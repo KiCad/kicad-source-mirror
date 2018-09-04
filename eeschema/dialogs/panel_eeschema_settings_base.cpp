@@ -94,23 +94,29 @@ PANEL_EESCHEMA_SETTINGS_BASE::PANEL_EESCHEMA_SETTINGS_BASE( wxWindow* parent, wx
 	m_checkHVOrientation = new wxCheckBox( this, wxID_ANY, _("&Restrict buses and wires to H and V orientation"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer9->Add( m_checkHVOrientation, 0, wxEXPAND|wxALL, 5 );
 	
-	
-	bSizer9->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-	
-	m_checkAutoplaceFields = new wxCheckBox( this, wxID_ANY, _("A&utomatically place symbol fields"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_checkAutoplaceJustify = new wxCheckBox( this, wxID_ANY, _("A&llow field autoplace to change justification"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_checkAutoplaceJustify, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_checkAutoplaceAlign = new wxCheckBox( this, wxID_ANY, _("Al&ways align autoplaced fields to the 50 mil grid"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_checkAutoplaceAlign, 0, wxEXPAND|wxLEFT|wxTOP|wxRIGHT, 5 );
+	m_footprintPreview = new wxCheckBox( this, wxID_ANY, _("Show footprint previews in symbol chooser"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer9->Add( m_footprintPreview, 0, wxALL, 5 );
 	
 	
 	bLeftColumn->Add( bSizer9, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
+	wxStaticBoxSizer* sbSizer1;
+	sbSizer1 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Symbol Field Automatic Placement") ), wxVERTICAL );
 	
-	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_checkAutoplaceFields = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("A&utomatically place symbol fields"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkAutoplaceFields, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	m_checkAutoplaceJustify = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("A&llow field autoplace to change justification"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkAutoplaceJustify, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	
+	m_checkAutoplaceAlign = new wxCheckBox( sbSizer1->GetStaticBox(), wxID_ANY, _("Al&ways align autoplaced fields to the 50 mil grid"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer1->Add( m_checkAutoplaceAlign, 0, wxEXPAND|wxALL, 5 );
+	
+	
+	bLeftColumn->Add( sbSizer1, 0, wxTOP|wxEXPAND, 5 );
+	
+	
+	bPanelSizer->Add( bLeftColumn, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bPanelSizer );

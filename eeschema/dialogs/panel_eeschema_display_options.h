@@ -23,11 +23,14 @@
 #include "panel_eeschema_display_options_base.h"
 
 class SCH_EDIT_FRAME;
+class GAL_OPTIONS_PANEL;
 
 
 class PANEL_EESCHEMA_DISPLAY_OPTIONS : public PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE
 {
-    SCH_EDIT_FRAME*   m_frame;
+    SCH_EDIT_FRAME*    m_frame;
+
+    GAL_OPTIONS_PANEL* m_galOptsPanel;
 
 public:
     PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame, wxWindow* aWindow );

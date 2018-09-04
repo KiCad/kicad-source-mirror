@@ -45,6 +45,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
     m_spinRepeatLabel->SetValue( m_frame->GetRepeatDeltaLabel() );
 
     m_checkHVOrientation->SetValue( m_frame->GetForceHVLines() );
+    m_footprintPreview->SetValue( m_frame->GetFootprintPreview() );
+
     m_checkAutoplaceFields->SetValue( m_frame->GetAutoplaceFields() );
     m_checkAutoplaceJustify->SetValue( m_frame->GetAutoplaceJustify() );
     m_checkAutoplaceAlign->SetValue( m_frame->GetAutoplaceAlign() );
@@ -70,6 +72,8 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     m_frame->SetRepeatDeltaLabel( m_spinRepeatLabel->GetValue() );
 
     m_frame->SetForceHVLines( m_checkHVOrientation->GetValue() );
+    m_frame->SetFootprintPreview( m_footprintPreview->GetValue() );
+
     m_frame->SetAutoplaceFields( m_checkAutoplaceFields->GetValue() );
     m_frame->SetAutoplaceJustify( m_checkAutoplaceJustify->GetValue() );
     m_frame->SetAutoplaceAlign( m_checkAutoplaceAlign->GetValue() );

@@ -12,29 +12,21 @@
 PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bPanelSizer;
-	bPanelSizer = new wxBoxSizer( wxVERTICAL );
+	bPanelSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxBoxSizer* bLeftColumn;
-	bLeftColumn = new wxBoxSizer( wxVERTICAL );
+	m_galOptionsSizer = new wxBoxSizer( wxVERTICAL );
+	
+	
+	bPanelSizer->Add( m_galOptionsSizer, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	
+	wxBoxSizer* bRightColumn;
+	bRightColumn = new wxBoxSizer( wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer32;
 	fgSizer32 = new wxFlexGridSizer( 0, 3, 0, 0 );
 	fgSizer32->AddGrowableCol( 1 );
 	fgSizer32->SetFlexibleDirection( wxBOTH );
 	fgSizer32->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("&Grid size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	fgSizer32->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-	
-	wxArrayString m_choiceGridSizeChoices;
-	m_choiceGridSize = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeChoices, 0 );
-	m_choiceGridSize->SetSelection( 0 );
-	fgSizer32->Add( m_choiceGridSize, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-	
-	m_staticGridUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticGridUnits->Wrap( -1 );
-	fgSizer32->Add( m_staticGridUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -76,7 +68,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_staticText26 = new wxStaticText( this, wxID_ANY, _("&Part ID notation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText26 = new wxStaticText( this, wxID_ANY, _("Symbol unit notation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText26->Wrap( -1 );
 	fgSizer32->Add( m_staticText26, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
@@ -90,32 +82,23 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	
-	bLeftColumn->Add( fgSizer32, 0, wxBOTTOM|wxRIGHT, 5 );
+	bRightColumn->Add( fgSizer32, 0, wxBOTTOM|wxRIGHT|wxEXPAND, 5 );
 	
 	wxBoxSizer* bSizer92;
 	bSizer92 = new wxBoxSizer( wxVERTICAL );
 	
-	m_checkShowGrid = new wxCheckBox( this, wxID_ANY, _("&Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer92->Add( m_checkShowGrid, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
 	m_checkShowHiddenPins = new wxCheckBox( this, wxID_ANY, _("S&how hidden pins"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer92->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer92->Add( m_checkShowHiddenPins, 0, wxEXPAND|wxALL, 5 );
 	
 	m_checkPageLimits = new wxCheckBox( this, wxID_ANY, _("Show page limi&ts"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_checkPageLimits->SetValue(true); 
 	bSizer92->Add( m_checkPageLimits, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	bSizer92->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
-	
-	m_footprintPreview = new wxCheckBox( this, wxID_ANY, _("Show footprint previews in symbol chooser (experimental)"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer92->Add( m_footprintPreview, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	bRightColumn->Add( bSizer92, 0, wxTOP|wxRIGHT, 5 );
 	
 	
-	bLeftColumn->Add( bSizer92, 0, wxTOP|wxRIGHT, 5 );
-	
-	
-	bPanelSizer->Add( bLeftColumn, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bPanelSizer );

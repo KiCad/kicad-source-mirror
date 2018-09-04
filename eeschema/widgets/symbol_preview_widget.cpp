@@ -37,7 +37,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     m_statusSizer( nullptr ),
     m_previewItem( nullptr )
 {
-    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
+    wxConfigBase* eeschemaConfig = GetNewConfig( wxString::FromUTF8( "eeschema" ) );
+    m_galDisplayOptions.ReadConfig( eeschemaConfig, GAL_DISPLAY_OPTIONS_KEY );
 
     m_preview = new SCH_PREVIEW_PANEL( aParent, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
                                        m_galDisplayOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );

@@ -18,10 +18,10 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bLeftSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 0, 0 );
+	gbSizer1 = new wxGridBagSizer( 3, 0 );
 	gbSizer1->SetFlexibleDirection( wxBOTH );
 	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	gbSizer1->SetEmptyCellSize( wxSize( -1,10 ) );
+	gbSizer1->SetEmptyCellSize( wxSize( -1,2 ) );
 	
 	m_staticTextautosave = new wxStaticText( this, wxID_ANY, _("&Auto save:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextautosave->Wrap( -1 );
@@ -31,60 +31,91 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_SaveTime = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
-	bSizer6->Add( m_SaveTime, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
+	bSizer6->Add( m_SaveTime, 0, wxLEFT, 5 );
 	
 	wxStaticText* minutesLabel;
 	minutesLabel = new wxStaticText( this, wxID_ANY, _("minutes"), wxDefaultPosition, wxDefaultSize, 0 );
 	minutesLabel->Wrap( -1 );
-	bSizer6->Add( minutesLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	bSizer6->Add( minutesLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
 	gbSizer1->Add( bSizer6, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND, 5 );
 	
 	m_staticTextFileHistorySize = new wxStaticText( this, wxID_ANY, _("File history size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextFileHistorySize->Wrap( -1 );
-	gbSizer1->Add( m_staticTextFileHistorySize, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_staticTextFileHistorySize, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_fileHistorySize = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 100, 0 );
-	gbSizer1->Add( m_fileHistorySize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_fileHistorySize, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxRIGHT|wxLEFT, 5 );
 	
-	wxStaticText* textEditorLabel;
-	textEditorLabel = new wxStaticText( this, wxID_ANY, _("Text editor:"), wxDefaultPosition, wxDefaultSize, 0 );
-	textEditorLabel->Wrap( -1 );
-	gbSizer1->Add( textEditorLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
+	wxStaticText* antialiasingLabel;
+	antialiasingLabel = new wxStaticText( this, wxID_ANY, _("Graphics acceleration:"), wxDefaultPosition, wxDefaultSize, 0 );
+	antialiasingLabel->Wrap( -1 );
+	gbSizer1->Add( antialiasingLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
-	m_textEditorPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_textEditorPath->Enable( false );
-	m_textEditorPath->SetMinSize( wxSize( 300,-1 ) );
-	
-	gbSizer1->Add( m_textEditorPath, wxGBPosition( 2, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-	
-	m_textEditorBtn = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_textEditorBtn->SetMinSize( wxSize( 29,29 ) );
-	
-	gbSizer1->Add( m_textEditorBtn, wxGBPosition( 2, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
-	
-	m_defaultPDFViewer = new wxRadioButton( this, wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_defaultPDFViewer, wxGBPosition( 4, 0 ), wxGBSpan( 1, 3 ), wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	m_otherPDFViewer = new wxRadioButton( this, wxID_ANY, _("Other:"), wxDefaultPosition, wxDefaultSize, 0 );
-	gbSizer1->Add( m_otherPDFViewer, wxGBPosition( 5, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
-	
-	m_PDFViewerPath = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_PDFViewerPath->Enable( false );
-	m_PDFViewerPath->SetMinSize( wxSize( 300,-1 ) );
-	
-	gbSizer1->Add( m_PDFViewerPath, wxGBPosition( 5, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
-	
-	m_pdfViewerBtn = new wxBitmapButton( this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
-	m_pdfViewerBtn->SetMinSize( wxSize( 29,29 ) );
-	
-	gbSizer1->Add( m_pdfViewerBtn, wxGBPosition( 5, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	wxString m_antialiasingChoices[] = { _("No Antialiasing"), _("Subpixel Antialiasing (High Quality)"), _("Subpixel Antialiasing (Ultra Quality)"), _("Supersampling (2x)"), _("Supersampling (4x)") };
+	int m_antialiasingNChoices = sizeof( m_antialiasingChoices ) / sizeof( wxString );
+	m_antialiasing = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_antialiasingNChoices, m_antialiasingChoices, 0 );
+	m_antialiasing->SetSelection( 0 );
+	gbSizer1->Add( m_antialiasing, wxGBPosition( 3, 1 ), wxGBSpan( 1, 2 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
 	gbSizer1->AddGrowableCol( 1 );
 	
-	bLeftSizer->Add( gbSizer1, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLeftSizer->Add( gbSizer1, 1, wxEXPAND|wxALL, 5 );
+	
+	
+	bLeftSizer->Add( 0, 0, 0, wxEXPAND|wxTOP, 3 );
+	
+	wxStaticBoxSizer* sizerHelperApps;
+	sizerHelperApps = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Helper Applications") ), wxVERTICAL );
+	
+	wxGridBagSizer* gridHelperApps;
+	gridHelperApps = new wxGridBagSizer( 0, 0 );
+	gridHelperApps->SetFlexibleDirection( wxBOTH );
+	gridHelperApps->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	gridHelperApps->SetEmptyCellSize( wxSize( -1,5 ) );
+	
+	wxStaticText* textEditorLabel;
+	textEditorLabel = new wxStaticText( sizerHelperApps->GetStaticBox(), wxID_ANY, _("Text editor:"), wxDefaultPosition, wxDefaultSize, 0 );
+	textEditorLabel->Wrap( -1 );
+	gridHelperApps->Add( textEditorLabel, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
+	
+	m_textEditorPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_textEditorPath->Enable( false );
+	m_textEditorPath->SetMinSize( wxSize( 360,-1 ) );
+	
+	gridHelperApps->Add( m_textEditorPath, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	
+	m_textEditorBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_textEditorBtn->SetMinSize( wxSize( 29,29 ) );
+	
+	gridHelperApps->Add( m_textEditorBtn, wxGBPosition( 0, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	
+	m_defaultPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("System default PDF viewer"), wxDefaultPosition, wxDefaultSize, 0 );
+	gridHelperApps->Add( m_defaultPDFViewer, wxGBPosition( 2, 0 ), wxGBSpan( 1, 3 ), wxTOP|wxRIGHT|wxLEFT, 4 );
+	
+	m_otherPDFViewer = new wxRadioButton( sizerHelperApps->GetStaticBox(), wxID_ANY, _("Other:"), wxDefaultPosition, wxDefaultSize, 0 );
+	gridHelperApps->Add( m_otherPDFViewer, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 4 );
+	
+	m_PDFViewerPath = new wxTextCtrl( sizerHelperApps->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PDFViewerPath->Enable( false );
+	m_PDFViewerPath->SetMinSize( wxSize( 360,-1 ) );
+	
+	gridHelperApps->Add( m_PDFViewerPath, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+	
+	m_pdfViewerBtn = new wxBitmapButton( sizerHelperApps->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW );
+	m_pdfViewerBtn->SetMinSize( wxSize( 29,29 ) );
+	
+	gridHelperApps->Add( m_pdfViewerBtn, wxGBPosition( 3, 2 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	gridHelperApps->AddGrowableCol( 1 );
+	
+	sizerHelperApps->Add( gridHelperApps, 0, wxEXPAND, 5 );
+	
+	
+	bLeftSizer->Add( sizerHelperApps, 0, wxEXPAND|wxALL, 5 );
 	
 	wxStaticBoxSizer* sbSizer5;
 	sbSizer5 = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("User Interface") ), wxVERTICAL );
@@ -97,32 +128,34 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_staticText1 = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("Icon scale:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText1->Wrap( -1 );
-	fgSizer11->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 3 );
+	fgSizer11->Add( m_staticText1, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 4 );
 	
-	m_scaleSlider = new STEPPED_SLIDER( sbSizer5->GetStaticBox(), wxID_ANY, 50, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_AUTOTICKS|wxSL_HORIZONTAL|wxSL_LABELS );
-	fgSizer11->Add( m_scaleSlider, 0, wxBOTTOM|wxEXPAND, 4 );
+	wxBoxSizer* bSizer4;
+	bSizer4 = new wxBoxSizer( wxHORIZONTAL );
+	
+	m_scaleSlider = new STEPPED_SLIDER( sbSizer5->GetStaticBox(), wxID_ANY, 50, 50, 275, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL|wxSL_LABELS );
+	m_scaleSlider->SetMinSize( wxSize( 240,-1 ) );
+	
+	bSizer4->Add( m_scaleSlider, 1, wxBOTTOM|wxEXPAND|wxALIGN_RIGHT, 4 );
 	
 	m_staticText2 = new wxStaticText( sbSizer5->GetStaticBox(), wxID_ANY, _("%"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText2->Wrap( -1 );
-	fgSizer11->Add( m_staticText2, 0, wxALIGN_BOTTOM|wxBOTTOM, 2 );
+	bSizer4->Add( m_staticText2, 0, wxALIGN_BOTTOM|wxBOTTOM|wxRIGHT, 2 );
+	
+	
+	fgSizer11->Add( bSizer4, 1, wxEXPAND, 5 );
+	
+	m_scaleAuto = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Automatic"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer11->Add( m_scaleAuto, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 25 );
 	
 	
 	fgSizer11->Add( 0, 0, 0, wxEXPAND, 5 );
 	
-	m_scaleAuto = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Auto"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer11->Add( m_scaleAuto, 0, wxTOP|wxLEFT, 9 );
 	
-	
-	fgSizer11->Add( 0, 0, 0, wxEXPAND, 5 );
-	
-	
-	sbSizer5->Add( fgSizer11, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
-	
-	
-	sbSizer5->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	sbSizer5->Add( fgSizer11, 0, wxEXPAND|wxBOTTOM|wxRIGHT, 5 );
 	
 	m_checkBoxIconsInMenus = new wxCheckBox( sbSizer5->GetStaticBox(), wxID_ANY, _("Show icons in menus"), wxDefaultPosition, wxDefaultSize, 0 );
-	sbSizer5->Add( m_checkBoxIconsInMenus, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbSizer5->Add( m_checkBoxIconsInMenus, 0, wxALL, 4 );
 	
 	
 	bLeftSizer->Add( sbSizer5, 0, wxEXPAND|wxALL, 5 );
@@ -133,17 +166,17 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_ZoomCenterOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_ANY, _("Ce&nter and warp cursor on zoom"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ZoomCenterOpt->SetToolTip( _("Center the cursor on screen when zooming.") );
 	
-	sbSizer51->Add( m_ZoomCenterOpt, 0, wxRIGHT|wxLEFT, 5 );
+	sbSizer51->Add( m_ZoomCenterOpt, 0, wxRIGHT|wxLEFT, 4 );
 	
 	m_MousewheelPANOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_ANY, _("Use touchpad to pan"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_MousewheelPANOpt->SetToolTip( _("Enable touchpad-friendly controls (pan with scroll action, zoom with Ctrl+scroll).") );
 	
-	sbSizer51->Add( m_MousewheelPANOpt, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	sbSizer51->Add( m_MousewheelPANOpt, 0, wxALL, 4 );
 	
 	m_AutoPANOpt = new wxCheckBox( sbSizer51->GetStaticBox(), wxID_AUTOPAN, _("&Pan while moving object"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_AutoPANOpt->SetToolTip( _("When drawing a track or moving an item, pan when approaching the edge of the display.") );
 	
-	sbSizer51->Add( m_AutoPANOpt, 0, wxALL, 5 );
+	sbSizer51->Add( m_AutoPANOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 4 );
 	
 	
 	bLeftSizer->Add( sbSizer51, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );

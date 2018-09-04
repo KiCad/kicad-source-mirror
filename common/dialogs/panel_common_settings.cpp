@@ -26,6 +26,7 @@
 #include <kiface_i.h>
 #include <bitmap_types.h>
 #include <bitmaps.h>
+#include <wx/graphics.h>
 #include "panel_common_settings.h"
 
 PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
@@ -54,6 +55,10 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     int fileHistorySize;
     commonSettings->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
     m_fileHistorySize->SetValue( fileHistorySize );
+
+    int antialiasingMode;
+    commonSettings->Read( GAL_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
+    m_antialiasing->SetSelection( antialiasingMode );
 
     int scale_fourths;
     commonSettings->Read( ICON_SCALE_KEY, &scale_fourths );
@@ -98,6 +103,8 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
     commonSettings->Write( AUTOSAVE_INTERVAL_KEY, m_SaveTime->GetValue() * 60 );
 
     commonSettings->Write( FILE_HISTORY_SIZE_KEY, m_fileHistorySize->GetValue() );
+
+    commonSettings->Write( GAL_ANTIALIASING_MODE_KEY, m_antialiasing->GetSelection() );
 
     const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
     commonSettings->Write( ICON_SCALE_KEY, scale_fourths );

@@ -31,23 +31,12 @@ using namespace KIGFX;
 /*
  * Config option strings
  */
-static const wxString GalGLAntialiasingKeyword( "OpenGLAntialiasingMode" );
 static const wxString GalGridStyleConfig( "GridStyle" );
 static const wxString GalGridLineWidthConfig( "GridLineWidth" );
 static const wxString GalGridMaxDensityConfig( "GridMaxDensity" );
 static const wxString GalGridAxesEnabledConfig( "GridAxesEnabled" );
 static const wxString GalFullscreenCursorConfig( "CursorFullscreen" );
 static const wxString GalForceDisplayCursorConfig( "ForceDisplayCursor" );
-
-
-static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeConfigVals =
-{
-    { KIGFX::OPENGL_ANTIALIASING_MODE::NONE,                0 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH,      1 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA,     2 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2,    3 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4,    4 },
-};
 
 
 static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
@@ -73,28 +62,15 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, const wxString& aBaseN
 {
     long readLong; // Temp value buffer
 
-    aCfg->Read( aBaseName + GalGLAntialiasingKeyword, &readLong,
-                static_cast<long>( KIGFX::OPENGL_ANTIALIASING_MODE::NONE ) );
-    gl_antialiasing_mode = UTIL::GetValFromConfig( aaModeConfigVals, readLong );
-
     aCfg->Read( aBaseName + GalGridStyleConfig, &readLong,
                 static_cast<long>( KIGFX::GRID_STYLE::DOTS ) );
     m_gridStyle = UTIL::GetValFromConfig( gridStyleConfigVals, readLong );
 
-    aCfg->Read( aBaseName + GalGridLineWidthConfig,
-                &m_gridLineWidth, 0.5 );
-
-    aCfg->Read( aBaseName + GalGridMaxDensityConfig,
-                &m_gridMinSpacing, 10 );
-
-    aCfg->Read( aBaseName + GalGridAxesEnabledConfig,
-                &m_axesEnabled, false );
-
-    aCfg->Read( aBaseName + GalFullscreenCursorConfig,
-                &m_fullscreenCursor, false );
-
-    aCfg->Read( aBaseName + GalForceDisplayCursorConfig,
-                &m_forceDisplayCursor, false );
+    aCfg->Read( aBaseName + GalGridLineWidthConfig, &m_gridLineWidth, 0.5 );
+    aCfg->Read( aBaseName + GalGridMaxDensityConfig, &m_gridMinSpacing, 10 );
+    aCfg->Read( aBaseName + GalGridAxesEnabledConfig, &m_axesEnabled, false );
+    aCfg->Read( aBaseName + GalFullscreenCursorConfig, &m_fullscreenCursor, false );
+    aCfg->Read( aBaseName + GalForceDisplayCursorConfig, &m_forceDisplayCursor, false );
 
     NotifyChanged();
 }
@@ -102,26 +78,14 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, const wxString& aBaseN
 
 void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase* aCfg, const wxString& aBaseName )
 {
-    aCfg->Write( aBaseName + GalGLAntialiasingKeyword,
-                 UTIL::GetConfigForVal( aaModeConfigVals, gl_antialiasing_mode ) );
-
     aCfg->Write( aBaseName + GalGridStyleConfig,
                  UTIL::GetConfigForVal( gridStyleConfigVals, m_gridStyle ) );
 
-    aCfg->Write( aBaseName + GalGridLineWidthConfig,
-                 m_gridLineWidth );
-
-    aCfg->Write( aBaseName + GalGridMaxDensityConfig,
-                 m_gridMinSpacing );
-
-    aCfg->Write( aBaseName + GalGridAxesEnabledConfig,
-                 m_axesEnabled );
-
-    aCfg->Write( aBaseName + GalFullscreenCursorConfig,
-                 m_fullscreenCursor );
-
-    aCfg->Write( aBaseName + GalForceDisplayCursorConfig,
-                 m_forceDisplayCursor );
+    aCfg->Write( aBaseName + GalGridLineWidthConfig, m_gridLineWidth );
+    aCfg->Write( aBaseName + GalGridMaxDensityConfig, m_gridMinSpacing );
+    aCfg->Write( aBaseName + GalGridAxesEnabledConfig, m_axesEnabled );
+    aCfg->Write( aBaseName + GalFullscreenCursorConfig, m_fullscreenCursor );
+    aCfg->Write( aBaseName + GalForceDisplayCursorConfig, m_forceDisplayCursor );
 }
 
 

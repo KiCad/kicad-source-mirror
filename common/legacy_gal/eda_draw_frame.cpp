@@ -290,25 +290,30 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
+    wxConfigBase* settings = Pgm().CommonSettings();
+
     int autosaveInterval;
-    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
+    settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
     SetAutoSaveInterval( autosaveInterval );
 
     int historySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    settings->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
     Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
 
     bool option;
-    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
+    settings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
     m_canvas->SetEnableMousewheelPan( option );
 
-    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
+    settings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
     m_canvas->SetEnableZoomNoCenter( option );
 
-    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &option );
+    settings->Read( ENBL_AUTO_PAN_KEY, &option );
     m_canvas->SetEnableAutoPan( option );
 
-    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
+    int tmp;
+    settings->Read( GAL_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) tmp;
+    m_galDisplayOptions.NotifyChanged();
 }
 
 
@@ -522,17 +527,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
 
-    // Notify GAL
-    TOOL_MANAGER* mgr = GetToolManager();
-
-    if( mgr && IsGalCanvasActive() )
-    {
-        mgr->RunAction( "common.Control.gridPreset", true, idx );
-    }
-    else
-        SetPresetGrid( idx );
-
-    m_canvas->Refresh();
+    SetPresetGrid( idx );
 }
 
 
@@ -702,7 +697,8 @@ void EDA_DRAW_FRAME::SetPrevGrid()
 
 void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 {
-    BASE_SCREEN * screen = GetScreen();
+    BASE_SCREEN* screen = GetScreen();
+    KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     if( ! screen->GridExists( aIndex + ID_POPUP_GRID_LEVEL_1000 ) )
         aIndex = screen->GetGrids()[0].m_CmdId;
@@ -724,7 +720,10 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 
     // Be sure m_LastGridSizeId is up to date.
     m_LastGridSizeId = aIndex;
-    GetScreen()->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
+
+    screen->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
+    view->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     // Put cursor on new grid
     SetCrossHairPosition( RefPos( true ) );
@@ -796,6 +795,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
     wxString baseCfgName = ConfigBaseName();
+    wxConfigBase* cmnCfg = Pgm().CommonSettings();
 
     // Read units used in dialogs and toolbars
     EDA_UNITS_T unitsTmp;
@@ -827,7 +827,12 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
-    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
+    m_galDisplayOptions.ReadConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
+
+    int temp;
+    cmnCfg->Read( GAL_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) temp;
+    m_galDisplayOptions.NotifyChanged();
 }
 
 
@@ -846,6 +851,8 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
+
+    m_galDisplayOptions.WriteConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
 }
 
 

@@ -156,6 +156,8 @@ public:
     }
     void SetGridOrigin( const wxPoint& aPoint ) override {}
 
+    void OnGridSettings( wxCommandEvent& aEvent );
+
     // Virtual from EDA_DRAW_FRAME
     // the background color of the draw canvas:
     COLOR4D GetDrawBgColor() const override;

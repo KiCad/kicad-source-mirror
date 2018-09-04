@@ -191,6 +191,10 @@ void prepareViewMenu( wxMenu* aParentMenu )
                  _( "Show &Grid" ), wxEmptyString,
                  KiBitmap( grid_xpm ), wxITEM_CHECK );
 
+    AddMenuItem( aParentMenu, ID_GRID_SETTINGS,
+                 _( "Grid Settings..." ), wxEmptyString,
+                 KiBitmap( grid_xpm ) );
+
     // Units submenu
     wxMenu* unitsSubMenu = new wxMenu;
     AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,

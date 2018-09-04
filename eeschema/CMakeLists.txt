@@ -71,6 +71,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_sch_sheet_props_base.cpp
     dialogs/dialog_schematic_find.cpp
     dialogs/dialog_schematic_find_base.cpp
+    dialogs/dialog_set_grid.cpp
+    dialogs/dialog_set_grid_base.cpp
     dialogs/dialog_symbol_remap.cpp
     dialogs/dialog_symbol_remap_base.cpp
     dialogs/dialog_update_fields.cpp

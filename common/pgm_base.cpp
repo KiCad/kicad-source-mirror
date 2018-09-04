@@ -41,6 +41,7 @@
 #include <wx/richmsgdlg.h>
 
 #include <pgm_base.h>
+#include <draw_frame.h>
 #include <eda_base_frame.h>
 #include <macros.h>
 #include <config_params.h>
@@ -553,13 +554,14 @@ void PGM_BASE::loadCommonSettings()
         m_common_settings->Write( USE_ICONS_IN_MENUS_KEY, defaultUseIconsInMenus );
 
     if( !m_common_settings->HasEntry( ICON_SCALE_KEY )
-        || !m_common_settings->HasEntry( GAL_DISPLAY_OPTIONS_KEY ) )
+        || !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY ) )
     {
-        // 5.0 and earlier saved common settings in each app, and saved GAL display options
-        // only in pcbnew (which was the only canvas to support them).  Since there's no
-        // single right answer to where to pull the common settings from, we might as well
-        // get them along with the GAL display options from pcbnew.
+        // 5.0 and earlier saved common settings in each app, and saved hardware antialiasing
+        // options only in pcbnew (which was the only canvas to support them).  Since there's
+        // no single right answer to where to pull the common settings from, we might as well
+        // get them along with the hardware antialiasing option from pcbnew.
         wxConfigBase* pcbnewConfig = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
+        wxString pcbFrameKey( PCB_EDIT_FRAME_NAME );
 
         if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
         {
@@ -579,13 +581,12 @@ void PGM_BASE::loadCommonSettings()
             m_common_settings->Write( ENBL_AUTO_PAN_KEY, option );
         }
 
-        if( !m_common_settings->HasEntry( GAL_DISPLAY_OPTIONS_KEY ) )
+        if( !m_common_settings->HasEntry( GAL_ANTIALIASING_MODE_KEY ) )
         {
-            KIGFX::GAL_DISPLAY_OPTIONS temp;
-            temp.ReadConfig( pcbnewConfig, wxString( "PcbFrame" ) + GAL_DISPLAY_OPTIONS_KEY );
-            temp.WriteConfig( m_common_settings, GAL_DISPLAY_OPTIONS_KEY );
-
-            m_common_settings->Write( GAL_DISPLAY_OPTIONS_KEY, 1 );
+            int temp;
+            pcbnewConfig->Read( pcbFrameKey + GAL_DISPLAY_OPTIONS_KEY + GAL_ANTIALIASING_MODE_KEY,
+                                &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+            m_common_settings->Write( GAL_ANTIALIASING_MODE_KEY, temp );
         }
     }
 

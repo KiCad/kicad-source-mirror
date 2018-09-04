@@ -20,6 +20,8 @@
 #include <wx/settings.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
+#include <wx/choice.h>
+#include <wx/gbsizer.h>
 #include <wx/textctrl.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -27,10 +29,9 @@
 #include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/radiobut.h>
-#include <wx/gbsizer.h>
+#include <wx/statbox.h>
 #include <wx/slider.h>
 #include <wx/checkbox.h>
-#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -52,6 +53,7 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxSpinCtrl* m_SaveTime;
 		wxStaticText* m_staticTextFileHistorySize;
 		wxSpinCtrl* m_fileHistorySize;
+		wxChoice* m_antialiasing;
 		wxTextCtrl* m_textEditorPath;
 		wxBitmapButton* m_textEditorBtn;
 		wxRadioButton* m_defaultPDFViewer;

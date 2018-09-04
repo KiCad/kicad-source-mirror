@@ -51,8 +51,6 @@ private:
 
     wxBoxSizer* m_mainSizer;
 
-    wxChoice* m_choiceAntialiasing;
-
     wxRadioBox* m_gridStyle;
 
     wxStaticText* l_gridLineWidth;

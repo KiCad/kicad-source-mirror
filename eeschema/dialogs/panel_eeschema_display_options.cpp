@@ -29,27 +29,23 @@
 #include <sch_painter.h>
 #include <class_libentry.h>
 #include <panel_eeschema_display_options.h>
+#include <widgets/gal_options_panel.h>
 
 
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :
         PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( aWindow ),
         m_frame( aFrame )
-{}
+{
+    KIGFX::GAL_DISPLAY_OPTIONS& galOptions = m_frame->GetGalDisplayOptions();
+    m_galOptsPanel = new GAL_OPTIONS_PANEL( this, galOptions );
+
+    m_galOptionsSizer->Add( m_galOptsPanel, 1, wxEXPAND, 0 );
+}
 
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 {
-    const GRIDS& gridSizes = m_frame->GetScreen()->GetGrids();
-
-    for( size_t i = 0; i < gridSizes.size(); i++ )
-    {
-        m_choiceGridSize->Append( wxString::Format( wxT( "%0.1f" ), gridSizes[i].m_Size.x ) );
-
-        if( gridSizes[i].m_CmdId == m_frame->GetScreen()->GetGridCmdId() )
-            m_choiceGridSize->SetSelection( (int) i );
-    }
-
     // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
     int refStyleSelection;
 
@@ -66,10 +62,10 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
     m_busWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultBusThickness(), false, true ) );
     m_lineWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultLineThickness(), false, true ) );
-    m_checkShowGrid->SetValue( m_frame->IsGridVisible() );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
     m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
-    m_footprintPreview->SetValue( m_frame->GetFootprintPreview() );
+
+    m_galOptsPanel->TransferDataToWindow();
 
     return true;
 }
@@ -77,11 +73,6 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
 bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
-    const GRIDS& gridSizes = m_frame->GetScreen()->GetGrids();
-    wxRealPoint gridsize = gridSizes[ (size_t) m_choiceGridSize->GetSelection() ].m_Size;
-    m_frame->SetLastGridSizeId( m_frame->GetScreen()->SetGrid( gridsize ) );
-    m_frame->SetGridVisibility( m_checkShowGrid->GetValue() );
-
     // Reference style one of: "A" ".A" "-A" "_A" ".1" "-1" "_1"
     int firstRefId, refSeparator;
 
@@ -108,12 +99,13 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     SetDefaultLineThickness( ValueFromString( INCHES, m_lineWidthCtrl->GetValue(), true ) );
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
-    m_frame->SetFootprintPreview( m_footprintPreview->GetValue() );
 
     // Update canvas
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
     m_frame->GetCanvas()->GetView()->MarkDirty();
     m_frame->GetCanvas()->Refresh();
+
+    m_galOptsPanel->TransferDataFromWindow();
 
     return true;
 }

@@ -49,16 +49,6 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleSelectMap =
 };
 
 
-static const UTIL::CFG_MAP<KIGFX::OPENGL_ANTIALIASING_MODE> aaModeSelectMap =
-{
-    { KIGFX::OPENGL_ANTIALIASING_MODE::NONE,              0 },    // Default
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_HIGH,    1 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUBSAMPLE_ULTRA,   2 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2,  3 },
-    { KIGFX::OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4,  4 },
-};
-
-
 GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTIONS& aGalOpts ):
     wxPanel( aParent, wxID_ANY ),
     m_galOptions( aGalOpts )
@@ -75,31 +65,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
     const wxString galOnlySuffix = _( " (not supported in Legacy Toolset)" );
 
     /*
-     * Anti-aliasing subpanel
-     */
-    {
-        wxStaticBoxSizer* sOpenGLRenderingSizer;
-        sOpenGLRenderingSizer = new wxStaticBoxSizer( new wxStaticBox( this,
-                wxID_ANY, _( "Accelerated Graphics" ) ), wxVERTICAL );
-
-        wxString m_choiceAntialiasingChoices[] = {
-            _( "No Antialiasing" ),
-            _( "Subpixel Antialiasing (High Quality)" ),
-            _( "Subpixel Antialiasing (Ultra Quality)" ),
-            _( "Supersampling (2x)" ),
-            _( "Supersampling (4x)" )
-        };
-        int m_choiceAntialiasingNChoices = sizeof( m_choiceAntialiasingChoices ) / sizeof( wxString );
-        m_choiceAntialiasing = new wxChoice( sOpenGLRenderingSizer->GetStaticBox(),
-                wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                m_choiceAntialiasingNChoices, m_choiceAntialiasingChoices, 0 );
-        sOpenGLRenderingSizer->Add( m_choiceAntialiasing, 0, wxALL|wxEXPAND, 5 );
-
-        sLeftSizer->Add( sOpenGLRenderingSizer, 0, wxTOP|wxRIGHT|wxEXPAND, 5 );
-    }
-
-    /*
-     * Grid setting subpanel
+     * Grid settings subpanel
      */
     {
         wxStaticBoxSizer* sGridSettings;
@@ -178,6 +144,9 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
     }
 
+    /*
+     * Cursor settings subpanel
+     */
     {
         wxString cursorDisplayTitle = _( "Cursor Options" );
 
@@ -225,9 +194,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
 bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 {
-    m_choiceAntialiasing->SetSelection( UTIL::GetConfigForVal(
-            aaModeSelectMap, m_galOptions.gl_antialiasing_mode ) );
-
     m_gridStyle->SetSelection( UTIL::GetConfigForVal(
             gridStyleSelectMap, m_galOptions.m_gridStyle ) );
 
@@ -245,9 +211,6 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
 
 bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
 {
-    m_galOptions.gl_antialiasing_mode = UTIL::GetValFromConfig(
-            aaModeSelectMap, m_choiceAntialiasing->GetSelection() );
-
     m_galOptions.m_gridStyle = UTIL::GetValFromConfig(
             gridStyleSelectMap, m_gridStyle->GetSelection() );
 

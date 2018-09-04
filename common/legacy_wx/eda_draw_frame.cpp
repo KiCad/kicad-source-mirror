@@ -290,25 +290,30 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 {
     EDA_BASE_FRAME::CommonSettingsChanged();
 
+    wxConfigBase* settings = Pgm().CommonSettings();
+
     int autosaveInterval;
-    Pgm().CommonSettings()->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
+    settings->Read( AUTOSAVE_INTERVAL_KEY, &autosaveInterval );
     SetAutoSaveInterval( autosaveInterval );
 
     int historySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
+    settings->Read( FILE_HISTORY_SIZE_KEY, &historySize, DEFAULT_FILE_HISTORY_SIZE );
     Kiface().GetFileHistory().SetMaxFiles( (unsigned) std::max( 0, historySize ) );
 
     bool option;
-    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
+    settings->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
     m_canvas->SetEnableMousewheelPan( option );
 
-    Pgm().CommonSettings()->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
+    settings->Read( ENBL_ZOOM_NO_CENTER_KEY, &option );
     m_canvas->SetEnableZoomNoCenter( option );
 
-    Pgm().CommonSettings()->Read( ENBL_AUTO_PAN_KEY, &option );
+    settings->Read( ENBL_AUTO_PAN_KEY, &option );
     m_canvas->SetEnableAutoPan( option );
 
-    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
+    int tmp;
+    settings->Read( GAL_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) tmp;
+    m_galDisplayOptions.NotifyChanged();
 }
 
 
@@ -797,6 +802,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_BASE_FRAME::LoadSettings( aCfg );
 
     wxString baseCfgName = ConfigBaseName();
+    wxConfigBase* cmnCfg = Pgm().CommonSettings();
 
     // Read units used in dialogs and toolbars
     EDA_UNITS_T unitsTmp;
@@ -828,7 +834,12 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
-    m_galDisplayOptions.ReadConfig( Pgm().CommonSettings(), GAL_DISPLAY_OPTIONS_KEY );
+    m_galDisplayOptions.ReadConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
+
+    int temp;
+    cmnCfg->Read( GAL_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
+    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) temp;
+    m_galDisplayOptions.NotifyChanged();
 }
 
 
@@ -847,6 +858,8 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
+
+    m_galDisplayOptions.WriteConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
 }
 
 

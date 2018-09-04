@@ -22,6 +22,7 @@
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/statbox.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -53,6 +54,7 @@ class PANEL_EESCHEMA_SETTINGS_BASE : public wxPanel
 		wxStaticText* m_staticText16;
 		wxSpinCtrl* m_spinRepeatLabel;
 		wxCheckBox* m_checkHVOrientation;
+		wxCheckBox* m_footprintPreview;
 		wxCheckBox* m_checkAutoplaceFields;
 		wxCheckBox* m_checkAutoplaceJustify;
 		wxCheckBox* m_checkAutoplaceAlign;

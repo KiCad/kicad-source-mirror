@@ -126,7 +126,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	bSizerBright->Add( m_staticTextBright, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	m_sliderBrightness = new wxSlider( sbSizerViewHSV->GetStaticBox(), wxID_ANY, 255, 0, 255, wxDefaultPosition, wxDefaultSize, wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
-	bSizerBright->Add( m_sliderBrightness, 1, wxTOP|wxRIGHT, 5 );
+	bSizerBright->Add( m_sliderBrightness, 1, wxTOP|wxRIGHT|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	sbSizerViewHSV->Add( bSizerBright, 0, wxEXPAND, 5 );
@@ -172,10 +172,10 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	
 	m_opacityLabel = new wxStaticText( this, wxID_ANY, _("Opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityLabel->Wrap( -1 );
-	m_SizerTransparency->Add( m_opacityLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
+	m_SizerTransparency->Add( m_opacityLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxTOP|wxLEFT, 5 );
 	
 	m_sliderTransparency = new wxSlider( this, wxID_ANY, 80, 20, 100, wxDefaultPosition, wxDefaultSize, wxSL_LABELS|wxSL_LEFT|wxSL_VERTICAL );
-	m_SizerTransparency->Add( m_sliderTransparency, 1, wxALL, 5 );
+	m_SizerTransparency->Add( m_sliderTransparency, 1, wxTOP|wxBOTTOM|wxRIGHT|wxALIGN_CENTER_HORIZONTAL, 10 );
 	
 	
 	bSizerUpperMain->Add( m_SizerTransparency, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
