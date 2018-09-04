@@ -1164,7 +1164,8 @@ void SCH_PAINTER::draw ( SCH_SHEET *aSheet, int aLayer )
         draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
 }
 
-void SCH_PAINTER::draw ( SCH_NO_CONNECT *aNC, int aLayer )
+
+void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 {
     int delta = aNC->GetSize().x / 2;
     int width = GetDefaultLineThickness();
@@ -1180,7 +1181,8 @@ void SCH_PAINTER::draw ( SCH_NO_CONNECT *aNC, int aLayer )
     m_gal->DrawLine( p + VECTOR2D(-delta, delta), p+VECTOR2D( delta, -delta ) );
 }
 
-void SCH_PAINTER::draw ( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
+
+void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
     m_gal->SetStrokeColor( GetLayerColor( LAYER_BUS ) );
     m_gal->SetIsStroke( true );
@@ -1197,11 +1199,10 @@ void SCH_PAINTER::draw ( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
     if( aEntry->IsDanglingEnd() )
         m_gal->DrawCircle( endPos, TARGET_BUSENTRY_RADIUS );
-
-
 }
 
-void SCH_PAINTER::draw ( SCH_BITMAP *aBitmap, int aLayer )
+
+void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 {
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
@@ -1209,9 +1210,36 @@ void SCH_PAINTER::draw ( SCH_BITMAP *aBitmap, int aLayer )
     m_gal->Restore();
 }
 
-void SCH_PAINTER::draw ( SCH_MARKER *aMarker, int aLayer )
-{
 
+void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
+{
+    const int scale = aMarker->m_ScalingFactor;
+
+    // If you are changing this, update the bounding box as well
+    const VECTOR2D arrow[] = {
+            VECTOR2D(  0 * scale,   0 * scale ),
+            VECTOR2D(  8 * scale,   1 * scale ),
+            VECTOR2D(  4 * scale,   3 * scale ),
+            VECTOR2D( 13 * scale,   8 * scale ),
+            VECTOR2D(  9 * scale,   9 * scale ),
+            VECTOR2D(  8 * scale,  13 * scale ),
+            VECTOR2D(  3 * scale,   4 * scale ),
+            VECTOR2D(  1 * scale,   8 * scale ),
+            VECTOR2D(  0 * scale,   0 * scale )
+    };
+
+    COLOR4D color = GetLayerColor( LAYER_ERC_WARN );
+
+    if( aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
+        color = GetLayerColor( LAYER_ERC_ERR );
+
+    m_gal->Save();
+    m_gal->Translate( aMarker->GetPosition() );
+    m_gal->SetFillColor( color );
+    m_gal->SetIsFill( true );
+    m_gal->SetIsStroke( false );
+    m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
+    m_gal->Restore();
 }
 
 

@@ -546,24 +546,23 @@ void EDA_DRAW_FRAME::createCanvas()
 
 void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem )
 {
-        GetScreen()->Append( aItem );
-        GetCanvas()->GetView()->Add( aItem );
+    GetScreen()->Append( aItem );
+    GetCanvas()->GetView()->Add( aItem );
 }
 
 void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems )
 {
     std::vector<SCH_ITEM*> tmp;
-        SCH_ITEM* itemList = aItems.begin();
+    SCH_ITEM* itemList = aItems.begin();
 
-        while( itemList )
-        {
-            itemList->SetList( nullptr );
-            GetCanvas()->GetView()->Add( itemList );
-            itemList = itemList->Next();
-        }
+    while( itemList )
+    {
+        itemList->SetList( nullptr );
+        GetCanvas()->GetView()->Add( itemList );
+        itemList = itemList->Next();
+    }
 
-        GetScreen()->Append( aItems );
-
+    GetScreen()->Append( aItems );
 }
 
 void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem )

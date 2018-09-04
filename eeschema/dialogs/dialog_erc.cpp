@@ -41,7 +41,7 @@
 #include <bitmaps.h>
 #include <reporter.h>
 #include <wildcards_and_files_ext.h>
-
+#include <sch_view.h>
 #include <netlist.h>
 #include <netlist_object.h>
 #include <sch_marker.h>
@@ -629,7 +629,15 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // Display diags:
     DisplayERC_MarkersList();
 
-    // Display new markers:
+    // Display new markers from the current screen:
+    KIGFX::VIEW* view = m_parent->GetCanvas()->GetView();
+
+    for( auto item = m_parent->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_MARKER_T )
+            view->Add( item );
+    }
+
     m_parent->GetCanvas()->Refresh();
 
     // Display message

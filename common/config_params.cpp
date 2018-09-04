@@ -295,7 +295,10 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
 
     if( old != UNSPECIFIED_COLOR )
     {
-        *m_Pt_param = COLOR4D( old );
+        if( m_Ident == wxT( "Color4DErcWEx" ) || m_Ident == wxT( "Color4DErcEEx" ) )
+            *m_Pt_param = COLOR4D( old ).WithAlpha( 0.8 );
+        else
+            *m_Pt_param = COLOR4D( old );
         return;
     }
 

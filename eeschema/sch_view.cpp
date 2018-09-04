@@ -93,7 +93,7 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aSheet )
     for( auto item = aSheet->GetDrawItems(); item; item = item->Next() )
     {
         //printf("-- ADD SCHITEM %p\n", item );
-        Add(item);
+        Add( item );
     }
 
     m_worksheet.reset ( new KIGFX::WORKSHEET_VIEWITEM( 1, &aSheet->GetPageSettings(), &aSheet->GetTitleBlock() ) );

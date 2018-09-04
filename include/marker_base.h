@@ -28,6 +28,7 @@
 
 #include <drc_item.h>
 #include <gr_basic.h>
+#include <eda_rect.h>
 
 
 /* Marker are mainly used to show a DRC or ERC error or warning
@@ -51,16 +52,16 @@ public:
     };
 
     wxPoint               m_Pos;                 ///< position of the marker
+    int                   m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can
+                                                 ///<   set the physical size)
 
 protected:
     TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
     MARKER_SEVERITY       m_ErrorLevel;          ///< Specify the severity of the error
     COLOR4D               m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
-                                                 ///< to the position of the shape, used for Hit
-                                                 ///< Tests
-    int                   m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can
-                                                 ///< set the physical size
+                                                 ///<   to the position of the shape, used for Hit
+                                                 ///<   Tests
     DRC_ITEM              m_drc;
 
     void init();
