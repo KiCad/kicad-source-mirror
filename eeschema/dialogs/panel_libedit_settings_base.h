@@ -17,9 +17,9 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/choice.h>
-#include <wx/checkbox.h>
 #include <wx/textctrl.h>
+#include <wx/checkbox.h>
+#include <wx/choice.h>
 #include <wx/spinctrl.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
@@ -35,10 +35,6 @@ class PANEL_LIBEDIT_SETTINGS_BASE : public wxPanel
 	private:
 	
 	protected:
-		wxStaticText* m_gridSizeLabel;
-		wxChoice* m_choiceGridSize;
-		wxStaticText* m_gridSizeUnits;
-		wxCheckBox* m_checkShowGrid;
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;

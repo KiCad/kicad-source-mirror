@@ -25,37 +25,6 @@ PANEL_LIBEDIT_SETTINGS_BASE::PANEL_LIBEDIT_SETTINGS_BASE( wxWindow* parent, wxWi
 	fgSizer->SetFlexibleDirection( wxBOTH );
 	fgSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_gridSizeLabel = new wxStaticText( this, wxID_ANY, _("&Grid size:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gridSizeLabel->Wrap( -1 );
-	fgSizer->Add( m_gridSizeLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
-	
-	wxArrayString m_choiceGridSizeChoices;
-	m_choiceGridSize = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceGridSizeChoices, 0 );
-	m_choiceGridSize->SetSelection( 0 );
-	fgSizer->Add( m_choiceGridSize, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
-	
-	m_gridSizeUnits = new wxStaticText( this, wxID_ANY, _("mils"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_gridSizeUnits->Wrap( -1 );
-	fgSizer->Add( m_gridSizeUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 3 );
-	
-	m_checkShowGrid = new wxCheckBox( this, wxID_ANY, _("&Show grid"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer->Add( m_checkShowGrid, 0, wxEXPAND|wxTOP|wxBOTTOM|wxRIGHT, 3 );
-	
-	
-	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	fgSizer->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );
-	
-	
-	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
-	
-	fgSizer->Add( 0, 0, 1, wxEXPAND, 5 );
-	
 	m_lineWidthLabel = new wxStaticText( this, wxID_ANY, _("&Default line width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_lineWidthLabel->Wrap( -1 );
 	fgSizer->Add( m_lineWidthLabel, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );

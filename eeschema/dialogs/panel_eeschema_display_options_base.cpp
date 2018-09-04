@@ -60,7 +60,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	fgSizer32->Add( m_lineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	fgSizer32->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
+	fgSizer32->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 10 );
 	
 	
 	fgSizer32->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -95,7 +95,7 @@ PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE::PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE( wxWind
 	bSizer92->Add( m_checkPageLimits, 0, wxEXPAND|wxALL, 5 );
 	
 	
-	bRightColumn->Add( bSizer92, 0, wxTOP|wxRIGHT, 5 );
+	bRightColumn->Add( bSizer92, 0, wxTOP|wxRIGHT, 12 );
 	
 	
 	bPanelSizer->Add( bRightColumn, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );

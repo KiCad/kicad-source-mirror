@@ -664,7 +664,7 @@
                                     </object>
                                 </object>
                                 <object class="sizeritem" expanded="1">
-                                    <property name="border">5</property>
+                                    <property name="border">10</property>
                                     <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                     <property name="proportion">1</property>
                                     <object class="spacer" expanded="1">
@@ -877,7 +877,7 @@
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
-                            <property name="border">5</property>
+                            <property name="border">12</property>
                             <property name="flag">wxTOP|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxBoxSizer" expanded="1">

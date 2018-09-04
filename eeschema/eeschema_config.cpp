@@ -45,6 +45,7 @@
 #include <dialogs/panel_eeschema_template_fieldnames.h>
 #include <dialogs/panel_eeschema_settings.h>
 #include <dialogs/panel_eeschema_display_options.h>
+#include <dialogs/panel_libedit_display_options.h>
 #include <widgets/widget_eeschema_color_config.h>
 #include <dialogs/panel_libedit_settings.h>
 #include <sch_view.h>
@@ -647,6 +648,7 @@ void LIB_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
     wxTreebook* book = aParent->GetTreebook();
 
     book->AddPage( new PANEL_LIBEDIT_SETTINGS( this, book ), _( "Symbol Editor" ) );
+    book->AddSubPage( new PANEL_LIBEDIT_DISPLAY_OPTIONS( this, aParent ), _( "Display Options" ) );
 }
 
 
