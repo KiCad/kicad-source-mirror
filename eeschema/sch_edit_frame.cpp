@@ -407,6 +407,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
         m_LastGridSizeId = default_grid;
 
+    SetPresetGrid( m_LastGridSizeId );
+
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_canvas )

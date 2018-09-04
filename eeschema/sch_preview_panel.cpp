@@ -68,6 +68,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
 
     m_gal->SetGridColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
     m_gal->SetCursorColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
+    m_gal->SetGridSize( VECTOR2D( 50.0, 50.0 ) );
 
     m_viewControls->SetSnapping( true );
 

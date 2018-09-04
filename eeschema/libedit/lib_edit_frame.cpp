@@ -239,7 +239,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+    SetPresetGrid( m_LastGridSizeId );
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );

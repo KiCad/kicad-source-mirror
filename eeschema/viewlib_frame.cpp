@@ -139,7 +139,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     // Initialize grid id to the default value (50 mils):
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-    GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
+
+    SetPresetGrid( m_LastGridSizeId );
 
     // Menu bar is not mandatory: uncomment/comment the next line
     // to add/remove the menubar
