@@ -478,7 +478,12 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         destFn.MakeAbsolute( Prj().GetProjectPath() );
 
     // Make sure any sheets in the block to be pasted will not cause recursion in
-    // the destination sheet.
+    // the destination sheet. Moreover new sheets create new sheetpaths, and component
+    // alternante references must be created and cleared
+    bool hasSheetPasted = false;
+    // Keep trace of existing sheet paths. Paste block can modify this list
+    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+
     for( i = 0; i < m_blockItems.GetCount(); i++ )
     {
         item = (SCH_ITEM*) m_blockItems.GetItem( i );
@@ -512,6 +517,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
 
             sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
             sheet->SetTimeStamp( timeStamp );
+            hasSheetPasted = true;
         }
     }
 
@@ -549,6 +555,14 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
     SaveCopyInUndoList( picklist, UR_NEW );
 
     MoveItemsInList( picklist, GetScreen()->m_BlockLocate.GetMoveVector() );
+
+    if( hasSheetPasted )
+    {
+        // We clear annotation of new sheet paths.
+        // Annotation of new components added in current sheet is already cleared.
+        SCH_SCREENS screensList( g_RootSheet );
+        screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+    }
 
     // Clear flags for all items.
     GetScreen()->ClearDrawingState();

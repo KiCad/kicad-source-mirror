@@ -746,8 +746,7 @@ void SCH_SCREEN::EnsureAlternateReferencesExist()
 
         // Add (when not existing) all sheet path entries
         for( unsigned int ii = 0; ii < m_clientSheetPathList.GetCount(); ii++ )
-            ((SCH_COMPONENT*)item)->AddSheetPathReferenceEntry( m_clientSheetPathList[ii] );
-
+            ((SCH_COMPONENT*)item)->AddSheetPathReferenceEntryIfMissing( m_clientSheetPathList[ii] );
     }
 }
 
@@ -1395,11 +1394,7 @@ void SCH_SCREENS::ClearAnnotationOfNewSheetPaths( SCH_SHEET_LIST& aInitialSheetP
         {
             // A new sheet path is found: clear the annotation corresponding to this new path:
             SCH_SCREEN* curr_screen = sheetpath.LastScreen();
-            #if 0   // For test and debug only
-            wxLogMessage(">>>new path %s <%s> screen %p usage %d",
-                sheetpath.Path(), sheetpath.PathHumanReadable(),
-                curr_screen, curr_screen->GetClientSheetPathsCount() );
-            #endif
+
             // Clear annotation and create the AR for this path, if not exists,
             // when the screen is shared by sheet paths.
             // Otherwise ClearAnnotation do nothing, because the F1 field is used as

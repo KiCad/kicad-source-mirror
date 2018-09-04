@@ -239,6 +239,11 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
     if( aItemsList.GetCount() == 0 )
         return;
 
+    // Keep trace of existing sheet paths. Duplicate block can modify this list
+    bool hasSheetCopied = false;
+    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+
+
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         newitem = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
@@ -270,6 +275,7 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
 
                 sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
                 sheet->SetTimeStamp( timeStamp );
+                hasSheetCopied = true;
                 break;
             }
 
@@ -285,6 +291,14 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
     }
 
     MoveItemsInList( aItemsList, aMoveVector );
+
+    if( hasSheetCopied )
+    {
+        // We clear annotation of new sheet paths.
+        // Annotation of new components added in current sheet is already cleared.
+        SCH_SCREENS screensList( g_RootSheet );
+        screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+    }
 }
 
 
