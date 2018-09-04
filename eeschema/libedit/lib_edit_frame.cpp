@@ -146,6 +146,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
+    EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
 
@@ -230,16 +231,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-    // Ensure m_LastGridSizeId is an offset inside the allowed schematic range
-    if( m_LastGridSizeId < ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-
-    if( m_LastGridSizeId > ID_POPUP_GRID_LEVEL_1 - ID_POPUP_GRID_LEVEL_1000 )
-        m_LastGridSizeId = ID_POPUP_GRID_LEVEL_1 - ID_POPUP_GRID_LEVEL_1000;
+    SetPresetGrid( m_LastGridSizeId );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
-    SetPresetGrid( m_LastGridSizeId );
 
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );

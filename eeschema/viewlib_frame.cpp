@@ -131,14 +131,14 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     m_listPowerCmpOnly = false;
     SetShowElectricalType( true );
 
+    // Initialize grid id to the default value (50 mils):
+    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
+
     SetScreen( new SCH_SCREEN( aKiway ) );
     GetScreen()->m_Center = true;      // Axis origin centered on screen.
     LoadSettings( config() );
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-
-    // Initialize grid id to the default value (50 mils):
-    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     SetPresetGrid( m_LastGridSizeId );
 

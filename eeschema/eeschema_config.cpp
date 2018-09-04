@@ -492,7 +492,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     auto painter = dynamic_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
     KIGFX::SCH_RENDER_SETTINGS* settings = painter->GetSettings();
-    settings->m_ShowPinsElectricalType = false ;
+    settings->m_ShowPinsElectricalType = false;
+    settings->m_ShowHiddenText = false;
     settings->m_ShowHiddenPins = m_showAllPins;
 }
 

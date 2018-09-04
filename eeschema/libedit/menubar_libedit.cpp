@@ -208,6 +208,16 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
+    viewMenu->AppendSeparator();
+
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
+                 _( "Show &Grid" ), wxEmptyString,
+                 KiBitmap( grid_xpm ), wxITEM_CHECK );
+
+    AddMenuItem( viewMenu, ID_GRID_SETTINGS,
+                 _( "Grid Settings..." ), wxEmptyString,
+                 KiBitmap( grid_xpm ) );
+
     // Separator
     viewMenu->AppendSeparator();
 

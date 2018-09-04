@@ -386,7 +386,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_toolManager = new TOOL_MANAGER;
 
-
     SetForceHVLines( true );
     SetSpiceAjustPassiveValues( false );
 
@@ -396,16 +395,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     SetIcon( icon );
 
     // Initialize grid id to the default value (50 mils):
-    const int default_grid = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
-    m_LastGridSizeId = default_grid;
+    m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
 
     LoadSettings( config() );
 
     CreateScreens();
-
-    // Ensure m_LastGridSizeId is an offset inside the allowed schematic grid range
-    if( !GetScreen()->GridExists( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 ) )
-        m_LastGridSizeId = default_grid;
 
     SetPresetGrid( m_LastGridSizeId );
 
