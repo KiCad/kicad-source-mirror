@@ -342,11 +342,11 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     wxMenu* autoplaceSubmenu = new wxMenu;
     AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_OFF_BOARD_MODULES,
-               _( "&Autoplace off-board components" ), _( "" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
+               _( "&Autoplace off-board components" ), "", KiBitmap( grid_select_axis_xpm ) // fixme: icons
               );
 
     AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES,
-               _( "&Autoplace selected components" ), _( "" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
+               _( "&Autoplace selected components" ), "", KiBitmap( grid_select_axis_xpm ) // fixme: icons
               );
 
     AddMenuItem( aParentMenu, autoplaceSubmenu,
