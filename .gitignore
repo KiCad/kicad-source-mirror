@@ -20,7 +20,6 @@ eeschema/dialogs/dialog_bom_cfg_lexer.h
 eeschema/dialogs/dialog_bom_help_html.h
 eeschema/template_fieldnames_keywords.*
 eeschema/template_fieldnames_lexer.h
-pcbnew/dialogs/dialog_freeroute_exchange_help_html.h
 pcbnew/pcb_plot_params_keywords.cpp
 pcbnew/pcb_plot_params_lexer.h
 pcb_calculator/attenuators/bridget_tee_formula.h
