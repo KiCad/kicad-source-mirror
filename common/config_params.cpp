@@ -276,22 +276,30 @@ void PARAM_CFG_SETCOLOR::ReadParam( wxConfigBase* aConfig ) const
     if( !m_Pt_param || !aConfig )
         return;
 
-    // First try reading old format
-    EDA_COLOR_T itmp = ColorByName( aConfig->Read( m_Ident, wxT( "NONE" ) ) );
-    COLOR4D wtmp = COLOR4D::UNSPECIFIED;
+    COLOR4D temp;
 
-    if( itmp == UNSPECIFIED_COLOR )
+    if( aConfig->HasEntry( m_Ident ) )
     {
-        // Next try reading new format
-        if( !wtmp.SetFromWxString( aConfig->Read( m_Ident, wxT( "NONE" ) ) ) )
-            wtmp = m_Default;
-    }
-    else
-    {
-        wtmp = COLOR4D( itmp );
+        if( temp.SetFromWxString( aConfig->Read( m_Ident, wxT( "NONE" ) ) ) )
+        {
+            *m_Pt_param = temp;
+            return;
+        }
     }
 
-    *m_Pt_param = wtmp;
+    // If no luck, try reading legacy format
+    wxString legacy_Ident = m_Ident;
+    legacy_Ident.Replace( wxT( "4D" ), wxEmptyString );
+
+    EDA_COLOR_T old = ColorByName( aConfig->Read( legacy_Ident, wxT( "NONE" ) ) );
+
+    if( old != UNSPECIFIED_COLOR )
+    {
+        *m_Pt_param = COLOR4D( old );
+        return;
+    }
+
+    *m_Pt_param = m_Default;
 }
 
 
