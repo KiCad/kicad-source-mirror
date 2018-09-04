@@ -61,6 +61,7 @@ public:
 
 private:
     PAGED_DIALOG*   m_Parent;
+    PCB_EDIT_FRAME* m_frame;
 
     BOARD*          m_pcb;
     LSET            m_enabledLayers;
