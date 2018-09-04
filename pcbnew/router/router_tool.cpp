@@ -799,7 +799,7 @@ void ROUTER_TOOL::performRouting()
             updateEndItem( *evt );
             m_router->Move( m_endSnapPoint, m_endItem );
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &ACT_NewTrack ) )
         {
             updateEndItem( *evt );
             bool needLayerSwitch = m_router->IsPlacingVia();
@@ -808,7 +808,7 @@ void ROUTER_TOOL::performRouting()
 
             if( m_router->FixRoute( m_endSnapPoint, m_endItem, forceFinish ) )
                 break;
-            
+
             if( needLayerSwitch )
                 switchLayerOnViaPlacement();
 
