@@ -140,11 +140,11 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
         wxVector<wxVariant> dataLine;
 
-        dataLine.push_back( wxVariant( wxString::Format( _( "%.3d" ), netcode ) ) );
+        dataLine.push_back( wxVariant( wxString::Format( "%.3d", netcode ) ) );
         dataLine.push_back( wxVariant( net->GetNetname() ) );
 
         if( netcode )
-            dataLine.push_back( wxVariant( wxString::Format( _( "%u" ), nodes ) ) );
+            dataLine.push_back( wxVariant( wxString::Format( "%u", nodes ) ) );
         else    // For the net 0 (unconnected pads), the pad count is not known
             dataLine.push_back( wxVariant( wxT( "---" ) ) );
 

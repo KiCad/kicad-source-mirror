@@ -211,7 +211,7 @@ void DIALOG_ANNOTATE::OnApplyClick( wxCommandEvent& event )
         else
             message += _( "Clear and annotate all of the symbols on the current sheet?" );
 
-        message += _( "\n\nThis operation will change the current annotation and cannot \nbe undone." );
+        message += _( "\n\nThis operation will change the current annotation and cannot be undone." );
 
         KIDIALOG dlg( this, message, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
         dlg.SetOKLabel( _( "Clear and Annotate" ) );
