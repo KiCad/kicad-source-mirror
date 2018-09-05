@@ -1603,6 +1603,13 @@ void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 }
 
 
+void EDA_DRAW_FRAME::HardRedraw()
+{
+    m_canvas->Refresh();
+    m_canvas->Update();
+}
+
+
 // Factor out the calculation portion of the various BestZoom() implementations.
 //
 // Note that like it's forerunners this routine has an intentional side-effect: it

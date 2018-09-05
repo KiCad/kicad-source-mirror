@@ -1331,6 +1331,11 @@ void EDA_DRAW_FRAME::RedrawScreen2( const wxPoint& posBefore )
 }
 
 
+void EDA_DRAW_FRAME::HardRedraw()
+{
+}
+
+
 // Factor out the calculation portion of the various BestZoom() implementations.
 //
 // Note that like it's forerunners this routine has an intentional side-effect: it
@@ -1421,7 +1426,7 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     case ID_POPUP_ZOOM_REDRAW:
     case ID_ZOOM_REDRAW:
         // This usually means something went wrong.  Do a hard refresh.
-        SetScreen( GetScreen() );
+        HardRedraw();
         break;
 
     case ID_POPUP_ZOOM_CENTER:

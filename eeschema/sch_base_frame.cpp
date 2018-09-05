@@ -29,7 +29,7 @@
 #include <sch_painter.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <confirm.h>
-
+#include <preview_items/selection_area.h>
 #include <class_library.h>
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
@@ -437,6 +437,14 @@ void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
     GetGalCanvas()->Refresh();
 }
 
+
+void SCH_BASE_FRAME::HardRedraw()
+{
+    GetCanvas()->DisplaySheet( GetScreen() );
+    GetCanvas()->Refresh();
+}
+
+
 SCH_DRAW_PANEL* SCH_BASE_FRAME::GetCanvas() const
 {
     return static_cast<SCH_DRAW_PANEL*>( GetGalCanvas() );
@@ -489,14 +497,17 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         break;
 
     case BLOCK_PASTE:
+    {
         block->InitData( m_canvas, aPosition );
-        GetCanvas()->GetView()->ShowSelectionArea();
-        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
         InitBlockPasteInfos();
+
+        KIGFX::PREVIEW::SELECTION_AREA* sel = GetCanvas()->GetView()->GetSelectionArea();
+        VECTOR2I offsetToCenter = ( sel->GetOrigin() - sel->GetEnd() ) / 2;
+        block->SetLastCursorPosition( wxPoint( offsetToCenter.x, offsetToCenter.y ) );
 
         if( block->GetCount() == 0 )      // No data to paste
         {
-            DisplayError( this, wxT( "No block to paste" ), 20 );
+            DisplayError( this, _( "Nothing to paste" ), 20 );
             GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
             m_canvas->SetMouseCaptureCallback( NULL );
             block->SetState( STATE_NO_BLOCK );
@@ -507,24 +518,21 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         if( !m_canvas->IsMouseCaptured() )
         {
             block->ClearItemsList();
-            DisplayError( this,
-                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
+            wxFAIL_MSG( "SCH_BASE_FRAME::HandleBlockBegin() error: m_mouseCaptureCallback NULL" );
             block->SetState( STATE_NO_BLOCK );
             block->SetMessageBlock( this );
             return true;
         }
 
         block->SetState( STATE_BLOCK_MOVE );
+        block->SetFlags( IS_MOVED );
         m_canvas->CallMouseCapture( aDC, aPosition, false );
+    }
         break;
 
     default:
-        {
-            wxString msg;
-            msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
-            block->GetCommand();
-            DisplayError( this, msg );
-        }
+        wxFAIL_MSG( wxString::Format( "SCH_BASE_FRAME::HandleBlockBegin() unknown command: %s",
+                                      block->GetCommand() ) );
         break;
     }
 

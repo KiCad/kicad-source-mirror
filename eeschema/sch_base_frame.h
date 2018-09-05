@@ -286,6 +286,8 @@ public:
 
     virtual void RedrawScreen2( const wxPoint& posBefore ) override;
 
+    virtual void HardRedraw() override;
+
     void AddToScreen( SCH_ITEM* aItem );
     void AddToScreen( DLIST<SCH_ITEM>& aItems );
     void RemoveFromScreen( SCH_ITEM* aItem );

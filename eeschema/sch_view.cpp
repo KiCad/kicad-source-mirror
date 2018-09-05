@@ -162,6 +162,14 @@ void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool owned )
 
 void SCH_VIEW::ShowSelectionArea( bool aShow  )
 {
+    if( aShow )
+    {
+        // Reset seleciton area so the previous one doesn't flash before the first
+        // mouse move updates it
+        m_selectionArea->SetOrigin( VECTOR2I() );
+        m_selectionArea->SetEnd( VECTOR2I() );
+    }
+
     SetVisible( m_selectionArea.get(), aShow );
 }
 

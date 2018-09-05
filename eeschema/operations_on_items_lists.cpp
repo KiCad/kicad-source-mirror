@@ -232,7 +232,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 
 
 void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
-                           const wxPoint& aMoveVector )
+                                           const wxPoint& aMoveVector )
 {
     SCH_ITEM* newitem;
 
@@ -285,12 +285,12 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
                 break;
             }
 
+            newitem->Move( aMoveVector );
+
             SetSchItemParent( newitem, screen );
             AddToScreen( newitem );
         }
     }
-
-    MoveItemsInList( aItemsList, aMoveVector );
 
     if( hasSheetCopied )
     {

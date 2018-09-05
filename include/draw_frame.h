@@ -681,6 +681,12 @@ public:
     virtual void RedrawScreen2( const wxPoint& posBefore );
 
     /**
+     * Function HardRedraw
+     * rebuilds the GAL and redraws the screen.  Call when something went wrong.
+     */
+    virtual void HardRedraw();
+
+    /**
      * Function Zoom_Automatique
      * redraws the screen with best zoom level and the best centering
      * that shows all the page or the board

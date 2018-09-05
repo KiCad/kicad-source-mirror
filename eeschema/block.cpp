@@ -270,8 +270,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             {
                 nextcmd = true;
                 GetScreen()->SelectBlockItems();
-                if( block->GetCommand() != BLOCK_DUPLICATE )
-                    block->SetFlags( IS_MOVED );
+                block->SetFlags( IS_MOVED );
 
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
@@ -431,7 +430,9 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
         SCH_ITEM *copy = static_cast<SCH_ITEM*>( schitem->Clone() );
         copy->Move( block->GetMoveVector() );
         preview->Add( copy );
-        view->Hide( schitem );
+
+        if( block->GetCommand() != BLOCK_DUPLICATE )
+            view->Hide( schitem );
     }
 
     view->Update( preview );
@@ -544,14 +545,19 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         {
             ( (SCH_SHEET*) item )->SetTimeStamp( GetNewTimeStamp() );
         }
-
-        SetSchItemParent( item, GetScreen() );
-        AddToScreen( item );
     }
 
     SaveCopyInUndoList( picklist, UR_NEW );
 
-    MoveItemsInList( picklist, GetScreen()->m_BlockLocate.GetMoveVector() );
+    for( i = 0; i < picklist.GetCount(); ++i )
+    {
+        item = (SCH_ITEM*) picklist.GetPickedItem( i );
+
+        item->Move( GetScreen()->m_BlockLocate.GetMoveVector() );
+
+        SetSchItemParent( item, GetScreen() );
+        AddToScreen( item );
+    }
 
     if( hasSheetPasted )
     {
@@ -565,8 +571,6 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
     GetScreen()->ClearDrawingState();
 
     OnModify();
-
-    return;
 }
 
 void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
@@ -588,7 +592,7 @@ void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoin
     panel->GetView()->ClearHiddenFlags();
 
     area->SetOrigin( block->GetOrigin() );;
-    area->SetEnd(  block->GetEnd() );
+    area->SetEnd( block->GetEnd() );
 
     panel->GetView()->SetVisible( area );
     panel->GetView()->Hide( area, false );

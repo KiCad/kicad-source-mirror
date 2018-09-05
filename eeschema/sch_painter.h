@@ -118,7 +118,7 @@ public:
 
 private:
 	void draw( LIB_RECTANGLE *, int );
-	void draw( LIB_PIN *, int, bool isDangling = true );
+	void draw( LIB_PIN *, int, bool isDangling = true, bool isMoving = false );
 	void draw( LIB_CIRCLE *, int );
 	void draw( LIB_ITEM *, int );
 	void draw( LIB_PART *, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
