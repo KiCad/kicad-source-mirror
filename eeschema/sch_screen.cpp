@@ -254,34 +254,6 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
 }
 
 
-void SCH_SCREEN::ExtractWires( DLIST< SCH_ITEM >& aList, bool aCreateCopy )
-{
-    SCH_ITEM* item;
-    SCH_ITEM* next_item;
-
-    for( item = m_drawList.begin(); item; item = next_item )
-    {
-        next_item = item->Next();
-
-        switch( item->Type() )
-        {
-        case SCH_JUNCTION_T:
-        case SCH_LINE_T:
-            m_drawList.Remove( item );
-            aList.Append( item );
-
-            if( aCreateCopy )
-                m_drawList.Insert( (SCH_ITEM*) item->Clone(), next_item );
-
-            break;
-
-        default:
-            break;
-        }
-    }
-}
-
-
 void SCH_SCREEN::ReplaceWires( DLIST< SCH_ITEM >& aWireList )
 {
     SCH_ITEM* item;

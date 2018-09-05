@@ -475,25 +475,32 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 
 void SCH_EDIT_FRAME::SaveWireImage()
 {
-    DLIST< SCH_ITEM > oldWires;
+    PICKED_ITEMS_LIST oldItems;
+    oldItems.m_Status = UR_WIRE_IMAGE;
 
-    oldWires.SetOwnership( false );      // Prevent DLIST for deleting items in destructor.
-    GetScreen()->ExtractWires( oldWires, true );
+    SCH_ITEM* item;
+    SCH_ITEM* next_item;
 
-    if( oldWires.GetCount() != 0 )
+    for( item = GetScreen()->GetDrawItems(); item; item = next_item )
     {
-        PICKED_ITEMS_LIST oldItems;
+        next_item = item->Next();
 
-        oldItems.m_Status = UR_WIRE_IMAGE;
-
-        while( oldWires.GetCount() != 0 )
+        if( item->Type() == SCH_JUNCTION_T || item->Type() == SCH_LINE_T )
         {
-            ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
-            oldItems.PushItem( picker );
-        }
+            GetScreen()->Remove( item );
+            GetCanvas()->GetView()->Remove( item );
 
-        SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
+            oldItems.PushItem( ITEM_PICKER( item, UR_WIRE_IMAGE ) );
+
+            SCH_ITEM* item_copy = static_cast<SCH_ITEM*>( item->Clone() );
+
+            GetScreen()->GetDrawList().Insert( item_copy, next_item );
+            GetCanvas()->GetView()->Add( item_copy );
+        }
     }
+
+    if( oldItems.GetCount() != 0 )
+        SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
 }
 
 

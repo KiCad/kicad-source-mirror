@@ -1726,7 +1726,8 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     case ID_VIEWER_ZOOM_REDRAW:
     case ID_POPUP_ZOOM_REDRAW:
     case ID_ZOOM_REDRAW:
-        m_canvas->Refresh();
+        // This usually means something went wrong.  Do a hard refresh.
+        SetScreen( GetScreen() );
         break;
 
     case ID_POPUP_ZOOM_CENTER:

@@ -272,27 +272,38 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     // Exchange the current wires, buses, and junctions with the copy save by the last edit.
     if( aList->m_Status == UR_WIRE_IMAGE )
     {
-        DLIST< SCH_ITEM > oldWires;
+        PICKED_ITEMS_LIST oldItems;
+        oldItems.m_Status = UR_WIRE_IMAGE;
 
-        // Prevent items from being deleted when the DLIST goes out of scope.
-        oldWires.SetOwnership( false );
+        SCH_ITEM* item;
+        SCH_ITEM* next_item;
 
         // Remove all of the wires, buses, and junctions from the current screen.
-        GetScreen()->ExtractWires( oldWires, false );
+        for( item = GetScreen()->GetDrawItems(); item; item = next_item )
+        {
+            next_item = item->Next();
+
+            if( item->Type() == SCH_JUNCTION_T || item->Type() == SCH_LINE_T )
+            {
+                GetScreen()->Remove( item );
+                GetCanvas()->GetView()->Remove( item );
+
+                oldItems.PushItem( ITEM_PICKER( item, UR_WIRE_IMAGE ) );
+            }
+        }
 
         // Copy the saved wires, buses, and junctions to the current screen.
         for( unsigned int i = 0;  i < aList->GetCount();  i++ )
-            AddToScreen( (SCH_ITEM*) aList->GetPickedItem( i ) );
+        {
+            auto item = static_cast<SCH_ITEM*>( aList->GetPickedItem( i ) );
 
-        aList->ClearItemsList();
+            AddToScreen( item );
+            GetCanvas()->GetView()->Add( item );
+        }
 
         // Copy the previous wires, buses, and junctions to the picked item list for the
         // redo operation.
-        while( oldWires.GetCount() != 0 )
-        {
-            ITEM_PICKER picker = ITEM_PICKER( oldWires.PopFront(), UR_WIRE_IMAGE );
-            aList->PushItem( picker );
-        }
+        *aList = oldItems;
 
         return;
     }
