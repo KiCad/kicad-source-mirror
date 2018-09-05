@@ -1908,8 +1908,7 @@ void SHAPE_POLY_SET::CacheTriangulation()
 
     SHAPE_POLY_SET tmpSet = *this;
 
-    if( tmpSet.HasHoles() )
-        tmpSet.Fracture( PM_FAST );
+    tmpSet.Fracture( PM_FAST );
 
     m_triangulatedPolys.clear();
 
