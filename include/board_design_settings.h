@@ -33,6 +33,7 @@
 // Some default values for the board editor and the fp editor (given in mm)
 #define DEFAULT_TEXT_MODULE_SIZE     1.0
 #define DEFAULT_GR_MODULE_THICKNESS  0.15         // given in mm
+#define DEFAULT_LINE_WIDTH           0.10
 
 // Board thickness, mainly for 3D view:
 #define DEFAULT_BOARD_THICKNESS_MM   1.6
