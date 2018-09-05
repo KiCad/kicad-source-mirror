@@ -571,6 +571,13 @@ void SCH_DRAW_PANEL::CrossHairOn( wxDC* DC )
     m_viewControls->ShowCursor( true );
 }
 
+
+void SCH_DRAW_PANEL::MoveCursorToCrossHair()
+{
+    GetViewControls()->WarpCursor( GetParent()->GetCrossHairPosition(), true );
+}
+
+
 void SCH_DRAW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
 {
     EDA_DRAW_PANEL_GAL::Refresh( aEraseBackground, aRect );

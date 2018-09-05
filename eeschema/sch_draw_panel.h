@@ -76,6 +76,8 @@ public:
                           // Show the cross hair.
     virtual void CrossHairOn( wxDC* DC=nullptr ) override;
 
+    virtual void MoveCursorToCrossHair() override;
+
     KIGFX::SCH_VIEW* GetView() const { return view(); }
 
     /// @copydoc wxWindow::Refresh()
