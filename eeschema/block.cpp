@@ -115,7 +115,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         wxString msg;
         msg.Printf( wxT( "HandleBlockPLace() error : no items to place (cmd %d, state %d)" ),
                     block->GetCommand(), block->GetState() );
-        DisplayError( this, msg );
+        wxFAIL_MSG( msg );
     }
 
     block->SetState( STATE_BLOCK_STOP );
@@ -192,7 +192,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     bool            zoom_command = false;
     bool            append = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
-
 
     auto panel =static_cast<SCH_DRAW_PANEL*>(m_canvas);
     auto view = panel->GetView();

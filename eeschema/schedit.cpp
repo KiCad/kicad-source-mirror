@@ -842,13 +842,18 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
 
-//    INSTALL_UNBUFFERED_DC( dc, m_canvas );
-    printf("OnRotate\n");
     // Allows block rotate operation on hot key.
     if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
     {
-        screen->m_BlockLocate.SetCommand( BLOCK_ROTATE );
-        HandleBlockEnd( nullptr );
+        // Compute the rotation center and put it on grid:
+        wxPoint rotationPoint = screen->m_BlockLocate.Centre();
+        rotationPoint = GetNearestGridPosition( rotationPoint );
+        SetCrossHairPosition( rotationPoint );
+
+        SaveCopyInUndoList( screen->m_BlockLocate.GetItems(), UR_ROTATED, false, rotationPoint );
+        RotateListOfItems( screen->m_BlockLocate.GetItems(), rotationPoint );
+        
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
         return;
     }
 
