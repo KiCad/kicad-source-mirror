@@ -1536,6 +1536,12 @@ DRAWSEGMENT* PCB_PARSER::parseDRAWSEGMENT()
         NeedRIGHT();
     }
 
+    // Only filled polygons may have a zero-line width
+    // This is not permitted in KiCad but some external tools generate invalid
+    // files.
+    if( segment->GetShape() != S_POLYGON && segment->GetWidth() == 0 )
+        segment->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
+
     return segment.release();
 }
 
@@ -2293,6 +2299,12 @@ EDGE_MODULE* PCB_PARSER::parseEDGE_MODULE()
 
         NeedRIGHT();
     }
+
+    // Only filled polygons may have a zero-line width
+    // This is not permitted in KiCad but some external tools generate invalid
+    // files.
+    if( segment->GetShape() != S_POLYGON && segment->GetWidth() == 0 )
+        segment->SetWidth( Millimeter2iu( DEFAULT_LINE_WIDTH ) );
 
     return segment.release();
 }
