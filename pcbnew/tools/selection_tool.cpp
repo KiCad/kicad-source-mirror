@@ -1617,14 +1617,6 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( m_editModules )
             return false;
 
-        float viewArea = getView()->GetViewport().GetArea();
-        float modArea = aItem->GetBoundingBox().GetArea();
-
-        // Do not select modules that are larger the view area
-        // (most likely footprints representing shield connectors)
-        if( viewArea > 0.0 && modArea > viewArea )
-            return false;
-
         // Allow selection of footprints if at least one draw layer is on and
         // the appropriate LAYER_MOD is on
 
