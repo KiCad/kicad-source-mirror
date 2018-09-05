@@ -35,8 +35,6 @@
 #include <base_struct.h>
 #include <base_screen.h>
 #include <legacy_gal/class_drawpanel.h>
-#include <class_draw_panel_gal.h>
-#include <view/view.h>
 #include <confirm.h>
 #include <block_commande.h>
 
@@ -151,16 +149,6 @@ void BLOCK_SELECTOR::InitData( EDA_DRAW_PANEL* aPanel, const wxPoint& startpos )
     SetSize( wxSize( 0, 0 ) );
     m_items.ClearItemsList();
     aPanel->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-}
-
-
-void BLOCK_SELECTOR::UpdateItems( EDA_DRAW_PANEL* aPanel )
-{
-    // ugly, but temporary
-    auto canvas = dynamic_cast<EDA_DRAW_PANEL_GAL*>( aPanel );
-
-    for( size_t i = 0;  i < m_items.GetCount();  i++ )
-        canvas->GetView()->Update( m_items.GetPickedItem( i ) );
 }
 
 

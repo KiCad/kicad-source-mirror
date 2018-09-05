@@ -140,11 +140,6 @@ public:
     void PushItem( ITEM_PICKER& aItem );
 
     /**
-     * Mark the list of items for update when the view is next refreshed.
-     */
-    void UpdateItems( EDA_DRAW_PANEL* aPanel );
-
-    /**
      * Function ClearListAndDeleteItems
      * deletes only the list of EDA_ITEM * pointers, AND the data printed
      * by m_Item

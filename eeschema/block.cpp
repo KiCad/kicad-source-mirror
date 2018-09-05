@@ -387,8 +387,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
     if( !nextcmd )
     {
-        block->UpdateItems( GetCanvas() );
-
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
         GetScreen()->SetCurItem( NULL );

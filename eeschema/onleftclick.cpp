@@ -89,6 +89,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_NO_CONNECT_T:
                 addCurrentItemToList();
                 GetCanvas()->GetView()->ClearPreview();
+                GetCanvas()->GetView()->ClearHiddenFlags();
                 return;
 
             case SCH_LINE_T:    // May already be drawing segment.
