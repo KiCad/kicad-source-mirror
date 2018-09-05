@@ -331,27 +331,33 @@ void SCH_PAINTER::triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D
 
 void SCH_PAINTER::defaultColors ( const LIB_ITEM *aItem )
 {
-  const COLOR4D& fg = m_schSettings.GetLayerColor ( LAYER_DEVICE );
-  const COLOR4D& bg = m_schSettings.GetLayerColor ( LAYER_DEVICE_BACKGROUND );
+    COLOR4D fg = m_schSettings.GetLayerColor( LAYER_DEVICE );
+    COLOR4D bg = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
-  m_gal->SetIsStroke (true);
-  m_gal->SetStrokeColor( fg );
-  m_gal->SetLineWidth ( aItem->GetPenSize() );
-  switch(aItem->GetFillMode())
-  {
+    if( aItem->IsMoving() )
+        bg = bg.Saturate( 0.7 ).WithAlpha( 0.66 );
+
+    m_gal->SetIsStroke( true );
+    m_gal->SetStrokeColor( fg );
+    m_gal->SetLineWidth( aItem->GetPenSize() );
+
+    switch( aItem->GetFillMode() )
+    {
     case FILLED_WITH_BG_BODYCOLOR:
-      m_gal->SetIsFill(true);
-      m_gal->SetFillColor ( bg );
-      break;
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( bg );
+        break;
 
     case FILLED_SHAPE:
-      m_gal->SetIsFill(true);
-      m_gal->SetFillColor ( fg );
-      break;
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( fg );
+        break;
+
     default:
-      m_gal->SetIsFill(false);
-  }
+        m_gal->SetIsFill( false );
+    }
 }
+
 
 void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
 {
@@ -981,10 +987,16 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     // In either case copy it so we can re-orient and translate it.
     std::unique_ptr<LIB_PART> ptrans( new LIB_PART( part ? *part.get() : *dummy() ) );
 
+    if( aComp->IsMoving() )
+        ptrans->SetFlags( IS_MOVED );
+
     orientComponent( ptrans.get(), aComp->GetOrientation() );
 
     for( auto& item : ptrans->GetDrawItems() )
     {
+        if( aComp->IsMoving() )
+            item.SetFlags( IS_MOVED );
+
         auto rp = aComp->GetPosition();
         auto ip = item.GetPosition();
         item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
