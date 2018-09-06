@@ -266,6 +266,23 @@ public:
     STATUS_FLAGS GetFlags() const { return m_Flags; }
 
     /**
+     * Function IsType
+     * Checks whether the item is one of the listed types
+     * @param aScanTypes List of item types
+     * @return true if the item type is contained in the list aScanTypes
+     */
+    bool IsType( const KICAD_T aScanTypes[] )
+    {
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( m_StructType == *p )
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Function SetForceVisible
      * is used to set and cleag force visible flag used to force the item to be drawn
      * even if it's draw attribute is set to not visible.

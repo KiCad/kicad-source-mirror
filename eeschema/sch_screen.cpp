@@ -893,7 +893,8 @@ int SCH_SCREEN::UpdatePickList()
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
         // An item is picked if its bounding box intersects the reference area.
-        if( item->HitTest( area ) )
+        if( item->HitTest( area ) &&
+                ( !m_BlockLocate.IsDragging() || item->IsType( SCH_COLLECTOR::DraggableItems ) ) )
         {
             picker.SetItem( item );
             m_BlockLocate.PushItem( picker );
