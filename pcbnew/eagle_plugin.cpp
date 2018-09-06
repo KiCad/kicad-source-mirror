@@ -680,43 +680,17 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
         else if( grName == "hole" )
         {
             m_xpath->push( "hole" );
-            EHOLE   e( gr );
 
             // Fabricate a MODULE with a single PAD_ATTRIB_HOLE_NOT_PLATED pad.
             // Use m_hole_count to gen up a unique name.
 
             MODULE* module = new MODULE( m_board );
             m_board->Add( module, ADD_APPEND );
-
-            char temp[40];
-            snprintf( temp, sizeof( temp ), "@HOLE%d", m_hole_count++ );
-            module->SetReference( FROM_UTF8( temp ) );
+            module->SetReference( wxString::Format( "@HOLE%d", m_hole_count++ ) );
             module->Reference().SetVisible( false );
 
-            wxPoint pos( kicad_x( e.x ), kicad_y( e.y ) );
+            packageHole( module, gr );
 
-            module->SetPosition( pos );
-
-            // Add a PAD_ATTRIB_HOLE_NOT_PLATED pad to this module.
-            D_PAD* pad = new D_PAD( module );
-            module->PadsList().PushBack( pad );
-
-            pad->SetShape( PAD_SHAPE_CIRCLE );
-            pad->SetAttribute( PAD_ATTRIB_HOLE_NOT_PLATED );
-
-            /* pad's position is already centered on module at relative (0, 0)
-            wxPoint padpos( kicad_x( e.x ), kicad_y( e.y ) );
-
-            pad->SetPos0( padpos );
-            pad->SetPosition( padpos + module->GetPosition() );
-            */
-
-            wxSize  sz( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() );
-
-            pad->SetDrillSize( sz );
-            pad->SetSize( sz );
-
-            pad->SetLayerSet( LSET::AllCuMask() );
             m_xpath->pop();
         }
         else if( grName == "frame" )
@@ -1837,7 +1811,7 @@ void EAGLE_PLUGIN::packageHole( MODULE* aModule, wxXmlNode* aTree ) const
     pad->SetDrillSize( sz );
     pad->SetSize( sz );
 
-    pad->SetLayerSet( LSET::AllCuMask() /* | SOLDERMASK_LAYER_BACK | SOLDERMASK_LAYER_FRONT */ );
+    pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 }
 
 
