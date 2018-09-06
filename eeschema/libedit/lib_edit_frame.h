@@ -528,7 +528,7 @@ private:
     /**
      * Rotates the current item.
      */
-    void OnRotateItem( wxCommandEvent& aEvent );
+    void OnRotate( wxCommandEvent& aEvent );
 
     /**
      * Handles the ID_LIBEDIT_MIRROR_X and ID_LIBEDIT_MIRROR_Y events.

@@ -516,6 +516,9 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
+    if( aPin->IsMoving() )
+        isMoving = true;
+
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_PIN );
 
     if( !aPin->IsVisible() )
@@ -717,6 +720,11 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     {
         for( COLOR4D& c : colour )
             c = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+    }
+    else if( isMoving )
+    {
+        for( COLOR4D& c : colour )
+            c = selectedBrightening( c );
     }
 
     int insideOffset = textOffset;

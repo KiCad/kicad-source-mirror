@@ -839,20 +839,22 @@ void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
+    SCH_SCREEN*     screen = GetScreen();
+    SCH_ITEM*       item = screen->GetCurItem();
+    BLOCK_SELECTOR& block = screen->m_BlockLocate;
 
     // Allows block rotate operation on hot key.
-    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    if( block.GetState() != STATE_NO_BLOCK )
     {
         // Compute the rotation center and put it on grid:
-        wxPoint rotationPoint = screen->m_BlockLocate.Centre();
+        wxPoint rotationPoint = block.Centre();
         rotationPoint = GetNearestGridPosition( rotationPoint );
         SetCrossHairPosition( rotationPoint );
 
-        SaveCopyInUndoList( screen->m_BlockLocate.GetItems(), UR_ROTATED, false, rotationPoint );
-        RotateListOfItems( screen->m_BlockLocate.GetItems(), rotationPoint );
-        
+        SaveCopyInUndoList( block.GetItems(), UR_ROTATED, block.AppendUndo(), rotationPoint );
+        block.SetAppendUndo();
+        RotateListOfItems( block.GetItems(), rotationPoint );
+
         m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
         return;
     }
@@ -1162,8 +1164,6 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
         {
-//            INSTALL_UNBUFFERED_DC( dc, m_canvas );
-//
             if( !HandleBlockBegin( nullptr, dragType, GetCrossHairPosition() ) )
                 break;
 
@@ -1183,27 +1183,40 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item   = screen->GetCurItem();
-
-//    INSTALL_UNBUFFERED_DC( dc, m_canvas );
+    SCH_SCREEN* screen    = GetScreen();
+    SCH_ITEM*   item      = screen->GetCurItem();
+    BLOCK_SELECTOR& block = screen->m_BlockLocate;
 
     // Allows block rotate operation on hot key.
-    if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    if( block.GetState() != STATE_NO_BLOCK )
     {
         if( aEvent.GetId() == ID_SCH_MIRROR_X )
         {
-            m_canvas->MoveCursorToCrossHair();
-            screen->m_BlockLocate.SetMessageBlock( this );
-            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
-            HandleBlockEnd( nullptr );
+            // Compute the mirror center and put it on grid.
+            wxPoint mirrorPoint = block.Centre();
+            mirrorPoint = GetNearestGridPosition( mirrorPoint );
+            SetCrossHairPosition( mirrorPoint );
+
+            SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_X, block.AppendUndo(), mirrorPoint );
+            block.SetAppendUndo();
+            MirrorX( block.GetItems(), mirrorPoint );
+
+            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+            return;
         }
         else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
         {
-            m_canvas->MoveCursorToCrossHair();
-            screen->m_BlockLocate.SetMessageBlock( this );
-            screen->m_BlockLocate.SetCommand( BLOCK_MIRROR_Y );
-            HandleBlockEnd( nullptr );
+            // Compute the mirror center and put it on grid.
+            wxPoint mirrorPoint = block.Centre();
+            mirrorPoint = GetNearestGridPosition( mirrorPoint );
+            SetCrossHairPosition( mirrorPoint );
+
+            SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_Y, block.AppendUndo(), mirrorPoint );
+            block.SetAppendUndo();
+            MirrorY( block.GetItems(), mirrorPoint );
+
+            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+            return;
         }
         else
         {

@@ -42,9 +42,11 @@
 BLOCK_SELECTOR::BLOCK_SELECTOR() :
     EDA_RECT()
 {
-    m_state   = STATE_NO_BLOCK; // State (enum BLOCK_STATE_T) of block.
-    m_command = BLOCK_IDLE;     // Type (enum BLOCK_COMMAND_T) of operation.
-    m_color   = BROWN;
+    m_state      = STATE_NO_BLOCK; // State (enum BLOCK_STATE_T) of block.
+    m_command    = BLOCK_IDLE;     // Type (enum BLOCK_COMMAND_T) of operation.
+    m_color      = BROWN;
+    m_appendUndo = false;          // Indicates at least one undo record has been saved and
+                                   // any additional undo records should be appended.
 }
 
 
@@ -97,17 +99,8 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         msg = _( "Zoom to selection" );
         break;
 
-    case BLOCK_ROTATE:     // Rotate 90 deg
-        msg = _( "Block Rotate" );
-        break;
-
     case BLOCK_FLIP:     // Flip
         msg = _( "Block Flip" );
-        break;
-
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:     // mirror
-        msg = _( "Block Mirror" );
         break;
 
     case BLOCK_ABORT:

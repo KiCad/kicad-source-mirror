@@ -950,11 +950,8 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
     case BLOCK_DUPLICATE_AND_INCREMENT: // Duplicate and increment relevant references
     case BLOCK_DELETE:              // Delete
     case BLOCK_COPY:                // Copy
-    case BLOCK_ROTATE:              // Rotate 90 deg
     case BLOCK_FLIP:                // Flip
     case BLOCK_ZOOM:                // Window Zoom
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:            // mirror
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
         block->InitData( m_canvas, aPosition );
         break;

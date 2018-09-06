@@ -273,137 +273,126 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     {
         BLOCK_STATE_T state     = block->GetState();
         BLOCK_COMMAND_T command = block->GetCommand();
+
         m_canvas->CallEndMouseCapture( aDC );
+
         block->SetState( state );
         block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        SetCrossHairPosition( wxPoint( block->GetRight(),
-                                       block->GetBottom() ) );
-        m_canvas->MoveCursorToCrossHair();
+        SetCrossHairPosition( wxPoint( block->GetRight(), block->GetBottom() ) );
+
+        if( block->GetCommand() != BLOCK_ABORT )
+            m_canvas->MoveCursorToCrossHair();
     }
 
-    switch( block->GetCommand() )
+    if( m_canvas->IsMouseCaptured() )
     {
-    case  BLOCK_IDLE:
-        DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
-        break;
-
-    case BLOCK_DRAG:        // Drag
-    case BLOCK_DRAG_ITEM:
-    case BLOCK_MOVE:        // Move
-    case BLOCK_DUPLICATE:   // Duplicate
-
-        if( GetCurPart() )
-            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
-        
-        if( ItemCount )
+        switch( block->GetCommand() )
         {
-            nextCmd = true;
+        case  BLOCK_IDLE:
+            DisplayError( this, wxT( "Error in HandleBlockPLace" ) );
+            break;
 
-            if( m_canvas->IsMouseCaptured() )
+        case BLOCK_DRAG:        // Drag
+        case BLOCK_DRAG_ITEM:
+        case BLOCK_MOVE:        // Move
+        case BLOCK_DUPLICATE:   // Duplicate
+            if( GetCurPart() )
+                ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+
+            if( ItemCount )
             {
+                nextCmd = true;
+                block->SetFlags( IS_MOVED );
+
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
+                block->SetState( STATE_BLOCK_MOVE );
+            }
+            else
+            {
+                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
+                m_canvas->SetMouseCapture( NULL, NULL );
+            }
+            break;
+
+        case BLOCK_COPY:    // Save a copy of items in the clipboard buffer
+        case BLOCK_CUT:
+            if( GetCurPart() )
+                ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+
+            if( ItemCount )
+            {
+                copySelectedItems();
+                auto cmd = block->GetCommand();
+
+                if( cmd == BLOCK_COPY )
+                {
+                    BlockClearSelectedItems( GetCurPart(), block );
+                    block->ClearItemsList();
+                }
+                else if( cmd == BLOCK_CUT )
+                {
+                    if( block->AppendUndo() )
+                        ; // UR_LIBEDIT saves entire state, so no need to append anything more
+                    else
+                    {
+                        SaveCopyInUndoList( GetCurPart(), UR_LIBEDIT );
+                        block->SetAppendUndo();
+                    }
+
+                    BlockDeleteSelectedItems( GetCurPart(), block );
+                    OnModify();
+                }
+            }
+            break;
+
+        case BLOCK_DELETE:     // Delete
+            if( GetCurPart() )
+                ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
+
+            if( block->AppendUndo() )
+                ; // UR_LIBEDIT saves entire state, so no need to append anything more
+            else if( ItemCount )
+            {
+                SaveCopyInUndoList( GetCurPart(), UR_LIBEDIT );
+                block->SetAppendUndo();
             }
 
-            block->SetState( STATE_BLOCK_MOVE );
-            m_canvas->Refresh( true );
-        }
-        break;
-
-    case BLOCK_PRESELECT_MOVE:     // Move with preselection list
-        nextCmd = true;
-        m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
-        block->SetState( STATE_BLOCK_MOVE );
-        break;
-
-    case BLOCK_COPY:    // Save a copy of items in the clipboard buffer
-    case BLOCK_CUT:
-        if( GetCurPart() )
-            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
-        
-        if( ItemCount )
-        {
-            copySelectedItems();
-            auto cmd = block->GetCommand();
-
-            if( cmd == BLOCK_COPY )
+            if( GetCurPart() )
             {
-                BlockClearSelectedItems( GetCurPart(), block );
-                block->ClearItemsList();
-            }
-            else if( cmd == BLOCK_CUT )
-            {
-                SaveCopyInUndoList( GetCurPart() );
                 BlockDeleteSelectedItems( GetCurPart(), block );
                 OnModify();
             }
+            break;
+
+        case BLOCK_PASTE:
+            wxFAIL; // should not happen
+            break;
+
+        case BLOCK_FLIP:
+            break;
+
+        case BLOCK_ZOOM:     // Window Zoom
+            Window_Zoom( *block );
+            break;
+
+        case BLOCK_ABORT:
+            break;
+
+        case BLOCK_SELECT_ITEMS_ONLY:
+            break;
+
+        case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
+        case BLOCK_MOVE_EXACT:              // not used in Eeschema
+            break;
         }
-        break;
+    }
 
-    case BLOCK_DELETE:     // Delete
-        if( GetCurPart() )
-            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
-        
-        if( ItemCount )
-            SaveCopyInUndoList( GetCurPart() );
-
-        if( GetCurPart() )
-        {
-            BlockDeleteSelectedItems( GetCurPart(), block );
-            OnModify();
-        }
-        break;
-
-    case BLOCK_PASTE:
-        wxFAIL; // should not happen
-        break;
-
-    case BLOCK_FLIP:
-        break;
-
-    case BLOCK_ROTATE:
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:
-        if( GetCurPart() )
-            ItemCount = BlockSelectItems( GetCurPart(), block, m_unit, m_convert, m_syncPinEdit );
-        
-        if( ItemCount )
-            SaveCopyInUndoList( GetCurPart() );
-
-        pt = block->Centre();
-        pt = GetNearestGridPosition( pt );
-        pt.y = -pt.y;
-
-        if( GetCurPart() )
-        {
-            OnModify();
-            int block_cmd = block->GetCommand();
-
-            if( block_cmd == BLOCK_MIRROR_Y)
-                BlockMirrorSelectedItemsH( pt, GetCurPart(), block );
-            else if( block_cmd == BLOCK_MIRROR_X)
-                BlockMirrorSelectedItemsV( pt, GetCurPart(), block );
-            else if( block_cmd == BLOCK_ROTATE )
-                BlockRotateSelectedItems( pt, GetCurPart(), block );
-        }
-
-        break;
-
-    case BLOCK_ZOOM:     // Window Zoom
-        Window_Zoom( *block );
-        break;
-
-    case BLOCK_ABORT:
-        break;
-
-    case BLOCK_SELECT_ITEMS_ONLY:
-        break;
-
-    case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
-    case BLOCK_MOVE_EXACT:              // not used in Eeschema
-        break;
+    if( block->GetCommand() == BLOCK_ABORT )
+    {
+        GetScreen()->ClearDrawingState();
     }
 
     if( !nextCmd )
@@ -416,7 +405,6 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
                                    false );
-        m_canvas->Refresh( true );
     }
 
     view->ShowPreview( false );
@@ -450,7 +438,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_PRESELECT_MOVE:      // Move with preselection list
         block->ClearItemsList();
 
-        if( GetCurPart() )
+        if( GetCurPart() && !block->AppendUndo() )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
@@ -465,7 +453,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DUPLICATE:           // Duplicate
         block->ClearItemsList();
 
-        if( GetCurPart() )
+        if( GetCurPart() && !block->AppendUndo() )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
@@ -486,30 +474,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         //pt.y = -pt.y;
 
         pasteClipboard( pt );
-        break;
-
-    case BLOCK_ROTATE:      // Invert by popup menu, from block move
-    case BLOCK_MIRROR_X:    // Invert by popup menu, from block move
-    case BLOCK_MIRROR_Y:    // Invert by popup menu, from block move
-        if( GetCurPart() )
-            SaveCopyInUndoList( GetCurPart() );
-
-        pt = block->Centre();
-        pt = GetNearestGridPosition( pt );
-        //pt.y = -pt.y;
-
-        if( GetCurPart() )
-        {
-            int block_cmd = block->GetCommand();
-
-            if( block_cmd == BLOCK_MIRROR_Y)
-                 BlockMirrorSelectedItemsH( pt, GetCurPart(), block );
-            else if( block_cmd == BLOCK_MIRROR_X)
-                 BlockMirrorSelectedItemsV( pt, GetCurPart(), block );
-            else if( block_cmd == BLOCK_ROTATE )
-                 BlockRotateSelectedItems( pt, GetCurPart(), block );
-        }
-
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
@@ -606,43 +570,34 @@ void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
 void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                               bool aErase )
 {
-    auto panel = static_cast<SCH_DRAW_PANEL*>(aPanel);
-    auto view = panel->GetView();
-    auto preview = view->GetPreview();
+    SCH_DRAW_PANEL*    panel =static_cast<SCH_DRAW_PANEL*>( aPanel );
+    LIB_EDIT_FRAME*    frame = (LIB_EDIT_FRAME*) aPanel->GetParent();
+    KIGFX::SCH_VIEW*   view = panel->GetView();
+    KIGFX::VIEW_GROUP* preview = view->GetPreview();
 
-    BASE_SCREEN* screen = aPanel->GetScreen();
-    BLOCK_SELECTOR* block = &screen->m_BlockLocate;
-
-    LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
-    wxASSERT( parent != NULL );
-
-    LIB_PART* component = parent->GetCurPart();
+    BASE_SCREEN*       screen = aPanel->GetScreen();
+    BLOCK_SELECTOR*    block = &screen->m_BlockLocate;
+    LIB_PART*          component = frame->GetCurPart();
 
     if( component == NULL )
         return;
 
-    auto cp =  parent->GetCrossHairPosition( true );
-    auto lcp = block->GetLastCursorPosition();
-
-    printf("cp %d %d\n", cp.x, cp.y);
-    printf("lcp %d %d\n", lcp.x, lcp.y);
-    
-    block->SetMoveVector( cp - lcp );
+    block->SetMoveVector( frame->GetCrossHairPosition( true ) - block->GetLastCursorPosition() );
     
     preview->Clear();
+    view->SetVisible( preview, true );
 
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
         LIB_ITEM* copy = static_cast<LIB_ITEM*>( libItem->Clone() );
-//        if( copy->Type() != LIB_PIN_T )
-         copy->Move( copy->GetPosition() + block->GetMoveVector() );
-
+        copy->Move( copy->GetPosition() + block->GetMoveVector() );
+        copy->SetFlags( IS_MOVED );
         preview->Add( copy );
-        view->Hide( libItem );
+
+        if( block->GetCommand() != BLOCK_DUPLICATE )
+            view->Hide( libItem );
     }
 
-    view->SetVisible( preview, true );
-    view->Hide( preview, false );
     view->Update( preview );
 }

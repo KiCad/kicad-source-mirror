@@ -74,10 +74,6 @@ int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
         cmd = BLOCK_DUPLICATE;
         break;
 
-    case GR_KB_ALT:
-        cmd = BLOCK_ROTATE;
-        break;
-
     case GR_KB_CTRL:
         cmd = BLOCK_DRAG;
         break;
@@ -136,19 +132,22 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             return;
         }
 
-        SaveCopyInUndoList( block->GetItems(), UR_CHANGED, false, block->GetMoveVector() );
+        SaveCopyInUndoList( block->GetItems(), UR_CHANGED, block->AppendUndo(), block->GetMoveVector() );
+        block->SetAppendUndo();
         MoveItemsInList( block->GetItems(), block->GetMoveVector() );
         break;
 
     case BLOCK_DUPLICATE:           /* Duplicate */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
+    {
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
 
-        SaveCopyInUndoList( block->GetItems(),
-                            ( block->GetCommand() == BLOCK_PRESELECT_MOVE ) ? UR_CHANGED : UR_NEW );
+        UNDO_REDO_T operation = block->GetCommand() == BLOCK_PRESELECT_MOVE ? UR_CHANGED : UR_NEW;
+        SaveCopyInUndoList( block->GetItems(), operation, block->AppendUndo() );
+    }
         break;
 
     case BLOCK_PASTE:
@@ -195,7 +194,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
     auto panel =static_cast<SCH_DRAW_PANEL*>(m_canvas);
     auto view = panel->GetView();
-    auto area = view->GetSelectionArea();
 
     view->ShowSelectionArea( false );
     view->ClearHiddenFlags();
@@ -222,27 +220,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         {
         case BLOCK_IDLE:
             DisplayError( this, wxT( "Error in HandleBlockPLace()" ) );
-            break;
-
-        case BLOCK_ROTATE:
-            GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
-
-            if( block->GetCount() )
-            {
-                // Compute the rotation center and put it on grid:
-                wxPoint rotationPoint = block->Centre();
-                rotationPoint = GetNearestGridPosition( rotationPoint );
-                SetCrossHairPosition( rotationPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_ROTATED, false, rotationPoint );
-                RotateListOfItems( block->GetItems(), rotationPoint );
-                CheckListConnections( block->GetItems(), true );
-                SchematicCleanUp( true );
-                OnModify();
-            }
-
-            block->ClearItemsList();
-            GetScreen()->TestDanglingEnds();
             break;
 
         case BLOCK_DRAG:
@@ -333,46 +310,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             zoom_command = true;
             break;
 
-        case BLOCK_MIRROR_X:
-            GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
-
-            if( block->GetCount() )
-            {
-                // Compute the mirror center and put it on grid.
-                wxPoint mirrorPoint = block->Centre();
-                mirrorPoint = GetNearestGridPosition( mirrorPoint );
-                SetCrossHairPosition( mirrorPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_X, false, mirrorPoint );
-                MirrorX( block->GetItems(), mirrorPoint );
-                SchematicCleanUp( true );
-                OnModify();
-            }
-
-            block->ClearItemsList();
-            GetScreen()->TestDanglingEnds();
-            break;
-
-        case BLOCK_MIRROR_Y:
-            GetScreen()->UpdatePickList();
-            DrawAndSizingBlockOutlines( m_canvas, aDC, wxDefaultPosition, false );
-
-            if( block->GetCount() )
-            {
-                // Compute the mirror center and put it on grid.
-                wxPoint mirrorPoint = block->Centre();
-                mirrorPoint = GetNearestGridPosition( mirrorPoint );
-                SetCrossHairPosition( mirrorPoint );
-                SaveCopyInUndoList( block->GetItems(), UR_MIRRORED_Y, false, mirrorPoint );
-                MirrorY( block->GetItems(), mirrorPoint );
-                SchematicCleanUp( true );
-                OnModify();
-            }
-
-            block->ClearItemsList();
-            GetScreen()->TestDanglingEnds();
-            break;
-
         default:
             break;
         }
@@ -409,14 +346,13 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    auto panel =static_cast<SCH_DRAW_PANEL*>(aPanel);
-    auto view = panel->GetView();
+    SCH_DRAW_PANEL*    panel =static_cast<SCH_DRAW_PANEL*>( aPanel );
+    KIGFX::SCH_VIEW*   view = panel->GetView();
+    KIGFX::VIEW_GROUP* preview = view->GetPreview();
 
-    auto preview = view->GetPreview();
-
-    BASE_SCREEN*    screen = aPanel->GetScreen();
-    BLOCK_SELECTOR* block = &screen->m_BlockLocate;
-    SCH_ITEM*       schitem;
+    BASE_SCREEN*       screen = aPanel->GetScreen();
+    BLOCK_SELECTOR*    block = &screen->m_BlockLocate;
+    SCH_ITEM*          schitem;
 
     block->SetMoveVector( panel->GetParent()->GetCrossHairPosition() - block->GetLastCursorPosition() );
 
@@ -426,7 +362,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     for( unsigned ii = 0; ii < block->GetCount(); ii++ )
     {
         schitem = (SCH_ITEM*) block->GetItem( ii );
-        SCH_ITEM *copy = static_cast<SCH_ITEM*>( schitem->Clone() );
+        SCH_ITEM* copy = static_cast<SCH_ITEM*>( schitem->Clone() );
         copy->Move( block->GetMoveVector() );
         preview->Add( copy );
 

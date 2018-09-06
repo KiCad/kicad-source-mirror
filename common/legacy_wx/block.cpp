@@ -97,17 +97,8 @@ void BLOCK_SELECTOR::SetMessageBlock( EDA_DRAW_FRAME* frame )
         msg = _( "Zoom to selection" );
         break;
 
-    case BLOCK_ROTATE:     // Rotate 90 deg
-        msg = _( "Block Rotate" );
-        break;
-
     case BLOCK_FLIP:     // Flip
         msg = _( "Block Flip" );
-        break;
-
-    case BLOCK_MIRROR_X:
-    case BLOCK_MIRROR_Y:     // mirror
-        msg = _( "Block Mirror" );
         break;
 
     case BLOCK_ABORT:

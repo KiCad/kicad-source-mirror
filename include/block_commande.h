@@ -82,6 +82,9 @@ class BLOCK_SELECTOR : public EDA_RECT
     wxPoint           m_lastCursorPosition;       //< Last Mouse position in block command
                                                   //< last cursor position in move commands
                                                   //< 0,0 in paste command.
+    bool              m_appendUndo;               //< indicates that at least one undo record
+                                                  //< has been saved and further undo records
+                                                  //< should be appended
 
 public:
     BLOCK_SELECTOR();
@@ -98,6 +101,10 @@ public:
     void SetColor( COLOR4D aColor ) { m_color = aColor; }
 
     COLOR4D GetColor() const { return m_color; }
+
+    bool AppendUndo() const { return m_appendUndo; }
+
+    void SetAppendUndo() { m_appendUndo = true; }
 
     /**
      * Function SetLastCursorPosition

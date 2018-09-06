@@ -53,7 +53,7 @@
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <symbol_lib_table.h>
-
+#include <list_operations.h>
 #include <kicad_device_context.h>
 #include <hotkeys.h>
 #include <eeschema_config.h>
@@ -157,7 +157,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Context menu events and commands.
     EVT_MENU( ID_LIBEDIT_EDIT_PIN, LIB_EDIT_FRAME::OnEditPin )
-    EVT_MENU( ID_LIBEDIT_ROTATE_ITEM, LIB_EDIT_FRAME::OnRotateItem )
+    EVT_MENU( ID_LIBEDIT_ROTATE_ITEM, LIB_EDIT_FRAME::OnRotate )
 
     EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
                     ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
@@ -263,8 +263,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                       .Caption( _( "Libraries" ) ).MinSize( 250, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
-    m_auimgr.AddPane( m_canvas->GetWindow(),
-                      wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
+    m_auimgr.AddPane( m_canvas->GetWindow(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.Update();
 
@@ -835,25 +834,13 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         HandleBlockEnd( nullptr );
         break;
 
-    case ID_POPUP_MIRROR_Y_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_MIRROR_Y );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( nullptr );
-        break;
-
     case ID_POPUP_MIRROR_X_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_MIRROR_X );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( nullptr );
+    case ID_POPUP_MIRROR_Y_BLOCK:
+        OnOrient( event );
         break;
 
     case ID_POPUP_ROTATE_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_ROTATE );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( nullptr );
+        OnRotate( event );
         break;
 
     case ID_POPUP_PLACE_BLOCK:
@@ -882,7 +869,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this, "LIB_EDIT_FRAME::Process_Special_Functions error" );
+        wxFAIL_MSG( "LIB_EDIT_FRAME::Process_Special_Functions error" );
         break;
     }
 
@@ -1161,67 +1148,111 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnRotateItem( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 {
-    LIB_ITEM* item = GetDrawItem();
+    LIB_PART*       part = GetCurPart();
+    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
+    LIB_ITEM*       item = GetDrawItem();
 
-    if( item == NULL )
-        return;
-
-    if( !item->InEditMode() )
+    // Allows block rotate operation on hot key.
+    if( block.GetState() != STATE_NO_BLOCK )
     {
-        LIB_PART*      part = GetCurPart();
+        // Compute the rotation center and put it on grid:
+        wxPoint rotationPoint = block.Centre();
+        rotationPoint = GetNearestGridPosition( rotationPoint );
+        SetCrossHairPosition( rotationPoint );
 
-        SaveCopyInUndoList( part );
-        item->SetUnit( m_unit );
+        if( block.AppendUndo() )
+            ; // UR_LIBEDIT saves entire state, so no need to append anything more
+        else
+        {
+            SaveCopyInUndoList( part, UR_LIBEDIT );
+            block.SetAppendUndo();
+        }
+
+        for( unsigned ii = 0; ii < block.GetCount(); ii++ )
+        {
+            item = dynamic_cast<LIB_ITEM*>( block.GetItem( ii ) );
+            item->Rotate( rotationPoint );
+        }
+
+        GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
     }
+    else if( item )
+    {
+        wxPoint rotationPoint = item->GetBoundingBox().Centre();
+        rotationPoint = GetNearestGridPosition( rotationPoint );
+        SetCrossHairPosition( rotationPoint );
 
-    item->Rotate();
-    OnModify();
+        if( !item->InEditMode() )
+            SaveCopyInUndoList( part, UR_LIBEDIT );
 
-    if( !item->InEditMode() )
-        item->ClearFlags();
+        item->Rotate( rotationPoint );
+        OnModify();
 
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_lastDrawItem = NULL;
+        if( !item->InEditMode() )
+            item->ClearFlags();
+
+        if( GetToolId() == ID_NO_TOOL_SELECTED )
+            m_lastDrawItem = NULL;
+    }
 }
 
 
 void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    BLOCK_SELECTOR& block = screen->m_BlockLocate;
-
-    // Change the current item to a block selection, if there were no items in the block selector
-    if( screen->GetCurItem() && block.GetState() == STATE_NO_BLOCK )
-    {
-        ITEM_PICKER picker( screen->GetCurItem() );
-        block.PushItem( picker );
-        block.SetState( STATE_BLOCK_INIT );
-
-        const wxPoint& cursorPos = GetCrossHairPosition();
-        block.SetLastCursorPosition( cursorPos );
-        block.SetOrigin( cursorPos );
-        block.SetEnd( cursorPos );
-    }
+    LIB_PART*       part = GetCurPart();
+    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
+    LIB_ITEM*       item = GetDrawItem();
 
     // Allows block rotate operation on hot key.
     if( block.GetState() != STATE_NO_BLOCK )
     {
-        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X )
+        // Compute the mirror center and put it on grid.
+        wxPoint mirrorPoint = block.Centre();
+        mirrorPoint = GetNearestGridPosition( mirrorPoint );
+        SetCrossHairPosition( mirrorPoint );
+
+        if( block.AppendUndo() )
+            ; // UR_LIBEDIT saves entire state, so no need to append anything more
+        else
         {
-            m_canvas->MoveCursorToCrossHair();
-            block.SetMessageBlock( this );
-            block.SetCommand( BLOCK_MIRROR_X );
-            HandleBlockEnd( nullptr );
+            SaveCopyInUndoList( part, UR_LIBEDIT );
+            block.SetAppendUndo();
         }
-        else if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y )
+
+        for( unsigned ii = 0; ii < block.GetCount(); ii++ )
         {
-            m_canvas->MoveCursorToCrossHair();
-            block.SetMessageBlock( this );
-            block.SetCommand( BLOCK_MIRROR_Y );
-            HandleBlockEnd( nullptr );
+            item = dynamic_cast<LIB_ITEM*>( block.GetItem( ii ) );
+
+            if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X || aEvent.GetId() == ID_POPUP_MIRROR_X_BLOCK )
+                item->MirrorHorizontal( mirrorPoint );
+            else
+                item->MirrorVertical( mirrorPoint );
         }
+
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+    }
+    else if( item )
+    {
+        wxPoint mirrorPoint = item->GetBoundingBox().Centre();
+        mirrorPoint = GetNearestGridPosition( mirrorPoint );
+        SetCrossHairPosition( mirrorPoint );
+
+        if( !item->InEditMode() )
+            SaveCopyInUndoList( part, UR_LIBEDIT );
+
+        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X || aEvent.GetId() == ID_POPUP_MIRROR_X_BLOCK )
+            item->MirrorHorizontal( mirrorPoint );
+        else
+            item->MirrorVertical( mirrorPoint );
+        OnModify();
+
+        if( !item->InEditMode() )
+            item->ClearFlags();
+
+        if( GetToolId() == ID_NO_TOOL_SELECTED )
+            m_lastDrawItem = NULL;
     }
 }
 

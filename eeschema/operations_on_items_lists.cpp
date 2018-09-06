@@ -76,7 +76,7 @@ void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& rotationPo
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         item->Rotate( rotationPoint );      // Place it in its new position.
         item->ClearFlags();
     }
@@ -87,7 +87,7 @@ void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         item->MirrorY( aMirrorPoint.x );      // Place it in its new position.
         item->ClearFlags();
     }
@@ -98,7 +98,7 @@ void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         item->MirrorX( aMirrorPoint.y );      // Place it in its new position.
         item->ClearFlags();
     }
@@ -109,7 +109,7 @@ void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector 
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         item->Move( aMoveVector );
     }
 }
@@ -123,7 +123,7 @@ void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool a
     GetSchematicConnections( connections );
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         std::vector< wxPoint > new_pts;
 
         if( !item->IsConnectable() )
@@ -175,7 +175,7 @@ void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aApp
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        SCH_ITEM* item = (SCH_ITEM*) aItemsList.GetPickedItem( ii );
+        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
         if( item->GetFlags() & STRUCT_DELETED )
             continue;
@@ -246,7 +246,7 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        newitem = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
+        newitem = DuplicateStruct( dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) ) );
         aItemsList.SetPickedItem( newitem, ii );
         aItemsList.SetPickedItemStatus( UR_NEW, ii );
         {
