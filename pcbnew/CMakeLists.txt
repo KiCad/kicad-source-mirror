@@ -789,6 +789,13 @@ if( KICAD_SCRIPTING_MODULES )
     if( MINGW )
         install( FILES ${CMAKE_BINARY_DIR}/pcbnew/_pcbnew.pyd DESTINATION ${PYTHON_DEST} )
         set( PYMOD_EXT "pyd" )
+
+        # For phase 1, copy _pcbnew.kiface to the python module.
+        add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            DEPENDS pcbnew_kiface
+            COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
+            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+            )
     elseif( APPLE )
          # put everything into bundle at build time, it is relocated at install
         add_custom_target( ScriptingModulesPcbnewSoCopy ALL
@@ -798,6 +805,12 @@ if( KICAD_SCRIPTING_MODULES )
             )
         add_dependencies( ScriptingModulesPcbnewSoCopy ScriptingWxpythonCopy )
         set( PYMOD_EXT "so" )
+
+        add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+            DEPENDS pcbnew_kiface
+            COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
+            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+            )
     else()  # only linux remains among supported platforms
         add_library( pcbnew_python MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
         target_link_libraries( pcbnew_python ${PCBNEW_KIFACE_LIBRARIES} )
@@ -807,33 +820,10 @@ if( KICAD_SCRIPTING_MODULES )
         set( PYMOD_EXT "so" )
     endif()
 
-    if( APPLE )
-         add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-            DEPENDS pcbnew_kiface
-            COMMAND ${CMAKE_COMMAND} -E copy  ${OSX_BUNDLE_BUILD_KIFACE_DIR}/_pcbnew.kiface _pcbnew.${PYMOD_EXT}
-            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
-            )
-        add_custom_target(
-            pcbnew_python_module ALL
-            DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-            )
-    else()
-
-    if( MINGW )
-        # For phase 1, copy _pcbnew.kiface to the python module.
-        add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-            DEPENDS pcbnew_kiface
-            COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
-            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
-            )
-    endif( MINGW )
-
     add_custom_target(
         pcbnew_python_module ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
         )
-    endif()
-
 endif()
 
 
