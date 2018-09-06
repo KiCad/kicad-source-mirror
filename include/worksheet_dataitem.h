@@ -205,15 +205,15 @@ public:
             return KiROUND( m_DefaultLineWidth * m_WSunits2Iu );
     }
 
-    static int GetMarkerSizeUi( wxDC* aDC )
+    /** @return the size of markers used in page layout editor to draw
+     * the anchor points of selected items.
+     * @param aZoomScale is a scaling factor that can be used to adjust
+     * the final marker size depending on zoom level
+     */
+    static int GetMarkerSizeUi( double aZoomScale = 1.0 )
     {
-        double x, y;
-        double scale;
-
-        aDC->GetUserScale( &x, &y );
-        scale = (x + y ) / 2;   // should be equal, but if not best we can do is average
-
-        return KiROUND( 0.01 * m_WSunits2Iu / scale );
+        #define MARKER_DRAW_SIZE 0.5    // Is a value choosen for a suitable size on screen
+        return KiROUND( MARKER_DRAW_SIZE * m_WSunits2Iu * aZoomScale );
     }
 
     /**

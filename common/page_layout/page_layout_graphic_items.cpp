@@ -61,6 +61,33 @@
 #include <worksheet_dataitem.h>
 #include <polygon_test_point_inside.h>
 
+/* a helper function to calculate a marker size scaling factor from zoom level
+ * when one need a "constant" size to draw an item whatever the zoom level
+ * the scaling factor is clamped between 1.0 to 10.0 to avoid ugly drawings
+ * when the factor is ti high (1.0 is the "actual" item size)
+ * Note:
+ *  Only the page layout editor uses the marker size.
+ *  Other editors do not use or draw markers
+ */
+static double getScaleFromZoom( wxDC* aDC )
+{
+    double x, y;
+    aDC->GetUserScale( &x, &y );
+
+    double scale = (x + y ) / 2;   // should be equal, but if not best we can do is average
+
+    double fscale = WORKSHEET_DATAITEM::m_WSunits2Iu * scale;
+    double zscale = 20.0/ fscale;   // The 20.0 factor is chosen for best results
+                                    // (fix the zoom level to have a zscale > 1)
+
+    // clamp scaling factor:
+    zscale = std::max( 1.0, zscale );   // never smaller than actual size
+    zscale = std::min( 10.0, zscale );  // should be enough to make item visible
+
+    return zscale;
+}
+
+
 /* a helper function to draw graphic symbols at start point or end point of
  * an item.
  * The start point symbol is a filled rectangle
@@ -101,7 +128,7 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
     }
 
     // The selected items are drawn after (usually 0 or 1)
-    int markerSize = WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC );
+    int markerSize = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
     for( WS_DRAW_ITEM_BASE* item = GetFirst(); item; item = GetNext() )
     {
@@ -110,63 +137,45 @@ void WS_DRAW_ITEM_LIST::Draw( EDA_RECT* aClipBox, wxDC* aDC )
 
         item->DrawWsItem( aClipBox, aDC );
 
+        if( !markerSize )
+            continue;
+
         switch( item->GetType() )
         {
         case WS_DRAW_ITEM_BASE::wsg_line:
             {
                 WS_DRAW_ITEM_LINE* line = (WS_DRAW_ITEM_LINE*) item;
-
-                if( markerSize )
-                {
-                    drawMarker( aClipBox, aDC, line->GetStart(), markerSize );
-                    drawMarker( aClipBox, aDC, line->GetEnd(), markerSize, true );
-                }
+                drawMarker( aClipBox, aDC, line->GetStart(), markerSize );
+                drawMarker( aClipBox, aDC, line->GetEnd(), markerSize, true );
             }
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_rect:
             {
                 WS_DRAW_ITEM_RECT* rect = (WS_DRAW_ITEM_RECT*) item;
-
-                if( markerSize )
-                {
-                    drawMarker( aClipBox, aDC, rect->GetStart(), markerSize );
-                    drawMarker( aClipBox, aDC, rect->GetEnd(), markerSize, true );
-                }
+                drawMarker( aClipBox, aDC, rect->GetStart(), markerSize );
+                drawMarker( aClipBox, aDC, rect->GetEnd(), markerSize, true );
             }
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_text:
             {
                 WS_DRAW_ITEM_TEXT* text = (WS_DRAW_ITEM_TEXT*) item;
-
-                if( markerSize )
-                    drawMarker( aClipBox, aDC, text->GetTextPos(),
-                                markerSize );
-               }
+                drawMarker( aClipBox, aDC, text->GetTextPos(), markerSize );
+            }
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_poly:
             {
                 WS_DRAW_ITEM_POLYGON* poly = (WS_DRAW_ITEM_POLYGON*) item;
-
-                if( markerSize )
-                {
-                    drawMarker( aClipBox, aDC, poly->GetPosition(),
-                                markerSize );
-                }
+                drawMarker( aClipBox, aDC, poly->GetPosition(), markerSize );
             }
             break;
 
         case WS_DRAW_ITEM_BASE::wsg_bitmap:
             {
                 WS_DRAW_ITEM_BITMAP* bitmap = (WS_DRAW_ITEM_BITMAP*) item;
-
-                if( markerSize )
-                {
-                    drawMarker( aClipBox, aDC, bitmap->GetPosition(),
-                                markerSize );
-                }
+                drawMarker( aClipBox, aDC, bitmap->GetPosition(), markerSize );
             }
             break;
         }
@@ -213,9 +222,10 @@ bool WS_DRAW_ITEM_TEXT::HitTest( const EDA_RECT& aRect ) const
 bool WS_DRAW_ITEM_TEXT::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint pos = GetTextPos();
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( pos.x - aPosition.x) <= marker_size / 2 &&
+        std::abs( pos.y - aPosition.y) <= marker_size / 2 )
         return true;
 
     return false;
@@ -279,9 +289,10 @@ bool WS_DRAW_ITEM_POLYGON::HitTest( const EDA_RECT& aRect ) const
 bool WS_DRAW_ITEM_POLYGON::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint pos = GetPosition();
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( pos.x - aPosition.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( pos.y - aPosition.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( pos.x - aPosition.x) <= marker_size / 2 &&
+        std::abs( pos.y - aPosition.y) <= marker_size / 2 )
         return true;
 
     return false;
@@ -371,9 +382,10 @@ bool WS_DRAW_ITEM_RECT::HitTest( const EDA_RECT& aRect ) const
 bool WS_DRAW_ITEM_RECT::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint dist = GetStart() - aPosition;
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( dist.x) <= marker_size / 2 &&
+        std::abs( dist.y) <= marker_size / 2 )
         return true;
 
     return false;
@@ -383,10 +395,11 @@ bool WS_DRAW_ITEM_RECT::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 bool WS_DRAW_ITEM_RECT::HitTestEndPoint( wxDC *aDC, const wxPoint& aPosition  )
 {
     wxPoint pos = GetEnd();
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
     int dist = (int) hypot( pos.x - aPosition.x, pos.y - aPosition.y );
 
-    if( dist <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( dist <= marker_size / 2 )
         return true;
 
     return false;
@@ -419,9 +432,10 @@ bool WS_DRAW_ITEM_LINE::HitTest( const EDA_RECT& aRect ) const
 bool WS_DRAW_ITEM_LINE::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint dist = GetStart() - aPosition;
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( dist.x) <= marker_size / 2 &&
+        std::abs( dist.y) <= marker_size / 2 )
         return true;
 
     return false;
@@ -431,9 +445,10 @@ bool WS_DRAW_ITEM_LINE::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 bool WS_DRAW_ITEM_LINE::HitTestEndPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint dist = GetEnd() - aPosition;
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( dist.x) <= marker_size / 2 &&
+        std::abs( dist.y) <= marker_size / 2 )
         return true;
 
     return false;
@@ -514,9 +529,10 @@ bool WS_DRAW_ITEM_BITMAP::HitTest( const EDA_RECT& aRect ) const
 bool WS_DRAW_ITEM_BITMAP::HitTestStartPoint( wxDC *aDC, const wxPoint& aPosition )
 {
     wxPoint dist = m_pos - aPosition;
+    int marker_size = WORKSHEET_DATAITEM::GetMarkerSizeUi( getScaleFromZoom( aDC ) );
 
-    if( std::abs( dist.x) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 &&
-        std::abs( dist.y) <= WORKSHEET_DATAITEM::GetMarkerSizeUi( aDC ) / 2 )
+    if( std::abs( dist.x) <= marker_size / 2 &&
+        std::abs( dist.y) <= marker_size / 2 )
         return true;
 
     return false;
