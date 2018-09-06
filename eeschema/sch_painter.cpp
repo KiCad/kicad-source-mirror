@@ -1127,6 +1127,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
+    int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
     if( aLabel->IsMoving() )
         color = selectedBrightening( color );
@@ -1141,7 +1142,7 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aLabel->GetThickness() );
+    m_gal->SetLineWidth( width );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
@@ -1152,6 +1153,7 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 {
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
+    int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
     if( aLabel->IsMoving() )
         color = selectedBrightening( color );
@@ -1166,7 +1168,7 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aLabel->GetThickness() );
+    m_gal->SetLineWidth( width );
     m_gal->SetStrokeColor( color );
     m_gal->DrawPolyline( pts2 );
 
