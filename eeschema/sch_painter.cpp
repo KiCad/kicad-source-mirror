@@ -892,7 +892,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
 void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 {
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_WIRE );
+    COLOR4D color = aLine->GetLineColor();
 
     if( aLine->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
