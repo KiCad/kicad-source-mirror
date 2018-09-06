@@ -342,7 +342,6 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
             int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {
     BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
-
     GRSetDrawMode( aDc, aOpts.draw_mode );
 
     /* draw background for filled items using background option
@@ -410,7 +409,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
         if( drawItem.Type() == LIB_FIELD_T )
         {
-            LIB_FIELD& field = dynamic_cast<LIB_FIELD&>( drawItem );
+            LIB_FIELD& field = static_cast<LIB_FIELD&>( drawItem );
 
             if( field.IsVisible() && !aOpts.draw_visible_fields )
                 continue;
@@ -421,7 +420,7 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            LIB_PIN& pin = dynamic_cast<LIB_PIN&>( drawItem );
+            LIB_PIN& pin = static_cast<LIB_PIN&>( drawItem );
 
             uintptr_t flags = 0;
             if( aOpts.show_pin_text )

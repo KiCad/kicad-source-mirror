@@ -677,7 +677,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     // Four locations around a pin where text can be drawn
     enum { INSIDE = 0, OUTSIDE, ABOVE, BELOW };
     int size[4] = { 0, 0, 0, 0 };
-    int thickness[4];
+    int thickness[4] = { numLineWidth, numLineWidth, numLineWidth, numLineWidth };
     COLOR4D colour[4];
     wxString text[4];
 

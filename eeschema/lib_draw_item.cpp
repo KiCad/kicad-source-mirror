@@ -146,10 +146,10 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         m_Fill = fillMode;
     }
     else
+    #endif
     {
         drawGraphic( aPanel, aDC, aOffset, aColor, aDrawMode, aData, aTransform );
     }
-    #endif
 }
 
 

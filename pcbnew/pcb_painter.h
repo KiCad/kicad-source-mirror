@@ -136,7 +136,7 @@ public:
         m_sketchBoardGfx = aEnabled;
     }
 
-    inline bool IsBackgroundDark() const
+    inline bool IsBackgroundDark() const override
     {
         auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
 
