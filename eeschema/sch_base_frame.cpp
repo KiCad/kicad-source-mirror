@@ -526,6 +526,7 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         block->SetState( STATE_BLOCK_MOVE );
         block->SetFlags( IS_MOVED );
         m_canvas->CallMouseCapture( aDC, aPosition, false );
+        m_canvas->Refresh();
     }
         break;
 

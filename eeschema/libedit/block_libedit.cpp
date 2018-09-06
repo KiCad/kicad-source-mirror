@@ -79,6 +79,7 @@ int LIB_EDIT_FRAME::BlockSelectItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock, i
     return itemCount;
 }
 
+
 void LIB_EDIT_FRAME::BlockClearSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
 {
     for( LIB_ITEM& item : aPart->GetDrawItems() )
@@ -87,6 +88,7 @@ void LIB_EDIT_FRAME::BlockClearSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* a
     }
     aBlock->ClearItemsList();
 }
+
 
 void LIB_EDIT_FRAME::BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
 {
@@ -101,6 +103,7 @@ void LIB_EDIT_FRAME::BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* a
 
     // view update    
 }
+
 
 void LIB_EDIT_FRAME::BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
 {
@@ -131,32 +134,31 @@ void LIB_EDIT_FRAME::BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* 
 
 void LIB_EDIT_FRAME::BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
 {
-    std::vector< LIB_ITEM* > tmp;
+    PICKED_ITEMS_LIST& aItemsList = aBlock->GetItems();
+    LIB_ITEM* oldItem;
+    LIB_ITEM* newItem;
 
-    for( LIB_ITEM& item : aPart->GetDrawItems() )
+    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
+        oldItem = dynamic_cast<LIB_ITEM*>( aItemsList.GetPickedItem( ii ) );
+
         // We *do not* copy fields because they are unique for the whole component
         // so skip them (do not duplicate) if they are flagged selected.
-        if( item.Type() == LIB_FIELD_T )
-            item.ClearFlags( SELECTED );
+        if( oldItem->Type() == LIB_FIELD_T )
+            oldItem->ClearFlags( SELECTED );
 
-        if( !item.IsSelected() )
+        if( !oldItem->IsSelected() )
             continue;
 
-        item.ClearFlags( SELECTED );
-        LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
+        newItem = (LIB_ITEM*) oldItem->Clone();
         newItem->SetFlags( SELECTED );
+        oldItem->ClearFlags( SELECTED );
 
-        // When push_back elements in buffer, a memory reallocation can happen
-        // and will break pointers.
-        // So, push_back later.
-        tmp.push_back( newItem );
+        aItemsList.SetPickedItem( newItem, ii );
+        aItemsList.SetPickedItemStatus( UR_NEW, ii );
+
+        aPart->GetDrawItems().push_back( newItem );
     }
-
-    for( auto item : tmp )
-        aPart->GetDrawItems().push_back( item );
-
-    BlockMoveSelectedItems( aOffset, aPart, aBlock );
 }
 
 
@@ -303,12 +305,13 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( ItemCount )
             {
                 nextCmd = true;
-                block->SetFlags( IS_MOVED );
+                block->SetState( STATE_BLOCK_MOVE );
 
-                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
+                if( block->GetCommand() == BLOCK_DUPLICATE )
+                    BlockCopySelectedItems( pt, GetCurPart(), block );
+
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
-                block->SetState( STATE_BLOCK_MOVE );
             }
             else
             {
@@ -384,6 +387,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         case BLOCK_SELECT_ITEMS_ONLY:
             break;
 
+        case BLOCK_PRESELECT_MOVE:          // not used in LibEdit
         case BLOCK_DUPLICATE_AND_INCREMENT: // not used in Eeschema
         case BLOCK_MOVE_EXACT:              // not used in Eeschema
             break;
@@ -407,9 +411,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                                    false );
     }
 
-    view->ShowPreview( false );
     view->ShowSelectionArea( false );
-    view->ClearHiddenFlags();
+    view->ShowPreview( nextCmd );
 
     return nextCmd;
 }
@@ -435,7 +438,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:                // Drag
     case BLOCK_DRAG_ITEM:
     case BLOCK_MOVE:                // Move
-    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
+    case BLOCK_DUPLICATE:           // Duplicate
         block->ClearItemsList();
 
         if( GetCurPart() && !block->AppendUndo() )
@@ -448,20 +451,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             BlockMoveSelectedItems( pt, GetCurPart(), block );
 
         m_canvas->Refresh( true );
-        break;
-
-    case BLOCK_DUPLICATE:           // Duplicate
-        block->ClearItemsList();
-
-        if( GetCurPart() && !block->AppendUndo() )
-            SaveCopyInUndoList( GetCurPart() );
-
-        pt = block->GetMoveVector();
-        //pt.y = -pt.y;
-
-        if( GetCurPart() )
-            BlockCopySelectedItems( pt, GetCurPart(), block );
-
         break;
 
     case BLOCK_PASTE:       // Paste (recopy the last block saved)
@@ -591,12 +580,12 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     {
         LIB_ITEM* libItem = (LIB_ITEM*) block->GetItem( ii );
         LIB_ITEM* copy = static_cast<LIB_ITEM*>( libItem->Clone() );
+
         copy->Move( copy->GetPosition() + block->GetMoveVector() );
         copy->SetFlags( IS_MOVED );
         preview->Add( copy );
 
-        if( block->GetCommand() != BLOCK_DUPLICATE )
-            view->Hide( libItem );
+        view->Hide( libItem );
     }
 
     view->Update( preview );

@@ -234,6 +234,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
                                            const wxPoint& aMoveVector )
 {
+    SCH_ITEM* olditem;
     SCH_ITEM* newitem;
 
     if( aItemsList.GetCount() == 0 )
@@ -246,32 +247,34 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        newitem = DuplicateStruct( dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) ) );
+        olditem = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
+        newitem = DuplicateStruct( olditem );
+
         aItemsList.SetPickedItem( newitem, ii );
         aItemsList.SetPickedItemStatus( UR_NEW, ii );
-        {
-            switch( newitem->Type() )
-            {
-            case SCH_JUNCTION_T:
-            case SCH_LINE_T:
-            case SCH_BUS_BUS_ENTRY_T:
-            case SCH_BUS_WIRE_ENTRY_T:
-            case SCH_TEXT_T:
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-            case SCH_SHEET_PIN_T:
-            case SCH_MARKER_T:
-            case SCH_NO_CONNECT_T:
-            default:
-                break;
 
-            case SCH_SHEET_T:
-            {
-                SCH_SHEET* sheet = (SCH_SHEET*) newitem;
-                // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
-                // based sheet name and update the time stamp for each sheet in the block.
-                timestamp_t timeStamp = GetNewTimeStamp();
+        switch( newitem->Type() )
+        {
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_SHEET_PIN_T:
+        case SCH_MARKER_T:
+        case SCH_NO_CONNECT_T:
+        default:
+            break;
+
+        case SCH_SHEET_T:
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) newitem;
+            // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
+            // based sheet name and update the time stamp for each sheet in the block.
+            timestamp_t timeStamp = GetNewTimeStamp();
 
                 sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
                 sheet->SetTimeStamp( timeStamp );
@@ -279,17 +282,14 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
                 break;
             }
 
-            case SCH_COMPONENT_T:
-                ( (SCH_COMPONENT*) newitem )->SetTimeStamp( GetNewTimeStamp() );
-                ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
-                break;
-            }
-
-            newitem->Move( aMoveVector );
-
-            SetSchItemParent( newitem, screen );
-            AddToScreen( newitem );
+        case SCH_COMPONENT_T:
+            ( (SCH_COMPONENT*) newitem )->SetTimeStamp( GetNewTimeStamp() );
+            ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
+            break;
         }
+
+        SetSchItemParent( newitem, screen );
+        AddToScreen( newitem );
     }
 
     if( hasSheetCopied )

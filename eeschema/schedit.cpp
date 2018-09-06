@@ -851,8 +851,12 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         rotationPoint = GetNearestGridPosition( rotationPoint );
         SetCrossHairPosition( rotationPoint );
 
-        SaveCopyInUndoList( block.GetItems(), UR_ROTATED, block.AppendUndo(), rotationPoint );
-        block.SetAppendUndo();
+        if( block.GetCommand() != BLOCK_DUPLICATE )
+        {
+            SaveCopyInUndoList( block.GetItems(), UR_ROTATED, block.AppendUndo(), rotationPoint );
+            block.SetAppendUndo();
+        }
+
         RotateListOfItems( block.GetItems(), rotationPoint );
 
         m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
@@ -1193,13 +1197,17 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         if( aEvent.GetId() == ID_SCH_MIRROR_X )
         {
             // Compute the mirror center and put it on grid.
-            wxPoint mirrorPoint = block.Centre();
-            mirrorPoint = GetNearestGridPosition( mirrorPoint );
-            SetCrossHairPosition( mirrorPoint );
+            wxPoint mirrorPt = block.Centre();
+            mirrorPt = GetNearestGridPosition( mirrorPt );
+            SetCrossHairPosition( mirrorPt );
 
-            SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_X, block.AppendUndo(), mirrorPoint );
-            block.SetAppendUndo();
-            MirrorX( block.GetItems(), mirrorPoint );
+            if( block.GetCommand() != BLOCK_DUPLICATE )
+            {
+                SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_X, block.AppendUndo(), mirrorPt );
+                block.SetAppendUndo();
+            }
+
+            MirrorX( block.GetItems(), mirrorPt );
 
             m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
             return;
@@ -1207,13 +1215,17 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
         {
             // Compute the mirror center and put it on grid.
-            wxPoint mirrorPoint = block.Centre();
-            mirrorPoint = GetNearestGridPosition( mirrorPoint );
-            SetCrossHairPosition( mirrorPoint );
+            wxPoint mirrorPt = block.Centre();
+            mirrorPt = GetNearestGridPosition( mirrorPt );
+            SetCrossHairPosition( mirrorPt );
 
-            SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_Y, block.AppendUndo(), mirrorPoint );
-            block.SetAppendUndo();
-            MirrorY( block.GetItems(), mirrorPoint );
+            if( block.GetCommand() != BLOCK_DUPLICATE )
+            {
+                SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_Y, block.AppendUndo(), mirrorPt );
+                block.SetAppendUndo();
+            }
+
+            MirrorY( block.GetItems(), mirrorPt );
 
             m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
             return;

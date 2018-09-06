@@ -121,6 +121,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG:        // Drag from mouse
     case BLOCK_DRAG_ITEM:   // Drag from a component selection and drag command
     case BLOCK_MOVE:
+    case BLOCK_DUPLICATE:           /* Duplicate */
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
@@ -132,22 +133,19 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             return;
         }
 
-        SaveCopyInUndoList( block->GetItems(), UR_CHANGED, block->AppendUndo(), block->GetMoveVector() );
-        block->SetAppendUndo();
+        if( block->GetCommand() != BLOCK_DUPLICATE )
+            SaveCopyInUndoList( block->GetItems(), UR_CHANGED, block->AppendUndo(), block->GetMoveVector() );
+
         MoveItemsInList( block->GetItems(), block->GetMoveVector() );
         break;
 
-    case BLOCK_DUPLICATE:           /* Duplicate */
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
-    {
         if( m_canvas->IsMouseCaptured() )
             m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
 
         DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
 
-        UNDO_REDO_T operation = block->GetCommand() == BLOCK_PRESELECT_MOVE ? UR_CHANGED : UR_NEW;
-        SaveCopyInUndoList( block->GetItems(), operation, block->AppendUndo() );
-    }
+        SaveCopyInUndoList( block->GetItems(), UR_CHANGED, block->AppendUndo() );
         break;
 
     case BLOCK_PASTE:
@@ -188,7 +186,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 {
     bool            nextcmd = false;
-    bool            zoom_command = false;
     bool            append = false;
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -226,32 +223,39 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         case BLOCK_DRAG_ITEM:   // Drag from a drag command
         case BLOCK_MOVE:
         case BLOCK_DUPLICATE:
-            if( block->GetCommand() == BLOCK_DRAG_ITEM && GetScreen()->GetCurItem() != NULL )
+        case BLOCK_PRESELECT_MOVE:
+            if( block->GetCommand() == BLOCK_DRAG_ITEM )
             {
                 // This is a drag command, not a mouse block command
                 // Only this item is put in list
-                ITEM_PICKER picker;
-                picker.SetItem( GetScreen()->GetCurItem() );
-                block->PushItem( picker );
+                if( GetScreen()->GetCurItem() )
+                {
+                    ITEM_PICKER picker;
+                    picker.SetItem( GetScreen()->GetCurItem() );
+                    block->PushItem( picker );
+                }
             }
-            else
+            else if( block->GetCommand() != BLOCK_PRESELECT_MOVE )
             {
                 // Collect all items in the locate block
                 GetScreen()->UpdatePickList();
             }
-            // fall through
 
-        case BLOCK_PRESELECT_MOVE: /* Move with preselection list*/
+            GetScreen()->SelectBlockItems();
+
+            if( block->GetCommand() == BLOCK_DUPLICATE )
+            {
+                DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
+                SaveCopyInUndoList( block->GetItems(), UR_NEW );
+            }
+
             if( block->GetCount() )
             {
                 nextcmd = true;
-                GetScreen()->SelectBlockItems();
-                block->SetFlags( IS_MOVED );
+                block->SetState( STATE_BLOCK_MOVE );
 
-                m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
-                block->SetState( STATE_BLOCK_MOVE );
             }
             else
             {
@@ -302,12 +306,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             block->ClearItemsList();
             break;
 
-        case BLOCK_PASTE:
-            block->SetState( STATE_BLOCK_MOVE );
-            break;
-
         case BLOCK_ZOOM:
-            zoom_command = true;
+            Window_Zoom( GetScreen()->m_BlockLocate );
             break;
 
         default:
@@ -315,26 +315,18 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         }
     }
 
-    if( block->GetCommand() == BLOCK_ABORT )
-    {
-        GetScreen()->ClearDrawingState();
-    }
-
     if( !nextcmd )
     {
         block->SetState( STATE_NO_BLOCK );
         block->SetCommand( BLOCK_IDLE );
+        GetScreen()->ClearDrawingState();
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
                                    false );
     }
 
-    if( zoom_command )
-        Window_Zoom( GetScreen()->m_BlockLocate );
-
-    view->ShowPreview( false );
     view->ShowSelectionArea( false );
-    view->ClearHiddenFlags();
+    view->ShowPreview( nextcmd );
 
     return nextcmd;
 }
@@ -363,11 +355,12 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     {
         schitem = (SCH_ITEM*) block->GetItem( ii );
         SCH_ITEM* copy = static_cast<SCH_ITEM*>( schitem->Clone() );
+
         copy->Move( block->GetMoveVector() );
+        copy->SetFlags( IS_MOVED );
         preview->Add( copy );
 
-        if( block->GetCommand() != BLOCK_DUPLICATE )
-            view->Hide( schitem );
+        view->Hide( schitem );
     }
 
     view->Update( preview );

@@ -641,7 +641,9 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     switch( id )   // Stop placement commands before handling new command.
     {
     case wxID_COPY:
+    case ID_POPUP_COPY_BLOCK:
     case wxID_CUT:
+    case ID_POPUP_CUT_BLOCK:
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
@@ -850,6 +852,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_COPY:
+    case ID_POPUP_COPY_BLOCK:
         block.SetCommand( BLOCK_COPY );
         block.SetMessageBlock( this );
         HandleBlockEnd( nullptr );
@@ -860,6 +863,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_CUT:
+    case ID_POPUP_CUT_BLOCK:
         if( block.GetCommand() != BLOCK_MOVE )
             break;
 
