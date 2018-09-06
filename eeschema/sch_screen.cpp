@@ -535,21 +535,33 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      * their SCH_SCREEN::Draw() draws nothing
      */
     std::vector< SCH_ITEM* > junctions;
+    std::vector< SCH_ITEM* > middlez;
 
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
 
+    // BITMAPs are drawn first, junctions are drawn last
+    // All other items are drawn in the order they were placed in the schematic
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
         if( item->IsMoving() || item->IsResized() )
             continue;
 
+        // TODO: clean this draw routine with a well-defined drawing order (maybe 5.1?)
         if( item->Type() == SCH_JUNCTION_T )
             junctions.push_back( item );
-        else
-            // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
-            // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
+        else if( item->Type() == SCH_BITMAP_T )
             item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+        else
+            middlez.push_back( item );
+    }
+
+
+    for( auto item : middlez )
+    {
+        // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
+        // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
+        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
     }
 
     for( auto item : junctions )
