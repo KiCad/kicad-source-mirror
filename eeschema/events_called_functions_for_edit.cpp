@@ -34,6 +34,7 @@
 #include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <sch_text.h>
+#include <view/view_controls.h>
 
 
 void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
@@ -43,6 +44,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
     if( !curr_item || curr_item->GetFlags() )
         return;
 
+    GetCanvas()->GetViewControls()->SetCursorPosition( GetCrossHairPosition() );
 
     switch( curr_item->Type() )
     {
