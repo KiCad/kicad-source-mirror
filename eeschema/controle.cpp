@@ -256,10 +256,12 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_canvas->CrossHairOff( aDC );
     else
-    {
-        SetCrossHairPosition( pos, snapToGrid );
-        RefreshCrossHair( oldpos, aPosition, aDC );
-    }
+        m_canvas->CrossHairOn( aDC );
+
+    SetCrossHairPosition( pos, snapToGrid );
+
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->CallMouseCapture( aDC, aPosition, true );
 
     if( aHotKey )
     {

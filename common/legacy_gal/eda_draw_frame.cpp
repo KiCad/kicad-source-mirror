@@ -1186,22 +1186,28 @@ void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos,
                                        const wxPoint &aEvtPos,
                                        wxDC* aDC )
 {
+    wxFAIL_MSG( "shouldn't be using RefreshCrossHair() anymore; use CallMouseCapture() directly" );
+
+    // CrossHair is no longer XORed; no need for most of this
+#if 0
     wxPoint newpos = GetCrossHairPosition();
 
 
     // Redraw the crosshair if it moved
-    //if( aOldPos != newpos )
+    if( aOldPos != newpos )
     {
         SetCrossHairPosition( aOldPos, false );
         m_canvas->CrossHairOff( aDC );
         SetCrossHairPosition( newpos, false );
         m_canvas->CrossHairOn( aDC );
-
+#endif
         if( m_canvas->IsMouseCaptured() )
         {
             m_canvas->CallMouseCapture( aDC, aEvtPos, true );
         }
+#if 0
     }
+#endif
 }
 
 bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,

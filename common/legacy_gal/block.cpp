@@ -179,8 +179,6 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
     if( aPanel->IsMouseCaptured() )      // Erase current drawing on screen
     {
-        // Clear block outline.
-        aPanel->CallMouseCapture( aDC, wxDefaultPosition, false );
         aPanel->SetMouseCapture( NULL, NULL );
         screen->SetCurItem( NULL );
 
