@@ -253,8 +253,13 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
     // Update cursor position.
-    SetCrossHairPosition( pos, snapToGrid );
-    RefreshCrossHair( oldpos, aPosition, aDC );
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
+        m_canvas->CrossHairOff( aDC );
+    else
+    {
+        SetCrossHairPosition( pos, snapToGrid );
+        RefreshCrossHair( oldpos, aPosition, aDC );
+    }
 
     if( aHotKey )
     {
