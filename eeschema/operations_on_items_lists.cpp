@@ -105,16 +105,6 @@ void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 }
 
 
-void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector )
-{
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-        item->Move( aMoveVector );
-    }
-}
-
-
 void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
 {
     std::vector< wxPoint > pts;

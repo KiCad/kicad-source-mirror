@@ -41,14 +41,6 @@ void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 
 /**
- * Function MoveItemsInList
- *  Move a list of items to a given move vector
- * @param aItemsList = list of picked items
- * @param aMoveVector = the move vector value
- */
-void MoveItemsInList( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector );
-
-/**
  * Function DeleteItemsInList
  * delete schematic items in aItemsList
  * deleted items are put in undo list

@@ -1329,7 +1329,7 @@ private:
      * @sa m_blockItems
      * @param aItemsList List to copy the block select items into.
      */
-    void copyBlockItems( PICKED_ITEMS_LIST& aItemsList );
+    void copyBlockItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector );
 
     /**
      * Add the context menu items to \a aMenu for \a aJunction.

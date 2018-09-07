@@ -136,7 +136,12 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         if( block->GetCommand() != BLOCK_DUPLICATE )
             SaveCopyInUndoList( block->GetItems(), UR_CHANGED, block->AppendUndo(), block->GetMoveVector() );
 
-        MoveItemsInList( block->GetItems(), block->GetMoveVector() );
+        for( unsigned ii = 0; ii < block->GetItems().GetCount(); ii++ )
+        {
+            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( block->GetItems().GetPickedItem( ii ) );
+            item->Move( block->GetMoveVector() );
+            GetCanvas()->GetView()->Update( item, KIGFX::GEOMETRY );
+        }
         break;
 
     case BLOCK_PRESELECT_MOVE:      /* Move with preselection list*/
@@ -273,8 +278,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( ( block->GetCommand() == BLOCK_CUT ) && block->GetCount() )
             {
                 wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
-                copyBlockItems( block->GetItems() );
-                MoveItemsInList( m_blockItems.GetItems(), move_vector );
+                copyBlockItems( block->GetItems(), move_vector );
             }
 
             // We set this in a while loop to catch any newly created items
@@ -299,8 +303,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( block->GetCount() )
             {
                 wxPoint move_vector = -GetScreen()->m_BlockLocate.GetLastCursorPosition();
-                copyBlockItems( block->GetItems() );
-                MoveItemsInList( m_blockItems.GetItems(), move_vector );
+                copyBlockItems( block->GetItems(), move_vector );
             }
 
             block->ClearItemsList();
@@ -367,7 +370,7 @@ static void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 }
 
 
-void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
+void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector )
 {
     m_blockItems.ClearListAndDeleteItems();   // delete previous saved list, if exists
 
@@ -380,6 +383,7 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList )
         SCH_ITEM* copy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         copy->SetParent( NULL );
         copy->SetFlags( copy->GetFlags() | UR_TRANSIENT );
+        copy->Move( aMoveVector );
         ITEM_PICKER item( copy, UR_NEW );
 
         m_blockItems.PushItem( item );
