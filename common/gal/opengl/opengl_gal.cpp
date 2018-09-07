@@ -809,20 +809,6 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
     VECTOR2D diagonalPointA( aEndPoint.x, aStartPoint.y );
     VECTOR2D diagonalPointB( aStartPoint.x, aEndPoint.y );
 
-    // Stroke the outline
-    if( isStrokeEnabled )
-    {
-        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-        std::deque<VECTOR2D> pointList;
-        pointList.push_back( aStartPoint );
-        pointList.push_back( diagonalPointA );
-        pointList.push_back( aEndPoint );
-        pointList.push_back( diagonalPointB );
-        pointList.push_back( aStartPoint );
-        DrawPolyline( pointList );
-    }
-
     // Fill the rectangle
     if( isFillEnabled )
     {
@@ -837,6 +823,20 @@ void OPENGL_GAL::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEn
         currentManager->Vertex( aStartPoint.x, aStartPoint.y, layerDepth );
         currentManager->Vertex( aEndPoint.x, aEndPoint.y, layerDepth );
         currentManager->Vertex( diagonalPointB.x, diagonalPointB.y, layerDepth );
+    }
+
+    // Stroke the outline
+    if( isStrokeEnabled )
+    {
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+        std::deque<VECTOR2D> pointList;
+        pointList.push_back( aStartPoint );
+        pointList.push_back( diagonalPointA );
+        pointList.push_back( aEndPoint );
+        pointList.push_back( diagonalPointB );
+        pointList.push_back( aStartPoint );
+        DrawPolyline( pointList );
     }
 }
 

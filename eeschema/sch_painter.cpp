@@ -308,18 +308,16 @@ void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
     if( !isUnitAndConversionShown( aRect ) )
         return;
 
-    defaultColors(aRect);
+    defaultColors( aRect );
 
-    //m_gal->SetIsStroke( true );
-    m_gal->SetLineWidth( aRect->GetPenSize() );
     m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
 
 }
 
 void SCH_PAINTER::triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c )
 {
-  m_gal->DrawLine ( a, b );
-  m_gal->DrawLine ( b, c );
+    m_gal->DrawLine ( a, b );
+    m_gal->DrawLine ( b, c );
 }
 
 
