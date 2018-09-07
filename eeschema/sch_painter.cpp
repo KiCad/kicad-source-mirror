@@ -171,7 +171,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
     m_gal->StrokeText( wxT("Test"), VECTOR2D(0, 0), 0.0 );
 */
-	switch(item->Type())
+	switch( item->Type() )
 	{
 	HANDLE_ITEM(LIB_ALIAS_T, LIB_ALIAS);
 	HANDLE_ITEM(LIB_PART_T, LIB_PART);
@@ -920,9 +920,10 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     switch( aText->Type() )
     {
-    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
-    case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
-    default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
+    case SCH_HIERARCHICAL_LABEL_T:  color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
+    case SCH_GLOBAL_LABEL_T:        color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
+    case SCH_LABEL_T:               color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
+    default:                        color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
     }
 
     if( !aText->IsVisible() )
@@ -1240,7 +1241,9 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 
 void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_BUS );
+    COLOR4D color = aEntry->Type() == SCH_BUS_BUS_ENTRY_T ?
+                                m_schSettings.GetLayerColor( LAYER_BUS )
+                                    : m_schSettings.GetLayerColor( LAYER_WIRE );
 
     if( aEntry->IsMoving() )
         color = selectedBrightening( color );
@@ -1255,7 +1258,8 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 
     m_gal->DrawLine( pos, endPos );
 
-    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_BUS ) );
+    // Draw dangling symbols:
+    m_gal->SetLineWidth ( 1.0 );
 
     if( aEntry->IsDanglingStart() )
         m_gal->DrawCircle( pos, TARGET_BUSENTRY_RADIUS );
