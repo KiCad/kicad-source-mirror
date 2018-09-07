@@ -27,6 +27,7 @@
  * @brief a few functions useful in geometry calculations.
  */
 
+#include <eda_rect.h>
 #include <geometry/geometry_utils.h>
 
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
@@ -59,5 +60,89 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
         aSegCountforCircle = 6;
     if( 1 || aSegCountforCircle > 64 )
         return 1.0 / cos( M_PI / aSegCountforCircle );
+}
+
+
+/***
+ * Utility for the line clipping code, returns the boundary code of
+ * a point. Bit allocation is arbitrary
+ */
+inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
+{
+    int code;
+    if( y < aClipBox->GetY() )
+        code = 2;
+    else if( y > aClipBox->GetBottom() )
+        code = 1;
+    else
+        code = 0;
+    if( x < aClipBox->GetX() )
+        code |= 4;
+    else if( x > aClipBox->GetRight() )
+        code |= 8;
+    return code;
+}
+
+
+bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
+{
+    // Stock Cohen-Sutherland algorithm; check *any* CG book for details
+    int outcode1 = clipOutCode( aClipBox, x1, y1 );
+    int outcode2 = clipOutCode( aClipBox, x2, y2 );
+
+    while( outcode1 || outcode2 )
+    {
+        // Fast reject
+        if( outcode1 & outcode2 )
+            return true;
+
+        // Choose a side to clip
+        int thisoutcode, x, y;
+        if( outcode1 )
+            thisoutcode = outcode1;
+        else
+            thisoutcode = outcode2;
+
+        /* One clip round
+         * Since we use the full range of 32 bit ints, the proportion
+         * computation has to be done in 64 bits to avoid horrible
+         * results */
+        if( thisoutcode & 1 ) // Clip the bottom
+        {
+            y = aClipBox->GetBottom();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+        }
+        else if( thisoutcode & 2 ) // Clip the top
+        {
+            y = aClipBox->GetY();
+            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
+        }
+        else if( thisoutcode & 8 ) // Clip the right
+        {
+            x = aClipBox->GetRight();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
+        }
+        else // if( thisoutcode & 4), obviously, clip the left
+        {
+            x = aClipBox->GetX();
+            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
+        }
+
+        // Put the result back and update the boundary code
+        // No ambiguity, otherwise it would have been a fast reject
+        if( thisoutcode == outcode1 )
+        {
+            x1 = x;
+            y1 = y;
+            outcode1 = clipOutCode( aClipBox, x1, y1 );
+        }
+        else
+        {
+            x2 = x;
+            y2 = y;
+            outcode2 = clipOutCode( aClipBox, x2, y2 );
+        }
+    }
+    return false;
 }
 

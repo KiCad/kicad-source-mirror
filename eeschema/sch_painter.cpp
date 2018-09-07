@@ -44,9 +44,9 @@
 #include <sch_bus_entry.h>
 #include <sch_bitmap.h>
 #include <draw_graphic_text.h>
-
+#include <geometry/geometry_utils.h>
 #include <lib_edit_frame.h>
-
+#include <plotter.h>
 #include <template_fieldnames.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -56,8 +56,6 @@
 #include <colors_design_settings.h>
 
 #include "sch_painter.h"
-
-#include <draw_graphic_text.h>
 
 namespace KIGFX
 {
@@ -899,10 +897,58 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 
     int width = aLine->GetPenSize();
 
-    m_gal->SetIsStroke(true);
+    m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor(color);
     m_gal->SetLineWidth( width );
-    m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
+
+    if( aLine->GetLineStyle() <= PLOTDASHTYPE_SOLID )
+    {
+        m_gal->DrawLine( aLine->GetStartPoint(), aLine->GetEndPoint() );
+    }
+    else
+    {
+        VECTOR2D start = aLine->GetStartPoint();
+        VECTOR2D end = aLine->GetEndPoint();
+
+        EDA_RECT clip( wxPoint( start.x, start.y ), wxSize( end.x - start.x, end.y - start.y ) );
+        clip.Normalize();
+
+        double theta = atan2( end.y - start.y, end.x - start.x );
+        double strokes[] = { 1.0, DASH_GAP_LEN( width ), 1.0, DASH_GAP_LEN( width ) };
+
+        switch( aLine->GetLineStyle() )
+        {
+        case PLOTDASHTYPE_DASH:
+            strokes[0] = strokes[2] = DASH_MARK_LEN( width );
+            break;
+        case PLOTDASHTYPE_DOT:
+            strokes[0] = strokes[2] = DOT_MARK_LEN( width );
+            break;
+        case PLOTDASHTYPE_DASHDOT:
+            strokes[0] = DASH_MARK_LEN( width );
+            strokes[2] = DOT_MARK_LEN( width );
+            break;
+        }
+
+        for( size_t i = 0; i < 100000; ++i )
+        {
+            // Calculations MUST be done in doubles to keep from accumulating rounding
+            // errors as we go.
+            VECTOR2D next( start.x + strokes[ i % 4 ] * cos( theta ),
+                           start.y + strokes[ i % 4 ] * sin( theta ) );
+
+            // Drawing each segment can be done rounded.
+            wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
+            wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
+
+            if( ClipLine( &clip, segStart.x, segStart.y, segEnd.x, segEnd.y ) )
+                break;
+            else if( i % 2 == 0 )
+                m_gal->DrawLine( segStart, segEnd );
+
+            start = next;
+        }
+    }
 
     if( aLine->IsStartDangling() )
         drawDanglingSymbol( m_gal, aLine->GetStartPoint());

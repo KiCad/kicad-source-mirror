@@ -35,6 +35,7 @@
 #include <math_for_graphics.h>
 #include <wx/graphics.h>
 #include <wx/tokenzr.h>
+#include <geometry/geometry_utils.h>
 #if defined(__WXMAC__) && defined(USE_WX_GRAPHICS_CONTEXT)
 #include <wx/dcgraph.h>
 #endif
@@ -99,102 +100,6 @@ static COLOR4D   s_DC_lastbrushcolor( 0, 0, 0, 0 );
 static bool  s_DC_lastbrushfill  = false;
 static wxDC* s_DC_lastDC = NULL;
 
-/***
- * Utility for the line clipping code, returns the boundary code of
- * a point. Bit allocation is arbitrary
- */
-static inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
-{
-    int code;
-    if( y < aClipBox->GetY() )
-        code = 2;
-    else if( y > aClipBox->GetBottom() )
-        code = 1;
-    else
-        code = 0;
-    if( x < aClipBox->GetX() )
-        code |= 4;
-    else if( x > aClipBox->GetRight() )
-        code |= 8;
-    return code;
-}
-
-
-/**
- * Test if any part of a line falls within the bounds of a rectangle.
- *
- * Please note that this is only accurate for lines that are one pixel wide.
- *
- * @param aClipBox - The rectangle to test.
- * @param x1 - X coordinate of one end of a line.
- * @param y1 - Y coordinate of one end of a line.
- * @param x2 - X coordinate of the other end of a line.
- * @param y2 - Y coordinate of the other  end of a line.
- *
- * @return - False if any part of the line lies within the rectangle.
- */
-static bool clipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
-{
-    // Stock Cohen-Sutherland algorithm; check *any* CG book for details
-    int outcode1 = clipOutCode( aClipBox, x1, y1 );
-    int outcode2 = clipOutCode( aClipBox, x2, y2 );
-
-    while( outcode1 || outcode2 )
-    {
-        // Fast reject
-        if( outcode1 & outcode2 )
-            return true;
-
-        // Choose a side to clip
-        int thisoutcode, x, y;
-        if( outcode1 )
-            thisoutcode = outcode1;
-        else
-            thisoutcode = outcode2;
-
-        /* One clip round
-         * Since we use the full range of 32 bit ints, the proportion
-         * computation has to be done in 64 bits to avoid horrible
-         * results */
-        if( thisoutcode & 1 ) // Clip the bottom
-        {
-            y = aClipBox->GetBottom();
-            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
-        }
-        else if( thisoutcode & 2 ) // Clip the top
-        {
-            y = aClipBox->GetY();
-            x = x1 + (x2 - x1) * int64_t(y - y1) / (y2 - y1);
-        }
-        else if( thisoutcode & 8 ) // Clip the right
-        {
-            x = aClipBox->GetRight();
-            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
-        }
-        else // if( thisoutcode & 4), obviously, clip the left
-        {
-            x = aClipBox->GetX();
-            y = y1 + (y2 - y1) * int64_t(x - x1) / (x2 - x1);
-        }
-
-        // Put the result back and update the boundary code
-        // No ambiguity, otherwise it would have been a fast reject
-        if( thisoutcode == outcode1 )
-        {
-            x1 = x;
-            y1 = y;
-            outcode1 = clipOutCode( aClipBox, x1, y1 );
-        }
-        else
-        {
-            x2 = x;
-            y2 = y;
-            outcode2 = clipOutCode( aClipBox, x2, y2 );
-        }
-    }
-    return false;
-}
-
 static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2, int width )
 {
     GRLastMoveToX = x2;
@@ -204,7 +109,7 @@ static void WinClipAndDrawLine( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int
     {
         EDA_RECT clipbox(*ClipBox);
         clipbox.Inflate(width/2);
-        if( clipLine( &clipbox, x1, y1, x2, y2 ) )
+        if( ClipLine( &clipbox, x1, y1, x2, y2 ) )
             return;
     }
 
@@ -478,7 +383,7 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
             int y1 = aLines[i].y;
             int x2 = aLines[i+1].x;
             int y2 = aLines[i+1].y;
-            if( ( aClipBox == NULL ) || !clipLine( aClipBox, x1, y1, x2, y2 ) )
+            if( ( aClipBox == NULL ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
             {
                 path.MoveToPoint( x1, y1 );
                 path.AddLineToPoint( x2, y2 );
@@ -496,7 +401,7 @@ void GRLineArray( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aLines,
             int y1 = aLines[i].y;
             int x2 = aLines[i+1].x;
             int y2 = aLines[i+1].y;
-            if( ( aClipBox == NULL ) || !clipLine( aClipBox, x1, y1, x2, y2 ) )
+            if( ( aClipBox == NULL ) || !ClipLine( aClipBox, x1, y1, x2, y2 ) )
                 aDC->DrawLine( x1, y1, x2, y2 );
         }
     }
@@ -518,7 +423,7 @@ void GRCSegm( EDA_RECT* ClipBox, wxDC* DC, int x1, int y1, int x2, int y2,
         EDA_RECT clipbox(*ClipBox);
         clipbox.Inflate(width/2);
 
-        if( clipLine( &clipbox, x1, y1, x2, y2 ) )
+        if( ClipLine( &clipbox, x1, y1, x2, y2 ) )
             return;
     }
 

@@ -96,9 +96,6 @@ enum PlotDashType {
  */
 class PLOTTER
 {
-private:
-    double m_dotMarkLength_mm ;      ///< Dotted line parameter in mm: segment
-
 public:
     // These values are used as flag for pen or aperture selection
     static const int DO_NOT_SET_LINE_WIDTH = -2;    // Skip selection

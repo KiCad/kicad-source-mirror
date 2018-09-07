@@ -48,7 +48,7 @@
 #include <base_screen.h>
 #include <draw_graphic_text.h>
 #include <geometry/shape_line_chain.h>
-
+#include <geometry/geometry_utils.h>
 
 PLOTTER::PLOTTER( )
 {
@@ -65,9 +65,6 @@ PLOTTER::PLOTTER( )
     // Temporary init to avoid not initialized vars, will be set later
     m_IUsPerDecimil = 1;        // will be set later to the actual value
     iuPerDeviceUnit = 1;        // will be set later to the actual value
-    m_dotMarkLength_mm = 0.1;   // Dotted line parameter in mm: segment
-                                // Dashed line parameter is 5 * dotted line mark
-                                // Dashed line gap is 3 * dotted line mark
 }
 
 PLOTTER::~PLOTTER()
@@ -134,23 +131,25 @@ double PLOTTER::userToDeviceSize( double size ) const
 }
 
 
+#define IU_PER_MILS ( m_IUsPerDecimil * 10 )
+
 double PLOTTER::GetDotMarkLenIU() const
 {
-    return userToDeviceSize( std::max( 1.0,
-            m_dotMarkLength_mm * 10000 / 25.4 * m_IUsPerDecimil - GetCurrentLineWidth() ) );
+    return userToDeviceSize( DOT_MARK_LEN( GetCurrentLineWidth() ) );
 }
 
 
 double PLOTTER::GetDashMarkLenIU() const
 {
-    return std::max( GetDashGapLenIU(), 5.0 * GetDotMarkLenIU() );
+    return userToDeviceSize( DASH_MARK_LEN( GetCurrentLineWidth() ) );
 }
 
 
 double PLOTTER::GetDashGapLenIU() const
 {
-    return 3.0 * GetDotMarkLenIU() + userToDeviceSize( 2 * GetCurrentLineWidth() );
+    return userToDeviceSize( DASH_GAP_LEN( GetCurrentLineWidth() ) );
 }
+
 
 void PLOTTER::Arc( const wxPoint& centre, double StAngle, double EndAngle, int radius,
                    FILL_T fill, int width )

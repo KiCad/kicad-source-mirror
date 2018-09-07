@@ -32,6 +32,9 @@
 
 #include <math/vector2d.h>
 
+class EDA_RECT;
+
+
 /**
  * @return the number of segments to approximate a arc by segments
  * with a given max error (this number is >= 1)
@@ -94,6 +97,43 @@ VECTOR2<T> GetVectorSnapped45( const VECTOR2<T>& aVec )
 
     return newVec;
 }
+
+
+/**
+ * Test if any part of a line falls within the bounds of a rectangle.
+ *
+ * Please note that this is only accurate for lines that are one pixel wide.
+ *
+ * @param aClipBox - The rectangle to test.
+ * @param x1 - X coordinate of one end of a line.
+ * @param y1 - Y coordinate of one end of a line.
+ * @param x2 - X coordinate of the other end of a line.
+ * @param y2 - Y coordinate of the other  end of a line.
+ *
+ * @return - False if any part of the line lies within the rectangle.
+ */
+bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 );
+
+
+/**
+ * Dashed and dotted line patterns.
+ *
+ * Note: these are all macros because they're included from files with different
+ * IU definitions.
+ */
+
+#define DOT_WIDTH_MILS 0.0254
+
+#define DOT_MARK_LEN( aLineWidth ) \
+    ( std::max( 1.0, IU_PER_MILS * DOT_WIDTH_MILS - aLineWidth ) )
+
+#define DASH_GAP_LEN( aLineWidth ) \
+    ( 3.0 * DOT_MARK_LEN( aLineWidth ) + ( 2.0 * aLineWidth ) )
+
+#define DASH_MARK_LEN( aLineWidth ) \
+    ( std::max( DASH_GAP_LEN( aLineWidth ), 5.0 * DOT_MARK_LEN( aLineWidth ) ) )
+
+
 
 #endif  // #ifndef GEOMETRY_UTILS_H
 
