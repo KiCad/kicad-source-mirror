@@ -1173,6 +1173,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
             // Give a non null size to the search block:
             screen->m_BlockLocate.Inflate( 1 );
+            screen->m_BlockLocate.SetLastCursorPosition( GetCrossHairPosition() );
             HandleBlockEnd( nullptr );
         }
 
