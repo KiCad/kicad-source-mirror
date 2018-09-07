@@ -282,6 +282,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SyncView();
     GetGalCanvas()->GetViewControls()->SetSnapping( true );
     GetGalCanvas()->GetView()->UseDrawPriority( true );
+    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 }
 
 

@@ -1002,7 +1002,7 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 {
     int ppi = aBitmap.GetPPI();
-    
+
     double w = (double) aBitmap.GetSizePixels().x / (double) ppi / worldUnitLength * 10.0; // no idea where the factor 10 comes from...
     double h = (double) aBitmap.GetSizePixels().y / (double) ppi / worldUnitLength * 10.0;
 
@@ -1011,7 +1011,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glm::vec4 v0 = xform * glm::vec4( -w/2, -h/2, 0.0, 0.0 );
     glm::vec4 v1 = xform * glm::vec4( w/2, h/2, 0.0, 0.0 );
     glm::vec4 trans = xform[3];
-    
+
     auto id = bitmapCache->RequestBitmap( &aBitmap );
 
     auto oldTarget = GetTarget();

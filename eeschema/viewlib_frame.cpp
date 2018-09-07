@@ -203,6 +203,8 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SyncView();
     GetGalCanvas()->GetViewControls()->SetSnapping( true );
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+    GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
 }
 
 
@@ -760,6 +762,6 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
     {
         EDA_RECT bbox = part->GetUnitBoundingBox( m_unit, m_convert );
         return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
-        
+
     }
 }

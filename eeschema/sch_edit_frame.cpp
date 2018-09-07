@@ -432,6 +432,9 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     Zoom_Automatique( false );
 
+    if( GetGalCanvas() )
+        GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
+
     // Net list generator
     DefaultExecFlags();
 
