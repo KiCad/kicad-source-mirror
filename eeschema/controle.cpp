@@ -249,10 +249,8 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
         snapToGrid = true;
 
     wxPoint pos = aPosition;
-    wxPoint oldpos = GetCrossHairPosition();
     bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
-    // Update cursor position.
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_canvas->CrossHairOff( aDC );
     else
