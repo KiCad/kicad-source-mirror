@@ -44,8 +44,8 @@
 #define DEFAULT_PCB_EDGE_THICKNESS  0.15
 #define DEFAULT_GRAPHIC_THICKNESS   0.2
 
-#define DEFAULT_SOLDERMASK_CLEARANCE 0.2
-#define DEFAULT_SOLDERMASK_MIN_WIDTH Millimeter2iu( 0.0 )
+#define DEFAULT_SOLDERMASK_CLEARANCE 0.1    // soldermask to pad clearance
+#define DEFAULT_SOLDERMASK_MIN_WIDTH 0.25   // soldermask minimum dam size
 
 #define DEFAULT_CUSTOMTRACKWIDTH    0.2
 #define DEFAULT_TRACKMINWIDTH       0.2     // track width min value
