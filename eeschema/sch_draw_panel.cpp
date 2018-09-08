@@ -185,6 +185,32 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
 }
 
 
+void SCH_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
+{
+    m_enableMousewheelPan = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableMousewheelPan( aEnable );
+}
+
+
+void SCH_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
+{
+    m_enableAutoPan = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
+}
+
+
+void SCH_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
+{
+    m_enableZoomNoCenter = aEnable;
+
+    if( GetParent()->IsGalCanvasActive() )
+        GetParent()->GetGalCanvas()->GetViewControls()->EnableCursorWarping( !aEnable );
+}
+
 
 void SCH_DRAW_PANEL::setDefaultLayerDeps()
 {

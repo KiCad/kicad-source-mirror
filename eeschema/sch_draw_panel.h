@@ -62,6 +62,10 @@ public:
     void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
 
+    void SetEnableMousewheelPan( bool aEnable ) override;
+    void SetEnableZoomNoCenter( bool aEnable ) override;
+    void SetEnableAutoPan( bool aEnable ) override;
+
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
 
