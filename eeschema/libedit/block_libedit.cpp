@@ -371,10 +371,11 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             break;
 
         case BLOCK_PASTE:
-            wxFAIL; // should not happen
-            break;
-
+        case BLOCK_ROTATE:
+        case BLOCK_MIRROR_X:
+        case BLOCK_MIRROR_Y:
         case BLOCK_FLIP:
+            wxFAIL; // should not happen
             break;
 
         case BLOCK_ZOOM:     // Window Zoom
