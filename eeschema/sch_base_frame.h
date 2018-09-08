@@ -280,11 +280,13 @@ public:
     virtual void Zoom_Automatique( bool aWarpPointer ) override;
 
                                        /* Set the zoom level to show the area Rect */
-    virtual void Window_Zoom( EDA_RECT& Rect ) override;
+    virtual void Window_Zoom( EDA_RECT& aRect ) override;
 
     virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer ) override;
 
     virtual void RedrawScreen2( const wxPoint& posBefore ) override;
+
+    virtual void CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     virtual void HardRedraw() override;
 

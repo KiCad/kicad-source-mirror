@@ -61,6 +61,7 @@ public:
     bool OnRightClick( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
+    void OnTimer( wxTimerEvent& event );
 
     void SetEnableMousewheelPan( bool aEnable ) override;
     void SetEnableZoomNoCenter( bool aEnable ) override;
@@ -101,6 +102,8 @@ protected:
     void setDefaultLayerDeps();
 
     wxWindow* m_parent;
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

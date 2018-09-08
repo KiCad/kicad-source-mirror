@@ -35,9 +35,6 @@ protected:
     wxPoint m_PanStartCenter;               ///< Initial scroll center position when pan started
     wxPoint m_PanStartEventPosition;        ///< Initial position of mouse event when pan started
 
-    wxPoint m_CursorClickPos;               ///< Used for maintaining click position
-    wxTimer *m_ClickTimer;
-
     /// The drawing area used to redraw the screen which is usually the visible area
     /// of the drawing in internal units.
     EDA_RECT    m_ClipBox;

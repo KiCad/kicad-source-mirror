@@ -82,7 +82,7 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART
 }
 
 
-// Sttaic members:
+// Static members:
 
 SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
         FRAME_T aWindowType, const wxString& aTitle,
@@ -335,6 +335,8 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
     return success;
 }
 
+
+// Set the zoom level to show the contents of the view.
 void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     EDA_DRAW_PANEL_GAL* galCanvas = GetGalCanvas();
@@ -378,11 +380,12 @@ void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
     galCanvas->Refresh();
 }
 
-                               /* Set the zoom level to show the area Rect */
-void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& Rect )
+
+// Set the zoom level to show the area of aRect
+void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& aRect )
 {
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
-    BOX2I selectionBox ( Rect.GetPosition(), Rect.GetSize() );
+    BOX2I selectionBox ( aRect.GetPosition(), aRect.GetSize() );
 
     VECTOR2D screenSize = view->ToWorld( GetGalCanvas()->GetClientSize(), false );
 
@@ -418,7 +421,7 @@ void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
         GetCanvas()->GetView()->SetScale( scale );
 
     if( aWarpPointer )
-        GetCanvas()->GetViewControls()->CenterOnCursor();
+        GetCanvas()->GetViewControls()->WarpCursor( aCenterPoint );
 
     GetCanvas()->Refresh();
 }
@@ -433,6 +436,17 @@ void SCH_BASE_FRAME::RedrawScreen2( const wxPoint& posBefore )
     double scale = 1.0 / ( zoomFactor * selectedZoom );
 
     GetCanvas()->GetView()->SetScale( scale );
+
+    GetGalCanvas()->Refresh();
+}
+
+
+void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
+{
+    GetCanvas()->GetView()->SetCenter( aCenterPoint );
+
+    if( aWarpPointer )
+        GetCanvas()->GetViewControls()->WarpCursor( aCenterPoint );
 
     GetGalCanvas()->Refresh();
 }

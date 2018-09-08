@@ -27,7 +27,6 @@
 #include <worksheet_viewitem.h>
 
 #include <gal/graphics_abstraction_layer.h>
-
 #include <sch_draw_panel.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -40,6 +39,26 @@
 #include <pgm_base.h>
 
 using namespace std::placeholders;
+
+
+// Events used by EDA_DRAW_PANEL
+// GAL TODO: some (most?) of these need to be implemented...
+BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledWindow )
+//    EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
+//    EVT_ENTER_WINDOW( EDA_DRAW_PANEL::OnMouseEntering )
+//    EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
+#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
+//    EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
+#endif
+//    EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
+    EVT_CHAR( SCH_DRAW_PANEL::OnKeyEvent )
+    EVT_CHAR_HOOK( SCH_DRAW_PANEL::OnCharHook )
+    EVT_PAINT( SCH_DRAW_PANEL::onPaint )
+//    EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
+//    EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
+//    EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
+//    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
+END_EVENT_TABLE()
 
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -85,8 +104,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     for( auto e : events )
     {
-        Connect( e, wxMouseEventHandler( SCH_DRAW_PANEL::OnMouseEvent ),
-                 NULL, this );
+        Connect( e, wxMouseEventHandler( SCH_DRAW_PANEL::OnMouseEvent ), NULL, this );
     }
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( SCH_DRAW_PANEL::OnKeyEvent ), NULL, this );
@@ -111,11 +129,9 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_enableBlockCommands = false;
     m_minDragEventCount = 0;
 
-
     m_cursorLevel = 0;
     m_PrintIsMirrored = false;
 
-    m_ClickTimer = (wxTimer*) NULL;
     m_doubleClickInterval = 250;
 
     m_gal->SetGridColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
@@ -251,7 +267,6 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     auto controls = GetViewControls();
     auto vcp = VECTOR2I( controls->GetCursorPosition() );
     auto vmp = VECTOR2I( controls->GetMousePosition() );
-    wxPoint cursorPos ( vcp.x, vcp.y );
     wxPoint mousePos ( vmp.x, vmp.y );
 
     event.Skip();
@@ -313,11 +328,6 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     // Calling Double Click and Click functions :
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
-        if( m_ClickTimer )
-        {
-            m_ClickTimer->Stop();
-            wxDELETE( m_ClickTimer );
-        }
         GetParent()->OnLeftDClick( nullptr, mousePos );
 
         // inhibit a response to the mouse left button release,
@@ -335,20 +345,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_ignoreNextLeftButtonRelease = false;
 
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK && !ignoreEvt )
-        {
-            EDA_ITEM* item = screen->GetCurItem();
-
-            // If we have an item already selected, or we are using a tool,
-            // we won't use the disambiguation menu so process the click immediately
-            if( ( item && item->GetFlags() ) || GetParent()->GetToolId() != ID_NO_TOOL_SELECTED )
-                GetParent()->OnLeftClick( nullptr, mousePos );
-            else
-            {
-                wxDELETE( m_ClickTimer );
-                m_ClickTimer = new wxTimer(this, ID_MOUSE_DOUBLECLICK);
-                m_ClickTimer->StartOnce( m_doubleClickInterval );
-            }
-        }
+            GetParent()->OnLeftClick( nullptr, mousePos );
 
     }
     else if( !event.LeftIsDown() )
@@ -527,13 +524,12 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
 }
 
+
 bool SCH_DRAW_PANEL::OnRightClick( wxMouseEvent& event )
 {
     auto controls = GetViewControls();
     auto vmp = controls->GetMousePosition();
-    auto vsp = GetView()->ToScreen( vmp );
     wxPoint mouseWorldPos ( (int) vmp.x, (int) vmp.y );
-    wxPoint mouseScreenPos ( (int) vsp.x, (int) vsp.y );
 
     wxMenu  MasterMenu;
 
@@ -559,7 +555,6 @@ void SCH_DRAW_PANEL::CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool
 
 void SCH_DRAW_PANEL::CallEndMouseCapture( wxDC* aDC )
 {
-
     // CallEndMouseCapture is sometimes called with m_endMouseCaptureCallback == NULL
     // for instance after an ABORT in block paste.
     if( m_endMouseCaptureCallback )
