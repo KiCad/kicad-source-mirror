@@ -128,8 +128,7 @@ void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset
         GRSetDrawMode( aDC, aDrawMode );
 #endif
 
-    //fixme-gal
-        //m_image->DrawBitmap( aPanel, aDC, pos );
+        m_image->DrawBitmap( aDC, pos );
     }
     else    // draws bounding box only (used to move items)
     {

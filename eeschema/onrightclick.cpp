@@ -142,7 +142,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         bool actionCancelled = false;
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
 
-        printf("Locateandshow %d %d item %p\n", aPosition.x, aPosition.y, item );
+        printf("Locateandshow %d %d item %p type %d\n", aPosition.x, aPosition.y,
+                item, item ? item->Type() : 0 ); fflush(0);
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )

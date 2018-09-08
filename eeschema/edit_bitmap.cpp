@@ -124,6 +124,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
         return NULL;
     }
 
+    image->SetFlags( IS_NEW | IS_MOVED );
 
     auto view = static_cast<SCH_DRAW_PANEL*>( m_canvas )->GetView();
 

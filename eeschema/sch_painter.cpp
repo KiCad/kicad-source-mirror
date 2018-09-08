@@ -1317,7 +1317,14 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 {
     m_gal->Save();
     m_gal->Translate( aBitmap->GetPosition() );
+
+    // When the image scale factor is not 1.0, we need to modify the actual
+    // as the image scale factor is similar to a local zoom
+    if( aBitmap->GetImageScale() != 1.0 )
+        m_gal->Scale( VECTOR2D( aBitmap->GetImageScale(), aBitmap->GetImageScale() ) );
+
     m_gal->DrawBitmap( *aBitmap->GetImage() );
+
     m_gal->Restore();
 }
 

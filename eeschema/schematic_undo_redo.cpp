@@ -381,6 +381,10 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         }
     }
 
+    // Bitmaps are cached in Opengl: clear the cache, because
+    // the cache data can be invalid
+    GetCanvas()->GetGAL()->ClearCache();
+
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
 

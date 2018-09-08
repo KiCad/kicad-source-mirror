@@ -430,17 +430,18 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_SHEET_PIN_T:
     case SCH_FIELD_T:
     case SCH_SHEET_T:
+    case SCH_BITMAP_T:
         PrepareMoveItem( item, nullptr );
         break;
 
-    case SCH_BITMAP_T:
+/*    case SCH_BITMAP_T:
         // move an image is a special case:
         // we cannot undraw/redraw a bitmap just using our xor mode
         // the MoveImage function handle this undraw/redraw difficulty
         // By redrawing the full bounding box
-//        MoveImage( (SCH_BITMAP*) item, &dc );
+        MoveImage( (SCH_BITMAP*) item, &dc );
         break;
-
+*/
     case SCH_MARKER_T:
         // Moving a marker has no sense
         break;
@@ -923,6 +924,9 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
     case SCH_BITMAP_T:
         RotateImage( (SCH_BITMAP*) item );
+        // The bitmap is cached in Opengl: clear the cache, because
+        // the cache data is invalid
+        GetCanvas()->GetGAL()->ClearCache();
         break;
 
     case SCH_SHEET_T:
@@ -1093,6 +1097,9 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
     case SCH_BITMAP_T:
         EditImage( (SCH_BITMAP*) item );
+        // The bitmap is cached in Opengl: clear the cache, because
+        // the cache data is perhaps invalid
+        GetCanvas()->GetGAL()->ClearCache();
         break;
 
     case SCH_LINE_T:        // These items have no param to edit
@@ -1283,6 +1290,10 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             MirrorImage( (SCH_BITMAP*) item, true );
         else if( aEvent.GetId() == ID_SCH_MIRROR_Y )
             MirrorImage( (SCH_BITMAP*) item, false );
+
+        // The bitmap is cached in Opengl: clear the cache, because
+        // the cache data is invalid
+        GetCanvas()->GetGAL()->ClearCache();
 
         break;
 
