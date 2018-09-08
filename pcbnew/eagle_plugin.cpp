@@ -2177,7 +2177,9 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         switch( aEagleLayer )
         {
         // Eagle says "Dimension" layer, but it's for board perimeter
+        case EAGLE_LAYER::MILLING:       kiLayer = Edge_Cuts;    break;
         case EAGLE_LAYER::DIMENSION:     kiLayer = Edge_Cuts;    break;
+
         case EAGLE_LAYER::TPLACE:        kiLayer = F_SilkS;      break;
         case EAGLE_LAYER::BPLACE:        kiLayer = B_SilkS;      break;
         case EAGLE_LAYER::TNAMES:        kiLayer = F_SilkS;      break;
@@ -2213,7 +2215,6 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::BKEEPOUT:
         case EAGLE_LAYER::TTEST:
         case EAGLE_LAYER::BTEST:
-        case EAGLE_LAYER::MILLING:
         case EAGLE_LAYER::HOLES:
         default:
             // some layers do not map to KiCad
