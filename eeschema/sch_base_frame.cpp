@@ -540,6 +540,7 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
     return true;
 }
 
+
 void EDA_DRAW_FRAME::createCanvas()
 {
     m_canvas = new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
@@ -558,26 +559,22 @@ void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem )
     GetCanvas()->GetView()->Add( aItem );
 }
 
+
 void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems )
 {
-    std::vector<SCH_ITEM*> tmp;
-    SCH_ITEM* itemList = aItems.begin();
-
-    while( itemList )
-    {
-        itemList->SetList( nullptr );
-        GetCanvas()->GetView()->Add( itemList );
-        itemList = itemList->Next();
-    }
+    for( SCH_ITEM* item = aItems.begin(); item; item = item->Next() )
+        GetCanvas()->GetView()->Add( item );
 
     GetScreen()->Append( aItems );
 }
+
 
 void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem )
 {
     GetCanvas()->GetView()->Remove( aItem );
     GetScreen()->Remove( aItem );
 }
+
 
 void SCH_BASE_FRAME::SyncView()
 {
