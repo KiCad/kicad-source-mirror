@@ -796,10 +796,7 @@ int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
         return wxID_CANCEL;
 
     if( aRedraw )
-    {
-        GetCanvas()->GetView()->Update( aLine );
-        GetCanvas()->Refresh();
-    }
+        RefreshItem( aLine );
 
     return wxID_OK;
 }

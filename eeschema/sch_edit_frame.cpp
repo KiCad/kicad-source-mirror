@@ -752,6 +752,18 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
+void SCH_EDIT_FRAME::RefreshItem( SCH_ITEM* aItem )
+{
+    GetCanvas()->GetView()->Update( aItem );
+
+    // Component children are drawn from their parents so we must also dirty the parent.
+    if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_COMPONENT_T )
+        GetCanvas()->GetView()->Update( aItem->GetParent(), KIGFX::REPAINT );
+
+    GetCanvas()->Refresh();
+}
+
+
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_blockItems.GetCount() > 0 );

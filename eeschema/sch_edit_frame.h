@@ -347,6 +347,11 @@ public:
      */
     void OnModify();
 
+    /**
+     * Mark an item for refresh.
+     */
+    void RefreshItem( SCH_ITEM* aItem );
+
     virtual wxString GetScreenDesc() const override;
 
     /**

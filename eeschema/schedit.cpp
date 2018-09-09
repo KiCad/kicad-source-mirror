@@ -764,7 +764,11 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
 
     SetRepeatItem( NULL );
 
-    if( !aItem->IsNew() )
+    if( aItem->IsNew() )
+    {
+        GetCanvas()->GetView()->Add( aItem );
+    }
+    else
     {
         if( (aItem->Type() == SCH_SHEET_PIN_T) || (aItem->Type() == SCH_FIELD_T) )
             SetUndoItem( (SCH_ITEM*) aItem->GetParent() );
@@ -952,8 +956,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
                                       GetChars( item->GetClass() ) ) );
     }
 
-    GetCanvas()->GetView()->Update( item );
-    GetCanvas()->Refresh();
+    RefreshItem( item );
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
@@ -1115,8 +1118,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
                                       GetChars( item->GetClass() ) ) );
     }
 
-    GetCanvas()->GetView()->Update( item );
-    GetCanvas()->Refresh();
+    RefreshItem( item );
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
@@ -1157,7 +1159,9 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
         // When a junction or a node is found, a BLOCK_DRAG is better
         if( m_collectedItems.IsCorner() || m_collectedItems.IsNode( false )
             || m_collectedItems.IsDraggableJunction() )
+        {
             dragType = BLOCK_DRAG;
+        }
     }
 
     switch( item->Type() )
@@ -1310,8 +1314,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         ;
     }
 
-    GetCanvas()->GetView()->Update( item );
-    GetCanvas()->Refresh();
+    RefreshItem( item );
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
