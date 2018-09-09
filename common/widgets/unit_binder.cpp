@@ -224,6 +224,26 @@ void UNIT_BINDER::SetValue( wxString aValue )
 }
 
 
+void UNIT_BINDER::ChangeValue( int aValue )
+{
+    ChangeValue( StringFromValue( m_units, aValue, false, m_useMils ) );
+}
+
+
+void UNIT_BINDER::ChangeValue( wxString aValue )
+{
+    if( dynamic_cast<wxTextEntry*>( m_value ) )
+        dynamic_cast<wxTextEntry*>( m_value )->ChangeValue( aValue );
+    else if( dynamic_cast<wxStaticText*>( m_value ) )
+        dynamic_cast<wxStaticText*>( m_value )->SetLabel( aValue );
+
+    if( m_allowEval )
+        m_eval.Clear();
+
+    m_unitLabel->SetLabel( GetAbbreviatedUnitsLabel( m_units, m_useMils ) );
+}
+
+
 int UNIT_BINDER::GetValue() const
 {
     wxString s;

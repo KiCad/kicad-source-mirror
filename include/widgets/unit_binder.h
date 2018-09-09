@@ -76,6 +76,16 @@ public:
     void SetValue( wxString aValue );
 
     /**
+     * Function ChangeValue
+     * Changes the value (in Internal Units) for the text field, taking care of units conversion
+     * but does not trigger the update routine
+     * @param aValue is the new value.
+     */
+    virtual void ChangeValue( int aValue );
+
+    void ChangeValue( wxString aValue );
+
+    /**
      * Function GetValue
      * Returns the current value in Internal Units.
      */
