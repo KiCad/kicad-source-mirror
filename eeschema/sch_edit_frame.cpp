@@ -372,8 +372,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
-    m_previewPosition = wxDefaultPosition;
-    m_previewSize = wxDefaultSize;
     m_printMonochrome = true;
     m_printSheetReference = true;
     SetShowPageLimits( true );
@@ -659,8 +657,6 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     // Close the find dialog and preserve it's setting if it is displayed.
     if( m_dlgFindReplace )
     {
-        m_findDialogPosition = m_dlgFindReplace->GetPosition();
-        m_findDialogSize = m_dlgFindReplace->GetSize();
         m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
         m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
         m_dlgFindReplace->Destroy();
@@ -947,26 +943,13 @@ void SCH_EDIT_FRAME::OnFindItems( wxCommandEvent& aEvent )
         m_dlgFindReplace = NULL;
     }
 
-    // Verify the find dialog is not drawn off the visible display area in case the
-    // display configuration has changed since the last time the dialog position was
-    // saved.
-    wxRect displayRect = wxDisplay().GetGeometry();
-    wxRect dialogRect = wxRect( m_findDialogPosition, m_findDialogSize );
-
-    wxPoint position = m_findDialogPosition;
-
-    if( !displayRect.Contains( dialogRect ) )
-    {
-        position = wxDefaultPosition;
-    }
-
     int style = 0;
 
     if( aEvent.GetId() == wxID_REPLACE )
         style = wxFR_REPLACEDIALOG;
 
     m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, m_findReplaceStatus,
-                                            position, m_findDialogSize, style );
+                                            wxDefaultPosition, wxDefaultSize, style );
 
     m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
     m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );
@@ -982,8 +965,6 @@ void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
 
     if( m_dlgFindReplace )
     {
-        m_findDialogPosition = m_dlgFindReplace->GetPosition();
-        m_findDialogSize = m_dlgFindReplace->GetSize();
         m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
         m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
         m_dlgFindReplace->Destroy();

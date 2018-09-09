@@ -126,15 +126,9 @@ private:
     wxPageSetupDialogData   m_pageSetupData;
     wxFindReplaceData*      m_findReplaceData;
     wxString*               m_findReplaceStatus;
-    wxPoint                 m_previewPosition;
-    wxSize                  m_previewSize;
-    wxPoint                 m_printDialogPosition;
-    wxSize                  m_printDialogSize;
     bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
     DIALOG_SCH_FIND*        m_dlgFindReplace;
-    wxPoint                 m_findDialogPosition;
-    wxSize                  m_findDialogSize;
     wxArrayString           m_findStringHistoryList;
     wxArrayString           m_replaceStringHistoryList;
     BLOCK_SELECTOR          m_blockItems;         ///< List of selected items.
@@ -171,11 +165,6 @@ private:
 
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool        m_spiceAjustPassiveValues;
-
-    /*  these are PROJECT specific, not schematic editor specific
-    wxString        m_userLibraryPath;
-    wxArrayString   m_componentLibFiles;
-    */
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;  ///< Last sheet pin type.
     static wxSize   m_lastSheetPinTextSize;         ///< Last sheet pin text size.
@@ -264,7 +253,7 @@ public:
     void Process_Config( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
-    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
+    bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
 
     /**
      * Return the project file parameter list for Eeschema.
@@ -350,7 +339,7 @@ public:
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
 
-    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
+    bool OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem ) override;
 
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the
@@ -359,8 +348,6 @@ public:
     void OnModify();
 
     virtual wxString GetScreenDesc() const override;
-
-    void InstallConfigFrame( wxCommandEvent& event );
 
     /**
      * Execute a remote command send by Pcbnew via a socket,
@@ -675,21 +662,6 @@ public:
     void OnPrint( wxCommandEvent& event );
 
     wxPageSetupDialogData& GetPageSetupData() { return m_pageSetupData; }
-
-    void SetPreviewPosition( const wxPoint& aPoint ) { m_previewPosition = aPoint; }
-    void SetPreviewSize( const wxSize& aSize ) { m_previewSize = aSize; }
-    const wxPoint& GetPreviewPosition() { return m_previewPosition; }
-    const wxSize& GetPreviewSize() { return m_previewSize; }
-
-    void SetPrintDialogPosition( const wxPoint& aPoint )
-    {
-        m_printDialogPosition = aPoint;
-    }
-
-
-    void SetPrintDialogSize( const wxSize& aSize ) { m_printDialogSize = aSize; }
-    const wxPoint& GetPrintDialogPosition() { return m_printDialogPosition; }
-    const wxSize& GetPrintDialogSize() { return m_printDialogSize; }
 
     bool GetPrintMonochrome() { return m_printMonochrome; }
     void SetPrintMonochrome( bool aMonochrome ) { m_printMonochrome = aMonochrome; }
@@ -1018,12 +990,6 @@ private:
     void DeleteCurrentSegment( wxDC* DC );
     void DeleteConnection( bool DeleteFullConnection );
 
-    // graphic lines
-    void Edge( DRAWSEGMENT* Segment, wxDC* DC );
-    void SetNewWidth( DRAWSEGMENT* DrawSegm, wxDC* DC );
-    void Layer( DRAWSEGMENT* Segment, wxDC* DC );
-    DRAWSEGMENT* Begin_Edge( DRAWSEGMENT* Segment, wxDC* DC );
-
     // Images:
     SCH_BITMAP* CreateNewImage( wxDC* aDC );
     void MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
@@ -1053,7 +1019,7 @@ private:
      * @param aSheet the hierarchical sheet to rotate
      * @param aRotCCW = true to rotate CCW, false to rotate CW
      */
-    void        RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW );
+    void RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW );
 
     /**
      * Mirror a hierarchical sheet.
@@ -1066,10 +1032,6 @@ private:
      */
     void MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis );
 
-    /// Loads the cache library associated to the aFileName
-    bool        LoadCacheLibrary( const wxString& aFileName );
-
-private:
     /**
      * Function EditLine
      * displays the dialog for editing the parameters of \a aLine.

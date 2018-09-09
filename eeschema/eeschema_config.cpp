@@ -415,38 +415,8 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( AutoplaceAlignEntry, &m_autoplaceAlign, false );
     aCfg->Read( FootprintPreviewEntry, &m_footprintPreview, false );
 
-    // Load print preview window session settings.
-    aCfg->Read( PreviewFramePositionXEntry, &tmp, -1 );
-    m_previewPosition.x = (int) tmp;
-    aCfg->Read( PreviewFramePositionYEntry, &tmp, -1 );
-    m_previewPosition.y = (int) tmp;
-    aCfg->Read( PreviewFrameWidthEntry, &tmp, -1 );
-    m_previewSize.SetWidth( (int) tmp );
-    aCfg->Read( PreviewFrameHeightEntry, &tmp, -1 );
-    m_previewSize.SetHeight( (int) tmp );
-
-    // Load print dialog session settings.
-    aCfg->Read( PrintDialogPositionXEntry, &tmp, -1 );
-    m_printDialogPosition.x = (int) tmp;
-    aCfg->Read( PrintDialogPositionYEntry, &tmp, -1 );
-    m_printDialogPosition.y = (int) tmp;
-    aCfg->Read( PrintDialogWidthEntry, &tmp, -1 );
-    m_printDialogSize.SetWidth( (int) tmp );
-    aCfg->Read( PrintDialogHeightEntry, &tmp, -1 );
-    m_printDialogSize.SetHeight( (int) tmp );
-
     // Load netlists options:
     aCfg->Read( SimulatorCommandEntry, &m_simulatorCommand );
-
-    // Load find dialog session setting.
-    aCfg->Read( FindDialogPositionXEntry, &tmp, -1 );
-    m_findDialogPosition.x = (int) tmp;
-    aCfg->Read( FindDialogPositionYEntry, &tmp, -1 );
-    m_findDialogPosition.y = (int) tmp;
-    aCfg->Read( FindDialogWidthEntry, &tmp, -1 );
-    m_findDialogSize.SetWidth( (int) tmp );
-    aCfg->Read( FindDialogHeightEntry, &tmp, -1 );
-    m_findDialogSize.SetHeight( (int) tmp );
 
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
@@ -514,26 +484,10 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
     aCfg->Write( AutoplaceAlignEntry, m_autoplaceAlign );
     aCfg->Write( FootprintPreviewEntry, m_footprintPreview );
 
-    // Save print preview window session settings.
-    aCfg->Write( PreviewFramePositionXEntry, m_previewPosition.x );
-    aCfg->Write( PreviewFramePositionYEntry, m_previewPosition.y );
-    aCfg->Write( PreviewFrameWidthEntry, m_previewSize.GetWidth() );
-    aCfg->Write( PreviewFrameHeightEntry, m_previewSize.GetHeight() );
-
-    // Save print dialog session settings.
-    aCfg->Write( PrintDialogPositionXEntry, m_printDialogPosition.x );
-    aCfg->Write( PrintDialogPositionYEntry, m_printDialogPosition.y );
-    aCfg->Write( PrintDialogWidthEntry, m_printDialogSize.GetWidth() );
-    aCfg->Write( PrintDialogHeightEntry, m_printDialogSize.GetHeight() );
-
     // Save netlists options:
     aCfg->Write( SimulatorCommandEntry, m_simulatorCommand );
 
     // Save find dialog session setting.
-    aCfg->Write( FindDialogPositionXEntry, m_findDialogPosition.x );
-    aCfg->Write( FindDialogPositionYEntry, m_findDialogPosition.y );
-    aCfg->Write( FindDialogWidthEntry, m_findDialogSize.GetWidth() );
-    aCfg->Write( FindDialogHeightEntry, m_findDialogSize.GetHeight() );
     wxASSERT_MSG( m_findReplaceData,
                   wxT( "Find dialog data settings object not created. Bad programmer!" ) );
     aCfg->Write( FindReplaceFlagsEntry,

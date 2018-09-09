@@ -171,14 +171,6 @@ DIALOG_PRINT_USING_PRINTER::DIALOG_PRINT_USING_PRINTER( SCH_EDIT_FRAME* aParent 
 
 DIALOG_PRINT_USING_PRINTER::~DIALOG_PRINT_USING_PRINTER()
 {
-    SCH_EDIT_FRAME* parent = GetParent();
-
-    if( !IsIconized() )
-    {
-        parent->SetPrintDialogPosition( GetPosition() );
-        parent->SetPrintDialogSize( GetSize() );
-    }
-
     GetPrintOptions();
 }
 
