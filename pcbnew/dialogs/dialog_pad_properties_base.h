@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Apr 19 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -104,7 +104,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_tcCornerSizeRatio;
 		wxStaticText* m_staticTextCornerSizeRatioUnit;
 		wxStaticText* m_cornerRadiusLabel;
-		wxStaticText* m_cornerRadiusValue;
+		TEXT_CTRL_EVAL* m_tcCornerRadius;
 		wxStaticText* m_cornerRadiusUnits;
 		wxStaticText* m_holeShapeLabel;
 		wxChoice* m_holeShapeCtrl;
@@ -195,6 +195,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		virtual void PadOrientEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSetLayers( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onCornerSizePercentChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onCornerRadiusChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDrillShapeSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnUpdateUINonCopperWarning( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onPrimitiveDClick( wxMouseEvent& event ) { event.Skip(); }

@@ -542,6 +542,12 @@ public:
     int GetRoundRectCornerRadius( const wxSize& aSize ) const;
 
     /**
+     * Set the rounded rectangle radius ratio based on a given radius
+     * @param aRadius = desired radius of curvature
+     */
+    void SetRoundRectCornerRadius( double aRadius );
+
+    /**
      * Function BuildPadShapePolygon
      * Build the Corner list of the polygonal shape,
      * depending on shape, extra size (clearance ...) pad and orientation

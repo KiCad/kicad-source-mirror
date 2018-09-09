@@ -204,6 +204,15 @@ int D_PAD::GetRoundRectCornerRadius( const wxSize& aSize ) const
 }
 
 
+void D_PAD::SetRoundRectCornerRadius( double aRadius )
+{
+    int min_r = std::min( m_Size.x, m_Size.y );
+
+    if( min_r > 0 )
+        SetRoundRectRadiusRatio( aRadius / min_r );
+}
+
+
 const EDA_RECT D_PAD::GetBoundingBox() const
 {
     EDA_RECT area;

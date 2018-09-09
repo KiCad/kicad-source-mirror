@@ -138,6 +138,7 @@ private:
 
     // Called when corner setup value is changed for rounded rect pads
     void onCornerSizePercentChange( wxCommandEvent& event ) override;
+    void onCornerRadiusChange( wxCommandEvent& event ) override;
 
     /// Called when a dimension has changed.
     /// Update the graphical pad shown in the panel.

@@ -112,7 +112,7 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_offsetY( aParent, m_offsetYLabel, m_offsetYCtrl, m_offsetYUnits, true ),
     m_padToDie( aParent, m_padToDieLabel, m_padToDieCtrl, m_padToDieUnits, true ),
     m_trapDelta( aParent, m_trapDeltaLabel, m_trapDeltaCtrl, m_trapDeltaUnits, true ),
-    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusValue, m_cornerRadiusUnits, true ),
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_tcCornerRadius, m_cornerRadiusUnits, true ),
     m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits, true, 0 ),
     m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits, true, 0 ),
     m_OrientValidator( 1, &m_OrientValue ),
@@ -467,6 +467,32 @@ void DIALOG_PAD_PROPERTIES::updateRoundRectCornerValues()
 }
 
 
+void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
+{
+    if( m_dummyPad->GetShape() != PAD_SHAPE_ROUNDRECT )
+        return;
+
+    wxString value = m_tcCornerRadius->GetValue();
+    double rrRadius;
+
+    if( value.ToDouble( &rrRadius ) )
+    {
+        if( rrRadius < 0.0 )
+        {
+            rrRadius = 0.0;
+            m_tcCornerRadius->ChangeValue( "0.0" );
+        }
+
+        transferDataToPad( m_dummyPad );
+        m_dummyPad->SetRoundRectCornerRadius( Millimeter2iu( rrRadius ) );
+
+        auto ratio = wxString::Format( "%.1f", m_dummyPad->GetRoundRectRadiusRatio() * 100 );
+        m_tcCornerSizeRatio->ChangeValue( ratio );
+        redraw();
+    }
+}
+
+
 void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
 {
     if( m_dummyPad->GetShape() != PAD_SHAPE_ROUNDRECT )
@@ -491,7 +517,7 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         }
 
         transferDataToPad( m_dummyPad );
-        m_cornerRadius.SetValue( m_dummyPad->GetRoundRectCornerRadius() );
+        m_cornerRadius.ChangeValue( m_dummyPad->GetRoundRectCornerRadius() );
         redraw();
     }
 }
