@@ -237,7 +237,7 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
 bool IsOK( wxWindow* aParent, const wxString& aMessage )
 {
     wxMessageDialog dlg( aParent, aMessage, _( "Confirmation" ),
-                         wxYES_NO | wxCENTRE | wxICON_QUESTION );
+                         wxYES_NO | wxCENTRE | wxICON_QUESTION | wxSTAY_ON_TOP );
 
     return dlg.ShowModal() == wxID_YES;
 }
