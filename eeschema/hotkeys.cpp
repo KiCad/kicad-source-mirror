@@ -494,12 +494,12 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             GetEventHandler()->ProcessEvent( cmd );
         }
         else if( notBusy )
-            DeleteItemAtCrossHair( aDC );
+            DeleteItemAtCrossHair();
         break;
 
     case HK_REPEAT_LAST:
         if( notBusy )
-            RepeatDrawItem( aDC );
+            RepeatDrawItem();
         break;
 
     case HK_END_CURR_LINEWIREBUS:

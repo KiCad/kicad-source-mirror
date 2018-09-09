@@ -211,8 +211,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
 }
 
 
-SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aDC,
-                                               const SCHLIB_FILTER*           aFilter,
+SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aFilter,
                                                SCH_BASE_FRAME::HISTORY_LIST&  aHistoryList,
                                                bool                           aAllowBrowser )
 {
@@ -291,7 +290,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
     if( m_autoplaceFields )
         component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-    PrepareMoveItem( (SCH_ITEM*) component, aDC );
+    PrepareMoveItem( component );
 
     return component;
 }
@@ -299,15 +298,11 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( wxDC*                          aD
 
 void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
-
-    wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
-                 wxT( "Cannot change orientation of invalid schematic item." ) );
-
+    SCH_SCREEN*    screen = GetScreen();
+    SCH_ITEM*      item = screen->GetCurItem();
     SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-    m_canvas->MoveCursorToCrossHair();
+    GetCanvas()->MoveCursorToCrossHair();
 
     if( item->GetFlags() == 0 )
         SetUndoItem( item );
@@ -322,27 +317,20 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
         SchematicCleanUp( true );
     }
 
-    if( GetScreen()->TestDanglingEnds() )
-        m_canvas->Refresh();
+    GetScreen()->TestDanglingEnds();
 
+    RefreshItem( item );
     OnModify();
 }
 
 
 void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
-
-    wxCHECK_RET( item != NULL && item->Type() == SCH_COMPONENT_T,
-                 wxT( "Cannot select unit of invalid schematic item." ) );
-
-//fixme-gal
-    //INSTALL_UNBUFFERED_DC( dc, m_canvas );
-
-    m_canvas->MoveCursorToCrossHair();
-
+    SCH_SCREEN*    screen = GetScreen();
+    SCH_ITEM*      item = screen->GetCurItem();
     SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+    GetCanvas()->MoveCursorToCrossHair();
 
     int unit = aEvent.GetId() + 1 - ID_POPUP_SCH_SELECT_UNIT1;
 
@@ -352,10 +340,6 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         return;
 
     int unitCount = part->GetUnitCount();
-
-    wxCHECK_RET( (unit >= 1) && (unit <= unitCount),
-                 wxString::Format( wxT( "Cannot select unit %d from component " ), unit ) +
-                 part->GetName() );
 
     if( unitCount <= 1 || component->GetUnit() == unit )
         return;
@@ -368,11 +352,6 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     if( !flags )    // No command in progress: save in undo list
         SaveCopyInUndoList( component, UR_CHANGED );
 
-    //if( flags )
-        //component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-    //else
-        //component->Draw( m_canvas, &dc, wxPoint( 0, 0 ), g_XorMode );
-
     /* Update the unit number. */
     component->SetUnitSelection( m_CurrentSheet, unit );
     component->SetUnit( unit );
@@ -382,14 +361,14 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     if( m_autoplaceFields )
         component->AutoAutoplaceFields( GetScreen() );
 
-    if( screen->TestDanglingEnds() )
-        m_canvas->Refresh();
+    screen->TestDanglingEnds();
 
+    RefreshItem( component );
     OnModify();
 }
 
 
-void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent, wxDC* DC )
+void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 {
     if( !aComponent )
         return;
@@ -411,11 +390,6 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent, wxDC* DC )
 
         STATUS_FLAGS flags = aComponent->GetFlags();
 
-        if( aComponent->GetFlags() )
-            aComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-        else
-            aComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode );
-
         aComponent->SetConvert( aComponent->GetConvert() + 1 );
 
         // ensure m_Convert = 0, 1 or 2
@@ -433,12 +407,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent, wxDC* DC )
         aComponent->ClearFlags();
         aComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
 
-        /* Redraw the component in the new position. */
-        if( aComponent->IsMoving() )
-            aComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), g_XorMode, g_GhostColor );
-        else
-            aComponent->Draw( m_canvas, DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
-
+        RefreshItem( aComponent );
         OnModify();
     }
 }

@@ -56,6 +56,7 @@ const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
     return m_lastSheetPinTextSize;
 }
 
+
 int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
 {
     if( aSheetPin == NULL )
@@ -67,13 +68,13 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
         return wxID_CANCEL;
 
     if( aRedraw )
-        m_canvas->Refresh();
+        RefreshItem( aSheetPin );
 
     return wxID_OK;
 }
 
 
-SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet )
 {
     wxString       line;
     SCH_SHEET_PIN* sheetPin;
@@ -95,15 +96,14 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
     sheetPin->SetPosition( GetCrossHairPosition() );
-    sheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-    PrepareMoveItem( (SCH_ITEM*) sheetPin, aDC );
+    PrepareMoveItem( sheetPin );
 
     OnModify();
     return sheetPin;
 }
 
 
-SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet )
 {
     EDA_ITEM*      item;
     SCH_SHEET_PIN* sheetPin;
@@ -141,8 +141,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC )
     sheetPin->SetShape( label->GetShape() );
     sheetPin->SetPosition( GetCrossHairPosition() );
 
-    sheetPin->Draw( m_canvas, aDC, wxPoint( 0, 0 ), g_XorMode );
-    PrepareMoveItem( (SCH_ITEM*) sheetPin, aDC );
+    PrepareMoveItem( sheetPin );
 
     return sheetPin;
 }

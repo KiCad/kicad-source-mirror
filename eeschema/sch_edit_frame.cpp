@@ -1032,16 +1032,14 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 
         if( create_me.FileExists() )
         {
-            wxString msg = wxString::Format( _(
-                    "Schematic file \"%s\" already exists, use Open instead" ),
-                    GetChars( create_me.GetFullName() )
-                    );
+            wxString msg;
+            msg.Printf( _( "Schematic file \"%s\" already exists." ), create_me.GetFullName() );
             DisplayError( this, msg );
             return ;
         }
 
         // OpenProjectFiles() requires absolute
-        wxASSERT_MSG( create_me.IsAbsolute(), wxT( "wxFileDialog returned non-absolute" ) );
+        wxASSERT_MSG( create_me.IsAbsolute(), "wxFileDialog returned non-absolute path" );
 
         OpenProjectFiles( std::vector<wxString>( 1, create_me.GetFullPath() ), KICTL_CREATE );
         m_mruPath = create_me.GetPath();
@@ -1051,7 +1049,6 @@ void SCH_EDIT_FRAME::OnNewProject( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnLoadProject( wxCommandEvent& event )
 {
-//  wxString pro_dir = wxPathOnly( Prj().GetProjectFullName() );
     wxString pro_dir = m_mruPath;
 
     wxFileDialog dlg( this, _( "Open Schematic" ), pro_dir,

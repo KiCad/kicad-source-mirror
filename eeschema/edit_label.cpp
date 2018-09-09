@@ -63,7 +63,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
 }
 
 
-SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
+SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
     SCH_TEXT* textItem = NULL;
 
@@ -112,14 +112,11 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( wxDC* aDC, int aType )
     lastTextItalic = textItem->IsItalic();
     lastTextOrientation = textItem->GetLabelSpinStyle();
 
-    if( ( textItem->Type() == SCH_GLOBAL_LABEL_T ) ||
-        ( textItem->Type() == SCH_HIERARCHICAL_LABEL_T ) )
-    {
+    if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIERARCHICAL_LABEL_T )
         lastGlobalLabelShape = textItem->GetShape();
-    }
 
     // Prepare display to move the new item
-    PrepareMoveItem( (SCH_ITEM*) textItem, nullptr );
+    PrepareMoveItem( textItem );
 
     return textItem;
 }
@@ -138,8 +135,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     SCH_SCREEN* screen = GetScreen();
     SCH_TEXT* text = (SCH_TEXT*) screen->GetCurItem();
 
-    wxCHECK_RET( (text != NULL) && text->CanIncrementLabel(),
-                 wxT( "Cannot convert text type." ) );
+    wxCHECK_RET( (text != NULL) && text->CanIncrementLabel(), "Cannot convert text type." );
 
     KICAD_T type;
 
@@ -162,15 +158,14 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "Invalid text type command ID %d." ),
-                                      aEvent.GetId() ) );
+        wxFAIL_MSG( wxString::Format( "Invalid text type command ID %d.", aEvent.GetId() ) );
         return;
     }
 
     if( text->Type() == type )
         return;
 
-    SCH_TEXT* newtext;
+    SCH_TEXT* newtext = nullptr;
     const wxPoint &position = text->GetPosition();
     const wxString &txt = text->GetText();
 
@@ -191,11 +186,6 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     case SCH_TEXT_T:
         newtext = new SCH_TEXT( position, txt );
         break;
-
-    default:
-        newtext = NULL;
-        wxFAIL_MSG( wxString::Format( wxT( "Cannot convert text type to %d" ), type ) );
-        return;
     }
 
     /* Copy the old text item settings to the new one.  Justifications are not copied because

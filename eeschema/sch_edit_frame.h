@@ -417,10 +417,9 @@ public:
      * cross hair position, a context menu is displayed to clarify which item to delete.
      * See LocateItem() for more information on locating multiple items.
      *
-     * @param aDC The device context to update if and item is deleted.
      * @return True if an item was deleted.
      */
-    bool DeleteItemAtCrossHair( wxDC* aDC );
+    bool DeleteItemAtCrossHair();
 
 
     /**
@@ -960,10 +959,10 @@ private:
      * @param aItem A pointer to an SCH_ITEM to move.
      * @param aDC The device context to draw \a aItem.
      */
-    void PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC );
+    void PrepareMoveItem( SCH_ITEM* aItem );
 
     // Text, label, glabel
-    SCH_TEXT* CreateNewText( wxDC* aDC, int aType );
+    SCH_TEXT* CreateNewText( int aType );
     void EditSchematicText( SCH_TEXT* TextStruct );
     void ChangeTextOrient( SCH_TEXT* aTextItem );
 
@@ -982,7 +981,7 @@ private:
      * and terminates the command.  If the end of the current segment is on a pin, terminate
      * the command.  In all other cases starts a new segment.
      */
-    void BeginSegment( wxDC* DC, int type );
+    void BeginSegment( int type );
 
     /**
      * Terminate a bus, wire, or line creation.
@@ -992,7 +991,7 @@ private:
     /**
      * Erase the last segment at the current mouse position.
      */
-    void DeleteCurrentSegment( wxDC* DC );
+    void DeleteCurrentSegment();
     void DeleteConnection( bool DeleteFullConnection );
 
     // Images:
@@ -1094,10 +1093,9 @@ private:
      * Create a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
      *
      * @param aSheet The sheet to add the new sheet pin to.
-     * @param aDC The device context to draw on.
      * @return The new sheet pin object created or NULL if the task was aborted by the user.
      */
-    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
+    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet );
 
     /**
      * Display the dialog for editing the parameters of \a aSheetPin.
@@ -1113,10 +1111,9 @@ private:
      * referenced by \a aSheet.
      *
      * @param aSheet The sheet to import the new sheet pin to.
-     * @param aDC The device context to draw on.
      * @return The new sheet pin object imported or NULL if the task was aborted by the user.
      */
-    SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet, wxDC* aDC );
+    SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet );
 
 public:
     /**
@@ -1163,7 +1160,6 @@ private:
      * if libname != "", search in lib "libname"
      * else search in all loaded libs
      *
-     * @param aDC is the device context to draw upon.
      * @param aFilter is a filter to pass the allowed lib names list, or library name
      * to load the component from and/or some other filters
      *          if NULL, no filtering.
@@ -1173,8 +1169,7 @@ private:
      * (TODO(hzeller): This really should be a class doing history, but didn't
      *  want to change too much while other refactoring is going on)
      */
-    SCH_COMPONENT* Load_Component( wxDC*                            aDC,
-                                   const SCHLIB_FILTER*             aFilter,
+    SCH_COMPONENT* Load_Component( const SCHLIB_FILTER*             aFilter,
                                    SCH_BASE_FRAME::HISTORY_LIST&    aHistoryList,
                                    bool                             aUseLibBrowser );
 
@@ -1194,8 +1189,7 @@ public:
 
 private:
     void OnSelectUnit( wxCommandEvent& aEvent );
-    void ConvertPart( SCH_COMPONENT* DrawComponent, wxDC* DC );
-    void SetInitCmp( SCH_COMPONENT* DrawComponent, wxDC* DC );
+    void ConvertPart( SCH_COMPONENT* DrawComponent );
 
     /**
      * Display the edit field dialog to edit the parameters of \a aField.
@@ -1351,7 +1345,7 @@ public:
      *
      * Labels that end with a number will be incremented.
      */
-    void RepeatDrawItem( wxDC* DC );
+    void RepeatDrawItem();
 
     /**
      * Clone \a aItem and owns that clone in this container.

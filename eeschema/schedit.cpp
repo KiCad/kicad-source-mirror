@@ -242,7 +242,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
         if( item != NULL && item->Type() == SCH_SHEET_T )
-            screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, nullptr ) );
+            screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item ) );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -252,8 +252,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( !sheet->HasUndefinedPins() )
             {
-                DisplayInfoMessage( this,
-                                    _( "There are no undefined labels in this sheet to clean up." ) );
+                DisplayInfoMessage( this, _( "There are no undefined labels in this sheet to clean up." ) );
                 return;
             }
 
@@ -277,7 +276,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item && item->Type() == SCH_COMPONENT_T )
         {
             m_canvas->MoveCursorToCrossHair();
-            ConvertPart( (SCH_COMPONENT*) item, nullptr );
+            ConvertPart( (SCH_COMPONENT*) item );
         }
 
         break;
@@ -356,8 +355,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_ADD_GLABEL:
-        screen->SetCurItem( CreateNewText( nullptr, id == ID_POPUP_SCH_ADD_LABEL ?
-                                           LAYER_LOCLABEL : LAYER_GLOBLABEL ) );
+        screen->SetCurItem( CreateNewText( id == ID_POPUP_SCH_ADD_LABEL ? LAYER_LOCLABEL
+                                                                        : LAYER_GLOBLABEL ) );
         item = screen->GetCurItem();
 
         if( item )
@@ -372,8 +371,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:        // Log error:
-        wxFAIL_MSG( wxString::Format( wxT( "Cannot process command event ID %d" ),
-                                      event.GetId() ) );
+        wxFAIL_MSG( wxString::Format( "Cannot process command event ID %d", event.GetId() ) );
         break;
     }
 
@@ -431,7 +429,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_FIELD_T:
     case SCH_SHEET_T:
     case SCH_BITMAP_T:
-        PrepareMoveItem( item, nullptr );
+        PrepareMoveItem( item );
         break;
 
 /*    case SCH_BITMAP_T:
@@ -448,8 +446,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
     default:
         // Unknown items cannot be moved
-        wxFAIL_MSG( wxString::Format(
-                    wxT( "Cannot move item type %d" ), item->Type() ) );
+        wxFAIL_MSG( wxString::Format( "Cannot move item type %d", item->Type() ) );
         break;
     }
 
@@ -464,7 +461,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 
     if( screen->IsBlockActive() )
     {
-//        m_canvas->SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
+        GetCanvas()->SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
         screen->ClearBlockCommand();
 
         // Stop the current command (if any) but keep the current tool
@@ -474,7 +471,7 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
     {
         if( m_canvas->IsMouseCaptured() ) // Stop the current command but keep the current tool
             m_canvas->EndMouseCapture();
-        else                    // Deselect current tool
+        else                              // Deselect current tool
             m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
      }
 
@@ -604,12 +601,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 #ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         SetToolID( id, -1, _( "Add a simulator probe" ) );
-        //m_canvas->SetCurrentCursor( CURSOR_PROBE );
+        //GAL TODO: m_canvas->SetCurrentCursor( CURSOR_PROBE );
         break;
 
     case ID_SIM_TUNE:
         SetToolID( id, -1, _( "Select a value to be tuned" ) );
-        //m_canvas->SetCurrentCursor( CURSOR_TUNE );
+        //GAL TODO: m_canvas->SetCurrentCursor( CURSOR_TUNE );
         break;
 #endif /* KICAD_SPICE */
 
@@ -622,10 +619,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     {
         EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
 
-        wxPoint pos = data->GetPosition();
-
-//        INSTALL_UNBUFFERED_DC( dc, m_canvas );
-        OnLeftClick( nullptr, pos );
+        OnLeftClick( nullptr, data->GetPosition() );
     }
 }
 
@@ -652,7 +646,7 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 }
 
 
-bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
+bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
 {
     SCH_ITEM*   item;
     SCH_SCREEN* screen = GetScreen();
@@ -667,8 +661,8 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
         SetRepeatItem( NULL );
         DeleteItem( item );
 
-        if( itemHasConnections && screen->TestDanglingEnds() )
-            m_canvas->Refresh();
+        if( itemHasConnections )
+            screen->TestDanglingEnds();
 
         OnModify();
         return true;
@@ -677,8 +671,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair( wxDC* DC )
     return false;
 }
 
-// This function is a callback function, called by the mouse cursor movin event
-// when an item is currently moved
+// This function is a callback function, called by the mouse cursor moving event
 static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                                      const wxPoint& aPosition, bool aErase )
 {
@@ -722,7 +715,6 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     if( item->IsNew() )
     {
         delete item;
-        item = NULL;
     }
     else
     {
@@ -733,13 +725,9 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         // Items that are children of other objects are undone by swapping the contents
         // of the parent items.
         if( (item->Type() == SCH_SHEET_PIN_T) || (item->Type() == SCH_FIELD_T) )
-        {
             currentItem = (SCH_ITEM*) item->GetParent();
-        }
         else
-        {
             currentItem = item;
-        }
 
         wxCHECK_RET( oldItem != NULL && currentItem->Type() == oldItem->Type(),
                      wxT( "Cannot restore undefined or bad last schematic item." ) );
@@ -758,7 +746,7 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 }
 
 
-void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
+void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
 
@@ -811,6 +799,7 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
 
     GetScreen()->SetCurItem( aItem );
     m_canvas->SetMouseCapture( moveItemWithMouseCursor, abortMoveItem );
+    m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
 
     m_canvas->Refresh();
 }

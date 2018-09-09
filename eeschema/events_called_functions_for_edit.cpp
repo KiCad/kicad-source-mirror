@@ -56,7 +56,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         newitem->ClearAnnotation( NULL );
         newitem->SetFlags( IS_NEW );
         // Draw the new part, MoveItem() expects it to be already on screen.
-        PrepareMoveItem( newitem, nullptr );
+        PrepareMoveItem( newitem );
     }
     break;
 
@@ -68,7 +68,7 @@ void SCH_EDIT_FRAME::OnCopySchematicItemRequest( wxCommandEvent& event )
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->SetFlags( IS_NEW );
         // Draw the new item, MoveItem() expects it to be already on screen.
-        PrepareMoveItem( newitem, nullptr );
+        PrepareMoveItem( newitem );
     }
         break;
 

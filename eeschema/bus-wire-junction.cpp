@@ -121,16 +121,10 @@ static void RemoveBacktracks( DLIST<SCH_ITEM>& aWires )
 /**
  * Mouse capture callback for drawing line segments.
  */
-static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                         bool aErase )
+static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition, bool aErase )
 {
-    SCH_LINE* segment;
-
     if( s_wires.GetCount() == 0 )
         return;
-
-    segment = (SCH_LINE*) s_wires.begin();
-    COLOR4D color = GetLayerColor( segment->GetLayer() );
 
     SCH_EDIT_FRAME* frame = (SCH_EDIT_FRAME*) aPanel->GetParent();
 
@@ -141,24 +135,19 @@ static void DrawSegment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     else
         ( (SCH_LINE*) s_wires.GetLast() )->SetEndPoint( endpos );
 
-    segment = (SCH_LINE*) s_wires.begin();
-
     auto view = static_cast<SCH_DRAW_PANEL*>( aPanel )->GetView();
 
     view->ClearPreview();
 
-    while( segment )
+    for( SCH_LINE* segment = (SCH_LINE*) s_wires.begin(); segment; segment = segment->Next() )
     {
-        if( !segment->IsNull() )  // Redraw if segment length != 0
+        if( !segment->IsNull() )  // Add to preview if segment length != 0
             view->AddToPreview( segment->Clone() );
-
-        segment = segment->Next();
     }
-
 }
 
 
-void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
+void SCH_EDIT_FRAME::BeginSegment( int type )
 {
     SCH_LINE* segment;
     SCH_LINE* nextSegment;
@@ -171,10 +160,8 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         if( !segment->GetFlags() || ( segment->Type() != SCH_LINE_T ) )
         {
             if( segment->GetFlags() )
-            {
-                wxLogDebug( wxT( "BeginSegment: item->GetFlags()== %X" ),
-                    segment->GetFlags() );
-            }
+                wxLogDebug( wxT( "BeginSegment: item->GetFlags()== %X" ), segment->GetFlags() );
+
             // no wire, bus or graphic line in progress
             segment = NULL;
         }
@@ -240,7 +227,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
                 return;
         }
 
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
 
         // Terminate the command if the end point is on a pin, junction, or another wire or bus.
         if( GetScreen()->IsTerminalPoint( cursorpos, segment->GetLayer() ) )
@@ -259,7 +246,7 @@ void SCH_EDIT_FRAME::BeginSegment( wxDC* DC, int type )
         segment->SetFlags( SELECTED );
         nextSegment->SetFlags( IS_NEW );
         GetScreen()->SetCurItem( nextSegment );
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
     }
 }
 
@@ -456,7 +443,7 @@ static void ComputeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 }
 
 
-void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
+void SCH_EDIT_FRAME::DeleteCurrentSegment()
 {
     SCH_SCREEN* screen = GetScreen();
 
@@ -464,8 +451,6 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment( wxDC* DC )
 
     if( ( screen->GetCurItem() == NULL ) || !screen->GetCurItem()->IsNew() )
         return;
-
-    DrawSegment( m_canvas, DC, wxDefaultPosition, false );
 
     RemoveFromScreen( screen->GetCurItem() );
     m_canvas->SetMouseCaptureCallback( NULL );
@@ -853,7 +838,7 @@ static void AbortCreateNewLine( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 }
 
 
-void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
+void SCH_EDIT_FRAME::RepeatDrawItem()
 {
     SCH_ITEM*   repeater = GetRepeatItem();
 
@@ -870,13 +855,12 @@ void SCH_EDIT_FRAME::RepeatDrawItem( wxDC* DC )
     // If cloning a component then put into 'move' mode.
     if( my_clone->Type() == SCH_COMPONENT_T )
     {
-        wxPoint pos = GetCrossHairPosition() -
-                      ( (SCH_COMPONENT*) my_clone )->GetPosition();
+        wxPoint pos = GetCrossHairPosition() - ( (SCH_COMPONENT*) my_clone )->GetPosition();
 
         my_clone->SetFlags( IS_NEW );
         ( (SCH_COMPONENT*) my_clone )->SetTimeStamp( GetNewTimeStamp() );
         my_clone->Move( pos );
-        PrepareMoveItem( my_clone, DC );
+        PrepareMoveItem( my_clone );
     }
     else
     {

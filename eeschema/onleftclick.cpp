@@ -179,28 +179,28 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        DeleteItemAtCrossHair( aDC );
+        DeleteItemAtCrossHair();
         break;
 
     case ID_WIRE_BUTT:
-        BeginSegment( aDC, LAYER_WIRE );
+        BeginSegment( LAYER_WIRE );
         m_canvas->SetAutoPanRequest( true );
         break;
 
     case ID_BUS_BUTT:
-        BeginSegment( aDC, LAYER_BUS );
+        BeginSegment( LAYER_BUS );
         m_canvas->SetAutoPanRequest( true );
         break;
 
     case ID_LINE_COMMENT_BUTT:
-        BeginSegment( aDC, LAYER_NOTES );
+        BeginSegment( LAYER_NOTES );
         m_canvas->SetAutoPanRequest( true );
         break;
 
     case ID_TEXT_COMMENT_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_NOTES ) );
+            GetScreen()->SetCurItem( CreateNewText( LAYER_NOTES ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -224,7 +224,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_LABEL_BUTT:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
         {
-            GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_LOCLABEL ) );
+            GetScreen()->SetCurItem( CreateNewText( LAYER_LOCLABEL ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -238,10 +238,10 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (item == NULL) || (item->GetFlags() == 0) )
         {
             if( GetToolId() == ID_GLABEL_BUTT )
-                GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_GLOBLABEL ) );
+                GetScreen()->SetCurItem( CreateNewText( LAYER_GLOBLABEL ) );
 
             if( GetToolId() == ID_HIERLABEL_BUTT )
-                GetScreen()->SetCurItem( CreateNewText( aDC, LAYER_HIERLABEL ) );
+                GetScreen()->SetCurItem( CreateNewText( LAYER_HIERLABEL ) );
 
             m_canvas->SetAutoPanRequest( true );
         }
@@ -279,9 +279,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         if( (item->Type() == SCH_SHEET_T) && (item->GetFlags() == 0) )
         {
             if( GetToolId() == ID_IMPORT_HLABEL_BUTT )
-                GetScreen()->SetCurItem( ImportSheetPin( (SCH_SHEET*) item, aDC ) );
+                GetScreen()->SetCurItem( ImportSheetPin( (SCH_SHEET*) item ) );
             else
-                GetScreen()->SetCurItem( CreateSheetPin( (SCH_SHEET*) item, aDC ) );
+                GetScreen()->SetCurItem( CreateSheetPin( (SCH_SHEET*) item ) );
         }
         else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
@@ -294,8 +294,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             // ERC dialog interferes with moving items so we close it before starting
             CloseErc();
-            GetScreen()->SetCurItem( Load_Component( aDC, NULL,
-                                                     s_CmpNameList, true ) );
+            GetScreen()->SetCurItem( Load_Component( NULL, s_CmpNameList, true ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -309,8 +308,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             SCHLIB_FILTER filter;
             filter.FilterPowerParts( true );
-            GetScreen()->SetCurItem( Load_Component( aDC, &filter,
-                                                     s_PowerNameList, false ) );
+            GetScreen()->SetCurItem( Load_Component( &filter, s_PowerNameList, false ) );
             m_canvas->SetAutoPanRequest( true );
         }
         else
@@ -323,7 +321,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_SIM_PROBE:
         {
             constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T,
-                SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
+                                                       SCH_COMPONENT_T,
+                                                       SCH_SHEET_PIN_T,
+                                                       EOT };
             item = LocateAndShowItem( aPosition, wiresAndComponents );
 
             if( !item )
