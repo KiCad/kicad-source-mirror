@@ -1108,27 +1108,22 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
 
 wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 {
-
-    // subject to change, borrow from old BASE_SCREEN for now.
-    if( IsGalCanvasActive() )
-    {
-        VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
-
-
-        return wxPoint( cursor.x, aInvertY ? -cursor.y : cursor.y );
-    }
-    else
-    {
-        BASE_SCREEN* screen = GetScreen();  // virtual call
-        return screen->getCrossHairPosition( aInvertY );
-    }
+    VECTOR2I cursor = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    return wxPoint( cursor.x, aInvertY ? -cursor.y : cursor.y );
 }
 
 
 void EDA_DRAW_FRAME::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
 {
+    // While we're now a GAL canvas, we still have a pre-GAL toolset so some code is going
+    // to look for the crosshair position in the BASE_SCREEN and some code is going to look
+    // for it in the VIEW_CONTROLS.  Better set it in both.
+
     BASE_SCREEN* screen = GetScreen();  // virtual call
     screen->setCrossHairPosition( aPosition, GetGridOrigin(), aSnapToGrid );
+
+    wxPoint snappedPosition = screen->getCrossHairPosition( false );
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( snappedPosition, false );
 }
 
 

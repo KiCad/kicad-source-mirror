@@ -387,7 +387,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     }
 
     // Calling the general function on mouse changes (and pseudo key commands)
-    GetParent()->GeneralControl( nullptr, wxPoint(0, 0), /*event.GetLogicalPosition( DC )*/ 0 );
+    GetParent()->GeneralControl( nullptr, mousePos );
 
     /*******************************/
     /* Control of block commands : */
@@ -604,6 +604,7 @@ void SCH_DRAW_PANEL::Refresh( bool aEraseBackground, const wxRect* aRect )
     EDA_DRAW_PANEL_GAL::Refresh( aEraseBackground, aRect );
 }
 
+
 void SCH_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 {
     event.Skip();
@@ -672,6 +673,7 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     if( !GetParent()->GeneralControl( nullptr, pos, localkey ) )
         event.Skip();
 }
+
 
 void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
 {

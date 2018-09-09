@@ -785,7 +785,7 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem, wxDC* aDC )
     // (for instance large hierarchical sheets od componants can have
     // the anchor position outside the canvas)
     // these items return IsMovableFromAnchorPoint() == false
-    // For these items, do not wrap the cursor
+    // For these items, do not warp the cursor
     if( aItem->IsMovableFromAnchorPoint() )
     {
         SetCrossHairPosition( aItem->GetPosition() );

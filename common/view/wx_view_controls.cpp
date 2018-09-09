@@ -459,10 +459,8 @@ void WX_VIEW_CONTROLS::SetCrossHairCursorPosition( const VECTOR2D& aPosition, bo
     BOX2I screen( VECTOR2I( 0, 0 ), screenSize );
     VECTOR2D screenPos = m_view->ToScreen( aPosition );
 
-    if( !screen.Contains( screenPos ) )
-    {
+    if( aWarpView && !screen.Contains( screenPos ) )
         m_view->SetCenter( aPosition );
-    }
 
     m_cursorPos = aPosition;
 }
