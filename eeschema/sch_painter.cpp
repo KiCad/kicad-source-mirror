@@ -872,7 +872,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     m_gal->SetIsFill(true);
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(),  aJct->GetSymbolSize() / 2 );
+    m_gal->DrawCircle( aJct->GetPosition(),  aJct->GetEffectiveSymbolSize() / 2 );
 }
 
 
@@ -1254,7 +1254,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
 void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 {
-    int delta = aNC->GetSize().x / 2;
+    int delta = aNC->GetSize() / 2;
     int width = GetDefaultLineThickness();
 
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_NOCONNECT ) );

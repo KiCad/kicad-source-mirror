@@ -30,7 +30,7 @@
 #include <class_libentry.h>
 #include <panel_eeschema_display_options.h>
 #include <widgets/gal_options_panel.h>
-
+#include <sch_junction.h>
 
 PANEL_EESCHEMA_DISPLAY_OPTIONS::PANEL_EESCHEMA_DISPLAY_OPTIONS( SCH_EDIT_FRAME* aFrame,
                                                                 wxWindow* aWindow ) :
@@ -62,6 +62,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataToWindow()
 
     m_busWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultBusThickness(), false, true ) );
     m_lineWidthCtrl->SetValue( StringFromValue( INCHES, GetDefaultLineThickness(), false, true ) );
+    m_jctSizeCtrl->SetValue( StringFromValue( INCHES, SCH_JUNCTION::GetSymbolSize(), false, true ) );
     m_checkShowHiddenPins->SetValue( m_frame->GetShowAllPins() );
     m_checkPageLimits->SetValue( m_frame->ShowPageLimits() );
 
@@ -97,6 +98,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     SetDefaultBusThickness( ValueFromString( INCHES, m_busWidthCtrl->GetValue(), true ) );
     SetDefaultLineThickness( ValueFromString( INCHES, m_lineWidthCtrl->GetValue(), true ) );
+    SCH_JUNCTION::SetSymbolSize( ValueFromString( INCHES, m_jctSizeCtrl->GetValue(), true ) );
     m_frame->SetShowAllPins( m_checkShowHiddenPins->GetValue() );
     m_frame->SetShowPageLimits( m_checkPageLimits->GetValue() );
 

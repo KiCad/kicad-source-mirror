@@ -50,6 +50,7 @@
 #include <dialogs/panel_libedit_settings.h>
 #include <sch_view.h>
 #include <sch_painter.h>
+#include "sch_junction.h"
 
 #define FR_HISTORY_LIST_CNT     10   ///< Maximum number of find and replace strings.
 
@@ -321,6 +322,7 @@ const wxChar LibIconScaleEntry[] =                  wxT( "LibIconScale" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
+static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
 static const wxChar PreviewFramePositionXEntry[] =  wxT( "PreviewFramePositionX" );
@@ -408,6 +410,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
     SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+    SCH_JUNCTION::SetSymbolSize( aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
     aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
@@ -477,6 +480,7 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
     aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
+    aCfg->Write( DefaultJctSizeEntry, (long) SCH_JUNCTION::GetSymbolSize() );
     aCfg->Write( ShowHiddenPinsEntry, m_showAllPins );
     aCfg->Write( HorzVertLinesOnlyEntry, GetForceHVLines() );
     aCfg->Write( AutoplaceFieldsEntry, m_autoplaceFields );

@@ -37,7 +37,7 @@ class NETLIST_OBJECT_LIST;
 class SCH_NO_CONNECT : public SCH_ITEM
 {
     wxPoint m_pos;                 ///< Position of the no connect object.
-    wxSize  m_size;                ///< Size of the no connect object.
+    int     m_size;                ///< Size of the no connect object.
 
 public:
     SCH_NO_CONNECT( const wxPoint& pos = wxPoint( 0, 0 ) );
@@ -51,9 +51,9 @@ public:
         return wxT( "SCH_NO_CONNECT" );
     }
 
-    wxSize GetSize() const
+    int GetSize() const
     {
-        return m_size;
+        return std::max( m_size, KiROUND( GetDefaultLineThickness() * 3 ) );
     }
 
     int GetPenSize() const override;

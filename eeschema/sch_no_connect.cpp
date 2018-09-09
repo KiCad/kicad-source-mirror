@@ -43,10 +43,8 @@
 SCH_NO_CONNECT::SCH_NO_CONNECT( const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_NO_CONNECT_T )
 {
-#define DRAWNOCONNECT_SIZE 48       /* No symbol connection range. */
     m_pos    = pos;
-    m_size.x = m_size.y = DRAWNOCONNECT_SIZE;
-#undef DRAWNOCONNECT_SIZE
+    m_size   = 48;      ///< No-connect symbol size.
 
     SetLayer( LAYER_NOCONNECT );
 }
@@ -71,7 +69,7 @@ void SCH_NO_CONNECT::SwapData( SCH_ITEM* aItem )
 
 const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 {
-    int      delta = ( GetPenSize() + m_size.x ) / 2;
+    int      delta = ( GetPenSize() + GetSize() ) / 2;
     EDA_RECT box;
 
     box.SetOrigin( m_pos );
@@ -98,7 +96,7 @@ void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
                            GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     int pX, pY;
-    int delta = m_size.x / 2;
+    int delta = GetSize() / 2;
     int width = GetDefaultLineThickness();
 
     pX = m_pos.x + aOffset.x;
@@ -179,7 +177,7 @@ bool SCH_NO_CONNECT::doIsConnected( const wxPoint& aPosition ) const
 
 bool SCH_NO_CONNECT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int delta = ( ( m_size.x + GetDefaultLineThickness() ) / 2 ) + aAccuracy;
+    int delta = ( ( GetSize() + GetDefaultLineThickness() ) / 2 ) + aAccuracy;
 
     wxPoint dist = aPosition - m_pos;
 
@@ -205,7 +203,7 @@ bool SCH_NO_CONNECT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
 void SCH_NO_CONNECT::Plot( PLOTTER* aPlotter )
 {
-    int delta = m_size.x / 2;
+    int delta = GetSize() / 2;
     int pX, pY;
 
     pX = m_pos.x;

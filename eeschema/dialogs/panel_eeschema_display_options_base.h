@@ -19,6 +19,7 @@
 #include <wx/colour.h>
 #include <wx/settings.h>
 #include <wx/textctrl.h>
+#include <wx/statbox.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/panel.h>
@@ -40,6 +41,9 @@ class PANEL_EESCHEMA_DISPLAY_OPTIONS_BASE : public wxPanel
 		wxStaticText* m_lineWidthLabel;
 		wxTextCtrl* m_lineWidthCtrl;
 		wxStaticText* m_lineWidthUnits;
+		wxStaticText* m_jctSizeLabel;
+		wxTextCtrl* m_jctSizeCtrl;
+		wxStaticText* m_jctSizeUnits;
 		wxStaticText* m_staticText26;
 		wxChoice* m_choiceSeparatorRefId;
 		wxCheckBox* m_checkShowHiddenPins;
