@@ -23,8 +23,6 @@
  */
 
 
-/// @ todo: this is work in progress. Cleanup will follow.
-
 #include <sch_item_struct.h>
 
 #include <lib_draw_item.h>
@@ -67,20 +65,18 @@ SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
     ImportLegacyColors( nullptr );
 }
 
+
 void SCH_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSettings )
 {
     for( int layer = SCH_LAYER_ID_START; layer < SCH_LAYER_ID_END; layer ++)
-    {
         m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
-    }
 
     for( int layer = GAL_LAYER_ID_START; layer < GAL_LAYER_ID_END; layer ++)
-    {
         m_layerColors[ layer ] = ::GetLayerColor( static_cast<SCH_LAYER_ID>( layer ) );
-    }
 
     m_backgroundColor = ::GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
 }
+
 
 const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
@@ -137,38 +133,19 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
 { }
 
 
-#define HANDLE_ITEM(type_id, type_name) \
-  case type_id: \
-    draw( (type_name *) item, aLayer ); \
-    break;
+#define HANDLE_ITEM( type_id, type_name ) \
+  case type_id: draw( (type_name *) item, aLayer ); break;
+
 
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 {
-	auto item2 = static_cast<const EDA_ITEM *>(aItem);
-    auto item = const_cast<EDA_ITEM*>(item2);
+	auto item2 = static_cast<const EDA_ITEM*>( aItem );
+    auto item = const_cast<EDA_ITEM*>( item2 );
 
-
-    //printf("Import\n");
     m_schSettings.ImportLegacyColors( nullptr );
-
-    //auto c =GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-    //printf("bkgd %.02f %.02f %.02f %.02f\n", c.r, c.g, c.b, c.a);
-    //auto c2 = m_schSettings.GetLayerColor ( LAYER_SCHEMATIC_BACKGROUND );
-    //printf("bkgd2 %.02f %.02f %.02f %.02f\n", c2.r, c2.g, c2.b, c2.a);
 
     m_gal->EnableDepthTest( false );
 
-/*    m_gal->SetLineWidth( 10 );
-    m_gal->SetIsFill( false );
-    m_gal->SetIsStroke (true);
-    m_gal->SetStrokeColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
-    m_gal->SetGlyphSize ( VECTOR2D(100,100) );
-
-    m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
-
-    m_gal->StrokeText( wxT("Test"), VECTOR2D(0, 0), 0.0 );
-*/
 	switch( item->Type() )
 	{
 	HANDLE_ITEM(LIB_ALIAS_T, LIB_ALIAS);
@@ -294,7 +271,6 @@ void SCH_PAINTER::draw( LIB_ALIAS *aAlias, int aLayer )
 }
 
 
-
 static VECTOR2D mapCoords( const wxPoint& aCoord )
 {
     return VECTOR2D( aCoord.x, -aCoord.y );
@@ -312,10 +288,10 @@ void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
 
 }
 
-void SCH_PAINTER::triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c )
+void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c )
 {
-    m_gal->DrawLine ( a, b );
-    m_gal->DrawLine ( b, c );
+    m_gal->DrawLine( a, b );
+    m_gal->DrawLine( b, c );
 }
 
 
@@ -357,7 +333,7 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
     if( !isUnitAndConversionShown( aCircle ) )
         return;
 
-    defaultColors(aCircle);
+    defaultColors( aCircle );
 
     m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
@@ -367,13 +343,13 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
     if( !isUnitAndConversionShown( aArc ) )
         return;
 
-    defaultColors(aArc);
+    defaultColors( aArc );
 
     int sai = aArc->GetFirstRadiusAngle();
     int eai = aArc->GetSecondRadiusAngle();
 
-    if (TRANSFORM().MapAngles( &sai, &eai ))
-        std::swap(sai, eai);
+    if( TRANSFORM().MapAngles( &sai, &eai ) )
+        std::swap( sai, eai );
 
     double sa = (double) sai * M_PI / 1800.0;
     double ea = (double) eai * M_PI / 1800.0 ;
@@ -401,16 +377,15 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
     }
 
+    if( aField->IsMoving() )
+        color = selectedBrightening( color );
+
     if( !aField->IsVisible() )
     {
         if( m_schSettings.m_ShowHiddenText )
             color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
         else
-          return;
-    }
-    else if( aField->IsMoving() )
-    {
-        color = selectedBrightening( color );
+            return;
     }
 
     int linewidth = aField->GetPenSize();
@@ -449,9 +424,9 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
         vtx.push_back ( mapCoords( p ) );
 
     if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR || aLine->GetFillMode() == FILLED_SHAPE )
-        vtx.push_back ( vtx[0] );
+        vtx.push_back( vtx[0] );
 
-    m_gal->DrawPolygon ( vtx );
+    m_gal->DrawPolygon( vtx );
 }
 
 
@@ -462,16 +437,15 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_NOTES );
 
+    if( aText->IsMoving() )
+        color = selectedBrightening( color );
+
     if( !aText->IsVisible() )
     {
-        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
-
-        if( !m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
             return;
-    }
-    else if( aText->IsMoving() )
-    {
-        color = selectedBrightening( color );
     }
 
     int w = aText->GetPenSize();
@@ -498,12 +472,25 @@ static int InternalPinDecoSize( const LIB_PIN &aPin )
     return aPin.GetNameTextSize() != 0 ? aPin.GetNameTextSize() / 2 : aPin.GetNumberTextSize() / 2;
 }
 
-/// Utility for getting the size of the 'external' pin decorators (as a radius)
-// i.e. the negation circle, the polarity 'slopes' and the nonlogic
-// marker
+
+// Utility for getting the size of the 'external' pin decorators (as a radius)
+// i.e. the negation circle, the polarity 'slopes' and the nonlogic marker
 static int ExternalPinDecoSize( const LIB_PIN &aPin )
 {
     return aPin.GetNumberTextSize() / 2;
+}
+
+
+// Draw the target (an open circle) for a pin which has no connection or is being
+// moved.
+static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4D& aColor )
+{
+    aGal->SetIsStroke( true );
+    aGal->SetIsFill( false );
+    aGal->SetStrokeColor( aColor );
+
+    aGal->SetLineWidth ( 1.0 );
+    aGal->DrawCircle( aPos, TARGET_PIN_RADIUS );
 }
 
 
@@ -516,20 +503,26 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
         isMoving = true;
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_PIN );
+    VECTOR2I pos = mapCoords( aPin->GetPosition() );
+
+    if( isMoving )
+        color = selectedBrightening( color );
 
     if( !aPin->IsVisible() )
     {
-        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        if( m_schSettings.m_ShowHiddenPins )
+        {
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        }
+        else
+        {
+            if( ( isDangling || isMoving ) && aPin->IsPowerConnection() )
+                drawPinDanglingSymbol( m_gal, pos, color );
 
-        if( !m_schSettings.m_ShowHiddenPins )
             return;
-    }
-    else if( isMoving )
-    {
-        color = selectedBrightening( color );
+        }
     }
 
-	VECTOR2I pos = mapCoords( aPin->GetPosition() );
     VECTOR2I p0, dir;
 	int len = aPin->GetLength();
 	int width = aPin->GetPenSize();
@@ -539,22 +532,18 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     switch( orient )
 	{
 		case PIN_UP:
-            //printf("pinUp\n");
 			p0 = VECTOR2I( pos.x, pos.y - len );
 			dir = VECTOR2I(0, 1);
 			break;
 		case PIN_DOWN:
-            //printf("pinDown\n");
 			p0 = VECTOR2I( pos.x, pos.y + len );
 			dir = VECTOR2I(0, -1);
 			break;
 		case PIN_LEFT:
-            //printf("pinLeft\n");
 			p0 = VECTOR2I( pos.x - len, pos.y );
 			dir = VECTOR2I(1, 0);
 			break;
 		case PIN_RIGHT:
-            //printf("pinRight\n");
             p0 = VECTOR2I( pos.x + len, pos.y );
 			dir = VECTOR2I(-1, 0);
 			break;
@@ -591,9 +580,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     }
     else
     {
-        //printf("DrawLPin\n");
         m_gal->DrawLine( p0, pos );
-        //m_gal->DrawLine( p0, pos+dir.Perpendicular() * radius);
     }
 
     if( shape == PINSHAPE_CLOCK )
@@ -616,15 +603,15 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     {
         if(!dir.y)
         {
-            triLine ( p0 + VECTOR2D(dir.x, 0) * radius * 2,
-                      p0 + VECTOR2D(dir.x, -1) * radius * 2,
-                      p0 );
+            triLine( p0 + VECTOR2D(dir.x, 0) * radius * 2,
+                     p0 + VECTOR2D(dir.x, -1) * radius * 2,
+                     p0 );
         }
         else    /* MapX1 = 0 */
         {
-            triLine ( p0 + VECTOR2D( 0, dir.y) * radius * 2,
-                      p0 + VECTOR2D(-1, dir.y) * radius * 2,
-                      p0 );
+            triLine( p0 + VECTOR2D( 0, dir.y) * radius * 2,
+                     p0 + VECTOR2D(-1, dir.y) * radius * 2,
+                     p0 );
         }
     }
 
@@ -653,10 +640,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     }
 
     if( ( isDangling || isMoving ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
-    {
-        m_gal->SetLineWidth ( 1.0 );
-        m_gal->DrawCircle( pos, TARGET_PIN_RADIUS );
-    }
+        drawPinDanglingSymbol( m_gal, pos, color );
 
 // Draw the labels
 
@@ -863,10 +847,16 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
 }
 
 
+// Draw the target (an open square) for a wire or label which has no connection or is
+// being moved.
 static void drawDanglingSymbol( GAL* aGal, const wxPoint& aPos )
 {
     wxPoint radius( DANGLING_SYMBOL_SIZE, DANGLING_SYMBOL_SIZE );
+
+    aGal->SetIsStroke( true );
+    aGal->SetIsFill( false );
     aGal->SetLineWidth ( 1.0 );
+
     aGal->DrawRectangle( aPos - radius, aPos + radius );
 }
 
@@ -930,14 +920,14 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
             break;
         }
 
-        for( size_t i = 0; i < 100000; ++i )
+        for( size_t i = 0; i < 10000; ++i )
         {
             // Calculations MUST be done in doubles to keep from accumulating rounding
             // errors as we go.
             VECTOR2D next( start.x + strokes[ i % 4 ] * cos( theta ),
                            start.y + strokes[ i % 4 ] * sin( theta ) );
 
-            // Drawing each segment can be done rounded.
+            // Drawing each segment can be done rounded to ints.
             wxPoint segStart( KiROUND( start.x ), KiROUND( start.y ) );
             wxPoint segEnd( KiROUND( next.x ), KiROUND( next.y ) );
 
@@ -964,26 +954,25 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     switch( aText->Type() )
     {
-    case SCH_HIERARCHICAL_LABEL_T:  color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
-    case SCH_GLOBAL_LABEL_T:        color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
-    case SCH_LABEL_T:               color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
-    default:                        color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
+    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
+    case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
+    case SCH_LABEL_T:              color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
+    default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
     }
+
+    if( aText->IsMoving() )
+        color = selectedBrightening( color );
 
     if( !aText->IsVisible() )
     {
-        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
-
-        if( !m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
             return;
-    }
-    else if( aText->IsMoving() )
-    {
-        color = selectedBrightening( color );
     }
 
     if( aText->IsDangling() )
-        drawDanglingSymbol( m_gal, aText->GetTextPos());
+        drawDanglingSymbol( m_gal, aText->GetTextPos() );
 
     wxPoint  text_offset = aText->GetTextPos() + aText->GetSchematicTextOffset();
     int      linewidth = aText->GetThickness() ? aText->GetThickness() : GetDefaultLineThickness();
@@ -1038,8 +1027,6 @@ static void orientComponent( LIB_PART *part, int orientation )
             break;
         }
     }
-
-    //printf("orient %d %d %d\n", o.n_rots, o.mirror_x, o.mirror_y );
 
     for( auto& item : part->GetDrawItems() )
     {
@@ -1109,16 +1096,15 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
     }
 
+    if( aField->IsMoving() )
+        color = selectedBrightening( color );
+
     if( !aField->IsVisible() )
     {
-        color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
-
-        if( !m_schSettings.m_ShowHiddenText )
+        if( m_schSettings.m_ShowHiddenText )
+            color = m_schSettings.GetLayerColor( LAYER_HIDDEN );
+        else
             return;
-    }
-    else if( aField->IsMoving() )
-    {
-        color = selectedBrightening( color );
     }
 
     if( aField->IsVoid() )
