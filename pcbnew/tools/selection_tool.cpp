@@ -1675,16 +1675,17 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         if( m_multiple && !m_editModules )
             return false;
 
-        // When editing modules, it's allowed to select them, even when
-        // locked, since you already have to explicitly activate the
-        // module editor to get to this stage
+        // In pcbnew, locked modules prevent individual pad selection
+        // in modedit, we don't enforce this as the module is assumed to
+        // be edited by design
         if( !m_editModules )
         {
             MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
             if( mod && mod->IsLocked() )
                 return false;
         }
-        else if( aItem->Type() == PCB_PAD_T )
+
+        if( aItem->Type() == PCB_PAD_T )
         {
             // In editor, pads are selectable if any draw layer is visible
 
