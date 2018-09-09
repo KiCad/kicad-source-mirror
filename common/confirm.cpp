@@ -44,7 +44,8 @@ static std::unordered_map<unsigned long, int> doNotShowAgainDlgs;
 
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
         const wxString& aCaption, long aStyle )
-    : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE )
+    : wxRichMessageDialog( aParent, aMessage, aCaption, aStyle | wxCENTRE | wxSTAY_ON_TOP ),
+      m_hash( 0 )
 {
 }
 
@@ -136,7 +137,7 @@ wxString KIDIALOG::getCaption( KD_TYPE aType, const wxString& aCaption )
 
 long KIDIALOG::getStyle( KD_TYPE aType )
 {
-    long style = wxOK | wxCENTRE;
+    long style = wxOK | wxCENTRE | wxSTAY_ON_TOP;
 
     switch( aType )
     {
@@ -235,7 +236,7 @@ void DisplayError( wxWindow* parent, const wxString& text, int displaytime )
     int icon = displaytime > 0 ? wxICON_INFORMATION : wxICON_ERROR;
 
     dialog = new wxMessageDialog( parent, text, _( "Warning" ),
-                                      wxOK | wxCENTRE | wxRESIZE_BORDER | icon );
+                                      wxOK | wxCENTRE | wxRESIZE_BORDER | icon | wxSTAY_ON_TOP );
 
     dialog->ShowModal();
     dialog->Destroy();
@@ -247,7 +248,8 @@ void DisplayErrorMessage( wxWindow* aParent, const wxString& aText, const wxStri
     wxRichMessageDialog* dlg;
 
     dlg = new wxRichMessageDialog( aParent, aText, _( "Error" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_ERROR );
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                   wxICON_ERROR | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
     {
@@ -264,7 +266,8 @@ void DisplayInfoMessage( wxWindow* aParent, const wxString& aMessage, const wxSt
     wxRichMessageDialog* dlg;
 
     dlg = new wxRichMessageDialog( aParent, aMessage, _( "Info" ),
-                                   wxOK | wxCENTRE | wxRESIZE_BORDER | wxICON_INFORMATION );
+                                   wxOK | wxCENTRE | wxRESIZE_BORDER |
+                                   wxICON_INFORMATION | wxSTAY_ON_TOP );
 
     if( !aExtraInfo.IsEmpty() )
     {
