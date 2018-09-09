@@ -266,7 +266,15 @@ private:
     void packageRectangle( MODULE* aModule, wxXmlNode* aTree ) const;
     void packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const;
     void packageCircle( MODULE* aModule, wxXmlNode* aTree ) const;
-    void packageHole( MODULE* aModule, wxXmlNode* aTree ) const;
+
+    /**
+     * Function packageHole
+     * @parameter aModule - The KiCad module to which to assign the hole
+     * @parameter aTree - The Eagle XML node that is of type "hole"
+     * @parameter aCenter - If true, center the hole in the module and
+     *      offset the module position
+     */
+    void packageHole( MODULE* aModule, wxXmlNode* aTree, bool aCenter ) const;
     void packageSMD( MODULE* aModule, wxXmlNode* aTree ) const;
 
     ///> Handles common pad properties
