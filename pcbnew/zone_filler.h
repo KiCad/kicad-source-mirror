@@ -38,7 +38,8 @@ class SHAPE_LINE_CHAIN;
 class ZONE_FILLER
 {
 public:
-    ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit = nullptr );
+    ZONE_FILLER( BOARD* aBoard, COMMIT* aCommit = nullptr,
+            wxWindow* aActiveWindow = nullptr );
     ~ZONE_FILLER();
 
     void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
@@ -117,6 +118,7 @@ private:
 
     BOARD* m_board;
     COMMIT* m_commit;
+    wxWindow* m_activeWindow;
     WX_PROGRESS_REPORTER* m_progressReporter;
 
     std::atomic_size_t m_next;          // An index into the vector of zones to fill.

@@ -65,9 +65,9 @@ extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 static double s_thermalRot = 450;    // angle of stubs in thermal reliefs for round pads
 static const bool s_DumpZonesWhenFilling = false;
 
-ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr ),
-    m_next( 0 ), m_count_done( 0 )
+ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit, wxWindow* aActiveWindow ) :
+    m_board( aBoard ), m_commit( aCommit ), m_activeWindow( aActiveWindow ),
+    m_progressReporter( nullptr ), m_next( 0 ), m_count_done( 0 )
 {
 }
 
@@ -185,7 +185,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     if( aCheck )
     {
-        bool cancel = !outOfDate || !IsOK( nullptr, _( "Zone fills are out-of-date. Re-fill?" ) );
+        bool cancel = !outOfDate || !IsOK( m_activeWindow,
+                _( "Zone fills are out-of-date. Re-fill?" ) );
 
         if( m_progressReporter )
         {

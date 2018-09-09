@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::Check_All_Zones( wxWindow* aActiveWindow )
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
             new WX_PROGRESS_REPORTER( aActiveWindow, _( "Checking Zones" ), 3 ) );
 
-    ZONE_FILLER filler( GetBoard(), &commit );
+    ZONE_FILLER filler( GetBoard(), &commit, aActiveWindow );
     filler.SetProgressReporter( progressReporter.get() );
 
     if( filler.Fill( toFill, true ) )
