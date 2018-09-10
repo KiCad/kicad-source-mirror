@@ -138,9 +138,9 @@ void Convert_shape_line_polygon_to_triangles( SHAPE_POLY_SET &aPolyList,
     aPolyList.CacheTriangulation();
     const double conver_d = (double)aBiuTo3DunitsScale;
 
-    for( unsigned int i = 0; i < aPolyList.TriangulatedPolyCount(); i++ )
+    for( unsigned int j = 0; j < aPolyList.TriangulatedPolyCount(); j++ )
     {
-        auto triPoly = aPolyList.TriangulatedPolygon( i );
+        auto triPoly = aPolyList.TriangulatedPolygon( j );
 
         for( size_t i = 0; i < triPoly->GetTriangleCount(); i++ )
         {
