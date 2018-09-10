@@ -379,6 +379,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
     const SCH_SHEET_LIST& sheetList = g_RootSheet;
 
     m_directives.clear();
+    bool controlBlock = false;
 
     for( unsigned i = 0; i < sheetList.size(); i++ )
     {
@@ -419,7 +420,23 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                 {
                     m_title = line.AfterFirst( ' ' );
                 }
+
+                else if( line.IsSameAs( ".control" ) && ( !controlBlock ) )
+                {
+                    controlBlock = true;
+                }
+                else if( line.IsSameAs( ".endc" ) && controlBlock )
+                {
+                    controlBlock = false;
+                    m_directives.push_back( line );
+                }
+
                 else if( line.StartsWith( '.' ) )
+                {
+                    m_directives.push_back( line );
+                }
+
+                if( controlBlock )
                 {
                     m_directives.push_back( line );
                 }
