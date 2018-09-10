@@ -147,6 +147,24 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
     }
     else
     {
+        // There are certain parent/child and enclosure combinations that can be handled
+        // automatically.  Since schematics are meant to be human-readable we don't have
+        // all the various overlap and coverage issues that we do in Pcbnew.
+        if( m_collectedItems.GetCount() == 2 )
+        {
+            SCH_ITEM* a = m_collectedItems[ 0 ];
+            SCH_ITEM* b = m_collectedItems[ 1 ];
+
+            if( a->GetParent() == b )
+                item = a;
+            else if( a == b->GetParent() )
+                item = b;
+            else if( a->Type() == SCH_SHEET_T && b->Type() != SCH_SHEET_T )
+                item = b;
+            else if( b->Type() == SCH_SHEET_T && a->Type() != SCH_SHEET_T )
+                item = a;
+        }
+
         // There are certain combinations of items that do not need clarification such as
         // a corner were two lines meet or all the items form a junction.
         if( aHotKeyCommandId )
@@ -182,8 +200,7 @@ SCH_ITEM* SCH_EDIT_FRAME::LocateItem( const wxPoint& aPosition, const KICAD_T aF
 
             wxMenu selectMenu;
 
-            AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
-                         KiBitmap( info_xpm ) );
+            AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ), KiBitmap( info_xpm ) );
             selectMenu.AppendSeparator();
 
             for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
