@@ -195,7 +195,7 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
                      wxT( "Sheet label has invalid parent item." ) );
         SaveCopyInUndoList( (SCH_ITEM*) sheet, UR_CHANGED, aAppend );
         sheet->RemovePin( (SCH_SHEET_PIN*) aItem );
-        m_canvas->RefreshDrawingRect( sheet->GetBoundingBox() );
+        RefreshItem( sheet );
     }
     else if( aItem->Type() == SCH_JUNCTION_T )
     {

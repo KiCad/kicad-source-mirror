@@ -151,13 +151,14 @@ void SCH_VIEW::ClearPreview()
 
 void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool owned )
 {
-    m_preview->Add(aItem);
-    if(owned)
-        m_previewItems.push_back(aItem);
+    m_preview->Add( aItem );
 
-    SetVisible(m_preview.get(), true);
-    Hide(m_preview.get(), false);
-    Update(m_preview.get());
+    if( owned )
+        m_previewItems.push_back( aItem );
+
+    SetVisible( m_preview.get(), true );
+    Hide( m_preview.get(), false );
+    Update( m_preview.get() );
 }
 
 void SCH_VIEW::ShowSelectionArea( bool aShow  )

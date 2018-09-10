@@ -567,17 +567,45 @@ void EDA_DRAW_FRAME::createCanvas()
 }
 
 
+void SCH_BASE_FRAME::RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete )
+{
+    EDA_ITEM* parent = aItem->GetParent();
+
+    if( aItem->Type() == SCH_SHEET_PIN_T )
+    {
+        // Sheet pins aren't in the view.  Refresh their parent.
+        if( parent )
+            GetCanvas()->GetView()->Update( parent );
+    }
+    else
+    {
+        if( !isAddOrDelete )
+            GetCanvas()->GetView()->Update( aItem );
+
+        // Component children are drawn from their parents.  Mark them for re-paint.
+        if( parent && parent->Type() == SCH_COMPONENT_T )
+            GetCanvas()->GetView()->Update( parent, KIGFX::REPAINT );
+    }
+
+    GetCanvas()->Refresh();
+}
+
+
 void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem )
 {
     GetScreen()->Append( aItem );
     GetCanvas()->GetView()->Add( aItem );
+    RefreshItem( aItem, true );           // handle any additional parent semantics
 }
 
 
 void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems )
 {
     for( SCH_ITEM* item = aItems.begin(); item; item = item->Next() )
+    {
         GetCanvas()->GetView()->Add( item );
+        RefreshItem( item, true );        // handle any additional parent semantics
+    }
 
     GetScreen()->Append( aItems );
 }
@@ -587,6 +615,7 @@ void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem )
 {
     GetCanvas()->GetView()->Remove( aItem );
     GetScreen()->Remove( aItem );
+    RefreshItem( aItem, true );           // handle any additional parent semantics
 }
 
 

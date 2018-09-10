@@ -229,7 +229,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_END_SHEET:
         m_canvas->MoveCursorToCrossHair();
-        addCurrentItemToList();
+        addCurrentItemToScreen();
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -360,7 +360,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         item = screen->GetCurItem();
 
         if( item )
-            addCurrentItemToList();
+            addCurrentItemToScreen();
 
         break;
 
@@ -664,6 +664,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
         if( itemHasConnections )
             screen->TestDanglingEnds();
 
+        GetCanvas()->Refresh();
         OnModify();
         return true;
     }

@@ -614,7 +614,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
                     remove_item( item );
                     remove_item( secondItem );
                     itemList.PushItem( ITEM_PICKER( line, UR_NEW ) );
-                    AddToScreen( (SCH_ITEM*) line );
+                    AddToScreen( line );
                     break;
                 }
             }
@@ -845,8 +845,6 @@ void SCH_EDIT_FRAME::RepeatDrawItem()
     if( !repeater )
         return;
 
-    //D( repeater>Show( 0, std::cout ); )
-
     // clone the repeater, move it, insert into display list, then save a copy
     // via SetRepeatItem();
 
@@ -872,9 +870,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem()
         AddToScreen( my_clone );
 
         if( my_clone->IsConnectable() )
-        {
             GetScreen()->TestDanglingEnds();
-        }
 
         SaveCopyInUndoList( my_clone, UR_NEW );
         my_clone->ClearFlags();

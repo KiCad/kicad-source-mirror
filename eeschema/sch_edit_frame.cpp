@@ -752,18 +752,6 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
-void SCH_EDIT_FRAME::RefreshItem( SCH_ITEM* aItem )
-{
-    GetCanvas()->GetView()->Update( aItem );
-
-    // Component children are drawn from their parents so we must also dirty the parent.
-    if( aItem->GetParent() && aItem->GetParent()->Type() == SCH_COMPONENT_T )
-        GetCanvas()->GetView()->Update( aItem->GetParent(), KIGFX::REPAINT );
-
-    GetCanvas()->Refresh();
-}
-
-
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_blockItems.GetCount() > 0 );
@@ -1339,7 +1327,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
+void SCH_EDIT_FRAME::addCurrentItemToScreen( bool aRedraw )
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
@@ -1416,7 +1404,7 @@ void SCH_EDIT_FRAME::addCurrentItemToList( bool aRedraw )
             if( item->Type() == SCH_SHEET_PIN_T )
                 ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
             else
-                wxLogMessage( wxT( "addCurrentItemToList: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
+                wxLogMessage( wxT( "addCurrentItemToScreen: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
                               item->Type() );
         }
 

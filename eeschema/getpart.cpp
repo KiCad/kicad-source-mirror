@@ -313,7 +313,7 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     if( item->GetFlags() == 0 )
     {
-        addCurrentItemToList();
+        addCurrentItemToScreen();
         SchematicCleanUp( true );
     }
 

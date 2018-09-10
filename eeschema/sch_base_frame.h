@@ -290,10 +290,29 @@ public:
 
     virtual void HardRedraw() override;
 
+    /**
+     * Add an item to the screen (and view)
+     */
     void AddToScreen( SCH_ITEM* aItem );
+
+    /**
+     * Add a list of items to the screen (and view)
+     */
     void AddToScreen( DLIST<SCH_ITEM>& aItems );
+
+    /**
+     * Remove an item from the screen (and view)
+     */
     void RemoveFromScreen( SCH_ITEM* aItem );
 
+    /**
+     * Mark an item for refresh.
+     */
+    void RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete = false );
+
+    /**
+     * Mark all items for refresh.
+     */
     void SyncView();
 
 

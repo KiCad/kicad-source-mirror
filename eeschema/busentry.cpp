@@ -46,7 +46,7 @@ SCH_BUS_BUS_ENTRY* SCH_EDIT_FRAME::CreateBusBusEntry()
 
     busEntry->SetFlags( IS_NEW );
     GetScreen()->SetCurItem( busEntry );
-    addCurrentItemToList();
+    addCurrentItemToScreen();
     return busEntry;
 }
 
@@ -57,7 +57,7 @@ SCH_BUS_WIRE_ENTRY* SCH_EDIT_FRAME::CreateBusWireEntry()
 
     busEntry->SetFlags( IS_NEW );
     GetScreen()->SetCurItem( busEntry );
-    addCurrentItemToList();
+    addCurrentItemToScreen();
     return busEntry;
 }
 

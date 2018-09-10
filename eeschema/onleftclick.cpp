@@ -87,7 +87,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_FIELD_T:
             case SCH_BITMAP_T:
             case SCH_NO_CONNECT_T:
-                addCurrentItemToList();
+                addCurrentItemToScreen();
                 GetCanvas()->GetView()->ClearPreview();
                 GetCanvas()->GetView()->ClearHiddenFlags();
                 return;
@@ -133,7 +133,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -150,7 +150,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -162,7 +162,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -174,7 +174,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -205,7 +205,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -217,7 +217,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -229,7 +229,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -247,7 +247,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -264,7 +264,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -285,7 +285,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -299,7 +299,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 
@@ -313,7 +313,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToList();
+            addCurrentItemToScreen();
         }
         break;
 

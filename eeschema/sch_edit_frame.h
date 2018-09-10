@@ -194,7 +194,7 @@ protected:
      *
      * @param aRedraw = true (default) to redrw -the screen after adding the item.
      */
-    void addCurrentItemToList( bool aRedraw = true );
+    void addCurrentItemToScreen( bool aRedraw = true );
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
@@ -346,11 +346,6 @@ public:
      * current screen* and update the date in frame reference.
      */
     void OnModify();
-
-    /**
-     * Mark an item for refresh.
-     */
-    void RefreshItem( SCH_ITEM* aItem );
 
     virtual wxString GetScreenDesc() const override;
 
