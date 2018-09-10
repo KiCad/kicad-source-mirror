@@ -222,8 +222,12 @@ void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
     wxSize clientSize = GetClientSize();
     m_gal->ResizeScreen( clientSize.x, clientSize.y );
-    m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
-    m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+    if( m_view )
+    {
+        m_view->MarkTargetDirty( KIGFX::TARGET_CACHED );
+        m_view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    }
 }
 
 
@@ -480,7 +484,7 @@ void EDA_DRAW_PANEL_GAL::SetCurrentCursor( int aCursor )
     {
         m_currentCursor = wxCURSOR_ARROW;
     }
-    
+
     SetCursor( (wxStockCursor) m_currentCursor );
 }
 
@@ -488,4 +492,3 @@ void EDA_DRAW_PANEL_GAL::SetDefaultCursor()
 {
     SetCurrentCursor( m_defaultCursor );
 }
-    
