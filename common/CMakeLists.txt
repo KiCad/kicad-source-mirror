@@ -19,6 +19,7 @@ include_directories(
     ${INC_AFTER}
     ${OCE_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
+    ${OPENSSL_INCLUDE_DIR}
     )
 
 
