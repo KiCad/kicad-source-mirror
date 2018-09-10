@@ -242,6 +242,18 @@ static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int)
 static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C', (int) wxID_COPY );
 static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V', (int) wxID_PASTE );
 
+static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                                  HK_CANVAS_OPENGL,
+#ifdef __WXMAC__
+                                  GR_KB_ALT +
+#endif
+                                  WXK_F11, ID_MENU_CANVAS_OPENGL );
+static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Toolset with software graphics (fall-back)" ),
+                                 HK_CANVAS_CAIRO,
+#ifdef __WXMAC__
+                                 GR_KB_ALT +
+#endif
+                                 WXK_F12, ID_MENU_CANVAS_CAIRO );
 
 // List of common hotkey descriptors
 static EDA_HOTKEY* common_Hotkey_List[] =
@@ -320,6 +332,8 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkLeaveSheet,
     &HkDeleteNode,
     &HkHighlightConnection,
+    &HkCanvasCairo,
+    &HkCanvasOpenGL,
     NULL
 };
 
@@ -624,12 +638,15 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ROTATE:                         // Rotate schematic item.
     case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
     case HK_AUTOPLACE_FIELDS:               // Autoplace all fields around component
+    case HK_CANVAS_CAIRO:
+    case HK_CANVAS_OPENGL:
         {
-            // force a new item search on hot keys at current position,
+           // force a new item search on hot keys at current position,
             // if there is no currently edited item,
             // to avoid using a previously selected item
             if( ! itemInEdit )
                 screen->SetCurItem( NULL );
+
             EDA_HOTKEY_CLIENT_DATA data( aPosition );
             cmd.SetInt( hotKey->m_Idcommand );
             cmd.SetClientObject( &data );

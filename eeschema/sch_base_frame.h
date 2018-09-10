@@ -102,10 +102,22 @@ public:
 
     virtual ~SCH_BASE_FRAME();
 
+    void createCanvas();
+
     SCH_DRAW_PANEL* GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
 
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
+
+    /**
+     * switches currently used canvas ( Cairo / OpenGL).
+     */
+    void OnSwitchCanvas( wxCommandEvent& aEvent );
+
+    /**
+     * Update UI called when switches currently used canvas (Cairo / OpenGL).
+     */
+    void OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent );
 
     /**
      * @return the increment value of the position of an item

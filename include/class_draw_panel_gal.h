@@ -162,7 +162,7 @@ public:
 
     virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList )
     {
-        assert( false );
+        wxASSERT( false );
     }
 
     /**
@@ -210,7 +210,7 @@ public:
      * Set the current cursor shape for this panel
      */
     virtual void SetCurrentCursor( int aCursor );
-    
+
     /**
      * Function GetDefaultCursor
      * @return the default cursor shape

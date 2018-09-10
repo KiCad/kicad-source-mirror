@@ -647,6 +647,20 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
     aParentMenu->AppendSeparator();
 
+    wxString text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hokeys_Descr,
+                          HK_CANVAS_OPENGL );
+    AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
+                 _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Eeschema_Hokeys_Descr,
+                          HK_CANVAS_CAIRO );
+    AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
+                 _( "Use Modern Toolset with software graphics (fall-back)" ),
+                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+
+    aParentMenu->AppendSeparator();
+
     // Import/export
     AddMenuItem( aParentMenu, ID_CONFIG_SAVE, _( "&Save Project File..." ),
                  _( "Save project preferences into a project file" ),

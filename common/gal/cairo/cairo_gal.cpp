@@ -351,7 +351,11 @@ void CAIRO_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControl
 void CAIRO_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 {
     int ppi = aBitmap.GetPPI();
-    double worldIU_per_mm = 1/(worldUnitLength/2.54)/1000;
+    // We have to calculate the pixel size in users units to draw the image.
+    // worldUnitLength is the user unit in GAL unit value
+    // (GAL unit = 0.1 inch in nanometer = 2.54/1000 in mm).
+    // worldUnitLength * 1000 / 2.54 is the user unit in mm
+    double worldIU_per_mm = 1/( worldUnitLength / 0.00254 );
     double pix_size_iu =  worldIU_per_mm * ( 25.4 / ppi );
     int w = aBitmap.GetSizePixels().x;
     int h = aBitmap.GetSizePixels().y;
@@ -1202,5 +1206,5 @@ unsigned int CAIRO_GAL::getNewGroupNumber()
 
 void CAIRO_GAL::EnableDepthTest( bool aEnabled )
 {
-    
+
 }

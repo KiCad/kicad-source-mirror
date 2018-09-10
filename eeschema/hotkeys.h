@@ -79,7 +79,9 @@ enum hotkey_id_commnand {
     HK_DELETE_NODE,
     HK_AUTOPLACE_FIELDS,
     HK_UPDATE_PCB_FROM_SCH,
-    HK_SELECT_ITEMS_ON_PCB
+    HK_SELECT_ITEMS_ON_PCB,
+    HK_CANVAS_OPENGL,
+    HK_CANVAS_CAIRO,
 };
 
 // List of hotkey descriptors for Eeschema

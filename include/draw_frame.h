@@ -78,10 +78,9 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     ///< GAL display options - this is the frame's interface to setting GAL display options
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
-    bool m_useSingleCanvasPane;
-
 
 protected:
+    bool m_useSingleCanvasPane;
 
     wxSocketServer*                          m_socketServer;
     std::vector<wxSocketBase*>               m_sockets;         ///< interprocess communication
@@ -217,8 +216,6 @@ protected:
 
     ///> Key in KifaceSettings to store the canvas type.
     static const wxChar CANVAS_TYPE_KEY[];
-
-    void createCanvas();
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,

@@ -60,6 +60,9 @@ BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledWindow )
 //    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
+// define our user unit value for GAL ( given in GAL unit = 2.54/(IU per meter))
+// TODO: move in a header common to sch_preview_panel.cpp
+#define IU_2_GAL_WORLD_UNIT 2.54/(IU_PER_MM*1000)
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                 const wxPoint& aPosition, const wxSize& aSize,
@@ -74,16 +77,15 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
     m_showCrossHair = true;
 #endif
-
     m_view = new KIGFX::SCH_VIEW( true );
     m_view->SetGAL( m_gal );
 
-    m_gal->SetWorldUnitLength( 0.01 ); // 1 unit = 0.01 inch
+    m_gal->SetWorldUnitLength( IU_2_GAL_WORLD_UNIT );
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 2000000.0, 0.002 ); 
+    m_view->SetScaleLimits( 2000.0, 0.002 );
     m_view->SetMirror( false, false );
 
     setDefaultLayerOrder();
@@ -134,7 +136,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     m_doubleClickInterval = 250;
 
-    m_gal->SetGridColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
+    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     m_gal->SetCursorColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
 
     m_viewControls->SetSnapping( true );
@@ -195,8 +197,12 @@ void SCH_DRAW_PANEL::setDefaultLayerOrder()
 
 bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
 {
+    VECTOR2D grid_size = m_gal->GetGridSize();
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
+    m_gal->SetWorldUnitLength( IU_2_GAL_WORLD_UNIT );
+    m_gal->SetGridSize( grid_size );
+    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     return rv;
 }
 
@@ -375,6 +381,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     if( event.MiddleIsDown() )
     {
+/* Not used in GAL canvas
         wxPoint currentPosition = event.GetPosition();
 
         double scale = GetParent()->GetScreen()->GetScalingFactor();
@@ -384,6 +391,8 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 KiROUND( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
 
         GetParent()->RedrawScreen( wxPoint( x, y ), false );
+*/
+        return;
     }
 
     // Calling the general function on mouse changes (and pseudo key commands)
@@ -679,7 +688,6 @@ void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
     if( m_painter )
         static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
-    
+
     EDA_DRAW_PANEL_GAL::onPaint( aEvent );
 }
-    

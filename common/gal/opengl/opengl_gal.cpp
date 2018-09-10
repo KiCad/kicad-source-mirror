@@ -1003,8 +1003,15 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 {
     int ppi = aBitmap.GetPPI();
 
-    double w = (double) aBitmap.GetSizePixels().x / (double) ppi / worldUnitLength * 10.0; // no idea where the factor 10 comes from...
-    double h = (double) aBitmap.GetSizePixels().y / (double) ppi / worldUnitLength * 10.0;
+    // We have to calculate the pixel size in users units to draw the image.
+    // worldUnitLength is the user unit in GAL unit value
+    // (GAL unit = 2.54/1e9 in meter).
+    // worldUnitLength * 1000 / 2.54 is the user unit in mm
+    double worldIU_per_mm = 1.0 / ( worldUnitLength / 0.00254 );
+    double pix_size_iu = worldIU_per_mm * ( 25.4 / ppi );
+
+    double w = (double) aBitmap.GetSizePixels().x * pix_size_iu;
+    double h = (double) aBitmap.GetSizePixels().y * pix_size_iu;
 
     auto xform = currentManager->GetTransformation();
 

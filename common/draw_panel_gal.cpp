@@ -364,7 +364,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             break;
 
         default:
-            assert( false );
+            wxASSERT( false );
             // warn about unhandled GAL canvas type, but continue with the fallback option
 
         case GAL_TYPE_NONE:
@@ -387,7 +387,7 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
     // from the defaults
     m_options.NotifyChanged();
 
-    assert( new_gal );
+    wxASSERT( new_gal );
     delete m_gal;
     m_gal = new_gal;
 

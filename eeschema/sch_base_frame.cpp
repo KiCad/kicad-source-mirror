@@ -91,6 +91,10 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
             aSize, aStyle, aFrameName )
 {
+    printf("calling createCanvas\n");
+    createCanvas();
+    printf("Canvas %p\n", m_canvas);
+
     m_zoomLevelCoeff = 11.0;    // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
                                 // obviously depends on the monitor,
@@ -100,9 +104,45 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
 }
 
 
-
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
 {
+}
+
+
+void SCH_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
+{
+    wxMenuBar* menuBar = GetMenuBar();
+    EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = gal_canvas->GetBackend();
+
+    struct { int menuId; int galType; } menuList[] =
+    {
+        { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
+        { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
+    };
+
+    for( auto ii: menuList )
+    {
+        wxMenuItem* item = menuBar->FindItem( ii.menuId );
+        if( ii.galType == canvasType )
+        {
+            item->Check( true );
+        }
+    }
+}
+
+
+void SCH_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+{
+    auto new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+
+    if( aEvent.GetId() == ID_MENU_CANVAS_CAIRO )
+        new_type = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+
+    if( m_canvasType == new_type )
+        return;
+
+    GetGalCanvas()->SwitchBackend( new_type );
 }
 
 
@@ -554,11 +594,17 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
     return true;
 }
 
-
-void EDA_DRAW_FRAME::createCanvas()
+void SCH_BASE_FRAME::createCanvas()
 {
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+
+    // Allows only a CAIRO or OPENGL canvas:
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL &&
+        canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+
     m_canvas = new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
-                                   m_galDisplayOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+                                   GetGalDisplayOptions(), canvasType );
 
     m_useSingleCanvasPane = true;
 

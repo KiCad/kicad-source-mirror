@@ -221,15 +221,12 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_FramePos.x   = m_FramePos.y = 0;
     m_FrameSize.y -= m_MsgFrameHeight;
 
-    printf("calling createCanvas\n");
-    createCanvas();
-    printf("Canvas %p\n", m_canvas);
-
     m_messagePanel  = new EDA_MSG_PANEL( this, -1, wxPoint( 0, m_FrameSize.y ),
                                          wxSize( m_FrameSize.x, m_MsgFrameHeight ) );
 
     m_messagePanel->SetBackgroundColour( COLOR4D( LIGHTGRAY ).ToColour() );
 }
+
 
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
@@ -652,7 +649,7 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
     // Change GAL canvas cursor if requested.
     if( IsGalCanvasActive() )
         defaultCursor = GetGalCanvas()->GetDefaultCursor();
-    
+
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
 }
 
@@ -1045,7 +1042,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
 
     GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
 
-   
+
     // Reset current tool on switch();
     SetNoToolSelected();
 
@@ -1067,7 +1064,7 @@ bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 }
 
 
-EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting() 
+EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
 {
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     wxConfigBase* cfg = Kiface().KifaceSettings();
