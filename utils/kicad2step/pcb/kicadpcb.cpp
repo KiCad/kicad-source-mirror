@@ -179,12 +179,12 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 }
 
 
-bool KICADPCB::WriteSTEP( const wxString& aFileName, bool aOverwrite )
+bool KICADPCB::WriteSTEP( const wxString& aFileName )
 {
     if( m_pcb )
     {
         std::string filename( aFileName.ToUTF8() );
-        return m_pcb->WriteSTEP( filename, aOverwrite );
+        return m_pcb->WriteSTEP( filename );
     }
 
     return false;
@@ -192,12 +192,12 @@ bool KICADPCB::WriteSTEP( const wxString& aFileName, bool aOverwrite )
 
 
 #ifdef SUPPORTS_IGES
-bool KICADPCB::WriteIGES( const wxString& aFileName, bool aOverwrite )
+bool KICADPCB::WriteIGES( const wxString& aFileName )
 {
     if( m_pcb )
     {
         std::string filename( aFileName.ToUTF8() );
-        return m_pcb->WriteIGES( filename, aOverwrite );
+        return m_pcb->WriteIGES( filename );
     }
 
     return false;

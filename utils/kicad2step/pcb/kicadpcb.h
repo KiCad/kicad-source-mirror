@@ -108,9 +108,9 @@ public:
 
     bool ReadFile( const wxString& aFileName );
     bool ComposePCB( bool aComposeVirtual = true );
-    bool WriteSTEP( const wxString& aFileName, bool aOverwrite );
+    bool WriteSTEP( const wxString& aFileName );
     #ifdef SUPPORTS_IGES
-    bool WriteIGES( const wxString& aFileName, bool aOverwrite );
+    bool WriteIGES( const wxString& aFileName );
     #endif
 };
 
