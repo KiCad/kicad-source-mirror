@@ -43,6 +43,9 @@ public:
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 private:
+    ///> Returns file extension for the selected output format
+    wxString getOutputExt() const;
+
 #ifdef SUPPORTS_IGES
     bool     m_fmtIGES;
 #endif
@@ -250,23 +253,21 @@ int KICAD2MCAD::OnRun()
     wxFileName tfname;
 
     if( m_outputFile.empty() )
+    {
         tfname.Assign( fname.GetFullPath() );
+        tfname.SetExt( getOutputExt() );
+    }
     else
+    {
         tfname.Assign( m_outputFile );
 
-    // Set the file extension if the user's requested file name does not have an extension.
-    if( !tfname.HasExt() )
-    {
-#ifdef SUPPORTS_IGES
-        if( m_fmtIGES )
-            tfname.SetExt( "igs" );
-        else
-#endif
-            tfname.SetExt( "stp" );
+        // Set the file extension if the user's requested
+        // file name does not have an extension.
+        if( !tfname.HasExt() )
+            tfname.SetExt( getOutputExt() );
     }
 
     wxString outfile = tfname.GetFullPath();
-
     KICADPCB pcb;
 
     pcb.SetOrigin( m_xOrigin, m_yOrigin );
@@ -309,4 +310,15 @@ int KICAD2MCAD::OnRun()
     }
 
     return 0;
+}
+
+
+wxString KICAD2MCAD::getOutputExt() const
+{
+#ifdef SUPPORTS_IGES
+    if( m_fmtIGES )
+        return wxString( "igs" );
+    else
+#endif
+        return wxString( "stp" );
 }
