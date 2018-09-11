@@ -54,7 +54,13 @@ const int EPSILON = Mils2iu( 5 );
 
 MARKER_PCB* DRC::newMarker( TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode )
 {
-    auto conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList() );
+    SHAPE_POLY_SET* conflictOutline;
+
+    if( aConflictZone->IsFilled() )
+        conflictOutline = const_cast<SHAPE_POLY_SET*>( &aConflictZone->GetFilledPolysList() );
+    else
+        conflictOutline = aConflictZone->Outline();
+
     wxPoint markerPos;
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();
