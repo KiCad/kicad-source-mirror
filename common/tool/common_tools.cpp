@@ -164,6 +164,25 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::CenterContents( const TOOL_EVENT& aEvent )
+{
+    EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
+    BOX2I bBox = getModel<EDA_ITEM>()->ViewBBox();
+
+    if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
+        bBox = galCanvas->GetDefaultViewBBox();
+
+    getView()->SetCenter( bBox.Centre() );
+
+    // Take scrollbars into account
+    VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
+    VECTOR2D worldScrollbarSize = getView()->ToWorld( scrollbarSize, false );
+    getView()->SetCenter( getView()->GetCenter() + worldScrollbarSize / 2.0 );
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::ZoomPreset( const TOOL_EVENT& aEvent )
 {
     unsigned int idx = aEvent.Parameter<intptr_t>();
@@ -256,6 +275,8 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ZoomCenter,         ACTIONS::zoomCenter.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomFitScreen,      ACTIONS::zoomFitScreen.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomPreset,         ACTIONS::zoomPreset.MakeEvent() );
+
+    Go( &COMMON_TOOLS::CenterContents,     ACTIONS::centerContents.MakeEvent() );
 
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );

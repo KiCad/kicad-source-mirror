@@ -83,6 +83,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_find_base.cpp
     dialogs/dialog_footprint_wizard_list.cpp
     dialogs/dialog_footprint_wizard_list_base.cpp
+    dialogs/dialog_fp_browser_display_options.cpp
+    dialogs/dialog_fp_browser_display_options_base.cpp
     dialogs/dialog_fp_plugin_options.cpp
     dialogs/dialog_fp_plugin_options_base.cpp
     dialogs/dialog_gen_footprint_position_file_base.cpp

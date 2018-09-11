@@ -236,17 +236,6 @@ public:
      */
     virtual bool CreateAndShow3D_Frame( bool aForceRecreateIfNotOwner );
 
-    // Read/write functions:
-    EDA_ITEM* ReadDrawSegmentDescr( LINE_READER* aReader );
-    int ReadListeSegmentDescr( LINE_READER* aReader,
-                               TRACK*       PtSegm,
-                               int          StructType,
-                               int          NumSegm );
-
-    int ReadSetup( LINE_READER* aReader );
-    int ReadGeneralDescrPcb( LINE_READER* aReader );
-
-
     /**
      * Function PcbGeneralLocateAndDisplay
      * searches for an item under the mouse cursor.
@@ -421,31 +410,6 @@ public:
                               bool aSaveForUndo );
 
     /**
-     * Function SelectFootprint
-     * displays a list of modules found in all libraries or a given library
-     *
-     *  @param aWindow = the current window ( parent window )
-     *
-     *  @param aLibraryName = library to list (if aLibraryFullFilename is empty, then list all modules).
-     *           This is a nickname for the FP_LIB_TABLE build.
-     *
-     *  @param aMask = Display filter (wildcart)( Mask = wxEmptyString if not used )
-     *
-     *  @param aKeyWord = keyword list, to display a filtered list of module
-     *                    having one (or more) of these keywords in their
-     *                    keyword list ( aKeyWord = wxEmptyString if not used )
-     *
-     *  @param aTable is the #FP_LIB_TABLE to search.
-     *
-     *  @return wxEmptyString if abort or fails, or the selected module name if Ok
-     */
-    wxString SelectFootprint( EDA_DRAW_FRAME* aWindow,
-                              const wxString& aLibraryName,
-                              const wxString& aMask,
-                              const wxString& aKeyWord,
-                              FP_LIB_TABLE*   aTable );
-
-    /**
      * Function SelectFootprintFromLibTree
      * opens a dialog to select a footprint.
      *
@@ -498,12 +462,6 @@ public:
     void TraceModuleRatsNest( wxDC* aDC );
 
     /**
-     * Function Build_Board_Ratsnest.
-     * Calculates the full ratsnest depending only on pads.
-     */
-    void Build_Board_Ratsnest();
-
-    /**
      *  function Displays the general ratsnest
      *  Only ratsnest with the status bit CH_VISIBLE is set are displayed
      * @param aDC = the current device context (can be NULL)
@@ -536,30 +494,6 @@ public:
                                    int aNet );
 
     /**
-     * Function TestForActiveLinksInRatsnest
-     * Explores the full rats nest list (which must exist) to determine
-     * the ACTIVE links in the full rats nest list
-     * When tracks exist between pads, a link can connect 2 pads already connected by a track
-     * and the link is said inactive.
-     * When a link connects 2 pads not already connected by a track, the link is said active.
-     * @param aNetCode = net code to test. If 0, test all nets
-     */
-    void TestForActiveLinksInRatsnest( int aNetCode );
-
-    /**
-     * Function TestConnections
-     * tests the connections relative to all nets.
-     * <p>
-     * This function update the status of the ratsnest ( flag CH_ACTIF = 0 if a connection
-     * is found, = 1 else) track segments are assumed to be sorted by net codes.
-     * This is the case because when a new track is added, it is inserted in the linked list
-     * according to its net code. and when nets are changed (when a new netlist is read)
-     * tracks are sorted before using this function.
-     * </p>
-     */
-    void TestConnections();
-
-    /**
      * Function TestNetConnection
      * tests the connections relative to \a aNetCode.  Track segments are assumed to be
      * sorted by net codes.
@@ -567,13 +501,6 @@ public:
      * @param aNetCode The net code to test
      */
     void TestNetConnection( wxDC* aDC, int aNetCode );
-
-    /**
-     * Function RecalculateAllTracksNetcode
-     * search connections between tracks and pads and propagate pad net codes to the track
-     * segments.
-     */
-    void ComputeLegacyConnections();
 
     /* Functions relative to Undo/redo commands:
      */
@@ -691,8 +618,6 @@ public:
      */
     void SetPrevGrid() override;
 
-    void ClearSelection();
-
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void UseGalCanvas( bool aEnable ) override;
 
@@ -706,14 +631,11 @@ public:
         return m_configSettings;
     }
 
-    const PCB_GENERAL_SETTINGS& CSettings() const
-    {
-        return m_configSettings;
-    }
-
-
     ///> Key in KifaceSettings to store the canvas type.
     static const wxChar CANVAS_TYPE_KEY[];
+
+    static const wxChar AUTO_ZOOM_KEY[];
+    static const wxChar ZOOM_KEY[];
 
     DECLARE_EVENT_TABLE()
 };

@@ -42,6 +42,9 @@ class CVPCB_MAINFRAME;
  */
 class DISPLAY_FOOTPRINTS_FRAME : public PCB_BASE_FRAME
 {
+    bool   m_autoZoom;
+    double m_lastZoom;
+
 public:
     DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aParent );
     ~DISPLAY_FOOTPRINTS_FRAME() override;
@@ -74,14 +77,17 @@ public:
      */
     void updateView();
 
-    /// Updates the GAL with display settings changes
-    void applyDisplaySettingsToGAL();
+    void LoadSettings( wxConfigBase* aCfg ) override;
+    void SaveSettings( wxConfigBase* aCfg ) override;
 
-    ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
-    void UseGalCanvas( bool aEnable ) override;
+    /// Updates the GAL with display settings changes
+    void ApplyDisplaySettingsToGAL();
 
     ///> @copydoc EDA_DRAW_FRAME::UpdateMsgPanel()
     void UpdateMsgPanel() override;
+
+    bool GetAutoZoom() const { return m_autoZoom; }
+    void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
     /**
      * Function IsGridVisible() , virtual

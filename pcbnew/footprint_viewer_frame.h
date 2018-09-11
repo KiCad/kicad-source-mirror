@@ -48,14 +48,21 @@ class FOOTPRINT_VIEWER_FRAME : public PCB_BASE_FRAME
     friend struct PCB::IFACE;       // constructor called from here only
 
 protected:
-    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
-                            EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend );
+    FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType );
 
 
 public:
     ~FOOTPRINT_VIEWER_FRAME();
 
+    PCB_GENERAL_SETTINGS& GetConfigSettings() { return m_configSettings; }
+
+    /// Updates the GAL with display settings changes
+    void ApplyDisplaySettingsToGAL();
+
     virtual COLOR4D GetGridColor() override;
+
+    bool GetAutoZoom() const { return m_autoZoom; }
+    void SetAutoZoom( bool aEnable ) { m_autoZoom = aEnable; }
 
     /**
      * redraws the message panel.
@@ -85,6 +92,9 @@ private:
 
     wxListBox*          m_libList;               // The list of libs names
     wxListBox*          m_footprintList;         // The list of footprint names
+
+    bool                m_autoZoom;
+    double              m_lastZoom;
 
     const wxString      getCurNickname();
     void                setCurNickname( const wxString& aNickname );
@@ -122,6 +132,8 @@ private:
     void ClickOnFootprintList( wxCommandEvent& event );
     void DClickOnFootprintList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
+
+    void InstallDisplayOptions( wxCommandEvent& event );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 

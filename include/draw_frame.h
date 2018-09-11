@@ -129,15 +129,12 @@ protected:
     /// Key to control whether first run dialog is shown on startup
     long    m_firstRunDialogSetting;
 
-    /// Choice box to choose the grid size.
-    wxChoice*           m_gridSelectBox;
-
-    /// Choice box to choose the zoom value.
+    wxChoice*       m_gridSelectBox;
     wxChoice*       m_zoomSelectBox;
 
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
-    wxAuiToolBar*       m_auxiliaryToolBar;
+    wxAuiToolBar*   m_auxiliaryToolBar;
 
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.

@@ -121,7 +121,6 @@ public:
 
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar() override;
-    void ReCreateAuxiliaryToolbar() override;
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     /**

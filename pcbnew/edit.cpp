@@ -233,7 +233,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( !viewer )
             {
                 viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, true );
-                viewer->Zoom_Automatique( false );
             }
             else
             {

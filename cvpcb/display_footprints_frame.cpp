@@ -68,6 +68,8 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
+    EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
+    EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
 
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
     EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
@@ -123,7 +125,12 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     ReCreateOptToolbar();
 
     // Create GAL canvas
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
     EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
     auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                   GetGalDisplayOptions(), backend );
     SetGalCanvas( gal_drawPanel );
@@ -156,11 +163,12 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_toolManager->InvokeTool( "cvpcb.InteractiveSelection" );
 
     auto& galOpts = GetGalDisplayOptions();
-    galOpts.m_fullscreenCursor = true;
-    galOpts.m_forceDisplayCursor = true;
     galOpts.m_axesEnabled = true;
+    UseGalCanvas( true );
 
-    UseGalCanvas( backend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
+    GetGalCanvas()->GetView()->SetScale( m_lastZoom );
+
     updateView();
 
     Show( true );
@@ -169,13 +177,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
 DISPLAY_FOOTPRINTS_FRAME::~DISPLAY_FOOTPRINTS_FRAME()
 {
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->StopDrawing();
-        GetGalCanvas()->GetView()->Clear();
-        // Be sure any event cannot be fired after frame deletion:
-        GetGalCanvas()->SetEvtHandlerEnabled( false );
-    }
+    GetGalCanvas()->StopDrawing();
+    GetGalCanvas()->GetView()->Clear();
+    // Be sure any event cannot be fired after frame deletion:
+    GetGalCanvas()->SetEvtHandlerEnabled( false );
 
     // Be sure a active tool (if exists) is desactivated:
     if( m_toolManager )
@@ -273,7 +278,7 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                       KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
-    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiScaledBitmap( display_options_xpm, this ),
+    m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiScaledBitmap( config_xpm, this ),
                             _( "Display options" ) );
 
     m_mainToolBar->AddSeparator();
@@ -297,26 +302,56 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiScaledBitmap( three_d_xpm, this ),
                             _( "3D Display (Alt+3)" ) );
 
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Grid selection choice box.
+    m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateGridSelectBox();
+    m_mainToolBar->AddControl( m_gridSelectBox );
+
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Zoom selection choice box.
+    m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateZoomSelectBox();
+    m_mainToolBar->AddControl( m_zoomSelectBox );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect
     // the changes
     m_mainToolBar->Realize();
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::UseGalCanvas( bool aEnable )
+void DISPLAY_FOOTPRINTS_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    PCB_BASE_FRAME::UseGalCanvas( aEnable );
+    PCB_BASE_FRAME::LoadSettings( aCfg );
+
+    m_configSettings.Load( aCfg );  // mainly, load the color config
+
+    aCfg->Read( ConfigBaseName() + AUTO_ZOOM_KEY, &m_autoZoom, true );
+    aCfg->Read( ConfigBaseName() + ZOOM_KEY, &m_lastZoom, 10.0 );
 }
 
 
-void DISPLAY_FOOTPRINTS_FRAME::applyDisplaySettingsToGAL()
+void DISPLAY_FOOTPRINTS_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-        auto view = GetGalCanvas()->GetView();
-        auto painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
-        KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
-        settings->LoadDisplayOptions( &m_DisplayOptions, false );
+    PCB_BASE_FRAME::SaveSettings( aCfg );
 
-        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    aCfg->Write( ConfigBaseName() + AUTO_ZOOM_KEY, m_autoZoom );
+    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetGalCanvas()->GetView()->GetScale() );
+}
+
+
+void DISPLAY_FOOTPRINTS_FRAME::ApplyDisplaySettingsToGAL()
+{
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->LoadDisplayOptions( &m_DisplayOptions, false );
+
+    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetGalCanvas()->Refresh();
 }
 
 
@@ -522,7 +557,7 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
     updateView();
 
     UpdateStatusBar();
-    Zoom_Automatique( false );
+
     GetCanvas()->Refresh();
     Update3DView();
 }
@@ -530,15 +565,18 @@ void DISPLAY_FOOTPRINTS_FRAME::InitDisplay()
 
 void DISPLAY_FOOTPRINTS_FRAME::updateView()
 {
-    if( IsGalCanvasActive() )
-    {
-        PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-        dp->UseColorScheme( &Settings().Colors() );
-        dp->DisplayBoard( GetBoard() );
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    PCB_DRAW_PANEL_GAL* dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    dp->UseColorScheme( &Settings().Colors() );
+    dp->DisplayBoard( GetBoard() );
+
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    if( m_autoZoom )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-        UpdateMsgPanel();
-    }
+    else
+        m_toolManager->RunAction( ACTIONS::centerContents, true );
+
+    UpdateMsgPanel();
 }
 
 
@@ -548,9 +586,7 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
     MSG_PANEL_ITEMS items;
 
     if( footprint )
-    {
         footprint->GetMsgPanelInfo( m_UserUnits, items );
-    }
 
     SetMsgPanel( items );
 }
@@ -558,15 +594,8 @@ void DISPLAY_FOOTPRINTS_FRAME::UpdateMsgPanel()
 
 void DISPLAY_FOOTPRINTS_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
-    if( !GetBoard() )
-        return;
-
-    m_canvas->DrawBackGround( DC );
-    GetBoard()->Draw( m_canvas, DC, GR_COPY );
-
-    UpdateMsgPanel();
-
-    m_canvas->DrawCrossHair( DC );
+    if( GetBoard() )
+        UpdateMsgPanel();
 }
 
 

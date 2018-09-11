@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@
 #include <bitmaps.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <eda_dockart.h>
-
+#include <pcb_painter.h>
 #include <class_board.h>
 #include <class_module.h>
 
@@ -89,10 +89,16 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
 
     // Toolbar events
     EVT_TOOL( ID_MODVIEW_SELECT_PART, FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint )
+    EVT_TOOL( ID_MODVIEW_OPTIONS, FOOTPRINT_VIEWER_FRAME::InstallDisplayOptions )
     EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_MODVIEW_EXPORT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
     EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
+    EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectZoom )
+    EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectGrid )
+
+    EVT_UPDATE_UI( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectGrid )
+    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectZoom )
 
     // listbox events
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
@@ -114,26 +120,20 @@ END_EVENT_TABLE()
  * If it still happens, it could be better to use wxSTAY_ON_TOP
  * instead of wxFRAME_FLOAT_ON_PARENT
  */
-#ifdef __WINDOWS__
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT   // could be wxSTAY_ON_TOP if issues
-#else
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
-#endif
+
+#define PARENT_STYLE   ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT )
+#define MODAL_STYLE    ( KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP )
+#define NONMODAL_STYLE ( KICAD_DEFAULT_DRAWFRAME_STYLE )
 
 
 FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent,
-                                                FRAME_T aFrameType,
-                                                EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
+                                                FRAME_T aFrameType ) :
     PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Library Browser" ),
             wxDefaultPosition, wxDefaultSize,
-            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
-                    aParent ?
-                        KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
-                        : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP
-                : KICAD_DEFAULT_DRAWFRAME_STYLE,
-            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ?
-                                FOOTPRINT_VIEWER_FRAME_NAME_MODAL
-                                : FOOTPRINT_VIEWER_FRAME_NAME )
+            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ? ( aParent ? PARENT_STYLE : MODAL_STYLE )
+                                                        : NONMODAL_STYLE,
+            aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ? FOOTPRINT_VIEWER_FRAME_NAME_MODAL
+                                                        : FOOTPRINT_VIEWER_FRAME_NAME )
 {
     wxASSERT( aFrameType == FRAME_PCB_MODULE_VIEWER_MODAL ||
               aFrameType == FRAME_PCB_MODULE_VIEWER );
@@ -193,8 +193,14 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     UpdateTitle();
 
     // Create GAL canvas
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(), aBackend );
+                                                            GetGalDisplayOptions(), backend );
     SetGalCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -243,15 +249,12 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     // call Update()() to reflect the changes
     m_auimgr.Update();
 
-    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetScalingFactor( BestZoom() );
-#else
-    Zoom_Automatique( false );
-#endif
-
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( aBackend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    UseGalCanvas( true );
+
+    // Restore last zoom.  (If auto-zooming we'll adjust when we load the footprint.)
+    GetGalCanvas()->GetView()->SetScale( m_lastZoom );
+
     updateView();
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
@@ -264,20 +267,21 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
 FOOTPRINT_VIEWER_FRAME::~FOOTPRINT_VIEWER_FRAME()
 {
+    GetGalCanvas()->StopDrawing();
+    GetGalCanvas()->GetView()->Clear();
+    // Be sure any event cannot be fired after frame deletion:
+    GetGalCanvas()->SetEvtHandlerEnabled( false );
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    DBG(printf( "%s:\n", __func__ );)
-
     // A workaround to avoid flicker, in modal mode when modview frame is destroyed,
     // when the aui toolbar is not docked (i.e. shown in a miniframe)
     // (usefull on windows only)
     m_mainToolBar->SetFocus();
 
-    if( IsGalCanvasActive() )
-        GetGalCanvas()->StopDrawing();
+    GetGalCanvas()->StopDrawing();
 
     if( IsModal() )
     {
@@ -334,7 +338,6 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateLibraryList()
     }
 
     ReCreateFootprintList();
-    ReCreateHToolbar();
 
     m_canvas->Refresh();
 }
@@ -396,7 +399,6 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnLibList( wxCommandEvent& event )
 
     ReCreateFootprintList();
     UpdateTitle();
-    ReCreateHToolbar();
 }
 
 
@@ -442,10 +444,8 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
         UpdateTitle();
 
-        if( IsGalCanvasActive() )
-            updateView();
+        updateView();
 
-        Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3D_Frame();
     }
@@ -501,14 +501,21 @@ void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::LoadSettings( aCfg );
+    PCB_BASE_FRAME::LoadSettings( aCfg );
+
     m_configSettings.Load( aCfg );  // mainly, load the color config
+
+    aCfg->Read( ConfigBaseName() + AUTO_ZOOM_KEY, &m_autoZoom, true );
+    aCfg->Read( ConfigBaseName() + ZOOM_KEY, &m_lastZoom, 10.0 );
 }
 
 
 void FOOTPRINT_VIEWER_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
-    EDA_DRAW_FRAME::SaveSettings( aCfg );
+    PCB_BASE_FRAME::SaveSettings( aCfg );
+
+    aCfg->Write( ConfigBaseName() + AUTO_ZOOM_KEY, m_autoZoom );
+    aCfg->Write( ConfigBaseName() + ZOOM_KEY, GetGalCanvas()->GetView()->GetScale() );
 }
 
 
@@ -798,13 +805,11 @@ void FOOTPRINT_VIEWER_FRAME::SelectAndViewFootprint( int aMode )
 
         Update3D_Frame();
 
-        if( IsGalCanvasActive() )
-            updateView();
+        updateView();
     }
 
-
     UpdateTitle();
-    Zoom_Automatique( false );
+
     m_canvas->Refresh();
 }
 
@@ -839,17 +844,31 @@ void FOOTPRINT_VIEWER_FRAME::UpdateMsgPanel()
 }
 
 
+void FOOTPRINT_VIEWER_FRAME::ApplyDisplaySettingsToGAL()
+{
+    auto painter = static_cast<KIGFX::PCB_PAINTER*>( GetGalCanvas()->GetView()->GetPainter() );
+    KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
+    settings->LoadDisplayOptions( &m_DisplayOptions, false );
+
+    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetGalCanvas()->Refresh();
+}
+
+
 void FOOTPRINT_VIEWER_FRAME::updateView()
 {
-    if( IsGalCanvasActive() )
-    {
-        auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
-        dp->UseColorScheme( &Settings().Colors() );
-        dp->DisplayBoard( GetBoard() );
-        m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+    auto dp = static_cast<PCB_DRAW_PANEL_GAL*>( GetGalCanvas() );
+    dp->UseColorScheme( &Settings().Colors() );
+    dp->DisplayBoard( GetBoard() );
+
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+
+    if( m_autoZoom )
         m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
-        UpdateMsgPanel();
-    }
+    else
+        m_toolManager->RunAction( ACTIONS::centerContents, true );
+
+    UpdateMsgPanel();
 }
 
 

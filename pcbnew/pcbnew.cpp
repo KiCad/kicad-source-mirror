@@ -145,7 +145,7 @@ static struct IFACE : public KIFACE_I
                 return new FOOTPRINT_EDIT_FRAME( aKiway, aParent, backend );
             case FRAME_PCB_MODULE_VIEWER:
             case FRAME_PCB_MODULE_VIEWER_MODAL:
-                return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ), backend );
+                return new FOOTPRINT_VIEWER_FRAME( aKiway, aParent, FRAME_T( aClassId ) );
             }
         }
 

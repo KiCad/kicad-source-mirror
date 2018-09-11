@@ -112,6 +112,22 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Check footprint" ) );
 #endif
 
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Grid selection choice box.
+    m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateGridSelectBox();
+    m_mainToolBar->AddControl( m_gridSelectBox );
+
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Zoom selection choice box.
+    m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateZoomSelectBox();
+    m_mainToolBar->AddControl( m_zoomSelectBox );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }
@@ -196,16 +212,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
                                KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
-#ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK  );
-#else
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                               wxITEM_CHECK  );
-#endif
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -229,35 +238,3 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
-{
-    if( m_auxiliaryToolBar )
-        m_auxiliaryToolBar->Clear();
-    else
-        m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                               KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-
-    // Set up toolbar
-    KiScaledSeparator( m_auxiliaryToolBar, this );
-
-    // Grid selection choice box.
-    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_ON_GRID_SELECT,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      0, NULL );
-    // Update tool bar to reflect setting.
-    updateGridSelectBox();
-    m_auxiliaryToolBar->AddControl( m_gridSelectBox );
-
-    // Zoom selection choice box.
-    KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_ON_ZOOM_SELECT,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      0, NULL );
-    updateZoomSelectBox();
-    m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
-
-    // after adding the buttons to the toolbar, must call Realize() to reflect the changes
-    m_auxiliaryToolBar->Realize();
-}

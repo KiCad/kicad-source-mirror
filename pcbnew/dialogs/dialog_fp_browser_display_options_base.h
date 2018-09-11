@@ -5,8 +5,8 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_DISPLAY_OPTIONS_BASE_H__
-#define __DIALOG_DISPLAY_OPTIONS_BASE_H__
+#ifndef __DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE_H__
+#define __DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -29,9 +29,9 @@
 #define ID_PADFILL_OPT 1000
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE
+/// Class DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
+class DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -53,9 +53,9 @@ class DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE();
+		DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Display Options"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE();
 	
 };
 
-#endif //__DIALOG_DISPLAY_OPTIONS_BASE_H__
+#endif //__DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE_H__

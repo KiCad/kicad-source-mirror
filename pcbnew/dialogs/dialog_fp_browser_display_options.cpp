@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,26 +24,24 @@
 #include <fctsys.h>
 
 #include <common.h>
-#include <cvpcb.h>
 #include <class_drawpanel.h>
-#include <display_footprints_frame.h>
+#include <footprint_viewer_frame.h>
 
-#include <dialog_display_options.h>
+#include <dialog_fp_browser_display_options.h>
 
 
-void DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay( wxCommandEvent& event )
+void FOOTPRINT_VIEWER_FRAME::InstallDisplayOptions( wxCommandEvent& event )
 {
-    DIALOG_FOOTPRINTS_DISPLAY_OPTIONS OptionWindow( this );
+    DIALOG_FP_BROWSER_DISPLAY_OPTIONS dlg( this );
 
-    OptionWindow.ShowModal();
+    dlg.ShowModal();
 }
 
 
-DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( DISPLAY_FOOTPRINTS_FRAME* parent )
-    : DIALOG_FOOTPRINTS_DISPLAY_OPTIONS_BASE( parent )
+DIALOG_FP_BROWSER_DISPLAY_OPTIONS::DIALOG_FP_BROWSER_DISPLAY_OPTIONS( FOOTPRINT_VIEWER_FRAME* aParent )
+    : DIALOG_FP_BROWSER_DISPLAY_OPTIONS_BASE( aParent ),
+      m_frame( aParent )
 {
-    m_Parent = parent;
-
     initDialog();
     m_sdbSizerOK->SetDefault();
 
@@ -51,49 +49,49 @@ DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( DISPLAY_FO
 }
 
 
-DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::~DIALOG_FOOTPRINTS_DISPLAY_OPTIONS( )
+DIALOG_FP_BROWSER_DISPLAY_OPTIONS::~DIALOG_FP_BROWSER_DISPLAY_OPTIONS( )
 {
 }
 
 
-void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::initDialog()
+void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::initDialog()
 {
     /* mandatory to use escape key as cancel under wxGTK. */
     SetFocus();
 
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     m_EdgesDisplayOption->SetValue( not displ_opts->m_DisplayModEdgeFill );
     m_TextDisplayOption->SetValue( not displ_opts->m_DisplayModTextFill );
     m_ShowPadSketch->SetValue( not displ_opts->m_DisplayPadFill );
     m_ShowPadNum->SetValue( displ_opts->m_DisplayPadNum );
 
-    m_autoZoomOption->SetValue( m_Parent->GetAutoZoom() );
+    m_autoZoomOption->SetValue( m_frame->GetAutoZoom() );
 }
 
 
-void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::UpdateObjectSettings( void )
+void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::UpdateObjectSettings()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Parent->GetDisplayOptions();
+    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     displ_opts->m_DisplayModEdgeFill = not m_EdgesDisplayOption->GetValue();
     displ_opts->m_DisplayModTextFill = not m_TextDisplayOption->GetValue();
     displ_opts->m_DisplayPadNum  = m_ShowPadNum->GetValue();
     displ_opts->m_DisplayPadFill = not m_ShowPadSketch->GetValue();
-    m_Parent->ApplyDisplaySettingsToGAL();
+    m_frame->ApplyDisplaySettingsToGAL();
 
-    m_Parent->SetAutoZoom( m_autoZoomOption->GetValue() );
+    m_frame->SetAutoZoom( m_autoZoomOption->GetValue() );
 }
 
 
-bool DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::TransferDataFromWindow()
+bool DIALOG_FP_BROWSER_DISPLAY_OPTIONS::TransferDataFromWindow()
 {
     UpdateObjectSettings();
     return true;
 }
 
 
-void DIALOG_FOOTPRINTS_DISPLAY_OPTIONS::OnApplyClick( wxCommandEvent& event )
+void DIALOG_FP_BROWSER_DISPLAY_OPTIONS::OnApplyClick( wxCommandEvent& event )
 {
     UpdateObjectSettings();
 }

@@ -54,6 +54,12 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
+    m_mainToolBar->AddTool( ID_MODVIEW_OPTIONS, wxEmptyString,
+                            KiScaledBitmap( config_xpm, this ),
+                            _( "Display options" ) );
+
+    m_mainToolBar->AddSeparator();
+
     m_mainToolBar->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( lib_previous_xpm, this ),
                             _( "Display previous footprint" ) );
@@ -64,11 +70,9 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( ID_MODVIEW_SHOW_3D_VIEW, wxEmptyString,
-                            KiScaledBitmap( three_d_xpm, this ),
-                            _( "Show footprint in 3D viewer" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
+    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
+    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
+                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_IN, wxEmptyString,
@@ -78,21 +82,38 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_OUT, wxEmptyString,
                             KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
     msg = AddHotkeyName( _( "Zoom to fit" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_AUTO );
     m_mainToolBar->AddTool( ID_VIEWER_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_MODVIEW_SHOW_3D_VIEW, wxEmptyString,
+                            KiScaledBitmap( three_d_xpm, this ),
+                            _( "Show footprint in 3D viewer" ) );
+
     if( IsModal() )
     {
-        KiScaledSeparator( m_mainToolBar, this );
         m_mainToolBar->AddTool( ID_MODVIEW_EXPORT_TO_BOARD, wxEmptyString,
                                 KiScaledBitmap( export_footprint_names_xpm, this ),
                                 _( "Insert footprint in board" ) );
     }
+
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Grid selection choice box.
+    m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateGridSelectBox();
+    m_mainToolBar->AddControl( m_gridSelectBox );
+
+    KiScaledSeparator( m_mainToolBar, this );
+
+    // Zoom selection choice box.
+    m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
+                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    updateZoomSelectBox();
+    m_mainToolBar->AddControl( m_zoomSelectBox );
 
     // after adding the buttons to the toolbar, must call Realize() to
     // reflect the changes

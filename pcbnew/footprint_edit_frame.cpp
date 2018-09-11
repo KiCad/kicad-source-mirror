@@ -270,7 +270,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     // ReCreateMenuBar();       // UseGalCanvas() will do this for us.
     ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
@@ -289,7 +288,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     // Horizontal items; layers 4 - 6
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_auxiliaryToolBar, EDA_PANE().HToolbar().Name( "AuxToolbar" ).Top().Layer(4) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
     // Vertical items; layers 1 - 3
@@ -986,7 +984,6 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged()
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged();
 
     ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
     ReCreateVToolbar();
     ReCreateOptToolbar();
     Layout();

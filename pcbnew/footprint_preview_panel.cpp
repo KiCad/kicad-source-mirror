@@ -243,13 +243,13 @@ public:
 };
 
 
-FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
-        KIWAY* aKiway, wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTIONS& aOpts, GAL_TYPE aGalType )
+FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
+                                                  KIGFX::GAL_DISPLAY_OPTIONS& aOpts,
+                                                  GAL_TYPE aGalType )
     : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), aOpts, aGalType  ),
       KIWAY_HOLDER( aKiway ),
       m_footprintDisplayed( true )
 {
-
     m_iface = std::make_shared<FP_THREAD_IFACE>();
     m_iface->SetPanel( this );
     m_loader = new FP_LOADER_THREAD( m_iface );
@@ -266,7 +266,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL(
     SyncLayersVisibility( &*m_dummyBoard );
 
     Raise();
-    Show(true);
+    Show( true );
     StartDrawing();
 
     Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( FOOTPRINT_PREVIEW_PANEL::OnLoaderThreadUpdate ), NULL, this );
@@ -300,9 +300,9 @@ void FOOTPRINT_PREVIEW_PANEL::CacheFootprint( LIB_ID const& aFPID )
 void FOOTPRINT_PREVIEW_PANEL::renderFootprint(  MODULE *module )
 {
     GetView()->Clear();
-    module->SetParent ( &*m_dummyBoard );
+    module->SetParent( &*m_dummyBoard );
 
-    GetView()->Add ( module );
+    GetView()->Add( module );
     GetView()->SetVisible( module, true );
     GetView()->Update( module, KIGFX::ALL );
 
@@ -368,6 +368,11 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 {
     KIGFX::GAL_DISPLAY_OPTIONS gal_opts;
 
-    return new FOOTPRINT_PREVIEW_PANEL(
-            aKiway, aParent, gal_opts, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+#ifdef __WXMAC__
+    // Cairo renderer doesn't handle Retina displays
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+#else
+    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+#endif
+    return new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, gal_opts, backend );
 }

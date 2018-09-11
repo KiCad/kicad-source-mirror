@@ -43,6 +43,10 @@ TOOL_ACTION ACTIONS::zoomPreset( "common.Control.zoomPreset",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION ACTIONS::centerContents( "common.Control.centerContents",
+        AS_GLOBAL, 0,
+        "", "" );
+
 // Grid control
 TOOL_ACTION ACTIONS::gridFast1( "common.Control.gridFast1",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_GRID_TO_FASTGRID1 ),
