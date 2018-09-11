@@ -838,7 +838,7 @@ bool PCBMODEL::CreatePCB()
 
 #ifdef SUPPORTS_IGES
 // write the assembly model in IGES format
-bool PCBMODEL::WriteIGES( const std::string& aFileName, bool aOverwrite )
+bool PCBMODEL::WriteIGES( const std::string& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
@@ -872,7 +872,7 @@ bool PCBMODEL::WriteIGES( const std::string& aFileName, bool aOverwrite )
 
 
 // write the assembly model in STEP format
-bool PCBMODEL::WriteSTEP( const std::string& aFileName, bool aOverwrite )
+bool PCBMODEL::WriteSTEP( const std::string& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {

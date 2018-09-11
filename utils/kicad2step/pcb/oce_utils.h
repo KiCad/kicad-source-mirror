@@ -142,11 +142,11 @@ public:
 
 #ifdef SUPPORTS_IGES
     // write the assembly model in IGES format
-    bool WriteIGES( const std::string& aFileName, bool aOverwrite );
+    bool WriteIGES( const std::string& aFileName );
 #endif
 
     // write the assembly model in STEP format
-    bool WriteSTEP( const std::string& aFileName, bool aOverwrite );
+    bool WriteSTEP( const std::string& aFileName );
 };
 
 #endif //OCE_VIS_OCE_UTILS_H

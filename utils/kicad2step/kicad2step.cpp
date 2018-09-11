@@ -267,6 +267,14 @@ int KICAD2MCAD::OnRun()
             tfname.SetExt( getOutputExt() );
     }
 
+    if( tfname.FileExists() && !m_overwrite )
+    {
+        std::cerr << "** Output already exists. "
+            << "Enable the force overwrite flag to overwrite it." << std::endl;
+
+        return -1;
+    }
+
     wxString outfile = tfname.GetFullPath();
     KICADPCB pcb;
 
@@ -289,10 +297,10 @@ int KICAD2MCAD::OnRun()
 
         #ifdef SUPPORTS_IGES
             if( m_fmtIGES )
-                res = pcb.WriteIGES( outfile, m_overwrite );
+                res = pcb.WriteIGES( outfile );
             else
         #endif
-                res = pcb.WriteSTEP( outfile, m_overwrite );
+                res = pcb.WriteSTEP( outfile );
 
             if( !res )
                 return -1;
