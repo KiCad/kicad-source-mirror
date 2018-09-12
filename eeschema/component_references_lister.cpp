@@ -552,8 +552,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
               && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF )  )
             {
                 msg.Printf( _( "Item not annotated: %s%s (unit %d)\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ),
-                            GetChars( tmp ),
+                            componentFlatList[ii].GetRef(),
+                            tmp,
                             componentFlatList[ii].m_Unit );
             }
             else
@@ -580,8 +580,8 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                 tmp = wxT( "?" );
 
             msg.Printf( _( "Error: symbol %s%s unit %d and symbol has only %d units defined\n" ),
-                        GetChars( componentFlatList[ii].GetRef() ),
-                        GetChars( tmp ),
+                        componentFlatList[ii].GetRef(),
+                        tmp,
                         componentFlatList[ii].m_Unit,
                         componentFlatList[ii].GetLibPart()->GetUnitCount() );
 
@@ -597,7 +597,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
     // count the duplicated elements (if all are annotated)
     int imax = componentFlatList.size() - 1;
 
-    for( int ii = 0; (ii < imax) && (error < 4); ii++ )
+    for( int ii = 0; ii < imax; ii++ )
     {
         msg.Empty();
         tmp.Empty();
@@ -618,15 +618,15 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
              && ( componentFlatList[ii].m_Unit < 0x7FFFFFFF ) )
             {
                 msg.Printf( _( "Multiple item %s%s (unit %d)\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ),
-                            GetChars( tmp ),
+                            componentFlatList[ii].GetRef(),
+                            tmp,
                             componentFlatList[ii].m_Unit );
             }
             else
             {
                 msg.Printf( _( "Multiple item %s%s\n" ),
-                            GetChars( componentFlatList[ii].GetRef() ),
-                            GetChars( tmp ) );
+                            componentFlatList[ii].GetRef(),
+                            tmp );
             }
 
             aReporter.Report( msg, REPORTER::RPT_ERROR );
@@ -669,16 +669,14 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
         if( componentFlatList[ii].CompareValue( componentFlatList[next] ) != 0 )
         {
             msg.Printf( _( "Different values for %s%d%s (%s) and %s%d%s (%s)" ),
-                        GetChars( componentFlatList[ii].GetRef() ),
+                        componentFlatList[ii].GetRef(),
                         componentFlatList[ii].m_NumRef,
-                        GetChars( LIB_PART::SubReference(
-                                  componentFlatList[ii].m_Unit ) ),
-                        GetChars( componentFlatList[ii].m_Value->GetText() ),
-                        GetChars( componentFlatList[next].GetRef() ),
+                        LIB_PART::SubReference( componentFlatList[ii].m_Unit ),
+                        componentFlatList[ii].m_Value->GetText(),
+                        componentFlatList[next].GetRef(),
                         componentFlatList[next].m_NumRef,
-                        GetChars( LIB_PART::SubReference(
-                                  componentFlatList[next].m_Unit ) ),
-                        GetChars( componentFlatList[next].m_Value->GetText() ) );
+                        LIB_PART::SubReference( componentFlatList[next].m_Unit ),
+                        componentFlatList[next].m_Value->GetText() );
 
             aReporter.Report( msg, REPORTER::RPT_ERROR );
             error++;
@@ -688,7 +686,7 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
     // count the duplicated time stamps
     SortByTimeStamp();
 
-    for( int ii = 0; ( ii < imax ) && ( error < 4 ); ii++ )
+    for( int ii = 0; ii < imax; ii++ )
     {
         if(  ( componentFlatList[ii].m_TimeStamp != componentFlatList[ii + 1].m_TimeStamp )
           || ( componentFlatList[ii].GetSheetPath() != componentFlatList[ii + 1].GetSheetPath() )  )
@@ -702,9 +700,10 @@ int SCH_REFERENCE_LIST::CheckAnnotation( REPORTER& aReporter )
                           componentFlatList[ii].m_TimeStamp );
 
         msg.Printf( _( "Duplicate time stamp (%s) for %s%d and %s%d" ),
-                    GetChars( full_path ),
-                    GetChars( componentFlatList[ii].GetRef() ), componentFlatList[ii].m_NumRef,
-                    GetChars( componentFlatList[ii + 1].GetRef() ),
+                    full_path,
+                    componentFlatList[ii].GetRef(),
+                    componentFlatList[ii].m_NumRef,
+                    componentFlatList[ii + 1].GetRef(),
                     componentFlatList[ii + 1].m_NumRef );
 
         aReporter.Report( msg, REPORTER::RPT_WARNING );
