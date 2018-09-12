@@ -472,7 +472,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_EXPORT_PART:
         if( getTargetFPId() == GetCurrentFPId() )
-            Export_Module( GetBoard()->m_Modules ) )
+            Export_Module( GetBoard()->m_Modules );
         else
             Export_Module( LoadFootprint( getTargetFPId() ) );
         break;
