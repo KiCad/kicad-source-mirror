@@ -163,14 +163,13 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 	this->Centre( wxBOTH );
 	
 	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ) );
 	m_EnvVars->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellChange ), NULL, this );
 	m_EnvVars->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridSize ), NULL, this );
-	m_EnvVars->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddEnvVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddEnvVar ), NULL, this );
 	m_btnDeleteEnvVar->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnRemoveEnvVar ), NULL, this );
 	m_SearchPaths->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellChange ), NULL, this );
 	m_SearchPaths->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellRightClick ), NULL, this );
-	m_SearchPaths->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddSearchPath->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddSearchPath ), NULL, this );
 	m_btnMoveUp->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveUp ), NULL, this );
 	m_btnMoveDown->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveDown ), NULL, this );
@@ -181,14 +180,13 @@ DIALOG_CONFIGURE_PATHS_BASE::DIALOG_CONFIGURE_PATHS_BASE( wxWindow* parent, wxWi
 DIALOG_CONFIGURE_PATHS_BASE::~DIALOG_CONFIGURE_PATHS_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ) );
 	m_EnvVars->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellChange ), NULL, this );
 	m_EnvVars->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridSize ), NULL, this );
-	m_EnvVars->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddEnvVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddEnvVar ), NULL, this );
 	m_btnDeleteEnvVar->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnRemoveEnvVar ), NULL, this );
 	m_SearchPaths->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellChange ), NULL, this );
 	m_SearchPaths->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnGridCellRightClick ), NULL, this );
-	m_SearchPaths->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnUpdateUI ), NULL, this );
 	m_btnAddSearchPath->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnAddSearchPath ), NULL, this );
 	m_btnMoveUp->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveUp ), NULL, this );
 	m_btnMoveDown->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_CONFIGURE_PATHS_BASE::OnSearchPathMoveDown ), NULL, this );

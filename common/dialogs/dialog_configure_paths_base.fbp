@@ -87,7 +87,7 @@
             <event name="OnRightUp"></event>
             <event name="OnSetFocus"></event>
             <event name="OnSize"></event>
-            <event name="OnUpdateUI"></event>
+            <event name="OnUpdateUI">OnUpdateUI</event>
             <object class="wxBoxSizer" expanded="1">
                 <property name="minimum_size"></property>
                 <property name="name">bSizerMain</property>
@@ -246,7 +246,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize">OnGridSize</event>
-                                <event name="OnUpdateUI">OnUpdateUI</event>
+                                <event name="OnUpdateUI"></event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
@@ -611,7 +611,7 @@
                                 <event name="OnRightUp"></event>
                                 <event name="OnSetFocus"></event>
                                 <event name="OnSize"></event>
-                                <event name="OnUpdateUI">OnUpdateUI</event>
+                                <event name="OnUpdateUI"></event>
                             </object>
                         </object>
                         <object class="sizeritem" expanded="1">
