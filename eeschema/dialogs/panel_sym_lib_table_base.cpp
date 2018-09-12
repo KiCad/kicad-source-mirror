@@ -164,7 +164,7 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	
 	// Grid
 	m_path_subs_grid->CreateGrid( 1, 2 );
-	m_path_subs_grid->EnableEditing( false );
+	m_path_subs_grid->EnableEditing( true );
 	m_path_subs_grid->EnableGridLines( true );
 	m_path_subs_grid->EnableDragGridSize( false );
 	m_path_subs_grid->SetMargins( 0, 0 );

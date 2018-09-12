@@ -27,6 +27,7 @@
 #include <grid_tricks.h>
 #include <wx/tokenzr.h>
 #include <wx/clipbrd.h>
+#include <widgets/grid_readonly_text_helpers.h>
 
 
 // It works for table data on clipboard for an Excell spreadsheet,
@@ -98,7 +99,7 @@ bool GRID_TRICKS::showEditor( int aRow, int aCol )
 {
     if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
     {
-        if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectionModes::wxGridSelectRows )
+        if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
             m_grid->SelectRow( aRow );
 
         m_grid->SetGridCursor( aRow, aCol );
@@ -151,8 +152,20 @@ void GRID_TRICKS::onMouseUp( wxMouseEvent& aEvent )
         // it sometimes fails.  Activating the control here seems to avoid those issues.
         if( m_grid->CanEnableCellControl() )
         {
+            // Yes, the first of these also shows the control.  Well, at least sometimes.
+            // The second call corrects those (as yet undefined) "other times".
             m_grid->EnableCellEditControl();
             m_grid->ShowCellEditControl();
+
+            // Yet another wxWidgets hack: setting the control to readonly results in the
+            // selection not getting shown.  Set it again in the hopes it will get rendered.
+            wxGridCellEditor* editor = m_grid->GetCellEditor( m_grid->GetCursorRow(), m_grid->GetCursorColumn() );
+            auto readonly = dynamic_cast<GRID_CELL_READONLY_TEXT_EDITOR*>( editor );
+            if( readonly )
+            {
+                readonly->GetControl()->Refresh();
+            }
+            editor->DecRef();
         }
         m_showEditorOnMouseUp = false;
     }
@@ -443,7 +456,7 @@ void GRID_TRICKS::onUpdateUI( wxUpdateUIEvent& event )
 {
     // Respect ROW selectionMode when moving cursor
 
-    if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectionModes::wxGridSelectRows )
+    if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
     {
         int cursorRow = m_grid->GetGridCursorRow();
         bool cursorInSelectedRow = false;

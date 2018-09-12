@@ -37,6 +37,7 @@
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <kiway.h>
+#include <widgets/grid_readonly_text_helpers.h>
 
 /**
  * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
@@ -162,15 +163,16 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *aProject ), true );
 
     // Give a bit more room for combobox editors
-    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 4 );
-    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
+    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 2 );
+    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 2 );
 
     // add Cut, Copy, and Paste to wxGrids
     m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_global_grid ) );
     m_project_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_project_grid ) );
+    m_path_subs_grid->PushEventHandler( new GRID_TRICKS( m_path_subs_grid ) );
 
-    m_global_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
-    m_project_grid->SetSelectionMode( wxGrid::wxGridSelectionModes::wxGridSelectRows );
+    m_global_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
+    m_project_grid->SetSelectionMode( wxGrid::wxGridSelectRows );
 
     m_global_grid->AutoSizeColumns( false );
     m_project_grid->AutoSizeColumns( false );
@@ -182,10 +184,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
 
     populateEnvironReadOnlyTable();
 
-    for( int i=0; i<2; ++i )
+    for( wxGrid* g : { m_global_grid, m_project_grid } )
     {
-        wxGrid* g = i==0 ? m_global_grid : m_project_grid;
-
         // Set special attributes
         wxGridCellAttr* attr;
 
@@ -244,19 +244,18 @@ PANEL_SYM_LIB_TABLE::~PANEL_SYM_LIB_TABLE()
     // Any additional event handlers should be popped before the window is deleted.
     m_global_grid->PopEventHandler( true );
     m_project_grid->PopEventHandler( true );
+    m_path_subs_grid->PopEventHandler( true );
 }
 
 
 bool PANEL_SYM_LIB_TABLE::verifyTables()
 {
-    for( int t=0; t<2; ++t )
+    for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
-        SYMBOL_LIB_TABLE_GRID& model = t==0 ? *global_model() : *project_model();
-
-        for( int r = 0; r < model.GetNumberRows(); )
+        for( int r = 0; r < model->GetNumberRows(); )
         {
-            wxString nick = model.GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
-            wxString uri  = model.GetValue( r, COL_URI ).Trim( false ).Trim();
+            wxString nick = model->GetValue( r, COL_NICKNAME ).Trim( false ).Trim();
+            wxString uri  = model->GetValue( r, COL_URI ).Trim( false ).Trim();
             unsigned illegalCh = 0;
 
             if( !nick || !uri )
@@ -265,7 +264,7 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                 // This also updates the UI which could be slow, but there should only be a few
                 // rows to delete, unless the user fell asleep on the Add Row
                 // button.
-                model.DeleteRows( r, 1 );
+                model->DeleteRows( r, 1 );
             }
             else if( ( illegalCh = LIB_ID::FindIllegalLibNicknameChar( nick, LIB_ID::ID_SCH ) ) )
             {
@@ -274,8 +273,8 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
                                                  nick );
 
                 // show the tabbed panel holding the grid we have flunked:
-                if( &model != cur_model() )
-                    m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
+                if( model != cur_model() )
+                    m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
 
                 m_cur_grid->MakeCellVisible( r, 0 );
                 m_cur_grid->SetGridCursor( r, 1 );
@@ -287,33 +286,31 @@ bool PANEL_SYM_LIB_TABLE::verifyTables()
             else
             {
                 // set the trimmed values back into the table so they get saved to disk.
-                model.SetValue( r, COL_NICKNAME, nick );
-                model.SetValue( r, COL_URI, uri );
+                model->SetValue( r, COL_NICKNAME, nick );
+                model->SetValue( r, COL_URI, uri );
                 ++r;        // this row was OK.
             }
         }
     }
 
     // check for duplicate nickNames, separately in each table.
-    for( int t=0; t<2; ++t )
+    for( SYMBOL_LIB_TABLE_GRID* model : { global_model(), project_model() } )
     {
-        SYMBOL_LIB_TABLE_GRID& model = t==0 ? *global_model() : *project_model();
-
-        for( int r1 = 0; r1 < model.GetNumberRows() - 1;  ++r1 )
+        for( int r1 = 0; r1 < model->GetNumberRows() - 1;  ++r1 )
         {
-            wxString    nick1 = model.GetValue( r1, COL_NICKNAME );
+            wxString    nick1 = model->GetValue( r1, COL_NICKNAME );
 
-            for( int r2=r1+1; r2 < model.GetNumberRows();  ++r2 )
+            for( int r2=r1+1; r2 < model->GetNumberRows();  ++r2 )
             {
-                wxString    nick2 = model.GetValue( r2, COL_NICKNAME );
+                wxString    nick2 = model->GetValue( r2, COL_NICKNAME );
 
                 if( nick1 == nick2 )
                 {
                     wxString msg = wxString::Format( _( "Duplicate Nickname: \"%s\"." ), nick1 );
 
                     // show the tabbed panel holding the grid we have flunked:
-                    if( &model != cur_model() )
-                        m_auinotebook->SetSelection( &model == global_model() ? 0 : 1 );
+                    if( model != cur_model() )
+                        m_auinotebook->SetSelection( model == global_model() ? 0 : 1 );
 
                     // go to the lower of the two rows, it is technically the duplicate:
                     m_cur_grid->MakeCellVisible( r2, 0 );
@@ -604,10 +601,8 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
     // clear the table
     m_path_subs_grid->DeleteRows( 0, m_path_subs_grid->GetNumberRows() );
 
-    for( int i = 0; i < 2; ++i )
+    for( SYMBOL_LIB_TABLE_GRID* tbl : { global_model(), project_model() } )
     {
-        SYMBOL_LIB_TABLE_GRID* tbl = i == 0 ? global_model() : project_model();
-
         for( int row = 0; row < tbl->GetNumberRows(); ++row )
         {
             wxString uri = tbl->GetValue( row, COL_URI );
@@ -641,15 +636,17 @@ void PANEL_SYM_LIB_TABLE::populateEnvironReadOnlyTable()
         m_path_subs_grid->AppendRows( 1 );
 
         m_path_subs_grid->SetCellValue( row, 0, wxT( "${" ) + evName + wxT( "}" ) );
+        m_path_subs_grid->SetCellEditor( row, 0, new GRID_CELL_READONLY_TEXT_EDITOR() );
 
         wxString evValue;
         wxGetEnv( evName, &evValue );
         m_path_subs_grid->SetCellValue( row, 1, evValue );
+        m_path_subs_grid->SetCellEditor( row, 1, new GRID_CELL_READONLY_TEXT_EDITOR() );
     }
 
     // No combobox editors here, but it looks better if its consistent with the other
     // grids in the dialog.
-    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 4 );
+    m_path_subs_grid->SetDefaultRowSize( m_path_subs_grid->GetDefaultRowSize() + 2 );
 
     adjustPathSubsGridColumns( m_path_subs_grid->GetRect().GetWidth() );
 }
