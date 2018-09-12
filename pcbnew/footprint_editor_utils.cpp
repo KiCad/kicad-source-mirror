@@ -418,26 +418,32 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
                 SyncLibraryTree( true );
         }
-        else
+        else if( getTargetFPId() == GetCurrentFPId() )
         {
-            // Save Footprint As
-            MODULE* footprint = LoadFootprint( getTargetFPId() );
+            // Save Board Footprint As
+            MODULE* footprint = GetBoard()->m_Modules;
+
             if( footprint && SaveFootprintAs( footprint ) )
             {
                 SyncLibraryTree( false );
 
-                if( getTargetFPId() == GetCurrentFPId() )
-                {
-                    m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+                m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
-                    if( IsGalCanvasActive() && GetGalCanvas() )
-                        GetGalCanvas()->ForceRefresh();
-                    else
-                        GetCanvas()->Refresh();
+                if( IsGalCanvasActive() && GetGalCanvas() )
+                    GetGalCanvas()->ForceRefresh();
+                else
+                    GetCanvas()->Refresh();
 
-                    GetScreen()->ClrModify();
-                }
+                GetScreen()->ClrModify();
             }
+        }
+        else
+        {
+            // Save Selected Footprint As
+            MODULE* footprint = LoadFootprint( getTargetFPId() );
+
+            if( footprint && SaveFootprintAs( footprint ) )
+                SyncLibraryTree( false );
         }
 
         m_treePane->GetLibTree()->Refresh();
@@ -465,7 +471,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EXPORT_PART:
-        Export_Module( LoadFootprint( getTargetFPId() ) );
+        if( getTargetFPId() == GetCurrentFPId() )
+            Export_Module( GetBoard()->m_Modules ) )
+        else
+            Export_Module( LoadFootprint( getTargetFPId() ) );
         break;
 
     case ID_MODEDIT_CREATE_NEW_LIB:

@@ -48,7 +48,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     // Setup right click-context menus
     std::unique_ptr<wxMenu> menuLibrary = std::make_unique<wxMenu>();
 
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "New &Library..." ),
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "&New Library..." ),
                  KiBitmap( new_library_xpm ) );
 /* TODO
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
@@ -56,7 +56,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
 */
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE, _( "&Save" ),
                  KiBitmap( save_xpm ) );
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE_AS, _( "Save a Copy As..." ),
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE_AS, _( "Save a Copy &As..." ),
                  KiBitmap( save_as_xpm ) );
 /* TODO
     AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
@@ -64,7 +64,7 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
 */
 
     menuLibrary->AppendSeparator();
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE, _( "New &Footprint..." ),
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE, _( "&New Footprint..." ),
                  KiBitmap( new_component_xpm ) );
 #ifdef KICAD_SCRIPTING
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
@@ -81,9 +81,9 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_MODEDIT_SAVE, _( "&Save" ),
                  KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_SAVE_AS, _( "Save a Copy As..." ),
+    AddMenuItem( menuPart.get(), ID_MODEDIT_SAVE_AS, _( "Save &As..." ),
                  KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_MODEDIT_DELETE_PART, _( "Delete" ),
+    AddMenuItem( menuPart.get(), ID_MODEDIT_DELETE_PART, _( "&Delete" ),
                  KiBitmap( delete_xpm ) );
 /* TODO
     AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
