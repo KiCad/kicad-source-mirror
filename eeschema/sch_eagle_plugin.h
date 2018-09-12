@@ -250,6 +250,15 @@ private:
      * @param aUpdateSet decides whether the missing units data should be updated.
      */
     void addImplicitConnections( SCH_COMPONENT* aComponent, SCH_SCREEN* aScreen, bool aUpdateSet );
+
+    /**
+     * Fixes invalid characters in Eagle symbol names. It changes invalid characters
+     * to underscores.
+     *
+     * @param aName is the symbol name to be fixed.
+     * @return Fixed symbol name.
+     */
+    static wxString fixSymbolName( const wxString& aName );
 };
 
 #endif  // _SCH_EAGLE_PLUGIN_H_
