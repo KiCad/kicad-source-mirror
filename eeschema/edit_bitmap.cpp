@@ -93,7 +93,7 @@ static void moveBitmap( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosit
     }
 
     // Draw the bitmap at it's new position.
-    image->SetPosition( aPanel->GetParent()->GetCrossHairPosition() );
+    image->SetPosition( aPanel->GetParent()->GetCrossHairPosition() - image->GetStoredPos() );
     image->Draw( aPanel, aDC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
 }
 
@@ -141,6 +141,8 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
 
 void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 {
+    // 5.1 TODO: MoveImage(), moveBitmap() and abortMoveBitmap() are obsolete....
+
     aImageItem->SetFlags( IS_MOVED );
 
     m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
@@ -149,10 +151,22 @@ void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
 
     SetUndoItem( aImageItem );
 
-    m_canvas->CrossHairOff( aDC );
-    SetCrossHairPosition( aImageItem->GetPosition() );
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->CrossHairOn( aDC );
+    if( aImageItem->IsMovableFromAnchorPoint() )
+    {
+        SetCrossHairPosition( aImageItem->GetPosition() );
+        m_canvas->MoveCursorToCrossHair();
+        aImageItem->SetStoredPos( wxPoint( 0,0 ) );
+    }
+    else
+    {
+        // Round the point under the cursor to a multiple of the grid
+        wxPoint cursorpos = GetCrossHairPosition() - aImageItem->GetPosition();
+        wxPoint gridsize = GetScreen()->GetGridSize();
+        cursorpos.x = ( cursorpos.x / gridsize.x ) * gridsize.x;
+        cursorpos.y = ( cursorpos.y / gridsize.y ) * gridsize.y;
+
+        aImageItem->SetStoredPos( cursorpos );
+    }
 
     OnModify();
 }

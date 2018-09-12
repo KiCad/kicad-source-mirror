@@ -117,6 +117,13 @@ public:
         m_pos += aMoveVector;
     }
 
+    /**
+     * Virtual function IsMovableFromAnchorPoint
+     * Return true for items which are moved with the anchor point at mouse cursor
+     *  and false for items moved with no reference to anchor
+     * @return false for a bus entry
+     */
+    bool IsMovableFromAnchorPoint() override { return false; }
 
     void MirrorY( int aYaxis_position ) override;
 
