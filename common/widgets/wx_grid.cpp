@@ -47,14 +47,18 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 {
     // wxGrid::SetTable() messes up the column widths from wxFormBuilder so we have to save
     // and restore them.
-    int* formBuilderColWidths = new int[ GetNumberCols() ];
+    int numberCols = GetNumberCols();
+    int* formBuilderColWidths = new int[numberCols];
 
-    for( int i = 0; i < GetNumberCols(); ++i )
+    for( int i = 0; i < numberCols; ++i )
         formBuilderColWidths[ i ] = GetColSize( i );
 
     wxGrid::SetTable( aTable );
+    // wxGrid::SetTable() may change the number of columns,
+    // so prevent out-of-bounds access to formBuildColWidths
+    numberCols = std::min( numberCols, GetNumberCols() );
 
-    for( int i = 0; i < GetNumberCols(); ++i )
+    for( int i = 0; i < numberCols; ++i )
     {
         // correct wxFormBuilder width for large fonts and/or long translations
         int headingWidth = GetTextExtent( GetColLabelValue( i ) ).x + 2 * MIN_GRIDCELL_MARGIN;
