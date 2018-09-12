@@ -313,6 +313,8 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
     controls.ShowCursor( true );
     controls.SetSnapping( true );
+    controls.CaptureCursor( false );
+    controls.SetAutoPan( false );
 
     view.Add( &previewRect );
 
@@ -332,6 +334,9 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             // had an in-progress area, so start again but don't
             // cancel the tool
             originSet = false;
+            controls.CaptureCursor( false );
+            controls.SetAutoPan( false );
+
             view.SetVisible( &previewRect, false );
             view.Update( &previewRect, KIGFX::GEOMETRY );
         }
@@ -344,7 +349,6 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
             tpGeomMgr.SetEnd( cursorPos );
 
             originSet = true;
-
             controls.CaptureCursor( true );
             controls.SetAutoPan( true );
         }
@@ -360,6 +364,8 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
 
             // start again if needed
             originSet = false;
+            controls.CaptureCursor( false );
+            controls.SetAutoPan( false );
 
             view.SetVisible( &previewRect, false );
             view.Update( &previewRect, KIGFX::GEOMETRY );
@@ -383,6 +389,8 @@ int MICROWAVE_TOOL::drawMicrowaveInductor( const TOOL_EVENT& aEvent )
         }
     }
 
+    controls.CaptureCursor( false );
+    controls.SetAutoPan( false );
     view.Remove( &previewRect );
 
     frame.SetNoToolSelected();
