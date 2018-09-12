@@ -115,8 +115,9 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     label.Printf( m_matchSpecifiedID->GetLabel(), verb );
     m_matchSpecifiedID->SetLabel( label );
 
+    // Use ChangeValue() instead of SetValue() so we don't generate events.
     if( m_currentModule )
-        m_specifiedID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+        m_specifiedID->ChangeValue( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
     m_specifiedIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
 
     m_upperSizer->SetEmptyCellSize( wxSize( 0, 0 ) );
