@@ -51,6 +51,8 @@
 #include <vector>
 #include <math/box2.h>
 
+#include "clipper.hpp"
+
 class PolygonTriangulation
 {
 
@@ -293,6 +295,27 @@ private:
 
     /**
      * Function createList
+     * Takes a Clipper path and converts it into a circular, doubly-linked
+     * list for triangulation
+     */
+    Vertex* createList( const ClipperLib::Path& aPath )
+    {
+        Vertex* tail = nullptr;
+
+        for( auto point : aPath )
+            tail = insertVertex( VECTOR2I( point.X, point.Y ), tail );
+
+        if( tail && ( *tail == *tail->next ) )
+        {
+            tail->next->remove();
+        }
+
+        return tail;
+
+    }
+
+    /**
+     * Function createList
      * Takes the SHAPE_LINE_CHAIN and links each point into a
      * circular, doubly-linked list
      */
@@ -322,10 +345,10 @@ private:
      * there is an intersection (not technically allowed by KiCad, but could exist in an edited file),
      * we create a single triangle and remove both vertices before attempting to
      */
-    void earcutList( Vertex* aPoint, int pass = 0 )
+    bool earcutList( Vertex* aPoint, int pass = 0 )
     {
         if( !aPoint )
-            return;
+            return true;
 
         Vertex* stop = aPoint;
         Vertex* prev;
@@ -386,7 +409,7 @@ private:
         /**
          * At this point, our polygon should be fully tesselated.
          */
-        assert( aPoint->prev == aPoint->next );
+        return( aPoint->prev == aPoint->next );
     }
 
     /**
@@ -585,10 +608,12 @@ private:
         return p;
     }
 
+
 public:
 
     void TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
     {
+        ClipperLib::Clipper c;
         m_bbox = aPoly.BBox();
 
         if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
@@ -599,7 +624,23 @@ public:
             return;
 
         outerNode->updateList();
-        earcutList( outerNode );
+        if( !earcutList( outerNode ) )
+        {
+            m_vertices.clear();
+            m_result.Clear();
+
+            ClipperLib::Paths simplified;
+            ClipperLib::SimplifyPolygon( aPoly.convertToClipper( true ), simplified );
+
+            for( auto path : simplified )
+            {
+                outerNode = createList( path );
+                if( !outerNode )
+                    return;
+
+                earcutList( outerNode );
+            }
+        }
 
         m_vertices.clear();
     }

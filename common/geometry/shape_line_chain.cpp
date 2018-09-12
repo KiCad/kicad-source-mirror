@@ -27,6 +27,25 @@
 #include <common.h>
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
+#include "clipper.hpp"
+
+
+ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation ) const
+{
+    ClipperLib::Path c_path;
+
+    for( int i = 0; i < PointCount(); i++ )
+    {
+        const VECTOR2I& vertex = CPoint( i );
+        c_path.push_back( ClipperLib::IntPoint( vertex.x, vertex.y ) );
+    }
+
+    if( Orientation( c_path ) != aRequiredOrientation )
+        ReversePath( c_path );
+
+    return c_path;
+}
+
 
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 {

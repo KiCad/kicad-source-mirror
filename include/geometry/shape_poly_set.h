@@ -73,7 +73,11 @@ class SHAPE_POLY_SET : public SHAPE
                 int a, b, c;
             };
 
-            void Clear();
+            void Clear()
+            {
+                m_vertices.clear();
+                m_triangles.clear();
+            }
 
             void GetTriangle( int index, VECTOR2I& a, VECTOR2I& b, VECTOR2I& c ) const
             {
@@ -1115,9 +1119,6 @@ class SHAPE_POLY_SET : public SHAPE
                         const SHAPE_POLY_SET& aOtherShape, POLYGON_MODE aFastMode );
 
         bool pointInPolygon( const VECTOR2I& aP, const SHAPE_LINE_CHAIN& aPath ) const;
-
-        const ClipperLib::Path convertToClipper( const SHAPE_LINE_CHAIN& aPath, bool aRequiredOrientation );
-        const SHAPE_LINE_CHAIN convertFromClipper( const ClipperLib::Path& aPath );
 
         /**
          * containsSingle function
