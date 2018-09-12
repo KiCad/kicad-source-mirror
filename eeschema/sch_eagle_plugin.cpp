@@ -1067,7 +1067,7 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     wxString gatename = epart->deviceset + epart->device + einstance.gate;
     wxString symbolname = wxString( epart->deviceset + epart->device );
     symbolname.Replace( "*", "" );
-    wxString kisymbolname = LIB_ID::FixIllegalChars( symbolname, LIB_ID::ID_SCH );
+    wxString kisymbolname = fixSymbolName( symbolname );
 
     int unit = m_eagleLibs[libraryname].GateUnit[gatename];
 
@@ -1299,7 +1299,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             wxString symbolName = edeviceset.name + edevice.name;
             symbolName.Replace( "*", "" );
             wxASSERT( !symbolName.IsEmpty() );
-            symbolName = LIB_ID::FixIllegalChars( symbolName, LIB_ID::ID_SCH );
+            symbolName = fixSymbolName( symbolName );
 
             if( edevice.package )
                 aEagleLibrary->package[symbolName] = edevice.package.Get();
@@ -1343,7 +1343,7 @@ EAGLE_LIBRARY* SCH_EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLibraryNode,
             if( gates_count == 1 && ispower )
                 kpart->SetPower();
 
-            wxString name = LIB_ID::FixIllegalChars( kpart->GetName(), LIB_ID::ID_SCH );
+            wxString name = fixSymbolName( kpart->GetName() );
             kpart->SetName( name );
             m_pi->SaveSymbol( getLibFileName().GetFullPath(), new LIB_PART( *kpart.get() ),
                               m_properties.get() );
@@ -2614,4 +2614,18 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
                 entry.units.emplace( i, true );
         }
     }
+}
+
+
+wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
+{
+    wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_ALIAS );
+
+    for( auto ch = ret.begin(); ch != ret.end(); ++ch )
+    {
+        if( *ch == '/' )
+            *ch = '_';
+    }
+
+    return ret;
 }
