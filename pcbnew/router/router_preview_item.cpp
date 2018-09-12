@@ -130,8 +130,11 @@ const BOX2I ROUTER_PREVIEW_ITEM::ViewBBox() const
     switch( m_type )
     {
     case PR_SHAPE:
-        bbox = m_shape->BBox();
-        bbox.Inflate( m_width / 2 );
+        if( m_shape )
+        {
+            bbox = m_shape->BBox();
+            bbox.Inflate( m_width / 2 );
+        }
         return bbox;
 
     case PR_POINT:
