@@ -140,13 +140,25 @@ PCB_DRAW_PANEL_GAL::~PCB_DRAW_PANEL_GAL()
 
 void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
 {
+
     m_view->Clear();
 
-    // Load zones
-    for( auto zone : aBoard->Zones() )
+    auto zones = aBoard->Zones();
+    std::atomic<size_t> next( 0 );
+    std::atomic<size_t> count_done( 0 );
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        zone->CacheTriangulation();
-        m_view->Add( zone );
+        std::thread t = std::thread( [ &count_done, &next, &zones ]( )
+        {
+            for( size_t i = next.fetch_add( 1 ); i < zones.size(); i = next.fetch_add( 1 ) )
+                zones[i]->CacheTriangulation();
+
+            count_done++;
+        } );
+
+        t.detach();
     }
 
     // Load drawings
@@ -170,6 +182,14 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
     {
         m_view->Add( aBoard->GetMARKER( marker_idx ) );
     }
+
+    // Finalize the triangulation threads
+    while( count_done < parallelThreadCount )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
+    // Load zones
+    for( auto zone : aBoard->Zones() )
+        m_view->Add( zone );
 
     // Ratsnest
     m_ratsnest.reset( new KIGFX::RATSNEST_VIEWITEM( aBoard->GetConnectivity() ) );
