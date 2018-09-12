@@ -156,16 +156,6 @@ void GRID_TRICKS::onMouseUp( wxMouseEvent& aEvent )
             // The second call corrects those (as yet undefined) "other times".
             m_grid->EnableCellEditControl();
             m_grid->ShowCellEditControl();
-
-            // Yet another wxWidgets hack: setting the control to readonly results in the
-            // selection not getting shown.  Set it again in the hopes it will get rendered.
-            wxGridCellEditor* editor = m_grid->GetCellEditor( m_grid->GetCursorRow(), m_grid->GetCursorColumn() );
-            auto readonly = dynamic_cast<GRID_CELL_READONLY_TEXT_EDITOR*>( editor );
-            if( readonly )
-            {
-                readonly->GetControl()->Refresh();
-            }
-            editor->DecRef();
         }
         m_showEditorOnMouseUp = false;
     }
