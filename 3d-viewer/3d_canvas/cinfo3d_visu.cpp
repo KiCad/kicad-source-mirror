@@ -256,7 +256,8 @@ unsigned int CINFO3D_VISU::GetNrSegmentsCircle( int aDiameterBIU ) const
 {
     wxASSERT( aDiameterBIU > 0 );
 
-    return GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, 360.0 );
+    // Require at least 3 segments for a circle
+    return std::max( GetArcToSegmentCount( aDiameterBIU / 2, ARC_HIGH_DEF, 360.0 ), 3 );
 }
 
 
