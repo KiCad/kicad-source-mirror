@@ -34,6 +34,7 @@
 #include <math/vector2d.h>
 #include <geometry/shape.h>
 #include <geometry/seg.h>
+#include "clipper.hpp"
 
 /**
  * Class SHAPE_LINE_CHAIN
@@ -123,6 +124,16 @@ public:
 
         for( int i = 0; i < aCount; i++ )
             m_points[i] = *aV++;
+    }
+
+    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
+        SHAPE( SH_LINE_CHAIN ),
+        m_closed( true )
+    {
+        m_points.reserve( aPath.size() );
+
+        for( auto point : aPath )
+            m_points.emplace_back( point.X, point.Y );
     }
 
     ~SHAPE_LINE_CHAIN()
@@ -578,6 +589,19 @@ public:
      * @return reference to self.
      */
     SHAPE_LINE_CHAIN& Simplify();
+
+    /**
+     * Function convertFromClipper()
+     * Appends the Clipper path to the current SHAPE_LINE_CHAIN
+     *
+     */
+    void convertFromClipper( const ClipperLib::Path& aPath );
+
+    /**
+     * Creates a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
+     *
+     */
+    ClipperLib::Path convertToClipper( bool aRequiredOrientation ) const;
 
     /**
      * Function NearestPoint()

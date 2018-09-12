@@ -455,62 +455,10 @@ int SHAPE_POLY_SET::AddHole( const SHAPE_LINE_CHAIN& aHole, int aOutline )
 }
 
 
-const Path SHAPE_POLY_SET::convertToClipper( const SHAPE_LINE_CHAIN& aPath,
-        bool aRequiredOrientation )
-{
-    Path c_path;
-
-    for( int i = 0; i < aPath.PointCount(); i++ )
-    {
-        const VECTOR2I& vertex = aPath.CPoint( i );
-        c_path.push_back( IntPoint( vertex.x, vertex.y ) );
-    }
-
-    if( Orientation( c_path ) != aRequiredOrientation )
-        ReversePath( c_path );
-
-    return c_path;
-}
-
-
-const SHAPE_LINE_CHAIN SHAPE_POLY_SET::convertFromClipper( const Path& aPath )
-{
-    SHAPE_LINE_CHAIN lc;
-
-    for( unsigned int i = 0; i < aPath.size(); i++ )
-        lc.Append( aPath[i].X, aPath[i].Y );
-
-    lc.SetClosed( true );
-
-    return lc;
-}
-
-
 void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType, const SHAPE_POLY_SET& aOtherShape,
         POLYGON_MODE aFastMode )
 {
-    Clipper c;
-
-    if( aFastMode == PM_STRICTLY_SIMPLE )
-        c.StrictlySimple( true );
-
-    for( const POLYGON& poly : m_polys )
-    {
-        for( unsigned int i = 0; i < poly.size(); i++ )
-            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptSubject, true );
-    }
-
-    for( const POLYGON& poly : aOtherShape.m_polys )
-    {
-        for( unsigned int i = 0; i < poly.size(); i++ )
-            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptClip, true );
-    }
-
-    PolyTree solution;
-
-    c.Execute( aType, solution, pftNonZero, pftNonZero );
-
-    importTree( &solution );
+    booleanOp( aType, *this, aOtherShape, aFastMode );
 }
 
 
@@ -521,19 +469,18 @@ void SHAPE_POLY_SET::booleanOp( ClipperLib::ClipType aType,
 {
     Clipper c;
 
-    if( aFastMode == PM_STRICTLY_SIMPLE )
-        c.StrictlySimple( true );
+    c.StrictlySimple( aFastMode == PM_STRICTLY_SIMPLE );
 
-    for( const POLYGON& poly : aShape.m_polys )
+    for( auto poly : aShape.m_polys )
     {
-        for( unsigned int i = 0; i < poly.size(); i++ )
-            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptSubject, true );
+        for( size_t i = 0 ; i < poly.size(); i++ )
+            c.AddPath( poly[i].convertToClipper( i == 0 ), ptSubject, true );
     }
 
-    for( const POLYGON& poly : aOtherShape.m_polys )
+    for( auto poly : aOtherShape.m_polys )
     {
-        for( unsigned int i = 0; i < poly.size(); i++ )
-            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), ptClip, true );
+        for( size_t i = 0; i < poly.size(); i++ )
+            c.AddPath( poly[i].convertToClipper( i == 0 ), ptClip, true );
     }
 
     PolyTree solution;
@@ -598,9 +545,8 @@ void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount )
 
     for( const POLYGON& poly : m_polys )
     {
-        for( unsigned int i = 0; i < poly.size(); i++ )
-            c.AddPath( convertToClipper( poly[i], i > 0 ? false : true ), jtRound,
-                    etClosedPolygon );
+        for( size_t i = 0; i < poly.size(); i++ )
+            c.AddPath( poly[i].convertToClipper( i == 0 ), jtRound, etClosedPolygon );
     }
 
     PolyTree solution;
@@ -643,10 +589,10 @@ void SHAPE_POLY_SET::importTree( PolyTree* tree )
         {
             POLYGON paths;
             paths.reserve( n->Childs.size() + 1 );
-            paths.push_back( convertFromClipper( n->Contour ) );
+            paths.push_back( n->Contour );
 
             for( unsigned int i = 0; i < n->Childs.size(); i++ )
-                paths.push_back( convertFromClipper( n->Childs[i]->Contour ) );
+                paths.push_back( n->Childs[i]->Contour );
 
             m_polys.push_back( paths );
         }
@@ -1908,7 +1854,8 @@ void SHAPE_POLY_SET::CacheTriangulation()
 
     SHAPE_POLY_SET tmpSet = *this;
 
-    tmpSet.Fracture( PM_FAST );
+    if( tmpSet.HasHoles() )
+        tmpSet.Fracture( PM_FAST );
 
     m_triangulatedPolys.clear();
 

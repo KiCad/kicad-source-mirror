@@ -139,6 +139,7 @@ typedef long time_t;
 // Contains VECTOR2I
 %include math.i
 
+%ignore SHAPE_LINE_CHAIN::convertFromClipper;
 #include <geometry/shape_line_chain.h>
 %include <geometry/shape_line_chain.h>
 
