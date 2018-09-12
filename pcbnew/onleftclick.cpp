@@ -608,7 +608,7 @@ void PCB_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_LINE_T:
-        InstallGraphicItemPropertiesDialog( aItem, aDC );
+        InstallGraphicItemPropertiesDialog( aItem );
         break;
 
     case PCB_ZONE_AREA_T:

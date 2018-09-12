@@ -534,7 +534,7 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_EDGE_T :
-        InstallGraphicItemPropertiesDialog( aItem, nullptr );
+        InstallGraphicItemPropertiesDialog( aItem );
         break;
 
     default:

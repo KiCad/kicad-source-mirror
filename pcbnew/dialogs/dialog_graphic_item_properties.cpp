@@ -46,7 +46,6 @@ class DIALOG_GRAPHIC_ITEM_PROPERTIES : public DIALOG_GRAPHIC_ITEM_PROPERTIES_BAS
 {
 private:
     PCB_BASE_EDIT_FRAME*  m_parent;
-    wxDC*                 m_DC;
     DRAWSEGMENT*          m_item;
     EDGE_MODULE*          m_moduleItem;
 
@@ -61,7 +60,7 @@ private:
     double                m_AngleValue;
 
 public:
-    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem, wxDC* aDC );
+    DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BOARD_ITEM* aItem );
     ~DIALOG_GRAPHIC_ITEM_PROPERTIES() {};
 
 private:
@@ -81,7 +80,7 @@ private:
 };
 
 DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent,
-                                                                BOARD_ITEM* aItem, wxDC* aDC ):
+                                                                BOARD_ITEM* aItem ):
     DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE( aParent ),
     m_startX( aParent, m_startXLabel, m_startXCtrl, m_startXUnits ),
     m_startY( aParent, m_startYLabel, m_startYCtrl, m_startYUnits ),
@@ -97,7 +96,6 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
     m_AngleValue( 0.0 )
 {
     m_parent = aParent;
-    m_DC = aDC;
     m_item = dynamic_cast<DRAWSEGMENT*>( aItem );
     m_moduleItem = dynamic_cast<EDGE_MODULE*>( aItem );
 
@@ -120,23 +118,16 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 }
 
 
-void PCB_BASE_EDIT_FRAME::InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem, wxDC* aDC )
+void PCB_BASE_EDIT_FRAME::InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "InstallGraphicItemPropertiesDialog() error: NULL item" ) );
 
-#ifdef USE_WX_OVERLAY
-    // #1277772 - Draw into dialog converted in refresh request
-    aDC = nullptr;
-#endif
-
     m_canvas->SetIgnoreMouseEvents( true );
-    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem, aDC );
+    DIALOG_GRAPHIC_ITEM_PROPERTIES dlg( this, aItem );
     dlg.ShowModal();
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
-
-    if( !aDC )
-        m_canvas->Refresh();
+    m_canvas->Refresh();
 }
 
 
@@ -234,11 +225,6 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     BOARD_COMMIT commit( m_parent );
     commit.Modify( m_item );
 
-    wxString msg;
-
-    if( m_DC )
-        m_item->Draw( m_parent->GetCanvas(), m_DC, GR_XOR );
-
     m_item->SetStartX( m_startX.GetValue() );
     m_item->SetStartY( m_startY.GetValue() );
 
@@ -277,16 +263,11 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataFromWindow()
     m_item->SetLayer( ToLAYER_ID( layer ) );
 
     if( m_item->GetShape() == S_ARC )
-    {
         m_item->SetAngle( m_AngleValue * 10.0 );
-    }
 
     m_item->RebuildBezierToSegmentsPointsList( m_item->GetWidth() );
 
     commit.Push( _( "Modify drawing properties" ) );
-
-    if( m_DC )
-        m_item->Draw( m_parent->GetCanvas(), m_DC, GR_OR );
 
     m_parent->SetMsgPanel( m_item );
 

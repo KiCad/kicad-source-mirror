@@ -1119,7 +1119,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_DRAWING:
-        InstallGraphicItemPropertiesDialog( GetCurItem(), &dc );
+        InstallGraphicItemPropertiesDialog( GetCurItem() );
         break;
 
     case ID_POPUP_PCB_MOVE_DRAWING_REQUEST:

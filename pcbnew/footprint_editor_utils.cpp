@@ -714,7 +714,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case  ID_POPUP_MODEDIT_EDIT_BODY_ITEM :
-        InstallGraphicItemPropertiesDialog( GetScreen()->GetCurItem(), nullptr );
+        InstallGraphicItemPropertiesDialog( GetScreen()->GetCurItem() );
         break;
 
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:

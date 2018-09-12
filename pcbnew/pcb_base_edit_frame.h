@@ -164,7 +164,7 @@ public:
     void SetRotationAngle( int aRotationAngle );
 
     void InstallTextOptionsFrame( BOARD_ITEM* aText, wxDC* aDC );
-    void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem, wxDC* aDC );
+    void InstallGraphicItemPropertiesDialog( BOARD_ITEM* aItem );
 
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas()
     void UseGalCanvas( bool aEnable ) override;
