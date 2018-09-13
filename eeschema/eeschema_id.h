@@ -34,11 +34,12 @@
 
 
 /**
- * The maximum number of items in the clarify selection context menu.  It is
- * highly unlikely that there would ever be more than 10 items at the current
- * cursor.  Increase this number if that ever becomes a problem.
+ * The maximum number of items in the clarify selection context menu.  While in
+ * most cases it is highly unlikely that there would ever be more than 10 items
+ * at the current cursor, there are some exceptions  (a bunch of pins created at
+ * once, for instance).  The current setting of 200 is arbitrary.
  */
-#define MAX_SELECT_ITEM_IDS 10
+#define MAX_SELECT_ITEM_IDS 200
 
 /**
  * The maximum number of units per package.
