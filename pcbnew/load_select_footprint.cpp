@@ -121,6 +121,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     newModule->ClearFlags();
     newModule->RunOnChildren( std::bind( &clearModuleItemFlags, _1 ) );
 
+    m_footprintNameWhenLoaded = newModule->GetFPID().GetLibItemName();
     GetBoard()->Add( newModule );
 
     // Clear references to any net info, because the footprint editor

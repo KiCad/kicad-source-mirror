@@ -317,11 +317,10 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
             return NULL;
     }
 
-    LIB_ID fpid;
-    fpid.SetLibItemName( module->GetFPID().GetLibItemName() );
-    module->SetFPID( fpid );
+    module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
     // Insert footprint in list
+    m_footprintNameWhenLoaded = module->GetFPID().GetLibItemName();
     GetBoard()->Add( module );
 
     // Display info :
@@ -665,16 +664,24 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
 {
     wxString libraryName = aModule->GetFPID().GetLibNickname();
     wxString footprintName = aModule->GetFPID().GetLibItemName();
+    bool nameChanged = m_footprintNameWhenLoaded != footprintName;
 
     if( aModule->GetLink() )
     {
-        return SaveFootprintToBoard( false );
+        if( SaveFootprintToBoard( false ) )
+        {
+            m_footprintNameWhenLoaded = footprintName;
+            return true;
+        }
+        else
+            return false;
     }
 
     if( libraryName.IsEmpty() || footprintName.IsEmpty() )
         return SaveFootprintAs( aModule );
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
+    bool syncLibraryTree = false;
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
@@ -684,6 +691,12 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
     {
         DisplayInfoMessage( this, INFO_LEGACY_LIB_WARN_EDIT );
         return false;
+    }
+
+    if( nameChanged )
+    {
+        LIB_ID oldFPID( libraryName, m_footprintNameWhenLoaded );
+        DeleteModuleFromLibrary( oldFPID, false );
     }
 
     try
@@ -702,6 +715,12 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
     {
         DisplayError( this, ioe.What() );
         return false;
+    }
+
+    if( nameChanged )
+    {
+        m_footprintNameWhenLoaded = footprintName;
+        SyncLibraryTree( true );
     }
 
     return true;
@@ -906,6 +925,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         DisplayError( this, ioe.What() );
         return false;
     }
+
+    m_footprintNameWhenLoaded = footprintName;
 
     wxString fmt = module_exists ? _( "Component \"%s\" replaced in \"%s\"" ) :
                                    _( "Component \"%s\" added in  \"%s\"" );

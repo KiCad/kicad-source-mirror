@@ -47,6 +47,8 @@ class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     FOOTPRINT_TREE_PANE*        m_treePane;
     LIB_TREE_MODEL_ADAPTER::PTR m_adapter;
 
+    wxString                    m_footprintNameWhenLoaded;
+
 public:
 
     ~FOOTPRINT_EDIT_FRAME();
@@ -295,10 +297,10 @@ public:
     BOARD_ITEM* ModeditLocateAndDisplay( int aHotKeyCode = 0 );
 
     /// Return the LIB_ID of the part selected in the footprint or the part being edited.
-    LIB_ID getTargetFPId() const;
+    LIB_ID getTargetFPID() const;
 
     /// Return the LIB_ID of the part being edited.
-    LIB_ID GetCurrentFPId() const;
+    LIB_ID GetLoadedFPID() const;
 
     void RemoveStruct( EDA_ITEM* Item );
 

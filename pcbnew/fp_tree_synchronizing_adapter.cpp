@@ -26,6 +26,9 @@
 #include <footprint_edit_frame.h>
 #include <fp_lib_table.h>
 #include <footprint_info_impl.h>
+#include <class_board.h>
+#include <class_module.h>
+
 
 LIB_TREE_MODEL_ADAPTER::PTR FP_TREE_SYNCHRONIZING_ADAPTER::Create( FOOTPRINT_EDIT_FRAME* aFrame,
                                                                    FP_LIB_TABLE* aLibs )
@@ -157,10 +160,16 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
     switch( aCol )
     {
     case 0:
-        // mark modified part with an asterix
-        if( node->LibId == m_frame->GetCurrentFPId() && !m_frame->IsCurrentFPFromBoard()
-                && m_frame->GetScreen()->IsModify() )
-            aVariant = node->Name + " *";
+        if( node->LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
+        {
+            wxString currentFPName = m_frame->GetBoard()->m_Modules->GetFPID().GetLibItemName();
+
+            // mark modified part with an asterix
+            if( m_frame->GetScreen()->IsModify() )
+                aVariant = currentFPName + " *";
+            else
+                aVariant = currentFPName;
+        }
         else
             aVariant = node->Name;
         break;
@@ -196,7 +205,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     switch( node->Type )
     {
         case LIB_TREE_NODE::LIB:
-            if( node->Name == m_frame->GetCurrentFPId().GetLibNickname() )
+            if( node->Name == m_frame->GetLoadedFPID().GetLibNickname() )
             {
 #ifdef __WXGTK__
                 // The native wxGTK+ impl ignores background colour, so set the text colour
@@ -213,7 +222,7 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
             break;
 
         case LIB_TREE_NODE::LIBID:
-            if( node->LibId == m_frame->GetCurrentFPId() )
+            if( node->LibId == m_frame->GetLoadedFPID() )
             {
 #ifdef __WXGTK__
                 // The native wxGTK+ impl ignores background colour, so set the text colour
