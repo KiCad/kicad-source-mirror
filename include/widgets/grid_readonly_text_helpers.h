@@ -34,7 +34,7 @@ class GRID_CELL_READONLY_TEXT_EDITOR : public wxGridCellTextEditor
 public:
     GRID_CELL_READONLY_TEXT_EDITOR() {};
 
-    void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler)
+    void Create(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler) override
     {
         DoCreate(parent, id, evtHandler);
         Text()->SetEditable( false );
