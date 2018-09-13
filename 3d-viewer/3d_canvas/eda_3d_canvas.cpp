@@ -1052,7 +1052,7 @@ bool EDA_3D_CANVAS::SetView3D( int aKeycode )
         m_settings.CameraGet().SetInterpolateMode( INTERPOLATION_BEZIER );
         m_settings.CameraGet().SetT0_and_T1_current_T();
         m_settings.CameraGet().Reset_T1();
-        m_settings.CameraGet().RotateX_T1( glm::radians( -180.0f ) );
+        m_settings.CameraGet().RotateY_T1( glm::radians( 180.0f ) );
         request_start_moving_camera(
                     glm::min( glm::max( m_settings.CameraGet().ZoomGet(), 0.5f ), 1.125f ) );
         return true;
