@@ -58,7 +58,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
                             KiScaledBitmap( save_xpm, this ),
-                            _( "Save footprint in existing library" ) );
+                            _( "Save changes" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString,
