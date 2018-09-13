@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,6 @@ class NETS_LIST_CTRL;
 #include <wx/icon.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/valtext.h>
 #include <wx/checkbox.h>
 #include <wx/notebook.h>
 #include <wx/dialog.h>

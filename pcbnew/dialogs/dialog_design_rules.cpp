@@ -185,8 +185,6 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     column0.SetText( NET_TITLE );
     column1.SetText( CLASS_TITLE );
 
-    SetDataValidators();
-
     m_leftListCtrl->InsertColumn( 0, column0 );
     m_leftListCtrl->InsertColumn( 1, column1 );
     m_leftListCtrl->SetColumnWidth( 0, wxLIST_AUTOSIZE );
@@ -218,24 +216,6 @@ DIALOG_DESIGN_RULES::DIALOG_DESIGN_RULES( PCB_EDIT_FRAME* parent ) :
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
 }
-
-void DIALOG_DESIGN_RULES::SetDataValidators()
-{
-    // Set floating-point validators for numerical inputs
-    wxFloatingPointValidator< double > fpValidator( NULL, wxNUM_VAL_ZERO_AS_BLANK | wxNUM_VAL_NO_TRAILING_ZEROES );
-
-    int maxDimension = 1000 * IU_PER_MILS; // One-inch
-
-    fpValidator.SetRange( 0, To_User_Unit( g_UserUnit, maxDimension ) );
-    fpValidator.SetPrecision( 10 );
-
-    m_SetViasMinSizeCtrl->SetValidator( fpValidator );
-    m_SetViasMinDrillCtrl->SetValidator( fpValidator );
-    m_SetMicroViasMinSizeCtrl->SetValidator( fpValidator );
-    m_SetMicroViasMinDrillCtrl->SetValidator( fpValidator );
-    m_SetTrackMinWidthCtrl->SetValidator( fpValidator );
-}
-
 
 void DIALOG_DESIGN_RULES::InitDialogRules()
 {
