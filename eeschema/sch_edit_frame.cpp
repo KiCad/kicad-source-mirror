@@ -172,7 +172,7 @@ PART_LIBS* PROJECT::SchLibs()
         catch( const PARSE_ERROR& pe )
         {
             wxString    lib_list = UTF8( pe.inputLine );
-            wxWindow*   parent = 0; // Pgm().App().GetTopWindow();
+            wxWindow*   parent = Pgm().App().GetTopWindow();
 
             // parent of this dialog cannot be NULL since that breaks the Kiway() chain.
             HTML_MESSAGE_BOX dlg( parent, _( "Not Found" ) );
@@ -187,7 +187,9 @@ PART_LIBS* PROJECT::SchLibs()
         }
         catch( const IO_ERROR& ioe )
         {
-            DisplayError( NULL, ioe.What() );
+            wxWindow* parent = Pgm().App().GetTopWindow();
+
+            DisplayError( parent, ioe.What() );
         }
     }
 
