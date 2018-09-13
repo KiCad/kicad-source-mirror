@@ -62,7 +62,6 @@ MODULE::MODULE( BOARD* parent ) :
     m_ModuleStatus = MODULE_PADS_LOCKED;
     m_arflag = 0;
     m_CntRot90 = m_CntRot180 = 0;
-    m_Surface  = 0.0;
     m_Link     = 0;
     m_LastEditTime  = 0;
     m_LocalClearance = 0;
@@ -464,7 +463,14 @@ void MODULE::DrawEdgesOnly( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offs
 void MODULE::CalculateBoundingBox()
 {
     m_BoundaryBox = GetFootprintRect();
-    m_Surface = std::abs( (double) m_BoundaryBox.GetWidth() * m_BoundaryBox.GetHeight() );
+}
+
+
+double MODULE::GetArea( int aPadding ) const
+{
+    double w = std::abs( m_BoundaryBox.GetWidth() ) + aPadding;
+    double h = std::abs( m_BoundaryBox.GetHeight() ) + aPadding;
+    return w * h;
 }
 
 
