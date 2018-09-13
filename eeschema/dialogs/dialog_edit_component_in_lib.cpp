@@ -59,7 +59,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_currentAlias( wxNOT_FOUND ),
     m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
     m_delayedFocusCtrl( nullptr ),
-    m_delayedFocusGrid( nullptr )
+    m_delayedFocusGrid( nullptr ),
+    m_delayedFocusPage( -1 )
 {
     m_config = Kiface().KifaceSettings();
 
@@ -94,6 +95,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
     m_aliasGrid->SetAttr( DATASHEET, FDC_VALUE, attr );
+
+    m_SymbolNameCtrl->SetValidator( SCH_FIELD_VALIDATOR( true, VALUE ) );
 
     // Configure button logos
     m_bpAdd->SetBitmap( KiBitmap( small_plus_xpm ) );
@@ -224,6 +227,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
         m_delayedFocusGrid = m_grid;
         m_delayedFocusColumn = FDC_VALUE;
         m_delayedFocusRow = REFERENCE;
+        m_delayedFocusPage = 0;
 
         return false;
     }
@@ -243,6 +247,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
             m_delayedFocusGrid = m_grid;
             m_delayedFocusColumn = FDC_NAME;
             m_delayedFocusRow = i;
+            m_delayedFocusPage = 0;
 
             return false;
         }
@@ -346,15 +351,33 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging( wxGridEvent& event )
     {
         event.Veto();
 
-        if( m_NoteBook->GetSelection() != 0 )
-            m_NoteBook->SetSelection( 0 );
-
         m_delayedFocusGrid = m_grid;
         m_delayedFocusRow = event.GetRow();
         m_delayedFocusColumn = event.GetCol();
+        m_delayedFocusPage = 0;
     }
+    else if( event.GetRow() == VALUE && event.GetCol() == FDC_VALUE )
+        m_SymbolNameCtrl->ChangeValue( event.GetString() );
 
     editor->DecRef();
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSymbolNameText( wxCommandEvent& event )
+{
+    m_grid->SetCellValue( VALUE, FDC_VALUE, m_SymbolNameCtrl->GetValue() );
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSymbolNameKillFocus( wxFocusEvent& event )
+{
+    if( !m_delayedFocusCtrl && !m_SymbolNameCtrl->GetValidator()->Validate( m_SymbolNameCtrl ) )
+    {
+        m_delayedFocusCtrl = m_SymbolNameCtrl;
+        m_delayedFocusPage = 0;
+    }
+
+    event.Skip();
 }
 
 
@@ -481,13 +504,13 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging( wxGridEvent& eve
         {
             event.Veto();
 
-            if( m_NoteBook->GetSelection() != 1 )
-                m_NoteBook->SetSelection( 1 );
-
             m_delayedFocusGrid = m_aliasGrid;
             m_delayedFocusRow = event.GetRow();
             m_delayedFocusColumn = event.GetCol();
+            m_delayedFocusPage = 1;
         }
+        else
+            updateAliasName( true, newName );
     }
 }
 
@@ -500,20 +523,11 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasNameText( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasNameKillFocus( wxFocusEvent& event )
 {
-    static bool inKillFocus = false;
-
-    // If we get an error then we're going to throw up a dialog.  Since we haven't yet
-    // finished the KillFocus event, we'll end up getting another one.  Side-effects may
-    // include death.
-    if( inKillFocus )
-        return;
-
-    inKillFocus = true;
-
-    if( !checkAliasName( m_AliasNameCtrl->GetValue() ) )
+    if( !m_delayedFocusCtrl && !checkAliasName( m_AliasNameCtrl->GetValue() ) )
+    {
         m_delayedFocusCtrl = m_AliasNameCtrl;
-
-    inKillFocus = false;
+        m_delayedFocusPage = 1;
+    }
 
     event.Skip();
 }
@@ -744,6 +758,19 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
     m_OptionPartsLocked->Enable( m_SelNumberOfUnits->GetValue() > 1 );
     m_pinNameOffset.Enable( m_PinsNameInsideButt->GetValue() );
 
+    if( m_grid->IsCellEditControlShown() )
+    {
+        int row = m_grid->GetGridCursorRow();
+        int col = m_grid->GetGridCursorCol();
+
+        if( row == VALUE && col == FDC_VALUE )
+        {
+            wxGridCellEditor* editor = m_grid->GetCellEditor( row, col );
+            m_SymbolNameCtrl->ChangeValue( editor->GetValue() );
+            editor->DecRef();
+        }
+    }
+
     // Synthesize a Select event when the selection is cleared
     if( m_aliasListBox->GetSelection() == wxNOT_FOUND && m_currentAlias != wxNOT_FOUND )
     {
@@ -762,7 +789,28 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
             adjustGridColumns( m_grid->GetRect().GetWidth() );
     }
 
-    // Handle a delayed focus
+    // Handle a delayed focus.  The delay allows us to:
+    // a) change focus when the error was triggered from within a killFocus handler
+    // b) show the correct notebook page in the background before the error dialog comes up
+    //    when triggered from an OK or a notebook page change
+
+    if( m_delayedFocusPage >= 0 && m_NoteBook->GetSelection() != m_delayedFocusPage )
+    {
+        m_NoteBook->SetSelection( (unsigned) m_delayedFocusPage );
+        m_delayedFocusPage = -1;
+    }
+
+    if( !m_delayedErrorMessage.IsEmpty() )
+    {
+        // We will re-enter this routine when the error dialog is displayed, so make
+        // sure we don't keep putting up more dialogs.
+        wxString msg = m_delayedErrorMessage;
+        m_delayedErrorMessage = wxEmptyString;
+
+        // Do not use DisplayErrorMessage(); it screws up window order on Mac
+        DisplayError( nullptr, msg );
+    }
+
     if( m_delayedFocusCtrl )
     {
         m_delayedFocusCtrl->SetFocus();
@@ -778,21 +826,12 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
 
-        if( !m_delayedErrorMessage.IsEmpty() )
-        {
-            // We will re-enter this routine when the error dialog is displayed, so make
-            // sure we don't keep putting up more dialogs.
-            wxString msg = m_delayedErrorMessage;
-            m_delayedErrorMessage = wxEmptyString;
-
-            // Do not use DisplayErrorMessage(); it screws up window order on Mac
-            DisplayError( nullptr, msg );
-        }
-
         m_delayedFocusGrid->EnableCellEditControl( true );
         m_delayedFocusGrid->ShowCellEditControl();
 
         m_delayedFocusGrid = nullptr;
+        m_delayedFocusRow = -1;
+        m_delayedFocusColumn = -1;
     }
 }
 

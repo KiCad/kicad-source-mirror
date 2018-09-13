@@ -410,7 +410,7 @@ public:
      * Function DeleteModuleFromLibrary
      * deletes the given module from its library.
      */
-    bool DeleteModuleFromLibrary( MODULE* aModule );
+    bool DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm );
 
     /**
      * Function IsElementVisible
@@ -549,6 +549,11 @@ protected:
     TEXTE_MODULE* CreateTextModule( MODULE* aModule, wxDC* aDC );
 
 private:
+
+    /**
+     * Run the Footprint Properties dialog and handle changes made in it.
+     */
+    void editFootprintProperties( MODULE* aFootprint );
 
     /**
      * Function moveExact

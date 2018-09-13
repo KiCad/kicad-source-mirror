@@ -25,14 +25,16 @@
 #ifndef DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
 #define DIALOG_EDIT_FOOTPRINT_FOR_MODEDIT_H
 
-// Include the wxFormBuider header base:
 #include <vector>
-#include <dialog_edit_footprint_for_fp_editor_base.h>
 #include <text_mod_grid_table.h>
 #include <widgets/unit_binder.h>
+#include <class_module.h>
+#include <dialog_edit_footprint_for_fp_editor_base.h>
+
 
 class PANEL_PREV_3D;
-class MODULE;
+class FOOTPRINT_EDIT_FRAME;
+
 
 class DIALOG_FOOTPRINT_FP_EDITOR : public DIALOG_FOOTPRINT_FP_EDITOR_BASE
 {
@@ -52,15 +54,17 @@ private:
     std::vector<MODULE_3D_SETTINGS>  m_shapes3D_list;
     PANEL_PREV_3D*                   m_PreviewPane;
 
-    wxString                         m_delayedErrorMessage;
-    wxGrid*                          m_delayedFocusGrid;
+    wxControl*                       m_delayedFocusCtrl;
+    int                              m_delayedFocusPage;
+
+    WX_GRID*                         m_delayedFocusGrid;
     int                              m_delayedFocusRow;
     int                              m_delayedFocusColumn;
+    wxString                         m_delayedErrorMessage;
 
     bool                             m_inSelect;
 
 public:
-
     // Constructor and destructor
     DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aParent, MODULE* aModule );
     ~DIALOG_FOOTPRINT_FP_EDITOR() override;
@@ -79,9 +83,14 @@ private:
     void OnAdd3DRow( wxCommandEvent& event ) override;
     void Cfg3DPath( wxCommandEvent& event ) override;
     void OnGridSize( wxSizeEvent& event ) override;
+    void OnFootprintNameKillFocus( wxFocusEvent& event ) override;
+    void OnFootprintNameText( wxCommandEvent& event ) override;
+    void OnGridCellChanging( wxGridEvent& event );
     void OnAddField( wxCommandEvent& event ) override;
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+
+    bool checkFootprintName( const wxString& aFootprintName );
 
     void select3DModel( int aModelIdx );
 

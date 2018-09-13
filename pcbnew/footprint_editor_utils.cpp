@@ -276,7 +276,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_DELETE_PART:
-        if( DeleteModuleFromLibrary( LoadFootprint( getTargetFPId() ) ) )
+        if( DeleteModuleFromLibrary( getTargetFPId(), true ) )
         {
             if( getTargetFPId() == GetCurrentFPId() )
                 Clear_Pcb( false );
@@ -556,11 +556,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
         {
             SetCurItem( GetBoard()->m_Modules );
-
-            DIALOG_FOOTPRINT_FP_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
-
-            dialog.ShowModal();
-            GetScreen()->GetCurItem()->ClearFlags();
+            editFootprintProperties( (MODULE*) GetScreen()->GetCurItem() );
 
             m_canvas->Refresh();
         }
@@ -585,13 +581,9 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
-        {
-            DIALOG_FOOTPRINT_FP_EDITOR dialog( this, (MODULE*) GetScreen()->GetCurItem() );
-            dialog.ShowModal();
-            GetScreen()->GetCurItem()->ClearFlags();
-            m_canvas->MoveCursorToCrossHair();
-            m_canvas->Refresh();
-        }
+        editFootprintProperties( (MODULE*) GetScreen()->GetCurItem() );
+        m_canvas->MoveCursorToCrossHair();
+        m_canvas->Refresh();
         break;
 
     case ID_POPUP_PCB_MOVE_PAD_REQUEST:
@@ -772,6 +764,32 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                       wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
     }
+}
+
+
+void FOOTPRINT_EDIT_FRAME::editFootprintProperties( MODULE* aModule )
+{
+    LIB_ID oldFPID = aModule->GetFPID();
+
+    DIALOG_FOOTPRINT_FP_EDITOR dialog( this, aModule );
+    dialog.ShowModal();
+
+    if( aModule->GetValue() != oldFPID.GetLibItemName() )
+    {
+        if( aModule->GetLink() )
+        {
+            SaveFootprintToBoard( false );
+        }
+        else
+        {
+            DeleteModuleFromLibrary( oldFPID, false );
+
+            SaveFootprint( aModule );
+            SyncLibraryTree( true );
+        }
+    }
+
+    GetScreen()->GetCurItem()->ClearFlags();
 }
 
 

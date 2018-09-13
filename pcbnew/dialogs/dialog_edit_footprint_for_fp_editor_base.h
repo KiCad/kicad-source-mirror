@@ -105,6 +105,8 @@ class DIALOG_FOOTPRINT_FP_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnGridSize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnFootprintNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnFootprintNameText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAdd3DRow( wxCommandEvent& event ) { event.Skip(); }

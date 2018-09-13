@@ -365,7 +365,7 @@
                                                             <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
-                                                            <property name="window_style">wxSIMPLE_BORDER</property>
+                                                            <property name="window_style"></property>
                                                             <event name="OnChar"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
@@ -818,20 +818,20 @@
                                                     </object>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="0">
+                                            <object class="sizeritem" expanded="1">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                 <property name="proportion">0</property>
-                                                <object class="wxBoxSizer" expanded="0">
+                                                <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
                                                     <property name="name">bSizerMidBasicPanel</property>
                                                     <property name="orient">wxVERTICAL</property>
                                                     <property name="permission">none</property>
-                                                    <object class="sizeritem" expanded="0">
+                                                    <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND|wxTOP|wxBOTTOM</property>
                                                         <property name="proportion">1</property>
-                                                        <object class="wxFlexGridSizer" expanded="0">
+                                                        <object class="wxFlexGridSizer" expanded="1">
                                                             <property name="cols">2</property>
                                                             <property name="flexible_direction">wxBOTH</property>
                                                             <property name="growablecols">1</property>
@@ -928,7 +928,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -993,7 +993,7 @@
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
                                                                     <event name="OnKeyUp"></event>
-                                                                    <event name="OnKillFocus"></event>
+                                                                    <event name="OnKillFocus">OnSymbolNameKillFocus</event>
                                                                     <event name="OnLeaveWindow"></event>
                                                                     <event name="OnLeftDClick"></event>
                                                                     <event name="OnLeftDown"></event>
@@ -1010,7 +1010,7 @@
                                                                     <event name="OnRightUp"></event>
                                                                     <event name="OnSetFocus"></event>
                                                                     <event name="OnSize"></event>
-                                                                    <event name="OnText"></event>
+                                                                    <event name="OnText">OnSymbolNameText</event>
                                                                     <event name="OnTextEnter"></event>
                                                                     <event name="OnTextMaxLen"></event>
                                                                     <event name="OnTextURL"></event>
@@ -1102,7 +1102,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3082,7 +3082,7 @@
                                                             <property name="tooltip"></property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
-                                                            <property name="window_style">wxSIMPLE_BORDER</property>
+                                                            <property name="window_style"></property>
                                                             <event name="OnChar"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>

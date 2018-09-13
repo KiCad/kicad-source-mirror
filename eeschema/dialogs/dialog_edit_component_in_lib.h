@@ -57,10 +57,12 @@ public:
     UNIT_BINDER     m_pinNameOffset;
 
     wxControl*      m_delayedFocusCtrl;
-    wxString        m_delayedErrorMessage;
     WX_GRID*        m_delayedFocusGrid;
     int             m_delayedFocusRow;
     int             m_delayedFocusColumn;
+    int             m_delayedFocusPage;
+    wxString        m_delayedErrorMessage;
+
     wxString        m_shownColumns;
 
     bool TransferDataToWindow() override;
@@ -80,6 +82,8 @@ private:
     void OnDeleteField( wxCommandEvent& event ) override;
     void OnMoveUp( wxCommandEvent& event ) override;
     void OnMoveDown( wxCommandEvent& event ) override;
+    void OnSymbolNameKillFocus( wxFocusEvent& event ) override;
+    void OnSymbolNameText( wxCommandEvent& event ) override;
     void OnSelectAlias( wxCommandEvent& event ) override;
     void OnAddAlias( wxCommandEvent& event ) override;
     void OnDeleteAlias( wxCommandEvent& event ) override;

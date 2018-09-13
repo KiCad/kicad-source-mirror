@@ -97,6 +97,8 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void OnMoveUp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMoveDown( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSymbolNameKillFocus( wxFocusEvent& event ) { event.Skip(); }
+		virtual void OnSymbolNameText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnAddAlias( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteAlias( wxCommandEvent& event ) { event.Skip(); }

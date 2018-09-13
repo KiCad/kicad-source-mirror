@@ -51,7 +51,8 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_userUnits( aDialog->GetUserUnits() ),
     m_part( aPart ),
     m_fieldNameValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), FIELD_NAME ),
-    m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE )
+    m_referenceValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), REFERENCE ),
+    m_valueValidator( aFrame->IsType( FRAME_SCH_LIB_EDITOR ), VALUE )
 {
     // Build the various grid cell attributes.
 
@@ -67,6 +68,11 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     GRID_CELL_TEXT_EDITOR* referenceEditor = new GRID_CELL_TEXT_EDITOR();
     referenceEditor->SetValidator( m_referenceValidator );
     m_referenceAttr->SetEditor( referenceEditor );
+
+    m_valueAttr = new wxGridCellAttr;
+    GRID_CELL_TEXT_EDITOR* valueEditor = new GRID_CELL_TEXT_EDITOR();
+    valueEditor->SetValidator( m_valueValidator );
+    m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
     m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( aDialog ) );
@@ -111,6 +117,7 @@ FIELDS_GRID_TABLE<T>::~FIELDS_GRID_TABLE()
     m_fieldNameAttr->DecRef();
     m_boolAttr->DecRef();
     m_referenceAttr->DecRef();
+    m_valueAttr->DecRef();
     m_footprintAttr->DecRef();
     m_urlAttr->DecRef();
     m_vAlignAttr->DecRef();
@@ -199,21 +206,17 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
         }
         else if( aRow == VALUE )
         {
-            if( m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
+            // For power symbols, the value is not editable, because value and pin name must
+            // be the same and can be edited only in library editor.
+            if( m_part && m_part->IsPower() && ! m_frame->IsType( FRAME_SCH_LIB_EDITOR ) )
             {
-                // This field is the lib name and the default value when loading this component
-                // in schematic.  The value is now not editable here (in this dialog) because
-                // changing it is equivalent to create a new component or alias. This is handled
-                // in libedit, not in this dialog.
                 m_readOnlyAttr->IncRef();
                 return m_readOnlyAttr;
             }
-            else if( m_part && m_part->IsPower() )
+            else
             {
-                // For power symbols, the value is not editable, because value and pin name must
-                // be the same and can be edited only in library editor.
-                m_readOnlyAttr->IncRef();
-                return m_readOnlyAttr;
+                m_valueAttr->IncRef();
+                return m_valueAttr;
             }
         }
         else if( aRow == FOOTPRINT )

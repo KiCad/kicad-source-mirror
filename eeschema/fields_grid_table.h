@@ -101,10 +101,12 @@ private:
 
     SCH_FIELD_VALIDATOR   m_fieldNameValidator;
     SCH_FIELD_VALIDATOR   m_referenceValidator;
+    SCH_FIELD_VALIDATOR   m_valueValidator;
 
     wxGridCellAttr*       m_readOnlyAttr;
     wxGridCellAttr*       m_fieldNameAttr;
     wxGridCellAttr*       m_referenceAttr;
+    wxGridCellAttr*       m_valueAttr;
     wxGridCellAttr*       m_footprintAttr;
     wxGridCellAttr*       m_urlAttr;
     wxGridCellAttr*       m_boolAttr;

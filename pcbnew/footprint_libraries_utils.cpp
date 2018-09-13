@@ -524,18 +524,13 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 }
 
 
-bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( MODULE* aModule )
+bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( const LIB_ID& aFPID, bool aConfirm )
 {
-    if( !aModule )
+    if( !aFPID.IsValid() )
         return false;
 
-    LIB_ID fpid = aModule->GetFPID();
-
-    if( !fpid.IsValid() )
-        return false;
-
-    wxString nickname = fpid.GetLibNickname();
-    wxString fpname = fpid.GetLibItemName();
+    wxString nickname = aFPID.GetLibNickname();
+    wxString fpname = aFPID.GetLibItemName();
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to delete a footprint from a legacy lib
@@ -557,7 +552,7 @@ bool FOOTPRINT_EDIT_FRAME::DeleteModuleFromLibrary( MODULE* aModule )
     // Confirmation
     wxString msg = wxString::Format( FMT_OK_DELETE, fpname.GetData(), nickname.GetData() );
 
-    if( !IsOK( this, msg ) )
+    if( aConfirm && !IsOK( this, msg ) )
         return false;
 
     try

@@ -72,9 +72,11 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_texts = new TEXT_MOD_GRID_TABLE( m_units, m_frame );
 
     m_delayedErrorMessage = wxEmptyString;
+    m_delayedFocusCtrl = nullptr;
     m_delayedFocusGrid = nullptr;
     m_delayedFocusRow = -1;
     m_delayedFocusColumn = -1;
+    m_delayedFocusPage = -1;
 
     // Give an icon
     wxIcon  icon;
@@ -119,13 +121,15 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_staticTextInfoValPos->SetFont( infoFont );
     m_staticTextInfoCopper->SetFont( infoFont );
 
-    m_NoteBook->SetSelection( m_page );
+    if( m_page >= 0 )
+        m_NoteBook->SetSelection( (unsigned) m_page );
 
     if( m_page == 0 )
     {
         m_delayedFocusGrid = m_itemsGrid;
         m_delayedFocusRow = 0;
         m_delayedFocusColumn = 0;
+        m_delayedFocusPage = 0;
     }
     else if ( m_page == 1 )
         SetInitialFocus( m_NetClearanceCtrl );
@@ -134,6 +138,7 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
         m_delayedFocusGrid = m_modelsGrid;
         m_delayedFocusRow = 0;
         m_delayedFocusColumn = 0;
+        m_delayedFocusPage = 2;
     }
 
     m_sdbSizerStdButtonsOK->SetDefault();
@@ -145,6 +150,9 @@ DIALOG_FOOTPRINT_FP_EDITOR::DIALOG_FOOTPRINT_FP_EDITOR( FOOTPRINT_EDIT_FRAME* aP
     m_button3DShapeBrowse->SetBitmap( KiBitmap( folder_xpm ) );
     m_button3DShapeRemove->SetBitmap( KiBitmap( trash_xpm ) );
 
+    // wxFormBuilder doesn't include this event...
+    m_itemsGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );
+
     FinishDialogSettings();
 }
 
@@ -155,6 +163,8 @@ DIALOG_FOOTPRINT_FP_EDITOR::~DIALOG_FOOTPRINT_FP_EDITOR()
 
     // Prevents crash bug in wxGrid's d'tor
     m_itemsGrid->DestroyTable( m_texts );
+
+    m_itemsGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging ), NULL, this );
 
     // Delete the GRID_TRICKS.
     m_itemsGrid->PopEventHandler( true );
@@ -177,7 +187,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     LIB_ID   fpID          = m_footprint->GetFPID();
     wxString footprintName = fpID.GetLibItemName();
 
-    m_FootprintNameCtrl->SetValue( footprintName );
+    m_FootprintNameCtrl->ChangeValue( footprintName );
 
     m_DocCtrl->SetValue( m_footprint->GetDescription() );
     m_KeywordCtrl->SetValue( m_footprint->GetKeywords() );
@@ -330,6 +340,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::On3DModelCellChanged( wxGridEvent& aEvent )
             m_delayedFocusGrid = m_modelsGrid;
             m_delayedFocusRow = aEvent.GetRow();
             m_delayedFocusColumn = aEvent.GetCol();
+            m_delayedFocusPage = 2;
             aEvent.Veto();
         }
 
@@ -459,6 +470,23 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnAdd3DRow( wxCommandEvent&  )
 }
 
 
+bool DIALOG_FOOTPRINT_FP_EDITOR::checkFootprintName( const wxString& aFootprintName )
+{
+    if( aFootprintName.IsEmpty() || !MODULE::IsLibNameValid( aFootprintName ) )
+    {
+        if( aFootprintName.IsEmpty() )
+            m_delayedErrorMessage = _( "Footprint must have a name." );
+        else
+            m_delayedErrorMessage.Printf( _( "Footprint name may not contain \"%s\"." ),
+                                          MODULE::StringLibNameInvalidChars( true ) );
+
+        return false;
+    }
+
+    return true;
+}
+
+
 bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
 {
     if( !m_itemsGrid->CommitPendingChanges() )
@@ -470,18 +498,13 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
     // First, test for invalid chars in module name
     wxString footprintName = m_FootprintNameCtrl->GetValue();
 
-    if( footprintName.IsEmpty() || !MODULE::IsLibNameValid( footprintName ) )
+    if( !checkFootprintName( footprintName ) )
     {
-        wxString msg;
-        if( footprintName.IsEmpty() )
-            msg = _( "Footprint must have a name." );
-        else
-            msg.Printf( _( "Footprint name may not contain \"%s\"." ),
-                        MODULE::StringLibNameInvalidChars( true ) );
+        if( m_NoteBook->GetSelection() != 0 )
+            m_NoteBook->SetSelection( 0 );
 
-        DisplayError( nullptr, msg );
-
-        m_FootprintNameCtrl->SetFocus();
+        m_delayedFocusCtrl = m_FootprintNameCtrl;
+        m_delayedFocusPage = 0;
 
         return false;
     }
@@ -607,6 +630,59 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataFromWindow()
 }
 
 
+static bool footprintIsFromBoard( MODULE* aFootprint )
+{
+    return aFootprint->GetLink() != 0;
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::OnGridCellChanging( wxGridEvent& event )
+{
+    if( event.GetRow() == 1 && event.GetCol() == TMC_TEXT )
+    {
+        if( !checkFootprintName( event.GetString() ) )
+        {
+            event.Veto();
+
+            if( m_NoteBook->GetSelection() != 0 )
+                m_NoteBook->SetSelection( 0 );
+
+            m_delayedFocusGrid = m_itemsGrid;
+            m_delayedFocusRow = event.GetRow();
+            m_delayedFocusColumn = event.GetCol();
+            m_delayedFocusPage = 0;
+        }
+        else if( !footprintIsFromBoard( m_footprint ) )
+        {
+            // Keep Name and Value of footprints in library in sync
+            m_FootprintNameCtrl->ChangeValue( event.GetString() );
+        }
+    }
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameText( wxCommandEvent& event )
+{
+    if( !footprintIsFromBoard( m_footprint ) )
+    {
+        // Keep Name and Value of footprints in library in sync
+        m_itemsGrid->SetCellValue( 1, TMC_TEXT, m_FootprintNameCtrl->GetValue() );
+    }
+}
+
+
+void DIALOG_FOOTPRINT_FP_EDITOR::OnFootprintNameKillFocus( wxFocusEvent& event )
+{
+    if( !m_delayedFocusCtrl && !checkFootprintName( m_FootprintNameCtrl->GetValue() ) )
+    {
+        m_delayedFocusCtrl = m_FootprintNameCtrl;
+        m_delayedFocusPage = 0;
+    }
+
+    event.Skip();
+}
+
+
 void DIALOG_FOOTPRINT_FP_EDITOR::OnAddField( wxCommandEvent& event )
 {
     if( !m_itemsGrid->CommitPendingChanges() )
@@ -698,23 +774,52 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     if( !m_itemsGrid->IsCellEditControlShown() && !m_modelsGrid->IsCellEditControlShown() )
         adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
 
-    // Handle a grid error.  This is delayed to OnUpdateUI so that we can change focus
-    // even when the original validation was triggered from a killFocus event, and so
-    // that the corresponding notebook page can be shown in the background when triggered
-    // from an OK.
-    if( m_delayedFocusRow >= 0 )
+    if( m_itemsGrid->IsCellEditControlShown() )
     {
-        if( !m_delayedErrorMessage.IsEmpty() )
+        int row = m_itemsGrid->GetGridCursorRow();
+        int col = m_itemsGrid->GetGridCursorCol();
+
+        if( row == 1 && col == TMC_TEXT )
         {
-            // We will re-enter this routine when the error dialog is displayed, so make
-            // sure we don't keep putting up more dialogs.
-            wxString msg = m_delayedErrorMessage;
-            m_delayedErrorMessage = wxEmptyString;
-
-            // Do not use DisplayErrorMessage(); it screws up window order on Mac
-            DisplayError( nullptr, msg );
+            wxGridCellEditor* editor = m_itemsGrid->GetCellEditor( row, col );
+            m_FootprintNameCtrl->ChangeValue( editor->GetValue() );
+            editor->DecRef();
         }
+    }
 
+    // Handle a delayed focus.  The delay allows us to:
+    // a) change focus when the error was triggered from within a killFocus handler
+    // b) show the correct notebook page in the background before the error dialog comes up
+    //    when triggered from an OK or a notebook page change
+
+    if( m_delayedFocusPage >= 0 && m_NoteBook->GetSelection() != m_delayedFocusPage )
+    {
+        m_NoteBook->SetSelection( (unsigned) m_delayedFocusPage );
+        m_delayedFocusPage = -1;
+    }
+
+    if( !m_delayedErrorMessage.IsEmpty() )
+    {
+        // We will re-enter this routine when the error dialog is displayed, so make
+        // sure we don't keep putting up more dialogs.
+        wxString msg = m_delayedErrorMessage;
+        m_delayedErrorMessage = wxEmptyString;
+
+        // Do not use DisplayErrorMessage(); it screws up window order on Mac
+        DisplayError( nullptr, msg );
+    }
+
+    if( m_delayedFocusCtrl )
+    {
+        m_delayedFocusCtrl->SetFocus();
+
+        if( dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl ) )
+            dynamic_cast<wxTextEntry*>( m_delayedFocusCtrl )->SelectAll();
+
+        m_delayedFocusCtrl = nullptr;
+    }
+    else if( m_delayedFocusGrid )
+    {
         m_delayedFocusGrid->SetFocus();
         m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
         m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
@@ -722,6 +827,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusGrid->EnableCellEditControl( true );
         m_delayedFocusGrid->ShowCellEditControl();
 
+        m_delayedFocusGrid = nullptr;
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }

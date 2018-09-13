@@ -356,7 +356,7 @@
                                                     <property name="tooltip"></property>
                                                     <property name="window_extra_style"></property>
                                                     <property name="window_name"></property>
-                                                    <property name="window_style">wxSIMPLE_BORDER</property>
+                                                    <property name="window_style"></property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
@@ -789,7 +789,7 @@
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>
                                                     <event name="OnKeyUp"></event>
-                                                    <event name="OnKillFocus"></event>
+                                                    <event name="OnKillFocus">OnFootprintNameKillFocus</event>
                                                     <event name="OnLeaveWindow"></event>
                                                     <event name="OnLeftDClick"></event>
                                                     <event name="OnLeftDown"></event>
@@ -806,7 +806,7 @@
                                                     <event name="OnRightUp"></event>
                                                     <event name="OnSetFocus"></event>
                                                     <event name="OnSize"></event>
-                                                    <event name="OnText"></event>
+                                                    <event name="OnText">OnFootprintNameText</event>
                                                     <event name="OnTextEnter"></event>
                                                     <event name="OnTextMaxLen"></event>
                                                     <event name="OnTextURL"></event>

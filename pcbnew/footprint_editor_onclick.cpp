@@ -524,13 +524,9 @@ void FOOTPRINT_EDIT_FRAME::OnEditItemRequest( wxDC* aDC, BOARD_ITEM* aItem )
         break;
 
     case PCB_MODULE_T:
-        {
-        DIALOG_FOOTPRINT_FP_EDITOR dialog( this, static_cast<MODULE*>( aItem ) );
-        dialog.ShowModal();
-        GetScreen()->GetCurItem()->ClearFlags();
+        editFootprintProperties( (MODULE*) aItem );
         m_canvas->MoveCursorToCrossHair();
         m_canvas->Refresh();
-        }
         break;
 
     case PCB_MODULE_TEXT_T:

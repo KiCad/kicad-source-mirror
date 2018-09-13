@@ -26,7 +26,7 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	wxStaticBoxSizer* sbSizerTexts;
 	sbSizerTexts = new wxStaticBoxSizer( new wxStaticBox( m_PanelGeneral, wxID_ANY, wxEmptyString ), wxVERTICAL );
 	
-	m_itemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxSIMPLE_BORDER );
+	m_itemsGrid = new WX_GRID( sbSizerTexts->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	
 	// Grid
 	m_itemsGrid->CreateGrid( 2, 11 );
@@ -409,6 +409,8 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_itemsGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnDeleteField ), NULL, this );
+	m_FootprintNameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnFootprintNameKillFocus ), NULL, this );
+	m_FootprintNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnFootprintNameText ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::On3DModelSelected ), NULL, this );
 	m_button3DShapeAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnAdd3DRow ), NULL, this );
@@ -425,6 +427,8 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::~DIALOG_FOOTPRINT_FP_EDITOR_BASE()
 	m_itemsGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnGridSize ), NULL, this );
 	m_bpAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnAddField ), NULL, this );
 	m_bpDelete->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnDeleteField ), NULL, this );
+	m_FootprintNameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnFootprintNameKillFocus ), NULL, this );
+	m_FootprintNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnFootprintNameText ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::On3DModelSelected ), NULL, this );
 	m_button3DShapeAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_FP_EDITOR_BASE::OnAdd3DRow ), NULL, this );

@@ -186,6 +186,10 @@ bool FP_TREE_SYNCHRONIZING_ADAPTER::GetAttr( wxDataViewItem const& aItem, unsign
     if( aCol != 0 )
         return false;
 
+    // don't link to a board footprint, even if the FPIDs match
+    if( m_frame->IsCurrentFPFromBoard() )
+        return false;
+
     auto node = ToNode( aItem );
     wxCHECK( node, false );
 
