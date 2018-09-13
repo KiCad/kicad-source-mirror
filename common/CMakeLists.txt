@@ -337,13 +337,16 @@ if( NOT HAVE_STRTOKR )
     list( APPEND COMMON_SRCS strtok_r.c )
 endif()
 
+if( BUILD_GITHUB_PLUGIN )
+    list( APPEND COMMON_SRCS
+        kicad_curl/kicad_curl.cpp
+        kicad_curl/kicad_curl_easy.cpp
+    )
+endif()
 
 set( COMMON_SRCS
     ${COMMON_SRCS}
     system/libcontext.cpp
-
-    kicad_curl/kicad_curl.cpp
-    kicad_curl/kicad_curl_easy.cpp
 
     view/view.cpp
     view/view_item.cpp
