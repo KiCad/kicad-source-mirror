@@ -829,33 +829,32 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
     while( i < aList.size() )
     {
         wxString ref = aList[ i ].GetRef();
+        int numRef = aList[ i ].m_NumRef;
 
-        size_t j = i;
+        size_t range = 1;
 
-        while( j + 1 < aList.size() && aList[ j + 1 ].GetRef() == ref )
-            j = j + 1;
+        while( i + range < aList.size()
+               && aList[ i + range ].GetRef() == ref
+               && aList[ i + range ].m_NumRef == numRef + range )
+        {
+            range++;
+        }
 
         if( !retVal.IsEmpty() )
             retVal << wxT( ", " );
 
-        if( j == i )
+        if( range == 1 )
         {
             retVal << ref << aList[ i ].GetRefNumber();
-        }
-        else if( j == i + 1 )
-        {
-            retVal << ref << aList[ i ].GetRefNumber();
-            retVal << wxT( ", " );
-            retVal << ref << aList[ j ].GetRefNumber();
         }
         else
         {
             retVal << ref << aList[ i ].GetRefNumber();
             retVal << wxT( " - " );
-            retVal << ref << aList[ j ].GetRefNumber();
+            retVal << ref << aList[ i + ( range - 1 ) ].GetRefNumber();
         }
 
-        i = j + 1;
+        i+= range;
     }
 
     return retVal;
