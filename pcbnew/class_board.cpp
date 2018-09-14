@@ -1214,7 +1214,8 @@ void BOARD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
 
-    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() );
+    // Subtract out the unconnected net before reporting number of nets
+    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() - 1 );
     aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
     txt.Printf( wxT( "%d" ), GetConnectivity()->GetUnconnectedCount() );
