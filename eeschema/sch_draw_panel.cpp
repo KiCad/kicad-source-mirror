@@ -270,7 +270,6 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     int          localbutt = 0;
     BASE_SCREEN* screen = GetScreen();
     auto controls = GetViewControls();
-    auto vcp = VECTOR2I( controls->GetCursorPosition() );
     auto vmp = VECTOR2I( controls->GetMousePosition() );
     wxPoint mousePos ( vmp.x, vmp.y );
 

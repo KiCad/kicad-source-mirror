@@ -215,8 +215,6 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
             if( junction && !screen->IsJunctionNeeded( point ) )
                 DeleteJunction( junction, true );
         }
-
-        m_canvas->RefreshDrawingRect( aItem->GetBoundingBox() );
     }
 }
 

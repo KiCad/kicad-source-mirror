@@ -175,20 +175,11 @@ void BLOCK_SELECTOR::Clear()
 void DrawAndSizingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                  bool aErase )
 {
-    BLOCK_SELECTOR* block;
-
-    block = &aPanel->GetScreen()->m_BlockLocate;
+    BLOCK_SELECTOR* block = &aPanel->GetScreen()->m_BlockLocate;
 
     block->SetMoveVector( wxPoint( 0, 0 ) );
-
-    if( aErase && aDC )
-        block->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, block->GetColor() );
-
     block->SetLastCursorPosition( aPanel->GetParent()->GetCrossHairPosition() );
     block->SetEnd( aPanel->GetParent()->GetCrossHairPosition() );
-
-    if( aDC )
-        block->Draw( aPanel, aDC, wxPoint( 0, 0 ), g_XorMode, block->GetColor() );
 
     if( block->GetState() == STATE_BLOCK_INIT )
     {
