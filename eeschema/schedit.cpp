@@ -753,11 +753,7 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
 
     SetRepeatItem( NULL );
 
-    if( aItem->IsNew() )
-    {
-        GetCanvas()->GetView()->Add( aItem );
-    }
-    else
+    if( !aItem->IsNew() )
     {
         if( (aItem->Type() == SCH_SHEET_PIN_T) || (aItem->Type() == SCH_FIELD_T) )
             SetUndoItem( (SCH_ITEM*) aItem->GetParent() );
