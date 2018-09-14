@@ -338,7 +338,7 @@ RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::RESCUE_SYMBOL_LIB_TABLE_CANDIDATE(
     LIB_PART* aLibCandidate ) : RESCUE_CANDIDATE()
 {
     m_requested_id = aRequestedId;
-    m_requested_name = aRequestedId.GetLibItemName();
+    m_requested_name = aRequestedId.Format();
     m_new_id = aNewId;
     m_lib_candidate = aLibCandidate;
     m_cache_candidate = aCacheCandidate;
