@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -10,6 +10,7 @@
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/intl.h>
 #include "dialog_shim.h"
 #include <wx/bitmap.h>
 #include <wx/image.h>
@@ -88,7 +89,7 @@ class COLOR4D_PICKER_DLG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~COLOR4D_PICKER_DLG_BASE();
 	
 };

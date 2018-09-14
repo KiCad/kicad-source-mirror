@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,7 +28,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	bSizerPanels = new wxBoxSizer( wxHORIZONTAL );
 	
 	wxStaticBoxSizer* sbSizerViewRGB;
-	sbSizerViewRGB = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("RGB") ), wxVERTICAL );
+	sbSizerViewRGB = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("RGB") ), wxVERTICAL );
 	
 	m_RgbBitmap = new wxStaticBitmap( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 264,264 ), 0 );
 	m_RgbBitmap->SetMinSize( wxSize( 264,264 ) );
@@ -43,15 +43,15 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	fgSizerRGB->SetFlexibleDirection( wxBOTH );
 	fgSizerRGB->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextR = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxT("Red:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextR = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, _("Red:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextR->Wrap( -1 );
 	fgSizerRGB->Add( m_staticTextR, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextG = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxT("Green:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextG = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, _("Green:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextG->Wrap( -1 );
 	fgSizerRGB->Add( m_staticTextG, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextB = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, wxT("Blue:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextB = new wxStaticText( sbSizerViewRGB->GetStaticBox(), wxID_ANY, _("Blue:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextB->Wrap( -1 );
 	fgSizerRGB->Add( m_staticTextB, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -77,7 +77,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	bSizerPanels->Add( sbSizerViewRGB, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	wxStaticBoxSizer* sbSizerViewHSV;
-	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, wxT("HSV") ), wxHORIZONTAL );
+	sbSizerViewHSV = new wxStaticBoxSizer( new wxStaticBox( m_panelFreeColors, wxID_ANY, _("HSV") ), wxHORIZONTAL );
 	
 	wxBoxSizer* bSizer10;
 	bSizer10 = new wxBoxSizer( wxVERTICAL );
@@ -94,11 +94,11 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	fgSizerHSV->SetFlexibleDirection( wxBOTH );
 	fgSizerHSV->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticTextHue = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxT("Hue:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextHue = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, _("Hue:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextHue->Wrap( -1 );
 	fgSizerHSV->Add( m_staticTextHue, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticTextSat = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxT("Saturation:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSat = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, _("Saturation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextSat->Wrap( -1 );
 	fgSizerHSV->Add( m_staticTextSat, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
@@ -121,7 +121,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizerBright;
 	bSizerBright = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticTextBright = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, wxT("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextBright = new wxStaticText( sbSizerViewHSV->GetStaticBox(), wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBright->Wrap( -1 );
 	bSizerBright->Add( m_staticTextBright, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
 	
@@ -141,7 +141,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	m_panelFreeColors->SetSizer( bSizerUpperFreeColors );
 	m_panelFreeColors->Layout();
 	bSizerUpperFreeColors->Fit( m_panelFreeColors );
-	m_notebook->AddPage( m_panelFreeColors, wxT("Color Picker"), true );
+	m_notebook->AddPage( m_panelFreeColors, _("Color Picker"), true );
 	m_panelDefinedColors = new wxPanel( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
 	m_SizerDefinedColors = new wxBoxSizer( wxVERTICAL );
 	
@@ -161,7 +161,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	m_panelDefinedColors->SetSizer( m_SizerDefinedColors );
 	m_panelDefinedColors->Layout();
 	m_SizerDefinedColors->Fit( m_panelDefinedColors );
-	m_notebook->AddPage( m_panelDefinedColors, wxT("Defined Colors"), false );
+	m_notebook->AddPage( m_panelDefinedColors, _("Defined Colors"), false );
 	
 	bSizerUpperMain->Add( m_notebook, 0, wxEXPAND | wxALL, 5 );
 	
@@ -170,7 +170,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	
 	m_SizerTransparency->Add( 0, 20, 0, wxTOP, 5 );
 	
-	m_opacityLabel = new wxStaticText( this, wxID_ANY, wxT("Opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_opacityLabel = new wxStaticText( this, wxID_ANY, _("Opacity:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_opacityLabel->Wrap( -1 );
 	m_SizerTransparency->Add( m_opacityLabel, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5 );
 	
@@ -192,7 +192,7 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bButtonsSizer;
 	bButtonsSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, wxT("Preview (old / new):"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOldColor = new wxStaticText( this, wxID_ANY, _("Preview (old / new):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextOldColor->Wrap( -1 );
 	bButtonsSizer->Add( m_staticTextOldColor, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
