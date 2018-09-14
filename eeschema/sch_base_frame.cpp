@@ -143,6 +143,8 @@ void SCH_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
         return;
 
     GetGalCanvas()->SwitchBackend( new_type );
+    m_canvasTypeDirty = true;   // force saving new canvas type in config
+    m_canvasType = new_type;
 }
 
 
@@ -461,7 +463,7 @@ void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
         GetCanvas()->GetView()->SetScale( scale );
 
     if( aWarpPointer )
-        GetCanvas()->GetViewControls()->WarpCursor( aCenterPoint );
+        GetCanvas()->GetViewControls()->CenterOnCursor();
 
     GetCanvas()->Refresh();
 }

@@ -94,7 +94,7 @@ public:
      * A way to pass info to draw functions.
      * this is just an accessor to the GetDisplayOptions() parent frame function.
      */
-    virtual void* GetDisplayOptions() { printf("Unimplemented\n"); assert(false); return nullptr; };
+    virtual void* GetDisplayOptions() { printf("EDA_DRAW_PANEL:Unimplemented\n"); wxASSERT(false); return nullptr; };
 
     virtual BASE_SCREEN* GetScreen() = 0;
 
@@ -143,7 +143,7 @@ public:
      * X and Y axis
      * X and Y auxiliary axis
      */
-    virtual void DrawBackGround( wxDC* DC ) { printf("Unimplemented\n"); };
+    virtual void DrawBackGround( wxDC* DC ) { printf("EDA_DRAW_PANEL:Unimplemented1\n"); };
 
     /**
      * Function DrawGrid
@@ -153,7 +153,7 @@ public:
      * @see EDA_DRAW_FRAME::GetGridColor() for the color of the grid.
      * @param aDC The device context to draw the grid.
      */
-    virtual void DrawGrid( wxDC* aDC ) { printf("Unimplemented\n"); };
+    virtual void DrawGrid( wxDC* aDC ) { printf("EDA_DRAW_PANEL:Unimplemented2\n"); };
 
     /**
      * Function DrawAuxiliaryAxis
@@ -162,7 +162,7 @@ public:
      * @param aDC = current Device Context
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
      */
-    virtual void DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode ) { printf("Unimplemented\n");};
+    virtual void DrawAuxiliaryAxis( wxDC* aDC, GR_DRAWMODE aDrawMode ) { printf("EDA_DRAW_PANEL:Unimplemented2\n");};
 
     /**
      * Function DrawGridAxis
@@ -172,7 +172,7 @@ public:
      * @param aDrawMode = draw mode (GR_COPY, GR_OR ..)
      * @param aGridOrigin = the absolute coordinate of grid origin for snap.
      */
-    virtual void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin ) { printf("Unimplemented\n");  };
+    virtual void DrawGridAxis( wxDC* aDC, GR_DRAWMODE aDrawMode, const wxPoint& aGridOrigin ) { printf("EDA_DRAW_PANEL:Unimplemented4\n");  };
 
         /**
      * Function DeviceToLogical
@@ -184,7 +184,7 @@ public:
      * @param aDC The device context used for the conversion.
      * @return A rectangle converted to drawing units.
      */
-    virtual wxRect DeviceToLogical( const wxRect& aRect, wxDC& aDC ) { printf("Unimplemented\n");assert(false); return wxRect(); };
+    virtual wxRect DeviceToLogical( const wxRect& aRect, wxDC& aDC ) { printf("EDA_DRAW_PANEL:Unimplemented5\n");wxASSERT(false); return wxRect(); };
 
     /* Mouse and keys events */
 
@@ -198,13 +198,13 @@ public:
      *</p>
      */
 
-     virtual void EraseScreen( wxDC* DC ) { printf("Unimplemented\n");  };;
+     virtual void EraseScreen( wxDC* DC ) { printf("EDA_DRAW_PANEL:Unimplemented6\n");  };;
 
-    virtual void SetZoom( double mode ) { printf("Unimplemented\n");  };;
-    virtual double GetZoom() { printf("Unimplemented\n"); return 1.0; };;
+    virtual void SetZoom( double mode ) { printf("EDA_DRAW_PANEL:Unimplemented7\n");  };;
+    virtual double GetZoom() { printf("EDA_DRAW_PANEL:Unimplemented8\n"); return 1.0; };;
 
-    //virtual void SetGrid( const wxRealPoint& size ) { printf("Unimplemented\n");  };;
-    //virtual wxRealPoint GetGrid() { printf("Unimplemented\n"); return wxRealPoint(1.0, 1.0); };;
+    //virtual void SetGrid( const wxRealPoint& size ) { printf("EDA_DRAW_PANEL:Unimplemented\n");  };;
+    //virtual wxRealPoint GetGrid() { printf("EDA_DRAW_PANEL:Unimplemented\n"); return wxRealPoint(1.0, 1.0); };;
 
 
     /**
@@ -213,7 +213,7 @@ public:
      * @return true if \a aPosition is visible on the screen.
      *         false if \a aPosition is not visible on the screen.
      */
-    virtual bool IsPointOnDisplay( const wxPoint& aPosition ) { printf("Unimplemented\n"); return false; };;
+    virtual bool IsPointOnDisplay( const wxPoint& aPosition ) { printf("EDA_DRAW_PANEL:Unimplemented9\n"); return false; };;
 
     /**
      * Function SetClipBox
@@ -231,9 +231,9 @@ public:
      * @param aRect The clip rectangle in device units or NULL for the entire visible area
      *              of the screen.
      */
-    virtual void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL ) { printf("Unimplemented\n"); };;
+    virtual void SetClipBox( wxDC& aDC, const wxRect* aRect = NULL ) { printf("EDA_DRAW_PANEL:Unimplemented10\n"); };;
 
-    virtual void ReDraw( wxDC* aDC, bool aEraseBackground = true ) { printf("Unimplemented\n");  };;
+    virtual void ReDraw( wxDC* aDC, bool aEraseBackground = true ) { printf("EDA_DRAW_PANEL:Unimplemented11\n");  };;
 
     /**
      * Function RefreshDrawingRect
@@ -242,7 +242,7 @@ public:
      * @param aRect The rectangle to repaint.
      * @param aEraseBackground Erases the background if true.
      */
-    virtual void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true ) { printf("Unimplemented\n"); };;
+    virtual void RefreshDrawingRect( const EDA_RECT& aRect, bool aEraseBackground = true ) { printf("EDA_DRAW_PANEL:Unimplemented12\n"); };;
 
     /// @copydoc wxWindow::Refresh()
     //virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL );
@@ -251,32 +251,32 @@ public:
      * Function GetScreenCenterLogicalPosition
      * @return The current screen center position in logical (drawing) units.
      */
-    virtual wxPoint GetScreenCenterLogicalPosition() { printf("Unimplemented\n"); return wxPoint(0, 0); };;
+    virtual wxPoint GetScreenCenterLogicalPosition() { printf("EDA_DRAW_PANEL:Unimplemented13\n"); return wxPoint(0, 0); };;
 
     /**
      * Function MoveCursorToCrossHair
      * warps the cursor to the current cross hair position.
      */
-    virtual void MoveCursorToCrossHair() { printf("Unimplemented\n"); };;
+    virtual void MoveCursorToCrossHair() { printf("EDA_DRAW_PANEL:Unimplemented14\n"); };;
 
     /**
      * Function ToDeviceXY
      * transforms logical to device coordinates
      */
-    virtual wxPoint ToDeviceXY( const wxPoint& pos ) { printf("Unimplemented\n"); return wxPoint(0, 0); };;
+    virtual wxPoint ToDeviceXY( const wxPoint& pos ) { printf("EDA_DRAW_PANEL:Unimplemented15\n"); return wxPoint(0, 0); };;
 
     /**
      * Function ToLogicalXY
      * transforms device to logical coordinates
      */
-    virtual wxPoint ToLogicalXY( const wxPoint& pos ) { printf("Unimplemented\n"); return wxPoint(0, 0); };;
+    virtual wxPoint ToLogicalXY( const wxPoint& pos ) { printf("EDA_DRAW_PANEL:Unimplemented16\n"); return wxPoint(0, 0); };;
 
     /**
      * Function MoveCursor
      * moves the mouse pointer to \a aPosition in logical (drawing) units.
      * @param aPosition The position in logical units to move the cursor.
      */
-    virtual void MoveCursor( const wxPoint& aPosition ) { printf("Unimplemented\n");  };;
+    virtual void MoveCursor( const wxPoint& aPosition ) { printf("EDA_DRAW_PANEL:Unimplemented17\n");  };;
 
     /* Cursor functions */
     /**
@@ -291,13 +291,13 @@ public:
      * @param aDC - the device context to draw the cursor
      * @param aColor - the color to draw the cursor
      */
-    virtual void DrawCrossHair( wxDC* aDC=nullptr, COLOR4D aColor = COLOR4D::WHITE ) { printf("Unimplemented\n"); };;
+    virtual void DrawCrossHair( wxDC* aDC=nullptr, COLOR4D aColor = COLOR4D::WHITE ) { printf("EDA_DRAW_PANEL:Unimplemented18\n"); };;
 
     // Hide the cross hair.
-    virtual void CrossHairOff( wxDC* DC=nullptr ) { printf("Unimplemented\n");  };;
+    virtual void CrossHairOff( wxDC* DC=nullptr ) { printf("EDA_DRAW_PANEL:Unimplemented19\n");  };;
 
     // Show the cross hair.
-    virtual void CrossHairOn( wxDC* DC=nullptr ) { printf("Unimplemented\n");  };;
+    virtual void CrossHairOn( wxDC* DC=nullptr ) { printf("EDA_DRAW_PANEL:Unimplemented20\n");  };;
 
     /**
      * Function SetMouseCapture
@@ -332,7 +332,7 @@ public:
      */
     virtual void EndMouseCapture( int aId = -1, int aCursorId = -1,
                           const wxString& aTitle = wxEmptyString,
-                          bool aCallEndFunc = true ) { printf("Unimplemented\n"); assert(false); };;
+                          bool aCallEndFunc = true ) { printf("EDA_DRAW_PANEL:Unimplemented21\n"); wxASSERT(false); };;
 
     inline bool IsMouseCaptured() const { return m_mouseCaptureCallback != NULL; }
 
@@ -346,7 +346,7 @@ public:
      * @param aErase True indicates the item being drawn should be erase before drawing
      *               it a \a aPosition.
      */
-    virtual void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase ) { printf("Unimplemented\n"); assert(false); };;
+    virtual void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase ) { printf("EDA_DRAW_PANEL:Unimplemented22\n"); wxASSERT(false); };;
 
     /**
      * Function CallEndMouseCapture
@@ -354,7 +354,7 @@ public:
      *
      * @param aDC A point to a wxDC object to perform any drawing upon.
      */
-    virtual void CallEndMouseCapture( wxDC* aDC ) { printf("Unimplemented\n"); assert(false); };;
+    virtual void CallEndMouseCapture( wxDC* aDC ) { printf("EDA_DRAW_PANEL:Unimplemented23\n"); wxASSERT(false); };;
 
     virtual void Refresh( bool eraseBackground = true, const wxRect* rect = NULL ) {}
 

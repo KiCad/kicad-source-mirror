@@ -237,7 +237,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
         socket->Destroy();
     }
 
-    if( m_canvasTypeDirty )
+    if( m_canvasTypeDirty )     // the canvas type has changed: save the new type
         saveCanvasTypeSetting( m_canvasType );
 
     delete m_actions;
@@ -1076,7 +1076,7 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
     if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || canvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
     {
-        assert( false );
+        wxASSERT( false );
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     }
 
@@ -1089,7 +1089,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
     {
-        assert( false );
+        wxASSERT( false );
         return false;
     }
 
@@ -1364,9 +1364,9 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         return;
 
     int          id = event.GetId();
-    bool         zoom_at_cursor = false;
-    BASE_SCREEN* screen = GetScreen();
-    wxPoint      center = GetScrollCenterPosition();
+    bool         warp_cursor = false;
+    VECTOR2D cpos = GetCrossHairPosition();//GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint zoom_center( (int)cpos.x, (int)cpos.y );
 
     if ( id == ID_KEY_ZOOM_IN )
     {
@@ -1382,39 +1382,27 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     switch( id )
     {
     case ID_OFFCENTER_ZOOM_IN:
-        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
-
-        if( screen->SetPreviousZoom() )
-            RedrawScreen2( center );
+        SetPreviousZoomAndRedraw( zoom_center,warp_cursor );
         break;
 
     case ID_POPUP_ZOOM_IN:
-        zoom_at_cursor = true;
-        center = GetCrossHairPosition();
-
-    // fall thru
+        warp_cursor = true;
+        // fall thru
     case ID_VIEWER_ZOOM_IN:
     case ID_ZOOM_IN:
-        if( screen->SetPreviousZoom() )
-            RedrawScreen( center, zoom_at_cursor );
+        SetPreviousZoomAndRedraw( zoom_center,warp_cursor );
         break;
 
     case ID_OFFCENTER_ZOOM_OUT:
-        center = m_canvas->ToDeviceXY( GetCrossHairPosition() );
-
-        if( screen->SetNextZoom() )
-            RedrawScreen2( center );
+        SetNextZoomAndRedraw( zoom_center, warp_cursor );
         break;
 
     case ID_POPUP_ZOOM_OUT:
-        zoom_at_cursor = true;
-        center = GetCrossHairPosition();
-
-    // fall thru
+        warp_cursor = true;
+        // fall thru
     case ID_VIEWER_ZOOM_OUT:
     case ID_ZOOM_OUT:
-        if( screen->SetNextZoom() )
-            RedrawScreen( center, zoom_at_cursor );
+        SetNextZoomAndRedraw( zoom_center, warp_cursor );
         break;
 
     case ID_VIEWER_ZOOM_REDRAW:
@@ -1425,8 +1413,8 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
         break;
 
     case ID_POPUP_ZOOM_CENTER:
-        center = GetCrossHairPosition();
-        RedrawScreen( center, true );
+        GetGalCanvas()->GetView()->SetScale( GetGalCanvas()->GetView()->GetScale(), zoom_center );
+        GetGalCanvas()->GetViewControls()->CenterOnCursor();
         break;
 
     case ID_POPUP_ZOOM_PAGE:
@@ -1459,6 +1447,64 @@ void EDA_DRAW_FRAME::SetNextZoom()
 void EDA_DRAW_FRAME::SetPrevZoom()
 {
     GetScreen()->SetPreviousZoom();
+}
+
+
+void EDA_DRAW_FRAME::SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer )
+{
+    double zoom = GetGalCanvas()->GetLegacyZoom();
+    zoom *= 1.3;
+
+    // Now look for the next closest menu step
+    std::vector<double>& zoomList = GetScreen()->m_ZoomList;
+    int idx;
+
+    for( idx = 0; idx < (int)zoomList.size(); ++idx )
+    {
+        if( zoomList[idx] > zoom )
+            break;
+    }
+
+    if( idx >= (int)zoomList.size() )
+        return;
+
+    VECTOR2D cpos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint center( (int)cpos.x, (int)cpos.y );
+
+    if( m_zoomSelectBox )
+        m_zoomSelectBox->SetSelection( idx );
+
+    if( GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] ) )
+        RedrawScreen( aCenterPoint, true );
+}
+
+
+void EDA_DRAW_FRAME::SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer )
+{
+    double zoom = GetGalCanvas()->GetLegacyZoom();
+    zoom /= 1.3;
+
+    // Now look for the next closest menu step
+    std::vector<double>& zoomList = GetScreen()->m_ZoomList;
+    int idx;
+
+    for( idx = zoomList.size() - 1; idx >= 0; --idx )
+    {
+        if( zoomList[idx] < zoom )
+            break;
+    }
+
+    if( idx < 0 )
+        return;
+
+    VECTOR2D cpos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
+    wxPoint center( (int)cpos.x, (int)cpos.y );
+
+    if( m_zoomSelectBox )
+        m_zoomSelectBox->SetSelection( idx );
+
+    if( GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] ) )
+        RedrawScreen( aCenterPoint, aWarpPointer );
 }
 
 

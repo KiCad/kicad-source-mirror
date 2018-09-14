@@ -72,7 +72,6 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
     bool                m_snapToGrid;         ///< Indicates if cursor should be snapped to grid.
-    bool                m_galCanvasActive;    ///< whether to use new GAL engine
 
     EDA_DRAW_PANEL_GAL* m_galCanvas;
 
@@ -80,6 +79,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
     KIGFX::GAL_DISPLAY_OPTIONS  m_galDisplayOptions;
 
 protected:
+    bool m_galCanvasActive;    ///< whether to use new GAL engine
     bool m_useSingleCanvasPane;
 
     wxSocketServer*                          m_socketServer;
@@ -649,10 +649,26 @@ public:
     void SetNextZoom();
 
     /**
+     * changes the zoom to the next one available redraws the screen
+     * and warp the mouse pointer on request.
+     * @param aCenterPoint is the reference point for zooming
+     * @param aWarpPointer = true to move the pointer to the aCenterPoint
+     */
+    void SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
+
+    /**
      * Function SetPrevZoom()
      * changes the zoom to the previous one available.
      */
     void SetPrevZoom();
+
+    /**
+     * changes the zoom to the previous one available redraws the screen
+     * and warp the mouse pointer on request.
+     * @param aCenterPoint is the reference point for zooming
+     * @param aWarpPointer = true to move the pointer to the aCenterPoint
+     */
+    void SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
      * Function SetPresetZoom()

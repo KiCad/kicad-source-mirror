@@ -40,10 +40,9 @@
 
 using namespace std::placeholders;
 
-
 // Events used by EDA_DRAW_PANEL
 // GAL TODO: some (most?) of these need to be implemented...
-BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledWindow )
+BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledCanvas )
 //    EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
 //    EVT_ENTER_WINDOW( EDA_DRAW_PANEL::OnMouseEntering )
 //    EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
@@ -381,17 +380,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     if( event.MiddleIsDown() )
     {
-/* Not used in GAL canvas
-        wxPoint currentPosition = event.GetPosition();
-
-        double scale = GetParent()->GetScreen()->GetScalingFactor();
-        int x = m_PanStartCenter.x +
-                KiROUND( (double) ( m_PanStartEventPosition.x - currentPosition.x ) / scale );
-        int y = m_PanStartCenter.y +
-                KiROUND( (double) ( m_PanStartEventPosition.y - currentPosition.y ) / scale );
-
-        GetParent()->RedrawScreen( wxPoint( x, y ), false );
-*/
+        // already managed by EDA_DRAW_PANEL_GAL mouse event handler.
         return;
     }
 
