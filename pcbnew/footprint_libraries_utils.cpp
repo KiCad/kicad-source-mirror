@@ -53,6 +53,7 @@
 #include <wildcards_and_files_ext.h>
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
+#include <env_paths.h>
 
 
 // unique, "file local" translations:
@@ -500,15 +501,21 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 
         pi->FootprintLibCreate( libPath );
 
+        // try to use path normalized to an environmental variable or project path
+        wxString path = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &Prj() );
+
+        if( path.IsEmpty() )
+            path = libPath;
+
         if( saveInGlobalTable )
         {
-            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), libPath, wxT( "KiCad" ), wxEmptyString );
+            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), path, wxT( "KiCad" ), wxEmptyString );
             GFootprintTable.InsertRow( row );
             GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
         }
         else if( saveInProjectTable )
         {
-            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), libPath, wxT( "KiCad" ), wxEmptyString );
+            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), path, wxT( "KiCad" ), wxEmptyString );
             Prj().PcbFootprintLibs()->InsertRow( row );
             Prj().PcbFootprintLibs()->Save( Prj().FootprintLibTblName() );
         }

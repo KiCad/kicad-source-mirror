@@ -27,7 +27,8 @@
 #include <class_library.h>
 #include <lib_edit_frame.h>
 #include <confirm.h>
-
+#include <env_paths.h>
+#include <pgm_base.h>
 #include <kiway.h>
 #include <profile.h>
 #include <symbol_lib_table.h>
@@ -622,7 +623,13 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
     wxString libName = getLibraryName( aFilePath );
     wxCHECK( !LibraryExists( libName ), false );  // either create or add an existing one
 
-    SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, aFilePath,
+    // try to use path normalized to an environmental variable or project path
+    wxString relPath = NormalizePath( aFilePath, &Pgm().GetLocalEnvVariables(), &m_frame.Prj() );
+
+    if( relPath.IsEmpty() )
+        relPath = aFilePath;
+
+    SYMBOL_LIB_TABLE_ROW* libRow = new SYMBOL_LIB_TABLE_ROW( libName, relPath,
             SCH_IO_MGR::ShowType( SCH_IO_MGR::SCH_LEGACY ) );
     aTable->InsertRow( libRow );
 
