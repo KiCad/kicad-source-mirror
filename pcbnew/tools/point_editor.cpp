@@ -688,9 +688,18 @@ void POINT_EDITOR::updatePoints()
         case S_POLYGON:
         {
             const auto& points = segment->BuildPolyPointsList();
-            for( unsigned i = 0; i < points.size(); i++ )
+
+            if( m_editPoints->PointsSize() != (unsigned) points.size() )
             {
-                m_editPoints->Point( i ).SetPosition( points[i] );
+                getView()->Remove( m_editPoints.get() );
+                m_editedPoint = nullptr;
+                m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
+                getView()->Add( m_editPoints.get() );
+            }
+            else
+            {
+                for( unsigned i = 0; i < points.size(); i++ )
+                    m_editPoints->Point( i ).SetPosition( points[i] );
             }
             break;
         }
@@ -861,7 +870,8 @@ bool POINT_EDITOR::canAddCorner( const EDA_ITEM& aItem )
     // Works only for zones and line segments
     return type == PCB_ZONE_AREA_T ||
            ( ( type == PCB_LINE_T || type == PCB_MODULE_EDGE_T ) &&
-               static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_SEGMENT );
+             ( static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_SEGMENT  ||
+               static_cast<const DRAWSEGMENT&>( aItem ).GetShape() == S_POLYGON ) );
 }
 
 
@@ -941,17 +951,23 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
     BOARD_COMMIT commit( frame );
 
-    if( item->Type() == PCB_ZONE_AREA_T )
+    bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
+
+    if( item->Type() == PCB_ZONE_AREA_T ||
+            ( moduleEdge && static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) )
     {
-        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-        SHAPE_POLY_SET* zoneOutline = zone->Outline();
-
-        commit.Modify( zone );
-
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
         unsigned int nearestDist = INT_MAX;
         unsigned int firstPointInContour = 0;
+        SHAPE_POLY_SET* zoneOutline;
+
+        if( moduleEdge )
+            zoneOutline = &( static_cast<DRAWSEGMENT*>( item )->GetPolyShape() );
+        else
+            zoneOutline = static_cast<ZONE_CONTAINER*>( item )->Outline();
+
+        commit.Modify( item );
 
         // Search the best outline segment to add a new corner
         // and therefore break this segment into two segments
@@ -998,15 +1014,18 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
         // Add corner between nearestIdx and nextNearestIdx:
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
-        zone->Hatch();
+
+        // In board editor, we re-hatch the zone item
+        if( !moduleEdge )
+            static_cast<ZONE_CONTAINER*>( item )->Hatch();
+
 
         commit.Push( _( "Add a zone corner" ) );
     }
 
-    else if( item->Type() == PCB_LINE_T || item->Type() == PCB_MODULE_EDGE_T )
+    else if( item->Type() == PCB_LINE_T ||
+            ( moduleEdge && static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT ) )
     {
-        bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
-
         DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
 
         if( segment->GetShape() == S_SEGMENT )
