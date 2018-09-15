@@ -78,9 +78,7 @@ void PROJECT::SetProjectFullName( const wxString& aFullPathAndName )
 
         m_project_name = aFullPathAndName;
 
-        // There's no guarantee that this path is absolute.  For instance, a relative
-        // path might have been passed via the command line.
-        // wxASSERT( m_project_name.IsAbsolute() );
+        wxASSERT( m_project_name.IsAbsolute() );
 
         wxASSERT( m_project_name.GetExt() == ProjectFileExtension );
 

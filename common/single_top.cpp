@@ -365,11 +365,11 @@ bool PGM_SINGLE_TOP::OnPgmInit()
             argSet.push_back( App().argv[i] );
         }
 
-        // special attention to the first argument: argv[1] (==argSet[0])
-        wxFileName argv1( argSet[0] );
-
-        if( argc - args_offset > 1 )
+        // special attention to a single argument: argv[1] (==argSet[0])
+        if( argc == args_offset + 1 )
         {
+            wxFileName argv1( argSet[0] );
+
 #if defined(PGM_DATA_FILE_EXT)
             // PGM_DATA_FILE_EXT, if present, may be different for each compile,
             // it may come from CMake on the compiler command line, but often does not.
