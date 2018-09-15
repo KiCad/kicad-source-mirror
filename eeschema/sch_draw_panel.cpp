@@ -50,9 +50,9 @@ BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledCanvas )
 //    EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
 #endif
 //    EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
-    EVT_CHAR( SCH_DRAW_PANEL::OnKeyEvent )
-    EVT_CHAR_HOOK( SCH_DRAW_PANEL::OnCharHook )
-    EVT_PAINT( SCH_DRAW_PANEL::onPaint )
+      EVT_CHAR( SCH_DRAW_PANEL::OnKeyEvent )
+      EVT_CHAR_HOOK( SCH_DRAW_PANEL::OnCharHook )
+      EVT_PAINT( SCH_DRAW_PANEL::onPaint )
 //    EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
 //    EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
 //    EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
@@ -674,6 +674,11 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
 void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
+    if( !m_gal->IsInitialized() )
+        // The first wxPaintEvent can be fired at startup before the GAL engine is fully initialized
+        // (depending on platforms). Do nothing in this case
+        return;
+
     if( m_painter )
         static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
 
