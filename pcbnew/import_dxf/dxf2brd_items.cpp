@@ -297,16 +297,20 @@ void DXF2BRD_CONVERTER::addArc( const DL_ArcData& aData )
     // Init arc start point
     double  arcStartx   = aData.radius;
     double  arcStarty   = 0;
-    double  startangle = aData.angle1;
-    double  endangle = aData.angle2;
 
-    RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( startangle ) );
+    // aData.anglex is in degrees. Our internal units are 0.1 degree
+    // so convert DXF angles to our units
+    #define DXF2ANGLEUI 10
+    double  startangle = aData.angle1 * DXF2ANGLEUI;
+    double  endangle = aData.angle2 * DXF2ANGLEUI;
+
+    RotatePoint( &arcStartx, &arcStarty, -startangle );
     wxPoint arcStart( mapX( arcStartx + aData.cx ),
                       mapY( arcStarty + aData.cy ) );
     segm->SetArcStart( arcStart );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
-    double angle = -RAD2DECIDEG( endangle - startangle );
+    double angle = -( endangle - startangle );
 
     if( angle > 0.0 )
         angle -= 3600.0;
