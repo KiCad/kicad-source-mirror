@@ -201,9 +201,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
     wxString    fullFileName( aFileSet[0] );
 
-    // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-    wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
-
     if( !LockFile( fullFileName ) )
     {
         wxString msg = wxString::Format( _( "Schematic file \"%s\" is already open." ),
