@@ -154,9 +154,9 @@ SEARCH_STACK* PROJECT::SchSearchS()
 
 PART_LIBS* PROJECT::SchLibs()
 {
-    PART_LIBS* libs = (PART_LIBS*)  GetElem( PROJECT::ELEM_SCH_PART_LIBS );
+    PART_LIBS* libs = (PART_LIBS*) GetElem( PROJECT::ELEM_SCH_PART_LIBS );
 
-    wxASSERT( !libs || dynamic_cast<PART_LIBS*>( libs ) );
+    wxASSERT( !libs || libs->Type() == PART_LIBS_T );
 
     if( !libs )
     {

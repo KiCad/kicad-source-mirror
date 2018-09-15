@@ -172,7 +172,7 @@ FP_LIB_TABLE* PROJECT::PcbFootprintLibs()
     FP_LIB_TABLE*   tbl = (FP_LIB_TABLE*) GetElem( ELEM_FPTBL );
 
     // its gotta be NULL or a FP_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || dynamic_cast<FP_LIB_TABLE*>( tbl ) );
+    wxASSERT( !tbl || tbl->Type() == FP_LIB_TABLE_T );
 
     if( !tbl )
     {

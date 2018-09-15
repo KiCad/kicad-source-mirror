@@ -107,6 +107,8 @@ class SYMBOL_LIB_TABLE : public LIB_TABLE
     static int m_modifyHash;     ///< helper for GetModifyHash()
 
 public:
+    KICAD_T Type() override { return SYMBOL_LIB_TABLE_T; }
+
     static const char* PropPowerSymsOnly;
     static const char* PropNonPowerSymsOnly;
 

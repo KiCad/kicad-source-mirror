@@ -189,8 +189,9 @@ typedef boost::ptr_vector< PART_LIB >                   PART_LIBS_BASE;
 class PART_LIBS : public PART_LIBS_BASE, public PROJECT::_ELEM
 {
 public:
+    KICAD_T Type() override { return PART_LIBS_T; }
 
-    static int s_modify_generation;     ///< helper for GetModifyHash()
+    static int s_modify_generation;         ///< helper for GetModifyHash()
 
     PART_LIBS()
     {

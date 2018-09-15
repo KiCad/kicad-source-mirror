@@ -30,6 +30,7 @@
 #include <vector>
 #include <wx/string.h>
 #include <wx/filename.h>
+#include <core/typeinfo.h>
 
 /// A variable name whose value holds the current project directory.
 /// Currently an environment variable, eventually a project variable.
@@ -67,6 +68,8 @@ public:
     {
     public:
         virtual ~_ELEM() {}
+
+        virtual KICAD_T Type() = 0;     // Sanity-checking for returned values.
     };
 
     PROJECT();

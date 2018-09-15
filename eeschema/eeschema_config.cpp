@@ -641,7 +641,7 @@ SYMBOL_LIB_TABLE* PROJECT::SchSymbolLibTable()
     SYMBOL_LIB_TABLE* tbl = (SYMBOL_LIB_TABLE*) GetElem( ELEM_SYMBOL_LIB_TABLE );
 
     // its gotta be NULL or a SYMBOL_LIB_TABLE, or a bug.
-    wxASSERT( !tbl || dynamic_cast<SYMBOL_LIB_TABLE*>( tbl ) );
+    wxASSERT( !tbl || tbl->Type() == SYMBOL_LIB_TABLE_T );
 
     if( !tbl )
     {

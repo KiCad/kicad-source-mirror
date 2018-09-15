@@ -169,6 +169,15 @@ enum KICAD_T
      */
     TYPE_PL_EDITOR_LAYOUT,
 
+    /*
+     * FOR PROJECT::_ELEMs
+     */
+    SYMBOL_LIB_TABLE_T,
+    FP_LIB_TABLE_T,
+    PART_LIBS_T,
+    SEARCH_STACK_T,
+    CACHE_WRAPPER_T,
+
     // End value
     MAX_STRUCT_TYPE_ID
 };

@@ -30,6 +30,8 @@
 class CACHE_WRAPPER : public S3D_CACHE, public PROJECT::_ELEM
 {
 public:
+    KICAD_T Type() override { return CACHE_WRAPPER_T; }
+
     CACHE_WRAPPER();
     virtual ~CACHE_WRAPPER();
 };
