@@ -619,6 +619,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     wxString msg;
     m_errorCount = 0;
     m_warningCount = 0;
+    MODULE* lastPreexistingFootprint = m_board->m_Modules.GetLast();
 
     cacheCopperZoneConnections();
 
@@ -627,10 +628,10 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_board->SetStatus( 0 );
     }
 
-    for( int i = 0; i < (int) aNetlist.GetCount();  i++ )
+    for( unsigned i = 0; i < aNetlist.GetCount(); i++ )
     {
         COMPONENT* component = aNetlist.GetComponent( i );
-        MODULE* footprint = NULL;
+        int        matchCount = 0;
 
         msg.Printf( _( "Processing component \"%s:%s:%s\"." ),
                     component->GetReference(),
@@ -638,25 +639,57 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        if( aNetlist.IsFindByTimeStamp() )
-            footprint = m_board->FindModule( component->GetTimeStamp(), true );
-        else
-            footprint = m_board->FindModule( component->GetReference() );
+        for( MODULE* footprint = m_board->m_Modules; footprint; footprint = footprint->Next() )
+        {
+            bool     match;
+            MODULE*  tmp;
 
-        if( footprint )        // An existing footprint.
-        {
-            if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
-                footprint = replaceComponent( aNetlist, footprint, component );
-        }
-        else
-        {
-            footprint = addNewComponent( component );
+            if( aNetlist.IsFindByTimeStamp() )
+                match = footprint->GetPath() == component->GetTimeStamp();
+            else
+                match = footprint->GetReference().CmpNoCase( component->GetReference() );
+
+            if( match )
+            {
+                tmp = footprint;
+
+                if( m_replaceFootprints && component->GetFPID() != footprint->GetFPID() )
+                    tmp = replaceComponent( aNetlist, footprint, component );
+
+                if( tmp )
+                {
+                    updateComponentParameters( tmp, component );
+                    updateComponentPadConnections( tmp, component );
+                }
+
+                matchCount++;
+            }
+
+            if( footprint == lastPreexistingFootprint )
+            {
+                if( matchCount == 0 )
+                {
+                    tmp = addNewComponent( component );
+
+                    if( tmp )
+                    {
+                        updateComponentParameters( tmp, component );
+                        updateComponentPadConnections( tmp, component );
+                    }
+
+                    matchCount++;
+                }
+
+                // No sense going through the newly-created footprints
+                break;
+            }
         }
 
-        if( footprint )
+        if( matchCount > 1 )
         {
-            updateComponentParameters( footprint, component );
-            updateComponentPadConnections( footprint, component );
+            msg.Printf( _( "Multiple footprints found for \"%s\"." ),
+                        component->GetReference() );
+            m_reporter->Report( msg, REPORTER::RPT_ERROR );
         }
     }
 
@@ -687,14 +720,10 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         m_reporter->ReportTail( _( "Errors occurred during the netlist update. Unless you fix them "
                                    "your board will not be consistent with the schematics." ),
                                 REPORTER::RPT_ERROR );
-
         return false;
     }
-    else
-    {
-        m_reporter->ReportTail( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
-    }
 
+    m_reporter->ReportTail( _( "Netlist update successful!" ), REPORTER::RPT_ACTION );
     return true;
 }
 
