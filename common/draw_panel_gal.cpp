@@ -175,10 +175,10 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         m_gal->BeginDrawing();
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetCursorColor( settings->GetLayerColor( LAYER_CURSOR ) );
-        m_gal->ClearScreen( );
 
         if( m_view->IsDirty() )
         {
+            m_gal->ClearScreen();
             m_view->ClearTargets();
 
             // Grid has to be redrawn only when the NONCACHED target is redrawn
