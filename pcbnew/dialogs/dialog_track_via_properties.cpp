@@ -203,7 +203,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_vias )
     {
-        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
+        m_DesignRuleViasUnit->SetLabel( GetAbbreviatedUnitsLabel( m_units, true ) );
 
         int viaSelection = wxNOT_FOUND;
 
@@ -251,7 +251,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
 
     if( m_tracks )
     {
-        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units ) );
+        m_DesignRuleWidthsUnits->SetLabel( GetAbbreviatedUnitsLabel( m_units, true ) );
 
         int widthSelection = wxNOT_FOUND;
 
