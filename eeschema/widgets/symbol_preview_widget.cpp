@@ -29,7 +29,8 @@
 #include <pgm_base.h>
 #include <sch_painter.h>
 
-SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway ) :
+SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
+                                              EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
     m_kiway( aKiway ),
     m_preview( nullptr ),
@@ -40,8 +41,15 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway )
     wxConfigBase* eeschemaConfig = GetNewConfig( wxString::FromUTF8( "eeschema" ) );
     m_galDisplayOptions.ReadConfig( eeschemaConfig, GAL_DISPLAY_OPTIONS_KEY );
 
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
+
+    // Allows only a CAIRO or OPENGL canvas:
+    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL &&
+        canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+
     m_preview = new SCH_PREVIEW_PANEL( aParent, wxID_ANY, wxDefaultPosition, wxSize( -1, -1 ),
-                                       m_galDisplayOptions, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
+                                       m_galDisplayOptions, canvasType );
     m_preview->SetStealsFocus( false );
 
     SetBackgroundColour( *wxWHITE );
@@ -117,15 +125,20 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         view->Add( alias );
         m_previewItem = alias;
 
-        // Zoom to fit
+        // Calculate the draw scale to fit the drawing area
+
+        // First, get the symbole size, in internal units
         BOX2I     bBox = alias->GetPart()->GetUnitBoundingBox( aUnit, 0 );
-        VECTOR2D  clientSize = m_preview->GetClientSize();
+        // Now calculate the drawing area size, in internal units, for a scaling factor = 1.0
+        view->SetScale( 1.0 );
+        VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
         double    scale = std::min( fabs( clientSize.x / bBox.GetWidth() ),
                                     fabs( clientSize.y / bBox.GetHeight() ) );
 
         // Above calculation will yield an exact fit; add a bit of whitespace around symbol
         scale /= 1.2;
 
+        // Now fix the best scale
         view->SetScale( scale );
         view->SetCenter( bBox.Centre() );
     }
@@ -157,15 +170,19 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
         view->Add( aPart );
         m_previewItem = aPart;
 
-        // Zoom to fit
+        // Calculate the draw scale to fit the drawing area
+
+        // First, get the symbole size, in internal units
         BOX2I     bBox = aPart->GetUnitBoundingBox( aUnit, 0 );
-        VECTOR2D  clientSize = m_preview->GetClientSize();
+        // Now calculate the drawing area size, in internal units, for a scaling factor = 1.0
+        view->SetScale( 1.0 );
+        VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
         double    scale = std::min( fabs( clientSize.x / bBox.GetWidth() ),
                                     fabs( clientSize.y / bBox.GetHeight() ) );
-
         // Above calculation will yield an exact fit; add a bit of whitespace around symbol
         scale /= 1.2;
 
+        // Now fix the best scale
         view->SetScale( scale );
         view->SetCenter( bBox.Centre() );
     }

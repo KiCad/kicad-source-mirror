@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -53,16 +53,12 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	bSizerLeftPreview->Add( m_previewOldLabel, 0, 0, 5 );
 	
 	m_previewOldPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerOldPanel;
-	bSizerOldPanel = new wxBoxSizer( wxVERTICAL );
-	
-	m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel, Kiway() );
-	bSizerOldPanel->Add( m_previewOldWidget, 1, wxEXPAND, 5 );
+	m_SizerOldPanel = new wxBoxSizer( wxVERTICAL );
 	
 	
-	m_previewOldPanel->SetSizer( bSizerOldPanel );
+	m_previewOldPanel->SetSizer( m_SizerOldPanel );
 	m_previewOldPanel->Layout();
-	bSizerOldPanel->Fit( m_previewOldPanel );
+	m_SizerOldPanel->Fit( m_previewOldPanel );
 	bSizerLeftPreview->Add( m_previewOldPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	
@@ -78,16 +74,12 @@ DIALOG_RESCUE_EACH_BASE::DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID i
 	bSizerRightPreview->Add( m_previewNewLabel, 0, 0, 5 );
 	
 	m_previewNewPanel = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	wxBoxSizer* bSizerNewPanel;
-	bSizerNewPanel = new wxBoxSizer( wxVERTICAL );
-	
-	m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel, Kiway() );
-	bSizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND, 5 );
+	m_SizerNewPanel = new wxBoxSizer( wxVERTICAL );
 	
 	
-	m_previewNewPanel->SetSizer( bSizerNewPanel );
+	m_previewNewPanel->SetSizer( m_SizerNewPanel );
 	m_previewNewPanel->Layout();
-	bSizerNewPanel->Fit( m_previewNewPanel );
+	m_SizerNewPanel->Fit( m_previewNewPanel );
 	bSizerRightPreview->Add( m_previewNewPanel, 1, wxEXPAND | wxALL, 5 );
 	
 	

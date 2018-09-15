@@ -655,29 +655,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     Save();
     currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
 
-    if( isStrokeEnabled )
-    {
-        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        double alpha;
-
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
-        {
-            VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
-            DrawLine( p, p_next );
-
-            p = p_next;
-        }
-
-        // Draw the last missing part
-        if( alpha != aEndAngle )
-        {
-            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
-            DrawLine( p, p_last );
-        }
-    }
-
     if( isFillEnabled )
     {
         double alpha;
@@ -701,6 +678,29 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         currentManager->Vertex( 0.0, 0.0, 0.0 );
         currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
         currentManager->Vertex( endPoint.x,    endPoint.y,     0.0 );
+    }
+
+    if( isStrokeEnabled )
+    {
+        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
+        double alpha;
+
+        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
+        {
+            VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
+            DrawLine( p, p_next );
+
+            p = p_next;
+        }
+
+        // Draw the last missing part
+        if( alpha != aEndAngle )
+        {
+            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
+            DrawLine( p, p_last );
+        }
     }
 
     Restore();

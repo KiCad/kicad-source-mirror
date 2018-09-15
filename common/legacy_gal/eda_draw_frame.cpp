@@ -1468,14 +1468,11 @@ void EDA_DRAW_FRAME::SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWa
     if( idx >= (int)zoomList.size() )
         return;
 
-    VECTOR2D cpos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
-    wxPoint center( (int)cpos.x, (int)cpos.y );
-
     if( m_zoomSelectBox )
         m_zoomSelectBox->SetSelection( idx );
 
     if( GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] ) )
-        RedrawScreen( aCenterPoint, true );
+        RedrawScreen( aCenterPoint, aWarpPointer );
 }
 
 
@@ -1496,9 +1493,6 @@ void EDA_DRAW_FRAME::SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool
 
     if( idx < 0 )
         return;
-
-    VECTOR2D cpos = GetGalCanvas()->GetViewControls()->GetCursorPosition();
-    wxPoint center( (int)cpos.x, (int)cpos.y );
 
     if( m_zoomSelectBox )
         m_zoomSelectBox->SetSelection( idx );

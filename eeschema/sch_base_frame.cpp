@@ -496,7 +496,7 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
 void SCH_BASE_FRAME::HardRedraw()
 {
-    GetCanvas()->DisplaySheet( GetScreen() );
+    // Currently: just refresh the screen
     GetCanvas()->Refresh();
 }
 
@@ -598,15 +598,15 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
 
 void SCH_BASE_FRAME::createCanvas()
 {
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+    m_canvasType = LoadCanvasTypeSetting();
 
     // Allows only a CAIRO or OPENGL canvas:
-    if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL &&
-        canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL &&
+        m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
 
     m_canvas = new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
-                                   GetGalDisplayOptions(), canvasType );
+                                   GetGalDisplayOptions(), m_canvasType );
 
     m_useSingleCanvasPane = true;
 

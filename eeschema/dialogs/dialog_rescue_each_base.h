@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,11 @@
 #include <wx/string.h>
 #include <wx/stattext.h>
 #include <wx/dataview.h>
-#include <symbol_preview_widget.h>
 #include <wx/sizer.h>
 #include <wx/panel.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -44,10 +46,10 @@ class DIALOG_RESCUE_EACH_BASE : public DIALOG_SHIM
 		wxDataViewListCtrl* m_ListOfInstances;
 		wxStaticText* m_previewOldLabel;
 		wxPanel* m_previewOldPanel;
-		SYMBOL_PREVIEW_WIDGET* m_previewOldWidget; 
+		wxBoxSizer* m_SizerOldPanel;
 		wxStaticText* m_previewNewLabel;
 		wxPanel* m_previewNewPanel;
-		SYMBOL_PREVIEW_WIDGET* m_previewNewWidget; 
+		wxBoxSizer* m_SizerNewPanel;
 		wxButton* m_btnNeverShowAgain;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;

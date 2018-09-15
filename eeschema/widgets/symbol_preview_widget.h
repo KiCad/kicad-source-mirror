@@ -23,13 +23,13 @@
 #include <wx/panel.h>
 #include <kiway.h>
 #include <gal/gal_display_options.h>
+#include <class_draw_panel_gal.h>
 
 
 class EDA_ITEM;
 class LIB_ID;
 class LIB_ALIAS;
 class LIB_PART;
-class EDA_DRAW_PANEL_GAL;
 class wxStaticText;
 class wxSizer;
 
@@ -43,8 +43,10 @@ public:
      *
      * @param aParent - parent window
      * @param aKiway - an active Kiway instance
+     * @param aCanvasType = the type of canvas (GAL_TYPE_OPENGL or GAL_TYPE_CAIRO only)
      */
-    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway );
+    SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
+                           EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
     ~SYMBOL_PREVIEW_WIDGET() override;
 

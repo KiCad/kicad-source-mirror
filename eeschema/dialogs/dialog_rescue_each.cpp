@@ -52,6 +52,8 @@ public:
 
 private:
     SCH_EDIT_FRAME* m_Parent;
+    SYMBOL_PREVIEW_WIDGET* m_previewNewWidget;
+    SYMBOL_PREVIEW_WIDGET* m_previewOldWidget;
     wxConfigBase*   m_Config;
     RESCUER*        m_Rescuer;
     bool            m_AskShowAgain;
@@ -63,6 +65,10 @@ private:
     void OnConflictSelect( wxDataViewEvent& aEvent ) override;
     void OnNeverShowClick( wxCommandEvent& aEvent ) override;
     void OnCancelClick( wxCommandEvent& aEvent ) override;
+
+    // Display the 2 items (old in cache and new in library) corresponding to the
+    // selected conflict in m_ListOfConflicts
+    void displayItemsInConflict();
 };
 
 
@@ -73,6 +79,12 @@ DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescu
       m_Rescuer( &aRescuer ),
       m_AskShowAgain( aAskShowAgain )
 {
+    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel,  Kiway(), m_Parent->GetGalCanvas()->GetBackend() );
+	m_SizerOldPanel->Add( m_previewOldWidget, 1, wxEXPAND | wxALL, 5 );
+
+    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  Kiway(), m_Parent->GetGalCanvas()->GetBackend() );
+	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
+
     m_Config = Kiface().KifaceSettings();
     m_stdButtonsOK->SetDefault();
 
@@ -172,6 +184,8 @@ void DIALOG_RESCUE_EACH::PopulateConflictList()
     {
         // Select the first choice
         m_ListOfConflicts->SelectRow( 0 );
+        // Ensure this choice is displayed:
+        displayItemsInConflict();
     }
 }
 
@@ -209,16 +223,8 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
 }
 
 
-void DIALOG_RESCUE_EACH::OnConflictSelect( wxDataViewEvent& aEvent )
+void DIALOG_RESCUE_EACH::displayItemsInConflict()
 {
-    // wxformbuilder connects this event to the _dialog_, not the data view.
-    // Make sure the correct item triggered it, otherwise we trigger recursively
-    // and get a stack overflow.
-    if( aEvent.GetEventObject() != m_ListOfConflicts )
-        return;
-
-    PopulateInstanceList();
-
     int row = m_ListOfConflicts->GetSelectedRow();
 
     if( row < 0 )
@@ -232,6 +238,19 @@ void DIALOG_RESCUE_EACH::OnConflictSelect( wxDataViewEvent& aEvent )
         m_previewOldWidget->DisplayPart( selected_part.GetCacheCandidate(), 0 );
         m_previewNewWidget->DisplayPart( selected_part.GetLibCandidate(), 0 );
     }
+}
+
+
+void DIALOG_RESCUE_EACH::OnConflictSelect( wxDataViewEvent& aEvent )
+{
+    // wxformbuilder connects this event to the _dialog_, not the data view.
+    // Make sure the correct item triggered it, otherwise we trigger recursively
+    // and get a stack overflow.
+    if( aEvent.GetEventObject() != m_ListOfConflicts )
+        return;
+
+    PopulateInstanceList();
+    displayItemsInConflict();
 }
 
 

@@ -207,7 +207,8 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     auto panel = new wxPanel( aParent );
     auto sizer = new wxBoxSizer( wxVERTICAL );
 
-    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, Kiway() );
+    m_symbol_preview = new SYMBOL_PREVIEW_WIDGET( panel, Kiway(),
+                                                  m_parent->GetGalCanvas()->GetBackend() );
     m_symbol_preview->SetLayoutDirection( wxLayout_LeftToRight );
 
     if( m_show_footprints )
