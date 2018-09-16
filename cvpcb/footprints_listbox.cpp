@@ -125,7 +125,7 @@ void FOOTPRINTS_LISTBOX::SetSelectedFootprint( const LIB_ID& aFPID )
                                     GetChars( aFPID.GetLibNickname() ),
                                     GetChars( aFPID.GetLibItemName() ) );
 
-    for( size_t i = 0; i < GetCount(); ++i )
+    for( int i = 0; i < GetCount(); ++i )
     {
         wxString candidate = m_footprintList.Item( i ).substr( 4 );
 

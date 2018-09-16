@@ -835,7 +835,7 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
 
         while( i + range < aList.size()
                && aList[ i + range ].GetRef() == ref
-               && aList[ i + range ].m_NumRef == numRef + range )
+               && aList[ i + range ].m_NumRef == int( numRef + range ) )
         {
             range++;
         }

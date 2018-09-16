@@ -80,7 +80,7 @@ static int getModelTypeIdx( char aPrimitive )
 {
     const char prim = std::toupper( aPrimitive );
 
-    for( int i = 0; i < modelTypes.size(); ++i )
+    for( size_t i = 0; i < modelTypes.size(); ++i )
     {
         if( modelTypes[i].type == prim )
             return i;
@@ -174,9 +174,8 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
             return false;
 
         int modelIdx = m_modelType->GetSelection();
-        wxASSERT( modelIdx < modelTypes.size() );
 
-        if( modelIdx > 0 && modelIdx < modelTypes.size() )
+        if( modelIdx > 0 && modelIdx < (int)modelTypes.size() )
             m_fieldsTmp[SF_PRIMITIVE] = static_cast<char>( modelTypes[modelIdx].type );
 
         m_fieldsTmp[SF_MODEL] = m_modelName->GetValue();
@@ -184,7 +183,6 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
         if( !empty( m_modelLibrary ) )
             m_fieldsTmp[SF_LIB_FILE] = m_modelLibrary->GetValue();
     }
-
 
     // Power source
     else if( page == m_power )
