@@ -145,29 +145,16 @@ wxPoint SCH_TEXT::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
 
-    // add an offset to x ( or y) position to allow a text to
-    // be on a wire or a line and be readable
-    int thick_offset = TXT_MARGIN +
-                       ( GetPenSize() + GetDefaultLineThickness() ) / 2;
+    // add an offset to x (or y) position to aid readability of text on a wire or line
+    int thick_offset = TXT_MARGIN + ( GetPenSize() + GetDefaultLineThickness() ) / 2;
 
     switch( GetLabelSpinStyle() )
     {
     default:
-    case 0: // Horiz Normal Orientation (left justified)
-        text_offset.y = -thick_offset;
-        break;
-
-    case 1: // Vert Orientation UP
-        text_offset.x = -thick_offset;
-        break;
-
-    case 2: // Horiz Orientation - Right justified
-        text_offset.y = -thick_offset;
-        break;
-
-    case 3: //  Vert Orientation BOTTOM
-        text_offset.x = -thick_offset;
-        break;
+    case 0: text_offset.y = -thick_offset; break;  // Horiz Normal Orientation (left justified)
+    case 1: text_offset.x = -thick_offset; break;  // Vert Orientation UP
+    case 2: text_offset.y = -thick_offset; break;  // Horiz Orientation - Right justified
+    case 3: text_offset.x = -thick_offset; break;  // Vert Orientation BOTTOM
     }
 
     return text_offset;
@@ -197,18 +184,11 @@ void SCH_TEXT::MirrorY( int aYaxis_position )
     // Text is NOT really mirrored; it is moved to a suitable horizontal position
     switch( GetLabelSpinStyle() )
     {
-    case 0: // horizontal text
-        SetLabelSpinStyle( 2 );
-        break;
-
-    case 2: // invert horizontal text
-        SetLabelSpinStyle( 0 );
-        break;
-
-    case 1: // Vert Orientation UP
-    case 3: // Vert Orientation BOTTOM
     default:
-        break;
+    case 0: SetLabelSpinStyle( 2 ); break;  // horizontal text
+    case 1:                         break;  // Vert Orientation UP
+    case 2: SetLabelSpinStyle( 0 ); break;  // invert horizontal text
+    case 3:                         break;  // Vert Orientation BOTTOM
     }
 
     SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
@@ -220,18 +200,11 @@ void SCH_TEXT::MirrorX( int aXaxis_position )
     // Text is NOT really mirrored; it is moved to a suitable vertical position
     switch( GetLabelSpinStyle() )
     {
-    case 1: // Vert Orientation UP
-        SetLabelSpinStyle( 3 );
-        break;
-
-    case 3: // Vert Orientation BOTTOM
-        SetLabelSpinStyle( 1 );
-        break;
-
-    case 0: // horizontal text
-    case 2: // invert horizontal text
     default:
-        break;
+    case 0:                         break;  // horizontal text
+    case 1: SetLabelSpinStyle( 3 ); break;  // Vert Orientation UP
+    case 2:                         break;  // invert horizontal text
+    case 3: SetLabelSpinStyle( 1 ); break;  // Vert Orientation BOTTOM
     }
 
     SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
@@ -248,30 +221,19 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 
     SetLabelSpinStyle( (GetLabelSpinStyle() + 1) % 4 );
 
-    switch( GetLabelSpinStyle() )
+    if( this->Type() == SCH_TEXT_T )
     {
-    case 0:     // horizontal text
-        dy = GetTextHeight();
-        break;
+        switch( GetLabelSpinStyle() )
+        {
+        case 0:  dy = GetTextHeight(); break;     // horizontal text
+        case 1:  dy = 0;               break;     // Vert Orientation UP
+        case 2:  dy = GetTextHeight(); break;     // invert horizontal text
+        case 3:  dy = 0;               break;     // Vert Orientation BOTTOM
+        default: dy = 0;               break;
+        }
 
-    case 1:     // Vert Orientation UP
-        dy = 0;
-        break;
-
-    case 2:     // invert horizontal text
-        dy = GetTextHeight();
-        break;
-
-    case 3:     // Vert Orientation BOTTOM
-        dy = 0;
-        break;
-
-    default:
-        dy = 0;
-        break;
+        SetTextY( GetTextPos().y + dy );
     }
-
-    SetTextY( GetTextPos().y + dy );
 }
 
 
@@ -477,7 +439,7 @@ const EDA_RECT SCH_TEXT::GetBoundingBox() const
 
     EDA_RECT rect = GetTextBox( -1, linewidth );
 
-    if( GetTextAngle() )      // Rotate rect
+    if( GetTextAngle() != 0 )      // Rotate rect
     {
         wxPoint pos = rect.GetOrigin();
         wxPoint end = rect.GetEnd();
@@ -569,7 +531,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
         wxStringSplit( GetShownText(), strings_list, '\n' );
         positions.reserve( strings_list.Count() );
 
-        GetPositionsOfLinesOfMultilineText(positions, strings_list.Count() );
+        GetPositionsOfLinesOfMultilineText(positions, (int) strings_list.Count() );
 
         for( unsigned ii = 0; ii < strings_list.Count(); ii++ )
         {
@@ -608,53 +570,23 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     switch( Type() )
     {
-    case SCH_TEXT_T:
-        msg = _( "Graphic Text" );
-        break;
-
-    case SCH_LABEL_T:
-        msg = _( "Label" );
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        msg = _( "Global Label" );
-        break;
-
-    case SCH_HIERARCHICAL_LABEL_T:
-        msg = _( "Hierarchical Label" );
-        break;
-
-    case SCH_SHEET_PIN_T:
-        msg = _( "Hierarchical Sheet Pin" );
-        break;
-
-    default:
-        return;
+    case SCH_TEXT_T:               msg = _( "Graphic Text" );           break;
+    case SCH_LABEL_T:              msg = _( "Label" );                  break;
+    case SCH_GLOBAL_LABEL_T:       msg = _( "Global Label" );           break;
+    case SCH_HIERARCHICAL_LABEL_T: msg = _( "Hierarchical Label" );     break;
+    case SCH_SHEET_PIN_T:          msg = _( "Hierarchical Sheet Pin" ); break;
+    default: return;
     }
 
     aList.push_back( MSG_PANEL_ITEM( msg, GetShownText(), DARKCYAN ) );
 
     switch( GetLabelSpinStyle() )
     {
-    case 0:     // horizontal text
-        msg = _( "Horizontal" );
-        break;
-
-    case 1:     // Vert Orientation UP
-        msg = _( "Vertical up" );
-        break;
-
-    case 2:     // invert horizontal text
-        msg = _( "Horizontal invert" );
-        break;
-
-    case 3:     // Vert Orientation Down
-        msg = _( "Vertical down" );
-        break;
-
-    default:
-        msg = wxT( "???" );
-        break;
+    case 0:  msg = _( "Horizontal" );        break;
+    case 1:  msg = _( "Vertical up" );       break;
+    case 2:  msg = _( "Horizontal invert" ); break;
+    case 3:  msg = _( "Vertical down" );     break;
+    default: msg = wxT( "???" );             break;
     }
 
     aList.push_back( MSG_PANEL_ITEM( _( "Orientation" ), msg, BROWN ) );
@@ -729,58 +661,6 @@ EDA_ITEM* SCH_LABEL::Clone() const
 }
 
 
-wxPoint SCH_LABEL::GetSchematicTextOffset() const
-{
-    return SCH_TEXT::GetSchematicTextOffset();
-}
-
-
-void SCH_LABEL::SetLabelSpinStyle( int aOrientation )
-{
-    SCH_TEXT::SetLabelSpinStyle( aOrientation );
-}
-
-
-void SCH_LABEL::MirrorX( int aXaxis_position )
-{
-    // Text is NOT really mirrored; it is moved to a suitable position
-    switch( GetLabelSpinStyle() )
-    {
-    case 1: // Vert Orientation UP
-        SetLabelSpinStyle( 3 );
-        break;
-
-    case 3: // Vert Orientation BOTTOM
-        SetLabelSpinStyle( 1 );
-        break;
-
-    case 0: // horizontal text
-    case 2: // invert horizontal text
-    default:
-        break;
-    }
-
-    SetTextY( ::Mirror( GetTextPos().y, aXaxis_position ) );
-}
-
-
-void SCH_LABEL::Rotate( wxPoint aPosition )
-{
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
-
-    SetLabelSpinStyle( (GetLabelSpinStyle() + 1) % 4 );
-}
-
-
-void SCH_LABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                      GR_DRAWMODE DrawMode, COLOR4D Color )
-{
-    SCH_TEXT::Draw( panel, DC, offset, DrawMode, Color );
-}
-
-
 const EDA_RECT SCH_LABEL::GetBoundingBox() const
 {
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
@@ -833,55 +713,6 @@ EDA_ITEM* SCH_GLOBALLABEL::Clone() const
 }
 
 
-void SCH_GLOBALLABEL::MirrorY( int aYaxis_position )
-{
-    /* The global label is NOT really mirrored.
-     *  for an horizontal label, the schematic orientation is changed.
-     *  for a vertical label, the schematic orientation is not changed.
-     *  and the label is moved to a suitable position
-     */
-    switch( GetLabelSpinStyle() )
-    {
-    case 0:             // horizontal text
-        SetLabelSpinStyle( 2 );
-        break;
-
-    case 2:        // invert horizontal text
-        SetLabelSpinStyle( 0 );
-        break;
-    }
-
-    SetTextX( ::Mirror( GetTextPos().x, aYaxis_position ) );
-}
-
-
-void SCH_GLOBALLABEL::MirrorX( int aXaxis_position )
-{
-    switch( GetLabelSpinStyle() )
-    {
-    case 1:             // vertical text
-        SetLabelSpinStyle( 3 );
-        break;
-
-    case 3:        // invert vertical text
-        SetLabelSpinStyle( 1 );
-        break;
-    }
-
-    SetTextY( ::Mirror( GetTextPos().y, aXaxis_position ) );
-}
-
-
-void SCH_GLOBALLABEL::Rotate( wxPoint aPosition )
-{
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
-
-    SetLabelSpinStyle( (GetLabelSpinStyle() + 3) % 4 );
-}
-
-
 wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
@@ -910,21 +741,11 @@ wxPoint SCH_GLOBALLABEL::GetSchematicTextOffset() const
 
     switch( GetLabelSpinStyle() )
     {
-    case 0:             // Orientation horiz normal
-        text_offset.x -= offset;
-        break;
-
-    case 1:             // Orientation vert UP
-        text_offset.y -= offset;
-        break;
-
-    case 2:             // Orientation horiz inverse
-        text_offset.x += offset;
-        break;
-
-    case 3:             // Orientation vert BOTTOM
-        text_offset.y += offset;
-        break;
+    default:
+    case 0: text_offset.x -= offset; break;    // Orientation horiz normal
+    case 1: text_offset.y -= offset; break;    // Orientation vert UP
+    case 2: text_offset.x += offset; break;    // Orientation horiz inverse
+    case 3: text_offset.y += offset; break;    // Orientation vert BOTTOM
     }
 
     return text_offset;
@@ -1089,31 +910,22 @@ void SCH_GLOBALLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const 
 
     switch( GetLabelSpinStyle() )
     {
-    case 0:             // Orientation horiz normal
-        break;
-
-    case 1:             // Orientation vert UP
-        angle = -900;
-        break;
-
-    case 2:             // Orientation horiz inverse
-        angle = 1800;
-        break;
-
-    case 3:             // Orientation vert BOTTOM
-        angle = 900;
-        break;
+    default:
+    case 0:               break;   // Orientation horiz normal
+    case 1: angle = -900; break;   // Orientation vert UP
+    case 2: angle = 1800; break;   // Orientation horiz inverse
+    case 3: angle = 900;  break;   // Orientation vert BOTTOM
     }
 
     // Rotate outlines and move corners in real position
-    for( unsigned ii = 0; ii < aPoints.size(); ii++ )
+    for( wxPoint& aPoint : aPoints )
     {
-        aPoints[ii].x += x_offset;
+        aPoint.x += x_offset;
 
         if( angle )
-            RotatePoint( &aPoints[ii], angle );
+            RotatePoint( &aPoint, angle );
 
-        aPoints[ii] += Pos;
+        aPoint += Pos;
     }
 
     aPoints.push_back( aPoints[0] ); // closing
@@ -1137,6 +949,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
     switch( GetLabelSpinStyle() )    // respect orientation
     {
+    default:
     case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
@@ -1174,7 +987,7 @@ const EDA_RECT SCH_GLOBALLABEL::GetBoundingBox() const
 
 wxString SCH_GLOBALLABEL::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    return wxString::Format( _( "Global Label %s" ), GetChars( ShortenedShownText() ) );
+    return wxString::Format( _( "Global Label %s" ), ShortenedShownText() );
 }
 
 
@@ -1283,7 +1096,6 @@ void SCH_HIERLABEL::CreateGraphicShape( std::vector <wxPoint>& aPoints, const wx
 {
     int* Template = TemplateShape[m_shape][m_spin_style];
     int  halfSize = GetTextWidth() / 2;
-
     int  imax = *Template; Template++;
 
     aPoints.clear();
@@ -1319,6 +1131,7 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 
     switch( GetLabelSpinStyle() )
     {
+    default:
     case 0:                             // Horiz Normal Orientation (left justified)
         dx = -length;
         dy = height;
@@ -1357,85 +1170,25 @@ const EDA_RECT SCH_HIERLABEL::GetBoundingBox() const
 wxPoint SCH_HIERLABEL::GetSchematicTextOffset() const
 {
     wxPoint text_offset;
-
     int     width = std::max( GetThickness(), GetDefaultLineThickness() );
-
     int     ii = GetTextWidth() + TXT_MARGIN + width;
 
     switch( GetLabelSpinStyle() )
     {
-    case 0:             // Orientation horiz normale
-        text_offset.x = -ii;
-        break;
-
-    case 1:             // Orientation vert UP
-        text_offset.y = -ii;
-        break;
-
-    case 2:             // Orientation horiz inverse
-        text_offset.x = ii;
-        break;
-
-    case 3:             // Orientation vert BOTTOM
-        text_offset.y = ii;
-        break;
+    default:
+    case 0: text_offset.x = -ii; break;  // Orientation horiz normale
+    case 1: text_offset.y = -ii; break;  // Orientation vert UP
+    case 2: text_offset.x =  ii; break;  // Orientation horiz inverse
+    case 3: text_offset.y =  ii; break;  // Orientation vert BOTTOM
     }
 
     return text_offset;
 }
 
 
-void SCH_HIERLABEL::MirrorY( int aYaxis_position )
-{
-    /* The hierarchical label is NOT really mirrored for an horizontal label, the schematic
-     * orientation is changed.  For a vertical label, the schematic orientation is not changed
-     * and the label is moved to a suitable position.
-     */
-    switch( GetLabelSpinStyle() )
-    {
-    case 0:             // horizontal text
-        SetLabelSpinStyle( 2 );
-        break;
-
-    case 2:             // invert horizontal text
-        SetLabelSpinStyle( 0 );
-        break;
-    }
-
-    SetTextX( Mirror( GetTextPos().x, aYaxis_position ) );
-}
-
-
-void SCH_HIERLABEL::MirrorX( int aXaxis_position )
-{
-    switch( GetLabelSpinStyle() )
-    {
-    case 1:             // vertical text
-        SetLabelSpinStyle( 3 );
-        break;
-
-    case 3:        // invert vertical text
-        SetLabelSpinStyle( 1 );
-        break;
-    }
-
-    SetTextY( Mirror( GetTextPos().y, aXaxis_position ) );
-}
-
-
-void SCH_HIERLABEL::Rotate( wxPoint aPosition )
-{
-    wxPoint pt = GetTextPos();
-    RotatePoint( &pt, aPosition, 900 );
-    SetTextPos( pt );
-
-    SetLabelSpinStyle( (GetLabelSpinStyle() + 3) % 4 );
-}
-
-
 wxString SCH_HIERLABEL::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    return wxString::Format( _( "Hierarchical Label %s" ), GetChars( ShortenedShownText() ) );
+    return wxString::Format( _( "Hierarchical Label %s" ), ShortenedShownText() );
 }
 
 
