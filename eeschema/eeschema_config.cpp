@@ -317,26 +317,12 @@ const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
 const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
 const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
 const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
-const wxChar SchIconScaleEntry[] =                  wxT( "SchIconScale" );
-const wxChar LibIconScaleEntry[] =                  wxT( "LibIconScale" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
 static const wxChar DefaultJctSizeEntry[] =         wxT( "DefaultJunctionSize" );
 static const wxChar ShowHiddenPinsEntry[] =         wxT( "ShowHiddenPins" );
 static const wxChar HorzVertLinesOnlyEntry[] =      wxT( "HorizVertLinesOnly" );
-static const wxChar PreviewFramePositionXEntry[] =  wxT( "PreviewFramePositionX" );
-static const wxChar PreviewFramePositionYEntry[] =  wxT( "PreviewFramePositionY" );
-static const wxChar PreviewFrameWidthEntry[] =      wxT( "PreviewFrameWidth" );
-static const wxChar PreviewFrameHeightEntry[] =     wxT( "PreviewFrameHeight" );
-static const wxChar PrintDialogPositionXEntry[] =   wxT( "PrintDialogPositionX" );
-static const wxChar PrintDialogPositionYEntry[] =   wxT( "PrintDialogPositionY" );
-static const wxChar PrintDialogWidthEntry[] =       wxT( "PrintDialogWidth" );
-static const wxChar PrintDialogHeightEntry[] =      wxT( "PrintDialogHeight" );
-static const wxChar FindDialogPositionXEntry[] =    wxT( "FindDialogPositionX" );
-static const wxChar FindDialogPositionYEntry[] =    wxT( "FindDialogPositionY" );
-static const wxChar FindDialogWidthEntry[] =        wxT( "FindDialogWidth" );
-static const wxChar FindDialogHeightEntry[] =       wxT( "FindDialogHeight" );
 static const wxChar FindReplaceFlagsEntry[] =       wxT( "LastFindReplaceFlags" );
 static const wxChar FindStringEntry[] =             wxT( "LastFindString" );
 static const wxChar ReplaceStringEntry[] =          wxT( "LastReplaceString" );
@@ -406,11 +392,12 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    GetGalCanvas()->GetView()->GetGAL()->SetGridColor( GetGridColor() );
     SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
-    SetDefaultBusThickness( aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
-    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
-    SCH_JUNCTION::SetSymbolSize( aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
+    SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
+    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+    SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
     aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
@@ -537,17 +524,17 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
-    SetDefaultLineThickness( aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
-    SetDefaultPinLength( aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
-    m_textPinNumDefaultSize = aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
-    m_textPinNameDefaultSize = aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
-    SetRepeatDeltaLabel( aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
-    SetRepeatPinStep( aCfg->Read( pinRepeatStepEntry, DEFAULT_REPEAT_OFFSET_PIN ) );
+    SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
+    SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
+    m_textPinNumDefaultSize = (int) aCfg->Read( defaultPinNumSizeEntry, DEFAULTPINNUMSIZE );
+    m_textPinNameDefaultSize = (int) aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
+    SetRepeatDeltaLabel( (int) aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
+    SetRepeatPinStep( (int) aCfg->Read( pinRepeatStepEntry, DEFAULT_REPEAT_OFFSET_PIN ) );
     wxPoint step;
-    step.x = aCfg->Read( repeatLibStepXEntry, (long)DEFAULT_REPEAT_OFFSET_X );
-    step.y = aCfg->Read( repeatLibStepYEntry, (long)DEFAULT_REPEAT_OFFSET_Y );
+    step.x = (int) aCfg->Read( repeatLibStepXEntry, (long) DEFAULT_REPEAT_OFFSET_X );
+    step.y = (int) aCfg->Read( repeatLibStepYEntry, (long) DEFAULT_REPEAT_OFFSET_Y );
     SetRepeatStep( step );
-    m_showPinElectricalTypeName = aCfg->Read( showPinElectricalType, true );
+    m_showPinElectricalTypeName = aCfg->ReadBool( showPinElectricalType, true );
 
     wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 

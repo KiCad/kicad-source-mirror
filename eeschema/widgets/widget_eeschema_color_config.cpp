@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <draw_frame.h>
 #include <sch_draw_panel.h>
-
+#include <sch_view.h>
 #include <general.h>
 
 #include "widget_eeschema_color_config.h"
@@ -271,46 +271,36 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
 
 bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 {
-    bool warning = false;
-
     // Check for color conflicts with background color to give user a chance to bail
     // out before making changes.
 
     COLOR4D bgcolor = currentColors[ LAYER_SCHEMATIC_BACKGROUND ];
 
-    for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
+    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
     {
         if( bgcolor == currentColors[ clyr ] && clyr != LAYER_SCHEMATIC_BACKGROUND )
         {
-            warning = true;
+            wxString msg = _( "Some items have the same color as the background\n"
+                              "and they will not be seen on the screen.  Are you\n"
+                              "sure you want to use these colors?" );
+
+            if( wxMessageBox( msg,  _( "Warning" ), wxYES_NO | wxICON_QUESTION, this ) == wxNO )
+                return false;
+
             break;
         }
-    }
-
-    // Prompt the user if an item has the same color as the background
-    // because this item cannot be seen:
-    if( warning )
-    {
-        if( wxMessageBox( _( "Some items have the same color as the background\n"
-                             "and they will not be seen on the screen.  Are you\n"
-                             "sure you want to use these colors?" ),
-                          _( "Warning" ),
-                          wxYES_NO | wxICON_QUESTION, this ) == wxNO )
-            return false;
     }
 
     // Update color of background
     GetDrawFrame()->SetDrawBgColor( bgcolor );
     currentColors[ LAYER_SCHEMATIC_BACKGROUND ] = bgcolor;
 
-
-    for( SCH_LAYER_ID clyr = LAYER_WIRE; clyr < SCH_LAYER_ID_END; ++clyr )
-    {
+    for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
         SetLayerColor( currentColors[ clyr ], clyr );
-    }
 
-    GetDrawFrame()->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    GetDrawFrame()->GetCanvas()->Refresh();
+    m_drawFrame->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    m_drawFrame->GetGalCanvas()->GetView()->GetGAL()->SetGridColor( m_drawFrame->GetGridColor() );
+    m_drawFrame->GetGalCanvas()->Refresh();
 
     return true;
 }
