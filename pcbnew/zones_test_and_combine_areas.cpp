@@ -172,8 +172,8 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
         if( area_to_test == area2 )
             continue;
 
-        // see if areas are on same layer
-        if( area_to_test->GetLayer() != area2->GetLayer() )
+        // see if areas are on same layers
+        if( area_to_test->GetLayerSet() != area2->GetLayerSet() )
             continue;
 
         // test for different priorities
@@ -183,6 +183,19 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
         // test for different types
         if( area_to_test->GetIsKeepout() != area2->GetIsKeepout() )
             continue;
+
+        // Keepout area-specific tests
+        if( area_to_test->GetIsKeepout() )
+        {
+            if( area_to_test->GetDoNotAllowCopperPour() != area2->GetDoNotAllowCopperPour() )
+                continue;
+
+            if( area_to_test->GetDoNotAllowTracks() != area2->GetDoNotAllowTracks() )
+                continue;
+
+            if( area_to_test->GetDoNotAllowVias() != area2->GetDoNotAllowVias() )
+                continue;
+        }
 
         if( TestAreaIntersection( area_to_test, area2 ) )
             return true;
