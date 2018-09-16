@@ -13,15 +13,15 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_PART;
 
-namespace KIGFX {
+namespace KIGFX
+{
     class VIEW_GROUP;
+    class WORKSHEET_VIEWITEM;
 
-namespace PREVIEW {
-    class SELECTION_AREA;
-
-};
-
-class WORKSHEET_VIEWITEM;
+    namespace PREVIEW
+    {
+        class SELECTION_AREA;
+    };
 
 class SCH_VIEW : public KIGFX::VIEW
 {
@@ -33,19 +33,6 @@ public:
     void DisplaySheet( SCH_SCREEN *aSheet );
     void DisplayComponent( LIB_PART *aPart );
 
-    /// @copydoc VIEW::Add()
-    virtual void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 ) override;
-    /// @copydoc VIEW::Remove()
-
-    virtual void Remove( VIEW_ITEM* aItem ) override;
-
-    /// @copydoc VIEW::Update()
-    virtual void Update( VIEW_ITEM* aItem, int aUpdateFlags ) override;
-
-    /// @copydoc VIEW::Update()
-    virtual void Update( VIEW_ITEM* aItem ) override;
-
-//    void SetWorksheet( KIGFX::WORKSHEET_VIEWITEM* aWorksheet );
     KIGFX::PREVIEW::SELECTION_AREA* GetSelectionArea() const { return m_selectionArea.get(); }
 
     KIGFX::VIEW_GROUP* GetPreview() const { return m_preview.get(); }

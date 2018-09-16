@@ -1250,9 +1250,7 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     else if( m_galCanvasActive )
     {
         // Switch to legacy renderer from GAL
-        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-        // TODO replace it with EDA_DRAW_PANEL_GAL::GetLegacyZoom
-        m_canvas->SetZoom( 1.0 / ( zoomFactor * view->GetScale() ) );
+        m_canvas->SetZoom( GetGalCanvas()->GetLegacyZoom() );
         VECTOR2D center = view->GetCenter();
         AdjustScrollBars( wxPoint( center.x, center.y ) );
     }
@@ -1640,7 +1638,7 @@ void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
     double bestzoom = BestZoom();
     screen->SetScalingFactor( bestzoom );
 
-    if( screen->m_FirstRedraw )
+    if( !screen->m_Initialized )
         SetCrossHairPosition( GetScrollCenterPosition() );
 
     if( !IsGalCanvasActive() )

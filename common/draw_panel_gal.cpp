@@ -32,7 +32,7 @@
 #include <view/view.h>
 #include <view/wx_view_controls.h>
 #include <painter.h>
-
+#include <base_screen.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <gal/opengl/opengl_gal.h>
 #include <gal/cairo/cairo_gal.h>
@@ -149,6 +149,11 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     m_viewControls->UpdateScrollbars();
+
+    GetParentEDAFrame()->GetScreen()->SetZoom( GetLegacyZoom() );
+
+    VECTOR2D center = GetView()->GetCenter();
+    GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
 
     // Drawing to a zero-width or zero-height GAL is fraught with peril.
     if( GetClientRect().IsEmpty() )

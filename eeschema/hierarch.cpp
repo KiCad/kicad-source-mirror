@@ -279,12 +279,10 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     SetSheetNumberAndCount();
     m_canvas->SetCanStartBlock( -1 );
 
-    if( screen->m_FirstRedraw )
+    if( !screen->m_Initialized )
     {
         Zoom_Automatique( false );
-        screen->m_FirstRedraw = false;
-        SetCrossHairPosition( GetScrollCenterPosition() );
-        m_canvas->MoveCursorToCrossHair();
+        screen->m_Initialized = true;
 
         // Ensure the schematic is fully segmented on first display
         BreakSegmentsOnJunctions();
@@ -295,18 +293,13 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
     else
     {
-        RedrawScreen( GetScrollCenterPosition(), true );
+        CenterScreen( GetScrollCenterPosition(), false );
+        // RedrawScreen() will set zoom to last used
+        RedrawScreen( GetScrollCenterPosition(), false );
     }
 
     // Some items (wires, labels) can be highlighted. So prepare the highlight flag:
     SetCurrentSheetHighlightFlags();
 
-    // Now refresh m_canvas. Should be not necessary, but because screen has changed
-    // the previous refresh has set all new draw parameters (scroll position ..)
-    // but most of time there were some inconsitencies about cursor parameters
-    // ( previous position of cursor ...) and artefacts can happen
-    // mainly when sheet size has changed
-    // This second refresh clears artefacts because at this point,
-    // all parameters are now updated
-    SyncView();
+    GetCanvas()->Refresh();
 }

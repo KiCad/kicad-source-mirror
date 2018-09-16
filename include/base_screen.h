@@ -204,7 +204,7 @@ public:
                                      * > 0 except for schematics.
                                      * false: when coordinates can only be >= 0
                                      * Schematic */
-    bool        m_FirstRedraw;
+    bool        m_Initialized;
 
     // Undo/redo list of commands
     UNDO_REDO_CONTAINER m_UndoList;         ///< Objects list for the undo command (old data)

@@ -26,57 +26,28 @@
 #include <memory>
 #include <view/view.h>
 #include <view/view_group.h>
-
 #include <view/wx_view_controls.h>
 #include <worksheet_viewitem.h>
 #include <layers_id_colors_and_visibility.h>
-
 #include <class_libentry.h>
-
-#include "sch_view.h"
-
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <preview_items/selection_area.h>
 
+#include "sch_view.h"
+
+
 namespace KIGFX {
+
 
 SCH_VIEW::SCH_VIEW( bool aIsDynamic ) :
     VIEW( aIsDynamic )
 {
 }
 
+
 SCH_VIEW::~SCH_VIEW()
 {
-}
-
-void SCH_VIEW::Add( KIGFX::VIEW_ITEM* aItem, int aDrawPriority )
-{
-    //auto ei = static_cast<EDA_ITEM*>(aItem);
-    //auto bb = ei->ViewBBox();
-    //printf("Add %p [%s] %d %d - %d %d\n", aItem, "dupa", bb.GetOrigin().x, bb.GetOrigin().y, bb.GetWidth(), bb.GetHeight() );
-
-    //if(bb.GetOrigin().x < 0)
-    //for(;;);
-
-    VIEW::Add( aItem, aDrawPriority );
-}
-
-
-void SCH_VIEW::Remove( KIGFX::VIEW_ITEM* aItem )
-{
-    VIEW::Remove( aItem );
-}
-
-void SCH_VIEW::Update( KIGFX::VIEW_ITEM* aItem, int aUpdateFlags )
-{
-    VIEW::Update( aItem, aUpdateFlags );
-}
-
-
-void SCH_VIEW::Update( KIGFX::VIEW_ITEM* aItem )
-{
-    VIEW::Update( aItem );
 }
 
 
@@ -87,30 +58,29 @@ static const LAYER_NUM SCH_LAYER_ORDER[] =
     LAYER_WORKSHEET
 };
 
+
 void SCH_VIEW::DisplaySheet( SCH_SCREEN *aSheet )
 {
 
     for( auto item = aSheet->GetDrawItems(); item; item = item->Next() )
-    {
-        //printf("-- ADD SCHITEM %p\n", item );
         Add( item );
-    }
 
-    m_worksheet.reset ( new KIGFX::WORKSHEET_VIEWITEM( 1, &aSheet->GetPageSettings(), &aSheet->GetTitleBlock() ) );
-    //m_worksheet->SetMilsToIUfactor(1);
-
+    m_worksheet.reset( new KIGFX::WORKSHEET_VIEWITEM( 1, &aSheet->GetPageSettings(),
+                                                      &aSheet->GetTitleBlock() ) );
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
     m_preview.reset( new KIGFX::VIEW_GROUP () );
-    //printf("Display-screen\n");
+
     Add( m_worksheet.get() );
     Add( m_selectionArea.get() );
     Add( m_preview.get() );
 }
 
+
 void SCH_VIEW::DisplaySheet( SCH_SHEET *aSheet )
 {
     DisplaySheet( aSheet->GetScreen() );
 }
+
 
 void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 {
@@ -142,12 +112,14 @@ void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 void SCH_VIEW::ClearPreview()
 {
     m_preview->Clear();
+
     for( auto item : m_previewItems )
         delete item;
 
     m_previewItems.clear();
     Update(m_preview.get());
 }
+
 
 void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool owned )
 {
@@ -160,6 +132,7 @@ void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool owned )
     Hide( m_preview.get(), false );
     Update( m_preview.get() );
 }
+
 
 void SCH_VIEW::ShowSelectionArea( bool aShow  )
 {
@@ -174,10 +147,12 @@ void SCH_VIEW::ShowSelectionArea( bool aShow  )
     SetVisible( m_selectionArea.get(), aShow );
 }
 
+
 void SCH_VIEW::ShowPreview( bool aShow  )
 {
     SetVisible( m_preview.get(), aShow );
 }
+
 
 void SCH_VIEW::ClearHiddenFlags()
 {
@@ -185,10 +160,12 @@ void SCH_VIEW::ClearHiddenFlags()
         Hide ( item, false );
 }
 
+
 void SCH_VIEW::HideWorksheet()
 {
 //    SetVisible( m_worksheet.get(), false );
 }
+
 
 };
 

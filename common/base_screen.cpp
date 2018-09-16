@@ -43,7 +43,7 @@ BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     EDA_ITEM( aType )
 {
     m_UndoRedoCountMax = DEFAULT_MAX_UNDO_ITEMS;
-    m_FirstRedraw      = true;
+    m_Initialized      = false;
     m_ScreenNumber     = 1;
     m_NumberOfScreens  = 1;      // Hierarchy: Root: ScreenNumber = 1
     m_Zoom             = 32.0;
