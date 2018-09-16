@@ -195,6 +195,7 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_additive( false ),
         m_subtractive( false ),
         m_multiple( false ),
+        m_skip_heuristics( false ),
         m_locked( true ),
         m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
@@ -273,6 +274,10 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Should selected items be REMOVED from the current selection?
         // This will be ignored if the SHIFT modifier is pressed
         m_subtractive = !m_additive && evt->Modifier( MD_CTRL );
+
+        // Is the user requesting that the selection list include all possible
+        // items without removing less likely selection candidates
+        m_skip_heuristics = !!evt->Modifier( MD_ALT );
 
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
@@ -513,12 +518,15 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     }
 
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
-    guessSelectionCandidates( collector );
-
-    if( collector.GetCount() == 1 )
+    if( !m_skip_heuristics )
     {
-        toggleSelection( collector[0] );
-        return true;
+        guessSelectionCandidates( collector );
+
+        if( collector.GetCount() == 1 )
+        {
+            toggleSelection( collector[0] );
+            return true;
+        }
     }
 
     // Still more than one item.  We're going to have to ask the user.
@@ -2027,6 +2035,30 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
             for( BOARD_ITEM* item : preferred )
                 aCollector.Append( item );
             return;
+        }
+    }
+
+    int numZones = aCollector.CountType( PCB_ZONE_AREA_T );
+
+    if( numZones > 0 && aCollector.GetCount() > numZones )
+    {
+        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+        {
+            if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
+                aCollector.Remove( i );
+        }
+    }
+
+    int numDrawitems = aCollector.CountType( PCB_LINE_T ) +
+            aCollector.CountType( PCB_MODULE_EDGE_T );
+
+    if( numDrawitems > 0 && aCollector.GetCount() > numDrawitems )
+    {
+        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+        {
+            auto ds = static_cast<DRAWSEGMENT*>( aCollector[i] );
+            if( ds->GetShape() == S_POLYGON )
+                aCollector.Remove( i );
         }
     }
 
