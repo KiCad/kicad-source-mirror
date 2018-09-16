@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -113,7 +113,11 @@ class PCB_PARSER : public PCB_LEXER
     void parseNETINFO_ITEM();
     void parseNETCLASS();
 
-    DRAWSEGMENT*    parseDRAWSEGMENT();
+    /** Read a DRAWSEGMENT description.
+     * @param aAllowCirclesZeroWidth = true to allow items with 0 width
+     * Only used in custom pad shapes for filled circles.
+     */
+    DRAWSEGMENT*    parseDRAWSEGMENT( bool aAllowCirclesZeroWidth = false );
     TEXTE_PCB*      parseTEXTE_PCB();
     DIMENSION*      parseDIMENSION();
 
