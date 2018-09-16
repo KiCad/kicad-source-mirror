@@ -358,9 +358,6 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
     VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
     m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea);
-    /*m_gal->SetStrokeColor(COLOR4D(1.0,0,0,1.0));
-    m_gal->DrawLine ( pos - VECTOR2D(20, 20), pos + VECTOR2D(20, 20));
-    m_gal->DrawLine ( pos - VECTOR2D(-20, 20), pos + VECTOR2D(-20, 20));*/
 }
 
 
@@ -1215,9 +1212,20 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
     VECTOR2D size = aSheet->GetSize();
 
     m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEET ) );
-    m_gal->SetFillColor ( COLOR4D(1.0, 1.0, 1.0, 0.5) );
+
+    if( aSheet->IsMoving() )    // Gives a filled background when moving for a better look
+    {
+        // Select a fill color working well with black and white background color,
+        // both in Opengl and Cairo
+        m_gal->SetFillColor ( COLOR4D(0.1, 0.5, 0.5, 0.3) );
+        m_gal->SetIsFill ( true );
+    }
+    else
+    {
+        // Could be modified later, when sheets can have their own fill color
+        m_gal->SetIsFill ( false );
+    }
     m_gal->SetIsStroke ( true );
-    m_gal->SetIsFill ( true );
     m_gal->DrawRectangle( pos, pos + size );
 
     auto nameAngle = 0.0;

@@ -255,6 +255,16 @@ public:
     }
 
     /**
+     * @brief Get the fill color.
+     *
+     * @return the color for filling a outline.
+     */
+    inline const COLOR4D& GetFillColor() const
+    {
+        return fillColor;
+    }
+
+    /**
      * @brief Set the stroke color.
      *
      * @param aColor is the color for stroking the outline.

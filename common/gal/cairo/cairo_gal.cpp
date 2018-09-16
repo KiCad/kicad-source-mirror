@@ -241,11 +241,15 @@ void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aS
 {
     SWAP( aStartAngle, >, aEndAngle );
 
-    cairo_new_sub_path( currentContext );
-    cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
-
-    if( isFillEnabled )
+    if( isFillEnabled )     // Draw the filled area of the shape, before drawing the outline itself
     {
+        double pen_size = GetLineWidth();
+        auto fgcolor = GetStrokeColor();
+        SetStrokeColor( GetFillColor() );
+
+        SetLineWidth( 0 );
+        cairo_new_sub_path( currentContext );
+        cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
         VECTOR2D startPoint( cos( aStartAngle ) * aRadius + aCenterPoint.x,
                              sin( aStartAngle ) * aRadius + aCenterPoint.y );
         VECTOR2D endPoint( cos( aEndAngle ) * aRadius + aCenterPoint.x,
@@ -255,8 +259,13 @@ void CAIRO_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aS
         cairo_line_to( currentContext, startPoint.x, startPoint.y );
         cairo_line_to( currentContext, endPoint.x, endPoint.y );
         cairo_close_path( currentContext );
+        flushPath();
+        SetLineWidth( pen_size );
+        SetStrokeColor( fgcolor );
     }
 
+    cairo_new_sub_path( currentContext );
+    cairo_arc( currentContext, aCenterPoint.x, aCenterPoint.y, aRadius, aStartAngle, aEndAngle );
     flushPath();
 
     isElementAdded = true;

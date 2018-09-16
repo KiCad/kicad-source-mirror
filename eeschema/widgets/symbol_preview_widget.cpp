@@ -122,6 +122,9 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
 
         settings->m_ShowUnit = aUnit;
 
+        // For symbols having a De Morgan body style, use the first style
+        settings->m_ShowConvert = part->HasConversion() ? 1 : 0;
+
         view->Add( alias );
         m_previewItem = alias;
 
@@ -166,6 +169,10 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
         // draw all of them.)
         if( aPart->IsMulti() && aUnit == 0 )
             aUnit = 1;
+
+        // For symbols having a De Morgan body style, use the first style
+        auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+        settings->m_ShowConvert = aPart->HasConversion() ? 1 : 0;
 
         view->Add( aPart );
         m_previewItem = aPart;

@@ -181,9 +181,17 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetCursorColor( settings->GetLayerColor( LAYER_CURSOR ) );
 
+        // TODO: find why ClearScreen() must be called here in opengl mode
+        // and only if m_view->IsDirty() in Cairo mode to avoid distaly artifacts
+        // when moving the mouse cursor
+        if( m_backend == GAL_TYPE_OPENGL )
+            m_gal->ClearScreen();
+
         if( m_view->IsDirty() )
         {
-            m_gal->ClearScreen();
+            if( m_backend != GAL_TYPE_OPENGL )   // already called in opengl
+                m_gal->ClearScreen();
+
             m_view->ClearTargets();
 
             // Grid has to be redrawn only when the NONCACHED target is redrawn
