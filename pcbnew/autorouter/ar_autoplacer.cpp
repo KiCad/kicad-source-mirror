@@ -224,8 +224,7 @@ int AR_AUTOPLACER::propagate()
 
     const uint32_t NO_CELL_ZONE = CELL_IS_HOLE | CELL_IS_EDGE | CELL_IS_ZONE;
 
-    pt_cell_V.reserve( std::max( m_matrix.m_Nrows, m_matrix.m_Ncols ) );
-    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
+    pt_cell_V.resize( std::max( m_matrix.m_Nrows, m_matrix.m_Ncols ), CELL_IS_EMPTY );
 
     // Search from left to right and top to bottom.
     for( row = 0; row < m_matrix.m_Nrows; row++ )
@@ -251,7 +250,7 @@ int AR_AUTOPLACER::propagate()
     }
 
     // Search from right to left and top to bottom/
-    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
 
     for( row = 0; row < m_matrix.m_Nrows; row++ )
     {
@@ -276,7 +275,7 @@ int AR_AUTOPLACER::propagate()
     }
 
     // Search from bottom to top and right to left.
-    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
 
     for( col = m_matrix.m_Ncols - 1; col >= 0; col-- )
     {
@@ -301,7 +300,7 @@ int AR_AUTOPLACER::propagate()
     }
 
     // Search from bottom to top and left to right.
-    fill( pt_cell_V.begin(), pt_cell_V.end(), 0 );
+    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
 
     for( col = 0; col < m_matrix.m_Ncols; col++ )
     {
