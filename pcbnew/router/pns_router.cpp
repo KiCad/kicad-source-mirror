@@ -135,6 +135,9 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode 
     if( !aStartItem || aStartItem->OfKind( ITEM::SOLID_T ) )
         return false;
 
+    m_placer.reset( new LINE_PLACER( this ) );
+    m_placer->Start( aP, aStartItem );
+
     m_dragger.reset( new DRAGGER( this ) );
     m_dragger->SetMode( aDragMode );
     m_dragger->SetWorld( m_world.get() );
