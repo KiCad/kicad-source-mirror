@@ -863,12 +863,18 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item || item->Type() != PCB_ZONE_AREA_T )
+    if( !item || !( item->Type() == PCB_ZONE_AREA_T || ( item->Type() == PCB_MODULE_EDGE_T &&
+                   static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
-    ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
-    auto& polyset = *zone->Outline();
-    auto vertex = findVertex( polyset, *m_editedPoint );
+    SHAPE_POLY_SET *polyset;
+
+    if( item->Type() == PCB_ZONE_AREA_T )
+        polyset = static_cast<ZONE_CONTAINER*>( item )->Outline();
+    else
+        polyset = &static_cast<DRAWSEGMENT*>( item )->GetPolyShape();
+
+    auto vertex = findVertex( *polyset, *m_editedPoint );
 
     if( !vertex.first )
         return false;
@@ -879,7 +885,7 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
     // degenerating the polygon.
     // The first condition allows one to remove all corners from holes (when
     // there are only 2 vertices left, a hole is removed).
-    if( vertexIdx.m_contour == 0 && polyset.Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
+    if( vertexIdx.m_contour == 0 && polyset->Polygon( vertexIdx.m_polygon )[vertexIdx.m_contour].PointCount() <= 3 )
         return false;
 
     // Remove corner does not work with lines
@@ -1030,7 +1036,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         auto zone = static_cast<ZONE_CONTAINER*>( item );
         polygon = zone->Outline();
     }
-    else if( item->Type() == PCB_LINE_T )
+    else if( (item->Type() == PCB_MODULE_EDGE_T ) || ( item->Type() == PCB_LINE_T ) )
     {
         auto ds = static_cast<DRAWSEGMENT*>( item );
 
