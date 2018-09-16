@@ -351,6 +351,9 @@ private:
     /// Flag saying if multiple selection mode is active.
     bool m_multiple;
 
+    /// Flag saying that heuristics should be skipped while choosing selection
+    bool m_skip_heuristics;
+
     /// Can other tools modify locked items.
     bool m_locked;
 
