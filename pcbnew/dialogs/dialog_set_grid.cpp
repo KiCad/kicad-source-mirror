@@ -185,28 +185,17 @@ void DIALOG_SET_GRID::setGridSize( const wxPoint& grid )
 
 bool DIALOG_SET_GRID::getGridSize( wxPoint& aGridSize )
 {
-    double x, y;
+    wxString value = m_OptGridSizeX->GetValue();
+    double x = DoubleValueFromString( g_UserUnit, value );
 
-    const wxString& x_str = m_OptGridSizeX->GetValue();
-
-    if( !x_str.ToDouble( &x ) )
-        return false;
-
-    x = DoubleValueFromString( g_UserUnit, x_str );
-
-    // Some error checking here is a good thing.
-    if( x < MIN_GRID_SIZE || x > MAX_GRID_SIZE )
-        return false;
-
-    const wxString& y_str = m_OptGridSizeY->GetValue();
-
-    if( !y_str.ToDouble( &y ) )
-        return false;
-
-    y = DoubleValueFromString( g_UserUnit, y_str );
+    value = m_OptGridSizeY->GetValue();
+    double y = DoubleValueFromString( g_UserUnit, value );
 
     // Some error checking here is a good thing.
     if( y < MIN_GRID_SIZE || y > MAX_GRID_SIZE )
+        return false;
+
+    if( x < MIN_GRID_SIZE || x > MAX_GRID_SIZE )
         return false;
 
     aGridSize.x = KiROUND( x );
@@ -218,30 +207,18 @@ bool DIALOG_SET_GRID::getGridSize( wxPoint& aGridSize )
 
 bool DIALOG_SET_GRID::getGridOrigin( wxPoint& aGridOrigin )
 {
-    double x, y;
+    wxString value = m_GridOriginXCtrl->GetValue();
+    double x = DoubleValueFromString( g_UserUnit, value );
 
-    const wxString& x_str = m_GridOriginXCtrl->GetValue();
-
-    if( !x_str.ToDouble( &x ) )
-        return false;
-
-    x = DoubleValueFromString( g_UserUnit, x_str );
+    value = m_GridOriginYCtrl->GetValue();
+    double y = DoubleValueFromString( g_UserUnit, value );
 
     // Some error checking here is a good thing.
     if( x < -MAX_GRID_OFFSET || x > MAX_GRID_OFFSET )
         return false;
 
-
-    const wxString& y_str = m_GridOriginYCtrl->GetValue();
-
-    if( !y_str.ToDouble( &y ) )
-        return false;
-
-    y = DoubleValueFromString( g_UserUnit, y_str );
-
     if( y < -MAX_GRID_OFFSET || y > MAX_GRID_OFFSET )
         return false;
-
 
     aGridOrigin.x = KiROUND( x );
     aGridOrigin.y = KiROUND( y );
