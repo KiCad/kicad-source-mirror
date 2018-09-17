@@ -449,7 +449,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
                                             // (the window is not updated for each message)
 
-    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, &reporter,
+    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, reporter,
                               m_cbUpdateFootprints->GetValue(),
                               m_cbDeleteShortingTracks->GetValue(),
                               m_cbDeleteExtraFootprints->GetValue(),

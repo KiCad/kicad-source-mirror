@@ -283,7 +283,7 @@ public:
      * @throw IO_ERROR if an I/O error occurs or a #PARSE_ERROR if a file parsing error
      *           occurs while reading footprint library files.
      */
-    void LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter );
+    void LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter );
 
     void OnQuit( wxCommandEvent& event );
 
@@ -1557,8 +1557,7 @@ public:
      * @param aNetlistFileName = netlist file name (*.net)
      * @param aCmpFileName = cmp/footprint link file name (*.cmp).
      *                       if not found or empty, only the netlist will be used
-     * @param aReporter is a pointer to a #REPORTER object to write display messages.
-     *                  can be NULL.
+     * @param aReporter a #REPORTER object to write display messages.
      * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
      * @param aDeleteBadTracks if true, erroneous tracks will be deleted
      * @param aDeleteExtraFootprints if true, remove unlocked footprints that are not in netlist
@@ -1571,7 +1570,7 @@ public:
      */
     void ReadPcbNetlist( const wxString&  aNetlistFileName,
                          const wxString&  aCmpFileName,
-                         REPORTER*        aReporter,
+                         REPORTER&        aReporter,
                          bool             aChangeFootprint,
                          bool             aDeleteBadTracks,
                          bool             aDeleteExtraFootprints,

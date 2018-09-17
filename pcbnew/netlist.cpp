@@ -57,7 +57,7 @@ using namespace std::placeholders;
 
 void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
                                      const wxString& aCmpFileName,
-                                     REPORTER*       aReporter,
+                                     REPORTER&       aReporter,
                                      bool            aChangeFootprints,
                                      bool            aDeleteUnconnectedTracks,
                                      bool            aDeleteExtraFootprints,
@@ -224,7 +224,7 @@ MODULE* PCB_EDIT_FRAME::ListAndSelectModuleName()
 
 #define ALLOW_PARTIAL_FPID      1
 
-void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
+void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER& aReporter )
 {
     wxString   msg;
     LIB_ID     lastFPID;
@@ -249,12 +249,9 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         if( component->GetFPID().empty() )
 #endif
         {
-            if( aReporter )
-            {
-                msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
-                            GetChars( component->GetReference() ) );
-                aReporter->Report( msg, REPORTER::RPT_ERROR );
-            }
+            msg.Printf( _( "No footprint defined for symbol \"%s\".\n" ),
+                        component->GetReference() );
+            aReporter.Report( msg, REPORTER::RPT_ERROR );
 
             continue;
         }
@@ -266,19 +263,15 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
         else
             fpOnBoard = m_Pcb->FindModule( aNetlist.GetComponent( ii )->GetReference() );
 
-        bool footprintMisMatch = fpOnBoard &&
-                                 fpOnBoard->GetFPID() != component->GetFPID();
+        bool footprintMisMatch = fpOnBoard && fpOnBoard->GetFPID() != component->GetFPID();
 
         if( footprintMisMatch && !aNetlist.GetReplaceFootprints() )
         {
-            if( aReporter )
-            {
-                msg.Printf( _( "Footprint of %s changed: board footprint \"%s\", netlist footprint \"%s\"." ),
-                            GetChars( component->GetReference() ),
-                            GetChars( fpOnBoard->GetFPID().Format() ),
-                            GetChars( component->GetFPID().Format() ) );
-                aReporter->Report( msg, REPORTER::RPT_WARNING );
-            }
+            msg.Printf( _( "Footprint of %s changed: board footprint \"%s\", netlist footprint \"%s\"." ),
+                        component->GetReference(),
+                        GetChars( fpOnBoard->GetFPID().Format() ),
+                        GetChars( component->GetFPID().Format() ) );
+            aReporter.Report( msg, REPORTER::RPT_WARNING );
 
             continue;
         }
@@ -301,13 +294,10 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             if( !component->GetFPID().IsValid() )
 #endif
             {
-                if( aReporter )
-                {
-                    msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().Format() ) );
-                    aReporter->Report( msg, REPORTER::RPT_ERROR );
-                }
+                msg.Printf( _( "%s footprint ID \"%s\" is not valid." ),
+                            component->GetReference(),
+                            GetChars( component->GetFPID().Format() ) );
+                aReporter.Report( msg, REPORTER::RPT_ERROR );
 
                 continue;
             }
@@ -321,13 +311,10 @@ void PCB_EDIT_FRAME::LoadFootprints( NETLIST& aNetlist, REPORTER* aReporter )
             }
             else
             {
-                if( aReporter )
-                {
-                    msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
-                                GetChars( component->GetReference() ),
-                                GetChars( component->GetFPID().GetLibItemName() ) );
-                    aReporter->Report( msg, REPORTER::RPT_ERROR );
-                }
+                msg.Printf( _( "%s footprint \"%s\" not found in any libraries in the footprint library table.\n" ),
+                            component->GetReference(),
+                            GetChars( component->GetFPID().GetLibItemName() ) );
+                aReporter.Report( msg, REPORTER::RPT_ERROR );
 
                 continue;
             }

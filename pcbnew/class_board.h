@@ -63,6 +63,7 @@ class NETLIST;
 class REPORTER;
 class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
+class COMPONENT;
 
 /**
  * Enum LAYER_T
@@ -896,11 +897,13 @@ public:
      * @param aNewFootprints is a pointer the to a list of new footprints used when updating
      *                       the netlist.
      * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
-     *                  the #BOARD.  If NULL, no change reporting occurs.
+     *                  the #BOARD.
      */
     void ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
-                         std::vector<MODULE*>* aNewFootprints, REPORTER* aReporter = NULL );
+                         std::vector<MODULE*>* aNewFootprints, REPORTER& aReporter );
 
+    void updateComponentPadConnections( NETLIST& aNetlist, MODULE* footprint,
+                                        COMPONENT* component, REPORTER& aReporter );
     /**
      * Function SortedNetnamesList
      * @param aNames An array string to fill with net names.
