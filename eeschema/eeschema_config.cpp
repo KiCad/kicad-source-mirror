@@ -391,10 +391,6 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hokeys_Descr );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
-    SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    GetGalCanvas()->GetView()->GetGAL()->SetGridColor( GetGridColor() );
-    SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
-
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
     SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
@@ -520,9 +516,6 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
     ReadHotkeyConfig( LIB_EDIT_FRAME_NAME, g_Libedit_Hokeys_Descr );
-
-    SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
     SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );

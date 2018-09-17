@@ -949,7 +949,8 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     switch( aText->Type() )
     {
-    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
+    case SCH_SHEET_PIN_T:          color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
+    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_HIERLABEL );  break;
     case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
     case SCH_LABEL_T:              color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
     default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;

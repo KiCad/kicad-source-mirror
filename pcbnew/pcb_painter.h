@@ -143,6 +143,12 @@ public:
         return luma < 0.5;
     }
 
+    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
+
+    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_GRID ]; }
+
+    const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
+
 protected:
     ///> Flag determining if items on a given layer should be drawn as an outline or a filled item
     bool    m_sketchMode[GAL_LAYER_ID_END];

@@ -670,18 +670,10 @@ void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
 #define CMPLIST_WIDTH_KEY "ViewCmplistWidth"
 #define CMPVIEW_SHOW_PINELECTRICALTYPE_KEY "ViewCmpShowPinElectricalType"
 
-// Currently, the library viewer has no dialog to change the background color
-// of the draw canvas. Therefore the background color is here just
-// in case of this option is added to some library viewer config dialog
-#define LIBVIEW_BGCOLOR   "LibviewBgColor"
-
 
 void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
-
-    SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    SetDrawBgColor( GetLayerColor( LAYER_SCHEMATIC_BACKGROUND ) );
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );

@@ -87,6 +87,12 @@ public:
         update();       // recompute other shades of the color
     }
 
+    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
+
+    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_GRID ]; }
+
+    const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }
+
     inline bool IsSpotFill() const
     {
         return m_spotFill;

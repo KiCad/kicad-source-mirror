@@ -163,23 +163,6 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 }
 
 
-// Virtual from EDA_DRAW_FRAME
-COLOR4D SCH_BASE_FRAME::GetDrawBgColor() const
-{
-    return GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
-}
-
-
-void SCH_BASE_FRAME::SetDrawBgColor( COLOR4D aColor )
-{
-    m_drawBgColor= aColor;
-    SetLayerColor( aColor, LAYER_SCHEMATIC_BACKGROUND );
-
-    if( m_auimgr.GetManagedWindow() )
-        m_auimgr.Update();
-}
-
-
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
 {
     return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen();

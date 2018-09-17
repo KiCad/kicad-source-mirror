@@ -593,17 +593,9 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     switch( m_UserUnits )
     {
-    case INCHES:
-        msg = _( "Inches" );
-        break;
-
-    case MILLIMETRES:
-        msg = _( "mm" );
-        break;
-
-    default:
-        msg = _( "Units" );
-        break;
+    case INCHES:      msg = _( "Inches" ); break;
+    case MILLIMETRES: msg = _( "mm" );     break;
+    default:          msg = _( "Units" );  break;
     }
 
     SetStatusText( msg, 4 );
@@ -776,7 +768,7 @@ const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
     }
     else if( BASE_SCREEN* screen = GetScreen() )
     {
-        level = m_zoomLevelCoeff / (double) screen->GetZoom();
+        level = m_zoomLevelCoeff / screen->GetZoom();
     }
 
     // returns a human readable value which can be displayed as zoom
@@ -807,12 +799,6 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
-    // Read grid color:
-    COLOR4D wtmp = COLOR4D::UNSPECIFIED;
-
-    if( wtmp.SetFromWxString( aCfg->Read( baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
-        SetGridColor( wtmp );
-
     aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
 
     // m_LastGridSizeId is an offset, expected to be >= 0
@@ -841,8 +827,6 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     aCfg->Write( baseCfgName + UserUnitsEntryKeyword, (int) m_UserUnits );
     aCfg->Write( baseCfgName + ShowGridEntryKeyword, IsGridVisible() );
-    aCfg->Write( baseCfgName + GridColorEntryKeyword,
-                 GetGridColor().ToColour().GetAsString( wxC2S_CSS_SYNTAX ) );
     aCfg->Write( baseCfgName + LastGridSizeIdKeyword, ( long ) m_LastGridSizeId );
     aCfg->Write( baseCfgName + FirstRunShownKeyword, m_firstRunDialogSetting );
 
@@ -1020,11 +1004,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
             view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
         }
 
-        // fixme-gal
-        gal->SetGridVisibility( true );
-        gal->SetGridColor( COLOR4D(0.0,0.0,0.0,1.0));
-
-
         // Transfer EDA_DRAW_PANEL settings
         GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
         GetGalCanvas()->GetViewControls()->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
@@ -1032,7 +1011,6 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
     }
 
     GetGalCanvas()->SetEvtHandlerEnabled( aEnable );
-
 
     // Reset current tool on switch();
     SetNoToolSelected();

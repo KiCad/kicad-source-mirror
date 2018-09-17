@@ -83,6 +83,12 @@ public:
         return luma < 0.5;
     }
 
+    const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_SCHEMATIC_BACKGROUND ]; }
+
+    const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_SCHEMATIC_GRID ]; }
+
+    const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_SCHEMATIC_CURSOR ]; }
+
     int  m_ShowUnit;                // Show all units if 0
     int  m_ShowConvert;             // Show all conversions if 0
 

@@ -170,11 +170,6 @@ public:
 
     void OnGridSettings( wxCommandEvent& aEvent );
 
-    // Virtual from EDA_DRAW_FRAME
-    // the background color of the draw canvas:
-    COLOR4D GetDrawBgColor() const override;
-    void SetDrawBgColor( COLOR4D aColor) override;
-
     const TITLE_BLOCK& GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
 
@@ -282,11 +277,10 @@ public:
      * @param aConvert          preselected deMorgan conversion
      * @return the selected component
      */
-    COMPONENT_SELECTION SelectComponentFromLibBrowser(
-            wxTopLevelWindow* aParent,
-            const SCHLIB_FILTER* aFilter,
-            const LIB_ID& aPreselectedLibid,
-            int aUnit, int aConvert );
+    COMPONENT_SELECTION SelectComponentFromLibBrowser( wxTopLevelWindow* aParent,
+                                                       const SCHLIB_FILTER* aFilter,
+                                                       const LIB_ID& aPreselectedLibid,
+                                                       int aUnit, int aConvert );
 
 
     virtual void Zoom_Automatique( bool aWarpPointer ) override;

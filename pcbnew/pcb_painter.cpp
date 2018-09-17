@@ -118,8 +118,6 @@ void PCB_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS* aSet
             m_layerColors[GetNetnameLayer( layer )] = lightLabel;
     }
 
-    SetBackgroundColor ( aSettings->GetItemColor( LAYER_PCB_BACKGROUND ) );
-
     update();
 }
 

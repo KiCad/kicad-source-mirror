@@ -135,9 +135,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 
     m_doubleClickInterval = 250;
 
-    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    m_gal->SetCursorColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
-
     m_viewControls->SetSnapping( true );
 
     SetEvtHandlerEnabled( true );
@@ -201,7 +198,6 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
     setDefaultLayerDeps();
     m_gal->SetWorldUnitLength( IU_2_GAL_WORLD_UNIT );
     m_gal->SetGridSize( grid_size );
-    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
     return rv;
 }
 

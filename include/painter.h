@@ -191,22 +191,20 @@ public:
     /**
      * Function GetBackgroundColor
      * Returns current background color settings.
-     * @return Background color.
      */
-    inline const COLOR4D& GetBackgroundColor() const
-    {
-        return m_backgroundColor;
-    }
+    virtual const COLOR4D& GetBackgroundColor() = 0;
 
     /**
-     * Function SetBackgroundColor
-     * Sets new color for background.
-     * @param aColor is the new background color.
+     * Function GetGridColor
+     * Returns current grid color settings.
      */
-    inline void SetBackgroundColor( const COLOR4D& aColor )
-    {
-        m_backgroundColor = aColor;
-    }
+    virtual const COLOR4D& GetGridColor() = 0;
+
+    /**
+     * Function GetCursorColor
+     * Returns current cursor color settings.
+     */
+    virtual const COLOR4D& GetCursorColor() = 0;
 
     /**
      * Function GetLayerColor

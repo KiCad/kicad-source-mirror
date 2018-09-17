@@ -72,8 +72,6 @@ void GERBVIEW_RENDER_SETTINGS::ImportLegacyColors( const COLORS_DESIGN_SETTINGS*
     for( int i = GAL_LAYER_ID_START; i < GAL_LAYER_ID_END; i++ )
         m_layerColors[i] = aSettings->GetLayerColor( i );
 
-    SetBackgroundColor( aSettings->GetItemColor( LAYER_PCB_BACKGROUND ) );
-
     update();
 }
 

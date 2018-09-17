@@ -69,8 +69,8 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
 
-    m_gal->SetGridColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
-    m_gal->SetCursorColor( COLOR4D(0.0, 0.0, 0.0, 1.0) );
+    m_gal->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
+    m_gal->SetCursorColor( GetLayerColor( LAYER_SCHEMATIC_CURSOR ) );
     m_gal->SetGridSize( VECTOR2D( 50.0, 50.0 ) );
 
     m_viewControls->SetSnapping( true );

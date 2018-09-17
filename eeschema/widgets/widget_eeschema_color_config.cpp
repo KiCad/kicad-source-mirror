@@ -90,9 +90,11 @@ static COLORBUTTON sheetColorButtons[] = {
 static COLORBUTTON miscColorButtons[] = {
     { _( "ERC warning" ),       LAYER_ERC_WARN },
     { _( "ERC error" ),         LAYER_ERC_ERR },
+    { _( "Cursor" ),            LAYER_SCHEMATIC_CURSOR },
     { _( "Grid" ),              LAYER_SCHEMATIC_GRID },
     { _( "Brightened" ),        LAYER_BRIGHTENED },
     { _( "Hidden items" ),      LAYER_HIDDEN },
+    { _( "Background" ),        LAYER_SCHEMATIC_BACKGROUND },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
 
@@ -186,42 +188,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::CreateControls()
         groups++;
     }
 
-    COLOR4D bgColor = GetDrawFrame()->GetDrawBgColor();
-    wxMemoryDC iconDC;
-    wxBitmap   bitmap( m_butt_size_pix );
-
-    iconDC.SelectObject( bitmap );
-    iconDC.SetPen( *wxBLACK_PEN );
-
-    wxBrush brush;
-    brush.SetColour( bgColor.ToColour() );
-    brush.SetStyle( wxBRUSHSTYLE_SOLID );
-    iconDC.SetBrush( brush );
-    iconDC.DrawRectangle( 0, 0, m_butt_size_pix.x, m_butt_size_pix.y );
-
-    buttonId++;
-    wxBitmapButton* selBgColorBtn = new wxBitmapButton(
-                            this, buttonId, bitmap, wxDefaultPosition,
-                            m_butt_size_pix + m_butt_border_pix + wxSize( 1, 1 ) );
-    selBgColorBtn->SetClientData( (void*) &bgColorButton );
-
-    Connect( 1800, buttonId, wxEVT_COMMAND_BUTTON_CLICKED,
-             wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
-
-    wxStaticText* bgColorLabel = new wxStaticText( this, wxID_ANY, _( "Background Color" ) );
-    wxFont font( bgColorLabel->GetFont() );
-    font.SetWeight( wxFONTWEIGHT_BOLD );
-    bgColorLabel->SetFont( font );
-
-    if( columnBoxSizer )
-    {
-        // Add a spacer to improve appearance.
-        columnBoxSizer->AddSpacer( 5 );
-        columnBoxSizer->Add( bgColorLabel, 1, wxALL, 5 );
-        columnBoxSizer->Add( selBgColorBtn, 1, wxRIGHT | wxBOTTOM, 5 );
-    }
-
-    currentColors[ LAYER_SCHEMATIC_BACKGROUND ] = bgColor;
+    Connect( 1800, buttonId, wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( WIDGET_EESCHEMA_COLOR_CONFIG::SetColor ) );
 
     // Dialog now needs to be resized, but the associated command is found elsewhere.
 }
@@ -291,16 +258,8 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
         }
     }
 
-    // Update color of background
-    GetDrawFrame()->SetDrawBgColor( bgcolor );
-    currentColors[ LAYER_SCHEMATIC_BACKGROUND ] = bgcolor;
-
     for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
         SetLayerColor( currentColors[ clyr ], clyr );
-
-    m_drawFrame->SetGridColor( GetLayerColor( LAYER_SCHEMATIC_GRID ) );
-    m_drawFrame->GetGalCanvas()->GetView()->GetGAL()->SetGridColor( m_drawFrame->GetGridColor() );
-    m_drawFrame->GetGalCanvas()->Refresh();
 
     return true;
 }

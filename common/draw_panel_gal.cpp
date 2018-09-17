@@ -184,7 +184,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
         m_gal->BeginDrawing();
         m_gal->SetClearColor( settings->GetBackgroundColor() );
-        m_gal->SetCursorColor( settings->GetLayerColor( LAYER_CURSOR ) );
+        m_gal->SetGridColor( settings->GetGridColor() );
+        m_gal->SetCursorColor( settings->GetCursorColor() );
 
         // TODO: find why ClearScreen() must be called here in opengl mode
         // and only if m_view->IsDirty() in Cairo mode to avoid distaly artifacts
