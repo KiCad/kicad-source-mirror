@@ -237,7 +237,7 @@ static LANGUAGE_DESCR s_Languages[] =
     {
         wxLANGUAGE_CHINESE_SIMPLIFIED,
         ID_LANGUAGE_CHINESE_SIMPLIFIED,
-        lang_chinese_xpm,
+        lang_zh_xpm,
         _( "Chinese simplified" )
     },
 
