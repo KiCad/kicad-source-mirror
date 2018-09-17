@@ -26,7 +26,7 @@
 #include <wx/mstream.h>
 #include <wx/filename.h>
 #include <wx/tokenzr.h>
-
+#include <pgm_base.h>
 #include <draw_graphic_text.h>
 #include <kiway.h>
 #include <kicad_string.h>
@@ -60,6 +60,7 @@
 #include <lib_text.h>
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
+#include <confirm.h>
 
 
 // Must be the first line of part library document (.dcm) files.
@@ -2334,6 +2335,18 @@ void SCH_LEGACY_PLUGIN_CACHE::AddSymbol( const LIB_PART* aPart )
 
 void SCH_LEGACY_PLUGIN_CACHE::Load()
 {
+    if( !m_libFileName.FileExists() )
+    {
+        wxString msg = wxString::Format( _( "Library file \"%s\" not found.\n\n"
+                                            "Use the Manage Symbol Libraries dialog to fix the "
+                                            "path (or remove the library)." ),
+                                         m_libFileName.GetFullPath() );
+        KIDIALOG dlg( Pgm().App().GetTopWindow(), msg, KIDIALOG::KD_ERROR );
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+        dlg.ShowModal();
+        return;
+    }
+
     wxCHECK_RET( m_libFileName.IsAbsolute(),
                  wxString::Format( "Cannot use relative file paths in legacy plugin to "
                                    "open library \"%s\".", m_libFileName.GetFullPath() ) );
