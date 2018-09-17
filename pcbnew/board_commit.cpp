@@ -30,6 +30,7 @@
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool.h>
+#include <tools/pcb_actions.h>
 #include <connectivity_data.h>
 
 #include <functional>
@@ -165,6 +166,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                     view->Remove( boardItem );
 
+                    // Removing an item should trigger the unselect
+                    m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, boardItem );
+
                     if( !( changeFlags & CHT_DONE ) )
                     {
                         MODULE* module = static_cast<MODULE*>( boardItem->GetParent() );
@@ -188,6 +192,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_ZONE_AREA_T:
                     view->Remove( boardItem );
 
+                    // Removing an item should trigger the unselect
+                    m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, boardItem );
+
                     if( !( changeFlags & CHT_DONE ) )
                         board->Remove( boardItem );
 
@@ -199,9 +206,11 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     wxASSERT( !m_editModules );
 
                     MODULE* module = static_cast<MODULE*>( boardItem );
-                    module->ClearFlags();
-
                     view->Remove( module );
+
+                    // Removing an item should trigger the unselect
+                    m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, boardItem );
+                    module->ClearFlags();
 
                     if( !( changeFlags & CHT_DONE ) )
                         board->Remove( module );        // handles connectivity
