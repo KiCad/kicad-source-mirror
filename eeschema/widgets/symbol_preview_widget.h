@@ -63,6 +63,10 @@ public:
     void DisplayPart( LIB_PART* aPart, int aUnit );
 
 private:
+    void onSize( wxSizeEvent& aEvent );
+
+    void fitOnDrawArea();    // set the view scale to fit the item on screen and center
+
     KIWAY&                     m_kiway;
 
     KIGFX::GAL_DISPLAY_OPTIONS m_galDisplayOptions;
@@ -72,6 +76,7 @@ private:
     wxSizer*                   m_statusSizer;
 
     EDA_ITEM*                  m_previewItem;
+    BOX2I                      m_itemBBox;      // The size of the current item
 };
 
 

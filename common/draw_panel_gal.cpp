@@ -150,10 +150,15 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
     m_viewControls->UpdateScrollbars();
 
-    GetParentEDAFrame()->GetScreen()->SetZoom( GetLegacyZoom() );
+    // Update current zoom settings if the canvas is managed by a EDA frame
+    // (i.e. not by a preview panel in a dialog)
+    if( GetParentEDAFrame() && GetParentEDAFrame()->GetScreen() )
+    {
+        GetParentEDAFrame()->GetScreen()->SetZoom( GetLegacyZoom() );
 
-    VECTOR2D center = GetView()->GetCenter();
-    GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
+        VECTOR2D center = GetView()->GetCenter();
+        GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
+    }
 
     // Drawing to a zero-width or zero-height GAL is fraught with peril.
     if( GetClientRect().IsEmpty() )
@@ -189,7 +194,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
         if( m_view->IsDirty() )
         {
-            if( m_backend != GAL_TYPE_OPENGL )   // already called in opengl
+            if( m_backend != GAL_TYPE_OPENGL &&     // Already called in opengl
+                m_view->IsTargetDirty( KIGFX::TARGET_NONCACHED ) )
                 m_gal->ClearScreen();
 
             m_view->ClearTargets();

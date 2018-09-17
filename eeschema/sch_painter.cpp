@@ -421,9 +421,6 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
     for( auto p : aLine->GetPolyPoints() )
         vtx.push_back ( mapCoords( p ) );
 
-//    if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR || aLine->GetFillMode() == FILLED_SHAPE )
-//        vtx.push_back( vtx[0] );
-
     m_gal->DrawPolygon( vtx );
 }
 

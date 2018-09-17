@@ -68,6 +68,8 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_statusSizer->ShowItems( false );
 
     SetSizer( outer_sizer );
+
+    Connect( wxEVT_SIZE, wxSizeEventHandler( SYMBOL_PREVIEW_WIDGET::onSize ), NULL, this );
 }
 
 
@@ -84,6 +86,42 @@ void SYMBOL_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
     m_statusSizer->ShowItems( true );
     m_preview->Hide();
     Layout();
+}
+
+
+void SYMBOL_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
+{
+    aEvent.Skip();
+
+    if( m_previewItem )
+    {
+        fitOnDrawArea();
+        m_preview->ForceRefresh();
+    }
+}
+
+
+void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
+{
+    if( !m_previewItem )
+        return;
+
+    // set the view scale to fit the item on screen
+    // Calculate the draw scale to fit the drawing area
+    KIGFX::VIEW* view = m_preview->GetView();
+
+    // Calculate the drawing area size, in internal units, for a scaling factor = 1.0
+    view->SetScale( 1.0 );
+    VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
+    double    scale = std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ),
+                                fabs( clientSize.y / m_itemBBox.GetHeight() ) );
+
+    // Above calculation will yield an exact fit; add a bit of whitespace around symbol
+    scale /= 1.2;
+
+    // Now fix the best scale
+    view->SetScale( scale );
+    view->SetCenter( m_itemBBox.Centre() );
 }
 
 
@@ -128,22 +166,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         view->Add( alias );
         m_previewItem = alias;
 
+        // Get the symbole size, in internal units
+        m_itemBBox = alias->GetPart()->GetUnitBoundingBox( aUnit, 0 );
+
         // Calculate the draw scale to fit the drawing area
-
-        // First, get the symbole size, in internal units
-        BOX2I     bBox = alias->GetPart()->GetUnitBoundingBox( aUnit, 0 );
-        // Now calculate the drawing area size, in internal units, for a scaling factor = 1.0
-        view->SetScale( 1.0 );
-        VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
-        double    scale = std::min( fabs( clientSize.x / bBox.GetWidth() ),
-                                    fabs( clientSize.y / bBox.GetHeight() ) );
-
-        // Above calculation will yield an exact fit; add a bit of whitespace around symbol
-        scale /= 1.2;
-
-        // Now fix the best scale
-        view->SetScale( scale );
-        view->SetCenter( bBox.Centre() );
+        fitOnDrawArea();
     }
 
     m_preview->ForceRefresh();
@@ -177,21 +204,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
         view->Add( aPart );
         m_previewItem = aPart;
 
+        // Get the symbole size, in internal units
+        m_itemBBox = aPart->GetUnitBoundingBox( aUnit, 0 );
+
         // Calculate the draw scale to fit the drawing area
-
-        // First, get the symbole size, in internal units
-        BOX2I     bBox = aPart->GetUnitBoundingBox( aUnit, 0 );
-        // Now calculate the drawing area size, in internal units, for a scaling factor = 1.0
-        view->SetScale( 1.0 );
-        VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
-        double    scale = std::min( fabs( clientSize.x / bBox.GetWidth() ),
-                                    fabs( clientSize.y / bBox.GetHeight() ) );
-        // Above calculation will yield an exact fit; add a bit of whitespace around symbol
-        scale /= 1.2;
-
-        // Now fix the best scale
-        view->SetScale( scale );
-        view->SetCenter( bBox.Centre() );
+        fitOnDrawArea();
     }
 
     m_preview->ForceRefresh();
