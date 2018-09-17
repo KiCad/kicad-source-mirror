@@ -369,6 +369,11 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
                                           wxEmptyString,
                                           "Bulgarian (BG)",
                                           aInfo.CreateKiBitmap( lang_bg_xpm ) ) );
+    aInfo.AddTranslator( new CONTRIBUTOR( "Liu Guang",
+                                          wxEmptyString,
+                                          wxEmptyString,
+                                          "Simplified Chinese (zh_CN)",
+                                          aInfo.CreateKiBitmap( lang_zh_xpm ) ) );
 
     // Maintainer who helper in translations, but not in a specific translation
     #define OTHERS_IN_TRANSLATION _( "Others" )
