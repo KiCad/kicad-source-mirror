@@ -293,6 +293,9 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 
 int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 {
+    if( !m_selectionTool )
+        return 0;
+
     const SELECTION& selection = m_selectionTool->GetSelection();
 
     if( selection.Size() != 1 )
@@ -1075,7 +1078,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 
 int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
-    if( !m_editedPoint )
+    if( !m_editPoints || !m_editedPoint )
         return 0;
 
     EDA_ITEM* item = m_editPoints->GetParent();
