@@ -676,23 +676,21 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         // Display properties dialog
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
-        // Some of properties dialogs alter pointers, so we should deselect them
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-        // Store flags, so they can be restored later
-        STATUS_FLAGS flags = item->GetFlags();
-        item->ClearFlags();
-
         // Do not handle undo buffer, it is done by the properties dialogs @todo LEGACY
         // Display properties dialog provided by the legacy canvas frame
         editFrame->OnEditItemRequest( NULL, item );
 
+        // Notify other tools of the changes
         m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
-        item->SetFlags( flags );
     }
 
     if( selection.IsHover() )
+    {
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
+        // Notify other tools of the changes -- This updates the visual ratsnest
+        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    }
 
     return 0;
 }

@@ -30,6 +30,7 @@
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool.h>
+#include <tools/pcb_actions.h>
 #include <connectivity_data.h>
 
 #include <functional>
@@ -185,6 +186,9 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( remove )
                     {
                         view->Remove( boardItem );
+
+                        // Removing an item should trigger the unselect
+                        m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, boardItem );
 
                         if( !( changeFlags & CHT_DONE ) )
                         {
