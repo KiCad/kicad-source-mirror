@@ -186,6 +186,10 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     case SCH_TEXT_T:
         newtext = new SCH_TEXT( position, txt );
         break;
+
+    default:
+        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", type ) );
+        return;
     }
 
     /* Copy the old text item settings to the new one.  Justifications are not copied because
