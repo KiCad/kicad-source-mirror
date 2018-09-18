@@ -322,13 +322,13 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     // If no other command in progress, prepare undo command
     // (for a command in progress, will be made later, at the completion of command)
-    bool pushCommit = ( m_item->GetFlags() == 0 );
+    bool pushCommit = !( m_item->GetFlags() & ~SELECTED );
 
     /* set flag in edit to force undo/redo/abort proper operation,
      * and avoid new calls to SaveCopyInUndoList for the same text
      * this can occurs when a text is moved, and then rotated, edited ..
     */
-    if( m_item->GetFlags() != 0 )
+    if( !pushCommit )
         m_item->SetFlags( IN_EDIT );
 
 #ifndef USE_WX_OVERLAY
