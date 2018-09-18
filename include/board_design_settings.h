@@ -299,6 +299,15 @@ public:
     }
 
     /**
+     * Function UseNetClassDiffPair
+     * returns true if netclass values should be used to obtain appropriate diff pair dimensions.
+     */
+    inline bool UseNetClassDiffPair() const
+    {
+        return ( m_diffPairIndex == 0 && !m_useCustomDiffPair );
+    }
+
+    /**
      * Function SetCurrentNetClass
      * Must be called after a netclass selection (or after a netclass parameter change
      * Initialize vias and tracks values displayed in comb boxes of the auxiliary toolbar

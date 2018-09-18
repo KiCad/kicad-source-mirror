@@ -124,7 +124,13 @@ void SIZES_SETTINGS::Init( BOARD* aBoard, ITEM* aStartItem, int aNet )
         m_viaDrill    = bds.GetCurrentViaDrill();
     }
 
-    if( bds.UseCustomDiffPairDimensions() )
+    if( bds.UseNetClassDiffPair() && netClass != NULL )
+    {
+        m_diffPairWidth  = netClass->GetDiffPairWidth();
+        m_diffPairGap    = netClass->GetDiffPairGap();
+        m_diffPairViaGap = netClass->GetDiffPairViaGap();
+    }
+    else if( bds.UseCustomDiffPairDimensions() )
     {
         m_diffPairWidth  = bds.GetCustomDiffPairWidth();
         m_diffPairGap    = bds.GetCustomDiffPairGap();
