@@ -186,14 +186,6 @@ int PNS_PCBNEW_RULE_RESOLVER::Clearance( const PNS::ITEM* aA, const PNS::ITEM* a
     int net_b = aB->Net();
     int cl_b = ( net_b >= 0 ? m_netClearanceCache[net_b].clearance : m_defaultClearance );
 
-    // Clearance in differential pairs can only happen when there is a specific net
-    if( m_router->Mode() == PNS::PNS_MODE_ROUTE_DIFF_PAIR &&
-            net_a >= 0 && net_b >= 0 && m_netClearanceCache[net_a].coupledNet == net_b )
-    {
-        cl_a = m_netClearanceCache[net_a].dpClearance;
-        cl_b = m_netClearanceCache[net_b].dpClearance;
-    }
-
     // Pad clearance is 0 if the ITEM* is not a pad
     int pad_a = localPadClearance( aA );
     int pad_b = localPadClearance( aB );
