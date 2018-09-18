@@ -60,6 +60,9 @@ CONTEXT_MENU::~CONTEXT_MENU()
  */
 static void set_wxMenuIcon( wxMenuItem* aMenu, const BITMAP_OPAQUE* aIcon )
 {
+    if( !Pgm().CommonSettings() )
+        return;
+
     // Retrieve the global applicaton show icon option:
     bool useImagesInMenus;
     Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
