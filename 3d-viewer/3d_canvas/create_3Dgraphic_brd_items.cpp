@@ -820,6 +820,8 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
         aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue,
                                                         segcountforcircle, correctionFactor );
 
+        polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
         if( polyList.IsEmpty() ) // Just for caution
             break;
 
@@ -846,13 +848,16 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
 {
     // Copy the polys list because we have to simplify it
     SHAPE_POLY_SET polyList = SHAPE_POLY_SET(aZoneContainer->GetFilledPolysList());
+    polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
+
+    if( polyList.IsEmpty() )
+        return;
 
     // This convert the poly in outline and holes
     Convert_shape_line_polygon_to_triangles( polyList,
                                              *aDstContainer,
                                              m_biuTo3Dunits,
                                              *aZoneContainer );
-
 
     // add filled areas outlines, which are drawn with thick lines segments
     // /////////////////////////////////////////////////////////////////////////
