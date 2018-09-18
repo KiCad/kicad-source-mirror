@@ -99,37 +99,38 @@ void GERBVIEW_RENDER_SETTINGS::LoadDisplayOptions( const GBR_DISPLAY_OPTIONS* aO
 
 const COLOR4D& GERBVIEW_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer ) const
 {
-    const GERBER_DRAW_ITEM* item = static_cast<const GERBER_DRAW_ITEM*>( aItem );
+    const EDA_ITEM* item = static_cast<const EDA_ITEM*>( aItem );
     static const COLOR4D transparent = COLOR4D( 0, 0, 0, 0 );
+    const GERBER_DRAW_ITEM* gbrItem = nullptr;
+
+    if( item && item->Type() == GERBER_DRAW_ITEM_T )
+        gbrItem = static_cast<const GERBER_DRAW_ITEM*>( item );
 
     // All DCODE layers stored under a single color setting
     if( IsDCodeLayer( aLayer ) )
         return m_layerColors[ LAYER_DCODES ];
 
-    if( item )
-    {
-        if( item->IsSelected() )
-            return m_layerColorsSel[aLayer];
+    if( item && item->IsSelected() )
+        return m_layerColorsSel[aLayer];
 
-        if( item->GetLayerPolarity() )
-        {
-            if( m_showNegativeItems )
-                return m_layerColors[LAYER_NEGATIVE_OBJECTS];
-            else
-                return transparent;
-        }
+    if( gbrItem && gbrItem->GetLayerPolarity() )
+    {
+        if( m_showNegativeItems )
+            return m_layerColors[LAYER_NEGATIVE_OBJECTS];
+        else
+            return transparent;
     }
 
-    if( !m_netHighlightString.IsEmpty() && item &&
-        m_netHighlightString == item->GetNetAttributes().m_Netname )
+    if( !m_netHighlightString.IsEmpty() && gbrItem &&
+        m_netHighlightString == gbrItem->GetNetAttributes().m_Netname )
         return m_layerColorsHi[aLayer];
 
-    if( !m_componentHighlightString.IsEmpty() && item &&
-        m_componentHighlightString == item->GetNetAttributes().m_Cmpref )
+    if( !m_componentHighlightString.IsEmpty() && gbrItem &&
+        m_componentHighlightString == gbrItem->GetNetAttributes().m_Cmpref )
         return m_layerColorsHi[aLayer];
 
-    if( !m_attributeHighlightString.IsEmpty() && item && item->GetDcodeDescr() &&
-        m_attributeHighlightString == item->GetDcodeDescr()->m_AperFunction )
+    if( !m_attributeHighlightString.IsEmpty() && gbrItem && gbrItem->GetDcodeDescr() &&
+        m_attributeHighlightString == gbrItem->GetDcodeDescr()->m_AperFunction )
         return m_layerColorsHi[aLayer];
 
     // Return grayish color for non-highlighted layers in the high contrast mode
