@@ -168,6 +168,10 @@ void SIZES_SETTINGS::ImportCurrent( BOARD_DESIGN_SETTINGS& aSettings )
     m_trackWidth = aSettings.GetCurrentTrackWidth();
     m_viaDiameter = aSettings.GetCurrentViaSize();
     m_viaDrill = aSettings.GetCurrentViaDrill();
+
+    m_diffPairWidth = aSettings.GetCurrentDiffPairWidth();
+    m_diffPairGap = aSettings.GetCurrentDiffPairGap();
+    m_diffPairViaGap = aSettings.GetCurrentDiffPairViaGap();
 }
 
 
