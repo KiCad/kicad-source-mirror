@@ -21,7 +21,7 @@
 
 #include <footprint_preview_panel.h>
 #include <pcb_draw_panel_gal.h>
-
+#include <kiface_i.h>
 #include <kiway.h>
 #include <io_mgr.h>
 #include <fp_lib_table.h>
@@ -261,6 +261,7 @@ FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aPare
 
     m_dummyBoard = std::make_unique<BOARD>();
     m_colorsSettings = std::make_unique<COLORS_DESIGN_SETTINGS>( FRAME_PCB_FOOTPRINT_PREVIEW );
+    m_colorsSettings->Load( Kiface().KifaceSettings() );
 
     UseColorScheme( m_colorsSettings.get() );
     SyncLayersVisibility( &*m_dummyBoard );
