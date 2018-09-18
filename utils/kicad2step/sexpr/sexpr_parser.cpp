@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2016 Mark Roszko <mark.roszko@gmail.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 
 #include <fstream>
 #include <streambuf>
+#include <wx/file.h>
+#include <macros.h>
 
 namespace SEXPR
 {
@@ -54,22 +56,22 @@ namespace SEXPR
 
     std::string PARSER::GetFileContents( const std::string &aFileName )
     {
-        std::ifstream file( aFileName.c_str(), std::ios::binary );
         std::string str;
 
-        // Faster than automatic allocation
-        file.seekg( 0, std::ios::end );
-        auto length = file.tellg();
+        // the filename is not always a UTF7 string, so do not use ifstream
+        // that do not work with unicode chars.
+        wxString fname( FROM_UTF8( aFileName.c_str() ) );
+        wxFile file( fname );
+        size_t length = file.Length();
 
-        if( length < 0 )
+        if( length <= 0 )
         {
-            throw PARSE_EXCEPTION( "Error occurred attempting to read in file" );
+            throw PARSE_EXCEPTION( "Error occurred attempting to read in file or empty file" );
         }
 
-        str.resize( static_cast<size_t>( length ) );
-        file.seekg( 0, std::ios::beg );
 
-        file.read( &str[0], str.length() );
+        str.resize( length );
+        file.Read( &str[0], str.length() );
 
         return str;
     }
