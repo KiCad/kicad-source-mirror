@@ -416,10 +416,17 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
 
     defaultColors( aLine );
 
+    const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
     std::deque<VECTOR2D> vtx;
 
-    for( auto p : aLine->GetPolyPoints() )
-        vtx.push_back ( mapCoords( p ) );
+    for( auto p : pts )
+        vtx.push_back( mapCoords( p ) );
+
+    // Make sure a filled polygon is closed.  We appear to have both types out in the wild:
+    // while most are closed (cf op-amp bodies, diodes, etc.), there are some that are inferred
+    // by their fill to be closed (cf arrowheads on potentiometers, optocoupler LEDs, etc.).
+    if( aLine->GetFillMode() != NO_FILL && pts.back() != pts.front() )
+        vtx.push_back( mapCoords( pts.front() ) );
 
     m_gal->DrawPolygon( vtx );
 }
