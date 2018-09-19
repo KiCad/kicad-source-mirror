@@ -322,7 +322,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 
     // If no other command in progress, prepare undo command
     // (for a command in progress, will be made later, at the completion of command)
-    bool pushCommit = !( m_item->GetFlags() & ~SELECTED );
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    bool pushCommit = ( m_item->GetFlags() & mask ) == 0;
 
     /* set flag in edit to force undo/redo/abort proper operation,
      * and avoid new calls to SaveCopyInUndoList for the same text
