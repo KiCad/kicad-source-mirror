@@ -30,7 +30,7 @@
 #include <confirm.h>
 
 #include <dialog_print_using_printer_base.h>
-#include <printout_controler.h>
+#include <gerbview_printout.h>
 
 #include <gerbview.h>
 #include <gerbview_frame.h>
@@ -91,6 +91,12 @@ private:
     void OnButtonCloseClick( wxCommandEvent& event ) override { Close(); }
     void SetPrintParameters();
     void InitValues();
+
+    GERBVIEW_PRINTOUT* createPrintout( const wxString& aTitle )
+    {
+        return new GERBVIEW_PRINTOUT( m_Parent->GetGerberLayout(), s_Parameters,
+                m_Parent->GetGalCanvas()->GetView(), m_Parent->GetPageSettings().GetSizeIU(), aTitle );
+    }
 
 public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
@@ -366,11 +372,9 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
         return;
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = _( "Print Preview" );
+    wxString title = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
-                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_Parent, title ),
-                            s_printData );
+        new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_printData );
 
     if( preview == NULL )
     {
@@ -403,13 +407,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 
     wxPrinter printer( &printDialogData );
     wxString title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_Parent, title );
+    auto printout = std::unique_ptr<GERBVIEW_PRINTOUT>( createPrintout( _( "Print" ) ) );
 
     // Disable 'Print' button to prevent issuing another print
     // command before the previous one is finished (causes problems on Windows)
     ENABLER printBtnDisable( *m_buttonPrint, false );
 
-    if( !printer.Print( this, &printout, true ) )
+    if( !printer.Print( this, printout.get(), true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing" ) );

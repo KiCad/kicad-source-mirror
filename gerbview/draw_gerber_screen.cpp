@@ -39,7 +39,7 @@
 #include <gerbview_frame.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-#include <printout_controler.h>
+#include "gerbview_printout.h"
 
 
 void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,

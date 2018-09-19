@@ -28,7 +28,7 @@
 #include <fctsys.h>
 #include <class_drawpanel.h>
 #include <pcb_edit_frame.h>
-#include <printout_controler.h>
+#include <pcbnew_printout.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>

@@ -38,6 +38,7 @@ set( GERBVIEW_SRCS
     gerber_file_image_list.cpp
     gerber_draw_item.cpp
     gerbview_layer_widget.cpp
+    gerbview_printout.cpp
     gbr_layer_box_selector.cpp
     X2_gerber_attributes.cpp
     clear_gbr_drawlayers.cpp
@@ -58,7 +59,6 @@ set( GERBVIEW_SRCS
     menubar.cpp
     onleftclick.cpp
     onrightclick.cpp
-    printout_control.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp

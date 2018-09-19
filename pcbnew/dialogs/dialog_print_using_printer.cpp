@@ -22,16 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// Set this to 1 if you want to test PostScript printing under MSW.
-//#define wxTEST_POSTSCRIPT_IN_MSW 1
-
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <base_units.h>
-#include <printout_controler.h>
+#include <pcbnew_printout.h>
 #include <pcbnew.h>
 #include <pcbplot.h>
 #include <class_board.h>
@@ -71,7 +68,6 @@ public:
     ~DIALOG_PRINT_USING_PRINTER() override;
 
 private:
-
     PCB_EDIT_FRAME* m_parent;
     wxConfigBase*   m_config;
     // the list of existing board layers in wxCheckListBox, with the board layers id:
@@ -89,6 +85,12 @@ private:
 
     void SetPrintParameters();
     int SetLayerSetFromListSelection();
+
+    PCBNEW_PRINTOUT* createPrintout( const wxString& aTitle )
+    {
+        return new PCBNEW_PRINTOUT( m_parent->GetBoard(), s_Parameters,
+            m_parent->GetGalCanvas()->GetView(), m_parent->GetPageSettings().GetSizeIU(), aTitle );
+    }
 };
 
 
@@ -375,7 +377,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
-    SetPrintParameters( );
+    SetPrintParameters();
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:
@@ -386,11 +388,9 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
     }
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = _( "Print Preview" );
+    wxString title = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
-                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
-                            s_PrintData );
+            new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_PrintData );
 
     preview->SetZoom( 100 );
 
@@ -425,7 +425,7 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     // because he could think there is a bug in Pcbnew:
     if( s_Parameters.m_PrintMaskLayer == 0 )
     {
-        DisplayError( this, _( "No layer selected." ) );
+        DisplayError( this, _( "No layer selected" ) );
         return;
     }
 
@@ -433,14 +433,13 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
     printDialogData.SetMaxPage( s_Parameters.m_PageCount );
 
     wxPrinter printer( &printDialogData );
-    wxString  title = _( "Print" );
-    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, title );
+    auto printout = std::unique_ptr<PCBNEW_PRINTOUT>( createPrintout( _( "Print" ) ) );
 
     // Disable 'Print' button to prevent issuing another print
     // command before the previous one is finished (causes problems on Windows)
     ENABLER printBtnDisable( *m_sdbSizer1OK, false );
 
-    if( !printer.Print( this, &printout, true ) )
+    if( !printer.Print( this, printout.get(), true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing." ) );

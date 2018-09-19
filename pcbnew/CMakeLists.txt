@@ -286,12 +286,12 @@ set( PCBNEW_CLASS_SRCS
 #    pcb_view.cpp
     pcb_edit_frame.cpp
     pcbnew_config.cpp
+    pcbnew_printout.cpp
     pcb_legacy_draw_utils.cpp
     pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
     print_board_functions.cpp
-    printout_controler.cpp
     ratsnest.cpp
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp

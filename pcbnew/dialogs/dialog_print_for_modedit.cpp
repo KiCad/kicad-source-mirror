@@ -34,7 +34,7 @@
 #include <pcbplot.h>
 
 #include <dialog_print_for_modedit_base.h>
-#include <printout_controler.h>
+#include <pcbnew_printout.h>
 #include <enabler.h>
 
 static double s_scaleList[] =
@@ -82,6 +82,12 @@ private:
     }
 
     void InitValues( );
+
+    PCBNEW_PRINTOUT* createPrintout( const wxString& aTitle )
+    {
+        return new PCBNEW_PRINTOUT( m_parent->GetBoard(), s_Parameters,
+            m_parent->GetGalCanvas()->GetView(), m_parent->GetPageSettings().GetSizeIU(), aTitle );
+    }
 };
 
 
@@ -179,11 +185,9 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintPreview( wxCommandEvent& event )
     s_Parameters.m_PrintScale = s_scaleList[m_ScaleOption->GetSelection()];
 
     // Pass two printout objects: for preview, and possible printing.
-    wxString        title   = _( "Print Preview" );
+    wxString title = _( "Print Preview" );
     wxPrintPreview* preview =
-        new wxPrintPreview( new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
-                            new BOARD_PRINTOUT_CONTROLLER( s_Parameters, m_parent, title ),
-                            s_PrintData );
+            new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_PrintData );
 
     if( preview == NULL )
     {
@@ -233,13 +237,13 @@ void DIALOG_PRINT_FOR_MODEDIT::OnPrintButtonClick( wxCommandEvent& event )
     wxPrintDialogData printDialogData( *s_PrintData );
     wxPrinter         printer( &printDialogData );
 
-    BOARD_PRINTOUT_CONTROLLER printout( s_Parameters, m_parent, _( "Print Footprint" ) );
+    auto printout = std::unique_ptr<PCBNEW_PRINTOUT>( createPrintout( _( "Print Footprint" ) ) );
 
     // Disable 'Print' button to prevent issuing another print
     // command before the previous one is finished (causes problems on Windows)
     ENABLER printBtnDisable( *m_buttonPrint, false );
 
-    if( !printer.Print( this, &printout, true ) )
+    if( !printer.Print( this, printout.get(), true ) )
     {
         if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
             DisplayError( this, _( "There was a problem printing." ) );

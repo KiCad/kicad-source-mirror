@@ -267,6 +267,7 @@ set( COMMON_SRCS
     bin_mod.cpp
     bitmap.cpp
     bitmap_base.cpp
+    board_printout.cpp
     build_version.cpp
     colors_design_settings.cpp
     colors.cpp
