@@ -111,15 +111,17 @@ CAIRO_PRINT_CTX::~CAIRO_PRINT_CTX()
 
 
 CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
-        cairo_t* aContext, cairo_surface_t* aSurface )
+        std::unique_ptr<CAIRO_PRINT_CTX> aContext )
     : CAIRO_GAL_BASE( aDisplayOptions )
 {
-    cairo_reference( aContext );
-    cairo_surface_reference( aSurface );
-    context = currentContext = aContext;
-    surface = aSurface;
+    m_printCtx = std::move( aContext );
+    context = currentContext = m_printCtx->GetContext();
+    surface = m_printCtx->GetSurface();
+    cairo_reference( context );
+    cairo_surface_reference( surface );
     m_clearColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
     resetContext();
+    SetScreenDPI( m_printCtx->GetNativeDPI() );
 }
 
 
@@ -178,4 +180,11 @@ void CAIRO_PRINT_GAL::SetSheetSize( const VECTOR2D& aSize )
     // Convert aSize (inches) to pixels
     SetScreenSize( VECTOR2I( std::ceil( aSize.x * screenDPI ) * 2,
                 std::ceil( aSize.y * screenDPI ) * 2 ) );
+}
+
+
+std::unique_ptr<GAL_PRINT> GAL_PRINT::Create( GAL_DISPLAY_OPTIONS& aOptions, wxDC* aDC )
+{
+    auto printCtx = std::make_unique<CAIRO_PRINT_CTX>( aDC );
+    return std::make_unique<CAIRO_PRINT_GAL>( aOptions, std::move( printCtx ) );
 }

@@ -21,6 +21,7 @@
 #define _CAIRO_PRINT_H_
 
 #include <gal/cairo/cairo_gal.h>
+#include <gal/gal_print.h>
 
 class wxDC;
 class wxGCDC;
@@ -31,7 +32,7 @@ namespace KIGFX
  * CAIRO_PRINT_CTX provides a Cairo context created from wxPrintDC.
  * It allows one to prepare printouts using the Cairo library and let wxWidgets handle the rest.
  */
-class CAIRO_PRINT_CTX
+class CAIRO_PRINT_CTX : public PRINT_CONTEXT
 {
 public:
     CAIRO_PRINT_CTX( wxDC* aDC );
@@ -47,12 +48,12 @@ public:
         return m_surface;
     }
 
-    double GetNativeDPI() const
+    double GetNativeDPI() const override
     {
         return m_dpi;
     }
 
-    bool HasNativeLandscapeRotation() const
+    bool HasNativeLandscapeRotation() const override
     {
 #ifdef __WXGTK__
         return false;
@@ -75,25 +76,35 @@ private:
 };
 
 
-class CAIRO_PRINT_GAL : public CAIRO_GAL_BASE
+class CAIRO_PRINT_GAL : public CAIRO_GAL_BASE, public GAL_PRINT
 {
 public:
     CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
-            cairo_t* aContext, cairo_surface_t* aSurface );
+            std::unique_ptr<CAIRO_PRINT_CTX> aContext );
 
     void ComputeWorldScreenMatrix() override;
+
+    GAL* GetGAL() override
+    {
+        return this;
+    }
+
+    PRINT_CONTEXT* GetPrintCtx() const override
+    {
+        return m_printCtx.get();
+    }
 
     /**
      * @param aSize is the printing sheet size expressed in inches.
      * @param aRotateIfLandscape true if the platform requires 90 degrees
      * rotation in order to print in landscape format.
      */
-    void SetNativePaperSize( const VECTOR2D& aSize, bool aRotateIfLandscape );
+    void SetNativePaperSize( const VECTOR2D& aSize, bool aRotateIfLandscape ) override;
 
     /**
      * @param aSize is the schematics sheet size expressed in inches.
      */
-    void SetSheetSize( const VECTOR2D& aSize );
+    void SetSheetSize( const VECTOR2D& aSize ) override;
 
 private:
     ///> Returns true if page orientation is landscape
@@ -109,6 +120,7 @@ private:
     ///> GAL needs to handle it in the transformation matrix
     bool m_hasNativeLandscapeRotation;
 
+    std::unique_ptr<CAIRO_PRINT_CTX> m_printCtx;
 };
 } // namespace KIGFX
 
