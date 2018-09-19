@@ -32,7 +32,7 @@
 #include <bitmaps.h>
 #include <wx/bmpcbox.h>
 #include <kiface_i.h>
-
+#include <kicad_string.h>
 
 #define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
 
@@ -227,17 +227,15 @@ public:
     {
         wxString lhStr = GetValue( lhs, sortCol, units );
         wxString rhStr = GetValue( rhs, sortCol, units );
-        bool     retVal;
 
         if( lhStr == rhStr )
         {
             // Secondary sort key is always COL_NUMBER
-            retVal = GetValue( lhs, COL_NUMBER, units ) < GetValue( rhs, COL_NUMBER, units );
+            lhStr = GetValue( lhs, COL_NUMBER, units );
+            rhStr = GetValue( rhs, COL_NUMBER, units );
         }
-        else
-            retVal = lhStr < rhStr;
 
-        return ascending == retVal;
+        return ascending == ( PinNumbers::Compare( lhStr, rhStr ) < 0 );
     }
 
     void RebuildRows( LIB_PINS& aPins, bool groupByName )
