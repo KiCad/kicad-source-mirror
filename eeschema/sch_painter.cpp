@@ -134,7 +134,7 @@ SCH_PAINTER::SCH_PAINTER( GAL* aGal ) :
 
 
 #define HANDLE_ITEM( type_id, type_name ) \
-  case type_id: draw( (type_name *) item, aLayer ); break;
+    case type_id: draw( (type_name *) item, aLayer ); break;
 
 
 bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
@@ -173,8 +173,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM(SCH_BITMAP_T, SCH_BITMAP);
     HANDLE_ITEM(SCH_MARKER_T, SCH_MARKER);
 
-    default:
-        return false;
+    default: return false;
 	}
 
 	return false;
@@ -202,7 +201,7 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 
 
 void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert,
-                       std::vector<bool>* danglingPinFlags )
+                        std::vector<bool>* danglingPinFlags )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -339,6 +338,7 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
     m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
 
+
 void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 {
     if( !isUnitAndConversionShown( aArc ) )
@@ -357,7 +357,7 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 
     VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
-    m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea);
+    m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
 }
 
 
@@ -545,8 +545,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
 			break;
 	}
 
-//printf("pin %p p0 %d %d pos %d %d len %d\n", aPin, p0.x, p0.y, pos.x, pos.y, len);
-
     VECTOR2D pc;
 
     m_gal->SetIsStroke( true );
@@ -638,7 +636,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     if( ( isDangling || isMoving ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( m_gal, pos, color );
 
-// Draw the labels
+    // Draw the labels
 
     LIB_PART* libEntry = aPin->GetParent();
     int textOffset = libEntry->GetPinNameOffset();
@@ -735,14 +733,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -len / 2, -aboveOffset ), 0 );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -len / 2.0, -aboveOffset ), 0 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( -len / 2, belowOffset ), 0 );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( -len / 2.0, belowOffset ), 0 );
         }
         break;
 
@@ -767,14 +765,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( len / 2, -aboveOffset ), 0 );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( len / 2.0, -aboveOffset ), 0 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( len / 2, belowOffset ), 0 );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( len / 2.0, belowOffset ), 0 );
         }
         break;
 
@@ -798,14 +796,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2 ), M_PI / 2 );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, len / 2.0 ), M_PI / 2 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2 ), M_PI / 2 );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, len / 2.0 ), M_PI / 2 );
         }
         break;
 
@@ -829,16 +827,19 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
             SET_DC( ABOVE );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2 ), M_PI / 2 );
+            m_gal->StrokeText( text[ABOVE], pos + VECTOR2D( -aboveOffset, -len / 2.0 ), M_PI / 2 );
         }
         if( size[BELOW] )
         {
             SET_DC( BELOW );
             m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
             m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2 ), M_PI / 2 );
+            m_gal->StrokeText( text[BELOW], pos + VECTOR2D( belowOffset, -len / 2.0 ), M_PI / 2 );
         }
         break;
+
+    default:
+        wxFAIL_MSG( "Unknown pin orientation" );
     }
 }
 
@@ -868,7 +869,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
     m_gal->SetIsFill(true);
     m_gal->SetStrokeColor( color );
     m_gal->SetFillColor( color );
-    m_gal->DrawCircle( aJct->GetPosition(),  aJct->GetEffectiveSymbolSize() / 2 );
+    m_gal->DrawCircle( aJct->GetPosition(), SCH_JUNCTION::GetEffectiveSymbolSize() / 2.0 );
 }
 
 
@@ -904,6 +905,7 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 
         switch( aLine->GetLineStyle() )
         {
+        default:
         case PLOTDASHTYPE_DASH:
             strokes[0] = strokes[2] = DASH_MARK_LEN( width );
             break;
@@ -1045,14 +1047,14 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
     // In either case copy it so we can re-orient and translate it.
-    std::unique_ptr<LIB_PART> ptrans( new LIB_PART( part ? *part.get() : *dummy() ) );
+    std::unique_ptr<LIB_PART> temp( new LIB_PART( part ? *part.get() : *dummy() ) );
 
     if( aComp->IsMoving() )
-        ptrans->SetFlags( IS_MOVED );
+        temp->SetFlags( IS_MOVED );
 
-    orientComponent( ptrans.get(), aComp->GetOrientation() );
+    orientComponent( temp.get(), aComp->GetOrientation() );
 
-    for( auto& item : ptrans->GetDrawItems() )
+    for( auto& item : temp->GetDrawItems() )
     {
         if( aComp->IsMoving() )
             item.SetFlags( IS_MOVED );
@@ -1062,7 +1064,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
         item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
     }
 
-    draw( ptrans.get(), aLayer, false,
+    draw( temp.get(), aLayer, false,
           aComp->GetUnit(), aComp->GetConvert(), aComp->GetDanglingPinFlags() );
 
     // The fields are SCH_COMPONENT-specific and so don't need to be copied/
@@ -1114,7 +1116,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     lineWidth = Clamp_Text_PenSize( lineWidth, aField->GetTextSize(), aField->IsBold() );
 
     // Calculate the text orientation according to the component orientation.
-    orient = aField->GetTextAngle();
+    orient = (int) aField->GetTextAngle();
 
     if( parentComponent->GetTransform().y1 )  // Rotate component 90 degrees.
     {
@@ -1166,7 +1168,7 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
-        pts2.push_back( VECTOR2D( p.x, p.y ) );
+        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
@@ -1192,7 +1194,7 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     aLabel->CreateGraphicShape( pts, aLabel->GetTextPos() );
 
     for( auto p : pts )
-        pts2.push_back( VECTOR2D( p.x, p.y ) );
+        pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
     m_gal->SetIsFill( false );
     m_gal->SetIsStroke( true );
@@ -1216,15 +1218,15 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
     {
         // Select a fill color working well with black and white background color,
         // both in Opengl and Cairo
-        m_gal->SetFillColor ( COLOR4D(0.1, 0.5, 0.5, 0.3) );
-        m_gal->SetIsFill ( true );
+        m_gal->SetFillColor( COLOR4D( 0.1, 0.5, 0.5, 0.3 ) );
+        m_gal->SetIsFill( true );
     }
     else
     {
         // Could be modified later, when sheets can have their own fill color
         m_gal->SetIsFill ( false );
     }
-    m_gal->SetIsStroke ( true );
+    m_gal->SetIsStroke( true );
     m_gal->DrawRectangle( pos, pos + size );
 
     auto nameAngle = 0.0;
@@ -1272,8 +1274,8 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 
     VECTOR2D p = aNC->GetPosition();
 
-    m_gal->DrawLine( p + VECTOR2D(-delta, -delta), p+VECTOR2D( delta, delta ) );
-    m_gal->DrawLine( p + VECTOR2D(-delta, delta), p+VECTOR2D( delta, -delta ) );
+    m_gal->DrawLine( p + VECTOR2D( -delta, -delta ), p + VECTOR2D( delta, delta ) );
+    m_gal->DrawLine( p + VECTOR2D( -delta, delta ), p + VECTOR2D( delta, -delta ) );
 }
 
 
@@ -1328,16 +1330,17 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     const int scale = aMarker->m_ScalingFactor;
 
     // If you are changing this, update the bounding box as well
-    const VECTOR2D arrow[] = {
-            VECTOR2D(  0 * scale,   0 * scale ),
-            VECTOR2D(  8 * scale,   1 * scale ),
-            VECTOR2D(  4 * scale,   3 * scale ),
-            VECTOR2D( 13 * scale,   8 * scale ),
-            VECTOR2D(  9 * scale,   9 * scale ),
-            VECTOR2D(  8 * scale,  13 * scale ),
-            VECTOR2D(  3 * scale,   4 * scale ),
-            VECTOR2D(  1 * scale,   8 * scale ),
-            VECTOR2D(  0 * scale,   0 * scale )
+    const VECTOR2D arrow[] =
+    {
+        VECTOR2D(  0 * scale,   0 * scale ),
+        VECTOR2D(  8 * scale,   1 * scale ),
+        VECTOR2D(  4 * scale,   3 * scale ),
+        VECTOR2D( 13 * scale,   8 * scale ),
+        VECTOR2D(  9 * scale,   9 * scale ),
+        VECTOR2D(  8 * scale,  13 * scale ),
+        VECTOR2D(  3 * scale,   4 * scale ),
+        VECTOR2D(  1 * scale,   8 * scale ),
+        VECTOR2D(  0 * scale,   0 * scale )
     };
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_ERC_WARN );
