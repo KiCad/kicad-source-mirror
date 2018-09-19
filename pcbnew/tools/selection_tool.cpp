@@ -1220,7 +1220,6 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
 int SELECTION_TOOL::find( const TOOL_EVENT& aEvent )
 {
     DIALOG_FIND dlg( m_frame );
-    dlg.EnableWarp( false );
     dlg.SetCallback( std::bind( &SELECTION_TOOL::findCallback, this, _1 ) );
     dlg.ShowModal();
 
