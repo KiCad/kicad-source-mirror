@@ -257,12 +257,6 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            if( IsCopperLayer( GetActiveLayer() ) )
-            {
-                DisplayError( this, _( "Graphic not allowed on Copper layers" ) );
-                break;
-            }
-
             if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
             {
                 curr_item = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
