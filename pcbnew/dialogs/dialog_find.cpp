@@ -58,17 +58,20 @@ DIALOG_FIND::DIALOG_FIND( PCB_BASE_FRAME* aParent ) : DIALOG_FIND_BASE( aParent 
     Center();
 }
 
+
 void DIALOG_FIND::OnInitDialog( wxInitDialogEvent& event )
 {
     m_SearchTextCtrl->SetFocus();
     m_SearchTextCtrl->SetSelection( -1, -1 );
 }
 
+
 void DIALOG_FIND::EnableWarp( bool aEnabled )
 {
     m_NoMouseWarpCheckBox->SetValue( !aEnabled );
     warpMouse = aEnabled;
 }
+
 
 void DIALOG_FIND::onButtonCloseClick( wxCommandEvent& aEvent )
 {
@@ -81,13 +84,14 @@ void DIALOG_FIND::onButtonFindItemClick( wxCommandEvent& aEvent )
     PCB_SCREEN* screen = parent->GetScreen();
     wxPoint     pos;
 
-    foundItem = NULL;
     wxString searchString = m_SearchTextCtrl->GetValue();
 
     if( !searchString.IsSameAs( prevSearchString, false ) )
     {
         itemCount = 0;
+        foundItem = NULL;
     }
+
     prevSearchString = searchString;
 
     parent->GetCanvas()->GetViewStart( &screen->m_StartVisu.x, &screen->m_StartVisu.y );
