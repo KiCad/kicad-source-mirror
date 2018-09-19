@@ -90,10 +90,11 @@ static COLORBUTTON sheetColorButtons[] = {
 static COLORBUTTON miscColorButtons[] = {
     { _( "ERC warning" ),       LAYER_ERC_WARN },
     { _( "ERC error" ),         LAYER_ERC_ERR },
-    { _( "Cursor" ),            LAYER_SCHEMATIC_CURSOR },
-    { _( "Grid" ),              LAYER_SCHEMATIC_GRID },
     { _( "Brightened" ),        LAYER_BRIGHTENED },
     { _( "Hidden items" ),      LAYER_HIDDEN },
+    { _( "Worksheet" ),         LAYER_WORKSHEET },
+    { _( "Cursor" ),            LAYER_SCHEMATIC_CURSOR },
+    { _( "Grid" ),              LAYER_SCHEMATIC_GRID },
     { _( "Background" ),        LAYER_SCHEMATIC_BACKGROUND },
     { wxT( "" ), -1 }                           // Sentinel marking end of list.
 };
@@ -260,6 +261,8 @@ bool WIDGET_EESCHEMA_COLOR_CONFIG::TransferDataFromControl()
 
     for( SCH_LAYER_ID clyr = SCH_LAYER_ID_START; clyr < SCH_LAYER_ID_END; ++clyr )
         SetLayerColor( currentColors[ clyr ], clyr );
+
+    SetLayerColor( currentColors[ LAYER_WORKSHEET ], (SCH_LAYER_ID) LAYER_WORKSHEET );
 
     return true;
 }
