@@ -32,6 +32,7 @@
 #include <class_zone.h>
 #include <profile.h>
 
+#include <thread>
 #include <unordered_set>
 #include <utility>
 
