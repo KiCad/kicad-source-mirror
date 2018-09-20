@@ -418,27 +418,24 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
                                                 *aPad ) );
 
         // Add the PAD contours
-        // !TODO: check the corners because it cannot add
-        // roundsegments that are in the same start and end position
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[0],
-                                                 corners3DU[1],
-                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[1],
-                                                 corners3DU[2],
-                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[2],
-                                                 corners3DU[3],
-                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[3],
-                                                 corners3DU[0],
-                                                 aClearanceValue.x * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
+        // Round segments cannot have 0-length elements, so we approximate them
+        // as a small circle
+        for( int i = 1; i <= 4; i++ )
+        {
+            if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+            {
+                aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
+                                        aClearanceValue.x * 2.0f * m_biuTo3Dunits,
+                                        *aPad ) );
+            }
+            else
+            {
+                aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
+                                                         corners3DU[i & 3],
+                                                         aClearanceValue.x * 2.0f * m_biuTo3Dunits,
+                                                         *aPad ) );
+            }
+        }
     }
     break;
 
@@ -473,27 +470,24 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
                                                 *aPad ) );
 
         // Add the PAD contours
-        // !TODO: check the corners because it cannot add
-        // roundsegments that are in the same start and end position
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[0],
-                            corners3DU[1],
-                            rounding_radius * 2.0f * m_biuTo3Dunits,
-                            *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[1],
-                                                 corners3DU[2],
-                                                 rounding_radius * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[2],
-                                                 corners3DU[3],
-                                                 rounding_radius * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
-
-        aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[3],
-                                                 corners3DU[0],
-                                                 rounding_radius * 2.0f * m_biuTo3Dunits,
-                                                 *aPad ) );
+        // Round segments cannot have 0-length elements, so we approximate them
+        // as a small circle
+        for( int i = 1; i <= 4; i++ )
+        {
+            if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
+            {
+                aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
+                                        rounding_radius * 2.0f * m_biuTo3Dunits,
+                                        *aPad ) );
+            }
+            else
+            {
+                aDstContainer->Add( new CROUNDSEGMENT2D( corners3DU[i - 1],
+                                        corners3DU[i & 3],
+                                        rounding_radius * 2.0f * m_biuTo3Dunits,
+                                        *aPad ) );
+            }
+        }
     }
     break;
 
