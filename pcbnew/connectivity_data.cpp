@@ -93,8 +93,6 @@ void CONNECTIVITY_DATA::updateRatsnest()
     PROF_COUNTER rnUpdate( "update-ratsnest" );
     #endif
 
-    int nDirty = 0;
-
     int i;
 
     #ifdef USE_OPENMP
@@ -111,7 +109,6 @@ void CONNECTIVITY_DATA::updateRatsnest()
             if( m_nets[i]->IsDirty() )
             {
                 m_nets[i]->Update();
-                nDirty++;
             }
         }
     }          /* end of parallel section */

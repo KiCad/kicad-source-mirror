@@ -28,10 +28,6 @@
  * @brief Class that computes missing connections on a PCB.
  */
 
-#ifdef USE_OPENMP
-#include <omp.h>
-#endif /* USE_OPENMP */
-
 #ifdef PROFILE
 #include <profile.h>
 #endif
@@ -69,7 +65,6 @@ static const std::vector<CN_EDGE> kruskalMST( std::list<CN_EDGE>& aEdges,
     unsigned int    mstSize = 0;
     bool ratsnestLines = false;
 
-    //printf("mst nodes : %d edges : %d\n", aNodes.size(), aEdges.size () );
     // The output
     std::vector<CN_EDGE> mst;
 
@@ -194,11 +189,6 @@ private:
         }
 
         return true;
-    }
-
-    const std::list<hed::EDGE_PTR> computeTriangulation( std::vector<hed::NODE_PTR>& aNodes )
-    {
-        return hedTriangulation( aNodes );
     }
 
 public:
@@ -341,7 +331,6 @@ void RN_NET::compute()
 {
     // Special cases do not need complicated algorithms (actually, it does not work well with
     // the Delaunay triangulator)
-    //printf("compute nodes :  %d\n", m_nodes.size() );
     if( m_nodes.size() <= 2 )
     {
         m_rnEdges.clear();
@@ -430,13 +419,8 @@ void RN_NET::AddCluster( CN_CLUSTER_PTR aCluster )
         if( nAnchors > anchors.size() )
             nAnchors = anchors.size();
 
-        //printf("item %p anchors : %d\n", item, anchors.size() );
-        //printf("add item %p anchors : %d net : %d\n", item, item->Anchors().size(), item->Parent()->GetNetCode() );
-
         for( unsigned int i = 0; i < nAnchors; i++ )
         {
-        //    printf("add anchor %p\n", anchors[i].get() );
-
             anchors[i]->SetCluster( aCluster );
             m_nodes.push_back(anchors[i]);
 

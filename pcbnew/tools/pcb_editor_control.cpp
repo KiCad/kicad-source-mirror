@@ -60,10 +60,6 @@
 
 #include <widgets/progress_reporter.h>
 
-#ifdef USE_OPENMP
-#include <omp.h>
-#endif /* USE_OPENMP */
-
 #include <tools/tool_event_utils.h>
 
 #include <functional>

@@ -688,7 +688,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         return SaveFootprintAs( aModule );
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
-    bool syncLibraryTree = false;
 
     // Legacy libraries are readable, but modifying legacy format is not allowed
     // So prompt the user if he try to add/replace a footprint in a legacy lib
