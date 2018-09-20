@@ -21,17 +21,16 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
+
 #ifdef PROFILE
 #include <profile.h>
 #endif
 
+#include <thread>
+
 #include <connectivity_data.h>
 #include <connectivity_algo.h>
 #include <ratsnest_data.h>
-
-#ifdef USE_OPENMP
-#include <omp.h>
-#endif /* USE_OPENMP */
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 {
@@ -87,31 +86,40 @@ void CONNECTIVITY_DATA::Build( const std::vector<BOARD_ITEM*>& aItems )
 
 void CONNECTIVITY_DATA::updateRatsnest()
 {
-    int lastNet = m_connAlgo->NetCount();
-
     #ifdef PROFILE
     PROF_COUNTER rnUpdate( "update-ratsnest" );
     #endif
 
-    int i;
+    size_t numDirty = std::count_if( m_nets.begin() + 1, m_nets.end(), [] ( RN_NET* aNet )
+            { return aNet->IsDirty(); } );
 
-    #ifdef USE_OPENMP
-        #pragma omp parallel shared(lastNet) private(i)
-    {
-        #pragma omp for schedule(guided, 1)
-    #else /* USE_OPENMP */
-    {
-    #endif
+    std::atomic<size_t> nextNet( 1 );
+    std::atomic<size_t> threadsFinished( 0 );
 
-        // Start with net number 1, as 0 stands for not connected
-        for( i = 1; i < lastNet; ++i )
+    // We don't want to spin up a new thread for fewer than two nets (overhead costs)
+    size_t parallelThreadCount = std::min<size_t>(
+            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+            numDirty / 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    {
+        std::thread t = std::thread( [&nextNet, &threadsFinished, this]()
         {
-            if( m_nets[i]->IsDirty() )
+            for( size_t i = nextNet.fetch_add( 1 ); i < m_nets.size(); i = nextNet.fetch_add( 1 ) )
             {
-                m_nets[i]->Update();
+                if( m_nets[i]->IsDirty() )
+                    m_nets[i]->Update();
             }
-        }
-    }          /* end of parallel section */
+
+            threadsFinished++;
+        } );
+
+        t.detach();
+    }
+
+    // Finalize the ratsnest threads
+    while( threadsFinished < parallelThreadCount )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 
     #ifdef PROFILE
     rnUpdate.Show();
