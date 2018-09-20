@@ -46,6 +46,7 @@ enum
     ROW_SILK = 0,
     ROW_COPPER,
     ROW_EDGES,
+    ROW_COURTYARD,
     ROW_OTHERS,
 
     ROW_COUNT
@@ -94,7 +95,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
     {
         SET_MILS_CELL( i, COL_LINE_THICKNESS, m_brdSettings.m_LineThickness[ i ] );
 
-        if( i == ROW_EDGES )
+        if( i == ROW_EDGES || i == ROW_COURTYARD )
         {
             DISABLE_CELL( i, COL_TEXT_WIDTH );
             DISABLE_CELL( i, COL_TEXT_HEIGHT );
@@ -168,7 +169,7 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataFromWindow()
     {
         m_brdSettings.m_LineThickness[ i ] = getGridValue( i, COL_LINE_THICKNESS );
 
-        if( i == ROW_EDGES )    // edges & courtyards only define line thickness
+        if( i == ROW_EDGES || i == ROW_COURTYARD )
             continue;
 
         m_brdSettings.m_TextSize[ i ] =
