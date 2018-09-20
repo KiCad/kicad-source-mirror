@@ -4,6 +4,7 @@ include_directories( SYSTEM
 )
 
 set( KS2_LIB_FILES
+    kicad2step.cpp
     pcb/3d_resolver.cpp
     pcb/base.cpp
     pcb/kicadmodel.cpp

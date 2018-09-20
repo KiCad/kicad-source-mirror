@@ -26,8 +26,9 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <wx/wx.h>
 #include <wx/filename.h>
-#include <wx/log.h>
+#include <wx/filefn.h>
 
 #include "oce_utils.h"
 #include "kicadpad.h"
@@ -164,9 +165,9 @@ FormatType fileType( const char* aFileName )
     if( !lfile.FileExists() )
     {
         std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
         ostr << "  * no such file: '" << aFileName << "'\n";
         wxLogMessage( "%s", ostr.str().c_str() );
 
@@ -257,9 +258,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         if( distance < m_minDistance2 )
         {
             std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
             ostr << "  * rejected a zero-length " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
@@ -276,9 +277,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         if( rad < m_minDistance2 )
         {
             std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
             ostr << "  * rejected a zero-radius " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
@@ -316,9 +317,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             if( rad < m_minDistance2 )
             {
                 std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
                 ostr << "  * rejected an arc with equivalent end points, "
                     << aCurve->Describe() << "\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
@@ -422,9 +423,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             do
             {
                 std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
                 ostr << "  * unsupported curve type: '" << aCurve->m_form << "'\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
             } while( 0 );
@@ -584,26 +585,18 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 {
     if( aFileName.empty() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * no model defined for component '" << aRefDes << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "no model defined for component %s\n", aRefDes ) );
         return false;
     }
+
+    ReportMessage( wxString::Format( "add component %s\n", aRefDes ) );
 
     // first retrieve a label
     TDF_Label lmodel;
 
     if( !getModelLabel( aFileName, aScale, lmodel ) )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * no model for filename '" << aFileName << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "no model for filename %s\n", aFileName ) );
         return false;
     }
 
@@ -612,12 +605,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     if( !getModelLocation( aBottom, aPosition, aRotation, aOffset, aOrientation, toploc ) )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * no location data for filename '" << aFileName << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "no location data for filename %s\n", aFileName ) );
         return false;
     }
 
@@ -626,12 +614,7 @@ bool PCBMODEL::AddComponent( const std::string& aFileName, const std::string& aR
 
     if( llabel.IsNull() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * could not add component with filename '" << aFileName << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "could not add component with filename %s\n", aFileName ) );
         return false;
     }
 
@@ -670,12 +653,7 @@ bool PCBMODEL::CreatePCB()
     if( m_curves.empty() || m_mincurve == m_curves.end() )
     {
         m_hasPCB = true;
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * no valid board outline\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( "no valid board outline\n" );
         return false;
     }
 
@@ -694,13 +672,7 @@ bool PCBMODEL::CreatePCB()
             {
                 if( !oln.MakeShape( board, m_thickness ) )
                 {
-                    std::ostringstream ostr;
-#ifdef DEBUG
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                    ostr << "  * could not create board extrusion\n";
-                    wxLogMessage( "%s", ostr.str().c_str() );
-
+                    ReportMessage( "could not create board extrusion\n" );
                     return false;
                 }
             }
@@ -714,12 +686,7 @@ bool PCBMODEL::CreatePCB()
                 }
                 else
                 {
-                    std::ostringstream ostr;
-#ifdef DEBUG
-                    ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                    ostr << "  * could not create board cutout\n";
-                    wxLogMessage( "%s", ostr.str().c_str() );
+                    ReportMessage( "could not create board cutout\n" );
                 }
             }
 
@@ -751,16 +718,14 @@ bool PCBMODEL::CreatePCB()
 
         if( !added && !oln.m_curves.empty() )
         {
-            std::ostringstream ostr;
-#ifdef DEBUG
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-            ostr << "  * could not close outline (dropping outline data with " << oln.m_curves.size() << " segments)\n";
+            wxString msg;
+            msg.Printf( "could not close outline (dropping outline data with %d segments)\n",
+                    oln.m_curves.size() );
 
             for( const auto& c : oln.m_curves )
-                ostr << "    + " << c.Describe() << "\n";
+                msg << " + " << c.Describe() << "\n";
 
-            wxLogMessage( "%s", ostr.str().c_str() );
+            ReportMessage( msg );
             oln.Clear();
 
             if( !m_curves.empty() )
@@ -777,12 +742,7 @@ bool PCBMODEL::CreatePCB()
         {
             if( !oln.MakeShape( board, m_thickness ) )
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * could not create board extrusion\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+                ReportMessage( "could not create board extrusion\n" );
                 return false;
             }
         }
@@ -797,11 +757,10 @@ bool PCBMODEL::CreatePCB()
             else
             {
                 std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * could not create board cutout\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+#endif /* __WXDEBUG */
+                ReportMessage( "could not create board cutout\n" );
             }
         }
     }
@@ -840,16 +799,11 @@ bool PCBMODEL::CreatePCB()
 
 #ifdef SUPPORTS_IGES
 // write the assembly model in IGES format
-bool PCBMODEL::WriteIGES( const std::string& aFileName )
+bool PCBMODEL::WriteIGES( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * No valid PCB assembly; cannot create output file " << aFileName << "\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
         return false;
     }
 
@@ -874,16 +828,11 @@ bool PCBMODEL::WriteIGES( const std::string& aFileName )
 
 
 // write the assembly model in STEP format
-bool PCBMODEL::WriteSTEP( const std::string& aFileName )
+bool PCBMODEL::WriteSTEP( const wxString& aFileName )
 {
     if( m_pcb_label.IsNull() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * No valid PCB assembly; cannot create output file " << aFileName << "\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "No valid PCB assembly; cannot create output file %s\n", aFileName ) );
         return false;
     }
 
@@ -903,10 +852,24 @@ bool PCBMODEL::WriteSTEP( const std::string& aFileName )
     hdr.SetOriginatingSystem( new TCollection_HAsciiString( "KiCad to STEP converter" ) );
     hdr.SetDescriptionValue( 1, new TCollection_HAsciiString( "KiCad electronic assembly" ) );
 
-    if( Standard_False == writer.Write( aFileName.c_str() ) )
-        return false;
+    bool success = true;
+    // Creates a temporary file with a ascii7 name, because writer does not know
+    // unicode filenames
+    wxString currCWD = wxGetCwd();
+    wxSetWorkingDirectory( fn.GetPath() );
+    char tmpfname[] = "$tempfile$.step";
 
-    return true;
+    if( Standard_False == writer.Write( tmpfname ) )
+        success = false;
+
+    if( success )
+    {
+        wxRenameFile( tmpfname, fn.GetFullName(), true );
+    }
+
+    wxSetWorkingDirectory( currCWD );
+
+    return success;
 }
 
 
@@ -934,12 +897,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
         case FMT_IGES:
             if( !readIGES( doc, aFileName.c_str() ) )
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * readIGES() failed on filename '" << aFileName << "'\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+                ReportMessage( wxString::Format( "readIGES() failed on filename %s\n", aFileName ) );
                 return false;
             }
             break;
@@ -947,12 +905,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
         case FMT_STEP:
             if( !readSTEP( doc, aFileName.c_str() ) )
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * readSTEP() failed on filename '" << aFileName << "'\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
+                ReportMessage( wxString::Format( "readSTEP() failed on filename %s\n", aFileName ) );
                 return false;
             }
             break;
@@ -1024,12 +977,7 @@ bool PCBMODEL::getModelLabel( const std::string aFileName, TRIPLET aScale, TDF_L
 
     if( aLabel.IsNull() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * could not transfer model data from file '" << aFileName << "'\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
+        ReportMessage( wxString::Format( "could not transfer model data from file %s", aFileName  ) );
         return false;
     }
 
@@ -1224,9 +1172,9 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                 scaled_shape = brep.Shape();
             } else {
                 std::ostringstream ostr;
-#ifdef DEBUG
+#ifdef __WXDEBUG__
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
+#endif /* __WXDEBUG */
                 ostr << "  * failed to scale model\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
                 scaled_shape = shape;
@@ -1437,21 +1385,15 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
         }
         catch( const Standard_Failure& e )
         {
-#ifdef DEBUG
-            wxLogMessage( "Exception caught: %s", e.GetMessageString() );
-#endif /* DEBUG */
+            ReportMessage( wxString::Format( "Exception caught: %s", e.GetMessageString() ) );
             success = false;
         }
 
         if( !success )
         {
-            std::ostringstream ostr;
-#ifdef DEBUG
-            ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-            ostr << "  * failed to add an edge: " << i.Describe() << "\n";
-            ostr << "  * last valid outline point: " << lastPoint << "\n";
-            wxLogMessage( "%s", ostr.str().c_str() );
+            ReportMessage( wxString::Format( "failed to add an edge: %d\n",
+                                      "last valid outline point: %f %f\n",
+                                      i.Describe(), lastPoint.x, lastPoint.y ) );
             return false;
         }
     }
@@ -1461,13 +1403,7 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
 
     if( aShape.IsNull() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * failed to create a prismatic shape\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
-
+        ReportMessage( "failed to create a prismatic shape\n" );
         return false;
     }
 
@@ -1510,13 +1446,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 
         default:
             {
-                std::ostringstream ostr;
-#ifdef DEBUG
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-                ostr << "  * unsupported curve type: " << aCurve.m_form << "\n";
-                wxLogMessage( "%s", ostr.str().c_str() );
-
+                ReportMessage( wxString::Format( "unsupported curve type: %d\n", aCurve.m_form ) );
                 return false;
             }
     }
@@ -1529,13 +1459,7 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
 
     if( BRepBuilderAPI_DisconnectedWire == aWire->Error() )
     {
-        std::ostringstream ostr;
-#ifdef DEBUG
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* DEBUG */
-        ostr << "  * failed to add curve\n";
-        wxLogMessage( "%s", ostr.str().c_str() );
-
+        ReportMessage( "failed to add curve\n" );
         return false;
     }
 

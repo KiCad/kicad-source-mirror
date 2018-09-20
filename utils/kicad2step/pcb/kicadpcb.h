@@ -39,6 +39,8 @@
 #undef SUPPORTS_IGES
 #endif
 
+extern void ReportMessage( const wxString& aMessage );
+
 namespace SEXPR
 {
     class SEXPR;
@@ -52,7 +54,7 @@ class KICADPCB
 {
 private:
     S3D_RESOLVER m_resolver;
-    std::string m_filename;
+    wxString    m_filename;
     PCBMODEL*   m_pcb;
     DOUBLET     m_origin;
     DOUBLET     m_gridOrigin;
@@ -71,6 +73,7 @@ private:
     double                      m_thickness;
     std::vector< KICADMODULE* > m_modules;
     std::vector< KICADCURVE* >  m_curves;
+    wxTextCtrl* m_messageWindow;        // to print messages
 
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );
@@ -80,8 +83,11 @@ private:
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
 
 public:
-    KICADPCB();
+    KICADPCB( wxTextCtrl* aMessageWindow );
     virtual ~KICADPCB();
+
+    // print aMessage to to called window
+    void ReportMessage( const wxString& aMessage );
 
     int GetLayerId( std::string& aLayerName );
 

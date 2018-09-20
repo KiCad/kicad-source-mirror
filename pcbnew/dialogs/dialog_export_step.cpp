@@ -341,13 +341,16 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     {
         wxBusyCursor dummy;
-        result = wxExecute( cmdK2S, output, errors, wxEXEC_SYNC | wxEXEC_HIDE_CONSOLE );
+        result = wxExecute( cmdK2S, output, errors, wxEXEC_SYNC  | wxEXEC_SHOW_CONSOLE );
     }
 
     // Check the output log for an indication of success,
     // the value returned by wxExecute is not conclusive
     for( auto& l : output )
     {
+        if( !l.IsEmpty() )
+            reporter.ReportTail( l, REPORTER::RPT_INFO );
+
         if( l.Contains( "Done" ) )
         {
             success = true;

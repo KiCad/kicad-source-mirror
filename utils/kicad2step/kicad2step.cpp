@@ -2,7 +2,7 @@
  * This program source code file is part of kicad2mcad
  *
  * Copyright (C) 2016 Cirilo Bernardo <cirilo.bernardo@gmail.com>
- * Copyright (C) 2016-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "wx/wx.h"
 #include <wx/app.h>
 #include <wx/cmdline.h>
 #include <wx/log.h>
@@ -30,11 +31,15 @@
 #include <sstream>
 #include <iostream>
 #include <sstream>
-#include <Standard_Failure.hxx>
+#include <Standard_Failure.hxx>     // In open cascade
 
 #include "pcb/kicadpcb.h"
+#include "kicad2step_frame_base.h"
+#include "panel_kicad2step.h"
 
-class KICAD2MCAD : public wxAppConsole
+class KICAD2STEP_FRAME;
+
+class KICAD2MCAD_APP : public wxApp
 {
 public:
     virtual bool OnInit() override;
@@ -43,22 +48,44 @@ public:
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 private:
-    ///> Returns file extension for the selected output format
-    wxString getOutputExt() const;
+    KICAD2MCAD_PRMS m_params;
 
-#ifdef SUPPORTS_IGES
-    bool     m_fmtIGES;
-#endif
-    bool     m_overwrite;
-    bool     m_useGridOrigin;
-    bool     m_useDrillOrigin;
-    bool     m_includeVirtual;
-    wxString m_filename;
-    wxString m_outputFile;
-    double   m_xOrigin;
-    double   m_yOrigin;
-    double   m_minDistance;
+public:
+    PANEL_KICAD2STEP* m_Panel;
+    KICAD2STEP_FRAME * m_frame;
 };
+
+wxIMPLEMENT_APP(KICAD2MCAD_APP);
+
+class KICAD2STEP_FRAME : public KICAD2STEP_FRAME_BASE
+{
+public:
+    KICAD2STEP_FRAME(const wxString& title);
+
+private:
+};
+
+KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
+{
+#ifdef SUPPORTS_IGES
+    m_fmtIGES = false;
+#endif
+    m_overwrite = false;
+    m_useGridOrigin = false;
+    m_useDrillOrigin = false;
+    m_includeVirtual = true;
+    m_xOrigin = 0.0;
+    m_yOrigin = 0.0;
+    m_minDistance = MIN_DISTANCE;
+
+}
+
+void ReportMessage( const wxString& aMessage )
+{
+    KICAD2MCAD_APP& app = wxGetApp();
+    app.m_Panel->AppendMessage( aMessage );
+}
+
 
 static const wxCmdLineEntryDesc cmdLineDesc[] =
     {
@@ -91,30 +118,41 @@ static const wxCmdLineEntryDesc cmdLineDesc[] =
     };
 
 
-wxIMPLEMENT_APP_CONSOLE( KICAD2MCAD );
-
-
-bool KICAD2MCAD::OnInit()
+bool KICAD2MCAD_APP::OnInit()
 {
-#ifdef SUPPORTS_IGES
-    m_fmtIGES = false;
-#endif
-    m_overwrite = false;
-    m_useGridOrigin = false;
-    m_useDrillOrigin = false;
-    m_includeVirtual = true;
-    m_xOrigin = 0.0;
-    m_yOrigin = 0.0;
-    m_minDistance = MIN_DISTANCE;
-
-    if( !wxAppConsole::OnInit() )
+    if( !wxApp::OnInit() )
         return false;
+
+    // create the main application window
+    m_frame = new KICAD2STEP_FRAME("Kicad2step");
+
+    m_Panel = m_frame->m_panelKicad2Step;
+    m_Panel->m_params = m_params;
+
+    // and show it (the frames, unlike simple controls, are not shown when
+    // created initially)
+    m_frame->Show( true );
+    m_frame->Iconize( false );
 
     return true;
 }
 
 
-void KICAD2MCAD::OnInitCmdLine( wxCmdLineParser& parser )
+int KICAD2MCAD_APP::OnRun()
+{
+    m_frame->Show(true);
+    m_Panel->RunConverter();
+    return 0;
+}
+
+
+KICAD2STEP_FRAME::KICAD2STEP_FRAME(const wxString& title)
+       : KICAD2STEP_FRAME_BASE(NULL, wxID_ANY, title)
+{
+}
+
+
+void KICAD2MCAD_APP::OnInitCmdLine( wxCmdLineParser& parser )
 {
     parser.SetDesc( cmdLineDesc );
     parser.SetSwitchChars( "-" );
@@ -122,7 +160,29 @@ void KICAD2MCAD::OnInitCmdLine( wxCmdLineParser& parser )
 }
 
 
-bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
+PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id,
+                  const wxPoint& pos, const wxSize& size, long style ):
+                wxPanel( parent, id, pos, size, style )
+{
+	wxBoxSizer* bSizer = new wxBoxSizer( wxVERTICAL );
+
+	m_tcMessages = new wxTextCtrl( this, wxID_ANY, wxEmptyString,
+                                   wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
+	bSizer->Add( m_tcMessages, 1, wxALL|wxEXPAND, 5 );
+
+	SetSizer( bSizer );
+	Layout();
+	bSizer->Fit( this );
+}
+
+
+void PANEL_KICAD2STEP::AppendMessage( const wxString& aMessage )
+{
+    m_tcMessages->AppendText( aMessage ); wxSafeYield();
+}
+
+
+bool KICAD2MCAD_APP::OnCmdLineParsed( wxCmdLineParser& parser )
 {
     #ifdef SUPPORTS_IGES
       if( parser.Found( "fmt-iges" ) )
@@ -130,16 +190,16 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
     #endif
 
     if( parser.Found( "f" ) )
-        m_overwrite = true;
+        m_params.m_overwrite = true;
 
     if( parser.Found( "grid-origin" ) )
-        m_useGridOrigin = true;
+        m_params.m_useGridOrigin = true;
 
     if( parser.Found( "drill-origin" ) )
-        m_useDrillOrigin = true;
+        m_params. m_useDrillOrigin = true;
 
     if( parser.Found( "no-virtual" ) )
-        m_includeVirtual = false;
+        m_params.m_includeVirtual = false;
 
     wxString tstr;
 
@@ -147,7 +207,7 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
     {
         std::istringstream istr;
         istr.str( std::string( tstr.ToUTF8() ) );
-        istr >> m_xOrigin;
+        istr >> m_params.m_xOrigin;
 
         if( istr.fail() )
         {
@@ -164,7 +224,7 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
             return false;
         }
 
-        istr >> m_yOrigin;
+        istr >> m_params.m_yOrigin;
 
         if( istr.fail() )
         {
@@ -179,8 +239,8 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
 
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                m_xOrigin *= 25.4;
-                m_yOrigin *= 25.4;
+                m_params.m_xOrigin *= 25.4;
+                m_params.m_yOrigin *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -195,7 +255,7 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
     {
         std::istringstream istr;
         istr.str( std::string( tstr.ToUTF8() ) );
-        istr >> m_minDistance;
+        istr >> m_params.m_minDistance;
 
         if( istr.fail() )
         {
@@ -210,7 +270,7 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
 
             if( !tunit.compare( "in" ) || !tunit.compare( "inch" ) )
             {
-                m_minDistance *= 25.4;
+                m_params.m_minDistance *= 25.4;
             }
             else if( tunit.compare( "mm" ) )
             {
@@ -221,7 +281,7 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
     }
 
     if( parser.Found( "o", &tstr ) )
-        m_outputFile = tstr;
+        m_params.m_outputFile = tstr;
 
 
     if( parser.GetParamCount() < 1 )
@@ -230,70 +290,98 @@ bool KICAD2MCAD::OnCmdLineParsed( wxCmdLineParser& parser )
         return false;
     }
 
-    m_filename = parser.GetParam( 0 );
+    m_params.m_filename = parser.GetParam( 0 );
 
     return true;
 }
 
 
-int KICAD2MCAD::OnRun()
+// Smart class that will swap streambufs and replace them when object goes out of scope.
+// ( ensure the initial stream buffer is restored )
+// see:
+// https://groups.google.com/forum/#!topic/borland.public.cppbuilder.language/Uua6t3VhELA
+// It is useful here to redirect for instance cout or cerr to a string stream
+class STREAMBUF_SWAPPER
 {
-    wxFileName fname( m_filename );
+public:
+    STREAMBUF_SWAPPER( ostream & orig, ostream & replacement )
+        : m_buf( orig.rdbuf() ), m_str( orig )
+    {
+        orig.rdbuf( replacement.rdbuf() );
+    }
+
+    ~STREAMBUF_SWAPPER()
+    {
+        m_str.rdbuf( m_buf);
+    }
+
+private:
+    std::streambuf * m_buf;
+    std::ostream & m_str;
+};
+
+
+int PANEL_KICAD2STEP::RunConverter()
+{
+    wxFileName fname( m_params.m_filename );
 
     if( !fname.FileExists() )
     {
-        std::ostringstream ostr;
-        ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-        ostr << "  * no such file: '" << m_filename.ToUTF8() << "'\n";
-        wxLogMessage( "%s\n", ostr.str().c_str() );
-
+        wxMessageBox( wxString::Format( "No such file: %s", m_params.m_filename ) );
         return -1;
     }
 
     wxFileName tfname;
 
-    if( m_outputFile.empty() )
+    if( m_params.m_outputFile.empty() )
     {
         tfname.Assign( fname.GetFullPath() );
-        tfname.SetExt( getOutputExt() );
+        tfname.SetExt( m_params.getOutputExt() );
     }
     else
     {
-        tfname.Assign( m_outputFile );
+        tfname.Assign( m_params.m_outputFile );
 
         // Set the file extension if the user's requested
         // file name does not have an extension.
         if( !tfname.HasExt() )
-            tfname.SetExt( getOutputExt() );
+            tfname.SetExt( m_params.getOutputExt() );
     }
 
-    if( tfname.FileExists() && !m_overwrite )
+    if( tfname.FileExists() && !m_params.m_overwrite )
     {
-        std::cerr << "** Output already exists. "
-            << "Enable the force overwrite flag to overwrite it." << std::endl;
+        wxMessageBox( "** Output already exists.\n"
+                      "Enable the force overwrite flag to overwrite it." );
 
         return -1;
     }
 
     wxString outfile = tfname.GetFullPath();
-    KICADPCB pcb;
+    KICADPCB pcb( m_tcMessages );
 
-    pcb.SetOrigin( m_xOrigin, m_yOrigin );
-    pcb.SetMinDistance( m_minDistance );
+    pcb.SetOrigin( m_params.m_xOrigin, m_params.m_yOrigin );
+    pcb.SetMinDistance( m_params.m_minDistance );
+    m_tcMessages->AppendText( wxString::Format( "Read: %s\n", m_params.m_filename ) );
 
-    if( pcb.ReadFile( m_filename ) )
+    // create the new stream to "redirect" cout's output to
+    std::ostringstream msgs_from_opencascade;
+    STREAMBUF_SWAPPER swapper(cout, msgs_from_opencascade);
+
+    if( pcb.ReadFile( m_params.m_filename ) )
     {
-        if( m_useDrillOrigin )
+        if( m_params.m_useDrillOrigin )
             pcb.UseDrillOrigin( true );
 
-        if( m_useGridOrigin )
+        if( m_params.m_useGridOrigin )
             pcb.UseGridOrigin( true );
 
         bool res;
 
         try
         {
-            pcb.ComposePCB( m_includeVirtual );
+            m_tcMessages->AppendText( "Build STEP data\n" );
+            pcb.ComposePCB( m_params.m_includeVirtual );
+            m_tcMessages->AppendText( "Start WriteSTEP\n" );
 
         #ifdef SUPPORTS_IGES
             if( m_fmtIGES )
@@ -303,25 +391,37 @@ int KICAD2MCAD::OnRun()
                 res = pcb.WriteSTEP( outfile );
 
             if( !res )
+            {
+                wxMessageBox( "Error WriteSTEP" );
                 return -1;
+            }
+
+            m_tcMessages->AppendText( wxString::Format( "Step file %s created\n", outfile ) );
         }
         catch( const Standard_Failure& e )
         {
             e.Print( std::cerr );
+            wxMessageBox( "Error Read" );
             return -1;
         }
         catch( ... )
         {
-            std::cerr << "** (no exception information)\n";
+            wxMessageBox( "(no exception information)", "Unknown error" );
             return -1;
         }
     }
+
+    wxString msg;
+    msg << msgs_from_opencascade.str();
+    m_tcMessages->AppendText( msg );
+
+    wxMessageBox( "End kicad2step" );
 
     return 0;
 }
 
 
-wxString KICAD2MCAD::getOutputExt() const
+wxString KICAD2MCAD_PRMS::getOutputExt() const
 {
 #ifdef SUPPORTS_IGES
     if( m_fmtIGES )
