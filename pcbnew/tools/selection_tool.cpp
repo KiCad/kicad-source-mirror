@@ -1524,8 +1524,10 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
 
     // Filter out items that do not belong to active layers
-    const std::set<unsigned int>& activeLayers = getView()->GetPainter()->
-                                                 GetSettings()->GetActiveLayers();
+    std::set<unsigned int> activeLayers = getView()->GetPainter()->GetSettings()->GetActiveLayers();
+
+    // The markers layer is considered to be always active
+    activeLayers.insert( (unsigned int) LAYER_DRC );
 
     aItem->ViewGetLayers( layers, layers_count );
 

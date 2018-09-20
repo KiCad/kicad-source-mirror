@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_DIALOG_TEXT_PROPERTIES_H
-#define KICAD_DIALOG_TEXT_PROPERTIES_H
+#ifndef DIALOG_TEXT_PROPERTIES_H
+#define DIALOG_TEXT_PROPERTIES_H
 
 #include <widgets/unit_binder.h>
 #include <wx/valnum.h>
@@ -32,6 +32,9 @@
 
 class PCB_BASE_EDIT_FRAME;
 class BOARD_ITEM;
+class EDA_TEXT;
+class TEXTE_MODULE;
+class TEXTE_PCB;
 
 
 class DIALOG_TEXT_PROPERTIES : public DIALOG_TEXT_PROPERTIES_BASE
@@ -66,4 +69,4 @@ private:
 };
 
 
-#endif //KICAD_DIALOG_TEXT_PROPERTIES_H
+#endif //DIALOG_TEXT_PROPERTIES_H
