@@ -425,7 +425,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
             if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
             {
                 aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
-                                        aClearanceValue.x * 2.0f * m_biuTo3Dunits,
+                                        aClearanceValue.x * m_biuTo3Dunits,
                                         *aPad ) );
             }
             else
@@ -477,7 +477,7 @@ void CINFO3D_VISU::createNewPadWithClearance( const D_PAD* aPad,
             if( Is_segment_a_circle( corners3DU[i - 1], corners3DU[i & 3] ) )
             {
                 aDstContainer->Add( new CFILLEDCIRCLE2D( corners3DU[i - 1],
-                                        rounding_radius * 2.0f * m_biuTo3Dunits,
+                                        rounding_radius * m_biuTo3Dunits,
                                         *aPad ) );
             }
             else
