@@ -49,9 +49,6 @@
 
 #include "zone_filler.h"
 
-#ifdef USE_OPENMP
-#include <omp.h>
-#endif /* USE_OPENMP */
 
 extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         const D_PAD& aPad,
