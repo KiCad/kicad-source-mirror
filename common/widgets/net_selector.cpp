@@ -27,7 +27,8 @@
 #include <class_board.h>
 #include <netinfo.h>
 #include <wx/arrstr.h>
-
+#include <wx/evtloop.h>
+#include <wx/display.h>
 
 wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 
@@ -37,21 +38,23 @@ wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 #define NO_NET _( "<no net>" )
 
 
-class NET_SELECTOR_COMBOPOPUP : public wxPanel, public wxComboPopup
+class NET_SELECTOR_POPUP : public wxPanel
 {
 public:
-    NET_SELECTOR_COMBOPOPUP() :
-            m_filterCtrl( nullptr ),
-            m_netListBox( nullptr ),
+    NET_SELECTOR_POPUP( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
+                        NETINFO_LIST* aNetInfoList ) :
+            wxPanel( aParent, wxID_ANY, aPos, aSize ),
             m_popupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
-            m_netinfoList( nullptr ),
+            m_netinfoList( aNetInfoList ),
+            m_filterCtrl( nullptr ),
+            m_netListBox( nullptr ),
+            m_cancelled( false ),
+            m_selected( false ),
             m_selectedNet( 0 )
-    { }
-
-    bool Create(wxWindow* aParent) override
     {
-        wxPanel::Create( aParent );
+        m_popupWidth = aSize.x;
+        m_maxPopupHeight = aSize.y;
 
         wxBoxSizer* mainSizer;
         mainSizer = new wxBoxSizer( wxVERTICAL );
@@ -67,66 +70,71 @@ public:
         SetSizer( mainSizer );
         Layout();
 
-        // wxPopupTransientWindow's mouse capture strategy is an absolute nightmare.  We can't
-        // tell where mouse-down events will come from, so we have to accept them from either
-        // ourselves (the popup) or our child (the net listbox).  Mouse-move events are even
-        // worse as the above strategy doesn't even work -- so we process them on idle.
-        Connect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_COMBOPOPUP::onIdle ), NULL, this );
-        Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), NULL, this );
-        m_netListBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_COMBOPOPUP::onMouseClick ), NULL, this );
-        m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_COMBOPOPUP::onFilterEdit ), NULL, this );
+        Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onCapturedMouseClick ), NULL, this );
+        m_netListBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
+        m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
 
-        return true;
-    }
-
-    wxWindow *GetControl() override { return this; }
-
-    void SetStringValue( const wxString& aNetName ) override
-    {
-        // shouldn't be here (combo is read-only)
-    }
-
-    wxString GetStringValue() const override
-    {
-        NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( m_selectedNet );
-
-        if( netInfo && netInfo->GetNet() > 0 )
-            return netInfo->GetNetname();
-
-        return NO_NET;
-    }
-
-    void SetNetInfo( NETINFO_LIST* aNetInfoList )
-    {
-        m_netinfoList = aNetInfoList;
         rebuildList();
     }
-
-    void SetIndeterminate() { m_selectedNet = -1; }
-    bool IsIndeterminate() { return m_selectedNet == -1; }
 
     void SetSelectedNetcode( int aNetcode ) { m_selectedNet = aNetcode; }
     int GetSelectedNetcode() { return m_selectedNet; }
 
-    wxSize GetAdjustedSize( int aMinWidth, int aPrefHeight, int aMaxHeight ) override
+    bool DoPopup()
     {
-        // Called when the popup is first shown.  Stash the width and maxHeight so we
-        // can use them later when refreshing the sizes after filter changes.
-        m_popupWidth = aMinWidth;
-        m_maxPopupHeight = aMaxHeight;
+        Show( true );
 
-        return updateSize();
-    }
+        wxGUIEventLoop eventLoop;
 
-    void OnPopup() override
-    {
-        // The updateSize() call in GetAdjustedSize() leaves the height off-by-one for
-        // some reason, so do it again.
-        updateSize();
+        while ( eventLoop.Pending() )
+        {
+            wxPoint screenPos = wxGetMousePosition();
+
+            if( m_netListBox->GetScreenRect().Contains( screenPos ) )
+            {
+                if( HasCapture() )
+                    ReleaseMouse();
+
+#ifdef __WXOSX_MAC__
+                m_netListBox->OSXForceFocus();
+#else
+                m_netListBox->SetFocus();
+#endif
+
+                wxPoint relativePos = m_netListBox->ScreenToClient( screenPos );
+                int     item = m_netListBox->HitTest( relativePos );
+
+                if( item >= 0 )
+                    m_netListBox->SetSelection( item );
+            }
+            else if( m_filterCtrl->GetScreenRect().Contains( screenPos ) )
+            {
+                if( HasCapture() )
+                    ReleaseMouse();
+
+                m_filterCtrl->SetFocus();
+            }
+            else if( !HasCapture() )
+            {
+                CaptureMouse();
+            }
+
+            eventLoop.Dispatch();
+
+            if( m_cancelled || m_selected )
+                break;
+        }
+
+        if( HasCapture() )
+            ReleaseMouse();
+
+        Show( false );
+
+        return m_selected;
     }
 
 protected:
-    wxSize updateSize()
+    void updateSize()
     {
         wxSize popupSize( m_popupWidth, m_maxPopupHeight );
         int    listTop = m_netListBox->GetRect().y;
@@ -136,14 +144,13 @@ protected:
         if( listTop + listHeight >= m_maxPopupHeight )
             listHeight = m_maxPopupHeight - listTop - 1;
 
+        wxSize listSize( m_popupWidth, listHeight );
+
+        m_netListBox->SetMinSize( listSize );
+        m_netListBox->SetSize( listSize );
+
         popupSize.y = listTop + listHeight;
-        SetSize( popupSize );               // us
-        GetParent()->SetSize( popupSize );  // the window that wxComboCtrl put us in
-
-        m_netListBox->SetSize( wxSize( m_popupWidth, listHeight ) );
-        m_netListBox->Refresh();
-
-        return popupSize;
+        SetSize( popupSize );
     }
 
     void rebuildList()
@@ -168,41 +175,18 @@ protected:
             netNames.insert( netNames.begin(), NO_NET );
 
         m_netListBox->Set( netNames );
+
+        updateSize();
+        m_netListBox->Refresh();
     }
 
-    // Hot-track mouse.
-    void onIdle( wxIdleEvent& aEvent )
+    void onFilterEdit( wxCommandEvent& aEvent )
     {
-        wxPoint screenPos = wxGetMousePosition();
-
-        if( m_netListBox->GetScreenRect().Contains( screenPos ) )
-        {
-            if( HasCapture() )
-                ReleaseMouse();
-
-#ifdef __WXOSX_MAC__
-            m_netListBox->OSXForceFocus();
-#else
-            m_netListBox->SetFocus();
-#endif
-
-            wxPoint relativePos = m_netListBox->ScreenToClient( screenPos );
-            int     item = m_netListBox->HitTest( relativePos );
-
-            if( item >= 0 )
-                m_netListBox->SetSelection( item );
-        }
-        else if( m_filterCtrl->GetScreenRect().Contains( screenPos ) )
-        {
-            if( HasCapture() )
-                ReleaseMouse();
-
-            m_filterCtrl->SetFocus();
-        }
+        rebuildList();
     }
 
     // Accecpt single-click closure from m_netListBox
-    void onMouseClick( wxMouseEvent& aEvent )
+    void onListBoxMouseClick( wxMouseEvent& aEvent )
     {
         wxPoint relativePos = m_netListBox->ScreenToClient( wxGetMousePosition() );
         int     item = m_netListBox->HitTest( relativePos );
@@ -212,79 +196,112 @@ protected:
             wxString selectedNetName = m_netListBox->GetString( (unsigned) item );
 
             if( selectedNetName.IsEmpty() )
-            {
                 m_selectedNet = -1;
-                GetComboCtrl()->SetValue( INDETERMINATE );
-            }
             else if( selectedNetName == NO_NET )
-            {
                 m_selectedNet = 0;
-                GetComboCtrl()->SetValue( NO_NET );
-            }
             else
-            {
                 m_selectedNet = m_netinfoList->GetNetItem( selectedNetName )->GetNet();
-                GetComboCtrl()->SetValue( selectedNetName );
-            }
 
-            wxCommandEvent changeEvent( NET_SELECTED );
-            wxPostEvent( GetComboCtrl(), changeEvent );
-
-            Dismiss();
+            m_selected = true;
         }
+
         aEvent.Skip();
     }
 
-    void onFilterEdit( wxCommandEvent& aEvent )
+    // Cancel popup for clicks outside it
+    void onCapturedMouseClick( wxMouseEvent& aEvent )
     {
-        rebuildList();
-        updateSize();
+        wxPoint mousePos = aEvent.GetPosition();
+
+        if( !GetRect().Contains( mousePos ) )
+            m_cancelled = true;
+
+        aEvent.Skip();
     }
 
 protected:
-    wxTextCtrl*   m_filterCtrl;
-    wxListBox*    m_netListBox;
     int           m_popupWidth;
     int           m_maxPopupHeight;
-
     NETINFO_LIST* m_netinfoList;
 
+    wxTextCtrl*   m_filterCtrl;
+    wxListBox*    m_netListBox;
+
+    bool          m_cancelled;
+    bool          m_selected;
     int           m_selectedNet;
 };
 
 
 NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id,
                             const wxPoint &pos, const wxSize &size, long style ) :
-        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY )
+        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY ),
+        m_netinfoList( nullptr ),
+        m_netSelectorPopup( nullptr )
+{ }
+
+void NET_SELECTOR::DoSetPopupControl( wxComboPopup* aPopup )
 {
-    m_netSelectorPopup = new NET_SELECTOR_COMBOPOPUP();
-    SetPopupControl( m_netSelectorPopup );
+    m_popup = nullptr;
+}
+
+void NET_SELECTOR::OnButtonClick()
+{
+    wxRect    comboRect = GetScreenRect();
+    wxPoint   popupPos( comboRect.x + 2, comboRect.y + comboRect.height );
+    wxWindow* dlg = m_parent;
+
+    while( !dlg->IsTopLevel() && dlg->GetParent() )
+        dlg = dlg->GetParent();
+
+    popupPos = dlg->ScreenToClient( popupPos );
+
+    wxSize popupSize( comboRect.width - 4, dlg->GetRect().height - popupPos.y - 24 );
+    auto   popup = new NET_SELECTOR_POPUP( dlg, popupPos, popupSize, m_netinfoList );
+
+    popup->SetSelectedNetcode( m_netcode );
+
+    if( popup->DoPopup() )
+        SetSelectedNetcode( popup->GetSelectedNetcode() );
 }
 
 void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
 {
-    m_netSelectorPopup->SetNetInfo( aNetInfoList );
+    m_netinfoList = aNetInfoList;
 }
 
 void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
 {
-    m_netSelectorPopup->SetSelectedNetcode( aNetcode );
-    SetValue( m_netSelectorPopup->GetStringValue() );
+    m_netcode = aNetcode;
+
+    wxASSERT( m_netinfoList );
+
+    if( m_netcode == -1 )
+        SetValue( INDETERMINATE );
+    else if( m_netinfoList )
+    {
+        NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( m_netcode );
+
+        if( netInfo && netInfo->GetNet() > 0 )
+            SetValue( netInfo->GetNetname() );
+        else
+            SetValue( NO_NET );
+    }
 }
 
 void NET_SELECTOR::SetIndeterminate()
 {
-    m_netSelectorPopup->SetIndeterminate();
+    m_netcode = -1;
     SetValue( INDETERMINATE );
 }
 
 bool NET_SELECTOR::IsIndeterminate()
 {
-    return m_netSelectorPopup->IsIndeterminate();
+    return m_netcode == -1;
 }
 
 int NET_SELECTOR::GetSelectedNetcode()
 {
-    return m_netSelectorPopup->GetSelectedNetcode();
+    return m_netcode;
 }
 
