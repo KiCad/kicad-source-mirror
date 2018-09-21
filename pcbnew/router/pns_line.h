@@ -99,7 +99,7 @@ public:
     /// @copydoc ITEM::Clone()
     virtual LINE* Clone() const override;
 
-    const LINE& operator=( const LINE& aOther );
+    LINE& operator=( const LINE& aOther );
 
     ///> Assigns a shape to the line (a polyline/line chain)
     void SetShape( const SHAPE_LINE_CHAIN& aLine )

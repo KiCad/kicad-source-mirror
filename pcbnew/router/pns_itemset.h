@@ -110,7 +110,7 @@ public:
 
     ~ITEM_SET();
 
-    const ITEM_SET& operator=( const ITEM_SET& aOther )
+    ITEM_SET& operator=( const ITEM_SET& aOther )
     {
         m_items = aOther.m_items;
         return *this;

@@ -55,7 +55,7 @@ LINE::~LINE()
 }
 
 
-const LINE& LINE::operator=( const LINE& aOther )
+LINE& LINE::operator=( const LINE& aOther )
 {
     m_line = aOther.m_line;
     m_width = aOther.m_width;

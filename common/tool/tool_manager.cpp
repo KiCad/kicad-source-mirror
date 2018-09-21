@@ -109,7 +109,7 @@ struct TOOL_MANAGER::TOOL_STATE
     /// VIEW_CONTROLS settings to preserve settings when the tools are switched
     KIGFX::VC_SETTINGS vcSettings;
 
-    void operator=( const TOOL_STATE& aState )
+    TOOL_STATE& operator=( const TOOL_STATE& aState )
     {
         theTool = aState.theTool;
         idle = aState.idle;
