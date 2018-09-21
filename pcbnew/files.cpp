@@ -45,6 +45,7 @@
 #include <kiway.h>
 #include <kiway_player.h>
 #include <trace_helpers.h>
+#include <lockfile.cpp>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -412,12 +413,16 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
     wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(), wxT( "Path is not absolute!" ) );
 
-    if( !LockFile( fullFileName ) )
+    std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullFileName );
+
+    if( !lockFile )
     {
         wxString msg = wxString::Format( _( "PCB file \"%s\" is already open." ), fullFileName );
         DisplayError( this, msg );
         return false;
     }
+
+    m_file_checker.reset( lockFile.release() );
 
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
