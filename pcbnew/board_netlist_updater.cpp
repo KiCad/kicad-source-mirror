@@ -639,15 +639,20 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        for( MODULE* footprint = m_board->m_Modules; footprint; footprint = footprint->Next() )
+        // This loop must be executed at least once to add new footprints even
+        // if the board has no existing footprints:
+        for( MODULE* footprint = m_board->m_Modules; ; footprint = footprint->Next() )
         {
-            bool     match;
+            bool     match = false;
             MODULE*  tmp;
 
-            if( aNetlist.IsFindByTimeStamp() )
-                match = footprint->GetPath() == component->GetTimeStamp();
-            else
-                match = footprint->GetReference().CmpNoCase( component->GetReference() );
+            if( footprint )
+            {
+                if( aNetlist.IsFindByTimeStamp() )
+                    match = footprint->GetPath() == component->GetTimeStamp();
+                else
+                    match = footprint->GetReference().CmpNoCase( component->GetReference() );
+            }
 
             if( match )
             {
@@ -680,7 +685,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     matchCount++;
                 }
 
-                // No sense going through the newly-created footprints
+                // No sense going through the newly-created footprints: end of loop
                 break;
             }
         }

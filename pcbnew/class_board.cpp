@@ -2568,15 +2568,20 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     GetChars( component->GetFPID().Format() ) );
         aReporter.Report( msg, REPORTER::RPT_INFO );
 
-        for( MODULE* footprint = m_Modules; footprint; footprint = footprint->Next() )
+        // This loop must be executed at least once to add new footprints even
+        // if the board has no existing footprints:
+        for( MODULE* footprint = m_Modules; ; footprint = footprint->Next() )
         {
-            bool     match;
+            bool     match = false;
             MODULE*  tmp;
 
-            if( aNetlist.IsFindByTimeStamp() )
-                match = footprint->GetPath() == component->GetTimeStamp();
-            else
-                match = footprint->GetReference().CmpNoCase( component->GetReference() );
+            if( footprint )
+            {
+                if( aNetlist.IsFindByTimeStamp() )
+                    match = footprint->GetPath() == component->GetTimeStamp();
+                else
+                    match = footprint->GetReference().CmpNoCase( component->GetReference() );
+            }
 
             if( match )
             {
@@ -2718,7 +2723,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     matchCount++;
                 }
 
-                // No sense going through the newly-created footprints
+                // No sense going through the newly-created footprints: end loop
                 break;
             }
         }
