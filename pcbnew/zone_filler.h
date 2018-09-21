@@ -118,11 +118,6 @@ private:
     BOARD* m_board;
     COMMIT* m_commit;
     WX_PROGRESS_REPORTER* m_progressReporter;
-
-    std::atomic_size_t m_next;          // An index into the vector of zones to fill.
-                                        // Used by the variuos parallel thread sets during
-                                        // fill operations.
-    std::atomic_size_t m_count_done;
 };
 
 #endif

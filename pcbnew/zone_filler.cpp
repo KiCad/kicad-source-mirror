@@ -63,8 +63,7 @@ static double s_thermalRot = 450;    // angle of stubs in thermal reliefs for ro
 static const bool s_DumpZonesWhenFilling = false;
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
-    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr ),
-    m_next( 0 ), m_count_done( 0 )
+    m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr )
 {
 }
 
@@ -81,8 +80,6 @@ void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
 
 bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 {
-    int parallelThreadCount = std::max( ( int )std::thread::hardware_concurrency(), 2 );
-
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
     auto connectivity = m_board->GetConnectivity();
 
@@ -112,16 +109,20 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
-    m_next = 0;
-    m_count_done = 0;
-    std::vector<std::thread> fillWorkers;
 
-    for( ssize_t ii = 0; ii < parallelThreadCount; ++ii )
+    std::atomic<size_t> nextItem( 0 );
+    std::atomic<size_t> threadsFinished( 0 );
+    size_t parallelThreadCount = std::min<size_t>(
+            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+            toFill.size() );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        fillWorkers.push_back( std::thread( [ this, toFill ]()
+        std::thread t = std::thread( [ & ]()
         {
-            size_t i = m_next.fetch_add( 1 );
-            while( i < toFill.size() )
+            for( size_t i = nextItem.fetch_add( 1 );
+                    i < toFill.size();
+                    i = nextItem.fetch_add( 1 ) )
             {
                 SHAPE_POLY_SET rawPolys, finalPolys;
                 ZONE_CONTAINER* zone = toFill[i].m_zone;
@@ -133,25 +134,25 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
                 if( m_progressReporter )
                     m_progressReporter->AdvanceProgress();
-
-                m_count_done.fetch_add( 1 );
-                i = m_next.fetch_add( 1 );
             }
-        } ) );
+
+            threadsFinished++;
+        } );
+
+        t.detach();
     }
 
-    while( m_count_done.load() < toFill.size() )
+
+    // Finalize the triangulation threads
+    while( threadsFinished < parallelThreadCount )
     {
         if( m_progressReporter )
             m_progressReporter->KeepRefreshing();
 
-        wxMilliSleep( 20 );
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
     }
 
-    for( size_t ii = 0; ii < fillWorkers.size(); ++ii )
-        fillWorkers[ ii ].join();
-
-    // Now remove insulated copper islands
+    // Now update the connectivity to check for copper islands
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
@@ -161,6 +162,14 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FindIsolatedCopperIslands( toFill );
+
+    // Now remove insulated copper islands
+    if( m_progressReporter )
+    {
+        m_progressReporter->AdvancePhase();
+        m_progressReporter->SetMaxProgress( toFill.size() );
+        m_progressReporter->KeepRefreshing();
+    }
 
     bool outOfDate = false;
 
@@ -178,6 +187,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
         if( aCheck && zone.m_lastPolys.GetHash() != poly.GetHash() )
             outOfDate = true;
+
+        if( m_progressReporter )
+        {
+            m_progressReporter->AdvanceProgress();
+            m_progressReporter->KeepRefreshing();
+        }
     }
 
     if( aCheck )
@@ -211,9 +226,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         }
     }
 
-    // Remove deprecaded segment zones (only found in very old boards)
-    m_board->m_SegZoneDeprecated.DeleteAll();
-
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
@@ -221,82 +233,104 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
-    m_next = 0;
-    m_count_done = 0;
-    std::vector<std::thread> triangulationWorkers;
 
-    for( ssize_t ii = 0; ii < parallelThreadCount; ++ii )
+    nextItem = 0;
+    threadsFinished = 0;
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        triangulationWorkers.push_back( std::thread( [ this, toFill ]()
+        std::thread t = std::thread( [ & ]()
         {
-            size_t i = m_next.fetch_add( 1 );
-            while( i < toFill.size() )
+            for( size_t i = nextItem.fetch_add( 1 );
+                    i < toFill.size();
+                    i = nextItem.fetch_add( 1 ) )
             {
-                if( m_progressReporter )
-                    m_progressReporter->AdvanceProgress();
-
                 toFill[i].m_zone->CacheTriangulation();
 
-                m_count_done.fetch_add( 1 );
-                i = m_next.fetch_add( 1 );
-            }
-        } ) );
-    }
+                if( m_progressReporter )
+                     m_progressReporter->AdvanceProgress();
+             }
 
-    while( m_count_done.load() < toFill.size() )
-    {
-        if( m_progressReporter )
-            m_progressReporter->KeepRefreshing();
+             threadsFinished++;
+         } );
 
-        wxMilliSleep( 10 );
-    }
+         t.detach();
+     }
 
-    for( size_t ii = 0; ii < triangulationWorkers.size(); ++ii )
-        triangulationWorkers[ ii ].join();
+
+     // Finalize the triangulation threads
+     while( threadsFinished < parallelThreadCount )
+     {
+         if( m_progressReporter )
+             m_progressReporter->KeepRefreshing();
+
+         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+     }
+
+
+    // Remove deprecaded segment zones (only found in very old boards)
+    m_board->m_SegZoneDeprecated.DeleteAll();
 
     // If some zones must be filled by segments, create the filling segments
     // (note, this is a outdated option, but it exists)
-    int zones_to_fill_count = 0;
-
-    for( unsigned i = 0; i < toFill.size(); i++ )
-    {
-        if( toFill[i].m_zone->GetFillMode() == ZFM_SEGMENTS )
-            zones_to_fill_count++;
-    }
-
-    if( zones_to_fill_count )
+    if( int zone_count = std::count_if( toFill.begin(), toFill.end(),
+            []( CN_ZONE_ISOLATED_ISLAND_LIST& aList )
+            { return aList.m_zone->GetFillMode() == ZFM_SEGMENTS; } ) > 0 )
     {
         if( m_progressReporter )
         {
             m_progressReporter->AdvancePhase();
             m_progressReporter->Report( _( "Performing segment fills..." ) );
-            m_progressReporter->SetMaxProgress( zones_to_fill_count );
+            m_progressReporter->SetMaxProgress( zone_count );
         }
 
-        // TODO: use thread pool to speedup calculations:
-        for( unsigned i = 0; i < toFill.size(); i++ )
+        parallelThreadCount = std::min<size_t>( static_cast<size_t>( zone_count ), parallelThreadCount );
+        nextItem = 0;
+        threadsFinished = 0;
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            ZONE_CONTAINER* zone = toFill[i].m_zone;
-
-            if( zone->GetFillMode() != ZFM_SEGMENTS )
-                continue;
-
-            if( m_progressReporter )
+            std::thread t = std::thread( [ & ]()
             {
-                m_progressReporter->AdvanceProgress();
-            }
+                for( size_t i = nextItem.fetch_add( 1 );
+                        i < toFill.size();
+                        i = nextItem.fetch_add( 1 ) )
+                {
+                    ZONE_CONTAINER* zone = toFill[i].m_zone;
 
-            ZONE_SEGMENT_FILL segFill;
+                    if( zone->GetFillMode() == ZFM_SEGMENTS )
+                    {
+                        ZONE_SEGMENT_FILL segFill;
 
-            fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
-            toFill[i].m_zone->SetFillSegments( segFill );
-        }
+                        fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
+                        zone->SetFillSegments( segFill );
+
+                        if( m_progressReporter )
+                             m_progressReporter->AdvanceProgress();
+                    }
+                 }
+
+                 threadsFinished++;
+             } );
+
+             t.detach();
+         }
+
+
+         // Finalize the triangulation threads
+         while( threadsFinished < parallelThreadCount )
+         {
+             if( m_progressReporter )
+                 m_progressReporter->KeepRefreshing();
+
+             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+         }
     }
+
 
     if( m_progressReporter )
     {
         m_progressReporter->AdvancePhase();
         m_progressReporter->Report( _( "Committing changes..." ) );
+        m_progressReporter->KeepRefreshing();
     }
 
     connectivity->SetProgressReporter( nullptr );
