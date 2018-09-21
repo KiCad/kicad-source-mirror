@@ -86,7 +86,7 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         }
     }
 
-    for( int i = 1; i < m_data->GetNetCount(); ++i )
+    for( int i = 1 /* skip "No Net" at [0] */; i < m_data->GetNetCount(); ++i )
     {
         RN_NET* net = m_data->GetRatsnestForNet( i );
 

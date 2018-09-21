@@ -1340,8 +1340,7 @@ void SPECCTRA_DB::FromBOARD( BOARD* aBoard )
         // expand the net vector to highestNetCode+1, setting empty to NULL
         nets.resize( highestNetCode + 1, NULL );
 
-        // skip netcode = 0
-        for( unsigned i = 1; i<nets.size(); ++i )
+        for( unsigned i = 1 /* skip "No Net" at [0] */; i < nets.size(); ++i )
             nets[i] = new NET( pcb->network );
 
         for( unsigned ii = 0; ii < aBoard->GetNetCount(); ii++ )

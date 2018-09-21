@@ -816,7 +816,7 @@ void BOARD::SetElementVisibility( GAL_LAYER_ID aLayer, bool isEnabled )
         // because we have a tool to show/hide ratsnest relative to a pad or a module
         // so the hide/show option is a per item selection
 
-        for( unsigned int net = 1; net < GetNetCount(); net++ )
+        for( unsigned int net = 1 /* skip "No Net" at [0] */; net < GetNetCount(); net++ )
         {
             auto rn = GetConnectivity()->GetRatsnestForNet( net );
             if( rn )
@@ -1211,8 +1211,7 @@ void BOARD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& 
     txt.Printf( wxT( "%d" ), GetNodesCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
 
-    // Subtract out the unconnected net before reporting number of nets
-    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() - 1 );
+    txt.Printf( wxT( "%d" ), m_NetInfo.GetNetCount() - 1 /* Don't include "No Net" in count */ );
     aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
     txt.Printf( wxT( "%d" ), GetConnectivity()->GetUnconnectedCount() );
@@ -1408,7 +1407,7 @@ NETINFO_ITEM* BOARD::FindNet( int aNetcode ) const
     // zero is reserved for "no connection" and is not actually a net.
     // NULL is returned for non valid netcodes
 
-    wxASSERT( m_NetInfo.GetNetCount() > 0 );    // net zero should exist
+    wxASSERT( m_NetInfo.GetNetCount() > 0 );
 
     if( aNetcode == NETINFO_LIST::UNCONNECTED && m_NetInfo.GetNetCount() == 0 )
         return &NETINFO_LIST::ORPHANED_ITEM;

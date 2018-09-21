@@ -364,7 +364,7 @@ void PCB_DRAW_PANEL_GAL::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PA
     txt.Printf( wxT( "%d" ), board->GetNodesCount() );
     aList.push_back( MSG_PANEL_ITEM( _( "Nodes" ), txt, DARKCYAN ) );
 
-    txt.Printf( wxT( "%d" ), board->GetNetCount() );
+    txt.Printf( wxT( "%d" ), board->GetNetCount() - 1 /* don't include "No Net" in count */ );
     aList.push_back( MSG_PANEL_ITEM( _( "Nets" ), txt, RED ) );
 
     txt.Printf( wxT( "%d" ), board->GetConnectivity()->GetUnconnectedCount() );
