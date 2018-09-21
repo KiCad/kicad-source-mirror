@@ -123,6 +123,7 @@ struct TOOL_MANAGER::TOOL_STATE
         transitions = aState.transitions;
         vcSettings = aState.vcSettings;
         // do not copy stateStack
+        return *this;
     }
 
     bool operator==( const TOOL_MANAGER::TOOL_STATE& aRhs ) const
