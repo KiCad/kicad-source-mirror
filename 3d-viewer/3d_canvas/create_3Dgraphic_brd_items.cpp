@@ -40,7 +40,7 @@
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/clayeritem.h"
-#include <openmp_mutex.h>
+
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
@@ -845,11 +845,7 @@ void CINFO3D_VISU::AddSolidAreasShapesToContainer( const ZONE_CONTAINER* aZoneCo
                                                    PCB_LAYER_ID aLayerId )
 {
     // Copy the polys list because we have to simplify it
-    SHAPE_POLY_SET polyList = SHAPE_POLY_SET(aZoneContainer->GetFilledPolysList());
-    polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
-
-    if( polyList.IsEmpty() )
-        return;
+    SHAPE_POLY_SET polyList = SHAPE_POLY_SET( aZoneContainer->GetFilledPolysList(), true );
 
     // This convert the poly in outline and holes
     Convert_shape_line_polygon_to_triangles( polyList,

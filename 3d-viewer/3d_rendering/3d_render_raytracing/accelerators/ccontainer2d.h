@@ -32,6 +32,7 @@
 
 #include "../shapes2D/cobject2d.h"
 #include <list>
+#include <mutex>
 
 typedef std::list<COBJECT2D *> LIST_OBJECT2D;
 typedef std::list<const COBJECT2D *> CONST_LIST_OBJECT2D;
@@ -52,6 +53,7 @@ public:
     {
         if( aObject ) // Only add if it is a valid pointer
         {
+            std::lock_guard<std::mutex> lock( m_lock );
             m_objects.push_back( aObject );
             m_bbox.Union( aObject->GetBBox() );
         }
@@ -70,6 +72,7 @@ public:
                                            CONST_LIST_OBJECT2D &aOutList ) const = 0;
 
 private:
+    std::mutex m_lock;
 };
 
 

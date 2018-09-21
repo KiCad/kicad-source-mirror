@@ -32,6 +32,7 @@
 #include <class_zone.h>
 #include <profile.h>
 
+#include <atomic>
 #include <thread>
 #include <unordered_set>
 #include <utility>
@@ -229,30 +230,49 @@ int main( int argc, char *argv[] )
     PROF_COUNTER cnt( "allBoard" );
 
 
-    #pragma omp parallel for schedule(dynamic)
-    for( int z = 0; z<brd->GetAreaCount(); z++ )
+    std::atomic<size_t> zonesToTriangulate( 0 );
+    std::atomic<size_t> threadsFinished( 0 );
+
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        auto zone = brd->GetArea( z );
-        SHAPE_POLY_SET poly = zone->GetFilledPolysList();
-
-        poly.CacheTriangulation();
-
-        (void) poly;
-        printf("zone %d/%d\n", ( z+1 ), brd->GetAreaCount() );
-#if 0
-        PROF_COUNTER unfrac("unfrac");
-        poly.Unfracture( SHAPE_POLY_SET::PM_FAST );
-        unfrac.Show();
-
-        PROF_COUNTER triangulate("triangulate");
-
-        for(int i =0; i< poly.OutlineCount(); i++)
+        std::thread t = std::thread( [brd, &zonesToTriangulate, &threadsFinished] ()
         {
-            poly.triangulatePoly( &poly.Polygon(i) );
-        }
-        triangulate.Show();
-#endif
+            for( size_t areaId = zonesToTriangulate.fetch_add( 1 );
+                        areaId < static_cast<size_t>( brd->GetAreaCount() );
+                        areaId = zonesToTriangulate.fetch_add( 1 ) )
+            {
+                auto zone = brd->GetArea( areaId );
+                SHAPE_POLY_SET poly = zone->GetFilledPolysList();
+
+                poly.CacheTriangulation();
+
+                (void) poly;
+                printf("zone %zu/%d\n", ( areaId + 1 ), brd->GetAreaCount() );
+        #if 0
+                PROF_COUNTER unfrac("unfrac");
+                poly.Unfracture( SHAPE_POLY_SET::PM_FAST );
+                unfrac.Show();
+
+                PROF_COUNTER triangulate("triangulate");
+
+                for(int i =0; i< poly.OutlineCount(); i++)
+                {
+                    poly.triangulatePoly( &poly.Polygon(i) );
+                }
+                triangulate.Show();
+        #endif
+            }
+
+            threadsFinished++;
+        } );
+
+        t.detach();
     }
+
+    while( threadsFinished < parallelThreadCount )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
 
     cnt.Show();
 

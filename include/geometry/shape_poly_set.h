@@ -424,8 +424,9 @@ class SHAPE_POLY_SET : public SHAPE
          * Copy constructor SHAPE_POLY_SET
          * Performs a deep copy of \p aOther into \p this.
          * @param aOther is the SHAPE_POLY_SET object that will be copied.
+         * @param aDeepCopy if true, make new copies of the triangulated unique_ptr vector
          */
-        SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther );
+        SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy = false );
 
         ~SHAPE_POLY_SET();
 

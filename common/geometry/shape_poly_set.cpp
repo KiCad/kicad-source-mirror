@@ -52,9 +52,18 @@ SHAPE_POLY_SET::SHAPE_POLY_SET() :
 }
 
 
-SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther ) :
+SHAPE_POLY_SET::SHAPE_POLY_SET( const SHAPE_POLY_SET& aOther, bool aDeepCopy ) :
     SHAPE( SH_POLY_SET ), m_polys( aOther.m_polys )
 {
+    if( aOther.IsTriangulationUpToDate() )
+    {
+        for( unsigned i = 0; i < aOther.TriangulatedPolyCount(); i++ )
+            m_triangulatedPolys.push_back(
+                    std::make_unique<TRIANGULATED_POLYGON>( *aOther.TriangulatedPolygon( i ) ) );
+
+        m_hash = aOther.GetHash();
+        m_triangulationValid = true;
+    }
 }
 
 

@@ -31,6 +31,10 @@
 #include "buffers_debug.h"
 #include <string.h> // For memcpy
 
+#include <atomic>
+#include <thread>
+#include <chrono>
+
 #ifndef CLAMP
 #define CLAMP(n, min, max) {if( n < min ) n=min; else if( n > max ) n = max;}
 #endif
@@ -469,34 +473,51 @@ void CIMAGE::EfxFilter( CIMAGE *aInImg, E_FILTER aFilterType )
     aInImg->m_wraping = WRAP_CLAMP;
     m_wraping = WRAP_CLAMP;
 
-    #pragma omp parallel for
-    for( int iy = 0; iy < (int)m_height; iy++)
+    std::atomic<size_t> nextRow( 0 );
+    std::atomic<size_t> threadsFinished( 0 );
+
+    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        for( int ix = 0; ix < (int)m_width; ix++ )
+        std::thread t = std::thread( [&]()
         {
-            int v = 0;
-
-            for( int sy = 0; sy < 5; sy++ )
+            for( size_t iy = nextRow.fetch_add( 1 );
+                        iy < m_height;
+                        iy = nextRow.fetch_add( 1 ) )
             {
-                for( int sx = 0; sx < 5; sx++ )
+                for( size_t ix = 0; ix < m_width; ix++ )
                 {
-                    int factor = filter.kernel[sx][sy];
-                    unsigned char pixelv = aInImg->Getpixel( ix + sx - 2,
-                                                             iy + sy - 2 );
+                    int v = 0;
 
-                    v += pixelv * factor;
+                    for( size_t sy = 0; sy < 5; sy++ )
+                    {
+                        for( size_t sx = 0; sx < 5; sx++ )
+                        {
+                            int factor = filter.kernel[sx][sy];
+                            unsigned char pixelv = aInImg->Getpixel( ix + sx - 2,
+                                                                     iy + sy - 2 );
+
+                            v += pixelv * factor;
+                        }
+                    }
+
+                    v /= filter.div;
+                    v += filter.offset;
+                    CLAMP(v, 0, 255);
+                    //TODO: This needs to write to a separate buffer
+                    m_pixels[ix + iy * m_width] = v;
                 }
             }
 
-            v /= filter.div;
+            threadsFinished++;
+        } );
 
-            v += filter.offset;
-
-            CLAMP(v, 0, 255);
-
-            m_pixels[ix + iy * m_width] = v;
-        }
+        t.detach();
     }
+
+    while( threadsFinished < parallelThreadCount )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 }
 
 
