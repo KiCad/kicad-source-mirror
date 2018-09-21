@@ -324,17 +324,19 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     PROF_COUNTER search_basic( "search-basic" );
 #endif
 
+    size_t numDirty = std::count_if( m_itemList.begin(), m_itemList.end(), [] ( CN_ITEM* aItem )
+            { return aItem->Dirty(); } );
+
     if( m_progressReporter )
     {
-        m_progressReporter->SetMaxProgress( m_itemList.IsDirty() ? m_itemList.Size() : 0 );
+        m_progressReporter->SetMaxProgress( numDirty );
+        m_progressReporter->KeepRefreshing();
     }
 
     if( m_itemList.IsDirty() )
     {
         std::atomic<int> nextItem( 0 );
         std::atomic<size_t> threadsFinished( 0 );
-        size_t numDirty = std::count_if( m_itemList.begin(), m_itemList.end(), [] ( CN_ITEM* aItem )
-                { return aItem->Dirty(); } );
 
         size_t parallelThreadCount = std::min<size_t>(
                 std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
@@ -353,10 +355,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                     {
                         CN_VISITOR visitor( item, &m_listLock );
                         m_itemList.FindNearby( item, visitor );
-                    }
 
-                    if( m_progressReporter )
-                        m_progressReporter->AdvanceProgress();
+                        if( m_progressReporter )
+                            m_progressReporter->AdvanceProgress();
+                    }
                 }
 
                 threadsFinished++;

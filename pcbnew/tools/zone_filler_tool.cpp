@@ -90,7 +90,7 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     }
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Fill Zone" ), 3 )
+            new WX_PROGRESS_REPORTER( frame(), _( "Fill Zone" ), 4 )
             );
 
     ZONE_FILLER filler( board(), &commit );
@@ -113,7 +113,7 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
     }
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
-            new WX_PROGRESS_REPORTER( frame(), _( "Fill All Zones" ), 3 )
+            new WX_PROGRESS_REPORTER( frame(), _( "Fill All Zones" ), 4 )
             );
 
     ZONE_FILLER filler( board(), &commit );
