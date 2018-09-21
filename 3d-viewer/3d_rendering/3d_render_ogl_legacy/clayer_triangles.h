@@ -35,6 +35,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 #include <vector>
+#include <mutex>
 
 
 typedef std::vector< SFVEC3F > SFVEC3F_VECTOR;
@@ -173,6 +174,8 @@ public:
                                float zBot,
                                float zTop,
                                bool aInvertFaceDirection );
+
+    std::mutex m_middle_layer_lock;
 
     CLAYER_TRIANGLE_CONTAINER *m_layer_top_segment_ends;
     CLAYER_TRIANGLE_CONTAINER *m_layer_top_triangles;

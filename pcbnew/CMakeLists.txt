@@ -631,12 +631,6 @@ if ( KICAD_BUILD_TESTS )
 
 endif ()
 
-if( ${OPENMP_FOUND} )
-    set_target_properties( pcbnew_kiface PROPERTIES
-        COMPILE_FLAGS   ${OpenMP_CXX_FLAGS}
-        )
-endif()
-
 set( PCBNEW_KIFACE_LIBRARIES
     3d-viewer
     pcbcommon
@@ -654,7 +648,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}      # must follow GITHUB
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
-    ${OPENMP_LIBRARIES}
     )
 
 

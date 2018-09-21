@@ -131,7 +131,7 @@ private:
     unsigned long int m_stats_start_rendering_time;
 
     /// Save the number of blocks progress of the render
-    long m_nrBlocksRenderProgress;
+    size_t m_nrBlocksRenderProgress;
 
     CPOSTSHADER_SSAO m_postshader_ssao;
 
@@ -165,7 +165,7 @@ private:
     std::vector< SFVEC2UI > m_blockPositions;
 
     /// this flags if a position was already processed (cleared each new render)
-    std::vector< bool > m_blockPositionsWasProcessed;
+    std::vector< int > m_blockPositionsWasProcessed;
 
     /// this encodes the Morton code positions (on fast preview mode)
     std::vector< SFVEC2UI > m_blockPositionsFast;

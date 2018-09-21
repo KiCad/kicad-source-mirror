@@ -29,6 +29,7 @@
 
 #include "ccontainer2d.h"
 #include <vector>
+#include <mutex>
 #include <boost/range/algorithm/partition.hpp>
 #include <boost/range/algorithm/nth_element.hpp>
 #include <wx/debug.h>
@@ -46,6 +47,7 @@ CGENERICCONTAINER2D::CGENERICCONTAINER2D( OBJECT2D_TYPE aObjType )
 
 void CGENERICCONTAINER2D::Clear()
 {
+    std::lock_guard<std::mutex> lock( m_lock );
     m_bbox.Reset();
 
     for( LIST_OBJECT2D::iterator ii = m_objects.begin();

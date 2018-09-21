@@ -30,6 +30,9 @@
 
 #include "clayer_triangles.h"
 #include <wx/debug.h>   // For the wxASSERT
+#include <mutex>
+#include <thread>
+#include <atomic>
 
 
 CLAYER_TRIANGLE_CONTAINER::CLAYER_TRIANGLE_CONTAINER( unsigned int aNrReservedTriangles,
@@ -219,8 +222,8 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             const SFVEC2F &v0 = aContournPoints[i + 0];
             const SFVEC2F &v1 = aContournPoints[i + 1];
 
-            #pragma omp critical
             {
+                std::lock_guard<std::mutex> lock( m_middle_layer_lock );
                 m_layer_middle_contourns_quads->AddQuad( SFVEC3F( v0.x, v0.y, zTop ),
                                                          SFVEC3F( v1.x, v1.y, zTop ),
                                                          SFVEC3F( v1.x, v1.y, zBot ),
@@ -305,21 +308,41 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
     m_layer_middle_contourns_quads->Reserve_More( nrContournPointsToReserve * 2,
                                                   true );
 
-    #pragma omp parallel for
-    for( signed int i = 0; i < aPolySet.OutlineCount(); ++i )
+    std::atomic<int> nextItem( 0 );
+    std::atomic<size_t> threadsFinished( 0 );
+
+    size_t parallelThreadCount = std::min<size_t>(
+            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+            static_cast<size_t>( aPolySet.OutlineCount() ) );
+    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
-        // Add outline
-        const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
-
-        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
-
-        // Add holes for this outline
-        for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
+        std::thread t = std::thread( [&]()
         {
-            const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
-            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
-        }
+            for( int i = nextItem.fetch_add( 1 );
+                     i < aPolySet.OutlineCount();
+                     i = nextItem.fetch_add( 1 ) )
+            {
+                // Add outline
+                const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
+
+                AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+
+                // Add holes for this outline
+                for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
+                {
+                    const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
+                    AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+                }
+            }
+
+            threadsFinished++;
+        } );
+
+        t.detach();
     }
+
+    while( threadsFinished < parallelThreadCount )
+        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 }
 
 

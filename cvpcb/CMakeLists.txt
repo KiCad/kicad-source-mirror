@@ -149,7 +149,6 @@ target_link_libraries( cvpcb_kiface
     gal
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-    ${OPENMP_LIBRARIES}         # used by 3d viewer
     )
 
 if( BUILD_GITHUB_PLUGIN )

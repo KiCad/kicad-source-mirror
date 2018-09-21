@@ -40,7 +40,7 @@
 #include "../3d_rendering/3d_render_raytracing/accelerators/ccontainer2d.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/ccylinder.h"
 #include "../3d_rendering/3d_render_raytracing/shapes3D/clayeritem.h"
-#include <openmp_mutex.h>
+
 #include <class_board.h>
 #include <class_module.h>
 #include <class_pad.h>
@@ -52,6 +52,9 @@
 #include <trigo.h>
 #include <utility>
 #include <vector>
+#include <thread>
+#include <algorithm>
+#include <atomic>
 
 #include <profile.h>
 
@@ -788,36 +791,43 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
         // Add zones objects
         // /////////////////////////////////////////////////////////////////////
-        for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+        std::atomic<size_t> nextZone( 0 );
+        std::atomic<size_t> threadsFinished( 0 );
+
+        size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
-
-            if( aStatusTextReporter )
-                aStatusTextReporter->Report( wxString::Format( _( "Create zones of layer %s" ),
-                                                               LSET::Name( curr_layer_id ) ) );
-
-            wxASSERT( m_layers_container2D.find( curr_layer_id ) != m_layers_container2D.end() );
-
-            CBVHCONTAINER2D *layerContainer = m_layers_container2D[curr_layer_id];
-
-            // ADD COPPER ZONES
-            for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
+            std::thread t = std::thread( [&]()
             {
-                const ZONE_CONTAINER* zone = m_board->GetArea( ii );
-                const PCB_LAYER_ID zonelayer = zone->GetLayer();
-
-                if( zonelayer == curr_layer_id )
+                for( size_t areaId = nextZone.fetch_add( 1 );
+                            areaId < static_cast<size_t>( m_board->GetAreaCount() );
+                            areaId = nextZone.fetch_add( 1 ) )
                 {
-                    AddSolidAreasShapesToContainer( zone,
-                                                    layerContainer,
-                                                    curr_layer_id );
+                    const ZONE_CONTAINER* zone = m_board->GetArea( areaId );
+
+                    if( zone == nullptr )
+                        break;
+
+                    auto layerContainer = m_layers_container2D.find( zone->GetLayer() );
+
+                    if( layerContainer != m_layers_container2D.end() )
+                        AddSolidAreasShapesToContainer( zone, layerContainer->second,
+                                                        zone->GetLayer() );
                 }
-            }
+
+                threadsFinished++;
+            } );
+
+            t.detach();
         }
+
+        while( threadsFinished < parallelThreadCount )
+            std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+
     }
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
-    printf( "T13: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
+    printf( "fill zones T13: %.3f ms\n", (float)( GetRunningMicroSecs()  - start_Time  ) / 1e3 );
     start_Time = GetRunningMicroSecs();
 #endif
 
@@ -825,29 +835,18 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
         GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
         (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
     {
-        // Add zones poly contourns
-        // /////////////////////////////////////////////////////////////////////
-        for( unsigned int lIdx = 0; lIdx < layer_id.size(); ++lIdx )
+        // ADD COPPER ZONES
+        for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
+            const ZONE_CONTAINER* zone = m_board->GetArea( ii );
 
-            wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
+            if( zone == nullptr )
+                break;
 
-            SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
+            auto layerContainer = m_layers_poly.find( zone->GetLayer() );
 
-            // ADD COPPER ZONES
-            for( int ii = 0; ii < m_board->GetAreaCount(); ++ii )
-            {
-                const ZONE_CONTAINER* zone = m_board->GetArea( ii );
-                const LAYER_NUM zonelayer = zone->GetLayer();
-
-                if( zonelayer == curr_layer_id )
-                {
-                    zone->TransformSolidAreasShapesToPolygonSet( *layerPoly,
-                                                                 segcountforcircle,
-                                                                 correctionFactor );
-                }
-            }
+            if( layerContainer != m_layers_poly.end() )
+                zone->TransformSolidAreasShapesToPolygonSet( *layerContainer->second, segcountforcircle, correctionFactor );
         }
     }
 
@@ -865,22 +864,35 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     if( GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) &&
         (m_render_engine == RENDER_ENGINE_OPENGL_LEGACY) )
     {
-        const int nLayers = layer_id.size();
+        std::atomic<size_t> nextItem( 0 );
+        std::atomic<size_t> threadsFinished( 0 );
 
-        #pragma omp parallel for
-        for( signed int lIdx = 0; lIdx < nLayers; ++lIdx )
+        size_t parallelThreadCount = std::min<size_t>(
+                std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+                layer_id.size() );
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            const PCB_LAYER_ID curr_layer_id = layer_id[lIdx];
+            std::thread t = std::thread( [&nextItem, &threadsFinished, &layer_id, this]()
+            {
+                for( size_t i = nextItem.fetch_add( 1 );
+                            i < layer_id.size();
+                            i = nextItem.fetch_add( 1 ) )
+                {
+                    auto layerPoly = m_layers_poly.find( layer_id[i] );
 
-            wxASSERT( m_layers_poly.find( curr_layer_id ) != m_layers_poly.end() );
+                    if( layerPoly != m_layers_poly.end() )
+                        // This will make a union of all added contours
+                        layerPoly->second->Simplify( SHAPE_POLY_SET::PM_FAST );
+                }
 
-            SHAPE_POLY_SET *layerPoly = m_layers_poly[curr_layer_id];
+                threadsFinished++;
+            } );
 
-            wxASSERT( layerPoly != NULL );
-
-            // This will make a union of all added contourns
-            layerPoly->Simplify( SHAPE_POLY_SET::PM_FAST );
+            t.detach();
         }
+
+        while( threadsFinished < parallelThreadCount )
+            std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
     }
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
