@@ -45,6 +45,7 @@
 #include <kiway.h>
 #include <kiway_player.h>
 #include <trace_helpers.h>
+#include <lockfile.cpp>
 
 #include <pcbnew.h>
 #include <pcbnew_id.h>
@@ -419,7 +420,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     wxASSERT_MSG( wxFileName( fullFileName ).IsAbsolute(),
         wxT( "bug in single_top.cpp or project manager." ) );
 
-    if( !LockFile( fullFileName ) )
+    std::unique_ptr<wxSingleInstanceChecker> lockFile = ::LockFile( fullFileName );
+
+    if( !lockFile )
     {
         wxString msg = wxString::Format( _(
                 "PCB file \"%s\" is already open." ),
@@ -428,6 +431,8 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         DisplayError( this, msg );
         return false;
     }
+
+    m_file_checker.reset( lockFile.release() );
 
     if( GetScreen()->IsModify() && !GetBoard()->IsEmpty() )
     {
