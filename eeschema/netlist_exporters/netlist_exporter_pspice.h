@@ -57,6 +57,7 @@ enum SPICE_PRIMITIVE {
     SP_DIODE        = 'D',
     SP_BJT          = 'Q',
     SP_MOSFET       = 'M',
+    SP_JFET         = 'J',
     SP_SUBCKT       = 'X',
     SP_VSOURCE      = 'V',
     SP_ISOURCE      = 'I'

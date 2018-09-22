@@ -70,6 +70,7 @@ static const std::vector<SPICE_MODEL_INFO> modelTypes =
     { SP_DIODE,     _( "Diode" ),      { "d" } },
     { SP_BJT,       _( "BJT" ),        { "npn", "pnp" } },
     { SP_MOSFET,    _( "MOSFET" ),     { "nmos", "pmos", "vdmos" } },
+    { SP_JFET,      _( "JFET" ),       { "njf", "pjf" } },
     { SP_SUBCKT,    _( "Subcircuit" ), {} },
 };
 
@@ -272,6 +273,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
         case SP_DIODE:
         case SP_BJT:
         case SP_MOSFET:
+        case SP_JFET:
         case SP_SUBCKT:
             m_notebook->SetSelection( m_notebook->FindPage( m_model ) );
             m_modelType->SetSelection( getModelTypeIdx( primitive ) );
