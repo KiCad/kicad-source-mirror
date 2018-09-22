@@ -480,7 +480,10 @@ void CVPCB_MAINFRAME::OnSelectComponent( wxListEvent& event )
     m_footprintListBox->SetFootprints( *m_FootprintsList, libraryName, component,
                                        m_currentSearchPattern, m_filteringOptions);
 
-    m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
+    if( component && component->GetFPID().IsValid() )
+        m_footprintListBox->SetSelectedFootprint( component->GetFPID() );
+    else
+        m_footprintListBox->SetSelection( m_footprintListBox->GetSelection(), false );
 
     refreshAfterComponentSearch (component);
 }

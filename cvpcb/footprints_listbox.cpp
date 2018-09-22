@@ -112,15 +112,28 @@ void FOOTPRINTS_LISTBOX::SetSelection( int index, bool State )
 
     if( (index >= 0)  && (GetCount() > 0) )
     {
-#ifndef __WXMAC__
         Select( index, State );
-#endif
-
         EnsureVisible( index );
-
-#ifdef __WXMAC__
         Refresh();
-#endif
+    }
+}
+
+
+void FOOTPRINTS_LISTBOX::SetSelectedFootprint( const LIB_ID& aFPID )
+{
+    wxString id = wxString::Format( "%s:%s",
+                                    GetChars( aFPID.GetLibNickname() ),
+                                    GetChars( aFPID.GetLibItemName() ) );
+
+    for( size_t i = 0; i < GetCount(); ++i )
+    {
+        wxString candidate = m_footprintList.Item( i ).substr( 4 );
+
+        if( candidate.CmpNoCase( id ) == 0 )
+        {
+            SetSelection( i, true );
+            return;
+        }
     }
 }
 

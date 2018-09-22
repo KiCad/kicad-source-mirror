@@ -110,6 +110,7 @@ public:
 
     int      GetCount();
     void     SetSelection( int index, bool State = true );
+    void     SetSelectedFootprint( const LIB_ID& aFPID );
     void     SetString( unsigned linecount, const wxString& text );
     void     AppendLine( const wxString& text );
 
