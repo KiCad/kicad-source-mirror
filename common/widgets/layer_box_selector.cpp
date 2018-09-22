@@ -166,8 +166,13 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
 
 void LAYER_BOX_SELECTOR::onKeyDown( wxKeyEvent& aEvent )
 {
+#ifdef __WXOSX_MAC__
     if( aEvent.GetKeyCode() == WXK_ESCAPE && IsPopupShown() )
+    {
         Dismiss();
-    else
-        aEvent.Skip();
+        return;
+    }
+#endif
+
+    aEvent.Skip();
 }
