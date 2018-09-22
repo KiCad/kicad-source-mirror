@@ -106,11 +106,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     // outside the existinag board
     EDA_RECT bbox = board->GetBoundingBox();
 
-    if( !aDryRun )
-    {
-        // Clear selection, just in case a selected item has to be removed
-        toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-    }
+    toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
     m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 0 );
@@ -162,8 +158,6 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
         {
             for( MODULE* footprint : newFootprints )
                 toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
-
-            toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
         }
     }
 

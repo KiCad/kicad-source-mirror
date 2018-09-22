@@ -405,6 +405,12 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         {
             DIALOG_UPDATE_PCB updateDialog( this, &netlist );
             updateDialog.ShowModal();
+
+            auto selectionTool = static_cast<SELECTION_TOOL*>(
+                    m_toolManager->FindTool( "pcbnew.InteractiveSelection" ) );
+
+            if( !selectionTool->GetSelection().Empty() )
+                GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
         }
 
         break;
