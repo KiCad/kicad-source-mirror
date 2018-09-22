@@ -147,6 +147,12 @@ void EDA_DRAW_PANEL_GAL::SetFocus()
 
 void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 {
+    m_viewControls->UpdateScrollbars();
+
+    // Drawing to a zero-width or zero-height GAL is fraught with peril.
+    if( GetClientRect().IsEmpty() )
+        return;
+
     m_pendingRefresh = false;
 
     if( m_drawing )
@@ -160,8 +166,6 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
     m_drawing = true;
     KIGFX::RENDER_SETTINGS* settings = static_cast<KIGFX::RENDER_SETTINGS*>( m_painter->GetSettings() );
-
-    m_viewControls->UpdateScrollbars();
 
     try
     {
