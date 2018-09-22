@@ -540,7 +540,8 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         InitBlockPasteInfos();
 
         KIGFX::PREVIEW::SELECTION_AREA* sel = GetCanvas()->GetView()->GetSelectionArea();
-        VECTOR2I offsetToCenter = ( sel->GetOrigin() - sel->GetEnd() ) / 2;
+        VECTOR2I offsetToCenter = GetCanvas()->GetGAL()->GetGridPoint(
+                ( sel->GetOrigin() - sel->GetEnd() ) / 2 );
         block->SetLastCursorPosition( wxPoint( offsetToCenter.x, offsetToCenter.y ) );
 
         if( block->GetCount() == 0 )      // No data to paste
