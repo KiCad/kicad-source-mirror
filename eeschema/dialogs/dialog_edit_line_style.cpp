@@ -25,7 +25,7 @@
 #include <cassert>
 #include <sch_edit_frame.h>
 #include <sch_line.h>
-#include <widgets/color4Dpickerdlg.h>
+#include <dialogs/dialog_color_picker.h>
 #include <dialog_edit_line_style.h>
 
 const int BUTT_COLOR_MINSIZE_X = 32;
@@ -65,7 +65,7 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataToWindow()
 void DIALOG_EDIT_LINE_STYLE::onColorButtonClicked( wxCommandEvent& event )
 {
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
-    COLOR4D_PICKER_DLG dialog( this, m_selectedColor, false );
+    DIALOG_COLOR_PICKER dialog( this, m_selectedColor, false );
 
     if( dialog.ShowModal() == wxID_OK )
         newColor = dialog.GetColor();

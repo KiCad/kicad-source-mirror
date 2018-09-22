@@ -1,15 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "color4Dpickerdlg_base.h"
+#include "dialog_color_picker_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
 
-COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
+DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
 	
@@ -226,64 +226,64 @@ COLOR4D_PICKER_DLG_BASE::COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID i
 	this->Centre( wxBOTH );
 	
 	// Connect Events
-	m_RgbBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onRGBMouseClick ), NULL, this );
-	m_RgbBitmap->Connect( wxEVT_MOTION, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onRGBMouseDrag ), NULL, this );
-	m_spinCtrlRed->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditRed ), NULL, this );
-	m_spinCtrlGreen->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditGreen ), NULL, this );
-	m_spinCtrlBlue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditBlue ), NULL, this );
-	m_HsvBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onHSVMouseClick ), NULL, this );
-	m_HsvBitmap->Connect( wxEVT_MOTION, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onHSVMouseDrag ), NULL, this );
-	m_spinCtrlHue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditHue ), NULL, this );
-	m_spinCtrlSaturation->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditSat ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
+	m_RgbBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onRGBMouseClick ), NULL, this );
+	m_RgbBitmap->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onRGBMouseDrag ), NULL, this );
+	m_spinCtrlRed->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditRed ), NULL, this );
+	m_spinCtrlGreen->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditGreen ), NULL, this );
+	m_spinCtrlBlue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditBlue ), NULL, this );
+	m_HsvBitmap->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseClick ), NULL, this );
+	m_HsvBitmap->Connect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseDrag ), NULL, this );
+	m_spinCtrlHue->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditHue ), NULL, this );
+	m_spinCtrlSaturation->Connect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditSat ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 }
 
-COLOR4D_PICKER_DLG_BASE::~COLOR4D_PICKER_DLG_BASE()
+DIALOG_COLOR_PICKER_BASE::~DIALOG_COLOR_PICKER_BASE()
 {
 	// Disconnect Events
-	m_RgbBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onRGBMouseClick ), NULL, this );
-	m_RgbBitmap->Disconnect( wxEVT_MOTION, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onRGBMouseDrag ), NULL, this );
-	m_spinCtrlRed->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditRed ), NULL, this );
-	m_spinCtrlGreen->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditGreen ), NULL, this );
-	m_spinCtrlBlue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditBlue ), NULL, this );
-	m_HsvBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onHSVMouseClick ), NULL, this );
-	m_HsvBitmap->Disconnect( wxEVT_MOTION, wxMouseEventHandler( COLOR4D_PICKER_DLG_BASE::onHSVMouseDrag ), NULL, this );
-	m_spinCtrlHue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditHue ), NULL, this );
-	m_spinCtrlSaturation->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeEditSat ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderBrightness->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeBrightness ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
-	m_sliderTransparency->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( COLOR4D_PICKER_DLG_BASE::OnChangeAlpha ), NULL, this );
+	m_RgbBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onRGBMouseClick ), NULL, this );
+	m_RgbBitmap->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onRGBMouseDrag ), NULL, this );
+	m_spinCtrlRed->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditRed ), NULL, this );
+	m_spinCtrlGreen->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditGreen ), NULL, this );
+	m_spinCtrlBlue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditBlue ), NULL, this );
+	m_HsvBitmap->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseClick ), NULL, this );
+	m_HsvBitmap->Disconnect( wxEVT_MOTION, wxMouseEventHandler( DIALOG_COLOR_PICKER_BASE::onHSVMouseDrag ), NULL, this );
+	m_spinCtrlHue->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditHue ), NULL, this );
+	m_spinCtrlSaturation->Disconnect( wxEVT_COMMAND_SPINCTRL_UPDATED, wxSpinEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeEditSat ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderBrightness->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeBrightness ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
+	m_sliderTransparency->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( DIALOG_COLOR_PICKER_BASE::OnChangeAlpha ), NULL, this );
 	
 }

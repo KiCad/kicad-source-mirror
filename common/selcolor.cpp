@@ -25,6 +25,7 @@
 
 /* Dialog for selecting color from the palette of available colors.
  */
+// LEGACY TODO: obsolete once legacy canvas removed
 
 
 #include <fctsys.h>

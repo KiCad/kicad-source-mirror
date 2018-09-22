@@ -155,6 +155,8 @@ set( COMMON_ABOUT_DLG_SRCS
     )
 
 set( COMMON_DLG_SRCS
+    dialogs/dialog_color_picker.cpp
+    dialogs/dialog_color_picker_base.cpp
     dialogs/dialog_configure_paths.cpp
     dialogs/dialog_configure_paths_base.cpp
     dialogs/dialog_display_info_HTML_base.cpp
@@ -176,8 +178,6 @@ set( COMMON_DLG_SRCS
     )
 
 set( COMMON_WIDGET_SRCS
-    widgets/color4Dpickerdlg.cpp
-    widgets/color4Dpickerdlg_base.cpp
     widgets/color_swatch.cpp
     widgets/footprint_choice.cpp
     widgets/footprint_preview_widget.cpp
@@ -315,7 +315,6 @@ set( COMMON_SRCS
     status_popup.cpp
     systemdirsappend.cpp
     trace_helpers.cpp
-    trigo.cpp
     undo_redo_container.cpp
     utf8.cpp
     validators.cpp
@@ -380,6 +379,7 @@ set( COMMON_SRCS
     geometry/shape_file_io.cpp
     geometry/shape_line_chain.cpp
     geometry/shape_poly_set.cpp
+    geometry/trigo.cpp
 
     libeval/numeric_evaluator.cpp
     )

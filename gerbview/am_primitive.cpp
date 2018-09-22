@@ -281,8 +281,8 @@ void AM_PRIMITIVE::DrawBasicShape( const GERBER_DRAW_ITEM* aParent,
 
     case AMP_MOIRE:
     {
-        /* Moiré, Primitive Code 6
-         * The moiré primitive is a cross hair centered on concentric rings (annuli).
+        /* Moirï¿½, Primitive Code 6
+         * The moirï¿½ primitive is a cross hair centered on concentric rings (annuli).
          * Exposure is always on.
          */
         curPos += mapPt( params[0].GetValue( tool ), params[1].GetValue( tool ),

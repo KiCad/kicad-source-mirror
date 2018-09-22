@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __COLOR4DPICKERDLG_BASE_H__
-#define __COLOR4DPICKERDLG_BASE_H__
+#ifndef __DIALOG_COLOR_PICKER_BASE_H__
+#define __DIALOG_COLOR_PICKER_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -36,9 +36,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class COLOR4D_PICKER_DLG_BASE
+/// Class DIALOG_COLOR_PICKER_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class COLOR4D_PICKER_DLG_BASE : public DIALOG_SHIM
+class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -89,9 +89,9 @@ class COLOR4D_PICKER_DLG_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		COLOR4D_PICKER_DLG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~COLOR4D_PICKER_DLG_BASE();
+		DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_COLOR_PICKER_BASE();
 	
 };
 
-#endif //__COLOR4DPICKERDLG_BASE_H__
+#endif //__DIALOG_COLOR_PICKER_BASE_H__

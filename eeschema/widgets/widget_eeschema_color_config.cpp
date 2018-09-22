@@ -32,7 +32,7 @@
 #include <general.h>
 
 #include "widget_eeschema_color_config.h"
-#include <../common/widgets/color4Dpickerdlg.h>
+#include <dialogs/dialog_color_picker.h>
 
 // Width and height of every (color-displaying / bitmap) button in dialog units
 const wxSize BUTT_SIZE( 10, 6 );
@@ -237,7 +237,7 @@ void WIDGET_EESCHEMA_COLOR_CONFIG::SetColor( wxCommandEvent& event )
     wxCHECK_RET( colorButton != NULL, wxT( "Client data not set for color button." ) );
     COLOR4D oldColor = currentColors[ SCH_LAYER_INDEX( colorButton->m_Layer ) ];
     COLOR4D newColor = COLOR4D::UNSPECIFIED;
-    COLOR4D_PICKER_DLG dialog( this, oldColor, false );
+    DIALOG_COLOR_PICKER dialog( this, oldColor, false );
 
     if( dialog.ShowModal() == wxID_OK )
     {

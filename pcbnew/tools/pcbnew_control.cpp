@@ -515,7 +515,7 @@ int PCBNEW_CONTROL::LayerToggle( const TOOL_EVENT& aEvent )
 }
 
 
-// It'd be nice to share the min/max with the COLOR4D_PICKER_DLG, but those are
+// It'd be nice to share the min/max with the DIALOG_COLOR_PICKER, but those are
 // set in wxFormBuilder.
 #define ALPHA_MIN 0.20
 #define ALPHA_MAX 1.00

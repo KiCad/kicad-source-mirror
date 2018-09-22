@@ -21,12 +21,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COLOR4DPICKERDLG_H
-#define COLOR4DPICKERDLG_H
+#ifndef DIALOG_COLOR_PICKER_H
+#define DIALOG_COLOR_PICKER_H
 
 
 #include <gal/color4d.h>
-#include "color4Dpickerdlg_base.h"
+#include "dialog_color_picker_base.h"
 
 enum CHANGED_COLOR
 {
@@ -39,7 +39,7 @@ enum CHANGED_COLOR
     VAL_CHANGED,
 };
 
-class COLOR4D_PICKER_DLG : public COLOR4D_PICKER_DLG_BASE
+class DIALOG_COLOR_PICKER : public DIALOG_COLOR_PICKER_BASE
 {
 public:
     /**
@@ -49,8 +49,8 @@ public:
      * @param aAllowOpacityControl = true to allow opacity (alpha channel) setting
      * false to not show this setting (opacity = 1.0 always)
      */
-	COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl );
-	~COLOR4D_PICKER_DLG();
+	DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl );
+	~DIALOG_COLOR_PICKER();
 
 	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
 
@@ -142,4 +142,4 @@ private:
 
 };
 
-#endif  // #define COLOR4DPICKERDLG_H
+#endif  // #define DIALOG_COLOR_PICKER_H

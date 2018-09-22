@@ -1,7 +1,3 @@
-/**
- * @file color4Dpickerdlg.cpp :
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -23,13 +19,13 @@
 
 
 #include "math.h"
-#include "color4Dpickerdlg.h"
+#include "dialog_color_picker.h"
 
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 
-COLOR4D_PICKER_DLG::COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
-                                        bool aAllowOpacityControl )
-	: COLOR4D_PICKER_DLG_BASE( aParent )
+DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
+                                          bool aAllowOpacityControl )
+	: DIALOG_COLOR_PICKER_BASE( aParent )
 {
     m_allowMouseEvents = false;
     m_allowOpacityCtrl = aAllowOpacityControl;
@@ -57,10 +53,10 @@ COLOR4D_PICKER_DLG::COLOR4D_PICKER_DLG( wxWindow* aParent, KIGFX::COLOR4D& aCurr
     m_sdbSizerOK->SetDefault();
 }
 
-int COLOR4D_PICKER_DLG::m_ActivePage = 0;    // the active notebook page, stored during a session
+int DIALOG_COLOR_PICKER::m_ActivePage = 0;    // the active notebook page, stored during a session
 
 
-COLOR4D_PICKER_DLG::~COLOR4D_PICKER_DLG()
+DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
 {
     delete m_bitmapRGB;
     delete m_bitmapHSV;
@@ -68,11 +64,11 @@ COLOR4D_PICKER_DLG::~COLOR4D_PICKER_DLG()
     m_ActivePage = m_notebook->GetSelection();
 
     for( auto button : m_buttonsColor )
-        button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( COLOR4D_PICKER_DLG::buttColorClick ), NULL, this );
+        button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
 }
 
 
-void COLOR4D_PICKER_DLG::setIconColor( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D )
+void DIALOG_COLOR_PICKER::setIconColor( wxStaticBitmap* aStaticBitmap, KIGFX::COLOR4D& aColor4D )
 {
     // Draw the icon that shows the aColor4D,
     // with colors according to the color 4D rgb and alpha
@@ -127,7 +123,7 @@ void COLOR4D_PICKER_DLG::setIconColor( wxStaticBitmap* aStaticBitmap, KIGFX::COL
 }
 
 
-bool COLOR4D_PICKER_DLG::TransferDataToWindow()
+bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 {
     // Draw all bitmaps, with colors according to the color 4D
     setIconColor( m_OldColorRect, m_previousColor4D );
@@ -143,7 +139,7 @@ bool COLOR4D_PICKER_DLG::TransferDataToWindow()
 }
 
 
-void COLOR4D_PICKER_DLG::initDefinedColors()
+void DIALOG_COLOR_PICKER::initDefinedColors()
 {
     #define ID_COLOR_BLACK 2000 // colors_id = ID_COLOR_BLACK a ID_COLOR_BLACK + NBCOLORS-1
 
@@ -201,12 +197,12 @@ void COLOR4D_PICKER_DLG::initDefinedColors()
                            wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
                            wxLEFT | wxRIGHT | wxBOTTOM, 5 );
         m_buttonsColor.push_back( bitmapButton );
-        bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( COLOR4D_PICKER_DLG::buttColorClick ), NULL, this );
+        bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
     }
 }
 
 
-void COLOR4D_PICKER_DLG::createRGBBitmap()
+void DIALOG_COLOR_PICKER::createRGBBitmap()
 {
     wxMemoryDC bitmapDC;
     wxSize bmsize = m_RgbBitmap->GetSize();
@@ -290,7 +286,7 @@ void COLOR4D_PICKER_DLG::createRGBBitmap()
 }
 
 
-void COLOR4D_PICKER_DLG::createHSVBitmap()
+void DIALOG_COLOR_PICKER::createHSVBitmap()
 {
     wxMemoryDC bitmapDC;
     wxSize bmsize = m_HsvBitmap->GetSize();
@@ -349,7 +345,7 @@ void COLOR4D_PICKER_DLG::createHSVBitmap()
 }
 
 
-void COLOR4D_PICKER_DLG::drawRGBPalette()
+void DIALOG_COLOR_PICKER::drawRGBPalette()
 {
     if( !m_bitmapRGB || m_bitmapRGB->GetSize() != m_RgbBitmap->GetSize() )
         createRGBBitmap();
@@ -413,7 +409,7 @@ void COLOR4D_PICKER_DLG::drawRGBPalette()
 }
 
 
-void COLOR4D_PICKER_DLG::drawHSVPalette()
+void DIALOG_COLOR_PICKER::drawHSVPalette()
 {
     if( !m_bitmapHSV || m_bitmapHSV->GetSize() != m_HsvBitmap->GetSize() )
         createHSVBitmap();
@@ -453,7 +449,7 @@ void COLOR4D_PICKER_DLG::drawHSVPalette()
 }
 
 
-void COLOR4D_PICKER_DLG::SetEditVals( CHANGED_COLOR aChanged )
+void DIALOG_COLOR_PICKER::SetEditVals( CHANGED_COLOR aChanged )
 {
     m_sliderTransparency->SetValue( normalizeToInt( m_newColor4D.a, ALPHA_MAX ) );
 
@@ -482,7 +478,7 @@ void COLOR4D_PICKER_DLG::SetEditVals( CHANGED_COLOR aChanged )
 }
 
 
-void COLOR4D_PICKER_DLG::drawAll()
+void DIALOG_COLOR_PICKER::drawAll()
 {
     m_NewColorRect->Freeze();   // Avoid flicker
     m_HsvBitmap->Freeze();
@@ -499,7 +495,7 @@ void COLOR4D_PICKER_DLG::drawAll()
 }
 
 
-void COLOR4D_PICKER_DLG::buttColorClick( wxCommandEvent& event )
+void DIALOG_COLOR_PICKER::buttColorClick( wxCommandEvent& event )
 {
     int id = event.GetId();
     KIGFX::COLOR4D color( EDA_COLOR_T( id - ID_COLOR_BLACK ) );
@@ -516,7 +512,7 @@ void COLOR4D_PICKER_DLG::buttColorClick( wxCommandEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::onRGBMouseClick( wxMouseEvent& event )
+void DIALOG_COLOR_PICKER::onRGBMouseClick( wxMouseEvent& event )
 {
     m_allowMouseEvents = true;
     wxPoint mousePos = event.GetPosition();
@@ -556,7 +552,7 @@ void COLOR4D_PICKER_DLG::onRGBMouseClick( wxMouseEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::onRGBMouseDrag( wxMouseEvent& event )
+void DIALOG_COLOR_PICKER::onRGBMouseDrag( wxMouseEvent& event )
 {
     if( !event.Dragging() || !m_allowMouseEvents )
     {
@@ -614,7 +610,7 @@ void COLOR4D_PICKER_DLG::onRGBMouseDrag( wxMouseEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::onHSVMouseClick( wxMouseEvent& event )
+void DIALOG_COLOR_PICKER::onHSVMouseClick( wxMouseEvent& event )
 {
     m_allowMouseEvents = true;
 
@@ -623,7 +619,7 @@ void COLOR4D_PICKER_DLG::onHSVMouseClick( wxMouseEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::onHSVMouseDrag( wxMouseEvent& event )
+void DIALOG_COLOR_PICKER::onHSVMouseDrag( wxMouseEvent& event )
 {
     if( !event.Dragging() || !m_allowMouseEvents )
         return;
@@ -633,7 +629,7 @@ void COLOR4D_PICKER_DLG::onHSVMouseDrag( wxMouseEvent& event )
 }
 
 
-bool COLOR4D_PICKER_DLG::setHSvaluesFromCursor( wxPoint aMouseCursor )
+bool DIALOG_COLOR_PICKER::setHSvaluesFromCursor( wxPoint aMouseCursor )
 {
     wxPoint mousePos = aMouseCursor;
     wxSize bmsize = m_bitmapHSV->GetSize();
@@ -671,7 +667,7 @@ bool COLOR4D_PICKER_DLG::setHSvaluesFromCursor( wxPoint aMouseCursor )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeAlpha( wxScrollEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeAlpha( wxScrollEvent& event )
 {
     double alpha = (double)event.GetPosition() / ALPHA_MAX;
     m_newColor4D.a = alpha;
@@ -682,7 +678,7 @@ void COLOR4D_PICKER_DLG::OnChangeAlpha( wxScrollEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeEditRed( wxSpinEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeEditRed( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.r = val;
@@ -692,7 +688,7 @@ void COLOR4D_PICKER_DLG::OnChangeEditRed( wxSpinEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeEditGreen( wxSpinEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeEditGreen( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.g = val;
@@ -702,7 +698,7 @@ void COLOR4D_PICKER_DLG::OnChangeEditGreen( wxSpinEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeEditBlue( wxSpinEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeEditBlue( wxSpinEvent& event )
 {
     double val = (double)event.GetPosition() / 255.0;
     m_newColor4D.b = val;
@@ -712,7 +708,7 @@ void COLOR4D_PICKER_DLG::OnChangeEditBlue( wxSpinEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeEditHue( wxSpinEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeEditHue( wxSpinEvent& event )
 {
     m_hue = (double)event.GetPosition();
 
@@ -724,7 +720,7 @@ void COLOR4D_PICKER_DLG::OnChangeEditHue( wxSpinEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeEditSat( wxSpinEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeEditSat( wxSpinEvent& event )
 {
     m_sat = (double)event.GetPosition() / 255.0;
 
@@ -736,7 +732,7 @@ void COLOR4D_PICKER_DLG::OnChangeEditSat( wxSpinEvent& event )
 }
 
 
-void COLOR4D_PICKER_DLG::OnChangeBrightness( wxScrollEvent& event )
+void DIALOG_COLOR_PICKER::OnChangeBrightness( wxScrollEvent& event )
 {
     m_val = (double)event.GetPosition() / 255.0;
 

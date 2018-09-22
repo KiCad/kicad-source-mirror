@@ -23,7 +23,7 @@
 
 #include <widgets/color_swatch.h>
 
-#include "color4Dpickerdlg.h"
+#include "dialog_color_picker.h"
 #include <memory>
 
 wxDEFINE_EVENT(COLOR_SWATCH_CHANGED, wxCommandEvent);
@@ -161,7 +161,7 @@ void COLOR_SWATCH::GetNewSwatchColor()
 
     if( m_arbitraryColors )
     {
-        COLOR4D_PICKER_DLG dialog( ::wxGetTopLevelParent( this ), m_color, true );
+        DIALOG_COLOR_PICKER dialog( ::wxGetTopLevelParent( this ), m_color, true );
 
         if( dialog.ShowModal() == wxID_OK )
             newColor = dialog.GetColor();
