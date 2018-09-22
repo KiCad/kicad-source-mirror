@@ -90,13 +90,13 @@ public:
     virtual bool IsInitialized() const override
     {
         // is*Initialized flags, but it is enough for OpenGL to show up
-        return IsShownOnScreen();
+        return IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
     ///> @copydoc GAL::IsVisible()
     bool IsVisible() const override
     {
-        return IsShownOnScreen();
+        return IsShownOnScreen() && !GetClientRect().IsEmpty();
     }
 
     // ---------------

@@ -91,6 +91,7 @@ private:
 
 };
 
+
 GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 {
     for ( auto b = m_bitmaps.begin(); b != m_bitmaps.end(); ++b )
@@ -98,6 +99,7 @@ GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
         glDeleteTextures( 1, &b->second.id );
     }
 }
+
 
 GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 {
@@ -320,7 +322,7 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
 void OPENGL_GAL::BeginDrawing()
 {
-    if( !IsShownOnScreen() )
+    if( !IsShownOnScreen() || GetClientRect().IsEmpty() )
         return;
 
 #ifdef __WXDEBUG__
@@ -491,7 +493,7 @@ void OPENGL_GAL::EndDrawing()
 
 void OPENGL_GAL::BeginUpdate()
 {
-    if( !IsShownOnScreen() )
+    if( !IsShownOnScreen() || GetClientRect().IsEmpty() )
         return;
 
     if( !isInitialized )
