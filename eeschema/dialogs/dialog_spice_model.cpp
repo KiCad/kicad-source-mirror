@@ -25,7 +25,6 @@
 #include "wildcards_and_files_ext.h"
 #include "dialog_spice_model.h"
 
-#include <netlist_exporters/netlist_exporter_pspice.h>
 #include <sim/spice_value.h>
 #include <confirm.h>
 #include <project.h>
@@ -56,6 +55,40 @@ static int wxCALLBACK comparePwlValues( wxIntPtr aItem1, wxIntPtr aItem2, wxIntP
 }
 
 
+// Structure describing a type of Spice model
+struct SPICE_MODEL_INFO
+{
+    SPICE_PRIMITIVE type;               ///< Character identifying the model
+    wxString description;               ///< Human-readable description
+    std::vector<std::string> keywords;  ///< Keywords indicating the model
+};
+
+
+// Recognized model types
+static const std::vector<SPICE_MODEL_INFO> modelTypes =
+{
+    { SP_DIODE,     _( "Diode" ),      { "d" } },
+    { SP_BJT,       _( "BJT" ),        { "npn", "pnp" } },
+    { SP_MOSFET,    _( "MOSFET" ),     { "nmos", "pmos", "vdmos" } },
+    { SP_SUBCKT,    _( "Subcircuit" ), {} },
+};
+
+
+// Returns index of an entry in modelTypes array (above) corresponding to a Spice primitive
+static int getModelTypeIdx( char aPrimitive )
+{
+    const char prim = std::toupper( aPrimitive );
+
+    for( int i = 0; i < modelTypes.size(); ++i )
+    {
+        if( modelTypes[i].type == prim )
+            return i;
+    }
+
+    return -1;
+}
+
+
 DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS& aFields )
     : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_fields( aFields ),
     m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
@@ -63,6 +96,12 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
     m_pasValue->SetValidator( m_spiceValidator );
 
     m_modelType->SetValidator( m_notEmptyValidator );
+    m_modelType->Clear();
+
+    // Create a list of handled models
+    for( const auto& model : modelTypes )
+        m_modelType->Append( model.description );
+
     m_modelName->SetValidator( m_notEmptyValidator );
 
     m_genDc->SetValidator( m_spiceEmptyValidator );
@@ -133,18 +172,11 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
         if( !m_model->Validate() )
             return false;
 
-        switch( m_modelType->GetSelection() )
-        {
-            case 0: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_SUBCKT; break;
-            case 1: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_BJT; break;
-            case 2: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_MOSFET; break;
-            case 3: m_fieldsTmp[SF_PRIMITIVE] = (char) SP_DIODE; break;
+        int modelIdx = m_modelType->GetSelection();
+        wxASSERT( modelIdx < modelTypes.size() );
 
-            default:
-                wxASSERT_MSG( false, "Unhandled semiconductor type" );
-                return false;
-                break;
-        }
+        if( modelIdx > 0 && modelIdx < modelTypes.size() )
+            m_fieldsTmp[SF_PRIMITIVE] = static_cast<char>( modelTypes[modelIdx].type );
 
         m_fieldsTmp[SF_MODEL] = m_modelName->GetValue();
 
@@ -237,16 +269,12 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             m_pasValue->SetValue( m_fieldsTmp[SF_MODEL] );
             break;
 
-        case SP_SUBCKT:
         case SP_DIODE:
         case SP_BJT:
         case SP_MOSFET:
+        case SP_SUBCKT:
             m_notebook->SetSelection( m_notebook->FindPage( m_model ) );
-            m_modelType->SetSelection( primitive == SP_SUBCKT ? 0
-                    : primitive == SP_BJT ? 1
-                    : primitive == SP_MOSFET ? 2
-                    : primitive == SP_DIODE ? 3
-                    : -1 );
+            m_modelType->SetSelection( getModelTypeIdx( primitive ) );
             m_modelName->SetValue( m_fieldsTmp[SF_MODEL] );
             m_modelLibrary->SetValue( m_fieldsTmp[SF_LIB_FILE] );
 
@@ -634,9 +662,9 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                     break;
 
                 token = tokenizer.GetNextToken();
-                MODEL::TYPE type = MODEL::parseModelType( token );
+                SPICE_PRIMITIVE type = MODEL::parseModelType( token );
 
-                if( type != MODEL::UNKNOWN )
+                if( type != SP_UNKNOWN )
                     m_models.emplace( name, MODEL( line_nr, type ) );
             }
 
@@ -650,7 +678,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
                 if( name.IsEmpty() )
                     break;
 
-                m_models.emplace( name, MODEL( line_nr, MODEL::SUBCKT ) );
+                m_models.emplace( name, MODEL( line_nr, SP_SUBCKT ) );
             }
 
             else if( token == ".ends" )
@@ -663,7 +691,7 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
         ++line_nr;
     }
 
-    wxArrayString models;
+    wxArrayString modelsList;
 
     // Refresh the model name combobox values
     m_modelName->Clear();
@@ -671,10 +699,10 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
     for( const auto& model : m_models )
     {
         m_modelName->Append( model.first );
-        models.Add( model.first );
+        modelsList.Add( model.first );
     }
 
-    m_modelName->AutoComplete( models );
+    m_modelName->AutoComplete( modelsList );
 
     // Restore the previous value or if there is none - pick the first one from the loaded library
     if( !curModel.IsEmpty() )
@@ -761,7 +789,7 @@ void DIALOG_SPICE_MODEL::onModelSelected( wxCommandEvent& event )
 
     if( it != m_models.end() )
     {
-        m_modelType->SetSelection( (int) it->second.model );
+        m_modelType->SetSelection( getModelTypeIdx( it->second.model ) );
 
         // scroll to the bottom, so the model definition is shown in the first line
         m_libraryContents->ShowPosition(
@@ -788,19 +816,19 @@ void DIALOG_SPICE_MODEL::onPwlRemove( wxCommandEvent& event )
 }
 
 
-DIALOG_SPICE_MODEL::MODEL::TYPE DIALOG_SPICE_MODEL::MODEL::parseModelType( const wxString& aValue )
+SPICE_PRIMITIVE DIALOG_SPICE_MODEL::MODEL::parseModelType( const wxString& aValue )
 {
-    if( aValue.IsEmpty() )
-        return UNKNOWN;
-
+    wxCHECK( !aValue.IsEmpty(), SP_UNKNOWN );
     const wxString val( aValue.Lower() );
 
-    if( val.StartsWith( "npn" ) || val.StartsWith( "pnp" ) )
-        return BJT;
-    else if( val.StartsWith( "nmos" ) || val.StartsWith( "pmos" ) )
-        return MOSFET;
-    else if( val[0] == 'd' )
-        return DIODE;
+    for( const auto& model : modelTypes )
+    {
+        for( const auto& keyword : model.keywords )
+        {
+            if( val.StartsWith( keyword ) )
+                return model.type;
+        }
+    }
 
-    return UNKNOWN;
+    return SP_UNKNOWN;
 }

@@ -26,6 +26,7 @@
 #define DIALOG_SPICE_MODEL_H
 
 #include "dialog_spice_model_base.h"
+#include "netlist_exporter_pspice.h"
 
 #include <sim/spice_value.h>
 #include <sch_component.h>
@@ -118,12 +119,12 @@ private:
         int line;
 
         ///> Type of the device
-        enum TYPE { UNKNOWN = -1, SUBCKT, BJT, MOSFET, DIODE } model;
+        SPICE_PRIMITIVE model;
 
         ///> Convert string to model
-        static TYPE parseModelType( const wxString& aValue );
+        static SPICE_PRIMITIVE parseModelType( const wxString& aValue );
 
-        MODEL( int aLine, enum TYPE aModel )
+        MODEL( int aLine, enum SPICE_PRIMITIVE aModel )
             : line( aLine ), model( aModel )
         {
         }

@@ -14,7 +14,6 @@
         <property name="file">dialog_spice_model_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_SPICE_MODEL_BASE</property>
         <property name="namespace"></property>
@@ -423,8 +422,6 @@
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnCombobox"></event>
-                                                    <event name="OnComboboxCloseup"></event>
-                                                    <event name="OnComboboxDropdown"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>
@@ -3833,8 +3830,6 @@
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnCombobox">onModelSelected</event>
-                                                    <event name="OnComboboxCloseup"></event>
-                                                    <event name="OnComboboxDropdown"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>
@@ -3962,7 +3957,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;Subcircuit&quot; &quot;BJT&quot; &quot;MOSFET&quot; &quot;Diode&quot;</property>
+                                                    <property name="choices"></property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>
@@ -4009,8 +4004,6 @@
                                                     <property name="window_style"></property>
                                                     <event name="OnChar"></event>
                                                     <event name="OnCombobox"></event>
-                                                    <event name="OnComboboxCloseup"></event>
-                                                    <event name="OnComboboxDropdown"></event>
                                                     <event name="OnEnterWindow"></event>
                                                     <event name="OnEraseBackground"></event>
                                                     <event name="OnKeyDown"></event>

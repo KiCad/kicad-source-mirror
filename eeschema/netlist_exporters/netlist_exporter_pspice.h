@@ -50,6 +50,7 @@ enum SPICE_FIELD {
 
 ///> Basic Spice component primitives
 enum SPICE_PRIMITIVE {
+    SP_UNKNOWN      = ' ',
     SP_RESISTOR     = 'R',
     SP_CAPACITOR    = 'C',
     SP_INDUCTOR     = 'L',
