@@ -26,7 +26,7 @@
 #include <bitmaps.h>
 
 #include <wx/wx.h>
-#include <wx/ownerdrw.h>
+#include <wx/odcombo.h>
 #include <wx/menuitem.h>
 
 #include <widgets/layer_box_selector.h>
