@@ -217,7 +217,7 @@ public:
 
     void formatLabels() override
     {
-        formatSILabels( this, wxT( "dB" ), 3 );
+        formatSILabels( this, wxT( "dBV" ), 3 );
     }
 
 };
