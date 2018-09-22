@@ -65,6 +65,15 @@ class GERBER_FILE_IMAGE;
 class X2_ATTRIBUTE;
 class X2_ATTRIBUTE_FILEFUNCTION;
 
+// For arcs, coordinates need 3 info: start point, end point and center or radius
+// In Excellon files it can be a A## value (radius) or I#J# center coordinates (like in gerber)
+// We need to know the last read type when reading a list of routing coordinates
+enum LAST_EXTRA_ARC_DATA_TYPE
+{
+    ARC_INFO_TYPE_NONE,
+    ARC_INFO_TYPE_CENTER,   // last info is a IJ command: arc center is given
+    ARC_INFO_TYPE_RADIUS,   // last info is a A command: arc radius is given
+};
 
 class GERBER_LAYER
 {
@@ -145,7 +154,8 @@ public:
     wxPoint            m_CurrentPos;                            // current specified coord for plot
     wxPoint            m_PreviousPos;                           // old current specified coord for plot
     wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
-
+    int                m_ArcRadius;                             // A value ( = radius in circular routing in Excellon files )
+    LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;                 // Identifier for arc data type (IJ (center) or A## (radius))
     FILE*              m_Current_File;                          // Current file to read
 
     int                m_Selected_Tool;                         // For hightlight: current selected Dcode
