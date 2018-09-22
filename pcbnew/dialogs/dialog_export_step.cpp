@@ -298,7 +298,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             }
 
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+            cmdK2S.Append( wxString::Format( " --user-origin=\"%.6f x %.6f\"", xOrg, yOrg ) );
         }
             break;
 
@@ -308,7 +308,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             xOrg = Iu2Millimeter( bbox.GetCenter().x );
             yOrg = Iu2Millimeter( bbox.GetCenter().y );
             LOCALE_IO dummy;
-            cmdK2S.Append( wxString::Format( " --user-origin %.6fx%.6f", xOrg, yOrg ) );
+            cmdK2S.Append( wxString::Format( " --user-origin=\"%.6f x %.6f\"", xOrg, yOrg ) );
         }
             break;
     }
