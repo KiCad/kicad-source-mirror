@@ -24,6 +24,10 @@
 
 #include <widgets/net_selector.h>
 
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#endif
+
 #include <class_board.h>
 #include <netinfo.h>
 #include <wx/arrstr.h>
@@ -128,7 +132,11 @@ public:
                 CaptureMouse();
             }
 
+#ifdef __WXGTK__
+            gtk_main_iteration();  // work around stupid assert in wxGUIEventLoop::Dispatch()
+#else
             eventLoop.Dispatch();
+#endif
 
             if( m_cancelled || m_selected )
                 break;
@@ -194,7 +202,7 @@ protected:
         rebuildList();
     }
 
-    // Accecpt single-click closure from m_netListBox
+    // Accept single-click closure from m_netListBox
     void onListBoxMouseClick( wxMouseEvent& aEvent )
     {
         wxPoint relativePos = m_netListBox->ScreenToClient( wxGetMousePosition() );
