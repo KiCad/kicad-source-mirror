@@ -85,6 +85,8 @@ public:
                         const wxPoint& pos, const wxSize& size,
                         const wxArrayString& choices );
 
+    ~LAYER_BOX_SELECTOR() override;
+
     // Get Current Item #
     int GetChoice();
 
@@ -100,6 +102,9 @@ public:
 
     // Reload the Layers bitmaps colors
     void ResyncBitmapOnly();
+
+private:
+    void onKeyDown( wxKeyEvent& aEvent );
 };
 
 #endif // LAYER_BOX_SELECTOR_H

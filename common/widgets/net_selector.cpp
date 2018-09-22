@@ -73,8 +73,17 @@ public:
         Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onCapturedMouseClick ), NULL, this );
         m_netListBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
         m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
+        GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
 
         rebuildList();
+    }
+
+    ~NET_SELECTOR_POPUP()
+    {
+        Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onCapturedMouseClick ), NULL, this );
+        m_netListBox->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
+        m_filterCtrl->Disconnect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
+        GetParent()->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
     }
 
     void SetSelectedNetcode( int aNetcode ) { m_selectedNet = aNetcode; }
@@ -217,6 +226,15 @@ protected:
             m_cancelled = true;
 
         aEvent.Skip();
+    }
+
+    // Intercept escape key; pass on everything else
+    void onKeyDown( wxKeyEvent& aEvent )
+    {
+        if( aEvent.GetKeyCode() == WXK_ESCAPE )
+            m_cancelled = true;
+        else
+            aEvent.Skip();
     }
 
 protected:

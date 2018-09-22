@@ -26,7 +26,7 @@
 #include <pcb_edit_frame.h>
 #include <class_board.h>
 #include <wx/textctrl.h>
-#include <layer_box_selector.h>
+#include <widgets/layer_box_selector.h>
 #include <pcb_layer_box_selector.h>
 
 

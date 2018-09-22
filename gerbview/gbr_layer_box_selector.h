@@ -25,7 +25,7 @@
 #ifndef GBR_LAYER_BOX_SELECTOR_H
 #define GBR_LAYER_BOX_SELECTOR_H 1
 
-#include <layer_box_selector.h>
+#include <widgets/layer_box_selector.h>
 
 
 // class to display a layer list in GerbView.

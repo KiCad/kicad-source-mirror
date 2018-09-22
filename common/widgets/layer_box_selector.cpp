@@ -29,7 +29,7 @@
 #include <wx/ownerdrw.h>
 #include <wx/menuitem.h>
 
-#include <layer_box_selector.h>
+#include <widgets/layer_box_selector.h>
 
 LAYER_SELECTOR::LAYER_SELECTOR()
 {
@@ -84,6 +84,8 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 
     if( choices != NULL )
         ResyncBitmapOnly();
+
+    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
 }
 
 
@@ -97,6 +99,14 @@ LAYER_BOX_SELECTOR::LAYER_BOX_SELECTOR( wxWindow* parent, wxWindowID id,
 
     if( !choices.IsEmpty() )
         ResyncBitmapOnly();
+
+    GetParent()->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
+}
+
+
+LAYER_BOX_SELECTOR::~LAYER_BOX_SELECTOR()
+{
+    GetParent()->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( LAYER_BOX_SELECTOR::onKeyDown ), NULL, this );
 }
 
 
@@ -124,7 +134,7 @@ int LAYER_BOX_SELECTOR::SetLayerSelection( LAYER_NUM layer )
 
     for( int i = 0; i < elements; i++ )
     {
-        if( GetClientData( i ) == (void*)(intptr_t) layer )
+        if( GetClientData( (unsigned) i ) == (void*)(intptr_t) layer )
         {
             if( GetSelection() != i )   // Element (i) is not selected
             {
@@ -153,3 +163,11 @@ void LAYER_BOX_SELECTOR::ResyncBitmapOnly()
     }
 }
 
+
+void LAYER_BOX_SELECTOR::onKeyDown( wxKeyEvent& aEvent )
+{
+    if( aEvent.GetKeyCode() == WXK_ESCAPE && IsPopupShown() )
+        Dismiss();
+    else
+        aEvent.Skip();
+}

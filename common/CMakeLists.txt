@@ -187,6 +187,7 @@ set( COMMON_WIDGET_SRCS
     widgets/grid_icon_text_helpers.cpp
     widgets/grid_text_button_helpers.cpp
     widgets/indicator_icon.cpp
+    widgets/layer_box_selector.cpp
     widgets/lib_tree.cpp
     widgets/mathplot.cpp
     widgets/paged_dialog.cpp
@@ -290,7 +291,6 @@ set( COMMON_SRCS
     kiway_express.cpp
     kiway_holder.cpp
     kiway_player.cpp
-    layer_box_selector.cpp
     lib_id.cpp
     lib_table_base.cpp
     lib_table_keywords.cpp
