@@ -32,6 +32,8 @@
 #include <wx/tokenzr.h>
 #include <wx/wupdlock.h>
 
+#include <cctype>
+
 // Helper function to shorten conditions
 static bool empty( const wxTextCtrl* aCtrl )
 {
