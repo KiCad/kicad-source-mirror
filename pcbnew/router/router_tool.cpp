@@ -1061,7 +1061,8 @@ void ROUTER_TOOL::performDragging( int aMode )
 
 void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
 {
-    /* If the collection contains a trivial line corner (two connected segments)
+    /*
+     * If the collection contains a trivial line corner (two connected segments)
      * or a non-fanout-via (a via with no more than two connected segments), then
      * trim the collection down to a single item (which one won't matter since
      * they're all connected).
@@ -1082,40 +1083,33 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
 
     int refNet = reference->GetNetCode();
 
-    wxPoint refPoint;
-    STATUS_FLAGS flags = reference->IsPointOnEnds( wxPoint( aPt.x, aPt.y ), -1 );
+    wxPoint refPoint( aPt.x, aPt.y );
+    STATUS_FLAGS flags = reference->IsPointOnEnds( refPoint, -1 );
 
     if( flags & STARTPOINT )
         refPoint = reference->GetStart();
     else if( flags & ENDPOINT )
         refPoint = reference->GetEnd();
-    else
-        return;
 
-    // Check all items to ensure that they are TRACKs which are co-terminus
-    // with the reference, and on the same net.  Ignore markers.
+    // Check all items to ensure that any TRACKs are co-terminus with the reference and on
+    // the same net.
     for( int i = 0; i < aCollector.GetCount(); i++ )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+        TRACK* neighbor = dynamic_cast<TRACK*>( aCollector[i] );
 
-        if( item->Type() == PCB_MARKER_T )
-            continue;
+        if( neighbor && neighbor != reference )
+        {
+            if( neighbor->GetNetCode() != refNet )
+                return;
 
-        TRACK* neighbor = dynamic_cast<TRACK*>( item );
-
-        if( !neighbor || neighbor->GetNetCode() != refNet )
-            return;
-
-        if( neighbor->GetStart() != refPoint && neighbor->GetEnd() != refPoint )
-            return;
+            if( neighbor->GetStart() != refPoint && neighbor->GetEnd() != refPoint )
+                return;
+        }
     }
 
     // Selection meets criteria; trim it to the reference item.
-    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
-    {
-        if( dynamic_cast<TRACK*>( aCollector[i] ) != reference )
-            aCollector.Remove( i );
-    }
+    aCollector.Empty();
+    aCollector.Append( reference );
 }
 
 
