@@ -96,7 +96,6 @@ TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
         _( "Duplicate Zone onto Layer..." ), _( "Duplicate zone outline onto a different layer" ),
         zone_duplicate_xpm );
 
-
 TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,
         _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ), NULL, AF_ACTIVATE );
@@ -130,6 +129,10 @@ TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         "", "" );
 
 TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
+        AS_GLOBAL, 0,
+        "", "" );
+
+TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
         AS_GLOBAL, 0,
         "", "" );
 
@@ -1020,6 +1023,21 @@ int PCB_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 }
 
 
+int PCB_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
+{
+    auto frame = static_cast<PCB_EDIT_FRAME*>( m_toolMgr->GetEditFrame() );
+    auto board = static_cast<BOARD*>( m_toolMgr->GetModel() );
+    KIGFX::RENDER_SETTINGS* render = m_toolMgr->GetView()->GetPainter()->GetSettings();
+
+    board->ResetHighLight();
+    render->SetHighlight( false );
+    m_toolMgr->GetView()->UpdateAllLayersColor();
+    frame->SetMsgPanel( board );
+    frame->SendCrossProbeNetName( "" );
+    return 0;
+}
+
+
 int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
     // If the keyboard hotkey was triggered, the behavior is as follows:
@@ -1199,6 +1217,7 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );

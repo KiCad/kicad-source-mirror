@@ -104,6 +104,9 @@ public:
     ///> Highlights net belonging to the item under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
+    ///> Clears all board highlights
+    int ClearHighlight( const TOOL_EVENT& aEvent );
+
     ///> Launches a tool to pick the item whose net is going to be highlighted.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
