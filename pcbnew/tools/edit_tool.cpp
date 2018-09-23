@@ -449,6 +449,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         }
                     }
 
+                    editFrame->UndoRedoBlock( true );
                     m_cursor = controls->GetCursorPosition();
 
                     if ( selection.HasReferencePoint() )
@@ -560,6 +561,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( false );
 
     m_dragging = false;
+    editFrame->UndoRedoBlock( false );
+
     // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
     selection.ClearReferencePoint();
 
