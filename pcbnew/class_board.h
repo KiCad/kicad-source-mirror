@@ -254,7 +254,7 @@ public:
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
     DLIST_ITERATOR_WRAPPER<BOARD_ITEM> Drawings() { return DLIST_ITERATOR_WRAPPER<BOARD_ITEM>(m_Drawings); }
     ZONE_CONTAINERS& Zones() { return m_ZoneDescriptorList; }
-
+    const std::vector<BOARD_CONNECTED_ITEM*> AllConnectedItems();
 
     // will be deprecated as soon as append board functionality is fixed
     DLIST<BOARD_ITEM>&          DrawingsList() { return m_Drawings; }
@@ -1358,6 +1358,8 @@ public:
      * Resets all items' netcodes to 0 (no net).
      */
     void ClearAllNetCodes();
+
+    void SanitizeNetcodes();
 };
 
 #endif      // CLASS_BOARD_H_

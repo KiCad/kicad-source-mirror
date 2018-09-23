@@ -3020,3 +3020,38 @@ void BOARD::ClearAllNetCodes()
     for( auto track : Tracks() )
         track->SetNetCode( 0 );
 }
+
+const std::vector<BOARD_CONNECTED_ITEM*> BOARD::AllConnectedItems()
+{
+    std::vector<BOARD_CONNECTED_ITEM*> items;
+
+    for( auto track : Tracks() )
+    {
+        items.push_back( track );
+    }
+
+    for( auto mod : Modules() )
+    {
+        for( auto pad : mod->Pads() )
+        {
+            items.push_back( pad );
+        }
+    }
+
+    for( int i = 0; i<GetAreaCount(); i++ )
+    {
+        auto zone = GetArea( i );
+        items.push_back( zone );
+    }
+
+    return items;
+}
+
+void BOARD::SanitizeNetcodes()
+{
+    for ( auto item : AllConnectedItems() )
+    {
+        if( FindNet( item->GetNetCode() ) == nullptr )
+            item->SetNetCode( NETINFO_LIST::ORPHANED );
+    }
+}
