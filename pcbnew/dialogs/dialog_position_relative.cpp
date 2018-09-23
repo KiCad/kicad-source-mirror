@@ -192,7 +192,7 @@ void DIALOG_POSITION_RELATIVE::OnOkClick( wxCommandEvent& event )
         POSITION_RELATIVE_TOOL* posrelTool = m_toolMgr->GetTool<POSITION_RELATIVE_TOOL>();
         wxASSERT( posrelTool );
 
-        posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation, 0.0 );
+        posrelTool->RelativeItemSelectionMove( m_anchor_position, m_translation );
 
         event.Skip();
     }

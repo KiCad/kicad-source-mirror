@@ -102,19 +102,25 @@ int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 }
 
 
-int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint anchor, wxPoint relativePosition,
-                                                       double rotation )
+int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint aPosAnchor, wxPoint aTranslation )
 {
-    VECTOR2I rp = m_selection.GetCenter();
-    wxPoint rotPoint( rp.x, rp.y );
-    wxPoint translation = anchor + relativePosition - rotPoint;
+    wxPoint aSelAnchor( INT_MAX, INT_MAX );
+
+    // Find top-left item anchor in selection
+    for( auto item : m_selection )
+    {
+        wxPoint itemAnchor = static_cast<BOARD_ITEM*>( item )->GetPosition();
+
+        if( EuclideanNorm( itemAnchor ) < EuclideanNorm( aSelAnchor ) )
+            aSelAnchor = itemAnchor;
+    }
+
+    wxPoint aggregateTranslation = aPosAnchor + aTranslation - aSelAnchor;
 
     for( auto item : m_selection )
     {
         m_commit->Modify( item );
-
-        static_cast<BOARD_ITEM*>( item )->Rotate( rotPoint, rotation );
-        static_cast<BOARD_ITEM*>( item )->Move( translation );
+        static_cast<BOARD_ITEM*>( item )->Move( aggregateTranslation );
     }
 
     m_commit->Push( _( "Position Relative" ) );

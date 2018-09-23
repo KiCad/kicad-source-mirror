@@ -62,17 +62,18 @@ public:
     /**
      * Function SelectPositionRelativeItem()
      *
-     * Invokes the picker tool to select the item to which the previos selection will be placed relative to.
+     * Invokes the picker tool to select the item to which the previous selection will be placed
+     * relative to.
      */
     int SelectPositionRelativeItem( const TOOL_EVENT& aEvent  );
 
     /**
      * Function RelativeItemSelectionMove()
      *
-     * Positions the m_position_relative_selection selection relative to anchorpostion using the given translation and rotation.
-     * Rotation is around the center of the selection.
+     * Positions the m_position_relative_selection selection relative to anchorpostion using
+     * the given translation.
      */
-    int RelativeItemSelectionMove( wxPoint anchor, wxPoint translation, double rotation );
+    int RelativeItemSelectionMove( wxPoint anchor, wxPoint translation );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
