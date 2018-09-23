@@ -58,7 +58,7 @@
 // a linear routing command (G01) is perhaps more usual for drill files
 // Comment this next line to use a canned slot hole (old way)
 // Uncomment this next line to use a linear routed hole (new way)
-//#define USE_ROUTING_MODE_FOR_OBLONG_HOLE
+#define USE_ROUTING_MODE_FOR_OBLONG_HOLE
 
 EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     : GENDRILL_WRITER_BASE( aPcb )
