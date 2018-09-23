@@ -100,10 +100,10 @@ const BOX2I VIEW_GROUP::ViewBBox() const
 
 void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 {
-    auto gal = aView->GetGAL();
-    PAINTER* painter = aView->GetPainter();
-
-    const auto drawList = updateDrawList();
+    KIGFX::GAL* gal = aView->GetGAL();
+    PAINTER*    painter = aView->GetPainter();
+    bool        isSelection = m_layer == LAYER_SELECT_OVERLAY;
+    const auto  drawList = updateDrawList();
 
     std::unordered_map<int, std::vector<VIEW_ITEM*>> layer_item_map;
 
@@ -140,7 +140,25 @@ void VIEW_GROUP::ViewDraw( int aLayer, VIEW* aView ) const
 
     for( int i = 0; i < layers_count; i++ )
     {
-        if( aView->IsLayerVisible( layers[i] ) )
+        int  layer = layers[i];
+        bool draw = aView->IsLayerVisible( layer );
+
+        if( isSelection )
+        {
+            switch( layer )
+            {
+            case LAYER_PADS_TH:
+            case LAYER_PADS_PLATEDHOLES:
+            case LAYER_PAD_FR:
+            case LAYER_PAD_BK:
+                draw = true;
+                break;
+            default:
+                break;
+            }
+        }
+
+        if( draw )
         {
             gal->AdvanceDepth();
 
