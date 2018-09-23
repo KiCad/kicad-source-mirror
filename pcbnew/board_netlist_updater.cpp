@@ -651,7 +651,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                 if( aNetlist.IsFindByTimeStamp() )
                     match = footprint->GetPath() == component->GetTimeStamp();
                 else
-                    match = footprint->GetReference().CmpNoCase( component->GetReference() );
+                    match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
             }
 
             if( match )
