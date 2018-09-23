@@ -359,6 +359,9 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
+
+            if( evt->IsCancel() && !m_editModules )
+                m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )

@@ -281,6 +281,10 @@ TOOL_ACTION PCB_ACTIONS::highlightNet( "pcbnew.EditorControl.highlightNet",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 DIALOG_BLOCK_OPTIONS_BASE::DIALOG_BLOCK_OPTIONS_BASE( wxWindow* parent,
         wxWindowID id,
