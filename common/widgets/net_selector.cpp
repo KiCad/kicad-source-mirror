@@ -24,10 +24,6 @@
 
 #include <widgets/net_selector.h>
 
-#ifdef __WXGTK__
-#include <gtk/gtk.h>
-#endif
-
 #include <class_board.h>
 #include <netinfo.h>
 #include <wx/arrstr.h>
@@ -98,6 +94,7 @@ public:
         Show( true );
 
         wxGUIEventLoop eventLoop;
+        wxEventLoopActivator activate( &eventLoop );
 
         while ( eventLoop.Pending() )
         {
@@ -132,14 +129,12 @@ public:
                 CaptureMouse();
             }
 
-#ifdef __WXGTK__
-            gtk_main_iteration();  // work around stupid assert in wxGUIEventLoop::Dispatch()
-#else
             eventLoop.Dispatch();
-#endif
 
             if( m_cancelled || m_selected )
                 break;
+
+            wxSafeYield( m_parent );
         }
 
         if( HasCapture() )
@@ -263,6 +258,7 @@ NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id,
                             const wxPoint &pos, const wxSize &size, long style ) :
         wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY ),
         m_netinfoList( nullptr ),
+        m_netcode( -1 ),
         m_netSelectorPopup( nullptr )
 { }
 
