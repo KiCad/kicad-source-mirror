@@ -377,8 +377,14 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
         while( xs.Last() == '0' )
             xs.RemoveLast();
 
+        if( xs.Last() == '.' )      // however keep a trailing 0 after the floating point separator
+            xs << '0';
+
         while( ys.Last() == '0' )
             ys.RemoveLast();
+
+        if( ys.Last() == '.' )
+            ys << '0';
 
         sprintf( aLine, "X%sY%s\n", TO_UTF8( xs ), TO_UTF8( ys ) );
         break;
@@ -457,6 +463,8 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
         msg = wxT( ";FORMAT={" );
 
         // Print precision:
+        // Note in decimal format the precision is not used.
+        // the floating point notation has higher priority than the precision.
         if( m_zeroFormat != DECIMAL_FORMAT )
             msg << m_precision.GetPrecisionString();
         else
@@ -482,8 +490,7 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
             wxT( "keep zeros" )
         };
 
-        msg << zero_fmt[m_zeroFormat];
-        msg << wxT( "}\n" );
+        msg << zero_fmt[m_zeroFormat] << wxT( "}\n" );
         fputs( TO_UTF8( msg ), m_file );
         fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }
@@ -492,8 +499,11 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
 
     switch( m_zeroFormat )
     {
-    case SUPPRESS_LEADING:
     case DECIMAL_FORMAT:
+        fputs( "\n", m_file );
+        break;
+
+    case SUPPRESS_LEADING:
         fputs( ",TZ\n", m_file );
         break;
 
@@ -502,7 +512,8 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
         break;
 
     case KEEP_ZEROS:
-        fputs( ",TZ\n", m_file ); // TZ is acceptable when all zeros are kept
+        // write nothing, but TZ is acceptable when all zeros are kept
+        fputs( "\n", m_file );
         break;
     }
 }
