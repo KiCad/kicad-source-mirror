@@ -1714,7 +1714,11 @@ void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
             SetCurLib( libNickname );
 
             if( m_treePane )
-                m_treePane->GetLibTree()->ExpandLibId( LIB_ID( libNickname, wxEmptyString ) );
+            {
+                LIB_ID id( libNickname, wxEmptyString );
+                m_treePane->GetLibTree()->ExpandLibId( id );
+                m_treePane->GetLibTree()->CenterLibId( id );
+            }
         }
 
         break;
