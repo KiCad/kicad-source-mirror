@@ -580,11 +580,12 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
     {
         CONTEXT_MENU popup;
         wxString     msg;
+        int          id = 0;
 
         for( LIB_ALIAS* alias : part->GetAliases() )
         {
             msg.Printf( wxT( "%s (%s)" ), alias->GetName(), alias->GetDocFileName() );
-            popup.Append( wxID_ANY, msg );
+            popup.Append( id++, msg );
         }
 
         PopupMenu( &popup );

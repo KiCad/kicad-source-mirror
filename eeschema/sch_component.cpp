@@ -1770,6 +1770,10 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
                 return SEARCH_QUIT;
             break;
 
+        case SCH_FIELD_LOCATE_DATASHEET_T:
+            if( SEARCH_QUIT == aInspector( GetField( DATASHEET ), (void*) this ) )
+                return SEARCH_QUIT;
+            break;
 
         case LIB_PIN_T:
             if( PART_SPTR part = m_part.lock() )

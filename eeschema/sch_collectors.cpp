@@ -103,8 +103,13 @@ const KICAD_T SCH_COLLECTOR::CmpFieldReferenceOnly[] = {
 };
 
 const KICAD_T SCH_COLLECTOR::CmpFieldFootprintOnly[] = {
-    SCH_FIELD_LOCATE_FOOTPRINT_T,
-    EOT
+        SCH_FIELD_LOCATE_FOOTPRINT_T,
+        EOT
+};
+
+const KICAD_T SCH_COLLECTOR::CmpFieldDatasheetOnly[] = {
+        SCH_FIELD_LOCATE_DATASHEET_T,
+        EOT
 };
 
 

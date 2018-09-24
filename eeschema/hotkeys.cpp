@@ -169,10 +169,13 @@ static EDA_HOTKEY HkEditComponentReference( _HKI( "Edit Symbol Reference" ),
 static EDA_HOTKEY HkEditComponentFootprint( _HKI( "Edit Symbol Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
+static EDA_HOTKEY HkShowComponentDatasheet( _HKI( "Show Symbol Datasheet" ),
+                                           HK_SHOW_COMPONENT_DATASHEET, 'D' + GR_KB_CTRL,
+                                           ID_POPUP_SCH_DISPLAYDOC_CMP );
 static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
-                                              HK_EDIT_COMPONENT_WITH_LIBEDIT,
-                                              'E' + GR_KB_CTRL,
+                                              HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
                                               ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
+
 static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ),
                           HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
@@ -203,6 +206,8 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
+static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_CTRL,
+                             ID_LIBEDIT_VIEW_DOC );
 
 // Autoplace fields
 static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
@@ -295,6 +300,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkEditComponentValue,
     &HkEditComponentReference,
     &HkEditComponentFootprint,
+    &HkShowComponentDatasheet,
     &HkEditComponentWithLibedit,
     &HkBeginWire,
     &HkBeginBus,
@@ -325,6 +331,7 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
     &HkMoveLibItem,
     &HkMirrorX,
     &HkMirrorY,
+    &HkViewDoc,
     NULL
 };
 
@@ -610,6 +617,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
     case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
+    case HK_SHOW_COMPONENT_DATASHEET:       // Show component datasheet in browser.
     case HK_MIRROR_Y:                       // Mirror Y
     case HK_MIRROR_X:                       // Mirror X
     case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)

@@ -265,9 +265,11 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Menu Inspect:
     wxMenu* inspectMenu = new wxMenu;
 
+
+    text = AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hokeys_Descr, HK_LIBEDIT_VIEW_DOC );
     AddMenuItem( inspectMenu,
                  ID_LIBEDIT_VIEW_DOC,
-                 _( "Show Datasheet" ),
+                 text,
                  _( "Open associated datasheet in web browser" ),
                  KiBitmap( datasheet_xpm ) );
 
@@ -322,7 +324,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Eeschema_Hokeys_Descr, HK_HELP );
+    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Libedit_Hokeys_Descr, HK_HELP );
     AddMenuItem( helpMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,

@@ -79,7 +79,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_INIT_CMP:
-    case ID_POPUP_SCH_DISPLAYDOC_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
@@ -279,18 +278,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             ConvertPart( (SCH_COMPONENT*) item, &dc );
         }
 
-        break;
-
-    case ID_POPUP_SCH_DISPLAYDOC_CMP:
-        // Ensure the struct is a component (could be a piece of a component, like Field, text..)
-        if( item && item->Type() == SCH_COMPONENT_T )
-        {
-            wxString text = static_cast<SCH_COMPONENT*>( item )->GetField( DATASHEET )->GetText();
-            text = ResolveUriByEnvVars( text );
-
-            if( !text.IsEmpty() )
-                GetAssociatedDocument( this, text );
-        }
         break;
 
     case ID_POPUP_SCH_ENTER_SHEET:
@@ -1000,6 +987,10 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
             filterListAux = SCH_COLLECTOR::ComponentsOnly;
             break;
 
+        case ID_POPUP_SCH_DISPLAYDOC_CMP:
+            filterList = SCH_COLLECTOR::CmpFieldDatasheetOnly;
+            filterListAux = SCH_COLLECTOR::ComponentsOnly;
+
         default:
             break;
         }
@@ -1031,6 +1022,16 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
         case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
             EditComponentFieldText( ( (SCH_COMPONENT*) item )->GetField( FOOTPRINT ) );
+            break;
+
+        case ID_POPUP_SCH_DISPLAYDOC_CMP:
+        {
+            wxString text = static_cast<SCH_COMPONENT*>( item )->GetField( DATASHEET )->GetText();
+            text = ResolveUriByEnvVars( text );
+
+            if( !text.IsEmpty() )
+                GetAssociatedDocument( this, text );
+        }
             break;
 
         case ID_SCH_EDIT_ITEM:

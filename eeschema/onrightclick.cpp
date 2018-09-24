@@ -350,6 +350,10 @@ void AddMenusForComponentField( wxMenu* PopMenu, SCH_FIELD* Field )
         id = HK_EDIT_COMPONENT_FOOTPRINT;
         name = _( "Edit Footprint Field..." );
         break;
+    case DATASHEET:
+        id = HK_SHOW_COMPONENT_DATASHEET;
+        name = _( "Show Datasheet" );
+        break;
     default:
         id = HK_EDIT;
         name = _( "Edit Field..." );
@@ -460,6 +464,11 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL
                              HK_EDIT_COMPONENT_FOOTPRINT );
         AddMenuItem( editmenu, ID_SCH_EDIT_COMPONENT_FOOTPRINT, msg,
                      KiBitmap( edit_comp_footprint_xpm ) );
+
+        msg = AddHotkeyName( _( "Show Datasheet" ), g_Schematic_Hokeys_Descr,
+                             HK_SHOW_COMPONENT_DATASHEET );
+        AddMenuItem( editmenu, ID_POPUP_SCH_DISPLAYDOC_CMP, msg,
+                     KiBitmap( datasheet_xpm ) );
     }
 
     if( part && part->HasConversion() )
