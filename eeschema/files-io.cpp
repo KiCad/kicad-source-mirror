@@ -146,9 +146,12 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
             wxRemoveFile( autoSaveFileName.GetFullPath() );
         }
 
-        // Update the screen and frame info.
+        // Update the screen and frame info and reset the lock file.
         if( aSaveUnderNewName )
+        {
             aScreen->SetFileName( schematicFileName.GetFullPath() );
+            LockFile( schematicFileName.GetFullPath() );
+        }
 
         aScreen->ClrSave();
         aScreen->ClrModify();
