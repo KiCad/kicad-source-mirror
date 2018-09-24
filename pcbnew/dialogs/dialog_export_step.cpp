@@ -120,6 +120,7 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_boardPath = aBoardPath;
     m_config = Kiface().KifaceSettings();
     m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizerOK->SetLabel( _( "Export" ) );
     m_sdbSizer->Layout();
 
     // Build default output file name
