@@ -809,7 +809,7 @@ bool PNS_KICAD_IFACE::syncZone( PNS::NODE* aWorld, ZONE_CONTAINER* aZone )
         {
             auto tri = poly.TriangulatedPolygon( outline );
 
-            for( int i = 0; i < tri->GetTriangleCount(); i++)
+            for( size_t i = 0; i < tri->GetTriangleCount(); i++ )
             {
                 VECTOR2I a, b, c;
                 tri->GetTriangle( i, a, b, c );
