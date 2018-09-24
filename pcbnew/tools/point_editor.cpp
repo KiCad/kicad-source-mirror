@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include "pcb_actions.h"
 #include "selection_tool.h"
 #include "point_editor.h"
+#include "grid_helper.h"
 #include <board_commit.h>
 #include <bitmaps.h>
 #include <status_popup.h>
@@ -305,6 +306,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     KIGFX::VIEW* view = getView();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
+
+    GRID_HELPER grid( editFrame );
     auto item = selection.Front();
 
     m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
@@ -347,6 +350,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 m_original = *m_editedPoint;    // Save the original position
                 controls->SetAutoPan( true );
                 modified = true;
+                grid.SetAuxAxes( true, m_original.GetPosition(), true );
             }
 
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
@@ -358,8 +362,10 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
             if( m_altConstraint )
                 m_altConstraint->Apply();
+            else
+                m_editedPoint->ApplyConstraint();
 
-            m_editedPoint->ApplyConstraint();
+            m_editedPoint->SetPosition( grid.Align( m_editedPoint->GetPosition() ) );
             updateItem();
             updatePoints();
         }
