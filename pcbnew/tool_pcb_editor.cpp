@@ -686,17 +686,17 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox )
         double hole = To_User_Unit( MILLIMETRES, viaDimension.m_Drill );
 
         if( hole > 0 )
-            mmStr.Printf( wxT( "%.2f / %.2f mm" ), diam, hole );
+            mmStr.Printf( _( "%.2f / %.2f mm" ), diam, hole );
         else
-            mmStr.Printf( wxT( "%.2f mm" ), diam );
+            mmStr.Printf( _( "%.2f mm" ), diam );
 
         diam = To_User_Unit( INCHES, viaDimension.m_Diameter ) * 1000;
         hole = To_User_Unit( INCHES, viaDimension.m_Drill ) * 1000;
 
         if( hole > 0 )
-            milsStr.Printf( wxT( "%.1f / %.1f mils" ), diam, hole );
+            milsStr.Printf( _( "%.1f / %.1f mils" ), diam, hole );
         else
-            milsStr.Printf( wxT( "%.1f mils" ), diam );
+            milsStr.Printf( _( "%.1f mils" ), diam );
 
         msg.Printf( _( "Via: %s (%s)" ), mmFirst ? mmStr : milsStr, mmFirst ? milsStr : mmStr );
 
