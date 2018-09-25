@@ -37,7 +37,7 @@
 #include "panel_prev_model.h"
 #include <class_board.h>
 #include <class_drawpanel.h>
-
+#include <pgm_base.h>
 
 PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE* aModule,
                               std::vector<MODULE_3D_SETTINGS> *aParentModelList ) :
@@ -57,8 +57,10 @@ PANEL_PREV_3D::PANEL_PREV_3D( wxWindow* aParent, PCB_BASE_FRAME* aFrame, MODULE*
 
     // Set 3d viewer configuration for preview
     m_settings3Dviewer = new CINFO3D_VISU();
-    m_settings3Dviewer->SetFlag( FL_MOUSEWHEEL_PANNING,
-                                 aFrame->GetCanvas()->GetEnableMousewheelPan() );
+
+    bool option;
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
+    m_settings3Dviewer->SetFlag( FL_MOUSEWHEEL_PANNING, option );
 
     // Create the 3D canvas
     m_previewPane = new EDA_3D_CANVAS( this, COGL_ATT_LIST::GetAttributesList( true ),

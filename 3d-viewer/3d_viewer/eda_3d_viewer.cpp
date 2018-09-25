@@ -38,6 +38,7 @@
 #include <hotkeys_basic.h>
 #include <wx/toolbar.h>
 #include <bitmaps.h>
+#include <pgm_base.h>
 
 /**
  *  Trace mask used to enable or disable the trace output of this class.
@@ -157,6 +158,10 @@ EDA_3D_VIEWER::EDA_3D_VIEWER( KIWAY *aKiway, PCB_BASE_FRAME *aParent,
     wxIcon icon;
     icon.CopyFromBitmap( KiBitmap( icon_3d_xpm ) );
     SetIcon( icon );
+
+    bool option;
+    Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
+    m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, option );
 
     LoadSettings( config() );
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
@@ -372,10 +377,6 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_MENU3D_PCB_BODY_COLOR_SELECTION:
         Set3DBoardBodyColorFromUser();
-        break;
-
-    case ID_MENU3D_MOUSEWHEEL_PANNING:
-        m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, isChecked );
         break;
 
     case ID_MENU3D_REALISTIC_MODE:
@@ -724,9 +725,6 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
 
 
     bool tmp;
-    aCfg->Read( keyMousewheelPanning, &tmp, false );
-    m_settings.SetFlag( FL_MOUSEWHEEL_PANNING, tmp );
-
     aCfg->Read( keyShowRealisticMode, &tmp, true );
     m_settings.SetFlag( FL_USE_REALISTIC_MODE, tmp );
 
@@ -842,8 +840,6 @@ void EDA_3D_VIEWER::SaveSettings( wxConfigBase *aCfg )
     aCfg->Write( keyBoardBodyColor_Blue,    m_settings.m_BoardBodyColor.b );
 
     aCfg->Write( keyShowRealisticMode,      m_settings.GetFlag( FL_USE_REALISTIC_MODE ) );
-
-    aCfg->Write( keyMousewheelPanning,      m_settings.GetFlag( FL_MOUSEWHEEL_PANNING ) );
 
     aCfg->Write( keyRenderEngine,           (int)m_settings.RenderEngineGet() );
 

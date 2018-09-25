@@ -996,9 +996,6 @@ void FOOTPRINT_EDIT_FRAME::CommonSettingsChanged()
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged();
 
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
     Layout();
     SendSizeEvent();
 }

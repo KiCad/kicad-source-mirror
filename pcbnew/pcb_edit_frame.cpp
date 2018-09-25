@@ -1315,11 +1315,8 @@ void PCB_EDIT_FRAME::CommonSettingsChanged()
 {
     PCB_BASE_EDIT_FRAME::CommonSettingsChanged();
 
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
     ReCreateMicrowaveVToolbar();
+
     Layout();
     SendSizeEvent();
 }

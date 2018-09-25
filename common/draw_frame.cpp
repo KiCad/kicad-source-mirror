@@ -800,8 +800,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     // Read grid color:
     COLOR4D wtmp = COLOR4D::UNSPECIFIED;
 
-    if( wtmp.SetFromWxString( aCfg->Read(
-                baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
+    if( wtmp.SetFromWxString( aCfg->Read( baseCfgName + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
         SetGridColor( wtmp );
 
     aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
