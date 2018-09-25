@@ -363,8 +363,6 @@ void PANEL_SETUP_LAYERS::setLayerCheckBox( LAYER_NUM aLayer, bool isChecked )
     PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( aLayer );
 
     ctl.checkbox->SetValue( isChecked );
-    ctl.name->Enable( isChecked );
-    ctl.choice->Enable( isChecked );
 }
 
 
@@ -411,13 +409,6 @@ void PANEL_SETUP_LAYERS::setCopperLayerCheckBoxes( int copperCount )
 
 void PANEL_SETUP_LAYERS::OnCheckBox( wxCommandEvent& event )
 {
-    for( LSEQ seq = dlg_layers(); seq; ++seq )
-    {
-        PANEL_SETUP_LAYERS_CTLs ctl = getCTLs( *seq );
-        ctl.name->Enable( ctl.checkbox->GetValue() );
-        ctl.choice->Enable( ctl.checkbox->GetValue() );
-    }
-
     m_enabledLayers = getUILayerMask();
 
     showPresets( m_enabledLayers );
