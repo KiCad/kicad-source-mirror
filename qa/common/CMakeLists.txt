@@ -27,6 +27,9 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_executable( qa_common
     test_module.cpp
+
+    test_utf8.cpp
+
     geometry/test_fillet.cpp
 )
 
