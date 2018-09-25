@@ -45,7 +45,7 @@ class DIALOG_SWAP_LAYERS_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_SWAP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("Swap Layers"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		DIALOG_SWAP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Swap Layers"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
 		~DIALOG_SWAP_LAYERS_BASE();
 	
 };
