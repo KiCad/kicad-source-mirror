@@ -479,6 +479,12 @@ public:
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
     /**
+     * Override from PCB_BASE_EDIT_FRAME which adds a module to the editor's dummy board,
+     * NOT to the user's PCB.
+     */
+    void AddModuleToBoard( MODULE* module ) override;
+
+    /**
      * Allows Modedit to install its preferences panel into the preferences dialog.
      */
     void InstallPreferences( PAGED_DIALOG* aParent ) override;

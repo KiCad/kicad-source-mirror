@@ -752,16 +752,7 @@ int SELECTION_TOOL::CursorSelection( const TOOL_EVENT& aEvent )
 {
     CLIENT_SELECTION_FILTER aClientFilter = aEvent.Parameter<CLIENT_SELECTION_FILTER>();
 
-    if( m_selection.Empty() )                        // Try to find an item that could be modified
-    {
-        selectCursor( true, aClientFilter );
-
-        if( CheckLock() == SELECTION_LOCKED )
-        {
-            clearSelection();
-            return 0;
-        }
-    }
+    selectCursor( false, aClientFilter );
 
     return 0;
 }
@@ -1691,9 +1682,27 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
 
         if( aItem->Type() == PCB_PAD_T )
         {
-            // In editor, pads are selectable if any draw layer is visible
-
             auto pad = static_cast<const D_PAD*>( aItem );
+
+            // Check render mode (from the Items tab) first
+            switch( pad->GetAttribute() )
+            {
+            case PAD_ATTRIB_STANDARD:
+            case PAD_ATTRIB_HOLE_NOT_PLATED:
+                if( !board()->IsElementVisible( LAYER_PADS_TH ) )
+                    return false;
+                break;
+
+            case PAD_ATTRIB_CONN:
+            case PAD_ATTRIB_SMD:
+                if( pad->IsOnLayer( F_Cu ) && !board()->IsElementVisible( LAYER_PAD_FR ) )
+                    return false;
+                else if( pad->IsOnLayer( B_Cu ) && !board()->IsElementVisible( LAYER_PAD_BK ) )
+                    return false;
+                break;
+            }
+
+            // Otherwise, pads are selectable if any draw layer is visible
 
             // Shortcut: check copper layer visibility
             if( board()->IsLayerVisible( F_Cu ) && pad->IsOnLayer( F_Cu ) )

@@ -321,8 +321,7 @@ MODULE* FOOTPRINT_EDIT_FRAME::Import_Module( const wxString& aName )
     module->SetFPID( LIB_ID( wxEmptyString, moduleName ) );
 
     // Insert footprint in list
-    m_footprintNameWhenLoaded = module->GetFPID().GetLibItemName();
-    GetBoard()->Add( module );
+    AddModuleToBoard( module );
 
     // Display info :
     SetMsgPanel( module );

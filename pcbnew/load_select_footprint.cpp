@@ -121,8 +121,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     newModule->ClearFlags();
     newModule->RunOnChildren( std::bind( &clearModuleItemFlags, _1 ) );
 
-    m_footprintNameWhenLoaded = newModule->GetFPID().GetLibItemName();
-    GetBoard()->Add( newModule );
+    AddModuleToBoard( newModule );
 
     // Clear references to any net info, because the footprint editor
     // does know any thing about nets handled by the current edited board.
@@ -268,41 +267,6 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
     }
 
     return module;
-}
-
-
-void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module, wxDC* aDC )
-{
-    if( module )
-    {
-        GetBoard()->Add( module, ADD_APPEND );
-
-        module->SetFlags( IS_NEW );
-        module->SetLink( 0 );
-
-        if( IsGalCanvasActive() )
-            module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
-        else
-            module->SetPosition( GetCrossHairPosition() );
-
-        module->SetTimeStamp( GetNewTimeStamp() );
-        GetBoard()->m_Status_Pcb = 0;
-
-        // Put it on FRONT layer,
-        // (Can be stored flipped if the lib is an archive built from a board)
-        if( module->IsFlipped() )
-            module->Flip( module->GetPosition() );
-
-        // Place it in orientation 0,
-        // even if it is not saved with orientation 0 in lib
-        // (Can happen if the lib is an archive built from a board)
-        Rotate_Module( NULL, module, 0, false );
-
-        //RecalculateAllTracksNetcode();
-
-        if( aDC )
-            module->Draw( m_canvas, aDC, GR_OR );
-    }
 }
 
 

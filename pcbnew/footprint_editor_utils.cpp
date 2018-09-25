@@ -297,7 +297,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
 
             SetCrossHairPosition( wxPoint( 0, 0 ) );
-            m_footprintNameWhenLoaded = module->GetFPID().GetLibItemName();
             AddModuleToBoard( module );
 
             // Initialize data relative to nets and netclasses (for a new
@@ -359,8 +358,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 SetCrossHairPosition( wxPoint( 0, 0 ) );
 
                 //  Add the new object to board
-                m_footprintNameWhenLoaded = module->GetFPID().GetLibItemName();
-                GetBoard()->Add( module, ADD_APPEND );
+                AddModuleToBoard( module );
 
                 // Initialize data relative to nets and netclasses (for a new
                 // module the defaults are used)
@@ -509,7 +507,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         SetCrossHairPosition( wxPoint( 0, 0 ) );
-        m_footprintNameWhenLoaded = module->GetFPID().GetLibItemName();
         AddModuleToBoard( module );
 
         if( GetBoard()->m_Modules )

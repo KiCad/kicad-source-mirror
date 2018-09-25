@@ -120,11 +120,6 @@ private:
     CONTEXT_MENU* m_placementMenu;
 
     /**
-     * Remove pads from a multi-unit select that also includes the pads' parents
-     */
-    void filterPadsWithModules( SELECTION &selection );
-
-    /**
      * Check a selection to ensure locks are valid for alignment.
      *
      * This is slightly different from the standard lock checking in that we ignore the lock

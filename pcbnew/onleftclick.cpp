@@ -369,7 +369,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( module )
             {
                 m_canvas->MoveCursorToCrossHair();
-                AddModuleToBoard( module, aDC );
+                AddModuleToBoard( module );
+
+                if( aDC )
+                    module->Draw( m_canvas, aDC, GR_OR );
+
                 StartMoveModule( module, aDC, false );
             }
         }

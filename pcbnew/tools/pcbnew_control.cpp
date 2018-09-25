@@ -798,7 +798,9 @@ static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    const SELECTION& selection = selectionTool->RequestSelection( SanitizePadsFilter );
+    const SELECTION& selection = selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED ); } );
 
     if( selection.Empty() )
         return true;

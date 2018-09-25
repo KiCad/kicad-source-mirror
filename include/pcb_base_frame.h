@@ -422,7 +422,7 @@ public:
      * @param module
      * @param aDC (can be NULL ) = the current Device Context, to draw the new footprint
      */
-    void AddModuleToBoard( MODULE* module, wxDC* aDC = nullptr );
+    virtual void AddModuleToBoard( MODULE* module );
 
     /**
      * Function SelectFootprintFromLibBrowser

@@ -169,14 +169,19 @@ TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard"
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 
-void filterItems( GENERAL_COLLECTOR& aCollector, bool sanitizePads, bool ensureEditable )
+
+void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
 {
     // Iterate from the back so we don't have to worry about removals.
     for( int i = aCollector.GetCount() - 1; i >= 0; --i )
     {
         BOARD_ITEM* item = aCollector[ i ];
 
-        if( sanitizePads && item->Type() == PCB_PAD_T )
+        if( ( aFlags & EXCLUDE_LOCKED ) && item->IsLocked() )
+        {
+            aCollector.Remove( item );
+        }
+        else if( item->Type() == PCB_PAD_T )
         {
             MODULE* mod = static_cast<MODULE*>( item->GetParent() );
 
@@ -193,29 +198,11 @@ void filterItems( GENERAL_COLLECTOR& aCollector, bool sanitizePads, bool ensureE
             if( mod && aCollector.HasItem( mod ) )
                 aCollector.Remove( item );
         }
-        else if( ensureEditable && item->Type() == PCB_MARKER_T )
+        else if( ( aFlags & EXCLUDE_TRANSIENTS ) && item->Type() == PCB_MARKER_T )
         {
             aCollector.Remove( item );
         }
     }
-}
-
-
-void SanitizePadsEnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
-{
-    filterItems( aCollector, true, true );
-}
-
-
-void SanitizePadsFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
-{
-    filterItems( aCollector, true, false );
-}
-
-
-void EnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
-{
-    filterItems( aCollector, false, true );
 }
 
 
@@ -245,14 +232,6 @@ bool EDIT_TOOL::Init()
         DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
-
-    PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
-    m_defaultSelectionFilter = SanitizePadsEnsureEditableFilter;
-
-    // Allow pad editing in Footprint Editor
-    if( editFrame->IsType( FRAME_PCB_MODULE_EDITOR ) )
-        m_defaultSelectionFilter = EnsureEditableFilter;
 
     auto editingModuleCondition = [ this ] ( const SELECTION& aSelection ) {
         return m_editModules;
@@ -356,7 +335,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
+    auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -622,10 +603,9 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    const auto& selection = m_selectionTool->RequestSelection( EnsureEditableFilter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        return 0;
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     // Tracks & vias are treated in a special way:
     if( ( SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::Tracks ) )( selection ) )
@@ -665,12 +645,11 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
-    auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
+    auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
-        return 0;
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
         return 0;
 
     updateModificationPoint( selection );
@@ -742,10 +721,9 @@ static void mirrorPadX( D_PAD& aPad, const wxPoint& aMirrorPoint )
 
 int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        return 0;
+    auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -822,10 +800,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 {
-    auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        return 0;
+    auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -869,10 +846,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
-    auto selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        return 0;
+    auto selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     // is this "alternative" remove?
     const bool isAlt = aEvent.Parameter<intptr_t>() == (int) PCB_ACTIONS::REMOVE_FLAGS::ALT;
@@ -930,10 +906,9 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
 int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED )
-        return 0;
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -1007,7 +982,9 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     bool increment = aEvent.IsAction( &PCB_ACTIONS::duplicateIncrement );
 
     // Be sure that there is at least one item that we can modify
-    const auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -1152,7 +1129,9 @@ private:
 
 int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 {
-    const auto& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
@@ -1436,7 +1415,9 @@ int EDIT_TOOL::doCopyToClipboard( bool withAnchor )
 
     Activate();
 
-    SELECTION& selection = m_selectionTool->RequestSelection( m_defaultSelectionFilter );
+    SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 1;

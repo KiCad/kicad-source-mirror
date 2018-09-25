@@ -80,15 +80,12 @@ bool POSITION_RELATIVE_TOOL::Init()
 int POSITION_RELATIVE_TOOL::PositionRelative( const TOOL_EVENT& aEvent )
 {
     PCB_BASE_FRAME*         editFrame = getEditFrame<PCB_BASE_FRAME>();
-    CLIENT_SELECTION_FILTER filter = SanitizePadsEnsureEditableFilter;
 
-    // Allow pad editing in Footprint Editor
-    if( editFrame->IsType( FRAME_PCB_MODULE_EDITOR ) )
-        filter = EnsureEditableFilter;
+    const auto& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
 
-    const auto& selection = m_selectionTool->RequestSelection( filter );
-
-    if( m_selectionTool->CheckLock() == SELECTION_LOCKED || selection.Empty() )
+    if( selection.Empty() )
         return 0;
 
     m_selection = selection;
@@ -148,7 +145,9 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool
             {
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-                const SELECTION& sel = m_selectionTool->RequestSelection( EnsureEditableFilter );
+                const SELECTION& sel = m_selectionTool->RequestSelection(
+                        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+                        { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 
                 if( sel.Empty() )
                     return true;    // still looking for an item

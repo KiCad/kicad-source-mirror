@@ -36,16 +36,16 @@ class BOARD_ITEM;
 class CONNECTIVITY_DATA;
 
 /**
- * Function SanitizePadsEnsureEditableFilter
+ * Function EditToolSelectionFilter
  *
  * A CLIENT_SELECTION_FILTER which promotes pad selections to their parent modules and
- * excludes non-editable items (such as markers).
+ * optionally excludes locked items and/or transient items (such as markers).
  */
-void SanitizePadsEnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
 
-void SanitizePadsFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
+#define EXCLUDE_LOCKED     0x0002
+#define EXCLUDE_TRANSIENTS 0x0004
 
-void EnsureEditableFilter( const VECTOR2I&, GENERAL_COLLECTOR& items );
+void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
 
 
 /**
@@ -188,8 +188,6 @@ public:
 private:
     ///> Selection tool used for obtaining selected items
     SELECTION_TOOL* m_selectionTool;
-
-    CLIENT_SELECTION_FILTER m_defaultSelectionFilter;
 
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;

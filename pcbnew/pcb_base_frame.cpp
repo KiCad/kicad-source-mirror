@@ -212,6 +212,36 @@ void PCB_BASE_FRAME::SetBoard( BOARD* aBoard )
 }
 
 
+void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
+{
+    if( module )
+    {
+        GetBoard()->Add( module, ADD_APPEND );
+
+        module->SetFlags( IS_NEW );
+        module->SetLink( 0 );
+
+        if( IsGalCanvasActive() )
+            module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
+        else
+            module->SetPosition( GetCrossHairPosition() );
+
+        module->SetTimeStamp( GetNewTimeStamp() );
+        GetBoard()->m_Status_Pcb = 0;
+
+        // Put it on FRONT layer,
+        // (Can be stored flipped if the lib is an archive built from a board)
+        if( module->IsFlipped() )
+            module->Flip( module->GetPosition() );
+
+        // Place it in orientation 0,
+        // even if it is not saved with orientation 0 in lib
+        // (Can happen if the lib is an archive built from a board)
+        module->SetOrientation( 0 );
+    }
+}
+
+
 void PCB_BASE_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
 {
     wxASSERT( m_Pcb );

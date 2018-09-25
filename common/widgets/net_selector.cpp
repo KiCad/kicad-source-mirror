@@ -262,10 +262,12 @@ NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id,
         m_netSelectorPopup( nullptr )
 { }
 
+
 void NET_SELECTOR::DoSetPopupControl( wxComboPopup* aPopup )
 {
     m_popup = nullptr;
 }
+
 
 void NET_SELECTOR::OnButtonClick()
 {
@@ -287,10 +289,12 @@ void NET_SELECTOR::OnButtonClick()
         SetSelectedNetcode( popup->GetSelectedNetcode() );
 }
 
+
 void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
 {
     m_netinfoList = aNetInfoList;
 }
+
 
 void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
 {
@@ -311,16 +315,19 @@ void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
     }
 }
 
+
 void NET_SELECTOR::SetIndeterminate()
 {
     m_netcode = -1;
     SetValue( INDETERMINATE );
 }
 
+
 bool NET_SELECTOR::IsIndeterminate()
 {
     return m_netcode == -1;
 }
+
 
 int NET_SELECTOR::GetSelectedNetcode()
 {
