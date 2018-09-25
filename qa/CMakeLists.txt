@@ -12,7 +12,7 @@ if( KICAD_SCRIPTING_MODULES )
 
 endif()
 
-add_subdirectory( geometry )
+add_subdirectory( common )
 add_subdirectory( shape_poly_set_refactor )
 add_subdirectory( pcb_test_window )
 add_subdirectory( polygon_triangulation )

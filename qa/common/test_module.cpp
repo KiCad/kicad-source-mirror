@@ -26,7 +26,7 @@
  */
 
 #define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE "Geometry module tests"
+#define BOOST_TEST_MODULE "Common library module tests"
 
 
 #include <boost/test/unit_test.hpp>

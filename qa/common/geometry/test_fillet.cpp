@@ -29,7 +29,7 @@
 
 #include <algorithm>
 
-#include <qa/geometry/geom_test_utils.h>
+#include "geom_test_utils.h"
 
 struct FilletFixture
 {

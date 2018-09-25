@@ -33,7 +33,7 @@ endif()
 add_dependencies( pnsrouter pcbcommon pcad2kicadpcb ${GITHUB_PLUGIN_LIBRARIES} )
 
 add_executable(test_polygon_triangulation
-  ../common/mocks.cpp
+  ../qa_utils/mocks.cpp
   ../../common/base_units.cpp
   test_polygon_triangulation.cpp
 )
