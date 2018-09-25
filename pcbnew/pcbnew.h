@@ -63,9 +63,10 @@ enum ENDPOINT_T {
 #define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 
 
-#define TEXTS_MIN_SIZE  Mils2iu( 5 )        ///< Minimum text size in Pcbnew units value (5 mils)
-#define TEXTS_MAX_SIZE  Mils2iu( 1000 )     ///< Maximum text size in Pcbnew units value (1 inch) )
-#define TEXTS_MAX_WIDTH Mils2iu( 500 )      ///< Maximum text width in Pcbnew units value (0.5 inches)
+// These are only here for algorithmic safety, not to tell the user what to do
+#define TEXTS_MIN_SIZE  Mils2iu( 1 )        ///< Minimum text size in internal units (1 mil)
+#define TEXTS_MAX_SIZE  Mils2iu( 10000 )    ///< Maximum text size in internal units (10 inches)
+#define TEXTS_MAX_WIDTH Mils2iu( 10000 )    ///< Maximum text width in internal units (10 inches)
 
 
 // Flag to force the SKETCH mode to display items (.m_Flags member)
