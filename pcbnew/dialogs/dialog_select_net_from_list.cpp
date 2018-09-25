@@ -65,6 +65,9 @@ private:
     void onListSize( wxSizeEvent& event ) override;
 
     void buildNetsList();
+    wxString getListColumnHeaderNet() { return _( "Net" ); };
+    wxString getListColumnHeaderName() { return _( "Name" ); };
+    wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
     void adjustListColumns( int aWidth );
 
     wxString        m_selection;
@@ -93,9 +96,9 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
 
-    m_netsList->AppendTextColumn( _( "Net" ),       wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn( _( "Name" ),      wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn( _( "Pad Count" ), wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderNet(),   wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderName(),  wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderCount(), wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -220,19 +223,44 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 
 void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns( int aWidth )
 {
+    int w0, w1, w2;
+
     if( aWidth == wxCOL_WIDTH_AUTOSIZE )
     {
-        m_netsList->GetColumn( 0 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-        m_netsList->GetColumn( 0 )->SetWidth( m_netsList->GetColumn( 0 )->GetWidth() + 12 );
-        m_netsList->GetColumn( 2 )->SetWidth( wxCOL_WIDTH_AUTOSIZE );
-        m_netsList->GetColumn( 2 )->SetWidth( m_netsList->GetColumn( 2 )->GetWidth() + 12 );
+        /**
+         * Calculating optimal width of the first (Net) and
+         * the last (Pad Count) columns. That width must be
+         * enough to fit column header label and be not less
+         * than width of four chars (0000).
+         */
+
+        wxClientDC dc( GetParent() );
+        int h, minw;
+
         aWidth = m_netsList->GetRect().GetWidth();
+
+        dc.GetTextExtent( getListColumnHeaderNet(), &w0, &h );
+        dc.GetTextExtent( getListColumnHeaderCount(), &w2, &h );
+        dc.GetTextExtent( "0000", &minw, &h );
+
+        // Considering left and right margins.
+        // For wxRanderGeneric it is 5px.
+        w0 = std::max( w0+10, minw);
+        w2 = std::max( w2+10, minw);
+
+        m_netsList->GetColumn( 0 )->SetWidth( w0 );
+        m_netsList->GetColumn( 2 )->SetWidth( w2 );
+    }
+    else
+    {
+        w0 = m_netsList->GetColumn( 0 )->GetWidth();
+        w2 = m_netsList->GetColumn( 2 )->GetWidth();
     }
 
-    aWidth -= m_netsList->GetColumn( 0 )->GetWidth();
-    aWidth -= m_netsList->GetColumn( 2 )->GetWidth();
+    // At resizing of the list the width of middle column (Name) changes only.
+    w1 = aWidth - w0 - w2;
 
-    m_netsList->GetColumn( 1 )->SetWidth( aWidth - 8 );
+    m_netsList->GetColumn( 1 )->SetWidth( w1 );
 }
 
 
