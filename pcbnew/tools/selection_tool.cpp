@@ -1784,9 +1784,6 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
-    if( !aItem->IsSelected() )
-        return;
-
     unhighlight( aItem, SELECTED, m_selection );
     view()->Update( &m_selection );
 
