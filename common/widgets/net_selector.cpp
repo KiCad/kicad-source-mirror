@@ -32,8 +32,15 @@
 
 wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 
-#define LIST_ITEM_PADDING 5    // these are probably going to be platform-specific...
+#ifdef __WXOSX_MAC__
+#define POPUP_PADDING 2
+#define LIST_ITEM_PADDING 5
 #define LIST_PADDING 5
+#else
+#define POPUP_PADDING 0
+#define LIST_ITEM_PADDING 5
+#define LIST_PADDING 5
+#endif
 
 #define NO_NET _( "<no net>" )
 
@@ -84,7 +91,7 @@ class NET_SELECTOR_POPUP : public wxDialog
 public:
     NET_SELECTOR_POPUP( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                         NETINFO_LIST* aNetInfoList ) :
-            wxDialog( aParent, wxID_ANY, _( "Net Selector" ), aPos, aSize, wxSTAY_ON_TOP ),
+            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxBORDER_NONE|wxSTAY_ON_TOP ),
             m_popupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( aNetInfoList ),
@@ -349,10 +356,11 @@ void NET_SELECTOR::OnButtonClick()
         return;
 
     wxRect    comboRect = GetScreenRect();
-    wxPoint   popupPos( comboRect.x + 2, comboRect.y + comboRect.height );
+    wxPoint   popupPos( comboRect.x + POPUP_PADDING, comboRect.y + comboRect.height );
     wxDisplay display( (unsigned) wxDisplay::GetFromWindow( this ) );
 
-    wxSize popupSize( comboRect.width - 4, display.GetClientArea().height - popupPos.y - 4 );
+    wxSize popupSize( comboRect.width - ( POPUP_PADDING * 2 ),
+                      display.GetClientArea().height - popupPos.y );
 
     m_netSelectorPopup = new NET_SELECTOR_POPUP( m_parent, popupPos, popupSize, m_netinfoList );
 
