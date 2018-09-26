@@ -1767,11 +1767,11 @@ void SELECTION_TOOL::select( BOARD_ITEM* aItem )
 
 void SELECTION_TOOL::unselect( BOARD_ITEM* aItem )
 {
-    if( !aItem->IsSelected() )
-        return;
-
     m_selection.Remove( aItem );
     unselectVisually( aItem );
+
+    if( m_frame && m_frame->GetCurItem() == aItem )
+        m_frame->SetCurItem( NULL );
 
     if( m_selection.Empty() )
     {

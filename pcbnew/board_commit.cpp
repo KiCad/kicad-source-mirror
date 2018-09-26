@@ -66,6 +66,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
     auto connectivity = board->GetConnectivity();
     std::set<EDA_ITEM*> savedModules;
+    std::vector<BOARD_ITEM*> itemsToRemove;
 
     if( Empty() )
         return;
@@ -145,6 +146,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
                 }
 
+                itemsToRemove.push_back( boardItem );
+
                 switch( boardItem->Type() )
                 {
                 // Module items
@@ -186,9 +189,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                     if( remove )
                     {
                         view->Remove( boardItem );
-
-                        // Removing an item should trigger the unselect
-                        m_toolMgr->RunAction( PCB_ACTIONS::unselectItem, true, boardItem );
 
                         if( !( changeFlags & CHT_DONE ) )
                         {
@@ -273,6 +273,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 break;
         }
     }
+
+     // Removing an item should trigger the unselect action
+     // but only after all items are removed otherwise we can get
+     // flickering depending on the system
+     if( itemsToRemove.size() > 0 )
+         m_toolMgr->RunAction( PCB_ACTIONS::unselectItems, true, &itemsToRemove );
 
     if( !m_editModules && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
