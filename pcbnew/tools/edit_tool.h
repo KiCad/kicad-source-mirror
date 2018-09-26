@@ -42,8 +42,9 @@ class CONNECTIVITY_DATA;
  * optionally excludes locked items and/or transient items (such as markers).
  */
 
-#define EXCLUDE_LOCKED     0x0002
-#define EXCLUDE_TRANSIENTS 0x0004
+#define EXCLUDE_LOCKED      0x0001
+#define EXCLUDE_LOCKED_PADS 0x0002
+#define EXCLUDE_TRANSIENTS  0x0004
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
 
