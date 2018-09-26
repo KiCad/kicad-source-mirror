@@ -283,6 +283,7 @@ set( COMMON_SRCS
     gr_basic.cpp
     grid_tricks.cpp
     hash_eda.cpp
+    hotkey_store.cpp
     hotkeys_basic.cpp
     html_messagebox.cpp
     incremental_text_ctrl.cpp

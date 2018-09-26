@@ -32,10 +32,10 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_frame( aFrame ),
         m_hotkeys( aHotkeys ),
         m_showHotkeys( aShowHotkeys ),
-        m_nickname( aNickname )
+        m_nickname( aNickname ),
+        m_hotkeyStore( aShowHotkeys )
 {
-    HOTKEY_SECTIONS sections = WIDGET_HOTKEY_LIST::GenSections( m_showHotkeys );
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, sections );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, m_hotkeyStore );
     m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
 }
 
@@ -60,12 +60,12 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
 
 void PANEL_HOTKEYS_EDITOR::ResetClicked( wxCommandEvent& aEvent )
 {
-    m_hotkeyListCtrl->TransferDataToControl();
+    m_hotkeyListCtrl->ResetAllHotkeys( false );
 }
 
 void PANEL_HOTKEYS_EDITOR::DefaultsClicked( wxCommandEvent& aEvent )
 {
-    m_hotkeyListCtrl->TransferDefaultsToControl();
+    m_hotkeyListCtrl->ResetAllHotkeys( true );
 }
 
 
