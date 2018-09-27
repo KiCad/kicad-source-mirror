@@ -249,7 +249,8 @@ void PCB_EDIT_FRAME::Rotate_Texte_Pcb( TEXTE_PCB* TextePcb, wxDC* DC )
     TextePcb->Draw( m_canvas, DC, GR_XOR );
     SetMsgPanel( TextePcb );
 
-    if( TextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( TextePcb->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( TextePcb, UR_ROTATED, TextePcb->GetTextPos() );
     else                 // set flag edit, to show it was a complex command
         TextePcb->SetFlags( IN_EDIT );
@@ -273,7 +274,8 @@ void PCB_EDIT_FRAME::FlipTextePcb( TEXTE_PCB* aTextePcb, wxDC* aDC )
     aTextePcb->Draw( m_canvas, aDC, GR_XOR );
     SetMsgPanel( aTextePcb );
 
-    if( aTextePcb->GetFlags() == 0 )    // i.e. not edited, or moved
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( aTextePcb->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( aTextePcb, UR_FLIPPED, aTextePcb->GetTextPos() );
     else                 // set edit flag, for the current command
         aTextePcb->SetFlags( IN_EDIT );

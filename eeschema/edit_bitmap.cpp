@@ -194,9 +194,12 @@ void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 
     // save old image in undo list if not already in edit
     // or the image to be edited is part of a block
-    if( aItem->GetFlags() == 0 ||
-        GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( aItem->GetFlags() & mask ) == 0
+        || GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
         SaveCopyInUndoList( aItem, UR_CHANGED );
+    }
 
     dlg.TransfertToImage( aItem->GetImage() );
     OnModify();

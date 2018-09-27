@@ -112,28 +112,23 @@ static void Move_Segment( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos
 
 void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
 {
-    EDA_ITEM* PtStruct;
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     bool tmp = displ_opts->m_DisplayDrawItemsFill;
 
     if( Segment == NULL )
         return;
 
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
     if( Segment->IsNew() )  // Trace in progress.
     {
         // Delete current segment.
         displ_opts->m_DisplayDrawItemsFill = SKETCH;
         Segment->Draw( m_canvas, DC, GR_XOR );
-        PtStruct = Segment->Back();
-        Segment ->DeleteStructure();
-
-        if( PtStruct && (PtStruct->Type() == PCB_LINE_T ) )
-            Segment = (DRAWSEGMENT*) PtStruct;
-
+        Segment->DeleteStructure();
         displ_opts->m_DisplayDrawItemsFill = tmp;
         SetCurItem( NULL );
     }
-    else if( Segment->GetFlags() == 0 )
+    else if( ( Segment->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
     {
         Segment->Draw( m_canvas, DC, GR_XOR );
         Segment->ClearFlags();

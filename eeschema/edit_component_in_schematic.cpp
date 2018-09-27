@@ -54,7 +54,8 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
                  wxT( "Invalid schematic field parent item." ) );
 
     // Save old component in undo list if not already in edit, or moving.
-    if( aField->GetFlags() == 0 )
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( aField->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
         SaveCopyInUndoList( component, UR_CHANGED );
 
     // Don't use GetText() here.  If the field is the reference designator and it's parent
@@ -100,7 +101,8 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField )
     SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
 
     // Save old component in undo list if not already in edit, or moving.
-    if( aField->GetFlags() == 0 )
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( aField->GetFlags() & mask ) == 0 )
         SaveCopyInUndoList( component, UR_CHANGED );
 
     if( aField->GetTextAngle() == TEXT_ANGLE_HORIZ )
