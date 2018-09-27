@@ -487,8 +487,12 @@ bool ApplyModifier( double& value, const wxString& aString )
 //
 // TODO: case (d) unimplemented !!!
 //
-int ValueStringCompare( const wxString& strFWord, const wxString& strSWord )
+int ValueStringCompare( wxString strFWord, wxString strSWord )
 {
+    // Compare unescaped text
+    strFWord = UnescapeString( strFWord );
+    strSWord = UnescapeString( strSWord );
+
     // The different sections of the two strings
     wxString strFWordBeg, strFWordMid, strFWordEnd;
     wxString strSWordBeg, strSWordMid, strSWordEnd;
@@ -531,8 +535,12 @@ int ValueStringCompare( const wxString& strFWord, const wxString& strSWord )
 }
 
 
-int RefDesStringCompare( const wxString& strFWord, const wxString& strSWord )
+int RefDesStringCompare( wxString strFWord, wxString strSWord )
 {
+    // Compare unescaped text
+    strFWord = UnescapeString( strFWord );
+    strSWord = UnescapeString( strSWord );
+
     // The different sections of the two strings
     wxString strFWordBeg, strFWordMid, strFWordEnd;
     wxString strSWordBeg, strSWordMid, strSWordEnd;

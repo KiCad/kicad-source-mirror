@@ -146,7 +146,7 @@ bool WildCompareString( const wxString& pattern,
  * return 0 if the strings are equal
  * return 1 if the first string is greater than the second
  */
-int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
+int ValueStringCompare( wxString strFWord, wxString strSWord );
 
 /**
  * Function RefDesStringCompare
@@ -156,7 +156,7 @@ int ValueStringCompare( const wxString& strFWord, const wxString& strSWord );
  * return 0 if the strings are equal
  * return 1 if the first string is greater than the second
  */
-int RefDesStringCompare( const wxString& lhs, const wxString& rhs );
+int RefDesStringCompare( wxString lhs, wxString rhs );
 
 /**
  * Function SplitString
