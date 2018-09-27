@@ -48,6 +48,38 @@ wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 #define NO_NET _( "<no net>" )
 
 
+class POPUP_EVENTFILTER : public wxEventFilter
+{
+public:
+    POPUP_EVENTFILTER( wxDialog* aPopup ) :
+            m_popup( aPopup )
+    {
+        wxEvtHandler::AddFilter( this );
+    }
+
+    ~POPUP_EVENTFILTER() override
+    {
+        wxEvtHandler::RemoveFilter( this );
+    }
+
+    int FilterEvent( wxEvent& aEvent ) override
+    {
+        // Click outside popup cancels
+        if( aEvent.GetEventType() == wxEVT_LEFT_DOWN
+            && !m_popup->GetScreenRect().Contains( wxGetMousePosition() ) )
+        {
+            m_popup->EndModal( wxID_CANCEL );
+            return Event_Processed;
+        }
+
+        return Event_Skip;
+    }
+
+private:
+    wxDialog* m_popup;
+};
+
+
 class NET_SELECTOR_POPUP : public wxDialog
 {
 public:
@@ -112,6 +144,8 @@ public:
     // to catch mouse and key events outside our window.
     int ShowModal() override
     {
+        POPUP_EVENTFILTER filter( this );
+
         Show( true );
 
         while( !m_retCode )
@@ -123,10 +157,10 @@ public:
     void EndModal( int aReason ) override
     {
         if( IsShown() )
-        Show( false );
+            Show( false );
 
         if( !m_retCode )
-        m_retCode = aReason;
+            m_retCode = aReason;
     }
 
 protected:
@@ -188,6 +222,7 @@ protected:
             onMouseMoved( screenPos );
         }
 
+#ifndef __WXGTK__
         // Check for loss of focus.  This will indicate that a window manager processed
         // an activate event without fully involving wxWidgets (and thus our EventFilter
         // never got notified of the click).
@@ -197,11 +232,12 @@ protected:
 
         if( m_initialized && focus != this && focus != m_netListBox && focus != m_filterCtrl )
             EndModal( wxID_CANCEL );
+#endif
     }
 
     // Hot-track the mouse (for focus and listbox selection)
     void onMouseMoved( const wxPoint aScreenPos )
-        {
+    {
         if( m_netListBox->GetScreenRect().Contains( aScreenPos ) )
         {
             doSetFocus( m_netListBox );
@@ -217,10 +253,10 @@ protected:
             doSetFocus( m_filterCtrl );
         }
         else if( !m_initialized )
-    {
+        {
             doSetFocus( m_netListBox );
             m_initialized = true;
-    }
+        }
     }
 
     void onKeyDown( wxKeyEvent& aEvent )
@@ -254,9 +290,9 @@ protected:
                 // textCtrl has focus.  Here we pass them directly to the textCtrl.
                 aEvent.SetEventType( wxEVT_KEY_DOWN );
                 m_filterCtrl->GetEventHandler()->ProcessEventLocally( aEvent );
-        }
+            }
             break;
-    }
+        }
     }
 
     void onFilterEdit( wxCommandEvent& aEvent )
