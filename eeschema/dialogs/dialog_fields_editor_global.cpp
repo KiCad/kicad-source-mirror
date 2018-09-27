@@ -143,9 +143,9 @@ struct DATA_MODEL_ROW
 #define QUANTITY_COLUMN   ( GetNumberCols() - 1 )
 
 #ifdef __WXMAC__
-#define CHECKBOX_COLUMN_MARGIN 5
+#define COLUMN_MARGIN 5
 #else
-#define CHECKBOX_COLUMN_MARGIN 15
+#define COLUMN_MARGIN 15
 #endif
 
 
@@ -293,7 +293,7 @@ public:
             fieldValue = wxString::Format( wxT( "%d" ), ( int )references.size() );
         }
 
-        return fieldValue;
+        return UnescapeString( fieldValue );
     }
 
 
@@ -302,10 +302,7 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
-        wxString value( aValue );
-        value.Replace( "\r", "\\r" );
-        value.Replace( "\n", "\\n" );
-        value.Replace( "\t", "\\t" );
+        wxString value = EscapeString( aValue );
 
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];
@@ -596,6 +593,33 @@ public:
         m_edited = false;
     }
 
+
+    int GetDataWidth( int aCol )
+    {
+        int width = 0;
+
+        if( aCol == REFERENCE )
+        {
+            for( unsigned row = 0; row < GetNumberRows(); ++row )
+            {
+                width = std::max( width, GetTextSize( GetValue( row, aCol ), GetView() ).x );
+            }
+        }
+        else
+        {
+            for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
+            {
+                timestamp_t compId = m_componentRefs[ compRef ].GetComp()->GetTimeStamp();
+                wxString text = m_dataStore[ compId ][ m_fieldNames[ aCol ] ];
+
+                width = std::max( width, GetTextSize( text, GetView() ).x );
+            }
+        }
+
+        return width;
+    }
+
+
     bool IsEdited()
     {
         return m_edited;
@@ -608,6 +632,8 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
         m_config( Kiface().KifaceSettings() ),
         m_parent( parent )
 {
+    wxSize defaultDlgSize = ConvertDialogToPixels( wxSize( 600, 300 ) );
+
     // Get all components from the list of schematic sheets
     SCH_SHEET_LIST sheets( g_RootSheet );
     sheets.GetComponents( m_componentRefs, false );
@@ -621,11 +647,11 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     // SetWidth( wxCOL_WIDTH_AUTOSIZE ) fails here on GTK, so we calculate the title sizes and
     // set the column widths ourselves.
     auto column = m_fieldsCtrl->GetColumn( SHOW_FIELD_COLUMN );
-    m_showColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + CHECKBOX_COLUMN_MARGIN;
+    m_showColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
     column->SetWidth( m_showColWidth );
 
     column = m_fieldsCtrl->GetColumn( GROUP_BY_COLUMN );
-    m_groupByColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + CHECKBOX_COLUMN_MARGIN;
+    m_groupByColWidth = GetTextSize( column->GetTitle(), m_fieldsCtrl ).x + COLUMN_MARGIN;
     column->SetWidth( m_groupByColWidth );
 
     // The fact that we're a list should keep the control from reserving space for the
@@ -674,7 +700,6 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     wxGridCellAttr* attr = new wxGridCellAttr;
     attr->SetReadOnly();
     m_grid->SetColAttr( REFERENCE, attr );
-    m_grid->SetColMinimalWidth( 0, 100 );
 
     // set footprint column browse button
     attr = new wxGridCellAttr;
@@ -691,9 +716,18 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     attr->SetReadOnly();
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 );
 
     m_grid->AutoSizeColumns( false );
+    for( int col = 0; col < m_grid->GetNumberCols(); ++ col )
+    {
+        int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+        int maxWidth = defaultDlgSize.x / 3;
+
+        if( col == m_grid->GetNumberCols() - 1 )
+            m_grid->SetColumnWidth( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+        else
+            m_grid->SetColumnWidth( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+    }
 
     m_grid->SetGridCursor( 0, 1 );
     SetInitialFocus( m_grid );
@@ -701,7 +735,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_sdbSizer1OK->SetDefault();
 
     FinishDialogSettings();
-    SetSizeInDU( 600, 300 );
+    SetSize( defaultDlgSize );
     Center();
 
     // Connect Events
@@ -832,7 +866,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
     attr->SetReadOnly();
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-    m_grid->SetColMinimalWidth( m_dataModel->GetColsCount() - 1, 50 );
+    m_grid->SetColumnWidth( m_dataModel->GetColsCount() - 1, 50 );
 }
 
 
