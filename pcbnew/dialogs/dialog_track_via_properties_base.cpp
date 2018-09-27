@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -19,24 +19,24 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	
 	m_sbCommonSizer = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Common") ), wxHORIZONTAL );
 	
-	wxBoxSizer* bSizer2;
-	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
+	wxBoxSizer* bSizerNetWidgets;
+	bSizerNetWidgets = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_netSelectorLabel = new wxStaticText( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Net:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_netSelectorLabel->Wrap( -1 );
-	bSizer2->Add( m_netSelectorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerNetWidgets->Add( m_netSelectorLabel, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_netSelector = new NET_SELECTOR( m_sbCommonSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ); 
-	bSizer2->Add( m_netSelector, 1, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerNetWidgets->Add( m_netSelector, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	
-	m_sbCommonSizer->Add( bSizer2, 5, wxEXPAND|wxRIGHT, 10 );
+	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxRIGHT, 10 );
 	
 	
-	m_sbCommonSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
+	m_sbCommonSizer->Add( 0, 0, 0, wxRIGHT|wxLEFT, 15 );
 	
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	m_sbCommonSizer->Add( m_lockedCbox, 4, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_sbCommonSizer->Add( m_lockedCbox, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 5 );
@@ -54,7 +54,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackLeftGridSizer->Add( m_TrackStartXLabel, 0, wxALIGN_CENTER_VERTICAL, 3 );
 	
 	m_TrackStartXCtrl = new wxTextCtrl( m_sbTrackSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_TrackStartXCtrl, 0, wxALIGN_CENTER_HORIZONTAL|wxEXPAND, 3 );
+	fgTrackLeftGridSizer->Add( m_TrackStartXCtrl, 0, wxEXPAND, 3 );
 	
 	m_TrackStartXUnit = new wxStaticText( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackStartXUnit->Wrap( -1 );
@@ -223,6 +223,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgViaLeftSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class sizes"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaNetclass->SetValue(true); 
 	fgViaLeftSizer->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	
@@ -232,7 +233,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbViaSizer->Add( fgViaLeftSizer, 5, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
-	m_sbViaSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 15 );
+	m_sbViaSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	wxFlexGridSizer* fgViaRightSizer;
 	fgViaRightSizer = new wxFlexGridSizer( 3, 2, 3, 5 );
@@ -250,14 +251,14 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_ViaTypeChoice->SetSelection( 0 );
 	m_ViaTypeChoice->Enable( false );
 	
-	fgViaRightSizer->Add( m_ViaTypeChoice, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 4 );
+	fgViaRightSizer->Add( m_ViaTypeChoice, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 4 );
 	
 	m_ViaStartLayerLabel = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Start layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaStartLayerLabel->Wrap( -1 );
 	fgViaRightSizer->Add( m_ViaStartLayerLabel, 0, wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_ViaStartLayer = new PCB_LAYER_BOX_SELECTOR( m_sbViaSizer->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 ); 
-	fgViaRightSizer->Add( m_ViaStartLayer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	fgViaRightSizer->Add( m_ViaStartLayer, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
 	
 	m_ViaEndLayerLabel1 = new wxStaticText( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("End layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_ViaEndLayerLabel1->Wrap( -1 );
@@ -287,7 +288,6 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	
 	this->SetSizer( m_MainSizer );
 	this->Layout();
-	m_MainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
