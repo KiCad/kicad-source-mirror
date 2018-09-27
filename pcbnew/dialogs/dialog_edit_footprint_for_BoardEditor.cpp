@@ -701,7 +701,8 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
     m_footprint->CalculateBoundingBox();
 
     // This is a simple edit, we must create an undo entry
-    if( m_footprint->GetFlags() == 0 )
+    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    if( ( m_footprint->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
         commit.Push( _( "Modify module properties" ) );
 
     SetReturnCode( PRM_EDITOR_EDIT_OK );
