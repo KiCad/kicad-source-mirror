@@ -323,6 +323,10 @@ bool DRAGGER::FixRoute()
 
     if( node )
     {
+        // Collisions still prevent fixing unless "Allow DRC violations" is checked
+        if( !m_dragStatus )
+            return false;
+
         Router()->CommitRouting( node );
         return true;
     }
