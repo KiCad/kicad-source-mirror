@@ -724,9 +724,9 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
         int maxWidth = defaultDlgSize.x / 3;
 
         if( col == m_grid->GetNumberCols() - 1 )
-            m_grid->SetColumnWidth( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+            m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
         else
-            m_grid->SetColumnWidth( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+            m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
     }
 
     m_grid->SetGridCursor( 0, 1 );
@@ -866,7 +866,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
     attr->SetReadOnly();
     m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
     m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-    m_grid->SetColumnWidth( m_dataModel->GetColsCount() - 1, 50 );
+    m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
 }
 
 
