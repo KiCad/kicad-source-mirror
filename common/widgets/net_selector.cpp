@@ -27,7 +27,6 @@
 #include <class_board.h>
 #include <netinfo.h>
 #include <wx/arrstr.h>
-#include <wx/evtloop.h>
 #include <wx/display.h>
 
 wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
@@ -45,47 +44,6 @@ wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 #define NO_NET _( "<no net>" )
 
 
-class POPUP_EVENTFILTER : public wxEventFilter
-{
-public:
-    POPUP_EVENTFILTER( wxDialog* aPopup ) :
-            m_popup( aPopup )
-    {
-        wxEvtHandler::AddFilter( this );
-    }
-
-    ~POPUP_EVENTFILTER() override
-    {
-        wxEvtHandler::RemoveFilter( this );
-    }
-
-    int FilterEvent( wxEvent& aEvent ) override
-    {
-        if( aEvent.GetEventType() == wxEVT_LEFT_DOWN )
-        {
-            // Click outside popup cancels
-            if( !m_popup->GetScreenRect().Contains( wxGetMousePosition() ) )
-            {
-                m_popup->EndModal( wxID_CANCEL );
-                return Event_Processed;
-            }
-        }
-        else if( aEvent.GetEventType() == wxEVT_KEY_DOWN )
-        {
-            // Allow keyboard navigation of popup
-            if( m_popup->GetEventHandler()->ProcessEvent( aEvent ) )
-                return Event_Processed;
-        }
-
-        // Otherwise continue processing normally
-        return Event_Skip;
-    }
-
-private:
-    wxDialog* m_popup;
-};
-
-
 class NET_SELECTOR_POPUP : public wxDialog
 {
 public:
@@ -97,9 +55,9 @@ public:
             m_netinfoList( aNetInfoList ),
             m_filterCtrl( nullptr ),
             m_netListBox( nullptr ),
+            m_initialized( false ),
             m_selectedNet( 0 ),
-            m_retCode( 0 ),
-            m_eventFilter( this )
+            m_retCode( 0 )
     {
         m_popupWidth = aSize.x;
         m_maxPopupHeight = aSize.y;
@@ -111,19 +69,16 @@ public:
         m_filterCtrl->SetHint( _( "Filter" ) );
         mainSizer->Add( m_filterCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 0 );
 
-        m_netListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0,
-                                      wxLB_SINGLE|wxLB_NEEDED_SB );
+        m_netListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_NO_SB );
         mainSizer->Add( m_netListBox, 0, wxALL|wxEXPAND, 0 );
 
         SetSizer( mainSizer );
         Layout();
 
         Connect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_POPUP::onIdle ), NULL, this );
-        Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
+        Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_netListBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
-        m_netListBox->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( NET_SELECTOR_POPUP::onKillFocus ), NULL, this );
         m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
-        m_filterCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( NET_SELECTOR_POPUP::onKillFocus ), NULL, this );
 
         rebuildList();
     }
@@ -131,11 +86,9 @@ public:
     ~NET_SELECTOR_POPUP()
     {
         Disconnect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_POPUP::onIdle ), NULL, this );
-        Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
+        Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_netListBox->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
-        m_netListBox->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( NET_SELECTOR_POPUP::onKillFocus ), NULL, this );
         m_filterCtrl->Disconnect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
-        m_filterCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( NET_SELECTOR_POPUP::onKillFocus ), NULL, this );
     }
 
     void SetSelectedNetcode( int aNetcode )
@@ -163,9 +116,11 @@ public:
 
     void EndModal( int aReason ) override
     {
-        Show( false );
+        if( IsShown() )
+            Show( false );
 
-        m_retCode = aReason;
+        if( !m_retCode )
+            m_retCode = aReason;
     }
 
 protected:
@@ -215,39 +170,87 @@ protected:
         m_netListBox->Refresh();
     }
 
-    // Hot-track the mouse (for focus and listbox selection)
     void onIdle( wxIdleEvent& aEvent )
     {
+        // Generate synthetic (but reliable) MouseMoved events
         static wxPoint lastPos;
         wxPoint screenPos = wxGetMousePosition();
 
-        if( screenPos == lastPos )
-            return;
-        else
+        if( screenPos != lastPos )
+        {
             lastPos = screenPos;
+            onMouseMoved( screenPos );
+        }
 
-        if( m_netListBox->GetScreenRect().Contains( screenPos ) )
+        // Check for loss of focus.  This will indicate that a window manager processed
+        // an activate event without fully involving wxWidgets (and thus our EventFilter
+        // never got notified of the click).
+        // Don't try and do this with KillFocus events; the event ordering is too
+        // platform-dependant.
+        wxWindow* focus = wxWindow::FindFocus();
+
+        if( m_initialized && focus != this && focus != m_netListBox && focus != m_filterCtrl )
+            EndModal( wxID_CANCEL );
+    }
+
+    // Hot-track the mouse (for focus and listbox selection)
+    void onMouseMoved( const wxPoint aScreenPos )
+    {
+        if( m_netListBox->GetScreenRect().Contains( aScreenPos ) )
         {
             doSetFocus( m_netListBox );
 
-            wxPoint relativePos = m_netListBox->ScreenToClient( screenPos );
+            wxPoint relativePos = m_netListBox->ScreenToClient( aScreenPos );
             int     item = m_netListBox->HitTest( relativePos );
 
             if( item >= 0 )
                 m_netListBox->SetSelection( item );
         }
-        else if( m_filterCtrl->GetScreenRect().Contains( screenPos ) )
+        else if( m_filterCtrl->GetScreenRect().Contains( aScreenPos ) )
         {
             doSetFocus( m_filterCtrl );
         }
+        else if( !m_initialized )
+        {
+            doSetFocus( m_netListBox );
+            m_initialized = true;
+        }
     }
 
-    void onKillFocus( wxFocusEvent& aEvent )
+    void onKeyDown( wxKeyEvent& aEvent )
     {
-        // If someone else is getting the focus then we must have missed a click outside
-        // the popup.
-        if( aEvent.GetWindow() != m_netListBox && aEvent.GetWindow() != m_filterCtrl )
+        switch( aEvent.GetKeyCode() )
+        {
+        case WXK_ESCAPE:
             EndModal( wxID_CANCEL );
+            break;
+
+        case WXK_RETURN:
+            doSelect( m_netListBox->GetSelection() );
+            break;
+
+        case WXK_DOWN:
+        case WXK_NUMPAD_DOWN:
+            doSetFocus( m_netListBox );
+            m_netListBox->SetSelection( std::min( m_netListBox->GetSelection() + 1, (int) m_netListBox->GetCount() - 1 ) );
+            break;
+
+        case WXK_UP:
+        case WXK_NUMPAD_UP:
+            doSetFocus( m_netListBox );
+            m_netListBox->SetSelection( std::max( m_netListBox->GetSelection() - 1, 0 ) );
+            break;
+
+        default:
+            if( m_filterCtrl->HasFocus() )
+            {
+                // On GTK these key events can go to the parent dialog even when the
+                // textCtrl has focus.  Here we pass them directly to the textCtrl.
+                aEvent.SetEventType( wxEVT_KEY_DOWN );
+                m_filterCtrl->GetEventHandler()->ProcessEventLocally( aEvent );
+            }
+            break;
+        }
     }
 
     void onFilterEdit( wxCommandEvent& aEvent )
@@ -255,7 +258,21 @@ protected:
         rebuildList();
     }
 
-    void onSelect( int aItem )
+    void onListBoxMouseClick( wxMouseEvent& aEvent )
+    {
+        doSelect( m_netListBox->HitTest( aEvent.GetPosition()));
+    }
+
+    void doSetFocus( wxWindow* aWindow )
+    {
+#ifdef __WXOSX_MAC__
+        aWindow->OSXForceFocus();
+#else
+        aWindow->SetFocus();
+#endif
+    }
+
+    void doSelect( int aItem )
     {
         if( aItem >= 0 )
         {
@@ -274,52 +291,6 @@ protected:
             EndModal( wxID_CANCEL );
     }
 
-    // Accept single-click closure from ListBox
-    void onListBoxMouseClick( wxMouseEvent& aEvent )
-    {
-        wxPoint relativePos = m_netListBox->ScreenToClient( wxGetMousePosition() );
-
-        onSelect( m_netListBox->HitTest( relativePos ) );
-    }
-
-    void onKeyDown( wxKeyEvent& aEvent )
-    {
-        switch( aEvent.GetKeyCode() )
-        {
-        case WXK_ESCAPE:
-            EndModal( wxID_CANCEL );
-            break;
-
-        case WXK_RETURN:
-            onSelect( m_netListBox->GetSelection() );
-            break;
-
-        case WXK_DOWN:
-        case WXK_NUMPAD_DOWN:
-            doSetFocus( m_netListBox );
-            m_netListBox->SetSelection( std::min( m_netListBox->GetSelection() + 1, (int) m_netListBox->GetCount() - 1 ) );
-            break;
-
-        case WXK_UP:
-        case WXK_NUMPAD_UP:
-            doSetFocus( m_netListBox );
-            m_netListBox->SetSelection( std::max( m_netListBox->GetSelection() - 1, 0 ) );
-            break;
-
-        default:
-            aEvent.Skip();
-        }
-    }
-
-    void doSetFocus( wxWindow* aWindow )
-    {
-#ifdef __WXOSX_MAC__
-        aWindow->OSXForceFocus();
-#else
-        aWindow->SetFocus();
-#endif
-    }
-
 protected:
     int               m_popupWidth;
     int               m_maxPopupHeight;
@@ -328,9 +299,10 @@ protected:
     wxTextCtrl*       m_filterCtrl;
     wxListBox*        m_netListBox;
 
+    bool              m_initialized;
+
     int               m_selectedNet;
     int               m_retCode;
-    POPUP_EVENTFILTER m_eventFilter;
 };
 
 
@@ -343,6 +315,12 @@ NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id,
 { }
 
 
+NET_SELECTOR::~NET_SELECTOR()
+{
+    delete m_netSelectorPopup;
+}
+
+
 void NET_SELECTOR::DoSetPopupControl( wxComboPopup* aPopup )
 {
     m_popup = nullptr;
@@ -351,7 +329,7 @@ void NET_SELECTOR::DoSetPopupControl( wxComboPopup* aPopup )
 
 void NET_SELECTOR::OnButtonClick()
 {
-    // Guard against clicks during show or during hide
+    // Guard against clicks during show or hide
     if( m_netSelectorPopup )
         return;
 
@@ -360,7 +338,7 @@ void NET_SELECTOR::OnButtonClick()
     wxDisplay display( (unsigned) wxDisplay::GetFromWindow( this ) );
 
     wxSize popupSize( comboRect.width - ( POPUP_PADDING * 2 ),
-                      display.GetClientArea().height - popupPos.y );
+                      display.GetClientArea().y + display.GetClientArea().height - popupPos.y );
 
     m_netSelectorPopup = new NET_SELECTOR_POPUP( m_parent, popupPos, popupSize, m_netinfoList );
 
@@ -368,6 +346,8 @@ void NET_SELECTOR::OnButtonClick()
 
     if( m_netSelectorPopup->ShowModal() == wxID_OK )
         SetSelectedNetcode( m_netSelectorPopup->GetSelectedNetcode() );
+
+    SetFocus();
 
     delete m_netSelectorPopup;
     m_netSelectorPopup = nullptr;

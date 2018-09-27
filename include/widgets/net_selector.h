@@ -44,6 +44,8 @@ public:
     NET_SELECTOR( wxWindow *parent, wxWindowID id, const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize, long style = 0 );
 
+    ~NET_SELECTOR() override;
+
     void SetNetInfo( NETINFO_LIST* aNetInfoList );
 
     void SetSelectedNetcode( int aNetcode );
