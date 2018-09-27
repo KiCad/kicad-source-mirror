@@ -53,7 +53,7 @@ class NET_SELECTOR_POPUP : public wxDialog
 public:
     NET_SELECTOR_POPUP( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                         NETINFO_LIST* aNetInfoList ) :
-            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxBORDER_NONE ),
+            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxSIMPLE_BORDER ),
             m_popupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( aNetInfoList ),
@@ -70,13 +70,13 @@ public:
         mainSizer = new wxBoxSizer( wxVERTICAL );
 
         wxStaticText* title = new wxStaticText( this, wxID_ANY, _( "Filter:" ) );
-        mainSizer->Add( title, 0, wxTOP|wxLEFT|wxRIGHT, 3 );
+        mainSizer->Add( title, 0, wxLEFT|wxRIGHT, 2 );
 
         m_filterCtrl = new wxTextCtrl( this, wxID_ANY );
-        mainSizer->Add( m_filterCtrl, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, 3 );
+        mainSizer->Add( m_filterCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 2 );
 
-        m_netListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_NO_SB );
-        mainSizer->Add( m_netListBox, 0, wxALL|wxEXPAND, 3 );
+        m_netListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_NEEDED_SB );
+        mainSizer->Add( m_netListBox, 0, wxALL|wxEXPAND, 2 );
 
         SetSizer( mainSizer );
         Layout();
