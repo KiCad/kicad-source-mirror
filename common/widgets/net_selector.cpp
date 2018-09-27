@@ -65,12 +65,14 @@ public:
         wxBoxSizer* mainSizer;
         mainSizer = new wxBoxSizer( wxVERTICAL );
 
+        wxStaticText* title = new wxStaticText( this, wxID_ANY, _( "Filter:" ) );
+        mainSizer->Add( title, 0, wxTOP|wxLEFT|wxRIGHT, 3 );
+
         m_filterCtrl = new wxTextCtrl( this, wxID_ANY );
-        m_filterCtrl->SetHint( _( "Filter" ) );
-        mainSizer->Add( m_filterCtrl, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 0 );
+        mainSizer->Add( m_filterCtrl, 0, wxEXPAND|wxBOTTOM|wxLEFT|wxRIGHT, 3 );
 
         m_netListBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0, wxLB_NO_SB );
-        mainSizer->Add( m_netListBox, 0, wxALL|wxEXPAND, 0 );
+        mainSizer->Add( m_netListBox, 0, wxALL|wxEXPAND, 3 );
 
         SetSizer( mainSizer );
         Layout();
@@ -117,10 +119,10 @@ public:
     void EndModal( int aReason ) override
     {
         if( IsShown() )
-            Show( false );
+        Show( false );
 
         if( !m_retCode )
-            m_retCode = aReason;
+        m_retCode = aReason;
     }
 
 protected:
@@ -195,7 +197,7 @@ protected:
 
     // Hot-track the mouse (for focus and listbox selection)
     void onMouseMoved( const wxPoint aScreenPos )
-    {
+        {
         if( m_netListBox->GetScreenRect().Contains( aScreenPos ) )
         {
             doSetFocus( m_netListBox );
@@ -211,10 +213,10 @@ protected:
             doSetFocus( m_filterCtrl );
         }
         else if( !m_initialized )
-        {
+    {
             doSetFocus( m_netListBox );
             m_initialized = true;
-        }
+    }
     }
 
     void onKeyDown( wxKeyEvent& aEvent )
@@ -248,9 +250,9 @@ protected:
                 // textCtrl has focus.  Here we pass them directly to the textCtrl.
                 aEvent.SetEventType( wxEVT_KEY_DOWN );
                 m_filterCtrl->GetEventHandler()->ProcessEventLocally( aEvent );
-            }
-            break;
         }
+            break;
+    }
     }
 
     void onFilterEdit( wxCommandEvent& aEvent )
