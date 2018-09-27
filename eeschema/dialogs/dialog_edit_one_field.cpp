@@ -40,6 +40,7 @@
 #include <sch_component.h>
 #include <template_fieldnames.h>
 #include <class_library.h>
+#include <sch_validators.h>
 
 #include <dialog_edit_one_field.h>
 
@@ -101,6 +102,9 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
 void DIALOG_EDIT_ONE_FIELD::init()
 {
     SetInitialFocus( m_TextValue );
+    SCH_BASE_FRAME* parent = GetParent();
+    bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
+    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );

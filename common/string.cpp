@@ -48,6 +48,8 @@ static const char illegalFileNameChars[] = "\\/:\"<>|";
  */
 wxString EscapeString( const wxString& aSource )
 {
+    return aSource;
+
     wxString converted;
 
     for( wxUniChar c: aSource )
@@ -90,6 +92,8 @@ wxString EscapeString( const wxString& aSource )
 
 wxString UnescapeString( const wxString& aSource )
 {
+    return aSource;
+
     wxString converted = aSource;
 
     converted.Replace( "&quot;", "\"" );
