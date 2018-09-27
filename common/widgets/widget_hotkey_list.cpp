@@ -253,6 +253,18 @@ WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::GetSelHKClientData()
 }
 
 
+WIDGET_HOTKEY_CLIENT_DATA* WIDGET_HOTKEY_LIST::getExpectedHkClientData( wxTreeListItem aItem )
+{
+    const auto hkdata = GetHKClientData( aItem );
+
+    // This probably means a hotkey-only action is being attempted on
+    // a row that is not a hotkey (like a section heading)
+    wxASSERT_MSG( hkdata != nullptr, "No hotkey data found for list item" );
+
+    return hkdata;
+}
+
+
 void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 {
     for( wxTreeListItem i = GetFirstItem(); i.IsOk(); i = GetNextItem( i ) )
@@ -285,13 +297,10 @@ void WIDGET_HOTKEY_LIST::LoadSection( EDA_HOTKEY_CONFIG* aSection )
 
 void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
 
     if( !hkdata )
-    {
-        // Activated item was not a hotkey row
         return;
-    }
 
     wxString    name = GetItemText( aItem, 0 );
     wxString    current_key = GetItemText( aItem, 1 );
@@ -299,7 +308,7 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
     wxKeyEvent key_event = HK_PROMPT_DIALOG::PromptForKey( GetParent(), name, current_key );
     long key = MapKeypressToKeycode( key_event );
 
-    if( hkdata && key )
+    if( key )
     {
         // See if this key code is handled in hotkeys names list
         bool exists;
@@ -327,7 +336,11 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 
 void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
+
+    if( !hkdata )
+        return;
+
     EDA_HOTKEY* hk = &hkdata->GetHotkey();
 
     for( size_t sec_index = 0; sec_index < m_sections.size(); ++sec_index )
@@ -356,9 +369,14 @@ void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
 
 void WIDGET_HOTKEY_LIST::ResetItemToDefault( wxTreeListItem aItem )
 {
-    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = getExpectedHkClientData( aItem );
+
+    if( !hkdata )
+        return;
+
     EDA_HOTKEY* hk = &hkdata->GetHotkey();
     hk->ResetKeyCodeToDefault();
+
     UpdateFromClientData();
 }
 
@@ -376,10 +394,17 @@ void WIDGET_HOTKEY_LIST::OnContextMenu( wxTreeListEvent& aEvent )
 
     wxMenu menu;
 
-    menu.Append( ID_EDIT, _( "Edit..." ) );
-    menu.Append( ID_RESET, _( "Undo Changes" ) );
-    menu.Append( ID_DEFAULT, _( "Restore Default" ) );
-    menu.Append( wxID_SEPARATOR );
+    WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( m_context_menu_item );
+
+    // Some actions only apply if the row is hotkey data
+    if( hkdata )
+    {
+        menu.Append( ID_EDIT, _( "Edit..." ) );
+        menu.Append( ID_RESET, _( "Undo Changes" ) );
+        menu.Append( ID_DEFAULT, _( "Restore Default" ) );
+        menu.Append( wxID_SEPARATOR );
+    }
+
     menu.Append( ID_RESET_ALL, _( "Undo All Changes" ) );
     menu.Append( ID_DEFAULT_ALL, _( "Restore All to Default" ) );
 
