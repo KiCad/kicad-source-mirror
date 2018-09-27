@@ -85,7 +85,7 @@ class NET_SELECTOR_POPUP : public wxDialog
 public:
     NET_SELECTOR_POPUP( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                         NETINFO_LIST* aNetInfoList ) :
-            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxSIMPLE_BORDER ),
+            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxSIMPLE_BORDER|wxWANTS_CHARS ),
             m_popupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( aNetInfoList ),
@@ -95,6 +95,8 @@ public:
             m_selectedNet( 0 ),
             m_retCode( 0 )
     {
+        SetExtraStyle( wxWS_EX_BLOCK_EVENTS|wxWS_EX_PROCESS_IDLE );
+
         m_popupWidth = aSize.x;
         m_maxPopupHeight = aSize.y;
 
@@ -225,8 +227,9 @@ protected:
 #ifndef __WXGTK__
         // Check for loss of focus.  This will indicate that a window manager processed
         // an activate event without fully involving wxWidgets (and thus our EventFilter
-        // never got notified of the click).
-        // Don't try and do this with KillFocus events; the event ordering is too
+        // never got notified of the click).  This is possibly an OSX-only issue, but it
+        // doesn't seem to cause any harm on MSW.
+        // Note: don't try to do this with KillFocus events; the event ordering is too
         // platform-dependant.
         wxWindow* focus = wxWindow::FindFocus();
 
@@ -263,6 +266,13 @@ protected:
     {
         switch( aEvent.GetKeyCode() )
         {
+        case WXK_TAB:
+            EndModal( wxID_CANCEL );
+
+            m_parent->NavigateIn( ( aEvent.ShiftDown() ? 0 : wxNavigationKeyEvent::IsForward ) |
+                                  ( aEvent.ControlDown() ? wxNavigationKeyEvent::WinChange : 0 ) );
+            break;
+
         case WXK_ESCAPE:
             EndModal( wxID_CANCEL );
             break;
@@ -284,13 +294,7 @@ protected:
             break;
 
         default:
-            if( m_filterCtrl->HasFocus() )
-            {
-                // On GTK these key events can go to the parent dialog even when the
-                // textCtrl has focus.  Here we pass them directly to the textCtrl.
-                aEvent.SetEventType( wxEVT_KEY_DOWN );
-                m_filterCtrl->GetEventHandler()->ProcessEventLocally( aEvent );
-            }
+            aEvent.Skip();
             break;
         }
     }
@@ -374,6 +378,9 @@ void NET_SELECTOR::OnButtonClick()
     // Guard against clicks during show or hide
     if( m_netSelectorPopup )
         return;
+
+    // Allow button to process mouse-up event
+    wxYield();
 
     wxRect    comboRect = GetScreenRect();
     wxPoint   popupPos( comboRect.x + POPUP_PADDING, comboRect.y + comboRect.height );
