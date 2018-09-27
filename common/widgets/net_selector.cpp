@@ -31,14 +31,18 @@
 
 wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
 
-#ifdef __WXOSX_MAC__
-#define POPUP_PADDING 2
-#define LIST_ITEM_PADDING 5
-#define LIST_PADDING 5
+#if defined( __WXOSX_MAC__ )
+    #define POPUP_PADDING 2
+    #define LIST_ITEM_PADDING 5
+    #define LIST_PADDING 5
+#elif defined( __WXMSW__ )
+    #define POPUP_PADDING 0
+    #define LIST_ITEM_PADDING 2
+    #define LIST_PADDING 5
 #else
-#define POPUP_PADDING 0
-#define LIST_ITEM_PADDING 5
-#define LIST_PADDING 5
+    #define POPUP_PADDING 0
+    #define LIST_ITEM_PADDING 5
+    #define LIST_PADDING 5
 #endif
 
 #define NO_NET _( "<no net>" )
@@ -49,7 +53,7 @@ class NET_SELECTOR_POPUP : public wxDialog
 public:
     NET_SELECTOR_POPUP( wxWindow* aParent, const wxPoint& aPos, const wxSize& aSize,
                         NETINFO_LIST* aNetInfoList ) :
-            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxBORDER_NONE|wxSTAY_ON_TOP ),
+            wxDialog( aParent, wxID_ANY, wxEmptyString, aPos, aSize, wxBORDER_NONE ),
             m_popupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( aNetInfoList ),
