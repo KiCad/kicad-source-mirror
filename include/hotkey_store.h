@@ -126,6 +126,13 @@ public:
      */
     SECTION_LIST& GetSections();
 
+
+    /**
+     * Find a hotkey with the given command ID and in the given section
+     * @return pointer to the hotkey if found.
+     */
+    CHANGED_HOTKEY* FindHotkey( const wxString& aTag, int aCmdId );
+
     /**
      * Persist all changes to hotkeys in the store to the underlying
      * data structures.

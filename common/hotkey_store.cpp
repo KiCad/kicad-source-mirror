@@ -53,6 +53,30 @@ std::vector<HOTKEY_SECTION>& HOTKEY_STORE::GetSections()
 }
 
 
+CHANGED_HOTKEY* HOTKEY_STORE::FindHotkey( const wxString& aTag, int aCmdId )
+{
+    CHANGED_HOTKEY* found_key = nullptr;
+
+    for( auto& section: m_hk_sections )
+    {
+        if( *section.m_section.m_SectionTag != aTag)
+            continue;
+
+        for( auto& hotkey: section.m_hotkeys )
+        {
+            auto& curr_hk = hotkey.GetCurrentValue();
+            if( curr_hk.m_Idcommand == aCmdId )
+            {
+                found_key = &hotkey;
+                break;
+            }
+        }
+    }
+
+    return found_key;
+}
+
+
 void HOTKEY_STORE::SaveAllHotkeys()
 {
     for( auto& section: m_hk_sections )
@@ -98,6 +122,7 @@ bool HOTKEY_STORE::CheckKeyConflicts( long aKey, const wxString& aSectionTag,
     for( auto& section: m_hk_sections )
     {
         const auto& sectionTag = *section.m_section.m_SectionTag;
+
         if( aSectionTag != g_CommonSectionTag
             && sectionTag != g_CommonSectionTag
             && sectionTag != aSectionTag )
