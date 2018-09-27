@@ -71,6 +71,15 @@ public:
         m_orig = m_changed;
     }
 
+    /**
+     * @brief Return true if the hotkey doesn't match the original (i.e. it
+     * has been changed)
+     */
+    bool HasUnsavedChange() const
+    {
+        return m_orig.m_KeyCode != m_changed.m_KeyCode;
+    }
+
     const wxString& GetSectionTag() const
     {
         return m_tag;

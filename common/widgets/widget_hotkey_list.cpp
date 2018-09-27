@@ -308,10 +308,17 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
 
         if( hkdata )
         {
-            const EDA_HOTKEY& hk = hkdata->GetChangedHotkey().GetCurrentValue();
+            const auto& changed_hk = hkdata->GetChangedHotkey();
+            const EDA_HOTKEY& hk = changed_hk.GetCurrentValue();
+
+            wxString key_text = KeyNameFromKeyCode( hk.m_KeyCode );
+
+            // mark unsaved changes
+            if( changed_hk.HasUnsavedChange() )
+                key_text += " *";
 
             SetItemText( i, 0, wxGetTranslation( hk.m_InfoMsg ) );
-            SetItemText( i, 1, KeyNameFromKeyCode( hk.m_KeyCode ) );
+            SetItemText( i, 1, key_text);
         }
     }
 }
