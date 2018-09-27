@@ -183,8 +183,6 @@ public:
     ~LOCALE_IO();
 
 private:
-    void setUserLocale( const char* aUserLocale );
-
     // allow for nesting of LOCALE_IO instantiations
     static std::atomic<unsigned int> m_c_count;
 
