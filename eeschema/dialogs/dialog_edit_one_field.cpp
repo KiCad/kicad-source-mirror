@@ -32,7 +32,7 @@
 #include <common.h>
 #include <kiway.h>
 #include <confirm.h>
-
+#include <kicad_string.h>
 #include <sch_base_frame.h>
 #include <sch_component.h>
 #include <class_libentry.h>
@@ -40,7 +40,6 @@
 #include <sch_component.h>
 #include <template_fieldnames.h>
 #include <class_library.h>
-#include <sch_validators.h>
 
 #include <dialog_edit_one_field.h>
 
@@ -101,12 +100,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
 
 void DIALOG_EDIT_ONE_FIELD::init()
 {
-    wxString msg;
-
     SetInitialFocus( m_TextValue );
-    SCH_BASE_FRAME* parent = GetParent();
-    bool libedit = parent->IsType( FRAME_SCH_LIB_EDITOR );
-    m_TextValue->SetValidator( SCH_FIELD_VALIDATOR( libedit, m_fieldId, &m_text ) );
 
     // Disable options for graphic text editing which are not needed for fields.
     m_CommonConvert->Show( false );
@@ -188,7 +182,7 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 {
-    m_TextValue->SetValue( m_text );
+    m_TextValue->SetValue( UnescapeString( m_text ) );
 
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
@@ -206,15 +200,22 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 {
-    m_text = m_TextValue->GetValue();
+    m_text = EscapeString( m_TextValue->GetValue() );
 
-    // There are lots of specific tests required to validate field text.
     if( m_fieldId == REFERENCE )
     {
         // Test if the reference string is valid:
         if( !SCH_COMPONENT::IsReferenceStringValid( m_text ) )
         {
             DisplayError( this, _( "Illegal reference field value!" ) );
+            return false;
+        }
+    }
+    else if( m_fieldId == VALUE )
+    {
+        if( m_text.IsEmpty() )
+        {
+            DisplayError( this, _( "Value may not be empty." ) );
             return false;
         }
     }

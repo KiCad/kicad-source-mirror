@@ -39,6 +39,79 @@
  */
 static const char illegalFileNameChars[] = "\\/:\"<>|";
 
+/**
+ * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
+ * characters which are:
+ *   (a) not legal in filenames
+ *   (b) used as control characters in LIB_IDs
+ *   (c) used to delineate hierarchical paths
+ */
+wxString EscapeString( const wxString& aSource )
+{
+    wxString converted;
+
+    for( wxUniChar c: aSource )
+    {
+        if( c == '\"' )
+            converted += "&quot;";
+        else if( c == '\'' )
+            converted += "&apos;";
+        else if( c == '&' )
+            converted += "&amp;";
+        else if( c == '<' )
+            converted += "&lt;";
+        else if( c == '>' )
+            converted += "&gt;";
+        else if( c == '\\' )
+            converted += "&Backslash;";
+        else if( c == '/' )
+            converted += "&frasl;";
+        else if( c == '|' )
+            converted += "&verbar;";
+        else if( c == ':' )
+            converted += "&colon;";
+        else if( c == ' ' )
+            converted += "&nbsp;";
+        else if( c == '%' )
+            converted += "&percnt;";
+        else if( c == '$' )
+            converted += "&dollar;";
+        else if( c == '\t' )
+            converted += "&tab;";
+        else if( c == '\n' || c == '\r' )
+            converted += "&Newline;";
+        else
+            converted += c;
+    }
+
+    return converted;
+}
+
+
+wxString UnescapeString( const wxString& aSource )
+{
+    wxString converted = aSource;
+
+    converted.Replace( "&quot;", "\"" );
+    converted.Replace( "&apos;", "'" );
+    converted.Replace( "&lt;", "<" );
+    converted.Replace( "&gt;", ">" );
+    converted.Replace( "&Backslash;", "\\" );
+    converted.Replace( "&frasl;", "/" );
+    converted.Replace( "&verbar;", "|" );
+    converted.Replace( "&colon;", ":" );
+    converted.Replace( "&nbsp;", " " );
+    converted.Replace( "&percnt;", "%" );
+    converted.Replace( "&dollar;", "$" );
+    converted.Replace( "&tab;", "\t" );
+    converted.Replace( "&Newline;", "\n" );
+
+    // must be done last
+    converted.Replace( "&amp;", "&" );
+
+    return converted;
+}
+
 
 int ReadDelimitedText( wxString* aDest, const char* aSource )
 {

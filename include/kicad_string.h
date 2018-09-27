@@ -37,6 +37,17 @@
 
 
 /**
+ * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
+ * characters which are:
+ *   (a) not legal in filenames
+ *   (b) used as control characters in LIB_IDs
+ *   (c) used to delineate hierarchical paths
+ */
+wxString EscapeString( const wxString& aSource );
+
+wxString UnescapeString( const wxString& aSource );
+
+/**
  * Function ReadDelimitedText
  * copies bytes from @a aSource delimited string segment to @a aDest buffer.
  * The extracted string will be null terminated even if truncation is necessary
