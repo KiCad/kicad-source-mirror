@@ -41,7 +41,7 @@ wxDEFINE_EVENT( NET_SELECTED, wxCommandEvent );
     #define LIST_PADDING 5
 #else
     #define POPUP_PADDING 0
-    #define LIST_ITEM_PADDING 5
+    #define LIST_ITEM_PADDING 2
     #define LIST_PADDING 5
 #endif
 
