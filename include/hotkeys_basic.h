@@ -71,6 +71,11 @@ public:
     EDA_HOTKEY( const wxChar* infomsg, int idcommand, int keycode, int idmenuevent = 0 );
     EDA_HOTKEY( const EDA_HOTKEY* base);
     void ResetKeyCodeToDefault() { m_KeyCode = m_defaultKeyCode; }
+
+    int GetDefaultKeyCode() const
+    {
+        return m_defaultKeyCode;
+    }
 };
 
 

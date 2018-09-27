@@ -56,11 +56,14 @@ public:
     }
 
     /**
-     * Reset the changed hotkey back to the original value.
+     * Gets the original value of the hotkey. This is what the hotkey used
+     * to be, and what it would be set to if reset.
+     *
+     * @return reference to the original hotkey.
      */
-    void ResetHotkey()
+    const EDA_HOTKEY& GetOriginalValue() const
     {
-        m_changed = m_orig;
+        return m_orig;
     }
 
     /**

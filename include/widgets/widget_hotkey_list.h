@@ -76,6 +76,17 @@ class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
      */
     void updateShownItems( const wxString& aFilterStr );
 
+    /**
+     * Attempt to change the given hotkey to the given key code.
+     *
+     * If the hotkey conflicts, the user is prompted to change anyway (and
+     * in doing so, unset the conflicting key), or cancel the attempt.
+     *
+     * @param aHotkey the change-able hotkey to try to change
+     * @param aKey the key code to change it to
+     */
+    void changeHotkey( CHANGED_HOTKEY& aHotkey, long aKey );
+
 protected:
 
     /**

@@ -321,6 +321,31 @@ void WIDGET_HOTKEY_LIST::UpdateFromClientData()
             SetItemText( i, 1, key_text);
         }
     }
+
+    // Trigger a resize in case column widths have changed
+    wxSizeEvent dummy_evt;
+    TWO_COLUMN_TREE_LIST::OnSize( dummy_evt );
+}
+
+
+void WIDGET_HOTKEY_LIST::changeHotkey( CHANGED_HOTKEY& aHotkey, long aKey )
+{
+    // See if this key code is handled in hotkeys names list
+    bool exists;
+    KeyNameFromKeyCode( aKey, &exists );
+
+    auto& curr_hk = aHotkey.GetCurrentValue();
+
+    if( exists && curr_hk.m_KeyCode != aKey )
+    {
+        const auto& tag = aHotkey.GetSectionTag();
+        bool can_update = ResolveKeyConflicts( aKey, tag );
+
+        if( can_update )
+        {
+            curr_hk.m_KeyCode = aKey;
+        }
+    }
 }
 
 
@@ -342,29 +367,8 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 
     if( hkdata && key )
     {
-        // See if this key code is handled in hotkeys names list
-        bool exists;
-        KeyNameFromKeyCode( key, &exists );
-
-        auto& changed_hk = hkdata->GetChangedHotkey();
-        auto& curr_hk = changed_hk.GetCurrentValue();
-
-        if( exists && curr_hk.m_KeyCode != key )
-        {
-            wxString tag = changed_hk.GetSectionTag();
-            bool canUpdate = ResolveKeyConflicts( key, tag );
-
-            if( canUpdate )
-            {
-                curr_hk.m_KeyCode = key;
-            }
-        }
-
+        changeHotkey( hkdata->GetChangedHotkey(), key );
         UpdateFromClientData();
-
-        // Trigger a resize in case column widths have changed
-        wxSizeEvent dummy_evt;
-        TWO_COLUMN_TREE_LIST::OnSize( dummy_evt );
     }
 }
 
@@ -372,8 +376,11 @@ void WIDGET_HOTKEY_LIST::EditItem( wxTreeListItem aItem )
 void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
-    hkdata->GetChangedHotkey().ResetHotkey();
 
+    auto& changed_hk = hkdata->GetChangedHotkey();
+    const auto& orig_hk = changed_hk.GetOriginalValue();
+
+    changeHotkey( changed_hk, orig_hk.m_KeyCode );
     UpdateFromClientData();
 }
 
@@ -381,8 +388,10 @@ void WIDGET_HOTKEY_LIST::ResetItem( wxTreeListItem aItem )
 void WIDGET_HOTKEY_LIST::ResetItemToDefault( wxTreeListItem aItem )
 {
     WIDGET_HOTKEY_CLIENT_DATA* hkdata = GetHKClientData( aItem );
-    hkdata->GetChangedHotkey().GetCurrentValue().ResetKeyCodeToDefault();
 
+    auto& changed_hk = hkdata->GetChangedHotkey();
+
+    changeHotkey( changed_hk, changed_hk.GetCurrentValue().GetDefaultKeyCode() );
     UpdateFromClientData();
 }
 
