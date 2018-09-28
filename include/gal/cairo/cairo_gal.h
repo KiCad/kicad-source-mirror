@@ -143,7 +143,7 @@ public:
     virtual void SetFillColor( const COLOR4D& aColor ) override;
 
     /// @copydoc GAL::SetLineWidth()
-    virtual void SetLineWidth( double aLineWidth ) override;
+    virtual void SetLineWidth( float aLineWidth ) override;
 
     /// @copydoc GAL::SetLayerDepth()
     virtual void SetLayerDepth( double aLayerDepth ) override;

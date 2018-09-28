@@ -1182,8 +1182,8 @@ void OPENGL_GAL::DrawGrid()
     nonCachedManager->EnableDepthTest( false );
 
     // sub-pixel lines all render the same
-    double minorLineWidth = std::max( 1.0, gridLineWidth ) * getWorldPixelSize();
-    double majorLineWidth = minorLineWidth * 2.0;
+    float minorLineWidth = std::fmax( 1.0f, gridLineWidth ) * getWorldPixelSize();
+    float majorLineWidth = minorLineWidth * 2.0f;
 
     // Draw the axis and grid
     // For the drawing the start points, end points and increments have

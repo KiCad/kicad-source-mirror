@@ -54,14 +54,14 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetLayerDepth( 0.0 );
     SetFlip( false, false );
-    SetLineWidth( 1.0 );
+    SetLineWidth( 1.0f );
     computeWorldScale();
     SetAxesEnabled( false );
 
     // Set grid defaults
     SetGridVisibility( true );
     SetCoarseGrid( 10 );
-    gridLineWidth = 0.5;
+    gridLineWidth = 0.5f;
     gridStyle = GRID_STYLE::LINES;
     gridMinSpacing = 10;
 
@@ -231,8 +231,8 @@ void GAL::DrawGrid()
     // Note: generic grids can't handle sub-pixel lines without
     // either losing fine/course distinction or having some dots
     // fail to render
-    double marker = std::max( 1.0, gridLineWidth ) / worldScale;
-    double doubleMarker = 2.0 * marker;
+    float marker = std::fmax( 1.0f, gridLineWidth ) / worldScale;
+    float doubleMarker = 2.0f * marker;
 
     // Draw axes if desired
     if( axesEnabled )

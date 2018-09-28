@@ -417,11 +417,10 @@ void CAIRO_GAL_BASE::SetFillColor( const COLOR4D& aColor )
 }
 
 
-void CAIRO_GAL_BASE::SetLineWidth( double aLineWidth )
+void CAIRO_GAL_BASE::SetLineWidth( float aLineWidth )
 {
     storePath();
-
-    lineWidth = aLineWidth;
+    GAL::SetLineWidth( aLineWidth );
 
     if( isGrouping )
     {
@@ -435,8 +434,8 @@ void CAIRO_GAL_BASE::SetLineWidth( double aLineWidth )
         // Make lines appear at least 1 pixel wide, no matter of zoom
         double x = 1.0, y = 1.0;
         cairo_device_to_user_distance( currentContext, &x, &y );
-        double minWidth = std::min( fabs( x ), fabs( y ) );
-        cairo_set_line_width( currentContext, std::max( aLineWidth, minWidth ) );
+        float minWidth = std::min( fabs( x ), fabs( y ) );
+        cairo_set_line_width( currentContext, std::fmax( aLineWidth, minWidth ) );
     }
 }
 

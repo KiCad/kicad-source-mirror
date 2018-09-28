@@ -283,7 +283,7 @@ public:
      *
      * @param aLineWidth is the line width.
      */
-    virtual void SetLineWidth( double aLineWidth )
+    virtual void SetLineWidth( float aLineWidth )
     {
         lineWidth = aLineWidth;
     }
@@ -293,7 +293,7 @@ public:
      *
      * @return the actual line width.
      */
-    inline double GetLineWidth() const
+    inline float GetLineWidth() const
     {
         return lineWidth;
     }
@@ -916,7 +916,7 @@ public:
      *
      * @return the grid line width
      */
-    inline double GetGridLineWidth() const
+    inline float GetGridLineWidth() const
     {
         return gridLineWidth;
     }
@@ -1042,7 +1042,7 @@ protected:
     bool globalFlipX;                          ///< Flag for X axis flipping
     bool globalFlipY;                          ///< Flag for Y axis flipping
 
-    double             lineWidth;              ///< The line width
+    float              lineWidth;              ///< The line width
 
     bool               isFillEnabled;          ///< Is filling of graphic objects enabled ?
     bool               isStrokeEnabled;        ///< Are the outlines stroked ?
@@ -1064,7 +1064,7 @@ protected:
     COLOR4D            axesColor;              ///< Color of the axes
     bool               axesEnabled;            ///< Should the axes be drawn
     int                gridTick;               ///< Every tick line gets the double width
-    double             gridLineWidth;          ///< Line width of the grid
+    float              gridLineWidth;          ///< Line width of the grid
     int                gridMinSpacing;         ///< Minimum screen size of the grid (pixels)
                                                ///< below which the grid is not drawn
 
