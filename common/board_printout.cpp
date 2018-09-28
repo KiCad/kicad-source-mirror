@@ -144,7 +144,9 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     if( m_PrintParams.m_PrintScale == 0.0 )
     {
         // Fit to page
-        scale = m_sheetSize.GetWidth() / bBox.GetWidth();
+        double scaleX = m_sheetSize.GetWidth() / bBox.GetWidth();
+        double scaleY = m_sheetSize.GetHeight() / bBox.GetHeight();
+        scale = std::min( scaleX, scaleY );
     }
     else if( m_PrintParams.m_PrintScale == 1.0 )
     {
