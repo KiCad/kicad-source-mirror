@@ -99,23 +99,24 @@ void TestLineChainEqualCPolyLine(SHAPE_LINE_CHAIN& lineChain, CPolyLine& polyLin
 BOOST_AUTO_TEST_CASE( Chamfer )
 {
     SHAPE_POLY_SET::POLYGON actual;
-    CPolyLine expected;
 
     // Test different distances, up to the half of the minimum segment longitude
-    for (int distance = 0; distance < 5; distance++) {
+    for( int distance = 0; distance < 5; distance++ )
+    {
         // Chamfered polygon to be tested.
         actual = common.holeyPolySet.ChamferPolygon( distance, 0 );
 
         // Chamfered polygon assumed to be right.
-        expected = *legacyPolyLine.Chamfer( distance );
+        // CPolyline::Chamfer returns new CPolyline - take ownership
+        std::unique_ptr<CPolyLine> expected( legacyPolyLine.Chamfer( distance ) );
 
         // Double check that there are no repeated corners in the legacy shape.
-        expected.RemoveNullSegments();
+        expected->RemoveNullSegments();
 
         // Test equality
-        for (size_t contourIdx = 0; contourIdx < actual.size(); contourIdx++)
+        for( size_t contourIdx = 0; contourIdx < actual.size(); contourIdx++ )
         {
-            TestLineChainEqualCPolyLine(actual[contourIdx], expected, contourIdx);
+            TestLineChainEqualCPolyLine(actual[contourIdx], *expected, contourIdx);
         }
     }
 }
