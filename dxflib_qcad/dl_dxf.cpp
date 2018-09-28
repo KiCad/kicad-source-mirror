@@ -6392,4 +6392,11 @@ void DL_Dxf::test()
     std::cout << "1 buf6: '" << buf6 << "'\n";
     stripWhiteSpace( &buf6 );
     std::cout << "2 buf6: '" << buf6 << "'\n";
+
+    delete( buf1 );
+    delete( buf2 );
+    delete( buf3 );
+    delete( buf4 );
+    delete( buf5 );
+    delete( buf6 );
 }
