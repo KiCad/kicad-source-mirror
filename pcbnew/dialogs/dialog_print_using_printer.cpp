@@ -35,6 +35,9 @@
 #include <enabler.h>
 #include <widgets/unit_binder.h>
 
+#include <tool/tool_manager.h>
+#include <tools/pcb_actions.h>
+
 #include <dialog_print_using_printer_base.h>
 
 #define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
@@ -99,6 +102,9 @@ bool DIALOG_PRINT_USING_PRINTER::m_ExcludeEdgeLayer;
 
 void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 {
+    // Selection affects the original item visibility
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
     const PAGE_INFO& pageInfo = GetPageSettings();
 
     if( s_PrintData == NULL )  // First print

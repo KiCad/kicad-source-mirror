@@ -37,6 +37,9 @@
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
 
+#include <tool/tool_manager.h>
+#include <tools/gerbview_actions.h>
+
 #include <enabler.h>
 
 ///@{
@@ -107,6 +110,9 @@ public:
 
 void GERBVIEW_FRAME::ToPrinter( wxCommandEvent& event )
 {
+    // Selection affects the original item visibility
+    GetToolManager()->RunAction( GERBVIEW_ACTIONS::selectionClear, true );
+
     if( s_printData == NULL )  // First print
         s_printData = new wxPrintData();
 
