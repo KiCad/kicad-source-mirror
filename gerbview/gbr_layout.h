@@ -24,7 +24,7 @@
 
 /**
  * @file gbr_layout.h
- * @brief Class CLASS_GBR_LAYOUT to handle info to draw/print loaded Gerber images
+ * @brief Class CLASS_GBR_LAYOUT to handle info to draw loaded Gerber images
  * and page frame reference
  */
 
@@ -56,7 +56,6 @@ private:
     mutable EDA_RECT    m_BoundingBox;
     TITLE_BLOCK         m_titles;
     wxPoint             m_originAxisPosition;
-    std::vector<int>    m_printLayersList;  // When printing: the list of graphic layers Id to print
 
 public:
 
@@ -116,7 +115,7 @@ public:
      * @param aDC = the current device context
      * @param aDrawMode = GR_COPY, GR_OR ... (not always used)
      * @param aOffset = an draw offset value
-     * @param aDisplayOptions = a GBR_DISPLAY_OPTIONS for draw/print display opts
+     * @param aDisplayOptions = a GBR_DISPLAY_OPTIONS for draw display opts
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset,
@@ -133,54 +132,6 @@ public:
      */
     void DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                            GR_DRAWMODE aDrawMode, COLOR4D aDrawColor );
-
-
-    /**
-     * Function SetPrintableLayers
-     * Set the list of printable graphic layers
-     * @param aLayerList = the new list (std::vector) of printable layer id
-     */
-    void SetPrintableLayers( const std::vector<int>& aLayerList  )
-    {
-        m_printLayersList = aLayerList;
-    }
-
-    /**
-     * Function GetPrintableLayers
-     * @return the list of printable layers
-     */
-    std::vector<int> GetPrintableLayers()
-    {
-        return m_printLayersList;
-    }
-
-    /**
-     * Function ClearPrintableLayers
-     * Clear the list of graphic layers to print
-     */
-    void ClearPrintableLayers()
-    {
-        m_printLayersList.clear();
-    }
-
-    /**
-     * Function AddLayerToPrintableList
-     * Add a layer to the list of graphic layers to print
-     * @param aLayer = the id of the graphic layer.
-     */
-    void AddLayerToPrintableList( int aLayer)
-    {
-        m_printLayersList.push_back( aLayer );
-    }
-
-
-     /**
-     * Function IsLayerPrintable
-     * tests whether a given layer is visible
-     * @param aLayer = The layer to be tested
-     * @return bool - true if the layer is in print list.
-     */
-    bool    IsLayerPrintable( int aLayer ) const;
 
     ///> @copydoc EDA_ITEM::Visit()
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;

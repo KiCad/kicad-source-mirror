@@ -29,6 +29,7 @@
 #include <class_board.h>
 
 #include <pcb_painter.h>
+#include <view/view.h>
 
 PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PRINT_PARAMETERS& aParams,
         const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle ) :
@@ -40,6 +41,7 @@ PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PRINT_PARAMETERS& aParams
 
 bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 {
+    // Store the layerset, as it is going to be modified below and the original settings are needed
     LSET lset = m_PrintParams.m_PrintMaskLayer;
     int pageCount = lset.count();
     wxString layer;
@@ -74,9 +76,48 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
     DrawPage( layer, aPage, pageCount );
 
+    // Restore the original layer set, so the next page can be printed
     m_PrintParams.m_PrintMaskLayer = lset;
 
     return true;
+}
+
+
+void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
+        const LSET& aLayerSet )
+{
+    BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
+
+    for( LSEQ layerSeq = m_PrintParams.m_PrintMaskLayer.Seq(); layerSeq; ++layerSeq )
+        aView->SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
+
+    // Enable pad layers corresponding to the selected copper layers
+    if( aLayerSet.test( F_Cu ) )
+        aView->SetLayerVisible( LAYER_PAD_FR, true );
+
+    if( aLayerSet.test( B_Cu ) )
+        aView->SetLayerVisible( LAYER_PAD_BK, true );
+
+    if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
+    {
+        // Enable items on copper layers, but do not draw holes
+        const int copperItems[] = {
+            LAYER_PADS_TH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
+        };
+
+        for( int item : copperItems )
+            aView->SetLayerVisible( item, true );
+    }
+
+
+    // Keep certain items always enabled/disabled and just rely on the layer visibility
+    const int alwaysEnabled[] = {
+        LAYER_MOD_TEXT_FR, LAYER_MOD_TEXT_BK, LAYER_MOD_FR, LAYER_MOD_BK,
+        LAYER_MOD_VALUES, LAYER_MOD_REFERENCES, LAYER_TRACKS
+    };
+
+    for( int item : alwaysEnabled )
+        aView->SetLayerVisible( item, true );
 }
 
 

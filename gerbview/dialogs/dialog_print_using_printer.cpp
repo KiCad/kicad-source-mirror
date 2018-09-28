@@ -102,9 +102,6 @@ public:
     bool IsMirrored() { return m_Print_Mirror->IsChecked(); }
     bool PrintUsingSinglePage() { return true; }
     int  SetLayerSetFromListSelection();
-    // Prepare print parameters. return true if OK,
-    // false if there is an issue (mainly no printable layers)
-    bool PreparePrintPrms();
 };
 
 
@@ -239,16 +236,18 @@ void DIALOG_PRINT_USING_PRINTER::InitValues( )
 
 int DIALOG_PRINT_USING_PRINTER::SetLayerSetFromListSelection()
 {
-    std::vector<int> layerList;
+    s_Parameters.m_PrintMaskLayer = LSET();
+    s_Parameters.m_PageCount = 0;
+    s_Parameters.m_Flags = 0;
 
-    for( int ii = 0; ii < GERBER_DRAWLAYERS_COUNT; ++ii )
+    for( unsigned layer = 0; layer < DIM( m_BoxSelectLayer ); ++layer )
     {
-        if( m_BoxSelectLayer[ii]->IsChecked() && m_BoxSelectLayer[ii]->IsEnabled() )
-            layerList.push_back( ii );
+        if( m_BoxSelectLayer[layer]->IsChecked() && m_BoxSelectLayer[layer]->IsEnabled() )
+        {
+            ++s_Parameters.m_PageCount;
+            s_Parameters.m_PrintMaskLayer.set( layer );
+        }
     }
-
-    m_Parent->GetGerberLayout()->SetPrintableLayers( layerList );
-    s_Parameters.m_PageCount = layerList.size();
 
     return s_Parameters.m_PageCount;
 }
@@ -281,8 +280,7 @@ void DIALOG_PRINT_USING_PRINTER::OnCloseWindow( wxCloseEvent& event )
 void DIALOG_PRINT_USING_PRINTER::SetPrintParameters()
 {
     s_Parameters.m_PrintMirror = m_Print_Mirror->GetValue();
-    s_Parameters.m_Print_Black_and_White =
-        m_ModeColorOption->GetSelection() != 0;
+    s_Parameters.m_Print_Black_and_White = m_ModeColorOption->GetSelection() != 0;
 
     // Due to negative objects in gerber objects, always use one page per image,
     // because these objects create artefact when they are printed on an existing image.
@@ -326,17 +324,19 @@ void DIALOG_PRINT_USING_PRINTER::SetPrintParameters()
     }
 }
 
+
 void DIALOG_PRINT_USING_PRINTER::OnScaleSelectionClick( wxCommandEvent& event )
 {
     double scale = s_ScaleList[m_ScaleOption->GetSelection()];
-    bool enable = (scale == 1.0);
+    bool enable = ( scale == 1.0 );
 
     if( m_FineAdjustXscaleOpt )
-        m_FineAdjustXscaleOpt->Enable(enable);
+        m_FineAdjustXscaleOpt->Enable( enable );
 
     if( m_FineAdjustYscaleOpt )
-        m_FineAdjustYscaleOpt->Enable(enable);
+        m_FineAdjustYscaleOpt->Enable( enable );
 }
+
 
 // Open a dialog box for printer setup (printer options, page size ...)
 void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
@@ -350,26 +350,20 @@ void DIALOG_PRINT_USING_PRINTER::OnPageSetup( wxCommandEvent& event )
     (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
 }
 
-bool DIALOG_PRINT_USING_PRINTER::PreparePrintPrms()
+
+
+// Open and display a previewer frame for printing
+void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 {
     SetPrintParameters();
 
     // If no layer selected, we have no plot. prompt user if it happens
     // because he could think there is a bug in Pcbnew:
-    if( m_Parent->GetGerberLayout()->GetPrintableLayers().size() == 0 )
+    if( s_Parameters.m_PrintMaskLayer == 0 )
     {
         DisplayError( this, _( "No layer selected" ) );
-        return false;
-    }
-
-    return true;
-}
-
-// Open and display a previewer frame for printing
-void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
-{
-    if( !PreparePrintPrms() )
         return;
+    }
 
     // Pass two printout objects: for preview, and possible printing.
     wxString title = _( "Print Preview" );
@@ -400,11 +394,17 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintPreview( wxCommandEvent& event )
 
 void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
 {
-    if( !PreparePrintPrms() )
+    SetPrintParameters();
+
+    // If no layer selected, we have no plot. prompt user if it happens
+    // because he could think there is a bug in Pcbnew:
+    if( s_Parameters.m_PrintMaskLayer == 0 )
+    {
+        DisplayError( this, _( "No layer selected" ) );
         return;
+    }
 
     wxPrintDialogData printDialogData( *s_printData );
-
     wxPrinter printer( &printDialogData );
     wxString title = _( "Print" );
     auto printout = std::unique_ptr<GERBVIEW_PRINTOUT>( createPrintout( _( "Print" ) ) );
@@ -423,4 +423,3 @@ void DIALOG_PRINT_USING_PRINTER::OnPrintButtonClick( wxCommandEvent& event )
         *s_printData = printer.GetPrintDialogData().GetPrintData();
     }
 }
-

@@ -75,7 +75,8 @@ enum PCB_LAYER_ID: int
     UNDEFINED_LAYER = -1,
     UNSELECTED_LAYER = -2,
 
-    F_Cu = 0,           // 0
+    PCBNEW_LAYER_ID_START = 0,
+    F_Cu = PCBNEW_LAYER_ID_START,
     In1_Cu,
     In2_Cu,
     In3_Cu,

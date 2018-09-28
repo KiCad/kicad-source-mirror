@@ -840,10 +840,7 @@ void GERBVIEW_FRAME::SetVisibleLayers( long aLayerMask )
 
 bool GERBVIEW_FRAME::IsLayerVisible( int aLayer ) const
 {
-    if( ! m_DisplayOptions.m_IsPrinting )
-        return m_LayersManager->IsLayerVisible( aLayer );
-    else
-        return GetGerberLayout()->IsLayerPrintable( aLayer );
+    return m_LayersManager->IsLayerVisible( aLayer );
 }
 
 

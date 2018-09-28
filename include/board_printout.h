@@ -125,6 +125,9 @@ public:
             int aPageNum = 1, int aPageCount = 1 );
 
 protected:
+    ///> Enables layers visibility for a printout
+    virtual void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet );
+
     ///> Returns bounding box of the printed objects (excluding worksheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
 

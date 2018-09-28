@@ -53,18 +53,6 @@ GERBER_FILE_IMAGE_LIST* GBR_LAYOUT::GetImagesList() const
 }
 
 
-bool GBR_LAYOUT::IsLayerPrintable( int aLayer ) const
-{
-    for( unsigned ii = 0; ii < m_printLayersList.size(); ++ii )
-    {
-        if( m_printLayersList[ii] == aLayer )
-            return true;
-    }
-
-    return false;
-}
-
-
 EDA_RECT GBR_LAYOUT::ComputeBoundingBox() const
 {
     EDA_RECT bbox;
@@ -204,12 +192,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        if( aDisplayOptions->m_IsPrinting )
-            gerber->m_IsVisible = IsLayerPrintable( layer );
-        else
-            gerber->m_IsVisible = gerbFrame->IsLayerVisible( layer );
-
-        if( !gerber->m_IsVisible )
+        if( !gerbFrame->IsLayerVisible( layer ) )
             continue;
 
         gerber->m_PositiveDrawColor = gerbFrame->GetLayerColor( GERBER_DRAW_LAYER( layer ) );

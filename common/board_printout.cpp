@@ -104,12 +104,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     view->SetScaleLimits( 10e9, 0.0001 );
     view->SetScale( 1.0 );
 
-    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
-    {
-        view->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
-        view->SetLayerVisible( i, true );
-    }
-
+    setupViewLayers( view, m_PrintParams.m_PrintMaskLayer );
 
     BOX2I bBox; // determine printout bounding box
 
@@ -153,5 +148,17 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     {
     KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
     view->Redraw();
+    }
+}
+
+
+void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
+        const LSET& aLayerSet )
+{
+    // Disable all layers by default, let specific implementions enable required layers
+    for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
+    {
+        aView->SetLayerVisible( i, false );
+        aView->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 }

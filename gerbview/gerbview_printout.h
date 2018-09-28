@@ -33,6 +33,8 @@ public:
     bool OnPrintPage( int aPage ) override;
 
 protected:
+    void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet ) override;
+
     EDA_RECT getBoundingBox() override;
 
     std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) override;

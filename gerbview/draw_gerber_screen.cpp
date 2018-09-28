@@ -42,51 +42,6 @@
 #include "gerbview_printout.h"
 
 
-void GERBVIEW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMasklayer,
-                                bool aPrintMirrorMode, void* aData )
-{
-    wxCHECK_RET( aData != NULL, wxT( "aData cannot be NULL." ) );
-
-    PRINT_PARAMETERS* printParameters = (PRINT_PARAMETERS*) aData;
-
-    // Build a suitable draw options for printing:
-    GBR_DISPLAY_OPTIONS displayOptions;
-    displayOptions.m_DisplayFlashedItemsFill = true;
-    displayOptions.m_DisplayLinesFill = true;
-    displayOptions.m_DisplayPolygonsFill = true;
-    displayOptions.m_DisplayDCodes = false;
-    displayOptions.m_IsPrinting = true;
-    displayOptions.m_ForceBlackAndWhite = printParameters->m_Print_Black_and_White;
-    displayOptions.m_NegativeDrawColor = GetDrawBgColor();
-    displayOptions.m_BgDrawColor = GetDrawBgColor();
-
-    // Find the graphic layer to be printed
-    int page_number = printParameters->m_Flags;    // contains the page number (not necessarily graphic layer number)
-
-    // Find the graphic layer number for the printed page (search through the mask and count bits)
-    std::vector<int> printList = GetGerberLayout()->GetPrintableLayers();
-
-    if( printList.size() < 1 )
-        return;
-
-    int graphiclayer = printList[page_number-1];
-
-    // In Gerbview, only one graphic layer is printed by page.
-    // So we temporary set the graphic layer list to print with only one layer id
-    GetGerberLayout()->ClearPrintableLayers();
-    GetGerberLayout()->AddLayerToPrintableList( graphiclayer );
-    m_canvas->SetPrintMirrored( aPrintMirrorMode );
-
-    GetGerberLayout()->Draw( m_canvas, aDC, (GR_DRAWMODE) 0,
-                             wxPoint( 0, 0 ), &displayOptions );
-
-    m_canvas->SetPrintMirrored( false );
-
-    // Restore the list of printable graphic layers list:
-    GetGerberLayout()->SetPrintableLayers( printList );
-}
-
-
 void GERBVIEW_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 {
     GBR_SCREEN* screen = (GBR_SCREEN*) GetScreen();

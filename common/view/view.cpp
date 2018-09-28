@@ -507,10 +507,12 @@ void VIEW::CopySettings( const VIEW* aOtherView )
 
 void VIEW::SetGAL( GAL* aGal )
 {
+    bool recacheGroups = ( m_gal != nullptr );    // recache groups only if GAL is reassigned
     m_gal = aGal;
 
     // clear group numbers, so everything is going to be recached
-    clearGroupCache();
+    if( recacheGroups )
+        clearGroupCache();
 
     // every target has to be refreshed
     MarkDirty();

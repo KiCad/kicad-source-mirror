@@ -56,21 +56,24 @@ GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const PRINT_PARAMETER
 
 bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
 {
-    // in gerbview, draw layers are always printed on separate pages
-    // because handling negative objects when using only one page is tricky
-    m_PrintParams.m_Flags = aPage;
+    // Store the layerset, as it is going to be modified below and the original settings are needed
+    LSET lset = m_PrintParams.m_PrintMaskLayer;
 
     // The gerber filename of the page to print will be printed to the worksheet.
     // Find this filename:
     // Find the graphic layer number for the page to print
-    std::vector<int> printList = m_layout->GetPrintableLayers();
+    LSEQ seq = lset.UIOrder();
+    wxCHECK( unsigned( aPage - 1 ) < seq.size(), false );
+    auto layerId = seq[aPage - 1];
 
-    if( printList.size() < 1 )      // Should not occur
-        return false;
+    // In gerbview, draw layers are always printed on separate pages
+    // because handling negative objects when using only one page is tricky
 
-    int graphiclayer = printList[aPage-1];
+    // Enable only one layer to create a printout
+    m_PrintParams.m_PrintMaskLayer = LSET( layerId );
+
     GERBER_FILE_IMAGE_LIST& gbrImgList = GERBER_FILE_IMAGE_LIST::GetImagesList();
-    GERBER_FILE_IMAGE* gbrImage = gbrImgList.GetGbrImage( graphiclayer );
+    GERBER_FILE_IMAGE* gbrImage = gbrImgList.GetGbrImage( layerId );
     wxString gbr_filename;
 
     if( gbrImage )
@@ -78,7 +81,20 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
 
     DrawPage( gbr_filename, aPage, m_PrintParams.m_PageCount );
 
+    // Restore the original layer set, so the next page can be printed
+    m_PrintParams.m_PrintMaskLayer = lset;
+
     return true;
+}
+
+
+void GERBVIEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
+        const LSET& aLayerSet )
+{
+    BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
+
+    for( LSEQ layerSeq = m_PrintParams.m_PrintMaskLayer.Seq(); layerSeq; ++layerSeq )
+        aView->SetLayerVisible( GERBVIEW_LAYER_ID_START + *layerSeq, true );
 }
 
 
