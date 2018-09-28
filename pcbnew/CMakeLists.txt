@@ -291,7 +291,6 @@ set( PCBNEW_CLASS_SRCS
     pcbplot.cpp
     plot_board_layers.cpp
     plot_brditems_plotter.cpp
-    print_board_functions.cpp
     ratsnest.cpp
     specctra_import_export/specctra.cpp
     specctra_import_export/specctra_export.cpp

@@ -356,17 +356,6 @@ public:
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox );
 
-    /**
-     * Function PrintPage , virtual
-     * Print the page pointed by the current screen, set by the calling print function
-     * @param aDC = wxDC given by the calling print function
-     * @param aPrintMaskLayer = a 32 bits mask: bit n = 1 -> layer n is printed
-     * @param aPrintMirrorMode = true to plot mirrored
-     * @param aData = a pointer on an auxiliary data (NULL if not used)
-     */
-    virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
-                            void* aData = NULL ) override;
-
     void GetKicadAbout( wxCommandEvent& event );
 
     /**

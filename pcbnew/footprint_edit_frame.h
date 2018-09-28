@@ -254,18 +254,6 @@ public:
      */
     void ToPrinter( wxCommandEvent& event );
 
-    /**
-     * Function PrintPage
-     * is used to print a page. Prints the page pointed by ActiveScreen,
-     * set by the calling print function.
-     * @param aDC = wxDC given by the calling print function
-     * @param aPrintMaskLayer = not used here
-     * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
-     * @param aData = a pointer on an auxiliary data (NULL if not used)
-     */
-    virtual void PrintPage( wxDC* aDC, LSET aPrintMaskLayer, bool aPrintMirrorMode,
-                            void * aData = NULL) override;
-
     // BOARD handling
 
     /**
