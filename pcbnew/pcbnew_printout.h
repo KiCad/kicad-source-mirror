@@ -21,6 +21,7 @@
 #define PCBNEW_PRINTOUT_H
 
 #include <board_printout.h>
+#include <pcb_painter.h>
 
 class BOARD;
 
@@ -35,6 +36,8 @@ public:
 protected:
     void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet ) override;
 
+    void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter ) override;
+
     EDA_RECT getBoundingBox() override;
 
     std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) override;
@@ -42,5 +45,47 @@ protected:
 private:
     BOARD* m_board;
 };
+
+
+namespace KIGFX {
+/**
+ * Special flavor of PCB_PAINTER that contains
+ * modifications to handle printing options.
+ */
+class PCB_PRINT_PAINTER : public PCB_PAINTER
+{
+public:
+    PCB_PRINT_PAINTER( GAL* aGal )
+        : PCB_PAINTER( aGal ), m_drillMarkReal( false ), m_drillMarkSize( 0 )
+    {
+    }
+
+    /**
+     * Set drill marks visibility and options.
+     * @param aRealSize when enabled, drill marks represent actual holes. Otherwise aSize
+     * parameter is used.
+     * @param aSize is drill mark size (internal units), valid only when aRealSize == false.
+     */
+    void SetDrillMarks( bool aRealSize, unsigned int aSize = 0 )
+    {
+        m_drillMarkReal = aRealSize;
+        m_drillMarkSize = aSize;
+    }
+
+protected:
+    int getDrillShape( const D_PAD* aPad ) const override;
+
+    VECTOR2D getDrillSize( const D_PAD* aPad ) const override;
+
+    int getDrillSize( const VIA* aVia ) const override;
+
+    ///> Flag deciding whether use the actual hole size or user-specified size for drill marks
+    bool m_drillMarkReal;
+
+    ///> User-specified size for drill marks (expressed in internal units)
+    int m_drillMarkSize;
+};
+
+}; // namespace KIGFX
 
 #endif /* PCBNEW_PRINTOUT_H */

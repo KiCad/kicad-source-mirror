@@ -183,6 +183,7 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; ++i )
     {
         aView->SetLayerVisible( i, false );
+        aView->SetTopLayer( i, false );
         aView->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
 }
@@ -191,4 +192,5 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
 void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
 {
     aPainter->GetSettings()->SetOutlineWidth( m_PrintParams.m_PenDefaultSize );
+    aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
 }

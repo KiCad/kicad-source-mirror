@@ -101,12 +101,23 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
     if( ( aLayerSet & LSET::AllCuMask() ).any() )   // Items visible on any copper layer
     {
         // Enable items on copper layers, but do not draw holes
-        const int copperItems[] = {
-            LAYER_PADS_TH, LAYER_VIA_MICROVIA, LAYER_VIA_BBLIND, LAYER_VIA_THROUGH
-        };
-
-        for( int item : copperItems )
+        for( auto item : { LAYER_PADS_TH, LAYER_VIA_MICROVIA,
+                LAYER_VIA_BBLIND, LAYER_VIA_THROUGH } )
+        {
             aView->SetLayerVisible( item, true );
+        }
+
+        if( m_PrintParams.m_DrillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
+        {
+            // Enable hole layers to draw drill marks
+            for( auto holeLayer : { LAYER_PADS_PLATEDHOLES,
+                    LAYER_NON_PLATEDHOLES, LAYER_VIAS_HOLES })
+            {
+                aView->SetLayerVisible( holeLayer, true );
+                aView->SetTopLayer( holeLayer, true );
+            }
+        }
+
     }
 
 
@@ -121,6 +132,33 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
 }
 
 
+void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
+{
+    BOARD_PRINTOUT::setupPainter( aPainter );
+
+    auto painter = static_cast<KIGFX::PCB_PRINT_PAINTER*>( aPainter.get() );
+
+    switch( m_PrintParams.m_DrillShapeOpt )
+    {
+        case PRINT_PARAMETERS::NO_DRILL_SHAPE:
+            painter->SetDrillMarks( false, 0 );
+            break;
+
+        case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
+            painter->SetDrillMarks( false, Millimeter2iu( 0.3 ) );
+            break;
+
+        case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
+            painter->SetDrillMarks( true );
+            break;
+    }
+
+    painter->GetSettings()->SetLayerColor( LAYER_PADS_PLATEDHOLES, COLOR4D::WHITE );
+    painter->GetSettings()->SetLayerColor( LAYER_NON_PLATEDHOLES, COLOR4D::WHITE );
+    painter->GetSettings()->SetLayerColor( LAYER_VIAS_HOLES, COLOR4D::WHITE );
+}
+
+
 EDA_RECT PCBNEW_PRINTOUT::getBoundingBox()
 {
     return m_board->ComputeBoundingBox();
@@ -129,5 +167,26 @@ EDA_RECT PCBNEW_PRINTOUT::getBoundingBox()
 
 std::unique_ptr<KIGFX::PAINTER> PCBNEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 {
-    return std::unique_ptr<KIGFX::PAINTER>( new KIGFX::PCB_PAINTER( aGal ) );
+    return std::unique_ptr<KIGFX::PAINTER>( new KIGFX::PCB_PRINT_PAINTER( aGal ) );
+}
+
+
+int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const D_PAD* aPad ) const
+{
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillShape( aPad ) : PAD_DRILL_SHAPE_CIRCLE;
+}
+
+
+VECTOR2D KIGFX::PCB_PRINT_PAINTER::getDrillSize( const D_PAD* aPad ) const
+{
+    // TODO should it depend on the pad size?
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aPad ) :
+        VECTOR2D( m_drillMarkSize, m_drillMarkSize );
+}
+
+
+int KIGFX::PCB_PRINT_PAINTER::getDrillSize( const VIA* aVia ) const
+{
+    // TODO should it depend on the via size?
+    return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillSize( aVia ) : m_drillMarkSize;
 }

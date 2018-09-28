@@ -278,6 +278,24 @@ int PCB_PAINTER::getLineThickness( int aActualThickness ) const
 }
 
 
+int PCB_PAINTER::getDrillShape( const D_PAD* aPad ) const
+{
+    return aPad->GetDrillShape();
+}
+
+
+VECTOR2D PCB_PAINTER::getDrillSize( const D_PAD* aPad ) const
+{
+    return VECTOR2D( aPad->GetDrillSize() );
+}
+
+
+int PCB_PAINTER::getDrillSize( const VIA* aVia ) const
+{
+    return aVia->GetDrillValue();
+}
+
+
 bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
 {
     const EDA_ITEM* item = dynamic_cast<const EDA_ITEM*>( aItem );
@@ -478,7 +496,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
     // Choose drawing settings depending on if we are drawing via's pad or hole
     if( aLayer == LAYER_VIAS_HOLES )
-        radius = aVia->GetDrillValue() / 2.0;
+        radius = getDrillSize( aVia ) / 2.0;
     else
         radius = aVia->GetWidth() / 2.0;
 
@@ -677,9 +695,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     }
 
     // Pad drawing
-    COLOR4D color = m_pcbSettings.GetColor( aPad, aLayer );
+    COLOR4D color;
 
-    // Pad holes color is specific
+    // Pad holes color is type specific
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         // Hole color is the background color for plated holes, but a specific color
@@ -691,6 +709,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             color = m_pcbSettings.GetColor( aPad, aLayer );
         else
             color = m_pcbSettings.GetBackgroundColor();
+    }
+    else
+    {
+        color = m_pcbSettings.GetColor( aPad, aLayer );
     }
 
     VECTOR2D size;
@@ -721,8 +743,8 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
     if( aLayer == LAYER_PADS_PLATEDHOLES || aLayer == LAYER_NON_PLATEDHOLES )
     {
         // Drawing hole: has same shape as PAD_CIRCLE or PAD_OVAL
-        size  = VECTOR2D( aPad->GetDrillSize() ) / 2.0;
-        shape = aPad->GetDrillShape() == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE;
+        size  = getDrillSize( aPad ) / 2.0;
+        shape = getDrillShape( aPad ) == PAD_DRILL_SHAPE_OBLONG ? PAD_SHAPE_OVAL : PAD_SHAPE_CIRCLE;
     }
     else if( aLayer == F_Mask || aLayer == B_Mask )
     {

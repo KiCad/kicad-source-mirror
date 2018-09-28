@@ -236,6 +236,21 @@ protected:
      * @return the thickness to draw
      */
     int getLineThickness( int aActualThickness ) const;
+
+    /**
+     * Return drill shape of a pad.
+     */
+    virtual int getDrillShape( const D_PAD* aPad ) const;
+
+    /**
+     * Return drill size for a pad (internal units).
+     */
+    virtual VECTOR2D getDrillSize( const D_PAD* aPad ) const;
+
+    /**
+     * Return drill diameter for a via (internal units).
+     */
+    virtual int getDrillSize( const VIA* aVia ) const;
 };
 } // namespace KIGFX
 
