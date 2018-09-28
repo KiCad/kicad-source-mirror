@@ -234,6 +234,16 @@ public:
         return false;
     }
 
+    /**
+     * Set line width used for drawing outlines.
+     *
+     * @param aWidth is the new width.
+     */
+    void SetOutlineWidth( float aWidth )
+    {
+        m_outlineWidth = aWidth;
+    }
+
 protected:
     /**
      * Function update

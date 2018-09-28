@@ -128,6 +128,9 @@ protected:
     ///> Enables layers visibility for a printout
     virtual void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet );
 
+    ///> Configures PAINTER object for a printout
+    virtual void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter );
+
     ///> Returns bounding box of the printed objects (excluding worksheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
 

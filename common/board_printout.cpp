@@ -104,7 +104,25 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     view->SetScaleLimits( 10e9, 0.0001 );
     view->SetScale( 1.0 );
 
+
+    // Set the color scheme
+    auto srcSettings = m_view->GetPainter()->GetSettings();
+    auto dstSettings = view->GetPainter()->GetSettings();
+
+    if( m_PrintParams.m_Print_Black_and_White )
+    {
+        for( int i = 0; i < LAYER_ID_COUNT; ++i )
+            dstSettings->SetLayerColor( i, COLOR4D::BLACK );
+    }
+    else // color enabled
+    {
+        for( int i = 0; i < LAYER_ID_COUNT; ++i )
+            dstSettings->SetLayerColor( i, srcSettings->GetLayerColor( i ) );
+    }
+
+
     setupViewLayers( view, m_PrintParams.m_PrintMaskLayer );
+    setupPainter( painter );
 
     BOX2I bBox; // determine printout bounding box
 
@@ -137,6 +155,10 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     }
 
 
+    if( m_PrintParams.m_PrintMirror )
+        gal->SetFlip( true, false );
+
+
     // TODO fix 'Preview' button
     VECTOR2D nps( GetLogicalPageRect().width, GetLogicalPageRect().height );
 
@@ -161,4 +183,10 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
         aView->SetLayerVisible( i, false );
         aView->SetLayerTarget( i, KIGFX::TARGET_NONCACHED );
     }
+}
+
+
+void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
+{
+    aPainter->GetSettings()->SetOutlineWidth( m_PrintParams.m_PenDefaultSize );
 }

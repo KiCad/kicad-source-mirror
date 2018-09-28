@@ -82,6 +82,8 @@ public:
     CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
             std::unique_ptr<CAIRO_PRINT_CTX> aContext );
 
+    void SetLineWidth( float aLineWidth ) override;
+
     void ComputeWorldScreenMatrix() override;
 
     GAL* GetGAL() override
