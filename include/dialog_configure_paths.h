@@ -62,11 +62,6 @@ protected:
     void AppendEnvVar( const wxString& aName, const wxString& aPath, bool isExternal );
     void AppendSearchPath( const wxString& aName, const wxString& aPath, const wxString& aDesc );
 
-    /**
-     * Determine if a particular ENV_VAR is protected
-     */
-    bool IsEnvVarImmutable( const wxString aEnvVar );
-
 private:
     wxString            m_errorMsg;
     wxGrid*             m_errorGrid;

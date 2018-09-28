@@ -271,6 +271,7 @@ set( COMMON_SRCS
     eda_pattern_match.cpp
     eda_size_ctrl.cpp
     env_paths.cpp
+    env_vars.cpp
     exceptions.cpp
     executable_names.cpp
     filename_resolver.cpp

@@ -29,6 +29,7 @@
 #include <validators.h>
 #include <html_messagebox.h>
 #include <filename_resolver.h>
+#include <env_vars.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 
@@ -549,60 +550,25 @@ void DIALOG_CONFIGURE_PATHS::OnHelp( wxCommandEvent& event )
                       "level.  Environment variables defined at the system or user level "
                       "take precedence over the ones defined in this table.  This means the "
                       "values in this table are ignored." );
-    msg << wxT( "<br><br><b>" );
+    msg << "<br><br><b>";
     msg << _( "To ensure environment variable names are valid on all platforms, the name field "
               "will only accept upper case letters, digits, and the underscore characters." );
-    msg << wxT( "</b><br><br>" );
-    msg << _( "<b>KICAD_SYMBOL_DIR</b> is the base path of the locally installed symbol libraries." );
-    msg << wxT( "<br><br>" );
-    msg << _( "<b>KIGITHUB</b> is used by KiCad to define the URL of the repository "
-              "of the official KiCad footprint libraries." );
-    msg << wxT( "<br><br>" );
-    msg << _( "<b>KISYS3DMOD</b> is the base path of system footprint 3D "
-              "shapes (.3Dshapes folders)." );
-    msg << wxT( "<br><br>" );
-    msg << _( "<b>KISYSMOD</b> is the base path of locally installed system "
-              "footprint libraries (.pretty folders)." );
-    msg << wxT( "<br><br>" );
-    msg << _( "<b>KIPRJMOD</b> is internally defined by KiCad (cannot be edited) and is set "
-              "to the absolute path of the currently loaded project file.  This environment "
-              "variable can be used to define files and paths relative to the currently loaded "
-              "project.  For instance, ${KIPRJMOD}/libs/footprints.pretty can be defined as a "
-              "folder containing a project specific footprint library named footprints.pretty." );
-    msg << wxT( "<br><br>" );
-    msg << _( "<b>KICAD_PTEMPLATES</b> is optional and can be defined if you want to "
-              "create your own project templates folder." );
+    msg << "</b>";
+
+    for( const auto& var: GetPredefinedEnvVars() )
+    {
+        msg << "<br><br><b>" << var << "</b>";
+
+        const auto desc = LookUpEnvVarHelp( var );
+
+        if( desc.size() > 0 )
+            msg << ": " << desc;
+
+    }
 
     HTML_MESSAGE_BOX dlg( GetParent(), _( "Environment Variable Help" ) );
     dlg.SetDialogSizeInDU( 400, 250 );
 
     dlg.AddHTML_Text( msg );
     dlg.ShowModal();
-}
-
-
-bool DIALOG_CONFIGURE_PATHS::IsEnvVarImmutable( const wxString aEnvVar )
-{
-    /*
-     * TODO - Instead of defining these values here,
-     * extract them from elsewhere in the program
-     * (where they are originally defined)
-     */
-
-    static const wxString immutable[] = {
-            "KIGITHUB",
-            "KISYS3DMOD",
-            "KISYSMOD",
-            "KIPRJMOD",
-            "KICAD_PTEMPLATES",
-            "KICAD_SYMBOL_DIR"
-    };
-
-    for( const auto& ii : immutable )
-    {
-        if( aEnvVar.Cmp( ii ) == 0 )
-            return true;
-    }
-
-    return false;
 }
