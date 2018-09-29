@@ -317,19 +317,21 @@ bool EDIT_TOOL::Init()
     menu.AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::NotEmpty );
 
 
+    menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::cutToClipboard, SELECTION_CONDITIONS::NotEmpty );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
     menu.AddItem( PCB_ACTIONS::pasteFromClipboard, noActiveToolCondition );
-    menu.AddSeparator( noActiveToolCondition );
 
     // Mirror only available in modedit
+    menu.AddSeparator( editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::mirror, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::createPadFromShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::explodePadToShapes, editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
 
     // Footprint actions
+    menu.AddSeparator( singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::editFootprintInFpEditor, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::updateFootprints, singleModuleCondition );
     menu.AddItem( PCB_ACTIONS::exchangeFootprints, singleModuleCondition );
