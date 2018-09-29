@@ -600,18 +600,19 @@ public:
 
         if( aCol == REFERENCE )
         {
-            for( unsigned row = 0; row < GetNumberRows(); ++row )
+            for( int row = 0; row < GetNumberRows(); ++row )
             {
                 width = std::max( width, GetTextSize( GetValue( row, aCol ), GetView() ).x );
             }
         }
         else
         {
+            wxString column_label = GetColLabelValue( aCol );  // component fieldName or Qty string
+
             for( unsigned compRef = 0; compRef < m_componentRefs.GetCount(); ++ compRef )
             {
                 timestamp_t compId = m_componentRefs[ compRef ].GetComp()->GetTimeStamp();
-                wxString text = m_dataStore[ compId ][ m_fieldNames[ aCol ] ];
-
+                wxString text = m_dataStore[ compId ][ column_label ];
                 width = std::max( width, GetTextSize( text, GetView() ).x );
             }
         }
