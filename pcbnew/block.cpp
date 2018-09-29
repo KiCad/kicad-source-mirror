@@ -566,7 +566,7 @@ void PCB_EDIT_FRAME::Block_Delete()
 
         // These items are deleted, but not put in undo list
         case PCB_MARKER_T:                  // a marker used to show something
-        case PCB_ZONE_T:                     // SEG_ZONE items are now deprecated
+        case PCB_SEGZONE_T:                     // SEG_ZONE items are now deprecated
             item->UnLink();
             itemsList->RemovePicker( ii );
             ii--;
@@ -625,7 +625,7 @@ void PCB_EDIT_FRAME::Block_Rotate()
             break;
 
         // This item is not put in undo list
-        case PCB_ZONE_T:         // SEG_ZONE items are now deprecated
+        case PCB_SEGZONE_T:         // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -694,7 +694,7 @@ void PCB_EDIT_FRAME::Block_Flip()
             break;
 
         // This item is not put in undo list
-        case PCB_ZONE_T:         // SEG_ZONE items are now deprecated
+        case PCB_SEGZONE_T:         // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;
@@ -750,7 +750,7 @@ void PCB_EDIT_FRAME::Block_Move()
             break;
 
         // This item is not put in undo list
-        case PCB_ZONE_T:        // SEG_ZONE items are now deprecated
+        case PCB_SEGZONE_T:        // SEG_ZONE items are now deprecated
             itemsList->RemovePicker( ii );
             ii--;
             break;

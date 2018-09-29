@@ -310,7 +310,7 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         case PCB_TEXT_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
-        case PCB_ZONE_T:
+        case PCB_SEGZONE_T:
 
             // If item has a list it's mean that the element is on the board
             if( item->GetList() == NULL )

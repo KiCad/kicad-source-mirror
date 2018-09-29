@@ -72,7 +72,7 @@ int PCB_EDIT_FRAME::SelectHighLight( wxDC* DC )
 
         case PCB_TRACE_T:
         case PCB_VIA_T:
-        case PCB_ZONE_T:
+        case PCB_SEGZONE_T:
             // since these classes are all derived from TRACK, use a common
             // GetNet() function:
             netcode = ( (TRACK*) item )->GetNetCode();

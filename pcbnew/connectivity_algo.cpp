@@ -188,7 +188,6 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         break;
 
     case PCB_ZONE_AREA_T:
-    case PCB_ZONE_T:
     {
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase ( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
@@ -196,6 +195,7 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         break;
     }
 
+    case PCB_SEGZONE_T:
     default:
         return false;
     }
@@ -279,7 +279,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
 
     case PCB_ZONE_AREA_T:
-    case PCB_ZONE_T:
     {
         auto zone = static_cast<ZONE_CONTAINER*>( aItem );
 
@@ -294,6 +293,8 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
     }
 
+    //N.B. SEGZONE items are deprecated and not to used for connectivity
+    case PCB_SEGZONE_T:
     default:
         return false;
     }
@@ -584,7 +585,6 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
         {
             case PCB_TRACE_T:
             case PCB_VIA_T:
-            case PCB_ZONE_T:
             case PCB_PAD_T:
                 Add( item );
                 break;
@@ -599,6 +599,8 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
                 break;
             }
 
+            //N.B. SEGZONE items are deprecated and not to used for connectivity
+            case PCB_SEGZONE_T:
             default:
                 break;
         }
@@ -830,21 +832,20 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
         return true;
 
     // We should handle zone-zone connection separately
-    if ( ( parentA->Type() == PCB_ZONE_AREA_T || parentA->Type() == PCB_ZONE_T ) &&
-         ( parentB->Type() == PCB_ZONE_AREA_T || parentB->Type() == PCB_ZONE_T ) )
+    if ( parentA->Type() == PCB_ZONE_AREA_T && parentB->Type() == PCB_ZONE_AREA_T )
     {
         checkZoneZoneConnection( static_cast<CN_ZONE*>( m_item ),
                 static_cast<CN_ZONE*>( aCandidate ) );
         return true;
     }
 
-    if( parentA->Type() == PCB_ZONE_AREA_T || parentA->Type() == PCB_ZONE_T)
+    if( parentA->Type() == PCB_ZONE_AREA_T )
     {
         checkZoneItemConnection( static_cast<CN_ZONE*>( aCandidate ), m_item );
         return true;
     }
 
-    if( parentB->Type() == PCB_ZONE_AREA_T || parentB->Type() == PCB_ZONE_T)
+    if( parentB->Type() == PCB_ZONE_AREA_T )
     {
         checkZoneItemConnection( static_cast<CN_ZONE*>( m_item ), aCandidate );
         return true;
