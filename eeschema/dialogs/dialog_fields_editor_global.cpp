@@ -704,7 +704,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
 
     // set footprint column browse button
     attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( this ) );
+    attr->SetEditor( new GRID_CELL_FOOTPRINT_ID_EDITOR( this ) );
     m_grid->SetColAttr( FOOTPRINT, attr );
 
     // set datasheet column viewer button

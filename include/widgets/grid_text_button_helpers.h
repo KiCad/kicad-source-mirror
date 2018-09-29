@@ -57,16 +57,35 @@ protected:
 };
 
 
-class GRID_CELL_FOOTPRINT_EDITOR : public GRID_CELL_TEXT_BUTTON
+class GRID_CELL_SYMBOL_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_FOOTPRINT_EDITOR( DIALOG_SHIM* aParent ) :
+    GRID_CELL_SYMBOL_ID_EDITOR( DIALOG_SHIM* aParent ) :
             m_dlg( aParent )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_FOOTPRINT_EDITOR( m_dlg );
+        return new GRID_CELL_SYMBOL_ID_EDITOR( m_dlg );
+    }
+
+    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
+
+protected:
+    DIALOG_SHIM* m_dlg;
+};
+
+
+class GRID_CELL_FOOTPRINT_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
+{
+public:
+    GRID_CELL_FOOTPRINT_ID_EDITOR( DIALOG_SHIM* aParent ) :
+            m_dlg( aParent )
+    { }
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GRID_CELL_FOOTPRINT_ID_EDITOR( m_dlg );
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;

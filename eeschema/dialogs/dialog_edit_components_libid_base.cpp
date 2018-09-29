@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -93,7 +93,7 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	bSizerButtons->Add( m_sdbSizer, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
-	bSizerMain->Add( bSizerButtons, 0, wxEXPAND, 5 );
+	bSizerMain->Add( bSizerButtons, 0, wxEXPAND|wxLEFT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

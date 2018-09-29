@@ -150,6 +150,51 @@ void GRID_CELL_TEXT_BUTTON::Reset()
 
 
 /**
+ * Symbol Picker
+ */
+
+class TEXT_BUTTON_SYMBOL_CHOOSER : public wxComboCtrl
+{
+public:
+    TEXT_BUTTON_SYMBOL_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg ) :
+            wxComboCtrl( aParent ),
+            m_dlg( aParentDlg )
+    {
+        SetButtonBitmaps( KiBitmap( small_library_xpm ) );
+    }
+
+protected:
+    void DoSetPopupControl( wxComboPopup* popup ) override
+    {
+        m_popup = nullptr;
+    }
+
+    void OnButtonClick() override
+    {
+        // pick a footprint using the footprint picker.
+        wxString      compid = GetValue();
+        KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, m_dlg );
+
+        if( frame->ShowModal( &compid, m_dlg ) )
+            SetValue( compid );
+
+        frame->Destroy();
+    }
+
+    DIALOG_SHIM* m_dlg;
+};
+
+
+void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
+                                         wxEvtHandler* aEventHandler )
+{
+    m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg );
+
+    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+}
+
+
+/**
  * Footprint Picker
  */
 
@@ -185,8 +230,8 @@ protected:
 };
 
 
-void GRID_CELL_FOOTPRINT_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
-                                         wxEvtHandler* aEventHandler )
+void GRID_CELL_FOOTPRINT_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
+                                            wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg );
 

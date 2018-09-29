@@ -39,6 +39,7 @@
 
 #include <dialog_edit_components_libid_base.h>
 #include <wx/tokenzr.h>
+#include <widgets/grid_text_button_helpers.h>
 
 #define COL_REFS 0
 #define COL_CURR_LIBID 1
@@ -303,8 +304,8 @@ public:
     bool IsSchematicModified() { return m_isModified; }
 
 private:
-    SCH_EDIT_FRAME* m_parent;
-    bool m_isModified;      // set to true if the schematic is modified
+    SCH_EDIT_FRAME*  m_parent;
+    bool             m_isModified;          // set to true if the schematic is modified
     std::vector<int> m_OrphansRowIndexes;   // list of rows containing orphan lib_id
 
     std::vector<CMP_CANDIDATE> m_components;
@@ -376,6 +377,8 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
     m_parent = aParent;
     m_autoWrapRenderer = new GRIDCELL_AUTOWRAP_STRINGRENDERER;
 
+    m_grid->PushEventHandler( new GRID_TRICKS( m_grid ) );
+
     initDlg();
 
     FinishDialogSettings();
@@ -384,6 +387,9 @@ DIALOG_EDIT_COMPONENTS_LIBID::DIALOG_EDIT_COMPONENTS_LIBID( SCH_EDIT_FRAME* aPar
 
 DIALOG_EDIT_COMPONENTS_LIBID::~DIALOG_EDIT_COMPONENTS_LIBID()
 {
+    // Delete the GRID_TRICKS.
+    m_grid->PopEventHandler( true );
+
     m_autoWrapRenderer->DecRef();
 }
 
@@ -541,6 +547,11 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& 
     // (fixed in 2014, but didn't get in to wxWidgets 3.0.2)
     wxClientDC dc( this );
     m_grid->SetRowSize( row, m_autoWrapRenderer->GetHeight( dc, m_grid, row, COL_REFS ) );
+
+    // set new libid column browse button
+    wxGridCellAttr* attr = new wxGridCellAttr;
+    attr->SetEditor( new GRID_CELL_SYMBOL_ID_EDITOR( this ) );
+    m_grid->SetColAttr( COL_NEW_LIBID, attr );
 }
 
 
@@ -816,9 +827,31 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AdjustGridColumns( int aWidth )
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
-    m_grid->SetColSize( 0, aWidth / 3 );
-    m_grid->SetColSize( 1, aWidth / 3 );
-    m_grid->SetColSize( 2, aWidth - m_grid->GetColSize( 0 ) - m_grid->GetColSize( 1 ) );
+    int colWidth = aWidth / 3;
+
+    m_grid->SetColSize( COL_REFS, colWidth );
+    aWidth -= colWidth;
+
+    colWidth = 0;
+    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+    {
+        wxString cellValue = m_grid->GetCellValue( row, COL_CURR_LIBID );
+        colWidth = std::max( colWidth, GetTextSize( cellValue, m_grid ).x );
+    }
+
+    colWidth += 20;
+    m_grid->SetColSize( COL_CURR_LIBID, colWidth );
+    aWidth -= colWidth;
+
+    colWidth = 0;
+    for( int row = 0; row < m_grid->GetNumberRows(); ++row )
+    {
+        wxString cellValue = m_grid->GetCellValue( row, COL_NEW_LIBID );
+        colWidth = std::max( colWidth, GetTextSize( cellValue, m_grid ).x );
+    }
+
+    colWidth += 20;
+    m_grid->SetColSize( COL_NEW_LIBID, std::max( colWidth, aWidth ) );
 }
 
 

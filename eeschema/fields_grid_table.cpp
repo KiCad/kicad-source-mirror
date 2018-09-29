@@ -75,7 +75,7 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
-    m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_EDITOR( aDialog ) );
+    m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_ID_EDITOR( aDialog ) );
 
     m_urlAttr = new wxGridCellAttr;
     m_urlAttr->SetEditor( new GRID_CELL_URL_EDITOR( aDialog ) );
