@@ -30,7 +30,7 @@
 
 class BOARD;
 class NETINFO_LIST;
-class NET_SELECTOR_POPUP;
+class NET_SELECTOR_COMBOPOPUP;
 
 
 wxDECLARE_EVENT( NET_SELECTED, wxCommandEvent );
@@ -41,10 +41,9 @@ class NET_SELECTOR : public wxComboCtrl
 public:
     // Note: this list of arguments is here because it keeps us from having to customize
     // the constructor calls in wxFormBuilder.
-    NET_SELECTOR( wxWindow *parent, wxWindowID id, const wxPoint &pos = wxDefaultPosition,
-                  const wxSize &size = wxDefaultSize, long style = 0 );
-
-    ~NET_SELECTOR() override;
+    NET_SELECTOR( wxWindow *parent, wxWindowID id,
+                  const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+                  long style = 0 );
 
     void SetNetInfo( NETINFO_LIST* aNetInfoList );
 
@@ -54,16 +53,8 @@ public:
     bool IsIndeterminate();
     int GetSelectedNetcode();
 
-
 protected:
-    void onDropdown( wxCommandEvent& aEvent );
-    void OnButtonClick() override;
-    void DoSetPopupControl( wxComboPopup* aPopup ) override;
-
-    NETINFO_LIST*       m_netinfoList;
-    int                 m_netcode;
-
-    NET_SELECTOR_POPUP* m_netSelectorPopup;
+    NET_SELECTOR_COMBOPOPUP* m_netSelectorPopup;
 };
 
 
