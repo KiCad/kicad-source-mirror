@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -9,7 +9,7 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style, const wxString& name ) : wxPanel( parent, id, pos, size, style, name )
+PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
@@ -46,14 +46,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->Add( m_thicknessLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_thicknessCtrl->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_thicknessCtrl->SetMaxLength( 12 );
-	}
-	#else
-	m_thicknessCtrl->SetMaxLength( 12 );
-	#endif
 	m_thicknessCtrl->SetMinSize( wxSize( 190,-1 ) );
 	
 	gbSizer1->Add( m_thicknessCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 10 );
@@ -164,14 +156,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_FrontCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_FrontName = new wxTextCtrl( m_LayersListPanel, ID_FRONTNAME, _("Front_layer"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_FrontName->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_FrontName->SetMaxLength( 20 );
-	}
-	#else
-	m_FrontName->SetMaxLength( 20 );
-	#endif
 	m_FrontName->SetToolTip( _("Layer name of front (top) copper layer") );
 	
 	m_LayerListFlexGridSizer->Add( m_FrontName, 0, wxEXPAND|wxRIGHT, 5 );
@@ -188,14 +172,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In1CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In1Name = new wxTextCtrl( m_LayersListPanel, ID_IN1NAME, _("In1"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In1Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In1Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In1Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In1Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In1ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -210,14 +186,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In2CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In2Name = new wxTextCtrl( m_LayersListPanel, ID_IN2NAME, _("In2"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In2Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In2Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In2Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In2Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In2ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -232,14 +200,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In3CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In3Name = new wxTextCtrl( m_LayersListPanel, ID_IN3NAME, _("In3"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In3Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In3Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In3Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In3Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In3ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -254,14 +214,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In4CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In4Name = new wxTextCtrl( m_LayersListPanel, ID_IN4NAME, _("In4"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In4Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In4Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In4Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In4Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In4ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -276,14 +228,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In5CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In5Name = new wxTextCtrl( m_LayersListPanel, ID_IN5NAME, _("In5"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In5Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In5Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In5Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In5Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In5ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -298,14 +242,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In6CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In6Name = new wxTextCtrl( m_LayersListPanel, ID_IN6NAME, _("In6"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In6Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In6Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In6Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In6Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In6ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -320,14 +256,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In7CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In7Name = new wxTextCtrl( m_LayersListPanel, ID_IN7NAME, _("In7"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In7Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In7Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In7Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In7Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In7ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -342,14 +270,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In8CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In8Name = new wxTextCtrl( m_LayersListPanel, ID_IN8NAME, _("In8"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In8Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In8Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In8Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In8Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In8ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -364,14 +284,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In9CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In9Name = new wxTextCtrl( m_LayersListPanel, ID_IN9NAME, _("In9"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In9Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In9Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In9Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In9Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In9ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -386,14 +298,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In10CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In10Name = new wxTextCtrl( m_LayersListPanel, ID_IN10NAME, _("In10"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In10Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In10Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In10Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In10Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In10ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -408,14 +312,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In11CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In11Name = new wxTextCtrl( m_LayersListPanel, ID_IN11NAME, _("In11"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In11Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In11Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In11Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In11Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In11ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -430,14 +326,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In12CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In12Name = new wxTextCtrl( m_LayersListPanel, ID_IN12NAME, _("In12"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In12Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In12Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In12Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In12Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In12ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -452,14 +340,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In13CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In13Name = new wxTextCtrl( m_LayersListPanel, ID_IN13NAME, _("In13"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In13Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In13Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In13Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In13Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In13ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -474,14 +354,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In14CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In14Name = new wxTextCtrl( m_LayersListPanel, ID_IN14NAME, _("In14"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In14Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In14Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In14Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In14Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In14ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -496,14 +368,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In15CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In15Name = new wxTextCtrl( m_LayersListPanel, ID_IN15NAME, _("In15"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In15Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In15Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In15Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In15Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In15ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -518,14 +382,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In16CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In16Name = new wxTextCtrl( m_LayersListPanel, ID_IN16NAME, _("In16"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In16Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In16Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In16Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In16Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In16ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -540,14 +396,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In17CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In17Name = new wxTextCtrl( m_LayersListPanel, ID_IN17NAME, _("In17"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In17Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In17Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In17Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In17Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In17ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -562,14 +410,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In18CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In18Name = new wxTextCtrl( m_LayersListPanel, ID_IN18NAME, _("In18"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In18Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In18Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In18Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In18Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In18ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -584,14 +424,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In19CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In19Name = new wxTextCtrl( m_LayersListPanel, ID_IN19NAME, _("In19"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In19Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In19Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In19Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In19Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In19ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -606,14 +438,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In20CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In20Name = new wxTextCtrl( m_LayersListPanel, ID_IN20NAME, _("In20"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In20Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In20Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In20Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In20Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In20ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -628,14 +452,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In21CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In21Name = new wxTextCtrl( m_LayersListPanel, ID_IN21NAME, _("In21"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In21Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In21Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In21Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In21Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In21ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -650,14 +466,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In22CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In22Name = new wxTextCtrl( m_LayersListPanel, ID_IN22NAME, _("In22"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In22Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In22Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In22Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In22Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In22ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -672,14 +480,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In23CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In23Name = new wxTextCtrl( m_LayersListPanel, ID_IN23NAME, _("In23"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In23Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In23Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In23Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In23Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In23ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -694,14 +494,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In24CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In24Name = new wxTextCtrl( m_LayersListPanel, ID_IN24NAME, _("In24"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In24Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In24Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In24Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In24Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In24ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -716,14 +508,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In25CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In25Name = new wxTextCtrl( m_LayersListPanel, ID_IN25NAME, _("In25"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In25Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In25Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In25Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In25Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In25ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -738,14 +522,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In26CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In26Name = new wxTextCtrl( m_LayersListPanel, ID_IN26NAME, _("In26"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In26Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In26Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In26Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In26Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In26ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -760,14 +536,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In27CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In27Name = new wxTextCtrl( m_LayersListPanel, ID_IN27NAME, _("In27"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In27Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In27Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In27Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In27Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In27ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -782,14 +550,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In28CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In28Name = new wxTextCtrl( m_LayersListPanel, ID_IN28NAME, _("In28"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In28Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In28Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In28Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In28Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In28ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -804,14 +564,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In29CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In29Name = new wxTextCtrl( m_LayersListPanel, ID_IN29NAME, _("In29"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In29Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In29Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In29Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In29Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In29ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -826,14 +578,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_In30CheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_In30Name = new wxTextCtrl( m_LayersListPanel, ID_IN30NAME, _("In30"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_In30Name->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_In30Name->SetMaxLength( 20 );
-	}
-	#else
-	m_In30Name->SetMaxLength( 20 );
-	#endif
 	m_LayerListFlexGridSizer->Add( m_In30Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
 	wxString m_In30ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
@@ -850,14 +594,6 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_BackCheckBox, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_BackName = new wxTextCtrl( m_LayersListPanel, ID_BACKNAME, _("Back"), wxDefaultPosition, wxDefaultSize, 0 );
-	#ifdef __WXGTK__
-	if ( !m_BackName->HasFlag( wxTE_MULTILINE ) )
-	{
-	m_BackName->SetMaxLength( 20 );
-	}
-	#else
-	m_BackName->SetMaxLength( 20 );
-	#endif
 	m_BackName->SetToolTip( _("Layer name of back (bottom) copper layer") );
 	
 	m_LayerListFlexGridSizer->Add( m_BackName, 0, wxEXPAND|wxRIGHT, 5 );

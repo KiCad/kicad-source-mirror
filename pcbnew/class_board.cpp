@@ -616,7 +616,7 @@ bool BOARD::SetLayerName( PCB_LAYER_ID aLayer, const wxString& aLayerName )
     if( !IsCopperLayer( aLayer ) )
         return false;
 
-    if( aLayerName == wxEmptyString || aLayerName.Len() > 20 )
+    if( aLayerName == wxEmptyString )
         return false;
 
     // no quote chars in the name allowed
