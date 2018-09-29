@@ -55,7 +55,8 @@ public:
             m_minPopupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( nullptr ),
-            m_selectedNetcode( 0 )
+            m_selectedNetcode( 0 ),
+            m_focusHandler( nullptr )
     { }
 
     bool Create(wxWindow* aParent) override
@@ -233,6 +234,12 @@ protected:
             lastPos = screenPos;
             onMouseMoved( screenPos );
         }
+
+        if( m_focusHandler )
+        {
+            m_filterCtrl->PushEventHandler( m_focusHandler );
+            m_focusHandler = nullptr;
+        }
     }
 
     // Hot-track the mouse (for focus and listbox selection)
@@ -331,7 +338,7 @@ protected:
                 // unhelpfully gives the event right back to the popup.  Make sure the filter
                 // control is going to get the event.
                 if( m_filterCtrl->GetEventHandler() != m_filterCtrl )
-                    m_filterCtrl->PushEventHandler( m_filterCtrl );
+                    m_focusHandler = m_filterCtrl->PopEventHandler();
 
                 aEvent.Skip();
             }
@@ -401,6 +408,8 @@ protected:
     NETINFO_LIST* m_netinfoList;
 
     int           m_selectedNetcode;
+
+    wxEvtHandler* m_focusHandler;
 };
 
 
