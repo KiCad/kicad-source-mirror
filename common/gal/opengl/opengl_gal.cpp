@@ -1437,19 +1437,22 @@ void OPENGL_GAL::EndGroup()
 
 void OPENGL_GAL::DrawGroup( int aGroupNumber )
 {
-    cachedManager->DrawItem( *groups[aGroupNumber] );
+    if( groups[aGroupNumber] )
+        cachedManager->DrawItem( *groups[aGroupNumber] );
 }
 
 
 void OPENGL_GAL::ChangeGroupColor( int aGroupNumber, const COLOR4D& aNewColor )
 {
-    cachedManager->ChangeItemColor( *groups[aGroupNumber], aNewColor );
+    if( groups[aGroupNumber] )
+        cachedManager->ChangeItemColor( *groups[aGroupNumber], aNewColor );
 }
 
 
 void OPENGL_GAL::ChangeGroupDepth( int aGroupNumber, int aDepth )
 {
-    cachedManager->ChangeItemDepth( *groups[aGroupNumber], aDepth );
+    if( groups[aGroupNumber] )
+        cachedManager->ChangeItemDepth( *groups[aGroupNumber], aDepth );
 }
 
 
