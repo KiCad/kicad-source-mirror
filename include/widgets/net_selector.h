@@ -56,6 +56,7 @@ public:
 
 
 protected:
+    void onDropdown( wxCommandEvent& aEvent );
     void OnButtonClick() override;
     void DoSetPopupControl( wxComboPopup* aPopup ) override;
 

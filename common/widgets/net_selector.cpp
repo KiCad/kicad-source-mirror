@@ -110,19 +110,14 @@ public:
             wxDialog( aParent->GetParent(), wxID_ANY, wxEmptyString, aPos, aSize,
                       wxWANTS_CHARS ),
             m_parentCombobox( aParent ),
-            m_minPopupWidth( -1 ),
-            m_maxPopupHeight( 1000 ),
+            m_minPopupWidth( aSize.x ),
+            m_maxPopupHeight( aSize.y ),
             m_netinfoList( aNetInfoList ),
-            m_filterCtrl( nullptr ),
-            m_listBox( nullptr ),
             m_initialized( false ),
             m_selectedNetcode( 0 ),
             m_retCode( 0 )
     {
         SetExtraStyle( wxWS_EX_BLOCK_EVENTS|wxWS_EX_PROCESS_IDLE );
-
-        m_minPopupWidth = aSize.x;
-        m_maxPopupHeight = aSize.y;
 
         auto mainSizer = new wxBoxSizer( wxVERTICAL );
         auto panelSizer = new wxBoxSizer( wxVERTICAL );
@@ -134,7 +129,8 @@ public:
         wxStaticText* title = new wxStaticText( panel, wxID_ANY, _( "Filter:" ) );
         panelSizer->Add( title, 0, wxEXPAND, 0 );
 
-        m_filterCtrl = new wxTextCtrl( panel, wxID_ANY );
+        m_filterCtrl = new wxTextCtrl( panel, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                                       wxDefaultSize, wxTE_PROCESS_ENTER );
         panelSizer->Add( m_filterCtrl, 0, wxEXPAND, 0 );
 
         m_listBox = new wxListBox( panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0,
@@ -146,11 +142,13 @@ public:
         Layout();
 
         Connect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_POPUP::onIdle ), NULL, this );
-        Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_listBox->Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
-        m_listBox->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_filterCtrl->Connect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
+        m_filterCtrl->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( NET_SELECTOR_POPUP::onEnter ), NULL, this );
+
+        // <enter> in a ListBox comes in as a double-click on GTK
+        m_listBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NET_SELECTOR_POPUP::onEnter ), NULL, this );
 
         rebuildList();
     }
@@ -158,11 +156,12 @@ public:
     ~NET_SELECTOR_POPUP()
     {
         Disconnect( wxEVT_IDLE, wxIdleEventHandler( NET_SELECTOR_POPUP::onIdle ), NULL, this );
-        Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_listBox->Disconnect( wxEVT_LEFT_DOWN, wxMouseEventHandler( NET_SELECTOR_POPUP::onListBoxMouseClick ), NULL, this );
-        m_listBox->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( NET_SELECTOR_POPUP::onKeyDown ), NULL, this );
         m_filterCtrl->Disconnect( wxEVT_TEXT, wxCommandEventHandler( NET_SELECTOR_POPUP::onFilterEdit ), NULL, this );
+        m_filterCtrl->Disconnect( wxEVT_TEXT_ENTER, wxCommandEventHandler( NET_SELECTOR_POPUP::onEnter ), NULL, this );
+
+        m_listBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( NET_SELECTOR_POPUP::onEnter ), NULL, this );
     }
 
     void SetSelectedNetcode( int aNetcode )
@@ -287,10 +286,16 @@ protected:
         // never got notified of the click).
         // Note: don't try to do this with KillFocus events; the event ordering is too
         // platform-dependant.
-        wxWindow* focus = wxWindow::FindFocus();
+        if( m_initialized )
+        {
+            bool focusFound = false;
 
-        if( m_initialized && focus != this && focus != m_listBox && focus != m_filterCtrl )
-            EndModal( wxID_CANCEL );
+            for( wxWindow* w = wxWindow::FindFocus(); w && !focusFound; w = w->GetParent() )
+                focusFound = ( w == this );
+
+            if( !focusFound )
+                EndModal( wxID_CANCEL );
+        }
 #endif
     }
 
@@ -355,6 +360,11 @@ protected:
         }
     }
 
+    void onEnter( wxCommandEvent& aEvent )
+    {
+        EndModal( wxID_OK );
+    }
+
     void onFilterEdit( wxCommandEvent& aEvent )
     {
         rebuildList();
@@ -397,7 +407,9 @@ NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id,
         m_netinfoList( nullptr ),
         m_netcode( -1 ),
         m_netSelectorPopup( nullptr )
-{ }
+{
+    Connect( wxEVT_COMBOBOX_DROPDOWN, wxCommandEventHandler( NET_SELECTOR::onDropdown ), NULL, this );
+}
 
 
 NET_SELECTOR::~NET_SELECTOR()
@@ -409,6 +421,14 @@ NET_SELECTOR::~NET_SELECTOR()
 void NET_SELECTOR::DoSetPopupControl( wxComboPopup*  )
 {
     m_popup = nullptr;
+}
+
+
+void NET_SELECTOR::onDropdown( wxCommandEvent&  )
+{
+    // Not all keyboard activation methods seem to get to OnButtonClick() by themselves,
+    // so we pick them up here.
+    OnButtonClick();
 }
 
 
