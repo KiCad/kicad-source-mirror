@@ -135,11 +135,8 @@ void CAIRO_PRINT_GAL::SetLineWidth( float aLineWidth )
 
 void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 {
-    // worldUnitLength = inch per integer
-    worldUnitLength = 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */;
     worldScale = screenDPI * worldUnitLength * zoomFactor;
-
-    const auto paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */ * 0.0254 * 1e9 /* 1 inch in nm */;
+    const auto paperSizeIU = VECTOR2D( m_nativePaperSize.y, m_nativePaperSize.x ) /* inches */ / worldUnitLength; /* 1 inch in IU */
     const auto paperSizeIUTransposed = VECTOR2D( paperSizeIU.y, paperSizeIU.x );
 
     MATRIX3x3D scale, translation, flip, rotate, lookat;
@@ -152,18 +149,18 @@ void CAIRO_PRINT_GAL::ComputeWorldScreenMatrix()
 
     if( m_hasNativeLandscapeRotation )
     {
-        translation.SetTranslation( 0.5 / GetZoomFactor() * paperSizeIUTransposed );
+        translation.SetTranslation( 0.5 / zoomFactor * paperSizeIUTransposed );
     }
     else
     {
         if( isLandscape() )
         {
-            translation.SetTranslation( 0.5 / GetZoomFactor() * paperSizeIU );
+            translation.SetTranslation( 0.5 / zoomFactor * paperSizeIU );
             rotate.SetRotation( 90.0 * M_PI / 180.0 );
         }
         else
         {
-            translation.SetTranslation( 0.5 / GetZoomFactor() * paperSizeIUTransposed );
+            translation.SetTranslation( 0.5 / zoomFactor * paperSizeIUTransposed );
         }
     }
 

@@ -131,6 +131,9 @@ protected:
     ///> Configures PAINTER object for a printout
     virtual void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter );
 
+    ///> Configures GAL object for a printout
+    virtual void setupGal( KIGFX::GAL* aGal ) {}
+
     ///> Returns bounding box of the printed objects (excluding worksheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
 

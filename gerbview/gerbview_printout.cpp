@@ -98,6 +98,12 @@ void GERBVIEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aVi
 }
 
 
+void GERBVIEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
+{
+    aGal->SetWorldUnitLength( 10e-9 /* 10 nm */ / 0.0254 /* 1 inch in meters */ );
+}
+
+
 EDA_RECT GERBVIEW_PRINTOUT::getBoundingBox()
 {
     return m_layout->ComputeBoundingBox();

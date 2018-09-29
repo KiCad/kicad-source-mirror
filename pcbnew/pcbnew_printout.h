@@ -38,6 +38,8 @@ protected:
 
     void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter ) override;
 
+    void setupGal( KIGFX::GAL* aGal ) override;
+
     EDA_RECT getBoundingBox() override;
 
     std::unique_ptr<KIGFX::PAINTER> getPainter( KIGFX::GAL* aGal ) override;

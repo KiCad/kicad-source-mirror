@@ -159,6 +159,12 @@ void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPain
 }
 
 
+void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
+{
+    aGal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+}
+
+
 EDA_RECT PCBNEW_PRINTOUT::getBoundingBox()
 {
     return m_board->ComputeBoundingBox();

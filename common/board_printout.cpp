@@ -164,6 +164,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     // TODO fix 'Preview' button
     VECTOR2D nps( GetLogicalPageRect().width, GetLogicalPageRect().height );
 
+    setupGal( gal );
     galPrint->SetNativePaperSize( VECTOR2D( nps.x / dc->GetPPI().x, nps.y / dc->GetPPI().y ),
             printCtx->HasNativeLandscapeRotation() );
     gal->SetLookAtPoint( bBox.Centre() );
