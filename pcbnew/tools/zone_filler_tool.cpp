@@ -58,6 +58,10 @@ TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
         _( "Unfill All" ), _( "Unfill all zones" ) );
 
+TOOL_ACTION PCB_ACTIONS::zoneDeleteSegzone( "pcbnew.ZoneFiller.zoneDeleteSegzone",
+        AS_GLOBAL, 0,
+        _( "Delete Zone Filling" ), _( "Delete Zone Filling" ), delete_xpm );
+
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL( "pcbnew.ZoneFiller" )
 {
@@ -148,6 +152,33 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
 }
 
 
+int ZONE_FILLER_TOOL::SegzoneDeleteFill( const TOOL_EVENT& aEvent )
+{
+    BOARD_COMMIT commit( this );
+    BOARD* board = (BOARD*) m_toolMgr->GetModel();
+
+    for( auto item : selection() )
+    {
+        assert( item->Type() == PCB_SEGZONE_T );
+
+        timestamp_t timestamp = item->GetTimeStamp(); // Save reference time stamp (aZone will be deleted)
+        SEGZONE* next;
+
+        for( SEGZONE* zone = board->m_SegZoneDeprecated; zone; zone = next )
+        {
+            next = zone->Next();
+
+            if( timestamp == zone->GetTimeStamp() )
+                commit.Remove( zone );
+        }
+    }
+
+    commit.Push( _( "Delete Zone Filling" ) );
+
+    return 0;
+}
+
+
 int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
 {
     BOARD_COMMIT commit( this );
@@ -172,5 +203,5 @@ void ZONE_FILLER_TOOL::setTransitions()
     Go( &ZONE_FILLER_TOOL::ZoneFill, PCB_ACTIONS::zoneFill.MakeEvent() );
     Go( &ZONE_FILLER_TOOL::ZoneFillAll, PCB_ACTIONS::zoneFillAll.MakeEvent() );
     Go( &ZONE_FILLER_TOOL::ZoneUnfill, PCB_ACTIONS::zoneUnfill.MakeEvent() );
-    Go( &ZONE_FILLER_TOOL::ZoneUnfillAll, PCB_ACTIONS::zoneUnfillAll.MakeEvent() );
+    Go( &ZONE_FILLER_TOOL::SegzoneDeleteFill, PCB_ACTIONS::zoneDeleteSegzone.MakeEvent() );
 }
