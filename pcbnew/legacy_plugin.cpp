@@ -491,7 +491,7 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$ZONE" ) )
         {
-            loadTrackList( PCB_ZONE_T );
+            loadTrackList( PCB_SEGZONE_T );
         }
 
         else if( TESTLINE( "$GENERAL" ) )
@@ -2260,7 +2260,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         BIU drill   = data ? biuParse( data ) : -1;     // SetDefault() if < 0
 
         // Read the 2nd line to determine the exact type, one of:
-        // PCB_TRACE_T, PCB_VIA_T, or PCB_ZONE_T.  The type field in 2nd line
+        // PCB_TRACE_T, PCB_VIA_T, or PCB_SEGZONE_T.  The type field in 2nd line
         // differentiates between PCB_TRACE_T and PCB_VIA_T.  With virtual
         // functions in use, it is critical to instantiate the PCB_VIA_T
         // exactly.
@@ -2313,7 +2313,7 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
             newTrack = new VIA( m_board );
             break;
 
-        case PCB_ZONE_T:     // this is now deprecated, but exist in old boards
+        case PCB_SEGZONE_T:     // this is now deprecated, but exist in old boards
             newTrack = new SEGZONE( m_board );
             break;
         }

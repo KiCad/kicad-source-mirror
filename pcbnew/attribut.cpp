@@ -70,7 +70,7 @@ void PCB_EDIT_FRAME::Attribut_Track( TRACK* track, wxDC* DC, bool Flag_On )
     TRACK* Track;
     int    nb_segm;
 
-    if( (track == NULL ) || (track->Type() == PCB_ZONE_T) )
+    if( (track == NULL ) || (track->Type() == PCB_SEGZONE_T) )
         return;
 
     m_canvas->CrossHairOff( DC );   // Erase cursor shape

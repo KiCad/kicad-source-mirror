@@ -210,7 +210,7 @@ protected:
      * reads a list of segments (Tracks and Vias, or Segzones)
      *
      * @param aStructType is either PCB_TRACE_T to indicate tracks and vias, or
-     *        PCB_ZONE_T to indicate oldschool zone segments (before polygons came to be).
+     *        PCB_SEGZONE_T to indicate oldschool zone segments (before polygons came to be).
      */
     void loadTrackList( int aStructType );
 

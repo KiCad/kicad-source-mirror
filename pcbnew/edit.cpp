@@ -1369,7 +1369,7 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
         Delete_Segment( DC, (TRACK*) Item );
         break;
 
-    case PCB_ZONE_T:
+    case PCB_SEGZONE_T:
         Delete_OldZone_Fill( (SEGZONE*) Item );
         break;
 

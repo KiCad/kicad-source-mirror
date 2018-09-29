@@ -76,7 +76,7 @@ public:
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
         return aItem && ( ( PCB_ZONE_AREA_T == aItem->Type() ) ||
-                          ( PCB_ZONE_T == aItem->Type() ) );
+                          ( PCB_SEGZONE_T == aItem->Type() ) );
     }
 
     /**

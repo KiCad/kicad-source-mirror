@@ -116,7 +116,7 @@ wxString TRACK::ShowWidth() const
 
 
 SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
-    TRACK( aParent, PCB_ZONE_T )
+    TRACK( aParent, PCB_SEGZONE_T )
 {
 }
 
@@ -484,7 +484,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
     // When reading from a file most of the items will already be in the correct order.
     // Searching from the back therefore takes us from n^2 to essentially 0.
 
-    if( Type() == PCB_ZONE_T )  // Deprecated items, only found in very old boards
+    if( Type() == PCB_SEGZONE_T )  // Deprecated items, only found in very old boards
         track = aPcb->m_SegZoneDeprecated.GetLast();
     else
         track = aPcb->m_Track.GetLast();
@@ -495,7 +495,7 @@ TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
             return track->Next();
     }
 
-    if( Type() == PCB_ZONE_T )  // Deprecated
+    if( Type() == PCB_SEGZONE_T )  // Deprecated
         return aPcb->m_SegZoneDeprecated.GetFirst();
     else
         return aPcb->m_Track.GetFirst();

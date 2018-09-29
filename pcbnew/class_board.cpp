@@ -871,7 +871,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
         break;
 
-    case PCB_ZONE_T:
+    case PCB_SEGZONE_T:
         if( aMode == ADD_APPEND )
             m_SegZoneDeprecated.PushBack( (SEGZONE*) aBoardItem );
         else
@@ -967,7 +967,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         m_Track.Remove( (TRACK*) aBoardItem );
         break;
 
-    case PCB_ZONE_T:
+    case PCB_SEGZONE_T:
         m_SegZoneDeprecated.Remove( (SEGZONE*) aBoardItem );
         break;
 
@@ -1313,7 +1313,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             ++p;
             break;
 
-        case PCB_ZONE_T:
+        case PCB_SEGZONE_T:
             result = IterateForward( m_SegZoneDeprecated, inspector, testData, p );
             ++p;
             break;

@@ -1103,7 +1103,7 @@ static void CreateRoutesSection( FILE* aFile, BOARD* aPcb )
             fprintf( aFile, "TRACK TRACK%d\n", track->GetWidth() );
         }
 
-        if( (track->Type() == PCB_TRACE_T) || (track->Type() == PCB_ZONE_T) )
+        if( (track->Type() == PCB_TRACE_T) || (track->Type() == PCB_SEGZONE_T) )
         {
             if( old_layer != track->GetLayer() )
             {

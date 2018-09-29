@@ -170,7 +170,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
 
         switch( item->Type() )
         {
-        case PCB_ZONE_T:
+        case PCB_SEGZONE_T:
             // Found a TYPE ZONE
             if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
             {
