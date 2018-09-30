@@ -853,7 +853,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         return 0;
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
-    auto selection = m_selectionTool->RequestSelection(
+    auto selectionCopy = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
 
@@ -862,20 +862,20 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     // in "alternative" mode, deletion is not just a simple list of selected items,
     // it removes whole tracks, not just segments
-    if( isAlt && selection.IsHover()
-            && ( selection.HasType( PCB_TRACE_T ) || selection.HasType( PCB_VIA_T ) ) )
+    if( isAlt && selectionCopy.IsHover()
+            && ( selectionCopy.HasType( PCB_TRACE_T ) || selectionCopy.HasType( PCB_VIA_T ) ) )
     {
         m_toolMgr->RunAction( PCB_ACTIONS::expandSelectedConnection, true );
-        selection = m_selectionTool->GetSelection();
+        selectionCopy = m_selectionTool->GetSelection();
     }
 
-    if( selection.Empty() )
+    if( selectionCopy.Empty() )
         return 0;
 
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    for( auto item : selection )
+    for( auto item : selectionCopy )
     {
         if( m_editModules )
         {

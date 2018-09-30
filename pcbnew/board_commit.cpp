@@ -61,12 +61,12 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 {
     // Objects potentially interested in changes:
     PICKED_ITEMS_LIST undoList;
-    KIGFX::VIEW* view = m_toolMgr->GetView();
-    BOARD* board = (BOARD*) m_toolMgr->GetModel();
-    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
-    auto connectivity = board->GetConnectivity();
-    std::set<EDA_ITEM*> savedModules;
-    std::vector<BOARD_ITEM*> itemsToRemove;
+    KIGFX::VIEW*      view = m_toolMgr->GetView();
+    BOARD*            board = (BOARD*) m_toolMgr->GetModel();
+    PCB_BASE_FRAME*   frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
+    auto              connectivity = board->GetConnectivity();
+    std::set<EDA_ITEM*>      savedModules;
+    std::vector<BOARD_ITEM*> itemsToDeselect;
 
     if( Empty() )
         return;
@@ -142,11 +142,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
             case CHT_REMOVE:
             {
                 if( !m_editModules && aCreateUndoEntry )
-                {
                     undoList.PushItem( ITEM_PICKER( boardItem, UR_DELETED ) );
-                }
-
-                itemsToRemove.push_back( boardItem );
 
                 switch( boardItem->Type() )
                 {
@@ -190,6 +186,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_MARKER_T:              // a marker used to show something
                 case PCB_SEGZONE_T:                // SEG_ZONE items are now deprecated
                 case PCB_ZONE_AREA_T:
+                    itemsToDeselect.push_back( boardItem );
+
                     view->Remove( boardItem );
 
                     if( !( changeFlags & CHT_DONE ) )
@@ -254,10 +252,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
     // Removing an item should trigger the unselect action
     // but only after all items are removed otherwise we can get
     // flickering depending on the system
-    if( itemsToRemove.size() > 0 )
-    {
-        m_toolMgr->RunAction( PCB_ACTIONS::unselectItems, true, &itemsToRemove );
-    }
+    if( itemsToDeselect.size() > 0 )
+        m_toolMgr->RunAction( PCB_ACTIONS::unselectItems, true, &itemsToDeselect );
 
     if( !m_editModules && aCreateUndoEntry )
         frame->SaveCopyInUndoList( undoList, UR_UNSPECIFIED );
