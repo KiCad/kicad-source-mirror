@@ -84,7 +84,7 @@ double getNormDeciDegFromRad( double aRadians )
 
 static const double ANGLE_EPSILON = 1e-9;
 
-double angleIsSpecial( double aRadians )
+bool angleIsSpecial( double aRadians )
 {
     return std::fabs( std::remainder( aRadians, M_PI_4 ) ) < ANGLE_EPSILON;
 }
