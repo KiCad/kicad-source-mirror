@@ -69,42 +69,44 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
 
     AddButton( ID_TO_SCH,
                KiBitmap( icon_eeschema_xpm ),
-               _( "Schematic layout editor" ) );
+               _( "Schematic Layout Editor" ) );
 
     AddButton( ID_TO_SCH_LIB_EDITOR,
                KiBitmap( icon_libedit_xpm ),
-               _( "Symbol library editor" ) );
+               _( "Symbol Library Editor" ) );
 
     separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
     m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
 
     AddButton( ID_TO_PCB,
                KiBitmap( icon_pcbnew_xpm ),
-               _( "PCB layout editor" ) );
+               _( "PCB Layout Editor" ) );
 
     AddButton( ID_TO_PCB_FP_EDITOR,
                KiBitmap( icon_modedit_xpm ),
-               _( "Footprint library editor" ) );
+               _( "Footprint Library Editor" ) );
 
     separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
     m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
 
     AddButton( ID_TO_GERBVIEW,
                KiBitmap( icon_gerbview_xpm ),
-               _( "Gerber viewer" ) );
+               _( "Gerber Viewer" ) );
 
     AddButton( ID_TO_BITMAP_CONVERTER,
                KiBitmap( icon_bitmap2component_xpm ),
-               _( "Import bitmap\n"
-                  "Convert bitmap images to schematic or PCB elements" ) );
+               _( "Bitmap to Component Converter\n"
+                  "Convert bitmap images to schematic or PCB components" ) );
 
     AddButton( ID_TO_PCB_CALCULATOR,
                KiBitmap( icon_pcbcalculator_xpm ),
-               _( "Calculator tools" ) );
+               _( "PCB Calculator\n"
+                  "Run component calculations, track width calculations, etc." ) );
 
     AddButton( ID_TO_PL_EDITOR,
                KiBitmap( icon_pagelayout_editor_xpm ),
-               _( "Worksheet layout editor" ) );
+               _( "Page Layout Editor\n"
+                  "Edit worksheet graphics and text" ) );
 
     // Add a stretchy spacer to make button bar fill the entire screen
     m_buttonSizer->AddStretchSpacer();

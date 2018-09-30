@@ -362,7 +362,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                          kicad_Manager_Hokeys_Descr, HK_RUN_LIBEDIT );
     AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg, KiBitmap( libedit_xpm ) );
 
-    msg = AddHotkeyName( _( "Edit PCB Layout" ),
+    msg = AddHotkeyName( _( "Edit PCB" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_PCBNEW );
     AddMenuItem( toolsMenu, ID_TO_PCB, msg, KiBitmap( pcbnew_xpm ) );
 
@@ -377,18 +377,17 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "Convert Image" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
     AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
-                 _( "Bitmap2Component - Convert bitmap images to schematic\n"
-                    "or PCB elements" ),
+                 _( "Convert bitmap images to schematic or PCB components" ),
                  KiBitmap( bitmap2component_xpm ) );
 
-    msg = AddHotkeyName( _( "Run PCB Calculator" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
+    msg = AddHotkeyName( _( "Calculator Tools" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
-                 _( "Pcb calculator - Calculator for components, track width, etc." ),
+                 _( "Run component calculations, track width calculations, etc." ),
                  KiBitmap( calculator_xpm ) );
 
-    msg = AddHotkeyName( _( "Edit Page Layout" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
+    msg = AddHotkeyName( _( "Edit Worksheet" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
-                 _( "Pl editor - Worksheet layout editor" ),
+                 _( "Edit worksheet graphics and text" ),
                  KiBitmap( pagelayout_load_xpm ) );
 
     // Menu Help:
