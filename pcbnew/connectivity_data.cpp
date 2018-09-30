@@ -93,13 +93,14 @@ void CONNECTIVITY_DATA::updateRatsnest()
     size_t numDirty = std::count_if( m_nets.begin() + 1, m_nets.end(), [] ( RN_NET* aNet )
             { return aNet->IsDirty(); } );
 
+    // Start with net 1 as net 0 is reserved for not-connected
     std::atomic<size_t> nextNet( 1 );
     std::atomic<size_t> threadsFinished( 0 );
 
     // We don't want to spin up a new thread for fewer than two nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>(
             std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            numDirty / 2 );
+            ( numDirty + 1 ) / 2 );
 
     for( size_t ii = 0; ii < parallelThreadCount; ++ii )
     {
