@@ -474,6 +474,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                 if( module == NULL )
                     continue;
 
+                module->SetLink( 0 );
                 m_frame->AddModuleToBoard( module );
                 commit.Added( module );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );

@@ -219,7 +219,6 @@ void PCB_BASE_FRAME::AddModuleToBoard( MODULE* module )
         GetBoard()->Add( module, ADD_APPEND );
 
         module->SetFlags( IS_NEW );
-        module->SetLink( 0 );
 
         if( IsGalCanvasActive() )
             module->SetPosition( wxPoint( 0, 0 ) ); // cursor in GAL may not be initialized at the moment
