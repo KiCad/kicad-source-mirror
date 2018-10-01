@@ -959,12 +959,11 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     if( !item || !canAddCorner( *item ) )
         return 0;
 
+    DRAWSEGMENT* graphicItem = dynamic_cast<DRAWSEGMENT*>( item );
     BOARD_COMMIT commit( frame );
 
-    bool moduleEdge = item->Type() == PCB_MODULE_EDGE_T;
-
     if( item->Type() == PCB_ZONE_AREA_T ||
-            ( moduleEdge && static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) )
+            ( graphicItem && graphicItem->GetShape() == S_POLYGON ) )
     {
         unsigned int nearestIdx = 0;
         unsigned int nextNearestIdx = 0;
@@ -972,10 +971,10 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         unsigned int firstPointInContour = 0;
         SHAPE_POLY_SET* zoneOutline;
 
-        if( moduleEdge )
-            zoneOutline = &( static_cast<DRAWSEGMENT*>( item )->GetPolyShape() );
-        else
+        if( item->Type() == PCB_ZONE_AREA_T )
             zoneOutline = static_cast<ZONE_CONTAINER*>( item )->Outline();
+        else
+            zoneOutline = &( graphicItem->GetPolyShape() );
 
         commit.Modify( item );
 
@@ -1010,7 +1009,6 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
             }
         }
 
-
         // Find the point on the closest segment
         VECTOR2I sideOrigin = zoneOutline->Vertex( nearestIdx );
         VECTOR2I sideEnd = zoneOutline->Vertex( nextNearestIdx );
@@ -1022,54 +1020,46 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         if( nearestPoint == sideOrigin || nearestPoint == sideEnd )
             nearestPoint = ( sideOrigin + sideEnd ) / 2;
 
-        // Add corner between nearestIdx and nextNearestIdx:
         zoneOutline->InsertVertex( nextNearestIdx, nearestPoint );
 
-        // In board editor, we re-hatch the zone item
-        if( !moduleEdge )
+        // We re-hatch the filled zones but not polygons
+        if( item->Type() == PCB_ZONE_AREA_T )
             static_cast<ZONE_CONTAINER*>( item )->Hatch();
 
 
         commit.Push( _( "Add a zone corner" ) );
     }
 
-    else if( item->Type() == PCB_LINE_T ||
-            ( moduleEdge && static_cast<DRAWSEGMENT*>( item )->GetShape() == S_SEGMENT ) )
+    else if( graphicItem && graphicItem->GetShape() == S_SEGMENT )
     {
-        DRAWSEGMENT* segment = static_cast<DRAWSEGMENT*>( item );
+        commit.Modify( graphicItem );
 
-        if( segment->GetShape() == S_SEGMENT )
+        SEG seg( graphicItem->GetStart(), graphicItem->GetEnd() );
+        VECTOR2I nearestPoint = seg.NearestPoint( cursorPos );
+
+        // Move the end of the line to the break point..
+        graphicItem->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
+
+        // and add another one starting from the break point
+        DRAWSEGMENT* newSegment;
+
+        if( item->Type() == PCB_MODULE_EDGE_T )
         {
-            commit.Modify( segment );
-
-            SEG seg( segment->GetStart(), segment->GetEnd() );
-            VECTOR2I nearestPoint = seg.NearestPoint( cursorPos );
-
-            // Move the end of the line to the break point..
-            segment->SetEnd( wxPoint( nearestPoint.x, nearestPoint.y ) );
-
-            // and add another one starting from the break point
-            DRAWSEGMENT* newSegment;
-
-            if( moduleEdge )
-            {
-                EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( segment );
-                assert( edge->Type() == PCB_MODULE_EDGE_T );
-                assert( edge->GetParent()->Type() == PCB_MODULE_T );
-                newSegment = new EDGE_MODULE( *edge );
-            }
-            else
-            {
-                newSegment = new DRAWSEGMENT( *segment );
-            }
-
-            newSegment->ClearSelected();
-            newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
-            newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
-
-            commit.Add( newSegment );
-            commit.Push( _( "Split segment" ) );
+            EDGE_MODULE* edge = static_cast<EDGE_MODULE*>( graphicItem );
+            assert( edge->GetParent()->Type() == PCB_MODULE_T );
+            newSegment = new EDGE_MODULE( *edge );
         }
+        else
+        {
+            newSegment = new DRAWSEGMENT( *graphicItem );
+        }
+
+        newSegment->ClearSelected();
+        newSegment->SetStart( wxPoint( nearestPoint.x, nearestPoint.y ) );
+        newSegment->SetEnd( wxPoint( seg.B.x, seg.B.y ) );
+
+        commit.Add( newSegment );
+        commit.Push( _( "Split segment" ) );
     }
 
     updatePoints();
