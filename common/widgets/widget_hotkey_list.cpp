@@ -51,9 +51,6 @@ enum ID_WHKL_MENU_IDS
 };
 
 
-
-
-
 /**
  * Class WIDGET_HOTKEY_CLIENT_DATA
  * Stores the hotkey change data associated with each row. To change a
@@ -521,15 +518,6 @@ WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkey
     Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
     Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
     Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
-}
-
-
-void WIDGET_HOTKEY_LIST::InstallOnPanel( wxPanel* aPanel )
-{
-    wxBoxSizer* sizer = new wxBoxSizer( wxVERTICAL );
-
-    sizer->Add( this, 1, wxALL | wxEXPAND, 0 );
-    aPanel->SetSizer( sizer );
 }
 
 

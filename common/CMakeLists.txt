@@ -172,12 +172,12 @@ set( COMMON_DLG_SRCS
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
     dialogs/panel_hotkeys_editor.cpp
-    dialogs/panel_hotkeys_editor_base.cpp
     dialogs/wx_html_report_panel.cpp
     dialogs/wx_html_report_panel_base.cpp
     )
 
 set( COMMON_WIDGET_SRCS
+    widgets/button_row_panel.cpp
     widgets/color_swatch.cpp
     widgets/footprint_choice.cpp
     widgets/footprint_preview_widget.cpp

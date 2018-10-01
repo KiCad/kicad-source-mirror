@@ -167,14 +167,6 @@ public:
     WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore );
 
     /**
-     * Method InstallOnPanel
-     * Install this WIDGET_HOTKEY_LIST onto an empty panel. This is useful
-     * when combining with wxFormBuilder, as an empty panel can be left as a
-     * placeholder in the layout.
-     */
-    void InstallOnPanel( wxPanel* aPanel );
-
-    /**
      * Method ApplyFilterString
      * Apply a filter string to the hotkey list, selecting which hotkeys
      * to show.

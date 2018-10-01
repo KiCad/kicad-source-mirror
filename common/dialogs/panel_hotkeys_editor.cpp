@@ -21,24 +21,119 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <eda_base_frame.h>
 #include <panel_hotkeys_editor.h>
+#include <eda_base_frame.h>
+
+#include <wx/srchctrl.h>
+#include <wx/panel.h>
+#include <wx/button.h>
+#include <wx/sizer.h>
+
+#include <widgets/button_row_panel.h>
+
+
+static const wxSize default_dialog_size { 500, 350 };
+static const wxSize min_dialog_size { -1, 350 };
+static const int widget_margins = 5;
+static const int side_margins = 10;
+
+/**
+ * Helper function to add a filter box to a panel, with some
+ * sensible defaults for that purpose.
+ *
+ * @param  aParent          The panrent widget/panel
+ * @param  aDescriptiveText The text to show when the box is empty.
+ * @return                  A newly constructed filter box - the caller owns it
+ */
+static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDescriptiveText )
+{
+    auto search_widget = new wxSearchCtrl( aParent, wxID_ANY );
+
+    search_widget->ShowSearchButton( false );
+    search_widget->ShowCancelButton( true );
+
+    search_widget->SetDescriptiveText( aDescriptiveText);
+
+    return search_widget;
+}
+
 
 PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
                                             EDA_HOTKEY_CONFIG* aHotkeys,
                                             EDA_HOTKEY_CONFIG* aShowHotkeys,
                                             const wxString& aNickname ) :
-        PANEL_HOTKEYS_EDITOR_BASE( aWindow ),
+        wxPanel( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
         m_frame( aFrame ),
         m_hotkeys( aHotkeys ),
         m_showHotkeys( aShowHotkeys ),
         m_nickname( aNickname ),
         m_hotkeyStore( aShowHotkeys )
 {
-    m_filterSearch->SetDescriptiveText( _("Type filter text") );
+    auto mainSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( m_panelHotkeys, m_hotkeyStore );
-    m_hotkeyListCtrl->InstallOnPanel( m_panelHotkeys );
+    // Sub-sizer for setting a wider side margin
+    // TODO: Can this be set by the parent widget- doesn't seem to be
+    // this panel's responsibility?
+    auto bMargins = new wxBoxSizer( wxVERTICAL );
+
+    auto filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
+    bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, widget_margins );
+
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore );
+    bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, widget_margins );
+
+    installButtons( bMargins );
+
+    mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
+
+    this->SetSizer( mainSizer );
+    this->Layout();
+
+    // Connect Events
+    filterSearch->Bind( wxEVT_COMMAND_TEXT_UPDATED,
+        &PANEL_HOTKEYS_EDITOR::OnFilterSearch, this );
+}
+
+
+void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
+{
+    const BUTTON_ROW_PANEL::BTN_DEF_LIST l_btn_defs = {
+        {
+            wxID_RESET,
+            _( "Reset Hotkeys" ),
+            [this]( wxCommandEvent ){
+                m_hotkeyListCtrl->ResetAllHotkeys( false );
+            }
+        },
+        {
+            wxID_ANY,
+            _( "Set to Defaults" ),
+            [this]( wxCommandEvent ){
+                m_hotkeyListCtrl->ResetAllHotkeys( true );
+            }
+        }
+    };
+
+    const BUTTON_ROW_PANEL::BTN_DEF_LIST r_btn_defs = {
+        {
+            wxID_ANY,
+            _( "Import..." ),
+            [this]( wxCommandEvent ){
+                m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
+            }
+        },
+        {
+            wxID_ANY,
+            _( "Export..." ),
+            [this]( wxCommandEvent ){
+                m_frame->ExportHotkeyConfigToFile( m_hotkeys, m_nickname );
+            }
+        },
+    };
+
+    auto btnPanel = new BUTTON_ROW_PANEL( this, l_btn_defs, r_btn_defs );
+
+    aSizer->Add( btnPanel, 0, wxEXPAND | wxTOP, widget_margins );
 }
 
 
@@ -59,28 +154,6 @@ bool PANEL_HOTKEYS_EDITOR::TransferDataFromWindow()
     return true;
 }
 
-
-void PANEL_HOTKEYS_EDITOR::ResetClicked( wxCommandEvent& aEvent )
-{
-    m_hotkeyListCtrl->ResetAllHotkeys( false );
-}
-
-void PANEL_HOTKEYS_EDITOR::DefaultsClicked( wxCommandEvent& aEvent )
-{
-    m_hotkeyListCtrl->ResetAllHotkeys( true );
-}
-
-
-void PANEL_HOTKEYS_EDITOR::OnExport( wxCommandEvent& aEvent )
-{
-    m_frame->ExportHotkeyConfigToFile( m_hotkeys, m_nickname );
-}
-
-
-void PANEL_HOTKEYS_EDITOR::OnImport( wxCommandEvent& aEvent )
-{
-    m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
-}
 
 void PANEL_HOTKEYS_EDITOR::OnFilterSearch( wxCommandEvent& aEvent )
 {

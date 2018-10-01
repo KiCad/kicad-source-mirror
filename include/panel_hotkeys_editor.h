@@ -27,11 +27,16 @@
 #include <hotkeys_basic.h>
 #include <hotkey_store.h>
 
-#include "../common/dialogs/panel_hotkeys_editor_base.h"
 #include <widgets/widget_hotkey_list.h>
 
+#include "wx/panel.h"
 
-class PANEL_HOTKEYS_EDITOR : public PANEL_HOTKEYS_EDITOR_BASE
+
+class wxPanel;
+class wxSizer;
+
+
+class PANEL_HOTKEYS_EDITOR : public wxPanel
 {
 protected:
     EDA_BASE_FRAME*           m_frame;
@@ -50,28 +55,13 @@ public:
                           EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
                           const wxString& aNickname );
 
-    ~PANEL_HOTKEYS_EDITOR() {};
-
 private:
 
     /**
-     * Function ResetClicked
-     * Reinit the hotkeys to the initial state (removes all pending changes)
-     *
-     * @param aEvent is the button press event, unused
+     * Install the button panel (global reset/default, import/export)
+     * @param aSizer the dialog to install on
      */
-    void ResetClicked( wxCommandEvent& aEvent ) override;
-
-    /**
-     * Function DefaultsClicked
-     * Set the hotkeys to the default values (values after installation)
-     *
-     * @param aEvent is the button press event, unused
-     */
-    void DefaultsClicked( wxCommandEvent& aEvent ) override;
-
-    void OnExport( wxCommandEvent& aEvent ) override;
-    void OnImport( wxCommandEvent& aEvent ) override;
+    void installButtons( wxSizer* aSizer );
 
     /**
      * Function OnFilterSearch
@@ -79,7 +69,7 @@ private:
      *
      * @param aEvent: the search event, used to get the search query
      */
-    void OnFilterSearch( wxCommandEvent& aEvent ) override;
+    void OnFilterSearch( wxCommandEvent& aEvent );
 };
 
 
