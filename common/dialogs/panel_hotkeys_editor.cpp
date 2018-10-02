@@ -101,6 +101,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         {
             wxID_RESET,
             _( "Reset Hotkeys" ),
+            _( "Undo all changes made so far in this dialog" ),
             [this]( wxCommandEvent ){
                 m_hotkeyListCtrl->ResetAllHotkeys( false );
             }
@@ -108,6 +109,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         {
             wxID_ANY,
             _( "Set to Defaults" ),
+            _( "Set all hotkeys to the built-in KiCad defaults" ),
             [this]( wxCommandEvent ){
                 m_hotkeyListCtrl->ResetAllHotkeys( true );
             }
@@ -118,6 +120,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         {
             wxID_ANY,
             _( "Import..." ),
+            _( "Import hotkey definitions from an external file, replacing the current values" ),
             [this]( wxCommandEvent ){
                 m_frame->ImportHotkeyConfigFromFile( m_hotkeys, m_nickname );
             }
@@ -125,6 +128,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
         {
             wxID_ANY,
             _( "Export..." ),
+            _( "Export these hotkey definitions to an external file" ),
             [this]( wxCommandEvent ){
                 m_frame->ExportHotkeyConfigToFile( m_hotkeys, m_nickname );
             }

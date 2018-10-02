@@ -64,6 +64,11 @@ public:
         wxString        m_text;
 
         /**
+         * Button tooltip text - empty string for no tooltip
+         */
+        wxString        m_tooltip;
+
+        /**
          * The callback fired when the button is clicked. Can be nullptr,
          * but then the button is useless.
          */

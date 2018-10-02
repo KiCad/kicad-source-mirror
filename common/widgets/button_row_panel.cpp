@@ -68,6 +68,8 @@ void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
         if( ( aLeft ) || ( !aLeft && i < aDefs.size() - 1 ) )
             this_style |= wxRIGHT;
 
+        btn->SetToolTip( def.m_tooltip );
+
         m_sizer->Add( btn, btn_proportion, this_style, btn_margin );
 
         btn->Bind( wxEVT_COMMAND_BUTTON_CLICKED, def.m_callback );
