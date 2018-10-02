@@ -379,7 +379,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateFootprintList()
     if( index == wxNOT_FOUND )
         setCurFootprintName( wxEmptyString );
     else
+    {
         m_footprintList->SetSelection( index, true );
+        m_footprintList->EnsureVisible( index );
+    }
 }
 
 
