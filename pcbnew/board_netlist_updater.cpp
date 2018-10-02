@@ -632,6 +632,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     {
         COMPONENT* component = aNetlist.GetComponent( i );
         int        matchCount = 0;
+        MODULE*    tmp;
 
         msg.Printf( _( "Processing component \"%s:%s:%s\"." ),
                     component->GetReference(),
@@ -639,12 +640,9 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
                     component->GetFPID().Format().wx_str() );
         m_reporter->Report( msg, REPORTER::RPT_INFO );
 
-        // This loop must be executed at least once to add new footprints even
-        // if the board has no existing footprints:
-        for( MODULE* footprint = m_board->m_Modules; ; footprint = footprint->Next() )
+        for( MODULE* footprint = m_board->m_Modules; footprint; footprint = footprint->Next() )
         {
             bool     match = false;
-            MODULE*  tmp;
 
             if( footprint )
             {
@@ -672,25 +670,22 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
 
             if( footprint == lastPreexistingFootprint )
             {
-                if( matchCount == 0 )
-                {
-                    tmp = addNewComponent( component );
-
-                    if( tmp )
-                    {
-                        updateComponentParameters( tmp, component );
-                        updateComponentPadConnections( tmp, component );
-                    }
-
-                    matchCount++;
-                }
-
                 // No sense going through the newly-created footprints: end of loop
                 break;
             }
         }
 
-        if( matchCount > 1 )
+        if( matchCount == 0 )
+        {
+            tmp = addNewComponent( component );
+
+            if( tmp )
+            {
+                updateComponentParameters( tmp, component );
+                updateComponentPadConnections( tmp, component );
+            }
+        }
+        else if( matchCount > 1 )
         {
             msg.Printf( _( "Multiple footprints found for \"%s\"." ),
                         component->GetReference() );

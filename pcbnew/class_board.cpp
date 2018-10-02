@@ -2575,7 +2575,7 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             if( aNetlist.IsFindByTimeStamp() )
                 match = footprint->GetPath() == component->GetTimeStamp();
             else
-                match = footprint->GetReference().CmpNoCase( component->GetReference() );
+                match = footprint->GetReference().CmpNoCase( component->GetReference() ) == 0;
 
             if( match )
             {
