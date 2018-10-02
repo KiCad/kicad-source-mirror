@@ -711,8 +711,7 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
     delete m_lastNode;
     m_lastNode = NULL;
 
-    if( !route( aP ) )
-        return false;
+    bool retval = route( aP );
 
     NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
@@ -722,7 +721,7 @@ bool DIFF_PAIR_PLACER::Move( const VECTOR2I& aP , ITEM* aEndItem )
 
     updateLeadingRatLine();
 
-    return true;
+    return retval;
 }
 
 
@@ -740,7 +739,7 @@ void DIFF_PAIR_PLACER::UpdateSizes( const SIZES_SETTINGS& aSizes )
 
 bool DIFF_PAIR_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinish )
 {
-    if( !m_fitOk )
+    if( !m_fitOk && !Settings().CanViolateDRC() )
         return false;
 
     if( m_currentTrace.CP().SegmentCount() < 1 ||
