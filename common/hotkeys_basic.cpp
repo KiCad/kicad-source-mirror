@@ -37,10 +37,12 @@
 #include <gestfich.h>
 #include <eda_base_frame.h>
 #include <macros.h>
-#include <panel_hotkeys_editor.h>
 #include <menus_helpers.h>
 #include <draw_frame.h>
+
 #include <tool/tool_manager.h>
+
+#include "dialogs/dialog_hotkey_list.h"
 
 #include <wx/apptrait.h>
 #include <wx/stdpaths.h>
@@ -442,52 +444,10 @@ int KeyCodeFromKeyName( const wxString& keyname )
  * Displays the current hotkey list
  * aList = a EDA_HOTKEY_CONFIG list(Null terminated)
  */
-#include <html_messagebox.h>
-
 void DisplayHotkeyList( EDA_BASE_FRAME* aFrame, struct EDA_HOTKEY_CONFIG* aDescList )
 {
-    wxString     keyname;
-    wxString     keymessage;
-    EDA_HOTKEY** list;
-
-    wxString     msg = wxT( "<html><body bgcolor=\"#E2E2E2\">" );
-
-    msg += wxT( "<H3>" );
-    msg += _( "Hotkeys List" );
-    msg += wxT( "</H3> <table cellpadding=\"0\">" );
-
-    for( ; aDescList->m_HK_InfoList != nullptr; aDescList++ )
-    {
-        list = aDescList->m_HK_InfoList;
-
-        for( ; *list != nullptr; list++ )
-        {
-            EDA_HOTKEY* hk_decr = *list;
-
-            if( !hk_decr->m_InfoMsg.Contains( wxT( "Macros" ) ) )
-            {
-                keyname = KeyNameFromKeyCode( hk_decr->m_KeyCode );
-                keymessage = wxGetTranslation( hk_decr->m_InfoMsg );
-
-                // Some chars are modified, using html encoding, to be
-                // displayed by DisplayHtmlInfoMessage()
-                keyname.Replace( wxT( "<" ), wxT( "&lt;" ) );
-                keyname.Replace( wxT( ">" ), wxT( "&gt;" ) );
-                msg    += wxT( "<tr><td>" ) + keymessage + wxT( "</td>" );
-                msg    += wxT( "<td><b>&nbsp;&nbsp;" ) + keyname + wxT( "</b></td></tr>" );
-            }
-        }
-    }
-
-    msg += wxT( "</table></html></body>" );
-
-    // Create a non modal dialog, which shows the list of hotkeys until dismissed
-    // but does not block the parent window
-    HTML_MESSAGE_BOX *dlg = new HTML_MESSAGE_BOX( aFrame, _( "Hotkeys List" ) );
-    dlg->SetDialogSizeInDU( 300, 250 );
-
-    dlg->AddHTML_Text( msg );
-    dlg->Show( true );
+    DIALOG_LIST_HOTKEYS dlg( aFrame, aDescList );
+    dlg.ShowModal();
 }
 
 

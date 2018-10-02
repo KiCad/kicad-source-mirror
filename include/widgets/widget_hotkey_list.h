@@ -44,6 +44,7 @@ class WIDGET_HOTKEY_CLIENT_DATA;
 class WIDGET_HOTKEY_LIST : public TWO_COLUMN_TREE_LIST
 {
     HOTKEY_STORE&               m_hk_store;
+    bool                        m_readOnly;
 
     wxTreeListItem              m_context_menu_item;
 
@@ -164,7 +165,7 @@ public:
      * @param aHotkeys - EDA_HOTKEY_CONFIG data - a hotkey store is constructed
      * from this.
      */
-    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore );
+    WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore, bool aReadOnly );
 
     /**
      * Method ApplyFilterString

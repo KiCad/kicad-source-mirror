@@ -506,18 +506,29 @@ bool WIDGET_HOTKEY_LIST::ResolveKeyConflicts( long aKey, const wxString& aSectio
 }
 
 
-WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore )
+WIDGET_HOTKEY_LIST::WIDGET_HOTKEY_LIST( wxWindow* aParent, HOTKEY_STORE& aHotkeyStore,
+            bool aReadOnly )
     :   TWO_COLUMN_TREE_LIST( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTL_SINGLE ),
-        m_hk_store( aHotkeyStore )
+        m_hk_store( aHotkeyStore ),
+        m_readOnly( aReadOnly )
 {
-    AppendColumn( _( "Command (double-click to edit)" ) );
+    wxString command_header = _( "Command" );
+
+    if( !m_readOnly )
+        command_header << " " << _( "(double-click to edit)" );
+
+    AppendColumn( command_header );
     AppendColumn( _( "Hotkey" ) );
     SetRubberBandColumn( 0 );
     SetClampedMinWidth( HOTKEY_MIN_WIDTH );
 
-    Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
-    Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
-    Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
+    if( !m_readOnly )
+    {
+        // The event only apply if the widget is in editable mode
+        Bind( wxEVT_TREELIST_ITEM_ACTIVATED, &WIDGET_HOTKEY_LIST::OnActivated, this );
+        Bind( wxEVT_TREELIST_ITEM_CONTEXT_MENU, &WIDGET_HOTKEY_LIST::OnContextMenu, this );
+        Bind( wxEVT_MENU, &WIDGET_HOTKEY_LIST::OnMenu, this );
+    }
 }
 
 

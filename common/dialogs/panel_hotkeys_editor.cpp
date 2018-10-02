@@ -59,13 +59,14 @@ static wxSearchCtrl* CreateTextFilterBox( wxWindow* aParent, const wxString& aDe
 
 
 PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
+                                            bool aReadOnly,
                                             EDA_HOTKEY_CONFIG* aHotkeys,
                                             EDA_HOTKEY_CONFIG* aShowHotkeys,
                                             const wxString& aNickname ) :
         wxPanel( aWindow, wxID_ANY, wxDefaultPosition, default_dialog_size ),
         m_frame( aFrame ),
+        m_readOnly( aReadOnly ),
         m_hotkeys( aHotkeys ),
-        m_showHotkeys( aShowHotkeys ),
         m_nickname( aNickname ),
         m_hotkeyStore( aShowHotkeys )
 {
@@ -79,10 +80,11 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
     auto filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
     bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, widget_margins );
 
-    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore );
+    m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
     bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, widget_margins );
 
-    installButtons( bMargins );
+    if( !m_readOnly )
+        installButtons( bMargins );
 
     mainSizer->Add( bMargins, 1, wxEXPAND | wxRIGHT | wxLEFT, side_margins );
 

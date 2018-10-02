@@ -40,20 +40,20 @@ class PANEL_HOTKEYS_EDITOR : public wxPanel
 {
 protected:
     EDA_BASE_FRAME*           m_frame;
+    bool                      m_readOnly;
     struct EDA_HOTKEY_CONFIG* m_hotkeys;
-    struct EDA_HOTKEY_CONFIG* m_showHotkeys;
     wxString                  m_nickname;
 
     HOTKEY_STORE              m_hotkeyStore;
     WIDGET_HOTKEY_LIST*       m_hotkeyListCtrl;
 
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
 public:
-    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow,
+    PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aWindow, bool aReadOnly,
                           EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CONFIG* aShowHotkeys,
                           const wxString& aNickname );
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
 
 private:
 

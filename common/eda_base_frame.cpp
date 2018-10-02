@@ -517,7 +517,8 @@ bool EDA_BASE_FRAME::ShowPreferences( EDA_HOTKEY_CONFIG* aHotkeys, EDA_HOTKEY_CO
     wxTreebook* book = dlg.GetTreebook();
 
     book->AddPage( new PANEL_COMMON_SETTINGS( &dlg, book ), _( "Common" ) );
-    book->AddPage( new PANEL_HOTKEYS_EDITOR( this, book, aHotkeys, aShowHotkeys, aHotkeysNickname ), _( "Hotkeys" ) );
+    book->AddPage( new PANEL_HOTKEYS_EDITOR( this, book, false,
+        aHotkeys, aShowHotkeys, aHotkeysNickname ), _( "Hotkeys" ) );
 
     for( unsigned i = 0; i < KIWAY_PLAYER_COUNT;  ++i )
     {
