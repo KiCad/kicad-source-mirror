@@ -77,15 +77,6 @@ void BOARD_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, 
 }
 
 
-bool BOARD_PRINTOUT::HasPage( int aPage )
-{
-    if( aPage <= m_PrintParams.m_PageCount )
-        return true;
-    else
-        return false;
-}
-
-
 void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPageCount )
 {
     auto dc = GetDC();
@@ -96,8 +87,10 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     auto painter = getPainter( gal );
     std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
 
-    wxRect page = GetLogicalPageRect();
-    galPrint->SetSheetSize( VECTOR2D( page.width / dc->GetPPI().x, page.height / dc->GetPPI().y ) );
+    wxRect pageSizePx = GetLogicalPageRect();
+    VECTOR2D pageSizeIn( (double) pageSizePx.width / dc->GetPPI().x,
+            (double) pageSizePx.height / dc->GetPPI().y );
+    galPrint->SetSheetSize( pageSizeIn );
 
     view->SetGAL( gal );
     view->SetPainter( painter.get() );
@@ -156,17 +149,9 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         scale = m_PrintParams.m_XScaleAdjust;
     }
 
-
-    if( m_PrintParams.m_PrintMirror )
-        gal->SetFlip( true, false );
-
-
-    // TODO fix 'Preview' button
-    VECTOR2D nps( GetLogicalPageRect().width, GetLogicalPageRect().height );
-
     setupGal( gal );
-    galPrint->SetNativePaperSize( VECTOR2D( nps.x / dc->GetPPI().x, nps.y / dc->GetPPI().y ),
-            printCtx->HasNativeLandscapeRotation() );
+    galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
+    gal->SetFlip( m_PrintParams.m_PrintMirror, false );
     gal->SetLookAtPoint( bBox.Centre() );
     gal->SetZoomFactor( scale );
 

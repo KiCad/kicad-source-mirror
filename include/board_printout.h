@@ -111,7 +111,10 @@ public:
 
     void GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, int* selPageTo ) override;
 
-    bool HasPage( int aPage ) override;
+    bool HasPage( int aPage ) override
+    {
+        return aPage <= m_PrintParams.m_PageCount;
+    }
 
     /**
      * Print a page (or a set of pages).
