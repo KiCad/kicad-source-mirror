@@ -17,7 +17,7 @@ KICAD2STEP_FRAME_BASE::KICAD2STEP_FRAME_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMain = new wxBoxSizer( wxVERTICAL );
 	
 	m_panelKicad2Step = new PANEL_KICAD2STEP( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizerMain->Add( m_panelKicad2Step, 1, wxEXPAND | wxALL, 5 );
+	bSizerMain->Add( m_panelKicad2Step, 1, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

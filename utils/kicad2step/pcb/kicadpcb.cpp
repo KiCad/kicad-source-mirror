@@ -86,19 +86,18 @@ static wxString GetKicadConfigPath()
 }
 
 
-KICADPCB::KICADPCB( wxTextCtrl* aMessageWindow )
+KICADPCB::KICADPCB()
 {
     wxFileName cfgdir( GetKicadConfigPath(), "" );
     cfgdir.AppendDir( "3d" );
     m_resolver.Set3DConfigDir( cfgdir.GetPath() );
     m_thickness = 1.6;
-    m_pcb = NULL;
+    m_pcb_model = nullptr;
     m_minDistance = MIN_DISTANCE;
     m_useGridOrigin = false;
     m_useDrillOrigin = false;
     m_hasGridOrigin = false;
     m_hasDrillOrigin = false;
-    m_messageWindow = aMessageWindow;
 }
 
 
@@ -110,16 +109,9 @@ KICADPCB::~KICADPCB()
     for( auto i : m_curves )
         delete i;
 
-    if( m_pcb )
-        delete m_pcb;
+    delete m_pcb_model;
 
     return;
-}
-
-
-void KICADPCB::ReportMessage( const wxString& aMessage )
-{
-    m_messageWindow->AppendText( aMessage );  wxSafeYield();
 }
 
 
@@ -175,9 +167,9 @@ bool KICADPCB::ReadFile( const wxString& aFileName )
 
 bool KICADPCB::WriteSTEP( const wxString& aFileName )
 {
-    if( m_pcb )
+    if( m_pcb_model )
     {
-        return m_pcb->WriteSTEP( aFileName );
+        return m_pcb_model->WriteSTEP( aFileName );
     }
 
     return false;
@@ -187,9 +179,9 @@ bool KICADPCB::WriteSTEP( const wxString& aFileName )
 #ifdef SUPPORTS_IGES
 bool KICADPCB::WriteIGES( const wxString& aFileName )
 {
-    if( m_pcb )
+    if( m_pcb_model )
     {
-        return m_pcb->WriteIGES( aFileName );
+        return m_pcb_model->WriteIGES( aFileName );
     }
 
     return false;
@@ -406,12 +398,12 @@ bool KICADPCB::parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType )
 
 bool KICADPCB::ComposePCB( bool aComposeVirtual )
 {
-    if( m_pcb )
+    if( m_pcb_model )
         return true;
 
     if( m_modules.empty() && m_curves.empty() )
     {
-        ReportMessage( "Error: no PCB data to render\n" );
+        ReportMessage( "Error: no PCB data (no footprint, no outline) to render\n" );
         return false;
     }
 
@@ -432,9 +424,9 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
         origin = m_origin;
     }
 
-    m_pcb = new PCBMODEL();
-    m_pcb->SetPCBThickness( m_thickness );
-    m_pcb->SetMinDistance( m_minDistance );
+    m_pcb_model = new PCBMODEL();
+    m_pcb_model->SetPCBThickness( m_thickness );
+    m_pcb_model->SetMinDistance( m_minDistance );
 
     for( auto i : m_curves )
     {
@@ -451,17 +443,19 @@ bool KICADPCB::ComposePCB( bool aComposeVirtual )
         if( CURVE_ARC == lcurve.m_form )
             lcurve.m_angle = -lcurve.m_angle;
 
-        m_pcb->AddOutlineSegment( &lcurve );
+        m_pcb_model->AddOutlineSegment( &lcurve );
     }
 
     for( auto i : m_modules )
-        i->ComposePCB( m_pcb, &m_resolver, origin, aComposeVirtual );
+        i->ComposePCB( m_pcb_model, &m_resolver, origin, aComposeVirtual );
 
-    if( !m_pcb->CreatePCB() )
+    ReportMessage( "Create PCB solid model\n" );
+
+    if( !m_pcb_model->CreatePCB() )
     {
         ReportMessage( "could not create PCB solid model\n" );
-        delete m_pcb;
-        m_pcb = NULL;
+        delete m_pcb_model;
+        m_pcb_model = NULL;
         return false;
     }
 

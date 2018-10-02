@@ -147,13 +147,17 @@ std::string KICADCURVE::Describe() const
         case CURVE_LINE:
             desc << "line start: " << m_start << " end: " << m_end;
             break;
+
         case CURVE_ARC:
             desc << "arc center: " << m_start << " radius: " << m_radius
-                 << " angle: " << 180.0 * m_angle / M_PI;
+                 << " angle: " << 180.0 * m_angle / M_PI
+                 << " arc start: " << m_end << " arc end: " << m_ep;
             break;
+
         case CURVE_CIRCLE:
             desc << "circle center: " << m_start << " radius: " << m_radius;
             break;
+
         default:
             desc << "<invalid curve type>";
             break;

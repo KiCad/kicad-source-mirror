@@ -165,9 +165,9 @@ FormatType fileType( const char* aFileName )
     if( !lfile.FileExists() )
     {
         std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
         ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
         ostr << "  * no such file: '" << aFileName << "'\n";
         wxLogMessage( "%s", ostr.str().c_str() );
 
@@ -258,9 +258,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         if( distance < m_minDistance2 )
         {
             std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
             ostr << "  * rejected a zero-length " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
@@ -277,9 +277,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
         if( rad < m_minDistance2 )
         {
             std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
             ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
             ostr << "  * rejected a zero-radius " << aCurve->Describe() << "\n";
             wxLogMessage( "%s", ostr.str().c_str() );
             return false;
@@ -317,9 +317,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             if( rad < m_minDistance2 )
             {
                 std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
                 ostr << "  * rejected an arc with equivalent end points, "
                     << aCurve->Describe() << "\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
@@ -423,9 +423,9 @@ bool PCBMODEL::AddOutlineSegment( KICADCURVE* aCurve )
             do
             {
                 std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
                 ostr << "  * unsupported curve type: '" << aCurve->m_form << "'\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
             } while( 0 );
@@ -659,10 +659,12 @@ bool PCBMODEL::CreatePCB()
 
     m_hasPCB = true;    // whether or not operations fail we note that CreatePCB has been invoked
     TopoDS_Shape board;
-    OUTLINE oln;    // loop to assemble (represents PCB outline and cutouts)
+    OUTLINE oln;        // loop to assemble (represents PCB outline and cutouts)
     oln.SetMinSqDistance( m_minDistance2 );
     oln.AddSegment( *m_mincurve );
     m_curves.erase( m_mincurve );
+
+    ReportMessage( wxString::Format( "Build board outline (%d items)\n", (int)m_curves.size() ) );
 
     while( !m_curves.empty() )
     {
@@ -756,10 +758,6 @@ bool PCBMODEL::CreatePCB()
             }
             else
             {
-                std::ostringstream ostr;
-#ifdef __WXDEBUG__
-                ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
                 ReportMessage( "could not create board cutout\n" );
             }
         }
@@ -769,7 +767,33 @@ bool PCBMODEL::CreatePCB()
     for( const auto& i : m_cutouts )
         board = BRepAlgoAPI_Cut( board, i );
 
+    if( m_cutouts.size() )
+        ReportMessage( wxString::Format( "Build board cutout (%d holes)\n", (int)m_cutouts.size() ) );
+
+    // Substract holes (cutouts) can be time consuming, so display activity
+    // state to be sure there is no hang:
+    int char_count = 0;
+    int cur_count = 0;
+    int cntmax =  m_cutouts.size();
+
+    for( auto hole : m_cutouts )
+    {
+        board = BRepAlgoAPI_Cut( board, hole );
+
+        cur_count++;
+        char_count++;
+
+        if( char_count < 80 )
+            ReportMessage( "." );
+        else
+        {
+            char_count = 0;
+            ReportMessage( wxString::Format( ". %d/%d\n", cur_count, cntmax ) );
+        }
+    }
+
     // push the board to the data structure
+    ReportMessage( "\nGenerate board full shape\n" );
     m_pcb_label = m_assy->AddComponent( m_assy_label, board );
 
     if( m_pcb_label.IsNull() )
@@ -1172,9 +1196,9 @@ TDF_Label PCBMODEL::transferModel( Handle( TDocStd_Document )& source,
                 scaled_shape = brep.Shape();
             } else {
                 std::ostringstream ostr;
-#ifdef __WXDEBUG__
+#ifdef DEBUG
                 ostr << __FILE__ << ": " << __FUNCTION__ << ": " << __LINE__ << "\n";
-#endif /* __WXDEBUG */
+#endif /* DEBUG */
                 ostr << "  * failed to scale model\n";
                 wxLogMessage( "%s", ostr.str().c_str() );
                 scaled_shape = shape;
@@ -1385,15 +1409,15 @@ bool OUTLINE::MakeShape( TopoDS_Shape& aShape, double aThickness )
         }
         catch( const Standard_Failure& e )
         {
-            ReportMessage( wxString::Format( "Exception caught: %s", e.GetMessageString() ) );
+            ReportMessage( wxString::Format( "Exception caught: %s\n", e.GetMessageString() ) );
             success = false;
         }
 
         if( !success )
         {
-            ReportMessage( wxString::Format( "failed to add an edge: %d\n",
-                                      "last valid outline point: %f %f\n",
-                                      i.Describe(), lastPoint.x, lastPoint.y ) );
+            ReportMessage( wxString::Format(
+                "failed to add an edge:\n%s\nlast valid outline point: %f %f\n",
+                i.Describe().c_str(), lastPoint.x, lastPoint.y ) );
             return false;
         }
     }
@@ -1445,10 +1469,8 @@ bool OUTLINE::addEdge( BRepBuilderAPI_MakeWire* aWire, KICADCURVE& aCurve, DOUBL
             break;
 
         default:
-            {
-                ReportMessage( wxString::Format( "unsupported curve type: %d\n", aCurve.m_form ) );
-                return false;
-            }
+            ReportMessage( wxString::Format( "unsupported curve type: %d\n", aCurve.m_form ) );
+            return false;
     }
 
     if( edge.IsNull() )

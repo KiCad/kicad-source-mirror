@@ -55,7 +55,7 @@ class KICADPCB
 private:
     S3D_RESOLVER m_resolver;
     wxString    m_filename;
-    PCBMODEL*   m_pcb;
+    PCBMODEL*   m_pcb_model;
     DOUBLET     m_origin;
     DOUBLET     m_gridOrigin;
     DOUBLET     m_drillOrigin;
@@ -73,7 +73,6 @@ private:
     double                      m_thickness;
     std::vector< KICADMODULE* > m_modules;
     std::vector< KICADCURVE* >  m_curves;
-    wxTextCtrl* m_messageWindow;        // to print messages
 
     bool parsePCB( SEXPR::SEXPR* data );
     bool parseGeneral( SEXPR::SEXPR* data );
@@ -83,11 +82,8 @@ private:
     bool parseCurve( SEXPR::SEXPR* data, CURVE_TYPE aCurveType );
 
 public:
-    KICADPCB( wxTextCtrl* aMessageWindow );
+    KICADPCB();
     virtual ~KICADPCB();
-
-    // print aMessage to to called window
-    void ReportMessage( const wxString& aMessage );
 
     int GetLayerId( std::string& aLayerName );
 

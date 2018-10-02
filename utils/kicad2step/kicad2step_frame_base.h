@@ -27,21 +27,19 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class KICAD2STEP_FRAME_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class KICAD2STEP_FRAME_BASE : public wxFrame
+class KICAD2STEP_FRAME_BASE : public wxFrame 
 {
 	private:
-
+	
 	protected:
-
+	
 	public:
 		PANEL_KICAD2STEP* m_panelKicad2Step;
-
-		KICAD2STEP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY,
-                const wxString& title = _("Kicad2step Converter"), const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
-
+		
+		KICAD2STEP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Kicad2step Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,300 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		
 		~KICAD2STEP_FRAME_BASE();
-
+	
 };
 
 #endif //__KICAD2STEP_FRAME_BASE_H__

@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "widgets/text_ctrl_eval.h"
-#include "wx_html_report_panel.h"
 
 #include "dialog_export_step_base.h"
 
@@ -73,9 +72,9 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText5 = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText5->Wrap( -1 );
-	fgSizer1->Add( m_staticText5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextUnits = new wxStaticText( this, wxID_ANY, _("Units:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextUnits->Wrap( -1 );
+	fgSizer1->Add( m_staticTextUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	wxString m_STEP_OrgUnitChoiceChoices[] = { _("mm"), _("inch") };
 	int m_STEP_OrgUnitChoiceNChoices = sizeof( m_STEP_OrgUnitChoiceChoices ) / sizeof( wxString );
@@ -86,9 +85,9 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText3 = new wxStaticText( this, wxID_ANY, _("X position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextXpos = new wxStaticText( this, wxID_ANY, _("X position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextXpos->Wrap( -1 );
+	fgSizer1->Add( m_staticTextXpos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_STEP_Xorg = new TEXT_CTRL_EVAL( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -104,9 +103,9 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	fgSizer1->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
-	m_staticText4 = new wxStaticText( this, wxID_ANY, _("Y position:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText4->Wrap( -1 );
-	fgSizer1->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextYpos = new wxStaticText( this, wxID_ANY, _("Y position:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextYpos->Wrap( -1 );
+	fgSizer1->Add( m_staticTextYpos, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_STEP_Yorg = new TEXT_CTRL_EVAL( this, wxID_ANY, _("0"), wxDefaultPosition, wxDefaultSize, 0 );
 	#ifdef __WXGTK__
@@ -134,34 +133,25 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 
 	bSizer8->Add( m_staticText7, 0, wxALL, 5 );
 
-	wxBoxSizer* bSizer6;
-	bSizer6 = new wxBoxSizer( wxVERTICAL );
-
-	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer3->SetFlexibleDirection( wxBOTH );
-	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-
-
-	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 5 );
-
 	m_cbRemoveVirtual = new wxCheckBox( this, wxID_ANY, _("Ignore virtual components"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_cbRemoveVirtual, 0, wxALL, 5 );
+	bSizer8->Add( m_cbRemoveVirtual, 0, wxALL, 5 );
 
+	m_cbOverwriteFile = new wxCheckBox( this, wxID_ANY, _("Overwrite old file"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer8->Add( m_cbOverwriteFile, 0, wxALL, 5 );
 
-	bSizer6->Add( fgSizer3, 1, wxEXPAND, 5 );
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizer8->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
 
-	wxFlexGridSizer* fgSizer4;
-	fgSizer4 = new wxFlexGridSizer( 0, 3, 0, 0 );
-	fgSizer4->SetFlexibleDirection( wxBOTH );
-	fgSizer4->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	m_staticText9 = new wxStaticText( this, wxID_ANY, _("Board outline builder:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText9->Wrap( -1 );
+	bSizer8->Add( m_staticText9, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 
+	wxBoxSizer* bSizerTolerance;
+	bSizerTolerance = new wxBoxSizer( wxHORIZONTAL );
 
-	fgSizer4->Add( 0, 0, 0, wxALL|wxEXPAND, 5 );
-
-	m_staticText8 = new wxStaticText( this, wxID_ANY, _("Tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText8->Wrap( -1 );
-	fgSizer4->Add( m_staticText8, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextTolerance = new wxStaticText( this, wxID_ANY, _("Tolerance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextTolerance->Wrap( -1 );
+	bSizerTolerance->Add( m_staticTextTolerance, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 
 	wxString m_toleranceChoices[] = { _("Tight"), _("Standard"), _("Loose"), _("Very loose") };
 	int m_toleranceNChoices = sizeof( m_toleranceChoices ) / sizeof( wxString );
@@ -169,22 +159,16 @@ DIALOG_EXPORT_STEP_BASE::DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID i
 	m_tolerance->SetSelection( 1 );
 	m_tolerance->SetToolTip( _("Tolerance sets the distance between two points that are considered joined.  Standard is 0.001mm.") );
 
-	fgSizer4->Add( m_tolerance, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizerTolerance->Add( m_tolerance, 1, wxALL, 5 );
 
 
-	bSizer6->Add( fgSizer4, 1, wxEXPAND, 10 );
-
-
-	bSizer8->Add( bSizer6, 1, wxEXPAND, 5 );
+	bSizer8->Add( bSizerTolerance, 0, wxEXPAND, 5 );
 
 
 	bSizer2->Add( bSizer8, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 
 
-	bSizerSTEPFile->Add( bSizer2, 0, wxEXPAND, 5 );
-
-	m_messagesPanel = new WX_HTML_REPORT_PANEL( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-	bSizerSTEPFile->Add( m_messagesPanel, 1, wxEXPAND | wxALL, 5 );
+	bSizerSTEPFile->Add( bSizer2, 1, wxEXPAND, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerSTEPFile->Add( m_staticline, 0, wxEXPAND | wxALL, 5 );

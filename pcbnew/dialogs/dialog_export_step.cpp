@@ -24,6 +24,7 @@
 
 #include <wx/choicdlg.h>
 #include <wx/stdpaths.h>
+#include <wx/process.h>
 
 #include "pcb_edit_frame.h"
 #include "kiface_i.h"
@@ -35,6 +36,7 @@
 #include <widgets/text_ctrl_eval.h>
 #include <wx_html_report_panel.h>
 
+#define OPTKEY_STEP_OVERWRITE       "STEP_Overwrite"
 
 class DIALOG_EXPORT_STEP: public DIALOG_EXPORT_STEP_BASE
 {
@@ -53,6 +55,7 @@ private:
     // The last preference for STEP Origin:
     STEP_ORG_OPT m_STEP_org_opt;
     bool   m_noVirtual;     // remember last preference for No Virtual Component
+    bool   m_overwriteFile; // remember last preference for overwrite file
     int    m_OrgUnits;      // remember last units for User Origin
     double m_XOrg;          // remember last User Origin X value
     double m_YOrg;          // remember last User Origin Y value
@@ -84,6 +87,11 @@ protected:
     bool GetNoVirtOption()
     {
         return m_cbRemoveVirtual->GetValue();
+    }
+
+    bool GetOverwriteFile()
+    {
+        return m_cbOverwriteFile->GetValue();
     }
 
 public:
@@ -153,6 +161,8 @@ DIALOG_EXPORT_STEP::DIALOG_EXPORT_STEP( PCB_EDIT_FRAME* aParent, const wxString&
     m_noVirtual = cfg->m_ExportStep.no_virtual;
 
     m_cbRemoveVirtual->SetValue( m_noVirtual );
+    m_config->Read( OPTKEY_STEP_OVERWRITE, &m_overwriteFile, false );
+    m_cbOverwriteFile->SetValue( m_overwriteFile );
 
     m_STEP_OrgUnitChoice->SetSelection( m_OrgUnits );
     wxString tmpStr;
@@ -243,7 +253,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     wxFileName fn = m_filePickerSTEP->GetFileName();
 
-    if( fn.FileExists() )
+    if( fn.FileExists() && !GetOverwriteFile() )
     {
         msg.Printf( _( "File '%s' already exists. Do you want overwrite this file?" ),
                     fn.GetFullPath().GetData() );
@@ -333,49 +343,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
     cmdK2S.Append( " " );
     cmdK2S.Append( wxString::Format("\"%s\"", m_boardPath ) );                  // output file path
 
-    int result = 0;
-    bool success = false;
-    wxArrayString output, errors;
-    REPORTER& reporter = m_messagesPanel->Reporter();
-    reporter.ReportHead( wxString::Format( _( "Executing '%s'" ), cmdK2S ), RPT_SEVERITY_ACTION );
+    wxExecute( cmdK2S, wxEXEC_ASYNC  | wxEXEC_SHOW_CONSOLE );
 
-    {
-        wxBusyCursor dummy;
-        result = wxExecute( cmdK2S, output, errors, wxEXEC_SYNC  | wxEXEC_SHOW_CONSOLE );
-    }
-
-    // Check the output log for an indication of success,
-    // the value returned by wxExecute is not conclusive
-    for( auto& l : output )
-    {
-        if( !l.IsEmpty() )
-            reporter.ReportTail( l, REPORTER::RPT_INFO );
-
-        if( l.Contains( "Done" ) )
-        {
-            success = true;
-            break;
-        }
-    }
-
-    for( auto& err : errors )
-        reporter.Report( err, RPT_SEVERITY_WARNING );
-
-    if( result )    // Any troubles?
-    {
-        if( !success )
-        {
-            reporter.ReportTail( _( "Unable to create STEP file.  Check that the board has a "
-                                        "valid outline and models." ), RPT_SEVERITY_ERROR );
-        }
-        else
-        {
-            reporter.ReportTail( _( "STEP file has been created, but there are warnings." ),
-                                 RPT_SEVERITY_INFO );
-        }
-    }
-    else
-    {
-        reporter.ReportTail( _( "STEP file has been created successfully." ), RPT_SEVERITY_INFO );
-    }
+    aEvent.Skip();      // Close the dialog
 }

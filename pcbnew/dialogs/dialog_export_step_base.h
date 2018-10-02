@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -11,7 +11,6 @@
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
 class TEXT_CTRL_EVAL;
-class WX_HTML_REPORT_PANEL;
 
 #include "dialog_shim.h"
 #include <wx/string.h>
@@ -28,7 +27,6 @@ class WX_HTML_REPORT_PANEL;
 #include <wx/textctrl.h>
 #include <wx/valtext.h>
 #include <wx/checkbox.h>
-#include <wx/panel.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
 
@@ -51,17 +49,19 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		wxRadioButton* m_rbUserDefinedOrigin;
 		wxRadioButton* m_rbBoardCenterOrigin;
 		wxStaticText* m_staticText2;
-		wxStaticText* m_staticText5;
+		wxStaticText* m_staticTextUnits;
 		wxChoice* m_STEP_OrgUnitChoice;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_staticTextXpos;
 		TEXT_CTRL_EVAL* m_STEP_Xorg;
-		wxStaticText* m_staticText4;
+		wxStaticText* m_staticTextYpos;
 		TEXT_CTRL_EVAL* m_STEP_Yorg;
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
-		wxStaticText* m_staticText8;
+		wxCheckBox* m_cbOverwriteFile;
+		wxStaticLine* m_staticline3;
+		wxStaticText* m_staticText9;
+		wxStaticText* m_staticTextTolerance;
 		wxChoice* m_tolerance;
-		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -76,7 +76,7 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 650,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 560,277 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EXPORT_STEP_BASE();
 
 };

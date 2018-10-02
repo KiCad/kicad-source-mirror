@@ -48,11 +48,11 @@ public:
     virtual bool OnCmdLineParsed(wxCmdLineParser& parser) override;
 
 private:
+    KICAD2STEP_FRAME * m_frame;
     KICAD2MCAD_PRMS m_params;
 
 public:
     PANEL_KICAD2STEP* m_Panel;
-    KICAD2STEP_FRAME * m_frame;
 };
 
 wxIMPLEMENT_APP(KICAD2MCAD_APP);
@@ -79,6 +79,7 @@ KICAD2MCAD_PRMS::KICAD2MCAD_PRMS()
     m_minDistance = MIN_DISTANCE;
 
 }
+
 
 void ReportMessage( const wxString& aMessage )
 {
@@ -124,13 +125,12 @@ bool KICAD2MCAD_APP::OnInit()
         return false;
 
     // create the main application window
-    m_frame = new KICAD2STEP_FRAME("Kicad2step");
+    m_frame = new KICAD2STEP_FRAME( "Kicad2step" );
 
     m_Panel = m_frame->m_panelKicad2Step;
     m_Panel->m_params = m_params;
 
-    // and show it (the frames, unlike simple controls, are not shown when
-    // created initially)
+    // and show it (a wxRrame is not shown when created initially)
     m_frame->Show( true );
     m_frame->Iconize( false );
 
@@ -140,9 +140,9 @@ bool KICAD2MCAD_APP::OnInit()
 
 int KICAD2MCAD_APP::OnRun()
 {
-    m_frame->Show(true);
-    m_Panel->RunConverter();
-    return 0;
+    int diag = m_Panel->RunConverter();
+    wxApp::OnRun();     // Start the main loop event, to manage the main frame
+    return diag;
 }
 
 
@@ -178,7 +178,8 @@ PANEL_KICAD2STEP::PANEL_KICAD2STEP( wxWindow* parent, wxWindowID id,
 
 void PANEL_KICAD2STEP::AppendMessage( const wxString& aMessage )
 {
-    m_tcMessages->AppendText( aMessage ); wxSafeYield();
+    m_tcMessages->AppendText( aMessage );
+    wxSafeYield();
 }
 
 
@@ -331,41 +332,44 @@ int PANEL_KICAD2STEP::RunConverter()
         return -1;
     }
 
-    wxFileName tfname;
+    wxFileName out_fname;
 
     if( m_params.m_outputFile.empty() )
     {
-        tfname.Assign( fname.GetFullPath() );
-        tfname.SetExt( m_params.getOutputExt() );
+        out_fname.Assign( fname.GetFullPath() );
+        out_fname.SetExt( m_params.getOutputExt() );
     }
     else
     {
-        tfname.Assign( m_params.m_outputFile );
+        out_fname.Assign( m_params.m_outputFile );
 
         // Set the file extension if the user's requested
         // file name does not have an extension.
-        if( !tfname.HasExt() )
-            tfname.SetExt( m_params.getOutputExt() );
+        if( !out_fname.HasExt() )
+            out_fname.SetExt( m_params.getOutputExt() );
     }
 
-    if( tfname.FileExists() && !m_params.m_overwrite )
+    if( out_fname.FileExists() && !m_params.m_overwrite )
     {
-        wxMessageBox( "** Output already exists.\n"
+        ReportMessage( "** Output already exists.\n"
                       "Enable the force overwrite flag to overwrite it." );
 
         return -1;
     }
 
-    wxString outfile = tfname.GetFullPath();
-    KICADPCB pcb( m_tcMessages );
+    wxString outfile = out_fname.GetFullPath();
+    KICADPCB pcb;
 
     pcb.SetOrigin( m_params.m_xOrigin, m_params.m_yOrigin );
     pcb.SetMinDistance( m_params.m_minDistance );
-    m_tcMessages->AppendText( wxString::Format( "Read: %s\n", m_params.m_filename ) );
+    ReportMessage( wxString::Format( "Read: %s\n", m_params.m_filename ) );
 
-    // create the new stream to "redirect" cout's output to
+    // create the new streams to "redirect" cout and cerr output to
+    // msgs_from_opencascade and errors_from_opencascade
     std::ostringstream msgs_from_opencascade;
-    STREAMBUF_SWAPPER swapper(cout, msgs_from_opencascade);
+    std::ostringstream errors_from_opencascade;
+    STREAMBUF_SWAPPER swapper_cout(cout, msgs_from_opencascade);
+    STREAMBUF_SWAPPER swapper_cerr(cerr, errors_from_opencascade);
 
     if( pcb.ReadFile( m_params.m_filename ) )
     {
@@ -379,9 +383,10 @@ int PANEL_KICAD2STEP::RunConverter()
 
         try
         {
-            m_tcMessages->AppendText( "Build STEP data\n" );
+            ReportMessage( "Build STEP data\n" );
+
             pcb.ComposePCB( m_params.m_includeVirtual );
-            m_tcMessages->AppendText( "Start WriteSTEP\n" );
+            ReportMessage( "Write STEP file\n" );
 
         #ifdef SUPPORTS_IGES
             if( m_fmtIGES )
@@ -392,30 +397,57 @@ int PANEL_KICAD2STEP::RunConverter()
 
             if( !res )
             {
-                wxMessageBox( "Error WriteSTEP" );
+                wxMessageBox( "Error Write STEP file" );
                 return -1;
             }
-
-            m_tcMessages->AppendText( wxString::Format( "Step file %s created\n", outfile ) );
         }
         catch( const Standard_Failure& e )
         {
-            e.Print( std::cerr );
-            wxMessageBox( "Error Read" );
+            wxString err = e.GetMessageString();
+            //e.Print( std::cerr );
+            wxMessageBox( err, "Export Error" );
+
+            ReportMessage( wxString::Format( "\nExport Error: %s\n", err ) );
+            ReportMessage( "\n*** Abort export ***\n" );
             return -1;
         }
         catch( ... )
         {
             wxMessageBox( "(no exception information)", "Unknown error" );
+            ReportMessage( "\nUnknown error\n*** Abort export ***\n" );
             return -1;
         }
     }
 
-    wxString msg;
-    msg << msgs_from_opencascade.str();
-    m_tcMessages->AppendText( msg );
+    wxString msgs, errs;
+    msgs << msgs_from_opencascade.str();
+    ReportMessage( msgs );
 
-    wxMessageBox( "End kicad2step" );
+    ReportMessage( wxString::Format( "\nStep file %s created\n\n", outfile ) );
+
+    errs << errors_from_opencascade.str();
+    ReportMessage( errs );
+
+    // Check the output log for an indication of success
+    bool success =  msgs.Contains( "Done" );
+    wxString msg;
+
+    if( !errs.IsEmpty() )    // Any troubles?
+    {
+        if( !success )
+            msg = "Unable to create STEP file.\n"
+                     "Check that the board has a valid outline and models.";
+        else
+        {
+            msg = "STEP file has been created, but there are warnings.";
+        }
+    }
+    else    // No error messages: the file is expected OK
+    {
+        msg.Printf( "STEP file:\n%s\nhas been created successfully.", outfile );
+    }
+
+    ReportMessage( msg );
 
     return 0;
 }
@@ -428,5 +460,5 @@ wxString KICAD2MCAD_PRMS::getOutputExt() const
         return wxString( "igs" );
     else
 #endif
-        return wxString( "stp" );
+        return wxString( "step" );
 }

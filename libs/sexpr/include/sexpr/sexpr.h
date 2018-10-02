@@ -68,7 +68,7 @@ namespace SEXPR
         std::string const & GetSymbol() const;
         SEXPR_LIST* GetList();
         std::string AsString( size_t aLevel = 0) const;
-        size_t GetLineNumber() { return m_lineNumber; }
+        size_t GetLineNumber() const { return m_lineNumber; }
     };
 
     struct SEXPR_INTEGER : public SEXPR
