@@ -1,16 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_PRINT_USING_PRINTER_BASE_H__
-#define __DIALOG_PRINT_USING_PRINTER_BASE_H__
+#ifndef __DIALOG_PRINT_PCBNEW_BASE_H__
+#define __DIALOG_PRINT_PCBNEW_BASE_H__
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
+
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -20,22 +22,23 @@
 #include <wx/settings.h>
 #include <wx/checklst.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/statbox.h>
-#include <wx/radiobox.h>
 #include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/gbsizer.h>
+#include <wx/radiobox.h>
+#include <wx/radiobut.h>
 #include <wx/statline.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_PRINT_USING_PRINTER_BASE
+/// Class DIALOG_PRINT_PCBNEW_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
+class DIALOG_PRINT_PCBNEW_BASE : public DIALOG_SHIM
 {
 	private:
 	
@@ -51,12 +54,9 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxCheckListBox* m_CopperLayersList;
 		wxStaticText* m_staticText5;
 		wxCheckListBox* m_TechnicalLayersList;
+		wxButton* m_buttonSelectAll;
+		wxButton* m_buttonDeselectAll;
 		wxCheckBox* m_Exclude_Edges_Pcb;
-		wxRadioBox* m_ScaleOption;
-		wxStaticText* m_FineAdjustXscaleTitle;
-		wxTextCtrl* m_FineAdjustXscaleOpt;
-		wxStaticText* m_FineAdjustYscaleTitle;
-		wxTextCtrl* m_FineAdjustYscaleOpt;
 		wxStaticText* m_penWidthLabel;
 		wxTextCtrl* m_penWidthCtrl;
 		wxStaticText* m_penWidthUnits;
@@ -67,6 +67,10 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxCheckBox* m_Print_Sheet_Ref;
 		wxCheckBox* m_Print_Mirror;
 		wxRadioBox* m_PagesOption;
+		wxRadioButton* m_scale1;
+		wxRadioButton* m_scaleFit;
+		wxRadioButton* m_scaleCustom;
+		wxTextCtrl* m_scaleCustomText;
 		wxStaticLine* m_staticline1;
 		wxButton* m_buttonOption;
 		wxStdDialogButtonSizer* m_sdbSizer1;
@@ -75,7 +79,9 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1Cancel;
 		
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnScaleSelectionClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSelectAllClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnDeselectAllClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnSetCustomScale( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPageSetup( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintPreview( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnPrintButtonClick( wxCommandEvent& event ) { event.Skip(); }
@@ -83,9 +89,9 @@ class DIALOG_PRINT_USING_PRINTER_BASE : public DIALOG_SHIM
 	
 	public:
 		
-		DIALOG_PRINT_USING_PRINTER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
-		~DIALOG_PRINT_USING_PRINTER_BASE();
+		DIALOG_PRINT_PCBNEW_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Print"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 700,550 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+		~DIALOG_PRINT_PCBNEW_BASE();
 	
 };
 
-#endif //__DIALOG_PRINT_USING_PRINTER_BASE_H__
+#endif //__DIALOG_PRINT_PCBNEW_BASE_H__

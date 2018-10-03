@@ -132,28 +132,27 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     }
 
 
-    double scale = m_PrintParams.m_PrintScale;
-
-    if( m_PrintParams.m_PrintScale == 0.0 )
+    // Fit to page
+    if( m_PrintParams.m_PrintScale <= 0.0 )
     {
-        // Fit to page
-        double scaleX = m_sheetSize.GetWidth() / bBox.GetWidth();
-        double scaleY = m_sheetSize.GetHeight() / bBox.GetHeight();
-        scale = std::min( scaleX, scaleY );
-    }
-    else if( m_PrintParams.m_PrintScale == 1.0 )
-    {
-        // TODO "accurate scale" that allows the user to specify custom scale
-        // I think it should be renamed to "custom scale", and "approx. scale 1" should be replaced with "Scale 1"
-        // TODO do not separate X and Y scale adjustments
-        scale = m_PrintParams.m_XScaleAdjust;
+        if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
+        {
+            // Nothing to print
+            m_PrintParams.m_PrintScale = 1.0;
+        }
+        else
+        {
+            double scaleX = (double) m_sheetSize.GetWidth() / bBox.GetWidth();
+            double scaleY = (double) m_sheetSize.GetHeight() / bBox.GetHeight();
+            m_PrintParams.m_PrintScale = std::min( scaleX, scaleY );
+        }
     }
 
     setupGal( gal );
     galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
     gal->SetFlip( m_PrintParams.m_PrintMirror, false );
     gal->SetLookAtPoint( bBox.Centre() );
-    gal->SetZoomFactor( scale );
+    gal->SetZoomFactor( m_PrintParams.m_PrintScale );
 
     {
     KIGFX::GAL_DRAWING_CONTEXT ctx( gal );

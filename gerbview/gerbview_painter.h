@@ -89,6 +89,11 @@ public:
 
     const COLOR4D& GetBackgroundColor() override { return m_layerColors[ LAYER_PCB_BACKGROUND ]; }
 
+    void SetBackgroundColor( const COLOR4D& aColor ) override
+    {
+        m_layerColors[ LAYER_PCB_BACKGROUND ] = aColor;
+    }
+
     const COLOR4D& GetGridColor() override { return m_layerColors[ LAYER_GRID ]; }
 
     const COLOR4D& GetCursorColor() override { return m_layerColors[ LAYER_CURSOR ]; }

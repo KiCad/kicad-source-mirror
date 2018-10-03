@@ -129,10 +129,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_pns_settings_base.cpp
     dialogs/dialog_position_relative.cpp
     dialogs/dialog_position_relative_base.cpp
-    dialogs/dialog_print_for_modedit.cpp
-    dialogs/dialog_print_for_modedit_base.cpp
-    dialogs/dialog_print_using_printer.cpp
-    dialogs/dialog_print_using_printer_base.cpp
+    dialogs/dialog_print_pcbnew.cpp
+    dialogs/dialog_print_pcbnew_base.cpp
     dialogs/dialog_select_net_from_list.cpp
     dialogs/dialog_select_net_from_list_base.cpp
     dialogs/dialog_set_grid.cpp
