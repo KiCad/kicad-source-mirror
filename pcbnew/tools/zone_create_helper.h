@@ -52,6 +52,9 @@ public:
         ///> Should create a keepout zone?
         bool m_keepout;
 
+        ///> Layer to begin drawing
+        PCB_LAYER_ID m_layer;
+
         ///> The zone mode to operate in
         DRAWING_TOOL::ZONE_MODE m_mode;
 

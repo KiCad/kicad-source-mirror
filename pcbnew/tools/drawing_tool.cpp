@@ -976,6 +976,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     DRAWSEGMENT line45;
 
+    m_frame->SetActiveLayer( getDrawingLayer() );
+
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
     m_view->Add( &preview );
@@ -1457,6 +1459,13 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     params.m_keepout = aKeepout;
     params.m_mode = aMode;
     params.m_sourceZone = sourceZone;
+
+    if( aMode == ZONE_MODE::GRAPHIC_POLYGON )
+        params.m_layer = getDrawingLayer();
+    else if( aMode == ZONE_MODE::SIMILAR )
+        params.m_layer = sourceZone->GetLayer();
+    else
+        params.m_layer = m_frame->GetActiveLayer();
 
     ZONE_CREATE_HELPER zoneTool( *this, params );
 

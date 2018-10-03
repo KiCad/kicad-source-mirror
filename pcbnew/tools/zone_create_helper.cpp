@@ -60,7 +60,7 @@ std::unique_ptr<ZONE_CONTAINER> ZONE_CREATE_HELPER::createNewZone( bool aKeepout
 
     // Get the current default settings for zones
     ZONE_SETTINGS zoneInfo = frame.GetZoneSettings();
-    zoneInfo.m_CurrentZone_Layer = frame.GetScreen()->m_Active_Layer;
+    zoneInfo.m_CurrentZone_Layer = m_params.m_layer;
     zoneInfo.m_NetcodeSelection = board.GetHighLightNetCode();
     zoneInfo.SetIsKeepout( m_params.m_keepout );
 
