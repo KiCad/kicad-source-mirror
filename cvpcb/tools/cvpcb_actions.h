@@ -50,25 +50,6 @@ public:
     static TOOL_ACTION no_selectionTool;
     static TOOL_ACTION measureTool;
 
-    /// Cursor control with keyboard
-    static TOOL_ACTION cursorUp;
-    static TOOL_ACTION cursorDown;
-    static TOOL_ACTION cursorLeft;
-    static TOOL_ACTION cursorRight;
-
-    static TOOL_ACTION cursorUpFast;
-    static TOOL_ACTION cursorDownFast;
-    static TOOL_ACTION cursorLeftFast;
-    static TOOL_ACTION cursorRightFast;
-
-    static TOOL_ACTION cursorClick;
-
-    // Panning with keyboard
-    static TOOL_ACTION panUp;
-    static TOOL_ACTION panDown;
-    static TOOL_ACTION panLeft;
-    static TOOL_ACTION panRight;
-
     // Miscellaneous
     static TOOL_ACTION zoomTool;
     static TOOL_ACTION resetCoords;

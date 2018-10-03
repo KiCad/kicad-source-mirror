@@ -58,6 +58,26 @@ public:
     static TOOL_ACTION zoomTool;
     static TOOL_ACTION centerContents;
 
+    /// Cursor control with keyboard
+    static TOOL_ACTION cursorUp;
+    static TOOL_ACTION cursorDown;
+    static TOOL_ACTION cursorLeft;
+    static TOOL_ACTION cursorRight;
+
+    static TOOL_ACTION cursorUpFast;
+    static TOOL_ACTION cursorDownFast;
+    static TOOL_ACTION cursorLeftFast;
+    static TOOL_ACTION cursorRightFast;
+
+    static TOOL_ACTION cursorClick;
+    static TOOL_ACTION cursorDblClick;
+
+    // Panning with keyboard
+    static TOOL_ACTION panUp;
+    static TOOL_ACTION panDown;
+    static TOOL_ACTION panLeft;
+    static TOOL_ACTION panRight;
+
     // Grid control
     static TOOL_ACTION gridFast1;
     static TOOL_ACTION gridFast2;

@@ -23,6 +23,7 @@
  */
 
 #include <tool/actions.h>
+#include <tool/tool_manager.h>
 #include <draw_frame.h>
 #include <class_draw_panel_gal.h>
 #include <view/view.h>
@@ -54,6 +55,107 @@ COMMON_TOOLS::~COMMON_TOOLS()
 void COMMON_TOOLS::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<EDA_DRAW_FRAME>();
+}
+
+
+// Cursor control
+int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
+{
+    long type = aEvent.Parameter<intptr_t>();
+    bool fastMove = type & ACTIONS::CURSOR_FAST_MOVE;
+    type &= ~ACTIONS::CURSOR_FAST_MOVE;
+    bool mirroredX = getView()->IsMirroredX();
+
+    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( true );
+    VECTOR2I gridSize = VECTOR2D( m_frame->GetScreen()->GetGridSize() );
+
+    if( fastMove )
+        gridSize = gridSize * 10;
+
+    switch( type )
+    {
+        case ACTIONS::CURSOR_UP:
+            cursor -= VECTOR2D( 0, gridSize.y );
+            break;
+
+        case ACTIONS::CURSOR_DOWN:
+            cursor += VECTOR2D( 0, gridSize.y );
+            break;
+
+        case ACTIONS::CURSOR_LEFT:
+            cursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            break;
+
+        case ACTIONS::CURSOR_RIGHT:
+            cursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            break;
+
+        case ACTIONS::CURSOR_CLICK:              // fall through
+        case ACTIONS::CURSOR_DBL_CLICK:
+        {
+            TOOL_ACTIONS action = TA_NONE;
+            int modifiers = 0;
+
+            modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
+            modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
+            modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
+
+            if( type == ACTIONS::CURSOR_CLICK )
+                action = TA_MOUSE_CLICK;
+            else if( type == ACTIONS::CURSOR_DBL_CLICK )
+                action = TA_MOUSE_DBLCLICK;
+            else
+                wxFAIL;
+
+            TOOL_EVENT evt( TC_MOUSE, action, BUT_LEFT | modifiers );
+            evt.SetMousePosition( getViewControls()->GetCursorPosition() );
+            m_toolMgr->ProcessEvent( evt );
+
+            return 0;
+        }
+        break;
+    }
+
+    getViewControls()->SetCursorPosition( cursor );
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::PanControl( const TOOL_EVENT& aEvent )
+{
+    long type = aEvent.Parameter<intptr_t>();
+    KIGFX::VIEW* view = getView();
+    VECTOR2D center = view->GetCenter();
+    VECTOR2I gridSize = VECTOR2D( m_frame->GetScreen()->GetGridSize() ) * 10;
+    bool mirroredX = view->IsMirroredX();
+
+    switch( type )
+    {
+        case ACTIONS::CURSOR_UP:
+            center -= VECTOR2D( 0, gridSize.y );
+            break;
+
+        case ACTIONS::CURSOR_DOWN:
+            center += VECTOR2D( 0, gridSize.y );
+            break;
+
+        case ACTIONS::CURSOR_LEFT:
+            center -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            break;
+
+        case ACTIONS::CURSOR_RIGHT:
+            center += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+            break;
+
+        default:
+            wxFAIL;
+            break;
+    }
+
+    view->SetCenter( center );
+
+    return 0;
 }
 
 
@@ -268,6 +370,26 @@ int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 
 void COMMON_TOOLS::setTransitions()
 {
+    // Cursor control
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorUp.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDown.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorLeft.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorRight.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorUpFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDownFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorLeftFast.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorRightFast.MakeEvent() );
+
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorClick.MakeEvent() );
+    Go( &COMMON_TOOLS::CursorControl,      ACTIONS::cursorDblClick.MakeEvent() );
+
+    // Pan control
+    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panUp.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panDown.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panLeft.MakeEvent() );
+    Go( &COMMON_TOOLS::PanControl,         ACTIONS::panRight.MakeEvent() );
+
+    // Zoom control
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomIn.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomOut.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomInCenter.MakeEvent() );

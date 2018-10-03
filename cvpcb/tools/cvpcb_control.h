@@ -48,9 +48,6 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    int CursorControl( const TOOL_EVENT& aEvent );
-    int PanControl( const TOOL_EVENT& aEvent );
-
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );
     int SwitchCursor( const TOOL_EVENT& aEvent );

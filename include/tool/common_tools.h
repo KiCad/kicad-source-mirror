@@ -53,7 +53,10 @@ public:
 
     int CenterContents( const TOOL_EVENT& aEvent );
 
+    int PanControl( const TOOL_EVENT& aEvent );
+
     // Cursor control
+    int CursorControl( const TOOL_EVENT& aEvent );
     int ToggleCursor( const TOOL_EVENT& aEvent );
 
     // Grid control

@@ -95,25 +95,9 @@ public:
     static TOOL_ACTION gridResetOrigin;
     static TOOL_ACTION gridPreset;
 
-    /// Cursor control with keyboard
-    static TOOL_ACTION cursorUp;
-    static TOOL_ACTION cursorDown;
-    static TOOL_ACTION cursorLeft;
-    static TOOL_ACTION cursorRight;
-
-    static TOOL_ACTION cursorUpFast;
-    static TOOL_ACTION cursorDownFast;
-    static TOOL_ACTION cursorLeftFast;
-    static TOOL_ACTION cursorRightFast;
-
+    /// Cursor control
     static TOOL_ACTION cursorClick;
     static TOOL_ACTION cursorDblClick;
-
-    // Panning with keyboard
-    static TOOL_ACTION panUp;
-    static TOOL_ACTION panDown;
-    static TOOL_ACTION panLeft;
-    static TOOL_ACTION panRight;
 
     // Miscellaneous
     static TOOL_ACTION selectionTool;
