@@ -522,6 +522,11 @@ void FOOTPRINT_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         GetGalCanvas()->StopDrawing();
     }
 
+    // Do not show the layer manager during closing to avoid flicker
+    // on some platforms (Windows) that generate useless redraw of items in
+    // the Layer Manger
+    m_auimgr.GetPane( "LayersManager" ).Show( false );
+
     Clear_Pcb( false );
 
     //close the editor

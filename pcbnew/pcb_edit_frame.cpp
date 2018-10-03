@@ -626,6 +626,12 @@ void PCB_EDIT_FRAME::OnCloseWindow( wxCloseEvent& Event )
         wxMessageBox( msg, Pgm().App().GetAppName(), wxOK | wxICON_ERROR, this );
     }
 
+    // Do not show the layer manager during closing to avoid flicker
+    // on some platforms (Windows) that generate useless redraw of items in
+    // the Layer Manger
+    if( m_show_layer_manager_tools )
+        m_auimgr.GetPane( "LayersManager" ).Show( false );
+
     // Delete board structs and undo/redo lists, to avoid crash on exit
     // when deleting some structs (mainly in undo/redo lists) too late
     Clear_Pcb( false );
