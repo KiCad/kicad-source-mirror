@@ -61,6 +61,14 @@ public:
     wxString CreateNewLibrary(const wxString& aLibName = wxEmptyString);
 
     /**
+     * Function AddLibrary
+     * Add an existing library to either the global or project library table.
+     * @param aFileName the library to add; a file open dialog will be displayed if empty.
+     * @return true if successfully added
+     */
+    bool AddLibrary(const wxString& aLibName = wxEmptyString);
+
+    /**
      * Function OnEditItemRequest
      * Install the corresponding dialog editor for the given item
      * @param aDC = the current device context

@@ -188,6 +188,13 @@ public:
     MODULE* FootprintLoad( const wxString& aNickname, const wxString& aFootprintName );
 
     /**
+     * Function FootprintExists
+     *
+     * indicates whether or not the given footprint already exists in the given library.
+     */
+    bool FootprintExists( const wxString& aNickname, const wxString& aFootprintName );
+
+    /**
      * Function GetEnumeratedFootprint
      *
      * a version of FootprintLoad() for use after FootprintEnumerate() for more efficient

@@ -75,7 +75,7 @@ SYMBOL_TREE_PANE::SYMBOL_TREE_PANE( LIB_EDIT_FRAME* aParent, LIB_MANAGER* aLibMg
     menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE, _( "&Save" ),
                  KiBitmap( save_xpm ) );
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_AS, _( "Save As..." ),
+    AddMenuItem( menuPart.get(), ID_LIBEDIT_SAVE_AS, _( "Save a Copy As..." ),
                  KiBitmap( save_xpm ) );
     AddMenuItem( menuPart.get(), ID_LIBEDIT_DUPLICATE_PART, _( "Duplicate" ),
                  KiBitmap( duplicate_xpm ) );

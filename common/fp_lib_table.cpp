@@ -334,6 +334,20 @@ const MODULE* FP_LIB_TABLE::GetEnumeratedFootprint( const wxString& aNickname,
 }
 
 
+bool FP_LIB_TABLE::FootprintExists( const wxString& aNickname, const wxString& aFootprintName )
+{
+    try
+    {
+        std::unique_ptr<MODULE> m( FootprintLoad( aNickname, aFootprintName ) );
+        return m.get() != nullptr;
+    }
+    catch( ... )
+    {
+        return false;
+    }
+}
+
+
 MODULE* FP_LIB_TABLE::FootprintLoad( const wxString& aNickname, const wxString& aFootprintName )
 {
     const FP_LIB_TABLE_ROW* row = FindRow( aNickname );

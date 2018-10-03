@@ -83,7 +83,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_AS,
                  text,
-                 _( "Save to a new name and/or location" ),
+                 _( "Save a copy to a new name and/or location" ),
                  KiBitmap( save_as_xpm ) );
 
     AddMenuItem( fileMenu,

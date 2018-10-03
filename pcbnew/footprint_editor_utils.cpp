@@ -449,6 +449,42 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_treePane->GetLibTree()->Refresh();
         break;
 
+    case ID_MODEDIT_REVERT_PART:
+        RevertFootprint();
+        break;
+
+    case ID_MODEDIT_CUT_PART:
+    case ID_MODEDIT_COPY_PART:
+        if( getTargetFPID().IsValid() )
+        {
+            LIB_ID fpID = getTargetFPID();
+            m_copiedModule.reset( LoadFootprint( fpID ) );
+
+            if( id == ID_MODEDIT_CUT_PART )
+                DeleteModuleFromLibrary( fpID, false );
+
+            SyncLibraryTree( true );
+        }
+        break;
+
+    case ID_MODEDIT_PASTE_PART:
+        if( m_copiedModule && !getTargetFPID().GetLibNickname().empty() )
+        {
+            wxString newLib = getTargetFPID().GetLibNickname();
+            MODULE*  newModule( m_copiedModule.get() );
+            wxString newName = newModule->GetFPID().GetLibItemName();
+
+            while( Prj().PcbFootprintLibs()->FootprintExists( newLib, newName ) )
+                newName += _( "_copy" );
+
+            newModule->SetFPID( LIB_ID( newLib, newName ) );
+            saveFootprintInLibrary( newModule, newLib );
+
+            SyncLibraryTree( true );
+            m_treePane->GetLibTree()->SelectLibId( newModule->GetFPID() );
+        }
+        break;
+
     case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
         SaveFootprintToBoard( true );
         break;
@@ -490,6 +526,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_treePane->GetLibTree()->SelectLibId( newLib );
         }
     }
+        break;
+
+    case ID_MODEDIT_ADD_LIBRARY:
+        AddLibrary();
         break;
 
     case ID_MODEDIT_SHEET_SET:

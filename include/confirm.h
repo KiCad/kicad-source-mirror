@@ -99,6 +99,13 @@ int UnsavedChangesDialog( wxWindow* aParent, const wxString& aMessage, bool* aAp
 
 
 /**
+ * Function ConfirmRevertDialog
+ * displays a confirmation for a revert action
+ */
+bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage );
+
+
+/**
  * Function DisplayError
  * displays an error or warning message box with \a aMessage.
  *

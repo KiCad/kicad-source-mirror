@@ -197,6 +197,19 @@ int UnsavedChangesDialog( wxWindow* parent, const wxString& aMessage, bool* aApp
 }
 
 
+bool ConfirmRevertDialog( wxWindow* parent, const wxString& aMessage )
+{
+    DIALOG_EXIT dlg( parent, aMessage,
+                     _( "Your current changes will be permanently lost." ),
+                     _( "Revert" ), _( "Cancel" ) );
+
+    dlg.m_ApplyToAllOpt->Show( false );
+    dlg.m_DiscardButton->Show( false );
+
+    return dlg.ShowModal() == wxID_YES;
+}
+
+
 bool HandleUnsavedChanges( wxWindow* aParent, const wxString& aMessage,
                            const std::function<bool()>& aSaveFunction )
 {

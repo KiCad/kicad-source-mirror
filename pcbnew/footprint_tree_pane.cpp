@@ -50,29 +50,26 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
 
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "&New Library..." ),
                  KiBitmap( new_library_xpm ) );
-/* TODO
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
+
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_ADD_LIBRARY, _( "&Add Library..." ),
                  KiBitmap( add_library_xpm ) );
-*/
+
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE, _( "&Save" ),
                  KiBitmap( save_xpm ) );
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_SAVE_AS, _( "Save a Copy &As..." ),
                  KiBitmap( save_as_xpm ) );
-/* TODO
-    AddMenuItem( menuLibrary.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
-                 KiBitmap( undo_xpm ) );
-*/
 
     menuLibrary->AppendSeparator();
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE, _( "&New Footprint..." ),
                  KiBitmap( new_component_xpm ) );
 #ifdef KICAD_SCRIPTING
-    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE_FROM_WIZARD,
-                 _( "&Create Footprint from Wizard..." ),
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_NEW_MODULE_FROM_WIZARD, _( "&Create Footprint from Wizard..." ),
                  KiBitmap( new_component_xpm ) );
 #endif
     AddMenuItem( menuLibrary.get(), ID_MODEDIT_IMPORT_PART, _( "&Import Footprint..." ),
                  KiBitmap( import_part_xpm ) );
+    AddMenuItem( menuLibrary.get(), ID_MODEDIT_PASTE_PART, _( "Paste Footprint" ),
+                 KiBitmap( paste_xpm ) );
 
     std::unique_ptr<wxMenu> menuPart = std::make_unique<wxMenu>();
     AddMenuItem( menuPart.get(), ID_MODEDIT_EDIT_MODULE, _( "&Edit Footprint" ),
@@ -85,10 +82,14 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
                  KiBitmap( save_xpm ) );
     AddMenuItem( menuPart.get(), ID_MODEDIT_DELETE_PART, _( "&Delete" ),
                  KiBitmap( delete_xpm ) );
-/* TODO
-    AddMenuItem( menuPart.get(), ID_LIBEDIT_REVERT, _( "Revert" ),
+    AddMenuItem( menuPart.get(), ID_MODEDIT_REVERT_PART, _( "Revert" ),
                  KiBitmap( undo_xpm ) );
-*/
+
+    menuPart->AppendSeparator();
+    AddMenuItem( menuPart.get(), ID_MODEDIT_CUT_PART, _( "Cut" ),
+                 KiBitmap( cut_xpm ) );
+    AddMenuItem( menuPart.get(), ID_MODEDIT_COPY_PART, _( "Copy" ),
+                 KiBitmap( copy_xpm ) );
 
     menuPart->AppendSeparator();
     AddMenuItem( menuPart.get(), ID_MODEDIT_EXPORT_PART, _( "E&xport Footprint..." ),
@@ -98,10 +99,10 @@ FOOTPRINT_TREE_PANE::FOOTPRINT_TREE_PANE( FOOTPRINT_EDIT_FRAME* aParent )
     std::unique_ptr<wxMenu> menuNoSelection = std::make_unique<wxMenu>();
     AddMenuItem( menuNoSelection.get(), ID_MODEDIT_CREATE_NEW_LIB, _( "&New Library..." ),
                  KiBitmap( new_library_xpm ) );
-/* TODO
-    AddMenuItem( menuNoSelection.get(), ID_LIBEDIT_ADD_LIBRARY, _( "&Add Library..." ),
+
+    AddMenuItem( menuNoSelection.get(), ID_MODEDIT_ADD_LIBRARY, _( "&Add Library..." ),
                  KiBitmap( add_library_xpm ) );
-*/
+
     m_tree->SetMenu( LIB_TREE_NODE::LIBID, std::move( menuPart ) );
     m_tree->SetMenu( LIB_TREE_NODE::LIB, std::move( menuLibrary ) );
     m_tree->SetMenu( LIB_TREE_NODE::INVALID, std::move( menuNoSelection ) );

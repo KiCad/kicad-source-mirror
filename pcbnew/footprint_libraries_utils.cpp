@@ -54,6 +54,7 @@
 #include <kicad_plugin.h>
 #include <legacy_plugin.h>
 #include <env_paths.h>
+#include "footprint_viewer_frame.h"
 
 
 // unique, "file local" translations:
@@ -421,7 +422,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
 
     wxString initialPath = wxPathOnly( Prj().GetProjectFullName() );
     wxFileName fn;
-    bool saveInGlobalTable = false, saveInProjectTable = false;
+    bool       doAdd = false;
 
     if( aLibName.IsEmpty() )
     {
@@ -430,18 +431,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         if( !LibraryFileBrowser( false, fn, KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
             return wxEmptyString;
 
-        wxArrayString libTableNames;
-        libTableNames.Add( _( "Global" ) );
-        libTableNames.Add( _( "Project" ) );
-
-        switch( SelectSingleOption( this, _( "Select Library Table" ),
-                                    _( "Choose the Library Table to add the library to:" ),
-                                    libTableNames ) )
-        {
-        case 0:  saveInGlobalTable = true;  break;
-        case 1:  saveInProjectTable = true; break;
-        default: return wxEmptyString;
-        }
+        doAdd = true;
     }
     else
     {
@@ -499,25 +489,6 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         }
 
         pi->FootprintLibCreate( libPath );
-
-        // try to use path normalized to an environmental variable or project path
-        wxString path = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &Prj() );
-
-        if( path.IsEmpty() )
-            path = libPath;
-
-        if( saveInGlobalTable )
-        {
-            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), path, wxT( "KiCad" ), wxEmptyString );
-            GFootprintTable.InsertRow( row );
-            GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
-        }
-        else if( saveInProjectTable )
-        {
-            auto row = new FP_LIB_TABLE_ROW( fn.GetName(), path, wxT( "KiCad" ), wxEmptyString );
-            Prj().PcbFootprintLibs()->InsertRow( row );
-            Prj().PcbFootprintLibs()->Save( Prj().FootprintLibTblName() );
-        }
     }
     catch( const IO_ERROR& ioe )
     {
@@ -525,7 +496,85 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         return wxEmptyString;
     }
 
+    if( doAdd )
+        AddLibrary( libPath );
+
     return libPath;
+}
+
+
+bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
+{
+    wxFileName fn( aFilename );
+
+    if( aFilename.IsEmpty() )
+    {
+        if( !LibraryFileBrowser( true, fn, KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
+            return false;
+    }
+
+    wxString libPath = fn.GetFullPath();
+    wxString libName = fn.GetName();
+
+    if( libName.IsEmpty() )
+        return false;
+
+    bool          saveInGlobalTable = false;
+    bool          saveInProjectTable = false;
+    wxArrayString libTableNames;
+
+    libTableNames.Add( _( "Global" ) );
+    libTableNames.Add( _( "Project" ) );
+
+    switch( SelectSingleOption( this, _( "Select Library Table" ),
+                                _( "Choose the Library Table to add the library to:" ),
+                                libTableNames ) )
+    {
+    case 0:  saveInGlobalTable = true;  break;
+    case 1:  saveInProjectTable = true; break;
+    default: return false;
+    }
+
+    wxString type = IO_MGR::ShowType( IO_MGR::GuessPluginTypeFromLibPath( libPath ) );
+
+    // try to use path normalized to an environmental variable or project path
+    wxString normalizedPath = NormalizePath( libPath, &Pgm().GetLocalEnvVariables(), &Prj() );
+
+    if( normalizedPath.IsEmpty() )
+        normalizedPath = libPath;
+
+    try
+    {
+        if( saveInGlobalTable )
+        {
+            auto row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
+            GFootprintTable.InsertRow( row );
+            GFootprintTable.Save( FP_LIB_TABLE::GetGlobalTableFileName() );
+        }
+        else if( saveInProjectTable )
+        {
+            auto row = new FP_LIB_TABLE_ROW( libName, normalizedPath, type, wxEmptyString );
+            Prj().PcbFootprintLibs()->InsertRow( row );
+            Prj().PcbFootprintLibs()->Save( Prj().FootprintLibTblName() );
+        }
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+        return false;
+    }
+
+    auto editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, false );
+
+    if( editor )
+        editor->SyncLibraryTree( true );
+
+    auto viewer = (FOOTPRINT_VIEWER_FRAME*) Kiway().Player( FRAME_PCB_MODULE_VIEWER, false );
+
+    if( viewer )
+        viewer->ReCreateLibraryList();
+
+    return true;
 }
 
 
@@ -647,25 +696,6 @@ void PCB_EDIT_FRAME::ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString&
 }
 
 
-class LIBRARY_NAME_CLEARER
-{
-    MODULE*  m_module;
-    LIB_ID   m_savedFPID;
-
-public:
-    LIBRARY_NAME_CLEARER( MODULE* aModule )
-    {
-        m_module = aModule;
-        m_savedFPID = aModule->GetFPID();
-        m_module->SetFPID( LIB_ID( wxEmptyString, m_savedFPID.GetLibItemName() ) );
-    }
-    ~LIBRARY_NAME_CLEARER()
-    {
-        m_module->SetFPID( m_savedFPID );
-    }
-};
-
-
 bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
 {
     wxString libraryName = aModule->GetFPID().GetLibNickname();
@@ -704,23 +734,8 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         DeleteModuleFromLibrary( oldFPID, false );
     }
 
-    try
-    {
-        MODULE* m = tbl->FootprintLoad( libraryName, footprintName );
-
-        delete m;
-
-        LIBRARY_NAME_CLEARER temp( aModule );
-
-        // this always overwrites any existing footprint, but should yell on its
-        // own if the library or footprint is not writable.
-        tbl->FootprintSave( libraryName, aModule );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
+    if( !saveFootprintInLibrary( aModule, libraryName ) )
         return false;
-    }
 
     if( nameChanged )
     {
@@ -729,6 +744,27 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
     }
 
     return true;
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::saveFootprintInLibrary( MODULE* aModule, const wxString& aLibraryName )
+{
+    try
+    {
+        aModule->SetFPID( LIB_ID( wxEmptyString, aModule->GetFPID().GetLibItemName() ) );
+
+        Prj().PcbFootprintLibs()->FootprintSave( aLibraryName, aModule );
+
+        aModule->SetFPID( LIB_ID( aLibraryName, aModule->GetFPID().GetLibItemName() ) );
+        return true;
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        DisplayError( this, ioe.What() );
+
+        aModule->SetFPID( LIB_ID( aLibraryName, aModule->GetFPID().GetLibItemName() ) );
+        return false;
+    }
 }
 
 
@@ -910,26 +946,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         return false;
     }
 
-    bool module_exists = false;
+    bool module_exists = tbl->FootprintExists( libraryName, footprintName );
 
-    try
-    {
-        MODULE* m = tbl->FootprintLoad( libraryName, footprintName );
-
-        module_exists = m != nullptr;
-        delete m;
-
-        LIBRARY_NAME_CLEARER temp( aModule );
-
-        // this always overwrites any existing footprint, but should yell on its
-        // own if the library or footprint is not writable.
-        tbl->FootprintSave( libraryName, aModule );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        DisplayError( this, ioe.What() );
+    if( !saveFootprintInLibrary( aModule, libraryName ) )
         return false;
-    }
 
     m_footprintNameWhenLoaded = footprintName;
 
@@ -940,7 +960,39 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     SetStatusText( msg );
     updateTitle();
 
+    SyncLibraryTree( true );
+
     return true;
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::RevertFootprint()
+{
+    if( GetScreen()->IsModify() && m_revertModule )
+    {
+        wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
+                                         GetChars( GetLoadedFPID().GetLibItemName() ) );
+
+        if( ConfirmRevertDialog( this, msg ) )
+        {
+            Clear_Pcb( false );
+            AddModuleToBoard( (MODULE*) m_revertModule->Clone() );
+
+            Zoom_Automatique( false );
+
+            Update3DView();
+
+            GetScreen()->ClearUndoRedoList();
+            GetScreen()->ClrModify();
+
+            updateView();
+            m_canvas->Refresh();
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

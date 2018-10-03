@@ -58,13 +58,13 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "New Library..." ),
                  _( "Creates an empty library" ),
                  KiBitmap( new_library_xpm ) );
-/* TODO
+
     AddMenuItem( fileMenu,
                  ID_MODEDIT_ADD_LIBRARY,
                  _( "Add Library..." ),
                  _( "Adds a previously created library" ),
                  KiBitmap( add_library_xpm ) );
-*/
+
     text = AddHotkeyName( _( "&New Footprint..." ), m_hotkeysDescrList, HK_NEW );
     AddMenuItem( fileMenu, ID_MODEDIT_NEW_MODULE,
                  text, _( "Create a new footprint" ),
@@ -88,6 +88,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Save &As..." ),
                  _( "Save a copy to a new name and/or location" ),
                  KiBitmap( save_as_xpm ) );
+
+    AddMenuItem( fileMenu, ID_MODEDIT_REVERT_PART,
+                 _( "&Revert" ),
+                 _( "Throw away changes" ),
+                 KiBitmap( undo_xpm ) );
 
     fileMenu->AppendSeparator();
 
