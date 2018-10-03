@@ -196,6 +196,7 @@ set( COMMON_WIDGET_SRCS
     widgets/stepped_slider.cpp
     widgets/text_ctrl_eval.cpp
     widgets/two_column_tree_list.cpp
+    widgets/ui_common.cpp
     widgets/unit_binder.cpp
     widgets/widget_hotkey_list.cpp
     widgets/wx_grid.cpp

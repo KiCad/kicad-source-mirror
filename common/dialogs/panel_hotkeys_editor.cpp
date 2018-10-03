@@ -30,12 +30,11 @@
 #include <wx/sizer.h>
 
 #include <widgets/button_row_panel.h>
+#include <widgets/ui_common.h>
 
 
 static const wxSize default_dialog_size { 500, 350 };
 static const wxSize min_dialog_size { -1, 350 };
-static const int widget_margins = 5;
-static const int side_margins = 10;
 
 /**
  * Helper function to add a filter box to a panel, with some
@@ -70,18 +69,20 @@ PANEL_HOTKEYS_EDITOR::PANEL_HOTKEYS_EDITOR( EDA_BASE_FRAME* aFrame, wxWindow* aW
         m_nickname( aNickname ),
         m_hotkeyStore( aShowHotkeys )
 {
+    const auto margin = KIUI::GetStdMargin();
     auto mainSizer = new wxBoxSizer( wxVERTICAL );
 
     // Sub-sizer for setting a wider side margin
     // TODO: Can this be set by the parent widget- doesn't seem to be
     // this panel's responsibility?
+    const int side_margins = 10; // seems to be hardcoded in wxFB
     auto bMargins = new wxBoxSizer( wxVERTICAL );
 
     auto filterSearch = CreateTextFilterBox( this, _( "Type filter text" ) );
-    bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, widget_margins );
+    bMargins->Add( filterSearch, 0, wxBOTTOM | wxEXPAND | wxTOP, margin );
 
     m_hotkeyListCtrl = new WIDGET_HOTKEY_LIST( this, m_hotkeyStore, m_readOnly );
-    bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, widget_margins );
+    bMargins->Add( m_hotkeyListCtrl, 1, wxALL | wxEXPAND, margin );
 
     if( !m_readOnly )
         installButtons( bMargins );
@@ -139,7 +140,7 @@ void PANEL_HOTKEYS_EDITOR::installButtons( wxSizer* aSizer )
 
     auto btnPanel = new BUTTON_ROW_PANEL( this, l_btn_defs, r_btn_defs );
 
-    aSizer->Add( btnPanel, 0, wxEXPAND | wxTOP, widget_margins );
+    aSizer->Add( btnPanel, 0, wxEXPAND | wxTOP, KIUI::GetStdMargin() );
 }
 
 

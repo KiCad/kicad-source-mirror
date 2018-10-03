@@ -24,6 +24,7 @@
 #include <dialog_hotkey_list.h>
 
 #include <panel_hotkeys_editor.h>
+#include <widgets/ui_common.h>
 
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -32,18 +33,20 @@
 DIALOG_LIST_HOTKEYS::DIALOG_LIST_HOTKEYS( EDA_BASE_FRAME* aParent, EDA_HOTKEY_CONFIG* aDescList ):
     DIALOG_SHIM( aParent, wxID_ANY, _( "Hotkey List" ) )
 {
+    const auto margin = KIUI::GetStdMargin();
+
     auto main_sizer = new wxBoxSizer( wxVERTICAL );
 
     m_hk_list = new PANEL_HOTKEYS_EDITOR( aParent, this, true,
         aDescList, aDescList, {} );
 
-    main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, 5 );
+    main_sizer->Add( m_hk_list, 1, wxTOP | wxLEFT | wxRIGHT | wxEXPAND, margin );
 
     auto sdb_sizer = new wxStdDialogButtonSizer;
     sdb_sizer->AddButton( new wxButton( this, wxID_OK ) );
     sdb_sizer->Realize();
 
-    main_sizer->Add( sdb_sizer, 0, wxEXPAND | wxALL, 5 );
+    main_sizer->Add( sdb_sizer, 0, wxEXPAND | wxALL, margin );
 
     SetSizer( main_sizer );
 

@@ -22,6 +22,7 @@
  */
 
 #include <widgets/button_row_panel.h>
+#include <widgets/ui_common.h>
 
 #include <wx/button.h>
 #include <wx/sizer.h>
@@ -37,7 +38,7 @@ BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
     addButtons( true, aLeftBtns );
 
     // add the spacer
-    m_sizer->Add( 0, 0, 1, wxEXPAND, 5 );
+    m_sizer->Add( 0, 0, 1, wxEXPAND, KIUI::GetStdMargin() );
 
     addButtons( false, aRightBtns );
 
@@ -48,9 +49,7 @@ BUTTON_ROW_PANEL::BUTTON_ROW_PANEL( wxWindow* aWindow,
 
 void BUTTON_ROW_PANEL::addButtons( bool aLeft, const BTN_DEF_LIST& aDefs )
 {
-    // The "normal" KiCad margin magic number
-    // TODO: Get this from somewhere
-    const int btn_margin = 5;
+    const int btn_margin = KIUI::GetStdMargin();
     // No button expands to fill horizontally
     const int btn_proportion = 0;
 
