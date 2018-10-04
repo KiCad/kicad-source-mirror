@@ -985,7 +985,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
+    m_controls->SetSnapping( false );
 
     Activate();
 
@@ -1023,7 +1023,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
 
-        cursorPos = grid.BestSnapAnchor( evt->Position(), aGraphic );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         const bool limit45 = ( frame()->Settings().m_use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
@@ -1069,6 +1069,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
+
             if( !started )
             {
                 // Init the new item attributes
@@ -1206,7 +1207,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     GRID_HELPER grid( m_frame );
 
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
+    m_controls->SetSnapping( false );
 
     Activate();
 
@@ -1219,7 +1220,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         aGraphic->SetLayer( layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        const VECTOR2I cursorPos = grid.BestSnapAnchor( evt->Position(), aGraphic );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1353,12 +1354,14 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
     STATUS_TEXT_POPUP status( m_frame );
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
+    m_controls->SetSnapping( false );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( evt->Position(), layers );
+
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), layers );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
