@@ -695,7 +695,6 @@ LSEQ PANEL_SETUP_LAYERS::getRemovedLayersWithItems()
 
     PCB_LAYER_COLLECTOR collector;
     LSEQ newLayerSeq = newLayers.Seq();
-    std::vector< PCB_LAYER_ID >::iterator it;
 
     for( auto layer_id : curLayers.Seq() )
     {
@@ -725,7 +724,6 @@ LSEQ PANEL_SETUP_LAYERS::getNonRemovableLayers()
 
     PCB_LAYER_COLLECTOR collector;
     LSEQ newLayerSeq = newLayers.Seq();
-    std::vector< PCB_LAYER_ID >::iterator it;
 
     for( auto layer_id : curLayers.Seq() )
     {
