@@ -247,7 +247,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
     LSET layers;
 
     if( aDraggedItem )
-        layers = aDraggedItem->GetLayer();
+        layers = aDraggedItem->GetLayerSet();
     else
         layers = LSET::AllLayersMask();
 

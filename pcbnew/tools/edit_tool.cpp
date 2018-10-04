@@ -337,33 +337,37 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
-
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+
+    if( m_dragging || selection.Empty() )
+        return 0;
+
+    LSET item_layers = static_cast<BOARD_ITEM*>( selection.Front() )->GetLayerSet();
+    bool unselect = selection.IsHover(); //N.B. This must be saved before the re-selection below
+
+    // Filter out locked pads here
+    // We cannot do this in the selection filter as we need the pad layers
+    // when it is the curr_item.
+    selection = m_selectionTool->RequestSelection(
+        []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+        { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
 
     if( selection.Empty() )
         return 0;
 
-    bool unselect = selection.IsHover();
-
-    if( m_dragging )
-        return 0;
-
     Activate();
-
-    m_dragging = false;         // Are selected items being dragged?
-    bool restore = false;       // Should items' state be restored when finishing the tool?
-
     controls->ShowCursor( true );
-    controls->SetSnapping( true );
+    controls->SetSnapping( false );
     controls->SetAutoPan( true );
 
-    // cumulative translation
+    auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
+    bool restore_state = false;
     VECTOR2I totalMovement;
     GRID_HELPER grid( editFrame );
     OPT_TOOL_EVENT evt = aEvent;
@@ -378,16 +382,9 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             evt->IsAction( &PCB_ACTIONS::move ) ||
             evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
-            if( selection.Empty() )
-                break;
-
-            auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
-
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( evt->Position(), curr_item );
-                controls->ForceCursorPosition( true, m_cursor );
-
+                m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition(), item_layers );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
 
@@ -488,7 +485,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsCancel() || evt->IsActivate() )
         {
-            restore = true; // Cancelling the tool means that items have to be restored
+            restore_state = true; // Canceling the tool means that items have to be restored
             break;          // Finish
         }
 
@@ -556,10 +553,10 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
     selection.ClearReferencePoint();
 
-    if( unselect || restore )
+    if( unselect || restore_state )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    if( restore )
+    if( restore_state )
         m_commit->Revert();
     else
         m_commit->Push( _( "Drag" ) );
