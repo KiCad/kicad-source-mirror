@@ -206,7 +206,7 @@
                                 <property name="col_label_values">&quot;Line Thickness&quot; &quot;Text Width&quot; &quot;Text Height&quot; &quot;Text Thickness&quot; &quot;Italic&quot; &quot;Keep Upright&quot;</property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">6</property>
-                                <property name="column_sizes">120,100,100,120,60,100</property>
+                                <property name="column_sizes">130,106,106,130,70,116</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>

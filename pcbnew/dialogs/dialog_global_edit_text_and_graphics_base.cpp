@@ -112,10 +112,10 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer1->Add( m_LayerCtrl, 0, wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 0, wxEXPAND, 10 );
+	fgSizer1->Add( 0, 0, 0, wxEXPAND, 5 );
 	
 	
-	fgSizer1->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 30 );
+	fgSizer1->Add( 55, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_Visible = new wxCheckBox( m_specifiedValues, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE|wxCHK_ALLOW_3RD_STATE_FOR_USER );
 	m_Visible->SetValue(true); 
@@ -224,12 +224,12 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	
 	// Columns
 	m_grid->SetColSize( 0, 120 );
-	m_grid->SetColSize( 1, 95 );
+	m_grid->SetColSize( 1, 110 );
 	m_grid->SetColSize( 2, 95 );
 	m_grid->SetColSize( 3, 95 );
-	m_grid->SetColSize( 4, 95 );
+	m_grid->SetColSize( 4, 110 );
 	m_grid->SetColSize( 5, 50 );
-	m_grid->SetColSize( 6, 50 );
+	m_grid->SetColSize( 6, 75 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( false );
 	m_grid->SetColLabelSize( 0 );

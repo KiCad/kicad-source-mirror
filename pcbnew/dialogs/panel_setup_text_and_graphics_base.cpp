@@ -32,12 +32,12 @@ PANEL_SETUP_TEXT_AND_GRAPHICS_BASE::PANEL_SETUP_TEXT_AND_GRAPHICS_BASE( wxWindow
 	m_grid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid->SetColSize( 0, 120 );
-	m_grid->SetColSize( 1, 100 );
-	m_grid->SetColSize( 2, 100 );
-	m_grid->SetColSize( 3, 120 );
-	m_grid->SetColSize( 4, 60 );
-	m_grid->SetColSize( 5, 100 );
+	m_grid->SetColSize( 0, 130 );
+	m_grid->SetColSize( 1, 106 );
+	m_grid->SetColSize( 2, 106 );
+	m_grid->SetColSize( 3, 130 );
+	m_grid->SetColSize( 4, 70 );
+	m_grid->SetColSize( 5, 116 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 22 );
