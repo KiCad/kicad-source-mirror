@@ -1204,24 +1204,23 @@ void NODE::releaseGarbage()
 
 
 void NODE::Commit( NODE* aNode )
-{
-    if( aNode->isRoot() )
-        return;
-
-    for( ITEM* item : aNode->m_override )
-    Remove( item );
-
-    for( INDEX::ITEM_SET::iterator i = aNode->m_index->begin();
-         i != aNode->m_index->end(); ++i )
     {
-        (*i)->SetRank( -1 );
-        (*i)->Unmark();
-        Add( std::unique_ptr<ITEM>( *i ) );
-    }
+        if( aNode->isRoot() )
+            return;
 
-    releaseChildren();
-    releaseGarbage();
-}
+        for( ITEM* item : aNode->m_override )
+            Remove( item );
+
+        for( auto i : *aNode->m_index )
+        {
+            i->SetRank( -1 );
+            i->Unmark();
+            Add( std::unique_ptr<ITEM>( i ) );
+        }
+
+        releaseChildren();
+        releaseGarbage();
+    }
 
 
 void NODE::KillChildren()
