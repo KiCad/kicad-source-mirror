@@ -139,7 +139,6 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
     bool picking = true;
 
     statusPopup.SetText( _( "Select reference item..." ) );
-    picker->SetSnapping( false );
     picker->Activate();
 
     picker->SetClickHandler( [&]( const VECTOR2D& aPoint ) -> bool

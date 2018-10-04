@@ -72,6 +72,12 @@ public:
     inline void SetCursorCapture( bool aEnable ) { m_cursorCapture = aEnable; }
 
     /**
+     * Function SetLayerSet()
+     * Sets the tool's snap layer set
+     */
+    inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
+
+    /**
      * Function SetClickHandler()
      * Sets a handler for mouse click event. Handler may decide to receive further click by
      * returning true.
@@ -101,6 +107,9 @@ private:
     bool m_cursorVisible;
     bool m_cursorCapture;
     bool m_autoPanning;
+
+    ///> The layer set to use for optional snapping
+    LSET m_layerMask;
 
     ///> Optional event handlers.
     OPT<CLICK_HANDLER> m_clickHandler;

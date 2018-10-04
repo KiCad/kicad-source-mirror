@@ -57,7 +57,7 @@ public:
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
-    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, LSET& aLayers );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers );
 
     void SetSnap( bool aSnap )
     {

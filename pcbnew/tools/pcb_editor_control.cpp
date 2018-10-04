@@ -1061,7 +1061,7 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, _1, false ) );
-    picker->SetSnapping( false );
+    picker->SetLayerSet( LSET::AllCuMask() );
     picker->Activate();
     Wait();
 

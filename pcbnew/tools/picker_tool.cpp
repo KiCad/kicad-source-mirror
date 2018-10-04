@@ -25,17 +25,10 @@
 #include "picker_tool.h"
 #include "pcb_actions.h"
 #include "grid_helper.h"
-#include <pcbnew_id.h>
-#include <pcb_edit_frame.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include "tool_event_utils.h"
 #include "selection_tool.h"
-
-
-extern bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool,
-                       wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
-
 
 TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
@@ -51,30 +44,23 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     GRID_HELPER grid( frame() );
-
     setControls();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        // TODO: magnetic pad & track processing needs to move to VIEW_CONTROLS.
-        wxPoint pos( controls->GetMousePosition().x, controls->GetMousePosition().y );
-        frame()->SetMousePosition( pos );
+        VECTOR2I cursorPos = controls->GetCursorPosition();
 
-        wxRealPoint gridSize = frame()->GetScreen()->GetGridSize();
-        wxSize igridsize;
-        igridsize.x = KiROUND( gridSize.x );
-        igridsize.y = KiROUND( gridSize.y );
-
-        if( Magnetize( frame(), ID_PCB_HIGHLIGHT_BUTT, igridsize, pos, &pos ) )
-            controls->ForceCursorPosition( true, pos );
-        else
-            controls->ForceCursorPosition( false );
+        if( m_cursorSnapping )
+        {
+            grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+            cursorPos = grid.BestSnapAnchor( cursorPos, m_layerMask );
+        }
 
         if( evt->IsClick( BUT_LEFT ) )
         {
             bool getNext = false;
 
-            m_picked = VECTOR2D( controls->GetCursorPosition() );
+            m_picked = cursorPos;
 
             if( m_clickHandler )
             {
@@ -139,6 +125,7 @@ void PICKER_TOOL::reset()
     m_cursorVisible = true;
     m_cursorCapture = false;
     m_autoPanning = false;
+    m_layerMask = LSET::AllLayersMask();
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
@@ -150,8 +137,10 @@ void PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
+    // Ensure that the view controls do not handle our snapping as we use the GRID_HELPER
+    controls->SetSnapping( false );
+
     controls->ShowCursor( m_cursorVisible );
-    controls->SetSnapping( m_cursorSnapping );
     controls->CaptureCursor( m_cursorCapture );
     controls->SetAutoPan( m_autoPanning );
 }

@@ -255,7 +255,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
 }
 
 
-VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, LSET& aLayers )
+VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers )
 {
     double worldScale = m_frame->GetGalCanvas()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );
