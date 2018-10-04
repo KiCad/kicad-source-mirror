@@ -628,7 +628,6 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
     {
         dc.SetPen( m_pen );
 
-
         double x, y;
         // Do this to reset the counters to evaluate bounding box for label positioning
         Rewind(); GetNextXY( x, y );
@@ -643,7 +642,7 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
         dc.SetClippingRegion( startPx, minYpx, endPx - startPx + 1, maxYpx - minYpx + 1 );
 
-        wxCoord ix = 0, iy = 0;
+        wxCoord ix = std::numeric_limits<wxCoord>::min(), iy = 0;
 
         if( !m_continuous )
         {
@@ -653,10 +652,14 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             {
                 while( GetNextXY( x, y ) )
                 {
-                    double  px = m_scaleX->TransformToPlot( x );
-                    double  py = m_scaleY->TransformToPlot( y );
+                    double px = m_scaleX->TransformToPlot( x );
+                    double py = m_scaleY->TransformToPlot( y );
+                    wxCoord newX = w.x2p( px );
 
-                    ix  = w.x2p( px );
+                    if( newX == ix )    // continue until a new X coordinate is reached
+                        continue;
+
+                    ix  = newX;
                     iy  = w.y2p( py );
 
                     if( m_drawOutsideMargins
@@ -672,10 +675,15 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
             {
                 while( GetNextXY( x, y ) )
                 {
-                    double  px = m_scaleX->TransformToPlot( x );
-                    double  py = m_scaleY->TransformToPlot( y );
+                    double px = m_scaleX->TransformToPlot( x );
+                    double py = m_scaleY->TransformToPlot( y );
 
-                    ix  = w.x2p( px );
+                    wxCoord newX = w.x2p( px );
+
+                    if( newX == ix )    // continue until a new X coordinate is reached
+                        continue;
+
+                    ix  = newX;
                     iy  = w.y2p( py );
 
                     if( m_drawOutsideMargins
@@ -699,34 +707,29 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
             while( GetNextXY( x, y ) )
             {
-                double  px = m_scaleX->TransformToPlot( x );
-                double  py = m_scaleY->TransformToPlot( y );
+                double px = m_scaleX->TransformToPlot( x );
+                double py = m_scaleY->TransformToPlot( y );
 
                 if( py >= 0.0 && py <= 1.0 )
                     n++;
 
-                // printf("py %.1f\n", py);
-
-                wxCoord x1  = w.x2p( px );
-                wxCoord c1  = w.y2p( py );
-
-                // printf("px %.10f py %.10f c1 %d\n", px, py, c1);
-
-                // wxCoord x1 = XScale().X2p(w,x); // (wxCoord) ((x - w.GetPosX()) * w.GetScaleX());
-                // wxCoord c1 = YScale().X2p(w,y); // (wxCoord) ((w.GetPosY() - y) * w.GetScaleY());
+                wxCoord x1 = w.x2p( px );
+                wxCoord c1 = w.y2p( py );
 
                 if( first )
                 {
                     first = false;
                     x0 = x1; c0 = c1;
                 }
-
-                bool outUp, outDown;
-
-                if( (x1 >= startPx)&&(x0 <= endPx) )
+                else if( x0 == x1 )      // continue until a new X coordinate is reached
                 {
-                    outDown = (c0 > maxYpx) && (c1 > maxYpx);
-                    outUp = (c0 < minYpx) && (c1 < minYpx);
+                    continue;
+                }
+
+                if( ( x1 >= startPx ) && ( x0 <= endPx ) )
+                {
+                    bool outDown = ( c0 > maxYpx ) && ( c1 > maxYpx );
+                    bool outUp = ( c0 < minYpx ) && ( c1 < minYpx );
 
                     if( !outUp && !outDown )
                     {
@@ -737,8 +740,6 @@ void mpFXY::Plot( wxDC& dc, mpWindow& w )
 
                 x0 = x1; c0 = c1;
             }
-
-            // printf("n %s %d\n", (const char *) m_name.c_str(), n);
         }
 
         if( !m_name.IsEmpty() && m_showName )
@@ -3340,13 +3341,15 @@ void mpFXYVector::Rewind()
 
 bool mpFXYVector::GetNextXY( double& x, double& y )
 {
-    if( m_index>=m_xs.size() )
+    if( m_index >= m_xs.size() )
+    {
         return false;
+    }
     else
     {
-        x   = m_xs[m_index];
-        y   = m_ys[m_index++];
-        return m_index<=m_xs.size();
+        x = m_xs[m_index];
+        y = m_ys[m_index++];
+        return m_index <= m_xs.size();
     }
 }
 
