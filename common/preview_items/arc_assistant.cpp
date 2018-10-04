@@ -119,11 +119,27 @@ static void drawArcWithHilight( KIGFX::VIEW *aView,
     if( angleIsSpecial( aStartAngle - aEndAngle ) )
         color = rs->IsBackgroundDark() ? COLOR4D( 0.5, 1.0, 0.5, 1.0 ) : COLOR4D( 0.0, 0.7, 0.0, 1.0 ) ;
 
+    gal->SetIsStroke( true );
+    gal->SetIsFill( true );
     gal->SetStrokeColor( color );
     gal->SetFillColor( color.WithAlpha( 0.2 ) );
 
     // draw the angle reference arc
     gal->DrawArc( aOrigin, aRad, -aStartAngle, -aEndAngle );
+}
+
+
+static void drawCircleGuide( KIGFX::VIEW* aView, const VECTOR2I& aOrigin, double aRad )
+{
+    auto gal = aView->GetGAL();
+    auto rs = static_cast<KIGFX::PCB_RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
+
+    auto color = rs->GetLayerColor( LAYER_AUX_ITEMS );
+
+    gal->SetStrokeColor( color.WithAlpha( PreviewOverlayDeemphAlpha( true ) ) );
+    gal->SetIsStroke( true );
+    gal->SetIsFill( false );
+    gal->DrawCircle( aOrigin, aRad );
 }
 
 
@@ -170,6 +186,9 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 
         // draw the angle reference arc
         drawArcWithHilight( aView, origin, innerRad, initAngle, 0.0 );
+
+        // draw the radius guide circle
+        drawCircleGuide( aView, origin, m_constructMan.GetRadius() );
 
         double degs = getNormDeciDegFromRad( initAngle );
 
