@@ -372,6 +372,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     do
     {
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+
         if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
             evt->IsAction( &PCB_ACTIONS::move ) ||
             evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )

@@ -57,6 +57,12 @@ public:
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, BOARD_ITEM* aItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
+    VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, LSET& aLayers );
+
+    void SetSnap( bool aSnap )
+    {
+        m_enableSnap = aSnap;
+    }
 
 private:
     enum ANCHOR_FLAGS {
@@ -79,8 +85,6 @@ private:
         {
             return ( aP - pos ).EuclideanNorm();
         }
-
-        //bool CanSnapItem( const BOARD_ITEM* aItem ) const;
     };
 
     std::vector<ANCHOR> m_anchors;
@@ -103,8 +107,13 @@ private:
 
     PCB_BASE_FRAME* m_frame;
     OPT<VECTOR2I> m_auxAxis;
-    bool m_diagonalAuxAxesEnable;
-    KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint, m_viewAxis;
+
+    bool m_diagonalAuxAxesEnable;   ///< If true, use the aux axis for snapping as well
+    bool m_enableSnap;              ///< If true, allow snapping to other items on the layers
+    int m_snapSize;                 ///< Sets the radius in screen units for snapping to items
+
+    KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
+    KIGFX::ORIGIN_VIEWITEM m_viewAxis;
 };
 
 #endif

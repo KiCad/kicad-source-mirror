@@ -975,6 +975,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
 
     DRAWSEGMENT line45;
+    GRID_HELPER grid( m_frame );
 
     m_frame->SetActiveLayer( getDrawingLayer() );
 
@@ -998,9 +999,11 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         // Init the new item attributes
         aGraphic->SetShape( (STROKE_T) aShape );
         aGraphic->SetWidth( m_lineWidth );
-        aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
-        aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
         aGraphic->SetLayer( getDrawingLayer() );
+        aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
+
+        cursorPos = grid.BestSnapAnchor( cursorPos, aGraphic );
+        aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
         if( aShape == S_SEGMENT )
             line45 = *aGraphic; // used only for direction 45 mode with lines
@@ -1018,7 +1021,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+
+        cursorPos = grid.BestSnapAnchor( evt->Position(), aGraphic );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         const bool limit45 = ( frame()->Settings().m_use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
@@ -1030,7 +1035,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             if( direction45 )
             {
                 preview.Add( &line45 );
-                make45DegLine( aGraphic, &line45 );
+                make45DegLine( aGraphic, &line45, cursorPos );
             }
             else
             {
@@ -1121,7 +1126,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             // 45 degree lines
             if( direction45 && aShape == S_SEGMENT )
-                make45DegLine( aGraphic, &line45 );
+                make45DegLine( aGraphic, &line45, cursorPos );
             else
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
@@ -1198,6 +1203,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     SELECTION preview;
     m_view->Add( &preview );
     m_view->Add( &arcAsst );
+    GRID_HELPER grid( m_frame );
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
@@ -1209,7 +1215,11 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        const VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        PCB_LAYER_ID layer = getDrawingLayer();
+        aGraphic->SetLayer( layer );
+
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        const VECTOR2I cursorPos = grid.BestSnapAnchor( evt->Position(), aGraphic );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1218,13 +1228,10 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
 
-                PCB_LAYER_ID layer = getDrawingLayer();
-
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
                 aGraphic->SetShape( S_ARC );
                 aGraphic->SetWidth( m_lineWidth );
-                aGraphic->SetLayer( layer );
 
                 preview.Add( aGraphic );
                 firstPoint = true;
@@ -1342,13 +1349,16 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
     auto&   controls    = *getViewControls();
     bool    started     = false;
 
+    GRID_HELPER grid( m_frame );
     STATUS_TEXT_POPUP status( m_frame );
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls.GetCursorPosition();
+        LSET layers( m_frame->GetActiveLayer() );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( evt->Position(), layers );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -1489,12 +1499,12 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 }
 
 
-void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const
+void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper,
+                                  VECTOR2I& aPos ) const
 {
-    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
     VECTOR2I    origin( aSegment->GetStart() );
-    DIRECTION_45 direction( origin - cursorPos );
-    SHAPE_LINE_CHAIN newChain = direction.BuildInitialTrace( origin, cursorPos );
+    DIRECTION_45 direction( origin - aPos );
+    SHAPE_LINE_CHAIN newChain = direction.BuildInitialTrace( origin, aPos );
 
     if( newChain.PointCount() > 2 )
     {
@@ -1504,9 +1514,9 @@ void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) 
     }
     else
     {
-        aSegment->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
-        aHelper->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-        aHelper->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+        aSegment->SetEnd( wxPoint( aPos.x, aPos.y ) );
+        aHelper->SetStart( wxPoint( aPos.x, aPos.y ) );
+        aHelper->SetEnd( wxPoint( aPos.x, aPos.y ) );
     }
 }
 
@@ -1593,24 +1603,17 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 
 //          bool do_snap = ( m_frame->Settings().m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
 //                || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS );
-            bool do_snap = true;
+            m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
+            auto    via = static_cast<VIA*>( aItem );
+            wxPoint pos = via->GetPosition();
+            TRACK*  track = findTrack( via );
 
-            if( m_modifiers & MD_SHIFT )
-                do_snap = !do_snap;
-
-            if( do_snap )
+            if( track )
             {
-                auto    via = static_cast<VIA*>( aItem );
-                wxPoint pos = via->GetPosition();
-                TRACK*  track = findTrack( via );
+                SEG         trackSeg( track->GetStart(), track->GetEnd() );
+                VECTOR2I    snap = m_gridHelper.AlignToSegment( pos, trackSeg );
 
-                if( track )
-                {
-                    SEG         trackSeg( track->GetStart(), track->GetEnd() );
-                    VECTOR2I    snap = m_gridHelper.AlignToSegment( pos, trackSeg );
-
-                    aItem->SetPosition( wxPoint( snap.x, snap.y ) );
-                }
+                aItem->SetPosition( wxPoint( snap.x, snap.y ) );
             }
         }
 

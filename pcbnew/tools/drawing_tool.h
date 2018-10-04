@@ -251,8 +251,9 @@ private:
      * the end of the aSegment is modified according to the current cursor position.
      * @param aSegment is the segment that is currently drawn.
      * @param aHelper is a helper line that shows the next possible segment.
+     * @param aPos is the position of the cursor for this event
      */
-    void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper ) const;
+    void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper, VECTOR2I& aPos ) const;
 
     /**
      * Function constrainDimension()

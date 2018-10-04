@@ -46,6 +46,8 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
     m_frame( aFrame )
 {
     m_diagonalAuxAxesEnable = true;
+    m_enableSnap = true;
+    m_snapSize = 100;
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
 
     m_viewAxis.SetSize( 20000 );
@@ -140,6 +142,9 @@ VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 {
     OPT_VECTOR2I pts[6];
+
+    if( !m_enableSnap )
+        return aPoint;
 
     const VECTOR2D gridOffset( GetOrigin() );
     const VECTOR2D gridSize( GetGrid() );
@@ -239,8 +244,21 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
 
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem )
 {
+    LSET layers;
+
+    if( aDraggedItem )
+        layers = aDraggedItem->GetLayer();
+    else
+        layers = LSET::AllLayersMask();
+
+    return BestSnapAnchor( aOrigin, layers );
+}
+
+
+VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, LSET& aLayers )
+{
     double worldScale = m_frame->GetGalCanvas()->GetGAL()->GetWorldScale();
-    int snapRange = (int) ( 100.0 / worldScale );
+    int snapRange = (int) ( m_snapSize / worldScale );
 
     BOX2I bb( VECTOR2I( aOrigin.x - snapRange / 2, aOrigin.y - snapRange / 2 ), VECTOR2I( snapRange, snapRange ) );
 
@@ -251,19 +269,12 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDrag
         computeAnchors( item, aOrigin );
     }
 
-    LSET layers;
-
-    if( aDraggedItem )
-        layers = aDraggedItem->GetLayer();
-    else
-        layers = LSET::AllLayersMask();
-
-    ANCHOR* nearest = nearestAnchor( aOrigin, CORNER | SNAPPABLE, layers );
+    ANCHOR* nearest = nearestAnchor( aOrigin, CORNER | SNAPPABLE, aLayers );
 
     VECTOR2I nearestGrid = Align( aOrigin );
     double gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
 
-    if( nearest )
+    if( nearest && m_enableSnap )
     {
         double snapDist = nearest->Distance( aOrigin );
 

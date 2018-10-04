@@ -329,6 +329,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         if( revert )
             break;
 
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+
         if( !m_editPoints ||
             evt->Matches( m_selectionTool->ClearedEvent ) ||
             evt->Matches( m_selectionTool->UnselectedEvent ) ||
@@ -346,7 +348,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 commit.StageItems( selection, CHT_MODIFY );
 
-                controls->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
                 controls->SetAutoPan( true );
                 modified = true;
@@ -358,14 +359,14 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
                 setAltConstraint( enableAltConstraint );
 
-            m_editedPoint->SetPosition( controls->GetCursorPosition() );
-
             if( m_altConstraint )
                 m_altConstraint->Apply();
             else
                 m_editedPoint->ApplyConstraint();
 
-            m_editedPoint->SetPosition( grid.Align( m_editedPoint->GetPosition() ) );
+
+            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(),
+                    static_cast<BOARD_ITEM*>( item ) ) );
             updateItem();
             updatePoints();
         }
