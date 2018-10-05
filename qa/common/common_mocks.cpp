@@ -27,6 +27,7 @@
  */
 
 #include <pgm_base.h>
+#include <kiface_i.h>
 
 
 struct PGM_TEST_FRAME : public PGM_BASE
@@ -39,4 +40,32 @@ PGM_BASE& Pgm()
 {
     static PGM_TEST_FRAME program;
     return program;
+}
+
+static struct IFACE : public KIFACE_I
+{
+    bool OnKifaceStart( PGM_BASE* aProgram, int aCtlBits ) override
+    {
+        return start_common( aCtlBits );
+    }
+
+    wxWindow* CreateWindow( wxWindow* aParent, int aClassId, KIWAY* aKiway, int aCtlBits = 0 ) override
+    {
+        return nullptr;
+    }
+
+    void* IfaceOrAddress( int aDataId ) override
+    {
+        return nullptr;
+    }
+
+    IFACE( const char* aDSOname, KIWAY::FACE_T aType ) :
+        KIFACE_I( aDSOname, aType )
+    {}
+
+} kiface( "common_test", KIWAY::KIWAY_FACE_COUNT );
+
+KIFACE_I& Kiface()
+{
+    return kiface;
 }

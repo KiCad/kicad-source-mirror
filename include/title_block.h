@@ -25,6 +25,7 @@
 #define TITLE_BLOCK_H
 
 #include <wx/string.h>
+#include <wx/arrstr.h>
 #include <ki_exception.h>
 
 class OUTPUTFORMATTER;
