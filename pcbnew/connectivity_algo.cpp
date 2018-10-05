@@ -325,41 +325,38 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     PROF_COUNTER search_basic( "search-basic" );
 #endif
 
-    size_t numDirty = std::count_if( m_itemList.begin(), m_itemList.end(), [] ( CN_ITEM* aItem )
-            { return aItem->Dirty(); } );
+    std::vector<CN_ITEM*> dirtyItems;
+    std::copy_if( m_itemList.begin(), m_itemList.end(), std::back_inserter( dirtyItems ),
+            [] ( CN_ITEM* aItem ) { return aItem->Dirty(); } );
 
     if( m_progressReporter )
     {
-        m_progressReporter->SetMaxProgress( numDirty );
+        m_progressReporter->SetMaxProgress( dirtyItems.size() );
         m_progressReporter->KeepRefreshing();
     }
 
     if( m_itemList.IsDirty() )
     {
-        std::atomic<int> nextItem( 0 );
+        std::atomic<size_t> nextItem( 0 );
         std::atomic<size_t> threadsFinished( 0 );
 
         size_t parallelThreadCount = std::min<size_t>(
                 std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-                numDirty );
+                dirtyItems.size() );
 
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            std::thread t = std::thread( [&nextItem, &threadsFinished, this]()
+            std::thread t = std::thread( [&nextItem, &threadsFinished, &dirtyItems, this]()
             {
-                for( int i = nextItem.fetch_add( 1 );
-                         i < m_itemList.Size();
-                         i = nextItem.fetch_add( 1 ) )
+                for( size_t i = nextItem.fetch_add( 1 );
+                            i < dirtyItems.size();
+                            i = nextItem.fetch_add( 1 ) )
                 {
-                    auto item = m_itemList[i];
-                    if( item->Dirty() )
-                    {
-                        CN_VISITOR visitor( item, &m_listLock );
-                        m_itemList.FindNearby( item, visitor );
+                    CN_VISITOR visitor( dirtyItems[i], &m_listLock );
+                    m_itemList.FindNearby( dirtyItems[i], visitor );
 
-                        if( m_progressReporter )
-                            m_progressReporter->AdvanceProgress();
-                    }
+                    if( m_progressReporter )
+                        m_progressReporter->AdvanceProgress();
                 }
 
                 threadsFinished++;
