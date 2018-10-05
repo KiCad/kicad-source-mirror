@@ -94,10 +94,6 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
 void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
-    // The ship is going down; no need to do anything...
-    if( !aEvent.GetWindow() || aEvent.GetWindow()->GetId() == wxID_CANCEL )
-        return;
-
     if( m_allowEval )
         evaluate();
 
