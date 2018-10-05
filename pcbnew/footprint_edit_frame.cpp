@@ -750,11 +750,17 @@ void FOOTPRINT_EDIT_FRAME::OnModify()
 
 void FOOTPRINT_EDIT_FRAME::updateTitle()
 {
-    wxString title = _( "Footprint Library Editor" );
+    wxString title = _( "Footprint Editor" );
     LIB_ID   fpid = GetLoadedFPID();
     bool     writable = true;
 
-    if( fpid.IsValid() )
+    if( IsCurrentFPFromBoard() )
+    {
+        title += wxString::Format( wxT( " \u2014 %s [from %s.%s]" ),
+                                   GetBoard()->m_Modules->GetReference(),
+                                   Prj().GetProjectName(), PcbFileExtension );
+    }
+    else if( fpid.IsValid() )
     {
         try
         {

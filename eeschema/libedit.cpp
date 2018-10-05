@@ -55,10 +55,10 @@
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 
-void LIB_EDIT_FRAME::DisplayLibInfos()
+void LIB_EDIT_FRAME::updateTitle()
 {
     wxString lib = GetCurLib();
-    wxString title = _( "Symbol Library Editor" );
+    wxString title = _( "Symbol Editor" );
 
     if( GetCurPart() )
         title += wxT( " \u2014 " ) + GetCurPart()->GetLibId().Format();
@@ -77,7 +77,7 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
     if( !selectedLib.empty() )
         SetCurLib( selectedLib );
 
-    DisplayLibInfos();
+    updateTitle();
 }
 
 
@@ -182,7 +182,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     SetShowDeMorgan( GetCurPart()->HasConversion() );
 
     Zoom_Automatique( false );
-    DisplayLibInfos();
+    updateTitle();
     UpdatePartSelectList();
 
     // Display the document information based on the entry selected just in
@@ -239,7 +239,7 @@ void LIB_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     m_canvas->DrawCrossHair( DC );
 
-    DisplayLibInfos();
+    updateTitle();
     UpdateStatusBar();
 }
 

@@ -343,12 +343,6 @@ public:
     void UpdatePartSelectList();
 
     /**
-     * Updates the main window title bar with the current library name and read only status
-     * of the library.
-     */
-    void DisplayLibInfos();
-
-    /**
      * Redraw the current component loaded in library editor
      * Display reference like in schematic (a reference U is shown U? or U?A)
      * accordint to the current selected unit and De Morgan selection
@@ -481,6 +475,12 @@ private:
      * @return True if the library was successfully saved.
      */
     bool saveLibrary( const wxString& aLibrary, bool aNewFile );
+
+    /**
+     * Updates the main window title bar with the current library name and read only status
+     * of the library.
+     */
+    void updateTitle();
 
     /**
      * Called when the frame is activated.  Tests if the current library exists.

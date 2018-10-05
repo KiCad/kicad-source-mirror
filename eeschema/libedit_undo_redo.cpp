@@ -92,7 +92,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     SetDrawItem( NULL );
     UpdatePartSelectList();
     SetShowDeMorgan( part->HasConversion() );
-    DisplayLibInfos();
+    updateTitle();
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();
@@ -139,7 +139,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     SetDrawItem( NULL );
     UpdatePartSelectList();
     SetShowDeMorgan( part->HasConversion() );
-    DisplayLibInfos();
+    updateTitle();
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();

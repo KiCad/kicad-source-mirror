@@ -251,7 +251,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     ReCreateVToolbar();
     ReCreateOptToolbar();
 
-    DisplayLibInfos();
+    updateTitle();
     DisplayCmpDoc();
     UpdatePartSelectList();
 
@@ -1046,7 +1046,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
 
     UpdatePartSelectList();
-    DisplayLibInfos();
+    updateTitle();
     DisplayCmpDoc();
     OnModify();
     m_canvas->Refresh();

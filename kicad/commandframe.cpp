@@ -73,7 +73,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
 
     AddButton( ID_TO_SCH_LIB_EDITOR,
                KiBitmap( icon_libedit_xpm ),
-               _( "Symbol Library Editor" ) );
+               _( "Symbol Editor" ) );
 
     separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
     m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
@@ -84,7 +84,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
 
     AddButton( ID_TO_PCB_FP_EDITOR,
                KiBitmap( icon_modedit_xpm ),
-               _( "Footprint Library Editor" ) );
+               _( "Footprint Editor" ) );
 
     separator = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
     m_buttonSizer->Add( separator, 0, wxEXPAND | wxALL, 8 );
