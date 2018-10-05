@@ -307,6 +307,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = getView();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    controls->SetSnapping( false );
+
     GRID_HELPER grid( editFrame );
     auto item = selection.Front();
 

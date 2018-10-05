@@ -28,10 +28,11 @@ using namespace std::placeholders;
 #include <pcb_edit_frame.h>
 
 #include <class_board.h>
-#include <class_module.h>
-#include <class_edge_mod.h>
-#include <class_zone.h>
+#include <class_dimension.h>
 #include <class_draw_panel_gal.h>
+#include <class_edge_mod.h>
+#include <class_module.h>
+#include <class_zone.h>
 
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -319,7 +320,6 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
         {
             D_PAD* pad = static_cast<D_PAD*>( aItem );
             addAnchor( pad->GetPosition(), CORNER | SNAPPABLE, pad );
-
             break;
         }
 
@@ -329,7 +329,6 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             DRAWSEGMENT* dseg = static_cast<DRAWSEGMENT*>( aItem );
             VECTOR2I start = dseg->GetStart();
             VECTOR2I end = dseg->GetEnd();
-            //PCB_LAYER_ID layer = dseg->GetLayer();
 
             switch( dseg->GetShape() )
             {
@@ -346,39 +345,41 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
                 }
 
                 case S_ARC:
-                {
                     origin = dseg->GetCenter();
                     addAnchor( dseg->GetArcStart(), CORNER | SNAPPABLE, dseg );
                     addAnchor( dseg->GetArcEnd(), CORNER | SNAPPABLE, dseg );
                     addAnchor( origin, ORIGIN | SNAPPABLE, dseg );
                     break;
-                }
+
+                case S_RECT:
+                    addAnchor( start, CORNER | SNAPPABLE, dseg );
+                    addAnchor( VECTOR2I( end.x, start.y ), CORNER | SNAPPABLE, dseg );
+                    addAnchor( VECTOR2I( start.x, end.y ), CORNER | SNAPPABLE, dseg );
+                    addAnchor( end, CORNER | SNAPPABLE, dseg );
+                    break;
 
                 case S_SEGMENT:
-                {
                     origin.x = start.x + ( start.x - end.x ) / 2;
                     origin.y = start.y + ( start.y - end.y ) / 2;
                     addAnchor( start, CORNER | SNAPPABLE, dseg );
                     addAnchor( end, CORNER | SNAPPABLE, dseg );
                     addAnchor( origin, ORIGIN, dseg );
                     break;
-                }
 
                 case S_POLYGON:
-                {
                     for( const auto& p : dseg->BuildPolyPointsList() )
-                    {
                         addAnchor( p, CORNER | SNAPPABLE, dseg );
-                    }
-                    break;
-                }
 
+                    break;
+
+                case S_CURVE:
+                    addAnchor( start, CORNER | SNAPPABLE, dseg );
+                    addAnchor( end, CORNER | SNAPPABLE, dseg );
+                    //Fallthrough
                 default:
-                {
                     origin = dseg->GetStart();
                     addAnchor( origin, ORIGIN | SNAPPABLE, dseg );
                     break;
-                }
             }
             break;
         }
@@ -396,8 +397,10 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             break;
         }
 
+        case PCB_MARKER_T:
+        case PCB_TARGET_T:
         case PCB_VIA_T:
-            addAnchor( aItem->GetPosition(), CORNER | SNAPPABLE, aItem );
+            addAnchor( aItem->GetPosition(), ORIGIN | CORNER | SNAPPABLE, aItem );
             break;
 
         case PCB_ZONE_AREA_T:
@@ -418,12 +421,23 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
             break;
         }
 
+        case PCB_DIMENSION_T:
+        {
+            const DIMENSION* dim = static_cast<const DIMENSION*>( aItem );
+            addAnchor( dim->m_featureLineGF, CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->m_featureLineDF, CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->m_featureLineGO, CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->m_featureLineDO, CORNER | SNAPPABLE, aItem );
+            break;
+        }
+
         case PCB_MODULE_TEXT_T:
         case PCB_TEXT_T:
             addAnchor( aItem->GetPosition(), ORIGIN, aItem );
-        default:
+            break;
 
-        break;
+        default:
+            break;
    }
 }
 
