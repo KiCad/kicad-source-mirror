@@ -97,14 +97,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
     std::atomic<size_t> nextNet( 1 );
     std::atomic<size_t> threadsFinished( 0 );
 
-    // We don't want to spin up a new thread for fewer than two nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            ( numDirty + 1 ) / 2 );
-
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-    {
-        std::thread t = std::thread( [&nextNet, &threadsFinished, this]()
+    auto update_lambda = [&nextNet, &threadsFinished, this]()
         {
             for( size_t i = nextNet.fetch_add( 1 ); i < m_nets.size(); i = nextNet.fetch_add( 1 ) )
             {
@@ -113,9 +106,23 @@ void CONNECTIVITY_DATA::updateRatsnest()
             }
 
             threadsFinished++;
-        } );
+        };
 
-        t.detach();
+    // We don't want to spin up a new thread for fewer than two nets (overhead costs)
+    size_t parallelThreadCount = std::min<size_t>(
+            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+            ( numDirty + 1 ) / 2 );
+
+    // This prevents generating a thread for point while routing as we are only
+    // updating the ratsnest on a single net
+    if( parallelThreadCount == 1 )
+        update_lambda();
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        {
+            std::thread( update_lambda ).detach();
+        }
     }
 
     // Finalize the ratsnest threads
