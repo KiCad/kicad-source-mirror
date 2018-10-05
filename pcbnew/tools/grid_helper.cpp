@@ -48,6 +48,7 @@ GRID_HELPER::GRID_HELPER( PCB_BASE_FRAME* aFrame ) :
 {
     m_diagonalAuxAxesEnable = true;
     m_enableSnap = true;
+    m_enableGrid = true;
     m_snapSize = 100;
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
 
@@ -121,6 +122,9 @@ void GRID_HELPER::SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin, bool aEnabl
 
 VECTOR2I GRID_HELPER::Align( const VECTOR2I& aPoint ) const
 {
+    if( !m_enableGrid )
+        return aPoint;
+
     const VECTOR2D gridOffset( GetOrigin() );
     const VECTOR2D gridSize( GetGrid() );
 

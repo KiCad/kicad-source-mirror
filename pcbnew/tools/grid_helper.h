@@ -64,6 +64,11 @@ public:
         m_enableSnap = aSnap;
     }
 
+    void SetUseGrid( bool aGrid = true )
+    {
+        m_enableGrid = aGrid;
+    }
+
 private:
     enum ANCHOR_FLAGS {
         CORNER = 0x1,
@@ -110,6 +115,7 @@ private:
 
     bool m_diagonalAuxAxesEnable;   ///< If true, use the aux axis for snapping as well
     bool m_enableSnap;              ///< If true, allow snapping to other items on the layers
+    bool m_enableGrid;              ///< If true, allow snapping to grid
     int m_snapSize;                 ///< Sets the radius in screen units for snapping to items
 
     KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
