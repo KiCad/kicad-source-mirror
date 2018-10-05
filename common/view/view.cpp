@@ -451,7 +451,7 @@ int VIEW::Query( const BOX2I& aRect, std::vector<LAYER_ITEM_PAIR>& aResult ) con
     for( i = m_orderedLayers.rbegin(); i != m_orderedLayers.rend(); ++i )
     {
         // ignore layers that do not contain actual items (i.e. the selection box, menus, floats)
-        if( ( *i )->displayOnly )
+        if( ( *i )->displayOnly || !( *i )->visible )
             continue;
 
         queryVisitor<std::vector<LAYER_ITEM_PAIR> > visitor( aResult, ( *i )->id );
