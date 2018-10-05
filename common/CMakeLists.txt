@@ -187,6 +187,8 @@ set( COMMON_DLG_SRCS
     dialogs/dialog_list_selector_base.cpp
     dialogs/dialog_page_settings_base.cpp
     dialogs/dialog_text_entry_base.cpp
+    dialogs/dialog_print_generic.cpp
+    dialogs/dialog_print_generic_base.cpp
     dialogs/dialog_text_entry.cpp
     dialogs/panel_common_settings.cpp
     dialogs/panel_common_settings_base.cpp
@@ -322,6 +324,7 @@ set( COMMON_SRCS
     netlist_keywords.cpp
     observable.cpp
     prependpath.cpp
+    printout.cpp
     project.cpp
     properties.cpp
     ptree.cpp

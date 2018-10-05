@@ -30,10 +30,36 @@
 
 #include <pcb_painter.h>
 #include <view/view.h>
+#include <pcbplot.h>
 
-PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PRINT_PARAMETERS& aParams,
+PCBNEW_PRINTOUT_SETTINGS::PCBNEW_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
+    : BOARD_PRINTOUT_SETTINGS( aPageInfo )
+{
+    m_drillMarks = SMALL_DRILL_SHAPE;
+    m_pagination = ALL_LAYERS;
+    m_noEdgeLayer = false;
+}
+
+
+void PCBNEW_PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
+{
+    BOARD_PRINTOUT_SETTINGS::Load( aConfig );
+    aConfig->Read( OPTKEY_PRINT_PADS_DRILL, (int*) &m_drillMarks, FULL_DRILL_SHAPE );
+    aConfig->Read( OPTKEY_PRINT_PAGE_PER_LAYER, (int*) &m_pagination, ALL_LAYERS );
+}
+
+
+void PCBNEW_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
+{
+    BOARD_PRINTOUT_SETTINGS::Save( aConfig );
+    aConfig->Write( OPTKEY_PRINT_PADS_DRILL, (int) m_drillMarks );
+    aConfig->Write( OPTKEY_PRINT_PAGE_PER_LAYER, (int) m_pagination );
+}
+
+
+PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS& aParams,
         const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle ) :
-    BOARD_PRINTOUT( aParams, aView, aSheetSize, aTitle )
+    BOARD_PRINTOUT( aParams, aView, aSheetSize, aTitle ), m_pcbnewSettings( aParams )
 {
     m_board = aBoard;
 }
@@ -42,13 +68,13 @@ PCBNEW_PRINTOUT::PCBNEW_PRINTOUT( BOARD* aBoard, const PRINT_PARAMETERS& aParams
 bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 {
     // Store the layerset, as it is going to be modified below and the original settings are needed
-    LSET lset = m_PrintParams.m_PrintMaskLayer;
+    LSET lset = m_settings.m_layerSet;
     int pageCount = lset.count();
     wxString layer;
     PCB_LAYER_ID extractLayer;
 
     // compute layer mask from page number if we want one page per layer
-    if( m_PrintParams.m_OptionPrintPage == 0 )  // One page per layer
+    if( m_pcbnewSettings.m_pagination == 0 )  // One page per layer
     {
         // This sequence is TBD, call a different
         // sequencer if needed, such as Seq().  Could not find documentation on
@@ -57,13 +83,13 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
 
         // aPage starts at 1, not 0
         if( unsigned( aPage - 1 ) < seq.size() )
-            m_PrintParams.m_PrintMaskLayer = LSET( seq[aPage - 1] );
+            m_settings.m_layerSet = LSET( seq[aPage - 1] );
     }
 
-    if( !m_PrintParams.m_PrintMaskLayer.any() )
+    if( !m_settings.m_layerSet.any() )
         return false;
 
-    extractLayer = m_PrintParams.m_PrintMaskLayer.ExtractLayer();
+    extractLayer = m_settings.m_layerSet.ExtractLayer();
 
     if( extractLayer == UNDEFINED_LAYER )
         layer = _( "Multiple Layers" );
@@ -71,13 +97,13 @@ bool PCBNEW_PRINTOUT::OnPrintPage( int aPage )
         layer = LSET::Name( extractLayer );
 
     // In Pcbnew we can want the layer EDGE always printed
-    if( m_PrintParams.m_Flags == 1 )
-        m_PrintParams.m_PrintMaskLayer.set( Edge_Cuts );
+    if( !m_pcbnewSettings.m_noEdgeLayer )
+        m_settings.m_layerSet.set( Edge_Cuts );
 
     DrawPage( layer, aPage, pageCount );
 
     // Restore the original layer set, so the next page can be printed
-    m_PrintParams.m_PrintMaskLayer = lset;
+    m_settings.m_layerSet = lset;
 
     return true;
 }
@@ -88,7 +114,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
-    for( LSEQ layerSeq = m_PrintParams.m_PrintMaskLayer.Seq(); layerSeq; ++layerSeq )
+    for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
         aView->SetLayerVisible( PCBNEW_LAYER_ID_START + *layerSeq, true );
 
     // Enable pad layers corresponding to the selected copper layers
@@ -107,7 +133,7 @@ void PCBNEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView
             aView->SetLayerVisible( item, true );
         }
 
-        if( m_PrintParams.m_DrillShapeOpt != PRINT_PARAMETERS::NO_DRILL_SHAPE )
+        if( m_pcbnewSettings.m_drillMarks != PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE )
         {
             // Enable hole layers to draw drill marks
             for( auto holeLayer : { LAYER_PADS_PLATEDHOLES,
@@ -138,17 +164,17 @@ void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPain
 
     auto painter = static_cast<KIGFX::PCB_PRINT_PAINTER*>( aPainter.get() );
 
-    switch( m_PrintParams.m_DrillShapeOpt )
+    switch( m_pcbnewSettings.m_drillMarks )
     {
-        case PRINT_PARAMETERS::NO_DRILL_SHAPE:
+        case PCBNEW_PRINTOUT_SETTINGS::NO_DRILL_SHAPE:
             painter->SetDrillMarks( false, 0 );
             break;
 
-        case PRINT_PARAMETERS::SMALL_DRILL_SHAPE:
+        case PCBNEW_PRINTOUT_SETTINGS::SMALL_DRILL_SHAPE:
             painter->SetDrillMarks( false, Millimeter2iu( 0.3 ) );
             break;
 
-        case PRINT_PARAMETERS::FULL_DRILL_SHAPE:
+        case PCBNEW_PRINTOUT_SETTINGS::FULL_DRILL_SHAPE:
             painter->SetDrillMarks( true );
             break;
     }
@@ -161,6 +187,7 @@ void PCBNEW_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPain
 
 void PCBNEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
+    BOARD_PRINTOUT::setupGal( aGal );
     aGal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
 }
 

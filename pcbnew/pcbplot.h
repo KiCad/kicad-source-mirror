@@ -36,6 +36,7 @@
 
 class PLOTTER;
 class TEXTE_PCB;
+class D_PAD;
 class DRAWSEGMENT;
 class DIMENSION;
 class MODULE;
@@ -50,10 +51,7 @@ class REPORTER;
 /// \ingroup config
 
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
-#define OPTKEY_PRINT_X_FINESCALE_ADJ wxT( "PrintXFineScaleAdj" )
-#define OPTKEY_PRINT_Y_FINESCALE_ADJ wxT( "PrintYFineScaleAdj" )
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
-#define OPTKEY_PRINT_MODULE_SCALE    wxT( "PrintModuleScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
 #define OPTKEY_PRINT_PAGE_PER_LAYER  wxT( "PrintSinglePage" )

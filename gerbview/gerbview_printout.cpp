@@ -46,7 +46,7 @@
 #include <gerbview_painter.h>
 
 
-GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const PRINT_PARAMETERS& aParams,
+GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const BOARD_PRINTOUT_SETTINGS& aParams,
         const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle ) :
     BOARD_PRINTOUT( aParams, aView, aSheetSize, aTitle )
 {
@@ -57,7 +57,7 @@ GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const PRINT_PARAMETER
 bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
 {
     // Store the layerset, as it is going to be modified below and the original settings are needed
-    LSET lset = m_PrintParams.m_PrintMaskLayer;
+    LSET lset = m_settings.m_layerSet;
 
     // The gerber filename of the page to print will be printed to the worksheet.
     // Find this filename:
@@ -70,7 +70,7 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
     // because handling negative objects when using only one page is tricky
 
     // Enable only one layer to create a printout
-    m_PrintParams.m_PrintMaskLayer = LSET( layerId );
+    m_settings.m_layerSet = LSET( layerId );
 
     GERBER_FILE_IMAGE_LIST& gbrImgList = GERBER_FILE_IMAGE_LIST::GetImagesList();
     GERBER_FILE_IMAGE* gbrImage = gbrImgList.GetGbrImage( layerId );
@@ -79,10 +79,10 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
     if( gbrImage )
         gbr_filename = gbrImage->m_FileName;
 
-    DrawPage( gbr_filename, aPage, m_PrintParams.m_PageCount );
+    DrawPage( gbr_filename, aPage, m_settings.m_pageCount );
 
     // Restore the original layer set, so the next page can be printed
-    m_PrintParams.m_PrintMaskLayer = lset;
+    m_settings.m_layerSet = lset;
 
     return true;
 }
@@ -93,13 +93,14 @@ void GERBVIEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aVi
 {
     BOARD_PRINTOUT::setupViewLayers( aView, aLayerSet );
 
-    for( LSEQ layerSeq = m_PrintParams.m_PrintMaskLayer.Seq(); layerSeq; ++layerSeq )
+    for( LSEQ layerSeq = m_settings.m_layerSet.Seq(); layerSeq; ++layerSeq )
         aView->SetLayerVisible( GERBVIEW_LAYER_ID_START + *layerSeq, true );
 }
 
 
 void GERBVIEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
+    BOARD_PRINTOUT::setupGal( aGal );
     aGal->SetWorldUnitLength( 10e-9 /* 10 nm */ / 0.0254 /* 1 inch in meters */ );
 }
 

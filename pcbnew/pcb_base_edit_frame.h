@@ -211,11 +211,6 @@ protected:
     virtual void duplicateItems( bool aIncrement ) = 0;
 
     void unitsChangeRefresh() override;
-
-    /**
-     * Set up printing system.
-     */
-    virtual void preparePrintout();
 };
 
 #endif

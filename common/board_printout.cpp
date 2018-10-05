@@ -29,35 +29,48 @@
 #include <view/view.h>
 #include <gal/gal_print.h>
 #include <painter.h>
+#include <pcbplot.h>
 
-PRINT_PARAMETERS::PRINT_PARAMETERS()
+
+BOARD_PRINTOUT_SETTINGS::BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
+    : PRINTOUT_SETTINGS( aPageInfo )
 {
-    // TODO Millimeter2iu is depends on PCBNEW/GERBVIEW #ifdefs, so it cannot be compiled to libcommon
-    //m_PenDefaultSize        = Millimeter2iu( 0.2 ); // A reasonable default value to draw items
-                                    // which do not have a specified line width
-    m_PenDefaultSize        = 0.0;
-    m_PrintScale            = 1.0;
-    m_XScaleAdjust          = 1.0;
-    m_YScaleAdjust          = 1.0;
-    m_Print_Sheet_Ref       = false;
-    m_PrintMaskLayer.set();
-    m_PrintMirror           = false;
-    m_Print_Black_and_White = true;
-    m_OptionPrintPage       = 1;
-    m_PageCount             = 1;
-    m_ForceCentered         = false;
-    m_Flags                 = 0;
-    m_DrillShapeOpt         = PRINT_PARAMETERS::SMALL_DRILL_SHAPE;
-    m_PageSetupData         = NULL;
+    m_layerSet.set();
+    m_mirror = false;
 }
 
 
-BOARD_PRINTOUT::BOARD_PRINTOUT( const PRINT_PARAMETERS& aParams, const KIGFX::VIEW* aView,
+void BOARD_PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
+{
+    PRINTOUT_SETTINGS::Load( aConfig );
+
+    for( unsigned layer = 0; layer < m_layerSet.count(); ++layer )
+    {
+        int tmp;
+        wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
+        aConfig->Read( key, &tmp, 1 );
+        m_layerSet.set( layer, tmp );
+    }
+}
+
+
+void BOARD_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
+{
+    PRINTOUT_SETTINGS::Save( aConfig );
+
+    for( unsigned layer = 0; layer < m_layerSet.count(); ++layer )
+    {
+        wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
+        aConfig->Write( key, m_layerSet.test( layer ) );
+    }
+}
+
+
+BOARD_PRINTOUT::BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams, const KIGFX::VIEW* aView,
         const wxSize& aSheetSize, const wxString& aTitle ) :
-    wxPrintout( aTitle )
+    wxPrintout( aTitle ), m_settings( aParams )
 {
     m_view = aView;
-    m_PrintParams = aParams;
     m_sheetSize = aSheetSize;
 }
 
@@ -67,13 +80,8 @@ void BOARD_PRINTOUT::GetPageInfo( int* minPage, int* maxPage, int* selPageFrom, 
     *minPage     = 1;
     *selPageFrom = 1;
 
-    int icnt = 1;
-
-    if( m_PrintParams.m_OptionPrintPage == 0 )
-        icnt = m_PrintParams.m_PageCount;
-
-    *maxPage   = icnt;
-    *selPageTo = icnt;
+    *maxPage   = m_settings.m_pageCount;
+    *selPageTo = m_settings.m_pageCount;
 }
 
 
@@ -102,7 +110,7 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     auto srcSettings = m_view->GetPainter()->GetSettings();
     auto dstSettings = view->GetPainter()->GetSettings();
 
-    if( m_PrintParams.m_Print_Black_and_White )
+    if( m_settings.m_blackWhite )
     {
         for( int i = 0; i < LAYER_ID_COUNT; ++i )
             dstSettings->SetLayerColor( i, COLOR4D::BLACK );
@@ -114,12 +122,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     }
 
 
-    setupViewLayers( view, m_PrintParams.m_PrintMaskLayer );
+    setupViewLayers( view, m_settings.m_layerSet );
     setupPainter( painter );
 
     BOX2I bBox; // determine printout bounding box
 
-    if( m_PrintParams.PrintBorderAndTitleBlock() )
+    if( m_settings.PrintBorderAndTitleBlock() )
     {
         bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( m_sheetSize ) );
         view->SetLayerVisible( LAYER_WORKSHEET, true );
@@ -133,26 +141,25 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
 
 
     // Fit to page
-    if( m_PrintParams.m_PrintScale <= 0.0 )
+    if( m_settings.m_scale <= 0.0 )
     {
         if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
         {
             // Nothing to print
-            m_PrintParams.m_PrintScale = 1.0;
+            m_settings.m_scale = 1.0;
         }
         else
         {
             double scaleX = (double) m_sheetSize.GetWidth() / bBox.GetWidth();
             double scaleY = (double) m_sheetSize.GetHeight() / bBox.GetHeight();
-            m_PrintParams.m_PrintScale = std::min( scaleX, scaleY );
+            m_settings.m_scale = std::min( scaleX, scaleY );
         }
     }
 
     setupGal( gal );
     galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
-    gal->SetFlip( m_PrintParams.m_PrintMirror, false );
     gal->SetLookAtPoint( bBox.Centre() );
-    gal->SetZoomFactor( m_PrintParams.m_PrintScale );
+    gal->SetZoomFactor( m_settings.m_scale );
 
     {
     KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
@@ -176,6 +183,12 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
 
 void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
 {
-    aPainter->GetSettings()->SetOutlineWidth( m_PrintParams.m_PenDefaultSize );
+    aPainter->GetSettings()->SetOutlineWidth( m_settings.m_lineWidth );
     aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
+}
+
+
+void BOARD_PRINTOUT::setupGal( KIGFX::GAL* aGal )
+{
+    aGal->SetFlip( m_settings.m_mirror, false );
 }

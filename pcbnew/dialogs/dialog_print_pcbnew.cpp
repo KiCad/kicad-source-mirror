@@ -31,217 +31,102 @@
 #include <pcb_edit_frame.h>
 #include <footprint_edit_frame.h>
 #include <base_units.h>
-#include <pcbnew_printout.h>
 #include <pcbnew.h>
 #include <pcbplot.h>
 #include <class_board.h>
-#include <enabler.h>
-#include <wx/valnum.h>
-#include <widgets/unit_binder.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 
-#include <dialog_print_pcbnew_base.h>
-
-#define PEN_WIDTH_MAX_VALUE ( KiROUND( 5 * IU_PER_MM ) )
-#define PEN_WIDTH_MIN_VALUE ( KiROUND( 0.005 * IU_PER_MM ) )
-
+#include <dialog_print_generic.h>
+#include <pcbnew_printout.h>
 
 extern int g_DrawDefaultLineThickness;
 
-// Define min and max reasonable values for print scale
-#define MIN_SCALE 0.01
-#define MAX_SCALE 100.0
-
-// static print data and page setup data, to remember settings during the session
-static wxPrintData* s_PrintData;
-static wxPageSetupDialogData* s_pageSetupData = (wxPageSetupDialogData*) NULL;
-
-static PRINT_PARAMETERS  s_Parameters;
-
-
-/**
- * Dialog to print schematic. Class derived from DIALOG_PRINT_PCBNEW_BASE
- *  created by wxFormBuilder
- */
-class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_PCBNEW_BASE
+class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
 {
 public:
-    DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* parent );
-    ~DIALOG_PRINT_PCBNEW() override;
-
-    /**
-     * Set 'print border and title block' to a requested value and hides the
-     * corresponding checkbox.
-     */
-    void ForcePrintBorder( bool aValue )
-    {
-        m_Print_Sheet_Ref->SetValue( aValue );
-        m_Print_Sheet_Ref->Hide();
-    }
+    DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_PRINTOUT_SETTINGS* aSettings );
+    ~DIALOG_PRINT_PCBNEW() {}
 
 private:
-    PCB_BASE_EDIT_FRAME* m_parent;
-    wxConfigBase*   m_config;
-    // the list of existing board layers in wxCheckListBox, with the board layers id:
-    std::pair<wxCheckListBox*, int> m_layers[PCB_LAYER_ID_COUNT];
-    static bool     m_ExcludeEdgeLayer;
-    wxFloatingPointValidator<double> m_scaleValidator;
-
-    UNIT_BINDER     m_defaultPenWidth;
+    PCBNEW_PRINTOUT_SETTINGS* settings() const
+    {
+        wxASSERT( dynamic_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings ) );
+        return static_cast<PCBNEW_PRINTOUT_SETTINGS*>( m_settings );
+    }
 
     bool TransferDataToWindow() override;
 
-    void OnSelectAllClick( wxCommandEvent& event ) override;
-    void OnDeselectAllClick( wxCommandEvent& event ) override;
-    void OnSetCustomScale( wxCommandEvent& event ) override;
-    void OnPageSetup( wxCommandEvent& event ) override;
-    void OnPrintPreview( wxCommandEvent& event ) override;
-    void OnPrintButtonClick( wxCommandEvent& event ) override;
+    void createExtraOptions();
+    void createLeftPanel();
+
+    void onSelectAllClick( wxCommandEvent& event );
+    void onDeselectAllClick( wxCommandEvent& event );
 
     ///> (Un)checks all items in a checklist box
-    void setListBoxValue( wxCheckListBox* aList, bool aValue )
-    {
-        for( int i = 0; i < aList->GetCount(); ++i )
-            aList->Check( i, aValue );
-    }
+    void setListBoxValue( wxCheckListBox* aList, bool aValue );
 
-    void SetPrintParameters();
-    int SetLayerSetFromListSelection();
+    ///> Check whether a layer is enabled in a listbox
+    bool isLayerEnabled( unsigned int aLayer ) const;
 
-    PCBNEW_PRINTOUT* createPrintout( const wxString& aTitle )
+    ///> Enable/disable layer in a listbox
+    void enableLayer( unsigned int aLayer, bool aValue );
+
+    ///> Update layerset basing on the selected layers
+    int setLayerSetFromList();
+
+    void saveSettings() override;
+
+    wxPrintout* createPrintout( const wxString& aTitle ) override
     {
-        return new PCBNEW_PRINTOUT( m_parent->GetBoard(), s_Parameters,
+        return new PCBNEW_PRINTOUT( m_parent->GetBoard(), *settings(),
             m_parent->GetGalCanvas()->GetView(), m_parent->GetPageSettings().GetSizeIU(), aTitle );
     }
 
-    /**
-     * Select a corresponing scale radio button and update custom scale value if needed.
-     * @param aValue is the scale value to be selected (0 stands for fit-to-page).
-     */
-    void setScaleValue( double aValue ) const
-    {
-        wxASSERT( aValue >= 0.0 );
+    PCB_BASE_EDIT_FRAME* m_parent;
 
-        if( aValue == 0.0 )
-        {
-            m_scaleFit->SetValue( true );
-        }
-        else if( aValue == 1.0 )
-        {
-            m_scale1->SetValue( true );
-        }
-        else
-        {
-            if( aValue > MAX_SCALE )
-            {
-                DisplayInfoMessage( NULL,
-                        _( "Warning: Scale option set to a very large value" ) );
-            }
+    // List of existing board layers in wxCheckListBox, with the board layers id:
+    std::pair<wxCheckListBox*, int> m_layers[PCB_LAYER_ID_COUNT];
 
-            if( aValue < MIN_SCALE )
-            {
-                DisplayInfoMessage( NULL,
-                        _( "Warning: Scale option set to a very small value" ) );
-            }
-
-            m_scaleCustom->SetValue( true );
-            m_scaleCustomText->SetValue( wxString::Format( wxT( "%f" ), aValue ) );
-        }
-    }
-
-    /**
-     * Return scale value selected in the dialog.
-     */
-    double getScaleValue() const
-    {
-        if( m_scale1->GetValue() )
-            return 1.0;
-
-        if( m_scaleFit->GetValue() )
-            return 0.0;
-
-        if( m_scaleCustom->GetValue() )
-        {
-            double scale;
-
-            wxCHECK( m_scaleCustomText->GetValue().ToDouble( &scale ), 1.0 );
-            return scale;
-        }
-
-        wxCHECK( false, 1.0 );
-    }
+    // Extra widgets
+    wxCheckListBox* m_listTechLayers;
+    wxCheckListBox* m_listCopperLayers;
+    wxButton* m_buttonSelectAll;
+    wxButton* m_buttonDeselectAll;
+    wxCheckBox* m_checkboxNoEdge;
+    wxCheckBox* m_checkboxMirror;
+    wxChoice* m_drillMarksChoice;
+    wxRadioBox* m_boxPagination;
 };
 
 
-bool DIALOG_PRINT_PCBNEW::m_ExcludeEdgeLayer;
-
-
-DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* parent ) :
-    DIALOG_PRINT_PCBNEW_BASE( parent ),
-    m_parent( parent ),
-    m_defaultPenWidth( parent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true,
-                       PEN_WIDTH_MIN_VALUE, PEN_WIDTH_MAX_VALUE )
+DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_PRINTOUT_SETTINGS* aSettings ) :
+    DIALOG_PRINT_GENERIC( aParent, aSettings ), m_parent( aParent )
 {
     m_config = Kiface().KifaceSettings();
     memset( m_layers, 0, sizeof( m_layers ) );
 
-    m_scaleValidator.SetRange( 1e-3, 1e3 );
-    m_scaleCustomText->SetValidator( m_scaleValidator );
+    // Line width settings range
+    m_lineWidth.SetMax( KiROUND( 5 * IU_PER_MM ) );
+    m_lineWidth.SetMin( KiROUND( 0.005 * IU_PER_MM ) );
 
-    // We use a sdbSizer to get platform-dependent ordering of the action buttons, but
-    // that requires us to correct the button labels here.
-    m_sdbSizer1OK->SetLabel( _( "Print" ) );
-    m_sdbSizer1Apply->SetLabel( _( "Print Preview" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
-
-    m_sdbSizer1OK->SetDefault();
-
-#if defined(__WXMAC__) or defined(__WXGTK__)
-    // Preview does not work well on GTK or Mac,
-    // but these platforms provide native print preview
-    m_sdbSizer1Apply->Hide();
-#endif
-
-    FinishDialogSettings();
-}
-
-
-DIALOG_PRINT_PCBNEW::~DIALOG_PRINT_PCBNEW()
-{
-    SetPrintParameters();
-
-    if( m_config )
-    {
-        m_config->Write( OPTKEY_PRINT_SCALE, getScaleValue() );
-        m_config->Write( OPTKEY_PRINT_PAGE_FRAME, s_Parameters.m_Print_Sheet_Ref);
-        m_config->Write( OPTKEY_PRINT_MONOCHROME_MODE, s_Parameters.m_Print_Black_and_White);
-        m_config->Write( OPTKEY_PRINT_PAGE_PER_LAYER, s_Parameters.m_OptionPrintPage );
-        m_config->Write( OPTKEY_PRINT_PADS_DRILL, (long) s_Parameters.m_DrillShapeOpt );
-
-        for( unsigned layer = 0; layer < DIM(m_layers); ++layer )
-        {
-            if( m_layers[layer].first )
-            {
-                wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
-                bool value = m_layers[layer].first->IsChecked( m_layers[layer].second );
-                m_config->Write( key, value );
-            }
-        }
-    }
+    createExtraOptions();
+    createLeftPanel();
 }
 
 
 bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 {
-    wxString msg;
-    BOARD*   board = m_parent->GetBoard();
+    if( !DIALOG_PRINT_GENERIC::TransferDataToWindow() )
+        return false;
 
-    s_Parameters.m_PageSetupData = s_pageSetupData;
+    if( m_config )
+        settings()->Load( m_config );
 
-    // Create layer list.
+    BOARD* board = m_parent->GetBoard();
+
+    // Create layer list
     for( LSEQ seq = board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
         PCB_LAYER_ID layer = *seq;
@@ -249,275 +134,232 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 
         if( IsCopperLayer( layer ) )
         {
-            checkIndex = m_CopperLayersList->Append( board->GetLayerName( layer ) );
-            m_layers[layer] = std::make_pair( m_CopperLayersList, checkIndex );
+            checkIndex = m_listCopperLayers->Append( board->GetLayerName( layer ) );
+            m_layers[layer] = std::make_pair( m_listCopperLayers, checkIndex );
         }
         else
         {
-            checkIndex = m_TechnicalLayersList->Append( board->GetLayerName( layer ) );
-            m_layers[layer] = std::make_pair( m_TechnicalLayersList, checkIndex );
+            checkIndex = m_listTechLayers->Append( board->GetLayerName( layer ) );
+            m_layers[layer] = std::make_pair( m_listTechLayers, checkIndex );
         }
 
-        if( m_config )
-        {
-            wxString layerKey;
-            layerKey.Printf( OPTKEY_LAYERBASE, layer );
-            bool option;
-
-            if( m_config->Read( layerKey, &option ) )
-                m_layers[layer].first->Check( checkIndex, option );
-        }
+        m_layers[layer].first->Check( checkIndex, settings()->m_layerSet.test( layer ) );
     }
 
-    // Option for excluding contents of "Edges Pcb" layer
-    m_Exclude_Edges_Pcb->Show( true );
-
-    // Read the scale adjust option
-    double scale = 1.0;
-
-    if( m_config )
-    {
-        m_config->Read( OPTKEY_PRINT_SCALE, &scale );
-        m_config->Read( OPTKEY_PRINT_PAGE_FRAME, &s_Parameters.m_Print_Sheet_Ref, 1);
-        m_config->Read( OPTKEY_PRINT_MONOCHROME_MODE, &s_Parameters.m_Print_Black_and_White, 1);
-        m_config->Read( OPTKEY_PRINT_PAGE_PER_LAYER, &s_Parameters.m_OptionPrintPage, 0);
-        int tmp;
-        m_config->Read( OPTKEY_PRINT_PADS_DRILL,  &tmp, PRINT_PARAMETERS::SMALL_DRILL_SHAPE );
-        s_Parameters.m_DrillShapeOpt = (PRINT_PARAMETERS::DrillShapeOptT) tmp;
-    }
-
-    setScaleValue( scale );
-    s_Parameters.m_PrintScale = getScaleValue();
-    m_Print_Mirror->SetValue(s_Parameters.m_PrintMirror);
-    m_Exclude_Edges_Pcb->SetValue(m_ExcludeEdgeLayer);
-    m_Print_Sheet_Ref->SetValue( s_Parameters.m_Print_Sheet_Ref );
+    m_checkboxMirror->SetValue( settings()->m_mirror );
+    m_checkboxNoEdge->SetValue( settings()->m_noEdgeLayer );
+    m_titleBlock->SetValue( settings()->m_titleBlock );
 
     // Options to plot pads and vias holes
-    m_drillMarksChoice->SetSelection( s_Parameters.m_DrillShapeOpt );
+    m_drillMarksChoice->SetSelection( settings()->m_drillMarks );
 
-    m_outputMode->SetSelection( s_Parameters.m_Print_Black_and_White ? 1 : 0 );
+    // Print all layers one one page or separately
+    m_boxPagination->SetSelection( settings()->m_pagination );
 
-    m_PagesOption->SetSelection( s_Parameters.m_OptionPrintPage );
-    s_Parameters.m_PenDefaultSize = g_DrawDefaultLineThickness;
-    m_defaultPenWidth.SetValue( s_Parameters.m_PenDefaultSize );
+    // Default line width
+    settings()->m_lineWidth = g_DrawDefaultLineThickness;
+    m_lineWidth.SetValue( settings()->m_lineWidth );
 
-    // Update the layout when layers are added
+    // Update the dialog layout when layers are added
     GetSizer()->Fit( this );
 
     return true;
 }
 
 
-int DIALOG_PRINT_PCBNEW::SetLayerSetFromListSelection()
+void DIALOG_PRINT_PCBNEW::createExtraOptions()
 {
-    int page_count = 0;
+    wxGridBagSizer* optionsSizer = getOptionsSizer();
+    wxStaticBox* box = getOptionsBox();
+    int rows = optionsSizer->GetEffectiveRowsCount();
+    int cols = optionsSizer->GetEffectiveColsCount();
 
-    s_Parameters.m_PrintMaskLayer = LSET();
+    // Drill marks option
+    auto drillMarksLabel = new wxStaticText( box, wxID_ANY, _( "Drill marks:" ) );
+    std::vector<wxString> drillMarkChoices =
+            { _( "No drill mark" ), _( "Small mark" ), _( "Real drill" ) };
+    m_drillMarksChoice = new wxChoice( box, wxID_ANY, wxDefaultPosition,
+            wxDefaultSize, drillMarkChoices.size(), drillMarkChoices.data(), 0 );
+    m_drillMarksChoice->SetSelection( 0 );
 
-    for( unsigned layer = 0; layer < DIM(m_layers); ++layer )
+    // Print mirrored
+    m_checkboxMirror = new wxCheckBox( box, wxID_ANY, _( "Print mirrored" ) );
+
+    // Pagination
+    std::vector<wxString> pagesOption = { _( "One page per layer" ), _( "All layers on single page" ) };
+    m_boxPagination = new wxRadioBox( box, wxID_ANY, _( "Pagination" ), wxDefaultPosition,
+            wxDefaultSize, pagesOption.size(), pagesOption.data(), 1, wxRA_SPECIFY_COLS );
+    m_boxPagination->SetSelection( 0 );
+
+    // Sizer layout
+    optionsSizer->Add( drillMarksLabel, wxGBPosition( rows, 0 ), wxGBSpan( 1, 1 ),
+            wxBOTTOM | wxRIGHT | wxLEFT | wxALIGN_CENTER_VERTICAL, 5 );
+    optionsSizer->Add( m_drillMarksChoice, wxGBPosition( rows, 1 ), wxGBSpan( 1, cols - 1 ),
+            wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+    optionsSizer->Add( m_checkboxMirror, wxGBPosition( rows + 1, 0 ), wxGBSpan( 1, cols ),
+            wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+    optionsSizer->Add( m_boxPagination, wxGBPosition( rows + 2, 0 ), wxGBSpan( 1, cols ), wxALL | wxEXPAND, 5 );
+}
+
+
+void DIALOG_PRINT_PCBNEW::createLeftPanel()
+{
+    wxStaticBoxSizer* sbLayersSizer = new wxStaticBoxSizer( new wxStaticBox( this,
+                wxID_ANY, _( "Included Layers" ) ), wxVERTICAL );
+
+    // Copper layer list
+    auto copperLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Copper layers:" ) );
+    m_listCopperLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
+
+    wxBoxSizer* sizerLeft = new wxBoxSizer( wxVERTICAL );
+    sizerLeft->Add( copperLabel, 0, wxRIGHT | wxLEFT, 5 );
+    sizerLeft->Add( m_listCopperLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+
+
+    // Technical layer list
+    auto technicalLabel = new wxStaticText( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Technical layers:" ) );
+    m_listTechLayers = new wxCheckListBox( sbLayersSizer->GetStaticBox(), wxID_ANY );
+
+    wxBoxSizer* sizerRight = new wxBoxSizer( wxVERTICAL );
+    sizerRight->Add( technicalLabel, 0, wxRIGHT | wxLEFT, 5 );
+    sizerRight->Add( m_listTechLayers, 1, wxEXPAND | wxBOTTOM | wxRIGHT | wxLEFT, 5 );
+
+
+    // Layer list layout
+    wxBoxSizer* bLayerListsSizer = new wxBoxSizer( wxHORIZONTAL );
+    bLayerListsSizer->Add( sizerLeft, 1, wxEXPAND, 5 );
+    bLayerListsSizer->Add( sizerRight, 1, wxEXPAND, 5 );
+
+
+    // Select/Unselect all buttons
+    m_buttonSelectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Select all" ) );
+    m_buttonDeselectAll = new wxButton( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Deselect all" ) );
+
+    m_buttonSelectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onSelectAllClick ), NULL, this );
+    m_buttonDeselectAll->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+            wxCommandEventHandler( DIALOG_PRINT_PCBNEW::onDeselectAllClick ), NULL, this );
+
+    wxBoxSizer* buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+    buttonSizer->Add( m_buttonSelectAll, 1, wxALL, 5 );
+    buttonSizer->Add( m_buttonDeselectAll, 1, wxALL, 5 );
+
+
+    // Exclude Edge.Pcb layer checkbox
+    m_checkboxNoEdge = new wxCheckBox( sbLayersSizer->GetStaticBox(), wxID_ANY, _( "Exclude PCB edge layer" ) );
+    m_checkboxNoEdge->SetToolTip( _("Exclude contents of Edges_Pcb layer from all other layers") );
+
+    // Static box sizer layout
+    sbLayersSizer->Add( bLayerListsSizer, 1, wxALL | wxEXPAND, 5 );
+    sbLayersSizer->Add( buttonSizer, 0, wxALL | wxEXPAND, 5 );
+    sbLayersSizer->Add( m_checkboxNoEdge, 0, wxALL | wxEXPAND, 5 );
+
+    getMainSizer()->Insert( 0, sbLayersSizer, 1, wxEXPAND );
+}
+
+
+void DIALOG_PRINT_PCBNEW::onSelectAllClick( wxCommandEvent& event )
+{
+    setListBoxValue( m_listCopperLayers, true );
+    setListBoxValue( m_listTechLayers, true );
+}
+
+
+void DIALOG_PRINT_PCBNEW::onDeselectAllClick( wxCommandEvent& event )
+{
+    setListBoxValue( m_listCopperLayers, false );
+    setListBoxValue( m_listTechLayers, false );
+}
+
+
+void DIALOG_PRINT_PCBNEW::setListBoxValue( wxCheckListBox* aList, bool aValue )
+{
+    for( unsigned int i = 0; i < aList->GetCount(); ++i )
+        aList->Check( i, aValue );
+}
+
+
+bool DIALOG_PRINT_PCBNEW::isLayerEnabled( unsigned int aLayer ) const
+{
+    wxCHECK( aLayer < DIM( m_layers ), false );
+    const auto& layerInfo = m_layers[aLayer];
+
+    if( layerInfo.first )
+        return layerInfo.first->IsChecked( layerInfo.second );
+
+    return false;
+}
+
+
+void DIALOG_PRINT_PCBNEW::enableLayer( unsigned int aLayer, bool aValue )
+{
+    wxCHECK( aLayer < DIM( m_layers ), /* void */ );
+    const auto& layerInfo = m_layers[aLayer];
+    layerInfo.first->Check( layerInfo.second, aValue );
+}
+
+
+int DIALOG_PRINT_PCBNEW::setLayerSetFromList()
+{
+    settings()->m_layerSet = LSET();
+    int& pageCount = settings()->m_pageCount;
+    pageCount = 0;
+
+    for( unsigned int layer = 0; layer < DIM( m_layers ); ++layer )
     {
-        if( m_layers[layer].first && m_layers[layer].first->IsChecked( m_layers[layer].second ) )
+        if( isLayerEnabled( layer ) )
         {
-            page_count++;
-            s_Parameters.m_PrintMaskLayer.set( layer );
+            ++pageCount;
+            settings()->m_layerSet.set( layer );
         }
     }
 
     // In Pcbnew force the EDGE layer to be printed or not with the other layers
-    m_ExcludeEdgeLayer = m_Exclude_Edges_Pcb->IsChecked();
-    s_Parameters.m_Flags = m_ExcludeEdgeLayer ? 0 : 1;
+    settings()->m_noEdgeLayer = m_checkboxNoEdge->IsChecked();
 
-    if( m_PagesOption->GetSelection() != 0 )
-        page_count = 1;
+    // All layers on one page (only if there is at least one layer selected)
+    if( m_boxPagination->GetSelection() != 0 && pageCount > 0 )
+        pageCount = 1;
 
-    s_Parameters.m_PageCount = page_count;
-
-    return page_count;
+    return pageCount;
 }
 
 
-void DIALOG_PRINT_PCBNEW::SetPrintParameters()
+void DIALOG_PRINT_PCBNEW::saveSettings()
 {
-    PCB_PLOT_PARAMS plot_opts = m_parent->GetPlotSettings();
+    setLayerSetFromList();
 
-    s_Parameters.m_PrintMirror = m_Print_Mirror->GetValue();
-    s_Parameters.m_Print_Sheet_Ref = m_Print_Sheet_Ref->GetValue();
-    s_Parameters.m_Print_Black_and_White = m_outputMode->GetSelection() != 0;
+    settings()->m_drillMarks =
+        (PCBNEW_PRINTOUT_SETTINGS::DRILL_MARK_SHAPE_T) m_drillMarksChoice->GetSelection();
 
-    s_Parameters.m_DrillShapeOpt =
-        (PRINT_PARAMETERS::DrillShapeOptT) m_drillMarksChoice->GetSelection();
+    settings()->m_pagination = m_boxPagination->GetSelection() == 0
+        ? PCBNEW_PRINTOUT_SETTINGS::LAYER_PER_PAGE : PCBNEW_PRINTOUT_SETTINGS::ALL_LAYERS;
 
-    s_Parameters.m_OptionPrintPage = m_PagesOption->GetSelection() != 0;
+    settings()->m_mirror = m_checkboxMirror->GetValue();
 
-    SetLayerSetFromListSelection();
-
-    s_Parameters.m_PrintScale = getScaleValue();
-    plot_opts.SetScale( s_Parameters.m_PrintScale );
-
-    m_parent->SetPlotSettings( plot_opts );
-
-    s_Parameters.m_PenDefaultSize = m_defaultPenWidth.GetValue();
-    g_DrawDefaultLineThickness = s_Parameters.m_PenDefaultSize;
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnSelectAllClick( wxCommandEvent& event )
-{
-    setListBoxValue( m_CopperLayersList, true );
-    setListBoxValue( m_TechnicalLayersList, true );
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnDeselectAllClick( wxCommandEvent& event )
-{
-    setListBoxValue( m_CopperLayersList, false );
-    setListBoxValue( m_TechnicalLayersList, false );
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnSetCustomScale( wxCommandEvent& event )
-{
-    // Select 'custom scale' radio button when user types in a value in the
-    // custom scale text box
-    m_scaleCustom->SetValue( true );
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnPageSetup( wxCommandEvent& event )
-{
-    wxPageSetupDialog pageSetupDialog( this, s_pageSetupData );
-    pageSetupDialog.ShowModal();
-
-    (*s_PrintData) = pageSetupDialog.GetPageSetupDialogData().GetPrintData();
-    (*s_pageSetupData) = pageSetupDialog.GetPageSetupDialogData();
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnPrintPreview( wxCommandEvent& event )
-{
-    SetPrintParameters();
-
-    // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in Pcbnew:
-    if( s_Parameters.m_PrintMaskLayer == 0 )
-    {
-        DisplayError( this, _( "No layer selected" ) );
-        return;
-    }
-
-    // Pass two printout objects: for preview, and possible printing.
-    wxString title = _( "Print Preview" );
-    wxPrintPreview* preview =
-            new wxPrintPreview( createPrintout( title ), createPrintout( title ), s_PrintData );
-
-    preview->SetZoom( 100 );
-
-    wxPreviewFrame* frame = new wxPreviewFrame( preview, this, title, m_parent->GetPosition(),
-                                                m_parent->GetSize() );
-    frame->SetMinSize( wxSize( 550, 350 ) );
-    frame->Center();
-
-    // On wxGTK, set the flag wxTOPLEVEL_EX_DIALOG is mandatory, if we want
-    // close the frame using the X box in caption, when the preview frame is run
-    // from a dialog
-    frame->SetExtraStyle( frame->GetExtraStyle() | wxTOPLEVEL_EX_DIALOG );
-
-    // We use here wxPreviewFrame_WindowModal option to make the wxPrintPreview frame
-    // modal for its caller only.
-    // An other reason is the fact when closing the frame without this option,
-    // all top level frames are reenabled.
-    // With this option, only the parent is reenabled.
-    // Reenabling all top level frames should be made by the parent dialog.
-    frame->InitializeWithModality( wxPreviewFrame_WindowModal );
-
-    frame->Raise(); // Needed on Ubuntu/Unity to display the frame
-    frame->Show( true );
-}
-
-
-void DIALOG_PRINT_PCBNEW::OnPrintButtonClick( wxCommandEvent& event )
-{
-    SetPrintParameters();
-
-    // If no layer selected, we have no plot. prompt user if it happens
-    // because he could think there is a bug in Pcbnew:
-    if( s_Parameters.m_PrintMaskLayer == 0 )
-    {
-        DisplayError( this, _( "No layer selected" ) );
-        return;
-    }
-
-    wxPrintDialogData printDialogData( *s_PrintData );
-    printDialogData.SetMaxPage( s_Parameters.m_PageCount );
-
-    wxPrinter printer( &printDialogData );
-    auto printout = std::unique_ptr<PCBNEW_PRINTOUT>( createPrintout( _( "Print" ) ) );
-
-    // Disable 'Print' button to prevent issuing another print
-    // command before the previous one is finished (causes problems on Windows)
-    ENABLER printBtnDisable( *m_sdbSizer1OK, false );
-
-    if( !printer.Print( this, printout.get(), true ) )
-    {
-        if( wxPrinter::GetLastError() == wxPRINTER_ERROR )
-            DisplayError( this, _( "There was a problem printing." ) );
-    }
-    else
-    {
-        *s_PrintData = printer.GetPrintDialogData().GetPrintData();
-    }
-}
-
-
-void PCB_BASE_EDIT_FRAME::preparePrintout()
-{
-    // Selection affects the original item visibility
-    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    const PAGE_INFO& pageInfo = GetPageSettings();
-
-    if( s_PrintData == NULL )  // First print
-    {
-        s_PrintData = new wxPrintData();
-
-        if( !s_PrintData->Ok() )
-            DisplayError( this, _( "An error occurred initializing the printer information." ) );
-
-        s_PrintData->SetQuality( wxPRINT_QUALITY_HIGH );      // Default resolution = HIGH;
-    }
-
-    if( s_pageSetupData == NULL )
-        s_pageSetupData = new wxPageSetupDialogData( *s_PrintData );
-
-    s_pageSetupData->SetPaperId( pageInfo.GetPaperId() );
-    s_pageSetupData->GetPrintData().SetOrientation( pageInfo.GetWxOrientation() );
-
-    if( pageInfo.IsCustom() )
-    {
-        if( pageInfo.IsPortrait() )
-            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetWidthMils() ),
-                                                   Mils2mm( pageInfo.GetHeightMils() ) ) );
-        else
-            s_pageSetupData->SetPaperSize( wxSize( Mils2mm( pageInfo.GetHeightMils() ),
-                                                   Mils2mm( pageInfo.GetWidthMils() ) ) );
-    }
-
-    *s_PrintData = s_pageSetupData->GetPrintData();
+    DIALOG_PRINT_GENERIC::saveSettings();
+    g_DrawDefaultLineThickness = settings()->m_lineWidth;
 }
 
 
 void PCB_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 {
-    preparePrintout();
-    DIALOG_PRINT_PCBNEW dlg( this );
+    // Selection affects the original item visibility
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    PCBNEW_PRINTOUT_SETTINGS settings( GetPageSettings() );
+    DIALOG_PRINT_PCBNEW dlg( this, &settings );
     dlg.ShowModal();
 }
 
 
 void FOOTPRINT_EDIT_FRAME::ToPrinter( wxCommandEvent& event )
 {
-    preparePrintout();
-    DIALOG_PRINT_PCBNEW dlg( this );
+    // Selection affects the original item visibility
+    GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
+    PCBNEW_PRINTOUT_SETTINGS settings( GetPageSettings() );
+    DIALOG_PRINT_PCBNEW dlg( this, &settings );
     dlg.ForcePrintBorder( false );
     dlg.ShowModal();
 }

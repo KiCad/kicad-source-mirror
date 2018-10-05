@@ -64,7 +64,25 @@ public:
      * Normally not needed (as the UNIT_BINDER inherits from the parent frame), but can be
      * used to set to DEGREES for angular controls.
      */
-     virtual void SetUnits( EDA_UNITS_T aUnits, bool aUseMils = false );
+    virtual void SetUnits( EDA_UNITS_T aUnits, bool aUseMils = false );
+
+    /**
+     * Set the minimal accepted value (in Internal Units).
+     */
+    void SetMin( int aMin )
+    {
+        wxASSERT( aMin < m_max );
+        m_min = aMin;
+    }
+
+    /**
+     * Set the maximal accepted value (in Internal Units).
+     */
+    void SetMax( int aMax )
+    {
+        wxASSERT( aMax > m_min );
+        m_max = aMax;
+    }
 
     /**
      * Function SetValue

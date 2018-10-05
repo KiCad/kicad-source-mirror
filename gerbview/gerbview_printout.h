@@ -27,7 +27,7 @@ class GBR_LAYOUT;
 class GERBVIEW_PRINTOUT : public BOARD_PRINTOUT
 {
 public:
-    GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const PRINT_PARAMETERS& aParams,
+    GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const BOARD_PRINTOUT_SETTINGS& aParams,
             const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle );
 
     bool OnPrintPage( int aPage ) override;

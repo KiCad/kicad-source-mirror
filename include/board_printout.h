@@ -36,6 +36,7 @@
 #include <wx/print.h>
 #include <layers_id_colors_and_visibility.h>
 #include <eda_rect.h>
+#include <printout.h>
 
 namespace KIGFX {
 class GAL;
@@ -43,58 +44,17 @@ class VIEW;
 class PAINTER;
 };
 
-/**
- * Class PRINT_PARAMETERS
- * handles the parameters used to print a board drawing.
- */
 
-class PRINT_PARAMETERS
+struct BOARD_PRINTOUT_SETTINGS : public PRINTOUT_SETTINGS
 {
-public:
-    PRINT_PARAMETERS();
+    BOARD_PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo );
 
-    int    m_PenDefaultSize;                 // The default value pen size to plot/print items
-                                             // that have no defined pen size
-    double m_PrintScale;                     // general scale when printing
-    double m_XScaleAdjust;                   // fine scale adjust for X axis
-    double m_YScaleAdjust;                   // fine scale adjust for Y axis
-    bool   m_Print_Sheet_Ref;                // Option: print page references
-    LSET   m_PrintMaskLayer;                 // Layers to print
-    bool   m_PrintMirror;                    // Option: Print mirrored
-    bool   m_Print_Black_and_White;          // Option: Print in B&W or Color
-    int    m_OptionPrintPage;                // Option: 0 = a layer per page, 1 = all layers at once
-    int    m_PageCount;                      // Number of pages to print
-    bool   m_ForceCentered;                  // Force plot origin to page centre (used in modedit)
-    int    m_Flags;                          // Can be used to pass some other info
-    wxPageSetupDialogData* m_PageSetupData;  // A wxPageSetupDialogData for page options (margins)
+    LSET m_layerSet;                   ///< Layers to print
+    bool m_mirror;                      ///< Print mirrored
 
-    enum DrillShapeOptT {
-        NO_DRILL_SHAPE    = 0,
-        SMALL_DRILL_SHAPE = 1,
-        FULL_DRILL_SHAPE  = 2
-    };
-
-    DrillShapeOptT m_DrillShapeOpt;          // Options to print pads and via holes
-
-    /**
-     * Returns true if the drawing border and title block should be printed.
-     *
-     * For scale factors greater than one, the border is not printed because it will end up
-     * scaling off of the page.
-     */
-    bool PrintBorderAndTitleBlock() const { return m_PrintScale <= 1.0 && m_Print_Sheet_Ref; }
-
-    /**
-     * Returns true if the print should be centered by the board outline instead of the
-     * paper size.
-     */
-    bool CenterOnBoardOutline() const
-    {
-        return !PrintBorderAndTitleBlock()
-               && ( m_ForceCentered || ( m_PrintScale > 1.0 ) || ( m_PrintScale == 0 ) );
-    }
+    void Load( wxConfigBase* aConfig ) override;
+    void Save( wxConfigBase* aConfig ) override;
 };
-
 
 /**
  * Class BOARD_PRINTOUT
@@ -104,7 +64,7 @@ public:
 class BOARD_PRINTOUT : public wxPrintout
 {
 public:
-    BOARD_PRINTOUT( const PRINT_PARAMETERS& aParams, const KIGFX::VIEW* aView,
+    BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams, const KIGFX::VIEW* aView,
             const wxSize& aSheetSize, const wxString& aTitle );
 
     virtual ~BOARD_PRINTOUT() {}
@@ -113,7 +73,7 @@ public:
 
     bool HasPage( int aPage ) override
     {
-        return aPage <= m_PrintParams.m_PageCount;
+        return aPage <= m_settings.m_pageCount;
     }
 
     /**
@@ -135,7 +95,7 @@ protected:
     virtual void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter );
 
     ///> Configures GAL object for a printout
-    virtual void setupGal( KIGFX::GAL* aGal ) {}
+    virtual void setupGal( KIGFX::GAL* aGal );
 
     ///> Returns bounding box of the printed objects (excluding worksheet frame)
     virtual EDA_RECT getBoundingBox() = 0;
@@ -147,7 +107,7 @@ protected:
     const KIGFX::VIEW* m_view;
 
     ///> Printout parameters
-    PRINT_PARAMETERS m_PrintParams;
+    BOARD_PRINTOUT_SETTINGS m_settings;
 
     ///> Sheet size expressed in internal units
     wxSize m_sheetSize;

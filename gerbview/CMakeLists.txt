@@ -10,6 +10,7 @@ include_directories(
     ../include/legacy_wx
     ../pcbnew
     dialogs
+    ../common
     ../3d-viewer
     ../polygon
     ${INC_AFTER}
@@ -22,8 +23,7 @@ set( DIALOGS_SRCS
     dialogs/panel_gerbview_settings.cpp
     dialogs/panel_gerbview_settings_base.cpp
     dialogs/dialog_layers_select_to_pcb_base.cpp
-    dialogs/dialog_print_using_printer.cpp
-    dialogs/dialog_print_using_printer_base.cpp
+    dialogs/dialog_print_gerbview.cpp
     dialogs/dialog_select_one_pcb_layer.cpp
     )
 

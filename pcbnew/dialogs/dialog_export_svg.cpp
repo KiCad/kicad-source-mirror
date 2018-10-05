@@ -57,7 +57,7 @@ private:
     wxString          m_outputDirectory;
     bool              m_printMirror;
     bool              m_oneFileOnly;
-    UNIT_BINDER       m_defaultPenWidth;
+    UNIT_BINDER       m_lineWidth;
 
     void initDialog();
 
@@ -91,7 +91,7 @@ private:
  */
 DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard ) :
     DIALOG_EXPORT_SVG_BASE( aParent ),
-    m_defaultPenWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true,
+    m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true,
                        WIDTH_MIN_VALUE, WIDTH_MAX_VALUE)
 {
     m_board  = aBoard;
@@ -115,7 +115,7 @@ DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard ) :
 
 DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 {
-    g_DrawDefaultLineThickness = m_defaultPenWidth.GetValue();
+    g_DrawDefaultLineThickness = m_lineWidth.GetValue();
     m_printBW = m_ModeColorOption->GetSelection();
     m_oneFileOnly = m_rbFileOpt->GetSelection() == 1;
     m_outputDirectory = m_outputDirectoryName->GetValue();
@@ -165,7 +165,7 @@ void DIALOG_EXPORT_SVG::initDialog()
     m_printMirrorOpt->SetValue( m_printMirror );
     m_rbFileOpt->SetSelection( m_oneFileOnly ? 1 : 0 );
 
-    m_defaultPenWidth.SetValue( g_DrawDefaultLineThickness );
+    m_lineWidth.SetValue( g_DrawDefaultLineThickness );
 
     for( LSEQ seq = m_board->GetEnabledLayers().UIOrder(); seq; ++seq )
     {
@@ -267,7 +267,7 @@ void DIALOG_EXPORT_SVG::ExportSVGFile( bool aOnlyOneFile )
 
     m_printMirror = m_printMirrorOpt->GetValue();
     m_printBW = m_ModeColorOption->GetSelection();
-    g_DrawDefaultLineThickness = m_defaultPenWidth.GetValue();
+    g_DrawDefaultLineThickness = m_lineWidth.GetValue();
 
     LSET all_selected = getCheckBoxSelectedLayers();
 
