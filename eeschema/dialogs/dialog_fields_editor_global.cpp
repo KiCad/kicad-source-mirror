@@ -721,13 +721,18 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_grid->AutoSizeColumns( false );
     for( int col = 0; col < m_grid->GetNumberCols(); ++ col )
     {
-        int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
-        int maxWidth = defaultDlgSize.x / 3;
+        // Columns are hidden by setting their width to 0 so if we resize them they will
+        // become unhidden.
+        if( m_grid->IsColShown( col ) )
+        {
+            int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
+            int maxWidth = defaultDlgSize.x / 3;
 
-        if( col == m_grid->GetNumberCols() - 1 )
-            m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
-        else
-            m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+            if( col == m_grid->GetNumberCols() - 1 )
+                m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
+            else
+                m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
+        }
     }
 
     m_grid->SetGridCursor( 0, 1 );
