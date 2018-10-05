@@ -129,8 +129,8 @@ bool FindBestGridPointOnTrack( wxPoint* aNearPos, wxPoint on_grid, const TRACK* 
 bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool, wxSize aGridSize,
                 wxPoint on_grid, wxPoint* curpos )
 {
-    // Note: only used for routing in the Legacy Toolset and for the measurement tool in the
-    // Modern Toolset.  Can be greatly simplified when the Legacy Toolset is retired.
+    // Note: only used for routing in the Legacy Toolset
+    // Can be greatly simplified when the Legacy Toolset is retired.
 
     bool    doCheckNet = frame->Settings().m_magneticPads != CAPTURE_ALWAYS && frame->Settings().m_legacyDrcOn;
     bool    doCheckLayer = aCurrentTool == ID_TRACK_BUTT;

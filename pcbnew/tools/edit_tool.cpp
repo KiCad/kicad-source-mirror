@@ -72,10 +72,6 @@ using namespace std::placeholders;
 #include <board_commit.h>
 
 
-extern bool Magnetize( PCB_BASE_EDIT_FRAME* frame, int aCurrentTool,
-                       wxSize aGridSize, wxPoint on_grid, wxPoint* curpos );
-
-
 // Edit tool actions
 TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFootprintInFpEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_MODULE_WITH_MODEDIT ),
@@ -1201,35 +1197,24 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     frame()->SetToolID( toolID, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-
     KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, frame()->GetUserUnits() );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
 
+    GRID_HELPER grid( frame() );
+
     bool originSet = false;
 
     controls.ShowCursor( true );
-    controls.SetSnapping( true );
+    controls.SetSnapping( false );
     controls.SetAutoPan( false );
 
     while( auto evt = Wait() )
     {
-        // TODO: magnetic pad & track processing needs to move to VIEW_CONTROLS.
-        wxPoint pos( controls.GetMousePosition().x, controls.GetMousePosition().y );
-        frame()->SetMousePosition( pos );
-
-        wxRealPoint gridSize = frame()->GetScreen()->GetGridSize();
-        wxSize igridsize;
-        igridsize.x = KiROUND( gridSize.x );
-        igridsize.y = KiROUND( gridSize.y );
-
-        if( Magnetize( frame(), toolID, igridsize, pos, &pos ) )
-            controls.ForceCursorPosition( true, pos );
-        else
-            controls.ForceCursorPosition( false );
-
-        const VECTOR2I cursorPos = controls.GetCursorPosition();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetCursorPosition(), nullptr );
 
         if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {
