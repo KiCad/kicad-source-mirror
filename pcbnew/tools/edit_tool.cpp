@@ -377,6 +377,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     do
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
             evt->IsAction( &PCB_ACTIONS::move ) ||

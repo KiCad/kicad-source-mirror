@@ -1022,7 +1022,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
@@ -1220,6 +1220,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         aGraphic->SetLayer( layer );
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
 
         if( evt->IsClick( BUT_LEFT ) )
@@ -1360,7 +1361,7 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
     {
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), layers );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )

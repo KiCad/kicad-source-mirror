@@ -332,6 +332,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             break;
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
 
         if( !m_editPoints ||
             evt->Matches( m_selectionTool->ClearedEvent ) ||
