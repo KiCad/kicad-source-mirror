@@ -449,7 +449,7 @@ GRID_HELPER::ANCHOR* GRID_HELPER::nearestAnchor( const VECTOR2I& aPos, int aFlag
 
     for( ANCHOR& a : m_anchors )
     {
-        if( !aMatchLayers[a.item->GetLayer()] )
+        if( ( aMatchLayers & a.item->GetLayerSet() ) == 0 )
             continue;
 
         if( ( aFlags & a.flags ) != aFlags )
