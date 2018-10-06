@@ -41,7 +41,6 @@
 #include <dialog_print_generic.h>
 #include <pcbnew_printout.h>
 
-extern int g_DrawDefaultLineThickness;
 
 class DIALOG_PRINT_PCBNEW : public DIALOG_PRINT_GENERIC
 {
@@ -155,10 +154,6 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
 
     // Print all layers one one page or separately
     m_boxPagination->SetSelection( settings()->m_pagination );
-
-    // Default line width
-    settings()->m_lineWidth = g_DrawDefaultLineThickness;
-    m_lineWidth.SetValue( settings()->m_lineWidth );
 
     // Update the dialog layout when layers are added
     GetSizer()->Fit( this );
@@ -338,7 +333,6 @@ void DIALOG_PRINT_PCBNEW::saveSettings()
     settings()->m_mirror = m_checkboxMirror->GetValue();
 
     DIALOG_PRINT_GENERIC::saveSettings();
-    g_DrawDefaultLineThickness = settings()->m_lineWidth;
 }
 
 

@@ -51,6 +51,7 @@ class REPORTER;
 /// \ingroup config
 
 #define OPTKEY_LAYERBASE             wxT( "PlotLayer_%d" )
+#define OPTKEY_PRINT_LINE_WIDTH      wxT( "PrintLineWidth" )
 #define OPTKEY_PRINT_SCALE           wxT( "PrintScale" )
 #define OPTKEY_PRINT_PAGE_FRAME      wxT( "PrintPageFrame" )
 #define OPTKEY_PRINT_MONOCHROME_MODE wxT( "PrintMonochrome" )
