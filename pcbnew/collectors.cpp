@@ -100,12 +100,10 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrModules[] = {
 };
 
 
-const KICAD_T GENERAL_COLLECTOR::PadsTracksOrZones[] = {
+const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
     PCB_PAD_T,
     PCB_VIA_T,
     PCB_TRACE_T,
-    PCB_SEGZONE_T,
-    PCB_ZONE_AREA_T,
     EOT
 };
 
