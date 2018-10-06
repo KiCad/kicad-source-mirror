@@ -116,9 +116,8 @@ private:
 
 
 DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent, BOARD_PRINTOUT_SETTINGS* aSettings ) :
-    DIALOG_PRINT_GENERIC( aParent, aSettings )
+    DIALOG_PRINT_GENERIC( aParent, aSettings ), m_parent( aParent )
 {
-    m_parent = aParent;
     m_config = Kiface().KifaceSettings();
 
     // Line width settings range
@@ -134,9 +133,6 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
 {
     if( !DIALOG_PRINT_GENERIC::TransferDataToWindow() )
         return false;
-
-    if( m_config )
-        settings()->Load( m_config );
 
     GERBER_FILE_IMAGE_LIST* images = m_parent->GetGerberLayout()->GetImagesList();
     int itemIdx = 0;
@@ -159,9 +155,15 @@ bool DIALOG_PRINT_GERBVIEW::TransferDataToWindow()
             continue;
 
         wxFileName filename( gbrImage->m_FileName );
-        m_layerLists[listIdx]->Append( filename.GetFullName() );
+        wxCheckListBox* listBox = m_layerLists[listIdx];
+        listBox->Append( filename.GetFullName() );
+
+        if( settings()->m_layerSet.test(ii) )
+            listBox->Check( ii, true );
+
         wxASSERT( m_layerToItemMap.count( ii ) == 0 );
         m_layerToItemMap[ii] = itemIdx;
+
         ++itemIdx;
     }
 

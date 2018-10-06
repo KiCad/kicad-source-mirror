@@ -44,7 +44,7 @@ void BOARD_PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
 {
     PRINTOUT_SETTINGS::Load( aConfig );
 
-    for( unsigned layer = 0; layer < m_layerSet.count(); ++layer )
+    for( unsigned layer = 0; layer < m_layerSet.size(); ++layer )
     {
         int tmp;
         wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
@@ -58,7 +58,7 @@ void BOARD_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
 {
     PRINTOUT_SETTINGS::Save( aConfig );
 
-    for( unsigned layer = 0; layer < m_layerSet.count(); ++layer )
+    for( unsigned layer = 0; layer < m_layerSet.size(); ++layer )
     {
         wxString key = wxString::Format( OPTKEY_LAYERBASE, layer );
         aConfig->Write( key, m_layerSet.test( layer ) );

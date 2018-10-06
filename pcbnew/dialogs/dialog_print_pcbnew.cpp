@@ -120,9 +120,6 @@ bool DIALOG_PRINT_PCBNEW::TransferDataToWindow()
     if( !DIALOG_PRINT_GENERIC::TransferDataToWindow() )
         return false;
 
-    if( m_config )
-        settings()->Load( m_config );
-
     BOARD* board = m_parent->GetBoard();
 
     // Create layer list
