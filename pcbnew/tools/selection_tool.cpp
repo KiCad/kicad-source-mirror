@@ -288,13 +288,24 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
+                CLIENT_SELECTION_FILTER filter = nullptr;
+
                 // If no modifier keys are pressed, clear the selection
                 if( !m_additive )
                 {
+                    if( m_selection.Size() != 0 )
+                        filter = []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+                        {
+                            for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+                                if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
+                                    aCollector.Remove( i );
+                        };
+
                     clearSelection();
                 }
 
-                selectPoint( evt->Position() );
+                selectPoint( evt->Position(), false, nullptr, filter );
+
             }
         }
 
