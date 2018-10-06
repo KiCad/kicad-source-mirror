@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,10 +58,10 @@ char* STDISTREAM_LINE_READER::ReadLine()
 }
 
 
-void STDISTREAM_LINE_READER::setStream( std::istream& aStream )
+void STDISTREAM_LINE_READER::SetStream( std::istream& aStream )
 {
     // Could be done with a virtual getStream function, but the
-    // virtual function call is a noticable (but minor) penalty within
+    // virtual function call is a noticeable (but minor) penalty within
     // ReadLine() in tight loops
     m_stream = &aStream;
 }
@@ -77,7 +77,7 @@ IFSTREAM_LINE_READER::IFSTREAM_LINE_READER( const wxFileName& aFileName )  :
         THROW_IO_ERROR( msg );
     }
 
-    setStream( m_fStream );
+    SetStream( m_fStream );
 
     m_source = aFileName.GetFullName();
 }

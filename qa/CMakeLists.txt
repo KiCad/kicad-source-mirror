@@ -12,8 +12,12 @@ if( KICAD_SCRIPTING_MODULES )
 
 endif()
 
+# common QA helpers
+add_subdirectory( qa_utils )
+
 add_subdirectory( common )
 add_subdirectory( shape_poly_set_refactor )
+add_subdirectory( pcb_parse_input )
 # add_subdirectory( pcb_test_window )
 # add_subdirectory( polygon_triangulation )
 # add_subdirectory( polygon_generator )

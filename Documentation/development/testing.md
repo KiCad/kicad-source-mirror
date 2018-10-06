@@ -103,6 +103,51 @@ You can run the tests in GDB to trace this:
 If the test segfaults, you will get a familiar backtrace, just like
 if you were running pcbnew under GDB.
 
+## Fuzz testing ##
+
+It is possible to run fuzz testing on some parts of KiCad. To do this for a
+generic function, you need to be able to pass some kind of input from the fuzz
+testing tool to the function under test.
+
+For example, to use the [AFL fuzzing tool][], you will need:
+
+* A test executable that can:
+** Receive input from `stdin` to be run by `afl-fuzz`.
+** Optional: process input from a filename to allow `afl-tmin` to minimise the
+   input files.
+* To compile this executable with an AFL compiler, to enable the instrumentation
+  that allows the fuzzer to detect the fuzzing state.
+
+For example, the `qa_pcb_parse_input` executable can be compiled like this:
+
+    mkdir build
+    cd build
+    cmake -DCMAKE_CXX_COMPILER=/usr/bin/afl-clang-fast++ -DCMAKE_C_COMPILER=/usr/bin/afl-clang-fast ../kicad_src
+    make qa_pcb_parse_input
+
+You may need to disable core dumps and CPU frequency scaling on your system (AFL
+will warn you if you should do this). For example, as root:
+
+    # echo core >/proc/sys/kernel/core_pattern
+    # echo performance | tee cpu*/cpufreq/scaling_governor
+
+To fuzz:
+
+    afl-fuzz -i fuzzin -o fuzzout -m500 qa/pcb_parse_input/qa_pcb_parse_input
+
+where:
+
+* `-i` is a directory of files to use as fuzz input "seeds"
+* `-o` is a directory to write the results (including inputs that provoke crashes
+  or hangs)
+* `-t` is the maximum time that a run is allowed to take before being declared a "hang"
+* `-m` is the memory allowed to use (this often needs to be bumped, as KiCad code
+  tends to use a lot of memory to initialise)
+
+The AFL TUI will then display the fuzzing progress, and you can use the hang- or
+crash-provoking inputs to debug code as needed.
+
 [CTest]: https://cmake.org/cmake/help/latest/module/CTest.html
 [Boost Unit Test framework]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/index.html
 [boost-test-functions]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref.html
+[AFL fuzzing tool]: http://lcamtuf.coredump.cx/afl/

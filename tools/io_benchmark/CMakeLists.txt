@@ -3,7 +3,6 @@ include_directories( BEFORE ${INC_BEFORE} )
 
 set( IOBENCHMARK_SRCS
     io_benchmark.cpp
-    stdstream_line_reader.cpp
 )
 
 add_executable( io_benchmark
@@ -12,6 +11,7 @@ add_executable( io_benchmark
 
 target_link_libraries( io_benchmark
     common
+    qa_utils
     ${wxWidgets_LIBRARIES}
 )
 
