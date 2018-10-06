@@ -493,6 +493,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     DIMENSION* dimension = NULL;
     BOARD_COMMIT commit( m_frame );
+    GRID_HELPER grid( m_frame );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
@@ -521,7 +522,10 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = m_controls->GetCursorPosition();
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), nullptr );
+
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
