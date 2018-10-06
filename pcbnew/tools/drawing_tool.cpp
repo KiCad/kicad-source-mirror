@@ -1023,7 +1023,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), getDrawingLayer() );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         const bool limit45 = ( frame()->Settings().m_use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
