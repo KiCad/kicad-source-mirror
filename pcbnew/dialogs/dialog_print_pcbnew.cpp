@@ -81,7 +81,7 @@ private:
     wxPrintout* createPrintout( const wxString& aTitle ) override
     {
         return new PCBNEW_PRINTOUT( m_parent->GetBoard(), *settings(),
-            m_parent->GetGalCanvas()->GetView(), m_parent->GetPageSettings().GetSizeIU(), aTitle );
+            m_parent->GetGalCanvas()->GetView(), aTitle );
     }
 
     PCB_BASE_EDIT_FRAME* m_parent;

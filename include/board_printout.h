@@ -65,7 +65,7 @@ class BOARD_PRINTOUT : public wxPrintout
 {
 public:
     BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams, const KIGFX::VIEW* aView,
-            const wxSize& aSheetSize, const wxString& aTitle );
+            const wxString& aTitle );
 
     virtual ~BOARD_PRINTOUT() {}
 
@@ -88,6 +88,9 @@ public:
             int aPageNum = 1, int aPageCount = 1 );
 
 protected:
+    ///> Convert mils to internal units
+    virtual int milsToIU( double aMils ) const = 0;
+
     ///> Enables layers visibility for a printout
     virtual void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet );
 
@@ -108,9 +111,6 @@ protected:
 
     ///> Printout parameters
     BOARD_PRINTOUT_SETTINGS m_settings;
-
-    ///> Sheet size expressed in internal units
-    wxSize m_sheetSize;
 };
 
 #endif      // BOARD_PRINTOUT_H

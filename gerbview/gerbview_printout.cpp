@@ -47,8 +47,8 @@
 
 
 GERBVIEW_PRINTOUT::GERBVIEW_PRINTOUT( GBR_LAYOUT* aLayout, const BOARD_PRINTOUT_SETTINGS& aParams,
-        const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle ) :
-    BOARD_PRINTOUT( aParams, aView, aSheetSize, aTitle )
+        const KIGFX::VIEW* aView, const wxString& aTitle ) :
+    BOARD_PRINTOUT( aParams, aView, aTitle )
 {
     m_layout = aLayout;
 }
@@ -85,6 +85,12 @@ bool GERBVIEW_PRINTOUT::OnPrintPage( int aPage )
     m_settings.m_layerSet = lset;
 
     return true;
+}
+
+
+int GERBVIEW_PRINTOUT::milsToIU( double aMils ) const
+{
+    return KiROUND( IU_PER_MILS * aMils );
 }
 
 

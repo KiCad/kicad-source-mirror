@@ -93,7 +93,7 @@ private:
     wxPrintout* createPrintout( const wxString& aTitle ) override
     {
         return new GERBVIEW_PRINTOUT( m_parent->GetGerberLayout(), *settings(),
-                m_parent->GetGalCanvas()->GetView(), m_parent->GetPageSettings().GetSizeIU(), aTitle );
+                m_parent->GetGalCanvas()->GetView(), aTitle );
     }
 
     GERBVIEW_FRAME* m_parent;

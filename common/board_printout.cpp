@@ -66,12 +66,11 @@ void BOARD_PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
 }
 
 
-BOARD_PRINTOUT::BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams, const KIGFX::VIEW* aView,
-        const wxSize& aSheetSize, const wxString& aTitle ) :
+BOARD_PRINTOUT::BOARD_PRINTOUT( const BOARD_PRINTOUT_SETTINGS& aParams,
+        const KIGFX::VIEW* aView, const wxString& aTitle ) :
     wxPrintout( aTitle ), m_settings( aParams )
 {
     m_view = aView;
-    m_sheetSize = aSheetSize;
 }
 
 
@@ -126,10 +125,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     setupPainter( painter );
 
     BOX2I bBox; // determine printout bounding box
+    auto sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
+    VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.GetWidth() ), milsToIU( sheetSizeMils.GetHeight() ) );
 
     if( m_settings.PrintBorderAndTitleBlock() )
     {
-        bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( m_sheetSize ) );
+        bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
         view->SetLayerVisible( LAYER_WORKSHEET, true );
     }
     else
@@ -150,8 +151,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
         else
         {
-            double scaleX = (double) m_sheetSize.GetWidth() / bBox.GetWidth();
-            double scaleY = (double) m_sheetSize.GetHeight() / bBox.GetHeight();
+            double scaleX = (double) sheetSizeIU.x / bBox.GetWidth();
+            double scaleY = (double) sheetSizeIU.y / bBox.GetHeight();
             m_settings.m_scale = std::min( scaleX, scaleY );
         }
     }

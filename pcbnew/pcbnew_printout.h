@@ -51,11 +51,13 @@ class PCBNEW_PRINTOUT : public BOARD_PRINTOUT
 {
 public:
     PCBNEW_PRINTOUT( BOARD* aBoard, const PCBNEW_PRINTOUT_SETTINGS& aParams,
-            const KIGFX::VIEW* aView, const wxSize& aSheetSize, const wxString& aTitle );
+            const KIGFX::VIEW* aView, const wxString& aTitle );
 
     bool OnPrintPage( int aPage ) override;
 
 protected:
+    int milsToIU( double aMils ) const override;
+
     void setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView, const LSET& aLayerSet ) override;
 
     void setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter ) override;
