@@ -428,8 +428,8 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos )
         case PCB_DIMENSION_T:
         {
             const DIMENSION* dim = static_cast<const DIMENSION*>( aItem );
-            addAnchor( dim->m_featureLineGF, CORNER | SNAPPABLE, aItem );
-            addAnchor( dim->m_featureLineDF, CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->m_crossBarF, CORNER | SNAPPABLE, aItem );
+            addAnchor( dim->m_crossBarO, CORNER | SNAPPABLE, aItem );
             addAnchor( dim->m_featureLineGO, CORNER | SNAPPABLE, aItem );
             addAnchor( dim->m_featureLineDO, CORNER | SNAPPABLE, aItem );
             break;
