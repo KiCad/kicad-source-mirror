@@ -59,7 +59,7 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_selectionCandidateColor = COLOR4D( 0.0, 1.0, 0.0, 0.75 );
 
     // By default everything should be displayed as filled
-    for( unsigned int i = 0; i < PCB_LAYER_ID_COUNT; ++i )
+    for( unsigned int i = 0; i < DIM( m_sketchMode ); ++i )
     {
         m_sketchMode[i] = false;
     }
