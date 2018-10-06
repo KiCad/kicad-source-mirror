@@ -34,6 +34,7 @@ using namespace std::placeholders;
 #include <class_module.h>
 #include <class_zone.h>
 
+#include <painter.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
@@ -228,18 +229,18 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
 std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
 {
     std::set<BOARD_ITEM*> items;
-
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
-    std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
 
     auto view = m_frame->GetGalCanvas()->GetView();
-    view->Query( aArea, selectedItems );         // Get the list of selected items
+    auto activeLayers = view->GetPainter()->GetSettings()->GetActiveLayers();
+    bool isHighContrast = view->GetPainter()->GetSettings()->GetHighContrast();
+    view->Query( aArea, selectedItems );
 
-    for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
+    for( auto it : selectedItems )
     {
-        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->first );
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
-        if( view->IsVisible( item ) )
+        if( view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( it.second ) ) )
             items.insert ( item );
     }
 
