@@ -94,10 +94,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     auto painter = getPainter( gal );
     std::unique_ptr<KIGFX::VIEW> view( m_view->DataReference() );
 
+    // Target paper size
     wxRect pageSizePx = GetLogicalPageRect();
-    VECTOR2D pageSizeIn( (double) pageSizePx.width / dc->GetPPI().x,
+    const VECTOR2D pageSizeIn( (double) pageSizePx.width / dc->GetPPI().x,
             (double) pageSizePx.height / dc->GetPPI().y );
     galPrint->SetSheetSize( pageSizeIn );
+    const VECTOR2D pageSizeIU( milsToIU( pageSizeIn.x * 1000 ), milsToIU( pageSizeIn.y * 1000 ) );
 
     view->SetGAL( gal );
     view->SetPainter( painter.get() );
@@ -124,10 +126,11 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     setupViewLayers( view, m_settings.m_layerSet );
     setupPainter( painter );
 
-    BOX2I bBox; // determine printout bounding box
     auto sheetSizeMils = m_settings.m_pageInfo.GetSizeMils();
     VECTOR2I sheetSizeIU( milsToIU( sheetSizeMils.GetWidth() ), milsToIU( sheetSizeMils.GetHeight() ) );
+    BOX2I bBox;
 
+    // Determine printout bounding box
     if( m_settings.PrintBorderAndTitleBlock() )
     {
         bBox = BOX2I( VECTOR2I( 0, 0 ), VECTOR2I( sheetSizeIU ) );
@@ -151,8 +154,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
         else
         {
-            double scaleX = (double) sheetSizeIU.x / bBox.GetWidth();
-            double scaleY = (double) sheetSizeIU.y / bBox.GetHeight();
+            double scaleX = (double) pageSizeIU.x / bBox.GetWidth();
+            double scaleY = (double) pageSizeIU.y / bBox.GetHeight();
             m_settings.m_scale = std::min( scaleX, scaleY );
         }
     }
