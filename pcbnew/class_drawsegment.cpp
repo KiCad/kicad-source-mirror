@@ -56,8 +56,7 @@ DRAWSEGMENT::DRAWSEGMENT( BOARD_ITEM* aParent, KICAD_T idtype ) :
     m_Angle = 0;
     m_Flags = 0;
     m_Shape = S_SEGMENT;
-    // Gives a decent pen size to draw shape:
-    m_Width = m_Shape == S_POLYGON ? 0 : Millimeter2iu( 0.15 );
+    m_Width = Millimeter2iu( DEFAULT_LINE_WIDTH );
 }
 
 
