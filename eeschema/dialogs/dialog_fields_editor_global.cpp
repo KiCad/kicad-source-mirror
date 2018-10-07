@@ -271,16 +271,26 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
         {
             // Remove duplicates (other units of multi-unit parts)
-            auto logicalEnd = std::unique( references.begin(), references.end(),
-                    []( const SCH_REFERENCE& l, const SCH_REFERENCE& r )
-                    {
-                        // If unannotated then we can't tell what units belong together
-                        // so we have to leave them all
-                        if( l.GetRefNumber() == wxT( "?" ) )
-                            return false;
+            std::sort( references.begin(), references.end(),
+                       []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                       {
+                           wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                           wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                           return RefDesStringCompare( l_ref, r_ref ) < 0;
+                       } );
 
-                        return( l.GetRef() == r.GetRef() && l.GetRefNumber() == r.GetRefNumber() );
-                    } );
+            auto logicalEnd = std::unique( references.begin(), references.end(),
+                       []( const SCH_REFERENCE& l, const SCH_REFERENCE& r ) -> bool
+                       {
+                           // If unannotated then we can't tell what units belong together
+                           // so we have to leave them all
+                           if( l.GetRefNumber() == wxT( "?" ) )
+                               return false;
+
+                           wxString l_ref( l.GetRef() << l.GetRefNumber() );
+                           wxString r_ref( r.GetRef() << r.GetRefNumber() );
+                           return l_ref == r_ref;
+                       } );
             references.erase( logicalEnd, references.end() );
         }
 
