@@ -66,9 +66,9 @@ LOCALE_IO::LOCALE_IO()
     if( m_c_count++ == 0 )
     {
         // Store the user locale name, to restore this locale later, in dtor
-        m_user_locale = setlocale( LC_ALL, 0 );
+        m_user_locale = setlocale( LC_NUMERIC, nullptr );
         // Switch the locale to C locale, to read/write files with fp numbers
-        setlocale( LC_ALL, "C" );
+        setlocale( LC_NUMERIC, "C" );
     }
 }
 
@@ -79,7 +79,7 @@ LOCALE_IO::~LOCALE_IO()
     if( --m_c_count == 0 )
     {
         // revert to the user locale
-        setlocale( LC_ALL, m_user_locale.c_str() );
+        setlocale( LC_NUMERIC, m_user_locale.c_str() );
     }
 }
 

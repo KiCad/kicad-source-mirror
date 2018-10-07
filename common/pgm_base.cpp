@@ -831,7 +831,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
     if( result != dtst )
         // string to double encode/decode does not work! Bug detected:
         // Disable floating point localization:
-        setlocale( LC_ALL, "C" );
+        setlocale( LC_NUMERIC, "C" );
 
     if( !m_locale->IsLoaded( dictionaryName ) )
         m_locale->AddCatalog( dictionaryName );
