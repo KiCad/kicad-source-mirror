@@ -896,13 +896,15 @@ void BOARD_DESIGN_SETTINGS::SetEnabledLayers( LSET aMask )
 int BOARD_DESIGN_SETTINGS::GetLayerClass( PCB_LAYER_ID aLayer ) const
 {
     if( aLayer == F_SilkS || aLayer == B_SilkS )
-        return 0;
+        return LAYER_CLASS_SILK;
     else if( IsCopperLayer( aLayer ) )
-        return 1;
-    else if( aLayer == Edge_Cuts || aLayer == F_CrtYd || aLayer == B_CrtYd )
-        return 2;
+        return LAYER_CLASS_COPPER;
+    else if( aLayer == Edge_Cuts )
+        return LAYER_CLASS_EDGES;
+    else if( aLayer == F_CrtYd || aLayer == B_CrtYd )
+        return LAYER_CLASS_COURTYARD;
     else
-        return 3;
+        return LAYER_CLASS_OTHERS;
 }
 
 
