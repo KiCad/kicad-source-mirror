@@ -119,7 +119,7 @@ PART_LIB* LIB_ALIAS::GetLib()
 
 void LIB_ALIAS::SetName( const wxString& aName )
 {
-    name = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_ALIAS );
+    name = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
 }
 
 
