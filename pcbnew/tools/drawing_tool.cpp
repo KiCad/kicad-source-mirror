@@ -1064,7 +1064,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
         else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
         {
+            m_lineWidth = getSegmentWidth( getDrawingLayer() );
             aGraphic->SetLayer( getDrawingLayer() );
+            aGraphic->SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( aGraphic );
         }
@@ -1265,6 +1267,14 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             delete aGraphic;
             aGraphic = nullptr;
             break;
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            m_lineWidth = getSegmentWidth( getDrawingLayer() );
+            aGraphic->SetLayer( getDrawingLayer() );
+            aGraphic->SetWidth( m_lineWidth );
+            m_view->Update( &preview );
+            frame()->SetMsgPanel( aGraphic );
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
