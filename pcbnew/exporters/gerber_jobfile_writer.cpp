@@ -166,7 +166,8 @@ void GERBER_JOBFILE_WRITER::addJSONHeader()
     // The time zone offset format is + (or -) mm or hhmm  (mm = number of minutes, hh = number of hours)
     // we want +(or -) hh:mm
     if( msg.Len() > 3 )
-        msg.insert( 3, ":", 1 ),
+        msg.insert( 3, ":", 1 );
+
     text.Printf( wxT( "\"CreationDate\":  \"%s%s\"\n" ),date.FormatISOCombined(), msg );
     addJSONObject( text );
 
@@ -309,8 +310,8 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     /* The board type according to IPC-2221. There are six primary board types:
     - Type 1 - Single-sided
     - Type 2 - Double-sided
-    - Type 3 – Multilayer, TH components only
-    - Type 4 – Multilayer, with TH, blind and/or buried vias.
+    - Type 3 - Multilayer, TH components only
+    - Type 4 - Multilayer, with TH, blind and/or buried vias.
     - Type 5 - Multilayer metal-core board, TH components only
     - Type 6 - Multilayer metal-core
     */
@@ -319,16 +320,16 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     /* Via protection: key words:
     Ia Tented - Single-sided
     Ib Tented - Double-sided
-    IIa Tented and Covered – Single-sided
-    IIb Tented and Covered – Double-sided
-    IIIa Plugged – Single-sided
-    IIIb…….Plugged – Double-sided
-    IVa…….Plugged and Covered – Single-sided
-    IVb…….Plugged and Covered – Double-sided
+    IIa Tented and Covered - Single-sided
+    IIb Tented and Covered - Double-sided
+    IIIa Plugged - Single-sided
+    IIIb Plugged - Double-sided
+    IVa Plugged and Covered - Single-sided
+    IVb Plugged and Covered - Double-sided
     V Filled (fully plugged)
     VI Filled and Covered
     VIII Filled and Capped
-    None…...No protection
+    None...No protection
     */
     addJSONObject( wxString::Format( "\"ViaProtection\": \"%s\",\n", "Ib" ) );
 #endif
