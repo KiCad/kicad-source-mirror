@@ -272,9 +272,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     // If some zones must be filled by segments, create the filling segments
     // (note, this is a outdated option, but it exists)
-    if( int zone_count = std::count_if( toFill.begin(), toFill.end(),
-            []( CN_ZONE_ISOLATED_ISLAND_LIST& aList )
-            { return aList.m_zone->GetFillMode() == ZFM_SEGMENTS; } ) > 0 )
+    int zone_count = std::count_if( toFill.begin(), toFill.end(),
+                []( CN_ZONE_ISOLATED_ISLAND_LIST& aList )
+                { return aList.m_zone->GetFillMode() == ZFM_SEGMENTS; } );
+
+    if( zone_count > 0 )
     {
         if( m_progressReporter )
         {
