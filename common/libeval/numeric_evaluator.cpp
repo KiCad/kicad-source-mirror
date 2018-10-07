@@ -129,8 +129,6 @@ wxString NUMERIC_EVALUATOR::OriginalText() const
 
 bool NUMERIC_EVALUATOR::Process( const wxString& aString )
 {
-    m_originalText = aString;
-
     // Feed parser token after token until end of input.
 
     newString( aString );
@@ -158,12 +156,15 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
 void NUMERIC_EVALUATOR::newString( const wxString& aString )
 {
     Clear();
-    auto len = aString.length();
-    m_token.token = reinterpret_cast<decltype( m_token.token )>( malloc( TokenStat::OutLen + 1 ));
+
+    m_originalText = aString;
+
+    m_token.token = reinterpret_cast<decltype( m_token.token )>( malloc( TokenStat::OutLen + 1 ) );
     strcpy( m_token.token, "0" );
-    m_token.inputLen = len;
+    m_token.inputLen = aString.length();
     m_token.pos = 0;
     m_token.input = aString.mb_str();
+
     m_parseFinished = false;
 }
 
