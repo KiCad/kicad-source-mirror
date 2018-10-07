@@ -422,7 +422,7 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
     auto partBuf = libBuf.GetBuffer( oldAlias );
     wxCHECK( partBuf, false );
 
-    LIB_PART* original = new LIB_PART( *partBuf->GetOriginal() );
+    std::unique_ptr<LIB_PART> original( new LIB_PART( *partBuf->GetOriginal() ) );
     // Save the screen object, so it is transferred to the new buffer
     std::unique_ptr<SCH_SCREEN> screen = partBuf->RemoveScreen();
 
@@ -435,7 +435,7 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
     partBuf = libBuf.GetBuffer( aPart->GetName() );
     partBuf->SetScreen( std::move( screen ) );
     wxCHECK( partBuf, false );
-    partBuf->SetOriginal( original ); // part buffer takes ownership of pointer
+    partBuf->SetOriginal( original.release() ); // part buffer takes ownership of pointer
 
     m_frame.SyncLibraries( false );
 
