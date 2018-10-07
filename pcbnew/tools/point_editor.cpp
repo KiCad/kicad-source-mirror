@@ -362,8 +362,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 grid.SetAuxAxes( true, m_original.GetPosition(), true );
             }
 
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers ) );
-
+            //TODO: unify the constraints to solve simultaneously instead of sequentially
+            m_editedPoint->SetPosition( grid.Align( evt->Position() ) );
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
@@ -374,9 +374,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
                 m_editedPoint->ApplyConstraint();
 
-            // There is a chance that the constraint above knocked us off grid
-            // This ensures the final point is on a grid line if requested.
-            m_editedPoint->SetPosition( grid.Align( m_editedPoint->GetPosition() ) );
+            m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers ) );
 
             updateItem();
             updatePoints();
