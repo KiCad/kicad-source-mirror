@@ -359,7 +359,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     Activate();
     controls->ShowCursor( true );
-    controls->SetSnapping( false );
     controls->SetAutoPan( true );
 
     auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
@@ -374,6 +373,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &PCB_ACTIONS::editActivate ) ||
             evt->IsAction( &PCB_ACTIONS::move ) ||
@@ -381,7 +381,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( controls->GetCursorPosition(), item_layers );
+                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
 
@@ -1207,14 +1207,14 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     bool originSet = false;
 
     controls.ShowCursor( true );
-    controls.SetSnapping( false );
     controls.SetAutoPan( false );
 
     while( auto evt = Wait() )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetCursorPosition(), nullptr );
+        controls.SetSnapping( !evt->Modifier( MD_ALT ) );
+        const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
 
         if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {

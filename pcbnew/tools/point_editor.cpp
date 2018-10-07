@@ -308,7 +308,6 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
     controls->ShowCursor( true );
-    controls->SetSnapping( false );
 
     GRID_HELPER grid( editFrame );
     BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
@@ -338,6 +337,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( !m_editPoints ||
             evt->Matches( m_selectionTool->ClearedEvent ) ||

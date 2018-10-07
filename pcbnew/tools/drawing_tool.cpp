@@ -524,7 +524,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), nullptr );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
 
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
@@ -989,14 +990,13 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( false );
 
     Activate();
 
     bool    direction45 = false;    // 45 degrees only mode
     bool    started = false;
     bool    IsOCurseurSet = ( m_frame->GetScreen()->m_O_Curseur != wxPoint( 0, 0 ) );
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetMousePosition();
 
     if( aStartingPoint )
     {
@@ -1027,7 +1027,8 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     {
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), getDrawingLayer() );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), getDrawingLayer() );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         const bool limit45 = ( frame()->Settings().m_use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
@@ -1211,7 +1212,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     GRID_HELPER grid( m_frame );
 
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( false );
+    m_controls->SetSnapping( true );
 
     Activate();
 
@@ -1225,7 +1226,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), aGraphic );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), aGraphic );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1359,14 +1361,15 @@ void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
     STATUS_TEXT_POPUP status( m_frame );
     status.SetTextColor( wxColour( 255, 0, 0 ) );
     status.SetText( _( "Self-intersecting polygons are not allowed" ) );
-    m_controls->SetSnapping( false );
+    m_controls->SetSnapping( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         LSET layers( m_frame->GetActiveLayer() );
         grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetCursorPosition(), layers );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
