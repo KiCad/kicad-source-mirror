@@ -307,10 +307,11 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     KIGFX::VIEW* view = getView();
     PCB_BASE_EDIT_FRAME* editFrame = getEditFrame<PCB_BASE_EDIT_FRAME>();
 
+    controls->ShowCursor( true );
     controls->SetSnapping( false );
 
     GRID_HELPER grid( editFrame );
-    auto item = selection.Front();
+    BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selection.Front() );
 
     m_editPoints = EDIT_POINTS_FACTORY::Make( item, getView()->GetGAL() );
 
@@ -324,6 +325,10 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
     bool revert = false;
 
     BOARD_COMMIT commit( editFrame );
+    LSET snapLayers = item->GetLayerSet();
+
+    if( item->Type() == PCB_DIMENSION_T )
+        snapLayers = LSET::AllLayersMask();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -357,6 +362,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
                 grid.SetAuxAxes( true, m_original.GetPosition(), true );
             }
 
+            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers ) );
+
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
@@ -367,9 +374,10 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
                 m_editedPoint->ApplyConstraint();
 
+            // There is a chance that the constraint above knocked us off grid
+            // This ensures the final point is on a grid line if requested.
+            m_editedPoint->SetPosition( grid.Align( m_editedPoint->GetPosition() ) );
 
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(),
-                    static_cast<BOARD_ITEM*>( item ) ) );
             updateItem();
             updatePoints();
         }
