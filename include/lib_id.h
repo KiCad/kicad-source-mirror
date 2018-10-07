@@ -53,7 +53,7 @@ class LIB_ID
 public:
 
     ///> Types of library identifiers
-    enum LIB_ID_TYPE { ID_SCH, ID_ALIAS, ID_PCB };
+    enum LIB_ID_TYPE { ID_SCH, ID_PCB };
 
     LIB_ID() {}
 
@@ -234,7 +234,24 @@ public:
 
 protected:
     /**
-     * Tests whether a unicode character is a legal LIB_ID item name character
+     * Tests whether a unicode character is a legal LIB_ID item name character.
+     *
+     * The criteria for legal LIB_ID character is as follows:
+     * - For both symbol and footprint names, neither '/' or ':' are legal.  They are
+     *   reserved characters used by #LIB_ID::Parse.
+     * - Spaces are allowed in footprint names as they are a legal filename character
+     *   on all operating systems.
+     * - Spaces are not allowed in symbol names since symbol names are not quoted in the
+     *   schematic or symbol library file formats.
+     * - Spaces are allowed in footprint library nicknames as they are quoted in the
+     *   footprint library table file format.
+     * - Spaces are not allowed in symbol library nicknames since they are not quoted in
+     *   the symbol library file format.
+     * - Illegal file name characters are not allowed in footprint names since the file
+     *   name is the footprint name.
+     * - Illegal file name characters except '/' are allowed in symbol names since the
+     *   name is not the file name.
+     *
      *
      * @note @a aUniChar is expected to be a 32 bit unicode character, not a UTF8 char, that use
      * a variable length coding value.

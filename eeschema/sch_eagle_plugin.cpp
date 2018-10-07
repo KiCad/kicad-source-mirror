@@ -2619,13 +2619,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
 
 wxString SCH_EAGLE_PLUGIN::fixSymbolName( const wxString& aName )
 {
-    wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_ALIAS );
-
-    for( auto ch = ret.begin(); ch != ret.end(); ++ch )
-    {
-        if( *ch == '/' )
-            *ch = '_';
-    }
+    wxString ret = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
 
     return ret;
 }

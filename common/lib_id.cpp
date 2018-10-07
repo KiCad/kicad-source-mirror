@@ -368,24 +368,23 @@ UTF8 LIB_ID::FixIllegalChars( const UTF8& aLibItemName, LIB_ID_TYPE aType, bool 
 
 bool LIB_ID::isLegalChar( unsigned aUniChar, LIB_ID_TYPE aType )
 {
-    bool const colon_allowed = ( aType == ID_ALIAS );
-    bool const space_allowed = ( aType == ID_ALIAS || aType == ID_PCB );
-    bool const illegal_filename_chars_allowed = ( aType == ID_SCH || aType == ID_ALIAS );
+    bool const space_allowed = ( aType == ID_PCB );
+    bool const illegal_filename_chars_allowed = ( aType == ID_SCH );
 
     if( aUniChar < ' ' )
         return false;
 
     switch( aUniChar )
     {
+    case ':':
     case '/':
+        return false;
+
     case '\\':
     case '<':
     case '>':
     case '"':
         return illegal_filename_chars_allowed;
-
-    case ':':
-        return colon_allowed;
 
     case ' ':
         return space_allowed;
