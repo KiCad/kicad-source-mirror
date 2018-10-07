@@ -815,16 +815,7 @@ void SCH_REFERENCE::Split()
 wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
 {
     wxString retVal;
-
-    std::sort( aList.begin(), aList.end(),
-               []( const SCH_REFERENCE& lhs, const SCH_REFERENCE& rhs ) -> bool
-               {
-                   wxString lhRef( lhs.GetRef() << lhs.GetRefNumber() );
-                   wxString rhRef( rhs.GetRef() << rhs.GetRefNumber() );
-                   return RefDesStringCompare( lhRef, rhRef ) < 0;
-               } );
-
-    size_t i = 0;
+    size_t   i = 0;
 
     while( i < aList.size() )
     {
