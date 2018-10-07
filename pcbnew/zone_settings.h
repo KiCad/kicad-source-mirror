@@ -33,8 +33,6 @@
 #include <zones.h>
 #include <wx/dataview.h>
 
-#define MAX_ZONE_CORNER_RADIUS_MILS 400
-
 enum ZONE_FILL_MODE
 {
     ZFM_POLYGONS = 0, // fill zone with polygons
