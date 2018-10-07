@@ -240,7 +240,13 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
     {
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
-        if( view->IsVisible( item ) && ( !isHighContrast || activeLayers.count( it.second ) ) )
+        // The item must be visible and on an active layer
+        // It cannot be selected because this routine is used to calculate snapping,
+        // so the selected it is what we are snapping _from_ and should not be
+        // considered a snap target
+        if( view->IsVisible( item )
+                && ( !isHighContrast || activeLayers.count( it.second ) )
+                && !item->IsSelected() )
             items.insert ( item );
     }
 
