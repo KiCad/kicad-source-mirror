@@ -282,7 +282,6 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
     }
 
     ANCHOR* nearest = nearestAnchor( aOrigin, CORNER | SNAPPABLE, aLayers );
-
     VECTOR2I nearestGrid = Align( aOrigin );
     double gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
 
@@ -290,7 +289,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
     {
         double snapDist = nearest->Distance( aOrigin );
 
-        if( nearest && snapDist <= gridDist )
+        if( nearest && ( !m_enableGrid || snapDist <= gridDist ) )
         {
             m_viewSnapPoint.SetPosition( nearest->pos );
             m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
