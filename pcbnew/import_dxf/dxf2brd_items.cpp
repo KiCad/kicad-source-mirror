@@ -427,7 +427,7 @@ void DXF2BRD_CONVERTER::addText( const DL_TextData& aData )
     // The 0.8 factor gives a better height/width ratio with our font
     textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
-    textItem->SetThickness( mapWidth( aData.height * 0.15 ) );  // Gives a reasonable text thickness
+    textItem->SetThickness( mapWidth( aData.height * DEFAULT_TEXT_WIDTH ) );  // Gives a reasonable text thickness
     textItem->SetText( text );
 
     m_newItemsList.push_back( static_cast< BOARD_ITEM* >( brdItem ) );
@@ -489,7 +489,7 @@ void DXF2BRD_CONVERTER::addMText( const DL_MTextData& aData )
     // The 0.8 factor gives a better height/width ratio with our font
     textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
-    textItem->SetThickness( mapWidth( aData.height * 0.15 ) );  // Gives a reasonable text thickness
+    textItem->SetThickness( mapWidth( aData.height * DEFAULT_TEXT_WIDTH ) );  // Gives a reasonable text thickness
     textItem->SetText( text );
 
     // Initialize text justifications:

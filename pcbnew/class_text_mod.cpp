@@ -59,7 +59,7 @@ TEXTE_MODULE::TEXTE_MODULE( MODULE* parent, TEXT_TYPE text_type ) :
     m_keepUpright = true;
 
     // Set text thickness to a default value
-    SetThickness( Millimeter2iu( 0.15 ) );
+    SetThickness( Millimeter2iu( DEFAULT_TEXT_WIDTH ) );
     SetLayer( F_SilkS );
 
     // Set position and give a default layer if a valid parent footprint exists

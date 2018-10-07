@@ -27,11 +27,12 @@
 #include <plotter.h>
 #include <macros.h>
 #include <convert_to_biu.h>
+#include <board_design_settings.h>
 
 
-#define PLOT_LINEWIDTH_MIN        (0.02*IU_PER_MM)  // min value for default line thickness
-#define PLOT_LINEWIDTH_MAX        (2*IU_PER_MM)     // max value for default line thickness
-#define PLOT_LINEWIDTH_DEFAULT    (0.15*IU_PER_MM)  // def. value for default line thickness
+#define PLOT_LINEWIDTH_MIN        ( 0.02 * IU_PER_MM )  // min value for default line thickness
+#define PLOT_LINEWIDTH_MAX        ( 2 * IU_PER_MM )     // max value for default line thickness
+#define PLOT_LINEWIDTH_DEFAULT    ( DEFAULT_TEXT_WIDTH * IU_PER_MM )
 #define HPGL_PEN_DIAMETER_MIN     0
 #define HPGL_PEN_DIAMETER_MAX     100.0     // Unit = mil
 #define HPGL_PEN_SPEED_MIN        1         // this param is always in cm/s
