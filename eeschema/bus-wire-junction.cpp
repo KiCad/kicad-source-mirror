@@ -340,11 +340,13 @@ void SCH_EDIT_FRAME::EndSegment()
 
         std::vector< wxPoint > pts;
         item->GetConnectionPoints( pts );
-        std::remove_if( pts.begin(), pts.end(), [ segment ]( const wxPoint& aPt )
-                { return segment->IsEndPoint( aPt ); } );
 
         if( pts.size() > 2 )
             continue;
+
+        // Do not trim wires that connect directly to an endpoint
+        pts.erase( std::remove_if( pts.begin(), pts.end(), [ &segment ]( const wxPoint& aPt )
+                { return segment->IsEndPoint( aPt ); } ), pts.end() );
 
         for( auto i = pts.begin(); i != pts.end(); i++ )
             for( auto j = i + 1; j != pts.end(); j++ )
