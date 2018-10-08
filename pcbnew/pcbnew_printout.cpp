@@ -210,6 +210,13 @@ std::unique_ptr<KIGFX::PAINTER> PCBNEW_PRINTOUT::getPainter( KIGFX::GAL* aGal )
 }
 
 
+KIGFX::PCB_PRINT_PAINTER::PCB_PRINT_PAINTER( GAL* aGal )
+    : PCB_PAINTER( aGal ), m_drillMarkReal( false ), m_drillMarkSize( 0 )
+{
+    m_pcbSettings.EnableZoneOutlines( false );
+}
+
+
 int KIGFX::PCB_PRINT_PAINTER::getDrillShape( const D_PAD* aPad ) const
 {
     return m_drillMarkReal ? KIGFX::PCB_PAINTER::getDrillShape( aPad ) : PAD_DRILL_SHAPE_CIRCLE;

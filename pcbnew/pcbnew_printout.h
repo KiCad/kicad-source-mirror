@@ -83,10 +83,7 @@ namespace KIGFX {
 class PCB_PRINT_PAINTER : public PCB_PAINTER
 {
 public:
-    PCB_PRINT_PAINTER( GAL* aGal )
-        : PCB_PAINTER( aGal ), m_drillMarkReal( false ), m_drillMarkSize( 0 )
-    {
-    }
+    PCB_PRINT_PAINTER( GAL* aGal );
 
     /**
      * Set drill marks visibility and options.

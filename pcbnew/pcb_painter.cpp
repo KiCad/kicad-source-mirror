@@ -51,6 +51,8 @@ PCB_RENDER_SETTINGS::PCB_RENDER_SETTINGS()
     m_padNumbers = true;
     m_netNamesOnPads = true;
     m_netNamesOnTracks = true;
+    m_netNamesOnVias = true;
+    m_zoneOutlines = true;
     m_displayZone = DZ_SHOW_FILLED;
     m_clearance = CL_NONE;
     m_sketchBoardGfx = false;
@@ -1108,7 +1110,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
     // Draw the outline
     const SHAPE_POLY_SET* outline = aZone->Outline();
 
-    if( outline )
+    if( m_pcbSettings.m_zoneOutlines && outline )
     {
         m_gal->SetStrokeColor( color );
         m_gal->SetIsFill( false );
@@ -1130,7 +1132,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
         int holes_count = outline->HoleCount( 0 );
 
         for( int ii = 0; ii < holes_count; ++ii )
-            m_gal->DrawPolyline(  outline->CHole( 0, ii ) );
+            m_gal->DrawPolyline( outline->CHole( 0, ii ) );
 
         // Draw hatch lines
         for( const SEG& hatchLine : aZone->GetHatchLines() )

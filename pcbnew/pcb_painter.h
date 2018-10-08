@@ -136,6 +136,14 @@ public:
         m_sketchBoardGfx = aEnabled;
     }
 
+    /**
+     * Turns on/off drawing outline and hatched lines for zones.
+     */
+    void EnableZoneOutlines( bool aEnabled )
+    {
+        m_zoneOutlines = aEnabled;
+    }
+
     inline bool IsBackgroundDark() const override
     {
         auto luma = m_layerColors[ LAYER_PCB_BACKGROUND ].GetBrightness();
@@ -177,7 +185,10 @@ protected:
     bool    m_netNamesOnTracks;
 
     ///> Flag determining if net names should be visible for vias
-    bool    m_netNamesOnVias = true;
+    bool    m_netNamesOnVias;
+
+    ///> Flag determining if zones should have outlines drawn
+    bool    m_zoneOutlines;
 
     ///> Maximum font size for netnames (and other dynamically shown strings)
     static const double MAX_FONT_SIZE;
