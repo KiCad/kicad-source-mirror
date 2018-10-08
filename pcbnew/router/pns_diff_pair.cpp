@@ -771,7 +771,7 @@ DP_PRIMITIVE_PAIR DIFF_PAIR::EndingPrimitives()
 }
 
 
-bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip )
+bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip )
 {
     SEG n_proj_p( p.LineProject( n.A ), p.LineProject( n.B ) );
 

@@ -282,7 +282,7 @@ const ITEM_SET TOPOLOGY::ConnectedItems( ITEM* aStart, int aKindMask )
 }
 
 
-bool commonParallelProjection( SEG n, SEG p, SEG &pClip, SEG& nClip );
+bool commonParallelProjection( SEG p, SEG n, SEG &pClip, SEG& nClip );
 
 
 bool TOPOLOGY::AssembleDiffPair( ITEM* aStart, DIFF_PAIR& aPair )
