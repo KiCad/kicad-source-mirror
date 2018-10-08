@@ -646,7 +646,7 @@ void DP_GATEWAYS::BuildGeneric( const VECTOR2I& p0_p, const VECTOR2I& p0_n, bool
     SEG d_n[2], d_p[2];
 
     const int padToGapThreshold = 3;
-    int padDist = ( p0_p - p0_p ).EuclideanNorm();
+    int padDist = ( p0_n - p0_p ).EuclideanNorm();
 
     st_p[0] = SEG(p0_p + VECTOR2I( -100, 0 ), p0_p + VECTOR2I( 100, 0 ) );
     st_n[0] = SEG(p0_n + VECTOR2I( -100, 0 ), p0_n + VECTOR2I( 100, 0 ) );
