@@ -57,16 +57,15 @@ LINE::~LINE()
 
 LINE& LINE::operator=( const LINE& aOther )
 {
+    if( this == &aOther )
+        return *this;
+
+    ITEM::operator =( aOther );
+
     m_line = aOther.m_line;
     m_width = aOther.m_width;
-    m_net = aOther.m_net;
-    m_movable = aOther.m_movable;
-    m_layers = aOther.m_layers;
     m_via = aOther.m_via;
     m_hasVia = aOther.m_hasVia;
-    m_marker = aOther.m_marker;
-    m_rank = aOther.m_rank;
-
     copyLinks( &aOther );
 
     return *this;

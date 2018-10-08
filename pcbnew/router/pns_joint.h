@@ -82,12 +82,24 @@ public:
     JOINT( const JOINT& aB ) :
         ITEM( JOINT_T )
     {
-        m_layers = aB.m_layers;
         m_tag.pos = aB.m_tag.pos;
         m_tag.net = aB.m_tag.net;
         m_linkedItems = aB.m_linkedItems;
-        m_layers = aB.m_layers;
         m_locked = aB.m_locked;
+    }
+
+    JOINT& operator=( const JOINT& aOther )
+    {
+        if( this == &aOther )
+            return *this;
+
+        ITEM::operator =( aOther );
+        m_tag.pos = aOther.m_tag.pos;
+        m_tag.net = aOther.m_tag.net;
+        m_linkedItems = aOther.m_linkedItems;
+        m_locked = aOther.m_locked;
+
+        return *this;
     }
 
     ITEM* Clone( ) const override

@@ -79,6 +79,21 @@ public:
         m_viaType = aB.m_viaType;
     }
 
+    VIA& operator=( const VIA& aOther )
+    {
+        if( this == &aOther )
+            return *this;
+
+        ITEM::operator =( aOther );
+        m_pos = aOther.m_pos;
+        m_diameter = aOther.m_diameter;
+        m_shape = SHAPE_CIRCLE( m_pos, m_diameter / 2 );
+        m_drill = aOther.m_drill;
+        m_viaType = aOther.m_viaType;
+
+        return *this;
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && VIA_T == aItem->Kind();

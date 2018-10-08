@@ -58,6 +58,16 @@ public:
         m_rank = aParentLine.Rank();
     }
 
+    SEGMENT& operator=( const SEGMENT& aOther )
+    {
+        if( this == &aOther )
+            return *this;
+
+        ITEM::operator =( aOther );
+        m_seg = aOther.m_seg;
+        return *this;
+    }
+
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SEGMENT_T == aItem->Kind();
