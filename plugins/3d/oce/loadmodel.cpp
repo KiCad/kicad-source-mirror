@@ -303,8 +303,6 @@ FormatType fileType( const char* aFileName )
 
 void getTag( TDF_Label& label, std::string& aTag )
 {
-    aTag.clear();
-
     if( label.IsNull() )
         return;
 
