@@ -136,6 +136,12 @@ bool NUMERIC_EVALUATOR::Process( const wxString& aString )
     m_parseFinished = false;
     Token tok;
 
+    if( aString.IsEmpty() )
+    {
+        m_parseFinished = true;
+        return true;
+    }
+
     do
     {
         tok = getToken();

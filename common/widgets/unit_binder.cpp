@@ -46,6 +46,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     m_min = aMin;
     m_max = aMax;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
+    m_needsEval = false;
 
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
     if( textEntry )
@@ -58,13 +59,6 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
-
-    // Connect wxEVT_TEXT_ENTER when (and *only when*) m_value has the wxTE_PROCESS_ENTER style
-    // because if this style does not exist:
-    // 1 - Connect wxEVT_TEXT_ENTER is useless
-    // 2 - it generates wxWidgets assert
-    if( m_value->HasFlag( wxTE_PROCESS_ENTER ) )
-        m_value->Connect( wxEVT_TEXT_ENTER, wxCommandEventHandler( UNIT_BINDER::onTextEnter ), NULL, this );
 }
 
 
@@ -86,6 +80,8 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
         if( oldStr.length() )
             textEntry->SetValue( oldStr );
+
+        m_needsEval = true;
     }
 
     aEvent.Skip();
@@ -94,38 +90,19 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
 void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
-    if( m_allowEval )
-        evaluate();
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+
+    if( m_allowEval && textEntry )
+    {
+        if( m_eval.Process( textEntry->GetValue() ) )
+            textEntry->ChangeValue( m_eval.Result() );
+
+        m_needsEval = false;
+    }
 
     Validate( true );
 
     aEvent.Skip();
-}
-
-
-void UNIT_BINDER::onTextEnter( wxCommandEvent& aEvent )
-{
-    if( m_allowEval )
-        evaluate();
-
-    // Send an OK event to the parent dialog
-    wxCommandEvent event( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK );
-    wxPostEvent( m_value->GetParent(), event );
-}
-
-
-void UNIT_BINDER::evaluate()
-{
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-
-    if( !textEntry )
-        return;
-
-    if( textEntry->GetValue().IsEmpty() )
-        textEntry->ChangeValue( "0" );
-
-    if( m_eval.Process( textEntry->GetValue() ) )
-        textEntry->ChangeValue( m_eval.Result() );
 }
 
 
@@ -208,10 +185,13 @@ void UNIT_BINDER::SetValue( int aValue )
 
 void UNIT_BINDER::SetValue( wxString aValue )
 {
-    if( dynamic_cast<wxTextEntry*>( m_value ) )
-        dynamic_cast<wxTextEntry*>( m_value )->SetValue( aValue );
-    else if( dynamic_cast<wxStaticText*>( m_value ) )
-        dynamic_cast<wxStaticText*>( m_value )->SetLabel( aValue );
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    auto staticText = dynamic_cast<wxStaticText*>( m_value );
+
+    if( textEntry )
+        textEntry->SetValue( aValue );
+    else if( staticText )
+        staticText->SetLabel( aValue );
 
     if( m_allowEval )
         m_eval.Clear();
@@ -228,10 +208,13 @@ void UNIT_BINDER::ChangeValue( int aValue )
 
 void UNIT_BINDER::ChangeValue( wxString aValue )
 {
-    if( dynamic_cast<wxTextEntry*>( m_value ) )
-        dynamic_cast<wxTextEntry*>( m_value )->ChangeValue( aValue );
-    else if( dynamic_cast<wxStaticText*>( m_value ) )
-        dynamic_cast<wxStaticText*>( m_value )->SetLabel( aValue );
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    auto staticText = dynamic_cast<wxStaticText*>( m_value );
+
+    if( textEntry )
+        textEntry->ChangeValue( aValue );
+    else if( staticText )
+        staticText->SetLabel( aValue );
 
     if( m_allowEval )
         m_eval.Clear();
@@ -240,23 +223,34 @@ void UNIT_BINDER::ChangeValue( wxString aValue )
 }
 
 
-int UNIT_BINDER::GetValue() const
+int UNIT_BINDER::GetValue()
 {
-    wxString s;
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+    auto staticText = dynamic_cast<wxStaticText*>( m_value );
 
-    if( dynamic_cast<wxTextEntry*>( m_value ) )
-        s = dynamic_cast<wxTextEntry*>( m_value )->GetValue();
-    else if( dynamic_cast<wxStaticText*>( m_value ) )
-        s = dynamic_cast<wxStaticText*>( m_value )->GetLabel();
+    if( m_needsEval && textEntry )
+    {
+        if( m_eval.Process( textEntry->GetValue() ) )
+            textEntry->ChangeValue( m_eval.Result() );
 
-    return ValueFromString( m_units, s, m_useMils );
+        m_needsEval = false;
+    }
+
+    if( textEntry )
+        return ValueFromString( m_units, textEntry->GetValue(), m_useMils );
+    else if( staticText )
+        return ValueFromString( m_units, staticText->GetLabel(), m_useMils );
+    else
+        return 0;
 }
 
 
 bool UNIT_BINDER::IsIndeterminate() const
 {
-    if( dynamic_cast<wxTextEntry*>( m_value ) )
-        return dynamic_cast<wxTextEntry*>( m_value )->GetValue() == INDETERMINATE;
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+
+    if( textEntry )
+        return textEntry->GetValue() == INDETERMINATE;
 
     return false;
 }

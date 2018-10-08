@@ -89,7 +89,7 @@ public:
      * Function GetValue
      * Returns the current value in Internal Units.
      */
-    virtual int GetValue() const;
+    virtual int GetValue();
 
     /**
      * Function IsIndeterminate
@@ -125,10 +125,7 @@ protected:
 
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
-    void onTextEnter( wxCommandEvent& aEvent );
     void delayedFocusHandler( wxIdleEvent& aEvent );
-
-    void evaluate();
 
     ///> The bound widgets
     wxStaticText*     m_label;
@@ -147,6 +144,7 @@ protected:
     ///> Evaluator
     NUMERIC_EVALUATOR m_eval;
     bool              m_allowEval;
+    bool              m_needsEval;
 };
 
 #endif /* __UNIT_BINDER_H_ */

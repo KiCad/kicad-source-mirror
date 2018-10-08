@@ -76,9 +76,6 @@ void TEXT_CTRL_EVAL::onTextEnter( wxCommandEvent& aEvent )
 
 void TEXT_CTRL_EVAL::evaluate()
 {
-    if( GetValue().IsEmpty() )
-        wxTextCtrl::SetValue( "0" );
-
     if( m_eval.Process( GetValue() ) )
         SetValue( m_eval.Result() );
 }
