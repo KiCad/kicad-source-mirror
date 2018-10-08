@@ -94,6 +94,7 @@ target_link_libraries( gal
     ${CAIRO_LIBRARIES}
     ${PIXMAN_LIBRARIES}
     ${OPENGL_LIBRARIES}
+    ${GDI_PLUS_LIBRARIES}
 )
 
 
