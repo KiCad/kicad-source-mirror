@@ -356,6 +356,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             {
                 commit.StageItems( selection, CHT_MODIFY );
 
+                controls->ForceCursorPosition( false );
                 m_original = *m_editedPoint;    // Save the original position
                 controls->SetAutoPan( true );
                 modified = true;
