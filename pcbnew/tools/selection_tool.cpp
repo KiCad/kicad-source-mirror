@@ -531,7 +531,7 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     // Apply some ugly heuristics to avoid disambiguation menus whenever possible
     if( !m_skip_heuristics )
     {
-        guessSelectionCandidates( collector );
+        guessSelectionCandidates( collector, aWhere );
 
         if( collector.GetCount() == 1 )
         {
@@ -1996,7 +1996,8 @@ double calcRatio( double a, double b )
 // We currently check for pads and text mostly covering a footprint, but we don’t check for
 // smaller footprints mostly covering a larger footprint.
 //
-void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) const
+void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
+        const VECTOR2I& aWhere ) const
 {
     std::set<BOARD_ITEM*> rejected;
     std::set<BOARD_ITEM*> forced;
@@ -2055,8 +2056,11 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector ) c
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
-            if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
+            if( aCollector[i]->Type() == PCB_ZONE_AREA_T && !static_cast<ZONE_CONTAINER*>
+                    ( aCollector[i] )->HitTestForEdge( wxPoint( aWhere.x, aWhere.y ) ) )
+            {
                 aCollector.Remove( i );
+            }
         }
     }
 
