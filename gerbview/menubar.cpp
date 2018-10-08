@@ -145,6 +145,13 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Clear all layers. All data will be deleted" ),
                  KiBitmap( delete_gerber_xpm ) );
 
+    // Reload all
+    AddMenuItem( fileMenu,
+                 ID_GERBVIEW_RELOAD_ALL,
+                 _( "Reload All Layers" ),
+                 _( "Reload all layers. All data will be reloaded" ),
+                 KiBitmap( reload2_xpm ) );
+
     // Separator
     fileMenu->AppendSeparator();
 

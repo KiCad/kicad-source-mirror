@@ -120,6 +120,32 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         ClearMsgPanel();
         break;
 
+    case ID_GERBVIEW_RELOAD_ALL:
+    {
+        // Store filenames
+        wxArrayString listOfFilenames;
+        listOfFilenames.Empty();
+        for( unsigned i = 0; i < GetImagesList()->ImagesMaxCount(); i++ )
+        {
+            if( GetImagesList()->GetGbrImage( i ) != nullptr )
+            {
+                if( GetImagesList()->GetGbrImage( i )->m_InUse == 1 )
+                    listOfFilenames.Add( GetImagesList()->GetGbrImage( i )->m_FileName );
+            }
+        }
+
+        // Clear all layers
+        Clear_DrawLayers( false );
+        Zoom_Automatique( false );
+        m_canvas->Refresh();
+        ClearMsgPanel();
+
+        // Load the layers from stored paths
+        wxBusyCursor wait;
+        loadListOfGerberFiles( wxEmptyString, listOfFilenames );
+    }
+    break;
+
     case ID_GERBVIEW_LOAD_DRILL_FILE:
         LoadExcellonFiles( wxEmptyString );
         m_canvas->Refresh();

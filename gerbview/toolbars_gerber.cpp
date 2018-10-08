@@ -56,6 +56,10 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
                             KiScaledBitmap( delete_gerber_xpm, this ),
                             _( "Clear all layers" ) );
 
+    m_mainToolBar->AddTool( ID_GERBVIEW_RELOAD_ALL, wxEmptyString,
+                            KiScaledBitmap( reload2_xpm, this ),
+                            _( "Reload all layers" ) );
+
     m_mainToolBar->AddTool( wxID_FILE, wxEmptyString, KiScaledBitmap( load_gerber_xpm, this ),
                             _( "Open Gerber file(s) on the current layer. Previous data will be deleted" ) );
 
