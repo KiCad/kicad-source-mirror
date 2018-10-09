@@ -553,7 +553,6 @@ bool TRACKS_CLEANER::cleanupSegments()
         removeDuplicatesOfTrack( segment, toRemove );
 
     modified |= removeItems( toRemove );
-    modified = true;
 
     if( modified )
         buildTrackConnectionInfo();
