@@ -176,6 +176,8 @@ public:
 
     virtual bool IsDangling() const override { return m_isDangling; }
 
+    virtual void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
+
     virtual bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;

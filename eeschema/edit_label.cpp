@@ -203,6 +203,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     newtext->SetThickness( text->GetThickness() );
     newtext->SetItalic( text->IsItalic() );
     newtext->SetBold( text->IsBold() );
+    newtext->SetIsDangling( text->IsDangling() );
 
     /* Save the new text in undo list if the old text was not itself a "new created text"
      * In this case, the old text is already in undo list as a deleted item.
