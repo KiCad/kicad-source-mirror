@@ -119,7 +119,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     else // color enabled
     {
         for( int i = 0; i < LAYER_ID_COUNT; ++i )
-            dstSettings->SetLayerColor( i, srcSettings->GetLayerColor( i ) );
+	{
+	    // Cairo does not support translucent colors on PostScript surfaces
+	    // see 'Features support by the PostScript surface' on
+	    // ttps://www.cairographics.org/documentation/using_the_postscript_surface/
+            dstSettings->SetLayerColor( i, srcSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
+	}
     }
 
 
