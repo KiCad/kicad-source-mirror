@@ -231,11 +231,34 @@ public:
         if( lhStr == rhStr )
         {
             // Secondary sort key is always COL_NUMBER
-            lhStr = GetValue( lhs, COL_NUMBER, units );
-            rhStr = GetValue( rhs, COL_NUMBER, units );
+            sortCol = COL_NUMBER;
+            lhStr = GetValue( lhs, sortCol, units );
+            rhStr = GetValue( rhs, sortCol, units );
         }
 
-        return ascending == ( PinNumbers::Compare( lhStr, rhStr ) < 0 );
+        bool cmp;
+
+        switch( sortCol )
+        {
+        case COL_NUMBER:
+        case COL_NAME:
+            cmp = PinNumbers::Compare( lhStr, rhStr ) < 0;
+            break;
+        case COL_NUMBER_SIZE:
+        case COL_NAME_SIZE:
+            cmp = ValueFromString( units, lhStr, true ) < ValueFromString( units, rhStr, true );
+            break;
+        case COL_LENGTH:
+        case COL_POSX:
+        case COL_POSY:
+            cmp = ValueFromString( units, lhStr ) < ValueFromString( units, rhStr );
+            break;
+        default:
+            cmp = StrNumCmp( lhStr, rhStr ) < 0;
+            break;
+        }
+
+        return ascending == cmp;
     }
 
     void RebuildRows( LIB_PINS& aPins, bool groupByName )
