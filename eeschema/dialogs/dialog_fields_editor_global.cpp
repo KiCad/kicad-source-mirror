@@ -689,7 +689,9 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
     m_dataModel->RebuildRows( m_groupComponentsBox, m_fieldsCtrl );
     m_dataModel->Sort( 0, true );
 
-    m_grid->UseNativeColHeader( true );
+    // wxGrid's column moving is buggy with native headers and this is one dialog where you'd
+    // really like to be able to rearrange columns.
+    m_grid->UseNativeColHeader( false );
     m_grid->SetTable( m_dataModel, true );
 
     // sync m_grid's column visiblities to Show checkboxes in m_fieldsCtrl

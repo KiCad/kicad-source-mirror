@@ -740,7 +740,7 @@
                                             <property name="dock">Dock</property>
                                             <property name="dock_fixed">0</property>
                                             <property name="docking">Left</property>
-                                            <property name="drag_col_move">0</property>
+                                            <property name="drag_col_move">1</property>
                                             <property name="drag_col_size">1</property>
                                             <property name="drag_grid_size">0</property>
                                             <property name="drag_row_size">0</property>

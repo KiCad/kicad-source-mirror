@@ -71,7 +71,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL_BASE::DIALOG_FIELDS_EDITOR_GLOBAL_BASE( wxWindow* pa
 	m_grid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_grid->EnableDragColMove( false );
+	m_grid->EnableDragColMove( true );
 	m_grid->EnableDragColSize( true );
 	m_grid->SetColLabelSize( 20 );
 	m_grid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );

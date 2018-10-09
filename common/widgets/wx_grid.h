@@ -70,6 +70,8 @@ public:
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;
 
+    void onGridColMove( wxGridEvent& aEvent );
+
     bool m_weOwnTable;
 };
 

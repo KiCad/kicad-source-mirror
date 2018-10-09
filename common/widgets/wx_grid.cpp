@@ -68,6 +68,8 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 
     delete[] formBuilderColWidths;
 
+    Connect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), NULL, this );
+
     m_weOwnTable = aTakeOwnership;
 }
 
@@ -77,6 +79,8 @@ void WX_GRID::DestroyTable( wxGridTableBase* aTable )
     // wxGrid's destructor will crash trying to look up the cell attr if the edit control
     // is left open.  Normally it's closed in Validate(), but not if the user hit Cancel.
     CommitPendingChanges( true /* quiet mode */ );
+
+    Disconnect( wxEVT_GRID_COL_MOVE, wxGridEventHandler( WX_GRID::onGridColMove ), NULL, this );
 
     wxGrid::SetTable( nullptr );
     delete aTable;
@@ -195,4 +199,11 @@ bool WX_GRID::CommitPendingChanges( bool aQuietMode )
     }
 
     return true;
+}
+
+
+void WX_GRID::onGridColMove( wxGridEvent& aEvent )
+{
+    // wxWidgets won't move an open editor, so better just to close it
+    CommitPendingChanges( true );
 }
