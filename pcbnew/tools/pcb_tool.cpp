@@ -66,9 +66,12 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
         VECTOR2I cursorPos = controls()->GetCursorPosition();
 
         newItem = aPlacer->CreateItem();
-        newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
 
-        preview.Add( newItem.get() );
+        if( newItem )
+        {
+            newItem->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            preview.Add( newItem.get() );
+        }
     }
 
     // Main loop: keep receiving events
@@ -155,9 +158,12 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
                     VECTOR2I pos = controls()->GetCursorPosition();
 
                     newItem = aPlacer->CreateItem();
-                    newItem->SetPosition( wxPoint( pos.x, pos.y ) );
 
-                    preview.Add( newItem.get() );
+                    if( newItem )
+                    {
+                        newItem->SetPosition( wxPoint( pos.x, pos.y ) );
+                        preview.Add( newItem.get() );
+                    }
                 }
             }
         }

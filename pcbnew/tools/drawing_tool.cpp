@@ -1739,7 +1739,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
     frame()->SetToolID( ID_PCB_DRAW_VIA_BUTT, wxCURSOR_PENCIL, _( "Add vias" ) );
 
     doInteractiveItemPlacement( &placer, _( "Place via" ),
-            IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP | IPO_PROPERTIES );
+            IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
     frame()->SetToolID( ID_NO_TOOL_SELECTED, wxCURSOR_DEFAULT, wxEmptyString );
 
