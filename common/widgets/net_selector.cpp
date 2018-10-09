@@ -379,7 +379,7 @@ protected:
                 if( !aEvent.ShiftDown() )
                     text.MakeLower();
 
-                m_filterCtrl->WriteText( text );
+                m_filterCtrl->AppendText( text );
             }
         }
     }
