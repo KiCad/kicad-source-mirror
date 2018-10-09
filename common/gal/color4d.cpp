@@ -400,7 +400,7 @@ COLOR4D& COLOR4D::Saturate( double aFactor )
 {
     double h, s, v;
 
-    ToHSV( h, s, v );
+    ToHSV( h, s, v, true );
     FromHSV( h, aFactor, 1.0 );
 
     return *this;
