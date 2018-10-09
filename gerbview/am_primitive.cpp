@@ -67,7 +67,7 @@ bool AM_PRIMITIVE::IsAMPrimitiveExposureOn( const GERBER_DRAW_ITEM* aParent ) co
      * In a aperture macro shape, a basic primitive with exposure off is a hole in the shape
      * it is NOT a negative shape
     */
-    wxASSERT( params.size() && params[0].IsImmediate() );
+    wxASSERT( params.size() );
 
     switch( primitive_id )
     {
