@@ -149,14 +149,10 @@ void S3D_PLUGIN_MANAGER::loadPlugins( void )
     #endif
 
     #ifndef _WIN32
-        // multiarch friendly determination of the plugin directory: the executable dir
-        // is first determined via wxStandardPaths::Get().GetExecutablePath() and then
-        // the CMAKE_INSTALL_LIBDIR path is appended relative to the executable dir.
+        // PLUGINDIR = CMAKE_INSTALL_FULL_LIBDIR path is the absolute path
+        // corresponding to the install path used for constructing KICAD_USER_PLUGIN
 
-        fn.Assign( wxStandardPaths::Get().GetExecutablePath() );
-        fn.RemoveLastDir();
-        wxString tfname = fn.GetPathWithSep();
-        tfname.Append( wxString::FromUTF8Unchecked( PLUGINDIR ) );
+        wxString tfname = wxString::FromUTF8Unchecked( PLUGINDIR );
         fn.Assign( tfname, "");
         fn.AppendDir( "kicad" );
     #else
