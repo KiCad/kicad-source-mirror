@@ -40,18 +40,6 @@ public:
     SHAPE_SEGMENT( const SEG& aSeg, int aWidth = 0 ):
         SHAPE( SH_SEGMENT ), m_seg( aSeg ), m_width( aWidth ) {};
 
-    SHAPE_SEGMENT& operator=( const SHAPE_SEGMENT& aOther )
-    {
-        if( this == &aOther )
-            return *this;
-
-        SHAPE::operator=( aOther );
-        m_seg = aOther.m_seg;
-        m_width = aOther.m_width;
-
-        return *this;
-    }
-
     ~SHAPE_SEGMENT() {};
 
     SHAPE* Clone() const override

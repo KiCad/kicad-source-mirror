@@ -52,18 +52,6 @@ public:
         m_pos = aSolid.m_pos;
     }
 
-    SOLID& operator=( const SOLID& aOther )
-    {
-        if( this == &aOther )
-            return *this;
-
-        ITEM::operator =( aOther );
-        m_shape = aOther.m_shape->Clone();
-        m_pos = aOther.m_pos;
-
-        return *this;
-    }
-
     static inline bool ClassOf( const ITEM* aItem )
     {
         return aItem && SOLID_T == aItem->Kind();

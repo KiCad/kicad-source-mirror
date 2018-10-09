@@ -92,24 +92,6 @@ public:
         m_routable = aOther.m_routable;
     }
 
-    ITEM& operator=( const ITEM& aOther )
-    {
-        if( this == &aOther )
-            return *this;
-
-        m_layers = aOther.m_layers;
-        m_net = aOther.m_net;
-        m_movable = aOther.m_movable;
-        m_kind = aOther.m_kind;
-        m_parent = aOther.m_parent;
-        m_owner = NULL;
-        m_marker = aOther.m_marker;
-        m_rank = aOther.m_rank;
-        m_routable = aOther.m_routable;
-
-        return *this;
-    }
-
     virtual ~ITEM();
 
     /**

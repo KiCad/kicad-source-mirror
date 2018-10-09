@@ -84,18 +84,6 @@ public:
         SHAPE( SH_LINE_CHAIN ), m_points( aShape.m_points ), m_closed( aShape.m_closed )
     {}
 
-    SHAPE_LINE_CHAIN& operator=( const SHAPE_LINE_CHAIN& aShape )
-    {
-        if( this == &aShape )
-            return *this;
-
-        m_type = SH_LINE_CHAIN;
-        m_points = aShape.m_points;
-        m_closed = aShape.m_closed;
-
-        return *this;
-    }
-
     /**
      * Constructor
      * Initializes a 2-point line chain (a single segment)
@@ -388,8 +376,14 @@ public:
      */
     void Append( const VECTOR2I& aP, bool aAllowDuplication = false )
     {
+        if( m_points.size() == 0 )
+            m_bbox = BOX2I( aP, VECTOR2I( 0, 0 ) );
+
         if( m_points.size() == 0 || aAllowDuplication || CPoint( -1 ) != aP )
+        {
             m_points.push_back( aP );
+            m_bbox.Merge( aP );
+        }
     }
 
     /**
@@ -407,12 +401,14 @@ public:
         {
             const VECTOR2I p = aOtherLine.CPoint( 0 );
             m_points.push_back( p );
+            m_bbox.Merge( p );
         }
 
         for( int i = 1; i < aOtherLine.PointCount(); i++ )
         {
             const VECTOR2I p = aOtherLine.CPoint( i );
             m_points.push_back( p );
+            m_bbox.Merge( p );
         }
     }
 
@@ -677,6 +673,9 @@ private:
 
     /// is the line chain closed?
     bool m_closed;
+
+    /// cached bounding box
+    BOX2I m_bbox;
 };
 
 #endif // __SHAPE_LINE_CHAIN
