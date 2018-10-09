@@ -577,8 +577,8 @@ void DIALOG_TRACK_VIA_PROPERTIES::onViaSelect( wxCommandEvent& aEvent )
 {
     VIA_DIMENSION* viaDimension = static_cast<VIA_DIMENSION*> ( aEvent.GetClientData() );
 
-    m_viaDiameter.SetValue( viaDimension->m_Diameter );
-    m_viaDrill.SetValue( viaDimension->m_Drill );
+    m_viaDiameter.ChangeValue( viaDimension->m_Diameter );
+    m_viaDrill.ChangeValue( viaDimension->m_Drill );
 }
 
 
