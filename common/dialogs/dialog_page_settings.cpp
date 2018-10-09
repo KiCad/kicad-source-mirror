@@ -237,7 +237,7 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
         m_parent->GetCanvas()->Refresh();
 
         if( LocalPrjConfigChanged() )
-            m_parent->SaveProjectSettings( true );
+            m_parent->SaveProjectSettings( false );
     }
 
     event.Skip();
