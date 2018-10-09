@@ -399,6 +399,15 @@ SELECTION& SELECTION_TOOL::GetSelection()
 }
 
 
+static EDA_RECT getRect( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_MODULE_T )
+        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
+
+    return aItem->GetBoundingBox();
+}
+
+
 SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
 {
     bool selectionEmpty = m_selection.Empty();
@@ -650,7 +659,7 @@ bool SELECTION_TOOL::selectMultiple()
 
                 if( windowSelection )
                 {
-                    BOX2I bbox = item->GetBoundingBox();
+                    BOX2I bbox = getRect( item );
 
                     if( selectionBox.Contains( bbox ) )
                     {
@@ -1905,15 +1914,6 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     }
 
     return false;
-}
-
-
-static EDA_RECT getRect( const BOARD_ITEM* aItem )
-{
-    if( aItem->Type() == PCB_MODULE_T )
-        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
-
-    return aItem->GetBoundingBox();
 }
 
 
