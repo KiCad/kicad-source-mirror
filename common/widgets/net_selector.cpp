@@ -139,6 +139,14 @@ public:
         updateSize();
     }
 
+    void OnStartingKey( wxKeyEvent& aEvent )
+    {
+        doSetFocus( m_filterCtrl );
+
+        m_filterCtrl->Clear();
+        doStartingKey( aEvent );
+    }
+
     void Accept()
     {
         wxString selectedNetName;
@@ -328,9 +336,9 @@ protected:
             {
                 doSetFocus( m_filterCtrl );
 
-                // We already missed our chance to have the native widget handle it.  We'll
-                // have to do the first character ourselves.
-                onStartingKey( aEvent );
+                // Because we didn't have focus we missed our chance to have the native widget
+                // handle the keystroke.  We'll have to do the first character ourselves.
+                doStartingKey( aEvent );
             }
             else
             {
@@ -351,7 +359,16 @@ protected:
         Accept();
     }
 
-    void onStartingKey( wxKeyEvent& aEvent )
+    void onFilterEdit( wxCommandEvent& aEvent )
+    {
+        rebuildList();
+        updateSize();
+
+        if( m_listBox->GetCount() > 0 )
+            m_listBox->SetSelection( 0 );
+    }
+
+    void doStartingKey( wxKeyEvent& aEvent )
     {
         if( aEvent.GetKeyCode() == WXK_BACK )
         {
@@ -384,12 +401,6 @@ protected:
         }
     }
 
-    void onFilterEdit( wxCommandEvent& aEvent )
-    {
-        rebuildList();
-        updateSize();
-    }
-
     void doSetFocus( wxWindow* aWindow )
     {
 #ifdef __WXOSX_MAC__
@@ -415,18 +426,65 @@ protected:
 
 NET_SELECTOR::NET_SELECTOR( wxWindow *parent, wxWindowID id, const wxPoint &pos,
                             const wxSize &size, long style ) :
-        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY )
+        wxComboCtrl( parent, id, wxEmptyString, pos, size, style|wxCB_READONLY|wxTE_PROCESS_ENTER )
 {
     UseAltPopupWindow();
 
     m_netSelectorPopup = new NET_SELECTOR_COMBOPOPUP();
     SetPopupControl( m_netSelectorPopup );
+
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), NULL, this );
 }
+
+
+NET_SELECTOR::~NET_SELECTOR()
+{
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( NET_SELECTOR::onKeyDown ), NULL, this );
+}
+
+
+void NET_SELECTOR::onKeyDown( wxKeyEvent& aEvt )
+{
+    int key = aEvt.GetKeyCode();
+
+    if( IsPopupShown() )
+    {
+        // If the popup is shown then it's CHAR_HOOK should be eating these before they
+        // even get to us.  But just to be safe, we go ahead and skip.
+        aEvt.Skip();
+    }
+
+    // Shift-return accepts dialog
+    else if( key == WXK_RETURN && aEvt.ShiftDown() )
+    {
+        wxPostEvent( m_parent, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
+    }
+
+    // Return, arrow-down and space-bar all open popup
+    else if( key == WXK_RETURN || key == WXK_DOWN || key == WXK_NUMPAD_DOWN || key == WXK_SPACE )
+    {
+        Popup();
+    }
+
+    // Non-control characters go to filterbox in popup
+    else if( key > WXK_SPACE && key < WXK_START )
+    {
+        Popup();
+        m_netSelectorPopup->OnStartingKey( aEvt );
+    }
+
+    else
+    {
+        aEvt.Skip();
+    }
+}
+
 
 void NET_SELECTOR::SetNetInfo( NETINFO_LIST* aNetInfoList )
 {
     m_netSelectorPopup->SetNetInfo( aNetInfoList );
 }
+
 
 void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
 {
@@ -434,16 +492,19 @@ void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
     SetValue( m_netSelectorPopup->GetStringValue() );
 }
 
+
 void NET_SELECTOR::SetIndeterminate()
 {
     m_netSelectorPopup->SetIndeterminate();
     SetValue( INDETERMINATE );
 }
 
+
 bool NET_SELECTOR::IsIndeterminate()
 {
     return m_netSelectorPopup->IsIndeterminate();
 }
+
 
 int NET_SELECTOR::GetSelectedNetcode()
 {
