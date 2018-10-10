@@ -71,6 +71,9 @@ public:
 
         m_filterCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxTE_PROCESS_ENTER );
+        m_filterValidator = new wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST );
+        m_filterValidator->SetCharExcludes( " /" );
+        m_filterCtrl->SetValidator( *m_filterValidator );
         mainSizer->Add( m_filterCtrl, 0, wxEXPAND, 0 );
 
         m_listBox = new wxListBox( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, 0,
@@ -399,7 +402,7 @@ protected:
             else
             {
                 ch = aEvent.GetKeyCode();
-                isPrintable = ch >= WXK_SPACE && ch < WXK_START;
+                isPrintable = ch > WXK_SPACE && ch < WXK_START;
             }
 
             if( isPrintable )
@@ -425,16 +428,17 @@ protected:
     }
 
 protected:
-    wxTextCtrl*   m_filterCtrl;
-    wxListBox*    m_listBox;
-    int           m_minPopupWidth;
-    int           m_maxPopupHeight;
+    wxTextValidator* m_filterValidator;
+    wxTextCtrl*      m_filterCtrl;
+    wxListBox*       m_listBox;
+    int              m_minPopupWidth;
+    int              m_maxPopupHeight;
 
-    NETINFO_LIST* m_netinfoList;
+    NETINFO_LIST*    m_netinfoList;
 
-    int           m_selectedNetcode;
+    int              m_selectedNetcode;
 
-    wxEvtHandler* m_focusHandler;
+    wxEvtHandler*    m_focusHandler;
 };
 
 
