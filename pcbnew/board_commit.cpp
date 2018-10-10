@@ -197,6 +197,8 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
 
                 case PCB_MODULE_T:
                 {
+                    itemsToDeselect.push_back( boardItem );
+
                     // There are no modules inside a module yet
                     wxASSERT( !m_editModules );
 
