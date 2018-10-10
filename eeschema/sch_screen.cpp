@@ -509,8 +509,6 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
      */
     std::vector< SCH_ITEM* > junctions;
 
-    printf("DrawScreen\n");
-
     // Ensure links are up to date, even if a library was reloaded for some reason:
     UpdateSymbolLinks();
 

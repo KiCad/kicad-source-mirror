@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <view/view.h>
-
+#include <math/box2.h>
 
 #include <view/wx_view_controls.h>
 #include <worksheet_viewitem.h>
@@ -29,6 +29,9 @@ public:
     SCH_VIEW( bool aIsDynamic );
     ~SCH_VIEW();
 
+    virtual void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 ) override;
+    virtual void Remove( VIEW_ITEM* aItem ) override;
+
     void DisplaySheet( SCH_SHEET *aSheet );
     void DisplaySheet( SCH_SCREEN *aSheet );
     void DisplayComponent( LIB_PART *aPart );
@@ -46,12 +49,14 @@ public:
     void ClearHiddenFlags();
     void HideWorksheet();
 
+    virtual void Redraw() override;
+
 private:
     std::unique_ptr<WORKSHEET_VIEWITEM> m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
-
     std::vector<EDA_ITEM *> m_previewItems;
+    std::unordered_map<VIEW_ITEM*, BOX2I> m_cachedBBoxes;
 };
 
 }; // namespace

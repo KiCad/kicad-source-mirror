@@ -26,6 +26,7 @@
 #include <memory>
 #include <view/view.h>
 #include <view/view_group.h>
+#include <view/view_rtree.h>
 #include <view/wx_view_controls.h>
 #include <worksheet_viewitem.h>
 #include <layers_id_colors_and_visibility.h>
@@ -50,6 +51,31 @@ SCH_VIEW::~SCH_VIEW()
 {
 }
 
+
+static const LAYER_NUM SCH_LAYER_ORDER[] =
+{
+    LAYER_GP_OVERLAY,
+    LAYER_DRC,
+    LAYER_WORKSHEET
+};
+
+
+void SCH_VIEW::Add( VIEW_ITEM* aItem, int aDrawPriority )
+{
+    // store the bounding box as eeschema can change them at weird moments (i.e.)
+    // while changing/resolving library references, resulting in incorrect bboxes
+    // and invisible components
+    m_cachedBBoxes[ aItem ] = aItem->ViewBBox();
+
+    VIEW::Add( aItem, aDrawPriority );
+}
+
+void SCH_VIEW::Remove( VIEW_ITEM* aItem )
+{
+    m_cachedBBoxes.erase( aItem );
+
+    VIEW::Remove( aItem );
+}
 
 void SCH_VIEW::DisplaySheet( SCH_SCREEN *aSheet )
 {
@@ -106,7 +132,7 @@ void SCH_VIEW::ClearPreview()
         delete item;
 
     m_previewItems.clear();
-    Update( m_preview.get() );
+    Update(m_preview.get());
 }
 
 
@@ -155,6 +181,46 @@ void SCH_VIEW::HideWorksheet()
 //    SetVisible( m_worksheet.get(), false );
 }
 
+
+void SCH_VIEW::Redraw()
+{
+    std::set<EDA_ITEM*> toUpdate;
+    BOX2I               rect;
+    rect.SetMaximum();
+
+    auto visitor = [&]( VIEW_ITEM* aItem ) -> bool {
+        auto       cached = m_cachedBBoxes.find( aItem );
+        const auto bb = aItem->ViewBBox();
+
+        if( cached == m_cachedBBoxes.end() )
+        {
+            m_cachedBBoxes[aItem] = bb;
+            return true;
+        }
+
+        if( bb != cached->second )
+        {
+            Update( aItem, KIGFX::GEOMETRY );
+            m_cachedBBoxes[aItem] = bb;
+        }
+
+        return true;
+    };
+
+    /* HACK: since eeschema doesn't have any notification mechanism for changing sch items' geometry,
+       the bounding boxes may become inconsistend with the VIEW Rtree causing disappearing components
+       (depending on the zoom level). This code keeps a cache of bboxes and checks (at every redraw) if
+       they haven't changed wrs to the cached version. It eats up some extra CPU cycles, but for the
+       complexity of schematics's graphics it has negligible effect on perforamance.
+    */
+
+    for( auto i = m_orderedLayers.rbegin(); i != m_orderedLayers.rend(); ++i )
+    {
+        ( *i )->items->Query( rect, visitor );
+    }
+
+    VIEW::Redraw();
+}
 
 };
 
