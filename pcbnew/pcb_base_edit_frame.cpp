@@ -30,6 +30,7 @@
 #include <view/view.h>
 #include "footprint_info_impl.h"
 #include <project.h>
+#include <tools/pcb_actions.h>
 
 PCB_BASE_EDIT_FRAME::PCB_BASE_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                           FRAME_T aFrameType, const wxString& aTitle,
@@ -103,3 +104,16 @@ void PCB_BASE_EDIT_FRAME::SetBoard( BOARD* aBoard )
             m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     }
 }
+
+
+void PCB_BASE_EDIT_FRAME::unitsChangeRefresh()
+{
+    PCB_BASE_FRAME::unitsChangeRefresh();
+
+    ReCreateAuxiliaryToolbar();
+
+    if( m_toolManager )
+        m_toolManager->RunAction( PCB_ACTIONS::updateUnits, true );
+}
+
+

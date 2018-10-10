@@ -209,8 +209,6 @@ protected:
      */
     void syncLayerVisibilities();
 
-    virtual void unitsChangeRefresh() override;
-
     /**
      * Function doAutoSave
      * performs auto save when the board has been modified and not saved within the

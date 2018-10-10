@@ -209,6 +209,8 @@ protected:
      * duplicateItem(BOARD_ITEM*, bool) above
      */
     virtual void duplicateItems( bool aIncrement ) = 0;
+
+    void unitsChangeRefresh() override;
 };
 
 #endif

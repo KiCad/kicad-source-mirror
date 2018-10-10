@@ -165,6 +165,10 @@ TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard"
         _( "Cut" ), _( "Cut selected content to clipboard" ),
         cut_xpm );
 
+TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
+        AS_GLOBAL, 0,
+        "", "" );
+
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
 {
@@ -1196,8 +1200,9 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
     Activate();
     frame()->SetToolID( toolID, wxCURSOR_PENCIL, _( "Measure distance" ) );
 
+    EDA_UNITS_T units = frame()->GetUserUnits();
     KIGFX::PREVIEW::TWO_POINT_GEOMETRY_MANAGER twoPtMgr;
-    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, frame()->GetUserUnits() );
+    KIGFX::PREVIEW::RULER_ITEM ruler( twoPtMgr, units );
 
     view.Add( &ruler );
     view.SetVisible( &ruler, false );
@@ -1252,12 +1257,15 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
             view.Update( &ruler, KIGFX::GEOMETRY );
         }
 
-        else if( evt->IsAction( &PCB_ACTIONS::switchUnits ) )
+        else if( evt->IsAction( &PCB_ACTIONS::switchUnits )
+                    || evt->IsAction( &PCB_ACTIONS::updateUnits ) )
         {
-            ruler.SwitchUnits();
-
-            view.SetVisible( &ruler, true );
-            view.Update( &ruler, KIGFX::GEOMETRY );
+            if( frame()->GetUserUnits() != units )
+            {
+                units = frame()->GetUserUnits();
+                ruler.SwitchUnits();
+                view.Update( &ruler, KIGFX::GEOMETRY );
+            }
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )

@@ -908,14 +908,6 @@ void PCB_EDIT_FRAME::OnUpdateLayerAlpha( wxUpdateUIEvent & )
 }
 
 
-void PCB_EDIT_FRAME::unitsChangeRefresh()
-{
-    PCB_BASE_EDIT_FRAME::unitsChangeRefresh();    // Update the grid size select box.
-
-    ReCreateAuxiliaryToolbar();
-}
-
-
 bool PCB_EDIT_FRAME::IsElementVisible( GAL_LAYER_ID aElement ) const
 {
     return GetBoard()->IsElementVisible( aElement );
@@ -1271,10 +1263,10 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
 
     int retvalue = dlg->ShowModal();
     /* retvalue =
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_ABORT if abort,
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if exchange module,
-     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edit
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_UPDATE_FP if update footprint
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_EXCHANGE_FP if change footprint
      *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_WANT_MODEDIT for a goto editor command
+     *  FP_PRM_EDITOR_RETVALUE::PRM_EDITOR_EDIT_OK for normal edit
      */
 
     dlg->Close();
