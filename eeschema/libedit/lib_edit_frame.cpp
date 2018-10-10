@@ -1166,7 +1166,10 @@ void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         // Compute the rotation center and put it on grid:
         wxPoint rotationPoint = block.Centre();
         rotationPoint = GetNearestGridPosition( rotationPoint );
-        SetCrossHairPosition( rotationPoint );
+
+        // The Y axis orientation is bottom to top for symbol items.
+        // so change the Y coord value of the rotation center
+        rotationPoint.y = -rotationPoint.y;
 
         if( block.AppendUndo() )
             ; // UR_LIBEDIT saves entire state, so no need to append anything more
@@ -1183,12 +1186,11 @@ void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         }
 
         GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        GetGalCanvas()->Refresh();
     }
     else if( item )
     {
-        wxPoint rotationPoint = item->GetBoundingBox().Centre();
-        rotationPoint = GetNearestGridPosition( rotationPoint );
-        SetCrossHairPosition( rotationPoint );
+        wxPoint rotationPoint = item->GetPosition();
 
         if( !item->InEditMode() )
             SaveCopyInUndoList( part, UR_LIBEDIT );
@@ -1217,7 +1219,10 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         // Compute the mirror center and put it on grid.
         wxPoint mirrorPoint = block.Centre();
         mirrorPoint = GetNearestGridPosition( mirrorPoint );
-        SetCrossHairPosition( mirrorPoint );
+
+        // The Y axis orientation is bottom to top for symbol items.
+        // so change the Y coord value of the rotation center
+        mirrorPoint.y = -mirrorPoint.y;
 
         if( block.AppendUndo() )
             ; // UR_LIBEDIT saves entire state, so no need to append anything more
@@ -1231,27 +1236,28 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         {
             item = dynamic_cast<LIB_ITEM*>( block.GetItem( ii ) );
 
-            if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X || aEvent.GetId() == ID_POPUP_MIRROR_X_BLOCK )
+            if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y || aEvent.GetId() == ID_POPUP_MIRROR_Y_BLOCK )
                 item->MirrorHorizontal( mirrorPoint );
             else
                 item->MirrorVertical( mirrorPoint );
         }
 
         m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        GetGalCanvas()->Refresh();
     }
     else if( item )
     {
-        wxPoint mirrorPoint = item->GetBoundingBox().Centre();
-        mirrorPoint = GetNearestGridPosition( mirrorPoint );
-        SetCrossHairPosition( mirrorPoint );
+        wxPoint mirrorPoint = item->GetPosition();
+        mirrorPoint.y = -mirrorPoint.y;
 
         if( !item->InEditMode() )
             SaveCopyInUndoList( part, UR_LIBEDIT );
 
-        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_X || aEvent.GetId() == ID_POPUP_MIRROR_X_BLOCK )
+        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y || aEvent.GetId() == ID_POPUP_MIRROR_Y_BLOCK )
             item->MirrorHorizontal( mirrorPoint );
         else
             item->MirrorVertical( mirrorPoint );
+
         OnModify();
 
         if( !item->InEditMode() )
