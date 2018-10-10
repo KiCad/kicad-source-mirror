@@ -496,6 +496,24 @@ public:
     {
         return sqrt( SquaredDistance( aBox ) );
     }
+
+    bool operator==( const BOX2<Vec>& aOther ) const
+    {
+        auto t1 ( *this );
+        auto t2 ( aOther );
+        t1.Normalize();
+        t2.Normalize();
+        return ( t1.m_Pos == t2.m_Pos && t1.m_Size == t2.m_Size );
+    }
+
+    bool operator!=( const BOX2<Vec>& aOther ) const
+    {
+        auto t1 ( *this );
+        auto t2 ( aOther );
+        t1.Normalize();
+        t2.Normalize();
+        return ( t1.m_Pos != t2.m_Pos || t1.m_Size != t2.m_Size );
+    }
 };
 
 /* Default specializations */
