@@ -122,6 +122,20 @@ public:
     void SetSelectedNetcode( int aNetcode ) { m_selectedNetcode = aNetcode; }
     int GetSelectedNetcode() { return m_selectedNetcode; }
 
+    void SetSelectedNet( const wxString& aNetname )
+    {
+        if( m_netinfoList && m_netinfoList->GetNetItem( aNetname ) )
+            m_selectedNetcode = m_netinfoList->GetNetItem( aNetname )->GetNet();
+    }
+
+    wxString GetSelectedNetname()
+    {
+        if( m_netinfoList && m_netinfoList->GetNetItem( m_selectedNetcode ) )
+            return m_netinfoList->GetNetItem( m_selectedNetcode )->GetNetname();
+        else
+            return wxEmptyString;
+    }
+
     wxSize GetAdjustedSize( int aMinWidth, int aPrefHeight, int aMaxHeight ) override
     {
         // Called when the popup is first shown.  Stash the minWidth and maxHeight so we
@@ -490,6 +504,19 @@ void NET_SELECTOR::SetSelectedNetcode( int aNetcode )
 {
     m_netSelectorPopup->SetSelectedNetcode( aNetcode );
     SetValue( m_netSelectorPopup->GetStringValue() );
+}
+
+
+void NET_SELECTOR::SetSelectedNet( const wxString& aNetname )
+{
+    m_netSelectorPopup->SetSelectedNet( aNetname );
+    SetValue( m_netSelectorPopup->GetStringValue() );
+}
+
+
+wxString NET_SELECTOR::GetSelectedNetname()
+{
+    return m_netSelectorPopup->GetSelectedNetname();
 }
 
 

@@ -50,10 +50,12 @@ public:
     void SetNetInfo( NETINFO_LIST* aNetInfoList );
 
     void SetSelectedNetcode( int aNetcode );
+    void SetSelectedNet( const wxString& aNetname );
     void SetIndeterminate();
 
     bool IsIndeterminate();
     int GetSelectedNetcode();
+    wxString GetSelectedNetname();
 
 protected:
     void onKeyDown( wxKeyEvent& aEvt );

@@ -46,6 +46,20 @@ enum {
 };
 
 
+// Globals to remember control settings during a session
+static bool         g_modifyTracks = true;
+static bool         g_modifyVias = true;
+
+// These settings go with a particular board, so we save the boardID.
+static timestamp_t  g_boardID;
+static bool         g_filterByNetclass;
+static wxString     g_netclassFilter;
+static bool         g_filterByNet;
+static wxString     g_netFilter;
+static bool         g_filterByLayer;
+static LAYER_NUM    g_layerFilter;
+
+
 class DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS : public DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 {
 private:
@@ -123,6 +137,16 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
 DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::~DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS()
 {
+    g_boardID = m_brd->GetTimeStamp();
+    g_modifyTracks = m_tracks->GetValue();
+    g_modifyVias = m_vias->GetValue();
+    g_filterByNetclass = m_netclassFilterOpt->GetValue();
+    g_netclassFilter = m_netclassFilter->GetStringSelection();
+    g_filterByNet = m_netFilterOpt->GetValue();
+    g_netFilter = m_netFilter->GetSelectedNetname();
+    g_filterByLayer = m_layerFilterOpt->GetValue();
+    g_layerFilter = m_layerFilter->GetLayerSelection();
+
     m_netFilter->Disconnect( NET_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnNetFilterSelect ), NULL, this );
 
     delete[] m_originalColWidths;
@@ -196,12 +220,32 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataToWindow()
 {
     auto item = dynamic_cast<BOARD_CONNECTED_ITEM*>( m_parent->GetCurItem() );
 
-    if( item )
+    m_tracks->SetValue( g_modifyTracks );
+    m_vias->SetValue( g_modifyVias );
+
+    if( g_filterByNetclass && g_boardID == m_brd->GetTimeStamp() )
     {
-        m_netFilter->SetSelectedNetcode( item->GetNetCode() );
-        m_netclassFilter->SetStringSelection( item->GetNet()->GetClassName() );
-        m_layerFilter->SetLayerSelection( item->GetLayer() );
+        m_netclassFilter->SetStringSelection( g_netclassFilter );
+        m_netclassFilterOpt->SetValue( true );
     }
+    else if( item )
+        m_netclassFilter->SetStringSelection( item->GetNet()->GetClassName() );
+
+    if( g_filterByNet && g_boardID == m_brd->GetTimeStamp() )
+    {
+        m_netFilter->SetSelectedNet( g_netFilter );
+        m_netFilterOpt->SetValue( true );
+    }
+    else if( item )
+        m_netFilter->SetSelectedNetcode( item->GetNetCode() );
+
+    if( g_filterByLayer && g_boardID == m_brd->GetTimeStamp() )
+    {
+        m_layerFilter->SetLayerSelection( g_layerFilter );
+        m_layerFilterOpt->SetValue( true );
+    }
+    else if( item )
+        m_layerFilter->SetLayerSelection( item->GetLayer() );
 
     return true;
 }
