@@ -72,7 +72,7 @@ public:
         m_filterCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition,
                                        wxDefaultSize, wxTE_PROCESS_ENTER );
         m_filterValidator = new wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST );
-        m_filterValidator->SetCharExcludes( " /" );
+        m_filterValidator->SetCharExcludes( " " );
         m_filterCtrl->SetValidator( *m_filterValidator );
         mainSizer->Add( m_filterCtrl, 0, wxEXPAND, 0 );
 
