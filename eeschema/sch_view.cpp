@@ -51,14 +51,6 @@ SCH_VIEW::~SCH_VIEW()
 }
 
 
-static const LAYER_NUM SCH_LAYER_ORDER[] =
-{
-    LAYER_GP_OVERLAY,
-    LAYER_DRC,
-    LAYER_WORKSHEET
-};
-
-
 void SCH_VIEW::DisplaySheet( SCH_SCREEN *aSheet )
 {
 
@@ -91,8 +83,6 @@ void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 
     for ( auto &item : aPart->GetDrawItems() )
     {
-        //printf("-- ADD %p\n", &item );
-
         // Apply a z-order heuristic (because we don't yet let the user edit it):
         // push body-filled objects to the back.
         if( item.GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
@@ -103,7 +93,6 @@ void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
     m_preview.reset( new KIGFX::VIEW_GROUP () );
-    //printf("Display-screen\n");
     Add( m_selectionArea.get() );
     Add( m_preview.get() );
 }
@@ -117,7 +106,7 @@ void SCH_VIEW::ClearPreview()
         delete item;
 
     m_previewItems.clear();
-    Update(m_preview.get());
+    Update( m_preview.get() );
 }
 
 
