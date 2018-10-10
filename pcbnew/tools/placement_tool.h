@@ -27,6 +27,7 @@
 
 #include <tool/tool_interactive.h>
 #include <class_board_item.h>
+#include <pcb_base_frame.h>
 
 typedef std::vector<std::pair<BOARD_ITEM*, EDA_RECT>> ALIGNMENT_RECTS;
 
@@ -118,6 +119,8 @@ private:
     SELECTION_TOOL* m_selectionTool;
 
     CONTEXT_MENU* m_placementMenu;
+
+    PCB_BASE_FRAME* m_frame;
 
     /**
      * Check a selection to ensure locks are valid for alignment.

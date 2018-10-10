@@ -80,7 +80,8 @@ TOOL_ACTION PCB_ACTIONS::distributeVertically( "pcbnew.AlignAndDistribute.distri
 
 
 ALIGN_DISTRIBUTE_TOOL::ALIGN_DISTRIBUTE_TOOL() :
-    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL )
+    TOOL_INTERACTIVE( "pcbnew.Placement" ), m_selectionTool( NULL ), m_placementMenu( NULL ),
+    m_frame( NULL )
 {
 }
 
@@ -100,6 +101,8 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
         DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
+
+    m_frame = getEditFrame<PCB_BASE_FRAME>();
 
     // Create a context menu and make it available through selection tool
     m_placementMenu = new CONTEXT_MENU;
@@ -185,7 +188,6 @@ ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -196,7 +198,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortTopmostY );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
@@ -209,7 +211,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -223,7 +225,6 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -234,7 +235,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortBottommostY );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
@@ -247,7 +248,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -276,7 +277,6 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -287,7 +287,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortLeftmostX );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
@@ -300,7 +300,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -329,7 +329,6 @@ int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -340,7 +339,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortRightmostX );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting, the fist item acts as the target for all others
@@ -353,7 +352,7 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -367,7 +366,6 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -378,7 +376,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterX );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting use the center x coordinate of the leftmost item as a target
@@ -392,7 +390,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( difference, 0 ) );
@@ -406,7 +404,6 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -417,7 +414,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
     auto itemsToAlign = GetBoundingBoxes( selection );
     std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterY );
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     // after sorting use the center y coordinate of the top-most item as a target
@@ -431,7 +428,7 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
-        if( item->Type() == PCB_PAD_T && frame->IsType( FRAME_PCB ) )
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
             item = item->GetParent();
 
         item->Move( wxPoint( 0, difference ) );
@@ -445,7 +442,6 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -453,7 +449,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     auto itemsToDistribute = GetBoundingBoxes( selection );
@@ -500,12 +496,18 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& items
 
     for( auto& i : itemsToDistribute )
     {
+        BOARD_ITEM* item = i.first;
+
         // cover the corner case where the last item is wider than the previous item and gap
-        if( lastItem == i.first )
+        if( lastItem == item )
             continue;
 
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
         int difference = targetX - i.second.GetX();
-        i.first->Move( wxPoint( difference, 0 ) );
+        item->Move( wxPoint( difference, 0 ) );
         targetX += ( i.second.GetWidth() + itemGap );
     }
 }
@@ -520,17 +522,22 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &it
     auto targetX = itemsToDistribute.begin()->second.GetCenter().x;
 
     for( auto& i : itemsToDistribute )
-        {
-            int difference = targetX - i.second.GetCenter().x;
-            i.first->Move( wxPoint( difference, 0 ) );
-            targetX += ( itemGap );
-        }
+    {
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
+        int difference = targetX - i.second.GetCenter().x;
+        item->Move( wxPoint( difference, 0 ) );
+        targetX += ( itemGap );
+    }
 }
 
 
 int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
 {
-    auto frame = getEditFrame<PCB_BASE_FRAME>();
     SELECTION& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
@@ -538,7 +545,7 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     if( selection.Size() <= 1 )
         return 0;
 
-    BOARD_COMMIT commit( frame );
+    BOARD_COMMIT commit( m_frame );
     commit.StageItems( selection, CHT_MODIFY );
 
     auto itemsToDistribute = GetBoundingBoxes( selection );
@@ -585,9 +592,15 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsTo
 
     for( auto& i : itemsToDistribute )
     {
+        BOARD_ITEM* item = i.first;
+
         // cover the corner case where the last item is wider than the previous item and gap
-        if( lastItem == i.first )
+        if( lastItem == item )
             continue;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
 
         int difference = targetY - i.second.GetY();
         i.first->Move( wxPoint( 0, difference ) );
@@ -606,8 +619,14 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& item
 
     for( auto& i : itemsToDistribute )
     {
+        BOARD_ITEM* item = i.first;
+
+        // Don't move a pad by itself unless editing the footprint
+        if( item->Type() == PCB_PAD_T && m_frame->IsType( FRAME_PCB ) )
+            item = item->GetParent();
+
         int difference = targetY - i.second.GetCenter().y;
-        i.first->Move( wxPoint( 0, difference ) );
+        item->Move( wxPoint( 0, difference ) );
         targetY += ( itemGap );
     }
 }
