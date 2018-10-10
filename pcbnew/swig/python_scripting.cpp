@@ -453,14 +453,14 @@ wxString PyErrStringWithTraceback()
 
     PyErr_Fetch( &type, &value, &traceback );
 
-    PyErr_NormalizeException( &type, &value, &traceback);
-    if (traceback == NULL) {
+    PyErr_NormalizeException( &type, &value, &traceback );
+    if ( traceback == NULL ) {
         traceback = Py_None;
         Py_INCREF( traceback );
     }
 
 #if PY_MAJOR_VERSION >= 3
-    PyException_SetTraceback(value, traceback);
+    PyException_SetTraceback( value, traceback );
 
     PyObject* tracebackModuleString = PyUnicode_FromString( "traceback" );
 #else
