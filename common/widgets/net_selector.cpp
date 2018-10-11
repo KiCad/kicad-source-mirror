@@ -151,6 +151,10 @@ public:
 
     void OnPopup() override
     {
+        // While it can sometimes be useful to keep the filter, it's always expected.
+        // Better to clear it.
+        m_filterCtrl->Clear();
+
         // The updateSize() call in GetAdjustedSize() leaves the height off-by-one for
         // some reason, so do it again.
         updateSize();
@@ -159,8 +163,6 @@ public:
     void OnStartingKey( wxKeyEvent& aEvent )
     {
         doSetFocus( m_filterCtrl );
-
-        m_filterCtrl->Clear();
         doStartingKey( aEvent );
     }
 
