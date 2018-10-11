@@ -385,7 +385,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
             default:
             {
                 wxString msg;
-                msg.Printf( wxT( "Unexpected symbol &lt;%c&gt;" ), *text );
+                msg.Printf( _( "Unexpected symbol &lt;%c&gt;" ), *text );
                 AddMessageToList( msg );
             }
                 break;
@@ -431,7 +431,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
 
     if( !cmd )
     {
-        msg.Printf( wxT( "Unknown Excellon command &lt;%s&gt;" ), text );
+        msg.Printf( _( "Unknown Excellon command &lt;%s&gt;" ), text );
         AddMessageToList( msg );
         while( *text )
             text++;
@@ -559,6 +559,12 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
     case DRILL_M_TOOL_UP:        // tool up (ending a routed polyline)
         {
         D_CODE* tool = GetDCODE( m_Current_Tool );
+
+        if( !tool )
+        {
+            AddMessageToList( wxString::Format( _( "Got unknown tool code %d" ), m_Current_Tool ) );
+            break;
+        }
 
         for( size_t ii = 1; ii < m_RoutePositions.size(); ii++ )
         {
