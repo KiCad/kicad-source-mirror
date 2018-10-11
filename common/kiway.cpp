@@ -443,14 +443,22 @@ void KIWAY::CommonSettingsChanged()
     }
 #endif
 
+    // OK, this is a hack, but it keeps OpenGL from puking when updating
+    // something like grid settings when several OpenGL canvasses are open.
     for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
     {
         KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
 
-        if( frame )
-        {
+        if( frame && frame->IsActive() )
             frame->CommonSettingsChanged();
-        }
+    }
+
+    for( unsigned i=0;  i < KIWAY_PLAYER_COUNT;  ++i )
+    {
+        KIWAY_PLAYER* frame = GetPlayerFrame( ( FRAME_T )i );
+
+        if( frame && !frame->IsActive() )
+            frame->CommonSettingsChanged();
     }
 }
 
