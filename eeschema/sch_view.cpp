@@ -104,6 +104,9 @@ void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
 {
     Clear();
 
+    if( !aPart )
+        return;
+
     int fgPriority = INT_MAX / 2;
     int bgPriority = 0;
 
