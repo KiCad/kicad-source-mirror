@@ -339,8 +339,10 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     default:
         // we can't assert here because wxWidgets sometimes calls this without checking
         // the column type when trying to see if there's an overflow
-        return wxT( "bad wxWidgets!" );
+        break;
     }
+
+    return wxT( "bad wxWidgets!" );
 }
 
 
