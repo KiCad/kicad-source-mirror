@@ -250,13 +250,17 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
         PyObject* str = PyDict_GetItemString(localDict, "result" );
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
-        if(str) {
+        if(str)
+        {
             PyObject* temp_bytes = PyUnicode_AsEncodedString( str, "UTF-8", "strict" );
-            if ( temp_bytes != NULL ) {
+            if ( temp_bytes != NULL )
+            {
                 str_res = PyBytes_AS_STRING( temp_bytes );
                 str_res = strdup( str_res );
                 Py_DECREF( temp_bytes );
-            } else {
+            }
+            else
+            {
                 wxLogMessage( "cannot encode unicode python string" );
             }
         }
@@ -422,12 +426,15 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
         PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
-        if ( temp_bytes != NULL ) {
+        if ( temp_bytes != NULL )
+        {
             str_res = PyBytes_AS_STRING( temp_bytes );
             str_res = strdup( str_res );
             Py_DECREF( temp_bytes );
             ret.Add( FROM_UTF8( str_res ), 1 );
-        } else {
+        }
+        else
+        {
             wxLogMessage( "cannot encode unicode python string" );
         }
 #else
@@ -454,7 +461,8 @@ wxString PyErrStringWithTraceback()
     PyErr_Fetch( &type, &value, &traceback );
 
     PyErr_NormalizeException( &type, &value, &traceback );
-    if ( traceback == NULL ) {
+    if ( traceback == NULL )
+    {
         traceback = Py_None;
         Py_INCREF( traceback );
     }

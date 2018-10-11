@@ -99,7 +99,8 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
 
     PyObject*   result = CallMethod( aMethod, aArglist );
 
-    if ( result == Py_None ) {
+    if ( result == Py_None )
+    {
         Py_DECREF( result );
         return ret;
     }
@@ -109,11 +110,14 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
         PyObject* temp_bytes = PyUnicode_AsEncodedString( result, "UTF-8", "strict" );
-        if ( temp_bytes != NULL ) {
+        if ( temp_bytes != NULL )
+        {
             str_res = PyBytes_AS_STRING( temp_bytes );
             str_res = strdup( str_res );
             Py_DECREF( temp_bytes );
-        } else {
+        }
+        else
+        {
             wxLogMessage( "cannot encode unicode python string" );
         }
 #else
@@ -219,7 +223,8 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
 
     Py_DECREF( arglist );
 
-    if ( result == Py_None ) {
+    if ( result == Py_None )
+    {
         Py_DECREF( result );
         return ret;
     }
@@ -229,11 +234,14 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
         PyObject* temp_bytes = PyUnicode_AsEncodedString( result, "UTF-8", "strict" );
-        if ( temp_bytes != NULL ) {
+        if ( temp_bytes != NULL )
+        {
             str_res = PyBytes_AS_STRING( temp_bytes );
             str_res = strdup( str_res );
             Py_DECREF( temp_bytes );
-        } else {
+        }
+        else
+        {
             wxLogMessage( "cannot encode unicode python string" );
         }
 #else
