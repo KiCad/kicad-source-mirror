@@ -525,7 +525,6 @@ void PCB_EDIT_FRAME::AddActionPluginTools()
 void PCB_EDIT_FRAME::SetActionPluginSettings( const std::vector< std::pair<wxString, wxString> >& aPluginSettings )
 {
     m_configSettings.m_pluginSettings = aPluginSettings;
-    ReCreateHToolbar();
 }
 
 
