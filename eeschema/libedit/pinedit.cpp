@@ -181,7 +181,7 @@ void LIB_EDIT_FRAME::PlacePin()
 {
     LIB_PIN* cur_pin  = (LIB_PIN*) GetDrawItem();
 
-    printf("PlacePin!\n");
+    DBG(printf("PlacePin!\n");)
 
     // Some tests
     if( !cur_pin || cur_pin->Type() != LIB_PIN_T )
@@ -335,7 +335,7 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
         return;
 
     
-    printf("DrawMovePin\n");
+    DBG(printf("DrawMovePin\n");)
 
     auto p =  aPanel->GetParent()->GetCrossHairPosition( true );
     

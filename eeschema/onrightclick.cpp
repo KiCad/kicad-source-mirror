@@ -76,7 +76,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool        blockActive = GetScreen()->IsBlockActive();
     wxString    msg;
 
-    printf("on-rclick cur %p blk %d\n", item, blockActive ? 1 : 0 );
+    DBG(printf("on-rclick cur %p blk %d\n", item, blockActive ? 1 : 0 );)
 
     // Do not start a block command on context menu.
     m_canvas->SetCanStartBlock( -1 );

@@ -867,7 +867,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::RotatableItems,
                                   aEvent.GetInt() );
 
-        printf("Rotate Item %p", item);
+        DBG(printf("Rotate Item %p", item);)
 
         // Exit if no item found at the current location or the item is already being edited.
         if( (item == NULL) || (item->GetFlags() != 0) )

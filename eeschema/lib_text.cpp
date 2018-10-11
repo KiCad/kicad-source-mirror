@@ -410,7 +410,7 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
 
 void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
 {
-    printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );
+    DBG(printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );)
 
     if( m_rotate )
     {
@@ -431,8 +431,8 @@ void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
     else if( m_Flags == IS_MOVED )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
-        printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );
+        DBG(printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );)
     }
 
-    printf("%p: move2 %d %d\n", this, GetPosition().x, GetPosition().y );
+    DBG(printf("%p: move2 %d %d\n", this, GetPosition().x, GetPosition().y );)
 }

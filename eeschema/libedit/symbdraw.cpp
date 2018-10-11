@@ -129,7 +129,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     view->ClearPreview();
     view->ShowPreview( false );
     view->ClearHiddenFlags();
-    printf("abort\n");
+    DBG(printf("abort\n");)
     parent->RebuildView();
 }
 
@@ -260,7 +260,7 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     if( item == NULL )
         return;
 
-    printf("CalcDraw!\n");
+    DBG(printf("CalcDraw!\n");)
 
     auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
 
@@ -268,12 +268,12 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     item->CalcEdit( p );
     
-    printf("cp: %d %d %d %d\n", item->GetPosition().x, item->GetPosition().y, p.x, p.y );
+    DBG(printf("cp: %d %d %d %d\n", item->GetPosition().x, item->GetPosition().y, p.x, p.y );)
     
     view->ClearPreview();
 
     auto copy = static_cast<LIB_ITEM*>( item->Clone() );
-    printf("cp: %d %d\n", copy->GetPosition().x, copy->GetPosition().y );
+    DBG(printf("cp: %d %d\n", copy->GetPosition().x, copy->GetPosition().y );)
     view->AddToPreview( copy );
 }
 
@@ -306,7 +306,7 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
     if( aItem == NULL )
         return;
 
-    printf("startmdifyraw\n");
+    DBG(printf("startmdifyraw\n");)
 
     TempCopyComponent();
     aItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
@@ -328,7 +328,7 @@ static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     auto cp = aPanel->GetParent()->GetCrossHairPosition( true );
 
-    printf("SymbolDisplayDraw\n");
+    DBG(printf("SymbolDisplayDraw\n");)
 
     item->CalcEdit( cp );
 
@@ -371,7 +371,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
         
         auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
 
-        printf("end: pos %d %d\n", item->GetPosition().x, item->GetPosition().y );
+        DBG(printf("end: pos %d %d\n", item->GetPosition().x, item->GetPosition().y );)
 
         view->ClearHiddenFlags();
         view->ClearPreview();

@@ -2003,14 +2003,14 @@ void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 
 void LIB_PIN::CalcEdit( const wxPoint& aPosition )
 {
-    printf("m_Flags %x\n", m_Flags );
+    DBG(printf("m_Flags %x\n", m_Flags );)
     if( m_Flags == IS_NEW )
     {
         SetPosition( aPosition );
     }
     else if( m_Flags == IS_MOVED )
     {
-        printf("MOVEPIN\n");
+        DBG(printf("MOVEPIN\n");)
         Move( aPosition );
     }
 }

@@ -457,7 +457,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 {
                     auto cmd = (GetParent()->GetToolId() == ID_ZOOM_SELECTION) ? BLOCK_ZOOM : 0;
 
-                    printf("start block\n");
+                    DBG(printf("start block\n");)
 
                     if( !GetParent()->HandleBlockBegin( nullptr, cmd_type, m_CursorStartPos, cmd ) )
                     {
