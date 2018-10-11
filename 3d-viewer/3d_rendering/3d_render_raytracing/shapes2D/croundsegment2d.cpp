@@ -76,7 +76,7 @@ bool CROUNDSEGMENT2D::Intersects( const CBBOX2D &aBBox ) const
         return false;
 
     if( (aBBox.Max().x > m_bbox.Max().x) &&
-        (aBBox.Max().y > m_bbox.Max().x) &&
+        (aBBox.Max().y > m_bbox.Max().y) &&
         (aBBox.Min().x < m_bbox.Min().x) &&
         (aBBox.Min().y < m_bbox.Min().y)
         )
