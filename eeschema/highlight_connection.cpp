@@ -29,6 +29,7 @@
  */
 
 #include <fctsys.h>
+#include <sch_view.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <erc.h>
@@ -69,7 +70,7 @@ bool SCH_EDIT_FRAME::HighlightConnectionAtPosition( wxPoint aPosition )
     SendCrossProbeNetName( m_SelectedNetName );
     SetStatusText( "selected net: " + m_SelectedNetName );
     SetCurrentSheetHighlightFlags();
-    m_canvas->Refresh();
+    GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 
     return buildNetlistOk;
 }
