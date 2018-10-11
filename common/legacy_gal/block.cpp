@@ -194,5 +194,8 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
     aPanel->GetParent()->DisplayToolMsg( wxEmptyString );
     
     // ugly, but temporary
-    dynamic_cast<EDA_DRAW_PANEL_GAL*>( aPanel )->SetDefaultCursor();
+    auto gal_panel = dynamic_cast<EDA_DRAW_PANEL_GAL*>( aPanel );
+
+    if( gal_panel )
+        gal_panel->SetDefaultCursor();
 }
