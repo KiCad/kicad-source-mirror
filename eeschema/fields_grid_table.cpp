@@ -291,30 +291,44 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         return field.GetText();
 
     case FDC_H_ALIGN:
-        switch( field.GetHorizJustify() )
+        switch ( field.GetHorizJustify() )
         {
-        case GR_TEXT_HJUSTIFY_LEFT:   return _( "Left" );
-        case GR_TEXT_HJUSTIFY_CENTER: return _( "Center" );
-        case GR_TEXT_HJUSTIFY_RIGHT:  return _( "Right" );
+        case GR_TEXT_HJUSTIFY_LEFT:
+            return _( "Left" );
+        case GR_TEXT_HJUSTIFY_CENTER:
+            return _( "Center" );
+        case GR_TEXT_HJUSTIFY_RIGHT:
+            return _( "Right" );
         }
 
+        break;
+
     case FDC_V_ALIGN:
-        switch( field.GetVertJustify() )
+        switch ( field.GetVertJustify() )
         {
-        case GR_TEXT_VJUSTIFY_TOP:    return _( "Top" );
-        case GR_TEXT_VJUSTIFY_CENTER: return _( "Center" );
-        case GR_TEXT_VJUSTIFY_BOTTOM: return _( "Bottom" );
+        case GR_TEXT_VJUSTIFY_TOP:
+            return _( "Top" );
+        case GR_TEXT_VJUSTIFY_CENTER:
+            return _( "Center" );
+        case GR_TEXT_VJUSTIFY_BOTTOM:
+            return _( "Bottom" );
         }
+
+        break;
 
     case FDC_TEXT_SIZE:
         return StringFromValue( m_userUnits, field.GetTextSize().GetHeight(), true, true );
 
     case FDC_ORIENTATION:
-        switch( (int) field.GetTextAngle() )
+        switch ( (int) field.GetTextAngle() )
         {
-        case TEXT_ANGLE_HORIZ: return _( "Horizontal" );
-        case TEXT_ANGLE_VERT:  return _( "Vertical" );
+        case TEXT_ANGLE_HORIZ:
+            return _( "Horizontal" );
+        case TEXT_ANGLE_VERT:
+            return _( "Vertical" );
         }
+
+        break;
 
     case FDC_POSX:
         return StringFromValue( m_userUnits, field.GetTextPos().x, true );
