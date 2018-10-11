@@ -191,8 +191,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
             *m_CurrentSheet = *sheet;
-            m_CurrentSheet->UpdateAllScreenReferences();
-            sheet->LastScreen()->TestDanglingEnds();
+            DisplayCurrentSheet();
         }
 
         wxPoint delta;
