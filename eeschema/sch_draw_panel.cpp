@@ -197,7 +197,16 @@ bool SCH_DRAW_PANEL::SwitchBackend( GAL_TYPE aGalType )
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
     m_gal->SetWorldUnitLength( IU_2_GAL_WORLD_UNIT );
+
+    // Keep grid size and grid visibility:
     m_gal->SetGridSize( grid_size );
+    SCH_BASE_FRAME* frame = dynamic_cast<SCH_BASE_FRAME*>( GetParent() );
+
+    if( frame )
+        m_gal->SetGridVisibility( frame->IsGridVisible() );
+
+    Refresh();
+
     return rv;
 }
 

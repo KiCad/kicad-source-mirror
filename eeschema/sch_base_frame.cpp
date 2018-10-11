@@ -91,9 +91,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
     EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
             aSize, aStyle, aFrameName )
 {
-    printf("calling createCanvas\n");
     createCanvas();
-    printf("Canvas %p\n", m_canvas);
 
     m_zoomLevelCoeff = 11.0;    // Adjusted to roughly displays zoom level = 1
                                 // when the screen shows a 1:1 image
