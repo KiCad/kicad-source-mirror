@@ -303,7 +303,7 @@ void SCH_PAINTER::defaultColors( const LIB_ITEM *aItem )
     if( aItem->IsMoving() )
     {
         fg = selectedBrightening( fg );
-        bg = bg.Saturate( 0.7 ).WithAlpha( 0.66 );
+        bg = selectedBrightening( bg );
     }
 
     m_gal->SetIsStroke( true );
