@@ -179,7 +179,7 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * @param aErrorText is a wxString to return error message.
  */
 bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
-        wxString* aErrorText, unsigned int aTolerance )
+                              wxString* aErrorText, unsigned int aTolerance )
 {
     if( aSegList.size() == 0 )
         return true;
@@ -393,14 +393,12 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
 
                     if( reverse )
                     {
-                        for( int jj = graphic->GetBezierPoints().size()-1;
-                                jj >= 0; jj-- )
+                        for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
                             aPolygons.Append( graphic->GetBezierPoints()[jj] );
                     }
                     else
                     {
-                        for( unsigned int jj = 0;
-                             jj < graphic->GetBezierPoints().size(); jj++ )
+                        for( size_t jj = 0; jj < graphic->GetBezierPoints().size(); jj++ )
                             aPolygons.Append( graphic->GetBezierPoints()[jj] );
                     }
 
@@ -411,7 +409,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             default:
                 if( aErrorText )
                 {
-                    msg.Printf( _( "Unsupported DRAWSEGMENT type %s" ),
+                    msg.Printf( _( "Unsupported DRAWSEGMENT type %s." ),
                                 GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
 
                     *aErrorText << msg << "\n";
@@ -438,12 +436,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                 {
                     if( aErrorText )
                     {
-                        msg.Printf(
-                            _( "Unable to find the next boundary segment with an endpoint of (%s mm, %s mm). "
-                                "graphic outline must form a contiguous, closed polygon." ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                            GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
-                            );
+                        msg.Printf( _( "Unable to find segment with an endpoint of (%s, %s)." ),
+                                    StringFromValue( MILLIMETRES, prevPt.x, true ),
+                                    StringFromValue( MILLIMETRES, prevPt.y, true ) );
 
                         *aErrorText << msg << "\n";
                     }
@@ -577,14 +572,12 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
 
                         if( reverse )
                         {
-                            for( int jj = graphic->GetBezierPoints().size()-1;
-                                    jj >= 0; jj-- )
+                            for( int jj = graphic->GetBezierPoints().size()-1; jj >= 0; jj-- )
                                 aPolygons.Append( graphic->GetBezierPoints()[jj], -1, hole );
                         }
                         else
                         {
-                            for( unsigned int jj = 0;
-                                 jj < graphic->GetBezierPoints().size(); jj++ )
+                            for( size_t jj = 0; jj < graphic->GetBezierPoints().size(); jj++ )
                                 aPolygons.Append( graphic->GetBezierPoints()[jj], -1, hole );
                         }
 
@@ -595,8 +588,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                 default:
                     if( aErrorText )
                     {
-                        msg.Printf( _( "Unsupported DRAWSEGMENT type %s" ),
-                                    GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
+                        msg.Printf( _( "Unsupported DRAWSEGMENT type %s." ),
+                                    BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                         *aErrorText << msg << "\n";
                     }
@@ -622,12 +615,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     {
                         if( aErrorText )
                         {
-                            msg.Printf(
-                                _( "Unable to find the next graphic segment with an endpoint of (%s mm, %s mm).\n"
-                                   "Edit graphics, making them contiguous polygons each." ),
-                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.x ).c_str() ) ),
-                                GetChars( FROM_UTF8( BOARD_ITEM::FormatInternalUnits( prevPt.y ).c_str() ) )
-                            );
+                            msg.Printf( _( "Unable to find segment with an endpoint of (%s, %s)." ),
+                                        StringFromValue( MILLIMETRES, prevPt.x, true ),
+                                        StringFromValue( MILLIMETRES, prevPt.y, true ) );
 
                             *aErrorText << msg << "\n";
                         }

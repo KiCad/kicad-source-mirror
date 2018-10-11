@@ -1475,18 +1475,19 @@ bool MODULE::BuildPolyCourtyard()
     wxString error_msg;
 
     bool success = ConvertOutlineToPolygon( list_front, m_poly_courtyard_front,
-            &error_msg, Millimeter2iu( 0.05 ) );
+                                            &error_msg, (unsigned) Millimeter2iu( 0.05 ) );
 
     if( success )
     {
         success = ConvertOutlineToPolygon( list_back, m_poly_courtyard_back,
-            &error_msg, Millimeter2iu( 0.05 ) );
+                                           &error_msg, (unsigned) Millimeter2iu( 0.05 ) );
     }
 
     if( !error_msg.IsEmpty() )
     {
-        error_msg.Prepend( GetReference() + ": " );
-        wxLogMessage( error_msg );
+        wxLogMessage( wxString::Format( _( "Processing courtyard of \"%s\": %s" ),
+                                        GetChars( GetFPID().Format() ),
+                                        error_msg) );
     }
 
     return success;
