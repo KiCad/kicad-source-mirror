@@ -40,7 +40,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <pcb_painter.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 class DIALOG_SELECT_NET_FROM_LIST: public DIALOG_SELECT_NET_FROM_LIST_BASE
 {

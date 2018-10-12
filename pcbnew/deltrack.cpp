@@ -33,7 +33,7 @@
 #include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <macros.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <class_board.h>
 #include <class_track.h>

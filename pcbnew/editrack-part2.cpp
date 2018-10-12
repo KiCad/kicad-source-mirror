@@ -43,7 +43,7 @@
 #include <pcbnew.h>
 #include <drc.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 
 bool PCB_EDIT_FRAME::Other_Layer_Route( TRACK* aTrack, wxDC* DC )

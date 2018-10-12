@@ -50,7 +50,7 @@
 #include <pcbnew.h>
 #include <protos.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #define BLOCK_OUTLINE_COLOR YELLOW
 

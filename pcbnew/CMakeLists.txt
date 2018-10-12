@@ -10,6 +10,8 @@ endif()
 
 add_definitions( -DPCBNEW )
 
+add_subdirectory(connectivity)
+
 add_subdirectory(router)
 
 # psnrouter depends on make_lexer outputs in common (bug # 1285878 )
@@ -677,6 +679,7 @@ set( PCBNEW_KIFACE_LIBRARIES
     idf3
     legacy_wx
     3d-viewer
+    connectivity
     pcbcommon
     pnsrouter
     pcad2kicadpcb

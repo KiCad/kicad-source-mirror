@@ -46,7 +46,6 @@
 #include <pcbnew.h>
 #include <zones.h>
 
-#include <connectivity_data.h>
 #include <board_commit.h>
 
 #include <widgets/progress_reporter.h>

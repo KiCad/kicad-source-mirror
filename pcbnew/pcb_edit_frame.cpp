@@ -60,7 +60,7 @@
 #include <class_board.h>
 #include <class_module.h>
 #include <worksheet_viewitem.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <ratsnest_viewitem.h>
 #include <wildcards_and_files_ext.h>
 #include <kicad_string.h>

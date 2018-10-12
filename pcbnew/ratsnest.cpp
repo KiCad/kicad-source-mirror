@@ -40,7 +40,6 @@
 
 #include <pcbnew.h>
 
-#include <connectivity_data.h>
 #include <ratsnest_data.h>
 
 /**

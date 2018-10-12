@@ -53,7 +53,7 @@
 #include <dialog_drc.h>
 #include <invoke_pcb_dialog.h>
 #include <array_creator.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <zone_filler.h>
 

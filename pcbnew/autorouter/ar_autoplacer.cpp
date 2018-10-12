@@ -42,7 +42,7 @@
 
 #include <board_commit.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <ratsnest_data.h>
 
 #include <widgets/progress_reporter.h>

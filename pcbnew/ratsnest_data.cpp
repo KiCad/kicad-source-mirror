@@ -40,8 +40,6 @@ using namespace std::placeholders;
 #include <algorithm>
 #include <limits>
 
-#include <connectivity_algo.h>
-
 static uint64_t getDistance( const CN_ANCHOR_PTR& aNode1, const CN_ANCHOR_PTR& aNode2 )
 {
     double  dx = ( aNode1->Pos().x - aNode2->Pos().x );

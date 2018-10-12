@@ -46,7 +46,7 @@
 #include <pcb_painter.h>
 #include <pcb_edit_frame.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <io_mgr.h>
 #include <set>

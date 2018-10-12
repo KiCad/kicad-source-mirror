@@ -46,7 +46,7 @@ using namespace std::placeholders;
 #include <class_edge_mod.h>
 #include <origin_viewitem.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <tools/selection_tool.h>
 #include <tools/pcbnew_control.h>

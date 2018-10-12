@@ -29,8 +29,8 @@
 #include <thread>
 #include <algorithm>
 
-#include <connectivity_data.h>
-#include <connectivity_algo.h>
+#include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_algo.h>
 #include <ratsnest_data.h>
 
 CONNECTIVITY_DATA::CONNECTIVITY_DATA()

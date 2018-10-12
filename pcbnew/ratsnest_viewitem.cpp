@@ -29,7 +29,6 @@
 
 #include <ratsnest_viewitem.h>
 #include <ratsnest_data.h>
-#include <connectivity_data.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <pcb_painter.h>
 #include <layers_id_colors_and_visibility.h>

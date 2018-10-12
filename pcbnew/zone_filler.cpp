@@ -36,7 +36,7 @@
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 
 #include <widgets/progress_reporter.h>

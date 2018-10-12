@@ -29,7 +29,7 @@
 #include <class_track.h>
 #include <pcb_edit_frame.h>
 #include <confirm.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <class_module.h>
 #include <widgets/net_selector.h>
 #include <board_commit.h>

@@ -53,7 +53,7 @@ using namespace std::placeholders;
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <router/router_tool.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <footprint_viewer_frame.h>
 #include "tool_event_utils.h"
 

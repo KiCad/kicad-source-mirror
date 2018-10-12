@@ -28,12 +28,12 @@
 // this shared_ptr line has to be before include connectivity_data.h.
 %shared_ptr(CONNECTIVITY_DATA)
 
-%include connectivity_data.h
+%include connectivity/connectivity_data.h
 
  
 
 
 %{
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 %}
 

@@ -40,7 +40,7 @@
 #include <ttl/halfedge/hetriang.h>
 #include <ttl/halfedge/hetraits.h>
 
-#include <connectivity_algo.h>
+#include <connectivity/connectivity_algo.h>
 
 class BOARD;
 class BOARD_ITEM;

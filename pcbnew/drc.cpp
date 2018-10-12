@@ -43,8 +43,8 @@
 #include <geometry/seg.h>
 #include <math_for_graphics.h>
 #include <geometry/geometry_utils.h>
-#include <connectivity_data.h>
-#include <connectivity_algo.h>
+#include <connectivity/connectivity_data.h>
+#include <connectivity/connectivity_algo.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

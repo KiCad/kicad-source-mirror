@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <class_zone.h>
 #include <class_board.h>
 #include <class_module.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include "zone_filler.h"
 

@@ -45,7 +45,7 @@
 #include <protos.h>
 #include <zones_functions_for_undo_redo.h>
 #include <drc.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <widgets/progress_reporter.h>
 

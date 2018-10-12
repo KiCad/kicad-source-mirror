@@ -58,7 +58,7 @@
 #include <class_pcb_text.h>
 #include <class_pcb_target.h>
 #include <class_dimension.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 
 /**

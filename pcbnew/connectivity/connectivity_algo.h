@@ -43,8 +43,8 @@
 #include <deque>
 #include <intrusive_list.h>
 
-#include <connectivity_rtree.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_rtree.h>
+#include <connectivity/connectivity_data.h>
 
 class CN_ITEM;
 class CN_CONNECTIVITY_ALGO_IMPL;

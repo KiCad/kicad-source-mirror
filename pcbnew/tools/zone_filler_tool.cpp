@@ -28,7 +28,7 @@
 
 #include <class_zone.h>
 #include <class_module.h>
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 #include <board_commit.h>
 
 #include <widgets/progress_reporter.h>

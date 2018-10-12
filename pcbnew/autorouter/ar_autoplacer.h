@@ -35,7 +35,7 @@
 #include <class_board.h>
 #include <class_module.h>
 
-#include <connectivity_data.h>
+#include <connectivity/connectivity_data.h>
 
 #include <view/view_overlay.h>
 
