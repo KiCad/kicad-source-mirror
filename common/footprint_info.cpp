@@ -138,6 +138,9 @@ FOOTPRINT_LIST* FOOTPRINT_LIST::GetInstance( KIWAY& aKiway )
 {
     FOOTPRINT_LIST* footprintInfo = get_instance_from_id( aKiway, KIFACE_FOOTPRINT_LIST );
 
+    if( ! footprintInfo )
+        return nullptr;
+
     if( !footprintInfo->GetCount() )
     {
         wxTextFile footprintInfoCache( aKiway.Prj().GetProjectPath() + "fp-info-cache" );
