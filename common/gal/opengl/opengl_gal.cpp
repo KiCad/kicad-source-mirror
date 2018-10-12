@@ -1252,6 +1252,8 @@ void OPENGL_GAL::DrawGrid()
                 }
             }
         }
+
+        nonCachedManager->EndDrawing();
     }
     else
     {
