@@ -1,0 +1,293 @@
+/*
+ * This program source code file is part of KICAD, a free EDA CAD application.
+ *
+ * Copyright (C) 2016-2018 CERN
+ * Copyright (C) 2018  KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include <connectivity/connectivity_items.h>
+
+int CN_ITEM::AnchorCount() const
+{
+    if( !m_valid )
+        return 0;
+
+    return m_parent->Type() == PCB_TRACE_T ? 2 : 1;
+}
+
+
+const VECTOR2I CN_ITEM::GetAnchor( int n ) const
+{
+    if( !m_valid )
+        return VECTOR2I();
+
+    switch( m_parent->Type() )
+    {
+        case PCB_PAD_T:
+            return static_cast<const D_PAD*>( m_parent )->ShapePos();
+            break;
+
+        case PCB_TRACE_T:
+        {
+            auto tr = static_cast<const TRACK*>( m_parent );
+            return ( n == 0 ? tr->GetStart() : tr->GetEnd() );
+
+            break;
+        }
+
+        case PCB_VIA_T:
+            return static_cast<const VIA*>( m_parent )->GetStart();
+
+        default:
+            assert( false );
+            return VECTOR2I();
+    }
+}
+
+
+int CN_ITEM::Net() const
+{
+    if( !m_parent || !m_valid )
+        return -1;
+
+    return m_parent->GetNetCode();
+}
+
+
+void CN_ITEM::Dump()
+{
+    printf("    valid: %d, connected: \n", !!Valid());
+
+    for( auto i : m_connected )
+    {
+        TRACK* t = static_cast<TRACK*>( i->Parent() );
+        printf( "    - %p %d\n", t, t->Type() );
+    }
+}
+
+
+int CN_ZONE::AnchorCount() const
+{
+    if( !Valid() )
+        return 0;
+
+    const auto zone = static_cast<const ZONE_CONTAINER*>( Parent() );
+    const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
+
+    return outline.PointCount() ? 1 : 0;
+}
+
+
+const VECTOR2I CN_ZONE::GetAnchor( int n ) const
+{
+    if( !Valid() )
+        return VECTOR2I();
+
+    const auto zone = static_cast<const ZONE_CONTAINER*> ( Parent() );
+    const auto& outline = zone->GetFilledPolysList().COutline( m_subpolyIndex );
+
+    return outline.CPoint( 0 );
+}
+
+
+void CN_ITEM::RemoveInvalidRefs()
+{
+    for( auto it = m_connected.begin(); it != m_connected.end(); )
+    {
+        if( !(*it)->Valid() )
+            it = m_connected.erase( it );
+        else
+            ++it;
+    }
+}
+
+
+
+void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
+{
+    if( !m_hasInvalid )
+        return;
+
+    auto lastItem = std::remove_if(m_items.begin(), m_items.end(), [&aGarbage] ( CN_ITEM* item )
+    {
+        if( !item->Valid() )
+        {
+            aGarbage.push_back ( item );
+            return true;
+        }
+
+        return false;
+    } );
+
+    m_items.resize( lastItem - m_items.begin() );
+
+    // fixme: mem leaks
+    for( auto item : m_items )
+        item->RemoveInvalidRefs();
+
+    for( auto item : aGarbage )
+        m_index.Remove( item );
+
+    m_hasInvalid = false;
+}
+
+
+BOARD_CONNECTED_ITEM* CN_ANCHOR::Parent() const
+{
+    assert( m_item->Valid() );
+    return m_item->Parent();
+}
+
+
+bool CN_ANCHOR::Valid() const
+{
+    if( !m_item )
+        return false;
+
+    return m_item->Valid();
+}
+
+
+bool CN_ANCHOR::IsDangling() const
+{
+    if( !m_cluster )
+        return true;
+
+    // Calculate the item count connected to this anchor.
+    // m_cluster groups all items connected, but they are not necessary connected
+    // at this coordinate point (they are only candidates)
+    BOARD_CONNECTED_ITEM* item_ref = Parent();
+    LSET layers = item_ref->GetLayerSet() & LSET::AllCuMask();
+
+    // the number of items connected to item_ref at ths anchor point
+    int connected_items_count = 0;
+
+    // the minimal number of items connected to item_ref
+    // at this anchor point to decide the anchor is *not* dangling
+    int minimal_count = 1;
+
+    // a via can be removed if connected to only one other item.
+    // the minimal_count is therefore 2
+    if( item_ref->Type() == PCB_VIA_T )
+        minimal_count = 2;
+
+    for( CN_ITEM* item : *m_cluster )
+    {
+        if( !item->Valid() )
+            continue;
+
+        BOARD_CONNECTED_ITEM* brd_item = item->Parent();
+
+        if( brd_item == item_ref )
+            continue;
+
+        // count only items on the same layer at this coordinate (especially for zones)
+        if( !( brd_item->GetLayerSet() & layers ).any() )
+            continue;
+
+        if( brd_item->Type() == PCB_ZONE_AREA_T )
+        {
+            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( brd_item );
+
+            if( zone->HitTestInsideZone( wxPoint( Pos() ) ) )
+                connected_items_count++;
+        }
+        else if( brd_item->HitTest( wxPoint( Pos() ) ) )
+            connected_items_count++;
+    }
+
+    return connected_items_count < minimal_count;
+}
+
+
+CN_CLUSTER::CN_CLUSTER()
+{
+    m_items.reserve( 64 );
+    m_originPad = nullptr;
+    m_originNet = -1;
+    m_conflicting = false;
+}
+
+
+CN_CLUSTER::~CN_CLUSTER()
+{
+}
+
+
+wxString CN_CLUSTER::OriginNetName() const
+{
+    if( !m_originPad || !m_originPad->Valid() )
+        return "<none>";
+    else
+        return m_originPad->Parent()->GetNetname();
+}
+
+
+bool CN_CLUSTER::Contains( const CN_ITEM* aItem )
+{
+    return std::find( m_items.begin(), m_items.end(), aItem ) != m_items.end();
+}
+
+
+bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
+{
+    return std::find_if( m_items.begin(), m_items.end(), [ &aItem ] ( const CN_ITEM* item )
+            { return item->Valid() && item->Parent() == aItem; } ) != m_items.end();
+}
+
+
+void CN_CLUSTER::Dump()
+{
+    for( auto item : m_items )
+    {
+        wxLogTrace( "CN", " - item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
+                item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
+        printf( "- item : %p bitem : %p type : %d inet %s\n", item, item->Parent(),
+                        item->Parent()->Type(), (const char*) item->Parent()->GetNetname().c_str() );
+        item->Dump();
+    }
+}
+
+
+void CN_CLUSTER::Add( CN_ITEM* item )
+{
+    m_items.push_back( item );
+
+    if( m_originNet < 0 )
+    {
+        m_originNet = item->Net();
+    }
+
+    if( item->Parent()->Type() == PCB_PAD_T )
+    {
+        if( !m_originPad )
+        {
+            m_originPad = item;
+            m_originNet = item->Net();
+        }
+
+        if( m_originPad && item->Net() != m_originNet )
+        {
+            m_conflicting = true;
+        }
+    }
+}

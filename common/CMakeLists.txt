@@ -440,6 +440,7 @@ set( PCB_COMMON_SRCS
     ../pcbnew/class_zone.cpp
     ../pcbnew/collectors.cpp
     ../pcbnew/connectivity/connectivity_algo.cpp
+    ../pcbnew/connectivity/connectivity_items.cpp
     ../pcbnew/connectivity/connectivity_data.cpp
     ../pcbnew/convert_drawsegment_list_to_polygon.cpp
     ../pcbnew/drc_item.cpp
