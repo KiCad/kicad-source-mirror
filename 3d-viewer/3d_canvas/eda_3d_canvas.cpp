@@ -508,6 +508,8 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
 void EDA_3D_CANVAS::OnMagnify( wxMouseEvent& event )
 {
+    SetFocus();
+
     if( m_camera_is_moving )
         return;
 
@@ -555,6 +557,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
 
 void EDA_3D_CANVAS::OnLeftDown( wxMouseEvent &event )
 {
+    SetFocus();
     stop_editingTimeOut_Timer();
 }
 
@@ -574,6 +577,7 @@ void EDA_3D_CANVAS::OnLeftUp( wxMouseEvent &event )
 
 void EDA_3D_CANVAS::OnMiddleDown( wxMouseEvent &event )
 {
+    SetFocus();
     stop_editingTimeOut_Timer();
 }
 
@@ -598,6 +602,8 @@ void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent &event )
 void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
 {
     wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnRightClick" ) );
+
+    SetFocus();
 
     if( m_camera_is_moving )
         return;
