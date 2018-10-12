@@ -24,7 +24,7 @@
 #define ALPHA_MAX 100   // the max value returned by the alpha (opacity) slider
 
 DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
-                                          bool aAllowOpacityControl )
+                                          bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors )
 	: DIALOG_COLOR_PICKER_BASE( aParent )
 {
     m_allowMouseEvents = false;
@@ -48,7 +48,7 @@ DIALOG_COLOR_PICKER::DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCu
         m_notebook->SetSelection( (unsigned) m_ActivePage );
 
     // Build the defined colors panel:
-    initDefinedColors();
+    initDefinedColors( aUserColors );
 
     m_sdbSizerOK->SetDefault();
 }
@@ -64,7 +64,8 @@ DIALOG_COLOR_PICKER::~DIALOG_COLOR_PICKER()
     m_ActivePage = m_notebook->GetSelection();
 
     for( auto button : m_buttonsColor )
-        button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
+        button->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED,
+                            wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
 }
 
 
@@ -139,7 +140,7 @@ bool DIALOG_COLOR_PICKER::TransferDataToWindow()
 }
 
 
-void DIALOG_COLOR_PICKER::initDefinedColors()
+void DIALOG_COLOR_PICKER::initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors )
 {
     #define ID_COLOR_BLACK 2000 // colors_id = ID_COLOR_BLACK a ID_COLOR_BLACK + NBCOLORS-1
 
@@ -156,48 +157,99 @@ void DIALOG_COLOR_PICKER::initDefinedColors()
     int grid_row = 0;
     int table_row_count = 6;
 
-    for( int jj = 0; jj < NBCOLORS; ++jj, grid_col++ )
+    // If no predefined list is given, build the default predefined colors:
+    if( aPredefinedColors )
     {
-        if( grid_col*table_row_count >= NBCOLORS )
-        {   // the current grid row is filled, and we must fill the next grid row
-            grid_col = 0;
-            grid_row++;
+        for( unsigned jj = 0; jj < aPredefinedColors->size() && jj < NBCOLORS; ++jj )
+        {
+            CUSTOM_COLOR_ITEM* item = & *aPredefinedColors->begin() + jj;
+            int butt_ID = ID_COLOR_BLACK + jj;
+            wxMemoryDC iconDC;
+            wxBitmap   ButtBitmap( w, h );
+            wxBrush    brush;
+
+            iconDC.SelectObject( ButtBitmap );
+
+            KIGFX::COLOR4D buttcolor = item->m_Color;
+
+            iconDC.SetPen( *wxBLACK_PEN );
+            brush.SetColour( buttcolor.ToColour() );
+            brush.SetStyle( wxBRUSHSTYLE_SOLID );
+
+            iconDC.SetBrush( brush );
+            iconDC.SetBackground( *wxGREY_BRUSH );
+            iconDC.Clear();
+            iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
+
+            wxBitmapButton* bitmapButton = new wxBitmapButton( m_panelDefinedColors, butt_ID, ButtBitmap,
+                                               wxDefaultPosition, wxSize( w+8, h+6 ) );
+            m_fgridColor->Add( bitmapButton, 0,
+                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
+                               wxLEFT | wxBOTTOM, 5 );
+
+            wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
+                                                    item->m_ColorName,
+                                                    wxDefaultPosition, wxDefaultSize, 0 );
+            m_fgridColor->Add( label, 1,
+                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
+                               wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+            m_buttonsColor.push_back( bitmapButton );
+
+            m_Color4DList.push_back( buttcolor );
+
+            bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                   wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
         }
+    }
+    else
+    {
+        m_Color4DList.assign( NBCOLORS, KIGFX::COLOR4D( 0.0, 0.0, 0.0, 1.0 ) );
 
-        int ii = grid_row + (grid_col*table_row_count); // The index in g_ColorRefs
+        for( int jj = 0; jj < NBCOLORS; ++jj, grid_col++ )
+        {
+            if( grid_col*table_row_count >= NBCOLORS )
+            {   // the current grid row is filled, and we must fill the next grid row
+                grid_col = 0;
+                grid_row++;
+            }
 
-        int butt_ID = ID_COLOR_BLACK + ii;
-        wxMemoryDC iconDC;
-        wxBitmap   ButtBitmap( w, h );
-        wxBrush    brush;
+            int ii = grid_row + (grid_col*table_row_count); // The index in g_ColorRefs
 
-        iconDC.SelectObject( ButtBitmap );
+            int butt_ID = ID_COLOR_BLACK + ii;
+            wxMemoryDC iconDC;
+            wxBitmap   ButtBitmap( w, h );
+            wxBrush    brush;
 
-        KIGFX::COLOR4D buttcolor = KIGFX::COLOR4D( g_ColorRefs[ii].m_Numcolor );
+            iconDC.SelectObject( ButtBitmap );
 
-        iconDC.SetPen( *wxBLACK_PEN );
-        brush.SetColour( buttcolor.ToColour() );
-        brush.SetStyle( wxBRUSHSTYLE_SOLID );
+            KIGFX::COLOR4D buttcolor = KIGFX::COLOR4D( g_ColorRefs[ii].m_Numcolor );
+            m_Color4DList[ butt_ID - ID_COLOR_BLACK ] = buttcolor;
 
-        iconDC.SetBrush( brush );
-        iconDC.SetBackground( *wxGREY_BRUSH );
-        iconDC.Clear();
-        iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
+            iconDC.SetPen( *wxBLACK_PEN );
+            brush.SetColour( buttcolor.ToColour() );
+            brush.SetStyle( wxBRUSHSTYLE_SOLID );
 
-        wxBitmapButton* bitmapButton = new wxBitmapButton( m_panelDefinedColors, butt_ID, ButtBitmap,
-                                           wxDefaultPosition, wxSize( w+8, h+6 ) );
-        m_fgridColor->Add( bitmapButton, 0,
-                           wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                           wxLEFT | wxBOTTOM, 5 );
+            iconDC.SetBrush( brush );
+            iconDC.SetBackground( *wxGREY_BRUSH );
+            iconDC.Clear();
+            iconDC.DrawRoundedRectangle( 0, 0, w, h, (double) h / 3 );
 
-        wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
-                                                wxGetTranslation( g_ColorRefs[ii].m_ColorName ),
-                                                wxDefaultPosition, wxDefaultSize, 0 );
-        m_fgridColor->Add( label, 1,
-                           wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
-                           wxLEFT | wxRIGHT | wxBOTTOM, 5 );
-        m_buttonsColor.push_back( bitmapButton );
-        bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
+            wxBitmapButton* bitmapButton = new wxBitmapButton( m_panelDefinedColors, butt_ID, ButtBitmap,
+                                               wxDefaultPosition, wxSize( w+8, h+6 ) );
+            m_fgridColor->Add( bitmapButton, 0,
+                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
+                               wxLEFT | wxBOTTOM, 5 );
+
+            wxStaticText* label = new wxStaticText( m_panelDefinedColors, -1,
+                                                    wxGetTranslation( g_ColorRefs[ii].m_ColorName ),
+                                                    wxDefaultPosition, wxDefaultSize, 0 );
+            m_fgridColor->Add( label, 1,
+                               wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL |
+                               wxLEFT | wxRIGHT | wxBOTTOM, 5 );
+            m_buttonsColor.push_back( bitmapButton );
+            bitmapButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED,
+                                   wxCommandEventHandler( DIALOG_COLOR_PICKER::buttColorClick ), NULL, this );
+        }
     }
 }
 
@@ -498,7 +550,7 @@ void DIALOG_COLOR_PICKER::drawAll()
 void DIALOG_COLOR_PICKER::buttColorClick( wxCommandEvent& event )
 {
     int id = event.GetId();
-    KIGFX::COLOR4D color( EDA_COLOR_T( id - ID_COLOR_BLACK ) );
+    KIGFX::COLOR4D color( m_Color4DList[id - ID_COLOR_BLACK] );//EDA_COLOR_T( id - ID_COLOR_BLACK ) );
     m_newColor4D.r = color.r;
     m_newColor4D.g = color.g;
     m_newColor4D.b = color.b;

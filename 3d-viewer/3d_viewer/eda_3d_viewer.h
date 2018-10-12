@@ -32,11 +32,11 @@
 #ifndef EDA_3D_VIEWER_H
 #define EDA_3D_VIEWER_H
 
-
 #include "../3d_canvas/cinfo3d_visu.h"
 #include "../3d_canvas/eda_3d_canvas.h"
 #include <kiway_player.h>
 #include <wx/colourdata.h>
+#include <../common/dialogs/dialog_color_picker.h>  // for CUSTOM_COLORS_LIST definition
 
 
 #define KICAD_DEFAULT_3D_DRAWFRAME_STYLE    (wxDEFAULT_FRAME_STYLE | wxWANTS_CHARS)
@@ -112,14 +112,13 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      * Get a SFVEC3D from a wx colour dialog
      * @param aColor is the SFVEC3D to change
      * @param aTitle is the title displayed in the colordialog selector
-     * @param aPredefinedColors is a reference to a wxColourData
+     * @param aPredefinedColors is a reference to a CUSTOM_COLOR_ITEM list
      * which contains a few predefined colors
-     * if it is NULL, no predefined colors are used
-     * @return true if a new color is chosen, false if
-     * no change or aborted by user
+     * if empty, no predefined colors are used.
+     * no change if aborted by user
      */
     bool Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
-                             wxColourData* aPredefinedColors = NULL );
+                             CUSTOM_COLORS_LIST* aPredefinedColors );
 
     /**
      * Function Set3DSolderMaskColorFromUser

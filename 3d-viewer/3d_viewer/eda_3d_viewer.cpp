@@ -340,7 +340,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_BGCOLOR_BOTTOM_SELECTION:
-        if( Set3DColorFromUser( m_settings.m_BgColorBot, _( "Background Color, Bottom" ) ) )
+        if( Set3DColorFromUser( m_settings.m_BgColorBot, _( "Background Color, Bottom" ), nullptr ) )
         {
             if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
                 m_canvas->Request_refresh();
@@ -350,7 +350,7 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
         return;
 
     case ID_MENU3D_BGCOLOR_TOP_SELECTION:
-        if( Set3DColorFromUser( m_settings.m_BgColorTop, _( "Background Color, Top" ) ) )
+        if( Set3DColorFromUser( m_settings.m_BgColorTop, _( "Background Color, Top" ), nullptr ) )
         {
             if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
                 m_canvas->Request_refresh();
@@ -716,7 +716,7 @@ void EDA_3D_VIEWER::LoadSettings( wxConfigBase *aCfg )
     // m_CopperColor default value = gold
     aCfg->Read( keyCopperColor_Red,  &m_settings.m_CopperColor.r, 255.0 * 0.7 / 255.0 );
     aCfg->Read( keyCopperColor_Green, &m_settings.m_CopperColor.g, 223.0 * 0.7 / 255.0 );
-    aCfg->Read( keyCopperColor_Blue,  &m_settings.m_CopperColor.b, 0.0 /255.0 );
+    aCfg->Read( keyCopperColor_Blue,  &m_settings.m_CopperColor.b, 0.0 );
 
     // m_BoardBodyColor default value = FR4, in realistic mode
     aCfg->Read( keyBoardBodyColor_Red,  &m_settings.m_BoardBodyColor.r, 51.0 / 255.0 );
@@ -995,32 +995,24 @@ void EDA_3D_VIEWER::RenderEngineChanged()
 
 
 bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
-                                       wxColourData* aPredefinedColors )
+                                        CUSTOM_COLORS_LIST* aPredefinedColors )
 {
-    wxColour newcolor, oldcolor;
+    KIGFX::COLOR4D newcolor;
+    KIGFX::COLOR4D oldcolor( aColor.r,aColor.g, aColor.b, 1.0 );
 
-    oldcolor.Set( KiROUND( aColor.r * 255 ),
-                  KiROUND( aColor.g * 255 ),
-                  KiROUND( aColor.b * 255 ) );
+    DIALOG_COLOR_PICKER picker( this, oldcolor, false, aPredefinedColors );
 
-    wxColourData emptyColorSet; // Provides a empty predefined set of colors
-                                // if no color set available to avoid use of an
-                                // old color set
-
-    if( aPredefinedColors == NULL )
-        aPredefinedColors = &emptyColorSet;
-
-    newcolor = wxGetColourFromUser( this, oldcolor, aTitle, aPredefinedColors );
-
-    if( !newcolor.IsOk() )     // Cancel command
+    if( picker.ShowModal() != wxID_OK )
         return false;
 
-    if( newcolor != oldcolor )
-    {
-        aColor.r = (double) newcolor.Red()   / 255.0;
-        aColor.g = (double) newcolor.Green() / 255.0;
-        aColor.b = (double) newcolor.Blue()  / 255.0;
-    }
+    newcolor = picker.GetColor();
+
+    if( newcolor == oldcolor )
+        return false;
+
+    aColor.r = newcolor.r;
+    aColor.g = newcolor.g;
+    aColor.b = newcolor.b;
 
     return true;
 }
@@ -1028,20 +1020,12 @@ bool EDA_3D_VIEWER::Set3DColorFromUser( SFVEC3D &aColor, const wxString& aTitle,
 
 bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
 {
-    wxColourData definedColors;
-    unsigned int i = 0;
-
-    definedColors.SetCustomColour( i++, wxColour( 241, 241, 241 ) );    // White
-    definedColors.SetCustomColour( i++, wxColour(   4,  18,  21 ) );    // Dark
-
-    for(; i < wxColourData::NUM_CUSTOM;)
-    {
-        definedColors.SetCustomColour( i++, wxColour(   0,   0,  0 ) );
-    }
+    CUSTOM_COLORS_LIST definedColors;
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 241.0/255.0, 241.0/255.0, 241.0/255.0, "White" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 4.0/255.0, 18.0/255.0, 21.0/255.0, "Dark" ) );
 
     bool change = Set3DColorFromUser( m_settings.m_SilkScreenColor,
-                                      _( "Silk Screen Color" ),
-                                      &definedColors );
+                                      _( "Solder Mask Color" ), &definedColors );
 
     if( change )
         NewDisplay( true );
@@ -1052,28 +1036,22 @@ bool EDA_3D_VIEWER::Set3DSilkScreenColorFromUser()
 
 bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
 {
-    wxColourData definedColors;
-    unsigned int i = 0;
+    CUSTOM_COLORS_LIST definedColors;
 
-    definedColors.SetCustomColour( i++, wxColour( 20,  51,  36 ) ); // Green
-    definedColors.SetCustomColour( i++, wxColour( 91, 168,  12 ) ); // Light Green
-    definedColors.SetCustomColour( i++, wxColour( 13, 104,  11 ) ); // Saturated Green
-    definedColors.SetCustomColour( i++, wxColour(181,  19,  21 ) ); // Red
-    definedColors.SetCustomColour( i++, wxColour(239,  53,  41 ) ); // Red Light Orange
-    definedColors.SetCustomColour( i++, wxColour(210,  40,  14 ) ); // Red 2
-    definedColors.SetCustomColour( i++, wxColour(  2,  59, 162 ) ); // Blue
-    definedColors.SetCustomColour( i++, wxColour( 54,  79, 116 ) ); // Light blue 1
-    definedColors.SetCustomColour( i++, wxColour( 61,  85, 130 ) ); // Light blue 2
-    definedColors.SetCustomColour( i++, wxColour( 21,  70,  80 ) ); // Green blue (dark)
-    definedColors.SetCustomColour( i++, wxColour( 11,  11,  11 ) ); // Black
-    definedColors.SetCustomColour( i++, wxColour( 245, 245,245 ) ); // White
-    definedColors.SetCustomColour( i++, wxColour(119,  31,  91 ) ); // Purple
-    definedColors.SetCustomColour( i++, wxColour( 32,   2,  53 ) ); // Purple Dark
-
-    for(; i < wxColourData::NUM_CUSTOM;)
-    {
-        definedColors.SetCustomColour( i++, wxColour(   0,   0,  0 ) );
-    }
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 20/255.0,  51/255.0,  36/255.0, "Green" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 91/255.0, 168/255.0,  12/255.0, "Light Green" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 13/255.0, 104/255.0,  11/255.0, "Saturated Green" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 181/255.0,  19/255.0,  21/255.0, "Red" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 239/255.0,  53/255.0,  41/255.0, "Red Light Orange" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 210/255.0,  40/255.0,  14/255.0, "Red 2" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM(  2/255.0,  59/255.0, 162/255.0, "Blue" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 54/255.0,  79/255.0, 116/255.0, "Light blue 1" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 61/255.0,  85/255.0, 130/255.0, "Light blue 2" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 21/255.0,  70/255.0,  80/255.0, "Green blue (dark)" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 11/255.0,  11/255.0,  11/255.0, "Black" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 245/255.0, 245/255.0, 245/255.0, "White" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 119/255.0,  31/255.0,  91/255.0, "Purple" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 32/255.0,   2/255.0,  53/255.0, "Purple Dark" ) );
 
     bool change = Set3DColorFromUser( m_settings.m_SolderMaskColor,
                                       _( "Solder Mask Color" ),
@@ -1088,21 +1066,14 @@ bool EDA_3D_VIEWER::Set3DSolderMaskColorFromUser()
 
 bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
 {
-    wxColourData definedColors;
-    unsigned int i = 0;
+    CUSTOM_COLORS_LIST definedColors;
 
-    definedColors.SetCustomColour( i++, wxColour( 184, 115,  50) );   // Copper
-    definedColors.SetCustomColour( i++, wxColour( 191, 155,  58) );   // Gold
-    definedColors.SetCustomColour( i++, wxColour( 213, 213, 213) );   // Silver
-    definedColors.SetCustomColour( i++, wxColour( 160, 160, 160) );   // tin
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 184/255.0, 115/255.0, 50/255.0, "Copper" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 178/255.0, 156/255.0,  0.0, "Gold" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 160/255.0, 160/255.0, "Tin" ) );
 
-    for(; i < wxColourData::NUM_CUSTOM;)
-    {
-        definedColors.SetCustomColour( i++, wxColour(   0,   0,  0 ) );
-    }
-
-    bool change = Set3DColorFromUser( m_settings.m_CopperColor,
-                                      _( "Copper Color" ),
+    bool change = Set3DColorFromUser( m_settings.m_CopperColor, _( "Copper Color" ),
                                       &definedColors );
 
     if( change )
@@ -1114,27 +1085,19 @@ bool EDA_3D_VIEWER::Set3DCopperColorFromUser()
 
 bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 {
-    wxColourData definedColors;
-    unsigned int i = 0;
+    CUSTOM_COLORS_LIST definedColors;
 
-    definedColors.SetCustomColour( i++, wxColour(  51,  43, 22 ) ); // FR4 natural, dark
-    definedColors.SetCustomColour( i++, wxColour( 109, 116, 75 ) ); // FR4 natural
-    definedColors.SetCustomColour( i++, wxColour(  78,  14,  5 ) ); // brown/red
-    definedColors.SetCustomColour( i++, wxColour( 146,  99, 47 ) ); // brown 1
-    definedColors.SetCustomColour( i++, wxColour( 160, 123, 54 ) ); // brown 2
-    definedColors.SetCustomColour( i++, wxColour( 146,  99, 47 ) ); // brown 3
-    definedColors.SetCustomColour( i++, wxColour(  63, 126, 71 ) ); // green 1
-    definedColors.SetCustomColour( i++, wxColour( 117, 122, 90 ) ); // green 2
+    definedColors.push_back( CUSTOM_COLOR_ITEM(  51/255.0,  43/255.0, 22/255.0, "FR4 natural, dark" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 109/255.0, 116/255.0, 75/255.0, "FR4 natural" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM(  78/255.0,  14/255.0,  5/255.0, "brown/red" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, "brown 1" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 160/255.0, 123/255.0, 54/255.0, "brown 2" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 146/255.0,  99/255.0, 47/255.0, "brown 3" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM(  63/255.0, 126/255.0, 71/255.0, "green 1" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 117/255.0, 122/255.0, 90/255.0, "green 2" ) );
 
-    for(; i < wxColourData::NUM_CUSTOM;)
-    {
-        definedColors.SetCustomColour( i++, wxColour(   0,   0,  0 ) );
-    }
-
-    bool change = Set3DColorFromUser( m_settings.m_BoardBodyColor,
-                                      _( "Board Body Color" ),
+    bool change = Set3DColorFromUser( m_settings.m_BoardBodyColor, _( "Board Body Color" ),
                                       &definedColors );
-
     if( change )
         NewDisplay( true );
 
@@ -1144,21 +1107,14 @@ bool EDA_3D_VIEWER::Set3DBoardBodyColorFromUser()
 
 bool EDA_3D_VIEWER::Set3DSolderPasteColorFromUser()
 {
-    wxColourData definedColors;
-    unsigned int i = 0;
+    CUSTOM_COLORS_LIST definedColors;
 
-    definedColors.SetCustomColour( i++, wxColour( 128, 128, 128 ) );    // grey
-    definedColors.SetCustomColour( i++, wxColour( 213, 213, 213 ) );    // Silver
-    definedColors.SetCustomColour( i++, wxColour( 90,  90,  90  ) );    // grey 2
-
-    for(; i < wxColourData::NUM_CUSTOM;)
-    {
-        definedColors.SetCustomColour( i++, wxColour(   0,   0,  0 ) );
-    }
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 128/255.0, 128/255.0, 128/255.0, "grey" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 213/255.0, 213/255.0, 213/255.0, "Silver" ) );
+    definedColors.push_back( CUSTOM_COLOR_ITEM( 90/255.0,  90/255.0,  90/255.0, "grey 2" ) );
 
     bool change = Set3DColorFromUser( m_settings.m_SolderPasteColor,
-                                      _( "Solder Paste Color" ),
-                                      &definedColors );
+                                      _( "Solder Paste Color" ), &definedColors );
 
     if( change )
         NewDisplay( true );

@@ -28,6 +28,31 @@
 #include <gal/color4d.h>
 #include "dialog_color_picker_base.h"
 
+/** a class to handle a custom color (predefined color) for
+ * the color picker dialog
+ */
+struct CUSTOM_COLOR_ITEM
+{
+    KIGFX::COLOR4D m_Color;
+    wxString m_ColorName;
+
+    CUSTOM_COLOR_ITEM( double red, double green, double blue, const wxString& aName )
+    {
+        m_Color.r = red;
+        m_Color.g = green;
+        m_Color.b = blue;
+        m_ColorName = aName;
+    }
+
+    CUSTOM_COLOR_ITEM( const KIGFX::COLOR4D& aColor, const wxString& aName )
+        : m_Color( aColor ), m_ColorName( aName)
+    {}
+};
+
+
+typedef std::vector<CUSTOM_COLOR_ITEM> CUSTOM_COLORS_LIST;
+
+
 enum CHANGED_COLOR
 {
     ALL_CHANGED,
@@ -48,8 +73,10 @@ public:
      * @param aCurrentColor is the current color, used to show it in dialog
      * @param aAllowOpacityControl = true to allow opacity (alpha channel) setting
      * false to not show this setting (opacity = 1.0 always)
+     * @param aUserColors: if not null is a list of defined colors replacing the dialog predefined colors
      */
-	DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor, bool aAllowOpacityControl );
+	DIALOG_COLOR_PICKER( wxWindow* aParent, KIGFX::COLOR4D& aCurrentColor,
+                         bool aAllowOpacityControl, CUSTOM_COLORS_LIST* aUserColors = nullptr );
 	~DIALOG_COLOR_PICKER();
 
 	KIGFX::COLOR4D GetColor() { return m_newColor4D; };
@@ -68,6 +95,8 @@ private:
                                         ///< false to keep alpha channel = 1.0
     KIGFX::COLOR4D m_previousColor4D;   ///< the inital color4d
     KIGFX::COLOR4D m_newColor4D;        ///< the current color4d
+    /// the list of color4d ordered by button ID, for predefined colors
+    std::vector<KIGFX::COLOR4D> m_Color4DList;
     int m_cursorsSize;
 
     wxPoint m_cursorBitmapRed;          ///< the red cursor on the RGB bitmap palette.
@@ -131,8 +160,10 @@ private:
     ///> called when creating the dialog
     bool TransferDataToWindow() override;
 
-    ///> creates the bitmap buttons for each defined colors
-    void initDefinedColors();
+    /** creates the bitmap buttons for each defined colors
+     * if aPredefinedColors is nullptr, a internal predefined list will be used
+     */
+    void initDefinedColors( CUSTOM_COLORS_LIST* aPredefinedColors );
 
     // convert double value 0 ... 1 to int 0 ... aValMax
     int normalizeToInt( double aValue, int aValMax = 255 )
