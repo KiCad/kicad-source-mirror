@@ -408,6 +408,36 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
 
 #endif
 
+wxString PyStringToWx( PyObject* aString )
+{
+    wxString    ret;
+
+    if( !aString )
+        return ret;
+
+    printf("PyStringToWx\n");
+#if PY_MAJOR_VERSION >= 3
+    const char* str_res = NULL;
+    PyObject* temp_bytes = PyUnicode_AsEncodedString( aString, "UTF-8", "strict" );
+    if ( temp_bytes != NULL )
+    {
+        str_res = PyBytes_AS_STRING( temp_bytes );
+        ret = FROM_UTF8( str_res );
+        Py_DECREF( temp_bytes );
+    }
+    else
+    {
+        wxLogMessage( "cannot encode unicode python string" );
+    }
+#else
+    const char* str_res = PyString_AsString( aString );
+    ret = FROM_UTF8( str_res );
+#endif
+
+    return ret;
+}
+
+
 wxArrayString PyArrayStringToWx( PyObject* aArrayString )
 {
     wxArrayString   ret;
@@ -429,9 +459,8 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
         if ( temp_bytes != NULL )
         {
             str_res = PyBytes_AS_STRING( temp_bytes );
-            str_res = strdup( str_res );
-            Py_DECREF( temp_bytes );
             ret.Add( FROM_UTF8( str_res ), 1 );
+            Py_DECREF( temp_bytes );
         }
         else
         {

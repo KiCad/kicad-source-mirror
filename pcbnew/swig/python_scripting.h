@@ -107,6 +107,7 @@ public:
 
 #endif
 
+wxString        PyStringToWx( PyObject* str );
 wxArrayString   PyArrayStringToWx( PyObject* arr );
 wxString        PyErrStringWithTraceback();
 

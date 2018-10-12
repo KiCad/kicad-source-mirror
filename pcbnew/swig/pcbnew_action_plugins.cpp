@@ -105,27 +105,8 @@ wxString PYTHON_ACTION_PLUGIN::CallRetStrMethod( const char* aMethod, PyObject* 
 
     PyObject* result = CallMethod( aMethod, aArglist );
 
-    if( result )
-    {
-#if PY_MAJOR_VERSION >= 3
-        const char* str_res = NULL;
-        PyObject* temp_bytes = PyUnicode_AsEncodedString( result, "UTF-8", "strict" );
-        if ( temp_bytes != NULL )
-        {
-            str_res = PyBytes_AS_STRING( temp_bytes );
-            str_res = strdup( str_res );
-            Py_DECREF( temp_bytes );
-        }
-        else
-        {
-            wxLogMessage( "cannot encode unicode python string" );
-        }
-#else
-        const char* str_res = PyString_AsString( result );
-#endif
-        ret = FROM_UTF8( str_res );
-        Py_DECREF( result );
-    }
+    ret = PyStringToWx( result );
+    Py_XDECREF( result );
 
     return ret;
 }
