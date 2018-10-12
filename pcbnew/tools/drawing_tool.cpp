@@ -1361,117 +1361,6 @@ bool DRAWING_TOOL::getSourceZoneForAction( ZONE_MODE aMode, ZONE_CONTAINER*& aZo
     return true;
 }
 
-
-void DRAWING_TOOL::runPolygonEventLoop( POLYGON_GEOM_MANAGER& polyGeomMgr )
-{
-    auto&   controls    = *getViewControls();
-    bool    started     = false;
-
-    GRID_HELPER grid( m_frame );
-    STATUS_TEXT_POPUP status( m_frame );
-    status.SetTextColor( wxColour( 255, 0, 0 ) );
-    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
-    m_controls->SetSnapping( true );
-
-    while( OPT_TOOL_EVENT evt = Wait() )
-    {
-        LSET layers( m_frame->GetActiveLayer() );
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
-
-        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
-        {
-            // pre-empted by another tool, give up
-            // cancelled without an inprogress polygon, give up
-            if( !polyGeomMgr.IsPolygonInProgress() || evt->IsActivate() )
-            {
-                break;
-            }
-
-            polyGeomMgr.Reset();
-            // start again
-            started = false;
-
-            controls.SetAutoPan( false );
-            controls.CaptureCursor( false );
-        }
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            m_menu.ShowContextMenu();
-        }
-        // events that lock in nodes
-        else if( evt->IsClick( BUT_LEFT )
-                 || evt->IsDblClick( BUT_LEFT )
-                 || evt->IsAction( &closeZoneOutline ) )
-        {
-            // Check if it is double click / closing line (so we have to finish the zone)
-            const bool endPolygon = evt->IsDblClick( BUT_LEFT )
-                                    || evt->IsAction( &closeZoneOutline )
-                                    || polyGeomMgr.NewPointClosesOutline( cursorPos );
-
-            if( endPolygon )
-            {
-                polyGeomMgr.SetFinished();
-                polyGeomMgr.Reset();
-
-                // ready to start again
-                started = false;
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-            }
-
-            // adding a corner
-            else if( polyGeomMgr.AddPoint( cursorPos ) )
-            {
-                if( !started )
-                {
-                    started = true;
-                    controls.SetAutoPan( true );
-                    controls.CaptureCursor( true );
-                }
-            }
-
-        }
-        else if( evt->IsAction( &deleteLastPoint ) )
-        {
-            polyGeomMgr.DeleteLastCorner();
-
-            if( !polyGeomMgr.IsPolygonInProgress() )
-            {
-                // report finished as an empty shape
-                polyGeomMgr.SetFinished();
-
-                // start again
-                started = false;
-                controls.SetAutoPan( false );
-                controls.CaptureCursor( false );
-            }
-        }
-        else if( polyGeomMgr.IsPolygonInProgress()
-                 && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
-        {
-            polyGeomMgr.SetCursorPosition( cursorPos, evt->Modifier( MD_CTRL )
-                                                      ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
-                                                      : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
-
-            if( polyGeomMgr.IsSelfIntersecting( true ) )
-            {
-                wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
-                status.Move( p );
-                status.Popup( m_frame );
-                status.Expire( 1500 );
-            }
-            else
-            {
-                status.Hide();
-            }
-        }
-    }    // end while
-}
-
-
 int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 {
     // get a source zone, if we need one. We need it for:
@@ -1506,12 +1395,118 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
     Activate();    // register for events
 
-    auto& controls = *getViewControls();
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
 
-    controls.ShowCursor( true );
-    controls.SetSnapping( true );
+    bool    started     = false;
+    GRID_HELPER grid( m_frame );
+    STATUS_TEXT_POPUP status( m_frame );
+    status.SetTextColor( wxColour( 255, 0, 0 ) );
+    status.SetText( _( "Self-intersecting polygons are not allowed" ) );
 
-    runPolygonEventLoop( polyGeomMgr );
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        LSET layers( m_frame->GetActiveLayer() );
+        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
+        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
+        m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
+
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        {
+            // pre-empted by another tool, give up
+            // cancelled without an inprogress polygon, give up
+            if( !polyGeomMgr.IsPolygonInProgress() || evt->IsActivate() )
+            {
+                break;
+            }
+
+            polyGeomMgr.Reset();
+            // start again
+            started = false;
+
+            m_controls->SetAutoPan( false );
+            m_controls->CaptureCursor( false );
+        }
+        else if( evt->IsAction( &PCB_ACTIONS::layerChanged ) )
+        {
+            if( aMode == ZONE_MODE::GRAPHIC_POLYGON )
+                params.m_layer = getDrawingLayer();
+            else if( aMode == ZONE_MODE::ADD || aMode == ZONE_MODE::CUTOUT )
+                params.m_layer = frame()->GetActiveLayer();
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu();
+        }
+        // events that lock in nodes
+        else if( evt->IsClick( BUT_LEFT )
+                 || evt->IsDblClick( BUT_LEFT )
+                 || evt->IsAction( &closeZoneOutline ) )
+        {
+            // Check if it is double click / closing line (so we have to finish the zone)
+            const bool endPolygon = evt->IsDblClick( BUT_LEFT )
+                                    || evt->IsAction( &closeZoneOutline )
+                                    || polyGeomMgr.NewPointClosesOutline( cursorPos );
+
+            if( endPolygon )
+            {
+                polyGeomMgr.SetFinished();
+                polyGeomMgr.Reset();
+
+                // ready to start again
+                started = false;
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+            }
+
+            // adding a corner
+            else if( polyGeomMgr.AddPoint( cursorPos ) )
+            {
+                if( !started )
+                {
+                    started = true;
+                    m_controls->SetAutoPan( true );
+                    m_controls->CaptureCursor( true );
+                }
+            }
+
+        }
+        else if( evt->IsAction( &deleteLastPoint ) )
+        {
+            polyGeomMgr.DeleteLastCorner();
+
+            if( !polyGeomMgr.IsPolygonInProgress() )
+            {
+                // report finished as an empty shape
+                polyGeomMgr.SetFinished();
+
+                // start again
+                started = false;
+                m_controls->SetAutoPan( false );
+                m_controls->CaptureCursor( false );
+            }
+        }
+        else if( polyGeomMgr.IsPolygonInProgress()
+                 && ( evt->IsMotion() || evt->IsDrag( BUT_LEFT ) ) )
+        {
+            polyGeomMgr.SetCursorPosition( cursorPos, evt->Modifier( MD_CTRL )
+                                                      ? POLYGON_GEOM_MANAGER::LEADER_MODE::DEG45
+                                                      : POLYGON_GEOM_MANAGER::LEADER_MODE::DIRECT );
+
+            if( polyGeomMgr.IsSelfIntersecting( true ) )
+            {
+                wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
+                status.Move( p );
+                status.Popup( m_frame );
+                status.Expire( 1500 );
+            }
+            else
+            {
+                status.Hide();
+            }
+        }
+    }    // end while
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->SetNoToolSelected();
