@@ -82,13 +82,8 @@ bool CN_CLUSTER::Contains( const CN_ITEM* aItem )
 
 bool CN_CLUSTER::Contains( const BOARD_CONNECTED_ITEM* aItem )
 {
-    for( auto item : m_items )
-    {
-        if( item->Valid() && item->Parent() == aItem )
-            return true;
-    }
-
-    return false;
+    return std::find_if( m_items.begin(), m_items.end(), [ &aItem ] ( const CN_ITEM* item )
+            { return item->Valid() && item->Parent() == aItem; } ) != m_items.end();
 }
 
 

@@ -27,6 +27,7 @@
 #endif
 
 #include <thread>
+#include <algorithm>
 
 #include <connectivity_data.h>
 #include <connectivity_algo.h>
@@ -237,34 +238,13 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_
     m_connAlgo->FindIsolatedCopperIslands( aZones );
 }
 
-int CONNECTIVITY_DATA::countRelevantItems( const std::vector<BOARD_ITEM*>& aItems )
-{
-    int n = 0;
-
-    for( const auto item : aItems )
-    {
-        switch( item->Type() )
-        {
-            case PCB_TRACE_T:
-            case PCB_PAD_T:
-            case PCB_ZONE_AREA_T:
-            case PCB_MODULE_T:
-            case PCB_VIA_T:
-                n++;
-                break;
-
-            default:
-                break;
-        }
-    }
-
-    return n;
-}
-
 
 void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems )
 {
-    if( countRelevantItems( aItems ) == 0 )
+    if( std::none_of( aItems.begin(), aItems.end(), []( const BOARD_ITEM* aItem )
+            { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
+                       aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_MODULE_T ||
+                       aItem->Type() == PCB_VIA_T ); } ) )
     {
         m_dynamicRatsnest.clear();
         return ;
