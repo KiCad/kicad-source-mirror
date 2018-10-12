@@ -121,6 +121,88 @@ void CN_ITEM::RemoveInvalidRefs()
 }
 
 
+CN_ITEM* CN_LIST::Add( D_PAD* pad )
+ {
+     auto item = new CN_ITEM( pad, false, 1 );
+     item->AddAnchor( pad->ShapePos() );
+     item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+
+     switch( pad->GetAttribute() )
+     {
+     case PAD_ATTRIB_SMD:
+     case PAD_ATTRIB_HOLE_NOT_PLATED:
+     case PAD_ATTRIB_CONN:
+     {
+         LSET lmsk = pad->GetLayerSet();
+
+         for( int i = 0; i <= MAX_CU_LAYERS; i++ )
+         {
+             if( lmsk[i] )
+             {
+                 item->SetLayer( i );
+                 break;
+             }
+         }
+         break;
+     }
+     default:
+         break;
+     }
+
+     addItemtoTree( item );
+     m_items.push_back( item );
+     SetDirty();
+     return item;
+ }
+
+ CN_ITEM* CN_LIST::Add( TRACK* track )
+ {
+     auto item = new CN_ITEM( track, true );
+     m_items.push_back( item );
+     item->AddAnchor( track->GetStart() );
+     item->AddAnchor( track->GetEnd() );
+     item->SetLayer( track->GetLayer() );
+     addItemtoTree( item );
+     SetDirty();
+     return item;
+ }
+
+ CN_ITEM* CN_LIST::Add( VIA* via )
+ {
+     auto item = new CN_ITEM( via, true, 1 );
+
+     m_items.push_back( item );
+     item->AddAnchor( via->GetStart() );
+     item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+     addItemtoTree( item );
+     SetDirty();
+     return item;
+ }
+
+ const std::vector<CN_ITEM*> CN_LIST::Add( ZONE_CONTAINER* zone )
+ {
+     const auto& polys = zone->GetFilledPolysList();
+
+     std::vector<CN_ITEM*> rv;
+
+     for( int j = 0; j < polys.OutlineCount(); j++ )
+     {
+         CN_ZONE* zitem = new CN_ZONE( zone, false, j );
+         const auto& outline = zone->GetFilledPolysList().COutline( j );
+
+         for( int k = 0; k < outline.PointCount(); k++ )
+             zitem->AddAnchor( outline.CPoint( k ) );
+
+         m_items.push_back( zitem );
+         zitem->SetLayer( zone->GetLayer() );
+         addItemtoTree( zitem );
+         rv.push_back( zitem );
+         SetDirty();
+     }
+
+     return rv;
+ }
+
 
 void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 {
@@ -140,7 +222,6 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 
     m_items.resize( lastItem - m_items.begin() );
 
-    // fixme: mem leaks
     for( auto item : m_items )
         item->RemoveInvalidRefs();
 

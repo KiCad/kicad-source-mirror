@@ -172,8 +172,8 @@ public:
 
 public:
 
-    CN_CONNECTIVITY_ALGO();
-    ~CN_CONNECTIVITY_ALGO();
+    CN_CONNECTIVITY_ALGO() {}
+    ~CN_CONNECTIVITY_ALGO() { Clear(); }
 
     bool ItemExists( const BOARD_CONNECTED_ITEM* aItem )
     {

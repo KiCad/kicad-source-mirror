@@ -34,31 +34,6 @@
 #endif
 
 
-using namespace std::placeholders;
-
-bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
-{
-    if( a->Pos().x == b->Pos().x )
-        return a->Pos().y < b->Pos().y;
-    else
-        return a->Pos().x < b->Pos().x;
-}
-
-
-
-
-
-CN_CONNECTIVITY_ALGO::CN_CONNECTIVITY_ALGO()
-{
-}
-
-
-CN_CONNECTIVITY_ALGO::~CN_CONNECTIVITY_ALGO()
-{
-    Clear();
-}
-
-
 bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
 {
     markItemNetAsDirty( aItem );

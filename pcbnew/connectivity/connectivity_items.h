@@ -427,7 +427,10 @@ public:
     CN_ITEM* operator[] ( int aIndex ) { return m_items[aIndex]; }
 
     template <class T>
-    void FindNearby( CN_ITEM *aItem, T aFunc );
+    void FindNearby( CN_ITEM *aItem, T aFunc )
+    {
+        m_index.Query( aItem->BBox(), aItem->Layers(), aFunc );
+    }
 
     void SetHasInvalid( bool aInvalid = true )
     {
@@ -467,94 +470,14 @@ public:
         return m_items.size();
     }
 
-    CN_ITEM* Add( D_PAD* pad )
-    {
-        auto item = new CN_ITEM( pad, false, 1 );
-        item->AddAnchor( pad->ShapePos() );
-        item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
+    CN_ITEM* Add( D_PAD* pad );
 
-        switch( pad->GetAttribute() )
-        {
-        case PAD_ATTRIB_SMD:
-        case PAD_ATTRIB_HOLE_NOT_PLATED:
-        case PAD_ATTRIB_CONN:
-        {
-            LSET lmsk = pad->GetLayerSet();
+    CN_ITEM* Add( TRACK* track );
 
-            for( int i = 0; i <= MAX_CU_LAYERS; i++ )
-            {
-                if( lmsk[i] )
-                {
-                    item->SetLayer( i );
-                    break;
-                }
-            }
-            break;
-        }
-        default:
-            break;
-        }
+    CN_ITEM* Add( VIA* via );
 
-        addItemtoTree( item );
-        m_items.push_back( item );
-        SetDirty();
-        return item;
-    }
-
-    CN_ITEM* Add( TRACK* track )
-    {
-        auto item = new CN_ITEM( track, true );
-        m_items.push_back( item );
-        item->AddAnchor( track->GetStart() );
-        item->AddAnchor( track->GetEnd() );
-        item->SetLayer( track->GetLayer() );
-        addItemtoTree( item );
-        SetDirty();
-        return item;
-    }
-
-    CN_ITEM* Add( VIA* via )
-    {
-        auto item = new CN_ITEM( via, true, 1 );
-
-        m_items.push_back( item );
-        item->AddAnchor( via->GetStart() );
-        item->SetLayers( LAYER_RANGE( F_Cu, B_Cu ) );
-        addItemtoTree( item );
-        SetDirty();
-        return item;
-    }
-
-    const std::vector<CN_ITEM*> Add( ZONE_CONTAINER* zone )
-    {
-        const auto& polys = zone->GetFilledPolysList();
-
-        std::vector<CN_ITEM*> rv;
-
-        for( int j = 0; j < polys.OutlineCount(); j++ )
-        {
-            CN_ZONE* zitem = new CN_ZONE( zone, false, j );
-            const auto& outline = zone->GetFilledPolysList().COutline( j );
-
-            for( int k = 0; k < outline.PointCount(); k++ )
-                zitem->AddAnchor( outline.CPoint( k ) );
-
-            m_items.push_back( zitem );
-            zitem->SetLayer( zone->GetLayer() );
-            addItemtoTree( zitem );
-            rv.push_back( zitem );
-            SetDirty();
-        }
-
-        return rv;
-    }
+    const std::vector<CN_ITEM*> Add( ZONE_CONTAINER* zone );
 };
-
-template <class T>
-void CN_LIST::FindNearby( CN_ITEM *aItem, T aFunc )
-{
-    m_index.Query( aItem->BBox(), aItem->Layers(), aFunc );
-}
 
 class CN_CLUSTER
 {
