@@ -328,6 +328,7 @@ private:
     bool                    isInitialized;              ///< Basic initialization flag, has to be done
                                                         ///< when the window is visible
     bool                    isGrouping;                 ///< Was a group started?
+    GLint                   ufm_worldPixelSize;
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
 
@@ -464,6 +465,8 @@ private:
         // Bigger arcs need smaller alpha increment to make them look smooth
         return std::min( 1e6 / aRadius, 2.0 * M_PI / CIRCLE_POINTS );
     }
+
+    double getWorldPixelSize() const;
 
     /**
      * @brief Basic OpenGL initialization.

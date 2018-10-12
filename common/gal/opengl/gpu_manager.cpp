@@ -287,6 +287,8 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
         m_shader->Deactivate();
     }
 
+    m_container->Clear();
+
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE",

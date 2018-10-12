@@ -30,20 +30,26 @@
 #ifndef VERTEX_COMMON_H_
 #define VERTEX_COMMON_H_
 
+#include <math/vector2d.h>
 #include <GL/glew.h>
 
 #include <cstddef>
 
 namespace KIGFX
 {
-///> Possible types of shaders
+///> Possible types of shaders (keep consistent with the actual shader source in gl_builtin_shaders.cpp)
 enum SHADER_MODE
 {
     SHADER_NONE = 0,
-    SHADER_LINE,
-    SHADER_FILLED_CIRCLE,
-    SHADER_STROKED_CIRCLE,
-    SHADER_FONT
+    SHADER_FILLED_CIRCLE = 2,
+    SHADER_STROKED_CIRCLE = 3,
+    SHADER_FONT = 4,
+    SHADER_LINE_A = 5,
+    SHADER_LINE_B = 6,
+    SHADER_LINE_C = 7,
+    SHADER_LINE_D = 8,
+    SHADER_LINE_E = 9,
+    SHADER_LINE_F = 10
 };
 
 ///> Data structure for vertices {X,Y,Z,R,G,B,A,shader&param}

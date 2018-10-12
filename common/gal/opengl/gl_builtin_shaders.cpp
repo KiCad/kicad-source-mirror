@@ -60,13 +60,18 @@ const char kicad_vertex_shader[] = R"SHADER_SOURCE(
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#version 120
+#version 130
 
 // Shader types
-const float SHADER_LINE                 = 1.0;
-const float SHADER_FILLED_CIRCLE        = 2.0;
-const float SHADER_STROKED_CIRCLE       = 3.0;
-const float SHADER_FONT                 = 4.0;
+const int SHADER_FILLED_CIRCLE        = 2;
+const int SHADER_STROKED_CIRCLE       = 3;
+const int SHADER_FONT                 = 4;
+const int SHADER_LINE_A                 = 5;
+const int SHADER_LINE_B                 = 6;
+const int SHADER_LINE_C                 = 7;
+const int SHADER_LINE_D                 = 8;
+const int SHADER_LINE_E                 = 9;
+const int SHADER_LINE_F                 = 10;
 
 // Minimum line width
 const float MIN_WIDTH = 1.0;
@@ -74,58 +79,84 @@ const float MIN_WIDTH = 1.0;
 attribute vec4 attrShaderParams;
 varying vec4 shaderParams;
 varying vec2 circleCoords;
+uniform float worldPixelSize;
 
-void main()
+void computeLineCoords( bool posture, vec2 offset, vec2 texcoord, vec2 dir )
 {
-    // Pass attributes to the fragment shader
-    shaderParams = attrShaderParams;
+    float w = length(offset);
 
-    if( shaderParams[0] == SHADER_LINE )
+    if( w > worldPixelSize )
     {
-        float lineWidth = shaderParams[3];
-        float worldScale = abs( gl_ModelViewMatrix[0][0] );
-
-        // Make lines appear to be at least 1 pixel wide
-        if( worldScale * lineWidth < MIN_WIDTH )
-            gl_Position = gl_ModelViewProjectionMatrix *
-                ( gl_Vertex + vec4( shaderParams.yz * MIN_WIDTH / ( worldScale * lineWidth ), 0.0, 0.0 ) );
-        else
-            gl_Position = gl_ModelViewProjectionMatrix *
-                ( gl_Vertex + vec4( shaderParams.yz, 0.0, 0.0 ) );
-    }
-    else if( ( shaderParams[0] == SHADER_STROKED_CIRCLE ) ||
-             ( shaderParams[0] == SHADER_FILLED_CIRCLE  ) )
-    {
-        // Compute relative circle coordinates basing on indices
-        // Circle
-        if( shaderParams[1] == 1.0 )
-            circleCoords = vec2( -sqrt( 3.0 ), -1.0 );
-        else if( shaderParams[1] == 2.0 )
-            circleCoords = vec2( sqrt( 3.0 ), -1.0 );
-        else if( shaderParams[1] == 3.0 )
-            circleCoords = vec2( 0.0, 2.0 );
-
-        // Semicircle
-        else if( shaderParams[1] == 4.0 )
-            circleCoords = vec2( -3.0 / sqrt( 3.0 ), 0.0 );
-        else if( shaderParams[1] == 5.0 )
-            circleCoords = vec2( 3.0 / sqrt( 3.0 ), 0.0 );
-        else if( shaderParams[1] == 6.0 )
-            circleCoords = vec2( 0.0, 2.0 );
-
-        // Make the line appear to be at least 1 pixel wide
-        float lineWidth = shaderParams[3];
-        float worldScale = abs( gl_ModelViewMatrix[0][0] );
-
-        if( worldScale * lineWidth < MIN_WIDTH )
-            shaderParams[3] = shaderParams[3] / ( worldScale * lineWidth );
-
-        gl_Position = ftransform();
+        gl_Position = gl_ModelViewProjectionMatrix * vec4( gl_Vertex.x + offset.x, gl_Vertex.y + offset.y, gl_Vertex.z, gl_Vertex.w );
+        shaderParams[0] = SHADER_LINE_A;
+        gl_TexCoord[0].st = texcoord;
     }
     else
     {
-        // Pass through the coordinates like in the fixed pipeline
-        gl_Position = ftransform();
+        vec4 pos = gl_Vertex;
+        pos.xy += (posture ? dir : dir.yx ) * worldPixelSize / 2.0;
+        gl_Position = gl_ModelViewProjectionMatrix * pos;
+        shaderParams[0] = SHADER_LINE_B;
+    }
+}
+
+
+void main()
+{
+    int mode = int( attrShaderParams[0] );
+
+    // Pass attributes to the fragment shader
+    shaderParams = attrShaderParams;
+
+    float aspect = shaderParams.y;
+    vec2 vs = shaderParams.zw;
+    vec2 vp = vec2(-vs.y, vs.x);
+    bool posture = abs( vs.x ) < abs(vs.y);
+
+    switch( mode )
+    {
+        case SHADER_LINE_A: computeLineCoords( posture, vp - vs, vec2( -aspect, -1 ), vec2(-1,0) ); break;
+        case SHADER_LINE_B: computeLineCoords( posture, -vp - vs, vec2( -aspect, 1 ), vec2(1,0) ); break;
+        case SHADER_LINE_C: computeLineCoords( posture, -vp + vs, vec2( aspect, 1 ), vec2(1,0) ); break;
+        case SHADER_LINE_D: computeLineCoords( posture, -vp + vs, vec2( -aspect, -1), vec2(1,0) ); break;
+        case SHADER_LINE_E: computeLineCoords( posture, vp + vs, vec2( -aspect, 1 ), vec2(-1,0) ); break;
+        case SHADER_LINE_F: computeLineCoords( posture, vp - vs, vec2( aspect, 1 ), vec2(-1,0) ); break;
+        case SHADER_STROKED_CIRCLE:
+        case SHADER_FILLED_CIRCLE:
+        {
+            // Compute relative circle coordinates basing on indices
+            // Circle
+            if( shaderParams[1] == 1.0 )
+                circleCoords = vec2( -sqrt( 3.0 ), -1.0 );
+            else if( shaderParams[1] == 2.0 )
+                circleCoords = vec2( sqrt( 3.0 ), -1.0 );
+            else if( shaderParams[1] == 3.0 )
+                circleCoords = vec2( 0.0, 2.0 );
+
+            // Semicircle
+            else if( shaderParams[1] == 4.0 )
+                circleCoords = vec2( -3.0 / sqrt( 3.0 ), 0.0 );
+            else if( shaderParams[1] == 5.0 )
+                circleCoords = vec2( 3.0 / sqrt( 3.0 ), 0.0 );
+            else if( shaderParams[1] == 6.0 )
+                circleCoords = vec2( 0.0, 2.0 );
+
+            // Make the line appear to be at least 1 pixel wide
+            float lineWidth = shaderParams[3];
+            float worldScale = abs( gl_ModelViewMatrix[0][0] );
+
+            if( worldScale * lineWidth < MIN_WIDTH )
+                shaderParams[3] = shaderParams[3] / ( worldScale * lineWidth );
+
+            gl_Position = ftransform();
+
+            break;
+        }
+        default:
+        {
+            gl_Position = ftransform();
+            break;
+        }
     }
 
     gl_FrontColor = gl_Color;
@@ -162,20 +193,22 @@ const char kicad_fragment_shader[] = R"SHADER_SOURCE(
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#version 120
+#version 130
 
 // Multi-channel signed distance field
 #define USE_MSDF
 
 // Shader types
-const float SHADER_LINE                 = 1.0;
 const float SHADER_FILLED_CIRCLE        = 2.0;
 const float SHADER_STROKED_CIRCLE       = 3.0;
 const float SHADER_FONT                 = 4.0;
+const float SHADER_LINE_A               = 5.0;
+const float SHADER_LINE_B               = 6.0;
 
 varying vec4 shaderParams;
 varying vec2 circleCoords;
 uniform sampler2D fontTexture;
+uniform float worldPixelSize;
 
 // Needed to reconstruct the mipmap level / texel derivative
 uniform int fontTextureWidth;
@@ -187,6 +220,36 @@ void filledCircle( vec2 aCoord )
     else
         discard;
 }
+
+float pixelSegDistance( vec2 aCoord )
+{
+    if (shaderParams[0] == SHADER_LINE_B)
+    {
+        gl_FragColor = gl_Color;
+        return 0.0;
+    }
+
+    float aspect = shaderParams[1];
+    float dist;
+    vec2 v = vec2( 1.0 - (aspect - abs(aCoord.s)), aCoord.t);
+
+    if( v.x <= 0.0 )
+    {
+        dist = abs(aCoord.t);
+    }
+    else
+    {
+        dist = length(v);
+    }
+
+    return dist;
+}
+
+int isPixelInSegment( vec2 aCoord )
+{
+    return pixelSegDistance(aCoord) <= 1.0 ? 1 : 0;
+}
+
 
 
 void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
@@ -202,6 +265,15 @@ void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
         discard;
 }
 
+
+void drawLine( vec2 aCoord )
+{
+    if( isPixelInSegment( aCoord ) != 0)
+        gl_FragColor = gl_Color;
+    else
+        discard;
+}
+
 #ifdef USE_MSDF
 float median( vec3 v )
 {
@@ -211,7 +283,11 @@ float median( vec3 v )
 
 void main()
 {
-    if( shaderParams[0] == SHADER_FILLED_CIRCLE )
+    if( shaderParams[0] == SHADER_LINE_A )
+    {
+        drawLine( gl_TexCoord[0].st );
+    }
+    else if( shaderParams[0] == SHADER_FILLED_CIRCLE )
     {
         filledCircle( circleCoords );
     }

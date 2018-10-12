@@ -107,6 +107,20 @@ public:
     bool Vertex( GLfloat aX, GLfloat aY, GLfloat aZ );
 
     /**
+     * Function Vertex()
+     * adds a vertex with the given coordinates to the currently set item. Vertex coordinates will
+     * have the current transformation matrix applied.
+     *
+     * @param aXY are the XY coordinates of the new vertex.
+     * @param aZ is the Z coordinate of the new vertex.
+     * @return True if successful, false otherwise.
+     */
+    bool Vertex( const VECTOR2D& aXY, GLfloat aZ )
+    {
+        return Vertex( aXY.x, aXY.y, aZ );
+    }
+
+    /**
      * Function Vertices()
      * adds one or more vertices to the currently set item. It takes advantage of allocating memory
      * in advance, so should be faster than adding vertices one by one. Color & shader
@@ -163,10 +177,10 @@ public:
      * @param aParam2 is the optional parameter for a shader.
      * @param aParam3 is the optional parameter for a shader.
      */
-    inline void Shader( GLfloat aShaderType, GLfloat aParam1 = 0.0f,
+    inline void Shader( int aShaderType, GLfloat aParam1 = 0.0f,
                         GLfloat aParam2 = 0.0f, GLfloat aParam3 = 0.0f )
     {
-        m_shader[0] = aShaderType;
+        m_shader[0] = (float) aShaderType;
         m_shader[1] = aParam1;
         m_shader[2] = aParam2;
         m_shader[3] = aParam3;
