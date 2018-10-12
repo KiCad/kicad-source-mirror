@@ -409,12 +409,11 @@ void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
+
     galOpts.NotifyChanged();
 
-    auto canvas =  GetCanvas();
-
-    canvas->CrossHairOff( );
-    canvas->CrossHairOn( );
+    // make sure the cursor is redrawn
+    GetCanvas()->Refresh();
 }
 
 
