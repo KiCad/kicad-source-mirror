@@ -215,18 +215,22 @@ wxPanel* DIALOG_CHOOSE_COMPONENT::ConstructRightPanel( wxWindow* aParent )
     {
         FOOTPRINT_LIST* fp_list = FOOTPRINT_LIST::GetInstance( Kiway() );
 
-        if( m_allow_field_edits )
-            m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
-
-        m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
-
-
         sizer->Add( m_symbol_preview, 1, wxEXPAND | wxTOP | wxBOTTOM | wxRIGHT, 5 );
+
+        if ( fp_list )
+        {
+
+            if( m_allow_field_edits )
+                m_fp_sel_ctrl = new FOOTPRINT_SELECT_WIDGET( panel, fp_list, true );
+
+            m_fp_preview = new FOOTPRINT_PREVIEW_WIDGET( panel, Kiway() );
+        }
 
         if( m_fp_sel_ctrl )
             sizer->Add( m_fp_sel_ctrl, 0, wxEXPAND | wxBOTTOM | wxTOP | wxRIGHT, 5 );
 
-        sizer->Add( m_fp_preview, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
+        if( m_fp_preview )
+            sizer->Add( m_fp_preview, 1, wxEXPAND | wxBOTTOM | wxRIGHT, 5 );
     }
     else
     {
