@@ -86,8 +86,6 @@ public:
         return m_pos;
     }
 
-    bool IsDirty() const;
-
     /// Returns tag, common identifier for connected nodes
     inline int GetTag() const
     {
@@ -737,9 +735,6 @@ public:
 
         m_itemMap[ brditem ] = ITEM_MAP_ENTRY( item );
     }
-
-    bool addConnectedItem( BOARD_CONNECTED_ITEM* aItem );
-    bool isDirty() const;
 
     void markItemNetAsDirty( const BOARD_ITEM* aItem );
 

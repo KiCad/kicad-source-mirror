@@ -45,12 +45,6 @@ bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b )
 }
 
 
-bool CN_ANCHOR::IsDirty() const
-{
-    return m_item->Dirty();
-}
-
-
 CN_CLUSTER::CN_CLUSTER()
 {
     m_items.reserve( 64 );
@@ -425,12 +419,6 @@ void CN_LIST::RemoveInvalidItems( std::vector<CN_ITEM*>& aGarbage )
 }
 
 
-bool CN_CONNECTIVITY_ALGO::isDirty() const
-{
-    return m_itemList.IsDirty();
-}
-
-
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
     constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_MODULE_T, EOT };
@@ -452,7 +440,7 @@ const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUST
     CN_ITEM* head = nullptr;
     CLUSTERS clusters;
 
-    if( isDirty() )
+    if( m_itemList.IsDirty() )
         searchConnections();
 
     auto addToSearchList = [&head, withinAnyNet, aSingleNet, aTypes] ( CN_ITEM *aItem )
