@@ -182,6 +182,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     {
         m_view->UpdateItems();
 
+        KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
+
         m_gal->BeginDrawing();
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetGridColor( settings->GetGridColor() );

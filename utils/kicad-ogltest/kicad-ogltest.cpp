@@ -132,6 +132,8 @@ bool OGLTEST_APP::OnInit()
         printf( "INFO: Found OpenGL version %ld.%ld\n", major, minor );
     }
 
+    KIGFX::GAL_CONTEXT_LOCKER locker( canvas );
+
     canvas->BeginDrawing();
     printf( "INFO: Successfully called OPENGL_GAL::BeginDrawing\n" );
     canvas->EndDrawing();

@@ -328,9 +328,14 @@ private:
     bool                    isInitialized;              ///< Basic initialization flag, has to be done
                                                         ///< when the window is visible
     bool                    isGrouping;                 ///< Was a group started?
+    bool                    isContextLocked;            ///< Used for assertion checking
     GLint                   ufm_worldPixelSize;
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
+
+    void lockContext();
+
+    void unlockContext();
 
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;

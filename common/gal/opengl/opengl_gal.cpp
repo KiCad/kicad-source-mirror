@@ -337,7 +337,8 @@ void OPENGL_GAL::BeginDrawing()
     if( !isInitialized )
         init();
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
+    wxASSERT_MSG( isContextLocked, "You must create a local GAL_CONTEXT_LOCKER instance "
+                                   "before calling GAL::BeginDrawing()." );
 
     // Set up the view port
     glMatrixMode( GL_PROJECTION );
@@ -348,18 +349,10 @@ void OPENGL_GAL::BeginDrawing()
 
     if( !isFramebufferInitialized )
     {
-        try
-        {
-            // Prepare rendering target buffers
-            compositor->Initialize();
-            mainBuffer = compositor->CreateBuffer();
-            overlayBuffer = compositor->CreateBuffer();
-        }
-        catch( std::runtime_error& )
-        {
-            GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
-            throw;      // DRAW_PANEL_GAL will handle it
-        }
+        // Prepare rendering target buffers
+        compositor->Initialize();
+        mainBuffer = compositor->CreateBuffer();
+        overlayBuffer = compositor->CreateBuffer();
 
         isFramebufferInitialized = true;
     }
@@ -470,6 +463,8 @@ void OPENGL_GAL::BeginDrawing()
 
 void OPENGL_GAL::EndDrawing()
 {
+    wxASSERT_MSG( isContextLocked, "What happened to the context lock?" );
+
 #ifdef __WXDEBUG__
     PROF_COUNTER totalRealTime( "OPENGL_GAL::EndDrawing()", true );
 #endif /* __WXDEBUG__ */
@@ -493,12 +488,25 @@ void OPENGL_GAL::EndDrawing()
     blitCursor();
 
     SwapBuffers();
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
     wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
+}
+
+
+void OPENGL_GAL::lockContext()
+{
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
+    isContextLocked = true;
+}
+
+
+void OPENGL_GAL::unlockContext()
+{
+    isContextLocked = false;
+    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
 
@@ -1953,59 +1961,51 @@ void OPENGL_GAL::init()
 {
     wxASSERT( IsShownOnScreen() );
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
+    GAL_CONTEXT_LOCKER locker( this );
 
     GLenum err = glewInit();
 
-    try
-    {
-        if( GLEW_OK != err )
-            throw std::runtime_error( (const char*) glewGetErrorString( err ) );
+    if( GLEW_OK != err )
+        throw std::runtime_error( (const char*) glewGetErrorString( err ) );
 
-        // Check the OpenGL version (minimum 2.1 is required)
-        if( !GLEW_VERSION_2_1 )
-            throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
+    // Check the OpenGL version (minimum 2.1 is required)
+    if( !GLEW_VERSION_2_1 )
+        throw std::runtime_error( "OpenGL 2.1 or higher is required!" );
 
 #if defined (__LINUX__)      // calling enableGlDebug crashes opengl on some OS (OSX and some Windows)
 #ifdef DEBUG
-        if( GLEW_ARB_debug_output )
-            enableGlDebug( true );
+    if( GLEW_ARB_debug_output )
+        enableGlDebug( true );
 #endif
 #endif
 
-        // Framebuffers have to be supported
-        if( !GLEW_EXT_framebuffer_object )
-            throw std::runtime_error( "Framebuffer objects are not supported!" );
+    // Framebuffers have to be supported
+    if( !GLEW_EXT_framebuffer_object )
+        throw std::runtime_error( "Framebuffer objects are not supported!" );
 
-        // Vertex buffer has to be supported
-        if( !GLEW_ARB_vertex_buffer_object )
-            throw std::runtime_error( "Vertex buffer objects are not supported!" );
+    // Vertex buffer has to be supported
+    if( !GLEW_ARB_vertex_buffer_object )
+        throw std::runtime_error( "Vertex buffer objects are not supported!" );
 
-        // Prepare shaders
-        if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX, BUILTIN_SHADERS::kicad_vertex_shader ) )
-            throw std::runtime_error( "Cannot compile vertex shader!" );
+    // Prepare shaders
+    if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_VERTEX, BUILTIN_SHADERS::kicad_vertex_shader ) )
+        throw std::runtime_error( "Cannot compile vertex shader!" );
 
-        if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::kicad_fragment_shader ) )
-            throw std::runtime_error( "Cannot compile fragment shader!" );
+    if( !shader->IsLinked() && !shader->LoadShaderFromStrings( SHADER_TYPE_FRAGMENT, BUILTIN_SHADERS::kicad_fragment_shader ) )
+        throw std::runtime_error( "Cannot compile fragment shader!" );
 
-        if( !shader->IsLinked() && !shader->Link() )
-            throw std::runtime_error( "Cannot link the shaders!" );
+    if( !shader->IsLinked() && !shader->Link() )
+        throw std::runtime_error( "Cannot link the shaders!" );
 
-        // Check if video card supports textures big enough to fit the font atlas
-        int maxTextureSize;
-        glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
+    // Check if video card supports textures big enough to fit the font atlas
+    int maxTextureSize;
+    glGetIntegerv( GL_MAX_TEXTURE_SIZE, &maxTextureSize );
 
-        if( maxTextureSize < (int) font_image.width || maxTextureSize < (int)font_image.height )
-        {
-            // TODO implement software texture scaling
-            // for bitmap fonts and use a higher resolution texture?
-            throw std::runtime_error( "Requested texture size is not supported" );
-        }
-    }
-    catch( std::runtime_error& )
+    if( maxTextureSize < (int) font_image.width || maxTextureSize < (int)font_image.height )
     {
-        GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
-        throw;
+        // TODO implement software texture scaling
+        // for bitmap fonts and use a higher resolution texture?
+        throw std::runtime_error( "Requested texture size is not supported" );
     }
 
     cachedManager = new VERTEX_MANAGER( true );
@@ -2017,7 +2017,6 @@ void OPENGL_GAL::init()
     nonCachedManager->SetShader( *shader );
     overlayManager->SetShader( *shader );
 
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
     isInitialized = true;
 }
 

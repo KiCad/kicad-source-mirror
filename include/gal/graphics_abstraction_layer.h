@@ -56,8 +56,10 @@ namespace KIGFX
  * for drawing purposes these are transformed to screen units with this layer. So zooming is handled here as well.
  *
  */
-class GAL: GAL_DISPLAY_OPTIONS_OBSERVER
+class GAL : GAL_DISPLAY_OPTIONS_OBSERVER
 {
+    friend class GAL_CONTEXT_LOCKER;
+
 public:
     // Constructor / Destructor
     GAL( GAL_DISPLAY_OPTIONS& aOptions );
@@ -1058,6 +1060,10 @@ protected:
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;
 
+    virtual void lockContext() {}
+
+    virtual void unlockContext() {}
+
     /// Compute the scaling factor for the world->screen matrix
     inline void computeWorldScale()
     {
@@ -1121,6 +1127,27 @@ private:
         bool                m_mirrored;
     } textProperties;
 };
-}    // namespace KIGFX
+
+
+class GAL_CONTEXT_LOCKER
+{
+public:
+    GAL_CONTEXT_LOCKER( GAL* aGal ) :
+        m_gal( aGal )
+    {
+        m_gal->lockContext();
+    }
+
+    ~GAL_CONTEXT_LOCKER()
+    {
+        m_gal->unlockContext();
+    }
+
+private:
+    GAL* m_gal;
+};
+
+
+};    // namespace KIGFX
 
 #endif /* GRAPHICSABSTRACTIONLAYER_H_ */

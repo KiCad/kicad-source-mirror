@@ -51,7 +51,44 @@ int checkGlError( const std::string& aInfo, bool aThrow )
             break;
 
         case GL_INVALID_FRAMEBUFFER_OPERATION:
-            errorMsg = wxString::Format( "Error: %s: invalid framebuffer operation", aInfo );
+        {
+            GLenum status = glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT );
+
+            if( status != GL_FRAMEBUFFER_COMPLETE_EXT )
+            {
+                switch( status )
+                {
+                case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+                    errorMsg = "The framebuffer attachment points are incomplete.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT:
+                    errorMsg = "No images attached to the framebuffer.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT:
+                    errorMsg = "The framebuffer does not have at least one image attached to it.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT:
+                    errorMsg = "The framebuffer read buffer is incomplete.";
+                    break;
+                case GL_FRAMEBUFFER_UNSUPPORTED_EXT:
+                    errorMsg = "The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE_EXT:
+                    errorMsg = "GL_RENDERBUFFER_SAMPLES is not the same for all attached renderbuffers.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS_EXT:
+                    errorMsg = "Framebuffer incomplete layer targets errors.";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+                    errorMsg = "Framebuffer attachments have different dimensions";
+                    break;
+                default:
+                    errorMsg = "Unknown incomplete framebufer error";
+                }
+            }
+            else
+                errorMsg = wxString::Format( "Error: %s: invalid framebuffer operation", aInfo );
+        }
             break;
 
         case GL_OUT_OF_MEMORY:
