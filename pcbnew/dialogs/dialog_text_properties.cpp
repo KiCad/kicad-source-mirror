@@ -235,7 +235,11 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
     if( m_SingleLineText->IsShown() )
     {
         m_SingleLineText->SetValue( m_edaText->GetText() );
-        m_SingleLineText->SetSelection( -1, -1 );
+
+        if( m_modText && m_modText->GetType() == TEXTE_MODULE::TEXT_is_REFERENCE )
+            SelectReferenceNumber( static_cast<wxTextEntry*>( m_SingleLineText ) );
+        else
+            m_SingleLineText->SetSelection( -1, -1 );
     }
     else if( m_MultiLineText->IsShown() )
     {

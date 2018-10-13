@@ -814,26 +814,37 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
     // from an OK.
     if( m_delayedFocusRow >= 0 )
     {
+        // We will re-enter this routine if an error dialog is displayed, so make sure we
+        // zero out our member variables first.
+        wxGrid*  grid = m_delayedFocusGrid;
+        int      row = m_delayedFocusRow;
+        int      col = m_delayedFocusColumn;
+        wxString msg = m_delayedErrorMessage;
+
+        m_delayedFocusGrid = nullptr;
+        m_delayedFocusRow = -1;
+        m_delayedFocusColumn = -1;
+        m_delayedErrorMessage = wxEmptyString;
+
         if( !m_delayedErrorMessage.IsEmpty() )
         {
-            // We will re-enter this routine when the error dialog is displayed, so make
-            // sure we don't keep putting up more dialogs.
-            wxString msg = m_delayedErrorMessage;
-            m_delayedErrorMessage = wxEmptyString;
-
             // Do not use DisplayErrorMessage(); it screws up window order on Mac
             DisplayError( nullptr, msg );
         }
 
-        m_delayedFocusGrid->SetFocus();
-        m_delayedFocusGrid->MakeCellVisible( m_delayedFocusRow, m_delayedFocusColumn );
-        m_delayedFocusGrid->SetGridCursor( m_delayedFocusRow, m_delayedFocusColumn );
+        grid->SetFocus();
+        grid->MakeCellVisible( row, col );
+        grid->SetGridCursor( row, col );
 
-        m_delayedFocusGrid->EnableCellEditControl( true );
-        m_delayedFocusGrid->ShowCellEditControl();
+        grid->EnableCellEditControl( true );
+        grid->ShowCellEditControl();
 
-        m_delayedFocusRow = -1;
-        m_delayedFocusColumn = -1;
+        if( grid == m_itemsGrid && row == 0 && col == 0 )
+        {
+            auto referenceEditor = grid->GetCellEditor( 0, 0 );
+            SelectReferenceNumber( dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) );
+            referenceEditor->DecRef();
+        }
     }
 }
 

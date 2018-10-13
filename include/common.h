@@ -214,6 +214,11 @@ wxSize GetTextSize( const wxString& aSingleLine, wxWindow* aWindow );
 bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString = NULL );
 
 /**
+ * Select the number (or "?") in a reference for ease of editing.
+ */
+void SelectReferenceNumber( wxTextEntry* aTextEntry );
+
+/**
  * Run a command in a child process.
  *
  * @param aCommandLine The process and any arguments to it all in a single

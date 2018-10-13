@@ -152,33 +152,9 @@ void DIALOG_EDIT_ONE_FIELD::OnTextValueSelectButtonClick( wxCommandEvent& aEvent
 void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 {
     if( m_fieldId == REFERENCE )
-    {
-        if( m_text.find_first_of( '?' ) != m_text.npos )
-        {
-            m_TextValue->SetSelection( m_text.find_first_of( '?' ), m_text.find_last_of( '?' ) + 1 );
-        }
-        else
-        {
-            wxString num = m_text;
-
-            while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
-            {
-                if( !isdigit( num.Last() ) )
-                    num.RemoveLast();
-                if( !isdigit( num.GetChar ( 0 ) ) )
-                    num = num.Right( num.Length() - 1);
-            }
-
-            m_TextValue->SetSelection( m_text.Find( num ), m_text.Find( num ) + num.Length() );
-
-            if( num.IsEmpty() )
-                m_TextValue->SetSelection( -1, -1 );
-        }
-    }
+        SelectReferenceNumber( static_cast<wxTextEntry*>( m_TextValue ) );
     else
-    {
         m_TextValue->SetSelection( -1, -1 );
-    }
 
     event.Skip();
 }

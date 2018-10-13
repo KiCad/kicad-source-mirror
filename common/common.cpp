@@ -127,6 +127,34 @@ bool EnsureTextCtrlWidth( wxTextCtrl* aCtrl, const wxString* aString )
 }
 
 
+void SelectReferenceNumber( wxTextEntry* aTextEntry )
+{
+    wxString ref = aTextEntry->GetValue();
+
+    if( ref.find_first_of( '?' ) != ref.npos )
+    {
+        aTextEntry->SetSelection( ref.find_first_of( '?' ), ref.find_last_of( '?' ) + 1 );
+    }
+    else
+    {
+        wxString num = ref;
+
+        while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
+        {
+            if( !isdigit( num.Last() ) )
+                num.RemoveLast();
+            if( !isdigit( num.GetChar ( 0 ) ) )
+                num = num.Right( num.Length() - 1);
+        }
+
+        aTextEntry->SetSelection( ref.Find( num ), ref.Find( num ) + num.Length() );
+
+        if( num.IsEmpty() )
+            aTextEntry->SetSelection( -1, -1 );
+    }
+}
+
+
 void wxStringSplit( const wxString& aText, wxArrayString& aStrings, wxChar aSplitter )
 {
     wxString tmp;
