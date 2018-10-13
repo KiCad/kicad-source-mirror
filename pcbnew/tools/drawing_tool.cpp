@@ -33,6 +33,7 @@
 #include <pcbnew_id.h>
 #include <confirm.h>
 #include <import_dxf/dialog_dxf_import.h>
+#include <import_gfx/dialog_import_gfx.h>
 
 #include <view/view_group.h>
 #include <view/view_controls.h>
@@ -738,26 +739,29 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     if( !m_frame->GetModel() )
         return 0;
 
-    DIALOG_DXF_IMPORT dlg( m_frame );
+    //DIALOG_DXF_IMPORT dlg( m_frame );
+    DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
     int dlgResult = dlg.ShowModal();
 
-    const std::list<BOARD_ITEM*>& list = dlg.GetImportedItems();
+    /*const std::list<BOARD_ITEM*>*/auto& list = dlg.GetImportedItems();
 
     if( dlgResult != wxID_OK || list.empty() )
         return 0;
-
-    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
-    VECTOR2I    delta = cursorPos - list.front()->GetPosition();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
-    for( auto item : list )
+    //for( auto item : list )
+    for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
     {
-        assert( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
+        EDA_ITEM* item = it->get();
+
+        wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
+
         preview.Add( item );
+        it->release();
     }
 
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( preview.Front() );
@@ -771,8 +775,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
 
     // Now move the new items to the current cursor position:
-    cursorPos = m_controls->GetCursorPosition();
-    delta = cursorPos - firstItem->GetPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I delta = cursorPos - firstItem->GetPosition();
 
     for( auto item : preview )
         static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
@@ -895,7 +899,8 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     }
 
                     default:
-                        assert( false );
+                        wxASSERT_MSG( false,
+                                      wxString::Format( "item type %d not allowed", item->Type() ) );
                         break;
                     }
 

@@ -181,10 +181,24 @@ if( KICAD_SCRIPTING AND KICAD_SCRIPTING_ACTION_MENU )
         )
 endif()
 
+if( 1)
 set( PCBNEW_IMPORT_DXF
     import_dxf/dialog_dxf_import.cpp
     import_dxf/dialog_dxf_import_base.cpp
     import_dxf/dxf2brd_items.cpp
+    )
+endif()
+
+set( PCBNEW_IMPORT_GFX
+    import_gfx/dialog_import_gfx_base.cpp
+    import_gfx/dialog_import_gfx.cpp
+    import_gfx/graphics_import_mgr.cpp
+    import_gfx/graphics_importer.cpp
+    import_gfx/graphics_importer_pcbnew.cpp
+    import_gfx/graphics_importer_buffer.cpp
+    import_gfx/dxf_import_plugin.cpp
+    import_gfx/svg_import_plugin.cpp
+    import_gfx/nanosvg.cpp
     )
 
 set( PCBNEW_EXPORTERS
@@ -209,6 +223,7 @@ set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DIALOGS}
     ${PCBNEW_EXPORTERS}
     ${PCBNEW_IMPORT_DXF}
+    ${PCBNEW_IMPORT_GFX}
 
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
@@ -653,6 +668,7 @@ endif ()
 
 set( PCBNEW_KIFACE_LIBRARIES
     3d-viewer
+    connectivity
     pcbcommon
     pnsrouter
     pcad2kicadpcb
@@ -663,7 +679,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     gal
     lib_dxf
     idf3
-    connectivity
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
