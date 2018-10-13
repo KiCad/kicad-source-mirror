@@ -91,6 +91,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     setDefaultLayerDeps();
 
     view()->UpdateAllLayersOrder();
+
     // View controls is the first in the event handler chain, so the Tool Framework operates
     // on updated viewport data.
     m_viewControls = new KIGFX::WX_VIEW_CONTROLS( m_view, this );
@@ -241,7 +242,7 @@ void SCH_DRAW_PANEL::SetEnableZoomNoCenter( bool aEnable )
 void SCH_DRAW_PANEL::setDefaultLayerDeps()
 {
     // caching makes no sense for Cairo and other software renderers
-    auto target = KIGFX::TARGET_NONCACHED; //m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
