@@ -322,7 +322,7 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 double OPENGL_GAL::getWorldPixelSize() const
 {
     auto matrix = GetScreenWorldMatrix();
-    return std::min(std::abs(matrix.GetScale().x), std::abs(matrix.GetScale().y ) );
+    return std::min( std::abs( matrix.GetScale().x ), std::abs( matrix.GetScale().y ) );
 }
 
 void OPENGL_GAL::BeginDrawing()
@@ -1160,7 +1160,7 @@ void OPENGL_GAL::DrawGrid()
     compositor->SetBuffer( mainBuffer );
 
     // sub-pixel lines all render the same
-    double minorLineWidth = std::max(1.0, gridLineWidth) * getWorldPixelSize();
+    double minorLineWidth = std::max( 1.0, gridLineWidth ) * getWorldPixelSize();
     double majorLineWidth = minorLineWidth * 2.0;
 
     // Draw the axis and grid
@@ -1222,7 +1222,7 @@ void OPENGL_GAL::DrawGrid()
         glStencilFunc( GL_ALWAYS, 1, 1 );
         glStencilOp( GL_KEEP, GL_KEEP, GL_INCR );
         glColor4d( 0.0, 0.0, 0.0, 0.0 );
-        SetStrokeColor( COLOR4D(0.0, 0.0, 0.0, 0.0 ) );
+        SetStrokeColor( COLOR4D( 0.0, 0.0, 0.0, 0.0 ) );
     }
     else
     {
@@ -1316,7 +1316,7 @@ void OPENGL_GAL::DrawGrid()
                 || gridScreenSizeDense > gridThreshold )
             {
                 VECTOR2D a ( x, gridStartY * gridSize.y + gridOrigin.y );
-                VECTOR2D b ( x,  gridEndY * gridSize.y + gridOrigin.y );
+                VECTOR2D b ( x, gridEndY * gridSize.y + gridOrigin.y );
                 DrawLine( a, b );
             }
         }

@@ -34,6 +34,7 @@
 #include <cassert>
 
 #include <gal/opengl/shader.h>
+#include <vector>
 
 using namespace KIGFX;
 
@@ -258,7 +259,19 @@ bool SHADER::loadShaderFromStringArray( SHADER_TYPE aShaderType, const char** aA
     if( status != GL_TRUE )
     {
         shaderInfo( shaderNumber );
-        throw std::runtime_error( "Shader compilation error" );
+
+        GLint maxLength = 0;
+        glGetShaderiv( shaderNumber, GL_INFO_LOG_LENGTH, &maxLength );
+
+        // The maxLength includes the NULL character
+        std::vector<GLchar> errorLog( (size_t) maxLength );
+        glGetShaderInfoLog( shaderNumber, maxLength, &maxLength, &errorLog[0] );
+
+        // Provide the infolog in whatever manor you deem best.
+        // Exit with failure.
+        glDeleteShader( shaderNumber ); // Don't leak the shader.
+
+        throw std::runtime_error( &errorLog[0] );
     }
 
     glAttachShader( programNumber, shaderNumber );
