@@ -246,6 +246,8 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
     for( auto& item : aComp->GetDrawItems() )
         visitItem( item, true );
 
+    m_gal->AdvanceDepth();
+
     for( auto& item : aComp->GetDrawItems() )
         visitItem( item, false );
 }
