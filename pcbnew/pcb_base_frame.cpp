@@ -88,6 +88,7 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnToggleEdgeDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnToggleTextDrawMode )
 
+    EVT_UPDATE_UI( ID_H_TOOLBAR, PCB_BASE_FRAME::OnUpdateToolbars )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnUpdateGraphicDrawMode )
@@ -108,10 +109,10 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
         long aStyle, const wxString & aFrameName ) :
     EDA_DRAW_FRAME( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName ),
-    m_configSettings( aFrameType )
+    m_Pcb( nullptr ),
+    m_configSettings( aFrameType ),
+    m_toolbarsDirty( false )
 {
-    m_Pcb                 = NULL;
-
     m_UserGridSize        = wxPoint( (int) 10 * IU_PER_MILS, (int) 10 * IU_PER_MILS );
     m_Collector           = new GENERAL_COLLECTOR();
 
@@ -477,10 +478,7 @@ void PCB_BASE_FRAME::ShowChangedLanguage()
     EDA_DRAW_FRAME::ShowChangedLanguage();
 
     // tooltips in toolbars
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    m_toolbarsDirty = true;
 
     // status bar
     UpdateMsgPanel();
@@ -1064,10 +1062,7 @@ void PCB_BASE_FRAME::CommonSettingsChanged()
 {
     EDA_DRAW_FRAME::CommonSettingsChanged();
 
-    ReCreateHToolbar();
-    ReCreateAuxiliaryToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
+    m_toolbarsDirty = true;
 
     EDA_3D_VIEWER* viewer = Get3DViewerFrame();
 
@@ -1076,6 +1071,20 @@ void PCB_BASE_FRAME::CommonSettingsChanged()
         bool option;
         Pgm().CommonSettings()->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option );
         viewer->GetSettings().SetFlag( FL_MOUSEWHEEL_PANNING, option );
+    }
+}
+
+
+void PCB_BASE_FRAME::OnUpdateToolbars( wxUpdateUIEvent& aEvent )
+{
+    if( m_toolbarsDirty )
+    {
+        ReCreateHToolbar();
+        ReCreateAuxiliaryToolbar();
+        ReCreateVToolbar();
+        ReCreateOptToolbar();
+
+        m_toolbarsDirty = false;
     }
 }
 

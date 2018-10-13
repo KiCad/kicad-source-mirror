@@ -74,9 +74,11 @@ public:
     int m_FastGrid2;                // 2nd fast grid setting (index in EDA_DRAW_FRAME::m_gridSelectBox)
 
 protected:
-    BOARD*              m_Pcb;
-    GENERAL_COLLECTOR*  m_Collector;
+    BOARD*               m_Pcb;
+    GENERAL_COLLECTOR*   m_Collector;
+
     PCB_GENERAL_SETTINGS m_configSettings;
+    bool                 m_toolbarsDirty;
 
     void updateGridSelectBox();
     void updateZoomSelectBox();
@@ -582,6 +584,8 @@ public:
     void OnToggleTextDrawMode( wxCommandEvent& aEvent );
 
     virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
+
+    void OnUpdateToolbars( wxUpdateUIEvent& aEvent );
 
     // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
