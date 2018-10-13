@@ -233,7 +233,7 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                             i < dirtyItems.size();
                             i = nextItem.fetch_add( 1 ) )
                 {
-                    CN_VISITOR visitor( dirtyItems[i], &m_listLock );
+                    CN_VISITOR visitor( dirtyItems[i] );
                     m_itemList.FindNearby( dirtyItems[i], visitor );
 
                     if( m_progressReporter )
@@ -597,8 +597,8 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
             ( aItem->Parent()->Type() == PCB_TRACE_T &&
               zoneItem->ContainsPoint( aItem->GetAnchor( 1 ) ) ) )
     {
-        std::lock_guard<std::mutex> lock( *m_listLock );
-        CN_ITEM::Connect( zoneItem, aItem );
+        zoneItem->Connect( aItem );
+        aItem->Connect( zoneItem );
     }
 }
 
@@ -622,8 +622,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     {
         if( aZoneB->ContainsPoint( outline.CPoint( i ) ) )
         {
-            std::lock_guard<std::mutex> lock( *m_listLock );
-            CN_ITEM::Connect( aZoneA, aZoneB );
+            aZoneA->Connect( aZoneB );
+            aZoneB->Connect( aZoneA );
             return;
         }
     }
@@ -634,8 +634,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     {
         if( aZoneA->ContainsPoint( outline2.CPoint( i ) ) )
         {
-            std::lock_guard<std::mutex> lock( *m_listLock );
-            CN_ITEM::Connect( aZoneA, aZoneB );
+            aZoneA->Connect( aZoneB );
+            aZoneB->Connect( aZoneA );
             return;
         }
     }
@@ -693,8 +693,8 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
             ( parentA->Type() == PCB_TRACE_T && parentB->HitTest( ptA2 ) ) ||
             ( parentB->Type() == PCB_TRACE_T && parentA->HitTest( ptB2 ) ) )
     {
-        std::lock_guard<std::mutex> lock( *m_listLock );
-        CN_ITEM::Connect( m_item, aCandidate );
+        m_item->Connect( aCandidate );
+        aCandidate->Connect( m_item );
     }
 
     return true;

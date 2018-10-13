@@ -171,6 +171,9 @@ private:
     ///> valid flag, used to identify garbage items (we use lazy removal)
     bool m_valid;
 
+    ///> mutex protecting this item's connected_items set to allow parallel connection threads
+    std::mutex m_listLock;
+
 protected:
     ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
@@ -267,17 +270,6 @@ public:
         return Layers().Start();
     }
 
-    /**
-     * Function LayersOverlap()
-     *
-     * Returns true if the set of layers spanned by aOther overlaps our
-     * layers.
-     */
-    bool LayersOverlap( const CN_ITEM* aOther ) const
-    {
-        return Layers().Overlaps( aOther->Layers() );
-    }
-
     const BOX2I& BBox()
     {
         if( m_dirty && m_valid )
@@ -318,15 +310,10 @@ public:
         return m_canChangeNet;
     }
 
-    bool isConnected( CN_ITEM* aItem ) const
+    void Connect( CN_ITEM* b )
     {
-        return ( m_connected.find( aItem ) != m_connected.end() );
-    }
-
-    static void Connect( CN_ITEM* a, CN_ITEM* b )
-    {
-        a->m_connected.insert( b );
-        b->m_connected.insert( a );
+        std::lock_guard<std::mutex> lock( m_listLock );
+        m_connected.insert( b );
     }
 
     void RemoveInvalidRefs();

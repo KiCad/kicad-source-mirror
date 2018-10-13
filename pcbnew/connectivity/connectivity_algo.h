@@ -115,7 +115,7 @@ private:
 
     class ITEM_MAP_ENTRY
     {
-public:
+    public:
         ITEM_MAP_ENTRY( CN_ITEM* aItem = nullptr )
         {
             if( aItem )
@@ -143,10 +143,7 @@ public:
         std::list<CN_ITEM*> m_items;
     };
 
-    std::mutex m_listLock;
     CN_LIST m_itemList;
-
-    using ITEM_MAP_PAIR = std::pair <const BOARD_CONNECTED_ITEM*, ITEM_MAP_ENTRY>;
 
     std::unordered_map<const BOARD_CONNECTED_ITEM*, ITEM_MAP_ENTRY> m_itemMap;
 
@@ -252,9 +249,6 @@ public:
 
 };
 
-bool operator<( const CN_ANCHOR_PTR& a, const CN_ANCHOR_PTR& b );
-
-
 /**
  * Struct CN_VISTOR
  **/
@@ -262,9 +256,8 @@ class CN_VISITOR {
 
 public:
 
-    CN_VISITOR( CN_ITEM* aItem, std::mutex* aListLock ) :
-        m_item( aItem ),
-        m_listLock( aListLock )
+    CN_VISITOR( CN_ITEM* aItem ) :
+        m_item( aItem )
     {}
 
     bool operator()( CN_ITEM* aCandidate );
@@ -277,10 +270,6 @@ protected:
 
     ///> the item we are looking for connections to
     CN_ITEM* m_item;
-
-    ///> the mutex protecting our connection list
-    std::mutex* m_listLock;
-
 };
 
 #endif
