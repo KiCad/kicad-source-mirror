@@ -55,7 +55,6 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
 
 static wxPoint OldPos;
-//static wxPoint PinPreviousPos;
 static ELECTRICAL_PINTYPE LastPinType   = PIN_INPUT;
 static int     LastPinOrient        = PIN_RIGHT;
 static GRAPHIC_PINSHAPE LastPinShape = PINSHAPE_LINE;
@@ -149,7 +148,7 @@ static void AbortPinMove( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     LIB_EDIT_FRAME* parent = (LIB_EDIT_FRAME*) aPanel->GetParent();
     auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
 
-    
+
     if( parent == NULL )
         return;
 
@@ -164,10 +163,10 @@ static void AbortPinMove( EDA_DRAW_PANEL* aPanel, wxDC* DC )
         delete pin;
     else
         parent->RestoreComponent();
-    
+
     panel->GetView()->ClearPreview();
     panel->GetView()->ClearHiddenFlags();
-        
+
     // clear edit flags
     parent->SetDrawItem( NULL );
     parent->SetLastDrawItem( NULL );
@@ -304,12 +303,8 @@ void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
 
     cur_pin->SetFlags( IS_LINKED | IS_MOVED );
 
-    //PinPreviousPos = OldPos = cur_pin->GetPosition();
     startPos.x = OldPos.x;
     startPos.y = -OldPos.y;
-
-    SetCrossHairPosition( startPos );
-    m_canvas->MoveCursorToCrossHair();
 
     MSG_PANEL_ITEMS items;
 
@@ -334,11 +329,11 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( cur_pin == NULL || cur_pin->Type() != LIB_PIN_T )
         return;
 
-    
+
     DBG(printf("DrawMovePin\n");)
 
     auto p =  aPanel->GetParent()->GetCrossHairPosition( true );
-    
+
     // Redraw pin in new position
     cur_pin->Move(p);
 
@@ -386,7 +381,6 @@ void LIB_EDIT_FRAME::CreatePin( wxDC* DC )
     pin->SetConvert( LastPinCommonConvert ? 0 : m_convert );
     pin->SetUnit( LastPinCommonUnit ? 0 : m_unit );
     pin->SetVisible( LastPinVisible );
-    //PinPreviousPos = pin->GetPosition();
     m_canvas->SetIgnoreMouseEvents( true );
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetId( ID_LIBEDIT_EDIT_PIN );
