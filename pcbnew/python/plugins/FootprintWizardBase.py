@@ -136,7 +136,7 @@ class FootprintWizard(pcbnew.FootprintWizardPlugin):
         self.module.SetValue(self.GetValue())
         self.module.SetReference("%s**" % self.GetReferencePrefix())
 
-        fpid = pcbnew.LIB_ID(self.module.GetValue())  # the name in library
+        fpid = pcbnew.LIB_ID("", self.module.GetValue())  # the lib name  (empty) and the name in library
         self.module.SetFPID(fpid)
 
         self.SetModule3DModel()  # add a 3D module if specified
