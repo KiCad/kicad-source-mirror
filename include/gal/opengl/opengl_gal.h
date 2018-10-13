@@ -333,9 +333,9 @@ private:
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
 
-    void lockContext();
+    void lockContext() override;
 
-    void unlockContext();
+    void unlockContext() override;
 
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;
