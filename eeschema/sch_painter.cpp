@@ -862,7 +862,9 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 {
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_JUNCTION );
 
-    if( aJct->IsMoving() )
+    if( aJct->GetState( BRIGHTENED ) )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+    else if( aJct->IsMoving() )
         color = selectedBrightening( color );
 
     m_gal->SetIsStroke(true);
@@ -959,6 +961,8 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
     }
 
+    if( aText->GetState( BRIGHTENED ) )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
     if( aText->IsMoving() )
         color = selectedBrightening( color );
 
@@ -1159,6 +1163,8 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
     int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
+    if( aLabel->GetState( BRIGHTENED ) )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
     if( aLabel->IsMoving() )
         color = selectedBrightening( color );
 
@@ -1185,6 +1191,8 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
     int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
+    if( aLabel->GetState( BRIGHTENED ) )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
     if( aLabel->IsMoving() )
         color = selectedBrightening( color );
 
