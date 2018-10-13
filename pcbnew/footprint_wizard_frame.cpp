@@ -214,7 +214,10 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     // Give a min size to the parameters
     m_auimgr.GetPane( m_parametersPanel ).MinSize( wxSize( 360, 180 ) );
 
-    m_auimgr.LoadPerspective( m_auiPerspective );
+    // DO  NOT use m_auimgr.LoadPerspective( m_auiPerspective ) here.
+    // It creates issues when items managed by m_auimgr are modified over the time or
+    // Kicad versions (some are not displayed)
+
     // Ensure the draw panel is shown, regardless the perspective config:
     m_auimgr.GetPane( wxT( "DrawFrame" ) ).Show( true );
 
