@@ -108,7 +108,7 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
 
 void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
 {
-    //wxWindowUpdateLocker dummy( this );
+    wxWindowUpdateLocker dummy( this );
     wxStaticText* text;
 
     if( !m_auxiliaryToolBar )

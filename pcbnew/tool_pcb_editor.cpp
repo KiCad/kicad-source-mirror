@@ -234,7 +234,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 {
     wxString msg;
 
-    //wxWindowUpdateLocker dummy( this );
+    wxWindowUpdateLocker dummy( this );
 
     if( m_mainToolBar )
         m_mainToolBar->Clear();
@@ -337,7 +337,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
 
 void PCB_EDIT_FRAME::ReCreateOptToolbar()
 {
-    //wxWindowUpdateLocker dummy( this );
+    wxWindowUpdateLocker dummy( this );
 
     if( m_optionsToolBar )
         m_optionsToolBar->Clear();
@@ -425,7 +425,7 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
 void PCB_EDIT_FRAME::ReCreateVToolbar()
 {
-    //wxWindowUpdateLocker dummy( this );
+    wxWindowUpdateLocker dummy( this );
 
     if( m_drawToolBar )
         m_drawToolBar->Clear();
@@ -516,7 +516,7 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
  */
 void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 {
-    //wxWindowUpdateLocker dummy(this);
+    wxWindowUpdateLocker dummy(this);
 
     if( m_microWaveToolBar )
         m_microWaveToolBar->Clear();
@@ -559,7 +559,7 @@ void PCB_EDIT_FRAME::ReCreateMicrowaveVToolbar()
 
 void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 {
-    //wxWindowUpdateLocker dummy( this );
+    wxWindowUpdateLocker dummy( this );
 
     if( m_auxiliaryToolBar )
     {
