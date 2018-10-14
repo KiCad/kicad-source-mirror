@@ -293,7 +293,7 @@ BOARD* EAGLE_PLUGIN::Load( const wxString& aFileName, BOARD* aAppendToMe,  const
 
     centerBoard();
 
-    deleter.reset();
+    deleter.release();
     return m_board;
 }
 
