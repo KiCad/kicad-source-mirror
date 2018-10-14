@@ -557,12 +557,13 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     m_gal->SetFontItalic( false );
 
     const int radius = ExternalPinDecoSize( *aPin );
+    const int diam = radius*2;
     const int clock_size = InternalPinDecoSize( *aPin );
 
 	if( shape == PINSHAPE_INVERTED )
 	{
 		m_gal->DrawCircle( p0 + dir * radius, radius );
-		m_gal->DrawLine( p0 + dir * ( 2 * radius ), pos );
+		m_gal->DrawLine( p0 + dir * ( diam ), pos );
 	}
 	else if( shape == PINSHAPE_FALLING_EDGE_CLOCK )
     {
@@ -599,24 +600,24 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
     {
         if(!dir.y)
         {
-            triLine( p0 + VECTOR2D(dir.x, 0) * radius * 2,
-                     p0 + VECTOR2D(dir.x, -1) * radius * 2,
+            triLine( p0 + VECTOR2D(dir.x, 0) * diam,
+                     p0 + VECTOR2D(dir.x, -1) * diam,
                      p0 );
         }
         else    /* MapX1 = 0 */
         {
-            triLine( p0 + VECTOR2D( 0, dir.y) * radius * 2,
-                     p0 + VECTOR2D(-1, dir.y) * radius * 2,
+            triLine( p0 + VECTOR2D( 0, dir.y) * diam,
+                     p0 + VECTOR2D(-1, dir.y) * diam,
                      p0 );
         }
     }
 
     if( shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
     {
-        if( !dir.y )
-            m_gal->DrawLine( p0 - VECTOR2D( 0, radius ), p0 + VECTOR2D( dir.x, 1 ) * radius * 2 );
-        else
-            m_gal->DrawLine( p0 - VECTOR2D( radius, 0 ), p0 + VECTOR2D( 0, dir.y ) * radius * 2 );
+        if( !dir.y )    // Horizontal pin
+            m_gal->DrawLine( p0 - VECTOR2D( 0, diam ), p0 + VECTOR2D( dir.x, 0 ) * diam );
+        else            // Vertical pin
+            m_gal->DrawLine( p0 - VECTOR2D( diam, 0 ), p0 + VECTOR2D( 0, dir.y ) * diam );
     }
 
     if( shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
