@@ -70,7 +70,9 @@ bool SCH_EDIT_FRAME::HighlightConnectionAtPosition( wxPoint aPosition )
     SendCrossProbeNetName( m_SelectedNetName );
     SetStatusText( "selected net: " + m_SelectedNetName );
     SetCurrentSheetHighlightFlags();
+    // Be sure hightlight change will be redrawn in any case
     GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_CACHED );
 
     return buildNetlistOk;
 }
