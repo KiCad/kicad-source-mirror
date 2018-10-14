@@ -79,6 +79,12 @@ public:
      */
     virtual void SetShader( SHADER& aShader );
 
+    /**
+     * Function EnableDepthTest()
+     * Enables/disables Z buffer depth test.
+     */
+    void EnableDepthTest( bool aEnabled );
+
 protected:
     GPU_MANAGER( VERTEX_CONTAINER* aContainer );
 
@@ -93,6 +99,9 @@ protected:
 
     ///> Location of shader attributes (for glVertexAttribPointer)
     int m_shaderAttrib;
+
+    ///> true: enable Z test when drawing
+    bool m_enableDepthTest;
 };
 
 

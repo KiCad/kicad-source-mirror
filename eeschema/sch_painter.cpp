@@ -144,8 +144,6 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
 
     m_schSettings.ImportLegacyColors( nullptr );
 
-    m_gal->EnableDepthTest( false );
-
 	switch( item->Type() )
 	{
 	HANDLE_ITEM(LIB_ALIAS_T, LIB_ALIAS);
@@ -1078,6 +1076,8 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     // oriented/translated.
     std::vector<SCH_FIELD*> fields;
     aComp->GetFields( fields, false );
+
+    m_gal->AdvanceDepth();
 
     for( SCH_FIELD* field : fields )
     {

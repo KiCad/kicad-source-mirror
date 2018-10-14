@@ -222,6 +222,9 @@ void SCH_VIEW::Redraw()
         ( *i )->items->Query( rect, visitor );
     }
 
+
+    m_gal->EnableDepthTest( false );
+
     VIEW::Redraw();
 }
 

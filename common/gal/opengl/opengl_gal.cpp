@@ -1159,6 +1159,8 @@ void OPENGL_GAL::DrawGrid()
     SetTarget( TARGET_NONCACHED );
     compositor->SetBuffer( mainBuffer );
 
+    nonCachedManager->EnableDepthTest( false );
+
     // sub-pixel lines all render the same
     double minorLineWidth = std::max( 1.0, gridLineWidth ) * getWorldPixelSize();
     double majorLineWidth = minorLineWidth * 2.0;
@@ -2072,10 +2074,7 @@ static void InitTesselatorCallbacks( GLUtesselator* aTesselator )
 
 void OPENGL_GAL::EnableDepthTest( bool aEnabled )
 {
-    if( aEnabled )
-        glEnable( GL_DEPTH_TEST );
-    else
-    {
-        glDisable( GL_DEPTH_TEST );
-    }
+    cachedManager->EnableDepthTest( aEnabled );
+    nonCachedManager->EnableDepthTest( aEnabled );
+    overlayManager->EnableDepthTest( aEnabled );
 }

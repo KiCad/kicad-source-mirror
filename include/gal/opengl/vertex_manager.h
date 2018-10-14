@@ -349,6 +349,12 @@ public:
      */
     void EndDrawing() const;
 
+    /**
+     * Function EnableDepthTest()
+     * Enables/disables Z buffer depth test.
+     */
+    void EnableDepthTest( bool aEnabled );
+
 protected:
     /**
      * Function putVertex()

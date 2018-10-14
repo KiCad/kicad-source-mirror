@@ -284,3 +284,8 @@ void VERTEX_MANAGER::putVertex( VERTEX& aTarget, GLfloat aX, GLfloat aY, GLfloat
         aTarget.shader[j] = m_shader[j];
     }
 }
+
+void VERTEX_MANAGER::EnableDepthTest( bool aEnabled )
+{
+    m_gpu->EnableDepthTest( aEnabled );
+}

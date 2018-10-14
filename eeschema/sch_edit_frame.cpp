@@ -1427,6 +1427,9 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen( bool aRedraw )
     }
 
     item->ClearFlags();
+
+    GetCanvas()->GetView()->Update( item );
+
     screen->SetModify();
     screen->SetCurItem( NULL );
     m_canvas->SetMouseCapture( NULL, NULL );

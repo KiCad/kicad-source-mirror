@@ -49,7 +49,7 @@ GPU_MANAGER* GPU_MANAGER::MakeManager( VERTEX_CONTAINER* aContainer )
 
 
 GPU_MANAGER::GPU_MANAGER( VERTEX_CONTAINER* aContainer ) :
-    m_isDrawing( false ), m_container( aContainer ), m_shader( NULL ), m_shaderAttrib( 0 )
+    m_isDrawing( false ), m_container( aContainer ), m_shader( NULL ), m_shaderAttrib( 0 ), m_enableDepthTest( true )
 {
 }
 
@@ -154,6 +154,11 @@ void GPU_CACHED_MANAGER::EndDrawing()
         return;
     }
 
+    if( m_enableDepthTest )
+        glEnable( GL_DEPTH_TEST );
+    else
+        glDisable( GL_DEPTH_TEST );
+
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
@@ -254,6 +259,11 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     GLfloat* coordinates    = (GLfloat*) ( vertices );
     GLubyte* colors         = (GLubyte*) ( vertices ) + COLOR_OFFSET;
 
+    if( m_enableDepthTest )
+        glEnable( GL_DEPTH_TEST );
+    else
+        glDisable( GL_DEPTH_TEST );
+
     // Prepare buffers
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_COLOR_ARRAY );
@@ -294,4 +304,9 @@ void GPU_NONCACHED_MANAGER::EndDrawing()
     wxLogTrace( "GAL_PROFILE",
                 wxT( "GPU_NONCACHED_MANAGER::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
+}
+
+void GPU_MANAGER::EnableDepthTest( bool aEnabled )
+{
+    m_enableDepthTest = aEnabled;
 }
