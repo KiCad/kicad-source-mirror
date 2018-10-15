@@ -1272,12 +1272,13 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
     dlg->Close();
     dlg->Destroy();
 
-#ifdef __WXMAC__
-    // If something edited, push a refresh request
     if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_OK )
+    {
+#ifdef __WXMAC__
+        // If something edited, push a refresh request
         m_canvas->Refresh();
 #endif
-
+    }
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_EDIT_BOARD_FOOTPRINT )
     {
         FOOTPRINT_EDIT_FRAME* editor = (FOOTPRINT_EDIT_FRAME*) Kiway().Player( FRAME_PCB_MODULE_EDITOR, true );
