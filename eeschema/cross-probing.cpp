@@ -42,6 +42,7 @@
 #include <lib_pin.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <sch_view.h>
 
 
 /**
@@ -81,7 +82,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
             SetStatusText( _( "Selected net: " ) + m_SelectedNetName );
             SetCurrentSheetHighlightFlags();
-            m_canvas->Refresh();
+            // Be sure hightlight change will be redrawn in any case
+            GetGalCanvas()->GetView()->RecacheAllItems();
+            GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
         }
 
         return;
