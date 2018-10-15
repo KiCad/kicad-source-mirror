@@ -286,9 +286,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
         if( module )
         {
-            wxString fpID = module->GetFPID().GetUniStringLibId();
-
-            if( !WildCompareString( m_footprintFilter->GetValue(), fpID, false ) )
+            if( !WildCompareString( m_footprintFilter->GetValue(), module->GetReference(), false ) )
                 return;
         }
     }

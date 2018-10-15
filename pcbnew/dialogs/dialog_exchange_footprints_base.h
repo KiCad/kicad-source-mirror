@@ -49,10 +49,8 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_mainSizer;
 		wxGridBagSizer* m_upperSizer;
 		wxRadioButton* m_matchAll;
-		wxRadioButton* m_matchCurrentRef;
 		wxRadioButton* m_matchSpecifiedRef;
 		wxTextCtrl* m_specifiedRef;
-		wxRadioButton* m_matchCurrentValue;
 		wxRadioButton* m_matchSpecifiedValue;
 		wxTextCtrl* m_specifiedValue;
 		wxRadioButton* m_matchSpecifiedID;

@@ -1216,11 +1216,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU_PCB_UPDATE_FOOTPRINTS:
-        InstallExchangeModuleFrame( (MODULE*) nullptr, true );
+        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true );
         break;
 
     case ID_MENU_PCB_EXCHANGE_FOOTPRINTS:
-        InstallExchangeModuleFrame( (MODULE*) nullptr, false );
+        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false );
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:

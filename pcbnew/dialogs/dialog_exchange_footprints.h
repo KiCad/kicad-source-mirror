@@ -31,6 +31,7 @@
 
 class PCB_EDIT_FRAME;
 class MODULE;
+class LIB_ID;
 
 class DIALOG_EXCHANGE_FOOTPRINTS : public DIALOG_EXCHANGE_FOOTPRINTS_BASE
 {
@@ -39,10 +40,6 @@ private:
     PCB_EDIT_FRAME* m_parent;
     MODULE*         m_currentModule;
     bool            m_updateMode;
-    static          int m_matchModeForUpdate;           // remember last match-mode
-    static          int m_matchModeForExchange;         // remember last match-mode
-    static          int m_matchModeForUpdateSelected;   // remember last match-mode
-    static          int m_matchModeForExchangeSelected; // remember last match-mode
 
 public:
     DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode );
@@ -56,13 +53,11 @@ private:
     void OnApplyClicked( wxCommandEvent& event ) override;
     void ViewAndSelectFootprint( wxCommandEvent& event ) override;
 
-    int getMatchMode();
     void setMatchMode( int aMatchMode );
 
     wxRadioButton* getRadioButtonForMode();
 
     bool isMatch( MODULE* );
-    bool processCurrentModule();
     bool processMatchingModules();
     bool processModule( MODULE* aModule, const LIB_ID& aNewFPID );
 };
