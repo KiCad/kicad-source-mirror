@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -21,10 +21,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
-#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -44,7 +44,8 @@ class WX_GRID;
 #define ID_NOTEBOOK 1000
 #define ID_MODULE_PROPERTIES_UPDATE 1001
 #define ID_MODULE_PROPERTIES_EXCHANGE 1002
-#define ID_GOTO_MODULE_EDITOR 1003
+#define ID_EDIT_FOOTPRINT 1003
+#define ID_EDIT_LIBRARY_FOOTPRINT 1004
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
@@ -86,6 +87,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		wxButton* m_buttonUpdate;
 		wxButton* m_buttonExchange;
 		wxButton* m_buttonModuleEditor;
+		wxButton* m_button5;
 		wxRadioBox* m_AttributsCtrl;
 		wxPanel* m_PanelClearances;
 		wxStaticText* m_staticTextInfo;
@@ -130,7 +132,8 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnOtherOrientation( wxKeyEvent& event ) { event.Skip(); }
 		virtual void UpdateModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExchangeModule( wxCommandEvent& event ) { event.Skip(); }
-		virtual void GotoModuleEditor( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }
+		virtual void EditLibraryFootprint( wxCommandEvent& event ) { event.Skip(); }
 		virtual void On3DModelCellChanged( wxGridEvent& event ) { event.Skip(); }
 		virtual void On3DModelSelected( wxGridEvent& event ) { event.Skip(); }
 		virtual void OnAdd3DRow( wxCommandEvent& event ) { event.Skip(); }

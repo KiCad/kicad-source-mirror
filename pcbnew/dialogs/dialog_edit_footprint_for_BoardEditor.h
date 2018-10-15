@@ -30,9 +30,13 @@
 #include <dialog_edit_footprint_for_BoardEditor_base.h>
 #include <wx/valnum.h>
 #include <text_mod_grid_table.h>
+#include <class_module.h>
 #include <widgets/unit_binder.h>
 
+
+class PCB_EDIT_FRAME;
 class PANEL_PREV_3D;
+
 
 class DIALOG_FOOTPRINT_BOARD_EDITOR: public DIALOG_FOOTPRINT_BOARD_EDITOR_BASE
 {
@@ -71,7 +75,8 @@ public:
         PRM_EDITOR_WANT_UPDATE_FP,
         PRM_EDITOR_WANT_EXCHANGE_FP,
         PRM_EDITOR_EDIT_OK,
-        PRM_EDITOR_WANT_MODEDIT
+        PRM_EDITOR_EDIT_BOARD_FOOTPRINT,
+        PRM_EDITOR_EDIT_LIBRARY_FOOTPRINT
     };
 
 public:
@@ -91,7 +96,8 @@ private:
     void OnRemove3DModel( wxCommandEvent&  ) override;
     void OnAdd3DModel( wxCommandEvent&  ) override;
     void OnAdd3DRow( wxCommandEvent&  ) override;
-    void GotoModuleEditor( wxCommandEvent&  ) override;
+    void EditFootprint( wxCommandEvent&  ) override;
+    void EditLibraryFootprint( wxCommandEvent&  ) override;
     void UpdateModule( wxCommandEvent&  ) override;
     void ExchangeModule( wxCommandEvent&  ) override;
     void ModuleOrientEvent( wxCommandEvent&  ) override;

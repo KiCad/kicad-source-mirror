@@ -177,13 +177,55 @@ BOARD_ITEM* FOOTPRINT_EDIT_FRAME::ModeditLocateAndDisplay( int aHotKeyCode )
 
 void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 {
-    if( ! Load_Module_From_BOARD( NULL ) )
+    Load_Module_From_BOARD( NULL );
+}
+
+
+void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
+{
+    MODULE* module = LoadFootprint( aFPID );
+
+    if( !module )
         return;
 
-    GetScreen()->ClearUndoRedoList();
-    GetScreen()->ClrModify();
+    if( !Clear_Pcb( true ) )
+        return;
+
+    SetCrossHairPosition( wxPoint( 0, 0 ) );
+    AddModuleToBoard( module );
+
+    if( GetBoard()->m_Modules )
+    {
+        GetBoard()->m_Modules->ClearFlags();
+
+        // if either m_Reference or m_Value are gone, reinstall them -
+        // otherwise you cannot see what you are doing on board
+        TEXTE_MODULE* ref = &GetBoard()->m_Modules->Reference();
+        TEXTE_MODULE* val = &GetBoard()->m_Modules->Value();
+
+        if( val && ref )
+        {
+            ref->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );    // just in case ...
+
+            if( ref->GetLength() == 0 )
+                ref->SetText( wxT( "Ref**" ) );
+
+            val->SetType( TEXTE_MODULE::TEXT_is_VALUE );        // just in case ...
+
+            if( val->GetLength() == 0 )
+                val->SetText( wxT( "Val**" ) );
+        }
+    }
+
+    Zoom_Automatique( false );
 
     Update3DView();
+
+    GetScreen()->ClrModify();
+
+    updateView();
+    m_canvas->Refresh();
+    m_treePane->GetLibTree()->Refresh();
 }
 
 
@@ -536,52 +578,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MODEDIT_EDIT_MODULE:
-    {
-        LIB_ID partId = m_treePane->GetLibTree()->GetSelectedLibId();
-        MODULE* module = LoadFootprint( partId );
-
-        if( !module )
-            break;
-
-        if( !Clear_Pcb( true ) )
-            break;
-
-        SetCrossHairPosition( wxPoint( 0, 0 ) );
-        AddModuleToBoard( module );
-
-        if( GetBoard()->m_Modules )
-        {
-            GetBoard()->m_Modules->ClearFlags();
-
-            // if either m_Reference or m_Value are gone, reinstall them -
-            // otherwise you cannot see what you are doing on board
-            TEXTE_MODULE* ref = &GetBoard()->m_Modules->Reference();
-            TEXTE_MODULE* val = &GetBoard()->m_Modules->Value();
-
-            if( val && ref )
-            {
-                ref->SetType( TEXTE_MODULE::TEXT_is_REFERENCE );    // just in case ...
-
-                if( ref->GetLength() == 0 )
-                    ref->SetText( wxT( "Ref**" ) );
-
-                val->SetType( TEXTE_MODULE::TEXT_is_VALUE );        // just in case ...
-
-                if( val->GetLength() == 0 )
-                    val->SetText( wxT( "Val**" ) );
-            }
-        }
-
-        Zoom_Automatique( false );
-
-        Update3DView();
-
-        GetScreen()->ClrModify();
-
-        updateView();
-        m_canvas->Refresh();
-        m_treePane->GetLibTree()->Refresh();
-    }
+        LoadModuleFromLibrary( m_treePane->GetLibTree()->GetSelectedLibId() );
         break;
 
     case ID_MODEDIT_PAD_SETTINGS:

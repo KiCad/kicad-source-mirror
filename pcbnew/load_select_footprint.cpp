@@ -102,7 +102,7 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
         if( ! frame->GetBoard() || ! frame->GetBoard()->m_Modules )
             return false;
 
-        aModule = SelectFootprintFromBoard( frame->GetBoard());
+        aModule = SelectFootprintFromBoard( frame->GetBoard() );
     }
 
     if( aModule == NULL )
@@ -148,6 +148,8 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
+
+    Update3DView();
 
     if( IsGalCanvasActive() )
         updateView();

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -81,7 +81,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bButtonSize;
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpAdd = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bpAdd->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
@@ -89,7 +89,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW|0 );
+	m_bpDelete = new wxBitmapButton( sbSizerTexts->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
 	m_bpDelete->SetMinSize( wxSize( 30,29 ) );
 	
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT|wxLEFT, 5 );
@@ -257,8 +257,14 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_buttonExchange = new wxButton( m_PanelGeneral, ID_MODULE_PROPERTIES_EXCHANGE, _("Change Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonExchange, 0, wxEXPAND|wxALL, 5 );
 	
-	m_buttonModuleEditor = new wxButton( m_PanelGeneral, ID_GOTO_MODULE_EDITOR, _("Footprint Editor..."), wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonModuleEditor = new wxButton( m_PanelGeneral, ID_EDIT_FOOTPRINT, _("Edit Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bButtonsSizer->Add( m_buttonModuleEditor, 0, wxEXPAND|wxALL, 5 );
+	
+	
+	bButtonsSizer->Add( 0, 15, 1, wxEXPAND, 5 );
+	
+	m_button5 = new wxButton( m_PanelGeneral, ID_EDIT_LIBRARY_FOOTPRINT, _("Edit Library Footprint..."), wxDefaultPosition, wxDefaultSize, 0 );
+	bButtonsSizer->Add( m_button5, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	bSizerRight->Add( bButtonsSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -440,12 +446,12 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	wxBoxSizer* bSizer3DButtons;
 	bSizer3DButtons = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_buttonAdd->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer3DButtons->Add( m_buttonAdd, 0, wxTOP, 5 );
 	
-	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_buttonBrowse->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALL, 5 );
@@ -453,7 +459,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	
 	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
+	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), 0 );
 	m_buttonRemove->SetMinSize( wxSize( 30,29 ) );
 	
 	bSizer3DButtons->Add( m_buttonRemove, 0, wxTOP|wxLEFT, 5 );
@@ -537,7 +543,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_OrientValueCtrl->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
 	m_buttonUpdate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
-	m_buttonModuleEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
+	m_buttonModuleEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditFootprint ), NULL, this );
+	m_button5->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditLibraryFootprint ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Connect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::On3DModelSelected ), NULL, this );
 	m_buttonAdd->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DRow ), NULL, this );
@@ -562,7 +569,8 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::~DIALOG_FOOTPRINT_BOARD_EDITOR_BASE()
 	m_OrientValueCtrl->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
 	m_buttonUpdate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
-	m_buttonModuleEditor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::GotoModuleEditor ), NULL, this );
+	m_buttonModuleEditor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditFootprint ), NULL, this );
+	m_button5->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditLibraryFootprint ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_CELL_CHANGED, wxGridEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::On3DModelCellChanged ), NULL, this );
 	m_modelsGrid->Disconnect( wxEVT_GRID_SELECT_CELL, wxGridEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::On3DModelSelected ), NULL, this );
 	m_buttonAdd->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnAdd3DRow ), NULL, this );

@@ -221,6 +221,8 @@ public:
      */
     void LoadModuleFromBoard( wxCommandEvent& event );
 
+    void LoadModuleFromLibrary( LIB_ID aFPID );
+
     /**
      * Returns the adapter object that provides the stored data.
      */

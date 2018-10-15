@@ -181,7 +181,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::~DIALOG_FOOTPRINT_BOARD_EDITOR()
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent&  )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::EditFootprint( wxCommandEvent&  )
 {
     if( m_footprint->GetTimeStamp() == 0 )    // Module Editor needs a non null timestamp
     {
@@ -189,7 +189,13 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::GotoModuleEditor( wxCommandEvent&  )
         m_frame->OnModify();
     }
 
-    EndModal( PRM_EDITOR_WANT_MODEDIT );
+    EndModal( PRM_EDITOR_EDIT_BOARD_FOOTPRINT );
+}
+
+
+void DIALOG_FOOTPRINT_BOARD_EDITOR::EditLibraryFootprint( wxCommandEvent&  )
+{
+    EndModal( PRM_EDITOR_EDIT_LIBRARY_FOOTPRINT );
 }
 
 
