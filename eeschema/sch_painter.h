@@ -151,7 +151,7 @@ private:
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem );
 
-    void defaultColors( const LIB_ITEM* aItem );
+    void setColors( const LIB_ITEM* aItem, bool aBackground );
 
     void triLine ( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c );
 

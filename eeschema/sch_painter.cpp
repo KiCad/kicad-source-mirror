@@ -277,17 +277,6 @@ static VECTOR2D mapCoords( const wxPoint& aCoord )
 }
 
 
-void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
-{
-    if( !isUnitAndConversionShown( aRect ) )
-        return;
-
-    defaultColors( aRect );
-
-    m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
-
-}
-
 void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D &c )
 {
     m_gal->DrawLine( a, b );
@@ -295,36 +284,52 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 }
 
 
-void SCH_PAINTER::defaultColors( const LIB_ITEM *aItem )
+void SCH_PAINTER::setColors( const LIB_ITEM* aItem, bool aBackground )
 {
-    COLOR4D fg = m_schSettings.GetLayerColor( LAYER_DEVICE );
-    COLOR4D bg = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
-
-    if( aItem->IsMoving() )
+    if( aBackground )
     {
-        fg = selectedBrightening( fg );
-        bg = selectedBrightening( bg );
+        COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
+
+        if( aItem->IsMoving() )
+            color = selectedBrightening( color );
+
+        m_gal->SetIsFill( true );
+        m_gal->SetFillColor( color );
+
+        m_gal->SetIsStroke( false );
+    }
+    else
+    {
+        COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE );
+
+        if( aItem->IsMoving() )
+            color = selectedBrightening( color );
+
+        m_gal->SetIsStroke( true );
+        m_gal->SetStrokeColor( color );
+        m_gal->SetLineWidth( aItem->GetPenSize() );
+
+        m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
+        m_gal->SetFillColor( color );
+    }
+}
+
+
+void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
+{
+    if( !isUnitAndConversionShown( aRect ) )
+        return;
+
+    if( aRect->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+    {
+        setColors( aRect, true );
+        m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
+        m_gal->AdvanceDepth();
     }
 
-    m_gal->SetIsStroke( true );
-    m_gal->SetStrokeColor( fg );
-    m_gal->SetLineWidth( aItem->GetPenSize() );
+    setColors( aRect, false );
+    m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
 
-    switch( aItem->GetFillMode() )
-    {
-    case FILLED_WITH_BG_BODYCOLOR:
-        m_gal->SetIsFill( true );
-        m_gal->SetFillColor( bg );
-        break;
-
-    case FILLED_SHAPE:
-        m_gal->SetIsFill( true );
-        m_gal->SetFillColor( fg );
-        break;
-
-    default:
-        m_gal->SetIsFill( false );
-    }
 }
 
 
@@ -333,8 +338,14 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
     if( !isUnitAndConversionShown( aCircle ) )
         return;
 
-    defaultColors( aCircle );
+    if( aCircle->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+    {
+        setColors( aCircle, true );
+        m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
+        m_gal->AdvanceDepth();
+    }
 
+    setColors( aCircle, false );
     m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
 
@@ -343,8 +354,6 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 {
     if( !isUnitAndConversionShown( aArc ) )
         return;
-
-    defaultColors( aArc );
 
     int sai = aArc->GetFirstRadiusAngle();
     int eai = aArc->GetSecondRadiusAngle();
@@ -357,7 +366,38 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 
     VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
+    if( aArc->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+    {
+        setColors( aArc, true );
+        m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
+    }
+
+    setColors( aArc, false );
     m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
+}
+
+
+void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
+{
+    if( !isUnitAndConversionShown( aLine ) )
+        return;
+
+
+    const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
+    std::deque<VECTOR2D> vtx;
+
+    for( auto p : pts )
+        vtx.push_back( mapCoords( p ) );
+
+    if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
+    {
+        setColors( aLine, true );
+        m_gal->DrawPolygon( vtx );
+        m_gal->AdvanceDepth();
+    }
+
+    setColors( aLine, false );
+    m_gal->DrawPolygon( vtx );
 }
 
 
@@ -406,23 +446,6 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     double orient = aField->GetTextAngleRadians();
 
     m_gal->StrokeText( aField->GetText(), pos, orient );
-}
-
-
-void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
-{
-    if( !isUnitAndConversionShown( aLine ) )
-        return;
-
-    defaultColors( aLine );
-
-    const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
-    std::deque<VECTOR2D> vtx;
-
-    for( auto p : pts )
-        vtx.push_back( mapCoords( p ) );
-
-    m_gal->DrawPolygon( vtx );
 }
 
 
