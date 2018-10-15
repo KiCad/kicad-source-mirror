@@ -242,6 +242,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
 
 void EDA_DRAW_PANEL_GAL::onSize( wxSizeEvent& aEvent )
 {
+    KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
     wxSize clientSize = GetClientSize();
     m_gal->ResizeScreen( clientSize.x, clientSize.y );
 
