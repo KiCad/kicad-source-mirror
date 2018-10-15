@@ -660,13 +660,13 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcbcommon
     pnsrouter
     pcad2kicadpcb
+    legacy_wx
     common
     polygon
     bitmaps
     gal
     lib_dxf
     idf3
-    legacy_wx
     connectivity
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
