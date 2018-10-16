@@ -84,7 +84,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 
     m_view->SetPainter( m_painter.get() );
-    m_view->SetScaleLimits( 2000.0, 0.002 );
+    m_view->SetScaleLimits( 2000.0, 1.0 );    // This fixes the zoom in and zoom out limits
     m_view->SetMirror( false, false );
 
     setDefaultLayerOrder();
