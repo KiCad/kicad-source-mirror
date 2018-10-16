@@ -223,7 +223,7 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::processItem( BOARD_COMMIT& aCommit, B
     aCommit.Modify( aItem );
 
     auto textItem = dynamic_cast<EDA_TEXT*>( aItem );
-    auto drawItem = dyn_cast<DRAWSEGMENT*>( aItem );
+    auto drawItem = dynamic_cast<DRAWSEGMENT*>( aItem );
     auto moduleTextItem = dyn_cast<TEXTE_MODULE*>( aItem );
 
     if( m_setToSpecifiedValues->GetValue() )
