@@ -24,6 +24,8 @@
 
 #include <utf8.h>
 #include <ki_exception.h>
+#include <wx/strconv.h>
+#include <wx/buffer.h>
 
 /* THROW_IO_ERROR needs this, but it includes this file, so until some
     factoring of THROW_IO_ERROR into a separate header, defer and use the asserts.
@@ -197,24 +199,11 @@ bool IsUTF8( const char* aString )
 }
 
 
-UTF8::UTF8( const wchar_t* txt ) :
-    // size initial string safely large enough, then shrink to known size later.
-    m_s( wcslen( txt ) * 4, 0 )
+UTF8::UTF8( const wchar_t* txt )
 {
-    /*
+    wxCharBuffer charbuf = wxSafeConvertWX2MB( txt );
 
-        "this" string was sized to hold the worst case UTF8 encoded byte
-        sequence, and was initialized with all nul bytes. Overwrite some of
-        those nuls, then resize, shrinking down to actual size.
-
-        Use the wx 2.8 function, not new FromWChar(). It knows about wchar_t
-        possibly being 16 bits wide on Windows and holding UTF16 input.
-
-    */
-
-    int sz = wxConvUTF8.WC2MB( (char*) m_s.data(), txt, m_s.size() );
-
-    m_s.resize( sz );
+    m_s.assign( charbuf.data() );
 }
 
 
@@ -224,6 +213,7 @@ UTF8& UTF8::operator+=( unsigned w_ch )
         m_s.operator+=( char( w_ch ) );
     else
     {
+        //TODO: Remove wchar use.  Replace with std::byte*
         wchar_t wide_chr[2];    // buffer to store wide chars (UTF16) read from aText
         wide_chr[1] = 0;
         wide_chr[0] = w_ch;
