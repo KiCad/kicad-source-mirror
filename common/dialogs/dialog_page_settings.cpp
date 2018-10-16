@@ -108,8 +108,11 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        if( m_canvas )
-            m_canvas->Refresh();
+#ifdef EESCHEMA
+        RedrawScreen( wxPoint( 0, 0 ), false );
+#else
+        GetCanvas()->Refresh();
+#endif
     }
 }
 
@@ -234,7 +237,6 @@ void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
     if( SavePageSettings() )
     {
         m_screen->SetModify();
-        m_parent->GetCanvas()->Refresh();
 
         if( LocalPrjConfigChanged() )
             m_parent->SaveProjectSettings( false );

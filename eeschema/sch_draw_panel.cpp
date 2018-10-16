@@ -247,10 +247,19 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
 
-    m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
+    // Bitmaps are draw on a non cached GAL layer:
+    m_view->SetLayerTarget( LAYER_DRAW_BITMAPS , KIGFX::TARGET_NONCACHED );
 
+    // Some draw layers need specific settings
+    m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY ) ;
+
+    m_view->SetLayerTarget( LAYER_SELECT_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
+
+    m_view->SetLayerTarget( LAYER_WORKSHEET , KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
+
     m_view->SetLayerDisplayOnly( LAYER_DRC );
 }
 

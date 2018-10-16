@@ -229,3 +229,10 @@ BITMAP_DEF SCH_BITMAP::GetMenuImage() const
 {
     return image_xpm;
 }
+
+
+void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount = 1;
+    aLayers[0] = LAYER_WORKSHEET;
+}
