@@ -240,9 +240,9 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::TransferDataToWindow()
     }
 
     // enter others corner coordinates
-    wxString msg;
     for( unsigned row = 0; row < m_currshape.m_Poly.size(); ++row )
     {
+        wxString msg;
         // Row label is "Corner x"
         msg.Printf( "Corner %d", row+1 );
         m_gridCornersList->SetRowLabelValue( row, msg );
@@ -370,7 +370,8 @@ void DIALOG_PAD_PRIMITIVE_POLY_PROPS::OnButtonDelete( wxCommandEvent& event )
     // remove corners:
     for( int ii = selections.size()-1; ii >= 0 ; --ii )
     {
-        m_currshape.m_Poly.erase( m_currshape.m_Poly.begin() + selections[ii] );
+        if( selections[ii] >= 0 )
+            m_currshape.m_Poly.erase( m_currshape.m_Poly.begin() + selections[ii] );
     }
 
     // Unselect all raws:
