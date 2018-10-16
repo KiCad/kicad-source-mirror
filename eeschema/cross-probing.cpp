@@ -250,6 +250,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_REFRESH:
+        GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
         break;
 

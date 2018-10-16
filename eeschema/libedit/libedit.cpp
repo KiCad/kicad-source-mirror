@@ -249,6 +249,7 @@ void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 {
     saveAllLibraries( false );
     m_treePane->Refresh();
+    refreshSchematic();
 }
 
 
@@ -357,6 +358,7 @@ void LIB_EDIT_FRAME::OnSave( wxCommandEvent& aEvent )
     }
 
     m_treePane->Refresh();
+    refreshSchematic();
 }
 
 
@@ -372,6 +374,7 @@ void LIB_EDIT_FRAME::OnSaveAs( wxCommandEvent& aEvent )
         savePartAs();
 
     m_treePane->Refresh();
+    refreshSchematic();
 }
 
 
@@ -488,6 +491,8 @@ void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
         emptyScreen();
 
     m_libMgr->RemovePart( libId.GetLibItemName(), libId.GetLibNickname() );
+
+    refreshSchematic();
 }
 
 
@@ -610,6 +615,7 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
         loadPart( curr_partName, libName, unit );
 
     m_treePane->Refresh();
+    refreshSchematic();
 }
 
 
@@ -719,7 +725,6 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     msg1.Printf( _( "Symbol library documentation file \"%s\" saved" ), docFileName.GetFullPath() );
     AppendMsgPanel( msg, msg1, BLUE );
     UpdatePartSelectList();
-    refreshSchematic();
 
     return true;
 }
