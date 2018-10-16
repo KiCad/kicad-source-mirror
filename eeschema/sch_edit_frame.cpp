@@ -1388,11 +1388,11 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             SetSheetNumberAndCount();
         }
 
+        if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
+            AddToScreen( item );
+
         if( undoItem == item )
         {
-            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
-                AddToScreen( item );
-
             SetRepeatItem( item );
 
             SaveCopyInUndoList( undoItem, UR_NEW );
