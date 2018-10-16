@@ -101,6 +101,8 @@ int ZONE_FILLER_TOOL::ZoneFill( const TOOL_EVENT& aEvent )
     filler.SetProgressReporter( progressReporter.get() );
     filler.Fill( toFill );
 
+    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
+
     return 0;
 }
 
@@ -126,6 +128,8 @@ int ZONE_FILLER_TOOL::ZoneFillAll( const TOOL_EVENT& aEvent )
     if( filler.Fill( toFill ) )
         frame()->m_ZoneFillsDirty = false;
 
+    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
+
     return 0;
 }
 
@@ -147,6 +151,7 @@ int ZONE_FILLER_TOOL::ZoneUnfill( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Unfill Zone" ) );
+    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
 
     return 0;
 }
@@ -174,6 +179,7 @@ int ZONE_FILLER_TOOL::SegzoneDeleteFill( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Delete Zone Filling" ) );
+    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
 
     return 0;
 }
@@ -192,6 +198,7 @@ int ZONE_FILLER_TOOL::ZoneUnfillAll( const TOOL_EVENT& aEvent )
     }
 
     commit.Push( _( "Unfill All Zones" ) );
+    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
 
     return 0;
 }
