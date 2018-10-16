@@ -1332,7 +1332,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::addCurrentItemToScreen( bool aRedraw )
+void SCH_EDIT_FRAME::addCurrentItemToScreen()
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
@@ -1447,11 +1447,10 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen( bool aRedraw )
             if( screen->IsJunctionNeeded( *i, true ) )
                 AddJunction( *i, true );
         }
-        screen->TestDanglingEnds();
+        TestDanglingEnds();
     }
 
-    if( aRedraw )
-        GetCanvas()->Refresh();
+    GetCanvas()->Refresh();
 }
 
 

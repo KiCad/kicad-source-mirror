@@ -534,7 +534,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     m_cmp->UpdatePinCache();
 
     GetParent()->OnModify();
-    GetParent()->GetScreen()->TestDanglingEnds();
+    GetParent()->TestDanglingEnds();
 
     return true;
 }

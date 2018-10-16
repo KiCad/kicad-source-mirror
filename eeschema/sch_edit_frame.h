@@ -191,10 +191,8 @@ protected:
     /**
      * Add the item currently being edited to the schematic and adds the changes to
      * the undo/redo container.
-     *
-     * @param aRedraw = true (default) to redrw -the screen after adding the item.
      */
-    void addCurrentItemToScreen( bool aRedraw = true );
+    void addCurrentItemToScreen();
 
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
@@ -472,6 +470,12 @@ public:
      * @return True if any wires or buses were broken.
      */
     bool BreakSegmentsOnJunctions( bool aApped = false );
+
+    /**
+     * Test all of the connectable objects in the schematic for unused connection points.
+     * @return True if any connection state changes were made.
+     */
+    bool TestDanglingEnds();
 
     /**
      * Send a message to Pcbnew via a socket connection.

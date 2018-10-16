@@ -197,19 +197,19 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
 
-        screen->TestDanglingEnds();
+        TestDanglingEnds();
         m_canvas->Refresh();
 
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
-        {
-            SaveWireImage();
-            m_canvas->MoveCursorToCrossHair();
-            BreakSegments( GetCrossHairPosition() );
-            if( screen->TestDanglingEnds() )
-                m_canvas->Refresh();
-        }
+        SaveWireImage();
+        m_canvas->MoveCursorToCrossHair();
+        BreakSegments( GetCrossHairPosition() );
+
+        TestDanglingEnds();
+        m_canvas->Refresh();
+
         break;
 
     case ID_POPUP_SCH_DELETE_CMP:
@@ -221,7 +221,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SchematicCleanUp( true );
         screen->SetCurItem( NULL );
         SetRepeatItem( NULL );
-        screen->TestDanglingEnds();
+        TestDanglingEnds();
         SetSheetNumberAndCount();
         m_canvas->Refresh();
         OnModify();
@@ -235,8 +235,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_SCH_RESIZE_SHEET:
         ReSizeSheet( (SCH_SHEET*) item, nullptr );
 
-        if( screen->TestDanglingEnds() )
-            m_canvas->Refresh();
+        TestDanglingEnds();
+        m_canvas->Refresh();
 
         break;
 
@@ -347,8 +347,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->MoveCursorToCrossHair();
         screen->SetCurItem( AddJunction( GetCrossHairPosition() ) );
 
-        if( screen->TestDanglingEnds() )
-            m_canvas->Refresh();
+        TestDanglingEnds();
+        m_canvas->Refresh();
 
         screen->SetCurItem( NULL );
         break;
@@ -662,7 +662,7 @@ bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
         DeleteItem( item );
 
         if( itemHasConnections )
-            screen->TestDanglingEnds();
+            TestDanglingEnds();
 
         GetCanvas()->Refresh();
         OnModify();

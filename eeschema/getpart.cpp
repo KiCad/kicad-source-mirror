@@ -317,7 +317,7 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
         SchematicCleanUp( true );
     }
 
-    GetScreen()->TestDanglingEnds();
+    TestDanglingEnds();
 
     RefreshItem( item );
     OnModify();
@@ -361,7 +361,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
     if( m_autoplaceFields )
         component->AutoAutoplaceFields( GetScreen() );
 
-    screen->TestDanglingEnds();
+    TestDanglingEnds();
 
     RefreshItem( component );
     OnModify();
@@ -403,7 +403,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
         // The alternate symbol may cause a change in the connection status so test the
         // connections so the connection indicators are drawn correctly.
-        GetScreen()->TestDanglingEnds();
+        TestDanglingEnds();
         aComponent->ClearFlags();
         aComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
 

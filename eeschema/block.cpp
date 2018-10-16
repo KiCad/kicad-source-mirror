@@ -168,13 +168,13 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     CheckListConnections( block->GetItems(), true );
     block->ClearItemsList();
     SchematicCleanUp( true );
+    TestDanglingEnds();
     OnModify();
 
     // clear dome flags and pointers
     GetScreen()->ClearDrawingState();
     GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
-    GetScreen()->TestDanglingEnds();
 
     if( block->GetCount() )
     {
@@ -294,7 +294,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 append = true;
             }
 
-            GetScreen()->TestDanglingEnds();
+            TestDanglingEnds();
             break;
 
         case BLOCK_COPY:    // Save a copy of items in paste buffer

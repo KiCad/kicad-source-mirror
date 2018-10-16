@@ -268,6 +268,27 @@ void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnectio
 }
 
 
+bool SCH_EDIT_FRAME::TestDanglingEnds()
+{
+    std::vector<DANGLING_END_ITEM> endPoints;
+    bool hasStateChanged = false;
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawList().begin(); item; item = item->Next() )
+        item->GetEndPoints( endPoints );
+
+    for( SCH_ITEM* item = GetScreen()->GetDrawList().begin(); item; item = item->Next() )
+    {
+        if( item->IsDanglingStateChanged( endPoints ) )
+        {
+            GetCanvas()->GetView()->Update( item, KIGFX::REPAINT );
+            hasStateChanged = true;
+        }
+    }
+
+    return hasStateChanged;
+}
+
+
 void SCH_EDIT_FRAME::EndSegment()
 {
     SCH_SCREEN* screen = GetScreen();
@@ -349,10 +370,11 @@ void SCH_EDIT_FRAME::EndSegment()
             AddJunction( i, true );
     }
 
-    screen->TestDanglingEnds();
+    TestDanglingEnds();
     screen->ClearDrawingState();
     screen->SetCurItem( NULL );
     m_canvas->EndMouseCapture( -1, -1, wxEmptyString, false );
+    m_canvas->Refresh();
     OnModify();
 }
 
@@ -634,7 +656,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
 
     SaveCopyInUndoList( itemList, UR_CHANGED, aAppend );
 
-    return !!( itemList.GetCount() );
+    return itemList.GetCount() > 0;
 }
 
 
@@ -778,7 +800,7 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppen
 
     AddToScreen( junction );
     broken_segments = BreakSegments( aPosition, aAppend );
-    screen->TestDanglingEnds();
+    TestDanglingEnds();
     OnModify();
     SaveCopyInUndoList( junction, UR_NEW, broken_segments || aAppend );
 
@@ -798,7 +820,7 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( const wxPoint& aPosition )
     SetRepeatItem( no_connect );
     AddToScreen( no_connect );
     SchematicCleanUp();
-    GetScreen()->TestDanglingEnds();
+    TestDanglingEnds();
     OnModify();
 
     auto view = GetCanvas()->GetView();
@@ -870,7 +892,7 @@ void SCH_EDIT_FRAME::RepeatDrawItem()
         AddToScreen( my_clone );
 
         if( my_clone->IsConnectable() )
-            GetScreen()->TestDanglingEnds();
+            TestDanglingEnds();
 
         SaveCopyInUndoList( my_clone, UR_NEW );
         my_clone->ClearFlags();
@@ -879,3 +901,5 @@ void SCH_EDIT_FRAME::RepeatDrawItem()
     // clone my_clone, now that it has been moved, thus saving new position.
     SetRepeatItem( my_clone );
 }
+
+

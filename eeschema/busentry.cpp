@@ -75,7 +75,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, c
     s_LastShape = entry_shape == '/' ? '/' : '\\';
 
     BusEntry->SetBusEntryShape( s_LastShape );
-    GetScreen()->TestDanglingEnds();
+    TestDanglingEnds();
     
     OnModify( );
 }
