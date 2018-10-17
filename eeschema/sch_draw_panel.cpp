@@ -676,7 +676,7 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     // Compute the cursor position in drawing units.  Also known as logical units to wxDC.
     //pos = wxPoint( DC.DeviceToLogicalX( pos.x ), DC.DeviceToLogicalY( pos.y ) );
 
-    auto p =  GetViewControls()->GetMousePosition();
+    auto p =  GetViewControls()->GetCursorPosition( false );
 
     wxPoint pos ((int)p.x, (int)p.y);
 

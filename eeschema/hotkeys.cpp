@@ -480,10 +480,11 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         else if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
         {
-            OnLeftClick( aDC, aPosition );
+            auto pos = GetCrossHairPosition();
+            OnLeftClick( aDC, pos );
 
             if( hotKey->m_Idcommand == HK_LEFT_DCLICK )
-                OnLeftDClick( aDC, aPosition );
+                OnLeftDClick( aDC, pos );
         }
         break;
 
