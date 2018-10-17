@@ -716,6 +716,11 @@ public:
     void RebuildView();
 
     /**
+     * Rebuild the GAL and redraw the screen.  Call when something went wrong.
+     */
+    void HardRedraw() override;
+
+    /**
      * Checks all draw objects of part to see if they are with block.
      *
      * Use this method to mark draw objects as selected during block

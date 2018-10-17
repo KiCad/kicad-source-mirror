@@ -592,6 +592,13 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 }
 
 
+void SCH_EDIT_FRAME::HardRedraw()
+{
+    static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( m_CurrentSheet->LastScreen() );
+    GetCanvas()->Refresh();
+}
+
+
 void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 {
     // if aItem != NULL, delete a previous m_undoItem, if exists

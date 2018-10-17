@@ -1720,10 +1720,12 @@ void LIB_EDIT_FRAME::ShowChangedLanguage()
     UpdateMsgPanel();
 }
 
+
 void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
     EDA_DRAW_FRAME::SetScreen( aScreen );
 }
+
 
 void LIB_EDIT_FRAME::RebuildView()
 {
@@ -1741,6 +1743,13 @@ void LIB_EDIT_FRAME::RebuildView()
 
     GetCanvas()->Refresh();
 }
+
+
+void LIB_EDIT_FRAME::HardRedraw()
+{
+    RebuildView();
+}
+
 
 const BOX2I LIB_EDIT_FRAME::GetDocumentExtents() const
 {

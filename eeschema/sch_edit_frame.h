@@ -627,6 +627,11 @@ public:
     void SetCurrentSheet( const SCH_SHEET_PATH& aSheet );
 
     /**
+     * Rebuild the GAL and redraw the screen.  Call when something went wrong.
+     */
+    void HardRedraw() override;
+
+    /**
      * Draw the current sheet on the display.
      */
     void DisplayCurrentSheet();
