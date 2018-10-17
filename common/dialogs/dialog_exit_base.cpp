@@ -51,13 +51,13 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_buttonSizer->Add( m_ApplyToAllOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 	
 	
-	m_buttonSizer->Add( 0, 0, 1, wxRIGHT|wxLEFT, 10 );
+	m_buttonSizer->Add( 20, 0, 1, wxRIGHT|wxLEFT, 5 );
 	
 	m_DiscardButton = new wxButton( this, wxID_ANY, _("Discard Changes"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonSizer->Add( m_DiscardButton, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
-	m_buttonSizer->Add( 0, 0, 0, wxRIGHT|wxLEFT, 5 );
+	m_buttonSizer->Add( 20, 0, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_sdbSizer1 = new wxStdDialogButtonSizer();
 	m_sdbSizer1OK = new wxButton( this, wxID_OK );
