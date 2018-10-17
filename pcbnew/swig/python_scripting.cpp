@@ -253,7 +253,7 @@ static void pcbnewRunPythonMethodWithReturnedString( const char* aMethodName, wx
         if(str)
         {
             PyObject* temp_bytes = PyUnicode_AsEncodedString( str, "UTF-8", "strict" );
-            if ( temp_bytes != NULL )
+            if( temp_bytes != NULL )
             {
                 str_res = PyBytes_AS_STRING( temp_bytes );
                 str_res = strdup( str_res );
@@ -419,7 +419,7 @@ wxString PyStringToWx( PyObject* aString )
 #if PY_MAJOR_VERSION >= 3
     const char* str_res = NULL;
     PyObject* temp_bytes = PyUnicode_AsEncodedString( aString, "UTF-8", "strict" );
-    if ( temp_bytes != NULL )
+    if( temp_bytes != NULL )
     {
         str_res = PyBytes_AS_STRING( temp_bytes );
         ret = FROM_UTF8( str_res );
@@ -456,7 +456,7 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
 #if PY_MAJOR_VERSION >= 3
         const char* str_res = NULL;
         PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
-        if ( temp_bytes != NULL )
+        if( temp_bytes != NULL )
         {
             str_res = PyBytes_AS_STRING( temp_bytes );
             ret.Add( FROM_UTF8( str_res ), 1 );
@@ -490,7 +490,7 @@ wxString PyErrStringWithTraceback()
     PyErr_Fetch( &type, &value, &traceback );
 
     PyErr_NormalizeException( &type, &value, &traceback );
-    if ( traceback == NULL )
+    if( traceback == NULL )
     {
         traceback = Py_None;
         Py_INCREF( traceback );

@@ -99,7 +99,7 @@ wxString PYTHON_FOOTPRINT_WIZARD::CallRetStrMethod( const char* aMethod, PyObjec
 
     PyObject*   result = CallMethod( aMethod, aArglist );
 
-    if ( result == Py_None )
+    if( result == Py_None )
     {
         Py_DECREF( result );
         return ret;
@@ -204,7 +204,7 @@ wxString PYTHON_FOOTPRINT_WIZARD::GetParameterPageName( int aPage )
 
     Py_DECREF( arglist );
 
-    if ( result == Py_None )
+    if( result == Py_None )
     {
         Py_DECREF( result );
         return ret;
