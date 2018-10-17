@@ -28,6 +28,8 @@
 #include <sch_preview_panel.h>
 #include <pgm_base.h>
 #include <sch_painter.h>
+#include <draw_frame.h>
+
 
 SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
@@ -38,8 +40,9 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_statusSizer( nullptr ),
     m_previewItem( nullptr )
 {
-    wxConfigBase* eeschemaConfig = GetNewConfig( wxString::FromUTF8( "eeschema" ) );
-    m_galDisplayOptions.ReadConfig( eeschemaConfig, GAL_DISPLAY_OPTIONS_KEY );
+    wxString eeschemaFrameKey( SCH_EDIT_FRAME_NAME );
+    wxConfigBase* eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
+    m_galDisplayOptions.ReadConfig( eeschemaConfig, eeschemaFrameKey + GAL_DISPLAY_OPTIONS_KEY );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 
