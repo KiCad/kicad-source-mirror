@@ -15,13 +15,13 @@ void callee( const wxString& aString )
 
 int main( int argc, char** argv )
 {
-    UTF8        bozo = "ü";
+    UTF8        bozo = "This is a test of UTF-8: ü‱☺😕😱";
 
     callee( bozo );
 
     wxString s = bozo;
 
-    wxString b = bozo;
+    UTF8 b = s;
 
     if( s.IsEmpty() )
     {
@@ -30,8 +30,23 @@ int main( int argc, char** argv )
 
     if(  s != bozo.wx_str() )
     {
-        printf( "string miscompare\n" );
+        printf( "wxString conversion error\n" );
     }
+
+    if( b != bozo )
+    {
+        printf( "From string conversion error\n" );
+    }
+
+    auto pos = bozo.begin();
+    auto end = bozo.end();
+
+    while( pos != end )
+    {
+        printf( "%c", *pos++ );
+    }
+
+    printf("\n");
 
     return 0;
 }
