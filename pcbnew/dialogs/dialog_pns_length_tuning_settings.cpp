@@ -97,6 +97,9 @@ bool DIALOG_PNS_LENGTH_TUNING_SETTINGS::TransferDataToWindow()
         break;
     }
 
+    // Bitmap has a new size, so recalculate sizes
+    GetSizer()->SetSizeHints(this);
+
     return true;
 }
 
