@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,8 +24,8 @@
 
 #include <macros.h>
 #include <search_stack.h>
+#include <trace_helpers.h>
 #include <wx/tokenzr.h>
-
 
 #if defined(__MINGW32__)
  #define PATH_SEPS          wxT( ";\r\n" )
@@ -200,11 +200,11 @@ const wxString SEARCH_STACK::LastVisitedPath( const wxString& aSubPathToSearch )
 #if defined(DEBUG)
 void SEARCH_STACK::Show( const wxString& aPrefix ) const
 {
-    wxLogDebug( wxT( "%s SEARCH_STACK:" ), GetChars( aPrefix ) );
+    wxLogTrace( tracePathsAndFiles, "%s SEARCH_STACK:", aPrefix );
 
     for( unsigned i=0;  i<GetCount();  ++i )
     {
-        wxLogDebug( wxT( "  [%2u]:%s" ), i, TO_UTF8( (*this)[i] ) );
+        wxLogTrace( tracePathsAndFiles, "  [%2u]:%s", i, TO_UTF8( (*this)[i] ) );
     }
 }
 #endif

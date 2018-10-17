@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,8 +36,11 @@
 #include <base_screen.h>
 #include <id.h>
 #include <base_units.h>
+#include <trace_helpers.h>
+
 
 wxString BASE_SCREEN::m_PageLayoutDescrFileName;   // the name of the page layout descr file.
+
 
 BASE_SCREEN::BASE_SCREEN( KICAD_T aType ) :
     EDA_ITEM( aType )
@@ -122,7 +125,7 @@ bool BASE_SCREEN::SetZoom( double iu_per_du )
     if( iu_per_du == m_Zoom )
         return false;
 
-    //wxLogDebug( "Zoom:%.16g  1/Zoom:%.16g", iu_per_du, 1/iu_per_du );
+    wxLogTrace( traceScreen, "Zoom:%.16g  1/Zoom:%.16g", iu_per_du, 1/iu_per_du );
 
     if( iu_per_du < GetMinAllowedZoom() )
         return false;
@@ -282,21 +285,20 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
 }
 
 
-
 void BASE_SCREEN::AddGrid( const GRID_TYPE& grid )
 {
     for( unsigned i = 0; i < m_grids.size(); i++ )
     {
         if( m_grids[i].m_Size == grid.m_Size && grid.m_CmdId != ID_POPUP_GRID_USER )
         {
-            wxLogDebug( wxT( "Discarding duplicate grid size( %g, %g )." ),
+            wxLogTrace( traceScreen,  "Discarding duplicate grid size( %g, %g ).",
                         grid.m_Size.x, grid.m_Size.y );
             return;
         }
 
         if( m_grids[i].m_CmdId == grid.m_CmdId )
         {
-            wxLogDebug( wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
+            wxLogTrace( traceScreen, wxT( "Changing grid ID %d from size( %g, %g ) to " ) \
                         wxT( "size( %g, %g )." ),
                         grid.m_CmdId, m_grids[i].m_Size.x,
                         m_grids[i].m_Size.y, grid.m_Size.x, grid.m_Size.y );
@@ -380,7 +382,8 @@ wxPoint BASE_SCREEN::getNearestGridPosition( const wxPoint& aPosition,
 }
 
 
-wxPoint BASE_SCREEN::getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin, wxRealPoint* aGridSize ) const
+wxPoint BASE_SCREEN::getCursorPosition( bool aOnGrid, const wxPoint& aGridOrigin,
+                                        wxRealPoint* aGridSize ) const
 {
     if( aOnGrid )
         return getNearestGridPosition( m_crossHairPosition, aGridOrigin, aGridSize );
@@ -401,7 +404,8 @@ wxPoint BASE_SCREEN::getCrossHairScreenPosition() const
 }
 
 
-void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin, bool aSnapToGrid )
+void BASE_SCREEN::setCrossHairPosition( const wxPoint& aPosition, const wxPoint& aGridOrigin,
+                                        bool aSnapToGrid )
 {
     if( aSnapToGrid )
         m_crossHairPosition = getNearestGridPosition( aPosition, aGridOrigin, NULL );
@@ -425,6 +429,7 @@ void BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aNewitem )
     if( m_UndoRedoCountMax > 0 )
     {
         int extraitems = GetUndoCommandCount() - m_UndoRedoCountMax;
+
         if( extraitems > 0 )
             ClearUndoORRedoList( m_UndoList, extraitems );
     }
@@ -439,6 +444,7 @@ void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
     if( m_UndoRedoCountMax > 0 )
     {
         int extraitems = GetRedoCommandCount() - m_UndoRedoCountMax;
+
         if( extraitems > 0 )
             ClearUndoORRedoList( m_RedoList, extraitems );
     }
@@ -447,13 +453,13 @@ void BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aNewitem )
 
 PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromUndoList( )
 {
-    return m_UndoList.PopCommand( );
+    return m_UndoList.PopCommand();
 }
 
 
 PICKED_ITEMS_LIST* BASE_SCREEN::PopCommandFromRedoList( )
 {
-    return m_RedoList.PopCommand( );
+    return m_RedoList.PopCommand();
 }
 
 

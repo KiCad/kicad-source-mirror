@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015 CERN
- * Copyright (C) 2014-2015 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -27,6 +27,7 @@
 #include <common.h>
 #include <config.h>     // to define DEFAULT_INSTALL_PATH
 #include <macros.h>
+#include <trace_helpers.h>
 
 
 /**
@@ -50,7 +51,7 @@ wxString FindFileInSearchPaths( const SEARCH_STACK& aStack,
                 fn.AppendDir( (*aSubdirs)[j] );
         }
 
-        wxLogDebug( wxT( "    %s" ), GetChars( fn.GetFullPath() ) );
+        wxLogTrace( tracePathsAndFiles, "    %s", fn.GetFullPath() );
 
         if( fn.DirExists() )
         {
@@ -85,10 +86,10 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     // and in Contents/SharedSupport/help inside the
     // bundle.
     // Below we account for an international subdirectory.
-    subdirs.Add( wxT( "help" ) );
-    altsubdirs.Add( wxT( "Contents" ) );
-    altsubdirs.Add( wxT( "SharedSupport" ) );
-    altsubdirs.Add( wxT( "help" ) );
+    subdirs.Add( "help" );
+    altsubdirs.Add( "Contents" );
+    altsubdirs.Add( "SharedSupport" );
+    altsubdirs.Add( "help" );
 #endif
 
 #if ! defined(__WXMAC__) // && defined(__linux__)
@@ -105,17 +106,17 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
     // installed into "<CMAKE_INSTALL_PREFIX>/share/doc/kicad/help" for linux.
     // This is ${KICAD_HELP} var in that CMakeLists.txt file.
     // Below we account for an international subdirectory.
-    subdirs.Add( wxT( "share" ) );
-    subdirs.Add( wxT( "doc" ) );
-    subdirs.Add( wxT( "kicad" ) );
-    subdirs.Add( wxT( "help" ) );
+    subdirs.Add( "share" );
+    subdirs.Add( "doc" );
+    subdirs.Add( "kicad" );
+    subdirs.Add( "help" );
 
     // Based on kicad-doc.bzr/CMakeLists.txt, line 35, the help files are
     // installed into "<CMAKE_INSTALL_PREFIX>/doc/help" for Windows.
     // This is ${KICAD_HELP} var in that CMakeLists.txt file.
     // Below we account for an international subdirectory.
-    altsubdirs.Add( wxT( "doc" ) );
-    altsubdirs.Add( wxT( "help" ) );
+    altsubdirs.Add( "doc" );
+    altsubdirs.Add( "help" );
 #endif
 
     // If there's a KICAD environment variable set, always use that guy's path first.
@@ -140,14 +141,14 @@ wxString SearchHelpFileFullPath( const SEARCH_STACK& aSStack, const wxString& aB
 
     // wxLocale::GetName() does not return always the short name
     locale_name_dirs.Add( i18n->GetName().BeforeLast( '_' ) );  // short canonical name like fr
-    locale_name_dirs.Add( wxT( "en" ) );                        // default (en)
+    locale_name_dirs.Add( "en" );                        // default (en)
 
 #if defined(DEBUG) && 1
     ss.Show( wxString( __func__ ) );
-    wxLogDebug( wxT( "%s: m_help_file:'%s'" ), __func__, GetChars( aBaseName ) );
+    wxLogTrace( tracePathsAndFiles, "%s: m_help_file:'%s'", __func__, aBaseName );
 #endif
 
-    wxLogDebug( wxT( "Checking SEARCH_STACK for file %s" ), GetChars( aBaseName ) );
+    wxLogTrace( tracePathsAndFiles, "Checking SEARCH_STACK for file %s", aBaseName );
 
     // Help files can be html (.html ext) or pdf (.pdf ext) files.
     // Therefore, <BaseName>.html file is searched and if not found,

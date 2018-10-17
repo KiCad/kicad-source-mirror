@@ -99,6 +99,16 @@ extern const wxChar* const tracePrinting;
  */
 extern const wxChar* const tracePathsAndFiles;
 
+/**
+ * Flag to enable locale debug output.
+ */
+extern const wxChar* const traceLocale;
+
+/**
+ * Flag to enable debug output of #BASE_SCREEN and it's derivatives.
+ */
+extern const wxChar* const traceScreen;
+
 ///@}
 
 /**

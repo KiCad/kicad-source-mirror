@@ -54,6 +54,7 @@
 #include <dialog_configure_paths.h>
 #include <lockfile.h>
 #include <systemdirsappend.h>
+#include <trace_helpers.h>
 #include <gal/gal_display_options.h>
 
 #define KICAD_COMMON                     wxT( "kicad_common" )
@@ -195,7 +196,7 @@ void PGM_BASE::SetEditorName( const wxString& aFileName )
 {
     m_editor_name = aFileName;
     wxASSERT( m_common_settings );
-    m_common_settings->Write( wxT( "Editor" ), aFileName );
+    m_common_settings->Write( "Editor", aFileName );
 }
 
 
@@ -205,7 +206,7 @@ const wxString& PGM_BASE::GetEditorName( bool aCanShowFileChooser )
 
     if( !editorname )
     {
-        if( !wxGetEnv( wxT( "EDITOR" ), &editorname ) )
+        if( !wxGetEnv( "EDITOR", &editorname ) )
         {
             // If there is no EDITOR variable set, try the desktop default
 #ifdef __WXMAC__
@@ -284,7 +285,7 @@ bool PGM_BASE::InitPgm()
     // Init KiCad environment
     // the environment variable KICAD (if exists) gives the kicad path:
     // something like set KICAD=d:\kicad
-    bool isDefined = wxGetEnv( wxT( "KICAD" ), &m_kicad_env );
+    bool isDefined = wxGetEnv( "KICAD", &m_kicad_env );
 
     if( isDefined )    // ensure m_kicad_env ends by "/"
     {
@@ -295,7 +296,7 @@ bool PGM_BASE::InitPgm()
     }
 
     // Init parameters for configuration
-    App().SetVendorName( wxT( "KiCad" ) );
+    App().SetVendorName( "KiCad" );
     App().SetAppName( pgm_name.GetName().Lower() );
 
     // Install some image handlers, mainly for help
@@ -348,8 +349,8 @@ bool PGM_BASE::InitPgm()
 #endif
 
 #if !defined( __WXMAC__ )
-    baseSharePath.AppendDir( wxT( "share" ) );
-    baseSharePath.AppendDir( wxT( "kicad" ) );
+    baseSharePath.AppendDir( "share" );
+    baseSharePath.AppendDir( "kicad" );
 #endif
 
     // KISYSMOD
@@ -363,7 +364,7 @@ bool PGM_BASE::InitPgm()
     else
     {
         tmpFileName = baseSharePath;
-        tmpFileName.AppendDir( wxT( "modules" ) );
+        tmpFileName.AppendDir( "modules" );
         envVarItem.SetDefinedExternally( false );
     }
 
@@ -380,7 +381,7 @@ bool PGM_BASE::InitPgm()
     }
     else
     {
-        tmpFileName.AppendDir( wxT( "packages3d" ) );
+        tmpFileName.AppendDir( "packages3d" );
         envVarItem.SetDefinedExternally( false );
     }
 
@@ -413,7 +414,8 @@ bool PGM_BASE::InitPgm()
             // Only add path if exists and can be read by the user.
             if( fn.DirExists() && fn.IsDirReadable() )
             {
-                wxLogDebug( "Checking template path '%s' exists", fn.GetPath() );
+                wxLogTrace( tracePathsAndFiles, "Checking template path '%s' exists",
+                            fn.GetPath() );
                 templatePaths.AddPaths( fn.GetPath() );
             }
         }
@@ -466,7 +468,7 @@ bool PGM_BASE::InitPgm()
     else
     {
         tmpFileName = baseSharePath;
-        tmpFileName.AppendDir( wxT( "library" ) );
+        tmpFileName.AppendDir( "library" );
         envVarItem.SetDefinedExternally( false );
     }
 
@@ -590,7 +592,7 @@ void PGM_BASE::loadCommonSettings()
         }
     }
 
-    m_editor_name = m_common_settings->Read( wxT( "Editor" ) );
+    m_editor_name = m_common_settings->Read( "Editor" );
 
     wxString entry, oldPath;
     wxArrayString entries;
@@ -602,7 +604,7 @@ void PGM_BASE::loadCommonSettings()
     while( m_common_settings->GetNextEntry( entry, index ) )
     {
         wxLogTrace( traceEnvVars,
-                    wxT( "Enumerating over entry %s, %ld." ), GetChars( entry ), index );
+                    "Enumerating over entry %s, %ld.", GetChars( entry ), index );
         entries.Add( entry );
     }
 
@@ -642,12 +644,12 @@ void PGM_BASE::SaveCommonSettings()
             if( it->second.GetDefinedExternally() )
                 continue;
 
-            wxLogTrace( traceEnvVars, wxT( "Saving environment variable config entry %s as %s" ),
+            wxLogTrace( traceEnvVars, "Saving environment variable config entry %s as %s",
                         GetChars( it->first ),  GetChars( it->second.GetValue() ) );
             m_common_settings->Write( it->first, it->second.GetValue() );
         }
 
-        m_common_settings->SetPath( wxT( ".." ) );
+        m_common_settings->SetPath( ".." );
     }
 }
 
@@ -677,14 +679,14 @@ bool PGM_BASE::SetLanguage( bool first_time )
     }
 
     // dictionary file name without extend (full name is kicad.mo)
-    wxString dictionaryName( wxT( "kicad" ) );
+    wxString dictionaryName( "kicad" );
 
     delete m_locale;
     m_locale = new wxLocale;
 
     if( !m_locale->Init( m_language_id ) )
     {
-        wxLogDebug( wxT( "This language is not supported by the system." ) );
+        wxLogTrace( traceLocale, "This language is not supported by the system." );
 
         setLanguageId( wxLANGUAGE_DEFAULT );
         delete m_locale;
@@ -695,7 +697,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
     }
     else if( !first_time )
     {
-        wxLogDebug( wxT( "Search for dictionary %s.mo in %s" ),
+        wxLogTrace( traceLocale, "Search for dictionary %s.mo in %s",
                     GetChars( dictionaryName ), GetChars( m_locale->GetName() ) );
     }
 
@@ -746,7 +748,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
 
 void PGM_BASE::SetLanguageIdentifier( int menu_id )
 {
-    wxLogDebug( wxT( "Select language ID %d from %d possible languages." ),
+    wxLogTrace( traceLocale, "Select language ID %d from %d possible languages.",
                 menu_id, DIM( s_Languages ) );
 
     for( unsigned ii = 0; ii < DIM( s_Languages ); ii++ )
@@ -772,23 +774,23 @@ void PGM_BASE::SetLanguagePath()
         wxFileName fn( guesses[i], wxEmptyString );
 
         // Append path for Windows and unix KiCad package install
-        fn.AppendDir( wxT( "share" ) );
-        fn.AppendDir( wxT( "internat" ) );
+        fn.AppendDir( "share" );
+        fn.AppendDir( "internat" );
 
         if( fn.IsDirReadable() )
         {
-            wxLogDebug( wxT( "Adding locale lookup path: " ) + fn.GetPath() );
+            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
 
         // Append path for unix standard install
         fn.RemoveLastDir();
-        fn.AppendDir( wxT( "kicad" ) );
-        fn.AppendDir( wxT( "internat" ) );
+        fn.AppendDir( "kicad" );
+        fn.AppendDir( "internat" );
 
         if( fn.IsDirReadable() )
         {
-            wxLogDebug( wxT( "Adding locale lookup path: " ) + fn.GetPath() );
+            wxLogTrace( traceLocale, "Adding locale lookup path: " + fn.GetPath() );
             wxLocale::AddCatalogLookupPathPrefix( fn.GetPath() );
         }
     }
@@ -843,12 +845,12 @@ bool PGM_BASE::SetLocalEnvVariable( const wxString& aName, const wxString& aValu
     // Check to see if the environment variable is already set.
     if( wxGetEnv( aName, &env ) )
     {
-        wxLogTrace( traceEnvVars, wxT( "Environment variable %s already set to %s." ),
+        wxLogTrace( traceEnvVars,  "Environment variable %s already set to %s.",
                     GetChars( aName ), GetChars( env ) );
         return env == aValue;
     }
 
-    wxLogTrace( traceEnvVars, wxT( "Setting local environment variable %s to %s." ),
+    wxLogTrace( traceEnvVars, "Setting local environment variable %s to %s.",
                 GetChars( aName ), GetChars( aValue ) );
 
     return wxSetEnv( aName, aValue );
@@ -869,7 +871,7 @@ void PGM_BASE::SetLocalEnvVariables( const ENV_VAR_MAP& aEnvVarMap )
     // is run.
     for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
     {
-        wxLogTrace( traceEnvVars, wxT( "Setting local environment variable %s to %s." ),
+        wxLogTrace( traceEnvVars, "Setting local environment variable %s to %s.",
                     GetChars( it->first ), GetChars( it->second.GetValue() ) );
         wxSetEnv( it->first, it->second.GetValue() );
     }
