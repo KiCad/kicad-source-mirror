@@ -1086,7 +1086,7 @@ void TREE_PROJECT_FRAME::FileWatcherReset()
             // we can see wxString under a debugger, not a wxFileName
             const wxString& path = itemData->GetFileName();
 
-            wxLogTrace( traceFilesAndPaths, "%s: add '%s'\n", __func__, TO_UTF8( path ) );
+            wxLogTrace( tracePathsAndFiles, "%s: add '%s'\n", __func__, TO_UTF8( path ) );
 
             if( wxFileName::IsDirReadable( path ) )     // linux whines about watching protected dir
             {
