@@ -583,9 +583,12 @@ SCH_SHEET_PATH& SCH_EDIT_FRAME::GetCurrentSheet()
 
 void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 {
-    auto c = static_cast<SCH_DRAW_PANEL*>(m_canvas);
-    *m_CurrentSheet = aSheet;
-    c->DisplaySheet( m_CurrentSheet->LastScreen() );
+    if( aSheet != *m_CurrentSheet )
+    {
+        *m_CurrentSheet = aSheet;
+
+        static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( m_CurrentSheet->LastScreen() );
+    }
 }
 
 

@@ -97,7 +97,7 @@ public:
 
     LIB_PART*      GetLibPart() const       { return m_Entry; }
 
-    SCH_SHEET_PATH GetSheetPath() const     { return m_SheetPath; }
+    const SCH_SHEET_PATH& GetSheetPath() const { return m_SheetPath; }
 
     int GetUnit() const                     { return m_Unit; }
 
