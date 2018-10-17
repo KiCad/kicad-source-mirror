@@ -201,9 +201,20 @@ bool IsUTF8( const char* aString )
 
 UTF8::UTF8( const wchar_t* txt )
 {
-    wxCharBuffer charbuf = wxSafeConvertWX2MB( txt );
+    try
+    {
+        size_t len = wcslen( txt ) * 4 + 1;
+        char temp[len];
+        wxConvUTF8.WC2MB( temp, txt, len );
+        m_s.assign( temp );
+    }
+    catch(...)
+    {
+        auto string = wxSafeConvertWX2MB( txt );
+        m_s.assign( string );
+    }
 
-    m_s.assign( charbuf.data() );
+    m_s.shrink_to_fit();
 }
 
 
