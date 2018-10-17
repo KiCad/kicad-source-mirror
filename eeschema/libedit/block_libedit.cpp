@@ -440,30 +440,28 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     case BLOCK_DRAG_ITEM:
     case BLOCK_MOVE:                // Move
     case BLOCK_DUPLICATE:           // Duplicate
-        block->ClearItemsList();
-
         if( GetCurPart() && !block->AppendUndo() )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
-        //pt.y *= -1;
 
         if( GetCurPart() )
             BlockMoveSelectedItems( pt, GetCurPart(), block );
 
+        block->ClearItemsList();
         m_canvas->Refresh( true );
         break;
 
     case BLOCK_PASTE:       // Paste (recopy the last block saved)
-        block->ClearItemsList();
-
         if( GetCurPart() )
             SaveCopyInUndoList( GetCurPart() );
 
         pt = block->GetMoveVector();
-        //pt.y = -pt.y;
 
         pasteClipboard( pt );
+
+        block->ClearItemsList();
+        m_canvas->Refresh( true );
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd

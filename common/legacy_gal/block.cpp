@@ -148,18 +148,21 @@ void BLOCK_SELECTOR::InitData( EDA_DRAW_PANEL* aPanel, const wxPoint& startpos )
 void BLOCK_SELECTOR::ClearItemsList()
 {
     m_items.ClearItemsList();
+    m_appendUndo = false;
 }
 
 
 void BLOCK_SELECTOR::ClearListAndDeleteItems()
 {
      m_items.ClearListAndDeleteItems();
+     m_appendUndo = false;
 }
 
 
 void BLOCK_SELECTOR::PushItem( ITEM_PICKER& aItem )
 {
     m_items.PushItem( aItem );
+    m_appendUndo = false;
 }
 
 
