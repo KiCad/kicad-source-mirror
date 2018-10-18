@@ -661,14 +661,20 @@ bool DIFF_PAIR_PLACER::routeHead( const VECTOR2I& aP )
         m_prevPair->CursorOrientation( fp, midp, dirV );
 
         VECTOR2I fpProj = SEG( midp, midp + dirV ).LineProject( fp );
+
+        // compute 'leader point' distance from the cursor (project cursor position
+        // on the extension of the starting segment pair of the DP)
         int lead_dist = ( fpProj - fp ).EuclideanNorm();
 
         gwsTarget.SetFitVias( m_placingVia, m_sizes.ViaDiameter(), viaGap() );
 
+        // far from the initial segment extension line -> allow a 45-degree obtuse turn
         if( lead_dist > m_sizes.DiffPairGap() + m_sizes.DiffPairWidth() )
         {
             gwsTarget.BuildForCursor( fp );
         }
+        // close to the initial segment extension line -> keep straight part only, project as close
+        // as possible to the cursor
         else
         {
             gwsTarget.BuildForCursor( fpProj );
