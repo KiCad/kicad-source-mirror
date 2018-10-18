@@ -231,7 +231,6 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_LINE_TOOL : ID_PCB_ADD_LINE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic line" ) );
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawSegment( S_SEGMENT, line, startingPoint ) )
     {
@@ -268,7 +267,6 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_CIRCLE_TOOL : ID_PCB_CIRCLE_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic circle" ) );
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawSegment( S_CIRCLE, circle ) )
     {
@@ -300,7 +298,6 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_ARC_TOOL : ID_PCB_ARC_BUTT,
             wxCURSOR_PENCIL, _( "Add graphic arc" ) );
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     while( drawArc( arc ) )
     {
@@ -508,7 +505,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
     Activate();
     m_frame->SetToolID( ID_PCB_DIMENSION_BUTT, wxCURSOR_PENCIL, _( "Add dimension" ) );
-    m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
     enum DIMENSION_STEPS
     {
@@ -526,7 +522,6 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
-
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -982,6 +977,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     DRAWSEGMENT line45;
     GRID_HELPER grid( m_frame );
 
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
     m_frame->SetActiveLayer( getDrawingLayer() );
 
     // Add a VIEW_GROUP that serves as a preview for the new item
@@ -1076,9 +1072,10 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
-
             if( !started )
             {
+                m_lineWidth = getSegmentWidth( getDrawingLayer() );
+
                 // Init the new item attributes
                 aGraphic->SetShape( (STROKE_T) aShape );
                 aGraphic->SetWidth( m_lineWidth );
@@ -1201,6 +1198,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
 {
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
+    m_lineWidth = getSegmentWidth( getDrawingLayer() );
+
     // Arc geometric construction manager
     KIGFX::PREVIEW::ARC_GEOM_MANAGER arcManager;
 
@@ -1237,6 +1236,8 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
             {
                 m_controls->SetAutoPan( true );
                 m_controls->CaptureCursor( true );
+
+                m_lineWidth = getSegmentWidth( getDrawingLayer() );
 
                 // Init the new item attributes
                 // (non-geometric, those are handled by the manager)
