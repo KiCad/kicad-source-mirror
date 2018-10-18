@@ -90,29 +90,29 @@ void CONNECTIVITY_DATA::updateRatsnest()
     #ifdef PROFILE
     PROF_COUNTER rnUpdate( "update-ratsnest" );
     #endif
+    std::vector<RN_NET*> dirty_nets;
 
-    size_t numDirty = std::count_if( m_nets.begin() + 1, m_nets.end(), [] ( RN_NET* aNet )
-            { return aNet->IsDirty(); } );
+    std::copy_if( m_nets.begin() + 1, m_nets.end(), std::back_inserter( dirty_nets ),
+            [] ( RN_NET* aNet ) { return aNet->IsDirty(); } );
 
     // Start with net 1 as net 0 is reserved for not-connected
     std::atomic<size_t> nextNet( 1 );
     std::atomic<size_t> threadsFinished( 0 );
 
-    auto update_lambda = [&nextNet, &threadsFinished, this]()
+    auto update_lambda = [&nextNet, &threadsFinished, &dirty_nets, this]()
         {
-            for( size_t i = nextNet.fetch_add( 1 ); i < m_nets.size(); i = nextNet.fetch_add( 1 ) )
+            for( size_t i = nextNet.fetch_add( 1 ); i < dirty_nets.size(); i = nextNet.fetch_add( 1 ) )
             {
-                if( m_nets[i]->IsDirty() )
-                    m_nets[i]->Update();
+                dirty_nets[i]->Update();
             }
 
             threadsFinished++;
         };
 
-    // We don't want to spin up a new thread for fewer than two nets (overhead costs)
+    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>(
             std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            ( numDirty + 1 ) / 2 );
+            ( dirty_nets.size() + 4 ) / 8 );
 
     // This prevents generating a thread for point while routing as we are only
     // updating the ratsnest on a single net
