@@ -26,7 +26,7 @@
 #include <macros.h>
 #include <gr_basic.h>
 #include <bitmaps.h>
-
+#include <sch_painter.h>
 #include <lib_edit_frame.h>
 #include <class_libentry.h>
 #include <lib_pin.h>
@@ -53,7 +53,8 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
     m_dummyPin->SetParent( nullptr );
     m_dummyPin->ClearFlags();
 
-    m_panelShowPin->SetBackgroundColour( parent->GetDrawBgColor().ToColour() );
+    COLOR4D bgColor = parent->GetRenderSettings()->GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    m_panelShowPin->SetBackgroundColour( bgColor.ToColour() );
 
     const wxArrayString& orientationNames = LIB_PIN::GetOrientationNames();
     const BITMAP_DEF*    orientationBitmaps = LIB_PIN::GetOrientationSymbols();
