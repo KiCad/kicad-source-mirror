@@ -115,7 +115,8 @@ private:
 //    void addCorner ( const VECTOR2I& aP );
 
     const SEG baselineSegment( const DIFF_PAIR::COUPLED_SEGMENTS& aCoupledSegs );
-
+    bool pairOrientation( const DIFF_PAIR::COUPLED_SEGMENTS& aPair );
+    
     void setWorld( NODE* aWorld );
     void release();
 

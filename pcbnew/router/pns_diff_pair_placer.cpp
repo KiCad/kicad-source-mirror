@@ -503,7 +503,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
                 found = true;
                 bestDist = dist;
 
-                if( refNet == netP )
+                if( refNet != netP )
                 {
                     aPair = DP_PRIMITIVE_PAIR ( item, primRef );
                     aPair.SetAnchors( *anchor, *refAnchor );
