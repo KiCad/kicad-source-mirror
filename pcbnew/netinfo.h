@@ -74,6 +74,10 @@ private:
     int m_NetCode;              ///< A number equivalent to the net name.
                                 ///< Used for fast comparisons in ratsnest and DRC computations.
 
+    bool m_isCurrent;           ///< Indicates the net is currently in use.  We still store those
+                                ///< that are not during a session for undo/redo and to keep
+                                ///< netclass membership information.
+
     wxString m_Netname;         ///< Full net name like /mysheet/mysubsheet/vout used by Eeschema
 
     wxString m_ShortNetname;    ///< short net name, like vout from /mysheet/mysubsheet/vout
@@ -239,6 +243,10 @@ public:
      * @return const wxString &, a reference to the short netname
      */
     const wxString& GetShortNetname() const { return m_ShortNetname; }
+
+    bool IsCurrent() const { return m_isCurrent; }
+
+    void SetIsCurrent( bool isCurrent ) { m_isCurrent = isCurrent; }
 
     /**
      * Function GetMsgPanelInfo

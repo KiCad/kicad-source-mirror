@@ -236,14 +236,15 @@ protected:
 
         for( NETINFO_ITEM* netinfo : *m_netinfoList )
         {
-            if( netinfo->GetNet() == 0 )
-                continue;  // we'll insert NO_NET after sorting
-
-            if( filter.IsEmpty() || wxString( netinfo->GetNetname() ).MakeLower().Matches( filter ) )
-                netNames.push_back( netinfo->GetNetname() );
+            if( netinfo->GetNet() > 0 && netinfo->IsCurrent() )
+            {
+                if( filter.IsEmpty() || wxString( netinfo->GetNetname() ).MakeLower().Matches( filter ) )
+                    netNames.push_back( netinfo->GetNetname() );
+            }
         }
         std::sort( netNames.begin(), netNames.end() );
 
+        // Special handling for <no net>
         if( filter.IsEmpty() || wxString( NO_NET ).MakeLower().Matches( filter ) )
             netNames.insert( netNames.begin(), NO_NET );
 

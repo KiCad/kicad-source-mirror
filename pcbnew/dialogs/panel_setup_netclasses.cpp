@@ -146,30 +146,16 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     for( NETCLASSES::iterator i = netclasses.begin();  i != netclasses.end();  ++i, ++row )
         netclassToGridRow( m_Frame->GetUserUnits(), m_netclassGrid, row, i->second );
 
-    // Reassure that all nets have net classes assigned
+    // ensure that all nets have net classes assigned
     m_Pcb->BuildListOfNets();
 
     if( m_membershipGrid->GetNumberRows() )
         m_membershipGrid->DeleteRows( 0, m_membershipGrid->GetNumberRows() );
 
-    // Initialize list of nets for Default Net Class
-    for( NETCLASS::iterator name = netclass->begin();  name != netclass->end();  ++name )
+    for( NETINFO_ITEM* net : m_Pcb->GetNetInfo() )
     {
-        if( name->IsEmpty() )
-            // @TODO go fix m_Pcb->SynchronizeNetsAndNetClasses() so that the netcode==0
-            //       is not present in the BOARD::m_NetClasses
-            continue;
-        else
-            addNet( *name, netclass->GetName() );
-    }
-
-    // Initialize list of nets for others (custom) Net Classes
-    for( NETCLASSES::const_iterator nc = netclasses.begin();  nc != netclasses.end();  ++nc )
-    {
-        netclass = nc->second;
-
-        for( NETCLASS::const_iterator name = netclass->begin();  name != netclass->end();  ++name )
-            addNet( *name, netclass->GetName() );
+        if( net->GetNet() > 0 && net->IsCurrent() )
+            addNet( net->GetNetname(), net->GetNetClass()->GetName() );
     }
 
     return true;

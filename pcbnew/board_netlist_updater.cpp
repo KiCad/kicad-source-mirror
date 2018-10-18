@@ -306,10 +306,14 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
         }
         else                                 // New footprint pad has a net.
         {
-            if( net.GetNetName() != pad->GetNetname() )
+            const wxString& netName = net.GetNetName();
+            NETINFO_ITEM* netinfo = m_board->FindNet( netName );
+
+            if( netinfo && !m_isDryRun )
+                netinfo->SetIsCurrent( true );
+
+            if( pad->GetNetname() != netName )
             {
-                const wxString& netName = net.GetNetName();
-                NETINFO_ITEM* netinfo = m_board->FindNet( netName );
 
                 if( netinfo == nullptr )
                 {
@@ -326,9 +330,9 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                         changed = true;
                         netinfo = new NETINFO_ITEM( m_board, netName );
                         m_commit.Add( netinfo );
-                        m_addedNets[netName] = netinfo;
                     }
 
+                    m_addedNets[netName] = netinfo;
                     msg.Printf( _( "Add net %s." ), netName );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
                 }
@@ -626,6 +630,11 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( !m_isDryRun )
     {
         m_board->SetStatus( 0 );
+
+        // Mark all nets (except <no net>) as stale; we'll update those to current that
+        // we find in the netlist
+        for( NETINFO_ITEM* net : m_board->GetNetInfo() )
+            net->SetIsCurrent( net->GetNet() == 0 );
     }
 
     for( unsigned i = 0; i < aNetlist.GetCount(); i++ )

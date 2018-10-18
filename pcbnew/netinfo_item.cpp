@@ -50,7 +50,10 @@
 
 NETINFO_ITEM::NETINFO_ITEM( BOARD* aParent, const wxString& aNetName, int aNetCode ) :
     BOARD_ITEM( aParent, PCB_NETINFO_T ),
-    m_NetCode( aNetCode ), m_Netname( aNetName ), m_ShortNetname( m_Netname.AfterLast( '/' ) )
+    m_NetCode( aNetCode ),
+    m_isCurrent( true ),
+    m_Netname( aNetName ),
+    m_ShortNetname( m_Netname.AfterLast( '/' ) )
 {
     m_parent = aParent;
 

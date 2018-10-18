@@ -2484,19 +2484,23 @@ void BOARD::updateComponentPadConnections( NETLIST& aNetlist, MODULE* footprint,
         }
         else                                 // Footprint pad has a net.
         {
-            if( net.GetNetName() != pad->GetNetname() )
+            const wxString& netName = net.GetNetName();
+            NETINFO_ITEM* netinfo = FindNet( netName );
+
+            if( netinfo && !aNetlist.IsDryRun() )
+                netinfo->SetIsCurrent( true );
+
+            if( pad->GetNetname() != netName )
             {
                 msg.Printf( _( "Changing footprint %s pad %s net from %s to %s." ),
                             footprint->GetReference(),
                             pad->GetName(),
                             pad->GetNetname(),
-                            net.GetNetName() );
+                            netName );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
 
                 if( !aNetlist.IsDryRun() )
                 {
-                    NETINFO_ITEM* netinfo = FindNet( net.GetNetName() );
-
                     if( netinfo == NULL )
                     {
                         // It is a new net, we have to add it
@@ -2555,6 +2559,11 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     }
 
     m_Status_Pcb = 0;
+
+    // Mark all nets (except <no net>) as stale; we'll update those to current that
+    // we find in the netlist
+    for( NETINFO_ITEM* net : m_NetInfo )
+        net->SetIsCurrent( net->GetNet() == 0 );
 
     for( i = 0;  i < aNetlist.GetCount();  i++ )
     {
