@@ -694,6 +694,9 @@ void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
         // (depending on platforms). Do nothing in this case
         return;
 
+    // Ensure links are up to date, even if a library was reloaded for some reason:
+    static_cast<SCH_SCREEN*>( GetScreen() )->UpdateSymbolLinks();
+
     if( m_painter )
         static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
 
