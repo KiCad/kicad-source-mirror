@@ -185,19 +185,20 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 
     SetModify();
 
+    m_drawList.Remove( aItem );
+
     if( aItem->Type() == SCH_SHEET_PIN_T )
     {
         // This structure is attached to a sheet, get the parent sheet object.
         SCH_SHEET_PIN* sheetPin = (SCH_SHEET_PIN*) aItem;
         SCH_SHEET* sheet = sheetPin->GetParent();
-        wxCHECK_RET( sheet,
-                     wxT( "Sheet label parent not properly set, bad programmer!" ) );
+        wxCHECK_RET( sheet, wxT( "Sheet label parent not properly set, bad programmer!" ) );
         sheet->RemovePin( sheetPin );
         return;
     }
     else
     {
-        delete m_drawList.Remove( aItem );
+        delete aItem;
     }
 }
 
