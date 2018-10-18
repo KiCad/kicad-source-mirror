@@ -27,8 +27,9 @@
 #include <utf8.h>
 
 #include <algorithm>
+#include <iostream>
 
-
+#define UTF8_INIT "This is a test of UTF-8: ü‱☺😕😱"
 struct Utf8Fixture
 {
 };
@@ -45,9 +46,9 @@ BOOST_FIXTURE_TEST_SUITE( Utf8, Utf8Fixture )
  */
 BOOST_AUTO_TEST_CASE( Utf8AndStdString )
 {
-    std::string str { "input" };
+    std::string str { UTF8_INIT };
 
-    UTF8 utf8_inited { "input" };
+    UTF8 utf8_inited { UTF8_INIT };
     UTF8 utf8_copied_from_stdstr = str;
 
     BOOST_CHECK_EQUAL( utf8_inited, utf8_copied_from_stdstr );
@@ -63,8 +64,8 @@ BOOST_AUTO_TEST_CASE( Utf8AndStdString )
  */
 BOOST_AUTO_TEST_CASE( Utf8AndWx )
 {
-    UTF8 utf8_inited { "input" };
-    wxString wx_inited { "input" };
+    UTF8 utf8_inited { UTF8_INIT };
+    wxString wx_inited = wxString::FromUTF8( UTF8_INIT );
 
     // Check that we can copy convert WxString and compare
     wxString wx_copied_from_utf8 = utf8_inited;
