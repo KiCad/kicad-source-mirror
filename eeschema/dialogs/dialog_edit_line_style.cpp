@@ -123,6 +123,8 @@ bool DIALOG_EDIT_LINE_STYLE::TransferDataFromWindow()
     m_line->SetLineStyle( m_lineStyle->GetSelection() );
     m_line->SetLineColor( m_selectedColor );
 
+    m_frame->RefreshItem( m_line );
+    m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 
     return true;

@@ -334,13 +334,14 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         m_CurrentText->SetThickness( 0 );
     }
 
+    m_Parent->RefreshItem( m_CurrentText );
+    m_Parent->GetCanvas()->Refresh();
     m_Parent->OnModify();
 
     // Make the text size the new default size ( if it is a new text ):
     if( m_CurrentText->IsNew() )
         SetDefaultTextSize( m_CurrentText->GetTextWidth() );
 
-    m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
     m_Parent->GetCanvas()->MoveCursorToCrossHair();
 
     return true;

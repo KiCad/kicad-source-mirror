@@ -98,6 +98,8 @@ bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
     auto shape = static_cast<PINSHEETLABEL_SHAPE>( m_choiceConnectionType->GetCurrentSelection() );
     m_sheetPin->SetShape( shape );
 
+    m_frame->RefreshItem( m_sheetPin );
+    m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 
     return true;

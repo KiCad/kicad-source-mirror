@@ -41,7 +41,7 @@ public:
     KIGFX::VIEW_GROUP* GetPreview() const { return m_preview.get(); }
 
     void ClearPreview();
-    void AddToPreview( EDA_ITEM *aItem, bool makeCopy = true );
+    void AddToPreview( EDA_ITEM *aItem, bool takeOwnership = true );
 
     void ShowSelectionArea( bool aShow = true );
     void ShowPreview( bool aShow = true );
@@ -55,7 +55,7 @@ private:
     std::unique_ptr<WORKSHEET_VIEWITEM> m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
-    std::vector<EDA_ITEM *> m_previewItems;
+    std::vector<EDA_ITEM *> m_ownedItems;
     std::unordered_map<VIEW_ITEM*, BOX2I> m_cachedBBoxes;
 };
 

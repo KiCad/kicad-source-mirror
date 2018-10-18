@@ -42,7 +42,7 @@
 #include <sch_edit_frame.h>
 #include <base_units.h>
 #include <trace_helpers.h>
-
+#include <sch_view.h>
 #include <general.h>
 #include <class_library.h>
 #include <lib_pin.h>
@@ -333,6 +333,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
             if( m_foundItems.ReplaceItem( sheet ) )
             {
+                GetCanvas()->GetView()->Update( undoItem, KIGFX::ALL );
                 OnModify();
                 SaveUndoItemInUndoList( undoItem );
                 updateFindReplaceView( aEvent );
@@ -363,6 +364,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
         if( m_foundItems.ReplaceItem( sheet ) )
         {
+            GetCanvas()->GetView()->Update( undoItem, KIGFX::ALL );
             OnModify();
             SaveUndoItemInUndoList( undoItem );
             updateFindReplaceView( aEvent );

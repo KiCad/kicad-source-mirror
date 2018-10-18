@@ -1003,6 +1003,8 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
+    GetCanvas()->GetView()->Update( DrawItem );
+    GetCanvas()->Refresh();
     OnModify();
 
     // Display new text
@@ -1051,6 +1053,9 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     UpdatePartSelectList();
     updateTitle();
     DisplayCmpDoc();
+
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -1186,7 +1191,7 @@ void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         }
 
         GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
     else if( item )
     {
@@ -1196,6 +1201,12 @@ void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
             SaveCopyInUndoList( part, UR_LIBEDIT );
 
         item->Rotate( rotationPoint );
+
+        if( item->InEditMode() )
+            GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        else
+            GetCanvas()->GetView()->Update( item );
+        GetCanvas()->Refresh();
         OnModify();
 
         if( !item->InEditMode() )
@@ -1243,7 +1254,7 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         }
 
         m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        GetGalCanvas()->Refresh();
+        GetCanvas()->Refresh();
     }
     else if( item )
     {
@@ -1258,6 +1269,11 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
         else
             item->MirrorVertical( mirrorPoint );
 
+        if( item->InEditMode() )
+            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        else
+            GetCanvas()->GetView()->Update( item );
+        GetCanvas()->Refresh();
         OnModify();
 
         if( !item->InEditMode() )
@@ -1418,11 +1434,6 @@ void LIB_EDIT_FRAME::OnModify()
     GetScreen()->SetModify();
     storeCurrentPart();
 
-    // Parts have a small number of view items (compared to a full schematic), and changes
-    // in shared pins, graphic items, etc. can add/remove items from the view.  All things
-    // considered, it's safer to just use a big hammer.
-    RebuildView();
-
     m_treePane->GetLibTree()->Refresh();
 }
 
@@ -1452,6 +1463,8 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 

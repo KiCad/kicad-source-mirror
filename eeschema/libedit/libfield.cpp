@@ -98,5 +98,7 @@ void LIB_EDIT_FRAME::EditField( LIB_FIELD* aField )
 
     dlg.UpdateField( aField );
 
+    GetCanvas()->GetView()->Update( aField );
+    GetCanvas()->Refresh();
     OnModify();
 }

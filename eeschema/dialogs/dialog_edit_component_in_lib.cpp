@@ -336,6 +336,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     m_libEntry->GetFootprints().Clear();
     m_libEntry->GetFootprints() = m_FootprintFilterListBox->GetStrings();
 
+    m_Parent->RebuildView();
     m_Parent->OnModify();
 
     return true;

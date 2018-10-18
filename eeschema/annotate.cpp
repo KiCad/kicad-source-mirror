@@ -72,6 +72,8 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
 
     // Update the references for the sheet that is currently being displayed.
     m_CurrentSheet->UpdateAllScreenReferences();
+
+    SyncView();
     GetCanvas()->Refresh();
     OnModify();
 }
@@ -230,13 +232,13 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     if( !CheckAnnotate( aReporter, !aAnnotateSchematic ) )
         aReporter.ReportTail( _( "Annotation complete." ), REPORTER::RPT_ACTION );
 
-    OnModify();
-
     // Update on screen references, that can be modified by previous calculations:
     m_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     SyncView();
+    GetCanvas()->Refresh();
+    OnModify();
 }
 
 

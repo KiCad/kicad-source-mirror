@@ -97,6 +97,8 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     DrawItem->SetWidth( m_drawLineWidth );
 
+    GetCanvas()->GetView()->Update( DrawItem );
+    GetCanvas()->Refresh();
     OnModify( );
 
     MSG_PANEL_ITEMS items;
@@ -117,9 +119,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     item->EndEdit( parent->GetCrossHairPosition( true ), true );
 
     if( newItem )
-    {
         delete item;
-    }
     else
         parent->RestoreComponent();
 
@@ -129,7 +129,6 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     view->ClearPreview();
     view->ShowPreview( false );
     view->ClearHiddenFlags();
-    DBG(printf("abort\n");)
     parent->RebuildView();
 }
 
@@ -253,28 +252,18 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase )
 {
-    LIB_ITEM* item;
-
-    item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
+    LIB_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
 
     if( item == NULL )
         return;
 
-    DBG(printf("CalcDraw!\n");)
-
     auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
-
     auto p = aPanel->GetParent()->GetCrossHairPosition( true );
 
     item->CalcEdit( p );
     
-    DBG(printf("cp: %d %d %d %d\n", item->GetPosition().x, item->GetPosition().y, p.x, p.y );)
-    
     view->ClearPreview();
-
-    auto copy = static_cast<LIB_ITEM*>( item->Clone() );
-    DBG(printf("cp: %d %d\n", copy->GetPosition().x, copy->GetPosition().y );)
-    view->AddToPreview( copy );
+    view->AddToPreview( item, false );
 }
 
 

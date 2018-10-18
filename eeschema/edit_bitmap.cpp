@@ -140,47 +140,15 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
 }
 
 
-void SCH_EDIT_FRAME::MoveImage( SCH_BITMAP* aImageItem, wxDC* aDC )
-{
-    // 5.1 TODO: MoveImage(), moveBitmap() and abortMoveBitmap() are obsolete....
-
-    aImageItem->SetFlags( IS_MOVED );
-
-    m_canvas->SetMouseCapture( moveBitmap, abortMoveBitmap );
-    GetScreen()->SetCurItem( aImageItem );
-    SetRepeatItem( NULL );
-
-    SetUndoItem( aImageItem );
-
-    if( aImageItem->IsMovableFromAnchorPoint() )
-    {
-        SetCrossHairPosition( aImageItem->GetPosition() );
-        m_canvas->MoveCursorToCrossHair();
-        aImageItem->SetStoredPos( wxPoint( 0,0 ) );
-    }
-    else
-    {
-        // Round the point under the cursor to a multiple of the grid
-        wxPoint cursorpos = GetCrossHairPosition() - aImageItem->GetPosition();
-        wxPoint gridsize = GetScreen()->GetGridSize();
-        cursorpos.x = ( cursorpos.x / gridsize.x ) * gridsize.x;
-        cursorpos.y = ( cursorpos.y / gridsize.y ) * gridsize.y;
-
-        aImageItem->SetStoredPos( cursorpos );
-    }
-
-    OnModify();
-}
-
-
 void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 {
     if( aItem->GetFlags( ) == 0 )
         SaveCopyInUndoList( aItem, UR_ROTATED, false, aItem->GetPosition() );
 
     aItem->Rotate( aItem->GetPosition() );
+
+    RefreshItem( aItem );
     OnModify();
-    m_canvas->Refresh();
 }
 
 
@@ -194,8 +162,8 @@ void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
     else
         aItem->MirrorY( aItem->GetPosition().x );
 
+    RefreshItem( aItem );
     OnModify();
-    m_canvas->Refresh();
 }
 
 
@@ -217,6 +185,7 @@ void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
     }
 
     dlg.TransfertToImage( aItem->GetImage() );
+
+    RefreshItem( aItem );
     OnModify();
-    m_canvas->Refresh();
 }

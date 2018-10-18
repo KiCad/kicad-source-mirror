@@ -59,6 +59,8 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
         SaveCopyInUndoList( aTextItem, UR_CHANGED );
 
     aTextItem->SetLabelSpinStyle( orient );
+
+    RefreshItem( aTextItem );
     OnModify();
 }
 

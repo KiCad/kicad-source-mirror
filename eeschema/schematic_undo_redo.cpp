@@ -404,11 +404,13 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToRedoList( List );
 
-    OnModify();
     SetSheetNumberAndCount();
 
     TestDanglingEnds();
-    m_canvas->Refresh();
+
+    SyncView();
+    GetCanvas()->Refresh();
+    OnModify();
 }
 
 
@@ -427,9 +429,11 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
     List->ReversePickersListOrder();
     GetScreen()->PushCommandToUndoList( List );
 
-    OnModify();
     SetSheetNumberAndCount();
 
     TestDanglingEnds();
-    m_canvas->Refresh();
+
+    SyncView();
+    GetCanvas()->Refresh();
+    OnModify();
 }

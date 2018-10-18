@@ -79,12 +79,12 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
     dlg.UpdateField( aField, m_CurrentSheet );
     m_canvas->MoveCursorToCrossHair();
     m_canvas->SetIgnoreMouseEvents( false );
-    OnModify();
 
     if( m_autoplaceFields )
         component->AutoAutoplaceFields( GetScreen() );
 
-    m_canvas->Refresh();
+    RefreshItem( aField );
+    OnModify();
 
     MSG_PANEL_ITEMS items;
     component->SetCurrentSheetPath( &GetCurrentSheet() );
@@ -110,5 +110,6 @@ void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField )
     else
         aField->SetTextAngle( TEXT_ANGLE_HORIZ );
 
+    RefreshItem( aField );
     OnModify();
 }

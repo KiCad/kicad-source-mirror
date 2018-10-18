@@ -94,6 +94,9 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     SetShowDeMorgan( part->HasConversion() );
     updateTitle();
     DisplayCmpDoc();
+
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -140,5 +143,8 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     SetShowDeMorgan( part->HasConversion() );
     updateTitle();
     DisplayCmpDoc();
+
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }

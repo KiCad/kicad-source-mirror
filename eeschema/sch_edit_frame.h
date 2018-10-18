@@ -1000,7 +1000,6 @@ private:
 
     // Images:
     SCH_BITMAP* CreateNewImage( wxDC* aDC );
-    void MoveImage( SCH_BITMAP* aItem, wxDC* aDC );
     void RotateImage( SCH_BITMAP* aItem );
 
     /**

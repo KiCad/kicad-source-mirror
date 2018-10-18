@@ -223,7 +223,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetRepeatItem( NULL );
         TestDanglingEnds();
         SetSheetNumberAndCount();
-        m_canvas->Refresh();
+        GetCanvas()->Refresh();
         OnModify();
         break;
 
@@ -262,8 +262,9 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             /* Save sheet in undo list before cleaning up unreferenced hierarchical labels. */
             SaveCopyInUndoList( sheet, UR_CHANGED );
             sheet->CleanupSheet();
+            SyncView();
+            GetCanvas()->Refresh();
             OnModify();
-            m_canvas->RefreshDrawingRect( sheet->GetBoundingBox() );
         }
         break;
 
@@ -691,7 +692,6 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     // Draw the item item at it's new position.
     item->SetWireImage();  // While moving, the item may choose to render differently
 
-    view->Hide( item );
     view->ClearPreview();
     view->AddToPreview( item, false );
 }

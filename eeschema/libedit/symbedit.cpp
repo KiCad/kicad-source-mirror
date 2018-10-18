@@ -185,30 +185,26 @@ void LIB_EDIT_FRAME::SaveOneSymbol()
     prj.SetRString( PROJECT::SCH_LIB_PATH, fn.GetPath() );
 
     if( fn.FileExists() )
-    {
         wxRemove( fn.GetFullPath() );
-    }
 
-    wxString        msg;
-    msg.Printf( _( "Saving symbol in \"%s\"" ), fn.GetPath() );
-    SetStatusText( msg );
+    SetStatusText( wxString::Format( _( "Saving symbol in \"%s\"" ), fn.GetPath() ) );
 
-    SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+    SCH_PLUGIN::SCH_PLUGIN_RELEASER plugin( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
     try
     {
         PROPERTIES nodoc_props;     // Doc file is useless for a .sym file
         nodoc_props[ SCH_LEGACY_PLUGIN::PropNoDocFile ] = "";
-        pi->CreateSymbolLib( fn.GetFullPath(), &nodoc_props );
+        plugin->CreateSymbolLib( fn.GetFullPath(), &nodoc_props );
 
         LIB_PART* saved_part = new LIB_PART( *part );
         saved_part->RemoveAllAliases();     // useless in a .sym file
-        pi->SaveSymbol( fn.GetFullPath(), saved_part, &nodoc_props );
+        plugin->SaveSymbol( fn.GetFullPath(), saved_part, &nodoc_props );
     }
     catch( const IO_ERROR& ioe )
     {
-        msg.Printf( _( "An error occurred attempting to save symbol file \"%s\"" ),
-                    fn.GetFullPath() );
+        wxString msg = wxString::Format( _( "An error occurred saving symbol file \"%s\"" ),
+                                         fn.GetFullPath() );
         DisplayErrorMessage( this, msg, ioe.What() );
     }
 }

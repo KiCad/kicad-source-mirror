@@ -709,8 +709,7 @@ void SCH_EDIT_FRAME::OnAutoplaceFields( wxCommandEvent& aEvent )
 
     component->AutoplaceFields( screen, /* aManual */ true );
 
-    SyncView();
-    GetCanvas()->Refresh();
+    RefreshItem( component );
     OnModify();
 }
 

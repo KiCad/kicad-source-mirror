@@ -619,8 +619,6 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     SCH_SCREENS allScreens;
     allScreens.ReplaceDuplicateTimeStamps();
 
-    OnModify();
-
     SCH_SCREENS screens( GetCurrentSheet().Last() );
     screens.UpdateSymbolLinks( true );
 
@@ -631,7 +629,10 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
+
     SyncView();
+    GetCanvas()->Refresh();
+    OnModify();
 
     return true;
 }

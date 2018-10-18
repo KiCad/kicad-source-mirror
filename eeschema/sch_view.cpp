@@ -131,20 +131,21 @@ void SCH_VIEW::ClearPreview()
 {
     m_preview->Clear();
 
-    for( auto item : m_previewItems )
+    for( auto item : m_ownedItems )
         delete item;
 
-    m_previewItems.clear();
-    Update(m_preview.get());
+    m_ownedItems.clear();
+    Update( m_preview.get() );
 }
 
 
-void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool owned )
+void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool takeOwnership )
 {
+    Hide( aItem, false );
     m_preview->Add( aItem );
 
-    if( owned )
-        m_previewItems.push_back( aItem );
+    if( takeOwnership )
+        m_ownedItems.push_back( aItem );
 
     SetVisible( m_preview.get(), true );
     Hide( m_preview.get(), false );

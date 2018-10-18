@@ -115,6 +115,8 @@ void LIB_EDIT_FRAME::OnEditPin( wxCommandEvent& event )
 
     if( pin->IsModified() || pin->IsNew() )
     {
+        GetCanvas()->GetView()->Update( pin );
+        GetCanvas()->Refresh();
         OnModify( );
 
         MSG_PANEL_ITEMS items;
@@ -267,6 +269,8 @@ void LIB_EDIT_FRAME::PlacePin()
 
     SetDrawItem( NULL );
 
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -274,7 +278,6 @@ void LIB_EDIT_FRAME::PlacePin()
 void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
 {
     LIB_PIN* cur_pin = (LIB_PIN*) aItem;
-    wxPoint startPos;
 
     TempCopyComponent();
 
@@ -294,8 +297,7 @@ void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
 
         if( pin->GetPosition() == cur_pin->GetPosition() &&
             pin->GetOrientation() == cur_pin->GetOrientation() &&
-            pin->GetConvert() == cur_pin->GetConvert()
-            )
+            pin->GetConvert() == cur_pin->GetConvert() )
         {
             pin->SetFlags( IS_LINKED | IS_MOVED );
         }
@@ -303,13 +305,11 @@ void LIB_EDIT_FRAME::StartMovePin( LIB_ITEM* aItem )
 
     cur_pin->SetFlags( IS_LINKED | IS_MOVED );
 
-    startPos.x = OldPos.x;
-    startPos.y = -OldPos.y;
-
     MSG_PANEL_ITEMS items;
 
     cur_pin->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
+
     m_canvas->SetMouseCapture( DrawMovePin, AbortPinMove );
 }
 
@@ -329,9 +329,6 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
     if( cur_pin == NULL || cur_pin->Type() != LIB_PIN_T )
         return;
 
-
-    DBG(printf("DrawMovePin\n");)
-
     auto p =  aPanel->GetParent()->GetCrossHairPosition( true );
 
     // Redraw pin in new position
@@ -339,11 +336,8 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
     auto view = parent->GetCanvas()->GetView();
 
-    auto copy_pin = static_cast<LIB_PIN*>( cur_pin->Clone() );
-
-    view->Hide( cur_pin );
     view->ClearPreview();
-    view->AddToPreview( copy_pin );
+    view->AddToPreview( cur_pin, false );
 }
 
 
@@ -494,6 +488,8 @@ void LIB_EDIT_FRAME::GlobalSetPins( LIB_PIN* aMasterPin, int aId )
 
     // Now changes are made, call OnModify() to validate thes changes and set
     // the global change for UI
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -564,7 +560,10 @@ void LIB_EDIT_FRAME::RepeatPinItem( wxDC* DC, LIB_PIN* SourcePin )
     MSG_PANEL_ITEMS items;
     pin->GetMsgPanelInfo( m_UserUnits, items );
     SetMsgPanel( items );
-    OnModify( );
+
+    RebuildView();
+    GetCanvas()->Refresh();
+    OnModify();
 }
 
 

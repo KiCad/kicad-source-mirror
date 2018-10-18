@@ -176,12 +176,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     GetScreen()->ClearBlockCommand();
     GetScreen()->SetCurItem( NULL );
 
-    if( block->GetCount() )
-    {
-        DisplayError( this, wxT( "HandleBlockPLace() error: some items left in buffer" ) );
-        block->ClearItemsList();
-    }
-
     m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString, false );
 
     GetCanvas()->GetView()->ClearPreview();

@@ -1438,12 +1438,12 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
 
     item->ClearFlags();
 
-    GetCanvas()->GetView()->Update( item );
-
     screen->SetModify();
     screen->SetCurItem( NULL );
     m_canvas->SetMouseCapture( NULL, NULL );
     m_canvas->EndMouseCapture();
+
+    RefreshItem( item );
 
     if( item->IsConnectable() )
     {

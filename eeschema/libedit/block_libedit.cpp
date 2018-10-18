@@ -346,6 +346,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                     }
 
                     BlockDeleteSelectedItems( GetCurPart(), block );
+                    RebuildView();
+                    GetCanvas()->Refresh();
                     OnModify();
                 }
             }
@@ -366,6 +368,8 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( GetCurPart() )
             {
                 BlockDeleteSelectedItems( GetCurPart(), block );
+                RebuildView();
+                GetCanvas()->Refresh();
                 OnModify();
             }
             break;
@@ -449,7 +453,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
             BlockMoveSelectedItems( pt, GetCurPart(), block );
 
         block->ClearItemsList();
-        m_canvas->Refresh( true );
         break;
 
     case BLOCK_PASTE:       // Paste (recopy the last block saved)
@@ -461,7 +464,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         pasteClipboard( pt );
 
         block->ClearItemsList();
-        m_canvas->Refresh( true );
         break;
 
     case BLOCK_ZOOM:        // Handled by HandleBlockEnd
@@ -472,6 +474,8 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         break;
     }
 
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 
     block->SetState( STATE_NO_BLOCK );
@@ -481,8 +485,6 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     
     GetCanvas()->GetView()->ClearPreview();
     GetCanvas()->GetView()->ClearHiddenFlags();
-
-    m_canvas->Refresh( true );
 }
 
 
@@ -547,6 +549,8 @@ void LIB_EDIT_FRAME::pasteClipboard( const wxPoint& aOffset )
     }
 
     BlockMoveSelectedItems( aOffset, GetCurPart(), &GetScreen()->m_BlockLocate );
+    RebuildView();
+    GetCanvas()->Refresh();
     OnModify();
 }
 

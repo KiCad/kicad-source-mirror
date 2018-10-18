@@ -82,6 +82,8 @@ bool DIALOG_UPDATE_FIELDS::TransferDataFromWindow()
     for( auto component : m_components )
         updateFields( component );
 
+    m_frame->SyncView();
+    m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
 
     return true;

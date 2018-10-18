@@ -121,7 +121,11 @@ void SCH_EDIT_FRAME::backAnnotateFootprints( const std::string& aChangedSetOfRef
     }
 
     if( isChanged )
+    {
+        SyncView();
+        GetCanvas()->Refresh();
         OnModify();
+    }
 }
 
 
@@ -252,6 +256,8 @@ bool SCH_EDIT_FRAME::LoadCmpToFootprintLinkFile()
         return false;
     }
 
+    SyncView();
+    GetCanvas()->Refresh();
     OnModify();
     return true;
 }
