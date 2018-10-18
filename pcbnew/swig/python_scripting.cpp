@@ -415,7 +415,6 @@ wxString PyStringToWx( PyObject* aString )
     if( !aString )
         return ret;
 
-    printf("PyStringToWx\n");
 #if PY_MAJOR_VERSION >= 3
     const char* str_res = NULL;
     PyObject* temp_bytes = PyUnicode_AsEncodedString( aString, "UTF-8", "strict" );
@@ -454,20 +453,20 @@ wxArrayString PyArrayStringToWx( PyObject* aArrayString )
         if( element )
         {
 #if PY_MAJOR_VERSION >= 3
-        const char* str_res = NULL;
-        PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
-        if( temp_bytes != NULL )
-        {
-            str_res = PyBytes_AS_STRING( temp_bytes );
-            ret.Add( FROM_UTF8( str_res ), 1 );
-            Py_DECREF( temp_bytes );
-        }
-        else
-        {
-            wxLogMessage( "cannot encode unicode python string" );
-        }
+            const char* str_res = NULL;
+            PyObject* temp_bytes = PyUnicode_AsEncodedString( element, "UTF-8", "strict" );
+            if( temp_bytes != NULL )
+            {
+                str_res = PyBytes_AS_STRING( temp_bytes );
+                ret.Add( FROM_UTF8( str_res ), 1 );
+                Py_DECREF( temp_bytes );
+            }
+            else
+            {
+                wxLogMessage( "cannot encode unicode python string" );
+            }
 #else
-        ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
+            ret.Add( FROM_UTF8( PyString_AsString( element ) ), 1 );
 #endif
         }
     }
