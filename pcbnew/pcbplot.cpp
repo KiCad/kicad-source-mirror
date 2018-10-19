@@ -170,6 +170,12 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
         break;
     }
 
+    // This code adds a optional parameter: the type of copper layers.
+    // Because it is not used by Pcbnew (it can be used only by external autorouters)
+    // user do not really set this parameter.
+    // Therefore do not add it.
+    // However, this code is left here, for perhaps a future usage.
+#if 0
     // Add the signal type of the layer, if relevant
     if( IsCopperLayer( aLayer ) )
     {
@@ -190,6 +196,7 @@ const wxString GetGerberFileFunctionAttribute( const BOARD *aBoard, LAYER_NUM aL
             break;   // do nothing (but avoid a warning for unhandled LAYER_T values from GCC)
         }
     }
+#endif
 
     wxString fileFct;
     fileFct.Printf( "%%TF.FileFunction,%s*%%", GetChars( attrib ) );
