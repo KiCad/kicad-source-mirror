@@ -122,7 +122,9 @@ EDA_ITEM* SEGZONE::Clone() const
 
 wxString SEGZONE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    return wxString::Format( _( "Zone [%s] on %s" ), GetNetnameMsg(), GetLayerName() );
+    return wxString::Format( _( "Zone [%s] on %s" ),
+                             UnescapeString( GetNetnameMsg() ),
+                             GetLayerName() );
 }
 
 
@@ -571,7 +573,8 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
     if( net == NULL )
         return;
 
-    int textlen = net->GetShortNetname().Len();
+    wxString text = UnescapeString( net->GetShortNetname() );
+    int textlen = text.Len();
 
     if( textlen > 0 )
     {
@@ -615,11 +618,10 @@ void TRACK::DrawShortNetname( EDA_DRAW_PANEL* panel,
 
             tsize = (tsize * 7) / 10;       // small reduction to give a better look
             DrawGraphicHaloText( panel->GetClipBox(), aDC, tpos,
-                                 aBgColor, BLACK, WHITE, net->GetShortNetname(), angle,
-                                 wxSize( tsize, tsize ),
+                                 aBgColor, BLACK, WHITE,
+                                 text, angle, wxSize( tsize, tsize ),
                                  GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                                 tsize / 7,
-                                 false, false );
+                                 tsize / 7, false, false );
         }
     }
 }
@@ -972,7 +974,8 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
     if( net == NULL )
         return;
 
-    int len = net->GetShortNetname().Len();
+    wxString text = UnescapeString( net->GetShortNetname() );
+    int len = text.Len();
 
     if( len > 0 )
     {
@@ -988,8 +991,8 @@ void VIA::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode, const w
 
             EDA_RECT* clipbox = panel->GetClipBox();
             DrawGraphicHaloText( clipbox, aDC, m_Start,
-                                 color, WHITE, BLACK, net->GetShortNetname(), 0,
-                                 wxSize( tsize, tsize ),
+                                 color, WHITE, BLACK,
+                                 text, 0, wxSize( tsize, tsize ),
                                  GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                                  tsize / 7, false, false );
         }
@@ -1114,9 +1117,9 @@ void TRACK::GetMsgPanelInfoBase_Common( EDA_UNITS_T aUnits, std::vector< MSG_PAN
         NETINFO_ITEM* net = GetNet();
 
         if( net )
-            msg = net->GetNetname();
+            msg = UnescapeString( net->GetNetname() );
         else
-            msg = wxT( "<noname>" );
+            msg = wxT( "<no name>" );
 
         aList.push_back( MSG_PANEL_ITEM( _( "NetName" ), msg, RED ) );
 

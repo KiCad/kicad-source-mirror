@@ -395,7 +395,10 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     // Search net_code for this net, if a net was selected
     if( m_ListNetNameSelection->GetSelection() > 0 )
-        net = m_Parent->GetBoard()->FindNet( m_ListNetNameSelection->GetStringSelection() );
+    {
+        wxString netname = EscapeString( m_ListNetNameSelection->GetStringSelection(), CTX_NETNAME );
+        net = m_Parent->GetBoard()->FindNet( netname );
+    }
 
     m_settings.m_NetcodeSelection = net ? net->GetNet() : 0;
 

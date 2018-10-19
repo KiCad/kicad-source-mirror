@@ -189,8 +189,19 @@ public:
         }
         else
         {
-            m_selectedNetcode = m_netinfoList->GetNetItem( selectedNetName )->GetNet();
-            GetComboCtrl()->SetValue( selectedNetName );
+            wxString netname = EscapeString( selectedNetName, CTX_NETNAME );
+            NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( netname );
+
+            if( netInfo == nullptr || netInfo->GetNet() == 0 )
+            {
+                m_selectedNetcode = 0;
+                GetComboCtrl()->SetValue( NO_NET );
+            }
+            else
+            {
+                m_selectedNetcode = netInfo->GetNet();
+                GetComboCtrl()->SetValue( selectedNetName );
+            }
         }
 
         wxCommandEvent changeEvent( NET_SELECTED );
@@ -241,8 +252,10 @@ protected:
         {
             if( netinfo->GetNet() > 0 && netinfo->IsCurrent() )
             {
-                if( filter.IsEmpty() || wxString( netinfo->GetNetname() ).MakeLower().Matches( filter ) )
-                    netNames.push_back( netinfo->GetNetname() );
+                wxString netname = UnescapeString( netinfo->GetNetname() );
+
+                if( filter.IsEmpty() || wxString( netname ).MakeLower().Matches( filter ) )
+                    netNames.push_back( netname );
             }
         }
         std::sort( netNames.begin(), netNames.end() );

@@ -82,7 +82,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         {
             m_SelectedNetName = FROM_UTF8( text );
 
-            SetStatusText( _( "Selected net: " ) + m_SelectedNetName );
+            SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
             std::vector<EDA_ITEM*> itemsToRedraw;
             SetCurrentSheetHighlightFlags( &itemsToRedraw );
 

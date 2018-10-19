@@ -40,78 +40,107 @@
 static const char illegalFileNameChars[] = "\\/:\"<>|";
 
 
-wxString EscapeString( const wxString& aSource )
+/**
+ * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
+ * characters which are:
+ *   (a) not legal in filenames
+ *   (b) used as control characters in LIB_IDs
+ *   (c) used to delineate hierarchical paths
+ */
+wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
 {
-#if 1
-    return aSource;
-#else
     wxString converted;
 
     for( wxUniChar c: aSource )
     {
-        if( c == '\"' )
-            converted += "&quot;";
-        else if( c == '\'' )
-            converted += "&apos;";
-        else if( c == '&' )
-            converted += "&amp;";
-        else if( c == '<' )
-            converted += "&lt;";
-        else if( c == '>' )
-            converted += "&gt;";
-        else if( c == '\\' )
-            converted += "&Backslash;";
-        else if( c == '/' )
-            converted += "&frasl;";
-        else if( c == '|' )
-            converted += "&verbar;";
-        else if( c == ':' )
-            converted += "&colon;";
-        else if( c == ' ' )
-            converted += "&nbsp;";
-        else if( c == '%' )
-            converted += "&percnt;";
-        else if( c == '$' )
-            converted += "&dollar;";
-        else if( c == '\t' )
-            converted += "&tab;";
-        else if( c == '\n' || c == '\r' )
-            converted += "&Newline;";
+        if( c == '{' )
+        {
+            converted += "{brace}";
+        }
+        else if( aContext == CTX_NETNAME )
+        {
+            if( c == '/' )
+                converted += "{slash}";
+            else
+                converted += c;
+        }
+        else if( aContext == CTX_LIBID )
+        {
+            if( c == ':' )
+                converted += "{colon}";
+            else
+                converted += c;
+        }
+        else if( aContext == CTX_QUOTED_STR )
+        {
+            if( c == '\"' )
+                converted += "{dblquote}";
+            else
+                converted += c;
+        }
+        else if( aContext == CTX_DELIMITED_STR )
+        {
+            if( c == ' ' )
+                converted += "{space}";
+            else if( c == '\t' )
+                converted += "{tab}";
+            else if( c == '\n' || c == '\r' )
+                converted += "{return}";
+            else
+                converted += c;
+        }
+        else if( aContext == CTX_FILENAME )
+        {
+            if( c == '/' )
+                converted += "{slash}";
+            else if( c == '\\' )
+                converted += "{backslash}";
+            else if( c == '\"' )
+                converted += "{dblquote}";
+            else if( c == '<' )
+                converted += "{lt}";
+            else if( c == '>' )
+                converted += "{gt}";
+            else if( c == '|' )
+                converted += "{bar}";
+            else if( c == ':' )
+                converted += "{colon}";
+            else if( c == '\t' )
+                converted += "{tab}";
+            else if( c == '\n' || c == '\r' )
+                converted += "{return}";
+            else
+                converted += c;
+        }
         else
             converted += c;
     }
 
     return converted;
-#endif
 }
 
 
 wxString UnescapeString( const wxString& aSource )
 {
-#if 1
-    return aSource;
-#else
     wxString converted = aSource;
 
-    converted.Replace( "&quot;", "\"" );
-    converted.Replace( "&apos;", "'" );
-    converted.Replace( "&lt;", "<" );
-    converted.Replace( "&gt;", ">" );
-    converted.Replace( "&Backslash;", "\\" );
-    converted.Replace( "&frasl;", "/" );
-    converted.Replace( "&verbar;", "|" );
-    converted.Replace( "&colon;", ":" );
-    converted.Replace( "&nbsp;", " " );
-    converted.Replace( "&percnt;", "%" );
-    converted.Replace( "&dollar;", "$" );
-    converted.Replace( "&tab;", "\t" );
-    converted.Replace( "&Newline;", "\n" );
+    converted.Replace( "{dblquote}", "\"" );
+    converted.Replace( "{quote}", "'" );
+    converted.Replace( "{lt}", "<" );
+    converted.Replace( "{gt}", ">" );
+    converted.Replace( "{backslash}", "\\" );
+    converted.Replace( "{slash}", "/" );
+    converted.Replace( "{bar}", "|" );
+    converted.Replace( "{colon}", ":" );
+    converted.Replace( "{space}", " " );
+    converted.Replace( "{dollar}", "$" );
+    converted.Replace( "{tab}", "\t" );
+    converted.Replace( "{return}", "\n" );
 
     // must be done last
-    converted.Replace( "&amp;", "&" );
+    converted.Replace( "{brace}", "{" );
 
     return converted;
-#endif
 }
 
 

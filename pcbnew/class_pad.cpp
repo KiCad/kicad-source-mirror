@@ -781,7 +781,7 @@ void D_PAD::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM>& a
         aList.push_back( MSG_PANEL_ITEM( _( "Pad" ), m_name, BROWN ) );
     }
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), GetNetname(), DARKCYAN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Net" ), UnescapeString( GetNetname() ), DARKCYAN ) );
 
     board = GetBoard();
 

@@ -135,7 +135,7 @@ int GERBVIEW_CONTROL::HighlightControl( const TOOL_EVENT& aEvent )
     {
         auto string = item->GetNetAttributes().m_Netname;
         settings->m_netHighlightString = string;
-        m_frame->m_SelNetnameBox->SetStringSelection( string );
+        m_frame->m_SelNetnameBox->SetStringSelection( UnescapeString( string ) );
     }
     else if( item && aEvent.IsAction( &GERBVIEW_ACTIONS::highlightComponent ) )
     {

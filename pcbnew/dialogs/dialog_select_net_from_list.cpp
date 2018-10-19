@@ -131,7 +131,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
         if( !netFilter.IsEmpty() )
         {
-            wxString netname = net->GetNetname();
+            wxString netname = UnescapeString( net->GetNetname() );
             if( filter.Find( netname.MakeUpper() ) == EDA_PATTERN_NOT_FOUND )
                 continue;
         }
@@ -144,7 +144,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
         wxVector<wxVariant> dataLine;
 
         dataLine.push_back( wxVariant( wxString::Format( "%.3d", netcode ) ) );
-        dataLine.push_back( wxVariant( net->GetNetname() ) );
+        dataLine.push_back( wxVariant( UnescapeString( net->GetNetname() ) ) );
 
         if( netcode )
             dataLine.push_back( wxVariant( wxString::Format( "%u", nodes ) ) );
@@ -208,7 +208,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 
     if( selected_row >= 0 )
     {
-        m_selection = m_netsList->GetTextValue( selected_row, 1 );
+        m_selection = EscapeString( m_netsList->GetTextValue( selected_row, 1 ), CTX_NETNAME );
         m_wasSelected = true;
 
         HighlightNet( m_selection );

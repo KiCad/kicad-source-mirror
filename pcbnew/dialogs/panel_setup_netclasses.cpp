@@ -170,7 +170,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataToWindow()
     for( NETINFO_ITEM* net : m_Pcb->GetNetInfo() )
     {
         if( net->GetNet() > 0 && net->IsCurrent() )
-            addNet( net->GetNetname(), net->GetNetClass()->GetName() );
+            addNet( UnescapeString( net->GetNetname() ), net->GetNetClass()->GetName() );
     }
 
     return true;
@@ -261,7 +261,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
         NETCLASSPTR nc = netclasses.Find( m_membershipGrid->GetCellValue( row, 1 ) );
 
         if( nc )
-            nc->Add( m_membershipGrid->GetCellValue( row, 0 ) );
+            nc->Add( EscapeString( m_membershipGrid->GetCellValue( row, 0 ), CTX_NETNAME ) );
     }
 
     m_Pcb->SynchronizeNetsAndNetClasses();

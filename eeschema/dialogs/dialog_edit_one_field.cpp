@@ -162,7 +162,7 @@ void DIALOG_EDIT_ONE_FIELD::OnSetFocusText( wxFocusEvent& event )
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 {
-    m_TextValue->SetValue( UnescapeString( m_text ) );
+    m_TextValue->SetValue( m_text );
 
     m_posX.SetValue( m_position.x );
     m_posY.SetValue( m_position.y );
@@ -180,7 +180,7 @@ bool DIALOG_EDIT_ONE_FIELD::TransferDataToWindow()
 
 bool DIALOG_EDIT_ONE_FIELD::TransferDataFromWindow()
 {
-    m_text = EscapeString( m_TextValue->GetValue() );
+    m_text = m_TextValue->GetValue();
 
     if( m_fieldId == REFERENCE )
     {

@@ -33,6 +33,7 @@
 
 #include <class_board_item.h>
 #include <netinfo.h>
+#include <kicad_string.h>
 
 class NETCLASS;
 class TRACK;
@@ -139,9 +140,9 @@ public:
         if( !netname.length() )
             return wxT( "[<no net>]" );
         else if( GetNetCode() < 0 )
-            return wxT( "[" + netname + "](" + _( "Not Found" ) + ")" );
+            return wxT( "[" + UnescapeString( netname ) + "](" + _( "Not Found" ) + ")" );
         else
-            return wxT( "[" + netname + "]" );
+            return wxT( "[" + UnescapeString( netname ) + "]" );
     }
 
     /**

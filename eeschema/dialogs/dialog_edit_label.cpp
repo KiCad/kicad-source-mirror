@@ -42,6 +42,7 @@
 #include <widgets/unit_binder.h>
 
 #include <dialog_edit_label_base.h>
+#include <kicad_string.h>
 
 class SCH_EDIT_FRAME;
 class SCH_TEXT;
@@ -153,10 +154,6 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     SetInitialFocus( m_activeTextCtrl );
 
-    // Enable validator for net names
-    if( m_CurrentText->Type() != SCH_TEXT_T )
-        m_activeTextCtrl->SetValidator( m_netNameValidator );
-
     m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
                        m_CurrentText->Type() == SCH_HIERARCHICAL_LABEL_T );
 
@@ -209,7 +206,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
-    m_activeTextEntry->SetValue( m_CurrentText->GetText() );
+    m_activeTextEntry->SetValue( UnescapeString( m_CurrentText->GetText() ) );
 
     if( m_valueCombo->IsShown() )
     {
@@ -220,7 +217,10 @@ bool DIALOG_LABEL_EDITOR::TransferDataToWindow()
         for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
             for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
                 if( item->Type() == m_CurrentText->Type() )
-                    existingLabels.insert( static_cast<SCH_TEXT*>( item )->GetText() );
+                {
+                    auto textItem = static_cast<SCH_TEXT*>( item );
+                    existingLabels.insert( UnescapeString( textItem->GetText() ) );
+                }
 
         wxArrayString existingLabelArray;
 
@@ -307,7 +307,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 
     m_Parent->GetCanvas()->Refresh();
 
-    text = m_activeTextEntry->GetValue();
+    text = EscapeString( m_activeTextEntry->GetValue(), CTX_NETNAME );
 
     if( !text.IsEmpty() )
         m_CurrentText->SetText( text );

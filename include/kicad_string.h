@@ -37,13 +37,19 @@
 
 
 /**
- * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
- * characters which are:
- *   (a) not legal in filenames
- *   (b) used as control characters in LIB_IDs
- *   (c) used to delineate hierarchical paths
+ * Escape/Unescape routines to safely encode reserved-characters in various
+ * contexts.
  */
-wxString EscapeString( const wxString& aSource );
+enum ESCAPE_CONTEXT
+{
+    CTX_NETNAME,
+    CTX_LIBID,
+    CTX_QUOTED_STR,
+    CTX_DELIMITED_STR,
+    CTX_FILENAME
+};
+
+wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext );
 
 wxString UnescapeString( const wxString& aSource );
 

@@ -1512,7 +1512,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
     {
         auto netcode = net->GetNet();
 
-        if( netcode > 0 )
+        if( netcode > 0 && net->IsCurrent() )
         {
             netBuffer.push_back( net );
             max_netcode = std::max( netcode, max_netcode);
@@ -1539,7 +1539,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
     }
 
     for( NETINFO_ITEM* net : netBuffer )
-        aNames.Add( net->GetNetname() );
+        aNames.Add( UnescapeString( net->GetNetname() ) );
 
     return netBuffer.size();
 }
@@ -2502,8 +2502,8 @@ void BOARD::updateComponentPadConnections( NETLIST& aNetlist, MODULE* footprint,
                 msg.Printf( _( "Changing footprint %s pad %s net from %s to %s." ),
                             footprint->GetReference(),
                             pad->GetName(),
-                            pad->GetNetname(),
-                            netName );
+                            UnescapeString( pad->GetNetname() ),
+                            UnescapeString( netName ) );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
 
                 if( !aNetlist.IsDryRun() )
@@ -2825,7 +2825,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
 
                 if( pad && zoneCount == 0 )
                 {
-                    msg.Printf( _( "Remove single pad net %s." ), GetChars( pad->GetNetname() ) );
+                    msg.Printf( _( "Remove single pad net %s." ),
+                                UnescapeString( pad->GetNetname() ) );
                     aReporter.Report( msg, REPORTER::RPT_ACTION );
 
                     m_connectivity->Remove( pad );
@@ -2900,14 +2901,14 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
             if( updatedNet )
             {
                 msg.Printf( _( "Updating copper zone from net %s to %s." ),
-                            zone->GetNetname(),
-                            updatedNet->GetNetname() );
+                            UnescapeString( zone->GetNetname() ),
+                            UnescapeString( updatedNet->GetNetname() ) );
                 aReporter.Report( msg, REPORTER::RPT_ACTION );
             }
             else
             {
                 msg.Printf( _( "Copper zone (net %s) has no pads connected." ),
-                            zone->GetNetname() );
+                            UnescapeString( zone->GetNetname() ) );
                 aReporter.Report( msg, REPORTER::RPT_WARNING );
             }
 

@@ -852,7 +852,7 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
             NETINFO_ITEM* net = GetNet();
 
             if( net )
-                msg = net->GetNetname();
+                msg = UnescapeString( net->GetNetname() );
             else    // Should not occur
                 msg = _( "<unknown>" );
         }

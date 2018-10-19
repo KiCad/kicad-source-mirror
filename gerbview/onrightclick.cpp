@@ -30,7 +30,7 @@
 #include <gerbview.h>
 #include <gerbview_frame.h>
 #include <menus_helpers.h>
-
+#include <kicad_string.h>
 
 /* Prepare the right-click pullup menu.
  * The menu already has a list of zoom commands.
@@ -113,7 +113,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
         {
             AddMenuItem( aPopMenu, ID_HIGHLIGHT_NET_ITEMS,
                          wxString::Format( _( "Highlight Items of Net \"%s\"" ),
-                                            GetChars( net_attr.m_Netname ) ),
+                                            UnescapeString( net_attr.m_Netname ) ),
                          KiBitmap( general_ratsnest_xpm ) );
             add_separator = true;
         }

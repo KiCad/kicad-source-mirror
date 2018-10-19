@@ -653,13 +653,17 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     if( !aDrawInfo.m_Display_padnum && !aDrawInfo.m_Display_netname )
         return;
 
-    wxPoint tpos0 = shape_pos;     // Position of the centre of text
-    wxPoint tpos  = tpos0;
-    wxSize  AreaSize;              // size of text area, normalized to AreaSize.y < AreaSize.x
-    int     shortname_len = 0;
+    wxPoint  tpos0 = shape_pos;     // Position of the centre of text
+    wxPoint  tpos  = tpos0;
+    wxSize   AreaSize;              // size of text area, normalized to AreaSize.y < AreaSize.x
+    wxString shortname;
+    int      shortname_len = 0;
 
     if( aDrawInfo.m_Display_netname )
-        shortname_len = GetShortNetname().Len();
+    {
+        shortname = UnescapeString( GetShortNetname() );
+        shortname_len = shortname.Len();
+    }
 
     if( GetShape() == PAD_SHAPE_CIRCLE )
         angle = 0;
@@ -695,8 +699,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
     constexpr int MIN_CHAR_COUNT = 3;
 
     unsigned int tsize;
-    EDA_RECT* clipBox = aDrawInfo.m_DrawPanel?
-                        aDrawInfo.m_DrawPanel->GetClipBox() : NULL;
+    EDA_RECT* clipBox = aDrawInfo.m_DrawPanel ? aDrawInfo.m_DrawPanel->GetClipBox() : NULL;
 
     if( aDrawInfo.m_Display_padnum )
     {
@@ -736,9 +739,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         tsize = ( tsize * 7 ) / 10;
         DrawGraphicHaloText( clipBox, aDC, tpos,
                              aDrawInfo.m_Color, BLACK, WHITE,
-                             GetShortNetname(), t_angle,
-                             wxSize( tsize, tsize ), GR_TEXT_HJUSTIFY_CENTER,
-                             GR_TEXT_VJUSTIFY_CENTER, tsize / 7, false, false );
+                             shortname, t_angle, wxSize( tsize, tsize ),
+                             GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
+                             tsize / 7, false, false );
     }
 }
 

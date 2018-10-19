@@ -316,7 +316,7 @@ public:
             fieldValue = wxString::Format( wxT( "%d" ), ( int )references.size() );
         }
 
-        return UnescapeString( fieldValue );
+        return fieldValue;
     }
 
 
@@ -325,7 +325,7 @@ public:
         if( aCol == REFERENCE || aCol == QUANTITY_COLUMN )
             return;             // Can't modify references or quantity
 
-        wxString value = EscapeString( aValue );
+        wxString value = aValue;
 
         DATA_MODEL_ROW& rowGroup = m_rows[ aRow ];
         wxString fieldName = m_fieldNames[ aCol ];

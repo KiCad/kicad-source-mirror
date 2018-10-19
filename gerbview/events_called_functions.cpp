@@ -274,7 +274,7 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_HIGHLIGHT_NET_ITEMS:
-        if( m_SelNetnameBox->SetStringSelection( currItem->GetNetAttributes().m_Netname ) )
+        if( m_SelNetnameBox->SetStringSelection( UnescapeString( currItem->GetNetAttributes().m_Netname ) ) )
             m_canvas->Refresh();
         break;
 
@@ -317,7 +317,7 @@ void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
             break;
 
         case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
-            settings->m_netHighlightString = m_SelNetnameBox->GetStringSelection();
+            settings->m_netHighlightString = EscapeString( m_SelNetnameBox->GetStringSelection(), CTX_NETNAME );
             break;
 
         case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:

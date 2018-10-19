@@ -382,7 +382,7 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             if( length < 10 * width )
                 return;
 
-            const wxString& netName = aTrack->GetShortNetname();
+            const wxString& netName = UnescapeString( aTrack->GetShortNetname() );
             VECTOR2D textPosition = start + line / 2.0;     // center of the track
 
             double textOrientation;
@@ -470,8 +470,9 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
             if( displayNetname )
             {
+                wxString netname = UnescapeString( aVia->GetShortNetname() );
                 // calculate the size of net name text:
-                double tsize = 1.5 * size / aVia->GetShortNetname().Length();
+                double tsize = 1.5 * size / netname.Length();
                 tsize = std::min( tsize, size );
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;
@@ -479,7 +480,7 @@ void PCB_PAINTER::draw( const VIA* aVia, int aLayer )
 
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( aVia->GetShortNetname(), textpos, 0.0 );
+                m_gal->BitmapText( netname, textpos, 0.0 );
             }
 
 
@@ -655,8 +656,9 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
             if( displayNetname )
             {
+                wxString netname = UnescapeString( aPad->GetShortNetname() );
                 // calculate the size of net name text:
-                double tsize = 1.5 * padsize.x / aPad->GetShortNetname().Length();
+                double tsize = 1.5 * padsize.x / netname.Length();
                 tsize = std::min( tsize, size );
                 // Use a smaller text size to handle interline, pen size..
                 tsize *= 0.7;
@@ -664,7 +666,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
 
                 m_gal->SetGlyphSize( namesize );
                 m_gal->SetLineWidth( namesize.x / 12.0 );
-                m_gal->BitmapText( aPad->GetShortNetname(), textpos, 0.0 );
+                m_gal->BitmapText( netname, textpos, 0.0 );
             }
 
             if( m_pcbSettings.m_padNumbers )

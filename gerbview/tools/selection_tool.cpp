@@ -110,7 +110,7 @@ private:
             {
                 auto menuEntry = Add( GERBVIEW_ACTIONS::highlightNet );
                 menuEntry->SetItemLabel( wxString::Format( _( "Highlight Items of Net \"%s\"" ),
-                                         GetChars( net_attr.m_Netname ) ) );
+                                         UnescapeString( net_attr.m_Netname ) ) );
                 addSeparator = true;
             }
 

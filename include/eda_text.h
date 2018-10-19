@@ -37,6 +37,7 @@
 #include <base_struct.h>            // EDA_RECT
 
 #include <mutex>
+#include "kicad_string.h"
 
 class SHAPE_POLY_SET;
 
@@ -149,7 +150,7 @@ public:
     /**
      * Returns the string actually shown after processing of the base
      * text. Default is no processing */
-    virtual wxString GetShownText() const { return m_Text; }
+    virtual wxString GetShownText() const { return UnescapeString( m_Text ); }
 
     /**
      * Returns a shortened version (max 15 characters) of the shown text */

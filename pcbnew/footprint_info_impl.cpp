@@ -357,8 +357,8 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( wxTextFile* aCacheFile )
     {
         aCacheFile->AddLine( fpinfo->GetLibNickname() );
         aCacheFile->AddLine( fpinfo->GetName() );
-        aCacheFile->AddLine( EscapeString( fpinfo->GetDescription() ) );
-        aCacheFile->AddLine( EscapeString( fpinfo->GetKeywords() ) );
+        aCacheFile->AddLine( EscapeString( fpinfo->GetDescription(), CTX_DELIMITED_STR ) );
+        aCacheFile->AddLine( EscapeString( fpinfo->GetKeywords(), CTX_DELIMITED_STR ) );
         aCacheFile->AddLine( wxString::Format( "%d", fpinfo->GetOrderNum() ) );
         aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetPadCount() ) );
         aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetUniquePadCount() ) );

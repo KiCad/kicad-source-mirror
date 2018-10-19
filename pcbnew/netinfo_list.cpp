@@ -172,8 +172,9 @@ void NETINFO_LIST::Show() const
     for( it = m_netNames.begin(), itEnd = m_netNames.end(); it != itEnd; ++it )
     {
         printf( "[%d]: netcode:%d  netname:<%s>\n",
-            i++, it->second->GetNet(),
-            TO_UTF8( it->second->GetNetname() ) );
+                i++,
+                it->second->GetNet(),
+                TO_UTF8( it->second->GetNetname() ) );
     }
 }
 #endif

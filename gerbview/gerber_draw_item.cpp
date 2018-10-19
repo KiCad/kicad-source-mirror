@@ -39,7 +39,7 @@
 #include <gerber_draw_item.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
-
+#include <kicad_string.h>
 
 GERBER_DRAW_ITEM::GERBER_DRAW_ITEM( GERBER_FILE_IMAGE* aGerberImageFile ) :
     EDA_ITEM( (EDA_ITEM*)NULL, GERBER_DRAW_ITEM_T )
@@ -741,16 +741,16 @@ void GERBER_DRAW_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PAN
         net_msg << " ";
 
         if( m_netAttributes.m_Netname.IsEmpty() )
-            net_msg << "<no net name>";
+            net_msg << "<no net>";
         else
-            net_msg << m_netAttributes.m_Netname;
+            net_msg << UnescapeString( m_netAttributes.m_Netname );
     }
 
     if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_PAD ) )
     {
         cmp_pad_msg.Printf( _( "Cmp: %s;  Pad: %s" ),
-                                GetChars( m_netAttributes.m_Cmpref ),
-                                GetChars( m_netAttributes.m_Padname ) );
+                                m_netAttributes.m_Cmpref,
+                                m_netAttributes.m_Padname );
     }
 
     else if( ( m_netAttributes.m_NetAttribType & GBR_NETLIST_METADATA::GBR_NETINFO_CMP ) )

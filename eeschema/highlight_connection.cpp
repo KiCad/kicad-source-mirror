@@ -72,7 +72,7 @@ bool SCH_EDIT_FRAME::HighlightConnectionAtPosition( wxPoint aPosition )
     }
 
     SendCrossProbeNetName( m_SelectedNetName );
-    SetStatusText( _( "Selected net: " ) + m_SelectedNetName );
+    SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
     SetCurrentSheetHighlightFlags( &itemsToRedraw );
 
     // Be sure hightlight change will be redrawn

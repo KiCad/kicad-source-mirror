@@ -333,7 +333,7 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                     }
 
                     m_addedNets[netName] = netinfo;
-                    msg.Printf( _( "Add net %s." ), netName );
+                    msg.Printf( _( "Add net %s." ), UnescapeString( netName ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
                 }
 
@@ -344,15 +344,15 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
                     msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
                             aPcbComponent->GetReference(),
                             pad->GetName(),
-                            pad->GetNetname(),
-                            netName );
+                            UnescapeString( pad->GetNetname() ),
+                            UnescapeString( netName ) );
                 }
                 else
                 {
                     msg.Printf( _( "Connect %s pin %s to %s."),
                             aPcbComponent->GetReference(),
                             pad->GetName(),
-                            netName );
+                            UnescapeString( netName ) );
                 }
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
@@ -439,8 +439,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             if( !updatedNetname.IsEmpty() )
             {
                 msg.Printf( _( "Reconnect copper zone from %s to %s." ),
-                            zone->GetNetname(),
-                            updatedNetname );
+                            UnescapeString( zone->GetNetname() ),
+                            UnescapeString( updatedNetname ) );
                 m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                 if( !m_isDryRun )
@@ -459,7 +459,8 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
             }
             else
             {
-                msg.Printf( _( "Copper zone (%s) has no pads connected." ), zone->GetNetname() );
+                msg.Printf( _( "Copper zone (%s) has no pads connected." ),
+                            UnescapeString( zone->GetNetname() ) );
                 m_reporter->Report( msg, REPORTER::RPT_WARNING );
                 ++m_warningCount;
             }
@@ -552,7 +553,8 @@ bool BOARD_NETLIST_UPDATER::deleteSinglePadNets()
 
                 if( count == 1 )    // Really one pad, and nothing else
                 {
-                    msg.Printf( _( "Remove single pad net %s." ), getNetname( previouspad ) );
+                    msg.Printf( _( "Remove single pad net %s." ),
+                                UnescapeString( getNetname( previouspad ) ) );
                     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
                     if( !m_isDryRun )

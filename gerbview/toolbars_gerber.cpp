@@ -38,7 +38,7 @@
 #include <DCodeSelectionbox.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
-
+#include <kicad_string.h>
 #include <wx/wupdlock.h>
 
 void GERBVIEW_FRAME::ReCreateHToolbar( void )
@@ -458,7 +458,7 @@ void GERBVIEW_FRAME::updateNetnameListSelectBox()
     // Now copy the list to the choice box
     for( auto ii = full_list.begin(); ii != full_list.end(); ++ii )
     {
-        m_SelNetnameBox->Append( ii->first );
+        m_SelNetnameBox->Append( UnescapeString( ii->first ) );
     }
 
     m_SelNetnameBox->SetSelection( 0 );

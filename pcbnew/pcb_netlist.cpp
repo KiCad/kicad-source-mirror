@@ -39,8 +39,8 @@
 int COMPONENT_NET::Format( OUTPUTFORMATTER* aOut, int aNestLevel, int aCtl )
 {
     return aOut->Print( aNestLevel, "(pin_net %s %s)",
-            aOut->Quotew( m_pinName ).c_str(),
-            aOut->Quotew( m_netName ).c_str() );
+                        aOut->Quotew( m_pinName ).c_str(),
+                        aOut->Quotew( m_netName ).c_str() );
 }
 
 
