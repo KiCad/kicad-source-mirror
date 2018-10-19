@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# Git "hook chain", used to execute multiple scripts per hook.
+# To use:
+#  * create a directory called <hookname>.d
+#  * add scripts to this directory (executable)
+#  * ln -s hook-chain <hookname>
+#
+# Now the scripts in that directory should be called in order.
+#
+# Set $HOOKCHAIN_DEBUG to see the names of invoked scripts.
+#
+# Based on script by Oliver Reflalo:
+# https://stackoverflow.com/questions/8730514/chaining-git-hooks
+#
+
+hookname=`basename $0`
+
+# Temp file for stdin, cleared at exit
+FILE=`mktemp`
+trap 'rm -f $FILE' EXIT
+cat - > $FILE
+
+# Git hooks directory (this dir)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+
+# Execute hooks in the directory one by one
+for hook in $DIR/$hookname.d/*;
+do
+    if [ -x "$hook" ]; then
+
+        if [ "$HOOKCHAIN_DEBUG" ]; then
+            echo "Running hook $hook"
+        fi
+
+        cat $FILE | $hook "$@"
+        status=$?
+
+        if [ $status -ne 0 ]; then
+            echo "Hook $hook failed with error code $status"
+            echo "To commit anyway, use --no-verify"
+            exit $status
+        else
+            if [ "$HOOKCHAIN_DEBUG" ]; then
+                echo "Hook passed: $hook"
+            fi
+        fi
+    fi
+done

@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+#
+# Runs clang-format on changed regions before commit.
+#
+# Remaining installation checks/instructions will be printed when you commit.
+#
+# Based on clang-format pre-commit hook by Alex Eagle
+# https://gist.github.com/alexeagle/c8ed91b14a407342d9a8e112b5ac7dab
+
+# Set KICAD_CHECK_FORMAT to allow this hook to run
+# if not set, the hook always succeeds.
+if [ -z "$KICAD_CHECK_FORMAT" ]; then
+    exit 0
+fi
+
+check_clang_format() {
+    if hash git-clang-format 2>/dev/null; then
+        return
+    else
+        echo "SETUP ERROR: no git-clang-format executable found, or it is not executable"
+        exit 1
+    fi
+}
+
+check_git_config() {
+    if [[ "$(git config --get clangFormat.style)" != "file" ]]; then
+        echo "SETUP ERROR: git config clangFormat.style is wrong (should be 'file'). Fix this with:"
+        echo "git config clangFormat.style file"
+        exit 1
+    fi
+}
+
+check_clang_format
+check_git_config
+
+readonly out=$(git clang-format -v --diff)
+
+# In these cases, there is no formatting issues, so we succeed
+if [[ "$out" == *"no modified files to format"* ]]; then exit 0; fi
+if [[ "$out" == *"clang-format did not modify any files"* ]]; then exit 0; fi
+
+# Any other case implies formatting results
+echo "ERROR: you need to run git clang-format on your commit"
+
+# print the errors to show what's the issue
+git clang-format -v --diff
+
+# fail the pre-commit
+exit 1
