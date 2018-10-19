@@ -254,33 +254,41 @@ void PROPERTIES_FRAME::CopyPrmsFromItemToPanel( WORKSHEET_DATAITEM* aItem )
     {
         case WORKSHEET_DATAITEM::WS_SEGMENT:
         case WORKSHEET_DATAITEM::WS_RECT:
-            m_SizerBitmapPPI->Show( false );
+            m_SizerRotAndPPI->Show( false );
             m_SizerLineThickness->Show( true );
             m_staticTextInfoThickness->Show( true );
-            m_SizerRotation->Show( false );
             m_SizerEndPosition->Show(true);
             break;
 
         case WORKSHEET_DATAITEM::WS_TEXT:
-            m_SizerBitmapPPI->Show( false );
+            m_SizerRotAndPPI->Show( true );
+            m_staticTextRot->Show( true );
+            m_textCtrlRotation->Show( true );
+            m_staticTextBitmapPPI->Show( false );
+            m_textCtrlBitmapPPI->Show( false );
             m_SizerLineThickness->Show( true );
             m_staticTextInfoThickness->Show( true );
-            m_SizerRotation->Show( true );
             m_SizerEndPosition->Show(false);
             break;
 
         case WORKSHEET_DATAITEM::WS_POLYPOLYGON:
-            m_SizerBitmapPPI->Show( false );
+            m_SizerRotAndPPI->Show( true );
+            m_staticTextRot->Show( true );
+            m_textCtrlRotation->Show( true );
+            m_staticTextBitmapPPI->Show( false );
+            m_textCtrlBitmapPPI->Show( false );
             m_SizerLineThickness->Show( true );
             m_staticTextInfoThickness->Show( false );   // No defaut value for thickness
-            m_SizerRotation->Show( true );
             m_SizerEndPosition->Show(false);
             break;
 
         case WORKSHEET_DATAITEM::WS_BITMAP:
-            m_SizerBitmapPPI->Show( true );
+            m_SizerRotAndPPI->Show( true );
+            m_staticTextRot->Show( false );
+            m_textCtrlRotation->Show( false );
+            m_staticTextBitmapPPI->Show( true );
+            m_textCtrlBitmapPPI->Show( true );
             m_SizerLineThickness->Show( false );
-            m_SizerRotation->Show( false );
             m_SizerEndPosition->Show(false);
             break;
     }

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -167,7 +167,7 @@ DIALOG_NEW_DATAITEM_BASE::DIALOG_NEW_DATAITEM_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizerButtons->AddButton( m_sdbSizerButtonsCancel );
 	m_sdbSizerButtons->Realize();
 	
-	bSizerMain->Add( m_sdbSizerButtons, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_sdbSizerButtons, 0, wxEXPAND|wxALL, 5 );
 	
 	
 	this->SetSizer( bSizerMain );

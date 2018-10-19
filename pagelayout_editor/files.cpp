@@ -60,10 +60,14 @@ void PL_EDITOR_FRAME::OnFileHistory( wxCommandEvent& event )
 
     if( filename != wxEmptyString )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
-                                   [&]()->bool { return saveCurrentPageLayout(); } ) )
+        if( GetScreen()->IsModify() )
         {
-            return;
+            if( !HandleUnsavedChanges( this,
+                                       _( "The current page layout has been modified. Save changes?" ),
+                                       [&]()->bool { return saveCurrentPageLayout(); } ) )
+            {
+                return;
+            }
         }
 
         m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, m_canvas->GetDefaultCursor() );
@@ -94,7 +98,7 @@ void PL_EDITOR_FRAME::Files_io( wxCommandEvent& event )
 
     if( ( id == wxID_NEW || id == wxID_OPEN ) && GetScreen()->IsModify() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
             return;

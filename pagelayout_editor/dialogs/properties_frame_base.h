@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -22,12 +22,12 @@
 #include <wx/choice.h>
 #include <wx/statline.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
-#include <wx/combobox.h>
-#include <wx/scrolwin.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
+#include <wx/button.h>
+#include <wx/combobox.h>
+#include <wx/scrolwin.h>
 #include <wx/notebook.h>
 #include <wx/panel.h>
 
@@ -97,13 +97,12 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextThickness;
 		wxTextCtrl* m_textCtrlThickness;
 		wxStaticText* m_staticTextInfoThickness;
-		wxBoxSizer* m_SizerRotation;
+		wxBoxSizer* m_SizerRotAndPPI;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextRot;
 		wxTextCtrl* m_textCtrlRotation;
 		wxStaticText* m_staticTextBitmapPPI;
 		wxTextCtrl* m_textCtrlBitmapPPI;
-		wxBoxSizer* m_SizerBitmapPPI;
 		wxStaticLine* m_staticline4;
 		wxStaticText* m_staticTextRepeatPrms;
 		wxStaticText* m_staticTextRepeatCnt;

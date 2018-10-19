@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -197,7 +197,8 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerMain->Add( m_SizerTextOptions, 0, wxEXPAND, 5 );
 	
 	m_buttonOK = new wxButton( m_swItemProperties, wxID_ANY, _("Accept"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonOK->SetDefault(); 
+	m_buttonOK->SetDefault();
+	
 	bSizerMain->Add( m_buttonOK, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline8 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
@@ -356,46 +357,35 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	bSizerMain->Add( m_SizerLineThickness, 0, 0, 5 );
 	
-	m_SizerRotation = new wxBoxSizer( wxVERTICAL );
+	m_SizerRotAndPPI = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticline1 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	m_SizerRotation->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_SizerRotAndPPI->Add( m_staticline1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	wxFlexGridSizer* fgSizer7;
-	fgSizer7 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer7->SetFlexibleDirection( wxBOTH );
-	fgSizer7->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerRotAndPPI;
+	fgSizerRotAndPPI = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizerRotAndPPI->SetFlexibleDirection( wxBOTH );
+	fgSizerRotAndPPI->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextRot = new wxStaticText( m_swItemProperties, wxID_ANY, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRot->Wrap( -1 );
-	fgSizer7->Add( m_staticTextRot, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRotAndPPI->Add( m_staticTextRot, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlRotation = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer7->Add( m_textCtrlRotation, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
+	fgSizerRotAndPPI->Add( m_textCtrlRotation, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
 	
 	m_staticTextBitmapPPI = new wxStaticText( m_swItemProperties, wxID_ANY, _("Bitmap PPI:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextBitmapPPI->Wrap( -1 );
-	fgSizer7->Add( m_staticTextBitmapPPI, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerRotAndPPI->Add( m_staticTextBitmapPPI, 0, wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_textCtrlBitmapPPI = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer7->Add( m_textCtrlBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
+	fgSizerRotAndPPI->Add( m_textCtrlBitmapPPI, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxLEFT|wxRIGHT, 5 );
 	
 	
-	m_SizerRotation->Add( fgSizer7, 1, wxEXPAND, 5 );
-	
-	wxBoxSizer* bSizerRotation;
-	bSizerRotation = new wxBoxSizer( wxHORIZONTAL );
+	m_SizerRotAndPPI->Add( fgSizerRotAndPPI, 1, wxEXPAND, 5 );
 	
 	
-	m_SizerRotation->Add( bSizerRotation, 0, wxEXPAND, 5 );
-	
-	
-	bSizerMain->Add( m_SizerRotation, 0, wxEXPAND, 5 );
-	
-	m_SizerBitmapPPI = new wxBoxSizer( wxHORIZONTAL );
-	
-	
-	bSizerMain->Add( m_SizerBitmapPPI, 0, wxEXPAND, 5 );
+	bSizerMain->Add( m_SizerRotAndPPI, 0, wxEXPAND, 5 );
 	
 	m_staticline4 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizerMain->Add( m_staticline4, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
@@ -472,7 +462,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	m_swItemProperties->SetSizer( bSizerMain );
 	m_swItemProperties->Layout();
 	bSizerMain->Fit( m_swItemProperties );
-	m_notebook->AddPage( m_swItemProperties, _("Item Properties"), false );
+	m_notebook->AddPage( m_swItemProperties, _("Item Properties"), true );
 	m_swGeneralOpts = new wxScrolledWindow( m_notebook, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTAB_TRAVERSAL|wxVSCROLL );
 	m_swGeneralOpts->SetScrollRate( 5, 5 );
 	wxBoxSizer* bSizerGeneralOpts;
@@ -640,14 +630,15 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	bSizerGeneralOpts->Add( bSizerGeneraMargins, 0, wxEXPAND, 5 );
 	
 	m_buttonGeneralOptsOK = new wxButton( m_swGeneralOpts, wxID_ANY, _("Accept"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonGeneralOptsOK->SetDefault(); 
+	m_buttonGeneralOptsOK->SetDefault();
+	
 	bSizerGeneralOpts->Add( m_buttonGeneralOptsOK, 0, wxALL|wxEXPAND, 5 );
 	
 	
 	m_swGeneralOpts->SetSizer( bSizerGeneralOpts );
 	m_swGeneralOpts->Layout();
 	bSizerGeneralOpts->Fit( m_swGeneralOpts );
-	m_notebook->AddPage( m_swGeneralOpts, _("General Options"), true );
+	m_notebook->AddPage( m_swGeneralOpts, _("General Options"), false );
 	
 	bSizerpanel->Add( m_notebook, 1, wxEXPAND, 5 );
 	
