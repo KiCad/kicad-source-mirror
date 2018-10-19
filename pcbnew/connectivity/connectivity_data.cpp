@@ -112,7 +112,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>(
             std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            ( dirty_nets.size() + 4 ) / 8 );
+            ( dirty_nets.size() + 7 ) / 8 );
 
     // This prevents generating a thread for point while routing as we are only
     // updating the ratsnest on a single net
