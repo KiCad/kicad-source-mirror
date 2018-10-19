@@ -400,13 +400,15 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
             {
                 wxString line( tokenizer.GetNextToken() );
 
-                // Convert to lower-case and remove preceding
-                // and trailing white-space characters
-                line.MakeLower().Trim( true ).Trim( false );
+                // Cleanup: remove preceding and trailing white-space characters
+                line.Trim( true ).Trim( false );
+                // Convert to lower-case for parsing purposes only
+                wxString lowercaseline = line;
+                lowercaseline.MakeLower();
 
                 // 'Include' directive stores the library file name, so it
                 // can be later resolved using a list of paths
-                if( line.StartsWith( ".inc" ) )
+                if( lowercaseline.StartsWith( ".inc" ) )
                 {
                     wxString lib = line.AfterFirst( ' ' );
 
@@ -425,17 +427,17 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
                 // Store the title to be sure it appears
                 // in the first line of output
-                else if( line.StartsWith( ".title " ) )
+                else if( lowercaseline.StartsWith( ".title " ) )
                 {
                     m_title = line.AfterFirst( ' ' );
                 }
 
                 // Handle .control .. .endc blocks
-                else if( line.IsSameAs( ".control" ) && ( !controlBlock ) )
+                else if( lowercaseline.IsSameAs( ".control" ) && ( !controlBlock ) )
                 {
                     controlBlock = true;
                 }
-                else if( line.IsSameAs( ".endc" ) && controlBlock )
+                else if( lowercaseline.IsSameAs( ".endc" ) && controlBlock )
                 {
                     controlBlock = false;
                     m_directives.push_back( line );
