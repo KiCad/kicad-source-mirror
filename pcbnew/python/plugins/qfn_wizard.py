@@ -37,6 +37,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("Pads", "pitch", self.uMM, 0.5, designator='e')
         self.AddParam("Pads", "width", self.uMM, 0.25, designator='X1')
         self.AddParam("Pads", "length", self.uMM, 1.5, designator='Y1')
+        self.AddParam("Pads", "fillet", self.uMM, 0.3)
         self.AddParam("Pads", "oval", self.uBool, True)
 
         self.AddParam("EPad", "epad", self.uBool, True)
@@ -81,6 +82,8 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
         pad_pitch = self.pads["pitch"]
         pad_length = self.pads["length"]
+        # Fillet allows to define how much of the pad is outside of the package
+        pad_fillet = self.pads["fillet"]
         pad_width = self.pads["width"]
 
         v_pitch = self.package["height"]
@@ -92,31 +95,34 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
         pad_shape = pcbnew.PAD_SHAPE_OVAL if self.pads["oval"] else pcbnew.PAD_SHAPE_RECT
 
-        h_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width,
+        h_pad = PA.PadMaker(self.module).SMDPad( pad_length + pad_fillet, pad_width,
                                                  shape=pad_shape, rot_degree=90.0)
-        v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
+        v_pad = PA.PadMaker(self.module).SMDPad( pad_length + pad_fillet, pad_width, shape=pad_shape)
+
+        h_pitch = h_pitch / 2 - pad_length + (pad_length+pad_fillet)/2
+        v_pitch = v_pitch / 2 - pad_length + (pad_length+pad_fillet)/2
 
         #left row
-        pin1Pos = pcbnew.wxPoint(-h_pitch / 2, 0)
+        pin1Pos = pcbnew.wxPoint(-h_pitch, 0)
         array = PA.PadLineArray(h_pad, pads_per_row, pad_pitch, True, pin1Pos)
         array.SetFirstPadInArray(1)
         array.AddPadsToModule(self.draw)
 
         #bottom row
-        pin1Pos = pcbnew.wxPoint(0, v_pitch / 2)
+        pin1Pos = pcbnew.wxPoint(0, v_pitch)
         array = PA.PadLineArray(v_pad, pads_per_row, pad_pitch, False, pin1Pos)
         array.SetFirstPadInArray(pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #right row
-        pin1Pos = pcbnew.wxPoint(h_pitch / 2, 0)
+        pin1Pos = pcbnew.wxPoint(h_pitch, 0)
         array = PA.PadLineArray(h_pad, pads_per_row, -pad_pitch, True,
                                 pin1Pos)
         array.SetFirstPadInArray(2*pads_per_row + 1)
         array.AddPadsToModule(self.draw)
 
         #top row
-        pin1Pos = pcbnew.wxPoint(0, -v_pitch / 2)
+        pin1Pos = pcbnew.wxPoint(0, -v_pitch)
         array = PA.PadLineArray(v_pad, pads_per_row, -pad_pitch, False,
                                 pin1Pos)
         array.SetFirstPadInArray(3*pads_per_row + 1)
