@@ -396,6 +396,9 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
             // Analyze each line of a text field
             wxStringTokenizer tokenizer( text, "\r\n" );
 
+            // Flag to follow multiline directives
+            bool directiveStarted = false;
+
             while( tokenizer.HasMoreTokens() )
             {
                 wxString line( tokenizer.GetNextToken() );
@@ -443,8 +446,9 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                     m_directives.push_back( line );
                 }
 
-                // Usual one-line directives
-                else if( line.StartsWith( '.' ) )
+                else if( line.StartsWith( '.' )                           // one-line directives
+                        || controlBlock                                   // .control .. .endc block
+                        || ( directiveStarted && line.StartsWith( '+' ) ) ) // multiline directives
                 {
                     m_directives.push_back( line );
                 }
@@ -453,6 +457,10 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                 {
                     m_directives.push_back( line );
                 }
+
+                // Mark directive as started or continued in case it is a multi-line one
+                directiveStarted = line.StartsWith( '.' )
+                    || ( directiveStarted && line.StartsWith( '+' ) );
             }
         }
     }
