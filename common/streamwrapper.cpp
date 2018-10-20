@@ -21,7 +21,7 @@
  * @file streamwrapper.cpp
  */
 
-#if !defined( WIN32 ) || !defined( __GNUC__ )
+#if !defined( _WIN32 ) || !defined( __GNUC__ )
     #error streamwrapper.cpp should not be included in this build
 #endif
 

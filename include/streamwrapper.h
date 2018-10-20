@@ -27,7 +27,7 @@
 #include <iostream>
 
 
-#if defined( WIN32 ) && defined( __GNUC__ )
+#if defined( _WIN32 ) && defined( __GNUC__ )
     #include <ext/stdio_filebuf.h>
 
     #define OSTREAM std::ostream
@@ -73,7 +73,7 @@
     }
 
 
-#elif defined( _MSC_VER )   // defined( WIN32 ) && defined( __GNUC__ )
+#elif defined( _MSC_VER )   // defined( _WIN32 ) && defined( __GNUC__ )
 
     #define OSTREAM std::ofstream
 
@@ -94,7 +94,7 @@
 
     #define CLOSE_STREAM( var ) var.close()
 
-#else   // defined( WIN32 ) && defined( __GNUC__ )
+#else   // defined( _WIN32 ) && defined( __GNUC__ )
 
     #define OSTREAM std::ofstream
 
@@ -112,6 +112,6 @@
 
     #define CLOSE_STREAM( var ) var.close()
 
-#endif  // defined( WIN32 ) && defined( __GNUC__ )
+#endif  // defined( _WIN32 ) && defined( __GNUC__ )
 
 #endif  // STREAMWRAPPER_H
