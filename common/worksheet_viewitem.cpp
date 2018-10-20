@@ -206,6 +206,14 @@ void WORKSHEET_VIEWITEM::draw( const WS_DRAW_ITEM_BITMAP* aItem, GAL* aGal ) con
     VECTOR2D position = aItem->GetPosition();
     aGal->Translate( position );
     WORKSHEET_DATAITEM_BITMAP* parent = static_cast<WORKSHEET_DATAITEM_BITMAP*>( aItem->GetParent() );
+
+    // When the image scale factor is not 1.0, we need to modify the actual scale
+    // as the image scale factor is similar to a local zoom
+    double img_scale = parent->m_ImageBitmap->GetScale();
+
+    if( img_scale != 1.0 )
+        aGal->Scale( VECTOR2D( img_scale, img_scale ) );
+
     aGal->DrawBitmap( *parent->m_ImageBitmap );
     aGal->Restore();
 }
