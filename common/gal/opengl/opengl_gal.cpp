@@ -1783,9 +1783,13 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     }
 
     const FONT_GLYPH_TYPE* glyph = LookupGlyph( aChar );
-    wxASSERT( glyph );
 
+    // If the glyph is not found (happens for many esotheric unicode chars)
+    // shows a '?' instead.
     if( !glyph )
+        glyph = LookupGlyph( '?' );
+
+    if( !glyph )    // Should not happen.
         return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
@@ -1877,7 +1881,9 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
         // Debug: show not coded char in the atlas
-        wxASSERT_MSG( glyph, wxString::Format( "missing char in font: code 0x%x <%c>", c, c ) );
+        // Be carefull before allowing the assert: it usually crash kicad
+        // when the assert is made during a paint event.
+        // wxASSERT_MSG( glyph, wxString::Format( "missing char in font: code 0x%x <%c>", c, c ) );
 
         if( !glyph || // Not coded in font
             c == '-' || c == '_' )     // Strange size of these 2 chars
