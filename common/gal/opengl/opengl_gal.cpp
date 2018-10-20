@@ -1766,9 +1766,11 @@ int OPENGL_GAL::drawBitmapChar( unsigned long aChar )
     }
 
     const FONT_GLYPH_TYPE* glyph = LookupGlyph( aChar );
-    wxASSERT( glyph );
 
-    if( !glyph )
+    if( !glyph )    // Replace any non existing char shape by '?'
+        glyph = LookupGlyph( '?' );
+
+    if( !glyph )    // Should not occur
         return 0;
 
     const float X = glyph->atlas_x + font_information.smooth_pixels;
@@ -1859,9 +1861,12 @@ std::pair<VECTOR2D, float> OPENGL_GAL::computeBitmapTextSize( const UTF8& aText 
         unsigned int c = *chIt;
 
         const FONT_GLYPH_TYPE* glyph = LookupGlyph( c );
-        wxASSERT( c == ' ' || glyph );      // space is not in the atlas
+        // Debug: show not coded char in the atlas
+        // Be carefull before allowing the assert: it usually crash kicad
+        // when the assert is made during a paint event.
+        //wxASSERT( c == ' ' || glyph );    // space is not in the atlas, so not found
 
-        // a few chars
+        // a few chars are strange in font
         if( !glyph || // Not coded in font
             c == '-' || c == '_' )     // Strange size of these 2 chars
         {
