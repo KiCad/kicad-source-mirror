@@ -822,6 +822,9 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
 
+        message( STATUS "wxWidgets_TOOLKIT_FOUND=${wxWidgets_TOOLKIT_FOUND}" )
+        message( STATUS "WXPYTHON_TOOLKIT_FOUND=${WXPYTHON_TOOLKIT_FOUND}" )
+
         # Check if wxWidgets toolkits match, it is a Linux-only issue
         if( UNIX AND NOT APPLE AND NOT wxWidgets_TOOLKIT_FOUND STREQUAL WXPYTHON_TOOLKIT_FOUND )
             message( FATAL_ERROR "\nwxWidgets and wxPython use different toolkits "
@@ -829,6 +832,24 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
                 "It will result in a broken build. Please either install wxPython built using "
                 "${wxWidgets_TOOLKIT_FOUND} or add '-DKICAD_SCRIPTING_WXPYTHON=OFF' to cmake "
                 "parameters to disable wxPython support." )
+        endif()
+
+        message( STATUS "wxWidgets_INCLUDE_DIRS=${wxWidgets_INCLUDE_DIRS}" )
+
+        # wxPython appears to be installed and valid so make sure the headers are available.
+        foreach( path ${wxWidgets_INCLUDE_DIRS} )
+            message( STATUS "Searching for wx/wxPython/wxPython.h in ${path}" )
+
+            find_path( wxPYTHON_INCLUDE_DIRS wx/wxPython/wxPython.h
+                PATHS "${path}" )
+
+            if( wxPYTHON_INCLUDE_DIRS )
+                break()
+            endif()
+        endforeach()
+
+        if( NOT wxPYTHON_INCLUDE_DIRS )
+            message( FATAL_ERROR "Cannot find wxPython.h." )
         endif()
     endif()
 
