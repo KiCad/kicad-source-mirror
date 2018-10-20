@@ -189,15 +189,12 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
             if( item && !item->Layers().Overlaps( tl ) )
                 item = NULL;
 
-        if( item )
+        if( item && ( aLayer < 0 || item->Layers().Overlaps( aLayer ) ) )
         {
             rv = item;
             break;
         }
     }
-
-    if( rv && aLayer >= 0 && !rv->Layers().Overlaps( aLayer ) )
-        rv = NULL;
 
     if( rv )
     {
