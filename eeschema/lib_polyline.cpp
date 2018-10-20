@@ -176,7 +176,13 @@ void LIB_POLYLINE::AddPoint( const wxPoint& point )
 
 int LIB_POLYLINE::GetPenSize() const
 {
-    return ( m_Width == 0 ) ? GetDefaultLineThickness() : m_Width;
+    if( m_Width > 0 )
+        return m_Width;
+
+    if( m_Width == 0 )
+       return GetDefaultLineThickness();
+
+    return -1;   // the minimal pen value
 }
 
 

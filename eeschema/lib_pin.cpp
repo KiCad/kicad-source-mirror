@@ -563,7 +563,13 @@ bool LIB_PIN::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM
 
 int LIB_PIN::GetPenSize() const
 {
-    return ( m_width == 0 ) ? GetDefaultLineThickness() : m_width;
+    if( m_width > 0 )
+        return m_width;
+
+    if( m_width == 0 )
+       return GetDefaultLineThickness();
+
+    return 0;
 }
 
 
