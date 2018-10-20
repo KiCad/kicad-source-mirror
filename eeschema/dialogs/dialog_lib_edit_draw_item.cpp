@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2006-2012 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2006-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( LIB_EDIT_FRAME* aParent, L
 
     // Required under wxGTK if we want to dismiss the dialog with the ESC key
     SetFocus();
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -56,7 +56,7 @@ bool DIALOG_LIB_EDIT_DRAW_ITEM::TransferDataToWindow()
     m_lineWidth.SetValue( m_item->GetWidth() );
     m_checkApplyToAllUnits->SetValue( m_item->GetUnit() == 0 );
     m_checkApplyToAllUnits->Enable( symbol && symbol->GetUnitCount() > 1 );
-    m_checkApplyToAllConversions->SetValue( symbol && symbol->HasConversion() );
+    m_checkApplyToAllConversions->SetValue( m_item->GetConvert() == 0 );
 
     bool enblConvOptStyle = symbol && symbol->HasConversion();
     // if a symbol contains no graphic items, symbol->HasConversion() returns false.

@@ -135,7 +135,7 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
     {
         if( m_showMessage )
         {
-            wxString msg = wxString::Format( _( "%s must be larger than %s." ),
+            wxString msg = wxString::Format( _( "%s must be larger than %s or equal." ),
                                              valueDescriptionFromLabel( m_label ),
                                              StringFromValue( m_units, m_min, true ) );
             DisplayError( m_value->GetParent(), msg );
