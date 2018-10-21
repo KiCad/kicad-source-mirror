@@ -66,7 +66,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
     type &= ~ACTIONS::CURSOR_FAST_MOVE;
     bool mirroredX = getView()->IsMirroredX();
 
-    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( true );
+    VECTOR2D cursor = getViewControls()->GetRawCursorPosition( false );
     VECTOR2I gridSize = VECTOR2D( m_frame->GetScreen()->GetGridSize() );
 
     if( fastMove )
