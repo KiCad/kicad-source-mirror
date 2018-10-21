@@ -680,7 +680,6 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_ITEM*   item   = screen->GetCurItem();
     auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
-    auto view = panel->GetView();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
 
@@ -689,14 +688,23 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     item->SetPosition( cpos );
 
-    // Draw the item item at it's new position.
+    // Draw the item at it's new position.
     item->SetWireImage();  // While moving, the item may choose to render differently
 
+    auto view = panel->GetView();
     view->ClearPreview();
     view->AddToPreview( item, false );
+
+    // Needed when moving a bitmap image to avoid ugly rendering and artifacts,
+    // because a bitmap is drawn only as non cached
+    if( item->Type() == SCH_BITMAP_T )
+        view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
 
 
+/**
+ * Callback function called when aborting a move item with mouse cursor command.
+ */
 static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     SCH_SCREEN*     screen = (SCH_SCREEN*) aPanel->GetScreen();
