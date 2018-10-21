@@ -92,22 +92,22 @@ void CONNECTIVITY_DATA::updateRatsnest()
     #endif
     std::vector<RN_NET*> dirty_nets;
 
+    // Start with net 1 as net 0 is reserved for not-connected
     std::copy_if( m_nets.begin() + 1, m_nets.end(), std::back_inserter( dirty_nets ),
             [] ( RN_NET* aNet ) { return aNet->IsDirty(); } );
 
-    // Start with net 1 as net 0 is reserved for not-connected
-    std::atomic<size_t> nextNet( 1 );
+    std::atomic<size_t> nextNet( 0 );
     std::atomic<size_t> threadsFinished( 0 );
 
     auto update_lambda = [&nextNet, &threadsFinished, &dirty_nets, this]()
+    {
+        for( size_t i = nextNet.fetch_add( 1 ); i < dirty_nets.size(); i = nextNet.fetch_add( 1 ) )
         {
-            for( size_t i = nextNet.fetch_add( 1 ); i < dirty_nets.size(); i = nextNet.fetch_add( 1 ) )
-            {
-                dirty_nets[i]->Update();
-            }
+            dirty_nets[i]->Update();
+        }
 
-            threadsFinished++;
-        };
+        threadsFinished++;
+    };
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>(
