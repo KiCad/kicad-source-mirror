@@ -409,6 +409,14 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     double orient = aField->GetTextAngleRadians();
 
     m_gal->StrokeText( aField->GetText(), pos, orient );
+
+    // Draw the umbilical line
+    if( aField->IsMoving() )
+    {
+        m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->DrawLine( pos, wxPoint( 0, 0 ) );
+    }
 }
 
 
@@ -1145,6 +1153,14 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     m_gal->SetTextMirrored( aField->IsMirrored() );
     m_gal->SetLineWidth( lineWidth );
     m_gal->StrokeText( aField->GetFullyQualifiedText(), textpos, orient == TEXT_ANGLE_VERT ? M_PI/2 : 0 );
+
+    // Draw the umbilical line
+    if( aField->IsMoving() )
+    {
+        m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
+        m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );
+        m_gal->DrawLine( textpos, parentComponent->GetPosition() );
+    }
 }
 
 
