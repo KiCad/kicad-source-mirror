@@ -1066,8 +1066,6 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     std::vector<SCH_FIELD*> fields;
     aComp->GetFields( fields, false );
 
-    m_gal->AdvanceDepth();
-
     for( SCH_FIELD* field : fields )
     {
         if( field->GetId() == REFERENCE || !field->IsMoving() )
