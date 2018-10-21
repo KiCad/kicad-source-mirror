@@ -108,6 +108,13 @@ bool SCH_MARKER::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
 }
 
 
+void SCH_MARKER::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 1;
+    aLayers[0]  = this->m_ErrorLevel == MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR : LAYER_ERC_WARN;
+}
+
+
 const EDA_RECT SCH_MARKER::GetBoundingBox() const
 {
     return GetBoundingBoxMarker();

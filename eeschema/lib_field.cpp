@@ -393,26 +393,27 @@ const EDA_RECT LIB_FIELD::GetBoundingBox() const
 }
 
 
-COLOR4D LIB_FIELD::GetDefaultColor()
+void LIB_FIELD::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    COLOR4D color;
+    aCount      = 1;
 
     switch( m_id )
     {
-    case REFERENCE:
-        color = GetLayerColor( LAYER_REFERENCEPART );
-        break;
-
-    case VALUE:
-        color = GetLayerColor( LAYER_VALUEPART );
-        break;
-
-    default:
-        color = GetLayerColor( LAYER_FIELDS );
-        break;
+    case REFERENCE: aLayers[0] = LAYER_REFERENCEPART; break;
+    case VALUE:     aLayers[0] = LAYER_VALUEPART;     break;
+    default:        aLayers[0] = LAYER_FIELDS;        break;
     }
+}
 
-    return color;
+
+COLOR4D LIB_FIELD::GetDefaultColor()
+{
+    switch( m_id )
+    {
+    case REFERENCE: return GetLayerColor( LAYER_REFERENCEPART );
+    case VALUE:     return GetLayerColor( LAYER_VALUEPART );
+    default:        return GetLayerColor( LAYER_FIELDS );
+    }
 }
 
 

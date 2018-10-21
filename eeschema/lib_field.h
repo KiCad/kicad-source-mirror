@@ -158,6 +158,8 @@ public:
         return m_Text.IsEmpty();
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     /**
      * @return true is this field is visible, false if flagged invisible
      */

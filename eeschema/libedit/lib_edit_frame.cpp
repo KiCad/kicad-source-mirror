@@ -1742,17 +1742,12 @@ void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 
 void LIB_EDIT_FRAME::RebuildView()
 {
-    KIGFX::SCH_VIEW* view = GetCanvas()->GetView();
-
-    view->Clear();
-
     GetRenderSettings()->m_ShowUnit = m_unit;
     GetRenderSettings()->m_ShowConvert = m_convert;
+    GetCanvas()->DisplayComponent( m_my_part );
 
-    view->DisplayComponent( m_my_part );
-
-    view->HideWorksheet();
-    view->ClearHiddenFlags();
+    GetCanvas()->GetView()->HideWorksheet();
+    GetCanvas()->GetView()->ClearHiddenFlags();
 
     GetCanvas()->Refresh();
 }

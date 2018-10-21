@@ -170,6 +170,12 @@ public:
     void SetLayer( SCH_LAYER_ID aLayer )  { m_Layer = aLayer; }
 
     /**
+     * Function ViewGetLayers
+     * returns the layers the item is drawn on (which may be more than its "home" layer)
+     */
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
+    /**
      * Function GetPenSize virtual pure
      * @return the size of the "pen" that be used to draw or plot this item
      */

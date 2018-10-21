@@ -68,6 +68,14 @@ SCH_ITEM::~SCH_ITEM()
 }
 
 
+void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Basic fallback
+    aCount      = 1;
+    aLayers[0]  = LAYER_DEVICE;
+}
+
+
 bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 {
     if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )

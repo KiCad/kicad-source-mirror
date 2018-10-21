@@ -180,6 +180,14 @@ bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 }
 
 
+void LIB_ALIAS::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 2;
+    aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+}
+
+
 /// http://www.boost.org/doc/libs/1_55_0/libs/smart_ptr/sp_techniques.html#weak_without_shared
 struct null_deleter
 {
@@ -758,6 +766,14 @@ const EDA_RECT LIB_PART::GetUnitBoundingBox( int aUnit, int aConvert ) const
     }
 
     return bBox;
+}
+
+
+void LIB_PART::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 2;
+    aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
 }
 
 

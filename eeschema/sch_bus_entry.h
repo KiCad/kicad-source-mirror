@@ -83,6 +83,8 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 

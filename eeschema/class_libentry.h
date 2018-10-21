@@ -176,6 +176,8 @@ public:
 
     bool operator==( const LIB_ALIAS* aAlias ) const { return this == aAlias; }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -328,6 +330,8 @@ public:
     void RemoveAllAliases();
 
     wxArrayString& GetFootprints() { return m_FootprintList; }
+
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**
      * Get the bounding box for the symbol.

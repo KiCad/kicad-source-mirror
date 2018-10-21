@@ -233,6 +233,14 @@ EDA_ITEM* SCH_COMPONENT::Clone() const
 }
 
 
+void SCH_COMPONENT::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 2;
+    aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+}
+
+
 void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, PART_LIBS* aLibs )
 {
     if( m_lib_id != aLibId )

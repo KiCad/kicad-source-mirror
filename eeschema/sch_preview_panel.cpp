@@ -96,29 +96,32 @@ void SCH_PREVIEW_PANEL::OnShow()
 
 void SCH_PREVIEW_PANEL::setDefaultLayerOrder()
 {
-/*    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof( SCH_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
     {
-        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        LAYER_NUM layer = SCH_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         m_view->SetLayerOrder( layer, i );
-    }*/
+    }
 }
 
 
 void SCH_PREVIEW_PANEL::setDefaultLayerDeps()
 {
     // caching makes no sense for Cairo and other software renderers
-    auto target = KIGFX::TARGET_NONCACHED;
+    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
 
     m_view->SetLayerTarget( LAYER_GP_OVERLAY , KIGFX::TARGET_OVERLAY );
-
     m_view->SetLayerDisplayOnly( LAYER_GP_OVERLAY ) ;
+
+    m_view->SetLayerTarget( LAYER_SELECT_OVERLAY , KIGFX::TARGET_OVERLAY );
+    m_view->SetLayerDisplayOnly( LAYER_SELECT_OVERLAY ) ;
+
+    m_view->SetLayerTarget( LAYER_WORKSHEET , KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
-    m_view->SetLayerDisplayOnly( LAYER_DRC );
 }
 
 

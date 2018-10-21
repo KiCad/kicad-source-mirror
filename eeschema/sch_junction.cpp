@@ -73,6 +73,13 @@ void SCH_JUNCTION::SwapData( SCH_ITEM* aItem )
 }
 
 
+void SCH_JUNCTION::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 1;
+    aLayers[0]  = LAYER_JUNCTION;
+}
+
+
 const EDA_RECT SCH_JUNCTION::GetBoundingBox() const
 {
     EDA_RECT rect;

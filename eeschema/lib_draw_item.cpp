@@ -153,6 +153,15 @@ void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 }
 
 
+void LIB_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    // Basic fallback
+    aCount      = 2;
+    aLayers[0]  = LAYER_DEVICE;
+    aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+}
+
+
 COLOR4D LIB_ITEM::GetDefaultColor()
 {
     return GetLayerColor( LAYER_DEVICE );

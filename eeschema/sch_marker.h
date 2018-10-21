@@ -52,6 +52,8 @@ public:
         return wxT( "SCH_MARKER" );
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDraw_mode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override;
 

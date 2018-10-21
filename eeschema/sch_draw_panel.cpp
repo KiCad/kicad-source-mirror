@@ -40,6 +40,7 @@
 
 using namespace std::placeholders;
 
+
 // Events used by EDA_DRAW_PANEL
 // GAL TODO: some (most?) of these need to be implemented...
 BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledCanvas )
@@ -69,13 +70,8 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
     m_parent( aParentWindow )
 {
-#ifdef __WXMAC__
-    m_defaultCursor = m_currentCursor = wxCURSOR_CROSS;
-    m_showCrossHair = false;
-#else
     m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
     m_showCrossHair = true;
-#endif
     m_view = new KIGFX::SCH_VIEW( true );
     m_view->SetGAL( m_gal );
 
@@ -143,8 +139,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     Show( true );
     Raise();
     StartDrawing();
-    //printf("CreateGALPAnel\n");
-    //m_selectionArea = new KIGFX::PREVIEW::SELECTION_AREA;
 }
 
 
@@ -182,13 +176,13 @@ void SCH_DRAW_PANEL::OnShow()
 
 void SCH_DRAW_PANEL::setDefaultLayerOrder()
 {
-/*    for( LAYER_NUM i = 0; (unsigned) i < sizeof( GAL_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
+    for( LAYER_NUM i = 0; (unsigned) i < sizeof( SCH_LAYER_ORDER ) / sizeof( LAYER_NUM ); ++i )
     {
-        LAYER_NUM layer = GAL_LAYER_ORDER[i];
+        LAYER_NUM layer = SCH_LAYER_ORDER[i];
         wxASSERT( layer < KIGFX::VIEW::VIEW_MAX_LAYERS );
 
         m_view->SetLayerOrder( layer, i );
-    }*/
+    }
 }
 
 
@@ -259,8 +253,6 @@ void SCH_DRAW_PANEL::setDefaultLayerDeps()
 
     m_view->SetLayerTarget( LAYER_WORKSHEET , KIGFX::TARGET_NONCACHED );
     m_view->SetLayerDisplayOnly( LAYER_WORKSHEET ) ;
-
-    m_view->SetLayerDisplayOnly( LAYER_DRC );
 }
 
 

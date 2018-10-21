@@ -49,7 +49,7 @@
 #include <class_libentry.h>
 #include <class_library.h>
 #include <sch_edit_frame.h>
-
+#include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <colors_design_settings.h>
 
@@ -209,19 +209,16 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
 
     size_t pinIndex = 0;
 
-    auto visitItem = [&]( LIB_ITEM& item, bool aBackground )
+    for( auto& item : aComp->GetDrawItems() )
     {
-        if( aBackground != ( item.GetFillMode() == FILLED_WITH_BG_BODYCOLOR ) )
-            return;
-
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
-            return;
+            continue;
 
         if( aUnit && item.GetUnit() && aUnit != item.GetUnit() )
-            return;
+            continue;
 
         if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
-            return;
+            continue;
 
         if( item.Type() == LIB_PIN_T )
         {
@@ -236,18 +233,7 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
         }
         else
             Draw( &item, aLayer );
-    };
-
-    // Apply a z-order heuristic (because we don't yet let the user edit it):
-    // draw body-filled objects first.
-
-    for( auto& item : aComp->GetDrawItems() )
-        visitItem( item, true );
-
-    m_gal->AdvanceDepth();
-
-    for( auto& item : aComp->GetDrawItems() )
-        visitItem( item, false );
+    }
 }
 
 
@@ -284,9 +270,9 @@ void SCH_PAINTER::triLine( const VECTOR2D &a, const VECTOR2D &b, const VECTOR2D 
 }
 
 
-void SCH_PAINTER::setColors( const LIB_ITEM* aItem, bool aBackground )
+bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
 {
-    if( aBackground )
+    if( aLayer == LAYER_DEVICE_BACKGROUND && aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
     {
         COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
@@ -297,8 +283,9 @@ void SCH_PAINTER::setColors( const LIB_ITEM* aItem, bool aBackground )
         m_gal->SetFillColor( color );
 
         m_gal->SetIsStroke( false );
+        return true;
     }
-    else
+    else if( aLayer == LAYER_DEVICE )
     {
         COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE );
 
@@ -311,7 +298,10 @@ void SCH_PAINTER::setColors( const LIB_ITEM* aItem, bool aBackground )
 
         m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
         m_gal->SetFillColor( color );
+        return true;
     }
+
+    return false;
 }
 
 
@@ -320,15 +310,8 @@ void SCH_PAINTER::draw( LIB_RECTANGLE *aRect, int aLayer )
     if( !isUnitAndConversionShown( aRect ) )
         return;
 
-    if( aRect->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
-    {
-        setColors( aRect, true );
+    if( setColors( aRect, aLayer ) )
         m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
-        m_gal->AdvanceDepth();
-    }
-
-    setColors( aRect, false );
-    m_gal->DrawRectangle( mapCoords( aRect->GetPosition() ), mapCoords( aRect->GetEnd() ) );
 
 }
 
@@ -338,15 +321,8 @@ void SCH_PAINTER::draw( LIB_CIRCLE *aCircle, int aLayer )
     if( !isUnitAndConversionShown( aCircle ) )
         return;
 
-    if( aCircle->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
-    {
-        setColors( aCircle, true );
+    if( setColors( aCircle, aLayer ) )
         m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
-        m_gal->AdvanceDepth();
-    }
-
-    setColors( aCircle, false );
-    m_gal->DrawCircle( mapCoords( aCircle->GetPosition() ), aCircle->GetRadius() );
 }
 
 
@@ -366,14 +342,8 @@ void SCH_PAINTER::draw( LIB_ARC *aArc, int aLayer )
 
     VECTOR2D pos = mapCoords( aArc->GetPosition() );
 
-    if( aArc->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
-    {
-        setColors( aArc, true );
+    if( setColors( aArc, aLayer ) )
         m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
-    }
-
-    setColors( aArc, false );
-    m_gal->DrawArc( pos, aArc->GetRadius(), sa, ea );
 }
 
 
@@ -382,38 +352,31 @@ void SCH_PAINTER::draw( LIB_POLYLINE *aLine, int aLayer )
     if( !isUnitAndConversionShown( aLine ) )
         return;
 
-
     const std::vector<wxPoint>& pts = aLine->GetPolyPoints();
     std::deque<VECTOR2D> vtx;
 
     for( auto p : pts )
         vtx.push_back( mapCoords( p ) );
 
-    if( aLine->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
-    {
-        setColors( aLine, true );
+    if( setColors( aLine, aLayer ) )
         m_gal->DrawPolygon( vtx );
-        m_gal->AdvanceDepth();
-    }
-
-    setColors( aLine, false );
-    m_gal->DrawPolygon( vtx );
 }
 
 
 void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 {
+    // Must check layer as fields are sometimes drawn by their parent rather than
+    // directly from the view.
+    int layers[KIGFX::VIEW::VIEW_MAX_LAYERS], layers_count;
+    aField->ViewGetLayers( layers, layers_count );
+
+    if( aLayer != layers[0] )
+        return;
+
     if( !isUnitAndConversionShown( aField ) )
         return;
 
-    COLOR4D color;
-
-    switch( aField->GetId() )
-    {
-    case REFERENCE: color = m_schSettings.GetLayerColor( LAYER_REFERENCEPART ); break;
-    case VALUE:     color = m_schSettings.GetLayerColor( LAYER_VALUEPART );     break;
-    default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
-    }
+    COLOR4D color = aField->GetDefaultColor();
 
     if( aField->IsMoving() )
         color = selectedBrightening( color );
@@ -515,6 +478,9 @@ static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4
 
 void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMoving )
 {
+    if( aLayer != LAYER_DEVICE )
+        return;
+
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
@@ -1241,58 +1207,70 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 {
-    VECTOR2D pos_sheetname = aSheet->GetSheetNamePosition();
-    VECTOR2D pos_filename = aSheet->GetFileNamePosition();
     VECTOR2D pos = aSheet->GetPosition();
     VECTOR2D size = aSheet->GetSize();
 
-    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEET ) );
-
-    if( aSheet->IsMoving() )    // Gives a filled background when moving for a better look
+    if( aLayer == LAYER_SHEET_BACKGROUND )
     {
-        // Select a fill color working well with black and white background color,
-        // both in Opengl and Cairo
-        m_gal->SetFillColor( COLOR4D( 0.1, 0.5, 0.5, 0.3 ) );
-        m_gal->SetIsFill( true );
+        m_gal->SetIsStroke( false );
+
+        if( aSheet->IsMoving() )    // Gives a filled background when moving for a better look
+        {
+            // Select a fill color working well with black and white background color,
+            // both in Opengl and Cairo
+            m_gal->SetFillColor( COLOR4D( 0.1, 0.5, 0.5, 0.3 ) );
+            m_gal->SetIsFill( true );
+        }
+        else
+        {
+            // Could be modified later, when sheets can have their own fill color
+            return;
+        }
+
+        m_gal->DrawRectangle( pos, pos + size );
     }
-    else
+    else if( aLayer == LAYER_SHEET )
     {
-        // Could be modified later, when sheets can have their own fill color
-        m_gal->SetIsFill ( false );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEET ) );
+        m_gal->SetIsStroke( true );
+
+        m_gal->SetIsFill( false );
+
+        m_gal->DrawRectangle( pos, pos + size );
+
+        VECTOR2D pos_sheetname = aSheet->GetSheetNamePosition();
+        VECTOR2D pos_filename = aSheet->GetFileNamePosition();
+        double   nameAngle = 0.0;
+
+        if( aSheet->IsVerticalOrientation() )
+            nameAngle = -M_PI/2;
+
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETNAME ) );
+
+        auto text = wxT( "Sheet: " ) + aSheet->GetName();
+
+        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
+        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
+
+        auto txtSize = aSheet->GetSheetNameSize();
+
+        m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
+        m_gal->SetFontBold( false );
+        m_gal->SetFontItalic( false );
+
+        m_gal->StrokeText( text, pos_sheetname, nameAngle );
+
+        txtSize = aSheet->GetFileNameSize();
+        m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
+        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETFILENAME ) );
+        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
+
+        text = wxT( "File: " ) + aSheet->GetFileName();
+        m_gal->StrokeText( text, pos_filename, nameAngle );
+
+        for( auto& sheetPin : aSheet->GetPins() )
+            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
     }
-    m_gal->SetIsStroke( true );
-    m_gal->DrawRectangle( pos, pos + size );
-
-    auto nameAngle = 0.0;
-
-    if( aSheet->IsVerticalOrientation() )
-        nameAngle = -M_PI/2;
-
-    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETNAME ) );
-
-    auto text = wxT( "Sheet: " ) + aSheet->GetName();
-
-    m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_LEFT );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_BOTTOM );
-
-    auto txtSize = aSheet->GetSheetNameSize();
-
-    m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-    m_gal->SetFontBold( false );
-    m_gal->SetFontItalic( false );
-
-    m_gal->StrokeText( text, pos_sheetname, nameAngle );
-
-    txtSize = aSheet->GetFileNameSize();
-    m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETFILENAME ) );
-    m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
-
-    text = wxT( "File: " ) + aSheet->GetFileName();
-    m_gal->StrokeText( text, pos_filename, nameAngle );
-
-    for( auto& sheetPin : aSheet->GetPins() )
-        draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
 }
 
 

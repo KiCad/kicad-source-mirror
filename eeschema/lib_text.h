@@ -70,6 +70,8 @@ public:
         return _( "Text" );
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     /**
      * Sets the text item string to \a aText.
      *

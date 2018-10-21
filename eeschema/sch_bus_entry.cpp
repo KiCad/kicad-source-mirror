@@ -100,6 +100,14 @@ void SCH_BUS_ENTRY_BASE::SwapData( SCH_ITEM* aItem )
 }
 
 
+void SCH_BUS_ENTRY_BASE::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 1;
+
+    aLayers[0]  = Type() == SCH_BUS_BUS_ENTRY_T ? LAYER_BUS : LAYER_WIRE;
+}
+
+
 const EDA_RECT SCH_BUS_ENTRY_BASE::GetBoundingBox() const
 {
     EDA_RECT box;

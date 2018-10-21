@@ -59,6 +59,8 @@ public:
 
     void SwapData( SCH_ITEM* aItem ) override;
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     const EDA_RECT GetBoundingBox() const override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,

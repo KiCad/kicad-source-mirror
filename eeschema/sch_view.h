@@ -13,6 +13,23 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_PART;
 
+
+static const LAYER_NUM SCH_LAYER_ORDER[] =
+    {
+        LAYER_GP_OVERLAY, LAYER_SELECT_OVERLAY,
+        LAYER_ERC_ERR, LAYER_ERC_WARN,
+        LAYER_REFERENCEPART, LAYER_VALUEPART, LAYER_FIELDS,
+        LAYER_JUNCTION,
+        LAYER_WIRE, LAYER_BUS,
+        LAYER_DEVICE,
+        LAYER_DEVICE_BACKGROUND,
+        LAYER_NOTES,
+        LAYER_SHEET,
+        LAYER_SHEET_BACKGROUND,
+        LAYER_WORKSHEET
+    };
+
+
 namespace KIGFX
 {
     class VIEW_GROUP;
@@ -28,9 +45,6 @@ class SCH_VIEW : public KIGFX::VIEW
 public:
     SCH_VIEW( bool aIsDynamic );
     ~SCH_VIEW();
-
-    virtual void Add( VIEW_ITEM* aItem, int aDrawPriority = -1 ) override;
-    virtual void Remove( VIEW_ITEM* aItem ) override;
 
     void DisplaySheet( SCH_SHEET *aSheet );
     void DisplaySheet( SCH_SCREEN *aSheet );
@@ -49,14 +63,11 @@ public:
     void ClearHiddenFlags();
     void HideWorksheet();
 
-    virtual void Redraw() override;
-
 private:
     std::unique_ptr<WORKSHEET_VIEWITEM> m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;
     std::vector<EDA_ITEM *> m_ownedItems;
-    std::unordered_map<VIEW_ITEM*, BOX2I> m_cachedBBoxes;
 };
 
 }; // namespace

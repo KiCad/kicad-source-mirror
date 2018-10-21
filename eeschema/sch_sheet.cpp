@@ -424,6 +424,14 @@ wxPoint SCH_SHEET::GetFileNamePosition()
 }
 
 
+void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 2;
+    aLayers[0]  = LAYER_SHEET;
+    aLayers[1]  = LAYER_SHEET_BACKGROUND;
+}
+
+
 void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                       const wxPoint& aOffset, GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {

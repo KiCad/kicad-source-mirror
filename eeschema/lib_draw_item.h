@@ -219,6 +219,8 @@ public:
         return (LIB_PART *)m_Parent;
     }
 
+    void ViewGetLayers( int aLayers[], int& aCount ) const override;
+
     virtual bool HitTest( const wxPoint& aPosition ) const override
     {
         return EDA_ITEM::HitTest( aPosition );

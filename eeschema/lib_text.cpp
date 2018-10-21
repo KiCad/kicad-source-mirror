@@ -52,6 +52,13 @@ LIB_TEXT::LIB_TEXT( LIB_PART * aParent ) :
 }
 
 
+void LIB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aCount      = 1;
+    aLayers[0]  = LAYER_NOTES;
+}
+
+
 bool LIB_TEXT::HitTest( const wxPoint& aPosition ) const
 {
     return HitTest( aPosition, 0, DefaultTransform );

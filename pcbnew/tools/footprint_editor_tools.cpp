@@ -107,6 +107,13 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             pad->IncrementPadName( true, true );
             return std::unique_ptr<BOARD_ITEM>( pad );
         }
+
+        void PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
+        {
+            auto pad = dynamic_cast<D_PAD*>( aItem );
+            m_frame->Export_Pad_Settings( pad );
+            aCommit.Add( aItem );
+        }
     };
 
     PAD_PLACER placer;
