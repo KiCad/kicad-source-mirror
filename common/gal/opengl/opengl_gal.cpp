@@ -1020,17 +1020,11 @@ void OPENGL_GAL::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aContro
 
 void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 {
-    int ppi = aBitmap.GetPPI();
-
     // We have to calculate the pixel size in users units to draw the image.
-    // worldUnitLength is the user unit in GAL unit value
-    // (GAL unit = 2.54/1e9 in meter).
-    // worldUnitLength * 1000 / 2.54 is the user unit in mm
-    double worldIU_per_mm = 1.0 / ( worldUnitLength / 0.00254 );
-    double pix_size_iu = worldIU_per_mm * ( 25.4 / ppi );
-
-    double w = (double) aBitmap.GetSizePixels().x * pix_size_iu;
-    double h = (double) aBitmap.GetSizePixels().y * pix_size_iu;
+    // worldUnitLength is a factor used for converting IU to inches
+    double scale = 1.0 / ( aBitmap.GetPPI() * worldUnitLength );
+    double w = (double) aBitmap.GetSizePixels().x * scale;
+    double h = (double) aBitmap.GetSizePixels().y * scale;
 
     auto xform = currentManager->GetTransformation();
 
@@ -1051,17 +1045,17 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glBindTexture( GL_TEXTURE_2D, id );
 
     glBegin( GL_QUADS );
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glTexCoord2f(0.0, 0.0);
+    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glTexCoord2f( 0.0, 0.0 );
     glVertex3f( v0.x, v0.y, layerDepth );
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glTexCoord2f(1.0, 0.0);
+    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glTexCoord2f( 1.0, 0.0 );
     glVertex3f( v1.x, v0.y, layerDepth );
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glTexCoord2f(1.0, 1.0);
+    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glTexCoord2f( 1.0, 1.0 );
     glVertex3f( v1.x, v1.y, layerDepth );
-    glColor4f(1.0, 1.0, 1.0, 1.0);
-    glTexCoord2f(0.0, 1.0);
+    glColor4f( 1.0, 1.0, 1.0, 1.0 );
+    glTexCoord2f( 0.0, 1.0 );
     glVertex3f( v0.x, v1.y, layerDepth );
     glEnd();
 

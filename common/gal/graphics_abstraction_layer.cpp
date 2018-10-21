@@ -34,9 +34,6 @@
 using namespace KIGFX;
 
 
-const double GAL::METRIC_UNIT_LENGTH = 1e9;
-
-
 GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     options( aDisplayOptions ),
     strokeFont( this )
@@ -49,8 +46,10 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetLookAtPoint( VECTOR2D( 0, 0 ) );
     SetZoomFactor( 1.0 );
     SetRotation( 0.0 );
-    SetWorldUnitLength( 1.0 / METRIC_UNIT_LENGTH * 2.54 );   // 1 inch in nanometers
-    SetScreenDPI( 106 );                                     // Display resolution setting
+    SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
+    // wxDC::GetPPI() reports 96 DPI, but somehow this value
+    // is the closest match to the legacy renderer
+    SetScreenDPI( 91 );
     SetDepthRange( VECTOR2D( GAL::MIN_DEPTH, GAL::MAX_DEPTH ) );
     SetLayerDepth( 0.0 );
     SetFlip( false, false );

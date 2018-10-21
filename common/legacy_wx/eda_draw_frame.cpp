@@ -779,10 +779,7 @@ const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 
     if( IsGalCanvasActive() )
     {
-        KIGFX::GAL* gal = m_galCanvas->GetGAL();
-        KIGFX::VIEW* view = m_galCanvas->GetView();
-        double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-        level = m_zoomLevelCoeff * zoomFactor * view->GetScale();
+        level = m_galCanvas->GetGAL()->GetZoomFactor();
     }
     else if( BASE_SCREEN* screen = GetScreen() )
     {
@@ -1231,10 +1228,8 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         if( !m_galCanvasActive )
         {
             // Set up viewport
-            double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-            double zoom = 1.0 / ( zoomFactor * m_canvas->GetZoom() );
-            view->SetScale( zoom );
-            view->SetCenter( VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
+            view->SetScale( GetZoomLevelCoeff() / m_canvas->GetZoom() );
+            view->SetCenter(VECTOR2D( m_canvas->GetScreenCenterLogicalPosition() ) );
         }
 
         // Set up grid settings
@@ -1243,9 +1238,10 @@ void EDA_DRAW_FRAME::UseGalCanvas( bool aEnable )
         gal->SetGridOrigin( VECTOR2D( GetGridOrigin() ) );
 
         // Transfer EDA_DRAW_PANEL settings
-        GetGalCanvas()->GetViewControls()->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
-        GetGalCanvas()->GetViewControls()->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
-        GetGalCanvas()->GetViewControls()->EnableAutoPan( m_canvas->GetEnableAutoPan() );
+        KIGFX::VIEW_CONTROLS* viewControls = GetGalCanvas()->GetViewControls();
+        viewControls->EnableCursorWarping( !m_canvas->GetEnableZoomNoCenter() );
+        viewControls->EnableMousewheelPan( m_canvas->GetEnableMousewheelPan() );
+        viewControls->EnableAutoPan( m_canvas->GetEnableAutoPan() );
     }
     else if( m_galCanvasActive )
     {

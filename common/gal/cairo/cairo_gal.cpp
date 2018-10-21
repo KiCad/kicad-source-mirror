@@ -274,27 +274,21 @@ void CAIRO_GAL_BASE::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aCo
 
 void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
 {
-    int ppi = aBitmap.GetPPI();
-    // We have to calculate the pixel size in users units to draw the image.
-    // worldUnitLength is the user unit in GAL unit value
-    // (GAL unit = 0.1 inch in nanometer = 2.54/1000 in mm).
-    // worldUnitLength * 1000 / 2.54 is the user unit in mm
-    double worldIU_per_mm = 1/( worldUnitLength / 0.00254 );
-    double pix_size_iu =  worldIU_per_mm * ( 25.4 / ppi );
-    int w = aBitmap.GetSizePixels().x;
-    int h = aBitmap.GetSizePixels().y;
-
     cairo_save( currentContext );
 
-    // Set the pixel scaling factor:
-    cairo_scale( currentContext, pix_size_iu, pix_size_iu );
+    // We have to calculate the pixel size in users units to draw the image.
+    // worldUnitLength is a factor used for converting IU to inches
+    double scale = 1.0 / ( aBitmap.GetPPI() * worldUnitLength );
+    cairo_scale( currentContext, scale, scale );
+
     // The position of the bitmap is the bitmap center.
     // move the draw origin to the top left bitmap corner:
+    int w = aBitmap.GetSizePixels().x;
+    int h = aBitmap.GetSizePixels().y;
     cairo_translate( currentContext, -w/2, -h/2 );
 
     cairo_new_path( currentContext );
-    cairo_surface_t *image;
-    image = cairo_image_surface_create( CAIRO_FORMAT_RGB24, w, h );
+    cairo_surface_t* image = cairo_image_surface_create( CAIRO_FORMAT_RGB24, w, h );
     cairo_surface_flush( image );
 
     unsigned char* pix_buffer = cairo_image_surface_get_data( image );

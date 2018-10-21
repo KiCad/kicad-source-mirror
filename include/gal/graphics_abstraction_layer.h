@@ -1019,8 +1019,6 @@ public:
 
     virtual void EnableDepthTest( bool aEnabled = false ) {};
 
-    static const double METRIC_UNIT_LENGTH;
-
 protected:
 
     GAL_DISPLAY_OPTIONS&    options;

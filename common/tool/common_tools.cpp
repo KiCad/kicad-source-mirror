@@ -297,9 +297,6 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 {
     std::vector<double>& zoomList = m_frame->GetScreen()->m_ZoomList;
     KIGFX::VIEW* view = m_frame->GetGalCanvas()->GetView();
-    KIGFX::GAL* gal = m_frame->GetGalCanvas()->GetGAL();
-
-    m_frame->SetPresetZoom( idx );
 
     if( idx == 0 )      // Zoom Auto
     {
@@ -307,11 +304,11 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
         return ZoomFitScreen( dummy );
     }
     else
+    {
         idx--;
+    }
 
-    double selectedZoom = zoomList[idx];
-    double zoomFactor = gal->GetWorldScale() / gal->GetZoomFactor();
-    double scale = 1.0 / ( zoomFactor * selectedZoom );
+    double scale = m_frame->GetZoomLevelCoeff() / zoomList[idx];
 
     if( aCenterOnCursor )
     {
@@ -321,7 +318,9 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
             getViewControls()->CenterOnCursor();
     }
     else
+    {
         view->SetScale( scale );
+    }
 
     return 0;
 }

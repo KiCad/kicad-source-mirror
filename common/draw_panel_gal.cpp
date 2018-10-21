@@ -353,8 +353,7 @@ void EDA_DRAW_PANEL_GAL::SetTopLayer( int aLayer )
 
 double EDA_DRAW_PANEL_GAL::GetLegacyZoom() const
 {
-    double zoomFactor = m_gal->GetWorldScale() / m_gal->GetZoomFactor();
-    return ( 1.0 / ( zoomFactor * m_view->GetScale() ) );
+    return m_edaFrame->GetZoomLevelCoeff() / m_gal->GetZoomFactor();
 }
 
 

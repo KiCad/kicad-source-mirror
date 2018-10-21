@@ -418,7 +418,7 @@ bool PCB_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
     setDefaultLayerDeps();
-    m_gal->SetWorldUnitLength( 2.54/(IU_PER_MM*1000) ); // world unit is in internal units per inch * 1000
+    m_gal->SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
     return rv;
 }
 
