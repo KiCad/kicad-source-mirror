@@ -664,19 +664,19 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
         for( alpha = aStartAngle; ( alpha + alphaIncrement ) < aEndAngle; )
         {
             currentManager->Reserve( 3 );
-            currentManager->Vertex( 0.0, 0.0, 0.0 );
-            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
+            currentManager->Vertex( 0.0, 0.0, layerDepth );
+            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, layerDepth );
             alpha += alphaIncrement;
-            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
+            currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, layerDepth );
         }
 
         // The last missing triangle
         const VECTOR2D endPoint( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
 
         currentManager->Reserve( 3 );
-        currentManager->Vertex( 0.0, 0.0, 0.0 );
-        currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, 0.0 );
-        currentManager->Vertex( endPoint.x,    endPoint.y,     0.0 );
+        currentManager->Vertex( 0.0, 0.0, layerDepth );
+        currentManager->Vertex( cos( alpha ) * aRadius, sin( alpha ) * aRadius, layerDepth );
+        currentManager->Vertex( endPoint.x, endPoint.y, layerDepth );
     }
 
     if( isStrokeEnabled )
