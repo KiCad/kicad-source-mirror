@@ -40,18 +40,21 @@
 #include <dialog_exchange_footprints.h>
 
 
-#define ID_MATCH_FP_ALL 4200
-#define ID_MATCH_FP_REF 4201
-#define ID_MATCH_FP_VAL 4202
-#define ID_MATCH_FP_ID  4203
+#define ID_MATCH_FP_ALL     4200
+#define ID_MATCH_FP_SELECTED 4201
+#define ID_MATCH_FP_REF     4202
+#define ID_MATCH_FP_VAL     4203
+#define ID_MATCH_FP_ID      4204
 
 
 int g_matchModeForUpdate           = ID_MATCH_FP_ALL;
+int g_matchModeForUpdateSelected   = ID_MATCH_FP_SELECTED;
 int g_matchModeForExchange         = ID_MATCH_FP_REF;
+int g_matchModeForExchangeSelected = ID_MATCH_FP_SELECTED;
 
 
 DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule,
-                                                        bool updateMode ) :
+                                                        bool updateMode, bool selectedMode ) :
     DIALOG_EXCHANGE_FOOTPRINTS_BASE( aParent ),
     m_commit( aParent ),
     m_parent( aParent ),
@@ -73,17 +76,17 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     else
     {
         m_upperSizer->FindItem( m_matchAll )->Show( false );
-
-        if( m_currentModule )
-        {
-            m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
-            SetInitialFocus( m_newID );
-        }
-        else
-            SetInitialFocus( m_specifiedRef );
-
         m_newIDBrowseButton->SetBitmap( KiBitmap( small_library_xpm ) );
     }
+
+    if( m_currentModule )
+    {
+        label.Printf( m_matchSelected->GetLabel(), verb );
+        m_matchSelected->SetLabel( label );
+        m_newID->AppendText( FROM_UTF8( m_currentModule->GetFPID().Format().c_str() ) );
+    }
+    else
+        m_upperSizer->FindItem( m_matchSelected )->Show( false );
 
     label.Printf( m_matchSpecifiedRef->GetLabel(), verb );
     m_matchSpecifiedRef->SetLabel( label );
@@ -110,14 +113,22 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
     m_upperSizer->RecalcSizes();
 
     // initialize match-mode
+    if( m_updateMode )
+        m_matchMode = selectedMode ? &g_matchModeForUpdateSelected : &g_matchModeForUpdate;
+    else
+        m_matchMode = selectedMode ? &g_matchModeForExchangeSelected : &g_matchModeForExchange;
+
     wxCommandEvent event;
-    switch( m_updateMode ? g_matchModeForUpdate : g_matchModeForExchange )
+    event.SetEventObject( this );
+
+    switch( *m_matchMode )
     {
-    case ID_MATCH_FP_ALL: OnMatchAllClicked( event );   break;
-    case ID_MATCH_FP_REF: OnMatchRefClicked( event );   break;
-    case ID_MATCH_FP_VAL: OnMatchValueClicked( event ); break;
-    case ID_MATCH_FP_ID:  OnMatchIDClicked( event );    break;
-    default:                                            break;
+    case ID_MATCH_FP_ALL:      OnMatchAllClicked( event );      break;
+    case ID_MATCH_FP_SELECTED: OnMatchSelectedClicked( event ); break;
+    case ID_MATCH_FP_REF:      OnMatchRefClicked( event );      break;
+    case ID_MATCH_FP_VAL:      OnMatchValueClicked( event );    break;
+    case ID_MATCH_FP_ID:       OnMatchIDClicked( event );       break;
+    default:                                                    break;
     }
 
     // DIALOG_SHIM needs a unique hash_key because classname is not sufficient
@@ -135,23 +146,16 @@ DIALOG_EXCHANGE_FOOTPRINTS::DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent,
 }
 
 
-void DIALOG_EXCHANGE_FOOTPRINTS::setMatchMode( int aMatchMode )
-{
-    if( m_updateMode )
-        g_matchModeForUpdate = aMatchMode;
-    else
-        g_matchModeForExchange = aMatchMode;
-}
-
-
 bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
 {
     LIB_ID specifiedID;
 
-    switch( m_updateMode ? g_matchModeForUpdate : g_matchModeForExchange )
+    switch( *m_matchMode )
     {
     case ID_MATCH_FP_ALL:
         return true;
+    case ID_MATCH_FP_SELECTED:
+        return aModule == m_currentModule;
     case ID_MATCH_FP_REF:
         return WildCompareString( m_specifiedRef->GetValue(), aModule->GetReference(), false );
     case ID_MATCH_FP_VAL:
@@ -167,13 +171,14 @@ bool DIALOG_EXCHANGE_FOOTPRINTS::isMatch( MODULE* aModule )
 
 wxRadioButton* DIALOG_EXCHANGE_FOOTPRINTS::getRadioButtonForMode()
 {
-    switch( m_updateMode ? g_matchModeForUpdate : g_matchModeForExchange )
+    switch( *m_matchMode )
     {
-    case ID_MATCH_FP_ALL: return m_matchAll;
-    case ID_MATCH_FP_REF: return m_matchSpecifiedRef;
-    case ID_MATCH_FP_VAL: return m_matchSpecifiedValue;
-    case ID_MATCH_FP_ID:  return m_matchSpecifiedID;
-    default:              return nullptr;
+    case ID_MATCH_FP_ALL:      return m_matchAll;
+    case ID_MATCH_FP_SELECTED: return m_matchSelected;
+    case ID_MATCH_FP_REF:      return m_matchSpecifiedRef;
+    case ID_MATCH_FP_VAL:      return m_matchSpecifiedValue;
+    case ID_MATCH_FP_ID:       return m_matchSpecifiedID;
+    default:                   return nullptr;
     }
 }
 
@@ -184,6 +189,8 @@ void DIALOG_EXCHANGE_FOOTPRINTS::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 
     wxRadioButton* rb_butt_list[] =
     {
+        m_matchAll,
+        m_matchSelected,
         m_matchSpecifiedRef,
         m_matchSpecifiedValue,
         m_matchSpecifiedID,
@@ -205,34 +212,55 @@ void DIALOG_EXCHANGE_FOOTPRINTS::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 
 void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchAllClicked( wxCommandEvent& event )
 {
-    setMatchMode( ID_MATCH_FP_ALL );
-    m_matchAll->SetFocus();
+    *m_matchMode = ID_MATCH_FP_ALL;
+
+    if( event.GetEventObject() == this )
+        SetInitialFocus( m_matchAll );
+    else
+        m_matchAll->SetFocus();
+}
+
+
+void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchSelectedClicked( wxCommandEvent& event )
+{
+    *m_matchMode = ID_MATCH_FP_SELECTED;
+
+    if( event.GetEventObject() == this )
+        SetInitialFocus( m_matchSelected );
+    else
+        m_matchSelected->SetFocus();
 }
 
 
 void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchRefClicked( wxCommandEvent& event )
 {
-    setMatchMode( ID_MATCH_FP_REF );
+    *m_matchMode = ID_MATCH_FP_REF;
 
-    if( event.GetEventObject() != m_specifiedRef )
+    if( event.GetEventObject() == this )
+        SetInitialFocus( m_specifiedRef );
+    else if( event.GetEventObject() != m_specifiedRef )
         m_specifiedRef->SetFocus();
 }
 
 
 void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchValueClicked( wxCommandEvent& event )
 {
-    setMatchMode( ID_MATCH_FP_VAL );
+    *m_matchMode = ID_MATCH_FP_VAL;
 
-    if( event.GetEventObject() != m_specifiedValue )
+    if( event.GetEventObject() == this )
+        SetInitialFocus( m_specifiedValue );
+    else if( event.GetEventObject() != m_specifiedValue )
         m_specifiedValue->SetFocus();
 }
 
 
 void DIALOG_EXCHANGE_FOOTPRINTS::OnMatchIDClicked( wxCommandEvent& event )
 {
-    setMatchMode( ID_MATCH_FP_ID );
+    *m_matchMode = ID_MATCH_FP_ID;
 
-    if( event.GetEventObject() != m_specifiedID )
+    if( event.GetEventObject() == this )
+        SetInitialFocus( m_specifiedID );
+    else if( event.GetEventObject() != m_specifiedID )
         m_specifiedID->SetFocus();
 }
 

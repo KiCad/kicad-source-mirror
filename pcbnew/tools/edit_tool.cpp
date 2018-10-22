@@ -1180,7 +1180,7 @@ int EDIT_TOOL::ExchangeFootprints( const TOOL_EVENT& aEvent )
 
     // invoke the exchange dialog process
     {
-        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode );
+        DIALOG_EXCHANGE_FOOTPRINTS dialog( frame(), mod, updateMode, mod != nullptr );
         dialog.ShowQuasiModal();
     }
 

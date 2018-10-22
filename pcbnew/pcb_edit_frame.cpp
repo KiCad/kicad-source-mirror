@@ -1303,19 +1303,20 @@ void PCB_EDIT_FRAME::InstallFootprintPropertiesDialog( MODULE* Module, wxDC* DC 
 
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_UPDATE_FP )
     {
-        InstallExchangeModuleFrame( Module, true );
+        InstallExchangeModuleFrame( Module, true, true );
     }
 
     else if( retvalue == DIALOG_FOOTPRINT_BOARD_EDITOR::PRM_EDITOR_WANT_EXCHANGE_FP )
     {
-        InstallExchangeModuleFrame( Module, false );
+        InstallExchangeModuleFrame( Module, false, true );
     }
 }
 
 
-int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* Module, bool updateMode )
+int PCB_EDIT_FRAME::InstallExchangeModuleFrame( MODULE* aModule, bool updateMode,
+                                                bool selectedMode )
 {
-    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, Module, updateMode );
+    DIALOG_EXCHANGE_FOOTPRINTS dialog( this, aModule, updateMode, selectedMode );
 
     return dialog.ShowQuasiModal();
 }

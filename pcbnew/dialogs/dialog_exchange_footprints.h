@@ -40,20 +40,21 @@ private:
     PCB_EDIT_FRAME* m_parent;
     MODULE*         m_currentModule;
     bool            m_updateMode;
+    int*            m_matchMode;
 
 public:
-    DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode );
+    DIALOG_EXCHANGE_FOOTPRINTS( PCB_EDIT_FRAME* aParent, MODULE* aModule, bool updateMode,
+                                bool selectedMode );
 
 private:
     void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) override;
     void OnMatchAllClicked( wxCommandEvent& event ) override;
+    void OnMatchSelectedClicked( wxCommandEvent& event ) override;
     void OnMatchRefClicked( wxCommandEvent& event ) override;
     void OnMatchValueClicked( wxCommandEvent& event ) override;
     void OnMatchIDClicked( wxCommandEvent& event ) override;
     void OnApplyClicked( wxCommandEvent& event ) override;
     void ViewAndSelectFootprint( wxCommandEvent& event ) override;
-
-    void setMatchMode( int aMatchMode );
 
     wxRadioButton* getRadioButtonForMode();
 

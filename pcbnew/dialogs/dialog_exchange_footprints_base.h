@@ -49,6 +49,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		wxBoxSizer* m_mainSizer;
 		wxGridBagSizer* m_upperSizer;
 		wxRadioButton* m_matchAll;
+		wxRadioButton* m_matchSelected;
 		wxRadioButton* m_matchSpecifiedRef;
 		wxTextCtrl* m_specifiedRef;
 		wxRadioButton* m_matchSpecifiedValue;
@@ -71,6 +72,7 @@ class DIALOG_EXCHANGE_FOOTPRINTS_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void updateMatchModeRadioButtons( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnMatchAllClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnMatchSelectedClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchRefClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchValueClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnMatchIDClicked( wxCommandEvent& event ) { event.Skip(); }
