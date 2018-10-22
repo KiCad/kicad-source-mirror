@@ -145,7 +145,7 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
 
     auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
     view->ShowPreview( true );
-    
+
     switch( GetToolId() )
     {
     case ID_LIBEDIT_BODY_ARC_BUTT:
@@ -237,11 +237,11 @@ void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
 
     auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
     view->ShowPreview( true );
-    
+
 
     if( GetDrawItem()->ContinueEdit( pos ) )
         return;
-    
+
     EndDrawGraphicItem( DC );
 }
 
@@ -261,7 +261,7 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
     auto p = aPanel->GetParent()->GetCrossHairPosition( true );
 
     item->CalcEdit( p );
-    
+
     view->ClearPreview();
     view->AddToPreview( item, false );
 }
@@ -357,7 +357,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
         SetDrawItem( NULL );
 
         m_canvas->SetMouseCapture( NULL, NULL );
-        
+
         auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
 
         DBG(printf("end: pos %d %d\n", item->GetPosition().x, item->GetPosition().y );)
@@ -367,4 +367,7 @@ void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
 
         OnModify();
     }
+
+    RebuildView();
+    GetCanvas()->Refresh();
 }
