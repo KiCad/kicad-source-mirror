@@ -819,15 +819,13 @@ if( KICAD_SCRIPTING_MODULES )
             )
     else()
 
-    if( MINGW )
-        # For phase 1, copy _pcbnew.kiface to the python module.
-        add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
-            DEPENDS pcbnew_kiface
-            COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
-            COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
-            )
-    endif( MINGW )
 
+    # For phase 1, copy _pcbnew.kiface to the python module.
+    add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
+        DEPENDS pcbnew_kiface
+        COMMAND ${CMAKE_COMMAND} -E copy _pcbnew.kiface _pcbnew.${PYMOD_EXT}
+        COMMENT "Creating python's pcbnew native module _pcbnew.${PYMOD_EXT} for command line use."
+        )
     add_custom_target(
         pcbnew_python_module ALL
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/_pcbnew.${PYMOD_EXT}
