@@ -168,15 +168,53 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
     else if( wxIsalpha( c ) )
     {
         // Capitals only.
-        // Note: changing the keyCode and/or uniChar in the event and passing it on
-        // doesn't work.  Some platforms look at the original copy as long as the event
-        // isn't vetoed.  Insert the capitalized character by hand.
-        wxString s( c, 1 );
-        s = s.Capitalize();
-        GetTextEntry()->WriteText( s );
+
+        if( wxIslower( c ) )
+        {
+            // You may wonder why this scope is so twisted, so make yourself comfortable and read:
+            // 1. Changing the keyCode and/or uniChar in the event and passing it on
+            // doesn't work.  Some platforms look at the original copy as long as the event
+            // isn't vetoed.
+            // 2. Inserting characters by hand does not move the cursor, meaning either you insert
+            // text backwards (lp:#1798869) or always append, no matter where is the cursor.
+            // wxTextEntry::{Get/Set}InsertionPoint() do not work at all here.
+            // 3. There is wxTextEntry::ForceUpper(), but it is not yet available in common
+            // wxWidgets packages.
+            //
+            // So here we are, with a command event handler that converts
+            // the text to upper case upon every change.
+            wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( GetTextEntry() );
+
+            if( textCtrl )
+            {
+                textCtrl->Connect( textCtrl->GetId(), wxEVT_COMMAND_TEXT_UPDATED,
+                        (wxObjectEventFunction) &ENV_VAR_NAME_VALIDATOR::OnTextChanged );
+            }
+        }
+
+        aEvent.Skip();
     }
     else
     {
         wxBell();
     }
+}
+
+
+void ENV_VAR_NAME_VALIDATOR::OnTextChanged( wxCommandEvent& event )
+{
+    wxTextCtrl* textCtrl = dynamic_cast<wxTextCtrl*>( event.GetEventObject() );
+
+    if( textCtrl )
+    {
+        if( !textCtrl->IsModified() )
+            return;
+
+        long insertionPoint = textCtrl->GetInsertionPoint();
+        textCtrl->ChangeValue( textCtrl->GetValue().Upper() );
+        textCtrl->SetInsertionPoint( insertionPoint );
+        textCtrl->Disconnect( textCtrl->GetId(), wxEVT_COMMAND_TEXT_UPDATED );
+    }
+
+    event.Skip();
 }

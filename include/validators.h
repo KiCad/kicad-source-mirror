@@ -107,7 +107,9 @@ public:
         return new ENV_VAR_NAME_VALIDATOR( *this );
     }
 
-    void OnChar(wxKeyEvent& event);
+    void OnChar( wxKeyEvent& event );
+
+    void OnTextChanged( wxCommandEvent& event );
 };
 
 #endif  // #ifndef VALIDATORS_H
