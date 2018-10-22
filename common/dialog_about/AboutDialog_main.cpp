@@ -184,7 +184,7 @@ static void buildKicadAboutBanner( EDA_BASE_FRAME* aParent, ABOUT_APP_INFO& aInf
         << HtmlNewline( 4 )
         << _( "The complete KiCad EDA Suite is released under the" ) << HtmlNewline( 2 )
         << HtmlHyperlink( "http://www.gnu.org/licenses",
-                          _( "GNU General Public License (GPL) version 3 or any later version" ) )
+                          _( "GNU Affero General Public License (AGPL) version 3 or any later version" ) )
         << "</div>";
 
     aInfo.SetLicense( license );

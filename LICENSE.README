@@ -1,0 +1,13 @@
+The majority of KiCad's source code is developed and distributed under the terms
+of the GPLv3 or later. However, It does include some third-party code licensed
+under AGPLv3 or later.
+
+Both licenses are compatible, but a combined works as is will be governed under
+the terms of the AGPLv3 (or later). This includes any binary distribution of the
+KiCad EDA suite by the KiCad project or any third party, e.g. Linux distributor.
+
+You are free to use the *sources* under the terms of their respective licenses.
+
+Licensed under AGPLv3 (or later):
+- TTL [https://www.sintef.no/projectweb/geometry-toolkits/ttl/], sources in include/ttl/*
+Licensed under GPLv3 (or later):
