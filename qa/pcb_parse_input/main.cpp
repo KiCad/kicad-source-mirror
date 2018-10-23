@@ -77,12 +77,12 @@ bool parse(std::istream& aStream, bool aVerbose )
 static const wxCmdLineEntryDesc g_cmdLineDesc [] =
 {
     { wxCMD_LINE_SWITCH, "h", "help",
-        _( "displays help on the command line parameters" ).wx_str(),
+        _( "displays help on the command line parameters" ).mb_str(),
         wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
     { wxCMD_LINE_SWITCH, "v", "verbose",
-        _( "print parsing information").wx_str() },
+        _( "print parsing information").mb_str() },
     { wxCMD_LINE_PARAM, nullptr, nullptr,
-        _( "input file" ).wx_str(),
+        _( "input file" ).mb_str(),
         wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
     { wxCMD_LINE_NONE }
 };
