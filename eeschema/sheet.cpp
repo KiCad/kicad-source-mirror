@@ -348,8 +348,10 @@ static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const
 
     auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
     auto view = panel->GetView();
+
+    view->Hide( sheet );
     view->ClearPreview();
-    view->AddToPreview( sheet, false );
+    view->AddToPreview( sheet->Clone() );
 }
 
 

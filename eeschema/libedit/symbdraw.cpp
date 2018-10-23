@@ -47,8 +47,6 @@
 #include <dialogs/dialog_lib_edit_draw_item.h>
 
 
-static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                               bool aErase );
 static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
                                      bool aErase );
 
@@ -136,7 +134,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
 LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
 {
     LIB_ITEM* item = GetDrawItem();
-    m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     wxPoint drawPos = GetCrossHairPosition( true );
 
     // no temp copy -> the current version of symbol will be used for Undo
@@ -262,8 +260,9 @@ static void RedrawWhileMovingCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wx
 
     item->CalcEdit( p );
 
+    view->Hide( item );
     view->ClearPreview();
-    view->AddToPreview( item, false );
+    view->AddToPreview( item->Clone() );
 }
 
 
@@ -299,30 +298,8 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
 
     TempCopyComponent();
     aItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
-    m_canvas->SetMouseCapture( SymbolDisplayDraw, AbortSymbolTraceOn );
+    m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
-}
-
-
-//! @brief Manage mouse events when creating new graphic object or modifying an graphic object.
-static void SymbolDisplayDraw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                               bool aErase )
-{
-    LIB_ITEM* item = ( (LIB_EDIT_FRAME*) aPanel->GetParent() )->GetDrawItem();
-
-    if( item == NULL )
-        return;
-
-    auto view = static_cast<SCH_DRAW_PANEL*>(aPanel)->GetView();
-
-    auto cp = aPanel->GetParent()->GetCrossHairPosition( true );
-
-    DBG(printf("SymbolDisplayDraw\n");)
-
-    item->CalcEdit( cp );
-
-    view->ClearPreview();
-    view->AddToPreview( item, false );
 }
 
 

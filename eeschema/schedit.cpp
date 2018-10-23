@@ -680,6 +680,7 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
     SCH_ITEM*   item   = screen->GetCurItem();
     auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
+    auto view = panel->GetView();
 
     wxCHECK_RET( (item != NULL), wxT( "Cannot move invalid schematic item." ) );
 
@@ -688,12 +689,9 @@ static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     item->SetPosition( cpos );
 
-    // Draw the item at it's new position.
-    item->SetWireImage();  // While moving, the item may choose to render differently
-
-    auto view = panel->GetView();
+    view->Hide( item );
     view->ClearPreview();
-    view->AddToPreview( item, false );
+    view->AddToPreview( item->Clone() );
 
     // Needed when moving a bitmap image to avoid ugly rendering and artifacts,
     // because a bitmap is drawn only as non cached
@@ -745,7 +743,6 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
         // Just restore its data
         currentItem->SwapData( oldItem );
 
-        // Erase the wire representation before the 'normal' view is drawn.
         view->Hide( item, false );
 
         item->ClearFlags();
@@ -769,14 +766,16 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
             SetUndoItem( aItem );
     }
 
+    aItem->SetFlags( IS_MOVED );
+
     if( aItem->Type() == SCH_FIELD_T && aItem->GetParent()->Type() == SCH_COMPONENT_T )
     {
+        RefreshItem( aItem );
+
         // Now that we're moving a field, they're no longer autoplaced.
         SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
         parent->ClearFieldsAutoplaced();
     }
-
-    aItem->SetFlags( IS_MOVED );
 
     // For some items, moving the cursor to anchor is not good
     // (for instance large hierarchical sheets od componants can have

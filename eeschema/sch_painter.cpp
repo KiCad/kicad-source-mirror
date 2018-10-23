@@ -1058,9 +1058,6 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     for( auto& item : temp->GetDrawItems() )
     {
-        if( aComp->IsMoving() )
-            item.SetFlags( IS_MOVED );
-
         auto rp = aComp->GetPosition();
         auto ip = item.GetPosition();
         item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
@@ -1076,7 +1073,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     for( SCH_FIELD* field : fields )
     {
-        if( field->GetId() == REFERENCE || !field->IsMoving() )
+        if( !field->IsMoving() )
             draw( field, aLayer );
     }
 }

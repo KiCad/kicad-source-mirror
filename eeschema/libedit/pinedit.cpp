@@ -336,8 +336,9 @@ static void DrawMovePin( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosi
 
     auto view = parent->GetCanvas()->GetView();
 
+    view->Hide( cur_pin );
     view->ClearPreview();
-    view->AddToPreview( cur_pin, false );
+    view->AddToPreview( cur_pin->Clone() );
 }
 
 
