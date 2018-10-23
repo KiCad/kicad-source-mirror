@@ -1426,6 +1426,9 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
     m_lastDrawItem = NULL;
     OnModify();
     m_canvas->CrossHairOn( aDC );
+
+    RebuildView();
+    GetCanvas()->Refresh();
 }
 
 
