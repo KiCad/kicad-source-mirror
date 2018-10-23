@@ -274,6 +274,10 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
         set( TO_LINKER -XLinker )
     else()
         set( TO_LINKER -Wl )
+        # Set 32-bit flag for GCC to prevent excess precision
+        if( CMAKE_SIZEOF_VOID_P EQUAL 4 )
+            set( CMAKE_CXX_FLAGS "-ffloat-store ${CMAKE_CXX_FLAGS}" )
+        endif()
     endif()
 
     # Establish -Wall early, so specialized relaxations of this may come
