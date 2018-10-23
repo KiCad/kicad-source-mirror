@@ -104,6 +104,9 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 
 // These define are used for the .m_Flags and .m_UndoRedoStatus member of the
 // class EDA_ITEM
+//
+// NB: DO NOT ADD FLAGS ANYWHERE BUT AT THE END: THE FLAG-SET IS STORED AS AN INTEGER IN FILES.
+//
 #define IS_CHANGED     (1 << 0)    ///< Item was edited, and modified
 #define IS_LINKED      (1 << 1)    ///< Used in calculation to mark linked items (temporary use)
 #define IN_EDIT        (1 << 2)    ///< Item currently edited
