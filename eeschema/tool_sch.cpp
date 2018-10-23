@@ -296,16 +296,9 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
                                KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set unit to mm" ), wxITEM_CHECK );
 
-#ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
-#else
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                               wxITEM_CHECK  );
-#endif
 
     //KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_HIDDEN_PINS, wxEmptyString,

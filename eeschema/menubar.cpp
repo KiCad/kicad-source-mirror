@@ -210,18 +210,10 @@ void prepareViewMenu( wxMenu* aParentMenu )
                  _( "Select which units are displayed" ),
                  KiBitmap( unit_mm_xpm ) );
 
-
-#ifndef __APPLE__
     AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
                  _( "Full &Window Crosshair" ),
                  _( "Change cursor shape" ),
                  KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#else
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full &Window Crosshair" ),
-                 _( "Change cursor shape (not supported in Legacy graphics)" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#endif
 
     aParentMenu->AppendSeparator();
 
