@@ -40,10 +40,6 @@
 
 using namespace std::placeholders;
 
-// define our user unit value for GAL ( given in GAL unit = 2.54/(IU per meter))
-// TODO: move in a header common to sch_draw_panel.cpp
-#define IU_2_GAL_WORLD_UNIT 2.54/(IU_PER_MM*1000)
-
 SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
                                       const wxPoint& aPosition, const wxSize& aSize,
                                       KIGFX::GAL_DISPLAY_OPTIONS& aOptions, GAL_TYPE aGalType ) :
@@ -53,7 +49,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     m_view = new KIGFX::SCH_VIEW( true );
     m_view->SetGAL( m_gal );
 
-    m_gal->SetWorldUnitLength( IU_2_GAL_WORLD_UNIT );
+    m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
 
     m_painter.reset( new KIGFX::SCH_PAINTER( m_gal ) );
 

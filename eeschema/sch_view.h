@@ -13,6 +13,8 @@ class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_PART;
 
+// Eeschema uses mils as the internal units
+constexpr double SCH_WORLD_UNIT = 0.001;
 
 static const LAYER_NUM SCH_LAYER_ORDER[] =
     {
