@@ -182,9 +182,15 @@ bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 )
 
 void LIB_ALIAS::ViewGetLayers( int aLayers[], int& aCount ) const
 {
-    aCount      = 2;
+    // An alias's fields don't know how to fetch their parent's values so we don't let
+    // them draw themselves.  This means the alias always has to draw them, which means
+    // it has to "own" their layers as well.
+    aCount      = 5;
     aLayers[0]  = LAYER_DEVICE;
     aLayers[1]  = LAYER_DEVICE_BACKGROUND;
+    aLayers[2]  = LAYER_REFERENCEPART;
+    aLayers[3]  = LAYER_VALUEPART;
+    aLayers[4]  = LAYER_FIELDS;
 }
 
 

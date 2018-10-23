@@ -108,8 +108,9 @@ void SCH_PREVIEW_PANEL::setDefaultLayerOrder()
 
 void SCH_PREVIEW_PANEL::setDefaultLayerDeps()
 {
-    // caching makes no sense for Cairo and other software renderers
-    auto target = m_backend == GAL_TYPE_OPENGL ? KIGFX::TARGET_CACHED : KIGFX::TARGET_NONCACHED;
+    // An alias's fields don't know how to substitute in their parent's values, so we
+    // don't let them draw themselves.  This means no caching.
+    auto target = KIGFX::TARGET_NONCACHED;
 
     for( int i = 0; i < KIGFX::VIEW::VIEW_MAX_LAYERS; i++ )
         m_view->SetLayerTarget( i, target );
