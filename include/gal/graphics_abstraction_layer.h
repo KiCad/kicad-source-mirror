@@ -771,6 +771,21 @@ public:
         globalFlipY = yAxis;
     }
 
+    /**
+     * Return true if flip flag for the X axis is set.
+     */
+    bool IsFlippedX() const
+    {
+        return globalFlipX;
+    }
+
+    /**
+     * Return true if flip flag for the Y axis is set.
+     */
+    bool IsFlippedY() const
+    {
+        return globalFlipY;
+    }
 
     // ---------------------------
     // Buffer manipulation methods
