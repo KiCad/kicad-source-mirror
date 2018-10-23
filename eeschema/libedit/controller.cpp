@@ -68,6 +68,11 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     wxPoint pos = aPosition;
     bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
 
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
+        m_canvas->CrossHairOff( aDC );
+    else
+        m_canvas->CrossHairOn( aDC );
+
     SetCrossHairPosition( pos, snapToGrid );
 
     if( m_canvas->IsMouseCaptured() )
