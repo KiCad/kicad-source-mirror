@@ -225,7 +225,9 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     updateView();
     m_canvas->Refresh();
-    m_treePane->GetLibTree()->Refresh();
+
+    m_treePane->GetLibTree()->ExpandLibId( aFPID );
+    m_treePane->GetLibTree()->CenterLibId( aFPID );
 }
 
 
@@ -467,8 +469,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( footprint && SaveFootprintAs( footprint ) )
             {
-                SyncLibraryTree( true );
-
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
 
                 if( IsGalCanvasActive() && GetGalCanvas() )
@@ -484,8 +484,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Save Selected Footprint As
             MODULE* footprint = LoadFootprint( getTargetFPID() );
 
-            if( footprint && SaveFootprintAs( footprint ) )
-                SyncLibraryTree( false );
+            if( footprint )
+                SaveFootprintAs( footprint );
         }
 
         m_treePane->GetLibTree()->Refresh();

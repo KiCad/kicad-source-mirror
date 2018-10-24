@@ -953,6 +953,9 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
 
     m_footprintNameWhenLoaded = footprintName;
 
+    // Once saved-as a board footprint is no longer a board footprint
+    aModule->SetLink( 0 );
+
     wxString fmt = module_exists ? _( "Component \"%s\" replaced in \"%s\"" ) :
                                    _( "Component \"%s\" added in  \"%s\"" );
 
