@@ -672,8 +672,10 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bo
     SaveCopyInUndoList( newSegment, UR_NEW, true );
 
     newSegment->SetStartPoint( aPoint );
-    aSegment->SetEndPoint( aPoint );
     AddToScreen( newSegment );
+
+    RefreshItem( aSegment );
+    aSegment->SetEndPoint( aPoint );
 
     if( aNewSegment )
         *aNewSegment = newSegment;
