@@ -254,10 +254,12 @@ void DIALOG_EXCHANGE_FOOTPRINTS::updateMatchModeRadioButtons( wxUpdateUIEvent& )
 
     wxRadioButton* rb_butt_list[] =
     {
-        m_matchCurrentRef, m_matchSpecifiedRef,
-        m_matchCurrentValue, m_matchCurrentValue,
-        m_matchSpecifiedValue, m_matchSpecifiedValue,
-        m_matchSpecifiedID, m_matchSpecifiedID,
+        m_matchAll,
+        m_matchCurrentRef,
+        m_matchSpecifiedRef,
+        m_matchCurrentValue,
+        m_matchSpecifiedValue,
+        m_matchSpecifiedID,
         nullptr     // end of list
     };
 
