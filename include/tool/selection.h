@@ -26,7 +26,7 @@
 #ifndef __SELECTION_H
 #define __SELECTION_H
 
-#include <set>
+#include <deque>
 
 #include <base_struct.h>
 #include <view/view_group.h>
@@ -53,8 +53,8 @@ public:
         return *this;
     }
 
-    using ITER = std::set<EDA_ITEM*>::iterator;
-    using CITER = std::set<EDA_ITEM*>::const_iterator;
+    using ITER = std::deque<EDA_ITEM*>::iterator;
+    using CITER = std::deque<EDA_ITEM*>::const_iterator;
 
     ITER begin() { return m_items.begin(); }
     ITER end() { return m_items.end(); }
@@ -73,12 +73,18 @@ public:
 
     virtual void Add( EDA_ITEM* aItem )
     {
-        m_items.insert( aItem );
+        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+
+        if( i == m_items.end() || *i > aItem )
+            m_items.insert( i, aItem );
     }
 
     virtual void Remove( EDA_ITEM *aItem )
     {
-        m_items.erase( aItem );
+        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+
+        if( !( i == m_items.end() || *i > aItem  ) )
+            m_items.erase( i );
     }
 
     virtual void Clear() override
@@ -91,18 +97,19 @@ public:
         return m_items.size();
     }
 
-    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int idx ) const override
+    virtual KIGFX::VIEW_ITEM* GetItem( unsigned int aIdx ) const override
     {
-        auto iter = m_items.begin();
+        if( aIdx < m_items.size() )
+            return m_items[ aIdx ];
 
-        std::advance( iter, idx );
-
-        return *iter;
+        return nullptr;
     }
 
     bool Contains( EDA_ITEM* aItem ) const
     {
-        return m_items.find( aItem ) != m_items.end();
+        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+
+        return !( i == m_items.end() || *i > aItem  );
     }
 
     /// Checks if there is anything selected
@@ -117,7 +124,7 @@ public:
         return m_items.size();
     }
 
-    const std::set<EDA_ITEM*> GetItems() const
+    const std::deque<EDA_ITEM*> GetItems() const
     {
         return m_items;
     }
@@ -134,25 +141,20 @@ public:
     EDA_ITEM*   GetTopLeftItem( bool onlyModules = false ) const;
     EDA_ITEM*   GetTopLeftModule() const;
 
-    EDA_ITEM* operator[]( const int index ) const
+    EDA_ITEM* operator[]( const size_t aIdx ) const
     {
-        if( index < 0 || (unsigned int) index >= m_items.size() )
-            return nullptr;
+        if( aIdx < m_items.size() )
+            return m_items[ aIdx ];
 
-        auto iter = m_items.begin();
-        std::advance( iter, index );
-        return *iter;
+        return nullptr;
     }
 
     EDA_ITEM* Front() const
     {
-        if ( !m_items.size() )
-            return nullptr;
-
-        return *m_items.begin();
+        return m_items.front();
     }
 
-    std::set<EDA_ITEM*>& Items()
+    std::deque<EDA_ITEM*>& Items()
     {
         return m_items;
     }
@@ -215,7 +217,7 @@ private:
     OPT<VECTOR2I> m_referencePoint;
 
     /// Set of selected items
-    std::set<EDA_ITEM*> m_items;
+    std::deque<EDA_ITEM*> m_items;
 
     bool m_isHover;
 
