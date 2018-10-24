@@ -953,6 +953,9 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
     RefreshItem( item );
 
+    if( item->IsMoving() )
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
 }
@@ -1310,6 +1313,9 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     }
 
     RefreshItem( item );
+
+    if( item->IsMoving() )
+        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
