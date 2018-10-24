@@ -83,6 +83,7 @@ public:
     CONNECTIVITY_DATA();
     ~CONNECTIVITY_DATA();
 
+    CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems );
 
     /**
      * Function Build()
@@ -246,7 +247,6 @@ private:
     void    updateRatsnest();
     void    addRatsnestCluster( const std::shared_ptr<CN_CLUSTER>& aCluster );
 
-    std::unique_ptr<CONNECTIVITY_DATA> m_dynamicConnectivity;
     std::shared_ptr<CN_CONNECTIVITY_ALGO> m_connAlgo;
 
     std::vector<RN_DYNAMIC_LINE> m_dynamicRatsnest;

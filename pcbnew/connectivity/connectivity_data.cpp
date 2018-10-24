@@ -40,6 +40,13 @@ CONNECTIVITY_DATA::CONNECTIVITY_DATA()
 }
 
 
+CONNECTIVITY_DATA::CONNECTIVITY_DATA( const std::vector<BOARD_ITEM*>& aItems )
+{
+    Build( aItems );
+    m_progressReporter = nullptr;
+}
+
+
 CONNECTIVITY_DATA::~CONNECTIVITY_DATA()
 {
     Clear();
@@ -241,25 +248,22 @@ void CONNECTIVITY_DATA::FindIsolatedCopperIslands( std::vector<CN_ZONE_ISOLATED_
 
 void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& aItems )
 {
+    m_dynamicRatsnest.clear();
+
     if( std::none_of( aItems.begin(), aItems.end(), []( const BOARD_ITEM* aItem )
             { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
-                       aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_MODULE_T ||
-                       aItem->Type() == PCB_VIA_T ); } ) )
+                      aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_MODULE_T ||
+                      aItem->Type() == PCB_VIA_T ); } ) )
     {
-        m_dynamicRatsnest.clear();
         return ;
     }
 
-    m_dynamicConnectivity.reset( new CONNECTIVITY_DATA );
-    m_dynamicConnectivity->Build( aItems );
-
-    m_dynamicRatsnest.clear();
-
+    CONNECTIVITY_DATA connData( aItems );
     BlockRatsnestItems( aItems );
 
-    for( unsigned int nc = 1; nc < m_dynamicConnectivity->m_nets.size(); nc++ )
+    for( unsigned int nc = 1; nc < connData.m_nets.size(); nc++ )
     {
-        auto dynNet = m_dynamicConnectivity->m_nets[nc];
+        auto dynNet = connData.m_nets[nc];
 
         if( dynNet->GetNodeCount() != 0 )
         {
@@ -278,7 +282,7 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
         }
     }
 
-    for( auto net : m_dynamicConnectivity->m_nets )
+    for( auto net : connData.m_nets )
     {
         if( !net )
             continue;
@@ -312,7 +316,6 @@ void CONNECTIVITY_DATA::ClearDynamicRatsnest()
 
 void CONNECTIVITY_DATA::HideDynamicRatsnest()
 {
-    m_dynamicConnectivity.reset();
     m_dynamicRatsnest.clear();
 }
 
