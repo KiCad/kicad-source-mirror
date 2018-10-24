@@ -948,6 +948,18 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
 
     bool module_exists = tbl->FootprintExists( libraryName, footprintName );
 
+    if( module_exists )
+    {
+        wxString msg = wxString::Format( _( "Footprint %s already exists in %s." ),
+                                         footprintName,
+                                         libraryName );
+        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKLabel( _( "Overwrite" ) );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+    }
+
     if( !saveFootprintInLibrary( aModule, libraryName ) )
         return false;
 
