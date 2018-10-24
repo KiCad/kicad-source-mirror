@@ -189,9 +189,8 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 
     if( aItem->Type() == SCH_SHEET_PIN_T )
     {
-        RemoveFromScreen( aItem );
-
-        // This item is attached to a node, and is not accessible by the global list directly.
+        // This item is attached to its parent hierarchical sheet,
+        // and is not accessible by the global list directly and cannot be removed from this list.
         SCH_SHEET* sheet = (SCH_SHEET*) aItem->GetParent();
         wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
                      wxT( "Sheet label has invalid parent item." ) );

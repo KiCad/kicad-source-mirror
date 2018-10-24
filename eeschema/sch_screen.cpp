@@ -185,8 +185,6 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
 
     SetModify();
 
-    m_drawList.Remove( aItem );
-
     if( aItem->Type() == SCH_SHEET_PIN_T )
     {
         // This structure is attached to a sheet, get the parent sheet object.
@@ -198,6 +196,7 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     }
     else
     {
+        m_drawList.Remove( aItem );
         delete aItem;
     }
 }

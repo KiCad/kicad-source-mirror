@@ -645,6 +645,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
             return;
 
         viewlibFrame = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER_MODAL, false );
+
         if( viewlibFrame && !viewlibFrame->Close() )   // Can close modal component viewer?
             return;
     }
@@ -1398,13 +1399,16 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             SetSheetNumberAndCount();
         }
 
-        if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
-            AddToScreen( item );
+        if(  item->Type() != SCH_SHEET_PIN_T )  // for SCH_SHEET_PIN_T: will be added later
+                                                // to the SCH_SHEET parent
+        {
+            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
+                AddToScreen( item );
+        }
 
         if( undoItem == item )
         {
             SetRepeatItem( item );
-
             SaveCopyInUndoList( undoItem, UR_NEW );
         }
         else
@@ -1414,7 +1418,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             // currently: sheet pin or component field.
             // currently, only a sheet pin can be found as new item,
             // because new component fields have a specific handling, and do not appears here
-            SaveCopyInUndoList( undoItem, UR_CHANGED );
+            SaveCopyInUndoList( undoItem, UR_CHANGED );     // Save the parent sheet
 
             if( item->Type() == SCH_SHEET_PIN_T )
                 ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
