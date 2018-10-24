@@ -101,7 +101,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
 
     auto update_lambda = [&nextNet, &threadsFinished, &dirty_nets, this]()
     {
-        for( size_t i = nextNet.fetch_add( 1 ); i < dirty_nets.size(); i = nextNet.fetch_add( 1 ) )
+        for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
         {
             dirty_nets[i]->Update();
         }
@@ -128,7 +128,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
 
     // Finalize the ratsnest threads
     while( threadsFinished < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+        std::this_thread::yield();
 
     #ifdef PROFILE
     rnUpdate.Show();
