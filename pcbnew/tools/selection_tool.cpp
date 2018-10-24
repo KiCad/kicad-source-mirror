@@ -422,19 +422,17 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
     {
         GENERAL_COLLECTOR collector;
 
-        while( m_selection.GetSize() )
-        {
-            collector.Append( m_selection.Front() );
-            unselect( static_cast<BOARD_ITEM*>( m_selection.Front() ) );
-        }
+        for( auto item : m_selection )
+            collector.Append( item );
 
         aClientFilter( VECTOR2I(), collector );
 
-        for( int i = 0; i < collector.GetCount(); ++i )
-        {
-            m_additive = true;
-            select( collector[ i ] );
-        }
+        std::vector<EDA_ITEM*> diff;
+        std::set_difference( m_selection.begin(), m_selection.end(), collector.begin(), collector.end(),
+                std::back_inserter( diff ) );
+
+        for( auto item : diff )
+            unhighlight( static_cast<BOARD_ITEM*>( item ), SELECTED, m_selection );
 
         m_frame->GetGalCanvas()->ForceRefresh();
     }

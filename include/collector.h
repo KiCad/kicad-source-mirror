@@ -86,6 +86,14 @@ public:
 
     virtual SEARCH_RESULT Inspect( EDA_ITEM* aItem, void* aTestData ) = 0;
 
+    using ITER = std::vector<EDA_ITEM*>::iterator;
+    using CITER = std::vector<EDA_ITEM*>::const_iterator;
+
+    ITER begin() { return m_List.begin(); }
+    ITER end() { return m_List.end(); }
+    CITER begin() const { return m_List.cbegin(); }
+    CITER end() const { return m_List.cend(); }
+
     /**
      * Function IsValidIndex
      * tests if \a aIndex is with the limits of the list of collected items.
