@@ -4,8 +4,8 @@
 <component type="desktop">
   <id>kicad.desktop</id>
   <name>KiCad</name>
-  <project_license>GPL-2.0+</project_license>
-  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>AGPL-3.0+</project_license>
+  <metadata_license>CC-BY-SA-4.0</metadata_license>
   <summary>EDA Suite</summary>
 
   <keywords>
