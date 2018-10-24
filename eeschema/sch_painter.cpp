@@ -1280,7 +1280,10 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         m_gal->StrokeText( text, pos_filename, nameAngle );
 
         for( auto& sheetPin : aSheet->GetPins() )
-            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+        {
+            if( !sheetPin.IsMoving() )
+                draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+        }
     }
 }
 

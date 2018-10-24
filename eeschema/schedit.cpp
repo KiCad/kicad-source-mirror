@@ -770,12 +770,14 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
 
     if( aItem->Type() == SCH_FIELD_T && aItem->GetParent()->Type() == SCH_COMPONENT_T )
     {
-        RefreshItem( aItem );
-
         // Now that we're moving a field, they're no longer autoplaced.
         SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( aItem->GetParent() );
         parent->ClearFieldsAutoplaced();
     }
+
+    // These are owned by their parent, and so their parent must erase them
+    if( aItem->Type() == SCH_SHEET_PIN_T || aItem->Type() == SCH_FIELD_T )
+        RefreshItem( aItem );
 
     // For some items, moving the cursor to anchor is not good
     // (for instance large hierarchical sheets od componants can have

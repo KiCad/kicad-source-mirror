@@ -1352,26 +1352,28 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
 
     m_canvas->SetAutoPanRequest( false );
 
-    SCH_ITEM* undoItem = item;
+    SCH_SHEET*     parentSheet = nullptr;
+    SCH_COMPONENT* parentComponent = nullptr;
+    SCH_ITEM*      undoItem = item;
 
     if( item->Type() == SCH_SHEET_PIN_T )
     {
-        SCH_SHEET* sheet = (SCH_SHEET*) item->GetParent();
+        parentSheet = (SCH_SHEET*) item->GetParent();
 
-        wxCHECK_RET( (sheet != NULL) && (sheet->Type() == SCH_SHEET_T),
+        wxCHECK_RET( parentSheet && parentSheet->Type() == SCH_SHEET_T,
                      wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
 
-        undoItem = sheet;
+        undoItem = parentSheet;
     }
 
     else if( item->Type() == SCH_FIELD_T )
     {
-        SCH_COMPONENT* cmp = (SCH_COMPONENT*) item->GetParent();
+        parentComponent = (SCH_COMPONENT*) item->GetParent();
 
-        wxCHECK_RET( (cmp != NULL) && (cmp->Type() == SCH_COMPONENT_T),
+        wxCHECK_RET( parentComponent && parentComponent->Type() == SCH_COMPONENT_T,
                      wxT( "Cannot place field in invalid schematic component object." ) );
 
-        undoItem = cmp;
+        undoItem = parentComponent;
     }
 
     if( item->IsNew() )
@@ -1397,34 +1399,33 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             }
 
             SetSheetNumberAndCount();
-        }
 
-        if(  item->Type() != SCH_SHEET_PIN_T )  // for SCH_SHEET_PIN_T: will be added later
-                                                // to the SCH_SHEET parent
-        {
             if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
                 AddToScreen( item );
-        }
 
-        if( undoItem == item )
-        {
             SetRepeatItem( item );
             SaveCopyInUndoList( undoItem, UR_NEW );
         }
+        else if( item->Type() == SCH_SHEET_PIN_T )
+        {
+            // Sheet pins are owned by their parent sheet.
+            SaveCopyInUndoList( undoItem, UR_CHANGED );     // save the parent sheet
+
+            parentSheet->AddPin( (SCH_SHEET_PIN*) item );
+        }
+        else if( item->Type() == SCH_FIELD_T )
+        {
+            // Component fields are also owned by their parent, but new component fields
+            // are handled elsewhere.
+            wxLogMessage( wxT( "addCurrentItemToScreen: unexpected new SCH_FIELD" ) );
+        }
         else
         {
-            // Here, item is not a basic schematic item, but an item inside
-            // a parent basic schematic item,
-            // currently: sheet pin or component field.
-            // currently, only a sheet pin can be found as new item,
-            // because new component fields have a specific handling, and do not appears here
-            SaveCopyInUndoList( undoItem, UR_CHANGED );     // Save the parent sheet
+            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
+                AddToScreen( item );
 
-            if( item->Type() == SCH_SHEET_PIN_T )
-                ( (SCH_SHEET*)undoItem )->AddPin( (SCH_SHEET_PIN*) item );
-            else
-                wxLogMessage( wxT( "addCurrentItemToScreen: expected type = SCH_SHEET_PIN_T, actual type = %d" ),
-                              item->Type() );
+            SetRepeatItem( item );
+            SaveCopyInUndoList( undoItem, UR_NEW );
         }
 
         if( doClearAnnotation )
