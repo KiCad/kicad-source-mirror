@@ -575,15 +575,6 @@ public:
      */
     bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    /**
-     * Return whether any pin in this symbol is dangling.
-     *
-     * @note This does not update the internal status.  It only checks the existing status.
-     *
-     * @return true if any pins of this symbol are not connect otherwise false.
-     */
-    bool IsDangling() const override;
-
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 
     bool IsSelectStateChanged( const wxRect& aRect ) override;

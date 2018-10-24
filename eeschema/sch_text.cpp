@@ -374,6 +374,7 @@ bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemLi
         case PIN_END:
         case LABEL_END:
         case SHEET_LABEL_END:
+        case NO_CONNECT_END:
             if( GetTextPos() == item.GetPosition() )
                 m_isDangling = false;
 

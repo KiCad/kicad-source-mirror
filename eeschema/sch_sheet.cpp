@@ -808,27 +808,12 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 
 bool SCH_SHEET::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
 {
-    bool currentState = IsDangling();
+    bool changed = false;
 
     for( SCH_SHEET_PIN& pinsheet : GetPins() )
-    {
-        pinsheet.IsDanglingStateChanged( aItemList );
-    }
+        changed |= pinsheet.IsDanglingStateChanged( aItemList );
 
-    return currentState != IsDangling();
-}
-
-
-bool SCH_SHEET::IsDangling() const
-{
-    // If any hierarchical label in the sheet is dangling, then the sheet is dangling.
-    for( size_t i = 0; i < GetPins().size(); i++ )
-    {
-        if( GetPins()[i].IsDangling() )
-            return true;
-    }
-
-    return false;
+    return changed;
 }
 
 

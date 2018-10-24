@@ -1656,17 +1656,6 @@ bool SCH_COMPONENT::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aIte
 }
 
 
-bool SCH_COMPONENT::IsDangling() const
-{
-    for( bool each : m_isDangling )
-    {
-        if( each )
-            return true;
-    }
-    return false;
-}
-
-
 wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 {
     wxCHECK_MSG( Pin != NULL && Pin->Type() == LIB_PIN_T, wxPoint( 0, 0 ),
