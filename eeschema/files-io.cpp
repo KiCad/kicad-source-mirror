@@ -441,7 +441,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
         if( !pi->GetError().IsEmpty() )
         {
             DisplayErrorMessage( this,
-                                 _( "The entire schematic could not be load.  Errors "
+                                 _( "The entire schematic could not be loaded.  Errors "
                                     "occurred attempting to load hierarchical sheet "
                                     "schematics." ),
                                  pi->GetError() );
@@ -484,11 +484,11 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
     if( newScreens.HasNoFullyDefinedLibIds() )
     {
-        if( !IsOK( this,
-                   "This schematic has not been remapped to the symbol library table. "
-                   "Therefore, all of the library symbol links will be broken.  Do you "
-                   "want to continue?" ) )
-            return false;
+        DisplayInfoMessage( this,
+                            "This schematic has not been remapped to the symbol library\n"
+                            "table.  The project this schematic belongs to must first be\n"
+                            "remapped before it can be imported into the current project." );
+        return false;
     }
     else
     {
@@ -685,6 +685,7 @@ void SCH_EDIT_FRAME::OnSaveProject( wxCommandEvent& aEvent )
     SaveProject();
 }
 
+
 bool SCH_EDIT_FRAME::SaveProject()
 {
     SCH_SCREEN* screen;
@@ -766,129 +767,129 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
     switch( (SCH_IO_MGR::SCH_FILE_T) aFileType )
     {
-        case SCH_IO_MGR::SCH_EAGLE:
-            // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
-            wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),
-                    wxT( "Import eagle schematic caller didn't send full filename" ) );
+    case SCH_IO_MGR::SCH_EAGLE:
+        // We insist on caller sending us an absolute path, if it does not, we say it's a bug.
+        wxASSERT_MSG( wxFileName( aFileName ).IsAbsolute(),
+                      wxT( "Import eagle schematic caller didn't send full filename" ) );
 
-            if( !LockFile( aFileName ) )
+        if( !LockFile( aFileName ) )
+        {
+            wxString msg = wxString::Format( _( "Schematic file \"%s\" is already open." ),
+                                             aFileName );
+            DisplayError( this, msg );
+            return false;
+        }
+
+        try
+        {
+            delete g_RootSheet;
+            g_RootSheet = nullptr;
+            SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
+            g_RootSheet = pi->Load( aFileName, &Kiway() );
+
+            // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
+            WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
+            pglayout.SetEmptyLayout();
+
+            BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
+            wxFileName layoutfn( Kiway().Prj().GetProjectPath(),
+                                 BASE_SCREEN::m_PageLayoutDescrFileName );
+            wxFile layoutfile;
+
+            if( layoutfile.Create( layoutfn.GetFullPath() ) )
             {
-                wxString msg = wxString::Format( _( "Schematic file \"%s\" is already open." ),
-                                                 aFileName );
-                DisplayError( this, msg );
-                return false;
+                layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
+                layoutfile.Close();
             }
 
-            try
+            projectpath = Kiway().Prj().GetProjectPath();
+            newfilename.SetPath( Prj().GetProjectPath() );
+            newfilename.SetName( Prj().GetProjectName() );
+            newfilename.SetExt( SchematicFileExtension );
+
+            m_CurrentSheet->clear();
+            m_CurrentSheet->push_back( g_RootSheet );
+            SetScreen( m_CurrentSheet->LastScreen() );
+
+            g_RootSheet->SetFileName( newfilename.GetFullPath() );
+            GetScreen()->SetFileName( newfilename.GetFullPath() );
+            GetScreen()->SetModify();
+            SaveProjectSettings( false );
+
+            UpdateFileHistory( aFileName );
+            SCH_SCREENS schematic;
+            schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+
+            // Ensure the schematic is fully segmented on first display
+            BreakSegmentsOnJunctions();
+            SchematicCleanUp( true );
+            GetScreen()->m_Initialized = true;
+
+            SCH_TYPE_COLLECTOR components;
+            SCH_SCREENS allScreens;
+
+            for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
             {
-                delete g_RootSheet;
-                g_RootSheet = nullptr;
-                SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) );
-                g_RootSheet = pi->Load( aFileName, &Kiway() );
+                components.Collect( screen->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
 
-
-                // Eagle sheets do not use a worksheet frame by default, so set it to an empty one
-                WORKSHEET_LAYOUT& pglayout = WORKSHEET_LAYOUT::GetTheInstance();
-                pglayout.SetEmptyLayout();
-
-                BASE_SCREEN::m_PageLayoutDescrFileName = "empty.kicad_wks";
-                wxFileName layoutfn( Kiway().Prj().GetProjectPath(),
-                                        BASE_SCREEN::m_PageLayoutDescrFileName );
-                wxFile layoutfile;
-
-                if( layoutfile.Create( layoutfn.GetFullPath() ) )
+                for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
                 {
-                    layoutfile.Write( WORKSHEET_LAYOUT::EmptyLayout() );
-                    layoutfile.Close();
-                }
+                    std::vector<wxPoint> pts;
+                    SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
 
-                projectpath = Kiway().Prj().GetProjectPath();
-                newfilename.SetPath( Prj().GetProjectPath() );
-                newfilename.SetName( Prj().GetProjectName() );
-                newfilename.SetExt( SchematicFileExtension );
+                    // Update footprint LIB_ID to point to the imported Eagle library
+                    auto fpField = cmp->GetField( FOOTPRINT );
 
-                m_CurrentSheet->clear();
-                m_CurrentSheet->push_back( g_RootSheet );
-                SetScreen( m_CurrentSheet->LastScreen() );
-
-                g_RootSheet->SetFileName( newfilename.GetFullPath() );
-                GetScreen()->SetFileName( newfilename.GetFullPath() );
-                GetScreen()->SetModify();
-                SaveProjectSettings( false );
-
-                UpdateFileHistory( aFileName );
-                SCH_SCREENS schematic;
-                schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
-
-                // Ensure the schematic is fully segmented on first display
-                BreakSegmentsOnJunctions();
-                SchematicCleanUp( true );
-                GetScreen()->m_Initialized = true;
-
-                SCH_TYPE_COLLECTOR components;
-                SCH_SCREENS allScreens;
-                for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
-                {
-                    components.Collect( screen->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
-
-                    for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
+                    if( !fpField->GetText().IsEmpty() )
                     {
-                        std::vector<wxPoint> pts;
-                        SCH_COMPONENT* cmp = static_cast<SCH_COMPONENT*>( components[cmpIdx] );
+                        LIB_ID fpId;
+                        fpId.Parse( fpField->GetText(), LIB_ID::ID_SCH, true );
+                        fpId.SetLibNickname( newfilename.GetName() );
+                        fpField->SetText( fpId.Format() );
+                    }
 
-                        // Update footprint LIB_ID to point to the imported Eagle library
-                        auto fpField = cmp->GetField( FOOTPRINT );
+                    // Add junction dots where necessary
+                    cmp->GetConnectionPoints( pts );
 
-                        if( !fpField->GetText().IsEmpty() )
-                        {
-                            LIB_ID fpId;
-                            fpId.Parse( fpField->GetText(), LIB_ID::ID_SCH, true );
-                            fpId.SetLibNickname( newfilename.GetName() );
-                            fpField->SetText( fpId.Format() );
-                        }
-
-                        // Add junction dots where necessary
-                        cmp->GetConnectionPoints( pts );
-
-                        for( auto i = pts.begin(); i != pts.end(); ++i )
-                        {
-                            if( GetScreen()->IsJunctionNeeded( *i, true ) )
-                                AddJunction( *i, true );
-                        }
+                    for( auto i = pts.begin(); i != pts.end(); ++i )
+                    {
+                        if( GetScreen()->IsJunctionNeeded( *i, true ) )
+                            AddJunction( *i, true );
                     }
                 }
-
-                GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-                // Only perform the dangling end test on root sheet.
-                GetScreen()->TestDanglingEnds();
-
-                GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-                Zoom_Automatique( false );
-                SetSheetNumberAndCount();
-                SyncView();
-                UpdateTitle();
-            }
-            catch( const IO_ERROR& ioe )
-            {
-                // Do not leave g_RootSheet == NULL because it is expected to be
-                // a valid sheet. Therefore create a dummy empty root sheet and screen.
-                CreateScreens();
-                Zoom_Automatique( false );
-
-                wxString msg;
-                msg.Printf( _( "Error loading schematic \"%s\".\n%s" ), aFileName, ioe.What() );
-                DisplayError( this, msg );
-
-                msg.Printf( _( "Failed to load \"%s\"" ), aFileName );
-                AppendMsgPanel( wxEmptyString, msg, CYAN );
-
-                return false;
             }
 
-            return true;
+            GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
+            // Only perform the dangling end test on root sheet.
+            GetScreen()->TestDanglingEnds();
 
-        default:
+            GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
+            Zoom_Automatique( false );
+            SetSheetNumberAndCount();
+            SyncView();
+            UpdateTitle();
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // Do not leave g_RootSheet == NULL because it is expected to be
+            // a valid sheet. Therefore create a dummy empty root sheet and screen.
+            CreateScreens();
+            Zoom_Automatique( false );
+
+            wxString msg;
+            msg.Printf( _( "Error loading schematic \"%s\".\n%s" ), aFileName, ioe.What() );
+            DisplayError( this, msg );
+
+            msg.Printf( _( "Failed to load \"%s\"" ), aFileName );
+            AppendMsgPanel( wxEmptyString, msg, CYAN );
+
             return false;
+        }
+
+        return true;
+
+    default:
+        return false;
     }
 }
 

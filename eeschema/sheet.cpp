@@ -42,7 +42,8 @@
 #include <dialogs/dialog_sch_sheet_props.h>
 
 
-bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems )
+bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
+                                bool* aClearAnnotationNewItems )
 {
     if( aSheet == NULL || aHierarchy == NULL )
         return false;
@@ -285,12 +286,12 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, b
 
     if( newScreens.HasNoFullyDefinedLibIds() )
     {
-        msg.Printf(_( "The schematic \"%s\" has not been remapped to the symbol library table. "
-                      "Most if not all of the symbol library links will be broken.  Do you "
-                      "want to continue?" ), fileName.GetFullName() );
+        msg.Printf(_( "The schematic \"%s\" has not been remapped to the symbol\nlibrary table. "
+                      " The project this schematic belongs to must first be remapped\nbefore it "
+                      "can be imported into the current project." ), fileName.GetFullName() );
 
-        if( !IsOK( this, msg ) )
-            return false;
+        DisplayInfoMessage( this, msg );
+        return false;
     }
 
     if( aClearAnnotationNewItems )
