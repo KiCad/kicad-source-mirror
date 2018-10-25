@@ -54,9 +54,9 @@ const char * s_bomHelpInfo =
 
 using namespace T_BOMCFG_T;
 
+
 /**
- * Structure BOM_PLUGIN
- * holds data of the BOM plugin.
+ * Hold data of the BOM plugin.
  */
 struct BOM_PLUGIN
 {
@@ -65,6 +65,7 @@ struct BOM_PLUGIN
     wxArrayString Options;
 };
 
+
 /**
  * Define wxArray of BOM_PLUGIN.
  */
@@ -72,9 +73,9 @@ WX_DECLARE_OBJARRAY( BOM_PLUGIN, BOM_PLUGIN_ARRAY );
 #include <wx/arrimpl.cpp>
 WX_DEFINE_OBJARRAY( BOM_PLUGIN_ARRAY )
 
+
 /**
- * Class BOM_CFG_READER_PARSER
- * holds data and functions pertinent to parsing a S-expression file
+ * Holds data and functions pertinent to parsing a S-expression file
  */
 class BOM_CFG_PARSER : public DIALOG_BOM_CFG_LEXER
 {
@@ -125,6 +126,7 @@ void BOM_CFG_PARSER::Parse()
     }
 }
 
+
 void BOM_CFG_PARSER::parsePlugin()
 {
     BOM_PLUGIN plugin;
@@ -133,6 +135,7 @@ void BOM_CFG_PARSER::parsePlugin()
     plugin.Name = FromUTF8();
 
     T token;
+
     while( ( token = NextTok() ) != T_RIGHT )
     {
         if( token == T_EOF)
@@ -281,6 +284,7 @@ DIALOG_BOM::~DIALOG_BOM()
 
 }
 
+
 // Read the initialized plugins in config and fill the list of names
 void DIALOG_BOM::installPluginsList()
 {
@@ -291,6 +295,7 @@ void DIALOG_BOM::installPluginsList()
     if( !list.IsEmpty() )
     {
         BOM_CFG_PARSER cfg_parser( &m_plugins, TO_UTF8( list ), wxT( "plugins" ) );
+
         try
         {
             cfg_parser.Parse();
@@ -371,15 +376,15 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
     if( !fdata.ReadAll( &data ) )
         return;
 
-    wxString header( wxT( "@package" ) );
+    wxString header( "@package" );
     wxString endsection;
 
     wxFileName fn( aFilename );
 
-    if( fn.GetExt().IsSameAs( wxT( "py" ), false ) )
-        endsection = wxT( "\"\"\"" );
-    else if( fn.GetExt().IsSameAs( wxT( "xsl" ), false ) )
-        endsection = wxT( "-->" );
+    if( fn.GetExt().IsSameAs( "py", false ) )
+        endsection = "\"\"\"";
+    else if( fn.GetExt().IsSameAs( "xsl", false ) )
+        endsection = "-->";
     else
         // If this is not a python or xsl file, then we don't know how to find the info
         return;
@@ -405,7 +410,6 @@ void DIALOG_BOM::displayPluginInfo( FILE * aFile, const wxString& aFilename )
 }
 
 
-// run the plugin command line
 void DIALOG_BOM::OnRunPlugin( wxCommandEvent& event )
 {
     // Calculate the xml netlist filename
@@ -461,7 +465,8 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 
     // Creates a new plugin entry
     wxFileName fn( getPluginFileName( cmdLine ) );
-    wxString name = wxGetTextFromUser( _("Plugin nickname:" ), _("Add Plugin"), fn.GetName(), this );
+    wxString name = wxGetTextFromUser( _( "Plugin nickname:" ), _( "Add Plugin" ),
+                                       fn.GetName(), this );
 
     if( name.IsEmpty() )
         return;
@@ -471,7 +476,7 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
     {
         if( name == m_plugins.Item( ii ).Name )
         {
-            wxMessageBox( wxString::Format( _("Nickname \"%s\" already in use."), name ) );
+            wxMessageBox( wxString::Format( _( "Nickname \"%s\" already in use." ), name ) );
             return;
         }
     }
@@ -487,20 +492,23 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
     pluginInit();
 }
 
-/*
- * Browse plugin files, and set m_CommandStringCtrl field
- */
+
 wxString DIALOG_BOM::choosePlugin()
 {
-    wxString mask = wxT( "*" );
+    static wxString lastPath;
+    wxString mask = "*";
+
+    if( lastPath.IsEmpty() )
+    {
 #ifndef __WXMAC__
-    wxString path = Pgm().GetExecutablePath();
+        lastPath = Pgm().GetExecutablePath();
 #else
-    wxString path = GetOSXKicadDataDir() + wxT( "/plugins" );
+        lastPath = GetOSXKicadDataDir() + "/plugins";
 #endif
+    }
 
     wxString fullFileName = EDA_FILE_SELECTOR( _( "Plugin files:" ),
-                                               path,
+                                               lastPath,
                                                wxEmptyString,
                                                wxEmptyString,
                                                mask,
@@ -518,6 +526,8 @@ wxString DIALOG_BOM::choosePlugin()
     wxFileName  fn( fullFileName );
     wxString    ext = fn.GetExt();
 
+    lastPath = fn.GetPath();
+
     // Python requires on Windows the path of the script ends by '/' instead of '\'
     // otherwise import does not find modules in the same folder as the python script
     // We cannot change all '\' to '/' in command line because it causes issues with files
@@ -526,11 +536,11 @@ wxString DIALOG_BOM::choosePlugin()
     //
     // I hope changing the last separator only to '/' will work.
 #ifdef __WINDOWS__
-    if( ext == wxT("py" ) || ext == wxT("pyw" ) )
+    if( ext == "py" || ext == "pyw" )
     {
         wxString sc_path = fn.GetPathWithSep();
         sc_path.RemoveLast();
-        fullFileName = sc_path +'/' + fn.GetFullName();;
+        fullFileName = sc_path + '/' + fn.GetFullName();;
     }
 #endif
 
@@ -561,13 +571,13 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
     // This is possible if the name ends by .py or .pyw or .xsl or .exe
     int pos = -1;
 
-    if( (pos = aCommand.Find( wxT(".pyw") )) != wxNOT_FOUND )
+    if( (pos = aCommand.Find( ".pyw" )) != wxNOT_FOUND )
         pos += 3;
-    else if( (pos = aCommand.Find( wxT(".py") )) != wxNOT_FOUND )
+    else if( (pos = aCommand.Find( ".py" )) != wxNOT_FOUND )
         pos += 2;
-    else if( (pos = aCommand.Find( wxT(".xsl") )) != wxNOT_FOUND )
+    else if( (pos = aCommand.Find( ".xsl" )) != wxNOT_FOUND )
         pos += 3;
-    else if( (pos = aCommand.Find( wxT(".exe") )) != wxNOT_FOUND )
+    else if( (pos = aCommand.Find( ".exe" )) != wxNOT_FOUND )
         pos += 3;
 
     // the end of plugin name is at position pos.
@@ -580,6 +590,7 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
         {
             // search for the starting point of the name
             int jj = pos-1;
+
             while( jj >= 0 )
                 if( aCommand[jj] != eos )
                     jj--;
@@ -605,7 +616,7 @@ wxString DIALOG_BOM::getPluginFileName(  const wxString& aCommand )
     if( prj_dir.EndsWith( '/' ) || prj_dir.EndsWith( '\\' ) )
         prj_dir.RemoveLast();
 
-    pluginName.Replace( wxT( "%P" ), prj_dir.GetData(), true );
+    pluginName.Replace( "%P", prj_dir.GetData(), true );
 
     return pluginName;
 }
@@ -616,7 +627,7 @@ void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 
     if( pluginName.Length() <= 2 )      // if name != ""
     {
-        wxMessageBox( _("Plugin file name not found.") );
+        wxMessageBox( _( "Plugin file name not found." ) );
         return;
     }
 
@@ -632,10 +643,10 @@ void DIALOG_BOM::OnEditPlugin( wxCommandEvent& event )
 
 void DIALOG_BOM::OnHelp( wxCommandEvent& event )
 {
-    HTML_MESSAGE_BOX help_Dlg( this, _("Bom Generation Help") );
+    HTML_MESSAGE_BOX help_Dlg( this, _( "Bom Generation Help" ) );
     help_Dlg.SetDialogSizeInDU( 500, 350 );
 
-    wxString msg = FROM_UTF8(s_bomHelpInfo);
+    wxString msg = FROM_UTF8( s_bomHelpInfo );
     help_Dlg.m_htmlWindow->AppendToPage( msg );
     help_Dlg.ShowModal();
 }
@@ -673,12 +684,12 @@ void DIALOG_BOM::OnShowConsoleChanged( wxCommandEvent& event )
 
     if( m_checkBoxShowConsole->IsChecked() )
     {
-        if( m_plugins.Item( ii ).Options.Index( wxT( "show_console" ) ) == wxNOT_FOUND )
-            m_plugins.Item( ii ).Options.Add( wxT( "show_console" ) );
+        if( m_plugins.Item( ii ).Options.Index( "show_console" ) == wxNOT_FOUND )
+            m_plugins.Item( ii ).Options.Add( "show_console" );
     }
     else
     {
-        m_plugins.Item( ii ).Options.Remove( wxT( "show_console" ) );
+        m_plugins.Item( ii ).Options.Remove( "show_console" );
     }
 #endif
 }
