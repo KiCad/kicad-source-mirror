@@ -1454,6 +1454,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
     {
         std::vector< wxPoint > pts;
         item->GetConnectionPoints( pts );
+
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {
             for( auto j = i + 1; j != pts.end(); j++ )
@@ -1462,6 +1463,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             if( screen->IsJunctionNeeded( *i, true ) )
                 AddJunction( *i, true );
         }
+
         TestDanglingEnds();
     }
 

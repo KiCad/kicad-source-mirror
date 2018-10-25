@@ -1246,6 +1246,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         m_gal->SetIsStroke( true );
 
         m_gal->SetIsFill( false );
+        m_gal->SetLineWidth( aSheet->GetPenSize() );
 
         m_gal->DrawRectangle( pos, pos + size );
 
