@@ -28,6 +28,7 @@
 
 #include <thread>
 #include <algorithm>
+#include <future>
 
 #include <connectivity/connectivity_data.h>
 #include <connectivity/connectivity_algo.h>
@@ -100,42 +101,36 @@ void CONNECTIVITY_DATA::updateRatsnest()
     std::vector<RN_NET*> dirty_nets;
 
     // Start with net 1 as net 0 is reserved for not-connected
+    // Nets without nodes are also ignored
     std::copy_if( m_nets.begin() + 1, m_nets.end(), std::back_inserter( dirty_nets ),
-            [] ( RN_NET* aNet ) { return aNet->IsDirty(); } );
-
-    std::atomic<size_t> nextNet( 0 );
-    std::atomic<size_t> threadsFinished( 0 );
-
-    auto update_lambda = [&nextNet, &threadsFinished, &dirty_nets, this]()
-    {
-        for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
-        {
-            dirty_nets[i]->Update();
-        }
-
-        threadsFinished++;
-    };
+            [] ( RN_NET* aNet ) { return aNet->IsDirty() && aNet->GetNodeCount() > 0; } );
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
             ( dirty_nets.size() + 7 ) / 8 );
 
-    // This prevents generating a thread for point while routing as we are only
-    // updating the ratsnest on a single net
+    std::atomic<size_t> nextNet( 0 );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+    auto update_lambda = [&nextNet, &dirty_nets]() -> size_t
+    {
+        for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
+            dirty_nets[i]->Update();
+
+        return 1;
+    };
+
     if( parallelThreadCount == 1 )
         update_lambda();
     else
     {
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-        {
-            std::thread( update_lambda ).detach();
-        }
-    }
+            returns[ii] = std::async( update_lambda );
 
-    // Finalize the ratsnest threads
-    while( threadsFinished < parallelThreadCount )
-        std::this_thread::yield();
+        // Finalize the ratsnest threads
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii].wait();
+    }
 
     #ifdef PROFILE
     rnUpdate.Show();

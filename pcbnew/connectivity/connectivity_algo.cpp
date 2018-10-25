@@ -221,40 +221,43 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         std::atomic<size_t> nextItem( 0 );
         std::atomic<size_t> threadsFinished( 0 );
 
-        size_t parallelThreadCount = std::min<size_t>(
-                std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-                dirtyItems.size() );
-
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        auto conn_lambda = [&nextItem, &threadsFinished, &dirtyItems]
+                            ( CN_LIST* aItemList, PROGRESS_REPORTER* aReporter)
         {
-            std::thread t = std::thread( [&nextItem, &threadsFinished, &dirtyItems, this]()
+            for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
             {
-                for( size_t i = nextItem.fetch_add( 1 );
-                            i < dirtyItems.size();
-                            i = nextItem.fetch_add( 1 ) )
-                {
-                    CN_VISITOR visitor( dirtyItems[i] );
-                    m_itemList.FindNearby( dirtyItems[i], visitor );
+                CN_VISITOR visitor( dirtyItems[i] );
+                aItemList->FindNearby( dirtyItems[i], visitor );
 
-                    if( m_progressReporter )
-                        m_progressReporter->AdvanceProgress();
-                }
+                if( aReporter )
+                    aReporter->AdvanceProgress();
+            }
 
-                threadsFinished++;
-            } );
+            threadsFinished++;
+        };
 
-            t.detach();
-        }
+        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+                ( dirtyItems.size() + 7 ) / 8 );
 
-        // Finalize the connectivity threads
-        while( threadsFinished < parallelThreadCount )
+        if( parallelThreadCount <= 1 )
+            conn_lambda( &m_itemList, m_progressReporter );
+        else
         {
-            if( m_progressReporter )
-                m_progressReporter->KeepRefreshing();
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+                std::thread( conn_lambda, &m_itemList, m_progressReporter ).detach();
 
-            // This routine is called every click while routing so keep the sleep time minimal
-            std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+            // Wait for connectivity threads to finish while updating the UI if set
+            while( threadsFinished < parallelThreadCount )
+            {
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
+
+                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+            }
         }
+
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
     }
 
 #ifdef PROFILE
