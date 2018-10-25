@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:video-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -16,7 +16,7 @@ Comment4 ""
 $EndDescr
 Connection ~ 1250 10750
 Wire Wire Line
-	1050 10750 1500 10750
+	1050 10750 1250 10750
 $Comp
 L video_schlib:PWR_FLAG #FLG076
 U 1 1 4174D9FB
@@ -32,7 +32,7 @@ Connection ~ 1150 8850
 Wire Wire Line
 	600  10200 1050 10200
 Wire Wire Line
-	1050 10150 1050 10300
+	1050 10150 1050 10200
 $Comp
 L video_schlib:PWR_FLAG #FLG077
 U 1 1 4BF03691
@@ -48,7 +48,7 @@ Connection ~ 4500 1000
 Wire Wire Line
 	4250 1000 4500 1000
 Wire Wire Line
-	700  8850 1150 8850
+	700  8850 850  8850
 $Comp
 L video_schlib:PWR_FLAG #FLG078
 U 1 1 4174D820
@@ -97,7 +97,7 @@ F 3 "" H 850 8800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	600  10150 600  10300
+	600  10150 600  10200
 Wire Wire Line
 	1150 8850 1150 8950
 $Comp
@@ -123,7 +123,7 @@ F 3 "" H 1050 10800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1050 10700 1050 10800
+	1050 10700 1050 10750
 $Comp
 L video_schlib:GND #GND084
 U 1 1 4BF036CC
@@ -223,11 +223,7 @@ PTBE-0
 Text HLabel 11200 4250 2    60   Output ~ 0
 PTATN-
 Wire Bus Line
-	11100 5850 11100 6150
-Wire Bus Line
 	11100 5850 11150 5850
-Wire Bus Line
-	11100 5350 11100 5750
 Wire Bus Line
 	11100 5350 11150 5350
 Entry Wire Line
@@ -284,8 +280,6 @@ Text Label 10700 5550 0    60   ~ 0
 ADR3
 Text Label 10700 5450 0    60   ~ 0
 ADR2
-Wire Bus Line
-	11600 850  11600 4050
 Entry Wire Line
 	11500 4150 11600 4050
 Entry Wire Line
@@ -353,11 +347,11 @@ Wire Wire Line
 Wire Wire Line
 	2200 1550 2200 1650
 Wire Wire Line
-	4500 6950 4500 7250
+	4500 6950 4500 7150
 Wire Wire Line
-	2100 6950 2100 7250
+	2100 6950 2100 7150
 Wire Wire Line
-	4950 9350 4950 9600
+	4950 9350 4950 9450
 Text Label 1500 6850 0    60   ~ 0
 P_AD1
 Text Label 1500 6650 0    60   ~ 0
@@ -698,7 +692,7 @@ U 1 1 2691B632
 P 1800 2150
 F 0 "W4" H 1800 2210 40  0000 C CNN
 F 1 "TEST" H 1800 2080 40  0000 C CNN
-F 2 "pin_array:PIN_ARRAY_2X1" H 1800 2150 60  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 1800 2150 60  0001 C CNN
 F 3 "" H 1800 2150 60  0001 C CNN
 	1    1800 2150
 	1    0    0    -1  
@@ -709,7 +703,7 @@ U 1 1 2691B637
 P 1800 1950
 F 0 "W5" H 1800 2010 40  0000 C CNN
 F 1 "TEST" H 1800 1880 40  0000 C CNN
-F 2 "pin_array:PIN_ARRAY_2X1" H 1800 1950 60  0001 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 1800 1950 60  0001 C CNN
 F 3 "" H 1800 1950 60  0001 C CNN
 	1    1800 1950
 	1    0    0    -1  
@@ -1006,7 +1000,7 @@ U 1 1 2820F08A
 P 700 9150
 F 0 "C38" H 750 9250 50  0000 L CNN
 F 1 "4,7uF" H 750 9050 50  0000 L CNN
-F 2 "lib_smd:SM1812L" H 700 9150 60  0001 C CNN
+F 2 "Resistor_SMD:R_1206_3216Metric_Pad1.24x1.80mm_HandSolder" H 700 9150 60  0001 C CNN
 F 3 "" H 700 9150 60  0001 C CNN
 	1    700  9150
 	1    0    0    -1  
@@ -2405,7 +2399,7 @@ Wire Wire Line
 Wire Wire Line
 	7400 5450 8300 5450
 Wire Wire Line
-	11600 6150 12250 6150
+	11600 6150 12050 6150
 Wire Wire Line
 	12750 6150 12850 6150
 Wire Wire Line
@@ -2485,9 +2479,9 @@ Wire Wire Line
 Wire Wire Line
 	10600 6850 11400 6850
 Wire Wire Line
-	2000 6950 2200 6950
+	2000 6950 2100 6950
 Wire Wire Line
-	4400 6950 4600 6950
+	4400 6950 4500 6950
 Wire Wire Line
 	7700 6950 8300 6950
 Wire Wire Line
@@ -2521,7 +2515,7 @@ Wire Wire Line
 Wire Wire Line
 	7700 7350 8300 7350
 Wire Wire Line
-	10600 7350 12100 7350
+	10600 7350 11900 7350
 Wire Wire Line
 	12600 7350 12700 7350
 Wire Wire Line
@@ -2565,7 +2559,7 @@ Wire Wire Line
 Wire Wire Line
 	7700 8250 8300 8250
 Wire Wire Line
-	11600 8250 12100 8250
+	11600 8250 11900 8250
 Wire Wire Line
 	12600 8250 12700 8250
 Wire Wire Line
@@ -2591,7 +2585,7 @@ Wire Wire Line
 Wire Wire Line
 	7700 8850 8300 8850
 Wire Wire Line
-	6550 8950 7100 8950
+	6550 8950 6800 8950
 Wire Wire Line
 	7700 8950 8300 8950
 Wire Wire Line
@@ -2607,27 +2601,27 @@ Wire Wire Line
 Wire Wire Line
 	4950 9550 5050 9550
 Wire Wire Line
-	6450 9650 8000 9650
+	6450 9650 6800 9650
 Wire Wire Line
-	6450 9750 8100 9750
+	6450 9750 7100 9750
 Wire Bus Line
 	11600 850  11700 850 
 Wire Wire Line
-	700  8800 700  8950
+	700  8800 700  8850
 Wire Wire Line
 	700  9350 700  9450
 Wire Wire Line
-	1500 1950 1500 2250
+	1500 1950 1500 2150
 Wire Wire Line
 	1900 1450 1900 750 
 Wire Wire Line
-	4500 950  4500 1250
+	4500 950  4500 1000
 Wire Wire Line
 	4700 1450 4700 750 
 Wire Wire Line
 	4900 1550 4900 1500
 Wire Wire Line
-	6550 8850 6550 9450
+	6550 8850 6550 8950
 Wire Wire Line
 	6800 8950 6800 9050
 Wire Wire Line
@@ -2740,4 +2734,52 @@ Wire Wire Line
 	2150 6750 2200 6750
 Wire Wire Line
 	12050 6700 12050 6650
+Wire Wire Line
+	1250 10750 1500 10750
+Wire Wire Line
+	4500 1000 4500 1250
+Wire Wire Line
+	1050 10750 1050 10800
+Wire Wire Line
+	1500 2150 1500 2250
+Wire Wire Line
+	12050 6150 12250 6150
+Wire Wire Line
+	2100 6950 2200 6950
+Wire Wire Line
+	4500 6950 4600 6950
+Wire Wire Line
+	2100 7150 2100 7250
+Wire Wire Line
+	4500 7150 4500 7250
+Wire Wire Line
+	11900 7350 12100 7350
+Wire Wire Line
+	11900 8250 12100 8250
+Wire Wire Line
+	6550 8950 6550 9450
+Wire Wire Line
+	6800 8950 7100 8950
+Wire Wire Line
+	4950 9450 4950 9550
+Wire Wire Line
+	4950 9550 4950 9600
+Wire Wire Line
+	6800 9650 8000 9650
+Wire Wire Line
+	7100 9750 8100 9750
+Wire Wire Line
+	600  10200 600  10300
+Wire Wire Line
+	1050 10200 1050 10300
+Wire Wire Line
+	700  8850 700  8950
+Wire Wire Line
+	850  8850 1150 8850
+Wire Bus Line
+	11100 5850 11100 6150
+Wire Bus Line
+	11100 5350 11100 5750
+Wire Bus Line
+	11600 850  11600 4050
 $EndSCHEMATC

@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# video_schlib:+12V
+# video_schlib_+12V
 #
-DEF video_schlib:+12V #PWR 0 0 N Y 1 F P
+DEF video_schlib_+12V #PWR 0 0 N Y 1 F P
 F0 "#PWR" 0 -50 20 H I C CNN
-F1 "video_schlib:+12V" 0 100 30 H V C CNN
+F1 "video_schlib_+12V" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -15,11 +15,11 @@ X +12V 1 0 0 0 U 20 30 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:+3.3V
+# video_schlib_+3.3V
 #
-DEF video_schlib:+3.3V #PWR 0 0 Y Y 1 F P
+DEF video_schlib_+3.3V #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -40 30 H I C CNN
-F1 "video_schlib:+3.3V" 0 110 30 H V C CNN
+F1 "video_schlib_+3.3V" 0 110 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS +3,3V
@@ -30,11 +30,11 @@ X +3.3V 1 0 0 0 U 30 30 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:+5F
+# video_schlib_+5F
 #
-DEF video_schlib:+5F #PWR 0 0 Y Y 1 F P
+DEF video_schlib_+5F #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -50 20 H I C CNN
-F1 "video_schlib:+5F" 0 100 30 H V C CNN
+F1 "video_schlib_+5F" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -44,11 +44,11 @@ X +5F 1 0 0 0 U 20 30 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:+5V
+# video_schlib_+5V
 #
-DEF video_schlib:+5V #PWR 0 40 Y Y 1 F P
+DEF video_schlib_+5V #PWR 0 40 Y Y 1 F P
 F0 "#PWR" 0 90 20 H I C CNN
-F1 "video_schlib:+5V" 0 90 30 H V C CNN
+F1 "video_schlib_+5V" 0 90 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -58,11 +58,11 @@ X +5V 1 0 0 0 U 20 20 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:24C16
+# video_schlib_24C16
 #
-DEF video_schlib:24C16 U 0 30 Y Y 1 F N
+DEF video_schlib_24C16 U 0 30 Y Y 1 F N
 F0 "U" 150 350 60 H V C CNN
-F1 "video_schlib:24C16" 200 -350 60 H V C CNN
+F1 "video_schlib_24C16" 200 -350 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS 24C512
@@ -79,11 +79,11 @@ X WP 7 700 100 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:4C4001
+# video_schlib_4C4001
 #
-DEF video_schlib:4C4001 U 0 40 Y Y 1 F N
+DEF video_schlib_4C4001 U 0 40 Y Y 1 F N
 F0 "U" 50 0 70 H V C CNN
-F1 "video_schlib:4C4001" 50 -300 70 H V C CNN
+F1 "video_schlib_4C4001" 50 -300 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -111,11 +111,11 @@ X A3 9 -650 400 300 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:74LS245
+# video_schlib_74LS245
 #
-DEF video_schlib:74LS245 U 0 10 Y Y 1 F N
+DEF video_schlib_74LS245 U 0 10 Y Y 1 F N
 F0 "U" 100 575 50 H V L BNN
-F1 "video_schlib:74LS245" 50 -575 50 H V L TNN
+F1 "video_schlib_74LS245" 50 -575 50 H V L TNN
 F2 "" 50 -650 30 H V L CNN
 F3 "" 100 575 30 H V C CNN
 ALIAS 74HC245
@@ -146,11 +146,11 @@ X A7 9 -700 -200 300 R 60 60 1 1 T
 ENDDRAW
 ENDDEF
 #
-# video_schlib:AV9173
+# video_schlib_AV9173
 #
-DEF video_schlib:AV9173 U 0 30 Y Y 1 F N
+DEF video_schlib_AV9173 U 0 30 Y Y 1 F N
 F0 "U" 170 450 60 H V C CNN
-F1 "video_schlib:AV9173" 260 -450 60 H V C CNN
+F1 "video_schlib_AV9173" 260 -450 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -166,11 +166,11 @@ X CLK/2 8 950 -100 300 L 60 60 1 1 T
 ENDDRAW
 ENDDEF
 #
-# video_schlib:BNC
+# video_schlib_BNC
 #
-DEF video_schlib:BNC P 0 40 Y N 1 F N
+DEF video_schlib_BNC P 0 40 Y N 1 F N
 F0 "P" 10 120 60 H V C CNN
-F1 "video_schlib:BNC" 110 -60 40 V V C CNN
+F1 "video_schlib_BNC" 110 -60 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -181,11 +181,11 @@ X Ext 2 0 -200 130 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:BT253
+# video_schlib_BT253
 #
-DEF video_schlib:BT253 U 0 40 Y Y 1 F N
+DEF video_schlib_BT253 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:BT253" 0 -100 70 H V C CNN
+F1 "video_schlib_BT253" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS BT254
@@ -278,11 +278,11 @@ X D7 9 -1050 -1300 300 R 60 60 1 1 T
 ENDDRAW
 ENDDEF
 #
-# video_schlib:BT473
+# video_schlib_BT473
 #
-DEF video_schlib:BT473 U 0 40 Y Y 1 F N
+DEF video_schlib_BT473 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:BT473" 0 -100 70 H V C CNN
+F1 "video_schlib_BT473" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -358,11 +358,11 @@ X CLOCK 9 1000 -400 300 L 60 60 1 1 I C
 ENDDRAW
 ENDDEF
 #
-# video_schlib:BT812
+# video_schlib_BT812
 #
-DEF video_schlib:BT812 U 0 30 Y Y 1 F N
+DEF video_schlib_BT812 U 0 30 Y Y 1 F N
 F0 "U" 1870 3350 60 H V C CNN
-F1 "video_schlib:BT812" 1230 -3350 60 H V C CNN
+F1 "video_schlib_BT812" 1230 -3350 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -510,11 +510,11 @@ X D6 99 -2050 -1800 300 R 60 60 1 1 T
 ENDDRAW
 ENDDEF
 #
-# video_schlib:BUSPCI-5V
+# video_schlib_BUSPCI-5V
 #
-DEF video_schlib:BUSPCI-5V J 0 30 Y Y 1 F N
+DEF video_schlib_BUSPCI-5V J 0 30 Y Y 1 F N
 F0 "J" 0 3200 60 H V C CNN
-F1 "video_schlib:BUSPCI-5V" 0 -3200 60 H V C CNN
+F1 "video_schlib_BUSPCI-5V" 0 -3200 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS BUSPCI-5V
@@ -639,11 +639,11 @@ X PRSNT1# B9 -1100 2250 350 R 60 60 1 1 I I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:C
+# video_schlib_C
 #
-DEF video_schlib:C C 0 10 N Y 1 F N
+DEF video_schlib_C C 0 10 N Y 1 F N
 F0 "C" 0 100 40 H V L CNN
-F1 "video_schlib:C" 6 -85 40 H V L CNN
+F1 "video_schlib_C" 6 -85 40 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 100 30 H V C CNN
 $FPLIST
@@ -659,11 +659,11 @@ X ~ 2 0 -200 170 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CONN_1
+# video_schlib_CONN_1
 #
-DEF ~video_schlib:CONN_1 P 0 30 N N 1 F N
+DEF ~video_schlib_CONN_1 P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
-F1 "video_schlib:CONN_1" 0 55 30 H I C CNN
+F1 "video_schlib_CONN_1" 0 55 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -673,11 +673,11 @@ X 1 1 -150 0 100 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CONN_2
+# video_schlib_CONN_2
 #
-DEF video_schlib:CONN_2 P 0 40 Y N 1 F N
+DEF video_schlib_CONN_2 P 0 40 Y N 1 F N
 F0 "P" -50 0 40 V V C CNN
-F1 "video_schlib:CONN_2" 50 0 40 V V C CNN
+F1 "video_schlib_CONN_2" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -687,11 +687,11 @@ X PM 2 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CONN_5
+# video_schlib_CONN_5
 #
-DEF video_schlib:CONN_5 P 0 40 Y Y 1 F N
+DEF video_schlib_CONN_5 P 0 40 Y Y 1 F N
 F0 "P" -50 0 50 V V C CNN
-F1 "video_schlib:CONN_5" 50 0 50 V V C CNN
+F1 "video_schlib_CONN_5" 50 0 50 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -704,11 +704,11 @@ X ~ 5 -400 -200 300 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CP
+# video_schlib_CP
 #
-DEF video_schlib:CP C 0 10 N N 1 F N
+DEF video_schlib_CP C 0 10 N N 1 F N
 F0 "C" 50 100 40 H V L CNN
-F1 "video_schlib:CP" 50 -100 40 H V L CNN
+F1 "video_schlib_CP" 50 -100 40 H V L CNN
 F2 "" 100 -150 30 H V C CNN
 F3 "" 50 100 30 H V C CNN
 ALIAS CAPAPOL
@@ -724,11 +724,11 @@ X ~ 2 0 -200 150 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CRYSTAL
+# video_schlib_CRYSTAL
 #
-DEF video_schlib:CRYSTAL X 0 40 N N 1 F N
+DEF video_schlib_CRYSTAL X 0 40 N N 1 F N
 F0 "X" 0 150 60 H V C CNN
-F1 "video_schlib:CRYSTAL" 0 -150 60 H V C CNN
+F1 "video_schlib_CRYSTAL" 0 -150 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -740,11 +740,11 @@ X 2 2 300 0 200 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:CTRIM
+# video_schlib_CTRIM
 #
-DEF video_schlib:CTRIM C 0 10 Y Y 1 F N
+DEF video_schlib_CTRIM C 0 10 Y Y 1 F N
 F0 "C" 130 -80 50 H V C CNN
-F1 "video_schlib:CTRIM" 150 -160 50 H V C CNN
+F1 "video_schlib_CTRIM" 150 -160 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -757,11 +757,11 @@ X ~ 2 0 -200 170 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:DB9
+# video_schlib_DB9
 #
-DEF video_schlib:DB9 J 0 40 Y N 1 F N
+DEF video_schlib_DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "video_schlib:DB9" 0 -550 70 H V C CNN
+F1 "video_schlib_DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -810,11 +810,11 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:DIODESCH
+# video_schlib_DIODESCH
 #
-DEF video_schlib:DIODESCH D 0 40 N N 1 F N
+DEF video_schlib_DIODESCH D 0 40 N N 1 F N
 F0 "D" 0 100 40 H V C CNN
-F1 "video_schlib:DIODESCH" 0 -100 40 H V C CNN
+F1 "video_schlib_DIODESCH" 0 -100 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -829,11 +829,11 @@ X K 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:GND
+# video_schlib_GND
 #
-DEF ~video_schlib:GND #PWR 0 0 Y Y 1 F P
+DEF ~video_schlib_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "video_schlib:GND" 0 -70 30 H I C CNN
+F1 "video_schlib_GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -842,11 +842,11 @@ X GND 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:INDUCTOR
+# video_schlib_INDUCTOR
 #
-DEF video_schlib:INDUCTOR L 0 40 N N 1 F N
+DEF video_schlib_INDUCTOR L 0 40 N N 1 F N
 F0 "L" -50 0 40 V V C CNN
-F1 "video_schlib:INDUCTOR" 100 0 40 V V C CNN
+F1 "video_schlib_INDUCTOR" 100 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -859,11 +859,11 @@ X 2 2 0 -300 100 U 70 70 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:LED
+# video_schlib_LED
 #
-DEF video_schlib:LED D 0 40 Y N 1 F N
+DEF video_schlib_LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "video_schlib:LED" 0 -100 50 H V C CNN
+F1 "video_schlib_LED" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -885,11 +885,11 @@ X K 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:LIGNE_A_RETARD
+# video_schlib_LIGNE_A_RETARD
 #
-DEF video_schlib:LIGNE_A_RETARD L 0 40 Y N 1 F N
+DEF video_schlib_LIGNE_A_RETARD L 0 40 Y N 1 F N
 F0 "L" 0 100 70 H V C CNN
-F1 "video_schlib:LIGNE_A_RETARD" 0 -100 70 H V C CNN
+F1 "video_schlib_LIGNE_A_RETARD" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -908,11 +908,11 @@ X COMMUN 3 -200 0 100 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:NPN
+# video_schlib_NPN
 #
-DEF video_schlib:NPN Q 0 0 Y Y 1 F N
+DEF video_schlib_NPN Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 50 H V R CNN
-F1 "video_schlib:NPN" 0 150 50 H V R CNN
+F1 "video_schlib_NPN" 0 150 50 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -928,11 +928,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:POT
+# video_schlib_POT
 #
-DEF video_schlib:POT RV 0 40 Y N 1 F N
+DEF video_schlib_POT RV 0 40 Y N 1 F N
 F0 "RV" 0 -100 50 H V C CNN
-F1 "video_schlib:POT" 0 0 50 H V C CNN
+F1 "video_schlib_POT" 0 0 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -944,11 +944,11 @@ X 3 3 250 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:PWR_FLAG
+# video_schlib_PWR_FLAG
 #
-DEF video_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
+DEF video_schlib_PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "video_schlib:PWR_FLAG" 0 180 30 H V C CNN
+F1 "video_schlib_PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -957,11 +957,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# video_schlib:R
+# video_schlib_R
 #
-DEF video_schlib:R R 0 0 N Y 1 F N
+DEF video_schlib_R R 0 0 N Y 1 F N
 F0 "R" 80 0 40 V V C CNN
-F1 "video_schlib:R" 7 1 40 V V C CNN
+F1 "video_schlib_R" 7 1 40 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST
@@ -978,11 +978,11 @@ X ~ 2 0 -250 100 U 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:RR8
+# video_schlib_RR8
 #
-DEF video_schlib:RR8 RR 0 40 Y N 1 F N
+DEF video_schlib_RR8 RR 0 40 Y N 1 F N
 F0 "RR" 50 550 70 H V C CNN
-F1 "video_schlib:RR8" 30 0 70 V V C CNN
+F1 "video_schlib_RR8" 30 0 70 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -999,11 +999,11 @@ X 9 9 -350 -350 300 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:S5933_PQ160
+# video_schlib_S5933_PQ160
 #
-DEF video_schlib:S5933_PQ160 U 0 30 Y Y 1 F N
+DEF video_schlib_S5933_PQ160 U 0 30 Y Y 1 F N
 F0 "U" 0 2250 60 H V C CNN
-F1 "video_schlib:S5933_PQ160" 450 -4150 60 H V C CNN
+F1 "video_schlib_S5933_PQ160" 450 -4150 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1169,11 +1169,11 @@ X DQ1 99 1150 3950 300 L 60 60 1 1 B
 ENDDRAW
 ENDDEF
 #
-# video_schlib:SIM4X32
+# video_schlib_SIM4X32
 #
-DEF video_schlib:SIM4X32 U 0 40 Y Y 1 F N
+DEF video_schlib_SIM4X32 U 0 40 Y Y 1 F N
 F0 "U" 0 550 70 H V C CNN
-F1 "video_schlib:SIM4X32" 450 -2000 70 H V C CNN
+F1 "video_schlib_SIM4X32" 450 -2000 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1241,11 +1241,11 @@ X DQ19 9 800 -300 300 L 60 60 1 1 T
 ENDDRAW
 ENDDEF
 #
-# video_schlib:TDA8501
+# video_schlib_TDA8501
 #
-DEF video_schlib:TDA8501 U 0 30 Y Y 1 F N
+DEF video_schlib_TDA8501 U 0 30 Y Y 1 F N
 F0 "U" 350 950 60 H V C CNN
-F1 "video_schlib:TDA8501" 350 -850 60 H V C CNN
+F1 "video_schlib_TDA8501" 350 -850 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1277,11 +1277,11 @@ X G 9 -900 -200 300 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# video_schlib:TEST
+# video_schlib_TEST
 #
-DEF video_schlib:TEST W 0 30 N N 1 F N
+DEF video_schlib_TEST W 0 30 N N 1 F N
 F0 "W" 0 60 40 H V C CNN
-F1 "video_schlib:TEST" 0 -70 40 H V C CNN
+F1 "video_schlib_TEST" 0 -70 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1292,11 +1292,11 @@ X 2 2 200 0 100 L 60 60 0 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:VCC
+# video_schlib_VCC
 #
-DEF video_schlib:VCC #PWR 0 0 Y Y 1 F P
+DEF video_schlib_VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "video_schlib:VCC" 0 100 30 H V C CNN
+F1 "video_schlib_VCC" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1306,11 +1306,11 @@ X VCC 1 0 0 0 U 20 20 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:VSS
+# video_schlib_VSS
 #
-DEF video_schlib:VSS #PWR 0 0 Y Y 1 F P
+DEF video_schlib_VSS #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "video_schlib:VSS" 0 -70 30 H V C CNN
+F1 "video_schlib_VSS" 0 -70 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1319,11 +1319,11 @@ X VSS 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:XC1736APD8
+# video_schlib_XC1736APD8
 #
-DEF video_schlib:XC1736APD8 U 0 40 Y Y 1 F N
+DEF video_schlib_XC1736APD8 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:XC1736APD8" 0 -100 70 H V C CNN
+F1 "video_schlib_XC1736APD8" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1339,11 +1339,11 @@ X VCC 8 -450 450 0 D 60 60 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# video_schlib:XC4003-VQ100
+# video_schlib_XC4003-VQ100
 #
-DEF video_schlib:XC4003-VQ100 U 0 40 Y Y 1 F N
+DEF video_schlib_XC4003-VQ100 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:XC4003-VQ100" 0 -100 70 H V C CNN
+F1 "video_schlib_XC4003-VQ100" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1451,11 +1451,11 @@ X SGCK1 99 950 2250 300 L 60 60 1 1 B
 ENDDRAW
 ENDDEF
 #
-# video_schlib:XC4005-PQ100
+# video_schlib_XC4005-PQ100
 #
-DEF video_schlib:XC4005-PQ100 U 0 40 Y Y 1 F N
+DEF video_schlib_XC4005-PQ100 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:XC4005-PQ100" 0 -100 70 H V C CNN
+F1 "video_schlib_XC4005-PQ100" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -1562,11 +1562,11 @@ X P99 99 1050 1900 300 L 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# video_schlib:XC4005-PQ160
+# video_schlib_XC4005-PQ160
 #
-DEF video_schlib:XC4005-PQ160 U 0 40 Y Y 1 F N
+DEF video_schlib_XC4005-PQ160 U 0 40 Y Y 1 F N
 F0 "U" 0 100 70 H V C CNN
-F1 "video_schlib:XC4005-PQ160" 0 -100 70 H V C CNN
+F1 "video_schlib_XC4005-PQ160" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW

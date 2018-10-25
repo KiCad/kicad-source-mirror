@@ -1,6 +1,5 @@
 (fp_lib_table
   (lib (name footprints)(type KiCad)(uri ${KIPRJMOD}/libs/footprints.pretty)(options "")(descr "footprints specific to this project"))
-  (lib (name Connectors)(type KiCad)(uri "$(KISYSMOD)/Connectors.pretty")(options "")(descr ""))
   (lib (name Discret)(type KiCad)(uri "$(KISYSMOD)/Discret.pretty")(options "")(descr ""))
   (lib (name Connector_PinHeader_2.54mm)(type KiCad)(uri ${KISYSMOD}/Connector_PinHeader_2.54mm.pretty)(options "")(descr ""))
   (lib (name Package_SO)(type KiCad)(uri ${KISYSMOD}/Package_SO.pretty)(options "")(descr ""))
@@ -8,4 +7,8 @@
   (lib (name Package_DIP)(type KiCad)(uri ${KISYSMOD}/Package_DIP.pretty)(options "")(descr ""))
   (lib (name Package_LCC)(type KiCad)(uri ${KISYSMOD}/Package_LCC.pretty)(options "")(descr ""))
   (lib (name Package_QFP)(type KiCad)(uri ${KISYSMOD}/Package_QFP.pretty)(options "")(descr ""))
+  (lib (name Resistor_SMD)(type KiCad)(uri ${KISYSMOD}/Resistor_SMD.pretty)(options "")(descr ""))
+  (lib (name Resistor_THT)(type KiCad)(uri ${KISYSMOD}/Resistor_THT.pretty)(options "")(descr ""))
+  (lib (name Package_TO_SOT_SMD)(type KiCad)(uri ${KISYSMOD}/Package_TO_SOT_SMD.pretty)(options "")(descr ""))
+  (lib (name Capacitor_Tantalum_SMD)(type KiCad)(uri ${KISYSMOD}/Capacitor_Tantalum_SMD.pretty)(options "")(descr ""))
 )

@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:video-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -15,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 Wire Wire Line
-	6900 1200 7300 1200
+	6900 1200 7100 1200
 $Comp
 L video_schlib:PWR_FLAG #FLG07
 U 1 1 4174D92E
@@ -137,9 +137,9 @@ Wire Wire Line
 Wire Wire Line
 	6350 3850 6800 3850
 Wire Wire Line
-	3500 1450 3500 2250
+	3500 1450 3500 1500
 Wire Wire Line
-	3500 1500 4000 1500
+	3500 1500 3900 1500
 Wire Wire Line
 	1500 3950 1500 3900
 Wire Wire Line
@@ -398,11 +398,11 @@ Connection ~ 6800 3850
 Connection ~ 3900 1500
 Connection ~ 5500 4600
 Wire Wire Line
-	2400 1800 2700 1800
+	2400 1800 2500 1800
 Wire Wire Line
 	4600 2400 4500 2400
 Wire Wire Line
-	4400 3000 6300 3000
+	4400 3000 5200 3000
 Wire Wire Line
 	4400 3200 4900 3200
 Wire Wire Line
@@ -444,7 +444,7 @@ Wire Wire Line
 Wire Wire Line
 	4500 3900 4500 4000
 Wire Wire Line
-	5500 4500 5500 4700
+	5500 4500 5500 4600
 Wire Wire Line
 	4500 2400 4500 2600
 Wire Wire Line
@@ -454,21 +454,21 @@ Wire Wire Line
 Wire Wire Line
 	5800 3000 5800 3300
 Wire Wire Line
-	6800 3950 6800 3600
+	6800 3950 6800 3850
 Wire Wire Line
-	6900 2400 6900 3000
+	6900 2400 6900 2700
 Wire Wire Line
 	9800 900  9800 1000
 Wire Wire Line
-	9800 1400 9800 1600
+	9800 1400 9800 1500
 Wire Wire Line
 	9800 2500 9800 2600
 Wire Wire Line
-	9800 3000 9800 3200
+	9800 3000 9800 3100
 Wire Wire Line
 	9800 4100 9800 4200
 Wire Wire Line
-	9800 4600 9800 4800
+	9800 4600 9800 4700
 Wire Wire Line
 	6200 4600 5500 4600
 Wire Wire Line
@@ -964,4 +964,30 @@ Wire Wire Line
 	10500 3100 10600 3100
 Wire Wire Line
 	10500 4700 10600 4700
+Wire Wire Line
+	2500 1800 2700 1800
+Wire Wire Line
+	7100 1200 7200 1200
+Wire Wire Line
+	6900 2700 6900 3000
+Wire Wire Line
+	5200 3000 5800 3000
+Wire Wire Line
+	5800 3000 6300 3000
+Wire Wire Line
+	6800 3850 6800 3600
+Wire Wire Line
+	3900 1500 4000 1500
+Wire Wire Line
+	5500 4600 5500 4700
+Wire Wire Line
+	9800 4700 9800 4800
+Wire Wire Line
+	9800 3100 9800 3200
+Wire Wire Line
+	9800 1500 9800 1600
+Wire Wire Line
+	3500 1500 3500 2250
+Wire Wire Line
+	7200 1200 7300 1200
 $EndSCHEMATC

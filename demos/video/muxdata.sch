@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:video-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -177,9 +177,9 @@ Wire Wire Line
 Wire Wire Line
 	2600 4500 2550 4500
 Wire Wire Line
-	2600 5700 2400 5700
+	2600 5700 2550 5700
 Wire Wire Line
-	2550 5700 2550 2100
+	2550 5700 2550 4500
 Wire Wire Line
 	2550 2100 2600 2100
 Wire Wire Line
@@ -187,9 +187,9 @@ Wire Wire Line
 Wire Wire Line
 	2600 4400 2500 4400
 Wire Wire Line
-	2400 5600 2600 5600
+	2400 5600 2500 5600
 Wire Wire Line
-	2500 5600 2500 2000
+	2500 5600 2500 4400
 Wire Wire Line
 	2500 2000 2600 2000
 Wire Wire Line
@@ -634,7 +634,7 @@ $EndComp
 Connection ~ 6100 1700
 Connection ~ 6100 1600
 Wire Wire Line
-	6100 1800 6100 1550
+	6100 1800 6100 1700
 $Comp
 L video_schlib:XC4003-VQ100 U22
 U 1 1 33A567B8
@@ -646,4 +646,20 @@ F 3 "" H 7050 3850 60  0001 C CNN
 	1    7050 3850
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	2500 3200 2500 2000
+Wire Wire Line
+	2550 3300 2550 2100
+Wire Wire Line
+	2550 4500 2550 3300
+Wire Wire Line
+	2500 4400 2500 3200
+Wire Wire Line
+	2500 5600 2600 5600
+Wire Wire Line
+	2550 5700 2400 5700
+Wire Wire Line
+	6100 1700 6100 1600
+Wire Wire Line
+	6100 1600 6100 1550
 $EndSCHEMATC
