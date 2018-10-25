@@ -73,7 +73,7 @@ public:
 
     virtual void Add( EDA_ITEM* aItem )
     {
-        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+        ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
 
         if( i == m_items.end() || *i > aItem )
             m_items.insert( i, aItem );
@@ -81,7 +81,7 @@ public:
 
     virtual void Remove( EDA_ITEM *aItem )
     {
-        CITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
+        ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
 
         if( !( i == m_items.end() || *i > aItem  ) )
             m_items.erase( i );
