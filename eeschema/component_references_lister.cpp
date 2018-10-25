@@ -838,10 +838,16 @@ wxString SCH_REFERENCE_LIST::Shorthand( std::vector<SCH_REFERENCE> aList )
         {
             retVal << ref << aList[ i ].GetRefNumber();
         }
+        else if( range == 2 )
+        {
+            retVal << ref << aList[ i ].GetRefNumber();
+            retVal << wxT( ", " );
+            retVal << ref << aList[ i + 1 ].GetRefNumber();
+        }
         else
         {
             retVal << ref << aList[ i ].GetRefNumber();
-            retVal << wxT( " - " );
+            retVal << wxT( "-" );
             retVal << ref << aList[ i + ( range - 1 ) ].GetRefNumber();
         }
 
