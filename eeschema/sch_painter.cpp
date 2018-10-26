@@ -276,7 +276,7 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     {
         COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
-        if( aItem->IsMoving() )
+        if( aItem->IsMoving() || aItem->GetParent()->IsMoving() )
             color = selectedBrightening( color );
 
         m_gal->SetIsFill( true );
@@ -289,7 +289,7 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     {
         COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE );
 
-        if( aItem->IsMoving() )
+        if( aItem->IsMoving() || aItem->GetParent()->IsMoving() )
             color = selectedBrightening( color );
 
         m_gal->SetIsStroke( true );
@@ -378,7 +378,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
 
     COLOR4D color = aField->GetDefaultColor();
 
-    if( aField->IsMoving() )
+    if( aField->IsMoving() || aField->GetParent()->IsMoving() )
         color = selectedBrightening( color );
 
     if( !aField->IsVisible() )
@@ -427,7 +427,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_NOTES );
 
-    if( aText->IsMoving() )
+    if( aText->IsMoving() || aText->GetParent()->IsMoving() )
         color = selectedBrightening( color );
 
     if( !aText->IsVisible() )
