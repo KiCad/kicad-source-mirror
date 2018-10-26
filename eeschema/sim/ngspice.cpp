@@ -318,8 +318,10 @@ void NGSPICE::init_dll()
     }
 
     if( !m_dll.IsLoaded() ) // try also the system libraries
-#endif /* __WINDOWS || __WXMAC__ */
         m_dll.Load( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
+#else
+    m_dll.Load("libngspice.so.0");
+#endif /* __WINDOWS || __WXMAC__ */
 
     if( !m_dll.IsLoaded() )
         throw std::runtime_error( "Missing ngspice shared library" );
