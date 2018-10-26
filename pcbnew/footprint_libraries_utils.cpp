@@ -953,10 +953,10 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
         wxString msg = wxString::Format( _( "Footprint %s already exists in %s." ),
                                          footprintName,
                                          libraryName );
-        KIDIALOG dlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-        dlg.SetOKLabel( _( "Overwrite" ) );
+        KIDIALOG chkdlg( this, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        chkdlg.SetOKLabel( _( "Overwrite" ) );
 
-        if( dlg.ShowModal() == wxID_CANCEL )
+        if( chkdlg.ShowModal() == wxID_CANCEL )
             return false;
     }
 

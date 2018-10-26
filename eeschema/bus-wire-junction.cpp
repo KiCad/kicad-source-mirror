@@ -797,7 +797,6 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppend )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
-    SCH_SCREEN* screen = GetScreen();
     bool broken_segments = false;
 
     AddToScreen( junction );
