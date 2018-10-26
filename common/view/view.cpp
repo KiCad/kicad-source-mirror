@@ -771,39 +771,44 @@ void VIEW::UpdateLayerColor( int aLayer )
 
     r.SetMaximum();
 
-    m_gal->BeginUpdate();
-    updateItemsColor visitor( aLayer, m_painter, m_gal );
-    m_layers[aLayer].items->Query( r, visitor );
-    MarkTargetDirty( m_layers[aLayer].target );
-    m_gal->EndUpdate();
+    if( m_gal->IsVisible() )
+    {
+        GAL_UPDATE_CONTEXT ctx( m_gal );
+
+        updateItemsColor visitor( aLayer, m_painter, m_gal );
+        m_layers[aLayer].items->Query( r, visitor );
+        MarkTargetDirty( m_layers[aLayer].target );
+    }
 }
 
 
 void VIEW::UpdateAllLayersColor()
 {
-    m_gal->BeginUpdate();
-
-    for( VIEW_ITEM* item : m_allItems )
+    if( m_gal->IsVisible() )
     {
-        auto viewData = item->viewPrivData();
+        GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        if( !viewData )
-            continue;
-
-        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
-        viewData->getLayers( layers, layers_count );
-
-        for( int i = 0; i < layers_count; ++i )
+        for( VIEW_ITEM* item : m_allItems )
         {
-            const COLOR4D color = m_painter->GetSettings()->GetColor( item, layers[i] );
-            int group = viewData->getGroup( layers[i] );
+            auto viewData = item->viewPrivData();
 
-            if( group >= 0 )
-                m_gal->ChangeGroupColor( group, color );
+            if( !viewData )
+                continue;
+
+            int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+            viewData->getLayers( layers, layers_count );
+
+            for( int i = 0; i < layers_count; ++i )
+            {
+                const COLOR4D color = m_painter->GetSettings()->GetColor( item, layers[i] );
+                int group = viewData->getGroup( layers[i] );
+
+                if( group >= 0 )
+                    m_gal->ChangeGroupColor( group, color );
+            }
         }
     }
 
-    m_gal->EndUpdate();
     MarkDirty();
 }
 
@@ -909,28 +914,31 @@ void VIEW::ClearTopLayers()
 void VIEW::UpdateAllLayersOrder()
 {
     sortLayers();
-    m_gal->BeginUpdate();
 
-    for( VIEW_ITEM* item : m_allItems )
+    if( m_gal->IsVisible() )
     {
-        auto viewData = item->viewPrivData();
+        GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        if( !viewData )
-            continue;
-
-        int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
-        viewData->getLayers( layers, layers_count );
-
-        for( int i = 0; i < layers_count; ++i )
+        for( VIEW_ITEM* item : m_allItems )
         {
-            int group = viewData->getGroup( layers[i] );
+            auto viewData = item->viewPrivData();
 
-            if( group >= 0 )
-                m_gal->ChangeGroupDepth( group, m_layers[layers[i]].renderingOrder );
+            if( !viewData )
+                continue;
+
+            int layers[VIEW::VIEW_MAX_LAYERS], layers_count;
+            viewData->getLayers( layers, layers_count );
+
+            for( int i = 0; i < layers_count; ++i )
+            {
+                int group = viewData->getGroup( layers[i] );
+
+                if( group >= 0 )
+                    m_gal->ChangeGroupDepth( group, m_layers[layers[i]].renderingOrder );
+            }
         }
     }
 
-    m_gal->EndUpdate();
     MarkDirty();
 }
 
@@ -1392,23 +1400,24 @@ void VIEW::RecacheAllItems()
 
 void VIEW::UpdateItems()
 {
-    m_gal->BeginUpdate();
-
-    for( VIEW_ITEM* item : m_allItems )
+    if( m_gal->IsVisible() )
     {
-        auto viewData = item->viewPrivData();
+        GAL_UPDATE_CONTEXT ctx( m_gal );
 
-        if( !viewData )
-            continue;
-
-        if( viewData->m_requiredUpdate != NONE )
+        for( VIEW_ITEM* item : m_allItems )
         {
-            invalidateItem( item, viewData->m_requiredUpdate );
-            viewData->m_requiredUpdate = NONE;
+            auto viewData = item->viewPrivData();
+
+            if( !viewData )
+                continue;
+
+            if( viewData->m_requiredUpdate != NONE )
+            {
+                invalidateItem( item, viewData->m_requiredUpdate );
+                viewData->m_requiredUpdate = NONE;
+            }
         }
     }
-
-    m_gal->EndUpdate();
 }
 
 

@@ -97,12 +97,6 @@ public:
     // Drawing methods
     // ---------------
 
-    /// @copydoc GAL::BeginDrawing()
-    virtual void BeginDrawing() override;
-
-    /// @copydoc GAL::EndDrawing()
-    virtual void EndDrawing() override;
-
     /// @copydoc GAL::DrawLine()
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
@@ -355,6 +349,12 @@ private:
     COLOR4D             backgroundColor;        ///< Background color
 
     int wxBufferWidth;
+
+    /// @copydoc GAL::BeginDrawing()
+    virtual void beginDrawing() override;
+
+    /// @copydoc GAL::EndDrawing()
+    virtual void endDrawing() override;
 
     ///> Cairo-specific update handlers
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;

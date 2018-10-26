@@ -103,18 +103,6 @@ public:
     // Drawing methods
     // ---------------
 
-    /// @copydoc GAL::BeginDrawing()
-    virtual void BeginDrawing() override;
-
-    /// @copydoc GAL::EndDrawing()
-    virtual void EndDrawing() override;
-
-    /// @copydoc GAL::BeginUpdate()
-    virtual void BeginUpdate() override;
-
-    /// @copydoc GAL::EndUpdate()
-    virtual void EndUpdate() override;
-
     /// @copydoc GAL::DrawLine()
     virtual void DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
@@ -329,13 +317,26 @@ private:
                                                         ///< when the window is visible
     bool                    isGrouping;                 ///< Was a group started?
     bool                    isContextLocked;            ///< Used for assertion checking
+    int                     lockClientCookie;
     GLint                   ufm_worldPixelSize;
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
 
-    void lockContext() override;
+    void lockContext( int aClientCookie ) override;
 
-    void unlockContext() override;
+    void unlockContext( int aClientCookie ) override;
+
+    /// @copydoc GAL::BeginUpdate()
+    virtual void beginUpdate() override;
+
+    /// @copydoc GAL::EndUpdate()
+    virtual void endUpdate() override;
+
+    /// @copydoc GAL::BeginDrawing()
+    virtual void beginDrawing() override;
+
+    /// @copydoc GAL::EndDrawing()
+    virtual void endDrawing() override;
 
     ///< Update handler for OpenGL settings
     bool updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions ) override;

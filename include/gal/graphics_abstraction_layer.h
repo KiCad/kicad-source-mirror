@@ -58,7 +58,11 @@ namespace KIGFX
  */
 class GAL : GAL_DISPLAY_OPTIONS_OBSERVER
 {
+    // These friend declarations allow us to hide routines that should not be called.  The
+    // corresponding RAII objects must be used instead.
     friend class GAL_CONTEXT_LOCKER;
+    friend class GAL_UPDATE_CONTEXT;
+    friend class GAL_DRAWING_CONTEXT;
 
 public:
     // Constructor / Destructor
@@ -74,18 +78,6 @@ public:
     // ---------------
     // Drawing methods
     // ---------------
-
-    /// @brief Begin the drawing, needs to be called for every new frame.
-    virtual void BeginDrawing() {};
-
-    /// @brief End the drawing, needs to be called for every new frame.
-    virtual void EndDrawing() {};
-
-    /// @brief Enables item update mode.
-    virtual void BeginUpdate() {}
-
-    /// @brief Disables item update mode.
-    virtual void EndUpdate() {}
 
     /**
      * @brief Draw a line.
@@ -1060,9 +1052,25 @@ protected:
     /// Instance of object that stores information about how to draw texts
     STROKE_FONT        strokeFont;
 
-    virtual void lockContext() {}
+    /// Private: use GAL_CONTEXT_LOCKER RAII object
+    virtual void lockContext( int aClientCookie ) {}
 
-    virtual void unlockContext() {}
+    virtual void unlockContext( int aClientCookie ) {}
+
+    /// @brief Enables item update mode.
+    /// Private: use GAL_UPDATE_CONTEXT RAII object
+    virtual void beginUpdate() {}
+
+    /// @brief Disables item update mode.
+    virtual void endUpdate() {}
+
+    /// @brief Begin the drawing, needs to be called for every new frame.
+    /// Private: use GAL_DRAWING_CONTEXT RAII object
+    virtual void beginDrawing() {};
+
+    /// @brief End the drawing, needs to be called for every new frame.
+    /// Private: use GAL_DRAWING_CONTEXT RAII object
+    virtual void endDrawing() {};
 
     /// Compute the scaling factor for the world->screen matrix
     inline void computeWorldScale()
@@ -1135,16 +1143,50 @@ public:
     GAL_CONTEXT_LOCKER( GAL* aGal ) :
         m_gal( aGal )
     {
-        m_gal->lockContext();
+        m_cookie = rand();
+        m_gal->lockContext( m_cookie );
     }
 
     ~GAL_CONTEXT_LOCKER()
     {
-        m_gal->unlockContext();
+        m_gal->unlockContext( m_cookie );
     }
 
-private:
+protected:
     GAL* m_gal;
+    int  m_cookie;
+};
+
+
+class GAL_UPDATE_CONTEXT : public GAL_CONTEXT_LOCKER
+{
+public:
+    GAL_UPDATE_CONTEXT( GAL* aGal ) :
+            GAL_CONTEXT_LOCKER( aGal )
+    {
+        m_gal->beginUpdate();
+    }
+
+    ~GAL_UPDATE_CONTEXT()
+    {
+        m_gal->endUpdate();
+    }
+};
+
+
+class GAL_DRAWING_CONTEXT : public GAL_CONTEXT_LOCKER
+{
+public:
+    GAL_DRAWING_CONTEXT( GAL* aGal ) :
+            GAL_CONTEXT_LOCKER( aGal )
+    {
+        m_gal->beginDrawing();
+    }
+
+    ~GAL_DRAWING_CONTEXT()
+    {
+        m_gal->endDrawing();
+    }
 };
 
 

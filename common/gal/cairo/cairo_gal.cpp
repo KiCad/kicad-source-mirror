@@ -126,7 +126,7 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 }
 
 
-void CAIRO_GAL::BeginDrawing()
+void CAIRO_GAL::beginDrawing()
 {
     initSurface();
 
@@ -138,7 +138,7 @@ void CAIRO_GAL::BeginDrawing()
 }
 
 
-void CAIRO_GAL::EndDrawing()
+void CAIRO_GAL::endDrawing()
 {
     // Force remaining objects to be drawn
     Flush();

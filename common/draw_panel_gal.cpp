@@ -160,8 +160,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         GetParentEDAFrame()->SetScrollCenterPosition( wxPoint( center.x, center.y ) );
     }
 
-    // Drawing to a zero-width or zero-height GAL is fraught with peril.
-    if( GetClientRect().IsEmpty() )
+    if( !m_gal->IsVisible() )
         return;
 
     m_pendingRefresh = false;
@@ -182,9 +181,8 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
     {
         m_view->UpdateItems();
 
-        KIGFX::GAL_CONTEXT_LOCKER locker( m_gal );
+        KIGFX::GAL_DRAWING_CONTEXT ctx( m_gal );
 
-        m_gal->BeginDrawing();
         m_gal->SetClearColor( settings->GetBackgroundColor() );
         m_gal->SetGridColor( settings->GetGridColor() );
         m_gal->SetCursorColor( settings->GetCursorColor() );
@@ -211,7 +209,6 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         }
 
         m_gal->DrawCursor( m_viewControls->GetCursorPosition() );
-        m_gal->EndDrawing();
     }
     catch( std::runtime_error& err )
     {

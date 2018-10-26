@@ -168,8 +168,16 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
     GAL( aDisplayOptions ),
     HIDPI_GL_CANVAS( aParent, wxID_ANY, (int*) glAttributes, wxDefaultPosition, wxDefaultSize,
                 wxEXPAND, aName ),
-    mouseListener( aMouseListener ), paintListener( aPaintListener ), currentManager( nullptr ),
-    cachedManager( nullptr ), nonCachedManager( nullptr ), overlayManager( nullptr ), mainBuffer( 0 ), overlayBuffer( 0 )
+    mouseListener( aMouseListener ),
+    paintListener( aPaintListener ),
+    currentManager( nullptr ),
+    cachedManager( nullptr ),
+    nonCachedManager( nullptr ),
+    overlayManager( nullptr ),
+    mainBuffer( 0 ),
+    overlayBuffer( 0 ),
+    isContextLocked( false ),
+    lockClientCookie( 0 )
 {
 // IsDisplayAttr() handles WX_GL_{MAJOR,MINOR}_VERSION correctly only in 3.0.4
 // starting with 3.1.0 one should use wxGLContext::IsOk() (done by GL_CONTEXT_MANAGER)
@@ -325,20 +333,21 @@ double OPENGL_GAL::getWorldPixelSize() const
     return std::min( std::abs( matrix.GetScale().x ), std::abs( matrix.GetScale().y ) );
 }
 
-void OPENGL_GAL::BeginDrawing()
+void OPENGL_GAL::beginDrawing()
 {
-    if( !IsShownOnScreen() || GetClientRect().IsEmpty() )
-        return;
-
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalRealTime( "OPENGL_GAL::BeginDrawing()", true );
+    PROF_COUNTER totalRealTime( "OPENGL_GAL::beginDrawing()", true );
 #endif /* __WXDEBUG__ */
+
+    wxASSERT_MSG( isContextLocked, "GAL_DRAWING_CONTEXT RAII object should have locked context. "
+                                   "Calling GAL::beginDrawing() directly is not allowed." );
+
+    wxASSERT_MSG( IsVisible(), "GAL::beginDrawing() must not be entered when GAL is not visible. "
+                               "Other drawing routines will expect everything to be initialized "
+                               "which will not be the case." );
 
     if( !isInitialized )
         init();
-
-    wxASSERT_MSG( isContextLocked, "You must create a local GAL_CONTEXT_LOCKER instance "
-                                   "before calling GAL::BeginDrawing()." );
 
     // Set up the view port
     glMatrixMode( GL_PROJECTION );
@@ -455,18 +464,17 @@ void OPENGL_GAL::BeginDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE",
-                wxT( "OPENGL_GAL::BeginDrawing(): %.1f ms" ), totalRealTime.msecs() );
+    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::beginDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 
 
-void OPENGL_GAL::EndDrawing()
+void OPENGL_GAL::endDrawing()
 {
     wxASSERT_MSG( isContextLocked, "What happened to the context lock?" );
 
 #ifdef __WXDEBUG__
-    PROF_COUNTER totalRealTime( "OPENGL_GAL::EndDrawing()", true );
+    PROF_COUNTER totalRealTime( "OPENGL_GAL::endDrawing()", true );
 #endif /* __WXDEBUG__ */
 
     // Cached & non-cached containers are rendered to the same buffer
@@ -491,45 +499,57 @@ void OPENGL_GAL::EndDrawing()
 
 #ifdef __WXDEBUG__
     totalRealTime.Stop();
-    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::EndDrawing(): %.1f ms" ), totalRealTime.msecs() );
+    wxLogTrace( "GAL_PROFILE", wxT( "OPENGL_GAL::endDrawing(): %.1f ms" ), totalRealTime.msecs() );
 #endif /* __WXDEBUG__ */
 }
 
 
-void OPENGL_GAL::lockContext()
+void OPENGL_GAL::lockContext( int aClientCookie )
 {
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
+    wxASSERT_MSG( !isContextLocked, "Context already locked." );
     isContextLocked = true;
+    lockClientCookie = aClientCookie;
+
+    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
 }
 
 
-void OPENGL_GAL::unlockContext()
+void OPENGL_GAL::unlockContext( int aClientCookie )
 {
+    wxASSERT_MSG( isContextLocked, "Context not locked.  A GAL_CONTEXT_LOCKER RAII object must "
+                                   "be stacked rather than making separate lock/unlock calls." );
+
+    wxASSERT_MSG( lockClientCookie == aClientCookie, "Context was locked by a different client. "
+                                                     "Should not be possible with RAII objects." );
+
     isContextLocked = false;
+
     GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
 
-void OPENGL_GAL::BeginUpdate()
+void OPENGL_GAL::beginUpdate()
 {
-    if( !IsShownOnScreen() || GetClientRect().IsEmpty() )
-        return;
+    wxASSERT_MSG( isContextLocked, "GAL_UPDATE_CONTEXT RAII object should have locked context. "
+                                   "Calling this from anywhere else is not allowed." );
+
+    wxASSERT_MSG( IsVisible(), "GAL::beginUpdate() must not be entered when GAL is not visible. "
+                               "Other update routines will expect everything to be initialized "
+                               "which will not be the case." );
 
     if( !isInitialized )
         init();
 
-    GL_CONTEXT_MANAGER::Get().LockCtx( glPrivContext, this );
     cachedManager->Map();
 }
 
 
-void OPENGL_GAL::EndUpdate()
+void OPENGL_GAL::endUpdate()
 {
     if( !isInitialized )
         return;
 
     cachedManager->Unmap();
-    GL_CONTEXT_MANAGER::Get().UnlockCtx( glPrivContext );
 }
 
 
@@ -1969,7 +1989,7 @@ void OPENGL_GAL::init()
 {
     wxASSERT( IsShownOnScreen() );
 
-    GAL_CONTEXT_LOCKER locker( this );
+    wxASSERT_MSG( isContextLocked, "This should only be called from within a locked context." );
 
     GLenum err = glewInit();
 
