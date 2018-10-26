@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -40,11 +40,11 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_TextLabel->Wrap( -1 );
 	m_SingleLineSizer->Add( m_TextLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_SingleLineText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SingleLineText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	m_SingleLineSizer->Add( m_SingleLineText, 1, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxALL, 10 );
+	bMainSizer->Add( m_SingleLineSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	m_DimensionTextSizer = new wxFlexGridSizer( 0, 4, 1, 5 );
 	m_DimensionTextSizer->AddGrowableCol( 1 );
@@ -69,7 +69,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_DimensionTextSizer->Add( m_DimensionUnitsOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
-	bMainSizer->Add( m_DimensionTextSizer, 0, wxEXPAND|wxALL, 10 );
+	bMainSizer->Add( m_DimensionTextSizer, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 10 );
 	
 	wxFlexGridSizer* fgSizerSetup;
 	fgSizerSetup = new wxFlexGridSizer( 0, 5, 4, 0 );
@@ -86,7 +86,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_LayerSelectionCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	
-	fgSizerSetup->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 40 );
+	fgSizerSetup->Add( 0, 0, 0, wxRIGHT|wxLEFT, 40 );
 	
 	m_Visible = new wxCheckBox( this, wxID_ANY, _("Visible"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerSetup->Add( m_Visible, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
@@ -98,7 +98,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_SizeXLabel->Wrap( -1 );
 	fgSizerSetup->Add( m_SizeXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fgSizerSetup->Add( m_SizeXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_SizeXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -109,13 +109,13 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_Italic, 0, wxALIGN_CENTER_VERTICAL|wxLEFT|wxRIGHT, 5 );
 	
 	
-	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizerSetup->Add( 0, 0, 0, 0, 5 );
 	
 	m_SizeYLabel = new wxStaticText( this, wxID_ANY, _("Height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_SizeYLabel->Wrap( -1 );
 	fgSizerSetup->Add( m_SizeYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_SizeYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fgSizerSetup->Add( m_SizeYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_SizeYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -136,7 +136,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_ThicknessLabel->Wrap( -1 );
 	fgSizerSetup->Add( m_ThicknessLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_ThicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fgSizerSetup->Add( m_ThicknessCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxBOTTOM, 2 );
 	
 	m_ThicknessUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -158,7 +158,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_PositionXLabel->Wrap( -1 );
 	fgSizerSetup->Add( m_PositionXLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionXCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fgSizerSetup->Add( m_PositionXCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_PositionXUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -169,13 +169,13 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	fgSizerSetup->Add( m_Mirrored, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	
-	fgSizerSetup->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizerSetup->Add( 0, 0, 0, 0, 5 );
 	
 	m_PositionYLabel = new wxStaticText( this, wxID_ANY, _("Position Y:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_PositionYLabel->Wrap( -1 );
 	fgSizerSetup->Add( m_PositionYLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_PositionYCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER );
 	fgSizerSetup->Add( m_PositionYCtrl, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
 	
 	m_PositionYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -189,7 +189,7 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	bMainSizer->Add( fgSizerSetup, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	
-	bMainSizer->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
+	bMainSizer->Add( 0, 0, 0, wxTOP, 5 );
 	
 	wxBoxSizer* bMargins;
 	bMargins = new wxBoxSizer( wxVERTICAL );
@@ -209,6 +209,9 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	wxBoxSizer* lowerSizer;
 	lowerSizer = new wxBoxSizer( wxHORIZONTAL );
 	
+	
+	lowerSizer->Add( 0, 0, 1, wxEXPAND, 5 );
+	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
 	m_sdbSizer->AddButton( m_sdbSizerOK );
@@ -216,15 +219,14 @@ DIALOG_TEXT_PROPERTIES_BASE::DIALOG_TEXT_PROPERTIES_BASE( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	lowerSizer->Add( m_sdbSizer, 1, wxEXPAND|wxALL, 5 );
+	lowerSizer->Add( m_sdbSizer, 0, wxALL, 5 );
 	
 	
-	bMainSizer->Add( lowerSizer, 0, wxALIGN_BOTTOM|wxEXPAND|wxLEFT, 5 );
+	bMainSizer->Add( lowerSizer, 0, wxEXPAND, 5 );
 	
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
-	bMainSizer->Fit( this );
 	
 	this->Centre( wxBOTH );
 	
