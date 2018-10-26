@@ -613,7 +613,6 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     }
 
     // It is finally safe to add the imported schematic.
-    // fixme-gal: rebuild view
     screen->Append( newScreen );
 
     SCH_SCREENS allScreens;
@@ -631,7 +630,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     SetSheetNumberAndCount();
 
     SyncView();
-    GetCanvas()->Refresh();
+    HardRedraw();   // Full reinit of the current screen and the display.
     OnModify();
 
     return true;
