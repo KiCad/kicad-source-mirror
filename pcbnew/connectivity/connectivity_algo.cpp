@@ -28,6 +28,8 @@
 
 #include <thread>
 #include <mutex>
+#include <algorithm>
+#include <future>
 
 #ifdef PROFILE
 #include <profile.h>
@@ -218,11 +220,14 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
     if( m_itemList.IsDirty() )
     {
-        std::atomic<size_t> nextItem( 0 );
-        std::atomic<size_t> threadsFinished( 0 );
+        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+                ( dirtyItems.size() + 7 ) / 8 );
 
-        auto conn_lambda = [&nextItem, &threadsFinished, &dirtyItems]
-                            ( CN_LIST* aItemList, PROGRESS_REPORTER* aReporter)
+        std::atomic<size_t> nextItem( 0 );
+        std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+        auto conn_lambda = [&nextItem, &dirtyItems]
+                            ( CN_LIST* aItemList, PROGRESS_REPORTER* aReporter) -> size_t
         {
             for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
             {
@@ -233,26 +238,27 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
                     aReporter->AdvanceProgress();
             }
 
-            threadsFinished++;
+            return 1;
         };
-
-        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-                ( dirtyItems.size() + 7 ) / 8 );
 
         if( parallelThreadCount <= 1 )
             conn_lambda( &m_itemList, m_progressReporter );
         else
         {
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                std::thread( conn_lambda, &m_itemList, m_progressReporter ).detach();
+                returns[ii] = std::async( conn_lambda, &m_itemList, m_progressReporter );
 
-            // Wait for connectivity threads to finish while updating the UI if set
-            while( threadsFinished < parallelThreadCount )
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
-                if( m_progressReporter )
-                    m_progressReporter->KeepRefreshing();
+                // Here we balance returns with a 10ms timeout to allow UI updating
+                std::future_status status;
+                do
+                {
+                    if( m_progressReporter )
+                        m_progressReporter->KeepRefreshing();
 
-                std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+                    status = returns[ii].wait_for( std::chrono::milliseconds( 10 ) );
+                } while( status != std::future_status::ready );
             }
         }
 
