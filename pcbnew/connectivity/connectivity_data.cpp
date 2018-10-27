@@ -125,7 +125,7 @@ void CONNECTIVITY_DATA::updateRatsnest()
     else
     {
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-            returns[ii] = std::async( update_lambda );
+            returns[ii] = std::async( std::launch::async, update_lambda );
 
         // Finalize the ratsnest threads
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )

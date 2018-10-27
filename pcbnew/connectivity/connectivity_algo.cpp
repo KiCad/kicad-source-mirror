@@ -246,7 +246,8 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
         else
         {
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
-                returns[ii] = std::async( conn_lambda, &m_itemList, m_progressReporter );
+                returns[ii] = std::async( std::launch::async, conn_lambda,
+                        &m_itemList, m_progressReporter );
 
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
