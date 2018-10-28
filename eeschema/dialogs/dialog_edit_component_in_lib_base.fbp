@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <wxFormBuilder_Project>
-    <FileVersion major="1" minor="13" />
+    <FileVersion major="1" minor="14" />
     <object class="Project" expanded="1">
         <property name="class_decoration"></property>
         <property name="code_generation">C++</property>
@@ -14,6 +14,7 @@
         <property name="file">dialog_edit_component_in_lib_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_FBP</property>
         <property name="namespace"></property>
@@ -54,13 +55,20 @@
             <property name="window_style"></property>
             <event name="OnActivate"></event>
             <event name="OnActivateApp"></event>
-            <event name="OnAuiFindManager"></event>
+            <event name="OnAuiPaneActivated"></event>
             <event name="OnAuiPaneButton"></event>
             <event name="OnAuiPaneClose"></event>
             <event name="OnAuiPaneMaximize"></event>
             <event name="OnAuiPaneRestore"></event>
             <event name="OnAuiRender"></event>
+            <event name="OnAux1DClick"></event>
+            <event name="OnAux1Down"></event>
+            <event name="OnAux1Up"></event>
+            <event name="OnAux2DClick"></event>
+            <event name="OnAux2Down"></event>
+            <event name="OnAux2Up"></event>
             <event name="OnChar"></event>
+            <event name="OnCharHook"></event>
             <event name="OnClose"></event>
             <event name="OnEnterWindow"></event>
             <event name="OnEraseBackground"></event>
@@ -75,17 +83,23 @@
             <event name="OnLeftDClick"></event>
             <event name="OnLeftDown"></event>
             <event name="OnLeftUp"></event>
+            <event name="OnMaximize"></event>
             <event name="OnMiddleDClick"></event>
             <event name="OnMiddleDown"></event>
             <event name="OnMiddleUp"></event>
             <event name="OnMotion"></event>
             <event name="OnMouseEvents"></event>
             <event name="OnMouseWheel"></event>
+            <event name="OnMove"></event>
+            <event name="OnMoveEnd"></event>
+            <event name="OnMoveStart"></event>
+            <event name="OnMoving"></event>
             <event name="OnPaint"></event>
             <event name="OnRightDClick"></event>
             <event name="OnRightDown"></event>
             <event name="OnRightUp"></event>
             <event name="OnSetFocus"></event>
+            <event name="OnShow"></event>
             <event name="OnSize"></event>
             <event name="OnUpdateUI">OnUpdateUI</event>
             <object class="wxBoxSizer" expanded="1">
@@ -159,7 +173,14 @@
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
                                 <property name="window_style">wxTAB_TRAVERSAL</property>
+                                <event name="OnAux1DClick"></event>
+                                <event name="OnAux1Down"></event>
+                                <event name="OnAux1Up"></event>
+                                <event name="OnAux2DClick"></event>
+                                <event name="OnAux2Down"></event>
+                                <event name="OnAux2Up"></event>
                                 <event name="OnChar"></event>
+                                <event name="OnCharHook"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
                                 <event name="OnKeyDown"></event>
@@ -239,7 +260,14 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxTAB_TRAVERSAL</property>
+                                        <event name="OnAux1DClick"></event>
+                                        <event name="OnAux1Down"></event>
+                                        <event name="OnAux1Up"></event>
+                                        <event name="OnAux2DClick"></event>
+                                        <event name="OnAux2Down"></event>
+                                        <event name="OnAux2Up"></event>
                                         <event name="OnChar"></event>
+                                        <event name="OnCharHook"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
                                         <event name="OnKeyDown"></event>
@@ -366,7 +394,14 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnGridCellChange"></event>
@@ -454,6 +489,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -467,9 +503,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Add Field</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -484,8 +521,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -499,8 +537,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnAddField</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -547,6 +592,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -560,9 +606,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Move Up</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -577,8 +624,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -592,8 +640,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnMoveUp</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -640,6 +695,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -653,9 +709,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Move Down</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -670,8 +727,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -685,8 +743,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnMoveDown</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -743,6 +808,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -756,9 +822,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Delete Field</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -773,8 +840,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -788,8 +856,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnDeleteField</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -876,6 +951,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Symbol name:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -901,7 +977,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -988,7 +1071,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -1050,6 +1140,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Description:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -1075,7 +1166,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -1162,7 +1260,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -1224,6 +1329,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Keywords:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -1249,7 +1355,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -1276,7 +1389,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxRIGHT|wxLEFT|wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -1336,7 +1449,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -1462,7 +1582,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -1550,7 +1677,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -1618,6 +1752,7 @@
                                                                                     <property name="hidden">0</property>
                                                                                     <property name="id">wxID_ANY</property>
                                                                                     <property name="label">Number of Units:</property>
+                                                                                    <property name="markup">0</property>
                                                                                     <property name="max_size"></property>
                                                                                     <property name="maximize_button">0</property>
                                                                                     <property name="maximum_size"></property>
@@ -1643,7 +1778,14 @@
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>
                                                                                     <property name="wrap">-1</property>
+                                                                                    <event name="OnAux1DClick"></event>
+                                                                                    <event name="OnAux1Down"></event>
+                                                                                    <event name="OnAux1Up"></event>
+                                                                                    <event name="OnAux2DClick"></event>
+                                                                                    <event name="OnAux2Down"></event>
+                                                                                    <event name="OnAux2Up"></event>
                                                                                     <event name="OnChar"></event>
+                                                                                    <event name="OnCharHook"></event>
                                                                                     <event name="OnEnterWindow"></event>
                                                                                     <event name="OnEraseBackground"></event>
                                                                                     <event name="OnKeyDown"></event>
@@ -1670,8 +1812,8 @@
                                                                             </object>
                                                                             <object class="sizeritem" expanded="0">
                                                                                 <property name="border">5</property>
-                                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL</property>
-                                                                                <property name="proportion">1</property>
+                                                                                <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL</property>
+                                                                                <property name="proportion">0</property>
                                                                                 <object class="wxSpinCtrl" expanded="0">
                                                                                     <property name="BottomDockable">1</property>
                                                                                     <property name="LeftDockable">1</property>
@@ -1728,7 +1870,14 @@
                                                                                     <property name="window_extra_style"></property>
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>
+                                                                                    <event name="OnAux1DClick"></event>
+                                                                                    <event name="OnAux1Down"></event>
+                                                                                    <event name="OnAux1Up"></event>
+                                                                                    <event name="OnAux2DClick"></event>
+                                                                                    <event name="OnAux2Down"></event>
+                                                                                    <event name="OnAux2Up"></event>
                                                                                     <event name="OnChar"></event>
+                                                                                    <event name="OnCharHook"></event>
                                                                                     <event name="OnEnterWindow"></event>
                                                                                     <event name="OnEraseBackground"></event>
                                                                                     <event name="OnKeyDown"></event>
@@ -1820,7 +1969,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -1934,7 +2090,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -2022,7 +2185,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -2120,7 +2290,14 @@
                                                                             <property name="window_extra_style"></property>
                                                                             <property name="window_name"></property>
                                                                             <property name="window_style"></property>
+                                                                            <event name="OnAux1DClick"></event>
+                                                                            <event name="OnAux1Down"></event>
+                                                                            <event name="OnAux1Up"></event>
+                                                                            <event name="OnAux2DClick"></event>
+                                                                            <event name="OnAux2Down"></event>
+                                                                            <event name="OnAux2Up"></event>
                                                                             <event name="OnChar"></event>
+                                                                            <event name="OnCharHook"></event>
                                                                             <event name="OnCheckBox"></event>
                                                                             <event name="OnEnterWindow"></event>
                                                                             <event name="OnEraseBackground"></event>
@@ -2188,6 +2365,7 @@
                                                                                     <property name="hidden">0</property>
                                                                                     <property name="id">wxID_ANY</property>
                                                                                     <property name="label">Position offset:</property>
+                                                                                    <property name="markup">0</property>
                                                                                     <property name="max_size"></property>
                                                                                     <property name="maximize_button">0</property>
                                                                                     <property name="maximum_size"></property>
@@ -2213,7 +2391,14 @@
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>
                                                                                     <property name="wrap">-1</property>
+                                                                                    <event name="OnAux1DClick"></event>
+                                                                                    <event name="OnAux1Down"></event>
+                                                                                    <event name="OnAux1Up"></event>
+                                                                                    <event name="OnAux2DClick"></event>
+                                                                                    <event name="OnAux2Down"></event>
+                                                                                    <event name="OnAux2Up"></event>
                                                                                     <event name="OnChar"></event>
+                                                                                    <event name="OnCharHook"></event>
                                                                                     <event name="OnEnterWindow"></event>
                                                                                     <event name="OnEraseBackground"></event>
                                                                                     <event name="OnKeyDown"></event>
@@ -2240,7 +2425,7 @@
                                                                             </object>
                                                                             <object class="sizeritem" expanded="0">
                                                                                 <property name="border">5</property>
-                                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                                <property name="flag">wxLEFT|wxRIGHT</property>
                                                                                 <property name="proportion">1</property>
                                                                                 <object class="wxTextCtrl" expanded="0">
                                                                                     <property name="BottomDockable">1</property>
@@ -2300,7 +2485,14 @@
                                                                                     <property name="window_extra_style"></property>
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>
+                                                                                    <event name="OnAux1DClick"></event>
+                                                                                    <event name="OnAux1Down"></event>
+                                                                                    <event name="OnAux1Up"></event>
+                                                                                    <event name="OnAux2DClick"></event>
+                                                                                    <event name="OnAux2Down"></event>
+                                                                                    <event name="OnAux2Up"></event>
                                                                                     <event name="OnChar"></event>
+                                                                                    <event name="OnCharHook"></event>
                                                                                     <event name="OnEnterWindow"></event>
                                                                                     <event name="OnEraseBackground"></event>
                                                                                     <event name="OnKeyDown"></event>
@@ -2362,6 +2554,7 @@
                                                                                     <property name="hidden">0</property>
                                                                                     <property name="id">wxID_ANY</property>
                                                                                     <property name="label">units</property>
+                                                                                    <property name="markup">0</property>
                                                                                     <property name="max_size"></property>
                                                                                     <property name="maximize_button">0</property>
                                                                                     <property name="maximum_size"></property>
@@ -2387,7 +2580,14 @@
                                                                                     <property name="window_name"></property>
                                                                                     <property name="window_style"></property>
                                                                                     <property name="wrap">-1</property>
+                                                                                    <event name="OnAux1DClick"></event>
+                                                                                    <event name="OnAux1Down"></event>
+                                                                                    <event name="OnAux1Up"></event>
+                                                                                    <event name="OnAux2DClick"></event>
+                                                                                    <event name="OnAux2Down"></event>
+                                                                                    <event name="OnAux2Up"></event>
                                                                                     <event name="OnChar"></event>
+                                                                                    <event name="OnCharHook"></event>
                                                                                     <event name="OnEnterWindow"></event>
                                                                                     <event name="OnEraseBackground"></event>
                                                                                     <event name="OnKeyDown"></event>
@@ -2488,7 +2688,14 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxTAB_TRAVERSAL</property>
+                                        <event name="OnAux1DClick"></event>
+                                        <event name="OnAux1Down"></event>
+                                        <event name="OnAux1Up"></event>
+                                        <event name="OnAux2DClick"></event>
+                                        <event name="OnAux2Down"></event>
+                                        <event name="OnAux2Up"></event>
                                         <event name="OnChar"></event>
+                                        <event name="OnCharHook"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
                                         <event name="OnKeyDown"></event>
@@ -2558,6 +2765,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Aliases:</property>
+                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -2583,7 +2791,14 @@
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
                                                             <property name="wrap">-1</property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>
@@ -2669,7 +2884,14 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>
@@ -2727,6 +2949,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -2740,9 +2963,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Add Alias</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2757,8 +2981,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -2772,8 +2997,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnAddAlias</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -2830,6 +3062,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -2843,9 +3076,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Delete Alias</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -2860,8 +3094,9 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size"></property>
                                                                     <property name="style"></property>
@@ -2875,8 +3110,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnDeleteAlias</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -2907,7 +3149,7 @@
                                             </object>
                                             <object class="sizeritem" expanded="1">
                                                 <property name="border">20</property>
-                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT</property>
+                                                <property name="flag">wxEXPAND|wxRIGHT|wxTOP</property>
                                                 <property name="proportion">7</property>
                                                 <object class="wxBoxSizer" expanded="1">
                                                     <property name="minimum_size"></property>
@@ -2947,6 +3189,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Alias field substitutions:</property>
+                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -2972,7 +3215,14 @@
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
                                                             <property name="wrap">-1</property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>
@@ -3083,7 +3333,14 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnGridCellChange"></event>
@@ -3168,7 +3425,7 @@
                                                             <property name="vgap">0</property>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxLEFT|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3199,6 +3456,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Alias name:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -3224,7 +3482,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3251,7 +3516,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3311,7 +3576,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3342,7 +3614,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxLEFT|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3373,6 +3645,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Alias description:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -3398,7 +3671,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3425,7 +3705,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL</property>
+                                                                <property name="flag">wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxTextCtrl" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3485,7 +3765,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3516,7 +3803,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="0">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxLEFT|wxRIGHT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxStaticText" expanded="0">
                                                                     <property name="BottomDockable">1</property>
@@ -3547,6 +3834,7 @@
                                                                     <property name="hidden">0</property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Alias keywords:</property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -3572,7 +3860,14 @@
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
                                                                     <property name="wrap">-1</property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3659,7 +3954,14 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -3750,7 +4052,14 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style">wxTAB_TRAVERSAL</property>
+                                        <event name="OnAux1DClick"></event>
+                                        <event name="OnAux1Down"></event>
+                                        <event name="OnAux1Up"></event>
+                                        <event name="OnAux2DClick"></event>
+                                        <event name="OnAux2Down"></event>
+                                        <event name="OnAux2Up"></event>
                                         <event name="OnChar"></event>
+                                        <event name="OnCharHook"></event>
                                         <event name="OnEnterWindow"></event>
                                         <event name="OnEraseBackground"></event>
                                         <event name="OnKeyDown"></event>
@@ -3820,6 +4129,7 @@
                                                             <property name="hidden">0</property>
                                                             <property name="id">wxID_ANY</property>
                                                             <property name="label">Footprint filters:</property>
+                                                            <property name="markup">0</property>
                                                             <property name="max_size"></property>
                                                             <property name="maximize_button">0</property>
                                                             <property name="maximum_size"></property>
@@ -3845,7 +4155,14 @@
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
                                                             <property name="wrap">-1</property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>
@@ -3931,7 +4248,14 @@
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
+                                                            <event name="OnAux1DClick"></event>
+                                                            <event name="OnAux1Down"></event>
+                                                            <event name="OnAux1Up"></event>
+                                                            <event name="OnAux2DClick"></event>
+                                                            <event name="OnAux2Down"></event>
+                                                            <event name="OnAux2Up"></event>
                                                             <event name="OnChar"></event>
+                                                            <event name="OnCharHook"></event>
                                                             <event name="OnEnterWindow"></event>
                                                             <event name="OnEraseBackground"></event>
                                                             <event name="OnKeyDown"></event>
@@ -3960,7 +4284,7 @@
                                                     </object>
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
-                                                        <property name="flag">wxALIGN_CENTER_VERTICAL</property>
+                                                        <property name="flag"></property>
                                                         <property name="proportion">0</property>
                                                         <object class="wxBoxSizer" expanded="1">
                                                             <property name="minimum_size"></property>
@@ -3969,7 +4293,7 @@
                                                             <property name="permission">none</property>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxBOTTOM|wxLEFT</property>
+                                                                <property name="flag">wxTOP|wxBOTTOM|wxLEFT</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxBitmapButton" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -3989,6 +4313,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -4002,9 +4327,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Add Filter</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -4019,11 +4345,12 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size">30,30</property>
-                                                                    <property name="style">wxBU_AUTODRAW</property>
+                                                                    <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
@@ -4034,8 +4361,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnAddFootprintFilter</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -4062,7 +4396,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxBitmapButton" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -4082,6 +4416,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -4095,9 +4430,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Edit Filter</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -4112,11 +4448,12 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size">30,30</property>
-                                                                    <property name="style">wxBU_AUTODRAW</property>
+                                                                    <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
@@ -4127,8 +4464,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnEditFootprintFilter</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>
@@ -4165,7 +4509,7 @@
                                                             </object>
                                                             <object class="sizeritem" expanded="1">
                                                                 <property name="border">5</property>
-                                                                <property name="flag">wxBOTTOM|wxRIGHT|wxLEFT</property>
+                                                                <property name="flag">wxALL</property>
                                                                 <property name="proportion">0</property>
                                                                 <object class="wxBitmapButton" expanded="1">
                                                                     <property name="BottomDockable">1</property>
@@ -4185,6 +4529,7 @@
                                                                     <property name="close_button">1</property>
                                                                     <property name="context_help"></property>
                                                                     <property name="context_menu">1</property>
+                                                                    <property name="current"></property>
                                                                     <property name="default">0</property>
                                                                     <property name="default_pane">0</property>
                                                                     <property name="disabled"></property>
@@ -4198,9 +4543,10 @@
                                                                     <property name="font"></property>
                                                                     <property name="gripper">0</property>
                                                                     <property name="hidden">0</property>
-                                                                    <property name="hover"></property>
                                                                     <property name="id">wxID_ANY</property>
                                                                     <property name="label">Delete Filter</property>
+                                                                    <property name="margins"></property>
+                                                                    <property name="markup">0</property>
                                                                     <property name="max_size"></property>
                                                                     <property name="maximize_button">0</property>
                                                                     <property name="maximum_size"></property>
@@ -4215,11 +4561,12 @@
                                                                     <property name="permission">protected</property>
                                                                     <property name="pin_button">1</property>
                                                                     <property name="pos"></property>
+                                                                    <property name="position"></property>
+                                                                    <property name="pressed"></property>
                                                                     <property name="resize">Resizable</property>
-                                                                    <property name="selected"></property>
                                                                     <property name="show">1</property>
                                                                     <property name="size">30,30</property>
-                                                                    <property name="style">wxBU_AUTODRAW</property>
+                                                                    <property name="style"></property>
                                                                     <property name="subclass">; forward_declare</property>
                                                                     <property name="toolbar_pane">0</property>
                                                                     <property name="tooltip"></property>
@@ -4230,8 +4577,15 @@
                                                                     <property name="window_extra_style"></property>
                                                                     <property name="window_name"></property>
                                                                     <property name="window_style"></property>
+                                                                    <event name="OnAux1DClick"></event>
+                                                                    <event name="OnAux1Down"></event>
+                                                                    <event name="OnAux1Up"></event>
+                                                                    <event name="OnAux2DClick"></event>
+                                                                    <event name="OnAux2Down"></event>
+                                                                    <event name="OnAux2Up"></event>
                                                                     <event name="OnButtonClick">OnDeleteFootprintFilter</event>
                                                                     <event name="OnChar"></event>
+                                                                    <event name="OnCharHook"></event>
                                                                     <event name="OnEnterWindow"></event>
                                                                     <event name="OnEraseBackground"></event>
                                                                     <event name="OnKeyDown"></event>

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -141,7 +141,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	fgSizerFPID->Add( staticKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	m_KeywordCtrl = new wxTextCtrl( m_PanelBasic, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID->Add( m_KeywordCtrl, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID->Add( m_KeywordCtrl, 0, wxRIGHT|wxLEFT|wxEXPAND, 5 );
 	
 	
 	bSizerMidBasicPanel->Add( fgSizerFPID, 1, wxEXPAND|wxTOP|wxBOTTOM, 5 );
@@ -178,7 +178,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 26, 1 );
-	bSizerUnitCount->Add( m_SelNumberOfUnits, 1, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	
 	sbSizerSymbol->Add( bSizerUnitCount, 1, wxEXPAND, 5 );
@@ -231,7 +231,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bSizerNameOffset->Add( m_nameOffsetLabel, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 30 );
 	
 	m_nameOffsetCtrl = new wxTextCtrl( sbSizerAnnotations->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	bSizerNameOffset->Add( m_nameOffsetCtrl, 1, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	bSizerNameOffset->Add( m_nameOffsetCtrl, 1, wxLEFT|wxRIGHT, 5 );
 	
 	m_nameOffsetUnits = new wxStaticText( sbSizerAnnotations->GetStaticBox(), wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_nameOffsetUnits->Wrap( -1 );
@@ -352,22 +352,22 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxStaticText* staticAliasNameLabel;
 	staticAliasNameLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias name:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticAliasNameLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasNameLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID1->Add( staticAliasNameLabel, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_AliasNameCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID1->Add( m_AliasNameCtrl, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID1->Add( m_AliasNameCtrl, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND, 5 );
 	
 	wxStaticText* staticAliasDescLabel;
 	staticAliasDescLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias description:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticAliasDescLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasDescLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID1->Add( staticAliasDescLabel, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_AliasDescCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerFPID1->Add( m_AliasDescCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerFPID1->Add( m_AliasDescCtrl, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 	
 	staticAliasKeywordsLabel = new wxStaticText( m_PanelAlias, wxID_ANY, _("Alias keywords:"), wxDefaultPosition, wxDefaultSize, 0 );
 	staticAliasKeywordsLabel->Wrap( -1 );
-	fgSizerFPID1->Add( staticAliasKeywordsLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
+	fgSizerFPID1->Add( staticAliasKeywordsLabel, 0, wxLEFT|wxRIGHT, 5 );
 	
 	m_AliasKeywordsCtrl = new wxTextCtrl( m_PanelAlias, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerFPID1->Add( m_AliasKeywordsCtrl, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -376,7 +376,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	bRightBoxSizerPanelAlias->Add( fgSizerFPID1, 1, wxEXPAND, 5 );
 	
 	
-	bSizerMainPanelAlias->Add( bRightBoxSizerPanelAlias, 7, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxTOP|wxRIGHT, 20 );
+	bSizerMainPanelAlias->Add( bRightBoxSizerPanelAlias, 7, wxEXPAND|wxRIGHT|wxTOP, 20 );
 	
 	
 	m_PanelAlias->SetSizer( bSizerMainPanelAlias );
@@ -402,20 +402,20 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	wxBoxSizer* bFpFilterRightBoxSizer;
 	bFpFilterRightBoxSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_addFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxBOTTOM|wxLEFT, 5 );
+	m_addFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), 0 );
+	bFpFilterRightBoxSizer->Add( m_addFilterButton, 0, wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
-	m_editFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bFpFilterRightBoxSizer->Add( m_editFilterButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_editFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), 0 );
+	bFpFilterRightBoxSizer->Add( m_editFilterButton, 0, wxALL, 5 );
 	
 	
 	bFpFilterRightBoxSizer->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
-	m_deleteFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
-	bFpFilterRightBoxSizer->Add( m_deleteFilterButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_deleteFilterButton = new wxBitmapButton( m_PanelFootprintFilter, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), 0 );
+	bFpFilterRightBoxSizer->Add( m_deleteFilterButton, 0, wxALL, 5 );
 	
 	
-	bFpFilterLeftBoxSizer->Add( bFpFilterRightBoxSizer, 0, wxALIGN_CENTER_VERTICAL, 5 );
+	bFpFilterLeftBoxSizer->Add( bFpFilterRightBoxSizer, 0, 0, 5 );
 	
 	
 	bPanelFpFilterBoxSizer->Add( bFpFilterLeftBoxSizer, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
