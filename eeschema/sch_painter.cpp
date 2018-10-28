@@ -425,7 +425,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     if( !isUnitAndConversionShown( aText ) )
         return;
 
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_NOTES );
+    COLOR4D color = m_schSettings.GetLayerColor( LAYER_DEVICE );
 
     if( aText->IsMoving() || aText->GetParent()->IsMoving() )
         color = selectedBrightening( color );
