@@ -1,6 +1,7 @@
 <!--XSL style sheet to convert EESCHEMA XML Partlist Format to grouped CSV BOM Format
     Copyright (C) 2014, Wolf Walter.
     Copyright (C) 2013, Stefan Helmert.
+    Copyright (C) 2018, Kicad developers.
     GPL v2.
 
 	Functionality:
@@ -33,7 +34,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:output method="text"/>
 
-	<!-- for Muenchian grouping of footprint and value combination -->
+	<xsl:variable name="digits" select="'1234567890'" />
+
+	<!-- for matching grouping of footprint and value combination -->
 	<xsl:key name="partTypeByValueAndFootprint" match="comp" use="concat(footprint, '-', value)" />
 
 	<!-- for table head and empty table fields-->
@@ -60,7 +63,8 @@
 		<xsl:text>&nl;</xsl:text>
 		<!-- list of all references -->
 		<xsl:for-each select="key('partTypeByValueAndFootprint', concat(footprint, '-', value))">
-			<xsl:sort select="@ref" />
+			<!-- strip non-digits from reference and sort based on remaining number -->
+			<xsl:sort select="translate(@ref, translate(@ref, digits, ''), '')" data-type="number" />
 			<xsl:value-of select="@ref"/><xsl:text> </xsl:text>
 		</xsl:for-each><xsl:text>,</xsl:text>
 		<!-- quantity of parts with same footprint and value -->
