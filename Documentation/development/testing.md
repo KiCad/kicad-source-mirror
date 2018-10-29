@@ -112,9 +112,9 @@ testing tool to the function under test.
 For example, to use the [AFL fuzzing tool][], you will need:
 
 * A test executable that can:
-** Receive input from `stdin` to be run by `afl-fuzz`.
-** Optional: process input from a filename to allow `afl-tmin` to minimise the
-   input files.
+    * Receive input from `stdin` to be run by `afl-fuzz`.
+    * Optional: process input from a filename to allow `afl-tmin` to minimise the
+      input files.
 * To compile this executable with an AFL compiler, to enable the instrumentation
   that allows the fuzzer to detect the fuzzing state.
 
@@ -146,6 +146,69 @@ where:
 
 The AFL TUI will then display the fuzzing progress, and you can use the hang- or
 crash-provoking inputs to debug code as needed.
+
+# Run-time debugging #
+
+KiCad can be debugged at run-time, either under a full debugger
+such as GDB, or using simple methods like logging debug to the
+console.
+
+## Printing debug ##
+
+If you are compiling KiCad yourself, you can simply add debugging statements to
+relevant places in the code, for example:
+
+    wxLogDebug( "Value of variable: %d", my_int );
+
+This produces debug output that can only be seen when compiling
+in Debug mode.
+
+You can also use `std::cout` and `printf`.
+
+Ensure you do not leave this kind of debugging in place when
+submitting code.
+
+## Printing trace ##
+
+Some parts of the code have "trace" that can be enabled selectively according to
+a "mask", for example:
+
+    wxLogTrace( "TRACEMASK", "My trace, value: %d", my_int );
+
+This will not be printed by default. To show it, set the `WXTRACE` environment
+variable when you run KiCad to include the masks you wish to enable:
+
+    $ WXTRACE="TRACEKEY,OTHERKEY" kicad
+
+When printed, the debug will be prefixed with a timestamp and the trace mask:
+
+    11:22:33: Trace: (KICAD_FIND_ITEM)   item Symbol GNDPWR, #PWR020
+
+Some available masks:
+
+* Core KiCad functions:
+    * `KICAD_KEY_EVENTS`
+    * `KicadScrollSettings`
+    * `KICAD_FIND_ITEM`
+    * `KICAD_FIND_REPLACE`
+    * `KICAD_NGSPICE`
+    * `KICAD_PLUGINLOADER`
+    * `GAL_PROFILE`
+    * `GAL_CACHED_CONTAINER`
+    * `PNS`
+    * `CN`
+* Plugin-specific (including "standard" KiCad formats):
+    * `3D_CACHE`
+    * `3D_SG`
+    * `3D_RESOLVER`
+    * `3D_PLUGIN_MANAGER`
+    * `KI_TRACE_CCAMERA`
+    * `PLUGIN_IDF`
+    * `PLUGIN_VRML`
+    * `KICAD_SCH_LEGACY_PLUGIN`
+    * `KICAD_GEDA_PLUGIN`
+    * `KICAD_PCB_PLUGIN`
+
 
 [CTest]: https://cmake.org/cmake/help/latest/module/CTest.html
 [Boost Unit Test framework]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/index.html
