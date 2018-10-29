@@ -509,7 +509,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
         }
         else
         {
-            if( ( isDangling || isMoving ) && aPin->IsPowerConnection() )
+            if( isDangling && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( m_gal, pos, color );
 
             return;
@@ -631,7 +631,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
     }
 
-    if( ( isDangling || isMoving ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( isDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( m_gal, pos, color );
 
     // Draw the labels

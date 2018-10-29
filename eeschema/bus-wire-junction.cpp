@@ -278,7 +278,7 @@ bool SCH_EDIT_FRAME::TestDanglingEnds()
 
     for( SCH_ITEM* item = GetScreen()->GetDrawList().begin(); item; item = item->Next() )
     {
-        if( item->IsDanglingStateChanged( endPoints ) )
+        if( item->UpdateDanglingState( endPoints ) )
         {
             GetCanvas()->GetView()->Update( item, KIGFX::REPAINT );
             hasStateChanged = true;

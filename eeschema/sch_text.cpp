@@ -353,7 +353,7 @@ void SCH_TEXT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_TEXT::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
+bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     // Normal text labels cannot be tested for dangling ends.
     if( Type() == SCH_TEXT_T )

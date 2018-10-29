@@ -260,7 +260,7 @@ public:
      * @param aItemList - List of items to test item against.
      * @return True if the dangling state has changed from it's current setting.
      */
-    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) { return false; }
+    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) { return false; }
 
     virtual bool IsDangling() const { return false; }
 

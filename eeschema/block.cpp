@@ -254,6 +254,21 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 nextcmd = true;
                 block->SetState( STATE_BLOCK_MOVE );
 
+                // Mark dangling pins at the edges of the block:
+                std::vector<DANGLING_END_ITEM> internalPoints;
+
+                for( unsigned i = 0; i < block->GetCount(); ++i )
+                {
+                    auto item = static_cast<SCH_ITEM*>( block->GetItem( i ) );
+                    item->GetEndPoints( internalPoints );
+                }
+
+                for( unsigned i = 0; i < block->GetCount(); ++i )
+                {
+                    auto item = static_cast<SCH_ITEM*>( block->GetItem( i ) );
+                    item->UpdateDanglingState( internalPoints );
+                }
+
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
             }

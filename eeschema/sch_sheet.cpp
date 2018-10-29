@@ -806,12 +806,12 @@ void SCH_SHEET::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_SHEET::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
+bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     bool changed = false;
 
     for( SCH_SHEET_PIN& pinsheet : GetPins() )
-        changed |= pinsheet.IsDanglingStateChanged( aItemList );
+        changed |= pinsheet.UpdateDanglingState( aItemList );
 
     return changed;
 }

@@ -1594,7 +1594,7 @@ void SCH_COMPONENT::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_COMPONENT::IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList )
+bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     bool changed = false;
 

@@ -159,7 +159,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 };
 
 /**
@@ -192,7 +192,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 };
 
 #endif    // _SCH_BUS_ENTRY_H_

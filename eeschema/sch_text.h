@@ -172,7 +172,7 @@ public:
 
     virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    virtual bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
+    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     virtual bool IsDangling() const override { return m_isDangling; }
 

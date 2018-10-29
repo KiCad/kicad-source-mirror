@@ -573,7 +573,7 @@ public:
      *
      * @return true if any pin's state has changed.
      */
-    bool IsDanglingStateChanged( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
 

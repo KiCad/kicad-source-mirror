@@ -156,7 +156,7 @@ public:
 
     void GetEndPoints( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    bool IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     bool IsStartDangling() const { return m_startIsDangling; }
     bool IsEndDangling() const { return m_endIsDangling; }

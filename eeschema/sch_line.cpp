@@ -94,7 +94,8 @@ SCH_LINE::SCH_LINE( const SCH_LINE& aLine ) :
     m_size = aLine.m_size;
     m_style = aLine.m_style;
     m_color = aLine.m_color;
-    m_startIsDangling = m_endIsDangling = false;
+    m_startIsDangling = aLine.m_startIsDangling;
+    m_endIsDangling = aLine.m_endIsDangling;
 }
 
 
@@ -503,7 +504,7 @@ void SCH_LINE::GetEndPoints( std::vector <DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_LINE::IsDanglingStateChanged( std::vector< DANGLING_END_ITEM >& aItemList )
+bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 {
     bool previousStartState = m_startIsDangling;
     bool previousEndState = m_endIsDangling;
