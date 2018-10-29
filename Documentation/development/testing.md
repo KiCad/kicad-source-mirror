@@ -1,6 +1,8 @@
 # Testing KiCad #
 
-# Unit tests #
+[TOC]
+
+# Unit tests {#unit-tests}
 
 KiCad has a limited number of unit tests, which can be used to
 check that certain functionality works.
@@ -13,13 +15,13 @@ required to add a test to the testing suite.
 The test CMake targets generally start with `qa_`, the names of the tests
 within CTest are the same but without the `qa_` prefix.
 
-## Running tests ##
+## Running tests {#running-tests}
 
 You can run all tests after building with `make test` or `ctest`. The latter
 option allows many CTest options which can be useful, especially in automated
 or CI environments.
 
-### Running specific tests ##
+### Running specific tests {#running-specific-tests}
 
 To run a specific test executable, you can just run with `ctest` or run
 the executable directly. Running directly is often the simplest way when
@@ -42,7 +44,7 @@ Common useful patterns:
 You can rebuild just a specific test with CMake to avoid rebuilding
 everything when working on a small area, e.g. `make qa_common`.
 
-### Writing Boost tests ###
+## Writing Boost tests {#writing-boost-tests}
 
 Boost unit tests are straightforward to write. Individual test cases can be
 registered with:
@@ -68,7 +70,7 @@ messages inside tested functions (i.e. where you don't have access to the Boost
 unit test headers). These will always be printed, so take care
 to remove them before committing, or they'll show up when KiCad runs normally!
 
-## Python modules ##
+## Python modules {#python-tests}
 
 The Pcbnew Python modules have some test programs in the `qa` directory.
 You must have the `KICAD_SCRIPTING_MODULES` option on in CMake to
@@ -87,7 +89,7 @@ from the source tree:
     cd /path/to/kicad/source/qa
     python2 testcase/test_001_pcb_load.py
 
-### Diagnosing segfaults ###
+### Diagnosing segfaults {#python-segfaults}
 
 Although the module is Python, it links against a C++ library
 (the same one used by KiCad Pcbnew), so it can segfault if the library
@@ -103,7 +105,7 @@ You can run the tests in GDB to trace this:
 If the test segfaults, you will get a familiar backtrace, just like
 if you were running pcbnew under GDB.
 
-## Fuzz testing ##
+# Fuzz testing {#fuzz-testing}
 
 It is possible to run fuzz testing on some parts of KiCad. To do this for a
 generic function, you need to be able to pass some kind of input from the fuzz
@@ -147,13 +149,13 @@ where:
 The AFL TUI will then display the fuzzing progress, and you can use the hang- or
 crash-provoking inputs to debug code as needed.
 
-# Run-time debugging #
+# Run-time debugging {#run-time}
 
 KiCad can be debugged at run-time, either under a full debugger
 such as GDB, or using simple methods like logging debug to the
 console.
 
-## Printing debug ##
+## Printing debug {#print-debug}
 
 If you are compiling KiCad yourself, you can simply add debugging statements to
 relevant places in the code, for example:
@@ -168,7 +170,7 @@ You can also use `std::cout` and `printf`.
 Ensure you do not leave this kind of debugging in place when
 submitting code.
 
-## Printing trace ##
+## Printing trace {#trace-debug}
 
 Some parts of the code have "trace" that can be enabled selectively according to
 a "mask", for example:
