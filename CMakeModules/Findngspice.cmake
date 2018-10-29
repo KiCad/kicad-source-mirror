@@ -12,6 +12,15 @@ find_library( NGSPICE_LIBRARY ngspice
     PATH_SUFFIXES src/.libs lib
 )
 
+if( WIN32 AND MSYS )
+    # NGSPICE_LIBRARY points to libngspice.dll.a on Windows,
+    # but the goal is to find out the DLL name.
+    find_library( NGSPICE_DLL NAMES libngspice-0.dll libngspice-1.dll )
+else()
+    set( NGSPICE_DLL "${NGSPICE_LIBRARY}" )
+endif()
+
+
 include( FindPackageHandleStandardArgs )
 
 if( ${NGSPICE_INCLUDE_DIR} STREQUAL "NGSPICE_INCLUDE_DIR-NOTFOUND" OR ${NGSPICE_LIBRARY} STREQUAL "NGSPICE_LIBRARY-NOTFOUND" )
@@ -28,12 +37,10 @@ if( ${NGSPICE_INCLUDE_DIR} STREQUAL "NGSPICE_INCLUDE_DIR-NOTFOUND" OR ${NGSPICE_
 endif()
 
 find_package_handle_standard_args( ngspice
-  REQUIRED_VARS
-    NGSPICE_INCLUDE_DIR
-    NGSPICE_LIBRARY
-)
+	REQUIRED_VARS NGSPICE_INCLUDE_DIR NGSPICE_LIBRARY NGSPICE_DLL )
 
 mark_as_advanced(
     NGSPICE_INCLUDE_DIR
     NGSPICE_LIBRARY
+    NGSPICE_DLL
 )

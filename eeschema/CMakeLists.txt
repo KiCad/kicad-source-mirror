@@ -7,6 +7,15 @@ add_definitions( -DEESCHEMA )
 
 if( KICAD_SPICE )
     set( INC_AFTER ${INC_AFTER} ${NGSPICE_INCLUDE_DIR} )
+
+    # Find out the exact libngspice file name
+    get_filename_component( NGSPICE_DLL_REALPATH "${NGSPICE_DLL}" REALPATH )
+    get_filename_component( NGSPICE_DLL_FILE "${NGSPICE_DLL_REALPATH}" NAME )
+
+    set_property( SOURCE sim/ngspice.cpp
+        APPEND PROPERTY COMPILE_DEFINITIONS
+        NGSPICE_DLL_FILE="${NGSPICE_DLL_FILE}"
+        )
 endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
@@ -315,6 +324,13 @@ target_link_libraries( eeschema_kiface
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )
+
+if( KICAD_SPICE )
+    target_link_libraries( eeschema_kiface
+        ${NGSPICE_LIBRARY}
+        )
+endif()
+
 set_target_properties( eeschema_kiface PROPERTIES
     # Decorate OUTPUT_NAME with PREFIX and SUFFIX, creating something like
     # _eeschema.so, _eeschema.dll, or _eeschema.kiface

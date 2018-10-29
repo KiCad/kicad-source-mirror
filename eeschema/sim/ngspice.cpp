@@ -289,11 +289,11 @@ void NGSPICE::init_dll()
 // Extra effort to find libngspice
 #if defined(__WINDOWS__) || (__WXMAC__)
 #ifdef __WINDOWS__
-    wxFileName dllFile( "", "libngspice-0.dll" );
+    wxFileName dllFile( "", NGSPICE_DLL_FILE );
     const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
 #endif /* __WINDOWS__ */
 #ifdef __WXMAC__
-    wxFileName dllFile( "", "libngspice.0.dylib" );
+    wxFileName dllFile( "", NGSPICE_DLL_FILE );
     const vector<string> dllPaths = {
         GetOSXKicadUserDataDir() + "/PlugIns/ngspice",
         GetOSXKicadMachineDataDir() + "/PlugIns/ngspice",
@@ -320,7 +320,7 @@ void NGSPICE::init_dll()
     if( !m_dll.IsLoaded() ) // try also the system libraries
         m_dll.Load( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
 #else
-    m_dll.Load("libngspice.so.0");
+    m_dll.Load( NGSPICE_DLL_FILE );
 #endif /* __WINDOWS || __WXMAC__ */
 
     if( !m_dll.IsLoaded() )
