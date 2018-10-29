@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <pcb_edit_frame.h>
 #include <panel_setup_layers.h>
 #include <panel_setup_text_and_graphics.h>

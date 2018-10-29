@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,9 +20,8 @@
 #include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/gbsizer.h>
-#include <wx/checkbox.h>
 #include <wx/sizer.h>
+#include <wx/checkbox.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
 
@@ -192,6 +191,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
+		wxStaticLine* m_staticline2;
 		wxScrolledWindow* m_LayersListPanel;
 		wxFlexGridSizer* m_LayerListFlexGridSizer;
 		wxCheckBox* m_CrtYdFrontCheckBox;
@@ -354,7 +354,7 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 714,394 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 585,545 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_SETUP_LAYERS_BASE();
 	
 };

@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -12,59 +12,60 @@
 PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style ) : wxPanel( parent, id, pos, size, style )
 {
 	wxBoxSizer* bMainSizer;
-	bMainSizer = new wxBoxSizer( wxHORIZONTAL );
-	
-	wxBoxSizer* leftSizer;
-	leftSizer = new wxBoxSizer( wxVERTICAL );
+	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
 	wxString m_PresetsChoiceChoices[] = { _("Custom layer set"), _("Two layers, parts on Front"), _("Two layers, parts on Back"), _("Two layers, parts on Front & Back"), _("Four layers, parts on Front"), _("Four layers, parts on Front & Back"), _("All layers on") };
 	int m_PresetsChoiceNChoices = sizeof( m_PresetsChoiceChoices ) / sizeof( wxString );
 	m_PresetsChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_PresetsChoiceNChoices, m_PresetsChoiceChoices, 0 );
 	m_PresetsChoice->SetSelection( 0 );
-	leftSizer->Add( m_PresetsChoice, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( m_PresetsChoice, 0, wxALL|wxEXPAND, 5 );
 	
 	m_staticline1 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	leftSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
+	bMainSizer->Add( m_staticline1, 0, wxEXPAND|wxALL, 5 );
 	
-	wxGridBagSizer* gbSizer1;
-	gbSizer1 = new wxGridBagSizer( 3, 0 );
-	gbSizer1->SetFlexibleDirection( wxHORIZONTAL );
-	gbSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+	wxFlexGridSizer* fgSizerBrdSetup;
+	fgSizerBrdSetup = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerBrdSetup->AddGrowableCol( 1 );
+	fgSizerBrdSetup->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizerBrdSetup->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_staticTextCopperLayers = new wxStaticText( this, wxID_ANY, _("Copper layers:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextCopperLayers->Wrap( -1 );
-	gbSizer1->Add( m_staticTextCopperLayers, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerBrdSetup->Add( m_staticTextCopperLayers, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxString m_CopperLayersChoiceChoices[] = { _("2"), _("4"), _("6"), _("8"), _("10"), _("12"), _("14"), _("16"), _("18"), _("20"), _("22"), _("24"), _("26"), _("28"), _("30"), _("32") };
 	int m_CopperLayersChoiceNChoices = sizeof( m_CopperLayersChoiceChoices ) / sizeof( wxString );
 	m_CopperLayersChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_CopperLayersChoiceNChoices, m_CopperLayersChoiceChoices, 0 );
 	m_CopperLayersChoice->SetSelection( 0 );
-	gbSizer1->Add( m_CopperLayersChoice, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 10 );
+	fgSizerBrdSetup->Add( m_CopperLayersChoice, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
+	
+	
+	fgSizerBrdSetup->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_thicknessLabel = new wxStaticText( this, wxID_ANY, _("PCB thickness:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessLabel->Wrap( -1 );
-	gbSizer1->Add( m_thicknessLabel, wxGBPosition( 1, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerBrdSetup->Add( m_thicknessLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_thicknessCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessCtrl->SetMinSize( wxSize( 190,-1 ) );
 	
-	gbSizer1->Add( m_thicknessCtrl, wxGBPosition( 1, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxLEFT, 10 );
+	fgSizerBrdSetup->Add( m_thicknessCtrl, 0, wxALL|wxEXPAND|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_thicknessUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_thicknessUnits->Wrap( -1 );
-	gbSizer1->Add( m_thicknessUnits, wxGBPosition( 1, 2 ), wxGBSpan( 1, 1 ), wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
+	fgSizerBrdSetup->Add( m_thicknessUnits, 0, wxALL, 5 );
 	
 	
-	gbSizer1->AddGrowableCol( 1 );
+	bMainSizer->Add( fgSizerBrdSetup, 0, wxEXPAND, 5 );
 	
-	leftSizer->Add( gbSizer1, 0, wxEXPAND|wxTOP|wxBOTTOM|wxLEFT, 5 );
+	m_staticline2 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bMainSizer->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
 	m_LayersListPanel = new wxScrolledWindow( this, wxID_ANY, wxDefaultPosition, wxSize( -1,-1 ), wxTAB_TRAVERSAL|wxVSCROLL );
 	m_LayersListPanel->SetScrollRate( 0, 5 );
-	wxBoxSizer* bSizer9;
-	bSizer9 = new wxBoxSizer( wxVERTICAL );
-	
-	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 2 );
+	m_LayerListFlexGridSizer = new wxFlexGridSizer( 0, 3, 2, 8 );
+	m_LayerListFlexGridSizer->AddGrowableCol( 1 );
+	m_LayerListFlexGridSizer->AddGrowableCol( 2 );
 	m_LayerListFlexGridSizer->SetFlexibleDirection( wxHORIZONTAL );
 	m_LayerListFlexGridSizer->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
@@ -160,11 +161,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	
 	m_LayerListFlexGridSizer->Add( m_FrontName, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_FrontChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_FrontChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_FrontChoiceNChoices = sizeof( m_FrontChoiceChoices ) / sizeof( wxString );
 	m_FrontChoice = new wxChoice( m_LayersListPanel, ID_FRONTCHOICE, wxDefaultPosition, wxDefaultSize, m_FrontChoiceNChoices, m_FrontChoiceChoices, 0 );
 	m_FrontChoice->SetSelection( 0 );
-	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter' layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -174,11 +175,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In1Name = new wxTextCtrl( m_LayersListPanel, ID_IN1NAME, _("In1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In1Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In1ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In1ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In1ChoiceNChoices = sizeof( m_In1ChoiceChoices ) / sizeof( wxString );
 	m_In1Choice = new wxChoice( m_LayersListPanel, ID_IN1CHOICE, wxDefaultPosition, wxDefaultSize, m_In1ChoiceNChoices, m_In1ChoiceChoices, 0 );
-	m_In1Choice->SetSelection( 3 );
-	m_In1Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In1Choice->SetSelection( 0 );
+	m_In1Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In1Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -188,11 +189,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In2Name = new wxTextCtrl( m_LayersListPanel, ID_IN2NAME, _("In2"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In2Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In2ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In2ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In2ChoiceNChoices = sizeof( m_In2ChoiceChoices ) / sizeof( wxString );
 	m_In2Choice = new wxChoice( m_LayersListPanel, ID_IN2CHOICE, wxDefaultPosition, wxDefaultSize, m_In2ChoiceNChoices, m_In2ChoiceChoices, 0 );
 	m_In2Choice->SetSelection( 0 );
-	m_In2Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In2Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In2Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -202,11 +203,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In3Name = new wxTextCtrl( m_LayersListPanel, ID_IN3NAME, _("In3"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In3Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In3ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In3ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In3ChoiceNChoices = sizeof( m_In3ChoiceChoices ) / sizeof( wxString );
 	m_In3Choice = new wxChoice( m_LayersListPanel, ID_IN3CHOICE, wxDefaultPosition, wxDefaultSize, m_In3ChoiceNChoices, m_In3ChoiceChoices, 0 );
 	m_In3Choice->SetSelection( 0 );
-	m_In3Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In3Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In3Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -216,11 +217,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In4Name = new wxTextCtrl( m_LayersListPanel, ID_IN4NAME, _("In4"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In4Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In4ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In4ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In4ChoiceNChoices = sizeof( m_In4ChoiceChoices ) / sizeof( wxString );
 	m_In4Choice = new wxChoice( m_LayersListPanel, ID_IN4CHOICE, wxDefaultPosition, wxDefaultSize, m_In4ChoiceNChoices, m_In4ChoiceChoices, 0 );
 	m_In4Choice->SetSelection( 0 );
-	m_In4Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In4Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In4Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -230,11 +231,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In5Name = new wxTextCtrl( m_LayersListPanel, ID_IN5NAME, _("In5"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In5Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In5ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In5ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In5ChoiceNChoices = sizeof( m_In5ChoiceChoices ) / sizeof( wxString );
 	m_In5Choice = new wxChoice( m_LayersListPanel, ID_IN5CHOICE, wxDefaultPosition, wxDefaultSize, m_In5ChoiceNChoices, m_In5ChoiceChoices, 0 );
 	m_In5Choice->SetSelection( 0 );
-	m_In5Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In5Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In5Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -244,11 +245,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In6Name = new wxTextCtrl( m_LayersListPanel, ID_IN6NAME, _("In6"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In6Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In6ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In6ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In6ChoiceNChoices = sizeof( m_In6ChoiceChoices ) / sizeof( wxString );
 	m_In6Choice = new wxChoice( m_LayersListPanel, ID_IN6CHOICE, wxDefaultPosition, wxDefaultSize, m_In6ChoiceNChoices, m_In6ChoiceChoices, 0 );
 	m_In6Choice->SetSelection( 0 );
-	m_In6Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In6Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In6Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -258,11 +259,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In7Name = new wxTextCtrl( m_LayersListPanel, ID_IN7NAME, _("In7"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In7Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In7ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In7ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In7ChoiceNChoices = sizeof( m_In7ChoiceChoices ) / sizeof( wxString );
 	m_In7Choice = new wxChoice( m_LayersListPanel, ID_IN7CHOICE, wxDefaultPosition, wxDefaultSize, m_In7ChoiceNChoices, m_In7ChoiceChoices, 0 );
 	m_In7Choice->SetSelection( 0 );
-	m_In7Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In7Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In7Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -272,11 +273,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In8Name = new wxTextCtrl( m_LayersListPanel, ID_IN8NAME, _("In8"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In8Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In8ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In8ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In8ChoiceNChoices = sizeof( m_In8ChoiceChoices ) / sizeof( wxString );
 	m_In8Choice = new wxChoice( m_LayersListPanel, ID_IN8CHOICE, wxDefaultPosition, wxDefaultSize, m_In8ChoiceNChoices, m_In8ChoiceChoices, 0 );
 	m_In8Choice->SetSelection( 0 );
-	m_In8Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In8Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In8Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -286,11 +287,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In9Name = new wxTextCtrl( m_LayersListPanel, ID_IN9NAME, _("In9"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In9Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In9ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In9ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In9ChoiceNChoices = sizeof( m_In9ChoiceChoices ) / sizeof( wxString );
 	m_In9Choice = new wxChoice( m_LayersListPanel, ID_IN9CHOICE, wxDefaultPosition, wxDefaultSize, m_In9ChoiceNChoices, m_In9ChoiceChoices, 0 );
 	m_In9Choice->SetSelection( 0 );
-	m_In9Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In9Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In9Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -300,11 +301,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In10Name = new wxTextCtrl( m_LayersListPanel, ID_IN10NAME, _("In10"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In10Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In10ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In10ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In10ChoiceNChoices = sizeof( m_In10ChoiceChoices ) / sizeof( wxString );
 	m_In10Choice = new wxChoice( m_LayersListPanel, ID_IN10CHOICE, wxDefaultPosition, wxDefaultSize, m_In10ChoiceNChoices, m_In10ChoiceChoices, 0 );
 	m_In10Choice->SetSelection( 0 );
-	m_In10Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In10Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In10Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -314,11 +315,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In11Name = new wxTextCtrl( m_LayersListPanel, ID_IN11NAME, _("In11"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In11Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In11ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In11ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In11ChoiceNChoices = sizeof( m_In11ChoiceChoices ) / sizeof( wxString );
 	m_In11Choice = new wxChoice( m_LayersListPanel, ID_IN11CHOICE, wxDefaultPosition, wxDefaultSize, m_In11ChoiceNChoices, m_In11ChoiceChoices, 0 );
 	m_In11Choice->SetSelection( 0 );
-	m_In11Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In11Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In11Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -328,11 +329,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In12Name = new wxTextCtrl( m_LayersListPanel, ID_IN12NAME, _("In12"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In12Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In12ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In12ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In12ChoiceNChoices = sizeof( m_In12ChoiceChoices ) / sizeof( wxString );
 	m_In12Choice = new wxChoice( m_LayersListPanel, ID_IN12CHOICE, wxDefaultPosition, wxDefaultSize, m_In12ChoiceNChoices, m_In12ChoiceChoices, 0 );
 	m_In12Choice->SetSelection( 0 );
-	m_In12Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In12Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In12Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -342,11 +343,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In13Name = new wxTextCtrl( m_LayersListPanel, ID_IN13NAME, _("In13"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In13Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In13ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In13ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In13ChoiceNChoices = sizeof( m_In13ChoiceChoices ) / sizeof( wxString );
 	m_In13Choice = new wxChoice( m_LayersListPanel, ID_IN13CHOICE, wxDefaultPosition, wxDefaultSize, m_In13ChoiceNChoices, m_In13ChoiceChoices, 0 );
 	m_In13Choice->SetSelection( 0 );
-	m_In13Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In13Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In13Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -356,11 +357,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In14Name = new wxTextCtrl( m_LayersListPanel, ID_IN14NAME, _("In14"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In14Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In14ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In14ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In14ChoiceNChoices = sizeof( m_In14ChoiceChoices ) / sizeof( wxString );
 	m_In14Choice = new wxChoice( m_LayersListPanel, ID_IN14CHOICE, wxDefaultPosition, wxDefaultSize, m_In14ChoiceNChoices, m_In14ChoiceChoices, 0 );
 	m_In14Choice->SetSelection( 0 );
-	m_In14Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In14Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In14Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -370,11 +371,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In15Name = new wxTextCtrl( m_LayersListPanel, ID_IN15NAME, _("In15"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In15Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In15ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In15ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In15ChoiceNChoices = sizeof( m_In15ChoiceChoices ) / sizeof( wxString );
 	m_In15Choice = new wxChoice( m_LayersListPanel, ID_IN15CHOICE, wxDefaultPosition, wxDefaultSize, m_In15ChoiceNChoices, m_In15ChoiceChoices, 0 );
 	m_In15Choice->SetSelection( 0 );
-	m_In15Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In15Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In15Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -384,11 +385,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In16Name = new wxTextCtrl( m_LayersListPanel, ID_IN16NAME, _("In16"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In16Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In16ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In16ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In16ChoiceNChoices = sizeof( m_In16ChoiceChoices ) / sizeof( wxString );
 	m_In16Choice = new wxChoice( m_LayersListPanel, ID_IN16CHOICE, wxDefaultPosition, wxDefaultSize, m_In16ChoiceNChoices, m_In16ChoiceChoices, 0 );
 	m_In16Choice->SetSelection( 0 );
-	m_In16Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In16Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In16Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -398,11 +399,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In17Name = new wxTextCtrl( m_LayersListPanel, ID_IN17NAME, _("In17"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In17Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In17ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In17ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In17ChoiceNChoices = sizeof( m_In17ChoiceChoices ) / sizeof( wxString );
 	m_In17Choice = new wxChoice( m_LayersListPanel, ID_IN17CHOICE, wxDefaultPosition, wxDefaultSize, m_In17ChoiceNChoices, m_In17ChoiceChoices, 0 );
 	m_In17Choice->SetSelection( 0 );
-	m_In17Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In17Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In17Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -412,11 +413,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In18Name = new wxTextCtrl( m_LayersListPanel, ID_IN18NAME, _("In18"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In18Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In18ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In18ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In18ChoiceNChoices = sizeof( m_In18ChoiceChoices ) / sizeof( wxString );
 	m_In18Choice = new wxChoice( m_LayersListPanel, ID_IN18CHOICE, wxDefaultPosition, wxDefaultSize, m_In18ChoiceNChoices, m_In18ChoiceChoices, 0 );
 	m_In18Choice->SetSelection( 0 );
-	m_In18Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In18Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In18Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -426,11 +427,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In19Name = new wxTextCtrl( m_LayersListPanel, ID_IN19NAME, _("In19"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In19Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In19ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In19ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In19ChoiceNChoices = sizeof( m_In19ChoiceChoices ) / sizeof( wxString );
 	m_In19Choice = new wxChoice( m_LayersListPanel, ID_IN19CHOICE, wxDefaultPosition, wxDefaultSize, m_In19ChoiceNChoices, m_In19ChoiceChoices, 0 );
 	m_In19Choice->SetSelection( 0 );
-	m_In19Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In19Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In19Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -440,11 +441,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In20Name = new wxTextCtrl( m_LayersListPanel, ID_IN20NAME, _("In20"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In20Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In20ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In20ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In20ChoiceNChoices = sizeof( m_In20ChoiceChoices ) / sizeof( wxString );
 	m_In20Choice = new wxChoice( m_LayersListPanel, ID_IN20CHOICE, wxDefaultPosition, wxDefaultSize, m_In20ChoiceNChoices, m_In20ChoiceChoices, 0 );
 	m_In20Choice->SetSelection( 0 );
-	m_In20Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In20Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In20Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -454,11 +455,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In21Name = new wxTextCtrl( m_LayersListPanel, ID_IN21NAME, _("In21"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In21Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In21ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In21ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In21ChoiceNChoices = sizeof( m_In21ChoiceChoices ) / sizeof( wxString );
 	m_In21Choice = new wxChoice( m_LayersListPanel, ID_IN21CHOICE, wxDefaultPosition, wxDefaultSize, m_In21ChoiceNChoices, m_In21ChoiceChoices, 0 );
 	m_In21Choice->SetSelection( 0 );
-	m_In21Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In21Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In21Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -468,11 +469,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In22Name = new wxTextCtrl( m_LayersListPanel, ID_IN22NAME, _("In22"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In22Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In22ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In22ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In22ChoiceNChoices = sizeof( m_In22ChoiceChoices ) / sizeof( wxString );
 	m_In22Choice = new wxChoice( m_LayersListPanel, ID_IN22CHOICE, wxDefaultPosition, wxDefaultSize, m_In22ChoiceNChoices, m_In22ChoiceChoices, 0 );
 	m_In22Choice->SetSelection( 0 );
-	m_In22Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In22Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In22Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -482,11 +483,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In23Name = new wxTextCtrl( m_LayersListPanel, ID_IN23NAME, _("In23"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In23Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In23ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In23ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In23ChoiceNChoices = sizeof( m_In23ChoiceChoices ) / sizeof( wxString );
 	m_In23Choice = new wxChoice( m_LayersListPanel, ID_IN22CHOICE, wxDefaultPosition, wxDefaultSize, m_In23ChoiceNChoices, m_In23ChoiceChoices, 0 );
 	m_In23Choice->SetSelection( 0 );
-	m_In23Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In23Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In23Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -496,11 +497,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In24Name = new wxTextCtrl( m_LayersListPanel, ID_IN24NAME, _("In24"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In24Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In24ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In24ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In24ChoiceNChoices = sizeof( m_In24ChoiceChoices ) / sizeof( wxString );
 	m_In24Choice = new wxChoice( m_LayersListPanel, ID_IN24CHOICE, wxDefaultPosition, wxDefaultSize, m_In24ChoiceNChoices, m_In24ChoiceChoices, 0 );
 	m_In24Choice->SetSelection( 0 );
-	m_In24Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In24Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In24Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -510,11 +511,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In25Name = new wxTextCtrl( m_LayersListPanel, ID_IN25NAME, _("In25"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In25Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In25ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In25ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In25ChoiceNChoices = sizeof( m_In25ChoiceChoices ) / sizeof( wxString );
 	m_In25Choice = new wxChoice( m_LayersListPanel, ID_IN25CHOICE, wxDefaultPosition, wxDefaultSize, m_In25ChoiceNChoices, m_In25ChoiceChoices, 0 );
 	m_In25Choice->SetSelection( 0 );
-	m_In25Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In25Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In25Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -524,11 +525,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In26Name = new wxTextCtrl( m_LayersListPanel, ID_IN26NAME, _("In26"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In26Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In26ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In26ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In26ChoiceNChoices = sizeof( m_In26ChoiceChoices ) / sizeof( wxString );
 	m_In26Choice = new wxChoice( m_LayersListPanel, ID_IN26CHOICE, wxDefaultPosition, wxDefaultSize, m_In26ChoiceNChoices, m_In26ChoiceChoices, 0 );
 	m_In26Choice->SetSelection( 0 );
-	m_In26Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In26Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In26Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -538,11 +539,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In27Name = new wxTextCtrl( m_LayersListPanel, ID_IN27NAME, _("In27"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In27Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In27ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In27ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In27ChoiceNChoices = sizeof( m_In27ChoiceChoices ) / sizeof( wxString );
 	m_In27Choice = new wxChoice( m_LayersListPanel, ID_IN27CHOICE, wxDefaultPosition, wxDefaultSize, m_In27ChoiceNChoices, m_In27ChoiceChoices, 0 );
 	m_In27Choice->SetSelection( 0 );
-	m_In27Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In27Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In27Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -552,11 +553,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In28Name = new wxTextCtrl( m_LayersListPanel, ID_IN28NAME, _("In28"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In28Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In28ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In28ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In28ChoiceNChoices = sizeof( m_In28ChoiceChoices ) / sizeof( wxString );
 	m_In28Choice = new wxChoice( m_LayersListPanel, ID_IN28CHOICE, wxDefaultPosition, wxDefaultSize, m_In28ChoiceNChoices, m_In28ChoiceChoices, 0 );
 	m_In28Choice->SetSelection( 0 );
-	m_In28Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In28Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In28Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -566,11 +567,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In29Name = new wxTextCtrl( m_LayersListPanel, ID_IN29NAME, _("In29"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In29Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In29ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In29ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In29ChoiceNChoices = sizeof( m_In29ChoiceChoices ) / sizeof( wxString );
 	m_In29Choice = new wxChoice( m_LayersListPanel, ID_IN29CHOICE, wxDefaultPosition, wxDefaultSize, m_In29ChoiceNChoices, m_In29ChoiceChoices, 0 );
 	m_In29Choice->SetSelection( 0 );
-	m_In29Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In29Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In29Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -580,11 +581,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_In30Name = new wxTextCtrl( m_LayersListPanel, ID_IN30NAME, _("In30"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_LayerListFlexGridSizer->Add( m_In30Name, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_In30ChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_In30ChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_In30ChoiceNChoices = sizeof( m_In30ChoiceChoices ) / sizeof( wxString );
 	m_In30Choice = new wxChoice( m_LayersListPanel, ID_IN30CHOICE, wxDefaultPosition, wxDefaultSize, m_In30ChoiceNChoices, m_In30ChoiceChoices, 0 );
 	m_In30Choice->SetSelection( 0 );
-	m_In30Choice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_In30Choice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_In30Choice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -598,11 +599,11 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	
 	m_LayerListFlexGridSizer->Add( m_BackName, 0, wxEXPAND|wxRIGHT, 5 );
 	
-	wxString m_BackChoiceChoices[] = { _("signal"), _("power"), _("mixed"), _("jumper") };
+	wxString m_BackChoiceChoices[] = { _("signal"), _("power plane"), _("mixed"), _("jumper") };
 	int m_BackChoiceNChoices = sizeof( m_BackChoiceChoices ) / sizeof( wxString );
 	m_BackChoice = new wxChoice( m_LayersListPanel, ID_BACKCHOICE, wxDefaultPosition, wxDefaultSize, m_BackChoiceNChoices, m_BackChoiceChoices, 0 );
 	m_BackChoice->SetSelection( 0 );
-	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter.  Power layers are removed from Freerouter's layer menus.") );
+	m_BackChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_BackChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
@@ -757,16 +758,10 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	m_LayerListFlexGridSizer->Add( m_DrawingsStaticText, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	
-	bSizer9->Add( m_LayerListFlexGridSizer, 1, wxEXPAND|wxRIGHT, 20 );
-	
-	
-	m_LayersListPanel->SetSizer( bSizer9 );
+	m_LayersListPanel->SetSizer( m_LayerListFlexGridSizer );
 	m_LayersListPanel->Layout();
-	bSizer9->Fit( m_LayersListPanel );
-	leftSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
-	
-	
-	bMainSizer->Add( leftSizer, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
+	m_LayerListFlexGridSizer->Fit( m_LayersListPanel );
+	bMainSizer->Add( m_LayersListPanel, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 3 );
 	
 	
 	this->SetSizer( bMainSizer );
