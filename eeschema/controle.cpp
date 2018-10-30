@@ -311,12 +311,11 @@ bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     }
 
     wxPoint pos = aPosition;
-    wxPoint oldpos = GetCrossHairPosition();
     GeneralControlKeyMovement( aHotKey, &pos, true );
 
     // Update cursor position.
+    m_canvas->CrossHairOn( aDC );
     SetCrossHairPosition( pos, true );
-    RefreshCrossHair( oldpos, aPosition, aDC );
 
     if( aHotKey )
     {
