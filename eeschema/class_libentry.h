@@ -101,6 +101,11 @@ public:
         return wxT( "LIB_ALIAS" );
     }
 
+    // a LIB_ALIAS does not really have a bounding box.
+    // But because it is derived from EDA_ITEM, returns a dummy bounding box
+    // to avoid useless messages in debug mode
+    const EDA_RECT GetBoundingBox() const override;
+
     /**
      * Get the shared LIB_PART.
      *

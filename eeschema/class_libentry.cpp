@@ -147,6 +147,15 @@ wxString LIB_ALIAS::GetUnitReference( int aUnit )
 }
 
 
+const EDA_RECT LIB_ALIAS::GetBoundingBox() const
+{
+    // a LIB_ALIAS does not really have a bounding box.
+    // return a 0 size rect.
+    EDA_RECT dummy;
+    return dummy;
+};
+
+
 wxString LIB_ALIAS::GetSearchText()
 {
     // Matches are scored by offset from front of string, so inclusion of this spacer

@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@
 #include <class_library.h>
 #include <view/view_controls.h>
 #include <sch_painter.h>
+
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -374,16 +375,18 @@ void LIB_VIEW_FRAME::onUpdateUnitChoice( wxUpdateUIEvent& aEvent )
 
     if( unit_count > 1 )
     {
-        // rebuild the unit list if it is not suitable
+        // rebuild the unit list if it is not suitable (after a new selection for instance)
         if( unit_count != (int)m_unitChoice->GetCount() )
         {
             m_unitChoice->Clear();
 
             for( int ii = 0; ii < unit_count; ii++ )
                 m_unitChoice->Append( wxString::Format( _( "Unit %c" ), 'A' + ii ) );
+
         }
 
-        m_unitChoice->SetSelection( std::max( 0, m_unit - 1 ) );
+        if( m_unitChoice->GetSelection() != std::max( 0, m_unit - 1 ) )
+            m_unitChoice->SetSelection( std::max( 0, m_unit - 1 ) );
     }
     else if( m_unitChoice->GetCount() )
         m_unitChoice->Clear();
@@ -510,8 +513,6 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
     if( m_cmpList == NULL )
         return false;
 
-    m_cmpList->Clear();
-
     wxArrayString aliasNames;
 
     try
@@ -520,6 +521,8 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
                                                        m_listPowerCmpOnly );
     }
     catch( const IO_ERROR& ) {}   // ignore, it is handled below
+
+    m_cmpList->Clear();
 
     if( aliasNames.IsEmpty() )
     {
