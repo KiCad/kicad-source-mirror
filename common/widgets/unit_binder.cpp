@@ -227,21 +227,21 @@ int UNIT_BINDER::GetValue()
 {
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
     auto staticText = dynamic_cast<wxStaticText*>( m_value );
-
-    if( m_needsEval && textEntry )
-    {
-        if( m_eval.Process( textEntry->GetValue() ) )
-            textEntry->ChangeValue( m_eval.Result() );
-
-        m_needsEval = false;
-    }
+    wxString value;
 
     if( textEntry )
-        return ValueFromString( m_units, textEntry->GetValue(), m_useMils );
+    {
+        if( m_needsEval && m_eval.Process( textEntry->GetValue() ) )
+            value = m_eval.Result();
+        else
+            value = textEntry->GetValue();
+    }
     else if( staticText )
-        return ValueFromString( m_units, staticText->GetLabel(), m_useMils );
+        value = staticText->GetLabel();
     else
         return 0;
+
+    return ValueFromString( m_units, value, m_useMils );
 }
 
 
