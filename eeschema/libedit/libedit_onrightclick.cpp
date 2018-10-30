@@ -103,9 +103,9 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( GetToolId() == ID_NO_TOOL_SELECTED )
         {
             msg = AddHotkeyName( _( "&Paste" ), g_Libedit_Hokeys_Descr, HK_EDIT_PASTE );
-            AddMenuItem( PopMenu, wxID_PASTE, msg,
-                        _( "Pastes item(s) from the Clipboard" ),
-                        KiBitmap( paste_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_PASTE_BLOCK, msg, _( "Pastes copied item(s)" ),
+                         KiBitmap( paste_xpm ) );
+            PopMenu->AppendSeparator();
         }
 
         return true;

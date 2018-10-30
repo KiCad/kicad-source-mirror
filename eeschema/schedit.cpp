@@ -144,6 +144,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case wxID_PASTE:
+    case ID_POPUP_PASTE_BLOCK:
         HandleBlockBegin( nullptr, BLOCK_PASTE, GetCrossHairPosition() );
         break;
 
@@ -850,9 +851,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     if( block.GetState() != STATE_NO_BLOCK )
     {
         // Compute the rotation center and put it on grid:
-        wxPoint rotationPoint = block.Centre();
-        rotationPoint = GetNearestGridPosition( rotationPoint );
-        SetCrossHairPosition( rotationPoint );
+        wxPoint rotationPoint = GetNearestGridPosition( block.Centre() );
 
         if( block.GetCommand() != BLOCK_DUPLICATE )
         {

@@ -496,7 +496,7 @@ KIGFX::SCH_RENDER_SETTINGS* SCH_BASE_FRAME::GetRenderSettings()
 
 
 bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-       int aExplicitCommand )
+                                       int aExplicitCommand )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -537,10 +537,14 @@ bool SCH_BASE_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
         block->InitData( m_canvas, aPosition );
         InitBlockPasteInfos();
 
-        KIGFX::PREVIEW::SELECTION_AREA* sel = GetCanvas()->GetView()->GetSelectionArea();
-        VECTOR2I offsetToCenter = GetCanvas()->GetGAL()->GetGridPoint(
-                ( sel->GetOrigin() - sel->GetEnd() ) / 2 );
-        block->SetLastCursorPosition( wxPoint( offsetToCenter.x, offsetToCenter.y ) );
+        wxRect bounds( 0, 0, 0, 0 );
+
+        for( unsigned i = 0; i < block->GetCount(); ++i )
+            bounds.Union( block->GetItem( i )->GetBoundingBox() );
+
+        block->SetOrigin( bounds.GetPosition() );
+        block->SetSize( bounds.GetSize() );
+        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
 
         if( block->GetCount() == 0 )      // No data to paste
         {
