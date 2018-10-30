@@ -37,7 +37,6 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     m_label( aLabel ),
     m_value( aValue ),
     m_unitLabel( aUnitLabel ),
-    m_showMessage( true ),
     m_eval( aParent->GetUserUnits(), aUseMils )
 {
     // Fix the units (to the current units) for the life of the binder
@@ -117,8 +116,12 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 
 void UNIT_BINDER::delayedFocusHandler( wxIdleEvent& )
 {
+    if( !m_errorMessage.IsEmpty() )
+        DisplayError( m_value->GetParent(), m_errorMessage );
+
+    m_errorMessage = wxEmptyString;
+
     m_value->SetFocus();
-    m_showMessage = true;
 
     m_value->Unbind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
 }
@@ -133,20 +136,15 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
 
     if( m_min > INT_MIN && GetValue() < m_min )
     {
-        if( m_showMessage )
-        {
-            wxString msg = wxString::Format( _( "%s must be larger than %s or equal." ),
-                                             valueDescriptionFromLabel( m_label ),
-                                             StringFromValue( m_units, m_min, true ) );
-            DisplayError( m_value->GetParent(), msg );
-        }
+        m_errorMessage = wxString::Format( _( "%s must be larger than %s or equal." ),
+                                           valueDescriptionFromLabel( m_label ),
+                                           StringFromValue( m_units, m_min, true ) );
 
         if( setFocusOnError )
         {
             textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
             m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
-            m_showMessage = false;
         }
 
         return false;
@@ -154,20 +152,15 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
 
     if( m_max < INT_MAX && GetValue() > m_max )
     {
-        if( m_showMessage )
-        {
-            wxString msg = wxString::Format( _( "%s must be smaller than %s." ),
-                                             valueDescriptionFromLabel( m_label ),
-                                             StringFromValue( m_units, m_max, true ) );
-            DisplayError( m_value->GetParent(), msg );
-        }
+        m_errorMessage = wxString::Format( _( "%s must be smaller than %s." ),
+                                           valueDescriptionFromLabel( m_label ),
+                                           StringFromValue( m_units, m_max, true ) );
 
         if( setFocusOnError )
         {
             textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
             m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
-            m_showMessage = false;
         }
 
         return false;

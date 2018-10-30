@@ -139,7 +139,7 @@ protected:
     ///> Validation support.
     int               m_min;
     int               m_max;
-    bool              m_showMessage;
+    wxString          m_errorMessage;
 
     ///> Evaluator
     NUMERIC_EVALUATOR m_eval;
