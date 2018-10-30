@@ -283,10 +283,6 @@ void EDGE_MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
         return;
 
     aList.push_back( MSG_PANEL_ITEM( _( "Footprint" ), module->GetReference(), DARKCYAN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Value" ), module->GetValue(), BLUE ) );
-    msg.Printf( wxT( "%8.8lX" ), module->GetTimeStamp() );
-    aList.push_back( MSG_PANEL_ITEM( _( "TimeStamp" ), msg, BROWN ) );
-    aList.push_back( MSG_PANEL_ITEM( _( "Footprint Layer" ), module->GetLayerName(), RED ) );
 
     // append the features shared with the base class
     DRAWSEGMENT::GetMsgPanelInfo( aUnits, aList );

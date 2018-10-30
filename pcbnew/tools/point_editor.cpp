@@ -425,7 +425,7 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         m_editPoints.reset();
     }
 
-    frame()->SetMsgPanel( board() );
+    frame()->UpdateMsgPanel();
 
     return 0;
 }
