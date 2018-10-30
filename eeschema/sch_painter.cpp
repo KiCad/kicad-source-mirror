@@ -1094,7 +1094,7 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
     default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
     }
 
-    if( aField->IsMoving() )
+    if( aField->IsMoving() || ( aField->GetParent() && aField->GetParent()->IsMoving() ) )
         color = selectedBrightening( color );
 
     if( !aField->IsVisible() )
