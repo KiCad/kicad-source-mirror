@@ -787,12 +787,21 @@ endif()
 add_definitions( -DWX_COMPATIBILITY )
 
 if( KICAD_SCRIPTING_WXPYTHON )
-    if( UNIX AND NOT APPLE )
+    # Check if '--toolkit=xxx' option has been passed
+    string( REGEX MATCH "--toolkit=([a-zA-Z0-9]+)"
+        WXWIDGETS_REQUESTED_TOOLKIT "${wxWidgets_CONFIG_OPTIONS}" )
+
+    if( WXWIDGETS_REQUESTED_TOOLKIT
+            AND NOT WXWIDGETS_REQUESTED_TOOLKIT STREQUAL "--toolkit=${WXPYTHON_TOOLKIT}" )
+        message( WARNING "wxWidgets and wxPython must be based on the same toolkit.\n"
+            "It will be fixed automatically if you skip the '--toolkit=xxx' "
+            "wxWidgets_CONFIG_OPTIONS parameter.")
+    else()
         # Use the same toolkit as wxPython otherwise there will be a symbol conflict
-        set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} --toolkit=${WXPYTHON_TOOLKIT} )
+        set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} "--toolkit=${WXPYTHON_TOOLKIT}" )
     endif()
 
-    # Request the same wxWidgets version as wxPython uses
+    # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
     set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
 else()
     # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
