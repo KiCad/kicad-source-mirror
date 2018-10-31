@@ -603,8 +603,7 @@ void LIB_VIEW_FRAME::ClickOnCmpList( wxCommandEvent& event )
 
 void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
 {
-    // Aren't component names case sensitive now?
-    if( m_entryName.CmpNoCase( aComponentName ) != 0 )
+    if( m_entryName != aComponentName )
     {
         m_entryName = aComponentName;
 
@@ -621,8 +620,8 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
             m_selection_changed = false;
         }
 
-        Zoom_Automatique( false );
         updatePreviewSymbol();
+        Zoom_Automatique( false );
     }
 }
 

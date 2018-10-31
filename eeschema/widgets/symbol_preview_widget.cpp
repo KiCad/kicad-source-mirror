@@ -80,6 +80,8 @@ SYMBOL_PREVIEW_WIDGET::~SYMBOL_PREVIEW_WIDGET()
 {
     if( m_previewItem )
         m_preview->GetView()->Remove( m_previewItem );
+
+    delete m_previewItem;
 }
 
 
@@ -149,6 +151,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
     if( m_previewItem )
     {
         view->Remove( m_previewItem );
+        delete m_previewItem;
         m_previewItem = nullptr;
     }
 
@@ -166,11 +169,11 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         // For symbols having a De Morgan body style, use the first style
         settings->m_ShowConvert = part->HasConversion() ? 1 : 0;
 
-        view->Add( alias );
-        m_previewItem = alias;
+        m_previewItem = new LIB_ALIAS( *alias, part );
+        view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
-        m_itemBBox = alias->GetPart()->GetUnitBoundingBox( aUnit, 0 );
+        m_itemBBox = part->GetUnitBoundingBox( aUnit, 0 );
 
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();
@@ -190,6 +193,7 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
     if( m_previewItem )
     {
         view->Remove( m_previewItem );
+        delete m_previewItem;
         m_previewItem = nullptr;
     }
 
@@ -203,9 +207,8 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
         // For symbols having a De Morgan body style, use the first style
         auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
         settings->m_ShowConvert = aPart->HasConversion() ? 1 : 0;
-
-        view->Add( aPart );
-        m_previewItem = aPart;
+        m_previewItem = new LIB_PART( *aPart );
+        view->Add( m_previewItem );
 
         // Get the symbole size, in internal units
         m_itemBBox = aPart->GetUnitBoundingBox( aUnit, 0 );

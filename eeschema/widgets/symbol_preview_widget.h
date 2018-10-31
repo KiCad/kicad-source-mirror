@@ -75,8 +75,12 @@ private:
     wxStaticText*              m_status;
     wxSizer*                   m_statusSizer;
 
+    /** a local copy of the LIB_ALIAS or the LIB_PART to display on the canvas
+     */
     EDA_ITEM*                  m_previewItem;
-    BOX2I                      m_itemBBox;      // The size of the current item
+
+    /// The bounding box of the current item
+    BOX2I                      m_itemBBox;
 };
 
 

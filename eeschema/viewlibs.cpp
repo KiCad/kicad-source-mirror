@@ -45,29 +45,31 @@
 void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
-    wxString                     dialogTitle;
-    SYMBOL_LIB_TABLE*            libs = Prj().SchSymbolLibTable();
 
     // One CHOOSE_COMPONENT dialog at a time.  User probaby can't handle more anyway.
     if( !dialogLock.try_lock() )
         return;
 
     // Container doing search-as-you-type.
+    SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
     auto adapterPtr( SYMBOL_TREE_MODEL_ADAPTER::Create( libs ) );
     auto adapter = static_cast<SYMBOL_TREE_MODEL_ADAPTER*>( adapterPtr.get() );
 
     const auto libNicknames = libs->GetLogicalLibs();
-
     adapter->AddLibraries( libNicknames, this );
 
+    LIB_ID id;
+    int unit;
+
+    wxString dialogTitle;
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
+
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, m_convert, false, false, false );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return;
 
-    int unit;
-    LIB_ID id = dlg.GetSelectedLibId( &unit );
+    id = dlg.GetSelectedLibId( &unit );
 
     if( !id.IsValid() )
         return;
@@ -75,8 +77,6 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     SetSelectedLibrary( id.GetLibNickname() );
     SetSelectedComponent( id.GetLibItemName() );
     SetUnitAndConvert( unit, 1 );
-
-    Zoom_Automatique( false );
 }
 
 
