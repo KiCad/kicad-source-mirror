@@ -143,6 +143,7 @@ const KICAD_T SCH_COLLECTOR::DraggableItems[] = {
     SCH_HIERARCHICAL_LABEL_T,
     SCH_COMPONENT_T,
     SCH_SHEET_T,
+    SCH_TEXT_T,
     EOT
 };
 

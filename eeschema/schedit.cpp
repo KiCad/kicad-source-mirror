@@ -1175,6 +1175,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
     case SCH_SHEET_T:
+    case SCH_TEXT_T:
         m_canvas->MoveCursorToCrossHair();
 
         if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
