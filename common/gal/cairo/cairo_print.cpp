@@ -25,6 +25,12 @@
 #include <wx/dcmemory.h>
 #include <wx/dcprint.h>
 
+#ifdef NOMINMAX         /* workaround for gdiplus.h */
+#include <algorithm>
+using std::min;
+using std::max;
+#endif
+
 #ifdef __WXMSW__
 #include <windows.h>
 #include <gdiplus.h>
