@@ -682,8 +682,14 @@ void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
         // (depending on platforms). Do nothing in this case
         return;
 
+    SCH_SCREEN* screen = static_cast<SCH_SCREEN*>( GetScreen() );
+
+    // The screen might be null if the wxPaintEvent is fired after the parent frame deletion
+    if( !screen )
+        return;
+
     // Ensure links are up to date, even if a library was reloaded for some reason:
-    static_cast<SCH_SCREEN*>( GetScreen() )->UpdateSymbolLinks();
+    screen->UpdateSymbolLinks();
 
     if( m_painter )
         static_cast<KIGFX::SCH_PAINTER*>(m_painter.get())->GetSettings()->ImportLegacyColors( nullptr );
