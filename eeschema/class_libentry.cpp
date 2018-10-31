@@ -352,12 +352,7 @@ void LIB_PART::SetName( const wxString& aName )
     wxString validatedName = LIB_ID::FixIllegalChars( aName, LIB_ID::ID_SCH );
     m_libId.SetLibItemName( validatedName, false );
 
-    LIB_FIELD& valueField = GetValueField();
-
-    // LIB_FIELD::SetText() calls LIB_PART::SetName(),
-    // the following if-clause is to break an infinite loop
-    if( valueField.GetText() != validatedName )
-        valueField.SetText( validatedName );
+    GetValueField().SetText( validatedName );
 }
 
 

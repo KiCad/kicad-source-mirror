@@ -29,9 +29,11 @@
 
 #include <dialog_lib_edit_text_base.h>
 #include <widgets/unit_binder.h>
+#include <lib_field.h>
+#include <class_libentry.h>
+#include <template_fieldnames.h>
 
 class SCH_BASE_FRAME;
-class LIB_FIELD;
 class SCH_FIELD;
 class EDA_TEXT;
 
@@ -120,6 +122,11 @@ public:
     void UpdateField( LIB_FIELD* aField )
     {
         aField->SetText( m_text );
+
+        // VALUE === component name, so update the parent component if it changes.
+        if( aField->GetId() == VALUE && aField->GetParent() )
+            aField->GetParent()->SetName( m_text );
+
         updateText( aField );
     }
 };

@@ -508,18 +508,6 @@ void LIB_FIELD::SetText( const wxString& aText )
     wxString oldValue( m_Text );
     wxString newValue( aText );
 
-    if( m_id == VALUE && m_Parent != NULL )
-    {
-        LIB_PART* parent = GetParent();
-
-        // Set the parent component and root alias to the new name.
-        if( parent->GetName().CmpNoCase( aText ) != 0 )
-        {
-            ReplaceIllegalFileNameChars( newValue, '_' );
-            parent->SetName( newValue );
-        }
-    }
-
     if( InEditMode() )
     {
         m_Text = oldValue;
