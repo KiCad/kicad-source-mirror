@@ -106,10 +106,6 @@ DIALOG_PRINT_PCBNEW::DIALOG_PRINT_PCBNEW( PCB_BASE_EDIT_FRAME* aParent, PCBNEW_P
     m_config = Kiface().KifaceSettings();
     memset( m_layers, 0, sizeof( m_layers ) );
 
-    // Line width settings range
-    m_lineWidth.SetMax( KiROUND( 5 * IU_PER_MM ) );
-    m_lineWidth.SetMin( KiROUND( 0.005 * IU_PER_MM ) );
-
     createExtraOptions();
     createLeftPanel();
 }

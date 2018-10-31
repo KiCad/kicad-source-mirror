@@ -22,7 +22,6 @@
 
 void PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
 {
-    aConfig->Write( OPTKEY_PRINT_LINE_WIDTH, m_lineWidth );
     aConfig->Write( OPTKEY_PRINT_SCALE, m_scale );
     aConfig->Write( OPTKEY_PRINT_PAGE_FRAME, m_titleBlock );
     aConfig->Write( OPTKEY_PRINT_MONOCHROME_MODE, m_blackWhite );
@@ -31,7 +30,6 @@ void PRINTOUT_SETTINGS::Save( wxConfigBase* aConfig )
 
 void PRINTOUT_SETTINGS::Load( wxConfigBase* aConfig )
 {
-    aConfig->Read( OPTKEY_PRINT_LINE_WIDTH, &m_lineWidth, 10000 );
     aConfig->Read( OPTKEY_PRINT_SCALE, &m_scale, 1.0 );
     aConfig->Read( OPTKEY_PRINT_PAGE_FRAME, &m_titleBlock, false );
     aConfig->Read( OPTKEY_PRINT_MONOCHROME_MODE, &m_blackWhite, 1 );

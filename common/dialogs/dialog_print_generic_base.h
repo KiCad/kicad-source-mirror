@@ -20,13 +20,13 @@ class DIALOG_SHIM;
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/textctrl.h>
 #include <wx/choice.h>
 #include <wx/checkbox.h>
 #include <wx/gbsizer.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
 #include <wx/radiobut.h>
+#include <wx/textctrl.h>
 #include <wx/statline.h>
 #include <wx/button.h>
 #include <wx/dialog.h>
@@ -50,9 +50,6 @@ class DIALOG_PRINT_GENERIC_BASE : public DIALOG_SHIM
 		wxBoxSizer* bUpperSizer;
 		wxStaticBoxSizer* sbOptionsSizer;
 		wxGridBagSizer* gbOptionsSizer;
-		wxStaticText* m_penWidthLabel;
-		wxTextCtrl* m_penWidthCtrl;
-		wxStaticText* m_penWidthUnits;
 		wxStaticText* m_outputModeLabel;
 		wxChoice* m_outputMode;
 		wxCheckBox* m_titleBlock;

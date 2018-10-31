@@ -32,10 +32,6 @@ struct PRINTOUT_SETTINGS
     PRINTOUT_SETTINGS( const PAGE_INFO& aPageInfo )
         : m_pageInfo( aPageInfo )
     {
-        // TODO Millimeter2iu is depends on PCBNEW/GERBVIEW #ifdefs, so it cannot be compiled to libcommon
-        //m_lineWidth        = Millimeter2iu( 0.2 ); // A reasonable default value to draw items
-                                        // which do not have a specified line width
-        m_lineWidth  = 0.0;
         m_scale      = 1.0;
         m_titleBlock = false;
         m_blackWhite = true;
@@ -45,8 +41,6 @@ struct PRINTOUT_SETTINGS
     virtual void Save( wxConfigBase* aConfig );
     virtual void Load( wxConfigBase* aConfig );
 
-    int    m_lineWidth;     ///< The default value pen size to plot/print items
-                            ///< that have no defined pen size
     double m_scale;         ///< Printing scale
     bool   m_titleBlock;    ///< Print frame and title block
     bool   m_blackWhite;    ///< Print in B&W or Color

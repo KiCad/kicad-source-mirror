@@ -81,8 +81,6 @@ protected:
 
     PRINTOUT_SETTINGS* m_settings;
 
-    UNIT_BINDER m_lineWidth;
-
 private:
     void onPageSetup( wxCommandEvent& event ) override;
     void onPrintPreview( wxCommandEvent& event ) override;

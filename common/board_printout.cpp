@@ -192,7 +192,6 @@ void BOARD_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aView,
 
 void BOARD_PRINTOUT::setupPainter( const std::unique_ptr<KIGFX::PAINTER>& aPainter )
 {
-    aPainter->GetSettings()->SetOutlineWidth( m_settings.m_lineWidth );
     aPainter->GetSettings()->SetBackgroundColor( COLOR4D::WHITE );
 }
 

@@ -28,8 +28,7 @@ static constexpr double MIN_SCALE = 0.01;
 static constexpr double MAX_SCALE = 100.0;
 
 DIALOG_PRINT_GENERIC::DIALOG_PRINT_GENERIC( EDA_DRAW_FRAME* aParent, PRINTOUT_SETTINGS* aSettings )
-    : DIALOG_PRINT_GENERIC_BASE( aParent ), m_config( nullptr ), m_settings( aSettings ),
-    m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
+    : DIALOG_PRINT_GENERIC_BASE( aParent ), m_config( nullptr ), m_settings( aSettings )
 {
     m_scaleValidator.SetRange( MIN_SCALE, MAX_SCALE );
     m_scaleCustomText->SetValidator( m_scaleValidator );
@@ -69,7 +68,6 @@ void DIALOG_PRINT_GENERIC::ForcePrintBorder( bool aValue )
 
 void DIALOG_PRINT_GENERIC::saveSettings()
 {
-    m_settings->m_lineWidth = m_lineWidth.GetValue();
     m_settings->m_scale = getScaleValue();
     m_settings->m_titleBlock = m_titleBlock->GetValue();
     m_settings->m_blackWhite = m_outputMode->GetSelection();
@@ -136,7 +134,6 @@ bool DIALOG_PRINT_GENERIC::TransferDataToWindow()
     if( m_config )
         m_settings->Load( m_config );
 
-    m_lineWidth.SetValue( m_settings->m_lineWidth );
     setScaleValue( m_settings->m_scale );
     m_titleBlock->SetValue( m_settings->m_titleBlock );
     m_outputMode->SetSelection( m_settings->m_blackWhite ? 1 : 0 );

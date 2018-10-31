@@ -120,10 +120,6 @@ DIALOG_PRINT_GERBVIEW::DIALOG_PRINT_GERBVIEW( GERBVIEW_FRAME* aParent, BOARD_PRI
 {
     m_config = Kiface().KifaceSettings();
 
-    // Line width settings range
-    m_lineWidth.SetMax( KiROUND( 5 * IU_PER_MM ) );
-    m_lineWidth.SetMin( KiROUND( 0.005 * IU_PER_MM ) );
-
     createExtraOptions();
     createLeftPanel();
 }
