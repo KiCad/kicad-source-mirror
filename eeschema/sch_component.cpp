@@ -1141,7 +1141,8 @@ bool SCH_COMPONENT::AddSheetPathReferenceEntryIfMissing( const wxString& aSheetP
 
     // The full component reference path is aSheetPathName + the component time stamp itself
     // full_AR_path is the alternate reference path to search
-    wxString full_AR_path = aSheetPathName + wxString::Format( "%8.8X", GetTimeStamp() );
+    wxString full_AR_path = aSheetPathName
+                                   + wxString::Format( "%8.8lX", (unsigned long) GetTimeStamp() );
 
     for( unsigned int ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
     {
