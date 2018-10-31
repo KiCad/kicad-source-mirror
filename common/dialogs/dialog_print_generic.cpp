@@ -63,6 +63,13 @@ void DIALOG_PRINT_GENERIC::ForcePrintBorder( bool aValue )
 {
     m_titleBlock->SetValue( aValue );
     m_titleBlock->Hide();
+
+    if( m_config )
+    {
+        m_settings->Load( m_config );
+        m_settings->m_titleBlock = aValue;
+        m_settings->Save( m_config );
+    }
 }
 
 
