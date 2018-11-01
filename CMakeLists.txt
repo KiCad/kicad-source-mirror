@@ -613,7 +613,7 @@ include( MinGWResourceCompiler )
 
 # Find GDI+ on windows if wxGraphicsContext is available, and only link gdiplus library
 # if wxGraphicsContext not used, because the cairo printing system uses this library
-if( MINGW )
+if( WIN32 )
     if( USE_WX_GRAPHICS_CONTEXT )
         find_package( GdiPlus )
         check_find_package_result( GDI_PLUS_FOUND "GDI+" )
