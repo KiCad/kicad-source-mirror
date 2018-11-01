@@ -792,7 +792,7 @@ LSET LSET::ForbiddenFootprintLayers()
 
 LSET LSET::ForbiddenTextLayers()
 {
-    static const LSET saved( 2, Edge_Cuts, Margin );
+    static const LSET saved( 1, Edge_Cuts );
     return saved;
 }
 
