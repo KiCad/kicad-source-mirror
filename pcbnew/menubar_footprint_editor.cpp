@@ -101,9 +101,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import a footprint from an existing footprint file" ),
                  KiBitmap( import_module_xpm ) );
 
-    AddMenuItem( fileMenu, ID_GEN_IMPORT_DXF_FILE,
-                 _( "Import Outlines from &DXF File..." ),
-                 _( "Import 2D Drawing DXF file to Footprint Editor on Drawings layer" ),
+    AddMenuItem( fileMenu, ID_GEN_IMPORT_GRAPHICS_FILE,
+                 _( "Import Outlines from &DXF or SVG File..." ),
+                 _( "Import 2D Drawing DXF or SVG file to Footprint Editor on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,

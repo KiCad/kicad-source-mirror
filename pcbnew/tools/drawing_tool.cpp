@@ -113,9 +113,9 @@ TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone
         _( "Add a Similar Zone" ), _( "Add a zone with the same settings as an existing zone" ),
         add_zone_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::placeDXF( "pcbnew.InteractiveDrawing.placeDXF",
+TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DXF ),
-        "Place DXF", "", NULL, AF_ACTIVATE );
+        "Place Imported Graphics", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ANCHOR ),
@@ -734,13 +734,15 @@ int DRAWING_TOOL::DrawSimilarZone( const TOOL_EVENT& aEvent )
 }
 
 
-int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
+int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
 {
     if( !m_frame->GetModel() )
         return 0;
 
     //DIALOG_DXF_IMPORT dlg( m_frame );
-    DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
+    // Note: PlaceImportedGraphics() will convert  PCB_LINE_T and PCB_TEXT_T to module graphic items
+    // if needed
+    DIALOG_IMPORT_GFX dlg( m_frame, false );// m_editModules );
     int dlgResult = dlg.ShowModal();
 
     /*const std::list<BOARD_ITEM*>*/auto& list = dlg.GetImportedItems();
@@ -915,7 +917,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
                     commit.Add( item );
             }
 
-            commit.Push( _( "Place a DXF drawing" ) );
+            commit.Push( _( "Place a DXF_SVG drawing" ) );
             break;
         }
     }
@@ -1793,7 +1795,7 @@ void DRAWING_TOOL::setTransitions()
     Go( &DRAWING_TOOL::DrawSimilarZone, PCB_ACTIONS::drawSimilarZone.MakeEvent() );
     Go( &DRAWING_TOOL::DrawVia, PCB_ACTIONS::drawVia.MakeEvent() );
     Go( &DRAWING_TOOL::PlaceText, PCB_ACTIONS::placeText.MakeEvent() );
-    Go( &DRAWING_TOOL::PlaceDXF, PCB_ACTIONS::placeDXF.MakeEvent() );
+    Go( &DRAWING_TOOL::PlaceImportedGraphics, PCB_ACTIONS::placeImportedGraphics.MakeEvent() );
     Go( &DRAWING_TOOL::SetAnchor, PCB_ACTIONS::setAnchor.MakeEvent() );
 }
 

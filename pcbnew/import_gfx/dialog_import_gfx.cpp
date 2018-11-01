@@ -105,7 +105,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleIt
         m_SelLayerBox->SetLayerSelection( m_layer );
     }
 
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
     Centre();
@@ -222,8 +222,8 @@ void DIALOG_IMPORT_GFX::OnOKClick( wxCommandEvent& event )
 
     if( plugin )
     {
-        m_importer->SetScale( 1e6 );       // @todo: add a setting in the dialog and apply it here
-        m_importer->SetLineWidth( 0.1 );   // @todo add a setting in the dialog and apply it here
+        m_importer->SetScale( 1.0 /*1e6*/ );       // mm -> IU @todo: add a setting in the dialog and apply it here
+        m_importer->SetLineWidth( 0.1 * 1e6 );   // @todo add a setting in the dialog and apply it here
         m_importer->SetPlugin( std::move( plugin ) );
 
         if( m_importer->Load( m_filename ) )
@@ -239,17 +239,19 @@ void DIALOG_IMPORT_GFX::OnOKClick( wxCommandEvent& event )
 
 void DIALOG_IMPORT_GFX::onChangeHeight( wxUpdateUIEvent &event)
 {
-    double heightInput;
-
-    heightInput = DoubleValueFromString(UNSCALED_UNITS,m_tcHeight->GetValue());
+    // @todo: implement scaling of Y
+#if 0
+    double heightInput = DoubleValueFromString(UNSCALED_UNITS,m_tcHeight->GetValue());
 
     if(m_cbKeepAspectRatio->GetValue())
     {
-        // @todo: implement scaling of Y
     }
+#endif
 }
 
-
+#if 0
+    // Must be reworked (perhaps removed) because this is not used in GAL canvases
+    // only in legacy canvas.
 bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
 {
     DIALOG_IMPORT_GFX dlg( aCaller );
@@ -299,7 +301,7 @@ bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 
     return success;
 }
-
+#endif
 
 void DIALOG_IMPORT_GFX::OriginOptionOnUpdateUI( wxUpdateUIEvent& event )
 {

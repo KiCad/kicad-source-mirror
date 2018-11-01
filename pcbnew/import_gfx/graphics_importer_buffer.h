@@ -116,7 +116,7 @@ class IMPORTED_TEXT : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_TEXT( const VECTOR2D& aOrigin, const wxString& aText,
-            unsigned int aHeight, unsigned aWidth, double aOrientation,
+            double aHeight, double aWidth, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
         : m_origin( aOrigin ), m_text( aText ),
             m_height( aHeight ), m_width( aWidth ),
@@ -132,13 +132,37 @@ public:
     }
 
 private:
-    const VECTOR2D& m_origin;
-    const wxString& m_text;
-    unsigned int m_height;
-    unsigned int m_width;
+    const VECTOR2D m_origin;
+    const wxString m_text;
+    double m_height;
+    double m_width;
     double m_orientation;
     EDA_TEXT_HJUSTIFY_T m_hJustify;
     EDA_TEXT_VJUSTIFY_T m_vJustify;
+};
+
+
+class IMPORTED_SPLINE : public IMPORTED_SHAPE
+{
+public:
+    IMPORTED_SPLINE( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth )
+        : m_start( aStart ), m_bezierControl1( aBezierControl1 ),
+          m_bezierControl2( aBezierControl2 ), m_end( aEnd ), m_width( aWidth )
+    {
+    }
+
+    void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
+    {
+        aImporter.AddSpline( m_start, m_bezierControl1, m_bezierControl2, m_end, m_width );
+    }
+
+private:
+    const VECTOR2D m_start;
+    const VECTOR2D m_bezierControl1;
+    const VECTOR2D m_bezierControl2;
+    const VECTOR2D m_end;
+    double m_width;
 };
 
 
@@ -147,15 +171,18 @@ class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 public:
     void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, unsigned int aRadius ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            unsigned int aHeight, unsigned aWidth, double aOrientation,
+            double aHeight, double aWidth, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
+
+    void AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
+                    const VECTOR2D& BezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter );
 

@@ -1242,12 +1242,12 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         ArchiveModulesOnBoard( true );
         break;
 
-    case ID_GEN_IMPORT_DXF_FILE:
+    case ID_GEN_IMPORT_GRAPHICS_FILE:
         InvokeDXFDialogBoardImport( this );
         m_canvas->Refresh();
         break;
 
-   
+
     default:
         wxString msg;
         msg.Printf( wxT( "PCB_EDIT_FRAME::Process_Special_Functions() unknown event id %d" ), id );

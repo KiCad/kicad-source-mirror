@@ -830,9 +830,9 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Import routed \"Specctra Session\" (*.ses) file" ),
                  KiBitmap( import_xpm ) );
 
-    AddMenuItem( submenuImport, ID_GEN_IMPORT_DXF_FILE,
-                 _( "&DXF File..." ),
-                 _( "Import 2D Drawing DXF file to Pcbnew on Drawings layer" ),
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
+                 _( "SVG or DXF &Graphics..." ),
+                 _( "Import 2D Drawing DXF or SVG file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( aParentMenu, submenuImport,

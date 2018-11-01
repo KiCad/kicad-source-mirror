@@ -29,7 +29,6 @@ class PCB_LAYER_BOX_SELECTOR;
 #include <wx/choice.h>
 #include <wx/radiobox.h>
 #include <wx/valtext.h>
-#include <wx/checkbox.h>
 #include <wx/bmpcbox.h>
 #include <wx/statline.h>
 #include <wx/dialog.h>
@@ -56,23 +55,19 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_PCBXCoord;
 		wxStaticText* m_staticText5;
 		wxTextCtrl* m_PCBYCoord;
-		wxStaticText* m_staticText6;
-		wxTextCtrl* m_tcHeight;
-		wxStaticText* m_staticText7;
-		wxTextCtrl* m_tcWidth;
-		wxCheckBox* m_cbKeepAspectRatio;
+		wxStaticText* m_staticTextScale;
+		wxTextCtrl* m_tcScale;
 		wxStaticText* m_staticTextBrdlayer;
 		PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;
 		wxStaticLine* m_staticline8;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnBrowseFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OriginOptionOnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onChangeHeight( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void onKeepAspectRatioUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnOKClick( wxCommandEvent& event ) { event.Skip(); }
 		

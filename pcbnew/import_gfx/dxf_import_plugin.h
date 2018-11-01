@@ -129,8 +129,8 @@ private:
                                 // Each message ends by '\n'
     DXF2BRD_ENTITY_DATA m_curr_entity;  // the current entity parameters when parsing a DXF entity
 
-    int m_minX, m_maxX;
-    int m_minY, m_maxY;
+    int m_minX, m_maxX;         // handles image size
+    int m_minY, m_maxY;         // handles image size
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 
@@ -154,6 +154,10 @@ public:
 
     unsigned int GetImageWidth() const override;
     unsigned int GetImageHeight() const override;
+
+    void updateImageLimits( const wxPoint& aPoint );
+    void updateImageLimits( const wxRealPoint& aPoint );
+    void updateImageLimits( const VECTOR2D& aPoint );
 
     /**
      * Allows the import DXF items converted to board graphic items or footprint

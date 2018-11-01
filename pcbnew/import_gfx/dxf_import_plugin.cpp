@@ -22,16 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-// The DXF reader lib (libdxfrw) comes from LibreCAD project, a 2D CAD program
-// libdxfrw can be found on http://sourceforge.net/projects/libdxfrw/
-// or (latest sources) on
-// https://github.com/LibreCAD/LibreCAD/tree/master/libraries/libdxfrw/src
-//
-// There is no doc to use it, but have a look to
-// https://github.com/LibreCAD/LibreCAD/blob/master/librecad/src/lib/filters/rs_filterdxf.cpp
-// and https://github.com/LibreCAD/LibreCAD/blob/master/librecad/src/lib/filters/rs_filterdxf.h
+// The DXF reader lib (libdxfrw) comes from dxflib project used in QCAD
+// See http://www.ribbonsoft.com
 // Each time a dxf entity is read, a "call back" fuction is called
-// like void DXF_IMPORT_PLUGIN::addLine( const DRW_Line& data ) when a line is read.
+// like void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& data ) when a line is read.
 // this function just add the BOARD entity from dxf parameters (start and end point ...)
 
 
@@ -75,16 +69,14 @@ DXF_IMPORT_PLUGIN::~DXF_IMPORT_PLUGIN()
 
 bool DXF_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
-    //dxfRW dxf( aFileName.ToUTF8() );
-    //return dxf.read( this, true );
-    return true;
+    return ImportDxfFile( aFileName );
 }
 
 
 bool DXF_IMPORT_PLUGIN::Import( float aXScale, float aYScale )
 {
-    //wxCHECK( m_importer, false );
-    //m_internalImporter.ImportTo( *m_importer );
+    wxCHECK( m_importer, false );
+    m_internalImporter.ImportTo( *m_importer );
 
     return true;
 }
@@ -203,7 +195,7 @@ void DXF_IMPORT_PLUGIN::addLayer( const DL_LayerData& aData )
 
 void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
 {
-    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
+/*    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
@@ -212,7 +204,14 @@ void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& aData )
     wxPoint end( mapX( aData.x2 ), mapY( aData.y2 ) );
     segm->SetEnd( end );
     segm->SetWidth( mapWidth( attributes.getWidth() ) );
-    m_newItemsList.push_back( segm );
+    m_newItemsList.push_back( segm );*/
+    VECTOR2D start( mapX( aData.x1 ), mapY( aData.y1 ) );
+    VECTOR2D end( mapX( aData.x2 ), mapY( aData.y2 ) );
+    m_internalImporter.AddLine( start, end );
+
+    updateImageLimits( start );
+    updateImageLimits( end );
+
 }
 
 
@@ -295,7 +294,7 @@ void DXF_IMPORT_PLUGIN::endEntity()
 
 void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 {
-    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
+/*    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
 
     segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
@@ -306,6 +305,14 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
     segm->SetArcStart( circle_start );
     segm->SetWidth( mapWidth( attributes.getWidth() ) );
     m_newItemsList.push_back( segm );
+*/
+    VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
+    m_internalImporter.AddCircle( center, mapDim( aData.radius ) );
+
+    VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
+
+    updateImageLimits( center + radiusDelta );
+    updateImageLimits( center - radiusDelta );
 }
 
 
@@ -314,6 +321,7 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
  */
 void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 {
+/*
     DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
 
@@ -349,11 +357,41 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 
     segm->SetWidth( mapWidth( attributes.getWidth() ) );
     m_newItemsList.push_back( segm );
+*/
+    // Init arc centre:
+    VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
+
+    // Init arc start point
+    double arcStartx = aData.radius;
+    double arcStarty = 0;
+
+    // aData.anglex is in degrees. Our internal units are 0.1 degree
+    // so convert DXF angles to our units
+    #define DXF2ANGLEUI 10
+    double  startangle = aData.angle1 * DXF2ANGLEUI;
+    double  endangle = aData.angle2 * DXF2ANGLEUI;
+
+    RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( startangle ) );
+    wxPoint arcStart( mapX( arcStartx + aData.cx ), mapY( arcStarty + aData.cy ) );
+
+    // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
+    double angle = -( endangle - startangle );
+
+    if( angle > 0.0 )
+        angle -= 3600.0;
+
+    m_internalImporter.AddArc( center, arcStart, angle );
+
+    VECTOR2D radiusDelta( mapDim( aData.radius ), mapDim( aData.radius ) );
+
+    updateImageLimits( center + radiusDelta );
+    updateImageLimits( center - radiusDelta );
 }
 
 
 void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
 {
+#if 0
     BOARD_ITEM* brdItem;
     EDA_TEXT* textItem;
 
@@ -454,18 +492,150 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     textItem->SetTextPos( refPoint );
     textItem->SetTextAngle( aData.angle * 10 );
 
-    // The 0.8 factor gives a better height/width ratio with our font
-    textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
+    // The 0.9 factor gives a better height/width ratio with our font
+    textItem->SetTextWidth( mapDim( aData.height * 0.9 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
     textItem->SetThickness( mapWidth( aData.height * DEFAULT_TEXT_WIDTH ) );  // Gives a reasonable text thickness
     textItem->SetText( text );
 
     m_newItemsList.push_back( static_cast< BOARD_ITEM* >( brdItem ) );
+#endif
+    wxPoint refPoint( mapX( aData.ipx ), mapY( aData.ipy ) );
+    wxPoint secPoint( mapX( aData.apx ), mapY( aData.apy ) );
+
+    if( aData.vJustification != 0 || aData.hJustification != 0 || aData.hJustification == 4 )
+    {
+        if( aData.hJustification != 3 && aData.hJustification != 5 )
+        {
+            wxPoint tmp = secPoint;
+            secPoint = refPoint;
+            refPoint = tmp;
+        }
+    }
+
+    wxString text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
+
+    double textHeight = mapDim( aData.height );
+    // The 0.9 factor gives a better height/width ratio with our font
+    double charWidth = textHeight * 0.9;
+    double textWidth = charWidth * text.length();          // Rough approximation
+
+    VECTOR2D bottomLeft(0.0, 0.0);
+    VECTOR2D bottomRight(0.0, 0.0);
+    VECTOR2D topLeft(0.0, 0.0);
+    VECTOR2D topRight(0.0, 0.0);
+
+    EDA_TEXT_HJUSTIFY_T hJustify = GR_TEXT_HJUSTIFY_LEFT;
+    EDA_TEXT_VJUSTIFY_T vJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+
+    switch( aData.vJustification )
+    {
+    case 0: //DRW_Text::VBaseLine:
+    case 1: //DRW_Text::VBottom:
+        vJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+
+        topLeft.y = textHeight;
+        topRight.y = textHeight;
+        break;
+
+    case 2: //DRW_Text::VMiddle:
+        vJustify = GR_TEXT_VJUSTIFY_CENTER;
+
+        bottomRight.y = -textHeight / 2.0;
+        bottomLeft.y = -textHeight / 2.0;
+        topLeft.y = textHeight / 2.0;
+        topRight.y = textHeight / 2.0;
+        break;
+
+    case 3: //DRW_Text::VTop:
+        vJustify = GR_TEXT_VJUSTIFY_TOP;
+
+        bottomLeft.y = -textHeight;
+        bottomRight.y = -textHeight;
+        break;
+    }
+
+    switch( aData.hJustification )
+    {
+    case 0: //DRW_Text::HLeft:
+    case 3: //DRW_Text::HAligned:    // no equivalent options in text pcb.
+    case 5: //DRW_Text::HFit:       // no equivalent options in text pcb.
+        hJustify = GR_TEXT_HJUSTIFY_LEFT;
+
+        bottomRight.x = textWidth;
+        topRight.x = textWidth;
+        break;
+
+    case 1: //DRW_Text::HCenter:
+    case 4: //DRW_Text::HMiddle:     // no equivalent options in text pcb.
+        hJustify = GR_TEXT_HJUSTIFY_CENTER;
+
+        bottomLeft.x = -textWidth / 2.0;
+        topLeft.x = -textWidth / 2.0;
+        bottomRight.x = textWidth / 2.0;
+        topRight.x = textWidth / 2.0;
+        break;
+
+    case 2: //DRW_Text::HRight:
+        hJustify = GR_TEXT_HJUSTIFY_RIGHT;
+
+        bottomLeft.x = -textWidth;
+        topLeft.x = -textWidth;
+        break;
+    }
+
+#if 0
+    wxString sty = wxString::FromUTF8( aData.style.c_str() );
+    sty = sty.ToLower();
+
+    if( aData.textgen == 2 )
+    {
+        // Text dir = left to right;
+    } else if( aData.textgen == 4 )
+    {
+        // Text dir = top to bottom;
+    } else
+    {
+    }
+#endif
+
+    double angle = aData.angle * 10;
+    double angleInRads = angle / 10.0 * M_PI / 180.0;
+    double cosine = cos(angleInRads);
+    double sine = sin(angleInRads);
+
+    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, angle,
+            hJustify, vJustify );
+
+    // Calculate the boundary box and update the image limits:
+    bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
+    bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;
+
+    bottomRight.x = bottomRight.x * cosine - bottomRight.y * sine;
+    bottomRight.y = bottomRight.x * sine + bottomRight.y * cosine;
+
+    topLeft.x = topLeft.x * cosine - topLeft.y * sine;
+    topLeft.y = topLeft.x * sine + topLeft.y * cosine;
+
+    topRight.x = topRight.x * cosine - topRight.y * sine;
+    topRight.y = topRight.x * sine + topRight.y * cosine;
+
+    bottomLeft += refPoint;
+    bottomRight += refPoint;
+    topLeft += refPoint;
+    topRight += refPoint;
+
+    updateImageLimits( bottomLeft );
+    updateImageLimits( bottomRight );
+    updateImageLimits( topLeft );
+    updateImageLimits( topRight );
+
 }
 
 
 void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 {
+#if 0
     wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
     wxString    attrib, tmp;
 
@@ -516,8 +686,8 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     textItem->SetTextPos( textpos );
     textItem->SetTextAngle( aData.angle * 10 );
 
-    // The 0.8 factor gives a better height/width ratio with our font
-    textItem->SetTextWidth( mapDim( aData.height * 0.8 ) );
+    // The 0.9 factor gives a better height/width ratio with our font
+    textItem->SetTextWidth( mapDim( aData.height * 0.9 ) );
     textItem->SetTextHeight( mapDim( aData.height ) );
     textItem->SetThickness( mapWidth( aData.height * DEFAULT_TEXT_WIDTH ) );  // Gives a reasonable text thickness
     textItem->SetText( text );
@@ -574,6 +744,152 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
 #endif
 
     m_newItemsList.push_back( static_cast< BOARD_ITEM* >( brdItem ) );
+#endif
+    wxString    text = toNativeString( wxString::FromUTF8( aData.text.c_str() ) );
+    wxString    attrib, tmp;
+
+    double textHeight = mapDim( aData.height );
+    // The 0.9 factor gives a better height/width ratio with our font
+    double charWidth = textHeight * 0.9;
+    double textWidth = charWidth * text.length();          // Rough approximation
+
+    wxRealPoint bottomLeft(0.0, 0.0);
+    wxRealPoint bottomRight(0.0, 0.0);
+    wxRealPoint topLeft(0.0, 0.0);
+    wxRealPoint topRight(0.0, 0.0);
+
+    /* Some texts start by '\' and have formating chars (font name, font option...)
+     *  ending with ';'
+     *  Here are some mtext formatting codes:
+     *  Format code        Purpose
+     * \0...\o            Turns overline on and off
+     *  \L...\l            Turns underline on and off
+     * \~                 Inserts a nonbreaking space
+     \\                 Inserts a backslash
+     \\\{...\}            Inserts an opening and closing brace
+     \\ \File name;        Changes to the specified font file
+     \\ \Hvalue;           Changes to the text height specified in drawing units
+     \\ \Hvaluex;          Changes the text height to a multiple of the current text height
+     \\ \S...^...;         Stacks the subsequent text at the \, #, or ^ symbol
+     \\ \Tvalue;           Adjusts the space between characters, from.75 to 4 times
+     \\ \Qangle;           Changes obliquing angle
+     \\ \Wvalue;           Changes width factor to produce wide text
+     \\ \A                 Sets the alignment value; valid values: 0, 1, 2 (bottom, center, top)    while( text.StartsWith( wxT("\\") ) )
+     */
+    while( text.StartsWith( wxT( "\\" ) ) )
+    {
+        attrib << text.BeforeFirst( ';' );
+        tmp     = text.AfterFirst( ';' );
+        text    = tmp;
+    }
+
+    wxPoint textpos( mapX( aData.ipx ), mapY( aData.ipy ) );
+
+    // Initialize text justifications:
+    EDA_TEXT_HJUSTIFY_T hJustify = GR_TEXT_HJUSTIFY_LEFT;
+    EDA_TEXT_VJUSTIFY_T vJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+
+    if( aData.attachmentPoint <= 3 )
+    {
+        vJustify = GR_TEXT_VJUSTIFY_TOP;
+
+        bottomLeft.y = -textHeight;
+        bottomRight.y = -textHeight;
+    }
+    else if( aData.attachmentPoint <= 6 )
+    {
+        vJustify = GR_TEXT_VJUSTIFY_CENTER;
+
+        bottomRight.y = -textHeight / 2.0;
+        bottomLeft.y = -textHeight / 2.0;
+        topLeft.y = textHeight / 2.0;
+        topRight.y = textHeight / 2.0;
+    }
+    else
+    {
+        vJustify = GR_TEXT_VJUSTIFY_BOTTOM;
+
+        topLeft.y = textHeight;
+        topRight.y = textHeight;
+    }
+
+    if( aData.attachmentPoint % 3 == 1 )
+    {
+        hJustify = GR_TEXT_HJUSTIFY_LEFT;
+
+        bottomRight.x = textWidth;
+        topRight.x = textWidth;
+    }
+    else if( aData.attachmentPoint % 3 == 2 )
+    {
+        hJustify = GR_TEXT_HJUSTIFY_CENTER;
+
+        bottomLeft.x = -textWidth / 2.0;
+        topLeft.x = -textWidth / 2.0;
+        bottomRight.x = textWidth / 2.0;
+        topRight.x = textWidth / 2.0;
+    }
+    else
+    {
+        hJustify = GR_TEXT_HJUSTIFY_RIGHT;
+
+        bottomLeft.x = -textWidth;
+        topLeft.x = -textWidth;
+    }
+
+#if 0   // These setting have no mening in Pcbnew
+    if( data.alignH == 1 )
+    {
+        // Text is left to right;
+    }
+    else if( data.alignH == 3 )
+    {
+        // Text is top to bottom;
+    }
+    else
+    {
+        // use ByStyle;
+    }
+
+    if( aData.alignV == 1 )
+    {
+        // use AtLeast;
+    }
+    else
+    {
+        // useExact;
+    }
+#endif
+
+    double angle = aData.angle * 10;
+    double angleInRads = angle / 10.0 * M_PI / 180.0;
+    double cosine = cos(angleInRads);
+    double sine = sin(angleInRads);
+
+    m_internalImporter.AddText( textpos, text, textHeight, charWidth, angle, hJustify, vJustify );
+
+    bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
+    bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;
+
+    bottomRight.x = bottomRight.x * cosine - bottomRight.y * sine;
+    bottomRight.y = bottomRight.x * sine + bottomRight.y * cosine;
+
+    topLeft.x = topLeft.x * cosine - topLeft.y * sine;
+    topLeft.y = topLeft.x * sine + topLeft.y * cosine;
+
+    topRight.x = topRight.x * cosine - topRight.y * sine;
+    topRight.y = topRight.x * sine + topRight.y * cosine;
+
+    bottomLeft += textpos;
+    bottomRight += textpos;
+    topLeft += textpos;
+    topRight += textpos;
+
+    updateImageLimits( bottomLeft );
+    updateImageLimits( bottomRight );
+    updateImageLimits( topLeft );
+    updateImageLimits( topRight );
+
 }
 
 
@@ -803,6 +1119,7 @@ void DXF_IMPORT_PLUGIN::addTextStyle( const DL_StyleData& aData )
 void DXF_IMPORT_PLUGIN::insertLine( const wxRealPoint& aSegStart,
                                     const wxRealPoint& aSegEnd, int aWidth )
 {
+    #if 0
     DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
     wxPoint segment_startpoint( Millimeter2iu( aSegStart.x ), Millimeter2iu( aSegStart.y ) );
@@ -814,17 +1131,24 @@ void DXF_IMPORT_PLUGIN::insertLine( const wxRealPoint& aSegStart,
     segm->SetWidth( aWidth );
 
     m_newItemsList.push_back( segm );
+    #endif
+    VECTOR2D origin( Millimeter2iu( aSegStart.x ), Millimeter2iu( aSegStart.y ) );
+    VECTOR2D end( Millimeter2iu( aSegEnd.x ), Millimeter2iu( aSegEnd.y ) );
+    m_internalImporter.AddLine( origin, end );
+
+    updateImageLimits( origin );
+    updateImageLimits( end );
 }
 
 
 void DXF_IMPORT_PLUGIN::insertArc( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd,
                                    double aBulge, int aWidth )
 {
-    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
+/*    DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                         static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) : new DRAWSEGMENT;
-
-    wxPoint segment_startpoint( Millimeter2iu( aSegStart.x ), Millimeter2iu( aSegStart.y ) );
-    wxPoint segment_endpoint( Millimeter2iu( aSegEnd.x ), Millimeter2iu( aSegEnd.y ) );
+*/
+    VECTOR2D segment_startpoint( Millimeter2iu( aSegStart.x ), Millimeter2iu( aSegStart.y ) );
+    VECTOR2D segment_endpoint( Millimeter2iu( aSegEnd.x ), Millimeter2iu( aSegEnd.y ) );
 
     // ensure aBulge represents an angle from +/- ( 0 .. approx 359.8 deg )
     if( aBulge < -2000.0 )
@@ -835,8 +1159,8 @@ void DXF_IMPORT_PLUGIN::insertArc( const wxRealPoint& aSegStart, const wxRealPoi
     double ang = 4.0 * atan( aBulge );
 
     // reflect the Y values to put everything in a RHCS
-    wxRealPoint sp( aSegStart.x, -aSegStart.y );
-    wxRealPoint ep( aSegEnd.x, -aSegEnd.y );
+    VECTOR2D sp( aSegStart.x, -aSegStart.y );
+    VECTOR2D ep( aSegEnd.x, -aSegEnd.y );
     // angle from end->start
     double offAng = atan2( ep.y - sp.y, ep.x - sp.x );
     // length of subtended segment = 1/2 distance between the 2 points
@@ -874,25 +1198,37 @@ void DXF_IMPORT_PLUGIN::insertArc( const wxRealPoint& aSegStart, const wxRealPoi
     // center point
     double cx = h * cos( offAng ) + xm;
     double cy = h * sin( offAng ) + ym;
+    VECTOR2D center( Millimeter2iu( cx ), Millimeter2iu( -cy ) );
+    VECTOR2D arc_start;
+    double angle = RAD2DECIDEG( ang );
 
-    segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
-    segm->SetShape( S_ARC );
-    segm->SetCenter( wxPoint( Millimeter2iu( cx ), Millimeter2iu( -cy ) ) );
+    //segm->SetLayer( ToLAYER_ID( m_brdLayer ) );
+    //segm->SetShape( S_ARC );
+    //segm->SetCenter( wxPoint( Millimeter2iu( cx ), Millimeter2iu( -cy ) ) );
 
     if( ang < 0.0 )
     {
-        segm->SetArcStart( wxPoint( Millimeter2iu( ep.x ), Millimeter2iu( -ep.y ) ) );
-        segm->SetAngle( RAD2DECIDEG( ang ) );
+        arc_start = VECTOR2D( Millimeter2iu( ep.x ), Millimeter2iu( -ep.y ) );
+        //segm->SetArcStart( wxPoint( Millimeter2iu( ep.x ), Millimeter2iu( -ep.y ) ) );
+        //segm->SetAngle( RAD2DECIDEG( ang ) );
     }
     else
     {
-        segm->SetArcStart( wxPoint( Millimeter2iu( sp.x ), Millimeter2iu( -sp.y ) ) );
-        segm->SetAngle( RAD2DECIDEG( -ang ) );
+        arc_start = VECTOR2D( Millimeter2iu( sp.x ), Millimeter2iu( -sp.y ) );
+        angle = -angle;
+        //segm->SetArcStart( wxPoint( Millimeter2iu( sp.x ), Millimeter2iu( -sp.y ) ) );
+        //segm->SetAngle( RAD2DECIDEG( -ang ) );
     }
 
-    segm->SetWidth( aWidth );
+    //segm->SetWidth( aWidth );
+    //m_newItemsList.push_back( segm );
 
-    m_newItemsList.push_back( segm );
+    m_internalImporter.AddArc( center, arc_start, angle );
+
+    wxPoint radiusDelta( Millimeter2iu( radius ), Millimeter2iu( radius ) );
+
+    updateImageLimits( center + radiusDelta );
+    updateImageLimits( center - radiusDelta );
     return;
 }
 
@@ -958,6 +1294,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
     // So we can have more than one Bezier curve ( there are one curve each four vertices)
     for( unsigned ii = 0; ii < coords.size(); ii += 8 )
     {
+        #if 0
         DRAWSEGMENT* segm = ( m_importAsfootprintGraphicItems ) ?
                                 static_cast< DRAWSEGMENT* >( new EDGE_MODULE( NULL ) ) :
                                 new DRAWSEGMENT;
@@ -970,7 +1307,36 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
         segm->SetWidth( aWidth );
         segm->RebuildBezierToSegmentsPointsList( aWidth );
         m_newItemsList.push_back( segm );
+        #endif
+        VECTOR2D start( mapX( coords[ii] ), mapY( coords[ii+1] ) );
+        VECTOR2D bezierControl1( mapX( coords[ii+2] ), mapY( coords[ii+3] ) );
+        VECTOR2D bezierControl2( mapX( coords[ii+4] ), mapY( coords[ii+5] ) );
+        VECTOR2D end( mapX( coords[ii+6] ), mapY( coords[ii+7] ) );
+        m_internalImporter.AddSpline( start, bezierControl1, bezierControl2, end , aWidth );
     }
 #endif
 }
 
+
+void DXF_IMPORT_PLUGIN::updateImageLimits( const VECTOR2D& aPoint )
+{
+    wxPoint truncatedPoint( (int)aPoint.x, (int)aPoint.y );
+
+    updateImageLimits( truncatedPoint );
+}
+
+
+void DXF_IMPORT_PLUGIN::updateImageLimits( const wxRealPoint& aPoint )
+{
+    updateImageLimits( VECTOR2D( aPoint.x, aPoint.y ) );
+}
+
+
+void DXF_IMPORT_PLUGIN::updateImageLimits( const wxPoint& aPoint )
+{
+    m_minX = std::min( aPoint.x, m_minX );
+    m_maxX = std::max( aPoint.x, m_maxX );
+
+    m_minY = std::min( aPoint.y, m_minY );
+    m_maxY = std::max( aPoint.y, m_maxY );
+}

@@ -54,7 +54,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddLine( const VECTOR2D& aOrigin, const VECTOR2D&
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, unsigned int aRadius )
+void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadius )
 {
     unique_ptr<DRAWSEGMENT> circle( createDrawing() );
     circle->SetShape( S_CIRCLE );
@@ -91,7 +91,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        unsigned int aHeight, unsigned aWidth, double aOrientation,
+        double aHeight, double aWidth, double aOrientation,
         EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
 {
     unique_ptr<BOARD_ITEM> boardItem;
@@ -99,14 +99,31 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     tie( boardItem, textItem ) = createText();
     boardItem->SetLayer( GetLayer() );
     textItem->SetThickness( GetLineWidth() );
-    textItem->SetTextPos( Round ( aOrigin * GetScale() ) );
+    textItem->SetTextPos( Round( aOrigin * GetScale() ) );
     textItem->SetTextAngle( aOrientation );
-    textItem->SetTextWidth( (double)aWidth * GetScale() );
-    textItem->SetTextHeight( (double)aHeight * GetScale() );
+    textItem->SetTextWidth( aWidth * GetScale() );
+    textItem->SetTextHeight( aHeight * GetScale() );
     textItem->SetVertJustify( aVJustify );
     textItem->SetHorizJustify( aHJustify );
     textItem->SetText( aText );
     addItem( std::move( boardItem ) );
+}
+
+
+void GRAPHICS_IMPORTER_PCBNEW::AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,
+                const VECTOR2D& BezierControl2, const VECTOR2D& aEnd, double aWidth )
+{
+    unique_ptr<DRAWSEGMENT> spline( createDrawing() );
+    aWidth = GetLineWidth();    // To do: use dxf line thickness if defined
+    spline->SetShape( S_CURVE );
+    spline->SetLayer( GetLayer() );
+    spline->SetWidth( aWidth );
+    spline->SetStart( Round( aStart * GetScale() ) );
+    spline->SetBezControl1( Round( BezierControl1 * GetScale() ) );
+    spline->SetBezControl2( Round( BezierControl2 * GetScale() ) );
+    spline->SetEnd( Round( aEnd * GetScale() ) );
+    spline->RebuildBezierToSegmentsPointsList( aWidth );
+    addItem( std::move( spline ) );
 }
 
 

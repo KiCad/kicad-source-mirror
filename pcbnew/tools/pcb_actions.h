@@ -177,8 +177,8 @@ public:
     /// Activation of the drawing tool (placing a MODULE)
     static TOOL_ACTION placeModule;
 
-    /// Activation of the drawing tool (placing a drawing from DXF file)
-    static TOOL_ACTION placeDXF;
+    /// Activation of the drawing tool (placing a drawing imported from DXF or SVG file)
+    static TOOL_ACTION placeImportedGraphics;
 
     /// Activation of the drawing tool (placing the footprint anchor)
     static TOOL_ACTION setAnchor;

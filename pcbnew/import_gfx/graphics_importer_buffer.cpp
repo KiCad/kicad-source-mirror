@@ -38,7 +38,7 @@ void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& 
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, unsigned int aRadius )
+void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius )
 {
     m_shapes.push_back( make_shape< IMPORTED_CIRCLE >( aCenter, aRadius ) );
 }
@@ -58,12 +58,20 @@ void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        unsigned int aHeight, unsigned aWidth, double aOrientation,
+        double aHeight, double aWidth, double aOrientation,
         EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
 {
     m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth, aOrientation,
                 aHJustify, aVJustify ) );
 }
+
+
+void GRAPHICS_IMPORTER_BUFFER::AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth )
+{
+    m_shapes.push_back( make_shape< IMPORTED_SPLINE >( aStart, aBezierControl1, aBezierControl2, aEnd, aWidth ) );
+}
+
 
 void GRAPHICS_IMPORTER_BUFFER::ImportTo( GRAPHICS_IMPORTER& aImporter )
 {

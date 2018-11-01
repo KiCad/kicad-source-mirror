@@ -168,10 +168,10 @@ public:
     int DrawSimilarZone( const TOOL_EVENT& aEvent );
 
     /**
-     * Function PlaceDXF()
-     * Places a drawing imported from a DXF file in module editor.
+     * Function PlaceImportedGraphics()
+     * Places a drawing imported from a DXF or SVG file in module editor.
      */
-    int PlaceDXF( const TOOL_EVENT& aEvent );
+    int PlaceImportedGraphics( const TOOL_EVENT& aEvent );
 
     /**
      * Function SetAnchor()

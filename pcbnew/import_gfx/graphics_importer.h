@@ -111,23 +111,6 @@ public:
 
 
     /**
-     * @brief Sets scale affecting the imported shapes, for the X direction.
-     */
-    void SetXScale( double aScale )
-    {
-        m_xScale = aScale;
-    }
-
-
-    /**
-     * @brief Sets scale affecting the imported shapes, for the Y direction.
-     */
-    void SetYScale( double aScale )
-    {
-        m_yScale = aScale;
-    }
-
-    /**
      * @brief Returns the scale factor affecting the imported shapes.
      */
     double GetScale() const
@@ -169,14 +152,14 @@ public:
      * @param aCenter is the circle center point expressed in internal units.
      * @param aRadius is the circle radius expressed in internal units.
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, unsigned int aRadius ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius ) = 0;
 
     /**
      * @brief Creates an object representing an arc.
      * @param aCenter is the arc center point expressed in internal units.
      * @param aStart is the arc arm end point expressed in internal units.
      * Its length is the arc radius.
-     * @param aAgnle is the arc angle expressed in decidegrees.
+     * @param aAngle is the arc angle expressed in decidegrees.
      */
     virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) = 0;
 
@@ -195,8 +178,11 @@ public:
      * @param aVJustify is the text vertical justification.
      */
     virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            unsigned int aHeight, unsigned aWidth, double aOrientation,
+            double aHeight, double, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) = 0;
+
+    virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth ) = 0;
 
 protected:
     ///> Adds an item to the imported shapes list.
@@ -220,12 +206,6 @@ private:
 
     ///> Default line thickness for the imported graphics
     unsigned int m_lineWidth;
-
-    ///> Scale factor applied to the imported graphics, X direction
-    double m_xScale;
-
-    ///> Scale factor applied to the imported graphics, Y direction
-    double m_yScale;
 
     ///> Scale factor applied to the imported graphics
     double m_scale;

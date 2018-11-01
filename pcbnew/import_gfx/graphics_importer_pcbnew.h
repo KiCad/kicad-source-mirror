@@ -62,15 +62,18 @@ public:
 
     void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd ) override;
 
-    void AddCircle( const VECTOR2D& aOrigin, unsigned int aRadius ) override;
+    void AddCircle( const VECTOR2D& aOrigin, double aRadius ) override;
 
     void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            unsigned int aHeight, unsigned aWidth, double aOrientation,
+            double aHeight, double aWidth, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
+
+    void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
+                    const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
 
 protected:
     ///> Create an object representing a graphical shape.
