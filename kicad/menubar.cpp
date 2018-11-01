@@ -323,9 +323,9 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Browse in file explorer
     AddMenuItem( browseMenu,
                 ID_BROWSE_IN_FILE_EXPLORER,
-                _( "&Browse Project Files..." ),
+                _( "&Browse Project Files" ),
                 _( "Open project directory in file explorer" ),
-                KiBitmap( open_project_xpm ) );
+                KiBitmap( directory_browser_xpm ) );
 
     // Menu Preferences:
     wxMenu* preferencesMenu = new wxMenu;

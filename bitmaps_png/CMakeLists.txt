@@ -215,6 +215,7 @@ set( BMAPS_MID
     delete_track
     delete
     directory
+    directory_browser
     display_options
     distribute_horizontal
     distribute_vertical
