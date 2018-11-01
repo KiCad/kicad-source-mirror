@@ -1,7 +1,7 @@
 #
 #  This program source code file is part of KICAD, a free EDA CAD application.
 #
-#  Copyright (C) 2007-2016 Kicad Developers, see AUTHORS.txt for contributors.
+#  Copyright (C) 2007-2018 Kicad Developers, see AUTHORS.txt for contributors.
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License
@@ -611,10 +611,16 @@ find_package( Boost 1.54.0 REQUIRED )
 # Include MinGW resource compiler.
 include( MinGWResourceCompiler )
 
-# Find GDI+ on windows if wxGraphicsContext is available.
-if( MINGW AND USE_WX_GRAPHICS_CONTEXT )
-    find_package( GdiPlus )
-    check_find_package_result( GDI_PLUS_FOUND "GDI+" )
+# Find GDI+ on windows if wxGraphicsContext is available, and only link gdiplus library
+# if wxGraphicsContext not used, because the cairo printing system uses this library
+if( MINGW )
+    if( USE_WX_GRAPHICS_CONTEXT )
+        find_package( GdiPlus )
+        check_find_package_result( GDI_PLUS_FOUND "GDI+" )
+    else()
+        # if WX_GRAPHICS_CONTEXT is not used we just need the gdiplus library for cairo printing
+        set( GDI_PLUS_LIBRARIES gdiplus )
+    endif()
 endif()
 
 # Find ngspice library, required for integrated circuit simulator
