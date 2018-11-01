@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -213,7 +213,7 @@ DIALOG_COLOR_PICKER_BASE::DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bButtonsSizer->Add( m_sdbSizer, 1, wxALIGN_RIGHT|wxALL, 5 );
+	bButtonsSizer->Add( m_sdbSizer, 1, wxALL, 5 );
 	
 	
 	bSizerMain->Add( bButtonsSizer, 1, wxEXPAND|wxLEFT, 10 );
