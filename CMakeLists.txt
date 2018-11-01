@@ -807,8 +807,12 @@ if( KICAD_SCRIPTING_WXPYTHON )
         set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} "--toolkit=${WXPYTHON_TOOLKIT}" )
     endif()
 
-    # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
-    set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
+    if( KICAD_SCRIPTING_WXPYTHON_PHOENIX )
+        set( wxWidgets_REQ_VERSION 3.0.2 )
+    else()
+        # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
+        set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
+    endif()
 else()
     # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
     set( wxWidgets_REQ_VERSION 3.0.0 )
@@ -823,7 +827,7 @@ find_package( wxWidgets ${wxWidgets_REQ_VERSION} COMPONENTS gl aui adv html core
 include( ${wxWidgets_USE_FILE} )
 
 
-if( KICAD_SCRIPTING_WXPYTHON )
+if( KICAD_SCRIPTING_WXPYTHON AND NOT KICAD_SCRIPTING_WXPYTHON_PHOENIX )
     # wxPython appears to be installed and valid so make sure the headers are available.
     foreach( path ${wxWidgets_INCLUDE_DIRS} )
         #message( STATUS "Searching for wx/wxPython/wxPython.h in ${path}" )
