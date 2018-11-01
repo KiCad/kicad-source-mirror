@@ -228,6 +228,7 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     m_treePane->GetLibTree()->ExpandLibId( aFPID );
     m_treePane->GetLibTree()->CenterLibId( aFPID );
+    m_treePane->GetLibTree()->Refresh();        // update highlighting
 }
 
 
@@ -459,6 +460,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         {
             // Save Library As
             const wxString& libName = getTargetFPID().GetLibNickname();
+
             if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
                 SyncLibraryTree( true );
         }
@@ -469,14 +471,16 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
             if( footprint && SaveFootprintAs( footprint ) )
             {
+                m_footprintNameWhenLoaded = footprint->GetFPID().GetLibItemName();
                 m_toolManager->GetView()->Update( GetBoard()->m_Modules );
+                GetScreen()->ClrModify();
 
                 if( IsGalCanvasActive() && GetGalCanvas() )
                     GetGalCanvas()->ForceRefresh();
                 else
                     GetCanvas()->Refresh();
 
-                GetScreen()->ClrModify();
+                SyncLibraryTree( true );
             }
         }
         else
@@ -484,8 +488,8 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             // Save Selected Footprint As
             MODULE* footprint = LoadFootprint( getTargetFPID() );
 
-            if( footprint )
-                SaveFootprintAs( footprint );
+            if( footprint && SaveFootprintAs( footprint ) )
+                SyncLibraryTree( true );
         }
 
         m_treePane->GetLibTree()->Refresh();

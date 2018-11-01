@@ -628,7 +628,8 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
     if( !alias )
     {
         wxString msg = wxString::Format( _( "Symbol name \"%s\" not found in library \"%s\"" ),
-            GetChars( aAlias ), GetChars( aLibrary ) );
+                                         GetChars( aAlias ),
+                                         GetChars( aLibrary ) );
         DisplayError( this, msg );
         return;
     }

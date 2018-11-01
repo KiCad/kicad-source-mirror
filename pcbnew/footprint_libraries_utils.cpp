@@ -712,9 +712,17 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprint( MODULE* aModule )
         else
             return false;
     }
-
-    if( libraryName.IsEmpty() || footprintName.IsEmpty() )
-        return SaveFootprintAs( aModule );
+    else if( libraryName.IsEmpty() || footprintName.IsEmpty() )
+    {
+        if( SaveFootprintAs( aModule ) )
+        {
+            m_footprintNameWhenLoaded = footprintName;
+            SyncLibraryTree( true );
+            return true;
+        }
+        else
+            return false;
+    }
 
     FP_LIB_TABLE* tbl = Prj().PcbFootprintLibs();
 
@@ -963,8 +971,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     if( !saveFootprintInLibrary( aModule, libraryName ) )
         return false;
 
-    m_footprintNameWhenLoaded = footprintName;
-
     // Once saved-as a board footprint is no longer a board footprint
     aModule->SetLink( 0 );
 
@@ -974,8 +980,6 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintAs( MODULE* aModule )
     wxString msg = wxString::Format( fmt, footprintName.GetData(), libraryName.GetData() );
     SetStatusText( msg );
     updateTitle();
-
-    SyncLibraryTree( true );
 
     return true;
 }

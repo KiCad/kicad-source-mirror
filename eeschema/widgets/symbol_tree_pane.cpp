@@ -125,11 +125,7 @@ void SYMBOL_TREE_PANE::Regenerate()
 
 void SYMBOL_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    // Repost the event
     wxCommandEvent evt( ID_LIBEDIT_EDIT_PART );
-    // I cannot figure out why the two methods below do not work..
-    //wxPostEvent( libEditFrame, evt );
-    //wxQueueEvent( m_libEditFrame, new wxCommandEvent( ID_LIBEDIT_EDIT_PART ) );
     m_libEditFrame->OnEditPart( evt );
 
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting

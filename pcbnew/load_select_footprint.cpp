@@ -46,7 +46,7 @@ using namespace std::placeholders;
 #include <macros.h>
 #include <fp_lib_table.h>
 #include <lib_id.h>
-
+#include <footprint_tree_pane.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <io_mgr.h>
@@ -59,6 +59,7 @@ using namespace std::placeholders;
 #include <footprint_viewer_frame.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
+#include <widgets/lib_tree.h>
 #include "fp_tree_model_adapter.h"
 
 
@@ -154,6 +155,8 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     if( IsGalCanvasActive() )
         updateView();
     m_canvas->Refresh();
+
+    m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items
 
     return true;
 }

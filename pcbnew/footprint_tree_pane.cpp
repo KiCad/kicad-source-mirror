@@ -128,11 +128,7 @@ void FOOTPRINT_TREE_PANE::Regenerate()
 
 void FOOTPRINT_TREE_PANE::onComponentSelected( wxCommandEvent& aEvent )
 {
-    // Repost the event
     wxCommandEvent evt( wxEVT_COMMAND_TOOL_CLICKED, ID_MODEDIT_EDIT_MODULE );
-    // I cannot figure out why the two methods below do not work..
-    //wxPostEvent( libEditFrame, evt );
-    //wxQueueEvent( m_libEditFrame, new wxCommandEvent( ID_LIBEDIT_EDIT_PART ) );
     m_frame->Process_Special_Functions( evt );
 
     // Make sure current-part highlighting doesn't get lost in seleciton highlighting
