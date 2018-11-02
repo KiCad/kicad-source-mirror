@@ -77,7 +77,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-18 21:11+0200\n"
-"PO-Revision-Date: 2018-07-15 16:49+0200\n"
+"PO-Revision-Date: 2018-11-02 11:58+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -626,7 +626,7 @@ msgstr "Esporta la vista corrente come PNG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:59
 msgid "Export Current View as JPEG..."
-msgstr "Esporta la virta corrente come JPEG..."
+msgstr "Esporta la vista corrente come JPEG..."
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:64 eeschema/menubar.cpp:468
 #: kicad/menubar.cpp:297 pcbnew/menubar_footprint_editor.cpp:150
