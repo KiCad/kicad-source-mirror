@@ -321,6 +321,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( browse_files_xpm ) );
 
     // Browse in file explorer
+    browseMenu->AppendSeparator();
     AddMenuItem( browseMenu,
                 ID_BROWSE_IN_FILE_EXPLORER,
                 _( "&Browse Project Files" ),
@@ -506,6 +507,12 @@ void KICAD_MANAGER_FRAME::RecreateBaseHToolbar()
     m_mainToolBar->AddTool( ID_PROJECT_TREE_REFRESH, wxEmptyString,
                             KiScaledBitmap( reload_xpm, this ),
                             _( "Refresh project tree" ) );
+
+    // Acces to the system file manager
+    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddTool( ID_BROWSE_IN_FILE_EXPLORER, wxEmptyString,
+                            KiScaledBitmap( directory_browser_xpm, this ),
+                            _( "Open project directory in file explorer" ) );
 
     // Create m_mainToolBar
     m_mainToolBar->Realize();
