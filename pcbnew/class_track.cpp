@@ -1031,13 +1031,20 @@ void VIA::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int VIA::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    constexpr unsigned int HIDE = std::numeric_limits<unsigned int>::max();
+
+    // Netnames will be shown only if zoom is appropriate
+    if( IsNetnameLayer( aLayer ) )
+        return m_Width == 0 ? HIDE : ( Millimeter2iu( 10 ) / m_Width );
+
+
     BOARD* board = GetBoard();
 
     // Only draw the via if at least one of the layers it crosses is being displayed
     if( board && ( board->GetVisibleLayers() & GetLayerSet() ).any() )
         return 0;
 
-    return std::numeric_limits<unsigned int>::max();
+    return HIDE;
 }
 
 
