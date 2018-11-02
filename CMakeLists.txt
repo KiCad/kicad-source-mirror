@@ -734,20 +734,20 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
 
         # Add user specified Python site package path.
         if( PYTHON_SITE_PACKAGE_PATH )
-            set( _py_cmd
-                "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");${_py_cmd}" )
+            set( _py_site_path
+                "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");" )
 
             if( APPLE ) # extra path for macOS, so that 'wx' module is accessible
-                set( _py_cmd
-                    "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}/wx-3.0-osx_cocoa\");${_py_cmd}" )
+                set( _py_site_path
+                    "${_py_site_path};sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}/wx-3.0-osx_cocoa\");" )
             endif()
         endif()
 
-        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_cmd}"
+        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_site_path}${_py_cmd}"
             RESULT_VARIABLE WXPYTHON_VERSION_RESULT
             OUTPUT_VARIABLE WXPYTHON_VERSION_FOUND
             OUTPUT_STRIP_TRAILING_WHITESPACE
-        )
+            )
 
         # Check to see if any version of wxPython is installed on the system.
         if( WXPYTHON_VERSION_RESULT GREATER 0 )
@@ -759,11 +759,34 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
         separate_arguments( WXPYTHON_VERSION_LIST )
         list( LENGTH WXPYTHON_VERSION_LIST VERSION_LIST_LEN )
 
-        if( VERSION_LIST_LEN EQUAL 3 )     # wxPython style, e.g. '3.0.2.0;gtk3;(classic)'
+        if( VERSION_LIST_LEN EQUAL 3 )
+            # wxPython style, e.g. '3.0.2.0;gtk3;(classic) or Pheonix style: e.g. 4.0.1;gtk3;(phoenix)
             list( GET WXPYTHON_VERSION_LIST 0 WXPYTHON_VERSION )
             list( GET WXPYTHON_VERSION_LIST 1 WXPYTHON_TOOLKIT )
-            set( WXPYTHON_WXVERSION ${WXPYTHON_VERSION} )
-        elseif( VERSION_LIST_LEN EQUAL 5 ) # Phoenix style, e.g. '4.0.3;gtk3;(phoenix);wxWidgets;3.0.4'
+            list( GET WXPYTHON_VERSION_LIST 2 WXPYTHON_FLAVOR )
+
+            # Determine wxWidgets version used by wxPython/Phoenix
+            if( WXPYTHON_FLAVOR MATCHES "phoenix" )
+                # 4.0.1;gtk3;(phoenix) does not contain wxWidgets version, request it explicitly
+                set( _py_cmd "import wx;print(wx.wxWidgets_version.split(' ')[1])")
+                execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_site_path}${_py_cmd}"
+                    RESULT_VARIABLE WXPYTHON_WXVERSION
+                    OUTPUT_VARIABLE WXPYTHON_WXVERSION_RESULT
+                    OUTPUT_STRIP_TRAILING_WHITESPACE
+                    )
+
+                if( NOT WXPYTHON_WXVERSION_RESULT EQUAL 0 )
+                    set( WXPYTHON_WXVERSION "3.0.2" )
+                    message( WARNING "Could not determine wxWidgets version used by Phoenix, requesting ${WXPYTHON_WXVERSION}" )
+                endif()
+
+            else()
+                # 3.0.2.0;gtk3;(classic) has the wxWidgets version in the first part
+                set( WXPYTHON_WXVERSION ${WXPYTHON_VERSION} )
+            endif()
+
+        elseif( VERSION_LIST_LEN EQUAL 5 )
+            # Phoenix style, e.g. '4.0.3;gtk3;(phoenix);wxWidgets;3.0.4'
             list( GET WXPYTHON_VERSION_LIST 0 WXPYTHON_VERSION )
             list( GET WXPYTHON_VERSION_LIST 1 WXPYTHON_TOOLKIT )
             list( GET WXPYTHON_VERSION_LIST 4 WXPYTHON_WXVERSION )
@@ -807,12 +830,8 @@ if( KICAD_SCRIPTING_WXPYTHON )
         set( wxWidgets_CONFIG_OPTIONS ${wxWidgets_CONFIG_OPTIONS} "--toolkit=${WXPYTHON_TOOLKIT}" )
     endif()
 
-    if( KICAD_SCRIPTING_WXPYTHON_PHOENIX )
-        set( wxWidgets_REQ_VERSION 3.0.2 )
-    else()
-        # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
-        set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
-    endif()
+    # Require the same wxWidgets version as is used by wxPython
+    set( wxWidgets_REQ_VERSION ${WXPYTHON_WXVERSION} )
 else()
     # Require wxWidgets 3.0.0 as the minimum when wxPython is disabled
     set( wxWidgets_REQ_VERSION 3.0.0 )
