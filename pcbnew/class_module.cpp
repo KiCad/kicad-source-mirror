@@ -1008,7 +1008,7 @@ unsigned int MODULE::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 
     // Currently it is only for anchor layer
     if( aView->IsLayerVisible( layer ) )
-        return 30;
+        return 3;
 
     return std::numeric_limits<unsigned int>::max();
 }

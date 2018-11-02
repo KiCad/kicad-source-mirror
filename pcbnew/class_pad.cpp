@@ -1342,7 +1342,7 @@ unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
         if( divisor == 0 )
             return HIDE;
 
-        return ( Millimeter2iu( 100 ) / divisor );
+        return ( Millimeter2iu( 20 ) / divisor );
     }
 
     // Other layers are shown without any conditions
