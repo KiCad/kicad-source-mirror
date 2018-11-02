@@ -29,6 +29,7 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_marker_pcb.h>
+#include <class_zone.h>
 
 
 /* This module contains out of line member functions for classes given in
@@ -149,12 +150,13 @@ const KICAD_T GENERAL_COLLECTOR::Zones[] = {
 
 SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 {
-    BOARD_ITEM* item   = (BOARD_ITEM*) testItem;
-    MODULE*     module = NULL;
-    D_PAD*      pad    = NULL;
-    bool        pad_through = false;
-    VIA*        via    = NULL;
-    MARKER_PCB* marker = NULL;
+    BOARD_ITEM*     item   = (BOARD_ITEM*) testItem;
+    MODULE*         module = NULL;
+    D_PAD*          pad    = NULL;
+    bool            pad_through = false;
+    VIA*            via    = NULL;
+    MARKER_PCB*     marker = NULL;
+    ZONE_CONTAINER* zone   = NULL;
 
 #if 0   // debugging
     static int  breakhere = 0;
@@ -268,6 +270,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_ZONE_AREA_T:
+        zone = static_cast<ZONE_CONTAINER*>( item );
         break;
 
     case PCB_TEXT_T:
@@ -386,8 +389,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         }
     }
 
-    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) ||
-            m_Guide->IgnorePreferredLayer() )
+    if( item->IsOnLayer( m_Guide->GetPreferredLayer() ) || m_Guide->IgnorePreferredLayer() )
     {
         PCB_LAYER_ID layer = item->GetLayer();
 
@@ -409,6 +411,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                     {
                         if( !module || module->HitTestAccurate( m_RefPos ) )
                             Append( item );
+                        goto exit;
+                    }
+                    else if( zone && !m_Guide->IgnoreZoneFills() && zone->HitTestFilledArea( m_RefPos ) )
+                    {
+                        Append( item );
                         goto exit;
                     }
                 }

@@ -651,8 +651,7 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 
 bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
 {
-    return HitTestForCorner( aPosition ) || HitTestForEdge( aPosition ) ||
-            HitTestFilledArea( aPosition );
+    return HitTestForCorner( aPosition ) || HitTestForEdge( aPosition );
 }
 
 

@@ -184,6 +184,11 @@ public:
     virtual     bool IgnoreTracks() const = 0;
 
     /**
+     * @return true if should ignore the interiors of zones
+     */
+    virtual     bool IgnoreZoneFills() const = 0;
+
+    /**
      * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
     virtual     bool UseHitTesting() const = 0;
@@ -404,6 +409,7 @@ private:
     bool    m_IgnoreBlindBuriedVias;
     bool    m_IgnoreMicroVias;
     bool    m_IgnoreTracks;
+    bool    m_IgnoreZoneFills;
 
 public:
 
@@ -446,6 +452,7 @@ public:
         m_IgnoreBlindBuriedVias     = false;
         m_IgnoreMicroVias           = false;
         m_IgnoreTracks              = false;
+        m_IgnoreZoneFills           = true;
     }
 
     /**
@@ -579,6 +586,9 @@ public:
 
     bool IgnoreTracks() const override { return m_IgnoreTracks; }
     void SetIgnoreTracks( bool ignore ) { m_IgnoreTracks = ignore; }
+
+    bool IgnoreZoneFills() const override { return m_IgnoreZoneFills; }
+    void SetIgnoreZoneFills( bool ignore ) { m_IgnoreZoneFills = ignore; }
 };
 
 

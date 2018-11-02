@@ -288,24 +288,11 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else
             {
-                CLIENT_SELECTION_FILTER filter = nullptr;
-
                 // If no modifier keys are pressed, clear the selection
                 if( !m_additive )
-                {
-                    if( m_selection.Size() != 0 )
-                        filter = []( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
-                        {
-                            for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
-                                if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
-                                    aCollector.Remove( i );
-                        };
-
                     clearSelection();
-                }
 
-                selectPoint( evt->Position(), false, nullptr, filter );
-
+                selectPoint( evt->Position() );
             }
         }
 
@@ -499,6 +486,9 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 {
     auto guide = getCollectorsGuide();
     GENERAL_COLLECTOR collector;
+    auto displayOpts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
+
+    guide.SetIgnoreZoneFills( displayOpts->m_DisplayZonesMode != 0 );
 
     collector.Collect( board(),
         m_editModules ? GENERAL_COLLECTOR::ModuleItems : GENERAL_COLLECTOR::AllBoardItems,
@@ -1997,8 +1987,10 @@ double calcRatio( double a, double b )
 void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
         const VECTOR2I& aWhere ) const
 {
+    std::set<BOARD_ITEM*> preferred;
     std::set<BOARD_ITEM*> rejected;
     std::set<BOARD_ITEM*> forced;
+    wxPoint               where( aWhere.x, aWhere.y );
 
     // footprints which are below this percentage of the largest footprint will be considered
     // for selection; all others will not
@@ -2018,14 +2010,11 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
     // its unique area).
     constexpr double commonAreaRatio = 0.6;
 
-    PCB_LAYER_ID actLayer = (PCB_LAYER_ID) view()->GetTopLayer();
+    PCB_LAYER_ID activeLayer = (PCB_LAYER_ID) view()->GetTopLayer();
+    LSET         silkLayers( 2, B_SilkS, F_SilkS );
 
-    LSET silkLayers( 2, B_SilkS, F_SilkS );
-
-    if( silkLayers[actLayer] )
+    if( silkLayers[activeLayer] )
     {
-        std::set<BOARD_ITEM*> preferred;
-
         for( int i = 0; i < aCollector.GetCount(); ++i )
         {
             BOARD_ITEM* item = aCollector[i];
@@ -2038,7 +2027,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             }
         }
 
-        if( preferred.size() != 0 )
+        if( preferred.size() > 0 )
         {
             aCollector.Empty();
 
@@ -2050,28 +2039,29 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
 
     int numZones = aCollector.CountType( PCB_ZONE_AREA_T );
 
-    if( numZones > 0 && aCollector.GetCount() > numZones )
+    // Zone edges are very specific; zone fills much less so.
+    if( numZones > 0 )
     {
         for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
         {
-            if( aCollector[i]->Type() == PCB_ZONE_AREA_T && !static_cast<ZONE_CONTAINER*>
-                    ( aCollector[i] )->HitTestForEdge( wxPoint( aWhere.x, aWhere.y ) ) )
+            if( aCollector[i]->Type() == PCB_ZONE_AREA_T )
             {
-                aCollector.Remove( i );
+                auto zone = static_cast<ZONE_CONTAINER*>( aCollector[i] );
+
+                if( zone->HitTestForEdge( where ) )
+                    preferred.insert( zone );
+                else
+                    rejected.insert( zone );
             }
         }
-    }
 
-    int numDrawitems = aCollector.CountType( PCB_LINE_T ) +
-            aCollector.CountType( PCB_MODULE_EDGE_T );
-
-    if( numDrawitems > 0 && aCollector.GetCount() > numDrawitems )
-    {
-        for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+        if( preferred.size() > 0 )
         {
-            auto ds = static_cast<DRAWSEGMENT*>( aCollector[i] );
-            if( ds->GetShape() == S_POLYGON )
-                aCollector.Remove( i );
+            aCollector.Empty();
+
+            for( BOARD_ITEM* item : preferred )
+                aCollector.Append( item );
+            return;
         }
     }
 
@@ -2167,9 +2157,9 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                 // footprint then it should be considered for selection
                 else if( calcRatio( calcArea( mod ), maxArea ) <= footprintToFootprintMinRatio )
                     continue;
-                // reject ALL OTHER footprints (whether there are one or more of
-                // them); the other items in the list should have precedence
-                else
+                // reject ALL OTHER footprints if there's still something else left
+                // to select
+                else if( rejected.size() + 1 < aCollector.GetCount() )
                     rejected.insert( mod );
             }
         }
