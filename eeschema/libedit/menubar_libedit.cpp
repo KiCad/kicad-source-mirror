@@ -109,18 +109,18 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_EXPORT_PART,
                  _( "&Export Symbol..." ),
-                 _( "Export the current symbol" ),
+                 _( "Create a library file containing only the current symbol" ),
                  KiBitmap( export_part_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "Export PNG..." ),
+                 _( "Export View as PNG..." ),
                  _( "Create a PNG file from the current view" ),
                  KiBitmap( plot_xpm ) );
 
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_GEN_SVG_FILE,
-                 _( "Export SVG..." ),
+                 _( "Export Symbol as SVG..." ),
                  _( "Create a SVG file from the current symbol" ),
                  KiBitmap( plot_svg_xpm ) );
 

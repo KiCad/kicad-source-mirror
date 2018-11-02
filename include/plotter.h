@@ -115,14 +115,17 @@ public:
     virtual bool StartPlot() = 0;
     virtual bool EndPlot() = 0;
 
-    virtual void SetNegative( bool _negative )
+    virtual void SetNegative( bool aNegative )
     {
-        negativeMode = _negative;
+        negativeMode = aNegative;
     }
 
-    virtual void SetColorMode( bool _color_mode )
+    /** Plot in B/W or color.
+     * @param aColorMode = true to plot in color, false to plot in black and white
+     */
+    virtual void SetColorMode( bool aColorMode )
     {
-        colorMode = _color_mode;
+        colorMode = aColorMode;
     }
 
     bool GetColorMode() const

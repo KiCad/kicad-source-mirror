@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,12 +119,10 @@ void LIB_EDIT_FRAME::OnPlotCurrentComponent( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg )
 {
-    wxSize     image_size;
-    //fixme-gal do it properly
+    // Make a screen copy of the canvas:
+    wxSize image_size = GetGalCanvas()->GetClientSize();
 
-// = m_canvas->GetClientSize();
-#if 0
-    wxClientDC dc( m_canvas );
+    wxClientDC dc( GetGalCanvas() );
     wxBitmap   bitmap( image_size.x, image_size.y );
     wxMemoryDC memdc;
 
@@ -142,19 +140,18 @@ void LIB_EDIT_FRAME::CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_j
     }
 
     image.Destroy();
-    #endif
 }
 
 
 void LIB_EDIT_FRAME::SVG_PlotComponent( const wxString& aFullFileName )
 {
-    const bool plotBW = false;
+    const bool plotColor = true;
     const PAGE_INFO& pageInfo = GetScreen()->GetPageSettings();
 
     SVG_PLOTTER* plotter = new SVG_PLOTTER();
     plotter->SetPageSettings( pageInfo );
     plotter->SetDefaultLineWidth( GetDefaultLineThickness() );
-    plotter->SetColorMode( plotBW );
+    plotter->SetColorMode( plotColor );
 
     wxPoint plot_offset;
     const double scale = 1.0;
