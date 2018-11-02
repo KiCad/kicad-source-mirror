@@ -57,6 +57,8 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 		wxStaticText* m_staticTextVjust;
 		wxChoice* m_choiceVjustify;
 		wxCheckBox* m_checkBoxItalic;
+		wxStaticLine* m_staticline81;
+		wxStaticText* m_staticTextSizeInfo;
 		wxStaticText* m_staticTexTsizeX;
 		wxStaticText* m_staticTextTsizeY;
 		wxTextCtrl* m_textCtrlTextSizeX;
@@ -153,7 +155,7 @@ class PANEL_PROPERTIES_BASE : public wxPanel
 	
 	public:
 		
-		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+		PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 371,864 ), long style = wxTAB_TRAVERSAL ); 
 		~PANEL_PROPERTIES_BASE();
 	
 };

@@ -111,6 +111,13 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_SizerTextOptions->Add( bSizerFontOpt, 0, wxEXPAND, 5 );
 	
+	m_staticline81 = new wxStaticLine( m_swItemProperties, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	m_SizerTextOptions->Add( m_staticline81, 0, wxEXPAND | wxALL, 5 );
+	
+	m_staticTextSizeInfo = new wxStaticText( m_swItemProperties, wxID_ANY, _("Set to 0 to use default values"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSizeInfo->Wrap( -1 );
+	m_SizerTextOptions->Add( m_staticTextSizeInfo, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	
 	wxFlexGridSizer* fgSizer2;
 	fgSizer2 = new wxFlexGridSizer( 0, 4, 0, 0 );
 	fgSizer2->AddGrowableCol( 0 );
@@ -120,14 +127,14 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_staticTexTsizeX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTexTsizeX->Wrap( -1 );
-	fgSizer2->Add( m_staticTexTsizeX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTexTsizeX, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_staticTextTsizeY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Text height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextTsizeY->Wrap( -1 );
-	fgSizer2->Add( m_staticTextTsizeY, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer2->Add( m_staticTextTsizeY, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -137,7 +144,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_units1 = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_units1->Wrap( -1 );
-	fgSizer2->Add( m_units1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_units1, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 5 );
 	
 	m_textCtrlTextSizeY = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_textCtrlTextSizeY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
@@ -161,14 +168,18 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_staticTextConstraintX = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum width:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextConstraintX->Wrap( -1 );
-	fgSizer2->Add( m_staticTextConstraintX, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextConstraintX->SetToolTip( _("Set to 0 to disable this constraint") );
+	
+	fgSizer2->Add( m_staticTextConstraintX, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_staticTextConstraintY = new wxStaticText( m_swItemProperties, wxID_ANY, _("Maximum height:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextConstraintY->Wrap( -1 );
-	fgSizer2->Add( m_staticTextConstraintY, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_staticTextConstraintY->SetToolTip( _("Set to 0 to disable this constraint") );
+	
+	fgSizer2->Add( m_staticTextConstraintY, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -178,7 +189,7 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	m_units111 = new wxStaticText( m_swItemProperties, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_units111->Wrap( -1 );
-	fgSizer2->Add( m_units111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM|wxRIGHT, 5 );
+	fgSizer2->Add( m_units111, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_LEFT|wxBOTTOM, 5 );
 	
 	m_textCtrlConstraintY = new wxTextCtrl( m_swItemProperties, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer2->Add( m_textCtrlConstraintY, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT, 5 );
@@ -645,7 +656,6 @@ PANEL_PROPERTIES_BASE::PANEL_PROPERTIES_BASE( wxWindow* parent, wxWindowID id, c
 	
 	this->SetSizer( bSizerpanel );
 	this->Layout();
-	bSizerpanel->Fit( this );
 	
 	// Connect Events
 	m_buttonOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( PANEL_PROPERTIES_BASE::OnAcceptPrms ), NULL, this );
