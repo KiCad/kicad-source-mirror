@@ -729,78 +729,11 @@ if( KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES )
     endif()
 
     if( KICAD_SCRIPTING_WXPYTHON )
-        # Create a CMake list containing wxPython version
-        set( _py_cmd "import wx;print(wx.version())" )
-
-        # Add user specified Python site package path.
-        if( PYTHON_SITE_PACKAGE_PATH )
-            set( _py_site_path
-                "import sys;sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}\");" )
-
-            if( APPLE ) # extra path for macOS, so that 'wx' module is accessible
-                set( _py_site_path
-                    "${_py_site_path}sys.path.insert(0, \"${PYTHON_SITE_PACKAGE_PATH}/wx-3.0-osx_cocoa\");" )
-            endif()
-        endif()
-
-        execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_site_path}${_py_cmd}"
-            RESULT_VARIABLE WXPYTHON_VERSION_RESULT
-            OUTPUT_VARIABLE WXPYTHON_VERSION_FOUND
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            )
-
-        # Check to see if any version of wxPython is installed on the system.
-        if( WXPYTHON_VERSION_RESULT GREATER 0 )
-            message( FATAL_ERROR "wxPython/Phoenix does not appear to be installed on the system." )
-        endif()
-
-        # Turn the version string to a list for easier processing
-        set( WXPYTHON_VERSION_LIST ${WXPYTHON_VERSION_FOUND})
-        separate_arguments( WXPYTHON_VERSION_LIST )
-        list( LENGTH WXPYTHON_VERSION_LIST VERSION_LIST_LEN )
-
-        if( VERSION_LIST_LEN EQUAL 3 )
-            # wxPython style, e.g. '3.0.2.0;gtk3;(classic) or Pheonix style: e.g. 4.0.1;gtk3;(phoenix)
-            list( GET WXPYTHON_VERSION_LIST 0 WXPYTHON_VERSION )
-            list( GET WXPYTHON_VERSION_LIST 1 WXPYTHON_TOOLKIT )
-            list( GET WXPYTHON_VERSION_LIST 2 WXPYTHON_FLAVOR )
-
-            # Determine wxWidgets version used by wxPython/Phoenix
-            if( WXPYTHON_FLAVOR MATCHES "phoenix" )
-                # 4.0.1;gtk3;(phoenix) does not contain wxWidgets version, request it explicitly
-                set( _py_cmd "import wx;print(wx.wxWidgets_version.split(' ')[1])")
-                execute_process( COMMAND ${PYTHON_EXECUTABLE} -c "${_py_site_path}${_py_cmd}"
-                    RESULT_VARIABLE WXPYTHON_WXVERSION
-                    OUTPUT_VARIABLE WXPYTHON_WXVERSION_RESULT
-                    OUTPUT_STRIP_TRAILING_WHITESPACE
-                    )
-
-                if( NOT WXPYTHON_WXVERSION_RESULT EQUAL 0 )
-                    set( WXPYTHON_WXVERSION "3.0.2" )
-                    message( WARNING "Could not determine wxWidgets version used by Phoenix, requesting ${WXPYTHON_WXVERSION}" )
-                endif()
-
-            else()
-                # 3.0.2.0;gtk3;(classic) has the wxWidgets version in the first part
-                set( WXPYTHON_WXVERSION ${WXPYTHON_VERSION} )
-            endif()
-
-        elseif( VERSION_LIST_LEN EQUAL 5 )
-            # Phoenix style, e.g. '4.0.3;gtk3;(phoenix);wxWidgets;3.0.4'
-            list( GET WXPYTHON_VERSION_LIST 0 WXPYTHON_VERSION )
-            list( GET WXPYTHON_VERSION_LIST 1 WXPYTHON_TOOLKIT )
-            list( GET WXPYTHON_VERSION_LIST 4 WXPYTHON_WXVERSION )
-        else()
-            message( FATAL_ERROR "Unknown wxPython/Phoenix version string: ${WXPYTHON_VERSION_FOUND}" )
-        endif()
+        find_package( wxPython REQUIRED )
+        message( STATUS "Found ${WXPYTHON_FLAVOR} "
+            "${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} "
+            "(wxWidgets ${WXPYTHON_WXVERSION})" )
     endif()
-
-    # Fix an incosistency between the toolkit names reported by wx.version() and wx-config for cocoa
-    if( WXPYTHON_TOOLKIT STREQUAL "osx-cocoa" )
-        set( WXPYTHON_TOOLKIT "osx_cocoa" )
-    endif()
-
-    message( STATUS "wxPython/Phoenix version ${WXPYTHON_VERSION}/${WXPYTHON_TOOLKIT} found." )
 
     # Infrequently needed headers go at end of search paths, append to INC_AFTER which
     # although is used for all components, should be a harmless hit for something like eeschema
