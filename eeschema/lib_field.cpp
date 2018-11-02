@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2012 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,19 @@ void LIB_FIELD::Init( int id )
 
 int LIB_FIELD::GetPenSize() const
 {
-    return GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
+    int pensize = GetThickness();
+
+    if( pensize == 0 )   // Use default values for pen size
+    {
+        if( IsBold() )
+            pensize = GetPenSizeForBold( GetTextWidth() );
+        else
+            pensize = GetDefaultLineThickness();
+    }
+
+    // Clip pen size for small texts:
+    pensize = Clamp_Text_PenSize( pensize, GetTextSize(), IsBold() );
+    return pensize;
 }
 
 
@@ -120,11 +132,6 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     wxPoint  text_pos;
     COLOR4D color = COLOR4D::UNSPECIFIED;
     int      linewidth = GetPenSize();
-
-    if( IsBold() )
-        linewidth = GetPenSizeForBold( GetTextWidth() );
-    else
-        linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
     if( !IsVisible() && ( aColor == COLOR4D::UNSPECIFIED ) )
     {
