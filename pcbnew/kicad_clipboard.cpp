@@ -61,11 +61,16 @@ void CLIPBOARD_IO::SetBoard( BOARD* aBoard )
 
 void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
     VECTOR2I refPoint( 0, 0 );
 
     // dont even start if the selection is empty
     if( aSelected.Empty() )
+        return;
+
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock || !clipboard->IsOpened() )
         return;
 
     if( aSelected.HasReferencePoint() )
@@ -175,16 +180,14 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
 
                 Format( clone.get(), 1 );
             }
-
         }
         m_formatter.Print( 0, "\n)" );
     }
-    if( wxTheClipboard->Open() )
-    {
-        wxTheClipboard->SetData( new wxTextDataObject(
-                    wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
-        wxTheClipboard->Close();
-    }
+
+    clipboard->SetData( new wxTextDataObject(
+                wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
+
+    clipboard->Flush();
 }
 
 
@@ -193,16 +196,18 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
     BOARD_ITEM* item;
     wxString result;
 
-    if( wxTheClipboard->Open() )
-    {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
-        {
-            wxTextDataObject data;
-            wxTheClipboard->GetData( data );
-            result = data.GetText();
-        }
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
 
-        wxTheClipboard->Close();
+    if( !clipboardLock )
+        return nullptr;
+
+
+    if( clipboard->IsSupported( wxDF_TEXT ) )
+    {
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        result = data.GetText();
     }
 
     try
@@ -221,7 +226,11 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
                 const PROPERTIES* aProperties )
 {
-    LOCALE_IO   toggle;     // toggles on, then off, the C locale.
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock )
+        return;
 
     init( aProperties );
 
@@ -241,13 +250,9 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
     m_out->Print( 0, ")\n" );
 
-    if( wxTheClipboard->Open() )
-    {
-        wxTheClipboard->SetData( new wxTextDataObject(
-                    wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
-        wxTheClipboard->Close();
-    }
-
+    clipboard->SetData( new wxTextDataObject(
+                wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
+    clipboard->Flush();
 }
 
 
@@ -256,17 +261,18 @@ BOARD* CLIPBOARD_IO::Load( const wxString& aFileName,
 {
     std::string result;
 
-    if( wxTheClipboard->Open() )
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock )
+        return nullptr;
+
+    if( clipboard->IsSupported( wxDF_TEXT ) )
     {
-        if( wxTheClipboard->IsSupported( wxDF_TEXT ) )
-        {
-            wxTextDataObject data;
-            wxTheClipboard->GetData( data );
+        wxTextDataObject data;
+        clipboard->GetData( data );
 
-            result = data.GetText().mb_str();
-        }
-
-        wxTheClipboard->Close();
+        result = data.GetText().mb_str();
     }
 
     STRING_LINE_READER    reader(result, wxT( "clipboard" ) );
