@@ -1502,11 +1502,17 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
     std::vector <NETINFO_ITEM*> netBuffer;
 
     netBuffer.reserve( m_NetInfo.GetNetCount() );
+    int max_netcode = 0;
 
     for( NETINFO_ITEM* net : m_NetInfo )
     {
-        if( net->GetNet() > 0 )
+        auto netcode = net->GetNet();
+
+        if( netcode > 0 )
+        {
             netBuffer.push_back( net );
+            max_netcode = std::max( netcode, max_netcode);
+        }
     }
 
     // sort the list
@@ -1516,14 +1522,7 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
         padCountListByNet.clear();
         std::vector<D_PAD*> pads = GetPads();
 
-        // Calculate the max value of net codes, and creates the buffer to
-        // store the pad count by net code
-        int max_netcode = 0;
-
-        for( D_PAD* pad : pads )
-            max_netcode = std::max( max_netcode, pad->GetNetCode() );
-
-        padCountListByNet.assign( max_netcode+1, 0 );
+        padCountListByNet.assign( max_netcode + 1, 0 );
 
         for( D_PAD* pad : pads )
             padCountListByNet[pad->GetNetCode()]++;
@@ -1531,7 +1530,9 @@ int BOARD::SortedNetnamesList( wxArrayString& aNames, bool aSortbyPadsCount )
         sort( netBuffer.begin(), netBuffer.end(), sortNetsByNodes );
     }
     else
+    {
         sort( netBuffer.begin(), netBuffer.end(), sortNetsByNames );
+    }
 
     for( NETINFO_ITEM* net : netBuffer )
         aNames.Add( net->GetNetname() );
