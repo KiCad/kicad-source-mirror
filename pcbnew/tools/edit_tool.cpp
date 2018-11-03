@@ -386,6 +386,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
                 m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers );
+                controls->ForceCursorPosition(true, m_cursor );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
 
@@ -1220,6 +1221,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls.SetSnapping( !evt->Modifier( MD_ALT ) );
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
+        controls.ForceCursorPosition(true, cursorPos );
 
         if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
         {

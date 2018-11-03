@@ -52,6 +52,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
+        controls->ForceCursorPosition(true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
