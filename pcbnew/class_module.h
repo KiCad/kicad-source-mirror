@@ -230,6 +230,9 @@ public:
     void IncrementFlag() { m_arflag += 1; }
     int GetFlag() const { return m_arflag; }
 
+    // A bit of a hack until net ties are supported as first class citizens
+    bool IsNetTie() const { return GetKeywords().StartsWith( wxT( "net tie" ) ); }
+
     void Move( const wxPoint& aMoveVector ) override;
 
     void Rotate( const wxPoint& aRotCentre, double aAngle ) override;

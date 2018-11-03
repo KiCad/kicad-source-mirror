@@ -1030,6 +1030,9 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
         syncTextItem( aWorld, &module->Reference(), module->Reference().GetLayer() );
         syncTextItem( aWorld, &module->Value(), module->Value().GetLayer() );
 
+        if( module->IsNetTie() )
+            continue;
+
         for( auto mgitem : module->GraphicalItems() )
         {
             if( mgitem->Type() == PCB_MODULE_EDGE_T )
