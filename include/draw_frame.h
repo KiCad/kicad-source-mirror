@@ -55,6 +55,22 @@ namespace KIGFX
 #define FOOTPRINT_VIEWER_FRAME_NAME_MODAL   wxT( "ModViewFrameModal" )
 #define PCB_EDIT_FRAME_NAME                 wxT( "PcbFrame" )
 
+
+///@{
+/// \ingroup config
+
+/// User units
+static const wxString UserUnitsEntryKeyword( wxT( "Units" ) );
+/// Nonzero to show grid (suffix)
+static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
+/// Grid color ID (suffix)
+static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
+/// Most recently used grid size (suffix)
+static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
+
+///@}
+
+
 /**
  * Class EDA_DRAW_FRAME
  * is the base class for create windows for drawing purpose.  The Eeschema, Pcbnew and

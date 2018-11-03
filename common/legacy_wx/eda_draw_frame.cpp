@@ -81,16 +81,6 @@ static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 ///@{
 /// \ingroup config
 
-/// User units
-static const wxString UserUnitsEntryKeyword( wxT( "Units" ) );
-static const wxString FpEditorUserUnitsEntryKeyword( wxT( "FpEditorUnits" ) );
-/// Nonzero to show grid (suffix)
-static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
-/// Grid color ID (suffix)
-static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
-/// Most recently used grid size (suffix)
-static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
-
 const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 
 static const wxString FirstRunShownKeyword( wxT( "FirstRunShown" ) );
