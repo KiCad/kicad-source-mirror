@@ -770,7 +770,7 @@ unsigned int TRACK::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
     // Netnames will be shown only if zoom is appropriate
     if( IsNetnameLayer( aLayer ) )
     {
-        return ( 4000000 / ( m_Width + 1 ) );
+        return ( Millimeter2iu( 4 ) / ( m_Width + 1 ) );
     }
 
     // Other layers are shown without any conditions

@@ -2159,7 +2159,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     continue;
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
-                else if( rejected.size() + 1 < aCollector.GetCount() )
+                else if( int( rejected.size() + 1 ) < aCollector.GetCount() )
                     rejected.insert( mod );
             }
         }
