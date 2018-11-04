@@ -752,8 +752,9 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
                                                      PCB_LAYER_ID aLayerId,
                                                      int aClearanceValue )
 {
-    // The full width of the lines to create:
-    const int linewidth = aDrawSegment->GetWidth() + (2 * aClearanceValue);
+    // The full width of the lines to create
+    // The extra 1 protects the inner/outer radius values from degeneracy
+    const int linewidth = aDrawSegment->GetWidth() + (2 * aClearanceValue) + 1;
 
     switch( aDrawSegment->GetShape() )
     {

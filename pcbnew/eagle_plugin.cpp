@@ -1174,7 +1174,8 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
 
     // clearances, etc.
     zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
-    zone->SetMinThickness( p.width.ToPcbUnits() );
+    zone->SetMinThickness( std::max<int>(
+            ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS, p.width.ToPcbUnits() ) );
 
     // FIXME: KiCad zones have very rounded corners compared to eagle.
     //        This means that isolation amounts that work well in eagle
@@ -1182,7 +1183,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     if( p.isolate )
         zone->SetZoneClearance( p.isolate->ToPcbUnits() );
     else
-        zone->SetZoneClearance( 0 );
+        zone->SetZoneClearance( 1 ); // @todo: set minimum clearance value based on board settings
 
     // missing == yes per DTD.
     bool thermals = !p.thermals || *p.thermals;
