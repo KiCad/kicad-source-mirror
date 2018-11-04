@@ -651,8 +651,6 @@ public:
     void UpdateAllItemsConditionally( int aUpdateFlags,
                                       std::function<bool( VIEW_ITEM* )> aCondition );
 
-    const BOX2I CalculateExtents() ;
-
     /**
      * Function IsUsingDrawPriority()
      * @return true if draw priority is being respected while redrawing.
