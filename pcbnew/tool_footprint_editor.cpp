@@ -234,6 +234,11 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
                                _( "Enable high contrast display mode" ),
                                wxITEM_CHECK );
 
+    KiScaledSeparator( m_optionsToolBar, this );
+    m_optionsToolBar->AddTool( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
+                               KiScaledBitmap( search_tree_xpm, this ),
+                               _( "Toggles the search tree" ), wxITEM_CHECK );
+
     m_optionsToolBar->Realize();
 }
 

@@ -225,7 +225,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE,
                  _( "&Search Tree" ),
                  _( "Toggles the search tree visibility" ),
-                 KiBitmap( search_tree_xpm ) );
+                 KiBitmap( search_tree_xpm ), wxITEM_CHECK );
 
     // Menu Place:
     wxMenu* placeMenu = new wxMenu;

@@ -428,8 +428,7 @@ void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 
 void LIB_EDIT_FRAME::OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent )
 {
-    if( aEvent.GetEventObject() == m_optionsToolBar )
-        aEvent.Check( IsSearchTreeShown() );
+    aEvent.Check( IsSearchTreeShown() );
 }
 
 

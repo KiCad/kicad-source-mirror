@@ -133,6 +133,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     // ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH id is managed in PCB_BASE_FRAME
     // ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH id is managed in PCB_BASE_FRAME
     EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, FOOTPRINT_EDIT_FRAME::OnToggleSearchTree )
 
     // Preferences and option menus
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
@@ -199,6 +200,8 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
     // Option toolbar:
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
+    EVT_UPDATE_UI( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
 
     EVT_UPDATE_UI( ID_GEN_IMPORT_DXF_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
@@ -344,6 +347,21 @@ void FOOTPRINT_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     // both layers and render columns, and and some settings dependent on the canvas.
     UpdateUserInterface();
 }
+
+
+void FOOTPRINT_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
+{
+    auto& treePane = m_auimgr.GetPane( m_treePane );
+    treePane.Show( !IsSearchTreeShown() );
+    m_auimgr.Update();
+}
+
+
+bool FOOTPRINT_EDIT_FRAME::IsSearchTreeShown()
+{
+    return m_auimgr.GetPane( m_treePane ).IsShown();
+}
+
 
 BOARD_ITEM_CONTAINER* FOOTPRINT_EDIT_FRAME::GetModel() const
 {
@@ -575,6 +593,10 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
     {
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         state = displ_opts->m_ContrastModeDisplay;
+        break;
+
+    case ID_MODEDIT_SHOW_HIDE_SEARCH_TREE:
+        state = IsSearchTreeShown();
         break;
 
     default:

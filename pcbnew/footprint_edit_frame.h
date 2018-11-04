@@ -153,6 +153,9 @@ public:
     void ToolOnRightClick( wxCommandEvent& event ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnConfigurePaths( wxCommandEvent& aEvent );
+    void OnToggleSearchTree( wxCommandEvent& event );
+
+    bool IsSearchTreeShown();
 
     /**
      * Function SaveLibraryAs
