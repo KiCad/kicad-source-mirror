@@ -199,10 +199,13 @@ protected:
       * @param doOpen if true runs an Open Library browser, otherwise New Library
       * @param aFilename for New may contain a default name; in both cases return the chosen
       *                  filename.
+      * @param wildcard a wildcard to filter the displayed files
+      * @param ext the library file extension
+      * @param isDirectory indicates the library files are directories
       * @return true for OK; false for Cancel.
       */
     bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
-                             const wxString& wildcard, const wxString& ext );
+                             const wxString& wildcard, const wxString& ext, bool isDirectory );
 
     /**
      * Function GeneralControlKeyMovement

@@ -1501,8 +1501,12 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
 {
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
-    if( !LibraryFileBrowser( !aCreateNew, fn, SchematicLibraryFileWildcard(), SchematicLibraryFileExtension) )
+    if( !LibraryFileBrowser( !aCreateNew, fn,
+                             SchematicLibraryFileWildcard(), SchematicLibraryFileExtension,
+                             false ) )
+    {
         return false;
+    }
 
     wxString libName = fn.GetName();
 

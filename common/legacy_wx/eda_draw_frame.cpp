@@ -1416,22 +1416,37 @@ void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aE
 
 
 bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
-                                         const wxString& wildcard, const wxString& ext )
+                                         const wxString& wildcard, const wxString& ext,
+                                         bool isDirectory )
 {
+    wxString prompt = doOpen ? _( "Select Library" ) : _( "New Library" );
     aFilename.SetExt( ext );
 
-    wxFileDialog dlg( this,
-                      doOpen ? _( "Select Library" ) : _( "New Library" ),
-                      Prj().GetProjectPath(),
-                      doOpen ? wxString( wxEmptyString ) : aFilename.GetFullName() ,
-                      wildcard,
-                      doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+#ifndef __WXMAC__
+    if( isDirectory )
+    {
+        wxDirDialog dlg( this, prompt, Prj().GetProjectPath(),
+                         doOpen ? wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST : wxDD_DEFAULT_STYLE );
 
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return false;
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
 
-    aFilename = dlg.GetPath();
-    aFilename.SetExt( ext );
+        aFilename = dlg.GetPath();
+        aFilename.SetExt( ext );
+    }
+    else
+#endif
+    {
+        wxFileDialog dlg( this, prompt, Prj().GetProjectPath(), aFilename.GetFullName() ,
+                          wildcard, doOpen ? wxFD_OPEN | wxFD_FILE_MUST_EXIST
+                                           : wxFD_SAVE | wxFD_CHANGE_DIR | wxFD_OVERWRITE_PROMPT );
+
+        if( dlg.ShowModal() == wxID_CANCEL )
+            return false;
+
+        aFilename = dlg.GetPath();
+        aFilename.SetExt( ext );
+    }
 
     return true;
 }

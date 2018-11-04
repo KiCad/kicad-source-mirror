@@ -428,8 +428,12 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
     {
         fn = initialPath;
 
-        if( !LibraryFileBrowser( false, fn, KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
+        if( !LibraryFileBrowser( false, fn,
+                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension,
+                                 true ) )
+        {
             return wxEmptyString;
+        }
 
         doAdd = true;
     }
@@ -509,8 +513,12 @@ bool PCB_BASE_EDIT_FRAME::AddLibrary( const wxString& aFilename )
 
     if( aFilename.IsEmpty() )
     {
-        if( !LibraryFileBrowser( true, fn, KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension ) )
+        if( !LibraryFileBrowser( true, fn,
+                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension,
+                                 true ) )
+        {
             return false;
+        }
     }
 
     wxString libPath = fn.GetFullPath();
