@@ -413,6 +413,8 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
             return;
     }
 
+    GetCanvas()->GetViewControls()->WarpCursor( GetCrossHairPosition(), true );
+
     switch( item->Type() )
     {
     case SCH_LINE_T:
