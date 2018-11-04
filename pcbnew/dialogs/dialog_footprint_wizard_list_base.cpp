@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -67,16 +67,16 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	wxBoxSizer* m_bsizerPanelInfo;
 	m_bsizerPanelInfo = new wxBoxSizer( wxVERTICAL );
 	
-	m_staticText1 = new wxStaticText( m_panelInfo, wxID_ANY, _("Search paths:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText1->Wrap( -1 );
-	m_bsizerPanelInfo->Add( m_staticText1, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextSearchPaths = new wxStaticText( m_panelInfo, wxID_ANY, _("Search paths:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSearchPaths->Wrap( -1 );
+	m_bsizerPanelInfo->Add( m_staticTextSearchPaths, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_tcSearchPaths = new wxTextCtrl( m_panelInfo, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	m_bsizerPanelInfo->Add( m_tcSearchPaths, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
-	m_staticText11 = new wxStaticText( m_panelInfo, wxID_ANY, _("Not loadable python scripts:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText11->Wrap( -1 );
-	m_bsizerPanelInfo->Add( m_staticText11, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	m_staticTextNotLoaded = new wxStaticText( m_panelInfo, wxID_ANY, _("Not loadable python scripts:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextNotLoaded->Wrap( -1 );
+	m_bsizerPanelInfo->Add( m_staticTextNotLoaded, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_tcNotLoaded = new wxTextCtrl( m_panelInfo, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY );
 	m_bsizerPanelInfo->Add( m_tcNotLoaded, 1, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
@@ -108,7 +108,7 @@ DIALOG_FOOTPRINT_WIZARD_LIST_BASE::DIALOG_FOOTPRINT_WIZARD_LIST_BASE( wxWindow* 
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 	
-	bSizerLower->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
+	bSizerLower->Add( m_sdbSizer, 0, wxALL, 5 );
 	
 	
 	bSizerMain->Add( bSizerLower, 0, wxEXPAND|wxLEFT, 10 );
@@ -153,7 +153,7 @@ DIALOG_FOOTPRINT_WIZARD_LOG::DIALOG_FOOTPRINT_WIZARD_LOG( wxWindow* parent, wxWi
 	m_sdbSizer->AddButton( m_sdbSizerOK );
 	m_sdbSizer->Realize();
 	
-	bSizerMain->Add( m_sdbSizer, 0, wxALIGN_RIGHT|wxALL, 5 );
+	bSizerMain->Add( m_sdbSizer, 0, wxALL|wxALIGN_RIGHT, 5 );
 	
 	
 	this->SetSizer( bSizerMain );
