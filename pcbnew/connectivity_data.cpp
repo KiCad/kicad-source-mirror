@@ -27,6 +27,8 @@
 #endif
 
 #include <thread>
+#include <algorithm>
+#include <future>
 
 #include <connectivity_data.h>
 #include <connectivity_algo.h>
@@ -90,37 +92,44 @@ void CONNECTIVITY_DATA::updateRatsnest()
     PROF_COUNTER rnUpdate( "update-ratsnest" );
     #endif
 
-    size_t numDirty = std::count_if( m_nets.begin() + 1, m_nets.end(), [] ( RN_NET* aNet )
-            { return aNet->IsDirty(); } );
+    std::vector<RN_NET*> dirty_nets;
 
     // Start with net 1 as net 0 is reserved for not-connected
-    std::atomic<size_t> nextNet( 1 );
-    std::atomic<size_t> threadsFinished( 0 );
+    // Nets without nodes are also ignored
+    std::copy_if( m_nets.begin() + 1, m_nets.end(), std::back_inserter( dirty_nets ),
+            [] ( RN_NET* aNet ) { return aNet->IsDirty() && aNet->GetNodeCount() > 0; } );
 
-    // We don't want to spin up a new thread for fewer than two nets (overhead costs)
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            ( numDirty + 1 ) / 2 );
+    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+            ( dirty_nets.size() + 7 ) / 8 );
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    std::atomic<size_t> nextNet( 0 );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+    auto update_lambda = [&nextNet, &dirty_nets]() -> size_t
     {
-        std::thread t = std::thread( [&nextNet, &threadsFinished, this]()
+        size_t processed = 0;
+
+        for( size_t i = nextNet++; i < dirty_nets.size(); i = nextNet++ )
         {
-            for( size_t i = nextNet.fetch_add( 1 ); i < m_nets.size(); i = nextNet.fetch_add( 1 ) )
-            {
-                if( m_nets[i]->IsDirty() )
-                    m_nets[i]->Update();
-            }
+            dirty_nets[i]->Update();
+            processed++;
+        }
 
-            threadsFinished++;
-        } );
+        return processed;
+    };
 
-        t.detach();
+    if( parallelThreadCount == 1 )
+        update_lambda();
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, update_lambda );
+
+        // Finalize the ratsnest threads
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii].wait();
     }
-
-    // Finalize the ratsnest threads
-    while( threadsFinished < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 
     #ifdef PROFILE
     rnUpdate.Show();
