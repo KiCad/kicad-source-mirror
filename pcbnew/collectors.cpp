@@ -450,6 +450,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                         Append2nd( item );
                         goto exit;
                     }
+                    else if( zone && !m_Guide->IgnoreZoneFills() && zone->HitTestFilledArea( m_RefPos ) )
+                    {
+                        Append( item );
+                        goto exit;
+                    }
                 }
             }
         }
