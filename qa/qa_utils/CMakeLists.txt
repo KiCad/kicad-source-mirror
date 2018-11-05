@@ -24,7 +24,7 @@ set( QA_UTIL_COMMON_SRC
 )
 
 # A generic library of useful functions for various testing purposes
-add_library( qa_utils
+add_library( qa_utils STATIC
     ${QA_UTIL_COMMON_SRC}
 )
 
