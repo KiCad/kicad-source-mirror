@@ -96,23 +96,21 @@ void InvokePluginOptionsEditor( wxWindow* aCaller, const wxString& aNickname,
     const wxString& aPluginType, const wxString& aOptions, wxString* aResult );
 
 /**
- * Function InvokeDXFDialogBoardImport
- * shows the modal DIALOG_DXF_IMPORT for importing a DXF file to a board.
+ * Shows the modal DIALOG_IMPORT_GFX for importing a DXF file to a board.
 
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  * @return true if the import was made.
  */
-bool InvokeDXFDialogBoardImport( PCB_BASE_FRAME* aCaller );
+bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller );
 
 /**
- * Function InvokeDXFDialogModuleImport
- * shows the modal DIALOG_DXF_IMPORT for importing a DXF file as footprint outlines.
+ * shows the modal DIALOG_IMPORT_GFX for importing a DXF file as footprint outlines.
  *
  * @param aCaller is the wxTopLevelWindow which is invoking the dialog.
  * @param aModule is the footprint currently edited.
  * @return true if the import was made.
  */
-bool InvokeDXFDialogModuleImport( PCB_BASE_FRAME* aCaller, MODULE* aModule );
+bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule );
 
 /**
  * Function InvokeExportSVG

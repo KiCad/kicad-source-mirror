@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Janito V. Ferreira Filho <janito.vff@gmail.com>
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,11 +26,11 @@
 #ifndef SVG_IMPORT_PLUGIN_H
 #define SVG_IMPORT_PLUGIN_H
 
+#include "vector"
+
 #include "nanosvg.h"
 
 #include "graphics_import_plugin.h"
-//#include "drw_interface.h"
-#include "convert_to_biu.h"
 #include <math/vector2d.h>
 
 
@@ -46,34 +47,22 @@ public:
         return wxArrayString( 1, { "svg" } );
     }
 
-    bool Import(float aXScale, float aYScale) override;
+    /**
+     * @return the list of messages in one string. Each message ends by '\n'
+     */
+    const std::string& GetMessages() const override
+    {
+        return m_messages;
+    }
+
+    bool Import() override;
     bool Load( const wxString& aFileName ) override;
 
-    virtual unsigned int GetImageHeight() const override
-    {
-        if( !m_parsedImage )
-        {
-            wxASSERT_MSG(false, "Image must have been loaded before checking height");
-            return false;
-        }
-
-        return Millimeter2iu( m_parsedImage->height );
-    }
-
-    virtual unsigned int GetImageWidth() const override
-    {
-        if( !m_parsedImage )
-        {
-            wxASSERT_MSG(false, "Image must have been loaded before checking width");
-            return false;
-        }
-
-        return Millimeter2iu( m_parsedImage->width );
-    }
-
+    virtual double GetImageHeight() const override;
+    virtual double GetImageWidth() const override;
 
 private:
-    void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath );
+    void DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath, bool aFilled, double aLineWidth );
 
     void DrawCubicBezierPath( const float* aPoints, int aNumPoints,
             std::vector< VECTOR2D >& aGeneratedPoints );
@@ -81,10 +70,13 @@ private:
     void DrawCubicBezierCurve( const float* aPoints,
             std::vector< VECTOR2D >& aGeneratedPoints );
 
-    void DrawPolygon( const std::vector< VECTOR2D >& aPoints );
-    void DrawLineSegments( const std::vector< VECTOR2D >& aPoints );
+    void DrawPolygon( const std::vector< VECTOR2D >& aPoints, double aWidth );
+    void DrawLineSegments( const std::vector< VECTOR2D >& aPoints, double aWidth );
 
     struct NSVGimage* m_parsedImage;
+
+    std::string m_messages;     // messages generated during svg file parsing.
+                                // Each message ends by '\n'
 };
 
 #endif /* SVG_IMPORT_PLUGIN_H */

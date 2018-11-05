@@ -799,7 +799,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_GEN_IMPORT_GRAPHICS_FILE:
         if( GetBoard()->m_Modules )
         {
-            InvokeDXFDialogModuleImport( this, GetBoard()->m_Modules );
+            InvokeDialogImportGfxModule( this, GetBoard()->m_Modules );
             m_canvas->Refresh();
         }
         break;

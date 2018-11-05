@@ -91,23 +91,30 @@ public:
     /**
      * @brief Return image height from original imported file.
      *
-     * @return Original Image height in internal units.
+     * @return Original Image height in mm.
      */
-    virtual unsigned int GetImageHeight() const = 0;
+    virtual double GetImageHeight() const = 0;
 
     /**
      * @brief Return image width from original imported file.
      *
-     * @return Original Image width in internal units.
+     * @return Original Image width in mm.
      */
-    virtual unsigned int GetImageWidth() const = 0;
+    virtual double GetImageWidth() const = 0;
 
     /**
      * @brief Actually imports the file.
      *
      * It is necessary to have loaded the file beforehand.
      */
-    virtual bool Import( float aXScale, float aYScale ) = 0;
+    virtual bool Import() = 0;
+
+    /**
+     * @brief collect warning and error messages after loading/importing.
+     * @return the list of messages in one string. Each message ends by '\n'
+     */
+    const virtual std::string& GetMessages() const = 0;
+
 
 
 protected:

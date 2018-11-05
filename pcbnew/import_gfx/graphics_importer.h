@@ -68,16 +68,28 @@ public:
      * @brief Imports shapes from loaded file.
      *
      * It is important to have the file loaded before importing.
+     *
+     * @param aScale allow import graphic items with a non 1:1 import ratio
+     * aScale = 1.0 to import graphics with their actual size.
      */
-    bool Import( float aXScale, float aYScale);
+    bool Import( double aScale = 1.0 );
+
+    /**
+     * @brief collect warning and error messages after loading/importing.
+     * @return the list of messages in one string. Each message ends by '\n'
+     */
+    const std::string& GetMessages() const
+    {
+        return m_plugin->GetMessages();
+    }
 
 
     /**
      * @brief Get original image Wigth.
      *
-     * @return Width of the loaded image in internal units.
+     * @return Width of the loaded image in mm.
      */
-    unsigned int GetImageWidth() const
+    double GetImageWidthMM() const
     {
         return m_originalWidth;
     }
@@ -85,46 +97,75 @@ public:
     /**
      * @brief Get original image Height
      *
-     * @return Height of the loaded image in internal units.
+     * @return Height of the loaded image in mm.
      */
-    unsigned int GetImageHeight() const
+    double GetImageHeightMM() const
     {
         return m_originalHeight;
     }
 
 
     /**
-     * @brief Sets the line width for the imported outlines.
+     * @brief Sets the line width for the imported outlines (in mm).
      */
-    void SetLineWidth( double aWidth )
+    void SetLineWidthMM( double aWidth )
     {
-        m_lineWidth = (unsigned int)( aWidth * m_scale );
+        m_lineWidth = aWidth;
     }
 
     /**
-     * @brief Returns the line width used for importing the outlines.
+     * @brief Returns the line width used for importing the outlines (in mm).
      */
-    unsigned int GetLineWidth() const
+    double GetLineWidthMM() const
     {
         return m_lineWidth;
     }
 
-
-    /**
-     * @brief Returns the scale factor affecting the imported shapes.
+    /** @return the scale factor affecting the imported shapes.
      */
     double GetScale() const
     {
         return m_scale;
     }
 
-    /**
-     * @brief set the scale factor affecting the imported shapes.
-     * it allows conversion between imported shapes units and internal units
+    /** @return the offset to add to coordinates when importing graphic items.
+     * The offset is always in mm
+     */
+    const VECTOR2D& GetImportOffsetMM() const
+    {
+        return m_offsetCoordmm;
+    }
+
+    /** Set the offset to add to coordinates when importing graphic items.
+     * The offset is always in mm
+     */
+    void SetImportOffsetMM( const VECTOR2D& aOffset )
+    {
+        m_offsetCoordmm = aOffset;
+    }
+
+    /** Set the scale factor affecting the imported shapes.
+     * it allows conversion between imported shapes units and mm
      */
     void SetScale( double aScale )
     {
         m_scale = aScale;
+    }
+
+    /** @return the conversion factor from mm to internal unit
+     */
+    double GetMillimeterToIuFactor()
+    {
+        return m_millimeterToIu;
+    }
+
+
+    /**
+     * @return the overall scale factor to convert the imported shapes dimension to mm.
+     */
+    double ImportScalingFactor() const
+    {
+        return m_scale * m_millimeterToIu;
     }
 
     /**
@@ -135,35 +176,38 @@ public:
         return m_items;
     }
 
-    ///> Default line thickness (in internal units)
+    ///> Default line thickness (in mm)
     static constexpr unsigned int DEFAULT_LINE_WIDTH_DFX = 1;
 
     // Methods to be implemented by derived graphics importers
 
     /**
      * @brief Creates an object representing a line segment.
-     * @param aOrigin is the segment origin point expressed in internal units.
-     * @param aEnd is the segment end point expressed in internal units.
+     * @param aOrigin is the segment origin point expressed in mm.
+     * @param aEnd is the segment end point expressed in mm.
+     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd ) = 0;
+    virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth ) = 0;
 
     /**
      * @brief Creates an object representing a circle.
-     * @param aCenter is the circle center point expressed in internal units.
-     * @param aRadius is the circle radius expressed in internal units.
+     * @param aCenter is the circle center point expressed in mm.
+     * @param aRadius is the circle radius expressed in mm.
+     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius ) = 0;
+    virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth ) = 0;
 
     /**
      * @brief Creates an object representing an arc.
-     * @param aCenter is the arc center point expressed in internal units.
-     * @param aStart is the arc arm end point expressed in internal units.
+     * @param aCenter is the arc center point expressed in mm.
+     * @param aStart is the arc arm end point expressed in mm.
      * Its length is the arc radius.
      * @param aAngle is the arc angle expressed in decidegrees.
+     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) = 0;
+    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) = 0;
 
-    virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices ) = 0;
+    virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) = 0;
 
     //virtual void AddArc( const VECTOR2D& aOrigin, double aStartAngle, double aEndAngle ) = 0;
     //
@@ -171,16 +215,25 @@ public:
      * @brief Creates an object representing a text.
      * @param aOrigin is the text position.
      * @param aText is the displayed text.
-     * @param aHeight is the text height expressed in internal units.
-     * @param aWidth is the text width expressed in internal units.
+     * @param aHeight is the text height expressed in mm.
+     * @param aWidth is the text width expressed in mm.
      * @param aOrientation is the text orientation angle expressed in decidegrees.
      * @param aHJustify is the text horizontal justification.
      * @param aVJustify is the text vertical justification.
+     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
     virtual void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double, double aOrientation,
+            double aHeight, double aWidth, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) = 0;
 
+    /**
+     * @brief Creates an object representing an arc.
+     * @param aStart is the curve start point expressed in mm.
+     * @param aBezierControl1 is the first Bezier control point expressed in mm.
+     * @param aBezierControl2 is the second Bezier control point expressed in mm.
+     * @param aEnd is the curve end point expressed in mm.
+     * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
+     */
     virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                             const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth ) = 0;
 
@@ -199,17 +252,26 @@ private:
     std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> m_plugin;
 
     ///> Total image width
-    unsigned int m_originalWidth;
+    double m_originalWidth;
 
     ///> Total image Height;
-    unsigned int m_originalHeight;
+    double m_originalHeight;
 
     ///> Default line thickness for the imported graphics
-    unsigned int m_lineWidth;
+    double m_lineWidth;
 
-    ///> Scale factor applied to the imported graphics
+    /** Scale factor applied to the imported graphics.
+     * 1.0 does not change the size of imported items
+     * scale < 1.0 reduce the size of imported items
+     */
     double m_scale;
 
+protected:
+    ///> factor to convert millimeters to Internal Units
+    double m_millimeterToIu;
+
+    ///> Offset (in mm) for imported coordinates
+    VECTOR2D m_offsetCoordmm;
 };
 
 #endif /* GRAPHICS_IMPORTER_H */

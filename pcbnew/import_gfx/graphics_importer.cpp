@@ -25,9 +25,13 @@
 #include "graphics_importer.h"
 #include "graphics_import_plugin.h"
 
-GRAPHICS_IMPORTER::GRAPHICS_IMPORTER() :
-    m_lineWidth( DEFAULT_LINE_WIDTH_DFX ), m_scale( 1.0 )
+GRAPHICS_IMPORTER::GRAPHICS_IMPORTER()
 {
+    m_millimeterToIu = 1.0;
+    m_lineWidth = DEFAULT_LINE_WIDTH_DFX;
+    m_scale = 1.0;
+    m_originalWidth = 0.0;
+    m_originalHeight = 0.0;
 }
 
 
@@ -46,7 +50,7 @@ bool GRAPHICS_IMPORTER::Load( const wxString &aFileName )
     return m_plugin->Load( aFileName );
 }
 
-bool GRAPHICS_IMPORTER::Import( float aXScale, float aYScale)
+bool GRAPHICS_IMPORTER::Import( double aScale )
 {
     if( !m_plugin )
     {
@@ -54,7 +58,9 @@ bool GRAPHICS_IMPORTER::Import( float aXScale, float aYScale)
         return false;
     }
 
+    SetScale( aScale );
+
     m_plugin->SetImporter( this );
 
-    return m_plugin->Import( aXScale, aYScale );
+    return m_plugin->Import();
 }

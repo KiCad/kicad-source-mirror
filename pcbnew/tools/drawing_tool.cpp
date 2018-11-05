@@ -739,31 +739,56 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     if( !m_frame->GetModel() )
         return 0;
 
-    //DIALOG_DXF_IMPORT dlg( m_frame );
     // Note: PlaceImportedGraphics() will convert  PCB_LINE_T and PCB_TEXT_T to module graphic items
     // if needed
-    DIALOG_IMPORT_GFX dlg( m_frame, false );// m_editModules );
+    DIALOG_IMPORT_GFX dlg( m_frame, m_editModules );
     int dlgResult = dlg.ShowModal();
 
-    /*const std::list<BOARD_ITEM*>*/auto& list = dlg.GetImportedItems();
+    auto& list = dlg.GetImportedItems();
 
-    if( dlgResult != wxID_OK || list.empty() )
+    if( dlgResult != wxID_OK )
         return 0;
+
+    // Ensure the list is not empty:
+    if( list.empty() )
+    {
+        wxMessageBox( _( "No graphic items found in file to import") );
+        return 0;
+    }
+
+
+    m_frame->SetNoToolSelected();
 
     // Add a VIEW_GROUP that serves as a preview for the new item
     SELECTION preview;
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
-    //for( auto item : list )
     for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
     {
         EDA_ITEM* item = it->get();
 
-        wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
+        if( m_editModules )
+        {
+            wxASSERT( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_MODULE_TEXT_T );
+        }
+        else
+        {
+            wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
+        }
 
-        preview.Add( item );
+        if( dlg.IsPlacementInteractive() )
+            preview.Add( item );
+        else
+            commit.Add( item );
+
         it->release();
+    }
+
+    if( !dlg.IsPlacementInteractive() )
+    {
+        commit.Push( _( "Place a DXF_SVG drawing" ) );
+        return 0;
     }
 
     BOARD_ITEM* firstItem = static_cast<BOARD_ITEM*>( preview.Front() );
@@ -836,86 +861,9 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
-            // Place the drawing
-            BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
-
+            // Place the imported drawings
             for( auto item : preview )
-            {
-                if( m_editModules )
-                {
-                    // Modules use different types for the same things,
-                    // so we need to convert imported items to appropriate classes.
-                    BOARD_ITEM* converted = NULL;
-
-                    switch( item->Type() )
-                    {
-                    case PCB_TEXT_T:
-                    {
-                        TEXTE_PCB* text = static_cast<TEXTE_PCB*>( item );
-                        TEXTE_MODULE* textMod = new TEXTE_MODULE( (MODULE*) parent );
-
-                        // Assignment operator also copies the item PCB_TEXT_T type,
-                        // so it cannot be added to a module which handles PCB_MODULE_TEXT_T
-                        textMod->SetText( text->GetText() );
-#if 0
-                        textMod->SetTextSize( text->GetTextSize() );
-                        textMod->SetThickness( text->GetThickness() );
-                        textMod->SetOrientation( text->GetTextAngle() );
-                        textMod->SetTextPos( text->GetTextPos() );
-                        textMod->SetTextSize( text->GetTextSize() );
-                        textMod->SetVisible( text->GetVisible() );
-                        textMod->SetMirrored( text->IsMirrored() );
-                        textMod->SetItalic( text->IsItalic() );
-                        textMod->SetBold( text->IsBold() );
-                        textMod->SetHorizJustify( text->GetHorizJustify() );
-                        textMod->SetVertJustify( text->GetVertJustify() );
-                        textMod->SetMultilineAllowed( text->IsMultilineAllowed() );
-#else
-                        textMod->EDA_TEXT::SetEffects( *text );
-                        textMod->SetLocalCoord();    // using changed SetTexPos() via SetEffects()
-#endif
-                        converted = textMod;
-                        break;
-                    }
-
-                    case PCB_LINE_T:
-                    {
-                        DRAWSEGMENT*    seg = static_cast<DRAWSEGMENT*>( item );
-                        EDGE_MODULE*    modSeg = new EDGE_MODULE( (MODULE*) parent );
-
-                        // Assignment operator also copies the item PCB_LINE_T type,
-                        // so it cannot be added to a module which handles PCB_MODULE_EDGE_T
-                        modSeg->SetWidth( seg->GetWidth() );
-                        modSeg->SetStart( seg->GetStart() );
-                        modSeg->SetEnd( seg->GetEnd() );
-                        modSeg->SetAngle( seg->GetAngle() );
-                        modSeg->SetShape( seg->GetShape() );
-                        modSeg->SetType( seg->GetType() );
-                        modSeg->SetBezControl1( seg->GetBezControl1() );
-                        modSeg->SetBezControl2( seg->GetBezControl2() );
-                        modSeg->SetBezierPoints( seg->GetBezierPoints() );
-                        modSeg->SetPolyShape( seg->GetPolyShape() );
-                        modSeg->SetLocalCoord();
-                        converted = modSeg;
-                        break;
-                    }
-
-                    default:
-                        wxASSERT_MSG( false,
-                                      wxString::Format( "item type %d not allowed", item->Type() ) );
-                        break;
-                    }
-
-                    if( converted )
-                        converted->SetLayer( static_cast<BOARD_ITEM*>( item )->GetLayer() );
-
-                    delete item;
-                    item = converted;
-                }
-
-                if( item )
-                    commit.Add( item );
-            }
+                commit.Add( item );
 
             commit.Push( _( "Place a DXF_SVG drawing" ) );
             break;

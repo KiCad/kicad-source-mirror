@@ -6,7 +6,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -27,71 +27,76 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "dialog_import_gfx.h"
 #include <kiface_i.h>
 #include <convert_to_biu.h>
-#include <confirm.h>
+#include <pcb_layer_box_selector.h>
+#include <wildcards_and_files_ext.h>
 
-#include <pcb_base_frame.h>
 #include <class_board.h>
 #include <class_module.h>
 #include <class_edge_mod.h>
 #include <class_text_mod.h>
 #include <class_pcb_text.h>
-#include <pcb_layer_box_selector.h>
-
-#include <import_gfx/graphics_importer_pcbnew.h>
+#include "dialog_import_gfx.h"
 
 // Keys to store setup in config
-#define IMPORT_GFX_LAYER_OPTION_KEY  "GfxImportBrdLayer"
-#define IMPORT_GFX_COORD_ORIGIN_KEY  "GfxImportCoordOrigin"
-#define IMPORT_GFX_LAST_FILE_KEY     "GfxImportLastFile"
-#define IMPORT_GFX_GRID_UNITS_KEY    "GfxImportGridUnits"
-#define IMPORT_GFX_GRID_OFFSET_X_KEY "GfxImportGridOffsetX"
-#define IMPORT_GFX_GRID_OFFSET_Y_KEY "GfxImportGridOffsetY"
+#define IMPORT_GFX_LAYER_OPTION_KEY             "GfxImportBrdLayer"
+#define IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY    "GfxImportPlacementInteractive"
+#define IMPORT_GFX_LAST_FILE_KEY                "GfxImportLastFile"
+#define IMPORT_GFX_POSITION_UNITS_KEY           "GfxImportPositionUnits"
+#define IMPORT_GFX_POSITION_X_KEY               "GfxImportPositionX"
+#define IMPORT_GFX_POSITION_Y_KEY               "GfxImportPositionY"
+#define IMPORT_GFX_LINEWIDTH_UNITS_KEY          "GfxImportLineWidthUnits"
+#define IMPORT_GFX_LINEWIDTH_KEY                "GfxImportLineWidth"
 
 
-// Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
+// Static members of DIALOG_IMPORT_GFX, to remember
+// the user's choices during the session
 wxString DIALOG_IMPORT_GFX::m_filename;
-int DIALOG_IMPORT_GFX::m_offsetSelection = 0;
+bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
 LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
+double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;  // Do not change the imported items siaz
 
 
-DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleItems )
+DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic )
     : DIALOG_IMPORT_GFX_BASE( aParent )
 {
     m_parent = aParent;
 
-    if( aUseModuleItems )
+    if( aImportAsFootprintGraphic )
         m_importer.reset( new GRAPHICS_IMPORTER_MODULE( m_parent->GetBoard()->m_Modules ) );
     else
         m_importer.reset( new GRAPHICS_IMPORTER_BOARD( m_parent->GetBoard() ) );
 
     m_config = Kiface().KifaceSettings();
-    m_gridUnits = 0;
-    m_gridOffsetX = 0.0;
-    m_gridOffsetY = 0.0;
+    m_originImportUnits = 0;
+    m_importOrigin.x = 0.0;         // always in mm
+    m_importOrigin.y = 0.0;         // always in mm
+    m_default_lineWidth = 0.2;      // always in mm
+    m_lineWidthImportUnits = 0;
 
     if( m_config )
     {
         m_layer = m_config->Read( IMPORT_GFX_LAYER_OPTION_KEY, (long)Dwgs_User );
-        m_offsetSelection = m_config->Read( IMPORT_GFX_COORD_ORIGIN_KEY, (long)0 );
+        m_placementInteractive = m_config->Read( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, true );
         m_filename =  m_config->Read( IMPORT_GFX_LAST_FILE_KEY, wxEmptyString );
-        m_config->Read( IMPORT_GFX_GRID_UNITS_KEY, &m_gridUnits, 0 );
-        m_config->Read( IMPORT_GFX_GRID_OFFSET_X_KEY, &m_gridOffsetX, 0.0 );
-        m_config->Read( IMPORT_GFX_GRID_OFFSET_Y_KEY, &m_gridOffsetY, 0.0 );
+        m_config->Read( IMPORT_GFX_LINEWIDTH_KEY, &m_default_lineWidth, 0.2 );
+        m_config->Read( IMPORT_GFX_POSITION_UNITS_KEY, &m_originImportUnits, 0 );
+        m_config->Read( IMPORT_GFX_POSITION_X_KEY, &m_importOrigin.x, 0.0 );
+        m_config->Read( IMPORT_GFX_POSITION_Y_KEY, &m_importOrigin.y, 0.0 );
     }
 
-    m_PCBGridUnits->SetSelection( m_gridUnits );
-    wxString tmpStr;
-    tmpStr << m_gridOffsetX;
-    m_PCBXCoord->SetValue( tmpStr );
-    tmpStr =  "";
-    tmpStr << m_gridOffsetY;
-    m_PCBYCoord->SetValue( tmpStr );
+    m_choiceUnitLineWidth->SetSelection( m_lineWidthImportUnits );
+    showPCBdefaultLineWidth();
+
+    m_DxfPcbPositionUnits->SetSelection( m_originImportUnits );
+    showPcbImportOffsets();
 
     m_textCtrlFileName->SetValue( m_filename );
-    m_rbOffsetOption->SetSelection( m_offsetSelection );
+    m_rbInteractivePlacement->SetValue( m_placementInteractive );
+    m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
+
+    m_textCtrlImportScale->SetValue( wxString::Format( "%f", m_scaleImport ) );
 
     // Configure the layers list selector
     m_SelLayerBox->SetLayersHotkeys( false );           // Do not display hotkeys
@@ -114,23 +119,108 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleIt
 
 DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
 {
-    m_offsetSelection = m_rbOffsetOption->GetSelection();
+    updatePcbImportOffsets_mm();
     m_layer = m_SelLayerBox->GetLayerSelection();
 
     if( m_config )
     {
         m_config->Write( IMPORT_GFX_LAYER_OPTION_KEY, (long)m_layer );
-        m_config->Write( IMPORT_GFX_COORD_ORIGIN_KEY, m_offsetSelection );
+        m_config->Write( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, m_placementInteractive );
         m_config->Write( IMPORT_GFX_LAST_FILE_KEY, m_filename );
 
-        m_config->Write( IMPORT_GFX_GRID_UNITS_KEY, GetPCBGridUnits() );
-        m_config->Write( IMPORT_GFX_GRID_OFFSET_X_KEY, m_PCBXCoord->GetValue() );
-        m_config->Write( IMPORT_GFX_GRID_OFFSET_Y_KEY, m_PCBYCoord->GetValue() );
+        m_config->Write( IMPORT_GFX_POSITION_UNITS_KEY, m_originImportUnits );
+        m_config->Write( IMPORT_GFX_POSITION_X_KEY, m_importOrigin.x );
+        m_config->Write( IMPORT_GFX_POSITION_Y_KEY, m_importOrigin.y );
+
+        m_lineWidthImportUnits = getPCBdefaultLineWidthMM();
+        m_config->Write( IMPORT_GFX_LINEWIDTH_KEY, m_default_lineWidth );
+        m_config->Write( IMPORT_GFX_LINEWIDTH_UNITS_KEY, m_lineWidthImportUnits );
     }
 }
 
 
-void DIALOG_IMPORT_GFX::OnBrowseFiles( wxCommandEvent& event )
+void DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEvent& event )
+{
+    // Collect last entered values:
+    updatePcbImportOffsets_mm();
+
+    m_originImportUnits = m_DxfPcbPositionUnits->GetSelection();;
+    showPcbImportOffsets();
+}
+
+
+double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
+{
+    double value = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlLineWidth->GetValue() );
+
+    switch( m_lineWidthImportUnits )
+    {
+        default:
+        case 0:     // display units = mm
+            break;
+
+        case 1:     // display units = mil
+            value *= 25.4 / 1000;
+            break;
+
+        case 2:     // display units = inch
+            value *= 25.4;
+            break;
+    }
+
+    return value;   // value is in mm
+}
+
+
+void DIALOG_IMPORT_GFX::onUnitWidthSelection( wxCommandEvent& event )
+{
+    m_default_lineWidth = getPCBdefaultLineWidthMM();
+
+    // Switch to new units
+    m_lineWidthImportUnits = m_choiceUnitLineWidth->GetSelection();
+    showPCBdefaultLineWidth();
+}
+
+
+void DIALOG_IMPORT_GFX::showPcbImportOffsets()
+{
+    // Display m_importOrigin value according to the unit selection:
+    VECTOR2D offset = m_importOrigin;
+
+    if( m_originImportUnits )   // Units are inches
+        offset = m_importOrigin / 25.4;
+
+    m_DxfPcbXCoord->SetValue( wxString::Format( "%f", offset.x ) );
+    m_DxfPcbYCoord->SetValue( wxString::Format( "%f", offset.y ) );
+
+}
+
+
+void DIALOG_IMPORT_GFX::showPCBdefaultLineWidth()
+{
+    double value;
+
+    switch( m_lineWidthImportUnits )
+    {
+        default:
+        case 0:     // display units = mm
+            value = m_default_lineWidth;
+            break;
+
+        case 1:     // display units = mil
+            value = m_default_lineWidth / 25.4 * 1000;
+            break;
+
+        case 2:     // display units = inch
+            value = m_default_lineWidth / 25.4;
+            break;
+    }
+
+    m_textCtrlLineWidth->SetValue( wxString::Format( "%f", value ) );
+}
+
+
+void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 {
     wxString path;
     wxString filename;
@@ -173,155 +263,226 @@ void DIALOG_IMPORT_GFX::OnBrowseFiles( wxCommandEvent& event )
 }
 
 
-void DIALOG_IMPORT_GFX::OnOKClick( wxCommandEvent& event )
+void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
 {
     m_filename = m_textCtrlFileName->GetValue();
 
     if( m_filename.IsEmpty() )
-        return;
-
-    double offsetX = 0;
-    double offsetY = 0;
-
-    m_offsetSelection = m_rbOffsetOption->GetSelection();
-
-    switch( m_offsetSelection )
     {
-    case 0:
-        offsetX = m_parent->GetPageSizeIU().x * MM_PER_IU / 2;
-        offsetY = m_parent->GetPageSizeIU().y * MM_PER_IU / 2;
-        break;
-
-    case 1:
-        break;
-
-    case 2:
-        offsetY = m_parent->GetPageSizeIU().y * MM_PER_IU / 2;
-        break;
-
-    case 3:
-        offsetY = m_parent->GetPageSizeIU().y * MM_PER_IU;
-        break;
-
-    case 4:
-        GetPCBGridOffsets( offsetX, offsetY );
-
-        if( GetPCBGridUnits() )
-        {
-            offsetX *= 25.4;
-            offsetY *= 25.4;
-        }
-        break;
+        wxMessageBox( _( "Error: No DXF filename!" ) );
+        return;
     }
 
-    // Set coordinates offset for import (offset is given in mm)
-    //m_importer.SetOffset( offsetX, offsetY );
+    updatePcbImportOffsets_mm();      // Update m_importOriginX and m_importOriginY;
+
     m_layer = m_SelLayerBox->GetLayerSelection();
+
+    if( m_layer < 0 )
+    {
+        wxMessageBox( _( "Please, select a valid layer " ) );
+        return;
+    }
+
+    m_default_lineWidth = getPCBdefaultLineWidthMM();
+
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
     auto plugin = GRAPHICS_IMPORT_MGR::GetPluginByExt( wxFileName( m_filename ).GetExt() );
 
     if( plugin )
     {
-        m_importer->SetScale( 1.0 /*1e6*/ );       // mm -> IU @todo: add a setting in the dialog and apply it here
-        m_importer->SetLineWidth( 0.1 * 1e6 );   // @todo add a setting in the dialog and apply it here
+        // Set coordinates offset for import (offset is given in mm)
+        m_importer->SetImportOffsetMM( m_importOrigin );
+        m_scaleImport = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlImportScale->GetValue() );
+
+        m_importer->SetLineWidthMM( m_default_lineWidth );
         m_importer->SetPlugin( std::move( plugin ) );
 
-        if( m_importer->Load( m_filename ) )
-            m_importer->Import( 1.0, 1.0 );  // @todo
+        LOCALE_IO dummy;    // Ensure floats can be read.
 
-        EndModal( wxID_OK );
+        if( m_importer->Load( m_filename ) )
+            m_importer->Import( m_scaleImport );
+
+        // Get warning messages:
+        const std::string& warnings = m_importer->GetMessages();
+
+        if( !warnings.empty() )
+            wxMessageBox( warnings.c_str(), _( "Not Handled Items" ) );
+
+        event.Skip();
     }
     else
     {
-        DisplayError( this, _( "There is no plugin to handle this file type" ) );
+        wxMessageBox( _( "There is no plugin to handle this file type" ) );
     }
 }
 
-void DIALOG_IMPORT_GFX::onChangeHeight( wxUpdateUIEvent &event)
-{
-    // @todo: implement scaling of Y
-#if 0
-    double heightInput = DoubleValueFromString(UNSCALED_UNITS,m_tcHeight->GetValue());
 
-    if(m_cbKeepAspectRatio->GetValue())
-    {
-    }
-#endif
-}
-
-#if 0
-    // Must be reworked (perhaps removed) because this is not used in GAL canvases
-    // only in legacy canvas.
+// Used only in legacy canvas by the board editor.
 bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
 {
     DIALOG_IMPORT_GFX dlg( aCaller );
-    bool success = ( dlg.ShowModal() == wxID_OK );
 
-    if( success )
+    if( dlg.ShowModal() != wxID_OK )
+        return false;
+
+    auto& list = dlg.GetImportedItems();
+
+    // Ensure the list is not empty:
+    if( list.empty() )
     {
-        PICKED_ITEMS_LIST picklist;
-        BOARD* board = aCaller->GetBoard();
-        auto& items = dlg.GetImportedItems();
-
-        for( auto it = items.begin(); it != items.end(); ++it )
-        {
-            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->release() );
-            board->Add( item );
-
-            ITEM_PICKER itemWrapper( item, UR_NEW );
-            picklist.PushItem( itemWrapper );
-        }
-
-        aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
-        aCaller->OnModify();
+        wxMessageBox( _( "No graphic items found in file to import") );
+        return false;
     }
 
-    return success;
+    PICKED_ITEMS_LIST picklist;         // the pick list for undo command
+    ITEM_PICKER item_picker( nullptr, UR_NEW );
+    BOARD* board = aCaller->GetBoard();
+
+    // Now prepare a block move command to place the new items, if interactive placement,
+    // and prepare the undo command.
+    EDA_RECT bbox;          // the new items bounding box, for block move if interactive placement.
+    bool bboxInit = true;   // true until the bounding box is initialized
+    BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
+
+    if( dlg.IsPlacementInteractive() )
+        aCaller->HandleBlockBegin( NULL, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0) );
+
+    PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
+
+    for( auto it = list.begin(); it != list.end(); ++it )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->release() );
+
+        if( dlg.IsPlacementInteractive() )
+            item->SetFlags( IS_MOVED );
+
+        board->Add( item );
+
+        item_picker.SetItem( item );
+        picklist.PushItem( item_picker );
+
+        if( dlg.IsPlacementInteractive() )
+        {
+            blockitemsList.PushItem( item_picker );
+
+            if( bboxInit )
+                bbox = item->GetBoundingBox();
+            else
+                bbox.Merge( item->GetBoundingBox() );
+
+            bboxInit = false;
+       }
+    }
+
+    aCaller->SaveCopyInUndoList( picklist, UR_NEW, wxPoint( 0, 0 ) );
+    aCaller->OnModify();
+
+    if( dlg.IsPlacementInteractive() )
+    {
+        // Finish block move command:
+        wxPoint cpos = aCaller->GetNearestGridPosition( bbox.Centre() );
+        blockmove.SetOrigin( bbox.GetOrigin() );
+        blockmove.SetSize( bbox.GetSize() );
+        blockmove.SetLastCursorPosition( cpos );
+        aCaller->HandleBlockEnd( NULL );
+    }
+
+    return true;
 }
 
 
+// Used only in legacy canvas by the footprint editor.
 bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 {
-    wxASSERT( aModule );
+    if( !aModule )
+        return false;
 
     DIALOG_IMPORT_GFX dlg( aCaller, true );
-    bool success = ( dlg.ShowModal() == wxID_OK );
 
-    if( success )
+    if( dlg.ShowModal() != wxID_OK )
+        return false;
+
+    auto& list = dlg.GetImportedItems();
+
+    // Ensure the list is not empty:
+    if( list.empty() )
     {
-        aCaller->SaveCopyInUndoList( aModule, UR_CHANGED );
-        aCaller->OnModify();
-        auto& list = dlg.GetImportedItems();
-
-        for( auto it = list.begin(); it != list.end(); ++it )
-        {
-            aModule->Add( static_cast<BOARD_ITEM*>( it->release() ) );
-        }
+        wxMessageBox( _( "No graphic items found in file to import") );
+        return false;
     }
 
-    return success;
+    aCaller->SaveCopyInUndoList( aModule, UR_CHANGED );
+
+    PICKED_ITEMS_LIST picklist;         // the pick list for undo command
+    ITEM_PICKER item_picker( nullptr, UR_NEW );
+
+    // Now prepare a block move command to place the new items, if interactive placement,
+    // and prepare the undo command.
+    EDA_RECT bbox;          // the new items bounding box, for block move if interactive placement.
+    bool bboxInit = true;   // true until the bounding box is initialized
+    BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
+
+    if( dlg.IsPlacementInteractive() )
+        aCaller->HandleBlockBegin( nullptr, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0) );
+
+    PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
+
+    for( auto it = list.begin(); it != list.end(); ++it )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it->release() );
+        aModule->Add( item );
+
+        if( dlg.IsPlacementInteractive() )
+        {
+            item->SetFlags( IS_MOVED );
+            item_picker.SetItem( item );
+            blockitemsList.PushItem( item_picker );
+
+            if( bboxInit )
+                bbox = item->GetBoundingBox();
+            else
+                bbox.Merge( item->GetBoundingBox() );
+
+            bboxInit = false;
+       }
+    }
+
+    aCaller->OnModify();
+
+    if( dlg.IsPlacementInteractive() )
+    {
+        // Finish block move command:
+        wxPoint cpos = aCaller->GetNearestGridPosition( bbox.Centre() );
+        blockmove.SetOrigin( bbox.GetOrigin() );
+        blockmove.SetSize( bbox.GetSize() );
+        blockmove.SetLastCursorPosition( cpos );
+        aCaller->HandleBlockEnd( NULL );
+    }
+
+    return true;
 }
-#endif
 
-void DIALOG_IMPORT_GFX::OriginOptionOnUpdateUI( wxUpdateUIEvent& event )
+
+void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
 {
-    bool enable = m_rbOffsetOption->GetSelection() == 4;
+    m_rbInteractivePlacement->SetValue( m_placementInteractive );
+    m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
 
-    m_PCBGridUnits->Enable( enable );
-    m_PCBXCoord->Enable( enable );
-    m_PCBYCoord->Enable( enable );
+    m_DxfPcbPositionUnits->Enable( not m_placementInteractive );
+    m_DxfPcbXCoord->Enable( not m_placementInteractive );
+    m_DxfPcbYCoord->Enable( not m_placementInteractive );
 }
 
 
-int  DIALOG_IMPORT_GFX::GetPCBGridUnits( void )
+void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
 {
-    return m_PCBGridUnits->GetSelection();
-}
+    m_importOrigin.x = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbXCoord->GetValue() );
+    m_importOrigin.y = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
 
+    if( m_originImportUnits )   // Units are inches
+    {
+        m_importOrigin = m_importOrigin * 25.4;
+    }
 
-void DIALOG_IMPORT_GFX::GetPCBGridOffsets( double &aXOffset, double &aYOffset )
-{
-    aXOffset = DoubleValueFromString( UNSCALED_UNITS, m_PCBXCoord->GetValue() );
-    aYOffset = DoubleValueFromString( UNSCALED_UNITS, m_PCBYCoord->GetValue() );
     return;
 }

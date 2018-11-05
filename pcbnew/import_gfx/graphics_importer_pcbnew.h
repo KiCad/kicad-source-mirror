@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,10 +39,7 @@ class EDA_TEXT;
 class GRAPHICS_IMPORTER_PCBNEW : public GRAPHICS_IMPORTER
 {
 public:
-    GRAPHICS_IMPORTER_PCBNEW()
-        : m_layer( Dwgs_User )
-    {
-    }
+    GRAPHICS_IMPORTER_PCBNEW();
 
     /**
      * @brief Sets the target layer for the imported shapes.
@@ -60,13 +58,13 @@ public:
         return m_layer;
     }
 
-    void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd ) override;
+    void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth ) override;
 
-    void AddCircle( const VECTOR2D& aOrigin, double aRadius ) override;
+    void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) override;
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) override;
 
-    void AddPolygon( const std::vector< VECTOR2D >& aVertices ) override;
+    void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
             double aHeight, double aWidth, double aOrientation,
@@ -74,6 +72,19 @@ public:
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
                     const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd , double aWidth ) override;
+
+    /** convert a imported coordinate to a board coordinate, according to
+     * the internal units, the user scale and offset
+     * @param aCoordinate is the imported coordinate in mm
+     */
+    wxPoint MapCoordinate( const VECTOR2D& aCoordinate );
+
+    /** @return a line thickness in a board Iu value, according to
+     * the internal units.
+     * if aLineWidth < 0, the default ine thickness value is returned
+     * @param aLineWidth is the line thickness in mm to convert
+     */
+    int MapLineWidth( double aLineWidth );
 
 protected:
     ///> Create an object representing a graphical shape.

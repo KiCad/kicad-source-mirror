@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,76 +40,80 @@ public:
 class IMPORTED_LINE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd )
-        : m_start( aStart ), m_end( aEnd )
+    IMPORTED_LINE( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth )
+        : m_start( aStart ), m_end( aEnd ), m_width( aWidth )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddLine( m_start, m_end );
+        aImporter.AddLine( m_start, m_end, m_width );
     }
 
 private:
     const VECTOR2D m_start;
     const VECTOR2D m_end;
+    double m_width;
 };
 
 
 class IMPORTED_CIRCLE : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius )
-        : m_center( aCenter ), m_radius( aRadius )
+    IMPORTED_CIRCLE( const VECTOR2D& aCenter, double aRadius, double aWidth )
+        : m_center( aCenter ), m_radius( aRadius ), m_width( aWidth )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddCircle( m_center, m_radius );
+        aImporter.AddCircle( m_center, m_radius, m_width );
     }
 
 private:
     const VECTOR2D m_center;
     double m_radius;
+    double m_width;
 };
 
 
 class IMPORTED_ARC : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle )
-        : m_center( aCenter ), m_start( aStart ), m_angle( aAngle )
+    IMPORTED_ARC( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth )
+        : m_center( aCenter ), m_start( aStart ), m_angle( aAngle ), m_width( aWidth )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddArc( m_center, m_start, m_angle );
+        aImporter.AddArc( m_center, m_start, m_angle, m_width );
     }
 
 private:
     const VECTOR2D m_center;
     const VECTOR2D m_start;
     double m_angle;
+    double m_width;
 };
 
 
 class IMPORTED_POLYGON : public IMPORTED_SHAPE
 {
 public:
-    IMPORTED_POLYGON( const std::vector< VECTOR2D >& aVertices )
-        : m_vertices( aVertices )
+    IMPORTED_POLYGON( const std::vector< VECTOR2D >& aVertices, double aWidth )
+        : m_vertices( aVertices ), m_width( aWidth )
     {
     }
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddPolygon( m_vertices );
+        aImporter.AddPolygon( m_vertices, m_width );
     }
 
 private:
     const std::vector< VECTOR2D > m_vertices;
+    double m_width;
 };
 
 
@@ -169,13 +174,13 @@ private:
 class GRAPHICS_IMPORTER_BUFFER : public GRAPHICS_IMPORTER
 {
 public:
-    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd ) override;
+    void AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth ) override;
 
-    void AddCircle( const VECTOR2D& aCenter, double aRadius ) override;
+    void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle ) override;
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) override;
 
-    void AddPolygon( const std::vector< VECTOR2D >& aVertices ) override;
+    void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
             double aHeight, double aWidth, double aOrientation,

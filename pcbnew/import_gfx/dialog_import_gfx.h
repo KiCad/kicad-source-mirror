@@ -22,10 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <pcb_edit_frame.h>
 #include "dialog_import_gfx_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
-
-class PCB_BASE_FRAME;
 
 class DIALOG_IMPORT_GFX : public DIALOG_IMPORT_GFX_BASE
 {
@@ -33,36 +32,58 @@ public:
     DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleItems = false );
     ~DIALOG_IMPORT_GFX();
 
+
     /**
      * Function GetImportedItems()
-     *
-     * Returns a list of items imported from a vector graphics file.
+     * @return a list of items imported from a vector graphics file.
      */
     std::list<std::unique_ptr<EDA_ITEM>>& GetImportedItems()
     {
         return m_importer->GetItems();
     }
 
+    /** @return true if the placement is interactive, i.e. all imported
+     * items must be moved by the mouse cursor to the final position
+     * false means the imported items are placed to the final position after import.
+     */
+    bool IsPlacementInteractive()
+    {
+        return m_placementInteractive;
+    }
+
 private:
     PCB_BASE_FRAME*      m_parent;
-    wxConfigBase*        m_config;               // Current config
+    wxConfigBase*        m_config;              // Current config
     std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
-    int                  m_gridUnits;
-    double               m_gridOffsetX;
-    double               m_gridOffsetY;
-    double               m_newHeight;
-    double               m_newWidth;
+    int                  m_originImportUnits;
+    VECTOR2D             m_importOrigin;        // This is the offset to add to imported coordinates
+                                                // Always in mm
 
     static wxString      m_filename;
-    static int           m_offsetSelection;
+    static bool          m_placementInteractive;
     static LAYER_NUM     m_layer;
+    double               m_default_lineWidth;   // always in mm: line width when a line width is not specified
+    int                  m_lineWidthImportUnits;
+    static double        m_scaleImport;         // a scale factor to change the size of imported items
+                                                // m_scaleImport =1.0 means keep original size
 
     // Virtual event handlers
-    void OnCancelClick( wxCommandEvent& event ) override { event.Skip(); }
-    void OnOKClick( wxCommandEvent& event ) override;
-    void OnBrowseFiles( wxCommandEvent& event ) override;
-    void OriginOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
-    void onChangeHeight( wxUpdateUIEvent& event ) override;
-    int  GetPCBGridUnits( void );
-    void GetPCBGridOffsets( double &aXOffset, double &aYOffset );
+    void onOKClick( wxCommandEvent& event ) override;
+    void onUnitPositionSelection( wxCommandEvent& event ) override;
+    void onUnitWidthSelection( wxCommandEvent& event ) override;
+    void onBrowseFiles( wxCommandEvent& event ) override;
+    void originOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
+	void onInteractivePlacement( wxCommandEvent& event ) override
+    {
+        m_placementInteractive = true;
+    }
+	void onAbsolutePlacement( wxCommandEvent& event ) override
+    {
+        m_placementInteractive = false;
+    }
+
+    void updatePcbImportOffsets_mm();
+    double getPCBdefaultLineWidthMM();
+    void showPCBdefaultLineWidth();
+    void showPcbImportOffsets();
 };

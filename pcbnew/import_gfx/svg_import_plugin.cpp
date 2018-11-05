@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2016 CERN
  * @author Janito V. Ferreira Filho
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,6 +50,7 @@ static VECTOR2D getPointInLine( const VECTOR2D& aLineStart, const VECTOR2D& aLin
 static float distanceFromPointToLine( const VECTOR2D& aPoint, const VECTOR2D& aLineStart,
         const VECTOR2D& aLineEnd );
 
+
 bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
     wxCHECK( m_importer, false );
@@ -60,31 +62,55 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
     return true;
 }
 
-bool SVG_IMPORT_PLUGIN::Import(float aXScale, float aYScale)
+bool SVG_IMPORT_PLUGIN::Import()
 {
     for( NSVGshape* shape = m_parsedImage->shapes; shape != NULL; shape = shape->next )
     {
-        m_importer->SetLineWidth( shape->strokeWidth );
+        double lineWidth = shape->strokeWidth;
 
         for( NSVGpath* path = shape->paths; path != NULL; path = path->next )
-            DrawPath( path->pts, path->npts, path->closed );
+            DrawPath( path->pts, path->npts, path->closed, shape->fill.type == NSVG_PAINT_COLOR, lineWidth );
     }
 
     return true;
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath )
+double SVG_IMPORT_PLUGIN::GetImageHeight() const
+{
+    if( !m_parsedImage )
+    {
+        wxASSERT_MSG(false, "Image must have been loaded before checking height");
+        return 0.0;
+    }
+
+    return m_parsedImage->height;
+}
+
+
+double SVG_IMPORT_PLUGIN::GetImageWidth() const
+{
+    if( !m_parsedImage )
+    {
+        wxASSERT_MSG(false, "Image must have been loaded before checking width");
+        return 0.0;
+    }
+
+    return m_parsedImage->width;
+}
+
+
+void SVG_IMPORT_PLUGIN::DrawPath( const float* aPoints, int aNumPoints, bool aClosedPath, bool aFilled, double aLineWidth )
 {
     std::vector< VECTOR2D > collectedPathPoints;
 
     if( aNumPoints > 0 )
         DrawCubicBezierPath( aPoints, aNumPoints, collectedPathPoints );
 
-    if( aClosedPath )
-        DrawPolygon( collectedPathPoints );
+    if( aFilled && aClosedPath )
+        DrawPolygon( collectedPathPoints, aLineWidth );
     else
-        DrawLineSegments( collectedPathPoints );
+        DrawLineSegments( collectedPathPoints, aLineWidth );
 }
 
 
@@ -109,28 +135,28 @@ void SVG_IMPORT_PLUGIN::DrawCubicBezierPath( const float* aPoints, int aNumPoint
 void SVG_IMPORT_PLUGIN::DrawCubicBezierCurve( const float* aPoints,
         std::vector< VECTOR2D >& aGeneratedPoints )
 {
-    auto start = getBezierPoint( aPoints, 0.f );
-    auto end = getBezierPoint( aPoints, 1.f );
+    auto start = getBezierPoint( aPoints, 0.0f );
+    auto end = getBezierPoint( aPoints, 1.0f );
     auto segmentationThreshold = calculateBezierSegmentationThreshold( aPoints );
 
     aGeneratedPoints.push_back( start );
-    segmentBezierCurve( start, end, 0.f, 0.5f, aPoints, segmentationThreshold, aGeneratedPoints );
+    segmentBezierCurve( start, end, 0.0f, 0.5f, aPoints, segmentationThreshold, aGeneratedPoints );
     aGeneratedPoints.push_back( end );
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector< VECTOR2D >& aPoints )
+void SVG_IMPORT_PLUGIN::DrawPolygon( const std::vector< VECTOR2D >& aPoints, double aWidth )
 {
-    m_importer->AddPolygon( aPoints );
+    m_importer->AddPolygon( aPoints, aWidth );
 }
 
 
-void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector< VECTOR2D >& aPoints )
+void SVG_IMPORT_PLUGIN::DrawLineSegments( const std::vector< VECTOR2D >& aPoints, double aWidth )
 {
     unsigned int numLineStartPoints = aPoints.size() - 1;
 
     for( unsigned int pointIndex = 0; pointIndex < numLineStartPoints; ++pointIndex )
-        m_importer->AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ] );
+        m_importer->AddLine( aPoints[ pointIndex ], aPoints[ pointIndex + 1 ], aWidth );
 }
 
 
@@ -185,10 +211,8 @@ static float calculateBezierSegmentationThreshold( const float* aCurvePoints )
 static VECTOR2D calculateBezierBoundingBoxExtremity( const float* aCurvePoints,
         std::function< const float&( const float&, const float& ) > comparator )
 {
-    float x, y;
-
-    x = aCurvePoints[0];
-    y = aCurvePoints[1];
+    float x = aCurvePoints[0];
+    float y = aCurvePoints[1];
 
     for( int pointIndex = 1; pointIndex < 3; ++pointIndex )
     {

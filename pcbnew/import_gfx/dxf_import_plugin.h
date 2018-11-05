@@ -64,8 +64,8 @@ public:
                                 // 2 = entity in progress
     int m_EntityFlag;           // a info flag to parse entities
 
-    wxRealPoint m_LastCoordinate;   // the last vertex coordinate read (unit = mm)
-    wxRealPoint m_PolylineStart;    // The first point of the polyline entity, when reading a polyline (unit = mm)
+    VECTOR2D m_LastCoordinate;   // the last vertex coordinate read (unit = mm)
+    VECTOR2D m_PolylineStart;    // The first point of the polyline entity, when reading a polyline (unit = mm)
     double m_BulgeVertex;       // the last vertex bulge value read
 
     // for spline parsing: parameters
@@ -83,7 +83,7 @@ public:
     // control points list coordinates, code 10, 20 & 30 (only X and Y cood and Weight)
     std::vector<SPLINE_CTRL_POINT> m_SplineControlPointList;
     // fit points list, code 11, 21 & 31 (only X and Y cood)
-    std::vector<wxRealPoint> m_SplineFitPointList;
+    std::vector<VECTOR2D> m_SplineFitPointList;
 
     DXF2BRD_ENTITY_DATA() { Clear(); };
 
@@ -115,7 +115,6 @@ public:
 class DXF_IMPORT_PLUGIN : public GRAPHICS_IMPORT_PLUGIN, public DL_CreationAdapter
 {
 private:
-    std::list<BOARD_ITEM*> m_newItemsList;  // The list of new items added to the board
     double m_xOffset;           // X coord offset for conversion (in mm)
     double m_yOffset;           // Y coord offset for conversion (in mm)
     double m_defaultThickness;  // default line thickness for conversion (in mm)
@@ -129,8 +128,8 @@ private:
                                 // Each message ends by '\n'
     DXF2BRD_ENTITY_DATA m_curr_entity;  // the current entity parameters when parsing a DXF entity
 
-    int m_minX, m_maxX;         // handles image size
-    int m_minY, m_maxY;         // handles image size
+    double m_minX, m_maxX;      // handles image size in mm
+    double m_minY, m_maxY;      // handles image size in mm
 
     GRAPHICS_IMPORTER_BUFFER m_internalImporter;
 
@@ -150,13 +149,11 @@ public:
     }
 
     bool Load( const wxString& aFileName ) override;
-    bool Import( float aXScale, float aYScale ) override;
+    bool Import() override;
 
-    unsigned int GetImageWidth() const override;
-    unsigned int GetImageHeight() const override;
+    double GetImageWidth() const override;
+    double GetImageHeight() const override;
 
-    void updateImageLimits( const wxPoint& aPoint );
-    void updateImageLimits( const wxRealPoint& aPoint );
     void updateImageLimits( const VECTOR2D& aPoint );
 
     /**
@@ -210,33 +207,29 @@ public:
     bool ImportDxfFile( const wxString& aFile );
 
     /**
-     * @return the list of new BOARD_ITEM
-     */
-    const std::list<BOARD_ITEM*>& GetItemsList() const
-    {
-        return m_newItemsList;
-    }
-
-    /**
      * @return the list of messages in one string. Each message ends by '\n'
      */
-    std::string& GetMessages() { return m_messages; }
+    const std::string& GetMessages() const override
+    {
+        return m_messages;
+    }
+
 
 private:
     // report message to keep trace of not supported dxf entities:
     void reportMsg( const char* aMessage );
 
-    // coordinate conversions from dxf to internal units
-    int mapX( double aDxfCoordX );
-    int mapY( double aDxfCoordY );
-    int mapDim( double aDxfValue );
-    // mapWidth returns ( in internal units) the aDxfValue if aDxfWidth > 0
+    // coordinate conversions from dxf file to mm
+    double mapX( double aDxfCoordX );
+    double mapY( double aDxfCoordY );
+    double mapDim( double aDxfValue );
+    // mapWidth returns ( in mm) the aDxfValue if aDxfWidth > 0
     // or m_defaultThickness
-    int mapWidth( double aDxfWidth );
+    double mapWidth( double aDxfWidth );
 
     // Functions to aid in the creation of a Polyline
-    void insertLine( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd, int aWidth );
-    void insertArc( const wxRealPoint& aSegStart, const wxRealPoint& aSegEnd,
+    void insertLine( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd, int aWidth );
+    void insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aSegEnd,
                     double aBulge, int aWidth );
     // Add a dxf spline (stored in m_curr_entity) to the board, after conversion to segments
     void insertSpline( int aWidth );

@@ -38,7 +38,8 @@ class GRAPHICS_IMPORT_MGR
 {
 public:
     ///> List of handled file types.
-    enum GFX_FILE_T {
+    enum GFX_FILE_T
+    {
         DXF,
         SVG
     };

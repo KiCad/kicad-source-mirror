@@ -831,8 +831,8 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
-                 _( "SVG or DXF &Graphics..." ),
-                 _( "Import 2D Drawing DXF or SVG file to Pcbnew on Drawings layer" ),
+                 _( "Import &Graphics..." ),
+                 _( "Import 2D Drawing file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( aParentMenu, submenuImport,

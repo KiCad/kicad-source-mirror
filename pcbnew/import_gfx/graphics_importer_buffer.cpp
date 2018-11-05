@@ -32,28 +32,28 @@ static std::unique_ptr<T> make_shape( const Args&... aArguments )
     return std::unique_ptr<T>( new T( aArguments... ) );
 }
 
-void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd )
+void GRAPHICS_IMPORTER_BUFFER::AddLine( const VECTOR2D& aStart, const VECTOR2D& aEnd, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_LINE >( aStart, aEnd ) );
+    m_shapes.push_back( make_shape< IMPORTED_LINE >( aStart, aEnd, aWidth ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius )
+void GRAPHICS_IMPORTER_BUFFER::AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_CIRCLE >( aCenter, aRadius ) );
+    m_shapes.push_back( make_shape< IMPORTED_CIRCLE >( aCenter, aRadius, aWidth ) );
 }
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
-        double aAngle )
+                                       double aAngle, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_ARC >( aCenter, aStart, aAngle ) );
+    m_shapes.push_back( make_shape< IMPORTED_ARC >( aCenter, aStart, aAngle, aWidth ) );
 }
 
 
-void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices )
+void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth )
 {
-    m_shapes.push_back( make_shape< IMPORTED_POLYGON >( aVertices ) );
+    m_shapes.push_back( make_shape< IMPORTED_POLYGON >( aVertices, aWidth ) );
 }
 
 
