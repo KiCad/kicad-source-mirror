@@ -284,6 +284,9 @@ private:
     ///> valid flag, used to identify garbage items (we use lazy removal)
     bool m_valid;
 
+    ///> mutex protecting this item's connected_items set to allow parallel connection threads
+    std::mutex m_listLock;
+
 protected:
     ///> dirty flag, used to identify recently added item not yet scanned into the connectivity search
     bool m_dirty;
@@ -436,10 +439,10 @@ public:
         return ( m_connected.find( aItem ) != m_connected.end() );
     }
 
-    static void Connect( CN_ITEM* a, CN_ITEM* b )
+    void Connect( CN_ITEM* b )
     {
-        a->m_connected.insert( b );
-        b->m_connected.insert( a );
+        std::lock_guard<std::mutex> lock( m_listLock );
+        m_connected.insert( b );
     }
 
     void RemoveInvalidRefs();
@@ -835,9 +838,8 @@ class CN_VISITOR {
 
 public:
 
-    CN_VISITOR( CN_ITEM* aItem, std::mutex* aListLock ) :
-        m_item( aItem ),
-        m_listLock( aListLock )
+    CN_VISITOR( CN_ITEM* aItem ) :
+        m_item( aItem )
     {}
 
     bool operator()( CN_ITEM* aCandidate );
@@ -850,10 +852,6 @@ protected:
 
     ///> the item we are looking for connections to
     CN_ITEM* m_item;
-
-    ///> the mutex protecting our connection list
-    std::mutex* m_listLock;
-
 };
 
 #endif

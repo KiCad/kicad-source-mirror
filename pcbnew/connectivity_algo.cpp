@@ -28,6 +28,8 @@
 
 #include <thread>
 #include <mutex>
+#include <future>
+#include <algorithm>
 
 #ifdef PROFILE
 #include <profile.h>
@@ -325,58 +327,63 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
     PROF_COUNTER search_basic( "search-basic" );
 #endif
 
-    size_t numDirty = std::count_if( m_itemList.begin(), m_itemList.end(), [] ( CN_ITEM* aItem )
-            { return aItem->Dirty(); } );
+    std::vector<CN_ITEM*> dirtyItems;
+    std::copy_if( m_itemList.begin(), m_itemList.end(), std::back_inserter( dirtyItems ),
+            [] ( CN_ITEM* aItem ) { return aItem->Dirty(); } );
 
     if( m_progressReporter )
     {
-        m_progressReporter->SetMaxProgress( numDirty );
+        m_progressReporter->SetMaxProgress( dirtyItems.size() );
         m_progressReporter->KeepRefreshing();
     }
 
     if( m_itemList.IsDirty() )
     {
-        std::atomic<int> nextItem( 0 );
-        std::atomic<size_t> threadsFinished( 0 );
+        size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+                ( dirtyItems.size() + 7 ) / 8 );
 
-        size_t parallelThreadCount = std::min<size_t>(
-                std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-                numDirty );
+        std::atomic<size_t> nextItem( 0 );
+        std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        auto conn_lambda = [&nextItem, &dirtyItems]
+                            ( CN_LIST* aItemList, PROGRESS_REPORTER* aReporter) -> size_t
         {
-            std::thread t = std::thread( [&nextItem, &threadsFinished, this]()
+            for( size_t i = nextItem++; i < dirtyItems.size(); i = nextItem++ )
             {
-                for( int i = nextItem.fetch_add( 1 );
-                         i < m_itemList.Size();
-                         i = nextItem.fetch_add( 1 ) )
-                {
-                    auto item = m_itemList[i];
-                    if( item->Dirty() )
-                    {
-                        CN_VISITOR visitor( item, &m_listLock );
-                        m_itemList.FindNearby( item, visitor );
+                CN_VISITOR visitor( dirtyItems[i] );
+                aItemList->FindNearby( dirtyItems[i], visitor );
 
-                        if( m_progressReporter )
-                            m_progressReporter->AdvanceProgress();
-                    }
-                }
+                if( aReporter )
+                    aReporter->AdvanceProgress();
+            }
 
-                threadsFinished++;
-            } );
+            return 1;
+        };
 
-            t.detach();
-        }
-
-        // Finalize the connectivity threads
-        while( threadsFinished < parallelThreadCount )
+        if( parallelThreadCount <= 1 )
+            conn_lambda( &m_itemList, m_progressReporter );
+        else
         {
-            if( m_progressReporter )
-                m_progressReporter->KeepRefreshing();
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+                returns[ii] = std::async( std::launch::async, conn_lambda,
+                        &m_itemList, m_progressReporter );
 
-            // This routine is called every click while routing so keep the sleep time minimal
-            std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
+            for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            {
+                // Here we balance returns with a 100ms timeout to allow UI updating
+                std::future_status status;
+                do
+                {
+                    if( m_progressReporter )
+                        m_progressReporter->KeepRefreshing();
+
+                    status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
+                } while( status != std::future_status::ready );
+            }
         }
+
+        if( m_progressReporter )
+            m_progressReporter->KeepRefreshing();
     }
 
 #ifdef PROFILE
@@ -766,8 +773,8 @@ void CN_VISITOR::checkZoneItemConnection( CN_ZONE* aZone, CN_ITEM* aItem )
             ( aItem->Parent()->Type() == PCB_TRACE_T &&
               zoneItem->ContainsPoint( aItem->GetAnchor( 1 ) ) ) )
     {
-        std::lock_guard<std::mutex> lock( *m_listLock );
-        CN_ITEM::Connect( zoneItem, aItem );
+        zoneItem->Connect( aItem );
+        aItem->Connect( zoneItem );
     }
 }
 
@@ -791,8 +798,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     {
         if( aZoneB->ContainsPoint( outline.CPoint( i ) ) )
         {
-            std::lock_guard<std::mutex> lock( *m_listLock );
-            CN_ITEM::Connect( aZoneA, aZoneB );
+            aZoneA->Connect( aZoneB );
+            aZoneB->Connect( aZoneA );
             return;
         }
     }
@@ -803,8 +810,8 @@ void CN_VISITOR::checkZoneZoneConnection( CN_ZONE* aZoneA, CN_ZONE* aZoneB )
     {
         if( aZoneA->ContainsPoint( outline2.CPoint( i ) ) )
         {
-            std::lock_guard<std::mutex> lock( *m_listLock );
-            CN_ITEM::Connect( aZoneA, aZoneB );
+            aZoneA->Connect( aZoneB );
+            aZoneB->Connect( aZoneA );
             return;
         }
     }
@@ -862,8 +869,8 @@ bool CN_VISITOR::operator()( CN_ITEM* aCandidate )
             ( parentA->Type() == PCB_TRACE_T && parentB->HitTest( ptA2 ) ) ||
             ( parentB->Type() == PCB_TRACE_T && parentA->HitTest( ptB2 ) ) )
     {
-        std::lock_guard<std::mutex> lock( *m_listLock );
-        CN_ITEM::Connect( m_item, aCandidate );
+        m_item->Connect( aCandidate );
+        aCandidate->Connect( m_item );
     }
 
     return true;
