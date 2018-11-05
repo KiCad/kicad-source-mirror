@@ -1174,6 +1174,9 @@ void DRC::testDisabledLayers()
     wxCHECK( board, /*void*/ );
     LSET disabledLayers = board->GetEnabledLayers().flip();
 
+    // Perform the test only for copper layers
+    disabledLayers &= LSET::AllCuMask();
+
     auto createMarker = [&]( BOARD_ITEM* aItem )
     {
         addMarkerToPcb( newMarker( aItem->GetPosition(), aItem, DRCE_DISABLED_LAYER_ITEM ) );
