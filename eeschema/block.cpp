@@ -394,6 +394,7 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList, const wxPoin
 
     wxPoint center( ( bounds.GetLeft() + bounds.GetRight() ) / 2,
                     ( bounds.GetTop() + bounds.GetBottom() ) / 2 );
+    center = GetNearestGridPosition( center );
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
