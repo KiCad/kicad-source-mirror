@@ -237,6 +237,12 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
     endif()
 endif()
 
+if( WIN32 )
+    # define UNICODE and_UNICODE definition on Windows. KiCad uses unicode.
+    # Both definitions are required
+    add_definitions(-DUNICODE -D_UNICODE)
+endif()
+
 
 #================================================
 # Provide access to CCACHE
@@ -315,13 +321,6 @@ if( CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang" )
 
     if( MINGW )
         set( CMAKE_EXE_LINKER_FLAGS_RELEASE "-s" )
-
-        # _UNICODE definition seems needed under mingw/gcc 4.8
-        # (KiCad uses unicode, and on Windows, wxWidgets >= 2.9.4 is mandatory
-        # and uses unicode)
-        if( GCC_VERSION VERSION_EQUAL 4.8.0 OR GCC_VERSION VERSION_GREATER 4.8.0 )
-            add_definitions(-D_UNICODE)
-        endif()
 
         # Since version 2.8.5, Cmake uses a response file (.rsp) to
         # pass the list of include paths to gcc
