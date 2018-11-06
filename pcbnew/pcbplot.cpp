@@ -42,6 +42,7 @@
 #include <dialog_plot.h>
 #include <macros.h>
 #include <build_version.h>
+#include <gbr_metadata.h>
 
 
 const wxString GetGerberProtelExtension( LAYER_NUM aLayer )
@@ -276,85 +277,6 @@ static wxString& makeStringCompatX1( wxString& aText, bool aUseX1CompatibilityMo
 }
 
 
-/** A helper function to build a project GUID using format RFC4122 Version 1 or 4
- * from the project name, because a kicad project has no specific GUID
- * RFC4122 is used mainly for its syntax, because fields have no meaning for Gerber files
- * and therefore the GUID generated has no meaning because it do not use any time and time stamp
- * specific to the project, just a random pattern (random is here a pattern specific to a project).
- *
- * See en.wikipedia.org/wiki/Universally_unique_identifier
- */
-static wxString makeProjectGUIDfromString( wxString& aText )
-{
-    // Gerber GUID format should be RFC4122 Version 1 or 4. The format is:
-    // xxxxxxxx-xxxx-Mxxx-Nxxx-xxxxxxxxxxxx
-    // with
-    //   x = hexDigit lower/upper case
-    // and
-    //  M = '1' or '4' (UUID version: 1 (basic) or 4 (random)) (we use 4: UUID random)
-    // and
-    //  N = '8' or '9' or 'A|a' or 'B|b' : UUID variant 1: 2 MSB bits have meaning) (we use N = 9)
-    //  N = 1000 or 1001 or 1010 or 1011  : 10xx means Variant 1 (Variant2: 110x and 111x are reserved)
-
-    wxString guid;
-
-    // Build a 32 digits GUID from the board name:
-    // guid has 32 digits, so add chars in name to be sure we can build a 32 digits guid
-    // (i.e. from a 16 char string name)
-    // In fact only 30 digits are used, and 2 UID id
-    wxString bname = aText;
-    int cnt = 16 - bname.Len();
-
-    if( cnt > 0 )
-        bname.Append( 'X', cnt );
-
-    int chr_idx = 0;
-
-    // Output the 8 first hex digits:
-    for( unsigned ii = 0; ii < 4; ii++ )
-    {
-        int cc = int( bname[chr_idx++] ) & 0xFF;
-        guid << wxString::Format( "%2.2x", cc );
-    }
-
-    // Output the 4 next hex digits:
-    guid << '-';
-
-    for( unsigned ii = 0; ii < 2; ii++ )
-    {
-        int cc = int( bname[chr_idx++] ) & 0xFF;
-        guid << wxString::Format( "%2.2x", cc );
-    }
-
-    // Output the 4 next hex digits (UUID version and 3 digits):
-    guid << "-4";   // first digit: UUID version 4 (M = 4)
-    {
-        int cc = int( bname[chr_idx++] ) << 4 & 0xFF0;
-        cc += int( bname[chr_idx] ) >> 4 & 0x0F;
-        guid << wxString::Format( "%3.3x", cc );
-    }
-
-    // Output the 4 next hex digits (UUID variant and 3 digits):
-    guid << "-9";  // first digit: UUID variant 1 (N = 9)
-    {
-        int cc = (int( bname[chr_idx++] ) & 0x0F) << 8;
-        cc += int( bname[chr_idx++] ) & 0xFF;
-        guid << wxString::Format( "%3.3x", cc );
-    }
-
-    // Output the 12 last hex digits:
-    guid << '-';
-
-    for( unsigned ii = 0; ii < 6; ii++ )
-    {
-        int cc = int( bname[chr_idx++] ) & 0xFF;
-        guid << wxString::Format( "%2.2x", cc );
-    }
-
-    return guid;
-}
-
-
 void AddGerberX2Header( PLOTTER * aPlotter,
             const BOARD *aBoard, bool aUseX1CompatibilityMode )
 {
@@ -393,7 +315,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     msg = fn.GetFullName();
 
     // Build a <project GUID>, from the board name
-    wxString guid = makeProjectGUIDfromString( msg );
+    wxString guid = GbrMakeProjectGUIDfromString( msg );
 
     // build the <project id> string: this is the board short filename (without ext)
     // and all non ASCII chars and comma are replaced by '_'
