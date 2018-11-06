@@ -246,31 +246,15 @@ void GERBER_JOBFILE_WRITER::addJSONGeneralSpecs()
     // <project id> is the name of the project, restricted to basic ASCII symbols only,
     // and comma not accepted
     // All illegal chars will be replaced by underscore
-    // <project GUID> is a 32 hexadecimal digits string which is an unique id of a project.
-    // This is a random 128-bit number expressed in 32 hexadecimal digits.
-    // See en.wikipedia.org/wiki/GUID for more information
-    // However Kicad does not handle such a project GUID, so it is built from the board name
     // Rem: <project id> accepts only ASCII 7 code (only basic ASCII codes are allowed in gerber files).
+    //
+    // <project GUID> is a string which is an unique id of a project.
+    // However Kicad does not handle such a project GUID, so it is built from the board name
     wxFileName fn = m_pcb->GetFileName();
     wxString msg = fn.GetFullName();
-    wxString guid;
 
-    // Build a 32 digits GUID from the board name:
-    for( unsigned ii = 0; ii < msg.Len(); ii++ )
-    {
-        int cc1 = int( msg[ii] ) & 0x0F;
-        int cc2 = ( int( msg[ii] ) >> 4) & 0x0F;
-        guid << wxString::Format( wxT( "%X%X" ), cc2, cc1 );
-
-        if( guid.Len() >= 32 )
-            break;
-    }
-
-    // guid has 32 digits, so add missing digits
-    int cnt = 32 - guid.Len();
-
-    if( cnt > 0 )
-        guid.Append( '0', cnt );
+    // Build a <project GUID>, from the board name
+    wxString guid = GbrMakeProjectGUIDfromString( msg );
 
     // build the <project id> string: this is the board short filename (without ext)
     // and all non ASCII chars are replaced by '_'

@@ -35,6 +35,16 @@
 
 #include <gbr_netlist_metadata.h>
 
+/** A helper function to build a project GUID using format RFC4122 Version 1 or 4
+ * from the project name, because a kicad project has no specific GUID
+ * RFC4122 is used mainly for its syntax, because fields have no meaning for Gerber files
+ * and therefore the GUID generated has no meaning because it do not use any time and time stamp
+ * specific to the project, just a random pattern (random is here a pattern specific to a project).
+ *
+ * See en.wikipedia.org/wiki/Universally_unique_identifier
+ */
+wxString GbrMakeProjectGUIDfromString( wxString& aText );
+
 
 // this class handle info which can be added in a gerber file as attribute
 // of an aperture, by the %TA.AperFunction command
