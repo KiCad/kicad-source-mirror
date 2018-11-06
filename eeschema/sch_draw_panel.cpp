@@ -300,7 +300,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( !event.IsButton() && !event.Moving() && !event.Dragging() )
         return;
 
-    if( event.RightDown() )
+    if( event.RightUp() )
     {
         OnRightClick( event );
         return;
