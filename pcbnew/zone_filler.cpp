@@ -26,6 +26,8 @@
 #include <cstdint>
 #include <thread>
 #include <mutex>
+#include <algorithm>
+#include <future>
 
 #include <class_board.h>
 #include <class_zone.h>
@@ -109,47 +111,66 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         m_progressReporter->SetMaxProgress( toFill.size() );
     }
 
+    // Remove deprecaded segment zones (only found in very old boards)
+    m_board->m_SegZoneDeprecated.DeleteAll();
 
     std::atomic<size_t> nextItem( 0 );
-    std::atomic<size_t> threadsFinished( 0 );
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            toFill.size() );
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(), toFill.size() );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    auto fill_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
     {
-        std::thread t = std::thread( [ & ]()
+        size_t num = 0;
+
+        for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
-            for( size_t i = nextItem.fetch_add( 1 );
-                    i < toFill.size();
-                    i = nextItem.fetch_add( 1 ) )
+            ZONE_CONTAINER* zone = toFill[i].m_zone;
+
+            if( zone->GetFillMode() == ZFM_SEGMENTS )
+            {
+                ZONE_SEGMENT_FILL segFill;
+                fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
+                zone->SetFillSegments( segFill );
+            }
+            else
             {
                 SHAPE_POLY_SET rawPolys, finalPolys;
-                ZONE_CONTAINER* zone = toFill[i].m_zone;
                 fillSingleZone( zone, rawPolys, finalPolys );
 
                 zone->SetRawPolysList( rawPolys );
                 zone->SetFilledPolysList( finalPolys );
-                zone->SetIsFilled( true );
-
-                if( m_progressReporter )
-                    m_progressReporter->AdvanceProgress();
             }
 
-            threadsFinished++;
-        } );
+            zone->SetIsFilled( true );
 
-        t.detach();
-    }
+            if( m_progressReporter )
+                m_progressReporter->AdvanceProgress();
 
+            num++;
+        }
 
-    // Finalize the triangulation threads
-    while( threadsFinished < parallelThreadCount )
+        return num;
+    };
+
+    if( parallelThreadCount <= 1 )
+        fill_lambda( m_progressReporter );
+    else
     {
-        if( m_progressReporter )
-            m_progressReporter->KeepRefreshing();
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, fill_lambda, m_progressReporter );
 
-        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+        {
+            // Here we balance returns with a 100ms timeout to allow UI updating
+            std::future_status status;
+            do
+            {
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
+
+                status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
+            } while( status != std::future_status::ready );
+        }
     }
 
     // Now update the connectivity to check for copper islands
@@ -164,13 +185,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     connectivity->FindIsolatedCopperIslands( toFill );
 
     // Now remove insulated copper islands
-    if( m_progressReporter )
-    {
-        m_progressReporter->AdvancePhase();
-        m_progressReporter->SetMaxProgress( toFill.size() );
-        m_progressReporter->KeepRefreshing();
-    }
-
     bool outOfDate = false;
 
     for( auto& zone : toFill )
@@ -187,12 +201,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
         if( aCheck && zone.m_lastPolys.GetHash() != poly.GetHash() )
             outOfDate = true;
-
-        if( m_progressReporter )
-        {
-            m_progressReporter->AdvanceProgress();
-            m_progressReporter->KeepRefreshing();
-        }
     }
 
     if( aCheck )
@@ -235,98 +243,43 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
 
     nextItem = 0;
-    threadsFinished = 0;
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+
+    auto tri_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
     {
-        std::thread t = std::thread( [ & ]()
+        size_t num = 0;
+
+        for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
-            for( size_t i = nextItem.fetch_add( 1 );
-                    i < toFill.size();
-                    i = nextItem.fetch_add( 1 ) )
-            {
-                toFill[i].m_zone->CacheTriangulation();
+            toFill[i].m_zone->CacheTriangulation();
+            num++;
 
-                if( m_progressReporter )
-                     m_progressReporter->AdvanceProgress();
-             }
-
-             threadsFinished++;
-         } );
-
-         t.detach();
-     }
-
-
-     // Finalize the triangulation threads
-     while( threadsFinished < parallelThreadCount )
-     {
-         if( m_progressReporter )
-             m_progressReporter->KeepRefreshing();
-
-         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-     }
-
-
-    // Remove deprecaded segment zones (only found in very old boards)
-    m_board->m_SegZoneDeprecated.DeleteAll();
-
-    // If some zones must be filled by segments, create the filling segments
-    // (note, this is a outdated option, but it exists)
-    int zone_count = std::count_if( toFill.begin(), toFill.end(),
-                []( CN_ZONE_ISOLATED_ISLAND_LIST& aList )
-                { return aList.m_zone->GetFillMode() == ZFM_SEGMENTS; } );
-
-    if( zone_count > 0 )
-    {
-        if( m_progressReporter )
-        {
-            m_progressReporter->AdvancePhase();
-            m_progressReporter->Report( _( "Performing segment fills..." ) );
-            m_progressReporter->SetMaxProgress( zone_count );
+            if( m_progressReporter )
+                m_progressReporter->AdvanceProgress();
         }
 
-        parallelThreadCount = std::min<size_t>( static_cast<size_t>( zone_count ), parallelThreadCount );
-        nextItem = 0;
-        threadsFinished = 0;
+        return num;
+    };
+
+    if( parallelThreadCount <= 1 )
+        tri_lambda( m_progressReporter );
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, tri_lambda, m_progressReporter );
+
         for( size_t ii = 0; ii < parallelThreadCount; ++ii )
         {
-            std::thread t = std::thread( [ & ]()
+            // Here we balance returns with a 100ms timeout to allow UI updating
+            std::future_status status;
+            do
             {
-                for( size_t i = nextItem.fetch_add( 1 );
-                        i < toFill.size();
-                        i = nextItem.fetch_add( 1 ) )
-                {
-                    ZONE_CONTAINER* zone = toFill[i].m_zone;
+                if( m_progressReporter )
+                    m_progressReporter->KeepRefreshing();
 
-                    if( zone->GetFillMode() == ZFM_SEGMENTS )
-                    {
-                        ZONE_SEGMENT_FILL segFill;
-
-                        fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
-                        zone->SetFillSegments( segFill );
-
-                        if( m_progressReporter )
-                             m_progressReporter->AdvanceProgress();
-                    }
-                 }
-
-                 threadsFinished++;
-             } );
-
-             t.detach();
-         }
-
-
-         // Finalize the triangulation threads
-         while( threadsFinished < parallelThreadCount )
-         {
-             if( m_progressReporter )
-                 m_progressReporter->KeepRefreshing();
-
-             std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-         }
+                status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
+            } while( status != std::future_status::ready );
+        }
     }
-
 
     if( m_progressReporter )
     {
