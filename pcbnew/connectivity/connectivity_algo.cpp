@@ -251,14 +251,14 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
             for( size_t ii = 0; ii < parallelThreadCount; ++ii )
             {
-                // Here we balance returns with a 10ms timeout to allow UI updating
+                // Here we balance returns with a 100ms timeout to allow UI updating
                 std::future_status status;
                 do
                 {
                     if( m_progressReporter )
                         m_progressReporter->KeepRefreshing();
 
-                    status = returns[ii].wait_for( std::chrono::milliseconds( 10 ) );
+                    status = returns[ii].wait_for( std::chrono::milliseconds( 100 ) );
                 } while( status != std::future_status::ready );
             }
         }
