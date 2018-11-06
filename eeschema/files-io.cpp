@@ -320,8 +320,6 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             return false;
         }
 
-        SetScreen( m_CurrentSheet->LastScreen() );
-
         // It's possible the schematic parser fixed errors due to bugs so warn the user
         // that the schematic has been fixed (modified).
         SCH_SHEET_LIST sheetList( g_RootSheet );
@@ -359,6 +357,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
+        SetScreen( m_CurrentSheet->LastScreen() );
 
         // Ensure the schematic is fully segmented on first display
         BreakSegmentsOnJunctions();
