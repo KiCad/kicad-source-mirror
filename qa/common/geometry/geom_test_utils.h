@@ -26,54 +26,17 @@
 
 #include <math.h>
 
+#include <geometry/seg.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+
+#include <unit_test_utils/numeric.h>
+
 /**
  * @brief Utility functions for testing geometry functions.
  */
 namespace GEOM_TEST
 {
-
-/**
- * @brief Check if a value is within a tolerance of a nominal value
- *
-* @return value is in [aNominal - aError, aNominal + aError]
- */
-template<typename T>
-bool IsWithin( T aValue, T aNominal, T aError )
-{
-    return ( aValue >= aNominal - aError )
-            && ( aValue <= aNominal + aError );
-}
-
-/**
- * @brief Check if a value is within a tolerance of a nominal value,
- * with different allowances for errors above and below.
- *
- * @return value is in [aNominal - aErrorBelow, aNominal + aErrorAbove]
- */
-template<typename T>
-bool IsWithin( T aValue, T aNominal, T aErrorAbove, T aErrorBelow )
-{
-    return ( aValue >= aNominal - aErrorBelow )
-            && ( aValue <= aNominal + aErrorAbove );
-}
-
-/**
- * @brief value is in range [aNominal - aErrorBelow, aNominal]
- */
-template<typename T>
-bool IsWithinAndBelow( T aValue, T aNominal, T aErrorBelow )
-{
-    return IsWithin( aValue, aNominal, 0, aErrorBelow );
-}
-
-/**
- * @brief value is in range [aNominal, aNominal + aErrorAbove]
- */
-template<typename T>
-bool IsWithinAndAbove( T aValue, T aNominal, T aErrorAbove )
-{
-    return IsWithin( aValue, aNominal, aErrorAbove, 0 );
-}
 
 /**
  * @brief Geometric quadrants, from top-right, anti-clockwise
@@ -163,7 +126,7 @@ bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, double aToleran
         angle -= M_PI;
     }
 
-    return IsWithin( angle, M_PI / 2.0, aTolerance );
+    return KI_TEST::IsWithin( angle, M_PI / 2.0, aTolerance );
 }
 
 /**

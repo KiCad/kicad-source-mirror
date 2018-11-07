@@ -70,6 +70,50 @@ messages inside tested functions (i.e. where you don't have access to the Boost
 unit test headers). These will always be printed, so take care
 to remove them before committing, or they'll show up when KiCad runs normally!
 
+### Expected failures {#expected-failures}
+
+Sometimes, it is helpful to check in tests that do not pass. However, it is bad
+practise to intentionally check in commits that break builds (which is what
+happens if you cause `make test` to fail).
+
+Boost provides a method of declaring that some specific tests are allowed to fail.
+This syntax is not consistently available in all supported Boost versions, so you
+should use the following construct:
+
+```
+#include <unit_test_utils/unit_test_utils.h>
+
+// On platforms with older boosts, the test will be excluded entirely
+#ifdef HAVE_EXPECTED_FAILURES
+
+// Declare a test case with 1 "allowed" failure (out of 2, in this case)
+BOOST_AUTO_TEST_CASE( SomeTest, *boost::unit_test::expected_failures( 1 ) )
+{
+    BOOST_CHECK_EQUAL( 1, 1 );
+
+    // This check fails, but does not cause a test suite failure
+    BOOST_CHECK_EQUAL( 1, 2 );
+
+    // Further failures *would* be a test suit failure
+}
+
+#endif
+```
+
+When run, this produces output somewhat like this:
+
+```
+qa/common/test_mytest.cpp(123): error: in "MyTests/SomeTest": check 1 == 2 has failed [1 != 2
+*** No errors detected
+```
+
+And the unit test executable returns `0` (success).
+
+Checking in a failing test is a strictly temporary situation, used to illustrate
+the triggering of a bug prior to fixing it. This is advantageous, not only from
+a "project history" perspective, but also to ensure that the test you write to
+catch the bug in question does, in fact, catch the bug in the first place.
+
 ## Python modules {#python-tests}
 
 The Pcbnew Python modules have some test programs in the `qa` directory.

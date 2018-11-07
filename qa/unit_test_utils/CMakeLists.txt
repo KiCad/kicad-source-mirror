@@ -19,53 +19,29 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
+# The unit_test_utils library is a simple helper library to collate
+# utilities that are generically useful for unit test executables.
+#
+# Code that is useful for QA purposes outside of the unit-testing context
+# belongs in qa_utils.
 
-add_executable( qa_common
-    # This is needed for the global mock objects
-    common_mocks.cpp
+find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 
-    # The main test entry points
-    test_module.cpp
-
-    # stuff from common due to...units?
-    ../../common/eda_text.cpp
-
-    # stuff from common which is needed...why?
-    ../../common/colors.cpp
-    ../../common/observable.cpp
-
-    test_color4d.cpp
-    test_hotkey_store.cpp
-    test_title_block.cpp
-    test_utf8.cpp
-
-    geometry/test_fillet.cpp
+set(SRCS
+    unit_test_utils.cpp
 )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
-    ${INC_AFTER}
+add_library( unit_test_utils STATIC ${SRCS} )
+
+target_link_libraries( unit_test_utils PUBLIC
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 
-target_link_libraries( qa_common
-    common
-    legacy_gal
-    polygon
-    bitmaps
-    gal
-    qa_utils
-    unit_test_utils
-    ${wxWidgets_LIBRARIES}
+target_include_directories( unit_test_utils PUBLIC
+    include
+    ${Boost_INCLUDE_DIR}
 )
 
-# we need to pretend to be something to appease the units code
-target_compile_definitions( qa_common
-    PRIVATE GERBVIEW
-)
-
-add_test( NAME common
-    COMMAND qa_common
+target_compile_definitions( unit_test_utils PUBLIC
+    BOOST_TEST_DYN_LINK
 )

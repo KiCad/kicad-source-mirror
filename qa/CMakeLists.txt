@@ -14,6 +14,7 @@ endif()
 
 # common QA helpers
 add_subdirectory( qa_utils )
+add_subdirectory( unit_test_utils )
 
 add_subdirectory( common )
 add_subdirectory( shape_poly_set_refactor )

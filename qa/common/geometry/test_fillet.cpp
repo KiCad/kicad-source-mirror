@@ -24,6 +24,8 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/test/test_case_template.hpp>
 
+#include <unit_test_utils/unit_test_utils.h>
+
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
 
@@ -51,26 +53,24 @@ BOOST_FIXTURE_TEST_SUITE( Fillet, FilletFixture )
 void TestFilletSegmentConstraints( const SEG& aSeg, VECTOR2I aRadCentre,
     int aRadius, int aError )
 {
-    using namespace GEOM_TEST;
-
     const auto diffA = aRadCentre - aSeg.A;
     const auto diffB = aRadCentre - aSeg.B;
     const auto diffC = aRadCentre - aSeg.Center();
 
     // Check 1: radii (error of 1 for rounding)
-    BOOST_CHECK_PREDICATE( IsWithinAndBelow<int>,
-        ( diffA.EuclideanNorm() )( aRadius )( 1 ) );
-    BOOST_CHECK_PREDICATE( IsWithinAndBelow<int>,
-        ( diffB.EuclideanNorm() )( aRadius )( 1 ) );
+    BOOST_CHECK_PREDICATE(
+            KI_TEST::IsWithinAndBelow<int>, ( diffA.EuclideanNorm() )( aRadius )( 1 ) );
+    BOOST_CHECK_PREDICATE(
+            KI_TEST::IsWithinAndBelow<int>, ( diffB.EuclideanNorm() )( aRadius )( 1 ) );
 
     // Check 2: Mid-point error
-    BOOST_CHECK_PREDICATE( IsWithinAndBelow<int>,
-        ( diffC.EuclideanNorm() )( aRadius )( aError + 1 ) );
+    BOOST_CHECK_PREDICATE(
+            KI_TEST::IsWithinAndBelow<int>, ( diffC.EuclideanNorm() )( aRadius )( aError + 1 ) );
 
     // Check 3: Mid-point -> radius centre perpendicular
     const auto perpendularityMaxError = ( M_PI / 2 ) / 10;
-    BOOST_CHECK_PREDICATE( ArePerpendicular<int>,
-        ( diffC )( aSeg.A - aSeg.B )( perpendularityMaxError ) );
+    BOOST_CHECK_PREDICATE( GEOM_TEST::ArePerpendicular<int>,
+            ( diffC )( aSeg.A - aSeg.B )( perpendularityMaxError ) );
 }
 
 
