@@ -837,7 +837,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_UPDATE_FOOTPRINTS:
         if( GetCurItem() && GetCurItem()->Type() == PCB_MODULE_T )
         {
-            InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true, true );
+            InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), true, true );
             m_canvas->MoveCursorToCrossHair();
         }
         break;
@@ -845,7 +845,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_EXCHANGE_FOOTPRINTS:
         if( GetCurItem() && GetCurItem()->Type() == PCB_MODULE_T )
         {
-            InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false, true );
+            InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), false, true );
             m_canvas->MoveCursorToCrossHair();
         }
         break;
@@ -1216,11 +1216,11 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_MENU_PCB_UPDATE_FOOTPRINTS:
-        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), true, false );
+        InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), true, false );
         break;
 
     case ID_MENU_PCB_EXCHANGE_FOOTPRINTS:
-        InstallExchangeModuleFrame( (MODULE*) GetCurItem(), false, false );
+        InstallExchangeModuleFrame( dynamic_cast<MODULE*>( GetCurItem() ), false, false );
         break;
 
     case ID_MENU_PCB_SWAP_LAYERS:
