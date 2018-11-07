@@ -86,9 +86,11 @@ private:
     void onPrintPreview( wxCommandEvent& event ) override;
     void onPrintButtonClick( wxCommandEvent& event ) override;
 
-    // Needed to execute onClose handler
+    // onClose* handlers are needed to save the dialogs settings as TransferDataFromWindow()
+    // is not called for 'Cancel' button that closes the window
     void onCloseButton( wxCommandEvent& event ) override;
     void onClose( wxCloseEvent& event ) override;
+
     void onSetCustomScale( wxCommandEvent& event ) override;
 
     void initPrintData();
