@@ -772,6 +772,9 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
             SetUndoItem( aItem );
     }
 
+    std::vector<DANGLING_END_ITEM> emptySet;
+    aItem->UpdateDanglingState( emptySet );
+
     aItem->SetFlags( IS_MOVED );
 
     if( aItem->Type() == SCH_FIELD_T && aItem->GetParent()->Type() == SCH_COMPONENT_T )
