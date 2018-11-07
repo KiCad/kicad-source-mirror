@@ -34,7 +34,7 @@
 #include <macros.h>
 #include <base_struct.h>
 #include <base_screen.h>
-#include <legacy_gal/class_drawpanel.h>
+#include <class_drawpanel.h>
 #include <confirm.h>
 #include <block_commande.h>
 

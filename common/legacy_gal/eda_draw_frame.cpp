@@ -35,7 +35,7 @@
 #include <bitmaps.h>
 #include <macros.h>
 #include <id.h>
-#include <legacy_gal/class_drawpanel.h>
+#include <class_drawpanel.h>
 #include <base_screen.h>
 #include <msgpanel.h>
 #include <draw_frame.h>

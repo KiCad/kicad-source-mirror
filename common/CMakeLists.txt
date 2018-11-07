@@ -88,6 +88,7 @@ add_library( legacy_gal STATIC ${LEGACY_GAL_SRCS} )
 add_library( legacy_wx STATIC ${LEGACY_WX_SRCS} )
 
 target_include_directories( legacy_wx PUBLIC ../include/legacy_wx )
+target_include_directories( legacy_gal PUBLIC ../include/legacy_gal )
 
 target_link_libraries( gal
     ${GLEW_LIBRARIES}

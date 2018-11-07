@@ -20,7 +20,6 @@ endif()
 
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
-    ../include/legacy_gal
     ./dialogs
     ./netlist_exporters
     ./widgets
