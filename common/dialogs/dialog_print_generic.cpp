@@ -243,7 +243,7 @@ void DIALOG_PRINT_GENERIC::onCloseButton( wxCommandEvent& event )
     if( IsModal() )
         EndModal( wxID_CANCEL );
 
-    Close( wxID_CANCEL );
+    Close();
 }
 
 
