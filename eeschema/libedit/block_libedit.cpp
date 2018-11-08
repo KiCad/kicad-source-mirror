@@ -496,7 +496,19 @@ void LIB_EDIT_FRAME::InitBlockPasteInfos()
     // (only the copy, the new instances will be appended to the part once the items are placed)
     block.GetItems().CopyList( m_clipboard.GetItems() );
 
-    // Set the pate reference point
+    // Set block items to the current unit & DeMorgan variant
+    for( size_t i = 0; i < m_clipboard.GetItems().GetCount(); ++i )
+    {
+        LIB_ITEM* item = dynamic_cast<LIB_ITEM*>( m_clipboard.GetItem( i ) );
+
+        if( item )
+        {
+            item->SetUnit( m_unit );
+            item->SetConvert( m_convert );
+        }
+    }
+
+    // Set the paste reference point
     block.SetLastCursorPosition( m_clipboard.GetLastCursorPosition() );
     m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
 }
