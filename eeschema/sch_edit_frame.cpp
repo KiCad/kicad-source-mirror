@@ -1236,7 +1236,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         if( !entry )     // Should not occur
             return;
 
-        libeditFrame->LoadComponentAndSelectLib( id );
+        libeditFrame->LoadComponentAndSelectLib( id, component->GetUnit(), component->GetConvert() );
     }
 
     SchematicCleanUp();

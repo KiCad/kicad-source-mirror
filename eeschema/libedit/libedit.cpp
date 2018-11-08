@@ -100,7 +100,7 @@ bool LIB_EDIT_FRAME::saveCurrentPart()
 }
 
 
-bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId )
+bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
     if( GetScreen()->IsModify() && GetCurPart() )
     {
@@ -112,7 +112,7 @@ bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId )
     }
 
     SelectActiveLibrary( aLibId.GetLibNickname() );
-    return LoadComponentFromCurrentLib( aLibId.GetLibItemName() );
+    return LoadComponentFromCurrentLib( aLibId.GetLibItemName(), aUnit, aConvert );
 }
 
 
@@ -135,14 +135,8 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
         return false;
     }
 
-    if( !alias || !LoadOneLibraryPartAux( alias, GetCurLib() ) )
+    if( !alias || !LoadOneLibraryPartAux( alias, GetCurLib(), aUnit, aConvert ) )
         return false;
-
-    if( aUnit > 0 )
-        m_unit = aUnit;
-
-    if( aConvert > 0 )
-        m_convert = aConvert;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
     m_syncPinEdit = !GetCurPart()->UnitsLocked();
@@ -158,7 +152,8 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
 }
 
 
-bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& aLibrary )
+bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& aLibrary,
+                                            int aUnit, int aConvert )
 {
     wxString msg, rootName;
 
@@ -174,8 +169,8 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     LIB_PART* lib_part = m_libMgr->GetBufferedPart( aEntry->GetName(), aLibrary );
     wxASSERT( lib_part );
 
-    m_unit = 1;
-    m_convert = 1;
+    m_unit = aUnit > 0 ? aUnit : 1;
+    m_convert = aConvert > 0 ? aConvert : 1;
 
     auto s = m_libMgr->GetScreen( lib_part->GetName(), aLibrary );
     SetScreen( s );
@@ -636,14 +631,13 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
 
     m_lastDrawItem = nullptr;
     SetDrawItem( NULL );
-    m_unit = ( aUnit <= part->GetUnitCount() ? aUnit : 1 );
 
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
     m_drawSpecificUnit = part->UnitsLocked() ? true : false;
 
-    LoadOneLibraryPartAux( alias, aLibrary );
+    LoadOneLibraryPartAux( alias, aLibrary, m_unit, 0 );
 }
 
 

@@ -516,9 +516,12 @@ private:
      * @param aLibEntry A pointer to the LIB_ALIAS object to an already loaded.
      * @param aLibrary the path to the library file that \a aLibEntry was loaded from.  This is
      *                 for error messaging purposes only.
+     * @param aUnit the initial unit to show.
+     * @param aConvert the initial DeMorgan variant to show.
      * @return True if a copy of \a aLibEntry was successfully copied.
      */
-    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary );
+    bool LoadOneLibraryPartAux( LIB_ALIAS* aLibEntry, const wxString& aLibrary,
+                                int aUnit, int aConvert );
 
     /**
      * Display the documentation of the selected component.
@@ -617,9 +620,11 @@ public:
      * Selects the currently active library and loads the symbol from \a aLibId.
      *
      * @param aLibId is the #LIB_ID of the symbol to select.
+     * @param aUnit the unit to show
+     * @param aConvert the DeMorgan variant to show
      * @return true if the symbol defined by \a aLibId was loaded.
      */
-    bool LoadComponentAndSelectLib( const LIB_ID& aLibId );
+    bool LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
 
     /* Block commands: */
 
