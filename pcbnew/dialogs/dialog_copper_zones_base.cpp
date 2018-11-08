@@ -9,19 +9,6 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
-BEGIN_EVENT_TABLE( DIALOG_COPPER_ZONE_BASE, DIALOG_SHIM )
-	EVT_CLOSE( DIALOG_COPPER_ZONE_BASE::_wxFB_OnClose )
-	EVT_UPDATE_UI( ID_DIALOG_COPPER_ZONE_BASE, DIALOG_COPPER_ZONE_BASE::_wxFB_OnUpdateUI )
-	EVT_DATAVIEW_ITEM_VALUE_CHANGED( wxID_ANY, DIALOG_COPPER_ZONE_BASE::_wxFB_OnLayerSelection )
-	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
-	EVT_TEXT_ENTER( ID_TEXTCTRL_NETNAMES_FILTER, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
-	EVT_BUTTON( wxID_APPLY_FILTERS, DIALOG_COPPER_ZONE_BASE::_wxFB_OnRunFiltersButtonClick )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_COPPER_ZONE_BASE::_wxFB_OnNetSortingOptionSelected )
-	EVT_CHECKBOX( wxID_ANY, DIALOG_COPPER_ZONE_BASE::_wxFB_OnNetSortingOptionSelected )
-	EVT_BUTTON( wxID_BUTTON_EXPORT, DIALOG_COPPER_ZONE_BASE::_wxFB_ExportSetupToOtherCopperZones )
-	EVT_BUTTON( wxID_CANCEL, DIALOG_COPPER_ZONE_BASE::_wxFB_OnButtonCancelClick )
-END_EVENT_TABLE()
-
 DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style ) : DIALOG_SHIM( parent, id, title, pos, size, style )
 {
 	this->SetSizeHints( wxDefaultSize, wxDefaultSize );
@@ -264,8 +251,32 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	this->SetSizer( m_MainBoxSizer );
 	this->Layout();
 	m_MainBoxSizer->Fit( this );
+	
+	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
+	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_DoNotShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_ShowNetNameFilter->Connect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_buttonRunFilter->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_showAllNetsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_sortByPadsOpt->Connect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ExportSetupButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::ExportSetupToOtherCopperZones ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
 }
 
 DIALOG_COPPER_ZONE_BASE::~DIALOG_COPPER_ZONE_BASE()
 {
+	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_COPPER_ZONE_BASE::OnClose ) );
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_COPPER_ZONE_BASE::OnUpdateUI ) );
+	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_COPPER_ZONE_BASE::OnLayerSelection ), NULL, this );
+	m_DoNotShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_ShowNetNameFilter->Disconnect( wxEVT_COMMAND_TEXT_ENTER, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_buttonRunFilter->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnRunFiltersButtonClick ), NULL, this );
+	m_showAllNetsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_sortByPadsOpt->Disconnect( wxEVT_COMMAND_CHECKBOX_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnNetSortingOptionSelected ), NULL, this );
+	m_ExportSetupButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::ExportSetupToOtherCopperZones ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_COPPER_ZONE_BASE::OnButtonCancelClick ), NULL, this );
+	
 }

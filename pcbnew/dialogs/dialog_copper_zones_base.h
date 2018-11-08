@@ -41,18 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 class DIALOG_COPPER_ZONE_BASE : public DIALOG_SHIM
 {
-	DECLARE_EVENT_TABLE()
 	private:
-		
-		// Private event handlers
-		void _wxFB_OnClose( wxCloseEvent& event ){ OnClose( event ); }
-		void _wxFB_OnUpdateUI( wxUpdateUIEvent& event ){ OnUpdateUI( event ); }
-		void _wxFB_OnLayerSelection( wxDataViewEvent& event ){ OnLayerSelection( event ); }
-		void _wxFB_OnRunFiltersButtonClick( wxCommandEvent& event ){ OnRunFiltersButtonClick( event ); }
-		void _wxFB_OnNetSortingOptionSelected( wxCommandEvent& event ){ OnNetSortingOptionSelected( event ); }
-		void _wxFB_ExportSetupToOtherCopperZones( wxCommandEvent& event ){ ExportSetupToOtherCopperZones( event ); }
-		void _wxFB_OnButtonCancelClick( wxCommandEvent& event ){ OnButtonCancelClick( event ); }
-		
 	
 	protected:
 		enum

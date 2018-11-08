@@ -10,7 +10,7 @@
         <property name="disconnect_python_events">0</property>
         <property name="embedded_files_path">res</property>
         <property name="encoding">UTF-8</property>
-        <property name="event_generation">table</property>
+        <property name="event_generation">connect</property>
         <property name="file">dialog_copper_zones_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
