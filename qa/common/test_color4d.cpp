@@ -247,12 +247,11 @@ static std::vector<WX_CONV_CASE> wx_conv_cases = {
     { { 0xFF, 0x00, 0x00, 0xFF }, { 0.999, 0.001, 0.0, 1.0 } },
 };
 
-#ifdef HAVE_EXPECTED_FAILURES
 
 /**
  * Check conversion to WxColour
  */
-BOOST_AUTO_TEST_CASE( ToWx, *boost::unit_test::expected_failures( 3 ) )
+BOOST_AUTO_TEST_CASE( ToWx )
 {
     for( const auto& c : wx_conv_cases )
     {
@@ -265,8 +264,6 @@ BOOST_AUTO_TEST_CASE( ToWx, *boost::unit_test::expected_failures( 3 ) )
         BOOST_CHECK_EQUAL( wx_col.Alpha(), c.wx.Alpha() );
     }
 }
-
-#endif // HAVE_EXPECTED_FAILURES
 
 
 /**
