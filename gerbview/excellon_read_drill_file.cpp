@@ -322,11 +322,12 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
     ResetDefaultValues();
     ClearMessageList();
 
-    m_Current_File = wxFopen( aFullFileName, wxT( "rt" ) );
+    m_Current_File = wxFopen( aFullFileName, "rt" );
 
     if( m_Current_File == NULL )
         return false;
 
+    wxString msg;
     m_FileName = aFullFileName;
 
     LOCALE_IO toggleIo;
@@ -342,7 +343,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
         char* line = excellonReader.Line();
         char* text = StrPurge( line );
 
-        if( *text == ';' )       // comment: skip line
+        if( *text == ';' || *text == 0 )       // comment: skip line or empty malformed line
             continue;
 
         if( m_State == EXCELLON_IMAGE::READ_HEADER_STATE )
@@ -357,7 +358,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
                 Execute_HEADER_And_M_Command( text );
                 break;
 
-            case 'G': /* Line type Gxx : command */
+            case 'G':       // Line type Gxx : command
                 Execute_EXCELLON_G_Command( text );
                 break;
 
@@ -383,11 +384,8 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
                 break;
 
             default:
-            {
-                wxString msg;
-                msg.Printf( _( "Unexpected symbol &lt;%c&gt;" ), *text );
+                msg.Printf( "Unexpected symbol 0x%2.2X &lt;%c&gt;", *text, *text );
                 AddMessageToList( msg );
-            }
                 break;
             }   // End switch
         }
@@ -481,10 +479,8 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
 
         if( *text != ',' )
         {
-            // No TZ or LZ specified. Can be a decimal format
-            // I am not sure this is incorrect and must be reported.
-            // AddMessageToList( _( "METRIC or INCH command has no parameter" ) );
-            // use default TZ setting, for now
+            // No TZ or LZ specified. Should be a decimal format
+            // but this is not always the case. Use default TZ setting as default
             m_NoTrailingZeros = false;
             break;
         }
@@ -514,7 +510,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
     case DRILL_INCREMENTALHEADER:
         if( *text != ',' )
         {
-            AddMessageToList( _( "ICI command has no parameter" ) );
+            AddMessageToList( "ICI command has no parameter" );
             break;
         }
         text++;     // skip separator
@@ -524,7 +520,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         else if( strncasecmp( text, "ON", 2 ) == 0 )
             m_Relative = true;
         else
-            AddMessageToList( _( "ICI command has incorrect parameter" ) );
+            AddMessageToList( "ICI command has incorrect parameter" );
         break;
 
     case DRILL_TOOL_CHANGE_STOP:
@@ -562,7 +558,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
 
         if( !tool )
         {
-            AddMessageToList( wxString::Format( _( "Got unknown tool code %d" ), m_Current_Tool ) );
+            AddMessageToList( wxString::Format( "Unknown tool code %d", m_Current_Tool ) );
             break;
         }
 
