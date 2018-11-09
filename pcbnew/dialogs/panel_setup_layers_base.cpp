@@ -165,7 +165,7 @@ PANEL_SETUP_LAYERS_BASE::PANEL_SETUP_LAYERS_BASE( wxWindow* parent, wxWindowID i
 	int m_FrontChoiceNChoices = sizeof( m_FrontChoiceChoices ) / sizeof( wxString );
 	m_FrontChoice = new wxChoice( m_LayersListPanel, ID_FRONTCHOICE, wxDefaultPosition, wxDefaultSize, m_FrontChoiceNChoices, m_FrontChoiceChoices, 0 );
 	m_FrontChoice->SetSelection( 0 );
-	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter' layer menus.") );
+	m_FrontChoice->SetToolTip( _("Copper layer type for Freerouter and other external routers.\nPower plane layers are removed from Freerouter's layer menus.") );
 	
 	m_LayerListFlexGridSizer->Add( m_FrontChoice, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	

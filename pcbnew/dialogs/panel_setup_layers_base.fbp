@@ -2864,7 +2864,7 @@
                                     <property name="style"></property>
                                     <property name="subclass"></property>
                                     <property name="toolbar_pane">0</property>
-                                    <property name="tooltip">Copper layer type for Freerouter and other external routers.&#x0A;Power plane layers are removed from Freerouter&apos; layer menus.</property>
+                                    <property name="tooltip">Copper layer type for Freerouter and other external routers.&#x0A;Power plane layers are removed from Freerouter&apos;s layer menus.</property>
                                     <property name="validator_data_type"></property>
                                     <property name="validator_style">wxFILTER_NONE</property>
                                     <property name="validator_type">wxDefaultValidator</property>
