@@ -175,8 +175,7 @@ void C3D_RENDER_OGL_LEGACY::render_3D_arrows()
 
 void C3D_RENDER_OGL_LEGACY::setupMaterials()
 {
-
-    memset( &m_materials, 0, sizeof( m_materials ) );
+    m_materials = {};
 
     if( m_settings.GetFlag( FL_USE_REALISTIC_MODE ) )
     {
