@@ -292,7 +292,12 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         if( !m_enableGrid || snapDist <= gridDist )
         {
             m_viewSnapPoint.SetPosition( nearest->pos );
-            m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
+
+            if( m_frame->GetGalCanvas()->GetView()->IsVisible( &m_viewSnapPoint ) )
+                m_frame->GetGalCanvas()->GetView()->Update( &m_viewSnapPoint, KIGFX::GEOMETRY);
+            else
+                m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
+
             return nearest->pos;
         }
     }
