@@ -99,6 +99,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_TOOL( ID_MODEDIT_SAVE_AS, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_REVERT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_OPEN_MODULE_VIEWER, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_MODEDIT_SAVE_PNG, FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng )
 
     EVT_TOOL( ID_MODEDIT_CUT_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_MODEDIT_COPY_PART, FOOTPRINT_EDIT_FRAME::Process_Special_Functions )
@@ -952,7 +953,8 @@ void FOOTPRINT_EDIT_FRAME::ProcessPreferences( wxCommandEvent& event )
         break;
 
     case wxID_PREFERENCES:
-        ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Module_Editor_Hotkeys_Descr, wxT( "pcbnew" ) );
+        ShowPreferences( g_Pcbnew_Editor_Hotkeys_Descr, g_Module_Editor_Hotkeys_Descr,
+                         wxT( "pcbnew" ) );
         break;
 
     default:
@@ -1062,3 +1064,32 @@ void FOOTPRINT_EDIT_FRAME::UpdateMsgPanel()
         ClearMsgPanel();
 }
 
+
+void FOOTPRINT_EDIT_FRAME::OnSaveFootprintAsPng( wxCommandEvent& event )
+{
+    wxString   fullFileName;
+
+    LIB_ID id = GetLoadedFPID();
+
+    if( id.empty() )
+    {
+        wxMessageBox( _( "No footprint selected." ) );
+        return;
+    }
+
+    wxFileName fn( id.GetLibItemName() );
+    fn.SetExt( "png" );
+
+    wxString projectPath = wxPathOnly( Prj().GetProjectFullName() );
+
+    wxFileDialog dlg( this, _( "Footprint Image File Name" ), projectPath,
+                      fn.GetFullName(), PngFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    if( dlg.ShowModal() == wxID_CANCEL || dlg.GetPath().IsEmpty() )
+        return;
+
+    // calling wxYield is mandatory under Linux, after closing the file selector dialog
+    // to refresh the screen before creating the PNG or JPEG image from screen
+    wxYield();
+    saveCanvasImageToFile( dlg.GetPath() );
+}

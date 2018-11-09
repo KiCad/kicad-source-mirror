@@ -672,11 +672,12 @@ public:
     void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
     /**
-     * Creates an image (screenshot) of the current component in PNG or JPEG format.
+     * Creates an image (screenshot) of the current symbol.
+     *
      * @param aFileName = the full filename
-     * @param aFmt_jpeg = true to use JPEG file format, false to use PNG file format
+     * @param aBitmapType = bitmap file format
      */
-    void CreatePNGorJPEGFile( const wxString& aFileName, bool aFmt_jpeg );
+    void CreateImageFile( const wxString& aFileName, wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
 
     /**
      * Print a page

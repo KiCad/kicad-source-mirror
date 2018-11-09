@@ -38,6 +38,7 @@
 #include <bitmaps.h>
 #include <pgm_base.h>
 #include <eda_base_frame.h>
+#include <draw_frame.h>
 
 
 struct SCALED_BITMAP_ID {
@@ -188,6 +189,34 @@ wxBitmap* KiBitmapNew( BITMAP_DEF aBitmap )
     wxBitmap* bitmap = new wxBitmap( image );
 
     return bitmap;
+}
+
+
+bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
+                            wxBitmapType aBitmapType )
+{
+    wxCHECK( aFrame != nullptr, false );
+
+    bool       retv = true;
+
+    // Make a screen copy of the canvas:
+    wxSize image_size = aFrame->GetGalCanvas()->GetClientSize();
+
+    wxClientDC dc( aFrame->GetGalCanvas() );
+    wxBitmap   bitmap( image_size.x, image_size.y );
+    wxMemoryDC memdc;
+
+    memdc.SelectObject( bitmap );
+    memdc.Blit( 0, 0, image_size.x, image_size.y, &dc, 0, 0 );
+    memdc.SelectObject( wxNullBitmap );
+
+    wxImage image = bitmap.ConvertToImage();
+
+    if( !image.SaveFile( aFileName, aBitmapType ) )
+        retv = false;
+
+    image.Destroy();
+    return retv;
 }
 
 

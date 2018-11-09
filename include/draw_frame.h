@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,8 +72,7 @@ static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
 
 
 /**
- * Class EDA_DRAW_FRAME
- * is the base class for create windows for drawing purpose.  The Eeschema, Pcbnew and
+ * The base class for create windows for drawing purpose.  The Eeschema, Pcbnew and
  * GerbView main windows are just a few examples of classes derived from EDA_DRAW_FRAME.
  */
 class EDA_DRAW_FRAME : public KIWAY_PLAYER
@@ -184,8 +183,7 @@ protected:
     double bestZoom( double sizeX, double sizeY, double scaleFactor, wxPoint centre );
 
     /**
-     * Function unitsChangeRefresh
-     * is called when when the units setting has changed to allow for any derived classes
+     * Called when when the units setting has changed to allow for any derived classes
      * to handle refreshing and controls that have units based measurements in them.  The
      * default version only updates the status bar.  Don't forget to call the default
      * in your derived class or the status bar will not get updated properly.
@@ -195,22 +193,21 @@ protected:
     void CommonSettingsChanged() override;
 
     /**
-     * Function LibraryFileBrowser
-      * @param doOpen if true runs an Open Library browser, otherwise New Library
-      * @param aFilename for New may contain a default name; in both cases return the chosen
-      *                  filename.
-      * @param wildcard a wildcard to filter the displayed files
-      * @param ext the library file extension
-      * @param isDirectory indicates the library files are directories
-      * @return true for OK; false for Cancel.
-      */
+     * @param doOpen if true runs an Open Library browser, otherwise New Library
+     * @param aFilename for New may contain a default name; in both cases return the chosen
+     *                  filename.
+     * @param wildcard a wildcard to filter the displayed files
+     * @param ext the library file extension
+     * @param isDirectory indicates the library files are directories
+     * @return true for OK; false for Cancel.
+     */
     bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
                              const wxString& wildcard, const wxString& ext, bool isDirectory );
 
     /**
-     * Function GeneralControlKeyMovement
      * Handle the common part of GeneralControl dedicated to global
      * cursor keys (i.e. cursor movement by keyboard)
+     *
      * @param aHotKey is the hotkey code
      * @param aPos is the position of the cursor (initial then new)
      * @param aSnapToGrid = true to force the cursor position on grid
@@ -233,6 +230,9 @@ protected:
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
 
+    bool saveCanvasImageToFile( const wxString& aFileName,
+                                wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
+
     ///> Key in KifaceSettings to store the canvas type.
     static const wxChar CANVAS_TYPE_KEY[];
 
@@ -246,7 +246,9 @@ public:
 
     ~EDA_DRAW_FRAME();
 
-    /** this function capture the key event before it is sent to the GUI.
+    /**
+     * Capture the key event before it is sent to the GUI.
+     *
      * the basic frame does not capture this event.
      * editor frames should override this event function to capture and filter
      * these keys when they are used as hotkeys, and skip it if the key is not
@@ -255,15 +257,14 @@ public:
     virtual void OnCharHook( wxKeyEvent& event );
 
     /**
-     * Function LockFile
-     * marks a schematic file as being in use.  Use ReleaseFile() to undo this.
+     * Mark a schematic file as being in use.  Use ReleaseFile() to undo this.
+     *
      * @param aFileName = full path to the file.
      * @return false if the file was already locked, true otherwise.
      */
     bool LockFile( const wxString& aFileName );
 
     /**
-     * Function ReleaseFile
      * Release the current file marked in use.  See m_file_checker.
      */
     void ReleaseFile();
@@ -272,29 +273,25 @@ public:
     virtual const PAGE_INFO& GetPageSettings() const = 0;
 
     /**
-     * Function GetPageSizeIU
-     * works off of GetPageSettings() to return the size of the paper page in
+     * Works off of GetPageSettings() to return the size of the paper page in
      * the internal units of this particular view.
      */
     virtual const wxSize GetPageSizeIU() const = 0;
 
     /**
-     * Function GetUserUnits
-     * returns the user units currently in use
+     * Return the user units currently in use.
      */
     EDA_UNITS_T GetUserUnits() const override { return m_UserUnits; }
     void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
 
     /**
-     * Function GetAuxOrigin
-     * returns the origin of the axis used for plotting and various exports.
+     * Return the origin of the axis used for plotting and various exports.
      */
     virtual const wxPoint& GetAuxOrigin() const = 0;
     virtual void SetAuxOrigin( const wxPoint& aPosition ) = 0;
 
     /**
-     * Function GetGridOrigin
-     * returns the absolute coordinates of the origin of the snap grid.  This is
+     * Return the absolute coordinates of the origin of the snap grid.  This is
      * treated as a relative offset, and snapping will occur at multiples of the grid
      * size relative to this point.
      */
@@ -306,26 +303,25 @@ public:
 
     //-----<BASE_SCREEN API moved here>------------------------------------------
     /**
-     * Function GetCrossHairPosition
-     * return the current cross hair position in logical (drawing) coordinates.
+     * Return the current cross hair position in logical (drawing) coordinates.
+     *
      * @param aInvertY Inverts the Y axis position.
      * @return The cross hair position in drawing coordinates.
      */
     wxPoint GetCrossHairPosition( bool aInvertY = false ) const;
 
     /**
-     * Function SetCrossHairPosition
-     * sets the screen cross hair position to \a aPosition in logical (drawing) units.
+     * Set the screen cross hair position to \a aPosition in logical (drawing) units.
+     *
      * @param aPosition The new cross hair position.
      * @param aSnapToGrid Sets the cross hair position to the nearest grid position to
      *                    \a aPosition.
-     *
      */
     void SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid = true );
 
     /**
-     * Function GetCursorPosition
-     * returns the current cursor position in logical (drawing) units.
+     * Return the current cursor position in logical (drawing) units.
+     *
      * @param aOnGrid Returns the nearest grid position at the current cursor position.
      * @param aGridSize Custom grid size instead of the current grid size.  Only valid
      *        if \a aOnGrid is true.
@@ -334,8 +330,8 @@ public:
     wxPoint GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize = NULL ) const;
 
     /**
-     * Function GetNearestGridPosition
-     * returns the nearest \a aGridSize location to \a aPosition.
+     * Return the nearest \a aGridSize location to \a aPosition.
+     *
      * @param aPosition The position to check.
      * @param aGridSize The grid size to locate to if provided.  If NULL then the current
      *                  grid size is used.
@@ -344,8 +340,8 @@ public:
     wxPoint GetNearestGridPosition( const wxPoint& aPosition, wxRealPoint* aGridSize = NULL ) const;
 
     /**
-     * Function GetCursorScreenPosition
-     * returns the cross hair position in device (display) units.b
+     * Return the cross hair position in device (display) units.b
+     *
      * @return The current cross hair position.
      */
     wxPoint GetCrossHairScreenPosition() const;
@@ -353,7 +349,6 @@ public:
     void SetMousePosition( const wxPoint& aPosition );
 
     /**
-     * Function RefPos
      * Return the reference position, coming from either the mouse position
      * or the cursor position.
      *
@@ -368,7 +363,6 @@ public:
     void SetScrollCenterPosition( const wxPoint& aPoint );
 
     //-----</BASE_SCREEN API moved here>-----------------------------------------
-
 
     virtual const TITLE_BLOCK& GetTitleBlock() const = 0;
     virtual void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) = 0;
@@ -396,8 +390,7 @@ public:
     virtual wxString GetScreenDesc() const;
 
     /**
-     * Function GetScreen
-     * returns a pointer to a BASE_SCREEN or one of its
+     * Return a pointer to a BASE_SCREEN or one of its
      * derivatives.  It is overloaded by derived classes to return
      * SCH_SCREEN or PCB_SCREEN.
      */
@@ -418,8 +411,7 @@ public:
     void  OnMouseEvent( wxMouseEvent& event );
 
     /**
-     * function SkipNextLeftButtonReleaseEvent
-     * after calling this function, if the left mouse button
+     * After calling this function, if the left mouse button
      * is down, the next left mouse button release event will be ignored.
      * It is is usefull for instance when closing a dialog on a mouse click,
      * to skip the next mouse left button release event
@@ -434,14 +426,12 @@ public:
     int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL ) override;
 
     /**
-     * Function GetHotkeyConfig()
-     * Returns a structure containing currently used hotkey mapping.
+     * Return a structure containing currently used hotkey mapping.
      */
     EDA_HOTKEY_CONFIG* GetHotkeyConfig() const { return m_hotkeysDescrList; }
 
     /**
-     * Function GetHotKeyDescription
-     * Searches lists of hot key identifiers (HK_xxx) used in the frame to find a matching
+     * Search lists of hot key identifiers (HK_xxx) used in the frame to find a matching
      * hot key descriptor.
      * @param aCommand is the hot key identifier.
      * @return Hot key descriptor or NULL if none found.
@@ -452,7 +442,6 @@ public:
                            EDA_ITEM* aItem = NULL );
 
     /**
-     * Function AddMenuZoomAndGrid (virtual)
      * Add standard zoom commands and submenu zoom and grid selection to a popup menu
      * uses zoom hotkeys info base to add hotkeys info to menu commands
      * @param aMasterMenu = the menu to populate.
@@ -460,8 +449,7 @@ public:
     virtual void AddMenuZoomAndGrid( wxMenu* aMasterMenu );
 
     /**
-     * Function GetZoomLevelIndicator
-     * returns a human readable value which can be displayed as zoom
+     * Return a human readable value which can be displayed as zoom
      * level indicator in dialogs.
      * this can be a percentage or other indicator.
      * it is virtual because it could be different for pcbnew, gerbview or eeschema
@@ -471,8 +459,7 @@ public:
     virtual const wxString GetZoomLevelIndicator() const;
 
     /**
-     * Function GetZoomLevelCoeff
-     * returns the coefficient to convert internal display scale factor to zoom level.
+     * Return the coefficient to convert internal display scale factor to zoom level.
      */
     inline double GetZoomLevelCoeff() const { return m_zoomLevelCoeff; }
 
@@ -505,12 +492,13 @@ public:
     wxAuiToolBarItem* GetToolbarTool( int aToolId );
 
     /**
-     * Function SetToolID
-     * sets the tool command ID to \a aId and sets the cursor to \a aCursor.  The
-     * command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command
+     * Set the tool command ID to \a aId and sets the cursor to \a aCursor.
+     *
+     * The command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command
      * ID is less than ::ID_NO_TOOL_SELECTED, the tool command ID is set to
      * ::ID_NO_TOOL_SELECTED.  On debug builds, an assertion will be raised when
      * \a aId is invalid.
+     *
      * @param aId New tool command ID if greater than or equal to ::ID_NO_TOOL_SELECTED.
                   If less than zero, the current tool command ID is retained.
      * @param aCursor Sets the cursor shape if greater than or equal to zero.
@@ -535,7 +523,6 @@ public:
      * These parameters are saved in KiCad config for each main frame
      */
     /**
-     * Function IsGridVisible() , virtual
      * @return true if the grid must be shown
      */
     virtual bool IsGridVisible() const
@@ -544,7 +531,6 @@ public:
     }
 
     /**
-     * Function SetGridVisibility() , virtual
      * It may be overloaded by derived classes
      * @param aVisible = true if the grid must be shown
      */
@@ -554,7 +540,6 @@ public:
     }
 
     /**
-     * Function GetGridColor() , virtual
      * @return the color of the grid
      */
     virtual COLOR4D GetGridColor()
@@ -563,7 +548,6 @@ public:
     }
 
     /**
-     * Function SetGridColor() , virtual
      * @param aColor = the new color of the grid
      */
     virtual void SetGridColor( COLOR4D aColor )
@@ -572,9 +556,9 @@ public:
     }
 
     /**
-     * Function GetGridPosition
-     * returns the nearest grid position to \a aPosition if a screen is defined and snap to
+     * Return the nearest grid position to \a aPosition if a screen is defined and snap to
      * grid is enabled.  Otherwise, the original positions is returned.
+     *
      * @see m_snapToGrid and m_BaseScreen members.
      * @param aPosition The position to test.
      * @return The wxPoint of the appropriate cursor position.
@@ -582,20 +566,18 @@ public:
     wxPoint GetGridPosition( const wxPoint& aPosition ) const;
 
     /**
-     * Function SetNextGrid()
-     * changes the grid size settings to the next one available.
+     * Change the grid size settings to the next one available.
      */
     virtual void SetNextGrid();
 
     /**
-     * Function SetPrevGrid()
-     * changes the grid size settings to the previous one available.
+     * Change the grid size settings to the previous one available.
      */
     virtual void SetPrevGrid();
 
     /**
-     * Function SetPresetGrid()
-     * changes the grid size to one of the preset values.
+     * Change the grid size to one of the preset values.
+     *
      * @param aIndex is the index from the list.
      */
     void SetPresetGrid( int aIndex );
@@ -613,8 +595,8 @@ public:
     virtual void OnSelectGrid( wxCommandEvent& event );
 
     /**
-     * Functions OnSelectZoom
-     * sets the zoom factor when selected by the zoom list box in the main tool bar.
+     * Set the zoom factor when selected by the zoom list box in the main tool bar.
+     *
      * @note List position 0 is fit to page
      *       List position >= 1 = zoom (1 to zoom max)
      *       Last list position is custom zoom not in zoom list.
@@ -635,8 +617,7 @@ public:
     void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 
     /**
-     * Function GeneralControl
-     * performs application specific control using \a aDC at \a aPosition in logical units.
+     * Perform application specific control using \a aDC at \a aPosition in logical units.
      * <p>
      * Override this function for application specific control.  This function gets
      * called on every mouse and key event.
@@ -652,8 +633,7 @@ public:
     }
 
     /**
-     * Function OnSize
-     * recalculates the size of toolbars and display panel when the frame size changes.
+     * Recalculate the size of toolbars and display panel when the frame size changes.
      */
     virtual void OnSize( wxSizeEvent& event );
 
@@ -662,65 +642,63 @@ public:
     virtual void OnZoom( wxCommandEvent& event );
 
     /**
-     * Function SetNextZoom()
-     * changes the zoom to the next one available.
+     * Change the zoom to the next one available.
      */
     void SetNextZoom();
 
     /**
-     * changes the zoom to the next one available redraws the screen
+     * Change the zoom to the next one available redraws the screen
      * and warp the mouse pointer on request.
+     *
      * @param aCenterPoint is the reference point for zooming
      * @param aWarpPointer = true to move the pointer to the aCenterPoint
      */
     void SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
-     * Function SetPrevZoom()
-     * changes the zoom to the previous one available.
+     * Change the zoom to the previous one available.
      */
     void SetPrevZoom();
 
     /**
-     * changes the zoom to the previous one available redraws the screen
+     * Change the zoom to the previous one available redraws the screen
      * and warp the mouse pointer on request.
+     *
      * @param aCenterPoint is the reference point for zooming
      * @param aWarpPointer = true to move the pointer to the aCenterPoint
      */
     void SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
-     * Function SetPresetZoom()
-     * changes zoom to one of the preset values.
+     * Change zoom to one of the preset values.
+     *
      * @param aIndex is the zoom index from the list.
      */
     void SetPresetZoom( int aIndex );
 
     /**
-     * Function RedrawScreen
-     * redraws the entire screen area by updating the scroll bars and mouse pointer in
+     * Redraw the entire screen area by updating the scroll bars and mouse pointer in
      * order to have \a aCenterPoint at the center of the screen.
+     *
      * @param aCenterPoint The position in logical units to center the scroll bars.
      * @param aWarpPointer Moves the mouse cursor to \a aCenterPoint if true.
      */
     virtual void RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer );
 
     /**
-     * Function RedrawScreen2
-     * puts the crosshair back to the screen position it had before zooming
+     * Put the crosshair back to the screen position it had before zooming.
+     *
      * @param posBefore screen position of the crosshair before zooming
      */
     virtual void RedrawScreen2( const wxPoint& posBefore );
 
     /**
-     * Function HardRedraw
-     * rebuilds the GAL and redraws the screen.  Call when something went wrong.
+     * Rebuild the GAL and redraws the screen.  Call when something went wrong.
      */
     virtual void HardRedraw();
 
     /**
-     * Function Zoom_Automatique
-     * redraws the screen with best zoom level and the best centering
+     * Redraw the screen with best zoom level and the best centering
      * that shows all the page or the board
      */
     virtual void Zoom_Automatique( bool aWarpPointer );
@@ -732,14 +710,13 @@ public:
     virtual double BestZoom() = 0;
 
     /**
-     * Function GetZoom
      * @return The current zoom level.
      */
     double GetZoom();
 
     /**
-     * Function DrawWorkSheet
      * Draws on screen the page layout with the frame and the basic inscriptions.
+     *
      * @param aDC The device context.
      * @param aScreen screen to draw
      * @param aLineWidth The pen width to use to draw the layout.
@@ -760,16 +737,15 @@ public:
     void            AdjustScrollBars( const wxPoint& aCenterPosition );
 
     /**
-     * Function OnActivate (virtual)
-     * is called when activating the frame.
+     * Called when activating the frame.
+     *
      * In derived classes with a overriding OnActivate function,
      * do not forget to call this EDA_DRAW_FRAME::OnActivate( event ) basic function.
      */
     virtual void OnActivate( wxActivateEvent& event );
 
     /**
-     * Function UpdateStatusBar
-     * updates the status bar information.
+     * Update the status bar information.
      *
      * The base method updates the absolute and relative coordinates and the
      * zoom information.  If you override this virtual method, make sure to call
@@ -783,8 +759,7 @@ public:
     virtual void UpdateStatusBar();
 
     /**
-     * Function DisplayUnitsMsg
-     * displays current unit pane on the status bar.
+     * Display current unit pane on the status bar.
      */
     void DisplayUnitsMsg();
 
@@ -804,8 +779,7 @@ public:
                                    int aExplicitCommand = 0 );
 
     /**
-     * Function BlockCommand
-     * Returns the block command code (BLOCK_MOVE, BLOCK_COPY...) corresponding to the
+     * Return the block command code (BLOCK_MOVE, BLOCK_COPY...) corresponding to the
      * keys pressed (ALT, SHIFT, SHIFT ALT ..) when block command is started by dragging
      * the mouse.
      *
@@ -815,7 +789,6 @@ public:
     virtual int BlockCommand( EDA_KEY aKey );
 
     /**
-     * Function HandleBlockPlace( )
      * Called after HandleBlockEnd, when a block command needs to be
      * executed after the block is moved to its new place
      * (bloc move, drag, copy .. )
@@ -824,7 +797,6 @@ public:
     virtual void HandleBlockPlace( wxDC* DC );
 
     /**
-     * Function HandleBlockEnd( )
      * Handle the "end"  of a block command,
      * i.e. is called at the end of the definition of the area of a block.
      * depending on the current block command, this command is executed
@@ -836,8 +808,7 @@ public:
     virtual bool HandleBlockEnd( wxDC* DC );
 
     /**
-     * Function CopyToClipboard
-     * copies the current page or the current block to the clipboard.
+     * Copy the current page or the current block to the clipboard.
      */
     void CopyToClipboard( wxCommandEvent& event );
 
@@ -871,8 +842,7 @@ public:
     void ClearMsgPanel( void );
 
     /**
-     * Function SetMsgPanel
-     * clears the message panel and populates it with the contents of \a aList.
+     * Clear the message panel and populates it with the contents of \a aList.
      *
      * @param aList is the list of #MSG_PANEL_ITEM objects to fill the message panel.
      */
@@ -881,14 +851,12 @@ public:
     void SetMsgPanel( EDA_ITEM* aItem );
 
     /**
-     * Function UpdateMsgPanel
-     * redraws the message panel.
+     * Redraw the message panel.
      */
     virtual void UpdateMsgPanel();
 
     /**
-     * Function PushPreferences
-     * Pushes a few preferences from a parent window to a child window.
+     * Push preferences from a parent window to a child window.
      * (i.e. from eeschema to schematic symbol editor)
      *
      * @param aParentCanvas is the parent canvas to push preferences from.
@@ -896,9 +864,8 @@ public:
     void PushPreferences( const EDA_DRAW_PANEL* aParentCanvas );
 
     /**
-     * Function PrintPage
-     * used to print a page
-     * Print the page pointed by current screen, set by the calling print function
+     * Print the page pointed by current screen, set by the calling print function.
+     *
      * @param aDC = wxDC given by the calling print function
      * @param aPrintMask = not used here
      * @param aPrintMirrorMode = not used here (Set when printing in mirror mode)
@@ -912,8 +879,7 @@ public:
     static EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
 
     /**
-     * Function UseGalCanvas
-     * used to switch between standard and GAL-based canvas.
+     * Use to switch between standard and GAL-based canvas.
      *
      * @param aEnable True for GAL-based canvas, false for standard canvas.
      */
@@ -935,8 +901,7 @@ public:
     bool IsGalCanvasActive() const          { return m_galCanvasActive; }
 
     /**
-     * Function GetGalCanvas
-     * returns a pointer to GAL-based canvas of given EDA draw frame.
+     * Return a pointer to GAL-based canvas of given EDA draw frame.
      *
      * @return Pointer to GAL-based canvas.
      */
@@ -944,13 +909,11 @@ public:
     void SetGalCanvas( EDA_DRAW_PANEL_GAL* aPanel ) { m_galCanvas = aPanel; }
 
     /**
-     * Function GetToolManager
-     * returns the tool manager instance, if any.
+     * Return the tool manager instance, if any.
      */
     TOOL_MANAGER* GetToolManager() const            { return m_toolManager; }
 
     /**
-     * Function GetDisplayOptions
      * A way to pass info to draw functions. the base class has no knowledge about
      * these options. It is virtual because this function must be overloaded to
      * pass usefull info.
@@ -958,14 +921,12 @@ public:
     virtual void* GetDisplayOptions() { return NULL; }
 
     /**
-     * Function GetGalDisplayOptions
-     * Returns a reference to the gal rendering options used by GAL for rendering.
+     * Return a reference to the gal rendering options used by GAL for rendering.
      */
     KIGFX::GAL_DISPLAY_OPTIONS& GetGalDisplayOptions() { return m_galDisplayOptions; }
 
     /**
-     * Function SyncMenusAndToolbars
-     * Updates the toolbars and menus (mostly settings/check buttons/checkboxes)
+     * Update the toolbars and menus (mostly settings/check buttons/checkboxes)
      * with the current controller state
      */
     virtual void SyncMenusAndToolbars( wxEvent& aEvent ) {};

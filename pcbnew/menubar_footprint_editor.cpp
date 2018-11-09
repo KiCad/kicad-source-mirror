@@ -121,6 +121,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
+    AddMenuItem( fileMenu,
+                 ID_MODEDIT_SAVE_PNG,
+                 _( "Export View as PN&G..." ),
+                 _( "Create a PNG file from the current view" ),
+                 KiBitmap( plot_xpm ) );
+
+    fileMenu->AppendSeparator();
+
     // Close editor
     AddMenuItem( fileMenu, wxID_EXIT,
                  _( "&Exit" ),

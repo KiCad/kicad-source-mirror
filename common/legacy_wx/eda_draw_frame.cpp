@@ -351,6 +351,7 @@ void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
     m_canvas->Refresh();
 }
 
+
 bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 {
     // Checks all the toolbars and returns true if the given tool id is toggled.
@@ -467,7 +468,8 @@ bool EDA_DRAW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     return false;
 }
 
-int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName )
+int EDA_DRAW_FRAME::WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
+                                       wxString* aFullFileName )
 {
     int result = EDA_BASE_FRAME::WriteHotkeyConfig( aDescList, aFullFileName );
 
@@ -608,7 +610,6 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 }
 
 
-
 void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
 {
     m_FrameSize = GetClientSize( );
@@ -656,6 +657,7 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
 
     SetToolID( ID_NO_TOOL_SELECTED, defaultCursor, wxEmptyString );
 }
+
 
 wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 {
@@ -761,6 +763,7 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
     // refresh units display
     DisplayUnitsMsg();
 }
+
 
 const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 {
@@ -900,6 +903,7 @@ void EDA_DRAW_FRAME::UpdateMsgPanel()
         SetMsgPanel( item );
 }
 
+
 // FIXME: There needs to be a better way for child windows to load preferences.
 //        This function pushes four preferences from a parent window to a child window
 //        i.e. from eeschema to the schematic symbol editor
@@ -909,8 +913,9 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
     m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
 }
 
+
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-       int aExplicitCommand )
+                                       int aExplicitCommand )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -1560,6 +1565,7 @@ bool EDA_DRAW_FRAME::isBusy() const
            || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
 }
 
+
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
     if( IsGalCanvasActive() )
@@ -1856,7 +1862,9 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     AddMenuItem( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), KiBitmap( cancel_xpm ) );
 }
 
+
 static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
+
 
 void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
@@ -1903,6 +1911,7 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     wxSize dcsize = DrawArea.GetSize();
 
     int maxdim = std::max( dcsize.x, dcsize.y );
+
     // the max size in pixels of the bitmap used to byuild the sheet copy
     const int maxbitmapsize = 3000;
 
@@ -2006,8 +2015,8 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
 
 
 void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWidth,
-                                     double aScalar, const wxString &aFilename,
-                                     const wxString &aSheetLayer )
+                                    double aScalar, const wxString &aFilename,
+                                    const wxString &aSheetLayer )
 {
     if( !m_showBorderAndTitleBlock )
         return;
@@ -2055,9 +2064,16 @@ wxString EDA_DRAW_FRAME::GetScreenDesc() const
     return wxEmptyString;
 }
 
+
 const BOX2I EDA_DRAW_FRAME::GetDocumentExtents() const
 {
     BOX2I rv;
     rv.SetMaximum();
     return rv;
+}
+
+
+bool EDA_DRAW_FRAME::saveCanvasImageToFile( const wxString& aFileName, wxBitmapType aBitmapType )
+{
+    return SaveCanvasImageToFile( this, aFileName, aBitmapType );
 }
