@@ -208,11 +208,11 @@ void fillLineGBRITEM(  GERBER_DRAW_ITEM* aGbrItem,
  *                      false when arc is inside one quadrant
  * @param aLayerNegative = true if the current layer is negative
  */
-static void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
-                             const wxPoint& aStart, const wxPoint& aEnd,
-                             const wxPoint& aRelCenter, wxSize aPenSize,
-                             bool aClockwise, bool aMultiquadrant,
-                             bool aLayerNegative  )
+void fillArcGBRITEM(  GERBER_DRAW_ITEM* aGbrItem, int Dcode_index,
+                      const wxPoint& aStart, const wxPoint& aEnd,
+                      const wxPoint& aRelCenter, wxSize aPenSize,
+                      bool aClockwise, bool aMultiquadrant,
+                      bool aLayerNegative  )
 {
     wxPoint center, delta;
 

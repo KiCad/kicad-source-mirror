@@ -29,6 +29,8 @@
 enum drill_M_code_t {
     DRILL_M_UNKNOWN,
     DRILL_M_END,
+    DRILL_M_TOOL_DOWN,      // tool down (starting a routed hole)
+    DRILL_M_TOOL_UP,        // tool up (ending a routed hole)
     DRILL_M_ENDREWIND,
     DRILL_M_MESSAGE,
     DRILL_M_LONGMESSAGE,
@@ -52,12 +54,13 @@ enum drill_M_code_t {
     DRILL_AUTOMATIC_TOOL_CHANGE,
     DRILL_FMT,
     DRILL_SKIP,
-    DRILL_TOOL_INFORMATION
+    DRILL_TOOL_INFORMATION,
+    DRILL_M_END_LIST                // not used: sentinel
 };
 
 
 enum drill_G_code_t {
-    DRILL_G_UNKNOWN,
+    DRILL_G_UNKNOWN = DRILL_M_END_LIST+1,     // Use next available value
     DRILL_G_ABSOLUTE,
     DRILL_G_INCREMENTAL,
     DRILL_G_ZEROSET,
@@ -78,6 +81,47 @@ struct EXCELLON_CMD
     int    m_asParams;      // 0 = no param, -1 = skip params, 1 = read params
 };
 
+// Helper struct to store Excellon points in routing mode
+#define ROUTE_CCW 1
+#define ROUTE_CW -1
+
+struct EXCELLON_ROUTE_COORD
+{
+    int m_x;        // X coordinate
+    int m_y;        // y coordinate
+    int m_cx;       // center X coordinate in circular routing mode
+                    // (when the IJ commad is used)
+    int m_cy;       // center y coordinate in circular routing mode
+                    // (when the IJ commad is used)
+    int m_radius;   // radius in circular routing mode (when the A## command is used)
+    int m_rmode;    // routing mode: 0 = circular, ROUTE_CCW (1) = ccw, ROUTE_CW (-1) = cw
+    int m_arc_type_info; // arc using radius or center coordinates
+
+    EXCELLON_ROUTE_COORD():
+        m_x( 0 ),  m_y( 0 ), m_cx( 0 ), m_cy( 0 ), m_radius( 0 ),
+        m_rmode( 0 ), m_arc_type_info( 0 )
+    {}
+
+    EXCELLON_ROUTE_COORD( const wxPoint& aPos ):
+        m_x( aPos.x ),  m_y( aPos.y ),
+        m_cx( 0 ), m_cy( 0 ), m_radius( 0 ), m_rmode( 0 ),
+        m_arc_type_info( ARC_INFO_TYPE_NONE )
+    {}
+
+    EXCELLON_ROUTE_COORD( const wxPoint& aPos, const wxPoint& aCenter, int aMode ):
+        m_x( aPos.x ),  m_y( aPos.y ),
+        m_cx( aCenter.x ), m_cy( aCenter.y ), m_radius( 0 ),  m_rmode( aMode ),
+        m_arc_type_info( ARC_INFO_TYPE_CENTER )
+    {}
+
+    EXCELLON_ROUTE_COORD( const wxPoint& aPos, int aRadius, int aMode ):
+        m_x( aPos.x ),  m_y( aPos.y ),
+        m_cx( 0 ), m_cy( 0 ), m_radius( aRadius ),  m_rmode( aMode ),
+        m_arc_type_info( ARC_INFO_TYPE_RADIUS )
+    {}
+
+    wxPoint GetPos() { return wxPoint( m_x, m_y ); }
+};
 
 /* EXCELLON_IMAGE handle a drill image
  *  It is derived from GERBER_FILE_IMAGE because there is a lot of likeness
@@ -96,12 +140,16 @@ private:
 
     excellon_state m_State;         // state of excellon file analysis
     bool           m_SlotOn;        // true during an oblong drill definition
+                                    // by G85 (canned slot) command
+    bool           m_RouteModeOn;   // true during a route mode (for instance a oval hole) or a cutout
+    std::vector<EXCELLON_ROUTE_COORD> m_RoutePositions;  // The list of points in a route mode
 
 public: EXCELLON_IMAGE( int layer ) :
         GERBER_FILE_IMAGE( layer )
     {
         m_State  = READ_HEADER_STATE;
         m_SlotOn = false;
+        m_RouteModeOn = false;
     }
 
 
@@ -124,7 +172,7 @@ public: EXCELLON_IMAGE( int layer ) :
     bool LoadFile( const wxString& aFullFileName );
 
 private:
-    bool Execute_HEADER_Command( char*& text );
+    bool Execute_HEADER_And_M_Command( char*& text );
     bool Select_Tool( char*& text );
     bool Execute_EXCELLON_G_Command( char*& text );
     bool Execute_Drill_Command( char*& text );
@@ -233,10 +281,10 @@ private:
  *  B#              Retract Rate
  *  C#              Tool Diameter
  *  F#              Table Feed Rate;Z Axis Infeed Rate
- *  G00X#Y#         Route Mode
- *  G01             Linear (Straight Line) Mode
- *  G02             Circular CW Mode
- *  G03             Circular CCW Mode
+ *  G00X#Y#         Route Mode; XY is the starting point
+ *  G01X#Y#         Linear (Straight Line) Route Mode YX is the ending point
+ *  G02X#Y#...      Circular CW Mode. Radius value (A#) or Center position (I#J#) follows
+ *  G03X#Y#...      Circular CCW Mode. Radius value (A#) or Center position (I#J#) follows
  *  G04	X#          Variable Dwell
  *  G05             Drill Mode
  *  G07             Override current tool feed or speed

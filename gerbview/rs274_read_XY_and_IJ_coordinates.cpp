@@ -89,7 +89,7 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
     text = line;
     while( *Text )
     {
-        if( (*Text == 'X') || (*Text == 'Y') )
+        if( (*Text == 'X') || (*Text == 'Y') || (*Text == 'A') )
         {
             type_coord = *Text;
             Text++;
@@ -111,7 +111,7 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
 
             if( is_float )
             {
-                // When X or Y values are float numbers, they are given in mm or inches
+                // When X or Y (or A) values are float numbers, they are given in mm or inches
                 if( m_GerbMetric )  // units are mm
                     current_coord = KiROUND( atof( line ) * IU_PER_MILS / 0.0254 );
                 else    // units are inches
@@ -160,6 +160,11 @@ wxPoint GERBER_FILE_IMAGE::ReadXYCoord( char*& Text, bool aExcellonMode )
                 pos.x = current_coord;
             else if( type_coord == 'Y' )
                 pos.y = current_coord;
+            else if( type_coord == 'A' )
+            {
+                m_ArcRadius = current_coord;
+                m_LastArcDataType = ARC_INFO_TYPE_RADIUS;
+            }
 
             continue;
         }
@@ -263,6 +268,8 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
     }
 
     m_IJPos = pos;
+    m_LastArcDataType = ARC_INFO_TYPE_CENTER;
+
     return pos;
 }
 
