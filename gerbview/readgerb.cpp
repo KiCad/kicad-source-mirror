@@ -206,9 +206,9 @@ bool GERBER_FILE_IMAGE::LoadGerberFile( const wxString& aFullFileName )
                 break;
 
             default:
-                text++;
                 msg.Printf( wxT("Unexpected symbol <%c>"), *text );
                 AddMessageToList( msg );
+                text++;
                 break;
             }
         }

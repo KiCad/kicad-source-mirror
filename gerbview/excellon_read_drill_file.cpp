@@ -259,7 +259,7 @@ bool EXCELLON_IMAGE::LoadFile( const wxString & aFullFileName )
         char* line = excellonReader.Line();
         char* text = StrPurge( line );
 
-        if( *text == ';' )       // comment: skip line
+        if( *text == ';' || *text == 0 )       // comment or empty line: skip line
             continue;
 
         if( m_State == EXCELLON_IMAGE::READ_HEADER_STATE )
