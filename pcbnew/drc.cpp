@@ -1100,6 +1100,10 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
 void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 {
     EDA_TEXT* text = dynamic_cast<EDA_TEXT*>( aTextItem );
+
+    if( text == nullptr )
+        return;
+
     std::vector<wxPoint> textShape;      // a buffer to store the text shape (set of segments)
     int textWidth = text->GetThickness();
 

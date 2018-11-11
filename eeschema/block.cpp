@@ -138,7 +138,7 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
 
         for( unsigned ii = 0; ii < block->GetItems().GetCount(); ii++ )
         {
-            SCH_ITEM* item = dynamic_cast<SCH_ITEM*>( block->GetItems().GetPickedItem( ii ) );
+            SCH_ITEM* item = static_cast<SCH_ITEM*>( block->GetItems().GetPickedItem( ii ) );
             item->Move( block->GetMoveVector() );
             item->SetFlags( IS_MOVED );
             GetCanvas()->GetView()->Update( item, KIGFX::GEOMETRY );

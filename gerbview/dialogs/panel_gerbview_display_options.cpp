@@ -94,7 +94,7 @@ bool PANEL_GERBVIEW_DISPLAY_OPTIONS::TransferDataFromWindow()
 
     // Apply changes to the GAL
     auto view = m_Parent->GetGalCanvas()->GetView();
-    auto painter = dynamic_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
+    auto painter = static_cast<KIGFX::GERBVIEW_PAINTER*>( view->GetPainter() );
     auto settings = painter->GetSettings();
     settings->LoadDisplayOptions( displayOptions );
     view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );

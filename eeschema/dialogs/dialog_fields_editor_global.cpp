@@ -431,7 +431,7 @@ public:
         {
             // Commit any pending in-place edits before the row gets moved out from under
             // the editor.
-            dynamic_cast<WX_GRID*>( GetView() )->CommitPendingChanges( true );
+            static_cast<WX_GRID*>( GetView() )->CommitPendingChanges( true );
 
             wxGridTableMessage msg( this, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_rows.size() );
             GetView()->ProcessTableMessage( msg );
