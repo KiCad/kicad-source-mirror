@@ -41,6 +41,7 @@ private:
     enum CONFIG_CTRL_TYPE_T
     {
         CFG_CTRL_TEXT,
+        CFG_CTRL_UNIT_BINDER,
         CFG_CTRL_CHECKBOX,
         CFG_CTRL_RADIOBOX,
         CFG_CTRL_CHOICE,
@@ -49,7 +50,7 @@ private:
 
     struct CONFIG_CTRL_T
     {
-        wxControl* control;
+        void* control;
         CONFIG_CTRL_TYPE_T type;
         void* dest;
     };
@@ -83,6 +84,14 @@ protected:
         ctrls.push_back( ctrlInfo );
     }
 
+    void Add( UNIT_BINDER& ctrl, int& dest )
+    {
+        CONFIG_CTRL_T ctrlInfo = { &ctrl, CFG_CTRL_UNIT_BINDER, (void*) &dest };
+
+        ctrls.push_back( ctrlInfo );
+    }
+
+
     void Add( wxChoice* ctrl, int& dest )
     {
         CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_CHOICE, (void*) &dest };
@@ -110,6 +119,10 @@ protected:
 
             case CFG_CTRL_TEXT:
                 *(wxString*) iter->dest = static_cast<wxTextCtrl*>( iter->control )->GetValue();
+                break;
+
+            case CFG_CTRL_UNIT_BINDER:
+                *(int*) iter->dest = static_cast<UNIT_BINDER*>( iter->control )->GetValue();
                 break;
 
             case CFG_CTRL_CHOICE:
@@ -149,6 +162,10 @@ protected:
 
             case CFG_CTRL_TEXT:
                 static_cast<wxTextCtrl*>( iter->control )->SetValue( *(wxString*) iter->dest );
+                break;
+
+            case CFG_CTRL_UNIT_BINDER:
+                static_cast<UNIT_BINDER*>( iter->control )->SetValue( *(int*) iter->dest );
                 break;
 
             case CFG_CTRL_CHOICE:
@@ -374,21 +391,21 @@ private:
 
         bool m_optionsSet;
 
-        wxString m_gridNx, m_gridNy,
-                 m_gridDx, m_gridDy,
-                 m_gridOffsetX, m_gridOffsetY,
-                 m_gridStagger;
+        wxString m_gridNx, m_gridNy;
+        int      m_gridDx, m_gridDy;
+        int      m_gridOffsetX, m_gridOffsetY;
+        wxString m_gridStagger;
 
-        int     m_gridStaggerType, m_gridNumberingAxis;
-        bool    m_gridNumberingReverseAlternate;
-        int     m_grid2dArrayNumbering;
-        int     m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
+        int      m_gridStaggerType, m_gridNumberingAxis;
+        bool     m_gridNumberingReverseAlternate;
+        int      m_grid2dArrayNumbering;
+        int      m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
         wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
 
-        wxString m_circCentreX, m_circCentreY,
-                 m_circAngle, m_circCount, m_circNumberingOffset;
-        bool m_circRotate;
-        int m_arrayTypeTab;
+        int      m_circCentreX, m_circCentreY;
+        wxString m_circAngle, m_circCount, m_circNumberingOffset;
+        bool     m_circRotate;
+        int      m_arrayTypeTab;
     };
 
     // some uses of arrays might not allow component renumbering

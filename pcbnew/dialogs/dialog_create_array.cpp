@@ -41,13 +41,13 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNu
     DIALOG_CREATE_ARRAY_BASE( aParent ),
     CONFIG_SAVE_RESTORE_WINDOW( m_options.m_optionsSet ),
     m_settings( NULL ),
-    m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx, true ),
-    m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy, true ),
-    m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX, true ),
-    m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY, true ),
-    m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX, true ),
-    m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY, true ),
-    m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius, true ),
+    m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
+    m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
+    m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
+    m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
+    m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
+    m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
+    m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
     m_originalItemPosition( aOrigPos ),
     m_numberingEnabled(enableNumbering)
 {
@@ -70,11 +70,11 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNu
 
     Add( m_entryNx, m_options.m_gridNx );
     Add( m_entryNy, m_options.m_gridNy );
-    Add( m_entryDx, m_options.m_gridDx );
-    Add( m_entryDy, m_options.m_gridDy );
+    Add( m_hSpacing, m_options.m_gridDx );
+    Add( m_vSpacing, m_options.m_gridDy );
 
-    Add( m_entryOffsetX, m_options.m_gridOffsetX );
-    Add( m_entryOffsetY, m_options.m_gridOffsetY );
+    Add( m_hOffset, m_options.m_gridOffsetX );
+    Add( m_vOffset, m_options.m_gridOffsetY );
     Add( m_entryStagger, m_options.m_gridStagger );
 
     Add( m_radioBoxGridStaggerType, m_options.m_gridStaggerType );
@@ -82,8 +82,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNu
     Add( m_radioBoxGridNumberingAxis, m_options.m_gridNumberingAxis );
     Add( m_checkBoxGridReverseNumbering, m_options.m_gridNumberingReverseAlternate );
 
-    Add( m_entryCentreX, m_options.m_circCentreX );
-    Add( m_entryCentreY, m_options.m_circCentreY );
+    Add( m_hCentre, m_options.m_circCentreX );
+    Add( m_vCentre, m_options.m_circCentreY );
     Add( m_entryCircAngle, m_options.m_circAngle );
     Add( m_entryCircCount, m_options.m_circCount );
     Add( m_entryRotateItemsCb, m_options.m_circRotate );
