@@ -614,26 +614,26 @@ wxString SCH_LINE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
     wxString txtfmt, orient;
 
     if( m_start.x == m_end.x )
-        orient = _( "Vertical " );
+        orient = _( "Vertical" );
     else if( m_start.y == m_end.y )
-        orient = _( "Horizontal " );
+        orient = _( "Horizontal" );
 
     switch( m_Layer )
     {
     case LAYER_NOTES:
-        txtfmt = _( "%sGraphic Line from (%s, %s) to (%s, %s)" );
+        txtfmt = _( "%s Graphic Line from (%s, %s) to (%s, %s)" );
         break;
 
     case LAYER_WIRE:
-        txtfmt = _( "%sWire from (%s, %s) to (%s, %s)" );
+        txtfmt = _( "%s Wire from (%s, %s) to (%s, %s)" );
         break;
 
     case LAYER_BUS:
-        txtfmt = _( "%sBus from (%s, %s) to (%s, %s)" );
+        txtfmt = _( "%s Bus from (%s, %s) to (%s, %s)" );
         break;
 
     default:
-        txtfmt = _( "%sLine on Unknown Layer from (%s, %s) to (%s, %s)" );
+        txtfmt = _( "%s Line on Unknown Layer from (%s, %s) to (%s, %s)" );
     }
 
     return wxString::Format( txtfmt,

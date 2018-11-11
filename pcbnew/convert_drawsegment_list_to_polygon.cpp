@@ -409,8 +409,8 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             default:
                 if( aErrorText )
                 {
-                    msg.Printf( _( "Unsupported DRAWSEGMENT type %s." ),
-                                GetChars( BOARD_ITEM::ShowShape( graphic->GetShape() ) ) );
+                    msg.Printf( "Unsupported DRAWSEGMENT type %s.",
+                                BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                     *aErrorText << msg << "\n";
                 }
@@ -588,7 +588,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                 default:
                     if( aErrorText )
                     {
-                        msg.Printf( _( "Unsupported DRAWSEGMENT type %s." ),
+                        msg.Printf( "Unsupported DRAWSEGMENT type %s.",
                                     BOARD_ITEM::ShowShape( graphic->GetShape() ) );
 
                         *aErrorText << msg << "\n";
