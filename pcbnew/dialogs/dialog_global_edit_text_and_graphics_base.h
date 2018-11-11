@@ -52,6 +52,8 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_footprintGraphics;
 		wxCheckBox* m_layerFilterOpt;
 		PCB_LAYER_BOX_SELECTOR* m_layerFilter;
+		wxCheckBox* m_referenceFilterOpt;
+		wxTextCtrl* m_referenceFilter;
 		wxCheckBox* m_footprintFilterOpt;
 		wxTextCtrl* m_footprintFilter;
 		wxRadioButton* m_setToSpecifiedValues;
@@ -82,6 +84,7 @@ class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE : public DIALOG_SHIM
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLayerFilterSelect( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnReferenceFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnFootprintFilterText( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSizeNetclassGrid( wxSizeEvent& event ) { event.Skip(); }
 		

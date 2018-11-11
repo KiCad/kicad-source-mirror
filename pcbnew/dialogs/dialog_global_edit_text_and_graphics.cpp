@@ -60,6 +60,7 @@ enum
 };
 
 
+static wxString g_textAndGraphicsReferenceFilter;
 static wxString g_textAndGraphicsFootprintFilter;
 
 
@@ -82,6 +83,10 @@ protected:
     void OnLayerFilterSelect( wxCommandEvent& event ) override
     {
         m_layerFilterOpt->SetValue( true );
+    }
+    void OnReferenceFilterText( wxCommandEvent& event ) override
+    {
+        m_referenceFilterOpt->SetValue( true );
     }
     void OnFootprintFilterText( wxCommandEvent& event ) override
     {
@@ -127,6 +132,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
 {
+    g_textAndGraphicsReferenceFilter = m_referenceFilter->GetValue();
     g_textAndGraphicsFootprintFilter = m_footprintFilter->GetValue();
 }
 
@@ -134,6 +140,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 {
     // SetValue() generates events, ChangeValue() does not
+    m_referenceFilter->ChangeValue( g_textAndGraphicsReferenceFilter );
     m_footprintFilter->ChangeValue( g_textAndGraphicsFootprintFilter );
 
     m_lineWidth.SetValue( INDETERMINATE );
@@ -280,13 +287,24 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
             return;
     }
 
+    if( m_referenceFilterOpt->GetValue() && !m_referenceFilter->GetValue().IsEmpty() )
+    {
+        MODULE* module = dynamic_cast<MODULE*>( aItem->GetParent() );
+
+        if( module )
+        {
+            if( !WildCompareString( m_referenceFilter->GetValue(), module->GetReference(), false ) )
+                return;
+        }
+    }
+
     if( m_footprintFilterOpt->GetValue() && !m_footprintFilter->GetValue().IsEmpty() )
     {
         MODULE* module = dynamic_cast<MODULE*>( aItem->GetParent() );
 
         if( module )
         {
-            if( !WildCompareString( m_footprintFilter->GetValue(), module->GetReference(), false ) )
+            if( !WildCompareString( m_footprintFilter->GetValue(), module->GetFPID().Format(), false ) )
                 return;
         }
     }

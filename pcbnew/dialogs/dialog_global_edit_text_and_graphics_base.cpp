@@ -71,13 +71,22 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	fgSizer2->Add( m_layerFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxLEFT, 5 );
 	
 	
-	fgSizer2->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 100 );
+	fgSizer2->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 60 );
 	
-	m_footprintFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent footprint:"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_footprintFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_referenceFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent footprint reference:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_referenceFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
+	m_referenceFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_referenceFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	
+	
+	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_footprintFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by parent footprint identifier:"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_footprintFilterOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_footprintFilter = new wxTextCtrl( sbFilters->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer2->Add( m_footprintFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxBOTTOM|wxLEFT, 5 );
+	fgSizer2->Add( m_footprintFilter, 0, wxEXPAND|wxBOTTOM|wxLEFT, 5 );
 	
 	
 	fgSizer2->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -271,6 +280,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	// Connect Events
 	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnUpdateUI ) );
 	m_layerFilter->Connect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
+	m_referenceFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );
 }
@@ -280,6 +290,7 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS
 	// Disconnect Events
 	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnUpdateUI ) );
 	m_layerFilter->Disconnect( wxEVT_COMMAND_COMBOBOX_SELECTED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnLayerFilterSelect ), NULL, this );
+	m_referenceFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnReferenceFilterText ), NULL, this );
 	m_footprintFilter->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnFootprintFilterText ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::OnSizeNetclassGrid ), NULL, this );
 	
