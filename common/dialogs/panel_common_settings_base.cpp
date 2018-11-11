@@ -31,6 +31,8 @@ PANEL_COMMON_SETTINGS_BASE::PANEL_COMMON_SETTINGS_BASE( wxWindow* parent, wxWind
 	bSizer6 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_SaveTime = new wxSpinCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 0, 10, 0 );
+	m_SaveTime->SetToolTip( _("Delay after the first change to create a backup file of the board on disk.\nIf set to 0, auto backup is disabled") );
+	
 	bSizer6->Add( m_SaveTime, 0, wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	wxStaticText* minutesLabel;
