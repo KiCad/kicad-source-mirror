@@ -182,15 +182,6 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile )
     fputs( "G90\n", m_file );                       // Absolute mode
     fputs( "G05\n", m_file );                       // Drill mode
 
-    // Units :
-    if( !m_minimalHeader )
-    {
-        if( m_unitsMetric  )
-            fputs( "M71\n", m_file );       /* M71 = metric mode */
-        else
-            fputs( "M72\n", m_file );       /* M72 = inch mode */
-    }
-
     /* Read the hole file and generate lines for normal holes (oblong
      * holes will be created later) */
     int tool_reference = -2;
