@@ -281,7 +281,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
         computeAnchors( item, aOrigin );
     }
 
-    ANCHOR* nearest = nearestAnchor( aOrigin, CORNER | SNAPPABLE, aLayers );
+    ANCHOR* nearest = nearestAnchor( aOrigin, SNAPPABLE, aLayers );
     VECTOR2I nearestGrid = Align( aOrigin );
     double gridDist = ( nearestGrid - aOrigin ).EuclideanNorm();
 
