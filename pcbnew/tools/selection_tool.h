@@ -143,7 +143,7 @@ public:
     void setTransitions() override;
 
     ///> Zooms the screen to center and fit the current selection.
-    void zoomFitSelection( void );
+    void zoomFitSelection();
 
 private:
     /**
@@ -273,16 +273,7 @@ private:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool selectable( const BOARD_ITEM* aItem ) const;
-
-    /**
-     * Function modifiable()
-     * Checks if an item might be modified. This function is used to filter out items
-     * from the selection when it is passed to other tools.
-     *
-     * @return True if the item fulfills conditions to be modified.
-     */
-    bool modifiable( const BOARD_ITEM* aItem ) const;
+    bool selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFlag = false ) const;
 
     /**
      * Function select()

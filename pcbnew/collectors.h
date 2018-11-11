@@ -146,11 +146,16 @@ public:
     virtual     bool IgnorePadsOnFront() const = 0;
 
     /**
+     * @return bool - ture if should ignore through-hole PADSs.
+     */
+    virtual     bool IgnoreThroughHolePads() const = 0;
+
+    /**
      * @return bool - true if should ignore PADSs on Front side and Back side.
      */
     virtual     bool IgnorePads() const
     {
-        return IgnorePadsOnFront() && IgnorePadsOnBack();
+        return IgnorePadsOnFront() && IgnorePadsOnBack() && IgnoreThroughHolePads();
     }
 
     /**
@@ -403,6 +408,7 @@ private:
     bool    m_IgnoreModulesOnFront;
     bool    m_IgnorePadsOnFront;
     bool    m_IgnorePadsOnBack;
+    bool    m_IgnoreThroughHolePads;
     bool    m_IgnoreModulesVals;
     bool    m_IgnoreModulesRefs;
     bool    m_IgnoreThroughVias;
@@ -444,6 +450,7 @@ public:
 
         m_IgnorePadsOnFront         = false;
         m_IgnorePadsOnBack          = false;
+        m_IgnoreThroughHolePads     = false;
 
         m_IgnoreModulesVals         = false;
         m_IgnoreModulesRefs         = false;
@@ -562,6 +569,12 @@ public:
      */
     bool IgnorePadsOnFront() const override { return m_IgnorePadsOnFront; }
     void SetIgnorePadsOnFront(bool ignore) { m_IgnorePadsOnFront = ignore; }
+
+    /**
+     * @return bool - true if should ignore through-hole PADSs.
+     */
+    bool IgnoreThroughHolePads() const override { return m_IgnoreThroughHolePads; }
+    void SetIgnoreThroughHolePads(bool ignore) { m_IgnoreThroughHolePads = ignore; }
 
     /**
      * @return bool - true if should ignore modules values.

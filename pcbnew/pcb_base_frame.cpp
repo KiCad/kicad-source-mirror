@@ -847,8 +847,7 @@ BOARD_ITEM* PCB_BASE_FRAME::GetCurItem()
 
 GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
 {
-    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(),
-                                    GetActiveLayer() );
+    GENERAL_COLLECTORS_GUIDE guide( m_Pcb->GetVisibleLayers(), GetActiveLayer() );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! m_Pcb->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
@@ -858,6 +857,7 @@ GENERAL_COLLECTORS_GUIDE PCB_BASE_FRAME::GetCollectorsGuide()
     guide.SetIgnoreModulesOnFront( ! m_Pcb->IsElementVisible( LAYER_MOD_FR ) );
     guide.SetIgnorePadsOnBack( ! m_Pcb->IsElementVisible( LAYER_PAD_BK ) );
     guide.SetIgnorePadsOnFront( ! m_Pcb->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreThroughHolePads( ! m_Pcb->IsElementVisible( LAYER_PADS_TH ) );
     guide.SetIgnoreModulesVals( ! m_Pcb->IsElementVisible( LAYER_MOD_VALUES ) );
     guide.SetIgnoreModulesRefs( ! m_Pcb->IsElementVisible( LAYER_MOD_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! m_Pcb->IsElementVisible( LAYER_VIA_THROUGH ) );

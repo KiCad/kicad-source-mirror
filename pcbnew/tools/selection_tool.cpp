@@ -469,6 +469,7 @@ const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
     guide.SetIgnoreModulesOnFront( ! board()->IsElementVisible( LAYER_MOD_FR ) );
     guide.SetIgnorePadsOnBack( ! board()->IsElementVisible( LAYER_PAD_BK ) );
     guide.SetIgnorePadsOnFront( ! board()->IsElementVisible( LAYER_PAD_FR ) );
+    guide.SetIgnoreThroughHolePads( ! board()->IsElementVisible( LAYER_PADS_TH ) );
     guide.SetIgnoreModulesVals( ! board()->IsElementVisible( LAYER_MOD_VALUES ) );
     guide.SetIgnoreModulesRefs( ! board()->IsElementVisible( LAYER_MOD_REFERENCES ) );
     guide.SetIgnoreThroughVias( ! board()->IsElementVisible( LAYER_VIA_THROUGH ) );
@@ -1137,7 +1138,7 @@ void SELECTION_TOOL::selectAllItemsOnSheet( wxString& aSheetpath )
 }
 
 
-void SELECTION_TOOL::zoomFitSelection( void )
+void SELECTION_TOOL::zoomFitSelection()
 {
     //Should recalculate the view to zoom in on the selection
     auto selectionBox = m_selection.ViewBBox();
@@ -1526,7 +1527,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFlag ) const
 {
     // Is high contrast mode enabled?
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
@@ -1567,7 +1568,7 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         {
             auto* zone = static_cast<const ZONE_CONTAINER*>( aItem );
 
-            if( zone && zone->GetIsKeepout() )
+            if( zone->GetIsKeepout() )
             {
                 auto zoneLayers = zone->GetLayerSet().Seq();
 
@@ -1622,52 +1623,37 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
             // For vias it is enough if only one of its layers is visible
             return ( board()->GetVisibleLayers() & via->GetLayerSet() ).any();
         }
-        break;
 
     case PCB_MODULE_T:
     {
-        // In the module editor, we do not want to select the module itself
-        // rather, the module sub-components should be selected individually
+        // In modedit, we do not want to select the module itself.
         if( m_editModules )
             return false;
 
-        // Allow selection of footprints if at least one draw layer is on and
-        // the appropriate LAYER_MOD is on
+        // Allow selection of footprints if some part of the footprint is visible.
 
-        bool layer_mod = ( ( aItem->IsOnLayer( F_Cu ) && board()->IsElementVisible( LAYER_MOD_FR ) ) ||
-                           ( aItem->IsOnLayer( B_Cu ) && board()->IsElementVisible( LAYER_MOD_BK ) ) );
+        MODULE* module = const_cast<MODULE*>( static_cast<const MODULE*>( aItem ) );
 
-        bool draw_layer_visible = false;
-        int draw_layers[KIGFX::VIEW::VIEW_MAX_LAYERS], draw_layers_count;
-
-        static_cast<const MODULE*>( aItem )->GetAllDrawingLayers( draw_layers,
-                                                                  draw_layers_count,
-                                                                  true );
-
-        for( int i = 0; i < draw_layers_count; ++i )
+        for( auto item : module->GraphicalItems() )
         {
-            // NOTE: Pads return LAYER_PADS_PLATEDHOLES but the visibility
-            // control only directly switches LAYER_PADS_TH, so we overwrite it
-            // here so that the visibility check is accurate
-            if( draw_layers[i] == LAYER_PADS_PLATEDHOLES )
-                draw_layers[i] = LAYER_PADS_TH;
-
-            if( ( ( draw_layers[i] < PCB_LAYER_ID_COUNT ) &&
-                  board()->IsLayerVisible( static_cast<PCB_LAYER_ID>( draw_layers[i] ) ) ) ||
-                ( ( draw_layers[i] >= GAL_LAYER_ID_START ) &&
-                  board()->IsElementVisible( static_cast<GAL_LAYER_ID>( draw_layers[i] ) ) ) )
-            {
-                draw_layer_visible = true;
-            }
+            if( selectable( item, true ) )
+                return true;
         }
 
-        return ( draw_layer_visible && layer_mod );
+        for( auto pad : module->Pads() )
+        {
+            if( selectable( pad, true ) )
+                return true;
+        }
 
-        break;
+        return false;
     }
 
     case PCB_MODULE_TEXT_T:
-        if( m_multiple && !m_editModules )
+        // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
+        // module subparts one by one, rather than with a drag selection.  This is so you can
+        // pick up items under an (unlocked) module without also moving the module's sub-parts.
+        if( m_multiple && !ignoreMultipleFlag && !m_editModules )
             return false;
 
         if( !m_editModules && !view()->IsVisible( aItem ) )
@@ -1678,17 +1664,14 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
     case PCB_MODULE_EDGE_T:
     case PCB_PAD_T:
     {
-        // Multiple selection is only allowed in modedit mode
-        // In pcbnew, you have to select subparts of modules
-        // one-by-one, rather than with a drag selection.
-        // This is so you can pick up items under an (unlocked)
-        // module without also moving the module's sub-parts.
-        if( m_multiple && !m_editModules )
+        // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
+        // module subparts one by one, rather than with a drag selection.  This is so you can
+        // pick up items under an (unlocked) module without also moving the module's sub-parts.
+        if( m_multiple && !ignoreMultipleFlag && !m_editModules )
             return false;
 
-        // In pcbnew, locked modules prevent individual pad selection
-        // in modedit, we don't enforce this as the module is assumed to
-        // be edited by design
+        // In pcbnew, locked modules prevent individual pad selection.
+        // In modedit, we don't enforce this as the module is assumed to be edited by design.
         if( !m_editModules )
         {
             MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
@@ -1889,7 +1872,7 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGrou
 bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 {
     const unsigned GRIP_MARGIN = 20;
-    VECTOR2D margin = getView()->ToWorld( VECTOR2D( GRIP_MARGIN, GRIP_MARGIN ), false );
+    VECTOR2I margin = getView()->ToWorld( VECTOR2I( GRIP_MARGIN, GRIP_MARGIN ), false );
 
     // Check if the point is located within any of the currently selected items bounding boxes
     for( auto item : m_selection )
@@ -2159,7 +2142,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     continue;
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
-                else if( int( rejected.size() + 1 ) < aCollector.GetCount() )
+                else if( (int)( rejected.size() + 1 ) < aCollector.GetCount() )
                     rejected.insert( mod );
             }
         }
