@@ -376,6 +376,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         {
             if( !text )
             {
+                m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
                 PCB_LAYER_ID layer = m_frame->GetActiveLayer();
 
                 // Init the new item attributes
@@ -432,6 +433,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                 if( text == NULL )
                     continue;
 
+                m_controls->WarpCursor( text->GetPosition(), true );
+                m_controls->ForceCursorPosition( false );
                 m_controls->CaptureCursor( true );
                 m_controls->SetAutoPan( true );
 
