@@ -520,6 +520,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::Validate()
                 m_NoteBook->SetSelection( 0 );
 
             m_delayedErrorMessage = _( "Text items must have some content." );
+            m_delayedFocusGrid = m_itemsGrid;
             m_delayedFocusColumn = TMC_TEXT;
             m_delayedFocusRow = i;
 

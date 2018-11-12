@@ -567,6 +567,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::Validate()
             if( m_NoteBook->GetSelection() != 0 )
                 m_NoteBook->SetSelection( 0 );
 
+            m_delayedFocusGrid = m_itemsGrid;
             m_delayedErrorMessage = _( "Text items must have some content." );
             m_delayedFocusColumn = TMC_TEXT;
             m_delayedFocusRow = i;
@@ -832,7 +833,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
         m_delayedFocusColumn = -1;
         m_delayedErrorMessage = wxEmptyString;
 
-        if( !m_delayedErrorMessage.IsEmpty() )
+        if( !msg.IsEmpty() )
         {
             // Do not use DisplayErrorMessage(); it screws up window order on Mac
             DisplayError( nullptr, msg );
