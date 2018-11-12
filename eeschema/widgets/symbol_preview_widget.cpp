@@ -55,18 +55,23 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
                                        m_galDisplayOptions, canvasType );
     m_preview->SetStealsFocus( false );
 
+    // Do not display the grid: the look is not good for a small canvas area.
+    // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates
+    // strange artifacts on Windows when eeschema is run from Kicad manager (but not in stand alone...).
+    m_preview->GetGAL()->SetGridVisibility( false );
+
     SetBackgroundColour( *wxWHITE );
     SetForegroundColour( *wxBLACK );
 
-    m_status = new wxStaticText( this, -1, wxEmptyString );
+    m_status = new wxStaticText( this, wxID_ANY, wxEmptyString );
     m_statusSizer = new wxBoxSizer( wxVERTICAL );
-    m_statusSizer->Add( 0, 0, 1 );
-    m_statusSizer->Add( m_status, 0, wxALL | wxALIGN_CENTER, 0 );
-    m_statusSizer->Add( 0, 0, 1 );
+    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
+    m_statusSizer->Add( m_status, 0, wxALIGN_CENTER );
+    m_statusSizer->Add( 0, 0, 1 );  // add a spacer
 
     auto outer_sizer = new wxBoxSizer( wxVERTICAL );
-    outer_sizer->Add( m_preview, 1, wxALL | wxEXPAND, 0 );
-    outer_sizer->Add( m_statusSizer, 1, wxALL | wxALIGN_CENTER, 0 );
+    outer_sizer->Add( m_preview, 1, wxTOP | wxEXPAND, 5 );
+    outer_sizer->Add( m_statusSizer, 1, wxALIGN_CENTER );
 
     m_statusSizer->ShowItems( false );
 
@@ -96,13 +101,13 @@ void SYMBOL_PREVIEW_WIDGET::SetStatusText( wxString const& aText )
 
 void SYMBOL_PREVIEW_WIDGET::onSize( wxSizeEvent& aEvent )
 {
-    aEvent.Skip();
-
     if( m_previewItem )
     {
         fitOnDrawArea();
         m_preview->ForceRefresh();
     }
+
+    aEvent.Skip();
 }
 
 
@@ -112,12 +117,12 @@ void SYMBOL_PREVIEW_WIDGET::fitOnDrawArea()
         return;
 
     // set the view scale to fit the item on screen
-    // Calculate the draw scale to fit the drawing area
     KIGFX::VIEW* view = m_preview->GetView();
 
     // Calculate the drawing area size, in internal units, for a scaling factor = 1.0
     view->SetScale( 1.0 );
     VECTOR2D  clientSize = view->ToWorld( m_preview->GetClientSize(), false );
+    // Calculate the draw scale to fit the drawing area
     double    scale = std::min( fabs( clientSize.x / m_itemBBox.GetWidth() ),
                                 fabs( clientSize.y / m_itemBBox.GetHeight() ) );
 
@@ -175,14 +180,18 @@ void SYMBOL_PREVIEW_WIDGET::DisplaySymbol( const LIB_ID& aSymbolID, int aUnit )
         // Get the symbole size, in internal units
         m_itemBBox = part->GetUnitBoundingBox( aUnit, 0 );
 
+        if( !m_preview->IsShown() )
+        {
+            m_preview->Show();
+            m_statusSizer->ShowItems( false );
+            Layout();   // Ensure panel size is up to date.
+        }
+
         // Calculate the draw scale to fit the drawing area
         fitOnDrawArea();
     }
 
     m_preview->ForceRefresh();
-
-    m_preview->Show();
-    m_statusSizer->ShowItems( false );
 }
 
 
@@ -222,5 +231,3 @@ void SYMBOL_PREVIEW_WIDGET::DisplayPart( LIB_PART* aPart, int aUnit )
     m_preview->Show();
     m_statusSizer->ShowItems( false );
 }
-
-
