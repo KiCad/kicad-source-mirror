@@ -439,7 +439,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
 
                     for( auto item : selection )
+                    {
                         item->SetFlags( IS_DRAGGED ); //todo: flags structure rework
+
+                        if( auto module = dyn_cast<MODULE*>( item ) )
+                            module->RunOnChildren( [&] ( BOARD_ITEM* bitem )
+                                    { bitem->SetFlags( IS_DRAGGED ); } );
+                    }
 
                     editFrame->UndoRedoBlock( true );
                     m_cursor = controls->GetCursorPosition();
@@ -562,7 +568,13 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     for( auto item : selection )
+    {
         item->ClearFlags( IS_DRAGGED ); //todo: flags structure rework
+
+        if( auto module = dyn_cast<MODULE*>( item ) )
+            module->RunOnChildren( [&] ( BOARD_ITEM* bitem )
+                    { bitem->SetFlags( IS_DRAGGED ); } );
+    }
 
     if( restore_state )
         m_commit->Revert();
