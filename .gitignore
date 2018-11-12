@@ -56,6 +56,7 @@ include/pcb_lexer.h
 # demo project auxillary files
 demos/**/*-bak
 demos/**/_autosave-*
+demos/**/fp-info-cache
 
 # editor/OS fluff
 .*.swp
