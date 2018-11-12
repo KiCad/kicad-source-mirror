@@ -61,6 +61,8 @@ private:
     void OnClear( wxCommandEvent& event ) override;
 
     void OnSelectItemClick( wxCommandEvent& event ) override;
+    void OnUseGridOriginClick( wxCommandEvent& event ) override;
+    void OnUseUserOriginClick( wxCommandEvent& event ) override;
     void OnOkClick( wxCommandEvent& event ) override;
 
     /**

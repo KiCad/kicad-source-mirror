@@ -162,6 +162,24 @@ void DIALOG_POSITION_RELATIVE::OnSelectItemClick( wxCommandEvent& event )
 }
 
 
+void DIALOG_POSITION_RELATIVE::OnUseGridOriginClick( wxCommandEvent& event )
+{
+    BOARD* board = (BOARD*) m_toolMgr->GetModel();
+
+    m_anchor_position = board->GetGridOrigin();
+    m_referenceInfo->SetLabel( _( "Reference location: grid origin" ) );
+}
+
+
+void DIALOG_POSITION_RELATIVE::OnUseUserOriginClick( wxCommandEvent& event )
+{
+    PCB_BASE_FRAME* frame = (PCB_BASE_FRAME*) m_toolMgr->GetEditFrame();
+
+    m_anchor_position = frame->GetScreen()->m_O_Curseur;
+    m_referenceInfo->SetLabel( _( "Reference location: local coordinates origin" ) );
+}
+
+
 void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
 {
     wxString reference = _( "<none selected>" );

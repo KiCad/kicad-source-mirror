@@ -37,6 +37,8 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_referenceInfo;
+		wxButton* m_user_origin_button;
+		wxButton* m_grid_origin_button;
 		wxButton* m_select_anchor_button;
 		wxStaticLine* m_staticline2;
 		wxStaticText* m_xLabel;
@@ -55,6 +57,8 @@ class DIALOG_POSITION_RELATIVE_BASE : public DIALOG_SHIM
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClose( wxCloseEvent& event ) { event.Skip(); }
+		virtual void OnUseUserOriginClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnUseGridOriginClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelectItemClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTextFocusLost( wxFocusEvent& event ) { event.Skip(); }
 		virtual void OnClear( wxCommandEvent& event ) { event.Skip(); }
