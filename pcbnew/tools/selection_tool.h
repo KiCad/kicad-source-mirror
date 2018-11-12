@@ -273,7 +273,7 @@ private:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFlag = false ) const;
+    bool selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly = false ) const;
 
     /**
      * Function select()

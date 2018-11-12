@@ -1527,7 +1527,7 @@ BOARD_ITEM* SELECTION_TOOL::pickSmallestComponent( GENERAL_COLLECTOR* aCollector
 }
 
 
-bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFlag ) const
+bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // Is high contrast mode enabled?
     bool highContrast = getView()->GetPainter()->GetSettings()->GetHighContrast();
@@ -1653,8 +1653,11 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFla
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
         // module subparts one by one, rather than with a drag selection.  This is so you can
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
-        if( m_multiple && !ignoreMultipleFlag && !m_editModules )
-            return false;
+        if( !m_editModules && !checkVisibilityOnly )
+        {
+            if( m_multiple )
+                return false;
+        }
 
         if( !m_editModules && !view()->IsVisible( aItem ) )
             return false;
@@ -1667,21 +1670,23 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem, bool ignoreMultipleFla
         // Multiple selection is only allowed in modedit mode.  In pcbnew, you have to select
         // module subparts one by one, rather than with a drag selection.  This is so you can
         // pick up items under an (unlocked) module without also moving the module's sub-parts.
-        if( m_multiple && !ignoreMultipleFlag && !m_editModules )
-            return false;
-
-        // In pcbnew, locked modules prevent individual pad selection.
-        // In modedit, we don't enforce this as the module is assumed to be edited by design.
-        if( !m_editModules )
+        if( !m_editModules && !checkVisibilityOnly )
         {
-            MODULE* mod = static_cast<const D_PAD*>( aItem )->GetParent();
-            if( mod && mod->IsLocked() )
+            if( m_multiple )
                 return false;
         }
 
         if( aItem->Type() == PCB_PAD_T )
         {
             auto pad = static_cast<const D_PAD*>( aItem );
+
+            // In pcbnew, locked modules prevent individual pad selection.
+            // In modedit, we don't enforce this as the module is assumed to be edited by design.
+            if( !m_editModules && !checkVisibilityOnly )
+            {
+                if( pad->GetParent() && pad->GetParent()->IsLocked() )
+                    return false;
+            }
 
             // Check render mode (from the Items tab) first
             switch( pad->GetAttribute() )
