@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-12 11:05-0200\n"
-"PO-Revision-Date: 2018-10-30 10:57-0300\n"
+"POT-Creation-Date: 2018-11-12 11:39-0200\n"
+"PO-Revision-Date: 2018-11-12 11:38-0200\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -2159,9 +2159,8 @@ msgstr "Atenção: Opção de escala definida para um valor muito pequeno"
 
 #: common/dialogs/dialog_print_generic.cpp:169
 #: common/dialogs/dialog_print_generic.cpp:210
-#, fuzzy
 msgid "Nothing to print"
-msgstr "Nada para colar"
+msgstr "Nada para imprimir"
 
 #: common/dialogs/dialog_print_generic.cpp:227
 msgid "There was a problem printing."
@@ -2215,9 +2214,8 @@ msgid "Fit to page"
 msgstr "Ajustar à página"
 
 #: common/dialogs/dialog_print_generic_base.cpp:66
-#, fuzzy
 msgid "Custom:"
-msgstr "Customizado"
+msgstr "Personalizado:"
 
 #: common/dialogs/dialog_print_generic_base.cpp:70
 msgid "Set X scale adjust for exact scale plotting"
@@ -8994,9 +8992,8 @@ msgid "&Paste"
 msgstr "&Colar"
 
 #: eeschema/libedit/libedit_onrightclick.cpp:106
-#, fuzzy
 msgid "Pastes copied item(s)"
-msgstr "Apaga o(s) iten(s) selecionado(s)"
+msgstr "Cola o(s) iten(s) copiado(s)"
 
 #: eeschema/libedit/libedit_onrightclick.cpp:126
 #: eeschema/libedit/libedit_onrightclick.cpp:147
@@ -9172,18 +9169,17 @@ msgid "No component"
 msgstr "Nenhum componente"
 
 #: eeschema/libedit/libedit_plot_component.cpp:70
-#, fuzzy
 msgid "Image File Name"
-msgstr "Nome do Arquivo de Imagem 3D:"
+msgstr "Nome do Arquivo de Imagem"
 
 #: eeschema/libedit/libedit_plot_component.cpp:92
 msgid "Filename:"
 msgstr "Nome do arquivo:"
 
 #: eeschema/libedit/libedit_plot_component.cpp:122
-#, fuzzy, c-format
+#, c-format
 msgid "Can't save file \"%s\"."
-msgstr "Não é possível salvar o arquivo \"%s\""
+msgstr "Não é possível salvar o arquivo \"%s\"."
 
 #: eeschema/libedit/libfield.cpp:56
 msgid "Edit Component Name"
@@ -9282,14 +9278,12 @@ msgid "&Export Symbol..."
 msgstr "&Exportar Símbolo…"
 
 #: eeschema/libedit/menubar_libedit.cpp:112
-#, fuzzy
 msgid "Create a library file containing only the current symbol"
-msgstr "Criar um arquivo SVG a partir do símbolo atual"
+msgstr "Criar um arquivo de biblioteca que contenha apenas o símbolo atual"
 
 #: eeschema/libedit/menubar_libedit.cpp:117
-#, fuzzy
 msgid "Export View as PNG..."
-msgstr "Exportar Visualização Atual como PNG…"
+msgstr "Exportar Visualização como PNG…"
 
 #: eeschema/libedit/menubar_libedit.cpp:118
 #: pcbnew/menubar_footprint_editor.cpp:127
@@ -9297,9 +9291,8 @@ msgid "Create a PNG file from the current view"
 msgstr "Criar um arquivo PNG a partir da vista atual"
 
 #: eeschema/libedit/menubar_libedit.cpp:123
-#, fuzzy
 msgid "Export Symbol as SVG..."
-msgstr "&Exportar Símbolo…"
+msgstr "Exportar Símbolo como SVG…"
 
 #: eeschema/libedit/menubar_libedit.cpp:124
 msgid "Create a SVG file from the current symbol"
@@ -10798,24 +10791,24 @@ msgid "library \"%s\" cannot be deleted"
 msgstr "a biblioteca \"%s\" não pode ser apagada"
 
 #: eeschema/sch_line.cpp:624
-#, fuzzy, c-format
+#, c-format
 msgid "%s Graphic Line from (%s, %s) to (%s, %s)"
-msgstr "%sLinha Gráfica de (%s, %s) para (%s, %s)"
+msgstr "%s Linha Gráfica de (%s, %s) para (%s, %s)"
 
 #: eeschema/sch_line.cpp:628
-#, fuzzy, c-format
+#, c-format
 msgid "%s Wire from (%s, %s) to (%s, %s)"
-msgstr "%sFio de ( %s, %s) para ( %s, %s)"
+msgstr "%s Fio de ( %s, %s) para ( %s, %s)"
 
 #: eeschema/sch_line.cpp:632
-#, fuzzy, c-format
+#, c-format
 msgid "%s Bus from (%s, %s) to (%s, %s)"
-msgstr "%sBarramento de (%s, %s) para ( %s, %s)"
+msgstr "%s Barramento de (%s, %s) para ( %s, %s)"
 
 #: eeschema/sch_line.cpp:636
-#, fuzzy, c-format
+#, c-format
 msgid "%s Line on Unknown Layer from (%s, %s) to (%s, %s)"
-msgstr "%sLinha em Camada Desconhecida de (%s, %s) para (%s, %s)"
+msgstr "%s Linha em Camada Desconhecida de (%s, %s) para (%s, %s)"
 
 #: eeschema/sch_marker.cpp:126
 msgid "Electronics Rule Check Error"
@@ -11819,9 +11812,8 @@ msgstr "Selecionar todos"
 
 #: gerbview/dialogs/dialog_print_gerbview.cpp:206
 #: pcbnew/dialogs/dialog_print_pcbnew.cpp:224
-#, fuzzy
 msgid "Deselect all"
-msgstr "Deselecionar todos"
+msgstr "Desmarcar todos"
 
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:113
 msgid "Select Layer:"
@@ -13255,13 +13247,12 @@ msgid "Edit local file"
 msgstr "Editar um arquivo local"
 
 #: kicad/menubar.cpp:327
-#, fuzzy
 msgid "&Browse Project Files"
-msgstr "Compactar arquivos do projeto"
+msgstr "&Navegar pelos Arquivos do Projeto"
 
 #: kicad/menubar.cpp:328 kicad/menubar.cpp:515
 msgid "Open project directory in file explorer"
-msgstr ""
+msgstr "Abrir pasta do projeto no navegador de arquivos"
 
 #: kicad/menubar.cpp:344
 msgid "Edit the global and project symbol library tables"
@@ -13638,9 +13629,8 @@ msgid "Vertical align:"
 msgstr "Alinhamento vertical:"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:117
-#, fuzzy
 msgid "Set to 0 to use default values"
-msgstr "Definir em 0 para usar o padrão"
+msgstr "Definir em 0 para utilizar valores padrão"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:156
 msgid "Constraints:"
@@ -13653,7 +13643,7 @@ msgstr "Largura máxima:"
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:171
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:180
 msgid "Set to 0 to disable this constraint"
-msgstr ""
+msgstr "Definir em 0 para desabilitar essa restrição"
 
 #: pagelayout_editor/dialogs/properties_frame_base.cpp:178
 msgid "Maximum height:"
@@ -18187,14 +18177,12 @@ msgid "Filter items by layer:"
 msgstr "Filtrar itens por camada:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:76
-#, fuzzy
 msgid "Filter items by parent footprint reference:"
-msgstr "Filtrar itens por footprint pai:"
+msgstr "Filtrar itens pela referência do footprint pai:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:85
-#, fuzzy
 msgid "Filter items by parent footprint identifier:"
-msgstr "Filtrar itens por footprint pai:"
+msgstr "Filtrar itens pelo identificador do footprint pai:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:101
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:91
@@ -20837,9 +20825,8 @@ msgstr "sinal"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:570
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:584
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:602
-#, fuzzy
 msgid "power plane"
-msgstr "alimentação"
+msgstr "plano de alimentação"
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:164
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:178
@@ -20943,13 +20930,13 @@ msgstr "jumper"
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:574
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:588
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:606
-#, fuzzy
 msgid ""
 "Copper layer type for Freerouter and other external routers.\n"
 "Power plane layers are removed from Freerouter's layer menus."
 msgstr ""
-"Tipo de camada de cobre para Freerouter. Camadas de alimentação são "
-"removidas dos menus do Freerouter."
+"Tipo de camada de cobre para o Freerouter e outros roteadores externos.\n"
+"As camadas do plano de alimentação são removidas dos menus de camada do "
+"Freerouter."
 
 #: pcbnew/dialogs/panel_setup_layers_base.cpp:175
 msgid "In1"
@@ -22059,14 +22046,12 @@ msgid "Default Values"
 msgstr "Valores Padrão"
 
 #: pcbnew/footprint_edit_frame.cpp:1076
-#, fuzzy
 msgid "No footprint selected."
-msgstr "Nenhum footprint selecionado"
+msgstr "Nenhum footprint selecionado."
 
 #: pcbnew/footprint_edit_frame.cpp:1085
-#, fuzzy
 msgid "Footprint Image File Name"
-msgstr "Nome do Arquivo de Imagem 3D:"
+msgstr "Nome do Arquivo de Imagem de Footprint"
 
 #: pcbnew/footprint_editor_onclick.cpp:257
 msgid "Duplicate Block (shift + drag mouse)"
@@ -23392,9 +23377,8 @@ msgid "Print current footprint"
 msgstr "Imprimir footprint atual"
 
 #: pcbnew/menubar_footprint_editor.cpp:126
-#, fuzzy
 msgid "Export View as PN&G..."
-msgstr "Exportar Visualização Atual como PNG…"
+msgstr "Exportar Visualização como PN&G…"
 
 #: pcbnew/menubar_footprint_editor.cpp:135
 msgid "Close footprint editor"
