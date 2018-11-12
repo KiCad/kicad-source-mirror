@@ -130,6 +130,7 @@ set( EESCHEMA_SRCS
     ${EESCHEMA_DLGS}
     ${EESCHEMA_WIDGETS}
     ${EESCHEMA_LIBEDIT_SRCS}
+    bom_plugins.cpp
     sch_view.cpp
     sch_painter.cpp
     annotate.cpp
