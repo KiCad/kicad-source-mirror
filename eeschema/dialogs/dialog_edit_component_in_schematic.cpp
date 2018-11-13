@@ -492,6 +492,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
             if( field.GetName() == fieldname.m_Name && field.GetText().IsEmpty() )
             {
                 m_fields->erase( m_fields->begin() + i );
+
+                // grid needs to be notified about the size change,
+                // as it still accesses the data on close (size event)
+                wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, i, 1 );
+                m_grid->ProcessTableMessage( msg );
                 i--;
                 break;
             }

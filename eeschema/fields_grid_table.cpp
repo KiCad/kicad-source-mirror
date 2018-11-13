@@ -275,6 +275,7 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
 template <class T>
 wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
 {
+    wxCHECK( aRow < GetNumberRows(), wxEmptyString );
     const T& field = this->at( (size_t) aRow );
 
     switch( aCol )
@@ -349,6 +350,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
 template <class T>
 bool FIELDS_GRID_TABLE<T>::GetValueAsBool( int aRow, int aCol )
 {
+    wxCHECK( aRow < GetNumberRows(), false );
     const T& field = this->at( (size_t) aRow );
 
     switch( aCol )
@@ -366,6 +368,7 @@ bool FIELDS_GRID_TABLE<T>::GetValueAsBool( int aRow, int aCol )
 template <class T>
 void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue )
 {
+    wxCHECK( aRow < GetNumberRows(), /*void*/ );
     T& field = this->at( (size_t) aRow );
     wxPoint    pos;
 
@@ -432,9 +435,11 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
     GetView()->Refresh();
 }
 
+
 template <class T>
 void FIELDS_GRID_TABLE<T>::SetValueAsBool( int aRow, int aCol, bool aValue )
 {
+    wxCHECK( aRow < GetNumberRows(), /*void*/ );
     T& field = this->at( (size_t) aRow );
 
     switch( aCol )
@@ -503,5 +508,3 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
         GRID_TRICKS::doPopupSelection( event );
     }
 }
-
-
