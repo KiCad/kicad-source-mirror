@@ -268,9 +268,9 @@ static EDA_HOTKEY HkDecLayerAlpha( _HKI( "Decrement Layer Transparency (Modern T
 static EDA_HOTKEY HkIncHighContrast( _HKI( "Increment High Contrast" ), HK_HIGHCONTRAST_INC, '>' );
 static EDA_HOTKEY HkDecHighContrast( _HKI( "Decrement High Contrast" ), HK_HIGHCONTRAST_DEC, '<' );
 
-static EDA_HOTKEY HkSelectConnection( _HKI( "Select Trivial Connection" ), HK_SEL_TRIVIAL_CONNECTION, 'U' );
+static EDA_HOTKEY HkSelectConnection( _HKI( "Select Single Track" ), HK_SEL_TRIVIAL_CONNECTION, 'U' );
 
-static EDA_HOTKEY HkSelectCopper( _HKI( "Select Copper Connection" ), HK_SEL_COPPER_CONNECTION, 'I' );
+static EDA_HOTKEY HkSelectCopper( _HKI( "Select Connected Tracks" ), HK_SEL_COPPER_CONNECTION, 'I' );
 
 static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, ',' + GR_KB_CTRL );
 

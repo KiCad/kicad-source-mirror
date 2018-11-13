@@ -98,11 +98,11 @@ TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMe
 
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
-        _( "Trivial Connection" ), _( "Selects a connection between two junctions." ), add_tracks_xpm );
+        _( "Single Track" ), _( "Selects all track segments & vias between two junctions." ), add_tracks_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
-        _( "Copper Connection" ), _( "Selects whole copper connection." ), net_highlight_xpm );
+        _( "Connected Tracks" ), _( "Selects all connected tracks & vias." ), net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
         AS_GLOBAL, 0,
@@ -111,7 +111,7 @@ TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
-        _( "Whole Net" ), _( "Selects all tracks & vias belonging to the same net." ), mode_track_xpm );
+        _( "All Tracks in Net" ), _( "Selects all tracks & vias belonging to the same net." ), mode_track_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL,  0,
