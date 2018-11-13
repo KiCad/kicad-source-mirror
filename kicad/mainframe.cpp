@@ -43,6 +43,11 @@
 #include "pgm_kicad.h"
 #include "tree_project_frame.h"
 
+#ifdef __WXMAC__
+#include <MacTypes.h>
+#include <ApplicationServices/ApplicationServices.h>
+#endif
+
 #include "kicad.h"
 
 
@@ -273,6 +278,11 @@ void KICAD_MANAGER_FRAME::Execute( wxWindow* frame, const wxString& execFile,
                                          GetChars( execFile ), GetChars( params ), pid );
 
         PrintMsg( msg );
+
+#ifdef __WXMAC__
+        msg.Printf( "osascript -e 'activate application \"%s\"' ", execFile );
+        system( msg.c_str() );
+#endif
     }
     else
     {
