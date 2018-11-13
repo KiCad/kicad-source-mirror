@@ -79,6 +79,13 @@ const EDA_RECT SCH_NO_CONNECT::GetBoundingBox() const
 }
 
 
+void SCH_NO_CONNECT::ViewGetLayers( int aLayers[], int& aCount ) const
+{
+    aLayers[0] = LAYER_NOCONNECT;
+    aCount = 1;
+}
+
+
 void SCH_NO_CONNECT::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList )
 {
     DANGLING_END_ITEM item( NO_CONNECT_END, this, m_pos );
