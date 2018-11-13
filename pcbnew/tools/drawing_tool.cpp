@@ -525,7 +525,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), nullptr );
-        m_controls->ForceCursorPosition(true, cursorPos );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -766,6 +766,7 @@ int DRAWING_TOOL::PlaceDXF( const TOOL_EVENT& aEvent )
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
+    m_controls->ForceCursorPosition( false );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::DXF );
 
@@ -1007,7 +1008,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         aGraphic->SetStart( wxPoint( aStartingPoint->x, aStartingPoint->y ) );
 
         cursorPos = grid.BestSnapAnchor( cursorPos, aGraphic );
-        m_controls->ForceCursorPosition(true, cursorPos );
+        m_controls->ForceCursorPosition( true, cursorPos );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
         if( aShape == S_SEGMENT )
@@ -1030,7 +1031,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), getDrawingLayer() );
-        m_controls->ForceCursorPosition(true, cursorPos );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         // 45 degree angle constraint enabled with an option and toggled with Ctrl
         const bool limit45 = ( frame()->Settings().m_use45DegreeGraphicSegments != !!( evt->Modifier( MD_CTRL ) ) );
@@ -1177,6 +1178,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
     frame()->SetMsgPanel( board() );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
 
     return started;
 }
@@ -1235,7 +1237,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), aGraphic );
-        m_controls->ForceCursorPosition(true, cursorPos );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -1330,6 +1332,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
     frame()->SetMsgPanel( board() );
     m_controls->SetAutoPan( false );
     m_controls->CaptureCursor( false );
+    m_controls->ForceCursorPosition( false );
 
     return !arcManager.IsReset();
 }
@@ -1419,7 +1422,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
         m_controls->SetSnapping( !evt->Modifier( MD_ALT ) );
         VECTOR2I cursorPos = grid.BestSnapAnchor( m_controls->GetMousePosition(), layers );
-        m_controls->ForceCursorPosition(true, cursorPos );
+        m_controls->ForceCursorPosition( true, cursorPos );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
@@ -1519,6 +1522,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     m_frame->SetNoToolSelected();
+    m_controls->ForceCursorPosition( false );
 
     return 0;
 }
