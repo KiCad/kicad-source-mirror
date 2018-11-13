@@ -918,7 +918,6 @@ void C3D_RENDER_RAYTRACING::reload( REPORTER *aStatusTextReporter )
     }
     m_accelerator = 0;
 
-    //m_accelerator = new CGRID( m_object_container );
     m_accelerator = new CBVH_PBRT( m_object_container );
 
 #ifdef PRINT_STATISTICS_3D_VIEWER
