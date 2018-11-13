@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -142,10 +142,10 @@ DIALOG_LIB_EDIT_PIN_BASE::DIALOG_LIB_EDIT_PIN_BASE( wxWindow* parent, wxWindowID
 	checkboxesSizer = new wxBoxSizer( wxVERTICAL );
 	
 	m_checkApplyToAllParts = new wxCheckBox( this, wxID_ANY, _("Common to all &units in symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	checkboxesSizer->Add( m_checkApplyToAllParts, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	checkboxesSizer->Add( m_checkApplyToAllParts, 0, wxALL, 3 );
 	
 	m_checkApplyToAllConversions = new wxCheckBox( this, wxID_ANY, _("Common to all body &styles (DeMorgan)"), wxDefaultPosition, wxDefaultSize, 0 );
-	checkboxesSizer->Add( m_checkApplyToAllConversions, 0, wxALIGN_CENTER_VERTICAL|wxALL, 3 );
+	checkboxesSizer->Add( m_checkApplyToAllConversions, 0, wxALL, 3 );
 	
 	
 	checkboxesSizer->Add( 0, 0, 0, wxEXPAND|wxTOP|wxBOTTOM, 5 );
