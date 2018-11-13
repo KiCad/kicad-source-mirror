@@ -130,6 +130,10 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         {
             // This calls the block-abort command routine on cleanup
             m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor() );
+
+            // We set the dangling ends to the block-scope, so we must set them back to
+            // schematic-socpe.
+            TestDanglingEnds();
             return;
         }
 
