@@ -271,7 +271,7 @@ SFVEC3F CBBOX::Offset( const SFVEC3F &p ) const
 // https://github.com/mmp/pbrt-v2/blob/master/src/core/geometry.cpp#L68
 // /////////////////////////////////////////////////////////////////////////
 #if 0
-bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 )
+bool CBBOX::Intersect( const RAY &aRay, float *aOutHitt0, float *aOutHitt1 ) const
 {
     float t0 = 0.0f;
     float t1 = FLT_MAX;

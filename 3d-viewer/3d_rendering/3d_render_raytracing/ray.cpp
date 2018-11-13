@@ -50,9 +50,9 @@ void RAY::Init( const SFVEC3F& o, const SFVEC3F& d )
     // Amy Williams Steve Barrus R. Keith Morley Peter Shirley
     // University of Utah
     // http://people.csail.mit.edu/amy/papers/box-jgt.pdf
-    m_dirIsNeg[0] = m_Dir.x <= 0.0f;
-    m_dirIsNeg[1] = m_Dir.y <= 0.0f;
-    m_dirIsNeg[2] = m_Dir.z <= 0.0f;
+    m_dirIsNeg[0] = m_Dir.x < 0.0f;
+    m_dirIsNeg[1] = m_Dir.y < 0.0f;
+    m_dirIsNeg[2] = m_Dir.z < 0.0f;
 
 
     // ray slope
