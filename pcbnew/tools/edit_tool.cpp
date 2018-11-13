@@ -35,6 +35,7 @@
 #include <array_creator.h>
 #include <pcbnew_settings.h>
 #include <status_popup.h>
+#include <tool/selection_conditions.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
@@ -133,26 +134,17 @@ void EDIT_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-class SPECIAL_TOOLS_CONTEXT_MENU : public ACTION_MENU
+SPECIAL_TOOLS_CONTEXT_MENU::SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool ) :
+        CONDITIONAL_MENU( aTool )
 {
-public:
-    SPECIAL_TOOLS_CONTEXT_MENU() :
-        ACTION_MENU( true )
-    {
-        SetIcon( options_board_xpm );
-        SetTitle( _( "Special Tools..." ) );
+    SetIcon( options_board_xpm );
+    SetTitle( _( "Special Tools..." ) );
 
-        Add( PCB_ACTIONS::moveExact );
-        Add( PCB_ACTIONS::moveWithReference );
-        Add( PCB_ACTIONS::positionRelative );
-        Add( PCB_ACTIONS::createArray );
-    }
-
-    ACTION_MENU* create() const override
-    {
-        return new SPECIAL_TOOLS_CONTEXT_MENU();
-    }
-};
+    AddItem( PCB_ACTIONS::moveExact, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::moveWithReference, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::positionRelative, SELECTION_CONDITIONS::ShowAlways );
+    AddItem( PCB_ACTIONS::createArray, SELECTION_CONDITIONS::ShowAlways );
+}
 
 
 bool EDIT_TOOL::Init()
@@ -209,8 +201,7 @@ bool EDIT_TOOL::Init()
     menu.AddItem( ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
 
     // Add the submenu for create array and special move
-    auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>();
-    specialToolsSubMenu->SetTool( this );
+    auto specialToolsSubMenu = std::make_shared<SPECIAL_TOOLS_CONTEXT_MENU>( this );
     menu.AddSeparator();
     m_selectionTool->GetToolMenu().AddSubMenu( specialToolsSubMenu );
     menu.AddMenu( specialToolsSubMenu.get(), SELECTION_CONDITIONS::NotEmpty );

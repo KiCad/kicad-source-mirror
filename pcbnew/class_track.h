@@ -312,7 +312,6 @@ public:
     double GetAngle() const;
     double GetArcAngleStart() const;
     double GetArcAngleEnd() const;
-
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;

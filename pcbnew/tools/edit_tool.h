@@ -57,7 +57,14 @@ namespace KIGFX {
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags, SELECTION_TOOL* sTool );
 
-/**
+
+class SPECIAL_TOOLS_CONTEXT_MENU : public CONDITIONAL_MENU
+{
+public:
+    SPECIAL_TOOLS_CONTEXT_MENU( TOOL_INTERACTIVE* aTool );
+};
+
+    /**
  * EDIT_TOOL
  *
  * The interactive edit tool. Allows one to move, rotate, flip and change properties of items selected

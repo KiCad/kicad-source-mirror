@@ -25,9 +25,12 @@
 #include "pcb_selection_conditions.h"
 #include "selection_tool.h"
 #include <board_connected_item.h>
+#include <class_drawsegment.h>
 
 #include <functional>
 using namespace std::placeholders;
+
+using S_C = SELECTION_CONDITION;
 
 
 bool PCB_SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
@@ -47,15 +50,21 @@ bool PCB_SELECTION_CONDITIONS::OnlyConnectedItems( const SELECTION& aSelection )
 }
 
 
-SELECTION_CONDITION PCB_SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
+S_C PCB_SELECTION_CONDITIONS::SameNet( bool aAllowUnconnected )
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::sameNetFunc, _1, aAllowUnconnected );
 }
 
 
-SELECTION_CONDITION PCB_SELECTION_CONDITIONS::SameLayer()
+S_C PCB_SELECTION_CONDITIONS::SameLayer()
 {
     return std::bind( &PCB_SELECTION_CONDITIONS::sameLayerFunc, _1 );
+}
+
+
+S_C PCB_SELECTION_CONDITIONS::OnlyGraphicShapeTypes( const std::set<STROKE_T> aTypes )
+{
+    return std::bind( &PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc, _1, aTypes );
 }
 
 
@@ -120,6 +129,27 @@ bool PCB_SELECTION_CONDITIONS::sameLayerFunc( const SELECTION& aSelection )
         layerSet &= item->GetLayerSet();
 
         if( !layerSet.any() )       // there are no common layers left
+            return false;
+    }
+
+    return true;
+}
+
+
+bool PCB_SELECTION_CONDITIONS::onlyGraphicShapeTypesFunc( const SELECTION& aSelection,
+                                                          const std::set<STROKE_T> aTypes )
+{
+    if( aSelection.Empty() )
+        return false;
+
+    for( const EDA_ITEM* item : aSelection )
+    {
+        if( item->Type() != PCB_LINE_T )
+            return false;
+
+        STROKE_T shape = static_cast<const DRAWSEGMENT*>( item )->GetShape();
+
+        if( !aTypes.count( shape ) )
             return false;
     }
 

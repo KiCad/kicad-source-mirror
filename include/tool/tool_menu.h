@@ -90,6 +90,14 @@ public:
     void AddSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu );
 
     /**
+     * @return the list of submenus from this menu
+     */
+    std::vector<std::shared_ptr<ACTION_MENU> >& GetSubMenus()
+    {
+        return m_subMenus;
+    }
+
+    /**
      * Function ShowContextMenu
      *
      * Helper function to set and immediately show a CONDITIONAL_MENU

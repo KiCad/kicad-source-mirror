@@ -316,6 +316,7 @@ set( PCBNEW_CLASS_SRCS
 
     ratsnest/ratsnest.cpp
 
+    tools/convert_tool.cpp
     tools/drawing_tool.cpp
     tools/edit_tool.cpp
     tools/global_edit_tool.cpp
