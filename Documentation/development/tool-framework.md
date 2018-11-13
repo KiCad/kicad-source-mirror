@@ -30,7 +30,7 @@ Some examples of tools in the Pcbnew GAL are:
 * The drawing tool - this tool controls the process of drawing graphics
   elements such as line segments and circles.
   (pcbnew/tools/drawing_tool.cpp,pcbnew/tools/drawing_tool.h)
-* The zoom tool - allows the user to zoom in and out
+* The zoom tool - allows the user to zoom in and out.
 
 # Major parts of a tool # {#major-parts}
 
@@ -60,7 +60,10 @@ or not, has a `TOOL_ACTION` instance. This provides:
   tooltip and provides a more detailed description if needed.
 * An "icon", which is shown in menus and on buttons for the action
 * "Flags" which include:
-    * `AF_ACTIVATE` which indicates that the tool enters an active state
+    * `AF_ACTIVATE` which indicates that the tool enters an active state. When
+      a tool is active it will keep receiving UI events, such as mouse clicks
+      or key presses, which are normally handled in an event loop (see
+      TOOL_INTERACTIVE::Wait()).
 * A parameter, which allows different actions to call the same function
   with different effects, for example "step left" and "step right".
 
