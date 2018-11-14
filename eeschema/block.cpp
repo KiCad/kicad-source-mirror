@@ -209,10 +209,16 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         block->SetState( state );
         block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        SetCrossHairPosition( block->GetEnd() );
 
-        if( block->GetCommand() != BLOCK_ABORT )
+        if( block->GetCommand() != BLOCK_ABORT
+            && block->GetCommand() != BLOCK_DUPLICATE
+            && block->GetCommand() != BLOCK_COPY
+            && block->GetCommand() != BLOCK_CUT
+            && block->GetCommand() != BLOCK_DELETE )
+        {
+            SetCrossHairPosition( block->GetEnd() );
             m_canvas->MoveCursorToCrossHair();
+        }
     }
 
     if( m_canvas->IsMouseCaptured() )
@@ -250,6 +256,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( block->GetCommand() == BLOCK_DUPLICATE )
             {
                 DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
+                block->SetLastCursorPosition( GetCrossHairPosition() );
                 SaveCopyInUndoList( block->GetItems(), UR_NEW );
             }
 

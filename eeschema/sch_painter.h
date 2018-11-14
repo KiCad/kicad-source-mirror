@@ -100,6 +100,8 @@ public:
     bool m_ShowHiddenText;
     bool m_ShowHiddenPins;
     bool m_ShowPinsElectricalType;
+
+    bool m_ShowUmbilicals;
 };
 
 

@@ -229,7 +229,7 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
     if( aItemsList.GetCount() == 0 )
         return;
 
-    // Keep trace of existing sheet paths. Duplicate block can modify this list
+    // Keep track of existing sheet paths. Duplicate block can modify this list
     bool hasSheetCopied = false;
     SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 
@@ -238,6 +238,7 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
     {
         olditem = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
         newitem = DuplicateStruct( olditem );
+        newitem->Move( aMoveVector );
 
         aItemsList.SetPickedItem( newitem, ii );
         aItemsList.SetPickedItemStatus( UR_NEW, ii );

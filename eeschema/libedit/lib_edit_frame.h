@@ -749,9 +749,6 @@ public:
     void BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
     void BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
     void BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-    void BlockMirrorSelectedItemsH( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-    void BlockMirrorSelectedItemsV( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-    void BlockRotateSelectedItems( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 

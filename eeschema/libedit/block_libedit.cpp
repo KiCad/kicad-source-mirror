@@ -154,49 +154,12 @@ void LIB_EDIT_FRAME::BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* a
         newItem->SetFlags( SELECTED );
         oldItem->ClearFlags( SELECTED );
 
+        newItem->SetOffset( aBlock->GetMoveVector() );
+
         aItemsList.SetPickedItem( newItem, ii );
         aItemsList.SetPickedItemStatus( UR_NEW, ii );
 
         aPart->GetDrawItems().push_back( newItem );
-    }
-}
-
-
-void LIB_EDIT_FRAME::BlockMirrorSelectedItemsH( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
-{
-    for( LIB_ITEM& item : aPart->GetDrawItems() )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.MirrorHorizontal( aCenter );
-        item.ClearFlags();
-    }
-}
-
-
-void LIB_EDIT_FRAME::BlockMirrorSelectedItemsV( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
-{
-    for( LIB_ITEM& item : aPart->GetDrawItems() )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.MirrorVertical( aCenter );
-        item.ClearFlags();
-    }
-}
-
-
-void LIB_EDIT_FRAME::BlockRotateSelectedItems( const wxPoint& aCenter, LIB_PART* aPart, BLOCK_SELECTOR* aBlock )
-{
-    for( LIB_ITEM& item : aPart->GetDrawItems() )
-    {
-        if( !item.IsSelected() )
-            continue;
-
-        item.Rotate( aCenter );
-        item.ClearFlags();
     }
 }
 
@@ -281,10 +244,16 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         block->SetState( state );
         block->SetCommand( command );
         m_canvas->SetMouseCapture( DrawAndSizingBlockOutlines, AbortBlockCurrentCommand );
-        SetCrossHairPosition( wxPoint( block->GetRight(), block->GetBottom() ) );
 
-        if( block->GetCommand() != BLOCK_ABORT )
+        if( block->GetCommand() != BLOCK_ABORT
+            && block->GetCommand() != BLOCK_DUPLICATE
+            && block->GetCommand() != BLOCK_COPY
+            && block->GetCommand() != BLOCK_CUT
+            && block->GetCommand() != BLOCK_DELETE )
+        {
+            SetCrossHairPosition( block->GetEnd() );
             m_canvas->MoveCursorToCrossHair();
+        }
     }
 
     if( m_canvas->IsMouseCaptured() )
@@ -308,7 +277,18 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 block->SetState( STATE_BLOCK_MOVE );
 
                 if( block->GetCommand() == BLOCK_DUPLICATE )
+                {
+                    if( block->AppendUndo() )
+                        ; // UR_LIBEDIT saves entire state, so no need to append anything more
+                    else
+                    {
+                        SaveCopyInUndoList( GetCurPart(), UR_LIBEDIT );
+                        block->SetAppendUndo();
+                    }
+
                     BlockCopySelectedItems( pt, GetCurPart(), block );
+                    block->SetLastCursorPosition( GetCrossHairPosition( true ) );
+                }
 
                 m_canvas->SetMouseCaptureCallback( DrawMovingBlockOutlines );
                 m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
