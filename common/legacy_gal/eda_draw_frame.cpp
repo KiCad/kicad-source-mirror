@@ -1555,6 +1555,42 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 }
 
 
+// Find the first child dialog.
+wxWindow* findDialog( wxWindowList& aList )
+{
+    for( wxWindow* window : aList )
+    {
+        if( dynamic_cast<DIALOG_SHIM*>( window ) )
+            return window;
+    }
+    return NULL;
+}
+
+
+void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, bool aCenterView )
+{
+    if( aCenterView )
+    {
+        wxWindow* dialog = findDialog( GetChildren() );
+
+        // If a dialog partly obscures the window, then center on the uncovered area.
+        if( dialog )
+        {
+            wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                               dialog->GetSize() );
+            GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
+        }
+        else
+            GetGalCanvas()->GetView()->SetCenter( aPos );
+    }
+
+    if( aWarpCursor )
+        GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
+    else
+        GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
+}
+
+
 static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 
 

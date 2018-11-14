@@ -31,6 +31,35 @@
 
 
 
+struct WINDOW_THAWER
+{
+    WINDOW_THAWER( wxWindow* aWindow )
+    {
+        m_window = aWindow;
+        m_freezeCount = 0;
+
+        while( m_window->IsFrozen() )
+        {
+            m_window->Thaw();
+            m_freezeCount++;
+        }
+    }
+
+    ~WINDOW_THAWER()
+    {
+        while( m_freezeCount > 0 )
+        {
+            m_window->Freeze();
+            m_freezeCount--;
+        }
+    }
+
+protected:
+    wxWindow* m_window;
+    int       m_freezeCount;
+};
+
+
 class WDO_ENABLE_DISABLE;
 class WX_EVENT_LOOP;
 

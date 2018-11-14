@@ -1863,6 +1863,69 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 }
 
 
+// Find the first child dialog.
+wxWindow* findDialog( wxWindowList& aList )
+{
+    for( wxWindow* window : aList )
+    {
+        if( dynamic_cast<DIALOG_SHIM*>( window ) )
+            return window;
+    }
+    return NULL;
+}
+
+
+void EDA_DRAW_FRAME::FocusOnLocation( const wxPoint& aPos, bool aWarpCursor, bool aCenterView )
+{
+    if( IsGalCanvasActive() )
+    {
+        if( aCenterView )
+        {
+            wxWindow* dialog = findDialog( GetChildren() );
+
+            // If a dialog partly obscures the window, then center on the uncovered area.
+            if( dialog )
+            {
+                wxRect dialogRect( GetGalCanvas()->ScreenToClient( dialog->GetScreenPosition() ),
+                                   dialog->GetSize() );
+                GetGalCanvas()->GetView()->SetCenter( aPos, dialogRect );
+            }
+            else
+                GetGalCanvas()->GetView()->SetCenter( aPos );
+        }
+
+        if( aWarpCursor )
+            GetGalCanvas()->GetViewControls()->SetCursorPosition( aPos );
+        else
+            GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPos );
+    }
+    else
+    {
+        INSTALL_UNBUFFERED_DC( dc, m_canvas );
+
+        // There may be need to reframe the drawing.
+        if( aCenterView || !m_canvas->IsPointOnDisplay( aPos ) )
+        {
+            SetCrossHairPosition( aPos );
+            RedrawScreen( aPos, aWarpCursor );
+        }
+        else
+        {
+            // Put cursor on item position
+            m_canvas->CrossHairOff( &dc );
+            SetCrossHairPosition( aPos );
+
+            if( aWarpCursor )
+                m_canvas->MoveCursorToCrossHair();
+        }
+
+        // Be sure cross hair cursor is ON:
+        m_canvas->CrossHairOn( &dc );
+        m_canvas->CrossHairOn( &dc );
+    }
+}
+
+
 static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 
 

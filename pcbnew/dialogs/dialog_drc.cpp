@@ -54,35 +54,6 @@
 #define RefillZonesBeforeDrc        wxT( "RefillZonesBeforeDrc" )
 
 
-struct BOARD_THAWER
-{
-    BOARD_THAWER( PCB_EDIT_FRAME* aBoardEditor )
-    {
-        m_boardEditor = aBoardEditor;
-        m_freezeCount = 0;
-
-        while( m_boardEditor->IsFrozen() )
-        {
-            m_boardEditor->Thaw();
-            m_freezeCount++;
-        }
-    }
-
-    ~BOARD_THAWER()
-    {
-        while( m_freezeCount > 0 )
-        {
-            m_boardEditor->Freeze();
-            m_freezeCount--;
-        }
-    }
-
-protected:
-    PCB_EDIT_FRAME* m_boardEditor;
-    int             m_freezeCount;
-};
-
-
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
                                         wxWindow* aParent ) :
     DIALOG_DRC_CONTROL_BASE( aParent ),
@@ -465,7 +436,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     if( aItem->HasSecondItem() )
         items.Append( aItem->GetAuxiliaryItem( m_brdEditor->GetBoard() ) );
 
-    BOARD_THAWER thawer( m_brdEditor );
+    WINDOW_THAWER thawer( m_brdEditor );
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
     m_brdEditor->GetCanvas()->Refresh();
 }
@@ -574,7 +545,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::RedrawDrawPanel()
 {
-    BOARD_THAWER thawer( m_brdEditor );
+    WINDOW_THAWER thawer( m_brdEditor );
 
     m_brdEditor->GetCanvas()->Refresh();
 }

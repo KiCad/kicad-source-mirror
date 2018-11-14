@@ -198,6 +198,14 @@ void DIALOG_ERC::OnErcCmpClick( wxCommandEvent& event )
 }
 
 
+void DIALOG_ERC::RedrawDrawPanel()
+{
+    WINDOW_THAWER thawer( m_parent );
+
+    m_parent->GetCanvas()->Refresh();
+}
+
+
 void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 {
     wxString link = event.GetLinkInfo().GetHref();
@@ -253,8 +261,9 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
     }
 
     m_lastMarkerFound = marker;
+    m_parent->FocusOnLocation( marker->m_Pos, false, true );
     m_parent->SetCrossHairPosition( marker->m_Pos );
-    m_parent->RedrawScreen( marker->m_Pos, false);
+    RedrawDrawPanel();
 }
 
 
@@ -265,8 +274,9 @@ void DIALOG_ERC::OnLeftDblClickMarkersList( wxMouseEvent& event )
     // (NULL if not found)
     if( m_lastMarkerFound )
     {
+        m_parent->FocusOnLocation( m_lastMarkerFound->m_Pos, false, true );
         m_parent->SetCrossHairPosition( m_lastMarkerFound->m_Pos );
-        m_parent->RedrawScreen( m_lastMarkerFound->m_Pos, true );
+        RedrawDrawPanel();
         // prevent a mouse left button release event in
         // coming from the ERC dialog double click
         // ( the button is released after closing this dialog and will generate

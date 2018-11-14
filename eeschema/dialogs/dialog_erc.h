@@ -64,6 +64,8 @@ private:
     void OnButtonCloseClick( wxCommandEvent& event ) override;
     void OnResetMatrixClick( wxCommandEvent& event ) override;
 
+    void RedrawDrawPanel();
+
     // Click on a marker info:
     void OnLeftClickMarkersList( wxHtmlLinkEvent& event ) override;
 
