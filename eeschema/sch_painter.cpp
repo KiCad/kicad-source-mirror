@@ -406,7 +406,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     m_gal->StrokeText( aField->GetText(), pos, orient );
 
     // Draw the umbilical line
-    if( aField->IsMoving() && m_schSettings->m_ShowUmbilicals )
+    if( aField->IsMoving() && m_schSettings.m_ShowUmbilicals )
     {
         m_gal->SetLineWidth( m_schSettings.m_outlineWidth );
         m_gal->SetStrokeColor( COLOR4D( 0.0, 0.0, 1.0, 1.0 ) );

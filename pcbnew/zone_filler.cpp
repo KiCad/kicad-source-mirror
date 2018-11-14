@@ -520,18 +520,24 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         if( !aItem->GetBoundingBox().Intersects( zone_boundingbox ) )
             return;
 
+        bool ignoreLineWidth = false;
         int zclearance = zone_clearance;
 
         if( aItem->IsOnLayer( Edge_Cuts ) )
+        {
             // use only the m_ZoneClearance, not the clearance using
             // the netclass value, because we do not have a copper item
             zclearance = zone_to_edgecut_clearance;
+
+            // edge cuts by definition don't have a width
+            ignoreLineWidth = true;
+        }
 
         switch( aItem->Type() )
         {
         case PCB_LINE_T:
             ( (DRAWSEGMENT*) aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, segsPerCircle, correctionFactor );
+                    aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
             break;
 
         case PCB_TEXT_T:
@@ -541,7 +547,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
         case PCB_MODULE_EDGE_T:
             ( (EDGE_MODULE*) aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, segsPerCircle, correctionFactor );
+                    aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
             break;
 
         case PCB_MODULE_TEXT_T:

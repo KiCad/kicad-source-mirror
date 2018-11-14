@@ -275,7 +275,8 @@ void BOARD_ITEM::SwapData( BOARD_ITEM* aImage )
 void BOARD_ITEM::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                            int aClearanceValue,
                                            int aCircleToSegmentsCount,
-                                           double aCorrectionFactor ) const
-                                           {
-    wxASSERT_MSG(false, wxT("Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM."));
+                                           double aCorrectionFactor,
+                                           bool ignoreLineWidth ) const
+{
+    wxASSERT_MSG( false, "Called TransformShapeWithClearanceToPolygon() on unsupported BOARD_ITEM." );
 };

@@ -338,10 +338,25 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    /**
+     * Function TransformShapeWithClearanceToPolygon
+     * Convert the item shape to a closed polygon
+     * Used in filling zones calculations
+     * Circles and arcs are approximated by segments
+     * @param aCornerBuffer = a buffer to store the polygon
+     * @param aClearanceValue = the clearance around the pad
+     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+     * @param aCorrectionFactor = the correction to apply to circles radius to keep
+     * clearance when the circle is approximated by segment bigger or equal
+     * to the real clearance value (usually near from 1.0)
+     * @param ignoreLineWidth = used for edge cut items where the line width is only
+     * for visualization
+     */
     virtual void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                int aClearanceValue,
                                                int aCircleToSegmentsCount,
-                                               double aCorrectionFactor ) const;
+                                               double aCorrectionFactor,
+                                               bool ignoreLineWidth = false ) const;
 };
 
 #endif /* BOARD_ITEM_STRUCT_H */

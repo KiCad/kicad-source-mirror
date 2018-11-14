@@ -748,7 +748,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
                 switch( item->Type() )
                 {
-                case PCB_LINE_T: // should not exist on copper layers
+                case PCB_LINE_T:
                 {
                     const int nrSegments =
                             GetNrSegmentsCircle( item->GetBoundingBox().GetSizeMax() );

@@ -510,14 +510,19 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
  * @param aCorrectionFactor = the correction to apply to circles radius to keep
  * clearance when the circle is approxiamted by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
+ * @param ignoreLineWidth = used for edge cut items where the line width is only
+ * for visualization
  */
 void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                         int             aClearanceValue,
                                                         int             aCircleToSegmentsCount,
-                                                        double          aCorrectionFactor ) const
+                                                        double          aCorrectionFactor,
+                                                        bool            ignoreLineWidth ) const
 {
     // The full width of the lines to create:
-    int linewidth = m_Width + (2 * aClearanceValue);
+    int linewidth = ignoreLineWidth ? 0 : m_Width;
+
+    linewidth += 2 * aClearanceValue;
 
     // Creating a reliable clearance shape for circles and arcs is not so easy, due to
     // the error created by segment approximation.
@@ -635,12 +640,17 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
  * @param aCorrectionFactor = the correction to apply to circles radius to keep
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
+ * @param ignoreLineWidth = used for edge cut items where the line width is only
+ * for visualization
  */
 void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    int  aClearanceValue,
                                                    int  aCircleToSegmentsCount,
-                                                   double aCorrectionFactor ) const
+                                                   double aCorrectionFactor,
+                                                   bool ignoreLineWidth ) const
 {
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
+
     switch( Type() )
     {
     case PCB_VIA_T:
@@ -671,12 +681,17 @@ void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * aCorrectionFactor = the correction to apply to circles radius to keep
  * clearance when the circle is approximated by segment bigger or equal
  * to the real clearance value (usually near from 1.0)
+ * @param ignoreLineWidth = used for edge cut items where the line width is only
+ * for visualization
  */
 void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                    int             aClearanceValue,
                                                    int             aCircleToSegmentsCount,
-                                                   double          aCorrectionFactor ) const
+                                                   double          aCorrectionFactor,
+                                                   bool            ignoreLineWidth ) const
 {
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
+
     double  angle = m_Orient;
     int     dx = (m_Size.x / 2) + aClearanceValue;
     int     dy = (m_Size.y / 2) + aClearanceValue;
@@ -1321,8 +1336,11 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                                         int             aClearanceValue,
                                                         int             aCircleToSegmentsCount,
-                                                        double          aCorrectionFactor ) const
+                                                        double          aCorrectionFactor,
+                                                        bool            ignoreLineWidth ) const
 {
+    wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
+
     aCornerBuffer = m_FilledPolysList;
     aCornerBuffer.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 }
