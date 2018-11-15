@@ -564,6 +564,12 @@ void OPENGL_GAL::DrawLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoin
 void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                               double aWidth )
 {
+    if( aStartPoint == aEndPoint )  // 0 length segments are just a circle.
+    {
+        DrawCircle( aStartPoint, aWidth/2 );
+        return;
+    }
+
     if( isFillEnabled || aWidth == 1.0 )
     {
         currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );

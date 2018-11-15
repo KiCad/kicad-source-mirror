@@ -423,27 +423,21 @@ void GERBVIEW_PAINTER::drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled )
         int radius = code->m_Size.x >> 1;
         VECTOR2D start( aItem->GetABPosition( aItem->m_Start ) );
 
-        if( !aFilled )
+        if( !aFilled || code->m_DrillShape == APT_DEF_NO_HOLE )
         {
             m_gal->DrawCircle( start, radius );
         }
-        else
+        else    // rectangular hole
         {
-            if( code->m_DrillShape == APT_DEF_NO_HOLE )
-            {
-                m_gal->DrawCircle( start, radius );
-            }
-            else    // rectangular hole
-            {
-                if( code->m_Polygon.OutlineCount() == 0 )
-                    code->ConvertShapeToPolygon();
+            if( code->m_Polygon.OutlineCount() == 0 )
+                code->ConvertShapeToPolygon();
 
-                SHAPE_POLY_SET poly = code->m_Polygon;
-                poly.Move( aItem->m_Start );
+            SHAPE_POLY_SET poly = code->m_Polygon;
+            poly.Move( aItem->m_Start );
 
-                drawPolygon( aItem, poly, aFilled );
-            }
+            drawPolygon( aItem, poly, aFilled );
         }
+
         break;
     }
 
