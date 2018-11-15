@@ -185,7 +185,7 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified.  Save changes?" ),
+        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
             Event.Veto();
