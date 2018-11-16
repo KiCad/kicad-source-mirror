@@ -290,7 +290,7 @@ bool DIALOG_PAD_PRIMITIVE_POLY_PROPS::doValidate( bool aRemoveRedundantCorners )
 
     if(  polyline.PointCount() < 3 )
     {
-        m_warningText->SetLabel( _("Polygon must have at least 3 corners\n after simplification" ) );
+        m_warningText->SetLabel( _("Polygon must have at least 3 corners after simplification" ) );
         valid = false;
     }
 

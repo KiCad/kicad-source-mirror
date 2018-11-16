@@ -100,7 +100,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	
 	bButtonSize->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	m_updateFieldValues = new wxButton( sbFields->GetStaticBox(), wxID_ANY, _("   Update Fields from Library...   "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_updateFieldValues = new wxButton( sbFields->GetStaticBox(), wxID_ANY, _("Update Fields from Library..."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_updateFieldValues->SetToolTip( _("Sets fields to the original library values") );
 	
 	bButtonSize->Add( m_updateFieldValues, 0, wxALL|wxEXPAND, 5 );
@@ -176,10 +176,10 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	
 	lowerSizer->Add( m_rbOrientation, 2, wxEXPAND|wxRIGHT|wxLEFT, 8 );
 	
-	wxString m_rbMirrorChoices[] = { _("Default"), _("Mirror around X axis "), _("Mirror around Y axis ") };
+	wxString m_rbMirrorChoices[] = { _("Default"), _("Mirror around X axis"), _("Mirror around Y axis") };
 	int m_rbMirrorNChoices = sizeof( m_rbMirrorChoices ) / sizeof( wxString );
 	m_rbMirror = new wxRadioBox( this, wxID_ANY, _("Aspect"), wxDefaultPosition, wxDefaultSize, m_rbMirrorNChoices, m_rbMirrorChoices, 1, wxRA_SPECIFY_COLS );
-	m_rbMirror->SetSelection( 2 );
+	m_rbMirror->SetSelection( 1 );
 	m_rbMirror->SetToolTip( _("Pick the graphical transformation to be used when displaying the symbol") );
 	
 	lowerSizer->Add( m_rbMirror, 2, wxEXPAND|wxRIGHT|wxLEFT, 8 );

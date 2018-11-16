@@ -480,12 +480,12 @@ bool BOARD_NETLIST_UPDATER::deleteUnusedComponents( NETLIST& aNetlist )
         {
             if( module->IsLocked() )
             {
-                msg.Printf( _( "Cannot remove unused %s (locked)." ), module->GetReference() );
+                msg.Printf( _( "Cannot remove unused footprint %s (locked)." ), module->GetReference() );
                 m_reporter->Report( msg, REPORTER::RPT_WARNING );
                 continue;
             }
 
-            msg.Printf( _( "Remove unused %s." ), module->GetReference() );
+            msg.Printf( _( "Remove unused footprint %s." ), module->GetReference() );
             m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
             if( !m_isDryRun )
