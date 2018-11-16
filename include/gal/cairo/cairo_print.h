@@ -55,11 +55,11 @@ public:
 
     bool HasNativeLandscapeRotation() const override
     {
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
         return false;
 #else
         return true;
-#endif /* not __WXGTK__ */
+#endif
     }
 
 private:
