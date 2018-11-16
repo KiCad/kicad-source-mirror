@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -17,10 +17,10 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
-#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
+#include <wx/statline.h>
 #include <wx/checkbox.h>
 #include <wx/scrolwin.h>
 #include <wx/panel.h>
@@ -185,7 +185,6 @@ class PANEL_SETUP_LAYERS_BASE : public wxPanel
 	
 	protected:
 		wxChoice* m_PresetsChoice;
-		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticTextCopperLayers;
 		wxChoice* m_CopperLayersChoice;
 		wxStaticText* m_thicknessLabel;
