@@ -72,7 +72,7 @@ public:
     ~SCH_VIEW();
 
     void DisplaySheet( SCH_SHEET *aSheet );
-    void DisplaySheet( SCH_SCREEN *aSheet );
+    void DisplaySheet( SCH_SCREEN *aScreen );
     void DisplayComponent( LIB_PART *aPart );
 
     KIGFX::PREVIEW::SELECTION_AREA* GetSelectionArea() const { return m_selectionArea.get(); }
