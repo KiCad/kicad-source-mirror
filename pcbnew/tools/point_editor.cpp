@@ -364,7 +364,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             }
 
             //TODO: unify the constraints to solve simultaneously instead of sequentially
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(), snapLayers ) );
+            m_editedPoint->SetPosition( grid.BestSnapAnchor( evt->Position(),
+                    snapLayers, { item } ) );
             bool enableAltConstraint = !!evt->Modifier( MD_CTRL );
 
             if( enableAltConstraint != (bool) m_altConstraint )  // alternative constraint
@@ -375,7 +376,8 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
             else
                 m_editedPoint->ApplyConstraint();
 
-            m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(), snapLayers ) );
+            m_editedPoint->SetPosition( grid.BestSnapAnchor( m_editedPoint->GetPosition(),
+                    snapLayers, { item } ) );
 
             updateItem();
             updatePoints();

@@ -226,7 +226,8 @@ VECTOR2I GRID_HELPER::BestDragOrigin( const VECTOR2I &aMousePos, BOARD_ITEM* aIt
 }
 
 
-std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
+std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea,
+        const std::vector<BOARD_ITEM*> aSkip ) const
 {
     std::set<BOARD_ITEM*> items;
     std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
@@ -241,13 +242,14 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
         BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
 
         // The item must be visible and on an active layer
-        // It cannot be moving as a moving item is being snapped _from_
-        // rather than considered a potential target
         if( view->IsVisible( item )
-                && ( !isHighContrast || activeLayers.count( it.second ) )
-                && !item->IsDragging() )
+                && ( !isHighContrast || activeLayers.count( it.second ) ) )
             items.insert ( item );
     }
+
+
+    for( auto ii : aSkip )
+        items.erase( ii );
 
     return items;
 }
@@ -256,17 +258,22 @@ std::set<BOARD_ITEM*> GRID_HELPER::queryVisible( const BOX2I& aArea ) const
 VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem )
 {
     LSET layers;
+    std::vector<BOARD_ITEM*> item;
 
     if( aDraggedItem )
+    {
         layers = aDraggedItem->GetLayerSet();
+        item.push_back( aDraggedItem );
+    }
     else
         layers = LSET::AllLayersMask();
 
-    return BestSnapAnchor( aOrigin, layers );
+    return BestSnapAnchor( aOrigin, layers, item );
 }
 
 
-VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers )
+VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
+        const std::vector<BOARD_ITEM*> aSkip )
 {
     double worldScale = m_frame->GetGalCanvas()->GetGAL()->GetWorldScale();
     int snapRange = (int) ( m_snapSize / worldScale );
@@ -275,7 +282,7 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
 
     clearAnchors();
 
-    for( BOARD_ITEM* item : queryVisible( bb ) )
+    for( BOARD_ITEM* item : queryVisible( bb, aSkip ) )
     {
         computeAnchors( item, aOrigin );
     }

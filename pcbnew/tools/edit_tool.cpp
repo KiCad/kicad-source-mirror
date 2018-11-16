@@ -366,6 +366,16 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( true );
 
     auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
+    std::vector<BOARD_ITEM*> sel_items;
+
+    for( auto it : selection )
+    {
+        auto item = dynamic_cast<BOARD_ITEM*>( it );
+
+        if( item )
+            sel_items.push_back( item );
+    }
+
     bool restore_state = false;
     VECTOR2I totalMovement;
     GRID_HELPER grid( editFrame );
@@ -385,7 +395,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
-                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(), item_layers );
+                m_cursor = grid.BestSnapAnchor( controls->GetMousePosition(),
+                        item_layers, sel_items );
                 controls->ForceCursorPosition(true, m_cursor );
                 VECTOR2I movement( m_cursor - prevPos );
                 selection.SetReferencePoint( m_cursor );
@@ -436,15 +447,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
                             m_commit->Modify( item );
                         }
-                    }
-
-                    for( auto item : selection )
-                    {
-                        item->SetFlags( IS_DRAGGED ); //todo: flags structure rework
-
-                        if( auto module = dyn_cast<MODULE*>( item ) )
-                            module->RunOnChildren( [&] ( BOARD_ITEM* bitem )
-                                    { bitem->SetFlags( IS_DRAGGED ); } );
                     }
 
                     editFrame->UndoRedoBlock( true );
@@ -566,15 +568,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( unselect || restore_state )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-
-    for( auto item : selection )
-    {
-        item->ClearFlags( IS_DRAGGED ); //todo: flags structure rework
-
-        if( auto module = dyn_cast<MODULE*>( item ) )
-            module->RunOnChildren( [&] ( BOARD_ITEM* bitem )
-                    { bitem->SetFlags( IS_DRAGGED ); } );
-    }
 
     if( restore_state )
         m_commit->Revert();
