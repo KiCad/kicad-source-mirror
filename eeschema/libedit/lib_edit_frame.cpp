@@ -1460,6 +1460,7 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
     SaveCopyInUndoList( part );
+    SetDrawItem( nullptr );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( this, part );
 
