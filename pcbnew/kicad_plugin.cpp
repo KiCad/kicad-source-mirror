@@ -1272,8 +1272,7 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
     case PAD_ATTRIB_HOLE_NOT_PLATED:   type = "np_thru_hole";   break;
 
     default:
-        THROW_IO_ERROR( wxString::Format( _( "unknown pad attribute: %d" ),
-                                          aPad->GetAttribute() ) );
+        THROW_IO_ERROR( wxString::Format( "unknown pad attribute: %d", aPad->GetAttribute() ) );
     }
 
     m_out->Print( aNestLevel, "(pad %s %s %s",

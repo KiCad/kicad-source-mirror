@@ -190,7 +190,7 @@ void DIALOG_POSITION_RELATIVE::UpdateAnchor( EDA_ITEM* aItem )
         reference = aItem->GetSelectMenuText( GetUserUnits() );
     }
 
-    m_referenceInfo->SetLabel( _( "Reference item: " ) + reference );
+    m_referenceInfo->SetLabel( wxString::Format( "Reference item: %s", reference ) );
 
     Show( true );
 }
