@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 17 2016)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO *NOT* EDIT THIS FILE!
+// PLEASE DO "NOT" EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_LIB_EDIT_PIN_TABLE_BASE_H__
@@ -11,6 +11,7 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
+class DIALOG_SHIM;
 class WX_GRID;
 
 #include "dialog_shim.h"
@@ -56,12 +57,14 @@ class DIALOG_LIB_EDIT_PIN_TABLE_BASE : public DIALOG_SHIM
 		wxButton* m_ButtonsCancel;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnClose( wxCloseEvent& event ) = 0;
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) = 0;
 		virtual void OnCellEdited( wxGridEvent& event ) = 0;
 		virtual void OnSize( wxSizeEvent& event ) = 0;
 		virtual void OnAddRow( wxCommandEvent& event ) = 0;
 		virtual void OnDeleteRow( wxCommandEvent& event ) = 0;
 		virtual void OnRebuildRows( wxCommandEvent& event ) = 0;
+		virtual void OnCancel( wxCommandEvent& event ) = 0;
 		
 	
 	public:

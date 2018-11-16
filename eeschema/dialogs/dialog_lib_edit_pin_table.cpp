@@ -33,6 +33,7 @@
 #include <wx/bmpcbox.h>
 #include <kiface_i.h>
 #include <kicad_string.h>
+#include <confirm.h>
 
 #define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
 
@@ -57,10 +58,11 @@ private:
     std::vector<LIB_PINS> m_rows;
 
     EDA_UNITS_T           m_userUnits;
+    bool                  m_edited;
 
 public:
     PIN_TABLE_DATA_MODEL( EDA_UNITS_T aUserUnits ) :
-            m_userUnits( aUserUnits )
+            m_userUnits( aUserUnits ), m_edited( false )
     {}
 
     int GetNumberRows() override { return (int) m_rows.size(); }
@@ -209,6 +211,8 @@ public:
                 break;
             }
         }
+
+        m_edited = true;
     }
 
     static int findRow( const std::vector<LIB_PINS>& aRowSet, const wxString& aName )
@@ -342,6 +346,11 @@ public:
         }
 
         return removedRow;
+    }
+
+    bool IsEdited()
+    {
+        return m_edited;
     }
 };
 
@@ -623,6 +632,36 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnUpdateUI( wxUpdateUIEvent& event )
 }
 
 
+void DIALOG_LIB_EDIT_PIN_TABLE::OnCancel( wxCommandEvent& event )
+{
+    Close();
+}
+
+
+void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
+{
+    // This is a cancel, so commit quietly as we're going to throw the results away anyway.
+    m_grid->CommitPendingChanges( true );
+
+    if( m_dataModel->IsEdited() )
+    {
+        if( !HandleUnsavedChanges( this, wxEmptyString,
+                                   [&]()->bool { return TransferDataFromWindow(); } ) )
+        {
+            event.Veto();
+            return;
+        }
+    }
+
+    if( IsQuasiModal() )
+        EndQuasiModal( wxID_OK );
+    else if( IsModal() )
+        EndModal( wxID_OK );
+    else
+        event.Skip();
+}
+
+
 void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
 {
     PinNumbers pinNumbers;
@@ -635,7 +674,3 @@ void DIALOG_LIB_EDIT_PIN_TABLE::updateSummary()
 
     m_summary->SetLabel( pinNumbers.GetSummary() );
 }
-
-
-
-

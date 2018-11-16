@@ -38,6 +38,8 @@ public:
     void OnCellEdited( wxGridEvent& event ) override;
     void OnRebuildRows( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnCancel( wxCommandEvent& event ) override;
+    void OnClose( wxCloseEvent& event ) override;
 
 protected:
 
@@ -50,6 +52,7 @@ protected:
     wxString              m_columnsShown;
     LIB_PART*             m_part;
     LIB_PINS              m_pins;       // a copy of the pins owned by me
+    bool                  m_modified;   ///< true when there are unsaved changes
 
     PIN_TABLE_DATA_MODEL* m_dataModel;
 };
