@@ -393,12 +393,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     {
         PCB_LAYER_ID layer = item->GetLayer();
 
-        /* Modules and their subcomponents: reference, value and pads
-         * are not sensitive to the layer visibility controls.  They all
-         * have their own separate visibility controls for vias,
-         * GetLayer() has no meaning, but IsOnLayer() works fine. User
-         * text in module *is* sensitive to layer visibility but that
-         * was already handled */
+        // Modules and their subcomponents: reference, value and pads are not sensitive
+        // to the layer visibility controls.  They all have their own separate visibility
+        // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
+        // text in module *is* sensitive to layer visibility but that was already handled.
 
         if( via || module || pad || m_Guide->IsLayerVisible( layer )
                 || !m_Guide->IgnoreNonVisibleLayers() )
@@ -407,13 +405,28 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             {
                 if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
                 {
-                    if( item->HitTest( m_RefPos ) )
+                    if( zone )
                     {
-                        if( !module || module->HitTestAccurate( m_RefPos ) )
+                        bool testFill = !m_Guide->IgnoreZoneFills();
+                        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
+                        if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
+                            || zone->HitTestForEdge( m_RefPos, accuracy )
+                            || ( testFill && zone->HitTestFilledArea( m_RefPos ) ) )
+                        {
                             Append( item );
-                        goto exit;
+                            goto exit;
+                        }
                     }
-                    else if( zone && !m_Guide->IgnoreZoneFills() && zone->HitTestFilledArea( m_RefPos ) )
+                    else if( module )
+                    {
+                        if( module->HitTest( m_RefPos ) && module->HitTestAccurate( m_RefPos ) )
+                        {
+                            Append( item );
+                            goto exit;
+                        }
+                    }
+                    else if( item->HitTest( m_RefPos ) )
                     {
                         Append( item );
                         goto exit;
@@ -432,11 +445,10 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
 
         PCB_LAYER_ID layer = item->GetLayer();
 
-        /* Modules and their subcomponents: reference, value and pads
-         * are not sensitive to the layer visibility controls.  They all
-         * have their own separate visibility controls. User texts
-         * follows layer visibility controls (but that was already
-         * checked) */
+        // Modules and their subcomponents: reference, value and pads are not sensitive
+        // to the layer visibility controls.  They all have their own separate visibility
+        // controls for vias, GetLayer() has no meaning, but IsOnLayer() works fine. User
+        // text in module *is* sensitive to layer visibility but that was already handled.
 
         if( via || module || pad || m_Guide->IsLayerVisible( layer )
                 || !m_Guide->IgnoreNonVisibleLayers() )
@@ -445,14 +457,30 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
             {
                 if( !item->IsLocked() || !m_Guide->IgnoreLockedItems() )
                 {
-                    if( item->HitTest( m_RefPos ) )
+                    if( zone )
+                    {
+                        bool testFill = !m_Guide->IgnoreZoneFills();
+                        int  accuracy = KiROUND( 5 * m_Guide->OnePixelInIU() );
+
+                        if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
+                            || zone->HitTestForEdge( m_RefPos, accuracy )
+                            || ( testFill && zone->HitTestFilledArea( m_RefPos ) ) )
+                        {
+                            Append2nd( item );
+                            goto exit;
+                        }
+                    }
+                    else if( module )
+                    {
+                        if( module->HitTest( m_RefPos ) && module->HitTestAccurate( m_RefPos ) )
+                        {
+                            Append2nd( item );
+                            goto exit;
+                        }
+                    }
+                    else if( item->HitTest( m_RefPos ) )
                     {
                         Append2nd( item );
-                        goto exit;
-                    }
-                    else if( zone && !m_Guide->IgnoreZoneFills() && zone->HitTestFilledArea( m_RefPos ) )
-                    {
-                        Append( item );
                         goto exit;
                     }
                 }

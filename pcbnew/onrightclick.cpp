@@ -628,6 +628,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu* aPopMenu )
 {
     wxString msg;
+    GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
     if( edge_zone->GetFlags() == IS_DRAGGED )
     {
@@ -646,19 +647,20 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
     else
     {
         wxMenu* zones_menu = new wxMenu();
+        int     accuracy = KiROUND( 5 * guide.OnePixelInIU() );
 
         AddMenuItem( aPopMenu, zones_menu, -1,
                     edge_zone->GetIsKeepout() ? _("Keepout Area") : _( "Zones" ),
                     KiBitmap( add_zone_xpm ) );
 
-        if( edge_zone->HitTestForCorner( RefPos( true ) ) )
+        if( edge_zone->HitTestForCorner( RefPos( true ), accuracy * 2 ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_MOVE_ZONE_CORNER,
                          _( "Move" ), KiBitmap( move_xpm ) );
             AddMenuItem( zones_menu, ID_POPUP_PCB_DELETE_ZONE_CORNER,
                          _( "Delete" ), KiBitmap( delete_xpm ) );
         }
-        else if( edge_zone->HitTestForEdge( RefPos( true ) ) )
+        else if( edge_zone->HitTestForEdge( RefPos( true ), accuracy ) )
         {
             AddMenuItem( zones_menu, ID_POPUP_PCB_ADD_ZONE_CORNER,
                          _( "Create Corner" ), KiBitmap( add_corner_xpm ) );

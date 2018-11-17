@@ -651,16 +651,21 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 
 bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
 {
-    return HitTestForCorner( aPosition ) || HitTestForEdge( aPosition );
+    // Normally accuracy is zoom-relative, but for the generic HitTest we just use
+    // a fixed (small) value.
+    int accuracy = Millimeter2iu( 0.05 );
+
+    return HitTestForCorner( aPosition, accuracy * 2 ) || HitTestForEdge( aPosition, accuracy );
 }
 
 
-void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition )
+void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition, int aAccuracy )
 {
     SHAPE_POLY_SET::VERTEX_INDEX corner;
 
     // If there is some corner to be selected, assign it to m_CornerSelection
-    if( HitTestForCorner( aPosition, corner ) || HitTestForEdge( aPosition, corner ) )
+    if( HitTestForCorner( aPosition, aAccuracy * 2, corner )
+        || HitTestForEdge( aPosition, aAccuracy, corner ) )
     {
         if( m_CornerSelection == nullptr )
             m_CornerSelection = new SHAPE_POLY_SET::VERTEX_INDEX;
@@ -669,40 +674,31 @@ void ZONE_CONTAINER::SetSelectedCorner( const wxPoint& aPosition )
     }
 }
 
-// Zones outlines have no thickness, so it Hit Test functions
-// we must have a default distance between the test point
-// and a corner or a zone edge:
-#define MAX_DIST_IN_MM 0.25
-
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos,
+bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos, int aAccuracy,
                                        SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
-    int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-
-    return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, distmax );
+    return m_Poly->CollideVertex( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos ) const
+bool ZONE_CONTAINER::HitTestForCorner( const wxPoint& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
-    return HitTestForCorner( refPos, dummy );
+    return HitTestForCorner( refPos, aAccuracy, dummy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos,
+bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos, int aAccuracy,
                                      SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const
 {
-    int distmax = Millimeter2iu( MAX_DIST_IN_MM );
-
-    return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, distmax );
+    return m_Poly->CollideEdge( VECTOR2I( refPos ), aCornerHit, aAccuracy );
 }
 
 
-bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos ) const
+bool ZONE_CONTAINER::HitTestForEdge( const wxPoint& refPos, int aAccuracy ) const
 {
     SHAPE_POLY_SET::VERTEX_INDEX dummy;
-    return HitTestForEdge( refPos, dummy );
+    return HitTestForEdge( refPos, aAccuracy, dummy );
 }
 
 

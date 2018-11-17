@@ -37,6 +37,7 @@
 
 #include <collector.h>
 #include <layers_id_colors_and_visibility.h>              // LAYER_COUNT, layer defs
+#include <view/view.h>
 
 
 class BOARD_ITEM;
@@ -193,6 +194,8 @@ public:
      */
     virtual     bool IgnoreZoneFills() const = 0;
 
+    virtual     double OnePixelInIU() const = 0;
+
     /**
      * @return bool - true if Inspect() should use BOARD_ITEM::HitTest()
      *             or false if Inspect() should use BOARD_ITEM::BoundsTest().
@@ -346,6 +349,8 @@ public:
      */
     void SetGuide( const COLLECTORS_GUIDE* aGuide ) { m_Guide = aGuide; }
 
+    const COLLECTORS_GUIDE* GetGuide() { return m_Guide; }
+
     /**
      * @return int - The number if items which met the primary search criteria
      */
@@ -417,6 +422,8 @@ private:
     bool    m_IgnoreTracks;
     bool    m_IgnoreZoneFills;
 
+    double  m_OnePixelInIU;
+
 public:
 
     /**
@@ -427,8 +434,11 @@ public:
      * @param aVisibleLayerMask = current visible layers (bit mask)
      * @param aPreferredLayer = the layer to search first
      */
-    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer )
+    GENERAL_COLLECTORS_GUIDE( LSET aVisibleLayerMask, PCB_LAYER_ID aPreferredLayer,
+                              KIGFX::VIEW* aView )
     {
+        VECTOR2I one( 1, 1 );
+
         m_PreferredLayer            = aPreferredLayer;
         m_IgnorePreferredLayer      = false;
         m_LayerVisible              = aVisibleLayerMask;
@@ -460,6 +470,8 @@ public:
         m_IgnoreMicroVias           = false;
         m_IgnoreTracks              = false;
         m_IgnoreZoneFills           = true;
+
+        m_OnePixelInIU              = aView->ToWorld( one, false ).x;
     }
 
     /**
@@ -602,6 +614,8 @@ public:
 
     bool IgnoreZoneFills() const override { return m_IgnoreZoneFills; }
     void SetIgnoreZoneFills( bool ignore ) { m_IgnoreZoneFills = ignore; }
+
+    double OnePixelInIU() const override { return m_OnePixelInIU; }
 };
 
 

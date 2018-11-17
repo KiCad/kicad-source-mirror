@@ -231,7 +231,7 @@ public:
 
     ///
     // Like HitTest but selects the current corner to be operated on
-    void SetSelectedCorner( const wxPoint& aPosition );
+    void SetSelectedCorner( const wxPoint& aPosition, int aAccuracy );
 
     int GetLocalFlags() const { return m_localFlgs; }
     void SetLocalFlags( int aFlags ) { m_localFlgs = aFlags; }
@@ -329,39 +329,45 @@ public:
      * Function HitTestForCorner
      * tests if the given wxPoint is near a corner.
      * @param  refPos     is the wxPoint to test.
+     * @param  aAccuracy  increase the item bounding box by this amount.
      * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
      *                    value is false.
      * @return bool - true if some corner was found to be closer to refPos than aClearance; false
      *              otherwise.
      */
-    bool HitTestForCorner( const wxPoint& refPos, SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
+    bool HitTestForCorner( const wxPoint& refPos, int aAccuracy,
+                           SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
 
     /**
      * Function HitTestForCorner
      * tests if the given wxPoint is near a corner.
      * @param  refPos     is the wxPoint to test.
+     * @param  aAccuracy  increase the item bounding box by this amount.
      * @return bool - true if some corner was found to be closer to refPos than aClearance; false
      *              otherwise.
      */
-    bool HitTestForCorner( const wxPoint& refPos ) const;
+    bool HitTestForCorner( const wxPoint& refPos, int aAccuracy ) const;
 
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint is near a segment defined by 2 corners.
      * @param  refPos     is the wxPoint to test.
+     * @param  aAccuracy  increase the item bounding box by this amount.
      * @param  aCornerHit [out] is the index of the closest vertex found, useless when return
      *                    value is false.
      * @return bool - true if some edge was found to be closer to refPos than aClearance.
      */
-    bool HitTestForEdge( const wxPoint& refPos, SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
+    bool HitTestForEdge( const wxPoint& refPos, int aAccuracy,
+                         SHAPE_POLY_SET::VERTEX_INDEX& aCornerHit ) const;
 
     /**
      * Function HitTestForEdge
      * tests if the given wxPoint is near a segment defined by 2 corners.
      * @param  refPos     is the wxPoint to test.
+     * @param  aAccuracy  increase the item bounding box by this amount.
      * @return bool - true if some edge was found to be closer to refPos than aClearance.
      */
-    bool HitTestForEdge( const wxPoint& refPos ) const;
+    bool HitTestForEdge( const wxPoint& refPos, int aAccuracy ) const;
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const

@@ -459,7 +459,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
 const GENERAL_COLLECTORS_GUIDE SELECTION_TOOL::getCollectorsGuide() const
 {
     GENERAL_COLLECTORS_GUIDE guide( board()->GetVisibleLayers(),
-                                    (PCB_LAYER_ID) view()->GetTopLayer() );
+                                    (PCB_LAYER_ID) view()->GetTopLayer(), view() );
 
     // account for the globals
     guide.SetIgnoreMTextsMarkedNoShow( ! board()->IsElementVisible( LAYER_MOD_TEXT_INVISIBLE ) );
@@ -2036,7 +2036,7 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
             {
                 auto zone = static_cast<ZONE_CONTAINER*>( aCollector[i] );
 
-                if( zone->HitTestForEdge( where ) )
+                if( zone->HitTestForEdge( where, 5 * aCollector.GetGuide()->OnePixelInIU() ) )
                     preferred.insert( zone );
                 else
                     rejected.insert( zone );
