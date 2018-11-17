@@ -563,8 +563,6 @@ public:
 
     void CommonSettingsChanged() override;
 
-    bool InvokeDialogGrid();
-
     void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
     void OnToggleGraphicDrawMode( wxCommandEvent& aEvent );
@@ -579,7 +577,6 @@ public:
     void OnUpdateGraphicDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}

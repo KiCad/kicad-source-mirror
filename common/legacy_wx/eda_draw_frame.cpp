@@ -447,6 +447,29 @@ void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
 }
 
 
+void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
+{
+    // No need to update the grid select box if it doesn't exist or the grid setting change
+    // was made using the select box.
+    if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
+        return;
+
+    int select = wxNOT_FOUND;
+
+    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
+    {
+        if( GetScreen()->GetGridCmdId() == GetScreen()->GetGrid( i ).m_CmdId )
+        {
+            select = (int) i;
+            break;
+        }
+    }
+
+    if( select != m_gridSelectBox->GetSelection() )
+        m_gridSelectBox->SetSelection( select );
+}
+
+
 void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetGalDisplayOptions().m_fullscreenCursor );
@@ -507,6 +530,23 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
          */
         int index = m_gridSelectBox->GetSelection();
         wxASSERT( index != wxNOT_FOUND );
+
+        if( index == m_gridSelectBox->GetCount() - 2 )
+        {
+            // this is the separator
+            wxUpdateUIEvent dummy;
+            OnUpdateSelectGrid( dummy );
+            return;
+        }
+        else if( index == m_gridSelectBox->GetCount() - 1 )
+        {
+            wxUpdateUIEvent dummy;
+            OnUpdateSelectGrid( dummy );
+            wxCommandEvent dummy2;
+            OnGridSettings( dummy2 );
+            return;
+        }
+
         clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
 
         if( clientData != NULL )
@@ -519,15 +559,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
 
-    // Notify GAL
-    TOOL_MANAGER* mgr = GetToolManager();
-
-    if( mgr && IsGalCanvasActive() )
-    {
-        mgr->RunAction( "common.Control.gridPreset", true, idx );
-    }
-    else
-        SetPresetGrid( idx );
+    SetPresetGrid( idx );
 
     m_canvas->Refresh();
 }

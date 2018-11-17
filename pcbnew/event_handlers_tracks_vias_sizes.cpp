@@ -117,13 +117,39 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
-        ii = m_SelTrackWidthBox->GetCurrentSelection();
-        GetDesignSettings().SetTrackWidthIndex( ii );
+        ii = m_SelTrackWidthBox->GetSelection();
+
+        if( ii == m_SelViaSizeBox->GetCount() - 2 )
+        {
+            // this is the separator
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+        }
+        else if( ii == m_SelTrackWidthBox->GetCount() - 1 )
+        {
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+        }
+        else
+            GetDesignSettings().SetTrackWidthIndex( ii );
+
         break;
 
     case ID_AUX_TOOLBAR_PCB_VIA_SIZE:
-        ii = m_SelViaSizeBox->GetCurrentSelection();
-        GetDesignSettings().SetViaSizeIndex( ii );
+        ii = m_SelViaSizeBox->GetSelection();
+
+        if( ii == m_SelViaSizeBox->GetCount() - 2 )
+        {
+            // this is the separator
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+        }
+        else if( ii == m_SelViaSizeBox->GetCount() - 1 )
+        {
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+            DoShowBoardSetupDialog( _( "Tracks & Vias" ) );
+        }
+        else
+            GetDesignSettings().SetViaSizeIndex( ii );
+
         break;
 
     default:

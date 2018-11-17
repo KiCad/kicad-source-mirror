@@ -194,7 +194,12 @@ int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst)
 
         if( grid.m_CmdId == ID_POPUP_GRID_USER )
         {
-            msg = _( "Custom User Grid" );
+            if( aMmFirst )
+                msg.Printf( _( "User grid: %.4f mm (%.2f mils)" ),
+                            gridValue_mm, gridValueMils );
+            else
+                msg.Printf( _( "User grid: %.2f mils (%.4f mm)" ),
+                            gridValueMils, gridValue_mm );
             idx_usergrid = i;
         }
         else

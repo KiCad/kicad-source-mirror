@@ -39,6 +39,11 @@ DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
     m_tracksAndVias = new PANEL_SETUP_TRACKS_AND_VIAS( this, aFrame, m_constraints );
     m_maskAndPaste = new PANEL_SETUP_MASK_AND_PASTE( this, aFrame );
 
+    /*
+     * WARNING: If you change page names you MUST update callers which specifiy a
+     * particular page to be in sync.
+     */
+
     m_treebook->AddPage( m_layers,  _( "Layers" ) );
     m_treebook->AddSubPage( m_textAndGraphics,  _( "Text & Graphics" ) );
 

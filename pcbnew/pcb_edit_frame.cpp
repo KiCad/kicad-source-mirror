@@ -144,7 +144,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, PCB_EDIT_FRAME::OnConfigurePaths )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, PCB_EDIT_FRAME::Process_Config )
     EVT_MENU( wxID_PREFERENCES, PCB_EDIT_FRAME::Process_Config )
-    EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_PCB_USER_GRID_SETUP, PCB_EDIT_FRAME::OnGridSettings )
 
     // menu Postprocess
     EVT_MENU( ID_PCB_GEN_POS_MODULES_FILE, PCB_EDIT_FRAME::GenFootprintsPositionFile )
@@ -720,7 +720,17 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
 
 void PCB_EDIT_FRAME::ShowBoardSetupDialog( wxCommandEvent& event )
 {
+    DoShowBoardSetupDialog();
+}
+
+
+void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
+                                             const wxString& aInitialParentPage )
+{
     DIALOG_BOARD_SETUP dlg( this );
+
+    if( !aInitialPage.IsEmpty() )
+        dlg.SetInitialPage( aInitialPage, aInitialParentPage );
 
     if( dlg.ShowModal() == wxID_OK )
     {

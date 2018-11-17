@@ -77,7 +77,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     {
     case wxID_CUT:
     case wxID_COPY:
-    case ID_PCB_USER_GRID_SETUP:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
@@ -1225,10 +1224,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MENU_PCB_SWAP_LAYERS:
         Swap_Layers( event );
-        break;
-
-    case ID_PCB_USER_GRID_SETUP:
-        InvokeDialogGrid();
         break;
 
     case ID_POPUP_PCB_DISPLAY_FOOTPRINT_DOC:

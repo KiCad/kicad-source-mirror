@@ -250,7 +250,6 @@ public:
     void OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
-    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;

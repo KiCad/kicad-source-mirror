@@ -594,6 +594,8 @@ public:
      */
     virtual void OnSelectGrid( wxCommandEvent& event );
 
+    virtual void OnGridSettings( wxCommandEvent& event ) { };
+
     /**
      * Set the zoom factor when selected by the zoom list box in the main tool bar.
      *
@@ -613,6 +615,7 @@ public:
     void OnUpdateUndo( wxUpdateUIEvent& aEvent );
     void OnUpdateRedo( wxUpdateUIEvent& aEvent );
     void OnUpdateGrid( wxUpdateUIEvent& aEvent );
+    void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateUnits( wxUpdateUIEvent& aEvent );
     void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 

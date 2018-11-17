@@ -102,6 +102,13 @@ void PAGED_DIALOG::finishInitialization()
 }
 
 
+void PAGED_DIALOG::SetInitialPage( const wxString& aPage, const wxString& aParentPage )
+{
+    g_lastPage[ m_title ] = aPage;
+    g_lastParentPage[ m_title ] = aParentPage;
+}
+
+
 PAGED_DIALOG::~PAGED_DIALOG()
 {
     // Store the current parentPageTitle/pageTitle hierarchy so we can re-select it
@@ -154,17 +161,17 @@ bool PAGED_DIALOG::TransferDataToWindow()
     {
         if( m_treebook->GetPageText( i ) == lastPage )
         {
-            int parent = m_treebook->GetPageParent( i );
-
-            if( parent == wxNOT_FOUND )
+            if( lastParentPage.IsEmpty() )
             {
-                if( lastParentPage.IsEmpty() )
-                    lastPageIndex = i;
+                lastPageIndex = i;
+                break;
             }
-            else
+
+            if( m_treebook->GetPageParent( i ) >= 0
+                && m_treebook->GetPageText( (unsigned) m_treebook->GetPageParent( i ) ) == lastParentPage )
             {
-                if( lastParentPage == m_treebook->GetPageText( (unsigned) parent ) )
-                    lastPageIndex = i;
+                lastPageIndex = i;
+                break;
             }
         }
     }

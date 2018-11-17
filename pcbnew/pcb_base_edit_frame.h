@@ -172,6 +172,9 @@ public:
     ///> @copydoc PCB_BASE_FRAME::SetBoard()
     virtual void SetBoard( BOARD* aBoard ) override;
 
+    void OnGridSettings( wxCommandEvent& aEvent ) override;
+    bool InvokeDialogGrid();
+
 protected:
     /// User defined rotation angle (in tenths of a degree).
     int m_rotationAngle;

@@ -661,6 +661,9 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox )
         aTrackWidthSelectBox->Append( msg );
     }
 
+    aTrackWidthSelectBox->Append( wxT( "---" ) );
+    aTrackWidthSelectBox->Append( _( "Edit pre-defined sizes..." ) );
+
     if( GetDesignSettings().GetTrackWidthIndex() >= GetDesignSettings().m_TrackWidthList.size() )
         GetDesignSettings().SetTrackWidthIndex( 0 );
 
@@ -706,6 +709,9 @@ void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox )
 
         aViaSizeSelectBox->Append( msg );
     }
+
+    aViaSizeSelectBox->Append( wxT( "---" ) );
+    aViaSizeSelectBox->Append( _( "Edit pre-defined sizes..." ) );
 
     if( GetDesignSettings().GetViaSizeIndex() >= GetDesignSettings().m_ViasDimensionsList.size() )
         GetDesignSettings().SetViaSizeIndex( 0 );

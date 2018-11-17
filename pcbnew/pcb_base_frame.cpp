@@ -677,29 +677,6 @@ void PCB_BASE_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
 }
 
 
-void PCB_BASE_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
-{
-    // No need to update the grid select box if it doesn't exist or the grid setting change
-    // was made using the select box.
-    if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
-        return;
-
-    int select = wxNOT_FOUND;
-
-    for( size_t i = 0; i < GetScreen()->GetGridCount(); i++ )
-    {
-        if( GetScreen()->GetGridCmdId() == GetScreen()->GetGrid( i ).m_CmdId )
-        {
-            select = (int) i;
-            break;
-        }
-    }
-
-    if( select != m_gridSelectBox->GetSelection() )
-        m_gridSelectBox->SetSelection( select );
-}
-
-
 void PCB_BASE_FRAME::OnUpdateSelectZoom( wxUpdateUIEvent& aEvent )
 {
     if( m_zoomSelectBox == NULL || m_zoomSelectBox->GetParent() == NULL )
@@ -1052,6 +1029,9 @@ void PCB_BASE_FRAME::updateGridSelectBox()
         GRID_TYPE& grid = GetScreen()->GetGrid( i );
         m_gridSelectBox->Append( gridsList[i], (void*) &grid.m_CmdId );
     }
+
+    m_gridSelectBox->Append( wxT( "---" ) );
+    m_gridSelectBox->Append( _( "Edit user grid..." ) );
 
     m_gridSelectBox->SetSelection( icurr );
 }

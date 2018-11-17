@@ -32,7 +32,7 @@
 #include <common.h>
 #include <widgets/unit_binder.h>
 #include <hotkeys.h>
-#include <pcb_base_frame.h>
+#include <pcb_base_edit_frame.h>
 #include <class_drawpanel.h>
 #include <class_draw_panel_gal.h>
 
@@ -168,8 +168,14 @@ void DIALOG_SET_GRID::OnResetGridOrgClick( wxCommandEvent& event )
 }
 
 
-bool PCB_BASE_FRAME::InvokeDialogGrid()
+bool PCB_BASE_EDIT_FRAME::InvokeDialogGrid()
 {
     DIALOG_SET_GRID dlg( this, m_gridSelectBox->GetStrings() );
     return dlg.ShowModal();
+}
+
+
+void PCB_BASE_EDIT_FRAME::OnGridSettings( wxCommandEvent& event )
+{
+    InvokeDialogGrid();
 }

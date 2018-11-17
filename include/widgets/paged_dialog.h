@@ -42,6 +42,8 @@ public:
 
     wxTreebook* GetTreebook() { return m_treebook; }
 
+    void SetInitialPage( const wxString& aPage, const wxString& aParentPage = wxEmptyString );
+
     void SetError( const wxString& aMessage, wxWindow* aPage, wxObject* aCtrl,
                    int aRow = -1, int aCol = -1 );
 

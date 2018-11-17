@@ -249,7 +249,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_MODEDIT_PAD_SETTINGS:
-    case ID_PCB_USER_GRID_SETUP:
     case ID_POPUP_PCB_ROTATE_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_ROTATE_TEXTMODULE:
@@ -743,10 +742,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
-        break;
-
-    case ID_PCB_USER_GRID_SETUP:
-        InvokeDialogGrid();
         break;
 
     case ID_POPUP_PLACE_BLOCK:

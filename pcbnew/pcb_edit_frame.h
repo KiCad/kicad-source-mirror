@@ -708,6 +708,8 @@ public:
      * Function ShowBoardSetupDialog
      */
     void ShowBoardSetupDialog( wxCommandEvent& event );
+    void DoShowBoardSetupDialog( const wxString& aInitialPage = wxEmptyString,
+                                 const wxString& aInitialParentPage = wxEmptyString );
 
     /* toolbars update UI functions: */
 
