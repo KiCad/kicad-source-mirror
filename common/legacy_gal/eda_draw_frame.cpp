@@ -530,14 +530,14 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
         int index = m_gridSelectBox->GetSelection();
         wxASSERT( index != wxNOT_FOUND );
 
-        if( index == m_gridSelectBox->GetCount() - 2 )
+        if( index == int( m_gridSelectBox->GetCount() - 2 ) )
         {
             // this is the separator
             wxUpdateUIEvent dummy;
             OnUpdateSelectGrid( dummy );
             return;
         }
-        else if( index == m_gridSelectBox->GetCount() - 1 )
+        else if( index == int( m_gridSelectBox->GetCount() - 1 ) )
         {
             wxUpdateUIEvent dummy;
             OnUpdateSelectGrid( dummy );
