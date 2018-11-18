@@ -418,17 +418,11 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                             goto exit;
                         }
                     }
-                    else if( module )
-                    {
-                        if( module->HitTest( m_RefPos ) && module->HitTestAccurate( m_RefPos ) )
-                        {
-                            Append( item );
-                            goto exit;
-                        }
-                    }
                     else if( item->HitTest( m_RefPos ) )
                     {
-                        Append( item );
+                        if( !module || module->HitTestAccurate( m_RefPos ) )
+                            Append( item );
+
                         goto exit;
                     }
                 }
@@ -465,14 +459,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
                         if( zone->HitTestForCorner( m_RefPos, accuracy * 2 )
                             || zone->HitTestForEdge( m_RefPos, accuracy )
                             || ( testFill && zone->HitTestFilledArea( m_RefPos ) ) )
-                        {
-                            Append2nd( item );
-                            goto exit;
-                        }
-                    }
-                    else if( module )
-                    {
-                        if( module->HitTest( m_RefPos ) && module->HitTestAccurate( m_RefPos ) )
                         {
                             Append2nd( item );
                             goto exit;
