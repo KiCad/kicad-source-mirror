@@ -294,7 +294,16 @@ VIEW::VIEW( bool aIsDynamic ) :
     m_nextDrawPriority( 0 ),
     m_reverseDrawOrder( false )
 {
-    m_boundary.SetMaximum();
+    // Set m_boundary to define the max area size. The default area size
+    // is defined here as the max value of a int.
+    // this is a default value acceptable for Pcbnew and Gerbview, but too large for Eeschema.
+    // So in eeschema a call to SetBoundary() with a smaller value will be needed.
+    typedef std::numeric_limits<int> coord_limits;
+    double pos = coord_limits::lowest() / 2 + coord_limits::epsilon();
+    double size = coord_limits::max() - coord_limits::epsilon();
+    m_boundary.SetOrigin( pos, pos );
+    m_boundary.SetSize( size, size );
+
     m_allItems.reset( new std::vector<VIEW_ITEM*> );
     m_allItems->reserve( 32768 );
 

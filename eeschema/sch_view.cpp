@@ -44,6 +44,12 @@ namespace KIGFX {
 SCH_VIEW::SCH_VIEW( bool aIsDynamic ) :
     VIEW( aIsDynamic )
 {
+    // Set m_boundary to define the max working area size. The default value
+    // is acceptable for Pcbnew and Gerbview, but too large for Eeschema.
+    // So we have to use a smaller value.
+    // A better size could be a size depending on the worksheet size.
+    m_boundary.SetOrigin( -Millimeter2iu( 3200.0 ), -Millimeter2iu( 2000.0 ) );
+    m_boundary.SetSize( Millimeter2iu( 6400.0 ), Millimeter2iu( 4000.0 ) );
 }
 
 
