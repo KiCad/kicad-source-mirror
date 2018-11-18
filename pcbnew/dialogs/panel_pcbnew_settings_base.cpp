@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -124,7 +124,7 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_Track_DoubleSegm_Ctrl = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_ANY, _("&Use double segmented tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Track_DoubleSegm_Ctrl->SetValue(true); 
-	m_Track_DoubleSegm_Ctrl->SetToolTip( _("Use two track segments, with 45 degrees angle between them, when drawing a new track ") );
+	m_Track_DoubleSegm_Ctrl->SetToolTip( _("Use two track segments, with 45 degrees angle between them, when drawing a new track") );
 	
 	bLegacyOptionsSizer->Add( m_Track_DoubleSegm_Ctrl, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
 	

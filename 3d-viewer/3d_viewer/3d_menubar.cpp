@@ -174,7 +174,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
 
     materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY,
                                     _( "Use Diffuse Only" ),
-                                    _( "Use only the diffuse color property from model 3D model file " ) );
+                                    _( "Use only the diffuse color property from model 3D model file" ) );
 
     materialsList->AppendRadioItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE,
                                     _( "CAD Color Style" ),

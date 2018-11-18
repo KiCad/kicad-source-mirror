@@ -386,7 +386,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     msg = AddHotkeyName( _( "Convert Image" ),
                          kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
     AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
-                 _( "Convert bitmap images to schematic or PCB components" ),
+                 _( "Convert bitmap images to schematic or PCB components." ),
                  KiBitmap( bitmap2component_xpm ) );
 
     msg = AddHotkeyName( _( "Calculator Tools" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );

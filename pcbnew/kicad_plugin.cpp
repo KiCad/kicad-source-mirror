@@ -2089,7 +2089,7 @@ void PCB_IO::FootprintSave( const wxString& aLibraryPath, const MODULE* aFootpri
 
     if( fn.FileExists() && !fn.IsFileWritable() )
     {
-        THROW_IO_ERROR( wxString::Format( _( "No write permissions to delete file \"%s\" " ),
+        THROW_IO_ERROR( wxString::Format( _( "No write permissions to delete file \"%s\"" ),
                                           fn.GetFullPath() ) );
     }
 
