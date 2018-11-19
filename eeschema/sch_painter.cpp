@@ -967,6 +967,8 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
             return;
     }
 
+    m_gal->SetStrokeColor( color );
+
     if( aText->IsDangling() )
         drawDanglingSymbol( m_gal, aText->GetTextPos() );
 
@@ -978,7 +980,6 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     {
         m_gal->SetIsFill( false );
         m_gal->SetIsStroke( true );
-        m_gal->SetStrokeColor( color );
         m_gal->SetTextAttributes( aText );
         m_gal->SetLineWidth( linewidth );
         m_gal->StrokeText( shownText, text_offset, aText->GetTextAngleRadians() );
