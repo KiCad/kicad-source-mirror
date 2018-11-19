@@ -161,6 +161,9 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
         t.detach();
     }
 
+    if( m_worksheet )
+        m_worksheet->SetFileName( TO_UTF8( aBoard->GetFileName() ) );
+
     // Load drawings
     for( auto drawing : const_cast<BOARD*>(aBoard)->Drawings() )
         m_view->Add( drawing );

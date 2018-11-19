@@ -35,6 +35,7 @@
 class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_PART;
+class SCH_BASE_FRAME;
 
 // Eeschema uses mils as the internal units
 constexpr double SCH_WORLD_UNIT = 0.001;
@@ -68,7 +69,9 @@ namespace KIGFX
 class SCH_VIEW : public KIGFX::VIEW
 {
 public:
-    SCH_VIEW( bool aIsDynamic );
+    // Note: aFrame is used to know the sheet path name when drawing the page layout.
+    // It can be null.
+    SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame );
     ~SCH_VIEW();
 
     void DisplaySheet( SCH_SHEET *aSheet );
@@ -89,6 +92,8 @@ public:
     void HideWorksheet();
 
 private:
+    SCH_BASE_FRAME* m_frame;    // The frame using this view. Can be null. Used mainly
+                                // to know the sheet path name when drawing the page layout
     std::unique_ptr<WORKSHEET_VIEWITEM> m_worksheet;
     std::unique_ptr<KIGFX::PREVIEW::SELECTION_AREA> m_selectionArea;
     std::unique_ptr<KIGFX::VIEW_GROUP> m_preview;

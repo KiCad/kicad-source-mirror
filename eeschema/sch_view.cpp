@@ -34,6 +34,7 @@
 #include <sch_sheet.h>
 #include <sch_screen.h>
 #include <preview_items/selection_area.h>
+#include <sch_edit_frame.h>
 
 #include "sch_view.h"
 
@@ -41,9 +42,10 @@
 namespace KIGFX {
 
 
-SCH_VIEW::SCH_VIEW( bool aIsDynamic ) :
+SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     VIEW( aIsDynamic )
 {
+    m_frame = aFrame;
     // Set m_boundary to define the max working area size. The default value
     // is acceptable for Pcbnew and Gerbview, but too large for Eeschema.
     // So we have to use a smaller value.
@@ -68,6 +70,12 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
                                                       &aScreen->GetTitleBlock() ) );
     m_worksheet->SetSheetNumber( aScreen->m_ScreenNumber );
     m_worksheet->SetSheetCount( aScreen->m_NumberOfScreens );
+    m_worksheet->SetFileName( TO_UTF8( aScreen->GetFileName() ) );
+
+    if( m_frame && m_frame->IsType( FRAME_SCH ) )
+        m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );
+    else
+        m_worksheet->SetSheetName( "" );
 
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
     m_preview.reset( new KIGFX::VIEW_GROUP () );

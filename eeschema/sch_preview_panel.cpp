@@ -46,7 +46,7 @@ SCH_PREVIEW_PANEL::SCH_PREVIEW_PANEL( wxWindow* aParentWindow, wxWindowID aWindo
     EDA_DRAW_PANEL_GAL( aParentWindow, aWindowId, aPosition, aSize, aOptions, aGalType ),
     m_parent( aParentWindow )
 {
-    m_view = new KIGFX::SCH_VIEW( true );
+    m_view = new KIGFX::SCH_VIEW( true, nullptr );
     m_view->SetGAL( m_gal );
 
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );

@@ -68,7 +68,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
 {
     m_defaultCursor = m_currentCursor = wxCURSOR_ARROW;
     m_showCrossHair = true;
-    m_view = new KIGFX::SCH_VIEW( true );
+    m_view = new KIGFX::SCH_VIEW( true, dynamic_cast<SCH_BASE_FRAME*>( aParentWindow ) );
     m_view->SetGAL( m_gal );
 
     m_gal->SetWorldUnitLength( SCH_WORLD_UNIT );
