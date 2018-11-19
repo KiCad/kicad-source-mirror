@@ -1040,9 +1040,10 @@ void ROUTER_TOOL::performDragging( int aMode )
             if( m_router->FixRoute( m_endSnapPoint, m_endItem ) )
                 break;
         }
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt )
-                 || evt->IsUndoRedo() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsUndoRedo() )
+        {
             break;
+        }
 
         handleCommonEvents( *evt );
     }

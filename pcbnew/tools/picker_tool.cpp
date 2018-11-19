@@ -79,7 +79,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             if( m_cancelHandler )
             {

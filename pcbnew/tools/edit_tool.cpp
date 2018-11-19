@@ -1234,7 +1234,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
         const VECTOR2I cursorPos = grid.BestSnapAnchor( controls.GetMousePosition(), nullptr );
         controls.ForceCursorPosition(true, cursorPos );
 
-        if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
         {
             break;
         }
