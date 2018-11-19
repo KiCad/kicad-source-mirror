@@ -624,6 +624,8 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     // Must be done after updating the symbol links as we need to know about multi-unit parts.
     screens.ClearAnnotation();
 
+    screens.TestDanglingEnds();
+
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
     Zoom_Automatique( false );
     SetSheetNumberAndCount();
