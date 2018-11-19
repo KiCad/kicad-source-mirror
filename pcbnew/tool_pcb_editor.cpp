@@ -768,7 +768,7 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     case ID_TB_OPTIONS_SHOW_RATSNEST:
         SetElementVisibility( LAYER_RATSNEST, state );
-        OnModify();
+        PCB_BASE_FRAME::OnModify();
         Compile_Ratsnest( NULL, true );
 
         if( IsGalCanvasActive() )
