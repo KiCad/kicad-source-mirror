@@ -28,11 +28,16 @@ BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
     : m_file( aFile )
 {
     if( !wxFile::Exists( aFile ) )
-        throw std::runtime_error( _( "Cannot open plugin " ) + aFile.ToStdString() );
+        throw std::runtime_error( ( _( "Cannot open plugin " ) + aFile ).ToStdString() );
 
     m_name = m_file.GetName();
     wxString extension = m_file.GetExt().Lower();
 
+    // Important note:
+    // On Windows the right command command to run a python script is:
+    // python <script_path>/script.py
+    // and *not* python <script_path>\script.py
+    // Otherwise the script does not find some auxiliary pythons scripts needed by this script
     if( extension == "xsl" )
     {
         m_info = readHeader( "-->" );
@@ -41,13 +46,19 @@ BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
     else if( extension == "py" )
     {
         m_info = readHeader( "\"\"\"" );
+#ifdef __WINDOWS__
+        m_cmd = wxString::Format( "python \"%s/%s\" \"%%I\" \"%%O\"",
+                                  m_file.GetPath(), m_file.GetFullName() );
+#else
         m_cmd = wxString::Format( "python \"%s\" \"%%I\" \"%%O\"", m_file.GetFullPath() );
+#endif
     }
 #ifdef __WINDOWS__
     else if( extension == "pyw" )
     {
         m_info = readHeader( "\"\"\"" );
-        m_cmd = wxString::Format( "pythonw \"%s\" \"%%I\" \"%%O\"", m_file.GetFullPath() );
+        m_cmd = wxString::Format( "pythonw \"%s/%s\" \"%%I\" \"%%O\"",
+                                  m_file.GetPath(),m_file.GetFullName() );
     }
 #endif /* __WINDOWS__ */
     else // fallback

@@ -194,7 +194,7 @@ private:
     {
         int idx = m_lbPlugins->GetSelection();
 
-        if( idx < 0 || idx >= m_plugins.size() )
+        if( idx < 0 || idx >= (int)m_plugins.size() )
             return nullptr;
 
         return m_plugins[idx].get();
@@ -502,7 +502,7 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
 
     try
     {
-        auto plugin =  addPlugin( fn.GetFullPath(), name );
+        auto plugin = addPlugin( fn.GetFullPath(), name );
 
         if( plugin )
         {
