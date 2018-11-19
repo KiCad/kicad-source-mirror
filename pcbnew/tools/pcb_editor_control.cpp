@@ -1089,25 +1089,22 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
         for( auto mod : modules )
         {
             for( auto pad : mod->Pads() )
-            {
-                pad->SetLocalRatsnestVisible( false );
-            }
+                pad->SetLocalRatsnestVisible( aBoard->IsElementVisible( LAYER_RATSNEST ) );
         }
-
-        return true;
     }
-
-    for( auto item : selection )
+    else
     {
-        if( item->Type() == PCB_MODULE_T )
+        for( auto item : selection )
         {
-            for( auto pad : static_cast<MODULE *> (item)->Pads() )
+            if( auto mod = dyn_cast<MODULE*>(item) )
             {
-                pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
+                for( auto pad : mod->Pads() )
+                    pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
             }
         }
     }
 
+    aToolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
     return true;
 }
 
