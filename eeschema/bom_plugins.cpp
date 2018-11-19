@@ -57,6 +57,21 @@ BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
 }
 
 
+bool BOM_PLUGIN::IsPlugin( const wxString& aFile )
+{
+    wxFileName fn( aFile );
+    wxString ext = fn.GetExt().Lower();
+
+    for( const auto& pluginExt : { "xsl", "py", "pyw" } )
+    {
+        if( pluginExt == ext )
+            return true;
+    }
+
+    return false;
+}
+
+
 wxString BOM_PLUGIN::readHeader( const wxString& aEndSection )
 {
     if( aEndSection.IsEmpty() )

@@ -34,7 +34,6 @@
 #include <confirm.h>
 #include <gestfich.h>
 #include <sch_edit_frame.h>
-#include <wx/ffile.h>
 #include <netlist.h>
 #include <netlist_exporter_generic.h>
 #include <invoke_sch_dialog.h>
@@ -44,6 +43,8 @@
 #include <reporter.h>
 #include <bom_plugins.h>
 #include <make_unique.h>
+
+static constexpr wxChar BOM_TRACE[] = wxT( "BOM_PLUGINS" );
 
 static constexpr wxChar BOM_PLUGINS_KEY[] = wxT( "bom_plugins" );
 static constexpr wxChar BOM_PLUGIN_SELECTED_KEY[] =  wxT( "bom_plugin_selected" );
@@ -186,6 +187,8 @@ private:
 
     void pluginInit();
     void installPluginsList();
+    BOM_PLUGIN* addPlugin( const wxString& aPath, const wxString& aName = wxEmptyString );
+    bool pluginExists( const wxString& aName );
 
     BOM_PLUGIN* selectedPlugin()
     {
@@ -232,6 +235,7 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
     SetInitialFocus( m_lbPlugins );
     m_sdbSizer1OK->SetDefault();
+    wxLogDebug( "TEEEEST" );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -299,18 +303,102 @@ void DIALOG_BOM::installPluginsList()
         {
             DisplayError( nullptr, e.what() );
         }
+
+        // Populate list box
+        for( unsigned ii = 0; ii < m_plugins.size(); ii++ )
+        {
+            m_lbPlugins->Append( m_plugins[ii]->GetName() );
+
+            if( active_plugin_name == m_plugins[ii]->GetName() )
+                m_lbPlugins->SetSelection( ii );
+        }
     }
 
-    // Populate list box
-    for( unsigned ii = 0; ii < m_plugins.size(); ii++ )
+    if( m_plugins.empty() ) // No plugins found?
     {
-        m_lbPlugins->Append( m_plugins[ii]->GetName() );
+        // Load plugins from the default locations
+        std::vector<wxString> pluginPaths = {
+#if defined(__WXGTK__)
+            "/usr/share/kicad/plugins",
+            "/usr/local/share/kicad/plugins",
+#elif defined(__WXMSW__)
+            wxString::Format( "%s\\scripting\\plugins", Pgm().GetExecutablePath() ),
+#elif defined(__WXMAC__)
+            wxString::Format( "%s/plugins", GetOSXKicadDataDir() ),
+#endif
+        };
 
-        if( active_plugin_name == m_plugins[ii]->GetName() )
-            m_lbPlugins->SetSelection( ii );
+        wxFileName pluginPath;
+
+        for( const auto& path : pluginPaths )
+        {
+            wxLogDebug( wxString::Format( "Searching directory %s for BOM plugins", path ) );
+            wxDir dir( path );
+
+            if( !dir.IsOpened() )
+                continue;
+
+            pluginPath.AssignDir( dir.GetName() );
+            wxString fileName;
+            bool cont = dir.GetFirst( &fileName, "*", wxDIR_FILES );
+
+            while( cont )
+            {
+                try
+                {
+                    wxLogTrace( BOM_TRACE, wxString::Format( "Checking if %s is a BOM plugin", fileName ) );
+
+                    if( BOM_PLUGIN::IsPlugin( fileName ) )
+                    {
+                        pluginPath.SetFullName( fileName );
+                        addPlugin( pluginPath.GetFullPath() );
+                    }
+                }
+                catch( ... ) { /* well, no big deal */ }
+
+                cont = dir.GetNext( &fileName );
+            }
+        }
     }
+
 
     pluginInit();
+}
+
+
+BOM_PLUGIN* DIALOG_BOM::addPlugin( const wxString& aPath, const wxString& aName )
+{
+    BOM_PLUGIN* ret = nullptr;
+    auto plugin = std::make_unique<BOM_PLUGIN>( aPath );
+
+    if( !plugin )
+        return nullptr;
+
+    if( !aName.IsEmpty() )
+    {
+        plugin->SetName( aName );
+        m_lbPlugins->Append( aName );
+    }
+    else
+    {
+        m_lbPlugins->Append( plugin->GetName() );
+    }
+
+    ret = plugin.get();
+    m_plugins.push_back( std::move( plugin ) );
+    return ret;
+}
+
+
+bool DIALOG_BOM::pluginExists( const wxString& aName )
+{
+    for( unsigned ii = 0; ii < m_plugins.size(); ii++ )
+    {
+        if( aName == m_plugins[ii]->GetName() )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -338,7 +426,7 @@ void DIALOG_BOM::pluginInit()
     m_Messages->SetSelection( 0, 0 );
 
 #ifdef __WINDOWS__
-    if( plugin.Options().Index( wxT( "show_console" ) ) == wxNOT_FOUND )
+    if( plugin->Options().Index( wxT( "show_console" ) ) == wxNOT_FOUND )
         m_checkBoxShowConsole->SetValue( false );
     else
         m_checkBoxShowConsole->SetValue( true );
@@ -406,29 +494,22 @@ void DIALOG_BOM::OnAddPlugin( wxCommandEvent& event )
         return;
 
     // Verify if it does not exists
-    for( unsigned ii = 0; ii < m_plugins.size(); ii++ )
+    if( pluginExists( name ) )
     {
-        if( name == m_plugins[ii]->GetName() )
-        {
-            wxMessageBox( wxString::Format( _( "Nickname \"%s\" already in use." ), name ) );
-            return;
-        }
+        wxMessageBox( wxString::Format( _( "Nickname \"%s\" already in use." ), name ) );
+        return;
     }
 
     try
     {
-        auto plugin = std::make_unique<BOM_PLUGIN>( fn.GetFullPath() );
+        auto plugin =  addPlugin( fn.GetFullPath(), name );
 
-        if( !plugin )
-            return;
-
-        plugin->SetName( name );
-        m_lbPlugins->Append( name );
-        m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
-        m_textCtrlCommand->SetValue( plugin->GetCommand() );
-
-        m_plugins.push_back( std::move( plugin ) );
-        pluginInit();
+        if( plugin )
+        {
+            m_lbPlugins->SetSelection( m_lbPlugins->GetCount() - 1 );
+            m_textCtrlCommand->SetValue( plugin->GetCommand() );
+            pluginInit();
+        }
     }
     catch( const std::runtime_error& e )
     {

@@ -46,6 +46,12 @@ public:
     BOM_PLUGIN( const wxString& aFile );
 
     /**
+     * Returns true if a file name matches a recognized plugin format.
+     * @param aFile is path to the plugin file.
+     */
+    static bool IsPlugin( const wxString& aFile );
+
+    /**
      * Returns plugin description stored in the plugin header file (if available).
      */
     const wxString& GetInfo() const
@@ -121,6 +127,7 @@ protected:
     ///> Description of the plugin (normally from the plugin header)
     wxString m_info;
 
+    ///> Plugin specific options
     wxArrayString m_options;
 };
 
