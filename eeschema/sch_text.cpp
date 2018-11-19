@@ -124,7 +124,7 @@ SCH_TEXT::SCH_TEXT( const SCH_TEXT& aText ) :
     EDA_TEXT( aText )
 {
     m_shape = aText.m_shape;
-    m_isDangling = false;
+    m_isDangling = aText.m_isDangling;
     m_spin_style = aText.m_spin_style;
 }
 
