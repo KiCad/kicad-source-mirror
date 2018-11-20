@@ -575,20 +575,24 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
     if( !ConfirmRevertDialog( this, msg ) )
         return;
 
-    bool reload_currentPart;
+    bool reload_currentPart = false;
     wxString curr_partName = partName;
 
-    // the library itself is reverted: the current part will be reloaded only if it is owned by this library
-    if( partName.IsEmpty() )
+    if( GetCurPart() )
     {
-        LIB_ID curr_libId = GetCurPart()->GetLibId();
-        reload_currentPart = libName == curr_libId.GetLibNickname();
+        // the library itself is reverted: the current part will be reloaded only if it is
+        // owned by this library
+        if( partName.IsEmpty() )
+        {
+            LIB_ID curr_libId = GetCurPart()->GetLibId();
+            reload_currentPart = libName == curr_libId.GetLibNickname();
 
-        if( reload_currentPart )
-            curr_partName = curr_libId.GetLibItemName();
+            if( reload_currentPart )
+                curr_partName = curr_libId.GetLibItemName();
+        }
+        else
+            reload_currentPart = isCurrentPart( libId );
     }
-    else
-        reload_currentPart = isCurrentPart( libId );
 
     int unit = m_unit;
 
