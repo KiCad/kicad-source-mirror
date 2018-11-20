@@ -55,6 +55,9 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
     double max_size = MAX_PAGE_SIZE_EDITORS_MILS * IU_PER_MILS * 3.0;
     m_boundary.SetOrigin( -max_size/4, -max_size/4 );
     m_boundary.SetSize( max_size, max_size );
+
+    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
+    m_preview.reset( new KIGFX::VIEW_GROUP() );
 }
 
 
