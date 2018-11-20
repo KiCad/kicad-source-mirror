@@ -1104,7 +1104,9 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
         }
     }
 
-    aToolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    auto frame = static_cast<PCB_BASE_FRAME*>(aToolMgr->GetEditFrame());
+    static_cast<PCB_DRAW_PANEL_GAL*>( frame->GetGalCanvas() )->RedrawRatsnest();
+
     return true;
 }
 
