@@ -74,9 +74,9 @@ public:
     SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame );
     ~SCH_VIEW();
 
-    void DisplaySheet( SCH_SHEET *aSheet );
-    void DisplaySheet( SCH_SCREEN *aScreen );
-    void DisplayComponent( LIB_PART *aPart );
+    void DisplaySheet( SCH_SHEET* aSheet );
+    void DisplaySheet( SCH_SCREEN* aScreen );
+    void DisplayComponent( LIB_PART* aPart );
 
     // Call it to set new draw area limits (max working and draw area size)
     void ResizeSheetWorkingArea( SCH_SCREEN *aScreen );
@@ -86,7 +86,7 @@ public:
     KIGFX::VIEW_GROUP* GetPreview() const { return m_preview.get(); }
 
     void ClearPreview();
-    void AddToPreview( EDA_ITEM *aItem, bool takeOwnership = true );
+    void AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership = true );
 
     void ShowSelectionArea( bool aShow = true );
     void ShowPreview( bool aShow = true );

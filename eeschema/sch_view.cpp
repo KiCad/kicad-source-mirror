@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2018 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -66,7 +66,7 @@ SCH_VIEW::~SCH_VIEW()
 }
 
 
-void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN *aScreen )
+void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN* aScreen )
 {
     const PAGE_INFO& page_info = aScreen->GetPageSettings();
     // A full size = 3 * page size allows a wide margin around the worksheet.
@@ -96,8 +96,8 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 
     ResizeSheetWorkingArea( aScreen );
 
-    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
-    m_preview.reset( new KIGFX::VIEW_GROUP () );
+    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
+    m_preview.reset( new KIGFX::VIEW_GROUP() );
 
     Add( m_worksheet.get() );
     Add( m_selectionArea.get() );
@@ -105,24 +105,24 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 }
 
 
-void SCH_VIEW::DisplaySheet( SCH_SHEET *aSheet )
+void SCH_VIEW::DisplaySheet( SCH_SHEET* aSheet )
 {
     DisplaySheet( aSheet->GetScreen() );
 }
 
 
-void SCH_VIEW::DisplayComponent( LIB_PART *aPart )
+void SCH_VIEW::DisplayComponent( LIB_PART* aPart )
 {
     Clear();
 
     if( !aPart )
         return;
 
-    for ( auto &item : aPart->GetDrawItems() )
+    for( auto& item : aPart->GetDrawItems() )
         Add( &item );
 
-    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
-    m_preview.reset( new KIGFX::VIEW_GROUP () );
+    m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA() );
+    m_preview.reset( new KIGFX::VIEW_GROUP() );
     Add( m_selectionArea.get() );
     Add( m_preview.get() );
 }
@@ -140,12 +140,12 @@ void SCH_VIEW::ClearPreview()
 }
 
 
-void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool takeOwnership )
+void SCH_VIEW::AddToPreview( EDA_ITEM* aItem, bool aTakeOwnership )
 {
     Hide( aItem, false );
     m_preview->Add( aItem );
 
-    if( takeOwnership )
+    if( aTakeOwnership )
         m_ownedItems.push_back( aItem );
 
     SetVisible( m_preview.get(), true );
@@ -154,7 +154,7 @@ void SCH_VIEW::AddToPreview( EDA_ITEM *aItem, bool takeOwnership )
 }
 
 
-void SCH_VIEW::ShowSelectionArea( bool aShow  )
+void SCH_VIEW::ShowSelectionArea( bool aShow )
 {
     if( aShow )
     {
@@ -168,7 +168,7 @@ void SCH_VIEW::ShowSelectionArea( bool aShow  )
 }
 
 
-void SCH_VIEW::ShowPreview( bool aShow  )
+void SCH_VIEW::ShowPreview( bool aShow )
 {
     SetVisible( m_preview.get(), aShow );
 }
@@ -177,15 +177,14 @@ void SCH_VIEW::ShowPreview( bool aShow  )
 void SCH_VIEW::ClearHiddenFlags()
 {
     for( auto item : *m_allItems )
-        Hide ( item, false );
+        Hide( item, false );
 }
 
 
 void SCH_VIEW::HideWorksheet()
 {
-//    SetVisible( m_worksheet.get(), false );
+    //    SetVisible( m_worksheet.get(), false );
 }
 
 
-};
-
+}; // namespace KIGFX
