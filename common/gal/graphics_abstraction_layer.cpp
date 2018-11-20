@@ -46,6 +46,8 @@ GAL::GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     SetLookAtPoint( VECTOR2D( 0, 0 ) );
     SetZoomFactor( 1.0 );
     SetRotation( 0.0 );
+    // this value for SetWorldUnitLength is only suitable for Pcbnew.
+    // Other editors/viewer must call SetWorldUnitLength with their internal units
     SetWorldUnitLength( 1e-9 /* 1 nm */ / 0.0254 /* 1 inch in meters */ );
     // wxDC::GetPPI() reports 96 DPI, but somehow this value
     // is the closest match to the legacy renderer

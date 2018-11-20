@@ -958,7 +958,7 @@ unsigned int GERBER_DRAW_ITEM::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) cons
 
         // the level of details is chosen experimentally, to show
         // only a readable text:
-        const int level = Millimeter2iu( 500 );
+        const int level = Millimeter2iu( 4 );
         return ( level / ( size + 1 ) );
     }
 

@@ -214,7 +214,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         m_gal->SetIsFill( false );
         m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( COLOR4D( 0, 0, 0, 0 ) );
-        m_gal->SetLineWidth( 2 );
+        m_gal->SetLineWidth( textSize/10 );
         m_gal->SetFontBold( false );
         m_gal->SetFontItalic( false );
         m_gal->SetTextMirrored( false );

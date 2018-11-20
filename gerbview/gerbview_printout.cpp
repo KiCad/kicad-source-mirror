@@ -107,7 +107,7 @@ void GERBVIEW_PRINTOUT::setupViewLayers( const std::unique_ptr<KIGFX::VIEW>& aVi
 void GERBVIEW_PRINTOUT::setupGal( KIGFX::GAL* aGal )
 {
     BOARD_PRINTOUT::setupGal( aGal );
-    aGal->SetWorldUnitLength( 10e-9 /* 10 nm */ / 0.0254 /* 1 inch in meters */ );
+    aGal->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );
 }
 
 
