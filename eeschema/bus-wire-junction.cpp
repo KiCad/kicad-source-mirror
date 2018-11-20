@@ -344,10 +344,6 @@ void SCH_EDIT_FRAME::EndSegment()
         if( pts.size() > 2 )
             continue;
 
-        // Do not trim wires that connect directly to an endpoint
-        pts.erase( std::remove_if( pts.begin(), pts.end(), [ &segment ]( const wxPoint& aPt )
-                { return segment->IsEndPoint( aPt ); } ), pts.end() );
-
         for( auto i = pts.begin(); i != pts.end(); i++ )
             for( auto j = i + 1; j != pts.end(); j++ )
                     TrimWire( *i, *j, true );
@@ -508,8 +504,7 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
         next_item = item->Next();
 
         // Don't remove wires that are already deleted or are currently being dragged
-        if( item->GetFlags() &
-                ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
+        if( item->GetFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
             continue;
 
         if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
@@ -518,7 +513,16 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
         line = (SCH_LINE*) item;
         if( !IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), aStart ) ||
                 !IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), aEnd ) )
+        {
             continue;
+        }
+
+        // Don't remove entire wires
+        if( ( line->GetStartPoint() == aStart && line->GetEndPoint() == aEnd )
+            || ( line->GetStartPoint() == aEnd && line->GetEndPoint() == aStart ) )
+        {
+            continue;
+        }
 
         // Step 1: break the segment on one end.  return_line remains line if not broken.
         // Ensure that *line points to the segment containing aEnd
