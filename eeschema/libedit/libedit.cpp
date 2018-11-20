@@ -569,7 +569,8 @@ void LIB_EDIT_FRAME::OnRevert( wxCommandEvent& aEvent )
     const wxString& libName = libId.GetLibNickname();
     const wxString& partName = libId.GetLibItemName();  // Empty if this is the library itself that is selected
 
-    wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ), partName );
+    wxString msg = wxString::Format( _( "Revert \"%s\" to last version saved?" ),
+                                     partName.IsEmpty() ? libName : partName );
 
     if( !ConfirmRevertDialog( this, msg ) )
         return;
