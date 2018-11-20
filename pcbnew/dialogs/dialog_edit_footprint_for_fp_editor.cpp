@@ -793,9 +793,11 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
     // b) show the correct notebook page in the background before the error dialog comes up
     //    when triggered from an OK or a notebook page change
 
-    if( m_delayedFocusPage >= 0 && m_NoteBook->GetSelection() != m_delayedFocusPage )
+    if( m_delayedFocusPage >= 0 )
     {
-        m_NoteBook->SetSelection( (unsigned) m_delayedFocusPage );
+        if( m_NoteBook->GetSelection() != m_delayedFocusPage )
+            m_NoteBook->SetSelection( (unsigned) m_delayedFocusPage );
+
         m_delayedFocusPage = -1;
     }
 
