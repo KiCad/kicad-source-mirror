@@ -47,11 +47,14 @@ SCH_VIEW::SCH_VIEW( bool aIsDynamic, SCH_BASE_FRAME* aFrame ) :
 {
     m_frame = aFrame;
     // Set m_boundary to define the max working area size. The default value
-    // is acceptable for Pcbnew and Gerbview, but too large for Eeschema.
+    // is acceptable for Pcbnew and Gerbview, but too large for Eeschema due to
+    // very different internal units.
     // So we have to use a smaller value.
-    // A better size could be a size depending on the worksheet size.
-    m_boundary.SetOrigin( -Millimeter2iu( 3200.0 ), -Millimeter2iu( 2000.0 ) );
-    m_boundary.SetSize( Millimeter2iu( 6400.0 ), Millimeter2iu( 4000.0 ) );
+    // A full size = 3 * MAX_PAGE_SIZE_EDITORS_MILS size allows a wide margin
+    // around the worksheet.
+    double max_size = MAX_PAGE_SIZE_EDITORS_MILS * IU_PER_MILS * 3.0;
+    m_boundary.SetOrigin( -max_size/4, -max_size/4 );
+    m_boundary.SetSize( max_size, max_size );
 }
 
 
@@ -60,9 +63,20 @@ SCH_VIEW::~SCH_VIEW()
 }
 
 
+void SCH_VIEW::ResizeSheetWorkingArea( SCH_SCREEN *aScreen )
+{
+    const PAGE_INFO& page_info = aScreen->GetPageSettings();
+    // A full size = 3 * page size allows a wide margin around the worksheet.
+    // This is useful to have a large working area.
+    double max_size_x = page_info.GetWidthMils() * IU_PER_MILS * 2.0;
+    double max_size_y = page_info.GetHeightMils() * IU_PER_MILS * 2.0;
+    m_boundary.SetOrigin( -max_size_x /4, -max_size_y/4 );
+    m_boundary.SetSize( max_size_x, max_size_y );
+}
+
+
 void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
 {
-
     for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
         Add( item );
 
@@ -76,6 +90,8 @@ void SCH_VIEW::DisplaySheet( SCH_SCREEN *aScreen )
         m_worksheet->SetSheetName( TO_UTF8( m_frame->GetScreenDesc() ) );
     else
         m_worksheet->SetSheetName( "" );
+
+    ResizeSheetWorkingArea( aScreen );
 
     m_selectionArea.reset( new KIGFX::PREVIEW::SELECTION_AREA( ) );
     m_preview.reset( new KIGFX::VIEW_GROUP () );

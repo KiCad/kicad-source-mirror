@@ -750,6 +750,13 @@ public:
     void            AdjustScrollBars( const wxPoint& aCenterPosition );
 
     /**
+     * Called when modifying the page settings.
+     * In derived classes it can be used to modify parameters like draw area size,
+     * and any other local parameter related to the page settings.
+     */
+    virtual void OnPageSettingsChange() {};
+
+    /**
      * Called when activating the frame.
      *
      * In derived classes with a overriding OnActivate function,

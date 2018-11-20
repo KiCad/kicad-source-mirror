@@ -150,11 +150,13 @@ void SCH_DRAW_PANEL::DisplayComponent( const LIB_PART* aComponent )
 
 }
 
+
 void SCH_DRAW_PANEL::DisplaySheet( const SCH_SHEET* aSheet )
 {
     view()->Clear();
     view()->DisplaySheet( const_cast<SCH_SHEET*>(aSheet) );
 }
+
 
 void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
 {
@@ -163,6 +165,7 @@ void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
     if( aScreen )
         view()->DisplaySheet( const_cast<SCH_SCREEN*>( aScreen ) );
 }
+
 
 void SCH_DRAW_PANEL::OnShow()
 {

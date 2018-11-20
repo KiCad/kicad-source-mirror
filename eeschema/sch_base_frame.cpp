@@ -659,10 +659,6 @@ void SCH_BASE_FRAME::SyncView()
     auto gal = GetGalCanvas()->GetGAL();
 
     auto gs = screen->GetGridSize();
-
     gal->SetGridSize( VECTOR2D( gs.x, gs.y ));
-
-    DBG(printf("SyncView: grid %d %d\n", (int)gs.x, (int)gs.y );)
-
     GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }

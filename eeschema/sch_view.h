@@ -78,6 +78,9 @@ public:
     void DisplaySheet( SCH_SCREEN *aScreen );
     void DisplayComponent( LIB_PART *aPart );
 
+    // Call it to set new draw area limits (max working and draw area size)
+    void ResizeSheetWorkingArea( SCH_SCREEN *aScreen );
+
     KIGFX::PREVIEW::SELECTION_AREA* GetSelectionArea() const { return m_selectionArea.get(); }
 
     KIGFX::VIEW_GROUP* GetPreview() const { return m_preview.get(); }

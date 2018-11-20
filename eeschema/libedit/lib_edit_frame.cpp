@@ -284,6 +284,15 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     GetGalCanvas()->GetView()->UseDrawPriority( true );
     GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+
+    // Set the working/draw area size to display a symbol to a reasonable value:
+    // A 600mm x 600mm with a origin at the area center looks like a large working area
+    double max_size_x = Millimeter2iu( 600 );
+    double max_size_y = Millimeter2iu( 600 );
+    BOX2D bbox;
+    bbox.SetOrigin( -max_size_x /2, -max_size_y/2 );
+    bbox.SetSize( max_size_x, max_size_y );
+    GetCanvas()->GetView()->SetBoundary( bbox );
 }
 
 

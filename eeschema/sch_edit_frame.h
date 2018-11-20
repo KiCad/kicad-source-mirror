@@ -637,6 +637,13 @@ public:
     void DisplayCurrentSheet();
 
     /**
+     * Called when modifying the page settings.
+     * In derived classes it can be used to modify parameters like draw area size,
+     * and any other local parameter related to the page settings.
+     */
+    void OnPageSettingsChange() override;
+
+    /**
      * Set or reset the BRIGHTENED of connected objects inside the current sheet,
      * according to the highlighted net name.
      *
