@@ -357,8 +357,8 @@ void FOOTPRINT_LIST_IMPL::WriteCacheToFile( wxTextFile* aCacheFile )
     {
         aCacheFile->AddLine( fpinfo->GetLibNickname() );
         aCacheFile->AddLine( fpinfo->GetName() );
-        aCacheFile->AddLine( fpinfo->GetDescription() );
-        aCacheFile->AddLine( fpinfo->GetKeywords() );
+        aCacheFile->AddLine( EscapeString( fpinfo->GetDescription() ) );
+        aCacheFile->AddLine( EscapeString( fpinfo->GetKeywords() ) );
         aCacheFile->AddLine( wxString::Format( "%d", fpinfo->GetOrderNum() ) );
         aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetPadCount() ) );
         aCacheFile->AddLine( wxString::Format( "%u", fpinfo->GetUniquePadCount() ) );
@@ -386,8 +386,8 @@ void FOOTPRINT_LIST_IMPL::ReadCacheFromFile( wxTextFile* aCacheFile )
             {
                 wxString libNickname = aCacheFile->GetNextLine();
                 wxString name = aCacheFile->GetNextLine();
-                wxString description = aCacheFile->GetNextLine();
-                wxString keywords = aCacheFile->GetNextLine();
+                wxString description = UnescapeString( aCacheFile->GetNextLine() );
+                wxString keywords = UnescapeString( aCacheFile->GetNextLine() );
                 int orderNum = wxAtoi( aCacheFile->GetNextLine() );
                 unsigned int padCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
                 unsigned int uniquePadCount = (unsigned) wxAtoi( aCacheFile->GetNextLine() );
