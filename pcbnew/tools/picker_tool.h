@@ -40,6 +40,15 @@ public:
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
     typedef std::function<void(void)> CANCEL_HANDLER;
+    typedef std::function<void(const int&)> FINALIZE_HANDLER;
+
+    enum pickerEndState
+    {
+        WAIT_CANCEL,
+        CLICK_CANCEL,
+        EVT_CANCEL,
+        EXCEPTION_CANCEL
+    };
 
     ///> @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override {}
@@ -98,6 +107,16 @@ public:
         m_cancelHandler = aHandler;
     }
 
+    /**
+     * Function SetFinalizeHandler()
+     * Sets a handler for the finalize event. Takes the state of the exit from the Main loop
+     */
+    inline void SetFinalizeHandler( FINALIZE_HANDLER aHandler )
+    {
+        assert( !m_finalizeHandler );
+        m_finalizeHandler = aHandler;
+    }
+
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
@@ -117,6 +136,9 @@ private:
 
     ///> Picked point (if any).
     OPT<VECTOR2D> m_picked;
+
+    ///> Optional finalize state handler.
+    OPT<FINALIZE_HANDLER> m_finalizeHandler;
 
     ///> Reinitializes tool to its initial state.
     void reset();
