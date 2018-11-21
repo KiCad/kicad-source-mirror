@@ -31,6 +31,47 @@
 #include <fctsys.h>
 #include <gbr_metadata.h>
 
+wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
+{
+    // creates the CreationDate attribute:
+    // The attribute value must conform to the full version of the ISO 8601
+    // date and time format, including time and time zone. Note that this is
+    // the date the Gerber file was effectively created,
+    // not the time the project of PCB was started
+    wxDateTime date( wxDateTime::GetTimeNow() );
+    // Date format: see http://www.cplusplus.com/reference/ctime/strftime
+    wxString timezone_offset;   // ISO 8601 offset from UTC in timezone
+    timezone_offset = date.Format( "%z" );  // Extract the time zone offset
+    // The time zone offset format is +mm or +hhmm (or -mm or -hhmm)
+    // (mm = number of minutes, hh = number of hours. 1h00mn is returned as +0100)
+    // we want +(or -) hh:mm
+    if( timezone_offset.Len() > 3 )     // format +hhmm or -hhmm found
+        // Add separator between hours and minutes
+        timezone_offset.insert( 3, ":", 1 );
+
+    wxString msg;
+
+    switch( aFormat )
+    {
+    case GBR_NC_STRING_FORMAT_X2:
+        msg.Printf( "%%TF.CreationDate,%s%s*%%", date.FormatISOCombined(), timezone_offset );
+        break;
+
+    case GBR_NC_STRING_FORMAT_X1:
+        msg.Printf( "G04 #@! TF.CreationDate,%s%s", date.FormatISOCombined(), timezone_offset );
+        break;
+
+    case GBR_NC_STRING_FORMAT_GBRJOB:
+        msg.Printf( "\"CreationDate\":  \"%s%s\"", date.FormatISOCombined(), timezone_offset );
+        break;
+
+    case GBR_NC_STRING_FORMAT_NCDRILL:
+        msg.Printf( "; #@! TF.CreationDate,%s%s", date.FormatISOCombined(), timezone_offset );
+        break;
+    }
+    return msg;
+}
+
 
 wxString GbrMakeProjectGUIDfromString( wxString& aText )
 {

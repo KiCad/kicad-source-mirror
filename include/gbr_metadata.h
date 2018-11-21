@@ -35,6 +35,29 @@
 
 #include <gbr_netlist_metadata.h>
 
+/** creates the TF.CreationDate attribute:
+ * The attribute value must conform to the full version of the ISO 8601
+ * date and time format, including time and time zone. Note that this is
+ * the date the Gerber file is effectively created,
+ * not the time the project of PCB was started
+ * @param aFormat = string compatibility: X1, X2, GBRJOB or NC drill synthax.
+ * exemple of structured comment (compatible X1 gerber)
+ *  G04 #@! TF.CreationDate,2018-11-21T08:49:16+01:00* (exemple of X1 attribute)
+ * exemple NC drill files
+ *  ; #@! TF.CreationDate,2018-11-21T08:49:16+01:00*    (exemple of NC drill comment)
+ * exemple of X2 attribute:
+ *  %TF.CreationDate,2018-11-06T08:25:24+01:00*%
+ */
+enum GBR_NC_STRING_FORMAT       // Options for string format in some attribute strings
+{
+    GBR_NC_STRING_FORMAT_X1,
+    GBR_NC_STRING_FORMAT_X2,
+    GBR_NC_STRING_FORMAT_GBRJOB,
+    GBR_NC_STRING_FORMAT_NCDRILL
+};
+wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat );
+
+
 /** A helper function to build a project GUID using format RFC4122 Version 1 or 4
  * from the project name, because a kicad project has no specific GUID
  * RFC4122 is used mainly for its syntax, because fields have no meaning for Gerber files

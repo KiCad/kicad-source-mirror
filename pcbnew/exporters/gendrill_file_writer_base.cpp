@@ -342,3 +342,88 @@ void GENDRILL_WRITER_BASE::CreateMapFilesSet( const wxString& aPlotDirectory,
         }
     }
 }
+
+
+const wxString GENDRILL_WRITER_BASE::BuildFileFunctionAttributeString(
+                        DRILL_LAYER_PAIR aLayerPair, bool aIsNpth, bool aCompatNCdrill ) const
+{
+// Build a wxString containing the .FileFunction attribute for drill files.
+// %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
+    wxString text;
+
+    if( aCompatNCdrill )
+        text = "; #@! ";
+    else
+        text = "%";
+
+    text << "TF.FileFunction,";
+
+    if( aIsNpth )
+        text << "NonPlated,";
+    else
+        text << "Plated,";
+
+    int layer1 = aLayerPair.first;
+    int layer2 = aLayerPair.second;
+    // In Gerber files, layers num are 1 to copper layer count instead of F_Cu to B_Cu
+    // (0 to copper layer count-1)
+    // Note also for a n copper layers board, gerber layers num are 1 ... n
+    layer1 += 1;
+
+    if( layer2 == B_Cu )
+        layer2 = m_pcb->GetCopperLayerCount();
+    else
+        layer2 += 1;
+
+    text << layer1 << ",";
+    text << layer2 << ",";
+
+    // Now add PTH or NPTH or Blind or Buried attribute
+    int toplayer = 1;
+    int bottomlayer = m_pcb->GetCopperLayerCount();
+
+    if( aIsNpth )
+        text << "NPTH";
+    else if( layer1 == toplayer && layer2 == bottomlayer )
+        text << "PTH";
+    else if( layer1 == toplayer || layer2 == bottomlayer )
+        text << "Blind";
+    else
+        text << "Buried";
+
+    // In NC drill file, these previous parameters should be enough:
+    if( aCompatNCdrill )
+        return text;
+
+
+    // Now add Drill or Route or Mixed:
+    // file containing only round holes have Drill attribute
+    // file containing only oblong holes have Routed attribute
+    // file containing both holes have Mixed attribute
+    bool hasOblong = false;
+    bool hasDrill = false;
+
+    for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
+    {
+        const HOLE_INFO& hole_descr = m_holeListBuffer[ii];
+
+        if( hole_descr.m_Hole_Shape )   // m_Hole_Shape not 0 is an oblong hole)
+            hasOblong = true;
+        else
+            hasDrill = true;
+    }
+
+    if( hasOblong && hasDrill )
+        text << ",Mixed";
+    else if( hasDrill )
+        text << ",Drill";
+    else if( hasOblong )
+        text << ",Route";
+
+    // else: empty file.
+
+    // End of .FileFunction attribute:
+    text << "*%";
+
+    return text;
+}

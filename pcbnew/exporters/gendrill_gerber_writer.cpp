@@ -95,13 +95,13 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
             {
                 wxString fullFilename = fn.GetFullPath();
 
-                int result = createDrillFile( fullFilename, doing_npth, pair.first, pair.second );
+                int result = createDrillFile( fullFilename, doing_npth, pair );
 
                 if( result < 0 )
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "** Unable to create %s **\n" ), GetChars( fullFilename ) );
+                        msg.Printf( _( "** Unable to create %s **\n" ), fullFilename );
                         aReporter->Report( msg );
                     }
                     break;
@@ -110,7 +110,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                 {
                     if( aReporter )
                     {
-                        msg.Printf( _( "Create file %s\n" ), GetChars( fullFilename ) );
+                        msg.Printf( _( "Create file %s\n" ), fullFilename );
                         aReporter->Report( msg );
                     }
                 }
@@ -127,7 +127,7 @@ void GERBER_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 static void convertOblong2Segment( wxSize aSize, double aOrient, wxPoint& aStart, wxPoint& aEnd );
 
 int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
-                                    int aLayer1, int aLayer2 )
+                                    DRILL_LAYER_PAIR aLayerPair )
 {
     int    holes_count;
 
@@ -148,68 +148,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
 
     // Add the standard X2 FileFunction for drill files
     // %TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH][Blind][Buried],Drill[Route][Mixed]*%
-    wxString text( "%TF.FileFunction," );
-
-    if( aIsNpth )
-        text << "NonPlated,";
-    else
-        text << "Plated,";
-
-    // In Gerber files, layers num are 1 to copper layer count instead of F_Cu to B_Cu
-    // (0 to copper layer count-1)
-    // Note also for a n copper layers board, gerber layers num are 1 ... n
-    aLayer1 += 1;
-
-    if( aLayer2 == B_Cu )
-        aLayer2 = m_pcb->GetCopperLayerCount();
-    else
-        aLayer2 += 1;
-
-    text << aLayer1 << ",";
-    text << aLayer2 << ",";
-
-    // Now add PTH or NPTH or Blind or Buried attribute
-    int toplayer = 1;
-    int bottomlayer = m_pcb->GetCopperLayerCount();
-
-    if( aIsNpth )
-        text << "NPTH";
-    else if( aLayer1 == toplayer && aLayer2 == bottomlayer )
-        text << "PTH";
-    else if( aLayer1 == toplayer || aLayer2 == bottomlayer )
-        text << "Blind";
-    else
-        text << "Buried";
-
-    // Now add Drill or Route or Mixed:
-    // file containing only round holes have Drill attribute
-    // file containing only oblong holes have Routed attribute
-    // file containing both holes have Mixed attribute
-    bool hasOblong = false;
-    bool hasDrill = false;
-
-    for( unsigned ii = 0; ii < m_holeListBuffer.size(); ii++ )
-    {
-        HOLE_INFO& hole_descr = m_holeListBuffer[ii];
-
-        if( hole_descr.m_Hole_Shape )   // m_Hole_Shape not 0 is an oblong hole)
-            hasOblong = true;
-        else
-            hasDrill = true;
-    }
-
-    if( hasOblong && hasDrill )
-        text << ",Mixed";
-    else if( hasDrill )
-        text << ",Drill";
-    else if( hasOblong )
-        text << ",Route";
-
-    // else: empty file.
-
-    // End of .FileFunction attribute:
-    text << "*%";
-
+    wxString text = BuildFileFunctionAttributeString( aLayerPair, aIsNpth );
     plotter.AddLineToHeader( text );
 
     // Add file polarity (positive)

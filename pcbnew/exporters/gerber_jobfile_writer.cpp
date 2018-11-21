@@ -155,20 +155,10 @@ void GERBER_JOBFILE_WRITER::addJSONHeader()
     addJSONObject( text );
     closeBlockWithSep();
 
-    // creates the TF.CreationDate ext:
+    // creates the CreationDate attribute:
     // The attribute value must conform to the full version of the ISO 8601
-    // date and time format, including time and time zone. Note that this is
-    // the date the Gerber file was effectively created,
-    // not the time the project of PCB was started
-    wxDateTime date( wxDateTime::GetTimeNow() );
-    // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-    wxString msg = date.Format( wxT( "%z" ) );  // Extract the time zone offset
-    // The time zone offset format is + (or -) mm or hhmm  (mm = number of minutes, hh = number of hours)
-    // we want +(or -) hh:mm
-    if( msg.Len() > 3 )
-        msg.insert( 3, ":", 1 );
-
-    text.Printf( wxT( "\"CreationDate\":  \"%s%s\"\n" ),date.FormatISOCombined(), msg );
+    // date and time format, including time and time zone.
+    text = GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT_GBRJOB ) + "\n";
     addJSONObject( text );
 
     closeBlockWithSep();

@@ -287,20 +287,11 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     text.Printf( wxT( "%%TF.GenerationSoftware,KiCad,Pcbnew,%s*%%" ), GetBuildVersion() );
     aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
 
-    // creates the TF.CreationDate ext:
-    // The attribute value must conform to the full version of the ISO 8601
-    // date and time format, including time and time zone. Note that this is
-    // the date the Gerber file was effectively created,
-    // not the time the project of PCB was started
-    wxDateTime date( wxDateTime::GetTimeNow() );
-    // Date format: see http://www.cplusplus.com/reference/ctime/strftime
-    wxString msg = date.Format( wxT( "%z" ) );  // Extract the time zone offset
-    // The time zone offset format is + (or -) mm or hhmm  (mm = number of minutes, hh = number of hours)
-    // we want +(or -) hh:mm
-    if( msg.Len() > 3 )
-        msg.insert( 3, ":", 1 ),
-    text.Printf( wxT( "%%TF.CreationDate,%s%s*%%" ), GetChars( date.FormatISOCombined() ), GetChars( msg ) );
-    aPlotter->AddLineToHeader( makeStringCompatX1( text, aUseX1CompatibilityMode ) );
+    // creates the TF.CreationDate attribute:
+    text = GbrMakeCreationDateAttributeString( aUseX1CompatibilityMode ?
+                                                    GBR_NC_STRING_FORMAT_X1 :
+                                                    GBR_NC_STRING_FORMAT_X2 );
+    aPlotter->AddLineToHeader( text );
 
     // Creates the TF,.ProjectId. Format is (from Gerber file format doc):
     // %TF.ProjectId,<project id>,<project GUID>,<revision id>*%
@@ -312,7 +303,7 @@ void AddGerberX2Header( PLOTTER * aPlotter,
     // <project GUID> is a string which is an unique id of a project.
     // However Kicad does not handle such a project GUID, so it is built from the board name
     wxFileName fn = aBoard->GetFileName();
-    msg = fn.GetFullName();
+    wxString msg = fn.GetFullName();
 
     // Build a <project GUID>, from the board name
     wxString guid = GbrMakeProjectGUIDfromString( msg );

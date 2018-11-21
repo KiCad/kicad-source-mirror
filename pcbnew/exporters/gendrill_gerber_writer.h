@@ -84,12 +84,11 @@ private:
      * Creates an Excellon drill file
      * @param aFullFilename = the full filename
      * @param aIsNpth = true for a NPTH file, false for a PTH file
-     * @param aLayer1 = the first board layer
-     * @param aLayer2 = the last board layer
+     * @param aLayerPair = first board layer and the last board layer for this drill file
      * for blind buried vias, they are not always top and bottom layers
      * @return hole count, or -1 if the file cannot be created
      */
-    int  createDrillFile( wxString& aFullFilename, bool aIsNpth, int aLayer1, int aLayer2 );
+    int  createDrillFile( wxString& aFullFilename, bool aIsNpth, DRILL_LAYER_PAIR aLayerPair );
 
     /**
      * @return a filename which identify the drill file function.

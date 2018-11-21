@@ -45,9 +45,11 @@
 
 #include <pcbplot.h>
 #include <pcbnew.h>
+#include <class_board.h>
 #include <gendrill_Excellon_writer.h>
 #include <wildcards_and_files_ext.h>
 #include <reporter.h>
+#include <gbr_metadata.h>
 
 // Comment/uncomment this to write or not a comment
 // in drill file when PTH and NPTH are merged to flag
@@ -126,7 +128,7 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
                     }
                 }
 
-                createDrillFile( file );
+                createDrillFile( file, pair, doing_npth );
             }
         }
     }
@@ -136,7 +138,8 @@ void EXCELLON_WRITER::CreateDrillandMapFilesSet( const wxString& aPlotDirectory,
 }
 
 
-int EXCELLON_WRITER::createDrillFile( FILE* aFile )
+int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
+                                      bool aGenerateNPTH_list )
 {
     m_file = aFile;
 
@@ -147,7 +150,7 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile )
 
     LOCALE_IO dummy;    // Use the standard notation for double numbers
 
-    writeEXCELLONHeader();
+    writeEXCELLONHeader( aLayerPair, aGenerateNPTH_list );
 
     holes_count = 0;
 
@@ -440,18 +443,19 @@ void EXCELLON_WRITER::writeCoordinates( char* aLine, double aCoordX, double aCoo
 }
 
 
-void EXCELLON_WRITER::writeEXCELLONHeader()
+void EXCELLON_WRITER::writeEXCELLONHeader( DRILL_LAYER_PAIR aLayerPair,
+                                           bool aGenerateNPTH_list)
 {
     fputs( "M48\n", m_file );    // The beginning of a header
 
     if( !m_minimalHeader )
     {
-        // The next 2 lines in EXCELLON files are comments:
+        // The next lines in EXCELLON files are comments:
         wxString msg;
-        msg << wxT("KiCad") << wxT( " " ) << GetBuildVersion();
+        msg << "KiCad " << GetBuildVersion();
 
-        fprintf( m_file, ";DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( DateAndTime() ) );
-        msg = wxT( ";FORMAT={" );
+        fprintf( m_file, "; DRILL file {%s} date %s\n", TO_UTF8( msg ), TO_UTF8( DateAndTime() ) );
+        msg = "; FORMAT={";
 
         // Print precision:
         // Note in decimal format the precision is not used.
@@ -459,10 +463,10 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
         if( m_zeroFormat != DECIMAL_FORMAT )
             msg << m_precision.GetPrecisionString();
         else
-            msg << wxT( "-:-" );  // in decimal format the precision is irrelevant
+            msg << "-:-";  // in decimal format the precision is irrelevant
 
-        msg << wxT( "/ absolute / " );
-        msg << ( m_unitsMetric ? wxT( "metric" ) :  wxT( "inch" ) );
+        msg << "/ absolute / ";
+        msg << ( m_unitsMetric ? "metric" :  "inch" );
 
         /* Adding numbers notation format.
          * this is same as m_Choice_Zeros_Format strings, but NOT translated
@@ -475,14 +479,34 @@ void EXCELLON_WRITER::writeEXCELLONHeader()
 
         const wxString zero_fmt[4] =
         {
-            wxT( "decimal" ),
-            wxT( "suppress leading zeros" ),
-            wxT( "suppress trailing zeros" ),
-            wxT( "keep zeros" )
+            "decimal",
+            "suppress leading zeros",
+            "suppress trailing zeros",
+            "keep zeros"
         };
 
-        msg << zero_fmt[m_zeroFormat] << wxT( "}\n" );
+        msg << zero_fmt[m_zeroFormat] << "}\n";
         fputs( TO_UTF8( msg ), m_file );
+
+        // add the structured comment TF.CreationDate:
+        // The attribute value must conform to the full version of the ISO 8601
+        msg = GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT_NCDRILL ) + "\n";
+        fputs( TO_UTF8( msg ), m_file );
+
+        // Add the application name that created the drill file
+        msg = "; #@! TF.GenerationSoftware,Kicad,Pcbnew,";
+        msg << GetBuildVersion() << "\n";
+        fputs( TO_UTF8( msg ), m_file );
+
+        if( !m_merge_PTH_NPTH )
+        {
+            // Add the standard X2 FileFunction for drill files
+            // TF.FileFunction,Plated[NonPlated],layer1num,layer2num,PTH[NPTH]
+            msg = BuildFileFunctionAttributeString( aLayerPair, aGenerateNPTH_list, true )
+                  + "\n";
+            fputs( TO_UTF8( msg ), m_file );
+        }
+
         fputs( "FMAT,2\n", m_file );     // Use Format 2 commands (version used since 1979)
     }
 
