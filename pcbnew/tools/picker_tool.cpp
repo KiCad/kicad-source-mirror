@@ -70,6 +70,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     GRID_HELPER grid( frame() );
+    int finalize_state = WAIT_CANCEL;
 
     assert( !m_picking );
     m_picking = true;
@@ -98,21 +99,38 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 catch( std::exception& e )
                 {
                     std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
             }
 
             if( !getNext )
+            {
+                finalize_state = CLICK_CANCEL;
                 break;
+            }
             else
                 setControls();
         }
-
         else if( evt->IsCancel() || TOOL_EVT_UTILS::IsCancelInteractive( *evt ) || evt->IsActivate() )
+        {
+            finalize_state = EVT_CANCEL;
             break;
-
+        }
         else
             m_toolMgr->PassEvent();
+    }
+
+    if( m_finalizeHandler )
+    {
+        try
+        {
+            (*m_finalizeHandler)( finalize_state );
+        }
+        catch( std::exception& e )
+        {
+            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+        }
     }
 
     reset();
@@ -138,6 +156,7 @@ void PICKER_TOOL::reset()
 
     m_picking = false;
     m_clickHandler = NULLOPT;
+    m_finalizeHandler = NULLOPT;
 }
 
 

@@ -334,6 +334,7 @@ void PCB_DRAW_PANEL_GAL::SyncLayersVisibility( const BOARD* aBoard )
     m_view->SetLayerVisible( LAYER_VIAS_HOLES, true );
     m_view->SetLayerVisible( LAYER_GP_OVERLAY, true );
     m_view->SetLayerVisible( LAYER_SELECT_OVERLAY, true );
+    m_view->SetLayerVisible( LAYER_RATSNEST, true );
 }
 
 
