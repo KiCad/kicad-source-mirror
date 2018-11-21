@@ -1706,7 +1706,7 @@ bool LIB_EDIT_FRAME::isCurrentPart( const LIB_ID& aLibId ) const
     // This will return the root part of any alias
     LIB_PART* part = m_libMgr->GetBufferedPart( aLibId.GetLibItemName(), aLibId.GetLibNickname() );
     // Now we can compare the libId of the current part and the root part
-    return ( GetCurPart() && part->GetLibId() == GetCurPart()->GetLibId() );
+    return ( part && GetCurPart() && part->GetLibId() == GetCurPart()->GetLibId() );
 }
 
 
