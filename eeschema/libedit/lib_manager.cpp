@@ -360,14 +360,20 @@ LIB_PART* LIB_MANAGER::GetBufferedPart( const wxString& aAlias, const wxString& 
         try
         {
             LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aAlias );
-            wxCHECK( alias, nullptr );
+
+            if( alias == nullptr )
+                THROW_IO_ERROR( _( "Symbol not found." ) );
+
             bufferedPart = new LIB_PART( *alias->GetPart(), nullptr );
             libBuf.CreateBuffer( bufferedPart, new SCH_SCREEN( &m_frame.Kiway() ) );
         }
         catch( const IO_ERROR& e )
         {
-            DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot load "
-                    "symbol \"%s\" from library \"%s\"" ), aAlias, aLibrary ), e.What() );
+            wxString msg = wxString::Format( _( "Error loading symbol \"%s\" from library \"%s\"." ),
+                                             aAlias,
+                                             aLibrary);
+            DisplayErrorMessage( &m_frame, msg, e.What() );
+
             bufferedPart = nullptr;
         }
     }
@@ -397,6 +403,8 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
     auto partBuf = libBuf.GetBuffer( aPart->GetName() );
     LIB_PART* partCopy = new LIB_PART( *aPart, nullptr );
 
+    partCopy->SetLibId( LIB_ID( aLibrary, aPart->GetLibId().GetLibItemName() ) );
+
     if( partBuf )
     {
         libBuf.UpdateBuffer( partBuf, partCopy );
@@ -415,14 +423,15 @@ bool LIB_MANAGER::UpdatePart( LIB_PART* aPart, const wxString& aLibrary )
 bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAlias,
                                          const wxString& aLibrary )
 {
-    // This is essentially a delete/update, but we have to make a copy of the "original"
-    // LIB_PART from the old buffer to give to the new one.
+    // This is essentially a delete/update.
 
     LIB_BUFFER& libBuf = getLibraryBuffer( aLibrary );
     auto partBuf = libBuf.GetBuffer( oldAlias );
     wxCHECK( partBuf, false );
 
+    // Save the original record so it is transferred to the new buffer
     std::unique_ptr<LIB_PART> original( new LIB_PART( *partBuf->GetOriginal() ) );
+
     // Save the screen object, so it is transferred to the new buffer
     std::unique_ptr<SCH_SCREEN> screen = partBuf->RemoveScreen();
 
@@ -720,6 +729,13 @@ void LIB_MANAGER::PART_BUFFER::SetPart( LIB_PART* aPart )
     wxASSERT( aPart );
     delete m_part;
     m_part = aPart;
+
+    // If the part moves libraries then the original moves with it
+    if( m_original->GetLibId().GetLibNickname() != m_part->GetLibId().GetLibNickname() )
+    {
+        m_original->SetLibId( LIB_ID( m_part->GetLibId().GetLibNickname(),
+                                      m_original->GetLibId().GetLibItemName() ) );
+    }
 }
 
 
@@ -729,6 +745,13 @@ void LIB_MANAGER::PART_BUFFER::SetOriginal( LIB_PART* aPart )
     wxASSERT( aPart );
     delete m_original;
     m_original = aPart;
+
+    // The original is not allowed to have a different library than its part
+    if( m_original->GetLibId().GetLibNickname() != m_part->GetLibId().GetLibNickname() )
+    {
+        m_original->SetLibId( LIB_ID( m_part->GetLibId().GetLibNickname(),
+                                      m_original->GetLibId().GetLibItemName() ) );
+    }
 }
 
 
