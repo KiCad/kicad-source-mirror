@@ -245,13 +245,9 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aF
     if( !part )
         return NULL;
 
-    SCH_COMPONENT* component = new SCH_COMPONENT( *part, m_CurrentSheet, sel.Unit, sel.Convert,
+    SCH_COMPONENT* component = new SCH_COMPONENT( *part, libId, m_CurrentSheet,
+                                                  sel.Unit, sel.Convert,
                                                   GetCrossHairPosition(), true );
-
-    // Set the m_ChipName value, from component name in lib, for aliases
-    // Note if part is found, and if name is an alias of a component,
-    // alias exists because its root component was found
-    component->SetLibId( libId );
 
     // Be sure the link to the corresponding LIB_PART is OK:
     component->Resolve( *Prj().SchSymbolLibTable() );
@@ -263,20 +259,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aF
 
         if( field )
             field->SetText( i.second );
-    }
-
-    // Set the component value that can differ from component name in lib, for aliases
-    component->GetField( VALUE )->SetText( sel.LibId.GetLibItemName() );
-
-    // If there is no field defined in the component, copy one over from the library
-    // ( from the .dcm file )
-    // This way the Datasheet field will not be empty and can be changed from the schematic
-    if( component->GetField( DATASHEET )->GetText().IsEmpty() )
-    {
-        LIB_ALIAS* entry = GetLibAlias( component->GetLibId(), true, true );
-
-        if( entry && !!entry->GetDocFileName() )
-            component->GetField( DATASHEET )->SetText( entry->GetDocFileName() );
     }
 
     MSG_PANEL_ITEMS items;

@@ -120,6 +120,7 @@ public:
      * Create schematic component from library component object.
      *
      * @param aPart - library part to create schematic component from.
+     * @param aLibId - libId of alias to create.
      * @param aSheet - Schematic sheet the component is place into.
      * @param unit - Part for components that have multiple parts per
      *               package.
@@ -128,7 +129,7 @@ public:
      * @param pos - Position to place new component.
      * @param setNewItemFlag - Set the component IS_NEW and IS_MOVED flags.
      */
-    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
+    SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
                    const wxPoint& pos = wxPoint( 0, 0 ),
                    bool setNewItemFlag = false );
@@ -176,12 +177,12 @@ public:
     /**
      * Return information about the aliased parts
      */
-    wxString GetAliasDescription() const;
+    wxString GetDescription() const;
 
     /**
      * Return the documentation text for the given part alias
      */
-    wxString GetAliasDocumentation() const;
+    wxString GetDatasheet() const;
 
     /**
      * Assigns the current #LIB_PART from \a aLibs which this symbol is based on.

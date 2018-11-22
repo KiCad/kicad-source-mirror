@@ -151,8 +151,13 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     if( !wxDialog::TransferDataToWindow() )
         return false;
 
+    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
+
     // Push a copy of each field into m_fields
     m_libEntry->GetFields( *m_fields );
+
+    // Datasheet field is special; grab its value from the docfilename
+    m_fields->at( DATASHEET ).SetText( rootAlias->GetDocFileName() );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign for editing
@@ -170,7 +175,6 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
 
     m_SymbolNameCtrl->SetValue( m_libEntry->GetName() );
 
-    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
     m_DescCtrl->SetValue( rootAlias->GetDescription() );
     m_KeywordCtrl->SetValue( rootAlias->GetKeyWords() );
 
@@ -279,6 +283,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     if( !Validate() )
         return false;
 
+    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
+
     m_Parent->SaveCopyInUndoList( m_libEntry );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
@@ -290,12 +296,14 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
         m_fields->at( i ).SetPosition( pos );
     }
 
+    // Datasheet field is special; copy it to the root alias docfilename
+    rootAlias->SetDocFileName( m_fields->at( DATASHEET ).GetText() );
+    m_fields->at( DATASHEET ).SetText( wxEmptyString );
+
     m_libEntry->SetFields( *m_fields );
 
     // We need to keep the name and the value the same at the moment!
     SetName( m_libEntry->GetValueField().GetText() );
-
-    LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
 
     rootAlias->SetDescription( m_DescCtrl->GetValue() );
     rootAlias->SetKeyWords( m_KeywordCtrl->GetValue() );

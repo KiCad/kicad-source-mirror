@@ -128,15 +128,15 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 }
 
 
-SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
-                              int convert, const wxPoint& pos, bool setNewItemFlag ) :
+SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sheet,
+                              int unit, int convert, const wxPoint& pos, bool setNewItemFlag ) :
     SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
 
     m_unit      = unit;
     m_convert   = convert;
-    m_lib_id.SetLibItemName( aPart.GetName(), false );
+    m_lib_id    = aLibId;
     m_part      = aPart.SharedPtr();
     m_currentSheetPath = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
@@ -146,25 +146,14 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* sheet, int unit,
     if( setNewItemFlag )
         m_Flags = IS_NEW | IS_MOVED;
 
-    // Import user defined fields from the library component
+    // Copy fields from the library component
     UpdateFields( true, true );
 
     // Update the pin locations
     UpdatePinCache();
 
-    wxString msg = aPart.GetReferenceField().GetText();
-
-    if( msg.IsEmpty() )
-        msg = wxT( "U" );
-
-    m_prefix = msg;
-
-    // update the reference -- just the prefix for now.
-    msg += wxT( "?" );
-    SetRef( sheet, msg );
-
-    // Use the schematic component name instead of the library value field name.
-    GetField( VALUE )->SetText( GetLibId().GetLibItemName() );
+    // Update the reference -- just the prefix for now.
+    SetRef( sheet, aPart.GetReferenceField().GetText() + wxT( "?" ) );
 }
 
 
@@ -280,7 +269,7 @@ void SCH_COMPONENT::SetLibId( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aSymLibTab
 }
 
 
-wxString SCH_COMPONENT::GetAliasDescription() const
+wxString SCH_COMPONENT::GetDescription() const
 {
     if( PART_SPTR part = m_part.lock() )
     {
@@ -296,7 +285,7 @@ wxString SCH_COMPONENT::GetAliasDescription() const
 }
 
 
-wxString SCH_COMPONENT::GetAliasDocumentation() const
+wxString SCH_COMPONENT::GetDatasheet() const
 {
     if( PART_SPTR part = m_part.lock() )
     {
@@ -1002,8 +991,8 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
 
             if( !schField )
             {
-                SCH_FIELD fld( wxPoint( 0, 0 ), GetFieldCount(), this, field.GetName() );
-                schField = AddField( fld );
+                SCH_FIELD newField( wxPoint( 0, 0 ), GetFieldCount(), this, field.GetName() );
+                schField = AddField( newField );
             }
 
             if( aResetStyle )
@@ -1012,7 +1001,12 @@ void SCH_COMPONENT::UpdateFields( bool aResetStyle, bool aResetRef )
                 schField->SetTextPos( m_Pos + field.GetTextPos() );
             }
 
-            schField->SetText( field.GetText() );
+            if( idx == VALUE )
+                schField->SetText( m_lib_id.GetLibItemName() ); // fetch alias-specific value
+            else if( idx == DATASHEET )
+                schField->SetText( GetDatasheet() );            // fetch alias-specific value
+            else
+                schField->SetText( field.GetText() );
         }
     }
 }
