@@ -67,12 +67,6 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
     if( aSelected.Empty() )
         return;
 
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock || !clipboard->IsOpened() )
-        return;
-
     if( aSelected.HasReferencePoint() )
         refPoint = aSelected.GetReferencePoint();
 
@@ -153,6 +147,8 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
     {
         // we will fake being a .kicad_pcb to get the full parser kicking
         // This means we also need layers and nets
+        LOCALE_IO io;
+
         m_formatter.Print( 0, "(kicad_pcb (version %d) (host pcbnew %s)\n",
                 SEXPR_BOARD_FILE_VERSION, m_formatter.Quotew( GetBuildVersion() ).c_str() );
 
@@ -184,10 +180,27 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
         m_formatter.Print( 0, "\n)" );
     }
 
+    // These are placed at the end to minimize the open time of the clipboard
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock || !clipboard->IsOpened() )
+        return;
+
     clipboard->SetData( new wxTextDataObject(
                 wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
 
     clipboard->Flush();
+
+    // This section exists to return the clipboard data, ensuring it has fully
+    // been processed by the system clipboard.  This appears to be needed for
+    // extremely large clipboard copies on asynchronous linux clipboard managers
+    // such as KDE's Klipper
+    {
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        ( void )data.GetText(); // Keep unused variable
+    }
 }
 
 
@@ -226,12 +239,6 @@ BOARD_ITEM* CLIPBOARD_IO::Parse()
 void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
                 const PROPERTIES* aProperties )
 {
-    auto clipboard = wxTheClipboard;
-    wxClipboardLocker clipboardLock( clipboard );
-
-    if( !clipboardLock )
-        return;
-
     init( aProperties );
 
     m_board = aBoard;       // after init()
@@ -250,9 +257,25 @@ void CLIPBOARD_IO::Save( const wxString& aFileName, BOARD* aBoard,
 
     m_out->Print( 0, ")\n" );
 
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock )
+        return;
+
     clipboard->SetData( new wxTextDataObject(
                 wxString( m_formatter.GetString().c_str(), wxConvUTF8 ) ) );
     clipboard->Flush();
+
+    // This section exists to return the clipboard data, ensuring it has fully
+    // been processed by the system clipboard.  This appears to be needed for
+    // extremely large clipboard copies on asynchronous linux clipboard managers
+    // such as KDE's Klipper
+    {
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        ( void )data.GetText(); // Keep unused variable
+    }
 }
 
 
