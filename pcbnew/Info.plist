@@ -31,6 +31,7 @@
     <key>CFBundleVersion</key>                  <string></string>
     <key>CSResourcesFileMapped</key>            <true/>
     <key>LSRequiresCarbon</key>                 <true/>
+    <key>NSRequiresAquaSystemAppearance</key>   <true/>
     <key>NSHumanReadableCopyright</key>         <string></string>
     <key>NSHighResolutionCapable</key>          <string>True</string>
 </dict>
