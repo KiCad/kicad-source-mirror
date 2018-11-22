@@ -559,7 +559,13 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
 
-    SetPresetGrid( idx );
+    // Notify GAL
+    TOOL_MANAGER* mgr = GetToolManager();
+
+    if( mgr && IsGalCanvasActive() )
+        mgr->RunAction( "common.Control.gridPreset", true, idx );
+    else
+        SetPresetGrid( idx );
 
     m_canvas->Refresh();
 }
@@ -743,7 +749,7 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 
     if( m_gridSelectBox )
     {
-        if( glistIdx < 0 || glistIdx >= (int) m_gridSelectBox->GetCount() )
+        if( glistIdx < 0 || glistIdx >= (int) m_gridSelectBox->GetCount() - 2 )
         {
             wxASSERT_MSG( false, "Invalid grid index" );
             return;
