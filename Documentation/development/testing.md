@@ -243,6 +243,7 @@ Some available masks:
     * `GAL_CACHED_CONTAINER`
     * `PNS`
     * `CN`
+    * `SCROLL_ZOOM` - for the scroll-wheel zooming logic in GAL
 * Plugin-specific (including "standard" KiCad formats):
     * `3D_CACHE`
     * `3D_SG`

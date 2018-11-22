@@ -30,6 +30,10 @@
 #ifndef _TRACE_HELPERS_H_
 #define _TRACE_HELPERS_H_
 
+#include <wx/arrstr.h>
+#include <wx/event.h>
+#include <wx/string.h>
+
 /**
  * @defgroup trace_env_vars Trace Environment Variables
  *
@@ -57,7 +61,6 @@ extern const wxChar* const traceFindReplace;
  * Flag to enable draw panel coordinate debug tracing.
  */
 extern const wxChar* const kicadTraceCoords;
-
 
 /**
  * Flag to enable wxKeyEvent debug tracing.
@@ -108,6 +111,12 @@ extern const wxChar* const traceLocale;
  * Flag to enable debug output of #BASE_SCREEN and it's derivatives.
  */
 extern const wxChar* const traceScreen;
+
+/**
+ * Flag to enable debug output of zoom-scrolling calculations in
+ * #KIGFX::ZOOM_CONTROLER and derivatives.
+ */
+extern const wxChar* const traceZoomScroll;
 
 ///@}
 

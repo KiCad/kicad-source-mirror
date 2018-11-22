@@ -28,12 +28,27 @@
 
 #include <view/view.h>
 #include <view/wx_view_controls.h>
+#include <view/zoom_controller.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_dispatcher.h>
 
 using namespace KIGFX;
 
 const wxEventType WX_VIEW_CONTROLS::EVT_REFRESH_MOUSE = wxNewEventType();
+
+
+static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
+{
+#ifdef __WXMAC__
+    // On Apple pointer devices, wheel events occur frequently and with
+    // smaller rotation values.  For those devices, let's handle zoom
+    // based on the rotation amount rather than the time difference.
+    return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::MAC_SCALE );
+#else
+    return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>( 500 );
+#endif
+}
+
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
     VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
@@ -72,9 +87,16 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEDOWN,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
+    m_zoomController = GetZoomControllerForPlatform();
+
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
                    wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
+}
+
+
+WX_VIEW_CONTROLS::~WX_VIEW_CONTROLS()
+{
 }
 
 
@@ -110,7 +132,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
-    const double zoomLevelScale = 1.2;      // The minimal step value when changing the current zoom level
 
     // mousewheelpan disabled:
     //      wheel + ctrl    -> horizontal scrolling;
@@ -153,46 +174,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     }
     else
     {
-        // Zooming
-        wxLongLong  timeStamp   = wxGetLocalTimeMillis();
-        double      timeDiff    = timeStamp.ToDouble() - m_timeStamp.ToDouble();
-        int         rotation    = aEvent.GetWheelRotation();
-        double      zoomScale = 1.0;
-
-#ifdef __WXMAC__
-        // On Apple pointer devices, wheel events occur frequently and with
-        // smaller rotation values.  For those devices, let's handle zoom
-        // based on the rotation amount rather than the time difference.
-
-        // Unused
-        ( void )timeDiff;
-
-        rotation = ( rotation > 0 ) ? std::min( rotation , 100 )
-                                    : std::max( rotation , -100 );
-
-        double dscale = rotation * 0.01;
-        zoomScale = ( rotation > 0 ) ? (1 + dscale)  : 1/(1 - dscale);
-
-#else
-
-        m_timeStamp = timeStamp;
-
-        // Set scaling speed depending on scroll wheel event interval
-        if( timeDiff < 500 && timeDiff > 0 )
-        {
-            zoomScale = 2.05 - timeDiff / 500;
-
-            // be sure zoomScale value is significant
-            zoomScale = std::max( zoomScale, zoomLevelScale );
-
-            if( rotation < 0 )
-                zoomScale = 1.0 / zoomScale;
-        }
-        else
-        {
-            zoomScale = ( rotation > 0 ) ? zoomLevelScale : 1/zoomLevelScale;
-        }
-#endif
+        int    rotation = aEvent.GetWheelRotation();
+        double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
         if( IsCursorWarpingEnabled() )
         {
