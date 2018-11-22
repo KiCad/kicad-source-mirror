@@ -43,6 +43,7 @@ protected:
     void OnScaleAuto( wxCommandEvent& aEvent ) override;
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
+	void onUpdateUIPdfPath( wxUpdateUIEvent& event ) override;
 
     DIALOG_SHIM*  m_dialog;
 

@@ -60,9 +60,9 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxRadioButton* m_otherPDFViewer;
 		wxTextCtrl* m_PDFViewerPath;
 		wxBitmapButton* m_pdfViewerBtn;
-		wxStaticText* m_staticText1;
+		wxStaticText* m_staticTexticonscale;
 		STEPPED_SLIDER* m_scaleSlider;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextPerCent;
 		wxCheckBox* m_scaleAuto;
 		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_ZoomCenterOpt;
@@ -71,6 +71,7 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnTextEditorClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }

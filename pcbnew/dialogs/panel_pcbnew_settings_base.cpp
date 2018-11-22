@@ -41,7 +41,7 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	
 	m_Show_Page_Limits = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_ANY, _("Show page limits"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Show_Page_Limits->SetValue(true); 
-	bOptionsSizer->Add( m_Show_Page_Limits, 0, wxBOTTOM|wxLEFT|wxRIGHT, 5 );
+	bOptionsSizer->Add( m_Show_Page_Limits, 0, wxALL, 5 );
 	
 	m_Segments_45_Only_Ctrl = new wxCheckBox( bOptionsSizer->GetStaticBox(), wxID_SEGMENTS45, _("L&imit graphic lines to H, V and 45 degrees"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_Segments_45_Only_Ctrl->SetToolTip( _("Force line segment directions to H, V or 45 degrees when drawing on technical layers.") );
@@ -108,7 +108,7 @@ PANEL_PCBNEW_SETTINGS_BASE::PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWind
 	m_DrcOn->SetValue(true); 
 	m_DrcOn->SetToolTip( _("Enable DRC control. When DRC control is disabled, all connections are allowed.") );
 	
-	bLegacyOptionsSizer->Add( m_DrcOn, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bLegacyOptionsSizer->Add( m_DrcOn, 0, wxEXPAND|wxALL, 5 );
 	
 	m_TrackAutodel = new wxCheckBox( bLegacyOptionsSizer->GetStaticBox(), wxID_TRACK_AUTODEL, _("Auto-delete old tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_TrackAutodel->SetValue(true); 

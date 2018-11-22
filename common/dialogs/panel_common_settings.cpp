@@ -180,3 +180,12 @@ void PANEL_COMMON_SETTINGS::OnPDFViewerClick( wxCommandEvent& event )
     m_otherPDFViewer->SetValue( true );
     m_PDFViewerPath->SetValue( dlg.GetPath() );
 }
+
+
+void PANEL_COMMON_SETTINGS::onUpdateUIPdfPath( wxUpdateUIEvent& event )
+{
+    bool enabled = m_otherPDFViewer->GetValue();
+    m_PDFViewerPath->Enable( enabled );
+    m_pdfViewerBtn->Enable( enabled );
+}
+
