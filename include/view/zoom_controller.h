@@ -30,6 +30,8 @@
 #ifndef __ZOOM_CONTROLLER_H
 #define __ZOOM_CONTROLLER_H
 
+#include <chrono>
+#include <memory>
 
 namespace KIGFX
 {
@@ -58,24 +60,65 @@ public:
 class ACCELERATING_ZOOM_CONTROLLER : public ZOOM_CONTROLLER
 {
 public:
-    /**
-     * @param aAccTimeout the timeout - if a scoll happens within this timeframe,
-     *                    the zoom will be faster
+    /// The type of the acceleration timeout
+    using TIMEOUT = std::chrono::milliseconds;
+
+    /// The clock used for the timestamp (guaranteed to be monotonic)
+    using CLOCK = std::chrono::steady_clock;
+
+    /// The type of the time stamps
+    using TIME_PT = std::chrono::time_point<CLOCK>;
+
+    /// The default timeout, after which a another scroll will not be accelerated
+    static constexpr TIMEOUT DEFAULT_TIMEOUT = std::chrono::milliseconds( 500 );
+
+    /*
+     * A class interface that provides timestamps for events
      */
-    ACCELERATING_ZOOM_CONTROLLER( unsigned aAccTimeout );
+    class TIMESTAMP_PROVIDER
+    {
+    public:
+        virtual ~TIMESTAMP_PROVIDER() = default;
+
+        /*
+         * @return the timestamp at the current time
+         */
+        virtual TIME_PT GetTimestamp() = 0;
+    };
+
+    /**
+     * @param aAccTimeout the timeout - if a scroll happens within this timeframe,
+     *                    the zoom will be faster
+     * @param aTimestampProv a provider for timestamps. If null, a default will
+     * be provided, which is the main steady_clock (this is probably what you
+     * want for real usage)
+     */
+    ACCELERATING_ZOOM_CONTROLLER( const TIMEOUT& aAccTimeout = DEFAULT_TIMEOUT,
+            TIMESTAMP_PROVIDER*                  aTimestampProv = nullptr );
 
     double GetScaleForRotation( int aRotation ) override;
 
+    TIMEOUT GetTimeout() const
+    {
+        return m_accTimeout;
+    }
+
+    void SetTimeout( const TIMEOUT& aNewTimeout )
+    {
+        m_accTimeout = aNewTimeout;
+    }
+
 private:
-    /**
-     * @return the timestamp of an event at the current time. Monotonic.
-     */
-    double getTimeStamp() const;
+    /// The timestamp provider to use (might be provided externally)
+    TIMESTAMP_PROVIDER* m_timestampProv;
+
+    /// Any provider owned by this class (the default one, if used)
+    std::unique_ptr<TIMESTAMP_PROVIDER> m_ownTimestampProv;
 
     /// The timestamp of the last event
-    double   m_lastTimeStamp;
+    TIME_PT m_lastTimestamp;
     /// The timeout value
-    unsigned m_accTimeout;
+    TIMEOUT m_accTimeout;
 };
 
 

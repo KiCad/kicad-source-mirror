@@ -31,9 +31,6 @@
 using namespace KIGFX;
 
 
-/**
- * Declares a struct as the Boost test fixture.
- */
 BOOST_AUTO_TEST_SUITE( ZoomController )
 
 
@@ -81,10 +78,73 @@ BOOST_AUTO_TEST_CASE( ConstController )
     }
 }
 
-/*
- * Testing the accelerated version without making a very slow test is a little
- * tricky and would need a mock timestamping interface, which complicates the
- * real interface a bit and does not really seem worth the effort.
+/**
+ * Timestamper that returns predefined values from a vector
  */
+class PREDEF_TIMESTAMPER : public ACCELERATING_ZOOM_CONTROLLER::TIMESTAMP_PROVIDER
+{
+public:
+    using STAMP_LIST = std::vector<int>;
+
+    PREDEF_TIMESTAMPER( const STAMP_LIST& aStamps )
+            : m_stamps( aStamps ), m_iter( m_stamps.begin() )
+    {
+    }
+
+    /**
+     * @return the next time point in the predefined sequence
+     */
+    ACCELERATING_ZOOM_CONTROLLER::TIME_PT GetTimestamp() override
+    {
+        // Don't ask for more samples than given
+        BOOST_REQUIRE( m_iter != m_stamps.end() );
+
+        return ACCELERATING_ZOOM_CONTROLLER::TIME_PT( std::chrono::milliseconds( *m_iter++ ) );
+    }
+
+    const STAMP_LIST           m_stamps;
+    STAMP_LIST::const_iterator m_iter;
+};
+
+
+struct ACCEL_ZOOM_CASE
+{
+    int                 timeout;
+    std::vector<int>    stamps; // NB includes the initial stamp!
+    std::vector<int>    scrolls;
+    std::vector<double> zooms;
+};
+
+static const std::vector<ACCEL_ZOOM_CASE> accel_cases = {
+    // Scrolls widely spaced, just go up and down by a constant factor
+    { 500, { 0, 1000, 2000, 3000 }, { 120, 120, -120 }, { 1.2, 1.2, 1 / 1.2 } },
+    // Close scrolls - acceleration on the latter
+    { 500, { 0, 1000, 1100 }, { 120, 120 }, { 1.2, 2.05 } },
+};
+
+
+/**
+ * Check basic setting and getting of values
+ */
+BOOST_AUTO_TEST_CASE( AccelController )
+{
+    const double tol_percent = 10.0;
+
+    for( const auto& c : accel_cases )
+    {
+        PREDEF_TIMESTAMPER timestamper( c.stamps );
+
+        ACCELERATING_ZOOM_CONTROLLER zoom_ctrl(
+                std::chrono::milliseconds( c.timeout ), &timestamper );
+
+        for( unsigned i = 0; i < c.scrolls.size(); i++ )
+        {
+            const auto zoom_scale = zoom_ctrl.GetScaleForRotation( c.scrolls[i] );
+
+            BOOST_CHECK_CLOSE( zoom_scale, c.zooms[i], tol_percent );
+        }
+    }
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

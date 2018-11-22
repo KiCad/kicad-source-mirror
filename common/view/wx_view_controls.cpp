@@ -45,7 +45,7 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
     // based on the rotation amount rather than the time difference.
     return std::make_unique<CONSTANT_ZOOM_CONTROLLER>( CONSTANT_ZOOM_CONTROLLER::MAC_SCALE );
 #else
-    return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>( 500 );
+    return std::make_unique<ACCELERATING_ZOOM_CONTROLLER>();
 #endif
 }
 

@@ -28,19 +28,45 @@
 
 #include <view/zoom_controller.h>
 
+#include <make_unique.h>
 #include <trace_helpers.h>
 
 #include <wx/log.h>
-#include <wx/time.h> // For timestamping events
 
 #include <algorithm>
 
 using namespace KIGFX;
 
 
-ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER( unsigned aAccTimeout )
-        : m_lastTimeStamp( getTimeStamp() ), m_accTimeout( aAccTimeout )
+/**
+ * A very simple timestamper that uses the #KIGFX::ACCELERATING_ZOOM_CONTROLLER::CLOCK
+ * to provide a timestamp. Since that's a steady_clock, it's monotonic.
+ */
+class SIMPLE_TIMESTAMPER : public ACCELERATING_ZOOM_CONTROLLER::TIMESTAMP_PROVIDER
 {
+public:
+    ACCELERATING_ZOOM_CONTROLLER::TIME_PT GetTimestamp() override
+    {
+        return ACCELERATING_ZOOM_CONTROLLER::CLOCK::now();
+    }
+};
+
+
+ACCELERATING_ZOOM_CONTROLLER::ACCELERATING_ZOOM_CONTROLLER(
+        const TIMEOUT& aAccTimeout, TIMESTAMP_PROVIDER* aTimestampProv )
+        : m_accTimeout( aAccTimeout )
+{
+    if( aTimestampProv )
+    {
+        m_timestampProv = aTimestampProv;
+    }
+    else
+    {
+        m_ownTimestampProv = std::make_unique<SIMPLE_TIMESTAMPER>();
+        m_timestampProv = m_ownTimestampProv.get();
+    }
+
+    m_lastTimestamp = m_timestampProv->GetTimestamp();
 }
 
 
@@ -49,18 +75,18 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     // The minimal step value when changing the current zoom level
     const double zoomLevelScale = 1.2;
 
-    const auto timeStamp = getTimeStamp();
-    auto       timeDiff = timeStamp - m_lastTimeStamp;
+    const auto timestamp = m_timestampProv->GetTimestamp();
+    auto       timeDiff = std::chrono::duration_cast<TIMEOUT>( timestamp - m_lastTimestamp );
 
-    m_lastTimeStamp = timeStamp;
+    m_lastTimestamp = timestamp;
 
     wxLogTrace( traceZoomScroll,
-            wxString::Format( "Rot %d, time diff: %ldms", aRotation, timeDiff ) );
+            wxString::Format( "Rot %d, time diff: %ldms", aRotation, timeDiff.count() ) );
 
     double zoomScale;
 
     // Set scaling speed depending on scroll wheel event interval
-    if( timeDiff < m_accTimeout && timeDiff > 0 )
+    if( timeDiff < m_accTimeout )
     {
         zoomScale = 2.05 - timeDiff / m_accTimeout;
 
@@ -78,12 +104,6 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     wxLogTrace( traceZoomScroll, wxString::Format( "  Zoom factor: %f", zoomScale ) );
 
     return zoomScale;
-}
-
-
-double ACCELERATING_ZOOM_CONTROLLER::getTimeStamp() const
-{
-    return wxGetLocalTimeMillis().ToDouble();
 }
 
 
@@ -108,5 +128,7 @@ double CONSTANT_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
 }
 
 // need these until C++17
+constexpr ACCELERATING_ZOOM_CONTROLLER::TIMEOUT ACCELERATING_ZOOM_CONTROLLER::DEFAULT_TIMEOUT;
+
 constexpr double CONSTANT_ZOOM_CONTROLLER::MAC_SCALE;
 constexpr double CONSTANT_ZOOM_CONTROLLER::GTK3_SCALE;
