@@ -119,7 +119,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
     case ID_AUX_TOOLBAR_PCB_TRACK_WIDTH:
         ii = m_SelTrackWidthBox->GetSelection();
 
-        if( ii == int( m_SelViaSizeBox->GetCount() - 2 ) )
+        if( ii == int( m_SelTrackWidthBox->GetCount() - 2 ) )
         {
             // this is the separator
             m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
