@@ -223,16 +223,19 @@ void DIALOG_PLOT::OnRightClick( wxMouseEvent& event )
 #include <layers_id_colors_and_visibility.h>
 void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 {
-    unsigned int i;
+    // Build a list of layers for usual fabrication:
+    // copper layers + tech layers without courtyard
+    LSET fab_layer_set = ( LSET::AllCuMask() | LSET::AllTechMask() )
+                         & ~LSET( 2, B_CrtYd, F_CrtYd );
 
     switch( event.GetId() )
     {
     case ID_LAYER_FAB: // Select layers usually needed to build a board
-        for( i = 0; i < m_layerList.size(); i++ )
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
         {
             LSET layermask( m_layerList[ i ] );
 
-            if( ( layermask & ( LSET::AllCuMask() | LSET::AllTechMask() ) ).any() )
+            if( ( layermask & fab_layer_set ).any() )
                 m_layerCheckListBox->Check( i, true );
             else
                 m_layerCheckListBox->Check( i, false );
@@ -240,7 +243,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
         break;
 
     case ID_SELECT_COPPER_LAYERS:
-        for( i = 0; i < m_layerList.size(); i++ )
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
         {
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, true );
@@ -248,7 +251,7 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
         break;
 
     case ID_DESELECT_COPPER_LAYERS:
-        for( i = 0; i < m_layerList.size(); i++ )
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
         {
             if( IsCopperLayer( m_layerList[i] ) )
                 m_layerCheckListBox->Check( i, false );
@@ -256,12 +259,12 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
         break;
 
     case ID_SELECT_ALL_LAYERS:
-        for( i = 0; i < m_layerList.size(); i++ )
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, true );
         break;
 
     case ID_DESELECT_ALL_LAYERS:
-        for( i = 0; i < m_layerList.size(); i++ )
+        for( unsigned i = 0; i < m_layerList.size(); i++ )
             m_layerCheckListBox->Check( i, false );
         break;
 
