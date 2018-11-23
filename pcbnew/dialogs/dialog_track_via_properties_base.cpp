@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -33,7 +33,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	m_sbCommonSizer->Add( bSizerNetWidgets, 5, wxEXPAND|wxRIGHT, 10 );
 	
 	m_lockedCbox = new wxCheckBox( m_sbCommonSizer->GetStaticBox(), wxID_ANY, _("Locked"), wxDefaultPosition, wxDefaultSize, wxCHK_3STATE );
-	m_sbCommonSizer->Add( m_lockedCbox, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_sbCommonSizer->Add( m_lockedCbox, 0, wxALL, 5 );
 	
 	
 	m_MainSizer->Add( m_sbCommonSizer, 0, wxEXPAND|wxALL, 5 );
@@ -118,7 +118,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgTrackLeftGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_trackNetclass = new wxCheckBox( m_sbTrackSizer->GetStaticBox(), wxID_ANY, _("Use net class widths"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgTrackLeftGridSizer->Add( m_trackNetclass, 0, wxBOTTOM, 5 );
+	fgTrackLeftGridSizer->Add( m_trackNetclass, 0, wxTOP|wxBOTTOM, 5 );
 	
 	
 	fgTrackLeftGridSizer->Add( 0, 0, 1, wxEXPAND, 5 );
@@ -220,7 +220,7 @@ DIALOG_TRACK_VIA_PROPERTIES_BASE::DIALOG_TRACK_VIA_PROPERTIES_BASE( wxWindow* pa
 	fgViaLeftSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
 	m_viaNetclass = new wxCheckBox( m_sbViaSizer->GetStaticBox(), wxID_ANY, _("Use net class sizes"), wxDefaultPosition, wxDefaultSize, 0 );
-	fgViaLeftSizer->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM, 5 );
+	fgViaLeftSizer->Add( m_viaNetclass, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
 	
 	
 	fgViaLeftSizer->Add( 0, 0, 1, wxEXPAND, 5 );
