@@ -1104,6 +1104,8 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
         }
     }
 
+    aToolMgr->GetView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+
     return true;
 }
 
