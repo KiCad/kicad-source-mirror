@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Nov 23 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_IMPORT_GFX_BASE_H__
-#define __DIALOG_IMPORT_GFX_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -42,7 +41,7 @@ class PCB_LAYER_BOX_SELECTOR;
 class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticTextFile;
 		wxTextCtrl* m_textCtrlFileName;
@@ -70,7 +69,7 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onBrowseFiles( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onInteractivePlacement( wxCommandEvent& event ) { event.Skip(); }
@@ -79,13 +78,12 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		virtual void onUnitPositionSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onOKClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import vector graphics file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 476,373 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import vector graphics file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_IMPORT_GFX_BASE();
-	
+
 };
 
-#endif //__DIALOG_IMPORT_GFX_BASE_H__
