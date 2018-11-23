@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #ifndef __DIALOG_SPICE_MODEL_BASE_H__
@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -49,12 +47,12 @@ class DIALOG_SPICE_MODEL_BASE : public DIALOG_SHIM
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_passive;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextPtype;
 		wxComboBox* m_pasType;
 		wxStaticText* m_staticText62;
-		wxStaticText* m_staticText3;
+		wxStaticText* m_staticTextPvalue;
 		wxTextCtrl* m_pasValue;
-		wxStaticText* m_staticText63;
+		wxStaticText* m_staticTextSpVal;
 		wxStaticLine* m_staticline1;
 		wxStaticText* m_staticText32;
 		wxStaticText* m_staticText321;

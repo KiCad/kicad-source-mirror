@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 17 2016)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_spice_model_base.h"
@@ -27,9 +27,9 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizer1->SetFlexibleDirection( wxBOTH );
 	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
-	m_staticText2 = new wxStaticText( m_passive, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText2->Wrap( -1 );
-	fgSizer1->Add( m_staticText2, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextPtype = new wxStaticText( m_passive, wxID_ANY, _("Type:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPtype->Wrap( -1 );
+	fgSizer1->Add( m_staticTextPtype, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_pasType = new wxComboBox( m_passive, wxID_ANY, _("Resistor"), wxDefaultPosition, wxDefaultSize, 0, NULL, wxCB_READONLY );
 	m_pasType->Append( _("Resistor") );
@@ -42,18 +42,18 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticText62->Wrap( -1 );
 	fgSizer1->Add( m_staticText62, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_staticText3 = new wxStaticText( m_passive, wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText3->Wrap( -1 );
-	fgSizer1->Add( m_staticText3, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextPvalue = new wxStaticText( m_passive, wxID_ANY, _("Value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPvalue->Wrap( -1 );
+	fgSizer1->Add( m_staticTextPvalue, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	m_pasValue = new wxTextCtrl( m_passive, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_pasValue->SetMinSize( wxSize( 200,-1 ) );
 	
 	fgSizer1->Add( m_pasValue, 0, wxALL|wxEXPAND, 5 );
 	
-	m_staticText63 = new wxStaticText( m_passive, wxID_ANY, _("Spice value in simulation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText63->Wrap( -1 );
-	fgSizer1->Add( m_staticText63, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	m_staticTextSpVal = new wxStaticText( m_passive, wxID_ANY, _("Spice value in simulation"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSpVal->Wrap( -1 );
+	fgSizer1->Add( m_staticTextSpVal, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
 	
 	bSizer41->Add( fgSizer1, 0, wxEXPAND|wxALL, 5 );
@@ -61,16 +61,16 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	m_staticline1 = new wxStaticLine( m_passive, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
 	bSizer41->Add( m_staticline1, 0, wxEXPAND | wxALL, 5 );
 	
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxVERTICAL );
+	wxBoxSizer* bSizerUnits;
+	bSizerUnits = new wxBoxSizer( wxVERTICAL );
 	
 	m_staticText32 = new wxStaticText( m_passive, wxID_ANY, _("In Spice values,the decimal separator is the point.\nValues can use Spice unit symbols."), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText32->Wrap( -1 );
-	bSizer5->Add( m_staticText32, 0, wxALL, 5 );
+	bSizerUnits->Add( m_staticText32, 0, wxALL, 5 );
 	
 	m_staticText321 = new wxStaticText( m_passive, wxID_ANY, _("Spice unit symbols in values (case insensitive):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText321->Wrap( -1 );
-	bSizer5->Add( m_staticText321, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizerUnits->Add( m_staticText321, 0, wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerUnitSymbols;
 	fgSizerUnitSymbols = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -187,10 +187,10 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	fgSizerUnitSymbols->Add( m_staticText60, 0, wxALL, 5 );
 	
 	
-	bSizer5->Add( fgSizerUnitSymbols, 1, wxEXPAND, 5 );
+	bSizerUnits->Add( fgSizerUnitSymbols, 1, wxEXPAND, 5 );
 	
 	
-	bSizer41->Add( bSizer5, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
+	bSizer41->Add( bSizerUnits, 0, wxALIGN_CENTER_HORIZONTAL, 5 );
 	
 	
 	m_passive->SetSizer( bSizer41 );
@@ -214,8 +214,8 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
 	
-	m_modelLibrary = new wxTextCtrl( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY );
-	bSizer7->Add( m_modelLibrary, 1, wxALIGN_CENTER_VERTICAL|wxALL|wxEXPAND, 5 );
+	m_modelLibrary = new wxTextCtrl( m_model, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_modelLibrary, 1, wxALL|wxEXPAND, 5 );
 	
 	m_selectLibrary = new wxButton( m_model, wxID_ANY, _("Select file..."), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizer7->Add( m_selectLibrary, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
@@ -667,7 +667,7 @@ DIALOG_SPICE_MODEL_BASE::DIALOG_SPICE_MODEL_BASE( wxWindow* parent, wxWindowID i
 	bSizer1->Add( m_staticline2, 0, wxEXPAND | wxALL, 5 );
 	
 	m_disabled = new wxCheckBox( this, wxID_ANY, _("Disable symbol for simulation"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer1->Add( m_disabled, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	bSizer1->Add( m_disabled, 0, wxALL, 5 );
 	
 	wxBoxSizer* bSizer2;
 	bSizer2 = new wxBoxSizer( wxHORIZONTAL );
