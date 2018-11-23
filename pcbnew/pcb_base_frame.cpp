@@ -914,7 +914,7 @@ void PCB_BASE_FRAME::unitsChangeRefresh()
 {
     EDA_DRAW_FRAME::unitsChangeRefresh();    // Update the status bar.
 
-    updateGridSelectBox();
+    UpdateGridSelectBox();
 }
 
 
@@ -1012,7 +1012,7 @@ const wxString PCB_BASE_FRAME::GetZoomLevelIndicator() const
 }
 
 
-void PCB_BASE_FRAME::updateGridSelectBox()
+void PCB_BASE_FRAME::UpdateGridSelectBox()
 {
     UpdateStatusBar();
     DisplayUnitsMsg();

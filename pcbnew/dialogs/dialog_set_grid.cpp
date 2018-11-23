@@ -137,6 +137,8 @@ bool DIALOG_SET_GRID::TransferDataFromWindow()
         mgr->ProcessEvent( gridOriginUpdate );
     }
 
+    m_parent->UpdateGridSelectBox();
+
     return wxDialog::TransferDataFromWindow();
 }
 

@@ -613,7 +613,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
                                       ID_ON_GRID_SELECT,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
-    updateGridSelectBox();
+    UpdateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom

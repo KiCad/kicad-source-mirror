@@ -79,7 +79,6 @@ protected:
 
     PCB_GENERAL_SETTINGS m_configSettings;
 
-    void updateGridSelectBox();
     void updateZoomSelectBox();
     virtual void unitsChangeRefresh() override;
 
@@ -205,6 +204,8 @@ public:
     virtual void UpdateStatusBar() override;
 
     PCB_SCREEN* GetScreen() const override { return (PCB_SCREEN*) EDA_DRAW_FRAME::GetScreen(); }
+
+    void UpdateGridSelectBox();
 
     /**
      * Function BestZoom

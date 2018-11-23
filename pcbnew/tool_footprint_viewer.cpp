@@ -104,7 +104,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     // Grid selection choice box.
     m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
                                     wxDefaultPosition, wxDefaultSize, 0, NULL );
-    updateGridSelectBox();
+    UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
