@@ -31,6 +31,8 @@
 
 #include "widgets/unit_binder.h"
 
+wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
+
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                           wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
                           bool aUseMils, int aMin, int aMax, bool allowEval ) :
@@ -58,6 +60,7 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
 
     m_value->Connect( wxEVT_SET_FOCUS, wxFocusEventHandler( UNIT_BINDER::onSetFocus ), NULL, this );
     m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
+    Connect( DELAY_FOCUS, wxCommandEventHandler( UNIT_BINDER::delayedFocusHandler ), NULL, this );
 }
 
 
@@ -114,16 +117,18 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 }
 
 
-void UNIT_BINDER::delayedFocusHandler( wxIdleEvent& )
+void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 {
+    // Kill focus event handler must be temporarily disconnected, as displaying a message box
+    // will trigger the event handler and validation again, effectively creating an infinite loop
+    m_value->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
+
     if( !m_errorMessage.IsEmpty() )
         DisplayError( m_value->GetParent(), m_errorMessage );
 
     m_errorMessage = wxEmptyString;
-
     m_value->SetFocus();
-
-    m_value->Unbind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+    m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
 }
 
 
@@ -144,7 +149,7 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
         {
             textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
-            m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
         }
 
         return false;
@@ -160,7 +165,7 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
         {
             textEntry->SelectAll();
             // Don't focus directly; we might be inside a KillFocus event handler
-            m_value->Bind( wxEVT_IDLE, &UNIT_BINDER::delayedFocusHandler, this );
+            wxPostEvent( this, wxCommandEvent( DELAY_FOCUS ) );
         }
 
         return false;

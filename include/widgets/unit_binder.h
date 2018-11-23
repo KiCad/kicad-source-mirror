@@ -143,7 +143,7 @@ protected:
 
     void onSetFocus( wxFocusEvent& aEvent );
     void onKillFocus( wxFocusEvent& aEvent );
-    void delayedFocusHandler( wxIdleEvent& aEvent );
+    void delayedFocusHandler( wxCommandEvent& aEvent );
 
     ///> The bound widgets
     wxStaticText*     m_label;
