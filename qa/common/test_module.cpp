@@ -22,11 +22,27 @@
  */
 
 /**
- * Main file for the geometry tests to be compiled
+ * Main file for the libcommon tests to be compiled
  */
-
-#define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE "Common library module tests"
-
-
 #include <boost/test/unit_test.hpp>
+
+#include <wx/init.h>
+
+
+bool init_unit_test()
+{
+    boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
+    return wxInitialize();
+}
+
+
+int main( int argc, char* argv[] )
+{
+    int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+
+    // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
+    // but without it, Valgrind notices a lot of leaks from WX
+    wxUninitialize();
+
+    return ret;
+}
