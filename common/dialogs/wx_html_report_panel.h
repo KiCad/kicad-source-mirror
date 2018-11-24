@@ -129,9 +129,6 @@ private:
     ///> message severities to display (mask)
     int m_severities;
 
-    ///> show all messages flag (overrides m_severities)
-    bool m_showAll;
-
     bool m_lazyUpdate;
 };
 

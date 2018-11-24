@@ -79,6 +79,8 @@ public:
         RPT_ERROR     = 0x8
     };
 
+    static constexpr int RPT_ALL = RPT_INFO | RPT_ACTION | RPT_WARNING | RPT_ERROR;
+
     /**
      * Location where the message is to be reported.
      * LOC_HEAD messages are printed before all others (typically intro messages)
