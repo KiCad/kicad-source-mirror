@@ -489,10 +489,19 @@ void KICAD_MANAGER_FRAME::OnBrowseInFileExplorer( wxCommandEvent& event )
     // open project directory in host OS's file explorer
     wxString project_dir = Prj().GetProjectPath();
 
+#ifdef __WXMAC__
+    wxString msg;
+
+    // Quote in case there are spaces in the path.
+    msg.Printf( "open \"%s\"", project_dir );
+
+    system( msg.c_str() );
+#else
     // Quote in case there are spaces in the path.
     AddDelimiterString( project_dir );
 
     wxLaunchDefaultApplication( project_dir );
+#endif
 }
 
 
