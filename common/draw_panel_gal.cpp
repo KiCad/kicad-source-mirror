@@ -221,7 +221,7 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
         }
         else
         {
-            SwitchBackend( GAL_TYPE_CAIRO );
+            SwitchBackend( GAL_FALLBACK );
         }
 
         DisplayError( m_parent, wxString( err.what() ) );
@@ -375,9 +375,17 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
         switch( aGalType )
         {
         case GAL_TYPE_OPENGL:
-            new_gal = new KIGFX::OPENGL_GAL( m_options, this, this, this );
-            break;
-
+            try
+            {
+                new_gal = new KIGFX::OPENGL_GAL( m_options, this, this, this );
+                break;
+            }
+            catch( std::runtime_error& err )
+            {
+                aGalType = GAL_TYPE_CAIRO;
+                DisplayError( m_parent, wxString( err.what() ) );
+            }
+            //Fallthrough
         case GAL_TYPE_CAIRO:
             new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             break;
