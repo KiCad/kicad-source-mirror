@@ -134,21 +134,31 @@ PANEL_SYM_LIB_TABLE_BASE::PANEL_SYM_LIB_TABLE_BASE( wxWindow* parent, wxWindowID
 	bSizer51 = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_append_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	m_append_button->SetToolTip( _("Add empty row to table") );
+	
 	bSizer51->Add( m_append_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	m_browse_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	m_browse_button->SetToolTip( _("Add existing library to table") );
+	
 	bSizer51->Add( m_browse_button, 0, wxRIGHT, 5 );
 	
 	m_move_up_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	m_move_up_button->SetToolTip( _("Move up") );
+	
 	bSizer51->Add( m_move_up_button, 0, wxRIGHT, 5 );
 	
 	m_move_down_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	m_move_down_button->SetToolTip( _("Move down") );
+	
 	bSizer51->Add( m_move_down_button, 0, wxRIGHT, 5 );
 	
 	
 	bSizer51->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_delete_button = new wxBitmapButton( m_top_sizer->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( 30,30 ), wxBU_AUTODRAW );
+	m_delete_button->SetToolTip( _("Remove library from table") );
+	
 	bSizer51->Add( m_delete_button, 0, wxRIGHT|wxLEFT, 5 );
 	
 	
