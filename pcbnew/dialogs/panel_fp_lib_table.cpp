@@ -58,6 +58,7 @@
 #include <footprint_edit_frame.h>
 #include <kiway.h>
 #include <widgets/grid_readonly_text_helpers.h>
+#include <widgets/grid_text_button_helpers.h>
 
 // Filters for the file picker
 static constexpr int FILTER_COUNT = 4;
@@ -282,8 +283,8 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_project_grid->SetTable( new FP_LIB_TABLE_GRID( *aProject ), true );
 
     // Give a bit more room for wxChoice editors
-    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 2 );
-    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 2 );
+    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 4 );
+    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
     m_global_grid->PushEventHandler( new FP_GRID_TRICKS( m_parent, m_global_grid ) );
@@ -313,6 +314,10 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     for( wxGrid* g : { m_global_grid, m_project_grid } )
     {
         wxGridCellAttr* attr;
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir ) );
+        g->SetColAttr( COL_URI, attr );
 
         attr = new wxGridCellAttr;
         attr->SetEditor( new wxGridCellChoiceEditor( choices ) );

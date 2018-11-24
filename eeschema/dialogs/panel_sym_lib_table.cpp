@@ -38,6 +38,7 @@
 #include <viewlib_frame.h>
 #include <kiway.h>
 #include <widgets/grid_readonly_text_helpers.h>
+#include <widgets/grid_text_button_helpers.h>
 
 /**
  * Build a wxGridTableBase by wrapping an #SYMBOL_LIB_TABLE object.
@@ -151,7 +152,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_globalTable( aGlobal ),
     m_projectTable( aProject ),
     m_projectBasePath( aProjectBasePath ),
-    m_parent( aParent )
+    m_parent( aParent ),
+    m_lastBrowseDir( aProjectBasePath )
 {
     // For user info, shows the table filenames:
     m_GblTableFilename->SetLabel( aGlobalTablePath );
@@ -163,8 +165,8 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     m_project_grid->SetTable( new SYMBOL_LIB_TABLE_GRID( *aProject ), true );
 
     // Give a bit more room for combobox editors
-    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 2 );
-    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 2 );
+    m_global_grid->SetDefaultRowSize( m_global_grid->GetDefaultRowSize() + 4 );
+    m_project_grid->SetDefaultRowSize( m_project_grid->GetDefaultRowSize() + 4 );
 
     // add Cut, Copy, and Paste to wxGrids
     m_global_grid->PushEventHandler( new SYMBOL_GRID_TRICKS( m_parent, m_global_grid ) );
@@ -188,6 +190,10 @@ PANEL_SYM_LIB_TABLE::PANEL_SYM_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     {
         // Set special attributes
         wxGridCellAttr* attr;
+
+        attr = new wxGridCellAttr;
+        attr->SetEditor( new GRID_CELL_PATH_EDITOR( m_parent, &m_lastBrowseDir ) );
+        g->SetColAttr( COL_URI, attr );
 
         attr = new wxGridCellAttr;
         attr->SetEditor( new wxGridCellChoiceEditor( pluginChoices ) );
@@ -338,9 +344,6 @@ void PANEL_SYM_LIB_TABLE::pageChangedHandler( wxAuiNotebookEvent& event )
 
 void PANEL_SYM_LIB_TABLE::browseLibrariesHandler( wxCommandEvent& event )
 {
-    if( m_lastBrowseDir.IsEmpty() )
-        m_lastBrowseDir = m_projectBasePath;
-
     wxFileDialog dlg( this, _( "Select Library" ), m_lastBrowseDir,
                       wxEmptyString, SchematicLibraryFileWildcard(),
                       wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE );
