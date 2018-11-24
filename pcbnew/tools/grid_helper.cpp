@@ -304,12 +304,23 @@ VECTOR2I GRID_HELPER::BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLaye
             else
                 m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, true );
 
+            m_snapItem = nearest;
             return nearest->pos;
         }
     }
 
+    m_snapItem = nullptr;
     m_frame->GetGalCanvas()->GetView()->SetVisible( &m_viewSnapPoint, false );
     return nearestGrid;
+}
+
+
+BOARD_ITEM* GRID_HELPER::GetSnapped( void ) const
+{
+    if( !m_snapItem )
+        return nullptr;
+
+    return m_snapItem->item;
 }
 
 

@@ -49,6 +49,15 @@ public:
     VECTOR2I GetGrid() const;
     VECTOR2I GetOrigin() const;
 
+    /**
+     * Function GetSnapped
+     * If the GRID_HELPER has highlighted a snap point (target shown), this function
+     * will return a pointer to the item to which it snapped.
+     *
+     * @return NULL if not snapped.  Pointer to snapped item otherwise
+     */
+    BOARD_ITEM* GetSnapped() const;
+
     void SetAuxAxes( bool aEnable, const VECTOR2I& aOrigin = VECTOR2I( 0, 0 ), bool aEnableDiagonal = false );
 
     VECTOR2I Align( const VECTOR2I& aPoint ) const;
@@ -119,6 +128,7 @@ private:
     bool m_enableSnap;              ///< If true, allow snapping to other items on the layers
     bool m_enableGrid;              ///< If true, allow snapping to grid
     int m_snapSize;                 ///< Sets the radius in screen units for snapping to items
+    ANCHOR* m_snapItem;             ///< Pointer to the currently snapped item in m_anchors (NULL if not snapped)
 
     KIGFX::ORIGIN_VIEWITEM m_viewSnapPoint;
     KIGFX::ORIGIN_VIEWITEM m_viewAxis;

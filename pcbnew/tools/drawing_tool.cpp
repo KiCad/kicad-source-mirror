@@ -1105,26 +1105,46 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
             }
             else
             {
+                auto snapItem = dyn_cast<DRAWSEGMENT*>( grid.GetSnapped() );
+                auto mod = dyn_cast<MODULE*>( m_frame->GetModel() );
+
                 if( aGraphic->GetEnd() == aGraphic->GetStart()
-                    || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT ) )
+                    || ( evt->IsDblClick( BUT_LEFT ) && aShape == S_SEGMENT )
+                    || snapItem )
                 // User has clicked twice in the same spot
+                //  or clicked on the end of an existing segment (closing a path)
                 {
+                    BOARD_COMMIT commit( m_frame );
+
                     // a clear sign that the current drawing is finished
                     // Now we have to add the helper line as well, unless it is zero-length
-                    if( direction45 && line45.GetStart() != aGraphic->GetStart() )
+                    if( direction45  && line45.GetStart() != aGraphic->GetStart() )
                     {
-                        BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
-                        DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( (MODULE*) parent )
-                                         : new DRAWSEGMENT;
+                        DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
 
                         // Copy coordinates, layer, etc.
-                        *static_cast<DRAWSEGMENT*>( l ) = line45;
-                        l->SetEnd( aGraphic->GetStart() );
+                        *l = line45;
 
-                        BOARD_COMMIT commit( m_frame );
+                        // If snapping, add both paths
+                        if( snapItem && l->GetLength() > 0.0 )
+                            commit.Add( l->Clone() );
+
+                        l->SetEnd( aGraphic->GetStart() );
                         commit.Add( l );
-                        commit.Push( _( "Draw a line" ) );
                     }
+
+                    // If the user clicks on an existing snap point from a drawsegment
+                    //  we finish the segment as they are likely closing a path
+                    else if( snapItem && aGraphic->GetLength() > 0.0 )
+                    {
+                        DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
+
+                        *l = *aGraphic;
+                        commit.Add( l );
+                    }
+
+                    if( !commit.Empty() )
+                        commit.Push( _( "Draw a line" ) );
 
                     delete aGraphic;
                     aGraphic = NULL;
