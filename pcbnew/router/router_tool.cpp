@@ -1228,5 +1228,9 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     sizes.ImportCurrent( board()->GetDesignSettings() );
     m_router->UpdateSizes( sizes );
 
+    //Changing the track width can affect the placement, so call the
+    // move routine without changing the destination
+    m_router->Move( m_endSnapPoint, m_endItem );
+
     return 0;
 }
