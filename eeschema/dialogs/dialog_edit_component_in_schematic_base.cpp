@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -75,16 +75,19 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bButtonSize = new wxBoxSizer( wxHORIZONTAL );
 	
 	m_bpAdd = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bpAdd->SetToolTip( _("Add field") );
 	m_bpAdd->SetMinSize( wxSize( 30,30 ) );
 	
 	bButtonSize->Add( m_bpAdd, 0, wxRIGHT, 5 );
 	
 	m_bpMoveUp = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bpMoveUp->SetToolTip( _("Move up") );
 	m_bpMoveUp->SetMinSize( wxSize( 30,30 ) );
 	
 	bButtonSize->Add( m_bpMoveUp, 0, wxRIGHT, 5 );
 	
 	m_bpMoveDown = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bpMoveDown->SetToolTip( _("Move down") );
 	m_bpMoveDown->SetMinSize( wxSize( 30,30 ) );
 	
 	bButtonSize->Add( m_bpMoveDown, 0, wxRIGHT, 5 );
@@ -93,6 +96,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bButtonSize->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 	
 	m_bpDelete = new wxBitmapButton( sbFields->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_bpDelete->SetToolTip( _("Delete field") );
 	m_bpDelete->SetMinSize( wxSize( 30,30 ) );
 	
 	bButtonSize->Add( m_bpDelete, 0, wxRIGHT, 5 );
@@ -136,6 +140,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
 	bLibraryReferenceSizer->Add( m_libraryNameTextCtrl, 1, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 	
 	m_buttonBrowseLibrary = new wxBitmapButton( sbSizerLibraryReference->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, 0 );
+	m_buttonBrowseLibrary->SetToolTip( _("Browse library") );
 	m_buttonBrowseLibrary->SetMinSize( wxSize( 30,29 ) );
 	
 	bLibraryReferenceSizer->Add( m_buttonBrowseLibrary, 0, wxALIGN_CENTER_VERTICAL, 5 );
