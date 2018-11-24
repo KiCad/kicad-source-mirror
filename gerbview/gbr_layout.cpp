@@ -355,6 +355,7 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
     wxString    Line;
 
     GRSetDrawMode( aDC, aDrawMode );
+    GERBVIEW_FRAME* gerbFrame = static_cast<GERBVIEW_FRAME*>( aPanel->GetParent() );
 
     for( unsigned layer = 0; layer < GetImagesList()->ImagesMaxCount(); ++layer )
     {
@@ -363,7 +364,7 @@ void GBR_LAYOUT::DrawItemsDCodeID( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         if( gerber == NULL )    // Graphic layer not yet used
             continue;
 
-        if( ! gerber->m_IsVisible )
+        if( !gerbFrame->IsLayerVisible( layer ) )
             continue;
 
         for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item != NULL; item = item->Next() )
