@@ -567,11 +567,12 @@ void PGM_BASE::loadCommonSettings()
 
         if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
         {
-            wxString value;
+            int temp;
+            wxString msg;
             bool option;
 
-            pcbnewConfig->Read( "PcbIconScale", &value );
-            m_common_settings->Write( ICON_SCALE_KEY, value );
+            pcbnewConfig->Read( "PcbIconScale", &temp, 0 );
+            m_common_settings->Write( ICON_SCALE_KEY, temp );
 
             pcbnewConfig->Read( ENBL_MOUSEWHEEL_PAN_KEY, &option, false );
             m_common_settings->Write( ENBL_MOUSEWHEEL_PAN_KEY, option );
