@@ -303,7 +303,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     m_libEntry->SetFields( *m_fields );
 
     // We need to keep the name and the value the same at the moment!
-    SetName( m_libEntry->GetValueField().GetText() );
+    m_libEntry->SetName( m_libEntry->GetValueField().GetText() );
 
     rootAlias->SetDescription( m_DescCtrl->GetValue() );
     rootAlias->SetKeyWords( m_KeywordCtrl->GetValue() );
