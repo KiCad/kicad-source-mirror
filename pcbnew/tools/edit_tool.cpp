@@ -343,7 +343,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
 
     if( m_dragging || selection.Empty() )
         return 0;
@@ -356,7 +356,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // when it is the curr_item.
     selection = m_selectionTool->RequestSelection(
         []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-        { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+        { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS ); } );
 
     if( selection.Empty() )
         return 0;
