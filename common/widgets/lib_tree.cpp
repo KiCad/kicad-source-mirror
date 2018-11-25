@@ -182,12 +182,12 @@ void LIB_TREE::ExpandLibId( const LIB_ID& aLibId )
 }
 
 
-void LIB_TREE::Regenerate()
+void LIB_TREE::Regenerate( bool aKeepState )
 {
     STATE current;
 
     // Store the state
-    if( !m_filtering )
+    if( aKeepState )
         m_unfilteredState = getState();
 
     wxString filter = m_query_ctrl->GetValue();
@@ -196,7 +196,7 @@ void LIB_TREE::Regenerate()
     postPreselectEvent();
 
     // Restore the state
-    if( !m_filtering )
+    if( aKeepState )
         setState( m_unfilteredState );
 }
 
@@ -297,7 +297,7 @@ void LIB_TREE::setState( const STATE& aState )
 
 void LIB_TREE::onQueryText( wxCommandEvent& aEvent )
 {
-    Regenerate();
+    Regenerate( false );
 
     // Required to avoid interaction with SetHint()
     // See documentation for wxTextEntry::SetHint

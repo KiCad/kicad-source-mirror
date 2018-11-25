@@ -119,7 +119,7 @@ SYMBOL_TREE_PANE::~SYMBOL_TREE_PANE()
 void SYMBOL_TREE_PANE::Regenerate()
 {
     if( m_tree )
-        m_tree->Regenerate();
+        m_tree->Regenerate( true );
 }
 
 

@@ -122,7 +122,7 @@ FOOTPRINT_TREE_PANE::~FOOTPRINT_TREE_PANE()
 void FOOTPRINT_TREE_PANE::Regenerate()
 {
     if( m_tree )
-        m_tree->Regenerate();
+        m_tree->Regenerate( true );
 }
 
 

@@ -111,7 +111,7 @@ public:
     /**
      * Regenerates the tree.
      */
-    void Regenerate();
+    void Regenerate( bool aKeepState );
 
     void SetFocus() override;
 
