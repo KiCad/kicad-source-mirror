@@ -339,6 +339,7 @@ void LINE::ShowLinks() const
         wxLogTrace( "PNS", "seg %d: %p\n", i, m_segmentRefs[i] );
 }
 
+
 SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECTOR2I& aP )
 {
     OPT<SHAPE_LINE_CHAIN> picked;
@@ -362,14 +363,21 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         SHAPE_LINE_CHAIN paths[2];
         DIRECTION_45 dirs[2];
         DIRECTION_45 d_prev = ( i > 0 ? DIRECTION_45( aOrigin.CSegment( i-1 ) ) : DIRECTION_45() );
+        int dirCount = 0;
 
         for( int j = 0; j < 2; j++ )
         {
             paths[j] = d_start.BuildInitialTrace( p_start, aP, j );
-            dirs[j] = DIRECTION_45( paths[j].CSegment( 0 ) );
+
+            if( paths[j].SegmentCount() < 1 )
+                continue;
+
+            assert( dirCount < sizeof( dirs ) / sizeof( dirs[0] ) );
+            dirs[dirCount] = DIRECTION_45( paths[j].CSegment( 0 ) );
+            ++dirCount;
         }
 
-        for( int j = 0; j < 2; j++ )
+        for( int j = 0; j < dirCount; j++ )
         {
             if( dirs[j] == d_start )
             {
@@ -381,7 +389,7 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
         if( picked )
             break;
 
-        for( int j = 0; j < 2; j++ )
+        for( int j = 0; j < dirCount; j++ )
         {
             if( dirs[j].IsObtuse( d_prev ) )
             {

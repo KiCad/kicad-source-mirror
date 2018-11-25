@@ -243,6 +243,9 @@ bool LINE_PLACER::reduceTail( const VECTOR2I& aEnd )
         // the direction of the segment to be replaced
         SHAPE_LINE_CHAIN replacement = dir.BuildInitialTrace( s.A, aEnd );
 
+        if( replacement.SegmentCount() < 1 )
+            continue;
+
         LINE tmp( m_tail, replacement );
 
         if( m_currentNode->CheckColliding( &tmp, ITEM::ANY_T ) )
