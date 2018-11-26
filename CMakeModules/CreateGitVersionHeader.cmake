@@ -39,7 +39,6 @@ macro( create_git_version_header _git_src_path )
             ERROR_VARIABLE _git_log_error
             RESULT_VARIABLE _git_log_result
             OUTPUT_STRIP_TRAILING_WHITESPACE)
-        endif()
 
         set( ENV{LC_ALL} ${_Git_SAVED_LC_ALL} )
     endif( GIT_FOUND )

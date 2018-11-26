@@ -836,6 +836,8 @@ if( DOXYGEN_FOUND )
         DEPENDS Doxyfile
         COMMENT "building developer's resource docs into directory Documentation/development/doxygen/html"
         )
+
+    add_subdirectory(Documentation/docset)
 else()
     message( STATUS "WARNING: Doxygen not found - doxygen-docs (Source Docs) target not created" )
 endif()
