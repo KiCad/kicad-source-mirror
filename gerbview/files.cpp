@@ -378,7 +378,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         else
             currentPath = m_mruPath;
 
-        wxFileDialog dlg( this, _( "Open Excellon Drill File(s)" ),
+        wxFileDialog dlg( this, _( "Open NC (Excellon) Drill File(s)" ),
                           currentPath, filename.GetFullName(), filetypes,
                           wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_MULTIPLE | wxFD_CHANGE_DIR );
 

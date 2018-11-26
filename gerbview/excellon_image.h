@@ -31,7 +31,7 @@ enum drill_M_code_t {
     DRILL_M_END,
     DRILL_M_TOOL_DOWN,      // tool down (starting a routed hole)
     DRILL_M_TOOL_UP,        // tool up (ending a routed hole)
-    DRILL_M_ENDREWIND,
+    DRILL_M_ENDFILE,
     DRILL_M_MESSAGE,
     DRILL_M_LONGMESSAGE,
     DRILL_M_HEADER,
@@ -187,6 +187,9 @@ private:
         return DCodeNumber( aText );
     }
 
+    /** Ends a route command started by M15 ot G01, G02 or G03 command
+     */
+    void FinishRouteCommand();
 
     void SelectUnits( bool aMetric );
 };

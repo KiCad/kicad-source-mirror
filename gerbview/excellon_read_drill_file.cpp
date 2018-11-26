@@ -197,7 +197,7 @@ static EXCELLON_CMD excellonHeaderCmdList[] =
     { "M15",    DRILL_M_TOOL_DOWN,            0 },  // tool down (starting a routed hole)
     { "M16",    DRILL_M_TOOL_UP,              0 },  // tool up (ending a routed hole)
     { "M17",    DRILL_M_TOOL_UP,              0 },  // tool up similar to M16 for a viewer
-    { "M30",    DRILL_M_ENDREWIND,           -1 },  // End of Program Rewind
+    { "M30",    DRILL_M_ENDFILE,             -1 },  // End of File (last line of NC drill)
     { "M47",    DRILL_M_MESSAGE,             -1 },  // Operator Message
     { "M45",    DRILL_M_LONGMESSAGE,         -1 },  // Long Operator message (use more than one line)
     { "M48",    DRILL_M_HEADER,              0  },  // beginning of a header
@@ -446,9 +446,11 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         break;
 
     case DRILL_M_END:
-        break;
+    case DRILL_M_ENDFILE:
+        // if a route command is in progress, finish it
+        if( m_RouteModeOn )
+            FinishRouteCommand();
 
-    case DRILL_M_ENDREWIND:
         break;
 
     case DRILL_M_MESSAGE:
@@ -553,51 +555,7 @@ bool EXCELLON_IMAGE::Execute_HEADER_And_M_Command( char*& text )
         break;
 
     case DRILL_M_TOOL_UP:        // tool up (ending a routed polyline)
-        {
-        D_CODE* tool = GetDCODE( m_Current_Tool );
-
-        if( !tool )
-        {
-            AddMessageToList( wxString::Format( "Unknown tool code %d", m_Current_Tool ) );
-            break;
-        }
-
-        for( size_t ii = 1; ii < m_RoutePositions.size(); ii++ )
-        {
-            GERBER_DRAW_ITEM* gbritem = new GERBER_DRAW_ITEM( this );
-
-            if( m_RoutePositions[ii].m_rmode == 0 )     // linear routing
-            {
-            fillLineGBRITEM( gbritem, tool->m_Num_Dcode,
-                            m_RoutePositions[ii-1].GetPos(), m_RoutePositions[ii].GetPos(),
-                            tool->m_Size, false );
-            }
-            else    // circular (cw or ccw) routing
-            {
-            bool rot_ccw = m_RoutePositions[ii].m_rmode == ROUTE_CW;
-            int radius = m_RoutePositions[ii].m_radius; // Can be adjusted by computeCenter.
-            wxPoint center;
-
-            if( m_RoutePositions[ii].m_arc_type_info == ARC_INFO_TYPE_CENTER )
-                center = wxPoint( m_RoutePositions[ii].m_cx, m_RoutePositions[ii].m_cy );
-            else
-                center = computeCenter( m_RoutePositions[ii-1].GetPos(),
-                                        m_RoutePositions[ii].GetPos(), radius, rot_ccw );
-
-            fillArcGBRITEM( gbritem, tool->m_Num_Dcode,
-                             m_RoutePositions[ii-1].GetPos(), m_RoutePositions[ii].GetPos(),
-                             center - m_RoutePositions[ii-1].GetPos(),
-                             tool->m_Size, not rot_ccw , true,
-                             false );
-            }
-
-            m_Drawings.Append( gbritem );
-
-            StepAndRepeatItem( *gbritem );
-        }
-
-        m_RoutePositions.clear();
-        }
+        FinishRouteCommand();
         break;
     }
 
@@ -824,6 +782,10 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
 
     case DRILL_G_ROUT:
         m_SlotOn = false;
+
+        if( m_RouteModeOn )
+            FinishRouteCommand();
+
         m_RouteModeOn = true;
         m_RoutePositions.clear();
         m_LastArcDataType = ARC_INFO_TYPE_NONE;
@@ -834,6 +796,10 @@ bool EXCELLON_IMAGE::Execute_EXCELLON_G_Command( char*& text )
 
     case DRILL_G_DRILL:
         m_SlotOn = false;
+
+        if( m_RouteModeOn )
+            FinishRouteCommand();
+
         m_RouteModeOn = false;
         m_RoutePositions.clear();
         m_LastArcDataType = ARC_INFO_TYPE_NONE;
@@ -923,4 +889,59 @@ void EXCELLON_IMAGE::SelectUnits( bool aMetric )
         m_FmtScale.x = m_FmtScale.y = fmtMantissaInch;
         m_FmtLen.x = m_FmtLen.y = fmtIntegerInch+fmtMantissaInch;
     }
+}
+
+
+void EXCELLON_IMAGE::FinishRouteCommand()
+{
+    // Ends a route command started by M15 ot G01, G02 or G03 command
+    // if a route command is not in progress, do nothing
+
+    if( !m_RouteModeOn )
+        return;
+
+    D_CODE* tool = GetDCODE( m_Current_Tool );
+
+    if( !tool )
+    {
+        AddMessageToList( wxString::Format( "Unknown tool code %d", m_Current_Tool ) );
+        return;
+    }
+
+    for( size_t ii = 1; ii < m_RoutePositions.size(); ii++ )
+    {
+        GERBER_DRAW_ITEM* gbritem = new GERBER_DRAW_ITEM( this );
+
+        if( m_RoutePositions[ii].m_rmode == 0 )     // linear routing
+        {
+        fillLineGBRITEM( gbritem, tool->m_Num_Dcode,
+                        m_RoutePositions[ii-1].GetPos(), m_RoutePositions[ii].GetPos(),
+                        tool->m_Size, false );
+        }
+        else    // circular (cw or ccw) routing
+        {
+        bool rot_ccw = m_RoutePositions[ii].m_rmode == ROUTE_CW;
+        int radius = m_RoutePositions[ii].m_radius; // Can be adjusted by computeCenter.
+        wxPoint center;
+
+        if( m_RoutePositions[ii].m_arc_type_info == ARC_INFO_TYPE_CENTER )
+            center = wxPoint( m_RoutePositions[ii].m_cx, m_RoutePositions[ii].m_cy );
+        else
+            center = computeCenter( m_RoutePositions[ii-1].GetPos(),
+                                    m_RoutePositions[ii].GetPos(), radius, rot_ccw );
+
+        fillArcGBRITEM( gbritem, tool->m_Num_Dcode,
+                         m_RoutePositions[ii-1].GetPos(), m_RoutePositions[ii].GetPos(),
+                         center - m_RoutePositions[ii-1].GetPos(),
+                         tool->m_Size, not rot_ccw , true,
+                         false );
+        }
+
+        m_Drawings.Append( gbritem );
+
+        StepAndRepeatItem( *gbritem );
+    }
+
+    m_RoutePositions.clear();
+    m_RouteModeOn = false;
 }
