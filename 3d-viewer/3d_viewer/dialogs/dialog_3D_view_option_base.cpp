@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul  2 2017)
+// C++ code generated with wxFormBuilder (version Jul 11 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
 #include "dialog_3D_view_option_base.h"
@@ -134,7 +134,7 @@ DIALOG_3D_VIEW_OPTIONS_BASE::DIALOG_3D_VIEW_OPTIONS_BASE( wxWindow* parent, wxWi
 	bSizeLeft->Add( fgSizer3DVisibility, 0, wxEXPAND, 5 );
 	
 	
-	bSizerUpper->Add( bSizeLeft, 1, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	bSizerUpper->Add( bSizeLeft, 1, wxEXPAND, 5 );
 	
 	m_staticlineVertical = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 	bSizerUpper->Add( m_staticlineVertical, 0, wxEXPAND | wxALL, 5 );
