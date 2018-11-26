@@ -615,11 +615,9 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
         {
             const SHAPE_POLY_SET *polyList = map_poly.at( layer_id );
 
-            layerTriangles->AddToMiddleContourns( *polyList,
-                                                  layer_z_bot,
-                                                  layer_z_top,
-                                                  m_settings.BiuTo3Dunits(),
-                                                  false );
+            if( polyList->OutlineCount() > 0 )
+                layerTriangles->AddToMiddleContourns( *polyList, layer_z_bot, layer_z_top,
+                                                      m_settings.BiuTo3Dunits(), false );
         }
 
         // Create display list

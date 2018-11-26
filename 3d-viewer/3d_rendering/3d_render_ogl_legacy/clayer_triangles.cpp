@@ -282,8 +282,6 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
                                              double aBiuTo3Du,
                                              bool aInvertFaceDirection )
 {
-    wxASSERT( aPolySet.OutlineCount() > 0 );
-
     if( aPolySet.OutlineCount() == 0 )
         return;
 
