@@ -40,6 +40,7 @@
 #include <gerbview_id.h>
 #include <gerber_file_image.h>
 #include <gerber_file_image_list.h>
+#include <excellon_image.h>
 #include <gerbview_layer_widget.h>
 #include <wildcards_and_files_ext.h>
 #include <widgets/progress_reporter.h>
@@ -123,15 +124,26 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
     case ID_GERBVIEW_RELOAD_ALL:
     {
         // Store filenames
-        wxArrayString listOfFilenames;
-        listOfFilenames.Empty();
+        wxArrayString listOfGerberFiles;
+        std::vector<int> fileType;
+
         for( unsigned i = 0; i < GetImagesList()->ImagesMaxCount(); i++ )
         {
-            if( GetImagesList()->GetGbrImage( i ) != nullptr )
-            {
-                if( GetImagesList()->GetGbrImage( i )->m_InUse == 1 )
-                    listOfFilenames.Add( GetImagesList()->GetGbrImage( i )->m_FileName );
-            }
+            if( GetImagesList()->GetGbrImage( i ) == nullptr )
+                continue;
+
+            if( !GetImagesList()->GetGbrImage( i )->m_InUse )
+                continue;
+
+            EXCELLON_IMAGE* drill_file =
+                dynamic_cast<EXCELLON_IMAGE*>( GetImagesList()->GetGbrImage( i ) );
+
+            if( drill_file )
+                fileType.push_back( 1 );
+            else
+                fileType.push_back( 0 );
+
+            listOfGerberFiles.Add( GetImagesList()->GetGbrImage( i )->m_FileName );
         }
 
         // Clear all layers
@@ -142,7 +154,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
 
         // Load the layers from stored paths
         wxBusyCursor wait;
-        loadListOfGerberFiles( wxEmptyString, listOfFilenames );
+        loadListOfGerberAndDrillFiles( wxEmptyString, listOfGerberFiles, &fileType );
     }
     break;
 
@@ -245,12 +257,13 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
     // Set the busy cursor
     wxBusyCursor wait;
 
-    return loadListOfGerberFiles( currentPath, filenamesList );
+    return loadListOfGerberAndDrillFiles( currentPath, filenamesList );
 }
 
 
-bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
-                                            const wxArrayString& aFilenameList )
+bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
+                                            const wxArrayString& aFilenameList,
+                                            const std::vector<int>* aFileType )
 {
     wxFileName filename;
 
@@ -294,31 +307,39 @@ bool GERBVIEW_FRAME::loadListOfGerberFiles( const wxString& aPath,
 
         visibility |= ( 1 << layer );
 
-        if( Read_GERBER_File( filename.GetFullPath() ) )
+        if( aFileType && (*aFileType)[ii] == 1 )
         {
-            UpdateFileHistory( m_lastFileName );
-
-            layer = getNextAvailableLayer( layer );
-
-            if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount()-1 )
+            LoadExcellonFiles( filename.GetFullPath() );
+            layer = GetActiveLayer();   // Loading NC drill file changes the active layer
+        }
+        else
+        {
+            if( Read_GERBER_File( filename.GetFullPath() ) )
             {
-                success = false;
-                reporter.Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
+                UpdateFileHistory( m_lastFileName );
 
-                // Report the name of not loaded files:
-                ii += 1;
-                while( ii < aFilenameList.GetCount() )
+                layer = getNextAvailableLayer( layer );
+
+                if( layer == NO_AVAILABLE_LAYERS && ii < aFilenameList.GetCount()-1 )
                 {
-                    filename = aFilenameList[ii++];
-                    wxString txt;
-                    txt.Printf( MSG_NOT_LOADED,
-                                GetChars( filename.GetFullName() ) );
-                    reporter.Report( txt, REPORTER::RPT_ERROR );
-                }
-                break;
-            }
+                    success = false;
+                    reporter.Report( MSG_NO_MORE_LAYER, REPORTER::RPT_ERROR );
 
-            SetActiveLayer( layer, false );
+                    // Report the name of not loaded files:
+                    ii += 1;
+                    while( ii < aFilenameList.GetCount() )
+                    {
+                        filename = aFilenameList[ii++];
+                        wxString txt;
+                        txt.Printf( MSG_NOT_LOADED,
+                                    GetChars( filename.GetFullName() ) );
+                        reporter.Report( txt, REPORTER::RPT_ERROR );
+                    }
+                    break;
+                }
+
+                SetActiveLayer( layer, false );
+            }
         }
 
         if( progress )
@@ -418,7 +439,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         if( Read_EXCELLON_File( filename.GetFullPath() ) )
         {
             // Update the list of recent drill files.
-            UpdateFileHistory( filename.GetFullPath(),  &m_drillFileHistory );
+            UpdateFileHistory( filename.GetFullPath(), &m_drillFileHistory );
 
             layer = getNextAvailableLayer( layer );
 
