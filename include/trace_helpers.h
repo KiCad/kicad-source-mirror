@@ -49,72 +49,100 @@
 
 /**
  * Flag to enable find debug tracing.
+ *
+ * Use "KICAD_FIND_ITEM" to enable.
  */
 extern const wxChar* const traceFindItem;
 
 /**
  * Flag to enable find and replace debug tracing.
+ *
+ * Use "KICAD_FIND_REPLACE" to enable.
  */
 extern const wxChar* const traceFindReplace;
 
 /**
  * Flag to enable draw panel coordinate debug tracing.
+ *
+ * Use "KICAD_COORDS" to enable.
  */
 extern const wxChar* const kicadTraceCoords;
 
 /**
  * Flag to enable wxKeyEvent debug tracing.
+ *
+ * Use "KICAD_KEY_EVENTS" to enable.
  */
 extern const wxChar* const kicadTraceKeyEvent;
 
 /**
  * Flag to enable auto save feature debug tracing.
+ *
+ * Use "KICAD_AUTOSAVE" to enable.
  */
 extern const wxChar* const traceAutoSave;
 
 /**
  * Flag to enable schematic library memory deletion debug output.
+ *
+ * Use "KICAD_SCH_LIB_MEM" to enable.
  */
 extern const wxChar* const traceSchLibMem;
 
 /**
  * Flag to enable legacy schematic plugin debug output.
+ *
+ * Use "KICAD_SCH_LEGACY_PLUGIN" to enable.
  */
 extern const wxChar* const traceSchLegacyPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
+ *
+ * Use "KICAD_PCB_PLUGIN" to enable.
  */
 extern const wxChar* const traceKicadPcbPlugin;
 
 /**
  * Flag to enable GEDA PCB plugin debug output.
+ *
+ * Use "KICAD_GEDA_PLUGIN" to enable.
  */
 extern const wxChar* const traceGedaPcbPlugin;
 
 /**
  * Flag to enable print controller debug output.
+ *
+ * Use "KICAD_PRINT" to enable.
  */
 extern const wxChar* const tracePrinting;
 
 /**
  * Flag to enable path and file name debug output.
+ *
+ * Use "KICAD_PATHS_AND_FILES" to enable.
  */
 extern const wxChar* const tracePathsAndFiles;
 
 /**
  * Flag to enable locale debug output.
+ *
+ * Use "KICAD_LOCALE" to enable.
  */
 extern const wxChar* const traceLocale;
 
 /**
  * Flag to enable debug output of #BASE_SCREEN and it's derivatives.
+ *
+ * Use "KICAD_SCREEN" to enable.
  */
 extern const wxChar* const traceScreen;
 
 /**
  * Flag to enable debug output of zoom-scrolling calculations in
- * #KIGFX::ZOOM_CONTROLER and derivatives.
+ * #KIGFX::ZOOM_CONTROLLER and derivatives.
+ *
+ * Use "KICAD_ZOOM_SCROLL" to enable.
  */
 extern const wxChar* const traceZoomScroll;
 
