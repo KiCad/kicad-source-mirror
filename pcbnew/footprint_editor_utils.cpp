@@ -503,10 +503,19 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( getTargetFPID().IsValid() )
         {
             LIB_ID fpID = getTargetFPID();
-            m_copiedModule.reset( LoadFootprint( fpID ) );
+
+            if( fpID == GetLoadedFPID() )
+                m_copiedModule.reset( new MODULE( *GetBoard()->m_Modules.GetFirst() ) );
+            else
+                m_copiedModule.reset( LoadFootprint( fpID ) );
 
             if( id == ID_MODEDIT_CUT_PART )
+            {
+                if( fpID == GetLoadedFPID() )
+                    Clear_Pcb( false );
+
                 DeleteModuleFromLibrary( fpID, false );
+            }
 
             SyncLibraryTree( true );
         }
