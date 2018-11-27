@@ -43,9 +43,11 @@ packages and Python script files in specific directories on startup.
 In order for the discovery process to work, the following requirements must be met.
 
 * The plugin must be installed in the KiCad plugins search paths as documented
-  in `scripting/kicadplugins.i`.
+  in `scripting/kicadplugins.i`.  You can always discover the search path for your
+  setup by opening the Scripting console and entering the command: `import pcbnew;
+  print pcbnew.PLUGIN_DIRECTORIES_SEARCH`.
 
-    Currently on a Linux Installation this is
+    Currently on a Linux Installation the plugins search path is
 
     * /usr/share/kicad/scripting/plugins/
     * ~/.kicad/scripting/plugins
@@ -56,7 +58,7 @@ In order for the discovery process to work, the following requirements must be m
     * \{KICAD_INSTALL_PATH\}/share/kicad/scripting/plugins
     * %APPDATA%/Roaming/kicad/scripting/plugins
 
-    On MacOS
+    On macOS, there is a security feature that makes it easier to add scripting plugins to the ~/Library... path than to kicad.app, but the search path is
 
     * /Applications/kicad/Kicad/Contents/SharedSupport/scripting/plugins
     * ~/Library/Application Support/kicad/scripting/plugins
