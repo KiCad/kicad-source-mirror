@@ -152,10 +152,11 @@ typedef std::vector<CN_ANCHOR_PTR>  CN_ANCHORS;
 // basic connectivity item
 class CN_ITEM : public INTRUSIVE_LIST<CN_ITEM>
 {
+public:
+    using CONNECTED_ITEMS = std::set<CN_ITEM*>;
+
 private:
     BOARD_CONNECTED_ITEM* m_parent;
-
-    using CONNECTED_ITEMS = std::set<CN_ITEM*>;
 
     ///> list of items physically connected (touching)
     CONNECTED_ITEMS m_connected;

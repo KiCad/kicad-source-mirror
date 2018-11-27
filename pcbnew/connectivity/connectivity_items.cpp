@@ -253,50 +253,27 @@ bool CN_ANCHOR::IsDangling() const
     if( !m_cluster )
         return true;
 
-    // Calculate the item count connected to this anchor.
-    // m_cluster groups all items connected, but they are not necessary connected
-    // at this coordinate point (they are only candidates)
-    BOARD_CONNECTED_ITEM* item_ref = Parent();
-    LSET layers = item_ref->GetLayerSet() & LSET::AllCuMask();
-
-    // the number of items connected to item_ref at ths anchor point
-    int connected_items_count = 0;
-
     // the minimal number of items connected to item_ref
     // at this anchor point to decide the anchor is *not* dangling
-    int minimal_count = 1;
+    size_t minimal_count = 1;
+    size_t connected_count = m_item->ConnectedItems().size();
 
     // a via can be removed if connected to only one other item.
-    // the minimal_count is therefore 2
-    if( item_ref->Type() == PCB_VIA_T )
-        minimal_count = 2;
+    if( Parent()->Type() == PCB_VIA_T )
+        return connected_count < 2;
 
-    for( CN_ITEM* item : *m_cluster )
+    if( m_item->AnchorCount() == 1 )
+        return connected_count < minimal_count;
+
+    // Only items with multiple anchors might have additional items connected that we
+    // should ignore for this calculation.
+    for( auto item : m_item->ConnectedItems() )
     {
-        if( !item->Valid() )
-            continue;
-
-        BOARD_CONNECTED_ITEM* brd_item = item->Parent();
-
-        if( brd_item == item_ref )
-            continue;
-
-        // count only items on the same layer at this coordinate (especially for zones)
-        if( !( brd_item->GetLayerSet() & layers ).any() )
-            continue;
-
-        if( brd_item->Type() == PCB_ZONE_AREA_T )
-        {
-            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( brd_item );
-
-            if( zone->HitTestInsideZone( wxPoint( Pos() ) ) )
-                connected_items_count++;
-        }
-        else if( brd_item->HitTest( wxPoint( Pos() ) ) )
-            connected_items_count++;
+        if( !item->Parent()->HitTest( wxPoint( Pos().x, Pos().y ) ) )
+            connected_count--;
     }
 
-    return connected_items_count < minimal_count;
+    return connected_count < minimal_count;
 }
 
 
