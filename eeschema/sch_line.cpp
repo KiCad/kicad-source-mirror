@@ -518,8 +518,7 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
             if( item.GetItem() == this )
                 continue;
 
-            if(     item.GetType() == NO_CONNECT_END ||
-                    item.GetType() == BUS_START_END ||
+            if(     item.GetType() == BUS_START_END ||
                     item.GetType() == BUS_END_END  ||
                     item.GetType() == BUS_ENTRY_END )
                 continue;
