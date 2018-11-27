@@ -92,17 +92,25 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
 void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
-    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
-
-    if( m_allowEval && textEntry )
+    if( aEvent.GetWindow() && aEvent.GetWindow()->GetId() == wxID_CANCEL )
     {
-        if( m_eval.Process( textEntry->GetValue() ) )
-            textEntry->ChangeValue( m_eval.Result() );
-
-        m_needsEval = false;
+        // Don't eval or validate when focus lost due to Cancel.  While most platforms
+        // suppress KillFocus events after a Cancel, MSW (at least) does not.
     }
+    else
+    {
+        auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
-    Validate( true );
+        if( m_allowEval && textEntry )
+        {
+            if( m_eval.Process( textEntry->GetValue() ) )
+                textEntry->ChangeValue( m_eval.Result() );
+
+            m_needsEval = false;
+        }
+
+        Validate( true );
+    }
 
     aEvent.Skip();
 }
