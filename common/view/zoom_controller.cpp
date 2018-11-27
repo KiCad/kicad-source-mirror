@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013-2015 CERN
- * Copyright (C) 2012-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -81,7 +81,7 @@ double ACCELERATING_ZOOM_CONTROLLER::GetScaleForRotation( int aRotation )
     m_lastTimestamp = timestamp;
 
     wxLogTrace( traceZoomScroll,
-            wxString::Format( "Rot %d, time diff: %ldms", aRotation, timeDiff.count() ) );
+            wxString::Format( "Rot %d, time diff: %ldms", aRotation, (long)timeDiff.count() ) );
 
     double zoomScale;
 
