@@ -143,8 +143,8 @@ static const std::vector<EVAL_CASE> eval_cases_valid = {
     { "(1)", "1" },
     // Parens affect precedence
     { "-(1 + (2 - 4)) * 20.8 / 2", "10.4" },
-    // Unary addition, not a leading operator
-    //{ "+2 - 1", "1" } // TODO: This does not come out as valid
+    // Unary addition is a sign, not a leading operator
+    { "+2 - 1", "1" },
     // Unknown vars are 0.0
     { "1 + unknown", "1" },
     // Set var in-string
@@ -187,7 +187,6 @@ static const std::vector<EVAL_INVALID_CASE> eval_cases_invalid = {
     // Trailing operator
     { "1+" },
     // Leading operator
-    { "+2 + 1" },
     { "*2 + 1" },
     // No operator
     { "1 2" },
