@@ -71,12 +71,12 @@ Webpage titles and navigational elements | Header
 
 This section defines how dialog boxes should be designed.  The KiCad project
 uses the [GNOME User Interface Guidelines][gnome-ui-guidelines] for laying out
-dialogs.  KiCad's dialogs must be designed with [wxFormBuilder][wxformbuilder].
-As wxFormBuilder available in packages is likely to be a different version than
-what other developers have installed, it has been decided to use the version
-kept in a Github repository, branch [wxFB3.5RC-1][wxformbuilder-github] to avoid
-version mismatch.  When designing dialogs, follow the [visual layout section of
-the GNOME User Interface Guidelines][gnome-ui-layout].
+dialogs.  When designing dialogs, follow the [visual layout section of the GNOME
+User Interface Guidelines][gnome-ui-layout].  KiCad's dialogs may either be
+designed with [wxFormBuilder][wxformbuilder] or created by hand.  However,
+existing dialogs must be maintained in the same way as they have been
+implemented.  Please use [wxFormBuilder v3.8.0 or later][wxformbuilder-releases]
+to avoid version mismatch between developers.
 
 ## Escape Key Termination ## {#dialogs-esc-key}
 Please note that the escape key termination only works properly if there is a
@@ -168,8 +168,8 @@ controls so text should be quoted with single quotes ''.  e.g.:
 [gnome-ui-guidelines]:https://developer.gnome.org/hig/stable/
 [gnome-ui-layout]:https://developer.gnome.org/hig/stable/visual-layout.html.en
 [gnome-ui-style]:https://developer.gnome.org/hig/stable/writing-style.html.en
-[wxformbuilder]:https://sourceforge.net/projects/wxformbuilder/
-[wxformbuilder-github]:https://github.com/marekr/wxFormBuilder/tree/wxFB3.5-RC1
+[wxformbuilder]:https://github.com/wxFormBuilder/wxFormBuilder
+[wxformbuilder-releases]:https://github.com/wxFormBuilder/wxFormBuilder/releases
 [wxwidgets-doc]:http://docs.wxwidgets.org/3.0/
 [wxdialog-setescapeid]:http://docs.wxwidgets.org/3.0/classwx_dialog.html#a585869988e308f549128a6a065f387c6
 [wxwidgets-sizers]:http://docs.wxwidgets.org/3.0/overview_sizer.html
