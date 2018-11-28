@@ -40,6 +40,8 @@ add_executable( qa_common
     test_title_block.cpp
     test_utf8.cpp
 
+    libeval/test_numeric_evaluator.cpp
+
     geometry/test_fillet.cpp
 
     view/test_zoom_controller.cpp
