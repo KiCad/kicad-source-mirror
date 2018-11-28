@@ -215,9 +215,6 @@ bool GERBER_PLOTTER::StartPlot()
     // Be sure the usual dark polarity is selected:
     fputs( "%LPD*%\n", outputFile );
 
-    // Specify linear interpol (G01):
-    fputs( "G01*\n", outputFile );
-
     fputs( "G04 APERTURE LIST*\n", outputFile );
 
     return true;
@@ -484,7 +481,7 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     DPOINT devEnd = userToDeviceCoordinates( end );
     DPOINT devCenter = userToDeviceCoordinates( aCenter ) - userToDeviceCoordinates( start );
 
-    fprintf( outputFile, "G75*\n" ); // Multiquadrant mode
+    fprintf( outputFile, "G75*\n" ); // Multiquadrant (360 degrees) mode
 
     if( aStAngle < aEndAngle )
         fprintf( outputFile, "G03" );
@@ -494,7 +491,8 @@ void GERBER_PLOTTER::Arc( const wxPoint& aCenter, double aStAngle, double aEndAn
     fprintf( outputFile, "X%dY%dI%dJ%dD01*\n",
              KiROUND( devEnd.x ), KiROUND( devEnd.y ),
              KiROUND( devCenter.x ), KiROUND( devCenter.y ) );
-    fprintf( outputFile, "G01*\n" ); // Back to linear interp.
+
+    fprintf( outputFile, "G01*\n" ); // Back to linear interpol (perhaps useless here).
 }
 
 
@@ -519,6 +517,7 @@ void GERBER_PLOTTER:: PlotPoly( const std::vector< wxPoint >& aCornerList,
         fputs( "G36*\n", outputFile );
 
         MoveTo( aCornerList[0] );
+        fputs( "G01*\n", outputFile );      // Set linear interpolation.
 
         for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
             LineTo( aCornerList[ii] );
