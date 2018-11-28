@@ -219,6 +219,7 @@ void GERBER_FILE_IMAGE::ResetDefaultValues()
     m_PreviousPos.x = m_PreviousPos.y = 0;          // last specified coord
     m_IJPos.x = m_IJPos.y = 0;                      // current centre coord for
                                                     // plot arcs & circles
+    m_LastCoordIsIJPos = false;                     // True only after a IJ coordinate is read
     m_ArcRadius = 0;                                // radius of arcs in circular interpol (given by A## command).
                                                     // in command like X##Y##A##
     m_LastArcDataType = ARC_INFO_TYPE_NONE;         // Extra coordinate info type for arcs

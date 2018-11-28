@@ -154,6 +154,7 @@ public:
     wxPoint            m_CurrentPos;                            // current specified coord for plot
     wxPoint            m_PreviousPos;                           // old current specified coord for plot
     wxPoint            m_IJPos;                                 // IJ coord (for arcs & circles )
+    bool               m_LastCoordIsIJPos;                      // true if a IJ coord was read (for arcs & circles )
     int                m_ArcRadius;                             // A value ( = radius in circular routing in Excellon files )
     LAST_EXTRA_ARC_DATA_TYPE m_LastArcDataType;                 // Identifier for arc data type (IJ (center) or A## (radius))
     FILE*              m_Current_File;                          // Current file to read
