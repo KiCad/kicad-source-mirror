@@ -96,6 +96,39 @@ SEG::ecoord SEG::SquaredDistance( const SEG& aSeg ) const
 }
 
 
+const VECTOR2I SEG::NearestPoint( const SEG& aSeg ) const
+{
+    if( auto p = Intersect( aSeg ) )
+        return *p;
+
+    const VECTOR2I pts_origin[4] =
+    {
+            aSeg.NearestPoint( A ),
+            aSeg.NearestPoint( B ),
+            NearestPoint( aSeg.A ),
+            NearestPoint( aSeg.B )
+    };
+
+    const ecoord pts_dist[4] =
+    {
+            ( pts_origin[0] - A ).SquaredEuclideanNorm(),
+            ( pts_origin[1] - B ).SquaredEuclideanNorm(),
+            ( pts_origin[2] - aSeg.A ).SquaredEuclideanNorm(),
+            ( pts_origin[3] - aSeg.B ).SquaredEuclideanNorm()
+    };
+
+    int min_i = 0;
+
+    for( int i = 0; i < 4; i++ )
+    {
+        if( pts_dist[i] < pts_dist[min_i] )
+            min_i = i;
+    }
+
+    return pts_origin[min_i];
+}
+
+
 OPT_VECTOR2I SEG::Intersect( const SEG& aSeg, bool aIgnoreEndpoints, bool aLines ) const
 {
     const VECTOR2I  e( B - A );

@@ -562,6 +562,8 @@ public:
     const ZONE_SETTINGS& GetZoneSettings() const            { return m_zoneSettings; }
     void SetZoneSettings( const ZONE_SETTINGS& aSettings )  { m_zoneSettings = aSettings; }
 
+    wxString    GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+
     /**
      * Function GetColorSettings
      * @return the current COLORS_DESIGN_SETTINGS in use
@@ -585,11 +587,14 @@ public:
      * @param aOutlines The SHAPE_POLY_SET to fill in with outlines/holes.
      * @param aErrorText = a wxString reference to display an error message
      *          with the coordinate of the point which creates the error
-     *          (default = NULL , no message returned on error)
+     *          (default = nullptr , no message returned on error)
+     * @param aErrorLocation = a wxPoint giving the location of the Error message on the board
+     *          if left null (default), no location is returned
+     *
      * @return true if success, false if a contour is not valid
      */
     bool GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines,
-                                  wxString* aErrorText = NULL );
+                                  wxString* aErrorText = nullptr, wxPoint* aErrorLocation = nullptr );
 
     /**
      * Function ConvertBrdLayerToPolygonalContours

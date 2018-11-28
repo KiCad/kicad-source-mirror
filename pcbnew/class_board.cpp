@@ -171,8 +171,6 @@ void BOARD::BuildConnectivity()
 
 const wxPoint BOARD::GetPosition() const
 {
-    wxLogWarning( wxT( "This should not be called on the BOARD object") );
-
     return ZeroOffset;
 }
 
@@ -1018,6 +1016,12 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     }
 
     m_connectivity->Remove( aBoardItem );
+}
+
+
+wxString BOARD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+{
+    return wxString::Format( _( "PCB" ) );
 }
 
 
@@ -2949,12 +2953,14 @@ BOARD_ITEM* BOARD::Duplicate( const BOARD_ITEM* aItem,
  * return true if success, false if a contour is not valid
  */
 extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-                                wxString* aErrorText, unsigned int aTolerance );
+                                wxString* aErrorText, unsigned int aTolerance,
+                                wxPoint* aErrorLocation = nullptr );
 
 
-bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText )
+bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText, wxPoint* aErrorLocation )
 {
-    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText, Millimeter2iu( 0.05 ) );
+    bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText,
+            Millimeter2iu( 0.05 ), aErrorLocation );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

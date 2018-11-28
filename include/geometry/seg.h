@@ -35,10 +35,8 @@ typedef OPT<VECTOR2I> OPT_VECTOR2I;
 
 class SEG
 {
-private:
-    typedef VECTOR2I::extended_type ecoord;
-
 public:
+    using ecoord = VECTOR2I::extended_type;
     friend inline std::ostream& operator<<( std::ostream& aStream, const SEG& aSeg );
 
     /* Start and the of the segment. Public, to make access simpler.
@@ -155,6 +153,12 @@ public:
       * @return the nearest point
       */
     const VECTOR2I NearestPoint( const VECTOR2I &aP ) const;
+
+    /**
+      * Computes a point on the segment (this) that is closest to any point on aSeg.
+      * @return the nearest point
+      */
+    const VECTOR2I NearestPoint( const SEG &aSeg ) const;
 
     /**
      * Function Intersect()

@@ -704,6 +704,32 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
             addMarkerToPcb( newMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE ) );
     }
 
+    /***********************************************/
+    /* Phase 4: test DRC with to board edge        */
+    /***********************************************/
+    {
+        SEG test_seg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
+
+        // the minimum distance = clearance plus half the reference track
+        // width.  Board edges do not have width or clearance values, so we
+        // look for simple crossing.
+        SEG::ecoord w_dist = aRefSeg->GetClearance() + aRefSeg->GetWidth() / 2;
+        w_dist *= w_dist;
+
+        for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )
+        {
+            if( test_seg.SquaredDistance( *it ) < w_dist )
+            {
+                auto pt = test_seg.NearestPoint( *it );
+                markers.push_back( newMarker( wxPoint( pt.x, pt.y ), aRefSeg, DRCE_TRACK_NEAR_EDGE ) );
+
+                if( !handleNewMarker() )
+                    return false;
+            }
+        }
+    }
+
+
     if( markers.size() > 0 )
     {
         commitMarkers();

@@ -101,6 +101,10 @@ wxString DRC_ITEM::GetErrorText() const
         return wxString( _( "Micro via drill too small" ) );
     case DRCE_DRILLED_HOLES_TOO_CLOSE:
         return wxString( _( "Drilled holes too close together" ) );
+    case DRCE_TRACK_NEAR_EDGE:
+        return wxString( _( "Track too close to board edge" ) );
+    case DRCE_INVALID_OUTLINE:
+        return wxString( _( "Board outline does not form a closed polygon" ) );
 
     // use &lt; since this is text ultimately embedded in HTML
     case DRCE_NETCLASS_TRACKWIDTH:

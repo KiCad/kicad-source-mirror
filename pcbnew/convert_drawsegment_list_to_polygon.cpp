@@ -177,9 +177,10 @@ static DRAWSEGMENT* findPoint( const wxPoint& aPoint, std::vector< DRAWSEGMENT* 
  * @param aPolygons will contain the complex polygon.
  * @param aTolerance is the max distance between points that is still accepted as connected (internal units)
  * @param aErrorText is a wxString to return error message.
+ * @param aErrorLocation is the optional position of the error in the outline
  */
 bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
-                              wxString* aErrorText, unsigned int aTolerance )
+                              wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
 {
     if( aSegList.size() == 0 )
         return true;
@@ -415,6 +416,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     *aErrorText << msg << "\n";
                 }
 
+                if( aErrorLocation )
+                    *aErrorLocation = graphic->GetPosition();
+
                 return false;
             }
 
@@ -442,6 +446,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
 
                         *aErrorText << msg << "\n";
                     }
+
+                    if( aErrorLocation )
+                        *aErrorLocation = prevPt;
 
                     return false;
                 }
@@ -594,6 +601,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                         *aErrorText << msg << "\n";
                     }
 
+                    if( aErrorLocation )
+                        *aErrorLocation = graphic->GetPosition();
+
                     return false;
                 }
 
@@ -622,6 +632,9 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                             *aErrorText << msg << "\n";
                         }
 
+                        if( aErrorLocation )
+                            *aErrorLocation = prevPt;
+
                         return false;
                     }
                     break;
@@ -641,7 +654,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
  * All contours should be closed, i.e. valid closed polygon vertices
  */
 bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
-        wxString* aErrorText, unsigned int aTolerance )
+        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation )
 {
     PCB_TYPE_COLLECTOR  items;
 
@@ -659,7 +672,7 @@ bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
             segList.push_back( static_cast< DRAWSEGMENT* >( items[ii] ) );
     }
 
-    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance );
+    bool success = ConvertOutlineToPolygon( segList, aOutlines, aErrorText, aTolerance, aErrorLocation );
 
     if( !success || !aOutlines.OutlineCount() )
     {

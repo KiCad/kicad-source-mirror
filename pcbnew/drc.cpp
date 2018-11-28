@@ -393,8 +393,15 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     // ( the board can be reloaded )
     m_pcb = m_pcbEditorFrame->GetBoard();
 
-    // someone should have cleared the two lists before calling this.
+    if( aMessages )
+    {
+        aMessages->AppendText( _( "Board Outline...\n" ) );
+        wxSafeYield();
+    }
 
+    testOutline();
+
+    // someone should have cleared the two lists before calling this.
     if( !testNetClasses() )
     {
         // testing the netclasses is a special case because if the netclasses
@@ -1161,6 +1168,17 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
                 break;
             }
         }
+    }
+}
+
+
+void DRC::testOutline()
+{
+    wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
+    if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
+    {
+        addMarkerToPcb( newMarker( error_loc, m_pcb, DRCE_INVALID_OUTLINE ) );
+        return;
     }
 }
 

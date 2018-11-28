@@ -1445,7 +1445,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
 
 // see convert_drawsegment_list_to_polygon.cpp:
 extern bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SET& aPolygons,
-        wxString* aErrorText, unsigned int aTolerance );
+        wxString* aErrorText, unsigned int aTolerance, wxPoint* aErrorLocation = nullptr );
 
 bool MODULE::BuildPolyCourtyard()
 {

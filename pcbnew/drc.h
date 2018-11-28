@@ -32,6 +32,7 @@
 #include <vector>
 #include <memory>
 #include <geometry/seg.h>
+#include <geometry/shape_poly_set.h>
 
 #define OK_DRC  0
 #define BAD_DRC 1
@@ -94,6 +95,8 @@
 #define DRCE_BURIED_VIA_NOT_ALLOWED            49   ///< buried vias are not allowed
 #define DRCE_DISABLED_LAYER_ITEM               50   ///< item on a disabled layer
 #define DRCE_DRILLED_HOLES_TOO_CLOSE           51   ///< overlapping drilled holes break drill bits
+#define DRCE_TRACK_NEAR_EDGE                   53   ///< track too close to board edge
+#define DRCE_INVALID_OUTLINE                   54   ///< invalid board outline
 
 
 class EDA_DRAW_PANEL;
@@ -220,6 +223,7 @@ private:
 
     PCB_EDIT_FRAME*     m_pcbEditorFrame;   ///< The pcb frame editor which owns the board
     BOARD*              m_pcb;
+    SHAPE_POLY_SET      m_board_outlines;   ///< The board outline including cutouts
     DIALOG_DRC_CONTROL* m_drcDialog;
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
@@ -313,6 +317,11 @@ private:
 
     ///> Tests for items placed on disabled layers (causing false connections).
     void testDisabledLayers();
+
+    /**
+     * Test that the board outline is contiguous and composed of valid elements
+     */
+    void testOutline();
 
     //-----<single "item" tests>-----------------------------------------
 
