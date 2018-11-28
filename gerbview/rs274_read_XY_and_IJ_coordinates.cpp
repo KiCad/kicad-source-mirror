@@ -269,6 +269,7 @@ wxPoint GERBER_FILE_IMAGE::ReadIJCoord( char*& Text )
 
     m_IJPos = pos;
     m_LastArcDataType = ARC_INFO_TYPE_CENTER;
+    m_LastCoordIsIJPos = true;
 
     return pos;
 }

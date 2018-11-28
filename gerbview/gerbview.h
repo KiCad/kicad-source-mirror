@@ -40,9 +40,6 @@ extern const wxChar* g_GerberPageSizeList[7];
 enum Gerb_Interpolation
 {
     GERB_INTERPOL_LINEAR_1X = 0,
-    GERB_INTERPOL_LINEAR_10X,
-    GERB_INTERPOL_LINEAR_01X,
-    GERB_INTERPOL_LINEAR_001X,
     GERB_INTERPOL_ARC_NEG,
     GERB_INTERPOL_ARC_POS
 };
@@ -56,9 +53,6 @@ enum Gerb_GCommand
     GC_CIRCLE_NEG_INTERPOL      = 2,
     GC_CIRCLE_POS_INTERPOL      = 3,
     GC_COMMENT                  = 4,
-    GC_LINEAR_INTERPOL_10X      = 10,
-    GC_LINEAR_INTERPOL_0P1X     = 11,
-    GC_LINEAR_INTERPOL_0P01X    = 12,
     GC_TURN_ON_POLY_FILL        = 36,
     GC_TURN_OFF_POLY_FILL       = 37,
     GC_SELECT_TOOL              = 54,

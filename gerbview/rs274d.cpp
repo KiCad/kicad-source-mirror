@@ -37,11 +37,12 @@
 
 #include <cmath>
 
-/* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes):
+/* Gerber: NOTES about some important commands found in RS274D and RS274X (G codes).
+ * Some are now deprecated, but deprecated commands must be known by the Gerber reader
  * Gn =
- * G01 linear interpolation (right trace)
- * G02, G20, G21 Circular interpolation, meaning trig <0 (clockwise)
- * G03, G30, G31 Circular interpolation, meaning trigo> 0 (counterclockwise)
+ * G01 linear interpolation (linear trace)
+ * G02, G20, G21 Circular interpolation, clockwise
+ * G03, G30, G31 Circular interpolation, counterclockwise
  * G04 = comment. Since Sept 2014, file attributes and other X2 attributes can be found here
  *       if the line starts by G04 #@!
  * G06 parabolic interpolation
@@ -49,19 +50,14 @@
  * G10 linear interpolation (scale x10)
  * G11 linear interpolation (0.1x range)
  * G12 linear interpolation (0.01x scale)
- * G36 Start polygon mode
+ * G36 Start polygon mode (called a region, because the "polygon" can include arcs)
  * G37 Stop polygon mode (and close it)
- * G54 Selection Tool
+ * G54 Selection Tool (outdated)
  * G60 linear interpolation (scale x100)
  * G70 Select Units = Inches
  * G71 Select Units = Millimeters
- * G74 disable 360 degrees circular interpolation  (return to 90 deg mode)
- *      and perhaps circular interpolation (return to linear interpolation )
- *      see rs274xrevd_e.pdf pages 47 and 48
- *      Unfortunately page 47 said G74 disable G02 or G03
- *      and page 48 said G01 must be used to disable G02 or G03.
- *      Currently GerbView disable G02 or G03 after a G74 command (tests using 2 gerber files).
- * G75 enable 360 degrees circular interpolation
+ * G74 enable 90 deg mode for arcs (CW or CCW)
+ * G75 enable 360 degrees for arcs (CW or CCW)
  * G90 mode absolute coordinates
  *
  * X, Y
@@ -506,18 +502,6 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
             text++;
         break;
 
-    case GC_LINEAR_INTERPOL_10X:
-        m_Iterpolation = GERB_INTERPOL_LINEAR_10X;
-        break;
-
-    case GC_LINEAR_INTERPOL_0P1X:
-        m_Iterpolation = GERB_INTERPOL_LINEAR_01X;
-        break;
-
-    case GC_LINEAR_INTERPOL_0P01X:
-        m_Iterpolation = GERB_INTERPOL_LINEAR_001X;
-        break;
-
     case GC_SELECT_TOOL:
     {
         int D_commande = DCodeNumber( text );
@@ -574,6 +558,7 @@ bool GERBER_FILE_IMAGE::Execute_G_Command( char*& text, int G_command )
         m_Exposure = false;
         m_PolygonFillMode = false;
         m_PolygonFillModeState = 0;
+        m_Iterpolation = GERB_INTERPOL_LINEAR_1X;   // not sure it should be done
         break;
 
     case GC_MOVE:       // Non existent
@@ -709,22 +694,27 @@ bool GERBER_FILE_IMAGE::Execute_DCODE_Command( char*& text, int D_commande )
                 StepAndRepeatItem( *gbritem );
                 break;
 
-            case GERB_INTERPOL_LINEAR_01X:
-            case GERB_INTERPOL_LINEAR_001X:
-            case GERB_INTERPOL_LINEAR_10X:
-                wxBell();
-                break;
-
             case GERB_INTERPOL_ARC_NEG:
             case GERB_INTERPOL_ARC_POS:
                 gbritem = new GERBER_DRAW_ITEM( this );
                 m_Drawings.Append( gbritem );
 
-                fillArcGBRITEM( gbritem, dcode, m_PreviousPos,
-                                m_CurrentPos, m_IJPos, size,
-                                ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
-                                false : true, m_360Arc_enbl, GetLayerParams().m_LayerNegative );
+                if( m_LastCoordIsIJPos )
+                {
+                    fillArcGBRITEM( gbritem, dcode, m_PreviousPos,
+                                    m_CurrentPos, m_IJPos, size,
+                                    ( m_Iterpolation == GERB_INTERPOL_ARC_NEG ) ?
+                                    false : true, m_360Arc_enbl, GetLayerParams().m_LayerNegative );
+                    m_LastCoordIsIJPos = false;
+                }
+                else
+                {
+                    fillLineGBRITEM( gbritem, dcode, m_PreviousPos,
+                                     m_CurrentPos, size, GetLayerParams().m_LayerNegative );
+                }
+
                 StepAndRepeatItem( *gbritem );
+
                 break;
 
             default:
