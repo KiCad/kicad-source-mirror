@@ -2,6 +2,8 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ *
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -55,6 +57,7 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
     return bbox;
 }
 
+
 void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     if( !m_data->TryLock() )
@@ -78,9 +81,13 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     {
         if ( l.a == l.b )
         {
-            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ), VECTOR2I( l.b.x + CROSS_SIZE, l.b.y + CROSS_SIZE ) );
-            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y + CROSS_SIZE ), VECTOR2I( l.b.x + CROSS_SIZE, l.b.y - CROSS_SIZE ) );
-        } else {
+            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y - CROSS_SIZE ),
+                           VECTOR2I( l.b.x + CROSS_SIZE, l.b.y + CROSS_SIZE ) );
+            gal->DrawLine( VECTOR2I( l.a.x - CROSS_SIZE, l.a.y + CROSS_SIZE ),
+                           VECTOR2I( l.b.x + CROSS_SIZE, l.b.y - CROSS_SIZE ) );
+        }
+        else
+        {
             gal->DrawLine( l.a, l.b );
         }
     }
@@ -129,8 +136,10 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             {
                 if ( source == target )
                 {
-                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y - CROSS_SIZE ), VECTOR2I( source.x + CROSS_SIZE, source.y + CROSS_SIZE ) );
-                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y + CROSS_SIZE ), VECTOR2I( source.x + CROSS_SIZE, source.y - CROSS_SIZE ) );
+                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y - CROSS_SIZE ),
+                                   VECTOR2I( source.x + CROSS_SIZE, source.y + CROSS_SIZE ) );
+                    gal->DrawLine( VECTOR2I( source.x - CROSS_SIZE, source.y + CROSS_SIZE ),
+                                   VECTOR2I( source.x + CROSS_SIZE, source.y - CROSS_SIZE ) );
                 }
                 else
                 {

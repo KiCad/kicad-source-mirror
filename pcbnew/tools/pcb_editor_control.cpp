@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 CERN
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -667,6 +667,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     return 0;
 }
 
+
 static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aOriginZones,
         std::vector<ZONE_CONTAINER *>& aMergedZones )
 {
@@ -684,7 +685,7 @@ static bool mergeZones( BOARD_COMMIT& aCommit, std::vector<ZONE_CONTAINER *>& aO
     // but we should never have more than 2 polys
     if( aOriginZones[0]->Outline()->OutlineCount() > 1 )
     {
-        wxLogMessage( wxT( "BOARD::CombineAreas error: more than 2 polys after merging" ) );
+        wxLogMessage( "BOARD::CombineAreas error: more than 2 polys after merging" );
         return false;
     }
 
@@ -889,17 +890,19 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_HAND, _( "Adjust zero" ) );
-    picker->SetClickHandler( std::bind( SetDrillOrigin, getView(), m_frame, m_placeOrigin.get(), _1 ) );
+    picker->SetClickHandler( std::bind( SetDrillOrigin, getView(), m_frame,
+                                        m_placeOrigin.get(), _1 ) );
     picker->Activate();
     Wait();
 
     return 0;
 }
 
+
 /**
- * Function highlightNet()
- * Looks for a BOARD_CONNECTED_ITEM in a given spot, and if one is found - it enables
+ * Look for a BOARD_CONNECTED_ITEM in a given spot and if one is found - it enables
  * highlight for its net.
+ *
  * @param aToolMgr is the TOOL_MANAGER currently in use.
  * @param aPosition is the point where an item is expected (world coordinates).
  * @param aUseSelection is true if we should use the current selection to pick the netcode
@@ -1119,7 +1122,8 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
     wxASSERT( picker );
     wxASSERT( board );
 
-    m_frame->SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT, wxCURSOR_PENCIL, _( "Pick Components for Local Ratsnest" ) );
+    m_frame->SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT, wxCURSOR_PENCIL,
+                        _( "Pick Components for Local Ratsnest" ) );
     picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board, _1 ) );
     picker->SetFinalizeHandler( [ board ]( int aCondition ){
         auto vis = board->IsElementVisible( LAYER_RATSNEST );

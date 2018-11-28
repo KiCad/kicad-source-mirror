@@ -107,17 +107,17 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
             &settings.m_LineThickness[ LAYER_CLASS_SILK ],
             Millimeter2iu( DEFAULT_SILK_LINE_WIDTH ), Millimeter2iu( 0.01 ), Millimeter2iu( 100.0 ),
             nullptr, 1/IU_PER_MM, wxT( "FpEditorGrlineWidth" ) ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextSizeH" ),
             &settings.m_TextSize[ LAYER_CLASS_SILK ].x,
             Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
             nullptr, 1/IU_PER_MM, wxT( "FpEditorTextsDefaultSizeH" ) ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextSizeV" ),
             &settings.m_TextSize[ LAYER_CLASS_SILK ].y,
             Millimeter2iu( DEFAULT_SILK_TEXT_SIZE ), TEXTS_MIN_SIZE, TEXTS_MAX_SIZE,
             nullptr, 1/IU_PER_MM, wxT( "FpEditorTextsDefaultSizeV" ) ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_INT_WITH_SCALE( true, wxT( "FpEditorSilkTextThickness" ),
             &settings.m_TextThickness[ LAYER_CLASS_SILK ],
             Millimeter2iu( DEFAULT_SILK_TEXT_WIDTH ), 1, TEXTS_MAX_WIDTH,
@@ -184,20 +184,20 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 
     m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorRefDefaultText" ),
             &settings.m_RefDefaultText, wxT( "REF**" ) ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorRefDefaultVisibility" ),
             &settings.m_RefDefaultVisibility, true ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorRefDefaultLayer" ),
             &settings.m_RefDefaultlayer,
             int( F_SilkS ), int( F_SilkS ), int( F_Fab ) ) );
 
     m_configParams.push_back( new PARAM_CFG_WXSTRING( true, wxT( "FpEditorValueDefaultText" ),
             &settings.m_ValueDefaultText, wxT( "" ) ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorValueDefaultVisibility" ),
             &settings.m_ValueDefaultVisibility, true ) );
-    
+
     m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "FpEditorValueDefaultLayer" ),
             &settings.m_ValueDefaultlayer,
             int( F_Fab ), int( F_SilkS ), int( F_Fab ) ) );

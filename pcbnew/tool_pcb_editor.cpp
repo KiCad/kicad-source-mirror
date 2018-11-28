@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012=2015 Wayne Stambaugh <stambaughw@verizon.net>
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
@@ -584,17 +584,17 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Creates box to display and choose tracks widths:
     m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
-                                         ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                         wxDefaultPosition, wxDefaultSize,
-                                         0, NULL );
+                                       ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
+                                       wxDefaultPosition, wxDefaultSize,
+                                       0, NULL );
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
 
     // Creates box to display and choose vias diameters:
     m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      0, NULL );
+                                    ID_AUX_TOOLBAR_PCB_VIA_SIZE,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    0, NULL );
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -610,18 +610,19 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     // Add the box to display and select the current grid size:
     KiScaledSeparator( m_auxiliaryToolBar, this );
     m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_ON_GRID_SELECT,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      0, NULL );
+                                    ID_ON_GRID_SELECT,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    0, NULL );
     UpdateGridSelectBox();
+
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom
     KiScaledSeparator( m_auxiliaryToolBar, this );
     m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                      ID_ON_ZOOM_SELECT,
-                                      wxDefaultPosition, wxDefaultSize,
-                                      0, NULL );
+                                    ID_ON_ZOOM_SELECT,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    0, NULL );
     updateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
