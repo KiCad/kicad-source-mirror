@@ -18,7 +18,7 @@
 */
 
 %token_type { numEval::TokenType }
-%extra_argument { NumericEvaluator* pEval }
+%extra_argument { NUMERIC_EVALUATOR* pEval }
 
 %nonassoc VAR ASSIGN SEMCOL.
 %left PLUS MINUS.
@@ -27,7 +27,7 @@
 
 %include {
 #include <assert.h>
-#include "numeric_evaluator.h"
+#include <libeval/numeric_evaluator.h>
 }
 
 %syntax_error {
