@@ -86,7 +86,7 @@ void PANEL_EESCHEMA_TEMPLATE_FIELDNAMES::OnDeleteButtonClick( wxCommandEvent& ev
 
     int curRow = m_grid->GetGridCursorRow();
 
-    if( curRow >= 0 )
+    if( curRow >= 0 && curRow < m_fields.size() )
     {
         m_fields.erase( m_fields.begin() + curRow );
         m_grid->DeleteRows( curRow );
