@@ -35,7 +35,7 @@ DIALOG_LIB_EDIT_TEXT::DIALOG_LIB_EDIT_TEXT( LIB_EDIT_FRAME* aParent, LIB_TEXT* a
     DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true, 0 )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
     m_parent = aParent;
     m_graphicText = aText;

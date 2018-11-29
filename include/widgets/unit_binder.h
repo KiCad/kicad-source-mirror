@@ -49,15 +49,11 @@ public:
      *               wxComboBox, wxStaticText, etc.).
      * @param aUnitLabel is the units label displayed after the text input widget
      * @param aUseMils specifies the use of mils for imperial units (instead of inches)
-     * @param aMin a minimum value (in internal units) for validation
-     * @param aMax a maximum value (in internal units) for validation
      * @param aAllowEval indicates \a aTextInput's content should be eval'ed before storing
      */
     UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                  wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
-                 bool aUseMils = false,
-                 int aMin = INT_MIN, int aMax = INT_MAX,
-                 bool aAllowEval = true );
+                 bool aUseMils = false, bool aAllowEval = true );
 
     /**
      * Function SetUnits
@@ -65,24 +61,6 @@ public:
      * used to set to DEGREES for angular controls.
      */
     virtual void SetUnits( EDA_UNITS_T aUnits, bool aUseMils = false );
-
-    /**
-     * Set the minimal accepted value (in Internal Units).
-     */
-    void SetMin( int aMin )
-    {
-        wxASSERT( aMin < m_max );
-        m_min = aMin;
-    }
-
-    /**
-     * Set the maximal accepted value (in Internal Units).
-     */
-    void SetMax( int aMax )
-    {
-        wxASSERT( aMax > m_min );
-        m_max = aMax;
-    }
 
     /**
      * Function SetValue
@@ -118,12 +96,13 @@ public:
 
     /**
      * Function Validate
-     * Validates the control, informing the user of any errors found.
+     * Validates the control against the given range, informing the user of any errors found.
      *
-     * When called from an OK handler, \a setFocusOnError should be set to true.  A negative
-     * return value indicates an error.
+     * @param aMin a minimum value (in internal units) for validation
+     * @param aMax a maximum value (in internal units) for validation
+     * @return false on error.
      */
-    virtual bool Validate( bool setFocusOnError = false );
+    virtual bool Validate( int aMin, int aMax, bool setFocusOnError = true );
 
     void SetLabel( const wxString& aLabel );
 
@@ -155,8 +134,6 @@ protected:
     bool              m_useMils;
 
     ///> Validation support.
-    int               m_min;
-    int               m_max;
     wxString          m_errorMessage;
 
     ///> Evaluator

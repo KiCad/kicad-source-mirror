@@ -60,6 +60,10 @@ enum VIATYPE_T
 
 #define MIN_VIA_DRAW_SIZE          4       /// Minimum size in pixel for full drawing
 
+// Used for tracks and vias for algorithmic safety, not to enforce constraints
+#define GEOMETRY_MIN_SIZE ( int )( 0.001 * IU_PER_MM )
+
+
 /**
  * Function GetTrack
  * is a helper function to locate a trace segment having an end point at \a aPosition

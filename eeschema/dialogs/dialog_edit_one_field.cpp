@@ -79,7 +79,7 @@ DIALOG_EDIT_ONE_FIELD::DIALOG_EDIT_ONE_FIELD( SCH_BASE_FRAME* aParent, const wxS
     DIALOG_LIB_EDIT_TEXT_BASE( aParent ),
     m_posX( aParent, m_xPosLabel, m_xPosCtrl, m_xPosUnits, true ),
     m_posY( aParent, m_yPosLabel, m_yPosCtrl, m_yPosUnits, true ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true, 0 )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, true )
 {
     SetTitle( aTitle );
 

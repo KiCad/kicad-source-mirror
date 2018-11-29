@@ -137,8 +137,7 @@ static const LSET presets[] =
 PANEL_SETUP_LAYERS::PANEL_SETUP_LAYERS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame ) :
         PANEL_SETUP_LAYERS_BASE( aParent->GetTreebook() ),
         m_Parent( aParent ), m_frame( aFrame ),
-        m_pcbThickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true,
-                        Millimeter2iu( 0.1 ), Millimeter2iu( 10.0 ) )
+        m_pcbThickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
 {
     m_pcb = aFrame->GetBoard();
 
@@ -487,9 +486,6 @@ void PANEL_SETUP_LAYERS::OnCopperLayersChoice( wxCommandEvent& event )
 
 bool PANEL_SETUP_LAYERS::TransferDataFromWindow()
 {
-    if( !m_pcbThickness.Validate( true ) )
-        return false;
-
     if( !testLayerNames() )
         return false;
 

@@ -576,7 +576,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::Validate()
         }
     }
 
-    if( !m_netClearance.Validate( true ) )
+    if( !m_netClearance.Validate( 0, INT_MAX ) )
         return false;
 
     return true;

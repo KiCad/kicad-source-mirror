@@ -103,10 +103,10 @@ protected:
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_EDIT_FRAME* parent ) :
         DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE( parent ),
-        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true, 0 ),
-        m_textWidth( parent, m_SizeXlabel, m_SizeXCtrl, m_SizeXunit, true, TEXTS_MIN_SIZE ),
-        m_textHeight( parent, m_SizeYlabel, m_SizeYCtrl, m_SizeYunit, true, TEXTS_MIN_SIZE ),
-        m_thickness( parent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnit, true, 0 )
+        m_lineWidth( parent, m_lineWidthLabel, m_LineWidthCtrl, m_lineWidthUnits, true ),
+        m_textWidth( parent, m_SizeXlabel, m_SizeXCtrl, m_SizeXunit, true ),
+        m_textHeight( parent, m_SizeYlabel, m_SizeYCtrl, m_SizeYunit, true ),
+        m_thickness( parent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnit, true )
 {
     m_parent = parent;
     m_brdSettings = &m_parent->GetDesignSettings();
@@ -315,9 +315,11 @@ void DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::visitItem( BOARD_COMMIT& aCommit, BOA
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
 {
-    if( !m_textWidth.Validate( true ) || !m_textHeight.Validate( true ) ||
-        !m_thickness.Validate( true ) || !m_lineWidth.Validate( true ) )
+    if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
+        || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
+    {
         return false;
+    }
 
     BOARD_COMMIT commit( m_parent );
 

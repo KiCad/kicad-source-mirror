@@ -94,8 +94,8 @@ DIALOG_TARGET_PROPERTIES::DIALOG_TARGET_PROPERTIES( PCB_EDIT_FRAME* aParent, PCB
     m_Parent( aParent ),
     m_DC( aDC ),
     m_Target( aTarget ),
-    m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits, true, 0 ),
-    m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true, 0 )
+    m_Size( aParent, m_sizeLabel, m_sizeCtrl, m_sizeUnits, true ),
+    m_Thickness( aParent, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
 {
     m_sdbSizerButtsOK->SetDefault();
 
@@ -119,6 +119,10 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataToWindow()
 
 bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
 {
+    // Zero-size targets are hard to see/select.
+    if( !m_Size.Validate( Mils2iu( 1 ), INT_MAX ) )
+        return false;
+
     BOARD_COMMIT commit( m_Parent );
     commit.Modify( m_Target );
 

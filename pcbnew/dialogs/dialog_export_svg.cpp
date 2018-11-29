@@ -81,18 +81,12 @@ private:
 #define PLOTSVG_LAYERBASE           wxT( "PlotSVGLayer_%d" )
 #define PLOTSVG_DIR_KEY             wxT( "PlotSVGDirectory" )
 
-// reasonable values for default pen width
-#define WIDTH_MAX_VALUE             (2 * IU_PER_MM)
-#define WIDTH_MIN_VALUE             (0.05 * IU_PER_MM)
-
-
 /*
  * DIALOG_EXPORT_SVG functions
  */
 DIALOG_EXPORT_SVG::DIALOG_EXPORT_SVG( PCB_BASE_FRAME* aParent, BOARD* aBoard ) :
     DIALOG_EXPORT_SVG_BASE( aParent ),
-    m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true,
-                       WIDTH_MIN_VALUE, WIDTH_MAX_VALUE)
+    m_lineWidth( aParent, m_penWidthLabel, m_penWidthCtrl, m_penWidthUnits, true )
 {
     m_board  = aBoard;
     m_config = Kiface().KifaceSettings();

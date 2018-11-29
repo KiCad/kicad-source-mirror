@@ -54,9 +54,9 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     DIALOG_TEXT_PROPERTIES_BASE( aParent ),
     m_Parent( aParent ), m_DC( aDC ), m_item( aItem ),
     m_edaText( nullptr ), m_modText( nullptr ), m_pcbText( nullptr ),
-    m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true, TEXTS_MIN_SIZE ),
-    m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true, TEXTS_MIN_SIZE ),
-    m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true, 0 ),
+    m_textWidth( aParent, m_SizeXLabel, m_SizeXCtrl, m_SizeXUnits, true ),
+    m_textHeight( aParent, m_SizeYLabel, m_SizeYCtrl, m_SizeYUnits, true ),
+    m_thickness( aParent, m_ThicknessLabel, m_ThicknessCtrl, m_ThicknessUnits, true ),
     m_posX( aParent, m_PositionXLabel, m_PositionXCtrl, m_PositionXUnits ),
     m_posY( aParent, m_PositionYLabel, m_PositionYCtrl, m_PositionYUnits ),
     m_OrientValidator( 1, &m_OrientValue )
@@ -315,10 +315,8 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
         return false;
     }
 
-    if( !m_textWidth.Validate( true ) || !m_textHeight.Validate( true ) )
-        return false;
-
-    if( !m_thickness.Validate( true ) )
+    if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
+        || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
         return false;
 
     BOARD_COMMIT commit( m_Parent );

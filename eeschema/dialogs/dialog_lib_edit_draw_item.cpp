@@ -34,7 +34,7 @@ DIALOG_LIB_EDIT_DRAW_ITEM::DIALOG_LIB_EDIT_DRAW_ITEM( LIB_EDIT_FRAME* aParent, L
     DIALOG_LIB_EDIT_DRAW_ITEM_BASE( aParent ),
     m_frame( aParent ),
     m_item( aItem ),
-    m_lineWidth( aParent, m_widthLabel, m_widthCtrl, m_widthUnits, true, 0 )
+    m_lineWidth( aParent, m_widthLabel, m_widthCtrl, m_widthUnits, true )
 {
     SetTitle( aItem->GetTypeName() + wxT( " " ) + GetTitle() );
 

@@ -73,10 +73,8 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
     m_fast_grid_opts( aGridChoices ),
     m_gridOriginX( aParent, m_staticTextGridPosX, m_GridOriginXCtrl, m_TextPosXUnits ),
     m_gridOriginY( aParent, m_staticTextGridPosY, m_GridOriginYCtrl, m_TextPosYUnits ),
-    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits,
-                 true, MIN_GRID_SIZE, MAX_GRID_SIZE ),
-    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits,
-                 true, MIN_GRID_SIZE, MAX_GRID_SIZE )
+    m_userGridX( aParent, m_staticTextSizeX, m_OptGridSizeX, m_TextSizeXUnits ),
+    m_userGridY( aParent, m_staticTextSizeY, m_OptGridSizeY, m_TextSizeYUnits )
 {
     m_comboBoxGrid1->Append( m_fast_grid_opts );
     m_comboBoxGrid2->Append( m_fast_grid_opts );
@@ -94,16 +92,10 @@ DIALOG_SET_GRID::DIALOG_SET_GRID( PCB_BASE_FRAME* aParent, const wxArrayString& 
 bool DIALOG_SET_GRID::TransferDataFromWindow()
 {
     // Validate new settings
-    if( !m_gridOriginX.Validate( true ) )
+    if( !m_userGridX.Validate( MIN_GRID_SIZE, MAX_GRID_SIZE ) )
         return false;
 
-    if( !m_gridOriginY.Validate( true ) )
-        return false;
-
-    if( !m_userGridX.Validate( true ) )
-        return false;
-
-    if( !m_userGridY.Validate( true ) )
+    if( !m_userGridY.Validate( MIN_GRID_SIZE, MAX_GRID_SIZE ) )
         return false;
 
     // Apply the new settings

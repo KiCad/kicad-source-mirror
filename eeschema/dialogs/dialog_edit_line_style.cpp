@@ -35,7 +35,7 @@ DIALOG_EDIT_LINE_STYLE::DIALOG_EDIT_LINE_STYLE( SCH_EDIT_FRAME* aParent, SCH_LIN
     DIALOG_EDIT_LINE_STYLE_BASE( aParent ),
     m_frame( aParent ),
     m_line( aLine ),
-    m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true, 0 )
+    m_width( aParent, m_staticTextWidth, m_lineWidth, m_staticWidthUnits, true )
 {
     m_sdbSizerApply->SetLabel( _( "Default" ) );
 

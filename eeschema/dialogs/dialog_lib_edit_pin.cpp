@@ -41,9 +41,9 @@ DIALOG_LIB_EDIT_PIN::DIALOG_LIB_EDIT_PIN( LIB_EDIT_FRAME* parent, LIB_PIN* aPin 
     m_pin( aPin ),
     m_posX( parent, m_posXLabel, m_posXCtrl, m_posXUnits, true ),
     m_posY( parent, m_posYLabel, m_posYCtrl, m_posYUnits, true ),
-    m_pinLength( parent, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits, true, 0 ),
-    m_nameSize( parent, m_nameSizeLabel, m_nameSizeCtrl, m_nameSizeUnits, true, 0 ),
-    m_numberSize( parent, m_numberSizeLabel, m_numberSizeCtrl, m_numberSizeUnits, true, 0 )
+    m_pinLength( parent, m_pinLengthLabel, m_pinLengthCtrl, m_pinLengthUnits, true ),
+    m_nameSize( parent, m_nameSizeLabel, m_nameSizeCtrl, m_nameSizeUnits, true ),
+    m_numberSize( parent, m_numberSizeLabel, m_numberSizeCtrl, m_numberSizeUnits, true )
 {
     // Creates a dummy pin to show on a panel, inside this dialog:
     m_dummyPin = new LIB_PIN( *m_pin );

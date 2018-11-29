@@ -113,14 +113,14 @@ DIALOG_PAD_PROPERTIES::DIALOG_PAD_PROPERTIES( PCB_BASE_FRAME* aParent, D_PAD* aP
     m_padToDie( aParent, m_padToDieLabel, m_padToDieCtrl, m_padToDieUnits, true ),
     m_trapDelta( aParent, m_trapDeltaLabel, m_trapDeltaCtrl, m_trapDeltaUnits, true ),
     m_cornerRadius( aParent, m_cornerRadiusLabel, m_tcCornerRadius, m_cornerRadiusUnits, true ),
-    m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits, true, 0 ),
-    m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits, true, 0 ),
+    m_holeX( aParent, m_holeXLabel, m_holeXCtrl, m_holeXUnits, true ),
+    m_holeY( aParent, m_holeYLabel, m_holeYCtrl, m_holeYUnits, true ),
     m_OrientValidator( 1, &m_OrientValue ),
     m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
     m_maskClearance( aParent, m_maskClearanceLabel, m_maskClearanceCtrl, m_maskClearanceUnits, true ),
     m_pasteClearance( aParent, m_pasteClearanceLabel, m_pasteClearanceCtrl, m_pasteClearanceUnits, true ),
-    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true, 0 ),
-    m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits, true, 0 )
+    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true ),
+    m_thermalGap( aParent, m_thermalGapLabel, m_thermalGapCtrl, m_thermalGapUnits, true )
 {
     m_currentPad = aPad;        // aPad can be NULL, if the dialog is called
                                 // from the footprint editor to set default pad setup
@@ -1543,6 +1543,8 @@ bool DIALOG_PAD_PROPERTIES::transferDataToPad( D_PAD* aPad )
         return true;
     if( !m_localSettingsPanel->Validate() )
         return true;
+    if( !m_spokeWidth.Validate( 0, INT_MAX ) )
+        return false;
 
     m_OrientValidator.TransferFromWindow();
 

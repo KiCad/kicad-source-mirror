@@ -120,10 +120,8 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
 DIALOG_PAGES_SETTINGS::DIALOG_PAGES_SETTINGS( EDA_DRAW_FRAME* parent, wxSize aMaxUserSizeMils ) :
     DIALOG_PAGES_SETTINGS_BASE( parent ),
     m_initialized( false ),
-    m_customSizeX( parent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false,
-                   MIN_PAGE_SIZE * IU_PER_MILS, aMaxUserSizeMils.x * IU_PER_MILS ),
-    m_customSizeY( parent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false,
-                   MIN_PAGE_SIZE * IU_PER_MILS, aMaxUserSizeMils.y * IU_PER_MILS )
+    m_customSizeX( parent, m_userSizeXLabel, m_userSizeXCtrl, m_userSizeXUnits, false ),
+    m_customSizeY( parent, m_userSizeYLabel, m_userSizeYCtrl, m_userSizeYUnits, false )
 {
     m_parent   = parent;
     m_screen   = m_parent->GetScreen();
@@ -234,6 +232,12 @@ void DIALOG_PAGES_SETTINGS::initDialog()
 
 void DIALOG_PAGES_SETTINGS::OnOkClick( wxCommandEvent& event )
 {
+    if( !m_customSizeX.Validate( Mils2iu( MIN_PAGE_SIZE ), Mils2iu( m_maxPageSizeMils.x ) ) )
+        return;
+
+    if( !m_customSizeY.Validate( Mils2iu( MIN_PAGE_SIZE ), Mils2iu( m_maxPageSizeMils.y ) ) )
+        return;
+
     if( SavePageSettings() )
     {
         m_screen->SetModify();
@@ -423,7 +427,7 @@ void DIALOG_PAGES_SETTINGS::OnDateApplyClick( wxCommandEvent& event )
 
 bool DIALOG_PAGES_SETTINGS::SavePageSettings()
 {
-    bool retSuccess = false;
+    bool success = false;
 
     wxString fileName = GetWksFileName();
 
@@ -453,13 +457,10 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     {
         GetCustomSizeMilsFromDialog();
 
-        retSuccess = m_pageInfo.SetType( PAGE_INFO::Custom );
+        success = m_pageInfo.SetType( PAGE_INFO::Custom );
 
-        if( retSuccess )
+        if( success )
         {
-            if( !m_customSizeX.Validate( true ) || !m_customSizeY.Validate( true ) )
-                return false;
-
             PAGE_INFO::SetCustomWidthMils( m_layout_size.x );
             PAGE_INFO::SetCustomHeightMils( m_layout_size.y );
 
@@ -471,42 +472,42 @@ bool DIALOG_PAGES_SETTINGS::SavePageSettings()
     {
         // search for longest common string first, e.g. A4 before A
         if( paperType.Contains( PAGE_INFO::USLetter ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::USLetter );
+            success = m_pageInfo.SetType( PAGE_INFO::USLetter );
         else if( paperType.Contains( PAGE_INFO::USLegal ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::USLegal );
+            success = m_pageInfo.SetType( PAGE_INFO::USLegal );
         else if( paperType.Contains( PAGE_INFO::USLedger ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::USLedger );
+            success = m_pageInfo.SetType( PAGE_INFO::USLedger );
         else if( paperType.Contains( PAGE_INFO::GERBER ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::GERBER );
+            success = m_pageInfo.SetType( PAGE_INFO::GERBER );
         else if( paperType.Contains( PAGE_INFO::A4 ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A4 );
+            success = m_pageInfo.SetType( PAGE_INFO::A4 );
         else if( paperType.Contains( PAGE_INFO::A3 ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A3 );
+            success = m_pageInfo.SetType( PAGE_INFO::A3 );
         else if( paperType.Contains( PAGE_INFO::A2 ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A2 );
+            success = m_pageInfo.SetType( PAGE_INFO::A2 );
         else if( paperType.Contains( PAGE_INFO::A1 ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A1 );
+            success = m_pageInfo.SetType( PAGE_INFO::A1 );
         else if( paperType.Contains( PAGE_INFO::A0 ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A0 );
+            success = m_pageInfo.SetType( PAGE_INFO::A0 );
         else if( paperType.Contains( PAGE_INFO::A ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::A );
+            success = m_pageInfo.SetType( PAGE_INFO::A );
         else if( paperType.Contains( PAGE_INFO::B ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::B );
+            success = m_pageInfo.SetType( PAGE_INFO::B );
         else if( paperType.Contains( PAGE_INFO::C ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::C );
+            success = m_pageInfo.SetType( PAGE_INFO::C );
         else if( paperType.Contains( PAGE_INFO::D ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::D );
+            success = m_pageInfo.SetType( PAGE_INFO::D );
         else if( paperType.Contains( PAGE_INFO::E ) )
-            retSuccess = m_pageInfo.SetType( PAGE_INFO::E );
+            success = m_pageInfo.SetType( PAGE_INFO::E );
 
-        if( retSuccess )
+        if( success )
         {
             int choice = m_orientationComboBox->GetSelection();
             m_pageInfo.SetPortrait( choice != 0 );
         }
     }
 
-    if( !retSuccess )
+    if( !success )
     {
         wxASSERT_MSG( false, _( "the translation for paper size must preserve original spellings" ) );
         m_pageInfo.SetType( PAGE_INFO::A4 );

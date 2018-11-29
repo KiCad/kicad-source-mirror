@@ -99,11 +99,11 @@ int InvokeCopperZonesEditor( PCB_BASE_FRAME* aCaller, ZONE_SETTINGS* aSettings )
 DIALOG_COPPER_ZONE::DIALOG_COPPER_ZONE( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings ) :
     DIALOG_COPPER_ZONE_BASE( aParent ),
     m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
-    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true, 0 ),
-    m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true, 0, ZONE_CLEARANCE_MAX_VALUE_MIL*IU_PER_MILS ),
-    m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true, ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS ),
-    m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true, 0 ),
-    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true, 0 )
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true ),
+    m_clearance( aParent, m_clearanceLabel, m_clearanceCtrl, m_clearanceUnits, true ),
+    m_minWidth( aParent, m_minWidthLabel, m_minWidthCtrl, m_minWidthUnits, true ),
+    m_antipadClearance( aParent, m_antipadLabel, m_antipadCtrl, m_antipadUnits, true ),
+    m_spokeWidth( aParent, m_spokeWidthLabel, m_spokeWidthCtrl, m_spokeWidthUnits, true )
 {
     m_Parent = aParent;
     m_Config = Kiface().KifaceSettings();
@@ -225,6 +225,15 @@ void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 
 bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 {
+    if( !m_clearance.Validate( 0, Mils2iu( ZONE_CLEARANCE_MAX_VALUE_MIL ) ) )
+        return false;
+    if( !m_minWidth.Validate( Mils2iu( ZONE_THICKNESS_MIN_VALUE_MIL ), INT_MAX ) )
+        return false;
+    if( !m_cornerRadius.Validate( 0, INT_MAX ) )
+        return false;
+    if( !m_spokeWidth.Validate( 0, INT_MAX ) )
+        return false;
+
     if( m_settings.m_FillMode == ZFM_SEGMENTS )
     {
         KIDIALOG dlg( this, _( "The legacy segment fill mode is not recommended."
@@ -260,12 +269,8 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
 
     m_netNameShowFilter = m_ShowNetNameFilter->GetValue();
 
-    if( !m_clearance.Validate( true ) )
-        return false;
     m_settings.m_ZoneClearance = m_clearance.GetValue();
 
-    if( !m_minWidth.Validate( true ) )
-        return false;
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );

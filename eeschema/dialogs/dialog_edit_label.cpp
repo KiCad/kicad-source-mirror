@@ -101,14 +101,14 @@ void SCH_EDIT_FRAME::EditSchematicText( SCH_TEXT* aTextItem )
 }
 
 
-// Conservative limits 0.01 to 250mm
-const int minSize = (int)( 0.01 * IU_PER_MM );
-const int maxSize = (int)( 250 * IU_PER_MM );
+// Don't allow text to disappear; it can be difficult to correct if you can't select it
+const int MIN_TEXTSIZE = (int)( 0.01 * IU_PER_MM );
+const int MAX_TEXTSIZE = INT_MAX;
 
 
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false, minSize, maxSize )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -289,6 +289,9 @@ void DIALOG_LABEL_EDITOR::OnCharHook( wxKeyEvent& aEvent )
 bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
 {
     if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
+    if( !m_textSize.Validate( MIN_TEXTSIZE, MAX_TEXTSIZE ) )
         return false;
 
     wxString text;

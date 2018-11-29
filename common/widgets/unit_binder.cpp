@@ -35,7 +35,7 @@ wxDEFINE_EVENT( DELAY_FOCUS, wxCommandEvent );
 
 UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
                           wxStaticText* aLabel, wxWindow* aValue, wxStaticText* aUnitLabel,
-                          bool aUseMils, int aMin, int aMax, bool allowEval ) :
+                          bool aUseMils, bool allowEval ) :
     m_label( aLabel ),
     m_value( aValue ),
     m_unitLabel( aUnitLabel ),
@@ -44,8 +44,6 @@ UNIT_BINDER::UNIT_BINDER( EDA_DRAW_FRAME* aParent,
     // Fix the units (to the current units) for the life of the binder
     m_units = aParent->GetUserUnits();
     m_useMils = aUseMils;
-    m_min = aMin;
-    m_max = aMax;
     m_allowEval = allowEval && dynamic_cast<wxTextEntry*>( m_value );
     m_needsEval = false;
 
@@ -92,24 +90,14 @@ void UNIT_BINDER::onSetFocus( wxFocusEvent& aEvent )
 
 void UNIT_BINDER::onKillFocus( wxFocusEvent& aEvent )
 {
-    if( aEvent.GetWindow() && aEvent.GetWindow()->GetId() == wxID_CANCEL )
+    auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+
+    if( m_allowEval && textEntry )
     {
-        // Don't eval or validate when focus lost due to Cancel.  While most platforms
-        // suppress KillFocus events after a Cancel, MSW (at least) does not.
-    }
-    else
-    {
-        auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
+        if( m_eval.Process( textEntry->GetValue() ) )
+            textEntry->ChangeValue( m_eval.Result() );
 
-        if( m_allowEval && textEntry )
-        {
-            if( m_eval.Process( textEntry->GetValue() ) )
-                textEntry->ChangeValue( m_eval.Result() );
-
-            m_needsEval = false;
-        }
-
-        Validate( true );
+        m_needsEval = false;
     }
 
     aEvent.Skip();
@@ -127,31 +115,26 @@ wxString valueDescriptionFromLabel( wxStaticText* aLabel )
 
 void UNIT_BINDER::delayedFocusHandler( wxCommandEvent& )
 {
-    // Kill focus event handler must be temporarily disconnected, as displaying a message box
-    // will trigger the event handler and validation again, effectively creating an infinite loop
-    m_value->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
-
     if( !m_errorMessage.IsEmpty() )
         DisplayError( m_value->GetParent(), m_errorMessage );
 
     m_errorMessage = wxEmptyString;
     m_value->SetFocus();
-    m_value->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( UNIT_BINDER::onKillFocus ), NULL, this );
 }
 
 
-bool UNIT_BINDER::Validate( bool setFocusOnError )
+bool UNIT_BINDER::Validate( int aMin, int aMax, bool setFocusOnError )
 {
     auto textEntry = dynamic_cast<wxTextEntry*>( m_value );
 
     if( !textEntry || textEntry->GetValue() == INDETERMINATE )
         return true;
 
-    if( m_min > INT_MIN && GetValue() < m_min )
+    if( GetValue() < aMin )
     {
-        m_errorMessage = wxString::Format( _( "%s must be larger than %s or equal." ),
+        m_errorMessage = wxString::Format( _( "%s must be at least %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, m_min, true ) );
+                                           StringFromValue( m_units, aMin, true ) );
 
         if( setFocusOnError )
         {
@@ -163,11 +146,11 @@ bool UNIT_BINDER::Validate( bool setFocusOnError )
         return false;
     }
 
-    if( m_max < INT_MAX && GetValue() > m_max )
+    if( GetValue() > aMax )
     {
-        m_errorMessage = wxString::Format( _( "%s must be smaller than %s." ),
+        m_errorMessage = wxString::Format( _( "%s must be less than %s." ),
                                            valueDescriptionFromLabel( m_label ),
-                                           StringFromValue( m_units, m_max, true ) );
+                                           StringFromValue( m_units, aMax, true ) );
 
         if( setFocusOnError )
         {
