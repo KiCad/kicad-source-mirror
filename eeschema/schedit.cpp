@@ -235,10 +235,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_RESIZE_SHEET:
         ReSizeSheet( (SCH_SHEET*) item, nullptr );
-
-        TestDanglingEnds();
-        m_canvas->Refresh();
-
         break;
 
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:

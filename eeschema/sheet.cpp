@@ -448,6 +448,9 @@ void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
     SetUndoItem( aSheet );
     aSheet->SetFlags( IS_RESIZED );
 
+    std::vector<DANGLING_END_ITEM> emptySet;
+    aSheet->UpdateDanglingState( emptySet );
+
     m_canvas->SetMouseCapture( resizeSheetWithMouseCursor, ExitSheet );
     m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
 
