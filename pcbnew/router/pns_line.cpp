@@ -372,7 +372,8 @@ SHAPE_LINE_CHAIN dragCornerInternal( const SHAPE_LINE_CHAIN& aOrigin, const VECT
             if( paths[j].SegmentCount() < 1 )
                 continue;
 
-            assert( dirCount < sizeof( dirs ) / sizeof( dirs[0] ) );
+            assert( dirCount < int( sizeof( dirs ) / sizeof( dirs[0] ) ) );
+
             dirs[dirCount] = DIRECTION_45( paths[j].CSegment( 0 ) );
             ++dirCount;
         }
