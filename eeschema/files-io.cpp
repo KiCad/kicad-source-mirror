@@ -576,6 +576,8 @@ bool SCH_EDIT_FRAME::AppendSchematic()
         }
     }
 
+    newScreens.ClearAnnotation();
+
     // Check for duplicate sheet names in the current page.
     wxArrayString duplicateSheetNames;
     SCH_TYPE_COLLECTOR sheets;
@@ -622,7 +624,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
     // Clear all annotation in the imported schematic to prevent clashes with existing annotation.
     // Must be done after updating the symbol links as we need to know about multi-unit parts.
-    screens.ClearAnnotation();
+    // screens.ClearAnnotation();
 
     screens.TestDanglingEnds();
 
