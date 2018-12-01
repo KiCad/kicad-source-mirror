@@ -138,7 +138,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
-    m_MultiLineText->Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
+    Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
 
     FinishDialogSettings();
 }
@@ -146,7 +146,7 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
 
 DIALOG_TEXT_PROPERTIES::~DIALOG_TEXT_PROPERTIES()
 {
-    m_MultiLineText->Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
+    Disconnect( wxEVT_CHAR_HOOK, wxKeyEventHandler( DIALOG_TEXT_PROPERTIES::OnCharHook ), NULL, this );
 }
 
 
@@ -183,10 +183,15 @@ void DIALOG_TEXT_PROPERTIES::OnCharHook( wxKeyEvent& aEvent )
 
         NavigateIn( flags );
     }
-    else if( aEvent.GetKeyCode() == WXK_RETURN && aEvent.ShiftDown() )
+    else if( aEvent.GetKeyCode() == WXK_RETURN )
     {
-        TransferDataFromWindow();
-        EndModal( wxID_OK );
+        if( FindFocus() == m_MultiLineText && !aEvent.ShiftDown() )
+            aEvent.Skip();
+        else
+        {
+            TransferDataFromWindow();
+            EndModal( wxID_OK );
+        }
     }
     else
     {
