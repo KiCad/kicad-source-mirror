@@ -578,6 +578,21 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                 poly[ii] += offset;
             }
 
+            // On the edge cuts layer, a polygon should be treated as a closed set of lines
+            if( m_Layer == Edge_Cuts )
+            {
+                auto start = poly[0];
+                for( size_t ii = 1; ii < poly.size(); ii++ )
+                {
+                    TransformOvalClearanceToPolygon( aCornerBuffer, poly[ii - 1], poly[ii],
+                            linewidth, aCircleToSegmentsCount, aCorrectionFactor );
+                }
+
+                TransformOvalClearanceToPolygon( aCornerBuffer, poly[poly.size() - 1], start,
+                        linewidth, aCircleToSegmentsCount, aCorrectionFactor );
+                break;
+            }
+
             // Generate polygons for the outline + clearance
             // This code is compatible with a polygon with holes linked to external outline
             // by overlapping segments.

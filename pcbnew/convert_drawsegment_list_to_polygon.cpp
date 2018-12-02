@@ -282,6 +282,21 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             }
             break;
 
+        case S_POLYGON:
+            {
+                const auto poly = graphic->GetPolyShape();
+
+                for( auto iter = poly.CIterate(); iter; iter++ )
+                {
+                    if( iter->x < xmin.x )
+                    {
+                        xmin.x = iter->x;
+                        xmin.y = iter->y;
+                        xmini = i;
+                    }
+                }
+            }
+            break;
         default:
             break;
         }
@@ -301,6 +316,10 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     {
         int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_LOW_DEF, 360.0 );
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), steps );
+    }
+    else if( graphic->GetShape() == S_POLYGON )
+    {
+        aPolygons = graphic->GetPolyShape();
     }
     else
     {
@@ -465,7 +484,16 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         graphic = (DRAWSEGMENT*) segList[0];
         segList.erase( segList.begin() );
 
-        if( graphic->GetShape() == S_CIRCLE )
+        // Both circles and polygons on the edge cuts layer are closed items that
+        // do not connect to other elements, so we process them independently
+        if( graphic->GetShape() == S_POLYGON )
+        {
+            for( auto it = graphic->GetPolyShape().CIterate(); it; it++ )
+            {
+                aPolygons.Append( *it, -1, hole );
+            }
+        }
+        else if( graphic->GetShape() == S_CIRCLE )
         {
             // make a circle by segments;
             wxPoint  center  = graphic->GetCenter();

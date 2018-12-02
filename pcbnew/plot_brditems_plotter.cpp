@@ -762,14 +762,26 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     case S_POLYGON:
         {
-            m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
-            // Draw the polygon: only one polygon is expected
-            // However we provide a multi polygon shape drawing
-            // ( for the future or to show a non expected shape )
-            for( int jj = 0; jj < aSeg->GetPolyShape().OutlineCount(); ++jj )
+            if( m_layerMask[ Edge_Cuts ] )
             {
-                SHAPE_LINE_CHAIN& poly = aSeg->GetPolyShape().Outline( jj );
-                m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+                for( auto it = aSeg->GetPolyShape().IterateSegments( 0 ); it; it++ )
+                {
+                    auto seg = it.Get();
+                    m_plotter->ThickSegment( wxPoint( seg.A ), wxPoint( seg.B ),
+                            thickness, GetPlotMode(), &gbr_metadata );
+                }
+            }
+            else
+            {
+                m_plotter->SetCurrentLineWidth( thickness, &gbr_metadata );
+                // Draw the polygon: only one polygon is expected
+                // However we provide a multi polygon shape drawing
+                // ( for the future or to show a non expected shape )
+                for( int jj = 0; jj < aSeg->GetPolyShape().OutlineCount(); ++jj )
+                {
+                    SHAPE_LINE_CHAIN& poly = aSeg->GetPolyShape().Outline( jj );
+                    m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
+                }
             }
         }
         break;
