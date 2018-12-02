@@ -968,11 +968,15 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
     case S_POLYGON:
     {
-        const auto& points = aSegment->BuildPolyPointsList();
-        std::deque<VECTOR2D> pointsList;
+        SHAPE_POLY_SET& shape = ((DRAWSEGMENT*)aSegment)->GetPolyShape();
 
-        if( points.empty() )
+        if( shape.OutlineCount() == 0 )
             break;
+
+        if( !shape.IsTriangulationUpToDate() )
+        {
+            shape.CacheTriangulation();
+        }
 
         m_gal->Save();
 
@@ -982,13 +986,10 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
             m_gal->Rotate( -module->GetOrientationRadians() );
         }
 
-        std::copy( points.begin(), points.end(), std::back_inserter( pointsList ) );
-        pointsList.push_back( points[0] );
-
         m_gal->SetLineWidth( thickness );
         m_gal->SetIsFill( true );
         m_gal->SetIsStroke( true );
-        m_gal->DrawPolygon( pointsList );
+        m_gal->DrawPolygon( shape );
 
         m_gal->Restore();
         break;
