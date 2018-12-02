@@ -68,6 +68,7 @@ protected:
     ITEM* m_startItem;
     int m_startLayer;
     VECTOR2I m_startSnapPoint;
+    bool m_startHighlight;                ///< Keeps track of whether the net was highlighted before routing
 
     ITEM* m_endItem;
     VECTOR2I m_endSnapPoint;

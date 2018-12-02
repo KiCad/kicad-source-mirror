@@ -71,6 +71,7 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
 
     m_startItem = nullptr;
     m_startLayer = 0;
+    m_startHighlight = false;
 
     m_endItem = nullptr;
     m_gridHelper = nullptr;
@@ -210,9 +211,20 @@ void TOOL_BASE::highlightNet( bool aEnabled, int aNetcode )
     RENDER_SETTINGS* rs = getView()->GetPainter()->GetSettings();
 
     if( aNetcode >= 0 && aEnabled )
+    {
+        // If the user has previously set the current net to be highlighted,
+        // we assume they want to keep it highlighted after routing
+        m_startHighlight = ( rs->IsHighlightEnabled() && rs->GetHighlightNetCode() == aNetcode );
+
         rs->SetHighlight( true, aNetcode );
+    }
     else
-        rs->SetHighlight( false );
+    {
+        if( !m_startHighlight )
+            rs->SetHighlight( false );
+
+        m_startHighlight = false;
+    }
 
     getView()->UpdateAllLayersColor();
 }
