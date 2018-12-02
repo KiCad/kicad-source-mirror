@@ -33,6 +33,7 @@
 #include <macros.h>
 
 #include <class_drawsegment.h>
+#include <class_module.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/geometry_utils.h>
@@ -285,13 +286,20 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         case S_POLYGON:
             {
                 const auto poly = graphic->GetPolyShape();
+                MODULE* module = aSegList[0]->GetParentModule();
+                double orientation = module ? module->GetOrientation() : 0.0;
+                VECTOR2I offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
 
                 for( auto iter = poly.CIterate(); iter; iter++ )
                 {
-                    if( iter->x < xmin.x )
+                    auto pt = *iter;
+                    RotatePoint( pt, orientation );
+                    pt += offset;
+
+                    if( pt.x < xmin.x )
                     {
-                        xmin.x = iter->x;
-                        xmin.y = iter->y;
+                        xmin.x = pt.x;
+                        xmin.y = pt.y;
                         xmini = i;
                     }
                 }
@@ -319,7 +327,19 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     }
     else if( graphic->GetShape() == S_POLYGON )
     {
-        aPolygons = graphic->GetPolyShape();
+        MODULE* module = graphic->GetParentModule();     // NULL for items not in footprints
+        double orientation = module ? module->GetOrientation() : 0.0;
+        VECTOR2I offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
+
+        aPolygons.NewOutline();
+
+        for( auto it = graphic->GetPolyShape().CIterate( 0 ); it; it++ )
+        {
+            auto pt = *it;
+            RotatePoint( pt, orientation );
+            pt += offset;
+            aPolygons.Append( pt );
+        }
     }
     else
     {
@@ -488,9 +508,17 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
         // do not connect to other elements, so we process them independently
         if( graphic->GetShape() == S_POLYGON )
         {
+            MODULE* module = graphic->GetParentModule();     // NULL for items not in footprints
+            double orientation = module ? module->GetOrientation() : 0.0;
+            VECTOR2I offset = module ? module->GetPosition() : VECTOR2I( 0, 0 );
+
             for( auto it = graphic->GetPolyShape().CIterate(); it; it++ )
             {
-                aPolygons.Append( *it, -1, hole );
+                auto val = *it;
+                RotatePoint( val, orientation );
+                val += offset;
+
+                aPolygons.Append( val, -1, hole );
             }
         }
         else if( graphic->GetShape() == S_CIRCLE )

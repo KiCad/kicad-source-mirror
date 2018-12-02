@@ -534,7 +534,22 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
                 cornerList.push_back( corner );
             }
 
-            m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
+            if( m_layerMask[ Edge_Cuts ] )
+            {
+                for( size_t i = 1; i < cornerList.size(); i++ )
+                {
+                    m_plotter->ThickSegment( cornerList[i-1], cornerList[i],
+                            thickness, GetPlotMode(), &gbr_metadata );
+                }
+
+                m_plotter->ThickSegment( cornerList.back(), cornerList.front(),
+                        thickness, GetPlotMode(), &gbr_metadata );
+
+            }
+            else
+            {
+                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, thickness, &gbr_metadata );
+            }
         }
     break;
     }
