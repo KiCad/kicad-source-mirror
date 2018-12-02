@@ -107,6 +107,11 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
         m_SingleLineSizer->Show( false );
         m_DimensionTextSizer->Show( false );
 
+        // This option make sense only for footprint texts,
+        // Texts on board are always visible:
+        m_Visible->SetValue( true );
+        m_Visible->Show( false );
+
         m_KeepUpright->Show( false );
         m_statusLine->Show( false );
     }
