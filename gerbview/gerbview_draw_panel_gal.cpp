@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -27,6 +27,9 @@
 #include <gerbview_frame.h>
 #include <gbr_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
+
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
 
 #include <functional>
 using namespace std::placeholders;
@@ -116,6 +119,32 @@ void GERBVIEW_DRAW_PANEL_GAL::OnShow()
 bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
+
+    // The next onPaint event will call m_view->UpdateItems() that is very time consumming
+    // after switching to opengl. Clearing m_view and rebuild it is much faster
+    if( aGalType == GAL_TYPE_OPENGL )
+    {
+        GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParent() );
+
+        if( frame )
+        {
+            m_view->Clear();
+
+            for( int layer = GERBER_DRAWLAYERS_COUNT-1; layer>= 0; --layer )
+            {
+                GERBER_FILE_IMAGE* gerber = frame->GetImagesList()->GetGbrImage( layer );
+
+                if( gerber == NULL )    // Graphic layer not yet used
+                    continue;
+
+                for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+                {
+                    m_view->Add (item );
+                }
+            }
+        }
+    }
+
     setDefaultLayerDeps();
 
     GetGAL()->SetWorldUnitLength( 1.0/IU_PER_MM /* 10 nm */ / 25.4 /* 1 inch in mm */ );

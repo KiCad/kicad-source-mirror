@@ -264,6 +264,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             m_gal->DrawPolyline( absolutePolygon.COutline( 0 ) );
         else
             m_gal->DrawPolygon( absolutePolygon );
+
         break;
     }
 
