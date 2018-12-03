@@ -84,7 +84,7 @@ void DIALOG_MOVE_EXACT::buildRotationAnchorMenu()
             menuItems.push_back( _( "Rotate around selection center" ) );
             break;
         case ROTATE_AROUND_USER_ORIGIN:
-            menuItems.push_back( _( "Rotate around user origin" ) );
+            menuItems.push_back( _( "Rotate around local coordinates origin" ) );
             break;
         case ROTATE_AROUND_AUX_ORIGIN:
             menuItems.push_back( _( "Rotate around drill/place origin" ) );

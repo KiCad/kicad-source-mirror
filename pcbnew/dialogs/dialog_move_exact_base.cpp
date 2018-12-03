@@ -66,7 +66,7 @@ DIALOG_MOVE_EXACT_BASE::DIALOG_MOVE_EXACT_BASE( wxWindow* parent, wxWindowID id,
 	
 	fgInputSizer->Add( 0, 0, 1, wxEXPAND, 5 );
 	
-	wxString m_anchorOptionsChoices[] = { _("Rotate around center of selection"), _("Rotate around User Origin"), _("Rotate around Drill/Place Origin") };
+	wxString m_anchorOptionsChoices[] = { _("Rotate around center of selection"), _("Rotate around local coordinates origin"), _("Rotate around drill/place origin") };
 	int m_anchorOptionsNChoices = sizeof( m_anchorOptionsChoices ) / sizeof( wxString );
 	m_anchorOptions = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_anchorOptionsNChoices, m_anchorOptionsChoices, 0 );
 	m_anchorOptions->SetSelection( 0 );

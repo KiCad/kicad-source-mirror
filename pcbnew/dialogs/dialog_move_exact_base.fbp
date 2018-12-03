@@ -1172,7 +1172,7 @@
                                 <property name="caption"></property>
                                 <property name="caption_visible">1</property>
                                 <property name="center_pane">0</property>
-                                <property name="choices">&quot;Rotate around center of selection&quot; &quot;Rotate around User Origin&quot; &quot;Rotate around Drill/Place Origin&quot;</property>
+                                <property name="choices">&quot;Rotate around center of selection&quot; &quot;Rotate around local coordinates origin&quot; &quot;Rotate around drill/place origin&quot;</property>
                                 <property name="close_button">1</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
