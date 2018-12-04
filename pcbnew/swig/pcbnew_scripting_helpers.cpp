@@ -78,7 +78,12 @@ BOARD* LoadBoard( wxString& aFileName, IO_MGR::PCB_FILE_T aFormat )
     BOARD* brd = IO_MGR::Load( aFormat, aFileName );
 
     if( brd )
+    {
         brd->BuildConnectivity();
+        brd->BuildListOfNets();
+        brd->SynchronizeNetsAndNetClasses();
+    }
+
 
     return brd;
 }
