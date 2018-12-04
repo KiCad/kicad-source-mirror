@@ -145,7 +145,8 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-        return wxArrayString( 1, { "dxf" } );
+        // N.B. The extra "" hints for some compilers that the array should not be optimized out
+        return wxArrayString( 1, { "dxf", "" } );
     }
 
     bool Load( const wxString& aFileName ) override;
