@@ -106,7 +106,15 @@ DIALOG_GRAPHIC_ITEM_PROPERTIES::DIALOG_GRAPHIC_ITEM_PROPERTIES( PCB_BASE_EDIT_FR
 
     // Configure the layers list selector
     if( m_moduleItem )
-        m_LayerSelectionCtrl->SetNotAllowedLayerSet( LSET::ForbiddenFootprintLayers() );
+    {
+        LSET forbiddenLayers = LSET::ForbiddenFootprintLayers();
+
+        // If someone went to the trouble of setting the layer in a text editor, then there's
+        // very little sense in nagging them about it.
+        forbiddenLayers.set( m_item->GetLayer(), false );
+
+        m_LayerSelectionCtrl->SetNotAllowedLayerSet( forbiddenLayers );
+    }
 
     m_LayerSelectionCtrl->SetLayersHotkeys( false );
     m_LayerSelectionCtrl->SetBoardFrame( m_parent );
@@ -206,9 +214,9 @@ bool DIALOG_GRAPHIC_ITEM_PROPERTIES::TransferDataToWindow()
 
     if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
     {
-        wxMessageBox( _( "This item was on a forbidden or non-existing layer.\n"
+        wxMessageBox( _( "This item was on a non-existing layer.\n"
                          "It has been moved to the first allowed layer." ) );
-        m_LayerSelectionCtrl->SetSelection( F_SilkS );
+        m_LayerSelectionCtrl->SetSelection( 0 );
     }
 
     return DIALOG_GRAPHIC_ITEM_PROPERTIES_BASE::TransferDataToWindow();
