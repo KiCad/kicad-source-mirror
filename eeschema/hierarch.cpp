@@ -299,7 +299,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     }
 
     // Some items (wires, labels) can be highlighted. So prepare the highlight flag:
-    SetCurrentSheetHighlightFlags();
+    SetCurrentSheetHighlightFlags( nullptr );
 
     GetCanvas()->Refresh();
 }

@@ -647,10 +647,13 @@ public:
      * Set or reset the BRIGHTENED of connected objects inside the current sheet,
      * according to the highlighted net name.
      *
+     * @param aItemsToRedrawList is the list of modified items (flag BRIGHTENED modified)
+     * that must be redrawn.
+     * Can be NULL
      * @return true if the flags are correctly set, and false if something goes wrong
      * (duplicate sheet names)
      */
-    bool SetCurrentSheetHighlightFlags();
+    bool SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aItemsToRedrawList );
 
     /**
      * @return a filename that can be used in plot and print functions

@@ -81,10 +81,17 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             m_SelectedNetName = FROM_UTF8( text );
 
             SetStatusText( _( "Selected net: " ) + m_SelectedNetName );
-            SetCurrentSheetHighlightFlags();
-            // Be sure hightlight change will be redrawn in any case
-            GetGalCanvas()->GetView()->RecacheAllItems();
-            GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+            std::vector<EDA_ITEM*> itemsToRedraw;
+            SetCurrentSheetHighlightFlags( &itemsToRedraw );
+
+            // Be sure hightlight change will be redrawn
+            KIGFX::VIEW* view = GetGalCanvas()->GetView();
+
+            for( auto item : itemsToRedraw )
+                view->Update( (KIGFX::VIEW_ITEM*)item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
+
+            //view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+            GetGalCanvas()->Refresh();
         }
 
         return;
