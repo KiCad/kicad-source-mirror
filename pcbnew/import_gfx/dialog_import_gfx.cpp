@@ -49,22 +49,12 @@
 #define IMPORT_GFX_LINEWIDTH_UNITS_KEY          "GfxImportLineWidthUnits"
 #define IMPORT_GFX_LINEWIDTH_KEY                "GfxImportLineWidth"
 
-// Currently (Version 5.1) SVG import is disabled by default, to avoid issues
-// SVG needs some enhancements.
-// Especially, all SVG shapes are imported as curves and converted to a lot of segments.
-// A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
-// arcs and circles as primitives (not yet possible with tinysvg library.
-// So, until these issues are solved, disable SVG import option.
-// Warning: enable svg import is currently only for developers.
-#define DISABLE_SVG_IMPORT
-
 // Static members of DIALOG_IMPORT_GFX, to remember
 // the user's choices during the session
 wxString DIALOG_IMPORT_GFX::m_filename;
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
 LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
-double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;  // Do not change the imported items siaz
-
+double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;  // Do not change the imported items size
 
 DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic )
     : DIALOG_IMPORT_GFX_BASE( aParent )
@@ -250,8 +240,6 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 
     for( auto pluginType : GRAPHICS_IMPORT_MGR::GFX_FILE_TYPES )
     {
-        if( !pluginType == GRAPHICS_IMPORT_MGR::GFX_FILE_T::DXF )
-            continue;
         auto plugin = GRAPHICS_IMPORT_MGR::GetPlugin( pluginType );
         const auto wildcards = plugin->GetWildcards();
 
