@@ -361,7 +361,8 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     double textHeight = mapDim( aData.height );
     // The 0.9 factor gives a better height/width ratio with our font
     double charWidth = textHeight * 0.9;
-    double textWidth = charWidth * text.length();          // Rough approximation
+    double textWidth = charWidth * text.length();   // Rough approximation
+    double textThickness = textHeight/8.0;          // Use a reasonable line thickness for this text
 
     VECTOR2D bottomLeft(0.0, 0.0);
     VECTOR2D bottomRight(0.0, 0.0);
@@ -447,7 +448,7 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, angle,
+    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, textThickness, angle,
             hJustify, vJustify );
 
     // Calculate the boundary box and update the image limits:
@@ -484,7 +485,8 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     double textHeight = mapDim( aData.height );
     // The 0.9 factor gives a better height/width ratio with our font
     double charWidth = textHeight * 0.9;
-    double textWidth = charWidth * text.length();          // Rough approximation
+    double textWidth = charWidth * text.length();   // Rough approximation
+    double textThickness = textHeight/8.0;          // Use a reasonable line thickness for this text
 
     VECTOR2D bottomLeft(0.0, 0.0);
     VECTOR2D bottomRight(0.0, 0.0);
@@ -599,7 +601,8 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    m_internalImporter.AddText( textpos, text, textHeight, charWidth, angle, hJustify, vJustify );
+    m_internalImporter.AddText( textpos, text, textHeight, charWidth,
+                                textThickness, angle, hJustify, vJustify );
 
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
     bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;

@@ -58,11 +58,11 @@ void GRAPHICS_IMPORTER_BUFFER::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
 
 void GRAPHICS_IMPORTER_BUFFER::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        double aHeight, double aWidth, double aOrientation,
+        double aHeight, double aWidth, double aThickness, double aOrientation,
         EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
 {
-    m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth, aOrientation,
-                aHJustify, aVJustify ) );
+    m_shapes.push_back( make_shape< IMPORTED_TEXT >( aOrigin, aText, aHeight, aWidth,
+                            aThickness, aOrientation, aHJustify, aVJustify ) );
 }
 
 

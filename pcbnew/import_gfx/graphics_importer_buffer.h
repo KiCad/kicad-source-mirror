@@ -121,10 +121,10 @@ class IMPORTED_TEXT : public IMPORTED_SHAPE
 {
 public:
     IMPORTED_TEXT( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double aWidth, double aOrientation,
+            double aHeight, double aWidth, double aThickness, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
         : m_origin( aOrigin ), m_text( aText ),
-            m_height( aHeight ), m_width( aWidth ),
+            m_height( aHeight ), m_width( aWidth ), m_thickness( aThickness ),
             m_orientation( aOrientation ),
             m_hJustify( aHJustify ), m_vJustify( aVJustify )
     {
@@ -132,8 +132,8 @@ public:
 
     void ImportTo( GRAPHICS_IMPORTER& aImporter ) const override
     {
-        aImporter.AddText( m_origin, m_text, m_height, m_width, m_orientation,
-            m_hJustify, m_vJustify );
+        aImporter.AddText( m_origin, m_text, m_height, m_width,
+                    m_thickness, m_orientation, m_hJustify, m_vJustify );
     }
 
 private:
@@ -141,6 +141,7 @@ private:
     const wxString m_text;
     double m_height;
     double m_width;
+    double m_thickness;
     double m_orientation;
     EDA_TEXT_HJUSTIFY_T m_hJustify;
     EDA_TEXT_VJUSTIFY_T m_vJustify;
@@ -183,7 +184,7 @@ public:
     void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
 
     void AddText( const VECTOR2D& aOrigin, const wxString& aText,
-            double aHeight, double aWidth, double aOrientation,
+            double aHeight, double aWidth, double aThickness, double aOrientation,
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) override;
 
     void AddSpline( const VECTOR2D& aStart, const VECTOR2D& BezierControl1,

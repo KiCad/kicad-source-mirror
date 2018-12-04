@@ -129,14 +129,14 @@ void GRAPHICS_IMPORTER_PCBNEW::AddPolygon( const std::vector< VECTOR2D >& aVerti
 
 
 void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString& aText,
-        double aHeight, double aWidth, double aOrientation,
+        double aHeight, double aWidth, double aThickness, double aOrientation,
         EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify )
 {
     unique_ptr<BOARD_ITEM> boardItem;
     EDA_TEXT* textItem;
     tie( boardItem, textItem ) = createText();
     boardItem->SetLayer( GetLayer() );
-    textItem->SetThickness( MapLineWidth( aWidth ) );
+    textItem->SetThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
     textItem->SetTextAngle( aOrientation );
     textItem->SetTextWidth( aWidth * ImportScalingFactor() );
