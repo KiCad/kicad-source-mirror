@@ -624,6 +624,7 @@ public:
             return;
 
         outerNode->updateList();
+
         if( !earcutList( outerNode ) )
         {
             m_vertices.clear();
@@ -635,9 +636,11 @@ public:
             for( auto path : simplified )
             {
                 outerNode = createList( path );
+
                 if( !outerNode )
                     return;
 
+                outerNode->updateList();
                 earcutList( outerNode );
             }
         }
