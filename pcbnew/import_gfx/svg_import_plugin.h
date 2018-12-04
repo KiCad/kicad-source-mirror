@@ -44,8 +44,9 @@ public:
 
     const wxArrayString GetFileExtensions() const override
     {
-        // N.B. The extra "" hints for some compilers that the array should not be optimized out
-        return wxArrayString( 1, { "svg", "" } );
+        wxArrayString list;
+        list.Add( "svg" );
+        return list;
     }
 
     /**
