@@ -238,7 +238,7 @@ copy on your machine by using the following command:
 
 Here is a list of source links:
 
-Stable release archive: https://launchpad.net/kicad/4.0/4.0.7/+download/kicad-4.0.7.tar.xz
+Stable release archive: https://launchpad.net/kicad/5.0/5.0.2/+download/kicad-5.0.2.tar.xz
 
 Development branch: https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref/master
 
