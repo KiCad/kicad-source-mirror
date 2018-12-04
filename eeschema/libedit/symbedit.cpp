@@ -41,6 +41,7 @@
 #include <wildcards_and_files_ext.h>
 #include <sch_legacy_plugin.h>
 #include <properties.h>
+#include <view/view.h>
 
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
@@ -219,5 +220,13 @@ void LIB_EDIT_FRAME::PlaceAnchor()
         wxPoint offset( -cross_hair.x, cross_hair.y );
         part->SetOffset( offset );
         OnModify();
+
+        // Refresh the view without changing the viewport
+        auto view = GetGalCanvas()->GetView();
+        auto center = view->GetCenter();
+        center.x += offset.x;
+        center.y -= offset.y;
+        view->SetCenter( center );
+        view->RecacheAllItems();
     }
 }
