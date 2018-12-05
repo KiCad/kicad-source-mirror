@@ -134,6 +134,14 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_OrientCtrl->SetValidator( m_OrientValidator );
     m_OrientValidator.SetWindow( m_OrientCtrl );
 
+    // Handle decimal separators in combo dropdown
+    for( size_t i = 0; i < m_OrientCtrl->GetCount(); ++i )
+    {
+        wxString item = m_OrientCtrl->GetString( i );
+        item.Replace( '.', localeconv()->decimal_point[0] );
+        m_OrientCtrl->SetString( i, item );
+    }
+
     // Set font sizes
     wxFont infoFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
     infoFont.SetSymbolicSize( wxFONTSIZE_SMALL );
@@ -290,7 +298,12 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_statusLine->Show( false );
     }
 
-    m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() );
+    if( m_LayerSelectionCtrl->SetLayerSelection( m_item->GetLayer() ) < 0 )
+    {
+        wxMessageBox( _( "This item was on a non-existing or forbidden layer.\n"
+                         "It has been moved to the first allowed layer." ) );
+        m_LayerSelectionCtrl->SetSelection( 0 );
+    }
 
     m_textWidth.SetValue( m_edaText->GetTextSize().x );
     m_textHeight.SetValue( m_edaText->GetTextSize().y );
@@ -316,14 +329,6 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataFromWindow()
 {
     if( !DIALOG_TEXT_PROPERTIES_BASE::TransferDataFromWindow() )
         return false;
-
-    // Test for acceptable layer.
-    // Incorrect layer can happen for old boards, having texts on edge cut layer for instance
-    if( m_LayerSelectionCtrl->GetLayerSelection() < 0 )
-    {
-        wxMessageBox( _( "No layer selected, Please select the text layer" ) );
-        return false;
-    }
 
     if( !m_textWidth.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE )
         || !m_textHeight.Validate( TEXTS_MIN_SIZE, TEXTS_MAX_SIZE ) )
