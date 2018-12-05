@@ -578,17 +578,16 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
                 poly[ii] += offset;
             }
 
-            // On the edge cuts layer, a polygon should be treated as a closed set of lines
-            if( m_Layer == Edge_Cuts )
+            // If the polygon is not filled, treat it as a closed set of lines
+            if( !IsPolygonFilled() )
             {
-                auto start = poly[0];
                 for( size_t ii = 1; ii < poly.size(); ii++ )
                 {
                     TransformOvalClearanceToPolygon( aCornerBuffer, poly[ii - 1], poly[ii],
                             linewidth, aCircleToSegmentsCount, aCorrectionFactor );
                 }
 
-                TransformOvalClearanceToPolygon( aCornerBuffer, poly[poly.size() - 1], start,
+                TransformOvalClearanceToPolygon( aCornerBuffer, poly.back(), poly.front(),
                         linewidth, aCircleToSegmentsCount, aCorrectionFactor );
                 break;
             }
