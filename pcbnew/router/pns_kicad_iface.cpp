@@ -941,20 +941,37 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
         }
 
         case S_CURVE:
-            {
-                aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
-                wxPoint start_pt = aItem->GetBezierPoints()[0];
+        {
+            aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
+            wxPoint start_pt = aItem->GetBezierPoints()[0];
 
-                for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
-                {
-                    wxPoint end_pt = aItem->GetBezierPoints()[jj];
-                    SHAPE_SEGMENT *seg = new SHAPE_SEGMENT(
-                        VECTOR2I( start_pt ), VECTOR2I( end_pt ), aItem->GetWidth() );
-                    segs.push_back( seg );
-                    start_pt = end_pt;
-                }
+            for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
+            {
+                wxPoint end_pt = aItem->GetBezierPoints()[jj];
+                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT(
+                    VECTOR2I( start_pt ), VECTOR2I( end_pt ), aItem->GetWidth() );
+                segs.push_back( seg );
+                start_pt = end_pt;
             }
-            break;
+        }
+        break;
+
+        case S_POLYGON:
+        {
+            if( !aItem->IsPolygonFilled() )
+            {
+                auto poly = aItem->BuildPolyPointsList();
+                for( size_t ii = 1; ii < poly.size(); ii++ )
+                {
+                    segs.push_back( new SHAPE_SEGMENT(
+                            VECTOR2I( poly[ii-1] ), VECTOR2I( poly[ii] ), aItem->GetWidth() ) );
+                }
+
+                segs.push_back( new SHAPE_SEGMENT(
+                        VECTOR2I( poly.back() ), VECTOR2I( poly.front() ), aItem->GetWidth() ) );
+            }
+        }
+        break;
 
         default:
             break;
