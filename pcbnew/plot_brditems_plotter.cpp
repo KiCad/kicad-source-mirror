@@ -534,7 +534,7 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
                 cornerList.push_back( corner );
             }
 
-            if( m_layerMask[ Edge_Cuts ] )
+            if( !aEdge->IsPolygonFilled() )
             {
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
@@ -777,7 +777,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 
     case S_POLYGON:
         {
-            if( m_layerMask[ Edge_Cuts ] )
+            if( !aSeg->IsPolygonFilled() )
             {
                 for( auto it = aSeg->GetPolyShape().IterateSegments( 0 ); it; it++ )
                 {

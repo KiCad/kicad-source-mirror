@@ -76,6 +76,11 @@ public:
         return aItem && PCB_LINE_T == aItem->Type();
     }
 
+    /** Polygonal shape is not always filled.
+     * For now it is filled on all layers but Edge_Cut layer
+     */
+    bool IsPolygonFilled() const { return m_Layer != Edge_Cuts; }
+
     void SetWidth( int aWidth )             { m_Width = aWidth; }
     int GetWidth() const                    { return m_Width; }
 
