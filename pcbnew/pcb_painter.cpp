@@ -996,7 +996,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
 
         m_gal->SetLineWidth( thickness );
 
-        m_gal->SetIsFill( aSegment->IsPolygonFilled );
+        m_gal->SetIsFill( aSegment->IsPolygonFilled() );
 
         m_gal->SetIsStroke( true );
         m_gal->DrawPolygon( shape );
