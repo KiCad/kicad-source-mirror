@@ -2464,8 +2464,10 @@ void SCH_LEGACY_PLUGIN_CACHE::loadDocs()
         if( !strCompare( "$CMP", line, &line ) != 0 )
             SCH_PARSE_ERROR( "$CMP command expected", reader, line );
 
-        parseUnquotedString( aliasName, reader, line, &line );    // Alias name.
+        aliasName = wxString::FromUTF8( line );
+        aliasName.Trim();
         aliasName = LIB_ID::FixIllegalChars( aliasName, LIB_ID::ID_SCH );
+
         LIB_ALIAS_MAP::iterator it = m_aliases.find( aliasName );
 
         if( it == m_aliases.end() )
@@ -2552,32 +2554,63 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
 
     wxCHECK( strCompare( "DEF", line, &line ), NULL );
 
-    // Read DEF line:
-    char yes_no = 0;
+    long num;
+    size_t pos = 4;                               // "DEF" plus the first space.
+    wxString utf8Line = wxString::FromUTF8( line );
+    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
 
+    if( tokens.CountTokens() < 8 )
+        SCH_PARSE_ERROR( "invalid symbol definition", aReader, line );
+
+    // Read DEF line:
     std::unique_ptr< LIB_PART > part( new LIB_PART( wxEmptyString ) );
 
-    wxString name, prefix;
+    wxString name, prefix, tmp;
 
-    parseUnquotedString( name, aReader, line, &line );           // Part name.
-    parseUnquotedString( prefix, aReader, line, &line );         // Prefix name
-    parseInt( aReader, line, &line );                            // NumOfPins, unused.
-    part->SetPinNameOffset( parseInt( aReader, line, &line ) );  // Pin name offset.
-    yes_no = parseChar( aReader, line, &line );                  // Show pin numbers.
+    name = tokens.GetNextToken();
+    pos += name.size() + 1;
 
-    if( !( yes_no == 'Y' || yes_no == 'N') )
-        SCH_PARSE_ERROR( "expected Y or N", aReader, line );
+    prefix = tokens.GetNextToken();
+    pos += prefix.size() + 1;
 
-    part->SetShowPinNumbers( ( yes_no == 'N' ) ? false : true );
+    tmp = tokens.GetNextToken();
+    pos += tmp.size() + 1;                        // NumOfPins, unused.
 
-    yes_no = parseChar( aReader, line, &line );                  // Show pin numbers.
+    tmp = tokens.GetNextToken();                  // Pin name offset.
 
-    if( !( yes_no == 'Y' || yes_no == 'N') )
-        SCH_PARSE_ERROR( "expected Y or N", aReader, line );
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin offset", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
 
-    part->SetShowPinNames( ( yes_no == 'N' ) ? false : true );   // Show pin names.
+    pos += tmp.size() + 1;
+    part->SetPinNameOffset( (int)num );
 
-    part->SetUnitCount( parseInt( aReader, line, &line ) );      // Number of units.
+    tmp = tokens.GetNextToken();                  // Show pin numbers.
+
+    if( !( tmp == "Y" || tmp == "N") )
+        THROW_PARSE_ERROR( "expected Y or N", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    part->SetShowPinNumbers( ( tmp == "N" ) ? false : true );
+
+    tmp = tokens.GetNextToken();                  // Show pin names.
+
+    if( !( tmp == "Y" || tmp == "N") )
+        THROW_PARSE_ERROR( "expected Y or N", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    part->SetShowPinNames( ( tmp == "N" ) ? false : true );
+
+    tmp = tokens.GetNextToken();                  // Number of units.
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid unit count", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    part->SetUnitCount( (int)num );
 
     // Ensure m_unitCount is >= 1.  Could be read as 0 in old libraries.
     if( part->GetUnitCount() < 1 )
@@ -2626,32 +2659,36 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::loadPart( FILE_LINE_READER& aReader )
     {
         // Nothing needs to be set since the default setting for symbols with multiple
         // units were never interchangeable.  Just parse the 0 an move on.
-        parseInt( aReader, line, &line );
+        tmp = tokens.GetNextToken();
+        pos += tmp.size() + 1;
     }
     else
     {
-        char locked = parseChar( aReader, line, &line );
+        tmp = tokens.GetNextToken();
 
-        if( locked == 'L' )
+        if( tmp == "L" )
             part->LockUnits( true );
-        else if( locked == 'F' || locked == '0' )
+        else if( tmp == "F" || tmp == "0" )
             part->LockUnits( false );
         else
-            SCH_PARSE_ERROR( "expected L, F, or 0", aReader, line );
+            THROW_PARSE_ERROR( "expected L, F, or 0", aReader.GetSource(), aReader.Line(),
+                               aReader.LineNumber(), pos );
+
+        pos += tmp.size() + 1;
     }
 
-
     // There is the optional power component flag.
-    if( *line )
+    if( tokens.HasMoreTokens() )
     {
-        char power = parseChar( aReader, line, &line );
+        tmp = tokens.GetNextToken();
 
-        if( power == 'P' )
+        if( tmp == "P" )
             part->SetPower();
-        else if( power == 'N' )
+        else if( tmp == "N" )
             part->SetNormal();
         else
-            SCH_PARSE_ERROR( "expected P or N", aReader, line );
+            THROW_PARSE_ERROR( "expected P or N", aReader.GetSource(), aReader.Line(),
+                               aReader.LineNumber(), pos );
     }
 
     line = aReader.ReadLine();
@@ -2756,17 +2793,15 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr< LIB_PART >& aPart,
 
     wxCHECK_RET( strCompare( "ALIAS", line, &line ), "Invalid ALIAS section" );
 
-    // Parse the ALIAS list.
-    wxString alias;
-    parseUnquotedString( alias, aReader, line, &line );
+    wxString utf8Line = wxString::FromUTF8( line );
+    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
 
-    while( !alias.IsEmpty() )
+    // Parse the ALIAS list.
+    while( tokens.HasMoreTokens() )
     {
-        newAlias = alias;
+        newAlias = tokens.GetNextToken();
         checkForDuplicates( newAlias );
         aPart->AddAlias( newAlias );
-        alias.clear();
-        parseUnquotedString( alias, aReader, line, &line, true );
     }
 }
 
