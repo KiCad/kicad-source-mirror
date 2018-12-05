@@ -639,13 +639,19 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
             return true;
         break;
 
-    case S_POLYGON:     // not yet handled
+    case S_POLYGON:
         {
             #define MAX_DIST_IN_MM 0.25
             int distmax = std::max( m_Width, Millimeter2iu( MAX_DIST_IN_MM ) );
 
-            if( m_Poly.Collide( VECTOR2I( aPosition ), distmax ) )
-                return true;
+            if( m_Layer == Edge_Cuts )
+            {
+                SHAPE_POLY_SET::VERTEX_INDEX i;
+                auto poly = m_Poly;  //todo: Fix CollideEdge to be const
+                return poly.CollideEdge(VECTOR2I( aPosition ), i, distmax );
+            }
+            else
+                return m_Poly.Collide( VECTOR2I( aPosition ), distmax );
         }
         break;
 
