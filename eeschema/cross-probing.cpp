@@ -257,10 +257,15 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         break;
 
     case MAIL_SCH_REFRESH:
+    {
+        SCH_SCREENS schematic;
+        schematic.UpdateSymbolLinks();
+        schematic.TestDanglingEnds();
+
         GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
         GetCanvas()->Refresh();
         break;
-
+    }
     case MAIL_IMPORT_FILE:
     {
         // Extract file format type and path (plugin type and path separated with \n)
