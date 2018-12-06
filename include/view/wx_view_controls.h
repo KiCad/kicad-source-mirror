@@ -159,6 +159,9 @@ private:
     /// Current scrollbar position
     VECTOR2I    m_scrollPos;
 
+    /// Last event timestamp to remove duplicates
+    long int    m_lastTimestamp;
+
     /// Current cursor position (world coordinates)
     VECTOR2D    m_cursorPos;
 

@@ -52,7 +52,7 @@ static std::unique_ptr<ZOOM_CONTROLLER> GetZoomControllerForPlatform()
 
 WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel ) :
     VIEW_CONTROLS( aView ), m_state( IDLE ), m_parentPanel( aParentPanel ),
-    m_scrollScale( 1.0, 1.0 ), m_cursorPos( 0, 0 ), m_updateCursor( true )
+    m_scrollScale( 1.0, 1.0 ), m_lastTimestamp( 0 ), m_cursorPos( 0, 0 ), m_updateCursor( true )
 {
     m_parentPanel->Connect( wxEVT_MOTION,
                             wxMouseEventHandler( WX_VIEW_CONTROLS::onMotion ), NULL, this );
@@ -132,6 +132,16 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
     const double wheelPanSpeed = 0.001;
+
+#ifdef __WXGTK3__
+    if( aEvent.GetTimestamp() == m_lastTimestamp )
+    {
+        aEvent.Skip( false );
+        return;
+    }
+
+    m_lastTimestamp = aEvent.GetTimestamp();
+#endif
 
     // mousewheelpan disabled:
     //      wheel + ctrl    -> horizontal scrolling;
