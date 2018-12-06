@@ -686,6 +686,20 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
+    // Fetch grid settings from Symbol Editor
+    wxString symbolEditor = LIB_EDIT_FRAME_NAME;
+    bool     btmp;
+    COLOR4D  wtmp;
+
+    if( aCfg->Read( symbolEditor + ShowGridEntryKeyword, &btmp ) )
+        SetGridVisibility( btmp );
+
+    if( wtmp.SetFromWxString( aCfg->Read( symbolEditor + GridColorEntryKeyword, wxT( "NONE" ) ) ) )
+        SetGridColor( wtmp );
+
+    // Grid shape, etc.
+    GetGalDisplayOptions().ReadConfig( aCfg, symbolEditor + GAL_DISPLAY_OPTIONS_KEY );
+
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
