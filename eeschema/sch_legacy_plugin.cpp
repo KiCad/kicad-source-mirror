@@ -3242,89 +3242,129 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 
     std::unique_ptr< LIB_PIN > pin( new LIB_PIN( aPart.get() ) );
 
-    wxString name, number;
+    size_t pos = 2;                               // "X" plus ' ' space character.
+    wxString tmp;
+    wxString utf8Line = wxString::FromUTF8( line );
+    wxStringTokenizer tokens( utf8Line, " \r\n\t" );
 
-    parseUnquotedString( name, aReader, line, &line );
-    parseUnquotedString( number, aReader, line, &line );
+    if( tokens.CountTokens() < 11 )
+        SCH_PARSE_ERROR( "invalid pin definition", aReader, line );
 
-    // Unlike most of the other LIB_ITEMs, the SetXXX() routines on LIB_PINs are at the UI
-    // level, performing additional pin checking, multi-pin editing, and setting the modified
-    // flag.  So we must set the member fields directly.
+    pin->m_name = tokens.GetNextToken();
+    pos += pin->m_name.size() + 1;
+    pin->m_number = tokens.GetNextToken();
+    pos += pin->m_number.size() + 1;
 
-    pin->m_name = name;
-    pin->m_number = number;
+    long num;
+    wxPoint position;
 
-    wxPoint pos;
+    tmp = tokens.GetNextToken();
 
-    pos.x = parseInt( aReader, line, &line );
-    pos.y = parseInt( aReader, line, &line );
-    pin->m_position = pos;
-    pin->m_length = parseInt( aReader, line, &line );
-    pin->m_orientation = parseChar( aReader, line, &line );
-    pin->m_numTextSize = parseInt( aReader, line, &line );
-    pin->m_nameTextSize = parseInt( aReader, line, &line );
-    pin->m_Unit = parseInt( aReader, line, &line );
-    pin->m_Convert = parseInt( aReader, line, &line );
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin X coordinate", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
 
-    char type = parseChar( aReader, line, &line );
+    pos += tmp.size() + 1;
+    position.x = (int) num;
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin Y coordinate", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    position.y = (int) num;
+    pin->m_position = position;
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin length", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_length = (int) num;
+
+
+    tmp = tokens.GetNextToken();
+
+    if( tmp.size() > 1 )
+        THROW_PARSE_ERROR( "invalid pin orientation", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_orientation = tmp[0];
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin number text size", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_numTextSize = (int) num;
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin name text size", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_nameTextSize = (int) num;
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin unit", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_Unit = (int) num;
+
+    tmp = tokens.GetNextToken();
+
+    if( !tmp.ToLong( &num ) )
+        THROW_PARSE_ERROR( "invalid pin alternate body type", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    pin->m_Convert = (int) num;
+
+    tmp = tokens.GetNextToken();
+
+    if( tmp.size() != 1 )
+        THROW_PARSE_ERROR( "invalid pin type", aReader.GetSource(), aReader.Line(),
+                           aReader.LineNumber(), pos );
+
+    pos += tmp.size() + 1;
+    char type = tmp[0];
 
     wxString attributes;
 
-    // Optional
-    parseUnquotedString( attributes, aReader, line, &line, true );
-
     switch( type )
     {
-    case 'I':
-        pin->m_type = PIN_INPUT;
-        break;
-
-    case 'O':
-        pin->m_type = PIN_OUTPUT;
-        break;
-
-    case 'B':
-        pin->m_type = PIN_BIDI;
-        break;
-
-    case 'T':
-        pin->m_type = PIN_TRISTATE;
-        break;
-
-    case 'P':
-        pin->m_type = PIN_PASSIVE;
-        break;
-
-    case 'U':
-        pin->m_type = PIN_UNSPECIFIED;
-        break;
-
-    case 'W':
-        pin->m_type = PIN_POWER_IN;
-        break;
-
-    case 'w':
-        pin->m_type = PIN_POWER_OUT;
-        break;
-
-    case 'C':
-        pin->m_type = PIN_OPENCOLLECTOR;
-        break;
-
-    case 'E':
-        pin->m_type = PIN_OPENEMITTER;
-        break;
-
-    case 'N':
-        pin->m_type = PIN_NC;
-        break;
-
-    default:
-        SCH_PARSE_ERROR( "unknown pin type", aReader, line );
+    case 'I': pin->m_type = PIN_INPUT;         break;
+    case 'O': pin->m_type = PIN_OUTPUT;        break;
+    case 'B': pin->m_type = PIN_BIDI;          break;
+    case 'T': pin->m_type = PIN_TRISTATE;      break;
+    case 'P': pin->m_type = PIN_PASSIVE;       break;
+    case 'U': pin->m_type = PIN_UNSPECIFIED;   break;
+    case 'W': pin->m_type = PIN_POWER_IN;      break;
+    case 'w': pin->m_type = PIN_POWER_OUT;     break;
+    case 'C': pin->m_type = PIN_OPENCOLLECTOR; break;
+    case 'E': pin->m_type = PIN_OPENEMITTER;   break;
+    case 'N': pin->m_type = PIN_NC;            break;
+    default: THROW_PARSE_ERROR( "unknown pin type", aReader.GetSource(),
+                                aReader.Line(), aReader.LineNumber(), pos );
     }
 
-    if( !attributes.IsEmpty() )       /* Special Symbol defined */
+    // Optional
+    if( tokens.HasMoreTokens() )       /* Special Symbol defined */
     {
+        tmp = tokens.GetNextToken();
+
         enum
         {
             INVERTED        = 1 << 0,
@@ -3337,44 +3377,23 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 
         int flags = 0;
 
-        for( int j = attributes.size(); j > 0; )
+        for( int j = tmp.size(); j > 0; )
         {
-            switch( attributes[--j].GetValue() )
+            switch( tmp[--j].GetValue() )
             {
-            case '~':
-                break;
-
-            case 'N':
-                pin->m_attributes |= PIN_INVISIBLE;
-                break;
-
-            case 'I':
-                flags |= INVERTED;
-                break;
-
-            case 'C':
-                flags |= CLOCK;
-                break;
-
-            case 'L':
-                flags |= LOWLEVEL_IN;
-                break;
-
-            case 'V':
-                flags |= LOWLEVEL_OUT;
-                break;
-
-            case 'F':
-                flags |= FALLING_EDGE;
-                break;
-
-            case 'X':
-                flags |= NONLOGIC;
-                break;
-
-            default:
-                SCH_PARSE_ERROR( "unknown pin attribute", aReader, line );
+            case '~': break;
+            case 'N': pin->m_attributes |= PIN_INVISIBLE; break;
+            case 'I': flags |= INVERTED;     break;
+            case 'C': flags |= CLOCK;        break;
+            case 'L': flags |= LOWLEVEL_IN;  break;
+            case 'V': flags |= LOWLEVEL_OUT; break;
+            case 'F': flags |= FALLING_EDGE; break;
+            case 'X': flags |= NONLOGIC;     break;
+            default: THROW_PARSE_ERROR( "invalid pin attribut", aReader.GetSource(),
+                                        aReader.Line(), aReader.LineNumber(), pos );
             }
+
+            pos += 1;
         }
 
         switch( flags )
