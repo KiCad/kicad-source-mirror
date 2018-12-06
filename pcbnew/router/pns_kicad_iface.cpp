@@ -901,80 +901,68 @@ bool PNS_KICAD_IFACE::syncGraphicalItem( PNS::NODE* aWorld, DRAWSEGMENT* aItem )
 
     switch( aItem->GetShape() )
     {
-        case S_ARC:
+    case S_ARC:
+    {
+        SHAPE_ARC arc( aItem->GetCenter(), aItem->GetArcStart(), aItem->GetAngle() / 10.0 );
+        auto l = arc.ConvertToPolyline();
+
+        for( int i = 0; i < l.SegmentCount(); i++ )
         {
-            SHAPE_ARC arc( aItem->GetCenter(), aItem->GetArcStart(), (double) aItem->GetAngle() / 10.0 );
-
-            auto l = arc.ConvertToPolyline();
-
-            for( int i = 0; i < l.SegmentCount(); i++ )
-            {
-                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( l.CSegment(i), aItem->GetWidth() );
-                segs.push_back( seg );
-            }
-
-            break;
-        }
-
-        case S_SEGMENT:
-        {
-            SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( aItem->GetStart(), aItem->GetEnd(), aItem->GetWidth() );
+            SHAPE_SEGMENT* seg = new SHAPE_SEGMENT( l.CSegment( i ), aItem->GetWidth() );
             segs.push_back( seg );
-
-            break;
         }
 
-        case S_CIRCLE:
-        {
-            // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
-            SHAPE_ARC circle( aItem->GetCenter(), aItem->GetEnd(), 360.0 );
+        break;
+    }
 
-            auto l = circle.ConvertToPolyline();
+    case S_SEGMENT:
+        segs.push_back(
+                new SHAPE_SEGMENT( aItem->GetStart(), aItem->GetEnd(), aItem->GetWidth() ) );
 
-            for( int i = 0; i < l.SegmentCount(); i++ )
-            {
-                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT( l.CSegment(i), aItem->GetWidth() );
-                segs.push_back( seg );
-            }
-
-            break;
-        }
-
-        case S_CURVE:
-        {
-            aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
-            wxPoint start_pt = aItem->GetBezierPoints()[0];
-
-            for( unsigned int jj = 1; jj < aItem->GetBezierPoints().size(); jj++ )
-            {
-                wxPoint end_pt = aItem->GetBezierPoints()[jj];
-                SHAPE_SEGMENT *seg = new SHAPE_SEGMENT(
-                    VECTOR2I( start_pt ), VECTOR2I( end_pt ), aItem->GetWidth() );
-                segs.push_back( seg );
-                start_pt = end_pt;
-            }
-        }
         break;
 
-        case S_POLYGON:
-        {
-            if( !aItem->IsPolygonFilled() )
-            {
-                auto poly = aItem->BuildPolyPointsList();
-                for( size_t ii = 1; ii < poly.size(); ii++ )
-                {
-                    segs.push_back( new SHAPE_SEGMENT(
-                            VECTOR2I( poly[ii-1] ), VECTOR2I( poly[ii] ), aItem->GetWidth() ) );
-                }
+    case S_CIRCLE:
+    {
+        // SHAPE_CIRCLE has no ConvertToPolyline() method, so use a 360.0 SHAPE_ARC
+        SHAPE_ARC circle( aItem->GetCenter(), aItem->GetEnd(), 360.0 );
+        auto l = circle.ConvertToPolyline();
 
+        for( int i = 0; i < l.SegmentCount(); i++ )
+            segs.push_back( new SHAPE_SEGMENT( l.CSegment( i ), aItem->GetWidth() ) );
+
+        break;
+    }
+
+    case S_CURVE:
+    {
+        aItem->RebuildBezierToSegmentsPointsList( aItem->GetWidth() );
+        auto pts = aItem->GetBezierPoints();
+
+        for( size_t ii = 1; ii < pts.size(); ii++ )
+        {
+            segs.push_back( new SHAPE_SEGMENT(
+                    VECTOR2I( pts[ii - 1] ), VECTOR2I( pts[ii] ), aItem->GetWidth() ) );
+        }
+        break;
+    }
+
+    case S_POLYGON:
+        if( !aItem->IsPolygonFilled() )
+        {
+            auto poly = aItem->BuildPolyPointsList();
+            for( size_t ii = 1; ii < poly.size(); ii++ )
+            {
                 segs.push_back( new SHAPE_SEGMENT(
-                        VECTOR2I( poly.back() ), VECTOR2I( poly.front() ), aItem->GetWidth() ) );
+                        VECTOR2I( poly[ii - 1] ), VECTOR2I( poly[ii] ), aItem->GetWidth() ) );
             }
+
+            segs.push_back( new SHAPE_SEGMENT(
+                    VECTOR2I( poly.back() ), VECTOR2I( poly.front() ), aItem->GetWidth() ) );
         }
         break;
 
-        default:
-            break;
+    default:
+        break;
     }
 
     for( auto seg : segs )
