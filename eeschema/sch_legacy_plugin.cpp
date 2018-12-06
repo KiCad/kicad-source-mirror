@@ -1426,8 +1426,15 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
         if( strCompare( "L", line, &line ) )
         {
             wxString libName;
+            size_t pos = 2;                               // "X" plus ' ' space character.
+            wxString utf8Line = wxString::FromUTF8( line );
+            wxStringTokenizer tokens( utf8Line, " \r\n\t" );
 
-            parseUnquotedString( libName, aReader, line, &line );
+            if( tokens.CountTokens() < 2 )
+                THROW_PARSE_ERROR( "invalid symbol library definition", aReader.GetSource(),
+                                   aReader.Line(), aReader.LineNumber(), pos );
+
+            libName = tokens.GetNextToken();
             libName.Replace( "~", " " );
 
             LIB_ID libId;
@@ -1442,9 +1449,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 
             component->SetLibId( libId );
 
-            wxString refDesignator;
+            wxString refDesignator = tokens.GetNextToken();
 
-            parseUnquotedString( refDesignator, aReader, line, &line );
             refDesignator.Replace( "~", " " );
 
             wxString prefix = refDesignator;
