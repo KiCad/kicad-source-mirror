@@ -229,7 +229,7 @@ can down load the source archive from the [KiCad Launchpad][] developers page.  
 other archive program to extract the source on your system.  If you are using tar, use the
 following command:
 
-    tar -xzf kicad_src_archive.tar.gz
+    tar -xaf kicad_src_archive.tar.xz
 
 If you are contributing directly to the KiCad project on Launchpad, you can create a local
 copy on your machine by using the following command:
