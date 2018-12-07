@@ -227,7 +227,10 @@ wxString ComponentFileWildcard()
 // Wildcard for reports and fabrication documents
 wxString DrillFileWildcard()
 {
-    return _( "Drill files (*.drl)|*." ) + FormatWildcardExt( "drl" );
+    //return _( "Drill files (*.drl)|*." ) + FormatWildcardExt( "drl" );
+    return _( "Drill files (*.drl *.nc *.xnc)|*." ) + FormatWildcardExt( "drl" )
+              + ";*." + FormatWildcardExt( "nc" )
+              + ";*." + FormatWildcardExt( "xnc" );
 }
 
 

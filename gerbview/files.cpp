@@ -174,7 +174,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
         break;
 
     default:
-        wxFAIL_MSG( wxT( "File_io: unexpected command id" ) );
+        wxFAIL_MSG( "File_io: unexpected command id" );
         break;
     }
 }
