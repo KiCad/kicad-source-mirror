@@ -308,7 +308,9 @@ void KICAD_MANAGER_FRAME::RunEeschema( const wxString& aProjectSchematicFileName
 
     if( !frame->IsShown() ) // A hidden frame might not have the project loaded.
     {
-        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) );
+        if( !frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectSchematicFileName ) ) )
+            return;
+
         frame->Show( true );
     }
 
@@ -377,7 +379,9 @@ void KICAD_MANAGER_FRAME::RunPcbNew( const wxString& aProjectBoardFileName )
 
     if( !frame->IsVisible() )   // A hidden frame might not have the board loaded.
     {
-        frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) );
+        if( !frame->OpenProjectFiles( std::vector<wxString>( 1, aProjectBoardFileName ) ) )
+            return;
+
         frame->Show( true );
     }
 

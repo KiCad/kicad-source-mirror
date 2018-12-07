@@ -134,6 +134,8 @@ enum PCB_LAYER_ID: int
     B_Fab,
     F_Fab,
 
+    Rescue,
+
     PCB_LAYER_ID_COUNT
 };
 

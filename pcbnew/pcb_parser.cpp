@@ -580,6 +580,88 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
         }
     }
 
+    if( m_undefinedLayers.size() > 0 )
+    {
+        bool deleteItems;
+        std::vector<BOARD_ITEM*> deleteList;
+        wxString msg = wxString::Format( _( "Items found on undefined layers.  Do you wish to\n"
+                                            "rescue them to the Cmts.User layer?" ) );
+        wxString details = wxString::Format( _( "Undefined layers:" ) );
+
+        for( const wxString& undefinedLayer : m_undefinedLayers )
+            details += wxT( "\n   " ) + undefinedLayer;
+
+        wxRichMessageDialog dlg( nullptr, msg, _( "Warning" ),
+                                 wxYES_NO | wxCANCEL | wxCENTRE | wxICON_WARNING | wxSTAY_ON_TOP );
+        dlg.ShowDetailedText( details );
+        dlg.SetYesNoCancelLabels( _( "Rescue" ), _( "Delete" ), _( "Cancel" ) );
+
+        switch( dlg.ShowModal() )
+        {
+        case wxID_YES:    deleteItems = false; break;
+        case wxID_NO:     deleteItems = true;  break;
+        case wxID_CANCEL:
+        default:          THROW_IO_ERROR( wxT( "CANCEL" ) );
+        }
+
+        auto visitItem = [&]( BOARD_ITEM* item )
+                            {
+                                if( item->GetLayer() == Rescue )
+                                {
+                                    if( deleteItems )
+                                        deleteList.push_back( item );
+                                    else
+                                        item->SetLayer( Cmts_User );
+                                }
+                            };
+
+        for( TRACK* segm = m_board->m_Track;  segm;  segm = segm->Next() )
+        {
+            if( segm->Type() == PCB_VIA_T )
+            {
+                VIA*         via = (VIA*) segm;
+                PCB_LAYER_ID top_layer, bottom_layer;
+
+                if( via->GetViaType() == VIA_THROUGH )
+                    continue;
+
+                via->LayerPair( &top_layer, &bottom_layer );
+
+                if( top_layer == Rescue || bottom_layer == Rescue )
+                {
+                    if( deleteItems )
+                        deleteList.push_back( via );
+                    else
+                    {
+                        if( top_layer == Rescue )
+                            top_layer = F_Cu;
+
+                        if( bottom_layer == Rescue )
+                            bottom_layer = B_Cu;
+
+                        via->SetLayerPair( top_layer, bottom_layer );
+                    }
+                }
+            }
+            else
+                visitItem( segm );
+        }
+
+        for( TRACK* segm = m_board->m_SegZoneDeprecated; segm; segm = segm->Next() )
+            visitItem( segm );
+
+        for( BOARD_ITEM* zone : m_board->Zones() )
+            visitItem( zone );
+
+        for( BOARD_ITEM* drawing : m_board->Drawings() )
+            visitItem( drawing );
+
+        for( BOARD_ITEM* item : deleteList )
+            m_board->Delete( item );
+
+        m_undefinedLayers.clear();
+    }
+
     return m_board;
 }
 
@@ -976,17 +1058,8 @@ T PCB_PARSER::lookUpLayer( const M& aMap )
         }
 #endif
 
-        wxString error = wxString::Format( _(
-                "Layer \"%s\" in file\n"
-                "\"%s\"\n"
-                "at line %d, position %d\n"
-                "was not defined in the layers section"
-                ),
-            GetChars( FROM_UTF8( CurText() ) ),
-            GetChars( CurSource() ),
-            CurLineNumber(), CurOffset() );
-
-        THROW_IO_ERROR( error );
+        m_undefinedLayers.insert( curText );
+        return Rescue;
     }
 
     return it->second;

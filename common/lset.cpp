@@ -134,6 +134,9 @@ const wxChar* LSET::Name( PCB_LAYER_ID aLayerId )
     case F_Fab:             txt = wxT( "F.Fab" );           break;
     case B_Fab:             txt = wxT( "B.Fab" );           break;
 
+    // Rescue
+    case Rescue:            txt = wxT( "Rescue" );          break;
+
     default:
         std::cout << aLayerId << std::endl;
         wxASSERT_MSG( 0, wxT( "aLayerId out of range" ) );
