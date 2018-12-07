@@ -55,7 +55,14 @@ bool SVG_IMPORT_PLUGIN::Load( const wxString& aFileName )
 {
     wxCHECK( m_importer, false );
 
-    m_parsedImage = nsvgParseFromFile( aFileName.c_str(), "mm", 96 );
+    // wxFopen takes care of unicode filenames across platforms
+    FILE* fp = wxFopen( aFileName, "rt" );
+
+    if( fp == nullptr )
+        return false;
+
+    // nsvgParseFromFile will close the file after reading
+    m_parsedImage = nsvgParseFromFile( fp, "mm", 96 );
 
     wxCHECK( m_parsedImage, false );
 

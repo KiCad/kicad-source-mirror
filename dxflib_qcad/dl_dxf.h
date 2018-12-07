@@ -124,10 +124,9 @@ public:
     DL_Dxf();
     ~DL_Dxf();
 
-    bool in( const std::string& file,
-            DL_CreationInterface* creationInterface );
-    bool readDxfGroups( FILE* fp,
-            DL_CreationInterface* creationInterface );
+    bool in( FILE* fp, DL_CreationInterface* creationInterface );
+    bool in( const std::string& file, DL_CreationInterface* creationInterface );
+    bool readDxfGroups( FILE* fp, DL_CreationInterface* creationInterface );
     static bool getStrippedLine( std::string& s, unsigned int size,
             FILE* stream, bool stripSpace = true );
 

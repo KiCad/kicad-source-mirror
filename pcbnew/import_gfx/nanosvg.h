@@ -66,6 +66,8 @@
 	nsvgDelete(image);
 */
 
+#include <stdio.h>
+
 enum NSVGpaintType {
 	NSVG_PAINT_NONE = 0,
 	NSVG_PAINT_COLOR = 1,
@@ -158,7 +160,8 @@ typedef struct NSVGimage
 } NSVGimage;
 
 // Parses SVG file from a file, returns SVG image as paths.
-NSVGimage* nsvgParseFromFile(const char* filename, const char* units, float dpi);
+// fp will be closed after reading the file
+NSVGimage* nsvgParseFromFile( FILE* fp, const char* units, float dpi);
 
 // Parses SVG file from a null terminated string, returns SVG image as paths.
 // Important note: changes the string.

@@ -28,7 +28,6 @@
 
 #include "nanosvg.h"
 
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -3668,17 +3667,14 @@ NSVGimage* nsvgParse( char* input, const char* units, float dpi )
 }
 
 
-NSVGimage* nsvgParseFromFile( const char* filename, const char* units, float dpi )
+NSVGimage* nsvgParseFromFile( FILE *fp, const char* units, float dpi )
 {
-    FILE* fp = NULL;
     size_t  size;
     char*   data = NULL;
     NSVGimage* image = NULL;
 
-    fp = fopen( filename, "rb" );
-
     if( !fp )
-        goto error;
+        return NULL;
 
     fseek( fp, 0, SEEK_END );
     size = ftell( fp );

@@ -121,8 +121,40 @@ DL_Dxf::~DL_Dxf()
  * @brief Reads the given file and calls the appropriate functions in
  * the given creation interface for every entity found in the file.
  *
+ * @param file Input the file pointer to read
+ * @param creationInterface
+ *      Pointer to the class which takes care of the entities in the file.
+ *
+ * @retval true if fp is valid (i.e. not NULL), false otherwise.
+ */
+bool DL_Dxf::in( FILE* fp, DL_CreationInterface* creationInterface )
+{
+    firstCall = true;
+    currentObjectType = DL_UNKNOWN;
+
+    if( fp )
+    {
+        std::locale oldLocale = std::locale::global( std::locale( "C" ) );    // use dot in numbers
+
+        while( readDxfGroups( fp, creationInterface ) )
+        {
+        }
+
+        std::locale::global( oldLocale );
+        fclose( fp );
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @brief Reads the given file and calls the appropriate functions in
+ * the given creation interface for every entity found in the file.
+ *
  * @param file Input
  *      Path and name of file to read
+ * Note: file is not very well utf8 compatible, depending on the platform.
  * @param creationInterface
  *      Pointer to the class which takes care of the entities in the file.
  *

@@ -133,14 +133,18 @@ double DXF_IMPORT_PLUGIN::mapWidth( double aDxfWidth )
 
 bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
 {
-    LOCALE_IO locale;
-
     DL_Dxf dxf_reader;
     std::string filename = TO_UTF8( aFile );
-    bool success = true;
 
-    if( !dxf_reader.in( filename, this ) )  // if file open failed
-        success = false;
+    // wxFopen takes care of unicode filenames across platforms
+    FILE* fp = wxFopen( aFile, "rt" );
+
+    if( fp == nullptr )
+        return false;
+
+    // Note the dxf reader takes care of switching to "C" locale before reading the file
+    // and will close the file after reading
+    bool success = dxf_reader.in( fp, this );
 
     return success;
 }
