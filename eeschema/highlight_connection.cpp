@@ -89,6 +89,9 @@ bool SCH_EDIT_FRAME::SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aIte
 {
     SCH_SCREEN* screen = m_CurrentSheet->LastScreen();
 
+    if( !screen )
+        return true;
+
     // Disable highlight flag on all items in the current screen
     for( SCH_ITEM* ptr = screen->GetDrawItems(); ptr; ptr = ptr->Next() )
     {
