@@ -103,6 +103,9 @@ const std::string GedaPcbFootprintLibFileExtension( "fp" );
 const std::string SpecctraDsnFileExtension( "dsn" );
 const std::string IpcD356FileExtension( "d356" );
 
+const std::string PngFileExtension( "png" );
+const std::string JpegFileExtension( "jpg" );
+
 
 const wxString AllFilesWildcard( _( "All files (*)|*" ) );
 
@@ -378,4 +381,11 @@ wxString WorkbookFileWildcard()
 wxString PngFileWildcard()
 {
     return _( "PNG file (*.png)|*." ) + FormatWildcardExt( "png" );
+}
+
+
+wxString JpegFileWildcard()
+{
+    return _( "Jpeg file (*.jpg *.jpeg)|*." ) + FormatWildcardExt( "jpg" ) + ";*." +
+           FormatWildcardExt( "jpeg" );
 }

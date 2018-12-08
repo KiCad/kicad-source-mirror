@@ -85,6 +85,9 @@ extern const std::string KiCadLib3DShapesPathExtension;
 extern const std::string SpecctraDsnFileExtension;
 extern const std::string IpcD356FileExtension;
 
+extern const std::string PngFileExtension;
+extern const std::string JpegFileExtension;
+
 /**
  * @}
  */
@@ -150,6 +153,7 @@ extern wxString SpecctraDsnFileWildcard();
 extern wxString IpcD356FileWildcard();
 extern wxString WorkbookFileWildcard();
 extern wxString PngFileWildcard();
+extern wxString JpegFileWildcard();
 
 /**
  * @}
