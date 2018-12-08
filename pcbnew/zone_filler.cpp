@@ -529,8 +529,12 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             // the netclass value, because we do not have a copper item
             zclearance = zone_to_edgecut_clearance;
 
+#if 0
+// 6.0 TODO: we're leaving this off for 5.1 so that people can continue to use the board
+// edge width as a hack for edge clearance.
             // edge cuts by definition don't have a width
             ignoreLineWidth = true;
+#endif
         }
 
         switch( aItem->Type() )
