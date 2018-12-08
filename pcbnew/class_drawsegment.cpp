@@ -236,7 +236,7 @@ const wxPoint DRAWSEGMENT::GetCenter() const
 
 const wxPoint DRAWSEGMENT::GetArcEnd() const
 {
-    wxPoint endPoint;         // start of arc
+    wxPoint endPoint( m_End );         // start of arc
 
     switch( m_Shape )
     {
@@ -246,6 +246,27 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
         // m_Start is the arc centre
         endPoint  = m_End;         // m_End = start point of arc
         RotatePoint( &endPoint, m_Start, -m_Angle );
+        break;
+
+    default:
+        break;
+    }
+
+    return endPoint;   // after rotation, the end of the arc.
+}
+
+const wxPoint DRAWSEGMENT::GetArcMid() const
+{
+    wxPoint endPoint( m_End );
+
+    switch( m_Shape )
+    {
+    case S_ARC:
+        // rotate the starting point of the arc, given by m_End, through half
+        // the angle m_Angle to get the middle of the arc.
+        // m_Start is the arc centre
+        endPoint  = m_End;         // m_End = start point of arc
+        RotatePoint( &endPoint, m_Start, -m_Angle / 2.0 );
         break;
 
     default:

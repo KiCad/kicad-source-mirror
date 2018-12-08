@@ -131,6 +131,7 @@ public:
     const wxPoint GetCenter() const override;
     const wxPoint& GetArcStart() const      { return m_End; }
     const wxPoint GetArcEnd() const;
+    const wxPoint GetArcMid() const;
 
     /**
      * function GetArcAngleStart()

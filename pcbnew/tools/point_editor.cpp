@@ -68,7 +68,7 @@ enum SEG_POINTS
 
 enum ARC_POINTS
 {
-    ARC_CENTER, ARC_START, ARC_END
+    ARC_CENTER, ARC_START, ARC_MID, ARC_END
 };
 
 enum CIRCLE_POINTS
@@ -163,6 +163,7 @@ public:
                 case S_ARC:
                     points->AddPoint( segment->GetCenter() );
                     points->AddPoint( segment->GetArcStart() );
+                    points->AddPoint( segment->GetArcMid() );
                     points->AddPoint( segment->GetArcEnd() );
 
                     // Set constraints
@@ -170,6 +171,9 @@ public:
                     points->Point( ARC_END ).SetConstraint( new EC_CIRCLE( points->Point( ARC_END ),
                                                                            points->Point( ARC_CENTER ),
                                                                            points->Point( ARC_START ) ) );
+
+                    points->Point( ARC_MID ).SetConstraint( new EC_LINE( points->Point( ARC_MID ),
+                                                                         points->Point( ARC_CENTER ) ) );
                     break;
 
                 case S_CIRCLE:
@@ -462,9 +466,10 @@ void POINT_EDITOR::updateItem() const
 
         case S_ARC:
         {
-            const VECTOR2I& center = m_editPoints->Point( ARC_CENTER ).GetPosition();
-            const VECTOR2I& start = m_editPoints->Point( ARC_START ).GetPosition();
-            const VECTOR2I& end = m_editPoints->Point( ARC_END ).GetPosition();
+            VECTOR2I center = m_editPoints->Point( ARC_CENTER ).GetPosition();
+            VECTOR2I mid = m_editPoints->Point( ARC_MID ).GetPosition();
+            VECTOR2I start = m_editPoints->Point( ARC_START ).GetPosition();
+            VECTOR2I end = m_editPoints->Point( ARC_END ).GetPosition();
 
             if( center != segment->GetCenter() )
             {
@@ -473,14 +478,21 @@ void POINT_EDITOR::updateItem() const
 
                 m_editPoints->Point( ARC_START ).SetPosition( segment->GetArcStart() );
                 m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
+                m_editPoints->Point( ARC_MID ).SetPosition( segment->GetArcMid() );
             }
-
             else
             {
+                if( mid != segment->GetArcMid() )
+                {
+                    center = GetArcCenter( start, mid, end );
+                    segment->SetCenter( wxPoint( center.x, center.y ) );
+                    m_editPoints->Point( ARC_CENTER ).SetPosition( center );
+                }
+
                 segment->SetArcStart( wxPoint( start.x, start.y ) );
 
                 VECTOR2D startLine = start - center;
-                VECTOR2I endLine = end - center;
+                VECTOR2D endLine = end - center;
                 double newAngle = RAD2DECIDEG( endLine.Angle() - startLine.Angle() );
 
                 // Adjust the new angle to (counter)clockwise setting
@@ -710,7 +722,8 @@ void POINT_EDITOR::updatePoints()
 
         case S_ARC:
             m_editPoints->Point( ARC_CENTER ).SetPosition( segment->GetCenter() );
-            m_editPoints->Point( ARC_START).SetPosition( segment->GetArcStart() );
+            m_editPoints->Point( ARC_START ).SetPosition( segment->GetArcStart() );
+            m_editPoints->Point( ARC_MID ).SetPosition( segment->GetArcMid() );
             m_editPoints->Point( ARC_END ).SetPosition( segment->GetArcEnd() );
             break;
 

@@ -344,3 +344,67 @@ void RotatePoint( double* pX, double* pY, double angle )
         *pY = fpy;
     }
 }
+
+
+const VECTOR2I GetArcCenter( const VECTOR2I& aStart, const VECTOR2I& aMid, const VECTOR2I& aEnd )
+{
+    VECTOR2I center;
+    double yDelta_21 = aMid.y - aStart.y;
+    double xDelta_21 = aMid.x - aStart.x;
+    double yDelta_32 = aEnd.y - aMid.y;
+    double xDelta_32 = aEnd.x - aMid.x;
+
+    // This is a special case for aMid as the half-way point when aSlope = 0 and bSlope = inf
+    // or the other way around.  In that case, the center lies in a straight line between
+    // aStart and aEnd
+    if( ( ( xDelta_21 == 0.0 ) && ( yDelta_32 == 0.0 ) ) ||
+        ( ( yDelta_21 == 0.0 ) && ( xDelta_32 == 0.0 ) ) )
+    {
+        center.x = KiROUND( ( aStart.x + aEnd.x ) / 2.0 );
+        center.y = KiROUND( ( aStart.y + aEnd.y ) / 2.0 );
+        return center;
+    }
+
+    // Prevent div=0 errors
+    if( xDelta_21 == 0.0 )
+        xDelta_21 = std::numeric_limits<double>::epsilon();
+
+    if( xDelta_32 == 0.0 )
+        xDelta_32 = -std::numeric_limits<double>::epsilon();
+
+    double aSlope = yDelta_21 / xDelta_21;
+    double bSlope = yDelta_32 / xDelta_32;
+
+    // If the points are colinear, the center is at infinity, so offset
+    // the slope by a minimal amount
+    // Warning: This will induce a small error in the center location
+    if( yDelta_32 * xDelta_21 == yDelta_21 * xDelta_32 )
+    {
+        aSlope += std::numeric_limits<double>::epsilon();
+        bSlope -= std::numeric_limits<double>::epsilon();
+    }
+
+    if( aSlope == 0.0 )
+        aSlope = std::numeric_limits<double>::epsilon();
+
+    if( bSlope == 0.0 )
+        bSlope = -std::numeric_limits<double>::epsilon();
+
+
+    double result = ( aSlope * bSlope * ( aStart.y - aEnd.y ) +
+                      bSlope * ( aStart.x + aMid.x ) -
+                      aSlope * ( aMid.x + aEnd.x ) ) / ( 2 * ( bSlope - aSlope ) );
+
+    center.x = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2 ),
+                                       result,
+                                       double( std::numeric_limits<int>::max() / 2 ) ) );
+
+    result = ( ( ( aStart.x + aMid.x ) / 2.0 - center.x ) / aSlope +
+                 ( aStart.y + aMid.y ) / 2.0 );
+
+    center.y = KiROUND( Clamp<double>( double( std::numeric_limits<int>::min() / 2 ),
+                                       result,
+                                       double( std::numeric_limits<int>::max() / 2 ) ) );
+
+    return center;
+}
