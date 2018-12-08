@@ -62,6 +62,7 @@ HANDLE_EXCEPTIONS(BOARD::TracksInNetBetweenPoints)
 %include edge_mod.i
 %include netinfo.i
 %include netclass.i
+%include pcb_plot_params.i
 
 %ignore operator++(SCH_LAYER_ID&);
 

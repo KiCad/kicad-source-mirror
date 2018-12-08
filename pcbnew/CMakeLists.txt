@@ -474,6 +474,7 @@ if( KICAD_SCRIPTING )   # Generate pcbnew.py and pcbnew_wrap.cxx using swig
         DEPENDS swig/edge_mod.i
         DEPENDS swig/marker_pcb.i
         DEPENDS swig/pcb_target.i
+        DEPENDS swig/pcb_plot_params.i
         DEPENDS swig/footprint.i
         DEPENDS swig/netclass.i
         DEPENDS swig/netinfo.i
