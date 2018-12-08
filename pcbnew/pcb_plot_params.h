@@ -103,7 +103,7 @@ private:
     bool        m_useGerberProtelExtensions;
 
     /// Include attributes from the Gerber X2 format (chapter 5 in revision J2)
-    bool        m_useGerberAttributes;
+    bool        m_useGerberX2format;
 
     /// Include netlist info (only in Gerber X2 format) (chapter ? in revision ?)
     bool        m_includeGerberNetlistInfo;
@@ -243,8 +243,8 @@ public:
     void        SetOutputDirectory( wxString aDir ) { m_outputDirectory = aDir; }
     wxString    GetOutputDirectory() const { return m_outputDirectory; }
 
-    void        SetUseGerberAttributes( bool aUse ) { m_useGerberAttributes = aUse; }
-    bool        GetUseGerberAttributes() const { return m_useGerberAttributes; }
+    void        SetUseGerberX2format( bool aUse ) { m_useGerberX2format = aUse; }
+    bool        GetUseGerberX2format() const { return m_useGerberX2format; }
 
     void        SetIncludeGerberNetlistInfo( bool aUse ) { m_includeGerberNetlistInfo = aUse; }
     bool        GetIncludeGerberNetlistInfo() const { return m_includeGerberNetlistInfo; }

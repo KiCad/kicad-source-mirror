@@ -1107,19 +1107,13 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
         // For the Gerber "file function" attribute, set the layer number
         if( plotter->GetPlotterType() == PLOT_FORMAT_GERBER )
         {
-            bool useX2mode = plotOpts.GetUseGerberAttributes();
+            bool useX2mode = plotOpts.GetUseGerberX2format();
 
-            if( useX2mode )
-            {
-                AddGerberX2Attribute( plotter, aBoard, aLayer, false );
-                GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
-                gbrplotter->UseX2Attributes( true );
-                gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
-            }
-            else
-            {
-                AddGerberX2Attribute( plotter, aBoard, aLayer, true );
-            }
+            GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
+            gbrplotter->UseX2Attributes( useX2mode );
+            gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
+
+            AddGerberX2Attribute( plotter, aBoard, aLayer, not useX2mode );
         }
 
         plotter->StartPlot();

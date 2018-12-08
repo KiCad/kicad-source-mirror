@@ -93,7 +93,7 @@ static bool setDouble( double* aTarget, double aValue, double aMin, double aMax 
 PCB_PLOT_PARAMS::PCB_PLOT_PARAMS()
 {
     m_useGerberProtelExtensions  = false;
-    m_useGerberAttributes        = false;
+    m_useGerberX2format          = false;
     m_includeGerberNetlistInfo   = false;
     m_createGerberJobFile        = false;
     m_gerberPrecision            = gbrDefaultPrecision;
@@ -162,7 +162,7 @@ void PCB_PLOT_PARAMS::Format( OUTPUTFORMATTER* aFormatter,
                        m_useGerberProtelExtensions ? trueStr : falseStr );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberattributes ),
-                       GetUseGerberAttributes() ? trueStr : falseStr );
+                       GetUseGerberX2format() ? trueStr : falseStr );
 
     aFormatter->Print( aNestLevel+1, "(%s %s)\n", getTokenName( T_usegerberadvancedattributes ),
                        GetIncludeGerberNetlistInfo() ? trueStr : falseStr );
@@ -239,9 +239,9 @@ bool PCB_PLOT_PARAMS::IsSameAs( const PCB_PLOT_PARAMS &aPcbPlotParams, bool aCom
         return false;
     if( m_useGerberProtelExtensions != aPcbPlotParams.m_useGerberProtelExtensions )
         return false;
-    if( m_useGerberAttributes != aPcbPlotParams.m_useGerberAttributes )
+    if( m_useGerberX2format != aPcbPlotParams.m_useGerberX2format )
         return false;
-    if( m_useGerberAttributes && m_includeGerberNetlistInfo != aPcbPlotParams.m_includeGerberNetlistInfo )
+    if( m_includeGerberNetlistInfo != aPcbPlotParams.m_includeGerberNetlistInfo )
         return false;
     if( m_createGerberJobFile != aPcbPlotParams.m_createGerberJobFile )
         return false;
@@ -402,7 +402,7 @@ void PCB_PLOT_PARAMS_PARSER::Parse( PCB_PLOT_PARAMS* aPcbPlotParams )
             break;
 
         case T_usegerberattributes:
-            aPcbPlotParams->m_useGerberAttributes = parseBool();
+            aPcbPlotParams->m_useGerberX2format = parseBool();
             break;
 
         case T_usegerberadvancedattributes:

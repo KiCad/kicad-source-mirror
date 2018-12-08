@@ -59,7 +59,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     // happen easily.
     m_gerberUnitInch = false;
     m_gerberUnitFmt = 6;
-    m_useX2Attributes = false;
+    m_useX2Attributes = true;
     m_useNetAttributes = true;
 }
 
@@ -144,12 +144,10 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     if( aData == NULL )
         return;
 
-    bool useX1StructuredComment = false;
-
-    if( !m_useX2Attributes )
-        useX1StructuredComment = true;
-    else if( !m_useNetAttributes )
+    if( !m_useNetAttributes )
         return;
+
+    bool useX1StructuredComment = !m_useX2Attributes;
 
     bool clearDict;
     std::string short_attribute_string;
@@ -325,7 +323,7 @@ void GERBER_PLOTTER::selectAperture( const wxSize&           aSize,
                   ( currentAperture->m_Type != aType ) ||
                   ( currentAperture->m_Size != aSize );
 
-    if( m_useX2Attributes && !m_useNetAttributes )
+    if( !m_useNetAttributes )
         aApertureAttribute = 0;
     else
         change = change || ( currentAperture->m_ApertureAttribute != aApertureAttribute );

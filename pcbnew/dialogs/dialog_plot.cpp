@@ -133,17 +133,16 @@ void DIALOG_PLOT::init_Dialog()
             m_layerCheckListBox->Check( checkIndex );
     }
 
-    // Option for using proper Gerber extensions
+    // Option for using proper Gerber extensions. Note also Protel extensions are
+    // a broken feature. However, for now, we need to handle it.
     m_useGerberExtensions->SetValue( m_plotOpts.GetUseGerberProtelExtensions() );
 
-    // Option for including Gerber attributes (from Gerber X2 format) in the output
-    m_useGerberX2Attributes->SetValue( m_plotOpts.GetUseGerberAttributes() );
+    // Option for including Gerber attributes, from Gerber X2 format, in the output
+    // In X1 format, they will be added as comments
+    m_useGerberX2Format->SetValue( m_plotOpts.GetUseGerberX2format() );
 
     // Option for including Gerber netlist info (from Gerber X2 format) in the output
     m_useGerberNetAttributes->SetValue( m_plotOpts.GetIncludeGerberNetlistInfo() );
-
-    // Grey out if m_useGerberX2Attributes is not checked
-    m_useGerberNetAttributes->Enable( m_useGerberX2Attributes->GetValue() );
 
     // Option to generate a Gerber job file
     m_generateGerberJobFile->SetValue( m_plotOpts.GetCreateGerberJobFile() );
@@ -658,7 +657,7 @@ void DIALOG_PLOT::applyPlotSettings()
     tempOptions.SetFormat( getPlotFormat() );
 
     tempOptions.SetUseGerberProtelExtensions( m_useGerberExtensions->GetValue() );
-    tempOptions.SetUseGerberAttributes( m_useGerberX2Attributes->GetValue() );
+    tempOptions.SetUseGerberX2format( m_useGerberX2Format->GetValue() );
     tempOptions.SetIncludeGerberNetlistInfo( m_useGerberNetAttributes->GetValue() );
     tempOptions.SetCreateGerberJobFile( m_generateGerberJobFile->GetValue() );
 
@@ -701,18 +700,7 @@ void DIALOG_PLOT::applyPlotSettings()
 
 void DIALOG_PLOT::OnGerberX2Checked( wxCommandEvent& event )
 {
-    // m_useGerberNetAttributes is useless if m_useGerberX2Attributes
-    // is not checked. So disabled (greyed out) when Gerber X2 gets unchecked
-    // to make it clear to the user.
-    if( m_useGerberX2Attributes->GetValue() )
-    {
-        m_useGerberNetAttributes->Enable( true );
-    }
-    else
-    {
-        m_useGerberNetAttributes->Enable( false );
-        m_useGerberNetAttributes->SetValue( false );
-    }
+    // Currently: do nothing
 }
 
 
