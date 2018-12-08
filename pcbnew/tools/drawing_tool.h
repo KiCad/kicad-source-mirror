@@ -246,16 +246,6 @@ private:
     void runPolygonEventLoop( POLYGON_GEOM_MANAGER& aPolyGeomMgr );
 
     /**
-     * Function make45DegLine()
-     * Forces a DRAWSEGMENT to be drawn at multiple of 45 degrees. The origin stays the same,
-     * the end of the aSegment is modified according to the current cursor position.
-     * @param aSegment is the segment that is currently drawn.
-     * @param aHelper is a helper line that shows the next possible segment.
-     * @param aPos is the position of the cursor for this event
-     */
-    void make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper, VECTOR2I& aPos ) const;
-
-    /**
      * Function constrainDimension()
      * Forces the dimension lime to be drawn on multiple of 45 degrees
      * @param aDimension is the dimension element currently being drawn

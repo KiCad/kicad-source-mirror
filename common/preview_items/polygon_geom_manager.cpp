@@ -23,7 +23,7 @@
 
 #include <preview_items/polygon_geom_manager.h>
 
-#include <geometry/direction45.h>
+#include <geometry/geometry_utils.h>
 
 
 POLYGON_GEOM_MANAGER::POLYGON_GEOM_MANAGER( CLIENT& aClient ):
@@ -144,24 +144,16 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
     const VECTOR2I& lastPt = m_lockedPoints.CLastPoint();
+    auto newEnd = VECTOR2I( lastPt );
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
+        const VECTOR2I lineVector( aEndPoint - lastPt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
-        DIRECTION_45 direction( lastPt - aEndPoint );
-        m_leaderPts = direction.BuildInitialTrace( lastPt, aEndPoint );
-
-        // Can also add chain back to start, but this rearely produces
-        // usable result
-        //SHAPE_LINE_CHAIN newChain;
-        //DIRECTION_45 directionToStart( aEndPoint - m_lockedPoints.front() );
-        //newChain.Append( directionToStart.BuildInitialTrace( aEndPoint, m_lockedPoints.front() ) );
-    }
-    else
-    {
-        // direct segment
-        m_leaderPts = SHAPE_LINE_CHAIN( lastPt, aEndPoint );
+        newEnd += GetVectorSnapped45( lineVector );
     }
 
+    // direct segment
+    m_leaderPts = SHAPE_LINE_CHAIN( lastPt, newEnd );
     m_client.OnGeometryChange( *this );
 }

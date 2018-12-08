@@ -40,7 +40,6 @@
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
-#include <geometry/direction45.h>
 #include <geometry/geometry_utils.h>
 #include <ratsnest_data.h>
 #include <board_commit.h>
@@ -933,8 +932,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
-
-    DRAWSEGMENT line45;
     GRID_HELPER grid( m_frame );
 
     m_lineWidth = getSegmentWidth( getDrawingLayer() );
@@ -966,9 +963,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         m_controls->ForceCursorPosition( true, cursorPos );
         aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
-        if( aShape == S_SEGMENT )
-            line45 = *aGraphic; // used only for direction 45 mode with lines
-
         preview.Add( aGraphic );
         m_controls->SetAutoPan( true );
         m_controls->CaptureCursor( true );
@@ -997,12 +991,15 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
             if( direction45 )
             {
-                preview.Add( &line45 );
-                make45DegLine( aGraphic, &line45, cursorPos );
+                const VECTOR2I lineVector( cursorPos - VECTOR2I( aGraphic->GetStart() ) );
+
+                // get a restricted 45/H/V line from the last fixed point to the cursor
+                auto newEnd = GetVectorSnapped45( lineVector );
+                aGraphic->SetEnd( aGraphic->GetStart() + wxPoint( newEnd.x, newEnd.y ) );
+                m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
             }
             else
             {
-                preview.Remove( &line45 );
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
             }
 
@@ -1048,9 +1045,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 if( !IsOCurseurSet )
                     m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
 
-                if( aShape == S_SEGMENT )
-                    line45 = *aGraphic; // used only for direction 45 mode with lines
-
                 preview.Add( aGraphic );
                 frame()->SetMsgPanel( aGraphic );
                 m_controls->SetAutoPan( true );
@@ -1071,26 +1065,9 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 {
                     BOARD_COMMIT commit( m_frame );
 
-                    // a clear sign that the current drawing is finished
-                    // Now we have to add the helper line as well, unless it is zero-length
-                    if( direction45  && line45.GetStart() != aGraphic->GetStart() )
-                    {
-                        DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
-
-                        // Copy coordinates, layer, etc.
-                        *l = line45;
-
-                        // If snapping, add both paths
-                        if( snapItem && l->GetLength() > 0.0 )
-                            commit.Add( l->Clone() );
-
-                        l->SetEnd( aGraphic->GetStart() );
-                        commit.Add( l );
-                    }
-
                     // If the user clicks on an existing snap point from a drawsegment
                     //  we finish the segment as they are likely closing a path
-                    else if( snapItem && aGraphic->GetLength() > 0.0 )
+                    if( snapItem && aGraphic->GetLength() > 0.0 )
                     {
                         DRAWSEGMENT* l = m_editModules ? new EDGE_MODULE( mod ) : new DRAWSEGMENT;
 
@@ -1113,7 +1090,14 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             // 45 degree lines
             if( direction45 && aShape == S_SEGMENT )
-                make45DegLine( aGraphic, &line45, cursorPos );
+            {
+                const VECTOR2I lineVector( cursorPos - VECTOR2I( aGraphic->GetStart() ) );
+
+                // get a restricted 45/H/V line from the last fixed point to the cursor
+                auto newEnd = GetVectorSnapped45( lineVector );
+                aGraphic->SetEnd( aGraphic->GetStart() + wxPoint( newEnd.x, newEnd.y ) );
+                m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
+            }
             else
                 aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
 
@@ -1128,7 +1112,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             m_lineWidth += WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
-            line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( aGraphic );
         }
@@ -1136,7 +1119,6 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
         {
             m_lineWidth -= WIDTH_STEP;
             aGraphic->SetWidth( m_lineWidth );
-            line45.SetWidth( m_lineWidth );
             m_view->Update( &preview );
             frame()->SetMsgPanel( aGraphic );
         }
@@ -1500,28 +1482,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
     m_controls->ForceCursorPosition( false );
 
     return 0;
-}
-
-
-void DRAWING_TOOL::make45DegLine( DRAWSEGMENT* aSegment, DRAWSEGMENT* aHelper,
-                                  VECTOR2I& aPos ) const
-{
-    VECTOR2I    origin( aSegment->GetStart() );
-    DIRECTION_45 direction( origin - aPos );
-    SHAPE_LINE_CHAIN newChain = direction.BuildInitialTrace( origin, aPos );
-
-    if( newChain.PointCount() > 2 )
-    {
-        aSegment->SetEnd( wxPoint( newChain.Point( -2 ).x, newChain.Point( -2 ).y ) );
-        aHelper->SetStart( wxPoint( newChain.Point( -2 ).x, newChain.Point( -2 ).y ) );
-        aHelper->SetEnd( wxPoint( newChain.Point( -1 ).x, newChain.Point( -1 ).y ) );
-    }
-    else
-    {
-        aSegment->SetEnd( wxPoint( aPos.x, aPos.y ) );
-        aHelper->SetStart( wxPoint( aPos.x, aPos.y ) );
-        aHelper->SetEnd( wxPoint( aPos.x, aPos.y ) );
-    }
 }
 
 
