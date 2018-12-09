@@ -1242,7 +1242,13 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
                 color[3] = 255;
 
                 for(; ii < prm_count && !is_eol( *line ); ii++ )
+                {
                     color[ii] = parseInt( aReader, line, &line );
+
+                    // Skip the separator between values
+                    if( *line == ',' || *line == ' ')
+                        line++;
+                }
 
                 wire->SetLineColor( color[0]/255.0, color[1]/255.0, color[2]/255.0,color[3]/255.0 );
             }
