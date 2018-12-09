@@ -144,13 +144,13 @@ void POLYGON_GEOM_MANAGER::updateLeaderPoints( const VECTOR2I& aEndPoint, LEADER
 {
     wxCHECK( m_lockedPoints.PointCount() > 0, /*void*/ );
     const VECTOR2I& lastPt = m_lockedPoints.CLastPoint();
-    auto newEnd = VECTOR2I( lastPt );
+    auto newEnd = VECTOR2I( aEndPoint );
 
     if( m_leaderMode == LEADER_MODE::DEG45 || aModifier == LEADER_MODE::DEG45 )
     {
         const VECTOR2I lineVector( aEndPoint - lastPt );
         // get a restricted 45/H/V line from the last fixed point to the cursor
-        newEnd += GetVectorSnapped45( lineVector );
+        newEnd = lastPt + GetVectorSnapped45( lineVector );
     }
 
     // direct segment
