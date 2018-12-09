@@ -926,7 +926,8 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     EDA_ITEM* item = m_editPoints->GetParent();
 
-    if( !item || !( item->Type() == PCB_ZONE_AREA_T || ( item->Type() == PCB_MODULE_EDGE_T &&
+    if( !item || !( item->Type() == PCB_ZONE_AREA_T ||
+            ( ( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_LINE_T ) &&
                    static_cast<DRAWSEGMENT*>( item )->GetShape() == S_POLYGON ) ) )
         return false;
 
