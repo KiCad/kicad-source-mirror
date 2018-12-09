@@ -1110,9 +1110,10 @@ PLOTTER* StartPlotBoard( BOARD *aBoard, PCB_PLOT_PARAMS *aPlotOpts,
             bool useX2mode = plotOpts.GetUseGerberX2format();
 
             GERBER_PLOTTER* gbrplotter = static_cast <GERBER_PLOTTER*> ( plotter );
-            gbrplotter->UseX2Attributes( useX2mode );
+            gbrplotter->UseX2format( useX2mode );
             gbrplotter->UseX2NetAttributes( plotOpts.GetIncludeGerberNetlistInfo() );
 
+            // Attributes can be added using X2 format or as comment (X1 format)
             AddGerberX2Attribute( plotter, aBoard, aLayer, not useX2mode );
         }
 

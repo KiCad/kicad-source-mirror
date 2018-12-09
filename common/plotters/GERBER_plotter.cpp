@@ -59,7 +59,7 @@ GERBER_PLOTTER::GERBER_PLOTTER()
     // happen easily.
     m_gerberUnitInch = false;
     m_gerberUnitFmt = 6;
-    m_useX2Attributes = true;
+    m_useX2format = true;
     m_useNetAttributes = true;
 }
 
@@ -113,7 +113,7 @@ void GERBER_PLOTTER::clearNetAttribute()
         return;
 
     // Remove all net attributes from object attributes dictionnary
-    if( m_useX2Attributes )
+    if( m_useX2format )
         fputs( "%TD*%\n", outputFile );
     else
         fputs( "G04 #@! TD*\n", outputFile );
@@ -147,7 +147,7 @@ void GERBER_PLOTTER::formatNetAttribute( GBR_NETLIST_METADATA* aData )
     if( !m_useNetAttributes )
         return;
 
-    bool useX1StructuredComment = !m_useX2Attributes;
+    bool useX1StructuredComment = !m_useX2format;
 
     bool clearDict;
     std::string short_attribute_string;
@@ -344,7 +344,7 @@ void GERBER_PLOTTER::writeApertureList()
 
     bool useX1StructuredComment = false;
 
-    if( !m_useX2Attributes )
+    if( !m_useX2format )
         useX1StructuredComment = true;
 
     // Init
@@ -407,7 +407,7 @@ void GERBER_PLOTTER::writeApertureList()
         // is to store the last attribute
         if( attribute )
         {
-            if( m_useX2Attributes )
+            if( m_useX2format )
                 fputs( "%TD*%\n", outputFile );
             else
                 fputs( "G04 #@! TD*\n", outputFile );

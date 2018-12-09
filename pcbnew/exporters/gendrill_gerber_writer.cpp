@@ -136,7 +136,7 @@ int GERBER_WRITER::createDrillFile( wxString& aFullFilename, bool aIsNpth,
     GERBER_PLOTTER plotter;
 
     // Gerber drill file imply X2 format:
-    plotter.UseX2Attributes( true );
+    plotter.UseX2format( true );
     plotter.UseX2NetAttributes( true );
 
     // Add the standard X2 header, without FileFunction
