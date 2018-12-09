@@ -28,6 +28,9 @@
 #include <gbr_display_options.h>
 #include <gal/graphics_abstraction_layer.h>
 
+#include <gerber_file_image.h>
+#include <gerber_file_image_list.h>
+
 #include <functional>
 using namespace std::placeholders;
 
@@ -114,6 +117,31 @@ void GERBVIEW_DRAW_PANEL_GAL::OnShow()
 bool GERBVIEW_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
 {
     bool rv = EDA_DRAW_PANEL_GAL::SwitchBackend( aGalType );
+
+    // The next onPaint event will call m_view->UpdateItems() that is very time consumming
+    // after switching to opengl. Clearing m_view and rebuild it is much faster
+    if( aGalType == GAL_TYPE_OPENGL )
+    {
+        GERBVIEW_FRAME* frame = dynamic_cast<GERBVIEW_FRAME*>( GetParent() );
+
+        if( frame )
+        {
+            m_view->Clear();
+
+            for( int layer = GERBER_DRAWLAYERS_COUNT-1; layer>= 0; --layer )
+            {
+                GERBER_FILE_IMAGE* gerber = frame->GetImagesList()->GetGbrImage( layer );
+
+                if( gerber == NULL )    // Graphic layer not yet used
+                    continue;
+
+                for( GERBER_DRAW_ITEM* item = gerber->GetItemsList(); item; item = item->Next() )
+                {
+                    m_view->Add (item );
+                }
+            }
+        }
+    }
     setDefaultLayerDeps();
     return rv;
 }
