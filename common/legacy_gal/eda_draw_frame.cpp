@@ -725,7 +725,7 @@ void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
     KIGFX::VIEW* view = GetGalCanvas()->GetView();
 
     if( ! screen->GridExists( aIndex + ID_POPUP_GRID_LEVEL_1000 ) )
-        aIndex = screen->GetGrids()[0].m_CmdId;
+        aIndex = 0;
 
     // aIndex is a Command Id relative to ID_POPUP_GRID_LEVEL_1000 comand id code.
     // we need an index in grid list (the cmd id in list is is screen->GetGrids()[0].m_CmdId):
@@ -832,7 +832,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
     if( aCfg->Read( baseCfgName + ShowGridEntryKeyword, &btmp ) )
         SetGridVisibility( btmp );
 
-    aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, 0L );
+    aCfg->Read( baseCfgName + LastGridSizeIdKeyword, &m_LastGridSizeId, m_LastGridSizeId );
 
     // m_LastGridSizeId is an offset, expected to be >= 0
     if( m_LastGridSizeId < 0 )
