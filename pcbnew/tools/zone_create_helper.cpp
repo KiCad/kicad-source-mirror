@@ -187,13 +187,34 @@ void ZONE_CREATE_HELPER::commitZone( std::unique_ptr<ZONE_CONTAINER> aZone )
         {
             BOARD_COMMIT bCommit( &m_tool );
             BOARD_ITEM_CONTAINER* parent = frame.GetModel();
-            auto poly = m_tool.m_editModules ? new EDGE_MODULE( (MODULE *) parent ) : new DRAWSEGMENT();
 
-            poly->SetShape ( S_POLYGON );
-            poly->SetLayer( m_tool.getDrawingLayer() );
-            poly->SetPolyShape ( *aZone->Outline() );
+            if( m_tool.getDrawingLayer() != Edge_Cuts )
+            {
+                auto poly = m_tool.m_editModules ?
+                        new EDGE_MODULE( (MODULE *) parent ) :
+                        new DRAWSEGMENT();
+                poly->SetShape ( S_POLYGON );
+                poly->SetLayer( m_tool.getDrawingLayer() );
+                poly->SetPolyShape ( *aZone->Outline() );
+                bCommit.Add( poly );
+            }
+            else
+            {
+                auto outline = aZone->Outline();
 
-            bCommit.Add( poly );
+                for( auto seg = outline->IterateSegments( 0 ); seg; seg++ )
+                {
+                    auto new_seg = m_tool.m_editModules ?
+                            new EDGE_MODULE( (MODULE *) parent ) :
+                            new DRAWSEGMENT();
+                    new_seg->SetShape( S_SEGMENT );
+                    new_seg->SetLayer( m_tool.getDrawingLayer() );
+                    new_seg->SetStart( wxPoint( seg.Get().A.x, seg.Get().A.y ) );
+                    new_seg->SetEnd( wxPoint( seg.Get().B.x, seg.Get().B.y ) );
+                    bCommit.Add( new_seg );
+                }
+            }
+
             bCommit.Push( _( "Add a graphical polygon" ) );
 
             break;
