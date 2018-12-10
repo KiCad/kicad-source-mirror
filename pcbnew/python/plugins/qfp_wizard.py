@@ -114,6 +114,7 @@ class QFPWizard(FootprintWizardBase.FootprintWizard):
 
         # Add outline to F_Fab layer
         self.draw.SetLayer(pcbnew.F_Fab)
+        thick = self.draw.GetLineThickness()
 
         bevel = min( pcbnew.FromMM(1.0), self.package['width']/2, self.package['height']/2 )
 
@@ -127,10 +128,12 @@ class QFPWizard(FootprintWizardBase.FootprintWizard):
         bottom_edge = (v_pitch + pad_length) / 2
         top_edge = -bottom_edge
 
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.1 ) ) #Default per KLC F5.2 as of 12/2018
         self.draw.BoxWithDiagonalAtCorner(0, 0, w, h, bevel)
 
         # Draw silkscreen
-        self.draw.SetLayer(pcbnew.F_SilkS)
+        self.draw.SetLayer( pcbnew.F_SilkS )
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
 
         #top left - as per IPC-7351C
         self.draw.Polyline([(-inner, -y), (-x, -y), (-x, -inner), (left_edge, -inner)])
@@ -143,16 +146,15 @@ class QFPWizard(FootprintWizardBase.FootprintWizard):
 
         # Courtyard
         cmargin = self.parameters["Package"]["courtyard margin"]
-        self.draw.SetLayer(pcbnew.F_CrtYd)
-        sizex = (right_edge + cmargin) * 2
-        sizey = (bottom_edge + cmargin) * 2
+        self.draw.SetLayer( pcbnew.F_CrtYd )
+        sizex = ( right_edge + cmargin ) * 2
+        sizey = ( bottom_edge + cmargin ) * 2
         # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
-        sizex = pcbnew.PutOnGridMM(sizex, 0.1)
-        sizey = pcbnew.PutOnGridMM(sizey, 0.1)
-        # set courtyard line thickness to the one defined in KLC
-        thick = self.draw.GetLineThickness()
-        self.draw.SetLineThickness(pcbnew.FromMM(0.05))
-        self.draw.Box(0, 0, sizex, sizey)
+        sizex = pcbnew.PutOnGridMM( sizex, 0.1 )
+        sizey = pcbnew.PutOnGridMM( sizey, 0.1 )
+
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.05 ) ) #Default per KLC F5.3 as of 12/2018
+        self.draw.Box( 0, 0, sizex, sizey )
         # restore line thickness to previous value
         self.draw.SetLineThickness(pcbnew.FromMM(thick))
 

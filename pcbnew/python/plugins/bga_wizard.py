@@ -99,11 +99,13 @@ class BGAWizard(FootprintWizardBase.FootprintWizard):
             bevel = pcbnew.FromMM(1)
 
         # Box with 1mm bevel as per IPC7351C
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.1 ) ) #Default per KLC F5.2 as of 12/2018
         self.draw.BoxWithDiagonalAtCorner(0, 0, ssx*2, ssy*2, bevel)
 
         # Add IPC markings to F_Silk layer
-        self.draw.SetLayer(pcbnew.F_SilkS)
-        offset = pcbnew.FromMM(0.15)
+        self.draw.SetLayer( pcbnew.F_SilkS )
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
+        offset = self.draw.GetLineThickness()
         len_x  = 0.5 * ssx
         len_y  = 0.5 * ssy
 

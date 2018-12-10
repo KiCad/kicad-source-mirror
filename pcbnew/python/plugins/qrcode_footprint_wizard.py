@@ -36,9 +36,9 @@ class QRCodeWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("Barcode", "Use SilkS layer", self.uBool, False)
         self.AddParam("Barcode", "Use Cu layer", self.uBool, True)
         self.AddParam("Caption", "Enabled", self.uBool, True)
-        self.AddParam("Caption", "Height", self.uMM, 1.2)
-        self.AddParam("Caption", "Width", self.uMM, 1.2)
-        self.AddParam("Caption", "Thickness", self.uMM, 0.12)
+        self.AddParam("Caption", "Height", self.uMM, 1.0)
+        self.AddParam("Caption", "Width", self.uMM, 1.0)
+        self.AddParam("Caption", "Thickness", self.uMM, 0.15)
 
 
     def CheckParameters(self):

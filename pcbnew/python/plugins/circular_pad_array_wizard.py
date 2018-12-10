@@ -101,11 +101,12 @@ class circular_pad_array_wizard(FootprintWizardBase.FootprintWizard):
         # Draw the outline
         body_radius = outline['diameter'] / 2
         self.draw.SetLayer(pcbnew.F_Fab)
-        self.draw.GetLineThickness()
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.1 ) ) #Default per KLC F5.2 as of 12/2018
         self.draw.Circle(0, 0, body_radius)
 
         #silkscreen
-        body_radius += pcbnew.FromMM(0.15)
+        body_radius += pcbnew.FromMM(0.12)
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
         self.draw.SetLayer(pcbnew.F_SilkS)
         self.draw.Circle(0, 0, body_radius)
 

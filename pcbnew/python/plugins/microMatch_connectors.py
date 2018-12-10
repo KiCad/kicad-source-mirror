@@ -148,6 +148,8 @@ class MicroMaTchWizard(FPWbase.FootprintWizard):
         width = pcbnew.FromMM(1.92) + (numPads * padPitch) / 2
         height = pcbnew.FromMM(5)
 
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
+
         # Left part
         #  --
         #  |

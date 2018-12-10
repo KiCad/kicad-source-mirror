@@ -101,6 +101,7 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         self.module.Add(pad_s1)
 
         # add footprint outline
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
         linewidth = self.draw.GetLineThickness()
         margin = linewidth
 

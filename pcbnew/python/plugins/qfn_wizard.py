@@ -34,9 +34,9 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         #TODO - Allow different number of pads in x and y directions
 
         self.AddParam("Pads", "n", self.uInteger, 100, multiple=4, min_value=4)
-        self.AddParam("Pads", "pitch", self.uMM, 0.5, designator='e')
-        self.AddParam("Pads", "width", self.uMM, 0.25, designator='X1')
-        self.AddParam("Pads", "length", self.uMM, 1.5, designator='Y1')
+        self.AddParam("Pads", "pitch", self.uMM, 0.4, designator='e')
+        self.AddParam("Pads", "width", self.uMM, 0.2, designator='X1')
+        self.AddParam("Pads", "length", self.uMM, 0.75, designator='Y1')
         self.AddParam("Pads", "fillet", self.uMM, 0.3)
         self.AddParam("Pads", "oval", self.uBool, True)
 
@@ -45,9 +45,9 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("EPad", "length", self.uMM, 10, designator="D2")
         self.AddParam("EPad", "thermal vias", self.uBool, False)
         self.AddParam("EPad", "thermal vias drill", self.uMM, 1, min_value=0.1)
-        self.AddParam("EPad", "x divisions", self.uInteger, 2, min_value=1)
-        self.AddParam("EPad", "y divisions", self.uInteger, 2, min_value=1)
-        self.AddParam("EPad", "paste margin", self.uMM, 0.1)
+        self.AddParam("EPad", "x divisions", self.uInteger, 4, min_value=1)
+        self.AddParam("EPad", "y divisions", self.uInteger, 4, min_value=1)
+        self.AddParam("EPad", "paste margin", self.uMM, 0.75)
 
         self.AddParam("Package", "width", self.uMM, 14, designator='E')
         self.AddParam("Package", "height", self.uMM, 14, designator='D')
@@ -188,17 +188,19 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.draw.BoxWithDiagonalAtCorner(0, 0, w, h, bevel)
 
         # Silkscreen
-        self.draw.SetLayer(pcbnew.F_SilkS)
+        self.draw.SetLayer( pcbnew.F_SilkS )
 
         offset = self.draw.GetLineThickness()
         clip = row_len / 2 + self.pads['pitch']
 
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
         self.draw.Polyline( [ [ clip, -h/2-offset], [ w/2+offset,-h/2-offset], [ w/2+offset, -clip] ] ) # top right
         self.draw.Polyline( [ [ clip,  h/2+offset], [ w/2+offset, h/2+offset], [ w/2+offset,  clip] ] ) # bottom right
         self.draw.Polyline( [ [-clip,  h/2+offset], [-w/2-offset, h/2+offset], [-w/2-offset,  clip] ] ) # bottom left
 
         # Add pin-1 indication as per IPC-7351C
-        self.draw.Line(-clip, -h/2-offset, -w/2-pad_length/2, -h/2-offset)
+        self.draw.Line( -clip, -h/2-offset, -w/2-pad_length/2, -h/2-offset )
+        self.draw.SetLineThickness( offset ) #Restore default
 
         # Courtyard
         cmargin = self.package["margin"]
@@ -219,7 +221,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
         #reference and value
         text_size = self.GetTextSize()  # IPC nominal
-        text_offset = v_pitch / 2 + text_size + pad_length / 2
+        text_offset = sizey / 2 + text_size
 
         self.draw.Value(0, text_offset, text_size)
         self.draw.Reference(0, -text_offset, text_size)

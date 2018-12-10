@@ -99,13 +99,14 @@ class RowedFootprint(FootprintWizardBase.FootprintWizard):
         ssx = -pin1_posX - ssx_offset
         ssy = -pin1_posY - ssy_offset
 
+        cmargin = self.draw.GetLineThickness()
+        self.draw.SetLineThickness( pcbnew.FromMM( 0.12 ) ) #Default per KLC F5.1 as of 12/2018
         self.DrawBox(ssx, ssy)
 
         # Courtyard
-        cmargin = self.draw.GetLineThickness()
         self.draw.SetLayer(pcbnew.F_CrtYd)
-        sizex = (ssx + cmargin) * 2
-        sizey = (ssy + cmargin) * 2
+        sizex = (pin1posX + cmargin) * 2 + pad_Hsize + thick
+        sizey = (pin1posY + cmargin) * 2 + pad_Vsize + thick
         # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
         sizex = pcbnew.PutOnGridMM(sizex, 0.1)
         sizey = pcbnew.PutOnGridMM(sizey, 0.1)
