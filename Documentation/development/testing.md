@@ -259,9 +259,20 @@ Some available masks:
     * `KICAD_GEDA_PLUGIN`
     * `KICAD_PCB_PLUGIN`
 
+# Advanced configuration
+
+There are some advance configuration options, which are mostly used for
+development or testing purposes.
+
+To set these options, you can create the file `kicad_advanced` and set the keys
+as desired (the [advanced config documentation][] for a current list. You should
+never need to set these keys for normal usage - if you do, that's a bug.
+
 
 [CTest]: https://cmake.org/cmake/help/latest/module/CTest.html
 [Boost Unit Test framework]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/index.html
 [boost-test-functions]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/boost_test/utf_reference/testing_tool_ref.html
 [AFL fuzzing tool]: http://lcamtuf.coredump.cx/afl/
 [trace mask documentation]: http://docs.kicad-pcb.org/doxygen/group__trace__env__vars.html
+[trace mask documentation]: http://docs.kicad-pcb.org/doxygen/group__trace__env__vars.html
+[advanced config documentation]: http://docs.kicad-pcb.org/doxygen/namespaceAC__KEYS.html
