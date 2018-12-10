@@ -40,6 +40,7 @@ private:
     NETLIST*        m_netlist;
     wxConfigBase*   m_config;
     bool            m_initialized;
+    bool            m_runDragCommand;
 
 public:
     DIALOG_UPDATE_PCB( PCB_EDIT_FRAME* aParent, NETLIST *aNetlist );

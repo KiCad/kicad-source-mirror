@@ -63,7 +63,8 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
                                      bool            aDeleteExtraFootprints,
                                      bool            aSelectByTimeStamp,
                                      bool            aDeleteSinglePadNets,
-                                     bool            aIsDryRun )
+                                     bool            aIsDryRun,
+                                     bool*           runDragCommand )
 {
     wxString        msg;
     NETLIST         netlist;
@@ -110,13 +111,12 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     {
         // Remove old modules
         for( MODULE* module = board->m_Modules; module; module = module->Next() )
-        {
             view->Remove( module );
-        }
     }
 
     // Clear selection, just in case a selected item has to be removed
     m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+    *runDragCommand = false;
 
     netlist.SortByReference();
     board->ReplaceNetlist( netlist, aDeleteSinglePadNets, &newFootprints, aReporter );
@@ -125,40 +125,37 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
     if( netlist.IsDryRun() )
         return;
 
-    if( IsGalCanvasActive() )
-    {
-        SpreadFootprints( &newFootprints, false, false, GetCrossHairPosition() );
+    wxPoint placementAreaPosition = GetCrossHairPosition();
 
-        if( !newFootprints.empty() )
-        {
-            for( MODULE* footprint : newFootprints )
-            {
-                m_toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
-            }
-            m_toolManager->InvokeTool( "pcbnew.InteractiveEdit" );
-        }
-    }
-    else
+    if( !IsGalCanvasActive() )
     {
-        wxPoint placementAreaPosition;
-
-        // Place area to the left side of the board.
+        // In legacy mode place area to the left side of the board.
         // if the board is empty, the bbox position is (0,0)
         placementAreaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
         placementAreaPosition.y = bbox.GetOrigin().y;
+    }
 
-        SpreadFootprints( &newFootprints, false, false, placementAreaPosition );
+    SpreadFootprints( &newFootprints, false, false, placementAreaPosition );
+
+    // Reload modules
+    for( MODULE* module = board->m_Modules; module; module = module->Next() )
+        view->Add( module );
+
+    if( IsGalCanvasActive() )
+    {
+        // Start drag command for new modules
+        if( !newFootprints.empty() )
+        {
+            for( MODULE* footprint : newFootprints )
+                m_toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+
+            *runDragCommand = true;
+        }
     }
 
     OnModify();
 
     SetCurItem( NULL );
-
-    // Reload modules
-    for( MODULE* module = board->m_Modules; module; module = module->Next() )
-    {
-        view->Add( module );
-    }
 
     if( aDeleteUnconnectedTracks && board->m_Track )
     {

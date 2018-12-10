@@ -91,6 +91,9 @@ DIALOG_UPDATE_PCB::~DIALOG_UPDATE_PCB()
     m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
     m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
     m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_messagePanel->GetVisibleSeverities() );
+
+    if( m_runDragCommand )
+        m_frame->GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
 }
 
 
@@ -107,6 +110,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     EDA_RECT bbox = board->GetBoundingBox();
 
     toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
+    m_runDragCommand = false;
 
     m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
     m_netlist->SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 0 );
@@ -153,11 +157,13 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
 
     if( m_frame->IsGalCanvasActive() )
     {
-        // Start move and place the new modules command
+        // Start drag command for new modules
         if( !newFootprints.empty() )
         {
             for( MODULE* footprint : newFootprints )
                 toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+
+            m_runDragCommand = true;
         }
     }
 

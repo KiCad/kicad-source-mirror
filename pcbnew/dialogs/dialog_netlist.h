@@ -41,6 +41,7 @@ private:
     PCB_EDIT_FRAME* m_parent;
     wxConfigBase*   m_config;
     bool            m_initialized;
+    bool            m_runDragCommand;
 
 public:
     DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, const wxString & aNetlistFullFilename );

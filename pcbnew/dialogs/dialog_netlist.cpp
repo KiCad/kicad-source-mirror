@@ -39,7 +39,7 @@
 #include <netlist_reader.h>
 #include <reporter.h>
 #include <bitmaps.h>
-
+#include <tool/tool_manager.h>
 #include <board_design_settings.h>
 #include <class_board.h>
 #include <class_module.h>
@@ -80,7 +80,8 @@ void PCB_EDIT_FRAME::InstallNetlistFrame( wxDC* DC )
 DIALOG_NETLIST::DIALOG_NETLIST( PCB_EDIT_FRAME* aParent, const wxString & aNetlistFullFilename )
     : DIALOG_NETLIST_BASE( aParent ),
       m_parent( aParent ),
-      m_initialized( false )
+      m_initialized( false ),
+      m_runDragCommand( false )
 {
     m_config = Kiface().KifaceSettings();
 
@@ -116,6 +117,9 @@ DIALOG_NETLIST::~DIALOG_NETLIST()
     m_config->Write( NETLIST_DELETEEXTRAFOOTPRINTS_KEY, m_cbDeleteExtraFootprints->GetValue() );
     m_config->Write( NETLIST_DELETESINGLEPADNETS_KEY, m_cbDeleteSinglePadNets->GetValue() );
     m_config->Write( NETLIST_FILTER_MESSAGES_KEY, (long) m_MessageWindow->GetVisibleSeverities() );
+
+    if( m_runDragCommand )
+        m_parent->GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
 }
 
 
@@ -455,7 +459,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
                               m_cbDeleteExtraFootprints->GetValue(),
                               m_matchByTimestamp->GetSelection() == 0,
                               m_cbDeleteSinglePadNets->GetValue(),
-                              aDryRun );
+                              aDryRun, &m_runDragCommand );
 
     // The creation of the report was made without window update: the full page must be displayed
     m_MessageWindow->Flush( true );

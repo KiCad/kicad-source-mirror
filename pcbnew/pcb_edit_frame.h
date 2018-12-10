@@ -1556,6 +1556,7 @@ public:
      * @param aDeleteSinglePadNets if true, remove nets counting only one pad
      *                             and set net code to 0 for these pads
      * @param aIsDryRun performs a dry run without making any changes if true.
+     * @param runDragCommand indicates that a selection was created which should be dragged.
      */
     void ReadPcbNetlist( const wxString&  aNetlistFileName,
                          const wxString&  aCmpFileName,
@@ -1565,7 +1566,8 @@ public:
                          bool             aDeleteExtraFootprints,
                          bool             aSelectByTimestamp,
                          bool             aDeleteSinglePadNets,
-                         bool             aIsDryRun );
+                         bool             aIsDryRun,
+                         bool*            runDragCommand );
 
     /**
      * Function RemoveMisConnectedTracks
