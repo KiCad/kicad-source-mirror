@@ -866,7 +866,8 @@ void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
     }
 }
 
-AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules, BOARD_COMMIT* aCommit, bool aPlaceOffboardModules )
+AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
+                                           BOARD_COMMIT* aCommit, bool aPlaceOffboardModules )
 {
     wxPoint             PosOK;
     wxPoint             memopos;
@@ -943,11 +944,16 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules, BOARD_
         m_progressReporter->SetMaxProgress( moduleCount );
     }
 
+    wxSafeYield();        // allows refreshing screen and UI
+
     while( ( module = pickModule( ) ) != nullptr )
     {
         // Display some info about activity, module placement can take a while:
-        //printf( _( "Place footprint %d of %d [%s]\n" ), cnt, moduleCount, (const char *)module->GetReference().c_str() );
         //m_frame->SetStatusText( msg );
+
+        if( m_progressReporter )
+            m_progressReporter->SetTitle( wxString::Format(
+                                          _( "Autoplacing %s" ), module->GetReference() ) );
 
         double initialOrient = module->GetOrientation();
         // Display fill area of interest, barriers, penalties.
@@ -990,6 +996,7 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules, BOARD_
 
         // Determine if the best orientation of a module is 90.
         rotAllowed = module->GetPlacementCost90();
+
         if( rotAllowed != 0 )
         {
             rotateModule( module, 900.0, true );
@@ -1055,10 +1062,10 @@ end_of_tst:
         module->SetIsPlaced( true );
         module->SetNeedsPlaced( false );
 
-
         if( m_progressReporter )
         {
             m_progressReporter->AdvanceProgress();
+
             if ( !m_progressReporter->KeepRefreshing( false ) )
             {
                 cancelled = true;
@@ -1066,6 +1073,8 @@ end_of_tst:
             }
         }
         cnt++;
+
+        wxSafeYield();        // allows refreshing screen and UI
     }
 
     m_curPosition = memopos;

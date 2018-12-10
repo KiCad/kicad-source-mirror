@@ -76,6 +76,14 @@ class PROGRESS_REPORTER
          */
         bool KeepRefreshing( bool aWait = false );
 
+        /** change the title displayed on the window caption
+         * *MUST* only be called from the main thread.
+         * Has meaning only for some reporters.
+         * Do nothing for others
+         */
+        virtual void SetTitle( const wxString& aTitle ) {}
+
+
     protected:
 
         int currentProgress() const;
@@ -108,6 +116,13 @@ public:
     WX_PROGRESS_REPORTER( wxWindow* aParent, const wxString& aTitle, int aNumPhases,
                           bool aCanAbort = true );
     ~WX_PROGRESS_REPORTER();
+
+    /** change the title displayed on the window caption
+     */
+    virtual void SetTitle( const wxString& aTitle ) override
+    {
+        wxProgressDialog::SetTitle( aTitle );
+    }
 
 private:
 
