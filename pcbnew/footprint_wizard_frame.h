@@ -63,6 +63,8 @@ private:
 
     wxString        m_auiPerspective;       ///< Encoded string describing the AUI layout
 
+    bool            m_wizardListShown;      ///< A show-once flag for the wizard list
+
 protected:
     wxString        m_wizardName;           ///< name of the current wizard
     wxString        m_wizardDescription;    ///< description of the wizard

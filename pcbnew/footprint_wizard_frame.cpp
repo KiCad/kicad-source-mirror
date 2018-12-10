@@ -122,7 +122,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
                 wxDefaultPosition, wxDefaultSize,
                 aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
                           : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
-                FOOTPRINT_WIZARD_FRAME_NAME )
+                FOOTPRINT_WIZARD_FRAME_NAME ), m_wizardListShown( false )
 {
     wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD );
 
@@ -271,7 +271,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     // It means the call to FOOTPRINT_WIZARD_FRAME::ShowModal will change the
     // Event Loop Manager, and stop the one created by the dialog.
     // It does not happen on all W.M., perhaps due to the way the order events are called
-//    SelectFootprintWizard();
+    // See the call in onActivate instead
 }
 
 
@@ -597,6 +597,11 @@ void FOOTPRINT_WIZARD_FRAME::OnActivate( wxActivateEvent& event )
     if( !event.GetActive() )
         return;
 
+    if( !m_wizardListShown )
+    {
+        m_wizardListShown = true;
+        SelectFootprintWizard();
+    }
 #if 0
     // Currently, we do not have a way to see if a Python wizard has changed,
     // therefore the lists of parameters and option has to be rebuilt
