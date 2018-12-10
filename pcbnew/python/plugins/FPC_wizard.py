@@ -109,19 +109,24 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         posy = -pad_height/2 - linewidth/2 - margin
         xstart = - pad_pitch*0.5-offsetX
         xend = pad_pitch * pad_count + xstart;
+        min_y = posy
+        max_y = posy
         self.draw.Line( xstart, posy, xend, posy )
 
         # lower line
         posy = pad_height/2 + linewidth/2 + margin
+        max_y = max( max_y, posy )
         self.draw.Line(xstart, posy, xend, posy)
 
         # around left mechanical pad (the outline around right pad is mirrored/y axix)
         yend = pad_s0_pos.y + shl_height/2 + margin
+        max_y = max( max_y, yend )
         self.draw.Line(xstart, posy, xstart, yend)
         self.draw.Line(-xstart, posy, -xstart, yend)
 
         posy = yend
         xend = pad_s0_pos.x - (shl_width/2 + linewidth + margin*2)
+        max_x = -xend
         self.draw.Line(xstart, posy, xend, posy)
 
         # right pad side
@@ -137,6 +142,8 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
 
         # right pad side
         self.draw.Line(-xstart, posy, -xend, yend)
+        max_y = max( max_y, posy )
+        min_y = min( min_y, yend )
 
         # horizontal segment above the pad
         xstart = xend
@@ -150,10 +157,28 @@ class FPC_FootprintWizard(FootprintWizardBase.FootprintWizard):
         # vertical segment above the pad
         xstart = xend
         yend = -pad_height/2 - linewidth/2 - margin
+        min_y = min( min_y, yend )
         self.draw.Line(xstart, posy, xend, yend)
 
         # right pad side
         self.draw.Line(-xstart, posy, -xend, yend)
-
+        
+        # Courtyard
+        self.draw.SetLayer(pcbnew.F_CrtYd)
+        max_x = max_x + linewidth + margin
+        min_y = min_y - linewidth - margin
+        max_y = max_y + linewidth + margin 
+        
+        # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
+        max_x = pcbnew.PutOnGridMM(max_x, 0.05)
+        max_y = pcbnew.PutOnGridMM(max_y, 0.05)
+        min_y = pcbnew.PutOnGridMM(min_y, 0.05)
+        
+        # set courtyard line thickness to the one defined in KLC
+        self.draw.SetLineThickness(pcbnew.FromMM(0.05))
+        self.draw.Line( -max_x, min_y, max_x, min_y )
+        self.draw.Line( max_x, min_y, max_x, max_y )
+        self.draw.Line( -max_x, max_y, max_x, max_y )
+        self.draw.Line( -max_x, min_y, -max_x, max_y )
 
 FPC_FootprintWizard().register()
