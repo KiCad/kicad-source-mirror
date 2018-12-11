@@ -29,6 +29,7 @@
 
 BIN_MOD::BIN_MOD( const char* aName ) :
     m_name( aName ),
+    m_config( 0 ),
     m_history( 0 )
 {
 }
@@ -47,7 +48,7 @@ void BIN_MOD::Init()
     Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
 
     m_history = new FILE_HISTORY( (unsigned) std::max( 0, fileHistorySize ), ID_FILE1 );
-    m_history->Load( *m_config.get() );
+    m_history->Load( *m_config );
 
     // Prepare On Line Help. Use only lower case for help file names, in order to
     // avoid problems with upper/lower case file names under windows and unix.
@@ -63,11 +64,14 @@ void BIN_MOD::End()
 {
     if( m_config )
     {
-        m_history->Save( *m_config.get() );
+        m_history->Save( *m_config );
+
         delete m_history;
 
         // Deleting a wxConfigBase writes its contents to disk if changed.
-        m_config.reset();
+        // Might be NULL if called twice, in which case nothing happens.
+        delete m_config;
+        m_config = 0;
     }
 }
 

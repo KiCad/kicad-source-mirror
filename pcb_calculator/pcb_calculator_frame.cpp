@@ -83,15 +83,15 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_attenuator_list.push_back( new ATTENUATOR_SPLITTER() );
     m_currAttenuator = m_attenuator_list[0];
 
-    auto config = GetNewConfig( Pgm().App().GetAppName() );
-    LoadSettings( config.get() );
+    wxConfigBase* config = GetNewConfig( Pgm().App().GetAppName() );
+    LoadSettings( config );
 
     ReadDataFile();
 
     TranslineTypeSelection( m_currTransLineType );
     m_TranslineSelection->SetSelection( m_currTransLineType );
 
-    TW_Init( config.get() );
+    TW_Init( config );
 
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 

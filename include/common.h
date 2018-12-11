@@ -43,7 +43,6 @@
 #include <gal/color4d.h>
 
 #include <atomic>
-#include <memory>
 
 // C++11 "polyfill" for the C++14 std::make_unique function
 #include "make_unique.h"
@@ -311,7 +310,7 @@ const wxString PrePendPath( const wxString& aEnvVar, const wxString& aPriorityPa
  * @return A pointer to a new wxConfigBase derived object is returned.  The caller is in charge
  *  of deleting it.
  */
-std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName );
+wxConfigBase* GetNewConfig( const wxString& aProgName );
 
 /**
  * Return the user configuration path used to store KiCad's configuration files.

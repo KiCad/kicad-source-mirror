@@ -56,7 +56,7 @@ public:
 
     FILE_HISTORY&   GetFileHistory()            { return *m_bm.m_history; }
 
-    wxConfigBase*   PgmSettings()               { return m_bm.m_config.get(); }
+    wxConfigBase*   PgmSettings()               { return m_bm.m_config; }
 
     SEARCH_STACK&   SysSearch()                 { return m_bm.m_search; }
 

@@ -33,7 +33,6 @@
 #include <wx/string.h>
 
 #include <search_stack.h>
-#include <memory>
 
 class wxConfigBase;
 class FILE_HISTORY;
@@ -56,7 +55,7 @@ struct BIN_MOD
 
     const char*         m_name;             ///< name of this binary module, static C string.
 
-    std::unique_ptr<wxConfigBase> m_config; ///< maybe from $HOME/.${m_name}
+    wxConfigBase*       m_config;           ///< maybe from $HOME/.${m_name}
     FILE_HISTORY*       m_history;
     wxString            m_help_file;
 
