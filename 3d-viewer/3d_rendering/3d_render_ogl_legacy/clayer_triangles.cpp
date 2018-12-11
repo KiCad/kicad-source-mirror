@@ -306,41 +306,20 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const SHAPE_POLY_SET &aPolySet,
     m_layer_middle_contourns_quads->Reserve_More( nrContournPointsToReserve * 2,
                                                   true );
 
-    std::atomic<int> nextItem( 0 );
-    std::atomic<size_t> threadsFinished( 0 );
-
-    size_t parallelThreadCount = std::min<size_t>(
-            std::max<size_t>( std::thread::hardware_concurrency(), 2 ),
-            static_cast<size_t>( aPolySet.OutlineCount() ) );
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    for( int i = 0; i < aPolySet.OutlineCount(); i++ )
     {
-        std::thread t = std::thread( [&]()
+        // Add outline
+        const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
+
+        AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+
+        // Add holes for this outline
+        for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
         {
-            for( int i = nextItem.fetch_add( 1 );
-                     i < aPolySet.OutlineCount();
-                     i = nextItem.fetch_add( 1 ) )
-            {
-                // Add outline
-                const SHAPE_LINE_CHAIN& pathOutline = aPolySet.COutline( i );
-
-                AddToMiddleContourns( pathOutline, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
-
-                // Add holes for this outline
-                for( int h = 0; h < aPolySet.HoleCount( i ); ++h )
-                {
-                    const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
-                    AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
-                }
-            }
-
-            threadsFinished++;
-        } );
-
-        t.detach();
+            const SHAPE_LINE_CHAIN &hole = aPolySet.CHole( i, h );
+            AddToMiddleContourns( hole, zBot, zTop, aBiuTo3Du, aInvertFaceDirection );
+        }
     }
-
-    while( threadsFinished < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 }
 
 
