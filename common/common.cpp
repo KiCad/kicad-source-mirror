@@ -248,15 +248,13 @@ double RoundTo0( double x, double precision )
 }
 
 
-wxConfigBase* GetNewConfig( const wxString& aProgName )
+std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName )
 {
-    wxConfigBase* cfg = 0;
     wxFileName configname;
     configname.AssignDir( GetKicadConfigPath() );
     configname.SetFullName( aProgName );
 
-    cfg = new wxFileConfig( wxT( "" ), wxT( "" ), configname.GetFullPath() );
-    return cfg;
+    return std::make_unique<wxConfig>( wxT( "" ), wxT( "" ), configname.GetFullPath() );
 }
 
 

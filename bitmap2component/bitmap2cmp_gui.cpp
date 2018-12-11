@@ -79,7 +79,7 @@ private:
     wxString        m_ConvertedFileName;
     wxSize          m_frameSize;
     wxPoint         m_framePos;
-    wxConfigBase*   m_config;
+    std::unique_ptr<wxConfigBase> m_config;
 
 public:
     BM2CMP_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -222,8 +222,6 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
     m_config->Write( KEYWORD_BW_NEGATIVE, m_checkNegative->IsChecked() ? 1 : 0 );
     m_config->Write( KEYWORD_LAST_FORMAT,  m_radioBoxFormat->GetSelection() );
     m_config->Write( KEYWORD_LAST_MODLAYER,  m_radio_PCBLayer->GetSelection() );
-
-    delete m_config;
 
     /* This needed for OSX: avoids further OnDraw processing after this
      * destructor and before the native window is destroyed
