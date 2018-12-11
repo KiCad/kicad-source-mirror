@@ -920,7 +920,7 @@ void EDA_DRAW_PANEL::OnMouseEntering( wxMouseEvent& aEvent )
 void EDA_DRAW_PANEL::OnMouseLeaving( wxMouseEvent& event )
 {
     if( m_mouseCaptureCallback == NULL )          // No command in progress.
-        m_requestAutoPan = false;
+        SetAutoPanRequest( false );
 
     if( !m_enableAutoPan || !m_requestAutoPan || m_ignoreMouseEvents )
         return;
@@ -1094,7 +1094,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_canStartBlock = -1;
 
     if( !IsMouseCaptured() )          // No mouse capture in progress.
-        m_requestAutoPan = false;
+        SetAutoPanRequest( false );
 
     if( GetParent()->IsActive() )
         SetFocus();
@@ -1268,7 +1268,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         {
             if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
             {
-                m_requestAutoPan = false;
+                SetAutoPanRequest( false );
                 GetParent()->HandleBlockPlace( &DC );
                 m_ignoreNextLeftButtonRelease = true;
             }
@@ -1298,7 +1298,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     }
                     else
                     {
-                        m_requestAutoPan = true;
+                        SetAutoPanRequest( true );
                         SetCursor( wxCURSOR_SIZING );
                     }
                 }
@@ -1324,19 +1324,19 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 if( m_endMouseCaptureCallback )
                 {
                     m_endMouseCaptureCallback( this, &DC );
-                    m_requestAutoPan = false;
+                    SetAutoPanRequest( false );
                 }
 
                 SetCursor( (wxStockCursor) m_currentCursor );
            }
             else if( screen->m_BlockLocate.GetState() == STATE_BLOCK_END )
             {
-                m_requestAutoPan = false;
+                SetAutoPanRequest( false );
                 GetParent()->HandleBlockEnd( &DC );
                 SetCursor( (wxStockCursor) m_currentCursor );
                 if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
                 {
-                    m_requestAutoPan = true;
+                    SetAutoPanRequest( true );
                     SetCursor( wxCURSOR_HAND );
                 }
            }
@@ -1535,7 +1535,7 @@ void EDA_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
-    m_requestAutoPan = false;
+    SetAutoPanRequest( false );
 
     if( id != -1 && cursor != -1 )
     {

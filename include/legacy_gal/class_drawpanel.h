@@ -46,8 +46,6 @@ protected:
 
     bool    m_enableAutoPan;                ///< True to enable automatic panning.
 
-    bool    m_requestAutoPan;               ///< true to request an auto pan.  Valid only when m_enableAutoPan = true.
-
     bool    m_ignoreMouseEvents;            ///< Ignore mouse events when true.
 
     /* Used to inhibit a response to a mouse left button release, after a double click
@@ -122,7 +120,7 @@ public:
 
     virtual void SetEnableAutoPan( bool aEnable ) { m_enableAutoPan = aEnable; };
 
-    void SetAutoPanRequest( bool aEnable ) { m_requestAutoPan = aEnable; }
+    virtual void SetAutoPanRequest( bool aEnable ) = 0;
 
     void SetIgnoreMouseEvents( bool aIgnore ) { m_ignoreMouseEvents = aIgnore; }
 

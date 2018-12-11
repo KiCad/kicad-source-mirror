@@ -119,7 +119,6 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
 
-    m_requestAutoPan = false;
     m_enableBlockCommands = false;
     m_minDragEventCount = 0;
 
@@ -216,10 +215,17 @@ void SCH_DRAW_PANEL::SetEnableMousewheelPan( bool aEnable )
 
 void SCH_DRAW_PANEL::SetEnableAutoPan( bool aEnable )
 {
-    m_enableAutoPan = aEnable;
+    EDA_DRAW_PANEL::SetEnableAutoPan( aEnable );
 
     if( GetParent()->IsGalCanvasActive() )
         GetParent()->GetGalCanvas()->GetViewControls()->EnableAutoPan( aEnable );
+}
+
+
+void SCH_DRAW_PANEL::SetAutoPanRequest( bool aEnable )
+{
+    wxCHECK( GetParent()->IsGalCanvasActive(), /*void*/ );
+    GetParent()->GetGalCanvas()->GetViewControls()->SetAutoPan( aEnable );
 }
 
 
@@ -293,7 +299,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         m_canStartBlock = -1;
 
     if( !IsMouseCaptured() )          // No mouse capture in progress.
-        m_requestAutoPan = false;
+        SetAutoPanRequest( false );
 
     if( GetParent()->IsActive() )
         SetFocus();
@@ -436,7 +442,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
         {
             if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
             {
-                m_requestAutoPan = false;
+                SetAutoPanRequest( false );
                 GetParent()->HandleBlockPlace( nullptr );
                 m_ignoreNextLeftButtonRelease = true;
             }
@@ -468,7 +474,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                     }
                     else
                     {
-                        m_requestAutoPan = true;
+                        SetAutoPanRequest( true );
                         SetCursor( wxCURSOR_SIZING );
                     }
                 }
@@ -494,19 +500,19 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
                 if( m_endMouseCaptureCallback )
                 {
                     m_endMouseCaptureCallback( this, nullptr );
-                    m_requestAutoPan = false;
+                    SetAutoPanRequest( false );
                 }
 
                 //SetCursor( (wxStockCursor) m_currentCursor );
            }
             else if( screen->m_BlockLocate.GetState() == STATE_BLOCK_END )
             {
-                m_requestAutoPan = false;
+                SetAutoPanRequest( false );
                 GetParent()->HandleBlockEnd( nullptr );
                 //SetCursor( (wxStockCursor) m_currentCursor );
                 if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
                 {
-                    m_requestAutoPan = true;
+                    SetAutoPanRequest( true );
                     SetCursor( wxCURSOR_HAND );
                 }
            }
@@ -575,7 +581,7 @@ void SCH_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;
-    m_requestAutoPan = false;
+    SetAutoPanRequest( false );
 
     if( id != -1 && cursor != -1 )
     {
