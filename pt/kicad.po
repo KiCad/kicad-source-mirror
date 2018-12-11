@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-11 09:00-0200\n"
-"PO-Revision-Date: 2018-11-12 11:38-0200\n"
+"POT-Creation-Date: 2018-12-11 10:15-0200\n"
+"PO-Revision-Date: 2018-12-11 10:14-0200\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -458,9 +458,8 @@ msgid "Use Diffuse Only"
 msgstr "Usar Apenas Difusão"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:177
-#, fuzzy
 msgid "Use only the diffuse color property from model 3D model file"
-msgstr "Utilizar apenas a propriedade difusa da cor do modelo do arquivo 3D "
+msgstr "Utilizar apenas a propriedade difusa da cor do modelo do arquivo 3D"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:180
 msgid "CAD Color Style"
@@ -825,9 +824,8 @@ msgid "Background Color, Top"
 msgstr "Cor de fundo, Topo"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:934
-#, fuzzy
 msgid "3D Image File Name"
-msgstr "Nome do Arquivo de Imagem 3D:"
+msgstr "Nome do Arquivo de Imagem 3D"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:976
 msgid "Failed to copy image to clipboard"
@@ -1198,14 +1196,14 @@ msgid "Bitmap to Component Converter"
 msgstr "Conversor de Bitmap para Componente"
 
 #: common/base_screen.cpp:198
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %.4f mm (%.2f mils)"
-msgstr "Grade: %.4f mm (%.2f mils)"
+msgstr "Grade do usuário: %.4f mm (%.2f mils)"
 
 #: common/base_screen.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %.2f mils (%.4f mm)"
-msgstr "Grade: %.2f mils (%.4f mm)"
+msgstr "Grade do usuário: %.2f mils (%.4f mm)"
 
 #: common/base_screen.cpp:208
 #, c-format
@@ -3470,12 +3468,12 @@ msgid "Filter:"
 msgstr "Filtro:"
 
 #: common/widgets/unit_binder.cpp:135
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be at least %s."
-msgstr "%s deve ser menor que %s."
+msgstr "%s deve ser ao menos %s."
 
 #: common/widgets/unit_binder.cpp:151
-#, fuzzy, c-format
+#, c-format
 msgid "%s must be less than %s."
 msgstr "%s deve ser menor que %s."
 
@@ -3632,9 +3630,8 @@ msgid "KiCad symbol footprint link files (*.cmp)|*."
 msgstr "Arquivos de ligação entre símbolos e footprints do KiCad (*.cmp)|*."
 
 #: common/wildcards_and_files_ext.cpp:234
-#, fuzzy
 msgid "Drill files (*.drl *.nc *.xnc)|*."
-msgstr "Arquivos de furação (*.drl)|*."
+msgstr "Arquivos de furação (*.drl *.nc *.xnc)|*."
 
 #: common/wildcards_and_files_ext.cpp:242
 msgid "SVG files (*.svg)|*."
@@ -3733,9 +3730,8 @@ msgid "PNG file (*.png)|*."
 msgstr "Arquivo PNG *.png)|*."
 
 #: common/wildcards_and_files_ext.cpp:389
-#, fuzzy
 msgid "Jpeg file (*.jpg *.jpeg)|*."
-msgstr "Arquivo PNG *.png)|*."
+msgstr "Arquivo Jpeg (*.jpg *.jpeg)|*."
 
 #: cvpcb/auto_associate.cpp:107
 #, c-format
@@ -4381,9 +4377,8 @@ msgstr ""
 "hierarquia do esquema."
 
 #: eeschema/bom_plugins.cpp:31
-#, fuzzy
 msgid "Cannot open plugin "
-msgstr "Não foi possível abrir o arquivo netlist \"%s\"."
+msgstr "Não foi possível abrir o plugin "
 
 #: eeschema/class_libentry.cpp:591
 #, c-format
@@ -4632,9 +4627,8 @@ msgid "No text editor selected in KiCad.  Please choose one."
 msgstr "Nenhum editor de texto selecionado no KiCad.  Por favor escolha um."
 
 #: eeschema/dialogs/dialog_bom.cpp:568
-#, fuzzy
 msgid "Bill of Material Generation Help"
-msgstr "Ajuda do Gerador de Lista de Materiais"
+msgstr "Ajuda da Geração de Lista de Materiais"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM plugins:"
@@ -4848,15 +4842,13 @@ msgstr "Posição Y"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:86
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:78
-#, fuzzy
 msgid "Add field"
-msgstr "Adicionar Campo"
+msgstr "Adicionar campo"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:107
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:99
-#, fuzzy
 msgid "Delete field"
-msgstr "Excluir item"
+msgstr "Excluir campo"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:128
 msgid "Symbol name:"
@@ -5001,14 +4993,12 @@ msgid "Aliases:"
 msgstr "Aliases:"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:283
-#, fuzzy
 msgid "Add alias"
-msgstr "Adicionar Vias"
+msgstr "Adicionar alias"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:292
-#, fuzzy
 msgid "Delete alias"
-msgstr "Apagar Via"
+msgstr "Apagar alias"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:306
 msgid "Alias field substitutions:"
@@ -5045,19 +5035,16 @@ msgstr ""
 "os nomes de footprints iniciados por sm."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:412
-#, fuzzy
 msgid "Add footprint filter"
-msgstr "Adicionar filtro de Footprint"
+msgstr "Adicionar filtro de footprint"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:417
-#, fuzzy
 msgid "Edit footprint filter"
-msgstr "Editar Filtro de Footprint"
+msgstr "Editar filtro de footprint"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:425
-#, fuzzy
 msgid "Delete footprint filter"
-msgstr "Não é um arquivo de footprint"
+msgstr "Excluir filtro de footprint"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:439
 msgid "Footprint Filters"
@@ -5094,9 +5081,8 @@ msgid "Name of the symbol in the library to which this symbol is linked"
 msgstr "Nome do símbolo na biblioteca à qual este símbolo está vinculado"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:143
-#, fuzzy
 msgid "Browse library"
-msgstr "Procurar biblioteca de componentes"
+msgstr "Procurar biblioteca"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:151
 msgid "Unit:"
@@ -5161,14 +5147,12 @@ msgid "Select if the symbol is to be rotated when drawn"
 msgstr "Seleciona a rotação aplicada ao símbolo quando for desenhado"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:184
-#, fuzzy
 msgid "Mirror around X axis"
-msgstr "Espelhar ao redor do eixo X "
+msgstr "Espelhar ao redor do eixo X"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:184
-#, fuzzy
 msgid "Mirror around Y axis"
-msgstr "Espelhar ao redor do eixo Y "
+msgstr "Espelhar ao redor do eixo Y"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:186
 msgid "Aspect"
@@ -5187,9 +5171,8 @@ msgid "Unique ID that identifies the symbol"
 msgstr "ID única que identifica o símbolo"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:220
-#, fuzzy
 msgid "Edit Spice Model..."
-msgstr "   Editar Modelo Spice...   "
+msgstr "Editar Modelo Spice..."
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.h:85
 #: eeschema/dialogs/dialog_lib_new_component_base.h:60
@@ -7646,19 +7629,17 @@ msgstr "Bibliotecas Específicas do Projeto"
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:137
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:136
 msgid "Add empty row to table"
-msgstr ""
+msgstr "Adicionar linha vazia à tabela"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:142
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:141
-#, fuzzy
 msgid "Add existing library to table"
-msgstr "Editar tabela de bibliotecas de footprint"
+msgstr "Adicionar biblioteca existente à tabela"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:160
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:159
-#, fuzzy
 msgid "Remove library from table"
-msgstr "Biblioteca de símbolos não habilitada."
+msgstr "Remover biblioteca da tabela"
 
 #: eeschema/dialogs/panel_sym_lib_table_base.cpp:171
 #: pcbnew/dialogs/panel_fp_lib_table_base.cpp:170
@@ -8158,9 +8139,8 @@ msgstr "Excluir item"
 
 #: eeschema/help_common_strings.h:51 gerbview/toolbars_gerber.cpp:218
 #: pcbnew/tool_footprint_editor.cpp:146 pcbnew/tool_pcb_editor.cpp:438
-#, fuzzy
 msgid "Select item"
-msgstr "Selecionar Itens"
+msgstr "Selecionar item"
 
 #: eeschema/help_common_strings.h:52 pcbnew/edit.cpp:1506
 #: pcbnew/tool_pcb_editor.cpp:443 pcbnew/tools/pcb_editor_control.cpp:1069
@@ -8978,17 +8958,13 @@ msgid "Cannot load aliases from library \"%s\""
 msgstr "Não foi possível carregar os aliases da biblioteca \"%s\""
 
 #: eeschema/libedit/lib_manager.cpp:365
-#, fuzzy
 msgid "Symbol not found."
-msgstr "Símbolo não encontrado em %s!!!"
+msgstr "Símbolo não encontrado."
 
 #: eeschema/libedit/lib_manager.cpp:372
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading symbol \"%s\" from library \"%s\"."
-msgstr ""
-"Erro ao carregar o símbolo %s a partir da biblioteca %s.\n"
-"\n"
-"%s"
+msgstr "Erro ao carregar o símbolo \"%s\" da biblioteca \"%s\"."
 
 #: eeschema/libedit/lib_manager.cpp:543
 #, c-format
@@ -12190,9 +12166,8 @@ msgid "Loading Gerber files..."
 msgstr "Carregando Arquivos Gerber…"
 
 #: gerbview/files.cpp:402
-#, fuzzy
 msgid "Open NC (Excellon) Drill File(s)"
-msgstr "Abrir Arquivo(s) de Perfuração Excellon"
+msgstr "Abrir Arquivo(s) de Perfuração NC (Excellon)"
 
 #: gerbview/files.cpp:501
 #, c-format
@@ -12485,9 +12460,9 @@ msgid "Gerbview Hotkeys"
 msgstr "Teclas de Atalho do Gerbview"
 
 #: gerbview/job_file_reader.cpp:148
-#, fuzzy
 msgid "This job file uses an outdated format. Please, recreate it."
-msgstr "Este arquivo de trabalho usa um formato desatualizado. Favor recriá-lo"
+msgstr ""
+"Este arquivo de trabalho usa um formato desatualizado. Favor recriá-lo."
 
 #: gerbview/job_file_reader.cpp:172
 msgid "Open Gerber Job File"
@@ -13394,9 +13369,8 @@ msgid "Convert Image"
 msgstr "Converter Imagem"
 
 #: kicad/menubar.cpp:389
-#, fuzzy
 msgid "Convert bitmap images to schematic or PCB components."
-msgstr "Converte imagens bitmap em elementos esquemáticos ou de PCI"
+msgstr "Converte imagens bitmap em componentes esquemáticos ou de PCI."
 
 #: kicad/menubar.cpp:392
 msgid "Calculator Tools"
@@ -15389,9 +15363,9 @@ msgid "Autoplacing components..."
 msgstr "Componentes de disposição automática…"
 
 #: pcbnew/autorouter/ar_autoplacer.cpp:956
-#, fuzzy, c-format
+#, c-format
 msgid "Autoplacing %s"
-msgstr "Componentes de disposição automática…"
+msgstr "Auto-posicionando %s"
 
 #: pcbnew/autorouter/autoplacer_tool.cpp:54
 msgid "Auto-place selected components"
@@ -15537,14 +15511,14 @@ msgid "Copper zone (%s) has no pads connected."
 msgstr "A zona de cobre (%s) não possui ilhas conectadas."
 
 #: pcbnew/board_netlist_updater.cpp:483
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot remove unused footprint %s (locked)."
-msgstr "Não é possível remover %s não utilizado (bloqueado)."
+msgstr "Não foi possível remover o footprint não utilizado %s (bloqueado)."
 
 #: pcbnew/board_netlist_updater.cpp:488
-#, fuzzy, c-format
+#, c-format
 msgid "Remove unused footprint %s."
-msgstr "Removendo o footprint não utilizado %s."
+msgstr "Remover footprint não utilizado %s."
 
 #: pcbnew/board_netlist_updater.cpp:546 pcbnew/class_board.cpp:2824
 #, c-format
@@ -15631,7 +15605,7 @@ msgstr "Esta é a classe de rede padrão."
 
 #: pcbnew/class_board.cpp:1024
 msgid "PCB"
-msgstr ""
+msgstr "PCI"
 
 #: pcbnew/class_board.cpp:1207 pcbnew/class_module.cpp:600
 #: pcbnew/netinfo_item.cpp:123 pcbnew/pcb_draw_panel_gal.cpp:360
@@ -18403,12 +18377,11 @@ msgid "Line Segment Properties"
 msgstr "Propriedades do Segmento de Linha"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:217
-#, fuzzy
 msgid ""
 "This item was on a non-existing layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
-"Este item estava em uma camada proibida ou inexistente.\n"
+"Este item estava em uma camada inexistente.\n"
 "Foi movido para a primeira camada permitida."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:278
@@ -18574,9 +18547,8 @@ msgstr "Girar em torno do centro da seleção"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:87
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
-#, fuzzy
 msgid "Rotate around local coordinates origin"
-msgstr "Girar em torno da origem do furo/posicionamento"
+msgstr "Girar em torno da origem das coordenadas locais"
 
 #: pcbnew/dialogs/dialog_move_exact.cpp:90
 #: pcbnew/dialogs/dialog_move_exact_base.cpp:69
@@ -18790,11 +18762,8 @@ msgid "Polygon must have at least 3 corners"
 msgstr "O polígono deve ter pelo menos 3 cantos"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:293
-#, fuzzy
 msgid "Polygon must have at least 3 corners after simplification"
-msgstr ""
-"O polígono deve ter pelo menos 3 cantos\n"
-" após a simplificação"
+msgstr "O polígono deve ter pelo menos 3 cantos após a simplificação"
 
 #: pcbnew/dialogs/dialog_pad_basicshapes_properties.cpp:299
 msgid "Polygon may not be self-intersecting"
@@ -19589,7 +19558,7 @@ msgstr "4,6 - unidade mm"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:212
 msgid "Use extended X2 format"
-msgstr ""
+msgstr "Utilizar formato X2 estendido"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:213
 msgid ""
@@ -19598,11 +19567,14 @@ msgid ""
 "If not checked, use X1 format.\n"
 "In X1 format, these attributes are included as comments in files."
 msgstr ""
+"Utiliza o formato de arquivo X2 Gerber.\n"
+"Inclue principalmente atributos X2 nos cabeçalhos Gerber.\n"
+"Se não estiver marcado, utiliza o formato X1.\n"
+"No formato X1, estes atributos são incluídos como comentários nos arquivos."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:217
-#, fuzzy
 msgid "Include netlist attributes"
-msgstr "Incluir atributos estendidos (x2)"
+msgstr "Incluir atributos netlist"
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:218
 msgid ""
@@ -19610,6 +19582,10 @@ msgid ""
 "In X1 format, they are comments.\n"
 "Used to check connectivity in CAM tools and Gerber viewers."
 msgstr ""
+"Inclui metadados netlist e atributos de abertura em arquivos Gerber.\n"
+"No formato X1, eles serão comentários.\n"
+"Utilizado para verificar a conectividade em ferramentas CAM e visualizadores "
+"Gerber."
 
 #: pcbnew/dialogs/dialog_plot_base.cpp:249
 msgid "Postscript Options"
@@ -19978,14 +19954,12 @@ msgid "Offset Y:"
 msgstr "Deslocamento Y:"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:170
-#, fuzzy
 msgid "Reference location: grid origin"
-msgstr "Definir origem da grade"
+msgstr "Local de referência: origem da grade"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:179
-#, fuzzy
 msgid "Reference location: local coordinates origin"
-msgstr "Utilizar coordenadas polares"
+msgstr "Local de referência: origem das coordenadas locais"
 
 #: pcbnew/dialogs/dialog_position_relative.cpp:185
 msgid "<none selected>"
@@ -19996,19 +19970,16 @@ msgid "Reference item: <none selected>"
 msgstr "Item de referência: <nenhum selecionado>"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:35
-#, fuzzy
 msgid "Use Local Origin"
-msgstr "Redefinir coordenadas locais"
+msgstr "Utilizar Origem Local"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:38
-#, fuzzy
 msgid "Use Grid Origin"
-msgstr "Redefinir Origem da Grade"
+msgstr "Utilizar Origem da Grade"
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:41
-#, fuzzy
 msgid "Select Item..."
-msgstr "Selecionar Itens"
+msgstr "Selecionar Item..."
 
 #: pcbnew/dialogs/dialog_position_relative_base.cpp:42
 msgid ""
@@ -20154,12 +20125,11 @@ msgid "Footprint %s (%s), %s, rotated %.1f deg"
 msgstr "Footprint %s (%s), %s, girado em %.1f graus"
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:303
-#, fuzzy
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer."
 msgstr ""
-"Este item estava em uma camada proibida ou inexistente.\n"
+"Este item estava em uma camada inexistente ou proibida.\n"
 "Foi movido para a primeira camada permitida."
 
 #: pcbnew/dialogs/dialog_text_properties.cpp:401
@@ -20620,13 +20590,12 @@ msgid "&Use double segmented tracks"
 msgstr "&Utilizar trilhas segmentadas duplas"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:127
-#, fuzzy
 msgid ""
 "Use two track segments, with 45 degrees angle between them, when drawing a "
 "new track"
 msgstr ""
 "Utilizar dois segmentos de trilha, com 45 graus de ângulo entre eles, ao "
-"desenhar uma nova trilha "
+"desenhar uma nova trilha"
 
 #: pcbnew/dialogs/panel_setup_feature_constraints_base.cpp:20
 msgid "Allow blind/buried vias"
@@ -21580,9 +21549,8 @@ msgid "Add 3D Shape Libraries Wizard"
 msgstr "Assistente para Adicionar Bibliotecas de Formas 3D"
 
 #: pcbnew/drc.cpp:398
-#, fuzzy
 msgid "Board Outline...\n"
-msgstr "Contornos da placa"
+msgstr "Contorno da Placa...\n"
 
 #: pcbnew/drc.cpp:412
 msgid "Aborting\n"
@@ -21777,14 +21745,12 @@ msgid "Drilled holes too close together"
 msgstr "Furos perfurados muito próximos"
 
 #: pcbnew/drc_item.cpp:105
-#, fuzzy
 msgid "Track too close to board edge"
-msgstr "Trilha muito próxima a ilha"
+msgstr "Trilha muito próxima a borda da placa"
 
 #: pcbnew/drc_item.cpp:107
-#, fuzzy
 msgid "Board outline does not form a closed polygon"
-msgstr "Definir espessura em 0 para um polígono preenchido."
+msgstr "O contorno da placa não forma um polígono fechado"
 
 #: pcbnew/drc_item.cpp:111
 msgid "NetClass Track Width &lt; global limit"
@@ -23104,14 +23070,12 @@ msgid "Decrement High Contrast"
 msgstr "Decrementar Alto Contraste"
 
 #: pcbnew/hotkeys.cpp:271
-#, fuzzy
 msgid "Select Single Track"
-msgstr "&Única Trilha"
+msgstr "Selecionar Trilha Única"
 
 #: pcbnew/hotkeys.cpp:273
-#, fuzzy
 msgid "Select Connected Tracks"
-msgstr "Apagar Trilha"
+msgstr "Selecionar Trilhas Conectadas"
 
 #: pcbnew/hotkeys.cpp:275
 msgid "Routing Options"
@@ -23225,49 +23189,42 @@ msgid "Import DXF File"
 msgstr "Importar Arquivo DXF"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:316
-#, fuzzy
 msgid "Not Handled Items"
-msgstr "Itens DXF Não Tratados"
+msgstr "Itens Não Tratados"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:322
 msgid "There is no plugin to handle this file type"
-msgstr ""
+msgstr "Não há nenhum plugin para lidar com este tipo de arquivo"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:340
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:417
 #: pcbnew/tools/drawing_tool.cpp:753
-#, fuzzy
 msgid "No graphic items found in file to import"
-msgstr "Exibir itens gráficos em modo contorno"
+msgstr "Nenhum item gráfico encontrado no arquivo de importação"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:45
-#, fuzzy
 msgid "Placement:"
-msgstr "Adicionar texto"
+msgstr "Posicionamento:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:54
-#, fuzzy
 msgid "Interactive placement"
-msgstr "Arraste interativo"
+msgstr "Posicionamento interativo"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:61
-#, fuzzy
 msgid "At"
-msgstr "A"
+msgstr "Em"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:149
-#, fuzzy
 msgid "Line width (DXF import):"
-msgstr "Largura de linha:"
+msgstr "Largura de linha (importação de DXF):"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:172
-#, fuzzy
 msgid "Import scale:"
-msgstr "Escala do ícone:"
+msgstr "Escala da importação:"
 
 #: pcbnew/import_gfx/dialog_import_gfx_base.h:85
 msgid "Import vector graphics file"
-msgstr ""
+msgstr "Importar arquivo de gráficos vetoriais"
 
 #: pcbnew/initpcb.cpp:47
 msgid ""
@@ -23364,9 +23321,9 @@ msgid "Footprint file name \"%s\" is not valid."
 msgstr "O nome do arquivo de footprint \"%s\" não é válido."
 
 #: pcbnew/kicad_plugin.cpp:2092
-#, fuzzy, c-format
+#, c-format
 msgid "No write permissions to delete file \"%s\""
-msgstr "Sem permissões de gravação para excluir o arquivo \"%s\" "
+msgstr "Sem permissões de gravação para excluir o arquivo \"%s\""
 
 #: pcbnew/kicad_plugin.cpp:2155
 #, c-format
@@ -23565,16 +23522,14 @@ msgid "Import a footprint from an existing footprint file"
 msgstr "Importar um footprint de um arquivo de footprint existente"
 
 #: pcbnew/menubar_footprint_editor.cpp:105
-#, fuzzy
 msgid "Import Outlines from &DXF or SVG File..."
-msgstr "Importar Contornos de um arquivo &DXF..."
+msgstr "Importar Contornos de um arquivo &DXF ou SVG..."
 
 #: pcbnew/menubar_footprint_editor.cpp:106
-#, fuzzy
 msgid "Import 2D Drawing DXF or SVG file to Footprint Editor on Drawings layer"
 msgstr ""
-"Importar arquivo DXF de desenho 2D para Editor de Footprints na camada "
-"Desenhos"
+"Importar arquivo DXF ou SVG de desenho 2D para o Editor de Footprints na "
+"camada Desenhos"
 
 #: pcbnew/menubar_footprint_editor.cpp:110
 msgid "&Export Footprint..."
@@ -24207,14 +24162,12 @@ msgid "Import routed \"Specctra Session\" (*.ses) file"
 msgstr "Importar arquivo roteado \"Specctra Session\" (*.ses)"
 
 #: pcbnew/menubar_pcb_editor.cpp:834
-#, fuzzy
 msgid "Import &Graphics..."
-msgstr "Configurações de Importação…"
+msgstr "Importar &Gráficos..."
 
 #: pcbnew/menubar_pcb_editor.cpp:835
-#, fuzzy
 msgid "Import 2D Drawing file to Pcbnew on Drawings layer"
-msgstr "Importar arquivo DXF de desenho 2D para o Pcbnew na camada Desenhos"
+msgstr "Importar arquivo de Desenho 2D para o Pcbnew na camada Desenhos"
 
 #: pcbnew/menubar_pcb_editor.cpp:849
 msgid "Export board"
@@ -24917,9 +24870,8 @@ msgid "Show texts in sketch mode"
 msgstr "Exibir textos em modo delineado"
 
 #: pcbnew/pcb_base_frame.cpp:1035
-#, fuzzy
 msgid "Edit user grid..."
-msgstr "Editar Campo…"
+msgstr "Editar grade do usuário..."
 
 #: pcbnew/pcb_edit_frame.cpp:625
 #, c-format
@@ -25246,16 +25198,16 @@ msgid ""
 "Items found on undefined layers.  Do you wish to\n"
 "rescue them to the Cmts.User layer?"
 msgstr ""
+"Itens encontrados em camadas indefinidas.\n"
+"Deseja resgatá-los na camada Cmts.User?"
 
 #: pcbnew/pcb_parser.cpp:589
-#, fuzzy
 msgid "Undefined layers:"
-msgstr "Camada final:"
+msgstr "Camadas indefinidas:"
 
 #: pcbnew/pcb_parser.cpp:597
-#, fuzzy
 msgid "Rescue"
-msgstr "Rec&uperar"
+msgstr "Recuperar"
 
 #: pcbnew/pcb_parser.cpp:766
 #, c-format
@@ -26154,9 +26106,8 @@ msgid "Track: %.2f mils (%.3f mm)"
 msgstr "Trilha: %.2f mils (%.3f mm)"
 
 #: pcbnew/tool_pcb_editor.cpp:666 pcbnew/tool_pcb_editor.cpp:715
-#, fuzzy
 msgid "Edit pre-defined sizes..."
-msgstr "Tamanhos pré-definidos:"
+msgstr "Editar tamanhos pré-definidos..."
 
 #: pcbnew/tool_pcb_editor.cpp:693
 #, c-format
@@ -26326,9 +26277,8 @@ msgid "Add similar zone"
 msgstr "Adicionar zona similar"
 
 #: pcbnew/tools/drawing_tool.cpp:788 pcbnew/tools/drawing_tool.cpp:866
-#, fuzzy
 msgid "Place a DXF_SVG drawing"
-msgstr "Colocar um desenho DXF"
+msgstr "Colocar um desenho DXF_SVG"
 
 #: pcbnew/tools/drawing_tool.cpp:909
 msgid "Move the footprint reference anchor"
@@ -26800,24 +26750,20 @@ msgid "Select reference item..."
 msgstr "Selecionar item de referência…"
 
 #: pcbnew/tools/selection_tool.cpp:101
-#, fuzzy
 msgid "Single Track"
-msgstr "&Única Trilha"
+msgstr "Trilha Única"
 
 #: pcbnew/tools/selection_tool.cpp:101
-#, fuzzy
 msgid "Selects all track segments & vias between two junctions."
-msgstr "Seleciona uma conexão entre duas junções."
+msgstr "Seleciona todos os segmentos de trilha & vias entre duas junções."
 
 #: pcbnew/tools/selection_tool.cpp:105
-#, fuzzy
 msgid "Connected Tracks"
-msgstr "Trilhas bloqueadas"
+msgstr "Trilhas Conectadas"
 
 #: pcbnew/tools/selection_tool.cpp:105
-#, fuzzy
 msgid "Selects all connected tracks & vias."
-msgstr "Seleciona uma conexão entre duas junções."
+msgstr "Seleciona todas as trilhas & vias conectadas."
 
 #: pcbnew/tools/selection_tool.cpp:109
 msgid "Expand Selected Connection"
@@ -26831,7 +26777,7 @@ msgstr ""
 
 #: pcbnew/tools/selection_tool.cpp:114
 msgid "All Tracks in Net"
-msgstr ""
+msgstr "Todas as Trilhas na Rede"
 
 #: pcbnew/tools/selection_tool.cpp:114
 msgid "Selects all tracks & vias belonging to the same net."
