@@ -32,6 +32,8 @@
 #include <vector>
 #include <deque>
 
+#include <geometry/shape_poly_set.h>
+
 class SEG;
 
 namespace KIGFX
@@ -49,10 +51,20 @@ public:
     struct COMMAND_ARC;
     struct COMMAND_LINE;
     struct COMMAND_CIRCLE;
+    struct COMMAND_RECTANGLE;
+
     struct COMMAND_SET_STROKE;
     struct COMMAND_SET_FILL;
     struct COMMAND_SET_COLOR;
     struct COMMAND_SET_WIDTH;
+
+    struct COMMAND_POLYGON;
+    struct COMMAND_POINT_POLYGON;
+    struct COMMAND_POLY_POLYGON;
+
+    struct COMMAND_POLYLINE;
+    struct COMMAND_POINT_POLYLINE;
+    struct COMMAND_POLY_POLYLINE;
 
     void Clear();
 
@@ -60,14 +72,25 @@ public:
     virtual void ViewDraw( int aLayer, VIEW *aView ) const override;
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    // Basic shape primitives
     void Line( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
     void Line( const SEG& aSeg );
     void Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth );
-    void Polyline( std::deque<VECTOR2D>& aPointList );
     void Circle( const VECTOR2D& aCenterPoint, double aRadius );
     void Arc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle );
     void Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint );
+
+    // Polyline primitives
+    void Polyline( std::deque<VECTOR2D>& aPointList );
+    void Polyline( const VECTOR2D aPointList[], int aListSize );
+    void Polyline( const SHAPE_LINE_CHAIN& aLineChain );
+
+    // polygon primitives
     void Polygon( const std::deque<VECTOR2D>& aPointList );
+    void Polygon( const SHAPE_POLY_SET& aPolySet );
+    void Polygon( const VECTOR2D aPointList[], int aListSize );
+
+    // Draw settings
     void SetIsFill( bool aIsFillEnabled );
     void SetIsStroke( bool aIsStrokeEnabled );
     void SetFillColor( const COLOR4D& aColor );

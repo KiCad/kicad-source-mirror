@@ -57,6 +57,22 @@ struct VIEW_OVERLAY::COMMAND_LINE : public VIEW_OVERLAY::COMMAND
 };
 
 
+struct VIEW_OVERLAY::COMMAND_RECTANGLE : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_RECTANGLE( const VECTOR2D& aP0, const VECTOR2D& aP1 ) :
+        m_p0( aP0 ), m_p1( aP1 )
+    {}
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawRectangle( m_p0, m_p1 );
+    }
+
+    VECTOR2D m_p0;
+    VECTOR2D m_p1;
+};
+
+
 struct VIEW_OVERLAY::COMMAND_CIRCLE : public VIEW_OVERLAY::COMMAND
 {
     COMMAND_CIRCLE( const VECTOR2D& aCenter, double aRadius ) :
@@ -91,6 +107,100 @@ struct VIEW_OVERLAY::COMMAND_ARC : public VIEW_OVERLAY::COMMAND
     double m_radius;
     double m_startAngle;
     double m_endAngle;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POLYLINE : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POLYLINE( const std::deque<VECTOR2D>& aPointList ) :
+       m_pointList( aPointList ) {}
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolyline( m_pointList );
+    }
+
+    std::deque<VECTOR2D> m_pointList;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POLY_POLYLINE : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POLY_POLYLINE( const SHAPE_LINE_CHAIN& aLineChain ) :
+       m_polyLine( aLineChain ) {}
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolyline( m_polyLine );
+    }
+
+    SHAPE_LINE_CHAIN m_polyLine;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POINT_POLYLINE : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POINT_POLYLINE( const VECTOR2D aPointList[], int aListSize )
+    {
+        m_pointList.reserve( aListSize );
+
+        for( int ii = 0; ii < aListSize; ii++ )
+            m_pointList.push_back( aPointList[ii] );
+    }
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolyline( &m_pointList[0], (int)m_pointList.size() );
+    }
+
+    std::vector<VECTOR2D> m_pointList;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POLYGON : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POLYGON( const std::deque<VECTOR2D>& aPointList ) :
+       m_pointList( aPointList ) {}
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolygon( m_pointList );
+    }
+
+    std::deque<VECTOR2D> m_pointList;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POLY_POLYGON : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POLY_POLYGON( const SHAPE_POLY_SET& aPolySet ) :
+       m_polySet( aPolySet ) {}
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolygon( m_polySet );
+    }
+
+    SHAPE_POLY_SET m_polySet;
+};
+
+
+struct VIEW_OVERLAY::COMMAND_POINT_POLYGON : public VIEW_OVERLAY::COMMAND
+{
+    COMMAND_POINT_POLYGON( const VECTOR2D aPointList[], int aListSize )
+    {
+        m_pointList.reserve( aListSize );
+
+        for( int ii = 0; ii < aListSize; ii++ )
+            m_pointList.push_back( aPointList[ii] );
+    }
+
+    virtual void Execute( VIEW* aView ) const override
+    {
+        aView->GetGAL()->DrawPolygon( &m_pointList[0], (int)m_pointList.size() );
+    }
+
+    std::vector<VECTOR2D> m_pointList;
 };
 
 
@@ -218,11 +328,41 @@ void VIEW_OVERLAY::Line( const SEG& aSeg )
 
 void VIEW_OVERLAY::Segment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint, double aWidth )
 {
+    SetLineWidth( aWidth );
+    Line( aStartPoint, aEndPoint );
 }
 
 
 void VIEW_OVERLAY::Polyline( std::deque<VECTOR2D>& aPointList )
 {
+}
+
+
+void VIEW_OVERLAY::Polyline( const VECTOR2D aPointList[], int aListSize )
+{
+}
+
+
+void VIEW_OVERLAY::Polyline( const SHAPE_LINE_CHAIN& aLineChain )
+{
+}
+
+
+void VIEW_OVERLAY::Polygon( const SHAPE_POLY_SET& aPolySet )
+{
+    m_commands.push_back( new COMMAND_POLY_POLYGON( aPolySet ) );
+}
+
+
+void VIEW_OVERLAY::Polygon( const std::deque<VECTOR2D>& aPointList )
+{
+    m_commands.push_back( new COMMAND_POLYGON( aPointList ) );
+}
+
+
+void VIEW_OVERLAY::Polygon( const VECTOR2D aPointList[], int aListSize )
+{
+    m_commands.push_back( new COMMAND_POINT_POLYGON( aPointList, aListSize ) );
 }
 
 
@@ -233,9 +373,7 @@ void VIEW_OVERLAY::Circle( const VECTOR2D& aCenterPoint, double aRadius )
 
 
 void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint,
-        double aRadius,
-        double aStartAngle,
-        double aEndAngle )
+                        double aRadius, double aStartAngle, double aEndAngle )
 {
     m_commands.push_back( new COMMAND_ARC( aCenterPoint, aRadius, aStartAngle, aEndAngle ) );
 }
@@ -243,11 +381,7 @@ void VIEW_OVERLAY::Arc( const VECTOR2D& aCenterPoint,
 
 void VIEW_OVERLAY::Rectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
-}
-
-
-void VIEW_OVERLAY::Polygon( const std::deque<VECTOR2D>& aPointList )
-{
+    m_commands.push_back( new COMMAND_RECTANGLE( aStartPoint, aEndPoint ) );
 }
 
 
