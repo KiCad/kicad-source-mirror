@@ -46,7 +46,6 @@ include_directories(
     ../common/dialogs
     ./exporters
     ../dxflib_qcad
-    ./import_dxf
     ../utils/idftools
     ${GLM_INCLUDE_DIR}
     ./specctra_import_export

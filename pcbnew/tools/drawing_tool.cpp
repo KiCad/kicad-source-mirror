@@ -32,7 +32,6 @@
 #include <id.h>
 #include <pcbnew_id.h>
 #include <confirm.h>
-#include <import_dxf/dialog_dxf_import.h>
 #include <import_gfx/dialog_import_gfx.h>
 
 #include <view/view_group.h>
