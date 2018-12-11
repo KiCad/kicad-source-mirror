@@ -763,7 +763,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
 void EAGLE_PLUGIN::loadLibrary( wxXmlNode* aLib, const wxString* aLibName )
 {
-    if( !aLib || !aLibName )
+    if( !aLib )
         return;
 
     // library will have <xmlattr> node, skip that and get the single packages node
