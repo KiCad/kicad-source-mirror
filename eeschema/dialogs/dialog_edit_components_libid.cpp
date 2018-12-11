@@ -708,8 +708,9 @@ void DIALOG_EDIT_COMPONENTS_LIBID::onClickOrphansButton( wxCommandEvent& event )
 
     if( fixesCount < m_OrphansRowIndexes.size() )   // Not all orphan components are fixed
     {
-        wxMessageBox( wxString::Format( _( "%u link(s) mapped, %d not found" ),
-                      fixesCount, m_OrphansRowIndexes.size() - fixesCount ) );
+        wxMessageBox( wxString::Format( _( "%u link(s) mapped, %u not found" ),
+                                        fixesCount,
+                                        (unsigned) m_OrphansRowIndexes.size() - fixesCount ) );
     }
     else
         wxMessageBox( wxString::Format( _( "All %u link(s) resolved" ), fixesCount ) );
