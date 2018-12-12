@@ -22,19 +22,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __WXWINDOWS__
+#if 1   // Set to 0 to compile outside wxWidgets
+#include <wx/gdicmn.h>      // for wxPoint definition
+#else
 // define here wxPoint if we want to compile outside wxWidgets
 class wxPoint
 {
 public:
     int x, y;
 };
-#else
-#include <wx/gdicmn.h>                          // for wxPoint definition
 #endif
 
 
-#if 0
+#if 1       // set to 0 when deprecated CPOLYGONS_LIST will be removed
 class CPOLYGONS_LIST;
 
 /**

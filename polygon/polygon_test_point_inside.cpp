@@ -50,7 +50,9 @@
 
 #define OUTSIDE false
 #define INSIDE true
-#if 0
+
+#if 1   // Will be removed whe deprecated CPOLYGONS_LIST will be rmoved
+#include <PolyLine.h>
 bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
                              int             aIdxstart,
                              int             aIdxend,
