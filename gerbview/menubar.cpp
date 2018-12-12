@@ -28,11 +28,12 @@
  * @brief (Re)Create the main menubar for GerbView
  */
 
+#include "gerbview_frame.h"
 
+#include <advanced_config.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
 
-#include "gerbview_frame.h"
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include <menus_helpers.h>
@@ -300,10 +301,13 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     // Canvas selection
     configMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr, HK_CANVAS_LEGACY );
-    AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY,
-                 text, _( "Use Legacy Toolset (not all features will be available)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
+    {
+        text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr, HK_CANVAS_LEGACY );
+        AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY, text,
+                _( "Use Legacy Toolset (not all features will be available)" ),
+                KiBitmap( tools_xpm ), wxITEM_RADIO );
+    }
 
     text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHokeysDescr, HK_CANVAS_OPENGL );
     AddMenuItem( configMenu, ID_MENU_CANVAS_OPENGL, text,

@@ -73,6 +73,21 @@ public:
      */
     bool m_enableSvgImport;
 
+    /**
+     * Helper to determine if legacy canvas is allowed (according to platform
+     * and config)
+     * @return true if legacy canvas should be shown
+     */
+    bool AllowLegacyCanvas() const;
+
+private:
+    /*
+     * These settings are private, as there is extra logic provide by helper
+     * functions above.
+     */
+
+    bool m_allowLegacyCanvasInGtk3;
+
 private:
     ADVANCED_CFG();
 

@@ -28,18 +28,17 @@
  * @file menubar_pcb_editor.cpp
  * board editor menubars
  */
-
-
-#include <menus_helpers.h>
-#include <kiface_i.h>
-#include <pgm_base.h>
 #include <pcb_edit_frame.h>
+
+#include <advanced_config.h>
+#include <kiface_i.h>
+#include <menus_helpers.h>
+#include <pgm_base.h>
 
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "pcbnew.h"
 #include "pcbnew_id.h"
-
 
 
 // Build the files menu. Because some commands are available only if
@@ -158,11 +157,14 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  _( "&Preferences..." ), _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
-    text = AddHotkeyName( _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_CANVAS_LEGACY );
-    AddMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY, text,
-                 _( "Use Legacy Toolset (not all features will be available)" ),
-                 KiBitmap( tools_xpm ), wxITEM_RADIO );
+    if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
+    {
+        text = AddHotkeyName(
+                _( "Legacy Tool&set" ), g_Board_Editor_Hotkeys_Descr, HK_CANVAS_LEGACY );
+        AddMenuItem( aParentMenu, ID_MENU_CANVAS_LEGACY, text,
+                _( "Use Legacy Toolset (not all features will be available)" ),
+                KiBitmap( tools_xpm ), wxITEM_RADIO );
+    }
 
     text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );

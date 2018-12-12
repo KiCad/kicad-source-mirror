@@ -61,6 +61,13 @@ namespace AC_KEYS
  */
 static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
 
+/**
+ * Allow legacy canvas to be shown in GTK3. Legacy canvas is generally pretty
+ * broken, but this avoids code in an ifdef where it could become broken
+ * on other platforms
+ */
+static const wxChar AllowLegacyCanvasInGtk3[] = wxT( "AllowLegacyCanvasInGtk3" );
+
 } // namespace KEYS
 
 
@@ -139,6 +146,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     // Init defaults - this is done in case the config doesn't exist,
     // then the values will remain as set here.
     m_enableSvgImport = false;
+    m_allowLegacyCanvasInGtk3 = false;
 
     loadFromConfigFile();
 }
@@ -175,7 +183,24 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
     configParams.push_back(
             new PARAM_CFG_BOOL( true, AC_KEYS::EnableSvgImport, &m_enableSvgImport, false ) );
 
+    configParams.push_back( new PARAM_CFG_BOOL(
+            true, AC_KEYS::AllowLegacyCanvasInGtk3, &m_allowLegacyCanvasInGtk3, false ) );
+
     wxConfigLoadSetups( &aCfg, configParams );
 
     dumpCfg( configParams );
+}
+
+
+bool ADVANCED_CFG::AllowLegacyCanvas() const
+{
+    // default is to allow
+    bool allow = true;
+
+    // on GTK3, check the config
+#ifdef __WXGTK3__
+    allow = m_allowLegacyCanvasInGtk3;
+#endif
+
+    return allow;
 }

@@ -67,6 +67,7 @@
 #include <worksheet_shape_builder.h>
 #include <page_info.h>
 #include <title_block.h>
+#include <advanced_config.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -1081,6 +1082,13 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
     {
         wxASSERT( false );
         canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    }
+
+    // Coerce the value into a GAL type when Legacy is not available
+    if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
+            && !ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
+    {
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
     }
 
     return canvasType;
