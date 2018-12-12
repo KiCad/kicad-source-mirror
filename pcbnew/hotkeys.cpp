@@ -145,7 +145,7 @@ static EDA_HOTKEY HkCopyItem( _HKI( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( _HKI( "Drag Item" ), HK_DRAG_ITEM, 'G' );
 static EDA_HOTKEY HkGetAndMoveFootprint( _HKI( "Get and Move Footprint" ), HK_GET_AND_MOVE_FOOTPRINT, 'T' );
 static EDA_HOTKEY HkLock_Unlock_Footprint( _HKI( "Lock/Unlock Footprint" ), HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
-static EDA_HOTKEY HkDelete( _HKI( "Delete Track or Footprint" ), HK_DELETE, WXK_DELETE );
+static EDA_HOTKEY HkDelete( _HKI( "Delete Full Track" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ), HK_SWITCH_HIGHCONTRAST_MODE,'H');
 

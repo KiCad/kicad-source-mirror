@@ -129,8 +129,8 @@ TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
 
 TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Delete (Alternative)" ), _( "Deletes selected item(s)" ), delete_xpm,
-        AF_NONE, (void*) REMOVE_FLAGS::ALT );
+        _( "Delete Full Track" ), _( "Deletes selected item(s) and copper connections" ),
+        delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::ALT );
 
 TOOL_ACTION PCB_ACTIONS::updateFootprints( "pcbnew.InteractiveEdit.updateFootprints",
         AS_GLOBAL, 0,
