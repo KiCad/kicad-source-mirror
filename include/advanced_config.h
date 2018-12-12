@@ -68,6 +68,11 @@ public:
      */
     static const ADVANCED_CFG& GetCfg();
 
+    /**
+     * Enable SVG import.
+     */
+    bool m_enableSvgImport;
+
 private:
     ADVANCED_CFG();
 

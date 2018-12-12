@@ -26,6 +26,8 @@
 #include "dialog_import_gfx_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
 
+class GRAPHICS_IMPORT_MGR;
+
 class DIALOG_IMPORT_GFX : public DIALOG_IMPORT_GFX_BASE
 {
 public:
@@ -55,6 +57,7 @@ private:
     PCB_BASE_FRAME*      m_parent;
     wxConfigBase*        m_config;              // Current config
     std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
+    std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
     int                  m_originImportUnits;
     VECTOR2D             m_importOrigin;        // This is the offset to add to imported coordinates
                                                 // Always in mm

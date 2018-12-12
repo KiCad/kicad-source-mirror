@@ -27,34 +27,44 @@
 #include "dxf_import_plugin.h"
 #include "svg_import_plugin.h"
 
-using namespace std;
 
-unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE_T aType )
+GRAPHICS_IMPORT_MGR::GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist )
 {
-    unique_ptr<GRAPHICS_IMPORT_PLUGIN> ret;
+    // This is the full list of types, from which we'll subtract our blacklist
+    static const TYPE_LIST all_types = {
+        DXF,
+        SVG,
+    };
+
+    std::copy_if( all_types.begin(), all_types.end(), std::back_inserter( m_importableTypes ),
+            [&aBlacklist]( const GFX_FILE_T& arg ) {
+                return ( std::find( aBlacklist.begin(), aBlacklist.end(), arg )
+                         == aBlacklist.end() );
+            } );
+}
+
+
+std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPlugin( GFX_FILE_T aType ) const
+{
+    std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> ret;
 
     switch( aType )
     {
-        case DXF:
-            ret.reset( new DXF_IMPORT_PLUGIN() );
-            break;
+    case DXF: ret = std::make_unique<DXF_IMPORT_PLUGIN>(); break;
 
-        case SVG:
-            ret.reset( new SVG_IMPORT_PLUGIN() );
-            break;
+    case SVG: ret = std::make_unique<SVG_IMPORT_PLUGIN>(); break;
 
-        default:
-            throw std::runtime_error( "Unhandled graphics format" );
-            break;
+    default: throw std::runtime_error( "Unhandled graphics format" ); break;
     }
 
     return ret;
 }
 
 
-unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt( const wxString& aExtension )
+std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt(
+        const wxString& aExtension ) const
 {
-    for( auto fileType : GFX_FILE_TYPES )
+    for( auto fileType : GetImportableFileTypes() )
     {
         auto plugin = GetPlugin( fileType );
         auto fileExtensions = plugin->GetFileExtensions();
@@ -66,8 +76,5 @@ unique_ptr<GRAPHICS_IMPORT_PLUGIN> GRAPHICS_IMPORT_MGR::GetPluginByExt( const wx
         }
     }
 
-    return unique_ptr<GRAPHICS_IMPORT_PLUGIN>();
+    return {};
 }
-
-
-const vector<GRAPHICS_IMPORT_MGR::GFX_FILE_T> GRAPHICS_IMPORT_MGR::GFX_FILE_TYPES = { DXF, SVG };

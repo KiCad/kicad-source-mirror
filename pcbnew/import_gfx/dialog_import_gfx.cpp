@@ -27,8 +27,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kiface_i.h>
+#include "dialog_import_gfx.h"
+
+#include <advanced_config.h>
 #include <convert_to_biu.h>
+#include <kiface_i.h>
 #include <pcb_layer_box_selector.h>
 #include <wildcards_and_files_ext.h>
 
@@ -37,7 +40,6 @@
 #include <class_edge_mod.h>
 #include <class_text_mod.h>
 #include <class_pcb_text.h>
-#include "dialog_import_gfx.h"
 
 // Keys to store setup in config
 #define IMPORT_GFX_LAYER_OPTION_KEY             "GfxImportBrdLayer"
@@ -65,6 +67,16 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         m_importer.reset( new GRAPHICS_IMPORTER_MODULE( m_parent->GetBoard()->m_Modules ) );
     else
         m_importer.reset( new GRAPHICS_IMPORTER_BOARD( m_parent->GetBoard() ) );
+
+    // construct an import manager with options from config
+    {
+        GRAPHICS_IMPORT_MGR::TYPE_LIST blacklist;
+
+        if( !ADVANCED_CFG::GetCfg().m_enableSvgImport )
+            blacklist.push_back( GRAPHICS_IMPORT_MGR::SVG );
+
+        m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
+    }
 
     m_config = Kiface().KifaceSettings();
     m_originImportUnits = 0;
@@ -232,15 +244,11 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 
     // Generate the list of handled file formats
     wxString wildcardsDesc;
-
-#ifdef DISABLE_SVG_IMPORT
-    wildcardsDesc = DxfFileWildcard();
-#else
     wxString allWildcards;
 
-    for( auto pluginType : GRAPHICS_IMPORT_MGR::GFX_FILE_TYPES )
+    for( auto pluginType : m_gfxImportMgr->GetImportableFileTypes() )
     {
-        auto plugin = GRAPHICS_IMPORT_MGR::GetPlugin( pluginType );
+        auto       plugin = m_gfxImportMgr->GetPlugin( pluginType );
         const auto wildcards = plugin->GetWildcards();
 
         wildcardsDesc += "|" + plugin->GetName() + " (" + wildcards + ")|" + wildcards;
@@ -248,7 +256,6 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
     }
 
     wildcardsDesc = "All supported formats|" + allWildcards + wildcardsDesc;
-#endif
 
     wxFileDialog dlg( m_parent, _( "Open File" ), path, filename,
                        wildcardsDesc, wxFD_OPEN|wxFD_FILE_MUST_EXIST );
@@ -289,11 +296,8 @@ void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
     m_default_lineWidth = getPCBdefaultLineWidthMM();
 
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
-#ifdef DISABLE_SVG_IMPORT
-    auto plugin = GRAPHICS_IMPORT_MGR::GetPluginByExt( "dxf" );
-#else
-    auto plugin = GRAPHICS_IMPORT_MGR::GetPluginByExt( wxFileName( m_filename ).GetExt() );
-#endif
+
+    auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() );
 
     if( plugin )
     {

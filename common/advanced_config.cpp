@@ -47,6 +47,20 @@ static const wxChar AdvancedConfigMask[] = wxT( "KICAD_ADVANCED_CONFIG" );
  */
 namespace AC_KEYS
 {
+
+/**
+ * Currently (Version 5.1) SVG import is disabled by default, to avoid issues
+ * SVG needs some enhancements.
+ *
+ * Especially, all SVG shapes are imported as curves and converted to a lot of segments.
+ * A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
+ * arcs and circles as primitives (not yet possible with tinysvg library.
+ * So, until these issues are solved, disable SVG import option.
+ *
+ * Warning: enable svg import is currently only for developers.
+ */
+static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
+
 } // namespace KEYS
 
 
@@ -121,6 +135,11 @@ static wxFileName getAdvancedCfgFilename()
 ADVANCED_CFG::ADVANCED_CFG()
 {
     wxLogTrace( AdvancedConfigMask, "Init advanced config" );
+
+    // Init defaults - this is done in case the config doesn't exist,
+    // then the values will remain as set here.
+    m_enableSvgImport = false;
+
     loadFromConfigFile();
 }
 
@@ -153,7 +172,8 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 {
     PARAM_CFG_ARRAY configParams;
 
-    // Add configs here
+    configParams.push_back(
+            new PARAM_CFG_BOOL( true, AC_KEYS::EnableSvgImport, &m_enableSvgImport, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

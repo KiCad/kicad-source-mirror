@@ -44,19 +44,29 @@ public:
         SVG
     };
 
-    ///> Vector containing all GFX_FILE_T values.
-    static const std::vector<GFX_FILE_T> GFX_FILE_TYPES;
+    using TYPE_LIST = std::vector<GFX_FILE_T>;
+
+    /**
+     * Construct an import plugin manager, with a specified list of filetypes
+     * that are not permitted (can be used for when some file type support
+     * is not available due to config or other reasons)
+     */
+    GRAPHICS_IMPORT_MGR( const TYPE_LIST& aBlacklist );
+
+    ///> Vector containing all GFX_FILE_T values that can be imported.
+    TYPE_LIST GetImportableFileTypes() const
+    {
+        return m_importableTypes;
+    }
 
     ///> Returns a plugin that handles a specific file extension.
-    static std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPluginByExt( const wxString& aExtension );
+    std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPluginByExt( const wxString& aExtension ) const;
 
     ///> Returns a plugin instance for a specific file type.
-    static std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPlugin( GFX_FILE_T aType );
+    std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> GetPlugin( GFX_FILE_T aType ) const;
 
 private:
-    GRAPHICS_IMPORT_MGR()
-    {
-    }
+    TYPE_LIST m_importableTypes;
 };
 
 #endif /* GRAPHICS_IMPORT_MGR_H */

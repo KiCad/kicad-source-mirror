@@ -852,23 +852,3 @@ if( APPLE )
             )
     endif()
 endif()
-
-# Experimental feature flags
-#
-
-# Currently (Version 5.1) SVG import is disabled by default, to avoid issues
-# SVG needs some enhancements.
-# Especially, all SVG shapes are imported as curves and converted to a lot of segments.
-# A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
-# arcs and circles as primitives (not yet possible with tinysvg library.
-# So, until these issues are solved, disable SVG import option.
-# Warning: enable svg import is currently only for developers.
-option( KICAD_EXPERIMENTAL_ENABLE_SVG "Experimental: Enable SVG import" OFF)
-
-if( NOT KICAD_EXPERIMENTAL_ENABLE_SVG )
-    set_property(
-        SOURCE import_gfx/dialog_import_gfx.cpp
-        PROPERTY COMPILE_DEFINITIONS DISABLE_SVG_IMPORT
-        APPEND
-    )
-endif()
