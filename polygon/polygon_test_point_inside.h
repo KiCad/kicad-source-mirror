@@ -47,10 +47,12 @@ class CPOLYGONS_LIST;
  * @return true if the point is inside, false for outside
  */
 bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
-                             int             aIdxstart,
-                             int             aIdxend,
-                             int             aRefx,
-                             int             aRefy);
+                             int                   aIdxstart,
+                             int                   aIdxend,
+                             int                   aRefx,
+                             int                   aRefy);
+#endif
+
 /**
  * Function TestPointInsidePolygon (overlaid)
  * same as previous, but mainly use wxPoint
@@ -59,7 +61,6 @@ bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
  * @param aRefPoint: the point coordinate to test
  * @return true if the point is inside, false for outside
  */
-#endif
 bool TestPointInsidePolygon( const wxPoint* aPolysList,
-                             int      aCount,
+                             int            aCount,
                              const wxPoint  &aRefPoint );

@@ -70,11 +70,13 @@ CPolyLine::~CPolyLine()
     UnHatch();
 }
 
-/* Removes corners which create a null segment edge
+
+/*
+ * Removes corners which create a null segment edge
  * (i.e. when 2 successive corners are at the same location)
  * returns the count of removed corners.
  */
- int CPolyLine::RemoveNullSegments()
+int CPolyLine::RemoveNullSegments()
 {
     int removed = 0;
     unsigned startcountour = 0;
@@ -169,6 +171,7 @@ int CPolyLine::NormalizeAreaOutlines( std::vector<CPolyLine*>* aNewPolygonList )
     return polySet.OutlineCount();
 }
 
+
 /**
  * Function ImportSettings
  * Copy settings (layer, hatch styles) from aPoly
@@ -179,6 +182,7 @@ void CPolyLine::ImportSettings( const CPolyLine * aPoly )
     SetHatchStyle( aPoly->GetHatchStyle() );
     SetHatchPitch( aPoly->GetHatchPitch() );
 }
+
 
 /* initialize a contour
  * set layer, hatch style, and starting point
@@ -205,6 +209,7 @@ void CPolyLine::AppendCorner( int x, int y )
     // add entries for new corner
     m_CornersList.Append( poly_pt );
 }
+
 
 // move corner of polyline
 //
@@ -248,15 +253,12 @@ void CPolyLine::DeleteCorner( int ic )
 }
 
 
-/******************************************/
-void CPolyLine::RemoveContour( int icont )
-/******************************************/
-
 /**
  * Function RemoveContour
  * @param icont = contour number to remove
  * remove a contour only if there is more than 1 contour
  */
+void CPolyLine::RemoveContour( int icont )
 {
     UnHatch();
     int istart  = GetContourStart( icont );
@@ -509,15 +511,12 @@ CPolyLine* CPolyLine::Fillet( unsigned int aRadius, unsigned int aSegments )
 }
 
 
-/******************************************/
-void CPolyLine::RemoveAllContours( void )
-/******************************************/
-
 /**
  * function RemoveAllContours
  * removes all corners from the list.
  * Others params are not changed
  */
+void CPolyLine::RemoveAllContours()
 {
     m_CornersList.RemoveAllContours();
 }
@@ -980,6 +979,7 @@ void CPolyLine::MoveOrigin( int x_off, int y_off )
     Hatch();
 }
 
+
 /*
  * AppendArc:
  * adds segments to current contour to approximate the given arc
@@ -1149,7 +1149,8 @@ int CPolyLine::Distance( const wxPoint& aPoint )
 }
 
 
-/* test is the point aPos is near (< aDistMax ) a vertex
+/*
+ * test is the point aPos is near (< aDistMax ) a vertex
  * return int = the index of the first corner of the vertex, or -1 if not found.
  */
 int CPolyLine::HitTestForEdge( const wxPoint& aPos, int aDistMax ) const
@@ -1191,7 +1192,9 @@ int CPolyLine::HitTestForEdge( const wxPoint& aPos, int aDistMax ) const
     return corner;
 }
 
-/* test is the point aPos is near (< aDistMax ) a corner
+
+/*
+ * test is the point aPos is near (< aDistMax ) a corner
  * return int = the index of corner of the, or -1 if not found.
  */
 int CPolyLine::HitTestForCorner( const wxPoint& aPos, int aDistMax ) const
@@ -1312,6 +1315,7 @@ bool CPolyLine::IsPolygonSelfIntersecting()
 
     return false;
 }
+
 
 const SHAPE_POLY_SET ConvertPolyListToPolySet( const CPOLYGONS_LIST& aList )
 {
