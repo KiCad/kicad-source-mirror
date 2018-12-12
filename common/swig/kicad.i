@@ -129,10 +129,6 @@ typedef long time_t;
 // KiCad plugin handling
 %include "kicadplugins.i"
 
-// map CPolyLine and classes used in CPolyLine:
-#include <../polygon/PolyLine.h>
-%include <../polygon/PolyLine.h>
-
 #include <geometry/shape.h>
 %include <geometry/shape.h>
 

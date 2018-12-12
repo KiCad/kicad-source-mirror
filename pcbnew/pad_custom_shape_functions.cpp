@@ -28,7 +28,6 @@
  */
 
 #include <fctsys.h>
-#include <PolyLine.h>
 #include <trigo.h>
 
 #include <pcbnew.h>

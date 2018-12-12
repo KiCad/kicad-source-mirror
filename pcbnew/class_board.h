@@ -44,6 +44,7 @@
 #include <zone_settings.h>
 #include <pcb_plot_params.h>
 #include <board_item_container.h>
+#include <eda_rect.h>
 
 #include <memory>
 

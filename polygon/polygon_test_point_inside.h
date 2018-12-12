@@ -29,7 +29,12 @@ class wxPoint
 public:
     int x, y;
 };
+#else
+#include <wx/gdicmn.h>                          // for wxPoint definition
 #endif
+
+
+#if 0
 class CPOLYGONS_LIST;
 
 /**
@@ -54,6 +59,7 @@ bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
  * @param aRefPoint: the point coordinate to test
  * @return true if the point is inside, false for outside
  */
+#endif
 bool TestPointInsidePolygon( const wxPoint* aPolysList,
                              int      aCount,
                              const wxPoint  &aRefPoint );

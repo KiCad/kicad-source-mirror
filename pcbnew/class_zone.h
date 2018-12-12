@@ -36,7 +36,6 @@
 #include <class_board_item.h>
 #include <board_connected_item.h>
 #include <layers_id_colors_and_visibility.h>
-#include <PolyLine.h>
 #include <geometry/shape_poly_set.h>
 #include <zone_settings.h>
 

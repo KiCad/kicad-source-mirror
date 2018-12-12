@@ -31,7 +31,6 @@
 #define CLASS_DRAWSEGMENT_H_
 
 #include <class_board_item.h>
-#include <PolyLine.h>
 #include <math_for_graphics.h>
 #include <trigo.h>
 #include <common.h>

@@ -41,7 +41,6 @@
 #include <lib_id.h>
 
 #include <class_text_mod.h>
-#include <PolyLine.h>
 #include "zones.h"
 
 #include <core/iterators.h>

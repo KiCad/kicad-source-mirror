@@ -29,7 +29,6 @@
  */
 
 #include <fctsys.h>
-#include <PolyLine.h>
 #include <trigo.h>
 #include <macros.h>
 #include <msgpanel.h>

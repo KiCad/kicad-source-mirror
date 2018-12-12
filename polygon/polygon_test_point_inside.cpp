@@ -28,7 +28,8 @@
 
 #include <cmath>
 #include <vector>
-#include <PolyLine.h>
+
+#include "polygon_test_point_inside.h"
 
 /* this algo uses the the Jordan curve theorem to find if a point is inside or outside a polygon:
  * It run a semi-infinite line horizontally (increasing x, fixed y)
@@ -49,7 +50,7 @@
 
 #define OUTSIDE false
 #define INSIDE true
-
+#if 0
 bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
                              int             aIdxstart,
                              int             aIdxend,
@@ -115,7 +116,7 @@ bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
 
     return count & 1 ? INSIDE : OUTSIDE;
 }
-
+#endif
 
 /* Function TestPointInsidePolygon (overlaid)
  * same as previous, but use wxPoint and aCount corners

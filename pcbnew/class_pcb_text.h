@@ -32,7 +32,6 @@
 
 #include <eda_text.h>
 #include <class_board_item.h>
-#include <PolyLine.h>
 
 
 class LINE_READER;
