@@ -1265,11 +1265,28 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         text = wxT( "File: " ) + aSheet->GetFileName();
         m_gal->StrokeText( text, pos_filename, nameAngle );
-
+    }
+    else if( aLayer == LAYER_HIERLABEL )
+    {
         for( auto& sheetPin : aSheet->GetPins() )
         {
             if( !sheetPin.IsMoving() )
+            {
+                int width = aSheet->GetPenSize();
+                wxPoint pt = sheetPin.GetTextPos();
+
+                switch( sheetPin.GetEdge() )
+                {
+                case SCH_SHEET_PIN::SHEET_TOP_SIDE:    pt.y -= width / 2; break;
+                case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: pt.y += width / 2; break;
+                case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:  pt.x -= width / 2; break;
+                case SCH_SHEET_PIN::SHEET_LEFT_SIDE:   pt.x += width / 2; break;
+                default: break;
+                }
+
+                sheetPin.SetTextPos(pt);
                 draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+            }
         }
     }
 }
