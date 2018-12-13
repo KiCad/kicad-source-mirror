@@ -395,7 +395,8 @@ static EDA_RECT getRect( const BOARD_ITEM* aItem )
 }
 
 
-SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter )
+SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+        std::vector<BOARD_ITEM*>* aFiltered )
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
@@ -428,6 +429,12 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
         std::vector<EDA_ITEM*> diff;
         std::set_difference( m_selection.begin(), m_selection.end(), collector.begin(), collector.end(),
                 std::back_inserter( diff ) );
+
+        if( aFiltered )
+        {
+            for( auto item : diff )
+                aFiltered->push_back( static_cast<BOARD_ITEM*>( item ) );
+        }
 
         /**
          * Once we find the adjustments to m_selection that are required by the client filter, we

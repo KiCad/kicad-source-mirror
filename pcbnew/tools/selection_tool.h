@@ -93,8 +93,10 @@ public:
      * Returns the current selection set, filtered according to aFlags
      * and aClientFilter.
      * If the set is empty, performs the legacy-style hover selection.
+     * @param aFiltered is an optional vector, that is filled with items removed by the filter
      */
-    SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter );
+    SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
+            std::vector<BOARD_ITEM*>* aFiltered = NULL  );
 
 
     inline TOOL_MENU& GetToolMenu()

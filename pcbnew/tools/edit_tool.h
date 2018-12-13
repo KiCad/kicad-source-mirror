@@ -29,6 +29,7 @@
 #include <math/vector2d.h>
 #include <tools/pcb_tool.h>
 #include <tools/selection_tool.h>
+#include <status_popup.h>
 
 
 class BOARD_COMMIT;
@@ -47,7 +48,6 @@ class CONNECTIVITY_DATA;
 #define EXCLUDE_TRANSIENTS  0x0004
 
 void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
-
 
 /**
  * Class EDIT_TOOL
@@ -192,6 +192,9 @@ private:
 
     ///> Flag determining if anything is being dragged right now
     bool m_dragging;
+
+    ///> Flag determining whether we are prompting for locked removal
+    bool m_lockedSelected;
 
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
