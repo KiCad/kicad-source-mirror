@@ -223,7 +223,7 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     BOARD_ITEM_CONTAINER* parent = m_frame->GetModel();
     DRAWSEGMENT* line = m_editModules ? new EDGE_MODULE( (MODULE*) parent ) : new DRAWSEGMENT;
 
-    OPT<VECTOR2D> startingPoint;
+    auto startingPoint = boost::make_optional<VECTOR2D>( false, VECTOR2D( 0, 0 ) );
     BOARD_COMMIT commit( m_frame );
 
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::LINE );
