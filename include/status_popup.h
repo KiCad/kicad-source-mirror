@@ -27,6 +27,7 @@
 
 
 #include <common.h>
+#include <math/vector2d.h>
 #include <wx/popupwin.h>
 
 class EDA_DRAW_FRAME;
@@ -46,6 +47,7 @@ public:
 
     virtual void Popup( wxWindow* aFocus = nullptr );
     virtual void Move( const wxPoint &aWhere );
+    virtual void Move( const VECTOR2I& aWhere );
 
     /**
      * Hides the popup after a specified time.
