@@ -1738,6 +1738,10 @@ bool SELECTION_TOOL::selectable( const BOARD_ITEM* aItem ) const
         break;
     }
 
+
+    case PCB_MARKER_T:  // Always selectable
+        return true;
+
     // These are not selectable
     case NOT_USED:
     case TYPE_NOT_INIT:
