@@ -1478,8 +1478,8 @@ void EDA_DRAW_FRAME::SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWa
     if( m_zoomSelectBox )
         m_zoomSelectBox->SetSelection( idx );
 
-    if( GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] ) )
-        RedrawScreen( aCenterPoint, aWarpPointer );
+    GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] );
+    RedrawScreen( aCenterPoint, aWarpPointer );
 }
 
 
@@ -1504,8 +1504,8 @@ void EDA_DRAW_FRAME::SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool
     if( m_zoomSelectBox )
         m_zoomSelectBox->SetSelection( idx );
 
-    if( GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] ) )
-        RedrawScreen( aCenterPoint, aWarpPointer );
+    GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] );
+    RedrawScreen( aCenterPoint, aWarpPointer );
 }
 
 
