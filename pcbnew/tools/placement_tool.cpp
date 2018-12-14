@@ -127,87 +127,106 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
 }
 
 
-bool SortLeftmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
+template <class T>
+ALIGNMENT_RECTS GetBoundingBoxes( const T &sel )
 {
-    return ( left.second.GetX() < right.second.GetX() );
-}
-
-
-bool SortRightmostX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
-{
-    return ( left.second.GetRight() > right.second.GetRight() );
-}
-
-
-bool SortTopmostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
-{
-    return ( left.second.GetY() < right.second.GetY() );
-}
-
-
-bool SortCenterX( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
-{
-    return ( left.second.GetCenter().x < right.second.GetCenter().x );
-}
-
-
-bool SortCenterY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
-{
-    return ( left.second.GetCenter().y < right.second.GetCenter().y );
-}
-
-
-bool SortBottommostY( const std::pair<BOARD_ITEM*, EDA_RECT> left, const std::pair<BOARD_ITEM*, EDA_RECT> right)
-{
-    return ( left.second.GetBottom() > right.second.GetBottom() );
-}
-
-
-ALIGNMENT_RECTS GetBoundingBoxes( const SELECTION &sel )
-{
-    const SELECTION& selection = sel;
-
     ALIGNMENT_RECTS rects;
 
-    for( auto item : selection )
+    for( auto item : sel )
     {
         BOARD_ITEM* boardItem = static_cast<BOARD_ITEM*>( item );
 
         if( item->Type() == PCB_MODULE_T )
-        {
             rects.emplace_back( std::make_pair( boardItem, static_cast<MODULE*>( item )->GetFootprintRect() ) );
-        }
         else
-        {
             rects.emplace_back( std::make_pair( boardItem, item->GetBoundingBox() ) );
+    }
+
+    return rects;
+}
+
+
+template< typename T >
+int ALIGN_DISTRIBUTE_TOOL::selectTarget( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aGetValue )
+{
+    wxPoint curPos( getViewControls()->GetCursorPosition().x,  getViewControls()->GetCursorPosition().y );
+
+    // after sorting, the fist item acts as the target for all others
+    // unless we have a locked item, in which case we use that for the target
+    int target = !aLocked.size() ? aGetValue( aItems.front() ): aGetValue( aLocked.front() );
+
+    // Iterate through both lists to find if we are mouse-over on one of the items.
+    for( auto sel = aLocked.begin(); sel != aItems.end(); sel++ )
+    {
+        // If there are locked items, prefer aligning to them over
+        // aligning to the cursor as they do not move
+        if( sel == aLocked.end() )
+        {
+            if( aLocked.size() == 0 )
+            {
+                sel = aItems.begin();
+                continue;
+            }
+
+            break;
+        }
+
+        // We take the first target that overlaps our cursor.
+        // This is deterministic because we assume sorted arrays
+        if( sel->second.Contains( curPos ) )
+        {
+            target = aGetValue( *sel );
+            break;
         }
     }
-    return rects;
+
+    return target;
+}
+
+
+template< typename T >
+size_t ALIGN_DISTRIBUTE_TOOL::GetSelections( ALIGNMENT_RECTS& aItems, ALIGNMENT_RECTS& aLocked, T aCompare )
+{
+
+    SELECTION& selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_TRANSIENTS ); } );
+
+    if( selection.Size() <= 1 )
+        return 0;
+
+    std::vector<BOARD_ITEM*> lockedItems;
+    selection = m_selectionTool->RequestSelection(
+            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED ); }, &lockedItems );
+
+    aItems = GetBoundingBoxes( selection );
+    aLocked = GetBoundingBoxes( lockedItems );
+    std::sort( aItems.begin(), aItems.end(), aCompare );
+    std::sort( aLocked.begin(), aLocked.end(), aCompare );
+
+    return aItems.size();
 }
 
 
 int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetTop() < right.second.GetTop() ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortTopmostY );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting, the fist item acts as the target for all others
-    const int targetTop = itemsToAlign.begin()->second.GetY();
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetTop = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetTop(); } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
     {
-        int difference = targetTop - i.second.GetY();
+        int difference = targetTop - i.second.GetTop();
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
@@ -225,21 +244,17 @@ int ALIGN_DISTRIBUTE_TOOL::AlignTop( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignBottom( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetBottom() < right.second.GetBottom() ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortBottommostY );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting, the fist item acts as the target for all others
-   const int targetBottom = itemsToAlign.begin()->second.GetBottom();
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetBottom = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetBottom(); } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
@@ -277,26 +292,22 @@ int ALIGN_DISTRIBUTE_TOOL::AlignLeft( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignLeft()
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetLeft() < right.second.GetLeft() ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortLeftmostX );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting, the fist item acts as the target for all others
-    const int targetLeft = itemsToAlign.begin()->second.GetX();
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetLeft = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetLeft(); } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
     {
-        int difference = targetLeft - i.second.GetX();
+        int difference = targetLeft - i.second.GetLeft();
         BOARD_ITEM* item = i.first;
 
         // Don't move a pad by itself unless editing the footprint
@@ -329,21 +340,17 @@ int ALIGN_DISTRIBUTE_TOOL::AlignRight( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetRight() < right.second.GetRight() ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortRightmostX );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting, the fist item acts as the target for all others
-    const int targetRight = itemsToAlign.begin()->second.GetRight();
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetRight = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetRight(); } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
@@ -366,22 +373,17 @@ int ALIGN_DISTRIBUTE_TOOL::doAlignRight()
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetCenter().x < right.second.GetCenter().x ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterX );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting use the center x coordinate of the leftmost item as a target
-    // for all other items
-    const int targetX = itemsToAlign.begin()->second.GetCenter().x;
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetX = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetCenter().x; } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
@@ -404,22 +406,17 @@ int ALIGN_DISTRIBUTE_TOOL::AlignCenterX( const TOOL_EVENT& aEvent )
 
 int ALIGN_DISTRIBUTE_TOOL::AlignCenterY( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection(
-            []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED | EXCLUDE_TRANSIENTS ); } );
+    ALIGNMENT_RECTS itemsToAlign;
+    ALIGNMENT_RECTS locked_items;
 
-    if( selection.Size() <= 1 )
+    if( !GetSelections( itemsToAlign, locked_items, []( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } ) )
         return 0;
 
-    auto itemsToAlign = GetBoundingBoxes( selection );
-    std::sort( itemsToAlign.begin(), itemsToAlign.end(), SortCenterY );
-
     BOARD_COMMIT commit( m_frame );
-    commit.StageItems( selection, CHT_MODIFY );
-
-    // after sorting use the center y coordinate of the top-most item as a target
-    // for all other items
-    const int targetY = itemsToAlign.begin()->second.GetCenter().y;
+    commit.StageItems( m_selectionTool->GetSelection(), CHT_MODIFY );
+    auto targetY = selectTarget( itemsToAlign, locked_items, []( const ALIGNMENT_RECT& aVal )
+            { return aVal.second.GetCenter().y; } );
 
     // Move the selected items
     for( auto& i : itemsToAlign )
@@ -455,13 +452,17 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeHorizontally( const TOOL_EVENT& aEvent )
     auto itemsToDistribute = GetBoundingBoxes( selection );
 
     // find the last item by reverse sorting
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortRightmostX );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+            [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetRight() > right.second.GetRight() ); } );
     const auto lastItem = itemsToDistribute.begin()->first;
 
     const auto maxRight = itemsToDistribute.begin()->second.GetRight();
 
     // sort to get starting order
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortLeftmostX );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+            [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetX() < right.second.GetX() ); } );
     const auto minX = itemsToDistribute.begin()->second.GetX();
     auto totalGap = maxRight - minX;
     int totalWidth = 0;
@@ -515,7 +516,9 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsHorizontally( ALIGNMENT_RECTS& items
 
 void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersHorizontally( ALIGNMENT_RECTS &itemsToDistribute ) const
 {
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortCenterX );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+            [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+            { return ( left.second.GetCenter().x < right.second.GetCenter().x ); } );
     const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().x
                           - itemsToDistribute.begin()->second.GetCenter().x;
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
@@ -551,12 +554,16 @@ int ALIGN_DISTRIBUTE_TOOL::DistributeVertically( const TOOL_EVENT& aEvent )
     auto itemsToDistribute = GetBoundingBoxes( selection );
 
     // find the last item by reverse sorting
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortBottommostY );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+        [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+        { return ( left.second.GetBottom() > right.second.GetBottom() ); } );
     const auto maxBottom = itemsToDistribute.begin()->second.GetBottom();
     const auto lastItem = itemsToDistribute.begin()->first;
 
     // sort to get starting order
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortTopmostY );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+        [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+        { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } );
     auto minY = itemsToDistribute.begin()->second.GetY();
 
     auto totalGap = maxBottom - minY;
@@ -611,7 +618,9 @@ void ALIGN_DISTRIBUTE_TOOL::doDistributeGapsVertically( ALIGNMENT_RECTS& itemsTo
 
 void ALIGN_DISTRIBUTE_TOOL::doDistributeCentersVertically( ALIGNMENT_RECTS& itemsToDistribute ) const
 {
-    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(), SortCenterY );
+    std::sort( itemsToDistribute.begin(), itemsToDistribute.end(),
+        [] ( const ALIGNMENT_RECT left, const ALIGNMENT_RECT right)
+        { return ( left.second.GetCenter().y < right.second.GetCenter().y ); } );
     const auto totalGap = ( itemsToDistribute.end()-1 )->second.GetCenter().y
                           - itemsToDistribute.begin()->second.GetCenter().y;
     const auto itemGap = totalGap / ( itemsToDistribute.size() - 1 );
