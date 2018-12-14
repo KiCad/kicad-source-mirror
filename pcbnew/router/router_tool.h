@@ -36,6 +36,7 @@ public:
 
     int RouteSingleTrace( const TOOL_EVENT& aEvent );
     int RouteDiffPair( const TOOL_EVENT& aEvent );
+    int InlineBreakTrack( const TOOL_EVENT& aEvent );
     bool CanInlineDrag();
     int InlineDrag( const TOOL_EVENT& aEvent );
 

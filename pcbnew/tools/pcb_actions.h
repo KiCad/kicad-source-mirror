@@ -132,7 +132,12 @@ public:
     static TOOL_ACTION remove;
     static TOOL_ACTION removeAlt;
 
+    /// Break a single track into two segments at the cursor
     static TOOL_ACTION breakTrack;
+
+    /// Breaks track when router is not activated
+    static TOOL_ACTION inlineBreakTrack;
+
     static TOOL_ACTION drag45Degree;
     static TOOL_ACTION dragFreeAngle;
 
