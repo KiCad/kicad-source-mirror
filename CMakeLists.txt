@@ -587,6 +587,10 @@ endif()
 # Find GLM library, required
 #
 find_package( GLM 0.9.5.1 REQUIRED )
+if( GLM_VERSION MATCHES "0.9.9.3" )
+    MESSAGE( FATAL_ERROR "\nGLM version ${GLM_VERSION} is incompatible with KiCad.\n"
+                         "Please downgrade to GLM version 0.9.9.2 or older" )
+endif()
 
 add_definitions( -DGLM_FORCE_CTOR_INIT )
 
