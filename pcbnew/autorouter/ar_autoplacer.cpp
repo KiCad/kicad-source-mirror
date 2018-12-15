@@ -55,6 +55,8 @@
 #define AR_KEEPOUT_MARGIN  500
 #define AR_ABORT_PLACEMENT -1
 
+#define STEP_AR_MM 1.0
+
 /* Penalty (cost) for CntRot90 and CntRot180:
  * CntRot90 and CntRot180 are from 0 (rotation allowed) to 10 (rotation not allowed)
  */
@@ -82,7 +84,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
     for( auto mod : m_board->Modules() )
         m_connectivity->Add( mod );
 
-    m_gridSize = Millimeter2iu( 0.5 );
+    m_gridSize = Millimeter2iu( STEP_AR_MM );
     m_progressReporter = nullptr;
     m_refreshCallback = nullptr;
 }
@@ -105,11 +107,12 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
     EDA_RECT bbox = m_board->GetBoardEdgesBoundingBox();
 
     if( bbox.GetWidth() == 0 || bbox.GetHeight() == 0 )
-    {
-        //DisplayError( NULL, _( "No PCB edge found, unknown board size!" ) );
-        // fixme: no wx here
         return 0;
-    }
+
+    // Build the board shape
+    m_board->GetBoardPolygonOutlines( m_boardShape /*, aErrorText, aErrorLocation*/ );
+    m_topFreeArea = m_boardShape;
+    m_bottomFreeArea = m_boardShape;
 
     m_matrix.ComputeMatrixSize( bbox );
     int nbCells = m_matrix.m_Ncols * m_matrix.m_Nrows;
@@ -117,54 +120,29 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
     // Choose the number of board sides.
     m_matrix.m_RoutingLayersCount = 2;
     m_matrix.InitRoutingMatrix();
-
-    m_matrix.m_routeLayerBottom = F_Cu;
-
-    if( m_matrix.m_RoutingLayersCount > 1 )
-        m_matrix.m_routeLayerBottom = B_Cu;
-
+    m_matrix.m_routeLayerBottom = B_Cu;
     m_matrix.m_routeLayerTop = F_Cu;
 
-    // Place the edge layer segments
-    TRACK tmp( NULL );
+    // Fill (mark) the cells inside the board:
+    fillMatrix();
 
-    tmp.SetLayer( UNDEFINED_LAYER );
-    tmp.SetNetCode( -1 );
-    tmp.SetWidth( m_matrix.m_GridRouting / 2 );
-
+    // Other obstacles can be added here:
     for( auto drawing : m_board->Drawings() )
     {
-        DRAWSEGMENT* DrawSegm;
-
         switch( drawing->Type() )
         {
         case PCB_LINE_T:
-            DrawSegm = (DRAWSEGMENT*) drawing;
-
-            if( DrawSegm->GetLayer() != Edge_Cuts )
-                break;
-
-
-            //printf("addSeg %p grid %d\n", DrawSegm,  m_matrix.m_GridRouting );
-            m_matrix.TraceSegmentPcb( DrawSegm, CELL_IS_HOLE | CELL_IS_EDGE,
-                             m_matrix.m_GridRouting, AR_MATRIX::WRITE_CELL );
+            if( drawing->GetLayer() != Edge_Cuts )
+            {
+                m_matrix.TraceSegmentPcb( (DRAWSEGMENT*)drawing, CELL_IS_HOLE | CELL_IS_EDGE,
+                                          m_matrix.m_GridRouting, AR_MATRIX::WRITE_CELL );
+            }
             break;
 
-        case PCB_TEXT_T:
         default:
             break;
         }
     }
-
-    // Mark cells of the routing matrix to CELL_IS_ZONE
-    // (i.e. availlable cell to place a module )
-    // Init a starting point of attachment to the area.
-    m_matrix.OrCell( m_matrix.m_Nrows / 2, m_matrix.m_Ncols / 2,
-                          AR_SIDE_BOTTOM, CELL_IS_ZONE );
-
-    // find and mark all other availlable cells:
-    for( int ii = 1; ii != 0; )
-        ii = propagate();
 
     // Initialize top layer. to the same value as the bottom layer
     if( m_matrix.m_BoardSide[AR_SIDE_TOP] )
@@ -173,6 +151,119 @@ int AR_AUTOPLACER::genPlacementRoutingMatrix()
 
     return 1;
 }
+
+
+bool AR_AUTOPLACER::fillMatrix()
+{
+    std::vector <int> x_coordinates;
+    bool success = true;
+    int step = m_matrix.m_GridRouting;
+    wxPoint coord_orgin = m_matrix.GetBrdCoordOrigin(); // Board coordinate of matruix cell (0,0)
+
+    // Create a single board outline:
+    SHAPE_POLY_SET brd_shape = m_boardShape;
+    brd_shape.Fracture( SHAPE_POLY_SET::PM_FAST );
+    const SHAPE_LINE_CHAIN& outline = brd_shape.Outline(0);
+    const BOX2I& rect = outline.BBox();
+
+    // Creates the horizontal segments
+    // Calculate the y limits of the area
+    for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += step )
+    {
+        // find all intersection points of an infinite line with polyline sides
+        x_coordinates.clear();
+
+        for( int v = 0; v < outline.PointCount(); v++ )
+        {
+
+            int seg_startX = outline.CPoint( v ).x;
+            int seg_startY = outline.CPoint( v ).y;
+            int seg_endX   = outline.CPoint( v + 1 ).x;
+            int seg_endY   = outline.CPoint( v + 1 ).y;
+
+            /* Trivial cases: skip if ref above or below the segment to test */
+            if( ( seg_startY > refy ) && ( seg_endY > refy ) )
+                continue;
+
+            // segment below ref point, or its Y end pos on Y coordinate ref point: skip
+            if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
+                continue;
+
+            /* at this point refy is between seg_startY and seg_endY
+             * see if an horizontal line at Y = refy is intersecting this segment
+             */
+            // calculate the x position of the intersection of this segment and the
+            // infinite line this is more easier if we move the X,Y axis origin to
+            // the segment start point:
+
+            seg_endX -= seg_startX;
+            seg_endY -= seg_startY;
+            double newrefy = (double) ( refy - seg_startY );
+            double intersec_x;
+
+            if ( seg_endY == 0 )    // horizontal segment on the same line: skip
+                continue;
+
+            // Now calculate the x intersection coordinate of the horizontal line at
+            // y = newrefy and the segment from (0,0) to (seg_endX,seg_endY) with the
+            // horizontal line at the new refy position the line slope is:
+            // slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
+            // and the x pos relative to the new origin is:
+            // intersec_x = refy/slope = refy * inv_slope
+            // Note: because horizontal segments are already tested and skipped, slope
+            // exists (seg_end_y not O)
+            double inv_slope = (double) seg_endX / seg_endY;
+            intersec_x = newrefy * inv_slope;
+            x_coordinates.push_back( (int) intersec_x + seg_startX );
+        }
+
+        // A line scan is finished: build list of segments
+
+        // Sort intersection points by increasing x value:
+        // So 2 consecutive points are the ends of a segment
+        std::sort( x_coordinates.begin(), x_coordinates.end() );
+
+        // An even number of coordinates is expected, because a segment has 2 ends.
+        // An if this algorithm always works, it must always find an even count.
+        if( ( x_coordinates.size() & 1 ) != 0 )
+        {
+            success = false;
+            break;
+        }
+
+        // Fill cells having the same Y coordinate
+        int iimax = x_coordinates.size() - 1;
+
+        int idy = (refy - coord_orgin.y) / step;
+
+        if( idy > m_matrix.m_Nrows )
+            break;
+
+        if( idy < 0 )
+            continue;
+
+        for( int ii = 0; ii < iimax; ii += 2 )
+        {
+            int seg_start_x = x_coordinates[ii] - coord_orgin.x;
+            int seg_end_x = x_coordinates[ii + 1] - coord_orgin.x;
+            // Fill cells at y coord = idy,
+            // and at x cood >= seg_start_x and <= seg_end_x
+
+            for( int idx = seg_start_x / step; idx < m_matrix.m_Ncols; idx++ )
+            {
+                if( idx * step > seg_end_x )
+                    break;
+
+                if( idx >= 0 && ( idx * step >= seg_start_x ) )
+                    m_matrix.SetCell( idy, idx, AR_SIDE_BOTTOM, CELL_IS_ZONE );
+            }
+
+        }
+    }   // End examine segments in one area
+
+    return success;
+}
+
 
 
 void AR_AUTOPLACER::rotateModule( MODULE* module, double angle, bool incremental )
@@ -190,141 +281,84 @@ void AR_AUTOPLACER::rotateModule( MODULE* module, double angle, bool incremental
 }
 
 
-/**
- * Function propagate
- * Used only in autoplace calculations
- * Uses the routing matrix to fill the cells within the zone
- * Search and mark cells within the zone, and agree with DRC options.
- * Requirements:
- * Start from an initial point, to fill zone
- * The zone must have no "copper island"
- *  Algorithm:
- *  If the current cell has a neighbor flagged as "cell in the zone", it
- *  become a cell in the zone
- *  The first point in the zone is the starting point
- *  4 searches within the matrix are made:
- *          1 - Left to right and top to bottom
- *          2 - Right to left and top to bottom
- *          3 - bottom to top and Right to left
- *          4 - bottom to top and Left to right
- *  Given the current cell, for each search, we consider the 2 neighbor cells
- *  the previous cell on the same line and the previous cell on the same column.
- *
- *  This function can request some iterations
- *  Iterations are made until no cell is added to the zone.
- *  @return added cells count (i.e. which the attribute CELL_IS_ZONE is set)
- */
-
-int AR_AUTOPLACER::propagate()
+void AR_AUTOPLACER::addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask )
 {
-    int     row, col;
-    long    current_cell, old_cell_H;
-    std::vector<int> pt_cell_V;
-    int     nbpoints = 0;
-
-    const uint32_t NO_CELL_ZONE = CELL_IS_HOLE | CELL_IS_EDGE | CELL_IS_ZONE;
-
-    pt_cell_V.resize( std::max( m_matrix.m_Nrows, m_matrix.m_Ncols ), CELL_IS_EMPTY );
-
-    // Search from left to right and top to bottom.
-    for( row = 0; row < m_matrix.m_Nrows; row++ )
+    // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
+    if( aLayerMask[ F_Cu ] )
     {
-        old_cell_H = 0;
+        m_fpAreaTop.NewOutline();
+        m_fpAreaTop.Append( aStart.x, aStart.y );
+        m_fpAreaTop.Append( aEnd.x, aStart.y );
+        m_fpAreaTop.Append( aEnd.x, aEnd.y );
+        m_fpAreaTop.Append( aStart.x, aEnd.y );
+    }
+    if( aLayerMask[ B_Cu ] )
+    {
+        m_fpAreaBottom.NewOutline();
+        m_fpAreaBottom.Append( aStart.x, aStart.y );
+        m_fpAreaBottom.Append( aEnd.x, aStart.y );
+        m_fpAreaBottom.Append( aEnd.x, aEnd.y );
+        m_fpAreaBottom.Append( aStart.x, aEnd.y );
+    }
+}
 
-        for( col = 0; col < m_matrix.m_Ncols; col++ )
-        {
-            current_cell = m_matrix.GetCell( row, col, AR_SIDE_BOTTOM ) & NO_CELL_ZONE;
+void AR_AUTOPLACER::addPad( D_PAD* aPad, int aClearance )
+{
+    // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
+    EDA_RECT bbox = aPad->GetBoundingBox();
+    bbox.Inflate( aClearance );
 
-            if( current_cell == 0 )    // a free cell is found
-            {
-                if( (old_cell_H & CELL_IS_ZONE) || (pt_cell_V[col] & CELL_IS_ZONE) )
-                {
-                    m_matrix.OrCell( row, col, AR_SIDE_BOTTOM, CELL_IS_ZONE );
-                    current_cell = CELL_IS_ZONE;
-                    nbpoints++;
-                }
-            }
+    if( aPad->IsOnLayer( F_Cu ) )
+    {
+        m_fpAreaTop.NewOutline();
+        m_fpAreaTop.Append( bbox.GetLeft(), bbox.GetTop() );
+        m_fpAreaTop.Append( bbox.GetRight(), bbox.GetTop() );
+        m_fpAreaTop.Append( bbox.GetRight(), bbox.GetBottom() );
+        m_fpAreaTop.Append( bbox.GetLeft(), bbox.GetBottom() );
+    }
+    if( aPad->IsOnLayer( B_Cu ) )
+    {
+        m_fpAreaBottom.NewOutline();
+        m_fpAreaBottom.Append( bbox.GetLeft(), bbox.GetTop() );
+        m_fpAreaBottom.Append( bbox.GetRight(), bbox.GetTop() );
+        m_fpAreaBottom.Append( bbox.GetRight(), bbox.GetBottom() );
+        m_fpAreaBottom.Append( bbox.GetLeft(), bbox.GetBottom() );
+    }
+}
 
-            pt_cell_V[col] = old_cell_H = current_cell;
-        }
+
+void AR_AUTOPLACER::buildFpAreas( MODULE* aFootprint, int aFpClearance )
+{
+    m_fpAreaTop.RemoveAllContours();
+    m_fpAreaBottom.RemoveAllContours();
+
+    if( aFootprint->BuildPolyCourtyard() )
+    {
+        m_fpAreaTop = aFootprint->GetPolyCourtyardFront();
+        m_fpAreaBottom = aFootprint->GetPolyCourtyardBack();
     }
 
-    // Search from right to left and top to bottom/
-    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
+    LSET        layerMask;
 
-    for( row = 0; row < m_matrix.m_Nrows; row++ )
+    if( aFootprint->GetLayer() == F_Cu )
+        layerMask.set( F_Cu );
+
+    if( aFootprint->GetLayer() == B_Cu )
+        layerMask.set( B_Cu );
+
+    EDA_RECT    fpBBox = aFootprint->GetBoundingBox();
+
+    fpBBox.Inflate( ( m_matrix.m_GridRouting / 2 ) + aFpClearance );
+
+    // Add a minimal area to the fp area:
+    addFpBody( fpBBox.GetOrigin(), fpBBox.GetEnd(), layerMask );
+
+    // Trace pads + clearance areas.
+    for( auto pad : aFootprint->Pads() )
     {
-        old_cell_H = 0;
-
-        for( col = m_matrix.m_Ncols - 1; col >= 0; col-- )
-        {
-            current_cell = m_matrix.GetCell( row, col, AR_SIDE_BOTTOM ) & NO_CELL_ZONE;
-
-            if( current_cell == 0 )    // a free cell is found
-            {
-                if( (old_cell_H & CELL_IS_ZONE) || (pt_cell_V[col] & CELL_IS_ZONE) )
-                {
-                    m_matrix.OrCell( row, col, AR_SIDE_BOTTOM, CELL_IS_ZONE );
-                    current_cell = CELL_IS_ZONE;
-                    nbpoints++;
-                }
-            }
-
-            pt_cell_V[col] = old_cell_H = current_cell;
-        }
+        int margin = (m_matrix.m_GridRouting / 2) + pad->GetClearance();
+        addPad( pad, margin );
     }
-
-    // Search from bottom to top and right to left.
-    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
-
-    for( col = m_matrix.m_Ncols - 1; col >= 0; col-- )
-    {
-        old_cell_H = 0;
-
-        for( row = m_matrix.m_Nrows - 1; row >= 0; row-- )
-        {
-            current_cell = m_matrix.GetCell( row, col, AR_SIDE_BOTTOM ) & NO_CELL_ZONE;
-
-            if( current_cell == 0 )    // a free cell is found
-            {
-                if( (old_cell_H & CELL_IS_ZONE) || (pt_cell_V[row] & CELL_IS_ZONE) )
-                {
-                    m_matrix.OrCell( row, col, AR_SIDE_BOTTOM, CELL_IS_ZONE );
-                    current_cell = CELL_IS_ZONE;
-                    nbpoints++;
-                }
-            }
-
-            pt_cell_V[row] = old_cell_H = current_cell;
-        }
-    }
-
-    // Search from bottom to top and left to right.
-    fill( pt_cell_V.begin(), pt_cell_V.end(), CELL_IS_EMPTY );
-
-    for( col = 0; col < m_matrix.m_Ncols; col++ )
-    {
-        old_cell_H = 0;
-
-        for( row = m_matrix.m_Nrows - 1; row >= 0; row-- )
-        {
-            current_cell = m_matrix.GetCell( row, col, AR_SIDE_BOTTOM ) & NO_CELL_ZONE;
-
-            if( current_cell == 0 )    // a free cell is found
-            {
-                if( (old_cell_H & CELL_IS_ZONE) || (pt_cell_V[row] & CELL_IS_ZONE) )
-                {
-                    m_matrix.OrCell( row, col, AR_SIDE_BOTTOM, CELL_IS_ZONE );
-                    current_cell = CELL_IS_ZONE;
-                    nbpoints++;
-                }
-            }
-
-            pt_cell_V[row] = old_cell_H = current_cell;
-        }
-    }
-
-    return nbpoints;
 }
 
 
@@ -383,6 +417,13 @@ void AR_AUTOPLACER::genModuleOnRoutingMatrix( MODULE* Module )
     // Trace clearance.
     int margin = ( m_matrix.m_GridRouting * Module->GetPadCount() ) / AR_GAIN;
     m_matrix.CreateKeepOutRectangle( ox, oy, fx, fy, margin, AR_KEEPOUT_MARGIN , layerMask );
+
+    // Build the footprint courtyard
+    buildFpAreas( Module, margin );
+
+    // Substract the shape to free areas
+    m_topFreeArea.BooleanSubtract( m_fpAreaTop, SHAPE_POLY_SET::PM_FAST );
+    m_bottomFreeArea.BooleanSubtract( m_fpAreaBottom, SHAPE_POLY_SET::PM_FAST );
 }
 
 
@@ -440,6 +481,22 @@ int AR_AUTOPLACER::testRectangle( const EDA_RECT& aRect, int side )
                 return AR_OCCUIPED_BY_MODULE;
         }
     }
+
+    return AR_FREE_CELL;
+}
+
+int AR_AUTOPLACER::testModuleByPolygon( MODULE* aModule, int aSide, const wxPoint& aOffset )
+{
+    // Test for footprint out of board:
+    // If a footprint is not fully inside the board, substract board polygon
+    // to the footprint polygon gives a non null area.
+    SHAPE_POLY_SET fp_area = m_fpAreaTop;
+    fp_area.Move( -aOffset );
+    SHAPE_POLY_SET out_of_board_area;
+    out_of_board_area.BooleanSubtract( fp_area, m_topFreeArea, SHAPE_POLY_SET::PM_FAST );
+
+    if( out_of_board_area.OutlineCount() )
+        return AR_OCCUIPED_BY_MODULE;
 
     return AR_FREE_CELL;
 }
@@ -515,14 +572,18 @@ int AR_AUTOPLACER::testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const 
     EDA_RECT    fpBBox = aModule->GetFootprintRect();
     fpBBox.Move( -aOffset );
 
-    int         diag = testRectangle( fpBBox, side );
+    buildFpAreas( aModule, 0 );
 
+    int diag = //testModuleByPolygon( aModule, side, aOffset );
+        testRectangle( fpBBox, side );
+//printf("test %p diag %d\n", aModule, diag);fflush(0);
     if( diag != AR_FREE_CELL )
         return diag;
 
     if( TstOtherSide )
     {
-        diag = testRectangle( fpBBox, otherside );
+        diag = //testModuleByPolygon( aModule, otherside, aOffset );
+                testRectangle( fpBBox, otherside );
 
         if( diag != AR_FREE_CELL )
             return diag;
@@ -593,12 +654,6 @@ int AR_AUTOPLACER::getOptimalModulePlacement(MODULE* aModule)
 
     for( ; m_curPosition.x < xylimit.x; m_curPosition.x += m_matrix.m_GridRouting )
     {
-        if ( m_refreshCallback )
-        {
-            if ( m_refreshCallback() == AR_ABORT_PLACEMENT )
-                return AR_ABORT_PLACEMENT;
-        }
-
         m_curPosition.y = initialPos.y;
 
         for( ; m_curPosition.y < xylimit.y; m_curPosition.y += m_matrix.m_GridRouting )
@@ -657,8 +712,6 @@ const D_PAD* AR_AUTOPLACER::nearestPad( MODULE *aRefModule, D_PAD* aRefPad, cons
                 continue;
 
             auto dist = (VECTOR2I( aRefPad->GetPosition() - aOffset ) - VECTOR2I( pad->GetPosition() ) ).EuclideanNorm();
-
-            //printf("Dist %lld pad %p\n", dist, pad );
 
             if ( dist < nearestDist )
             {
@@ -743,13 +796,6 @@ static bool sortFootprintsByRatsnestSize( MODULE* ref, MODULE* compare )
 }
 
 
-/**
- * Function Module
- * find the "best" module place
- * The criteria are:
- * - Maximum ratsnest with modules already placed
- * - Max size, and number of pads max
- */
 MODULE* AR_AUTOPLACER::pickModule( )
 {
     MODULE* module;
@@ -817,54 +863,34 @@ MODULE* AR_AUTOPLACER::pickModule( )
 
 void AR_AUTOPLACER::drawPlacementRoutingMatrix( )
 {
-    int         ii, jj;
-    COLOR4D     color;
-    int         ox, oy;
-    AR_MATRIX::MATRIX_CELL top_state, bottom_state;
+    // Draw the board free area
+    m_overlay->Clear();
+    m_overlay->SetIsFill( true );
+    m_overlay->SetIsStroke( false );
 
+    SHAPE_POLY_SET freeArea = m_topFreeArea;
+    freeArea.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-    for( ii = 0; ii < m_matrix.m_Nrows; ii++ )
+    // Draw the free polygon areas, top side:
+    if( freeArea.OutlineCount() > 0 )
     {
-        oy = m_matrix.m_BrdBox.GetY() + ( ii * m_matrix.m_GridRouting );
+        m_overlay->SetIsFill( true );
+        m_overlay->SetIsStroke( false );
+        m_overlay->SetFillColor( COLOR4D(0.7, 0.0, 0.1, 0.2) );
+        m_overlay->Polygon( freeArea );
+    }
 
-        for( jj = 0; jj < m_matrix.m_Ncols; jj++ )
-        {
-            ox      = m_matrix.m_BrdBox.GetX() + (jj * m_matrix.m_GridRouting);
-            color   = COLOR4D::BLACK;
+    freeArea = m_bottomFreeArea;
+    freeArea.Fracture( SHAPE_POLY_SET::PM_FAST );
 
-            top_state       = m_matrix.GetCell( ii, jj, AR_SIDE_TOP );
-            bottom_state    = m_matrix.GetCell( ii, jj, AR_SIDE_BOTTOM );
-
-            if(top_state || bottom_state)
-            {
-             //   printf("[%d, %d] [%d, %d] TS %x BS %x\n",ii,jj, ox, oy, top_state, bottom_state );
-            }
-
-            if( top_state & CELL_IS_ZONE )
-                color = COLOR4D( BLUE );
-
-            // obstacles
-            if( ( top_state & CELL_IS_EDGE ) || ( bottom_state & CELL_IS_EDGE ) )
-                color = COLOR4D::WHITE;
-            else if( top_state & ( CELL_IS_HOLE | CELL_IS_MODULE ) )
-                color = COLOR4D( LIGHTRED );
-            else if( bottom_state & ( CELL_IS_HOLE | CELL_IS_MODULE) )
-                color = COLOR4D( LIGHTGREEN );
-            else    // Display the filling and keep out regions.
-            {
-                if( m_matrix.GetDist( ii, jj, AR_SIDE_TOP )
-                    || m_matrix.GetDist( ii, jj, AR_SIDE_BOTTOM ) )
-                    color = DARKGRAY;
-            }
-
-            m_overlay->SetIsFill(true);
-            m_overlay->SetFillColor( color );
-
-            VECTOR2D p(ox, oy);
-            m_overlay->Circle(p, m_matrix.m_GridRouting/4 );
-        }
+    // Draw the free polygon areas, bottom side:
+    if( freeArea.OutlineCount() > 0 )
+    {
+        m_overlay->SetFillColor( COLOR4D(0.0, 0.7, 0.0, 0.2) );
+        m_overlay->Polygon( freeArea );
     }
 }
+
 
 AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
                                            BOARD_COMMIT* aCommit, bool aPlaceOffboardModules )
@@ -924,16 +950,11 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
     for ( auto m : m_board->Modules() )
     {
         if( m->NeedsPlaced() )    // Erase from screen
-        {
             moduleCount++;
-        }
         else
-        {
             genModuleOnRoutingMatrix( m );
-        }
     }
 
-    drawPlacementRoutingMatrix();
 
     int         cnt = 0;
     wxString    msg;
@@ -944,7 +965,11 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
         m_progressReporter->SetMaxProgress( moduleCount );
     }
 
-    wxSafeYield();        // allows refreshing screen and UI
+    drawPlacementRoutingMatrix();
+
+    if( m_refreshCallback )
+        m_refreshCallback( nullptr );
+
 
     while( ( module = pickModule( ) ) != nullptr )
     {
@@ -956,8 +981,6 @@ AR_RESULT AR_AUTOPLACER::AutoplaceModules( std::vector<MODULE*> aModules,
                                           _( "Autoplacing %s" ), module->GetReference() ) );
 
         double initialOrient = module->GetOrientation();
-        // Display fill area of interest, barriers, penalties.
-        //drawPlacementRoutingMatrix( );
 
         error = getOptimalModulePlacement( module );
         double bestScore = m_minCost;
@@ -1061,6 +1084,11 @@ end_of_tst:
         genModuleOnRoutingMatrix( module );
         module->SetIsPlaced( true );
         module->SetNeedsPlaced( false );
+        drawPlacementRoutingMatrix();
+
+        if( m_refreshCallback )
+            m_refreshCallback( module );
+
 
         if( m_progressReporter )
         {
@@ -1073,8 +1101,6 @@ end_of_tst:
             }
         }
         cnt++;
-
-        wxSafeYield();        // allows refreshing screen and UI
     }
 
     m_curPosition = memopos;

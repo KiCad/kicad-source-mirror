@@ -70,12 +70,19 @@ public:
         m_gridSize = aGrid;
     }
 
+    /**
+     * Set a VIEW overlay to draw items during a autoplace session.
+     */
     void SetOverlay( std::shared_ptr<KIGFX::VIEW_OVERLAY> aOverlay )
     {
         m_overlay = aOverlay;
     }
 
-    void SetRefreshCallback( std::function<int()> aCallback )
+    /**
+     * a callback function to redraw on screen the view after changes,
+     * for instance after moving a footprint
+     */
+    void SetRefreshCallback( std::function<int( MODULE* aModule )> aCallback )
     {
         m_refreshCallback = aCallback;
     }
@@ -86,21 +93,49 @@ public:
     }
 
 private:
-    void         drawPlacementRoutingMatrix();
+    void         drawPlacementRoutingMatrix();  // draw the working area (shows free and occupied areas)
     void         rotateModule( MODULE* module, double angle, bool incremental );
     int          genPlacementRoutingMatrix();
+
+    /** fills m_matrix cells from m_boardShape.
+     * cells inside m_boardShape are set to CELL_IS_ZONE
+     */
+    bool         fillMatrix();
     void         genModuleOnRoutingMatrix( MODULE* Module );
-    int          propagate();
+
     int          testRectangle( const EDA_RECT& aRect, int side );
+    int          testModuleByPolygon( MODULE* aModule,int aSide, const wxPoint& aOffset );
     unsigned int calculateKeepOutArea( const EDA_RECT& aRect, int side );
     int          testModuleOnBoard( MODULE* aModule, bool TstOtherSide, const wxPoint& aOffset );
     int          getOptimalModulePlacement( MODULE* aModule );
     double       computePlacementRatsnestCost( MODULE* aModule, const wxPoint& aOffset );
+
+    /**
+     * Find the "best" module place. The criteria are:
+     * - Maximum ratsnest with modules already placed
+     * - Max size, and number of pads max
+     */
     MODULE*      pickModule();
+
     void         placeModule( MODULE* aModule, bool aDoNotRecreateRatsnest, const wxPoint& aPos );
     const D_PAD* nearestPad( MODULE* aRefModule, D_PAD* aRefPad, const wxPoint& aOffset );
 
+    // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
+    void         addFpBody( wxPoint aStart, wxPoint aEnd, LSET aLayerMask );
+
+    // Add a polygonal shape (rectangle) to m_fpAreaFront and/or m_fpAreaBack
+    void         addPad( D_PAD* aPad, int aClearance );
+
+    // Build m_fpAreaTop and m_fpAreaBottom polygonal shapes for aFootprint.
+    // aFpClearance is a mechanical clearance.
+    void         buildFpAreas( MODULE* aFootprint, int aFpClearance );
+
     AR_MATRIX m_matrix;
+    SHAPE_POLY_SET m_topFreeArea;       // The polygonal description of the top side free areas;
+    SHAPE_POLY_SET m_bottomFreeArea;    // The polygonal description of the bottom side free areas;
+    SHAPE_POLY_SET m_boardShape;        // The polygonal description of the board;
+    SHAPE_POLY_SET m_fpAreaTop;         // The polygonal description of the footprint to place, top side;
+    SHAPE_POLY_SET m_fpAreaBottom;      // The polygonal description of the footprint to place, bottom side;
 
     BOARD* m_board;
 
@@ -109,10 +144,10 @@ private:
     double  m_minCost;
     int     m_gridSize;
 
-    std::shared_ptr<KIGFX::VIEW_OVERLAY> m_overlay;
-    std::unique_ptr<CONNECTIVITY_DATA>   m_connectivity;
-    std::function<int()>                 m_refreshCallback;
-    PROGRESS_REPORTER*                   m_progressReporter;
+    std::shared_ptr<KIGFX::VIEW_OVERLAY>    m_overlay;
+    std::unique_ptr<CONNECTIVITY_DATA>      m_connectivity;
+    std::function<int( MODULE* aModule )>   m_refreshCallback;
+    PROGRESS_REPORTER*                      m_progressReporter;
 };
 
 #endif

@@ -68,6 +68,25 @@ AUTOPLACE_TOOL::~AUTOPLACE_TOOL()
 }
 
 
+// A helper call back function used by autoplace.
+// It is called by the autoplacer to update the view, when something must be displayed
+// especially each time a footprint is autoplaced,
+static PCB_BASE_EDIT_FRAME* fparent;
+static int refreshCallback( MODULE* aModule )
+{
+    if( aModule )
+    {
+        fparent->GetGalCanvas()->GetView()->Update( aModule );
+    }
+
+    fparent->GetGalCanvas()->GetView()->MarkDirty();
+    fparent->GetGalCanvas()->Refresh();
+    wxSafeYield();  // Give a slice of time to refresh the display
+
+    return 0;
+}
+
+
 int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboard )
 {
     auto overlay = view()->MakeOverlay();
@@ -79,6 +98,9 @@ int AUTOPLACE_TOOL::autoplace( std::vector<MODULE*>& aModules, bool aPlaceOffboa
     BOARD_COMMIT commit( frame() );
 
     autoplacer.SetOverlay( overlay );
+    fparent = frame();
+    std::function<int( MODULE* aModule )> callback = refreshCallback;
+    autoplacer.SetRefreshCallback( callback );
 
     std::unique_ptr<WX_PROGRESS_REPORTER> progressReporter(
             new WX_PROGRESS_REPORTER( frame(), _( "Autoplace Components" ), 1 ) );
