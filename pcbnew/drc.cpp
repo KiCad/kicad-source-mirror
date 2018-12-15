@@ -978,11 +978,14 @@ void DRC::testCopperTextAndGraphics()
 
     for( MODULE* module : m_pcb->Modules() )
     {
-        if( IsCopperLayer( module->Reference().GetLayer() ) )
-            testCopperTextItem( &module->Reference());
+        TEXTE_MODULE& ref = module->Reference();
+        TEXTE_MODULE& val = module->Value();
 
-        if( IsCopperLayer( module->Value().GetLayer() ) )
-            testCopperTextItem( &module->Value());
+        if( ref.IsVisible() && IsCopperLayer( ref.GetLayer() ) )
+            testCopperTextItem( &ref );
+
+        if( val.IsVisible() && IsCopperLayer( val.GetLayer() ) )
+            testCopperTextItem( &val );
 
         if( module->IsNetTie() )
             continue;
@@ -991,7 +994,7 @@ void DRC::testCopperTextAndGraphics()
         {
             if( IsCopperLayer( item->GetLayer() ) )
             {
-                if( item->Type() == PCB_MODULE_TEXT_T )
+                if( item->Type() == PCB_MODULE_TEXT_T && ( (TEXTE_MODULE*) item )->IsVisible() )
                     testCopperTextItem( item );
                 else if( item->Type() == PCB_MODULE_EDGE_T )
                     testCopperDrawItem( static_cast<DRAWSEGMENT*>( item ));
