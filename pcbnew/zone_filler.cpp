@@ -555,8 +555,11 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             break;
 
         case PCB_MODULE_TEXT_T:
-            ( (TEXTE_PCB*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
-                    &aFeatures, zclearance );
+            if( ( (TEXTE_MODULE*) aItem )->IsVisible() )
+            {
+                ( (TEXTE_MODULE*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
+                        &aFeatures, zclearance );
+            }
             break;
 
         default:
