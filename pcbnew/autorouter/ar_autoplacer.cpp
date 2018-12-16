@@ -170,6 +170,17 @@ bool AR_AUTOPLACER::fillMatrix()
     // Calculate the y limits of the area
     for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += step )
     {
+        // The row index (vertical position) of current line scan inside the placement matrix
+        int idy = (refy - coord_orgin.y) / step;
+
+        // Ensure we are still inside the placement matrix
+        if( idy >= m_matrix.m_Nrows )
+            break;
+
+        // Ensure we are inside the placement matrix
+        if( idy <= 0 )
+            continue;
+
         // find all intersection points of an infinite line with polyline sides
         x_coordinates.clear();
 
@@ -234,14 +245,6 @@ bool AR_AUTOPLACER::fillMatrix()
         // Fill cells having the same Y coordinate
         int iimax = x_coordinates.size() - 1;
 
-        int idy = (refy - coord_orgin.y) / step;
-
-        if( idy > m_matrix.m_Nrows )
-            break;
-
-        if( idy < 0 )
-            continue;
-
         for( int ii = 0; ii < iimax; ii += 2 )
         {
             int seg_start_x = x_coordinates[ii] - coord_orgin.x;
@@ -254,7 +257,7 @@ bool AR_AUTOPLACER::fillMatrix()
                 if( idx * step > seg_end_x )
                     break;
 
-                if( idx >= 0 && ( idx * step >= seg_start_x ) )
+                if( idx * step >= seg_start_x )
                     m_matrix.SetCell( idy, idx, AR_SIDE_BOTTOM, CELL_IS_ZONE );
             }
 
