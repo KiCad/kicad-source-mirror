@@ -619,13 +619,16 @@ public:
         if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
             return;
 
-        Vertex* outerNode = createList( aPoly );
-        if( !outerNode )
+        /// Place the polygon Vertices into a circular linked list
+        /// and check for lists that have only 0, 1 or 2 elements and
+        /// therefore cannot be polygons
+        Vertex* firstVertex = createList( aPoly );
+        if( !firstVertex || firstVertex->prev == firstVertex->next )
             return;
 
-        outerNode->updateList();
+        firstVertex->updateList();
 
-        if( !earcutList( outerNode ) )
+        if( !earcutList( firstVertex ) )
         {
             m_vertices.clear();
             m_result.Clear();
@@ -635,13 +638,13 @@ public:
 
             for( auto path : simplified )
             {
-                outerNode = createList( path );
+                firstVertex = createList( path );
 
-                if( !outerNode )
+                if( !firstVertex )
                     return;
 
-                outerNode->updateList();
-                earcutList( outerNode );
+                firstVertex->updateList();
+                earcutList( firstVertex );
             }
         }
 
