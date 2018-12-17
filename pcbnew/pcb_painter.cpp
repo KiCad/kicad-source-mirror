@@ -973,7 +973,6 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         if( shape.OutlineCount() == 0 )
             break;
 
-#if 0
         // On Opengl, a not convex filled polygon is usually drawn by using triangles as primitives.
         // Although CacheTriangulation() can create basic triangle primitives
         // to draw the polygon solid shape on Opengl, it is not used because it does not work fine
@@ -985,7 +984,7 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         {
             shape.CacheTriangulation();
         }
-#endif
+
         m_gal->Save();
 
         if( MODULE* module = aSegment->GetParentModule() )

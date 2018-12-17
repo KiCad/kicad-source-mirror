@@ -301,9 +301,31 @@ private:
     Vertex* createList( const ClipperLib::Path& aPath )
     {
         Vertex* tail = nullptr;
+        double sum = 0.0;
+        auto len = aPath.size();
 
-        for( auto point : aPath )
-            tail = insertVertex( VECTOR2I( point.X, point.Y ), tail );
+        // Check for winding order
+        for( size_t i = 0; i < len; i++ )
+        {
+            auto p1 = aPath.at( i );
+            auto p2 = aPath.at( ( i + 1 ) < len ? i + 1 : 0 );
+
+            sum += ( ( p2.X - p1.X ) * ( p2.Y - p1.Y ) );
+        }
+
+        if( sum <= 0.0 )
+        {
+            for( auto point : aPath )
+                tail = insertVertex( VECTOR2I( point.X, point.Y ), tail );
+        }
+        else
+        {
+            for( size_t i = 0; i < len; i++ )
+            {
+                auto p = aPath.at( len - i );
+                tail = insertVertex( VECTOR2I( p.X, p.Y ), tail );
+            }
+        }
 
         if( tail && ( *tail == *tail->next ) )
         {
@@ -322,9 +344,23 @@ private:
     Vertex* createList( const SHAPE_LINE_CHAIN& points )
     {
         Vertex* tail = nullptr;
+        double sum = 0.0;
 
+        // Check for winding order
         for( int i = 0; i < points.PointCount(); i++ )
-            tail = insertVertex( points.CPoint( i ), tail );
+        {
+            VECTOR2D p1 = points.CPoint( i );
+            VECTOR2D p2 = points.CPoint( i + 1 );
+
+            sum += ( ( p2.x - p1.x ) * ( p2.y - p1.y ) );
+        }
+
+        if( sum > 0.0 )
+            for( int i = points.PointCount() - 1; i >= 0; i--)
+                tail = insertVertex( points.CPoint( i ), tail );
+        else
+            for( int i = 0; i < points.PointCount(); i++ )
+                tail = insertVertex( points.CPoint( i ), tail );
 
         if( tail && ( *tail == *tail->next ) )
         {
