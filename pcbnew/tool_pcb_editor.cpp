@@ -290,7 +290,7 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ADD_TOOL( ID_OPEN_MODULE_VIEWER, modview_icon_xpm, _( "Open footprint viewer" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    ADD_TOOL( ID_GET_NETLIST, netlist_xpm, _( "Read netlist" ) );
+    ADD_TOOL( ID_GET_NETLIST, netlist_xpm, _( "Load netlist" ) );
     ADD_TOOL( ID_UPDATE_PCB_FROM_SCH, update_pcb_from_sch_xpm, _( "Update PCB from schematic" ) );
     ADD_TOOL( ID_DRC_CONTROL, erc_xpm, _( "Perform design rules check" ) );
 
