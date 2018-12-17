@@ -1875,7 +1875,13 @@ void SHAPE_POLY_SET::CacheTriangulation()
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
         PolygonTriangulation tess( *m_triangulatedPolys.back() );
 
-        tess.TesselatePolygon( tmpSet.Polygon( i ).front() );
+        // If the tesselation fails, we re-fracture the polygon, which will
+        // first simplify the system before fracturing and removing the holes
+        if( !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
+        {
+            tmpSet.Fracture( PM_FAST );
+            tess.TesselatePolygon( tmpSet.Polygon( i ).front() );
+        }
     }
 
     m_triangulationValid = true;

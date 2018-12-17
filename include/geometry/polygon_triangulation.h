@@ -322,7 +322,7 @@ private:
         {
             for( size_t i = 0; i < len; i++ )
             {
-                auto p = aPath.at( len - i );
+                auto p = aPath.at( len - i - 1 );
                 tail = insertVertex( VECTOR2I( p.X, p.Y ), tail );
             }
         }
@@ -647,44 +647,27 @@ private:
 
 public:
 
-    void TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
+    bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
     {
         ClipperLib::Clipper c;
         m_bbox = aPoly.BBox();
+        m_result.Clear();
 
         if( !m_bbox.GetWidth() || !m_bbox.GetHeight() )
-            return;
+            return false;
 
         /// Place the polygon Vertices into a circular linked list
         /// and check for lists that have only 0, 1 or 2 elements and
         /// therefore cannot be polygons
         Vertex* firstVertex = createList( aPoly );
         if( !firstVertex || firstVertex->prev == firstVertex->next )
-            return;
+            return false;
 
         firstVertex->updateList();
 
-        if( !earcutList( firstVertex ) )
-        {
-            m_vertices.clear();
-            m_result.Clear();
-
-            ClipperLib::Paths simplified;
-            ClipperLib::SimplifyPolygon( aPoly.convertToClipper( true ), simplified );
-
-            for( auto path : simplified )
-            {
-                firstVertex = createList( path );
-
-                if( !firstVertex )
-                    return;
-
-                firstVertex->updateList();
-                earcutList( firstVertex );
-            }
-        }
-
+        auto retval = earcutList( firstVertex );
         m_vertices.clear();
+        return retval;
     }
 };
 
