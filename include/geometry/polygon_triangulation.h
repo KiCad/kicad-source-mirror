@@ -310,7 +310,7 @@ private:
             auto p1 = aPath.at( i );
             auto p2 = aPath.at( ( i + 1 ) < len ? i + 1 : 0 );
 
-            sum += ( ( p2.X - p1.X ) * ( p2.Y - p1.Y ) );
+            sum += ( ( p2.X - p1.X ) * ( p2.Y + p1.Y ) );
         }
 
         if( sum <= 0.0 )
@@ -352,7 +352,7 @@ private:
             VECTOR2D p1 = points.CPoint( i );
             VECTOR2D p2 = points.CPoint( i + 1 );
 
-            sum += ( ( p2.x - p1.x ) * ( p2.y - p1.y ) );
+            sum += ( ( p2.x - p1.x ) * ( p2.y + p1.y ) );
         }
 
         if( sum > 0.0 )
