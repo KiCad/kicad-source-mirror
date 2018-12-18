@@ -323,9 +323,14 @@ bool KICADPCB::parseLayers( SEXPR::SEXPR* data )
             wxLogMessage( "%s\n", ostr.str().c_str() );
             return false;
         }
+        std::string ref;
 
-        m_layersNames[child->GetChild( 1 )->GetSymbol()] =
-                      child->GetChild( 0 )->GetInteger();
+        if( child->GetChild( 1 )->IsSymbol() )
+            ref = child->GetChild( 1 )->GetSymbol();
+        else
+            ref = child->GetChild( 1 )->GetString();
+
+        m_layersNames[ref] = child->GetChild( 0 )->GetInteger();
     }
 
     return true;
