@@ -1869,12 +1869,10 @@ void SHAPE_POLY_SET::CacheTriangulation()
         tmpSet.Fracture( PM_FAST );
 
     m_triangulatedPolys.clear();
+    m_triangulationValid = true;
 
     for( int i = 0; i < tmpSet.OutlineCount(); i++ )
     {
-        if( tmpSet.Outline( i ).PointCount() < 3 )  // malformed polygon
-            continue;
-
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
         PolygonTriangulation tess( *m_triangulatedPolys.back() );
 
@@ -1883,12 +1881,17 @@ void SHAPE_POLY_SET::CacheTriangulation()
         if( !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
         {
             tmpSet.Fracture( PM_FAST );
-            tess.TesselatePolygon( tmpSet.Polygon( i ).front() );
+
+            if( !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
+            {
+                m_triangulatedPolys.pop_back();
+                m_triangulationValid = false;
+            }
         }
     }
 
-    m_triangulationValid = true;
-    m_hash = checksum();
+    if( m_triangulationValid )
+        m_hash = checksum();
 }
 
 

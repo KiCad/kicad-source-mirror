@@ -651,9 +651,6 @@ public:
     {
         ClipperLib::Clipper c;
 
-        if( aPoly.PointCount() < 3 )    // Malformed polygon
-            return false;
-
         m_bbox = aPoly.BBox();
         m_result.Clear();
 
