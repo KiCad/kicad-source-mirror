@@ -262,8 +262,8 @@ protected:
 
 public:
     PCB_LAYER_BOX_SELECTOR* m_SelLayerBox;  // a combo box to display and select active layer
-    wxChoice* m_SelTrackWidthBox;           // a choice box to display and select current track width
-    wxChoice* m_SelViaSizeBox;              // a choice box to display and select current via diameter
+    wxComboBox* m_SelTrackWidthBox;         // a choice box to display and select current track width
+    wxComboBox* m_SelViaSizeBox;            // a choice box to display and select current via diameter
 
     bool m_show_microwave_tools;
     bool m_show_layer_manager_tools;
@@ -353,8 +353,8 @@ public:
     void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
 
-    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox );
-    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox );
+    void UpdateTrackWidthSelectBox( wxComboBox* aTrackWidthSelectBox );
+    void UpdateViaSizeSelectBox( wxComboBox* aViaSizeSelectBox );
 
     void GetKicadAbout( wxCommandEvent& event );
 

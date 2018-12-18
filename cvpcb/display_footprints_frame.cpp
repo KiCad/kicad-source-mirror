@@ -68,8 +68,8 @@ BEGIN_EVENT_TABLE( DISPLAY_FOOTPRINTS_FRAME, PCB_BASE_FRAME )
     EVT_CLOSE( DISPLAY_FOOTPRINTS_FRAME::OnCloseWindow )
     EVT_TOOL( ID_OPTIONS_SETUP, DISPLAY_FOOTPRINTS_FRAME::InstallOptionsDisplay )
     EVT_TOOL( ID_CVPCB_SHOW3D_FRAME, DISPLAY_FOOTPRINTS_FRAME::Show3D_Frame )
-    EVT_CHOICE( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
-    EVT_CHOICE( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
+    EVT_COMBOBOX( ID_ON_ZOOM_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectZoom )
+    EVT_COMBOBOX( ID_ON_GRID_SELECT, DISPLAY_FOOTPRINTS_FRAME::OnSelectGrid )
 
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
     EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection )
@@ -305,16 +305,16 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     KiScaledSeparator( m_mainToolBar, this );
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxChoice( m_mainToolBar, ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString,
+                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     // Zoom selection choice box.
-    m_zoomSelectBox = new wxChoice( m_mainToolBar, ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize, 0, NULL );
+    m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
+                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     updateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 

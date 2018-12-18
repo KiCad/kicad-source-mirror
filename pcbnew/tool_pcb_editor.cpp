@@ -583,18 +583,16 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     /* Set up toolbar items */
 
     // Creates box to display and choose tracks widths:
-    m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
-                                       ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
-                                       wxDefaultPosition, wxDefaultSize,
-                                       0, NULL );
+    m_SelTrackWidthBox = new wxComboBox( m_auxiliaryToolBar,
+                                       ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, wxEmptyString,
+                                       wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     UpdateTrackWidthSelectBox( m_SelTrackWidthBox );
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
 
     // Creates box to display and choose vias diameters:
-    m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_AUX_TOOLBAR_PCB_VIA_SIZE,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+    m_SelViaSizeBox = new wxComboBox( m_auxiliaryToolBar,
+                                    ID_AUX_TOOLBAR_PCB_VIA_SIZE, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     UpdateViaSizeSelectBox( m_SelViaSizeBox );
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -609,20 +607,17 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Add the box to display and select the current grid size:
     KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_ON_GRID_SELECT,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+    m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxEmptyString,
+                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     UpdateGridSelectBox();
 
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom
     KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
-                                    ID_ON_ZOOM_SELECT,
-                                    wxDefaultPosition, wxDefaultSize,
-                                    0, NULL );
+    m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar,
+                                    ID_ON_ZOOM_SELECT, wxEmptyString,
+                                    wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     updateZoomSelectBox();
     m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
 
@@ -631,7 +626,7 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 }
 
 
-void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox )
+void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxComboBox* aTrackWidthSelectBox )
 {
     if( aTrackWidthSelectBox == NULL )
         return;
@@ -672,7 +667,7 @@ void PCB_EDIT_FRAME::UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox )
 }
 
 
-void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox )
+void PCB_EDIT_FRAME::UpdateViaSizeSelectBox( wxComboBox* aViaSizeSelectBox )
 {
     if( aViaSizeSelectBox == NULL )
         return;

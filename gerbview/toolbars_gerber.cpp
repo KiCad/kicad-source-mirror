@@ -119,8 +119,9 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     // Creates box to display and choose components:
     if( !m_SelComponentBox )
     {
-        m_SelComponentBox = new wxChoice( m_auxiliaryToolBar,
-                                          ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE );
+        m_SelComponentBox = new wxComboBox( m_auxiliaryToolBar,
+                                          ID_GBR_AUX_TOOLBAR_PCB_CMP_CHOICE, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
         m_SelComponentBox->SetToolTip( _("Highlight items belonging to this component") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Cmp: ") );
         m_auxiliaryToolBar->AddControl( text );
@@ -131,8 +132,9 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     // Creates choice box to display net names and highlight selected:
     if( !m_SelNetnameBox )
     {
-        m_SelNetnameBox = new wxChoice( m_auxiliaryToolBar,
-                                        ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE );
+        m_SelNetnameBox = new wxComboBox( m_auxiliaryToolBar,
+                                        ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE, wxEmptyString,
+                                        wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
         m_SelNetnameBox->SetToolTip( _("Highlight items belonging to this net") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Net:" ) );
         m_auxiliaryToolBar->AddControl( text );
@@ -143,8 +145,9 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     // Creates choice box to display aperture attributes and highlight selected:
     if( !m_SelAperAttributesBox )
     {
-        m_SelAperAttributesBox = new wxChoice( m_auxiliaryToolBar,
-                                               ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE );
+        m_SelAperAttributesBox = new wxComboBox( m_auxiliaryToolBar,
+                                               ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE, wxEmptyString,
+                                               wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
         m_SelAperAttributesBox->SetToolTip( _("Highlight items with this aperture attribute") );
         text = new wxStaticText( m_auxiliaryToolBar, wxID_ANY, _( "Attr:" ) );
         m_auxiliaryToolBar->AddControl( text );
@@ -165,16 +168,16 @@ void GERBVIEW_FRAME::ReCreateAuxiliaryToolbar()
     if( !m_gridSelectBox )
     {
         KiScaledSeparator( m_auxiliaryToolBar, this );
-        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_GRID_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_gridSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_GRID_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
         m_auxiliaryToolBar->AddControl( m_gridSelectBox );
     }
 
     if( !m_zoomSelectBox )
     {
         KiScaledSeparator( m_auxiliaryToolBar, this );
-        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT,
-                                        wxDefaultPosition, wxDefaultSize, 0, nullptr );
+        m_zoomSelectBox = new wxComboBox( m_auxiliaryToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
         m_auxiliaryToolBar->AddControl( m_zoomSelectBox );
     }
 

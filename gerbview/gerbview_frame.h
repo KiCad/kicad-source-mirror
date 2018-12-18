@@ -170,9 +170,9 @@ protected:
     wxString                m_lastFileName;
 
 public:
-    wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
-    wxChoice* m_SelNetnameBox;                  // a choice box to display and highlight netlist graphic items
-    wxChoice* m_SelAperAttributesBox;           // a choice box to display aperture attributes and highlight items
+    wxComboBox* m_SelComponentBox;              // a choice box to display and highlight component graphic items
+    wxComboBox* m_SelNetnameBox;                // a choice box to display and highlight netlist graphic items
+    wxComboBox* m_SelAperAttributesBox;         // a choice box to display aperture attributes and highlight items
     GBR_LAYER_BOX_SELECTOR* m_SelLayerBox;      // The combobox to select the current active graphic layer
                                                 // (which is drawn on top on the other layers
     DCODE_SELECTION_BOX*    m_DCodeSelector;    // a list box to select the dcode Id to highlight.

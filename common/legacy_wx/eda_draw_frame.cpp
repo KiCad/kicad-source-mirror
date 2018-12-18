@@ -519,7 +519,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
     int* clientData;
     int  eventId = ID_POPUP_GRID_LEVEL_100;
 
-    if( event.GetEventType() == wxEVT_CHOICE )
+    if( event.GetEventType() == wxEVT_COMBOBOX )
     {
         if( m_gridSelectBox == NULL )   // Should not happen
             return;
