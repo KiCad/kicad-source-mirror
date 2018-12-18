@@ -35,6 +35,7 @@ add_executable( qa_pcbnew
     ../../common/observable.cpp
 
     test_graphics_import_mgr.cpp
+    test_pad_naming.cpp
 )
 
 if( BUILD_GITHUB_PLUGIN )

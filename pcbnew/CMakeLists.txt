@@ -280,6 +280,7 @@ set( PCBNEW_CLASS_SRCS
     onleftclick.cpp
     onrightclick.cpp
     pad_edit_functions.cpp
+    pad_naming.cpp
     pcb_base_edit_frame.cpp
     pcb_footprint_edit_utils.cpp
     pcb_layer_box_selector.cpp

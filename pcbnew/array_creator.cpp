@@ -27,7 +27,9 @@
  */
 
 #include "array_creator.h"
+
 #include <board_commit.h>
+#include <pad_naming.h>
 
 #include <dialogs/dialog_create_array.h>
 
@@ -108,7 +110,7 @@ void ARRAY_CREATOR::Invoke()
                 {
                     D_PAD* pad = static_cast<D_PAD*>( new_item );
 
-                    if( !pad->IsAperturePad() )
+                    if( PAD_NAMING::PadCanHaveName( *pad ) )
                         pad->SetName( array_opts->GetItemNumber( ptN ) );
                 }
             }
