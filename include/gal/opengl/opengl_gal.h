@@ -86,6 +86,8 @@ public:
 
     virtual ~OPENGL_GAL();
 
+    virtual bool IsOpenGlEngine() override { return true; }
+
     /// @copydoc GAL::IsInitialized()
     virtual bool IsInitialized() const override
     {

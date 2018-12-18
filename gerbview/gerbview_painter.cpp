@@ -260,10 +260,20 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
         for( auto it = absolutePolygon.Iterate( 0 ); it; ++it )
             *it = aItem->GetABPosition( *it );
 
-        if( !isFilled )
+        // Degenerated polygons (having < 3 points) are drawn as lines
+        // to avoid issues in draw polygon functions
+        if( !isFilled || absolutePolygon.COutline( 0 ).PointCount() < 3 )
             m_gal->DrawPolyline( absolutePolygon.COutline( 0 ) );
         else
+        {
+            // On Opengl, a not convex filled polygon is usually drawn by using triangles as primitives.
+            // CacheTriangulation() can create basic triangle primitives to draw the polygon solid shape
+            // on Opengl
+            if( m_gal->IsOpenGlEngine() )
+                absolutePolygon.CacheTriangulation();
+
             m_gal->DrawPolygon( absolutePolygon );
+        }
 
         break;
     }

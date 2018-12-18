@@ -75,6 +75,12 @@ public:
     /// @brief Returns true if the GAL canvas is visible on the screen.
     virtual bool IsVisible() const { return true; }
 
+    /// @brief Returns true if the GAL engine is a cairo based type.
+    virtual bool IsCairoEngine() { return false; }
+
+    /// @brief Returns true if the GAL engine is a opengl based type.
+    virtual bool IsOpenGlEngine() { return false; }
+
     // ---------------
     // Drawing methods
     // ---------------

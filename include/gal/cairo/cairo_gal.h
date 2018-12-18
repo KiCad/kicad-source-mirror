@@ -72,6 +72,8 @@ public:
 
     virtual ~CAIRO_GAL_BASE();
 
+    virtual bool IsCairoEngine() override { return true; }
+
     // ---------------
     // Drawing methods
     // ---------------

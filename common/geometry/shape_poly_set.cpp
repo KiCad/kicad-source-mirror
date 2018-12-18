@@ -1872,6 +1872,9 @@ void SHAPE_POLY_SET::CacheTriangulation()
 
     for( int i = 0; i < tmpSet.OutlineCount(); i++ )
     {
+        if( tmpSet.Outline( i ).PointCount() < 3 )  // malformed polygon
+            continue;
+
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
         PolygonTriangulation tess( *m_triangulatedPolys.back() );
 

@@ -974,13 +974,10 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
             break;
 
         // On Opengl, a not convex filled polygon is usually drawn by using triangles as primitives.
-        // Although CacheTriangulation() can create basic triangle primitives
-        // to draw the polygon solid shape on Opengl, it is not used because it does not work fine
-        // with any polygon. It must be a simple polygon.
-        // And unfortunately, calling shape.Simplify( PM_FAST) is very slow.
-        // So for now we just use GLU tesselation (much slower, but works with any polygon)
-        // This section is left until a better way is found
-        if( !shape.IsTriangulationUpToDate() )
+        // CacheTriangulation() can create basic triangle primitives to draw the polygon solid shape
+        // on Opengl.
+        // GLU tesselation is much slower, so currently we are using our tesselation.
+        if( m_gal->IsOpenGlEngine() && !shape.IsTriangulationUpToDate() )
         {
             shape.CacheTriangulation();
         }
