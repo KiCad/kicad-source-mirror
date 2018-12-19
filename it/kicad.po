@@ -77,8 +77,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-15 17:12+0100\n"
-"PO-Revision-Date: 2018-12-15 17:26+0100\n"
+"POT-Creation-Date: 2018-12-19 08:09+0100\n"
+"PO-Revision-Date: 2018-12-19 08:12+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1528,8 +1528,9 @@ msgstr "Info"
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:126
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:327
 #: pcbnew/footprint_libraries_utils.cpp:484
-#: pcbnew/footprint_libraries_utils.cpp:972 pcbnew/router/router_tool.cpp:1008
-#: pcbnew/router/router_tool.cpp:1157 pcbnew/zone_filler.cpp:217
+#: pcbnew/footprint_libraries_utils.cpp:972 pcbnew/router/router_tool.cpp:1015
+#: pcbnew/router/router_tool.cpp:1164 pcbnew/router/router_tool.cpp:1240
+#: pcbnew/zone_filler.cpp:217
 msgid "Confirmation"
 msgstr "Conferma"
 
@@ -1902,7 +1903,7 @@ msgid "Mirror Y"
 msgstr "Ribalta in Y"
 
 #: common/dialogs/dialog_image_editor_base.cpp:39 pcbnew/onrightclick.cpp:942
-#: pcbnew/tools/edit_tool.cpp:694
+#: pcbnew/tools/edit_tool.cpp:696
 msgid "Rotate"
 msgstr "Ruota"
 
@@ -4352,7 +4353,7 @@ msgstr "Misura interattivamente distanze tra punti"
 #: gerbview/tools/selection_tool.cpp:807
 #: pcbnew/menubar_footprint_editor.cpp:396 pcbnew/menubar_pcb_editor.cpp:244
 #: pcbnew/tool_footprint_editor.cpp:184 pcbnew/tool_pcb_editor.cpp:508
-#: pcbnew/tools/edit_tool.cpp:1248
+#: pcbnew/tools/edit_tool.cpp:1250
 msgid "Measure distance"
 msgstr "Misura la distanza"
 
@@ -9193,7 +9194,7 @@ msgstr "Modifica opzioni arco"
 #: pcbnew/onrightclick.cpp:661 pcbnew/onrightclick.cpp:768
 #: pcbnew/onrightclick.cpp:851 pcbnew/onrightclick.cpp:908
 #: pcbnew/onrightclick.cpp:954 pcbnew/pcb_parser.cpp:597
-#: pcbnew/tools/edit_tool.cpp:127 pcbnew/tools/edit_tool.cpp:932
+#: pcbnew/tools/edit_tool.cpp:127 pcbnew/tools/edit_tool.cpp:934
 msgid "Delete"
 msgstr "Cancella"
 
@@ -10329,7 +10330,7 @@ msgstr "Sposta %s"
 #: eeschema/onrightclick.cpp:390 eeschema/onrightclick.cpp:533
 #: eeschema/onrightclick.cpp:570 eeschema/onrightclick.cpp:605
 #: eeschema/onrightclick.cpp:795 pcbnew/onrightclick.cpp:740
-#: pcbnew/tools/edit_tool.cpp:577
+#: pcbnew/tools/edit_tool.cpp:579
 msgid "Drag"
 msgstr "Trascina"
 
@@ -10996,19 +10997,19 @@ msgid ""
 msgstr ""
 "Inserire il simbolo python che implementa le funzioni SCH_PLUGIN::Symbol*()."
 
-#: eeschema/sch_sheet.cpp:669
+#: eeschema/sch_sheet.cpp:670
 msgid "Sheet Name"
 msgstr "Nome foglio"
 
-#: eeschema/sch_sheet.cpp:670
+#: eeschema/sch_sheet.cpp:671
 msgid "File Name"
 msgstr "Nome file"
 
-#: eeschema/sch_sheet.cpp:675
+#: eeschema/sch_sheet.cpp:676
 msgid "Time Stamp"
 msgstr "Marcatura temporale"
 
-#: eeschema/sch_sheet.cpp:871
+#: eeschema/sch_sheet.cpp:872
 #, c-format
 msgid "Hierarchical Sheet %s"
 msgstr "Foglio gerarchico %s"
@@ -12287,7 +12288,7 @@ msgstr "Polarità"
 #: gerbview/gerber_draw_item.cpp:724 pcbnew/class_pcb_text.cpp:131
 #: pcbnew/class_pcb_text.cpp:133 pcbnew/class_text_mod.cpp:401
 #: pcbnew/footprint_editor_onclick.cpp:297 pcbnew/tools/edit_tool.cpp:123
-#: pcbnew/tools/edit_tool.cpp:811
+#: pcbnew/tools/edit_tool.cpp:813
 msgid "Mirror"
 msgstr "Capovolgi"
 
@@ -15412,11 +15413,11 @@ msgstr "Errore durante il caricamento scheda in AppendBoardFile"
 msgid "Create an array"
 msgstr "Crea un array"
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:943
+#: pcbnew/autorouter/ar_autoplacer.cpp:967
 msgid "Autoplacing components..."
 msgstr "Autopiazzamento componenti..."
 
-#: pcbnew/autorouter/ar_autoplacer.cpp:956
+#: pcbnew/autorouter/ar_autoplacer.cpp:984
 #, c-format
 msgid "Autoplacing %s"
 msgstr "Autopiazzamento %s"
@@ -15439,11 +15440,11 @@ msgstr ""
 "Esegue la disposizione automatica dei componenti presenti fuori dal bordo "
 "della scheda"
 
-#: pcbnew/autorouter/autoplacer_tool.cpp:84
+#: pcbnew/autorouter/autoplacer_tool.cpp:106
 msgid "Autoplace Components"
 msgstr "Autopiazza componenti"
 
-#: pcbnew/autorouter/autoplacer_tool.cpp:90
+#: pcbnew/autorouter/autoplacer_tool.cpp:112
 msgid "Autoplace components"
 msgstr "Autopiazza componenti"
 
@@ -22955,7 +22956,7 @@ msgid "Select Layer and Add Blind/Buried Via"
 msgstr "Seleziona strato e piazza via cieco/sepolto"
 
 #: pcbnew/hotkeys.cpp:128 pcbnew/onrightclick.cpp:536
-#: pcbnew/router/router_tool.cpp:191
+#: pcbnew/router/router_tool.cpp:197
 msgid "Switch Track Posture"
 msgstr "Commuta postura pista"
 
@@ -24591,7 +24592,7 @@ msgstr ""
 "file: \"%s\"\n"
 "riga: %d"
 
-#: pcbnew/onleftclick.cpp:280 pcbnew/router/router_tool.cpp:726
+#: pcbnew/onleftclick.cpp:280 pcbnew/router/router_tool.cpp:732
 msgid "Tracks on Copper layers only"
 msgstr "Piste solo sugli strati in rame"
 
@@ -24658,7 +24659,7 @@ msgstr "Documentazione impronta"
 
 #: pcbnew/onrightclick.cpp:427 pcbnew/onrightclick.cpp:750
 #: pcbnew/onrightclick.cpp:944 pcbnew/tools/edit_tool.cpp:119
-#: pcbnew/tools/edit_tool.cpp:849
+#: pcbnew/tools/edit_tool.cpp:851
 msgid "Flip"
 msgstr "Ribalta"
 
@@ -24679,6 +24680,7 @@ msgid "Create Track Array..."
 msgstr "Crea schiera di tracce..."
 
 #: pcbnew/onrightclick.cpp:495 pcbnew/router/router_tool.cpp:121
+#: pcbnew/router/router_tool.cpp:127 pcbnew/router/router_tool.cpp:1242
 msgid "Break Track"
 msgstr "Interrompi pista"
 
@@ -24687,23 +24689,23 @@ msgid "Place Node"
 msgstr "Piazza nodo"
 
 #: pcbnew/onrightclick.cpp:512 pcbnew/router/length_tuner_tool.cpp:55
-#: pcbnew/router/router_tool.cpp:142
+#: pcbnew/router/router_tool.cpp:148
 msgid "End Track"
 msgstr "Finisci pista"
 
-#: pcbnew/onrightclick.cpp:516 pcbnew/router/router_tool.cpp:149
+#: pcbnew/onrightclick.cpp:516 pcbnew/router/router_tool.cpp:155
 msgid "Place Through Via"
 msgstr "Piazza via passante"
 
-#: pcbnew/onrightclick.cpp:519 pcbnew/router/router_tool.cpp:170
+#: pcbnew/onrightclick.cpp:519 pcbnew/router/router_tool.cpp:176
 msgid "Select Layer and Place Through Via..."
 msgstr "Seleziona strato e piazza via passante..."
 
-#: pcbnew/onrightclick.cpp:526 pcbnew/router/router_tool.cpp:156
+#: pcbnew/onrightclick.cpp:526 pcbnew/router/router_tool.cpp:162
 msgid "Place Blind/Buried Via"
 msgstr "Piazza via cieco/sepolto"
 
-#: pcbnew/onrightclick.cpp:530 pcbnew/router/router_tool.cpp:178
+#: pcbnew/onrightclick.cpp:530 pcbnew/router/router_tool.cpp:184
 msgid "Select Layer and Place Blind/Buried Via..."
 msgstr "Seleziona strato e piazza via cieco/sepolto..."
 
@@ -25393,11 +25395,11 @@ msgid ""
 msgstr ""
 "Inserire il modulo python che implementa le funzioni PLUGIN::Footprint*()."
 
-#: pcbnew/router/length_tuner_tool.cpp:52 pcbnew/router/router_tool.cpp:139
+#: pcbnew/router/length_tuner_tool.cpp:52 pcbnew/router/router_tool.cpp:145
 msgid "New Track"
 msgstr "Nuova pista"
 
-#: pcbnew/router/length_tuner_tool.cpp:52 pcbnew/router/router_tool.cpp:139
+#: pcbnew/router/length_tuner_tool.cpp:52 pcbnew/router/router_tool.cpp:145
 msgid "Starts laying a new track."
 msgstr "Comincia la stesura di una nuova pista."
 
@@ -25627,64 +25629,64 @@ msgstr "Trascina pista/via"
 msgid "Drags tracks and vias without breaking connections"
 msgstr "Trascina piste e via senza interrompere le connessioni"
 
-#: pcbnew/router/router_tool.cpp:122
+#: pcbnew/router/router_tool.cpp:122 pcbnew/router/router_tool.cpp:128
 msgid ""
 "Splits the track segment into two segments connected at the cursor position."
 msgstr ""
 "Divide il segmento di pista in due segmenti connessi alla posizione del "
 "puntatore."
 
-#: pcbnew/router/router_tool.cpp:127
+#: pcbnew/router/router_tool.cpp:133
 msgid "Drag (45 degree mode)"
 msgstr "Trascina (modalità a 45 gradi)"
 
-#: pcbnew/router/router_tool.cpp:128
+#: pcbnew/router/router_tool.cpp:134
 msgid "Drags the track segment while keeping connected tracks at 45 degrees."
 msgstr ""
 "Trascina il segmento di pista mentre mantiene le piste connesse a 45 gradi."
 
-#: pcbnew/router/router_tool.cpp:133
+#: pcbnew/router/router_tool.cpp:139
 msgid "Drag (free angle)"
 msgstr "Trascina (angoli liberi)"
 
-#: pcbnew/router/router_tool.cpp:134
+#: pcbnew/router/router_tool.cpp:140
 msgid ""
 "Drags the nearest joint in the track without restricting the track angle."
 msgstr ""
 "Trascina lo snodo più vicino nella pista senza limitare l'angolo della pista."
 
-#: pcbnew/router/router_tool.cpp:142
+#: pcbnew/router/router_tool.cpp:148
 msgid "Stops laying the current track."
 msgstr "Ferma la progettazione della pista corrente."
 
-#: pcbnew/router/router_tool.cpp:145
+#: pcbnew/router/router_tool.cpp:151
 msgid "Auto-end Track"
 msgstr "Auto-chiudi pista"
 
-#: pcbnew/router/router_tool.cpp:145
+#: pcbnew/router/router_tool.cpp:151
 msgid "Automagically finishes currently routed track."
 msgstr "Finisce automaticamente la pista in corso di sbroglio."
 
-#: pcbnew/router/router_tool.cpp:150
+#: pcbnew/router/router_tool.cpp:156
 msgid "Adds a through-hole via at the end of currently routed track."
 msgstr ""
 "Aggiungi un foro passante alla fine della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:157
+#: pcbnew/router/router_tool.cpp:163
 msgid "Adds a blind or buried via at the end of currently routed track."
 msgstr ""
 "Aggiunge un via cieco o sepolto alla fine della pista sbrogliata "
 "correntemente."
 
-#: pcbnew/router/router_tool.cpp:163
+#: pcbnew/router/router_tool.cpp:169
 msgid "Place Microvia"
 msgstr "Piazza microvia"
 
-#: pcbnew/router/router_tool.cpp:163
+#: pcbnew/router/router_tool.cpp:169
 msgid "Adds a microvia at the end of currently routed track."
 msgstr "Aggiunge un microvia alla fine della pista correntemente sbrogliata."
 
-#: pcbnew/router/router_tool.cpp:171
+#: pcbnew/router/router_tool.cpp:177
 msgid ""
 "Select a layer, then add a through-hole via at the end of currently routed "
 "track."
@@ -25692,7 +25694,7 @@ msgstr ""
 "Seleziona uno strato, poi aggiunge un foro passante alla fine della pista "
 "sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:179
+#: pcbnew/router/router_tool.cpp:185
 msgid ""
 "Select a layer, then add a blind or buried via at the end of currently "
 "routed track."
@@ -25700,111 +25702,111 @@ msgstr ""
 "Seleziona uno strato, poi aggiunge un via cieco o sepolto alla fine della "
 "pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:185
+#: pcbnew/router/router_tool.cpp:191
 msgid "Custom Track/Via Size..."
 msgstr "Dimensioni pista / via personalizzate..."
 
-#: pcbnew/router/router_tool.cpp:186
+#: pcbnew/router/router_tool.cpp:192
 msgid "Shows a dialog for changing the track width and via size."
 msgstr ""
 "Mostra una finestra di dialogo per la modifica della larghezza piste e via."
 
-#: pcbnew/router/router_tool.cpp:192
+#: pcbnew/router/router_tool.cpp:198
 msgid "Switches posture of the currently routed track."
 msgstr "Commuta la postura della pista sbrogliata correntemente."
 
-#: pcbnew/router/router_tool.cpp:208
+#: pcbnew/router/router_tool.cpp:214
 msgid "Select Track/Via Width"
 msgstr "Seleziona larghezza piste/via"
 
-#: pcbnew/router/router_tool.cpp:227
+#: pcbnew/router/router_tool.cpp:233
 msgid "Use Starting Track Width"
 msgstr "Usa larghezza iniziale della pista"
 
-#: pcbnew/router/router_tool.cpp:228
+#: pcbnew/router/router_tool.cpp:234
 msgid "Route using the width of the starting track."
 msgstr "Sbroglia usando la larghezza della pista iniziale."
 
-#: pcbnew/router/router_tool.cpp:232 pcbnew/router/router_tool.cpp:350
+#: pcbnew/router/router_tool.cpp:238 pcbnew/router/router_tool.cpp:356
 msgid "Use Net Class Values"
 msgstr "Usa i valori netclass"
 
-#: pcbnew/router/router_tool.cpp:233
+#: pcbnew/router/router_tool.cpp:239
 msgid "Use track and via sizes from the net class"
 msgstr "Usa dimensioni piste e via dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:237 pcbnew/router/router_tool.cpp:355
+#: pcbnew/router/router_tool.cpp:243 pcbnew/router/router_tool.cpp:361
 msgid "Use Custom Values..."
 msgstr "Usa i valori personalizzati..."
 
-#: pcbnew/router/router_tool.cpp:238
+#: pcbnew/router/router_tool.cpp:244
 msgid "Specify custom track and via sizes"
 msgstr "Specifica dimensioni piste e via personalizzate"
 
-#: pcbnew/router/router_tool.cpp:249
+#: pcbnew/router/router_tool.cpp:255
 msgid "Track netclass width"
 msgstr "Larghezza piste netclass"
 
-#: pcbnew/router/router_tool.cpp:251
+#: pcbnew/router/router_tool.cpp:257
 msgid "Track "
 msgstr "Pista "
 
-#: pcbnew/router/router_tool.cpp:265
+#: pcbnew/router/router_tool.cpp:271
 msgid "Via netclass values"
 msgstr "Usa valori netclass"
 
-#: pcbnew/router/router_tool.cpp:268
+#: pcbnew/router/router_tool.cpp:274
 msgid "Via "
 msgstr "Via "
 
-#: pcbnew/router/router_tool.cpp:271
+#: pcbnew/router/router_tool.cpp:277
 msgid ", drill "
 msgstr ", foro "
 
-#: pcbnew/router/router_tool.cpp:334
+#: pcbnew/router/router_tool.cpp:340
 msgid "Select Differential Pair Dimensions"
 msgstr "Seleziona dimensioni coppia differenziale"
 
-#: pcbnew/router/router_tool.cpp:351
+#: pcbnew/router/router_tool.cpp:357
 msgid "Use differential pair dimensions from the net class"
 msgstr "Usa dimensioni coppia differenziale dalla netclass"
 
-#: pcbnew/router/router_tool.cpp:356
+#: pcbnew/router/router_tool.cpp:362
 msgid "Specify custom differential pair dimensions"
 msgstr "Specifica dimensioni coppia differenziale personalizzate"
 
-#: pcbnew/router/router_tool.cpp:369
+#: pcbnew/router/router_tool.cpp:375
 msgid "Width "
 msgstr "Larghezza "
 
-#: pcbnew/router/router_tool.cpp:372
+#: pcbnew/router/router_tool.cpp:378
 msgid ", gap "
 msgstr ", spazio "
 
-#: pcbnew/router/router_tool.cpp:375
+#: pcbnew/router/router_tool.cpp:381
 msgid ", via gap "
 msgstr ", spazio via"
 
-#: pcbnew/router/router_tool.cpp:424
+#: pcbnew/router/router_tool.cpp:430
 msgid "Interactive Router"
 msgstr "Sbroglio interattivo"
 
-#: pcbnew/router/router_tool.cpp:599
+#: pcbnew/router/router_tool.cpp:605
 msgid "Blind/buried vias have to be enabled in the design settings."
 msgstr ""
 "I via ciechi/sepolti devono essere abilitati nelle impostazioni di "
 "progettazione."
 
-#: pcbnew/router/router_tool.cpp:605
+#: pcbnew/router/router_tool.cpp:611
 msgid "Microvias have to be enabled in the design settings."
 msgstr ""
 "I microvia devono essere abilitati nelle impostazioni di progettazione."
 
-#: pcbnew/router/router_tool.cpp:612
+#: pcbnew/router/router_tool.cpp:618
 msgid "Only through vias are allowed on 2 layer boards."
 msgstr "Solo via passanti sono consentiti su schede a due strati."
 
-#: pcbnew/router/router_tool.cpp:619
+#: pcbnew/router/router_tool.cpp:625
 msgid ""
 "Microvias can be placed only between the outer layers (F.Cu/B.Cu) and the "
 "ones directly adjacent to them."
@@ -25812,19 +25814,20 @@ msgstr ""
 "I microvia possono essere piazzati sono tra gli strati esterni (F.Cu/B.Cu) e "
 "quelli direttamente adiacenti a questi."
 
-#: pcbnew/router/router_tool.cpp:902
+#: pcbnew/router/router_tool.cpp:909
 msgid "Route Track"
 msgstr "Sbroglia pista"
 
-#: pcbnew/router/router_tool.cpp:909
+#: pcbnew/router/router_tool.cpp:916
 msgid "Router Differential Pair"
 msgstr "Sbroglia coppia differenziale"
 
-#: pcbnew/router/router_tool.cpp:1008 pcbnew/router/router_tool.cpp:1157
+#: pcbnew/router/router_tool.cpp:1015 pcbnew/router/router_tool.cpp:1164
+#: pcbnew/router/router_tool.cpp:1240
 msgid "The selected item is locked."
 msgstr "L'elemento selezionato è bloccato."
 
-#: pcbnew/router/router_tool.cpp:1010 pcbnew/router/router_tool.cpp:1159
+#: pcbnew/router/router_tool.cpp:1017 pcbnew/router/router_tool.cpp:1166
 msgid "Drag Anyway"
 msgstr "Trascina comunque"
 
@@ -26072,8 +26075,8 @@ msgid "Open footprint viewer"
 msgstr "Apri visualizzatore impronte"
 
 #: pcbnew/tool_pcb_editor.cpp:293
-msgid "Read netlist"
-msgstr "Leggi la netlist"
+msgid "Load netlist"
+msgstr "Carica netlist"
 
 #: pcbnew/tool_pcb_editor.cpp:294
 msgid "Update PCB from schematic"
@@ -26441,32 +26444,32 @@ msgstr "Copia il contenuto selezionato sugli appunti"
 msgid "Cut selected content to clipboard"
 msgstr "Taglia in contenuto selezionato sugli appunti"
 
-#: pcbnew/tools/edit_tool.cpp:616
+#: pcbnew/tools/edit_tool.cpp:618
 msgid "Edit track width/via size"
 msgstr "Larghezza piste/dimensioni via"
 
-#: pcbnew/tools/edit_tool.cpp:941
+#: pcbnew/tools/edit_tool.cpp:943
 msgid "Delete again to remove locked items"
 msgstr "Cancella nuovamente per eliminare gli elementi bloccati"
 
-#: pcbnew/tools/edit_tool.cpp:1022
+#: pcbnew/tools/edit_tool.cpp:1024
 msgid "Move exact"
 msgstr "Sposta esattamente"
 
-#: pcbnew/tools/edit_tool.cpp:1099
+#: pcbnew/tools/edit_tool.cpp:1101
 #, c-format
 msgid "Duplicated %d item(s)"
 msgstr "%d elementi duplicati"
 
-#: pcbnew/tools/edit_tool.cpp:1429
+#: pcbnew/tools/edit_tool.cpp:1431
 msgid "Select reference point for the copy..."
 msgstr "Selezionare il punto di riferimento per la copia..."
 
-#: pcbnew/tools/edit_tool.cpp:1434
+#: pcbnew/tools/edit_tool.cpp:1436
 msgid "Selection copied."
 msgstr "Selezione copiata."
 
-#: pcbnew/tools/edit_tool.cpp:1441
+#: pcbnew/tools/edit_tool.cpp:1443
 msgid "Copy cancelled."
 msgstr "Copia annullata."
 
@@ -26743,35 +26746,35 @@ msgstr "Distribuisce gli elementi selezionati lungo l'asse verticale"
 msgid "Align/Distribute"
 msgstr "Allinea/distribuisci"
 
-#: pcbnew/tools/placement_tool.cpp:220
+#: pcbnew/tools/placement_tool.cpp:239
 msgid "Align to top"
 msgstr "Allinea in alto"
 
-#: pcbnew/tools/placement_tool.cpp:257
+#: pcbnew/tools/placement_tool.cpp:272
 msgid "Align to bottom"
 msgstr "Allinea in basso"
 
-#: pcbnew/tools/placement_tool.cpp:309
+#: pcbnew/tools/placement_tool.cpp:320
 msgid "Align to left"
 msgstr "Allinea a sinistra"
 
-#: pcbnew/tools/placement_tool.cpp:361
+#: pcbnew/tools/placement_tool.cpp:368
 msgid "Align to right"
 msgstr "Allinea a destra"
 
-#: pcbnew/tools/placement_tool.cpp:399
+#: pcbnew/tools/placement_tool.cpp:401
 msgid "Align to middle"
 msgstr "Allinea a metà"
 
-#: pcbnew/tools/placement_tool.cpp:437
+#: pcbnew/tools/placement_tool.cpp:434
 msgid "Align to center"
 msgstr "Allinea al centro"
 
-#: pcbnew/tools/placement_tool.cpp:485
+#: pcbnew/tools/placement_tool.cpp:486
 msgid "Distribute horizontally"
 msgstr "Distribuisci orizzontalmente"
 
-#: pcbnew/tools/placement_tool.cpp:581
+#: pcbnew/tools/placement_tool.cpp:588
 msgid "Distribute vertically"
 msgstr "Distribuisci verticalmente"
 
