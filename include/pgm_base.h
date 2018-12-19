@@ -32,6 +32,7 @@
 #define  PGM_BASE_H_
 
 #include <map>
+#include <memory>
 #include <wx/filename.h>
 #include <wx/filehistory.h>
 #include <search_stack.h>
@@ -184,7 +185,7 @@ public:
      */
     VTBL_ENTRY void MacOpenFile( const wxString& aFileName ) = 0;
 
-    VTBL_ENTRY wxConfigBase* CommonSettings() const                 { return m_common_settings; }
+    VTBL_ENTRY wxConfigBase* CommonSettings() const { return m_common_settings.get(); }
 
     VTBL_ENTRY void SetEditorName( const wxString& aFileName );
 
@@ -362,7 +363,7 @@ protected:
 
     /// Configuration settings common to all KiCad program modules,
     /// like as in $HOME/.kicad_common
-    wxConfigBase*   m_common_settings;
+    std::unique_ptr<wxConfigBase> m_common_settings;
 
     /// full path to this program
     wxString        m_bin_dir;

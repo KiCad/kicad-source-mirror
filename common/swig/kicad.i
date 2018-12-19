@@ -100,6 +100,9 @@ principle should be easily implemented by adapting the current STL containers.
 // all the wx wrappers for wxString, wxPoint, wxRect, wxChar ..
 %include wx.i
 
+// SWIG is incompatible with std::unique_ptr
+%ignore GetNewConfig;
+
 // header files that must be wrapped
 
 %include macros.h

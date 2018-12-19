@@ -154,7 +154,6 @@ PGM_BASE::PGM_BASE()
 {
     m_pgm_checker = NULL;
     m_locale = NULL;
-    m_common_settings = NULL;
 
     m_show_env_var_dialog = true;
 
@@ -173,9 +172,7 @@ PGM_BASE::~PGM_BASE()
 void PGM_BASE::Destroy()
 {
     // unlike a normal destructor, this is designed to be called more than once safely:
-
-    delete m_common_settings;
-    m_common_settings = 0;
+    m_common_settings.reset();
 
     delete m_pgm_checker;
     m_pgm_checker = 0;
@@ -562,7 +559,7 @@ void PGM_BASE::loadCommonSettings()
         // options only in pcbnew (which was the only canvas to support them).  Since there's
         // no single right answer to where to pull the common settings from, we might as well
         // get them along with the hardware antialiasing option from pcbnew.
-        wxConfigBase* pcbnewConfig = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
+        auto pcbnewConfig = GetNewConfig( wxString::FromUTF8( "pcbnew" ) );
         wxString pcbFrameKey( PCB_EDIT_FRAME_NAME );
 
         if( !m_common_settings->HasEntry( ICON_SCALE_KEY ) )
