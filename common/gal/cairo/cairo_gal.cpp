@@ -259,6 +259,12 @@ void CAIRO_GAL_BASE::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
 }
 
 
+void CAIRO_GAL_BASE::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
+{
+    drawPoly( aPolygon );
+}
+
+
 void CAIRO_GAL_BASE::DrawCurve( const VECTOR2D& aStartPoint, const VECTOR2D& aControlPointA,
                            const VECTOR2D& aControlPointB, const VECTOR2D& aEndPoint )
 {

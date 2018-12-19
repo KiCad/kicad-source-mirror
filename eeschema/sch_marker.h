@@ -22,7 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/*
+/**
  * @file sch_marker.h
  * @brief SCH_MARKER class definition.
  */
@@ -32,10 +32,6 @@
 
 #include <sch_item_struct.h>
 #include <marker_base.h>
-
-
-/* Names for corresponding types of markers: */
-extern const wxChar* NameMarqueurType[];
 
 
 class SCH_MARKER : public SCH_ITEM, public MARKER_BASE

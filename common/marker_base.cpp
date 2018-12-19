@@ -31,11 +31,11 @@
 
 
 #include "fctsys.h"
-//#include "gr_basic.h"
 #include "base_screen.h"
 #include "common.h"
 #include "macros.h"
 #include "marker_base.h"
+#include <geometry/shape_line_chain.h>
 #include "dialog_display_info_HTML_base.h"
 
 
@@ -96,18 +96,18 @@ MARKER_BASE::MARKER_BASE( const MARKER_BASE& aMarker )
 }
 
 
-MARKER_BASE::MARKER_BASE()
+MARKER_BASE::MARKER_BASE( int aScalingFactor )
 {
-    m_ScalingFactor = 1;
+    m_ScalingFactor = aScalingFactor;
     init();
 }
 
 
 MARKER_BASE::MARKER_BASE( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
                           EDA_ITEM* aItem, const wxPoint& aPos,
-                          EDA_ITEM* bItem, const wxPoint& bPos )
+                          EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor )
 {
-    m_ScalingFactor = 1;
+    m_ScalingFactor = aScalingFactor;
     init();
 
     SetData( aUnits, aErrorCode, aMarkerPos, aItem, aPos, bItem, bPos );
@@ -116,9 +116,9 @@ MARKER_BASE::MARKER_BASE( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMa
 
 MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
                           const wxString& aText, const wxPoint& aPos,
-                          const wxString& bText, const wxPoint& bPos )
+                          const wxString& bText, const wxPoint& bPos, int aScalingFactor )
 {
-    m_ScalingFactor = 1;
+    m_ScalingFactor = aScalingFactor;
     init();
 
     SetData( aErrorCode, aMarkerPos, aText, aPos, bText, bPos );
@@ -126,9 +126,9 @@ MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
 
 
 MARKER_BASE::MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                          const wxString& aText, const wxPoint& aPos )
+                          const wxString& aText, const wxPoint& aPos, int aScalingFactor )
 {
-    m_ScalingFactor = 1;
+    m_ScalingFactor = aScalingFactor;
     init();
 
     SetData( aErrorCode, aMarkerPos, aText, aPos );
@@ -164,7 +164,31 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition ) const
 {
     EDA_RECT bbox = GetBoundingBoxMarker();
 
-    return bbox.Contains( aHitPosition );
+    // Fast hit test using boundary box. A finer test will be made if requested
+    bool hit = bbox.Contains( aHitPosition );
+
+    if( hit )   // Fine test
+    {
+        SHAPE_LINE_CHAIN polygon;
+        ShapeToPolygon( polygon );
+        VECTOR2I rel_pos( aHitPosition - m_Pos );
+        hit = polygon.PointInside( rel_pos );
+    }
+
+    return hit;
+}
+
+
+void MARKER_BASE::ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const
+{
+    // Build the marker shape polygon in internal units:
+    const int ccount = GetShapePolygonCornerCount();
+
+    for( int ii = 0; ii < ccount; ii++ )
+        aPolygon.Append( GetShapePolygonCorner( ii ) * MarkerScale() );
+
+    // Be sure aPolygon is seen as a closed polyline:
+    aPolygon.SetClosed( true );
 }
 
 

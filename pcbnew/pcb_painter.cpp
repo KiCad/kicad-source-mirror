@@ -42,6 +42,7 @@
 
 #include <gal/graphics_abstraction_layer.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/shape_line_chain.h>
 
 using namespace KIGFX;
 
@@ -1243,16 +1244,8 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
 {
-    const int scale = aMarker->MarkerScale();
-
-    // Build the marker shape polygon in internal units:
-    const int ccount = aMarker->GetShapePolygonCornerCount();
-    std::vector<VECTOR2D> arrow;
-    arrow.reserve( ccount );
-
-    for( int ii = 0; ii < ccount; ii++ )
-        arrow.push_back( VECTOR2D( aMarker->GetShapePolygonCorner( ii ).x * scale,
-                                aMarker->GetShapePolygonCorner( ii ).y * scale ) );
+    SHAPE_LINE_CHAIN polygon;
+    aMarker->ShapeToPolygon( polygon );
 
     auto strokeColor = m_pcbSettings.GetColor( aMarker, LAYER_DRC );
 
@@ -1261,7 +1254,7 @@ void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
     m_gal->SetFillColor( strokeColor );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
-    m_gal->DrawPolygon( &arrow[0], arrow.size() );
+    m_gal->DrawPolygon( polygon );
     m_gal->Restore();
 }
 

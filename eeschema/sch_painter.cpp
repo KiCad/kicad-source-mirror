@@ -52,6 +52,7 @@
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <colors_design_settings.h>
+#include <geometry/shape_line_chain.h>
 
 #include "sch_painter.h"
 
@@ -1364,16 +1365,8 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
 void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
 {
-    const int scale = aMarker->MarkerScale();
-
-    // Build the marker shape polygon in internal units:
-    const int ccount = aMarker->GetShapePolygonCornerCount();
-    std::vector<VECTOR2D> arrow;
-    arrow.reserve( ccount );
-
-    for( int ii = 0; ii < ccount; ii++ )
-        arrow.push_back( VECTOR2D( aMarker->GetShapePolygonCorner( ii ).x * scale,
-                                aMarker->GetShapePolygonCorner( ii ).y * scale ) );
+    SHAPE_LINE_CHAIN polygon;
+    aMarker->ShapeToPolygon( polygon );
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_ERC_WARN );
 
@@ -1385,7 +1378,7 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
-    m_gal->DrawPolygon( &arrow[0], arrow.size() );
+    m_gal->DrawPolygon( polygon );
     m_gal->Restore();
 }
 

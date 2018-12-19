@@ -548,8 +548,8 @@ public:
     /**
      * Function PointInside()
      *
-     * Checks if point aP lies inside a polygon (any type) defined by the line chain. For closed
-     * shapes only.
+     * Checks if point aP lies inside a polygon (any type) defined by the line chain.
+     * For closed shapes only.
      * @param aP point to check
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */

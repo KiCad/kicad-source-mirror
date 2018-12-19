@@ -29,7 +29,7 @@
 #include <drc_item.h>
 #include <gr_basic.h>
 #include <eda_rect.h>
-
+class SHAPE_LINE_CHAIN;
 
 /* Marker are mainly used to show a DRC or ERC error or warning
  */
@@ -67,7 +67,7 @@ protected:
 
 public:
 
-    MARKER_BASE();
+    MARKER_BASE( int aScalingFactor );
 
     /**
      * Constructor
@@ -77,10 +77,11 @@ public:
      * @param aPos The position of the first of two objects
      * @param bItem The second of the two conflicting objects
      * @param bPos The position of the second of two objects
+     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
     MARKER_BASE( EDA_UNITS_T aUnits, int aErrorCode, const wxPoint& aMarkerPos,
                  EDA_ITEM* aItem, const wxPoint& aPos,
-                 EDA_ITEM* bItem, const wxPoint& bPos );
+                 EDA_ITEM* bItem, const wxPoint& bPos, int aScalingFactor );
 
     /**
      * Constructor
@@ -90,10 +91,11 @@ public:
      * @param aPos The position of the first of two objects
      * @param bText Text describing the second of the two conflicting objects
      * @param bPos The position of the second of two objects
+     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
                  const wxString& aText, const wxPoint& aPos,
-                 const wxString& bText, const wxPoint& bPos );
+                 const wxString& bText, const wxPoint& bPos, int aScalingFactor );
 
     /**
      * Constructor
@@ -101,9 +103,10 @@ public:
      * @param aMarkerPos The position of the MARKER on the BOARD
      * @param aText Text describing the object
      * @param aPos The position of the object
+     * @param aScalingFactor the scaling factor to convert the shape coordinates to IU coordinates
      */
     MARKER_BASE( int aErrorCode, const wxPoint& aMarkerPos,
-                 const wxString& aText, const wxPoint& aPos );
+                 const wxString& aText, const wxPoint& aPos, int aScalingFactor );
 
     /**
      * Contructor
@@ -119,7 +122,13 @@ public:
      */
     int MarkerScale() const { return m_ScalingFactor; }
 
-    /** @return the shape polygon corners list
+    /** Returns the shape polygon in internal units in a SHAPE_LINE_CHAIN
+     * the coordinates are relatives to the marker position (are not absolute)
+     * @param aPolygon is the SHAPE_LINE_CHAIN to fill with the shape
+     */
+    void ShapeToPolygon( SHAPE_LINE_CHAIN& aPolygon) const;
+
+    /** @return the shape corner list
      */
     const VECTOR2I* GetShapePolygon() const;
 

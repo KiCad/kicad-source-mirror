@@ -41,17 +41,15 @@
 #define SCALING_FACTOR  Millimeter2iu( 0.1 )
 
 
-SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE()
+SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE( SCALING_FACTOR )
 {
-    m_ScalingFactor = SCALING_FACTOR;
 }
 
 
 SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, SCH_MARKER_T ),
-    MARKER_BASE( 0, pos, text, pos )
+    MARKER_BASE( 0, pos, text, pos, SCALING_FACTOR )
 {
-    m_ScalingFactor = SCALING_FACTOR;
 }
 
 

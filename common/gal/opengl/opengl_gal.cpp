@@ -971,24 +971,30 @@ void OPENGL_GAL::DrawPolygon( const SHAPE_POLY_SET& aPolySet )
     for( int j = 0; j < aPolySet.OutlineCount(); ++j )
     {
         const SHAPE_LINE_CHAIN& outline = aPolySet.COutline( j );
-
-        if( outline.SegmentCount() == 0 )
-            continue;
-
-        const int pointCount = outline.SegmentCount() + 1;
-        std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
-        GLdouble* ptr = points.get();
-
-        for( int i = 0; i < pointCount; ++i )
-        {
-            const VECTOR2I& p = outline.CPoint( i );
-            *ptr++ = p.x;
-            *ptr++ = p.y;
-            *ptr++ = layerDepth;
-        }
-
-        drawPolygon( points.get(), pointCount );
+        DrawPolygon( outline );
     }
+}
+
+
+
+void OPENGL_GAL::DrawPolygon( const SHAPE_LINE_CHAIN& aPolygon )
+{
+    if( aPolygon.SegmentCount() == 0 )
+        return;
+
+    const int pointCount = aPolygon.SegmentCount() + 1;
+    std::unique_ptr<GLdouble[]> points( new GLdouble[3 * pointCount] );
+    GLdouble* ptr = points.get();
+
+    for( int i = 0; i < pointCount; ++i )
+    {
+        const VECTOR2I& p = aPolygon.CPoint( i );
+        *ptr++ = p.x;
+        *ptr++ = p.y;
+        *ptr++ = layerDepth;
+    }
+
+    drawPolygon( points.get(), pointCount );
 }
 
 
