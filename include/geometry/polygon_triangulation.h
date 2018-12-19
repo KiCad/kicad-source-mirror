@@ -649,8 +649,6 @@ public:
 
     bool TesselatePolygon( const SHAPE_LINE_CHAIN& aPoly )
     {
-        ClipperLib::Clipper c;
-
         m_bbox = aPoly.BBox();
         m_result.Clear();
 

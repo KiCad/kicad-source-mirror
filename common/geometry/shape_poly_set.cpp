@@ -1882,11 +1882,15 @@ void SHAPE_POLY_SET::CacheTriangulation()
         {
             tmpSet.Fracture( PM_FAST );
 
-            if( !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
+            // After fracturing, we may have zero or one polygon
+            // Check for zero polygons before tesselating and break regardless
+            if( !tmpSet.OutlineCount() ||  !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
             {
                 m_triangulatedPolys.pop_back();
                 m_triangulationValid = false;
             }
+
+            break;
         }
     }
 
