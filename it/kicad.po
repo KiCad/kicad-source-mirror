@@ -41,7 +41,7 @@
 # mc: - keepout = proibita
 # mc: - through hole = foro passante
 # mc: - board = scheda
-# mc: - PCB = CS
+# mc: - PCB = C.S. (Circuiti Stampati)
 # mc: - component documentation = documentazione componente
 # mc: - datasheet = TT
 # mc: - setback = sporgenza?
@@ -78,7 +78,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-12-19 08:09+0100\n"
-"PO-Revision-Date: 2018-12-19 08:12+0100\n"
+"PO-Revision-Date: 2018-12-19 09:35+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -10051,7 +10051,7 @@ msgstr "Esegui controllo regole elettriche"
 
 #: eeschema/menubar.cpp:523 pcbnew/menubar_pcb_editor.cpp:369
 msgid "Update PCB from Schematic..."
-msgstr "Aggiorna C.S. dallo schema..."
+msgstr "Aggiorna il C.S. dallo schema..."
 
 #: eeschema/menubar.cpp:528
 msgid "Updates PCB design with current schematic (forward annotation)."
@@ -23787,7 +23787,7 @@ msgstr "&Misura"
 
 #: pcbnew/menubar_footprint_editor.cpp:403
 msgid "&Load Footprint from PCB..."
-msgstr "Carica impronta da CS..."
+msgstr "Carica impronta da&l C.S. ..."
 
 #: pcbnew/menubar_footprint_editor.cpp:404
 msgid "Load a footprint from the current board into the editor"
@@ -23795,7 +23795,7 @@ msgstr "Carica una impronta dalla scheda corrente nell'editor"
 
 #: pcbnew/menubar_footprint_editor.cpp:408
 msgid "&Insert Footprint on PCB"
-msgstr "&Inserisci impronta su CS"
+msgstr "&Inserisci impronta sul C.S."
 
 #: pcbnew/menubar_footprint_editor.cpp:409
 msgid "Insert footprint onto current board"
@@ -23935,7 +23935,7 @@ msgstr "Marcatore di allineamento strat&i"
 
 #: pcbnew/menubar_pcb_editor.cpp:332
 msgid "Drill and &Place Offset"
-msgstr "Scostamento foratura e &posizionamento"
+msgstr "Scostamento forature e &posizionamento"
 
 #: pcbnew/menubar_pcb_editor.cpp:333
 msgid "Place origin point for drill and place files"
@@ -23943,7 +23943,7 @@ msgstr "Piazza il punto di origine per i file di forature e posizionamento"
 
 #: pcbnew/menubar_pcb_editor.cpp:345
 msgid "&Autoplace off-board components"
-msgstr "&Autoposiziona componenti fuori scheda"
+msgstr "&Autoposiziona i componenti fuori scheda"
 
 #: pcbnew/menubar_pcb_editor.cpp:349
 msgid "&Autoplace selected components"
@@ -23959,7 +23959,7 @@ msgstr "Posizionamento automatico componenti"
 
 #: pcbnew/menubar_pcb_editor.cpp:363
 msgid "Load &Netlist..."
-msgstr "Carica &netlist..."
+msgstr "Carica la &netlist..."
 
 #: pcbnew/menubar_pcb_editor.cpp:364
 msgid "Read netlist and update board connectivity"
@@ -23967,7 +23967,7 @@ msgstr "Legge la netlist e aggiorna i collegamenti della scheda"
 
 #: pcbnew/menubar_pcb_editor.cpp:370
 msgid "Update PCB design with current schematic (forward annotation)"
-msgstr "Aggiorna il progetto del CS dallo schema corrente (forward annotation)"
+msgstr "Aggiorna il progetto del C.S. dallo schema corrente (forward annotation)"
 
 #: pcbnew/menubar_pcb_editor.cpp:376
 msgid "Update Footprints from Library..."
@@ -24953,10 +24953,7 @@ msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
 "project manager and create a PCB project."
-msgstr ""
-"Impossibile aggiornare il CS, perché Kicad è aperto in modalità autonoma. "
-"Per creare/aggiornare un CS da uno schema elettrico, è necessario eseguire "
-"il gestore di progetti KiCad e creare un progetto di CS."
+msgstr "Impossibile aggiornare il C.S., perché Kicad è aperto in modalità autonoma. Per creare/aggiornare un C.S. da uno schema elettrico, è necessario eseguire il gestore di progetti KiCad e creare un progetto di C.S. ."
 
 #: pcbnew/pcb_edit_frame.cpp:1175
 #, c-format
@@ -25097,7 +25094,7 @@ msgstr "Mostra origine impronte e testi con una crocetta"
 
 #: pcbnew/pcb_layer_widget.cpp:89
 msgid "PCB Cursor"
-msgstr "Puntatore CS"
+msgstr "Puntatore C.S."
 
 #: pcbnew/pcb_layer_widget.cpp:90
 msgid "Aux items"
@@ -26036,7 +26033,7 @@ msgstr "Inform&azioni su Pcbnew"
 
 #: pcbnew/tool_footprint_viewer.cpp:194
 msgid "About Pcbnew PCB designer"
-msgstr "Informazioni su Pcbnew progettazione CS"
+msgstr "Informazioni su Pcbnew progettazione C.S."
 
 #: pcbnew/tool_pcb_editor.cpp:56
 msgid ""
@@ -26080,7 +26077,7 @@ msgstr "Carica netlist"
 
 #: pcbnew/tool_pcb_editor.cpp:294
 msgid "Update PCB from schematic"
-msgstr "Aggiorna CS dallo schema"
+msgstr "Aggiorna C.S. dallo schema"
 
 #: pcbnew/tool_pcb_editor.cpp:313
 msgid "Open schematic in Eeschema"
