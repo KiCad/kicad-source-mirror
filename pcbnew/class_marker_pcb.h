@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009-2014 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2009-2018 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,13 +34,14 @@
 #include <class_board_item.h>
 #include <marker_base.h>
 
+// Coordinates count for the basic shape marker
+#define MARKER_SHAPE_POINT_COUNT 9
 
 class MSG_PANEL_ITEM;
 
 
 class MARKER_PCB : public BOARD_ITEM, public MARKER_BASE
 {
-
 public:
 
     MARKER_PCB( BOARD_ITEM* aParent );
@@ -78,10 +79,6 @@ public:
         return aItem && PCB_MARKER_T == aItem->Type();
     }
 
-    /** A scaling factor to create the marker symbol
-    */
-    static int MarkerScale() {return Millimeter2iu( 0.1 ); }
-
     void Move(const wxPoint& aMoveVector) override
     {
         m_Pos += aMoveVector;
@@ -113,12 +110,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    const BOX2I ViewBBox() const override
-    {
-        // The following is based on the PCB_PAINTER::draw( const MARKER_PCB* )
-        // the value 13 comes from the max relative coordinate of the shape)
-        return BOX2I( m_Pos, VECTOR2I( 13*MarkerScale(), 13*MarkerScale() ) );
-    }
+    const BOX2I ViewBBox() const override;
 
     const EDA_RECT GetBoundingBox() const override;
 

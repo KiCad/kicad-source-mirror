@@ -32,14 +32,18 @@
 #include <trigo.h>
 #include <msgpanel.h>
 #include <bitmaps.h>
+#include <base_units.h>
 
 #include <sch_marker.h>
 #include <erc.h>
 
+/// Factor to convert the maker unit shape to internal units:
+#define SCALING_FACTOR  Millimeter2iu( 0.1 )
+
 
 SCH_MARKER::SCH_MARKER() : SCH_ITEM( NULL, SCH_MARKER_T ), MARKER_BASE()
 {
-    m_ScalingFactor = 8;
+    m_ScalingFactor = SCALING_FACTOR;
 }
 
 
@@ -47,7 +51,7 @@ SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
     SCH_ITEM( NULL, SCH_MARKER_T ),
     MARKER_BASE( 0, pos, text, pos )
 {
-    m_ScalingFactor = 8;
+    m_ScalingFactor = SCALING_FACTOR;
 }
 
 

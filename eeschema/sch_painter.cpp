@@ -1364,21 +1364,16 @@ void SCH_PAINTER::draw( SCH_BITMAP *aBitmap, int aLayer )
 
 void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
 {
-    const int scale = aMarker->m_ScalingFactor;
+    const int scale = aMarker->MarkerScale();
 
-    // If you are changing this, update the bounding box as well
-    const VECTOR2D arrow[] =
-    {
-        VECTOR2D(  0 * scale,   0 * scale ),
-        VECTOR2D(  8 * scale,   1 * scale ),
-        VECTOR2D(  4 * scale,   3 * scale ),
-        VECTOR2D( 13 * scale,   8 * scale ),
-        VECTOR2D(  9 * scale,   9 * scale ),
-        VECTOR2D(  8 * scale,  13 * scale ),
-        VECTOR2D(  3 * scale,   4 * scale ),
-        VECTOR2D(  1 * scale,   8 * scale ),
-        VECTOR2D(  0 * scale,   0 * scale )
-    };
+    // Build the marker shape polygon in internal units:
+    const int ccount = aMarker->GetShapePolygonCornerCount();
+    std::vector<VECTOR2D> arrow;
+    arrow.reserve( ccount );
+
+    for( int ii = 0; ii < ccount; ii++ )
+        arrow.push_back( VECTOR2D( aMarker->GetShapePolygonCorner( ii ).x * scale,
+                                aMarker->GetShapePolygonCorner( ii ).y * scale ) );
 
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_ERC_WARN );
 
@@ -1390,7 +1385,7 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     m_gal->SetFillColor( color );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
-    m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
+    m_gal->DrawPolygon( &arrow[0], arrow.size() );
     m_gal->Restore();
 }
 

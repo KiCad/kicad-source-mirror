@@ -8,40 +8,34 @@
 #include "dialog_display_info_HTML_base.h"
 
 
-static const wxPoint MarkerShapeCorners[] =
-{
-    wxPoint( 0,  0 ),
-    wxPoint( 8,  1 ),
-    wxPoint( 4,  3 ),
-    wxPoint( 13, 8 ),
-    wxPoint( 9, 9 ),
-    wxPoint( 8,  13 ),
-    wxPoint( 3,  4 ),
-    wxPoint( 1,  8 )
-};
-const unsigned CORNERS_COUNT = DIM( MarkerShapeCorners );
-
-
-
 void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
                               const wxPoint& aOffset )
 {
-    wxPoint corners[CORNERS_COUNT];
+    // Build the marker shape polygon in internal units:
+    const int ccount = GetShapePolygonCornerCount();
+    std::vector<wxPoint> shape;
+    shape.reserve( ccount );
+
+    for( int ii = 0; ii < ccount; ii++ )
+        shape.push_back( wxPoint( GetShapePolygonCorner( ii ).x * MarkerScale(),
+                                  GetShapePolygonCorner( ii ).y * MarkerScale() ) );
 
     GRSetDrawMode( aDC, aDrawMode );
 
-    for( unsigned ii = 0; ii < CORNERS_COUNT; ii++ )
+    for( int ii = 0; ii < ccount; ii++ )
     {
-        corners[ii] = MarkerShapeCorners[ii];
-        corners[ii].x *= m_ScalingFactor;
-        corners[ii].y *= m_ScalingFactor;
-        corners[ii] += m_Pos + aOffset;
+        shape[ii] += m_Pos + aOffset;
     }
 
-    GRClosedPoly( aPanel->GetClipBox(), aDC, CORNERS_COUNT, corners,
+    GRClosedPoly( aPanel->GetClipBox(), aDC, ccount, &shape[0],
                   true,         // = Filled
                   0,            // outline width
                   m_Color,      // outline color
                   m_Color       // fill collor
                   );
+
+#if 0   // For testing purpose only:
+    EDA_RECT bbox = GetBoundingBoxMarker();
+    GRRect( aPanel->GetClipBox(), aDC, bbox, 10, m_Color );
+#endif
 }

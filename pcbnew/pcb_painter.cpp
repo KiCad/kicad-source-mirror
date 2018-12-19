@@ -1243,20 +1243,16 @@ void PCB_PAINTER::draw( const PCB_TARGET* aTarget )
 
 void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
 {
-    const int scale = MARKER_PCB::MarkerScale();
+    const int scale = aMarker->MarkerScale();
 
-    // If you are changing this, update MARKER_PCB::ViewBBox()
-    const VECTOR2D arrow[] = {
-        VECTOR2D(  0 * scale,   0 * scale ),
-        VECTOR2D(  8 * scale,   1 * scale ),
-        VECTOR2D(  4 * scale,   3 * scale ),
-        VECTOR2D( 13 * scale,   8 * scale ),
-        VECTOR2D(  9 * scale,   9 * scale ),
-        VECTOR2D(  8 * scale,  13 * scale ),
-        VECTOR2D(  3 * scale,   4 * scale ),
-        VECTOR2D(  1 * scale,   8 * scale ),
-        VECTOR2D(  0 * scale,   0 * scale )
-    };
+    // Build the marker shape polygon in internal units:
+    const int ccount = aMarker->GetShapePolygonCornerCount();
+    std::vector<VECTOR2D> arrow;
+    arrow.reserve( ccount );
+
+    for( int ii = 0; ii < ccount; ii++ )
+        arrow.push_back( VECTOR2D( aMarker->GetShapePolygonCorner( ii ).x * scale,
+                                aMarker->GetShapePolygonCorner( ii ).y * scale ) );
 
     auto strokeColor = m_pcbSettings.GetColor( aMarker, LAYER_DRC );
 
@@ -1265,7 +1261,7 @@ void PCB_PAINTER::draw( const MARKER_PCB* aMarker )
     m_gal->SetFillColor( strokeColor );
     m_gal->SetIsFill( true );
     m_gal->SetIsStroke( false );
-    m_gal->DrawPolygon( arrow, sizeof( arrow ) / sizeof( VECTOR2D ) );
+    m_gal->DrawPolygon( &arrow[0], arrow.size() );
     m_gal->Restore();
 }
 

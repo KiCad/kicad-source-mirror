@@ -52,16 +52,15 @@ public:
     };
 
     wxPoint               m_Pos;                 ///< position of the marker
-    int                   m_ScalingFactor;       ///< Scaling factor for m_Size and m_Corners (can
-                                                 ///<   set the physical size)
 
 protected:
+    int                   m_ScalingFactor;       ///< Scaling factor to convert corners coordinates
+                                                 ///< to internat units coordinates
     TYPEMARKER            m_MarkerType;          ///< The type of marker (useful to filter markers)
     MARKER_SEVERITY       m_ErrorLevel;          ///< Specify the severity of the error
     COLOR4D               m_Color;               ///< color
     EDA_RECT              m_ShapeBoundingBox;    ///< Bounding box of the graphic symbol, relative
-                                                 ///<   to the position of the shape, used for Hit
-                                                 ///<   Tests
+                                                 ///< to the position of the shape, in marker shape units
     DRC_ITEM              m_drc;
 
     void init();
@@ -116,6 +115,22 @@ public:
 
     ~MARKER_BASE();
 
+    /** The scaling factor to convert polygonal shape coordinates to internal units
+     */
+    int MarkerScale() const { return m_ScalingFactor; }
+
+    /** @return the shape polygon corners list
+     */
+    const VECTOR2I* GetShapePolygon() const;
+
+    /** @return the shape polygon corner aIdx
+     */
+    const VECTOR2I& GetShapePolygonCorner( int aIdx ) const;
+
+    /** @return the default shape polygon corner count
+     */
+    int GetShapePolygonCornerCount() const;
+
     /**
      * Function DrawMarker
      * draws the shape is the polygon defined in m_Corners (array of wxPoints).
@@ -125,7 +140,7 @@ public:
 
     /**
      * Function GetPos
-     * returns the position of this MARKER, const.
+     * @return the position of this MARKER in internal units.
      */
     const wxPoint& GetPos() const
     {
@@ -229,12 +244,11 @@ public:
     void DisplayMarkerInfo( EDA_DRAW_FRAME* aFrame );
 
     /**
-     * Function HitTestMarker
-     * tests if the given wxPoint is within the bounds of this object.
-     * @param ref_pos A wxPoint to test
+     * Tests if the given wxPoint is within the bounds of this object.
+     * @param aHitPosition is the wxPoint to test (in internal units)
      * @return bool - true if a hit, else false
      */
-    bool     HitTestMarker( const wxPoint& ref_pos ) const;
+    bool HitTestMarker( const wxPoint& aHitPosition ) const;
 
     /**
      * Function GetBoundingBoxMarker
