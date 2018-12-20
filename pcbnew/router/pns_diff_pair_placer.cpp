@@ -470,7 +470,7 @@ bool DIFF_PAIR_PLACER::findDpPrimitivePair( const VECTOR2I& aP, ITEM* aItem,
         {
             *aErrorMsg = _( "Can't find a suitable starting point.  If starting "
                             "from an existing differential pair make sure you are "
-                            "at the end. " );
+                            "at the end." );
         }
         return false;
     }

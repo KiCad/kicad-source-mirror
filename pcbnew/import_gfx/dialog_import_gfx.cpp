@@ -282,7 +282,7 @@ void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
 
     if( m_layer < 0 )
     {
-        wxMessageBox( _( "Please, select a valid layer " ) );
+        wxMessageBox( _( "Please, select a valid layer" ) );
         return;
     }
 
