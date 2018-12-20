@@ -24,6 +24,9 @@
 #ifndef UNIT_TEST_UTILS__H
 #define UNIT_TEST_UTILS__H
 
+#include <boost/test/test_case_template.hpp>
+#include <boost/test/unit_test.hpp>
+
 #include <functional>
 
 /**
@@ -50,4 +53,40 @@
  */
 #undef BOOST_TEST
 
+
+#if BOOST_VERSION < 105900
+
+/*
+ * BOOST_TEST_INFO is not available before 1.59. It's not critical for
+ * test pass/fail, it's just info, so just pass along to a logging
+ * function.
+ *
+ * This can be removed when our minimum boost version is 1.59 or higher.
+ */
+#define BOOST_TEST_INFO( A ) BOOST_TEST_MESSAGE( A )
+
+/*
+ *
+ * BOOST_TEST_CONTEXT provides scoped info, but again, only after 1.59.
+ * Replacing with a call to BOOST_TEST_MESSAGE will work, and the
+ * scoping will still work for newer boosts.
+ *
+ * This can be removed when our minimum boost version is 1.59 or higher.
+ */
+#define BOOST_TEST_CONTEXT( A ) BOOST_TEST_MESSAGE( A );
+
+#endif
+
+/*
+ * Define a helper to make it easier to use the right namespace for
+ * defining the print helpers like this:
+ *
+ * template<>
+ * struct BOOST_PRINT::print_log_value< MY_TYPE >
+ */
+#if BOOST_VERSION < 105900
+namespace BOOST_PRINT = boost::test_tools;
+#else
+namespace BOOST_PRINT = boost::test_tools::tt_detail;
+#endif
 #endif // UNIT_TEST_UTILS__H
