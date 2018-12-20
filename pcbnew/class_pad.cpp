@@ -1369,25 +1369,28 @@ wxString LayerMaskDescribe( const BOARD *aBoard, LSET aMask )
 {
     // Try to be smart and useful.  Check all copper first.
     if( aMask[F_Cu] && aMask[B_Cu] )
-        return wxT( "all copper layers" );
+        return _( "All copper layers" );
 
-    // Check for single copper.
-    LSEQ cu = aBoard->GetEnabledLayers().CuStack();
+    // Check for copper.
+    auto layer = aBoard->GetEnabledLayers().AllCuMask() & aMask;
 
-    if( cu )
-        return aBoard->GetLayerName( *cu );
-
-    // No copper; check for single techincal.
-    LSEQ tech = aBoard->GetEnabledLayers().Technicals();
-
-    if( tech )
+    for( int i = 0; i < 2; i++ )
     {
-        wxString layerInfo = aBoard->GetLayerName( *tech );
+        for( int bit = PCBNEW_LAYER_ID_START; bit < PCB_LAYER_ID_COUNT; ++bit )
+        {
+            if( layer[ bit ] )
+            {
+                wxString layerInfo = aBoard->GetLayerName( static_cast<PCB_LAYER_ID>( bit ) );
 
-        if( tech.size() > 1 )
-            layerInfo << _( " & others" );
+                if( aMask.count() > 1 )
+                    layerInfo << _( " and others" );
 
-        return layerInfo;
+                return layerInfo;
+            }
+        }
+
+        // No copper; check for technicals.
+        layer = aBoard->GetEnabledLayers().AllTechMask() & aMask;
     }
 
     // No copper, no technicals: no layer
