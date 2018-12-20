@@ -207,8 +207,10 @@ public:
     int GetSelectedCorner() const
     {
         // Transform relative indices to global index
-        int globalIndex;
-        m_Poly->GetGlobalIndex( *m_CornerSelection, globalIndex );
+        int globalIndex = -1;
+
+        if( m_CornerSelection )
+            m_Poly->GetGlobalIndex( *m_CornerSelection, globalIndex );
 
         return globalIndex;
     }
