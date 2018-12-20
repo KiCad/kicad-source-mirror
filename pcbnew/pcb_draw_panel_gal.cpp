@@ -42,6 +42,7 @@
 #include <gal/graphics_abstraction_layer.h>
 
 #include <functional>
+#include <thread>
 using namespace std::placeholders;
 
 const LAYER_NUM GAL_LAYER_ORDER[] =

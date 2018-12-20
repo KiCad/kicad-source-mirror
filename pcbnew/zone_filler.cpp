@@ -85,7 +85,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
     auto connectivity = m_board->GetConnectivity();
 
-    if( !connectivity->TryLock() )
+    std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
+
+    if( !lock )
         return false;
 
     for( auto zone : aZones )
@@ -229,7 +231,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
                 m_commit->Revert();
 
             connectivity->SetProgressReporter( nullptr );
-            connectivity->Unlock();
             return false;
         }
     }
@@ -304,7 +305,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         connectivity->RecalculateRatsnest();
     }
 
-    connectivity->Unlock();
     return true;
 }
 

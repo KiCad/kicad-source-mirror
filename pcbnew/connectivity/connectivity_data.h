@@ -27,7 +27,6 @@
 #define __CONNECTIVITY_DATA_H
 
 #include <core/typeinfo.h>
-#include <core/lockable.h>
 
 #include <wx/string.h>
 #include <vector>
@@ -77,7 +76,7 @@ struct RN_DYNAMIC_LINE
 };
 
 // a wrapper class encompassing the connectivity computation algorithm and the
-class CONNECTIVITY_DATA : public LOCKABLE
+class CONNECTIVITY_DATA
 {
 public:
     CONNECTIVITY_DATA();
@@ -235,6 +234,11 @@ public:
         return m_connAlgo;
     }
 
+    std::mutex& GetLock()
+    {
+        return m_lock;
+    }
+
     void MarkItemNetAsDirty( BOARD_ITEM* aItem );
     void SetProgressReporter( PROGRESS_REPORTER* aReporter );
 
@@ -253,6 +257,8 @@ private:
     std::vector<RN_NET*> m_nets;
 
     PROGRESS_REPORTER* m_progressReporter;
+
+    std::mutex m_lock;
 };
 
 #endif

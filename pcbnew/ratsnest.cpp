@@ -97,7 +97,9 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
 
     auto connectivity = m_Pcb->GetConnectivity();
 
-    if( !connectivity->TryLock() )
+    std::unique_lock<std::mutex> lock( connectivity->GetLock(), std::try_to_lock );
+
+    if( !lock )
         return;
 
     COLOR4D color = Settings().Colors().GetItemColor( LAYER_RATSNEST );
@@ -131,8 +133,6 @@ void PCB_BASE_FRAME::DrawGeneralRatsnest( wxDC* aDC, int aNetcode )
             }
         }
     }
-
-    connectivity->Unlock();
 }
 
 

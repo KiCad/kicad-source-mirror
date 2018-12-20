@@ -60,7 +60,9 @@ const BOX2I RATSNEST_VIEWITEM::ViewBBox() const
 
 void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
-    if( !m_data->TryLock() )
+    std::unique_lock<std::mutex> lock( m_data->GetLock(), std::try_to_lock );
+
+    if( !lock )
         return;
 
     constexpr int CROSS_SIZE = 200000;
@@ -148,8 +150,6 @@ void RATSNEST_VIEWITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
             }
         }
     }
-
-    m_data->Unlock();
 }
 
 
