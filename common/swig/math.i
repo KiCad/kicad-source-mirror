@@ -29,6 +29,8 @@
 %ignore VECTOR2<int>::ECOORD_MAX;
 %ignore VECTOR2<int>::ECOORD_MIN;
 
+
+%rename(getWxPoint) operator wxPoint;
 #include <math/vector2d.h>
 %include <math/vector2d.h>
 %template(VECTOR2I) VECTOR2<int>;
