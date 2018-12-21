@@ -792,9 +792,14 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
                 // Draw the polygon: only one polygon is expected
                 // However we provide a multi polygon shape drawing
                 // ( for the future or to show a non expected shape )
-                for( int jj = 0; jj < aSeg->GetPolyShape().OutlineCount(); ++jj )
+                // This must be simplified and fractured to prevent overlapping polygons
+                // from generating invalid Gerber files
+                auto tmpPoly = SHAPE_POLY_SET( aSeg->GetPolyShape() );
+                tmpPoly.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+                for( int jj = 0; jj < tmpPoly.OutlineCount(); ++jj )
                 {
-                    SHAPE_LINE_CHAIN& poly = aSeg->GetPolyShape().Outline( jj );
+                    SHAPE_LINE_CHAIN& poly = tmpPoly.Outline( jj );
                     m_plotter->PlotPoly( poly, FILLED_SHAPE, thickness, &gbr_metadata );
                 }
             }
