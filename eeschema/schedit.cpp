@@ -740,9 +740,12 @@ static void abortMoveItem( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 
         // Never delete existing item, because it can be referenced by an undo/redo command
         // Just restore its data
+
+        view->Remove( item );
         currentItem->SwapData( oldItem );
-        view->Hide( item, false );
         item->ClearFlags();
+        view->Add( item );
+        view->Hide( item, false );
 
         // for items managed by their parent, we have to refresh
         // the parent drawings (scheet or symbol)
