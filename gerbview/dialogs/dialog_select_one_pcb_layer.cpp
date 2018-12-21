@@ -137,8 +137,11 @@ SELECT_LAYER_DIALOG::SELECT_LAYER_DIALOG( GERBVIEW_FRAME* parent,
     }
 
     // Build the layer list; build non copper layers list
-    for( ; ii < NB_PCB_LAYERS; ++ii )
+    for( ; ; ++ii )
     {
+        if( GetPCBDefaultLayerName( ii ) == "" )    // End of list
+            break;
+
         layerList.Add( GetPCBDefaultLayerName( ii ) );
 
         if( ii == aDefaultLayer )
@@ -260,17 +263,11 @@ const wxString GetPCBDefaultLayerName( int aLayerId )
     case Eco1_User:         txt = wxT( "Eco1.User" );       break;
     case Eco2_User:         txt = wxT( "Eco2.User" );       break;
     case Edge_Cuts:         txt = wxT( "Edge.Cuts" );       break;
-    case Margin:            txt = wxT( "Margin" );          break;
 
-    // Footprint
-    case F_CrtYd:           txt = wxT( "F.CrtYd" );         break;
-    case B_CrtYd:           txt = wxT( "B.CrtYd" );         break;
-    case F_Fab:             txt = wxT( "F.Fab" );           break;
-    case B_Fab:             txt = wxT( "B.Fab" );           break;
+    // Pcbnew konws some oter layers. But any other layer is not suitable for export.
 
-    default:
-        wxASSERT_MSG( 0, wxT( "aLayerId out of range" ) );
-                            txt = wxT( "BAD INDEX!" );      break;
+    default:    // Sentinel
+        txt = wxT( "" ); break;
     }
 
     return wxString( txt );
