@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-20 22:41-0200\n"
-"PO-Revision-Date: 2018-12-11 10:14-0200\n"
+"POT-Creation-Date: 2018-12-20 22:57-0200\n"
+"PO-Revision-Date: 2018-12-20 22:56-0200\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -4145,7 +4145,7 @@ msgstr "&Salvar Esquema\tCtrl+S"
 #: kicad/menubar.cpp:337 pcbnew/menubar_footprint_editor.cpp:419
 #: pcbnew/menubar_pcb_editor.cpp:261
 msgid "&Configure Paths..."
-msgstr "&Configurar Caminhos..."
+msgstr "&Locais dos Arquivos..."
 
 #: cvpcb/menubar.cpp:68 eeschema/libedit/menubar_libedit.cpp:299
 #: eeschema/menubar.cpp:622 kicad/menubar.cpp:338
@@ -5196,9 +5196,9 @@ msgid "Candidates count %d "
 msgstr "Contagem de candidatos %d "
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:711
-#, fuzzy, c-format
+#, c-format
 msgid "%u link(s) mapped, %u not found"
-msgstr "%u link(s) mapeados, %d não encontrado"
+msgstr "%u link(s) mapeados, %u não encontrado"
 
 #: eeschema/dialogs/dialog_edit_components_libid.cpp:716
 #, c-format
@@ -15917,9 +15917,8 @@ msgid "All copper layers"
 msgstr "Todas as camadas de cobre"
 
 #: pcbnew/class_pad.cpp:1386
-#, fuzzy
 msgid " and others"
-msgstr " & outros"
+msgstr "e outros"
 
 #: pcbnew/class_pad.cpp:1397
 msgid "no layers"
@@ -22933,9 +22932,8 @@ msgid "Lock/Unlock Footprint"
 msgstr "Bloquear/Desbloquear Footprint"
 
 #: pcbnew/hotkeys.cpp:148 pcbnew/tools/edit_tool.cpp:132
-#, fuzzy
 msgid "Delete Full Track"
-msgstr "Apagar Trilha"
+msgstr "Apagar Trilha Inteira"
 
 #: pcbnew/hotkeys.cpp:150
 msgid "Toggle High Contrast Mode"
@@ -23191,9 +23189,8 @@ msgid "Import DXF File"
 msgstr "Importar Arquivo DXF"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:285
-#, fuzzy
 msgid "Please, select a valid layer"
-msgstr "Por favor, selecione uma camada válida "
+msgstr "Por favor, selecione uma camada válida"
 
 #: pcbnew/import_gfx/dialog_import_gfx.cpp:316
 msgid "Not Handled Items"
@@ -24733,14 +24730,12 @@ msgid "Keepout Area"
 msgstr "Área de Afastamento"
 
 #: pcbnew/onrightclick.cpp:659
-#, fuzzy
 msgid "Move Corner"
-msgstr "Remover Canto"
+msgstr "Mover Canto"
 
 #: pcbnew/onrightclick.cpp:661
-#, fuzzy
 msgid "Delete Corner"
-msgstr "Apagar Último Canto"
+msgstr "Apagar Canto"
 
 #: pcbnew/onrightclick.cpp:666 pcbnew/tools/point_editor.cpp:55
 msgid "Create Corner"
@@ -25415,13 +25410,12 @@ msgstr ""
 "terminem com _N/_P ou +/-."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:471
-#, fuzzy
 msgid ""
 "Can't find a suitable starting point.  If starting from an existing "
 "differential pair make sure you are at the end."
 msgstr ""
-"Não foi possível localizar um ponto de partida adequado.  Se está iniciando "
-"de um par diferencial existente certifique-se de estar no final. "
+"Não foi possível encontrar um ponto de partida adequado.  Se está partindo "
+"de um par diferencial existente, certifique-se de estar ao final."
 
 #: pcbnew/router/pns_diff_pair_placer.cpp:524
 #, c-format
@@ -26023,9 +26017,8 @@ msgid "Open footprint viewer"
 msgstr "Abrir visualizador de footprint"
 
 #: pcbnew/tool_pcb_editor.cpp:293
-#, fuzzy
 msgid "Load netlist"
-msgstr "Ler Netlist"
+msgstr "Carregar Netlist"
 
 #: pcbnew/tool_pcb_editor.cpp:294
 msgid "Update PCB from schematic"
@@ -26367,9 +26360,8 @@ msgid "Deletes selected item(s)"
 msgstr "Apaga o(s) iten(s) selecionado(s)"
 
 #: pcbnew/tools/edit_tool.cpp:132
-#, fuzzy
 msgid "Deletes selected item(s) and copper connections"
-msgstr "Gira o(s) item(s) selecionado(s) no sentido anti-horário"
+msgstr "Exclui o(s) item(s) selecionado(s) e conexões de cobre"
 
 #: pcbnew/tools/edit_tool.cpp:137
 msgid "Update the footprint from the library"
@@ -26404,9 +26396,8 @@ msgid "Edit track width/via size"
 msgstr "Editar largura da trilha / tamanho da via"
 
 #: pcbnew/tools/edit_tool.cpp:943
-#, fuzzy
 msgid "Delete again to remove locked items"
-msgstr "Apagar item selecionado"
+msgstr "Exclua novamente para remover itens bloqueados"
 
 #: pcbnew/tools/edit_tool.cpp:1024
 msgid "Move exact"
