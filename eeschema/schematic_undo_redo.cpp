@@ -385,6 +385,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
     // the cache data can be invalid
     GetCanvas()->GetGAL()->ClearCache();
 
+    GetCanvas()->GetView()->ClearHiddenFlags();
     GetCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
 }
 
