@@ -386,11 +386,10 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
 
     if( !nextCmd )
     {
-        if( block->GetCommand() != BLOCK_SELECT_ITEMS_ONLY &&  GetCurPart() )
+        if( block->GetCommand() != BLOCK_SELECT_ITEMS_ONLY && GetCurPart() )
             BlockClearSelectedItems( GetCurPart(), block );
                 
-        block->SetState( STATE_NO_BLOCK );
-        block->SetCommand( BLOCK_IDLE );
+        GetScreen()->ClearBlockCommand();
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
                                    false );

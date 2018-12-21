@@ -130,10 +130,6 @@ void SCH_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
         {
             // This calls the block-abort command routine on cleanup
             m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor() );
-
-            // We set the dangling ends to the block-scope, so we must set them back to
-            // schematic-socpe.
-            TestDanglingEnds();
             return;
         }
 
@@ -342,10 +338,24 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         }
     }
 
+    if( block->GetCommand() == BLOCK_ABORT )
+    {
+        if( block->AppendUndo() )
+        {
+            PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
+            PutDataInPreviousState( undo, false );
+            undo->ClearListAndDeleteItems();
+            delete undo;
+        }
+
+        // We set the dangling ends to the block-scope, so we must set them back to
+        // schematic-scope.
+        TestDanglingEnds();
+    }
+
     if( !nextcmd )
     {
-        block->SetState( STATE_NO_BLOCK );
-        block->SetCommand( BLOCK_IDLE );
+        GetScreen()->ClearBlockCommand();
         GetScreen()->ClearDrawingState();
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,

@@ -180,20 +180,15 @@ void AbortBlockCurrentCommand( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
 {
     BASE_SCREEN* screen = aPanel->GetScreen();
 
-    if( aPanel->IsMouseCaptured() )      // Erase current drawing on screen
+    if( aPanel->IsMouseCaptured() )
     {
         aPanel->SetMouseCapture( NULL, NULL );
         screen->SetCurItem( NULL );
-
-        // Delete the picked wrapper if this is a picked list.
-        screen->m_BlockLocate.ClearItemsList();
     }
 
-    screen->m_BlockLocate.SetState( STATE_NO_BLOCK );
     screen->m_BlockLocate.SetCommand( BLOCK_ABORT );
     aPanel->GetParent()->HandleBlockEnd( aDC );
 
-    screen->m_BlockLocate.SetCommand( BLOCK_IDLE );
     aPanel->GetParent()->DisplayToolMsg( wxEmptyString );
     
     // ugly, but temporary
