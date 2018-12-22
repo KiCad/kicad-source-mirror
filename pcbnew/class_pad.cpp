@@ -1307,6 +1307,9 @@ void D_PAD::ViewGetLayers( int aLayers[], int& aCount ) const
 
 unsigned int D_PAD::ViewGetLOD( int aLayer, KIGFX::VIEW* aView ) const
 {
+    if( aView->GetPrintMode() > 0 )  // In printing mode the pad is always drawable
+        return 0;
+
     const int HIDE = std::numeric_limits<unsigned int>::max();
     BOARD* board = GetBoard();
 

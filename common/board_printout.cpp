@@ -119,12 +119,12 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     else // color enabled
     {
         for( int i = 0; i < LAYER_ID_COUNT; ++i )
-	{
-	    // Cairo does not support translucent colors on PostScript surfaces
-	    // see 'Features support by the PostScript surface' on
-	    // ttps://www.cairographics.org/documentation/using_the_postscript_surface/
+        {
+            // Cairo does not support translucent colors on PostScript surfaces
+            // see 'Features support by the PostScript surface' on
+            // ttps://www.cairographics.org/documentation/using_the_postscript_surface/
             dstSettings->SetLayerColor( i, srcSettings->GetLayerColor( i ).WithAlpha( 1.0 ) );
-	}
+        }
     }
 
 
@@ -165,6 +165,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
         }
     }
 
+    view->SetPrintMode( 1 );
+
     setupGal( gal );
     galPrint->SetNativePaperSize( pageSizeIn, printCtx->HasNativeLandscapeRotation() );
     gal->SetLookAtPoint( bBox.Centre() );
@@ -174,6 +176,8 @@ void BOARD_PRINTOUT::DrawPage( const wxString& aLayerName, int aPageNum, int aPa
     KIGFX::GAL_DRAWING_CONTEXT ctx( gal );
     view->Redraw();
     }
+
+    view->SetPrintMode( 0 );
 }
 
 
