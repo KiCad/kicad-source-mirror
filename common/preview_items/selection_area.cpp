@@ -121,7 +121,8 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     gal.SetIsStroke( true );
     gal.SetIsFill( true );
 
-    gal.SetLineWidth( 1.0 / gal.GetWorldScale() );
+    // force 1-pixel-wide line
+    gal.SetLineWidth( 0.0 );
 
     // Set the stroke color to indicate window or crossing selection
     bool windowSelection = ( m_origin.x <= m_end.x ) ? true : false;
@@ -130,5 +131,10 @@ void SELECTION_AREA::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         windowSelection = !windowSelection;
 
     gal.SetStrokeColor( windowSelection ? scheme.outline_l2r : scheme.outline_r2l );
+    gal.SetIsFill( false );
+    gal.DrawRectangle( m_origin, m_end );
+    gal.SetIsFill( true );
+    // draw the fill as the second object so that Z test will not clamp
+    // the single-pixel-wide rectangle sides
     gal.DrawRectangle( m_origin, m_end );
 }
