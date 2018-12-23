@@ -24,20 +24,15 @@ find_program(LEMON lemon)
 
 if( LEMON )
 
-    macro( generate_lemon_grammar GRAMMAR_LEMON GRAMMAR_C )
-        add_custom_command(
+    macro( generate_lemon_grammar TGT_NAME GRAMMAR_LEMON GRAMMAR_C )
+        add_custom_target( ${TGT_NAME}
             DEPENDS ${GRAMMAR_LEMON}
-            OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${GRAMMAR_C}
             COMMAND ${LEMON} -q ${GRAMMAR_LEMON}
             COMMENT "Running Lemon on ${GRAMMAR_LEMON} -> ${GRAMMAR_C}"
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         )
     endmacro()
 
-    generate_lemon_grammar( grammar.lemon grammar.c )
-
-    add_custom_target(libeval_grammar
-        DEPENDS grammar.c
-    )
+    generate_lemon_grammar( libeval_grammar grammar.lemon grammar.c )
 
 endif()
