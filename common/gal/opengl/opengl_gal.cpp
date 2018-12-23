@@ -1776,21 +1776,9 @@ void OPENGL_GAL::drawPolyline( const std::function<VECTOR2D (int)>& aPointGetter
     {
         auto start = aPointGetter( i - 1 );
         auto end = aPointGetter( i );
-        const VECTOR2D startEndVector = ( end - start );
-        double lineAngle = startEndVector.Angle();
 
         drawLineQuad( start, end );
-
-        // There is no need to draw line caps on both ends of polyline's segments
-        drawFilledSemiCircle( start, lineWidth / 2, lineAngle + M_PI / 2 );
     }
-
-    // ..and now - draw the ending cap
-    auto start = aPointGetter( i - 2 );
-    auto end = aPointGetter( i - 1 );
-    const VECTOR2D startEndVector = ( end - start );
-    double lineAngle = startEndVector.Angle();
-    drawFilledSemiCircle( end, lineWidth / 2, lineAngle - M_PI / 2 );
 }
 
 
