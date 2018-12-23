@@ -90,6 +90,15 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     m_parentPanel->Connect( wxEVT_SCROLLWIN_PAGEDOWN,
                             wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
 
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_BOTTOM,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_TOP,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEUP,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+    m_parentPanel->Connect( wxEVT_SCROLLWIN_LINEDOWN,
+                            wxScrollWinEventHandler( WX_VIEW_CONTROLS::onScroll ), NULL, this );
+
     m_zoomController = GetZoomControllerForPlatform();
 
     m_panTimer.SetOwner( this );
