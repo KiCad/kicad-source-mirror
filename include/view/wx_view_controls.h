@@ -85,7 +85,7 @@ public:
     /// @copydoc VIEW_CONTROLS::GetRawCursorPosition()
     VECTOR2D GetRawCursorPosition( bool aSnappingEnabled = true ) const override;
 
-    void SetCursorPosition( const VECTOR2D& aPosition, bool warpView ) override;
+    void SetCursorPosition( const VECTOR2D& aPosition, bool warpView, bool aTriggeredByArrows ) override;
 
     /// @copydoc VIEW_CONTROLS::SetCrossHairCursorPosition()
     void SetCrossHairCursorPosition( const VECTOR2D& aPosition, bool aWarpView ) override;
@@ -99,6 +99,8 @@ public:
 
     /// Adjusts the scrollbars position to match the current viewport.
     void UpdateScrollbars();
+
+    void ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition = VECTOR2D( 0, 0 ) ) override;
 
     /// Event that forces mouse move event in the dispatcher (eg. used in autopanning, when mouse
     /// cursor does not move in screen coordinates, but does in world coordinates)

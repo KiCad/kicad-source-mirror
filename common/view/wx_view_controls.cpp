@@ -95,6 +95,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
                    wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
+
+    m_settings.m_lastKeyboardCursorPositionValid = false;
 }
 
 
@@ -439,9 +441,16 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 }
 
 
-void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView )
+void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView, bool aTriggeredByArrows )
 {
     m_updateCursor = false;
+    if( aTriggeredByArrows )
+    {
+        m_settings.m_lastKeyboardCursorPositionValid = true;
+        m_settings.m_lastKeyboardCursorPosition = aPosition;
+    } else {
+        m_settings.m_lastKeyboardCursorPositionValid = false;
+    }
     WarpCursor( aPosition, true, aWarpView );
     m_cursorPos = aPosition;
 }
@@ -508,13 +517,23 @@ void WX_VIEW_CONTROLS::CenterOnCursor() const
 
 bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
 {
-    VECTOR2D p( aEvent.GetX(), aEvent.GetY() );
+    VECTOR2I p( aEvent.GetX(), aEvent.GetY() );
+    VECTOR2I pKey( m_view->ToScreen(m_settings.m_lastKeyboardCursorPosition ) );
+
+    if( m_settings.m_lastKeyboardCursorPositionValid && (p == pKey) )
+    {
+        // last cursor move event came from keyboard cursor control. If auto-panning is enabled and
+        // the next position is inside the autopan zone, check if it really came from a mouse event, otherwise
+        // disable autopan temporarily.
+
+        return true;
+    }
 
     // Compute areas where autopanning is active
-    double borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
+    int borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,
                                    m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().y );
-    double borderEndX = m_view->GetScreenPixelSize().x - borderStart;
-    double borderEndY = m_view->GetScreenPixelSize().y - borderStart;
+    int borderEndX = m_view->GetScreenPixelSize().x - borderStart;
+    int borderEndY = m_view->GetScreenPixelSize().y - borderStart;
 
     if( p.x < borderStart )
         m_panDirection.x = -( borderStart - p.x );
@@ -641,4 +660,10 @@ void WX_VIEW_CONTROLS::UpdateScrollbars()
 
         m_scrollPos = newScroll;
     }
+}
+
+void WX_VIEW_CONTROLS::ForceCursorPosition( bool aEnabled, const VECTOR2D& aPosition )
+{
+    m_settings.m_forceCursorPosition = aEnabled;
+    m_settings.m_forcedPosition = aPosition;
 }

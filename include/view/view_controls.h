@@ -92,6 +92,12 @@ struct VC_SETTINGS
 
     ///> Allow panning with the left button in addition to middle
     bool m_panWithLeftButton;
+
+    ///> Is last cursor motion event coming from keyboard arrow cursor motion action
+    bool m_lastKeyboardCursorPositionValid;
+
+    ///> Position of the above event
+    VECTOR2D m_lastKeyboardCursorPosition;
 };
 
 
@@ -233,7 +239,7 @@ public:
      * @param aPosition is the requested cursor position in the world coordinates.
      * @param aWarpView enables/disables view warp if the cursor is outside the current viewport.
      */
-    virtual void SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true ) = 0;
+    virtual void SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView = true, bool aTriggeredByArrows = false ) = 0;
 
 
     /**

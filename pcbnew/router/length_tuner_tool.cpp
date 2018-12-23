@@ -128,6 +128,7 @@ void LENGTH_TUNER_TOOL::Reset( RESET_REASON aReason )
 
 void LENGTH_TUNER_TOOL::updateStatusPopup( PNS_TUNE_STATUS_POPUP& aPopup )
 {
+    // fixme: wx code not allowed inside tools!
     wxPoint p = wxGetMousePosition();
 
     p.x += 20;

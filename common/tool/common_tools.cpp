@@ -116,7 +116,7 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
         break;
     }
 
-    getViewControls()->SetCursorPosition( cursor );
+    getViewControls()->SetCursorPosition( cursor, true, true );
 
     return 0;
 }
