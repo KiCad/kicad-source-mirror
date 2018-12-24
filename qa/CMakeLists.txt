@@ -22,7 +22,8 @@ add_subdirectory( pcbnew )
 add_subdirectory( eeschema )
 add_subdirectory( shape_poly_set_refactor )
 
-# Utility/test programs
+# Utility/debugging/profiling programs
+add_subdirectory( common_tools )
 add_subdirectory( pcb_parse_input )
 
 # add_subdirectory( pcb_test_window )
