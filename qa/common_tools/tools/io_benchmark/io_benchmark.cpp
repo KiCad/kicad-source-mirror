@@ -21,6 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "io_benchmark.h"
+
 #include <wx/wx.h>
 #include <richio.h>
 
@@ -377,13 +379,7 @@ BENCH_REPORT executeBenchMark( const BENCHMARK& aBenchmark, int aReps,
 }
 
 
-enum RET_CODES
-{
-    BAD_ARGS = 1,
-};
-
-
-int main( int argc, char* argv[] )
+int io_benchmark_func( int argc, char* argv[] )
 {
     auto& os = std::cout;
 
@@ -392,7 +388,7 @@ int main( int argc, char* argv[] )
         os << "Usage: " << argv[0] << " <FILE> <REPS> [" << getBenchFlags() << "]\n\n";
         os << "Benchmarks:\n";
         os << getBenchDescriptions();
-        return BAD_ARGS;
+        return RET_CODES::BAD_CMDLINE;
     }
 
     wxFileName inFile( argv[1] );
@@ -423,5 +419,12 @@ int main( int argc, char* argv[] )
             << std::endl;;
     }
 
-    return 0;
+    return RET_CODES::OK;
 }
+
+
+UTILITY_PROGRAM io_benchmark_tool = {
+    "io_benchmark",
+    "Benchmark various kinds of IO methods",
+    io_benchmark_func,
+};

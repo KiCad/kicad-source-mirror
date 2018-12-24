@@ -34,6 +34,8 @@ add_executable( qa_common_tools
     main.cpp
 
     tools/coroutines/coroutines.cpp
+
+    tools/io_benchmark/io_benchmark.cpp
 )
 
 include_directories(
