@@ -177,6 +177,8 @@ void PANEL_SETUP_NETCLASSES::addNet( wxString netName, const wxString& netclass 
  */
 void PANEL_SETUP_NETCLASSES::rebuildNetclassDropdowns()
 {
+    m_membershipGrid->CommitPendingChanges( true );
+
     wxArrayString netclassNames;
 
     for( int ii = 0; ii < m_netclassGrid->GetNumberRows(); ii++ )
