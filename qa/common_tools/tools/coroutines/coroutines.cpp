@@ -1,0 +1,131 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include "coroutine_tools.h"
+
+#include <cstdio>
+#include <string>
+
+#include <common.h>
+
+#include <tool/coroutine.h>
+
+#include <wx/cmdline.h>
+
+
+typedef COROUTINE<int, int> MyCoroutine;
+
+class CoroutineExample
+{
+public:
+    CoroutineExample( int aCount ) : m_count( aCount )
+    {
+    }
+
+    int CountTo( int n )
+    {
+        printf( "%s: Coroutine says hi. I will count from 1 to %d and yield each value.\n",
+                __FUNCTION__, n );
+
+        for( int i = 1; i <= n; i++ )
+        {
+            printf( "%s: Yielding %d\n", __FUNCTION__, i );
+            m_cofunc->KiYield( i );
+        }
+
+        return 0;
+    }
+
+    void Run()
+    {
+        m_cofunc = std::make_unique<MyCoroutine>( this, &CoroutineExample::CountTo );
+        printf( "%s: Calling coroutine that will count from 1 to 5.\n", __FUNCTION__ );
+        m_cofunc->Call( m_count );
+
+        while( m_cofunc->Running() )
+        {
+            printf( "%s: Got value: %d\n", __FUNCTION__, m_cofunc->ReturnValue() );
+            m_cofunc->Resume();
+        }
+
+        printf( "%s: Done!\n", __FUNCTION__ );
+    }
+
+    std::unique_ptr<MyCoroutine> m_cofunc;
+    int                          m_count;
+};
+
+
+static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
+    {
+            wxCMD_LINE_SWITCH,
+            "h",
+            "help",
+            _( "displays help on the command line parameters" ).mb_str(),
+            wxCMD_LINE_VAL_NONE,
+            wxCMD_LINE_OPTION_HELP,
+    },
+    {
+            wxCMD_LINE_OPTION,
+            "c",
+            "count",
+            _( "how high to count" ).mb_str(),
+            wxCMD_LINE_VAL_NUMBER,
+            wxCMD_LINE_PARAM_OPTIONAL,
+    },
+    { wxCMD_LINE_NONE }
+};
+
+
+static int coroutine_main_func( int argc, char** argv )
+{
+    wxCmdLineParser cl_parser( argc, argv );
+    cl_parser.SetDesc( g_cmdLineDesc );
+    cl_parser.AddUsageText( _( "Test a simple coroutine that yields a given number of times" ) );
+
+    int cmd_parsed_ok = cl_parser.Parse();
+    if( cmd_parsed_ok != 0 )
+    {
+        // Help and invalid input both stop here
+        return ( cmd_parsed_ok == -1 ) ? RET_CODES::OK : RET_CODES::BAD_CMDLINE;
+    }
+
+    long count = 5;
+    cl_parser.Found( "count", &count );
+
+    CoroutineExample obj( (int) count );
+
+    obj.Run();
+
+    return RET_CODES::OK;
+}
+
+
+/*
+ * Define the tool interface
+ */
+UTILITY_PROGRAM coroutine_tool = {
+    "coroutine",
+    "Test a simple coroutine",
+    coroutine_main_func,
+};
