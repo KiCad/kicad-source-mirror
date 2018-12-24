@@ -1974,3 +1974,20 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
         }
     }
 }
+
+void SCH_COMPONENT::ClearHighlightedPins()
+{
+    m_highlightedPins.clear();
+}
+
+
+void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
+{
+    m_highlightedPins.insert( aPin->GetNumber() );
+}
+
+
+bool SCH_COMPONENT::IsPinHighlighted( const LIB_PIN* aPin )
+{
+    return m_highlightedPins.find( aPin->GetNumber() ) != m_highlightedPins.end();
+}

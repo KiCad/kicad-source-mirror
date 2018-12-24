@@ -38,6 +38,7 @@
 #include <transform.h>
 #include <general.h>
 #include <vector>
+#include <set>
 #include <lib_draw_item.h>
 
 class SCH_SCREEN;
@@ -92,6 +93,7 @@ private:
 
     std::vector<bool> m_isDangling; ///< One isDangling per pin
     std::vector<wxPoint> m_Pins;
+    std::set<wxString> m_highlightedPins; ///< God forgive me - Tom
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -146,6 +148,11 @@ public:
     SCH_COMPONENT( const SCH_COMPONENT& aComponent );
 
     ~SCH_COMPONENT() { }
+
+    static inline bool ClassOf( const EDA_ITEM* aItem )
+    {
+        return aItem && SCH_COMPONENT_T == aItem->Type();
+    }
 
     wxString GetClass() const override
     {
@@ -641,6 +648,12 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+    void ClearHighlightedPins();
+
+    void HighlightPin( LIB_PIN* aPin );
+
+    bool IsPinHighlighted( const LIB_PIN* aPin );
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;

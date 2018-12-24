@@ -35,6 +35,7 @@
 class SCH_SHEET;
 class SCH_SCREEN;
 class LIB_PART;
+class LIB_PIN;
 class SCH_BASE_FRAME;
 
 // Eeschema uses mils as the internal units
@@ -94,6 +95,8 @@ public:
 
     void ClearHiddenFlags();
     void HideWorksheet();
+
+    void HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin = nullptr );
 
 private:
     SCH_BASE_FRAME* m_frame;    // The frame using this view. Can be null. Used mainly

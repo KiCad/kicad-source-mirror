@@ -117,8 +117,9 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     SCH_COMPONENT*  Component = NULL;
     wxPoint         pos;
     bool            notFound = true;
-    LIB_PIN*        pin;
+    LIB_PIN*        pin = nullptr;
     SCH_SHEET_LIST  sheetList( g_RootSheet );
+    EDA_ITEM*       foundItem = nullptr;
 
     if( !aSearchHierarchy )
         sheetList.push_back( *m_CurrentSheet );
@@ -148,6 +149,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
                 case FIND_COMPONENT_ONLY:    // Find component only
                     notFound = false;
                     pos = pSch->GetPosition();
+                    foundItem = Component;
                     break;
 
                 case FIND_PIN:               // find a pin
@@ -159,11 +161,13 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
                     notFound = false;
                     pos += pin->GetPosition();
+                    foundItem = Component;
                     break;
 
                 case FIND_REFERENCE:         // find reference
                     notFound = false;
                     pos = pSch->GetField( REFERENCE )->GetPosition();
+                    foundItem = pSch->GetField( REFERENCE );
                     break;
 
                 case FIND_VALUE:             // find value
@@ -174,6 +178,8 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
                     notFound = false;
                     pos = pSch->GetField( VALUE )->GetPosition();
+                    foundItem = pSch->GetField( VALUE );
+
                     break;
                 }
             }
@@ -228,6 +234,10 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
         msg.Printf( _( "Component %s not found" ), aReference );
 
     SetStatusText( msg );
+
+    // highlight selection
+    GetCanvas()->GetView()->HighlightItem( foundItem, pin );
+    GetCanvas()->Refresh();
 
     return item;
 }

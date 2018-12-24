@@ -252,6 +252,9 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
 {
     MODULE*     module;
 
+    if( !aItem )
+        return "$PART: \"UNUSED0\""; // dummy message clears highlight state
+
     switch( aItem->Type() )
     {
     case PCB_MODULE_T:
@@ -309,13 +312,6 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
  */
 void PCB_EDIT_FRAME::SendMessageToEESCHEMA( BOARD_ITEM* aSyncItem )
 {
-#if 1
-    wxASSERT( aSyncItem );      // can't we fix the caller?
-#else
-    if( !aSyncItem )
-        return;
-#endif
-
     std::string packet = FormatProbeItem( aSyncItem );
 
     if( packet.size() )
