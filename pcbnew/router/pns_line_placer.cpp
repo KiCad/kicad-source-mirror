@@ -413,23 +413,38 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
 
 bool LINE_PLACER::rhMarkObstacles( const VECTOR2I& aP, LINE& aNewHead )
 {
-    buildInitialLine( aP, m_head );
+    LINE newHead( m_head ), bestHead( m_head );
+    bool hasBest = false;
 
-    auto obs = m_currentNode->NearestObstacle( &m_head );
+    buildInitialLine( aP, newHead );
 
-    if( obs )
+    NODE::OBSTACLES obstacles;
+
+    m_currentNode->QueryColliding( &newHead, obstacles );
+
+    for( auto& obs : obstacles )
     {
-        int cl = m_currentNode->GetClearance( obs->m_item, &m_head );
-        auto hull = obs->m_item->Hull( cl, m_head.Width() );
+        int cl = m_currentNode->GetClearance( obs.m_item, &newHead );
+        auto hull = obs.m_item->Hull( cl, newHead.Width() );
 
         auto nearest = hull.NearestPoint( aP );
         Dbg()->AddLine( hull, 2, 10000 );
 
-        if( ( nearest - aP ).EuclideanNorm() < m_head.Width() )
+        if( ( nearest - aP ).EuclideanNorm() < newHead.Width() + cl )
         {
-            buildInitialLine( nearest, m_head );
+            buildInitialLine( nearest, newHead );
+            if ( newHead.CLine().Length() > bestHead.CLine().Length() )
+            {
+                bestHead = newHead;
+                hasBest = true;
+            }
         }
     }
+
+    if( hasBest )
+        m_head = bestHead;
+    else
+        m_head = newHead;
 
     aNewHead = m_head;
 
