@@ -222,6 +222,10 @@ bool DIALOG_CONFIGURE_PATHS::TransferDataFromWindow()
     {
         wxString name = m_EnvVars->GetCellValue( row, EV_NAME_COL );
         wxString path = m_EnvVars->GetCellValue( row, EV_PATH_COL );
+        wxString external = m_EnvVars->GetCellValue( row, EV_FLAG_COL );
+
+        if( external.Length() )
+            continue;
 
         if( name.IsEmpty() )
         {
