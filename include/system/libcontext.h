@@ -39,6 +39,9 @@
     #elif __aarch64__
         #define LIBCONTEXT_PLATFORM_linux_arm64
         #define LIBCONTEXT_CALL_CONVENTION
+    #elif (__mips__ && _MIPS_SIM == _ABI64)
+        #define LIBCONTEXT_PLATFORM_linux_mips_n64
+        #define LIBCONTEXT_CALL_CONVENTION
     #endif
 
     #elif defined(__MINGW32__) || defined(__MINGW64__)
