@@ -254,7 +254,7 @@ std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName )
     configname.AssignDir( GetKicadConfigPath() );
     configname.SetFullName( aProgName );
 
-    return std::make_unique<wxConfig>( wxT( "" ), wxT( "" ), configname.GetFullPath() );
+    return std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), configname.GetFullPath() );
 }
 
 
