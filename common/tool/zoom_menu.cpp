@@ -73,5 +73,9 @@ void ZOOM_MENU::update()
                                (int) screen->m_ZoomList.size() );
 
     for( int i = 0; i < maxZoomIds; ++i )
-        Check( ID_POPUP_ZOOM_LEVEL_START+1 + i, std::fabs( zoomList[i] - zoom ) < 1e-6 );
+    {
+        // Search for a value near the current zoom setting:
+        double rel_error = std::fabs( zoomList[i] - zoom )/zoom;
+        Check( ID_POPUP_ZOOM_LEVEL_START+1 + i, rel_error < 0.1 );
+    }
 }
