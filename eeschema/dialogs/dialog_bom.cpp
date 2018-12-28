@@ -144,7 +144,14 @@ void BOM_CFG_PARSER::parsePlugin()
             NeedSYMBOLorNUMBER();
 
             if( plugin )
-                plugin->Options().Add( FromUTF8() );
+            {
+                wxString option = FromUTF8();
+
+                if( option.StartsWith( "nickname=", &name ) )
+                    plugin->SetName( name );
+                else
+                    plugin->Options().Add( option );
+            }
 
             NeedRIGHT();
             break;
@@ -235,7 +242,6 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
 
     SetInitialFocus( m_lbPlugins );
     m_sdbSizer1OK->SetDefault();
-    wxLogDebug( "TEEEEST" );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -264,6 +270,14 @@ DIALOG_BOM::~DIALOG_BOM()
         {
             writer.Print( 1, "(opts %s)",
                           writer.Quotew( plugin->Options().Item( jj ) ).c_str() );
+        }
+
+        if( !plugin->GetName().IsEmpty() )
+        {
+            wxString option = wxString::Format( "nickname=%s", plugin->GetName() );
+
+            writer.Print( 1, "(opts %s)",
+                          writer.Quotew( option ).c_str() );
         }
 
         writer.Print( 0, ")" );
