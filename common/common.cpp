@@ -254,6 +254,7 @@ std::unique_ptr<wxConfigBase> GetNewConfig( const wxString& aProgName )
     configname.AssignDir( GetKicadConfigPath() );
     configname.SetFullName( aProgName );
 
+    // explicitly use wxFileConfig to prevent storing any settings in the system registry on Windows
     return std::make_unique<wxFileConfig>( wxT( "" ), wxT( "" ), configname.GetFullPath() );
 }
 
