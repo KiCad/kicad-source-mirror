@@ -288,8 +288,10 @@ public:
      * Send a remote command to Eeschema via a socket,
      * Commands are
      * $PART: "reference"   put cursor on component anchor
+     * @param aClearHighligntOnly = true if the message to send is only "clear highlight"
+     * (used when exiting Cvpcb)
      */
-    void SendMessageToEESCHEMA();
+    void SendMessageToEESCHEMA( bool aClearHighligntOnly = false );
 
     COMPONENT* GetSelectedComponent();
 

@@ -190,7 +190,7 @@ void SCH_VIEW::HideWorksheet()
 
 void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
 {
-    if(! aItem )
+    if( !aItem )
     {
         for( auto item : *m_allItems )
         {

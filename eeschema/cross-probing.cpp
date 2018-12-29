@@ -108,8 +108,9 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     /* look for a complement */
     idcmd = strtok( NULL, " \n\r" );
 
-    if( idcmd == NULL )    // component only
+    if( idcmd == NULL )    // Highlight component only (from Cvpcb or Pcbnew)
     {
+        // Highlight component part_ref, or clear Highlight, if part_ref is not existing
         FindComponentAndItem( part_ref, true, FIND_COMPONENT_ONLY, wxEmptyString );
         return;
     }

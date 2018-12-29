@@ -93,7 +93,11 @@ public:
     void ShowSelectionArea( bool aShow = true );
     void ShowPreview( bool aShow = true );
 
+    /**
+     * Clear the hide flag of all items in the view
+     */
     void ClearHiddenFlags();
+
     void HideWorksheet();
 
     void HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin = nullptr );

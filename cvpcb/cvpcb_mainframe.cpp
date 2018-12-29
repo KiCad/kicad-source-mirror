@@ -274,6 +274,10 @@ void CVPCB_MAINFRAME::OnCloseWindow( wxCloseEvent& Event )
 
     m_modified = false;
 
+    // clear highlight symbol in schematic:
+    SendMessageToEESCHEMA( true );
+
+    // Delete window
     Destroy();
 }
 
@@ -717,22 +721,35 @@ bool CVPCB_MAINFRAME::LoadFootprintFiles()
 }
 
 
-void CVPCB_MAINFRAME::SendMessageToEESCHEMA()
+void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
 {
     if( m_netlist.IsEmpty() )
         return;
 
+    // clear highlight of previously selected components (if any):
+    // Selecting a non existing symbol clears any previously highlighted symbols
+    std::string packet = "$PART: \"$DUMMY$\"";
+
+    if( Kiface().IsSingle() )
+        SendCommand( MSG_TO_SCH, packet.c_str() );
+    else
+        Kiway().ExpressMail( FRAME_SCH, MAIL_CROSS_PROBE, packet, this );
+
+    if( aClearHighligntOnly )
+        return;
+
     int selection = m_compListBox->GetSelection();
 
-    if ( selection < 0 )
-        selection = 0;
+    if ( selection < 0 )    // Nothing selected
+        return;
 
     if( m_netlist.GetComponent( selection ) == NULL )
         return;
 
+    // Now highlight the selected component:
     COMPONENT* component = m_netlist.GetComponent( selection );
 
-    std::string packet = StrPrintf( "$PART: \"%s\"", TO_UTF8( component->GetReference() ) );
+    packet = StrPrintf( "$PART: \"%s\"", TO_UTF8( component->GetReference() ) );
 
     if( Kiface().IsSingle() )
         SendCommand( MSG_TO_SCH, packet.c_str() );

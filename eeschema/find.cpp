@@ -235,12 +235,9 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
 
     SetStatusText( msg );
 
-    if( foundItem )
-    {
-        // highlight selection
-        GetCanvas()->GetView()->HighlightItem( foundItem, pin );
-        GetCanvas()->Refresh();
-    }
+    // highlight selection if foundItem is not null, or clear any highlight selection
+    GetCanvas()->GetView()->HighlightItem( foundItem, pin );
+    GetCanvas()->Refresh();
 
     return item;
 }

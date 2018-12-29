@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,6 +48,7 @@
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
 #include <symbol_lib_table.h>
+#include <sch_view.h>
 
 #include <iostream>
 
@@ -76,7 +77,9 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     bool        blockActive = GetScreen()->IsBlockActive();
     wxString    msg;
 
-    DBG(printf("on-rclick cur %p blk %d\n", item, blockActive ? 1 : 0 );)
+    // Ugly hack, clear any highligthed symbol, because the HIGHLIGHT flag create issues when creating menus
+    // Will be fixed later
+    GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
     // Do not start a block command on context menu.
     m_canvas->SetCanStartBlock( -1 );
@@ -141,9 +144,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         bool actionCancelled = false;
         item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
-
-        printf("Locateandshow %d %d item %p type %d\n", aPosition.x, aPosition.y,
-                    item, item ? item->Type() : 0 ); fflush(0);
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )

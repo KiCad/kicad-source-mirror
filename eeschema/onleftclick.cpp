@@ -62,10 +62,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     SCH_ITEM*   item = GetScreen()->GetCurItem();
     wxPoint     gridPosition = GetGridPosition( aPosition );
-    DBG(printf("mousep %d %d gridp %d %d\n", aPosition.x, aPosition.y, gridPosition.x, gridPosition.y );)
 
-
-    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || ( item && item->GetFlags() ) )
+    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) ||
+        ( item && ( item->GetFlags() & ~HIGHLIGHTED ) ) )
     {
         m_canvas->SetAutoPanRequest( false );
         SetRepeatItem( NULL );
@@ -107,6 +106,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             item = LocateAndShowItem( aPosition );
         }
     }
+
+    if( !item ) // If clicked on a empty area, clear any highligthed symbol
+        GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
     switch( GetToolId() )
     {
