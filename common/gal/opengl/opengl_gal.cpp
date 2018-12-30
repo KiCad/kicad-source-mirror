@@ -44,10 +44,17 @@
 #include <limits>
 #include <functional>
 using namespace std::placeholders;
-
-
 using namespace KIGFX;
 
+// A ugly workaround to avoid serious issues (crashes) when using bitmaps cache
+// to speedup redraw.
+// issues arise when using bitmaps in page layout, when the page layout containd bitmaps,
+// and is common to schematic and board editor,
+// and the schematic is a hierarchy and when using cross-probing
+// When the cross probing from pcbnew to eeschema switches to a sheet, the bitmaps cache
+// becomes broken (in fact the associated texture).
+// I hope (JPC) it will be fixed later, but a slighty slower refresh is better than a crash
+#define DISABLE_BITMAP_CACHE
 
 // The current font is "Ubuntu Mono" available under Ubuntu Font Licence 1.0
 // (see ubuntu-font-licence-1.0.txt for details)
@@ -95,9 +102,7 @@ private:
 GL_BITMAP_CACHE::~GL_BITMAP_CACHE()
 {
     for ( auto b = m_bitmaps.begin(); b != m_bitmaps.end(); ++b )
-    {
         glDeleteTextures( 1, &b->second.id );
-    }
 }
 
 
@@ -107,12 +112,15 @@ GLuint GL_BITMAP_CACHE::RequestBitmap( const BITMAP_BASE* aBitmap )
 
     if ( it != m_bitmaps.end() )
     {
-        return it->second.id;
+        // A bitmap is found in cache bitmap.
+        // Ensure the associated texture is still valide (can be destoyed somewhere)
+        if( glIsTexture( it->second.id ) )
+            return it->second.id;
+
+        // else if not valid, it will be recreated.
     }
-    else
-    {
-        return cacheBitmap( aBitmap );
-    }
+
+    return cacheBitmap( aBitmap );
 }
 
 
@@ -157,7 +165,9 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
     bmp.id = textureID;
 
+#ifndef DISABLE_BITMAP_CACHE
     m_bitmaps[ aBitmap ] = bmp;
+#endif
 
     return textureID;
 }
@@ -1044,7 +1054,10 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     glm::vec4 v1 = xform * glm::vec4( w/2, h/2, 0.0, 0.0 );
     glm::vec4 trans = xform[3];
 
-    auto id = bitmapCache->RequestBitmap( &aBitmap );
+    auto texture_id = bitmapCache->RequestBitmap( &aBitmap );
+
+    if( !glIsTexture( texture_id ) )    // ensure the bitmap texture is still valid
+        return;
 
     auto oldTarget = GetTarget();
 
@@ -1054,7 +1067,7 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
     SetTarget( TARGET_NONCACHED );
     glEnable(GL_TEXTURE_2D);
     glActiveTexture( GL_TEXTURE0 );
-    glBindTexture( GL_TEXTURE_2D, id );
+    glBindTexture( GL_TEXTURE_2D, texture_id );
 
     glBegin( GL_QUADS );
     glColor4f( 1.0, 1.0, 1.0, 1.0 );
@@ -1073,6 +1086,10 @@ void OPENGL_GAL::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     SetTarget( oldTarget );
     glBindTexture( GL_TEXTURE_2D, 0 );
+
+#ifdef DISABLE_BITMAP_CACHE
+    glDeleteTextures( 1, &texture_id );
+#endif
 
     glPopMatrix();
 }
