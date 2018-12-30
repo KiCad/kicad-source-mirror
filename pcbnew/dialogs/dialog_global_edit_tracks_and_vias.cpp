@@ -23,6 +23,7 @@
  */
 
 #include <fctsys.h>
+#include <confirm.h>
 #include <pcb_edit_frame.h>
 #include <class_drawpanel.h>
 #include <class_board.h>
@@ -66,6 +67,7 @@ private:
     PCB_EDIT_FRAME* m_parent;
     BOARD*          m_brd;
     int*            m_originalColWidths;
+    bool            m_failedDRC;
 
 public:
     DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT_FRAME* aParent );
@@ -110,6 +112,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
         m_originalColWidths[ i ] = m_netclassGrid->GetColSize( i );
+
+    m_failedDRC = false;
 
     buildFilterLists();
 
@@ -255,6 +259,12 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::OnUpdateUI( wxUpdateUIEvent&  )
 {
     m_trackWidthSelectBox->Enable( m_setToSpecifiedValues->GetValue() );
     m_viaSizesSelectBox->Enable( m_setToSpecifiedValues->GetValue() );
+
+    if( m_failedDRC )
+    {
+        m_failedDRC = false;
+        DisplayError( this, _( "Some items failed DRC and were not modified." ) );
+    }
 }
 
 
@@ -269,7 +279,9 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
         {
             brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
             brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
-            m_parent->SetTrackSegmentWidth( aItem, aUndoList, false );
+
+            if( !m_parent->SetTrackSegmentWidth( aItem, aUndoList, false ) )
+                m_failedDRC = true;
         }
         brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
         brdSettings.SetViaSizeIndex( prevViaSizeIndex );
@@ -289,7 +301,8 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
     }
     else
     {
-        m_parent->SetTrackSegmentWidth( aItem, aUndoList, true );
+        if( !m_parent->SetTrackSegmentWidth( aItem, aUndoList, true ) )
+            m_failedDRC = true;
     }
 }
 
@@ -345,7 +358,7 @@ bool DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::TransferDataFromWindow()
             m_parent->GetCanvas()->Refresh();
     }
 
-    return true;
+    return !m_failedDRC;
 }
 
 
