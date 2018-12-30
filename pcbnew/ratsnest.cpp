@@ -192,6 +192,9 @@ static MODULE movedModule( nullptr );
 
 void PCB_BASE_FRAME::build_ratsnest_module( MODULE* aModule, wxPoint aMoveVector )
 {
+    if( !GetBoard()->IsElementVisible( LAYER_RATSNEST ) )
+        return;
+
     auto connectivity = GetBoard()->GetConnectivity();
 
     movedModule = *aModule;

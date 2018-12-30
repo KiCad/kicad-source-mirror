@@ -148,6 +148,10 @@ TOOL_ACTION PCB_ACTIONS::showLocalRatsnest( "pcbnew.Control.showLocalRatsnest",
         AS_GLOBAL, 0,
         "", "" );
 
+TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
+        AS_GLOBAL, 0,
+        "", "" );
+
 class ZONE_CONTEXT_MENU : public CONTEXT_MENU
 {
 public:
@@ -1147,7 +1151,7 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
     auto& selection = selectionTool->GetSelection();
     auto connectivity = getModel<BOARD>()->GetConnectivity();
 
-    if( selection.Empty() )
+    if( selection.Empty() || !getModel<BOARD>()->IsElementVisible( LAYER_RATSNEST ) )
     {
         connectivity->ClearDynamicRatsnest();
     }
@@ -1196,6 +1200,9 @@ void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
 
 void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 {
+    if( !board()->IsElementVisible( LAYER_RATSNEST ) )
+        return;
+
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selectionTool->GetSelection();
     auto connectivity = board()->GetConnectivity();
@@ -1239,9 +1246,10 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::selectionModified.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, SELECTION_TOOL::ClearedEvent );
+
+    Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, PCB_ACTIONS::hideLocalRatsnest.MakeEvent() );
 }
 
 
