@@ -253,7 +253,7 @@ std::string FormatProbeItem( BOARD_ITEM* aItem )
     MODULE*     module;
 
     if( !aItem )
-        return "$PART: \"UNUSED0\""; // dummy message clears highlight state
+        return "$CLEAR: \"HIGHLIGHTED\""; // message to clear highlight state
 
     switch( aItem->Type() )
     {

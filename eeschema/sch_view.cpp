@@ -194,12 +194,19 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
     {
         for( auto item : *m_allItems )
         {
-            auto eitem = static_cast<EDA_ITEM *>( item );
-            eitem->ClearFlags( HIGHLIGHTED );
+            // Not all view items can be highlighted, only EDA_ITEMs
+            // So clear flag of only EDA_ITEMs.
+            auto eitem = dynamic_cast<EDA_ITEM *>( item );
 
-            if( eitem->Type() == SCH_COMPONENT_T )
+            if( eitem )
             {
-                static_cast<SCH_COMPONENT*>( eitem )->ClearHighlightedPins();
+                eitem->ClearFlags( HIGHLIGHTED );
+
+                if( eitem->Type() == SCH_COMPONENT_T )
+                {
+                    // Items inside a component (pins, fields can be highlighted.
+                    static_cast<SCH_COMPONENT*>( eitem )->ClearAllHighlightFlags();
+                }
             }
         }
     }
@@ -210,9 +217,7 @@ void SCH_VIEW::HighlightItem( EDA_ITEM *aItem, LIB_PIN* aPin )
             static_cast<SCH_COMPONENT*>( aItem )->HighlightPin( aPin );
         }
         else
-        {
             aItem->SetFlags( HIGHLIGHTED );
-        }
     }
 
     // ugly but I guess OK for the moment...

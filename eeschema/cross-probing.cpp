@@ -58,6 +58,7 @@
  * \li \c \$PART: \c "reference" \c \$VAL: \c "value" Put cursor on component value.
  * \li \c \$PART: \c "reference" \c \$PAD: \c "pin name" Put cursor on the component pin.
  * \li \c \$NET: \c "netname" Highlight a specified net
+ * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear components highlight
  * <p>
  * @param cmdline = received command from Pcbnew
  */
@@ -93,6 +94,14 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
             //view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
             GetGalCanvas()->Refresh();
         }
+
+        return;
+    }
+
+    if( strcmp( idcmd, "$CLEAR:" ) == 0 )
+    {
+        if( text && strcmp( text, "HIGHLIGHTED" ) == 0 )
+            GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
 
         return;
     }

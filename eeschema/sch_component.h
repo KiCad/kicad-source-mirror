@@ -329,6 +329,12 @@ public:
      */
     void SetTimeStamp( timestamp_t aNewTimeStamp );
 
+    /**
+     * Clear the HIGHLIGHTED flag of all items of the component
+     * (fields, pins ...)
+     */
+    void ClearAllHighlightFlags();
+
     const EDA_RECT GetBoundingBox() const override;
 
     /**

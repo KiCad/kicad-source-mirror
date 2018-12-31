@@ -728,7 +728,7 @@ void CVPCB_MAINFRAME::SendMessageToEESCHEMA( bool aClearHighligntOnly )
 
     // clear highlight of previously selected components (if any):
     // Selecting a non existing symbol clears any previously highlighted symbols
-    std::string packet = "$PART: \"$DUMMY$\"";
+    std::string packet = "$CLEAR: \"HIGHLIGHTED\"";
 
     if( Kiface().IsSingle() )
         SendCommand( MSG_TO_SCH, packet.c_str() );

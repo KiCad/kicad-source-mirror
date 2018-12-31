@@ -1975,6 +1975,7 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
     }
 }
 
+
 void SCH_COMPONENT::ClearHighlightedPins()
 {
     m_highlightedPins.clear();
@@ -1990,4 +1991,17 @@ void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 bool SCH_COMPONENT::IsPinHighlighted( const LIB_PIN* aPin )
 {
     return m_highlightedPins.find( aPin->GetNumber() ) != m_highlightedPins.end();
+}
+
+
+void SCH_COMPONENT::ClearAllHighlightFlags()
+{
+    ClearFlags( HIGHLIGHTED );
+
+    // Clear the HIGHLIGHTED flag of pins
+    ClearHighlightedPins();
+
+    // Clear the HIGHLIGHTED flag of other items, currently only fields
+    for( SCH_FIELD& each_field : m_Fields )
+        each_field.ClearFlags( HIGHLIGHTED );
 }
