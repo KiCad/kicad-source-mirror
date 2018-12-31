@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -458,9 +457,10 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( getTargetFPID().GetLibItemName().empty() )
         {
             // Save Library As
-            const wxString& libName = getTargetFPID().GetLibNickname();
+            const wxString& src_libNickname = getTargetFPID().GetLibNickname();
+            wxString src_libFullName = Prj().PcbFootprintLibs()->GetFullURI( src_libNickname );
 
-            if( SaveLibraryAs( Prj().PcbFootprintLibs()->FindRow( libName )->GetFullURI() ) )
+            if( SaveLibraryAs( src_libFullName ) )
                 SyncLibraryTree( true );
         }
         else if( getTargetFPID() == GetLoadedFPID() )
