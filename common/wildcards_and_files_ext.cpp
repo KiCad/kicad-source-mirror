@@ -71,7 +71,7 @@ static wxString formatWildcardExt( const wxString& aWildcard )
 
 wxString AddFileExtListToFilter( int aArgCnt, ... )
 {
-    wxString files_filter = " (*.";
+    wxString files_filter = " (";
 
     va_list args;
     va_start( args, aArgCnt );
@@ -80,18 +80,14 @@ wxString AddFileExtListToFilter( int aArgCnt, ... )
     for( int ii = 0; ii < aArgCnt; ii++)
     {
         const char* ext = va_arg(args, char*);
-
-        if( ii > 0 )
-            files_filter << " *.";
-
-        files_filter << formatWildcardExt( ext );
+        files_filter << " *." << ext;
     }
 
     files_filter << ")|*.";
 
     va_start( args, aArgCnt );
 
-    // Add extensions to the filter list:
+    // Add extensions to the filter list, using a formated string (GTK specific):
     for( int ii = 0; ii < aArgCnt; ii++)
     {
         const char* ext = va_arg( args, const char* );
