@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,8 +25,8 @@
  */
 
 /**
- * The common library
  * @file wildcards_and_files_ext.h
+ * Definition of file extensions used in Kicad.
  */
 
 #ifndef INCLUDE_WILDCARDS_AND_FILES_EXT_H_
@@ -45,6 +45,23 @@
  *
  * @{
  */
+
+/**
+ * build the wildcard extension file dialog wildcard filter to add to the base message dialog.
+ * for instance, to open .txt files in a file dialog:
+ * the base message is for instance "Text files"
+ * the ext list is " (*.txt)|*.txt"
+ * and the returned string to add to the base message is " (*.txt)|*.txt"
+ * the message to display in the dialog is  "Text files (*.txt)|*.txt"
+ *
+ * @param aArgCnt is the count of file ext to add to the filter
+ * other params are the const char* file ext to add to the filter
+ *
+ * @return the appropriate file dialog wildcard filter list.
+ */
+
+wxString AddFileExtListToFilter( int aArgCnt, ... );
+
 
 // Do NOT use wxString for these.  wxStrings are not thread-safe, even when const.  (For the
 // curious the UTF8 cacheing strategy puts iterators in a linked list.  Insertion and removal
