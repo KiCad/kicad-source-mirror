@@ -496,6 +496,8 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+
         }
 
         else if( evt->IsCancel() || evt->IsActivate() )
@@ -700,6 +702,9 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
 
+    if( m_dragging )
+        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+
     return 0;
 }
 
@@ -817,6 +822,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
 
+    if( m_dragging )
+        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
+
     return 0;
 }
 
@@ -854,6 +862,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+
+    if( m_dragging )
+        m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
 
     return 0;
 }
@@ -1027,6 +1038,9 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+
+        if( m_dragging )
+            m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
     }
 
     return 0;

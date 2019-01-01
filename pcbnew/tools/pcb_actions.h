@@ -380,9 +380,12 @@ public:
     static TOOL_ACTION crossProbeSchToPcb;
     static TOOL_ACTION appendBoard;
     static TOOL_ACTION showHelp;
+    static TOOL_ACTION toBeDone;
+
+    // Ratsnest
     static TOOL_ACTION showLocalRatsnest;
     static TOOL_ACTION hideLocalRatsnest;
-    static TOOL_ACTION toBeDone;
+    static TOOL_ACTION updateLocalRatsnest;
 
     /// Find an item
     static TOOL_ACTION find;
