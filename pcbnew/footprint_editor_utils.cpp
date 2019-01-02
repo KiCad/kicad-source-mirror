@@ -805,8 +805,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
+        wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::Process_Special_Functions error" ) );
         break;
     }
 }

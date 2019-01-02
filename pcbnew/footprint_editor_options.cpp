@@ -74,7 +74,7 @@ void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar error" ) );
+        wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar error" ) );
         break;
     }
 }

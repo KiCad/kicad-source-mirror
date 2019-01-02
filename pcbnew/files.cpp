@@ -357,7 +357,7 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
         }
 
     default:
-        DisplayError( this, wxT( "File_io Internal Error" ) );
+        wxLogDebug( wxT( "File_io Internal Error" ) );
         return false;
     }
 }

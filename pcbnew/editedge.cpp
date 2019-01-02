@@ -175,12 +175,8 @@ void PCB_EDIT_FRAME::Delete_Drawings_All_Layer( PCB_LAYER_ID aLayer )
             break;
 
         default:
-        {
-            msg.Printf( wxT("Delete_Drawings_All_Layer() error: unknown type %d"),
-                        item->Type() );
-            wxMessageBox( msg );
-            break;
-        }
+            wxLogDebug( wxT( "Delete_Drawings_All_Layer() error: unknown type %d" ), item->Type() );
+
         }
     }
 

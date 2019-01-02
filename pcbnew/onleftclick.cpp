@@ -240,7 +240,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "OnLeftClick err: not a PCB_TARGET_T" ) );
+            wxLogDebug( wxT( "OnLeftClick err: not a PCB_TARGET_T" ) );
         }
 
         break;
@@ -327,7 +327,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() zone internal error" ) );
+            wxLogDebug( wxT( "PCB_EDIT_FRAME::OnLeftClick() zone internal error" ) );
         }
 
         break;
@@ -353,7 +353,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "OnLeftClick err: not a PCB_TEXT_T" ) );
+            wxLogDebug( wxT( "OnLeftClick err: not a PCB_TEXT_T" ) );
         }
 
         break;
@@ -385,7 +385,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this, wxT( "Internal err: Struct not PCB_MODULE_T" ) );
+            wxLogDebug( wxT( "Internal err: Struct not PCB_MODULE_T" ) );
         }
 
         break;
@@ -411,8 +411,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            DisplayError( this,
-                          wxT( "PCB_EDIT_FRAME::OnLeftClick() error item is not a DIMENSION" ) );
+            wxLogDebug( wxT( "PCB_EDIT_FRAME::OnLeftClick() error item is not a DIMENSION" ) );
         }
 
         break;
@@ -456,7 +455,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     default:
-        DisplayError( this, wxT( "PCB_EDIT_FRAME::OnLeftClick() id error" ) );
+        wxLogDebug( wxT( "PCB_EDIT_FRAME::OnLeftClick() id error" ) );
         SetNoToolSelected();
         break;
     }

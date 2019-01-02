@@ -248,7 +248,7 @@ void FOOTPRINT_EDIT_FRAME::Delete_Edge_Module( EDGE_MODULE* aEdge )
 
     if( aEdge->Type() != PCB_MODULE_EDGE_T )
     {
-        DisplayError( this, wxT( "StructType error: PCB_MODULE_EDGE_T expected" ) );
+        wxLogDebug( wxT( "StructType error: PCB_MODULE_EDGE_T expected" ) );
         return;
     }
 
@@ -380,7 +380,7 @@ EDGE_MODULE* FOOTPRINT_EDIT_FRAME::Begin_Edge_Module( EDGE_MODULE* aEdge,
         }
         else
         {
-            wxMessageBox( wxT( "Begin_Edge() error" ) );
+            wxLogDebug( wxT( "Begin_Edge() error" ) );
         }
     }
 

@@ -293,16 +293,14 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
         case SCREEN_T:
         case TYPE_NOT_INIT:
         case PCB_T:
-            msg.Printf( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unexpected DrawType %d" ),
+            wxLogDebug( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unexpected DrawType %d" ),
                         item->Type() );
-            wxMessageBox( msg );
             SetCurItem( NULL );
             break;
 
         default:
-            msg.Printf( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unknown DrawType %d" ),
+            wxLogDebug( wxT( "PCB_EDIT_FRAME::OnRightClick() Error: unknown DrawType %d" ),
                         item->Type() );
-            wxMessageBox( msg );
 
             // Attempt to clear error (but should no occurs )
             if( item->Type() >= MAX_STRUCT_TYPE_ID )

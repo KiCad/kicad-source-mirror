@@ -234,7 +234,7 @@ bool EDIT_TOOL::Init()
 
     if( !m_selectionTool )
     {
-        DisplayError( NULL, wxT( "pcbnew.InteractiveSelection tool is not available" ) );
+        DisplayError( NULL, _( "pcbnew.InteractiveSelection tool is not available" ) );
         return false;
     }
 

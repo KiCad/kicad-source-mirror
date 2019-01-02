@@ -1080,7 +1080,7 @@ bool DRC::checkClearancePadToPad( D_PAD* aRefPad, D_PAD* aPad )
     }
 
     default:
-        wxMessageBox( wxT( "DRC::checkClearancePadToPad: unknown pad shape" ) );
+        wxLogDebug( wxT( "DRC::checkClearancePadToPad: unknown pad shape" ) );
         break;
     }
 

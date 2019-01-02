@@ -71,14 +71,9 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 break;
 
             default:
-            {
-                wxString msg;
-                msg.Printf( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
+                wxLogDebug( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
                             item->Type(), item->GetFlags() );
-                DisplayError( this, msg );
                 item->ClearFlags();
-                break;
-            }
             }
         }
 
@@ -134,9 +129,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
                 SetCurItem( Begin_Edge_Module( (EDGE_MODULE*) item, DC, S_SEGMENT ) );
             }
             else
-            {
-                wxMessageBox( wxT( "ProcessCommand error: unknown shape" ) );
-            }
+                wxLogDebug( wxT( "ProcessCommand error: unknown shape" ) );
         }
         break;
 
@@ -202,12 +195,12 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         break;
 
     case ID_MODEDIT_MEASUREMENT_TOOL:
-        DisplayError( this, wxT( "Measurement Tool not available in Legacy Toolset" ) );
+        DisplayError( this, _( "Measurement Tool not available in Legacy Toolset" ) );
         SetNoToolSelected();
         break;
 
     default:
-        DisplayError( this, wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
+        wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::ProcessCommand error" ) );
         SetNoToolSelected();
     }
 
@@ -448,23 +441,20 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         case PCB_MARKER_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
-            msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: Unexpected DrawType %d" ),
+            wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: Unexpected DrawType %d" ),
                         item->Type() );
-            DisplayError( this, msg );
             break;
 
         case SCREEN_T:
         case TYPE_NOT_INIT:
         case PCB_T:
-            msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: illegal DrawType %d" ),
+            wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: illegal DrawType %d" ),
                         item->Type() );
-            DisplayError( this, msg );
             break;
 
         default:
-            msg.Printf( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
+            wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::OnRightClick Error: unknown DrawType %d" ),
                         item->Type() );
-            DisplayError( this, msg );
             break;
         }
         PopMenu->AppendSeparator();

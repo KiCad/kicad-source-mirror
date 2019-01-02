@@ -77,8 +77,7 @@ void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
         break;
 
     default:
-        DisplayError( this,
-                      wxT( "PCB_EDIT_FRAME::ProcessMuWaveFunctions() id error" ) );
+        wxLogDebug( wxT( "id %d error" ), id );
         break;
     }
 }
@@ -112,7 +111,7 @@ void PCB_EDIT_FRAME::MuWaveCommand( wxDC* DC, const wxPoint& MousePos )
 
     default:
         m_canvas->SetCursor( wxCURSOR_ARROW );
-        DisplayError( this, wxT( "PCB_EDIT_FRAME::MuWaveCommand() id error" ) );
+        wxLogDebug( wxT( "id %d error" ), GetToolId() );
         SetNoToolSelected();
         break;
     }

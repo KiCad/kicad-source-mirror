@@ -153,7 +153,7 @@ void PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event( wxCommandEvent& event )
         break;
 
     default:
-        wxMessageBox( wxT( "PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event() error") );
+        wxLogDebug( wxT( "PCB_EDIT_FRAME::Tracks_and_Vias_Size_Event() error") );
         break;
     }
 
