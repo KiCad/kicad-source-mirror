@@ -150,7 +150,7 @@ static EDA_HOTKEY HkRunPleditor( _HKI( "Run PlEditor" ), HK_RUN_PLEDITOR, 'Y' + 
 static EDA_HOTKEY HkNewProject( _HKI( "New Project" ), HK_NEW, GR_KB_CTRL + 'N' );
 static EDA_HOTKEY HkOpenProject( _HKI( "Open Project" ), HK_OPEN, GR_KB_CTRL + 'O' );
 static EDA_HOTKEY HkSaveProject( _HKI( "Save Project" ), HK_SAVE, GR_KB_CTRL + 'S' );
-static EDA_HOTKEY HkHelp( _HKI( "Help (this window)" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
 
 // List of hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =

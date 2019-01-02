@@ -80,7 +80,7 @@ static EDA_HOTKEY    HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2, ID_KEY_
 static EDA_HOTKEY    HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1, ID_KEY_ZOOM_IN );
 static EDA_HOTKEY    HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION,
                                       GR_KB_CTRL + WXK_F5, ID_ZOOM_SELECTION );
-static EDA_HOTKEY    HkHelp( _HKI( "Help (this window)" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY    HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
 static EDA_HOTKEY    HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M', ID_POPUP_ITEM_MOVE );
 static EDA_HOTKEY    HkPlaceItem( _HKI( "Place Item" ), HK_PLACE_ITEM, 'P', ID_POPUP_ITEM_PLACE );
 static EDA_HOTKEY    HkMoveStartPoint( _HKI( "Move Start Point" ), HK_MOVE_START_POINT, 'S',
