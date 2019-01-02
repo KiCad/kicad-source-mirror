@@ -333,7 +333,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
                          DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Orient_Filter,
                          DIALOG_PUSH_PAD_PROPERTIES::m_Pad_Layer_Filter );
 
-    commit.Push( _( "Paste Pad Properties" ) );
+    commit.Push( _( "Push Pad Settings" ) );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
     frame.Refresh();
