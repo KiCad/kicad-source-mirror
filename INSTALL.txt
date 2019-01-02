@@ -114,7 +114,7 @@ GLM                  >= 9.5.4           http://glm.g-truc.net/
 
 pkg-config                              http://pkgconfig.freedesktop.org/
 
-Doxygen              (optional)         http://www.stack.nl/~dimitri/doxygen/index.html
+Doxygen              (optional)         http://www.doxygen.nl
 
 python               >= 2.6 (optional)  http://python.org/
 

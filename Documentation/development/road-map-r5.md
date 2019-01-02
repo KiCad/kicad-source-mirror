@@ -453,7 +453,7 @@ involved with the project.
 
 **Status:**
 - In progress.  Most of the developer documentation has been converted to
-  [Doxygen markdown](http://www.stack.nl/~dimitri/doxygen/manual/markdown.html)
+  [Doxygen markdown](http://www.doxygen.nl/manual/markdown.html)
   and the [output][kicad-docs] is rebuilt automatically when a commit is
   made to the KiCad repo.
 

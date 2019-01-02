@@ -462,7 +462,7 @@ you will have to apply the Boost patches in the KiCad source [patches folder][].
 [GIT]: https://git-scm.com/
 [GitHub]: https://github.com/KiCad/kicad-source-mirror
 [ngspice]: http://ngspice.sourceforge.net/
-[Doxygen]: http://www.stack.nl/~dimitri/doxygen/
+[Doxygen]: http://www.doxygen.nl
 [mailing list]: https://launchpad.net/~kicad-developers
 [SWIG]: http://www.swig.org/
 [wxWidgets]: http://wxwidgets.org/

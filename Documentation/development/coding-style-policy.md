@@ -235,8 +235,8 @@ good practice to actually generate the Doxygen \*.html files by
 building target doxygen-docs, and then to review the quality of your
 Doxygen comments with a web browser before submitting a patch.
 
-[doccode]: http://www.stack.nl/~dimitri/doxygen/manual/docblocks.html
-[manual]:  http://www.stack.nl/~dimitri/doxygen/manual.html
+[doccode]: http://www.doxygen.nl/manual/docblocks.html
+[manual]:  http://www.doxygen.nl/manual
 
 ### 3.2.1 Function Comments ### {#function_comments}
 These go into a header file, unless the function is a private (i.e.
