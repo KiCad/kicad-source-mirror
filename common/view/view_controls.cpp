@@ -69,6 +69,7 @@ void VC_SETTINGS::Reset()
     m_enableMousewheelPan = false;
     m_panWithRightButton = false;
     m_panWithLeftButton = false;
+    m_lastKeyboardCursorPositionValid = false;
 }
 
 
