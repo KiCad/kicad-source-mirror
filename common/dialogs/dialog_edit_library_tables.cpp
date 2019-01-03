@@ -27,7 +27,8 @@ DIALOG_EDIT_LIBRARY_TABLES::DIALOG_EDIT_LIBRARY_TABLES( wxWindow* aParent,
         DIALOG_SHIM( aParent, wxID_ANY, aTitle, wxDefaultPosition, wxDefaultSize,
                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER ),
         m_GlobalTableChanged( false ),
-        m_ProjectTableChanged( false )
+        m_ProjectTableChanged( false ),
+        m_contentPanel( nullptr )
 {
     // Construction delayed until after panel is installed
 }

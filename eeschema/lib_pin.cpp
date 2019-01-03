@@ -607,7 +607,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
             EDA_DRAW_FRAME* frame = aPanel->GetParent();
 
             if( frame->IsType( FRAME_SCH ) )
-                drawHidden = dynamic_cast<SCH_EDIT_FRAME*>( frame )->GetShowAllPins();
+                drawHidden = static_cast<SCH_EDIT_FRAME*>( frame )->GetShowAllPins();
             else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) )
                 drawHidden = true;      // must be able to edit
         }

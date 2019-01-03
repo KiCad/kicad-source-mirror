@@ -1195,7 +1195,7 @@ void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
         for( unsigned ii = 0; ii < block.GetCount(); ii++ )
         {
-            item = dynamic_cast<LIB_ITEM*>( block.GetItem( ii ) );
+            item = static_cast<LIB_ITEM*>( block.GetItem( ii ) );
             item->Rotate( rotationPoint );
         }
 
@@ -1254,7 +1254,7 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
         for( unsigned ii = 0; ii < block.GetCount(); ii++ )
         {
-            item = dynamic_cast<LIB_ITEM*>( block.GetItem( ii ) );
+            item = static_cast<LIB_ITEM*>( block.GetItem( ii ) );
 
             if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y || aEvent.GetId() == ID_POPUP_MIRROR_Y_BLOCK )
                 item->MirrorHorizontal( mirrorPoint );

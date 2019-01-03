@@ -84,7 +84,26 @@ protected:
 
 public:
 
-    EDA_DRAW_PANEL(){};
+    EDA_DRAW_PANEL() :
+        m_showCrossHair( true ),
+        m_cursorLevel( 0 ),
+        m_scrollIncrementX( 1 ),
+        m_scrollIncrementY( 1 ),
+        m_abortRequest( false ),
+        m_enableZoomNoCenter( false ),
+        m_enableMousewheelPan( false ),
+        m_enableAutoPan( false ),
+        m_ignoreMouseEvents( false ),
+        m_ignoreNextLeftButtonRelease( false ),
+        m_enableBlockCommands( true ),
+        m_minDragEventCount( 5 ),
+        m_PrintIsMirrored( false ),
+        m_mouseCaptureCallback( nullptr ),
+        m_endMouseCaptureCallback( nullptr ),
+        m_canStartBlock( true ),
+        m_doubleClickInterval( 0 )
+    {};
+
     virtual ~EDA_DRAW_PANEL(){};
 
     /**

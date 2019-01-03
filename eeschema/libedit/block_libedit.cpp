@@ -101,7 +101,7 @@ void LIB_EDIT_FRAME::BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* a
         item.ClearFlags();
     }
 
-    // view update    
+    // view update
 }
 
 
@@ -140,7 +140,7 @@ void LIB_EDIT_FRAME::BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* a
 
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
-        oldItem = dynamic_cast<LIB_ITEM*>( aItemsList.GetPickedItem( ii ) );
+        oldItem = static_cast<LIB_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
         // We *do not* copy fields because they are unique for the whole component
         // so skip them (do not duplicate) if they are flagged selected.
@@ -388,7 +388,7 @@ bool LIB_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     {
         if( block->GetCommand() != BLOCK_SELECT_ITEMS_ONLY && GetCurPart() )
             BlockClearSelectedItems( GetCurPart(), block );
-                
+
         GetScreen()->ClearBlockCommand();
         GetScreen()->SetCurItem( NULL );
         m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString,
@@ -461,7 +461,7 @@ void LIB_EDIT_FRAME::HandleBlockPlace( wxDC* DC )
     block->SetCommand( BLOCK_IDLE );
     GetScreen()->SetCurItem( NULL );
     m_canvas->EndMouseCapture( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString, false );
-    
+
     GetCanvas()->GetView()->ClearPreview();
     GetCanvas()->GetView()->ClearHiddenFlags();
 }
@@ -566,7 +566,7 @@ void DrawMovingBlockOutlines( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         return;
 
     block->SetMoveVector( frame->GetCrossHairPosition( true ) - block->GetLastCursorPosition() );
-    
+
     preview->Clear();
     view->SetVisible( preview, true );
 

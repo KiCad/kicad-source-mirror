@@ -1532,6 +1532,9 @@ size_t SCH_SCREENS::GetLibNicknames( wxArrayString& aLibNicknames )
             symbol = dynamic_cast< SCH_COMPONENT* >( item );
             wxASSERT( symbol );
 
+            if( !symbol )
+                continue;
+
             nickname = symbol->GetLibId().GetLibNickname();
 
             if( !nickname.empty() && ( aLibNicknames.Index( nickname ) == wxNOT_FOUND ) )

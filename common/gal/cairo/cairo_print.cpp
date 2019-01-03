@@ -120,6 +120,7 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
     cairo_reference( context );
     cairo_surface_reference( surface );
     m_clearColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
+    m_hasNativeLandscapeRotation = false;
     resetContext();
     SetScreenDPI( m_printCtx->GetNativeDPI() );
 }

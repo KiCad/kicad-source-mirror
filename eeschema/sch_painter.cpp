@@ -60,10 +60,14 @@ namespace KIGFX
 {
 
 SCH_RENDER_SETTINGS::SCH_RENDER_SETTINGS() :
-    m_ShowUnit( 0 ),
-    m_ShowConvert( 0 )
+    m_ShowUnit( 0 ), m_ShowConvert( 0 )
 {
     ImportLegacyColors( nullptr );
+
+    m_ShowHiddenText = true;
+    m_ShowHiddenPins = true;
+    m_ShowPinsElectricalType = true;
+    m_ShowUmbilicals = true;
 }
 
 
