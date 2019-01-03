@@ -277,7 +277,7 @@ bool DIALOG_TEXT_PROPERTIES::TransferDataToWindow()
         m_DimensionUnitsOpt->SetSelection( units == MILLIMETRES ? 2 : useMils ? 1 : 0 );
     }
 
-    if( m_item->Type() == PCB_MODULE_TEXT_T )
+    if( m_item->Type() == PCB_MODULE_TEXT_T && m_modText )
     {
         MODULE*  module = dynamic_cast<MODULE*>( m_modText->GetParent() );
         wxString msg;
