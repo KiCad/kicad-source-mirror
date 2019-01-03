@@ -312,21 +312,19 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         SHAPE_POLY_SET& aFeatures ) const
 {
-    int segsPerCircle;
-    double correctionFactor;
-
     // Set the number of segments in arc approximations
-    if( aZone->GetArcSegmentCount() > SEGMENT_COUNT_CROSSOVER  )
-        segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
-    else
-        segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
+    // Since we can no longer edit the segment count in pcbnew, we set
+    // the fill to our high-def count to avoid jagged knock-outs
+    // However, if the user has edited their zone to increase the segment count,
+    // we keep this preference
+    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF );
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx.
      * For a circle the min radius is radius * cos( 2PI / segsPerCircle / 2)
      * correctionFactor is 1 /cos( PI/segsPerCircle  )
      */
-    correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
+    double correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
 
     aFeatures.RemoveAllContours();
 
@@ -701,22 +699,17 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
         SHAPE_POLY_SET& aRawPolys,
         SHAPE_POLY_SET& aFinalPolys ) const
 {
-    int segsPerCircle;
-    double correctionFactor;
     int outline_half_thickness = aZone->GetMinThickness() / 2;
 
     std::unique_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO(
                     s_DumpZonesWhenFilling ? "zones_dump.txt" : "", SHAPE_FILE_IO::IOM_APPEND ) );
 
     // Set the number of segments in arc approximations
-    if( aZone->GetArcSegmentCount() == ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF  )
-        segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF;
-    else
-        segsPerCircle = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
+    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF );
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      */
-    correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
+    double correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
 
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );
