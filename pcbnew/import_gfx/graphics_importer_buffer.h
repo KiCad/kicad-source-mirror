@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Janito Vaqueiro Ferreira Filho <janito.vff@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 class IMPORTED_SHAPE
 {
 public:
+    virtual ~IMPORTED_SHAPE() {}
     virtual void ImportTo( GRAPHICS_IMPORTER& aImporter ) const = 0;
 };
 
