@@ -436,6 +436,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART
 
     m_ButtonsOK->SetDefault();
     m_initialized = true;
+    m_modified = false;
 
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
