@@ -855,7 +855,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             SHAPE_POLY_SET outline;
             outline.Append( aPad->GetCustomShapeAsPolygon() );
-            const int segmentToCircleCount = 32;
+            const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
             outline.Inflate( custom_margin, segmentToCircleCount );
             m_gal->DrawPolygon( outline );
         }

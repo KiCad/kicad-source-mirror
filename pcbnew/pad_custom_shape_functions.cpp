@@ -233,7 +233,7 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
                     polyset.Append( poly[ii].x, poly[ii].y );
                 }
 
-                polyset.Inflate( bshape.m_Thickness/2, 32 );
+                polyset.Inflate( bshape.m_Thickness/2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
                 aux_polyset.Append( polyset );
             }

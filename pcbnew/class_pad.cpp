@@ -884,7 +884,7 @@ bool D_PAD::HitTest( const wxPoint& aPosition ) const
     {
         // Check for hit in polygon
         SHAPE_POLY_SET outline;
-        const int segmentToCircleCount = 32;
+        const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         TransformRoundRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,
                                  GetRoundRectCornerRadius(), segmentToCircleCount );
 

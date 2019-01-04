@@ -418,9 +418,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         if( aDrawInfo.m_PadClearance )
         {
-            #define SEGCOUNT 32     // number of segments to approximate a circle
             SHAPE_POLY_SET outline;
-            TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance, SEGCOUNT, 1.0 );
+            TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF, 1.0 );
 
             // Draw the polygon: Inflate creates only one convex polygon
             if( outline.OutlineCount() > 0 )
@@ -483,7 +482,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             corner_radius = GetRoundRectCornerRadius() + aDrawInfo.m_PadClearance;
 
             TransformRoundRectToPolygon( outline, shape_pos, size, GetOrientation(),
-                                     corner_radius, 32 );
+                                     corner_radius, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
             if( outline.OutlineCount() > 0 )
             {
@@ -544,7 +543,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         CustomShapeAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
         SHAPE_LINE_CHAIN* poly;
 
-        const int segmentToCircleCount = 32;
+        const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
 
         if( aDrawInfo.m_Mask_margin.x )
         {

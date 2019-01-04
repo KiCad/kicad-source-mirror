@@ -461,7 +461,7 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 D_PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
                 pad->MergePrimitivesAsPolygon( &shape, 64 );
-                shape.Inflate( margin.x, 32 );
+                shape.Inflate( margin.x, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitive( shape, 0 );
                 dummy.MergePrimitivesAsPolygon();
@@ -817,7 +817,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
      */
-    int circleToSegmentsCount = 32;
+    int circleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
     double correction = GetCircletoPolyCorrectionFactor( circleToSegmentsCount );
 
     // Plot pads
@@ -895,7 +895,7 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // However it is not complex, and fast enough for plot purposes (copy/convert data
     // is only a very small calculation time for these calculations)
     ZONE_CONTAINER zone( aBoard );
-    zone.SetArcSegmentCount( 32 );
+    zone.SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer ( layer );
 

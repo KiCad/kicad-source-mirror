@@ -1173,7 +1173,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
         zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
 
     // clearances, etc.
-    zone->SetArcSegmentCount( 32 );     // @todo: should be a constructor default?
+    zone->SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );     // @todo: should be a constructor default?
     zone->SetMinThickness( std::max<int>(
             ZONE_THICKNESS_MIN_VALUE_MIL*IU_PER_MILS, p.width.ToPcbUnits() ) );
 

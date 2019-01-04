@@ -711,7 +711,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             case PAD_SHAPE_ROUNDRECT:
             {
                 SHAPE_POLY_SET outline;
-                const int segmentToCircleCount = 32;
+                const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
                 aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ),
                                             segmentToCircleCount, 1.0 );
 

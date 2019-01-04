@@ -30,7 +30,7 @@
 #ifndef PAD_H_
 #define PAD_H_
 
-
+#include <pcbnew.h>
 #include <class_board_item.h>
 #include <board_connected_item.h>
 #include <pad_shapes.h>
@@ -308,7 +308,7 @@ public:
      * Note: The corners coordinates are relative to the pad position, orientation 0,
      */
     bool MergePrimitivesAsPolygon( SHAPE_POLY_SET * aMergedPolygon = NULL,
-                                    int aCircleToSegmentsCount = 32 );
+                                    int aCircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
     /**
      * clear the basic shapes list
