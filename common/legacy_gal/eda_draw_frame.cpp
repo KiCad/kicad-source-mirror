@@ -1018,13 +1018,6 @@ bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& a
 }
 
 
-// I am not seeing a problem with this size yet:
-static const double MAX_AXIS = INT_MAX - 100;
-
-#define VIRT_MIN    (-MAX_AXIS/2.0)     ///< min X or Y coordinate in virtual space
-#define VIRT_MAX    (MAX_AXIS/2.0)      ///< max X or Y coordinate in virtual space
-
-
 void EDA_DRAW_FRAME::AdjustScrollBars( const wxPoint& aCenterPositionIU )
 {
 }
