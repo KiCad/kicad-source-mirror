@@ -317,7 +317,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_DRAW_PANEL_GAL* galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
                                                 m_FrameSize,
                                                 GetGalDisplayOptions(),
-                                                EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+                                                EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
     SetGalCanvas( galCanvas );
 
@@ -425,9 +425,10 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
                     GetEventHandler()->ProcessEvent( cairoEvt );
                 }
             }
-            else if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+            else
             {
-                // If they were on legacy, switch them to Cairo
+                // If they were on legacy, or they've been coerced into GAL
+                // due to unavailable legacy (GTK3), switch to Cairo
                 wxCommandEvent evt( wxEVT_MENU, ID_MENU_CANVAS_CAIRO );
                 GetEventHandler()->ProcessEvent( evt );
             }

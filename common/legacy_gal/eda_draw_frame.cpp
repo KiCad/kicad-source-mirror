@@ -1085,10 +1085,11 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
     }
 
     // Coerce the value into a GAL type when Legacy is not available
+    // Default to Cairo, and on the first, user will be prompted for OpenGL
     if( canvasType == EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             && !ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
     {
-        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+        canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
     }
 
     return canvasType;
