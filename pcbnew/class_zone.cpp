@@ -1341,7 +1341,7 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
-        polybuffer.Inflate( clearance, 16 );
+        polybuffer.Inflate( clearance, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );

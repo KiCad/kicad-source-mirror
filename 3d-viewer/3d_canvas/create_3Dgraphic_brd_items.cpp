@@ -815,7 +815,7 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
     case S_CURVE:
     case S_POLYGON:
     {
-        const int segcountforcircle = 16;
+        const int segcountforcircle = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         const double correctionFactor = GetCircleCorrectionFactor( segcountforcircle );
         SHAPE_POLY_SET polyList;
 

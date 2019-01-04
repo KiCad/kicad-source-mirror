@@ -1087,7 +1087,7 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         if( !pad->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
-        const int      segmentCount = 18;
+        const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
 
@@ -1153,7 +1153,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         if( !pad->IsOnLayer( aTextItem->GetLayer() ) )
             continue;
 
-        const int      segmentCount = 18;
+        const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
 

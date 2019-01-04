@@ -329,7 +329,7 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
 
-    if ( !buildCustomPadPolygon( &poly, 16 ) )
+    if ( !buildCustomPadPolygon( &poly, ARC_APPROX_SEGMENTS_COUNT_LOW_DEF ) )
         return false;
 
     const int minSteps = 10;

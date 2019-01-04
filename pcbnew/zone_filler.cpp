@@ -814,7 +814,7 @@ bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& a
     {
         aRawPolys = smoothedPoly;
         aFinalPolys = smoothedPoly;
-        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, 16 );
+        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
         aFinalPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
     }
 

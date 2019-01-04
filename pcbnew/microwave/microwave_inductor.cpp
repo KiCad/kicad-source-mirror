@@ -52,7 +52,7 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
                      const wxPoint&         aCenter,
                      int                     a_ArcAngle )
 {
-    const int SEGM_COUNT_PER_360DEG = 16;
+    const int SEGM_COUNT_PER_360DEG = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
     auto    first_point = aStartPoint - aCenter;
     int     seg_count   = ( ( abs( a_ArcAngle ) ) * SEGM_COUNT_PER_360DEG ) / 3600;
 
