@@ -146,7 +146,7 @@ protected:
     long    m_firstRunDialogSetting;
 
     wxComboBox*       m_gridSelectBox;
-    wxChoice*       m_zoomSelectBox;
+    wxComboBox*       m_zoomSelectBox;
 
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
