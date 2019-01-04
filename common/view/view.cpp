@@ -1147,12 +1147,19 @@ void VIEW::Redraw()
 #endif /* __WXDEBUG__ */
 
     VECTOR2D screenSize = m_gal->GetScreenPixelSize();
-    BOX2I    rect( ToWorld( VECTOR2D( 0, 0 ) ),
+    BOX2D    rect( ToWorld( VECTOR2D( 0, 0 ) ),
                    ToWorld( screenSize ) - ToWorld( VECTOR2D( 0, 0 ) ) );
+
     rect.Normalize();
+    BOX2I recti( rect.GetPosition(), rect.GetSize() );
 
-    redrawRect( rect );
+    // The view rtree uses integer positions.  Large screens can overflow
+    // this size so in this case, simply set the rectangle to the full rtree
+    if( rect.GetWidth() > std::numeric_limits<int>::max() ||
+            rect.GetHeight() > std::numeric_limits<int>::max() )
+        recti.SetMaximum();
 
+    redrawRect( recti );
     // All targets were redrawn, so nothing is dirty
     markTargetClean( TARGET_CACHED );
     markTargetClean( TARGET_NONCACHED );
