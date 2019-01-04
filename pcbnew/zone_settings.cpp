@@ -51,9 +51,9 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_CurrentZone_Layer  = F_Cu;                                // Layer used to create the current zone
     m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE;       // Option to show the zone area (outlines only, short hatches or full hatches
 
-    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF; // Option to select number of segments to approximate a circle
+    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF; // Option to select number of segments to approximate a circle
                                                                 // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
-                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF segments
+                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF segments
 
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );

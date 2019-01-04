@@ -726,7 +726,7 @@ private:
     int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
 
     /** The number of segments to convert a circle to a polygon.  Valid values are
-        #ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or #ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF. */
+        #ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or #ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF. */
     int                   m_ArcToSegmentsCount;
 
     /** True when a zone was filled, false after deleting the filled areas. */

@@ -39,7 +39,7 @@
 // Arcs are approximated by segments: define the number of segments per 360 deg (KiCad uses 0.1
 // deg approximation).  Be aware 3600 / ARC_APPROX_SEGMENTS_COUNT_LOW_DEF is an integer.
 #define ARC_APPROX_SEGMENTS_COUNT_LOW_DEF 16
-#define ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF 32
+#define ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF 32
 
 // The new absolute-error-based algorithm uses the stored segment count as a hint on whether
 // to use ARC_HIGH_DEF or ARC_LOW_DEF.  This defines the crossover point.

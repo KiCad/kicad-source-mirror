@@ -2617,7 +2617,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
 
             zc->SetFillMode( fillmode ? ZFM_SEGMENTS : ZFM_POLYGONS );
 
-            // @todo ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF: don't really want pcbnew.h
+            // @todo ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF: don't really want pcbnew.h
             // in here, after all, its a PLUGIN and global data is evil.
             // put in accessor
             if( arcsegcount >= 32 )

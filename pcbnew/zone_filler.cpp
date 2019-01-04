@@ -317,7 +317,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
     // the fill to our high-def count to avoid jagged knock-outs
     // However, if the user has edited their zone to increase the segment count,
     // we keep this preference
-    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF );
+    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      * due to the segment approx.
@@ -705,7 +705,7 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
                     s_DumpZonesWhenFilling ? "zones_dump.txt" : "", SHAPE_FILE_IO::IOM_APPEND ) );
 
     // Set the number of segments in arc approximations
-    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGHT_DEF );
+    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
 
     /* calculates the coeff to compensate radius reduction of holes clearance
      */
