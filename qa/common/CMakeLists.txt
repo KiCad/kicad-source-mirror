@@ -37,10 +37,11 @@ set( common_srcs
     ../../common/observable.cpp
 
     test_color4d.cpp
+    test_format_units.cpp
     test_hotkey_store.cpp
     test_title_block.cpp
     test_utf8.cpp
-    test_format_units.cpp
+    test_wildcards_and_files_ext.cpp
 
     libeval/test_numeric_evaluator.cpp
 
