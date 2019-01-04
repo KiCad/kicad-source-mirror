@@ -213,7 +213,10 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         }
     }
 
-    aEvent.Skip();
+    // Do not skip this event, otherwise wxWidgets will fire
+    // 3 wxEVT_SCROLLWIN_LINEUP or wxEVT_SCROLLWIN_LINEDOWN (normal wxWidgets behavior)
+    // and we do not want that.
+    m_parentPanel->Refresh();
 }
 
 
