@@ -1393,6 +1393,26 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint      end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
     int          width = w.width.ToPcbUnits();
 
+    if( width <= 0 )
+    {
+        switch( layer )
+        {
+        case Edge_Cuts:
+            width = DEFAULT_EDGE_WIDTH;
+            break;
+        case F_SilkS:
+        case B_SilkS:
+            width = DEFAULT_SILK_LINE_WIDTH;
+            break;
+        case F_CrtYd:
+        case B_CrtYd:
+            width = DEFAULT_COURTYARD_WIDTH;
+            break;
+        default:
+            width = DEFAULT_LINE_WIDTH;
+        }
+    }
+
     // FIXME: the cap attribute is ignored because kicad can't create lines
     //        with flat ends.
     EDGE_MODULE* dwg;
@@ -1718,20 +1738,38 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     ECIRCLE         e( aTree );
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
+    int             width = e.width.ToPcbUnits();
+
+    if( width <= 0 )
+    {
+        switch( layer )
+        {
+        case Edge_Cuts:
+            width = DEFAULT_EDGE_WIDTH;
+            break;
+        case F_SilkS:
+        case B_SilkS:
+            width = DEFAULT_SILK_LINE_WIDTH;
+            break;
+        case F_CrtYd:
+        case B_CrtYd:
+            width = DEFAULT_COURTYARD_WIDTH;
+            break;
+        default:
+            width = DEFAULT_LINE_WIDTH;
+        }
+    }
 
     aModule->GraphicalItemsList().PushBack( gr );
+    gr->SetWidth( width );
 
-    gr->SetWidth( e.width.ToPcbUnits() );
-
-    switch( (int) layer )
+    switch ( (int) layer )
     {
-    case UNDEFINED_LAYER:   layer = Cmts_User;          break;
-    /*
-    case Eco1_User:            layer = F_SilkS; break;
-    case Eco2_User:            layer = B_SilkS;  break;
-    */
+    case UNDEFINED_LAYER:
+        layer = Cmts_User;
+        break;
     default:
-                            break;
+        break;
     }
 
     gr->SetLayer( layer );
