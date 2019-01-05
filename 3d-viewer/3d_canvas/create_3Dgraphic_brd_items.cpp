@@ -763,7 +763,8 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
         const SFVEC2F center3DU(  aDrawSegment->GetCenter().x * m_biuTo3Dunits,
                                  -aDrawSegment->GetCenter().y * m_biuTo3Dunits );
 
-        const float inner_radius  = (aDrawSegment->GetRadius() - linewidth / 2) * m_biuTo3Dunits;
+        const float inner_radius  =
+                std::max<float>( (aDrawSegment->GetRadius() - linewidth / 2) * m_biuTo3Dunits, 0.0 );
         const float outter_radius = (aDrawSegment->GetRadius() + linewidth / 2) * m_biuTo3Dunits;
 
         aDstContainer->Add( new CRING2D( center3DU,
