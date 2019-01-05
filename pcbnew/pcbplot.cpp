@@ -381,7 +381,7 @@ void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
 
     // remove leading and trailing spaces if any from the suffix, if
     // something survives add it to the name;
-    // also the suffix can contain some not allowed chars in filename (/ \ . :),
+    // also the suffix can contain some not allowed chars in filename (/ \ . : and some others),
     // so change them to underscore
     // Remember it can be called from a python script, so the illegal chars
     // have to be filtered here.
@@ -390,7 +390,7 @@ void BuildPlotFileName( wxFileName* aFilename, const wxString& aOutputDir,
     suffix.Trim( false );
 
     wxString badchars = wxFileName::GetForbiddenChars(wxPATH_DOS);
-    badchars.Append( '%' );
+    badchars.Append( "%." );
 
     for( unsigned ii = 0; ii < badchars.Len(); ii++ )
         suffix.Replace( badchars[ii], wxT("_") );
