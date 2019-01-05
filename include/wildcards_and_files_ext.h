@@ -34,6 +34,9 @@
 
 #include <wx/wx.h>
 
+#include <string>
+#include <vector>
+
 /**
  * \defgroup file_extensions File Extension Definitions
  *
@@ -47,20 +50,24 @@
  */
 
 /**
- * build the wildcard extension file dialog wildcard filter to add to the base message dialog.
- * for instance, to open .txt files in a file dialog:
+ * Build the wildcard extension file dialog wildcard filter to add to the base message dialog.
+ *
+ * For instance, to open .txt files in a file dialog:
  * the base message is for instance "Text files"
  * the ext list is " (*.txt)|*.txt"
  * and the returned string to add to the base message is " (*.txt)|*.txt"
  * the message to display in the dialog is  "Text files (*.txt)|*.txt"
  *
- * @param aArgCnt is the count of file ext to add to the filter
- * other params are the const char* file ext to add to the filter
+ * This function produces a case-insensitive filter (so .txt, .TXT and .tXT
+ * are all match if you pass "txt" into the function).
+ *
+ * @param aExts is the list of exts to add to the filter. Do not include the
+ * leading dot.
  *
  * @return the appropriate file dialog wildcard filter list.
  */
 
-wxString AddFileExtListToFilter( int aArgCnt, ... );
+wxString AddFileExtListToFilter( const std::vector<std::string>& aExts );
 
 
 // Do NOT use wxString for these.  wxStrings are not thread-safe, even when const.  (For the

@@ -73,26 +73,17 @@ static constexpr bool should_use_regex_filters()
 /**
  * Check correct handling of filter strings (as used by WX)
  */
-BOOST_AUTO_TEST_CASE( SingleFilter )
+BOOST_AUTO_TEST_CASE( BasicFilter )
 {
-    const auto&       c = ext_wildcard_cases[0];
-    const std::string exp_filter =
-            should_use_regex_filters() ? c.m_re_filter : c.m_filter_case_insenstive;
+    for( const auto& c : ext_wildcard_cases )
+    {
+        const std::string exp_filter =
+                should_use_regex_filters() ? c.m_re_filter : c.m_filter_case_insenstive;
 
-    const auto resp = AddFileExtListToFilter( 1, "png" );
+        const auto resp = AddFileExtListToFilter( c.m_exts );
 
-    BOOST_CHECK_EQUAL( resp, exp_filter );
-}
-
-BOOST_AUTO_TEST_CASE( MultipleFilter )
-{
-    const auto&       c = ext_wildcard_cases[1];
-    const std::string exp_filter =
-            should_use_regex_filters() ? c.m_re_filter : c.m_filter_case_insenstive;
-
-    const auto resp = AddFileExtListToFilter( 2, "png", "gif" );
-
-    BOOST_CHECK_EQUAL( resp, exp_filter );
+        BOOST_CHECK_EQUAL( resp, exp_filter );
+    }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
