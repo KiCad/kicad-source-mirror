@@ -1386,6 +1386,8 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
             std::unique_ptr<LIB_PIN> pin( loadPin( aPart, currentNode, &ePin, aGateNumber ) );
             pincount++;
 
+            pin->SetType( PIN_BIDI );
+
             if( ePin.direction )
             {
                 const std::map<wxString, ELECTRICAL_PINTYPE> pinDirectionsMap =
@@ -1396,8 +1398,6 @@ bool SCH_EAGLE_PLUGIN::loadSymbol( wxXmlNode* aSymbolNode, std::unique_ptr<LIB_P
                     { "oc",  PIN_OPENCOLLECTOR },   { "hiz", PIN_TRISTATE },
                     { "pwr", PIN_POWER_IN },
                 };
-
-                pin->SetType( PIN_UNSPECIFIED );
 
                 for( const auto& pinDir : pinDirectionsMap )
                 {
