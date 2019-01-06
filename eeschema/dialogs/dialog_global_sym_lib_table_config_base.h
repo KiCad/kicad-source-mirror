@@ -1,18 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 29 2017)
+// C++ code generated with wxFormBuilder (version Nov 23 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE_H__
-#define __DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -36,8 +33,9 @@ class DIALOG_SHIM;
 class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
+		wxBoxSizer* bSizer2;
 		wxStaticText* m_staticText1;
 		wxRadioButton* m_defaultRb;
 		wxRadioButton* m_customRb;
@@ -47,17 +45,16 @@ class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateDefaultSelection( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateFilePicker( wxUpdateUIEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Symbol Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER ); 
+
+		DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Symbol Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
 		~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE();
-	
+
 };
 
-#endif //__DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE_H__

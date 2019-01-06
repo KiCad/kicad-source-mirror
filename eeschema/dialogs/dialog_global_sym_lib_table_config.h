@@ -27,6 +27,7 @@ class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_SYM_LIB_TABLE_CO
 {
 private:
     bool m_defaultFileFound;
+    wxFilePickerCtrl* m_filePicker_new;
 
 public:
     DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent );

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -33,7 +33,7 @@
 
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-    DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( aParent )
+        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( aParent )
 {
     wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 
@@ -41,7 +41,16 @@ DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow
     wxString fileName = Kiface().KifaceSearch().FindValidPath( fn.GetName() );
 
     m_defaultFileFound = wxFileName::FileExists( fileName );
-    m_filePicker1->SetFileName( wxFileName( fileName ) );
+
+    m_filePicker_new = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _( "Select a file" ),
+            wxFileSelectorDefaultWildcardStr, wxDefaultPosition, wxDefaultSize,
+            wxFLP_DEFAULT_STYLE | wxFLP_FILE_MUST_EXIST | wxFLP_OPEN );
+    m_filePicker_new->SetFileName( wxFileName( fileName ) );
+    m_filePicker_new->Enable( false );
+    m_filePicker_new->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
+
+    bSizer2->Replace( m_filePicker1, m_filePicker_new, true );
+    bSizer2->Layout();
 
     if( !m_defaultFileFound )
         m_customRb->SetValue( true );
@@ -57,6 +66,7 @@ DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG()
 {
+    m_filePicker_new->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
 }
 
 
@@ -96,7 +106,7 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
         return true;
     }
 
-    wxString fileName = m_filePicker1->GetPath();
+    wxString fileName = m_filePicker_new->GetPath();
 
     if( fileName.IsEmpty() )
     {
