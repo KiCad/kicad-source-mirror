@@ -834,9 +834,8 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnOKClick( wxCommandEvent& event )
 
 void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
 {
-    wxString FullFileName, Mask, Path;
+    wxString FullFileName, Path;
 
-    Mask = wxT( "*" );
 #ifndef __WXMAC__
     Path = Pgm().GetExecutablePath();
 #else
@@ -846,7 +845,7 @@ void NETLIST_DIALOG_ADD_PLUGIN::OnBrowsePlugins( wxCommandEvent& event )
                                       Path,
                                       FullFileName,
                                       wxEmptyString,
-                                      Mask,
+                                      wxFileSelectorDefaultWildcardStr,
                                       this,
                                       wxFD_OPEN,
                                       true

@@ -354,7 +354,7 @@ void DIALOG_BOM::installPluginsList()
 
             pluginPath.AssignDir( dir.GetName() );
             wxString fileName;
-            bool cont = dir.GetFirst( &fileName, "*", wxDIR_FILES );
+            bool cont = dir.GetFirst( &fileName, wxFileSelectorDefaultWildcardStr, wxDIR_FILES );
 
             while( cont )
             {
@@ -546,7 +546,8 @@ wxString DIALOG_BOM::choosePlugin()
     }
 
     wxString fullFileName = EDA_FILE_SELECTOR( _( "Plugin files:" ), lastPath, wxEmptyString,
-                                               wxEmptyString, "*", this, wxFD_OPEN, true );
+                                               wxEmptyString, wxFileSelectorDefaultWildcardStr,
+                                               this, wxFD_OPEN, true );
 
     return fullFileName;
 }

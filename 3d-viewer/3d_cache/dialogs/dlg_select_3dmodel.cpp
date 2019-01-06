@@ -111,7 +111,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
         if( !filter.empty() )
             m_FileTree->SetFilter( filter );
         else
-            m_FileTree->SetFilter( wxT( "*.*" ) );
+            m_FileTree->SetFilter( wxFileSelectorDefaultWildcardStr );
 
         if( prevModelWildcard >= 0 && prevModelWildcard < (int)fl->size() )
             m_FileTree->SetFilterIndex( prevModelWildcard );
@@ -123,7 +123,7 @@ DLG_SELECT_3DMODEL::DLG_SELECT_3DMODEL( wxWindow* aParent, S3D_CACHE* aCacheMana
     }
     else
     {
-        m_FileTree->SetFilter( wxT( "*.*" ) );
+        m_FileTree->SetFilter( wxFileSelectorDefaultWildcardStr );
         prevModelWildcard = 0;
         m_FileTree->SetFilterIndex( 0 );
     }
