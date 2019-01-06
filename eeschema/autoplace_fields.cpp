@@ -322,7 +322,7 @@ protected:
             { SIDE_LEFT,    pins_on_side( SIDE_LEFT ) },
             { SIDE_BOTTOM,  pins_on_side( SIDE_BOTTOM ) },
         };
-        std::vector<SIDE_AND_NPINS> sides( sides_init, sides_init + DIM( sides_init ) );
+        std::vector<SIDE_AND_NPINS> sides( sides_init, sides_init + arrayDim( sides_init ) );
 
         int orient = m_component->GetOrientation();
         int orient_angle = orient & 0xff; // enum is a bitmask
@@ -386,7 +386,7 @@ protected:
     std::vector<SIDE_AND_COLL> get_colliding_sides()
     {
         SIDE sides_init[] = { SIDE_RIGHT, SIDE_TOP, SIDE_LEFT, SIDE_BOTTOM };
-        std::vector<SIDE> sides( sides_init, sides_init + DIM( sides_init ) );
+        std::vector<SIDE> sides( sides_init, sides_init + arrayDim( sides_init ) );
         std::vector<SIDE_AND_COLL> colliding;
 
         // Iterate over all sides and find the ones that collide

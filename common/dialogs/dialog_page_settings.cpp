@@ -26,7 +26,7 @@
  */
 
 #include <fctsys.h>
-#include <macros.h>              // DIM()
+#include <macros.h>              // arrayDim()
 #include <common.h>
 #include <project.h>
 #include <confirm.h>
@@ -94,7 +94,7 @@ void EDA_DRAW_FRAME::Process_PageSettings( wxCommandEvent& event )
     // units that do not allow too large draw areas
     wxSize maxPageSize( MAX_PAGE_SIZE_EDITORS_MILS, MAX_PAGE_SIZE_EDITORS_MILS );
 
-    for( unsigned ii = 0; ii < DIM( smallSizeFrames ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( smallSizeFrames ); ii++ )
     {
         if( IsType( smallSizeFrames[ii] ) )
         {
@@ -157,7 +157,7 @@ void DIALOG_PAGES_SETTINGS::initDialog()
     // The first shows translated strings, the second contains not translated strings
     m_paperSizeComboBox->Clear();
 
-    for( unsigned ii = 0; ii < DIM(pageFmts); ii++ )
+    for( unsigned ii = 0; ii < arrayDim(pageFmts); ii++ )
     {
         m_pageFmt.Add( pageFmts[ii] );
         m_paperSizeComboBox->Append( wxGetTranslation( pageFmts[ii] ) );
@@ -721,7 +721,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
 
         unsigned i;
 
-        for( i=0;  i < DIM( papers );  ++i )
+        for( i=0;  i < arrayDim( papers );  ++i )
         {
             if( paperType.Contains( papers[i] ) )
             {
@@ -730,7 +730,7 @@ void DIALOG_PAGES_SETTINGS::GetPageLayoutInfoFromDialog()
             }
         }
 
-        wxASSERT( i != DIM(papers) );   // dialog UI match the above list?
+        wxASSERT( i != arrayDim(papers) );   // dialog UI match the above list?
 
         m_layout_size = pageInfo.GetSizeMils();
 

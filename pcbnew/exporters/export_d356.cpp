@@ -391,7 +391,7 @@ void PCB_EDIT_FRAME::GenD356File( wxCommandEvent& aEvent )
     // CUST 1 would be metric but gerbtool simply ignores it!
     fprintf( file, "P  CODE 00\n" );
     fprintf( file, "P  UNITS CUST 0\n" );
-    fprintf( file, "P  DIM   N\n" );
+    fprintf( file, "P  arrayDim   N\n" );
     write_D356_records( d356_records, file );
     fprintf( file, "999\n" );
 

@@ -103,7 +103,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
         wxT( "file:" )
     };
 
-    for( unsigned ii = 0; ii < DIM(url_header); ii++ )
+    for( unsigned ii = 0; ii < arrayDim(url_header); ii++ )
     {
         if( aDocName.First( url_header[ii] ) == 0 )   // looks like an internet url
         {

@@ -188,7 +188,7 @@ wxString FindKicadFile( const wxString& shortname )
     };
 
     // find binary file from possibilities list:
-    for( unsigned i=0;  i<DIM(possibilities);  ++i )
+    for( unsigned i=0;  i<arrayDim(possibilities);  ++i )
     {
 #ifndef __WXMAC__
         fullFileName = possibilities[i] + shortname;
@@ -309,7 +309,7 @@ wxString KicadDatasPath()
 #endif
         };
 
-        for( unsigned i=0;  i<DIM(possibilities);  ++i )
+        for( unsigned i=0;  i<arrayDim(possibilities);  ++i )
         {
             data_path = possibilities[i];
 

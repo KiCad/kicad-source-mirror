@@ -376,7 +376,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
 
     unsigned choice = (unsigned) m_Choice_Drill_Map->GetSelection();
 
-    if( choice >= DIM( filefmt ) )
+    if( choice >= arrayDim( filefmt ) )
         choice = 1;
 
     // Create output directory if it does not exist (also transform it in

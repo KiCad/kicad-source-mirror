@@ -657,7 +657,7 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
         F_Fab
     };
 
-    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, DIM( non_cu ) );  seq;  ++seq )
+    for( LSEQ seq = aBoard->GetEnabledLayers().Seq( non_cu, arrayDim( non_cu ) );  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 

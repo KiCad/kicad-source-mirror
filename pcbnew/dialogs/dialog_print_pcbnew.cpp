@@ -269,7 +269,7 @@ void DIALOG_PRINT_PCBNEW::setListBoxValue( wxCheckListBox* aList, bool aValue )
 
 bool DIALOG_PRINT_PCBNEW::isLayerEnabled( unsigned int aLayer ) const
 {
-    wxCHECK( aLayer < DIM( m_layers ), false );
+    wxCHECK( aLayer < arrayDim( m_layers ), false );
     const auto& layerInfo = m_layers[aLayer];
 
     if( layerInfo.first )
@@ -281,7 +281,7 @@ bool DIALOG_PRINT_PCBNEW::isLayerEnabled( unsigned int aLayer ) const
 
 void DIALOG_PRINT_PCBNEW::enableLayer( unsigned int aLayer, bool aValue )
 {
-    wxCHECK( aLayer < DIM( m_layers ), /* void */ );
+    wxCHECK( aLayer < arrayDim( m_layers ), /* void */ );
     const auto& layerInfo = m_layers[aLayer];
     layerInfo.first->Check( layerInfo.second, aValue );
 }
@@ -293,7 +293,7 @@ int DIALOG_PRINT_PCBNEW::setLayerSetFromList()
     int& pageCount = settings()->m_pageCount;
     pageCount = 0;
 
-    for( unsigned int layer = 0; layer < DIM( m_layers ); ++layer )
+    for( unsigned int layer = 0; layer < arrayDim( m_layers ); ++layer )
     {
         if( isLayerEnabled( layer ) )
         {

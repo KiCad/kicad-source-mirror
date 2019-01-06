@@ -672,7 +672,7 @@ void PlotLayerOutlines( BOARD* aBoard, PLOTTER* aPlotter,
 
     SHAPE_POLY_SET outlines;
 
-    for( LSEQ seq = aLayerMask.Seq( plot_seq, DIM( plot_seq ) );  seq;  ++seq )
+    for( LSEQ seq = aLayerMask.Seq( plot_seq, arrayDim( plot_seq ) );  seq;  ++seq )
     {
         PCB_LAYER_ID layer = *seq;
 

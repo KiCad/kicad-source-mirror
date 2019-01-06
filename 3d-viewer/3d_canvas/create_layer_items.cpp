@@ -219,10 +219,10 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
     layer_id.clear();
     layer_id.reserve( m_copperLayersCount );
 
-    for( unsigned i = 0; i < DIM( cu_seq ); ++i )
+    for( unsigned i = 0; i < arrayDim( cu_seq ); ++i )
         cu_seq[i] = ToLAYER_ID( B_Cu - i );
 
-    for( LSEQ cu = cu_set.Seq( cu_seq, DIM( cu_seq ) ); cu; ++cu )
+    for( LSEQ cu = cu_set.Seq( cu_seq, arrayDim( cu_seq ) ); cu; ++cu )
     {
         const PCB_LAYER_ID curr_layer_id = *cu;
 
@@ -973,7 +973,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 
     // User layers are not drawn here, only technical layers
 
-    for( LSEQ seq = LSET::AllNonCuMask().Seq( teckLayerList, DIM( teckLayerList ) );
+    for( LSEQ seq = LSET::AllNonCuMask().Seq( teckLayerList, arrayDim( teckLayerList ) );
          seq;
          ++seq )
     {

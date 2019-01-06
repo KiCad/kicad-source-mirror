@@ -48,7 +48,7 @@ void PROJECT::ElemsClear()
 {
     // careful here, this should work, but the virtual destructor may not
     // be in the same link image as PROJECT.
-    for( unsigned i = 0;  i < DIM( m_elems );  ++i )
+    for( unsigned i = 0;  i < arrayDim( m_elems );  ++i )
     {
         SetElem( ELEM_T( i ), NULL );
     }
@@ -172,7 +172,7 @@ void PROJECT::SetRString( RSTRING_T aIndex, const wxString& aString )
 {
     unsigned ndx = unsigned( aIndex );
 
-    if( ndx < DIM( m_rstrings ) )
+    if( ndx < arrayDim( m_rstrings ) )
     {
         m_rstrings[ndx] = aString;
     }
@@ -187,7 +187,7 @@ const wxString& PROJECT::GetRString( RSTRING_T aIndex )
 {
     unsigned ndx = unsigned( aIndex );
 
-    if( ndx < DIM( m_rstrings ) )
+    if( ndx < arrayDim( m_rstrings ) )
     {
         return m_rstrings[ndx];
     }
@@ -206,7 +206,7 @@ PROJECT::_ELEM* PROJECT::GetElem( ELEM_T aIndex )
 {
     // This is virtual, so implement it out of line
 
-    if( unsigned( aIndex ) < DIM( m_elems ) )
+    if( unsigned( aIndex ) < arrayDim( m_elems ) )
     {
         return m_elems[aIndex];
     }
@@ -218,7 +218,7 @@ void PROJECT::SetElem( ELEM_T aIndex, _ELEM* aElem )
 {
     // This is virtual, so implement it out of line
 
-    if( unsigned( aIndex ) < DIM( m_elems ) )
+    if( unsigned( aIndex ) < arrayDim( m_elems ) )
     {
 #if defined(DEBUG) && 0
         if( aIndex == ELEM_SCH_PART_LIBS )

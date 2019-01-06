@@ -174,7 +174,7 @@ static COLOR4D s_layerColor[LAYER_ID_COUNT];
 COLOR4D GetLayerColor( SCH_LAYER_ID aLayer )
 {
     unsigned layer = ( aLayer );
-    wxASSERT( layer < DIM( s_layerColor ) );
+    wxASSERT( layer < arrayDim( s_layerColor ) );
     return s_layerColor[layer];
 }
 
@@ -187,7 +187,7 @@ void SetLayerColor( COLOR4D aColor, SCH_LAYER_ID aLayer )
         aColor.Darken( 0.01 );
 
     unsigned layer = aLayer;
-    wxASSERT( layer < DIM( s_layerColor ) );
+    wxASSERT( layer < arrayDim( s_layerColor ) );
     s_layerColor[layer] = aColor;
 }
 

@@ -188,7 +188,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
 
 	wxArrayString files;
 
-    for( unsigned ii = 0; ii < DIM( extentionList ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( extentionList ); ii++ )
         wxDir::GetAllFiles( currdirname, &files, extentionList[ii] );
 
     files.Sort();

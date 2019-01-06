@@ -177,7 +177,7 @@ public:
 
     MODEL_VRML() : m_OutputPCB( (SGNODE*) NULL )
     {
-        for( unsigned i = 0; i < DIM( m_layer_z );  ++i )
+        for( unsigned i = 0; i < arrayDim( m_layer_z );  ++i )
             m_layer_z[i] = 0;
 
         m_holes.GetArcParams( m_iMaxSeg, m_arcMinLen, m_arcMaxLen );
@@ -254,7 +254,7 @@ public:
 
     double GetLayerZ( LAYER_NUM aLayer )
     {
-        if( unsigned( aLayer ) >= DIM( m_layer_z ) )
+        if( unsigned( aLayer ) >= arrayDim( m_layer_z ) )
             return 0;
 
         return m_layer_z[ aLayer ];

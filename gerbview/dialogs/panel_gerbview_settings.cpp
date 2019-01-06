@@ -41,7 +41,7 @@ bool PANEL_GERBVIEW_SETTINGS::TransferDataToWindow( )
     m_BoxUnits->SetSelection( m_Parent->GetUserUnits() ? 1 : 0 );
     m_ShowPageLimitsOpt->SetValue( m_Parent->m_DisplayOptions.m_DisplayPageLimits );
 
-    for( unsigned i = 0;  i < DIM( g_GerberPageSizeList );  ++i )
+    for( unsigned i = 0;  i < arrayDim( g_GerberPageSizeList );  ++i )
     {
         if( g_GerberPageSizeList[i] == m_Parent->GetPageSettings().GetType() )
         {

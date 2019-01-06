@@ -80,10 +80,10 @@ static GRID_TYPE pl_editorGridList[] =
 PL_EDITOR_SCREEN::PL_EDITOR_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    for( unsigned i = 0; i < DIM( pl_editorZoomList );  ++i )
+    for( unsigned i = 0; i < arrayDim( pl_editorZoomList );  ++i )
         m_ZoomList.push_back( pl_editorZoomList[i] );
 
-    for( unsigned i = 0; i < DIM( pl_editorGridList );  ++i )
+    for( unsigned i = 0; i < arrayDim( pl_editorGridList );  ++i )
         AddGrid( pl_editorGridList[i] );
 
     // pl_editor uses the same frame position as schematic and board editors

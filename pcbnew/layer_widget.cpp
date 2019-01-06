@@ -890,7 +890,7 @@ public:
             LAYER_WIDGET::ROW( wxT("layer_4_you"), 3, BLUE, wxT("BLUE"), false ),
         };
 
-        lw->AppendLayerRows( layerRows, DIM(layerRows) );
+        lw->AppendLayerRows( layerRows, arrayDim(layerRows) );
 
         // add some render rows
         static const LAYER_WIDGET::ROW renderRows[] = {
@@ -899,7 +899,7 @@ public:
             LAYER_WIDGET::ROW( wxT("With Oval Eyes"), 1, BROWN, wxT("My eyes are upon you") ),
         };
 
-        lw->AppendRenderRows( renderRows, DIM(renderRows) );
+        lw->AppendRenderRows( renderRows, arrayDim(renderRows) );
 
         lw->SelectLayerRow( 1 );
 

@@ -126,7 +126,7 @@ DIALOG_EXPORT_SVG::~DIALOG_EXPORT_SVG()
 
         wxString layerKey;
 
-        for( unsigned layer = 0; layer < DIM(m_boxSelectLayer);  ++layer )
+        for( unsigned layer = 0; layer < arrayDim(m_boxSelectLayer);  ++layer )
         {
             if( !m_boxSelectLayer[layer].first )
                 continue;
@@ -194,7 +194,7 @@ LSET DIALOG_EXPORT_SVG::getCheckBoxSelectedLayers() const
 {
     LSET ret;
 
-    for( unsigned layer = 0; layer < DIM(m_boxSelectLayer);  ++layer )
+    for( unsigned layer = 0; layer < arrayDim(m_boxSelectLayer);  ++layer )
     {
         if( !m_boxSelectLayer[layer].first )
             continue;

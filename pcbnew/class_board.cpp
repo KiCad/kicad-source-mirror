@@ -558,7 +558,7 @@ void BOARD::PopHighLight()
 
 bool BOARD::SetLayerDescr( PCB_LAYER_ID aIndex, const LAYER& aLayer )
 {
-    if( unsigned( aIndex ) < DIM( m_Layer ) )
+    if( unsigned( aIndex ) < arrayDim( m_Layer ) )
     {
         m_Layer[ aIndex ] = aLayer;
         return true;

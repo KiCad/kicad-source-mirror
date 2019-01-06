@@ -101,7 +101,7 @@ GERBER_FILE_IMAGE::GERBER_FILE_IMAGE( int aLayer ) :
 
     ResetDefaultValues();
 
-    for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
         m_Aperture_List[ii] = 0;
 }
 
@@ -110,7 +110,7 @@ GERBER_FILE_IMAGE::~GERBER_FILE_IMAGE()
 {
     m_Drawings.DeleteAll();
 
-    for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
     {
         delete m_Aperture_List[ii];
     }
@@ -132,7 +132,7 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODEOrCreate( int aDCODE, bool aCreateIfNoExist )
 {
     unsigned ndx = aDCODE - FIRST_DCODE;
 
-    if( ndx < (unsigned) DIM( m_Aperture_List ) )
+    if( ndx < (unsigned) arrayDim( m_Aperture_List ) )
     {
         // lazily create the D_CODE if it does not exist.
         if( aCreateIfNoExist )
@@ -152,7 +152,7 @@ D_CODE* GERBER_FILE_IMAGE::GetDCODE( int aDCODE ) const
 {
     unsigned ndx = aDCODE - FIRST_DCODE;
 
-    if( ndx < (unsigned) DIM( m_Aperture_List ) )
+    if( ndx < (unsigned) arrayDim( m_Aperture_List ) )
     {
         return m_Aperture_List[ndx];
     }
@@ -266,7 +266,7 @@ int GERBER_FILE_IMAGE::GetDcodesCount()
 {
     int count = 0;
 
-    for( unsigned ii = 0; ii < DIM( m_Aperture_List ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( m_Aperture_List ); ii++ )
     {
         if( m_Aperture_List[ii] )
             if( m_Aperture_List[ii]->m_InUse || m_Aperture_List[ii]->m_Defined )

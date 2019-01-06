@@ -1303,7 +1303,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
         stub.NewOutline();
 
-        for( unsigned ii = 0; ii < DIM( stubBuffer ); ii++ )
+        for( unsigned ii = 0; ii < arrayDim( stubBuffer ); ii++ )
         {
             wxPoint cpos = stubBuffer[ii];
             RotatePoint( &cpos, aPad.GetOrientation() );
@@ -1325,7 +1325,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         stub.RemoveAllContours();
         stub.NewOutline();
 
-        for( unsigned ii = 0; ii < DIM( stubBuffer ); ii++ )
+        for( unsigned ii = 0; ii < arrayDim( stubBuffer ); ii++ )
         {
             wxPoint cpos = stubBuffer[ii];
             RotatePoint( &cpos, aPad.GetOrientation() );

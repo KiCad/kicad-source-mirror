@@ -121,7 +121,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
         RR( _( "Background" ),       LAYER_PCB_BACKGROUND,   BLACK,    _( "PCB Background" ), true, false )
     };
 
-    for( unsigned row=0;  row<DIM(renderRows);  ++row )
+    for( unsigned row=0;  row<arrayDim(renderRows);  ++row )
     {
         if( renderRows[row].color != COLOR4D::UNSPECIFIED )       // does this row show a color?
             renderRows[row].color = myframe->GetVisibleElementColor( renderRows[row].id );
@@ -130,7 +130,7 @@ void GERBER_LAYER_WIDGET::ReFillRender()
             renderRows[row].state = myframe->IsElementVisible( renderRows[row].id );
     }
 
-    AppendRenderRows( renderRows, DIM(renderRows) );
+    AppendRenderRows( renderRows, arrayDim(renderRows) );
 }
 
 

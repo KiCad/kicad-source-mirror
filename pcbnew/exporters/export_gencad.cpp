@@ -660,7 +660,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
                  fmt_mask( mask ).c_str(),
                  via->GetDrillValue() / SCALE_FACTOR );
 
-        for( LSEQ seq = mask.Seq( gc_seq, DIM( gc_seq ) );  seq;  ++seq )
+        for( LSEQ seq = mask.Seq( gc_seq, arrayDim( gc_seq ) );  seq;  ++seq )
         {
             PCB_LAYER_ID layer = *seq;
 
@@ -687,7 +687,7 @@ static void CreatePadsShapesSection( FILE* aFile, BOARD* aPcb )
         LSET pad_set = pad->GetLayerSet() & master_layermask;
 
         // the special gc_seq
-        for( LSEQ seq = pad_set.Seq( gc_seq, DIM( gc_seq ) );  seq;  ++seq )
+        for( LSEQ seq = pad_set.Seq( gc_seq, arrayDim( gc_seq ) );  seq;  ++seq )
         {
             PCB_LAYER_ID layer = *seq;
 

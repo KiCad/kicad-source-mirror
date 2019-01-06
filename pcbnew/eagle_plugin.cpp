@@ -320,7 +320,7 @@ void EAGLE_PLUGIN::clear_cu_map()
 {
     // All cu layers are invalid until we see them in the <layers> section while
     // loading either a board or library.  See loadLayerDefs().
-    for( unsigned i = 0;  i < DIM(m_cu_map);  ++i )
+    for( unsigned i = 0;  i < arrayDim(m_cu_map);  ++i )
         m_cu_map[i] = -1;
 }
 
@@ -435,7 +435,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
 
 #if 0 && defined(DEBUG)
     printf( "m_cu_map:\n" );
-    for( unsigned i=0; i<DIM(m_cu_map);  ++i )
+    for( unsigned i=0; i<arrayDim(m_cu_map);  ++i )
     {
         printf( "\t[%d]:%d\n", i, m_cu_map[i] );
     }
@@ -2165,7 +2165,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
     int kiLayer;
 
     // eagle copper layer:
-    if( aEagleLayer >= 1 && aEagleLayer < int( DIM( m_cu_map ) ) )
+    if( aEagleLayer >= 1 && aEagleLayer < int( arrayDim( m_cu_map ) ) )
     {
         kiLayer = m_cu_map[aEagleLayer];
     }

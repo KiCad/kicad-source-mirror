@@ -62,8 +62,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNu
         _( "Alphabet, minus IOSQXZ" ),
         _( "Alphabet, full 26 characters" )
     };
-    m_choicePriAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
-    m_choiceSecAxisNumbering->Set( DIM( charSetDescriptions ), charSetDescriptions );
+    m_choicePriAxisNumbering->Set( arrayDim( charSetDescriptions ), charSetDescriptions );
+    m_choiceSecAxisNumbering->Set( arrayDim( charSetDescriptions ), charSetDescriptions );
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );

@@ -104,7 +104,7 @@ static LSEQ dlg_layers()
         Dwgs_User,
     };
 
-    return LSEQ( layers, layers + DIM( layers ) );
+    return LSEQ( layers, layers + arrayDim( layers ) );
 }
 
 
@@ -315,7 +315,7 @@ void PANEL_SETUP_LAYERS::showPresets( LSET enabledLayers )
 {
     int presetsNdx = 0;     // the "Custom" setting, matches nothing
 
-    for( unsigned i=1; i<DIM( presets );  ++i )
+    for( unsigned i=1; i<arrayDim( presets );  ++i )
     {
         if( enabledLayers == presets[i] )
         {
@@ -460,7 +460,7 @@ void PANEL_SETUP_LAYERS::OnPresetsChoice( wxCommandEvent& event )
     if( presetNdx <= 0 )        // the Custom setting controls nothing.
         return;
 
-    if( presetNdx < (int) DIM(presets) )
+    if( presetNdx < (int) arrayDim(presets) )
     {
         m_enabledLayers = presets[ presetNdx ];
         LSET copperSet = m_enabledLayers & LSET::AllCuMask();

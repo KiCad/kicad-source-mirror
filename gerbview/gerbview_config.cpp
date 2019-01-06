@@ -123,10 +123,10 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
         wxT("ColorLayer28Ex"), wxT("ColorLayer29Ex"), wxT("ColorLayer30Ex"), wxT("ColorLayer31Ex"),
     };
 
-    wxASSERT( DIM(keys) == DIM(color_default) );
-    wxASSERT( DIM(keys) <= DIM(g_ColorsSettings.m_LayersColors) && DIM(keys) <= DIM(color_default) );
+    wxASSERT( arrayDim(keys) == arrayDim(color_default) );
+    wxASSERT( arrayDim(keys) <= arrayDim(g_ColorsSettings.m_LayersColors) && arrayDim(keys) <= arrayDim(color_default) );
 
-    for( unsigned i = 0; i < DIM(keys);  ++i )
+    for( unsigned i = 0; i < arrayDim(keys);  ++i )
     {
         COLOR4D* prm = &g_ColorsSettings.m_LayersColors[ GERBER_DRAW_LAYER( i ) ];
 

@@ -707,7 +707,7 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
 
         bool enbl = IsGalCanvasActive();
 
-        for( unsigned ii = 0; ii < DIM( id_list ); ii++ )
+        for( unsigned ii = 0; ii < arrayDim( id_list ); ii++ )
         {
             if( GetMenuBar()->FindItem( id_list[ii] ) )
                 GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );

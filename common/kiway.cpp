@@ -149,7 +149,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFaceId.
-    if( unsigned( aFaceId ) >= DIM( m_kiface ) )
+    if( unsigned( aFaceId ) >= arrayDim( m_kiface ) )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -481,7 +481,7 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 
 void KIWAY::OnKiwayEnd()
 {
-    for( unsigned i=0;  i < DIM( m_kiface );  ++i )
+    for( unsigned i=0;  i < arrayDim( m_kiface );  ++i )
     {
         if( m_kiface[i] )
             m_kiface[i]->OnKifaceEnd();

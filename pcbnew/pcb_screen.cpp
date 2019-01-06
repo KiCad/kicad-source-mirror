@@ -160,13 +160,10 @@ static GRID_TYPE pcbGridList[] =
 PCB_SCREEN::PCB_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    // D(wxSize displayz = wxGetDisplaySize();)
-    // D(printf( "displayz x:%d y:%d lastZoomFactor: %.16g\n", displayz.x, displayz.y, pcbZoomList[DIM(pcbZoomList)-1] );)
-
-    for( unsigned i = 0; i < DIM( pcbZoomList );  ++i )
+    for( unsigned i = 0; i < arrayDim( pcbZoomList );  ++i )
         m_ZoomList.push_back( pcbZoomList[i] );
 
-    for( unsigned i = 0; i < DIM( pcbGridList );  ++i )
+    for( unsigned i = 0; i < arrayDim( pcbGridList );  ++i )
         AddGrid( pcbGridList[i] );
 
     // Set the working grid size to a reasonable value (in 1/10000 inch)
@@ -190,5 +187,5 @@ PCB_SCREEN::~PCB_SCREEN()
 
 int PCB_SCREEN::MilsToIuScalar()
 {
-    return (int)IU_PER_MILS;
+    return static_cast<int>( IU_PER_MILS );
 }

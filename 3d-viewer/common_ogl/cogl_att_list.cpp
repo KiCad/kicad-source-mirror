@@ -75,7 +75,7 @@ const int COGL_ATT_LIST::m_openGL_attributes_list[] = {
 #define ATT_WX_GL_SAMPLE_BUFFERS_DATA 11
 
 int COGL_ATT_LIST::m_openGL_attributes_list_to_use[
-                                        DIM( COGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
+                                        arrayDim( COGL_ATT_LIST::m_openGL_attributes_list ) ] = { 0 };
 
 
 const int *COGL_ATT_LIST::GetAttributesList( bool aUseAntiAliasing )

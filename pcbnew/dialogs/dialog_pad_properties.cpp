@@ -975,7 +975,7 @@ void DIALOG_PAD_PROPERTIES::PadTypeSelected( wxCommandEvent& event )
 {
     int ii = m_PadType->GetSelection();
 
-    if( (unsigned)ii >= DIM( code_type ) ) // catches < 0 also
+    if( (unsigned)ii >= arrayDim( code_type ) ) // catches < 0 also
         ii = 0;
 
     bool hasHole, hasConnection;
@@ -1025,7 +1025,7 @@ void DIALOG_PAD_PROPERTIES::OnUpdateUI( wxUpdateUIEvent& event )
 {
     int ii = m_PadType->GetSelection();
 
-    if( (unsigned)ii >= DIM( code_type ) ) // catches < 0 also
+    if( (unsigned)ii >= arrayDim( code_type ) ) // catches < 0 also
         ii = 0;
 
     bool hasHole, hasConnection;
@@ -1905,7 +1905,7 @@ void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
     wxString shapelist[] = { _( "Segment" ), _( "Arc" ), _( "Ring/Circle" ), _( "Polygon" ) };
 
     int type = wxGetSingleChoiceIndex( _( "Shape type:" ), _( "Add Primitive" ),
-                                       DIM( shapelist ), shapelist, 0, this );
+                                       arrayDim( shapelist ), shapelist, 0, this );
 
     STROKE_T listtype[] = { S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON };
 

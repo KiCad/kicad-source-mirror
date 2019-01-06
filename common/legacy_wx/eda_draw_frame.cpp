@@ -207,7 +207,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
         GetTextSize( wxT( "Add layer alignment target" ), stsbar ).x + 10,
     };
 
-    SetStatusWidths( DIM( dims ), dims );
+    SetStatusWidths( arrayDim( dims ), dims );
 
     // Create child subwindows.
     GetClientSize( &m_FrameSize.x, &m_FrameSize.y );

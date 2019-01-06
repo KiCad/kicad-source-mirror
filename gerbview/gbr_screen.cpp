@@ -103,10 +103,10 @@ static GRID_TYPE gbrGridList[] =
 GBR_SCREEN::GBR_SCREEN( const wxSize& aPageSizeIU ) :
     BASE_SCREEN( SCREEN_T )
 {
-    for( unsigned i = 0; i < DIM( gbrZoomList );  ++i )
+    for( unsigned i = 0; i < arrayDim( gbrZoomList );  ++i )
         m_ZoomList.push_back( gbrZoomList[i] );
 
-    for( unsigned i = 0; i < DIM( gbrGridList );  ++i )
+    for( unsigned i = 0; i < arrayDim( gbrGridList );  ++i )
         AddGrid( gbrGridList[i] );
 
     // Set the working grid size to a reasonable value

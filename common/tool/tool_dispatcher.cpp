@@ -268,7 +268,7 @@ bool isKeySpecialCode( int aKeyCode )
 
     bool isInList = false;
 
-    for( unsigned ii = 0; ii < DIM( special_keys ) && !isInList; ii++ )
+    for( unsigned ii = 0; ii < arrayDim( special_keys ) && !isInList; ii++ )
     {
         if( special_keys[ii] == aKeyCode )
             isInList = true;

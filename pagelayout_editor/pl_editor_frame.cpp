@@ -120,7 +120,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         GetTextSize( _( "Inches" ), stsbar ).x + 10
     };
 
-    SetStatusWidths( DIM( dims ), dims );
+    SetStatusWidths( arrayDim( dims ), dims );
 
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );

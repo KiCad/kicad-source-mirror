@@ -56,7 +56,7 @@ static const VECTOR2I MarkerShapeCorners[] =
     VECTOR2I( 1,  8 ),
     VECTOR2I( 0,  0 )
 };
-const unsigned CORNERS_COUNT = DIM( MarkerShapeCorners );
+const unsigned CORNERS_COUNT = arrayDim( MarkerShapeCorners );
 
 /*******************/
 /* Classe MARKER_BASE */

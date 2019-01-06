@@ -94,9 +94,12 @@ static inline const wxChar* GetChars( const wxString& s )
     return (const wxChar*) s.c_str();
 }
 
-/// # of elements in an array
-#define DIM( x )    unsigned( sizeof(x) / sizeof( (x)[0] ) )    // not size_t
-
+/// # of elements in an array.  This implements type-safe compile time checking
+template <typename T, std::size_t N>
+constexpr std::size_t arrayDim(T const (&)[N]) noexcept
+{
+    return N;
+}
 
 /**
  * Function MIRROR

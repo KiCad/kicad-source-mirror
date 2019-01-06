@@ -57,7 +57,7 @@ static const int pin_orientation_codes[] =
     PIN_UP,
     PIN_DOWN
 };
-#define PIN_ORIENTATION_CNT DIM( pin_orientation_codes )
+#define PIN_ORIENTATION_CNT arrayDim( pin_orientation_codes )
 
 // small margin in internal units between the pin text and the pin line
 #define PIN_TEXT_MARGIN 4

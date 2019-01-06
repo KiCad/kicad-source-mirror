@@ -145,7 +145,7 @@ COLOR4D PCB_LAYER_WIDGET::getBackgroundLayerColor()
 
 bool PCB_LAYER_WIDGET::isAllowedInFpMode( int aId )
 {
-    for( unsigned ii = 0; ii < DIM( s_allowed_in_FpEditor ); ii++ )
+    for( unsigned ii = 0; ii < arrayDim( s_allowed_in_FpEditor ); ii++ )
         if( s_allowed_in_FpEditor[ii] == aId )
             return true;
 
@@ -394,7 +394,7 @@ void PCB_LAYER_WIDGET::ReFillRender()
     // Because s_render_rows is created static, we must explicitly call
     // wxGetTranslation for texts which are internationalized (tool tips
     // and item names)
-    for( unsigned row=0;  row<DIM(s_render_rows);  ++row )
+    for( unsigned row=0;  row<arrayDim(s_render_rows);  ++row )
     {
         LAYER_WIDGET::ROW renderRow = s_render_rows[row];
 
@@ -554,7 +554,7 @@ void PCB_LAYER_WIDGET::ReFill()
         { B_Fab,            _( "Footprint assembly on board's back" ) }
     };
 
-    for( unsigned i=0;  i<DIM( non_cu_seq );  ++i )
+    for( unsigned i=0;  i<arrayDim( non_cu_seq );  ++i )
     {
         PCB_LAYER_ID layer = non_cu_seq[i].layerId;
 

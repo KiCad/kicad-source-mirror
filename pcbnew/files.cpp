@@ -117,7 +117,7 @@ bool AskLoadBoardFileName( wxWindow* aParent, int* aCtl, wxString* aFileName, bo
     }
     else
     {
-        for( unsigned ii = 2; ii < DIM( loaders ); ++ii )
+        for( unsigned ii = 2; ii < arrayDim( loaders ); ++ii )
         {
             if( !fileFilters.IsEmpty() )
                 fileFilters += wxChar( '|' );

@@ -450,7 +450,7 @@ void EDA_BASE_FRAME::GetKicadHelp( wxCommandEvent& event )
         wxString helpFile;
         // Search for "getting_started_in_kicad.html" or "getting_started_in_kicad.pdf"
         // or "Getting_Started_in_KiCad.html" or "Getting_Started_in_KiCad.pdf"
-        for( unsigned ii = 0; ii < DIM( names ); ii++ )
+        for( unsigned ii = 0; ii < arrayDim( names ); ii++ )
         {
             helpFile = SearchHelpFileFullPath( search, names[ii] );
 
