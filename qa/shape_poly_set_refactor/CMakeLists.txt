@@ -28,7 +28,6 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 add_executable( qa_shape_poly_set_refactor
     test_module.cpp
-    test_chamfer.cpp
     test_collision.cpp
     test_iterator.cpp
     test_segment.cpp

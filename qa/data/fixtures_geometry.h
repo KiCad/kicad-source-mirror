@@ -27,7 +27,6 @@
 
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
-#include <polygon/PolyLine.h>
 
 /**
  * Common data for the tests:
@@ -141,62 +140,6 @@ struct CommonTestData
     ~CommonTestData(){}
 };
 
-/**
- * Fixture for the ChamferFillet test suite. It contains an instance of the common data and the
- * holeyPolySet replicated as a CPolyLine, in order to test behaviour of old and new Chamfer and
- * Fillet methods.
- */
-struct ChamferFilletFixture {
-    // Structure to store the common data.
-    struct CommonTestData common;
-
-    // CPolyLine representing the same polygon in polySet.
-    CPolyLine legacyPolyLine;
-
-    /**
-     * Constructor.
-     */
-    ChamferFilletFixture()
-    {
-        // Replicate the vertices in the polySet outline
-        legacyPolyLine.Start( 0, common.holeyPoints[0].x, common.holeyPoints[0].y,
-                              CPolyLine::NO_HATCH );
-
-        for( int i = 1; i < 4; i++ )
-        {
-            VECTOR2I point = common.holeyPoints[i];
-            legacyPolyLine.AppendCorner( point.x, point.y );
-        }
-
-        legacyPolyLine.CloseLastContour();
-
-        // Add the non-convex pentagon hole
-        legacyPolyLine.Start( 0, common.holeyPoints[4].x, common.holeyPoints[4].y,
-                              CPolyLine::NO_HATCH );
-
-        for( int i = 5; i < 9; i++ )
-        {
-            VECTOR2I point = common.holeyPoints[i];
-            legacyPolyLine.AppendCorner( point.x, point.y );
-        }
-
-        legacyPolyLine.CloseLastContour();
-
-        // Add the triangle hole
-        legacyPolyLine.Start( 0, common.holeyPoints[9].x, common.holeyPoints[9].y,
-                              CPolyLine::NO_HATCH );
-
-        for( int i = 10; i < 12; i++ )
-        {
-            VECTOR2I point = common.holeyPoints[i];
-            legacyPolyLine.AppendCorner( point.x, point.y );
-        }
-
-        legacyPolyLine.CloseLastContour();
-    }
-
-    ~ChamferFilletFixture(){}
-};
 
 /**
  * Fixture for the Collision test suite. It contains an instance of the common data and two

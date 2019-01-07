@@ -34,25 +34,6 @@ public:
 #endif
 
 
-#if 1       // set to 0 when deprecated CPOLYGONS_LIST will be removed
-class CPOLYGONS_LIST;
-
-/**
- * Function TestPointInsidePolygon
- * test if a point is inside or outside a polygon.
- * @param aPolysList: the list of polygons
- * @param aIdxstart: the starting point of a given polygon in m_FilledPolysList.
- * @param aIdxend: the ending point of the polygon in m_FilledPolysList.
- * @param aRefx, aRefy: the point coordinate to test
- * @return true if the point is inside, false for outside
- */
-bool TestPointInsidePolygon( const CPOLYGONS_LIST& aPolysList,
-                             int                   aIdxstart,
-                             int                   aIdxend,
-                             int                   aRefx,
-                             int                   aRefy);
-#endif
-
 /**
  * Function TestPointInsidePolygon (overlaid)
  * same as previous, but mainly use wxPoint
