@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -737,31 +737,6 @@ void Polygon_Calc_BBox_3DU( const SHAPE_POLY_SET &aPolysList,
     }
 
     aOutBBox.ScaleNextUp();
-}
-
-
-void Polygon_Convert( const KI_POLYGON &aPolygon,
-                      ClipperLib::Path &aOutPath,
-                      CBBOX2D &aOutBBox,
-                      float aBiuTo3DunitsScale )
-{
-    aOutPath.resize( aPolygon.size() );
-    aOutBBox.Reset();
-
-    for( unsigned i = 0; i < aPolygon.size(); i++ )
-    {
-        const KI_POLY_POINT point = *(aPolygon.begin() + i);
-
-        aOutPath[i] = ClipperLib::IntPoint( (ClipperLib::cInt)point.x(),
-                                            (ClipperLib::cInt)point.y() );
-
-        aOutBBox.Union( SFVEC2F( (float) point.x() * aBiuTo3DunitsScale,
-                                 (float)-point.y() * aBiuTo3DunitsScale ) );
-    }
-
-    aOutBBox.ScaleNextUp();
-
-    ClipperLib::CleanPolygon( aOutPath );
 }
 
 

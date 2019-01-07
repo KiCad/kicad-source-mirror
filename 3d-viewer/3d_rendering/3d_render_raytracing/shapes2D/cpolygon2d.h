@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,6 @@
 #include "cobject2d.h"
 #include "../accelerators/ccontainer2d.h"
 #include <geometry/shape_poly_set.h>
-#include <polygons_defs.h>
 #include <vector>
 
 
@@ -154,11 +153,6 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
 void Polygon_Calc_BBox_3DU( const SHAPE_POLY_SET &aPolysList,
                             CBBOX2D &aOutBBox,
                             float aBiuTo3DunitsScale );
-
-void Polygon_Convert( const KI_POLYGON &aPolygon,
-                      ClipperLib::Path &aOutPath,
-                      CBBOX2D &aOutBBox,
-                      float aBiuTo3DunitsScale );
 
 void Polygon2d_TestModule();
 
