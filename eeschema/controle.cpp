@@ -47,6 +47,7 @@
 #include <sch_sheet_path.h>
 #include <sch_marker.h>
 #include <sch_component.h>
+#include <sch_view.h>
 
 
 SCH_ITEM* SCH_EDIT_FRAME::LocateAndShowItem( const wxPoint& aPosition, const KICAD_T aFilterList[],
@@ -280,16 +281,25 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
 
     if( aHotKey )
     {
-        SCH_SCREEN* screen = GetScreen();
-        bool hk_handled;
-
-        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
-            hk_handled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+        if( m_movingCursorWithKeyboard )    // The hotkey was a move crossahir cursor command
+        {
+            // The crossair was moved. move the mouse cursor to the new crosshair position:
+            GetGalCanvas()->GetViewControls()->WarpCursor( GetCrossHairPosition(), true );
+            m_movingCursorWithKeyboard = 0;
+        }
         else
-            hk_handled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+        {
+            SCH_SCREEN* screen = GetScreen();
+            bool hk_handled;
 
-        if( hk_handled )
-            keyHandled = true;
+            if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
+                hk_handled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+            else
+                hk_handled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+
+            if( hk_handled )
+                keyHandled = true;
+        }
     }
 
     UpdateStatusBar();    /* Display cursor coordinates info */
