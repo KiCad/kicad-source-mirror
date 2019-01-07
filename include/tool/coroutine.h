@@ -26,7 +26,6 @@
 #ifndef __COROUTINE_H
 #define __COROUTINE_H
 
-#include <cassert>
 #include <cstdlib>
 
 #include <type_traits>
