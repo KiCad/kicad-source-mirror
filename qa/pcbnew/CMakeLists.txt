@@ -36,6 +36,10 @@ add_executable( qa_pcbnew
 
     test_graphics_import_mgr.cpp
     test_pad_naming.cpp
+
+    # Older CMakes cannot link OBJECT libraries
+    # https://cmake.org/pipermail/cmake/2013-November/056263.html
+    $<TARGET_OBJECTS:pcbnew_kiface_objects>
 )
 
 if( BUILD_GITHUB_PLUGIN )
@@ -73,7 +77,6 @@ target_link_libraries( qa_pcbnew
     qa_utils
     lib_dxf
     idf3
-    pcbnew_kiface_objects
     unit_test_utils
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
