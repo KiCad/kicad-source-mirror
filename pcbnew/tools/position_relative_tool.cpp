@@ -130,8 +130,8 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint aPosAnchor, wxPoi
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
-    
-    getEditFrame<PCB_EDIT_FRAME>()->Refresh();
+
+    canvas()->Refresh();
     return 0;
 }
 

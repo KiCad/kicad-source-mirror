@@ -33,6 +33,7 @@
 #include <class_board.h>
 #include <view/view_group.h>
 #include <pcb_view.h>
+#include <pcb_draw_panel_gal.h>
 
 #include <functional>
 #include <tool/tool_menu.h>
@@ -46,7 +47,6 @@
 class PCB_TOOL;
 class PCB_EDIT_FRAME;
 class PCB_DISPLAY_OPTIONS;
-class PCB_DRAW_PANEL_GAL;
 class SELECTION;
 
 struct INTERACTIVE_PLACER_BASE
