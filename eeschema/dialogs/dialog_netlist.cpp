@@ -172,11 +172,6 @@ private:
      */
     void WriteCurrentNetlistSetup();
 
-    bool GetUseDefaultNetlistName()
-    {
-        return m_cbUseDefaultNetlistName->IsChecked();
-    }
-
     /**
      * Function UserNetlistTypeName
      * to retrieve user netlist type names
@@ -314,7 +309,6 @@ NETLIST_DIALOG::NETLIST_DIALOG( SCH_EDIT_FRAME* parent ) :
 
     long tmp;
     m_config->Read( NETLIST_USE_DEFAULT_NETNAME, &tmp, 0l );
-    m_cbUseDefaultNetlistName->SetValue( tmp );
     m_NetFmtName = m_Parent->GetNetListFormatName();
 
     for( int ii = 0; ii < PANELCUSTOMBASE + CUSTOMPANEL_COUNTMAX; ii++ )
@@ -508,18 +502,6 @@ void NETLIST_DIALOG::OnNetlistTypeSelection( wxNotebookEvent& event )
         return;
 
     m_buttonDelPlugin->Enable( currPage->m_IdNetType >= NET_TYPE_CUSTOM1 );
-    m_cbUseDefaultNetlistName->Enable( currPage->m_IdNetType < NET_TYPE_CUSTOM1 );
-
-    wxString fileExt;
-
-    if( FilenamePrms( currPage->m_IdNetType, &fileExt, NULL ) )
-    {
-        wxFileName fn = g_RootSheet->GetScreen()->GetFileName();
-        fn.SetExt( fileExt );
-        m_textCtrlDefaultFileName->SetValue( fn.GetFullName() );
-    }
-    else
-        m_textCtrlDefaultFileName->Clear();
 }
 
 
@@ -597,20 +579,16 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
        fn.SetPath( wxPathOnly( Prj().GetProjectFullName() ) );
 
     wxString fullpath = fn.GetFullPath();
+    wxString fullname = fn.GetFullName();
+    wxString path     = fn.GetPath();
 
-    if( !GetUseDefaultNetlistName() || currPage->m_IdNetType >= NET_TYPE_CUSTOM1 )
-    {
-        wxString fullname = fn.GetFullName();
-        wxString path     = fn.GetPath();
+    // fullname does not and should not include the path, per wx docs.
+    wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
 
-        // fullname does not and should not include the path, per wx docs.
-        wxFileDialog dlg( this, title, path, fullname, fileWildcard, wxFD_SAVE );
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return;
 
-        if( dlg.ShowModal() == wxID_CANCEL )
-            return;
-
-        fullpath = dlg.GetPath();   // directory + filename
-    }
+    fullpath = dlg.GetPath();   // directory + filename
 
     m_Parent->ClearMsgPanel();
 
@@ -709,8 +687,6 @@ void NETLIST_DIALOG::WriteCurrentNetlistSetup()
     wxString  msg, Command;
 
     NetlistUpdateOpt();
-
-    m_config->Write( NETLIST_USE_DEFAULT_NETNAME, GetUseDefaultNetlistName() );
 
     // Update existing custom pages
     int jj = 0;
