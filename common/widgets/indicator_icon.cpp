@@ -75,7 +75,7 @@ wxImage createBlankImage( int size )
         for( int x = 0; x < size; ++x )
             image.SetAlpha( x, y, wxIMAGE_ALPHA_TRANSPARENT );
 
-#ifdef __WXWINDOWS__
+#ifdef __WXMSW__
     // wxWidgets on Windows chokes on an empty fully transparent bitmap and draws it
     // as a black box
     image.SetRGB( size / 2, size / 2, 128, 128, 128 );
