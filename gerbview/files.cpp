@@ -219,7 +219,7 @@ bool GERBVIEW_FRAME::LoadGerberFiles( const wxString& aFullFileName )
         filetypes += _( "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|" );
 
         // All filetypes
-        filetypes += AllFilesWildcard;
+        filetypes += AllFilesWildcard();
 
         // Use the current working directory if the file name path does not exist.
         if( filename.DirExists() )
@@ -391,7 +391,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
         filetypes << wxT( "|" );
 
         /* All filetypes */
-        filetypes += wxGetTranslation( AllFilesWildcard );
+        filetypes += AllFilesWildcard();
 
         /* Use the current working directory if the file name path does not exist. */
         if( filename.DirExists() )

@@ -632,7 +632,7 @@ bool NETLIST_DIALOG::FilenamePrms( NETLIST_TYPE_ID aNetTypeId,
         break;
 
     default:    // custom, NET_TYPE_CUSTOM1 and greater
-        fileWildcard = AllFilesWildcard;
+        fileWildcard = AllFilesWildcard();
         ret = false;
     }
 

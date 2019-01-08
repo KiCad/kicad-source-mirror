@@ -86,4 +86,22 @@ BOOST_AUTO_TEST_CASE( BasicFilter )
     }
 }
 
+static constexpr bool should_use_windows_filters()
+{
+#ifdef __WXMSW__
+    return true;
+#else
+    return false;
+#endif
+}
+
+BOOST_AUTO_TEST_CASE( AllFilesFilter )
+{
+    const auto resp = AddFileExtListToFilter( {} );
+
+    const std::string exp_filter = should_use_windows_filters() ? " (*.*)|*.*" : " (*)|*";
+
+    BOOST_CHECK_EQUAL( resp, exp_filter );
+}
+
 BOOST_AUTO_TEST_SUITE_END()

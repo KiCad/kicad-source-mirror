@@ -105,7 +105,7 @@ static wxFileName getFootprintFilenameFromUser( wxWindow* aParent, const wxStrin
     wildCard << KiCadFootprintLibFileWildcard() << wxChar( '|' )
              << ModLegacyExportFileWildcard() << wxChar( '|' )
              << GedaPcbFootprintLibFileWildcard() << wxChar( '|' )
-             << AllFilesWildcard;
+             << AllFilesWildcard();
 
     wxFileDialog dlg( aParent, FMT_IMPORT_MODULE, aLastPath, wxEmptyString, wildCard,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );

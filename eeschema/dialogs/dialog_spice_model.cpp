@@ -764,7 +764,7 @@ void DIALOG_SPICE_MODEL::onSelectLibrary( wxCommandEvent& event )
     if( searchPath.IsEmpty() )
         searchPath = Prj().GetProjectPath();
 
-    wxString wildcards = SpiceLibraryFileWildcard() + "|" + AllFilesWildcard;
+    wxString     wildcards = SpiceLibraryFileWildcard() + "|" + AllFilesWildcard();
     wxFileDialog openDlg( this, _( "Select library" ), searchPath, "", wildcards,
             wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 

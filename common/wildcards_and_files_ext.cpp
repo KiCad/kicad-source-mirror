@@ -68,9 +68,17 @@ static wxString formatWildcardExt( const wxString& aWildcard )
 #endif
 }
 
-
 wxString AddFileExtListToFilter( const std::vector<std::string>& aExts )
 {
+    if( aExts.size() == 0 )
+    {
+        // The "all files" wildcard is different on different systems
+        wxString filter;
+        filter << " (" << wxFileSelectorDefaultWildcardStr << ")|"
+               << wxFileSelectorDefaultWildcardStr;
+        return filter;
+    }
+
     wxString files_filter = " (";
 
     // Add extensions to the info message:
@@ -136,7 +144,10 @@ const std::string PngFileExtension( "png" );
 const std::string JpegFileExtension( "jpg" );
 
 
-const wxString AllFilesWildcard( _( "All files (*)|*" ) );
+wxString AllFilesWildcard()
+{
+    return _( "All files" ) + AddFileExtListToFilter( {} );
+}
 
 
 wxString SchematicSymbolFileWildcard()

@@ -62,7 +62,7 @@
  * are all match if you pass "txt" into the function).
  *
  * @param aExts is the list of exts to add to the filter. Do not include the
- * leading dot.
+ * leading dot. Empty means "allow all files".
  *
  * @return the appropriate file dialog wildcard filter list.
  */
@@ -127,7 +127,7 @@ extern const std::string JpegFileExtension;
  * @{
  */
 
-extern const wxString AllFilesWildcard;
+extern wxString AllFilesWildcard();
 
 extern wxString ComponentFileWildcard();
 extern wxString PageLayoutDescrFileWildcard();
