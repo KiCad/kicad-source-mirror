@@ -340,9 +340,9 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
         {
             std::string m = StrPrintf(
                 "intervening pad at:(xy %s) between start:(xy %s) and goal:(xy %s)",
-                BOARD_ITEM::FormatInternalUnits( next ).c_str(),
-                BOARD_ITEM::FormatInternalUnits( aStart ).c_str(),
-                BOARD_ITEM::FormatInternalUnits( aGoal ).c_str()
+                FormatInternalUnits( next ).c_str(),
+                FormatInternalUnits( aStart ).c_str(),
+                FormatInternalUnits( aGoal ).c_str()
                 );
             THROW_IO_ERROR( m );
         }
@@ -354,7 +354,7 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
             std::string m = StrPrintf(
                 "found %d tracks intersecting at (xy %s), exactly 2 would be acceptable.",
                 track_count + aList->size() == 1 ? 1 : 0,
-                BOARD_ITEM::FormatInternalUnits( next ).c_str()
+                FormatInternalUnits( next ).c_str()
                 );
             THROW_IO_ERROR( m );
         }
@@ -367,8 +367,8 @@ static void checkConnectedTo( BOARD* aBoard, TRACKS* aList, const TRACKS& aTrack
 
     std::string m = StrPrintf(
         "not enough tracks connecting start:(xy %s) and goal:(xy %s).",
-        BOARD_ITEM::FormatInternalUnits( aStart ).c_str(),
-        BOARD_ITEM::FormatInternalUnits( aGoal ).c_str()
+        FormatInternalUnits( aStart ).c_str(),
+        FormatInternalUnits( aGoal ).c_str()
         );
     THROW_IO_ERROR( m );
 }
@@ -412,8 +412,8 @@ TRACKS BOARD::TracksInNetBetweenPoints( const wxPoint& aStartPos, const wxPoint&
 
     wxString m = wxString::Format(
             "no clean path connecting start:(xy %s) with goal:(xy %s)",
-            BOARD_ITEM::FormatInternalUnits( aStartPos ).c_str(),
-            BOARD_ITEM::FormatInternalUnits( aGoalPos ).c_str()
+            FormatInternalUnits( aStartPos ).c_str(),
+            FormatInternalUnits( aGoalPos ).c_str()
             );
 
     THROW_IO_ERROR( m + per_path_problem_text );

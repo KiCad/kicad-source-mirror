@@ -308,34 +308,6 @@ public:
     }
 
 
-    /**
-     * Function FormatInternalUnits
-     * converts \a aValue from board internal units to a string appropriate for writing to file.
-     *
-     * @note Internal units for board items can be either deci-mils or nanometers depending
-     *       on how KiCad is build.
-     * @param aValue A coordinate value to convert.
-     * @return A std::string object containing the converted value.
-     */
-    static std::string FormatInternalUnits( int aValue );
-
-    /**
-     * Function FormatAngle
-     * converts \a aAngle from board units to a string appropriate for writing to file.
-     *
-     * @note Internal angles for board items can be either degrees or tenths of degree
-     *       on how KiCad is built.
-     * @param aAngle A angle value to convert.
-     * @return A std::string object containing the converted angle.
-     */
-    static std::string FormatAngle( double aAngle );
-
-    static std::string FormatInternalUnits( const wxPoint& aPoint );
-
-    static std::string FormatInternalUnits( const VECTOR2I& aPoint );
-
-    static std::string FormatInternalUnits( const wxSize& aSize );
-
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     /**

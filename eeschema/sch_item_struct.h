@@ -380,31 +380,6 @@ public:
 
     virtual bool operator <( const SCH_ITEM& aItem ) const;
 
-    /**
-     * Function FormatInternalUnits
-     * converts \a aValue from schematic internal units to a string appropriate for writing
-     * to file.
-     *
-     * @param aValue A coordinate value to convert.
-     * @return A std::string object containing the converted value.
-     */
-    static std::string FormatInternalUnits( int aValue );
-
-    /**
-     * Function FormatAngle
-     * converts \a aAngle from board units to a string appropriate for writing to file.
-     *
-     * @note Internal angles for board items can be either degrees or tenths of degree
-     *       on how KiCad is built.
-     * @param aAngle A angle value to convert.
-     * @return A std::string object containing the converted angle.
-     */
-    static std::string FormatAngle( double aAngle );
-
-    static std::string FormatInternalUnits( const wxPoint& aPoint );
-
-    static std::string FormatInternalUnits( const wxSize& aSize );
-
 private:
     /**
      * Function doIsConnected

@@ -2,8 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
- *
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,10 +32,13 @@
 #ifndef _BASE_UNITS_H_
 #define _BASE_UNITS_H_
 
+#include <string>
 
+#include <math/vector2d.h>
 #include <common.h>
 #include <convert_to_biu.h>
 
+//TODO: Abstract Base Units to a single class
 
 /**
  * Used for holding indeterminate values, such as with multiple selections
@@ -175,6 +177,36 @@ void FetchUnitsFromString( const wxString& aTextValue, EDA_UNITS_T& aUnits, bool
  * @return The human readable units string.
  */
 wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils = false );
+
+/**
+ * Function FormatInternalUnits
+ * converts \a aValue from internal units to a string appropriate for writing
+ * to file.
+ *
+ * @note Internal units for board items can be either deci-mils or nanometers depending
+ *       on how KiCad is built.
+ *
+ * @param aValue A coordinate value to convert.
+ * @return A std::string object containing the converted value.
+ */
+std::string FormatInternalUnits( int aValue );
+
+/**
+ * Function FormatAngle
+ * converts \a aAngle from board units to a string appropriate for writing to file.
+ *
+ * @note Internal angles for board items can be either degrees or tenths of degree
+ *       on how KiCad is built.
+ * @param aAngle A angle value to convert.
+ * @return A std::string object containing the converted angle.
+ */
+std::string FormatAngle( double aAngle );
+
+std::string FormatInternalUnits( const wxPoint& aPoint );
+
+std::string FormatInternalUnits( const wxSize& aSize );
+
+std::string FormatInternalUnits( const VECTOR2I& aPoint );
 
 
 #endif   // _BASE_UNITS_H_

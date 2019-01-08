@@ -33,11 +33,6 @@
 #include <class_board.h>
 #include <netclass.h>
 
-/// Abbrevation for fomatting internal units to a string.
-#define FMT_IU     BOARD_ITEM::FormatInternalUnits
-#define FMT_ANGLE  BOARD_ITEM::FormatAngle
-
-
 // This will get mapped to "kicad_default" in the specctra_export.
 const char NETCLASS::Default[] = "Default";
 
@@ -261,22 +256,24 @@ void NETCLASS::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
                        aFormatter->Quotew( GetName() ).c_str(),
                        aFormatter->Quotew( GetDescription() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FMT_IU( GetClearance() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FMT_IU( GetTrackWidth() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(clearance %s)\n", FormatInternalUnits( GetClearance() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(trace_width %s)\n", FormatInternalUnits( GetTrackWidth() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FMT_IU( GetViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FMT_IU( GetViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_dia %s)\n", FormatInternalUnits( GetViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(via_drill %s)\n", FormatInternalUnits( GetViaDrill() ).c_str() );
 
-    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FMT_IU( GetuViaDiameter() ).c_str() );
-    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FMT_IU( GetuViaDrill() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_dia %s)\n", FormatInternalUnits( GetuViaDiameter() ).c_str() );
+    aFormatter->Print( aNestLevel+1, "(uvia_drill %s)\n", FormatInternalUnits( GetuViaDrill() ).c_str() );
 
     // Save the diff_pair_gap and diff_pair_width values only if not the default, to avoid unnecessary
     // incompatibility  with previous Pcbnew versions.
     if( ( DEFAULT_DIFF_PAIR_WIDTH != GetDiffPairWidth() ) ||
         ( DEFAULT_DIFF_PAIR_GAP != GetDiffPairGap() ) )
     {
-        aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n", FMT_IU( GetDiffPairWidth() ).c_str() );
-        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n", FMT_IU( GetDiffPairGap() ).c_str() );
+        aFormatter->Print( aNestLevel+1, "(diff_pair_width %s)\n",
+                FormatInternalUnits( GetDiffPairWidth() ).c_str() );
+        aFormatter->Print( aNestLevel+1, "(diff_pair_gap %s)\n",
+                FormatInternalUnits( GetDiffPairGap() ).c_str() );
 
         // 6.0 TODO: figure out what to do with DiffPairViaGap...
     }

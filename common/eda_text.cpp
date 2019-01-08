@@ -35,7 +35,7 @@
 #include <class_drawpanel.h>     // EDA_DRAW_PANEL
 
 #include <basic_gal.h>
-#include <unit_format.h>
+#include <base_units.h>
 #include <convert_to_biu.h>
 
 EDA_TEXT::EDA_TEXT( const wxString& text ) :
@@ -416,7 +416,7 @@ bool EDA_TEXT::IsDefaultFormatting() const
 void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControlBits ) const
 {
 #ifndef GERBVIEW        // Gerbview does not use EDA_TEXT::Format
-                        // and does not define FMT_IU, used here
+                        // and does not define FormatInternalUnits, used here
                         // however this function should exist
 
 	aFormatter->Print( aNestLevel + 1, "(effects" );
@@ -425,11 +425,11 @@ void EDA_TEXT::Format( OUTPUTFORMATTER* aFormatter, int aNestLevel, int aControl
 	aFormatter->Print( 0, " (font" );
 
 	aFormatter->Print( 0, " (size %s %s)",
-					   FMT_IU( GetTextHeight() ).c_str(),
-					   FMT_IU( GetTextWidth() ).c_str() );
+					   FormatInternalUnits( GetTextHeight() ).c_str(),
+					   FormatInternalUnits( GetTextWidth() ).c_str() );
 
 	if( GetThickness() )
-		aFormatter->Print( 0, " (thickness %s)", FMT_IU( GetThickness() ).c_str() );
+		aFormatter->Print( 0, " (thickness %s)", FormatInternalUnits( GetThickness() ).c_str() );
 
 	if( IsBold() )
 		aFormatter->Print( 0, " bold" );

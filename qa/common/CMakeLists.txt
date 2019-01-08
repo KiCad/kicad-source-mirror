@@ -21,7 +21,7 @@
 
 find_package( wxWidgets 3.0.0 COMPONENTS gl aui adv html core net base xml stc REQUIRED )
 
-add_executable( qa_common
+set( common_srcs
     # This is needed for the global mock objects
     common_mocks.cpp
 
@@ -30,6 +30,7 @@ add_executable( qa_common
 
     # stuff from common due to...units?
     ../../common/eda_text.cpp
+    ../../common/base_units.cpp
 
     # stuff from common which is needed...why?
     ../../common/colors.cpp
@@ -39,6 +40,7 @@ add_executable( qa_common
     test_hotkey_store.cpp
     test_title_block.cpp
     test_utf8.cpp
+    test_format_units.cpp
 
     libeval/test_numeric_evaluator.cpp
 
@@ -47,14 +49,7 @@ add_executable( qa_common
     view/test_zoom_controller.cpp
 )
 
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
-    ${INC_AFTER}
-)
-
-target_link_libraries( qa_common
+set( common_libs 
     common
     legacy_gal
     polygon
@@ -65,11 +60,38 @@ target_link_libraries( qa_common
     ${wxWidgets_LIBRARIES}
 )
 
-# we need to pretend to be something to appease the units code
-target_compile_definitions( qa_common
-    PRIVATE GERBVIEW
+
+# Use code with GERBVIEW defines in place (primarily IU difference)
+add_executable( qa_common_gerbview ${common_srcs} )
+target_link_libraries( qa_common_gerbview ${common_libs} )
+target_compile_definitions( qa_common_gerbview PRIVATE GERBVIEW )
+
+# Use code with PCBNEW defines in place
+add_executable( qa_common_pcbnew ${common_srcs} )
+target_link_libraries( qa_common_pcbnew  ${common_libs} )
+target_compile_definitions( qa_common_pcbnew PRIVATE PCBNEW )
+
+# Use code with EESCHEMA defines in place
+add_executable( qa_common_eeschema ${common_srcs} )
+target_link_libraries( qa_common_eeschema  ${common_libs} )
+target_compile_definitions( qa_common_eeschema PRIVATE EESCHEMA )
+
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/pcbnew
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/polygon
+    ${INC_AFTER}
 )
 
-add_test( NAME common
-    COMMAND qa_common
+add_test( NAME common_gerbview
+    COMMAND qa_common_gerbview
+)
+
+add_test( NAME common_pcbnew
+    COMMAND qa_common_pcbnew
+)
+
+add_test( NAME common_eeschema
+    COMMAND qa_common_eeschema
 )

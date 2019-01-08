@@ -453,3 +453,65 @@ wxString GetAbbreviatedUnitsLabel( EDA_UNITS_T aUnit, bool aUseMils )
     }
 }
 
+
+std::string FormatInternalUnits( int aValue )
+{
+    char    buf[50];
+    double  engUnits = aValue;
+    int     len;
+
+#ifndef EESCHEMA
+    engUnits /= IU_PER_MM;
+#endif
+
+    if( engUnits != 0.0 && fabs( engUnits ) <= 0.0001 )
+    {
+        len = snprintf( buf, sizeof(buf), "%.10f", engUnits );
+
+        while( --len > 0 && buf[len] == '0' )
+            buf[len] = '\0';
+
+#ifndef EESCHEMA
+        if( buf[len] == '.' )
+            buf[len] = '\0';
+        else
+#endif
+            ++len;
+    }
+    else
+    {
+        len = snprintf( buf, sizeof(buf), "%.10g", engUnits );
+    }
+
+    return std::string( buf, len );
+}
+
+
+std::string FormatAngle( double aAngle )
+{
+    char temp[50];
+    int len;
+
+    len = snprintf( temp, sizeof(temp), "%.10g", aAngle / 10.0 );
+
+    return std::string( temp, len );
+}
+
+
+std::string FormatInternalUnits( const wxPoint& aPoint )
+{
+    return FormatInternalUnits( aPoint.x ) + " " + FormatInternalUnits( aPoint.y );
+}
+
+
+std::string FormatInternalUnits( const VECTOR2I& aPoint )
+{
+    return FormatInternalUnits( aPoint.x ) + " " + FormatInternalUnits( aPoint.y );
+}
+
+
+std::string FormatInternalUnits( const wxSize& aSize )
+{
+    return FormatInternalUnits( aSize.GetWidth() ) + " " + FormatInternalUnits( aSize.GetHeight() );
+}
+

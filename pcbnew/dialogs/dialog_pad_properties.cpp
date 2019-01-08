@@ -35,7 +35,6 @@
 #include <pcbnew.h>
 #include <pcb_base_frame.h>
 #include <base_units.h>
-#include <unit_format.h>
 #include <board_commit.h>
 #include <bitmaps.h>
 
@@ -798,7 +797,7 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             bs_info[0] = _( "Arc" );
             bs_info[1] = _( "center " ) + formatCoord( m_units, primitive.m_Start );// Center
             bs_info[2] = _( "start " ) + formatCoord( m_units, primitive.m_End );   // Start point
-            bs_info[3] = wxString::Format( _( "angle %s" ), FMT_ANGLE( primitive.m_ArcAngle ) );
+            bs_info[3] = wxString::Format( _( "angle %s" ), FormatAngle( primitive.m_ArcAngle ) );
             break;
 
         case S_CIRCLE:          //  ring or circle
