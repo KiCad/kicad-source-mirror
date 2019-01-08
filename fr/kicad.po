@@ -29989,7 +29989,7 @@ msgstr "Vérification des Zones"
 #~ msgstr "Sélection de la librairie active"
 
 #~ msgid "&Open Footprint..."
-#~ msgstr "&Ouvriir Empreinte..."
+#~ msgstr "&Ouvrir Empreinte..."
 
 #~ msgid "Open a footprint from a library"
 #~ msgstr "Charger une empreinte à partir d'une librairie"
