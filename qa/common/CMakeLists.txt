@@ -46,6 +46,7 @@ set( common_srcs
     libeval/test_numeric_evaluator.cpp
 
     geometry/test_fillet.cpp
+    geometry/test_shape_arc.cpp
 
     view/test_zoom_controller.cpp
 )
