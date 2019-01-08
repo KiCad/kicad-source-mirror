@@ -453,7 +453,7 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
 }
 
 
-void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
+void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
 {
     if( aItem->IsSelected() )
     {
@@ -468,7 +468,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem )
             clearSelection();
 
         // Prevent selection of invisible or inactive items
-        if( selectable( aItem ) )
+        if( aForce || selectable( aItem ) )
         {
             select( aItem );
 
@@ -1271,7 +1271,7 @@ int SELECTION_TOOL::findMove( const TOOL_EVENT& aEvent )
     {
         KIGFX::VIEW_CONTROLS* viewCtrls = getViewControls();
         clearSelection();
-        toggleSelection( module );
+        toggleSelection( module, true );
 
         auto cursorPosition = viewCtrls->GetCursorPosition( false );
 

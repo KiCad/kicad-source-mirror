@@ -266,8 +266,9 @@ private:
      * Changes selection status of a given item.
      *
      * @param aItem is the item to have selection status changed.
+     * @param aForce causes the toggle to happen without checking selectability
      */
-    void toggleSelection( BOARD_ITEM* aItem );
+    void toggleSelection( BOARD_ITEM* aItem, bool aForce = false );
 
     /**
      * Function selectable()
