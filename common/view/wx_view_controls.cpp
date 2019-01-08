@@ -101,6 +101,8 @@ WX_VIEW_CONTROLS::WX_VIEW_CONTROLS( VIEW* aView, wxScrolledCanvas* aParentPanel 
 
     m_zoomController = GetZoomControllerForPlatform();
 
+    m_cursorWarped = false;
+
     m_panTimer.SetOwner( this );
     this->Connect( wxEVT_TIMER,
                    wxTimerEventHandler( WX_VIEW_CONTROLS::onTimer ), NULL, this );
@@ -453,16 +455,23 @@ VECTOR2D WX_VIEW_CONTROLS::GetCursorPosition( bool aEnableSnapping ) const
 }
 
 
-void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView, bool aTriggeredByArrows )
+void WX_VIEW_CONTROLS::SetCursorPosition( const VECTOR2D& aPosition, bool aWarpView,
+        bool aTriggeredByArrows )
 {
     m_updateCursor = false;
+
     if( aTriggeredByArrows )
     {
         m_settings.m_lastKeyboardCursorPositionValid = true;
         m_settings.m_lastKeyboardCursorPosition = aPosition;
-    } else {
-        m_settings.m_lastKeyboardCursorPositionValid = false;
+        m_cursorWarped = false;
     }
+    else
+    {
+        m_settings.m_lastKeyboardCursorPositionValid = false;
+        m_cursorWarped = true;
+    }
+
     WarpCursor( aPosition, true, aWarpView );
     m_cursorPos = aPosition;
 }
@@ -532,14 +541,18 @@ bool WX_VIEW_CONTROLS::handleAutoPanning( const wxMouseEvent& aEvent )
     VECTOR2I p( aEvent.GetX(), aEvent.GetY() );
     VECTOR2I pKey( m_view->ToScreen(m_settings.m_lastKeyboardCursorPosition ) );
 
-    if( m_settings.m_lastKeyboardCursorPositionValid && (p == pKey) )
+    if( m_cursorWarped || (m_settings.m_lastKeyboardCursorPositionValid && (p == pKey)) )
     {
         // last cursor move event came from keyboard cursor control. If auto-panning is enabled and
         // the next position is inside the autopan zone, check if it really came from a mouse event, otherwise
-        // disable autopan temporarily.
+        // disable autopan temporarily. Also temporaly disable autopan if the cursor is in the autopan zone
+        // because the application warped the cursor.
 
+        m_cursorWarped = false;
         return true;
     }
+
+    m_cursorWarped = false;
 
     // Compute areas where autopanning is active
     int borderStart = std::min( m_settings.m_autoPanMargin * m_view->GetScreenPixelSize().x,

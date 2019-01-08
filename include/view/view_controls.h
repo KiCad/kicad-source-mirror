@@ -377,6 +377,9 @@ protected:
     ///> Pointer to controlled VIEW.
     VIEW* m_view;
 
+    ///> Application warped the cursor, not the user (keyboard)
+    bool m_cursorWarped;
+
     ///> Current VIEW_CONTROLS settings
     VC_SETTINGS m_settings;
 };
