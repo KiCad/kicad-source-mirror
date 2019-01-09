@@ -266,10 +266,7 @@ static const std::vector<ARC_CPA_CASE> arc_cases = {
     },
 };
 
-#ifdef HAVE_EXPECTED_FAILURES
-// One of the bbox tests fails
-
-BOOST_AUTO_TEST_CASE( BasicCPAGeom, *boost::unit_test::expected_failures( 6 ) )
+BOOST_AUTO_TEST_CASE( BasicCPAGeom )
 {
     for( const auto& c : arc_cases )
     {
@@ -283,7 +280,5 @@ BOOST_AUTO_TEST_CASE( BasicCPAGeom, *boost::unit_test::expected_failures( 6 ) )
         }
     }
 }
-
-#endif // HAVE_EXPECTED_FAILURES
 
 BOOST_AUTO_TEST_SUITE_END()

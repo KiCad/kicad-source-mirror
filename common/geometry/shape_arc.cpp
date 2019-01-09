@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <algorithm>
 #include <vector>
 
 #include <geometry/geometry_utils.h>
@@ -157,6 +158,37 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
     points.push_back( m_pc );
     points.push_back( m_p0 );
     points.push_back( GetP1() );
+
+    double start_angle = GetStartAngle();
+    double end_angle = start_angle + GetCentralAngle();
+
+    // we always count quadrants clockwise (increasing angle)
+    if( start_angle > end_angle )
+        std::swap( start_angle, end_angle );
+
+    int quad_angle_start = std::ceil( start_angle / 90.0 );
+    int quad_angle_end = std::floor( end_angle / 90.0 );
+
+    // count through quadrants included in arc
+    for( int quad_angle = quad_angle_start; quad_angle <= quad_angle_end; ++quad_angle )
+    {
+        const int radius = GetRadius();
+        VECTOR2I  quad_pt = m_pc;
+
+        switch( quad_angle % 4 )
+        {
+        case 0: quad_pt += { radius, 0 }; break;
+        case 1:
+        case -3: quad_pt += { 0, radius }; break;
+        case 2:
+        case -2: quad_pt += { -radius, 0 }; break;
+        case 3:
+        case -1: quad_pt += { 0, -radius }; break;
+        default: assert( false );
+        }
+
+        points.push_back( quad_pt );
+    }
 
     bbox.Compute( points );
 
