@@ -33,6 +33,7 @@
 #include <kicad_string.h>
 #include <build_version.h>
 #include <general.h>
+#include <sch_view.h>
 #include <class_library.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
@@ -770,6 +771,10 @@ DIALOG_FIELDS_EDITOR_GLOBAL::~DIALOG_FIELDS_EDITOR_GLOBAL()
     m_grid->PopEventHandler( true );
 
     // we gave ownership of m_dataModel to the wxGrid...
+
+    // Clear highligted symbols, if any
+    m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
+    m_parent->GetCanvas()->Refresh();
 }
 
 
@@ -972,6 +977,9 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnTableCellClick( wxGridEvent& event )
 {
     if( event.GetCol() == REFERENCE )
     {
+        // Clear highligted symbols, if any
+        m_parent->GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
+
         m_dataModel->ExpandCollapseRow( event.GetRow() );
         std::vector<SCH_REFERENCE> refs = m_dataModel->GetRowReferences( event.GetRow() );
 
