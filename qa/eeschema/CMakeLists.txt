@@ -23,11 +23,15 @@
 
 find_package( Boost COMPONENTS unit_test_framework REQUIRED )
 
+
 include_directories( BEFORE ${INC_BEFORE} )
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/eeschema
+    ${CMAKE_SOURCE_DIR}/common
     ${INC_AFTER}
-    )
+)
 
 add_executable( qa_eagle_plugin
     test_module.cpp

@@ -19,6 +19,7 @@ add_subdirectory( unit_test_utils )
 # Unit tests
 add_subdirectory( common )
 add_subdirectory( pcbnew )
+add_subdirectory( eeschema )
 add_subdirectory( shape_poly_set_refactor )
 
 # Utility/test programs
