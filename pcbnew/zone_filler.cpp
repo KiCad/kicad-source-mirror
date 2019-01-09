@@ -648,6 +648,9 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             if( pad->GetNetCode() != aZone->GetNetCode() )
                 continue;
 
+            if( pad->GetNetCode() <= 0 )
+                continue;
+
             item_boundingbox = pad->GetBoundingBox();
             int thermalGap = aZone->GetThermalReliefGap( pad );
             item_boundingbox.Inflate( thermalGap, thermalGap );
