@@ -1119,7 +1119,6 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
             }
             else if( auto mod = dyn_cast<MODULE*>(item) )
             {
-                printf("2\n");
                 bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
 
                 for( auto modpad : mod->Pads() )
