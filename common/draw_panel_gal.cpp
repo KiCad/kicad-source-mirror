@@ -230,7 +230,9 @@ void EDA_DRAW_PANEL_GAL::onPaint( wxPaintEvent& WXUNUSED( aEvent ) )
             SwitchBackend( GAL_FALLBACK );
         }
 
-        DisplayError( m_parent, wxString( err.what() ) );
+        DisplayInfoMessage( m_parent,
+                _( "Could not use OpenGL, falling back to software rendering" ),
+                wxString( err.what() ) );
     }
 
 #ifdef __WXDEBUG__
@@ -389,9 +391,14 @@ bool EDA_DRAW_PANEL_GAL::SwitchBackend( GAL_TYPE aGalType )
             catch( std::runtime_error& err )
             {
                 aGalType = GAL_TYPE_CAIRO;
-                DisplayError( m_parent, wxString( err.what() ) );
+                DisplayInfoMessage( m_parent,
+                        _( "Could not use OpenGL, falling back to software rendering" ),
+                        wxString( err.what() ) );
             }
-            //Fallthrough
+
+            new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
+            break;
+
         case GAL_TYPE_CAIRO:
             new_gal = new KIGFX::CAIRO_GAL( m_options, this, this, this );
             break;

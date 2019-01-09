@@ -149,7 +149,6 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
     m_canvas              = NULL;
     m_canvasType          = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    m_canvasTypeDirty     = false;
     m_galCanvas           = NULL;
     m_galCanvasActive     = false;
     m_actions             = NULL;
@@ -231,8 +230,7 @@ EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
         socket->Destroy();
     }
 
-    if( m_canvasTypeDirty )
-        saveCanvasTypeSetting( m_canvasType );
+    saveCanvasTypeSetting( m_canvasType );
 
     delete m_actions;
     delete m_toolManager;
@@ -1316,7 +1314,6 @@ bool EDA_DRAW_FRAME::SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
     use_gal &= aCanvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
     UseGalCanvas( use_gal );
     m_canvasType = use_gal ? aCanvasType : EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-    m_canvasTypeDirty = true;
 
     return use_gal;
 }

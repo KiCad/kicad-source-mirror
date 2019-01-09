@@ -141,7 +141,6 @@ void SCH_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
         return;
 
     GetGalCanvas()->SwitchBackend( new_type );
-    m_canvasTypeDirty = true;   // force saving new canvas type in config
     m_canvasType = new_type;
 }
 
