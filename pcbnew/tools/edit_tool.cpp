@@ -1215,6 +1215,18 @@ int EDIT_TOOL::CreateArray( const TOOL_EVENT& aEvent )
 }
 
 
+void EDIT_TOOL::PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
+{
+    for( int i = aCollector.GetCount() - 1; i >= 0; i-- )
+    {
+        BOARD_ITEM* item = static_cast<BOARD_ITEM*>( aCollector[i] );
+
+        if( item->Type() != PCB_PAD_T )
+            aCollector.Remove( i );
+    }
+}
+
+
 void EDIT_TOOL::FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector )
 {
     for( int i = aCollector.GetCount() - 1; i >= 0; i-- )

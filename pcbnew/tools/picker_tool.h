@@ -46,6 +46,7 @@ public:
     {
         WAIT_CANCEL,
         CLICK_CANCEL,
+        END_ACTIVATE,
         EVT_CANCEL,
         EXCEPTION_CANCEL
     };

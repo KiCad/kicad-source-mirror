@@ -158,6 +158,14 @@ public:
      */
     static void FootprintFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
 
+    /**
+     * Function PadFilter()
+     *
+     * A selection filter which prunes the selection to contain only items
+     * of type PCB_PAD_T
+     */
+    static void PadFilter( const VECTOR2I&, GENERAL_COLLECTOR& aCollector );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

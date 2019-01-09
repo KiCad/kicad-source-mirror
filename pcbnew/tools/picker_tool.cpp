@@ -99,7 +99,12 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
 
-            finalize_state = EVT_CANCEL;
+            // Activating a new tool may have alternate finalization from canceling the current tool
+            if( evt->IsActivate() )
+                finalize_state = END_ACTIVATE;
+            else
+                finalize_state = EVT_CANCEL;
+
             break;
         }
 

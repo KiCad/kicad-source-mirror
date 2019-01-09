@@ -1089,17 +1089,21 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECTOR2D& aPosition )
 {
     auto selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
-    auto modules = aBoard->Modules();
 
     aToolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
-    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::FootprintFilter );
+    aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::PadFilter );
+    SELECTION& selection = selectionTool->GetSelection();
 
-    const SELECTION& selection = selectionTool->GetSelection();
+    if( selection.Empty() )
+    {
+        aToolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, EDIT_TOOL::FootprintFilter );
+        selection = selectionTool->GetSelection();
+    }
 
     if( selection.Empty() )
     {
         // Clear the previous local ratsnest if we click off all items
-        for( auto mod : modules )
+        for( auto mod : aBoard->Modules() )
         {
             for( auto pad : mod->Pads() )
                 pad->SetLocalRatsnestVisible( aBoard->IsElementVisible( LAYER_RATSNEST ) );
@@ -1109,10 +1113,19 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
     {
         for( auto item : selection )
         {
-            if( auto mod = dyn_cast<MODULE*>(item) )
+            if( auto pad = dyn_cast<D_PAD*>(item) )
             {
-                for( auto pad : mod->Pads() )
-                    pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
+                pad->SetLocalRatsnestVisible( !pad->GetLocalRatsnestVisible() );
+            }
+            else if( auto mod = dyn_cast<MODULE*>(item) )
+            {
+                printf("2\n");
+                bool enable = !( *( mod->Pads().begin() ) )->GetLocalRatsnestVisible();
+
+                for( auto modpad : mod->Pads() )
+                {
+                    modpad->SetLocalRatsnestVisible( enable );
+                }
             }
         }
     }
@@ -1137,10 +1150,15 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
     picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board, _1 ) );
     picker->SetFinalizeHandler( [ board ]( int aCondition ){
         auto vis = board->IsElementVisible( LAYER_RATSNEST );
-        for( auto mod : board->Modules() )
-            for( auto pad : mod->Pads() )
-                pad->SetLocalRatsnestVisible( vis );
+
+        if( aCondition != PICKER_TOOL::END_ACTIVATE )
+        {
+            for( auto mod : board->Modules() )
+                for( auto pad : mod->Pads() )
+                    pad->SetLocalRatsnestVisible( vis );
+        }
         } );
+
     picker->SetSnapping( false );
     picker->Activate();
     Wait();
@@ -1155,7 +1173,7 @@ int PCB_EDITOR_CONTROL::UpdateSelectionRatsnest( const TOOL_EVENT& aEvent )
     auto& selection = selectionTool->GetSelection();
     auto connectivity = getModel<BOARD>()->GetConnectivity();
 
-    if( selection.Empty() || !getModel<BOARD>()->IsElementVisible( LAYER_RATSNEST ) )
+    if( selection.Empty() )
     {
         connectivity->ClearDynamicRatsnest();
     }
@@ -1204,9 +1222,6 @@ void PCB_EDITOR_CONTROL::ratsnestTimer( wxTimerEvent& aEvent )
 
 void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 {
-    if( !board()->IsElementVisible( LAYER_RATSNEST ) )
-        return;
-
     auto selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     auto& selection = selectionTool->GetSelection();
     auto connectivity = board()->GetConnectivity();
@@ -1215,7 +1230,22 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
     items.reserve( selection.Size() );
 
     for( auto item : selection )
-        items.push_back( static_cast<BOARD_ITEM*>( item ) );
+    {
+        auto board_item = static_cast<BOARD_CONNECTED_ITEM*>( item );
+
+        if( board_item->Type() != PCB_MODULE_T && board_item->GetLocalRatsnestVisible() )
+        {
+            items.push_back( board_item );
+        }
+        else if( board_item->Type() == PCB_MODULE_T )
+        {
+            for( auto pad : static_cast<MODULE*>( item )->Pads() )
+            {
+                if( pad->GetLocalRatsnestVisible() )
+                    items.push_back( pad );
+            }
+        }
+    }
 
     connectivity->ComputeDynamicRatsnest( items );
 }
