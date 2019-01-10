@@ -655,9 +655,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnClose( wxCloseEvent& event )
     }
 
     if( IsQuasiModal() )
-        EndQuasiModal( wxID_OK );
+        EndQuasiModal( wxID_CANCEL );
     else if( IsModal() )
-        EndModal( wxID_OK );
+        EndModal( wxID_CANCEL );
     else
         event.Skip();
 }
