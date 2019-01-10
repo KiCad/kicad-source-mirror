@@ -191,6 +191,10 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     for( auto& zone : toFill )
     {
+        // Non-net zones do not have islands by definition
+        if( zone.m_zone->GetNetCode() <= 0 )
+            continue;
+
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
         SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList();
 
