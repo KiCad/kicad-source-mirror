@@ -30,13 +30,16 @@
 
 #include <sim/spice_value.h>
 #include <sch_component.h>
+#include <sch_field.h>
+#include <lib_field.h>
 
 #include <wx/valnum.h>
 
 class DIALOG_SPICE_MODEL : public DIALOG_SPICE_MODEL_BASE
 {
 public:
-    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS& aSchFields );
+    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS* aSchFields );
+    DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, LIB_FIELDS* aLibFields );
 
 private:
     /**
@@ -67,7 +70,8 @@ private:
      * @param aFieldType is an SPICE_FIELD enum value.
      * @return Requested field.
      */
-    SCH_FIELD& getField( int aFieldType );
+    SCH_FIELD& getSchField( int aFieldType );
+    LIB_FIELD& getLibField( int aFieldType );
 
     /**
      * Adds a value to the PWL values list.
@@ -98,6 +102,11 @@ private:
         FinishDialogSettings();
     }
 
+    /**
+     * Initializes the internal settings
+     */
+    void Init();
+
     // Event handlers
     void onSelectLibrary( wxCommandEvent& event ) override;
     void onModelSelected( wxCommandEvent& event ) override;
@@ -108,7 +117,9 @@ private:
     SCH_COMPONENT& m_component;
 
     ///> Fields from the component properties dialog
-    SCH_FIELDS& m_fields;
+    SCH_FIELDS* m_schfields;
+    LIB_FIELDS* m_libfields;
+    bool m_useSchFields;
 
     ///> Temporary field values
     std::map<int, wxString> m_fieldsTmp;

@@ -39,9 +39,15 @@
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
+#include <sch_item_struct.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
+
+#ifdef KICAD_SPICE
+#include <dialog_spice_model.h>
+#include <netlist_exporter_pspice.h>
+#endif /* KICAD_SPICE */
 
 #include <dialog_edit_component_in_lib.h>
 
@@ -553,6 +559,35 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::transferAliasDataToBuffer()
         alias->SetDescription( m_AliasDescCtrl->GetValue() );
         alias->SetKeyWords( m_AliasKeywordsCtrl->GetValue() );
     }
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditSpiceModel( wxCommandEvent& event )
+{
+#ifdef KICAD_SPICE
+    int diff = m_fields->size();
+    auto cmp = SCH_COMPONENT( *m_libEntry, m_libEntry->GetLibId(), nullptr );
+
+    DIALOG_SPICE_MODEL dialog( this, cmp, m_fields );
+
+    if( dialog.ShowModal() != wxID_OK )
+        return;
+
+    diff = m_fields->size() - diff;
+
+    if( diff > 0 )
+    {
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, diff );
+        m_grid->ProcessTableMessage( msg );
+    }
+    else if( diff < 0 )
+    {
+        wxGridTableMessage msg( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, diff );
+        m_grid->ProcessTableMessage( msg );
+    }
+
+    m_grid->ForceRefresh();
+#endif /* KICAD_SPICE */
 }
 
 

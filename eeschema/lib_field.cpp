@@ -61,6 +61,14 @@ LIB_FIELD::LIB_FIELD( int idfield ) :
 }
 
 
+LIB_FIELD::LIB_FIELD( int aID, wxString& aName ) :
+    LIB_ITEM( LIB_FIELD_T, NULL )
+{
+    Init( aID );
+    m_name = aName;
+}
+
+
 LIB_FIELD::~LIB_FIELD()
 {
 }

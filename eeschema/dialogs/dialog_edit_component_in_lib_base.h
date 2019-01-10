@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Nov 23 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__
-#define __DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -20,10 +19,10 @@ class WX_GRID;
 #include <wx/font.h>
 #include <wx/grid.h>
 #include <wx/gdicmn.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
@@ -46,7 +45,7 @@ class WX_GRID;
 class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_NoteBook;
 		wxPanel* m_PanelBasic;
@@ -86,10 +85,11 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_addFilterButton;
 		wxBitmapButton* m_editFilterButton;
 		wxBitmapButton* m_deleteFilterButton;
+		wxButton* m_spiceFieldsButton;
 		wxStdDialogButtonSizer* m_stdSizerButton;
 		wxButton* m_stdSizerButtonOK;
 		wxButton* m_stdSizerButtonCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnSizeGrid( wxSizeEvent& event ) { event.Skip(); }
@@ -108,13 +108,13 @@ class DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE : public DIALOG_SHIM
 		virtual void OnAddFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteFootprintFilter( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
+
+
 	public:
-		
-		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wxWindow* parent, wxWindowID id = ID_LIBEDIT_NOTEBOOK, const wxString& title = _("Library Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE();
-	
+
 };
 
-#endif //__DIALOG_EDIT_COMPONENT_IN_LIB_BASE_H__

@@ -96,6 +96,7 @@ private:
     void OnAliasGridCellChanging( wxGridEvent& event );
     void OnAliasNameKillFocus( wxFocusEvent& event ) override;
     void OnAliasNameText( wxCommandEvent& event ) override;
+    void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
 
     void updateAliasName( bool aFromGrid, const wxString& aName );

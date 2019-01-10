@@ -92,9 +92,25 @@ static int getModelTypeIdx( char aPrimitive )
 }
 
 
-DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS& aFields )
-    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_fields( aFields ),
-    m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
+DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS* aFields )
+    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_schfields( aFields ),
+      m_useSchFields( true ),
+      m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
+{
+    Init();
+}
+
+
+DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, LIB_FIELDS* aFields )
+    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ),
+      m_libfields( aFields ), m_useSchFields( false ),
+      m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
+{
+    Init();
+}
+
+
+void DIALOG_SPICE_MODEL::Init()
 {
     m_pasValue->SetValidator( m_spiceValidator );
 
@@ -136,7 +152,6 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
     m_pwlValueCol = m_pwlValList->AppendColumn( "Value [V/A]", wxLIST_FORMAT_LEFT, 100 );
 
     m_sdbSizerOK->SetDefault();
-
 }
 
 
@@ -213,19 +228,22 @@ bool DIALOG_SPICE_MODEL::TransferDataFromWindow()
     {
         if( m_fieldsTmp.count( (SPICE_FIELD) i ) > 0 && !m_fieldsTmp.at( i ).IsEmpty() )
         {
-            getField( i ).SetText( m_fieldsTmp[i] );
+            if( m_useSchFields )
+                getSchField( i ).SetText( m_fieldsTmp[i] );
+            else
+                getLibField( i ).SetText( m_fieldsTmp[i] );
         }
         else
         {
             // Erase empty fields (having empty fields causes a warning in the properties dialog)
             const wxString& spiceField = NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( (SPICE_FIELD) i );
 
-            auto fieldIt = std::find_if( m_fields.begin(), m_fields.end(), [&]( const SCH_FIELD& f ) {
-                return f.GetName() == spiceField;
-            } );
-
-            if( fieldIt != m_fields.end() )
-                m_fields.erase( fieldIt );
+            if( m_useSchFields )
+                m_schfields->erase( std::remove_if( m_schfields->begin(), m_schfields->end(),
+                        [&]( const SCH_FIELD& f ) { return f.GetName() == spiceField; } ), m_schfields->end() );
+            else
+                m_libfields->erase( std::remove_if( m_libfields->begin(), m_libfields->end(),
+                        [&]( const LIB_FIELD& f ) { return f.GetName() == spiceField; } ), m_libfields->end() );
         }
     }
 
@@ -242,16 +260,33 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
     {
         const wxString& spiceField = spiceFields[idx];
 
-        auto fieldIt = std::find_if( m_fields.begin(), m_fields.end(), [&]( const SCH_FIELD& f ) {
-            return f.GetName() == spiceField;
-        } );
+        m_fieldsTmp[idx] = NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( (SPICE_FIELD) idx, &m_component,
+            NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS );
 
         // Do not modify the existing value, just add missing fields with default values
-        if( fieldIt != m_fields.end() && !fieldIt->GetText().IsEmpty() )
-            m_fieldsTmp[idx] = fieldIt->GetText();
-        else
-            m_fieldsTmp[idx] = NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( (SPICE_FIELD) idx, &m_component,
-                NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS );
+        if( m_schfields )
+        {
+            for( auto field : *m_schfields )
+            {
+                if( field.GetName() == spiceField  && !field.GetText().IsEmpty() )
+                {
+                    m_fieldsTmp[idx] = field.GetText();
+                    break;
+                }
+            }
+        }
+        else if( m_libfields)
+        {
+            // TODO: There must be a good way to template out these repetitive calls
+            for( auto field : *m_libfields )
+            {
+                if( field.GetName() == spiceField  && !field.GetText().IsEmpty() )
+                {
+                    m_fieldsTmp[idx] = field.GetText();
+                    break;
+                }
+            }
+        }
     }
 
     // Analyze the component fields to fill out the dialog
@@ -714,21 +749,43 @@ void DIALOG_SPICE_MODEL::loadLibrary( const wxString& aFilePath )
 }
 
 
-SCH_FIELD& DIALOG_SPICE_MODEL::getField( int aFieldType )
+SCH_FIELD& DIALOG_SPICE_MODEL::getSchField( int aFieldType )
 {
     const wxString& spiceField = NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( (SPICE_FIELD) aFieldType );
 
-    auto fieldIt = std::find_if( m_fields.begin(), m_fields.end(), [&]( const SCH_FIELD& f ) {
+    auto fieldIt = std::find_if( m_schfields->begin(), m_schfields->end(), [&]( const SCH_FIELD& f ) {
         return f.GetName() == spiceField;
     } );
 
     // Found one, so return it
-    if( fieldIt != m_fields.end() )
+    if( fieldIt != m_schfields->end() )
         return *fieldIt;
 
     // Create a new field with requested name
-    m_fields.emplace_back( wxPoint(), m_fields.size(), &m_component, spiceField );
-    return m_fields.back();
+    m_schfields->emplace_back( wxPoint(), m_schfields->size(), &m_component, spiceField );
+    return m_schfields->back();
+}
+
+
+LIB_FIELD& DIALOG_SPICE_MODEL::getLibField( int aFieldType )
+{
+    const wxString& spiceField = NETLIST_EXPORTER_PSPICE::GetSpiceFieldName( (SPICE_FIELD) aFieldType );
+
+    auto fieldIt = std::find_if( m_libfields->begin(), m_libfields->end(), [&]( const LIB_FIELD& f ) {
+        return f.GetName() == spiceField;
+    } );
+
+    // Found one, so return it
+    if( fieldIt != m_libfields->end() )
+        return *fieldIt;
+
+    // Create a new field with requested name
+    LIB_FIELD new_field( m_libfields->size() );
+    m_libfields->front().Copy( &new_field );
+    new_field.SetName( spiceField );
+
+    m_libfields->push_back( new_field );
+    return m_libfields->back();
 }
 
 

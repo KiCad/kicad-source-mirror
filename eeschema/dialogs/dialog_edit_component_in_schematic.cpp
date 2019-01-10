@@ -323,7 +323,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 #ifdef KICAD_SPICE
     int diff = m_fields->size();
 
-    DIALOG_SPICE_MODEL dialog( this, *m_cmp, *m_fields );
+    DIALOG_SPICE_MODEL dialog( this, *m_cmp, m_fields );
 
     if( dialog.ShowModal() != wxID_OK )
         return;

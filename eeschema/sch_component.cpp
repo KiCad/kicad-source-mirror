@@ -153,7 +153,10 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     UpdatePinCache();
 
     // Update the reference -- just the prefix for now.
-    SetRef( sheet, aPart.GetReferenceField().GetText() + wxT( "?" ) );
+    if( sheet )
+        SetRef( sheet, aPart.GetReferenceField().GetText() + wxT( "?" ) );
+    else
+        m_prefix = aPart.GetReferenceField().GetText() + wxT( "?" );
 }
 
 
