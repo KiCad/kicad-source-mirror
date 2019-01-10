@@ -709,6 +709,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteAlias( wxCommandEvent& event )
 
     m_aliasListBox->Delete( (unsigned) sel );
     m_aliasesBuffer.erase( m_aliasesBuffer.begin() + sel );
+    m_currentAlias = wxNOT_FOUND;
 
     if( m_aliasListBox->GetCount() == 0 )
         m_aliasListBox->SetSelection( wxNOT_FOUND );
