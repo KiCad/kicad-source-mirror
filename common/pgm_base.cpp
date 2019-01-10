@@ -756,7 +756,7 @@ bool PGM_BASE::SetLanguage( bool first_time )
 void PGM_BASE::SetLanguageIdentifier( int menu_id )
 {
     wxLogTrace( traceLocale, "Select language ID %d from %d possible languages.",
-                menu_id, arrayDim( s_Languages ) );
+                menu_id, (int)arrayDim( s_Languages ) );
 
     for( unsigned ii = 0; ii < arrayDim( s_Languages ); ii++ )
     {
