@@ -81,15 +81,12 @@
  * Define a helper to make it easier to use the right namespace for
  * defining the print helpers like this:
  *
- * namespace BOOST_PRINT_NAMESPACE
- * {
- *  template<>
- *  struct print_log_value< MY_TYPE >
- * }
+ * template<>
+ * struct BOOST_PRINT::print_log_value< MY_TYPE >
  */
 #if BOOST_VERSION < 105900
-    #define BOOST_PRINT_NAMESPACE boost::test_tools
+namespace BOOST_PRINT = boost::test_tools;
 #else
-    #define BOOST_PRINT_NAMESPACE boost::test_tools::tt_detail
+namespace BOOST_PRINT = boost::test_tools::tt_detail;
 #endif
 #endif // UNIT_TEST_UTILS__H

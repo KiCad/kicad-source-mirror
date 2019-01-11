@@ -8,20 +8,17 @@
 #include <math/box2.h>
 #include <math/vector2d.h>
 
-
 /**
  * Printer for BOX2I type
  */
-namespace BOOST_PRINT_NAMESPACE
-{
-template <> struct print_log_value<BOX2I>
+template <> struct BOOST_PRINT::print_log_value<BOX2I>
 {
     void operator()( std::ostream& os, const BOX2I& aBox )
     {
         os << "BOX[ " << aBox.GetOrigin() << " + " << aBox.GetSize() << " ]";
     }
 };
-}   // namespace BOOST_PRINT_NAMESPACE
+
 
 namespace KI_TEST
 {
