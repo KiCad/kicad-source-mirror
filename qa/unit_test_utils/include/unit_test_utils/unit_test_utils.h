@@ -77,16 +77,4 @@
 
 #endif
 
-/*
- * Define a helper to make it easier to use the right namespace for
- * defining the print helpers like this:
- *
- * template<>
- * struct BOOST_PRINT::print_log_value< MY_TYPE >
- */
-#if BOOST_VERSION < 105900
-namespace BOOST_PRINT = boost::test_tools;
-#else
-namespace BOOST_PRINT = boost::test_tools::tt_detail;
-#endif
 #endif // UNIT_TEST_UTILS__H
