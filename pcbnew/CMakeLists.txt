@@ -212,7 +212,9 @@ set( PCBNEW_MICROWAVE_SRCS
     )
 
 set( PCBNEW_DRC_SRCS
+    drc/courtyard_overlap.cpp
     drc/drc_marker_factory.cpp
+    drc/drc_provider.cpp
     )
 
 set( PCBNEW_CLASS_SRCS

@@ -342,10 +342,8 @@ private:
 
     /**
      * Test for footprint courtyard overlaps.
-     *
-     * @return bool - false if DRC error  or true if OK
      */
-    bool doFootprintOverlappingDrc();
+    void doFootprintOverlappingDrc();
 
     //-----<single tests>----------------------------------------------
 

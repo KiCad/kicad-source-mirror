@@ -25,9 +25,9 @@
 # Code that is useful for QA purposes outside of the unit-testing context
 # belongs in qa_utils.
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package( Boost COMPONENTS unit_test_framework filesystem REQUIRED )
 
-set(SRCS
+set( SRCS
     unit_test_utils.cpp
 )
 
@@ -35,6 +35,8 @@ add_library( unit_test_utils STATIC ${SRCS} )
 
 target_link_libraries( unit_test_utils PUBLIC
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    ${Boost_FILESYSTEM_LIBRARY}
+    ${Boost_SYSTEM_LIBRARY}
 )
 
 target_include_directories( unit_test_utils PUBLIC

@@ -19,13 +19,13 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
+if( BUILD_GITHUB_PLUGIN )
+    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
+endif()
 
 add_executable( qa_pcbnew
     # A single top to load the pcnew kiface
     # ../../common/single_top.cpp
-
-    # The main test entry points
-    test_module.cpp
 
     # stuff from common due to...units?
     ../../common/eda_text.cpp
@@ -34,42 +34,35 @@ add_executable( qa_pcbnew
     ../../common/colors.cpp
     ../../common/observable.cpp
 
+    # The main test entry points
+    test_module.cpp
+
+    # testing utility routines
+    board_test_utils.cpp
+    drc/drc_test_utils.cpp
+
+    # test compilation units (start test_)
     test_graphics_import_mgr.cpp
     test_pad_naming.cpp
+
+    drc/test_drc_courtyard_invalid.cpp
+    drc/test_drc_courtyard_overlap.cpp
 
     # Older CMakes cannot link OBJECT libraries
     # https://cmake.org/pipermail/cmake/2013-November/056263.html
     $<TARGET_OBJECTS:pcbnew_kiface_objects>
 )
 
-if( BUILD_GITHUB_PLUGIN )
-    set( GITHUB_PLUGIN_LIBRARIES github_plugin )
-endif()
-
-set_source_files_properties( ../common/single_top.cpp pcbnew.cpp PROPERTIES
-    COMPILE_DEFINITIONS "TOP_FRAME=FRAME_PCB;PGM_DATA_FILE_EXT=\"kicad_pcb\";BUILD_KIWAY_DLL"
-)
-
-include_directories( BEFORE ${INC_BEFORE} )
-include_directories(
-    ${CMAKE_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
-    ${CMAKE_SOURCE_DIR}/pcbnew
-    ${CMAKE_SOURCE_DIR}/common
-    ${CMAKE_SOURCE_DIR}/pcbnew/router
-    ${CMAKE_SOURCE_DIR}/pcbnew/tools
-    ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
-    ${INC_AFTER}
-)
-
 target_link_libraries( qa_pcbnew
+    qa_pcbnew_utils
     3d-viewer
     connectivity
     pcbcommon
     pnsrouter
     pcad2kicadpcb
+    bitmaps
     common
+    pcbcommon
     legacy_wx
     polygon
     bitmaps
@@ -84,11 +77,6 @@ target_link_libraries( qa_pcbnew
     ${PYTHON_LIBRARIES}
     ${Boost_LIBRARIES}      # must follow GITHUB
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
-)
-
-# we need to pretend to be something to appease the units code
-target_compile_definitions( qa_pcbnew
-    PRIVATE PCBNEW
 )
 
 add_test( NAME pcbnew

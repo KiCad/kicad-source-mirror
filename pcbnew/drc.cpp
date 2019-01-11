@@ -58,6 +58,8 @@
 #include <geometry/shape_segment.h>
 #include <geometry/shape_arc.h>
 
+#include <drc/courtyard_overlap.h>
+
 void DRC::ShowDRCDialog( wxWindow* aParent )
 {
     bool show_dlg_modal = true;
@@ -1416,105 +1418,10 @@ bool DRC::doPadToPadsDrc( D_PAD* aRefPad, D_PAD** aStart, D_PAD** aEnd, int x_li
 }
 
 
-bool DRC::doFootprintOverlappingDrc()
+void DRC::doFootprintOverlappingDrc()
 {
-    // Detects missing (or malformed) footprint courtyard,
-    // and for footprint with courtyard, courtyards overlap.
-    wxString msg;
-    bool success = true;
+    DRC_COURTYARD_OVERLAP drc_overlap(
+            m_markerFactory, [&]( MARKER_PCB* aMarker ) { addMarkerToPcb( aMarker ); } );
 
-    // Update courtyard polygons, and test for missing courtyard definition:
-    for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
-    {
-        wxPoint pos = footprint->GetPosition();
-        bool is_ok = footprint->BuildPolyCourtyard();
-
-        if( !is_ok && m_pcb->GetDesignSettings().m_ProhibitOverlappingCourtyards )
-        {
-            addMarkerToPcb( m_markerFactory.NewMarker(
-                    pos, footprint, DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT ) );
-            success = false;
-        }
-
-        if( !m_pcb->GetDesignSettings().m_RequireCourtyards )
-            continue;
-
-        if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 &&
-            footprint->GetPolyCourtyardBack().OutlineCount() == 0 &&
-            is_ok )
-        {
-            addMarkerToPcb( m_markerFactory.NewMarker(
-                    pos, footprint, DRCE_MISSING_COURTYARD_IN_FOOTPRINT ) );
-            success = false;
-        }
-    }
-
-    if( !m_pcb->GetDesignSettings().m_ProhibitOverlappingCourtyards )
-        return success;
-
-    // Now test for overlapping on top layer:
-    SHAPE_POLY_SET courtyard;   // temporary storage of the courtyard of current footprint
-
-    for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
-    {
-        if( footprint->GetPolyCourtyardFront().OutlineCount() == 0 )
-            continue;           // No courtyard defined
-
-        for( MODULE* candidate = footprint->Next(); candidate; candidate = candidate->Next() )
-        {
-            if( candidate->GetPolyCourtyardFront().OutlineCount() == 0 )
-                continue;       // No courtyard defined
-
-            courtyard.RemoveAllContours();
-            courtyard.Append( footprint->GetPolyCourtyardFront() );
-
-            // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection( candidate->GetPolyCourtyardFront(),
-                                           SHAPE_POLY_SET::PM_FAST );
-
-            // If no overlap, courtyard is empty (no common area).
-            // Therefore if a common polygon exists, this is a DRC error
-            if( courtyard.OutlineCount() )
-            {
-                //Overlap between footprint and candidate
-                VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                addMarkerToPcb( m_markerFactory.NewMarker( wxPoint( pos.x, pos.y ), footprint,
-                        candidate, DRCE_OVERLAPPING_FOOTPRINTS ) );
-                success = false;
-            }
-        }
-    }
-
-    // Test for overlapping on bottom layer:
-    for( MODULE* footprint = m_pcb->m_Modules; footprint; footprint = footprint->Next() )
-    {
-        if( footprint->GetPolyCourtyardBack().OutlineCount() == 0 )
-            continue;           // No courtyard defined
-
-        for( MODULE* candidate = footprint->Next(); candidate; candidate = candidate->Next() )
-        {
-            if( candidate->GetPolyCourtyardBack().OutlineCount() == 0 )
-                continue;       // No courtyard defined
-
-            courtyard.RemoveAllContours();
-            courtyard.Append( footprint->GetPolyCourtyardBack() );
-
-            // Build the common area between footprint and the candidate:
-            courtyard.BooleanIntersection( candidate->GetPolyCourtyardBack(),
-                                           SHAPE_POLY_SET::PM_FAST );
-
-            // If no overlap, courtyard is empty (no common area).
-            // Therefore if a common polygon exists, this is a DRC error
-            if( courtyard.OutlineCount() )
-            {
-                //Overlap between footprint and candidate
-                VECTOR2I& pos = courtyard.Vertex( 0, 0, -1 );
-                addMarkerToPcb( m_markerFactory.NewMarker( wxPoint( pos.x, pos.y ), footprint,
-                        candidate, DRCE_OVERLAPPING_FOOTPRINTS ) );
-                success = false;
-            }
-        }
-    }
-
-    return success;
+    drc_overlap.RunDRC( *m_pcb );
 }

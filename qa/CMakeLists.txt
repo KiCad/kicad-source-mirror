@@ -14,6 +14,7 @@ endif()
 
 # Shared QA helper libraries
 add_subdirectory( qa_utils )
+add_subdirectory( pcbnew_utils )
 add_subdirectory( unit_test_utils )
 
 # Unit tests
