@@ -87,8 +87,9 @@ public:
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
     {
-        return aItem->Type() == SCH_LINE_T &&
-                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS );
+        return ( aItem->Type() == SCH_LINE_T &&
+                ( aItem->GetLayer() == LAYER_WIRE || aItem->GetLayer() == LAYER_BUS ) ) ||
+                aItem->Type() == SCH_COMPONENT_T;
     }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
