@@ -61,7 +61,6 @@
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
 
-const wxChar PCB_BASE_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
 const wxChar PCB_BASE_FRAME::AUTO_ZOOM_KEY[] = wxT( "AutoZoom" );
 const wxChar PCB_BASE_FRAME::ZOOM_KEY[] = wxT( "Zoom" );
 
@@ -126,6 +125,12 @@ PCB_BASE_FRAME::PCB_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
 PCB_BASE_FRAME::~PCB_BASE_FRAME()
 {
+    // Ensure m_canvasType is up to date, to save it in config
+    if( !GetGalCanvas() )
+        m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
+    else
+        m_canvasType = GetGalCanvas()->GetBackend();
+
     delete m_Collector;
     delete m_Pcb;
 }

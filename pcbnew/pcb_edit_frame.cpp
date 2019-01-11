@@ -390,12 +390,12 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     Zoom_Automatique( false );
 
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = LoadCanvasTypeSetting();
+    m_canvasType = LoadCanvasTypeSetting();
 
     // Nudge user to switch to OpenGL if they are on legacy or Cairo
     if( m_firstRunDialogSetting < 1 )
     {
-        if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
+        if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL )
         {
             wxString msg = _( "KiCad can use your graphics card to give you a smoother "
                               "and faster experience. This option is turned off by "
@@ -439,9 +439,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     }
     else
     {
-        if( canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
+        if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
         {
-            if( GetGalCanvas()->SwitchBackend( canvasType ) )
+            if( GetGalCanvas()->SwitchBackend( m_canvasType ) )
                 UseGalCanvas( true );
         }
     }

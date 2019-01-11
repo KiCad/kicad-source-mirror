@@ -622,8 +622,6 @@ public:
     }
 
     ///> Key in KifaceSettings to store the canvas type.
-    static const wxChar CANVAS_TYPE_KEY[];
-
     static const wxChar AUTO_ZOOM_KEY[];
     static const wxChar ZOOM_KEY[];
 

@@ -60,14 +60,17 @@ namespace KIGFX
 /// \ingroup config
 
 /// User units
-static const wxString UserUnitsEntryKeyword( wxT( "Units" ) );
+#define UserUnitsEntryKeyword "Units"
 /// Nonzero to show grid (suffix)
-static const wxString ShowGridEntryKeyword( wxT( "ShowGrid" ) );
+#define ShowGridEntryKeyword "ShowGrid"
 /// Grid color ID (suffix)
-static const wxString GridColorEntryKeyword( wxT( "GridColor" ) );
+#define GridColorEntryKeyword "GridColor"
 /// Most recently used grid size (suffix)
-static const wxString LastGridSizeIdKeyword( wxT( "_LastGridSize" ) );
+#define LastGridSizeIdKeyword "_LastGridSize"
 
+/// The key to store the canvas type in config. This is the base key.
+/// can be a suffix if the canvas_type in config is specific to a frame
+#define CanvasTypeKeyBase "canvas_type"
 ///@}
 
 
@@ -230,8 +233,14 @@ protected:
     bool saveCanvasImageToFile( const wxString& aFileName,
                                 wxBitmapType aBitmapType = wxBITMAP_TYPE_PNG );
 
-    ///> Key in KifaceSettings to store the canvas type.
-    static const wxChar CANVAS_TYPE_KEY[];
+    /** @return the key in KifaceSettings to store the canvas type.
+     * the base version returns only CanvasTypeKeyBase.
+     * Can be overriden to return a key specific of a frame name
+     */
+    virtual wxString GetCanvasTypeKey()
+    {
+        return CanvasTypeKeyBase;
+    }
 
 public:
     EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -893,7 +902,7 @@ public:
     /**
      * Returns the canvas type stored in the application settings.
      */
-    static EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE LoadCanvasTypeSetting();
 
     /**
      * Use to switch between standard and GAL-based canvas.
@@ -915,7 +924,7 @@ public:
      *
      * @return True for GAL-based canvas, false for standard canvas.
      */
-    bool IsGalCanvasActive() const          { return m_galCanvasActive; }
+    bool IsGalCanvasActive() const { return m_galCanvasActive; }
 
     /**
      * Return a pointer to GAL-based canvas of given EDA draw frame.

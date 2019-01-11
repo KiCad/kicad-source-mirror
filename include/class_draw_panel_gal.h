@@ -58,10 +58,11 @@ class EDA_DRAW_PANEL_GAL : public wxScrolledCanvas
 {
 public:
     enum GAL_TYPE {
-        GAL_TYPE_NONE,      ///< Not used
-        GAL_TYPE_OPENGL,    ///< OpenGL implementation
-        GAL_TYPE_CAIRO,     ///< Cairo implementation
-        GAL_TYPE_LAST       ///< Sentinel, do not use as a parameter
+        GAL_TYPE_UNKNOWN = -1,  ///< not specified: a GAL engine must be set by the client
+        GAL_TYPE_NONE = 0,      ///< GAL not used (the legacy wxDC engine is used)
+        GAL_TYPE_OPENGL,        ///< OpenGL implementation
+        GAL_TYPE_CAIRO,         ///< Cairo implementation
+        GAL_TYPE_LAST           ///< Sentinel, do not use as a parameter
     };
 
     EDA_DRAW_PANEL_GAL( wxWindow* aParentWindow, wxWindowID aWindowId, const wxPoint& aPosition,

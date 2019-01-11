@@ -228,8 +228,13 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     SetIcon( icon );
 
     // Create GAL canvas
+    if( aBackend == EDA_DRAW_PANEL_GAL::GAL_TYPE_UNKNOWN )
+        m_canvasType = LoadCanvasTypeSetting();
+    else
+        m_canvasType = aBackend;
+
     PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(), aBackend );
+                                                            GetGalDisplayOptions(), m_canvasType );
     SetGalCanvas( drawPanel );
 
     SetBoard( new BOARD() );
@@ -317,7 +322,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
-    UseGalCanvas( aBackend != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
+    UseGalCanvas( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     m_auimgr.Update();
     updateTitle();

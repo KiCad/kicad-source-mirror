@@ -46,7 +46,6 @@
 #include <math/box2.h>
 #include <lockfile.h>
 #include <trace_helpers.h>
-//#include "../eeschema/sch_draw_panel.h"
 #include <wx/fontdlg.h>
 #include <wx/snglinst.h>
 #include <view/view.h>
@@ -78,9 +77,6 @@ static const wxString traceScrollSettings( wxT( "KicadScrollSettings" ) );
 
 ///@{
 /// \ingroup config
-
-const wxChar EDA_DRAW_FRAME::CANVAS_TYPE_KEY[] = wxT( "canvas_type" );
-
 static const wxString FirstRunShownKeyword( wxT( "FirstRunShown" ) );
 
 ///@}
@@ -221,6 +217,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 EDA_DRAW_FRAME::~EDA_DRAW_FRAME()
 {
     delete m_socketServer;
+
     for( auto socket : m_sockets )
     {
         socket->Shutdown();
@@ -1072,7 +1069,7 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
     wxConfigBase* cfg = Kiface().KifaceSettings();
 
     if( cfg )
-        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( CANVAS_TYPE_KEY,
+        canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE) cfg->ReadLong( GetCanvasTypeKey(),
                                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
     if( canvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
@@ -1096,6 +1093,28 @@ EDA_DRAW_PANEL_GAL::GAL_TYPE EDA_DRAW_FRAME::LoadCanvasTypeSetting()
 
 bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType )
 {
+    // Not all classes derived from EDA_DRAW_FRAME can save the canvas type, because some
+    // have a fixed type, or do not have a option to set the canvas type (they inherit from
+    // a parent frame)
+    FRAME_T allowed_frames[] =
+    {
+        FRAME_SCH, FRAME_PCB, FRAME_PCB_MODULE_EDITOR
+    };
+
+    bool allow_save = false;
+
+    for( int ii = 0; ii < 3; ii++ )
+    {
+        if( m_Ident == allowed_frames[ii] )
+        {
+            allow_save = true;
+            break;
+        }
+    }
+
+    if( !allow_save )
+        return false;
+
     if( aCanvasType < EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE
             || aCanvasType >= EDA_DRAW_PANEL_GAL::GAL_TYPE_LAST )
     {
@@ -1106,7 +1125,7 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     wxConfigBase* cfg = Kiface().KifaceSettings();
 
     if( cfg )
-        return cfg->Write( CANVAS_TYPE_KEY, (long) aCanvasType );
+        return cfg->Write( GetCanvasTypeKey(), (long) aCanvasType );
 
     return false;
 }
