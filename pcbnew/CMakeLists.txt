@@ -211,10 +211,15 @@ set( PCBNEW_MICROWAVE_SRCS
     microwave/microwave_inductor.cpp
     )
 
+set( PCBNEW_DRC_SRCS
+    drc/drc_marker_factory.cpp
+    )
+
 set( PCBNEW_CLASS_SRCS
     ${PCBNEW_DIALOGS}
     ${PCBNEW_EXPORTERS}
     ${PCBNEW_IMPORT_GFX}
+    ${PCBNEW_DRC_SRCS}
 
     autorouter/rect_placement/rect_placement.cpp
     autorouter/spread_footprints.cpp
@@ -238,7 +243,6 @@ set( PCBNEW_CLASS_SRCS
     dragsegm.cpp
     drc.cpp
     drc_clearance_test_functions.cpp
-    drc_marker_functions.cpp
     edgemod.cpp
     edit.cpp
     edit_pcb_text.cpp

@@ -1,7 +1,3 @@
-/**
- * @file drc_marker_functions.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -27,32 +23,48 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "drc_marker_factory.h"
 
-/* Methods of class DRC to initialize drc markers with messages
- * according to items and error code
-*/
-
-#include <fctsys.h>
-#include <common.h>
-#include <pcbnew.h>
 #include <board_design_settings.h>
-#include <geometry/geometry_utils.h>
-#include <pcb_edit_frame.h>
-#include <drc.h>
-#include <class_pad.h>
-#include <class_track.h>
-#include <class_zone.h>
+#include <class_board_item.h>
+#include <class_edge_mod.h>
 #include <class_marker_pcb.h>
+#include <class_pad.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
-#include <class_edge_mod.h>
-#include <class_board_item.h>
+#include <class_track.h>
+#include <class_zone.h>
+#include <common.h>
+#include <drc.h>
+#include <fctsys.h>
+#include <geometry/geometry_utils.h>
+#include <pcb_edit_frame.h>
+#include <pcbnew.h>
 
 
 const int EPSILON = Mils2iu( 5 );
 
 
-MARKER_PCB* DRC::newMarker( TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode )
+DRC_MARKER_FACTORY::DRC_MARKER_FACTORY()
+{
+    SetUnits( EDA_UNITS_T::MILLIMETRES );
+}
+
+
+void DRC_MARKER_FACTORY::SetUnitsProvider( UNITS_PROVIDER aUnitsProvider )
+{
+    m_units_provider = aUnitsProvider;
+}
+
+
+void DRC_MARKER_FACTORY::SetUnits( EDA_UNITS_T aUnits )
+{
+    m_units_provider = [=]() { return aUnits; };
+}
+
+
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
+        TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aErrorCode ) const
 {
     SHAPE_POLY_SET* conflictOutline;
 
@@ -84,16 +96,15 @@ MARKER_PCB* DRC::newMarker( TRACK* aTrack, ZONE_CONTAINER* aConflictZone, int aE
         markerPos = pt1;
     }
 
-    return new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(), aErrorCode, markerPos,
-                           aTrack, aTrack->GetPosition(),
-                           aConflictZone, aConflictZone->GetPosition() );
+    return new MARKER_PCB( getCurrentUnits(), aErrorCode, markerPos, aTrack, aTrack->GetPosition(),
+            aConflictZone, aConflictZone->GetPosition() );
 }
 
 
-MARKER_PCB* DRC::newMarker( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg,
-                            int aErrorCode )
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
+        TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& aConflictSeg, int aErrorCode ) const
 {
-    wxPoint  markerPos;
+    wxPoint markerPos;
     wxPoint pt1 = aTrack->GetPosition();
     wxPoint pt2 = aTrack->GetEnd();
 
@@ -109,36 +120,36 @@ MARKER_PCB* DRC::newMarker( TRACK* aTrack, BOARD_ITEM* aConflitItem, const SEG& 
     // Once we're within EPSILON pt1 and pt2 are "equivalent"
     markerPos = pt1;
 
-    return new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(), aErrorCode, markerPos,
-                           aTrack, aTrack->GetPosition(),
-                           aConflitItem, aConflitItem->GetPosition() );
+    return new MARKER_PCB( getCurrentUnits(), aErrorCode, markerPos, aTrack, aTrack->GetPosition(),
+            aConflitItem, aConflitItem->GetPosition() );
 }
 
 
-MARKER_PCB* DRC::newMarker( D_PAD* aPad, BOARD_ITEM* aConflictItem, int aErrorCode )
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
+        D_PAD* aPad, BOARD_ITEM* aConflictItem, int aErrorCode ) const
 {
-    return new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(), aErrorCode, aPad->GetPosition(),
-                           aPad, aPad->GetPosition(),
-                           aConflictItem, aConflictItem->GetPosition() );
+    return new MARKER_PCB( getCurrentUnits(), aErrorCode, aPad->GetPosition(), aPad,
+            aPad->GetPosition(), aConflictItem, aConflictItem->GetPosition() );
 }
 
 
-MARKER_PCB* DRC::newMarker(const wxPoint &aPos, BOARD_ITEM *aItem, int aErrorCode )
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
+        const wxPoint& aPos, BOARD_ITEM* aItem, int aErrorCode ) const
 {
-    return new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(), aErrorCode, aPos,
-                           aItem, aItem->GetPosition(), nullptr, wxPoint() );
+    return new MARKER_PCB(
+            getCurrentUnits(), aErrorCode, aPos, aItem, aItem->GetPosition(), nullptr, wxPoint() );
 }
 
 
-MARKER_PCB* DRC::newMarker( const wxPoint &aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem,
-                            int aErrorCode )
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
+        const wxPoint& aPos, BOARD_ITEM* aItem, BOARD_ITEM* bItem, int aErrorCode ) const
 {
-    return new MARKER_PCB( m_pcbEditorFrame->GetUserUnits(), aErrorCode, aPos,
-                           aItem, aItem->GetPosition(), bItem, bItem->GetPosition() );
+    return new MARKER_PCB( getCurrentUnits(), aErrorCode, aPos, aItem, aItem->GetPosition(), bItem,
+            bItem->GetPosition() );
 }
 
 
-MARKER_PCB* DRC::newMarker( int aErrorCode, const wxString& aMessage )
+MARKER_PCB* DRC_MARKER_FACTORY::NewMarker( int aErrorCode, const wxString& aMessage ) const
 {
     MARKER_PCB* marker = new MARKER_PCB( aErrorCode, wxPoint(), aMessage, wxPoint() );
 
@@ -146,5 +157,3 @@ MARKER_PCB* DRC::newMarker( int aErrorCode, const wxString& aMessage )
 
     return marker;
 }
-
-
