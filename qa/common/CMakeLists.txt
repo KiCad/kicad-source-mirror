@@ -51,7 +51,7 @@ set( common_srcs
     view/test_zoom_controller.cpp
 )
 
-set( common_libs 
+set( common_libs
     common
     legacy_gal
     polygon
@@ -61,6 +61,11 @@ set( common_libs
     unit_test_utils
     ${wxWidgets_LIBRARIES}
 )
+
+# test_shape_arc.cpp does not compile without -fpermissive compil option:
+if( CMAKE_COMPILER_IS_GNUCXX )
+    set( CMAKE_CXX_FLAGS "-fpermissive ${CMAKE_CXX_FLAGS}" )
+endif()
 
 
 # Use code with GERBVIEW defines in place (primarily IU difference)
