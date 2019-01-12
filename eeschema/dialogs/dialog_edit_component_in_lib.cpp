@@ -66,6 +66,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_pinNameOffset( aParent, m_nameOffsetLabel, m_nameOffsetCtrl, m_nameOffsetUnits, true ),
     m_delayedFocusCtrl( nullptr ),
     m_delayedFocusGrid( nullptr ),
+    m_delayedFocusRow( -1 ),
+    m_delayedFocusColumn( -1 ),
     m_delayedFocusPage( -1 )
 {
     m_config = Kiface().KifaceSettings();
@@ -116,6 +118,10 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_editFilterButton->SetBitmap( KiBitmap( small_edit_xpm ) );
 
     m_stdSizerButtonOK->SetDefault();
+
+#ifndef KICAD_SPICE
+    m_spiceFieldsButton->Hide();
+#endif
 
     // wxFormBuilder doesn't include this event...
     m_grid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ), NULL, this );
