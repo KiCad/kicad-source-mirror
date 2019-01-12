@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
+ * Copyright (C) 2019  KiCad Developers, see CHANGELOG.TXT for contributors.
  * Copyright (C) 2016-2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -264,7 +265,7 @@ bool DIALOG_SPICE_MODEL::TransferDataToWindow()
             NET_ADJUST_INCLUDE_PATHS | NET_ADJUST_PASSIVE_VALS );
 
         // Do not modify the existing value, just add missing fields with default values
-        if( m_schfields )
+        if( m_useSchFields && m_schfields )
         {
             for( auto field : *m_schfields )
             {
