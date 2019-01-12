@@ -882,12 +882,19 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     std::vector<BOARD_ITEM*> lockedItems;
 
     // get a copy instead of reference (as we're going to clear the selection before removing items)
-    auto selectionCopy = m_selectionTool->RequestSelection(
+    SELECTION selectionCopy;
+    bool isCut = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::CUT );
+    bool isAlt = aEvent.Parameter<intptr_t>() == static_cast<intptr_t>( PCB_ACTIONS::REMOVE_FLAGS::ALT );
+
+    // If we are in a "Cut" operation, then the copied selection exists already
+    if( isCut )
+        selectionCopy = m_selectionTool->GetSelection();
+    else
+        selectionCopy = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
 
     bool isHover = selectionCopy.IsHover();
-    const bool isAlt = aEvent.Parameter<intptr_t>() == (int) PCB_ACTIONS::REMOVE_FLAGS::ALT;
 
     // in "alternative" mode, deletion is not just a simple list of selected items,
     // it removes whole tracks, not just segments
@@ -900,7 +907,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     if( selectionCopy.Empty() )
         return 0;
 
-    if( !m_lockedSelected )
+    // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
+    // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be done
+    // in the copyToClipboard() routine
+    if( !m_lockedSelected && !isCut )
     {
         // Second RequestSelection removes locked items but keeps a copy of their pointers
         selectionCopy = m_selectionTool->RequestSelection(
@@ -942,7 +952,10 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_commit->Push( _( "Delete" ) );
+    if( isCut )
+        m_commit->Push( _( "Cut" ) );
+    else
+        m_commit->Push( _( "Delete" ) );
 
     if( !m_lockedSelected && lockedItems.size() > 0 )
     {
@@ -1533,7 +1546,14 @@ int EDIT_TOOL::copyToClipboardWithAnchor( const TOOL_EVENT& aEvent )
 int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 {
     if( !copyToClipboard( aEvent ) )
-        Remove( aEvent );
+    {
+        // N.B. Setting the CUT flag prevents lock filtering as we only want to delete the items that
+        // were copied to the clipboard, no more, no fewer.  Filtering for locked item, if any will be done
+        // in the copyToClipboard() routine
+        TOOL_EVENT evt = aEvent;
+        evt.SetParameter( PCB_ACTIONS::REMOVE_FLAGS::CUT );
+        Remove( evt );
+    }
 
     return 0;
 }

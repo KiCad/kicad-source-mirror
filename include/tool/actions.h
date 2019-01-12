@@ -104,7 +104,7 @@ public:
                              CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };
 
     ///> Remove event modifier flags
-    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01 };
+    enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };
 };
 
 #endif

@@ -150,6 +150,11 @@ public:
         return m_viewPrivData;
     }
 
+    void ClearViewPrivData()
+    {
+        m_viewPrivData = NULL;
+    }
+
 private:
     friend class VIEW;
 
