@@ -1023,11 +1023,8 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
     {
         for( auto pad : module->Pads() )
         {
-            std::unique_ptr< PNS::SOLID > solid = syncPad( pad );
-
-            if( solid )
+            if( auto solid = syncPad( pad ) )
                 aWorld->Add( std::move( solid ) );
-
 
             worstPadClearance = std::max( worstPadClearance, pad->GetLocalClearance() );
         }
@@ -1055,16 +1052,15 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
     {
         KICAD_T type = t->Type();
 
-        if( type == PCB_TRACE_T ) {
-            std::unique_ptr< PNS::SEGMENT > segment = syncTrack( t );
-            if( segment ) {
+        if( type == PCB_TRACE_T )
+        {
+            if( auto segment = syncTrack( t ) )
                 aWorld->Add( std::move( segment ) );
-            }
-        } else if( type == PCB_VIA_T ) {
-            std::unique_ptr< PNS::VIA > via = syncVia( static_cast<VIA*>( t ) );
-            if( via ) {
+        }
+        else if( type == PCB_VIA_T )
+        {
+            if( auto via = syncVia( static_cast<VIA*>( t ) ) )
                 aWorld->Add( std::move( via ) );
-            }
         }
     }
 
