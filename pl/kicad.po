@@ -8467,7 +8467,7 @@ msgstr "Ponów"
 #: pcbnew/footprint_tree_pane.cpp:89 pcbnew/hotkeys.cpp:305
 #: pcbnew/tools/edit_tool.cpp:165
 msgid "Cut"
-msgstr "Wytnik"
+msgstr "Wytnij"
 
 #: eeschema/hotkeys.cpp:242 eeschema/onrightclick.cpp:572
 #: eeschema/widgets/symbol_tree_pane.cpp:90 pcbnew/footprint_tree_pane.cpp:91
