@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ extern struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[];
 
 void EDA_3D_VIEWER::CreateMenuBar()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::CreateMenuBar" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CreateMenuBar" );
 
     wxMenuBar* menuBar   = new wxMenuBar;
     wxMenu*    fileMenu  = new wxMenu;
@@ -343,71 +343,4 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  KiBitmap( about_xpm ) );
 
     SetMenuBar( menuBar );
-    SetMenuBarOptionsState();
-}
-
-
-void EDA_3D_VIEWER::SetMenuBarOptionsState()
-{
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::SetMenuBarOptionsState" ) );
-
-    wxMenuBar* menuBar = GetMenuBar();
-
-    if( menuBar == NULL )
-    {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::SetMenuBarOptionsState menuBar == NULL" ) );
-
-        return;
-    }
-
-    wxMenuItem* item;
-    // Set the state of toggle menus according to the current display options
-    item = menuBar->FindItem( ID_MENU3D_ENGINE_OPENGL_LEGACY );
-    item->Check( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY );
-
-    item = menuBar->FindItem( ID_MENU3D_ENGINE_RAYTRACING );
-    item->Check( m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_NORMAL );
-    item->Check( m_settings.MaterialModeGet() == MATERIAL_MODE_NORMAL );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_DIFFUSE_ONLY );
-    item->Check( m_settings.MaterialModeGet() == MATERIAL_MODE_DIFFUSE_ONLY );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RENDER_MATERIAL_MODE_CAD_MODE );
-    item->Check( m_settings.MaterialModeGet() == MATERIAL_MODE_CAD_MODE );
-
-    // OpenGL
-    item = menuBar->FindItem( ID_MENU3D_FL_OPENGL_RENDER_COPPER_THICKNESS );
-    item->Check( m_settings.GetFlag( FL_RENDER_OPENGL_COPPER_THICKNESS ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_OPENGL_RENDER_SHOW_MODEL_BBOX );
-    item->Check( m_settings.GetFlag( FL_RENDER_OPENGL_SHOW_MODEL_BBOX ) );
-
-    // Raytracing
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_RENDER_SHADOWS );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_SHADOWS ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_BACKFLOOR );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_BACKFLOOR ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_REFRACTIONS );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFRACTIONS ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_REFLECTIONS );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_REFLECTIONS ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_POST_PROCESSING );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_POST_PROCESSING ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_ANTI_ALIASING );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_ANTI_ALIASING ) );
-
-    item = menuBar->FindItem( ID_MENU3D_FL_RAYTRACING_PROCEDURAL_TEXTURES );
-    item->Check( m_settings.GetFlag( FL_RENDER_RAYTRACING_PROCEDURAL_TEXTURES ) );
-
-
-    item = menuBar->FindItem( ID_MENU3D_AXIS_ONOFF );
-    item->Check( m_settings.GetFlag( FL_AXIS ) );
-
 }

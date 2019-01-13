@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,6 @@
 
 
 /**
- *  Class EDA_3D_CANVAS
  *  Implement a canvas based on a wxGLCanvas
  */
 class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
@@ -269,6 +268,8 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 
     /// Flags that the user requested the current view to be render with raytracing
     bool m_render_raytracing_was_requested;
+
+    bool m_opengl_supports_raytracing;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

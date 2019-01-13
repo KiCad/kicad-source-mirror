@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,10 +48,11 @@ extern struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[];
 
 
 /**
- *  Trace mask used to enable or disable the trace output of this class.
- *  The debug output can be turned on by setting the WXTRACE environment variable to
- *  "KI_TRACE_EDA_3D_CANVAS".  See the wxWidgets documentation on wxLogTrace for
- *  more information.
+ * Flag to enable 3D canvas debug tracing.
+ *
+ * Use "KI_TRACE_EDA_3D_CANVAS" to enable.
+ *
+ * @ingroup trace_env_vars
  */
 const wxChar * EDA_3D_CANVAS::m_logTrace = wxT( "KI_TRACE_EDA_3D_CANVAS" );
 
@@ -64,16 +65,16 @@ BEGIN_EVENT_TABLE( EDA_3D_CANVAS, wxGLCanvas )
     EVT_CHAR_HOOK( EDA_3D_CANVAS::OnCharHook )
 
     // mouse events
-    EVT_LEFT_DOWN(   EDA_3D_CANVAS::OnLeftDown )
-    EVT_LEFT_UP(     EDA_3D_CANVAS::OnLeftUp )
-    EVT_MIDDLE_UP(   EDA_3D_CANVAS::OnMiddleUp )
+    EVT_LEFT_DOWN( EDA_3D_CANVAS::OnLeftDown )
+    EVT_LEFT_UP( EDA_3D_CANVAS::OnLeftUp )
+    EVT_MIDDLE_UP( EDA_3D_CANVAS::OnMiddleUp )
     EVT_MIDDLE_DOWN( EDA_3D_CANVAS::OnMiddleDown)
-    EVT_RIGHT_DOWN(  EDA_3D_CANVAS::OnRightClick )
-    EVT_MOUSEWHEEL(  EDA_3D_CANVAS::OnMouseWheel )
-    EVT_MOTION(      EDA_3D_CANVAS::OnMouseMove )
+    EVT_RIGHT_DOWN( EDA_3D_CANVAS::OnRightClick )
+    EVT_MOUSEWHEEL( EDA_3D_CANVAS::OnMouseWheel )
+    EVT_MOTION( EDA_3D_CANVAS::OnMouseMove )
 
 #if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
-    EVT_MAGNIFY(     EDA_3D_CANVAS::OnMagnify )
+    EVT_MAGNIFY( EDA_3D_CANVAS::OnMagnify )
 #endif
 
     // other events
@@ -90,7 +91,6 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
                               const int *aAttribList,
                               BOARD *aBoard,
                               CINFO3D_VISU &aSettings , S3D_CACHE *a3DCachePointer ) :
-
                   HIDPI_GL_CANVAS( aParent,
                               wxID_ANY,
                               aAttribList,
@@ -101,9 +101,8 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
                 m_settings( aSettings )
 {
     // Run test cases in debug mode, once.
-    //DBG( Run_3d_viewer_test_cases() );
 
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::EDA_3D_CANVAS" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::EDA_3D_CANVAS" );
 
     m_editing_timeout_timer.SetOwner( this );
     Connect( m_editing_timeout_timer.GetId(),
@@ -130,6 +129,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
     m_is_opengl_initialized = false;
 
     m_render_raytracing_was_requested = false;
+    m_opengl_supports_raytracing = false;
 
     m_parentStatusBar = NULL;
     m_glRC = NULL;
@@ -154,7 +154,7 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
 
 EDA_3D_CANVAS::~EDA_3D_CANVAS()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::~EDA_3D_CANVAS" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::~EDA_3D_CANVAS" );
 
     releaseOpenGL();
 }
@@ -189,14 +189,16 @@ void EDA_3D_CANVAS::OnCloseWindow( wxCloseEvent &event )
     event.Skip();
 }
 
+
 void EDA_3D_CANVAS::OnResize( wxSizeEvent &event )
 {
     this->Request_refresh();
 }
 
+
 bool  EDA_3D_CANVAS::initializeOpenGL()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::initializeOpenGL" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::initializeOpenGL" );
 
     const GLenum err = glewInit();
 
@@ -210,10 +212,14 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
     }
     else
     {
-        wxLogTrace( m_logTrace,
-                    wxString( wxT( "EDA_3D_CANVAS::initializeOpenGL Using GLEW " ) ) +
+        wxLogTrace( m_logTrace, "EDA_3D_CANVAS::initializeOpenGL Using GLEW version %s",
                     FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
+
+    const GLubyte* version = glGetString( GL_VERSION );
+
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL version string %s.",
+                __WXFUNCTION__, FROM_UTF8( (char*) version ) );
 
     m_is_opengl_initialized = true;
 
@@ -260,14 +266,11 @@ void EDA_3D_CANVAS::DisplayStatus()
     {
         wxString msg;
 
-        msg.Printf( wxT( "dx %3.2f" ), m_settings.CameraGet().GetCameraPos().x );
+        msg.Printf( "dx %3.2f", m_settings.CameraGet().GetCameraPos().x );
         m_parentStatusBar->SetStatusText( msg, 1 );
 
-        msg.Printf( wxT( "dy %3.2f" ), m_settings.CameraGet().GetCameraPos().y );
+        msg.Printf( "dy %3.2f", m_settings.CameraGet().GetCameraPos().y );
         m_parentStatusBar->SetStatusText( msg, 2 );
-
-        //msg.Printf( _( "Zoom: %3.1f" ), 50 * m_settings.CameraGet().ZoomGet() );
-        //m_parentStatusBar->SetStatusText( msg, 3 );
     }
 }
 
@@ -282,7 +285,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     // SwapBuffer requires the window to be shown before calling
     if( !IsShownOnScreen() )
     {
-        wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnPaint !IsShown" ) );
+        wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnPaint !IsShown" );
         return;
     }
 
@@ -300,7 +303,6 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     // !TODO: implement error reporter
     //WX_STRING_REPORTER errorReporter( &err_messages );
     STATUS_TEXT_REPORTER activityReporter( m_parentStatusBar, 0 );
-
 
     unsigned strtime = GetRunningMicroSecs();
 
@@ -324,7 +326,6 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
     const bool windows_size_changed = m_settings.CameraGet().SetCurWindowSize( clientSize );
 
-
     // Initialize openGL if need
     // /////////////////////////////////////////////////////////////////////////
     if( !m_is_opengl_initialized )
@@ -336,7 +337,6 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
             return;
         }
     }
-
 
     // Check if a raytacing was requented and need to switch to raytracing mode
     if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
@@ -355,7 +355,6 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
             m_3d_render = m_3d_render_ogl_legacy;
         }
     }
-
 
     float curtime_delta_s = 0.0f;
 
@@ -379,7 +378,6 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
             Request_refresh();
         }
     }
-
 
     // It will return true if the render request a new redraw
     bool requested_redraw = false;
@@ -433,7 +431,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
 
 void EDA_3D_CANVAS::OnEraseBackground( wxEraseEvent &event )
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnEraseBackground" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnEraseBackground" );
     // Do nothing, to avoid flashing.
 }
 
@@ -442,7 +440,7 @@ void EDA_3D_CANVAS::OnMouseWheel( wxMouseEvent &event )
 {
     bool mouseActivity = false;
 
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnMouseWheel" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnMouseWheel" );
 
     if( m_camera_is_moving )
         return;
@@ -601,7 +599,7 @@ void EDA_3D_CANVAS::OnMiddleUp( wxMouseEvent &event )
 
 void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnRightClick" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnRightClick" );
 
     SetFocus();
 
@@ -692,7 +690,7 @@ void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent &event )
 {
     int id = event.GetId();
 
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnPopUpMenu id:%d" ), id );
+    wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnPopUpMenu id:%d", id );
 
     int key = 0;
 
@@ -756,14 +754,14 @@ void EDA_3D_CANVAS::OnPopUpMenu( wxCommandEvent &event )
 
 void EDA_3D_CANVAS::OnCharHook( wxKeyEvent &event )
 {
-    //wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnCharHook" ) );
+    //wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnCharHook" );
     event.Skip();
 }
 
 
 void EDA_3D_CANVAS::OnKeyEvent( wxKeyEvent& event )
 {
-    //wxLogTrace( m_logTrace, wxT( "EDA_3D_CANVAS::OnKeyEvent" ) );
+    //wxLogTrace( m_logTrace, "EDA_3D_CANVAS::OnKeyEvent" );
     int localkey = event.GetKeyCode();
 
     // Use only upper char values in comparisons

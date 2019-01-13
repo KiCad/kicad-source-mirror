@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@
 
 void EDA_3D_VIEWER::ReCreateMainToolbar()
 {
-    wxLogTrace( m_logTrace, wxT( "EDA_3D_VIEWER::ReCreateMainToolbar" ) );
+    wxLogTrace( m_logTrace, "EDA_3D_VIEWER::ReCreateMainToolbar" );
 
     if( m_mainToolBar != NULL )
     {
