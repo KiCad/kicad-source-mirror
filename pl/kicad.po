@@ -3573,7 +3573,7 @@ msgstr "Pliki obwodu drukowanego programu KiCad (*.kicad_pcb)|*."
 
 #: common/wildcards_and_files_ext.cpp:186
 msgid "KiCad footprint files (*.kicad_mod)|*."
-msgstr "Pliki footrprintów programu KiCad (*.kicad_mod)|*."
+msgstr "Pliki footprintów programu KiCad (*.kicad_mod)|*."
 
 #: common/wildcards_and_files_ext.cpp:192
 msgid "KiCad footprint library paths (*.pretty)|*."
