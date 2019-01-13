@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -596,8 +596,9 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             pad->SetSize( wxSize( KiROUND( EuclideanNorm( delta ) ) + width,
                                   width ) );
 
-            padPos += module->GetPosition();
+            // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );
+            padPos += module->GetPosition();
             pad->SetPosition( padPos );
 
             if( !testFlags( parameters[paramCnt-2], 0x0100, wxT( "square" ) ) )
@@ -677,8 +678,10 @@ MODULE* GPCB_FPL_CACHE::parseMODULE( LINE_READER* aLineReader )
             }
 
             pad->SetDrillSize( wxSize( drillSize, drillSize ) );
-            padPos += module->GetPosition();
+
+            // Set the relative position before adjusting the absolute position
             pad->SetPos0( padPos );
+            padPos += module->GetPosition();
             pad->SetPosition( padPos );
 
             if( pad->GetShape() == PAD_SHAPE_CIRCLE  &&  pad->GetSize().x != pad->GetSize().y )

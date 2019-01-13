@@ -127,10 +127,11 @@ void CLIPBOARD_IO::SaveSelection( const SELECTION& aSelected )
                pad->SetNetCode( 0, 0 );
             }
 
+            // Add the pad to the new module before moving to ensure the local coords are correct
+            partialModule.Add( clone );
+
             // locate the reference point at (0, 0) in the copied items
             clone->Move( wxPoint(-refPoint.x, -refPoint.y ) );
-
-            partialModule.Add( clone );
         }
 
         // Set the new relative internal local coordinates of copied items

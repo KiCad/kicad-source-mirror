@@ -680,6 +680,7 @@ public:
     ///> Set absolute coordinates.
     void SetDrawCoord();
 
+    //todo: Remove SetLocalCoord along with m_pos
     ///> Set relative coordinates.
     void SetLocalCoord();
 
@@ -788,6 +789,7 @@ private:    // Private variable members:
 
     wxString    m_name;
 
+    // TODO: Remove m_Pos from Pad or make private.  View positions calculated from m_Pos0
     wxPoint     m_Pos;              ///< pad Position on board
 
     PAD_SHAPE_T m_padShape;         ///< Shape: PAD_SHAPE_CIRCLE, PAD_SHAPE_RECT,

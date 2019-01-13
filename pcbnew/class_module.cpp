@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -285,27 +285,6 @@ void MODULE::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
     }
 
     aBoardItem->SetParent( this );
-
-    // Update relative coordinates, it can be done only after there is a parent object assigned
-    switch( aBoardItem->Type() )
-    {
-    case PCB_MODULE_TEXT_T:
-        static_cast<TEXTE_MODULE*>( aBoardItem )->SetLocalCoord();
-        break;
-
-    case PCB_MODULE_EDGE_T:
-        static_cast<EDGE_MODULE*>( aBoardItem )->SetLocalCoord();
-        break;
-
-    case PCB_PAD_T:
-        static_cast<D_PAD*>( aBoardItem )->SetLocalCoord();
-        break;
-
-    default:
-        // Huh? It should have been filtered out by the previous switch
-        assert(false);
-        break;
-    }
 }
 
 
