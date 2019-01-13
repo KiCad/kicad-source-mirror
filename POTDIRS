@@ -6,7 +6,6 @@ eeschema
 gerbview
 include
 kicad
-lib_dxf
 pagelayout_editor
 pcb_calculator
 pcbnew
