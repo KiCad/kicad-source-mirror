@@ -3213,7 +3213,7 @@ msgstr "Select application language (only for testing)"
 
 #: common/preview_items/preview_utils.cpp:41
 msgid "\""
-msgstr "\""
+msgstr "″"
 
 #: common/project.cpp:258
 #, c-format
@@ -7677,7 +7677,7 @@ msgstr "Duplicate sheet name"
 #: eeschema/erc.cpp:278
 #, c-format
 msgid "Unit %s has '%s' assigned, whereas unit %s has '%s' assigned"
-msgstr "Unit %s has '%s' assigned, whereas unit %s has '%s' assigned"
+msgstr "Unit %s has ‘%s’ assigned, whereas unit %s has ‘%s’ assigned"
 
 #: eeschema/erc.cpp:319
 #, c-format
@@ -9724,7 +9724,7 @@ msgstr ""
 
 #: eeschema/menubar.cpp:407
 msgid "&Footprint Association File..."
-msgstr "&Footprint Association File..."
+msgstr "&Footprint Association File…"
 
 #: eeschema/menubar.cpp:411 pcbnew/menubar_pcb_editor.cpp:841
 msgid "&Import"
@@ -9863,11 +9863,11 @@ msgstr "Remap legacy library symbols to symbol library table"
 
 #: eeschema/menubar.cpp:552
 msgid "Edit Symbol Field&s..."
-msgstr "Edit Symbol Field&s..."
+msgstr "Edit Symbol Field&s…"
 
 #: eeschema/menubar.cpp:556
 msgid "Edit Symbol Library References..."
-msgstr "Edit Symbol Library References..."
+msgstr "Edit Symbol Library References…"
 
 #: eeschema/menubar.cpp:557
 msgid "Edit links between schematic symbols and library symbols"
@@ -9951,7 +9951,7 @@ msgstr "Use Modern Toolset with software graphics (fall-back)"
 
 #: eeschema/menubar.cpp:657
 msgid "&Save Project File..."
-msgstr "&Save Project File..."
+msgstr "&Save Project File…"
 
 #: eeschema/menubar.cpp:658
 msgid "Save project preferences into a project file"
@@ -9959,7 +9959,7 @@ msgstr "Save project preferences into a project file"
 
 #: eeschema/menubar.cpp:661
 msgid "Load P&roject File..."
-msgstr "Load P&roject File..."
+msgstr "Load P&roject File…"
 
 #: eeschema/menubar.cpp:662
 msgid "Load project preferences from a project file"
@@ -10633,7 +10633,7 @@ msgstr "“%s” does not appear to be an Eeschema file"
 
 #: eeschema/sch_legacy_plugin.cpp:811
 msgid "Missing 'EELAYER END'"
-msgstr "Missing 'EELAYER END'"
+msgstr "Missing ‘EELAYER END’"
 
 #: eeschema/sch_legacy_plugin.cpp:859 eeschema/sch_legacy_plugin.cpp:1121
 #: eeschema/sch_legacy_plugin.cpp:1129 eeschema/sch_legacy_plugin.cpp:2372
@@ -10646,7 +10646,7 @@ msgstr "Unexpected end of file"
 
 #: eeschema/sch_legacy_plugin.cpp:1385
 msgid "expected 'Italics' or '~'"
-msgstr "expected 'Italics' or '~'"
+msgstr "expected ‘Italics’ or ‘~’"
 
 #: eeschema/sch_legacy_plugin.cpp:1615
 msgid "component field text attributes must be 3 characters wide"
@@ -11212,7 +11212,7 @@ msgstr "Tune component value"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Show SPICE Netlist..."
-msgstr "Show SPICE Netlist..."
+msgstr "Show SPICE Netlist…"
 
 #: eeschema/sim/sim_plot_frame_base.cpp:65
 msgid "Shows current simulation's netlist. Useful for debugging SPICE errors."
@@ -11846,7 +11846,7 @@ msgstr "Tool definition shape not found"
 #: gerbview/excellon_read_drill_file.cpp:593
 #, c-format
 msgid "Tool definition '%c' not supported"
-msgstr "Tool definition '%c' not supported"
+msgstr "Tool definition ‘%c’ not supported"
 
 #: gerbview/excellon_read_drill_file.cpp:674
 #, c-format
@@ -12256,7 +12256,7 @@ msgstr "Open Gerber Job File"
 
 #: gerbview/menubar.cpp:57
 msgid "Open &Gerber File(s)..."
-msgstr "Open &Gerber File(s)..."
+msgstr "Open &Gerber File(s)…"
 
 #: gerbview/menubar.cpp:58 gerbview/toolbars_gerber.cpp:64
 msgid "Open Gerber file(s) on the current layer. Previous data will be deleted"
@@ -12265,7 +12265,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:63
 msgid "Open &Excellon Drill File(s)..."
-msgstr "Open &Excellon Drill File(s)..."
+msgstr "Open &Excellon Drill File(s)…"
 
 #: gerbview/menubar.cpp:64 gerbview/toolbars_gerber.cpp:68
 msgid ""
@@ -12277,7 +12277,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:69
 msgid "Open Gerber &Job File..."
-msgstr "Open Gerber &Job File..."
+msgstr "Open Gerber &Job File…"
 
 #: gerbview/menubar.cpp:70
 msgid ""
@@ -12287,7 +12287,7 @@ msgstr ""
 
 #: gerbview/menubar.cpp:75
 msgid "Open &Zip Archive File..."
-msgstr "Open &Zip Archive File..."
+msgstr "Open &Zip Archive File…"
 
 #: gerbview/menubar.cpp:76
 msgid "Open a zipped archive (Gerber and Drill) file"
@@ -13044,7 +13044,7 @@ msgstr "Save current project"
 
 #: kicad/menubar.cpp:255
 msgid "EAGLE CAD..."
-msgstr "EAGLE CAD..."
+msgstr "EAGLE CAD…"
 
 #: kicad/menubar.cpp:256
 msgid "Import EAGLE CAD XML schematic and board"
@@ -17184,7 +17184,7 @@ msgstr "STEP export failed!  Please save the PCB and try again"
 #: pcbnew/dialogs/dialog_export_step.cpp:243
 #, c-format
 msgid "File '%s' already exists. Do you want overwrite this file?"
-msgstr "File '%s' already exists. Do you want overwrite this file?"
+msgstr "File ‘%s’ already exists. Do you want overwrite this file?"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:246
 msgid "STEP Export"
@@ -17193,7 +17193,7 @@ msgstr "STEP Export"
 #: pcbnew/dialogs/dialog_export_step.cpp:328
 #, c-format
 msgid "Executing '%s'"
-msgstr "Executing '%s'"
+msgstr "Executing ‘%s’"
 
 #: pcbnew/dialogs/dialog_export_step.cpp:353
 msgid ""
@@ -19030,7 +19030,7 @@ msgstr "Plot"
 
 #: pcbnew/dialogs/dialog_plot.cpp:54
 msgid "Generate Drill Files..."
-msgstr "Generate Drill Files..."
+msgstr "Generate Drill Files…"
 
 #: pcbnew/dialogs/dialog_plot.cpp:593
 msgid "HPGL pen size constrained."
@@ -21237,7 +21237,7 @@ msgstr "Courtyard areas…\n"
 
 #: pcbnew/drc.cpp:528
 msgid "Items on disabled layers...\n"
-msgstr "Items on disabled layers...\n"
+msgstr "Items on disabled layers…\n"
 
 #: pcbnew/drc.cpp:581
 #, c-format
@@ -21467,7 +21467,7 @@ msgstr "No “%s” package in library “%s”"
 #: pcbnew/eagle_plugin.cpp:2220
 #, c-format
 msgid "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
-msgstr "Unsupported Eagle layer '%s' (%d), converted to Dwgs.User layer"
+msgstr "Unsupported Eagle layer ‘%s’ (%d), converted to Dwgs.User layer"
 
 #: pcbnew/edgemod.cpp:208
 msgid ""
@@ -22967,17 +22967,17 @@ msgstr "Unknown sheet type “%s” on line:%d"
 #: pcbnew/legacy_plugin.cpp:1377
 #, c-format
 msgid "Missing '$EndMODULE' for MODULE \"%s\""
-msgstr "Missing '$EndMODULE' for MODULE “%s”"
+msgstr "Missing ‘$EndMODULE’ for MODULE “%s”"
 
 #: pcbnew/legacy_plugin.cpp:1429
 #, c-format
 msgid "Unknown padshape '%c=0x%02x' on line: %d of footprint: \"%s\""
-msgstr "Unknown padshape '%c=0x%02x' on line: %d of footprint: “%s”"
+msgstr "Unknown padshape ‘%c=0x%02x’ on line: %d of footprint: “%s”"
 
 #: pcbnew/legacy_plugin.cpp:1635
 #, c-format
 msgid "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:\"%s\""
-msgstr "Unknown EDGE_MODULE type:'%c=0x%02x' on line:%d of footprint:“%s”"
+msgstr "Unknown EDGE_MODULE type:‘%c=0x%02x’ on line:%d of footprint:“%s”"
 
 #: pcbnew/legacy_plugin.cpp:2463
 #, c-format
@@ -23673,7 +23673,7 @@ msgstr "Append another board to currently loaded board"
 
 #: pcbnew/menubar_pcb_editor.cpp:815
 msgid "Import Non-KiCad Board File..."
-msgstr "Import Non-KiCad Board File..."
+msgstr "Import Non-KiCad Board File…"
 
 #: pcbnew/menubar_pcb_editor.cpp:816
 msgid "Import board file from other applications"
@@ -25340,7 +25340,7 @@ msgstr "Session file is missing the “library_out” section"
 #: pcbnew/specctra_import_export/specctra_import.cpp:407
 #, c-format
 msgid "Session file has 'reference' to non-existent symbol \"%s\""
-msgstr "Session file has 'reference' to non-existent symbol “%s”"
+msgstr "Session file has ‘reference’ to non-existent symbol “%s”"
 
 #: pcbnew/specctra_import_export/specctra_import.cpp:546
 #, c-format
@@ -26416,7 +26416,7 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:245
 msgid "Performing polygon fills..."
-msgstr "Performing polygon fills..."
+msgstr "Performing polygon fills…"
 
 #: pcbnew/zone_filler.cpp:292
 msgid "Committing changes..."
