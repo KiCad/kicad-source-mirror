@@ -46,6 +46,12 @@ public:
     BOM_PLUGIN( const wxString& aFile );
 
     /**
+     * Returns true if the plugin is ready to work, i.e. if the plugin file
+     * is found an readable
+     */
+    bool IsOk() { return m_isOk; }
+
+    /**
      * Returns true if a file name matches a recognized plugin format.
      * @param aFile is path to the plugin file.
      */
@@ -114,6 +120,9 @@ protected:
      * @param aEndSection is a string marking end of the header.
      */
     wxString readHeader( const wxString& aEndSection );
+
+    ///> true if the plugin is working (i.e. if the plugin file exists and was read
+    bool m_isOk;
 
     ///> Path to the plugin
     const wxFileName m_file;

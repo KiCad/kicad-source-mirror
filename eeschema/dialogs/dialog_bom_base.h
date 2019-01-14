@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_BOM_BASE_H__
-#define __DIALOG_BOM_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -21,10 +20,10 @@
 #include <wx/listbox.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/checkbox.h>
 #include <wx/statline.h>
@@ -38,14 +37,14 @@
 class DIALOG_BOM_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		enum
 		{
 			IN_NAMELINE = 1000,
 			ID_CMDLINE
 		};
-		
+
 		wxStaticText* m_staticTextPluginTitle;
 		wxListBox* m_lbPlugins;
 		wxStaticText* m_staticTextName;
@@ -58,11 +57,11 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_textCtrlCommand;
 		wxCheckBox* m_checkBoxShowConsole;
 		wxStaticLine* m_staticline2;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Cancel;
-		wxButton* m_sdbSizer1Help;
-		
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerCancel;
+		wxButton* m_sdbSizerHelp;
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnIdle( wxIdleEvent& event ) { event.Skip(); }
 		virtual void OnPluginSelected( wxCommandEvent& event ) { event.Skip(); }
@@ -74,13 +73,12 @@ class DIALOG_BOM_BASE : public DIALOG_SHIM
 		virtual void OnShowConsoleChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnHelp( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRunPlugin( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bill of Material"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 617,433 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_BOM_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bill of Material"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 617,433 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_BOM_BASE();
-	
+
 };
 
-#endif //__DIALOG_BOM_BASE_H__

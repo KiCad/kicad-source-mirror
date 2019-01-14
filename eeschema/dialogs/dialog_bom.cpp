@@ -236,12 +236,12 @@ DIALOG_BOM::DIALOG_BOM( SCH_EDIT_FRAME* parent ) :
     m_checkBoxShowConsole->Show( false );
 #endif
 
-    m_sdbSizer1OK->SetLabel( _( "Generate" ) );
-    m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
-    m_sdbSizer1->Layout();
+    m_sdbSizerOK->SetLabel( _( "Generate" ) );
+    m_sdbSizerCancel->SetLabel( _( "Close" ) );
+    m_sdbSizer->Layout();
 
     SetInitialFocus( m_lbPlugins );
-    m_sdbSizer1OK->SetDefault();
+    m_sdbSizerOK->SetDefault();
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -445,6 +445,10 @@ void DIALOG_BOM::pluginInit()
     else
         m_checkBoxShowConsole->SetValue( true );
 #endif
+
+    // A plugin can be not working, so do not left the OK button enabled if
+    // the plugin is not ready to use
+    m_sdbSizerOK->Enable( plugin->IsOk() );
 }
 
 

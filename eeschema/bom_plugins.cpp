@@ -27,8 +27,15 @@
 BOM_PLUGIN::BOM_PLUGIN( const wxString& aFile )
     : m_file( aFile )
 {
+    m_isOk = false;
+
     if( !wxFile::Exists( aFile ) )
-        throw std::runtime_error( ( _( "Cannot open plugin " ) + aFile ).ToStdString() );
+    {
+        m_info.Printf( _("Plugin file:\n%s\nnot found. Plugin not available."), aFile );
+        return;
+    }
+
+    m_isOk = true;
 
     m_name = m_file.GetName();
     wxString extension = m_file.GetExt().Lower();
