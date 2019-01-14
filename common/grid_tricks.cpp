@@ -388,6 +388,11 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
     const int cur_row = m_grid->GetGridCursorRow();
     const int cur_col = m_grid->GetGridCursorCol();
+    int start_row;
+    int end_row;
+    int start_col;
+    int end_col;
+    bool is_selection = false;
 
     if( cur_row < 0 || cur_col < 0 )
     {
@@ -395,23 +400,66 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
         return;
     }
 
-    wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
-
-    for( int row = cur_row;  rows.HasMoreTokens();  ++row )
+    if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
     {
-        // If table can't be expanded just paste the part of clipboard
-        // that may be placed.
-        if( row >= tbl->GetNumberRows() )
-            break;
+        if( m_sel_row_count > 1 )
+            is_selection = true;
+    }
+    else
+    {
+        if( m_grid->IsSelection() )
+            is_selection = true;
+    }
+
+    wxStringTokenizer rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
+
+    // If selection of cells is present
+    // then a clipboard pastes to selected cells only.
+    if( is_selection )
+    {
+        start_row = m_sel_row_start;
+        end_row = m_sel_row_start + m_sel_row_count;
+        start_col = m_sel_col_start;
+        end_col = m_sel_col_start + m_sel_col_count;
+    }
+    // Otherwise, paste whole clipboard
+    // starting from cell with cursor.
+    else
+    {
+        start_row = cur_row;
+        end_row = cur_row + rows.CountTokens();
+        if( end_row > tbl->GetNumberRows() )
+            end_row = tbl->GetNumberRows();
+        start_col = cur_col;
+        // end_col calculates later
+    }
+
+    for( int row = start_row;  row < end_row;  ++row )
+    {
+        // If number of selected rows bigger than count of rows in
+        // the clipboard, paste from the clipboard again and again
+        // while end of the selection is reached.
+        if( !rows.HasMoreTokens() )
+            rows.SetString( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
 
         wxString rowTxt = rows.GetNextToken();
 
-        wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
+        wxStringTokenizer cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
-        for( int col = cur_col;  cols.HasMoreTokens();  ++col )
+        if( !is_selection )
         {
-            if( col >= tbl->GetNumberCols() )
-                break;
+            end_col = cur_col + cols.CountTokens();
+            if( end_col > tbl->GetNumberCols() )
+                end_col = tbl->GetNumberCols();
+        }
+
+        for( int col = start_col;  col < end_col;  ++col )
+        {
+            // If number of selected columns bigger than count of columns in
+            // the clipboard, paste from the clipboard again and again while
+            // end of the selection is reached.
+            if( !cols.HasMoreTokens() )
+                cols.SetString( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
             wxString cellTxt = cols.GetNextToken();
             tbl->SetValue( row, col, cellTxt );
