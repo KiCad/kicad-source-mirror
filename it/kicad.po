@@ -78,7 +78,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-01-11 10:32+0100\n"
-"PO-Revision-Date: 2019-01-11 10:35+0100\n"
+"PO-Revision-Date: 2019-01-14 12:28+0100\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -2205,7 +2205,7 @@ msgstr "Stampante"
 #: common/dialogs/dialog_print_generic.cpp:39
 #: common/dialogs/dialog_print_generic.cpp:174
 msgid "Print Preview"
-msgstr "Anteprima di stampa "
+msgstr "Anteprima di stampa"
 
 #: common/dialogs/dialog_print_generic.cpp:40
 #: common/legacy_gal/eda_draw_frame.cpp:1601
@@ -13987,7 +13987,7 @@ msgstr "Salva il file di disposizione pagina corrente con un nuovo nome"
 
 #: pagelayout_editor/menubar.cpp:96
 msgid "Print Pre&view..."
-msgstr "_Visualizza anteprima di stampa..."
+msgstr "&Visualizza anteprima di stampa..."
 
 #: pagelayout_editor/menubar.cpp:101
 msgid "Close Page Layout Editor"
