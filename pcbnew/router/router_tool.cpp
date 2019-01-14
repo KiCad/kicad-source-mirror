@@ -254,7 +254,7 @@ protected:
             if( i == 0 )
                 msg = _( "Track netclass width" );
             else
-                msg = _( "Track " ) + MessageTextFromValue( units, width, true );
+                msg.Printf( _( "Track %s" ), MessageTextFromValue( units, width, true ) );
 
             int menuIdx = ID_POPUP_PCB_SELECT_WIDTH1 + i;
             Append( menuIdx, msg, wxEmptyString, wxITEM_CHECK );
@@ -271,10 +271,12 @@ protected:
                 msg = _( "Via netclass values" );
             else
             {
-                msg = _( "Via " ) + MessageTextFromValue( units, via.m_Diameter, true );
-
                 if( via.m_Drill > 0 )
-                    msg << _(", drill " ) << MessageTextFromValue( units, via.m_Drill, true );
+                    msg.Printf( _("Via %s, drill %s" ),
+                                MessageTextFromValue( units, via.m_Diameter, true ),
+                                MessageTextFromValue( units, via.m_Drill, true ) );
+                else
+                    msg.Printf( _( "Via %s" ), MessageTextFromValue( units, via.m_Diameter, true ) );
             }
 
             int menuIdx = ID_POPUP_PCB_SELECT_VIASIZE1 + i;
@@ -1279,7 +1281,7 @@ int ROUTER_TOOL::onTrackViaSizeChanged( const TOOL_EVENT& aEvent )
     sizes.ImportCurrent( board()->GetDesignSettings() );
     m_router->UpdateSizes( sizes );
 
-    //Changing the track width can affect the placement, so call the
+    // Changing the track width can affect the placement, so call the
     // move routine without changing the destination
     m_router->Move( m_endSnapPoint, m_endItem );
 
