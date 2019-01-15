@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,8 @@ using KIGFX::COLOR4D;
 EDA_UNITS_T    g_UserUnit;
 COLOR4D        g_GhostColor;
 
-#ifdef _WIN32
+
+#if defined( _WIN32 ) && defined( DEBUG )
 // a wxAssertHandler_t function to filter wxWidgets alert messages when reading/writing a file
 // when switching the locale to LC_NUMERIC, "C"
 // It is used in class LOCALE_IO to hide a useless (in kicad) wxWidgets alert message
@@ -70,7 +71,9 @@ void KiAssertFilter( const wxString &file, int line,
 }
 #endif
 
-std::atomic<unsigned int> LOCALE_IO::m_c_count(0);
+
+std::atomic<unsigned int> LOCALE_IO::m_c_count( 0 );
+
 
 // Note on Windows, setlocale( LC_NUMERIC, "C" ) works fine to read/write
 // files with floating point numbers, but generates a overzealous wx alert
@@ -84,7 +87,7 @@ LOCALE_IO::LOCALE_IO()
     {
         // Store the user locale name, to restore this locale later, in dtor
         m_user_locale = setlocale( LC_NUMERIC, nullptr );
-#ifdef _WIN32
+#if defined( _WIN32 ) && defined( DEBUG )
         // Disable wxWidgets alerts
         wxSetAssertHandler( KiAssertFilter );
 #endif
@@ -101,7 +104,7 @@ LOCALE_IO::~LOCALE_IO()
     {
         // revert to the user locale
         setlocale( LC_NUMERIC, m_user_locale.c_str() );
-#ifdef _WIN32
+#if defined( _WIN32 ) && defined( DEBUG )
         // Enaable wxWidgets alerts
         wxSetDefaultAssertHandler();
 #endif
