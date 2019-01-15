@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Wayne Stambaugh <stambaughw@gmail.com>
  *
@@ -1075,8 +1075,16 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
         }
         else if( strCompare( "Scale", line, &line ) )
         {
-            /// @todo Make m_scale private and add accessors.
-            bitmap->GetImage()->SetScale( parseDouble( aReader, line, &line ) );
+            auto scalefactor = parseDouble( aReader, line, &line );
+
+            // Prevent scalefactor values that cannot be displayed.
+            // In the case of a bad value, we accept that the image might be mis-scaled
+            // rather than removing the full image.  Users can then edit the scale factor in
+            // Eeschema to the appropriate value
+            if( !std::isnormal( scalefactor ) )
+                scalefactor = 1.0;
+
+            bitmap->GetImage()->SetScale( scalefactor );
         }
         else if( strCompare( "Data", line, &line ) )
         {
