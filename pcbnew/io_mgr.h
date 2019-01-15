@@ -30,6 +30,8 @@
 #include <functional>
 #include <wx/time.h>
 
+#include <config.h>
+
 class BOARD;
 class PLUGIN;
 class MODULE;
