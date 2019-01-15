@@ -300,7 +300,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
     wxArrayString choices;
 
     choices.Add( IO_MGR::ShowType( IO_MGR::KICAD_SEXP ) );
+#if defined(BUILD_GITHUB_PLUGIN)
     choices.Add( IO_MGR::ShowType( IO_MGR::GITHUB ) );
+#endif
     choices.Add( IO_MGR::ShowType( IO_MGR::LEGACY ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::EAGLE ) );
     choices.Add( IO_MGR::ShowType( IO_MGR::GEDA_PCB ) );

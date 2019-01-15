@@ -155,6 +155,7 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
     }
     else
     {
+#if defined(BUILD_GITHUB_PLUGIN)
         // There is no extension for a remote repo, so test the server name.
         wxURI   uri( aLibPath );
 
@@ -162,6 +163,7 @@ IO_MGR::PCB_FILE_T IO_MGR::GuessPluginTypeFromLibPath( const wxString& aLibPath 
         {
             ret = GITHUB;
         }
+#endif
     }
 
     return ret;
