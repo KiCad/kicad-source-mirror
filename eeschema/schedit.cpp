@@ -853,7 +853,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         // Compute the rotation center and put it on grid:
         wxPoint rotationPoint = GetNearestGridPosition( block.Centre() );
 
-        if( block.GetCommand() != BLOCK_DUPLICATE )
+        if( block.GetCommand() != BLOCK_DUPLICATE && block.GetCommand() != BLOCK_PASTE )
         {
             SaveCopyInUndoList( block.GetItems(), UR_ROTATED, block.AppendUndo(), rotationPoint );
             block.SetAppendUndo();
@@ -1214,7 +1214,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             mirrorPt = GetNearestGridPosition( mirrorPt );
             SetCrossHairPosition( mirrorPt );
 
-            if( block.GetCommand() != BLOCK_DUPLICATE )
+            if( block.GetCommand() != BLOCK_DUPLICATE && block.GetCommand() != BLOCK_PASTE )
             {
                 SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_X, block.AppendUndo(), mirrorPt );
                 block.SetAppendUndo();
@@ -1232,7 +1232,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             mirrorPt = GetNearestGridPosition( mirrorPt );
             SetCrossHairPosition( mirrorPt );
 
-            if( block.GetCommand() != BLOCK_DUPLICATE )
+            if( block.GetCommand() != BLOCK_DUPLICATE && block.GetCommand() != BLOCK_PASTE )
             {
                 SaveCopyInUndoList( block.GetItems(), UR_MIRRORED_Y, block.AppendUndo(), mirrorPt );
                 block.SetAppendUndo();
