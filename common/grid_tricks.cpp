@@ -397,22 +397,22 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
 
     wxStringTokenizer   rows( cb_text, ROW_SEP, wxTOKEN_RET_EMPTY );
 
-    // if clipboard rows would extend past end of current table size...
-    if( int( rows.CountTokens() ) > tbl->GetNumberRows() - cur_row )
-    {
-        int newRowsNeeded = rows.CountTokens() - ( tbl->GetNumberRows() - cur_row );
-
-        tbl->AppendRows( newRowsNeeded );
-    }
-
     for( int row = cur_row;  rows.HasMoreTokens();  ++row )
     {
+        // If table can't be expanded just paste the part of clipboard
+        // that may be placed.
+        if( row >= tbl->GetNumberRows() )
+            break;
+
         wxString rowTxt = rows.GetNextToken();
 
         wxStringTokenizer   cols( rowTxt, COL_SEP, wxTOKEN_RET_EMPTY );
 
         for( int col = cur_col;  cols.HasMoreTokens();  ++col )
         {
+            if( col >= tbl->GetNumberCols() )
+                break;
+
             wxString cellTxt = cols.GetNextToken();
             tbl->SetValue( row, col, cellTxt );
         }
