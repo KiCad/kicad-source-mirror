@@ -146,6 +146,7 @@ void GRID_CELL_TEXT_BUTTON::ApplyEdit( int aRow, int aCol, wxGrid* aGrid )
 
 void GRID_CELL_TEXT_BUTTON::Reset()
 {
+    Combo()->SetValue( m_value );
 }
 
 
