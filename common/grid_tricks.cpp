@@ -65,6 +65,8 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 
     if( isCheckbox )
     {
+        m_grid->SetGridCursor( aRow, aCol );
+
         wxGridTableBase* model = m_grid->GetTable();
 
         if( model->CanGetValueAs( aRow, aCol, wxGRID_VALUE_BOOL )
@@ -97,12 +99,12 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 
 bool GRID_TRICKS::showEditor( int aRow, int aCol )
 {
+    m_grid->SetGridCursor( aRow, aCol );
+
     if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
     {
         if( m_grid->GetSelectionMode() == wxGrid::wxGridSelectRows )
             m_grid->SelectRow( aRow );
-
-        m_grid->SetGridCursor( aRow, aCol );
 
         // For several reasons we can't enable the control here.  There's the whole
         // SetInSetFocus() issue/hack in wxWidgets, and there's also wxGrid's MouseUp
@@ -122,9 +124,10 @@ void GRID_TRICKS::onGridCellLeftClick( wxGridEvent& aEvent )
     int row = aEvent.GetRow();
     int col = aEvent.GetCol();
 
-    // Don't make users click twice to toggle a checkbox or edit a text cell
-
-    if( !aEvent.GetModifiers() )
+    // Activate editor only if a cursor is placed on the clicked cell
+    if( !aEvent.GetModifiers() &&
+        m_grid->GetGridCursorRow() == row &&
+        m_grid->GetGridCursorCol() == col )
     {
         if( toggleCell( row, col ) )
             return;
@@ -150,17 +153,24 @@ void GRID_TRICKS::onMouseUp( wxMouseEvent& aEvent )
     {
         // Some wxGridCellEditors don't have the SetInSetFocus() hack.  Even when they do,
         // it sometimes fails.  Activating the control here seems to avoid those issues.
-        if( m_grid->CanEnableCellControl() )
+        m_showEditorOnMouseUp = false;
+        // Mouse button can be pressed on one cell but be released on another
+        // cell (when range of cells is selecting, for example).
+        // So it must be checked.
+        wxGridCellCoords curCell = wxGridCellCoords( m_grid->GetGridCursorRow(),
+                                                     m_grid->GetGridCursorCol() );
+        wxGridCellCoords eventCell = m_grid->XYToCell( m_grid->CalcUnscrolledPosition( aEvent.GetPosition() ) );
+        if( eventCell == curCell && m_grid->CanEnableCellControl() )
         {
             // Yes, the first of these also shows the control.  Well, at least sometimes.
             // The second call corrects those (as yet undefined) "other times".
             m_grid->EnableCellEditControl();
             m_grid->ShowCellEditControl();
+            return;
         }
-        m_showEditorOnMouseUp = false;
     }
-    else
-        aEvent.Skip();
+
+    aEvent.Skip();
 }
 
 
