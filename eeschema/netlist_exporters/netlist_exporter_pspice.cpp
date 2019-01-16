@@ -3,7 +3,7 @@
  *
  * Copyright (C) 1992-2013 jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.TXT for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -439,6 +439,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                 else if( lowercaseline.IsSameAs( ".control" ) && ( !controlBlock ) )
                 {
                     controlBlock = true;
+                    m_directives.push_back( line );
                 }
                 else if( lowercaseline.IsSameAs( ".endc" ) && controlBlock )
                 {
@@ -449,11 +450,6 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
                 else if( line.StartsWith( '.' )                           // one-line directives
                         || controlBlock                                   // .control .. .endc block
                         || ( directiveStarted && line.StartsWith( '+' ) ) ) // multiline directives
-                {
-                    m_directives.push_back( line );
-                }
-
-                if( controlBlock )
                 {
                     m_directives.push_back( line );
                 }
