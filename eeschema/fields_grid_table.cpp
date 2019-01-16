@@ -291,6 +291,9 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     case FDC_VALUE:
         return field.GetText();
 
+    case FDC_SHOWN:
+        return StringFromBool( field.IsVisible() );
+
     case FDC_H_ALIGN:
         switch ( field.GetHorizJustify() )
         {
@@ -316,6 +319,12 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
         }
 
         break;
+
+    case FDC_ITALIC:
+        return StringFromBool( field.IsItalic() );
+
+    case FDC_BOLD:
+        return StringFromBool( field.IsBold() );
 
     case FDC_TEXT_SIZE:
         return StringFromValue( m_userUnits, field.GetTextSize().GetHeight(), true, true );
@@ -382,6 +391,10 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
         field.SetText( aValue );
         break;
 
+    case FDC_SHOWN:
+        field.SetVisible( BoolFromString( aValue ) );
+        break;
+
     case FDC_H_ALIGN:
         if( aValue == _( "Left" ) )
             field.SetHorizJustify( GR_TEXT_HJUSTIFY_LEFT );
@@ -402,6 +415,14 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             field.SetVertJustify( GR_TEXT_VJUSTIFY_BOTTOM );
         else
             wxFAIL_MSG( wxT( "unknown vertical alignment: " ) + aValue);
+        break;
+
+    case FDC_ITALIC:
+        field.SetItalic( BoolFromString( aValue ) );
+        break;
+
+    case FDC_BOLD:
+        field.SetBold( BoolFromString( aValue ) );
         break;
 
     case FDC_TEXT_SIZE:
@@ -506,5 +527,32 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     else
     {
         GRID_TRICKS::doPopupSelection( event );
+    }
+}
+
+template <class T>
+wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue )
+{
+    if( aValue )
+        return wxT( "1" );
+    else
+        return wxT( "0" );
+}
+
+template <class T>
+bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue )
+{
+    if( aValue == wxT( "1" ) )
+    {
+        return true;
+    }
+    else if( aValue == wxT( "0" ) )
+    {
+        return false;
+    }
+    else
+    {
+        wxFAIL_MSG( wxString::Format( wxT( "string \"%s\" can't be converted to boolean correctly, it will have been perceived as FALSE" ), aValue ) );
+        return false;
     }
 }
