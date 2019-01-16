@@ -396,7 +396,7 @@ static EDA_RECT getRect( const BOARD_ITEM* aItem )
 
 
 SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-        std::vector<BOARD_ITEM*>* aFiltered )
+        std::vector<BOARD_ITEM*>* aFiltered, bool aConfirmLockedItems )
 {
     bool selectionEmpty = m_selection.Empty();
     m_selection.SetIsHover( selectionEmpty );
@@ -406,7 +406,13 @@ SELECTION& SELECTION_TOOL::RequestSelection( CLIENT_SELECTION_FILTER aClientFilt
         m_toolMgr->RunAction( PCB_ACTIONS::selectionCursor, true, aClientFilter );
         m_selection.ClearReferencePoint();
     }
-    else if( aClientFilter )
+
+    if ( aConfirmLockedItems && CheckLock() == SELECTION_LOCKED )
+    {
+        clearSelection();
+    }
+
+    if( aClientFilter )
     {
         GENERAL_COLLECTOR collector;
 

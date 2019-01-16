@@ -96,7 +96,7 @@ public:
      * @param aFiltered is an optional vector, that is filled with items removed by the filter
      */
     SELECTION& RequestSelection( CLIENT_SELECTION_FILTER aClientFilter,
-            std::vector<BOARD_ITEM*>* aFiltered = NULL  );
+            std::vector<BOARD_ITEM*>* aFiltered = NULL, bool aConfirmLockedItems = false );
 
 
     inline TOOL_MENU& GetToolMenu()
