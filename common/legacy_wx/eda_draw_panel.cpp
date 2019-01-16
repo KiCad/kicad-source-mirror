@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2009 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2007 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1355,7 +1355,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
     lastPanel = this;
 
-#ifdef WXGTK3
+#ifdef __WXGTK3__
     // Screen has to be updated on every operation, otherwise the cursor leaves a trail (when xor
     // operation is changed to copy) or is not updated at all.
     Refresh();
