@@ -235,6 +235,9 @@ int DRAWING_TOOL::DrawLine( const TOOL_EVENT& aEvent )
     {
         if( line )
         {
+            if( m_editModules )
+                static_cast<EDGE_MODULE*>( line )->SetLocalCoord();
+
             commit.Add( line );
             commit.Push( _( "Draw a line segment" ) );
             startingPoint = VECTOR2D( line->GetEnd() );
@@ -271,6 +274,9 @@ int DRAWING_TOOL::DrawCircle( const TOOL_EVENT& aEvent )
     {
         if( circle )
         {
+            if( m_editModules )
+                static_cast<EDGE_MODULE*>( circle )->SetLocalCoord();
+
             commit.Add( circle );
             commit.Push( _( "Draw a circle" ) );
         }
@@ -302,6 +308,9 @@ int DRAWING_TOOL::DrawArc( const TOOL_EVENT& aEvent )
     {
         if( arc )
         {
+            if( m_editModules )
+                static_cast<EDGE_MODULE*>( arc )->SetLocalCoord();
+
             commit.Add( arc );
             commit.Push( _( "Draw an arc" ) );
         }
