@@ -36,6 +36,7 @@
 #include <view/view_group.h>
 #include <pcb_painter.h>
 #include <origin_viewitem.h>
+#include <status_popup.h>
 
 #include <kicad_plugin.h>
 #include <pcbnew_id.h>
@@ -168,6 +169,13 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     std::map<wxString, wxString> oldNames;
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
+    STATUS_TEXT_POPUP statusPopup( frame() );
+    statusPopup.SetText( wxString::Format(
+            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+            padPrefix.c_str(), padNumber ) );
+    statusPopup.Popup();
+    statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+
     while( OPT_TOOL_EVENT evt = Wait() )
     {
         if( evt->IsDrag( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -219,6 +227,10 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
                     pad->SetName( newName );
                     pad->SetSelected();
                     getView()->Update( pad );
+
+                    statusPopup.SetText( wxString::Format(
+                            _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+                            padPrefix.c_str(), padNumber ) );
                 }
 
                 // ..or restore the old name if it was enumerated and clicked again
@@ -272,6 +284,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         // Prepare the next loop by updating the old cursor mouse position
         // to this last mouse cursor position
         oldCursorPos = getViewControls()->GetCursorPosition();
+        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
     }
 
     for( auto p : board()->m_Modules->Pads() )
@@ -280,6 +293,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
         view->Update( p );
     }
 
+    statusPopup.Hide();
     frame()->SetNoToolSelected();
     frame()->GetGalCanvas()->SetCursor( wxCURSOR_ARROW );
 
