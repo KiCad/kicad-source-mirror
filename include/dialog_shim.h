@@ -28,6 +28,7 @@
 #include <wx/dialog.h>
 #include <hashtables.h>
 #include <kiway_player.h>
+class wxGridEvent;
 
 
 
@@ -182,6 +183,12 @@ protected:
     WX_EVENT_LOOP*      m_qmodal_loop;      // points to nested event_loop, NULL means not qmodal and dismissed
     bool                m_qmodal_showing;
     WDO_ENABLE_DISABLE* m_qmodal_parent_disabler;
+
+private:
+    void OnGridEditorShown( wxGridEvent& event );
+    void OnGridEditorHidden( wxGridEvent& event );
+
+    DECLARE_EVENT_TABLE()
 };
 
 #endif  // DIALOG_SHIM_

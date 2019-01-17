@@ -28,6 +28,7 @@
 #include <pgm_base.h>
 #include <eda_rect.h>
 #include <wx/display.h>
+#include <wx/grid.h>
 
 /// Toggle a window's "enable" status to disabled, then enabled on destruction.
 class WDO_ENABLE_DISABLE
@@ -52,6 +53,14 @@ public:
         }
     }
 };
+
+
+BEGIN_EVENT_TABLE( DIALOG_SHIM, wxDialog )
+    // If dialog has a grid and the grid has an active cell editor
+    // Esc key closes cell editor, otherwise Esc key closes the dialog.
+    EVT_GRID_EDITOR_SHOWN( DIALOG_SHIM::OnGridEditorShown )
+    EVT_GRID_EDITOR_HIDDEN( DIALOG_SHIM::OnGridEditorHidden )
+END_EVENT_TABLE()
 
 
 DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& title,
@@ -460,4 +469,18 @@ void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 
     // This is mandatory to allow wxDialogBase::OnButton() to be called.
     aEvent.Skip();
+}
+
+
+void DIALOG_SHIM::OnGridEditorShown( wxGridEvent& event )
+{
+    SetEscapeId( wxID_NONE );
+    event.Skip();
+}
+
+
+void DIALOG_SHIM::OnGridEditorHidden( wxGridEvent& event )
+{
+    SetEscapeId( wxID_ANY );
+    event.Skip();
 }
