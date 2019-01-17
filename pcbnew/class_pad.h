@@ -348,6 +348,13 @@ public:
     void FlipPrimitives();
 
     /**
+     * Mirror the primitives about a coordinate
+     *
+     * @param aX the x coordinate about which to mirror
+     */
+    void MirrorXPrimitives( int aX );
+
+    /**
      * Import to the basic shape list
      * @return true if OK, false if issues
      * (more than one polygon to build the polygon shape list)

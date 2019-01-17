@@ -481,6 +481,40 @@ void D_PAD::FlipPrimitives()
 }
 
 
+void D_PAD::MirrorXPrimitives( int aX )
+{
+    // Mirror custom shapes
+    for( unsigned ii = 0; ii < m_basicShapes.size(); ++ii )
+    {
+        PAD_CS_PRIMITIVE& primitive = m_basicShapes[ii];
+
+        MIRROR( primitive.m_Start.x, aX );
+        MIRROR( primitive.m_End.x, aX );
+        primitive.m_ArcAngle = -primitive.m_ArcAngle;
+
+        switch( primitive.m_Shape )
+        {
+        case S_POLYGON:         // polygon
+            for( unsigned jj = 0; jj < primitive.m_Poly.size(); jj++ )
+                MIRROR( primitive.m_Poly[jj].x, aX );
+            break;
+
+        default:
+            break;
+        }
+    }
+
+    // Mirror the local coordinates in merged Polygon
+    for( int cnt = 0; cnt < m_customShapeAsPolygon.OutlineCount(); ++cnt )
+    {
+        SHAPE_LINE_CHAIN& poly = m_customShapeAsPolygon.Outline( cnt );
+
+        for( int ii = 0; ii < poly.PointCount(); ++ii )
+            MIRROR( poly.Point( ii ).x, aX );
+    }
+}
+
+
 void D_PAD::AppendConfigs( PARAM_CFG_ARRAY* aResult )
 {
     // Parameters stored in config are only significant parameters
