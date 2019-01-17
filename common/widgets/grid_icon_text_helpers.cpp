@@ -53,9 +53,10 @@ void GRID_CELL_ICON_TEXT_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, w
     // draw the icon
     // note that the set of icons might be smaller than the set of labels if the last
     // label is <...>.
-    if( m_names.Index( value ) < (int) m_icons.size() )
+    auto position = m_names.Index( value );
+    if( position < (int) m_icons.size() && position != wxNOT_FOUND )
     {
-        bitmap = KiBitmap( (BITMAP_DEF) m_icons[ m_names.Index( value ) ] );
+        bitmap = KiBitmap( (BITMAP_DEF) m_icons[ position ] );
         aDC.DrawBitmap( bitmap, rect.GetLeft() + 3, rect.GetTop() + 2, true );
     }
     // still need a bitmap to fetch the width

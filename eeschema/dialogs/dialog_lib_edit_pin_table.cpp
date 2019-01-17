@@ -180,13 +180,18 @@ public:
                 pin->SetName( aValue );
                 break;
             case COL_TYPE:
-                pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ), false );
+                if( g_typeNames.Index( aValue ) != wxNOT_FOUND )
+                    pin->SetType( (ELECTRICAL_PINTYPE) g_typeNames.Index( aValue ), false );
+
                 break;
             case COL_SHAPE:
-                pin->SetShape( (GRAPHIC_PINSHAPE) g_shapeNames.Index( aValue ) );
+                if( g_shapeNames.Index( aValue ) != wxNOT_FOUND )
+                    pin->SetShape( (GRAPHIC_PINSHAPE) g_shapeNames.Index( aValue ) );
+
                 break;
             case COL_ORIENTATION:
-                pin->SetOrientation( LIB_PIN::GetOrientationCode(
+                if( g_orientationNames.Index( aValue ) != wxNOT_FOUND )
+                    pin->SetOrientation( LIB_PIN::GetOrientationCode(
                                               g_orientationNames.Index( aValue ) ), false );
                 break;
             case COL_NUMBER_SIZE:
