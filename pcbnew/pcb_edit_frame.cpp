@@ -437,13 +437,11 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
         m_firstRunDialogSetting = 1;
         SaveSettings( config() );
     }
-    else
+
+    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
     {
-        if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE )
-        {
-            if( GetGalCanvas()->SwitchBackend( m_canvasType ) )
-                UseGalCanvas( true );
-        }
+        if( GetGalCanvas()->SwitchBackend( m_canvasType ) )
+            UseGalCanvas( true );
     }
 
     enableGALSpecificMenus();

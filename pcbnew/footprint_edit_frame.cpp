@@ -221,6 +221,7 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_showGridAxis = true;               // show the grid origin axis
     m_hotkeysDescrList = g_Module_Editor_Hotkeys_Descr;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
+    m_canvasType = aBackend;
 
     // Give an icon
     wxIcon icon;
