@@ -153,8 +153,9 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     guide.SetIgnoreModulesVals( true );
     guide.SetIgnoreModulesRefs( true );
 
-    int padNumber = settingsDlg.GetStartNumber();
+    int seqPadNum = settingsDlg.GetStartNumber();
     wxString padPrefix = settingsDlg.GetPrefix();
+    std::deque<int> storedPadNumbers;
 
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_HAND,
                         _( "Click on successive pads to renumber them" ) );
@@ -166,13 +167,13 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
     VECTOR2I oldCursorPos;  // store the previous mouse cursor position, during mouse drag
     std::list<D_PAD*> selectedPads;
     BOARD_COMMIT commit( frame() );
-    std::map<wxString, wxString> oldNames;
+    std::map<wxString, std::pair<int, wxString>> oldNames;
     bool isFirstPoint = true;   // used to be sure oldCursorPos will be initialized at least once.
 
     STATUS_TEXT_POPUP statusPopup( frame() );
     statusPopup.SetText( wxString::Format(
             _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
-            padPrefix.c_str(), padNumber ) );
+            padPrefix.c_str(), seqPadNum ) );
     statusPopup.Popup();
     statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
@@ -222,15 +223,31 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
                     commit.Modify( pad );
 
                     // Rename pad and store the old name
-                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), padNumber++ );
-                    oldNames[newName] = pad->GetName();
+                    int newval;
+
+                    if( storedPadNumbers.size() > 0 )
+                    {
+                        newval = storedPadNumbers.front();
+                        storedPadNumbers.pop_front();
+                    }
+                    else
+                        newval = seqPadNum++;
+
+                    wxString newName = wxString::Format( wxT( "%s%d" ), padPrefix.c_str(), newval );
+                    oldNames[newName] = { newval, pad->GetName() };
                     pad->SetName( newName );
                     pad->SetSelected();
                     getView()->Update( pad );
 
+                    // Ensure the popup text shows the correct next value
+                    if( storedPadNumbers.size() > 0 )
+                        newval = storedPadNumbers.front();
+                    else
+                        newval = seqPadNum;
+
                     statusPopup.SetText( wxString::Format(
                             _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
-                            padPrefix.c_str(), padNumber ) );
+                            padPrefix.c_str(), newval ) );
                 }
 
                 // ..or restore the old name if it was enumerated and clicked again
@@ -241,8 +258,13 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
                     if( it != oldNames.end() )
                     {
-                        pad->SetName( it->second );
+                        storedPadNumbers.push_back( it->second.first );
+                        pad->SetName( it->second.second );
                         oldNames.erase( it );
+
+                        statusPopup.SetText( wxString::Format(
+                                _( "Click on pad %s%d\nPress Escape to cancel or double-click to commit" ),
+                                padPrefix.c_str(), storedPadNumbers.front() ) );
                     }
 
                     pad->ClearSelected();
