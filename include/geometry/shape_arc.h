@@ -34,7 +34,7 @@ class SHAPE_ARC : public SHAPE
 {
 public:
     SHAPE_ARC() :
-        SHAPE( SH_ARC ), m_width( 0 ) {};
+        SHAPE( SH_ARC ), m_centralAngle( 0.0 ), m_width( 0 ) {};
 
     SHAPE_ARC( const VECTOR2I& aArcCenter, const VECTOR2I& aArcStartPoint,
                double aCenterAngle, int aWidth = 0 ) :
