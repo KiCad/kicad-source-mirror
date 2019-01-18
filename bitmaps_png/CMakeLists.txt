@@ -505,6 +505,7 @@ set( BMAPS_MID
     rotate_neg_z
     rotate_pos_z
     save_as
+    save_fp_to_board
     save_gerber
     save_library
     save_project

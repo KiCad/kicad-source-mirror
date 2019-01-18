@@ -22,7 +22,7 @@
 
 /**
  * @file tool_footprint_editor.cpp
- * @brief Footprint editor tool bars
+ * @brief methods to build Footprint Editor toolbars
  */
 
 #include <fctsys.h>
@@ -37,6 +37,13 @@
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
+    // Note:
+    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
+    // all wxAuiToolBarItems.
+    // However the wxAuiToolBarItems are not the owners of controls managed by
+    // them ( m_zoomSelectBox and m_gridSelectBox ), and therefore do not delete them
+    // So we do not recreate them after clearing the tools.
+
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
@@ -57,8 +64,10 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #endif
 
     m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
-                            KiScaledBitmap( save_xpm, this ),
-                            _( "Save changes" ) );
+                            KiScaledBitmap( IsCurrentFPFromBoard() ? open_brd_file_xpm : save_xpm,
+                                            this ),
+                            IsCurrentFPFromBoard() ?
+                                _( "Save changes to board" ) : _( "Save changes to library" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString,
@@ -115,16 +124,19 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     KiScaledSeparator( m_mainToolBar, this );
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString,
-                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+    if( m_gridSelectBox == nullptr )
+        m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     // Zoom selection choice box.
-    m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
-                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+    if( m_zoomSelectBox == nullptr )
+        m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                                          wxCB_READONLY );
     updateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 

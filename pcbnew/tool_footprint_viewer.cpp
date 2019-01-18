@@ -39,6 +39,13 @@
 
 void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
 {
+    // Note:
+    // To rebuild the aui toolbar, the more easy way is to clear ( calling m_mainToolBar.Clear() )
+    // all wxAuiToolBarItems.
+    // However the wxAuiToolBarItems are not the owners of controls managed by
+    // them ( m_zoomSelectBox and m_gridSelectBox ), and therefore do not delete them
+    // So we do not recreate them after clearing the tools.
+
     wxString msg;
 
     if( m_mainToolBar )
@@ -102,16 +109,20 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     KiScaledSeparator( m_mainToolBar, this );
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString,
-                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+    if( m_gridSelectBox == nullptr )
+        m_gridSelectBox = new wxComboBox( m_mainToolBar, ID_ON_GRID_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                                          wxCB_READONLY );
     UpdateGridSelectBox();
     m_mainToolBar->AddControl( m_gridSelectBox );
 
     KiScaledSeparator( m_mainToolBar, this );
 
     // Zoom selection choice box.
-    m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
-                                      wxDefaultPosition, wxDefaultSize, 0, nullptr, wxCB_READONLY );
+    if( m_zoomSelectBox == nullptr )
+        m_zoomSelectBox = new wxComboBox( m_mainToolBar, ID_ON_ZOOM_SELECT, wxEmptyString,
+                                          wxDefaultPosition, wxDefaultSize, 0, nullptr,
+                                          wxCB_READONLY );
     updateZoomSelectBox();
     m_mainToolBar->AddControl( m_zoomSelectBox );
 

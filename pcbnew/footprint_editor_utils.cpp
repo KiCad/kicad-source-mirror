@@ -182,6 +182,8 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromBoard( wxCommandEvent& event )
 
 void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 {
+    bool is_last_fp_from_brd = IsCurrentFPFromBoard();
+
     MODULE* module = LoadFootprint( aFPID );
 
     if( !module )
@@ -224,6 +226,10 @@ void FOOTPRINT_EDIT_FRAME::LoadModuleFromLibrary( LIB_ID aFPID)
 
     updateView();
     m_canvas->Refresh();
+
+    // Update the bitmap of the ID_MODEDIT_SAVE tool if needed.
+    if( is_last_fp_from_brd )
+        ReCreateHToolbar();
 
     m_treePane->GetLibTree()->ExpandLibId( aFPID );
     m_treePane->GetLibTree()->CenterLibId( aFPID );

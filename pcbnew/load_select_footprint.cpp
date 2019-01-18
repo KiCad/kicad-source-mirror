@@ -89,9 +89,12 @@ static void clearModuleItemFlags( BOARD_ITEM* aItem )
     aItem->ClearFlags();
 }
 
-
+#include "pcbnew_id.h"
+#include <bitmaps.h>
 bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
 {
+    bool is_last_fp_from_brd = IsCurrentFPFromBoard();
+
     MODULE* newModule;
     PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
@@ -150,10 +153,15 @@ bool FOOTPRINT_EDIT_FRAME::Load_Module_From_BOARD( MODULE* aModule )
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();
 
+    // Update the bitmap of the ID_MODEDIT_SAVE tool if needed.
+    if( !is_last_fp_from_brd )
+        ReCreateHToolbar();
+
     Update3DView();
 
     if( IsGalCanvasActive() )
         updateView();
+
     m_canvas->Refresh();
 
     m_treePane->GetLibTree()->Refresh();    // update any previously-highlighted items
