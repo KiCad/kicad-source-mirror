@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -357,9 +358,10 @@ const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         bool aIgnoreNetcodes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> rv;
-    const auto clusters = m_connAlgo->SearchClusters( 
-            aIgnoreNetcodes ? CN_CONNECTIVITY_ALGO::CSM_PROPAGATE : CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK,
-            aTypes, 
+    const auto clusters = m_connAlgo->SearchClusters(
+            aIgnoreNetcodes ?
+                    CN_CONNECTIVITY_ALGO::CSM_PROPAGATE :
+                    CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK, aTypes,
             aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
 
     for( auto cl : clusters )

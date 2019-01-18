@@ -652,7 +652,7 @@ int D_PAD::GetSolderMaskMargin() const
             BOARD* brd = GetBoard();
             if( brd )
             {
-            	margin = brd->GetDesignSettings().m_SolderMaskMargin;
+                margin = brd->GetDesignSettings().m_SolderMaskMargin;
             }
         }
     }
