@@ -1871,27 +1871,23 @@ void SHAPE_POLY_SET::CacheTriangulation()
     m_triangulatedPolys.clear();
     m_triangulationValid = true;
 
-    for( int i = 0; i < tmpSet.OutlineCount(); i++ )
+    while( tmpSet.OutlineCount() > 0 )
     {
         m_triangulatedPolys.push_back( std::make_unique<TRIANGULATED_POLYGON>() );
         PolygonTriangulation tess( *m_triangulatedPolys.back() );
 
         // If the tesselation fails, we re-fracture the polygon, which will
         // first simplify the system before fracturing and removing the holes
-        if( !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
+        // This may result in multiple, disjoint polygons.
+        if( !tess.TesselatePolygon( tmpSet.Polygon( 0 ).front() ) )
         {
             tmpSet.Fracture( PM_FAST );
-
-            // After fracturing, we may have zero or one polygon
-            // Check for zero polygons before tesselating and break regardless
-            if( !tmpSet.OutlineCount() ||  !tess.TesselatePolygon( tmpSet.Polygon( i ).front() ) )
-            {
-                m_triangulatedPolys.pop_back();
-                m_triangulationValid = false;
-            }
-
-            break;
+            m_triangulationValid = false;
+            continue;
         }
+
+        tmpSet.DeletePolygon( 0 );
+        m_triangulationValid = true;
     }
 
     if( m_triangulationValid )

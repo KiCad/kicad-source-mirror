@@ -263,9 +263,9 @@ private:
      * as the NULL triangles are inserted as Steiner points to improve the
      * triangulation regularity of polygons
      */
-    bool removeNullTriangles( Vertex* aStart )
+    Vertex* removeNullTriangles( Vertex* aStart )
     {
-        bool retval = false;
+        Vertex* retval = nullptr;
         Vertex* p = aStart->next;
 
         while( p != aStart )
@@ -274,7 +274,7 @@ private:
             {
                 p = p->prev;
                 p->next->remove();
-                retval = true;
+                retval = aStart;
 
                 if( p == p->next )
                     break;
@@ -286,8 +286,8 @@ private:
         // here we do the final check for this as a Steiner point
         if( area( aStart->prev, aStart, aStart->next ) == 0.0 )
         {
+            retval = p->next;
             p->remove();
-            retval = true;
         }
 
         return retval;
@@ -433,8 +433,13 @@ private:
             if( aPoint == stop )
             {
                 // First, try to remove the remaining steiner points
-                if( removeNullTriangles( aPoint ) )
+                // If aPoint is a steiner, we need to re-assign both the start and stop points
+                if( auto newPoint = removeNullTriangles( aPoint ) )
+                {
+                    aPoint = newPoint;
+                    stop = newPoint;
                     continue;
+                }
 
                 // If we don't have any NULL triangles left, cut the polygon in two and try again
                 splitPolygon( aPoint );
