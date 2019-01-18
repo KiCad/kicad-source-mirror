@@ -353,11 +353,14 @@ void CONNECTIVITY_DATA::Clear()
 
 const std::vector<BOARD_CONNECTED_ITEM*> CONNECTIVITY_DATA::GetConnectedItems(
         const BOARD_CONNECTED_ITEM* aItem,
-        const KICAD_T aTypes[] ) const
+        const KICAD_T aTypes[],
+        bool aIgnoreNetcodes ) const
 {
     std::vector<BOARD_CONNECTED_ITEM*> rv;
-    const auto clusters = m_connAlgo->SearchClusters( CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK,
-            aTypes, aItem->GetNetCode() );
+    const auto clusters = m_connAlgo->SearchClusters( 
+            aIgnoreNetcodes ? CN_CONNECTIVITY_ALGO::CSM_PROPAGATE : CN_CONNECTIVITY_ALGO::CSM_CONNECTIVITY_CHECK,
+            aTypes, 
+            aIgnoreNetcodes ? -1 : aItem->GetNetCode() );
 
     for( auto cl : clusters )
     {

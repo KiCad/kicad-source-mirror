@@ -175,7 +175,7 @@ public:
 
     const std::vector<D_PAD*> GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem ) const;
 
-    const void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<D_PAD*>* pads ) const;
+    const void GetConnectedPads( const BOARD_CONNECTED_ITEM* aItem, std::set<D_PAD*>* pads) const;
 
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem, const VECTOR2I& aAnchor, KICAD_T aTypes[] );
 
@@ -212,7 +212,7 @@ public:
      * @param aTypes allows one to filter by item types.
      */
     const std::vector<BOARD_CONNECTED_ITEM*> GetConnectedItems( const BOARD_CONNECTED_ITEM* aItem,
-            const KICAD_T aTypes[] ) const;
+            const KICAD_T aTypes[], bool aIgnoreNetcodes = false ) const;
 
     /**
      * Function GetNetItems()

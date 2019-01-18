@@ -344,8 +344,15 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
 
         for( auto& item : m_items )
         {
-            auto boardItem = static_cast<BOARD_CONNECTED_ITEM*>( item );
-            connectivity->GetConnectedPads( boardItem, &connectedPads );
+            const KICAD_T ourTypes[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
+            auto connectedItems = connectivity->GetConnectedItems( static_cast<BOARD_CONNECTED_ITEM*>( item ), ourTypes, true );
+            for ( auto citem : connectedItems )
+            {
+                if( citem->Type() == PCB_PAD_T )
+                {
+                    connectedPads.insert( static_cast<D_PAD*>( citem ) );
+                }
+            }
         }
 
         for( D_PAD* pad : connectedPads )

@@ -483,9 +483,19 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
                     continue;
 
                 module->SetLink( 0 );
-                m_frame->AddModuleToBoard( module );
-                commit.Added( module );
+
+                module->SetFlags( IS_NEW ); // whatever
+                module->SetTimeStamp( GetNewTimeStamp() );
+        
+                // Put it on FRONT layer,
+                // (Can be stored flipped if the lib is an archive built from a board)
+                if( module->IsFlipped() )
+                    module->Flip( module->GetPosition() );
+
+                module->SetOrientation( 0 );
                 module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+
+                commit.Add( module );
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
                 controls->SetCursorPosition( cursorPos, false );
             }
