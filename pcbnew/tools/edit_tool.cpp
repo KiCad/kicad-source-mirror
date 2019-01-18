@@ -880,7 +880,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     // Do not delete items while actively routing.
     if( routerTool && routerTool->Router() && routerTool->Router()->RoutingInProgress() )
-        return 0;
+        return 1;
 
     std::vector<BOARD_ITEM*> lockedItems;
 
