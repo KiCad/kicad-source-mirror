@@ -2,13 +2,13 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2014-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Włostowski <tomasz.wlostowski@cern.ch>
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -542,24 +542,24 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         switch( aItem->Type() )
         {
         case PCB_LINE_T:
-            ( (DRAWSEGMENT*) aItem )->TransformShapeWithClearanceToPolygon(
+            static_cast<DRAWSEGMENT*>( aItem )->TransformShapeWithClearanceToPolygon(
                     aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
             break;
 
         case PCB_TEXT_T:
-            ( (TEXTE_PCB*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
+            static_cast<TEXTE_PCB*>( aItem )->TransformBoundingBoxWithClearanceToPolygon(
                     &aFeatures, zclearance );
             break;
 
         case PCB_MODULE_EDGE_T:
-            ( (EDGE_MODULE*) aItem )->TransformShapeWithClearanceToPolygon(
+            static_cast<EDGE_MODULE*>( aItem )->TransformShapeWithClearanceToPolygon(
                     aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
             break;
 
         case PCB_MODULE_TEXT_T:
-            if( ( (TEXTE_MODULE*) aItem )->IsVisible() )
+            if( static_cast<TEXTE_MODULE*>( aItem )->IsVisible() )
             {
-                ( (TEXTE_MODULE*) aItem )->TransformBoundingBoxWithClearanceToPolygon(
+                static_cast<TEXTE_MODULE*>( aItem )->TransformBoundingBoxWithClearanceToPolygon(
                         &aFeatures, zclearance );
             }
             break;
