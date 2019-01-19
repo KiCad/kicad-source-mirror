@@ -160,6 +160,7 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     void On3DGridSelection( wxCommandEvent &event );
 
     void OnRenderEngineSelection( wxCommandEvent &event );
+    void OnDisableRayTracing( wxCommandEvent& aEvent );
 
     void OnUpdateUIEngine( wxUpdateUIEvent& aEvent );
     void OnUpdateUIMaterial( wxUpdateUIEvent& aEvent );
@@ -222,6 +223,8 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      *  Store all the settings and options to be used by the renders
      */
     CINFO3D_VISU m_settings;
+
+    bool m_disable_ray_tracing;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

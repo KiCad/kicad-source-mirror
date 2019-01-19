@@ -124,7 +124,11 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 
     void OnKeyEvent( wxKeyEvent& event );
 
- private:
+    bool SupportsRayTracing() const { return m_opengl_supports_raytracing; }
+
+    bool IsOpenGLInitialized() const { return m_is_opengl_initialized; }
+
+private:
 
     void OnPaint( wxPaintEvent &event );
 

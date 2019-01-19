@@ -28,6 +28,7 @@
  */
 
 #include <GL/glew.h>    // Must be included first
+#include <wx/tokenzr.h>
 
 #include "../common_ogl/openGL_includes.h"
 #include "../common_ogl/ogl_utils.h"
@@ -172,7 +173,7 @@ void EDA_3D_CANVAS::releaseOpenGL()
         delete m_3d_render_ogl_legacy;
         m_3d_render_ogl_legacy = NULL;
 
-        // This is just a copy of a pointer, can safelly be set to NULL
+        // This is just a copy of a pointer, can safely be set to NULL
         m_3d_render = NULL;
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( m_glRC );
@@ -216,10 +217,48 @@ bool  EDA_3D_CANVAS::initializeOpenGL()
                     FROM_UTF8( (char*) glewGetString( GLEW_VERSION ) ) );
     }
 
-    const GLubyte* version = glGetString( GL_VERSION );
+    wxString version = FROM_UTF8( (char *) glGetString( GL_VERSION ) );
 
     wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL version string %s.",
-                __WXFUNCTION__, FROM_UTF8( (char*) version ) );
+                __WXFUNCTION__, version );
+
+    // Extract OpenGL version from string.  This method is used because prior to OpenGL 2,
+    // getting the OpenGL major and minor version as integers didn't exist.
+    wxString tmp;
+
+    wxStringTokenizer tokenizer( version );
+
+    m_opengl_supports_raytracing = true;
+
+    if( tokenizer.HasMoreTokens() )
+    {
+        long major = 0;
+        long minor = 0;
+
+        tmp = tokenizer.GetNextToken();
+
+        tokenizer.SetString( tmp, wxString( "." ) );
+
+        if( tokenizer.HasMoreTokens() )
+            tokenizer.GetNextToken().ToLong( &major );
+
+        if( tokenizer.HasMoreTokens() )
+            tokenizer.GetNextToken().ToLong( &minor );
+
+        if( major < 2 || ( (major == 2 ) && (minor < 1) ) )
+        {
+            wxLogTrace( m_logTrace, "EDA_3D_CANVAS::%s OpenGL ray tracing not supported.",
+                        __WXFUNCTION__ );
+
+            if( GetParent() )
+            {
+                wxCommandEvent evt( wxEVT_MENU, ID_DISABLE_RAY_TRACING );
+                GetParent()->ProcessWindowEvent( evt );
+            }
+
+            m_opengl_supports_raytracing = false;
+        }
+    }
 
     m_is_opengl_initialized = true;
 
@@ -293,7 +332,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     // ensure this parent is still alive. When it is closed before the viewer
     // frame, a paint event can be generated after the parent is closed,
     // therefore with invalid board.
-    // This is dependant of the platform.
+    // This is dependent of the platform.
     // Especially on OSX, but also on Windows, it frequently happens
     if( !GetParent()->GetParent()->IsShown() )
         return; // The parent board editor frame is no more alive
@@ -338,7 +377,15 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
         }
     }
 
-    // Check if a raytacing was requented and need to switch to raytracing mode
+    // Don't attend to ray trace if OpenGL doesn't support it.
+    if( !m_opengl_supports_raytracing )
+    {
+        m_3d_render = m_3d_render_ogl_legacy;
+        m_render_raytracing_was_requested = false;
+        m_settings.RenderEngineSet( RENDER_ENGINE_OPENGL_LEGACY );
+    }
+
+    // Check if a raytacing was requested and need to switch to raytracing mode
     if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
     {
         const bool was_camera_changed = m_settings.CameraGet().ParametersChanged();
@@ -407,7 +454,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     {
         if( m_mouse_was_moved || m_camera_is_moving )
         {
-            // Calculation time in miliseconds
+            // Calculation time in milliseconds
             const double calculation_time = (double)( GetRunningMicroSecs() - strtime) / 1e3;
 
             activityReporter.Report( wxString::Format( _( "Render time %.0f ms ( %.1f fps)" ),

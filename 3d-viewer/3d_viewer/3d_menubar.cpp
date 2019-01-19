@@ -142,23 +142,9 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Display Options" ),
                  KiBitmap( read_setup_xpm ) );
 
-    wxMenu * renderEngineList = new wxMenu;
-    AddMenuItem( prefsMenu, renderEngineList, ID_MENU3D_ENGINE,
-                _( "Render Engine" ), KiBitmap( render_mode_xpm ) );
-
-    renderEngineList->AppendRadioItem( ID_MENU3D_ENGINE_OPENGL_LEGACY,
-                                       _( "OpenGL" ),
-                                       wxEmptyString );
-
-    renderEngineList->AppendRadioItem( ID_MENU3D_ENGINE_RAYTRACING,
-                                       _( "Raytracing" ),
-                                       wxEmptyString );
-
-    renderEngineList->Check( ID_MENU3D_ENGINE_OPENGL_LEGACY,
-                             m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY );
-
-    renderEngineList->Check( ID_MENU3D_ENGINE_RAYTRACING,
-                             m_settings.RenderEngineGet() == RENDER_ENGINE_RAYTRACING );
+    prefsMenu->AppendCheckItem( ID_RENDER_CURRENT_VIEW, _( "Raytracing" ) );
+    prefsMenu->Check( ID_RENDER_CURRENT_VIEW,
+                      m_settings.RenderEngineGet() != RENDER_ENGINE_OPENGL_LEGACY );
 
     wxMenu * renderOptionsMenu = new wxMenu;
     AddMenuItem( prefsMenu, renderOptionsMenu, ID_MENU3D_FL,

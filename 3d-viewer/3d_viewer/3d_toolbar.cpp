@@ -67,9 +67,8 @@ void EDA_3D_VIEWER::ReCreateMainToolbar()
                             _( "Set display options, and some layers visibility" ) );
     m_mainToolBar->AddSeparator();
 
-    m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString,
-                            KiBitmap( render_mode_xpm ),
-                            _( "Render current view using Raytracing" ) );
+    m_mainToolBar->AddTool( ID_RENDER_CURRENT_VIEW, wxEmptyString, KiBitmap( render_mode_xpm ),
+                            _( "Render current view using Raytracing" ), wxITEM_CHECK );
 
     m_mainToolBar->AddSeparator();
 
