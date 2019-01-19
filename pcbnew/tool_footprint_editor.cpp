@@ -64,7 +64,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 #endif
 
     m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
-                            KiScaledBitmap( IsCurrentFPFromBoard() ? open_brd_file_xpm : save_xpm,
+                            KiScaledBitmap( IsCurrentFPFromBoard() ? save_fp_to_board_xpm : save_xpm,
                                             this ),
                             IsCurrentFPFromBoard() ?
                                 _( "Save changes to board" ) : _( "Save changes to library" ) );
