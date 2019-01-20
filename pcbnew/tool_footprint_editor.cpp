@@ -271,7 +271,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     KiScaledSeparator( m_auxiliaryToolBar, this );
 
     // Grid selection choice box.
-    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
+    if( m_gridSelectBox == nullptr )
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
@@ -281,7 +282,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Zoom selection choice box.
     KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
+
+    if( m_zoomSelectBox == nullptr )
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );

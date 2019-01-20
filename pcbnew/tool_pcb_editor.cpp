@@ -586,18 +586,22 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
     /* Set up toolbar items */
 
     // Creates box to display and choose tracks widths:
-    m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
+    if( m_SelTrackWidthBox == nullptr )
+        m_SelTrackWidthBox = new wxChoice( m_auxiliaryToolBar,
                                          ID_AUX_TOOLBAR_PCB_TRACK_WIDTH,
                                          wxDefaultPosition, wxDefaultSize,
                                          0, NULL );
+
     updateTraceWidthSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelTrackWidthBox );
 
     // Creates box to display and choose vias diameters:
-    m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
+    if( m_SelViaSizeBox == nullptr )
+        m_SelViaSizeBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_AUX_TOOLBAR_PCB_VIA_SIZE,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
+
     updateViaSizeSelectBox();
     m_auxiliaryToolBar->AddControl( m_SelViaSizeBox );
     KiScaledSeparator( m_auxiliaryToolBar, this );
@@ -612,16 +616,21 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
 
     // Add the box to display and select the current grid size:
     KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
+
+    if( m_gridSelectBox == nullptr )
+        m_gridSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_GRID_SELECT,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
+
     updateGridSelectBox();
     m_auxiliaryToolBar->AddControl( m_gridSelectBox );
 
     //  Add the box to display and select the current Zoom
     KiScaledSeparator( m_auxiliaryToolBar, this );
-    m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
+
+    if( m_zoomSelectBox == nullptr )
+        m_zoomSelectBox = new wxChoice( m_auxiliaryToolBar,
                                       ID_ON_ZOOM_SELECT,
                                       wxDefaultPosition, wxDefaultSize,
                                       0, NULL );
