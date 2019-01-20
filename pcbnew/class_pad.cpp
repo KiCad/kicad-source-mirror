@@ -691,15 +691,17 @@ wxSize D_PAD::GetSolderPasteMargin() const
         if( margin == 0 )
             margin = module->GetLocalSolderPasteMargin();
 
-        BOARD * brd = GetBoard();
+        auto brd = GetBoard();
 
-        if( margin == 0 )
-            margin = brd->GetDesignSettings().m_SolderPasteMargin;
+        if( margin == 0 && brd )
+        {
+                margin = brd->GetDesignSettings().m_SolderPasteMargin;
+        }
 
         if( mratio == 0.0 )
             mratio = module->GetLocalSolderPasteMarginRatio();
 
-        if( mratio == 0.0 )
+        if( mratio == 0.0 && brd )
         {
             mratio = brd->GetDesignSettings().m_SolderPasteMarginRatio;
         }
