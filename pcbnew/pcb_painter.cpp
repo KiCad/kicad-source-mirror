@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2019 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -413,21 +413,12 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
     {
         // Draw a regular track
         const COLOR4D& color = m_pcbSettings.GetColor( aTrack, aLayer );
+        bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
         m_gal->SetStrokeColor( color );
-        m_gal->SetIsStroke( true );
-
-        if( m_pcbSettings.m_sketchMode[LAYER_TRACKS] )
-        {
-            // Outline mode
-            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
-            m_gal->SetIsFill( false );
-        }
-        else
-        {
-            // Filled mode
-            m_gal->SetFillColor( color );
-            m_gal->SetIsFill( true );
-        }
+        m_gal->SetFillColor( color );
+        m_gal->SetIsStroke( outline_mode );
+        m_gal->SetIsFill( not outline_mode );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
 
         m_gal->DrawSegment( start, end, width );
 
