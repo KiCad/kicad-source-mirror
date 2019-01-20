@@ -390,18 +390,19 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
         // Draw a regular track
         const COLOR4D& color = m_pcbSettings.GetColor( aTrack, aLayer );
         m_gal->SetStrokeColor( color );
-        m_gal->SetIsStroke( true );
 
         if( m_pcbSettings.m_sketchMode[LAYER_TRACKS] )
         {
             // Outline mode
             m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsStroke( true );
             m_gal->SetIsFill( false );
         }
         else
         {
             // Filled mode
             m_gal->SetFillColor( color );
+            m_gal->SetIsStroke( false );
             m_gal->SetIsFill( true );
         }
 
