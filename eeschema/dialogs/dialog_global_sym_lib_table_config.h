@@ -21,23 +21,18 @@
 #ifndef _DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_H_
 #define _DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_H_
 
-#include "dialog_global_sym_lib_table_config_base.h"
+#include "dialog_global_lib_table_config.h"
 
-class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE
+
+class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG : public DIALOG_GLOBAL_LIB_TABLE_CONFIG
 {
-private:
-    bool m_defaultFileFound;
-    wxFilePickerCtrl* m_filePicker_new;
-
 public:
     DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent );
     virtual ~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG();
 
     bool TransferDataFromWindow() override;
 
-protected:
-    virtual void onUpdateFilePicker( wxUpdateUIEvent& aEvent ) override;
-    virtual void onUpdateDefaultSelection( wxUpdateUIEvent& aEvent ) override;
+    virtual wxFileName GetGlobalTableFileName() override;
 };
 
 #endif  // _DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_H_

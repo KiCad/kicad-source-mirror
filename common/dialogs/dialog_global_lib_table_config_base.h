@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 23 2018)
+// C++ code generated with wxFormBuilder (version Jan  5 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -28,9 +28,9 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE
+/// Class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
+class DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 {
 	private:
 
@@ -53,8 +53,8 @@ class DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE : public DIALOG_SHIM
 
 	public:
 
-		DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Symbol Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
-		~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE();
+		DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Configure Global Library Table"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxCAPTION|wxRESIZE_BORDER );
+		~DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE();
 
 };
 

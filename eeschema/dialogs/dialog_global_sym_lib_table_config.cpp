@@ -21,64 +21,26 @@
 #include "dialog_global_sym_lib_table_config.h"
 
 #include <confirm.h>
-#include <grid_tricks.h>
 #include <kiface_i.h>
-#include <lib_table_grid.h>
-#include <lib_table_lexer.h>
 #include <macros.h>
-
-#include <wx/filename.h>
 
 #include "symbol_lib_table.h"
 
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-        DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG_BASE( aParent )
+    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, "symbol" )
 {
-    wxFileName fn = SYMBOL_LIB_TABLE::GetGlobalTableFileName();
-
-    // Attempt to find the default global file table from the KiCad template folder.
-    wxString fileName = Kiface().KifaceSearch().FindValidPath( fn.GetName() );
-
-    m_defaultFileFound = wxFileName::FileExists( fileName );
-
-    m_filePicker_new = new wxFilePickerCtrl( this, wxID_ANY, wxEmptyString, _( "Select a file" ),
-            wxFileSelectorDefaultWildcardStr, wxDefaultPosition, wxDefaultSize,
-            wxFLP_DEFAULT_STYLE | wxFLP_FILE_MUST_EXIST | wxFLP_OPEN );
-    m_filePicker_new->SetFileName( wxFileName( fileName ) );
-    m_filePicker_new->Enable( false );
-    m_filePicker_new->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
-
-    bSizer2->Replace( m_filePicker1, m_filePicker_new, true );
-    bSizer2->Layout();
-
-    if( !m_defaultFileFound )
-        m_customRb->SetValue( true );
-
-    wxButton* okButton = (wxButton *) FindWindowById( wxID_OK );
-
-    if( okButton )
-        okButton->SetDefault();
-
-    FinishDialogSettings();
 }
 
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::~DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG()
 {
-    m_filePicker_new->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
 }
 
 
-void DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateFilePicker( wxUpdateUIEvent& aEvent )
+wxFileName DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::GetGlobalTableFileName()
 {
-    aEvent.Enable( m_customRb->GetValue() );
-}
-
-
-void DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::onUpdateDefaultSelection( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( m_defaultFileFound );
+    return SYMBOL_LIB_TABLE::GetGlobalTableFileName();
 }
 
 
@@ -106,7 +68,7 @@ bool DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::TransferDataFromWindow()
         return true;
     }
 
-    wxString fileName = m_filePicker_new->GetPath();
+    wxString fileName = m_filePicker1->GetPath();
 
     if( fileName.IsEmpty() )
     {
