@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,6 +62,7 @@
 #include <footprint_info_impl.h>
 #include <gl_context_mgr.h>
 #include "invoke_pcb_dialog.h"
+#include "dialog_global_fp_lib_table_config.h"
 
 extern bool IsWxPythonLoaded();
 
@@ -233,7 +234,7 @@ static bool scriptingSetup()
     kipython = fn.GetPath();
 
     // If our python install is existing inside kicad, use it
-    // Note: this is usefull only when another python version is installed
+    // Note: this is useful only when another python version is installed
     if( wxDirExists( kipython ) )
     {
         // clear any PYTHONPATH and PYTHONHOME env var definition: the default
@@ -343,40 +344,39 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
     // display the real hotkeys in menus or tool tips
     ReadHotkeyConfig( PCB_EDIT_FRAME_NAME, g_Board_Editor_Hotkeys_Descr );
 
-    try
-    {
-        // The global table is not related to a specific project.  All projects
-        // will use the same global table.  So the KIFACE::OnKifaceStart() contract
-        // of avoiding anything project specific is not violated here.
+    wxFileName fn = FP_LIB_TABLE::GetGlobalTableFileName();
 
-        if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
+    if( !fn.FileExists() )
+    {
+        DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG fpDialog( NULL );
+
+        fpDialog.ShowModal();
+    }
+    else
+    {
+        try
         {
-            DisplayInfoMessage( NULL, _(
-                "You have run Pcbnew for the first time using the "
-                "new footprint library table method for finding footprints.\n"
-                "Pcbnew has either copied the default "
-                "table or created an empty table in the kicad configuration folder.\n"
-                "You must first configure the library "
-                "table to include all footprint libraries you want to use.\n"
-                "See the \"Footprint Library Table\" section of "
-                "the CvPcb or Pcbnew documentation for more information." ) );
+            // The global table is not related to a specific project.  All projects
+            // will use the same global table.  So the KIFACE::OnKifaceStart() contract
+            // of avoiding anything project specific is not violated here.
+            if( !FP_LIB_TABLE::LoadGlobalTable( GFootprintTable ) )
+                return false;
+        }
+        catch( const IO_ERROR& ioe )
+        {
+            // if we are here, a incorrect global footprint library table was found.
+            // Incorrect global symbol library table is not a fatal error:
+            // the user just has to edit the (partially) loaded table.
+            wxString msg = _(
+                "An error occurred attempting to load the global footprint library table.\n"
+                "Please edit this global symbol library table in Preferences menu."
+                );
+
+            DisplayErrorMessage( NULL, msg, ioe.What() );
         }
     }
-    catch( const IO_ERROR& ioe )
-    {
-        // if we are here, a incorrect global footprint library table was found.
-        // Incorrect global footprint library table is not a fatal error:
-        // the user just has to edit the (partially) loaded table.
 
-        wxString msg = _(
-            "An error occurred attempting to load the global footprint library table:\n"
-            "Please edit this global footprint library table in Preferences menu"
-            );
-
-        DisplayErrorMessage( NULL, msg, ioe.What() );
-    }
-
-#if defined(KICAD_SCRIPTING)
+#if defined( KICAD_SCRIPTING )
     scriptingSetup();
 #endif
 
