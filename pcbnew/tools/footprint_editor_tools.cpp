@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2015 CERN
+ * Copyright (C) 2014-2019 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -113,6 +113,8 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
         {
             auto pad = dynamic_cast<D_PAD*>( aItem );
             m_frame->Export_Pad_Settings( pad );
+
+            static_cast<D_PAD*>( aItem )->SetLocalCoord();
             aCommit.Add( aItem );
         }
     };
@@ -121,7 +123,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
     frame()->SetToolID( ID_MODEDIT_PAD_TOOL, wxCURSOR_PENCIL, _( "Add pads" ) );
 
-    assert( board()->m_Modules );
+    wxASSERT( board()->m_Modules );
 
     doInteractiveItemPlacement( &placer,  _( "Place pad" ), IPO_REPEAT | IPO_SINGLE_CLICK | IPO_ROTATE | IPO_FLIP );
 
