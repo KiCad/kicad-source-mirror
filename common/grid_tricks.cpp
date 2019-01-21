@@ -428,10 +428,12 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
     {
         start_row = cur_row;
         end_row = cur_row + rows.CountTokens();
+
         if( end_row > tbl->GetNumberRows() )
             end_row = tbl->GetNumberRows();
+
         start_col = cur_col;
-        // end_col calculates later
+        end_col = start_col; // end_col actual value calculates later
     }
 
     for( int row = start_row;  row < end_row;  ++row )
@@ -449,6 +451,7 @@ void GRID_TRICKS::paste_text( const wxString& cb_text )
         if( !is_selection )
         {
             end_col = cur_col + cols.CountTokens();
+
             if( end_col > tbl->GetNumberCols() )
                 end_col = tbl->GetNumberCols();
         }
