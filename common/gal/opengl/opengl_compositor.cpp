@@ -404,3 +404,16 @@ void OPENGL_COMPOSITOR::clean()
 
     m_initialized = false;
 }
+
+int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
+{
+    switch( m_currentAntialiasingMode )
+    {
+        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X2:
+            return 2;
+        case OPENGL_ANTIALIASING_MODE::SUPERSAMPLING_X4:
+            return 4;
+        default:
+            return 1;
+    }
+}

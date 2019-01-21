@@ -6,7 +6,7 @@
 #include <gr_basic.h>
 #include <eda_rect.h>
 
-#include <class_drawpanel.h>
+#include <legacy_gal/class_drawpanel.h>
 
 
 namespace KIGFX

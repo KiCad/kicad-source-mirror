@@ -135,24 +135,6 @@ public:
     DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle, double aEndAngle ) {};
 
     /**
-     * @brief Draw an arc segment.
-     *
-     * This method differs from DrawArc() in what happens when fill/stroke are on or off.
-     * DrawArc() draws a "pie piece" when fill is turned on, and a thick stroke when fill is off.
-     * DrawArcSegment() with fill *on* behaves like DrawArc() with fill *off*.
-     * DrawArcSegment() with fill *off* draws the outline of what it would have drawn with fill on.
-     *
-     * @param aCenterPoint  is the center point of the arc.
-     * @param aRadius       is the arc radius.
-     * @param aStartAngle   is the start angle of the arc.
-     * @param aEndAngle     is the end angle of the arc.
-     * @param aWidth        is the thickness of the arc (pen size).
-     */
-    virtual void
-    DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                   double aEndAngle, double aWidth ) {};
-
-    /**
      * @brief Draw a rectangle.
      *
      * @param aStartPoint   is the start point of the rectangle.
@@ -944,7 +926,7 @@ public:
     }
 
     ///> @brief Draw the grid
-    virtual void DrawGrid();
+    virtual void DrawGrid() {};
 
     /**
      * Function GetGridPoint()

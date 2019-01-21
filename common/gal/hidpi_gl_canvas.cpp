@@ -43,7 +43,7 @@ HIDPI_GL_CANVAS::HIDPI_GL_CANVAS( wxWindow *parent,
 }
 
 
-wxSize HIDPI_GL_CANVAS::GetClientSize() const
+wxSize HIDPI_GL_CANVAS::GetNativePixelSize() const
 {
     wxSize size = wxGLCanvas::GetClientSize();
 

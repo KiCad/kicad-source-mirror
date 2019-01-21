@@ -35,7 +35,7 @@ using namespace KIGFX;
 
 CAIRO_COMPOSITOR::CAIRO_COMPOSITOR( cairo_t** aMainContext ) :
     m_current( 0 ), m_currentContext( aMainContext ), m_mainContext( *aMainContext ),
-    m_currentAntialiasingMode( CAIRO_ANTIALIAS_NONE )
+    m_currentAntialiasingMode( CAIRO_ANTIALIAS_DEFAULT )
 {
     // Do not have uninitialized members:
     cairo_matrix_init_identity( &m_matrix );
@@ -109,9 +109,7 @@ unsigned int CAIRO_COMPOSITOR::CreateBuffer()
 #endif /* __WXDEBUG__ */
 
     // Set default settings for the buffer
-    cairo_set_antialias( context, m_currentAntialiasingMode );
-    cairo_set_line_join( context, CAIRO_LINE_JOIN_ROUND );
-    cairo_set_line_cap( context, CAIRO_LINE_CAP_ROUND );
+    cairo_set_antialias( context,  m_currentAntialiasingMode );
 
     // Use the same transformation matrix as the main context
     cairo_get_matrix( m_mainContext, &m_matrix );

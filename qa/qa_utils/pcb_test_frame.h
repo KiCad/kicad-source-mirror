@@ -30,6 +30,8 @@
 
 #include <memory>
 
+#include <pcb_draw_panel_gal.h>
+
 using std::unique_ptr;
 
 class PCB_DRAW_PANEL_GAL;
@@ -64,7 +66,8 @@ public:
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE);
+            long style = wxDEFAULT_FRAME_STYLE,
+            PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType = PCB_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 
     virtual ~PCB_TEST_FRAME();
 
@@ -81,9 +84,11 @@ protected:
 
     unique_ptr < PCB_DRAW_PANEL_GAL > m_galPanel;
     unique_ptr < BOARD > m_board;
+#ifdef USE_TOOL_MANAGER
     unique_ptr < TOOL_MANAGER > m_toolManager;
     unique_ptr < TOOL_DISPATCHER > m_toolDispatcher;
     unique_ptr < ACTIONS > m_pcbActions;
+#endif
 };
 
 wxFrame* CreateMainFrame( const std::string& aFileName );

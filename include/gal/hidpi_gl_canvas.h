@@ -51,10 +51,7 @@ public:
                const wxPalette& palette = wxNullPalette );
 
 
-    // wxGLCanvas override
-    virtual wxSize GetClientSize() const;
-
-    // wxGLCanvas override (with patch applied) or default value of 1.0
+    virtual wxSize GetNativePixelSize() const;
     virtual float GetBackingScaleFactor() const;
 };
 

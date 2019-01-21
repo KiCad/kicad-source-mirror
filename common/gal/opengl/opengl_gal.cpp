@@ -262,7 +262,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
 #endif
 
     SetSize( aParent->GetClientSize() );
-    screenSize = VECTOR2I( aParent->GetClientSize() );
+    screenSize = VECTOR2I( GetNativePixelSize() );
 
     // Grid color settings are different in Cairo and OpenGL
     SetGridColor( COLOR4D( 0.8, 0.8, 0.8, 0.1 ) );
@@ -351,6 +351,13 @@ double OPENGL_GAL::getWorldPixelSize() const
     auto matrix = GetScreenWorldMatrix();
     return std::min( std::abs( matrix.GetScale().x ), std::abs( matrix.GetScale().y ) );
 }
+
+VECTOR2D OPENGL_GAL::getScreenPixelSize() const
+{
+    auto sf = GetBackingScaleFactor();
+    return VECTOR2D( 2.0 / (double) ( screenSize.x * sf ), 2.0 / (double) ( screenSize.y * sf ) );
+}
+
 
 void OPENGL_GAL::beginDrawing()
 {
@@ -460,6 +467,8 @@ void OPENGL_GAL::beginDrawing()
         GLint ufm_fontTexture       = shader->AddParameter( "fontTexture" );
         GLint ufm_fontTextureWidth  = shader->AddParameter( "fontTextureWidth" );
         ufm_worldPixelSize          = shader->AddParameter( "worldPixelSize" );
+        ufm_screenPixelSize         = shader->AddParameter( "screenPixelSize" );
+        ufm_pixelSizeMultiplier     = shader->AddParameter( "pixelSizeMultiplier" );
 
         shader->Use();
         shader->SetParameter( ufm_fontTexture,       (int) FONT_TEXTURE_UNIT  );
@@ -471,7 +480,10 @@ void OPENGL_GAL::beginDrawing()
     }
 
     shader->Use();
-    shader->SetParameter( ufm_worldPixelSize, (float) getWorldPixelSize() );
+    shader->SetParameter( ufm_worldPixelSize, (float) getWorldPixelSize() / GetBackingScaleFactor() );
+    shader->SetParameter( ufm_screenPixelSize, getScreenPixelSize() );
+    double pixelSizeMultiplier = compositor->GetAntialiasSupersamplingFactor();
+    shader->SetParameter( ufm_pixelSizeMultiplier, (float) pixelSizeMultiplier );
     shader->Deactivate();
 
     // Something betreen BeginDrawing and EndDrawing seems to depend on
@@ -636,24 +648,21 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
          *  Parameters given to Shader() are indices of the triangle's vertices
          *  (if you want to understand more, check the vertex shader source [shader.vert]).
          *  Shader uses this coordinates to determine if fragments are inside the circle or not.
+         *  Does the calculations in the vertex shader now (pixel alignment)
          *       v2
          *       /\
          *      //\\
          *  v0 /_\/_\ v1
          */
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0 );
-        currentManager->Vertex( aCenterPoint.x - aRadius * sqrt( 3.0f ),            // v0
-                                aCenterPoint.y - aRadius, layerDepth );
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 1.0, aRadius );
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, layerDepth );
 
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0 );
-        currentManager->Vertex( aCenterPoint.x + aRadius * sqrt( 3.0f),             // v1
-                                aCenterPoint.y - aRadius, layerDepth );
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 2.0, aRadius );
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, layerDepth );
 
-        currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0 );
-        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + aRadius * 2.0f,    // v2
-                                layerDepth );
+        currentManager->Shader( SHADER_FILLED_CIRCLE, 3.0, aRadius );
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y, layerDepth );
     }
-
     if( isStrokeEnabled )
     {
         currentManager->Reserve( 3 );
@@ -669,17 +678,16 @@ void OPENGL_GAL::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
          *      //\\
          *  v0 /_\/_\ v1
          */
-        double outerRadius = aRadius + ( lineWidth / 2 );
         currentManager->Shader( SHADER_STROKED_CIRCLE, 1.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x - outerRadius * sqrt( 3.0f ),            // v0
-                                aCenterPoint.y - outerRadius, layerDepth );
+        currentManager->Vertex( aCenterPoint.x,            // v0
+                                aCenterPoint.y, layerDepth );
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 2.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x + outerRadius * sqrt( 3.0f ),            // v1
-                                aCenterPoint.y - outerRadius, layerDepth );
+        currentManager->Vertex( aCenterPoint.x,            // v1
+                                aCenterPoint.y, layerDepth );
 
         currentManager->Shader( SHADER_STROKED_CIRCLE, 3.0, aRadius, lineWidth );
-        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y + outerRadius * 2.0f,    // v2
+        currentManager->Vertex( aCenterPoint.x, aCenterPoint.y,    // v2
                                 layerDepth );
     }
 }
@@ -727,102 +735,6 @@ void OPENGL_GAL::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, double a
     if( isStrokeEnabled )
     {
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-        VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
-        double alpha;
-
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
-        {
-            VECTOR2D p_next( cos( alpha ) * aRadius, sin( alpha ) * aRadius );
-            DrawLine( p, p_next );
-
-            p = p_next;
-        }
-
-        // Draw the last missing part
-        if( alpha != aEndAngle )
-        {
-            VECTOR2D p_last( cos( aEndAngle ) * aRadius, sin( aEndAngle ) * aRadius );
-            DrawLine( p, p_last );
-        }
-    }
-
-    Restore();
-}
-
-
-void OPENGL_GAL::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
-                                 double aEndAngle, double aWidth )
-{
-    if( aRadius <= 0 )
-    {
-        // Arcs of zero radius are a circle of aWidth diameter
-        if( aWidth > 0 )
-            DrawCircle( aCenterPoint, aWidth / 2.0 );
-
-        return;
-    }
-
-    // Swap the angles, if start angle is greater than end angle
-    SWAP( aStartAngle, >, aEndAngle );
-
-    const double alphaIncrement = calcAngleStep( aRadius );
-
-    Save();
-    currentManager->Translate( aCenterPoint.x, aCenterPoint.y, 0.0 );
-
-    if( isStrokeEnabled )
-    {
-        currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
-
-        double width = aWidth / 2.0;
-        VECTOR2D startPoint( cos( aStartAngle ) * aRadius,
-                             sin( aStartAngle ) * aRadius );
-        VECTOR2D endPoint( cos( aEndAngle ) * aRadius,
-                           sin( aEndAngle ) * aRadius );
-
-        drawStrokedSemiCircle( startPoint, width, aStartAngle + M_PI );
-        drawStrokedSemiCircle( endPoint, width, aEndAngle );
-
-        VECTOR2D pOuter( cos( aStartAngle ) * ( aRadius + width ),
-                         sin( aStartAngle ) * ( aRadius + width ) );
-
-        VECTOR2D pInner( cos( aStartAngle ) * ( aRadius - width ),
-                         sin( aStartAngle ) * ( aRadius - width ) );
-
-        double alpha;
-
-        for( alpha = aStartAngle + alphaIncrement; alpha <= aEndAngle; alpha += alphaIncrement )
-        {
-            VECTOR2D pNextOuter( cos( alpha ) * ( aRadius + width ),
-                                 sin( alpha ) * ( aRadius + width ) );
-            VECTOR2D pNextInner( cos( alpha ) * ( aRadius - width ),
-                                 sin( alpha ) * ( aRadius - width ) );
-
-            DrawLine( pOuter, pNextOuter );
-            DrawLine( pInner, pNextInner );
-
-            pOuter = pNextOuter;
-            pInner = pNextInner;
-        }
-
-        // Draw the last missing part
-        if( alpha != aEndAngle )
-        {
-            VECTOR2D pLastOuter( cos( aEndAngle ) * ( aRadius + width ),
-                                 sin( aEndAngle ) * ( aRadius + width ) );
-            VECTOR2D pLastInner( cos( aEndAngle ) * ( aRadius - width ),
-                                 sin( aEndAngle ) * ( aRadius - width ) );
-
-            DrawLine( pOuter, pLastOuter );
-            DrawLine( pInner, pLastInner );
-        }
-    }
-
-    if( isFillEnabled )
-    {
-        currentManager->Color( fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-        SetLineWidth( aWidth );
 
         VECTOR2D p( cos( aStartAngle ) * aRadius, sin( aStartAngle ) * aRadius );
         double alpha;
@@ -1632,43 +1544,27 @@ void OPENGL_GAL::drawLineQuad( const VECTOR2D& aStartPoint, const VECTOR2D& aEnd
     auto v1  = currentManager->GetTransformation() * glm::vec4( aStartPoint.x, aStartPoint.y, 0.0, 0.0 );
     auto v2  = currentManager->GetTransformation() * glm::vec4( aEndPoint.x, aEndPoint.y, 0.0, 0.0 );
 
-    VECTOR2D startEndVector( v2.x - v1.x, v2.y - v1.y );
-
-    double lineLength     = startEndVector.EuclideanNorm();
-
-    VECTOR2D vs ( startEndVector );
-    float aspect;
-
-    if ( lineWidth == 0.0 ) // pixel-width line
-    {
-        vs = vs.Resize( 0.5 );
-        aspect = ( lineLength + 1.0 );
-    }
-    else
-    {
-        vs = vs.Resize( 0.5 * lineWidth );
-        aspect = ( lineLength + lineWidth ) / lineWidth;
-    }
+    VECTOR2D vs( v2.x - v1.x, v2.y - v1.y );
 
     currentManager->Reserve( 6 );
 
     // Line width is maintained by the vertex shader
-    currentManager->Shader( SHADER_LINE_A, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_A, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aStartPoint, layerDepth );
 
-    currentManager->Shader( SHADER_LINE_B, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_B, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aStartPoint, layerDepth );
 
-    currentManager->Shader( SHADER_LINE_C, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_C, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aEndPoint, layerDepth );
 
-    currentManager->Shader( SHADER_LINE_D, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_D, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aEndPoint, layerDepth );
 
-    currentManager->Shader( SHADER_LINE_E, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_E, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aEndPoint, layerDepth );
 
-    currentManager->Shader( SHADER_LINE_F, aspect, vs.x, vs.y );
+    currentManager->Shader( SHADER_LINE_F, lineWidth, vs.x, vs.y );
     currentManager->Vertex( aStartPoint, layerDepth );
 }
 
@@ -2124,3 +2020,21 @@ void OPENGL_GAL::EnableDepthTest( bool aEnabled )
     nonCachedManager->EnableDepthTest( aEnabled );
     overlayManager->EnableDepthTest( aEnabled );
 }
+
+
+static double roundr( double f, double r )
+{
+    return floor(f / r + 0.5) * r;
+}
+
+
+void OPENGL_GAL::ComputeWorldScreenMatrix()
+{
+    auto pixelSize = worldScale;
+
+    lookAtPoint.x = roundr( lookAtPoint.x, pixelSize );
+    lookAtPoint.y = roundr( lookAtPoint.y, pixelSize );
+
+    GAL::ComputeWorldScreenMatrix();
+}
+

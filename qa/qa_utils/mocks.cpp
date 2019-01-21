@@ -263,6 +263,9 @@ MODULE* PCB_BASE_FRAME::GetFootprintFromBoardByReference()
     return nullptr;
 }
 
+TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
+        AS_GLOBAL, 0,
+        "", "" );
 
 TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
         AS_GLOBAL, 0,
@@ -355,4 +358,24 @@ void PCB_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 
 void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I&, GENERAL_COLLECTOR& )
 {
+}
+
+EDA_DRAW_FRAME* EDA_DRAW_PANEL::GetParent() const
+{
+    return nullptr;
+}
+
+void* EDA_DRAW_PANEL::GetDisplayOptions()
+{
+    return nullptr;
+}
+
+BASE_SCREEN* EDA_DRAW_PANEL::GetScreen()
+{
+    return nullptr;
+}
+
+void DrawAndSizingBlockOutlines(EDA_DRAW_PANEL*, wxDC*, wxPoint const&, bool) 
+{
+
 }

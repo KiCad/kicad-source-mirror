@@ -322,7 +322,7 @@ void GERBVIEW_PAINTER::draw( /*const*/ GERBER_DRAW_ITEM* aItem, int aLayer )
             endAngle = 2 * M_PI;
         }
 
-        m_gal->DrawArcSegment( center, radius, startAngle, endAngle, width );
+        m_gal->DrawArc( center, radius, startAngle, endAngle );
 
         // Arc Debugging
         // m_gal->SetLineWidth( 5 );

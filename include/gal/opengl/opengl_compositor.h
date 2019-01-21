@@ -91,6 +91,8 @@ public:
     void SetAntialiasingMode( OPENGL_ANTIALIASING_MODE aMode ); // clears all buffers
     OPENGL_ANTIALIASING_MODE GetAntialiasingMode() const;
 
+    int GetAntialiasSupersamplingFactor() const;
+
 protected:
     // Buffers are simply textures storing a result of certain target rendering.
     typedef struct

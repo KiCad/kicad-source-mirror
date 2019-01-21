@@ -129,10 +129,12 @@ void PCB_TEST_FRAME::SetBoard( BOARD* b )
     m_board.reset( b );
     m_board->GetConnectivity()->Build( m_board.get() );
     m_galPanel->DisplayBoard( m_board.get() );
+#ifdef USE_TOOL_MANAGER
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
             m_galPanel->GetViewControls(), nullptr );
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
+#endif
 }
 
 
@@ -161,7 +163,7 @@ BOARD* PCB_TEST_FRAME::LoadAndDisplayBoard( const std::string& filename )
 
 
 PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxPoint& pos,
-        const wxSize& size, long style ) :
+        const wxSize& size, long style, PCB_DRAW_PANEL_GAL::GAL_TYPE aGalType ) :
     wxFrame( frame, wxID_ANY, title, pos, size, style )
 {
     // Make a menubar
@@ -180,8 +182,10 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
 
     KIGFX::GAL_DISPLAY_OPTIONS options;
 
+    options.gl_antialiasing_mode = KIGFX::OPENGL_ANTIALIASING_MODE::NONE; //SUPERSAMPLING_X4;
+
     m_galPanel.reset( new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0,
-                            0 ), wxDefaultSize, options, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO ) );
+                            0 ), wxDefaultSize, options, aGalType ) );
 
     m_galPanel->SetEvtHandlerEnabled( true );
     m_galPanel->SetFocus();
@@ -200,6 +204,7 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
 
     m_galPanel->GetViewControls()->ShowCursor( true );
 
+#ifdef USE_TOOL_MANAGER
     m_toolManager.reset( new TOOL_MANAGER );
     m_toolManager->SetEnvironment( m_board.get(), m_galPanel->GetView(),
             m_galPanel->GetViewControls(), nullptr );
@@ -212,6 +217,7 @@ PCB_TEST_FRAME::PCB_TEST_FRAME( wxFrame* frame, const wxString& title, const wxP
     m_toolManager->InitTools();
     m_galPanel->SetEventDispatcher( m_toolDispatcher.get() );
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+#endif
 
     SetBoard( new BOARD );
 }

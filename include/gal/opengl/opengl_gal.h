@@ -119,10 +119,6 @@ public:
     virtual void DrawArc( const VECTOR2D& aCenterPoint, double aRadius,
                           double aStartAngle, double aEndAngle ) override;
 
-    /// @copydoc GAL::DrawArcSegment()
-    virtual void DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius,
-                                 double aStartAngle, double aEndAngle, double aWidth ) override;
-
     /// @copydoc GAL::DrawRectangle()
     virtual void DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) override;
 
@@ -236,6 +232,8 @@ public:
     /// @copydoc GAL::SetNegativeDrawMode()
     virtual void SetNegativeDrawMode( bool aSetting ) override {}
 
+    virtual void ComputeWorldScreenMatrix() override;
+
     // -------
     // Cursor
     // -------
@@ -322,6 +320,9 @@ private:
     bool                    isContextLocked;            ///< Used for assertion checking
     int                     lockClientCookie;
     GLint                   ufm_worldPixelSize;
+    GLint                   ufm_screenPixelSize;
+    GLint                   ufm_pixelSizeMultiplier;
+    GLint                   ufm_backingScaleFactor;
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
 
@@ -476,6 +477,9 @@ private:
     }
 
     double getWorldPixelSize() const;
+
+    VECTOR2D getScreenPixelSize() const;
+
 
     /**
      * @brief Basic OpenGL initialization.
