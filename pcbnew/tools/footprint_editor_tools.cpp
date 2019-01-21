@@ -111,11 +111,14 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
 
         void PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
         {
-            auto pad = dynamic_cast<D_PAD*>( aItem );
-            m_frame->Export_Pad_Settings( pad );
+            D_PAD* pad = dynamic_cast<D_PAD*>( aItem );
 
-            static_cast<D_PAD*>( aItem )->SetLocalCoord();
-            aCommit.Add( aItem );
+            if( pad )
+            {
+                m_frame->Export_Pad_Settings( pad );
+                pad->SetLocalCoord();
+                aCommit.Add( aItem );
+            }
         }
     };
 
