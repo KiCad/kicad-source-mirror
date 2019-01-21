@@ -29,6 +29,7 @@
 
 #include <wx/dir.h>
 #include <wx/fs_zip.h>
+#include <wx/uri.h>
 #include <wx/wfstream.h>
 #include <wx/zipstrm.h>
 
@@ -83,10 +84,11 @@ void KICAD_MANAGER_FRAME::OnUnarchiveFiles( wxCommandEvent& event )
     wxFileSystem zipfilesys;
 
     zipfilesys.AddHandler( new wxZipFSHandler );
-    zipfilesys.ChangePathTo( zipfiledlg.GetPath() + wxT( "#zip:" ), true );
+    auto path = wxURI( zipfiledlg.GetPath() + wxT( "#zip:" ) ).BuildURI();
+    zipfilesys.ChangePathTo( path, true );
 
     wxFSFile* zipfile = NULL;
-    wxString  localfilename = zipfilesys.FindFirst( wxFileSelectorDefaultWildcardStr );
+    wxString  localfilename = zipfilesys.FindFirst( wxFileSelectorDefaultWildcardStr, wxFILE );
 
     while( !localfilename.IsEmpty() )
     {
