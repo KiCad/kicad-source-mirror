@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,28 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef PCBNEW_TOOLS_POLYGON_GENERATOR_UTILITY_H
+#define PCBNEW_TOOLS_POLYGON_GENERATOR_UTILITY_H
+
 #include <utility_program.h>
 
-#include "tools/drc_tool/drc_tool.h"
-#include "tools/pcb_parser/pcb_parser_tool.h"
-#include "tools/polygon_generator/polygon_generator.h"
+/// A tool to parse kicad PCBs from the command line
+extern UTILITY_PROGRAM polygon_generator_tool;
 
-/**
- * List of registered tools.
- *
- * This is a pretty rudimentary way to register, but for a simple purpose,
- * it's effective enough. When you have a new tool, add it to this list.
- */
-const static std::vector<UTILITY_PROGRAM*> known_tools = {
-    &drc_tool,
-    &pcb_parser_tool,
-    &polygon_generator_tool,
-};
-
-
-int main( int argc, char** argv )
-{
-    COMBINED_UTILITY c_util( known_tools );
-
-    return c_util.HandleCommandLine( argc, argv );
-}
+#endif //PCBNEW_TOOLS_POLYGON_GENERATOR_UTILITY_H

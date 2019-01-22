@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,24 +23,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <geometry/shape_poly_set.h>
-#include <geometry/shape_line_chain.h>
+#include "polygon_generator.h"
+
 #include <geometry/shape_file_io.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
 
 #include <io_mgr.h>
 #include <kicad_plugin.h>
 
 #include <class_board.h>
-#include <class_zone.h>
-#include <class_pad.h>
-#include <class_track.h>
 #include <class_drawsegment.h>
 #include <class_module.h>
+#include <class_pad.h>
+#include <class_track.h>
+#include <class_zone.h>
 
 BOARD* loadBoard( const std::string& filename )
 {
     PLUGIN::RELEASER pi( new PCB_IO );
-    BOARD* brd = nullptr;
+    BOARD*           brd = nullptr;
 
     try
     {
@@ -47,8 +50,7 @@ BOARD* loadBoard( const std::string& filename )
     }
     catch( const IO_ERROR& ioe )
     {
-        wxString msg = wxString::Format( _( "Error loading board.\n%s" ),
-                ioe.Problem() );
+        wxString msg = wxString::Format( _( "Error loading board.\n%s" ), ioe.Problem() );
 
         printf( "%s\n", (const char*) msg.mb_str() );
         return nullptr;
@@ -72,12 +74,12 @@ void process( const BOARD_CONNECTED_ITEM* item, int net )
 
     item->TransformShapeWithClearanceToPolygon( pset, 1, segsPerCircle, correctionFactor );
 
-    SHAPE_FILE_IO shapeIo;    // default = stdout
+    SHAPE_FILE_IO shapeIo; // default = stdout
     shapeIo.Write( &pset );
 }
 
 
-int main( int argc, char* argv[] )
+int polygon_gererator_main( int argc, char* argv[] )
 {
     if( argc < 2 )
     {
@@ -109,4 +111,15 @@ int main( int argc, char* argv[] )
 
         printf( "endnet\n" );
     }
+
+    return 0;
 }
+
+/*
+ * Define the tool interface
+ */
+UTILITY_PROGRAM polygon_generator_tool = {
+    "polygon_generator",
+    "Dump board geometry as a set of polygons",
+    polygon_gererator_main,
+};

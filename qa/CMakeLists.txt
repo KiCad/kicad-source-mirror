@@ -29,4 +29,3 @@ add_subdirectory( pcbnew_tools )
 
 # add_subdirectory( pcb_test_window )
 # add_subdirectory( polygon_triangulation )
-# add_subdirectory( polygon_generator )
