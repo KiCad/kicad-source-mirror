@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,18 +21,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "pcb_parser_tool.h"
 
-#include <kicad_plugin.h>
-#include <pcb_parser.h>
-#include <richio.h>
-#include <class_board_item.h>
+#include <cstdio>
+#include <string>
+
+#include <common.h>
 
 #include <wx/cmdline.h>
 
-#include <stdstream_line_reader.h>
+#include <class_board_item.h>
+#include <kicad_plugin.h>
+#include <pcb_parser.h>
+#include <richio.h>
+
+#include <wx/cmdline.h>
+
 #include <scoped_timer.h>
+#include <stdstream_line_reader.h>
 
 using PARSE_DURATION = std::chrono::microseconds;
+
 
 /**
  * Parse a PCB or footprint file from the given input stream
@@ -40,7 +49,7 @@ using PARSE_DURATION = std::chrono::microseconds;
  * @param aStream the input stream to read from
  * @return success, duration (in us)
  */
-bool parse(std::istream& aStream, bool aVerbose )
+bool parse( std::istream& aStream, bool aVerbose )
 {
     // Take input from stdin
     STDISTREAM_LINE_READER reader;
@@ -52,7 +61,7 @@ bool parse(std::istream& aStream, bool aVerbose )
 
     BOARD_ITEM* board = nullptr;
 
-    PARSE_DURATION duration {};
+    PARSE_DURATION duration{};
 
     try
     {
@@ -74,40 +83,35 @@ bool parse(std::istream& aStream, bool aVerbose )
 }
 
 
-static const wxCmdLineEntryDesc g_cmdLineDesc [] =
-{
-    { wxCMD_LINE_SWITCH, "h", "help",
-        _( "displays help on the command line parameters" ).mb_str(),
-        wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
-    { wxCMD_LINE_SWITCH, "v", "verbose",
-        _( "print parsing information").mb_str() },
-    { wxCMD_LINE_PARAM, nullptr, nullptr,
-        _( "input file" ).mb_str(),
-        wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
+static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
+    { wxCMD_LINE_SWITCH, "h", "help", _( "displays help on the command line parameters" ).mb_str(),
+            wxCMD_LINE_VAL_NONE, wxCMD_LINE_OPTION_HELP },
+    { wxCMD_LINE_SWITCH, "v", "verbose", _( "print parsing information" ).mb_str() },
+    { wxCMD_LINE_PARAM, nullptr, nullptr, _( "input file" ).mb_str(), wxCMD_LINE_VAL_STRING,
+            wxCMD_LINE_PARAM_OPTIONAL | wxCMD_LINE_PARAM_MULTIPLE },
     { wxCMD_LINE_NONE }
 };
 
 
-enum RET_CODES
+enum PARSER_RET_CODES
 {
-    OK = 0,
-    BAD_CMDLINE = 1,
-    PARSE_FAILED = 2,
+    PARSE_FAILED = RET_CODES::TOOL_SPECIFIC,
 };
 
 
-int main(int argc, char** argv)
+int pcb_parser_main_func( int argc, char** argv )
 {
 #ifdef __AFL_COMPILER
     __AFL_INIT();
 #endif
 
-    wxMessageOutput::Set(new wxMessageOutputStderr);
+    wxMessageOutput::Set( new wxMessageOutputStderr );
     wxCmdLineParser cl_parser( argc, argv );
     cl_parser.SetDesc( g_cmdLineDesc );
-    cl_parser.AddUsageText( _("This program parses PCB files, either from the "
-        "stdin stream or from the given filenames. This can be used either for "
-        "standalone testing of the parser or for fuzz testing." ) );
+    cl_parser.AddUsageText(
+            _( "This program parses PCB files, either from the "
+               "stdin stream or from the given filenames. This can be used either for "
+               "standalone testing of the parser or for fuzz testing." ) );
 
     int cmd_parsed_ok = cl_parser.Parse();
     if( cmd_parsed_ok != 0 )
@@ -119,11 +123,10 @@ int main(int argc, char** argv)
     const bool verbose = cl_parser.Found( "verbose" );
 
     bool ok = true;
-    PARSE_DURATION duration;
 
     const auto file_count = cl_parser.GetParamCount();
 
-    if ( file_count == 0 )
+    if( file_count == 0 )
     {
         // Parse the file provided on stdin - used by AFL to drive the
         // program
@@ -152,7 +155,17 @@ int main(int argc, char** argv)
     }
 
     if( !ok )
-        return RET_CODES::PARSE_FAILED;
+        return PARSER_RET_CODES::PARSE_FAILED;
 
     return RET_CODES::OK;
 }
+
+
+/*
+ * Define the tool interface
+ */
+UTILITY_PROGRAM pcb_parser_tool = {
+    "pcb_parser",
+    "Parse a KiCad PCB file",
+    pcb_parser_main_func,
+};
