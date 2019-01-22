@@ -430,8 +430,7 @@ wxString PCB_BASE_EDIT_FRAME::CreateNewLibrary(const wxString& aLibName )
         fn = initialPath;
 
         if( !LibraryFileBrowser( false, fn,
-                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension,
-                                 true ) )
+                                 KiCadFootprintLibPathWildcard(), KiCadFootprintLibPathExtension) )
         {
             return wxEmptyString;
         }

@@ -1499,10 +1499,10 @@ bool EDA_DRAW_FRAME::LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
     aFilename.SetExt( ext );
 
 #ifndef __WXMAC__
-    if( isDirectory )
+    if( isDirectory && doOpen )
     {
         wxDirDialog dlg( this, prompt, Prj().GetProjectPath(),
-                         doOpen ? wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST : wxDD_DEFAULT_STYLE );
+                wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
         if( dlg.ShowModal() == wxID_CANCEL )
             return false;

@@ -202,7 +202,8 @@ protected:
      * @return true for OK; false for Cancel.
      */
     bool LibraryFileBrowser( bool doOpen, wxFileName& aFilename,
-                             const wxString& wildcard, const wxString& ext, bool isDirectory );
+                             const wxString& wildcard, const wxString& ext,
+                             bool isDirectory = false );
 
     /**
      * Handle the common part of GeneralControl dedicated to global
