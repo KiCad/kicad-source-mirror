@@ -316,24 +316,20 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     // Init arc centre:
     VECTOR2D center( mapX( aData.cx ), mapY( aData.cy ) );
 
+    // aData.anglex is in degrees.
+    double  startangle = aData.angle1;
+    double  endangle = aData.angle2;
+
     // Init arc start point
-    double arcStartx = aData.radius;
-    double arcStarty = 0;
-
-    // aData.anglex is in degrees. Our internal units are 0.1 degree
-    // so convert DXF angles (in degrees) to our units
-    #define DXF2ANGLEUI 10
-    double  startangle = aData.angle1 * DXF2ANGLEUI;
-    double  endangle = aData.angle2 * DXF2ANGLEUI;
-
-    RotatePoint( &arcStartx, &arcStarty, -startangle );
-    VECTOR2D arcStart( mapX( arcStartx + aData.cx ), mapY( arcStarty + aData.cy ) );
+    VECTOR2D startPoint( aData.radius, 0.0 );
+    startPoint = startPoint.Rotate( startangle * M_PI / 180.0 );
+    VECTOR2D arcStart( mapX( startPoint.x + aData.cx ), mapY( startPoint.y + aData.cy ) );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)
     double angle = -( endangle - startangle );
 
     if( angle > 0.0 )
-        angle -= 3600.0;
+        angle -= 360.0;
 
     double lineWidth = mapWidth( attributes.getWidth() );
     m_internalImporter.AddArc( center, arcStart, angle, lineWidth );
@@ -447,13 +443,17 @@ void DXF_IMPORT_PLUGIN::addText( const DL_TextData& aData )
     }
 #endif
 
-    double angle = aData.angle * 10;
-    double angleInRads = angle / 10.0 * M_PI / 180.0;
+    // dxf_lib imports text angle in radians (although there are no comment about that.
+    // So, for the moment, convert this angle to degrees
+    double angle_degree = aData.angle * 180 / M_PI;
+    // We also need the angle in radians. so convert angle_degree to radians
+    // regardless the aData.angle unit
+    double angleInRads = angle_degree * M_PI / 180.0;
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
-    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, textThickness, angle,
-            hJustify, vJustify );
+    m_internalImporter.AddText( refPoint, text, textHeight, charWidth, textThickness,
+                                angle_degree, hJustify, vJustify );
 
     // Calculate the boundary box and update the image limits:
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
@@ -600,13 +600,17 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     }
 #endif
 
-    double angle = aData.angle * 10;
-    double angleInRads = angle / 10.0 * M_PI / 180.0;
+    // dxf_lib imports text angle in radians (although there are no comment about that.
+    // So, for the moment, convert this angle to degrees
+    double angle_degree = aData.angle * 180/M_PI;
+    // We also need the angle in radians. so convert angle_degree to radians
+    // regardless the aData.angle unit
+    double angleInRads = angle_degree * M_PI / 180.0;
     double cosine = cos(angleInRads);
     double sine = sin(angleInRads);
 
     m_internalImporter.AddText( textpos, text, textHeight, charWidth,
-                                textThickness, angle, hJustify, vJustify );
+                                textThickness, angle_degree, hJustify, vJustify );
 
     bottomLeft.x = bottomLeft.x * cosine - bottomLeft.y * sine;
     bottomLeft.y = bottomLeft.x * sine + bottomLeft.y * cosine;
@@ -924,7 +928,7 @@ void DXF_IMPORT_PLUGIN::insertArc( const VECTOR2D& aSegStart, const VECTOR2D& aS
     double cy = h * sin( offAng ) + ym;
     VECTOR2D center( SCALE_FACTOR( cx ), SCALE_FACTOR( -cy ) );
     VECTOR2D arc_start;
-    double angle = RAD2DECIDEG( ang );
+    double angle = RAD2DEG( ang );
 
     if( ang < 0.0 )
     {

@@ -62,7 +62,8 @@ public:
 
     void AddCircle( const VECTOR2D& aOrigin, double aRadius, double aWidth ) override;
 
-    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) override;
+    void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+                 double aWidth ) override;
 
     void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) override;
 

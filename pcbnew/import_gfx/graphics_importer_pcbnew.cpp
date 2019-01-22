@@ -90,7 +90,8 @@ void GRAPHICS_IMPORTER_PCBNEW::AddCircle( const VECTOR2D& aCenter, double aRadiu
 }
 
 
-void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth )
+void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart,
+                                       double aAngle, double aWidth )
 {
     unique_ptr<DRAWSEGMENT> arc( createDrawing() );
     arc->SetShape( S_ARC );
@@ -98,7 +99,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddArc( const VECTOR2D& aCenter, const VECTOR2D& 
     arc->SetWidth( MapLineWidth( aWidth ) );
     arc->SetCenter( MapCoordinate( aCenter) );
     arc->SetArcStart( MapCoordinate( aStart ) );
-    arc->SetAngle( aAngle );
+    arc->SetAngle( aAngle * 10.0 );     // Pcbnew uses the decidegree
 
     if( arc->Type() == PCB_MODULE_EDGE_T )
         static_cast<EDGE_MODULE*>( arc.get() )->SetLocalCoord();
@@ -138,7 +139,7 @@ void GRAPHICS_IMPORTER_PCBNEW::AddText( const VECTOR2D& aOrigin, const wxString&
     boardItem->SetLayer( GetLayer() );
     textItem->SetThickness( MapLineWidth( aThickness ) );
     textItem->SetTextPos( MapCoordinate( aOrigin ) );
-    textItem->SetTextAngle( aOrientation );
+    textItem->SetTextAngle( aOrientation * 10.0 );      // Pcbnew uses the decidegree
     textItem->SetTextWidth( aWidth * ImportScalingFactor() );
     textItem->SetTextHeight( aHeight * ImportScalingFactor() );
     textItem->SetVertJustify( aVJustify );

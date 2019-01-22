@@ -202,22 +202,20 @@ public:
      * @param aCenter is the arc center point expressed in mm.
      * @param aStart is the arc arm end point expressed in mm.
      * Its length is the arc radius.
-     * @param aAngle is the arc angle expressed in decidegrees.
+     * @param aAngle is the arc angle expressed in degrees.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
     virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) = 0;
 
     virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) = 0;
 
-    //virtual void AddArc( const VECTOR2D& aOrigin, double aStartAngle, double aEndAngle ) = 0;
-    //
     /**
      * @brief Creates an object representing a text.
      * @param aOrigin is the text position.
      * @param aText is the displayed text.
      * @param aHeight is the text height expressed in mm.
      * @param aWidth is the text width expressed in mm.
-     * @param aOrientation is the text orientation angle expressed in decidegrees.
+     * @param aOrientation is the text orientation angle expressed in degrees.
      * @param aHJustify is the text horizontal justification.
      * @param aVJustify is the text vertical justification.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
