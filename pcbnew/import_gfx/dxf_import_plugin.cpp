@@ -321,12 +321,12 @@ void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
     double arcStarty = 0;
 
     // aData.anglex is in degrees. Our internal units are 0.1 degree
-    // so convert DXF angles to our units
+    // so convert DXF angles (in degrees) to our units
     #define DXF2ANGLEUI 10
     double  startangle = aData.angle1 * DXF2ANGLEUI;
     double  endangle = aData.angle2 * DXF2ANGLEUI;
 
-    RotatePoint( &arcStartx, &arcStarty, -RAD2DECIDEG( startangle ) );
+    RotatePoint( &arcStartx, &arcStarty, -startangle );
     VECTOR2D arcStart( mapX( arcStartx + aData.cx ), mapY( arcStarty + aData.cy ) );
 
     // calculate arc angle (arcs are CCW, and should be < 0 in Pcbnew)

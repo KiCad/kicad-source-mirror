@@ -476,8 +476,11 @@ bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
 
 void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
 {
-    m_rbInteractivePlacement->SetValue( m_placementInteractive );
-    m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
+    if( m_rbInteractivePlacement->GetValue() != m_placementInteractive )
+        m_rbInteractivePlacement->SetValue( m_placementInteractive );
+
+    if( m_rbAbsolutePlacement->GetValue() == m_placementInteractive )
+        m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
 
     m_DxfPcbPositionUnits->Enable( not m_placementInteractive );
     m_DxfPcbXCoord->Enable( not m_placementInteractive );
