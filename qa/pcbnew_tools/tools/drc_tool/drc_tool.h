@@ -21,26 +21,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef PCBNEW_TOOLS_DRC_TOOL_H
+#define PCBNEW_TOOLS_DRC_TOOL_H
+
 #include <utility_program.h>
 
-#include "tools/coroutines/coroutine_tools.h"
-#include "tools/io_benchmark/io_benchmark.h"
+/// A tool to run DRC tools on KiCad PCBs from the command line
+extern UTILITY_PROGRAM drc_tool;
 
-/**
- * List of registered tools.
- *
- * This is a pretty rudimentary way to register, but for a simple purpose,
- * it's effective enough. When you have a new tool, add it to this list.
- */
-const static std::vector<UTILITY_PROGRAM*> known_tools = {
-    &coroutine_tool,
-    &io_benchmark_tool,
-};
-
-
-int main( int argc, char** argv )
-{
-    COMBINED_UTILITY c_util( known_tools );
-
-    return c_util.HandleCommandLine( argc, argv );
-}
+#endif //PCBNEW_TOOLS_DRC_TOOL_H

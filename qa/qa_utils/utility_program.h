@@ -25,6 +25,9 @@
 #define UTILITY_PROGRAM_H
 
 #include <functional>
+#include <iostream>
+#include <string>
+#include <vector>
 
 /**
  * Return codes for tools
@@ -72,6 +75,56 @@ struct UTILITY_PROGRAM
 
     /// The function to call to run the program
     FUNC m_func;
+};
+
+
+/**
+ * Class that handles delegation of command lines to one of a
+ * number of "sub-utilities"
+ */
+class COMBINED_UTILITY
+{
+public:
+    using UTIL_LIST = std::vector<UTILITY_PROGRAM*>;
+
+    COMBINED_UTILITY( const UTIL_LIST& aSubUtils );
+
+    /**
+     * Take in a a command line and:
+     *
+     * * Handle "top level" commands like -h and -l
+     * * Delegate to sub-utilities
+     * * Report malformed command lines
+     *
+     * @param  argc argument count (directly from the main() parameter )
+     * @param  argv argument values (directly from the main() parameter )
+     * @return      return code
+     */
+    int HandleCommandLine( int argc, char** argv ) const;
+
+private:
+    /**
+     * Format the list of known sub-utils.
+     * @param os the stream to format on
+     */
+    void showSubUtilityList( std::ostream& os ) const;
+
+    /**
+     * Find a sub-utility with the given ID/name.
+     * @param  aName the desired sub-utility name (e.g. "drc")
+     * @return       pointer to the function that runs that sub-utility
+     */
+    UTILITY_PROGRAM::FUNC* findSubUtility( const std::string& aName ) const;
+
+    /**
+     * Print the command line usage of this program
+     * @param name the name the program was run with
+     * @param os   stream to print to
+     */
+    void printUsage( char* name, std::ostream& os ) const;
+
+    /// List of known sub-utils
+    const UTIL_LIST& m_subUtils;
 };
 
 #endif // UTILITY_PROGRAM_H

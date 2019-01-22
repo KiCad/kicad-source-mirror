@@ -23,8 +23,7 @@
 
 #include <utility_program.h>
 
-#include "tools/coroutines/coroutine_tools.h"
-#include "tools/io_benchmark/io_benchmark.h"
+#include "tools/drc_tool/drc_tool.h"
 
 /**
  * List of registered tools.
@@ -33,8 +32,7 @@
  * it's effective enough. When you have a new tool, add it to this list.
  */
 const static std::vector<UTILITY_PROGRAM*> known_tools = {
-    &coroutine_tool,
-    &io_benchmark_tool,
+    &drc_tool,
 };
 
 
