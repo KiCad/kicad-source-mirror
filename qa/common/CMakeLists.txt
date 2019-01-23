@@ -37,6 +37,7 @@ set( common_srcs
     ../../common/observable.cpp
 
     test_color4d.cpp
+    test_coroutine.cpp
     test_format_units.cpp
     test_hotkey_store.cpp
     test_title_block.cpp

@@ -35,6 +35,13 @@
 
 typedef COROUTINE<int, int> MyCoroutine;
 
+/**
+ * A simple harness that counts to a preset value in a couroutine, yielding
+ * each value.
+ *
+ * This is a user-facing version of the "Increment" unit test in the "Coroutine"
+ * suite, in qa_common.
+ */
 class CoroutineExample
 {
 public:
