@@ -109,7 +109,7 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
             return std::unique_ptr<BOARD_ITEM>( pad );
         }
 
-        void PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
+        bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit ) override
         {
             D_PAD* pad = dynamic_cast<D_PAD*>( aItem );
 
@@ -118,7 +118,10 @@ int MODULE_EDITOR_TOOLS::PlacePad( const TOOL_EVENT& aEvent )
                 m_frame->Export_Pad_Settings( pad );
                 pad->SetLocalCoord();
                 aCommit.Add( aItem );
+                return true;
             }
+
+            return false;
         }
     };
 

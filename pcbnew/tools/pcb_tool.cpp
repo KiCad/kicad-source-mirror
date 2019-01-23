@@ -132,10 +132,16 @@ void PCB_TOOL::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer,
             }
             else
             {
+                auto oldFlags = newItem->GetFlags();
                 newItem->ClearFlags();
-                preview.Remove( newItem.get() );
 
-                aPlacer->PlaceItem( newItem.get(), commit );
+                if( !aPlacer->PlaceItem( newItem.get(), commit ) )
+                {
+                    newItem->SetFlags( oldFlags );
+                    continue;
+                }
+
+                preview.Remove( newItem.get() );
 
                 if( newItem->Type() == PCB_MODULE_T )
                 {
@@ -262,7 +268,8 @@ void INTERACTIVE_PLACER_BASE::SnapItem( BOARD_ITEM *aItem )
     // Base implementation performs no snapping
 }
 
-void INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit )
+bool INTERACTIVE_PLACER_BASE::PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit )
 {
     aCommit.Add( aItem );
+    return true;
 }

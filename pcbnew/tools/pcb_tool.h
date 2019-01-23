@@ -53,7 +53,7 @@ struct INTERACTIVE_PLACER_BASE
 {
     virtual std::unique_ptr<BOARD_ITEM> CreateItem() = 0;
     virtual void SnapItem( BOARD_ITEM *aItem );
-    virtual void PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit );
+    virtual bool PlaceItem( BOARD_ITEM *aItem, BOARD_COMMIT& aCommit );
 
     PCB_EDIT_FRAME* m_frame;
     BOARD* m_board;

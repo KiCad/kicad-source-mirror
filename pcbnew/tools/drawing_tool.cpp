@@ -1504,19 +1504,85 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
         TRACK* findTrack( VIA* aVia )
         {
             const LSET lset = aVia->GetLayerSet();
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+            BOX2I bbox = aVia->GetBoundingBox();
+            auto view = m_frame->GetGalCanvas()->GetView();
 
-            for( TRACK* track : m_board->Tracks() )
+            view->Query( bbox, items );
+
+            for( auto it : items )
             {
-                if( !(track->GetLayerSet() & lset ).any() )
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+                if( !(item->GetLayerSet() & lset ).any() )
                     continue;
 
-                if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
-                                    ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
-                    return track;
+                if( auto track = dyn_cast<TRACK*>( item ) )
+                {
+                    if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
+                                        ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
+                        return track;
+                }
             }
 
             return nullptr;
         }
+
+
+        bool hasDRCViolation( VIA* aVia )
+        {
+            const LSET lset = aVia->GetLayerSet();
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
+            int net = 0;
+            int clearance = 0;
+            BOX2I bbox = aVia->GetBoundingBox();
+            auto view = m_frame->GetGalCanvas()->GetView();
+
+            view->Query( bbox, items );
+
+            for( auto it : items )
+            {
+                BOARD_ITEM* item = static_cast<BOARD_ITEM*>( it.first );
+
+                if( !(item->GetLayerSet() & lset ).any() )
+                    continue;
+
+                if( auto track = dyn_cast<TRACK*>( item ) )
+                {
+                    int max_clearance = std::max( clearance, track->GetClearance() );
+
+                    if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
+                            ( track->GetWidth() + aVia->GetWidth() ) / 2  + max_clearance ) )
+                    {
+                        if( net && track->GetNetCode() != net )
+                            return true;
+
+                        net = track->GetNetCode();
+                        clearance = track->GetClearance();
+                    }
+                }
+
+                if( auto mod = dyn_cast<MODULE*>( item ) )
+                {
+                    for( auto pad : mod->Pads() )
+                    {
+                        int max_clearance = std::max( clearance, pad->GetClearance() );
+
+                        if( pad->HitTest( aVia->GetBoundingBox(), false, max_clearance ) )
+                        {
+                            if( net && pad->GetNetCode() != net )
+                                return true;
+
+                            net = pad->GetNetCode();
+                            clearance = pad->GetClearance();
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
 
         int findStitchedZoneNet( VIA* aVia )
         {
@@ -1572,8 +1638,6 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             // That's not ideal, and is in fact probably worse than forcing snap in
             // this situation.
 
-//          bool do_snap = ( m_frame->Settings().m_magneticTracks == CAPTURE_CURSOR_IN_TRACK_TOOL
-//                || m_frame->Settings().m_magneticTracks == CAPTURE_ALWAYS );
             m_gridHelper.SetSnap( !( m_modifiers & MD_SHIFT ) );
             auto    via = static_cast<VIA*>( aItem );
             wxPoint pos = via->GetPosition();
@@ -1588,11 +1652,14 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             }
         }
 
-        void PlaceItem( BOARD_ITEM* aItem, BOARD_COMMIT& aCommit ) override
+        bool PlaceItem( BOARD_ITEM* aItem, BOARD_COMMIT& aCommit ) override
         {
             auto    via = static_cast<VIA*>( aItem );
             int     newNet;
             TRACK*  track = findTrack( via );
+
+            if( hasDRCViolation( via ) )
+                return false;
 
             if( track )
             {
@@ -1611,6 +1678,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 via->SetNetCode( newNet );
 
             aCommit.Add( aItem );
+            return true;
         }
 
         std::unique_ptr<BOARD_ITEM> CreateItem() override
