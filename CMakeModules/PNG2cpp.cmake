@@ -47,7 +47,7 @@ set( output_begin "
  * PNG2cpp CMake script, using a *.png file as input.
  */
 
-#include <bitmaps.h>
+#include <bitmaps_png/bitmaps_list.h>
 
 static const unsigned char png[] = {"
 )

@@ -93,7 +93,11 @@ add_library( legacy_wx STATIC ${LEGACY_WX_SRCS} )
 target_include_directories( legacy_wx PUBLIC ../include/legacy_wx )
 target_include_directories( legacy_gal PUBLIC ../include/legacy_gal )
 
+target_link_libraries( legacy_wx PRIVATE bitmaps )
+target_link_libraries( legacy_gal PRIVATE bitmaps )
+
 target_link_libraries( gal
+    bitmaps
     ${GLEW_LIBRARIES}
     ${CAIRO_LIBRARIES}
     ${PIXMAN_LIBRARIES}
@@ -603,7 +607,7 @@ add_dependencies( common page_layout_lexer_source_files )
 add_executable( dsntest EXCLUDE_FROM_ALL dsnlexer.cpp )
 target_link_libraries( dsntest common ${wxWidgets_LIBRARIES} rt )
 
-target_link_libraries( pcbcommon )
+target_link_libraries( pcbcommon PUBLIC bitmaps )
 
 
 # _kiway.so
@@ -646,7 +650,6 @@ if( false ) # future
 
     swig_link_libraries( kiway
         common
-        bitmaps
         ${wxWidgets_LIBRARIES}
         ${PYTHON_LIBRARIES}
         )

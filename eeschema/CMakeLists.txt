@@ -321,19 +321,15 @@ target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
-    bitmaps
     gal
     legacy_gal
     common
-    bitmaps
     gal
     legacy_gal
     common
-    bitmaps
     gal
     legacy_gal
     common
-    bitmaps
     gal
     legacy_gal
     ${wxWidgets_LIBRARIES}
@@ -346,22 +342,18 @@ add_library( eeschema_kiface SHARED
     )
 target_link_libraries( eeschema_kiface
     common
-    bitmaps
     polygon
     gal
     legacy_gal
     common
-    bitmaps
     polygon
     gal
     legacy_gal
     common
-    bitmaps
     polygon
     gal
     legacy_gal
     common
-    bitmaps
     polygon
     gal
     legacy_gal

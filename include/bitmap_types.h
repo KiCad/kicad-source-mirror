@@ -38,23 +38,7 @@ class wxAuiToolBar;
 #include <config.h>
 #include <wx/gdicmn.h>  // wxBitmapType
 
-
-/// PNG memory record (file in memory).
-struct BITMAP_OPAQUE
-{
-    const unsigned char* png;
-    int         byteCount;
-    const char* name;       // for debug, or future lazy dynamic linking
-};
-
-// declared as single element _array_, so its name assigns to pointer
-#define EXTERN_BITMAP( x ) extern const BITMAP_OPAQUE x[1];
-
-
-/// a BITMAP_DEF is really a const pointer to an opaque
-/// structure.  So you should never need to use 'const' with it.
-typedef const BITMAP_OPAQUE *BITMAP_DEF;
-
+#include <bitmaps_png/bitmap_def.h>
 
 /**
  * Construct a wxBitmap from a memory record, held in a BITMAP_DEF.

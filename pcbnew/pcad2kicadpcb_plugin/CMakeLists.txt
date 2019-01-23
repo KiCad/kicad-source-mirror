@@ -29,4 +29,5 @@ set( PCAD2PCBNEW_SRCS
     )
 
 add_library( pcad2kicadpcb STATIC ${PCAD2PCBNEW_SRCS} )
-add_dependencies( pcad2kicadpcb pcbcommon )
+
+target_link_libraries( pcad2kicadpcb pcbcommon )

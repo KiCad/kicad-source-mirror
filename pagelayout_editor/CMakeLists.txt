@@ -81,19 +81,15 @@ target_link_libraries( pl_editor
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
-    bitmaps
     gal
     legacy_wx
     common
-    bitmaps
     gal
     legacy_wx
     common
-    bitmaps
     gal
     legacy_wx
     common
-    bitmaps
     gal
     legacy_wx
     ${wxWidgets_LIBRARIES}
@@ -114,17 +110,14 @@ add_library( pl_editor_kiface MODULE
 target_link_libraries( pl_editor_kiface
     common
     polygon
-    bitmaps
     gal
     legacy_wx
     common
     polygon
-    bitmaps
     gal
     legacy_wx
     common
     polygon
-    bitmaps
     gal
     legacy_wx
     ${wxWidgets_LIBRARIES}

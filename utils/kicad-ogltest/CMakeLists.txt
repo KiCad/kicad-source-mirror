@@ -23,7 +23,6 @@ add_executable( kicad-ogltest WIN32
 target_link_libraries( kicad-ogltest
     gal
     common
-    bitmaps
     polygon
     ${wxWidgets_LIBRARIES} )
 

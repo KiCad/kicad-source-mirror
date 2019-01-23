@@ -49,7 +49,6 @@ target_link_libraries( qa_common_tools
     common
     legacy_gal
     polygon
-    bitmaps
     gal
     qa_utils
     ${wxWidgets_LIBRARIES}

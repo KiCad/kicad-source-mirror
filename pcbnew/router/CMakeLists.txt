@@ -46,3 +46,7 @@ set( PCBNEW_PNS_SRCS
 )
 
 add_library( pnsrouter STATIC ${PCBNEW_PNS_SRCS} )
+
+target_link_libraries( pnsrouter PRIVATE
+    common
+)

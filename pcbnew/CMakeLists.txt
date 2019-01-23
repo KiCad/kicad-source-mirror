@@ -626,7 +626,6 @@ target_link_libraries( pcbnew
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
     common
-    bitmaps
     gal
     ${wxWidgets_LIBRARIES}
     )
@@ -643,6 +642,12 @@ add_library( pcbnew_kiface_objects OBJECT
     ${PCBNEW_COMMON_SRCS}
     ${PCBNEW_SCRIPTING_SRCS}
     )
+
+# CMake <3.9 can't link anything to object libraries,
+# but we only need include directories, as we will link the kiface MODULE
+target_include_directories( pcbnew_kiface_objects PRIVATE
+   $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
+)
 
 add_library( pcbnew_kiface MODULE $<TARGET_OBJECTS:pcbnew_kiface_objects> )
 
@@ -675,7 +680,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     legacy_wx
     common
     polygon
-    bitmaps
     gal
     lib_dxf
     idf3

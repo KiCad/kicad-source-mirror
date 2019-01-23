@@ -49,12 +49,10 @@ target_link_libraries( qa_pcbnew_tools
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    bitmaps
     common
     pcbcommon
     legacy_wx
     polygon
-    bitmaps
     gal
     qa_utils
     lib_dxf

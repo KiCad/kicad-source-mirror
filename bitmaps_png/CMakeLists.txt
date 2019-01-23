@@ -55,14 +55,6 @@ option( MAINTAIN_PNGS
 # Used Only to maintain PNG files (and therefore to recreate .cpp files)
 # The png2cpp creates files with native End of Line format.
 
-include_directories(BEFORE ${INC_BEFORE})
-include_directories(
-    ${INC_AFTER}
-    )
-
-
-
-
 # Plan for three sizes of bitmaps:
 # SMALL - for menus         - 16 x 16
 # MID   - for toolbars      - 26 x 26
@@ -794,3 +786,7 @@ endforeach()
 
 #add_library( bitmaps SHARED ${CPP_LIST} )
 add_library( bitmaps STATIC ${CPP_LIST} )
+
+target_include_directories( bitmaps PUBLIC
+    include
+)

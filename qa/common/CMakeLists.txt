@@ -63,7 +63,6 @@ set( common_libs
     common
     legacy_gal
     polygon
-    bitmaps
     gal
     qa_utils
     unit_test_utils
