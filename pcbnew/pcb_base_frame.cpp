@@ -162,7 +162,14 @@ bool PCB_BASE_FRAME::Update3DView( const wxString* aTitle )
     if( aTitle )
         draw3DFrame->SetTitle( *aTitle );
 
-    draw3DFrame->NewDisplay( true );
+    // The 3D view update can be time consumming to rebuild a board 3D view.
+    // So do not use a immediate update in the board editor
+    bool immediate_update = true;
+
+    if( IsType( FRAME_PCB ) )
+        immediate_update = false;
+
+    draw3DFrame->NewDisplay( immediate_update );
 
     return true;
 }
