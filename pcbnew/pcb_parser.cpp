@@ -1111,6 +1111,10 @@ void PCB_PARSER::parseSetup()
     BOARD_DESIGN_SETTINGS designSettings = m_board->GetDesignSettings();
     ZONE_SETTINGS zoneSettings = m_board->GetZoneSettings();
 
+    // Missing soldermask min width value means that the user has set the value to 0 and
+    // not the default value (0.25mm)
+    designSettings.m_SolderMaskMinWidth = 0;
+
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
         if( token != T_LEFT )
