@@ -774,7 +774,11 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
                           int aMinThickness )
 {
     PCB_LAYER_ID    layer = aLayerMask[B_Mask] ? B_Mask : F_Mask;
-    int         inflate = aMinThickness/2;
+
+    // We remove 1nm as we expand both sides of the shapes, so allowing for
+    // a strictly greater than or equal comparison in the shape separation (boolean add)
+    // means that we will end up with separate shapes that then are shrunk
+    int             inflate = aMinThickness/2 - 1;
 
     BRDITEMS_PLOTTER itemplotter( aPlotter, aBoard, aPlotOpt );
     itemplotter.SetLayerSet( aLayerMask );
