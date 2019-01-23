@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2011 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@
  * \li \c \$NET: \c "netname" Highlight a specified net
  * \li \c \$CLEAR: \c "HIGHLIGHTED" Clear components highlight
  * <p>
+ * They are a keyword followed by a quoted string.
  * @param cmdline = received command from Pcbnew
  */
 void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
@@ -152,23 +153,25 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
 std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
 {
+    // This is a keyword followed by a quoted string.
+
     // Cross probing to Pcbnew if a pin or a component is found
     switch( aItem->Type() )
     {
     case SCH_FIELD_T:
     case LIB_FIELD_T:
         if( aPart )
-            return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+            return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
         break;
 
     case SCH_COMPONENT_T:
         aPart = (SCH_COMPONENT*) aItem;
-        return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+        return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
 
     case SCH_SHEET_T:
         {
         SCH_SHEET* sheet = (SCH_SHEET*)aItem;
-        return StrPrintf( "$SHEET: %8.8lX", (unsigned long) sheet->GetTimeStamp() );
+        return StrPrintf( "$SHEET: \"%8.8lX\"", (unsigned long) sheet->GetTimeStamp() );
         }
 
     case LIB_PIN_T:
@@ -180,12 +183,12 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
 
             if( !pin->GetNumber().IsEmpty() )
             {
-                return StrPrintf( "$PIN: %s $PART: %s", TO_UTF8( pin->GetNumber() ),
+                return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"", TO_UTF8( pin->GetNumber() ),
                          TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
             }
             else
             {
-                return StrPrintf( "$PART: %s", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+                return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
             }
         }
         break;
@@ -224,7 +227,9 @@ void SCH_EDIT_FRAME::SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT
 
 void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 {
-    std::string packet = StrPrintf( "$NET: %s", TO_UTF8( aNetName ) );
+    // The command is a keyword followed by a quoted string.
+
+    std::string packet = StrPrintf( "$NET: \"%s\"", TO_UTF8( aNetName ) );
 
     if( packet.size() )
     {
