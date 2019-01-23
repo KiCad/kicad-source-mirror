@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2017 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -1431,7 +1431,6 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
                 polyGeomMgr.SetFinished();
                 polyGeomMgr.Reset();
 
-                // ready to start again
                 started = false;
                 m_controls->SetAutoPan( false );
                 m_controls->CaptureCursor( false );

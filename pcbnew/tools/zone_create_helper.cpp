@@ -1,6 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +37,7 @@
 
 #include <zone_filler.h>
 
-ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, const PARAMS& aParams ):
+ZONE_CREATE_HELPER::ZONE_CREATE_HELPER( DRAWING_TOOL& aTool, PARAMS& aParams ):
         m_tool( aTool ),
         m_params( aParams ),
         m_parentView( *aTool.getView() )
@@ -119,6 +120,10 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     BOARD* board = m_tool.getModel<BOARD>();
     std::vector<ZONE_CONTAINER*> newZones;
 
+    // Clear the selection before removing the old zone
+    auto toolMgr = m_tool.GetManager();
+    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+
     SHAPE_POLY_SET originalOutline( *aZone.Outline() );
     originalOutline.BooleanSubtract( *aCutout.Outline(), SHAPE_POLY_SET::PM_FAST );
 
@@ -146,10 +151,10 @@ void ZONE_CREATE_HELPER::performZoneCutout( ZONE_CONTAINER& aZone, ZONE_CONTAINE
     ZONE_FILLER filler( board );
     filler.Fill( newZones );
 
-    auto toolMgr = m_tool.GetManager();
-
-    toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+    // Select the new zone and set it as the source for the next cutout
     toolMgr->RunAction( PCB_ACTIONS::selectItem, true, newZones[0] );
+    m_params.m_sourceZone = newZones[0];
+
 }
 
 
@@ -295,6 +300,7 @@ void ZONE_CREATE_HELPER::OnComplete( const POLYGON_GEOM_MANAGER& aMgr )
 
         // hand the zone over to the committer
         commitZone( std::move( m_zone ) );
+        m_zone = nullptr;
     }
 
     m_parentView.SetVisible( &m_previewItem, false );
