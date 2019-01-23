@@ -327,6 +327,18 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
         selectIfValid( GetNextItem( *m_tree_ctrl, sel ) );
         break;
 
+    case WXK_ADD:
+        if( type == LIB_TREE_NODE::LIB )
+            m_tree_ctrl->Expand( sel );
+
+        break;
+
+    case WXK_SUBTRACT:
+        if( type == LIB_TREE_NODE::LIB )
+            m_tree_ctrl->Collapse( sel );
+
+        break;
+
     case WXK_RETURN:
         if( type == LIB_TREE_NODE::LIB )
         {
