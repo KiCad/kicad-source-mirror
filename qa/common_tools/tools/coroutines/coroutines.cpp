@@ -114,7 +114,7 @@ static int coroutine_main_func( int argc, char** argv )
     if( cmd_parsed_ok != 0 )
     {
         // Help and invalid input both stop here
-        return ( cmd_parsed_ok == -1 ) ? RET_CODES::OK : RET_CODES::BAD_CMDLINE;
+        return ( cmd_parsed_ok == -1 ) ? KI_TEST::RET_CODES::OK : KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
     long count = 5;
@@ -124,14 +124,14 @@ static int coroutine_main_func( int argc, char** argv )
 
     obj.Run();
 
-    return RET_CODES::OK;
+    return KI_TEST::RET_CODES::OK;
 }
 
 
 /*
  * Define the tool interface
  */
-UTILITY_PROGRAM coroutine_tool = {
+KI_TEST::UTILITY_PROGRAM coroutine_tool = {
     "coroutine",
     "Test a simple coroutine",
     coroutine_main_func,

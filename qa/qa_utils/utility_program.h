@@ -29,6 +29,9 @@
 #include <string>
 #include <vector>
 
+namespace KI_TEST
+{
+
 /**
  * Return codes for tools
  */
@@ -126,5 +129,7 @@ private:
     /// List of known sub-utils
     const UTIL_LIST& m_subUtils;
 };
+
+} // namespace KI_TEST
 
 #endif // UTILITY_PROGRAM_H

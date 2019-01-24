@@ -32,7 +32,7 @@
  * This is a pretty rudimentary way to register, but for a simple purpose,
  * it's effective enough. When you have a new tool, add it to this list.
  */
-const static std::vector<UTILITY_PROGRAM*> known_tools = {
+const static std::vector<KI_TEST::UTILITY_PROGRAM*> known_tools = {
     &coroutine_tool,
     &io_benchmark_tool,
 };
@@ -40,7 +40,7 @@ const static std::vector<UTILITY_PROGRAM*> known_tools = {
 
 int main( int argc, char** argv )
 {
-    COMBINED_UTILITY c_util( known_tools );
+    KI_TEST::COMBINED_UTILITY c_util( known_tools );
 
     return c_util.HandleCommandLine( argc, argv );
 }

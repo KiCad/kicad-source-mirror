@@ -388,7 +388,7 @@ int io_benchmark_func( int argc, char* argv[] )
         os << "Usage: " << argv[0] << " <FILE> <REPS> [" << getBenchFlags() << "]\n\n";
         os << "Benchmarks:\n";
         os << getBenchDescriptions();
-        return RET_CODES::BAD_CMDLINE;
+        return KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
     wxFileName inFile( argv[1] );
@@ -419,11 +419,11 @@ int io_benchmark_func( int argc, char* argv[] )
             << std::endl;;
     }
 
-    return RET_CODES::OK;
+    return KI_TEST::RET_CODES::OK;
 }
 
 
-UTILITY_PROGRAM io_benchmark_tool = {
+KI_TEST::UTILITY_PROGRAM io_benchmark_tool = {
     "io_benchmark",
     "Benchmark various kinds of IO methods",
     io_benchmark_func,

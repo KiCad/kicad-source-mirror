@@ -26,6 +26,6 @@
 
 #include <utility_program.h>
 
-extern UTILITY_PROGRAM io_benchmark_tool;
+extern KI_TEST::UTILITY_PROGRAM io_benchmark_tool;
 
 #endif // IO_BENCHMARK_H

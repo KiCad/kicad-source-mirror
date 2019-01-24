@@ -27,6 +27,6 @@
 #include <utility_program.h>
 
 /// A tool to parse kicad PCBs from the command line
-extern UTILITY_PROGRAM polygon_generator_tool;
+extern KI_TEST::UTILITY_PROGRAM polygon_generator_tool;
 
 #endif //PCBNEW_TOOLS_POLYGON_GENERATOR_UTILITY_H

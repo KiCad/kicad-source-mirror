@@ -27,6 +27,6 @@
 #include <utility_program.h>
 
 /// A tool to parse kicad PCBs from the command line
-extern UTILITY_PROGRAM pcb_parser_tool;
+extern KI_TEST::UTILITY_PROGRAM pcb_parser_tool;
 
 #endif //PCBNEW_TOOLS_PCB_PARSER_UTILITY_H

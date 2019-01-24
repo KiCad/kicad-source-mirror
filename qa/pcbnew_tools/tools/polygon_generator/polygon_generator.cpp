@@ -118,7 +118,7 @@ int polygon_gererator_main( int argc, char* argv[] )
 /*
  * Define the tool interface
  */
-UTILITY_PROGRAM polygon_generator_tool = {
+KI_TEST::UTILITY_PROGRAM polygon_generator_tool = {
     "polygon_generator",
     "Dump board geometry as a set of polygons",
     polygon_gererator_main,

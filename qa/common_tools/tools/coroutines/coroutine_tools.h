@@ -5,6 +5,6 @@
 #include <utility_program.h>
 
 /// A tool to test a simple coroutine
-extern UTILITY_PROGRAM coroutine_tool;
+extern KI_TEST::UTILITY_PROGRAM coroutine_tool;
 
 #endif

@@ -80,6 +80,29 @@
 
 namespace KI_TEST
 {
+
+template <typename EXP_CONT> using EXP_OBJ = typename EXP_CONT::value_type;
+template <typename FOUND_CONT> using FOUND_OBJ = typename FOUND_CONT::value_type;
+
+/**
+ * A match predicate: check that a "found" object is equivalent to or represents
+ * an "expected" object, perhaps of a different type.
+ *
+ * Exactly what "equivalent to" means depends heavily on the context and what
+ * is care about. For example, if you only care about a #MODULE's refdes,
+ * std::string is sufficient to indicate a "match".
+ *
+ * This can be used, for example, for checking a set of results without having
+ * to instantiate a full result object for checking by equality.
+ *
+ * @tparam EXP_OBJ      the "expected" object type
+ * @tparam FOUND_OBJ    the "found" object type
+ *
+ * @return true if the "found" object represents the "expected" object
+ */
+template <typename EXP_OBJ, typename FOUND_OBJ>
+using MATCH_PRED = std::function<bool( const EXP_OBJ&, const FOUND_OBJ& )>;
+
 /**
  * Check that a container of "found" objects matches a container of "expected"
  * objects. This means that:
@@ -91,7 +114,7 @@ namespace KI_TEST
  * and a function to check if a given "found" object corresponds to a given
  * "expected object". Conditions:
  *
- * * The expected object type needs operator<<
+ * * The expected object type needs `operator<<` (for logging)
  * * The expected object container does not contain multiple references to the
  *   same object.
  * * Identical values are also can't be present as the predicate can't tell which
@@ -105,16 +128,15 @@ namespace KI_TEST
  * lists and checking element-by-element matches. However, it can tell you
  * exactly which objects are problematic, as well as a simple go/no-go.
  *
+ * When you have two containers of identical types (or you have a suitable
+ * `operator==`) and ordering is important, you can use `BOOST_CHECK_EQUAL_COLLECTIONS`
+ *
  *@param aExpected  a container of "expected" items, usually from a test case
  *@param aMatched   a container of "found" items, usually the result of some
  *                  routine under test
  *@param aMatchPredicate a predicate that determines if a given "found" object
  *                  matches a given "expected" object.
  */
-template <typename EXP_CONT> using EXP_OBJ = typename EXP_CONT::value_type;
-template <typename FOUND_CONT> using FOUND_OBJ = typename FOUND_CONT::value_type;
-template <typename EXP_OBJ, typename FOUND_OBJ>
-using MATCH_PRED = std::function<bool( const EXP_OBJ&, const FOUND_OBJ& )>;
 template <typename EXP_CONT, typename FOUND_CONT, typename MATCH_PRED>
 void CheckUnorderedMatches(
         const EXP_CONT& aExpected, const FOUND_CONT& aFound, MATCH_PRED aMatchPredicate )

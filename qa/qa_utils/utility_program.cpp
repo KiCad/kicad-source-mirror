@@ -24,15 +24,14 @@
 
 #include <wx/msgout.h>
 
+namespace KI_TEST
+{
 
 COMBINED_UTILITY::COMBINED_UTILITY( const UTIL_LIST& aSubUtils ) : m_subUtils( aSubUtils )
 {
 }
 
 
-/**
- * Print the names and descriptions of the registered tools
- */
 void COMBINED_UTILITY::showSubUtilityList( std::ostream& os ) const
 {
     for( const auto& tool : m_subUtils )
@@ -42,11 +41,6 @@ void COMBINED_UTILITY::showSubUtilityList( std::ostream& os ) const
 }
 
 
-/**
- * Get the utility program that matches a tool name
- * @param  aName the name to look for
- * @return       the tool function
- */
 UTILITY_PROGRAM::FUNC* COMBINED_UTILITY::findSubUtility( const std::string& aName ) const
 {
     for( const auto& tool : m_subUtils )
@@ -113,3 +107,5 @@ int COMBINED_UTILITY::HandleCommandLine( int argc, char** argv ) const
     // pass on the rest of the commands
     return ( *func )( argc - 1, argv + 1 );
 }
+
+} // namespace KI_TEST

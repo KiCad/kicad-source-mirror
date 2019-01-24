@@ -304,7 +304,7 @@ static const wxCmdLineEntryDesc g_cmdLineDesc[] = {
  */
 enum PARSER_RET_CODES
 {
-    PARSE_FAILED = RET_CODES::TOOL_SPECIFIC,
+    PARSE_FAILED = KI_TEST::RET_CODES::TOOL_SPECIFIC,
 };
 
 
@@ -325,7 +325,7 @@ int drc_main_func( int argc, char** argv )
     if( cmd_parsed_ok != 0 )
     {
         // Help and invalid input both stop here
-        return ( cmd_parsed_ok == -1 ) ? RET_CODES::OK : RET_CODES::BAD_CMDLINE;
+        return ( cmd_parsed_ok == -1 ) ? KI_TEST::RET_CODES::OK : KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
     const bool verbose = cl_parser.Found( "verbose" );
@@ -380,14 +380,14 @@ int drc_main_func( int argc, char** argv )
         runner.Execute( *board );
     }
 
-    return RET_CODES::OK;
+    return KI_TEST::RET_CODES::OK;
 }
 
 
 /*
  * Define the tool interface
  */
-UTILITY_PROGRAM drc_tool = {
+KI_TEST::UTILITY_PROGRAM drc_tool = {
     "drc",
     "Run selected DRC function on a PCB",
     drc_main_func,
