@@ -34,6 +34,22 @@
 #include <dialogs/dialog_create_array.h>
 
 
+/**
+ * Transform a #BOARD_ITEM from the given #ARRAY_OPTIONS and an index into the array.
+ *
+ * @param aArrOpts The array options that describe the array
+ * @param aIndex   The index in the array of this item
+ * @param aItem    The item to transform
+ */
+static void TransformItem( const ARRAY_OPTIONS& aArrOpts, int aIndex, BOARD_ITEM& aItem )
+{
+    const ARRAY_OPTIONS::TRANSFORM transform = aArrOpts.GetTransform( aIndex, aItem.GetPosition() );
+
+    aItem.Move( (wxPoint) transform.m_offset );
+    aItem.Rotate( aItem.GetPosition(), transform.m_rotation * 10 );
+}
+
+
 void ARRAY_CREATOR::Invoke()
 {
     const int numItems = getNumberOfItemsToArray();
@@ -51,7 +67,7 @@ void ARRAY_CREATOR::Invoke()
     DIALOG_CREATE_ARRAY dialog( &m_parent, enableArrayNumbering, rotPoint );
     int ret = dialog.ShowModal();
 
-    DIALOG_CREATE_ARRAY::ARRAY_OPTIONS* const array_opts = dialog.GetArrayOptions();
+    ARRAY_OPTIONS* const array_opts = dialog.GetArrayOptions();
 
     if( ret != wxID_OK || array_opts == NULL )
         return;
@@ -94,7 +110,7 @@ void ARRAY_CREATOR::Invoke()
 
             if( new_item )
             {
-                array_opts->TransformItem( ptN, new_item, rotPoint );
+                TransformItem( *array_opts, ptN, *new_item );
                 prePushAction( new_item );
                 commit.Add( new_item );
                 postPushAction( new_item );
@@ -103,7 +119,7 @@ void ARRAY_CREATOR::Invoke()
             // attempt to renumber items if the array parameters define
             // a complete numbering scheme to number by (as opposed to
             // implicit numbering by incrementing the items during creation
-            if( new_item && array_opts->NumberingStartIsSpecified() )
+            if( new_item && array_opts->GetNumberingStartIsSpecified() )
             {
                 // Renumber non-aperture pads.
                 if( new_item->Type() == PCB_PAD_T )

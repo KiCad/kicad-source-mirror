@@ -36,6 +36,7 @@ set( common_srcs
     ../../common/colors.cpp
     ../../common/observable.cpp
 
+    test_array_options.cpp
     test_color4d.cpp
     test_coroutine.cpp
     test_format_units.cpp

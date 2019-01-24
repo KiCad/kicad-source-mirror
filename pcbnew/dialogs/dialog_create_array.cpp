@@ -124,65 +124,6 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 }
 
 
-static const wxString& alphabetFromNumberingScheme( DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type )
-{
-    static const wxString alphaNumeric = "0123456789";
-    static const wxString alphaHex = "0123456789ABCDEF";
-    static const wxString alphaFull = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static const wxString alphaNoIOSQXZ   = "ABCDEFGHJKLMNPRTUVWY";
-
-    switch( type )
-    {
-    default:
-    case DIALOG_CREATE_ARRAY::NUMBERING_NUMERIC:         return alphaNumeric;
-    case DIALOG_CREATE_ARRAY::NUMBERING_HEX:             return alphaHex;
-    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_NO_IOSQXZ: return alphaNoIOSQXZ;
-    case DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL:      return alphaFull;
-    }
-}
-
-
-/**
- * @return False for schemes like 0,1...9,10
- *         True for schemes like A,B..Z,AA (where the tens column starts with char 0)
- */
-static bool schemeNonUnitColsStartAt0( DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type )
-{
-    return type == DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_FULL
-           || type == DIALOG_CREATE_ARRAY::NUMBERING_ALPHA_NO_IOSQXZ;
-}
-
-
-static bool getNumberingOffset( const wxString& str, DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T type,
-                                int& offsetToFill )
-{
-    const wxString& alphabet = alphabetFromNumberingScheme( type );
-
-    int offset = 0;
-    const int radix = alphabet.length();
-
-    for( unsigned i = 0; i < str.length(); i++ )
-    {
-        int chIndex = alphabet.Find( str[i], false );
-
-        if( chIndex == wxNOT_FOUND )
-            return false;
-
-        const bool start0 = schemeNonUnitColsStartAt0( type );
-
-        // eg "AA" is actually index 27, not 26
-        if( start0 && i < str.length() - 1 )
-            chIndex++;
-
-        offset  *= radix;
-        offset  += chIndex;
-    }
-
-    offsetToFill = offset;
-    return true;
-}
-
-
 /**
  * Validates and saves (if valid) the type and offset of an array axis numbering
  *
@@ -195,16 +136,16 @@ static bool getNumberingOffset( const wxString& str, DIALOG_CREATE_ARRAY::NUMBER
  */
 static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
                                             const wxChoice& typeEntry,
-                                            DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T& type,
+                                            ARRAY_OPTIONS::NUMBERING_TYPE_T& type,
                                             int& offset, wxArrayString& errors )
 {
     const int typeVal = typeEntry.GetSelection();
     // mind undefined casts to enums (should not be able to happen)
-    bool ok = typeVal <= DIALOG_CREATE_ARRAY::NUMBERING_TYPE_MAX;
+    bool ok = typeVal <= ARRAY_OPTIONS::NUMBERING_TYPE_MAX;
 
     if( ok )
     {
-        type = (DIALOG_CREATE_ARRAY::NUMBERING_TYPE_T) typeVal;
+        type = (ARRAY_OPTIONS::NUMBERING_TYPE_T) typeVal;
     }
     else
     {
@@ -216,11 +157,11 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
     }
 
     const wxString text = offsetEntry.GetValue();
-    ok = getNumberingOffset( text, type, offset );
+    ok = ARRAY_OPTIONS::GetNumberingOffset( text, type, offset );
 
     if( !ok )
     {
-        const wxString& alphabet = alphabetFromNumberingScheme( type );
+        const wxString& alphabet = ARRAY_OPTIONS::AlphabetFromNumberingScheme( type );
 
         wxString err;
         err.Printf( _( "Could not determine numbering start from \"%s\": "
@@ -287,7 +228,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         newGrid->m_horizontalThenVertical = m_radioBoxGridNumberingAxis->GetSelection() == 0;
         newGrid->m_reverseNumberingAlternate = m_checkBoxGridReverseNumbering->GetValue();
 
-        newGrid->m_shouldNumber = m_numberingEnabled;
+        newGrid->SetShouldNumber( m_numberingEnabled );
 
         if ( m_numberingEnabled )
         {
@@ -308,7 +249,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
             ok = ok && numOk;
 
-            newGrid->m_numberingStartIsSpecified = m_rbGridStartNumberingOpt->GetSelection() == 1;
+            newGrid->SetNumberingStartIsSpecified( m_rbGridStartNumberingOpt->GetSelection() == 1 );
         }
 
         // Only use settings if all values are good
@@ -329,12 +270,12 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         ok = ok && validateLongEntry(*m_entryCircCount, newCirc->m_nPts, _("point count"), errors);
 
         newCirc->m_rotateItems = m_entryRotateItemsCb->GetValue();
-        newCirc->m_shouldNumber = m_numberingEnabled;
+        newCirc->SetShouldNumber( m_numberingEnabled );
 
         if ( m_numberingEnabled )
         {
-            newCirc->m_numberingStartIsSpecified = m_rbCircStartNumberingOpt->GetSelection() == 1;
-            newCirc->m_numberingType = NUMBERING_NUMERIC;
+            newCirc->SetNumberingStartIsSpecified( m_rbCircStartNumberingOpt->GetSelection() == 1 );
+            newCirc->m_numberingType = ARRAY_OPTIONS::NUMBERING_NUMERIC;
 
             ok = ok && validateLongEntry(*m_entryCircNumberingStart, newCirc->m_numberingOffset,
                                          _("numbering start"), errors);
@@ -420,157 +361,10 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 
 void DIALOG_CREATE_ARRAY::calculateCircularArrayProperties()
 {
-    wxPoint centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
+    VECTOR2I centre( m_hCentre.GetValue(), m_vCentre.GetValue() );
 
     // Find the radius, etc of the circle
     centre -= m_originalItemPosition;
 
-    const double radius = VECTOR2I(centre.x, centre.y).EuclideanNorm();
-    m_circRadius.SetValue( int( radius ) );
-}
-
-
-// ARRAY OPTION implementation functions --------------------------------------
-
-wxString DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::getCoordinateNumber( int n,
-        NUMBERING_TYPE_T type )
-{
-    wxString itemNum;
-    const wxString& alphabet = alphabetFromNumberingScheme( type );
-
-    const bool nonUnitColsStartAt0 = schemeNonUnitColsStartAt0( type );
-
-    bool    firstRound = true;
-    int     radix = alphabet.Length();
-
-    do {
-        int modN = n % radix;
-
-        if( nonUnitColsStartAt0 && !firstRound )
-            modN--;    // Start the "tens/hundreds/etc column" at "Ax", not "Bx"
-
-        itemNum.insert( 0, 1, alphabet[modN] );
-
-        n /= radix;
-        firstRound = false;
-    } while( n );
-
-    return itemNum;
-}
-
-
-wxString DIALOG_CREATE_ARRAY::ARRAY_OPTIONS::InterpolateNumberIntoString(
-        int aN, const wxString& aPattern ) const
-{
-    wxString newStr( aPattern );
-    newStr.Replace( "%s", GetItemNumber( aN ), false );
-
-    return newStr;
-}
-
-
-int DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::GetArraySize() const
-{
-    return m_nx * m_ny;
-}
-
-
-wxPoint DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::getGridCoords( int n ) const
-{
-    const int axisSize = m_horizontalThenVertical ? m_nx : m_ny;
-
-    int x   = n % axisSize;
-    int y   = n / axisSize;
-
-    // reverse on this row/col?
-    if( m_reverseNumberingAlternate && ( y % 2 ) )
-        x = axisSize - x - 1;
-
-    wxPoint coords( x, y );
-
-    return coords;
-}
-
-
-void DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::TransformItem( int n, BOARD_ITEM* item,
-        const wxPoint& rotPoint ) const
-{
-    wxPoint point;
-
-    wxPoint coords = getGridCoords( n );
-
-    // swap axes if needed
-    if( !m_horizontalThenVertical )
-        std::swap( coords.x, coords.y );
-
-    point.x = coords.x * m_delta.x + coords.y * m_offset.x;
-    point.y = coords.y * m_delta.y + coords.x * m_offset.y;
-
-    if( std::abs( m_stagger ) > 1 )
-    {
-        const int stagger = std::abs( m_stagger );
-        const bool  sr = m_stagger_rows;
-        const int   stagger_idx = ( ( sr ? coords.y : coords.x ) % stagger );
-
-        wxPoint stagger_delta( ( sr ? m_delta.x : m_offset.x ),
-                ( sr ? m_offset.y : m_delta.y ) );
-
-        // Stagger to the left/up if the sign of the stagger is negative
-        point += stagger_delta * copysign( stagger_idx, m_stagger ) / stagger;
-    }
-
-    // this is already relative to the first array entry
-    item->Move( point );
-}
-
-
-wxString DIALOG_CREATE_ARRAY::ARRAY_GRID_OPTIONS::GetItemNumber( int n ) const
-{
-    wxString itemNum;
-
-    if( m_2dArrayNumbering )
-    {
-        wxPoint coords = getGridCoords( n );
-
-        itemNum += getCoordinateNumber( coords.x + m_numberingOffsetX, m_priAxisNumType );
-        itemNum += getCoordinateNumber( coords.y + m_numberingOffsetY, m_secAxisNumType );
-    }
-    else
-    {
-        itemNum += getCoordinateNumber( n + m_numberingOffsetX, m_priAxisNumType );
-    }
-
-    return itemNum;
-}
-
-
-int DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::GetArraySize() const
-{
-    return m_nPts;
-}
-
-
-void DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::TransformItem( int n, BOARD_ITEM* item,
-        const wxPoint& rotPoint ) const
-{
-    double angle;
-
-    if( m_angle == 0 )
-        // angle is zero, divide evenly into m_nPts
-        angle = 3600.0 * n / double( m_nPts );
-    else
-        // n'th step
-        angle = m_angle * n;
-
-    item->Rotate( m_centre, angle );
-
-    // take off the rotation (but not the translation) if needed
-    if( !m_rotateItems )
-        item->Rotate( item->GetCenter(), -angle );
-}
-
-
-wxString DIALOG_CREATE_ARRAY::ARRAY_CIRCULAR_OPTIONS::GetItemNumber( int aN ) const
-{
-    return getCoordinateNumber( aN + m_numberingOffset, m_numberingType );
+    m_circRadius.SetValue( int( centre.EuclideanNorm() ) );
 }
