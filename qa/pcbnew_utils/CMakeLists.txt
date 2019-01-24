@@ -54,7 +54,9 @@ target_include_directories( qa_pcbnew_utils PUBLIC
     ${INC_AFTER}
 )
 
-# target_link_libraries( qa_pcbnew_utils PUBLIC
+target_link_libraries( qa_pcbnew_utils PUBLIC
+    qa_utils
+)
 #     3d-viewer
 #     connectivity
 #     pcbcommon

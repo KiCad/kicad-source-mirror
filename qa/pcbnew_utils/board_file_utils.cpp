@@ -30,6 +30,8 @@
 
 #include <class_board.h>
 
+#include <stdstream_line_reader.h>
+
 namespace KI_TEST
 {
 
@@ -48,6 +50,52 @@ std::unique_ptr<BOARD_ITEM> ReadBoardItemFromFile( const std::string& aFilename 
     parser.SetLineReader( &reader );
 
     return std::unique_ptr<BOARD_ITEM>( parser.Parse() );
+}
+
+
+std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream )
+{
+    // Take input from stdin
+    STDISTREAM_LINE_READER reader;
+    reader.SetStream( aStream );
+
+    PCB_PARSER parser;
+
+    parser.SetLineReader( &reader );
+
+    std::unique_ptr<BOARD_ITEM> board;
+
+    try
+    {
+        board.reset( parser.Parse() );
+    }
+    catch( const IO_ERROR& parse_error )
+    {
+        std::cerr << parse_error.Problem() << std::endl;
+        std::cerr << parse_error.Where() << std::endl;
+    }
+
+    return board;
+}
+
+std::unique_ptr<BOARD> ReadBoardFromFileOrStream(
+        const std::string& aFilename, std::istream& aFallback )
+{
+    std::istream* in_stream = nullptr;
+    std::ifstream file_stream;
+
+    if( aFilename.empty() )
+    {
+        // no file, read stdin
+        in_stream = &aFallback;
+    }
+    else
+    {
+        file_stream.open( aFilename );
+        in_stream = &file_stream;
+    }
+
+    return ReadItemFromStream<BOARD>( *in_stream );
 }
 
 } // namespace KI_TEST

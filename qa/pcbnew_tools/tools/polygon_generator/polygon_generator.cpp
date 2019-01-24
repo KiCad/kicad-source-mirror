@@ -29,8 +29,7 @@
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_poly_set.h>
 
-#include <io_mgr.h>
-#include <kicad_plugin.h>
+#include <pcbnew_utils/board_file_utils.h>
 
 #include <class_board.h>
 #include <class_drawsegment.h>
@@ -38,26 +37,6 @@
 #include <class_pad.h>
 #include <class_track.h>
 #include <class_zone.h>
-
-BOARD* loadBoard( const std::string& filename )
-{
-    PLUGIN::RELEASER pi( new PCB_IO );
-    BOARD*           brd = nullptr;
-
-    try
-    {
-        brd = pi->Load( wxString( filename.c_str() ), NULL, NULL );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxString msg = wxString::Format( _( "Error loading board.\n%s" ), ioe.Problem() );
-
-        printf( "%s\n", (const char*) msg.mb_str() );
-        return nullptr;
-    }
-
-    return brd;
-}
 
 
 void process( const BOARD_CONNECTED_ITEM* item, int net )
@@ -79,19 +58,32 @@ void process( const BOARD_CONNECTED_ITEM* item, int net )
 }
 
 
+enum POLY_GEN_RET_CODES
+{
+    LOAD_FAILED = KI_TEST::RET_CODES::TOOL_SPECIFIC,
+};
+
+
 int polygon_gererator_main( int argc, char* argv[] )
 {
     if( argc < 2 )
     {
         printf( "A sample tool for dumping board geometry as a set of polygons.\n" );
-        printf( "usage : %s board_file.kicad_pcb\n\n", argv[0] );
-        return -1;
+        printf( "Usage : %s board_file.kicad_pcb\n\n", argv[0] );
+        return KI_TEST::RET_CODES::BAD_CMDLINE;
     }
 
-    std::unique_ptr<BOARD> brd( loadBoard( argv[1] ) );
+    std::string filename;
+
+    if( argc > 1 )
+        filename = argv[1];
+
+    auto brd = KI_TEST::ReadBoardFromFileOrStream( filename );
 
     if( !brd )
-        return -1;
+    {
+        return POLY_GEN_RET_CODES::LOAD_FAILED;
+    }
 
     for( unsigned net = 0; net < brd->GetNetCount(); net++ )
     {
@@ -112,7 +104,7 @@ int polygon_gererator_main( int argc, char* argv[] )
         printf( "endnet\n" );
     }
 
-    return 0;
+    return KI_TEST::RET_CODES::OK;
 }
 
 /*

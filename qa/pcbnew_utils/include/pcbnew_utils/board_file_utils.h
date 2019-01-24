@@ -25,6 +25,7 @@
 #ifndef QA_PCBNEW_UTILS_BOARD_FILE_UTILS__H
 #define QA_PCBNEW_UTILS_BOARD_FILE_UTILS__H
 
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -60,7 +61,39 @@ void DumpBoardToFile( BOARD& aBoard, const std::string& aFilename );
  * @param aFilename   the file to read in
  * @returns           a new #BOARD_ITEM, which is nullptr if the read or parse failed.
  */
-std::unique_ptr<BOARD_ITEM> ReadBoardItemFromFile( const std::string& aFilename );
+std::unique_ptr<BOARD_ITEM> ReadBoardItemFromStream( std::istream& aStream );
+
+/**
+ * Read a specific kind of #BOARD_ITEM from a stream
+ *
+ * @tparam ITEM the item type to return (probably a #MODULE or #BOARD)
+ * @param aStream the stream to read from.
+ */
+template <typename ITEM> std::unique_ptr<ITEM> ReadItemFromStream( std::istream& aStream )
+{
+    auto                  bi_ptr = ReadBoardItemFromStream( aStream );
+    std::unique_ptr<ITEM> downcast_ptr;
+
+    // if it's the right type, downcast and "steal" (and we'll return ownership)
+    ITEM* const tmp = dynamic_cast<ITEM*>( bi_ptr.get() );
+    if( tmp != nullptr )
+    {
+        bi_ptr.release();
+        downcast_ptr.reset( tmp );
+    }
+
+    return downcast_ptr;
+}
+
+/**
+ * Read a board from a file, or another stream, as appropriate
+ *
+ * @param aFilename The file to read, or the fallback if empty
+ * @param aFallback: the fallback stream
+ * @return a #BOARD, if successful
+ */
+std::unique_ptr<BOARD> ReadBoardFromFileOrStream(
+        const std::string& aFilename, std::istream& aFallback = std::cin );
 
 } // namespace KI_TEST
 
