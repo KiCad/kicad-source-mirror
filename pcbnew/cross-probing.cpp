@@ -1,3 +1,27 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-3.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+
 /**
  * @file pcbnew/cross-probing.cpp
  * @brief Cross probing functions to handle communication to andfrom Eeschema.
@@ -44,6 +68,7 @@
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  * $NET: "net name" highlight the given net (if highlight tool is active)
+ * They are a keyword followed by a quoted string.
  */
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 {
@@ -61,7 +86,7 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     line[sizeof(line) - 1] = 0;
 
     idcmd = strtok( line, " \n\r" );
-    text  = strtok( NULL, " \n\r" );
+    text  = strtok( NULL, "\"\n\r" );
 
     if( idcmd == NULL )
         return;
@@ -155,9 +180,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         module = pcb->FindModuleByReference( modName );
 
         if( module )
-            msg.Printf( _( "%s found" ), GetChars( modName ) );
+            msg.Printf( _( "%s found" ), modName );
         else
-            msg.Printf( _( "%s not found" ), GetChars( modName ) );
+            msg.Printf( _( "%s not found" ), modName );
 
         SetStatusText( msg );
 
@@ -181,8 +206,9 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         pinName = FROM_UTF8( text );
 
         text = strtok( NULL, " \n\r" );
+
         if( text && strcmp( text, "$PART:" ) == 0 )
-            text = strtok( NULL, "\n\r" );
+            text = strtok( NULL, "\"\n\r" );
 
         modName = FROM_UTF8( text );
 
@@ -212,16 +238,16 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
         if( module == NULL )
         {
-            msg.Printf( _( "%s not found" ), GetChars( modName ) );
+            msg.Printf( _( "%s not found" ), modName );
         }
         else if( pad == NULL )
         {
-            msg.Printf( _( "%s pin %s not found" ), GetChars( modName ), GetChars( pinName ) );
+            msg.Printf( _( "%s pin %s not found" ), modName, pinName );
             SetCurItem( module );
         }
         else
         {
-            msg.Printf( _( "%s pin %s found" ), GetChars( modName ), GetChars( pinName ) );
+            msg.Printf( _( "%s pin %s found" ), modName, pinName );
             SetCurItem( pad );
         }
 
