@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,7 +134,6 @@ double DXF_IMPORT_PLUGIN::mapWidth( double aDxfWidth )
 bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
 {
     DL_Dxf dxf_reader;
-    std::string filename = TO_UTF8( aFile );
 
     // wxFopen takes care of unicode filenames across platforms
     FILE* fp = wxFopen( aFile, "rt" );

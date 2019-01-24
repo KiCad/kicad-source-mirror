@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -149,8 +149,6 @@ public:
      * @param aTarget Target field to copy values to.
      */
     void Copy( LIB_FIELD* aTarget ) const;
-
-    void SetFields( const std::vector <LIB_FIELD> aFields );
 
     /**
      * @return true if the field value is void (no text in this field)
