@@ -172,6 +172,7 @@ parameters, refer to the tools' usage test (`-h`).
     * `drc`: Run and benchmark certain DRC functions on a user-provided `.kicad_pcb` files
     * `pcb_parser`: Parse user-provided `.kicad_pcb` files
     * `polygon_generator`: Dump polygons found on a PCB to the console
+    * `polygon_triangulation`: Perform triangulation of zone polygons on PCBs
 
 # Fuzz testing {#fuzz-testing}
 

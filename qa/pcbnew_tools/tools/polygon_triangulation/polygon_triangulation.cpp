@@ -22,6 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "polygon_triangulation.h"
+
 #include <geometry/shape_poly_set.h>
 #include <geometry/shape_line_chain.h>
 
@@ -198,7 +200,7 @@ aResult->clear();
         std::swap( (*aResult) [0], (*aResult)[outline] );
 }
 
-BOARD* loadBoard( const std::string& filename )
+BOARD* loadBoardTri( const std::string& filename )
 {
     PLUGIN::RELEASER pi( new PCB_IO );
     BOARD* brd = nullptr;
@@ -219,12 +221,18 @@ BOARD* loadBoard( const std::string& filename )
     return brd;
 }
 
-int main( int argc, char *argv[] )
+enum POLY_TRI_RET_CODES
 {
-    auto brd = loadBoard( argc > 1 ? argv[1] : "../../../../tests/dp.kicad_pcb" );
+    LOAD_FAILED = KI_TEST::RET_CODES::TOOL_SPECIFIC,
+};
+
+
+int polygon_triangulation_main( int argc, char *argv[] )
+{
+    auto brd = loadBoardTri( argc > 1 ? argv[1] : "../../../../tests/dp.kicad_pcb" );
 
     if( !brd )
-        return -1;
+        return POLY_TRI_RET_CODES::LOAD_FAILED;
 
 
     PROF_COUNTER cnt( "allBoard" );
@@ -278,6 +286,15 @@ int main( int argc, char *argv[] )
 
     delete brd;
 
-    return 0;
+    return KI_TEST::RET_CODES::OK;
 
 }
+
+/*
+ * Define the tool interface
+ */
+KI_TEST::UTILITY_PROGRAM polygon_triangulation_tool = {
+    "polygon_triangulation",
+    "Process polygon trianguation on a PCB",
+    polygon_triangulation_main,
+};
