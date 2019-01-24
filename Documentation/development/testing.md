@@ -39,7 +39,7 @@ Common useful patterns:
 * `<test> -t "Utf8/UniIterNull"` runs only a single test in a specific suite.
 * `<test> -l all` adds more verbose debugging to the output.
 * `<test> --list_content` lists the test suites and test cases within the
-    test program. You can use these for arguments to `-l`.
+    test program. You can use these for arguments to `-t`.
 
 You can rebuild just a specific test with CMake to avoid rebuilding
 everything when working on a small area, e.g. `make qa_common`.
@@ -149,6 +149,30 @@ You can run the tests in GDB to trace this:
 If the test segfaults, you will get a familiar backtrace, just like
 if you were running pcbnew under GDB.
 
+# Utility programs {#utility-programs}
+
+KiCad includes some utility programs that can be used for debugging, profiling,
+analysing or developing certain parts of the code without having to invoke the full
+GUI program.
+
+Generally, they are part of the `qa_*_tools` QA executables, each one containing
+the relevant tools for that library. To list the tools in a given program, pass
+the `-l` parameter. Most tools provide help with the `-h` argument.
+To invoke a program:
+
+    qa_<lib>_tools <tool name> [-h] [tool arguments]
+
+Below is a brief outline of some available tools. For full information and command-line
+parameters, refer to the tools' usage test (`-h`).
+
+* `common_tools` (the common library and core functions):
+    * `coroutine`: A simple coroutine example
+    * `io_benchmark`: Show relative speeds of reading files using various IO techniques.
+* `qa_pcbnew_tools` (pcbnew-related functions):
+    * `drc`: Run and benchmark certain DRC functions on a user-provided `.kicad_pcb` files
+    * `pcb_parser`: Parse user-provided `.kicad_pcb` files
+    * `polygon_generator`: Dump polygons found on a PCB to the console
+
 # Fuzz testing {#fuzz-testing}
 
 It is possible to run fuzz testing on some parts of KiCad. To do this for a
@@ -164,12 +188,13 @@ For example, to use the [AFL fuzzing tool][], you will need:
 * To compile this executable with an AFL compiler, to enable the instrumentation
   that allows the fuzzer to detect the fuzzing state.
 
-For example, the `qa_pcb_parse_input` executable can be compiled like this:
+For example, the `qa_pcbnew_tools` executable (which contains `pcb_parser`,
+a fuzz testing tool for `.kicad_pcb` file parsing) can be compiled like this:
 
     mkdir build
     cd build
     cmake -DCMAKE_CXX_COMPILER=/usr/bin/afl-clang-fast++ -DCMAKE_C_COMPILER=/usr/bin/afl-clang-fast ../kicad_src
-    make qa_pcb_parse_input
+    make qa_pcbnew_tools
 
 You may need to disable core dumps and CPU frequency scaling on your system (AFL
 will warn you if you should do this). For example, as root:
@@ -177,9 +202,9 @@ will warn you if you should do this). For example, as root:
     # echo core >/proc/sys/kernel/core_pattern
     # echo performance | tee cpu*/cpufreq/scaling_governor
 
-To fuzz:
+To fuzz, run the executable via `afl-fuzz`:
 
-    afl-fuzz -i fuzzin -o fuzzout -m500 qa/pcb_parse_input/qa_pcb_parse_input
+    afl-fuzz -i fuzzin -o fuzzout -m500 qa/pcbnew_tools/qa_pcbnew_tools pcb_parser
 
 where:
 
