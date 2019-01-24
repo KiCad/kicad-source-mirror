@@ -25,7 +25,7 @@
 # Code that is useful for QA purposes outside of the unit-testing context
 # belongs in qa_utils.
 
-find_package( Boost COMPONENTS unit_test_framework filesystem REQUIRED )
+find_package( Boost COMPONENTS unit_test_framework filesystem system REQUIRED )
 
 set( SRCS
     unit_test_utils.cpp
