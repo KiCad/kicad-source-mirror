@@ -22,12 +22,70 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
-#include <geometry/shape_poly_set.h>
-#include <geometry/shape_line_chain.h>
+#include <unit_test_utils/unit_test_utils.h>
 
-#include <qa/data/fixtures_geometry.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+
+#include "fixtures_geometry.h"
+
+/**
+* Fixture for the Iterator test suite. It contains an instance of the common data, three polysets with null segments and a vector containing their points.
+*/
+struct IteratorFixture
+{
+    // Structure to store the common data.
+    struct KI_TEST::CommonTestData common;
+
+    // Polygons to test whether the RemoveNullSegments method works
+    SHAPE_POLY_SET lastNullSegmentPolySet;
+    SHAPE_POLY_SET firstNullSegmentPolySet;
+    SHAPE_POLY_SET insideNullSegmentPolySet;
+
+    // Null segments points
+    std::vector<VECTOR2I> nullPoints;
+
+    IteratorFixture()
+    {
+        nullPoints.push_back( VECTOR2I( 100, 100 ) );
+        nullPoints.push_back( VECTOR2I( 0, 100 ) );
+        nullPoints.push_back( VECTOR2I( 0, 0 ) );
+
+        // Create a polygon with its last segment null
+        SHAPE_LINE_CHAIN polyLine;
+        polyLine.Append( nullPoints[0] );
+        polyLine.Append( nullPoints[1] );
+        polyLine.Append( nullPoints[2] );
+        polyLine.Append( nullPoints[2], true );
+        polyLine.SetClosed( true );
+
+        lastNullSegmentPolySet.AddOutline( polyLine );
+
+        // Create a polygon with its first segment null
+        polyLine.Clear();
+        polyLine.Append( nullPoints[0] );
+        polyLine.Append( nullPoints[0], true );
+        polyLine.Append( nullPoints[1] );
+        polyLine.Append( nullPoints[2] );
+        polyLine.SetClosed( true );
+
+        firstNullSegmentPolySet.AddOutline( polyLine );
+
+        // Create a polygon with an inside segment null
+        polyLine.Clear();
+        polyLine.Append( nullPoints[0] );
+        polyLine.Append( nullPoints[1] );
+        polyLine.Append( nullPoints[1], true );
+        polyLine.Append( nullPoints[2] );
+        polyLine.SetClosed( true );
+
+        insideNullSegmentPolySet.AddOutline( polyLine );
+    }
+
+    ~IteratorFixture()
+    {
+    }
+};
 
 /**
  * Declares the IteratorFixture as the boost test suite fixture.
@@ -40,7 +98,7 @@ BOOST_FIXTURE_TEST_SUITE( PolygonIterator, IteratorFixture )
 BOOST_AUTO_TEST_CASE( VertexIterator )
 {
     SHAPE_POLY_SET::ITERATOR iterator;
-    int vertexIndex = 0;
+    int                      vertexIndex = 0;
 
     for( iterator = common.holeyPolySet.IterateWithHoles(); iterator; iterator++ )
     {
@@ -55,9 +113,10 @@ BOOST_AUTO_TEST_CASE( VertexIterator )
 BOOST_AUTO_TEST_CASE( SegmentIterator )
 {
     SHAPE_POLY_SET::SEGMENT_ITERATOR iterator;
-    int segmentIndex = 0;
+    int                              segmentIndex = 0;
 
-    for( iterator = common.holeyPolySet.IterateSegmentsWithHoles(); iterator; iterator++ ){
+    for( iterator = common.holeyPolySet.IterateSegmentsWithHoles(); iterator; iterator++ )
+    {
         SEG segment = *iterator;
 
         BOOST_CHECK_EQUAL( common.holeySegments[segmentIndex].A, segment.A );
@@ -113,19 +172,18 @@ BOOST_AUTO_TEST_CASE( TotalVertices )
  */
 BOOST_AUTO_TEST_CASE( RemoveNullSegments )
 {
-    SHAPE_POLY_SET polygonSets[3] = {lastNullSegmentPolySet,
-                                     firstNullSegmentPolySet,
-                                     insideNullSegmentPolySet};
+    SHAPE_POLY_SET polygonSets[3] = { lastNullSegmentPolySet, firstNullSegmentPolySet,
+        insideNullSegmentPolySet };
 
     for( SHAPE_POLY_SET polygonSet : polygonSets )
     {
         BOOST_CHECK_EQUAL( polygonSet.TotalVertices(), 4 );
-        BOOST_CHECK_EQUAL( polygonSet.RemoveNullSegments(), 1);
+        BOOST_CHECK_EQUAL( polygonSet.RemoveNullSegments(), 1 );
         BOOST_CHECK_EQUAL( polygonSet.TotalVertices(), 3 );
 
-        BOOST_CHECK_EQUAL( polygonSet.CVertex(0), nullPoints[0] );
-        BOOST_CHECK_EQUAL( polygonSet.CVertex(1), nullPoints[1] );
-        BOOST_CHECK_EQUAL( polygonSet.CVertex(2), nullPoints[2] );
+        BOOST_CHECK_EQUAL( polygonSet.CVertex( 0 ), nullPoints[0] );
+        BOOST_CHECK_EQUAL( polygonSet.CVertex( 1 ), nullPoints[1] );
+        BOOST_CHECK_EQUAL( polygonSet.CVertex( 2 ), nullPoints[2] );
     }
 }
 

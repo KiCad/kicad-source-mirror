@@ -22,12 +22,57 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
-#include <geometry/shape_poly_set.h>
-#include <geometry/shape_line_chain.h>
+#include <unit_test_utils/unit_test_utils.h>
 
-#include <qa/data/fixtures_geometry.h>
+#include <geometry/shape_line_chain.h>
+#include <geometry/shape_poly_set.h>
+
+#include "fixtures_geometry.h"
+
+/**
+ * Fixture for the Collision test suite. It contains an instance of the common data and two
+ * vectors containing colliding and non-colliding points.
+ */
+struct CollisionFixture
+{
+    // Structure to store the common data.
+    struct KI_TEST::CommonTestData common;
+
+    // Vectors containing colliding and non-colliding points
+    std::vector<VECTOR2I> collidingPoints, nonCollidingPoints;
+
+    /**
+    * Constructor
+    */
+    CollisionFixture()
+    {
+        // Create points colliding with the poly set.
+
+        // Inside the polygon
+        collidingPoints.push_back( VECTOR2I( 10, 90 ) );
+
+        // Inside the polygon, but on a re-entrant angle of a hole
+        collidingPoints.push_back( VECTOR2I( 15, 16 ) );
+
+        // On a hole edge => inside the polygon
+        collidingPoints.push_back( VECTOR2I( 40, 25 ) );
+
+        // On the outline edge => inside the polygon
+        collidingPoints.push_back( VECTOR2I( 0, 10 ) );
+
+        // Create points not colliding with the poly set.
+
+        // Completely outside of the polygon
+        nonCollidingPoints.push_back( VECTOR2I( 200, 200 ) );
+
+        // Inside the outline and inside a hole => outside the polygon
+        nonCollidingPoints.push_back( VECTOR2I( 15, 12 ) );
+    }
+
+    ~CollisionFixture()
+    {
+    }
+};
 
 /**
  * Declares the CollisionFixture as the boost test suite fixture.
@@ -40,7 +85,7 @@ BOOST_FIXTURE_TEST_SUITE( Collision, CollisionFixture )
 BOOST_AUTO_TEST_CASE( HasHoles )
 {
     BOOST_CHECK( !common.solidPolySet.HasHoles() );
-    BOOST_CHECK(  common.holeyPolySet.HasHoles() );
+    BOOST_CHECK( common.holeyPolySet.HasHoles() );
 }
 
 /**
@@ -50,22 +95,22 @@ BOOST_AUTO_TEST_CASE( HasHoles )
 BOOST_AUTO_TEST_CASE( PointOnEdge )
 {
     // Check points on corners
-    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 0,50 ) ) );
+    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 0, 50 ) ) );
 
     // Check points on outline edges
-    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 0,10 ) ) );
+    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 0, 10 ) ) );
 
     // Check points on hole edges
-    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 10,11 ) ) );
+    BOOST_CHECK( common.holeyPolySet.PointOnEdge( VECTOR2I( 10, 11 ) ) );
 
     // Check points inside a hole -> not in edge
-    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 12,12 ) ) );
+    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 12, 12 ) ) );
 
     // Check points inside the polygon and outside any hole -> not on edge
-    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 90,90 ) ) );
+    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 90, 90 ) ) );
 
     // Check points outside the polygon -> not on edge
-    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 200,200 ) ) );
+    BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 200, 200 ) ) );
 }
 
 /**
@@ -109,10 +154,10 @@ BOOST_AUTO_TEST_CASE( Collide )
     // Checks with clearance > 0
 
     // Point at the offset zone outside of the outline => collision!
-    BOOST_CHECK( common.holeyPolySet.Collide( VECTOR2I( -1,10 ), 5 ) );
+    BOOST_CHECK( common.holeyPolySet.Collide( VECTOR2I( -1, 10 ), 5 ) );
 
     // Point at the offset zone outside of a hole => collision!
-    BOOST_CHECK( common.holeyPolySet.Collide( VECTOR2I( 11,11 ), 5 ) );
+    BOOST_CHECK( common.holeyPolySet.Collide( VECTOR2I( 11, 11 ), 5 ) );
 }
 
 /**
@@ -143,7 +188,7 @@ BOOST_AUTO_TEST_CASE( CollideVertexWithClearance )
     // Check that the set collides with the colliding points
     for( const VECTOR2I& point : common.holeyPoints )
     {
-        BOOST_CHECK( common.holeyPolySet.CollideVertex( point + VECTOR2I(1,1), cornerHit, 2 ) );
+        BOOST_CHECK( common.holeyPolySet.CollideVertex( point + VECTOR2I( 1, 1 ), cornerHit, 2 ) );
     }
 }
 

@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,42 +23,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/test/unit_test.hpp>
-#include <boost/test/test_case_template.hpp>
+#include <unit_test_utils/unit_test_utils.h>
+
 #include <geometry/seg.h>
 
-#include <qa/data/fixtures_geometry.h>
+
+BOOST_AUTO_TEST_SUITE( Segment )
 
 /**
- * Declares the IteratorFixture as the boost test suite fixture.
+ * Checks whether the construction of a segment referencing external points works
+ * and that the endpoints can be modified as normal points.
  */
-BOOST_FIXTURE_TEST_SUITE( SegmentReference, CommonTestData )
-
-/**
- * Checks whether the construction of a segment referencing external points works.
- */
-BOOST_AUTO_TEST_CASE( SegmentReference )
+BOOST_AUTO_TEST_CASE( EndpointCtorMod )
 {
-    VECTOR2I pointA( 10, 20 );
-    VECTOR2I pointB( 100, 200 );
+    const VECTOR2I pointA{ 10, 20 };
+    const VECTOR2I pointB{ 100, 200 };
 
     // Build a segment referencing the previous points
     SEG segment( pointA, pointB );
 
-    BOOST_CHECK_EQUAL( pointA, VECTOR2I( 10, 20) );
-    BOOST_CHECK_EQUAL( pointB, VECTOR2I( 100, 200) );
+    BOOST_CHECK_EQUAL( pointA, VECTOR2I( 10, 20 ) );
+    BOOST_CHECK_EQUAL( pointB, VECTOR2I( 100, 200 ) );
 
     // Modify the ends of the segments
     segment.A += VECTOR2I( 10, 10 );
     segment.B += VECTOR2I( 100, 100 );
 
-    // Check that the original points are not modified
-    BOOST_CHECK_EQUAL( pointA, VECTOR2I( 10, 20) );
-    BOOST_CHECK_EQUAL( pointB, VECTOR2I( 100, 200) );
-
     // Check that the ends in segment are modified
-    BOOST_CHECK_EQUAL( segment.A, VECTOR2I( 20, 30) );
-    BOOST_CHECK_EQUAL( segment.B, VECTOR2I( 200, 300) );
+    BOOST_CHECK_EQUAL( segment.A, VECTOR2I( 20, 30 ) );
+    BOOST_CHECK_EQUAL( segment.B, VECTOR2I( 200, 300 ) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
