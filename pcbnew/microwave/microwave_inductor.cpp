@@ -79,6 +79,15 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
 }
 
 
+enum class INDUCTOR_S_SHAPE_RESULT
+{
+    OK,        /// S-shape constructed
+    TOO_LONG,  /// Requested length too long
+    TOO_SHORT, /// Requested length too short
+    NO_REPR,   /// Requested length can't be represented
+};
+
+
 /**
  * Function BuildCornersList_S_Shape
  * Create a path like a S-shaped coil
@@ -88,10 +97,8 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
  * @param  aLength = full length of the path
  * @param  aWidth = segment width
  */
-static int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
-                              const wxPoint& aStartPoint,
-                              const wxPoint& aEndPoint,
-                              int aLength, int aWidth )
+static INDUCTOR_S_SHAPE_RESULT BuildCornersList_S_Shape( std::vector<wxPoint>& aBuffer,
+        const wxPoint& aStartPoint, const wxPoint& aEndPoint, int aLength, int aWidth )
 {
 /* We must determine:
  * segm_count = number of segments perpendicular to the direction
@@ -171,7 +178,7 @@ static int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
             if( radius < aWidth ) // Radius too small.
             {
                 // Unable to create line: Requested length value is too large for room
-                return 0;
+                return INDUCTOR_S_SHAPE_RESULT::TOO_LONG;
             }
         }
 
@@ -191,6 +198,30 @@ static int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
 
     // reduce len of the segm_count segments + 2 half size segments (= 1 full size segment)
     segm_len -= delta_size / (segm_count + 1);
+
+    // at this point, it could still be that the requested length is too
+    // short (because 4 quarter-circles are too long)
+    // to fix this is a relatively complex numerical problem which probably
+    // needs a refactor in this area. For now, just reject these cases:
+    {
+        const int min_total_length = 2 * stubs_len + 2 * M_PI * ADJUST_SIZE * radius;
+        if( min_total_length > aLength )
+        {
+            // we can't express this inductor with 90-deg arcs of this radius
+            return INDUCTOR_S_SHAPE_RESULT::TOO_SHORT;
+        }
+    }
+
+    if( segm_len - 2 * radius < 0 )
+    {
+        // we can't represent this exact requested length with this number
+        // of segments (using the current algorithm). This stems from when
+        // you add a segment, you also add another half-circle, so there's a
+        // little bit of "dead" space.
+        // It's a bit ugly to just reject the input, as it might be possible
+        // to tweak the radius, but, again, that probably needs a refactor.
+        return INDUCTOR_S_SHAPE_RESULT::NO_REPR;
+    }
 
     // Generate first line (the first stub) and first arc (90 deg arc)
     pt = aStartPoint;
@@ -257,7 +288,7 @@ static int BuildCornersList_S_Shape( std::vector <wxPoint>& aBuffer,
     // push last point (end point)
     aBuffer.push_back( aEndPoint );
 
-    return 1;
+    return INDUCTOR_S_SHAPE_RESULT::OK;
 }
 
 
@@ -298,7 +329,6 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
      */
 
     D_PAD*   pad;
-    int      ll;
     wxString msg;
 
     auto pt = inductorPattern.m_End - inductorPattern.m_Start;
@@ -324,14 +354,22 @@ MODULE* MWAVE::CreateMicrowaveInductor( INDUCTOR_PATTERN& inductorPattern,
 
     // Calculate the elements.
     std::vector <wxPoint> buffer;
-    ll = BuildCornersList_S_Shape( buffer, inductorPattern.m_Start,
-                                   inductorPattern.m_End, inductorPattern.m_length,
-                                   inductorPattern.m_Width );
+    const INDUCTOR_S_SHAPE_RESULT res = BuildCornersList_S_Shape( buffer, inductorPattern.m_Start,
+            inductorPattern.m_End, inductorPattern.m_length, inductorPattern.m_Width );
 
-    if( !ll )
+    switch( res )
     {
+    case INDUCTOR_S_SHAPE_RESULT::TOO_LONG:
         aErrorMessage = _( "Requested length too large" );
         return nullptr;
+    case INDUCTOR_S_SHAPE_RESULT::TOO_SHORT:
+        aErrorMessage = _( "Requested length too small" );
+        return nullptr;
+    case INDUCTOR_S_SHAPE_RESULT::NO_REPR:
+        aErrorMessage = _( "Requested length can't be represented" );
+        return nullptr;
+    case INDUCTOR_S_SHAPE_RESULT::OK:
+        break;
     }
 
     // Generate footprint. the value is also used as footprint name.
