@@ -318,34 +318,32 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 {
     if ( m_numberingEnabled )
     {
-        const bool renumber = m_rbGridStartNumberingOpt->GetSelection() == 1;
+        const bool use_set_start_grid = m_rbGridStartNumberingOpt->GetSelection() == 1;
 
-        // If we're not renumbering, we can't set the numbering scheme
-        // or axis numbering types
-        m_radioBoxGridNumberingScheme->Enable( renumber );
-        m_labelPriAxisNumbering->Enable( renumber );
-        m_choicePriAxisNumbering->Enable( renumber );
+        m_radioBoxGridNumberingScheme->Enable( true );
+        m_labelPriAxisNumbering->Enable( true );
+        m_choicePriAxisNumbering->Enable( true );
 
         // Disable the secondary axis numbering option if the
         // numbering scheme doesn't have two axes
         const bool num2d = m_radioBoxGridNumberingScheme->GetSelection() != 0;
 
-        m_labelSecAxisNumbering->Enable( renumber && num2d );
-        m_choiceSecAxisNumbering->Enable( renumber && num2d );
+        m_labelSecAxisNumbering->Enable( true && num2d );
+        m_choiceSecAxisNumbering->Enable( true && num2d );
 
-        // We can only set an offset if we renumber
-        m_labelGridNumberingOffset->Enable( renumber );
-        m_entryGridPriNumberingOffset->Enable( renumber );
-        m_entryGridSecNumberingOffset->Enable( renumber && num2d );
+        // We can only set an offset if we're setting the start number
+        m_labelGridNumberingOffset->Enable( use_set_start_grid );
+        m_entryGridPriNumberingOffset->Enable( use_set_start_grid );
+        m_entryGridSecNumberingOffset->Enable( use_set_start_grid && num2d );
 
-        m_entryCircNumberingStart->Enable( m_rbCircStartNumberingOpt->GetSelection() == 1 );
+        // disable the circular number offset in the same way
+        const bool use_set_start_circ = m_rbCircStartNumberingOpt->GetSelection() == 1;
+        m_entryCircNumberingStart->Enable( use_set_start_circ );
     }
     else
     {
         // grid
         m_rbGridStartNumberingOpt->Enable( false );
-        m_checkBoxGridReverseNumbering->Enable( false );
-        m_radioBoxGridNumberingAxis->Enable( false );
         m_radioBoxGridNumberingScheme->Enable( false );
         m_choiceSecAxisNumbering->Enable( false );
         m_choicePriAxisNumbering->Enable( false );
