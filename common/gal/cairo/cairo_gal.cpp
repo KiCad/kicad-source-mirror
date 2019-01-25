@@ -158,7 +158,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
     if( isFillEnabled )     // Draw the filled area of the shape, before drawing the outline itself
     {
-        double pen_size = GetLineWidth();
+        auto pen_size = GetLineWidth();
         auto fgcolor = GetStrokeColor();
         SetStrokeColor( GetFillColor() );
 
@@ -439,7 +439,7 @@ void CAIRO_GAL_BASE::SetLineWidth( float aLineWidth )
         // Make lines appear at least 1 pixel wide, no matter of zoom
         double x = 1.0, y = 1.0;
         cairo_device_to_user_distance( currentContext, &x, &y );
-        float minWidth = std::min( fabs( x ), fabs( y ) );
+        auto minWidth = std::min( fabs( x ), fabs( y ) );
         cairo_set_line_width( currentContext, std::fmax( aLineWidth, minWidth ) );
     }
 }
@@ -718,10 +718,8 @@ void CAIRO_GAL_BASE::DeleteGroup( int aGroupNumber )
 
 void CAIRO_GAL_BASE::ClearCache()
 {
-    for( int i = groups.size() - 1; i >= 0; --i )
-    {
-        DeleteGroup( i );
-    }
+    for( auto it = groups.begin(); it != groups.end(); )
+        DeleteGroup( ( it++ )->first );
 }
 
 
