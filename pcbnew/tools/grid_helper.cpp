@@ -160,8 +160,8 @@ VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
 
     pts[0] = aSeg.A;
     pts[1] = aSeg.B;
-    pts[2] = aSeg.IntersectLines( SEG( nearest, nearest + VECTOR2I( 1, 0 ) ) );
-    pts[3] = aSeg.IntersectLines( SEG( nearest, nearest + VECTOR2I( 0, 1 ) ) );
+    pts[2] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( -1, 1 ), nearest + VECTOR2I( 1, -1 ) ) );
+    pts[3] = aSeg.IntersectLines( SEG( nearest + VECTOR2I( -1, -1 ), nearest + VECTOR2I( 1, 1 ) ) );
 
     int min_d = std::numeric_limits<int>::max();
 

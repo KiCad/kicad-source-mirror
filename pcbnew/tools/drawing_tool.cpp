@@ -1507,6 +1507,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
             std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> items;
             BOX2I bbox = aVia->GetBoundingBox();
             auto view = m_frame->GetGalCanvas()->GetView();
+            std::vector<TRACK*> possible_tracks;
 
             view->Query( bbox, items );
 
@@ -1521,11 +1522,26 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 {
                     if( TestSegmentHit( aVia->GetPosition(), track->GetStart(), track->GetEnd(),
                                         ( track->GetWidth() + aVia->GetWidth() ) / 2 ) )
-                        return track;
+                        possible_tracks.push_back( track );
                 }
             }
 
-            return nullptr;
+            TRACK* return_track = nullptr;
+            int min_d = std::numeric_limits<int>::max();
+            for( auto track : possible_tracks )
+            {
+                SEG test( track->GetStart(), track->GetEnd() );
+                auto dist = ( test.NearestPoint( aVia->GetPosition() ) -
+                        VECTOR2I( aVia->GetPosition() ) ).EuclideanNorm();
+
+                if( dist < min_d )
+                {
+                    min_d = dist;
+                    return_track = track;
+                }
+            }
+
+            return return_track;
         }
 
 
