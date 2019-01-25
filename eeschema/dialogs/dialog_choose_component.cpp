@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Henner Zeller <h.zeller@acm.org>
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,19 +142,6 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
     sizer->Add( buttonsSizer, 0, wxEXPAND | wxLEFT, 5 );
     SetSizer( sizer );
 
-    Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
-    Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
-    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
-    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
-
-    if( m_browser_button )
-        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
-                                &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
-
-    if( m_fp_sel_ctrl )
-        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
-                             &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
-
     Layout();
 
     // We specify the width of the right window (m_symbol_view_panel), because specify
@@ -171,6 +158,19 @@ DIALOG_CHOOSE_COMPONENT::DIALOG_CHOOSE_COMPONENT( SCH_BASE_FRAME* aParent, const
 
     SetInitialFocus( m_tree );
     okButton->SetDefault();
+
+    Bind( wxEVT_INIT_DIALOG, &DIALOG_CHOOSE_COMPONENT::OnInitDialog, this );
+    Bind( wxEVT_TIMER, &DIALOG_CHOOSE_COMPONENT::OnCloseTimer, this, m_dbl_click_timer->GetId() );
+    Bind( COMPONENT_PRESELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentPreselected, this );
+    Bind( COMPONENT_SELECTED, &DIALOG_CHOOSE_COMPONENT::OnComponentSelected, this );
+
+    if( m_browser_button )
+        m_browser_button->Bind( wxEVT_COMMAND_BUTTON_CLICKED,
+                                &DIALOG_CHOOSE_COMPONENT::OnUseBrowser, this );
+
+    if( m_fp_sel_ctrl )
+        m_fp_sel_ctrl->Bind( EVT_FOOTPRINT_SELECTED,
+                             &DIALOG_CHOOSE_COMPONENT::OnFootprintSelected, this );
 }
 
 

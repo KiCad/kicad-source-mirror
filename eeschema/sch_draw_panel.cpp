@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2017 CERN
+ * Copyright (C) 2014-2019 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -78,6 +78,11 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     m_view->SetPainter( m_painter.get() );
     m_view->SetScaleLimits( 50.0, 0.05 );    // This fixes the zoom in and zoom out limits
     m_view->SetMirror( false, false );
+
+    // Early initialization of the canvas background color,
+    // before any OnPaint event is fired for the canvas using a wrong bg color
+    auto settings = m_painter->GetSettings();
+    m_gal->SetClearColor( settings->GetBackgroundColor() );
 
     setDefaultLayerOrder();
     setDefaultLayerDeps();

@@ -35,10 +35,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
                                               EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType ) :
     wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ),
     m_kiway( aKiway ),
-    m_preview( nullptr ),
-    m_status( nullptr ),
-    m_statusSizer( nullptr ),
-    m_previewItem( nullptr )
+    m_preview( nullptr ), m_status( nullptr ), m_statusSizer( nullptr ), m_previewItem( nullptr )
 {
     wxString eeschemaFrameKey( SCH_EDIT_FRAME_NAME );
     auto eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
@@ -59,6 +56,12 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     // But mainly, due to some strange bug I (JPC) was unable to fix, the grid creates
     // strange artifacts on Windows when eeschema is run from Kicad manager (but not in stand alone...).
     m_preview->GetGAL()->SetGridVisibility( false );
+
+    // Early initialization of the canvas background color,
+    // before any OnPaint event is fired for the canvas using a wrong bg color
+    KIGFX::VIEW* view = m_preview->GetView();
+    auto settings = static_cast<KIGFX::SCH_RENDER_SETTINGS*>( view->GetPainter()->GetSettings() );
+    m_preview->GetGAL()->SetClearColor( settings->GetBackgroundColor() );
 
     SetBackgroundColour( *wxWHITE );
     SetForegroundColour( *wxBLACK );
