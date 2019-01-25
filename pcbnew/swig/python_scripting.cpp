@@ -366,9 +366,16 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     PyDict_SetItemString( globals, "__builtins__", builtins );
     Py_DECREF( builtins );
 
+    auto app_ptr = wxTheApp;
     // Execute the code to make the makeWindow function we defined above
     PyObject*   result = PyRun_String( pcbnew_pyshell_one_step.str().c_str(), Py_file_input, globals, globals );
 
+#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
+    // This absolutely ugly hack is to work around the pyshell re-writing the global
+    // wxApp variable.  Once we can initialize Phoenix to access the appropriate instance
+    // of wx, we can remove this line
+    wxApp::SetInstance( app_ptr );
+#endif
     // Was there an exception?
     if( !result )
     {
