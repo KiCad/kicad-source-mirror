@@ -523,6 +523,10 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
     COLOR4D  color = GetLayerColor( GetLayer() );
     int      thickness = GetPenSize();
 
+    // Two thicknesses are set here:
+    // The first is for EDA_TEXT, which controls the interline spacing based on text thickness
+    // The second is for the output that sets the actual stroke size
+    SetThickness( thickness );
     aPlotter->SetCurrentLineWidth( thickness );
 
     if( IsMultilineAllowed() )
