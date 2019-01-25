@@ -87,51 +87,71 @@ void ARRAY_CREATOR::Invoke()
         }
 
         // The first item in list is the original item. We do not modify it
-        for( int ptN = 1; ptN < array_opts->GetArraySize(); ptN++ )
+        for( int ptN = 0; ptN < array_opts->GetArraySize(); ptN++ )
         {
-            BOARD_ITEM* new_item;
+            BOARD_ITEM* this_item;
 
-            if( isModuleEditor )
+            if( ptN == 0 )
             {
-                // Don't bother incrementing pads: the module won't update
-                // until commit, so we can only do this once
-                new_item = module->Duplicate( item, false );
+                // the first point: we don't own this or add it, but
+                // we might still modify it (position or label)
+                this_item = item;
             }
             else
             {
-                new_item = getBoard()->Duplicate( item );
+                // Need to create a new item
+                std::unique_ptr<BOARD_ITEM> new_item;
 
-                // Incrementing the reference number won't always be correct, but leaving
-                // it the same is always incorrect.
-                if( new_item->Type() == PCB_MODULE_T )
-                    static_cast<MODULE*>( new_item )->IncrementReference( ptN );
+                if( isModuleEditor )
+                {
+                    // Don't bother incrementing pads: the module won't update
+                    // until commit, so we can only do this once
+                    new_item.reset( module->Duplicate( item, false ) );
+                }
+                else
+                {
+                    new_item.reset( getBoard()->Duplicate( item ) );
 
-                // @TODO: we should merge zones. This is a bit tricky, because
-                // the undo command needs saving old area, if it is merged.
+                    // Incrementing the reference number won't always be correct, but leaving
+                    // it the same is always incorrect.
+                    if( new_item->Type() == PCB_MODULE_T )
+                        static_cast<MODULE&>( *new_item ).IncrementReference( ptN );
+
+                    // @TODO: we should merge zones. This is a bit tricky, because
+                    // the undo command needs saving old area, if it is merged.
+                }
+
+                this_item = new_item.get();
+
+                if( new_item )
+                {
+                    prePushAction( this_item );
+                    commit.Add( new_item.release() );
+                    postPushAction( this_item );
+                }
             }
 
-            if( new_item )
+            // always transform the item
+            if( this_item )
             {
-                TransformItem( *array_opts, ptN, *new_item );
-                prePushAction( new_item );
-                commit.Add( new_item );
-                postPushAction( new_item );
+                commit.Modify( this_item );
+                TransformItem( *array_opts, ptN, *this_item );
             }
 
             // attempt to renumber items if the array parameters define
             // a complete numbering scheme to number by (as opposed to
             // implicit numbering by incrementing the items during creation
-            if( new_item && array_opts->ShouldNumberItems() )
+            if( this_item && array_opts->ShouldNumberItems() )
             {
                 // Renumber non-aperture pads.
-                if( new_item->Type() == PCB_PAD_T )
+                if( this_item->Type() == PCB_PAD_T )
                 {
-                    D_PAD* pad = static_cast<D_PAD*>( new_item );
+                    auto& pad = static_cast<D_PAD&>( *this_item );
 
-                    if( PAD_NAMING::PadCanHaveName( *pad ) )
+                    if( PAD_NAMING::PadCanHaveName( pad ) )
                     {
                         wxString newName = pad_name_provider.GetNextPadName();
-                        pad->SetName( newName );
+                        pad.SetName( newName );
                     }
                 }
             }
