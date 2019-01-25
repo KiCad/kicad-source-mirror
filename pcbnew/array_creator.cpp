@@ -28,11 +28,11 @@
 
 #include "array_creator.h"
 
+#include <array_pad_name_provider.h>
 #include <board_commit.h>
 #include <pad_naming.h>
 
 #include <dialogs/dialog_create_array.h>
-
 
 /**
  * Transform a #BOARD_ITEM from the given #ARRAY_OPTIONS and an index into the array.
@@ -74,6 +74,8 @@ void ARRAY_CREATOR::Invoke()
 
     BOARD_COMMIT commit( &m_parent );
 
+    ARRAY_PAD_NAME_PROVIDER pad_name_provider( module, *array_opts );
+
     for ( int i = 0; i < numItems; ++i )
     {
         BOARD_ITEM* item = getNthItemToArray( i );
@@ -91,9 +93,9 @@ void ARRAY_CREATOR::Invoke()
 
             if( isModuleEditor )
             {
-                // increment pad numbers if do any renumbering
-                // (we will number again later according to the numbering scheme if set)
-                new_item = module->Duplicate( item, array_opts->ShouldNumberItems() );
+                // Don't bother incrementing pads: the module won't update
+                // until commit, so we can only do this once
+                new_item = module->Duplicate( item, false );
             }
             else
             {
@@ -119,7 +121,7 @@ void ARRAY_CREATOR::Invoke()
             // attempt to renumber items if the array parameters define
             // a complete numbering scheme to number by (as opposed to
             // implicit numbering by incrementing the items during creation
-            if( new_item && array_opts->GetNumberingStartIsSpecified() )
+            if( new_item && array_opts->ShouldNumberItems() )
             {
                 // Renumber non-aperture pads.
                 if( new_item->Type() == PCB_PAD_T )
@@ -127,7 +129,10 @@ void ARRAY_CREATOR::Invoke()
                     D_PAD* pad = static_cast<D_PAD*>( new_item );
 
                     if( PAD_NAMING::PadCanHaveName( *pad ) )
-                        pad->SetName( array_opts->GetItemNumber( ptN ) );
+                    {
+                        wxString newName = pad_name_provider.GetNextPadName();
+                        pad->SetName( newName );
+                    }
                 }
             }
         }
