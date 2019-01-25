@@ -174,7 +174,7 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         double degs = getNormDeciDegFromRad( initAngle );
 
         cursorStrings.push_back( DimensionLabel( "r", m_constructMan.GetRadius(), m_units ) );
-        cursorStrings.push_back( DimensionLabel( "θ", degs, DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
     }
     else
     {
@@ -191,8 +191,8 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         // draw dimmed extender line to cursor
         drawLineWithHilight( aView, origin, m_constructMan.GetLastPoint(), true );
 
-        cursorStrings.push_back( DimensionLabel( "Δθ", subtendedDeg, DEGREES ) );
-        cursorStrings.push_back( DimensionLabel( "θ", endAngleDeg, DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "Δθ" ), subtendedDeg, DEGREES ) );
+        cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg, DEGREES ) );
     }
 
     // FIXME: spaces choke OpenGL lp:1668455
