@@ -366,7 +366,9 @@ wxWindow* CreatePythonShellWindow( wxWindow* parent, const wxString& aFramenameI
     PyDict_SetItemString( globals, "__builtins__", builtins );
     Py_DECREF( builtins );
 
+#ifdef KICAD_SCRIPTING_WXPYTHON_PHOENIX
     auto app_ptr = wxTheApp;
+#endif
     // Execute the code to make the makeWindow function we defined above
     PyObject*   result = PyRun_String( pcbnew_pyshell_one_step.str().c_str(), Py_file_input, globals, globals );
 
