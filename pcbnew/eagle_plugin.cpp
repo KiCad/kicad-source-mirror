@@ -1395,22 +1395,7 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
 
     if( width <= 0 )
     {
-        switch( layer )
-        {
-        case Edge_Cuts:
-            width = DEFAULT_EDGE_WIDTH;
-            break;
-        case F_SilkS:
-        case B_SilkS:
-            width = DEFAULT_SILK_LINE_WIDTH;
-            break;
-        case F_CrtYd:
-        case B_CrtYd:
-            width = DEFAULT_COURTYARD_WIDTH;
-            break;
-        default:
-            width = DEFAULT_LINE_WIDTH;
-        }
+        width = aModule->GetBoard()->GetDesignSettings().GetLineThickness( layer );
     }
 
     // FIXME: the cap attribute is ignored because kicad can't create lines
@@ -1732,32 +1717,19 @@ void EAGLE_PLUGIN::packagePolygon( MODULE* aModule, wxXmlNode* aTree ) const
     dwg->SetDrawCoord();
 }
 
-
 void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
 {
     ECIRCLE         e( aTree );
     PCB_LAYER_ID    layer = kicad_layer( e.layer );
     EDGE_MODULE*    gr = new EDGE_MODULE( aModule, S_CIRCLE );
     int             width = e.width.ToPcbUnits();
+    int             radius = e.radius.ToPcbUnits();
 
+    // with == 0 means filled circle
     if( width <= 0 )
     {
-        switch( layer )
-        {
-        case Edge_Cuts:
-            width = DEFAULT_EDGE_WIDTH;
-            break;
-        case F_SilkS:
-        case B_SilkS:
-            width = DEFAULT_SILK_LINE_WIDTH;
-            break;
-        case F_CrtYd:
-        case B_CrtYd:
-            width = DEFAULT_COURTYARD_WIDTH;
-            break;
-        default:
-            width = DEFAULT_LINE_WIDTH;
-        }
+        width = radius;
+        radius = radius / 2;
     }
 
     aModule->GraphicalItemsList().PushBack( gr );
@@ -1775,7 +1747,7 @@ void EAGLE_PLUGIN::packageCircle( MODULE* aModule, wxXmlNode* aTree ) const
     gr->SetLayer( layer );
     gr->SetTimeStamp( EagleTimeStamp( aTree ) );
     gr->SetStart0( wxPoint( kicad_x( e.x ), kicad_y( e.y ) ) );
-    gr->SetEnd0( wxPoint( kicad_x( e.x + e.radius ), kicad_y( e.y ) ) );
+    gr->SetEnd0( wxPoint( kicad_x( e.x ) + radius, kicad_y( e.y ) ) );
     gr->SetDrawCoord();
 }
 
