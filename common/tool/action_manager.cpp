@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -200,28 +201,27 @@ void ACTION_MANAGER::UpdateHotKeys()
         TOOL_ACTION* action = actionName.second;
         int hotkey = processHotKey( action );
 
-        if( hotkey > 0 )
-        {
-            m_actionHotKeys[hotkey].push_back( action );
-            m_hotkeys[action->GetId()] = hotkey;
-        }
-    }
+        if( hotkey <= 0 )
+            continue;
 
-#ifdef DEBUG
-    // Check if there are two global actions assigned to the same hotkey
-    for( const auto& action_list : m_actionHotKeys )
-    {
-        int global_actions_cnt = 0;
-
-        for( const TOOL_ACTION* action : action_list.second )
+        // Second hotkey takes priority as defaults are loaded first and updates
+        // are loaded after
+        if( action->GetScope() == AS_GLOBAL && m_actionHotKeys.count( hotkey ) )
         {
-            if( action->GetScope() == AS_GLOBAL )
-                ++global_actions_cnt;
+            for( auto it = m_actionHotKeys[hotkey].begin();
+                      it != m_actionHotKeys[hotkey].end(); )
+            {
+                if( (*it)->GetScope() == AS_GLOBAL )
+                    it = m_actionHotKeys[hotkey].erase( it );
+                else
+                    it++;
+            }
         }
 
-        wxASSERT( global_actions_cnt <= 1 );
+        m_actionHotKeys[hotkey].push_back( action );
+        m_hotkeys[action->GetId()] = hotkey;
+
     }
-#endif /* not NDEBUG */
 }
 
 
