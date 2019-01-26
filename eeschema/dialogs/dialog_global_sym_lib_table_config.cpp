@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2019 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -28,7 +28,7 @@
 
 
 DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG::DIALOG_GLOBAL_SYM_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, "symbol" )
+    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "symbol" ) )
 {
 }
 

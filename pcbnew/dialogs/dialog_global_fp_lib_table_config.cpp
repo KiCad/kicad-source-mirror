@@ -28,7 +28,7 @@
 
 
 DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG::DIALOG_GLOBAL_FP_LIB_TABLE_CONFIG( wxWindow* aParent ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, "footprint" )
+    DIALOG_GLOBAL_LIB_TABLE_CONFIG( aParent, _( "footprint" ) )
 {
 }
 

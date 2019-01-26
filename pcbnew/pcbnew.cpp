@@ -369,7 +369,7 @@ bool IFACE::OnKifaceStart( PGM_BASE* aProgram, int aCtlBits )
             // the user just has to edit the (partially) loaded table.
             wxString msg = _(
                 "An error occurred attempting to load the global footprint library table.\n"
-                "Please edit this global symbol library table in Preferences menu."
+                "Please edit this global footprint library table in Preferences menu."
                 );
 
             DisplayErrorMessage( NULL, msg, ioe.What() );

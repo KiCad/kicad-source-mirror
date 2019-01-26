@@ -35,7 +35,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
     SetTitle( tmp );
 
     tmp.Printf( _( "KiCad has been run for the first time using the new %s library table for\n"
-                   "accessing symbol libraries.  In order for KiCad to access %s libraries,\n"
+                   "accessing libraries.  In order for KiCad to access %s libraries,\n"
                    "you must configure your global %s library table.  Please select from one\n"
                    "of the options below.  If you are not sure which option to select, please\n"
                    "use the default selection." ), aTableName, aTableName, aTableName );
@@ -59,7 +59,7 @@ DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParen
                 aTableName );
     m_emptyRb->SetToolTip( tmp );
 
-    tmp.Printf( _( "Select global %symbol library table file:" ), aTableName );
+    tmp.Printf( _( "Select global %s library table file:" ), aTableName );
     m_staticText2->SetLabel( tmp );
 
     m_filePicker1->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_GLOBAL_LIB_TABLE_CONFIG::onUpdateFilePicker ), NULL, this );
