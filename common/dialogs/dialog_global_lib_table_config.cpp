@@ -20,7 +20,11 @@
 
 #include "dialog_global_lib_table_config.h"
 
-#include <kiface_i.h>
+#include <pgm_base.h>
+#include <search_stack.h>
+#include <systemdirsappend.h>
+
+#include <wx/stdpaths.h>
 
 
 DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent,
@@ -98,14 +102,28 @@ bool DIALOG_GLOBAL_LIB_TABLE_CONFIG::TransferDataToWindow()
 
     wxFileName fn = GetGlobalTableFileName();
 
+    SEARCH_STACK ss;
+
+    SystemDirsAppend( &ss );
+
+    wxString templatePath =
+        Pgm().GetLocalEnvVariables().at( wxT( "KICAD_TEMPLATE_DIR" ) ).GetValue();
+
+    if( !templatePath.IsEmpty() )
+        ss.AddPaths( templatePath, 0 );
+    else
+        templatePath = wxStandardPaths::Get().GetUserConfigDir();
+
+    m_filePicker1->SetInitialDirectory( templatePath );
+
     // Attempt to find the default global file table from the KiCad template folder.
-    wxString fileName = Kiface().KifaceSearch().FindValidPath( fn.GetName() );
+    wxString fileName = ss.FindValidPath( fn.GetName() );
 
     m_defaultFileFound = wxFileName::FileExists( fileName );
 
     if( m_defaultFileFound )
     {
-        m_filePicker1->SetFileName( wxFileName( fileName ) );
+        m_filePicker1->SetPath(fileName );
         m_filePicker1->Enable( false );
     }
     else

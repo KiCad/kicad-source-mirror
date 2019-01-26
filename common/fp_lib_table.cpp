@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@
 #include <footprint_info.h>
 #include <lib_id.h>
 #include <lib_table_lexer.h>
+#include <pgm_base.h>
+#include <search_stack.h>
+#include <systemdirsappend.h>
 #include <fp_lib_table.h>
 #include <class_module.h>
 
@@ -475,7 +478,17 @@ bool FP_LIB_TABLE::LoadGlobalTable( FP_LIB_TABLE& aTable )
 
         // Attempt to copy the default global file table from the KiCad
         // template folder to the user's home configuration path.
-        wxString fileName = Kiface().KifaceSearch().FindValidPath( global_tbl_name );
+        SEARCH_STACK ss;
+
+        SystemDirsAppend( &ss );
+
+        wxString templatePath =
+            Pgm().GetLocalEnvVariables().at( wxT( "KICAD_TEMPLATE_DIR" ) ).GetValue();
+
+        if( !templatePath.IsEmpty() )
+            ss.AddPaths( templatePath, 0 );
+
+        wxString fileName = ss.FindValidPath( global_tbl_name );
 
         // The fallback is to create an empty global footprint table for the user to populate.
         if( fileName.IsEmpty() || !::wxCopyFile( fileName, fn.GetFullPath(), false ) )
