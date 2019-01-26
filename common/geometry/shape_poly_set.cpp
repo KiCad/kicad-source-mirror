@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2017 CERN
+ * Copyright (C) 2015-2019 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
  *
@@ -1593,7 +1593,7 @@ int SHAPE_POLY_SET::Distance( VECTOR2I aPoint )
 int SHAPE_POLY_SET::Distance( const SEG& aSegment, int aSegmentWidth )
 {
     int currentDistance;
-    int minDistance = DistanceToPolygon( aSegment, 0 );
+    int minDistance = DistanceToPolygon( aSegment, 0, aSegmentWidth );
 
     // Iterate through all the polygons and get the minimum distance.
     for( unsigned int polygonIdx = 1; polygonIdx < m_polys.size(); polygonIdx++ )

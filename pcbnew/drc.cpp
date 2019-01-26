@@ -1,9 +1,9 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2004-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2017-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1135,6 +1135,9 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
     if( textShape.size() == 0 )     // Should not happen (empty text?)
         return;
 
+    EDA_RECT bbox = text->GetTextBox();
+    SHAPE_RECT rect_area( bbox.GetX(), bbox.GetY(), bbox.GetWidth(), bbox.GetHeight() );
+
     // Test tracks and vias
     for( TRACK* track = m_pcb->m_Track; track != NULL; track = track->Next() )
     {
@@ -1143,6 +1146,10 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 
         int minDist = ( track->GetWidth() + textWidth ) / 2 + track->GetClearance( NULL );
         SEG trackAsSeg( track->GetStart(), track->GetEnd() );
+
+        // Fast test to detect a trach segment candidate inside the text bounding box
+        if( !rect_area.Collide( trackAsSeg, minDist ) )
+            continue;
 
         for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
         {
@@ -1167,19 +1174,27 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         if( !pad->IsOnLayer( aTextItem->GetLayer() ) )
             continue;
 
+        // Fast test to detect a pad candidate inside the text bounding box
+        // Finer test (time consumming) is made only for pads near the text.
+        int bb_radius = pad->GetBoundingRadius() + pad->GetClearance( NULL );
+        VECTOR2I shape_pos( pad->ShapePos() );
+
+        if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
+            continue;
+
         const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
 
-        // We incorporate "minDist" into the pad's outline
-        pad->TransformShapeWithClearanceToPolygon( padOutline, pad->GetClearance( NULL ),
+        int minDist = textWidth/2 + pad->GetClearance( NULL );
+        pad->TransformShapeWithClearanceToPolygon( padOutline, 0,
                                                    segmentCount, correctionFactor );
 
         for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
         {
             SEG textSeg( textShape[jj], textShape[jj+1] );
 
-            if( padOutline.Distance( textSeg, textWidth ) == 0 )
+            if( padOutline.Distance( textSeg, 0 ) <= minDist )
             {
                 addMarkerToPcb( m_markerFactory.NewMarker( pad, aTextItem, DRCE_PAD_NEAR_COPPER ) );
                 break;
@@ -1192,6 +1207,7 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
 void DRC::testOutline()
 {
     wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
+
     if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
     {
         addMarkerToPcb( m_markerFactory.NewMarker( error_loc, m_pcb, DRCE_INVALID_OUTLINE ) );
