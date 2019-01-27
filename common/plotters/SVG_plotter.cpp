@@ -288,6 +288,24 @@ void SVG_PLOTTER::SetCurrentLineWidth( int width, void* aData )
 }
 
 
+void SVG_PLOTTER::StartBlock( void* aData )
+{
+    std::string* idstr = reinterpret_cast<std::string*>( aData );
+
+    fputs( "<svg:g ", outputFile );
+    if( idstr )
+        fprintf( outputFile, "id=\"%s\"", idstr->c_str() );
+
+    fprintf( outputFile, ">\n" );
+}
+
+
+void SVG_PLOTTER::EndBlock( void* aData )
+{
+    fprintf( outputFile, "</g>\n" );
+}
+
+
 /* initialize m_red, m_green, m_blue ( 0 ... 255)
  * from reduced values r, g ,b ( 0.0 to 1.0 )
  */
