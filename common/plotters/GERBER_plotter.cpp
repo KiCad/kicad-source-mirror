@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -201,8 +201,12 @@ bool GERBER_PLOTTER::StartPlot()
              m_gerberUnitInch ? "inch" : "mm" );
 
     wxString Title = creator + wxT( " " ) + GetBuildVersion();
+    // In gerber files, ASCII7 chars only are allowed.
+    // So use a ISO date format (using a space as separator between date and time),
+    // not a localized date format
+    wxDateTime date = wxDateTime::Now();
     fprintf( outputFile, "G04 Created by KiCad (%s) date %s*\n",
-             TO_UTF8( Title ), TO_UTF8( DateAndTime() ) );
+             TO_UTF8( Title ), TO_UTF8( date.FormatISOCombined( ' ') ) );
 
     /* Mass parameter: unit = INCHES/MM */
     if( m_gerberUnitInch )
