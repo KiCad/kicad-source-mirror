@@ -1166,8 +1166,9 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
 void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
-    int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
+    auto color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
+    auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
     if( aLabel->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
@@ -1182,7 +1183,8 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
     for( auto p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
-    m_gal->SetIsFill( false );
+    m_gal->SetIsFill( true );
+    m_gal->SetFillColor( back_color );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( width );
     m_gal->SetStrokeColor( color );
@@ -1194,8 +1196,9 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 {
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
-    int     width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
+    auto color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
+    auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
+    int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
     if( aLabel->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
@@ -1210,7 +1213,8 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     for( auto p : pts )
         pts2.emplace_back( VECTOR2D( p.x, p.y ) );
 
-    m_gal->SetIsFill( false );
+    m_gal->SetIsFill( true );
+    m_gal->SetFillColor( back_color );
     m_gal->SetIsStroke( true );
     m_gal->SetLineWidth( width );
     m_gal->SetStrokeColor( color );
