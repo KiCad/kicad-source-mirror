@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <utility_program.h>
+#include <qa_utils/utility_program.h>
 
 #include "tools/coroutines/coroutine_tools.h"
 #include "tools/io_benchmark/io_benchmark.h"

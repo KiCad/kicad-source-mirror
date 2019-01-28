@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
 #include <wx/wfstream.h>
 #include <wx/filename.h>
 
-#include "stdstream_line_reader.h"
+#include <qa_utils/stdstream_line_reader.h>
 
 
 using CLOCK = std::chrono::steady_clock;

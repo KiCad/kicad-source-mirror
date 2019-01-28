@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,42 +21,52 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCOPED_TIMER_H
-#define SCOPED_TIMER_H
+#ifndef FSTREAM_LINE_READER_H
+#define FSTREAM_LINE_READER_H
 
-#include <chrono>
+#include <wx/filename.h>
+
+#include <richio.h>
+
+#include <fstream>
+#include <istream>
 
 /**
- * A simple RAII class to measure the time of an operation.
- *
- * ON construction, a timer is started, and on destruction, the timer is
- * ended, and the time difference is written into the given duration
+ * LINE_READER that wraps a given std::istream instance.
  */
-template<typename DURATION>
-class SCOPED_TIMER
+class STDISTREAM_LINE_READER : public LINE_READER
 {
-    using CLOCK = std::chrono::steady_clock;
-    using TIME_PT = std::chrono::time_point<CLOCK>;
-
 public:
-    SCOPED_TIMER( DURATION& aDuration ):
-        m_duration( aDuration )
-    {
-        m_start = CLOCK::now();
-    }
+    STDISTREAM_LINE_READER();
 
-    ~SCOPED_TIMER()
-    {
-        const auto end = CLOCK::now();
+    ~STDISTREAM_LINE_READER();
 
-        // update the output
-        m_duration = std::chrono::duration_cast<DURATION>( end - m_start );
-    }
+    char* ReadLine() override;
+
+    /**
+     * Set the stream for this line reader.
+     * @param aStream a stream to read
+     */
+    void SetStream( std::istream& aStream );
 
 private:
-
-    DURATION& m_duration;
-    TIME_PT m_start;
+    std::string   m_buffer;
+    std::istream* m_stream;
 };
 
-#endif // SCOPED_TIMER_h
+
+/**
+ * LINE_READER interface backed by std::ifstream
+ */
+class IFSTREAM_LINE_READER : public STDISTREAM_LINE_READER
+{
+public:
+    IFSTREAM_LINE_READER( const wxFileName& aFileName );
+
+    void Rewind();
+
+private:
+    std::ifstream m_fStream;
+};
+
+#endif // FSTREAM_LINE_READER_H

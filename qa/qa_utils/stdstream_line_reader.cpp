@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "stdstream_line_reader.h"
+#include <qa_utils/stdstream_line_reader.h>
 
 #include <ios>
 

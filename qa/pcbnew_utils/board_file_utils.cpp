@@ -30,7 +30,7 @@
 
 #include <class_board.h>
 
-#include <stdstream_line_reader.h>
+#include <qa_utils/stdstream_line_reader.h>
 
 namespace KI_TEST
 {

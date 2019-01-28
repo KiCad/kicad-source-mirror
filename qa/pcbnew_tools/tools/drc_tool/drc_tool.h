@@ -24,7 +24,7 @@
 #ifndef PCBNEW_TOOLS_DRC_TOOL_H
 #define PCBNEW_TOOLS_DRC_TOOL_H
 
-#include <utility_program.h>
+#include <qa_utils/utility_program.h>
 
 /// A tool to run DRC tools on KiCad PCBs from the command line
 extern KI_TEST::UTILITY_PROGRAM drc_tool;

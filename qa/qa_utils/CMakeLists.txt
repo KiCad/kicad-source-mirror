@@ -42,5 +42,4 @@ target_link_libraries( qa_utils
 
 target_include_directories( qa_utils PUBLIC
     include
-    ${CMAKE_CURRENT_SOURCE_DIR}
 )

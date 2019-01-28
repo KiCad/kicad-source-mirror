@@ -36,8 +36,8 @@
 #include <drc/courtyard_overlap.h>
 #include <drc/drc_marker_factory.h>
 
-#include <scoped_timer.h>
-#include <stdstream_line_reader.h>
+#include <qa_utils/scoped_timer.h>
+#include <qa_utils/stdstream_line_reader.h>
 
 
 using DRC_DURATION = std::chrono::microseconds;

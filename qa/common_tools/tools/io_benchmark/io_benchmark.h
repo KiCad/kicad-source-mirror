@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef IO_BENCHMARK_H
-#define IO_BENCHMARK_H
+#ifndef QA_COMMON_TOOLS_IO_BENCHMARK__H
+#define QA_COMMON_TOOLS_IO_BENCHMARK__H
 
-#include <utility_program.h>
+#include <qa_utils/utility_program.h>
 
 extern KI_TEST::UTILITY_PROGRAM io_benchmark_tool;
 
-#endif // IO_BENCHMARK_H
+#endif // QA_COMMON_TOOLS_IO_BENCHMARK__H

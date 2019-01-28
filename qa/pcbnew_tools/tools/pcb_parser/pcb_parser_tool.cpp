@@ -37,8 +37,8 @@
 
 #include <wx/cmdline.h>
 
-#include <scoped_timer.h>
-#include <stdstream_line_reader.h>
+#include <qa_utils/scoped_timer.h>
+#include <qa_utils/stdstream_line_reader.h>
 
 using PARSE_DURATION = std::chrono::microseconds;
 

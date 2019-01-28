@@ -20,7 +20,7 @@
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
-#include "utility_program.h"
+#include <qa_utils/utility_program.h>
 
 #include <wx/msgout.h>
 
