@@ -351,6 +351,9 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         // We set the dangling ends to the block-scope, so we must set them back to
         // schematic-scope.
         TestDanglingEnds();
+
+        view->ShowSelectionArea( false );
+        view->ClearHiddenFlags();
     }
 
     if( !nextcmd )
@@ -363,6 +366,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     }
 
     view->ShowSelectionArea( false );
+    view->ClearPreview();
     view->ShowPreview( nextcmd );
 
     return nextcmd;
