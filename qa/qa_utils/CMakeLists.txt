@@ -22,6 +22,10 @@
 set( QA_UTIL_COMMON_SRC
     stdstream_line_reader.cpp
     utility_program.cpp
+
+    geometry/line_chain_construction.cpp
+    geometry/poly_set_construction.cpp
+    geometry/seg_construction.cpp
 )
 
 # A generic library of useful functions for various testing purposes
@@ -37,5 +41,6 @@ target_link_libraries( qa_utils
 )
 
 target_include_directories( qa_utils PUBLIC
+    include
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
