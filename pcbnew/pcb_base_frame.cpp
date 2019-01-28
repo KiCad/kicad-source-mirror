@@ -1087,7 +1087,7 @@ void PCB_BASE_FRAME::SetFastGrid1()
 
     if( m_gridSelectBox )
     {
-        wxCommandEvent cmd( wxEVT_COMBOBOX );
+        wxCommandEvent cmd( wxEVT_CHOICE );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
@@ -1106,7 +1106,7 @@ void PCB_BASE_FRAME::SetFastGrid2()
 
     if( m_gridSelectBox )
     {
-        wxCommandEvent cmd( wxEVT_COMBOBOX );
+        wxCommandEvent cmd( wxEVT_CHOICE );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
@@ -1120,7 +1120,7 @@ void PCB_BASE_FRAME::SetNextGrid()
 
     if( m_gridSelectBox )
     {
-        wxCommandEvent cmd( wxEVT_COMBOBOX );
+        wxCommandEvent cmd( wxEVT_CHOICE );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
@@ -1135,7 +1135,7 @@ void PCB_BASE_FRAME::SetPrevGrid()
 
     if( m_gridSelectBox )
     {
-        wxCommandEvent cmd( wxEVT_COMBOBOX );
+        wxCommandEvent cmd( wxEVT_CHOICE );
         cmd.SetEventObject( this );
         OnSelectGrid( cmd );
     }
