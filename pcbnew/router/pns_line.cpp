@@ -625,7 +625,7 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold
     }
     else
     {
-        if( dir_prev.IsObtuse(drag_dir ) )
+        if( dir_prev.Angle( drag_dir ) & (DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_HALF_FULL) )
         {
             guideA[0] = SEG( s_prev.A, s_prev.A + drag_dir.Left().ToVector() );
             guideA[1] = SEG( s_prev.A, s_prev.A + drag_dir.Right().ToVector() );
@@ -649,13 +649,14 @@ void LINE::dragSegment45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold
     }
     else
     {
-        if( dir_next.IsObtuse( drag_dir ) )
+        if( dir_next.Angle( drag_dir ) & (DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_HALF_FULL) )
         {
             guideB[0] = SEG( s_next.B, s_next.B + drag_dir.Left().ToVector() );
             guideB[1] = SEG( s_next.B, s_next.B + drag_dir.Right().ToVector() );
         }
         else
             guideB[0] = guideB[1] =    SEG( dragged.B, dragged.B + dir_next.ToVector() );
+        
     }
 
     SEG s_current( target, target + drag_dir.ToVector() );
