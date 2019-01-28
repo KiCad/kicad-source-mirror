@@ -225,6 +225,7 @@ set( COMMON_WIDGET_SRCS
     widgets/two_column_tree_list.cpp
     widgets/ui_common.cpp
     widgets/unit_binder.cpp
+    widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
     widgets/wx_grid.cpp
     )

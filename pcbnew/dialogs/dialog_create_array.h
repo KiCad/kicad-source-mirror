@@ -34,163 +34,10 @@
 
 #include <boost/bimap.hpp>
 #include <widgets/unit_binder.h>
-
-class CONFIG_SAVE_RESTORE_WINDOW
-{
-private:
-
-    enum CONFIG_CTRL_TYPE_T
-    {
-        CFG_CTRL_TEXT,
-        CFG_CTRL_UNIT_BINDER,
-        CFG_CTRL_CHECKBOX,
-        CFG_CTRL_RADIOBOX,
-        CFG_CTRL_CHOICE,
-        CFG_CTRL_TAB
-    };
-
-    struct CONFIG_CTRL_T
-    {
-        void* control;
-        CONFIG_CTRL_TYPE_T type;
-        void* dest;
-    };
-
-    std::vector<CONFIG_CTRL_T> ctrls;
-    bool& valid;
-
-protected:
-    CONFIG_SAVE_RESTORE_WINDOW( bool& validFlag ) :
-        valid( validFlag )
-    {}
-
-    void Add( wxRadioBox* ctrl, int& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_RADIOBOX, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
-
-    void Add( wxCheckBox* ctrl, bool& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_CHECKBOX, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
-
-    void Add( wxTextCtrl* ctrl, wxString& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_TEXT, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
-
-    void Add( UNIT_BINDER& ctrl, int& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { &ctrl, CFG_CTRL_UNIT_BINDER, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
+#include <widgets/widget_save_restore.h>
 
 
-    void Add( wxChoice* ctrl, int& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_CHOICE, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
-
-    void Add( wxNotebook* ctrl, int& dest )
-    {
-        CONFIG_CTRL_T ctrlInfo = { ctrl, CFG_CTRL_TAB, (void*) &dest };
-
-        ctrls.push_back( ctrlInfo );
-    }
-
-    void ReadConfigFromControls()
-    {
-        for( std::vector<CONFIG_CTRL_T>::const_iterator iter = ctrls.begin(), iend = ctrls.end();
-             iter != iend; ++iter )
-        {
-            switch( iter->type )
-            {
-            case CFG_CTRL_CHECKBOX:
-                *(bool*) iter->dest = static_cast<wxCheckBox*>( iter->control )->GetValue();
-                break;
-
-            case CFG_CTRL_TEXT:
-                *(wxString*) iter->dest = static_cast<wxTextCtrl*>( iter->control )->GetValue();
-                break;
-
-            case CFG_CTRL_UNIT_BINDER:
-                *(int*) iter->dest = static_cast<UNIT_BINDER*>( iter->control )->GetValue();
-                break;
-
-            case CFG_CTRL_CHOICE:
-                *(int*) iter->dest = static_cast<wxChoice*>( iter->control )->GetSelection();
-                break;
-
-            case CFG_CTRL_RADIOBOX:
-                *(int*) iter->dest = static_cast<wxRadioBox*>( iter->control )->GetSelection();
-                break;
-
-            case CFG_CTRL_TAB:
-                *(int*) iter->dest = static_cast<wxNotebook*>( iter->control )->GetSelection();
-                break;
-
-            default:
-                wxASSERT_MSG( false, wxString(
-                                "Unhandled control type for config store: " ) << iter->type );
-            }
-        }
-
-        valid = true;
-    }
-
-    void RestoreConfigToControls()
-    {
-        if( !valid )
-            return;
-
-        for( std::vector<CONFIG_CTRL_T>::const_iterator iter = ctrls.begin(), iend = ctrls.end();
-             iter != iend; ++iter )
-        {
-            switch( iter->type )
-            {
-            case CFG_CTRL_CHECKBOX:
-                static_cast<wxCheckBox*>( iter->control )->SetValue( *(bool*) iter->dest );
-                break;
-
-            case CFG_CTRL_TEXT:
-                static_cast<wxTextCtrl*>( iter->control )->SetValue( *(wxString*) iter->dest );
-                break;
-
-            case CFG_CTRL_UNIT_BINDER:
-                static_cast<UNIT_BINDER*>( iter->control )->SetValue( *(int*) iter->dest );
-                break;
-
-            case CFG_CTRL_CHOICE:
-                static_cast<wxChoice*>( iter->control )->SetSelection( *(int*) iter->dest );
-                break;
-
-            case CFG_CTRL_RADIOBOX:
-                static_cast<wxRadioBox*>( iter->control )->SetSelection( *(int*) iter->dest );
-                break;
-
-            case CFG_CTRL_TAB:
-                static_cast<wxNotebook*>( iter->control )->SetSelection( *(int*) iter->dest );
-                break;
-
-            default:
-                wxASSERT_MSG( false, wxString(
-                                "Unhandled control type for config restore: " ) << iter->type );
-            }
-        }
-    }
-};
-
-class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE,
-    public CONFIG_SAVE_RESTORE_WINDOW
+class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE
 {
 public:
 
@@ -223,6 +70,9 @@ private:
     UNIT_BINDER    m_hOffset, m_vOffset;
     UNIT_BINDER    m_hCentre, m_vCentre;
     UNIT_BINDER    m_circRadius;
+    UNIT_BINDER    m_circAngle;
+
+    WIDGET_SAVE_RESTORE m_cfg_persister;
 
     /*
      * The position of the original item(s), used for finding radius, etc

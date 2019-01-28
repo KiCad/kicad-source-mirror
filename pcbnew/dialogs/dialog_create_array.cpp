@@ -42,13 +42,13 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
      */
     CREATE_ARRAY_DIALOG_ENTRIES()
             : m_optionsSet( true ),
-              m_gridNx( "5" ),
-              m_gridNy( "5" ),
+              m_gridNx( 5 ),
+              m_gridNy( 5 ),
               m_gridDx( Millimeter2iu( 2.54 ) ),
               m_gridDy( Millimeter2iu( 2.54 ) ),
               m_gridOffsetX( 0 ),
               m_gridOffsetY( 0 ),
-              m_gridStagger( "1" ),
+              m_gridStagger( 1 ),
               m_gridStaggerType( 0 ),   // rows
               m_gridNumberingAxis( 0 ), // h then v
               m_gridNumberingReverseAlternate( false ),
@@ -60,8 +60,8 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
               m_gridSecNumberingOffset( "1" ), // numeric
               m_circCentreX( 0 ),
               m_circCentreY( 0 ),
-              m_circAngle( "0" ),
-              m_circCount( "4" ),
+              m_circAngle( 0.0 ),
+              m_circCount( 4 ),
               m_circNumberingStartSet( 1 ), // use specified start
               m_circNumberingOffset( "1" ),
               m_circRotate( false ),
@@ -71,44 +71,46 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
 
     bool m_optionsSet;
 
-    wxString m_gridNx, m_gridNy;
-    int      m_gridDx, m_gridDy;
-    int      m_gridOffsetX, m_gridOffsetY;
-    wxString m_gridStagger;
+    long m_gridNx, m_gridNy;
+    long m_gridDx, m_gridDy;
+    long m_gridOffsetX, m_gridOffsetY;
+    long m_gridStagger;
 
-    int      m_gridStaggerType, m_gridNumberingAxis;
+    long     m_gridStaggerType, m_gridNumberingAxis;
     bool     m_gridNumberingReverseAlternate;
-    int      m_gridNumberingStartSet;
-    int      m_grid2dArrayNumbering;
-    int      m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
+    long     m_gridNumberingStartSet;
+    long     m_grid2dArrayNumbering;
+    long     m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
     wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
 
-    int      m_circCentreX, m_circCentreY;
-    wxString m_circAngle, m_circCount;
-    int      m_circNumberingStartSet;
+    long     m_circCentreX, m_circCentreY;
+    long     m_circAngle;
+    long     m_circCount;
+    long     m_circNumberingStartSet;
     wxString m_circNumberingOffset;
     bool     m_circRotate;
-    int      m_arrayTypeTab;
+    long     m_arrayTypeTab;
 };
 
 // Persistent options settings
 static CREATE_ARRAY_DIALOG_ENTRIES saved_array_options;
 
 
-DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNumbering,
-                                          wxPoint aOrigPos ) :
-    DIALOG_CREATE_ARRAY_BASE( aParent ),
-    CONFIG_SAVE_RESTORE_WINDOW( saved_array_options.m_optionsSet ),
-    m_settings( NULL ),
-    m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
-    m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
-    m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
-    m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
-    m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
-    m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
-    m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
-    m_originalItemPosition( aOrigPos ),
-    m_numberingEnabled( enableNumbering )
+DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
+        PCB_BASE_FRAME* aParent, bool enableNumbering, wxPoint aOrigPos )
+        : DIALOG_CREATE_ARRAY_BASE( aParent ),
+          m_settings( NULL ),
+          m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
+          m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
+          m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
+          m_vOffset( aParent, m_labelOffsetY, m_entryOffsetY, m_unitLabelOffsetY ),
+          m_hCentre( aParent, m_labelCentreX, m_entryCentreX, m_unitLabelCentreX ),
+          m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
+          m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
+          m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
+          m_cfg_persister( saved_array_options.m_optionsSet ),
+          m_originalItemPosition( aOrigPos ),
+          m_numberingEnabled( enableNumbering )
 {
     // Set up numbering scheme drop downs
     //
@@ -127,43 +129,48 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNu
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );
 
+    m_circAngle.SetUnits( EDA_UNITS_T::DEGREES );
+
     // bind grid options to persister
-    Add( m_entryNx, saved_array_options.m_gridNx );
-    Add( m_entryNy, saved_array_options.m_gridNy );
-    Add( m_hSpacing, saved_array_options.m_gridDx );
-    Add( m_vSpacing, saved_array_options.m_gridDy );
+    m_cfg_persister.Add( *m_entryNx, saved_array_options.m_gridNx );
+    m_cfg_persister.Add( *m_entryNy, saved_array_options.m_gridNy );
+    m_cfg_persister.Add( m_hSpacing, saved_array_options.m_gridDx );
+    m_cfg_persister.Add( m_vSpacing, saved_array_options.m_gridDy );
 
-    Add( m_hOffset, saved_array_options.m_gridOffsetX );
-    Add( m_vOffset, saved_array_options.m_gridOffsetY );
-    Add( m_entryStagger, saved_array_options.m_gridStagger );
+    m_cfg_persister.Add( m_hOffset, saved_array_options.m_gridOffsetX );
+    m_cfg_persister.Add( m_vOffset, saved_array_options.m_gridOffsetY );
+    m_cfg_persister.Add( *m_entryStagger, saved_array_options.m_gridStagger );
 
-    Add( m_radioBoxGridStaggerType, saved_array_options.m_gridStaggerType );
+    m_cfg_persister.Add( *m_radioBoxGridStaggerType, saved_array_options.m_gridStaggerType );
 
-    Add( m_radioBoxGridNumberingAxis, saved_array_options.m_gridNumberingAxis );
-    Add( m_checkBoxGridReverseNumbering, saved_array_options.m_gridNumberingReverseAlternate );
+    m_cfg_persister.Add( *m_radioBoxGridNumberingAxis, saved_array_options.m_gridNumberingAxis );
+    m_cfg_persister.Add(
+            *m_checkBoxGridReverseNumbering, saved_array_options.m_gridNumberingReverseAlternate );
 
-    Add( m_rbGridStartNumberingOpt, saved_array_options.m_gridNumberingStartSet );
-    Add( m_radioBoxGridNumberingScheme, saved_array_options.m_grid2dArrayNumbering );
-    Add( m_choicePriAxisNumbering, saved_array_options.m_gridPriAxisNumScheme );
-    Add( m_choiceSecAxisNumbering, saved_array_options.m_gridSecAxisNumScheme );
+    m_cfg_persister.Add( *m_rbGridStartNumberingOpt, saved_array_options.m_gridNumberingStartSet );
+    m_cfg_persister.Add(
+            *m_radioBoxGridNumberingScheme, saved_array_options.m_grid2dArrayNumbering );
+    m_cfg_persister.Add( *m_choicePriAxisNumbering, saved_array_options.m_gridPriAxisNumScheme );
+    m_cfg_persister.Add( *m_choiceSecAxisNumbering, saved_array_options.m_gridSecAxisNumScheme );
 
-    Add( m_entryGridPriNumberingOffset, saved_array_options.m_gridPriNumberingOffset );
-    Add( m_entryGridSecNumberingOffset, saved_array_options.m_gridSecNumberingOffset );
+    m_cfg_persister.Add(
+            *m_entryGridPriNumberingOffset, saved_array_options.m_gridPriNumberingOffset );
+    m_cfg_persister.Add(
+            *m_entryGridSecNumberingOffset, saved_array_options.m_gridSecNumberingOffset );
 
     // bind circular options to persister
-    Add( m_hCentre, saved_array_options.m_circCentreX );
-    Add( m_vCentre, saved_array_options.m_circCentreY );
-    Add( m_entryCircAngle, saved_array_options.m_circAngle );
-    Add( m_entryCircCount, saved_array_options.m_circCount );
-    Add( m_entryRotateItemsCb, saved_array_options.m_circRotate );
+    m_cfg_persister.Add( m_hCentre, saved_array_options.m_circCentreX );
+    m_cfg_persister.Add( m_vCentre, saved_array_options.m_circCentreY );
+    m_cfg_persister.Add( m_circAngle, saved_array_options.m_circAngle );
+    m_cfg_persister.Add( *m_entryCircCount, saved_array_options.m_circCount );
+    m_cfg_persister.Add( *m_entryRotateItemsCb, saved_array_options.m_circRotate );
 
-    Add( m_rbCircStartNumberingOpt, saved_array_options.m_circNumberingStartSet );
-    Add( m_entryCircNumberingStart, saved_array_options.m_circNumberingOffset );
+    m_cfg_persister.Add( *m_rbCircStartNumberingOpt, saved_array_options.m_circNumberingStartSet );
+    m_cfg_persister.Add( *m_entryCircNumberingStart, saved_array_options.m_circNumberingOffset );
 
-    Add( m_gridTypeNotebook, saved_array_options.m_arrayTypeTab );
+    m_cfg_persister.Add( *m_gridTypeNotebook, saved_array_options.m_arrayTypeTab );
 
-
-    RestoreConfigToControls();
+    m_cfg_persister.RestoreConfigToControls();
 
     // Run the callbacks once to process the dialog contents
     setControlEnablement();
@@ -360,7 +367,7 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         // assign pointer and ownership here
         m_settings = newSettings;
-        ReadConfigFromControls();
+        m_cfg_persister.ReadConfigFromControls();
 
         return true;
     }
