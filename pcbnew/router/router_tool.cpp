@@ -1172,7 +1172,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
             return 0;
     }
 
-    VECTOR2I p0 = controls()->GetCursorPosition();
+    VECTOR2I p0 = controls()->GetCursorPosition( false );
 
     int dragMode = aEvent.Parameter<int64_t> ();
 
