@@ -157,6 +157,8 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_COMPONENT_T,
     SCH_SHEET_T,
     SCH_BITMAP_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     EOT
 };
 
@@ -200,6 +202,8 @@ const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
 
 
 const KICAD_T SCH_COLLECTOR::OrientableItems[] = {
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_BUS_WIRE_ENTRY_T,
     SCH_COMPONENT_T,
     SCH_BITMAP_T,
     SCH_SHEET_T,
