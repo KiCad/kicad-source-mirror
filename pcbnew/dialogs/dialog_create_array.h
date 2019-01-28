@@ -238,44 +238,8 @@ private:
 
     bool TransferDataFromWindow() override;
 
-    struct CREATE_ARRAY_DIALOG_ENTRIES
-    {
-        CREATE_ARRAY_DIALOG_ENTRIES() :
-            m_optionsSet( false ),
-            m_gridStaggerType( 0 ),
-            m_gridNumberingAxis( 0 ),
-            m_gridNumberingReverseAlternate( false ),
-            m_grid2dArrayNumbering( 0 ),
-            m_gridPriAxisNumScheme( 0 ),
-            m_gridSecAxisNumScheme( 0 ),
-            m_circRotate( false ),
-            m_arrayTypeTab( 0 )
-        {}
-
-        bool m_optionsSet;
-
-        wxString m_gridNx, m_gridNy;
-        int      m_gridDx, m_gridDy;
-        int      m_gridOffsetX, m_gridOffsetY;
-        wxString m_gridStagger;
-
-        int      m_gridStaggerType, m_gridNumberingAxis;
-        bool     m_gridNumberingReverseAlternate;
-        int      m_grid2dArrayNumbering;
-        int      m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
-        wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
-
-        int      m_circCentreX, m_circCentreY;
-        wxString m_circAngle, m_circCount, m_circNumberingOffset;
-        bool     m_circRotate;
-        int      m_arrayTypeTab;
-    };
-
     // some uses of arrays might not allow component renumbering
     bool m_numberingEnabled;
-
-    // saved array options
-    static CREATE_ARRAY_DIALOG_ENTRIES m_options;
 };
 
 #endif      // __DIALOG_CREATE_ARRAY__
