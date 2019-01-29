@@ -365,43 +365,39 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
      */
     for( int i = 0; i < PointCount(); i++ )
     {
-        const VECTOR2D p1 = CPoint( i );
-        const VECTOR2D p2 = CPoint( i + 1 ); // CPoint wraps, so ignore counts
-        const VECTOR2D diff = p2 - p1;
+        const auto p1 = CPoint( i );
+        const auto p2 = CPoint( i + 1 ); // CPoint wraps, so ignore counts
+        const auto diff = p2 - p1;
 
-        if( ( ( p1.y > aP.y ) != ( p2.y > aP.y ) ) &&
-                ( aP.x - p1.x < ( diff.x / diff.y ) * ( aP.y - p1.y ) ) )
-            inside = !inside;
+        if( diff.y != 0 )
+        {
+            const int d = rescale( diff.x, ( aP.y - p1.y ), diff.y );
+
+            if( ( ( p1.y > aP.y ) != ( p2.y > aP.y ) ) && ( aP.x - p1.x < d ) )
+                inside = !inside;
+        }
     }
-
     return inside;
 }
 
 
 bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 {
-    if( !PointCount() )
-        return false;
-    else if( PointCount() == 1 )
+	if( !PointCount() )
+		return false;
+
+	else if( PointCount() == 1 )
         return m_points[0] == aP;
 
-    for( int i = 0; i < PointCount(); i++ )
+    for( int i = 0; i < SegmentCount(); i++ )
     {
-        const VECTOR2I& p1 = CPoint( i );
-        const VECTOR2I& p2 = CPoint( i + 1 );
+        const SEG s = CSegment( i );
 
-        if( aP == p1 )
+        if( s.A == aP || s.B == aP )
             return true;
 
-        if( p1.x == p2.x && p1.x == aP.x && ( p1.y > aP.y ) != ( p2.y > aP.y ) )
+        if( s.Distance( aP ) <= 1 )
             return true;
-
-        const VECTOR2D diff = p2 - p1;
-        if( aP.x >= p1.x && aP.x <= p2.x )
-        {
-            if( round_nearest( p1.y + ( diff.y / diff.x ) * ( aP.x - p1.x ) ) == aP.y )
-                return true;
-        }
     }
 
     return false;
