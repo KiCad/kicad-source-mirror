@@ -641,6 +641,29 @@ int SplitString( wxString  strToSplit,
 }
 
 
+int GetTrailingInt( const wxString& aStr )
+{
+    int number = 0;
+    int base = 1;
+
+    // Trim and extract the trailing numeric part
+    int index = aStr.Len() - 1;
+    while( index >= 0 )
+    {
+        const char chr = aStr.GetChar( index );
+
+        if( chr < '0' || chr > '9' )
+            break;
+
+        number += ( chr - '0' ) * base;
+        base *= 10;
+        index--;
+    }
+
+    return number;
+}
+
+
 wxString GetIllegalFileNameWxChars()
 {
     return FROM_UTF8( illegalFileNameChars );

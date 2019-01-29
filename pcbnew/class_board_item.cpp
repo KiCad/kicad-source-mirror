@@ -95,29 +95,6 @@ void BOARD_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-int BOARD_ITEM::getTrailingInt( const wxString& aStr )
-{
-    int number = 0;
-    int base = 1;
-
-    // Trim and extract the trailing numeric part
-    int index = aStr.Len() - 1;
-    while( index >= 0 )
-    {
-        const char chr = aStr.GetChar( index );
-
-        if( chr < '0' || chr > '9' )
-            break;
-
-        number += ( chr - '0' ) * base;
-        base *= 10;
-        index--;
-    }
-
-    return number;
-}
-
-
 int BOARD_ITEM::getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps)
 {
     if( aSeq.empty() )

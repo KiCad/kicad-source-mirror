@@ -41,6 +41,7 @@ set( common_srcs
     test_coroutine.cpp
     test_format_units.cpp
     test_hotkey_store.cpp
+    test_kicad_string.cpp
     test_title_block.cpp
     test_utf8.cpp
     test_wildcards_and_files_ext.cpp

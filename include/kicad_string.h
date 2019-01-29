@@ -172,6 +172,13 @@ int SplitString( wxString  strToSplit,
                  wxString* strEnd );
 
 /**
+ * Gets the trailing int, if any, from a string.
+ * @param  aStr the string to check
+ * @return      the trailing int or 0 if none found
+ */
+int GetTrailingInt( const wxString& aStr );
+
+/**
  * Function GetIllegalFileNameWxChars
  * @return a wString object containing the illegal file name characters for all platforms.
  */

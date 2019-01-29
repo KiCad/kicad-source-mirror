@@ -71,7 +71,6 @@ class BOARD_ITEM : public EDA_ITEM
 protected:
     PCB_LAYER_ID    m_Layer;
 
-    static int getTrailingInt( const wxString& aStr );
     static int getNextNumberInSequence( const std::set<int>& aSeq, bool aFillSequenceGaps );
 
 public:

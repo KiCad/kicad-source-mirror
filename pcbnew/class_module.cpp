@@ -1309,7 +1309,7 @@ wxString MODULE::GetNextPadName( bool aFillSequenceGaps ) const
     // Create a set of used pad numbers
     for( D_PAD* pad = PadsList(); pad; pad = pad->Next() )
     {
-        int padNumber = getTrailingInt( pad->GetName() );
+        int padNumber = GetTrailingInt( pad->GetName() );
         usedNumbers.insert( padNumber );
     }
 
@@ -1343,9 +1343,8 @@ wxString MODULE::GetReferencePrefix() const
 
 void MODULE::IncrementReference( int aDelta )
 {
-    SetReference( wxString::Format( wxT( "%s%i" ),
-                                    GetReferencePrefix(),
-                                    getTrailingInt( GetReference() ) + aDelta ) );
+    SetReference( wxString::Format(
+            wxT( "%s%i" ), GetReferencePrefix(), GetTrailingInt( GetReference() ) + aDelta ) );
 }
 
 
