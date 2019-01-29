@@ -28,7 +28,7 @@
 
 
 #include <macros.h>
-#include <kicad_string.h>
+#include <refdes_utils.h>
 #include <reporter.h>
 
 #include <pcb_netlist.h>
@@ -197,7 +197,7 @@ void NETLIST::SortByFPID()
  */
 bool operator < ( const COMPONENT& item1, const COMPONENT& item2 )
 {
-    return RefDesStringCompare(item1.GetReference(), item2.GetReference() ) < 0;
+    return UTIL::RefDesStringCompare( item1.GetReference(), item2.GetReference() ) < 0;
 }
 
 

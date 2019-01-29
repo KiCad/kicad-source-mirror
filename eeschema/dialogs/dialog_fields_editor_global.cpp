@@ -31,6 +31,7 @@
 #include <bitmaps.h>
 #include <grid_tricks.h>
 #include <kicad_string.h>
+#include <refdes_utils.h>
 #include <build_version.h>
 #include <general.h>
 #include <sch_view.h>
@@ -289,7 +290,7 @@ public:
                        {
                            wxString l_ref( l.GetRef() << l.GetRefNumber() );
                            wxString r_ref( r.GetRef() << r.GetRefNumber() );
-                           return RefDesStringCompare( l_ref, r_ref ) < 0;
+                           return UTIL::RefDesStringCompare( l_ref, r_ref ) < 0;
                        } );
 
             auto logicalEnd = std::unique( references.begin(), references.end(),
@@ -357,7 +358,7 @@ public:
         {
             wxString lhRef = lhGroup.m_Refs[ 0 ].GetRef() + lhGroup.m_Refs[ 0 ].GetRefNumber();
             wxString rhRef = rhGroup.m_Refs[ 0 ].GetRef() + rhGroup.m_Refs[ 0 ].GetRefNumber();
-            retVal = RefDesStringCompare( lhRef, rhRef ) < 0;
+            retVal = UTIL::RefDesStringCompare( lhRef, rhRef ) < 0;
         }
         else
             retVal = ValueStringCompare( lhs, rhs ) < 0;

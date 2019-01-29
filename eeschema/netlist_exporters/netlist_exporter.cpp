@@ -23,23 +23,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-/**
- * @file netlist_exporter.cpp
- */
-
-#include <fctsys.h>
-#include <confirm.h>
-#include <kicad_string.h>
-#include <gestfich.h>
-#include <pgm_base.h>
-
-#include <sch_reference_list.h>
-#include <class_library.h>
-
-#include <netlist.h>
 #include <netlist_exporter.h>
 
+#include <confirm.h>
+#include <fctsys.h>
+#include <gestfich.h>
+#include <pgm_base.h>
+#include <refdes_utils.h>
+
+#include <class_library.h>
+#include <netlist.h>
+#include <sch_reference_list.h>
 
 
 wxString NETLIST_EXPORTER::MakeCommandLine( const wxString& aFormatString,
@@ -157,7 +151,7 @@ SCH_COMPONENT* NETLIST_EXPORTER::findNextComponent( EDA_ITEM* aItem, SCH_SHEET_P
 static bool sortPinsByNum( NETLIST_OBJECT* aPin1, NETLIST_OBJECT* aPin2 )
 {
     // return "lhs < rhs"
-    return RefDesStringCompare( aPin1->GetPinNumText(), aPin2->GetPinNumText() ) < 0;
+    return UTIL::RefDesStringCompare( aPin1->GetPinNumText(), aPin2->GetPinNumText() ) < 0;
 }
 
 

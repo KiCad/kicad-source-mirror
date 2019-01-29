@@ -28,6 +28,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <sch_reference_list.h>
 
 #include <wx/regex.h>
 #include <algorithm>
@@ -35,11 +36,11 @@
 #include <unordered_set>
 
 #include <fctsys.h>
-#include <kicad_string.h>
-#include <sch_edit_frame.h>
-#include <sch_reference_list.h>
-#include <sch_component.h>
+#include <refdes_utils.h>
 #include <reporter.h>
+
+#include <sch_component.h>
+#include <sch_edit_frame.h>
 
 
 //#define USE_OLD_ALGO
@@ -113,7 +114,7 @@ bool SCH_REFERENCE_LIST::sortByReferenceOnly( const SCH_REFERENCE& item1,
 {
     int             ii;
 
-    ii = RefDesStringCompare( item1.GetRef(), item2.GetRef() );
+    ii = UTIL::RefDesStringCompare( item1.GetRef(), item2.GetRef() );
 
     if( ii == 0 )
     {

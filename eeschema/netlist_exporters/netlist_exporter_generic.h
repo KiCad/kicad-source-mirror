@@ -26,10 +26,12 @@
 #ifndef NETLIST_EXPORT_GENERIC_H
 #define NETLIST_EXPORT_GENERIC_H
 
-#include <project.h>
 #include <netlist_exporter.h>
 
+#include <project.h>
 #include <xnode.h>      // also nests: <wx/xml/xml.h>
+
+#include <sch_edit_frame.h>
 
 class SYMBOL_LIB_TABLE;
 

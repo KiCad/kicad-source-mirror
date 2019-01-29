@@ -29,7 +29,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <kicad_string.h>
+#include <refdes_utils.h>
+
+#include <vector>
 
 // Helper class to store parameters for a regulator
 class REGULATOR_DATA
@@ -78,7 +80,7 @@ public:
         unsigned ii = 0;
         for( ; ii < m_List.size(); ii++ )
         {
-            if( RefDesStringCompare( aItem->m_Name, m_List[ii]->m_Name ) < 0 )
+            if( UTIL::RefDesStringCompare( aItem->m_Name, m_List[ii]->m_Name ) < 0 )
                 break;
         }
         m_List.insert( m_List.begin() + ii, aItem );

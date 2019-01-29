@@ -475,15 +475,6 @@ public:
     }
 
     /**
-     * Function GetReferencePrefix
-     * Gets the alphabetic prefix of the module reference - e.g.
-     *      R1    -> R
-     *      IC34  -> IC
-     * @return the reference prefix (may be empty)
-     */
-    wxString GetReferencePrefix() const;
-
-    /**
      * Function IncrementReference
      * Bumps the current reference by aDelta.
      */

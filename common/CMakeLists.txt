@@ -338,6 +338,7 @@ set( COMMON_SRCS
     project.cpp
     properties.cpp
     ptree.cpp
+    refdes_utils.cpp
     reporter.cpp
     richio.cpp
     search_stack.cpp

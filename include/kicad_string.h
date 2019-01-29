@@ -149,16 +149,6 @@ bool WildCompareString( const wxString& pattern,
 int ValueStringCompare( wxString strFWord, wxString strSWord );
 
 /**
- * Function RefDesStringCompare
- * acts just like the strcmp function but treats numbers within the string text
- * correctly for sorting.  eg. A10 > A2
- * return -1 if first string is less than the second
- * return 0 if the strings are equal
- * return 1 if the first string is greater than the second
- */
-int RefDesStringCompare( wxString lhs, wxString rhs );
-
-/**
  * Function SplitString
  * breaks a string into three parts.
  * The alphabetic preamble
