@@ -36,30 +36,35 @@
  */
 BOOST_AUTO_TEST_SUITE( RefdesUtils )
 
-#ifdef HAVE_EXPECTED_FAILURES
 
 /**
  * Test the #UTIL::GetReferencePrefix function
  */
-BOOST_AUTO_TEST_CASE( GetPrefix, *boost::unit_test::expected_failures( 2 ) )
+BOOST_AUTO_TEST_CASE( GetPrefix )
 {
     using CASE = std::pair<std::string, std::string>;
 
     const std::vector<CASE> cases = {
-        { "", "" },       // empty
-        { "U", "U" },     // no number
-        { "U1", "U" },    // single digit
-        { "U10", "U" },   // double digit // fails!
-        { "U1000", "U" }, //multi digit // fails!
+        { "", "" },        // empty
+        { "U", "U" },      // no number
+        { "1", "" },       // only number
+        { "IC", "IC" },    // >1 char prefix, no number
+        { "U1", "U" },     // single digit
+        { "IC21", "IC" },  // >1 char prefix + number
+        { "U10", "U" },    // double digit
+        { "U1000", "U" },  // multi digit
+        { "U1U2", "U1U" }, // prefix contains digit
     };
 
     for( const auto& c : cases )
     {
-        BOOST_CHECK_EQUAL( UTIL::GetReferencePrefix( c.first ), c.second );
+        BOOST_TEST_CONTEXT( "Testing: " << c.first )
+        {
+            BOOST_CHECK_EQUAL( UTIL::GetReferencePrefix( c.first ), c.second );
+        }
     }
 }
 
-#endif
 
 struct REF_DES_COMP_CASE
 {

@@ -25,28 +25,20 @@
 
 #include <kicad_string.h>
 
+#include <algorithm>
+#include <cctype>
+
+
 namespace UTIL
 {
 
 wxString GetReferencePrefix( const wxString& aRefDes )
 {
-    wxString prefix = aRefDes;
+    // find the first non-digit character from the back
+    auto res = std::find_if( aRefDes.rbegin(), aRefDes.rend(),
+            []( wxUniChar aChr ) { return !std::isdigit( aChr ); } );
 
-    int strIndex = prefix.length() - 1;
-    while( strIndex >= 0 )
-    {
-        const wxUniChar chr = prefix.GetChar( strIndex );
-
-        // numeric suffix
-        if( chr >= '0' && chr <= '9' )
-            break;
-
-        strIndex--;
-    }
-
-    prefix = prefix.Mid( 0, strIndex );
-
-    return prefix;
+    return { aRefDes.begin(), res.base() };
 }
 
 
