@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Cirilo Bernardo
- * Copyright (C) 2016-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -313,6 +313,12 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
             cmdK2S.Append( wxString::Format( " --user-origin=\"%.6f x %.6f\"", xOrg, yOrg ) );
         }
             break;
+    }
+
+    if( m_tolerance->GetSelection() != 1 )
+    {
+        double tolerance = 0.001 * std::pow<double>( 10, m_tolerance->GetSelection() - 1.0 );
+        cmdK2S.Append( wxString::Format( " --min-distance=\"%.4f mm\"", tolerance ) );
     }
 
     cmdK2S.Append( " -f -o " );

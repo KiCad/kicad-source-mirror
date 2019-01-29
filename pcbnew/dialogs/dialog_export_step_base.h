@@ -1,17 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  4 2017)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_EXPORT_STEP_BASE_H__
-#define __DIALOG_EXPORT_STEP_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
 class TEXT_CTRL_EVAL;
 class WX_HTML_REPORT_PANEL;
 
@@ -42,7 +40,7 @@ class WX_HTML_REPORT_PANEL;
 class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_txtBrdFile;
 		wxFilePickerCtrl* m_filePickerSTEP;
@@ -61,24 +59,25 @@ class DIALOG_EXPORT_STEP_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_STEP_Yorg;
 		wxStaticText* m_staticText7;
 		wxCheckBox* m_cbRemoveVirtual;
+		wxStaticText* m_staticText8;
+		wxChoice* m_tolerance;
 		WX_HTML_REPORT_PANEL* m_messagesPanel;
 		wxStaticLine* m_staticline;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onUpdateUnits( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateXPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onUpdateYPos( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void onExportButton( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 552,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_EXPORT_STEP_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Export STEP"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 650,361 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_EXPORT_STEP_BASE();
-	
+
 };
 
-#endif //__DIALOG_EXPORT_STEP_BASE_H__
