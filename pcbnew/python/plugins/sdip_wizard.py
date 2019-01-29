@@ -105,11 +105,12 @@ class RowedFootprint(FootprintWizardBase.FootprintWizard):
 
         # Courtyard
         self.draw.SetLayer(pcbnew.F_CrtYd)
-        sizex = (pin1posX + cmargin) * 2 + pad_Hsize + thick
-        sizey = (pin1posY + cmargin) * 2 + pad_Vsize + thick
-        # round size to nearest 0.1mm, rectangle will thus land on a 0.05mm grid
-        sizex = pcbnew.PutOnGridMM(sizex, 0.1)
-        sizey = pcbnew.PutOnGridMM(sizey, 0.1)
+        cclearance = pcbnew.FromMM(0.25)
+        sizex = (-pin1_posX + cclearance) * 2 + pad_width
+        sizey = (-pin1_posY + cclearance) * 2 + pad_length
+        # round size to nearest 0.02mm, rectangle will thus land on a 0.01mm grid
+        sizex = pcbnew.PutOnGridMM(sizex, 0.02)
+        sizey = pcbnew.PutOnGridMM(sizey, 0.02)
         # set courtyard line thickness to the one defined in KLC
         self.draw.SetLineThickness(pcbnew.FromMM(0.05))
         self.draw.Box(0, 0, sizex, sizey)
