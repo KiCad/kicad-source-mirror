@@ -452,7 +452,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = controls->GetCursorPosition();
+        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( reselect && module )
             m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, module );
@@ -625,7 +625,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = controls->GetCursorPosition();
+        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             break;

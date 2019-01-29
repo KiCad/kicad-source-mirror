@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PANEL_PCBNEW_SETTINGS_BASE_H__
-#define __PANEL_PCBNEW_SETTINGS_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -22,6 +21,7 @@
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/statbox.h>
+#include <wx/choice.h>
 #include <wx/panel.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -29,22 +29,21 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// Class PANEL_PCBNEW_SETTINGS_BASE
 ///////////////////////////////////////////////////////////////////////////////
-class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel 
+class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 {
 	private:
-	
+
 	protected:
 		enum
 		{
 			wxID_POLAR_CTRL = 1000,
 			wxID_UNITS,
 			wxID_SEGMENTS45,
-			wxID_MAGNETIC_TRACKS,
 			wxID_DRC_ONOFF,
 			wxID_TRACK_AUTODEL,
 			wxID_TRACKS45
 		};
-		
+
 		wxRadioBox* m_PolarDisplay;
 		wxRadioBox* m_UnitsSelection;
 		wxCheckBox* m_Show_Page_Limits;
@@ -53,18 +52,21 @@ class PANEL_PCBNEW_SETTINGS_BASE : public wxPanel
 		wxCheckBox* m_dragSelects;
 		wxStaticText* m_staticTextRotationAngle;
 		wxTextCtrl* m_RotationAngle;
-		wxRadioBox* m_MagneticPadOptCtrl;
-		wxRadioBox* m_MagneticTrackOptCtrl;
+		wxStaticText* m_staticText2;
+		wxChoice* m_magneticPadChoice;
+		wxStaticText* m_staticText21;
+		wxChoice* m_magneticTrackChoice;
+		wxStaticText* m_staticText211;
+		wxChoice* m_magneticGraphicsChoice;
 		wxCheckBox* m_DrcOn;
 		wxCheckBox* m_TrackAutodel;
 		wxCheckBox* m_Track_45_Only_Ctrl;
 		wxCheckBox* m_Track_DoubleSegm_Ctrl;
-	
+
 	public:
-		
-		PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL ); 
+
+		PANEL_PCBNEW_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxTAB_TRAVERSAL, const wxString& name = wxEmptyString );
 		~PANEL_PCBNEW_SETTINGS_BASE();
-	
+
 };
 
-#endif //__PANEL_PCBNEW_SETTINGS_BASE_H__

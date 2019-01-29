@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,8 +56,9 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     m_Track_45_Only_Ctrl->SetValue( m_Frame->Settings().m_legacyUse45DegreeTracks );
     m_Segments_45_Only_Ctrl->SetValue( m_Frame->Settings().m_use45DegreeGraphicSegments );
     m_Track_DoubleSegm_Ctrl->SetValue( m_Frame->Settings().m_legacyUseTwoSegmentTracks );
-    m_MagneticPadOptCtrl->SetSelection( m_Frame->Settings().m_magneticPads );
-    m_MagneticTrackOptCtrl->SetSelection( m_Frame->Settings().m_magneticTracks );
+    m_magneticPadChoice->SetSelection( m_Frame->Settings().m_magneticPads );
+    m_magneticTrackChoice->SetSelection( m_Frame->Settings().m_magneticTracks );
+    m_magneticGraphicsChoice->SetSelection( !m_Frame->Settings().m_magneticGraphics );
     m_UseEditKeyForWidth->SetValue( m_Frame->Settings().m_editActionChangesTrackWidth );
     m_dragSelects->SetValue( m_Frame->Settings().m_dragSelects );
 
@@ -84,8 +85,9 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     m_Frame->Settings().m_legacyUse45DegreeTracks    = m_Track_45_Only_Ctrl->GetValue();
 
     m_Frame->Settings().m_legacyUseTwoSegmentTracks = m_Track_DoubleSegm_Ctrl->GetValue();
-    m_Frame->Settings().m_magneticPads   = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticPadOptCtrl->GetSelection();
-    m_Frame->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_MagneticTrackOptCtrl->GetSelection();
+    m_Frame->Settings().m_magneticPads   = (MAGNETIC_PAD_OPTION_VALUES) m_magneticPadChoice->GetSelection();
+    m_Frame->Settings().m_magneticTracks = (MAGNETIC_PAD_OPTION_VALUES) m_magneticTrackChoice->GetSelection();
+    m_Frame->Settings().m_magneticGraphics = !m_magneticGraphicsChoice->GetSelection();
     m_Frame->Settings().m_editActionChangesTrackWidth = m_UseEditKeyForWidth->GetValue();
     m_Frame->Settings().m_dragSelects = m_dragSelects->GetValue();
 

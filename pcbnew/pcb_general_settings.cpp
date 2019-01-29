@@ -36,6 +36,7 @@ PCB_GENERAL_SETTINGS::PCB_GENERAL_SETTINGS( FRAME_T aFrameType )
         Add( "Use45DegreeGraphicSegments", &m_use45DegreeGraphicSegments, false);
         Add( "MagneticPads", reinterpret_cast<int*>( &m_magneticPads ), CAPTURE_CURSOR_IN_TRACK_TOOL );
         Add( "MagneticTracks", reinterpret_cast<int*>( &m_magneticTracks ), CAPTURE_CURSOR_IN_TRACK_TOOL );
+        Add( "MagneticGraphics", &m_magneticGraphics, true );
         Add( "EditActionChangesTrackWidth", &m_editActionChangesTrackWidth, false );
         Add( "DragSelects", &m_dragSelects, true );
         break;
