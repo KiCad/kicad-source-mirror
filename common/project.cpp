@@ -294,6 +294,11 @@ wxConfigBase* PROJECT::configCreate( const SEARCH_STACK& aSList,
     wxConfigBase*   cfg = 0;
     wxString        cur_pro_fn = !aProjectFileName ? GetProjectFullName() : aProjectFileName;
 
+    // If we do not have a project name or specified name, choose an empty file to store the
+    // temporary configuration data in.
+    if( cur_pro_fn.IsEmpty() )
+        cur_pro_fn = wxFileName::CreateTempFileName( GetProjectPath() );
+
     if( wxFileName( cur_pro_fn ).IsFileReadable() )
     {
         // Note: currently, aGroupName is not used.
