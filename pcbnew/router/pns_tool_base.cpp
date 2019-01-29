@@ -264,6 +264,8 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
     VECTOR2I p;
 
     controls()->ForceCursorPosition( false );
+    m_gridHelper->SetUseGrid( !aEvent.Modifier( MD_ALT ) );
+    m_gridHelper->SetSnap( !aEvent.Modifier( MD_SHIFT ) );
 
     bool snapEnabled = true;
 
@@ -284,7 +286,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 
     m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
 
-    if( checkSnap ( m_startItem ))
+    if( checkSnap ( m_startItem ) )
     {
         controls()->ForceCursorPosition( true, m_startSnapPoint );
     }
@@ -293,13 +295,13 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 
 void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 {
-    controls()->ForceCursorPosition( false );
-
-    VECTOR2I mousePos = controls()->GetMousePosition();
-    VECTOR2I cursorPos = controls()->GetCursorPosition();
-
     int layer;
     bool snapEnabled = !aEvent.Modifier( MD_SHIFT );
+    m_gridHelper->SetUseGrid( !aEvent.Modifier( MD_ALT ) );
+    m_gridHelper->SetSnap( snapEnabled );
+
+    controls()->ForceCursorPosition( false );
+    VECTOR2I mousePos = controls()->GetMousePosition();
 
     if( m_router->Settings().Mode() != RM_MarkObstacles &&
         ( m_router->GetCurrentNets().empty() || m_router->GetCurrentNets().front() < 0 ) )
@@ -330,14 +332,14 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     if( checkSnap( endItem ) )
     {
-        VECTOR2I p = snapToItem( snapEnabled, endItem, mousePos );
-        controls()->ForceCursorPosition( true, p );
         m_endItem = endItem;
-        m_endSnapPoint = p;
+        m_endSnapPoint = snapToItem( snapEnabled, endItem, mousePos );
     } else {
         m_endItem = nullptr;
-        m_endSnapPoint = cursorPos;
+        m_endSnapPoint = m_gridHelper->Align( mousePos );
     }
+
+    controls()->ForceCursorPosition( true, m_endSnapPoint );
 
     if( m_endItem )
     {
