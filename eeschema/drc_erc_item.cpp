@@ -43,7 +43,7 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_PIN_NOT_CONNECTED:
         return wxString( _("Pin not connected (use a \"no connection\" flag to suppress this error)") );
     case ERCE_PIN_NOT_DRIVEN:
-        return wxString( _("Pin connected to some others pins but no pin to drive it") );
+        return wxString( _( "Pin connected to other pins, but not driven by any pin" ) );
     case ERCE_PIN_TO_PIN_WARNING:
         return wxString( _("Conflict problem between pins. Severity: warning") );
     case ERCE_PIN_TO_PIN_ERROR:
