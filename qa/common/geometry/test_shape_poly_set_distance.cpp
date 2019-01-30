@@ -31,6 +31,8 @@
 #include <qa_utils/geometry/poly_set_construction.h>
 #include <qa_utils/geometry/seg_construction.h>
 
+#include <unit_test_utils/geometry.h>
+
 /**
  * Declares the Boost test suite fixture.
  */
@@ -141,7 +143,7 @@ BOOST_AUTO_TEST_CASE( SegDistance )
             int dist = polyset.Distance( c.m_seg, c.m_seg_width );
 
             // right answer?
-            BOOST_CHECK_EQUAL( dist, c.m_exp_dist );
+            BOOST_CHECK_PREDICATE( KI_TEST::IsWithin<int>, ( dist )( c.m_exp_dist )( 1 ) );
         }
     }
 }

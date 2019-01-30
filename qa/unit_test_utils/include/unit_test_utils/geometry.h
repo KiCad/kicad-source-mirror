@@ -14,7 +14,7 @@
  *
  * TODO: convert to boost_test_print_type when Boost minver > 1.64
  */
-std::ostream& operator<<( std::ostream& os, const BOX2I& aBox )
+inline std::ostream& operator<<( std::ostream& os, const BOX2I& aBox )
 {
     os << "BOX[ " << aBox.GetOrigin() << " + " << aBox.GetSize() << " ]";
     return os;
