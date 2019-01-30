@@ -174,15 +174,13 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
         return COMPONENT_SELECTION();
 
     COMPONENT_SELECTION sel;
-    LIB_ID id;
+    LIB_ID id = dlg.GetSelectedLibId( &sel.Unit );
 
     if( dlg.IsExternalBrowserSelected() )   // User requested component browser.
     {
         sel = SelectComponentFromLibBrowser( this, aFilter, id, sel.Unit, sel.Convert );
         id = sel.LibId;
     }
-    else
-        id = dlg.GetSelectedLibId( &sel.Unit );
 
     if( !id.IsValid() )     // Dialog closed by OK button,
                             // or the selection by lib browser was requested,
