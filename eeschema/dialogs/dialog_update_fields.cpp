@@ -197,7 +197,7 @@ void DIALOG_UPDATE_FIELDS::updateFields( SCH_COMPONENT* aComponent )
 
         // If the library field is empty an update would clear an existing entry.
         // Check if this is the desired behavior.
-        if( !libField->GetText().empty() || m_resetEmpty->IsChecked() )
+        if( !fieldValue.empty() || m_resetEmpty->IsChecked() )
            field->SetText( fieldValue );
 
         if( m_resetVisibility->IsChecked() )
