@@ -58,8 +58,15 @@ void LIB_VIEW_FRAME::OnSelectSymbol( wxCommandEvent& aEvent )
     const auto libNicknames = libs->GetLogicalLibs();
     adapter->AddLibraries( libNicknames, this );
 
+    LIB_ALIAS *current = getSelectedAlias();
     LIB_ID id;
-    int unit;
+    int unit = 0;
+
+    if( current )
+    {
+        id = current->GetLibId();
+        adapter->SetPreselectNode( id, unit );
+    }
 
     wxString dialogTitle;
     dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
