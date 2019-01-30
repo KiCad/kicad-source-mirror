@@ -202,7 +202,7 @@ wxString PCB_BASE_FRAME::SelectFootprintFromLibBrowser()
 }
 
 
-MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
+MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAllowBrowser )
 {
     FP_LIB_TABLE*   fpTable = Prj().PcbFootprintLibs();
     wxString        moduleName;
@@ -228,7 +228,9 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( bool aAllowBrowser )
 
     adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos, true );
 
-    if( !historyInfos.empty() )
+    if( aPreselect.IsValid() )
+        adapter->SetPreselectNode( aPreselect, 0 );
+    else if( !historyInfos.empty() )
         adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
 
     adapter->AddLibraries();

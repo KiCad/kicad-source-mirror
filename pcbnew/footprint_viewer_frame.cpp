@@ -746,7 +746,9 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
 
 void FOOTPRINT_VIEWER_FRAME::SelectCurrentFootprint( wxCommandEvent& event )
 {
-    MODULE* module = SelectFootprintFromLibTree( false );
+    LIB_ID current( getCurNickname(), getCurFootprintName() );
+
+    MODULE* module = SelectFootprintFromLibTree( current, false );
 
     if( module )
     {

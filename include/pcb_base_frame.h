@@ -42,6 +42,7 @@
 #include <pcb_screen.h>
 #include <pcb_display_options.h>
 #include <pcb_general_settings.h>
+#include <lib_id.h>
 
 /* Forward declarations of classes. */
 class BOARD;
@@ -57,7 +58,6 @@ class BOARD_DESIGN_SETTINGS;
 class ZONE_SETTINGS;
 class PCB_PLOT_PARAMS;
 class FP_LIB_TABLE;
-class LIB_ID;
 class PCB_GENERAL_SETTINGS ;
 
 /**
@@ -404,9 +404,12 @@ public:
      * Function SelectFootprintFromLibTree
      * opens a dialog to select a footprint.
      *
-     * @param aUseFootprintViewer = true to allow selection by the footprint viewer
+     * @param aPreslect = if valid, the LIB_ID to select (otherwise the global history is
+     *                    used)
+     * @param aAllowBroswer = allow selection via the footprint viewer (false when already
+     *                        called from footprint viewer)
      */
-    MODULE* SelectFootprintFromLibTree( bool aUseFootprintViewer = true );
+    MODULE* SelectFootprintFromLibTree( LIB_ID aPreselect = LIB_ID(), bool aAllowBroswer = true );
 
     /**
      * Adds the given module to the board.
