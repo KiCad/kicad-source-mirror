@@ -167,8 +167,7 @@ public:
         m_sdbSizer1Cancel->SetLabel( aCancelLabel );
         m_sdbSizer1OK->SetDefault();
 
-        m_sdbSizer1->Layout();
-        m_buttonSizer->Layout();
+        Layout();
 
         FinishDialogSettings();
     };
