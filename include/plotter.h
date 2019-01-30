@@ -975,9 +975,12 @@ protected:
 
     /**
      * function setSVGPlotStyle()
-     * output the string which define pen and brush color, shape, transparence
+     * output the string which define pen and brush color, shape, transparency
+     *
+     * @param aIsGroup If false, do not form a new group for the style.
+     * @param aExtraStyle If given, the string will be added into the style string before closing
      */
-    void setSVGPlotStyle();
+    void setSVGPlotStyle( bool aIsGroup = true, const std::string& aExtraStyle = {} );
 
     /**
      * function setFillMode()

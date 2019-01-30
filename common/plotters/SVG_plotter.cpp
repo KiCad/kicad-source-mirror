@@ -206,12 +206,13 @@ void SVG_PLOTTER::setFillMode( FILL_T fill )
 }
 
 
-void SVG_PLOTTER::setSVGPlotStyle()
+void SVG_PLOTTER::setSVGPlotStyle( bool aIsGroup, const std::string& aExtraStyle )
 {
-    fputs( "</g>\n<g style=\"", outputFile );
-    fputs( "fill:#", outputFile );
+    if( aIsGroup )
+        fputs( "</g>\n<g ", outputFile );
+
     // output the background fill color
-    fprintf( outputFile, "%6.6lX; ", m_brush_rgb_color );
+    fprintf( outputFile, "style=\"fill:#%6.6lX; ", m_brush_rgb_color );
 
     switch( m_fillMode )
     {
@@ -249,9 +250,20 @@ void SVG_PLOTTER::setSVGPlotStyle()
         break;
     }
 
-    fputs( "\">\n", outputFile );
+    if( aExtraStyle.length() )
+    {
+        fputs( aExtraStyle.c_str(), outputFile );
+    }
 
-    m_graphics_changed = false;
+    fputs( "\"", outputFile );
+
+    if( aIsGroup )
+    {
+        fputs( ">", outputFile );
+        m_graphics_changed = false;
+    }
+
+    fputs( "\n", outputFile );
 }
 
 /* Set the current line width (in IUs) for the next plot
@@ -470,21 +482,22 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
 
     setFillMode( aFill );
     SetCurrentLineWidth( aWidth );
+    fprintf( outputFile, "<path ");
 
     switch( aFill )
     {
     case NO_FILL:
-        fprintf( outputFile, "<polyline fill=\"none;\"\n" );
+        setSVGPlotStyle( false, "fill:none" );
         break;
 
     case FILLED_WITH_BG_BODYCOLOR:
     case FILLED_SHAPE:
-        fprintf( outputFile, "<polyline style=\"fill-rule:evenodd;\"\n" );
+        setSVGPlotStyle( false, "fill-rule:evenodd;" );
         break;
     }
 
     DPOINT pos = userToDeviceCoordinates( aCornerList[0] );
-    fprintf( outputFile, "points=\"%d,%d\n", (int) pos.x, (int) pos.y );
+    fprintf( outputFile, "d=\"M %d,%d\n", (int) pos.x, (int) pos.y );
 
     for( unsigned ii = 1; ii < aCornerList.size(); ii++ )
     {
@@ -492,16 +505,7 @@ void SVG_PLOTTER::PlotPoly( const std::vector<wxPoint>& aCornerList,
         fprintf( outputFile, "%d,%d\n", (int) pos.x, (int) pos.y );
     }
 
-    // ensure the shape is closed, for filled shapes (that are closed polygons):
-    // (svg does not close automatically a polygon
-    if( aCornerList.front() != aCornerList.back() && aFill != NO_FILL )
-    {
-        pos = userToDeviceCoordinates( aCornerList.front() );
-        fprintf( outputFile, "%d,%d\n", (int) pos.x, (int) pos.y );
-    }
-
-    // Close/(fill) the path
-    fprintf( outputFile, "\" /> \n" );
+    fprintf( outputFile, "Z\" /> \n" );
 }
 
 
