@@ -317,7 +317,7 @@ void DIALOG_EXPORT_STEP::onExportButton( wxCommandEvent& aEvent )
 
     if( m_tolerance->GetSelection() != 1 )
     {
-        double tolerance = 0.001 * std::pow<double>( 10, m_tolerance->GetSelection() - 1.0 );
+        double tolerance = 0.001 * std::pow<double>( 10.0, m_tolerance->GetSelection() - 1 );
         cmdK2S.Append( wxString::Format( " --min-distance=\"%.4f mm\"", tolerance ) );
     }
 
