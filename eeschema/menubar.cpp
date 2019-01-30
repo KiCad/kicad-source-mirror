@@ -131,7 +131,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_TO_LIBVIEW,
-                 _( "Library &Browser" ),  HELP_RUN_LIB_VIEWER,
+                 _( "Symbol Library &Browser" ),  HELP_RUN_LIB_VIEWER,
                  KiBitmap( library_browse_xpm ) );
 
     AddMenuItem( aParentMenu,

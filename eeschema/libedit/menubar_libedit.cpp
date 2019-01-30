@@ -168,7 +168,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     AddMenuItem( viewMenu,
                  ID_TO_LIBVIEW,
-                 _( "Library Browser" ),
+                 _( "Symbol Library Browser" ),
                  _( "Open the symbol viewer" ),
                  KiBitmap( library_browse_xpm ) );
 

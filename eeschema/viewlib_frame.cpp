@@ -103,7 +103,7 @@ END_EVENT_TABLE()
 
 LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrameType,
                                 const wxString& aLibraryName ) :
-    SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Library Browser" ),
+    SCH_BASE_FRAME( aKiway, aParent, aFrameType, _( "Symbol Library Browser" ),
                     wxDefaultPosition, wxDefaultSize,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_STYLE_MODAL : LIB_VIEW_STYLE,
                     aFrameType == FRAME_SCH_VIEWER_MODAL ? LIB_VIEW_NAME_MODAL : LIB_VIEW_NAME ),

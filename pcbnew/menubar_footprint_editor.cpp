@@ -191,8 +191,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* viewMenu = new wxMenu;
 
     AddMenuItem( viewMenu, ID_OPEN_MODULE_VIEWER,
-                 _( "&Library Browser" ),
-                 _( "Open the Library Browser" ),
+                 _( "Footprint &Library Browser" ),
+                 _( "Browse footprint libraries" ),
                  KiBitmap( modview_icon_xpm ) );
 
     text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );

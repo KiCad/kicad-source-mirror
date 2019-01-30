@@ -725,7 +725,7 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     wxString title;
     wxString path;
 
-    title.Printf( _( "Library Browser" ) + L" \u2014 %s",
+    title.Printf( _( "Footprint Library Browser" ) + L" \u2014 %s",
             getCurNickname().size()
                 ? getCurNickname()
                 : _( "no library selected" ) );

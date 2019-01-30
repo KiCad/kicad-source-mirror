@@ -546,8 +546,8 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  KiBitmap( mw_toolbar_xpm ), wxITEM_CHECK );
 
     AddMenuItem( aParentMenu, ID_OPEN_MODULE_VIEWER,
-                 _( "&Library Browser" ),
-                 _( "Open the Library Browser" ),
+                 _( "Footprint &Library Browser" ),
+                 _( "Browse footprint libraries" ),
                  KiBitmap( modview_icon_xpm ) );
 
     text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
