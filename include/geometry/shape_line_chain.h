@@ -132,7 +132,7 @@ public:
     {
         m_points.reserve( aPath.size() );
 
-        for( auto point : aPath )
+        for( const auto& point : aPath )
             m_points.emplace_back( point.X, point.Y );
     }
 
