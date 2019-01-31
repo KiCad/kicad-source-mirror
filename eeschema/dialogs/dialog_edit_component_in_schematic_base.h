@@ -78,6 +78,7 @@ class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE : public DIALOG_SHIM
 		virtual void UpdateFieldsFromLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBrowseLibrary( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnEditSpiceModel( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCancelButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		
 	
 	public:

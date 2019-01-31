@@ -91,6 +91,7 @@ private:
     void OnSizeGrid( wxSizeEvent& event ) override;
     void OnGridCellChanging( wxGridEvent& event );
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
 
     void OnInitDlg( wxInitDialogEvent& event ) override
     {
@@ -343,6 +344,14 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnEditSpiceModel( wxCommandEvent& event
 
     m_grid->ForceRefresh();
 #endif /* KICAD_SPICE */
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnCancelButtonClick( wxCommandEvent& event )
+{
+    // Running the Footprint Browser gums up the works and causes the automatic cancel
+    // stuff to no longer work.  So we do it here ourselves.
+    EndQuasiModal( wxID_CANCEL );
 }
 
 
