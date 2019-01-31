@@ -86,9 +86,11 @@ echo "LANG;TRANSLATED;FUZZY;UNTRANSLATED" > "${CSVFILE}"
 for i in $LINGUAS
 do
   echo "## $i"
-  msgmerge --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2> /dev/null
   if [ "$i" = "en" ] ; then
+    msgmerge --no-location --no-fuzzy-matching --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2> /dev/null
     msgen $LOCALDIR/$i/kicad.po -o $LOCALDIR/$i/kicad.po.tmp && mv $LOCALDIR/$i/kicad.po.tmp $LOCALDIR/$i/kicad.po
+  else
+    msgmerge --force-po $LOCALDIR/$i/kicad.po $LOCALDIR/kicad.pot -o $LOCALDIR/$i/kicad.po 2> /dev/null
   fi
   msgfmt --statistics $LOCALDIR/$i/kicad.po -o $LOCALDIR/messages.mo 2>&1 >>/dev/null |
     while IFS=",." read A B C D ; do
