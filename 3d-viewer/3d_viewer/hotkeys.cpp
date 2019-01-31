@@ -86,14 +86,20 @@ static EDA_HOTKEY* viewer3d_Hotkey_List[] =
 
 // list of sections and corresponding hotkey list for the 3D Viewer
 // (used to list current hotkeys)
-struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[] =
+static struct EDA_HOTKEY_CONFIG s_3DViewer_Hotkeys_Descr[] =
 {
     { &g_CommonSectionTag, viewer3d_Hotkey_List, &viewer3DSectionTitle },
     { NULL,                NULL,                 NULL }
 };
 
 
-void EDA_3D_VIEWER::DisplayHotKeys()
+EDA_HOTKEY_CONFIG* EDA_3D_VIEWER::GetHotkeyConfig() const
 {
-    DisplayHotkeyList( this, g_3DViewer_Hokeys_Descr );
+    return s_3DViewer_Hotkeys_Descr;
+}
+
+
+EDA_HOTKEY_CONFIG* EDA_3D_CANVAS::GetHotkeyConfig() const
+{
+    return s_3DViewer_Hotkeys_Descr;
 }

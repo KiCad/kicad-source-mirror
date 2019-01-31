@@ -36,8 +36,6 @@
 #include <3d_viewer_id.h>
 #include "help_common_strings.h"
 
-extern struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[];
-
 void EDA_3D_VIEWER::CreateMenuBar()
 {
     wxLogTrace( m_logTrace, "EDA_3D_VIEWER::CreateMenuBar" );
@@ -308,7 +306,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_3DViewer_Hokeys_Descr, HK_HELP );
+    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), GetHotkeyConfig(), HK_HELP );
     AddMenuItem( helpMenu, ID_MENU3D_HELP_HOTKEY_SHOW_CURRENT_LIST,
                  text,
                  _( "Displays the current hotkeys list and corresponding commands" ),

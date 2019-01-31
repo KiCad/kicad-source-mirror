@@ -128,6 +128,11 @@ class EDA_3D_CANVAS : public HIDPI_GL_CANVAS
 
     bool IsOpenGLInitialized() const { return m_is_opengl_initialized; }
 
+    /**
+     * Return a structure containing currently used hotkey mapping.
+     */
+    EDA_HOTKEY_CONFIG* GetHotkeyConfig() const;
+
 private:
 
     void OnPaint( wxPaintEvent &event );

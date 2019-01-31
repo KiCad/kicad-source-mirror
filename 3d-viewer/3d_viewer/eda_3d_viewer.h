@@ -103,6 +103,11 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     CINFO3D_VISU &GetSettings() { return m_settings; }
 
     /**
+     * Return a structure containing currently used hotkey mapping.
+     */
+    EDA_HOTKEY_CONFIG* GetHotkeyConfig() const;
+
+    /**
      * Get a SFVEC3D from a wx colour dialog
      * @param aColor is the SFVEC3D to change
      * @param aTitle is the title displayed in the colordialog selector
@@ -178,7 +183,10 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
 
     void CreateMenuBar();
 
-    void DisplayHotKeys();
+    void DisplayHotKeys()
+    {
+        DisplayHotkeyList( this, GetHotkeyConfig() );
+    }
 
     void ReCreateMainToolbar();
 

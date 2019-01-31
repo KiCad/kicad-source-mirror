@@ -45,8 +45,6 @@
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 
-extern struct EDA_HOTKEY_CONFIG g_3DViewer_Hokeys_Descr[];
-
 
 /**
  * Flag to enable 3D canvas debug tracing.
@@ -660,71 +658,71 @@ void EDA_3D_CANVAS::OnRightClick( wxMouseEvent &event )
     pos.x = event.GetX();
     pos.y = event.GetY();
 
-    msg = AddHotkeyName( _( "Zoom +" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom +" ), GetHotkeyConfig(),
                          ID_POPUP_ZOOMIN );
     AddMenuItem( &PopUpMenu, ID_POPUP_ZOOMIN,
                  msg, KiBitmap( zoom_in_xpm ) );
 
 
-    msg = AddHotkeyName( _( "Zoom -" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom -" ), GetHotkeyConfig(),
                          ID_POPUP_ZOOMOUT );
     AddMenuItem( &PopUpMenu, ID_POPUP_ZOOMOUT,
                  msg, KiBitmap( zoom_out_xpm ) );
 
     PopUpMenu.AppendSeparator();
 
-    msg = AddHotkeyName( _( "Top View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Top View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_ZPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZPOS,
                  msg, KiBitmap( axis3d_top_xpm ) );
 
-    msg = AddHotkeyName( _( "Bottom View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Bottom View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_ZNEG );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_ZNEG,
                  msg, KiBitmap( axis3d_bottom_xpm ) );
 
     PopUpMenu.AppendSeparator();
 
-    msg = AddHotkeyName( _( "Right View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Right View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_XPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_XPOS,
                  msg, KiBitmap( axis3d_right_xpm ) );
 
-    msg = AddHotkeyName( _( "Left View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Left View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_XNEG );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_XNEG,
                  msg, KiBitmap( axis3d_left_xpm ) );
 
     PopUpMenu.AppendSeparator();
 
-    msg = AddHotkeyName( _( "Front View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Front View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_YPOS );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_YPOS,
                  msg, KiBitmap( axis3d_front_xpm ) );
 
-    msg = AddHotkeyName( _( "Back View" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Back View" ), GetHotkeyConfig(),
                          ID_POPUP_VIEW_YNEG );
     AddMenuItem( &PopUpMenu, ID_POPUP_VIEW_YNEG,
                  msg, KiBitmap( axis3d_back_xpm ) );
 
     PopUpMenu.AppendSeparator();
 
-    msg = AddHotkeyName( _( "Move Left <-" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Left <-" ), GetHotkeyConfig(),
                          ID_POPUP_MOVE3D_LEFT );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_LEFT,
                  msg, KiBitmap( left_xpm ) );
 
-    msg = AddHotkeyName( _( "Move Right ->" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Right ->" ), GetHotkeyConfig(),
                          ID_POPUP_MOVE3D_RIGHT );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_RIGHT,
                  msg, KiBitmap( right_xpm ) );
 
-    msg = AddHotkeyName( _( "Move Up ^" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Up ^" ), GetHotkeyConfig(),
                          ID_POPUP_MOVE3D_UP );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_UP,
                  msg, KiBitmap( up_xpm ) );
 
-    msg = AddHotkeyName( _( "Move Down" ), g_3DViewer_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Move Down" ), GetHotkeyConfig(),
                          ID_POPUP_MOVE3D_DOWN );
     AddMenuItem( &PopUpMenu, ID_POPUP_MOVE3D_DOWN,
                  msg, KiBitmap( down_xpm ) );
