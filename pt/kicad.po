@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-31 10:33-0200\n"
-"PO-Revision-Date: 2018-12-20 22:56-0200\n"
+"POT-Creation-Date: 2019-01-31 15:44-0200\n"
+"PO-Revision-Date: 2019-01-31 15:43-0200\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -845,9 +845,8 @@ msgstr "Cor da pasta de solda"
 #: 3d-viewer/3d_viewer/hotkeys.cpp:34 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:68 kicad/menubar.cpp:153
 #: pagelayout_editor/hotkeys.cpp:83 pcbnew/hotkeys.cpp:231
-#, fuzzy
 msgid "List Hotkeys"
-msgstr "&Listar Teclas de Atalho"
+msgstr "Listar Teclas de Atalho"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:35
 msgid "Center pivot rotation (Middle mouse click)"
@@ -1798,12 +1797,12 @@ msgid "Discard Changes"
 msgstr "Descartar Alterações"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:38
-#, fuzzy, c-format
+#, c-format
 msgid "Configure Global %s Library Table"
-msgstr "Configurar a tabela da biblioteca de símbolos globais"
+msgstr "Configurar a Tabela de Biblioteca %s Global"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:41
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "KiCad has been run for the first time using the new %s library table for\n"
 "accessing libraries.  In order for KiCad to access %s libraries,\n"
@@ -1811,88 +1810,90 @@ msgid ""
 "of the options below.  If you are not sure which option to select, please\n"
 "use the default selection."
 msgstr ""
-"O KiCad foi executado pela primeira vez usando a nova tabela de biblioteca "
-"de símbolos para acessar a bibliotecas de símbolos. Para que o KiCad acesse "
-"bibliotecas de símbolos, você deve configurar sua tabela de biblioteca de "
-"símbolos globais. Por favor, selecione uma das opções abaixo. Se você não "
-"tiver certeza de qual opção selecionar, use a seleção padrão."
+"O KiCad foi executado pela primeira vez utilizando a nova tabela de "
+"biblioteca %s para\n"
+"acessar bibliotecas.  Para que o KiCad acesse bibliotecas %s,\n"
+"você deve configurar sua tabela de biblioteca %s global.  Por favor, "
+"selecione uma\n"
+"das opções abaixo.  Se não tiver certeza de qual opção selecionar, por "
+"favor\n"
+"utilize a seleção padrão."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:48
-#, fuzzy, c-format
+#, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr "Copiar tabela de biblioteca de símbolos globais padrão (recomendado)"
+msgstr "Copiar tabela de biblioteca %s global (recomendado)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:50
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
-"Selecione esta opção se não tiver certeza sobre como configurar a tabela da "
-"biblioteca de símbolos globais"
+"Selecione esta opção se não tiver certeza sobre como configurar a tabela de "
+"biblioteca %s global"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:54
-#, fuzzy, c-format
+#, c-format
 msgid "Copy custom global %s library table"
-msgstr "Copiar tabela de biblioteca de símbolos globais personalizados"
+msgstr "Copiar tabela de biblioteca %s global personalizada"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:56
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
 msgstr ""
-"Selecione esta opção para copiar um arquivo de tabela de biblioteca de "
-"símbolos diferente do padrão"
+"Selecione esta opção para copiar um arquivo de tabela de biblioteca %s "
+"diferente do padrão"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:60
-#, fuzzy, c-format
+#, c-format
 msgid "Create an empty global %s library table"
-msgstr "Criar uma tabela de biblioteca de símbolos global vazia"
+msgstr "Criar uma tabela de biblioteca %s global vazia"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:62
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Select this option to define %s libraries in project specific library tables"
 msgstr ""
-"Selecione esta opção para definir bibliotecas de símbolos em tabelas de "
-"biblioteca específicas do projeto"
+"Selecione esta opção para definir bibliotecas %s em tabelas de biblioteca "
+"específicas do projeto"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:66
-#, fuzzy, c-format
+#, c-format
 msgid "Select global %s library table file:"
-msgstr "Selecione o arquivo da tabela da biblioteca de símbolos globais:"
+msgstr "Selecione o arquivo da tabela da biblioteca %s global:"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:21
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:30
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:35
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:40
 msgid "Temp"
-msgstr ""
+msgstr "Temp"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:28
 msgid "temp1"
-msgstr ""
+msgstr "temp1"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:34
 msgid "temp2"
-msgstr ""
+msgstr "temp2"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:39
 msgid "temp3"
-msgstr ""
+msgstr "temp3"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:47
 msgid "temp"
-msgstr ""
+msgstr "temp"
 
 #: common/dialogs/dialog_global_lib_table_config_base.cpp:51
 msgid "Select a file"
 msgstr "Selecionar um arquivo"
 
 #: common/dialogs/dialog_global_lib_table_config_base.h:56
-#, fuzzy
 msgid "Configure Global Library Table"
-msgstr "Configurar a tabela da biblioteca de símbolos globais"
+msgstr "Configurar Tabela de Biblioteca Global"
 
 #: common/dialogs/dialog_hotkey_list.cpp:34
 msgid "Hotkey List"
@@ -2368,9 +2369,8 @@ msgid "File history size:"
 msgstr "Tamanho do histórico de arquivos:"
 
 #: common/dialogs/panel_common_settings_base.cpp:54
-#, fuzzy
 msgid "Graphics (Accelerated):"
-msgstr "Aceleração gráfica:"
+msgstr "Gráficos (Acelerado):"
 
 #: common/dialogs/panel_common_settings_base.cpp:58
 #: common/dialogs/panel_common_settings_base.cpp:69
@@ -2394,24 +2394,20 @@ msgid "Supersampling (4x)"
 msgstr "Super amostragem (4x)"
 
 #: common/dialogs/panel_common_settings_base.cpp:65
-#, fuzzy
 msgid "Graphics (Fallback):"
-msgstr "Camada gráfica:"
+msgstr "Gráficos (Contingência):"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "Fast Antialiasing"
-msgstr "Sem Suavização"
+msgstr "Suavização Rápida"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "Balanced Antialiasing"
-msgstr "Sem Suavização"
+msgstr "Suavização Equilibrada"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "High Quality Antialiasing"
-msgstr "Sem Suavização"
+msgstr "Suavização de Alta Qualidade"
 
 #: common/dialogs/panel_common_settings_base.cpp:81
 msgid "Helper Applications"
@@ -2600,6 +2596,7 @@ msgstr "Filtro"
 #: common/draw_panel_gal.cpp:234 common/draw_panel_gal.cpp:395
 msgid "Could not use OpenGL, falling back to software rendering"
 msgstr ""
+"Não foi possível utilizar OpenGL, retornando para renderização via software"
 
 #: common/dsnlexer.cpp:39
 msgid "clipboard"
@@ -3663,44 +3660,36 @@ msgid "Hotkey"
 msgstr "Tecla de Atalho"
 
 #: common/wildcards_and_files_ext.cpp:149
-#, fuzzy
 msgid "All files"
-msgstr "Arquivos de furação"
+msgstr "Todos os arquivos"
 
 #: common/wildcards_and_files_ext.cpp:155
-#, fuzzy
 msgid "KiCad drawing symbol files"
-msgstr "Arquivos de símbolos de desenho do KiCad (*.sym)|*."
+msgstr "Arquivos de símbolos de desenho do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:161
-#, fuzzy
 msgid "KiCad symbol library files"
-msgstr "Arquivos de biblioteca de símbolos do KiCad (*.lib)|*."
+msgstr "Arquivos de biblioteca de símbolos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:167
-#, fuzzy
 msgid "KiCad project files"
 msgstr "Arquivo de projeto KiCad"
 
 #: common/wildcards_and_files_ext.cpp:173
-#, fuzzy
 msgid "KiCad schematic files"
-msgstr "Arquivos esquemas do Kicad (*.sch)|*."
+msgstr "Arquivos esquemáticos do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:179
-#, fuzzy
 msgid "Eagle XML schematic files"
-msgstr "Arquivos XML de esquemas do Eagle (*.sch)|*."
+msgstr "Arquivos XML esquemáticos do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:185
-#, fuzzy
 msgid "Eagle XML files"
-msgstr "Arquivos XML do Eagle (*.sch *.brd)|*."
+msgstr "Arquivos XML do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:191
-#, fuzzy
 msgid "KiCad netlist files"
-msgstr "Arquivos netlist do Kicad ((*.net)|*."
+msgstr "Arquivos netlist do Kicad"
 
 #: common/wildcards_and_files_ext.cpp:197 gerbview/files.cpp:57
 msgid "Gerber files"
@@ -3708,183 +3697,148 @@ msgstr "Arquivos Gerber"
 
 #: common/wildcards_and_files_ext.cpp:203
 #: common/wildcards_and_files_ext.cpp:221
-#, fuzzy
 msgid "KiCad printed circuit board files"
-msgstr "Arquivos de placa de circuito impresso do Kicad (*.brd)|*."
+msgstr "Arquivos de placa de circuito impresso do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:209
-#, fuzzy
 msgid "Eagle ver. 6.x XML PCB files"
-msgstr "Arquivos XML de PCI do Eagle ver. 6.x (*.brd)|*."
+msgstr "Arquivos de PCI em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:215
-#, fuzzy
 msgid "P-Cad 200x ASCII PCB files"
-msgstr "Arquivos ASCII de PCI do P-Cad 200x (*.pcb)|*."
+msgstr "Arquivos de PCI em ASCII do P-Cad 200x"
 
 #: common/wildcards_and_files_ext.cpp:227
-#, fuzzy
 msgid "KiCad footprint files"
-msgstr "Adicionar filtro de footprint"
+msgstr "Arquivos de footprint do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:233
-#, fuzzy
 msgid "KiCad footprint library paths"
-msgstr "Diretório de biblioteca de footprint do Kicad (*.pretty)|*."
+msgstr "Locais de bibliotecas de footprint do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:239
-#, fuzzy
 msgid "Legacy footprint library files"
-msgstr "Arquivos de biblioteca de footprint legados (*.mod)|*."
+msgstr "Arquivos de biblioteca de footprint legados"
 
 #: common/wildcards_and_files_ext.cpp:245
-#, fuzzy
 msgid "Eagle ver. 6.x XML library files"
-msgstr "Arquivos de biblioteca Eagle ver. 6.x XML (*.lbr)|*."
+msgstr "Arquivos de biblioteca em XML ver. 6.x do Eagle"
 
 #: common/wildcards_and_files_ext.cpp:251
-#, fuzzy
 msgid "Geda PCB footprint library files"
-msgstr "Arquivos de biblioteca de footprint Geda PCB (*.fp)|*."
+msgstr "Arquivos de biblioteca de footprint PCB do Geda"
 
 #: common/wildcards_and_files_ext.cpp:257
-#, fuzzy
 msgid "Page layout design files"
-msgstr "Arquivo de descrição de layout de página"
+msgstr "Arquivos de desenho de layout de página"
 
 #: common/wildcards_and_files_ext.cpp:264
-#, fuzzy
 msgid "KiCad symbol footprint link files"
-msgstr "Arquivos de ligação entre símbolos e footprints do KiCad (*.cmp)|*."
+msgstr "Arquivos de ligação entre símbolos e footprints do KiCad"
 
 #: common/wildcards_and_files_ext.cpp:271 gerbview/files.cpp:71
 msgid "Drill files"
 msgstr "Arquivos de furação"
 
 #: common/wildcards_and_files_ext.cpp:277
-#, fuzzy
 msgid "SVG files"
-msgstr "Arquivos Gerber"
+msgstr "Arquivos SVG"
 
 #: common/wildcards_and_files_ext.cpp:283
-#, fuzzy
 msgid "HTML files"
-msgstr "Arquivos zip"
+msgstr "Arquivos HTML"
 
 #: common/wildcards_and_files_ext.cpp:289
-#, fuzzy
 msgid "CSV Files"
-msgstr "Arquivos"
+msgstr "Arquivos CSV"
 
 #: common/wildcards_and_files_ext.cpp:295
-#, fuzzy
 msgid "Portable document format files"
-msgstr "Arquivos de documentos portáveis (.pdf)|*."
+msgstr "Arquivos de formato de documentos portáveis"
 
 #: common/wildcards_and_files_ext.cpp:301
-#, fuzzy
 msgid "PostScript files"
-msgstr "Arquivos PostScript (.ps)|*."
+msgstr "Arquivos PostScript"
 
 #: common/wildcards_and_files_ext.cpp:307
-#, fuzzy
 msgid "Report files"
-msgstr "Importar arquivos"
+msgstr "Arquivos de relatório"
 
 #: common/wildcards_and_files_ext.cpp:313
-#, fuzzy
 msgid "Footprint place files"
-msgstr "Arquivos de posição de footprint (*.pos)|*."
+msgstr "Arquivos de posicionamento de footprint"
 
 #: common/wildcards_and_files_ext.cpp:319
-#, fuzzy
 msgid "VRML and X3D files"
-msgstr "Arquivos VRML e X3D (*.wrl *.x3d)|*."
+msgstr "Arquivos VRML e X3D"
 
 #: common/wildcards_and_files_ext.cpp:325
-#, fuzzy
 msgid "IDFv3 footprint files"
-msgstr "Arquivos de footprint IDFv3 (*.idf)|*."
+msgstr "Arquivos de footprint IDFv3"
 
 #: common/wildcards_and_files_ext.cpp:331
-#, fuzzy
 msgid "Text files"
-msgstr "Tamanho do Texto"
+msgstr "Arquivos de texto"
 
 #: common/wildcards_and_files_ext.cpp:337
-#, fuzzy
 msgid "Legacy footprint export files"
-msgstr "Arquivos de exportação de footprint legados (*.emp)|*."
+msgstr "Arquivos de exportação de footprint legados"
 
 #: common/wildcards_and_files_ext.cpp:343
-#, fuzzy
 msgid "Electronic rule check file"
-msgstr "Arquivo de checagem de regas eletrônicas (.erc)|*."
+msgstr "Arquivo de checagem de regas eletrônicas"
 
 #: common/wildcards_and_files_ext.cpp:349
-#, fuzzy
 msgid "Spice library file"
-msgstr "Arquivo de biblioteca SPICE (*.lib)|*."
+msgstr "Arquivo de biblioteca Spice"
 
 #: common/wildcards_and_files_ext.cpp:355
-#, fuzzy
 msgid "SPICE netlist file"
-msgstr "Arquivo netlist SPICE (.cir)|*."
+msgstr "Arquivo de netlist SPICE"
 
 #: common/wildcards_and_files_ext.cpp:361
-#, fuzzy
 msgid "CadStar netlist file"
-msgstr "Arquivo netlist CadStar (.frp)|*."
+msgstr "Arquivo de netlist CadStar"
 
 #: common/wildcards_and_files_ext.cpp:367
-#, fuzzy
 msgid "Symbol footprint association files"
-msgstr "Arquivos de correspondência de footprints Kicad (*.equ)|*."
+msgstr "Arquivos de associação entre símbolo e footprint"
 
 #: common/wildcards_and_files_ext.cpp:373
-#, fuzzy
 msgid "Zip file"
-msgstr "Arquivos zip"
+msgstr "Arquivo ZIP"
 
 #: common/wildcards_and_files_ext.cpp:379
-#, fuzzy
 msgid "GenCAD 1.4 board files"
-msgstr "Arquivos de placas GenCAD 1.4 (.cad)|*."
+msgstr "Arquivos de placa GenCAD 1.4"
 
 #: common/wildcards_and_files_ext.cpp:385
-#, fuzzy
 msgid "DXF Files"
-msgstr "Arquivos Doc"
+msgstr "Arquivos DXF"
 
 #: common/wildcards_and_files_ext.cpp:391
-#, fuzzy
 msgid "Gerber job file"
-msgstr "Arquivos Gerber"
+msgstr "Arquivo de trabalho Gerber"
 
 #: common/wildcards_and_files_ext.cpp:397
-#, fuzzy
 msgid "Specctra DSN file"
 msgstr "Arquivo Specctra DSN"
 
 #: common/wildcards_and_files_ext.cpp:403
-#, fuzzy
 msgid "IPC-D-356 Test Files"
-msgstr "Arquivo de Netlist IPC-D-356…"
+msgstr "Arquivos de Teste IPC-D-356"
 
 #: common/wildcards_and_files_ext.cpp:409
-#, fuzzy
 msgid "Workbook file"
-msgstr "Arquivo Workbook (*.wbk)|*."
+msgstr "Arquivo Workbook"
 
 #: common/wildcards_and_files_ext.cpp:415
-#, fuzzy
 msgid "PNG file"
-msgstr "Arquivos Gerber"
+msgstr "Arquivo PNG"
 
 #: common/wildcards_and_files_ext.cpp:421
-#, fuzzy
 msgid "Jpeg file"
-msgstr "Arquivos zip"
+msgstr "Arquivo Jpeg"
 
 #: cvpcb/auto_associate.cpp:107
 #, c-format
@@ -4536,6 +4490,9 @@ msgid ""
 "%s\n"
 "not found. Plugin not available."
 msgstr ""
+"Arquivo de plugin:\n"
+"%s\n"
+"não encontrado. Plugin não disponível."
 
 #: eeschema/class_libentry.cpp:591
 #, c-format
@@ -5775,9 +5732,8 @@ msgid "Symbol Fields"
 msgstr "Campos de Símbolos"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:31
-#, fuzzy
 msgid "symbol"
-msgstr "Símbolo"
+msgstr "símbolo"
 
 #: eeschema/dialogs/dialog_global_sym_lib_table_config.cpp:61
 #, c-format
@@ -7760,9 +7716,8 @@ msgstr ""
 "este erro)"
 
 #: eeschema/drc_erc_item.cpp:46
-#, fuzzy
 msgid "Pin connected to other pins, but not driven by any pin"
-msgstr "Pino conectado a alguns outros pinos mas, nenhum pino controla este"
+msgstr "Pino conectado a outros pinos, mas não conduzido por nenhum pino"
 
 #: eeschema/drc_erc_item.cpp:48
 msgid "Conflict problem between pins. Severity: warning"
@@ -9530,9 +9485,8 @@ msgid "Show pin table"
 msgstr "Exibir tabela de pinos"
 
 #: eeschema/libedit/menubar_libedit.cpp:171 eeschema/viewlib_frame.cpp:106
-#, fuzzy
 msgid "Symbol Library Browser"
-msgstr "Navegador de Biblioteca de Símbolos -- %s"
+msgstr "Navegador de Biblioteca de Símbolos"
 
 #: eeschema/libedit/menubar_libedit.cpp:172
 msgid "Open the symbol viewer"
@@ -9789,9 +9743,8 @@ msgid "&Tools"
 msgstr "&Ferramentas"
 
 #: eeschema/menubar.cpp:134
-#, fuzzy
 msgid "Symbol Library &Browser"
-msgstr "Navegador de Biblioteca de Símbolos -- %s"
+msgstr "Navegador de &Biblioteca de Símbolos"
 
 #: eeschema/menubar.cpp:139
 msgid "Show &Hierarchical Navigator"
@@ -11733,7 +11686,7 @@ msgid "About Eeschema schematic designer"
 msgstr "Sobre o editor de esquemas Eeschema"
 
 #: eeschema/viewlib_frame.cpp:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The current configuration does not include a library with the\n"
 "nickname \"%s\".  Use Manage Symbol Libraries\n"
@@ -11744,9 +11697,8 @@ msgstr ""
 "para editar a configuração."
 
 #: eeschema/viewlib_frame.cpp:342
-#, fuzzy
 msgid "Symbol library not found."
-msgstr "Biblioteca de símbolos não habilitada."
+msgstr "Biblioteca de símbolos não encontrada."
 
 #: eeschema/viewlib_frame.cpp:433
 #, c-format
@@ -16019,7 +15971,7 @@ msgstr "Todas as camadas de cobre"
 
 #: pcbnew/class_pad.cpp:1428
 msgid " and others"
-msgstr "e outros"
+msgstr " e outros"
 
 #: pcbnew/class_pad.cpp:1439
 msgid "no layers"
@@ -16726,9 +16678,8 @@ msgid "Vertical, then horizontal"
 msgstr "Vertical, então horizontal"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:112
-#, fuzzy
 msgid "Numbering Direction:"
-msgstr "Direção da Numeração de Ilhas:"
+msgstr "Sentido da Numeração:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:116
 msgid "Reverse numbering on alternate rows/columns"
@@ -16835,9 +16786,8 @@ msgstr ""
 "Gire o item, bem como mova-o - multi-seleções serão rotacionadas juntas"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:262
-#, fuzzy
 msgid "Numbering Options:"
-msgstr "Opções de Numeração de Ilha:"
+msgstr "Opções de Numeração:"
 
 #: pcbnew/dialogs/dialog_create_array_base.cpp:273
 msgid "Pad numbering start value:"
@@ -17600,7 +17550,7 @@ msgstr "Selecione um nome de arquivo para exportação do STEP"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:26
 msgid "STEP files (*.stp;*.step)|*.stp;*.step"
-msgstr ""
+msgstr "Arquivos STEP (*.stp;*.step)|*.stp;*.step"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:38
 msgid "Coordinate origin options:"
@@ -17635,33 +17585,32 @@ msgid "Ignore virtual components"
 msgstr "Ignorar componentes virtuais"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:162
-#, fuzzy
 msgid "Tolerance:"
-msgstr "Tolerância"
+msgstr "Tolerância:"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Tight"
-msgstr "Direita"
+msgstr "Apertado"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
-#, fuzzy
 msgid "Standard"
-msgstr "Tipo Padrão"
+msgstr "Padrão"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 msgid "Loose"
-msgstr ""
+msgstr "Com folga"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:166
 msgid "Very loose"
-msgstr ""
+msgstr "Com muita folga"
 
 #: pcbnew/dialogs/dialog_export_step_base.cpp:170
 msgid ""
 "Tolerance sets the distance between two points that are considered joined.  "
 "Standard is 0.001mm."
 msgstr ""
+"A tolerância define a distância entre dois pontos considerados como unidos.  "
+"O padrão é 0.001 milímetros."
 
 #: pcbnew/dialogs/dialog_export_step_base.h:79
 msgid "Export STEP"
@@ -18468,7 +18417,7 @@ msgstr "Furo da µVia"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:266
 msgid "Some items failed DRC and were not modified."
-msgstr ""
+msgstr "Alguns itens falharam na DRC e não foram modificados."
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:55
 msgid "Filter items by net:"
@@ -18487,40 +18436,38 @@ msgid "Set Track and Via Properties"
 msgstr "Definir Propriedades de Trilha e Via"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:31
-#, fuzzy
 msgid "footprint"
-msgstr "Footprint"
+msgstr "footprint"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:61
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred writing empty footprint library table file.\n"
 "\n"
 "%s"
 msgstr ""
 "Ocorreu um erro ao gravar arquivo vazio de tabela de biblioteca de "
-"símbolos.\n"
+"footprint.\n"
 "\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:75
-#, fuzzy
 msgid "Please select a footprint library table file."
-msgstr "Por favor, selecione um arquivo de tabela de biblioteca de símbolos."
+msgstr "Por favor, selecione um arquivo de tabela de biblioteca de footprint."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:99
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "File \"%s\" is not a valid footprint library table file.\n"
 "\n"
 "%s"
 msgstr ""
-"O arquivo \"%s\" não é um arquivo de biblioteca de símbolo válido.\n"
+"O arquivo \"%s\" não é um arquivo de biblioteca de footprint válido.\n"
 "\n"
 "%s"
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:119
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Cannot copy global footprint library table file:\n"
 "\n"
@@ -18530,8 +18477,8 @@ msgid ""
 "\n"
 "\"%s\"."
 msgstr ""
-"Não é possível copiar o arquivo da tabela da biblioteca de símbolos "
-"globais:\n"
+"Não foi possível copiar o arquivo global de tabela de biblioteca de "
+"footprint:\n"
 "\n"
 "  \"%s\"\n"
 "\n"
@@ -18540,13 +18487,13 @@ msgstr ""
 "\"%s\"."
 
 #: pcbnew/dialogs/dialog_global_fp_lib_table_config.cpp:136
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Error occurred loading global footprint library table:\n"
 "\n"
 "%s"
 msgstr ""
-"Ocorreu um erro ao carregar a tabela de bibliotecas de símbolos global:\n"
+"Ocorreu um erro ao carregar a tabela de biblioteca de footprint global:\n"
 "\n"
 "%s"
 
@@ -18585,13 +18532,12 @@ msgid "Line Segment Properties"
 msgstr "Propriedades do Segmento de Linha"
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:217
-#, fuzzy
 msgid ""
 "This item was on a non-existing or forbidden layer.\n"
 "It has been moved to the first allowed layer. Please fix it."
 msgstr ""
 "Este item estava em uma camada inexistente ou proibida.\n"
-"Foi movido para a primeira camada permitida."
+"Foi movido para a primeira camada permitida. Por favor corrija."
 
 #: pcbnew/dialogs/dialog_graphic_item_properties.cpp:278
 msgid "Modify drawing properties"
@@ -20252,12 +20198,11 @@ msgstr "Aplicar Propriedades"
 
 #: pcbnew/dialogs/dialog_scripting_base.cpp:24
 msgid "&Run"
-msgstr ""
+msgstr "&Executar"
 
 #: pcbnew/dialogs/dialog_scripting_base.h:46
-#, fuzzy
 msgid "Scripting Test Window"
-msgstr "Console de &Script"
+msgstr "Janela de Teste de Scripts"
 
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:70
 msgid "Pad Count"
@@ -20735,20 +20680,17 @@ msgstr ""
 "atalho."
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:89
-#, fuzzy
 msgid "Magnetic Points"
-msgstr "Ilhas Magnéticas"
+msgstr "Pontos Magnéticos"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:96
 msgid "Snap to Pads"
-msgstr ""
+msgstr "Alinhar em Ilhas"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:98
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:106
-#, fuzzy
 msgid "Capture cursor when the mouse enters a pad area"
-msgstr ""
-"Controlar a captura do cursor quando o mouse entrar na área de uma ilha."
+msgstr "Captura o cursor quando o mouse entrar em uma área de ilha"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:102
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:116
@@ -20766,27 +20708,23 @@ msgid "Always"
 msgstr "Sempre"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:110
-#, fuzzy
 msgid "Snap to Tracks"
-msgstr "Delinear &Trilhas"
+msgstr "Alinhar em Trilhas"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:112
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:120
-#, fuzzy
 msgid "Capture cursor when the mouse approaches a track"
-msgstr ""
-"Controlar a captura do cursor quando o mouse aproximar-se de uma trilha."
+msgstr "Captura o cursor quando o mouse aproximar-se de uma trilha"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:124
 msgid "Snap to Graphical"
-msgstr ""
+msgstr "Alinhar em Gráficos"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:126
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:134
-#, fuzzy
 msgid "Capture cursor when the mouse approaches graphical control points"
 msgstr ""
-"Controlar a captura do cursor quando o mouse aproximar-se de uma trilha."
+"Captura o cursor quando o mouse aproximar-se de um ponto de controle gráfico"
 
 #: pcbnew/dialogs/panel_pcbnew_settings_base.cpp:145
 msgid "Legacy Toolset Routing Options"
@@ -23782,14 +23720,12 @@ msgid "Delete the current footprint"
 msgstr "Excluir o footprint atual"
 
 #: pcbnew/menubar_footprint_editor.cpp:194 pcbnew/menubar_pcb_editor.cpp:549
-#, fuzzy
 msgid "Footprint &Library Browser"
-msgstr "Navegador de Biblioteca de Footprints"
+msgstr "Navegador de &Biblioteca de Footprint"
 
 #: pcbnew/menubar_footprint_editor.cpp:195 pcbnew/menubar_pcb_editor.cpp:550
-#, fuzzy
 msgid "Browse footprint libraries"
-msgstr "Administrar bibliotecas de footprint"
+msgstr "Nevegar bibliotecas de footprint"
 
 #: pcbnew/menubar_footprint_editor.cpp:198 pcbnew/menubar_pcb_editor.cpp:553
 msgid "&3D Viewer"
@@ -24615,14 +24551,12 @@ msgid "Requested length too large"
 msgstr "Comprimento solicitado muito grande"
 
 #: pcbnew/microwave/microwave_inductor.cpp:366
-#, fuzzy
 msgid "Requested length too small"
-msgstr "Comprimento solicitado muito grande"
+msgstr "Comprimento solicitado muito pequeno"
 
 #: pcbnew/microwave/microwave_inductor.cpp:369
-#, fuzzy
 msgid "Requested length can't be represented"
-msgstr "Comprimento solicitado muito grande"
+msgstr "Comprimento solicitado não pôde ser representado"
 
 #: pcbnew/microwave/microwave_inductor.cpp:377
 msgid "Component Value:"
@@ -25489,14 +25423,13 @@ msgstr ""
 "você deve verificar e editá-la (executar teste DRC)."
 
 #: pcbnew/pcbnew.cpp:371
-#, fuzzy
 msgid ""
 "An error occurred attempting to load the global footprint library table.\n"
 "Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"Ocorreu um erro ao carregar a tabela de bibliotecas de símbolo global.\n"
-"Por favor edite esta tabela global de bibliotecas de símbolo no menu "
-"Preferências"
+"Ocorreu um erro ao carregar a tabela de bibliotecas de footprint global.\n"
+"Por favor edite esta tabela global de bibliotecas de footprint no menu "
+"Preferências."
 
 #: pcbnew/pcbnew_config.cpp:102
 msgid "Action Plugins"
@@ -26064,14 +25997,12 @@ msgid "New footprint using footprint wizard"
 msgstr "Novo footprint utilizando o assistente de footprint"
 
 #: pcbnew/tool_footprint_editor.cpp:70
-#, fuzzy
 msgid "Save changes to board"
-msgstr "Salvar alterações"
+msgstr "Salvar a alterações na placa"
 
 #: pcbnew/tool_footprint_editor.cpp:70
-#, fuzzy
 msgid "Save changes to library"
-msgstr "Salvar na Biblioteca:"
+msgstr "Salvar ss alterações na biblioteca"
 
 #: pcbnew/tool_footprint_editor.cpp:75
 msgid "Print footprint"
@@ -26571,7 +26502,7 @@ msgstr "Recorta o conteúdo selecionado para a área de transferência"
 #: pcbnew/tools/edit_tool.cpp:237 pcbnew/tools/placement_tool.cpp:101
 #: pcbnew/tools/point_editor.cpp:263
 msgid "pcbnew.InteractiveSelection tool is not available"
-msgstr ""
+msgstr "a ferramenta pcbnew.InteractiveSelection não está disponível"
 
 #: pcbnew/tools/edit_tool.cpp:620
 msgid "Edit track width/via size"
@@ -26656,6 +26587,8 @@ msgid ""
 "Click on pad %s%d\n"
 "Press Escape to cancel or double-click to commit"
 msgstr ""
+"Clique na ilha %s%d\n"
+"Pressione Esc para cancelar ou clique duas vezes para confirmar"
 
 #: pcbnew/tools/footprint_editor_tools.cpp:287
 #: pcbnew/tools/footprint_editor_tools.cpp:305
@@ -26740,9 +26673,8 @@ msgid "Copy the current pad's properties to other pads"
 msgstr "Copiar as configurações atuais da ilha para outras ilhas"
 
 #: pcbnew/tools/pad_tool.cpp:336
-#, fuzzy
 msgid "Push Pad Settings"
-msgstr "Configurações de Página"
+msgstr "Aplicar Configurações da Ilha"
 
 #: pcbnew/tools/pcb_editor_control.cpp:92
 msgid "Merge Zones"
@@ -27101,6 +27033,7 @@ msgstr "Limpeza da placa"
 #: pcbnew/undo_redo.cpp:579
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr ""
+"Operação de desfazer/refazer incompleta: alguns itens não foram encontrados"
 
 #: pcbnew/zone_filler.cpp:112
 msgid "Checking zone fills..."
