@@ -258,11 +258,6 @@ int BASE_SCREEN::SetGrid( const wxRealPoint& size )
     }
 
     m_Grid = nearest_grid;
-
-    wxLogWarning( _( "Grid size( %f, %f ) not in grid list, falling back "
-                     "to grid size( %f, %f )." ),
-                  size.x, size.y, m_Grid.m_Size.x, m_Grid.m_Size.y );
-
     return gridIdx;
 }
 
@@ -281,11 +276,6 @@ int BASE_SCREEN::SetGrid( int aCommandId  )
     }
 
     m_Grid = m_grids[0];
-
-    wxLogWarning( _( "Grid ID %d not in grid list, falling back to "
-                     "grid size( %g, %g )." ), aCommandId,
-                  m_Grid.m_Size.x, m_Grid.m_Size.y );
-
     return m_grids[0].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
 }
 

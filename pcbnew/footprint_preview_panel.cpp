@@ -396,13 +396,15 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
     }
 
 #ifdef __WXMAC__
-    // Cairo renderer doesn't handle Retina displays
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    // Cairo renderer doesn't handle Retina displays so default to OpenGL
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE)
+                        cfg->ReadLong( CanvasTypeKeyBase, EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
 #else
-    EDA_DRAW_PANEL_GAL::GAL_TYPE backend = EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = (EDA_DRAW_PANEL_GAL::GAL_TYPE)
+                        cfg->ReadLong( CanvasTypeKeyBase, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 #endif
 
-    auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, gal_opts, backend );
+    auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, gal_opts, canvasType );
 
     if( pcbnew )
     {
