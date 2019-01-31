@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-14 04:51+0100\n"
+"POT-Creation-Date: 2019-01-31 12:59+0100\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -232,12 +232,6 @@ msgstr "&Preferences"
 
 msgid "Display Options"
 msgstr "Display Options"
-
-msgid "Render Engine"
-msgstr "Render Engine"
-
-msgid "OpenGL"
-msgstr "OpenGL"
 
 msgid "Raytracing"
 msgstr "Raytracing"
@@ -1128,6 +1122,81 @@ msgstr "Apply to all"
 
 msgid "Discard Changes"
 msgstr "Discard Changes"
+
+#, c-format
+msgid "Configure Global %s Library Table"
+msgstr "Configure Global %s Library Table"
+
+#, c-format
+msgid ""
+"KiCad has been run for the first time using the new %s library table for\n"
+"accessing libraries.  In order for KiCad to access %s libraries,\n"
+"you must configure your global %s library table.  Please select from one\n"
+"of the options below.  If you are not sure which option to select, please\n"
+"use the default selection."
+msgstr ""
+"KiCad has been run for the first time using the new %s library table for\n"
+"accessing libraries.  In order for KiCad to access %s libraries,\n"
+"you must configure your global %s library table.  Please select from one\n"
+"of the options below.  If you are not sure which option to select, please\n"
+"use the default selection."
+
+#, c-format
+msgid "Copy default global %s library table (recommended)"
+msgstr "Copy default global %s library table (recommended)"
+
+#, c-format
+msgid ""
+"Select this option if you not sure about configuring the global %s library "
+"table"
+msgstr ""
+"Select this option if you not sure about configuring the global %s library "
+"table"
+
+#, c-format
+msgid "Copy custom global %s library table"
+msgstr "Copy custom global %s library table"
+
+#, c-format
+msgid ""
+"Select this option to copy a %s library table file other than the default"
+msgstr ""
+"Select this option to copy a %s library table file other than the default"
+
+#, c-format
+msgid "Create an empty global %s library table"
+msgstr "Create an empty global %s library table"
+
+#, c-format
+msgid ""
+"Select this option to define %s libraries in project specific library tables"
+msgstr ""
+"Select this option to define %s libraries in project specific library tables"
+
+#, c-format
+msgid "Select global %s library table file:"
+msgstr "Select global %s library table file:"
+
+msgid "Temp"
+msgstr "Temp"
+
+msgid "temp1"
+msgstr "temp1"
+
+msgid "temp2"
+msgstr "temp2"
+
+msgid "temp3"
+msgstr "temp3"
+
+msgid "temp"
+msgstr "temp"
+
+msgid "Select a file"
+msgstr "Select a file"
+
+msgid "Configure Global Library Table"
+msgstr "Configure Global Library Table"
 
 msgid "Hotkey List"
 msgstr "Hotkey List"
@@ -2871,8 +2940,15 @@ msgstr ""
 "the sheet “%s” or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
 
-msgid "Cannot open plugin "
-msgstr "Cannot open plugin "
+#, c-format
+msgid ""
+"Plugin file:\n"
+"%s\n"
+"not found. Plugin not available."
+msgstr ""
+"Plugin file:\n"
+"%s\n"
+"not found. Plugin not available."
 
 #, c-format
 msgid ""
@@ -3698,8 +3774,8 @@ msgstr "Add Field…"
 msgid "Symbol Fields"
 msgstr "Symbol Fields"
 
-msgid "Select a file"
-msgstr "Select a file"
+msgid "symbol"
+msgstr "symbol"
 
 #, c-format
 msgid ""
@@ -3755,53 +3831,6 @@ msgstr ""
 "Error occurred loading global symbol library table:\n"
 "\n"
 "%s"
-
-msgid ""
-"KiCad has been run for the first time using the new symbol library table for "
-"accessing symbol libraries.  In order for KiCad to access symbol libraries, "
-"you must configure your global symbol library table.  Please select from one "
-"of the options below.  If you are not sure which option to select, please "
-"use the default selection."
-msgstr ""
-"KiCad has been run for the first time using the new symbol library table for "
-"accessing symbol libraries.  In order for KiCad to access symbol libraries, "
-"you must configure your global symbol library table.  Please select from one "
-"of the options below.  If you are not sure which option to select, please "
-"use the default selection."
-
-msgid "Copy default global symbol library table (recommended)"
-msgstr "Copy default global symbol library table (recommended)"
-
-msgid ""
-"Select this option if you not sure about configuring the global symbol "
-"library table"
-msgstr ""
-"Select this option if you not sure about configuring the global symbol "
-"library table"
-
-msgid "Copy custom global symbol library table"
-msgstr "Copy custom global symbol library table"
-
-msgid ""
-"Select this option to copy a symbol library table file other than the default"
-msgstr ""
-"Select this option to copy a symbol library table file other than the default"
-
-msgid "Create an empty global symbol library table"
-msgstr "Create an empty global symbol library table"
-
-msgid ""
-"Select this option to define symbol libraries in project specific library "
-"tables"
-msgstr ""
-"Select this option to define symbol libraries in project specific library "
-"tables"
-
-msgid "Select global symbol library table file:"
-msgstr "Select global symbol library table file:"
-
-msgid "Configure Global Symbol Library Table"
-msgstr "Configure Global Symbol Library Table"
 
 msgid "Line width:"
 msgstr "Line width:"
@@ -5102,8 +5131,8 @@ msgstr "Duplicate sheet names within a given sheet"
 msgid "Pin not connected (use a \"no connection\" flag to suppress this error)"
 msgstr "Pin not connected (use a “no connection” flag to suppress this error)"
 
-msgid "Pin connected to some others pins but no pin to drive it"
-msgstr "Pin connected to some others pins but no pin to drive it"
+msgid "Pin connected to other pins, but not driven by any pin"
+msgstr "Pin connected to other pins, but not driven by any pin"
 
 msgid "Conflict problem between pins. Severity: warning"
 msgstr "Conflict problem between pins. Severity: warning"
@@ -6331,8 +6360,8 @@ msgstr "Pin &Table…"
 msgid "Show pin table"
 msgstr "Show pin table"
 
-msgid "Library Browser"
-msgstr "Library Browser"
+msgid "Symbol Library Browser"
+msgstr "Symbol Library Browser"
 
 msgid "Open the symbol viewer"
 msgstr "Open the symbol viewer"
@@ -6513,8 +6542,8 @@ msgstr "Toggles the search tree"
 msgid "&Tools"
 msgstr "&Tools"
 
-msgid "Library &Browser"
-msgstr "Library &Browser"
+msgid "Symbol Library &Browser"
+msgstr "Symbol Library &Browser"
 
 msgid "Show &Hierarchical Navigator"
 msgstr "Show &Hierarchical Navigator"
@@ -7936,6 +7965,19 @@ msgstr "&About Eeschema"
 
 msgid "About Eeschema schematic designer"
 msgstr "About Eeschema schematic designer"
+
+#, c-format
+msgid ""
+"The current configuration does not include a library with the\n"
+"nickname \"%s\".  Use Manage Symbol Libraries\n"
+"to edit the configuration."
+msgstr ""
+"The current configuration does not include a library with the\n"
+"nickname “%s”.  Use Manage Symbol Libraries\n"
+"to edit the configuration."
+
+msgid "Symbol library not found."
+msgstr "Symbol library not found."
 
 #, c-format
 msgid "Unit %c"
@@ -11473,8 +11515,8 @@ msgstr "Horizontal, then vertical"
 msgid "Vertical, then horizontal"
 msgstr "Vertical, then horizontal"
 
-msgid "Pad Numbering Direction:"
-msgstr "Pad Numbering Direction:"
+msgid "Numbering Direction:"
+msgstr "Numbering Direction:"
 
 msgid "Reverse numbering on alternate rows/columns"
 msgstr "Reverse numbering on alternate rows/columns"
@@ -11547,8 +11589,8 @@ msgstr ""
 "Rotate the item as well as move it - multi-selections will be rotated "
 "together"
 
-msgid "Pad Numbering Options:"
-msgstr "Pad Numbering Options:"
+msgid "Numbering Options:"
+msgstr "Numbering Options:"
 
 msgid "Pad numbering start value:"
 msgstr "Pad numbering start value:"
@@ -12085,6 +12127,9 @@ msgstr "STEP file has been created successfully."
 msgid "Select a STEP export filename"
 msgstr "Select a STEP export filename"
 
+msgid "STEP files (*.stp;*.step)|*.stp;*.step"
+msgstr "STEP files (*.stp;*.step)|*.stp;*.step"
+
 msgid "Coordinate origin options:"
 msgstr "Coordinate origin options:"
 
@@ -12108,6 +12153,28 @@ msgstr "Other options:"
 
 msgid "Ignore virtual components"
 msgstr "Ignore virtual components"
+
+msgid "Tolerance:"
+msgstr "Tolerance:"
+
+msgid "Tight"
+msgstr "Tight"
+
+msgid "Standard"
+msgstr "Standard"
+
+msgid "Loose"
+msgstr "Loose"
+
+msgid "Very loose"
+msgstr "Very loose"
+
+msgid ""
+"Tolerance sets the distance between two points that are considered joined.  "
+"Standard is 0.001mm."
+msgstr ""
+"Tolerance sets the distance between two points that are considered joined.  "
+"Standard is 0.001mm."
 
 msgid "Export STEP"
 msgstr "Export STEP"
@@ -12680,6 +12747,60 @@ msgstr "Set to net class values:"
 msgid "Set Track and Via Properties"
 msgstr "Set Track and Via Properties"
 
+msgid "footprint"
+msgstr "footprint"
+
+#, c-format
+msgid ""
+"Error occurred writing empty footprint library table file.\n"
+"\n"
+"%s"
+msgstr ""
+"Error occurred writing empty footprint library table file.\n"
+"\n"
+"%s"
+
+msgid "Please select a footprint library table file."
+msgstr "Please select a footprint library table file."
+
+#, c-format
+msgid ""
+"File \"%s\" is not a valid footprint library table file.\n"
+"\n"
+"%s"
+msgstr ""
+"File “%s” is not a valid footprint library table file.\n"
+"\n"
+"%s"
+
+#, c-format
+msgid ""
+"Cannot copy global footprint library table file:\n"
+"\n"
+" \"%s\"\n"
+"\n"
+":to:\n"
+"\n"
+"\"%s\"."
+msgstr ""
+"Cannot copy global footprint library table file:\n"
+"\n"
+" “%s”\n"
+"\n"
+":to:\n"
+"\n"
+"“%s”."
+
+#, c-format
+msgid ""
+"Error occurred loading global footprint library table:\n"
+"\n"
+"%s"
+msgstr ""
+"Error occurred loading global footprint library table:\n"
+"\n"
+"%s"
+
 msgid "Circle Properties"
 msgstr "Circle Properties"
 
@@ -12705,11 +12826,11 @@ msgid "Line Segment Properties"
 msgstr "Line Segment Properties"
 
 msgid ""
-"This item was on a non-existing layer.\n"
-"It has been moved to the first allowed layer."
+"This item was on a non-existing or forbidden layer.\n"
+"It has been moved to the first allowed layer. Please fix it."
 msgstr ""
-"This item was on a non-existing layer.\n"
-"It has been moved to the first allowed layer."
+"This item was on a non-existing or forbidden layer.\n"
+"It has been moved to the first allowed layer. Please fix it."
 
 msgid "Modify drawing properties"
 msgstr "Modify drawing properties"
@@ -14321,6 +14442,15 @@ msgstr "&Rotation angle:"
 msgid "Set increment (in degrees) for context menu and hotkey rotation."
 msgstr "Set increment (in degrees) for context menu and hotkey rotation."
 
+msgid "Magnetic Points"
+msgstr "Magnetic Points"
+
+msgid "Snap to Pads"
+msgstr "Snap to Pads"
+
+msgid "Capture cursor when the mouse enters a pad area"
+msgstr "Capture cursor when the mouse enters a pad area"
+
 msgid "Never"
 msgstr "Never"
 
@@ -14330,17 +14460,17 @@ msgstr "When creating tracks"
 msgid "Always"
 msgstr "Always"
 
-msgid "Magnetic Pads"
-msgstr "Magnetic Pads"
+msgid "Snap to Tracks"
+msgstr "Snap to Tracks"
 
-msgid "Control capture of the cursor when the mouse enters a pad area."
-msgstr "Control capture of the cursor when the mouse enters a pad area."
+msgid "Capture cursor when the mouse approaches a track"
+msgstr "Capture cursor when the mouse approaches a track"
 
-msgid "Magnetic Tracks"
-msgstr "Magnetic Tracks"
+msgid "Snap to Graphical"
+msgstr "Snap to Graphical"
 
-msgid "Control capture of the cursor when the mouse approaches a track."
-msgstr "Control capture of the cursor when the mouse approaches a track."
+msgid "Capture cursor when the mouse approaches graphical control points"
+msgstr "Capture cursor when the mouse approaches graphical control points"
 
 msgid "Legacy Toolset Routing Options"
 msgstr "Legacy Toolset Routing Options"
@@ -16465,11 +16595,11 @@ msgstr "&Delete Footprint from Library"
 msgid "Delete the current footprint"
 msgstr "Delete the current footprint"
 
-msgid "&Library Browser"
-msgstr "&Library Browser"
+msgid "Footprint &Library Browser"
+msgstr "Footprint &Library Browser"
 
-msgid "Open the Library Browser"
-msgstr "Open the Library Browser"
+msgid "Browse footprint libraries"
+msgstr "Browse footprint libraries"
 
 msgid "&3D Viewer"
 msgstr "&3D Viewer"
@@ -17076,6 +17206,12 @@ msgstr "Requested length < minimum length"
 
 msgid "Requested length too large"
 msgstr "Requested length too large"
+
+msgid "Requested length too small"
+msgstr "Requested length too small"
+
+msgid "Requested length can't be represented"
+msgstr "Requested length can't be represented"
 
 msgid "Component Value:"
 msgstr "Component Value:"
@@ -17734,30 +17870,11 @@ msgstr ""
 "you should verify and edit it (run DRC test)."
 
 msgid ""
-"You have run Pcbnew for the first time using the new footprint library table "
-"method for finding footprints.\n"
-"Pcbnew has either copied the default table or created an empty table in the "
-"kicad configuration folder.\n"
-"You must first configure the library table to include all footprint "
-"libraries you want to use.\n"
-"See the \"Footprint Library Table\" section of the CvPcb or Pcbnew "
-"documentation for more information."
+"An error occurred attempting to load the global footprint library table.\n"
+"Please edit this global footprint library table in Preferences menu."
 msgstr ""
-"You have run Pcbnew for the first time using the new footprint library table "
-"method for finding footprints.\n"
-"Pcbnew has either copied the default table or created an empty table in the "
-"kicad configuration folder.\n"
-"You must first configure the library table to include all footprint "
-"libraries you want to use.\n"
-"See the “Footprint Library Table” section of the CvPcb or Pcbnew "
-"documentation for more information."
-
-msgid ""
-"An error occurred attempting to load the global footprint library table:\n"
-"Please edit this global footprint library table in Preferences menu"
-msgstr ""
-"An error occurred attempting to load the global footprint library table:\n"
-"Please edit this global footprint library table in Preferences menu"
+"An error occurred attempting to load the global footprint library table.\n"
+"Please edit this global footprint library table in Preferences menu."
 
 msgid "Action Plugins"
 msgstr "Action Plugins"
@@ -18037,17 +18154,8 @@ msgstr "Specify custom track and via sizes"
 msgid "Track netclass width"
 msgstr "Track netclass width"
 
-msgid "Track "
-msgstr "Track "
-
 msgid "Via netclass values"
 msgstr "Via netclass values"
-
-msgid "Via "
-msgstr "Via "
-
-msgid ", drill "
-msgstr ", drill "
 
 msgid "Select Differential Pair Dimensions"
 msgstr "Select Differential Pair Dimensions"
@@ -18186,6 +18294,12 @@ msgstr "New footprint"
 
 msgid "New footprint using footprint wizard"
 msgstr "New footprint using footprint wizard"
+
+msgid "Save changes to board"
+msgstr "Save changes to board"
+
+msgid "Save changes to library"
+msgstr "Save changes to library"
 
 msgid "Print footprint"
 msgstr "Print footprint"
@@ -18617,6 +18731,14 @@ msgstr "Place pad"
 
 msgid "Click on successive pads to renumber them"
 msgstr "Click on successive pads to renumber them"
+
+#, c-format
+msgid ""
+"Click on pad %s%d\n"
+"Press Escape to cancel or double-click to commit"
+msgstr ""
+"Click on pad %s%d\n"
+"Press Escape to cancel or double-click to commit"
 
 msgid "Renumber pads"
 msgstr "Renumber pads"
