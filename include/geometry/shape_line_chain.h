@@ -34,7 +34,8 @@
 #include <math/vector2d.h>
 #include <geometry/shape.h>
 #include <geometry/seg.h>
-#include <../polygon/clipper.hpp>
+
+#include <clipper.hpp>
 
 /**
  * Class SHAPE_LINE_CHAIN

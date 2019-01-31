@@ -5,7 +5,6 @@ include_directories(
     dialogs
     transline
     attenuators
-    ../polygon
     ../common
     ${INC_AFTER}
     )
@@ -88,7 +87,6 @@ set_target_properties( pcb_calculator_kiface PROPERTIES
     )
 target_link_libraries( pcb_calculator_kiface
     common
-    polygon
     ${wxWidgets_LIBRARIES}
     )
 set_source_files_properties( pcb_calculator.cpp PROPERTIES

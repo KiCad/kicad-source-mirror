@@ -64,7 +64,6 @@ target_link_libraries( qa_pcbnew
     common
     pcbcommon
     legacy_wx
-    polygon
     gal
     qa_utils
     lib_dxf

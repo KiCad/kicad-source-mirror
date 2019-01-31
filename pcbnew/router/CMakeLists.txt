@@ -6,7 +6,6 @@ include_directories(
     ../../include
     ../../3d-viewer
     ../../pcbnew
-    ../../polygon
     ${INC_AFTER}
 )
 

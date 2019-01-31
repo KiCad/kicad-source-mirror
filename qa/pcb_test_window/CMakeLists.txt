@@ -55,7 +55,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/pcbnew/router
     ${CMAKE_SOURCE_DIR}/pcbnew/tools
     ${CMAKE_SOURCE_DIR}/pcbnew/dialogs
-    ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/common/geometry
     ${CMAKE_SOURCE_DIR}/qa/qa_utils
     ${Boost_INCLUDE_DIR}
@@ -63,19 +62,15 @@ include_directories(
 )
 
 target_link_libraries( test_window
-    polygon
     pnsrouter
     common
     pcbcommon
-    polygon
     pnsrouter
     common
     pcbcommon
-    polygon
     pnsrouter
     common
     pcbcommon
-    polygon
     pnsrouter
     common
     pcbcommon

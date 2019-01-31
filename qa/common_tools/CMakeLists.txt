@@ -41,14 +41,12 @@ add_executable( qa_common_tools
 include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
     ${INC_AFTER}
 )
 
 target_link_libraries( qa_common_tools
     common
     legacy_gal
-    polygon
     gal
     qa_utils
     ${wxWidgets_LIBRARIES}

@@ -71,13 +71,11 @@ if( APPLE )
         )
     target_link_libraries( kicad
         common
-        polygon
         ${wxWidgets_LIBRARIES}
         )
 else()
     target_link_libraries( kicad
         common
-        polygon
         gal
         ${wxWidgets_LIBRARIES}
         ${GDI_PLUS_LIBRARIES}

@@ -342,19 +342,15 @@ add_library( eeschema_kiface SHARED
     )
 target_link_libraries( eeschema_kiface
     common
-    polygon
     gal
     legacy_gal
     common
-    polygon
     gal
     legacy_gal
     common
-    polygon
     gal
     legacy_gal
     common
-    polygon
     gal
     legacy_gal
     ${wxWidgets_LIBRARIES}

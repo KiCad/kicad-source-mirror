@@ -12,7 +12,6 @@ include_directories(
     ../3d-viewer
     ../pcbnew
     ../pcbnew/dialogs
-    ../polygon
     ../common
     ${GLM_INCLUDE_DIR}
     ${INC_AFTER}
@@ -146,21 +145,18 @@ target_link_libraries( cvpcb_kiface
     pcad2kicadpcb
     3d-viewer
     common
-    polygon
     gal
     legacy_wx
     pcbcommon
     pcad2kicadpcb
     3d-viewer
     common
-    polygon
     gal
     legacy_wx
     pcbcommon
     pcad2kicadpcb
     3d-viewer
     common
-    polygon
     gal
     legacy_wx
     ${wxWidgets_LIBRARIES}

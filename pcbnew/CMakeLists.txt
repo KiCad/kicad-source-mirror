@@ -42,7 +42,6 @@ include_directories(
     ./autorouter
     ../3d-viewer
     ../common
-    ../polygon
     ../common/dialogs
     ./exporters
     ../dxflib_qcad
@@ -679,7 +678,6 @@ set( PCBNEW_KIFACE_LIBRARIES
     pcad2kicadpcb
     legacy_wx
     common
-    polygon
     gal
     lib_dxf
     idf3

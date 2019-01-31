@@ -45,7 +45,6 @@ target_include_directories( qa_pcbnew_utils PUBLIC
     # target_include_directories and made PUBLIC)
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/common
     ${CMAKE_SOURCE_DIR}/pcbnew/router
@@ -65,7 +64,6 @@ target_link_libraries( qa_pcbnew_utils PUBLIC
 #     common
 #     pcbcommon
 #     legacy_wx
-#     polygon
 #     gal
 #     qa_utils
 #     lib_dxf

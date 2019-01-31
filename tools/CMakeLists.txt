@@ -14,7 +14,6 @@ add_executable( container_test
     )
 target_link_libraries( container_test
     common
-    polygon
     ${wxWidgets_LIBRARIES}
     )
 

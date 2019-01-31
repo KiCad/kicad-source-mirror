@@ -8,7 +8,6 @@ include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
     ../include/legacy_wx
     ../pcbnew
-    ../polygon
     3d_canvas
     3d_cache
     3d_rendering
@@ -108,6 +107,7 @@ add_dependencies( 3d-viewer pcbcommon )
 
 target_link_libraries( 3d-viewer
                        gal
+                       polygon
                        ${Boost_}
                        ${wxWidgets_LIBRARIES}
                        ${OPENGL_LIBRARIES}

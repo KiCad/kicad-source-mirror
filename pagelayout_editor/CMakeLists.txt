@@ -109,15 +109,12 @@ add_library( pl_editor_kiface MODULE
     )
 target_link_libraries( pl_editor_kiface
     common
-    polygon
     gal
     legacy_wx
     common
-    polygon
     gal
     legacy_wx
     common
-    polygon
     gal
     legacy_wx
     ${wxWidgets_LIBRARIES}

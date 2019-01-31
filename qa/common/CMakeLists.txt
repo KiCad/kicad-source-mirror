@@ -62,7 +62,6 @@ set( common_srcs
 set( common_libs
     common
     legacy_gal
-    polygon
     gal
     qa_utils
     unit_test_utils
@@ -89,7 +88,6 @@ include_directories(
     ${CMAKE_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/pcbnew
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/polygon
     ${INC_AFTER}
 )
 

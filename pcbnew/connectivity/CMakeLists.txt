@@ -4,7 +4,6 @@ include_directories(
     ./
     ../
     ../../include
-    ../../polygon
     ${INC_AFTER}
 )
 

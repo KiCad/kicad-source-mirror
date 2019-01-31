@@ -12,7 +12,6 @@ include_directories(
     dialogs
     ../common
     ../3d-viewer
-    ../polygon
     ${INC_AFTER}
     )
 
@@ -143,15 +142,12 @@ set_target_properties( gerbview_kiface PROPERTIES
     )
 target_link_libraries( gerbview_kiface
     common
-    polygon
     gal
     legacy_wx
     common
-    polygon
     gal
     legacy_wx
     common
-    polygon
     gal
     legacy_wx
     ${wxWidgets_LIBRARIES}

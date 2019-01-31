@@ -16,3 +16,6 @@ set(POLYGON_SRCS
 
 add_library(polygon STATIC ${POLYGON_SRCS})
 
+target_include_directories( polygon PUBLIC
+    include
+)
