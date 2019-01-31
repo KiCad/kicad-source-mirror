@@ -47,7 +47,7 @@
 #include <class_library.h>
 #include <view/view_controls.h>
 #include <sch_painter.h>
-
+#include <confirm.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -317,6 +317,46 @@ void LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton( wxUpdateUIEvent& aEvent )
         aEvent.Check( m_convert <= 1 );
     else
         aEvent.Check( true );
+}
+
+
+bool LIB_VIEW_FRAME::ShowModal( wxString* aSymbol, wxWindow* aParent )
+{
+    if( aSymbol && !aSymbol->IsEmpty() )
+    {
+        wxString msg;
+        LIB_TABLE* libTable = Prj().SchSymbolLibTable();
+        LIB_ID libid;
+
+        libid.Parse( *aSymbol, LIB_ID::ID_SCH, true );
+
+        if( libid.IsValid() )
+        {
+            wxString nickname = libid.GetLibNickname();
+
+            if( !libTable->HasLibrary( libid.GetLibNickname(), false ) )
+            {
+                msg.sprintf( _( "The current configuration does not include a library with the\n"
+                                "nickname \"%s\".  Use Manage Symbol Libraries\n"
+                                "to edit the configuration." ), nickname );
+                DisplayErrorMessage( aParent, _( "Symbol library not found." ), msg );
+            }
+            else if ( !libTable->HasLibrary( libid.GetLibNickname(), true ) )
+            {
+                msg.sprintf( _( "The library with the nickname \"%s\" is not enabled\n"
+                                "in the current configuration.  Use Manage Symbol Libraries to\n"
+                                "edit the configuration." ), nickname );
+                DisplayErrorMessage( aParent, _( "Symbol library not enabled." ), msg );
+            }
+            else
+            {
+                SetSelectedLibrary( libid.GetLibNickname() );
+                SetSelectedComponent( libid.GetLibItemName() );
+            }
+        }
+    }
+
+    return KIWAY_PLAYER::ShowModal( aSymbol, aParent );
 }
 
 

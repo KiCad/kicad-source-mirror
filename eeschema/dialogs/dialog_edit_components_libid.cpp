@@ -347,7 +347,12 @@ private:
     {
         if( m_isModified )
             revertChanges();
-        event.Skip();
+
+        // Just skipping the event doesn't work after the library browser was run
+        if( IsQuasiModal() )
+            EndQuasiModal( wxID_CANCEL );
+        else
+            event.Skip();
     }
 
     // Undo all changes, and clear the list of new lib_ids
@@ -550,8 +555,8 @@ void DIALOG_EDIT_COMPONENTS_LIBID::AddRowToGrid( bool aMarkRow, const wxString& 
 
     // set new libid column browse button
     wxGridCellAttr* attr = new wxGridCellAttr;
-    attr->SetEditor( new GRID_CELL_SYMBOL_ID_EDITOR( this ) );
-    m_grid->SetColAttr( COL_NEW_LIBID, attr );
+    attr->SetEditor( new GRID_CELL_SYMBOL_ID_EDITOR( this, aStrLibId ) );
+    m_grid->SetAttr( row, COL_NEW_LIBID, attr );
 }
 
 
@@ -727,6 +732,14 @@ bool DIALOG_EDIT_COMPONENTS_LIBID::setLibIdByBrowser( int aRow )
 #else
     // Use library viewer to choose a symbol
     LIB_ID aPreselectedLibid;
+    wxString current = m_grid->GetCellValue( aRow, COL_NEW_LIBID );
+
+    if( current.IsEmpty() )
+        current = m_grid->GetCellValue( aRow, COL_CURR_LIBID );
+
+    if( !current.IsEmpty() )
+        aPreselectedLibid.Parse( current, LIB_ID::ID_SCH, true );
+
     SCH_BASE_FRAME::COMPONENT_SELECTION sel =
             m_parent->SelectComponentFromLibBrowser( this, NULL, aPreselectedLibid, 0, 0 );
 #endif

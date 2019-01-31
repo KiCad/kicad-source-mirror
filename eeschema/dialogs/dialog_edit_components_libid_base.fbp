@@ -185,7 +185,6 @@
                         <event name="OnGridCellChange"></event>
                         <event name="OnGridCellLeftClick"></event>
                         <event name="OnGridCellLeftDClick">onCellBrowseLib</event>
-                        <event name="OnGridCellRightClick">onCellBrowseLib</event>
                         <event name="OnGridCellRightDClick"></event>
                         <event name="OnGridCmdCellChange"></event>
                         <event name="OnGridCmdCellLeftClick"></event>

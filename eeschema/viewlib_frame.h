@@ -58,6 +58,15 @@ public:
 
     ~LIB_VIEW_FRAME();
 
+    /**
+     * Function ShowModal
+     *
+     * Runs the Symbol Viewer as a modal dialog.
+     * @param aSymbol an optional FPID string to initialize the viewer with and to
+     *                return a selected footprint through.
+     */
+    bool ShowModal( wxString* aSymbol, wxWindow* aParent ) override;
+
     void OnSize( wxSizeEvent& event ) override;
 
     /**

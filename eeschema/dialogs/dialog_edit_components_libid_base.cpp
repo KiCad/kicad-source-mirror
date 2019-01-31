@@ -103,7 +103,6 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::DIALOG_EDIT_COMPONENTS_LIBID_BASE( wxWindow* 
 	
 	// Connect Events
 	m_grid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
-	m_grid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
 	m_grid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::OnSizeGrid ), NULL, this );
 	m_buttonUndo->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onUndoChangesButton ), NULL, this );
 	m_buttonUndo->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIChangesButton ), NULL, this );
@@ -116,7 +115,6 @@ DIALOG_EDIT_COMPONENTS_LIBID_BASE::~DIALOG_EDIT_COMPONENTS_LIBID_BASE()
 {
 	// Disconnect Events
 	m_grid->Disconnect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
-	m_grid->Disconnect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onCellBrowseLib ), NULL, this );
 	m_grid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::OnSizeGrid ), NULL, this );
 	m_buttonUndo->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::onUndoChangesButton ), NULL, this );
 	m_buttonUndo->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_EDIT_COMPONENTS_LIBID_BASE::updateUIChangesButton ), NULL, this );

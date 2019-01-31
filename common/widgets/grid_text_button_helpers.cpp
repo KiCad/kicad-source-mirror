@@ -157,9 +157,11 @@ void GRID_CELL_TEXT_BUTTON::Reset()
 class TEXT_BUTTON_SYMBOL_CHOOSER : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_SYMBOL_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg ) :
+    TEXT_BUTTON_SYMBOL_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
+                                const wxString& aPreselect ) :
             wxComboCtrl( aParent ),
-            m_dlg( aParentDlg )
+            m_dlg( aParentDlg ),
+            m_preselect( aPreselect )
     {
         SetButtonBitmaps( KiBitmap( small_library_xpm ) );
     }
@@ -174,6 +176,10 @@ protected:
     {
         // pick a footprint using the footprint picker.
         wxString      compid = GetValue();
+
+        if( compid.IsEmpty() )
+            compid = m_preselect;
+
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_SCH_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &compid, m_dlg ) )
@@ -183,13 +189,14 @@ protected:
     }
 
     DIALOG_SHIM* m_dlg;
+    wxString     m_preselect;
 };
 
 
 void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                          wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg );
+    m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg, m_preselect );
 
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }
@@ -202,9 +209,11 @@ void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg ) :
+    TEXT_BUTTON_FP_CHOOSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
+                            const wxString& aPreselect ) :
             wxComboCtrl( aParent ),
-            m_dlg( aParentDlg )
+            m_dlg( aParentDlg ),
+            m_preselect( aPreselect )
     {
         SetButtonBitmaps( KiBitmap( small_library_xpm ) );
     }
@@ -219,6 +228,10 @@ protected:
     {
         // pick a footprint using the footprint picker.
         wxString      fpid = GetValue();
+
+        if( fpid.IsEmpty() )
+            fpid = m_preselect;
+
         KIWAY_PLAYER* frame = m_dlg->Kiway().Player( FRAME_PCB_MODULE_VIEWER_MODAL, true, m_dlg );
 
         if( frame->ShowModal( &fpid, m_dlg ) )
@@ -228,13 +241,14 @@ protected:
     }
 
     DIALOG_SHIM* m_dlg;
+    wxString     m_preselect;
 };
 
 
 void GRID_CELL_FOOTPRINT_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                             wxEvtHandler* aEventHandler )
 {
-    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg );
+    m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_preselect );
 
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }

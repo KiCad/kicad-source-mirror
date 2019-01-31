@@ -60,27 +60,32 @@ protected:
 class GRID_CELL_SYMBOL_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_SYMBOL_ID_EDITOR( DIALOG_SHIM* aParent ) :
-            m_dlg( aParent )
+    GRID_CELL_SYMBOL_ID_EDITOR( DIALOG_SHIM* aParent,
+                                const wxString& aPreselect = wxEmptyString ) :
+            m_dlg( aParent ),
+            m_preselect( aPreselect )
     { }
 
     wxGridCellEditor* Clone() const override
     {
-        return new GRID_CELL_SYMBOL_ID_EDITOR( m_dlg );
+        return new GRID_CELL_SYMBOL_ID_EDITOR( m_dlg, m_preselect );
     }
 
     void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
 
 protected:
     DIALOG_SHIM* m_dlg;
+    wxString     m_preselect;
 };
 
 
 class GRID_CELL_FOOTPRINT_ID_EDITOR : public GRID_CELL_TEXT_BUTTON
 {
 public:
-    GRID_CELL_FOOTPRINT_ID_EDITOR( DIALOG_SHIM* aParent ) :
-            m_dlg( aParent )
+    GRID_CELL_FOOTPRINT_ID_EDITOR( DIALOG_SHIM* aParent,
+                                   const wxString& aPreselect = wxEmptyString ) :
+            m_dlg( aParent ),
+            m_preselect( aPreselect )
     { }
 
     wxGridCellEditor* Clone() const override
@@ -92,6 +97,7 @@ public:
 
 protected:
     DIALOG_SHIM* m_dlg;
+    wxString     m_preselect;
 };
 
 
