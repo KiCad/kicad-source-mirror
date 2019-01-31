@@ -366,7 +366,8 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
     }
 
     view->ShowSelectionArea( false );
-    view->ClearPreview();
+    if( !nextcmd )
+        view->ClearPreview();
     view->ShowPreview( nextcmd );
 
     return nextcmd;
