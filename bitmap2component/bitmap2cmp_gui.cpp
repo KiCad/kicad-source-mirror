@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2010 jean-pierre.charras
- * Copyright (C) 1992-2017 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,6 +35,7 @@
 #include <kiway.h>
 #include <kiface_i.h>
 
+#include <wx/rawbmp.h>
 #include <potracelib.h>
 
 #include "bitmap2component.h"
@@ -91,7 +92,9 @@ public:
 private:
 
     // Event handlers
-    void OnPaint( wxPaintEvent& event ) override;
+    void OnPaintInit( wxPaintEvent& event ) override;
+    void OnPaintGreyscale( wxPaintEvent& event ) override;
+    void OnPaintBW( wxPaintEvent& event ) override;
     void OnLoadFile( wxCommandEvent& event ) override;
     void OnExport( wxCommandEvent& event ) override;
 
@@ -230,30 +233,59 @@ BM2CMP_FRAME::~BM2CMP_FRAME()
 }
 
 
-void BM2CMP_FRAME::OnPaint( wxPaintEvent& event )
+void BM2CMP_FRAME::OnPaintInit( wxPaintEvent& event )
 {
 #ifdef __WXMAC__
     // Otherwise fails due: using wxPaintDC without being in a native paint event
     wxClientDC pict_dc( m_InitialPicturePanel );
-    wxClientDC greyscale_dc( m_GreyscalePicturePanel );
-    wxClientDC nb_dc( m_BNPicturePanel );
 #else
     wxPaintDC pict_dc( m_InitialPicturePanel );
-    wxPaintDC greyscale_dc( m_GreyscalePicturePanel );
-    wxPaintDC nb_dc( m_BNPicturePanel );
 #endif
 
     m_InitialPicturePanel->PrepareDC( pict_dc );
-    m_GreyscalePicturePanel->PrepareDC( greyscale_dc );
-    m_BNPicturePanel->PrepareDC( nb_dc );
 
     // OSX crashes with empty bitmaps (on initial refreshes)
-    if( m_Pict_Bitmap.IsOk() && m_Greyscale_Bitmap.IsOk() && m_BN_Bitmap.IsOk() )
-    {
-        pict_dc.DrawBitmap( m_Pict_Bitmap, 0, 0, false );
-        greyscale_dc.DrawBitmap( m_Greyscale_Bitmap, 0, 0, false );
-        nb_dc.DrawBitmap( m_BN_Bitmap, 0, 0, false );
-    }
+    if( m_Pict_Bitmap.IsOk() )
+        pict_dc.DrawBitmap( m_Pict_Bitmap, 0, 0, !!m_Pict_Bitmap.GetMask() );
+
+    event.Skip();
+}
+
+
+void BM2CMP_FRAME::OnPaintGreyscale( wxPaintEvent& event )
+{
+#ifdef __WXMAC__
+    // Otherwise fails due: using wxPaintDC without being in a native paint event
+    wxClientDC greyscale_dc( m_GreyscalePicturePanel );
+#else
+    wxPaintDC greyscale_dc( m_GreyscalePicturePanel );
+#endif
+
+    m_GreyscalePicturePanel->PrepareDC( greyscale_dc );
+
+    // OSX crashes with empty bitmaps (on initial refreshes)
+    if( m_Greyscale_Bitmap.IsOk() )
+        greyscale_dc.DrawBitmap( m_Greyscale_Bitmap, 0, 0, !!m_Greyscale_Bitmap.GetMask() );
+
+    event.Skip();
+}
+
+
+void BM2CMP_FRAME::OnPaintBW( wxPaintEvent& event )
+{
+#ifdef __WXMAC__
+    // Otherwise fails due: using wxPaintDC without being in a native paint event
+    wxClientDC nb_dc( m_BNPicturePanel );
+#else
+    wxPaintDC nb_dc( m_BNPicturePanel );
+#endif
+
+    m_BNPicturePanel->PrepareDC( nb_dc );
+
+    if( m_BN_Bitmap.IsOk() )
+        nb_dc.DrawBitmap( m_BN_Bitmap, 0, 0, !!m_BN_Bitmap.GetMask() );
+
+    event.Skip();
 }
 
 
@@ -288,8 +320,7 @@ void BM2CMP_FRAME::OnLoadFile( wxCommandEvent& event )
 
 bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
-    // Prj().MaybeLoadProjectSettings();
-
+    m_Pict_Image.Destroy();
     m_BitmapFileName = aFileSet[0];
 
     if( !m_Pict_Image.LoadFile( m_BitmapFileName ) )
@@ -336,11 +367,26 @@ bool BM2CMP_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int 
     m_Greyscale_Image.Destroy();
     m_Greyscale_Image = m_Pict_Image.ConvertToGreyscale( );
 
+    if( m_Pict_Bitmap.GetMask() )
+    {
+        for( int x = 0; x < m_Pict_Bitmap.GetWidth(); x++ )
+        {
+            for( int y = 0; y < m_Pict_Bitmap.GetHeight(); y++ )
+            {
+                if( m_Pict_Image.GetRed( x, y ) == m_Pict_Image.GetMaskRed() &&
+                    m_Pict_Image.GetGreen( x, y ) == m_Pict_Image.GetMaskGreen() &&
+                    m_Pict_Image.GetBlue( x, y ) == m_Pict_Image.GetMaskBlue() )
+                {
+                    m_Greyscale_Image.SetRGB( x, y, 255, 255, 255 );
+                }
+            }
+        }
+    }
+
     if( m_Negative )
         NegateGreyscaleImage( );
 
     m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
-
     m_NB_Image  = m_Greyscale_Image;
     Binarize( (double) m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
 
@@ -391,26 +437,30 @@ void BM2CMP_FRAME::OnResolutionChange( wxCommandEvent& event )
 
 void BM2CMP_FRAME::Binarize( double aThreshold )
 {
-    unsigned int  pixin;
-    unsigned char pixout;
     int           h = m_Greyscale_Image.GetHeight();
     int           w = m_Greyscale_Image.GetWidth();
-    unsigned int  threshold = (int)(aThreshold * 256);
+    unsigned char threshold = aThreshold * 255;
+    unsigned char alpha_thresh = 0.7 * threshold;
 
     for( int y = 0; y < h; y++ )
         for( int x = 0; x < w; x++ )
         {
-            pixin   = m_Greyscale_Image.GetGreen( x, y );
+            unsigned char pixout;
+            auto pixin   = m_Greyscale_Image.GetGreen( x, y );
+            auto alpha   = m_Greyscale_Image.HasAlpha() ?
+                    m_Greyscale_Image.GetAlpha( x, y ) : wxALPHA_OPAQUE;
 
-            if( pixin < threshold )
+            if( pixin < threshold || alpha < alpha_thresh )
                 pixout = 0;
             else
                 pixout = 255;
 
             m_NB_Image.SetRGB( x, y, pixout, pixout, pixout );
+
         }
 
     m_BN_Bitmap = wxBitmap( m_NB_Image );
+
 }
 
 
@@ -435,6 +485,7 @@ void BM2CMP_FRAME::OnNegativeClicked( wxCommandEvent&  )
     if( m_checkNegative->GetValue() != m_Negative )
     {
         NegateGreyscaleImage();
+
         m_Greyscale_Bitmap = wxBitmap( m_Greyscale_Image );
         Binarize( (double)m_sliderThreshold->GetValue()/m_sliderThreshold->GetMax() );
         m_Negative = m_checkNegative->GetValue();
@@ -647,8 +698,8 @@ void BM2CMP_FRAME::ExportFile( FILE* aOutfile, OUTPUT_FMT_ID aFormat )
     {
         for( int x = 0; x < w; x++ )
         {
-            unsigned char pix = m_NB_Image.GetGreen( x, y );
-            BM_PUT( potrace_bitmap, x, y, pix ? 1 : 0 );
+            auto pix = m_NB_Image.GetGreen( x, y );
+            BM_PUT( potrace_bitmap, x, y, pix ? 0 : 1 );
         }
     }
 

@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __BITMAP2CMP_GUI_BASE_H__
-#define __BITMAP2CMP_GUI_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -43,7 +42,7 @@
 class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_Notebook;
 		wxScrolledWindow* m_InitialPicturePanel;
@@ -73,9 +72,11 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		wxCheckBox* m_checkNegative;
 		wxRadioBox* m_radio_PCBLayer;
 		wxStatusBar* m_statusBar;
-		
+
 		// Virtual event handlers, overide them in your derived class
-		virtual void OnPaint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnPaintInit( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnPaintGreyscale( wxPaintEvent& event ) { event.Skip(); }
+		virtual void OnPaintBW( wxPaintEvent& event ) { event.Skip(); }
 		virtual void UpdatePPITextValueX( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnResolutionChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UpdatePPITextValueY( wxMouseEvent& event ) { event.Skip(); }
@@ -84,14 +85,13 @@ class BM2CMP_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnFormatChange( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnThresholdChange( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnNegativeClicked( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		BM2CMP_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Bitmap to Component Converter"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 733,634 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxTAB_TRAVERSAL );
-		
+
 		~BM2CMP_FRAME_BASE();
-	
+
 };
 
-#endif //__BITMAP2CMP_GUI_BASE_H__

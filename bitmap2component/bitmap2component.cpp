@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 1992-2013 jean-pierre.charras
- * Copyright (C) 1992-2013 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,6 +155,7 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
         return 1;
     }
 
+    printf("Step 1\n");
     BITMAPCONV_INFO info;
     info.m_PixmapWidth  = aPotrace_bitmap->w;
     info.m_PixmapHeight = aPotrace_bitmap->h;     // the bitmap size in pixels
@@ -434,6 +435,8 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
      * Bezier curves are approximated by a polyline
      */
     potrace_path_t* paths = m_Paths;    // the list of paths
+    if(!m_Paths)
+        printf("NULL Paths!\n");
     while( paths != NULL )
     {
         int cnt  = paths->curve.n;
