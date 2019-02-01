@@ -215,6 +215,9 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAll
     GFootprintList.ReadFootprintFiles( fpTable, nullptr, &progressReporter );
     progressReporter.Show( false );
 
+    if( progressReporter.WasCancelled() )
+        return NULL;
+
     if( GFootprintList.GetErrorCount() )
         GFootprintList.DisplayErrors( this );
 

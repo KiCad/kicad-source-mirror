@@ -113,7 +113,10 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
     auto& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
     for( auto item: aItemList )
-        lib_node.AddItem( item );
+    {
+        if( item )
+            lib_node.AddItem( item );
+    }
 
     lib_node.AssignIntrinsicRanks( presorted );
 }
