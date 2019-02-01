@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,7 @@
 #include <board_netlist_updater.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
 #include <class_draw_panel_gal.h>
 #include <class_drawpanel.h>
 #include <class_board.h>
@@ -164,6 +165,13 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
                 toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
             m_runDragCommand = true;
+
+            // Now fix a reference point to move the footprints.
+            // We use the first footprint in list as reference point
+            // The graphic cursor will be on this fp when moving the footprints.
+            SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
+            SELECTION& selection = selTool->GetSelection();
+            selection.SetReferencePoint( newFootprints[0]->GetPosition() );
         }
     }
 
