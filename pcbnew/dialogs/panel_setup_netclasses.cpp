@@ -66,12 +66,19 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
-        m_originalColWidths[ i ] = m_netclassGrid->GetColSize( i );
+    {
+        // 'M' is generally the widest character, so we buffer the column width by default to ensure
+        // we don't write a continuous line of text at the column header
+        auto size = m_netclassGrid->GetTextExtent( m_netclassGrid->GetColLabelValue( i ) + "M");
+
+        m_originalColWidths[ i ] = std::max( m_netclassGrid->GetColSize( i ), size.x );
+        m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
+    }
 
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency
-    m_netclassGrid->SetDefaultRowSize(    m_netclassGrid->GetDefaultRowSize()    + 4 );
-    m_membershipGrid->SetDefaultRowSize(  m_membershipGrid->GetDefaultRowSize()  + 4 );
+    m_netclassGrid->SetDefaultRowSize( m_netclassGrid->GetDefaultRowSize() + 4 );
+    m_membershipGrid->SetDefaultRowSize( m_membershipGrid->GetDefaultRowSize() + 4 );
 
     m_netclassGrid->PushEventHandler( new GRID_TRICKS( m_netclassGrid ) );
     m_membershipGrid->PushEventHandler( new GRID_TRICKS( m_membershipGrid ) );
