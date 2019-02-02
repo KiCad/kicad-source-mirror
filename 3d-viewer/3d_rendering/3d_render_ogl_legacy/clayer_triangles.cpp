@@ -150,7 +150,7 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
                                              float zTop,
                                              bool aInvertFaceDirection )
 {
-    if( aContournPoints.size() > 4 )
+    if( aContournPoints.size() >= 4 )
     {
         // Calculate normals of each segment of the contourn
         std::vector< SFVEC2F > contournNormals;
@@ -164,7 +164,6 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             {
                 const SFVEC2F &v0 = aContournPoints[i + 0];
                 const SFVEC2F &v1 = aContournPoints[i + 1];
-
                 const SFVEC2F n = glm::normalize( v1 - v0 );
 
                 contournNormals[i] = SFVEC2F( n.y,-n.x );
@@ -176,7 +175,6 @@ void CLAYER_TRIANGLES::AddToMiddleContourns( const std::vector< SFVEC2F > &aCont
             {
                 const SFVEC2F &v0 = aContournPoints[i + 0];
                 const SFVEC2F &v1 = aContournPoints[i + 1];
-
                 const SFVEC2F n = glm::normalize( v1 - v0 );
 
                 contournNormals[i] = SFVEC2F( -n.y, n.x );

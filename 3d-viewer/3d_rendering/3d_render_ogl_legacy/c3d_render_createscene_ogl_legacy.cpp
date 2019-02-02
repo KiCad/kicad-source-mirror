@@ -501,11 +501,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
             get_layer_z_pos( layer_id, layer_z_top, layer_z_bot );
 
             m_ogl_disp_lists_layers_holes_outer[layer_id] = generate_holes_display_list(
-                        container->GetList(),
-                        *poly,
-                        layer_z_top,
-                        layer_z_bot,
-                        false );
+                        container->GetList(), *poly, layer_z_top, layer_z_bot, false );
         }
 
         for( MAP_POLY::const_iterator ii = innerMapHoles.begin();
@@ -519,11 +515,7 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
             get_layer_z_pos( layer_id, layer_z_top, layer_z_bot );
 
             m_ogl_disp_lists_layers_holes_inner[layer_id] = generate_holes_display_list(
-                        container->GetList(),
-                        *poly,
-                        layer_z_top,
-                        layer_z_bot,
-                        false );
+                        container->GetList(), *poly, layer_z_top, layer_z_bot, false );
         }
     }
 
@@ -531,7 +523,6 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
     generate_3D_Vias_and_Pads();
 
     // Add layers maps
-    // /////////////////////////////////////////////////////////////////////////
 
     if( aStatusTextReporter )
         aStatusTextReporter->Report( _( "Load OpenGL: layers" ) );
@@ -572,38 +563,33 @@ void C3D_RENDER_OGL_LEGACY::reload( REPORTER *aStatusTextReporter )
 
             switch( object2d_A->GetObjectType() )
             {
-                case OBJ2D_FILLED_CIRCLE:
-                    add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
-                                                  layerTriangles,
-                                                  layer_z_top, layer_z_bot );
+            case OBJ2D_FILLED_CIRCLE:
+                add_object_to_triangle_layer( (const CFILLEDCIRCLE2D *)object2d_A,
+                                              layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-                case OBJ2D_POLYGON4PT:
-                    add_object_to_triangle_layer( (const CPOLYGON4PTS2D *)object2d_A,
-                                                  layerTriangles,
-                                                  layer_z_top, layer_z_bot );
+            case OBJ2D_POLYGON4PT:
+                add_object_to_triangle_layer( (const CPOLYGON4PTS2D *)object2d_A,
+                                              layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-                case OBJ2D_RING:
-                    add_object_to_triangle_layer( (const CRING2D *)object2d_A,
-                                                  layerTriangles,
-                                                  layer_z_top, layer_z_bot );
+            case OBJ2D_RING:
+                add_object_to_triangle_layer( (const CRING2D *)object2d_A,
+                                              layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-                case OBJ2D_TRIANGLE:
-                    add_object_to_triangle_layer( (const CTRIANGLE2D *)object2d_A,
-                                                  layerTriangles,
-                                                  layer_z_top, layer_z_bot );
+            case OBJ2D_TRIANGLE:
+                add_object_to_triangle_layer( (const CTRIANGLE2D *)object2d_A,
+                                              layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-                case OBJ2D_ROUNDSEG:
-                    add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
-                                                  layerTriangles,
-                                                  layer_z_top, layer_z_bot );
+            case OBJ2D_ROUNDSEG:
+                add_object_to_triangle_layer( (const CROUNDSEGMENT2D *) object2d_A,
+                                              layerTriangles, layer_z_top, layer_z_bot );
                 break;
 
-                default:
-                    wxFAIL_MSG("C3D_RENDER_OGL_LEGACY: Object type is not implemented");
+            default:
+                wxFAIL_MSG("C3D_RENDER_OGL_LEGACY: Object type is not implemented");
                 break;
             }
         }
@@ -885,12 +871,8 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
                 const SFVEC2F &v2 = tri->GetP2();
                 const SFVEC2F &v3 = tri->GetP3();
 
-                add_triangle_top_bot( layerTriangles,
-                                      v1,
-                                      v2,
-                                      v3,
-                                      layer_z_top,
-                                      layer_z_bot );
+                add_triangle_top_bot( layerTriangles, v1, v2, v3,
+                                      layer_z_top, layer_z_bot );
             }
 
             wxASSERT( tht_outer_holes_poly.OutlineCount() > 0 );
@@ -898,16 +880,14 @@ void C3D_RENDER_OGL_LEGACY::generate_3D_Vias_and_Pads()
             if( tht_outer_holes_poly.OutlineCount() > 0 )
             {
                 layerTriangles->AddToMiddleContourns( tht_outer_holes_poly,
-                                                      layer_z_bot,
-                                                      layer_z_top,
+                                                      layer_z_bot, layer_z_top,
                                                       m_settings.BiuTo3Dunits(),
                                                       false );
 
                 m_ogl_disp_list_pads_holes = new CLAYERS_OGL_DISP_LISTS(
                             *layerTriangles,
                             m_ogl_circle_texture, // not need
-                            layer_z_top,
-                            layer_z_top );
+                            layer_z_top, layer_z_top );
             }
 
             delete layerTriangles;
@@ -931,8 +911,7 @@ void C3D_RENDER_OGL_LEGACY::load_3D_models( REPORTER *aStatusTextReporter )
 
     // Go for all modules
     for( const MODULE* module = m_settings.GetBoard()->m_Modules;
-         module;
-         module = module->Next() )
+         module; module = module->Next() )
     {
         if( !module->Models().empty() )
         {
