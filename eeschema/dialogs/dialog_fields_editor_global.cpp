@@ -213,16 +213,12 @@ public:
 
     int GetNumberRows() override { return m_rows.size(); }
 
-    // Columns are fieldNames + quantity column
-    int GetNumberCols() override { return m_fieldNames.size() + 1; }
+    int GetNumberCols() override { return m_fieldNames.size(); }
 
 
     wxString GetColLabelValue( int aCol ) override
     {
-        if( aCol == QUANTITY_COLUMN )
-            return _( "Qty" );
-        else
-            return m_fieldNames[ aCol - 1 ];
+        return m_fieldNames[ aCol ];
     }
 
 
@@ -272,12 +268,12 @@ public:
                 timestamp_t compID = ref.GetComp()->GetTimeStamp();
 
                 if( !m_dataStore.count( compID ) ||
-                        !m_dataStore[ compID ].count( m_fieldNames[ aCol - 1 ] ) )
+                        !m_dataStore[ compID ].count( m_fieldNames[ aCol ] ) )
                     return INDETERMINATE;
 
                 if( &ref == &group.m_Refs.front() )
-                    fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol - 1 ] ];
-                else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol - 1 ] ] )
+                    fieldValue = m_dataStore[ compID ][ m_fieldNames[ aCol ] ];
+                else if ( fieldValue != m_dataStore[ compID ][ m_fieldNames[ aCol ] ] )
                     return INDETERMINATE;
             }
         }
@@ -754,7 +750,7 @@ DIALOG_FIELDS_EDITOR_GLOBAL::DIALOG_FIELDS_EDITOR_GLOBAL( SCH_EDIT_FRAME* parent
             int textWidth = m_dataModel->GetDataWidth( col ) + COLUMN_MARGIN;
             int maxWidth = defaultDlgSize.x / 3;
 
-            if( col == m_grid->GetNumberCols() - 1 )
+            if( col == QUANTITY_COLUMN )
                 m_grid->SetColSize( col, std::min( std::max( 50, textWidth ), maxWidth ) );
             else
                 m_grid->SetColSize( col, std::min( std::max( 100, textWidth ), maxWidth ) );
@@ -847,6 +843,7 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
             userFieldNames.insert( comp->GetField( j )->GetName() );
     }
 
+    m_dataModel->AddColumn( _( "Qty" ) );
     AddField( _( "Reference" ), true, true  );
     AddField( _( "Value" ),     true, true  );
     AddField( _( "Footprint" ), true, true  );
@@ -864,11 +861,6 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::LoadFieldNames()
 
 void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 {
-    // quantities column will become new field column, so it needs to be reset
-    auto attr = new wxGridCellAttr;
-    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
-    m_grid->SetColFormatCustom( m_dataModel->GetColsCount() - 1, wxGRID_VALUE_STRING );
-
     wxTextEntryDialog dlg( this, _( "New field name:" ), _( "Add Field" ) );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -897,13 +889,6 @@ void DIALOG_FIELDS_EDITOR_GLOBAL::OnAddField( wxCommandEvent& event )
 
     wxGridTableMessage msg( m_dataModel, wxGRIDTABLE_NOTIFY_COLS_INSERTED, m_fieldsCtrl->GetItemCount(), 1 );
     m_grid->ProcessTableMessage( msg );
-
-    // set up attributes on the new quantities column
-    attr = new wxGridCellAttr;
-    attr->SetReadOnly();
-    m_grid->SetColAttr( m_dataModel->GetColsCount() - 1, attr );
-    m_grid->SetColFormatNumber( m_dataModel->GetColsCount() - 1 );
-    m_grid->SetColSize( m_dataModel->GetColsCount() - 1, 50 );
 }
 
 
