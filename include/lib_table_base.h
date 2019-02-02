@@ -342,19 +342,27 @@ public:
     /**
      * Get the number of rows contained in the table
      */
-    int GetCount()
+    unsigned GetCount() const
     {
         return rows.size();
     }
 
     /**
-     * Get the row at the given index.
-     * @param  aIndex row index (must exist)
-     * @return        pointer to the row
+     * Get the 'n'th #LIB_TABLE_ROW object
+     * @param  aIndex index of row (must exist: from 0 to GetCount() - 1)
+     * @return        reference to the row
      */
-    LIB_TABLE_ROW* At( int aIndex )
+    LIB_TABLE_ROW& At( unsigned aIndex )
     {
-        return &rows[aIndex];
+        return rows[aIndex];
+    }
+
+    /**
+     * @copydoc At()
+     */
+    const LIB_TABLE_ROW& At( unsigned aIndex ) const
+    {
+        return rows[aIndex];
     }
 
     /**

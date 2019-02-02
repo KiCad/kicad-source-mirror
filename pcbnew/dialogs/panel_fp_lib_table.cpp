@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 CERN
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -245,11 +245,11 @@ protected:
             if( parsed )
             {
                 // make sure the table is big enough...
-                if( tmp_tbl.GetCount() > tbl->GetNumberRows() )
+                if( tmp_tbl.GetCount() > (unsigned) tbl->GetNumberRows() )
                     tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
 
-                for( int i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->rows.replace( i, tmp_tbl.At( i )->clone() );
+                for( unsigned i = 0;  i < tmp_tbl.GetCount();  ++i )
+                    tbl->rows.replace( i, tmp_tbl.At( i ).clone() );
             }
 
             m_grid->AutoSizeColumns( false );

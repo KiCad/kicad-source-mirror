@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE( Equal )
     BOOST_CHECK_EQUAL( false, m_mainTableNoFb != m_mainTableWithFb );
 
     // Modify one of them
-    m_mainTableWithFb.At( 1 )->SetNickName( "NewNickname" );
+    m_mainTableWithFb.At( 1 ).SetNickName( "NewNickname" );
     BOOST_CHECK_EQUAL( false, m_mainTableNoFb == m_mainTableWithFb );
     BOOST_CHECK_EQUAL( true, m_mainTableNoFb != m_mainTableWithFb );
 
@@ -280,15 +280,15 @@ BOOST_AUTO_TEST_CASE( Indexing )
     // Filled with the right row count
     BOOST_CHECK_EQUAL( m_mainTableNoFb.GetCount(), 3 );
 
-    const auto* row0 = m_mainTableNoFb.At( 0 );
-    BOOST_CHECK_EQUAL( row0->GetNickName(), "Lib1" );
+    const auto& row0 = m_mainTableNoFb.At( 0 );
+    BOOST_CHECK_EQUAL( row0.GetNickName(), "Lib1" );
 
-    const auto* row1 = m_mainTableNoFb.At( 1 );
-    BOOST_CHECK_EQUAL( row1->GetNickName(), "Lib2" );
+    const auto& row1 = m_mainTableNoFb.At( 1 );
+    BOOST_CHECK_EQUAL( row1.GetNickName(), "Lib2" );
 
     // disable, but still in the index
-    const auto* row2 = m_mainTableNoFb.At( 2 );
-    BOOST_CHECK_EQUAL( row2->GetNickName(), "Lib3" );
+    const auto& row2 = m_mainTableNoFb.At( 2 );
+    BOOST_CHECK_EQUAL( row2.GetNickName(), "Lib3" );
 
     // check correct handling of out-of-bounds
     // TODO: this doesn't work with boost::ptr_vector - that only asserts
