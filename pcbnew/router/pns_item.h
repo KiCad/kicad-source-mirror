@@ -181,6 +181,11 @@ public:
         return m_net;
     }
 
+    bool InAnyNet() const
+    {
+        return m_net != UnusedNet;
+    }
+
     /**
      * Function SetLayers()
      *

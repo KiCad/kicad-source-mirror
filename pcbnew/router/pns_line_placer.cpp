@@ -780,7 +780,15 @@ void LINE_PLACER::routeStep( const VECTOR2I& aP )
 bool LINE_PLACER::route( const VECTOR2I& aP )
 {
     routeStep( aP );
-    return CurrentEnd() == aP;
+
+    if (!m_head.PointCount() )
+    {
+        return false;
+    }
+    else
+    {
+        return m_head.CPoint(-1) == aP;
+    }
 }
 
 
@@ -946,7 +954,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
         m_lastNode = NULL;
     }
 
-    route( p );
+    bool reachesEnd = route( p );
 
     current = Trace();
 
@@ -958,7 +966,7 @@ bool LINE_PLACER::Move( const VECTOR2I& aP, ITEM* aEndItem )
     NODE* latestNode = m_currentNode;
     m_lastNode = latestNode->Branch();
 
-    if( eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth && current.SegmentCount() )
+    if( reachesEnd && eiDepth >= 0 && aEndItem && latestNode->Depth() > eiDepth && current.SegmentCount() )
     {
         SplitAdjacentSegments( m_lastNode, aEndItem, current.CPoint( -1 ) );
 
