@@ -372,10 +372,16 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     for( auto it : selection )
     {
-        auto item = dynamic_cast<BOARD_ITEM*>( it );
-
-        if( item )
+        if( auto item = dynamic_cast<BOARD_ITEM*>( it ) )
+        {
             sel_items.push_back( item );
+
+            if( auto mod = dyn_cast<MODULE*>( item ) )
+            {
+                for( auto pad : mod->Pads() )
+                    sel_items.push_back( pad );
+            }
+        }
     }
 
     bool restore_state = false;

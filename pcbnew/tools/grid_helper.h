@@ -114,7 +114,15 @@ private:
 
     ANCHOR* nearestAnchor( const VECTOR2I& aPos, int aFlags, LSET aMatchLayers );
 
-    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos );
+    /**
+     * computeAnchors inserts the local anchor points in to the grid helper for the specified
+     * board item, given the reference point and the direction of use for the point.
+     *
+     * @param aItem The board item for which to compute the anchors
+     * @param aRefPos The point for which to compute the anchors (if used by the component)
+     * @param aFrom Is this for an anchor that is designating a source point (aFrom=true) or not
+     */
+    void computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, const bool aFrom = false );
 
     void clearAnchors()
     {
