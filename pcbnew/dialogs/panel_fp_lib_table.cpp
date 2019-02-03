@@ -249,7 +249,7 @@ protected:
                     tbl->AppendRows( tmp_tbl.GetCount() - tbl->GetNumberRows() );
 
                 for( int i = 0;  i < tmp_tbl.GetCount();  ++i )
-                    tbl->rows.replace( i, tmp_tbl.At( i ) );
+                    tbl->rows.replace( i, tmp_tbl.At( i )->clone() );
             }
 
             m_grid->AutoSizeColumns( false );
