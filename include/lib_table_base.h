@@ -304,7 +304,7 @@ public:
      *                       a row is not found in this table.  No ownership is
      *                       taken of aFallBackTable.
      */
-    LIB_TABLE( LIB_TABLE* aFallBackTable = NULL );
+    LIB_TABLE( LIB_TABLE* aFallBackTable = nullptr );
 
     virtual ~LIB_TABLE();
 
@@ -315,6 +315,12 @@ public:
         nickIndex.clear();
     }
 
+    /**
+     * Compares this table against another.
+     *
+     * This compares the row *contents* against each other.
+     * Any fallback tables are not checked.
+     */
     bool operator==( const LIB_TABLE& r ) const
     {
         if( rows.size() == r.rows.size() )
@@ -333,9 +339,23 @@ public:
 
     bool operator!=( const LIB_TABLE& r ) const  { return !( *this == r ); }
 
-    int GetCount()       { return rows.size(); }
+    /**
+     * Get the number of rows contained in the table
+     */
+    int GetCount()
+    {
+        return rows.size();
+    }
 
-    LIB_TABLE_ROW* At( int aIndex ) { return &rows[aIndex]; }
+    /**
+     * Get the row at the given index.
+     * @param  aIndex row index (must exist)
+     * @return        pointer to the row
+     */
+    LIB_TABLE_ROW* At( int aIndex )
+    {
+        return &rows[aIndex];
+    }
 
     /**
      * Return true if the table is empty.

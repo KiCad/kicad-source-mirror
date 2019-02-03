@@ -306,7 +306,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName ) const
         // not found, search fall back table(s), if any
     } while( ( cur = cur->fallBack ) != 0 );
 
-    return NULL;   // not found
+    return nullptr; // not found
 }
 
 
@@ -328,7 +328,7 @@ LIB_TABLE_ROW* LIB_TABLE::findRow( const wxString& aNickName )
         // not found, search fall back table(s), if any
     } while( ( cur = cur->fallBack ) != 0 );
 
-    return NULL;   // not found
+    return nullptr; // not found
 }
 
 
@@ -364,7 +364,7 @@ const LIB_TABLE_ROW* LIB_TABLE::FindRowByURI( const wxString& aURI )
         // not found, search fall back table(s), if any
     } while( ( cur = cur->fallBack ) != 0 );
 
-    return NULL;   // not found
+    return nullptr; // not found
 }
 
 
@@ -503,7 +503,7 @@ PROPERTIES* LIB_TABLE::ParseOptions( const std::string& aOptionsList )
             return new PROPERTIES( props );
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
