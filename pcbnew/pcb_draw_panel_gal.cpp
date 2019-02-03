@@ -282,12 +282,12 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
     const std::vector<LAYER_NUM> frontLayers = {
-        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_CrtYd, F_Fab, LAYER_PAD_FR,
+        F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_Fab, LAYER_PAD_FR,
         LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
     const std::vector<LAYER_NUM> backLayers = {
-        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_CrtYd, B_Fab, LAYER_PAD_BK,
+        B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_Fab, LAYER_PAD_BK,
         LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
@@ -314,6 +314,7 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
         m_view->SetTopLayer( GetNetnameLayer( aLayer ) );
     }
 
+    m_view->EnableTopLayer( true );
     m_view->UpdateAllLayersOrder();
 }
 
