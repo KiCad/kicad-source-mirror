@@ -35,7 +35,8 @@
 
 LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAPTER::PTR& aAdapter,
                     WIDGETS aWidgets, wxHtmlWindow* aDetails )
-    : wxPanel( aParent ),
+    : wxPanel( aParent, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+               wxWANTS_CHARS | wxTAB_TRAVERSAL | wxNO_BORDER ),
       m_lib_table( aLibTable ),
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
