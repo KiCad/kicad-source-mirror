@@ -801,6 +801,8 @@ void ROUTER_TOOL::performRouting()
         // Don't crash if we missed an operation that cancelled routing.
         wxCHECK2( m_router->RoutingInProgress(), break );
 
+        handleCommonEvents( *evt );
+
         if( evt->IsMotion() )
         {
             m_router->SetOrthoMode( evt->Modifier( MD_CTRL ) );

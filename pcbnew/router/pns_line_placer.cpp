@@ -367,6 +367,7 @@ bool LINE_PLACER::rhWalkOnly( const VECTOR2I& aP, LINE& aNewHead )
     WALKAROUND walkaround( m_currentNode, Router() );
 
     walkaround.SetSolidsOnly( false );
+    walkaround.SetDebugDecorator( Dbg() );
     walkaround.SetIterationLimit( Settings().WalkaroundIterationLimit() );
 
     WALKAROUND::WALKAROUND_STATUS wf = walkaround.Route( initTrack, walkFull, false );
@@ -565,6 +566,7 @@ bool LINE_PLACER::rhShoveOnly( const VECTOR2I& aP, LINE& aNewHead )
 
     walkaround.SetSolidsOnly( true );
     walkaround.SetIterationLimit( 10 );
+    walkaround.SetDebugDecorator( Dbg() );
     WALKAROUND::WALKAROUND_STATUS stat_solids = walkaround.Route( initTrack, walkSolids );
 
     optimizer.SetEffortLevel( OPTIMIZER::MERGE_SEGMENTS );

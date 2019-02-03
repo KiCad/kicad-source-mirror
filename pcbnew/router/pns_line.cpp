@@ -163,12 +163,20 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     if( line.SegmentCount() < 1 )
         return false;
 
+    const auto pFirst = line.CPoint(0);
+    const auto pLast = line.CPoint(-1);
+
     if( aObstacle.PointInside( line.CPoint( 0 ) ) || aObstacle.PointInside( line.CPoint( -1 ) ) )
+    {
         return false;
+    }
 
     SHAPE_LINE_CHAIN::INTERSECTIONS ips;
 
     line.Intersect( aObstacle, ips );
+
+    auto eFirst = aObstacle.EdgeContainingPoint( pFirst );
+    auto eLast = aObstacle.EdgeContainingPoint( pLast );
 
     aWalk.Clear();
     aPost.Clear();
@@ -177,6 +185,23 @@ bool LINE::Walkaround( SHAPE_LINE_CHAIN aObstacle, SHAPE_LINE_CHAIN& aPre,
     int farthest_dist = 0;
 
     SHAPE_LINE_CHAIN::INTERSECTION nearest, farthest;
+    SHAPE_LINE_CHAIN::INTERSECTION is;
+
+    if( eFirst >= 0 )
+    {
+        is.our = line.CSegment(0);
+        is.their = aObstacle.CSegment( eFirst );
+        is.p = pFirst;
+        ips.push_back(is);
+    }
+
+    if ( eLast >= 0 )
+    {
+        is.our = line.CSegment(-1);
+        is.their = aObstacle.CSegment( eLast );
+        is.p = pLast;
+        ips.push_back(is);
+    }
 
     for( int i = 0; i < (int) ips.size(); i++ )
     {

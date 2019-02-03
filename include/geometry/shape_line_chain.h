@@ -565,6 +565,15 @@ public:
     bool PointOnEdge( const VECTOR2I& aP ) const;
 
     /**
+     * Function EdgeContainingPoint()
+     *
+     * Checks if point aP lies on an edge or vertex of the line chain.
+     * @param aP point to check
+     * @return index of the first edge containing the point, otherwise negative
+     */
+    int EdgeContainingPoint( const VECTOR2I& aP ) const;
+
+    /**
      * Function CheckClearance()
      *
      * Checks if point aP is closer to (or on) an edge or vertex of the line chain.

@@ -377,30 +377,35 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
                 inside = !inside;
         }
     }
-    return inside;
+    return inside && !PointOnEdge( aP );
 }
 
 
 bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
 {
-	if( !PointCount() )
-		return false;
+	return EdgeContainingPoint( aP ) >= 0;
+}
+
+int SHAPE_LINE_CHAIN::EdgeContainingPoint( const VECTOR2I& aP ) const
+{
+    if( !PointCount() )
+		return -1;
 
 	else if( PointCount() == 1 )
-        return m_points[0] == aP;
+        return m_points[0] == aP ? 0 : -1;
 
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG s = CSegment( i );
 
         if( s.A == aP || s.B == aP )
-            return true;
+            return i;
 
         if( s.Distance( aP ) <= 1 )
-            return true;
+            return i;
     }
 
-    return false;
+    return -1;
 }
 
 
