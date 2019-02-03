@@ -270,41 +270,39 @@ void PCB_DRAW_PANEL_GAL::SetTopLayer( PCB_LAYER_ID aLayer )
     m_view->SetTopLayer( aLayer );
 
     // Layers that should always have on-top attribute enabled
-    const LAYER_NUM layers[] = {
+    const std::vector<LAYER_NUM> layers = {
             LAYER_VIA_THROUGH, LAYER_VIAS_HOLES, LAYER_VIAS_NETNAMES,
             LAYER_PADS_TH, LAYER_PADS_PLATEDHOLES, LAYER_PADS_NETNAMES,
             LAYER_NON_PLATEDHOLES, LAYER_SELECT_OVERLAY, LAYER_GP_OVERLAY,
             LAYER_RATSNEST, LAYER_DRC
     };
 
-    for( unsigned int i = 0; i < sizeof( layers ) / sizeof( LAYER_NUM ); ++i )
-        m_view->SetTopLayer( layers[i] );
+    for( auto layer : layers )
+        m_view->SetTopLayer( layer );
 
     // Extra layers that are brought to the top if a F.* or B.* is selected
-    const LAYER_NUM frontLayers[] = {
+    const std::vector<LAYER_NUM> frontLayers = {
         F_Cu, F_Adhes, F_Paste, F_SilkS, F_Mask, F_CrtYd, F_Fab, LAYER_PAD_FR,
-        LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu ), -1
+        LAYER_PAD_FR_NETNAMES, NETNAMES_LAYER_INDEX( F_Cu )
     };
 
-    const LAYER_NUM backLayers[] = {
+    const std::vector<LAYER_NUM> backLayers = {
         B_Cu, B_Adhes, B_Paste, B_SilkS, B_Mask, B_CrtYd, B_Fab, LAYER_PAD_BK,
-        LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu ), -1
+        LAYER_PAD_BK_NETNAMES, NETNAMES_LAYER_INDEX( B_Cu )
     };
 
-    const LAYER_NUM* extraLayers = NULL;
+    const std::vector<LAYER_NUM>* extraLayers = NULL;
 
     // Bring a few more extra layers to the top depending on the selected board side
     if( IsFrontLayer( aLayer ) )
-        extraLayers = frontLayers;
+        extraLayers = &frontLayers;
     else if( IsBackLayer( aLayer ) )
-        extraLayers = backLayers;
+        extraLayers = &backLayers;
 
     if( extraLayers )
     {
-        const LAYER_NUM* l = extraLayers;
-
-        while( *l >= 0 )
-            m_view->SetTopLayer( *l++ );
+        for( auto layer : *extraLayers )
+            m_view->SetTopLayer( layer );
 
         // Move the active layer to the top
         if( !IsCopperLayer( aLayer ) )
