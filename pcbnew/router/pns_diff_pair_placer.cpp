@@ -130,7 +130,7 @@ bool DIFF_PAIR_PLACER::propagateDpHeadForces ( const VECTOR2I& aP, VECTOR2I& aNe
     else
     {
         virtHead.SetLayer( m_currentLayer );
-        virtHead.SetDiameter( m_sizes.DiffPairGap() + 2 * m_sizes.TrackWidth() );
+        virtHead.SetDiameter( m_sizes.DiffPairGap() + 2 * m_sizes.DiffPairWidth() );
     }
 
     VECTOR2I lead( 0, 0 );// = aP - m_currentStart ;
