@@ -698,6 +698,7 @@ struct EPAD : public EPAD_COMMON
 
     // for shape: (square | round | octagon | long | offset)
     enum {
+        UNDEF = -1,
         SQUARE,
         ROUND,
         OCTAGON,
