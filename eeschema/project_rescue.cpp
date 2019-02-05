@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -378,7 +378,7 @@ void RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::FindRescues(
             cache_match = find_component( part_id.Format().wx_str(), aRescuer.GetPrj()->SchLibs(),
                                           true );
 
-            lib_match = aRescuer.GetFrame()->GetLibPart( part_id );
+            lib_match = SchGetLibPart( part_id, aRescuer.GetPrj()->SchSymbolLibTable() );
 
             if( !cache_match && !lib_match )
                 continue;
@@ -464,11 +464,13 @@ bool RESCUE_SYMBOL_LIB_TABLE_CANDIDATE::PerformAction( RESCUER* aRescuer )
 }
 
 
-RESCUER::RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject )
+RESCUER::RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+                  EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType )
 {
     get_components( m_components );
     m_prj = &aProject;
-    m_edit_frame = &aEditFrame;
+    m_currentSheet = aCurrentSheet;
+    m_galBackEndType = aGalBackEndType;
 }
 
 
@@ -510,7 +512,7 @@ void RESCUER::UndoRescues()
 
 bool SCH_EDIT_FRAME::RescueLegacyProject( bool aRunningOnDemand )
 {
-    LEGACY_RESCUER rescuer( *this, Prj() );
+    LEGACY_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetGalCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
 }
@@ -518,7 +520,7 @@ bool SCH_EDIT_FRAME::RescueLegacyProject( bool aRunningOnDemand )
 
 bool SCH_EDIT_FRAME::RescueSymbolLibTableProject( bool aRunningOnDemand )
 {
-    SYMBOL_LIB_TABLE_RESCUER rescuer( *this, Prj() );
+    SYMBOL_LIB_TABLE_RESCUER rescuer( Prj(), &GetCurrentSheet(), GetGalCanvas()->GetBackend() );
 
     return rescueProject( rescuer, aRunningOnDemand );
 }
@@ -526,13 +528,32 @@ bool SCH_EDIT_FRAME::RescueSymbolLibTableProject( bool aRunningOnDemand )
 
 bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
 {
+    if( !RESCUER::RescueProject( this, aRescuer, aRunningOnDemand ) )
+        return false;
+
+    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+
+    if( viewer )
+        viewer->ReCreateListLib();
+
+    GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
+    SyncView();
+    GetCanvas()->Refresh();
+    OnModify();
+
+    return true;
+}
+
+
+bool RESCUER::RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunningOnDemand )
+{
     aRescuer.FindCandidates();
 
-    if( ! aRescuer.GetCandidateCount() )
+    if( !aRescuer.GetCandidateCount() )
     {
         if( aRunningOnDemand )
         {
-            wxMessageDialog dlg( this, _( "This project has nothing to rescue." ),
+            wxMessageDialog dlg( aParent, _( "This project has nothing to rescue." ),
                                  _( "Project Rescue Helper" ) );
             dlg.ShowModal();
         }
@@ -541,20 +562,18 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
     }
 
     aRescuer.RemoveDuplicates();
-
-    aRescuer.InvokeDialog( !aRunningOnDemand );
+    aRescuer.InvokeDialog( aParent, !aRunningOnDemand );
 
     // If no symbols were rescued, let the user know what's going on. He might
     // have clicked cancel by mistake, and should have some indication of that.
     if( !aRescuer.GetChosenCandidateCount() )
     {
-        wxMessageDialog dlg( this, _( "No symbols were rescued." ),
+        wxMessageDialog dlg( aParent, _( "No symbols were rescued." ),
                              _( "Project Rescue Helper" ) );
         dlg.ShowModal();
 
         // Set the modified flag even on Cancel. Many users seem to instinctively want to Save at
         // this point, due to the reloading of the symbols, so we'll make the save button active.
-        OnModify();
         return true;
     }
 
@@ -566,17 +585,7 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
         return false;
     }
 
-    aRescuer.WriteRescueLibrary( this );
-
-    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
-
-    if( viewer )
-        viewer->ReCreateListLib();
-
-    GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-    SyncView();
-    GetCanvas()->Refresh();
-    OnModify();
+    aRescuer.WriteRescueLibrary( aParent );
 
     return true;
 }
@@ -620,9 +629,10 @@ void LEGACY_RESCUER::FindCandidates()
 }
 
 
-void LEGACY_RESCUER::InvokeDialog( bool aAskShowAgain )
+void LEGACY_RESCUER::InvokeDialog( wxWindow* aParent, bool aAskShowAgain )
 {
-    InvokeDialogRescueEach( m_edit_frame, static_cast< RESCUER& >( *this ), aAskShowAgain );
+    InvokeDialogRescueEach( aParent, static_cast< RESCUER& >( *this ), m_currentSheet,
+                            m_galBackEndType, aAskShowAgain );
 }
 
 
@@ -658,7 +668,7 @@ void LEGACY_RESCUER::OpenRescueLibrary()
 }
 
 
-bool LEGACY_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
+bool LEGACY_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 {
     try
     {
@@ -670,7 +680,7 @@ bool LEGACY_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
 
         msg.Printf( _( "Failed to create symbol library file \"%s\"" ),
                     m_rescue_lib->GetFullFileName() );
-        DisplayError( aEditFrame, msg );
+        DisplayError( aParent, msg );
         return false;
     }
 
@@ -750,9 +760,10 @@ void LEGACY_RESCUER::AddPart( LIB_PART* aNewPart )
 }
 
 
-SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( SCH_EDIT_FRAME& aEditFrame,
-                                                    PROJECT& aProject ) :
-    RESCUER( aEditFrame, aProject )
+SYMBOL_LIB_TABLE_RESCUER::SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject,
+                                                    SCH_SHEET_PATH* aCurrentSheet,
+                                                    EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
+    RESCUER( aProject, aCurrentSheet, aGalBackEndType )
 {
     m_properties = std::make_unique<PROPERTIES>();
 }
@@ -764,9 +775,10 @@ void SYMBOL_LIB_TABLE_RESCUER::FindCandidates()
 }
 
 
-void SYMBOL_LIB_TABLE_RESCUER::InvokeDialog( bool aAskShowAgain )
+void SYMBOL_LIB_TABLE_RESCUER::InvokeDialog( wxWindow* aParent, bool aAskShowAgain )
 {
-    InvokeDialogRescueEach( m_edit_frame, static_cast< RESCUER& >( *this ), aAskShowAgain );
+    InvokeDialogRescueEach( aParent, static_cast< RESCUER& >( *this ), m_currentSheet,
+                            m_galBackEndType, aAskShowAgain );
 }
 
 
@@ -777,7 +789,7 @@ void SYMBOL_LIB_TABLE_RESCUER::OpenRescueLibrary()
 }
 
 
-bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
+bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( wxWindow *aParent )
 {
     wxString msg;
     wxFileName fn = GetRescueLibraryFileName();
@@ -793,7 +805,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
         catch( const IO_ERROR& ioe )
         {
             msg.Printf( _( "Failed to save rescue library %s." ), fn.GetFullPath() );
-            DisplayErrorMessage( aEditFrame, msg, ioe.What() );
+            DisplayErrorMessage( aParent, msg, ioe.What() );
             return false;
         }
 
@@ -817,7 +829,7 @@ bool SYMBOL_LIB_TABLE_RESCUER::WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame )
         catch( const IO_ERROR& ioe )
         {
             msg.Printf( _( "Error occurred saving project specific symbol library table." ) );
-            DisplayErrorMessage( aEditFrame, msg, ioe.What() );
+            DisplayErrorMessage( aParent, msg, ioe.What() );
             return false;
         }
     }

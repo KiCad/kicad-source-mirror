@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,8 @@
 #include <project_rescue.h>
 #include <eeschema_config.h>
 #include <symbol_preview_widget.h>
+#include <class_draw_panel_gal.h>
+
 
 class DIALOG_RESCUE_EACH: public DIALOG_RESCUE_EACH_BASE
 {
@@ -44,18 +46,21 @@ public:
      *
      * @param aParent - the SCH_EDIT_FRAME calling this
      * @param aRescuer - the active RESCUER instance
+     * @param aCurrentSheet the current sheet in the schematic editor frame
+     * @param aGalBackEndType the current GAL type used to render symbols
      * @param aAskShowAgain - if true, a "Never Show Again" button will be included
      */
-    DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescuer, bool aAskShowAgain );
+    DIALOG_RESCUE_EACH( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
+                        EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain );
 
     ~DIALOG_RESCUE_EACH();
 
 private:
-    SCH_EDIT_FRAME* m_Parent;
     SYMBOL_PREVIEW_WIDGET* m_previewNewWidget;
     SYMBOL_PREVIEW_WIDGET* m_previewOldWidget;
     wxConfigBase*   m_Config;
     RESCUER*        m_Rescuer;
+    SCH_SHEET_PATH* m_currentSheet;
     bool            m_AskShowAgain;
 
     bool TransferDataToWindow() override;
@@ -72,17 +77,22 @@ private:
 };
 
 
-DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( SCH_EDIT_FRAME* aParent, RESCUER& aRescuer,
+DIALOG_RESCUE_EACH::DIALOG_RESCUE_EACH( wxWindow* aParent,
+                                        RESCUER& aRescuer,
+                                        SCH_SHEET_PATH* aCurrentSheet,
+                                        EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType,
                                         bool aAskShowAgain )
     : DIALOG_RESCUE_EACH_BASE( aParent ),
-      m_Parent( aParent ),
       m_Rescuer( &aRescuer ),
+      m_currentSheet( aCurrentSheet ),
       m_AskShowAgain( aAskShowAgain )
 {
-    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel,  Kiway(), m_Parent->GetGalCanvas()->GetBackend() );
+    wxASSERT( aCurrentSheet );
+
+    m_previewOldWidget = new SYMBOL_PREVIEW_WIDGET( m_previewOldPanel,  Kiway(), aGalBackEndType );
 	m_SizerOldPanel->Add( m_previewOldWidget, 1, wxEXPAND | wxALL, 5 );
 
-    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  Kiway(), m_Parent->GetGalCanvas()->GetBackend() );
+    m_previewNewWidget = new SYMBOL_PREVIEW_WIDGET( m_previewNewPanel,  Kiway(), aGalBackEndType );
 	m_SizerNewPanel->Add( m_previewNewWidget, 1, wxEXPAND | wxALL, 5 );
 
     m_Config = Kiface().KifaceSettings();
@@ -212,7 +222,7 @@ void DIALOG_RESCUE_EACH::PopulateInstanceList()
         SCH_FIELD* valueField = each_component->GetField( 1 );
 
         data.clear();
-        data.push_back( each_component->GetRef( & m_Parent->GetCurrentSheet() ) );
+        data.push_back( each_component->GetRef( m_currentSheet ) );
         data.push_back( valueField ? valueField->GetText() : wxT( "" ) );
         m_ListOfInstances->AppendItem( data );
         count++;
@@ -274,7 +284,7 @@ bool DIALOG_RESCUE_EACH::TransferDataFromWindow()
 
 void DIALOG_RESCUE_EACH::OnNeverShowClick( wxCommandEvent& aEvent )
 {
-    wxMessageDialog dlg( m_Parent,
+    wxMessageDialog dlg( GetParent(),
                 _(  "Stop showing this tool?\n"
                     "No changes will be made.\n\n"
                     "This setting can be changed from the \"Symbol Libraries\" dialog,\n"
@@ -298,8 +308,9 @@ void DIALOG_RESCUE_EACH::OnCancelClick( wxCommandEvent& aEvent )
 }
 
 
-int InvokeDialogRescueEach( SCH_EDIT_FRAME* aCaller, RESCUER& aRescuer, bool aAskShowAgain )
+int InvokeDialogRescueEach( wxWindow* aParent, RESCUER& aRescuer, SCH_SHEET_PATH* aCurrentSheet,
+                            EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType, bool aAskShowAgain )
 {
-    DIALOG_RESCUE_EACH dlg( aCaller, aRescuer, aAskShowAgain );
-    return dlg.ShowModal();
+    DIALOG_RESCUE_EACH dlg( aParent, aRescuer, aCurrentSheet, aGalBackEndType, aAskShowAgain );
+    return dlg.ShowQuasiModal();
 }

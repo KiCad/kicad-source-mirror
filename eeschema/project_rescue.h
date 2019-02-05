@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Chris Pavlina <pavlina.chris@gmail.com>
- * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,6 +45,7 @@
 
 #include <class_libentry.h>
 #include <sch_legacy_plugin.h>
+#include <class_draw_panel_gal.h>
 
 
 class LIB_PART;
@@ -52,6 +53,7 @@ class SCH_COMPONENT;
 class RESCUER;
 class SCH_EDIT_FRAME;
 class SCH_LEGACY_PLUGIN;
+class SCH_SHEET_PATH;
 
 
 enum RESCUE_TYPE
@@ -219,7 +221,8 @@ protected:
 
     std::vector<SCH_COMPONENT*> m_components;
     PROJECT* m_prj;
-    SCH_EDIT_FRAME* m_edit_frame;
+    EDA_DRAW_PANEL_GAL::GAL_TYPE m_galBackEndType;
+    SCH_SHEET_PATH* m_currentSheet;
 
     boost::ptr_vector<RESCUE_CANDIDATE> m_all_candidates;
     std::vector<RESCUE_CANDIDATE*> m_chosen_candidates;
@@ -227,7 +230,8 @@ protected:
     std::vector<RESCUE_LOG> m_rescue_log;
 
 public:
-    RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject );
+    RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+             EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
     /**
      * Writes out the rescue library. Called after successful PerformAction()s. If this fails,
@@ -235,7 +239,7 @@ public:
      *
      * @return True on success.
      */
-    virtual bool WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame ) = 0;
+    virtual bool WriteRescueLibrary( wxWindow *aParent ) = 0;
 
     virtual void OpenRescueLibrary() = 0;
 
@@ -251,9 +255,7 @@ public:
      *
      * @param aAskShowAgain - whether the "Never Show Again" button should be visible
      */
-    virtual void InvokeDialog( bool aAskShowAgain ) = 0;
-
-    SCH_EDIT_FRAME* GetFrame() { return m_edit_frame; }
+    virtual void InvokeDialog( wxWindow* aParent, bool aAskShowAgain ) = 0;
 
     /**
      * Filter out duplicately named rescue candidates.
@@ -297,6 +299,8 @@ public:
      * Reverse the effects of all rescues on the project.
      */
     void UndoRescues();
+
+    static bool RescueProject( wxWindow* aParent, RESCUER& aRescuer, bool aRunningOnDemand );
 };
 
 
@@ -306,18 +310,19 @@ private:
     std::unique_ptr<PART_LIB> m_rescue_lib;
 
 public:
-    LEGACY_RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject ) :
-        RESCUER( aEditFrame, aProject )
+    LEGACY_RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+                    EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackEndType ) :
+        RESCUER( aProject, aCurrentSheet, aGalBackEndType )
     {
     }
 
     virtual void FindCandidates() override;
 
-    virtual void InvokeDialog( bool aAskShowAgain ) override;
+    virtual void InvokeDialog( wxWindow* aParent, bool aAskShowAgain ) override;
 
     virtual void OpenRescueLibrary() override;
 
-    virtual bool WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame ) override;
+    virtual bool WriteRescueLibrary( wxWindow *aParent ) override;
 
     virtual void AddPart( LIB_PART* aNewPart ) override;
 };
@@ -331,15 +336,16 @@ private:
     std::unique_ptr< PROPERTIES > m_properties;   ///< Library plugin properties
 
 public:
-    SYMBOL_LIB_TABLE_RESCUER( SCH_EDIT_FRAME& aEditFrame, PROJECT& aProject );
+    SYMBOL_LIB_TABLE_RESCUER( PROJECT& aProject, SCH_SHEET_PATH* aCurrentSheet,
+                              EDA_DRAW_PANEL_GAL::GAL_TYPE aGalBackeEndType );
 
     virtual void FindCandidates() override;
 
-    virtual void InvokeDialog( bool aAskShowAgain ) override;
+    virtual void InvokeDialog( wxWindow* aParent, bool aAskShowAgain ) override;
 
     virtual void OpenRescueLibrary() override;
 
-    virtual bool WriteRescueLibrary( SCH_EDIT_FRAME *aEditFrame ) override;
+    virtual bool WriteRescueLibrary( wxWindow* aParent ) override;
 
     virtual void AddPart( LIB_PART* aNewPart ) override;
 };

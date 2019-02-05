@@ -6,7 +6,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2017-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -32,12 +32,14 @@
 #include <wx_html_report_panel.h>
 
 #include <class_library.h>
+#include <project_rescue.h>
 #include <sch_io_mgr.h>
 #include <sch_sheet.h>
 #include <sch_component.h>
 #include <sch_screen.h>
 #include <sch_edit_frame.h>
 #include <symbol_lib_table.h>
+#include <viewlib_frame.h>
 #include <env_paths.h>
 
 #include <dialog_symbol_remap.h>
@@ -85,7 +87,21 @@ void DIALOG_SYMBOL_REMAP::OnRemapSymbols( wxCommandEvent& aEvent )
     // Ignore the never show rescue setting for one last rescue of legacy symbol
     // libraries before remapping to the symbol library table.  This ensures the
     // best remapping results.
-    parent->RescueLegacyProject( false );
+    LEGACY_RESCUER rescuer( Prj(), &parent->GetCurrentSheet(),
+                            parent->GetGalCanvas()->GetBackend() );
+
+    if( RESCUER::RescueProject( this, rescuer, false ) )
+    {
+        LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) parent->Kiway().Player( FRAME_SCH_VIEWER, false );
+
+        if( viewer )
+            viewer->ReCreateListLib();
+
+        parent->GetScreen()->ClearUndoORRedoList( parent->GetScreen()->m_UndoList, 1 );
+        parent->SyncView();
+        parent->GetCanvas()->Refresh();
+        parent->OnModify();
+    }
 
     // The schematic is fully loaded, any legacy library symbols have been rescued.  Now
     // check to see if the schematic has not been converted to the symbol library table
