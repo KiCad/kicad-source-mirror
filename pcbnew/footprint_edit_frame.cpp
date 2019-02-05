@@ -209,6 +209,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
 
 END_EVENT_TABLE()
 
+static const wxChar defaultLibWidthEntry[] =        wxT( "ModeditLibWidth" );
 
 FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
                                             EDA_DRAW_PANEL_GAL::GAL_TYPE aBackend ) :
@@ -310,7 +311,8 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     // Vertical items; layers 1 - 3
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "Footprints" ).Left().Layer(1)
-                      .Caption( _( "Libraries" ) ).MinSize( 250, 400 ) );
+                      .Caption( _( "Libraries" ) ).MinSize( 250, 400 )
+                      .BestSize( m_defaultLibWidth, -1 ) );
 
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
     m_auimgr.AddPane( m_Layers, EDA_PANE().Palette().Name( "LayersManager" ).Right().Layer(3)
@@ -511,6 +513,8 @@ void FOOTPRINT_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     if( ( settings.m_ValueDefaultlayer != F_SilkS ) && ( settings.m_ValueDefaultlayer != F_Fab ) )
         settings.m_ValueDefaultlayer = F_Fab;
+
+    aCfg->Read( defaultLibWidthEntry, &m_defaultLibWidth, 250 );
 }
 
 
@@ -520,6 +524,8 @@ void FOOTPRINT_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     PCB_BASE_FRAME::SaveSettings( aCfg );
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
+
+    aCfg->Write( defaultLibWidthEntry, m_treePane->GetSize().x );
 }
 
 

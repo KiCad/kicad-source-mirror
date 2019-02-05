@@ -142,7 +142,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     /// Default repeat offset for pins in repeat place pin
     int m_repeatPinStep;
 
-    static wxSize m_clientSize;
+    int m_defaultLibWidth;
 
     friend class DIALOG_LIB_EDIT_TEXT;
 

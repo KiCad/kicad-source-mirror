@@ -742,7 +742,6 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
-    aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
     m_showPinElectricalTypeName = aCfg->Read( CMPVIEW_SHOW_PINELECTRICALTYPE_KEY, true );
 
     // Set parameters to a reasonable value.

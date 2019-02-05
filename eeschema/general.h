@@ -67,6 +67,9 @@ class SCH_SHEET;
 ///< The default pin name size when creating pins(can be changed in preference menu)
 #define DEFAULTPINNAMESIZE 50
 
+///< The default library pane width
+#define DEFAULTLIBWIDTH 250
+
 #define GR_DEFAULT_DRAWMODE GR_COPY
 
 /* Rotation, mirror of graphic items in components bodies are handled by a

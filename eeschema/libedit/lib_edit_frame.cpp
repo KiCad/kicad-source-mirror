@@ -75,7 +75,6 @@ int LIB_EDIT_FRAME::           m_convert = 1;
 LIB_ITEM* LIB_EDIT_FRAME::m_lastDrawItem = NULL;
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
-wxSize LIB_EDIT_FRAME::        m_clientSize      = wxSize( -1, -1 );
 int LIB_EDIT_FRAME::           m_textSize        = -1;
 double LIB_EDIT_FRAME::        m_current_text_angle = TEXT_ANGLE_HORIZ;
 int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
@@ -262,7 +261,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
     m_auimgr.AddPane( m_treePane, EDA_PANE().Palette().Name( "ComponentTree" ).Left().Layer(1)
-                      .Caption( _( "Libraries" ) ).MinSize( 250, -1 ).Resizable() );
+                      .Caption( _( "Libraries" ) ).MinSize( 250, -1 )
+                      .BestSize( m_defaultLibWidth, -1 ).Resizable() );
     m_auimgr.AddPane( m_drawToolBar, EDA_PANE().VToolbar().Name( "ToolsToolbar" ).Right().Layer(1) );
 
     m_auimgr.AddPane( m_canvas->GetWindow(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );

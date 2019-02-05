@@ -47,6 +47,7 @@
 #include <dialogs/panel_eeschema_display_options.h>
 #include <dialogs/panel_libedit_display_options.h>
 #include <widgets/widget_eeschema_color_config.h>
+#include <widgets/symbol_tree_pane.h>
 #include <dialogs/panel_libedit_settings.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -339,6 +340,7 @@ static const wxString RepeatStepYEntry =            "RepeatStepY";
 static const wxString RepeatLabelIncrementEntry =   "RepeatLabelIncrement";
 
 // Library editor wxConfig entry names.
+static const wxChar defaultLibWidthEntry[] =        wxT( "LibeditLibWidth" );
 static const wxChar defaultPinNumSizeEntry[] =      wxT( "LibeditPinNumSize" );
 static const wxChar defaultPinNameSizeEntry[] =     wxT( "LibeditPinNameSize" );
 static const wxChar DefaultPinLengthEntry[] =       wxT( "DefaultPinLength" );
@@ -525,11 +527,13 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     m_textPinNameDefaultSize = (int) aCfg->Read( defaultPinNameSizeEntry, DEFAULTPINNAMESIZE );
     SetRepeatDeltaLabel( (int) aCfg->Read( repeatLibLabelIncEntry, DEFAULT_REPEAT_LABEL_INC ) );
     SetRepeatPinStep( (int) aCfg->Read( pinRepeatStepEntry, DEFAULT_REPEAT_OFFSET_PIN ) );
+
     wxPoint step;
-    step.x = (int) aCfg->Read( repeatLibStepXEntry, (long) DEFAULT_REPEAT_OFFSET_X );
-    step.y = (int) aCfg->Read( repeatLibStepYEntry, (long) DEFAULT_REPEAT_OFFSET_Y );
+    aCfg->Read( repeatLibStepXEntry, &step.x, DEFAULT_REPEAT_OFFSET_X );
+    aCfg->Read( repeatLibStepYEntry, &step.y, DEFAULT_REPEAT_OFFSET_Y );
     SetRepeatStep( step );
     m_showPinElectricalTypeName = aCfg->ReadBool( showPinElectricalType, true );
+    aCfg->Read( defaultLibWidthEntry, &m_defaultLibWidth, DEFAULTLIBWIDTH );
 
     wxString templateFieldNames = aCfg->Read( FieldNamesEntry, wxEmptyString );
 
@@ -563,14 +567,15 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::SaveSettings( aCfg );
 
-    aCfg->Write( DefaultPinLengthEntry, (long) GetDefaultPinLength() );
-    aCfg->Write( defaultPinNumSizeEntry, (long) GetPinNumDefaultSize() );
-    aCfg->Write( defaultPinNameSizeEntry, (long) GetPinNameDefaultSize() );
-    aCfg->Write( repeatLibLabelIncEntry, (long) GetRepeatDeltaLabel() );
-    aCfg->Write( pinRepeatStepEntry, (long) GetRepeatPinStep() );
-    aCfg->Write( repeatLibStepXEntry, (long) GetRepeatStep().x );
-    aCfg->Write( repeatLibStepYEntry, (long) GetRepeatStep().y );
+    aCfg->Write( DefaultPinLengthEntry, GetDefaultPinLength() );
+    aCfg->Write( defaultPinNumSizeEntry, GetPinNumDefaultSize() );
+    aCfg->Write( defaultPinNameSizeEntry, GetPinNameDefaultSize() );
+    aCfg->Write( repeatLibLabelIncEntry, GetRepeatDeltaLabel() );
+    aCfg->Write( pinRepeatStepEntry, GetRepeatPinStep() );
+    aCfg->Write( repeatLibStepXEntry, GetRepeatStep().x );
+    aCfg->Write( repeatLibStepYEntry, GetRepeatStep().y );
     aCfg->Write( showPinElectricalType, GetShowElectricalType() );
+    aCfg->Write( defaultLibWidthEntry, m_treePane->GetSize().x );
 }
 
 

@@ -51,6 +51,8 @@ class FOOTPRINT_EDIT_FRAME : public PCB_BASE_EDIT_FRAME
     std::unique_ptr<MODULE>     m_revertModule;
     wxString                    m_footprintNameWhenLoaded;
 
+    int                         m_defaultLibWidth;
+
 public:
 
     ~FOOTPRINT_EDIT_FRAME();
@@ -556,6 +558,7 @@ private:
      * @param aIncrement increment the number of pad (if that is what is selected)
      */
     void duplicateItems( bool aIncrement ) override;
+
 };
 
 #endif      // FOOTPRINT_EDIT_FRAME_H
