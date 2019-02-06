@@ -531,15 +531,18 @@ bool SCH_EDIT_FRAME::rescueProject( RESCUER& aRescuer, bool aRunningOnDemand )
     if( !RESCUER::RescueProject( this, aRescuer, aRunningOnDemand ) )
         return false;
 
-    LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
+    if( aRescuer.GetCandidateCount() )
+    {
+        LIB_VIEW_FRAME* viewer = (LIB_VIEW_FRAME*) Kiway().Player( FRAME_SCH_VIEWER, false );
 
-    if( viewer )
-        viewer->ReCreateListLib();
+        if( viewer )
+            viewer->ReCreateListLib();
 
-    GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
-    SyncView();
-    GetCanvas()->Refresh();
-    OnModify();
+        GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
+        SyncView();
+        GetCanvas()->Refresh();
+        OnModify();
+    }
 
     return true;
 }
