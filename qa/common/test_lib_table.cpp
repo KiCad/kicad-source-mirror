@@ -332,12 +332,8 @@ BOOST_AUTO_TEST_CASE( URIs )
 
     const LIB_TABLE_ROW* row = m_mainTableNoFb.FindRowByURI( "://lib/1" );
 
-    // A LIB_TABLE_ROW* nullptr for BOOST_CHECK_NE, because some boost version
-    // do not handle a nullptr with no type
-    const LIB_TABLE_ROW* null_row = nullptr;
-
     // should be found
-    BOOST_CHECK_NE( null_row, row );
+    BOOST_CHECK_NE( nullptr, row );
 
     if( row )
     {
@@ -346,7 +342,7 @@ BOOST_AUTO_TEST_CASE( URIs )
 
     row = m_mainTableNoFb.FindRowByURI( "this_uri_is_not_found" );
 
-    BOOST_CHECK_EQUAL( null_row, row );
+    BOOST_CHECK_EQUAL( nullptr, row );
 }
 
 

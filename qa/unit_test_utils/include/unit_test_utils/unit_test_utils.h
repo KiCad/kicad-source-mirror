@@ -78,6 +78,58 @@
 
 #endif
 
+/*
+ * Boost hides the configuration point for print_log_value in different
+ * namespaces between < 1.59 and >= 1.59.
+ *
+ * The macros can be used to open and close the right level of namespacing
+ * based on the version.
+ *
+ * We could just use a conditionally defined namespace alias, but that
+ * doesn't work in GCC <7 (GCC bug #56480)
+ *
+ * From Boost 1.64, this should be done with boost_test_print_type,
+ * and these defines can be removed once all logging functions use that.
+ */
+#if BOOST_VERSION >= 105900
+#define BOOST_TEST_PRINT_NAMESPACE_OPEN \
+    namespace boost                     \
+    {                                   \
+    namespace test_tools                \
+    {                                   \
+    namespace tt_detail
+#define BOOST_TEST_PRINT_NAMESPACE_CLOSE }}
+#else
+#define BOOST_TEST_PRINT_NAMESPACE_OPEN \
+    namespace boost                     \
+    {                                   \
+    namespace test_tools
+#define BOOST_TEST_PRINT_NAMESPACE_CLOSE }
+#endif
+
+/**
+ * Before Boost 1.64, nullptr_t wasn't handled. Provide our own logging
+ * for nullptr_t's, which helps when doing BOOST_CHECK/REQUIRES on pointers.
+ *
+ * This can be removed when our minimum boost version is 1.64 or higher.
+ */
+#if BOOST_VERSION < 106400
+
+BOOST_TEST_PRINT_NAMESPACE_OPEN
+{
+template <>
+struct print_log_value<nullptr_t>
+{
+    inline void operator()( std::ostream& os, nullptr_t const& p )
+    {
+        os << "nullptr";
+    }
+};
+}
+BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
+#endif
+
 namespace KI_TEST
 {
 
