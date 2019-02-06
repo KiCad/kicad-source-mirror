@@ -295,6 +295,7 @@ BOOST_AUTO_TEST_CASE( Indexing )
     // BOOST_CHECK_THROW( m_mainTableNoFb.At( 3 ), std::out_of_range );
 }
 
+
 /**
  * Test retrieval of libs by nickname
  */
@@ -329,10 +330,14 @@ BOOST_AUTO_TEST_CASE( URIs )
 {
     BOOST_CHECK_EQUAL( "://lib/1", m_mainTableNoFb.GetFullURI( "Lib1" ) );
 
-    const auto* row = m_mainTableNoFb.FindRowByURI( "://lib/1" );
+    const LIB_TABLE_ROW* row = m_mainTableNoFb.FindRowByURI( "://lib/1" );
+
+    // A LIB_TABLE_ROW* nullptr for BOOST_CHECK_NE, because some boost version
+    // do not handle a nullptr with no type
+    const LIB_TABLE_ROW* null_row = nullptr;
 
     // should be found
-    BOOST_CHECK_NE( nullptr, row );
+    BOOST_CHECK_NE( null_row, row );
 
     if( row )
     {
@@ -341,8 +346,9 @@ BOOST_AUTO_TEST_CASE( URIs )
 
     row = m_mainTableNoFb.FindRowByURI( "this_uri_is_not_found" );
 
-    BOOST_CHECK_EQUAL( nullptr, row );
+    BOOST_CHECK_EQUAL( null_row, row );
 }
+
 
 /**
  * Test retrieval of the logical libs function
