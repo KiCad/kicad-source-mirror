@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -104,7 +104,7 @@ class DIALOG_PAD_PROPERTIES_BASE : public DIALOG_SHIM
 		TEXT_CTRL_EVAL* m_tcCornerSizeRatio;
 		wxStaticText* m_staticTextCornerSizeRatioUnit;
 		wxStaticText* m_cornerRadiusLabel;
-		TEXT_CTRL_EVAL* m_tcCornerRadius;
+		wxTextCtrl* m_tcCornerRadius;
 		wxStaticText* m_cornerRadiusUnits;
 		wxStaticText* m_holeShapeLabel;
 		wxChoice* m_holeShapeCtrl;
@@ -227,20 +227,20 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextPosStart;
 		wxStaticText* m_startXLabel;
-		TEXT_CTRL_EVAL* m_startXCtrl;
+		wxTextCtrl* m_startXCtrl;
 		wxStaticText* m_startXUnits;
 		wxStaticText* m_startYLabel;
-		TEXT_CTRL_EVAL* m_startYCtrl;
+		wxTextCtrl* m_startYCtrl;
 		wxStaticText* m_startYUnits;
 		wxStaticText* m_staticTextPosEnd;
 		wxStaticText* m_endXLabel;
-		TEXT_CTRL_EVAL* m_endXCtrl;
+		wxTextCtrl* m_endXCtrl;
 		wxStaticText* m_endXUnits;
 		wxStaticText* m_endYLabel;
-		TEXT_CTRL_EVAL* m_endYCtrl;
+		wxTextCtrl* m_endYCtrl;
 		wxStaticText* m_endYUnits;
 		wxStaticText* m_radiusLabel;
-		TEXT_CTRL_EVAL* m_radiusCtrl;
+		wxTextCtrl* m_radiusCtrl;
 		wxStaticText* m_radiusUnits;
 		wxStaticText* m_thicknessLabel;
 		wxTextCtrl* m_thicknessCtrl;
@@ -268,13 +268,13 @@ class DIALOG_PAD_PRIMITIVES_TRANSFORM_BASE : public DIALOG_SHIM
 	protected:
 		wxStaticText* m_staticTextMove;
 		wxStaticText* m_xLabel;
-		TEXT_CTRL_EVAL* m_xCtrl;
+		wxTextCtrl* m_xCtrl;
 		wxStaticText* m_xUnits;
 		wxStaticText* m_yLabel;
-		TEXT_CTRL_EVAL* m_yCtrl;
+		wxTextCtrl* m_yCtrl;
 		wxStaticText* m_yUnits;
 		wxStaticText* m_rotationLabel;
-		TEXT_CTRL_EVAL* m_rotationCtrl;
+		wxTextCtrl* m_rotationCtrl;
 		wxStaticText* m_rotationUnits;
 		wxStaticText* m_scaleLabel;
 		TEXT_CTRL_EVAL* m_scaleCtrl;
@@ -304,7 +304,7 @@ class DIALOG_PAD_PRIMITIVE_POLY_PROPS_BASE : public DIALOG_SHIM
 		wxBitmapButton* m_addButton;
 		wxBitmapButton* m_deleteButton;
 		wxStaticText* m_thicknessLabel;
-		TEXT_CTRL_EVAL* m_thicknessCtrl;
+		wxTextCtrl* m_thicknessCtrl;
 		wxStaticText* m_thicknessUnits;
 		wxPanel* m_panelPoly;
 		wxStaticBitmap* m_warningIcon;

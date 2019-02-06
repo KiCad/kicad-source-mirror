@@ -11,8 +11,6 @@
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class TEXT_CTRL_EVAL;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -39,13 +37,13 @@ class DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE : public DIALOG_SHIM
 	
 	protected:
 		wxStaticText* m_traceWidthLabel;
-		TEXT_CTRL_EVAL* m_traceWidthText;
+		wxTextCtrl* m_traceWidthText;
 		wxStaticText* m_traceWidthUnit;
 		wxStaticText* m_traceGapLabel;
-		TEXT_CTRL_EVAL* m_traceGapText;
+		wxTextCtrl* m_traceGapText;
 		wxStaticText* m_traceGapUnit;
 		wxStaticText* m_viaGapLabel;
-		TEXT_CTRL_EVAL* m_viaGapText;
+		wxTextCtrl* m_viaGapText;
 		wxStaticText* m_viaGapUnit;
 		wxCheckBox* m_viaTraceGapEqual;
 		wxStaticLine* m_staticline1;

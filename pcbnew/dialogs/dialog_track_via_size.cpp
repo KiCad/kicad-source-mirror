@@ -36,9 +36,9 @@ const int minSize = (int)( 0.01 * IU_PER_MM );
 DIALOG_TRACK_VIA_SIZE::DIALOG_TRACK_VIA_SIZE( EDA_DRAW_FRAME* aParent,
                                               BOARD_DESIGN_SETTINGS& aSettings ) :
     DIALOG_TRACK_VIA_SIZE_BASE( aParent ),
-    m_trackWidth( aParent, m_trackWidthLabel, m_trackWidthText, m_trackWidthLabel, false, minSize ),
-    m_viaDiameter( aParent, m_viaDiameterLabel, m_viaDiameterText, m_viaDiameterLabel, false, minSize ),
-    m_viaDrill( aParent, m_viaDrillLabel, m_viaDrillText, m_viaDrillLabel, false, minSize ),
+    m_trackWidth( aParent, m_trackWidthLabel, m_trackWidthText, m_trackWidthUnits, false, minSize ),
+    m_viaDiameter( aParent, m_viaDiameterLabel, m_viaDiameterText, m_viaDiameterUnits, false, minSize ),
+    m_viaDrill( aParent, m_viaDrillLabel, m_viaDrillText, m_viaDrillUnits, false, minSize ),
     m_settings( aSettings )
 {
     m_stdButtonsOK->SetDefault();

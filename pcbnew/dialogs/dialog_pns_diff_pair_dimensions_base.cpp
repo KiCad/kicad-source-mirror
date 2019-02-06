@@ -5,8 +5,6 @@
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#include "widgets/text_ctrl_eval.h"
-
 #include "dialog_pns_diff_pair_dimensions_base.h"
 
 ///////////////////////////////////////////////////////////////////////////
@@ -28,7 +26,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_traceWidthLabel->Wrap( -1 );
 	fgSizer1->Add( m_traceWidthLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_traceWidthText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_traceWidthText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_traceWidthText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_traceWidthUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -39,7 +37,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	m_traceGapLabel->Wrap( -1 );
 	fgSizer1->Add( m_traceGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_traceGapText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_traceGapText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer1->Add( m_traceGapText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 	
 	m_traceGapUnit = new wxStaticText( this, wxID_ANY, _("u"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -52,7 +50,7 @@ DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE::DIALOG_PNS_DIFF_PAIR_DIMENSIONS_BASE( wxWi
 	
 	fgSizer1->Add( m_viaGapLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
-	m_viaGapText = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_viaGapText = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	m_viaGapText->Enable( false );
 	
 	fgSizer1->Add( m_viaGapText, 0, wxEXPAND|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );

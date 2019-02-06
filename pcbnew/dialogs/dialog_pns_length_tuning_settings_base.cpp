@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -29,12 +29,12 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	
 	m_staticText4 = new wxStaticText( sbSizerUpper->GetStaticBox(), wxID_ANY, _("Tune from:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText4->Wrap( -1 );
-	fgSizerLenSkew->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerLenSkew->Add( m_staticText4, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
 	wxArrayString m_choicePathFromChoices;
 	m_choicePathFrom = new wxChoice( sbSizerUpper->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choicePathFromChoices, 0 );
 	m_choicePathFrom->SetSelection( 0 );
-	fgSizerLenSkew->Add( m_choicePathFrom, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizerLenSkew->Add( m_choicePathFrom, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	
 	fgSizerLenSkew->Add( 0, 0, 0, 0, 5 );
@@ -70,7 +70,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_targetLengthLabel->Wrap( -1 );
 	fgSizerLenSkew->Add( m_targetLengthLabel, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 	
-	m_targetLengthText = new TEXT_CTRL_EVAL( sbSizerUpper->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_targetLengthText = new wxTextCtrl( sbSizerUpper->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizerLenSkew->Add( m_targetLengthText, 0, wxALL|wxEXPAND, 5 );
 	
 	m_targetLengthUnit = new wxStaticText( sbSizerUpper->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -97,10 +97,10 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	
 	m_minAmplLabel = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("Min amplitude (Amin):"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minAmplLabel->Wrap( -1 );
-	fgSizer3->Add( m_minAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
+	fgSizer3->Add( m_minAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
-	m_minAmplText = new TEXT_CTRL_EVAL( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizer3->Add( m_minAmplText, 0, wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 5 );
+	m_minAmplText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer3->Add( m_minAmplText, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_minAmplUnit = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_minAmplUnit->Wrap( -1 );
@@ -110,7 +110,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_maxAmplLabel->Wrap( -1 );
 	fgSizer3->Add( m_maxAmplLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_maxAmplText = new TEXT_CTRL_EVAL( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_maxAmplText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_maxAmplText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_maxAmplUnit = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -121,7 +121,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	m_spacingLabel->Wrap( -1 );
 	fgSizer3->Add( m_spacingLabel, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
-	m_spacingText = new TEXT_CTRL_EVAL( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	m_spacingText = new wxTextCtrl( sbSizerLower->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_spacingText, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_spacingUnit = new wxStaticText( sbSizerLower->GetStaticBox(), wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -170,6 +170,7 @@ DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE( 
 	
 	this->SetSizer( bMainSizer );
 	this->Layout();
+	bMainSizer->Fit( this );
 }
 
 DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE::~DIALOG_PNS_LENGTH_TUNING_SETTINGS_BASE()
