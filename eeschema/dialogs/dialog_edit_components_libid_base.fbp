@@ -185,6 +185,7 @@
                         <event name="OnGridCellChange"></event>
                         <event name="OnGridCellLeftClick"></event>
                         <event name="OnGridCellLeftDClick">onCellBrowseLib</event>
+                        <event name="OnGridCellRightClick"></event>
                         <event name="OnGridCellRightDClick"></event>
                         <event name="OnGridCmdCellChange"></event>
                         <event name="OnGridCmdCellLeftClick"></event>
@@ -561,7 +562,7 @@
                                 <property name="style"></property>
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
-                                <property name="tooltip">If  some components are orphan (the linked symbol is found nowhere),&#x0A;try to find a candidate having the same name in one of loaded symbol libraries</property>
+                                <property name="tooltip">If some components are orphan (the linked symbol is found nowhere),&#x0A;try to find a candidate having the same name in one of loaded symbol libraries.</property>
                                 <property name="validator_data_type"></property>
                                 <property name="validator_style">wxFILTER_NONE</property>
                                 <property name="validator_type">wxDefaultValidator</property>

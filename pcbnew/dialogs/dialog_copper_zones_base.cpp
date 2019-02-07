@@ -183,7 +183,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	
 	m_connectionLabel = new wxStaticText( m_ExportableSetupSizer->GetStaticBox(), wxID_ANY, _("Pad connections:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_connectionLabel->Wrap( -1 );
-	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local  pad settings") );
+	m_connectionLabel->SetToolTip( _("Default pad connection type to zone.\nThis setting can be overridden by local pad settings") );
 	
 	gbSizer2->Add( m_connectionLabel, wxGBPosition( 2, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 	
@@ -198,7 +198,7 @@ DIALOG_COPPER_ZONE_BASE::DIALOG_COPPER_ZONE_BASE( wxWindow* parent, wxWindowID i
 	gbSizer2->Add( m_antipadLabel, wxGBPosition( 3, 0 ), wxGBSpan( 1, 1 ), wxALIGN_CENTER_VERTICAL|wxTOP|wxRIGHT|wxLEFT, 5 );
 	
 	m_antipadCtrl = new wxTextCtrl( m_ExportableSetupSizer->GetStaticBox(), wxID_ANTIPAD_SIZE, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	m_antipadCtrl->SetToolTip( _("Clearance between pads in the same net and filled areas.") );
+	m_antipadCtrl->SetToolTip( _("Clearance between pads and filled areas of the same net.") );
 	
 	gbSizer2->Add( m_antipadCtrl, wxGBPosition( 3, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
 	

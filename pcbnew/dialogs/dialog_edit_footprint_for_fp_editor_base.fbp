@@ -1611,7 +1611,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local net clearance for all pad of this footprint&#x0A;If 0, the Netclass values are used&#x0A;This value can be superseded by a pad local value.</property>
+                                                            <property name="tooltip">This is the local net clearance for all pads of this footprint.&#x0A;If 0, the Netclass values are used.&#x0A;This value can be overridden on a pad-by-pad basis in the Local&#x0A;Clearance and Settings tab of Pad Properties.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -1797,7 +1797,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local clearance between pads and the solder mask&#x0A;for this footprint&#x0A;This value can be superseded by a pad local value.&#x0A;If 0, the global value is used</property>
+                                                            <property name="tooltip">This is the local clearance between pads and the solder mask for &#x0A;this footprint.&#x0A;If 0, the global value is used.&#x0A;This value can be overridden on a pad-by-pad basis in the Local&#x0A;Clearance and Settings tab of Pad Properties.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -1983,7 +1983,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local clearance between pads and the solder paste&#x0A;for this footprint.&#x0A;This value can be superseded by a pad local values.&#x0A;The final clearance value is the sum of this value and the clearance value ratio&#x0A;A negative value means a smaller mask size than pad size</property>
+                                                            <property name="tooltip">This is the local clearance between pads and the solder paste for&#x0A;this footprint.&#x0A;The final clearance value is the sum of this value and the clearance value ratio.&#x0A;A negative value means a smaller mask size than pad size.&#x0A;This value can be overridden on a pad-by-pad basis in the Local&#x0A;Clearance and Settings tab of Pad Properties.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
@@ -2169,7 +2169,7 @@
                                                             <property name="style"></property>
                                                             <property name="subclass"></property>
                                                             <property name="toolbar_pane">0</property>
-                                                            <property name="tooltip">This is the local clearance ratio in per cent between pads and the solder paste&#x0A;for this footprint.&#x0A;A value of 10 means the clearance value is 10 per cent of the pad size&#x0A;This value can be superseded by a pad local value.&#x0A;The final clearance value is the sum of this value and the clearance value&#x0A;A negative value means a smaller mask size than pad size.</property>
+                                                            <property name="tooltip">This is the local clearance ratio in percent between pads and the&#x0A;solder paste for this footprint.&#x0A;A value of 10 means the clearance value is 10 percent of the pad size.&#x0A;The final clearance value is the sum of this value and the clearance value.&#x0A;A negative value means a smaller mask size than pad size.&#x0A;This value can be overridden on a pad-by-pad basis in the Local&#x0A;Clearance and Settings tab of Pad Properties.</property>
                                                             <property name="window_extra_style"></property>
                                                             <property name="window_name"></property>
                                                             <property name="window_style"></property>
