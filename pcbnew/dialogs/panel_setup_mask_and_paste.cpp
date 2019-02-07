@@ -60,7 +60,7 @@ bool PANEL_SETUP_MASK_AND_PASTE::TransferDataToWindow()
     if( m_BrdSettings->m_SolderPasteMargin == 0 )
         m_PasteMarginCtrl->SetValue( wxT( "-" ) + m_PasteMarginCtrl->GetValue() );
 
-    // Add solder paste margin ratio in per cent
+    // Add solder paste margin ratio in percent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
     wxString msg;
     msg.Printf( wxT( "%f" ), m_BrdSettings->m_SolderPasteMarginRatio * 100.0 );

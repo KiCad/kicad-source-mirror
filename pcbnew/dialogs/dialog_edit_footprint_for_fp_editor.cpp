@@ -252,7 +252,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     if( m_footprint->GetLocalSolderPasteMargin() == 0 )
         m_SolderPasteMarginCtrl->SetValue( wxT( "-" ) + m_SolderPasteMarginCtrl->GetValue() );
 
-    // Add solder paste margin ratio in per cent
+    // Add solder paste margin ratio in percent
     // for the usual default value 0.0, display -0.0 (or -0,0 in some countries)
     wxString msg;
     msg.Printf( wxT( "%f" ), m_footprint->GetLocalSolderPasteMarginRatio() * 100.0 );

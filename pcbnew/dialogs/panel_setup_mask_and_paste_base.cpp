@@ -91,7 +91,7 @@ PANEL_SETUP_MASK_AND_PASTE_BASE::PANEL_SETUP_MASK_AND_PASTE_BASE( wxWindow* pare
 	
 	m_staticTextRatio = new wxStaticText( this, wxID_ANY, _("Solder paste ratio clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextRatio->Wrap( -1 );
-	m_staticTextRatio->SetToolTip( _("This is the global clearance ratio in per cent between pads and the solder paste\nA value of 10 means the clearance value is 10 per cent of the pad size\nThis value can be superseded by local values for a footprint or a pad.\nThe final clearance value is the sum of this value and the clearance value") );
+	m_staticTextRatio->SetToolTip( _("This is the global clearance ratio in percent between pads and the solder paste\nA value of 10 means the clearance value is 10 percent of the pad size\nThis value can be superseded by local values for a footprint or a pad.\nThe final clearance value is the sum of this value and the clearance value") );
 	
 	fgGridSolderMaskSizer->Add( m_staticTextRatio, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM|wxLEFT, 5 );
 	
