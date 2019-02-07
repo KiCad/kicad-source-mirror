@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -76,6 +76,7 @@ DIALOG_SCH_EDIT_SHEET_PIN::DIALOG_SCH_EDIT_SHEET_PIN( SCH_EDIT_FRAME* parent, SC
 bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataToWindow()
 {
     m_textName->SetValue( m_sheetPin->GetText() );
+    m_textName->SelectAll();
     m_textWidth.SetValue( m_sheetPin->GetTextWidth() );
     m_textHeight.SetValue( m_sheetPin->GetTextHeight() );
     m_choiceConnectionType->SetSelection( m_sheetPin->GetShape() );
