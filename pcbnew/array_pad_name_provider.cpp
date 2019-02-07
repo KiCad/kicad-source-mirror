@@ -31,7 +31,7 @@ ARRAY_PAD_NAME_PROVIDER::ARRAY_PAD_NAME_PROVIDER(
         : m_arrayOpts( aArrayOpts )
 {
     // start by numbering the first new item
-    m_current_pad_index = 1;
+    m_current_pad_index = 0;
 
     // construct the set of existing pad numbers
     if( aArrayOpts.GetNumberingStartIsSpecified() )

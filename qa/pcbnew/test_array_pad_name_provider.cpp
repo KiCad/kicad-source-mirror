@@ -63,13 +63,18 @@ BOOST_AUTO_TEST_SUITE( ArrayPadNameProv )
 struct APNP_CASE
 {
     std::string                    m_case_name;
+    bool                           m_using_module;
     std::vector<wxString>          m_existing_pads;
     std::unique_ptr<ARRAY_OPTIONS> m_arr_opts;
     std::vector<wxString>          m_exp_arr_names;
 };
 
 
-std::vector<APNP_CASE> GetAPNPCases()
+/**
+ * Get Array Pad Name Provider cases when a module is looked
+ * at to determine what names are available.
+ */
+std::vector<APNP_CASE> GetModuleAPNPCases()
 {
     std::vector<APNP_CASE> cases;
 
@@ -77,17 +82,32 @@ std::vector<APNP_CASE> GetAPNPCases()
 
     // simple linear numbering
     opts->m_2dArrayNumbering = false;
-    opts->m_numberingOffsetX = 0;
+    opts->m_numberingOffsetX = 1;
     opts->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
 
     cases.push_back( {
             "Simple linear, skip some",
+            true,
             { "1", "3" },
             std::move( opts ),
             { "2", "4", "5", "6", "7" },
     } );
 
+    // one without a module
     opts = std::make_unique<ARRAY_GRID_OPTIONS>();
+
+    // simple linear numbering (again)
+    opts->m_2dArrayNumbering = false;
+    opts->m_numberingOffsetX = 1;
+    opts->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
+
+    cases.push_back( {
+            "Simple linear, no module",
+            false,
+            {}, // not used
+            std::move( opts ),
+            { "1", "2", "3", "4", "5" },
+    } );
 
     // Grid numberings with skips don't make a lot of sense, there is
     // no particular contract made for them
@@ -95,25 +115,42 @@ std::vector<APNP_CASE> GetAPNPCases()
     return cases;
 }
 
-BOOST_AUTO_TEST_CASE( Cases )
+
+/**
+ * Check that an #ARRAY_PAD_NAME_PROVIDER provides the right names
+ * @param aProvider the provider
+ * @param aExpNames ordered list of expected names
+ */
+void CheckPadNameProvider( ARRAY_PAD_NAME_PROVIDER& aProvider, std::vector<wxString> aExpNames )
 {
-    for( const auto& c : GetAPNPCases() )
+    std::vector<wxString> got_names;
+
+    for( unsigned i = 0; i < aExpNames.size(); ++i )
+    {
+        got_names.push_back( aProvider.GetNextPadName() );
+    }
+
+    BOOST_CHECK_EQUAL_COLLECTIONS(
+            aExpNames.begin(), aExpNames.end(), got_names.begin(), got_names.end() );
+}
+
+
+BOOST_AUTO_TEST_CASE( ModuleCases )
+{
+    for( const auto& c : GetModuleAPNPCases() )
     {
         BOOST_TEST_CONTEXT( c.m_case_name )
         {
-            auto module = ModuleWithPads( c.m_existing_pads );
+            std::unique_ptr<MODULE> module;
+
+            if( c.m_using_module )
+            {
+                module = ModuleWithPads( c.m_existing_pads );
+            }
 
             ARRAY_PAD_NAME_PROVIDER apnp( module.get(), *c.m_arr_opts );
 
-            std::vector<wxString> got_names;
-
-            for( unsigned i = 0; i < c.m_exp_arr_names.size(); ++i )
-            {
-                got_names.push_back( apnp.GetNextPadName() );
-            }
-
-            BOOST_CHECK_EQUAL_COLLECTIONS( c.m_exp_arr_names.begin(), c.m_exp_arr_names.end(),
-                    got_names.begin(), got_names.end() );
+            CheckPadNameProvider( apnp, c.m_exp_arr_names );
         }
     }
 }

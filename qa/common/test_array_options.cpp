@@ -397,6 +397,7 @@ struct GRID_ARRAY_NAMING_PARAMS
     std::string                     m_start_at_x;
     std::string                     m_start_at_y;
     bool                            m_2d_numbering;
+    bool                            m_h_then_v;
     int                             m_nx;
     int                             m_ny;
 };
@@ -420,19 +421,53 @@ static const std::vector<GRID_ARRAY_NAMING_CASE> grid_name_cases = {
             "1",
             "2",
             false,
+            false, // doesn't matter
             2,
             3,
         },
         { "1", "2", "3", "4", "5", "6" },
     },
     {
+        // Tests a 2d grid
+        "2D grid A1",
+        {
+            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_ALPHA_FULL,
+            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
+            "A",
+            "1",
+            true,
+            true,
+            2,
+            3,
+        },
+        { "A1", "B1", "A2", "B2", "A3", "B3" },
+    },
+    {
+        // Tests a 2d grid
+        "2D grid 11",
+        {
+            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
+            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
+            "1",
+            "1",
+            true,
+            false,
+            2,
+            3,
+        },
+        // moving down the "long axis" first
+        // so the first coordinate has a range of 1-3, the second 1-2
+        { "11", "21", "31", "12", "22", "32" },
+    },
+    {
         // Tests a 2d grid, with different types and offsets (and alphabet wrap)
-        "2D grid",
+        "2D grid offsets",
         {
             ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
             ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_ALPHA_FULL,
             "5",
             "Z",
+            true,
             true,
             2,
             3,
@@ -456,6 +491,8 @@ BOOST_AUTO_TEST_CASE( GridNaming )
 
             grid_opts.m_nx = c.m_prms.m_nx;
             grid_opts.m_ny = c.m_prms.m_ny;
+
+            grid_opts.m_horizontalThenVertical = c.m_prms.m_h_then_v;
 
             ARRAY_OPTIONS::GetNumberingOffset(
                     c.m_prms.m_start_at_x, c.m_prms.m_pri_type, grid_opts.m_numberingOffsetX );

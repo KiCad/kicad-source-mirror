@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 John Beard, john.j.beard@gmail.com
- * Copyright (C) 1992-2014 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -304,24 +303,34 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         if ( m_numberingEnabled )
         {
-            newGrid->m_2dArrayNumbering = m_radioBoxGridNumberingScheme->GetSelection() != 0;
-
-            bool numOk = validateNumberingTypeAndOffset(
-                                    *m_entryGridPriNumberingOffset, *m_choicePriAxisNumbering,
-                                    newGrid->m_priAxisNumType, newGrid->m_numberingOffsetX,
-                                    errors );
-
-            if( newGrid->m_2dArrayNumbering )
-            {
-                numOk = validateNumberingTypeAndOffset(
-                                    *m_entryGridSecNumberingOffset, *m_choiceSecAxisNumbering,
-                                    newGrid->m_secAxisNumType, newGrid->m_numberingOffsetY,
-                                    errors ) && numOk;
-            }
-
-            ok = ok && numOk;
-
             newGrid->SetNumberingStartIsSpecified( m_rbGridStartNumberingOpt->GetSelection() == 1 );
+
+            if( newGrid->GetNumberingStartIsSpecified() )
+            {
+                newGrid->m_2dArrayNumbering = m_radioBoxGridNumberingScheme->GetSelection() != 0;
+
+                // validate from the input fields
+                bool numOk = validateNumberingTypeAndOffset( *m_entryGridPriNumberingOffset,
+                        *m_choicePriAxisNumbering, newGrid->m_priAxisNumType,
+                        newGrid->m_numberingOffsetX, errors );
+
+                if( newGrid->m_2dArrayNumbering )
+                {
+                    numOk = validateNumberingTypeAndOffset( *m_entryGridSecNumberingOffset,
+                                    *m_choiceSecAxisNumbering, newGrid->m_secAxisNumType,
+                                    newGrid->m_numberingOffsetY, errors )
+                            && numOk;
+                }
+
+                ok = ok && numOk;
+            }
+            else
+            {
+                // artificial linear numeric scheme from 1
+                newGrid->m_2dArrayNumbering = false;
+                newGrid->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
+                newGrid->m_numberingOffsetX = 1; // Start at "1"
+            }
         }
 
         // Only use settings if all values are good
@@ -347,10 +356,20 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
         if ( m_numberingEnabled )
         {
             newCirc->SetNumberingStartIsSpecified( m_rbCircStartNumberingOpt->GetSelection() == 1 );
-            newCirc->m_numberingType = ARRAY_OPTIONS::NUMBERING_NUMERIC;
 
-            ok = ok && validateLongEntry(*m_entryCircNumberingStart, newCirc->m_numberingOffset,
-                                         _("numbering start"), errors);
+            if( newCirc->GetNumberingStartIsSpecified() )
+            {
+                newCirc->m_numberingType = ARRAY_OPTIONS::NUMBERING_NUMERIC;
+
+                ok = ok
+                     && validateLongEntry( *m_entryCircNumberingStart, newCirc->m_numberingOffset,
+                                _( "numbering start" ), errors );
+            }
+            else
+            {
+                // artificial linear numeric scheme from 1
+                newCirc->m_numberingOffset = 1; // Start at "1"
+            }
         }
 
         // Only use settings if all values are good
@@ -390,18 +409,20 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
 {
     if ( m_numberingEnabled )
     {
+        // If we set the start number, we can set the other options,
+        // otherwise it's a hardcoded linear array
         const bool use_set_start_grid = m_rbGridStartNumberingOpt->GetSelection() == 1;
 
-        m_radioBoxGridNumberingScheme->Enable( true );
-        m_labelPriAxisNumbering->Enable( true );
-        m_choicePriAxisNumbering->Enable( true );
+        m_radioBoxGridNumberingScheme->Enable( use_set_start_grid );
+        m_labelPriAxisNumbering->Enable( use_set_start_grid );
+        m_choicePriAxisNumbering->Enable( use_set_start_grid );
 
         // Disable the secondary axis numbering option if the
         // numbering scheme doesn't have two axes
         const bool num2d = m_radioBoxGridNumberingScheme->GetSelection() != 0;
 
-        m_labelSecAxisNumbering->Enable( true && num2d );
-        m_choiceSecAxisNumbering->Enable( true && num2d );
+        m_labelSecAxisNumbering->Enable( use_set_start_grid && num2d );
+        m_choiceSecAxisNumbering->Enable( use_set_start_grid && num2d );
 
         // We can only set an offset if we're setting the start number
         m_labelGridNumberingOffset->Enable( use_set_start_grid );
@@ -417,8 +438,14 @@ void DIALOG_CREATE_ARRAY::setControlEnablement()
         // grid
         m_rbGridStartNumberingOpt->Enable( false );
         m_radioBoxGridNumberingScheme->Enable( false );
+
+        m_labelPriAxisNumbering->Enable( false );
+        m_labelSecAxisNumbering->Enable( false );
+
         m_choiceSecAxisNumbering->Enable( false );
         m_choicePriAxisNumbering->Enable( false );
+
+        m_labelGridNumberingOffset->Enable( false );
         m_entryGridPriNumberingOffset->Enable( false );
         m_entryGridSecNumberingOffset->Enable( false );
 
