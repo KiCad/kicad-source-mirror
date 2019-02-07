@@ -33,18 +33,18 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_netclassGrid->SetColSize( 0, 120 );
-	m_netclassGrid->SetColSize( 1, 85 );
-	m_netclassGrid->SetColSize( 2, 85 );
-	m_netclassGrid->SetColSize( 3, 85 );
-	m_netclassGrid->SetColSize( 4, 85 );
-	m_netclassGrid->SetColSize( 5, 85 );
-	m_netclassGrid->SetColSize( 6, 85 );
-	m_netclassGrid->SetColSize( 7, 85 );
-	m_netclassGrid->SetColSize( 8, 85 );
+	m_netclassGrid->SetColSize( 0, 130 );
+	m_netclassGrid->SetColSize( 1, 96 );
+	m_netclassGrid->SetColSize( 2, 96 );
+	m_netclassGrid->SetColSize( 3, 96 );
+	m_netclassGrid->SetColSize( 4, 96 );
+	m_netclassGrid->SetColSize( 5, 96 );
+	m_netclassGrid->SetColSize( 6, 96 );
+	m_netclassGrid->SetColSize( 7, 96 );
+	m_netclassGrid->SetColSize( 8, 96 );
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( true );
-	m_netclassGrid->SetColLabelSize( 22 );
+	m_netclassGrid->SetColLabelSize( 24 );
 	m_netclassGrid->SetColLabelValue( 0, _("Name") );
 	m_netclassGrid->SetColLabelValue( 1, _("Clearance") );
 	m_netclassGrid->SetColLabelValue( 2, _("Track Width") );
@@ -208,7 +208,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	// Columns
 	m_membershipGrid->EnableDragColMove( false );
 	m_membershipGrid->EnableDragColSize( true );
-	m_membershipGrid->SetColLabelSize( 22 );
+	m_membershipGrid->SetColLabelSize( 24 );
 	m_membershipGrid->SetColLabelValue( 0, _("Net") );
 	m_membershipGrid->SetColLabelValue( 1, _("Net Class") );
 	m_membershipGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );

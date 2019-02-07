@@ -39,7 +39,7 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_trackWidthsGrid->SetColSize( 0, 125 );
 	m_trackWidthsGrid->EnableDragColMove( false );
 	m_trackWidthsGrid->EnableDragColSize( false );
-	m_trackWidthsGrid->SetColLabelSize( 22 );
+	m_trackWidthsGrid->SetColLabelSize( 24 );
 	m_trackWidthsGrid->SetColLabelValue( 0, _("Width") );
 	m_trackWidthsGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
 	
@@ -97,11 +97,11 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_viaSizesGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_viaSizesGrid->SetColSize( 0, 110 );
-	m_viaSizesGrid->SetColSize( 1, 110 );
+	m_viaSizesGrid->SetColSize( 0, 125 );
+	m_viaSizesGrid->SetColSize( 1, 125 );
 	m_viaSizesGrid->EnableDragColMove( false );
 	m_viaSizesGrid->EnableDragColSize( false );
-	m_viaSizesGrid->SetColLabelSize( 22 );
+	m_viaSizesGrid->SetColLabelSize( 24 );
 	m_viaSizesGrid->SetColLabelValue( 0, _("Size") );
 	m_viaSizesGrid->SetColLabelValue( 1, _("Drill") );
 	m_viaSizesGrid->SetColLabelAlignment( wxALIGN_CENTRE, wxALIGN_CENTRE );
@@ -160,12 +160,12 @@ PANEL_SETUP_TRACKS_AND_VIAS_BASE::PANEL_SETUP_TRACKS_AND_VIAS_BASE( wxWindow* pa
 	m_diffPairsGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_diffPairsGrid->SetColSize( 0, 110 );
-	m_diffPairsGrid->SetColSize( 1, 110 );
-	m_diffPairsGrid->SetColSize( 2, 110 );
+	m_diffPairsGrid->SetColSize( 0, 125 );
+	m_diffPairsGrid->SetColSize( 1, 125 );
+	m_diffPairsGrid->SetColSize( 2, 125 );
 	m_diffPairsGrid->EnableDragColMove( false );
 	m_diffPairsGrid->EnableDragColSize( true );
-	m_diffPairsGrid->SetColLabelSize( 22 );
+	m_diffPairsGrid->SetColLabelSize( 24 );
 	m_diffPairsGrid->SetColLabelValue( 0, _("Width") );
 	m_diffPairsGrid->SetColLabelValue( 1, _("Gap") );
 	m_diffPairsGrid->SetColLabelValue( 2, _("Via Gap") );

@@ -23,6 +23,7 @@
 
 #include <wx/tokenzr.h>
 #include <wx/dc.h>
+#include <wx/wx.h>
 #include "wx_grid.h"
 
 
@@ -43,6 +44,16 @@ WX_GRID::~WX_GRID()
 }
 
 
+void WX_GRID::SetColLabelSize( int aHeight )
+{
+    // correct wxFormBuilder height for large fonts
+    wxFont guiFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
+    int minHeight = guiFont.GetPixelSize().y + 2 * MIN_GRIDCELL_MARGIN;
+
+    wxGrid::SetColLabelSize( std::max( aHeight, minHeight ) );
+}
+
+
 void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
 {
     // wxGrid::SetTable() messes up the column widths from wxFormBuilder so we have to save
@@ -54,8 +65,8 @@ void WX_GRID::SetTable( wxGridTableBase* aTable, bool aTakeOwnership )
         formBuilderColWidths[ i ] = GetColSize( i );
 
     wxGrid::SetTable( aTable );
-    // wxGrid::SetTable() may change the number of columns,
-    // so prevent out-of-bounds access to formBuildColWidths
+    // wxGrid::SetTable() may change the number of columns, so prevent out-of-bounds access
+    // to formBuilderColWidths
     numberCols = std::min( numberCols, GetNumberCols() );
 
     for( int i = 0; i < numberCols; ++i )

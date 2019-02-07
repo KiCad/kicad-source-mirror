@@ -36,20 +36,20 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 	m_itemsGrid->SetMargins( 0, 0 );
 
 	// Columns
-	m_itemsGrid->SetColSize( 0, 116 );
-	m_itemsGrid->SetColSize( 1, 53 );
-	m_itemsGrid->SetColSize( 2, 96 );
-	m_itemsGrid->SetColSize( 3, 96 );
-	m_itemsGrid->SetColSize( 4, 96 );
-	m_itemsGrid->SetColSize( 5, 53 );
-	m_itemsGrid->SetColSize( 6, 106 );
-	m_itemsGrid->SetColSize( 7, 80 );
-	m_itemsGrid->SetColSize( 8, 48 );
-	m_itemsGrid->SetColSize( 9, 96 );
-	m_itemsGrid->SetColSize( 10, 96 );
+	m_itemsGrid->SetColSize( 0, 124 );
+	m_itemsGrid->SetColSize( 1, 60 );
+	m_itemsGrid->SetColSize( 2, 110 );
+	m_itemsGrid->SetColSize( 3, 110 );
+	m_itemsGrid->SetColSize( 4, 110 );
+	m_itemsGrid->SetColSize( 5, 60 );
+	m_itemsGrid->SetColSize( 6, 110 );
+	m_itemsGrid->SetColSize( 7, 110 );
+	m_itemsGrid->SetColSize( 8, 110 );
+	m_itemsGrid->SetColSize( 9, 110 );
+	m_itemsGrid->SetColSize( 10, 110 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( true );
-	m_itemsGrid->SetColLabelSize( 22 );
+	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_itemsGrid->SetColLabelValue( 1, _("Show") );
 	m_itemsGrid->SetColLabelValue( 2, _("Width") );
@@ -65,7 +65,7 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 
 	// Rows
 	m_itemsGrid->EnableDragRowSize( false );
-	m_itemsGrid->SetRowLabelSize( 80 );
+	m_itemsGrid->SetRowLabelSize( 100 );
 	m_itemsGrid->SetRowLabelValue( 0, _("Reference") );
 	m_itemsGrid->SetRowLabelValue( 1, _("Value") );
 	m_itemsGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
@@ -75,8 +75,8 @@ DIALOG_FOOTPRINT_FP_EDITOR_BASE::DIALOG_FOOTPRINT_FP_EDITOR_BASE( wxWindow* pare
 
 	// Cell Defaults
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
-	m_itemsGrid->SetMinSize( wxSize( 724,140 ) );
-
+	m_itemsGrid->SetMinSize( wxSize( 800,140 ) );
+	
 	sbSizerTexts->Add( m_itemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bButtonSize;

@@ -3164,7 +3164,7 @@
                                 <property name="col_label_values"></property>
                                 <property name="col_label_vert_alignment">wxALIGN_CENTRE</property>
                                 <property name="cols">7</property>
-                                <property name="column_sizes">120,110,95,95,110,50,75</property>
+                                <property name="column_sizes">120,110,110,110,110,60,80</property>
                                 <property name="context_help"></property>
                                 <property name="context_menu">1</property>
                                 <property name="default_pane">0</property>

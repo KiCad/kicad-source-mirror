@@ -38,6 +38,13 @@ public:
     ~WX_GRID() override;
 
     /**
+     * Hide wxGrid's SetColLabelSize() method with one which makes sure the size is tall
+     * enough for the system GUI font.
+     * @param height
+     */
+    void SetColLabelSize( int aHeight );
+
+    /**
      * Get a tokenized string containing the shown column indexes.
      * Tokens are separated by spaces.
      */

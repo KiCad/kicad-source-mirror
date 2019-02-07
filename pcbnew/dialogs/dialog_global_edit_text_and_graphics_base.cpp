@@ -234,11 +234,11 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_
 	// Columns
 	m_grid->SetColSize( 0, 120 );
 	m_grid->SetColSize( 1, 110 );
-	m_grid->SetColSize( 2, 95 );
-	m_grid->SetColSize( 3, 95 );
+	m_grid->SetColSize( 2, 110 );
+	m_grid->SetColSize( 3, 110 );
 	m_grid->SetColSize( 4, 110 );
-	m_grid->SetColSize( 5, 50 );
-	m_grid->SetColSize( 6, 75 );
+	m_grid->SetColSize( 5, 60 );
+	m_grid->SetColSize( 6, 80 );
 	m_grid->EnableDragColMove( false );
 	m_grid->EnableDragColSize( false );
 	m_grid->SetColLabelSize( 0 );

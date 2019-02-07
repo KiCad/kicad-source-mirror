@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -126,12 +126,12 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	m_netclassGrid->SetMargins( 0, 0 );
 	
 	// Columns
-	m_netclassGrid->SetColSize( 0, 95 );
-	m_netclassGrid->SetColSize( 1, 95 );
-	m_netclassGrid->SetColSize( 2, 95 );
-	m_netclassGrid->SetColSize( 3, 95 );
-	m_netclassGrid->SetColSize( 4, 95 );
-	m_netclassGrid->SetColSize( 5, 95 );
+	m_netclassGrid->SetColSize( 0, 110 );
+	m_netclassGrid->SetColSize( 1, 110 );
+	m_netclassGrid->SetColSize( 2, 110 );
+	m_netclassGrid->SetColSize( 3, 110 );
+	m_netclassGrid->SetColSize( 4, 110 );
+	m_netclassGrid->SetColSize( 5, 110 );
 	m_netclassGrid->EnableDragColMove( false );
 	m_netclassGrid->EnableDragColSize( false );
 	m_netclassGrid->SetColLabelSize( 0 );
