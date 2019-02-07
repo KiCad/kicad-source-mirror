@@ -161,15 +161,15 @@ public:
     {
         m_bitmap->SetBitmap( KiBitmap( dialog_warning_xpm ) );
         m_TextInfo->SetLabel( aWarning );
-        m_staticText2->SetLabel( aMessage );
+        m_staticTextWarningMessage->SetLabel( aMessage );
 
-        m_sdbSizer1OK->SetLabel( aOKLabel );
-        m_sdbSizer1Cancel->SetLabel( aCancelLabel );
-        m_sdbSizer1OK->SetDefault();
+        m_sdbSizerOK->SetLabel( aOKLabel );
+        m_sdbSizerCancel->SetLabel( aCancelLabel );
+        m_sdbSizerOK->SetDefault();
 
         Layout();
 
-        FinishDialogSettings();
+        //FinishDialogSettings();
     };
 
 private:
