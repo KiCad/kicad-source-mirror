@@ -174,11 +174,7 @@ bool BASE_SCREEN::SetPreviousZoom()
     return false;
 }
 
-/* Build the list of human readable grid list.
- * The list shows the grid size both in mils or mm.
- * aMmFirst = true to have mm first and mils after
- *            false to have mils first and mm after
- */
+
 int BASE_SCREEN::BuildGridsChoiceList( wxArrayString& aGridsList, bool aMmFirst) const
 {
     wxString msg;

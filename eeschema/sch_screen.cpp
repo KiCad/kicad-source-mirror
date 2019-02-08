@@ -105,7 +105,9 @@ SCH_SCREEN::SCH_SCREEN( KIWAY* aKiway ) :
     for( unsigned i = 0; i < arrayDim( SchematicGridList ); i++ )
         AddGrid( SchematicGridList[i] );
 
-    SetGrid( wxRealPoint( 50, 50 ) );   // Default grid size.
+    // Set the default grid size, now that the grid list is populated
+    SetGrid( wxRealPoint( 50, 50 ) );
+
     m_refCount = 0;
 
     // Suitable for schematic only. For libedit and viewlib, must be set to true
