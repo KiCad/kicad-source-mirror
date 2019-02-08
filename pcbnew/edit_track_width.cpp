@@ -39,20 +39,15 @@
 #include <drc.h>
 
 
-bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
+int PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
                                            PICKED_ITEMS_LIST* aItemsListPicker,
                                            bool               aUseNetclassValue )
 {
-    /* Modify one track segment width or one via diameter and drill (using DRC control).
-     * Basic function used by other routines when editing tracks or vias
-     * aTrackItem = the track segment or via to modify
-     * aItemsListPicker = the list picker to use for an undo command (can be NULL)
-     * aUseNetclassValue = true to use NetClass value, false to use BOARD::m_designSettings value
-     * return  true if done, false if no not change (due to DRC error)
-     */
-    int           initial_width, new_width;
-    int           initial_drill = -1,new_drill = -1;
-    bool          change_ok = false;
+    int           return_code = TRACK_ACTION_NONE;
+    int           initial_width;
+    int           new_width;
+    int           initial_drill = -1;
+    int           new_drill = -1;
     NETINFO_ITEM* net = NULL;
 
     if( aUseNetclassValue )
@@ -118,25 +113,26 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
     if( initial_width < new_width )
     {
         int diagdrc = OK_DRC;
+        return_code = TRACK_ACTION_SUCCESS;
 
         if( Settings().m_legacyDrcOn )
             diagdrc = m_drc->DrcOnCreatingTrack( aTrackItem, GetBoard()->m_Track );
 
-        if( diagdrc == OK_DRC )
-            change_ok = true;
+        if( diagdrc != OK_DRC )
+            return_code = TRACK_ACTION_DRC_ERROR;
     }
     else if( initial_width > new_width )
     {
-        change_ok = true;
+        return_code = TRACK_ACTION_SUCCESS;
     }
     else if( (aTrackItem->Type() == PCB_VIA_T) )
     {
         // if a via has its drill value changed, force change
         if( initial_drill != new_drill )
-            change_ok = true;
+            return_code = TRACK_ACTION_SUCCESS;
     }
 
-    if( change_ok )
+    if( return_code == TRACK_ACTION_SUCCESS )
     {
         OnModify();
 
@@ -164,7 +160,7 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
         aTrackItem->SetWidth( initial_width );
     }
 
-    return change_ok;
+    return return_code;
 }
 
 
@@ -177,9 +173,9 @@ bool PCB_EDIT_FRAME::SetTrackSegmentWidth( TRACK*             aTrackItem,
 void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
 {
     PICKED_ITEMS_LIST itemsListPicker;
-    bool change = SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
+    bool changed = !SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
 
-    if( change == 0 || aTrackItem->GetFlags() )
+    if( !changed || aTrackItem->GetFlags() )
         return;     // No change
 
     // The segment has changed: redraw it and save it in undo list
@@ -221,7 +217,7 @@ void PCB_EDIT_FRAME::Edit_Track_Width( wxDC* aDC, TRACK* aTrackSegment )
     {
         pt_track->SetState( BUSY, false );
 
-        if( SetTrackSegmentWidth( pt_track, &itemsListPicker, false ) )
+        if( !SetTrackSegmentWidth( pt_track, &itemsListPicker, false ) )
             change = true;
     }
 

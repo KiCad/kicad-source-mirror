@@ -66,6 +66,16 @@ class FP_LIB_TABLE;
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
 /**
+ * Enum to signify the result of editing tracks and vias
+ */
+enum TRACK_ACTION_RESULT
+{
+    TRACK_ACTION_DRC_ERROR = -1,//!< TRACK_ACTION_DRC_ERROR - Track not changed to to DRC
+    TRACK_ACTION_SUCCESS,       //!< TRACK_ACTION_SUCCESS - Track changed successfully
+    TRACK_ACTION_NONE           //!< TRACK_ACTION_NONE - Nothing to change
+};
+
+/**
  * Class PCB_EDIT_FRAME
  * is the main frame for Pcbnew.
  *
@@ -1351,15 +1361,19 @@ public:
     /**
      * Function SetTrackSegmentWidth
      *  Modify one track segment width or one via diameter (using DRC control).
-     *  Basic routine used by other routines when editing tracks or vias
+     *  Basic routine used by other routines when editing tracks or vias.
+     *  Note that casting this to boolean will allow you to determine whether any action
+     *  happened.
      * @param aTrackItem = the track segment or via to modify
      * @param aItemsListPicker = the list picker to use for an undo command
      *                           (can be NULL)
      * @param aUseNetclassValue = true to use NetClass value, false to use
      *                            current designSettings value
-     * @return  true if done, false if no not change (because DRC error)
+     * @return  0 if items successfully changed,
+     *          -1 if there was a DRC error,
+     *          1 if items were changed successfully
      */
-    bool SetTrackSegmentWidth( TRACK*             aTrackItem,
+    int SetTrackSegmentWidth( TRACK*             aTrackItem,
                                PICKED_ITEMS_LIST* aItemsListPicker,
                                bool               aUseNetclassValue );
 

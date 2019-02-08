@@ -280,7 +280,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
             brdSettings.SetTrackWidthIndex( (unsigned) m_trackWidthSelectBox->GetSelection() );
             brdSettings.SetViaSizeIndex( (unsigned) m_viaSizesSelectBox->GetSelection() );
 
-            if( !m_parent->SetTrackSegmentWidth( aItem, aUndoList, false ) )
+            if( m_parent->SetTrackSegmentWidth( aItem, aUndoList, false ) == TRACK_ACTION_DRC_ERROR )
                 m_failedDRC = true;
         }
         brdSettings.SetTrackWidthIndex( prevTrackWidthIndex );
@@ -301,7 +301,7 @@ void DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::processItem( PICKED_ITEMS_LIST* aUndoLi
     }
     else
     {
-        if( !m_parent->SetTrackSegmentWidth( aItem, aUndoList, true ) )
+        if( m_parent->SetTrackSegmentWidth( aItem, aUndoList, true ) == TRACK_ACTION_DRC_ERROR )
             m_failedDRC = true;
     }
 }
