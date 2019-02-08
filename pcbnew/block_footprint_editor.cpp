@@ -210,6 +210,8 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
                 default:
                     wxFAIL_MSG( "Rotation choice shouldn't have been available in this context." );
                 }
+
+                OnModify();
             }
         }
         break;
@@ -227,6 +229,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         DeleteMarkedItems( currentModule );
+        OnModify();
         break;
 
     case BLOCK_COPY:     // Copy
@@ -241,6 +244,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         RotateMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
+        OnModify();
         break;
 
     case BLOCK_MIRROR_X:
@@ -252,6 +256,7 @@ bool FOOTPRINT_EDIT_FRAME::HandleBlockEnd( wxDC* DC )
             SaveCopyInUndoList( currentModule, UR_CHANGED );
 
         MirrorMarkedItems( currentModule, GetScreen()->m_BlockLocate.Centre() );
+        OnModify();
         break;
 
     case BLOCK_ZOOM:     // Window Zoom
