@@ -234,5 +234,5 @@ BITMAP_DEF SCH_BITMAP::GetMenuImage() const
 void SCH_BITMAP::ViewGetLayers( int aLayers[], int& aCount ) const
 {
     aCount = 1;
-    aLayers[0] = LAYER_WORKSHEET;
+    aLayers[0] = LAYER_DRAW_BITMAPS;
 }

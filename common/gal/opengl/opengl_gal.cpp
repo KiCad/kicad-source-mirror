@@ -158,8 +158,11 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
             if( imgData->HasAlpha() )
                 p[3] = imgData->GetAlpha( x, y );
+            else if( imgData->HasMask() && p[0] == imgData->GetMaskRed() &&
+                     p[1] == imgData->GetMaskGreen() && p[2] == imgData->GetMaskBlue() )
+                p[3] = wxALPHA_TRANSPARENT;
             else
-                p[3] = 255;
+                p[3] = wxALPHA_OPAQUE;
         }
     }
 
