@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-31 12:59+0100\n"
+"POT-Creation-Date: 2019-02-08 17:18+0100\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -723,16 +723,6 @@ msgstr "Grid: %.4f mm (%.2f mils)"
 #, c-format
 msgid "Grid: %.2f mils (%.4f mm)"
 msgstr "Grid: %.2f mils (%.4f mm)"
-
-#, c-format
-msgid ""
-"Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
-msgstr ""
-"Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
-
-#, c-format
-msgid "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
-msgstr "Grid ID %d not in grid list, falling back to grid size( %g, %g )."
 
 msgid "mils"
 msgstr "mils"
@@ -3730,6 +3720,9 @@ msgstr "Show Datasheet"
 
 msgid "Show datasheet in browser"
 msgstr "Show datasheet in browser"
+
+msgid "The Reference column cannot be hidden."
+msgstr "The Reference column cannot be hidden."
 
 msgid "Qty"
 msgstr "Qty"
