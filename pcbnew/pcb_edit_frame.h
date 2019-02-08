@@ -353,8 +353,8 @@ public:
     void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
 
-    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox );
-    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox );
+    void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit = true );
+    void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit = true );
 
     void GetKicadAbout( wxCommandEvent& event );
 

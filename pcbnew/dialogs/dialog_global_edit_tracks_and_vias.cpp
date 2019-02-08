@@ -117,8 +117,8 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS( PCB_EDIT
 
     buildFilterLists();
 
-    m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox );
-    m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox );
+    m_parent->UpdateTrackWidthSelectBox( m_trackWidthSelectBox, false );
+    m_parent->UpdateViaSizeSelectBox( m_viaSizesSelectBox, false );
 
     m_layerBox->SetBoardFrame( m_parent );
     m_layerBox->SetLayersHotkeys( false );
