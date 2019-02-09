@@ -293,6 +293,11 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
 
     select3DModel( 0 );   // will clamp idx within bounds
 
+    for( int col = 0; col < m_itemsGrid->GetCols(); col++ )
+        m_itemsGrid->SetColSize( col, m_itemsGrid->GetVisibleWidth( col, true, false, true ) );
+
+    m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, true, true, true ) );
+
     Layout();
     adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
 

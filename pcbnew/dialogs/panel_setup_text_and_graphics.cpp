@@ -65,26 +65,6 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
 
     m_grid->SetDefaultRowSize( m_grid->GetDefaultRowSize() + 4 );
 
-    // Work around an issue where wxWidgets doesn't calculate the row width on its own
-    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
-    {
-        // 'M' is generally the widest character, so we buffer the column width by default to ensure
-        // we don't write a continuous line of text at the column header
-        auto size = m_grid->GetTextExtent( m_grid->GetColLabelValue( col ) + "M").x;
-
-        for( int row = 0; row < m_grid->GetNumberRows(); row++ )
-            size = std::max( size, m_grid->GetTextExtent( m_grid->GetCellValue( row, col ) ).x );
-
-        m_grid->SetColMinimalWidth( col, size);
-    }
-
-    int size = m_grid->GetRowLabelSize();
-
-    for( int row = 0; row < m_grid->GetNumberRows(); row++ )
-        size = std::max( size, m_grid->GetTextExtent( m_grid->GetRowLabelValue( row ) + "M" ).x );
-
-    m_grid->SetRowLabelSize( size );
-
     // Work around a bug in wxWidgets where it fails to recalculate the grid height
     // after changing the default row size
     m_grid->AppendRows( 1 );
@@ -144,6 +124,14 @@ bool PANEL_SETUP_TEXT_AND_GRAPHICS::TransferDataToWindow()
             m_grid->SetAttr( i, COL_TEXT_UPRIGHT, attr );
         }
     }
+
+    // Work around an issue where wxWidgets doesn't calculate the row width on its own
+    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+        m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, true, false ) );
+
+    m_grid->SetRowLabelSize( m_grid->GetVisibleWidth( -1, true, true, true ) );
+
+    Layout();
 
     return true;
 }

@@ -374,22 +374,10 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     // Show the footprint's ID.
     m_staticLibraryID->SetLabel( m_footprint->GetFPID().Format() );
 
-    // Work around an issue where wxWidgets doesn't calculate the row width on its own
-    // TODO: Refactor this into a GRID_TRICKS routine or similar
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
-    {
-        // 'M' is generally the widest character, so we buffer the column width by default to ensure
-        // we don't write a continuous line of text at the column header
-        auto size = m_itemsGrid->GetTextExtent( m_itemsGrid->GetColLabelValue( col ) + "M").x;
-        m_itemsGrid->SetColSize( col, std::max( m_itemsGrid->GetColSize( col ), size ) );
-    }
+        m_itemsGrid->SetColSize( col, m_itemsGrid->GetVisibleWidth( col, true, false, false ) );
 
-    int size = m_itemsGrid->GetRowLabelSize();
-
-    for( int row = 0; row < m_itemsGrid->GetNumberRows(); row++ )
-        size = std::max( size, m_itemsGrid->GetTextExtent( m_itemsGrid->GetRowLabelValue( row ) + "M" ).x );
-
-    m_itemsGrid->SetRowLabelSize( size );
+    m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, false, true, true ) );
 
     Layout();
     adjustGridColumns( m_itemsGrid->GetRect().GetWidth());

@@ -207,3 +207,33 @@ void WX_GRID::onGridColMove( wxGridEvent& aEvent )
     // wxWidgets won't move an open editor, so better just to close it
     CommitPendingChanges( true );
 }
+
+
+int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep )
+{
+    int size = 0;
+
+    if( aCol < 0 )
+    {
+        if( aKeep )
+            size = GetRowLabelSize();
+
+        for( int row = 0; aContents && row < GetRows(); row++ )
+            size = std::max( size, GetTextExtent( GetRowLabelValue( row ) + "M" ).x );
+    }
+    else
+    {
+        if( aKeep )
+            size = GetColSize( aCol );
+
+        // 'M' is generally the widest character, so we buffer the column width by default to ensure
+        // we don't write a continuous line of text at the column header
+        if( aHeader )
+            size = std::max( size, GetTextExtent( GetColLabelValue( aCol ) + "M" ).x );
+
+        for( int row = 0; aContents && row < GetRows(); row++ )
+            size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
+    }
+
+    return size;
+}

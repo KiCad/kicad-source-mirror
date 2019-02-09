@@ -67,6 +67,17 @@ public:
      */
     bool CommitPendingChanges( bool aQuietMode = false );
 
+    /**
+     * Calculates the specified column based on the actual size of the text
+     * on screen.  Will return the maximum value of all calculated widths.
+     * @param aCol - Integer value of the column to resize.  Specify -1 for the row labels.
+     * @param aHeader - Include the header in the width calculation
+     * @param aContents - Include the full contents of the
+     * @param aKeep - Use the current size as a minimum value
+     * @return The new size of the column
+     */
+    int GetVisibleWidth( int aCol, bool aHeader = true, bool aContents = false, bool aKeep = true );
+
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;
 

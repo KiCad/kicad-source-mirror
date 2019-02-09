@@ -67,11 +67,7 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
     {
-        // 'M' is generally the widest character, so we buffer the column width by default to ensure
-        // we don't write a continuous line of text at the column header
-        auto size = m_netclassGrid->GetTextExtent( m_netclassGrid->GetColLabelValue( i ) + "M");
-
-        m_originalColWidths[ i ] = std::max( m_netclassGrid->GetColSize( i ), size.x );
+        m_originalColWidths[ i ] = m_netclassGrid->GetVisibleWidth( i, true, false, true );
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
     }
 
