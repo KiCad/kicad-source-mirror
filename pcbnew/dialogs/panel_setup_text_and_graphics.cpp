@@ -75,7 +75,7 @@ PANEL_SETUP_TEXT_AND_GRAPHICS::PANEL_SETUP_TEXT_AND_GRAPHICS( PAGED_DIALOG* aPar
         for( int row = 0; row < m_grid->GetNumberRows(); row++ )
             size = std::max( size, m_grid->GetTextExtent( m_grid->GetCellValue( row, col ) ).x );
 
-        m_grid->SetColSize( col, size);
+        m_grid->SetColMinimalWidth( col, size);
     }
 
     int size = m_grid->GetRowLabelSize();
