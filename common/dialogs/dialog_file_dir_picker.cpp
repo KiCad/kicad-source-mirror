@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2018 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -27,7 +27,7 @@
 DIALOG_FILE_DIR_PICKER::DIALOG_FILE_DIR_PICKER( wxWindow* parent, const wxString& title,
         const wxString& defaultPath, const wxString& wildcard, int style )
     : DIALOG_SHIM( parent, wxID_ANY, title, wxDefaultPosition,
-       wxSize( 500, 600 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                   wxSize( -1, 600 ), wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {
     m_showHidden = nullptr;
 
@@ -68,7 +68,7 @@ DIALOG_FILE_DIR_PICKER::DIALOG_FILE_DIR_PICKER( wxWindow* parent, const wxString
     sdbSizer->AddButton( new wxButton( this, wxID_OK ) );
     sdbSizer->AddButton( new wxButton( this, wxID_CANCEL ) );
     sdbSizer->Realize();
-    mainSizer->Add( sdbSizer, 0, wxEXPAND, 5 );
+    mainSizer->Add( sdbSizer, 0, wxEXPAND | wxALL, 5 );
 
     SetSizer( mainSizer );
     Layout();
