@@ -4,7 +4,7 @@
  * Copyright (C) 2016 Mario Luzeiro <mrluzeiro@ua.pt>
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -381,7 +381,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
         // 'M' is generally the widest character, so we buffer the column width by default to ensure
         // we don't write a continuous line of text at the column header
         auto size = m_itemsGrid->GetTextExtent( m_itemsGrid->GetColLabelValue( col ) + "M").x;
-        m_itemsGrid->SetColSize( col, std::max( m_itemsGrid->GetColumnWidth( col ),  size ) );
+        m_itemsGrid->SetColSize( col, std::max( m_itemsGrid->GetColSize( col ), size ) );
     }
 
     int size = m_itemsGrid->GetRowLabelSize();
@@ -630,7 +630,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataFromWindow()
 
     size_t i = 2;
     BOARD_ITEM* next;
-    
+
     for( BOARD_ITEM* item = m_footprint->GraphicalItemsList().GetFirst(); item; item = next )
     {
         next = item->Next();
