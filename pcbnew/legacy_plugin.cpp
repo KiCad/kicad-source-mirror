@@ -3,8 +3,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004 Jean-Pierre Charras, jp.charras@wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras@wanadoo.fr
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -290,6 +290,8 @@ PCB_LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
 
     if( unsigned( old ) <= unsigned( LAYER_N_FRONT ) )
     {
+        // In .brd files, the layers are numbered from back to front
+        // (the opposite of the .kicad_pcb files)
         if( old == LAYER_N_FRONT )
             newid = F_Cu;
         else if( old == LAYER_N_BACK )
@@ -298,6 +300,9 @@ PCB_LAYER_ID LEGACY_PLUGIN::leg_layer2new( int cu_count, LAYER_NUM aLayerNum )
         {
             newid = cu_count - 1 - old;
             wxASSERT( newid >= 0 );
+            // This is of course incorrect, but at least it avoid crashing pcbnew:
+            if( newid < 0 )
+                newid = 0;
         }
     }
     else
@@ -1851,6 +1856,7 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
     if( vjust )
         aText->SetVertJustify( vertJustify( vjust ) );
 
+     // A protection against mal formed (or edited by hand) files:
     if( layer_num < FIRST_LAYER )
         layer_num = FIRST_LAYER;
     else if( layer_num > LAST_NON_COPPER_LAYER )
@@ -1859,8 +1865,10 @@ void LEGACY_PLUGIN::loadMODULE_TEXT( TEXTE_MODULE* aText )
         layer_num = SILKSCREEN_N_BACK;
     else if( layer_num == LAYER_N_FRONT )
         layer_num = SILKSCREEN_N_FRONT;
+    else if( layer_num < LAYER_N_FRONT )    // this case is a internal layer
+        layer_num = SILKSCREEN_N_FRONT;
 
-    aText->SetLayer( leg_layer2new( m_cu_count,  layer_num ) );
+    aText->SetLayer( leg_layer2new( m_cu_count, layer_num ) );
 
     // Calculate the actual position.
     aText->SetDrawCoord();
