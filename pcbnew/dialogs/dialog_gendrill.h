@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2010 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
- * Copyright (C) 1992-2010 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras@ujf-grenoble.fr>
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,9 +42,11 @@ public:
     static bool      m_MinimalHeader;
     static bool      m_Mirror;
     static bool      m_Merge_PTH_NPTH;
-    DRILL_PRECISION  m_Precision;           // Selected precision for drill files
-    wxPoint          m_FileDrillOffset;     // Drill offset: 0,0 for absolute coordinates,
-                                            // or origin of the auxiliary axis
+    DRILL_PRECISION  m_Precision;                   /// Selected precision for drill files, in non decimal format
+    wxPoint          m_FileDrillOffset;             /// Drill offset: 0,0 for absolute coordinates,
+                                                    /// or origin of the auxiliary axis
+    static bool      m_UseRouteModeForOvalHoles;    /// True to use a G00 route command for oval holes
+                                                    /// False to use a G85 canned mode for oval holes
 
 
 private:
@@ -52,16 +54,16 @@ private:
     wxConfigBase*   m_config;
     BOARD*          m_board;
     PCB_PLOT_PARAMS m_plotOpts;
-    bool            m_drillOriginIsAuxAxis; // Axis selection (main / auxiliary)
-                                            // for drill origin coordinates
+    bool            m_drillOriginIsAuxAxis;     // Axis selection (main / auxiliary)
+                                                // for drill origin coordinates
     int m_platedPadsHoleCount;
     int m_notplatedPadsHoleCount;
     int m_throughViasCount;
     int m_microViasCount;
     int m_blindOrBuriedViasCount;
 
-    static int m_mapFileType;            // HPGL, PS ...
-    static int m_drillFileType;          // Excellon, Gerber
+    static int m_mapFileType;            // format of map file: HPGL, PS ...
+    static int m_drillFileType;          // for Excellon, Gerber
 
 
     void            initDialog();

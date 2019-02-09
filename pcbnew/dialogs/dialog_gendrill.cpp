@@ -5,8 +5,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2017 Jean_Pierre Charras <jp.charras at wanadoo.fr>
- * Copyright (C) 1992-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Jean_Pierre Charras <jp.charras at wanadoo.fr>
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@
 #include <wx/stdpaths.h>
 
 
-// Keywords for read and write config
+// Keywords for read and write parameters in project config
 #define ZerosFormatKey          wxT( "DrillZerosFormat" )
 #define MirrorKey               wxT( "DrillMirrorYOpt" )
 #define MinimalHeaderKey        wxT( "DrillMinHeader" )
@@ -55,10 +55,12 @@
 #define UnitDrillInchKey        wxT( "DrillUnit" )
 #define DrillMapFileTypeKey     wxT( "DrillMapFileType" )
 #define DrillFileFormatKey      wxT( "DrillFileType" )
+#define OvalHolesRouteModeKey   wxT( "OvalHolesRouteMode" )
 
 // list of allowed precision for EXCELLON files, for integer format:
 // Due to difference between inches and mm,
 // there are 2 precision values, one for inches and one for metric
+// Note: for decimla format, the precision is not used
 static DRILL_PRECISION precisionListForInches( 2, 4 );
 static DRILL_PRECISION precisionListForMetric( 3, 3 );
 
@@ -103,7 +105,7 @@ bool DIALOG_GENDRILL::m_Mirror = false;             // Only for Excellon format
 bool DIALOG_GENDRILL::m_Merge_PTH_NPTH  = false;    // Only for Excellon format
 int DIALOG_GENDRILL::m_mapFileType      = 1;
 int DIALOG_GENDRILL::m_drillFileType    = 0;
-
+bool DIALOG_GENDRILL::m_UseRouteModeForOvalHoles = true;    // Use G00 route mode to "drill" oval holes
 
 DIALOG_GENDRILL::~DIALOG_GENDRILL()
 {
@@ -121,6 +123,7 @@ void DIALOG_GENDRILL::initDialog()
     m_drillOriginIsAuxAxis = m_plotOpts.GetUseAuxOrigin();
     m_config->Read( DrillMapFileTypeKey, &m_mapFileType );
     m_config->Read( DrillFileFormatKey, &m_drillFileType );
+    m_config->Read( OvalHolesRouteModeKey, &m_UseRouteModeForOvalHoles );
 
     InitDisplayParams();
 }
@@ -143,6 +146,7 @@ void DIALOG_GENDRILL::InitDisplayParams()
     m_Check_Mirror->SetValue( m_Mirror );
     m_Check_Merge_PTH_NPTH->SetValue( m_Merge_PTH_NPTH );
     m_Choice_Drill_Map->SetSelection( m_mapFileType );
+    m_radioBoxOvalHoleMode->SetSelection( m_UseRouteModeForOvalHoles ? 0 : 1 );
 
     m_platedPadsHoleCount    = 0;
     m_notplatedPadsHoleCount = 0;
@@ -228,6 +232,7 @@ void DIALOG_GENDRILL::onFileFormatSelection( wxCommandEvent& event )
     m_Check_Mirror->Enable( enbl_Excellon );
     m_Check_Minimal->Enable( enbl_Excellon );
     m_Check_Merge_PTH_NPTH->Enable( enbl_Excellon );
+    m_radioBoxOvalHoleMode->Enable( enbl_Excellon );
 
     if( enbl_Excellon )
         UpdatePrecisionOptions();
@@ -250,6 +255,7 @@ void DIALOG_GENDRILL::UpdateConfig()
     m_config->Write( UnitDrillInchKey, m_UnitDrillIsInch );
     m_config->Write( DrillMapFileTypeKey, m_mapFileType );
     m_config->Write( DrillFileFormatKey, m_drillFileType );
+    m_config->Write( OvalHolesRouteModeKey, m_UseRouteModeForOvalHoles );
 }
 
 
@@ -346,6 +352,7 @@ void DIALOG_GENDRILL::SetParams()
     m_Mirror = m_Check_Mirror->IsChecked();
     m_Merge_PTH_NPTH = m_Check_Merge_PTH_NPTH->IsChecked();
     m_ZerosFormat = m_Choice_Zeros_Format->GetSelection();
+    m_UseRouteModeForOvalHoles = m_radioBoxOvalHoleMode->GetSelection() == 0;
 
     if( m_Choice_Drill_Offset->GetSelection() == 0 )
         m_FileDrillOffset = wxPoint( 0, 0 );
@@ -399,6 +406,7 @@ void DIALOG_GENDRILL::GenDrillAndMapFiles( bool aGenDrill, bool aGenMap )
         excellonWriter.SetFormat( !m_UnitDrillIsInch, (EXCELLON_WRITER::ZEROS_FMT) m_ZerosFormat,
                                   m_Precision.m_lhs, m_Precision.m_rhs );
         excellonWriter.SetOptions( m_Mirror, m_MinimalHeader, m_FileDrillOffset, m_Merge_PTH_NPTH );
+        excellonWriter.SetRouteModeForOvalHoles( m_UseRouteModeForOvalHoles );
         excellonWriter.SetMapFileFormat( filefmt[choice] );
 
         excellonWriter.CreateDrillandMapFilesSet( outputDir.GetFullPath(),

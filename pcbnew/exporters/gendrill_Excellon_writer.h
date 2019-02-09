@@ -44,9 +44,12 @@ class OUTPUTFORMATTER;
 class EXCELLON_WRITER: public GENDRILL_WRITER_BASE
 {
 private:
-    FILE*                    m_file;                    // The output file
-    bool                     m_minimalHeader;           // True to use minimal header
+    FILE*                    m_file;                // The output file
+    bool                     m_minimalHeader;       // True to use minimal header
     bool                     m_mirror;
+    bool                     m_useRouteModeForOval; // True to use a route command for oval holes
+                                                    // False to use a G85 canned mode for oval holes
+
 
 public:
     EXCELLON_WRITER( BOARD* aPcb );
@@ -60,6 +63,14 @@ public:
      * of the auxiliary axis
      */
     const wxPoint GetOffset() { return m_offset; }
+
+    /**
+     *
+     */
+    void SetRouteModeForOvalHoles( bool aUseRouteModeForOvalHoles )
+    {
+        m_useRouteModeForOval = aUseRouteModeForOvalHoles;
+    }
 
     /**
      * Function SetFormat

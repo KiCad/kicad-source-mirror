@@ -58,9 +58,9 @@
 
 // Oblong holes can be drilled by a "canned slot" command (G85) or a routing command
 // a linear routing command (G01) is perhaps more usual for drill files
-// Comment this next line to use a canned slot hole (old way)
-// Uncomment this next line to use a linear routed hole (new way)
-#define USE_ROUTING_MODE_FOR_OBLONG_HOLE
+//
+// set m_useRouteModeForOval to false to use a canned slot hole (old way)
+// set m_useRouteModeForOval to true (prefered mode) to use a linear routed hole (new way)
 
 EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     : GENDRILL_WRITER_BASE( aPcb )
@@ -72,6 +72,7 @@ EXCELLON_WRITER::EXCELLON_WRITER( BOARD* aPcb )
     m_merge_PTH_NPTH = false;
     m_minimalHeader = false;
     m_drillFileExtension = DrillFileExtension;
+    m_useRouteModeForOval = true;
 }
 
 
@@ -272,35 +273,41 @@ int EXCELLON_WRITER::createDrillFile( FILE* aFile, DRILL_LAYER_PAIR aLayerPair,
 
         xt = x0 * m_conversionUnits;
         yt = y0 * m_conversionUnits;
-#ifdef USE_ROUTING_MODE_FOR_OBLONG_HOLE
-        fputs( "G00", m_file );    // Select the routing mode
-#endif
+
+        if( m_useRouteModeForOval )
+            fputs( "G00", m_file );    // Select the routing mode
+
         writeCoordinates( line, xt, yt );
 
-#ifndef USE_ROUTING_MODE_FOR_OBLONG_HOLE
-        /* remove the '\n' from end of line, because we must add the "G85"
-         * command to the line: */
-        for( int kk = 0; line[kk] != 0; kk++ )
+        if( !m_useRouteModeForOval )
         {
-            if( line[kk] < ' ' )
-                line[kk] = 0;
+            /* remove the '\n' from end of line, because we must add the "G85"
+             * command to the line: */
+            for( int kk = 0; line[kk] != 0; kk++ )
+            {
+                if( line[kk] < ' ' )
+                    line[kk] = 0;
+            }
+
+            fputs( line, m_file );
+            fputs( "G85", m_file );         // add the "G85" command
+        }
+        else
+        {
+            fputs( line, m_file );
+            fputs( "M15\nG01", m_file );    // tool down and linear routing from last coordinates
         }
 
-        fputs( line, m_file );
-        fputs( "G85", m_file );    // add the "G85" command
-#else
-        fputs( line, m_file );
-        fputs( "M15\nG01", m_file );    // tool down and linear routing from last coordinates
-#endif
         xt = xf * m_conversionUnits;
         yt = yf * m_conversionUnits;
         writeCoordinates( line, xt, yt );
 
         fputs( line, m_file );
-#ifdef USE_ROUTING_MODE_FOR_OBLONG_HOLE
-        fputs( "M16\n", m_file );       // Tool up (end routing)
-#endif
-        fputs( "G05\n", m_file );       // Select drill mode
+
+        if( m_useRouteModeForOval )
+            fputs( "M16\n", m_file );       // Tool up (end routing)
+
+        fputs( "G05\n", m_file );           // Select drill mode
         holes_count++;
     }
 
