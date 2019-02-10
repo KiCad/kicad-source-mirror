@@ -377,6 +377,8 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
 void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 {
     const SCH_SHEET_LIST& sheetList = g_RootSheet;
+    wxRegEx couplingK( "^[kK][[:digit:]]*[[:space:]]+[[:alnum:]]+[[:space:]]+[[:alnum:]]+",
+            wxRE_ADVANCED );
 
     m_directives.clear();
     bool controlBlock = false;
@@ -449,6 +451,7 @@ void NETLIST_EXPORTER_PSPICE::UpdateDirectives( unsigned aCtl )
 
                 else if( line.StartsWith( '.' )                           // one-line directives
                         || controlBlock                                   // .control .. .endc block
+                        || couplingK.Matches( line )                      // K## L## L## coupling constant
                         || ( directiveStarted && line.StartsWith( '+' ) ) ) // multiline directives
                 {
                     m_directives.push_back( line );
