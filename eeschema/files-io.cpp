@@ -851,15 +851,6 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
                         fpId.SetLibNickname( newfilename.GetName() );
                         fpField->SetText( fpId.Format() );
                     }
-
-                    // Add junction dots where necessary
-                    cmp->GetConnectionPoints( pts );
-
-                    for( auto i = pts.begin(); i != pts.end(); ++i )
-                    {
-                        if( GetScreen()->IsJunctionNeeded( *i, true ) )
-                            AddJunction( *i, true );
-                    }
                 }
             }
 
