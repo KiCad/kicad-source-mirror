@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Andrew Lutsenko, anlutsenko at gmail dot com
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -192,7 +192,12 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
     }
 
     for( int col = 0; col < m_grid->GetNumberCols(); col++ )
+    {
+        // Set the minimal width to the column label size.
+        m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, false, false ) );
+        // Set the width to seen the full contents
         m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, false ) );
+    }
 
     m_grid->AutoSizeRows();
 
