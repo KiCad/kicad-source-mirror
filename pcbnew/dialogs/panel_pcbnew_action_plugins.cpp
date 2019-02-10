@@ -191,7 +191,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
         m_grid->SetCellValue( row, COLUMN_PATH, ap->GetPluginPath() );
     }
 
-    for( int col = 0; col < m_grid->GetCols(); col++ )
+    for( int col = 0; col < m_grid->GetNumberCols(); col++ )
         m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, false ) );
 
     m_grid->AutoSizeRows();

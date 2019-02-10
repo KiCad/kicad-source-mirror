@@ -218,7 +218,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         if( aKeep )
             size = GetRowLabelSize();
 
-        for( int row = 0; aContents && row < GetRows(); row++ )
+        for( int row = 0; aContents && row < GetNumberRows(); row++ )
             size = std::max( size, GetTextExtent( GetRowLabelValue( row ) + "M" ).x );
     }
     else
@@ -231,7 +231,7 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         if( aHeader )
             size = std::max( size, GetTextExtent( GetColLabelValue( aCol ) + "M" ).x );
 
-        for( int row = 0; aContents && row < GetRows(); row++ )
+        for( int row = 0; aContents && row < GetNumberRows(); row++ )
             size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
     }
 
