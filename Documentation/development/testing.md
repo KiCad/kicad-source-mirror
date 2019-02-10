@@ -294,6 +294,11 @@ To set these options, you can create the file `kicad_advanced` and set the keys
 as desired (the [advanced config documentation][] for a current list. You should
 never need to set these keys for normal usage - if you do, that's a bug.
 
+Any features enabled though the advanced configuration system are
+considered experimental and therefore unsuitable for production use. These
+features are explicitly not supported or considered fully tested.
+Issues are still welcome for defects discovered.
+
 
 [CTest]: https://cmake.org/cmake/help/latest/module/CTest.html
 [Boost Unit Test framework]: https://www.boost.org/doc/libs/1_68_0/libs/test/doc/html/index.html
