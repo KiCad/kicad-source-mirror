@@ -28,8 +28,6 @@
 #include <wx/wupdlock.h>
 
 
-LIB_TREE_MODEL_ADAPTER::WIDTH_CACHE LIB_TREE_MODEL_ADAPTER::m_width_cache;
-
 static const int kDataViewIndent = 20;
 
 
@@ -99,6 +97,17 @@ void LIB_TREE_MODEL_ADAPTER::ShowUnits( bool aShow )
 }
 
 
+void LIB_TREE_MODEL_ADAPTER::UpdateWidth( int aCol )
+{
+    auto col = m_widget->GetColumn( aCol );
+
+    if( col )
+    {
+        col->SetWidth( ColWidth( m_tree, aCol, col->GetTitle() ) );
+    }
+}
+
+
 void LIB_TREE_MODEL_ADAPTER::SetPreselectNode( LIB_ID const& aLibId, int aUnit )
 {
     m_preselect_lib_id = aLibId;
@@ -112,10 +121,15 @@ void LIB_TREE_MODEL_ADAPTER::DoAddLibrary( wxString const& aNodeName, wxString c
 {
     auto& lib_node = m_tree.AddLib( aNodeName, aDesc );
 
+    lib_node.VisLen = wxTheApp->GetTopWindow()->GetTextExtent( lib_node.Name ).x;
+
     for( auto item: aItemList )
     {
         if( item )
-            lib_node.AddItem( item );
+        {
+            auto& child_node = lib_node.AddItem( item );
+            child_node.VisLen = wxTheApp->GetTopWindow()->GetTextExtent( child_node.Name ).x;
+        }
     }
 
     lib_node.AssignIntrinsicRanks( presorted );
@@ -170,6 +184,8 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
         m_widget->Select( item );
         m_widget->EnsureVisible( item );
     }
+
+    UpdateWidth( 0 );
 }
 
 
@@ -183,10 +199,8 @@ void LIB_TREE_MODEL_ADAPTER::AttachTo( wxDataViewCtrl* aDataViewCtrl )
     wxString part_head = _( "Item" );
     wxString desc_head = _( "Description" );
 
-    m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT,
-                                                  ColWidth( m_tree, 0, part_head ) );
-    m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT,
-                                                  ColWidth( m_tree, 1, desc_head ) );
+    m_col_part = aDataViewCtrl->AppendTextColumn( part_head, 0, wxDATAVIEW_CELL_INERT, 360 );
+    m_col_desc = aDataViewCtrl->AppendTextColumn( desc_head, 1, wxDATAVIEW_CELL_INERT, 2000 );
 }
 
 
@@ -349,10 +363,33 @@ bool LIB_TREE_MODEL_ADAPTER::GetAttr( wxDataViewItem const&   aItem,
 
 int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString const& aHeading )
 {
-    // It's too expensive to calculate widths on really big trees, and the user probably
-    // wants it left where they dragged it anyway.
     if( aCol == 0 )
-        return 360;
+    {
+        int padding = m_widget->GetTextExtent( "MM" ).x;
+        int longest = m_widget->GetTextExtent( aHeading ).x;
+
+        for( auto& node : aTree.Children )
+        {
+            auto item = ToItem( &*node );
+
+            if( !item.IsOk() )
+                continue;
+
+            if( node->Score > 0 )
+                longest = std::max( longest, node->VisLen + padding );
+
+            if( !m_widget->IsExpanded( item ) )
+                continue;
+
+            for( auto& childNode : node->Children )
+            {
+                if( childNode->Score > 0 )
+                    longest = std::max( longest, childNode->VisLen + 2 * padding );
+            }
+        }
+
+        return longest;
+    }
     else
         return 2000;
 }

@@ -41,8 +41,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
       m_adapter( aAdapter ),
       m_query_ctrl( nullptr ),
       m_details_ctrl( nullptr ),
-      m_menuActive( false ),
-      m_filtering( false )
+      m_menuActive( false )
 {
     // create space for context menu pointers, INVALID is the max value
     m_menus.resize( LIB_TREE_NODE::TYPE::INVALID + 1 );
@@ -114,6 +113,8 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_ACTIVATED, &LIB_TREE::onTreeActivate, this );
     m_tree_ctrl->Bind( wxEVT_DATAVIEW_SELECTION_CHANGED, &LIB_TREE::onTreeSelect, this );
     m_tree_ctrl->Bind( wxEVT_COMMAND_DATAVIEW_ITEM_CONTEXT_MENU, &LIB_TREE::onContextMenu, this );
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_EXPANDED, &LIB_TREE::onExpandCollapse, this );
+    m_tree_ctrl->Bind( wxEVT_DATAVIEW_ITEM_COLLAPSED, &LIB_TREE::onExpandCollapse, this );
 
     Bind( COMPONENT_PRESELECTED, &LIB_TREE::onPreselect, this );
 
@@ -129,6 +130,7 @@ LIB_TREE::LIB_TREE( wxWindow* aParent, LIB_TABLE* aLibTable, LIB_TREE_MODEL_ADAP
 
     // There may be a part preselected in the model. Make sure it is displayed.
     postPreselectEvent();
+    m_adapter->UpdateWidth( 0 );
 
     Layout();
     sizer->Fit( this );
@@ -193,7 +195,6 @@ void LIB_TREE::Regenerate( bool aKeepState )
 
     wxString filter = m_query_ctrl->GetValue();
     m_adapter->UpdateSearchString( filter );
-    m_filtering = !filter.IsEmpty();
     postPreselectEvent();
 
     // Restore the state
@@ -228,6 +229,7 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
     if( aTreeId.IsOk() )
     {
         m_tree_ctrl->EnsureVisible( aTreeId );
+        m_adapter->UpdateWidth( 0 );
         m_tree_ctrl->Select( aTreeId );
         postPreselectEvent();
     }
@@ -237,7 +239,10 @@ void LIB_TREE::selectIfValid( const wxDataViewItem& aTreeId )
 void LIB_TREE::centerIfValid( const wxDataViewItem& aTreeId )
 {
     if( aTreeId.IsOk() )
+    {
         m_tree_ctrl->EnsureVisible( aTreeId );
+        m_adapter->UpdateWidth( 0 );
+    }
 }
 
 
@@ -358,6 +363,12 @@ void LIB_TREE::onQueryCharHook( wxKeyEvent& aKeyStroke )
 void LIB_TREE::onTreeSelect( wxDataViewEvent& aEvent )
 {
     postPreselectEvent();
+}
+
+
+void LIB_TREE::onExpandCollapse( wxDataViewEvent& aEvent )
+{
+    m_adapter->UpdateWidth( 0 );
 }
 
 

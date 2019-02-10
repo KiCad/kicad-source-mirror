@@ -104,6 +104,7 @@ public:
     LIB_ID      LibId;       ///< LIB_ID determined by the parent library nickname and alias name.
     int         Unit;        ///< Actual unit, or zero
     bool        IsRoot;      ///< Indicates if the symbol is a root symbol instead of an alias.
+    int         VisLen;      ///< Length of the string as shown on screen
 
     /**
      * Update the score for this part. This is accumulative - it will be

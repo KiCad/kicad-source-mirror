@@ -169,6 +169,7 @@ protected:
 
     void onTreeSelect( wxDataViewEvent& aEvent );
     void onTreeActivate( wxDataViewEvent& aEvent );
+    void onExpandCollapse( wxDataViewEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& aEvent );
 
     void onDetailsLink( wxHtmlLinkEvent& aEvent );
@@ -187,9 +188,6 @@ protected:
 
     ///> Flag indicating whether a right-click context menu is active
     bool m_menuActive;
-
-    ///> Flag indicating whether the results are filtered using the search query
-    bool m_filtering;
 
     ///> State of the widget before any filters applied
     STATE m_unfilteredState;

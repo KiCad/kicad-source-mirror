@@ -28,6 +28,7 @@
 
 #include <wx/hashmap.h>
 #include <wx/dataview.h>
+#include <wx/headerctrl.h>
 #include <vector>
 #include <functional>
 
@@ -132,6 +133,13 @@ public:
      * @param aShow if true, units are displayed
      */
     void ShowUnits( bool aShow );
+
+    /**
+     * Update the column size based on the displayed contents
+     *
+     * @param aCol Which column to resize
+     */
+    void UpdateWidth( int aCol );
 
     /**
      * Set the component name to be selected if there are no search results.
@@ -326,10 +334,6 @@ private:
     wxDataViewColumn*   m_col_part;
     wxDataViewColumn*   m_col_desc;
     wxDataViewCtrl*     m_widget;
-
-    WX_DECLARE_STRING_HASH_MAP( std::vector<int>, WIDTH_CACHE );
-
-    static WIDTH_CACHE m_width_cache;
 
     /**
      * Compute the width required for the given column of a node and its
