@@ -218,8 +218,10 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         if( aKeep )
             size = GetRowLabelSize();
 
+        // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than the normal font
+        // TODO: use a better way to evaluate the text size, for bold font
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
-            size = std::max( size, GetTextExtent( GetRowLabelValue( row ) + "M" ).x );
+            size = std::max( size, int( GetTextExtent( GetRowLabelValue( row ) + "M" ).x * 1.1 ) );
     }
     else
     {
@@ -229,7 +231,10 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         // 'M' is generally the widest character, so we buffer the column width by default to ensure
         // we don't write a continuous line of text at the column header
         if( aHeader )
-            size = std::max( size, GetTextExtent( GetColLabelValue( aCol ) + "M" ).x );
+        {
+            // The 1.1 scale factor is due to the fact headers use a bold font, bigger than the normal font
+            size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x * 1.1 ) );
+        }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
             size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );

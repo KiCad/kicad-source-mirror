@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2009 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2009-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2009-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,7 +67,8 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
     {
-        m_originalColWidths[ i ] = m_netclassGrid->GetVisibleWidth( i, true, false, true );
+        m_originalColWidths[ i ] = m_netclassGrid->GetVisibleWidth( i, true, true, true );
+        m_netclassGrid->SetColMinimalWidth( i, m_originalColWidths[ i ] );
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
     }
 

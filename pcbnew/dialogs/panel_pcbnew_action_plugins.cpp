@@ -195,7 +195,7 @@ bool PANEL_PCBNEW_ACTION_PLUGINS::TransferDataToWindow()
     {
         // Set the minimal width to the column label size.
         m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, false, false ) );
-        // Set the width to seen the full contents
+        // Set the width to see the full contents
         m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, false ) );
     }
 

@@ -375,7 +375,16 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_staticLibraryID->SetLabel( m_footprint->GetFPID().Format() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
-        m_itemsGrid->SetColSize( col, m_itemsGrid->GetVisibleWidth( col, true, false, false ) );
+    {
+        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false, false ) );
+        // Adjust the column size. The column 6 has a small bitmap, so its width must be taken in account
+        int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
+
+        if( col == 6 )
+            col_size += 20;
+
+        m_itemsGrid->SetColSize( col, col_size );
+    }
 
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, false, true, true ) );
 

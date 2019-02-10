@@ -72,7 +72,7 @@ public:
      * on screen.  Will return the maximum value of all calculated widths.
      * @param aCol - Integer value of the column to resize.  Specify -1 for the row labels.
      * @param aHeader - Include the header in the width calculation
-     * @param aContents - Include the full contents of the
+     * @param aContents - Include the full contents of the column
      * @param aKeep - Use the current size as a minimum value
      * @return The new size of the column
      */

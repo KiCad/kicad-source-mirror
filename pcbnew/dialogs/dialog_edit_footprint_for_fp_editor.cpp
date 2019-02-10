@@ -294,7 +294,17 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     select3DModel( 0 );   // will clamp idx within bounds
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
-        m_itemsGrid->SetColSize( col, m_itemsGrid->GetVisibleWidth( col, true, false, true ) );
+    {
+        // Adjust min size to the column label size
+        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false, false ) );
+        // Adjust the column size. The column 6 has a small bitmap, so its width must be taken in account
+        int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
+
+        if( col == 6 )
+            col_size += 20;
+
+        m_itemsGrid->SetColSize( col, col_size );
+    }
 
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, true, true, true ) );
 
