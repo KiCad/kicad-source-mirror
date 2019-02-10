@@ -285,7 +285,7 @@ Some available masks:
     * `KICAD_GEDA_PLUGIN`
     * `KICAD_PCB_PLUGIN`
 
-# Advanced configuration
+# Advanced configuration {#advanced-configuration}
 
 There are some advance configuration options, which are mostly used for
 development or testing purposes.
