@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Feb 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -450,12 +450,12 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_buttonAdd = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonAdd->SetMinSize( wxSize( 30,29 ) );
 
-	bSizer3DButtons->Add( m_buttonAdd, 0, wxTOP, 5 );
+	bSizer3DButtons->Add( m_buttonAdd, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_buttonBrowse = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonBrowse->SetMinSize( wxSize( 30,29 ) );
 
-	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALL, 5 );
+	bSizer3DButtons->Add( m_buttonBrowse, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -463,13 +463,13 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_buttonRemove = new wxBitmapButton( sbSizer3->GetStaticBox(), wxID_ANY, wxNullBitmap, wxDefaultPosition, wxSize( -1,-1 ), wxBU_AUTODRAW|0 );
 	m_buttonRemove->SetMinSize( wxSize( 30,29 ) );
 
-	bSizer3DButtons->Add( m_buttonRemove, 0, wxTOP|wxLEFT, 5 );
+	bSizer3DButtons->Add( m_buttonRemove, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
 
 
 	bSizer3DButtons->Add( 0, 0, 1, wxEXPAND, 5 );
 
 	m_button8 = new wxButton( sbSizer3->GetStaticBox(), wxID_ANY, _("Configure Paths..."), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer3DButtons->Add( m_button8, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bSizer3DButtons->Add( m_button8, 0, wxALL|wxEXPAND, 5 );
 
 
 	sbSizer3->Add( bSizer3DButtons, 0, wxEXPAND, 5 );

@@ -287,11 +287,11 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
         m_AutoPlaceCtrl->SetSelection( 0 );
 
     m_AutoPlaceCtrl->SetItemToolTip( 0, _( "Component can be freely moved and auto placed. User "
-                                                   "can arbitrarily select and edit component's pads." ) );
+                                           "can arbitrarily select and edit component's pads." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 1, _( "Component can be freely moved and auto placed, but "
-                                                   "its pads cannot be selected or edited." ) );
+                                           "its pads cannot be selected or edited." ) );
     m_AutoPlaceCtrl->SetItemToolTip( 2, _( "Component is locked: it cannot be freely moved or "
-                                                   "auto placed." ) );
+                                           "auto placed." ) );
 
     m_CostRot90Ctrl->SetValue( m_footprint->GetPlacementCost90() );
     m_CostRot180Ctrl->SetValue( m_footprint->GetPlacementCost180() );
@@ -300,8 +300,8 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
             "Footprints with this option are not put in the footprint position list file" ) );
     m_AttributsCtrl->SetItemToolTip( 1, _( "Use this attribute for SMD footprints.\n"
             "Only footprints with this option are put in the footprint position list file" ) );
-    m_AttributsCtrl->SetItemToolTip( 2, _( "Use this attribute for \"virtual\" footprints drawn on board\n"
-            "such as an edge connector (old ISA PC bus for instance)" ) );
+    m_AttributsCtrl->SetItemToolTip( 2, _( "Use this attribute for \"virtual\" footprints drawn "
+            "on board\nsuch as an edge connector (old ISA PC bus for instance)" ) );
 
     switch( m_footprint->GetAttributes() & 255 )
     {
@@ -370,14 +370,17 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     }
 
     select3DModel( 0 );   // will clamp idx within bounds
+    m_PreviewPane->UpdateDummyModule();
 
     // Show the footprint's ID.
     m_staticLibraryID->SetLabel( m_footprint->GetFPID().Format() );
 
     for( int col = 0; col < m_itemsGrid->GetNumberCols(); col++ )
     {
-        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false, false ) );
-        // Adjust the column size. The column 6 has a small bitmap, so its width must be taken in account
+        m_itemsGrid->SetColMinimalWidth( col, m_itemsGrid->GetVisibleWidth( col, true, false,
+                                                                            false ) );
+        // Adjust the column size. The column 6 has a small bitmap, so its width must be
+        // taken in account
         int col_size = m_itemsGrid->GetVisibleWidth( col, true, true, false );
 
         if( col == 6 )
@@ -490,7 +493,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
     int filter = 0;
 
     // If the PROJECT::VIEWER_3D_PATH hasn't been set yet, use the KISYS3DMOD environment
-    // varaible and fall back to the project path if necessary.
+    // variable and fall back to the project path if necessary.
     if( initialpath.IsEmpty() )
     {
         if( !wxGetEnv( "KISYS3DMOD", &initialpath ) || initialpath.IsEmpty() )
@@ -524,7 +527,7 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnAdd3DModel( wxCommandEvent&  )
         filename = alias + wxT( ":" ) + shortPath;
 
 #ifdef __WINDOWS__
-    // In Kicad files, filenames and paths are stored using Unix notation
+    // In KiCad files, filenames and paths are stored using Unix notation
     model.m_Filename.Replace( "\\", "/" );
 #endif
 
