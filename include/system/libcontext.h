@@ -42,6 +42,15 @@
     #elif (__mips__ && _MIPS_SIM == _ABI64)
         #define LIBCONTEXT_PLATFORM_linux_mips_n64
         #define LIBCONTEXT_CALL_CONVENTION
+    #elif __powerpc__
+        #ifdef _ARCH_PPC64
+            #define LIBCONTEXT_PLATFORM_linux_ppc64
+            #define LIBCONTEXT_CALL_CONVENTION
+        #endif
+        #ifdef _ARCH_PPC
+            #define LIBCONTEXT_PLATFORM_linux_ppc32
+            #define LIBCONTEXT_CALL_CONVENTION
+        #endif
     #endif
 
     #elif defined(__MINGW32__) || defined(__MINGW64__)
