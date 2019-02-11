@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Nov 21 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -32,7 +32,7 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerMessages->Add( m_TextInfo, 0, wxALL, 5 );
 
 	m_staticTextWarningMessage = new wxStaticText( this, wxID_ANY, _("If you don't save, all your changes will be permanently lost."), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticTextWarningMessage->Wrap( -1 );
+	m_staticTextWarningMessage->Wrap( 300 );
 	bSizerMessages->Add( m_staticTextWarningMessage, 0, wxALL, 5 );
 
 
@@ -42,13 +42,12 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	bSizerMain->Add( bSizerUpper, 1, wxEXPAND|wxALL, 5 );
 
 	m_staticline = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
-	bSizerMain->Add( m_staticline, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerMain->Add( m_staticline, 0, wxEXPAND|wxLEFT|wxRIGHT, 10 );
 
 	m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
 
-	m_buttonSizer->SetMinSize( wxSize( 475,-1 ) );
 	m_ApplyToAllOpt = new wxCheckBox( this, wxID_ANY, _("Apply to all"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_buttonSizer->Add( m_ApplyToAllOpt, 0, wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5 );
+	m_buttonSizer->Add( m_ApplyToAllOpt, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP, 5 );
 
 
 	m_buttonSizer->Add( 20, 0, 1, wxRIGHT|wxLEFT, 5 );
@@ -66,10 +65,10 @@ DIALOG_EXIT_BASE::DIALOG_EXIT_BASE( wxWindow* parent, wxWindowID id, const wxStr
 	m_sdbSizer->AddButton( m_sdbSizerCancel );
 	m_sdbSizer->Realize();
 
-	m_buttonSizer->Add( m_sdbSizer, 0, wxALL, 5 );
+	m_buttonSizer->Add( m_sdbSizer, 0, wxBOTTOM|wxTOP, 5 );
 
 
-	bSizerMain->Add( m_buttonSizer, 0, wxEXPAND|wxLEFT, 10 );
+	bSizerMain->Add( m_buttonSizer, 0, wxEXPAND|wxLEFT, 5 );
 
 
 	this->SetSizer( bSizerMain );

@@ -253,7 +253,7 @@
                                         <property name="window_extra_style"></property>
                                         <property name="window_name"></property>
                                         <property name="window_style"></property>
-                                        <property name="wrap">-1</property>
+                                        <property name="wrap">300</property>
                                     </object>
                                 </object>
                             </object>
@@ -262,7 +262,7 @@
                 </object>
                 <object class="sizeritem" expanded="1">
                     <property name="border">10</property>
-                    <property name="flag">wxEXPAND|wxTOP|wxRIGHT|wxLEFT</property>
+                    <property name="flag">wxEXPAND|wxLEFT|wxRIGHT</property>
                     <property name="proportion">0</property>
                     <object class="wxStaticLine" expanded="1">
                         <property name="BottomDockable">1</property>
@@ -319,17 +319,17 @@
                     </object>
                 </object>
                 <object class="sizeritem" expanded="1">
-                    <property name="border">10</property>
+                    <property name="border">5</property>
                     <property name="flag">wxEXPAND|wxLEFT</property>
                     <property name="proportion">0</property>
                     <object class="wxBoxSizer" expanded="1">
-                        <property name="minimum_size">475,-1</property>
+                        <property name="minimum_size">-1,-1</property>
                         <property name="name">m_buttonSizer</property>
                         <property name="orient">wxHORIZONTAL</property>
                         <property name="permission">protected</property>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxCheckBox" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -486,7 +486,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">5</property>
-                            <property name="flag">wxALL</property>
+                            <property name="flag">wxBOTTOM|wxTOP</property>
                             <property name="proportion">0</property>
                             <object class="wxStdDialogButtonSizer" expanded="1">
                                 <property name="Apply">0</property>
