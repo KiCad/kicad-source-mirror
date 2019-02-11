@@ -154,6 +154,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         wxT( "*.wrl" ),
         wxT( "*.net" ), wxT( "*.py" ),
         wxT( "*.pdf" ), wxT( "*.txt" ), wxT( "*.kicad_wks" ),
+        wxT( "fp-lib-table" ), wxT( "sym-lib-table" )
     };
 
     wxString    msg;
