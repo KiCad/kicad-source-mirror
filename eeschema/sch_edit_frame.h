@@ -1020,7 +1020,13 @@ private:
      *                      false to mirror relative to vertical axis
      */
     void MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis );
-    void EditImage( SCH_BITMAP* aItem );
+
+    /**
+     * Launches the "Edit Image" dialog to modify an image
+     * @param aItem Pointer to the image item to modify
+     * @return true if the image was modified, false if the user canceled
+     */
+    bool EditImage( SCH_BITMAP* aItem );
 
     // Hierarchical Sheet & PinSheet
     void        InstallHierarchyFrame( wxPoint& pos );

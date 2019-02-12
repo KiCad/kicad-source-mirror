@@ -430,7 +430,12 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case SCH_BITMAP_T:
-            EditImage( (SCH_BITMAP*) item );
+
+            // The bitmap is cached in Opengl: clear the cache, because
+            // the cache data is perhaps invalid
+            if( EditImage( (SCH_BITMAP*) item ) )
+                GetCanvas()->GetView()->RecacheAllItems();
+
             break;
 
         case SCH_FIELD_T:

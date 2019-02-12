@@ -921,7 +921,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
         RotateImage( (SCH_BITMAP*) item );
         // The bitmap is cached in Opengl: clear the cache, because
         // the cache data is invalid
-        GetCanvas()->GetGAL()->ClearCache();
+        GetCanvas()->GetView()->RecacheAllItems();
         break;
 
     case SCH_SHEET_T:
@@ -1093,10 +1093,12 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         break;
 
     case SCH_BITMAP_T:
-        EditImage( (SCH_BITMAP*) item );
+
         // The bitmap is cached in Opengl: clear the cache, because
         // the cache data is perhaps invalid
-        GetCanvas()->GetGAL()->ClearCache();
+        if( EditImage( (SCH_BITMAP*) item ) )
+            GetCanvas()->GetView()->RecacheAllItems();
+
         break;
 
     case SCH_LINE_T:        // These items have no param to edit
@@ -1294,7 +1296,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
         // The bitmap is cached in Opengl: clear the cache, because
         // the cache data is invalid
-        GetCanvas()->GetGAL()->ClearCache();
+        GetCanvas()->GetView()->RecacheAllItems();
         break;
 
     case SCH_SHEET_T:

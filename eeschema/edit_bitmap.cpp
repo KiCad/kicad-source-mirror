@@ -99,13 +99,13 @@ void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
 }
 
 
-void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
+bool SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 {
     // TODO: change image scale or more
     DIALOG_IMAGE_EDITOR dlg( this, aItem->GetImage() );
 
     if( dlg.ShowModal() != wxID_OK )
-        return;
+        return false;
 
     // save old image in undo list if not already in edit
     // or the image to be edited is part of a block
@@ -120,4 +120,5 @@ void SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 
     RefreshItem( aItem );
     OnModify();
+    return true;
 }
