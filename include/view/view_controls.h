@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
  * Copyright (C) 2013 CERN
- * Copyright (C) 2013-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -126,6 +126,14 @@ public:
     virtual void SetSnapping( bool aEnabled )
     {
         m_settings.m_snappingEnabled = aEnabled;
+    }
+
+    /**
+     * @return the current state of the snapping cursor to grid.
+     */
+    virtual bool GetSnappingState()
+    {
+        return m_settings.m_snappingEnabled;
     }
 
     /**

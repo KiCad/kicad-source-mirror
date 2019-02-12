@@ -535,7 +535,6 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     }
 
     lastPanel = this;
-
 }
 
 
