@@ -292,7 +292,7 @@ void SVG_PLOTTER::StartBlock( void* aData )
 {
     std::string* idstr = reinterpret_cast<std::string*>( aData );
 
-    fputs( "<svg:g ", outputFile );
+    fputs( "<g ", outputFile );
     if( idstr )
         fprintf( outputFile, "id=\"%s\"", idstr->c_str() );
 
