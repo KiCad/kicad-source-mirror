@@ -139,6 +139,28 @@ public:
     static EDA_COLOR_T GetNearestLegacyColor( const COLOR4D &aColor );
 #endif /* WX_COMPATIBLITY */
 
+
+    /**
+     * Function ToHSL()
+     * Converts current color (stored in RGB) to HSL format.
+     *
+     * @param aOutHue is the conversion result for hue component, in degrees 0 ... 360.0
+     * @param aOutSaturation is the conversion result for saturation component (0 ... 1.0).
+     * @param aOutLightness is conversion result for value component (0 ... 1.0).
+     * @note saturation is set to 0.0 for black color if r = g = b,
+     */
+    void ToHSL( double& aOutHue, double& aOutSaturation, double& aOutValue ) const;
+
+    /**
+     * Function FromHSL()
+     * Changes currently used color to the one given by hue, saturation and lightness parameters.
+     *
+     * @param aInHue is hue component, in degrees (0.0 - 360.0)
+     * @param aInSaturation is saturation component (0.0 - 1.0)
+     * @param aInLightness is lightness component (0.0 - 1.0)
+     */
+    void FromHSL( double aInHue, double aInSaturation, double aInLightness );
+
     /**
      * Function Brighten
      * Makes the color brighter by a given factor.

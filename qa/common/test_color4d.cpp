@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,16 +217,70 @@ struct FROM_HSV_TO_HEX_CASE
 BOOST_AUTO_TEST_CASE( FromHsv )
 {
     static const std::vector<FROM_HSV_TO_HEX_CASE> cases = {
-        { 90.0, 0.5, 0.5, 96, 128, 64 },
+        {  10, 0.71, 0.66, 168,  69,  49 },
+        {  15, 0.96, 0.34,  87,  24,   3 },
+        { 120, 0.50, 0.50,  64, 128,  64 },
+        { 190, 0.32, 0.97, 168, 234, 247 },
+        { 240, 0.15, 0.75, 163, 163, 191 },
+        { 240, 0.90, 0.75,  19,  19, 191 },
+        { 310, 0.71, 0.66, 168,  49, 148 },
+        { 331, 0.15, 0.85, 217, 184, 200 },
     };
 
     for( const auto& c : cases )
     {
         auto col = COLOR4D{};
         col.FromHSV( c.h, c.s, c.v );
+        double new_h, new_s, new_v;
+        col.ToHSV( new_h, new_s, new_v );
         const unsigned char alpha = 0xFF;
 
         BOOST_CHECK_PREDICATE( pred_colour_is_near_hex, ( col )( c.r )( c.g )( c.b )( alpha ) );
+        BOOST_CHECK_CLOSE( c.h, new_h, 0.0001 );
+        BOOST_CHECK_CLOSE( c.s, new_s, 0.0001 );
+        BOOST_CHECK_CLOSE( c.v, new_v, 0.0001 );
+    }
+}
+
+struct FROM_HSL_TO_HEX_CASE
+{
+    double        h;
+    double        s;
+    double        l;
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+};
+
+
+/**
+ * Check FromHSL
+ */
+BOOST_AUTO_TEST_CASE( FromHsl )
+{
+    static const std::vector<FROM_HSL_TO_HEX_CASE> cases = {
+        {  10, 0.71, 0.66, 230, 127, 107 },
+        {  15, 0.96, 0.34, 170,  45,   3 },
+        { 120, 0.5,  0.5,   64, 191,  64 },
+        { 190, 0.32, 0.97, 245, 249, 250 },
+        { 240, 0.15, 0.75, 182, 182, 201 },
+        { 240, 0.90, 0.75, 134, 134, 249 },
+        { 310, 0.71, 0.66, 230, 107, 209 },
+        { 331, 0.15, 0.85, 222, 211, 217 },
+    };
+
+    for( const auto& c : cases )
+    {
+        auto col = COLOR4D{};
+        col.FromHSL( c.h, c.s, c.l );
+        double new_h, new_s, new_l;
+        col.ToHSL( new_h, new_s, new_l );
+        const unsigned char alpha = 0xFF;
+
+        BOOST_CHECK_PREDICATE( pred_colour_is_near_hex, ( col )( c.r )( c.g )( c.b )( alpha ) );
+        BOOST_CHECK_CLOSE( c.h, new_h, 0.0001 );
+        BOOST_CHECK_CLOSE( c.s, new_s, 0.0001 );
+        BOOST_CHECK_CLOSE( c.l, new_l, 0.0001 );
     }
 }
 

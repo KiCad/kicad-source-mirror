@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014-2015  CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -33,16 +33,33 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
 
     SetText( placer->TuningInfo( m_frame->GetUserUnits() ) );
 
+    // Determine the background color first and choose a contrasting value
+    COLOR4D bg( m_panel->GetBackgroundColour() );
+    double h, s, l;
+    bg.ToHSL( h, s, l );
+
     switch( placer->TuningStatus() )
     {
     case PNS::MEANDER_PLACER::TUNED:
-        SetTextColor( wxColour( 0, 255, 0 ) );
+        if( l < 0.5 )
+            SetTextColor( wxColor( 0, 255, 0 ) );
+        else
+            SetTextColor( wxColor( 0, 128, 0 ) );
+
         break;
     case PNS::MEANDER_PLACER::TOO_SHORT:
-        SetTextColor( wxColour( 255, 128, 128 ) );
+        if( l < 0.5 )
+            SetTextColor( wxColor( 255, 128, 128 ) );
+        else
+            SetTextColor( wxColor( 128, 64, 64 ) );
+
         break;
     case PNS::MEANDER_PLACER::TOO_LONG:
-        SetTextColor( wxColour( 128, 128, 255 ) );
+        if( l < 0.5 )
+            SetTextColor( wxColor( 24, 24, 255 ) );
+        else
+            SetTextColor( wxColor( 19, 19, 195 ) );
+
         break;
     }
 }
