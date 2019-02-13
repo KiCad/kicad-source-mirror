@@ -23,12 +23,12 @@ output_directory is the directory where output will be written
 # Author: Prabhu Ramachandran
 # License: BSD style
 
+from __future__ import print_function
 
 from xml.dom import minidom
 import re
 import textwrap
 import sys
-import types
 import os.path
 
 
@@ -130,7 +130,7 @@ class Doxy2SWIG:
 
     def add_text(self, value):
         """Adds text corresponding to `value` into `self.pieces`."""
-        if type(value) in (types.ListType, types.TupleType):
+        if type(value) in (list, tuple):
             self.pieces.extend(value)
         else:
             self.pieces.append(value)
@@ -190,13 +190,13 @@ class Doxy2SWIG:
         kind = node.attributes['kind'].value
         if kind in ('class', 'struct'):
             prot = node.attributes['prot'].value
-            if prot <> 'public':
+            if prot != 'public':
                 return
             names = ('compoundname', 'briefdescription',
                      'detaileddescription', 'includes')
             first = self.get_specific_nodes(node, names)
             for n in names:
-                if first.has_key(n):
+                if n in first:
                     self.parse(first[n])
             self.add_text(['";','\n'])
             for n in node.childNodes:
@@ -315,7 +315,7 @@ class Doxy2SWIG:
             fname = refid + '.xml'
             if not os.path.exists(fname):
                 fname = os.path.join(self.my_dir,  fname)
-            print "parsing file: %s"%fname
+            print("parsing file: %s" % fname)
             p = Doxy2SWIG(fname)
             p.generate()
             self.pieces.extend(self.clean_pieces(p.pieces))
@@ -376,7 +376,7 @@ def main(input_py, input_xml, output_dir):
 
     classes = get_python_classes(input_py)
 
-    with file("%s/docstrings.i"%output_dir,'w') as f_index:
+    with open("%s/docstrings.i"%output_dir,'w') as f_index:
 
         for classname in classes:
 
@@ -385,21 +385,21 @@ def main(input_py, input_xml, output_dir):
             swig_file = "%s/%s.i"%(output_dir,classname.lower())
 
             if os.path.isfile(class_file):
-                print "processing:",class_file," ->",swig_file
+                print("processing:", class_file, " ->", swig_file)
                 p = Doxy2SWIG(class_file)
                 p.generate()
                 p.write(swig_file)
                 f_index.write('%%include "%s.i"\n'% classname.lower())
             #else:
-            #    print "ignoring class %s, as %s does not exist" %(classname,class_file)
+            #    print("ignoring class %s, as %s does not exist" % (classname,class_file))
 
 
 
 
 
 if __name__ == '__main__':
-    print sys.argv
+    print(sys.argv)
     if len(sys.argv) != 4:
-        print __doc__
+        print(__doc__)
         sys.exit(1)
-    main(sys.argv[1], sys.argv[2],sys.argv[3])
+    main(sys.argv[1], sys.argv[2], sys.argv[3])
