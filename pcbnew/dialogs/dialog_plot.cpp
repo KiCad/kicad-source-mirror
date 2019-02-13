@@ -33,6 +33,7 @@
 #include <bitmaps.h>
 #include <class_board.h>
 #include <dialog_plot.h>
+#include <dialog_gendrill.h>
 #include <wx_html_report_panel.h>
 #include <drc.h>
 
@@ -276,9 +277,11 @@ void DIALOG_PLOT::OnPopUpLayers( wxCommandEvent& event )
 void DIALOG_PLOT::CreateDrillFile( wxCommandEvent& event )
 {
     // Be sure drill file use the same settings (axis option, plot directory)
-    // than plot files:
+    // as plot files:
     applyPlotSettings();
-    m_parent->InstallDrillFrame( event );
+
+    DIALOG_GENDRILL dlg( m_parent, this );
+    dlg.ShowModal();
 
     // a few plot settings can be modified: take them in account
     m_plotOpts = m_parent->GetPlotSettings();

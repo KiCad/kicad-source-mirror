@@ -218,16 +218,16 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	m_buttonReport = new wxButton( this, wxID_ANY, _("Generate Report File"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_buttonsSizer->Add( m_buttonReport, 0, wxEXPAND|wxRIGHT|wxLEFT, 10 );
 
-	m_sdbSizer1 = new wxStdDialogButtonSizer();
-	m_sdbSizer1OK = new wxButton( this, wxID_OK );
-	m_sdbSizer1->AddButton( m_sdbSizer1OK );
-	m_sdbSizer1Apply = new wxButton( this, wxID_APPLY );
-	m_sdbSizer1->AddButton( m_sdbSizer1Apply );
-	m_sdbSizer1Cancel = new wxButton( this, wxID_CANCEL );
-	m_sdbSizer1->AddButton( m_sdbSizer1Cancel );
-	m_sdbSizer1->Realize();
+	m_sdbSizer = new wxStdDialogButtonSizer();
+	m_sdbSizerOK = new wxButton( this, wxID_OK );
+	m_sdbSizer->AddButton( m_sdbSizerOK );
+	m_sdbSizerApply = new wxButton( this, wxID_APPLY );
+	m_sdbSizer->AddButton( m_sdbSizerApply );
+	m_sdbSizerCancel = new wxButton( this, wxID_CANCEL );
+	m_sdbSizer->AddButton( m_sdbSizerCancel );
+	m_sdbSizer->Realize();
 
-	m_buttonsSizer->Add( m_sdbSizer1, 1, wxEXPAND, 5 );
+	m_buttonsSizer->Add( m_sdbSizer, 1, wxEXPAND, 5 );
 
 
 	bMainSizer->Add( m_buttonsSizer, 0, wxALL|wxEXPAND, 5 );
@@ -239,26 +239,30 @@ DIALOG_GENDRILL_BASE::DIALOG_GENDRILL_BASE( wxWindow* parent, wxWindowID id, con
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GENDRILL_BASE::onCloseDlg ) );
 	m_browseButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_rbExcellon->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_rbGerberX2->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_Choice_Unit->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Connect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
 	m_buttonReport->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
-	m_sdbSizer1Apply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
-	m_sdbSizer1OK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
+	m_sdbSizerApply->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
+	m_sdbSizerCancel->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onQuitDlg ), NULL, this );
+	m_sdbSizerOK->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
 }
 
 DIALOG_GENDRILL_BASE::~DIALOG_GENDRILL_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_CLOSE_WINDOW, wxCloseEventHandler( DIALOG_GENDRILL_BASE::onCloseDlg ) );
 	m_browseButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnOutputDirectoryBrowseClicked ), NULL, this );
 	m_rbExcellon->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_rbGerberX2->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onFileFormatSelection ), NULL, this );
 	m_Choice_Unit->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelDrillUnitsSelected ), NULL, this );
 	m_Choice_Zeros_Format->Disconnect( wxEVT_COMMAND_RADIOBOX_SELECTED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnSelZerosFmtSelected ), NULL, this );
 	m_buttonReport->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenReportFile ), NULL, this );
-	m_sdbSizer1Apply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
-	m_sdbSizer1OK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
+	m_sdbSizerApply->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenMapFile ), NULL, this );
+	m_sdbSizerCancel->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::onQuitDlg ), NULL, this );
+	m_sdbSizerOK->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_GENDRILL_BASE::OnGenDrillFile ), NULL, this );
 
 }

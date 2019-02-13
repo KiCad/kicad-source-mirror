@@ -29,13 +29,25 @@
 #ifndef DIALOG_GENDRILL_H_
 #define DIALOG_GENDRILL_H_
 
+#include <gendrill_file_writer_base.h>      // for DRILL_PRECISION definition
 #include <dialog_gendrill_base.h>
 
 class DIALOG_GENDRILL : public DIALOG_GENDRILL_BASE
 {
 public:
-    DIALOG_GENDRILL( PCB_EDIT_FRAME* parent );
+    /**
+     * Ctor
+     * @param aPcbEditFrame is the board edit frame
+     * @param aParent is the parent window caller ( the board edit frame or a dialog )
+     */
+    DIALOG_GENDRILL( PCB_EDIT_FRAME* aPcbEditFrame, wxWindow* aParent );
     ~DIALOG_GENDRILL();
+
+    /**
+     * Update board drill/plot parameters
+     */
+    void            UpdateDrillParams( void );
+
 
     static int       m_UnitDrillIsInch;
     static int       m_ZerosFormat;
@@ -50,7 +62,7 @@ public:
 
 
 private:
-    PCB_EDIT_FRAME* m_parent;
+    PCB_EDIT_FRAME* m_pcbEditFrame;
     wxConfigBase*   m_config;
     BOARD*          m_board;
     PCB_PLOT_PARAMS m_plotOpts;
@@ -76,6 +88,20 @@ private:
     void            OnGenMapFile( wxCommandEvent& event ) override;
 	void            onFileFormatSelection( wxCommandEvent& event ) override;
 
+    // Called when closing the dialog: Update config.
+    // This is not done in Dtor, because the dtor call is often delayed
+    // and the update could happen too late for the caller.
+	void onCloseDlg( wxCloseEvent& event ) override
+    {
+        UpdateConfig();
+        event.Skip();
+    }
+	void onQuitDlg( wxCommandEvent& event ) override
+    {
+        UpdateConfig();
+        event.Skip();
+    }
+
     /*
      *  Create a plain text report file giving a list of drill values and drill count
      *  for through holes, oblong holes, and for buried vias,
@@ -86,8 +112,6 @@ private:
     void            OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) override;
 
     // Specific functions:
-    void            SetParams( void );
-
     /**
      * Function GenDrillAndMapFiles
      * Calls the functions to create EXCELLON drill files and/or drill map files

@@ -69,18 +69,20 @@ class DIALOG_GENDRILL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_messagesBox;
 		wxBoxSizer* m_buttonsSizer;
 		wxButton* m_buttonReport;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-		wxButton* m_sdbSizer1Apply;
-		wxButton* m_sdbSizer1Cancel;
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+		wxButton* m_sdbSizerApply;
+		wxButton* m_sdbSizerCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void onCloseDlg( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnOutputDirectoryBrowseClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onFileFormatSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelDrillUnitsSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnSelZerosFmtSelected( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenReportFile( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenMapFile( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onQuitDlg( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnGenDrillFile( wxCommandEvent& event ) { event.Skip(); }
 
 
