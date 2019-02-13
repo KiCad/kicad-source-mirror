@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-09 20:34+0100\n"
-"PO-Revision-Date: 2019-02-09 20:38+0100\n"
+"POT-Creation-Date: 2019-02-10 11:39+0100\n"
+"PO-Revision-Date: 2019-02-10 11:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -1445,6 +1445,7 @@ msgstr "Confirmation"
 #: eeschema/libedit/libedit.cpp:835 eeschema/sch_component.cpp:1472
 #: eeschema/viewlib_frame.cpp:289 include/lib_table_grid.h:196
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:44
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:40
 #: pcbnew/footprint_libraries_utils.cpp:887
 #: pcbnew/footprint_libraries_utils.cpp:1110
 msgid "Description"
@@ -1753,12 +1754,14 @@ msgstr "Variables d'Environnement"
 #: eeschema/widgets/tuner_slider_base.cpp:20
 #: pcbnew/dialogs/dialog_footprint_wizard_list_base.cpp:43
 #: pcbnew/dialogs/dialog_select_net_from_list.cpp:69
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:38
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:48
 msgid "Name"
 msgstr "Nom"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:40
 #: common/dialogs/dialog_configure_paths_base.cpp:97
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
 msgstr "Chemin"
 
@@ -2265,7 +2268,7 @@ msgstr ""
 "l'imprimante."
 
 #: common/dialogs/dialog_print_generic_base.cpp:24
-#: eeschema/dialogs/dialog_erc_base.cpp:159
+#: eeschema/dialogs/dialog_erc_base.cpp:138
 #: eeschema/dialogs/dialog_plot_schematic_base.cpp:50
 #: include/lib_table_grid.h:195 pcbnew/dialogs/dialog_export_svg_base.cpp:80
 #: pcbnew/dialogs/dialog_netlist_base.cpp:52
@@ -5578,23 +5581,19 @@ msgstr "Créer fichier rapport ERC"
 msgid "Error List:"
 msgstr "Liste des Erreurs:"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:100
-msgid "Delete Markers"
-msgstr "Supprimer Marqueurs"
-
-#: eeschema/dialogs/dialog_erc_base.cpp:122
+#: eeschema/dialogs/dialog_erc_base.cpp:101
 msgid "ERC"
 msgstr "ERC"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:128
+#: eeschema/dialogs/dialog_erc_base.cpp:107
 msgid "Label to Label Connections"
 msgstr "Connections Label à Label"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:130
+#: eeschema/dialogs/dialog_erc_base.cpp:109
 msgid "Test similar labels"
 msgstr "Test labels similaires"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:131
+#: eeschema/dialogs/dialog_erc_base.cpp:110
 msgid ""
 "Similar labels are labels (inside a sheet) which differs only by upper/lower "
 "case"
@@ -5602,11 +5601,11 @@ msgstr ""
 "Les labels similaires sont des labels (à l'intérieur d'une feuille) qui "
 "diffèrent seulement par les majuscules/minuscules"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:135
+#: eeschema/dialogs/dialog_erc_base.cpp:114
 msgid "Test single instances of global labels"
 msgstr "Test instances uniques des labels globaux"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:136
+#: eeschema/dialogs/dialog_erc_base.cpp:115
 msgid ""
 "Global labels are used to connect signals across the full hierarchy.\n"
 "They are expected to be at least two labels with the same name."
@@ -5615,15 +5614,19 @@ msgstr ""
 "hiérarchie complète.\n"
 "Ils devraient être au moins deux avec le même nom."
 
-#: eeschema/dialogs/dialog_erc_base.cpp:144
+#: eeschema/dialogs/dialog_erc_base.cpp:123
 msgid "Pin to Pin Connections"
 msgstr "Connexions Pin à Pin"
 
-#: eeschema/dialogs/dialog_erc_base.cpp:149
+#: eeschema/dialogs/dialog_erc_base.cpp:128
 msgid "Reset to Defaults"
 msgstr "Réinitialiser aux Défauts"
 
-#: eeschema/dialogs/dialog_erc_base.h:86
+#: eeschema/dialogs/dialog_erc_base.cpp:145
+msgid "Delete Markers"
+msgstr "Supprimer Marqueurs"
+
+#: eeschema/dialogs/dialog_erc_base.h:85
 msgid "Electrical Rules Checker"
 msgstr "Contrôle des Règles Electriques"
 
@@ -17002,24 +17005,24 @@ msgstr ""
 "circuit imprimé\n"
 "comme un connecteur de bord de carte (vieux PC ISA bus par exemple)"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:437
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:339
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:425
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:344
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Nom fichier invalide:  %s"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:588
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:522
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:576
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:527
 msgid "Text items must have some content."
 msgstr "Les éléments de texte doivent avoir du contenu."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:733
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:628
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:721
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:633
 msgid "Modify module properties"
 msgstr "Modifier les propriétés de l'empreinte"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:792
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:731
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:780
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:736
 msgid "Reference and value are mandatory."
 msgstr "Référence et valeur sont obligatoires."
 
@@ -17323,11 +17326,11 @@ msgstr "Activer les raccourcis clavier de déplacement et d'auto placement"
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Désactiver les raccourcis clavier de déplacement et d'auto placement"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:478
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:483
 msgid "Footprint must have a name."
 msgstr "L'Empreinte doit avoir un nom."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:480
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:485
 #, c-format
 msgid "Footprint name may not contain \"%s\"."
 msgstr "Le nom d'empreinte ne peut pas contenir \"%s\"."
@@ -20537,8 +20540,8 @@ msgstr "Editer options"
 msgid "Duplicate Nicknames \"%s\"."
 msgstr "Noms Logiques \"%s\" dupliqués."
 
-#: pcbnew/dialogs/panel_modedit_defaults.cpp:152
-#: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:171
+#: pcbnew/dialogs/panel_modedit_defaults.cpp:157
+#: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:159
 msgid ""
 "Text will not be readable with a thickness greater than\n"
 "1/4 its width or height."
@@ -20656,6 +20659,18 @@ msgstr ""
 "Lorsque activé et rien n’est sélectionné,le \"drag\" va dessiner une zone de "
 "sélection, même s’il existe des éléments sous le curseur qui peuvent être "
 "\"draggés immédiatement."
+
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
+msgid "Icon"
+msgstr "Icône"
+
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
+msgid "Show button"
+msgstr "Afficher bouton"
+
+#: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
+msgid "Category"
+msgstr "Categorie"
 
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:31
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:53
@@ -21579,59 +21594,59 @@ msgstr ""
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
 "Une valeur négative signifie que le masque est plus petit que le pad."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:273
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:269
 msgid "Netclass must have a name."
 msgstr "La net classe doit avoir un nom."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:282
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:278
 msgid "Netclass name already in use."
 msgstr "Nom de netclasse déjà en usage."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:337
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:333
 msgid "The default net class is required."
 msgstr "La net class par défaut est obligatoire."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:496
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:492
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:238
 #, c-format
 msgid "Track width less than minimum track width (%s)."
 msgstr "Largeur de piste inférieure à la largeur de piste minimale (%s)."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:504
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:500
 #, c-format
 msgid "Differential pair width less than minimum track width (%s)."
 msgstr ""
 "La largeur de la paire différentielle est inférieure à la largeur de piste "
 "minimale (%s)."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:513
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:509
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:255
 #, c-format
 msgid "Via diameter less than minimum via diameter (%s)."
 msgstr "Diamètre via inférieur au diamètre via minimum (%s)."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:521
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:517
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:281
 msgid "Via drill larger than via diameter."
 msgstr "Le diamètre de perçage de via plus grand que le diamètre de via."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:528
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:524
 #: pcbnew/dialogs/panel_setup_tracks_and_vias.cpp:272
 #, c-format
 msgid "Via drill less than minimum via drill (%s)."
 msgstr "Perçage de via inférieur au perçage de via minimum  ( %s)."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:537
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:533
 #, c-format
 msgid "Microvia diameter less than minimum microvia diameter (%s)."
 msgstr "Diamètre microvia inférieur au diamètre microvia minimum (%s)."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:545
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:541
 msgid "Microvia drill larger than microvia diameter."
 msgstr ""
 "Le diamètre de perçage doit être plus petit que le diamètre de la microvia."
 
-#: pcbnew/dialogs/panel_setup_netclasses.cpp:552
+#: pcbnew/dialogs/panel_setup_netclasses.cpp:548
 #, c-format
 msgid "Microvia drill less than minimum microvia drill (%s)."
 msgstr "Perçage microvia inférieur au perçage microvia minimum (%s)."
