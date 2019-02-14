@@ -1826,4 +1826,4 @@ PCB_LAYER_ID DRAWING_TOOL::getDrawingLayer() const
 }
 
 
-const unsigned int DRAWING_TOOL::WIDTH_STEP = 100000;
+const unsigned int DRAWING_TOOL::WIDTH_STEP = Millimeter2iu( 0.1 );

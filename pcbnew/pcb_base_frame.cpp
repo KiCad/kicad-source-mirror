@@ -830,10 +830,6 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     if( !screen )
         return;
 
-    int dx;
-    int dy;
-    double dXpos;
-    double dYpos;
     wxString line;
     wxString locformatter;
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
@@ -842,27 +838,25 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     if( displ_opts->m_DisplayPolarCood )  // display polar coordinates
     {
-        double       theta, ro;
+        double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
+        double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
 
-        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        double theta = ArcTangente( -dy, dx ) / 10;
+        double ro = hypot( dx, dy );
 
-        theta = ArcTangente( -dy, dx ) / 10;
-
-        ro = hypot( dx, dy );
         wxString formatter;
         switch( GetUserUnits() )
         {
         case INCHES:
-            formatter = wxT( "r %.6f  theta %.1f" );
+            formatter = "r %.6f  theta %.1f";
             break;
 
         case MILLIMETRES:
-            formatter = wxT( "r %.6f  theta %.1f" );
+            formatter = "r %.6f  theta %.1f";
             break;
 
         case UNSCALED_UNITS:
-            formatter = wxT( "r %f  theta %f" );
+            formatter = "r %f  theta %f";
             break;
 
         case DEGREES:
@@ -876,8 +870,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     }
 
     // Display absolute coordinates:
-    dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
-    dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
+    double dXpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().x );
+    double dYpos = To_User_Unit( GetUserUnits(), GetCrossHairPosition().y );
 
     // The following sadly is an if Eeschema/if Pcbnew
     wxString absformatter;
@@ -885,18 +879,18 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     switch( GetUserUnits() )
     {
     case INCHES:
-        absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  dist %.4f" );
+        absformatter = "X %.6f  Y %.6f";
+        locformatter = "dx %.6f  dy %.6f  dist %.4f";
         break;
 
     case MILLIMETRES:
-        absformatter = wxT( "X %.6f  Y %.6f" );
-        locformatter = wxT( "dx %.6f  dy %.6f  dist %.3f" );
+        absformatter = "X %.6f  Y %.6f";
+        locformatter = "dx %.6f  dy %.6f  dist %.3f";
         break;
 
     case UNSCALED_UNITS:
-        absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  dist %f" );
+        absformatter = "X %f  Y %f";
+        locformatter = "dx %f  dy %f  dist %f";
         break;
 
     case DEGREES:
@@ -910,8 +904,8 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     if( !displ_opts->m_DisplayPolarCood )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
-        dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-        dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
+        double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
+        double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
         dXpos = To_User_Unit( GetUserUnits(), dx );
         dYpos = To_User_Unit( GetUserUnits(), dy );
 

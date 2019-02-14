@@ -222,7 +222,6 @@ void SCH_BASE_FRAME::SetTitleBlock( const TITLE_BLOCK& aTitleBlock )
 void SCH_BASE_FRAME::UpdateStatusBar()
 {
     wxString        line;
-    int             dx, dy;
     BASE_SCREEN*    screen = GetScreen();
 
     if( !screen )
@@ -246,18 +245,18 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     switch( GetUserUnits() )
     {
     case INCHES:
-        absformatter = wxT( "X %.3f  Y %.3f" );
-        locformatter = wxT( "dx %.3f  dy %.3f  dist %.3f" );
+        absformatter = "X %.3f  Y %.3f";
+        locformatter = "dx %.3f  dy %.3f  dist %.3f";
         break;
 
     case MILLIMETRES:
-        absformatter = wxT( "X %.2f  Y %.2f" );
-        locformatter = wxT( "dx %.2f  dy %.2f  dist %.2f" );
+        absformatter = "X %.2f  Y %.2f";
+        locformatter = "dx %.2f  dy %.2f  dist %.2f";
         break;
 
     case UNSCALED_UNITS:
-        absformatter = wxT( "X %f  Y %f" );
-        locformatter = wxT( "dx %f  dy %f  dist %f" );
+        absformatter = "X %f  Y %f";
+        locformatter = "dx %f  dy %f  dist %f";
         break;
 
     case DEGREES:
@@ -269,8 +268,8 @@ void SCH_BASE_FRAME::UpdateStatusBar()
     SetStatusText( line, 2 );
 
     // Display relative coordinates:
-    dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;
-    dy = GetCrossHairPosition().y - screen->m_O_Curseur.y;
+    double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
+    double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
 
     dXpos = To_User_Unit( GetUserUnits(), dx );
     dYpos = To_User_Unit( GetUserUnits(), dy );
