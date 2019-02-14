@@ -983,6 +983,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
 
         for( int i = 0; i < collector.GetCount(); i++ )
         {
+            if( ( collector[i]->GetLayerSet() & LSET::AllCuMask() ).none() )
+                collector.Remove( i );
+
             if( collector[i]->Type() == PCB_PAD_T )
             {
                 frame->SendMessageToEESCHEMA( static_cast<BOARD_CONNECTED_ITEM*>( collector[i] ) );
