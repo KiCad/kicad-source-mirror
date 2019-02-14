@@ -40,8 +40,8 @@ polygon           - Sourcecode of the polygon library
 potrace           - Sourcecode of the potrace library, used in bitmap2component
 qa                - Testcases using the python interface
 resources         - Resources for freedesktop mime-types for linux
-scripting         - SWIG Python scripting definitions
-scripts           - Helper scripts for various things
+scripting         - SWIG Python scripting definitions and build scripts
+scripts           - Example scripts for distribution with KiCad
 template          - Project and pagelayout templates
 tools             - Other miscellaneous helpers for testing
 utils             - Small utils for kicad, e.g. IDF tools
