@@ -9,17 +9,17 @@ import os
 from shutil import copy, rmtree
 from subprocess import call
 
-ICON_SOURCES = "../bitmaps_png/sources/"
+ICON_SOURCES = "../../bitmaps_png/sources/"
 
 ICONS = [
-    ("bitmap2component", ("bitmap2component",), "../bitmap2component"),
-    ("cvpcb", ("cvpcb", "cvpcb_doc"), "../cvpcb"),
-    ("eeschema", ("eeschema", "eeschema_doc"), "../eeschema"),
-    ("gerbview", ("gerbview", "gerbview_doc"), "../gerbview"),
-    ("kicad", ("kicad", "kicad_doc"), "../kicad"),
-    ("pagelayout_editor", ("pl_editor", "pl_editor_doc"), "../pagelayout_editor"),
-    ("pcbcalculator", ("pcb_calculator",), "../pcb_calculator"),
-    ("pcbnew", ("pcbnew", "pcbnew_doc"), "../pcbnew")
+    ("bitmap2component", ("bitmap2component",), "../../bitmap2component"),
+    ("cvpcb", ("cvpcb", "cvpcb_doc"), "../../cvpcb"),
+    ("eeschema", ("eeschema", "eeschema_doc"), "../../eeschema"),
+    ("gerbview", ("gerbview", "gerbview_doc"), "../../gerbview"),
+    ("kicad", ("kicad", "kicad_doc"), "../../kicad"),
+    ("pagelayout_editor", ("pl_editor", "pl_editor_doc"), "../../pagelayout_editor"),
+    ("pcbcalculator", ("pcb_calculator",), "../../pcb_calculator"),
+    ("pcbnew", ("pcbnew", "pcbnew_doc"), "../../pcbnew")
 ]
 
 SIZES = [
