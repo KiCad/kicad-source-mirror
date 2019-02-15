@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -407,6 +408,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     m_gal->SetIsStroke( true );
     m_gal->SetStrokeColor( color );
     m_gal->SetGlyphSize( VECTOR2D( aField->GetTextSize() ) );
+    m_gal->SetFontItalic( aField->IsItalic() );
 
     m_gal->SetHorizontalJustify( aField->GetHorizJustify( ) );
     m_gal->SetVerticalJustify( aField->GetVertJustify( ) );
