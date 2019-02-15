@@ -79,8 +79,21 @@ public:
     template <class Visitor>
     void Query( const BOX2I& aBounds, Visitor& aVisitor )    // const
     {
-        const int   mmin[2] = { aBounds.GetX(), aBounds.GetY() };
-        const int   mmax[2] = { aBounds.GetRight(), aBounds.GetBottom() };
+        int   mmin[2] = { aBounds.GetX(), aBounds.GetY() };
+        int   mmax[2] = { aBounds.GetRight(), aBounds.GetBottom() };
+
+        // We frequently use the maximum bounding box to recache all items
+        // or for any item that overflows the integer width limits of BBOX2I
+        // in this case, we search the full rtree whose bounds are absolute
+        // coordinates rather than relative
+        BOX2I max_box;
+        max_box.SetMaximum();
+
+        if( aBounds == max_box )
+        {
+            mmin[0] = mmin[1] = INT_MIN;
+            mmax[0] = mmax[1] = INT_MAX;
+        }
 
         VIEW_RTREE_BASE::Search( mmin, mmax, aVisitor );
     }
