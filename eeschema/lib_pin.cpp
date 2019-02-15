@@ -600,7 +600,7 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
     // They are drawn in GetInvisibleItemColor().
     if( ! IsVisible() )
     {
-        bool drawHidden = false;
+        bool drawHidden = true;
 
         if( aPanel && aPanel->GetParent() )
         {
@@ -608,8 +608,6 @@ void LIB_PIN::drawGraphic( EDA_DRAW_PANEL*  aPanel,
 
             if( frame->IsType( FRAME_SCH ) )
                 drawHidden = static_cast<SCH_EDIT_FRAME*>( frame )->GetShowAllPins();
-            else if( frame->IsType( FRAME_SCH_LIB_EDITOR ) )
-                drawHidden = true;      // must be able to edit
         }
 
         if( !drawHidden )

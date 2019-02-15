@@ -100,6 +100,8 @@ bool DIALOG_LIB_EDIT_PIN::TransferDataToWindow()
     m_checkApplyToAllConversions->SetValue( m_pin->GetConvert() == 0 );
     m_checkShow->SetValue( m_pin->IsVisible() );
 
+    m_dummyPin->SetVisible( m_pin->IsVisible() );
+
     return true;
 }
 
@@ -157,7 +159,7 @@ void DIALOG_LIB_EDIT_PIN::OnPaintShowPanel( wxPaintEvent& event )
     m_dummyPin->SetParent( libframe->GetCurPart() );
 
     // Calculate a suitable scale to fit the available draw area
-    EDA_RECT bBox = m_dummyPin->GetBoundingBox();
+    EDA_RECT bBox = m_dummyPin->GetBoundingBox( true );
     double xscale    = (double) dc_size.x / bBox.GetWidth();
     double yscale = (double) dc_size.y / bBox.GetHeight();
     double scale = std::min( xscale, yscale );
