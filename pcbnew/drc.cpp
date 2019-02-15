@@ -1099,6 +1099,10 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         if( !pad->IsOnLayer( aItem->GetLayer() ) )
             continue;
 
+        // Graphic items are allowed to act as net-ties within their own footprint
+        if( pad->GetParent() == aItem->GetParent() )
+            continue;
+
         const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
