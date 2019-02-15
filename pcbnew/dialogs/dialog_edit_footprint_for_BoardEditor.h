@@ -65,6 +65,7 @@ private:
     wxGrid*                          m_delayedFocusGrid;
     int                              m_delayedFocusRow;
     int                              m_delayedFocusColumn;
+    bool                             m_initialFocus;
 
     bool                             m_inSelect;
 

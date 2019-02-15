@@ -64,6 +64,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR::DIALOG_FOOTPRINT_BOARD_EDITOR( PCB_EDIT_FRAME* aP
     m_netClearance( aParent, m_NetClearanceLabel, m_NetClearanceCtrl, m_NetClearanceUnits, false, 0 ),
     m_solderMask( aParent, m_SolderMaskMarginLabel, m_SolderMaskMarginCtrl, m_SolderMaskMarginUnits ),
     m_solderPaste( aParent, m_SolderPasteMarginLabel, m_SolderPasteMarginCtrl, m_SolderPasteMarginUnits ),
+    m_initialFocus( true ),
     m_inSelect( false )
 {
     m_config = Kiface().KifaceSettings();
@@ -862,17 +863,23 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnUpdateUI( wxUpdateUIEvent&  )
 
         grid->SetFocus();
         grid->MakeCellVisible( row, col );
-        grid->SetGridCursor( row, col );
 
-        grid->EnableCellEditControl( true );
-        grid->ShowCellEditControl();
-
-        if( grid == m_itemsGrid && row == 0 && col == 0 )
+        // Selecting the first grid item only makes sense for the
+        // items grid
+        if( !m_initialFocus || grid == m_itemsGrid )
         {
-            auto referenceEditor = grid->GetCellEditor( 0, 0 );
-            SelectReferenceNumber( dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) );
-            referenceEditor->DecRef();
+            grid->SetGridCursor( row, col );
+            grid->EnableCellEditControl( true );
+            grid->ShowCellEditControl();
+
+            if( grid == m_itemsGrid && row == 0 && col == 0 )
+            {
+                auto referenceEditor = grid->GetCellEditor( 0, 0 );
+                SelectReferenceNumber( dynamic_cast<wxTextEntry*>( referenceEditor->GetControl() ) );
+                referenceEditor->DecRef();
+            }
         }
+        m_initialFocus = false;
     }
 }
 
