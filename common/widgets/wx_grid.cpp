@@ -237,7 +237,13 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
-            size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
+        {
+            // If we have text, get the size.  Otherwise, use a placeholder for the checkbox
+            if( GetTable()->CanGetValueAs( row, aCol, wxGRID_VALUE_STRING ) )
+                size = std::max( size, GetTextExtent( GetCellValue( row, aCol ) + "M" ).x );
+            else
+                size = std::max( size, GetTextExtent( "MM" ).x );
+        }
     }
 
     return size;

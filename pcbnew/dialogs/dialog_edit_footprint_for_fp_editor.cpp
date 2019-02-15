@@ -307,6 +307,7 @@ bool DIALOG_FOOTPRINT_FP_EDITOR::TransferDataToWindow()
     }
 
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, true, true, true ) );
+    m_modelsGrid->SetColSize( 1, m_modelsGrid->GetVisibleWidth( 1, true, false, false ) );
 
     Layout();
     adjustGridColumns( m_itemsGrid->GetRect().GetWidth());
@@ -779,7 +780,9 @@ void DIALOG_FOOTPRINT_FP_EDITOR::adjustGridColumns( int aWidth )
     for( int i = 1; i < m_itemsGrid->GetNumberCols(); i++ )
         itemsWidth -= m_itemsGrid->GetColSize( i );
 
-    m_itemsGrid->SetColSize( 0, std::max( itemsWidth, 120 ) );
+    if( itemsWidth > 0 )
+        m_itemsGrid->SetColSize( 0, std::max( itemsWidth,
+                m_itemsGrid->GetVisibleWidth( 0, true, false, false ) ) );
 
     m_modelsGrid->SetColSize( 0, modelsWidth - m_modelsGrid->GetColSize( 1 ) - 5 );
 }
