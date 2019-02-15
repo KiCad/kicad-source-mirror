@@ -63,7 +63,7 @@ static const wxString FilterFootprintEntry = "FilterFootprint";
 BEGIN_EVENT_TABLE( CVPCB_MAINFRAME, KIWAY_PLAYER )
 
     // Menu events
-    EVT_MENU( wxID_SAVE, CVPCB_MAINFRAME::OnSaveAndContinue )
+    EVT_MENU( ID_SAVE_PROJECT, CVPCB_MAINFRAME::OnSaveAndContinue )
     EVT_MENU( wxID_EXIT, CVPCB_MAINFRAME::OnQuit )
     EVT_MENU( wxID_HELP, CVPCB_MAINFRAME::GetKicadHelp )
     EVT_MENU( wxID_ABOUT, CVPCB_MAINFRAME::GetKicadAbout )
@@ -189,7 +189,7 @@ CVPCB_MAINFRAME::CVPCB_MAINFRAME( KIWAY* aKiway, wxWindow* aParent ) :
     auto buttonsSizer = new wxBoxSizer( wxHORIZONTAL );
     auto sdbSizer = new wxStdDialogButtonSizer();
 
-    m_saveAndContinue = new wxButton( bottomPanel, wxID_SAVE,
+    m_saveAndContinue = new wxButton( bottomPanel, ID_SAVE_PROJECT,
                                       _( "Apply, Save Schematic && Continue" ) );
     buttonsSizer->Add( m_saveAndContinue, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 20 );
 

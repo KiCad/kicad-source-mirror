@@ -53,7 +53,7 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     wxMenu* filesMenu = new wxMenu;
 
     // Save the footprints back into eeschema
-    AddMenuItem( filesMenu, wxID_SAVE,
+    AddMenuItem( filesMenu, ID_SAVE_PROJECT,
                  _( "&Save Schematic\tCtrl+S" ),
                  SAVE_HLP_MSG,
                  KiBitmap( save_xpm ) );
