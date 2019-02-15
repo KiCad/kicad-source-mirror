@@ -365,7 +365,8 @@ int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString c
 {
     if( aCol == 0 )
     {
-        int padding = m_widget->GetTextExtent( "MM" ).x;
+        int padding = m_widget->GetTextExtent( "M" ).x;
+        int indent = m_widget->GetIndent();
         int longest = m_widget->GetTextExtent( aHeading ).x;
 
         for( auto& node : aTree.Children )
@@ -376,7 +377,7 @@ int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString c
                 continue;
 
             if( node->Score > 0 )
-                longest = std::max( longest, node->VisLen + padding );
+                longest = std::max( longest, node->VisLen + padding + indent );
 
             if( !m_widget->IsExpanded( item ) )
                 continue;
@@ -384,7 +385,7 @@ int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString c
             for( auto& childNode : node->Children )
             {
                 if( childNode->Score > 0 )
-                    longest = std::max( longest, childNode->VisLen + 2 * padding );
+                    longest = std::max( longest, childNode->VisLen + padding + 2 * indent );
             }
         }
 
