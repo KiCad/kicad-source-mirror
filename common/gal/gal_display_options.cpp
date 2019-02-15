@@ -71,7 +71,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, const wxString& aBaseN
     aCfg->Read( aBaseName + GalGridMaxDensityConfig, &m_gridMinSpacing, 10 );
     aCfg->Read( aBaseName + GalGridAxesEnabledConfig, &m_axesEnabled, false );
     aCfg->Read( aBaseName + GalFullscreenCursorConfig, &m_fullscreenCursor, false );
-    aCfg->Read( aBaseName + GalForceDisplayCursorConfig, &m_forceDisplayCursor, false );
+    aCfg->Read( aBaseName + GalForceDisplayCursorConfig, &m_forceDisplayCursor, true );
 
     NotifyChanged();
 }

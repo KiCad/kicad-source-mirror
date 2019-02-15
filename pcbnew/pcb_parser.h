@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 CERN
- * Copyright (C) 2012-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -239,7 +239,7 @@ class PCB_PARSER : public PCB_LEXER
         // larger or smaller than those board units represent undefined behavior for
         // the system.  We limit values to the largest that is visible on the screen
         // This is the diagonal distance of the full screen ~1.5m
-        double int_limit = std::numeric_limits<int>::max() * M_SQRT1_2f64;
+        double int_limit = std::numeric_limits<int>::max() * 0.7071;    // 0.7071 = roughly 1/sqrt(2)
         return KiROUND( Clamp<double>( -int_limit, retval, int_limit ) );
     }
 
@@ -250,7 +250,7 @@ class PCB_PARSER : public PCB_LEXER
         // N.B. we currently represent board units as integers.  Any values that are
         // larger or smaller than those board units represent undefined behavior for
         // the system.  We limit values to the largest that is visible on the screen
-        double int_limit = std::numeric_limits<int>::max() * M_SQRT1_2f64;
+        double int_limit = std::numeric_limits<int>::max() * 0.7071;
 
         // Use here KiROUND, not KIROUND (see comments about them)
         // when having a function as argument, because it will be called twice
