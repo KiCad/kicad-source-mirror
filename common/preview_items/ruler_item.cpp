@@ -238,8 +238,8 @@ void RULER_ITEM::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
     auto& gal = *aView->GetGAL();
     auto rs = static_cast<KIGFX::RENDER_SETTINGS*>( aView->GetPainter()->GetSettings() );
 
-    const auto origin = m_geomMgr.GetOrigin();
-    const auto end = m_geomMgr.GetEnd();
+    VECTOR2D origin = m_geomMgr.GetOrigin();
+    VECTOR2D end = m_geomMgr.GetEnd();
 
     gal.SetLineWidth( 1.0 );
     gal.SetIsStroke( true );
