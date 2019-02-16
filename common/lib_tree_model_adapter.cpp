@@ -377,7 +377,13 @@ int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString c
                 continue;
 
             if( node->Score > 0 )
+            {
+                // Ensure the text size is up to date:
+                if( node->VisLen == 0 )
+                    node->VisLen = m_widget->GetTextExtent( node->Name ).x;
+
                 longest = std::max( longest, node->VisLen + padding + indent );
+            }
 
             if( !m_widget->IsExpanded( item ) )
                 continue;
@@ -385,7 +391,12 @@ int LIB_TREE_MODEL_ADAPTER::ColWidth( LIB_TREE_NODE& aTree, int aCol, wxString c
             for( auto& childNode : node->Children )
             {
                 if( childNode->Score > 0 )
+                {
+                    if( childNode->VisLen == 0 )
+                        childNode->VisLen = m_widget->GetTextExtent( childNode->Name ).x;
+
                     longest = std::max( longest, childNode->VisLen + padding + 2 * indent );
+                }
             }
         }
 
