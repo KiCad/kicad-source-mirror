@@ -64,7 +64,19 @@ COMMIT& COMMIT::Stage( EDA_ITEM* aItem, CHANGE_TYPE aChangeType )
         case CHT_MODIFY:
         {
             EDA_ITEM* parent = parentObject( aItem );
-            return createModified( parent, parent->Clone(), flag );
+            EDA_ITEM* clone = nullptr;
+
+            assert( parent );
+
+            if( parent )
+                clone = parent->Clone();
+
+            assert( clone );
+
+            if( clone )
+                return createModified( parent, clone, flag );
+
+            break;
         }
 
         default:
