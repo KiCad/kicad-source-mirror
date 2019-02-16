@@ -346,11 +346,13 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
     return refresh;
 }
 
+
 double OPENGL_GAL::getWorldPixelSize() const
 {
     auto matrix = GetScreenWorldMatrix();
     return std::min( std::abs( matrix.GetScale().x ), std::abs( matrix.GetScale().y ) );
 }
+
 
 VECTOR2D OPENGL_GAL::getScreenPixelSize() const
 {

@@ -309,7 +309,7 @@ protected:
      */
     unsigned int getNewGroupNumber();
 
-    void syncLineWidth( bool aForceWidth = false, double aWidth = 0.0);
+    void syncLineWidth( bool aForceWidth = false, double aWidth = 0.0 );
     void updateWorldScreenMatrix();
     const VECTOR2D roundp( const VECTOR2D& v );
 

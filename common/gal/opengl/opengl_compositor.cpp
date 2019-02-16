@@ -405,6 +405,7 @@ void OPENGL_COMPOSITOR::clean()
     m_initialized = false;
 }
 
+
 int OPENGL_COMPOSITOR::GetAntialiasSupersamplingFactor() const
 {
     switch( m_currentAntialiasingMode )

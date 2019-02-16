@@ -93,6 +93,7 @@ void CAIRO_GAL_BASE::updateWorldScreenMatrix()
     cairo_matrix_multiply( &currentWorld2Screen, &currentXform, &cairoWorldScreenMatrix );
 }
 
+
 const VECTOR2D CAIRO_GAL_BASE::xform( double x, double y )
 {
     VECTOR2D rv;
@@ -102,10 +103,12 @@ const VECTOR2D CAIRO_GAL_BASE::xform( double x, double y )
     return rv;
 }
 
+
 const VECTOR2D CAIRO_GAL_BASE::xform( const VECTOR2D& aP )
 {
-    return xform(aP.x, aP.y);
+    return xform( aP.x, aP.y );
 }
+
 
 const double CAIRO_GAL_BASE::xform( double x )
 {
@@ -114,14 +117,16 @@ const double CAIRO_GAL_BASE::xform( double x )
     return sqrt( dx * dx + dy * dy );
 }
 
+
 static double roundp( double x )
 {
     return floor( x + 0.5 ) + 0.5;
 }
 
+
 const VECTOR2D CAIRO_GAL_BASE::roundp( const VECTOR2D& v )
 {
-    if ( lineWidthIsOdd )
+    if( lineWidthIsOdd )
         return VECTOR2D( ::roundp( v.x ), ::roundp( v.y ) );
     else
         return VECTOR2D( floor( v.x + 0.5 ), floor( v.y + 0.5 ) );
@@ -164,6 +169,7 @@ void CAIRO_GAL_BASE::syncLineWidth( bool aForceWidth, double aWidth )
 
     lineWidthInPixels = w;
 }
+
 
 void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint,
                              double aWidth )
@@ -223,7 +229,7 @@ void CAIRO_GAL_BASE::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
     auto r = ::roundp( xform( aRadius ) );
 
     cairo_new_sub_path( currentContext );
-    cairo_arc( currentContext, c.x, c.y, r, 0.0, 2 * M_PI);
+    cairo_arc( currentContext, c.x, c.y, r, 0.0, 2 * M_PI );
     cairo_close_path( currentContext );
     flushPath();
     isElementAdded = true;
@@ -265,7 +271,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
         SetStrokeColor( fgcolor );
     }
 
-    cairo_set_line_width(currentContext, lineWidthInPixels );
+    cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
     cairo_arc( currentContext, c.x, c.y, r, aStartAngle, aEndAngle );
     flushPath();
@@ -849,6 +855,7 @@ void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& 
     cairo_stroke( currentContext );
 }
 
+
 void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
 {
     auto p = roundp( xform( aPoint ) );
@@ -861,12 +868,12 @@ void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
 
     cairo_set_line_join( currentContext, CAIRO_LINE_JOIN_MITER );
     cairo_set_line_cap( currentContext, CAIRO_LINE_CAP_BUTT );
-    cairo_set_line_width( currentContext, 1.0 ); //floor( aSize + 0.5 ) - 0.5 );
+    cairo_set_line_width( currentContext, 1.0 );
 
-    cairo_move_to( currentContext, p.x - s, p.y - s);
-    cairo_line_to( currentContext, p.x + s, p.y - s);
-    cairo_line_to( currentContext, p.x + s, p.y + s);
-    cairo_line_to( currentContext, p.x - s, p.y + s);
+    cairo_move_to( currentContext, p.x - s, p.y - s );
+    cairo_line_to( currentContext, p.x + s, p.y - s );
+    cairo_line_to( currentContext, p.x + s, p.y + s );
+    cairo_line_to( currentContext, p.x - s, p.y + s );
     cairo_close_path( currentContext );
 
     cairo_fill( currentContext );
@@ -1342,7 +1349,6 @@ void CAIRO_GAL::setCompositor()
     compositor->Resize( screenSize.x, screenSize.y );
     compositor->SetAntialiasingMode( options.cairo_antialiasing_mode );
 
-
     // Prepare buffers
     mainBuffer = compositor->CreateBuffer();
     overlayBuffer = compositor->CreateBuffer();
@@ -1387,6 +1393,7 @@ bool CAIRO_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     return refresh;
 }
+
 
 void CAIRO_GAL_BASE::DrawGrid()
 {

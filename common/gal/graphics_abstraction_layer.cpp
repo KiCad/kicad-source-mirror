@@ -213,7 +213,6 @@ double GAL::computeMinGridSpacing() const
 }
 
 
-
 VECTOR2D GAL::GetGridPoint( const VECTOR2D& aPoint ) const
 {
 #if 0
