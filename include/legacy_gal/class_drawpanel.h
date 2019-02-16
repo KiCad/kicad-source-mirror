@@ -218,7 +218,7 @@ public:
      virtual void EraseScreen( wxDC* DC ) { printf("EDA_DRAW_PANEL:Unimplemented6\n");  };;
 
     virtual void SetZoom( double mode ) { printf("EDA_DRAW_PANEL:Unimplemented7\n");  };;
-    virtual double GetZoom() { printf("EDA_DRAW_PANEL:Unimplemented8\n"); return 1.0; };;
+    virtual double GetZoom() { return 1.0; };;
 
     //virtual void SetGrid( const wxRealPoint& size ) { printf("EDA_DRAW_PANEL:Unimplemented\n");  };;
     //virtual wxRealPoint GetGrid() { printf("EDA_DRAW_PANEL:Unimplemented\n"); return wxRealPoint(1.0, 1.0); };;
@@ -268,7 +268,7 @@ public:
      * Function GetScreenCenterLogicalPosition
      * @return The current screen center position in logical (drawing) units.
      */
-    virtual wxPoint GetScreenCenterLogicalPosition() { printf("EDA_DRAW_PANEL:Unimplemented13\n"); return wxPoint(0, 0); };;
+    virtual wxPoint GetScreenCenterLogicalPosition() { return wxPoint(0, 0); };;
 
     /**
      * Function MoveCursorToCrossHair
