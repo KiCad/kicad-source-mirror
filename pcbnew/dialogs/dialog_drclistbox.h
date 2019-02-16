@@ -197,6 +197,7 @@ public:
             long style = 0, const wxString choices[] = NULL, int unused = 0)
         : wxHtmlListBox( parent, id, pos, size, style )
     {
+        m_units = MILLIMETRES;
         m_list = 0;
     }
 

@@ -45,6 +45,7 @@ BLOCK_SELECTOR::BLOCK_SELECTOR() :
     m_state   = STATE_NO_BLOCK; // State (enum BLOCK_STATE_T) of block.
     m_command = BLOCK_IDLE;     // Type (enum BLOCK_COMMAND_T) of operation.
     m_color   = BROWN;
+    m_appendUndo = false;
 }
 
 

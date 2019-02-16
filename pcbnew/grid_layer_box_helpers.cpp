@@ -78,8 +78,7 @@ void GRID_CELL_LAYER_RENDERER::Draw( wxGrid& aGrid, wxGridCellAttr& aAttr, wxDC&
 
 
 GRID_CELL_LAYER_SELECTOR::GRID_CELL_LAYER_SELECTOR( PCB_BASE_FRAME* aFrame, LSET aMask ) :
-        m_frame( aFrame ),
-        m_mask( aMask )
+        m_frame( aFrame ), m_mask( aMask ), m_value( 0 )
 {
 }
 

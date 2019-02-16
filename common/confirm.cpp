@@ -52,7 +52,8 @@ KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
 
 KIDIALOG::KIDIALOG( wxWindow* aParent, const wxString& aMessage,
         KD_TYPE aType, const wxString& aCaption )
-    : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) )
+    : wxRichMessageDialog( aParent, aMessage, getCaption( aType, aCaption ), getStyle( aType ) ),
+      m_hash( 0 )
 {
 }
 

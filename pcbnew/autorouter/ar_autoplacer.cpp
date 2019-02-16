@@ -87,6 +87,7 @@ AR_AUTOPLACER::AR_AUTOPLACER( BOARD* aBoard )
     m_gridSize = Millimeter2iu( STEP_AR_MM );
     m_progressReporter = nullptr;
     m_refreshCallback = nullptr;
+    m_minCost = 0.0;
 }
 
 
