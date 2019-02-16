@@ -5,7 +5,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,6 +98,7 @@ private:
     void OnAliasNameText( wxCommandEvent& event ) override;
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
+    void OnFilterDClick( wxMouseEvent& event ) override;
 
     void updateAliasName( bool aFromGrid, const wxString& aName );
     bool checkAliasName( const wxString& aName );

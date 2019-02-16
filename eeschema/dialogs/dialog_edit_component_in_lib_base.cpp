@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 23 2018)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -487,6 +487,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_aliasGrid->Connect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeAliasGrid ), NULL, this );
 	m_AliasNameCtrl->Connect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameKillFocus ), NULL, this );
 	m_AliasNameCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameText ), NULL, this );
+	m_FootprintFilterListBox->Connect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnFilterDClick ), NULL, this );
+	m_FootprintFilterListBox->Connect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddFootprintFilter ), NULL, this );
 	m_editFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_deleteFilterButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteFootprintFilter ), NULL, this );
@@ -510,6 +512,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::~DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE()
 	m_aliasGrid->Disconnect( wxEVT_SIZE, wxSizeEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnSizeAliasGrid ), NULL, this );
 	m_AliasNameCtrl->Disconnect( wxEVT_KILL_FOCUS, wxFocusEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameKillFocus ), NULL, this );
 	m_AliasNameCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAliasNameText ), NULL, this );
+	m_FootprintFilterListBox->Disconnect( wxEVT_LEFT_DCLICK, wxMouseEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnFilterDClick ), NULL, this );
+	m_FootprintFilterListBox->Disconnect( wxEVT_COMMAND_LISTBOX_DOUBLECLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_addFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnAddFootprintFilter ), NULL, this );
 	m_editFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnEditFootprintFilter ), NULL, this );
 	m_deleteFilterButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::OnDeleteFootprintFilter ), NULL, this );
