@@ -383,6 +383,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
         // The alternate symbol may cause a change in the connection status so test the
         // connections so the connection indicators are drawn correctly.
+        aComponent->UpdatePinCache();
         TestDanglingEnds();
         aComponent->ClearFlags();
         aComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
