@@ -137,6 +137,7 @@ public:
         m_running( false ),
         m_args( 0 ),
         m_callContext( nullptr ),
+        m_caller( nullptr ),
         m_callee( nullptr ),
         m_retVal( 0 )
     {

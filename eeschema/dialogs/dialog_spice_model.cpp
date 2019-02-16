@@ -95,7 +95,7 @@ static int getModelTypeIdx( char aPrimitive )
 
 DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, SCH_FIELDS* aFields )
     : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_schfields( aFields ),
-      m_useSchFields( true ),
+      m_libfields( nullptr ), m_useSchFields( true ),
       m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
 {
     Init();
@@ -103,7 +103,7 @@ DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aCompo
 
 
 DIALOG_SPICE_MODEL::DIALOG_SPICE_MODEL( wxWindow* aParent, SCH_COMPONENT& aComponent, LIB_FIELDS* aFields )
-    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ),
+    : DIALOG_SPICE_MODEL_BASE( aParent ), m_component( aComponent ), m_schfields( nullptr ),
       m_libfields( aFields ), m_useSchFields( false ),
       m_spiceEmptyValidator( true ), m_notEmptyValidator( wxFILTER_EMPTY )
 {

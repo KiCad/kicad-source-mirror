@@ -29,7 +29,8 @@
 
 DIALOG_GLOBAL_LIB_TABLE_CONFIG::DIALOG_GLOBAL_LIB_TABLE_CONFIG( wxWindow* aParent,
                                                                 const wxString& aTableName  ) :
-    DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent )
+    DIALOG_GLOBAL_LIB_TABLE_CONFIG_BASE( aParent ),
+    m_defaultFileFound( false )
 {
     m_tableName = aTableName;
 

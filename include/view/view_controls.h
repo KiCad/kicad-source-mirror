@@ -109,7 +109,8 @@ struct VC_SETTINGS
 class VIEW_CONTROLS
 {
 public:
-    VIEW_CONTROLS( VIEW* aView ) : m_view( aView )
+    VIEW_CONTROLS( VIEW* aView ) :
+        m_view( aView ), m_cursorWarped( false )
     {
     }
 
