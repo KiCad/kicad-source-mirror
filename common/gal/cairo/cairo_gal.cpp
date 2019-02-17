@@ -188,6 +188,10 @@ void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& a
     }
     else
     {
+        aWidth /= 2.0;
+        SetLineWidth( 1.0 );
+        syncLineWidth();
+
         // Outline mode for tracks
         VECTOR2D startEndVector = aEndPoint - aStartPoint;
         double   lineAngle      = atan2( startEndVector.y, startEndVector.x );
@@ -195,13 +199,13 @@ void CAIRO_GAL_BASE::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& a
         double sa = sin( lineAngle + M_PI / 2.0 );
         double ca = cos( lineAngle + M_PI / 2.0 );
 
-        auto pa0 = roundp( xform ( aStartPoint + VECTOR2D(aWidth * ca, aWidth * sa ) ) );
-        auto pa1 = roundp( xform ( aStartPoint - VECTOR2D(aWidth * ca, aWidth * sa ) ) );
-        auto pb0 = roundp( xform ( aEndPoint + VECTOR2D(aWidth * ca, aWidth * sa ) ) );
-        auto pb1 = roundp( xform ( aEndPoint - VECTOR2D(aWidth * ca, aWidth * sa ) ) );
-        auto pa = roundp( xform( aStartPoint ) );
-        auto pb = roundp( xform( aEndPoint ) );
-        auto rb = ::roundp( (pa0 - pa).EuclideanNorm() );
+        auto pa0 = xform ( aStartPoint + VECTOR2D(aWidth * ca, aWidth * sa ) );
+        auto pa1 = xform ( aStartPoint - VECTOR2D(aWidth * ca, aWidth * sa ) );
+        auto pb0 = xform ( aEndPoint + VECTOR2D(aWidth * ca, aWidth * sa ) );
+        auto pb1 = xform ( aEndPoint - VECTOR2D(aWidth * ca, aWidth * sa ) );
+        auto pa = xform( aStartPoint );
+        auto pb = xform( aEndPoint );
+        auto rb = (pa0 - pa).EuclideanNorm();
 
         cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
