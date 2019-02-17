@@ -149,10 +149,9 @@ void computeLineCoords( bool posture, vec2 vs, vec2 vp, vec2 texcoord, vec2 dir,
 void computeCircleCoords( float vertexIndex, float radius, float lineWidth )
 {
     vec4 delta;
-    vec4 center = roundv(gl_ModelViewProjectionMatrix * gl_Vertex + vec4(1, 1, 0, 0), screenPixelSize);
-    float pixelWidth = roundr(lineWidth / worldPixelSize, 1.0);
-    float pixelR =  roundr(radius / worldPixelSize, 1.0);
-    //float pixelWidth = lineWidth / worldPixelSize;
+    vec4 center = roundv( gl_ModelViewProjectionMatrix * gl_Vertex + vec4(1, 1, 0, 0), screenPixelSize );
+    float pixelWidth = roundr( lineWidth / worldPixelSize, 1.0);
+    float pixelR =  roundr( radius / worldPixelSize, 1.0);
 
     vec4 adjust = vec4(-1, -1, 0, 0);
 
@@ -162,19 +161,33 @@ void computeCircleCoords( float vertexIndex, float radius, float lineWidth )
     if( vertexIndex == 1.0 )
     {
         circleCoords = vec2( -sqrt( 3.0 ), -1.0 );
-        delta = vec4(- pixelR * sqrt(3.0), -pixelR, 0, 0);
+        delta = vec4( -pixelR * sqrt(3.0), -pixelR, 0, 0 );
     }
     else if( vertexIndex == 2.0 )
     {
         circleCoords = vec2( sqrt( 3.0 ), -1.0 );
-        delta = vec4( pixelR * sqrt(3.0), -pixelR, 0, 0);
+        delta = vec4( pixelR * sqrt( 3.0 ), -pixelR, 0, 0 );
     }
     else if( vertexIndex == 3.0 )
     {
         circleCoords = vec2( 0.0, 2.0 );
-        delta = vec4(0, 2*pixelR, 0, 0);
+        delta = vec4( 0, 2 * pixelR, 0, 0 );
     }
-
+    else if( vertexIndex == 4.0 )
+    {
+        circleCoords = vec2( -sqrt( 3.0 ), 0.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
+    else if( vertexIndex == 5.0 )
+    {
+        circleCoords = vec2( sqrt( 3.0 ), 0.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
+    else if( vertexIndex == 6.0 )
+    {
+        circleCoords = vec2( 0.0, 2.0 );
+        delta = vec4( 0, 0, 0, 0 );
+    }
 
     shaderParams[2] = pixelR;
     shaderParams[3] = pixelWidth;

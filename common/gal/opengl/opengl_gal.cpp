@@ -617,6 +617,7 @@ void OPENGL_GAL::DrawSegment( const VECTOR2D& aStartPoint, const VECTOR2D& aEndP
         // Outlined tracks
         double lineLength = startEndVector.EuclideanNorm();
 
+        SetLineWidth( 1.0 );
         currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
 
         Save();
