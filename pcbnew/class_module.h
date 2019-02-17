@@ -116,7 +116,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return PCB_MODULE_T == aItem->Type();
+        return aItem && PCB_MODULE_T == aItem->Type();
     }
 
     MODULE* Next() const { return static_cast<MODULE*>( Pnext ); }

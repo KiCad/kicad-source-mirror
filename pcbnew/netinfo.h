@@ -93,7 +93,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && PCB_T == aItem->Type();
+        return aItem && PCB_NETINFO_T == aItem->Type();
     }
 
     wxString GetClass() const override
