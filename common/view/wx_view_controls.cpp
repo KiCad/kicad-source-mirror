@@ -646,12 +646,6 @@ wxPoint WX_VIEW_CONTROLS::getMouseScreenPosition() const
 
 void WX_VIEW_CONTROLS::UpdateScrollbars()
 {
-#ifdef __WXGTK3__
-    // Until we can handle the repaint events from scroll bar hide/show
-    // todo: Implement area mapping for re-painting scrollbars
-    return;
-#endif
-
     const BOX2D viewport = m_view->GetViewport();
     const BOX2D& boundary = m_view->GetBoundary();
 

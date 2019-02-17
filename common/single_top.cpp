@@ -134,6 +134,10 @@ struct APP_SINGLE_TOP : public wxApp
         {
             wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
         }
+
+        // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause excessive redraw requests
+        wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
+
     }
 #endif
 
