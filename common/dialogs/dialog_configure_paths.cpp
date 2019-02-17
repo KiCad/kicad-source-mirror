@@ -50,7 +50,7 @@ enum SEARCH_PATH_GRID_COLUMNS
 
 DIALOG_CONFIGURE_PATHS::DIALOG_CONFIGURE_PATHS( wxWindow* aParent, FILENAME_RESOLVER* aResolver ) :
     DIALOG_CONFIGURE_PATHS_BASE( aParent ),
-    m_errorGrid( nullptr ),
+    m_errorGrid( nullptr ), m_errorRow( -1 ), m_errorCol( -1 ),
     m_resolver( aResolver ),
     m_gridWidthsDirty( true )
 {

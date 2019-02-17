@@ -52,6 +52,9 @@ class NET_SELECTOR_COMBOPOPUP : public wxPanel, public wxComboPopup
 {
 public:
     NET_SELECTOR_COMBOPOPUP() :
+            m_filterValidator( nullptr ),
+            m_filterCtrl( nullptr ),
+            m_listBox( nullptr ),
             m_minPopupWidth( -1 ),
             m_maxPopupHeight( 1000 ),
             m_netinfoList( nullptr ),

@@ -20,10 +20,10 @@ void screenSpaceLine( KIGFX::GAL* gal, const VECTOR2D& p0, const VECTOR2D& p1, d
 
     auto pa = xform2 ( minv, p0 );
     auto pb = xform2 ( minv, p1 );
-    
+
 #if 0
     //shader->Deactivate();
-        
+
     currentManager->Reserve( 6 );
     currentManager->Shader( SHADER_NONE );
     currentManager->Color( strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
@@ -40,7 +40,7 @@ void screenSpaceLine( KIGFX::GAL* gal, const VECTOR2D& p0, const VECTOR2D& p1, d
     gal->SetLineWidth( w * minv.GetScale().x );
     gal->DrawLine( pa, pb );
 
-    
+
 }
 
 void screenSpaceCircle( KIGFX::GAL* gal, const VECTOR2D& p0, double r, double w )
@@ -80,12 +80,11 @@ public:
     virtual void ViewDraw( int aLayer, KIGFX::VIEW* aView ) const override
     {
         auto gal = aView->GetGAL();
-        int i;
         gal->SetTarget( KIGFX::TARGET_NONCACHED );
         gal->SetIsStroke( true );
         gal->SetStrokeColor( COLOR4D::WHITE );
 
-       /* for(i=0;i < 100; i++)
+       /* for( int i=0;i < 100; i++ )
         {
             gal->SetLineWidth( 10000 );
             gal->DrawLine( VECTOR2I(0, i * 30000), VECTOR2I(1000000, i * 30000) );
@@ -107,53 +106,52 @@ public:
         //gal->Rotate( 1.0 / 3.0 * M_PI );
         for(int step = 10; step < 80; step += 11, k+=100)
         {
+            for (int i = 0; i < 100; i++)
+            {
+                /*auto p0  = VECTOR2D( k + 100, 100 + i * step );
+                auto p1  = VECTOR2D( k + 100 + step/2, 100 + i * step );
+                auto p2  = VECTOR2D( k + 100 + step/2, 100 + i * step + step/2 );
+                auto p3  = VECTOR2D( k + 100, 100 + i * step + step/2 );
+                auto p4  = VECTOR2D( k + 100, 100 + i * step + step );*/
 
-        for (int i = 0; i < 100; i++)
-        {
-            /*auto p0  = VECTOR2D( k + 100, 100 + i * step );
-            auto p1  = VECTOR2D( k + 100 + step/2, 100 + i * step );
-            auto p2  = VECTOR2D( k + 100 + step/2, 100 + i * step + step/2 );
-            auto p3  = VECTOR2D( k + 100, 100 + i * step + step/2 );
-            auto p4  = VECTOR2D( k + 100, 100 + i * step + step );*/
-
-            auto p0  = VECTOR2D( k + 100, 100 + i * step );
-            auto p1  = VECTOR2D( k + 100 + step/2, 100 + i * step );
-            auto p2  = VECTOR2D( k + 100 + step/2, 100 + i * step + step/2 );
-            auto p3  = VECTOR2D( k + 100, 100 + i * step + step/2 );
-            auto p4  = VECTOR2D( k + 100, 100 + i * step + step );
+                auto p0  = VECTOR2D( k + 100, 100 + i * step );
+                auto p1  = VECTOR2D( k + 100 + step/2, 100 + i * step );
+                auto p2  = VECTOR2D( k + 100 + step/2, 100 + i * step + step/2 );
+                auto p3  = VECTOR2D( k + 100, 100 + i * step + step/2 );
+                auto p4  = VECTOR2D( k + 100, 100 + i * step + step );
 
 
-            screenSpaceLine( gal, p0, p1 , w);
-            screenSpaceLine( gal, p3, p2 , w);
-            
-            p0 += VECTOR2D(50, 0);
-            p1 += VECTOR2D(50, 0);
-            p2 += VECTOR2D(50, 0);
-            p3 += VECTOR2D(50, 0);
+                screenSpaceLine( gal, p0, p1 , w);
+                screenSpaceLine( gal, p3, p2 , w);
 
-            screenSpaceLine( gal, p0, p3 , w);
-            screenSpaceLine( gal, p1, p2 , w);
-            
+                p0 += VECTOR2D(50, 0);
+                p1 += VECTOR2D(50, 0);
+                p2 += VECTOR2D(50, 0);
+                p3 += VECTOR2D(50, 0);
 
-          /*  screenSpaceLine( gal, p1, p2 , w);
-            screenSpaceLine( gal, p2, p3 , w);
-            screenSpaceLine( gal, p3, p4 , w);
+                screenSpaceLine( gal, p0, p3 , w);
+                screenSpaceLine( gal, p1, p2 , w);
 
-            std::swap(p0.x, p0.y );
-            std::swap(p1.x, p1.y );
-            std::swap(p2.x, p2.y );
-            std::swap(p3.x, p3.y );
-            std::swap(p4.x, p4.y );
 
-            screenSpaceLine( gal, p0, p1 , w); 
-            screenSpaceLine( gal, p1, p2 , w);
-            screenSpaceLine( gal, p2, p3 , w);
-            screenSpaceLine( gal, p3, p4 , w);*/
-        }
+              /*  screenSpaceLine( gal, p1, p2 , w);
+                screenSpaceLine( gal, p2, p3 , w);
+                screenSpaceLine( gal, p3, p4 , w);
+
+                std::swap(p0.x, p0.y );
+                std::swap(p1.x, p1.y );
+                std::swap(p2.x, p2.y );
+                std::swap(p3.x, p3.y );
+                std::swap(p4.x, p4.y );
+
+                screenSpaceLine( gal, p0, p1 , w);
+                screenSpaceLine( gal, p1, p2 , w);
+                screenSpaceLine( gal, p2, p3 , w);
+                screenSpaceLine( gal, p3, p4 , w);*/
+            }
         }
 
         /*
-        for(i=0;i < 1000; i++)
+        for(int i=0;i < 1000; i++)
         {
             int k = 0;
 
@@ -162,12 +160,12 @@ public:
                 //screenSpaceLine( gal, VECTOR2D( k, i*step ),  VECTOR2D( k, i*step ) + VECTOR2D( 50, 0 ), w );
                 //screenSpaceLine( gal, VECTOR2D( i*step, k ), VECTOR2D( i*step, k ) + VECTOR2D( 0, 50 ), w );
             }
-            
+
 
             //gal->ScreenSpaceQuad( VECTOR2D( 250, 100 + i*8 ), VECTOR2D( 100, 2 ) );
             //gal->ScreenSpaceQuad( VECTOR2D( 400, 100 + i*4 + 0.5 ), VECTOR2D( 100, 1 ) );
             //gal->ScreenSpaceQuad( VECTOR2D( 550, 100 + i*8 + 0.5 ), VECTOR2D( 100, 2 ) );
-            
+
         }*/
 
         for(int i = 1; i < 16; i+=1)
