@@ -130,8 +130,10 @@ bool PANEL_MODEDIT_DEFAULTS::TransferDataToWindow()
     {
         // Set the minimal width to the column label size.
         m_grid->SetColMinimalWidth( col, m_grid->GetVisibleWidth( col, true, false, false ) );
+
         // Set the width to see the full contents
-        m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, true ) );
+        if( m_grid->IsColShown( col ) )
+            m_grid->SetColSize( col, m_grid->GetVisibleWidth( col, true, true, true ) );
     }
 
     m_grid->SetRowLabelSize( m_grid->GetVisibleWidth( -1, true, true, true ) );

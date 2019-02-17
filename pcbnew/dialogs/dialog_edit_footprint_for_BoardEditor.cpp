@@ -387,7 +387,8 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
         if( col == 6 )
             col_size += 20;
 
-        m_itemsGrid->SetColSize( col, col_size );
+        if( m_itemsGrid->IsColShown( col ) )
+            m_itemsGrid->SetColSize( col, col_size );
     }
 
     m_itemsGrid->SetRowLabelSize( m_itemsGrid->GetVisibleWidth( -1, false, true, true ) );
