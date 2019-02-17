@@ -302,7 +302,7 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
         m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
 
-    m_Parent->GetCanvas()->RefreshDrawingRect( m_CurrentText->GetBoundingBox() );
+    m_Parent->GetCanvas()->Refresh();
 
     text = m_activeTextEntry->GetValue();
 
