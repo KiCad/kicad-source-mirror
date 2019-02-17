@@ -254,6 +254,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
                 DuplicateItemsInList( GetScreen(), block->GetItems(), block->GetMoveVector() );
                 block->SetLastCursorPosition( GetCrossHairPosition() );
                 SaveCopyInUndoList( block->GetItems(), UR_NEW );
+                block->SetAppendUndo();
             }
 
             if( block->GetCount() )
