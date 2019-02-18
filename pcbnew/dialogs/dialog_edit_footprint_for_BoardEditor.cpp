@@ -269,13 +269,18 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     m_posY.SetValue( m_footprint->GetPosition().y );
 
     m_OrientValue = m_footprint->GetOrientation() / 10.0;
-    m_Orient0->SetValue( m_OrientValue == 0.0 );
-    m_Orient90->SetValue( m_OrientValue == 90.0 || m_OrientValue == -270.0 );
-    m_Orient270->SetValue( m_OrientValue == 270.0 || m_OrientValue == -90.0 );
-    m_Orient180->SetValue( m_OrientValue == 180.0 || m_OrientValue == -180.0 );
 
-    m_OrientOther->SetValue( !m_Orient0->GetValue() && !m_Orient90->GetValue()
-                             && !m_Orient270->GetValue() && !m_Orient180->GetValue() );
+    if( m_OrientValue == 0.0 )
+        m_Orient0->SetValue( true );
+    else if( m_OrientValue == 90.0 || m_OrientValue == -270.0 )
+        m_Orient90->SetValue( true );
+    else if( m_OrientValue == 270.0 || m_OrientValue == -90.0 )
+        m_Orient270->SetValue( true );
+    else if( m_OrientValue == 180.0 || m_OrientValue == -180.0 )
+        m_Orient180->SetValue( true );
+    else
+        m_OrientOther->SetValue( true );
+
     m_OrientValidator.TransferToWindow();
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
