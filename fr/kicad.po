@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-16 15:05+0100\n"
-"PO-Revision-Date: 2019-02-16 15:09+0100\n"
+"POT-Creation-Date: 2019-02-17 15:57+0100\n"
+"PO-Revision-Date: 2019-02-17 16:13+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
 "Language: fr_FR\n"
@@ -2112,15 +2112,15 @@ msgstr "Hauteur due la page (utilisateur)."
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:142
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:164
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:181
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:34
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:45
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:56
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:32
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:43
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:54
 msgid "unit"
 msgstr "unité"
 
 #: common/dialogs/dialog_page_settings_base.cpp:82
 #: eeschema/dialogs/dialog_edit_line_style_base.cpp:36
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:27
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:25
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:97
 msgid "Width:"
 msgstr "Largeur:"
@@ -3566,7 +3566,7 @@ msgstr "Zoom - sur le tracé."
 msgid "<no net>"
 msgstr "<pas de net>"
 
-#: common/widgets/net_selector.cpp:69
+#: common/widgets/net_selector.cpp:72
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:746
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:784
 msgid "Filter:"
@@ -4459,11 +4459,11 @@ msgstr "Change Visibilité"
 msgid "Failed to open component-footprint link file \"%s\""
 msgstr "Impossible d'ouvrir le fichier lien composant/empreinte \"%s\""
 
-#: eeschema/block.cpp:453
+#: eeschema/block.cpp:454
 msgid "No item to paste."
 msgstr "Pas d'élément à coller."
 
-#: eeschema/block.cpp:488 eeschema/files-io.cpp:473 eeschema/sheet.cpp:276
+#: eeschema/block.cpp:489 eeschema/files-io.cpp:473 eeschema/sheet.cpp:276
 #, c-format
 msgid ""
 "The sheet changes cannot be made because the destination sheet already has "
@@ -5342,14 +5342,14 @@ msgstr "Fixe Orphelins"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:77
 msgid ""
-"If  some components are orphan (the linked symbol is found nowhere),\n"
+"If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
-"libraries"
+"libraries."
 msgstr ""
 "Si certains composants sont orphelins (le symbole lié a été trouvé nulle "
 "part),\n"
 "essaie de trouver un candidat ayant le même nom dans l’une des librairies de "
-"symboles chargées"
+"symboles chargées."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:62
 msgid "Symbol Library References"
@@ -6968,9 +6968,9 @@ msgid "1e-9"
 msgstr "1e-9"
 
 #: eeschema/dialogs/dialog_spice_model_base.cpp:117
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:34
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:45
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:60
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:32
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:43
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:58
 msgid "u"
 msgstr "u"
 
@@ -16541,7 +16541,7 @@ msgstr "Connexions des pads:"
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
 msgid ""
 "Default pad connection type to zone.\n"
-"This setting can be overridden by local  pad settings"
+"This setting can be overridden by local pad settings"
 msgstr ""
 "Type de connexion par défaut des pads à la zone.\n"
 "Ce paramètre peut être remplacé par les paramètres locaux du pad"
@@ -16559,8 +16559,8 @@ msgid "Thermal clearance:"
 msgstr "Longueur frein thermique:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
-msgid "Clearance between pads in the same net and filled areas."
-msgstr "Distance entre pads et la surface remplie."
+msgid "Clearance between pads and filled areas of the same net."
+msgstr "Distance entre pads et la surface remplie du même net."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
 msgid "Thermal spoke width:"
@@ -17012,24 +17012,24 @@ msgstr ""
 "circuit imprimé\n"
 "comme un connecteur de bord de carte (vieux PC ISA bus par exemple)"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:439
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:355
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:440
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:356
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Nom fichier invalide:  %s"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:590
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:538
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:591
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:539
 msgid "Text items must have some content."
 msgstr "Les éléments de texte doivent avoir du contenu."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:735
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:644
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:736
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:645
 msgid "Modify module properties"
 msgstr "Modifier les propriétés de l'empreinte"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:794
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:747
+#: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor.cpp:795
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:748
 msgid "Reference and value are mandatory."
 msgstr "Référence et valeur sont obligatoires."
 
@@ -17187,7 +17187,6 @@ msgid "Pad clearance:"
 msgstr "Isolation pad:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:326
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:228
 msgid ""
 "This is the local net clearance for all pad of this footprint\n"
 "If 0, the Netclass values are used\n"
@@ -17333,11 +17332,11 @@ msgstr "Activer les raccourcis clavier de déplacement et d'auto placement"
 msgid "Disable hotkey move commands and Auto Placement"
 msgstr "Désactiver les raccourcis clavier de déplacement et d'auto placement"
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:494
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:495
 msgid "Footprint must have a name."
 msgstr "L'Empreinte doit avoir un nom."
 
-#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:496
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor.cpp:497
 #, c-format
 msgid "Footprint name may not contain \"%s\"."
 msgstr "Le nom d'empreinte ne peut pas contenir \"%s\"."
@@ -17354,52 +17353,67 @@ msgstr "Nom empreinte:"
 msgid "Set values to 0 to use netclass values."
 msgstr "Mettre les images à 0 pour utiliser les valeurs des netclasses."
 
+#: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:228
+msgid ""
+"This is the local net clearance for all pads of this footprint.\n"
+"If 0, the Netclass values are used.\n"
+"This value can be overridden on a pad-by-pad basis in the Local\n"
+"Clearance and Settings tab of Pad Properties."
+msgstr ""
+"Ceci est l'isolation locale pour tous les pads de cette empreinte\n"
+"Si 0, la valeur en Netclasse sera utilisée\n"
+"Cette valeur peut être remplacée pour chaque pad par une valeur définie\n"
+"dans les Propriétés du Pad, onglet Isolations et Options locales."
+
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:241
 msgid ""
-"This is the local clearance between pads and the solder mask\n"
-"for this footprint\n"
-"This value can be superseded by a pad local value.\n"
-"If 0, the global value is used"
+"This is the local clearance between pads and the solder mask for \n"
+"this footprint.\n"
+"If 0, the global value is used.\n"
+"This value can be overridden on a pad-by-pad basis in the Local\n"
+"Clearance and Settings tab of Pad Properties."
 msgstr ""
 "Ceci est la valeur locale de la marge entre pads et le masque de soudure\n"
-"pour l'empreinte\n"
-"Cette valeur peut être remplacée par une valeur locale du pad\n"
-"Si 0, la valeur globale sera utilisée"
+"pour cette empreinte\n"
+"Si 0, la valeur globale sera utilisée.\n"
+"Cette valeur peut être remplacée pour chaque  pad par une valeur définie\n"
+"dans les Propriétés du Pad, onglet Isolations et Options locales."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:254
 msgid ""
-"This is the local clearance between pads and the solder paste\n"
-"for this footprint.\n"
-"This value can be superseded by a pad local values.\n"
+"This is the local clearance between pads and the solder paste for\n"
+"this footprint.\n"
 "The final clearance value is the sum of this value and the clearance value "
-"ratio\n"
-"A negative value means a smaller mask size than pad size"
+"ratio.\n"
+"A negative value means a smaller mask size than pad size.\n"
+"This value can be overridden on a pad-by-pad basis in the Local\n"
+"Clearance and Settings tab of Pad Properties."
 msgstr ""
 "Ceci est la valeur locale de la marge entre pads et le masque de pâte à "
 "souder\n"
 "pour cette empreinte.\n"
-"Cette valeur peut être remplacée par une valeur locale du pad.\n"
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
-"Une valeur négative signifie que le masque est plus petit que le pad"
+"Cette valeur peut être remplacée pour chaque pad par une valeur définie\n"
+"dans les Propriétés du Pad, onglet Isolations et Options locales."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:267
 msgid ""
-"This is the local clearance ratio in per cent between pads and the solder "
-"paste\n"
-"for this footprint.\n"
-"A value of 10 means the clearance value is 10 per cent of the pad size\n"
-"This value can be superseded by a pad local value.\n"
-"The final clearance value is the sum of this value and the clearance value\n"
-"A negative value means a smaller mask size than pad size."
+"This is the local clearance ratio in percent between pads and the\n"
+"solder paste for this footprint.\n"
+"A value of 10 means the clearance value is 10 percent of the pad size.\n"
+"The final clearance value is the sum of this value and the clearance value.\n"
+"A negative value means a smaller mask size than pad size.\n"
+"This value can be overridden on a pad-by-pad basis in the Local\n"
+"Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pâte à "
-"souder\n"
-"pour cette empreinte\n"
+"Ceci est la valeur locale du rapport de la marge entre pads et le\n"
+"masque de pâte à souder pour cette empreinte\n"
 "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du "
 "pad\n"
-"Cette valeur peut être remplacée par une valeur locale du pad\n"
 "La marge finale est la somme de cette valeur et du rapport de marge\n"
-"Une valeur négative signifie que le masque est plus petit que le pad."
+"Une valeur négative signifie que le masque est plus petit que le pad.\n"
+"Cette valeur peut être remplacée pour chaque pad par une valeur définie\n"
+"dans les Propriétés du Pad, onglet Isolations et Options locales."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -19923,19 +19937,19 @@ msgstr "Désélection Toutes Couches"
 msgid "Trace gap must be greater than 0."
 msgstr "La distance entre pistes doit être plus grande que 0."
 
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:38
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:36
 msgid "Trace gap:"
 msgstr "Espacement piste:"
 
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:49
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:47
 msgid "Via gap:"
 msgstr "Espacement via:"
 
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:69
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.cpp:67
 msgid "Via gap same as trace gap"
 msgstr "Espacement via identique espacement piste"
 
-#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:62
+#: pcbnew/dialogs/dialog_pns_diff_pair_dimensions_base.h:60
 #: pcbnew/hotkeys.cpp:279
 msgid "Differential Pair Dimensions"
 msgstr "Dimensions de la Paire Différentielle"
@@ -20457,7 +20471,7 @@ msgid "Pre-defined widths:"
 msgstr "Largeurs pré-définies:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:106
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:27
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:25
 msgid "Track width:"
 msgstr "Épais. piste:"
 
@@ -20470,12 +20484,12 @@ msgid "Pre-defined sizes:"
 msgstr "Tailles pré-définies:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:197
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:38
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:36
 msgid "Via diameter:"
 msgstr "Diamètre via:"
 
 #: pcbnew/dialogs/dialog_track_via_properties_base.cpp:208
-#: pcbnew/dialogs/dialog_track_via_size_base.cpp:49
+#: pcbnew/dialogs/dialog_track_via_size_base.cpp:47
 msgid "Via drill:"
 msgstr "Perçage via:"
 
@@ -20515,7 +20529,7 @@ msgstr "Propriétés des Pistes & Vias"
 msgid "Via drill size has to be smaller than via diameter"
 msgstr "Le diamètre de perçage doit être plus petit que le diamètre de la via"
 
-#: pcbnew/dialogs/dialog_track_via_size_base.h:57
+#: pcbnew/dialogs/dialog_track_via_size_base.h:54
 msgid "Track Width and Via Size"
 msgstr "Taille des Pistes et Vias"
 
@@ -20547,7 +20561,7 @@ msgstr "Editer options"
 msgid "Duplicate Nicknames \"%s\"."
 msgstr "Noms Logiques \"%s\" dupliqués."
 
-#: pcbnew/dialogs/panel_modedit_defaults.cpp:164
+#: pcbnew/dialogs/panel_modedit_defaults.cpp:166
 #: pcbnew/dialogs/panel_setup_text_and_graphics.cpp:159
 msgid ""
 "Text will not be readable with a thickness greater than\n"
@@ -21586,20 +21600,20 @@ msgstr ""
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:94
 msgid ""
-"This is the global clearance ratio in per cent between pads and the solder "
+"This is the global clearance ratio in percent between pads and the solder "
 "paste\n"
-"A value of 10 means the clearance value is 10 per cent of the pad size\n"
+"A value of 10 means the clearance value is 10 percent of the pad size\n"
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
-"Ceci est la valeur locale de la marge entre pads et le masque de pâte à "
-"souder\n"
-"pour cette empreinte\n"
+"Ceci est la valeur en %  globale de la marge entre pads et le masque de pâte "
+"à souder\n"
 "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du "
 "pad\n"
-"Cette valeur peut être remplacée par une valeur locale du pad\n"
-"La marge finale est la somme de cette valeur et du rapport de marge\n"
-"Une valeur négative signifie que le masque est plus petit que le pad."
+"Cette valeur peut être remplacée par une valeur locale d'empreinte ou de "
+"pad\n"
+"La valeur de la marge finale est la somme de cette valeur et de la valeur de "
+"la marge."
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:270
 msgid "Netclass must have a name."
@@ -24639,12 +24653,12 @@ msgid "Shape has no points!"
 msgstr "La forme n'a pas de points!"
 
 #: pcbnew/microwave.cpp:707
-msgid "No pad for this footprint"
-msgstr "Pas de pad dans cette empreinte"
+msgid "No pad for this footprint."
+msgstr "Pas de pad dans cette empreinte."
 
 #: pcbnew/microwave.cpp:715
-msgid "Only one pad for this footprint"
-msgstr "Seulement un pad dans cette empreinte"
+msgid "Only one pad for this footprint."
+msgstr "Seulement un seul pad dans cette empreinte."
 
 #: pcbnew/microwave.cpp:726
 msgid "Gap:"
@@ -27144,7 +27158,7 @@ msgstr "Supprimer Remplissage Zone"
 msgid "Unfill All Zones"
 msgstr "Supprimer Remplissage toutes Zones"
 
-#: pcbnew/tracks_cleaner.cpp:169 pcbnew/tracks_cleaner.cpp:740
+#: pcbnew/tracks_cleaner.cpp:169 pcbnew/tracks_cleaner.cpp:739
 msgid "Board cleanup"
 msgstr "Nettoyage du circuit imprimé"
 
@@ -27234,6 +27248,51 @@ msgstr "Remplissage %d Zones"
 #: pcbnew/zones_by_polygon_fill_functions.cpp:119
 msgid "Checking Zones"
 msgstr "Vérification des Zones"
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder mask\n"
+#~ "for this footprint\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "If 0, the global value is used"
+#~ msgstr ""
+#~ "Ceci est la valeur locale de la marge entre pads et le masque de soudure\n"
+#~ "pour l'empreinte\n"
+#~ "Cette valeur peut être remplacée par une valeur locale du pad\n"
+#~ "Si 0, la valeur globale sera utilisée"
+
+#~ msgid ""
+#~ "This is the local clearance between pads and the solder paste\n"
+#~ "for this footprint.\n"
+#~ "This value can be superseded by a pad local values.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value ratio\n"
+#~ "A negative value means a smaller mask size than pad size"
+#~ msgstr ""
+#~ "Ceci est la valeur locale de la marge entre pads et le masque de pâte à "
+#~ "souder\n"
+#~ "pour cette empreinte.\n"
+#~ "Cette valeur peut être remplacée par une valeur locale du pad.\n"
+#~ "La marge finale est la somme de cette valeur et du rapport de marge\n"
+#~ "Une valeur négative signifie que le masque est plus petit que le pad"
+
+#~ msgid ""
+#~ "This is the local clearance ratio in per cent between pads and the solder "
+#~ "paste\n"
+#~ "for this footprint.\n"
+#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
+#~ "This value can be superseded by a pad local value.\n"
+#~ "The final clearance value is the sum of this value and the clearance "
+#~ "value\n"
+#~ "A negative value means a smaller mask size than pad size."
+#~ msgstr ""
+#~ "Ceci est la valeur locale de la marge entre pads et le masque de pâte à "
+#~ "souder\n"
+#~ "pour cette empreinte\n"
+#~ "Une valeur de 10 signifie que la marge est 10 pour cent  de la taille du "
+#~ "pad\n"
+#~ "Cette valeur peut être remplacée par une valeur locale du pad\n"
+#~ "La marge finale est la somme de cette valeur et du rapport de marge\n"
+#~ "Une valeur négative signifie que le masque est plus petit que le pad."
 
 #~ msgid ""
 #~ "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
