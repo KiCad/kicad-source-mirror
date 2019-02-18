@@ -243,27 +243,9 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         // we don't write a continuous line of text at the column header
         if( aHeader )
         {
+            EnsureColLabelsVisible();
             // The 1.1 scale factor is due to the fact headers use a bold font, bigger than the normal font
             size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x * 1.1 ) );
-
-            // Headers can be multiline. Fix the Column Label Height to show the full header
-            // However GetTextExtent does not work on multiline strings,
-            // and do not return the full text height (only the height of one line)
-            int nl_count = 0;
-
-            for( unsigned ii = 0; ii < GetColLabelValue( aCol ).size(); ii++ )
-                if( GetColLabelValue( aCol )[ii] == '\n' )
-                    nl_count++;
-
-            if( nl_count )
-            {
-                // calculate a reasonable text height and its margin
-                int heigth = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
-
-                // Col Label height must be able to show nl_count+1 lines
-                if( GetColLabelSize() < heigth * (nl_count+1) )
-                    SetColLabelSize( GetColLabelSize() + heigth*nl_count );
-            }
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
@@ -277,4 +259,35 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
     }
 
     return size;
+}
+
+
+void WX_GRID::EnsureColLabelsVisible()
+{
+    int row_height = GetColLabelSize();
+    // The 1.1 scale factor is due to the fact row labels use a bold font, bigger than the normal font
+    // TODO: use a better way to evaluate the text size, for bold font
+    // Headers can be multiline. Fix the Column Label Height to show the full header
+    // However GetTextExtent does not work on multiline strings,
+    // and do not return the full text height (only the height of one line)
+    for( int col = 0; col < GetNumberCols(); col++ )
+    {
+        int nl_count = 0;
+
+        for( unsigned ii = 0; ii < GetColLabelValue( col ).size(); ii++ )
+            if( GetColLabelValue( col )[ii] == '\n' )
+                nl_count++;
+
+        if( nl_count )
+        {
+            // calculate a reasonable text height and its margin
+            int heigth = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
+
+            // Col Label height must be able to show nl_count+1 lines
+            if( row_height < heigth * (nl_count+1) )
+                row_height += heigth*nl_count;
+        }
+    }
+
+    SetColLabelSize( row_height );
 }

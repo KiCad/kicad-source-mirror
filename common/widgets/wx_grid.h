@@ -85,6 +85,12 @@ public:
      */
     int GetVisibleWidth( int aCol, bool aHeader = true, bool aContents = false, bool aKeep = true );
 
+    /**
+     * Ensure the height of the row displaying the column labels is enough, even
+     * if labels are multiline texts
+     */
+    void EnsureColLabelsVisible();
+
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;
 

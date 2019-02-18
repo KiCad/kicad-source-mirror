@@ -79,6 +79,9 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
     }
 
+    // Be sure the column labels are readable
+    m_netclassGrid->EnsureColLabelsVisible();
+
     // Membership combobox editors require a bit more room, so increase the row size of
     // all our grids for consistency
     m_netclassGrid->SetDefaultRowSize( m_netclassGrid->GetDefaultRowSize() + 4 );
