@@ -118,7 +118,7 @@ public:
                 auto p1  = VECTOR2D( k + 100 + step/2, 100 + i * step );
                 auto p2  = VECTOR2D( k + 100 + step/2, 100 + i * step + step/2 );
                 auto p3  = VECTOR2D( k + 100, 100 + i * step + step/2 );
-                auto p4  = VECTOR2D( k + 100, 100 + i * step + step );
+                // auto p4  = VECTOR2D( k + 100, 100 + i * step + step );
 
 
                 screenSpaceLine( gal, p0, p1 , w);
