@@ -110,6 +110,14 @@ const VECTOR2D CAIRO_GAL_BASE::xform( const VECTOR2D& aP )
 }
 
 
+const double CAIRO_GAL_BASE::angle_xform( const double aAngle )
+{
+    double world_angle = -std::atan2( currentWorld2Screen.xy, currentWorld2Screen.xx );
+
+    return std::fmod( aAngle + world_angle, 2.0 * M_PI );
+}
+
+
 const double CAIRO_GAL_BASE::xform( double x )
 {
     double dx = currentWorld2Screen.xx * x;
@@ -256,7 +264,9 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     auto startPointS = roundp( xform ( startPoint ) );
     auto endPointS = roundp( xform ( endPoint ) );
 
-    SWAP( aStartAngle, >, aEndAngle );
+    auto startAngleS = angle_xform( aStartAngle );
+    auto endAngleS = angle_xform( aEndAngle );
+    SWAP( startAngleS, >, endAngleS );
 
     if( isFillEnabled )     // Draw the filled area of the shape, before drawing the outline itself
     {
@@ -265,7 +275,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
         cairo_set_line_width( currentContext, 1.0 );
         cairo_new_sub_path( currentContext );
-        cairo_arc( currentContext, c.x, c.y, r, aStartAngle, aEndAngle );
+        cairo_arc( currentContext, c.x, c.y, r, startAngleS, endAngleS );
 
         cairo_move_to( currentContext, c.x, c.y );
         cairo_line_to( currentContext, startPointS.x, startPointS.y );
@@ -277,7 +287,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
     cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
-    cairo_arc( currentContext, c.x, c.y, r, aStartAngle, aEndAngle );
+    cairo_arc( currentContext, c.x, c.y, r, startAngleS, endAngleS );
     flushPath();
 
     isElementAdded = true;
@@ -290,13 +300,15 @@ void CAIRO_GAL_BASE::DrawRectangle( const VECTOR2D& aStartPoint, const VECTOR2D&
     syncLineWidth();
 
     const auto p0 = roundp( xform( aStartPoint ) );
-    const auto p1 = roundp( xform( aEndPoint ) );
+    const auto p1 = roundp( xform( VECTOR2D( aEndPoint.x, aStartPoint.y ) ) );
+    const auto p2 = roundp( xform( aEndPoint ) );
+    const auto p3 = roundp( xform( VECTOR2D( aStartPoint.x, aEndPoint.y ) ) );
 
     // The path is composed from 4 segments
     cairo_move_to( currentContext, p0.x, p0.y );
-    cairo_line_to( currentContext, p1.x, p0.y );
     cairo_line_to( currentContext, p1.x, p1.y );
-    cairo_line_to( currentContext, p0.x, p1.y );
+    cairo_line_to( currentContext, p2.x, p2.y );
+    cairo_line_to( currentContext, p3.x, p3.y );
     cairo_close_path( currentContext );
     flushPath();
 
@@ -1452,11 +1464,9 @@ void CAIRO_GAL_BASE::DrawGrid()
     int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridSize.y );
 
     // Ensure start coordinate > end coordinate
-    if( gridStartX > gridEndX )
-        std::swap( gridStartX, gridEndX );
 
-    if( gridStartY > gridEndY )
-        std::swap( gridStartY, gridEndY );
+    SWAP( gridStartX, >, gridStartX );
+    SWAP( gridStartY, >, gridEndY );
 
     // Ensure the grid fills the screen
     --gridStartX; ++gridEndX;

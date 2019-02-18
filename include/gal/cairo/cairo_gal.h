@@ -218,6 +218,7 @@ protected:
     const double xform( double x );
     const VECTOR2D xform( double x, double y );
     const VECTOR2D xform( const VECTOR2D& aP );
+    const double angle_xform( const double aAngle );
 
     /// @copydoc GAL::BeginDrawing()
     virtual void beginDrawing() override;
