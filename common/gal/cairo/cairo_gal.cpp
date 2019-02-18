@@ -258,19 +258,40 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 {
     syncLineWidth();
 
-    auto c = roundp( xform( aCenterPoint ) );
-    auto r = ::roundp( xform( aRadius ) );
-    SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
+
+    SWAP( startAngleS, >, endAngleS );
+
+    VECTOR2D startPoint( cos( startAngleS ) * aRadius + aCenterPoint.x,
+                             sin( startAngleS ) * aRadius + aCenterPoint.y );
+    VECTOR2D endPoint( cos( endAngleS ) * aRadius + aCenterPoint.x,
+                           sin( endAngleS ) * aRadius + aCenterPoint.y );
+
+    auto startPointS = roundp( xform ( startPoint ) );
+    auto endPointS = roundp( xform ( endPoint ) );
+
+    double centerAngle = endAngleS - startAngleS;
+    auto mid = ( startPointS + endPointS ) * 0.5;
+    auto chord = endPointS - startPointS;
+    double c = chord.EuclideanNorm() / 2.0;
+    auto d = chord.Rotate( (centerAngle > M_PI ? -M_PI : M_PI) / 2.0 ).Resize( c );
+    VECTOR2D centerS;
+
+    if( centerAngle == 0.0 )
+        centerS = mid;
+    else
+        centerS = mid + d * ( 1.0 / tan( centerAngle / 2.0 ) );
+
+    auto rS = (centerS - startPointS).EuclideanNorm();
 
     cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
 
     if( isFillEnabled )
-        cairo_move_to( currentContext, c.x, c.y );
+        cairo_move_to( currentContext, centerS.x, centerS.y );
 
-    cairo_arc( currentContext, c.x, c.y, r, startAngleS, endAngleS );
+    cairo_arc( currentContext, centerS.x, centerS.y, rS, startAngleS, endAngleS );
 
     if( isFillEnabled )
         cairo_close_path( currentContext );
