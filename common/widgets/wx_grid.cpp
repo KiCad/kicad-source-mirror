@@ -245,6 +245,25 @@ int WX_GRID::GetVisibleWidth( int aCol, bool aHeader, bool aContents, bool aKeep
         {
             // The 1.1 scale factor is due to the fact headers use a bold font, bigger than the normal font
             size = std::max( size, int( GetTextExtent( GetColLabelValue( aCol ) + "M" ).x * 1.1 ) );
+
+            // Headers can be multiline. Fix the Column Label Height to show the full header
+            // However GetTextExtent does not work on multiline strings,
+            // and do not return the full text height (only the height of one line)
+            int nl_count = 0;
+
+            for( unsigned ii = 0; ii < GetColLabelValue( aCol ).size(); ii++ )
+                if( GetColLabelValue( aCol )[ii] == '\n' )
+                    nl_count++;
+
+            if( nl_count )
+            {
+                // calculate a reasonable text height and its margin
+                int heigth = int( GetTextExtent( "Mj" ).y * 1.1 ) + 3;
+
+                // Col Label height must be able to show nl_count+1 lines
+                if( GetColLabelSize() < heigth * (nl_count+1) )
+                    SetColLabelSize( GetColLabelSize() + heigth*nl_count );
+            }
         }
 
         for( int row = 0; aContents && row < GetNumberRows(); row++ )
