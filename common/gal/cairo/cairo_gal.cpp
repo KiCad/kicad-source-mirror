@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2019 Kicad Developers, see change_log.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -51,6 +51,11 @@ CAIRO_GAL_BASE::CAIRO_GAL_BASE( GAL_DISPLAY_OPTIONS& aDisplayOptions ) :
     isElementAdded      = false;
     groupCounter        = 0;
     currentGroup        = nullptr;
+
+    lineWidth = 1.0;
+    linePixelWidth = 1.0;
+    lineWidthInPixels = 1.0;
+    lineWidthIsOdd = true;
 
     // Initialise Cairo state
     cairo_matrix_init_identity( &cairoWorldScreenMatrix );
@@ -255,39 +260,21 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 
     auto c = roundp( xform( aCenterPoint ) );
     auto r = ::roundp( xform( aRadius ) );
-
-    VECTOR2D startPoint( cos( aStartAngle ) * aRadius + aCenterPoint.x,
-                             sin( aStartAngle ) * aRadius + aCenterPoint.y );
-    VECTOR2D endPoint( cos( aEndAngle ) * aRadius + aCenterPoint.x,
-                           sin( aEndAngle ) * aRadius + aCenterPoint.y );
-
-    auto startPointS = roundp( xform ( startPoint ) );
-    auto endPointS = roundp( xform ( endPoint ) );
-
+    SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
-    SWAP( startAngleS, >, endAngleS );
-
-    if( isFillEnabled )     // Draw the filled area of the shape, before drawing the outline itself
-    {
-        auto fgcolor = GetStrokeColor();
-        SetStrokeColor( GetFillColor() );
-
-        cairo_set_line_width( currentContext, 1.0 );
-        cairo_new_sub_path( currentContext );
-        cairo_arc( currentContext, c.x, c.y, r, startAngleS, endAngleS );
-
-        cairo_move_to( currentContext, c.x, c.y );
-        cairo_line_to( currentContext, startPointS.x, startPointS.y );
-        cairo_line_to( currentContext, endPointS.x, endPointS.y );
-        cairo_close_path( currentContext );
-        flushPath();
-        SetStrokeColor( fgcolor );
-    }
 
     cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
+
+    if( isFillEnabled )
+        cairo_move_to( currentContext, c.x, c.y );
+
     cairo_arc( currentContext, c.x, c.y, r, startAngleS, endAngleS );
+
+    if( isFillEnabled )
+        cairo_close_path( currentContext );
+
     flushPath();
 
     isElementAdded = true;

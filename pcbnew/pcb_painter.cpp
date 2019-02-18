@@ -779,19 +779,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             m = ( size.y - size.x );
             n = size.x;
 
+            m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
+            m_gal->DrawArc( VECTOR2D( 0, m ),  n, M_PI, 0 );
+
             if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
             {
-                // Outline mode
-                m_gal->DrawArc( VECTOR2D( 0, -m ), n, -M_PI, 0 );
-                m_gal->DrawArc( VECTOR2D( 0, m ),  n, M_PI, 0 );
                 m_gal->DrawLine( VECTOR2D( -n, -m ), VECTOR2D( -n, m ) );
                 m_gal->DrawLine( VECTOR2D( n, -m ),  VECTOR2D( n, m ) );
             }
             else
             {
-                // Filled mode
-                m_gal->DrawCircle( VECTOR2D( 0, -m ), n );
-                m_gal->DrawCircle( VECTOR2D( 0, m ),  n );
                 m_gal->DrawRectangle( VECTOR2D( -n, -m ), VECTOR2D( n, m ) );
             }
         }
@@ -799,20 +796,16 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             m = ( size.x - size.y );
             n = size.y;
+            m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
+            m_gal->DrawArc( VECTOR2D( m, 0 ),  n, M_PI / 2, -M_PI / 2 );
 
             if( m_pcbSettings.m_sketchMode[LAYER_PADS_TH] )
             {
-                // Outline mode
-                m_gal->DrawArc( VECTOR2D( -m, 0 ), n, M_PI / 2, 3 * M_PI / 2 );
-                m_gal->DrawArc( VECTOR2D( m, 0 ),  n, M_PI / 2, -M_PI / 2 );
                 m_gal->DrawLine( VECTOR2D( -m, -n ), VECTOR2D( m, -n ) );
                 m_gal->DrawLine( VECTOR2D( -m, n ),  VECTOR2D( m, n ) );
             }
             else
             {
-                // Filled mode
-                m_gal->DrawCircle( VECTOR2D( -m, 0 ), n );
-                m_gal->DrawCircle( VECTOR2D( m, 0 ),  n );
                 m_gal->DrawRectangle( VECTOR2D( -m, -n ), VECTOR2D( m, n ) );
             }
         }
