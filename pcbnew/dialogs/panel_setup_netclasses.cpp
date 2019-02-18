@@ -64,11 +64,18 @@ PANEL_SETUP_NETCLASSES::PANEL_SETUP_NETCLASSES( PAGED_DIALOG* aParent, PCB_EDIT_
     m_netclassesDirty = true;
 
     m_originalColWidths = new int[ m_netclassGrid->GetNumberCols() ];
+    // Calculate a min best size to handle longest usual numeric values:
+    // (The 'M' large char is used to give a margin)
+    int min_best_width = m_netclassGrid->GetTextExtent( "555,555555 milsM" ).x;
 
     for( int i = 0; i < m_netclassGrid->GetNumberCols(); ++i )
     {
-        m_originalColWidths[ i ] = m_netclassGrid->GetVisibleWidth( i, true, true, true );
-        m_netclassGrid->SetColMinimalWidth( i, m_originalColWidths[ i ] );
+        // We calculate the column min size only from texts sizes, not using the initial col width
+        // as this initial width is sometimes strange depending on the language (wxGrid bug?)
+        int min_width =  m_netclassGrid->GetVisibleWidth( i, true, true, false );
+        m_netclassGrid->SetColMinimalWidth( i, min_width );
+        // We use a "best size" >= min_best_width
+        m_originalColWidths[ i ] = std::max( min_width, min_best_width );
         m_netclassGrid->SetColSize( i, m_originalColWidths[ i ] );
     }
 

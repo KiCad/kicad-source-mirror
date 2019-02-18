@@ -57,7 +57,7 @@ PANEL_SETUP_NETCLASSES_BASE::PANEL_SETUP_NETCLASSES_BASE( wxWindow* parent, wxWi
 	m_netclassGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
 
 	// Rows
-	m_netclassGrid->EnableDragRowSize( false );
+	m_netclassGrid->EnableDragRowSize( true );
 	m_netclassGrid->SetRowLabelSize( 0 );
 	m_netclassGrid->SetRowLabelValue( 0, _("Default") );
 	m_netclassGrid->SetRowLabelAlignment( wxALIGN_LEFT, wxALIGN_CENTER );
