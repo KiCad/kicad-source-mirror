@@ -103,6 +103,8 @@ void computeLineCoords( bool posture, vec2 vs, vec2 vp, vec2 texcoord, vec2 dir,
     float pixelWidth = roundr( w / worldPixelSize, 1.0 );
     float aspect = ( lineLength + w ) / w;
     vec4 color = gl_Color;
+    vec2 s = sign( vec2( gl_ModelViewProjectionMatrix[0][0], gl_ModelViewProjectionMatrix[1][1] ) );
+
 
     if( pixelWidth < 1.0 )
         pixelWidth = 1.0;
@@ -110,7 +112,7 @@ void computeLineCoords( bool posture, vec2 vs, vec2 vp, vec2 texcoord, vec2 dir,
     if ( pixelWidth > 1.0 || pixelSizeMultiplier > 1.0 )
     {
         vec2 offsetNorm = (vs + vp) * pixelWidth / lineLength * 0.5;
-        vec4 screenOffset = vec4( offsetNorm.x  * screenPixelSize.x, -offsetNorm.y  * screenPixelSize.y , 0, 0);
+        vec4 screenOffset = vec4( s.x * offsetNorm.x  * screenPixelSize.x, s.y * offsetNorm.y  * screenPixelSize.y , 0, 0);
         vec4 adjust = vec4(-1, -1, 0, 0);
 
         if( mod( pixelWidth * pixelSizeMultiplier, 2.0 ) > 0.9 )
