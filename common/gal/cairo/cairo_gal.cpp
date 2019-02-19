@@ -258,10 +258,9 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 {
     syncLineWidth();
 
+    SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
-
-    SWAP( startAngleS, >, endAngleS );
 
     VECTOR2D startPoint( cos( startAngleS ) * aRadius + aCenterPoint.x,
                              sin( startAngleS ) * aRadius + aCenterPoint.y );
