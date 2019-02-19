@@ -138,7 +138,7 @@ public:
     double GetScaleForRotation( int aRotation ) override;
 
     /// A suitable (magic) scale factor for GTK3 systems
-    static constexpr double GTK3_SCALE = 0.001;
+    static constexpr double GTK3_SCALE = 0.002;
 
     /// A suitable (magic) scale factor for Mac systems
     static constexpr double MAC_SCALE = 0.01;

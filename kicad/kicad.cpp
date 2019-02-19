@@ -232,6 +232,10 @@ struct APP_KICAD : public wxApp
 
         // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause excessive redraw requests
         wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
+
+        // Set GTK2-style input instead of xinput2.  This disables touchscreen and smooth scrolling
+        // Needed to ensure that we are not getting multiple mouse scroll events
+        wxSetEnv( wxT( "GDK_CORE_DEVICE_EVENTS" ), wxT( "1" ) );
     }
 #endif
 
