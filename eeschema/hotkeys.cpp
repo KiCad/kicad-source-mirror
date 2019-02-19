@@ -965,6 +965,12 @@ bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         cmd.SetId( ID_ZOOM_PAGE );
         GetEventHandler()->ProcessEvent( cmd );
         break;
+
+    case HK_CANVAS_CAIRO:
+    case HK_CANVAS_OPENGL:
+        cmd.SetInt( HK_Descr->m_Idcommand );
+        cmd.SetId( HK_Descr->m_IdMenuEvent );
+        GetEventHandler()->ProcessEvent( cmd );
     }
 
     return true;
