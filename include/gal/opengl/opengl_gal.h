@@ -322,7 +322,6 @@ private:
     GLint                   ufm_worldPixelSize;
     GLint                   ufm_screenPixelSize;
     GLint                   ufm_pixelSizeMultiplier;
-    GLint                   ufm_backingScaleFactor;
 
     std::unique_ptr<GL_BITMAP_CACHE>         bitmapCache;
 
