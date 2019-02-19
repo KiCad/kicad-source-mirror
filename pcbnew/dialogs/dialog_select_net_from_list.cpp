@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ private:
     wxString getListColumnHeaderNet() { return _( "Net" ); };
     wxString getListColumnHeaderName() { return _( "Name" ); };
     wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
-    void adjustListColumns( int aWidth );
+    void adjustListColumns();
 
     wxString        m_selection;
     bool            m_wasSelected;
@@ -106,7 +106,7 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
 
     buildNetsList();
 
-    adjustListColumns( wxCOL_WIDTH_AUTOSIZE );
+    adjustListColumns();
 
     m_sdbSizerOK->SetDefault();
 
@@ -221,44 +221,35 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns( int aWidth )
+void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
 {
     int w0, w1, w2;
 
-    if( aWidth == wxCOL_WIDTH_AUTOSIZE )
-    {
-        /**
-         * Calculating optimal width of the first (Net) and
-         * the last (Pad Count) columns. That width must be
-         * enough to fit column header label and be not less
-         * than width of four chars (0000).
-         */
+    /**
+     * Calculating optimal width of the first (Net) and
+     * the last (Pad Count) columns. That width must be
+     * enough to fit column header label and be not less
+     * than width of four chars (0000).
+     */
 
-        wxClientDC dc( GetParent() );
-        int h, minw;
+    wxClientDC dc( GetParent() );
+    int h, minw;
 
-        aWidth = m_netsList->GetRect().GetWidth();
+    dc.GetTextExtent( getListColumnHeaderNet()+"MM", &w0, &h );
+    dc.GetTextExtent( getListColumnHeaderCount()+"MM", &w2, &h );
+    dc.GetTextExtent( "M0000M", &minw, &h );
 
-        dc.GetTextExtent( getListColumnHeaderNet(), &w0, &h );
-        dc.GetTextExtent( getListColumnHeaderCount(), &w2, &h );
-        dc.GetTextExtent( "0000", &minw, &h );
+    // Considering left and right margins.
+    // For wxRenderGeneric it is 5px.
+    w0 = std::max( w0+10, minw);
+    w2 = std::max( w2+10, minw);
 
-        // Considering left and right margins.
-        // For wxRanderGeneric it is 5px.
-        w0 = std::max( w0+10, minw);
-        w2 = std::max( w2+10, minw);
+    m_netsList->GetColumn( 0 )->SetWidth( w0 );
+    m_netsList->GetColumn( 2 )->SetWidth( w2 );
 
-        m_netsList->GetColumn( 0 )->SetWidth( w0 );
-        m_netsList->GetColumn( 2 )->SetWidth( w2 );
-    }
-    else
-    {
-        w0 = m_netsList->GetColumn( 0 )->GetWidth();
-        w2 = m_netsList->GetColumn( 2 )->GetWidth();
-    }
-
-    // At resizing of the list the width of middle column (Name) changes only.
-    w1 = aWidth - w0 - w2;
+    // At resizing of the list the width of middle column (Net Names) changes only.
+    int width = m_netsList->GetClientSize().x;
+    w1 = width - w0 - w2;
 
     m_netsList->GetColumn( 1 )->SetWidth( w1 );
 }
@@ -266,7 +257,8 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns( int aWidth )
 
 void DIALOG_SELECT_NET_FROM_LIST::onListSize( wxSizeEvent& aEvent )
 {
-    adjustListColumns( aEvent.GetSize().GetX() );
+    aEvent.Skip();
+    adjustListColumns();
 }
 
 
