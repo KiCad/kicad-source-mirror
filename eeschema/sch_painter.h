@@ -37,6 +37,7 @@ class LIB_POLYLINE;
 class LIB_ARC;
 class LIB_FIELD;
 class LIB_TEXT;
+class LIB_BEZIER;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class SCH_JUNCTION;
@@ -141,6 +142,7 @@ private:
     void draw( LIB_POLYLINE *, int );
     void draw( LIB_FIELD *, int );
     void draw( LIB_TEXT *, int );
+    void draw( LIB_BEZIER *, int );
     void draw( SCH_COMPONENT *, int );
     void draw( SCH_JUNCTION *, int );
     void draw( SCH_FIELD *, int );

@@ -104,10 +104,22 @@ bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 void LIB_BEZIER::Move( const wxPoint& aPosition )
 {
     if ( !m_PolyPoints.size() )
-        return;
+    {
+        m_PolyPoints.push_back( wxPoint(0, 0) );
+    }
+
     SetOffset( aPosition - m_PolyPoints[0] );
 }
 
+const wxPoint LIB_BEZIER::GetOffset() const
+{
+    if ( !m_PolyPoints.size() )
+    {
+        return wxPoint(0, 0);
+    }
+
+    return m_PolyPoints[0];
+}
 
 void LIB_BEZIER::MirrorHorizontal( const wxPoint& aCenter )
 {

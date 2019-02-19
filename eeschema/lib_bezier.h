@@ -67,6 +67,7 @@ public:
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
     void SetOffset( const wxPoint& aOffset ) override;
+    const wxPoint GetOffset() const;
 
     /**
      * @return the number of corners
