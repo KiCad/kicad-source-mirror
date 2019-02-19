@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -122,49 +122,66 @@ static EDA_HOTKEY HkAddThroughVia( _HKI( "Add Through Via" ), HK_ADD_THROUGH_VIA
 static EDA_HOTKEY HkSelLayerAndAddThroughVia( _HKI( "Select Layer and Add Through Via" ),
                                               HK_SEL_LAYER_AND_ADD_THROUGH_VIA, '<' );
 static EDA_HOTKEY HkAddMicroVia( _HKI( "Add MicroVia" ), HK_ADD_MICROVIA, 'V' + GR_KB_CTRL );
-static EDA_HOTKEY HkAddBlindBuriedVia( _HKI( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA, 'V' + GR_KB_ALT + GR_KB_SHIFT );
+static EDA_HOTKEY HkAddBlindBuriedVia( _HKI( "Add Blind/Buried Via" ), HK_ADD_BLIND_BURIED_VIA,
+                                       'V' + GR_KB_ALT + GR_KB_SHIFT );
 static EDA_HOTKEY HkSelLayerAndAddBlindBuriedVia( _HKI( "Select Layer and Add Blind/Buried Via" ),
-                                                  HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA, '<' + GR_KB_ALT );
-static EDA_HOTKEY HkSwitchTrackPosture( _HKI( "Switch Track Posture" ),  HK_SWITCH_TRACK_POSTURE, '/' );
-static EDA_HOTKEY HkDragTrackKeepSlope( _HKI( "Drag Track Keep Slope" ), HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
+                                                  HK_SEL_LAYER_AND_ADD_BLIND_BURIED_VIA,
+                                                  '<' + GR_KB_ALT );
+static EDA_HOTKEY HkSwitchTrackPosture( _HKI( "Switch Track Posture" ),
+                                        HK_SWITCH_TRACK_POSTURE, '/' );
+static EDA_HOTKEY HkDragTrackKeepSlope( _HKI( "Drag Track Keep Slope" ),
+                                        HK_DRAG_TRACK_KEEP_SLOPE, 'D' );
 static EDA_HOTKEY HkPlaceItem( _HKI( "Place Item" ), HK_PLACE_ITEM, 'P' );
 static EDA_HOTKEY HkEditBoardItem( _HKI( "Edit Item" ), HK_EDIT_ITEM, 'E' );
-static EDA_HOTKEY HkEditWithModedit( _HKI( "Edit with Footprint Editor" ), HK_EDIT_MODULE_WITH_MODEDIT, 'E' + GR_KB_CTRL );
+static EDA_HOTKEY HkEditWithModedit( _HKI( "Edit with Footprint Editor" ),
+                                     HK_EDIT_MODULE_WITH_MODEDIT, 'E' + GR_KB_CTRL );
 static EDA_HOTKEY HkFlipItem( _HKI( "Flip Item" ), HK_FLIP_ITEM, 'F' );
 static EDA_HOTKEY HkRotateItem( _HKI( "Rotate Item" ), HK_ROTATE_ITEM, 'R' );
 static EDA_HOTKEY HkRotateItemClockwise( _HKI( "Rotate Item Clockwise (Modern Toolset only)" ),
                                          HK_ROTATE_ITEM_CLOCKWISE, GR_KB_SHIFT + 'R' );
 static EDA_HOTKEY HkMoveItem( _HKI( "Move Item" ), HK_MOVE_ITEM, 'M' );
-static EDA_HOTKEY HkMoveItemExact( _HKI( "Move Item Exactly" ), HK_MOVE_ITEM_EXACT, 'M' + GR_KB_CTRL );
-static EDA_HOTKEY HkPositionItemRelative( _HKI( "Position Item Relative" ), HK_POSITION_RELATIVE, 'R' + GR_KB_CTRL );
+static EDA_HOTKEY HkMoveItemExact( _HKI( "Move Item Exactly" ), HK_MOVE_ITEM_EXACT,
+                                   'M' + GR_KB_CTRL );
+static EDA_HOTKEY HkPositionItemRelative( _HKI( "Position Item Relative" ), HK_POSITION_RELATIVE,
+                                          'R' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Item" ), HK_DUPLICATE_ITEM, 'D' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItemAndIncrement( _HKI( "Duplicate Item and Increment" ),
-                                   HK_DUPLICATE_ITEM_AND_INCREMENT, 'D' + GR_KB_SHIFTCTRL );
+                                               HK_DUPLICATE_ITEM_AND_INCREMENT,
+                                               'D' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkCreateArray( _HKI( "Create Array" ), HK_CREATE_ARRAY, 'T' + GR_KB_CTRL );
 static EDA_HOTKEY HkCopyItem( _HKI( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( _HKI( "Drag Item" ), HK_DRAG_ITEM, 'G' );
-static EDA_HOTKEY HkGetAndMoveFootprint( _HKI( "Get and Move Footprint" ), HK_GET_AND_MOVE_FOOTPRINT, 'T' );
-static EDA_HOTKEY HkLock_Unlock_Footprint( _HKI( "Lock/Unlock Footprint" ), HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
+static EDA_HOTKEY HkGetAndMoveFootprint( _HKI( "Get and Move Footprint" ),
+                                         HK_GET_AND_MOVE_FOOTPRINT, 'T' );
+static EDA_HOTKEY HkLock_Unlock_Footprint( _HKI( "Lock/Unlock Footprint" ),
+                                           HK_LOCK_UNLOCK_FOOTPRINT, 'L' );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Full Track" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ), HK_SWITCH_HIGHCONTRAST_MODE,'H');
+static EDA_HOTKEY HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
+                                            HK_SWITCH_HIGHCONTRAST_MODE, 'H'+GR_KB_CTRL );
 
 static EDA_HOTKEY HkAddLine( _HKI( "Draw Line" ), HK_ADD_LINE, 'L' + GR_KB_SHIFTCTRL );
-static EDA_HOTKEY HkAddPolygon( _HKI( "Draw Graphic Polygon" ), HK_ADD_POLYGON, 'P' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddPolygon( _HKI( "Draw Graphic Polygon" ), HK_ADD_POLYGON,
+                                'P' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddCircle( _HKI( "Draw Circle" ), HK_ADD_CIRCLE, 'C' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddArc( _HKI( "Draw Arc" ), HK_ADD_ARC, 'A' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddText( _HKI( "Add Text" ), HK_ADD_TEXT, 'T' + GR_KB_SHIFTCTRL );
-static EDA_HOTKEY HkAddDimension( _HKI( "Add Dimension" ), HK_ADD_DIMENSION, 'H' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddDimension( _HKI( "Add Dimension" ), HK_ADD_DIMENSION,
+                                  'H' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddFilledZone( _HKI( "Add Filled Zone" ), HK_ADD_ZONE, 'Z' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddFreeVia( _HKI( "Add Vias" ), HK_ADD_FREE_VIA, 'V' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddKeepout( _HKI( "Add Keepout Area" ), HK_ADD_KEEPOUT, 'K' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' + GR_KB_SHIFT );
-static EDA_HOTKEY HkAddSimilarZone( _HKI( "Add a Similar Zone" ), HK_ADD_SIMILAR_ZONE, '.' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddSimilarZone( _HKI( "Add a Similar Zone" ), HK_ADD_SIMILAR_ZONE,
+                                    '.' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddDXF( _HKI( "Place DXF" ), HK_ADD_DXF, 'F' + GR_KB_SHIFTCTRL );
-static EDA_HOTKEY HkAddAnchor( _HKI( "Place the Footprint Anchor" ), HK_ADD_ANCHOR, 'N' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkAddAnchor( _HKI( "Place the Footprint Anchor" ), HK_ADD_ANCHOR,
+                               'N' + GR_KB_SHIFTCTRL );
 
-static EDA_HOTKEY HkIncreaseLineWidth( _HKI( "Increase Line Width" ), HK_INC_LINE_WIDTH, '+' + GR_KB_CTRL );
-static EDA_HOTKEY HkDecreaseLineWidth( _HKI( "Decrease Line Width" ), HK_DEC_LINE_WIDTH, '-' + GR_KB_CTRL );
+static EDA_HOTKEY HkIncreaseLineWidth( _HKI( "Increase Line Width" ), HK_INC_LINE_WIDTH,
+                                       '+' + GR_KB_CTRL );
+static EDA_HOTKEY HkDecreaseLineWidth( _HKI( "Decrease Line Width" ), HK_DEC_LINE_WIDTH,
+                                       '-' + GR_KB_CTRL );
 
 
 static EDA_HOTKEY HkSetGridOrigin( _HKI( "Set Grid Origin" ), HK_SET_GRID_ORIGIN, 'S' );
@@ -190,9 +207,9 @@ static EDA_HOTKEY HkCanvasCairo( _HKI( "Switch to Modern Toolset with software g
                                  WXK_F12 );
 
 static EDA_HOTKEY HkZoneFillOrRefill( _HKI( "Fill or Refill All Zones" ),
-                                 HK_ZONE_FILL_OR_REFILL, 'B' );
+                                      HK_ZONE_FILL_OR_REFILL, 'B' );
 static EDA_HOTKEY HkZoneRemoveFilled( _HKI( "Remove Filled Areas in All Zones" ),
-                                 HK_ZONE_REMOVE_FILLED, 'B' + GR_KB_CTRL );
+                                      HK_ZONE_REMOVE_FILLED, 'B' + GR_KB_CTRL );
 /* Fit on Screen */
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, WXK_HOME );
@@ -234,8 +251,8 @@ static EDA_HOTKEY HkSwitchTrackWidthToNext( _HKI( "Switch Track Width To Next" )
                                             HK_SWITCH_TRACK_WIDTH_TO_NEXT, 'W' );
 
 static EDA_HOTKEY HkSwitchTrackWidthToPrevious( _HKI( "Switch Track Width To Previous" ),
-                                                HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS, 'W'
-                                                + GR_KB_CTRL );
+                                                HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS,
+                                                'W' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkSwitchGridToFastGrid1( _HKI( "Switch Grid To Fast Grid1" ),
                                            HK_SWITCH_GRID_TO_FASTGRID1, GR_KB_ALT + '1' );
@@ -268,15 +285,19 @@ static EDA_HOTKEY HkDecLayerAlpha( _HKI( "Decrement Layer Transparency (Modern T
 static EDA_HOTKEY HkIncHighContrast( _HKI( "Increment High Contrast" ), HK_HIGHCONTRAST_INC, '>' );
 static EDA_HOTKEY HkDecHighContrast( _HKI( "Decrement High Contrast" ), HK_HIGHCONTRAST_DEC, '<' );
 
-static EDA_HOTKEY HkSelectConnection( _HKI( "Select Single Track" ), HK_SEL_TRIVIAL_CONNECTION, 'U' );
+static EDA_HOTKEY HkSelectConnection( _HKI( "Select Single Track" ), HK_SEL_TRIVIAL_CONNECTION,
+                                      'U' );
 
-static EDA_HOTKEY HkSelectCopper( _HKI( "Select Connected Tracks" ), HK_SEL_COPPER_CONNECTION, 'I' );
+static EDA_HOTKEY HkSelectCopper( _HKI( "Select Connected Tracks" ), HK_SEL_COPPER_CONNECTION,
+                                  'I' );
 
-static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS, ',' + GR_KB_CTRL );
+static EDA_HOTKEY HkRoutingOptions( _HKI( "Routing Options" ), HK_ROUTING_OPTIONS,
+                                    ',' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkCustomTrackWidth( _HKI( "Custom Track/Via Size" ), HK_CUSTOM_TRACK_WIDTH, 'Q' );
 
-static EDA_HOTKEY HkDpDimension( _HKI( "Differential Pair Dimensions" ), HK_DP_DIMENSIONS, 'R' + GR_KB_SHIFTCTRL );
+static EDA_HOTKEY HkDpDimension( _HKI( "Differential Pair Dimensions" ), HK_DP_DIMENSIONS,
+                                 'R' + GR_KB_SHIFTCTRL );
 
 static EDA_HOTKEY HkViaSizeInc( _HKI( "Increase Via Size" ), HK_VIA_SIZE_INC, '\'' );
 
@@ -289,7 +310,8 @@ static EDA_HOTKEY HkHighlightNetSelection( _HKI( "Toggle Highlight of Selected N
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
 static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
 static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_SAVE );
-static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S', (int) wxID_SAVEAS );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S',
+                            (int) wxID_SAVEAS );
 static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
 static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
