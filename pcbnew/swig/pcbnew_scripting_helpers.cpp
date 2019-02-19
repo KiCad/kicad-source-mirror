@@ -146,6 +146,15 @@ void UpdateUserInterface()
 }
 
 
+int GetUserUnits()
+{
+    if( s_PcbEditFrame )
+        return s_PcbEditFrame->GetUserUnits();
+
+    return -1;
+}
+
+
 bool IsActionRunning()
 {
     return ACTION_PLUGINS::IsActionRunning();

@@ -70,6 +70,12 @@ void    WindowZoom( int xl, int yl, int width, int height );
 void UpdateUserInterface();
 
 /**
+ * Returns the currently selected user unit value for the interface
+ * @return 0 = Inches, 1=mm, -1 if the frame isn't set
+ */
+int GetUserUnits();
+
+/**
  * Are we currently in an action plugin?
  */
 bool IsActionRunning();
