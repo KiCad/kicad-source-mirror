@@ -139,7 +139,7 @@ static double roundp( double x )
 
 const VECTOR2D CAIRO_GAL_BASE::roundp( const VECTOR2D& v )
 {
-    if( lineWidthIsOdd )
+    if( lineWidthIsOdd && isStrokeEnabled )
         return VECTOR2D( ::roundp( v.x ), ::roundp( v.y ) );
     else
         return VECTOR2D( floor( v.x + 0.5 ), floor( v.y + 0.5 ) );
@@ -275,9 +275,10 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     auto chord = endPointS - startPointS;
     double c = chord.EuclideanNorm() / 2.0;
     auto d = chord.Rotate( M_PI / 2.0 ).Resize( c );
+    auto tan_angle = tan( centerAngle / 2.0 );
 
-    if( centerAngle != 0.0 )
-        mid += d * ( 1.0 / tan( centerAngle / 2.0 ) );
+    if( tan_angle != 0.0 )
+        mid += d * ( 1.0 / tan_angle );
 
     auto rS = ( mid - startPointS ).EuclideanNorm();
 
