@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-17 20:44+0100\n"
-"PO-Revision-Date: 2019-02-17 21:37+0100\n"
+"PO-Revision-Date: 2019-02-19 08:56+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski\n"
@@ -18400,22 +18400,30 @@ msgstr "Edycja właściwości tekstu oraz elementów graficznych"
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:193
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:51
 msgid "Via Size"
-msgstr "Rozmiar przelotki"
+msgstr ""
+"Rozmiar\n"
+"przelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:194
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:52
 msgid "Via Drill"
-msgstr "Otwór przelotki"
+msgstr ""
+"Otwór\n"
+"przelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:195
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:53
 msgid "uVia Size"
-msgstr "Rozmiar mikroprzelotki"
+msgstr ""
+"Rozmiar\n"
+"mikroprzelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:196
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:54
 msgid "uVia Drill"
-msgstr "Otwór mikroprzelotki"
+msgstr ""
+"Otwór\n"
+"mikroprzelotki"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias.cpp:266
 msgid "Some items failed DRC and were not modified."
@@ -21601,11 +21609,15 @@ msgstr "Prześwit"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:55
 msgid "dPair Width"
-msgstr "Szerokość ścieżki pary różnicowej"
+msgstr ""
+"Szerokość ścieżki\n"
+"pary różnicowej"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:56
 msgid "dPair Gap"
-msgstr "Prześwit pary różnicowej"
+msgstr ""
+"Prześwit\n"
+"pary różnicowej"
 
 #: pcbnew/dialogs/panel_setup_netclasses_base.cpp:97
 msgid "Net Class Memberships"
