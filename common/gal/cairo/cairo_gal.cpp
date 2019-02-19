@@ -274,23 +274,20 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     auto mid = ( startPointS + endPointS ) * 0.5;
     auto chord = endPointS - startPointS;
     double c = chord.EuclideanNorm() / 2.0;
-    auto d = chord.Rotate( (centerAngle > M_PI ? -M_PI : M_PI) / 2.0 ).Resize( c );
-    VECTOR2D centerS;
+    auto d = chord.Rotate( M_PI / 2.0 ).Resize( c );
 
-    if( centerAngle == 0.0 )
-        centerS = mid;
-    else
-        centerS = mid + d * ( 1.0 / tan( centerAngle / 2.0 ) );
+    if( centerAngle != 0.0 )
+        mid += d * ( 1.0 / tan( centerAngle / 2.0 ) );
 
-    auto rS = (centerS - startPointS).EuclideanNorm();
+    auto rS = ( mid - startPointS ).EuclideanNorm();
 
     cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
 
     if( isFillEnabled )
-        cairo_move_to( currentContext, centerS.x, centerS.y );
+        cairo_move_to( currentContext, mid.x, mid.y );
 
-    cairo_arc( currentContext, centerS.x, centerS.y, rS, startAngleS, endAngleS );
+    cairo_arc( currentContext, mid.x, mid.y, rS, startAngleS, endAngleS );
 
     if( isFillEnabled )
         cairo_close_path( currentContext );
