@@ -890,6 +890,8 @@ void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
         p += VECTOR2D( 0.5, 0.5 );
     }
 
+    cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
     cairo_set_line_join( currentContext, CAIRO_LINE_JOIN_MITER );
     cairo_set_line_cap( currentContext, CAIRO_LINE_CAP_BUTT );
     cairo_set_line_width( currentContext, 1.0 );
