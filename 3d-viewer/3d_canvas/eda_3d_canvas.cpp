@@ -359,7 +359,7 @@ void EDA_3D_CANVAS::OnPaint( wxPaintEvent &event )
     // multiple canvases: If we updated the viewport in the wxSizeEvent
     // handler, changing the size of one canvas causes a viewport setting that
     // is wrong when next another canvas is repainted.
-    wxSize clientSize = GetClientSize();
+    wxSize clientSize = GetNativePixelSize();
 
     const bool windows_size_changed = m_settings.CameraGet().SetCurWindowSize( clientSize );
 
@@ -576,7 +576,7 @@ void EDA_3D_CANVAS::OnMouseMove( wxMouseEvent &event )
     if( m_camera_is_moving )
         return;
 
-    m_settings.CameraGet().SetCurWindowSize( GetClientSize() );
+    m_settings.CameraGet().SetCurWindowSize( GetNativePixelSize() );
 
     if( event.Dragging() )
     {
