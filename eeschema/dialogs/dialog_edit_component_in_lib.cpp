@@ -729,9 +729,13 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteAlias( wxCommandEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnFilterDClick( wxMouseEvent& event)
 {
+    int idx = m_FootprintFilterListBox->HitTest( event.GetPosition() );
     wxCommandEvent dummy;
-    OnAddFootprintFilter( dummy );
-    event.Skip();
+
+    if( idx >= 0 )
+        OnEditFootprintFilter( dummy );
+    else
+        OnAddFootprintFilter( dummy );
 }
 
 
