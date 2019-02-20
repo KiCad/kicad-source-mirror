@@ -1,7 +1,3 @@
-/**
- * @file dialog_edit_component_in_lib.h
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -107,5 +103,4 @@ private:
     void adjustAliasGridColumns( int aWidth );
 };
 
-#endif
-    // _DIALOG_EDIT_COMPONENT_IN_LIB_H_
+#endif // _DIALOG_EDIT_COMPONENT_IN_LIB_H_

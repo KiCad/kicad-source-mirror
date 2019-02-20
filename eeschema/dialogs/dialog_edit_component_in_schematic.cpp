@@ -21,23 +21,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <dialogs/dialog_edit_component_in_schematic.h>
 
 #include <wx/tooltip.h>
-#include <pgm_base.h>
-#include <kiface_i.h>
-#include <sch_draw_panel.h>
-#include <confirm.h>
-#include <sch_edit_frame.h>
-#include <grid_tricks.h>
-#include <menus_helpers.h>
-#include <widgets/wx_grid.h>
-#include <sch_reference_list.h>
-#include <class_library.h>
-#include <symbol_lib_table.h>
-#include <fields_grid_table.h>
 
-#include <dialog_edit_component_in_schematic_base.h>
+#include <confirm.h>
+#include <grid_tricks.h>
+#include <kiface_i.h>
+#include <menus_helpers.h>
+#include <pgm_base.h>
+
+#include <widgets/wx_grid.h>
+
+#include <class_library.h>
+#include <fields_grid_table.h>
 #include <invoke_sch_dialog.h>
+#include <sch_draw_panel.h>
+#include <sch_edit_frame.h>
+#include <sch_reference_list.h>
+#include <symbol_lib_table.h>
 
 #ifdef KICAD_SPICE
 #include <dialog_spice_model.h>
@@ -45,92 +47,7 @@
 #endif /* KICAD_SPICE */
 
 
-
 #define SymbolFieldsShownColumnsKey   wxT( "SymbolFieldsShownColumns" )
-
-
-/**
- * Dialog used to edit #SCH_COMPONENT objects in a schematic.
- *
- * This is derived from DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE which is maintained by
- * wxFormBuilder.  Do not auto-generate this class or file, it is hand coded.
- */
-class DIALOG_EDIT_COMPONENT_IN_SCHEMATIC : public DIALOG_EDIT_COMPONENT_IN_SCHEMATIC_BASE
-{
-public:
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent, SCH_COMPONENT* aComponent );
-    ~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC() override;
-
-    SCH_EDIT_FRAME* GetParent() { return dynamic_cast<SCH_EDIT_FRAME*>( wxDialog::GetParent() ); }
-
-private:
-    wxConfigBase*   m_config;
-
-    SCH_COMPONENT*  m_cmp;
-    LIB_PART*       m_part;
-
-    int             m_delayedFocusRow;
-    int             m_delayedFocusColumn;
-    wxString        m_shownColumns;
-
-    FIELDS_GRID_TABLE<SCH_FIELD>* m_fields;
-
-    bool TransferDataToWindow() override;
-    bool TransferDataFromWindow() override;
-
-    bool Validate() override;
-
-    // event handlers
-    void UpdateFieldsFromLibrary( wxCommandEvent& event ) override;
-    void OnAddField( wxCommandEvent& event ) override;
-    void OnDeleteField( wxCommandEvent& event ) override;
-    void OnMoveUp( wxCommandEvent& event ) override;
-    void OnMoveDown( wxCommandEvent& event ) override;
-    void OnBrowseLibrary( wxCommandEvent& event ) override;
-    void OnEditSpiceModel( wxCommandEvent& event ) override;
-    void OnSizeGrid( wxSizeEvent& event ) override;
-    void OnGridCellChanging( wxGridEvent& event );
-    void OnUpdateUI( wxUpdateUIEvent& event ) override;
-    void OnCancelButtonClick( wxCommandEvent& event ) override;
-
-    void OnInitDlg( wxInitDialogEvent& event ) override
-    {
-        TransferDataToWindow();
-
-        // Now all widgets have the size fixed, call FinishDialogSettings
-        FinishDialogSettings();
-    }
-
-    void AdjustGridColumns( int aWidth );
-};
-
-
-void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
-{
-    wxCHECK_RET( aComponent != nullptr && aComponent->Type() == SCH_COMPONENT_T,
-                 wxT( "Invalid component object pointer.  Bad Programmer!" ) );
-
-    m_canvas->SetIgnoreMouseEvents( true );
-
-    DIALOG_EDIT_COMPONENT_IN_SCHEMATIC dlg( this, aComponent );
-
-    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
-    // frame. Therefore this dialog as a modal frame parent, MUST be run under
-    // quasimodal mode for the quasimodal frame support to work.  So don't use
-    // the QUASIMODAL macros here.
-    int ret = dlg.ShowQuasiModal();
-
-    m_canvas->SetIgnoreMouseEvents( false );
-    m_canvas->MoveCursorToCrossHair();
-
-    if( ret == wxID_OK )
-    {
-        if( m_autoplaceFields )
-            aComponent->AutoAutoplaceFields( GetScreen() );
-
-        GetCanvas()->Refresh();
-    }
-}
 
 
 DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT_FRAME* aParent,
@@ -196,6 +113,12 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
+}
+
+
+SCH_EDIT_FRAME* DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::GetParent()
+{
+    return dynamic_cast<SCH_EDIT_FRAME*>( wxDialog::GetParent() );
 }
 
 
@@ -759,4 +682,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeGrid( wxSizeEvent& event )
     AdjustGridColumns( event.GetSize().GetX() );
 
     event.Skip();
+}
+
+
+void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnInitDlg( wxInitDialogEvent& event )
+{
+    TransferDataToWindow();
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
