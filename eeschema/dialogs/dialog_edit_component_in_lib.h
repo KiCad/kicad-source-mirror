@@ -99,6 +99,7 @@ private:
     void OnEditSpiceModel( wxCommandEvent& event ) override;
     void OnUpdateUI( wxUpdateUIEvent& event ) override;
     void OnFilterDClick( wxMouseEvent& event ) override;
+    void OnCancelButtonClick( wxCommandEvent& event ) override;
 
     void updateAliasName( bool aFromGrid, const wxString& aName );
     bool checkAliasName( const wxString& aName );

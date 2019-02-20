@@ -3300,6 +3300,7 @@
                                 <property name="minimum_size"></property>
                                 <property name="name">m_stdSizerButton</property>
                                 <property name="permission">protected</property>
+                                <event name="OnCancelButtonClick">OnCancelButtonClick</event>
                             </object>
                         </object>
                     </object>

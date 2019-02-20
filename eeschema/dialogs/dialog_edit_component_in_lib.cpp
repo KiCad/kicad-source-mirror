@@ -739,6 +739,14 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnFilterDClick( wxMouseEvent& event)
 }
 
 
+void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnCancelButtonClick( wxCommandEvent& event )
+{
+    // Running the Footprint Browser gums up the works and causes the automatic cancel
+    // stuff to no longer work.  So we do it here ourselves.
+    EndQuasiModal( wxID_CANCEL );
+}
+
+
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddFootprintFilter( wxCommandEvent& event )
 {
     wxString  filterLine;
