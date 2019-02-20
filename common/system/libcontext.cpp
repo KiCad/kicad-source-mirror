@@ -1011,24 +1011,24 @@ __asm (
 #if defined(LIBCONTEXT_PLATFORM_linux_ppc64) && defined(LIBCONTEXT_COMPILER_gcc)
 __asm (
 ".globl jump_fcontext\n"
-"#if _CALL_ELF == 2\n"
+#if _CALL_ELF == 2
 "  .text\n"
 "  .align 2\n"
 "jump_fcontext:\n"
 "        addis   %r2, %r12, .TOC.-jump_fcontext@ha\n"
 "        addi    %r2, %r2, .TOC.-jump_fcontext@l\n"
 "        .localentry jump_fcontext, . - jump_fcontext\n"
-"#else\n"
+#else
 "  .section \".opd\",\"aw\"\n"
 "  .align 3\n"
 "jump_fcontext:\n"
-"# ifdef _CALL_LINUX\n"
+# ifdef _CALL_LINUX
 "        .quad   .L.jump_fcontext,.TOC.@tocbase,0\n"
 "        .type   jump_fcontext,@function\n"
 "        .text\n"
 "        .align 2\n"
 ".L.jump_fcontext:\n"
-"# else\n"
+# else
 "        .hidden .jump_fcontext\n"
 "        .globl  .jump_fcontext\n"
 "        .quad   .jump_fcontext,.TOC.@tocbase,0\n"
@@ -1037,13 +1037,13 @@ __asm (
 "        .text\n"
 "        .align 2\n"
 ".jump_fcontext:\n"
-"# endif\n"
-"#endif\n"
+# endif
+#endif
 "    # reserve space on stack\n"
 "    subi  %r1, %r1, 328\n"
-"#if _CALL_ELF != 2\n"
+#if _CALL_ELF != 2
 "    std  %r2,  152(%r1)  # save TOC\n"
-"#endif\n"
+#endif
 "    std  %r14, 160(%r1)  # save R14\n"
 "    std  %r15, 168(%r1)  # save R15\n"
 "    std  %r16, 176(%r1)  # save R16\n"
@@ -1122,9 +1122,9 @@ __asm (
 "    lfd  %f0,  144(%r1)  # load FPSCR\n"
 "    mtfsf  0xff, %f0  # restore FPSCR\n"
 "2:\n"
-"#if _CALL_ELF != 2\n"
+#if _CALL_ELF != 2
 "    ld  %r2,  152(%r1)  # restore TOC\n"
-"#endif\n"
+#endif
 "    ld  %r14, 160(%r1)  # restore R14\n"
 "    ld  %r15, 168(%r1)  # restore R15\n"
 "    ld  %r16, 176(%r1)  # restore R16\n"
@@ -1160,15 +1160,15 @@ __asm (
 "    mr  %r3, %r5\n"
 "    # jump to context\n"
 "    bctr\n"
-"#if _CALL_ELF == 2\n"
+#if _CALL_ELF == 2
 "  .size jump_fcontext, .-jump_fcontext\n"
-"#else\n"
-"# ifdef _CALL_LINUX\n"
+#else
+# ifdef _CALL_LINUX
 "  .size .jump_fcontext, .-.L.jump_fcontext\n"
-"# else\n"
+# else
 "  .size .jump_fcontext, .-.jump_fcontext\n"
-"# endif\n"
-"#endif\n"
+# endif
+#endif
 ".section .note.GNU-stack,\"\",%progbits\n"
 );
 
@@ -1177,24 +1177,24 @@ __asm (
 #if defined(LIBCONTEXT_PLATFORM_linux_ppc64) && defined(LIBCONTEXT_COMPILER_gcc)
 __asm (
 ".globl make_fcontext\n"
-"#if _CALL_ELF == 2\n"
+#if _CALL_ELF == 2
 "  .text\n"
 "  .align 2\n"
 "make_fcontext:\n"
 "  addis   %r2, %r12, .TOC.-make_fcontext@ha\n"
 "  addi    %r2, %r2, .TOC.-make_fcontext@l\n"
 "  .localentry make_fcontext, . - make_fcontext\n"
-"#else\n"
+#else
 "  .section \".opd\",\"aw\"\n"
 "  .align 3\n"
 "make_fcontext:\n"
-"# ifdef _CALL_LINUX\n"
+# ifdef _CALL_LINUX
 "  .quad   .L.make_fcontext,.TOC.@tocbase,0\n"
 "  .type   make_fcontext,@function\n"
 "  .text\n"
 "  .align 2\n"
 ".L.make_fcontext:\n"
-"# else\n"
+# else
 "  .hidden .make_fcontext\n"
 "  .globl  .make_fcontext\n"
 "  .quad   .make_fcontext,.TOC.@tocbase,0\n"
@@ -1203,8 +1203,8 @@ __asm (
 "  .text\n"
 "  .align 2\n"
 ".make_fcontext:\n"
-"# endif\n"
-"#endif\n"
+# endif
+#endif
 "    # save return address into R6\n"
 "    mflr  %r6\n"
 "    # first arg of make_fcontext() == top address of context-stack\n"
@@ -1215,17 +1215,17 @@ __asm (
 "    subi  %r3, %r3, 392\n"
 "    # third arg of make_fcontext() == address of context-function\n"
 "    # entry point (ELFv2) or descriptor (ELFv1)\n"
-"#if _CALL_ELF == 2\n"
+#if _CALL_ELF == 2
 "    # save address of context-function entry point\n"
 "    std  %r5, 320(%r3)\n"
-"#else\n"
+#else
 "    # save address of context-function entry point\n"
 "    ld   %r4, 0(%r5)\n"
 "    std  %r4, 320(%r3)\n"
 "    # save TOC of context-function\n"
 "    ld   %r4, 8(%r5)\n"
 "    std  %r4, 152(%r3)\n"
-"#endif\n"
+#endif
 "    # load LR\n"
 "    mflr  %r0\n"
 "    # jump to label 1\n"
@@ -1255,15 +1255,15 @@ __asm (
 "    # exit application\n"
 "    bl  _exit\n"
 "    nop\n"
-"#if _CALL_ELF == 2\n"
+#if _CALL_ELF == 2
 "  .size make_fcontext, .-make_fcontext\n"
-"#else\n"
-"# ifdef _CALL_LINUX\n"
+#else
+# ifdef _CALL_LINUX
 "  .size .make_fcontext, .-.L.make_fcontext\n"
-"# else\n"
+# else
 "  .size .make_fcontext, .-.make_fcontext\n"
-"# endif\n"
-"#endif\n"
+# endif
+#endif
 ".section .note.GNU-stack,\"\",%progbits\n"
 );
 
