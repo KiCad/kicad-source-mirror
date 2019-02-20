@@ -261,16 +261,13 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
-
-    VECTOR2D startPoint( cos( startAngleS ) * aRadius + aCenterPoint.x,
-                             sin( startAngleS ) * aRadius + aCenterPoint.y );
-    VECTOR2D endPoint( cos( endAngleS ) * aRadius + aCenterPoint.x,
-                           sin( endAngleS ) * aRadius + aCenterPoint.y );
-
-    auto startPointS = roundp( xform ( startPoint ) );
-    auto endPointS = roundp( xform ( endPoint ) );
-
     double centerAngle = endAngleS - startAngleS;
+
+
+    auto startPointS = roundp( xform ( aCenterPoint +
+                                VECTOR2D( aRadius, 0.0 ).Rotate( startAngleS ) ) );
+    auto endPointS = roundp( xform ( aCenterPoint +
+                                VECTOR2D( aRadius, 0.0 ).Rotate( endAngleS ) ) );
     auto mid = ( startPointS + endPointS ) * 0.5;
     auto chord = endPointS - startPointS;
     double c = chord.EuclideanNorm() / 2.0;
@@ -366,16 +363,9 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
     int w = aBitmap.GetSizePixels().x;
     int h = aBitmap.GetSizePixels().y;
 
-    auto matrix = currentWorld2Screen;
-
-    // hack: fix the world 2 screen matrix so that our bitmap is placed where it should
-    // (cairo_translate does not chain transforms)
-    matrix.xx *= scale;
-    matrix.yy *= scale;
-    matrix.x0 -= matrix.xx * (double)w / 2;
-    matrix.y0 -= matrix.yy * (double)h / 2;
-
-    cairo_set_matrix( currentContext, &matrix );
+    cairo_set_matrix( currentContext, &currentWorld2Screen );
+    cairo_scale( currentContext, scale, scale );
+    cairo_translate( currentContext, -w / 2.0, -h / 2.0 );
 
     cairo_new_path( currentContext );
     cairo_surface_t* image = cairo_image_surface_create( CAIRO_FORMAT_ARGB32, w, h );
@@ -383,8 +373,8 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     unsigned char* pix_buffer = cairo_image_surface_get_data( image );
     // The pixel buffer of the initial bitmap:
-    auto bm_pix_buffer = (( BITMAP_BASE&)aBitmap).GetImageData();
-    uint32_t mask_color = ( bm_pix_buffer->GetMaskRed() << 16 )+
+    auto bm_pix_buffer = const_cast<BITMAP_BASE&>( aBitmap ).GetImageData();
+    uint32_t mask_color = ( bm_pix_buffer->GetMaskRed() << 16 ) +
             ( bm_pix_buffer->GetMaskGreen() << 8 ) +
             ( bm_pix_buffer->GetMaskBlue() );
 
