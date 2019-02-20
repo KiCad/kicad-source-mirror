@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-18 11:20-0300\n"
-"PO-Revision-Date: 2019-01-31 15:43-0200\n"
+"POT-Creation-Date: 2019-02-20 08:38-0300\n"
+"PO-Revision-Date: 2019-02-20 08:37-0300\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Basepath: ../../kicad-source-mirror\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 2.2\n"
+"X-Generator: Poedit 2.2.1\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Poedit-KeywordsList: _;_HKI\n"
 "X-Poedit-SearchPath-0: 3d-viewer\n"
@@ -5336,16 +5336,15 @@ msgid "Map Orphans"
 msgstr "Mapear Órfãos"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:77
-#, fuzzy
 msgid ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
-"Se alguns componentes são órfãos (o símbolo vinculado não está localizado em "
-"nenhum lugar),\n"
+"Se alguns componentes estão órfãos (o símbolo vinculado não foi localizado "
+"em nenhum lugar),\n"
 "tente encontrar um candidato com o mesmo nome em uma das bibliotecas de "
-"símbolos"
+"símbolos carregadas."
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:62
 msgid "Symbol Library References"
@@ -5651,9 +5650,8 @@ msgstr "Mostrar ficha técnica no navegador"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:110
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:931
-#, fuzzy
 msgid "The Reference column cannot be hidden."
-msgstr "O ângulo do arco não pode ser zero."
+msgstr "A coluna Referência não pode ser oculta."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:223
 msgid "Qty"
@@ -16504,13 +16502,12 @@ msgid "Pad connections:"
 msgstr "Conexões da ilha:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
-"Tipo de conexão de ilha padrão para zona.\n"
-"Essa configuração pode ser substituída por configurações locais de ilha"
+"Tipo de conexão de ilha para zona padrão.\n"
+"Essa configuração pode ser substituída pelas configurações locais da ilha"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid "Thermal reliefs"
@@ -16525,9 +16522,8 @@ msgid "Thermal clearance:"
 msgstr "Afastamento térmico:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
-#, fuzzy
 msgid "Clearance between pads and filled areas of the same net."
-msgstr "Isolamento entre ilhas da mesma rede e áreas preenchidas."
+msgstr "Isolamento entre ilhas e áreas preenchidas da mesma rede."
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
 msgid "Thermal spoke width:"
@@ -17264,7 +17260,7 @@ msgstr "Alívio térmico"
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:310
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:595
 msgid "Local Clearance and Settings"
-msgstr "Isolamento Local e Configurações"
+msgstr "Isolamento e Configurações Locais"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:430
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:332
@@ -17323,19 +17319,18 @@ msgid "Set values to 0 to use netclass values."
 msgstr "Defina os valores em 0 para utilizar os valores da classe de rede."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:228
-#, fuzzy
 msgid ""
 "This is the local net clearance for all pads of this footprint.\n"
 "If 0, the Netclass values are used.\n"
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este é o isolamento local para todas as ilhas deste footprint\n"
-"Caso seja 0, os valores da classe de rede serão utilizados\n"
-"Este valor pode ser sobreposto por um valor da ilha local."
+"Este é o isolamento de rede local para todas as ilhas deste footprint.\n"
+"Caso seja 0, os valores da classe de rede serão utilizados.\n"
+"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:241
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder mask for \n"
 "this footprint.\n"
@@ -17343,13 +17338,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este é o isolamento local entre ilhas e máscara de solda para este "
-"footprint\n"
-"Este valor pode ser sobreposto por um valor local de ilha.\n"
-"Se 0, o valor global será utilizado."
+"Este é o isolamento local entre ilhas e máscara de solda para \n"
+"este footprint.\n"
+"Caso seja 0, o valor global será utilizado.\n"
+"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:254
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -17359,13 +17354,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Este é o isolamento local entre ilhas e pasta de solda para este footprint.\n"
-"Este valor pode ser sobreposto por um valor local de ilha.\n"
-"O valor final de isolamento é a soma deste valor com a taxa de isolamento\n"
-"Um valor negativo significa uma máscara menor que o tamanho da ilha."
+"Este é o isolamento local entre ilhas e pasta de solda para\n"
+"este footprint.\n"
+"O valor final de isolamento é a soma deste valor com a taxa de isolamento.\n"
+"Um valor negativo significa uma máscara menor que o tamanho da ilha.\n"
+"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:267
-#, fuzzy
 msgid ""
 "This is the local clearance ratio in percent between pads and the\n"
 "solder paste for this footprint.\n"
@@ -17375,12 +17371,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"Esta é a taxa local de isolamento em percentual entre ilhas e pasta de solda "
-"para este footprint.\n"
+"Esta é a taxa local de isolamento em percentual entre ilhas e a\n"
+"pasta de solda deste footprint.\n"
 "Um valor de 10 significa que o isolamento é 10 porcento do tamanho da ilha.\n"
-"Este valor pode ser sobreposto por um valor local da ilha.\n"
 "O isolamento final é a soma deste valor com o valor do isolamento.\n"
-"Um valor negativo significa uma máscara menor que o tamanho da ilha."
+"Um valor negativo significa uma máscara menor que o tamanho da ilha.\n"
+"Este valor pode ser substituído em uma base de ilha-por-ilha na guia\n"
+"de Isolamento e Configurações Locais das Propriedades da Ilha."
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -18074,17 +18071,15 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 msgid "Use route command (recommended)"
-msgstr ""
+msgstr "Usar comando rotear (recomendado)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
-#, fuzzy
 msgid "Use alternate drill mode"
-msgstr "Utilizar modo de alto contraste"
+msgstr "Usar modo alternativo de perfuração"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
-#, fuzzy
 msgid "Oval Holes Drill Mode"
-msgstr "Modo de Exibição DCodes"
+msgstr "Modo de Perfuração de Furos Ovais"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:73
 msgid ""
@@ -18093,6 +18088,12 @@ msgid ""
 " \"Use alternate mode\" uses another drill/ route command (G85)\n"
 "(Use it only if the recommended command does not work)"
 msgstr ""
+"Os furos ovais criam frequentemente problemas para os fabricantes de "
+"placas.\n"
+"\"Usar comando rotear\" utiliza o comando de roteamento usual G00 "
+"(recomendado)\n"
+"\"Usar modo alternativo\" utiliza outro comando para perfurar/rotear (G85)\n"
+"(use-o somente se o comando recomendado não funcionar)"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:80
 msgid "Gerber X2 (experimental)"
@@ -20627,18 +20628,16 @@ msgstr ""
 "poderiam ser imediatamente arrastados."
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:36
-#, fuzzy
 msgid "Icon"
-msgstr "Ícones"
+msgstr "Ícone"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:37
-#, fuzzy
 msgid "Show button"
-msgstr "Exibir Cursor"
+msgstr "Mostrar botão"
 
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:39
 msgid "Category"
-msgstr ""
+msgstr "Categoria"
 
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:31
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:53
@@ -21538,7 +21537,6 @@ msgstr ""
 "isolamento"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:94
-#, fuzzy
 msgid ""
 "This is the global clearance ratio in percent between pads and the solder "
 "paste\n"
@@ -21546,11 +21544,12 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
-"Esta é a taxa em percentual do isolamento global entre ilhas e pasta de "
+"Esta é a taxa em percentual do isolamento global entre ilhas e a pasta de "
 "solda\n"
 "Um valor de 10 significa que o valor do isolamento é 10 por cento do tamanho "
 "da ilha\n"
-"Este valor pode ser sobreposto por valores locais para o footprint ou ilha.\n"
+"Este valor pode ser sobreposto por valores locais para um footprint ou "
+"ilha.\n"
 "O valor de isolamento final é a soma deste valor e o valor de isolamento"
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:277
@@ -24578,14 +24577,12 @@ msgid "Shape has no points!"
 msgstr "A forma não tem pontos!"
 
 #: pcbnew/microwave.cpp:707
-#, fuzzy
 msgid "No pad for this footprint."
-msgstr "Nenhuma ilha para este footprint"
+msgstr "Nenhuma ilha para este footprint."
 
 #: pcbnew/microwave.cpp:715
-#, fuzzy
 msgid "Only one pad for this footprint."
-msgstr "Apenas uma ilha para este footprint"
+msgstr "Apenas uma ilha para este footprint."
 
 #: pcbnew/microwave.cpp:726
 msgid "Gap:"
