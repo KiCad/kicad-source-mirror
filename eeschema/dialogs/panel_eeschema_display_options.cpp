@@ -106,6 +106,7 @@ bool PANEL_EESCHEMA_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_frame->GetRenderSettings()->m_ShowHiddenPins = m_checkShowHiddenPins->GetValue();
     m_frame->GetRenderSettings()->SetShowPageLimits( m_checkPageLimits->GetValue() );
     m_frame->GetCanvas()->GetView()->MarkDirty();
+    m_frame->GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
     m_frame->GetCanvas()->Refresh();
 
     m_galOptsPanel->TransferDataFromWindow();
