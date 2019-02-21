@@ -60,8 +60,18 @@ enum
 };
 
 
-static wxString g_textAndGraphicsReferenceFilter;
-static wxString g_textAndGraphicsFootprintFilter;
+static bool       g_modifyReferences;
+static bool       g_modifyValues;
+static bool       g_modifyOtherFields;
+static bool       g_modifyFootprintGraphics;
+static bool       g_modifyBoardText;
+static bool       g_modifyBoardGraphics;
+static bool       g_filterByLayer;
+static LAYER_NUM  g_layerFilter;
+static bool       g_filterByReference;
+static wxString   g_referenceFilter;
+static bool       g_filterByFootprint;
+static wxString   g_footprintFilter;
 
 
 class DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS : public DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS_BASE
@@ -132,16 +142,39 @@ DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS( PCB_
 
 DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::~DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS()
 {
-    g_textAndGraphicsReferenceFilter = m_referenceFilter->GetValue();
-    g_textAndGraphicsFootprintFilter = m_footprintFilter->GetValue();
+    g_modifyReferences = m_references->GetValue();
+    g_modifyValues = m_values->GetValue();
+    g_modifyOtherFields = m_otherFields->GetValue();
+    g_modifyFootprintGraphics = m_footprintGraphics->GetValue();
+    g_modifyBoardText = m_boardText->GetValue();
+    g_modifyBoardGraphics = m_boardGraphics->GetValue();
+
+    g_filterByLayer = m_layerFilterOpt->GetValue();
+    g_layerFilter = m_layerFilter->GetLayerSelection();
+    g_filterByReference = m_referenceFilterOpt->GetValue();
+    g_referenceFilter = m_referenceFilter->GetValue();
+    g_filterByFootprint = m_footprintFilterOpt->GetValue();
+    g_footprintFilter = m_footprintFilter->GetValue();
 }
 
 
 bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataToWindow()
 {
+    m_references->SetValue( g_modifyReferences );
+    m_values->SetValue( g_modifyValues );
+    m_otherFields->SetValue( g_modifyOtherFields );
+    m_footprintGraphics->SetValue( g_modifyFootprintGraphics );
+    m_boardText->SetValue( g_modifyBoardText );
+    m_boardGraphics->SetValue( g_modifyBoardGraphics );
+
+    if( m_layerFilter->SetLayerSelection( g_layerFilter ) != wxNOT_FOUND )
+        m_layerFilterOpt->SetValue( g_filterByLayer );
+
     // SetValue() generates events, ChangeValue() does not
-    m_referenceFilter->ChangeValue( g_textAndGraphicsReferenceFilter );
-    m_footprintFilter->ChangeValue( g_textAndGraphicsFootprintFilter );
+    m_referenceFilter->ChangeValue( g_referenceFilter );
+    m_referenceFilterOpt->SetValue( g_filterByReference );
+    m_footprintFilter->ChangeValue( g_footprintFilter );
+    m_footprintFilterOpt->SetValue( g_filterByFootprint );
 
     m_lineWidth.SetValue( INDETERMINATE );
     m_textWidth.SetValue( INDETERMINATE );
