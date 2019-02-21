@@ -930,13 +930,10 @@ void PCB_PAINTER::draw( const DRAWSEGMENT* aSegment, int aLayer )
         break;
 
     case S_ARC:
-
-        m_gal->SetLineWidth( thickness );
-        m_gal->SetIsFill( false );
-        m_gal->SetIsStroke( true );
-        m_gal->DrawArc( start, aSegment->GetRadius(),
+        m_gal->DrawArcSegment( start, aSegment->GetRadius(),
                         DECIDEG2RAD( aSegment->GetArcAngleStart() ),
-                        DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ) );
+                        DECIDEG2RAD( aSegment->GetArcAngleStart() + aSegment->GetAngle() ),
+                        thickness );
         break;
 
     case S_CIRCLE:

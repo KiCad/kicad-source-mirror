@@ -263,7 +263,6 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     auto endAngleS = angle_xform( aEndAngle );
     double centerAngle = endAngleS - startAngleS;
 
-
     auto startPointS = roundp( xform ( aCenterPoint +
                                 VECTOR2D( aRadius, 0.0 ).Rotate( startAngleS ) ) );
     auto endPointS = roundp( xform ( aCenterPoint +
@@ -290,6 +289,57 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     if( isFillEnabled )
         cairo_close_path( currentContext );
 
+    flushPath();
+
+    isElementAdded = true;
+}
+
+
+void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadius, double aStartAngle,
+                                double aEndAngle, double aWidth )
+{
+    if( isFillEnabled )
+    {
+        lineWidth = aWidth;
+        isStrokeEnabled = true;
+        isFillEnabled = false;
+        DrawArc( aCenterPoint, aRadius, aStartAngle, aEndAngle );
+        isFillEnabled = true;
+        isStrokeEnabled = false;
+        return;
+    }
+
+    syncLineWidth();
+    SWAP( aStartAngle, >, aEndAngle );
+
+    auto width = ::roundp( xform( aWidth / 2.0 ) );
+    auto r = ::roundp( xform( aRadius ) );
+    auto startAngleS = angle_xform( aStartAngle );
+    auto endAngleS = angle_xform( aEndAngle );
+
+    auto mid = roundp( xform( aCenterPoint ) );
+    auto startPointS = VECTOR2D( r, 0.0 ).Rotate( startAngleS );
+    auto endPointS = VECTOR2D( r, 0.0 ).Rotate( endAngleS );
+
+    cairo_save( currentContext );
+
+    cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+
+    cairo_translate( currentContext, mid.x, mid.y );
+
+    cairo_new_sub_path( currentContext );
+    cairo_arc( currentContext, 0, 0, r - width, startAngleS, endAngleS );
+
+    cairo_new_sub_path( currentContext );
+    cairo_arc( currentContext, 0, 0, r + width, startAngleS, endAngleS );
+
+    cairo_new_sub_path( currentContext );
+    cairo_arc_negative( currentContext, startPointS.x, startPointS.y, width, startAngleS, startAngleS + M_PI );
+
+    cairo_new_sub_path( currentContext );
+    cairo_arc( currentContext, endPointS.x, endPointS.y, width, endAngleS, endAngleS + M_PI );
+
+    cairo_restore( currentContext );
     flushPath();
 
     isElementAdded = true;
