@@ -1113,14 +1113,6 @@ protected:
      */
     double computeMinGridSpacing() const;
 
-    /**
-     * @brief Draw a grid line (usually a simplified line function).
-     *
-     * @param aStartPoint is the start point of the line.
-     * @param aEndPoint is the end point of the line.
-     */
-    virtual void drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint ) {};
-
     /// Possible depth range
     static const int MIN_DEPTH;
     static const int MAX_DEPTH;

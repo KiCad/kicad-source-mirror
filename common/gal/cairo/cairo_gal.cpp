@@ -853,16 +853,51 @@ void CAIRO_GAL_BASE::resetContext()
 }
 
 
-void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
+void CAIRO_GAL_BASE::drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
+    syncLineWidth();
     auto p0 = roundp( xform( aStartPoint ) );
     auto p1 = roundp( xform( aEndPoint ) );
 
-    syncLineWidth();
+    cairo_move_to( currentContext, p0.x, 0.0);
+    cairo_line_to( currentContext, p1.x, 0.0 );
+    cairo_move_to( currentContext, 0.0, p0.y );
+    cairo_line_to( currentContext, 0.0, p1.y );
+    cairo_set_source_rgba( currentContext, axesColor.r, axesColor.g, axesColor.b, axesColor.a );
+    cairo_stroke( currentContext );
+}
 
+
+void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
+{
+    syncLineWidth();
+    auto p0 = roundp( xform( aStartPoint ) );
+    auto p1 = roundp( xform( aEndPoint ) );
+
+    printf("Line Width: %f\n", lineWidth);
+    cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     cairo_move_to( currentContext, p0.x, p0.y );
     cairo_line_to( currentContext, p1.x, p1.y );
-    cairo_set_source_rgba( currentContext, strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a );
+    cairo_stroke( currentContext );
+}
+
+
+void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
+{
+    syncLineWidth();
+    VECTOR2D offset( 0, 0 );
+    auto size = 2.0 * lineWidthInPixels;
+
+    auto p0 = roundp( xform( aPoint ) ) - VECTOR2D( size, 0 ) + offset;
+    auto p1 = roundp( xform( aPoint ) ) + VECTOR2D( size, 0 ) + offset;
+    auto p2 = roundp( xform( aPoint ) ) - VECTOR2D( 0, size ) + offset;
+    auto p3 = roundp( xform( aPoint ) ) + VECTOR2D( 0, size ) + offset;
+
+    cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
+    cairo_move_to( currentContext, p0.x, p0.y );
+    cairo_line_to( currentContext, p1.x, p1.y );
+    cairo_move_to( currentContext, p2.x, p2.y );
+    cairo_line_to( currentContext, p3.x, p3.y );
     cairo_stroke( currentContext );
 }
 
@@ -870,23 +905,11 @@ void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& 
 void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
 {
     auto p = roundp( xform( aPoint ) );
-    auto s = aSize / 2.0;
+    auto s = ::roundp( xform( aSize / 2.0 ) );
 
-    if( (((int)aSize) % 2) == 0 ) // s even
-    {
-        p += VECTOR2D( 0.5, 0.5 );
-    }
-
-    cairo_set_source_rgba( currentContext, fillColor.r, fillColor.g, fillColor.b, fillColor.a );
-
-    cairo_set_line_join( currentContext, CAIRO_LINE_JOIN_MITER );
-    cairo_set_line_cap( currentContext, CAIRO_LINE_CAP_BUTT );
-    cairo_set_line_width( currentContext, 1.0 );
-
-    cairo_move_to( currentContext, p.x - s, p.y - s );
-    cairo_line_to( currentContext, p.x + s, p.y - s );
-    cairo_line_to( currentContext, p.x + s, p.y + s );
-    cairo_line_to( currentContext, p.x - s, p.y + s );
+    cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
+    cairo_move_to( currentContext, p.x, p.y );
+    cairo_arc( currentContext, p.x, p.y, s, 0.0, 2.0 * M_PI );
     cairo_close_path( currentContext );
 
     cairo_fill( currentContext );
@@ -1418,10 +1441,13 @@ void CAIRO_GAL_BASE::DrawGrid()
     VECTOR2D worldStartPoint = screenWorldMatrix * VECTOR2D( 0.0, 0.0 );
     VECTOR2D worldEndPoint   = screenWorldMatrix * VECTOR2D( screenSize );
 
-    const double gridThreshold = computeMinGridSpacing();
+    double gridThreshold = KiROUND( computeMinGridSpacing() / worldScale );
 
-    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
-    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+    if( gridStyle == GRID_STYLE::SMALL_CROSS )
+        gridThreshold *= 2.0;
+
+    int gridScreenSizeDense  = gridSize.x;
+    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) );
 
     // Compute the line marker or point radius of the grid
     // Note: generic grids can't handle sub-pixel lines without
@@ -1433,32 +1459,28 @@ void CAIRO_GAL_BASE::DrawGrid()
     // Draw axes if desired
     if( axesEnabled )
     {
-        SetIsFill( false );
-        SetIsStroke( true );
-        SetStrokeColor( axesColor );
         SetLineWidth( marker );
-
-        drawGridLine( VECTOR2D( worldStartPoint.x, 0 ),
-                      VECTOR2D( worldEndPoint.x, 0 ) );
-
-        drawGridLine( VECTOR2D( 0, worldStartPoint.y ),
-                      VECTOR2D( 0, worldEndPoint.y ) );
+        drawAxes( worldStartPoint, worldEndPoint );
     }
 
     if( !gridVisibility )
         return;
 
-    // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
-        return;
+    // If we cannot display the grid density, scale down by a tick size and
+    // try again.  Eventually, we get some representation of the grid
+    while( std::min( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
+    {
+        gridScreenSizeCoarse *= gridTick;
+        gridScreenSizeDense *= gridTick;
+    }
 
     // Compute grid staring and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
-    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridSize.x );
-    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridSize.x );
-    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridSize.y );
-    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridSize.y );
+    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSizeDense );
+    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSizeDense );
+    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSizeDense );
+    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSizeDense );
 
     // Ensure start coordinate > end coordinate
 
@@ -1474,117 +1496,52 @@ void CAIRO_GAL_BASE::DrawGrid()
 
     if( gridStyle == GRID_STYLE::LINES )
     {
-        SetIsFill( false );
-        SetIsStroke( true );
-        SetStrokeColor( gridColor );
-
         // Now draw the grid, every coarse grid line gets the double width
 
         // Vertical lines
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            const double y = j * gridSize.y + gridOrigin.y;
+            const double y = j * gridScreenSizeDense + gridOrigin.y;
 
             if( axesEnabled && y == 0 )
                 continue;
 
-            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                SetLineWidth( doubleMarker );
-            else
-                SetLineWidth( marker );
-
-            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
-            {
-                drawGridLine( VECTOR2D( gridStartX * gridSize.x + gridOrigin.x, y ),
-                              VECTOR2D( gridEndX * gridSize.x + gridOrigin.x, y ) );
-            }
+            SetLineWidth( ( j % gridTick ) ? marker : doubleMarker );
+            drawGridLine( VECTOR2D( gridStartX * gridScreenSizeDense + gridOrigin.x, y ),
+                          VECTOR2D( gridEndX * gridScreenSizeDense + gridOrigin.x, y ) );
         }
 
         // Horizontal lines
         for( int i = gridStartX; i <= gridEndX; i++ )
         {
-            const double x = i * gridSize.x + gridOrigin.x;
+            const double x = i * gridScreenSizeDense + gridOrigin.x;
 
             if( axesEnabled && x == 0 )
                 continue;
 
-            if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                SetLineWidth( doubleMarker );
-            else
-                SetLineWidth( marker );
+            SetLineWidth( ( i % gridTick ) ? marker : doubleMarker );
+            drawGridLine( VECTOR2D( x, gridStartY * gridScreenSizeDense + gridOrigin.y ),
+                          VECTOR2D( x, gridEndY * gridScreenSizeDense + gridOrigin.y ) );
 
-            if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
-            {
-                drawGridLine( VECTOR2D( x, gridStartY * gridSize.y + gridOrigin.y ),
-                              VECTOR2D( x, gridEndY * gridSize.y + gridOrigin.y ) );
-            }
         }
     }
-    else if( gridStyle == GRID_STYLE::SMALL_CROSS )
+    else    // Dots or Crosses grid
     {
-        SetIsFill( false );
-        SetIsStroke( true );
-        SetStrokeColor( gridColor );
-
-        SetLineWidth( marker );
-        double lineLen = GetLineWidth() * 2;
-
-        // Vertical positions:
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
-            {
-                int posY =  j * gridSize.y + gridOrigin.y;
-
-                // Horizontal positions:
-                for( int i = gridStartX; i <= gridEndX; i++ )
-                {
-                    if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                        || gridScreenSizeDense > gridThreshold )
-                    {
-                        int posX = i * gridSize.x + gridOrigin.x;
-
-                        drawGridLine( VECTOR2D( posX - lineLen, posY ),
-                                        VECTOR2D( posX + lineLen,   posY ) );
-
-                        drawGridLine( VECTOR2D( posX, posY - lineLen ),
-                                        VECTOR2D( posX, posY + lineLen ) );
-                    }
-                }
-            }
-        }
-    }
-    else    // Dotted grid
-    {
-        bool tickX, tickY;
-        SetIsFill( true );
-        SetIsStroke( false );
-        SetFillColor( gridColor );
-
-        for( int j = gridStartY; j <= gridEndY; j++ )
-        {
-            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                tickY = true;
-            else
-                tickY = false;
+            bool tickY = ( j % gridTick == 0 );
 
             for( int i = gridStartX; i <= gridEndX; i++ )
             {
-                if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                    tickX = true;
-                else
-                    tickX = false;
+                bool tickX = ( i % gridTick == 0 );
+                SetLineWidth( ( ( tickX && tickY ) ? doubleMarker : marker ) );
+                auto pos = VECTOR2D( i * gridScreenSizeDense + gridOrigin.x,
+                                     j * gridScreenSizeDense + gridOrigin.y );
 
-                if( tickX || tickY || gridScreenSizeDense > gridThreshold )
-                {
-                    double radius = ( ( tickX && tickY ) ? 2.0 : 1.0 );
-                    drawGridPoint( VECTOR2D( i * gridSize.x + gridOrigin.x,
-                                             j * gridSize.y + gridOrigin.y ), radius );
-
-                }
+                if( gridStyle == GRID_STYLE::SMALL_CROSS )
+                    drawGridCross( pos );
+                else if( gridStyle == GRID_STYLE::DOTS )
+                    drawGridPoint( pos, GetLineWidth() );
             }
         }
     }

@@ -1154,29 +1154,33 @@ void OPENGL_GAL::DrawGrid()
     if( !gridVisibility )
         return;
 
-    int gridScreenSizeDense  = KiROUND( gridSize.x * worldScale );
-    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) * worldScale );
+    int gridScreenSizeDense  = gridSize.x;
+    int gridScreenSizeCoarse = KiROUND( gridSize.x * static_cast<double>( gridTick ) );
 
-    const double gridThreshold = computeMinGridSpacing();
+    double gridThreshold = KiROUND( computeMinGridSpacing() / worldScale );
 
-    // Check if the grid would not be too dense
-    if( std::max( gridScreenSizeDense, gridScreenSizeCoarse ) < gridThreshold )
-        return;
+    if( gridStyle == GRID_STYLE::SMALL_CROSS )
+        gridThreshold *= 2.0;
+
+    // If we cannot display the grid density, scale down by a tick size and
+    // try again.  Eventually, we get some representation of the grid
+    while( std::min( gridScreenSizeDense, gridScreenSizeCoarse ) <= gridThreshold )
+    {
+        gridScreenSizeCoarse *= gridTick;
+        gridScreenSizeDense *= gridTick;
+    }
 
     // Compute grid staring and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
-    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridSize.x );
-    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridSize.x );
-    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridSize.y );
-    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridSize.y );
+    int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSizeDense );
+    int gridEndX = KiROUND( ( worldEndPoint.x - gridOrigin.x ) / gridScreenSizeDense );
+    int gridStartY = KiROUND( ( worldStartPoint.y - gridOrigin.y ) / gridScreenSizeDense );
+    int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSizeDense );
 
     // Ensure start coordinate > end coordinate
-    if( gridStartX > gridEndX )
-        std::swap( gridStartX, gridEndX );
-
-    if( gridStartY > gridEndY )
-        std::swap( gridStartY, gridEndY );
+    SWAP( gridStartX, >, gridStartX );
+    SWAP( gridStartY, >, gridEndY );
 
     // Ensure the grid fills the screen
     --gridStartX; ++gridEndX;
@@ -1201,32 +1205,23 @@ void OPENGL_GAL::DrawGrid()
 
     if( gridStyle == GRID_STYLE::SMALL_CROSS )
     {
-        SetLineWidth( minorLineWidth );
-
-        // calculate a line len = 2 minorLineWidth, in internal unit value
-        // (in fact the size of cross is lineLen*2)
-        int lineLen = KiROUND( minorLineWidth * 2.0 );
 
         // Vertical positions
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
+            bool tickY = ( j % gridTick == 0 );
+            int posY =  j * gridScreenSizeDense + gridOrigin.y;
+
+            // Horizontal positions
+            for( int i = gridStartX; i <= gridEndX; i++ )
             {
-                int posY =  j * gridSize.y + gridOrigin.y;
+                bool tickX = ( i % gridTick == 0 );
+                SetLineWidth( ( ( tickX && tickY ) ? majorLineWidth : minorLineWidth ) );
+                auto lineLen = 2.0 * GetLineWidth();
+                auto posX = i * gridScreenSizeDense + gridOrigin.x;
 
-                // Horizontal positions
-                for( int i = gridStartX; i <= gridEndX; i++ )
-                {
-                    if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                        || gridScreenSizeDense > gridThreshold )
-                    {
-                        int posX = i * gridSize.x + gridOrigin.x;
-
-                        DrawLine( VECTOR2D( posX - lineLen, posY ), VECTOR2D( posX + lineLen, posY ) );
-                        DrawLine( VECTOR2D( posX, posY - lineLen ), VECTOR2D( posX, posY + lineLen ) );
-                    }
-                }
+                DrawLine( VECTOR2D( posX - lineLen, posY ), VECTOR2D( posX + lineLen, posY ) );
+                DrawLine( VECTOR2D( posX, posY - lineLen ), VECTOR2D( posX, posY + lineLen ) );
             }
         }
 
@@ -1237,25 +1232,17 @@ void OPENGL_GAL::DrawGrid()
         // Vertical lines
         for( int j = gridStartY; j <= gridEndY; j++ )
         {
-            const double y = j * gridSize.y + gridOrigin.y;
+            const double y = j * gridScreenSizeDense + gridOrigin.y;
 
             // If axes are drawn, skip the lines that would cover them
             if( axesEnabled && y == 0 )
                 continue;
 
-            if( j % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                SetLineWidth( majorLineWidth );
-            else
-                SetLineWidth( minorLineWidth );
+            SetLineWidth( ( j % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
+            VECTOR2D a ( gridStartX * gridScreenSizeDense + gridOrigin.x, y );
+            VECTOR2D b ( gridEndX * gridScreenSizeDense + gridOrigin.x, y );
 
-            if( ( j % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
-            {
-                VECTOR2D a ( gridStartX * gridSize.x + gridOrigin.x, y );
-                VECTOR2D b ( gridEndX * gridSize.x + gridOrigin.x, y );
-
-                DrawLine( a, b );
-            }
+            DrawLine( a, b );
         }
 
         nonCachedManager->EndDrawing();
@@ -1270,24 +1257,16 @@ void OPENGL_GAL::DrawGrid()
         // Horizontal lines
         for( int i = gridStartX; i <= gridEndX; i++ )
         {
-            const double x = i * gridSize.x + gridOrigin.x;
+            const double x = i * gridScreenSizeDense + gridOrigin.x;
 
             // If axes are drawn, skip the lines that would cover them
             if( axesEnabled && x == 0 )
                 continue;
 
-            if( i % gridTick == 0 && gridScreenSizeDense > gridThreshold )
-                SetLineWidth( majorLineWidth );
-            else
-                SetLineWidth( minorLineWidth );
-
-            if( ( i % gridTick == 0 && gridScreenSizeCoarse > gridThreshold )
-                || gridScreenSizeDense > gridThreshold )
-            {
-                VECTOR2D a ( x, gridStartY * gridSize.y + gridOrigin.y );
-                VECTOR2D b ( x, gridEndY * gridSize.y + gridOrigin.y );
-                DrawLine( a, b );
-            }
+            SetLineWidth( ( i % gridTick == 0 ) ? majorLineWidth : minorLineWidth );
+            VECTOR2D a ( x, gridStartY * gridScreenSizeDense + gridOrigin.y );
+            VECTOR2D b ( x, gridEndY * gridScreenSizeDense + gridOrigin.y );
+            DrawLine( a, b );
         }
 
         nonCachedManager->EndDrawing();
