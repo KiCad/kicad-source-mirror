@@ -261,22 +261,15 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
-    double centerAngle = endAngleS - startAngleS;
+    auto r = xform( aRadius );
 
-    auto startPointS = roundp( xform ( aCenterPoint +
-                                VECTOR2D( aRadius, 0.0 ).Rotate( startAngleS ) ) );
-    auto endPointS = roundp( xform ( aCenterPoint +
-                                VECTOR2D( aRadius, 0.0 ).Rotate( endAngleS ) ) );
-    auto mid = ( startPointS + endPointS ) * 0.5;
-    auto chord = endPointS - startPointS;
-    double c = chord.EuclideanNorm() / 2.0;
-    auto d = chord.Rotate( M_PI / 2.0 ).Resize( c );
-    auto tan_angle = tan( centerAngle / 2.0 );
+    // N.B. This is backwards. We set this because we want to adjust the center
+    // point that changes both endpoints.  In the worst case, this is twice as far.
+    // We cannot adjust radius or center based on the other because this causes the
+    // whole arc to change position/size
+    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 1 );
 
-    if( tan_angle != 0.0 )
-        mid += d * ( 1.0 / tan_angle );
-
-    auto rS = ( mid - startPointS ).EuclideanNorm();
+    auto mid = roundp( xform( aCenterPoint ) );
 
     cairo_set_line_width( currentContext, lineWidthInPixels );
     cairo_new_sub_path( currentContext );
@@ -284,7 +277,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     if( isFillEnabled )
         cairo_move_to( currentContext, mid.x, mid.y );
 
-    cairo_arc( currentContext, mid.x, mid.y, rS, startAngleS, endAngleS );
+    cairo_arc( currentContext, mid.x, mid.y, r, startAngleS, endAngleS );
 
     if( isFillEnabled )
         cairo_close_path( currentContext );
@@ -311,13 +304,18 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 
     syncLineWidth();
     SWAP( aStartAngle, >, aEndAngle );
-
-    auto width = ::roundp( xform( aWidth / 2.0 ) );
-    auto r = ::roundp( xform( aRadius ) );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
+    auto r = xform( aRadius );
+
+    // N.B. This is backwards. We set this because we want to adjust the center
+    // point that changes both endpoints.  In the worst case, this is twice as far.
+    // We cannot adjust radius or center based on the other because this causes the
+    // whole arc to change position/size
+    lineWidthIsOdd = !( static_cast<int>( aRadius ) % 1 );
 
     auto mid = roundp( xform( aCenterPoint ) );
+    auto width = xform( aWidth / 2.0 );
     auto startPointS = VECTOR2D( r, 0.0 ).Rotate( startAngleS );
     auto endPointS = VECTOR2D( r, 0.0 ).Rotate( endAngleS );
 
