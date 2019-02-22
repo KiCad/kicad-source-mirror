@@ -33,28 +33,6 @@ double KIGFX::PREVIEW::PreviewOverlayDeemphAlpha( bool aDeemph )
 }
 
 
-static wxString getDimensionUnit( EDA_UNITS_T aUnits )
-{
-    switch( aUnits )
-    {
-    case INCHES:
-        return _( "\"" );
-
-    case MILLIMETRES:
-        return _( "mm" );
-
-    case DEGREES:
-        return _( "deg" );
-
-    case UNSCALED_UNITS:
-        break;
-    // no default: handle all cases
-    }
-
-    return wxEmptyString;
-}
-
-
 static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
 {
     int precision = 4;
@@ -66,12 +44,15 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
     case MILLIMETRES:
         precision = 2;  // 10um
         break;
+
     case INCHES:
-        precision = 4;  // 1mil
+        precision = 4;  // 0.1mil
         break;
+
     case DEGREES:
-        precision = 1;  // 0.1deg (limit of formats anyway)
+        precision = 1;  // 0.1deg
         break;
+
     case UNSCALED_UNITS:
         break;
     }
@@ -80,7 +61,7 @@ static wxString formatPreviewDimension( double aVal, EDA_UNITS_T aUnits )
 
     wxString str = wxString::Format( fmtStr, To_User_Unit( aUnits, aVal ) );
 
-    const wxString symbol = getDimensionUnit( aUnits );
+    const wxString symbol = GetAbbreviatedUnitsLabel( aUnits, false );
 
     if( symbol.size() )
         str << " " << symbol;

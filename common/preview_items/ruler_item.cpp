@@ -53,12 +53,6 @@ static void drawCursorStrings( KIGFX::VIEW* aView, const VECTOR2D& aCursor,
     double degs = RAD2DECIDEG( -aRulerVec.Angle() );
     cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), degs, DEGREES ) );
 
-    for( auto& str: cursorStrings )
-    {
-        // FIXME: remove spaces that choke OpenGL lp:1668455
-        str.erase( std::remove( str.begin(), str.end(), ' ' ), str.end() );
-    }
-
     auto temp = aRulerVec;
     DrawTextNextToCursor( aView, aCursor, -temp, cursorStrings );
 }
@@ -174,10 +168,6 @@ void drawTicksAlongLine( KIGFX::VIEW *aView, const VECTOR2D& aOrigin,
         if( drawLabel )
         {
             wxString label = DimensionLabel( "", tickSpace * i, aUnits );
-
-            // FIXME: spaces choke OpenGL lp:1668455
-            label.erase( std::remove( label.begin(), label.end(), ' ' ), label.end() );
-
             gal->BitmapText( label, tickPos + labelOffset, labelAngle );
         }
     }
