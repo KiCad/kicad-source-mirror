@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -20,8 +20,11 @@
 #include <wx/textctrl.h>
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
-#include <wx/dataview.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/dataview.h>
 #include <wx/dialog.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -38,6 +41,7 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticTextFilter;
 		wxTextCtrl* m_textCtrlFilter;
 		wxCheckBox* m_cbShowZeroPad;
+		wxButton* m_Export;
 		wxDataViewListCtrl* m_netsList;
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
@@ -45,6 +49,7 @@ class DIALOG_SELECT_NET_FROM_LIST_BASE : public DIALOG_SHIM
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void onFilterChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onExport( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSelChanged( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void onListSize( wxSizeEvent& event ) { event.Skip(); }
 

@@ -63,11 +63,16 @@ private:
     void onSelChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
     void onListSize( wxSizeEvent& event ) override;
+    void onExport( wxMouseEvent& event ) override;
 
     void buildNetsList();
     wxString getListColumnHeaderNet() { return _( "Net" ); };
     wxString getListColumnHeaderName() { return _( "Name" ); };
     wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
+    wxString getListColumnHeaderVias() { return _( "Via Count" ); };
+    wxString getListColumnHeaderBoard() { return _( "Board Length" ); };
+    wxString getListColumnHeaderDie() { return _( "Die Length" ); };
+    wxString getListColumnHeaderLength() { return _( "Length" ); };
     void adjustListColumns();
 
     wxArrayString   m_netsInitialNames;   // The list of escaped netnames (original names)
@@ -97,9 +102,13 @@ DIALOG_SELECT_NET_FROM_LIST::DIALOG_SELECT_NET_FROM_LIST( PCB_EDIT_FRAME* aParen
     m_brd = aParent->GetBoard();
     m_wasSelected = false;
 
-    m_netsList->AppendTextColumn( getListColumnHeaderNet(),   wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn( getListColumnHeaderName(),  wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
-    m_netsList->AppendTextColumn( getListColumnHeaderCount(), wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderNet(),    wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderName(),   wxDATAVIEW_CELL_INERT, 0, wxALIGN_LEFT, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderCount(),  wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderVias(),   wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderBoard(),  wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderDie(),    wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
+    m_netsList->AppendTextColumn( getListColumnHeaderLength(), wxDATAVIEW_CELL_INERT, 0, wxALIGN_CENTER, 0 );
 
     // The fact that we're a list should keep the control from reserving space for the
     // expander buttons... but it doesn't.  Fix by forcing the indent to 0.
@@ -120,10 +129,16 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     wxString                   netFilter = m_textCtrlFilter->GetValue();
     EDA_PATTERN_MATCH_WILDCARD filter;
 
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
+
     filter.SetPattern( netFilter.MakeUpper() );
 
     m_netsList->DeleteAllItems();
     m_netsInitialNames.Clear();
+
+    auto connectivity = m_brd->GetConnectivity();
+
+    auto units = GetUserUnits();
 
     // Populate the nets list with nets names matching the filters:
     // Note: the filtering is case insensitive.
@@ -150,9 +165,46 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
         m_netsInitialNames.Add( net->GetNetname() );
 
         if( netcode )
+        {
             dataLine.push_back( wxVariant( wxString::Format( "%u", nodes ) ) );
+
+            int lenPadToDie = 0;
+            int len = 0;
+            int viaCount = 0;
+
+            for( auto item : connectivity->GetNetItems( netcode, types ) )
+            {
+
+                if( item->Type() == PCB_PAD_T )
+                {
+                    D_PAD *pad = dyn_cast<D_PAD*>( item );
+                    lenPadToDie += pad->GetPadToDieLength();
+                }
+                else if( item->Type() == PCB_TRACE_T )
+                {
+                    TRACK *track = dyn_cast<TRACK*>( item );
+                    len += track->GetLength();
+                }
+                else if( item->Type() == PCB_VIA_T )
+                {
+                    viaCount++;
+                }
+            }
+
+            dataLine.push_back( wxVariant( wxString::Format( "%u", viaCount ) ) ); // vias
+            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, len ).c_str() ) ) ); // board
+            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, lenPadToDie ).c_str() ) ) ); // die
+            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, len + lenPadToDie ).c_str() ) ) ); // length
+        }
         else    // For the net 0 (unconnected pads), the pad count is not known
+        {
             dataLine.push_back( wxVariant( wxT( "---" ) ) );
+            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // vias
+            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // board
+            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // die
+            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // length
+        }
+
 
         m_netsList->AppendItem( dataLine );
     }
@@ -230,7 +282,7 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 
 void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
 {
-    int w0, w1, w2;
+    int w0, w1, w2, w3, w4, w5, w6;
 
     /**
      * Calculating optimal width of the first (Net) and
@@ -244,19 +296,31 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
 
     dc.GetTextExtent( getListColumnHeaderNet()+"MM", &w0, &h );
     dc.GetTextExtent( getListColumnHeaderCount()+"MM", &w2, &h );
-    dc.GetTextExtent( "M0000M", &minw, &h );
+    dc.GetTextExtent( getListColumnHeaderVias()+"MM", &w3, &h );
+    dc.GetTextExtent( getListColumnHeaderBoard()+"MM", &w4, &h );
+    dc.GetTextExtent( getListColumnHeaderDie()+"MM", &w5, &h );
+    dc.GetTextExtent( getListColumnHeaderLength()+"MM", &w6, &h );
+    dc.GetTextExtent( "M00000,000 mmM", &minw, &h );
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
     w0 = std::max( w0+10, minw);
     w2 = std::max( w2+10, minw);
+    w3 = std::max( w3+10, minw);
+    w4 = std::max( w4+10, minw);
+    w5 = std::max( w5+10, minw);
+    w6 = std::max( w6+10, minw);
 
     m_netsList->GetColumn( 0 )->SetWidth( w0 );
     m_netsList->GetColumn( 2 )->SetWidth( w2 );
+    m_netsList->GetColumn( 3 )->SetWidth( w3 );
+    m_netsList->GetColumn( 4 )->SetWidth( w4 );
+    m_netsList->GetColumn( 5 )->SetWidth( w5 );
+    m_netsList->GetColumn( 6 )->SetWidth( w6 );
 
     // At resizing of the list the width of middle column (Net Names) changes only.
     int width = m_netsList->GetClientSize().x;
-    w1 = width - w0 - w2;
+    w1 = width - w0 - w2 - w3 - w4 - w5 - w6;
 
     m_netsList->GetColumn( 1 )->SetWidth( w1 );
 }
@@ -274,3 +338,36 @@ bool DIALOG_SELECT_NET_FROM_LIST::GetNetName( wxString& aName )
     aName = m_selection;
     return m_wasSelected;
 }
+
+
+void DIALOG_SELECT_NET_FROM_LIST::onExport( wxMouseEvent& aEvent )
+{
+    wxFileDialog
+           saveFileDialog(this, _( "Export file" ), "", "",
+                          "Text files (*.txt)|*.txt", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
+       if (saveFileDialog.ShowModal() == wxID_CANCEL)
+           return;
+
+       wxTextFile f( saveFileDialog.GetPath() );
+
+       f.Create();
+
+       int rows = m_netsList->GetItemCount();
+       
+       for( int row = 0; row < rows; row++ )
+       {
+           wxString txt = m_netsList->GetTextValue(row, 0)+";"+
+                          m_netsList->GetTextValue(row, 1)+";"+
+                          m_netsList->GetTextValue(row, 2)+";"+
+                          m_netsList->GetTextValue(row, 3)+";"+
+                          m_netsList->GetTextValue(row, 4)+";"+
+                          m_netsList->GetTextValue(row, 5)+";"+
+                          m_netsList->GetTextValue(row, 6)+";";
+
+           f.AddLine( txt );
+       }
+
+       f.Write();
+       f.Close();
+}
+
