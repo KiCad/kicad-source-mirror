@@ -684,6 +684,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         return 0;
 
     updateModificationPoint( selection );
+    auto refPt = selection.GetReferencePoint();
     const int rotateAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *editFrame, aEvent );
 
     // When editing modules, all items have the same parent
@@ -697,7 +698,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( !item->IsNew() && !EditingModules() )
             m_commit->Modify( item );
 
-        static_cast<BOARD_ITEM*>( item )->Rotate( selection.GetReferencePoint(), rotateAngle );
+        static_cast<BOARD_ITEM*>( item )->Rotate( refPt, rotateAngle );
     }
 
     if( !m_dragging )
@@ -1421,10 +1422,10 @@ bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
         auto pos = item->GetPosition();
         aSelection.SetReferencePoint( VECTOR2I( pos.x, pos.y ) );
     }
-    // ...otherwise modify items with regard to the cursor position
+    // ...otherwise modify items with regard to the grid-snapped cursor position
     else
     {
-        m_cursor = getViewControls()->GetCursorPosition();
+        m_cursor = getViewControls()->GetCursorPosition( true );
         aSelection.SetReferencePoint( m_cursor );
     }
 
