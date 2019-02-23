@@ -80,10 +80,16 @@ void DIALOG_PNS_SETTINGS::OnOkClick( wxCommandEvent& aEvent )
 void DIALOG_PNS_SETTINGS::onModeChange( wxCommandEvent& aEvent )
 {
     if( m_mode->GetSelection() == PNS::RM_MarkObstacles )
+    {
         m_freeAngleMode->Enable();
+        m_violateDrc->Enable();
+    }
     else
     {
         m_freeAngleMode->SetValue( false );
         m_freeAngleMode->Enable( false );
+
+        m_violateDrc->SetValue( false );
+        m_violateDrc->Enable( false );
     }
 }
