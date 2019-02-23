@@ -21,10 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
-#include "tools/pcb_actions.h"
+#include <dialogs/dialog_position_relative.h>
 
-#include "dialog_position_relative.h"
+#include <tools/pcb_actions.h>
+
+#include <widgets/tab_traversal.h>
+
+#include <pcb_edit_frame.h>
 
 // initialise statics
 DIALOG_POSITION_RELATIVE::POSITION_RELATIVE_OPTIONS DIALOG_POSITION_RELATIVE::m_options;
@@ -40,7 +43,12 @@ DIALOG_POSITION_RELATIVE::DIALOG_POSITION_RELATIVE( PCB_BASE_FRAME* aParent, wxP
     m_yOffset( aParent, m_yLabel, m_yEntry, m_yUnit )
 {
     // tabbing goes through the entries in sequence
-    m_yEntry->MoveAfterInTabOrder( m_xEntry );
+    KIUI::SetControlsTabOrder( {
+            m_xEntry,
+            m_yEntry,
+    } );
+
+    SetInitialFocus( m_xEntry );
 
     // and set up the entries according to the saved options
     m_polarCoords->SetValue( m_options.polarCoords );

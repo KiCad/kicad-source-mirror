@@ -22,9 +22,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
+#include <dialogs/dialog_move_exact.h>
 
-#include "dialog_move_exact.h"
+#include <widgets/tab_traversal.h>
+
+#include <pcb_edit_frame.h>
 
 // initialise statics
 DIALOG_MOVE_EXACT::MOVE_EXACT_OPTIONS DIALOG_MOVE_EXACT::m_options;
@@ -41,8 +43,12 @@ DIALOG_MOVE_EXACT::DIALOG_MOVE_EXACT( PCB_BASE_FRAME *aParent, wxPoint& aTransla
     m_rotate( aParent, m_rotLabel, m_rotEntry, m_rotUnit )
 {
     // tabbing goes through the entries in sequence
-    m_yEntry->MoveAfterInTabOrder( m_xEntry );
-    m_rotEntry->MoveAfterInTabOrder( m_yEntry );
+    KIUI::SetControlsTabOrder( {
+            m_xEntry,
+            m_yEntry,
+            m_rotEntry,
+            m_anchorOptions,
+    } );
 
     updateDialogControls( m_options.polarCoords );
 

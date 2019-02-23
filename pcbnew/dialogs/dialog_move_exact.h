@@ -28,7 +28,10 @@
 #include <vector>
 #include <widgets/unit_binder.h>
 
-#include <dialog_move_exact_base.h>
+#include <dialogs/dialog_move_exact_base.h>
+
+
+class PCB_BASE_FRAME;
 
 
 enum ROTATION_ANCHOR

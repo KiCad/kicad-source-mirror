@@ -225,6 +225,7 @@ set( COMMON_WIDGET_SRCS
     widgets/paged_dialog.cpp
     widgets/progress_reporter.cpp
     widgets/stepped_slider.cpp
+    widgets/tab_traversal.cpp
     widgets/text_ctrl_eval.cpp
     widgets/two_column_tree_list.cpp
     widgets/ui_common.cpp

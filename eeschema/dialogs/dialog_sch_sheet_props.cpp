@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2014-2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/string.h>
-#include <sch_edit_frame.h>
 #include <dialog_sch_sheet_props.h>
+
+#include <wx/string.h>
+
+#include <confirm.h>
 #include <validators.h>
 #include <wildcards_and_files_ext.h>
-#include <confirm.h>
+
+#include <widgets/tab_traversal.h>
+
+#include <sch_edit_frame.h>
+
 
 DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEET* aSheet ) :
     DIALOG_SCH_SHEET_PROPS_BASE( parent ),
@@ -38,6 +44,17 @@ DIALOG_SCH_SHEET_PROPS::DIALOG_SCH_SHEET_PROPS( SCH_EDIT_FRAME* parent, SCH_SHEE
     m_textFileName->SetValidator( FILE_NAME_WITH_PATH_CHAR_VALIDATOR() );
     m_textFileName->SetFocus();
     m_sdbSizer1OK->SetDefault();
+
+    // Normally, the file and sheet name are the "main" edited fields
+    // so put them first
+    KIUI::SetControlsTabOrder( {
+            m_textFileName,
+            m_textSheetName,
+            m_filenameSizeCtrl,
+            m_sheetnameSizeCtrl,
+    } );
+
+    SetInitialFocus( m_textFileName );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
