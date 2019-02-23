@@ -1,10 +1,10 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2008-2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -261,6 +261,8 @@ void DIALOG_PAD_PROPERTIES::prepareCanvas()
         // gives a non null grid size (0.001mm) because GAL layer does not like a 0 size grid:
         double gridsize = 0.001 * IU_PER_MM;
         view->GetGAL()->SetGridSize( VECTOR2D( gridsize, gridsize ) );
+        // And do not show the grid:
+        view->GetGAL()->SetGridVisibility( false );
         view->Add( m_dummyPad );
         view->Add( m_axisOrigin );
 
@@ -1338,7 +1340,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
             BOX2I drawbox;
             drawbox.Move( m_dummyPad->GetPosition() );
             drawbox.Inflate( bbox.GetSize().x*2, bbox.GetSize().y*2 );
-            
+
             view->SetBoundary( drawbox );
 
             // Autozoom
