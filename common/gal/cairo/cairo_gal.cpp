@@ -922,7 +922,6 @@ void CAIRO_GAL_BASE::drawGridLine( const VECTOR2D& aStartPoint, const VECTOR2D& 
     auto p0 = roundp( xform( aStartPoint ) );
     auto p1 = roundp( xform( aEndPoint ) );
 
-    printf("Line Width: %f\n", lineWidth);
     cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     cairo_move_to( currentContext, p0.x, p0.y );
     cairo_line_to( currentContext, p1.x, p1.y );
@@ -953,7 +952,7 @@ void CAIRO_GAL_BASE::drawGridCross( const VECTOR2D& aPoint )
 void CAIRO_GAL_BASE::drawGridPoint( const VECTOR2D& aPoint, double aSize )
 {
     auto p = roundp( xform( aPoint ) );
-    auto s = ::roundp( xform( aSize / 2.0 ) );
+    auto s = xform( aSize / 2.0 );
 
     cairo_set_source_rgba( currentContext, gridColor.r, gridColor.g, gridColor.b, gridColor.a );
     cairo_move_to( currentContext, p.x, p.y );
