@@ -102,7 +102,10 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
     if( strcmp( idcmd, "$CLEAR:" ) == 0 )
     {
         if( text && strcmp( text, "HIGHLIGHTED" ) == 0 )
+        {
             GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
+            GetCanvas()->Refresh();
+        }
 
         return;
     }
