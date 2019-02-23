@@ -300,6 +300,10 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     {
         COLOR4D color = getOverlayColor( aItem, m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND ), true );
 
+        // These actions place the item over others, so allow a modest transparency here
+        if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
+            color = color.WithAlpha( 0.75 );
+
         m_gal->SetIsFill( true );
         m_gal->SetFillColor( color );
 
@@ -309,6 +313,10 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     else if( aLayer == LAYER_DEVICE )
     {
         COLOR4D color = getOverlayColor( aItem, m_schSettings.GetLayerColor( LAYER_DEVICE ), false );
+
+        // These actions place the item over others, so allow a modest transparency here
+        if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
+            color = color.WithAlpha( 0.75 );
 
         m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
