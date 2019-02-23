@@ -627,11 +627,8 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
 
     if( m_page_bitmap->IsOk() )
     {
-        // Calculate layout preview scale.
-        int appScale = m_screen->MilsToIuScalar();
-
-        double scaleW = (double) lyWidth  / clamped_layout_size.x / appScale;
-        double scaleH = (double) lyHeight / clamped_layout_size.y / appScale;
+        double scaleW = (double) lyWidth  / clamped_layout_size.x;
+        double scaleH = (double) lyHeight / clamped_layout_size.y;
 
         // Prepare DC.
         wxSize example_size( lyWidth + 1, lyHeight + 1 );
@@ -664,10 +661,11 @@ void DIALOG_PAGES_SETTINGS::UpdatePageLayoutExample()
         GRResetPenAndBrush( &memDC );
 
         WORKSHEET_LAYOUT::SetAltInstance( m_pagelayout );
+        GRFilledRect( NULL, &memDC, 0, 0, m_layout_size.x, m_layout_size.y, WHITE, WHITE );
         DrawPageLayout( &memDC, NULL, pageDUMMY,
                         emptyString, emptyString,
                         m_tb, m_screen->m_NumberOfScreens,
-                        m_screen->m_ScreenNumber, 1, appScale, DARKGRAY, RED );
+                        m_screen->m_ScreenNumber, 1, 1, DARKGRAY, RED );
 
         memDC.SelectObject( wxNullBitmap );
         m_PageLayoutExampleBitmap->SetBitmap( *m_page_bitmap );
