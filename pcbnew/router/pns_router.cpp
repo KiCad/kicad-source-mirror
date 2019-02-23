@@ -157,6 +157,9 @@ bool ROUTER::StartDragging( const VECTOR2I& aP, ITEM* aStartItem, int aDragMode 
 
 bool ROUTER::isStartingPointRoutable( const VECTOR2I& aWhere, int aLayer )
 {
+    if( Settings().CanViolateDRC() && Settings().Mode() == RM_MarkObstacles )
+        return true;
+
     auto candidates = QueryHoverItems( aWhere );
 
     for( ITEM* item : candidates.Items() )
