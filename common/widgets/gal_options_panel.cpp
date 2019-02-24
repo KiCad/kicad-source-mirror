@@ -32,9 +32,9 @@
 /*
  * Spin control parameters
  */
-static const double gridThicknessMin = 0.5;
+static const double gridThicknessMin = 1.0;
 static const double gridThicknessMax = 10.0;
-static const double gridThicknessStep = 0.5;
+static const double gridThicknessStep = 1.0;
 
 static const double gridMinSpacingMin = 5;
 static const double gridMinSpacingMax = 200;
@@ -134,7 +134,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
                                         gridThicknessStep );
-        m_gridSizeIncrementer->SetPrecision( 1 );
+        m_gridSizeIncrementer->SetPrecision( 0 );
 
         m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
                     *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
@@ -214,7 +214,7 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
     m_galOptions.m_gridStyle = UTIL::GetValFromConfig(
             gridStyleSelectMap, m_gridStyle->GetSelection() );
 
-    m_galOptions.m_gridLineWidth = m_gridSizeIncrementer->GetValue();
+    m_galOptions.m_gridLineWidth = std::floor( m_gridSizeIncrementer->GetValue() + 0.5 );
 
     m_galOptions.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
 

@@ -108,7 +108,7 @@ bool GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
 
     if( options.m_gridLineWidth != gridLineWidth )
     {
-        gridLineWidth = options.m_gridLineWidth ;
+        gridLineWidth = std::floor( options.m_gridLineWidth + 0.5 );
         refresh = true;
     }
 

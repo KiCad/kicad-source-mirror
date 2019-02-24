@@ -51,7 +51,7 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
       cairo_antialiasing_mode( CAIRO_ANTIALIASING_MODE::NONE ),
       m_gridStyle( GRID_STYLE::DOTS ),
-      m_gridLineWidth( 0.5 ),
+      m_gridLineWidth( 1.0 ),
       m_gridMinSpacing( 10.0 ),
       m_axesEnabled( false ),
       m_fullscreenCursor( false ),
@@ -67,7 +67,7 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase* aCfg, const wxString& aBaseN
                 static_cast<long>( KIGFX::GRID_STYLE::DOTS ) );
     m_gridStyle = UTIL::GetValFromConfig( gridStyleConfigVals, readLong );
 
-    aCfg->Read( aBaseName + GalGridLineWidthConfig, &m_gridLineWidth, 0.5 );
+    aCfg->Read( aBaseName + GalGridLineWidthConfig, &m_gridLineWidth, 1.0 );
     aCfg->Read( aBaseName + GalGridMaxDensityConfig, &m_gridMinSpacing, 10 );
     aCfg->Read( aBaseName + GalGridAxesEnabledConfig, &m_axesEnabled, false );
     aCfg->Read( aBaseName + GalFullscreenCursorConfig, &m_fullscreenCursor, false );
