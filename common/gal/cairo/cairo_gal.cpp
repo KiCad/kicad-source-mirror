@@ -904,14 +904,16 @@ void CAIRO_GAL_BASE::resetContext()
 void CAIRO_GAL_BASE::drawAxes( const VECTOR2D& aStartPoint, const VECTOR2D& aEndPoint )
 {
     syncLineWidth();
+
     auto p0 = roundp( xform( aStartPoint ) );
     auto p1 = roundp( xform( aEndPoint ) );
+    auto org = roundp( xform( VECTOR2D( 0.0, 0.0 ) ) );     // Axis origin = 0,0 coord
 
-    cairo_move_to( currentContext, p0.x, 0.0);
-    cairo_line_to( currentContext, p1.x, 0.0 );
-    cairo_move_to( currentContext, 0.0, p0.y );
-    cairo_line_to( currentContext, 0.0, p1.y );
     cairo_set_source_rgba( currentContext, axesColor.r, axesColor.g, axesColor.b, axesColor.a );
+    cairo_move_to( currentContext, p0.x, org.y);
+    cairo_line_to( currentContext, p1.x, org.y );
+    cairo_move_to( currentContext, org.x, p0.y );
+    cairo_line_to( currentContext, org.x, p1.y );
     cairo_stroke( currentContext );
 }
 

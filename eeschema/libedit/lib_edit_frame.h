@@ -154,6 +154,11 @@ public:
 
     ~LIB_EDIT_FRAME();
 
+    /**
+     * switches currently used canvas ( Cairo / OpenGL).
+     */
+    void OnSwitchCanvas( wxCommandEvent& aEvent ) override;
+
     /** The nickname of the current library being edited and empty string if none. */
     wxString GetCurLib() const;
 

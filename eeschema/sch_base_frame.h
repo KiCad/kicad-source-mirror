@@ -112,7 +112,7 @@ public:
     /**
      * switches currently used canvas ( Cairo / OpenGL).
      */
-    void OnSwitchCanvas( wxCommandEvent& aEvent );
+    virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
 
     /**
      * Update UI called when switches currently used canvas (Cairo / OpenGL).

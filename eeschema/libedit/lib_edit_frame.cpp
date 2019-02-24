@@ -1840,3 +1840,13 @@ void LIB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ;
     }
 }
+
+
+void LIB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
+{
+    // switches currently used canvas ( Cairo / OpenGL):
+    SCH_BASE_FRAME::OnSwitchCanvas( aEvent );
+
+    // Set options specific to symbol editor (axies are always enabled):
+    GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
+}
