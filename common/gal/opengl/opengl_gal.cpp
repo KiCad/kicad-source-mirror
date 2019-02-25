@@ -69,7 +69,6 @@ wxGLContext* OPENGL_GAL::glMainContext = NULL;
 int OPENGL_GAL::instanceCounter = 0;
 GLuint OPENGL_GAL::fontTexture = 0;
 bool OPENGL_GAL::isBitmapFontLoaded = false;
-SHADER* OPENGL_GAL::shader = NULL;
 
 namespace KIGFX {
 class GL_BITMAP_CACHE
@@ -215,7 +214,6 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
             throw std::runtime_error( "Could not create the main OpenGL context" );
 
         glPrivContext = glMainContext;
-        shader = new SHADER();
     }
     else
     {
@@ -225,6 +223,7 @@ OPENGL_GAL::OPENGL_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions, wxWindow* aParent,
             throw std::runtime_error( "Could not create a private OpenGL context" );
     }
 
+    shader = new SHADER();
     ++instanceCounter;
 
     bitmapCache.reset( new GL_BITMAP_CACHE );
@@ -306,6 +305,8 @@ OPENGL_GAL::~OPENGL_GAL()
     if( glPrivContext != glMainContext )
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glPrivContext );
 
+    delete shader;
+
     // Are we destroying the last GAL instance?
     if( instanceCounter == 0 )
     {
@@ -316,8 +317,6 @@ OPENGL_GAL::~OPENGL_GAL()
             glDeleteTextures( 1, &fontTexture );
             isBitmapFontLoaded = false;
         }
-
-        delete shader;
 
         GL_CONTEXT_MANAGER::Get().UnlockCtx( glMainContext );
         GL_CONTEXT_MANAGER::Get().DestroyCtx( glMainContext );

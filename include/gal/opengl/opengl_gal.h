@@ -312,7 +312,7 @@ private:
     RENDER_TARGET           currentTarget;          ///< Current rendering target
 
     // Shader
-    static SHADER*          shader;                 ///< There is only one shader used for different objects
+    SHADER*                 shader;                 ///< There is only one shader used for different objects
 
     // Internal flags
     bool                    isFramebufferInitialized;   ///< Are the framebuffers initialized?
