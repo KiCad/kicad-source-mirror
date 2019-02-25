@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
         break;
 
     case GBR_NC_STRING_FORMAT_X1:
-        msg.Printf( "G04 #@! TF.CreationDate,%s%s", date.FormatISOCombined(), timezone_offset );
+        msg.Printf( "G04 #@! TF.CreationDate,%s%s*", date.FormatISOCombined(), timezone_offset );
         break;
 
     case GBR_NC_STRING_FORMAT_GBRJOB:
@@ -66,7 +66,7 @@ wxString GbrMakeCreationDateAttributeString( GBR_NC_STRING_FORMAT aFormat )
         break;
 
     case GBR_NC_STRING_FORMAT_NCDRILL:
-        msg.Printf( "; #@! TF.CreationDate,%s%s", date.FormatISOCombined(), timezone_offset );
+        msg.Printf( "; #@! TF.CreationDate,%s%s*", date.FormatISOCombined(), timezone_offset );
         break;
     }
     return msg;
