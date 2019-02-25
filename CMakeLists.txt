@@ -64,7 +64,7 @@ option( USE_WX_GRAPHICS_CONTEXT
     "Use wxGraphicsContext for rendering (default OFF).  Warning, this is experimental" )
 
 option( USE_WX_OVERLAY
-    "Use wxOverlay: Always ON for MAC (default OFF).  Warning, this is experimental" )
+    "Use wxOverlay: Always ON for MAC and GTK3 (default OFF)." )
 
 option( KICAD_SCRIPTING
     "Build the Python scripting support inside KiCad binaries (default ON)."
@@ -781,6 +781,10 @@ find_package( wxWidgets ${wxWidgets_REQ_VERSION} COMPONENTS gl aui adv html core
 # Include wxWidgets macros.
 include( ${wxWidgets_USE_FILE} )
 
+# Check for GTK3 libraries - These do not have XOR, so we need overlay (Page layout editor)
+if( wxWidgets_LIBRARIES MATCHES "gtk3" )
+    add_definitions( -DUSE_WX_OVERLAY )
+endif()
 
 if( KICAD_SCRIPTING_WXPYTHON AND NOT KICAD_SCRIPTING_WXPYTHON_PHOENIX )
     # wxPython appears to be installed and valid so make sure the headers are available.
