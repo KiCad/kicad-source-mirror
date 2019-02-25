@@ -1534,6 +1534,14 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 
     // status bar
     UpdateMsgPanel();
+
+    // This ugly hack is to fix an option(left) toolbar update bug that seems to only affect
+    // windows.  See https://bugs.launchpad.net/kicad/+bug/1816492.  For some reason, calling
+    // wxWindow::Refresh() does not resolve the issue.  Only a resize event seems to force the
+    // toolbar to update correctly.
+#if defined( __WXMSW__ )
+    PostSizeEvent();
+#endif
 }
 
 
