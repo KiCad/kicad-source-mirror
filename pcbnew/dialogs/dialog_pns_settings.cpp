@@ -47,6 +47,9 @@ DIALOG_PNS_SETTINGS::DIALOG_PNS_SETTINGS( wxWindow* aParent, PNS::ROUTING_SETTIN
     m_violateDrc->SetValue( m_settings.CanViolateDRC() );
     m_freeAngleMode->SetValue( m_settings.GetFreeAngleMode() );
     m_dragToolMode->SetSelection ( m_settings.InlineDragEnabled() ? 1 : 0 );
+    // Enable/disable some options
+    wxCommandEvent event;
+    onModeChange( event );
 
     // Don't show options that are not implemented
     m_suggestEnding->Hide();
