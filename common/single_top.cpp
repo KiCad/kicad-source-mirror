@@ -135,6 +135,10 @@ struct APP_SINGLE_TOP : public wxApp
             wxSetEnv ( wxT("UBUNTU_MENUPROXY" ), wxT( "0" ) );
         }
 
+        // Force the use of X11 backend (or wayland-x11 compatibilty layer).  This is required until wxWidgets
+        // supports the Wayland compositors
+        wxSetEnv( wxT( "GDK_BACKEND" ), wxT( "x11" ) );
+
         // Disable overlay scrollbars as they mess up wxWidgets window sizing and cause excessive redraw requests
         wxSetEnv( wxT( "GTK_OVERLAY_SCROLLING" ), wxT( "0" ) );
 
