@@ -1,5 +1,5 @@
 * Copyright (C) 1992-2015 Jean-Pierre Charras
-* Copyright (C) 1992-2017 Kicad Developers Team
+* Copyright (C) 1992-2019 Kicad Developers Team
 * under GNU General Public License (see copyright.txt)
 
 == Main Authors
@@ -55,7 +55,7 @@ https://code.launchpad.net/~kicad-product-committers/kicad/+git/product-git/+ref
 Jean-Pierre Charras <jean-pierre.charras[at]gipsa-lab.inpg-dot-fr>
 Igor Plyatov <plyatov[at]gmail-dot-com>
 Fabrizio Tappero <fabrizio-dot-tappero[at]gmail-dot-com>
-Marco Ciampa <ciampix[at]libero-dot-it>
+Marco Ciampa <ciampix[at]posteo-dot-net>
 Wayne Stambaugh <stambaughw[at]gmail-dot-com
 
 
@@ -64,6 +64,7 @@ Czech (CZ) Martin KratoÅ¡ka <martin[at]ok1rr-dot-com>
 Dutch (NL) Jerry Jacobs <xor.gate.engineering[at]gmail-dot-com>
 Finnish (FI) Vesa Solonen <vesa.solonen[at]hut-dot-fi>
 French (FR) Jean-Pierre Charras <jean-pierre.charras[at]inpg-dot-fr>
+Italian (IT) Marco Ciampa  <ciampix[at]posteo-dot-net>
 Polish (PL) Mateusz Skowro¿ski <skowri[at]gmail-dot-com>
 Polish (PL) Kerusey Karyu <keruseykaryu[at]o2.pl>
 Portuguese (PT) Renie Marquet <reniemarquet[at]uol-dot-com-dot-br>"
