@@ -352,8 +352,8 @@ void GRID_TRICKS::onKeyDown( wxKeyEvent& ev )
             return;
     }
 
-    // shift-return for OK
-    if( ev.GetKeyCode() == WXK_RETURN && ev.ShiftDown() )
+    // shift-return (Mac default) or Ctrl-Return (GTK) for OK
+    if( ev.GetKeyCode() == WXK_RETURN && ( ev.ShiftDown() || ev.ControlDown() ) )
     {
         wxPostEvent( this, wxCommandEvent( wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK ) );
         return;

@@ -54,6 +54,7 @@ private:
     SCH_COMPONENT* m_cmp;
     LIB_PART*      m_part;
 
+    int      m_width;
     int      m_delayedFocusRow;
     int      m_delayedFocusColumn;
     wxString m_shownColumns;

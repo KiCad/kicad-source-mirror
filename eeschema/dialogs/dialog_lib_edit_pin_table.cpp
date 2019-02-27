@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -442,6 +442,7 @@ DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART
     m_ButtonsOK->SetDefault();
     m_initialized = true;
     m_modified = false;
+    m_width = 0;
 
     // Connect Events
     m_grid->Connect( wxEVT_GRID_COL_SORT, wxGridEventHandler( DIALOG_LIB_EDIT_PIN_TABLE::OnColSort ), nullptr, this );
@@ -583,6 +584,8 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnRebuildRows( wxCommandEvent&  )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns( int aWidth )
 {
+    m_width = aWidth;
+
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
@@ -617,10 +620,13 @@ void DIALOG_LIB_EDIT_PIN_TABLE::adjustGridColumns( int aWidth )
 
 void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
 {
-    if( m_initialized )
-        adjustGridColumns( event.GetSize().GetX() );
+    auto new_size = event.GetSize().GetX();
 
-    event.Skip();
+    if( m_initialized && m_width != new_size )
+    {
+        adjustGridColumns( new_size );
+        event.Skip();
+    }
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,6 +60,7 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_part = GetParent()->GetLibPart( m_cmp->GetLibId(), true );
     m_fields = new FIELDS_GRID_TABLE<SCH_FIELD>( this, aParent, m_part );
 
+    m_width = 0;
     m_delayedFocusRow = REFERENCE;
     m_delayedFocusColumn = FDC_VALUE;
 
@@ -634,6 +635,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::AdjustGridColumns( int aWidth )
 {
+    m_width = aWidth;
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
@@ -679,9 +681,13 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeGrid( wxSizeEvent& event )
 {
-    AdjustGridColumns( event.GetSize().GetX() );
+    auto new_size = event.GetSize().GetX();
 
-    event.Skip();
+    if( m_width != new_size )
+    {
+        AdjustGridColumns( new_size );
+        event.Skip();
+    }
 }
 
 
