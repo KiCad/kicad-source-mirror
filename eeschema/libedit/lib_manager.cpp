@@ -446,6 +446,7 @@ bool LIB_MANAGER::UpdatePartAfterRename( LIB_PART* aPart, const wxString& oldAli
     wxCHECK( partBuf, false );
     partBuf->SetOriginal( original.release() ); // part buffer takes ownership of pointer
 
+    SetCurrentPart( aPart->GetName() );
     m_frame.SyncLibraries( false );
 
     return true;
