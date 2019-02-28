@@ -87,6 +87,10 @@ public:
 
     void SetTextAngle( double aAngle );
 
+    /**
+     * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text is not easy to read
+     * if false, the text rotation is free.
+     */
     bool IsKeepUpright()
     {
         return m_keepUpright;
@@ -243,7 +247,9 @@ private:
     wxPoint   m_Pos0;       ///< text coordinates relative to the footprint anchor, orient 0.
                             ///< text coordinate ref point is the text center
 
-    bool      m_keepUpright;
+    bool      m_keepUpright;    ///< if true, keep rotation angle between -90 .. 90 deg.
+                                ///< to keep the text more easy to read
+
 };
 
 #endif // TEXT_MODULE_H_
