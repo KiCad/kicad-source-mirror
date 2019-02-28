@@ -594,7 +594,10 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
     if( !part )
         return;
 
-    const int MIN_GRID_SIZE = 25;
+    wxRealPoint curr_grid_size = GetScreen()->GetGridSize();
+    const int min_grid_size = 25;
+    const int grid_size = KiROUND( curr_grid_size.x );
+    const int clamped_grid_size = ( grid_size < min_grid_size ) ? min_grid_size : grid_size;
 
     LIB_PINS pinList;
 
@@ -672,8 +675,8 @@ void LIB_EDIT_FRAME::OnCheckComponent( wxCommandEvent& event )
     {
         LIB_PIN* pin = pinList[ii];
 
-        if( ( (pin->GetPosition().x % MIN_GRID_SIZE) == 0 ) &&
-            ( (pin->GetPosition().y % MIN_GRID_SIZE) == 0 ) )
+        if( ( (pin->GetPosition().x % clamped_grid_size) == 0 ) &&
+            ( (pin->GetPosition().y % clamped_grid_size) == 0 ) )
             continue;
 
         // "pin" is off grid here.
