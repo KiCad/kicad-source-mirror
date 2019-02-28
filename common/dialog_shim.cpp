@@ -434,10 +434,15 @@ void DIALOG_SHIM::OnCloseWindow( wxCloseEvent& aEvent )
 
 void DIALOG_SHIM::OnButton( wxCommandEvent& aEvent )
 {
+    const int id = aEvent.GetId();
+
+    // If we are pressing a button to exit, we need to enable the escapeID
+    // otherwise the dialog does not process cancel
+    if( id == wxID_CANCEL )
+        SetEscapeId( wxID_ANY );
+
     if( IsQuasiModal() )
     {
-        const int id = aEvent.GetId();
-
         if( id == GetAffirmativeId() )
         {
             EndQuasiModal( id );
