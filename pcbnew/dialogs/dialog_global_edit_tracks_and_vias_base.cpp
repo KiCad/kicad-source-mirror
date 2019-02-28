@@ -40,13 +40,13 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbScope->Add( fgSizer1, 0, wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( sbScope, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbScope, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	wxStaticBoxSizer* sbFilters;
 	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filters") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 3, 3, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 3, 2, 0 );
 	fgSizer3->AddGrowableCol( 1 );
 	fgSizer3->AddGrowableCol( 2 );
 	fgSizer3->SetFlexibleDirection( wxHORIZONTAL );
@@ -85,14 +85,14 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbFilters->Add( fgSizer3, 1, wxEXPAND, 5 );
 	
 	
-	bMainSizer->Add( sbFilters, 0, wxALL|wxEXPAND, 5 );
+	bMainSizer->Add( sbFilters, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	wxStaticBoxSizer* sbAction;
 	sbAction = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Action") ), wxVERTICAL );
 	
 	m_setToSpecifiedValues = new wxRadioButton( sbAction->GetStaticBox(), ID_SPECIFIED_NET_TO_SPECIFIED_VALUES, _("Set to specified values:"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP );
 	m_setToSpecifiedValues->SetValue( true ); 
-	sbAction->Add( m_setToSpecifiedValues, 0, wxTOP|wxBOTTOM, 5 );
+	sbAction->Add( m_setToSpecifiedValues, 0, wxBOTTOM, 5 );
 	
 	wxBoxSizer* bSizerTrackViaPopups;
 	bSizerTrackViaPopups = new wxBoxSizer( wxHORIZONTAL );
@@ -154,7 +154,7 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	sbAction->Add( 0, 0, 1, wxEXPAND|wxTOP, 5 );
 	
 	
-	bMainSizer->Add( sbAction, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	bMainSizer->Add( sbAction, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	m_sdbSizer = new wxStdDialogButtonSizer();
 	m_sdbSizerOK = new wxButton( this, wxID_OK );
