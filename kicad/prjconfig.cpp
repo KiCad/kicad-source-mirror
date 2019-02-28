@@ -232,7 +232,8 @@ void KICAD_MANAGER_FRAME::OnNewProject( wxCommandEvent& aEvent )
 
     // wxFileName automatically extracts an extension.  But if it isn't
     // a .pro extension, we should keep it as part of the filename
-    if( pro.GetExt().ToStdString() != ProjectFileExtension )
+    if( !pro.GetExt().IsEmpty()
+            && pro.GetExt().ToStdString() != ProjectFileExtension )
         pro.SetName( pro.GetName() + wxT( "." ) + pro.GetExt() );
 
     pro.SetExt( ProjectFileExtension );     // enforce extension
