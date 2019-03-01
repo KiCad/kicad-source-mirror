@@ -10,7 +10,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2960,7 +2960,7 @@ extern bool BuildBoardPolygonOutlines( BOARD* aBoard, SHAPE_POLY_SET& aOutlines,
 bool BOARD::GetBoardPolygonOutlines( SHAPE_POLY_SET& aOutlines, wxString* aErrorText, wxPoint* aErrorLocation )
 {
     bool success = BuildBoardPolygonOutlines( this, aOutlines, aErrorText,
-            Millimeter2iu( 0.05 ), aErrorLocation );
+            ARC_HIGH_DEF, aErrorLocation );
 
     // Make polygon strictly simple to avoid issues (especially in 3D viewer)
     aOutlines.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );

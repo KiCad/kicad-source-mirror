@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,10 +32,12 @@
 #include <trigo.h>
 #include <macros.h>
 
+#include <math/vector2d.h>
 #include <class_drawsegment.h>
 #include <class_module.h>
 #include <base_units.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/shape_poly_set.h>
 #include <geometry/geometry_utils.h>
 
 
@@ -322,7 +324,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     // Output the Edge.Cuts perimeter as circle or polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
-        int steps = GetArcToSegmentCount( graphic->GetRadius(), ARC_LOW_DEF, 360.0 );
+        int steps = GetArcToSegmentCount( graphic->GetRadius(), aTolerance, 360.0 );
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), steps );
     }
     else if( graphic->GetShape() == S_POLYGON )
@@ -386,7 +388,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     wxPoint pcenter = graphic->GetCenter();
                     double  angle   = -graphic->GetAngle();
                     double  radius  = graphic->GetRadius();
-                    int     steps   = GetArcToSegmentCount( radius, ARC_LOW_DEF, angle / 10.0 );
+                    int     steps   = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
 
                     if( !close_enough( prevPt, pstart, aTolerance ) )
                     {
@@ -528,7 +530,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             double   angle   = 3600.0;
             wxPoint  start   = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = GetArcToSegmentCount( radius, ARC_LOW_DEF, 360.0 );
+            int      steps   = GetArcToSegmentCount( radius, aTolerance, 360.0 );
             wxPoint  nextPt;
 
             start.x += radius;
@@ -587,7 +589,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                         wxPoint pcenter = graphic->GetCenter();
                         double  angle   = -graphic->GetAngle();
                         int     radius  = graphic->GetRadius();
-                        int     steps = GetArcToSegmentCount( radius, ARC_LOW_DEF, angle / 10.0 );
+                        int     steps = GetArcToSegmentCount( radius, aTolerance, angle / 10.0 );
 
                         if( !close_enough( prevPt, pstart, aTolerance ) )
                         {
@@ -695,6 +697,42 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
                     }
                     break;
                 }
+            }
+        }
+    }
+
+    // All of the silliness that follows is to work around the segment iterator
+    // while checking for collisions.
+    // TODO: Implement proper segment and point iterators that follow std
+    for( auto seg1 = aPolygons.IterateSegmentsWithHoles(); seg1; seg1++ )
+    {
+        auto seg2 = seg1;
+
+        for( ++seg2; seg2; seg2++ )
+        {
+            // Check for exact overlapping segments.  This is not viewed
+            // as an intersection below
+            if( *seg1 == *seg2 ||
+                    ( ( *seg1 ).A == ( *seg2 ).B && ( *seg1 ).B == ( *seg2 ).A ) )
+            {
+                if( aErrorLocation )
+                {
+                    aErrorLocation->x = ( *seg1 ).A.x;
+                    aErrorLocation->y = ( *seg1 ).A.y;
+                }
+
+                return false;
+            }
+
+            if( auto pt = seg1.Get().Intersect( seg2.Get(), true ) )
+            {
+                if( aErrorLocation )
+                {
+                    aErrorLocation->x = pt->x;
+                    aErrorLocation->y = pt->y;
+                }
+
+                return false;
             }
         }
     }

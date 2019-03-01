@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2010 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -137,7 +137,7 @@ MARKER_PCB* DRC_MARKER_FACTORY::NewMarker(
         const wxPoint& aPos, BOARD_ITEM* aItem, int aErrorCode ) const
 {
     return new MARKER_PCB(
-            getCurrentUnits(), aErrorCode, aPos, aItem, aItem->GetPosition(), nullptr, wxPoint() );
+            getCurrentUnits(), aErrorCode, aPos, aItem, aPos, nullptr, wxPoint() );
 }
 
 
