@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 10 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -181,7 +181,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 
 	bSizerUnitCount->Add( m_staticTextNbUnits, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxALIGN_CENTER_VERTICAL, 5 );
 
-	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 26, 1 );
+	m_SelNumberOfUnits = new wxSpinCtrl( sbSizerSymbol->GetStaticBox(), wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS, 1, 64, 1 );
 	bSizerUnitCount->Add( m_SelNumberOfUnits, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_VERTICAL, 5 );
 
 
@@ -283,7 +283,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_addAliasButton->SetToolTip( _("Add alias") );
 	m_addAliasButton->SetMinSize( wxSize( 30,29 ) );
 
-	bSizerButtons->Add( m_addAliasButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_addAliasButton, 0, wxALL, 5 );
 
 
 	bSizerButtons->Add( 0, 0, 0, wxEXPAND|wxRIGHT|wxLEFT, 5 );
@@ -292,7 +292,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	m_deleteAliasButton->SetToolTip( _("Delete alias") );
 	m_deleteAliasButton->SetMinSize( wxSize( 30,29 ) );
 
-	bSizerButtons->Add( m_deleteAliasButton, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	bSizerButtons->Add( m_deleteAliasButton, 0, wxALL, 5 );
 
 
 	bLeftBoxSizerPanelAlias->Add( bSizerButtons, 0, wxEXPAND, 5 );
