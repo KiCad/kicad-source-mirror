@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2012 Torsten Hueter, torstenhtr <at> gmx.de
- * Copyright (C) 2012-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2019 Kicad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017-2018 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -1523,7 +1523,7 @@ void CAIRO_GAL_BASE::DrawGrid()
         gridScreenSizeDense *= gridTick;
     }
 
-    // Compute grid staring and ending indexes to draw grid points on the
+    // Compute grid starting and ending indexes to draw grid points on the
     // visible screen area
     // Note: later any point coordinate will be offsetted by gridOrigin
     int gridStartX = KiROUND( ( worldStartPoint.x - gridOrigin.x ) / gridScreenSizeDense );
@@ -1533,7 +1533,7 @@ void CAIRO_GAL_BASE::DrawGrid()
 
     // Ensure start coordinate > end coordinate
 
-    SWAP( gridStartX, >, gridStartX );
+    SWAP( gridStartX, >, gridEndX );
     SWAP( gridStartY, >, gridEndY );
 
     // Ensure the grid fills the screen

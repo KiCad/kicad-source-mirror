@@ -1274,7 +1274,7 @@ void OPENGL_GAL::DrawGrid()
     int gridEndY = KiROUND( ( worldEndPoint.y - gridOrigin.y ) / gridScreenSizeDense );
 
     // Ensure start coordinate > end coordinate
-    SWAP( gridStartX, >, gridStartX );
+    SWAP( gridStartX, >, gridEndX );
     SWAP( gridStartY, >, gridEndY );
 
     // Ensure the grid fills the screen
