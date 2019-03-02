@@ -60,6 +60,7 @@ public:
     wxString        m_delayedErrorMessage;
 
     wxString        m_shownColumns;
+    int             m_width;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;

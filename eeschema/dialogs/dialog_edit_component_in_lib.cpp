@@ -68,7 +68,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     m_delayedFocusGrid( nullptr ),
     m_delayedFocusRow( -1 ),
     m_delayedFocusColumn( -1 ),
-    m_delayedFocusPage( -1 )
+    m_delayedFocusPage( -1 ),
+    m_width( 0 )
 {
     m_config = Kiface().KifaceSettings();
 
@@ -800,6 +801,8 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditFootprintFilter( wxCommandEvent& ev
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::adjustGridColumns( int aWidth )
 {
+    m_width = aWidth;
+
     // Account for scroll bars
     aWidth -= ( m_grid->GetSize().x - m_grid->GetClientSize().x );
 
@@ -906,9 +909,13 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnUpdateUI( wxUpdateUIEvent& event )
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
 {
-    adjustGridColumns( event.GetSize().GetX() );
+    auto new_size = event.GetSize().GetX();
 
-    event.Skip();
+    if( new_size != m_width )
+    {
+        adjustGridColumns( event.GetSize().GetX() );
+        event.Skip();
+    }
 }
 
 
