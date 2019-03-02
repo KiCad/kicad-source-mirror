@@ -77,7 +77,7 @@ void LIB_TREE_NODE::AssignIntrinsicRanks( bool presorted )
 
         std::sort( sort_buf.begin(), sort_buf.end(),
                 []( LIB_TREE_NODE* a, LIB_TREE_NODE* b ) -> bool
-                    { return StrNumCmp( a->Name, b->Name, INT_MAX, true ) > 0; } );
+                    { return StrNumCmp( a->Name, b->Name, true ) > 0; } );
 
         for( int i = 0; i < (int) sort_buf.size(); ++i )
             sort_buf[i]->IntrinsicRank = i;

@@ -168,12 +168,12 @@ protected:
 /// FOOTPRINT object list sort function.
 inline bool operator<( const FOOTPRINT_INFO& item1, const FOOTPRINT_INFO& item2 )
 {
-    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, INT_MAX, true );
+    int retv = StrNumCmp( item1.m_nickname, item2.m_nickname, true );
 
     if( retv != 0 )
         return retv < 0;
 
-    return StrNumCmp( item1.m_fpname, item2.m_fpname, INT_MAX, true ) < 0;
+    return StrNumCmp( item1.m_fpname, item2.m_fpname, true ) < 0;
 }
 
 

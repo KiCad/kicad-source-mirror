@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE( NaturalNumberCompare )
                 c.first.first + " AND " + c.first.second + " failed for case sensitive" );
 
         BOOST_CHECK_MESSAGE(
-                StrNumCmp( c.first.first, c.first.second, INT_MAX, true ) == c.second.second,
+                StrNumCmp( c.first.first, c.first.second, true ) == c.second.second,
                 c.first.first + " AND " + c.first.second + " failed for case insensitive" );
     }
 }

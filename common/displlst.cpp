@@ -250,7 +250,7 @@ static int wxCALLBACK myCompareFunction( wxIntPtr aItem1, wxIntPtr aItem2,
     wxString* component1Name = (wxString*) aItem1;
     wxString* component2Name = (wxString*) aItem2;
 
-    return StrNumCmp( *component1Name, *component2Name, INT_MAX, true );
+    return StrNumCmp( *component1Name, *component2Name, true );
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,13 +39,7 @@
  */
 static const char illegalFileNameChars[] = "\\/:\"<>|";
 
-/**
- * These Escape/Unescape routines use HTML-entity-reference-style encoding to handle
- * characters which are:
- *   (a) not legal in filenames
- *   (b) used as control characters in LIB_IDs
- *   (c) used to delineate hierarchical paths
- */
+
 wxString EscapeString( const wxString& aSource )
 {
 #if 1
@@ -316,62 +310,78 @@ wxString DateAndTime()
 }
 
 
-int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength, bool aIgnoreCase )
+int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreCase )
 {
-    int i;
     int nb1 = 0, nb2 = 0;
 
     wxString::const_iterator str1 = aString1.begin(), str2 = aString2.begin();
 
-    for( i = 0; i < aLength; i++ )
+    while( str1 != aString1.end() && str2 != aString2.end() )
     {
         wxUniChar c1 = *str1;
         wxUniChar c2 = *str2;
 
-        if( isdigit( c1 ) && isdigit( c2 ) ) /* digit found */
+        if( isdigit( c1 ) && isdigit( c2 ) ) // Both characters are digits, do numeric compare.
         {
             nb1 = 0;
             nb2 = 0;
 
-            while( isdigit( c1 ) )
+            do
             {
+                c1 = *(str1);
                 nb1 = nb1 * 10 + (int) c1 - '0';
-                c1 = *(++str1);
-            }
+                ++str1;
+            } while( str1 != aString1.end() && isdigit( *(str1) ) );
 
-            while( isdigit( c2 ) )
+            do
             {
+                c2 = *(str2);
                 nb2 = nb2 * 10 + (int) c2 - '0';
-                c2 = *(++str2);
-            }
+                ++str2;
+            } while( str2 != aString2.end() && isdigit( *(str2) ) );
 
             if( nb1 < nb2 )
                 return -1;
-            else if( nb1 > nb2 )
+
+            if( nb1 > nb2 )
                 return 1;
+
+            c1 = ( str1 != aString1.end() ) ? *(str1) : (wxUniChar) '\0';
+            c2 = ( str2 != aString2.end() ) ? *(str2) : (wxUniChar) '\0';
         }
 
+        // Any numerical comparisons to here are identical.
         if( aIgnoreCase )
         {
-            if( toupper( c1 ) < toupper(c2 ) )
+            if( toupper( c1 ) < toupper( c2 ) )
                 return -1;
-            else if( toupper( c1 ) > toupper( c2 ) )
+
+            if( toupper( c1 ) > toupper( c2 ) )
                 return 1;
-            else if( ( c1 == 0 ) && ( c2 == 0 ) )
-                return 0;
         }
         else
         {
             if( c1 < c2 )
                 return -1;
-            else if( c1 > c2 )
+
+            if( c1 > c2 )
                 return 1;
-            else if( ( c1 == 0 ) && ( c2 == 0 ) )
-                return 0;
         }
 
-        ++str1;
-        ++str2;
+        if( str1 != aString1.end() )
+            ++str1;
+
+        if( str2 != aString2.end() )
+            ++str2;
+    }
+
+    if( str1 == aString1.end() && str2 != aString2.end() )
+    {
+        return -1;   // Identical to here but aString1 is longer.
+    }
+    else if( str1 != aString1.end() && str2 == aString2.end() )
+    {
+        return 1;    // Identical to here but aString2 is longer.
     }
 
     return 0;
@@ -486,15 +496,6 @@ bool ApplyModifier( double& value, const wxString& aString )
 }
 
 
-// Should handle:
-// a) Purely numerical e.g. '22'
-// b) Numerical with included units e.g. '15uF'
-// c) Numerical with included prefix but no units e.g. '20n'
-// d) Numerical with prefix inside number e.g. '4K7'
-// e) Other, e.g. 'MAX232'
-//
-// TODO: case (d) unimplemented !!!
-//
 int ValueStringCompare( wxString strFWord, wxString strSWord )
 {
     // Compare unescaped text
@@ -611,6 +612,7 @@ int GetTrailingInt( const wxString& aStr )
 
     // Trim and extract the trailing numeric part
     int index = aStr.Len() - 1;
+
     while( index >= 0 )
     {
         const char chr = aStr.GetChar( index );

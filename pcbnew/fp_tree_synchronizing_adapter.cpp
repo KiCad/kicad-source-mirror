@@ -109,7 +109,7 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::updateLibrary( LIB_TREE_NODE_LIB& aLibNode )
         auto footprintIt = std::lower_bound( footprints.begin(), footprints.end(), &dummy,
             []( LIB_TREE_ITEM* a, LIB_TREE_ITEM* b )
             {
-                return StrNumCmp( a->GetName(), b->GetName(), INT_MAX, true ) < 0;
+                return StrNumCmp( a->GetName(), b->GetName(), true ) < 0;
             } );
 
         if( footprintIt != footprints.end() && dummy.GetName() == (*footprintIt)->GetName() )

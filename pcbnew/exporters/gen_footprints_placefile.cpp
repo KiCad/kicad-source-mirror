@@ -388,7 +388,7 @@ static wxPoint File_Place_Offset;  // Offset coordinates for generated file.
 static bool sortFPlist( const LIST_MOD& ref, const LIST_MOD& tst )
 {
     if( ref.m_Layer == tst.m_Layer )
-        return StrNumCmp( ref.m_Reference, tst.m_Reference, 16 ) < 0;
+        return StrNumCmp( ref.m_Reference, tst.m_Reference ) < 0;
 
     return ref.m_Layer > tst.m_Layer;
 }

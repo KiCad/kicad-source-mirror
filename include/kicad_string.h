@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004, 2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,8 @@ wxString EscapeString( const wxString& aSource );
 wxString UnescapeString( const wxString& aSource );
 
 /**
- * Function ReadDelimitedText
- * copies bytes from @a aSource delimited string segment to @a aDest buffer.
+ * Copy bytes from @a aSource delimited string segment to @a aDest buffer.
+ *
  * The extracted string will be null terminated even if truncation is necessary
  * because aDestSize was not large enough.
  *
@@ -63,8 +63,7 @@ wxString UnescapeString( const wxString& aSource );
 int ReadDelimitedText( char* aDest, const char* aSource, int aDestSize );
 
 /**
- * Function ReadDelimitedText
- * copies bytes from @a aSource delimited string segment to @a aDest wxString.
+ * Copy bytes from @a aSource delimited string segment to @a aDest wxString.
  *
  * @param aDest is the destination wxString
  * @param aSource is the source C string holding utf8 encoded bytes.
@@ -90,48 +89,43 @@ std::string EscapedUTF8( const wxString& aString );
 wxString EscapedHTML( const wxString& aString );
 
 /**
- * Function GetLine
- * reads one line line from \a aFile.
- * @return A pointer the first useful line read by eliminating blank lines and comments.
+ * Read one line line from \a aFile.
+ *
+ * @return a pointer the first useful line read by eliminating blank lines and comments.
  */
 char* GetLine( FILE* aFile, char* Line, int* LineNum = NULL, int SizeLine = 255 );
 
 /**
- * Function StrPurge
- * removes leading and training spaces, tabs and end of line chars in \a text
- * return a pointer on the first n char in text
+ * Remove leading and training spaces, tabs and end of line chars in \a text
+ *
+ * @return a pointer on the first n char in text
  */
 char* StrPurge( char* text );
 
 /**
- * Function DateAndTime
  * @return a string giving the current date and time.
  */
 wxString DateAndTime();
 
 /**
- * Function StrNumCmp
- * is a routine compatible with qsort() to sort by alphabetical order.
+ * Compare two strings with alphanumerical content.
  *
  * This function is equivalent to strncmp() or strncasecmp() if \a aIgnoreCase is true
  * except that strings containing numbers are compared by their integer value not
- * by their ASCII code.
+ * by their ASCII code.  In other words U10 would be greater than U2.
  *
  * @param aString1 A wxString reference to the reference string.
  * @param aString2 A wxString reference to the comparison string.
- * @param aLength The number of characters to compare.  Set to -1 to compare
- *                the entire string.
  * @param aIgnoreCase Use true to make the comparison case insensitive.
  * @return An integer value of -1 if \a aString1 is less than \a aString2, 0 if
  *         \a aString1 is equal to \a aString2, or 1 if \a aString1 is greater
  *         than \a aString2.
  */
-int StrNumCmp( const wxString& aString1, const wxString& aString2, int aLength = INT_MAX,
-               bool aIgnoreCase = false );
+int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreCase = false );
 
 /**
- * Function WildCompareString
- * compares a string against wild card (* and ?) pattern using the usual rules.
+ * Compare a string against wild card (* and ?) pattern using the usual rules.
+ *
  * @return true if pattern matched otherwise false.
  */
 bool WildCompareString( const wxString& pattern,
@@ -139,21 +133,18 @@ bool WildCompareString( const wxString& pattern,
                         bool            case_sensitive = true );
 
 /**
- * Function ValueStringCompare
- * acts just like the strcmp function but handles numbers and modifiers within the
+ * Compare strings like the strcmp function but handle numbers and modifiers within the
  * string text correctly for sorting.  eg. 1mF > 55uF
- * return -1 if first string is less than the second
- * return 0 if the strings are equal
- * return 1 if the first string is greater than the second
+ *
+ * @return -1 if first string is less than the second, 0 if the strings are equal, or
+ *          1 if the first string is greater than the second.
  */
 int ValueStringCompare( wxString strFWord, wxString strSWord );
 
 /**
- * Function SplitString
- * breaks a string into three parts.
- * The alphabetic preamble
- * The numeric part
- * Any alphabetic ending
+ * Breaks a string into three parts: he alphabetic preamble, the numeric part, and any
+ * alphabetic ending.
+ *
  * For example C10A is split to C 10 A
  */
 int SplitString( wxString  strToSplit,
@@ -163,26 +154,25 @@ int SplitString( wxString  strToSplit,
 
 /**
  * Gets the trailing int, if any, from a string.
+ *
  * @param  aStr the string to check
  * @return      the trailing int or 0 if none found
  */
 int GetTrailingInt( const wxString& aStr );
 
 /**
- * Function GetIllegalFileNameWxChars
- * @return a wString object containing the illegal file name characters for all platforms.
+ * @return a wxString object containing the illegal file name characters for all platforms.
  */
 wxString GetIllegalFileNameWxChars();
 
 /**
- * Function ReplaceIllegalFileNameChars
- * checks \a aName for illegal file name characters.
+ * Checks \a aName for illegal file name characters.
  *
  * The Windows (DOS) file system forbidden characters already include the forbidden file
  * name characters for both Posix and OSX systems.  The characters \/?*|"\<\> are illegal
  * and are replaced with %xx where xx the hexadecimal equivalent of the replaced character.
  * This replacement may not be as elegant as using an underscore ('_') or hyphen ('-') but
- * it guarentees that there will be no naming conflicts when fixing footprint library names.
+ * it guarantees that there will be no naming conflicts when fixing footprint library names.
  * however, if aReplaceChar is given, it will replace the illegal chars
  *
  * @param aName is a point to a std::string object containing the footprint name to verify.
@@ -199,7 +189,7 @@ extern "C" char* strtok_r( char* str, const char* delim, char** nextp );
 
 /**
  * A helper for sorting strings from the rear.  Useful for things like 3d model names
- * where they tend to be largely repititous at the front.
+ * where they tend to be largely repetitious at the front.
  */
 struct rsort_wxString
 {

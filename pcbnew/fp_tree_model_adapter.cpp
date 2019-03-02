@@ -68,7 +68,7 @@ std::vector<LIB_TREE_ITEM*> FP_TREE_MODEL_ADAPTER::getFootprints( const wxString
     auto libBounds = std::equal_range( fullListStart, fullListEnd, dummy,
         []( const std::unique_ptr<FOOTPRINT_INFO>& a, const std::unique_ptr<FOOTPRINT_INFO>& b )
         {
-            return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), INT_MAX, true ) < 0;
+            return StrNumCmp( a->GetLibNickname(), b->GetLibNickname(), true ) < 0;
         } );
 
     for( auto i = libBounds.first; i != libBounds.second; ++i )
