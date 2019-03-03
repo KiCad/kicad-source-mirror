@@ -69,6 +69,8 @@ static EDA_HOTKEY   HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1
 static EDA_HOTKEY   HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
 static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
                                        HK_RESET_LOCAL_COORD, ' ' );
+static EDA_HOTKEY   HkSwitchHighContrastMode( _HKI( "Toggle High Contrast Mode" ),
+                                              HK_SWITCH_HIGHCONTRAST_MODE, 'H' + GR_KB_CTRL );
 
 static EDA_HOTKEY   HkLinesDisplayMode( _HKI( "Gbr Lines Display Mode" ),
                                         HK_GBR_LINES_DISPLAY_MODE, 'L' );
@@ -115,6 +117,7 @@ EDA_HOTKEY* gerbviewHotkeyList[] = {
     &HkZoomAuto, &HkZoomSelection, &HkSwitchUnits, &HkResetLocalCoord,
     &HkLinesDisplayMode, &HkFlashedDisplayMode, &HkPolygonDisplayMode,
     &HkDCodesDisplayMode, &HkNegativeObjDisplayMode,
+    &HkSwitchHighContrastMode,
     &HkSwitch2NextCopperLayer,
     &HkSwitch2PreviousCopperLayer,
     &HkCanvasDefault,
@@ -234,6 +237,11 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_GBR_DCODE_DISPLAY_ONOFF:
         SetElementVisibility( LAYER_DCODES, not IsElementVisible( LAYER_DCODES ) );
+        m_canvas->Refresh();
+        break;
+
+    case HK_SWITCH_HIGHCONTRAST_MODE:
+        CHANGE( m_DisplayOptions.m_HighContrastMode );
         m_canvas->Refresh();
         break;
 

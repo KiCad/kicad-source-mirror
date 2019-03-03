@@ -246,24 +246,29 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
-                 _( "Sketch F&lashed Items" ),_( "Show flashed items in outline mode" ),
+    text = AddHotkeyName( _( "Sketch F&lashed Items" ), GerbviewHokeysDescr, HK_GBR_FLASHED_DISPLAY_MODE );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, text,
+                 _( "Show flashed items in outline mode" ),
                  KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LINES_SKETCH,
-                 _( "Sketch &Lines" ),_( "Show lines in outline mode" ),
+    text = AddHotkeyName( _( "Sketch &Lines" ), GerbviewHokeysDescr, HK_GBR_LINES_DISPLAY_MODE );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LINES_SKETCH, text,
+                 _( "Show lines in outline mode" ),
                  KiBitmap( showtrack_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                 _( "Sketch Pol&ygons" ),_( "Show polygons in outline mode" ),
+    text = AddHotkeyName( _( "Sketch Pol&ygons" ), GerbviewHokeysDescr, HK_GBR_POLYGON_DISPLAY_MODE );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, text,
+                 _( "Show polygons in outline mode" ),
                  KiBitmap( opt_show_polygon_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_DCODES,
-                 _( "Show &DCodes" ), _( "Show or hide DCodes" ),
+    text = AddHotkeyName( _( "Show &DCodes" ), GerbviewHokeysDescr, HK_GBR_DCODE_DISPLAY_ONOFF );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_DCODES, text,
+                 _( "Show or hide DCodes" ),
                  KiBitmap( show_dcodenumber_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS,
-                 _( "Show &Negative Objects" ), _( "Show negative objects in ghost color" ),
+    text = AddHotkeyName( _( "Show &Negative Objects" ), GerbviewHokeysDescr, HK_GBR_NEGATIVE_DISPLAY_ONOFF );
+    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, text,
+                 _( "Show negative objects in ghost color" ),
                  KiBitmap( gerbview_show_negative_objects_xpm ), wxITEM_CHECK );
 
     if( IsGalCanvasActive() )
@@ -272,8 +277,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                      _( "Show in Differential Mode" ), _( "Show layers in differential mode" ),
                      KiBitmap( gbr_select_mode2_xpm ), wxITEM_CHECK );
 
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
-                     _( "Show in High Contrast" ), _( "Show in high contrast mode" ),
+        text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHokeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
+        AddMenuItem( viewMenu, ID_TB_OPTIONS_HIGH_CONTRAST_MODE, text,
+                     _( "Show in high contrast mode" ),
                      KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
     }
     else
