@@ -396,6 +396,8 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRats
         aModule->Draw( m_canvas, aDC, GR_OR );
 
     // Redraw dragged track segments, if any
+    bool isDragged = g_DragSegmentList.size() > 0;
+
     for( unsigned ii = 0; ii < g_DragSegmentList.size(); ii++ )
     {
         TRACK * track = g_DragSegmentList[ii].m_Track;
@@ -412,7 +414,12 @@ void PCB_BASE_FRAME::PlaceModule( MODULE* aModule, wxDC* aDC, bool aRecreateRats
     m_canvas->SetMouseCapture( NULL, NULL );
 
     if( aRecreateRatsnest )
-        m_Pcb->GetConnectivity()->Update( aModule );
+    {
+        if( isDragged ) // Some tracks have positions modified: rebuild the connectivity
+            m_Pcb->GetConnectivity()->Build(m_Pcb);
+        else        // Only pad positions are modified: rebuild the connectivity only for this footprint (faster)
+            m_Pcb->GetConnectivity()->Update( aModule );
+    }
 
     if( ( GetBoard()->IsElementVisible( LAYER_RATSNEST ) || displ_opts->m_Show_Module_Ratsnest )
             && aRecreateRatsnest )
