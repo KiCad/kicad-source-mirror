@@ -305,10 +305,12 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
 {
 public:
-    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg, wxString* aCurrentDir ) :
+    TEXT_BUTTON_FILE_BROWSER( wxWindow* aParent, DIALOG_SHIM* aParentDlg,
+                              wxString* aCurrentDir, wxString* aExt = nullptr ) :
             wxComboCtrl( aParent ),
             m_dlg( aParentDlg ),
-            m_currentDir( aCurrentDir )
+            m_currentDir( aCurrentDir ),
+            m_ext( aExt )
     {
         SetButtonBitmaps( KiBitmap( folder_xpm ) );
     }
@@ -328,18 +330,33 @@ protected:
         else
             path = ExpandEnvVarSubstitutions( path );
 
-        wxDirDialog dlg( nullptr, _( "Select Path" ), path,
+        if( m_ext )
+        {
+            wxFileDialog dlg( nullptr, _( "Select a File" ), path, wxEmptyString, *m_ext,
+                    wxFD_FILE_MUST_EXIST | wxFD_OPEN );
+
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                SetValue( dlg.GetPath() );
+                *m_currentDir = dlg.GetPath();
+            }
+        }
+        else
+        {
+            wxDirDialog dlg( nullptr, _( "Select Path" ), path,
                          wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
-        if( dlg.ShowModal() == wxID_OK )
-        {
-            SetValue( dlg.GetPath() );
-            *m_currentDir = dlg.GetPath();
+            if( dlg.ShowModal() == wxID_OK )
+            {
+                SetValue( dlg.GetPath() );
+                *m_currentDir = dlg.GetPath();
+            }
         }
     }
 
     DIALOG_SHIM* m_dlg;
     wxString*    m_currentDir;
+    wxString*    m_ext;
 };
 
 
@@ -347,6 +364,15 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
                                     wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir );
+
+    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+}
+
+
+void GRID_CELL_SYMLIB_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
+                                    wxEvtHandler* aEventHandler )
+{
+    m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext );
 
     wxGridCellEditor::Create(aParent, aId, aEventHandler);
 }

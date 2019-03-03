@@ -141,4 +141,27 @@ protected:
 };
 
 
+class GRID_CELL_SYMLIB_EDITOR : public GRID_CELL_TEXT_BUTTON
+{
+public:
+    GRID_CELL_SYMLIB_EDITOR( DIALOG_SHIM* aParent, wxString* aCurrentDir, const wxString& aExt ) :
+            m_dlg( aParent ),
+            m_currentDir( aCurrentDir ),
+            m_ext( aExt )
+    { }
+
+    wxGridCellEditor* Clone() const override
+    {
+        return new GRID_CELL_SYMLIB_EDITOR( m_dlg, m_currentDir, m_ext );
+    }
+
+    void Create( wxWindow* aParent, wxWindowID aId, wxEvtHandler* aEventHandler ) override;
+
+protected:
+    DIALOG_SHIM* m_dlg;
+    wxString*    m_currentDir;
+    wxString     m_ext;
+};
+
+
 #endif  // GRID_TEXT_BUTTON_HELPERS_H
