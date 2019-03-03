@@ -114,6 +114,8 @@ void DIALOG_TEMPLATE_SELECTOR::OnPageChange( wxNotebookEvent& event )
 
     if( page != wxNOT_FOUND && (unsigned)page < m_panels.size() )
         m_tcTemplatePath->SetValue( m_panels[page]->GetPath() );
+
+    event.Skip();
 }
 
 
