@@ -314,31 +314,32 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
 {
     int nb1 = 0, nb2 = 0;
 
-    wxString::const_iterator str1 = aString1.begin(), str2 = aString2.begin();
+    auto str1 = aString1.begin();
+    auto str2 = aString2.begin();
 
     while( str1 != aString1.end() && str2 != aString2.end() )
     {
         wxUniChar c1 = *str1;
         wxUniChar c2 = *str2;
 
-        if( isdigit( c1 ) && isdigit( c2 ) ) // Both characters are digits, do numeric compare.
+        if( wxIsdigit( c1 ) && wxIsdigit( c2 ) ) // Both characters are digits, do numeric compare.
         {
             nb1 = 0;
             nb2 = 0;
 
             do
             {
-                c1 = *(str1);
+                c1 = *str1;
                 nb1 = nb1 * 10 + (int) c1 - '0';
                 ++str1;
-            } while( str1 != aString1.end() && isdigit( *(str1) ) );
+            } while( str1 != aString1.end() && wxIsdigit( *str1 ) );
 
             do
             {
-                c2 = *(str2);
+                c2 = *str2;
                 nb2 = nb2 * 10 + (int) c2 - '0';
                 ++str2;
-            } while( str2 != aString2.end() && isdigit( *(str2) ) );
+            } while( str2 != aString2.end() && wxIsdigit( *str2 ) );
 
             if( nb1 < nb2 )
                 return -1;
@@ -346,17 +347,17 @@ int StrNumCmp( const wxString& aString1, const wxString& aString2, bool aIgnoreC
             if( nb1 > nb2 )
                 return 1;
 
-            c1 = ( str1 != aString1.end() ) ? *(str1) : (wxUniChar) '\0';
-            c2 = ( str2 != aString2.end() ) ? *(str2) : (wxUniChar) '\0';
+            c1 = ( str1 != aString1.end() ) ? *str1 : wxUniChar( 0 );
+            c2 = ( str2 != aString2.end() ) ? *str2 : wxUniChar( 0 );
         }
 
         // Any numerical comparisons to here are identical.
         if( aIgnoreCase )
         {
-            if( toupper( c1 ) < toupper( c2 ) )
+            if( wxToupper( c1 ) < wxToupper( c2 ) )
                 return -1;
 
-            if( toupper( c1 ) > toupper( c2 ) )
+            if( wxToupper( c1 ) > wxToupper( c2 ) )
                 return 1;
         }
         else
