@@ -290,10 +290,10 @@ void IncrementLabelMember( wxString& name, int aIncrement )
 
     ii = name.Len() - 1; nn = 0;
 
-    if( !isdigit( name.GetChar( ii ) ) )
+    if( !wxIsdigit( name.GetChar( ii ) ) )
         return;
 
-    while( (ii >= 0) && isdigit( name.GetChar( ii ) ) )
+    while( (ii >= 0) && wxIsdigit( name.GetChar( ii ) ) )
     {
         ii--; nn++;
     }
