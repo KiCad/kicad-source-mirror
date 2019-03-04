@@ -96,7 +96,7 @@ bool GRID_TRICKS::toggleCell( int aRow, int aCol )
 
 bool GRID_TRICKS::showEditor( int aRow, int aCol )
 {
-    if( m_grid->GetCursorRow() != aRow || m_grid->GetCursorColumn() != aCol )
+    if( m_grid->GetGridCursorRow() != aRow || m_grid->GetGridCursorCol() != aCol )
         m_grid->SetGridCursor( aRow, aCol );
 
     if( m_grid->IsEditable() && !m_grid->IsReadOnly( aRow, aCol ) )
