@@ -104,6 +104,19 @@ bool LINE_PLACER::handleSelfIntersections()
     if( tail.PointCount() < 2 )
         return false;
 
+    if( head.PointCount() < 2 )
+        return false;
+
+    // completely new head trace? chop off the tail
+    if( tail.CPoint(0) == head.CPoint(0) )
+    {
+        m_p_start = tail.CPoint( 0 );
+        m_direction = m_initial_direction;
+        tail.Clear();
+        return true;
+    }
+
+
     tail.Intersect( head, ips );
 
     // no intesection points - nothing to reduce
@@ -782,13 +795,9 @@ bool LINE_PLACER::route( const VECTOR2I& aP )
     routeStep( aP );
 
     if (!m_head.PointCount() )
-    {
         return false;
-    }
-    else
-    {
-        return m_head.CPoint(-1) == aP;
-    }
+
+    return m_head.CPoint(-1) == aP;
 }
 
 
