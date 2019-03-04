@@ -175,7 +175,7 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // Build list of nets:
     buildAvailableListOfNets();
 
-    m_ListNetNameSelection->SetFocus();
+    SetInitialFocus( m_ListNetNameSelection );
 
     return true;
 }

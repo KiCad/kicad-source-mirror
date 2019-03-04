@@ -92,7 +92,7 @@ bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
     case ZONE_CONTAINER::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
     }
 
-    m_OutlineAppearanceCtrl->SetFocus();
+    SetInitialFocus( m_OutlineAppearanceCtrl );
 
     return true;
 }

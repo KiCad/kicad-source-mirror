@@ -93,7 +93,7 @@ bool DIALOG_KEEPOUT_AREA_PROPERTIES::TransferDataToWindow()
     case ZONE_CONTAINER::DIAGONAL_FULL: m_OutlineAppearanceCtrl->SetSelection( 2 ); break;
     }
 
-    m_OutlineAppearanceCtrl->SetFocus();
+    SetInitialFocus( m_OutlineAppearanceCtrl );
 
     return true;
 }
