@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_LIB_NEW_COMPONENT_BASE_H__
-#define __DIALOG_LIB_NEW_COMPONENT_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -33,19 +32,19 @@
 class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
-		wxStaticText* m_staticText8;
-		wxStaticText* m_staticText2;
+		wxStaticText* m_staticTextGeneralSettings;
+		wxStaticText* m_staticTextName;
 		wxTextCtrl* m_textName;
-		wxStaticText* m_staticText9;
+		wxStaticText* m_staticTextDes;
 		wxTextCtrl* m_textReference;
-		wxStaticText* m_staticText10;
+		wxStaticText* m_staticTextUnits;
 		wxSpinCtrl* m_spinPartCount;
 		wxCheckBox* m_checkHasConversion;
 		wxCheckBox* m_checkIsPowerSymbol;
 		wxCheckBox* m_checkLockItems;
-		wxStaticText* m_staticText11;
+		wxStaticText* m_staticTextPinSettings;
 		wxStaticText* m_staticText12;
 		wxSpinCtrl* m_spinPinTextPosition;
 		wxCheckBox* m_checkShowPinNumber;
@@ -54,12 +53,11 @@ class DIALOG_LIB_NEW_COMPONENT_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-	
+
 	public:
-		
-		DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_LIB_NEW_COMPONENT_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Symbol Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_LIB_NEW_COMPONENT_BASE();
-	
+
 };
 
-#endif //__DIALOG_LIB_NEW_COMPONENT_BASE_H__
