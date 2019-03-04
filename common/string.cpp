@@ -566,7 +566,7 @@ int SplitString( wxString  strToSplit,
 
     for( ii = (strToSplit.length() - 1); ii >= 0; ii-- )
     {
-        if( isdigit( strToSplit[ii] ) )
+        if( wxIsdigit( strToSplit[ii] ) )
             break;
     }
 
@@ -585,7 +585,7 @@ int SplitString( wxString  strToSplit,
 
         for( ; ii >= 0; ii-- )
         {
-            if( !isdigit( strToSplit[ii] ) && separators.Find( strToSplit[ii] ) < 0 )
+            if( !wxIsdigit( strToSplit[ii] ) && separators.Find( strToSplit[ii] ) < 0 )
                 break;
         }
 

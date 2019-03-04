@@ -33,16 +33,16 @@ wxString GetNextComponent( const wxString& str, wxString::size_type& cursor )
 
     wxString::size_type begin = cursor;
 
-    wxUniChar c = str[cursor];
+    wxChar c = str[cursor];
 
-    if( isdigit( c ) || c == '+' || c == '-' )
+    if( wxIsdigit( c ) || c == '+' || c == '-' )
     {
         // number, possibly with sign
         while( ++cursor < str.size() )
         {
             c = str[cursor];
 
-            if( isdigit( c ) || c == 'v' || c == 'V' )
+            if( wxIsdigit( c ) || c == 'v' || c == 'V' )
                 continue;
             else
                 break;
@@ -54,7 +54,7 @@ wxString GetNextComponent( const wxString& str, wxString::size_type& cursor )
         {
             c = str[cursor];
 
-            if( isdigit( c ) )
+            if( wxIsdigit( c ) )
                 break;
             else
                 continue;
@@ -128,12 +128,12 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
         if( comp2.empty() )
             return 2;
 
-        wxUniChar c1    = comp1[0];
-        wxUniChar c2    = comp2[0];
+        wxChar c1    = comp1[0];
+        wxChar c2    = comp2[0];
 
-        if( isdigit( c1 ) || c1 == '-' || c1 == '+' )
+        if( wxIsdigit( c1 ) || c1 == '-' || c1 == '+' )
         {
-            if( isdigit( c2 ) || c2 == '-' || c2 == '+' )
+            if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
             {
                 // numeric comparison
                 wxString::size_type v1 = comp1.find_first_of( "vV" );
@@ -172,7 +172,7 @@ int PinNumbers::Compare( const PinNumber& lhs, const PinNumber& rhs )
         }
         else
         {
-            if( isdigit( c2 ) || c2 == '-' || c2 == '+' )
+            if( wxIsdigit( c2 ) || c2 == '-' || c2 == '+' )
                 return 2;
 
             int res = comp1.Cmp( comp2 );

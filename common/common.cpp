@@ -167,12 +167,12 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry )
     {
         wxString num = ref;
 
-        while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
+        while( !num.IsEmpty() && ( !wxIsdigit( num.Last() ) || !wxIsdigit( num.GetChar( 0 ) ) ) )
         {
-            if( !isdigit( num.Last() ) )
+            if( !wxIsdigit( num.Last() ) )
                 num.RemoveLast();
 
-            if( !isdigit( num.GetChar ( 0 ) ) )
+            if( !wxIsdigit( num.GetChar ( 0 ) ) )
                 num = num.Right( num.Length() - 1);
         }
 
