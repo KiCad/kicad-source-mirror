@@ -30,6 +30,7 @@
 #include <html_messagebox.h>
 #include <filename_resolver.h>
 #include <env_vars.h>
+#include <grid_tricks.h>
 #include <widgets/wx_grid.h>
 #include <widgets/grid_text_button_helpers.h>
 

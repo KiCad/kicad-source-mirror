@@ -37,7 +37,7 @@ class DIALOG_SHIM;
 class FIELDS_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_GRID_TRICKS( wxGrid* aGrid, DIALOG_SHIM* aDialog ) :
+    FIELDS_GRID_TRICKS( WX_GRID* aGrid, DIALOG_SHIM* aDialog ) :
         GRID_TRICKS( aGrid ),
         m_dlg( aDialog )
     {}

@@ -198,7 +198,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     auto divider = new wxStaticLine( m_parametersPanel, wxID_ANY,
                                      wxDefaultPosition, wxDefaultSize, wxLI_VERTICAL );
 
-    m_parameterGrid = new wxGrid( m_parametersPanel, ID_FOOTPRINT_WIZARD_PARAMETER_LIST );
+    m_parameterGrid = new WX_GRID( m_parametersPanel, ID_FOOTPRINT_WIZARD_PARAMETER_LIST );
     initParameterGrid();
     m_parameterGrid->PushEventHandler( new GRID_TRICKS( m_parameterGrid ) );
 

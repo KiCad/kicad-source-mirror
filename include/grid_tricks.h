@@ -28,7 +28,7 @@
 
 #include <wx/grid.h>
 #include <wx/event.h>
-
+#include <widgets/wx_grid.h>
 
 enum
 {
@@ -46,25 +46,23 @@ enum
 
 /**
  * Class GRID_TRICKS
- * is used to add cut, copy, and paste to an otherwise unmodied wxGrid instance.
+ * is used to add mouse and command handling (such as cut, copy, and paste) to a WX_GRID instance.
  */
 class GRID_TRICKS : public wxEvtHandler
 {
 public:
 
-    explicit GRID_TRICKS( wxGrid* aGrid );
+    explicit GRID_TRICKS( WX_GRID* aGrid );
 
 protected:
-    wxGrid* m_grid;     ///< I don't own the grid, but he owns me
+    WX_GRID* m_grid;     ///< I don't own the grid, but he owns me
 
     // row & col "selection" acquisition
     // selected area by cell coordinate and count
-    int     m_sel_row_start;
-    int     m_sel_col_start;
-    int     m_sel_row_count;
-    int     m_sel_col_count;
-
-    bool    m_showEditorOnMouseUp;
+    int      m_sel_row_start;
+    int      m_sel_col_start;
+    int      m_sel_row_count;
+    int      m_sel_col_count;
 
     /// Puts the selected area into a sensible rectangle of m_sel_{row,col}_{start,count} above.
     void getSelectedArea();
@@ -80,7 +78,6 @@ protected:
     void onGridLabelRightClick( wxGridEvent& event );
     void onPopupSelection( wxCommandEvent& event );
     void onKeyDown( wxKeyEvent& ev );
-    void onMouseUp( wxMouseEvent& aEvent );
     void onUpdateUI( wxUpdateUIEvent& event );
 
     virtual bool handleDoubleClick( wxGridEvent& aEvent );

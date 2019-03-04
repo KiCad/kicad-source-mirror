@@ -156,7 +156,7 @@ public:
 class FP_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, wxGrid* aGrid ) :
+    FP_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
             GRID_TRICKS( aGrid ),
             m_dialog( aParent )
     { }

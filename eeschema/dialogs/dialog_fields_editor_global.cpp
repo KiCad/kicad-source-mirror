@@ -55,7 +55,7 @@ enum
 class FIELDS_EDITOR_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, wxGrid* aGrid,
+    FIELDS_EDITOR_GRID_TRICKS( DIALOG_SHIM* aParent, WX_GRID* aGrid,
                                wxDataViewListCtrl* aFieldsCtrl ) :
             GRID_TRICKS( aGrid ),
             m_dlg( aParent ),

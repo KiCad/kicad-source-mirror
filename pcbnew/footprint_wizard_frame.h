@@ -35,7 +35,7 @@
 #include <footprint_wizard.h>
 class wxSashLayoutWindow;
 class wxListBox;
-class wxGrid;
+class WX_GRID;
 class wxGridEvent;
 class FOOTPRINT_EDIT_FRAME;
 
@@ -55,7 +55,7 @@ class FOOTPRINT_WIZARD_FRAME : public PCB_BASE_FRAME
 private:
     wxPanel*        m_parametersPanel;      ///< Panel for the page list and parameter grid
     wxListBox*      m_pageList;             ///< The list of pages
-    wxGrid*         m_parameterGrid;        ///< The list of parameters
+    WX_GRID*        m_parameterGrid;        ///< The list of parameters
     int             m_parameterGridPage;    ///< the page currently displayed by m_parameterGrid
                                             ///< it is most of time the m_pageList selection, but can differ
                                             ///< during transitions between pages.

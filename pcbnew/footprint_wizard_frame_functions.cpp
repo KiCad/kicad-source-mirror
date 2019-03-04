@@ -42,6 +42,7 @@
 #include <wildcards_and_files_ext.h>
 #include <dialogs/dialog_footprint_wizard_list.h>
 #include <base_units.h>
+#include <widgets/wx_grid.h>
 
 #include <tool/tool_manager.h>
 

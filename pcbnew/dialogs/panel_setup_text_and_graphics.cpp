@@ -28,6 +28,7 @@
 #include <pcb_edit_frame.h>
 #include <board_design_settings.h>
 #include <widgets/wx_grid.h>
+#include <grid_tricks.h>
 
 #include <panel_setup_text_and_graphics.h>
 

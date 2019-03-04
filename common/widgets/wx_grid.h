@@ -25,7 +25,6 @@
 #define KICAD_WX_GRID_H
 
 #include <wx/grid.h>
-#include <grid_tricks.h>
 
 class WX_GRID : public wxGrid
 {
@@ -90,6 +89,14 @@ public:
      * if labels are multiline texts
      */
     void EnsureColLabelsVisible();
+
+    /**
+     * WxWidgets has a bunch of bugs in its handling of wxGrid mouse events which close cell
+     * editors right after opening them.  Helpfully, it already has a bunch of work-arounds in
+     * place (such as the SetInSetFocus() hack), including one to make slow clicks work.  We
+     * re-purpose this hack to work-around the bugs when we want to open an editor.
+     */
+    void ShowEditorOnMouseUp() { m_waitForSlowClick = true; }
 
 protected:
     void DrawColLabel( wxDC& dc, int col ) override;

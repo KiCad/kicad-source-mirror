@@ -83,7 +83,7 @@ public:
 class SYMBOL_GRID_TRICKS : public GRID_TRICKS
 {
 public:
-    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, wxGrid* aGrid ) :
+    SYMBOL_GRID_TRICKS( DIALOG_EDIT_LIBRARY_TABLES* aParent, WX_GRID* aGrid ) :
         GRID_TRICKS( aGrid ),
         m_dialog( aParent )
     {
