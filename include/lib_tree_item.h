@@ -27,7 +27,7 @@
 
 #include <base_struct.h>
 #include <lib_id.h>
-
+#include <import_export.h>
 
 /**
  * A mix-in to provide polymorphism between items stored in libraries (symbols, aliases
@@ -36,7 +36,7 @@
  * It is used primarily to drive the component tree for library browsing and editing.
  */
 
-class LIB_TREE_ITEM
+class APIEXPORT LIB_TREE_ITEM
 {
 public:
     virtual LIB_ID GetLibId() const = 0;
