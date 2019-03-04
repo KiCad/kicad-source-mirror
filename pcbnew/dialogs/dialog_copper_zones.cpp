@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -52,8 +52,8 @@ private:
 
     bool            m_NetSortingByPadCount;
     long            m_NetFiltering;
-    static wxString m_netNameShowFilter;    // the filter to show nets (default * "*").
-                                            // static to keep this pattern for an entire Pcbnew session
+    static wxString m_netNameShowFilter;    // the filter to show nets (default * "*").  Static
+                                            // to keep this pattern for an entire Pcbnew session
     int             m_cornerSmoothingType;
 
     UNIT_BINDER     m_cornerRadius;
@@ -66,8 +66,8 @@ private:
     bool TransferDataFromWindow() override;
 
     /**
-     * Function AcceptOptions
-     * @param aUseExportableSetupOnly is true to use exportable parameters only (used to export this setup to other zones).
+     * @param aUseExportableSetupOnly is true to use exportable parameters only (used to
+     *                                export this setup to other zones).
      * @return bool - false if incorrect options, true if ok.
      */
     bool AcceptOptions( bool aUseExportableSetupOnly = false );
@@ -175,6 +175,8 @@ bool DIALOG_COPPER_ZONE::TransferDataToWindow()
     // Build list of nets:
     buildAvailableListOfNets();
 
+    m_ListNetNameSelection->SetFocus();
+
     return true;
 }
 
@@ -216,6 +218,7 @@ bool DIALOG_COPPER_ZONE::TransferDataFromWindow()
     *m_ptr = m_settings;
     return true;
 }
+
 
 void DIALOG_COPPER_ZONE::OnClose( wxCloseEvent& event )
 {
