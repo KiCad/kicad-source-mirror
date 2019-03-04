@@ -105,7 +105,7 @@ bool GRID_TRICKS::showEditor( int aRow, int aCol )
         {
             wxArrayInt rows = m_grid->GetSelectedRows();
 
-            if( rows.size() != 1 || rows.at( 0 ) != aRow )
+            if( rows.size() != 1 || rows.Item( 0 ) != aRow )
                 m_grid->SelectRow( aRow );
         }
 
