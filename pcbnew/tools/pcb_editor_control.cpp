@@ -981,6 +981,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
             collector.Collect( board, GENERAL_COLLECTOR::Zones,
                                wxPoint( aPosition.x, aPosition.y ), guide );
 
+        // Clear the previous highlight
+        frame->SendMessageToEESCHEMA( nullptr );
+
         for( int i = 0; i < collector.GetCount(); i++ )
         {
             if( ( collector[i]->GetLayerSet() & LSET::AllCuMask() ).none() )
