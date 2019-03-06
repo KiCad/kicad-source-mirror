@@ -946,16 +946,17 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
      * copper_thickness must be decreased by aMinThicknessValue because drawing outlines
      * with a thickness of aMinThicknessValue will increase real thickness by aMinThicknessValue
      */
-    aCopperThickness -= aMinThicknessValue;
-
-    if( aCopperThickness < 0 )
-        aCopperThickness = 0;
-
     int     dx = aPad.GetSize().x / 2;
     int     dy = aPad.GetSize().y / 2;
 
-    copper_thickness.x = std::min( dx, aCopperThickness );
-    copper_thickness.y = std::min( dy, aCopperThickness );
+    copper_thickness.x = std::min( aPad.GetSize().x, aCopperThickness ) - aMinThicknessValue;
+    copper_thickness.y = std::min( aPad.GetSize().y, aCopperThickness ) - aMinThicknessValue;
+
+    if( copper_thickness.x < 0 )
+        copper_thickness.x = 0;
+
+    if( copper_thickness.y < 0 )
+        copper_thickness.y = 0;
 
     switch( aPad.GetShape() )
     {
@@ -1177,12 +1178,12 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             /* we create 4 copper holes and put them in position 1, 2, 3 and 4
              * here is the area of the rectangular pad + its thermal gap
              * the 4 copper holes remove the copper in order to create the thermal gap
-             * 4 ------ 1
+             * 1 ------ 4
              * |        |
              * |        |
              * |        |
              * |        |
-             * 3 ------ 2
+             * 2 ------ 3
              * hole 3 is the same as hole 1, rotated 180 deg
              * hole 4 is the same as hole 2, rotated 180 deg and is the same as hole 1, mirrored
              */
@@ -1202,30 +1203,63 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             dx = (aPad.GetSize().x / 2) + aThermalGap;         // Cutout radius x
             dy = (aPad.GetSize().y / 2) + aThermalGap;         // Cutout radius y
 
+            // calculation is optimized for pad shape with dy >= dx (vertical rectangle).
+            // if it is not the case, just rotate this shape 90 degrees:
+            double angle = aPad.GetOrientation();
+            wxPoint corner_origin_pos( -aPad.GetSize().x / 2, -aPad.GetSize().y / 2 );
+
+            if( dy < dx )
+            {
+                std::swap( dx, dy );
+                std::swap( copper_thickness.x, copper_thickness.y );
+                std::swap( corner_origin_pos.x, corner_origin_pos.y );
+                angle += 900.0;
+            }
+            // Now calculate the hole pattern in position 1 ( top left pad corner )
+
             // The first point of polygon buffer is left lower corner, second the crosspoint of
             // thermal spoke sides, the third is upper right corner and the rest are rounding
-            // vertices going anticlockwise. Note the inveted Y-axis in CG.
-            corners_buffer.push_back( wxPoint( -dx, -(aThermalGap / 4 + copper_thickness.y / 2) ) );    // Adds small miters to zone
+            // vertices going anticlockwise. Note the inverted Y-axis in corners_buffer y coordinates.
+            wxPoint arc_end_point( -dx, -(aThermalGap / 4 + copper_thickness.y / 2) );
+            corners_buffer.push_back( arc_end_point );          // Adds small miters to zone
             corners_buffer.push_back( wxPoint( -(dx - aThermalGap / 4), -copper_thickness.y / 2 ) );    // fill and spoke corner
             corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -copper_thickness.y / 2 ) );
             corners_buffer.push_back( wxPoint( -copper_thickness.x / 2, -(dy - aThermalGap / 4) ) );
-            corners_buffer.push_back( wxPoint( -(aThermalGap / 4 + copper_thickness.x / 2), -dy ) );
+            // The first point to build the rounded corner:
+            wxPoint arc_start_point( -(aThermalGap / 4 + copper_thickness.x / 2) , -dy );
+            corners_buffer.push_back( arc_start_point );
 
-            double angle = aPad.GetOrientation();
             int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
 
-            for( int i = 0; i < aCircleToSegmentsCount / 4 + 1; i++ )
+            // Calculate arc angle parameters.
+            // the start angle id near 900 decidegrees, the final angle is near 1800.0 decidegrees.
+            double arc_increment = 3600.0 / aCircleToSegmentsCount;
+
+            // the arc_angle_start is 900.0 or slighly more, depending on the actual arc starting point
+            double arc_angle_start = atan2( -arc_start_point.y -corner_origin_pos.y, arc_start_point.x - corner_origin_pos.x ) * 1800/M_PI;
+            if( arc_angle_start < 900.0 )
+                arc_angle_start = 900.0;
+
+            bool first_point = true;
+            for( double curr_angle = arc_angle_start; ; curr_angle += arc_increment )
             {
-                wxPoint corner_position = wxPoint( 0, -rounding_radius );
+                wxPoint corner_position = wxPoint( rounding_radius, 0 );
+                RotatePoint( &corner_position, curr_angle );        // Rounding vector rotation
+                corner_position += corner_origin_pos;               // Rounding vector + Pad corner offset
 
-                // Start at half increment offset
-                RotatePoint( &corner_position, 1800.0 / aCircleToSegmentsCount );
-                double angle_pg = i * delta;
+                // The arc angle is <= 90 degrees, therefore the arc is finished if the x coordinate
+                // decrease or the y coordinate is smaller than the y end point
+                if( !first_point &&
+                    ( corner_position.x >= corners_buffer.back().x || corner_position.y > arc_end_point.y ) )
+                    break;
 
-                RotatePoint( &corner_position, angle_pg );          // Rounding vector rotation
-                corner_position -= aPad.GetSize() / 2;              // Rounding vector + Pad corner offset
+                first_point = false;
 
-                corners_buffer.push_back( wxPoint( corner_position.x, corner_position.y ) );
+                // Note: for hole in position 1, arc x coordinate is always < x starting point
+                // and arc y coordinate is always <= y ending point
+                if( corner_position != corners_buffer.back()    // avoid duplicate corners.
+                    && corner_position.x <= arc_start_point.x )   // skip current point at the right of the starting point
+                    corners_buffer.push_back( corner_position );
             }
 
             for( int irect = 0; irect < 2; irect++ )

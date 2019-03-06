@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -473,21 +473,17 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         {
             int ilim = CornersBuffer.size() - 1;
 
+            int line_thickness = m_ZoneMinThickness;
+
             for( int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
             {
-                int x0 = CornersBuffer[is].x;
-                int y0 = CornersBuffer[is].y;
-                int x1 = CornersBuffer[ie].x;
-                int y1 = CornersBuffer[ie].y;
-
                 // Draw only basic outlines, not extra segments.
                 if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
                     GRCSegm( panel->GetClipBox(), DC,
-                             x0, y0, x1, y1,
-                             m_ZoneMinThickness, color );
+                             CornersBuffer[is], CornersBuffer[ie], line_thickness, color );
                 else
-                    GRFillCSegm( panel->GetClipBox(), DC,
-                                 x0, y0, x1, y1, m_ZoneMinThickness, color );
+                    GRFilledSegment( panel->GetClipBox(), DC,
+                                 CornersBuffer[is], CornersBuffer[ie], line_thickness, color );
             }
         }
 
