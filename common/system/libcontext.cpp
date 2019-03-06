@@ -13,6 +13,8 @@
             http://www.boost.org/LICENSE_1_0.txt)
 
 */
+#include <stdlib.h>
+#include <setjmp.h>
 #include <system/libcontext.h>
 
 #if defined(LIBCONTEXT_PLATFORM_windows_i386) && defined(LIBCONTEXT_COMPILER_gcc)
@@ -1266,5 +1268,69 @@ __asm (
 #endif
 ".section .note.GNU-stack,\"\",%progbits\n"
 );
+
+#endif
+
+#if defined(LIBCONTEXT_PLATFORM_msvc_x86_64) || defined(LIBCONTEXT_PLATFORM_msvc_i386)
+
+#include <map>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <windows.h>
+
+namespace libcontext
+{
+
+static int threadHasFibers = 0;
+
+struct FiberData
+{
+	intptr_t inValue;
+	intptr_t outValue;
+	void(*entry)(intptr_t);
+};
+
+static std::map<fcontext_t, FiberData> fiberParams;
+
+static void fiberEntry(LPVOID params)
+{
+	auto ctx = (fcontext_t) GetCurrentFiber();
+	auto& d = fiberParams[ctx];
+	d.entry(d.inValue);
+}
+
+fcontext_t LIBCONTEXT_CALL_CONVENTION make_fcontext(void* sp, size_t size, void(*fn)(intptr_t))
+{
+	if (!threadHasFibers)
+	{
+		ConvertThreadToFiber(nullptr);
+		threadHasFibers = 1;
+	}
+
+	fcontext_t ctx = CreateFiber(size, (LPFIBER_START_ROUTINE) fiberEntry, nullptr );
+	fiberParams[ctx].entry = fn;
+
+	return ctx;
+}
+
+intptr_t LIBCONTEXT_CALL_CONVENTION jump_fcontext(fcontext_t* ofc, fcontext_t nfc,
+	intptr_t vp, bool preserve_fpu)
+{
+	auto current = (void*)GetCurrentFiber();
+	fiberParams[current].outValue = vp;
+	*ofc = GetCurrentFiber();
+	fiberParams[nfc].inValue = vp;
+	SwitchToFiber(nfc);
+	return fiberParams[*ofc].outValue;
+}
+
+}; // namespace libcontext
+
+#ifdef __cplusplus
+};
+#endif
 
 #endif

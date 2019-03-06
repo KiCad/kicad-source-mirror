@@ -294,15 +294,19 @@ private:
 
         assert( m_stack == nullptr );
 
-        // fixme: Clean up stack stuff. Add a guard
         size_t stackSize = c_defaultStackSize;
+        void* sp = nullptr;
+
+        #ifndef LIBCONTEXT_HAS_OWN_STACK
+        // fixme: Clean up stack stuff. Add a guard
         m_stack.reset( new char[stackSize] );
 
         // align to 16 bytes
-        void* sp = (void*)((((ptrdiff_t) m_stack.get()) + stackSize - 0xf) & (~0x0f));
+        sp = (void*)((((ptrdiff_t) m_stack.get()) + stackSize - 0xf) & (~0x0f));
 
         // correct the stack size
         stackSize -= size_t( ( (ptrdiff_t) m_stack.get() + stackSize ) - (ptrdiff_t) sp );
+        #endif
 
         m_callee = libcontext::make_fcontext( sp, stackSize, callerStub );
         m_running = true;
