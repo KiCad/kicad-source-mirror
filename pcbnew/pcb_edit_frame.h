@@ -93,6 +93,7 @@ protected:
     PCB_LAYER_WIDGET* m_Layers;
 
     PARAM_CFG_ARRAY   m_configParams;         ///< List of Pcbnew configuration settings.
+    PARAM_CFG_ARRAY   m_projectFileParams;
 
     wxString          m_lastNetListRead;        ///< Last net list read with relative path.
 
@@ -380,7 +381,7 @@ public:
      * @return PARAM_CFG_ARRAY - it is only good until SetBoard() is called, so
      *   don't keep it around past that event.
      */
-    PARAM_CFG_ARRAY GetProjectFileParameters();
+    PARAM_CFG_ARRAY& GetProjectFileParameters();
 
     /**
      * Function SaveProjectSettings

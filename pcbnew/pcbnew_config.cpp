@@ -125,21 +125,21 @@ void PCB_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 }
 
 
-PARAM_CFG_ARRAY PCB_EDIT_FRAME::GetProjectFileParameters()
+PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetProjectFileParameters()
 {
-    PARAM_CFG_ARRAY pca;
+    m_projectFileParams.clear();
 
     // This one cannot be cached because some settings are going to/from the BOARD,
     // so pointers into that cannot be saved for long.
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "PageLayoutDescrFile" ),
                                           &BASE_SCREEN::m_PageLayoutDescrFileName ) );
 
-    pca.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
+    m_projectFileParams.push_back( new PARAM_CFG_FILENAME( wxT( "LastNetListRead" ), &m_lastNetListRead ) );
 
-    GetBoard()->GetDesignSettings().AppendConfigs( GetBoard(), &pca );
+    GetBoard()->GetDesignSettings().AppendConfigs( GetBoard(), &m_projectFileParams);
 
-    return pca;
+    return m_projectFileParams;
 }
 
 
