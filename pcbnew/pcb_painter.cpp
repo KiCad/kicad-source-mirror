@@ -1140,6 +1140,7 @@ void PCB_PAINTER::draw( const ZONE_CONTAINER* aZone, int aLayer )
             return;
 
         // Set up drawing options
+        m_gal->SetStrokeColor( color );
         m_gal->SetFillColor( color );
         m_gal->SetLineWidth( aZone->GetMinThickness() );
 
