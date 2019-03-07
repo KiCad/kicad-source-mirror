@@ -1212,6 +1212,8 @@ void DRC::testOutline()
 {
     wxPoint error_loc( m_pcb->GetBoardEdgesBoundingBox().GetPosition() );
 
+    m_board_outlines.RemoveAllContours();
+
     if( !m_pcb->GetBoardPolygonOutlines( m_board_outlines, nullptr, &error_loc ) )
     {
         addMarkerToPcb( m_markerFactory.NewMarker( error_loc, m_pcb, DRCE_INVALID_OUTLINE ) );
