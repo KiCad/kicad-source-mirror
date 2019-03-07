@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Feb 10 2019)
+// C++ code generated with wxFormBuilder (version Nov 10 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -49,7 +49,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_itemsGrid->SetColSize( 10, 110 );
 	m_itemsGrid->EnableDragColMove( false );
 	m_itemsGrid->EnableDragColSize( true );
-	m_itemsGrid->SetColLabelSize( 22 );
+	m_itemsGrid->SetColLabelSize( 24 );
 	m_itemsGrid->SetColLabelValue( 0, _("Text Items") );
 	m_itemsGrid->SetColLabelValue( 1, _("Show") );
 	m_itemsGrid->SetColLabelValue( 2, _("Width") );
@@ -76,7 +76,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	// Cell Defaults
 	m_itemsGrid->SetDefaultCellAlignment( wxALIGN_LEFT, wxALIGN_TOP );
 	m_itemsGrid->SetMinSize( wxSize( 800,140 ) );
-	
+
 	sbSizerTexts->Add( m_itemsGrid, 1, wxEXPAND|wxBOTTOM, 5 );
 
 	wxBoxSizer* bButtonSize;
@@ -426,7 +426,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_modelsGrid->SetColSize( 1, 65 );
 	m_modelsGrid->EnableDragColMove( false );
 	m_modelsGrid->EnableDragColSize( false );
-	m_modelsGrid->SetColLabelSize( 26 );
+	m_modelsGrid->SetColLabelSize( 24 );
 	m_modelsGrid->SetColLabelValue( 0, _("3D Model(s)") );
 	m_modelsGrid->SetColLabelValue( 1, _("Preview") );
 	m_modelsGrid->SetColLabelAlignment( wxALIGN_CENTER, wxALIGN_CENTER );
