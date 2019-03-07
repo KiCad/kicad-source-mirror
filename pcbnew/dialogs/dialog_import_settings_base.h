@@ -57,6 +57,7 @@ class DIALOG_IMPORT_SETTINGS_BASE : public DIALOG_SHIM
 		wxCheckBox* m_TextAndGraphicsOpt;
 		wxCheckBox* m_ConstraintsOpt;
 		wxCheckBox* m_NetclassesOpt;
+		wxCheckBox* m_TracksAndViasOpt;
 		wxCheckBox* m_MaskAndPasteOpt;
 		
 		DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Settings"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 

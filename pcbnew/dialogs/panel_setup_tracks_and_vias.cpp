@@ -334,24 +334,6 @@ bool PANEL_SETUP_TRACKS_AND_VIAS::validateData()
 }
 
 
-void PANEL_SETUP_TRACKS_AND_VIAS::ImportSettingsFrom( BOARD* aBoard )
-{
-    m_trackWidthsGrid->CommitPendingChanges( true );
-    m_viaSizesGrid->CommitPendingChanges( true );
-    m_diffPairsGrid->CommitPendingChanges( true );
-
-    // Note: do not change the board, as we need to get the current nets from it for
-    // netclass memberships.  All the netclass definitions and dimension lists are in
-    // the BOARD_DESIGN_SETTINGS.
-
-    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
-
-    m_BrdSettings = &aBoard->GetDesignSettings();
-    TransferDataToWindow();
-
-    m_BrdSettings = savedSettings;
-}
-
 void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
 {
     int i = m_trackWidthsGrid->GetNumberRows();
@@ -361,6 +343,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendTrackWidth( const int aWidth )
     wxString val = StringFromValue( m_Frame->GetUserUnits(), aWidth, true, true );
     m_trackWidthsGrid->SetCellValue( i, TR_WIDTH_COL, val );
 }
+
 
 void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( const int aSize, const int aDrill )
 {
@@ -377,6 +360,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::AppendViaSize( const int aSize, const int aDri
         m_viaSizesGrid->SetCellValue( i, VIA_DRILL_COL, val );
     }
 }
+
 
 void PANEL_SETUP_TRACKS_AND_VIAS::AppendDiffPairs( const int aWidth, const int aGap,
                                                    const int aViaGap )
@@ -412,6 +396,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddTrackWidthsClick( wxCommandEvent& aEvent 
     m_trackWidthsGrid->ShowCellEditControl();
 }
 
+
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& event )
 {
     int curRow = m_trackWidthsGrid->GetGridCursorRow();
@@ -426,6 +411,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveTrackWidthsClick( wxCommandEvent& even
     m_trackWidthsGrid->SetGridCursor( curRow, m_trackWidthsGrid->GetGridCursorCol() );
 }
 
+
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
 {
     AppendViaSize( 0, 0 );
@@ -436,6 +422,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddViaSizesClick( wxCommandEvent& event )
     m_viaSizesGrid->EnableCellEditControl( true );
     m_viaSizesGrid->ShowCellEditControl();
 }
+
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
 {
@@ -451,6 +438,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveViaSizesClick( wxCommandEvent& event )
     m_viaSizesGrid->SetGridCursor( curRow, m_viaSizesGrid->GetGridCursorCol() );
 }
 
+
 void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
 {
     AppendDiffPairs( 0, 0, 0 );
@@ -461,6 +449,7 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnAddDiffPairsClick( wxCommandEvent& event )
     m_diffPairsGrid->EnableCellEditControl( true );
     m_diffPairsGrid->ShowCellEditControl();
 }
+
 
 void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event )
 {
@@ -475,3 +464,23 @@ void PANEL_SETUP_TRACKS_AND_VIAS::OnRemoveDiffPairsClick( wxCommandEvent& event 
     m_diffPairsGrid->MakeCellVisible( curRow, m_diffPairsGrid->GetGridCursorCol() );
     m_diffPairsGrid->SetGridCursor( curRow, m_diffPairsGrid->GetGridCursorCol() );
 }
+
+
+void PANEL_SETUP_TRACKS_AND_VIAS::ImportSettingsFrom( BOARD* aBoard )
+{
+    m_trackWidthsGrid->CommitPendingChanges( true );
+    m_viaSizesGrid->CommitPendingChanges( true );
+    m_diffPairsGrid->CommitPendingChanges( true );
+
+    // Note: do not change the board, as we need to get the current nets from it for
+    // netclass memberships.  All the netclass definitions and dimension lists are in
+    // the BOARD_DESIGN_SETTINGS.
+
+    BOARD_DESIGN_SETTINGS* savedSettings = m_BrdSettings;
+
+    m_BrdSettings = &aBoard->GetDesignSettings();
+    TransferDataToWindow();
+
+    m_BrdSettings = savedSettings;
+}
+

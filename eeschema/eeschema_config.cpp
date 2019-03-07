@@ -158,9 +158,8 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             fn = g_RootSheet->GetScreen()->GetFileName();
             fn.SetExt( ProjectFileExtension );
 
-            wxFileDialog dlg( this, _( "Load Project File" ), fn.GetPath(),
-                              fn.GetFullName(), ProjectFileWildcard(),
-                              wxFD_OPEN | wxFD_FILE_MUST_EXIST );
+            wxFileDialog dlg( this, _( "Load Project File" ), fn.GetPath(), fn.GetFullName(),
+                              ProjectFileWildcard(), wxFD_OPEN | wxFD_FILE_MUST_EXIST );
 
             if( dlg.ShowModal() == wxID_CANCEL )
                 break;
@@ -173,10 +172,10 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
             {
                 // Read library list and library path list
                 Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH,
-                                  GetProjectFileParametersList() );
+                                  GetProjectFileParameters() );
                 // Read schematic editor setup
-                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDITOR,
-                                  GetProjectFileParametersList() );
+                Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT,
+                                  GetProjectFileParameters() );
             }
         }
         break;
@@ -213,7 +212,7 @@ void SCH_EDIT_FRAME::InstallPreferences( PAGED_DIALOG* aParent )
 }
 
 
-PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
+PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParameters()
 
 {
     if( !m_projectFileParams.empty() )
@@ -259,12 +258,10 @@ PARAM_CFG_ARRAY& SCH_EDIT_FRAME::GetProjectFileParametersList()
 bool SCH_EDIT_FRAME::LoadProjectFile()
 {
     // Read library list and library path list
-    bool isRead = Prj().ConfigLoad( Kiface().KifaceSearch(),
-                    GROUP_SCH, GetProjectFileParametersList() );
+    bool ret = Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH, GetProjectFileParameters() );
 
     // Read schematic editor setup
-    isRead = isRead && Prj().ConfigLoad( Kiface().KifaceSearch(),
-                                         GROUP_SCH_EDITOR, GetProjectFileParametersList() );
+    ret &= Prj().ConfigLoad( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters() );
 
     // Verify some values, because the config file can be edited by hand,
     // and have bad values:
@@ -282,7 +279,7 @@ bool SCH_EDIT_FRAME::LoadProjectFile()
 
     pglayout.SetPageLayout( pg_fullfilename );
 
-    return isRead;
+    return ret;
 }
 
 
@@ -298,8 +295,7 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
 
     if( aAskForSave )
     {
-        wxFileDialog dlg( this, _( "Save Project File" ),
-                          fn.GetPath(), fn.GetFullName(),
+        wxFileDialog dlg( this, _( "Save Project File" ), fn.GetPath(), fn.GetFullName(),
                           ProjectFileWildcard(), wxFD_SAVE );
 
         if( dlg.ShowModal() == wxID_CANCEL )
@@ -308,7 +304,9 @@ void SCH_EDIT_FRAME::SaveProjectSettings( bool aAskForSave )
         fn = dlg.GetPath();
     }
 
-    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDITOR, GetProjectFileParametersList() );
+    wxString path = fn.GetFullPath();
+
+    prj.ConfigSave( Kiface().KifaceSearch(), GROUP_SCH_EDIT, GetProjectFileParameters(), path );
 }
 
 ///@{
