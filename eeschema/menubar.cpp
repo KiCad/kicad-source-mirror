@@ -420,6 +420,10 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Export drawings to clipboard" ),
                  KiBitmap( copy_xpm ) );
 
+    AddMenuItem( aParentMenu, ID_GET_NETLIST, _( "Export &Netlist..." ),
+                 _( "Export netlist file" ),
+                 KiBitmap( netlist_xpm ) );
+
     AddMenuItem( aParentMenu, submenuExport, ID_GEN_EXPORT_FILE, _( "E&xport" ),
                  _( "Export files" ),
                  KiBitmap( export_xpm ) );
@@ -525,7 +529,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
-                 text, _( "Updates PCB design with current schematic (forward annotation)." ),
+                 text, _( "Update PCB design with current schematic." ),
                  KiBitmap( update_pcb_from_sch_xpm ) );
 
     // Run Pcbnew
@@ -563,17 +567,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  HELP_ANNOTATE,
                  KiBitmap( annotate_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_GET_NETLIST, _( "Generate &Netlist File..." ),
-                 _( "Generate netlist file" ),
-                 KiBitmap( netlist_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_GET_TOOLS, _( "Generate Bill of &Materials..." ),
-                 HELP_GENERATE_BOM,
-                 KiBitmap( bom_xpm ) );
-
-    AddMenuItem( aParentMenu,
-                 ID_BUS_MANAGER,
-                 _( "Bus &Definitions" ),
+    AddMenuItem( aParentMenu, ID_BUS_MANAGER, _( "Bus &Definitions..." ),
                  HELP_BUS_MANAGER,
                  KiBitmap( bus_definition_tool_xpm ) );
 
@@ -583,6 +577,10 @@ void prepareToolsMenu( wxMenu* aParentMenu )
     AddMenuItem( aParentMenu, ID_RUN_CVPCB, _( "A&ssign Footprints..." ),
                  _( "Assign PCB footprints to schematic symbols" ),
                  KiBitmap( cvpcb_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_GET_TOOLS, _( "Generate Bill of &Materials..." ),
+                 HELP_GENERATE_BOM,
+                 KiBitmap( bom_xpm ) );
 
     aParentMenu->AppendSeparator();
 

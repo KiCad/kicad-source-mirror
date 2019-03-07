@@ -191,6 +191,12 @@ void prepareRouteMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
+    AddMenuItem( aParentMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
+                 _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
+                 KiBitmap( select_layer_pair_xpm ) );
+
+    aParentMenu->AppendSeparator();
+
     text = AddHotkeyName( _( "&Single Track" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ADD_NEW_TRACK, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TRACK_BUTT, text,
@@ -364,31 +370,26 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 // Build the tools menu
 void prepareToolsMenu( wxMenu* aParentMenu )
 {
-    AddMenuItem( aParentMenu, ID_GET_NETLIST,
-                 _( "Load &Netlist..." ),
-                 _( "Read netlist and update board connectivity" ),
-                 KiBitmap( netlist_xpm ) );
-
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
                  _( "Update &PCB from Schematic..." ),
                  _( "Update PCB design with current schematic (forward annotation)" ),
                  KiBitmap( update_pcb_from_sch_xpm ) );
 
-    aParentMenu->AppendSeparator();
-
     AddMenuItem( aParentMenu, ID_MENU_PCB_UPDATE_FOOTPRINTS,
                  _( "Update &Footprints from Library..." ),
                  _( "Update footprints to include any changes from the library" ),
                  KiBitmap( reload_xpm ) );
 
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR,
-                 _( "Set &Layer Pair..." ), _( "Change active layer pair" ),
-                 KiBitmap( select_layer_pair_xpm ) );
+    bool needsSeparator = true;
 
 #if defined(KICAD_SCRIPTING_WXPYTHON)
+    if( needsSeparator )
+    {
+        aParentMenu->AppendSeparator();
+        needsSeparator = false;
+    }
+
     AddMenuItem( aParentMenu, ID_TOOLBARH_PCB_SCRIPTING_CONSOLE,
                  _( "&Scripting Console" ),
                  _( "Show/Hide the Python scripting console" ),
@@ -396,7 +397,11 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 #endif
 
 #if defined(KICAD_SCRIPTING) && defined(KICAD_SCRIPTING_ACTION_MENU)
-    aParentMenu->AppendSeparator( );
+    if( needsSeparator )
+    {
+        aParentMenu->AppendSeparator();
+        needsSeparator = false;
+    }
 
     wxMenu* submenuActionPluginsMenu = new wxMenu();
 
@@ -827,6 +832,11 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     //----- Import submenu ------------------------------------------------------
     wxMenu* submenuImport = new wxMenu();
+
+    AddMenuItem( aParentMenu, ID_GET_NETLIST,
+                 _( "Import &Netlist..." ),
+                 _( "Read netlist and update board connectivity" ),
+                 KiBitmap( netlist_xpm ) );
 
     AddMenuItem( submenuImport, ID_GEN_IMPORT_SPECCTRA_SESSION,
                  _( "&Specctra Session..." ),

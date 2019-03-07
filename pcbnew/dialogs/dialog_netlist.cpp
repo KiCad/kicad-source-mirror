@@ -445,9 +445,9 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     reporter.ReportHead( msg, REPORTER::RPT_INFO );
 
     if( m_matchByTimestamp->GetSelection() == 0 )
-        msg = _( "Using time stamps to match components and footprints.\n" );
-    else
         msg = _( "Using references to match components and footprints.\n" );
+    else
+        msg = _( "Using tstamp fields to match components and footprints.\n" );
 
     reporter.ReportHead( msg, REPORTER::RPT_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
@@ -457,7 +457,7 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
                               m_cbUpdateFootprints->GetValue(),
                               m_cbDeleteShortingTracks->GetValue(),
                               m_cbDeleteExtraFootprints->GetValue(),
-                              m_matchByTimestamp->GetSelection() == 0,
+                              m_matchByTimestamp->GetSelection() == 1,
                               m_cbDeleteSinglePadNets->GetValue(),
                               aDryRun, &m_runDragCommand );
 

@@ -75,8 +75,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_SHEET_SET, wxEmptyString, KiScaledBitmap( sheetset_xpm, this ),
                             _( "Edit Page settings" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString, KiScaledBitmap( print_button_xpm, this ),
                             _( "Print schematic" ) );
 
@@ -161,9 +159,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     m_mainToolBar->AddTool( ID_RUN_CVPCB, wxEmptyString, KiScaledBitmap( cvpcb_xpm, this ),
                             _( "Assign PCB footprints to schematic symbols" ) );
-
-    m_mainToolBar->AddTool( ID_GET_NETLIST, wxEmptyString, KiScaledBitmap( netlist_xpm, this ),
-                            _( "Generate netlist" ) );
 
     m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString,
                             KiScaledBitmap( spreadsheet_xpm, this ), _( "Edit symbol fields"  ) );

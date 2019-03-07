@@ -40,7 +40,7 @@ DIALOG_NETLIST_BASE::DIALOG_NETLIST_BASE( wxWindow* parent, wxWindowID id, const
 	wxBoxSizer* bUpperSizer;
 	bUpperSizer = new wxBoxSizer( wxHORIZONTAL );
 	
-	wxString m_matchByTimestampChoices[] = { _("Keep existing symbol to footprint associations"), _("Re-associate footprints by reference") };
+	wxString m_matchByTimestampChoices[] = { _("Associate footprints by reference"), _("Associate footprints using \"tstamp\" fields") };
 	int m_matchByTimestampNChoices = sizeof( m_matchByTimestampChoices ) / sizeof( wxString );
 	m_matchByTimestamp = new wxRadioBox( this, wxID_ANY, _("Match Method"), wxDefaultPosition, wxDefaultSize, m_matchByTimestampNChoices, m_matchByTimestampChoices, 1, wxRA_SPECIFY_COLS );
 	m_matchByTimestamp->SetSelection( 0 );
