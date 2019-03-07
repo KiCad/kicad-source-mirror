@@ -140,7 +140,9 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* aText )
         m_canvas->RefreshDrawingRect( aText->GetBoundingBox() );
         aText->DeleteStructure();
         OnModify();
-        module->SetLastEditTime();
+
+        if( module )
+            module->SetLastEditTime();
     }
 }
 

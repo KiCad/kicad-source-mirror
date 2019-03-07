@@ -437,6 +437,7 @@ void FIELDS_GRID_TABLE<T>::SetValue( int aRow, int aCol, const wxString &aValue 
             field.SetTextAngle( TEXT_ANGLE_VERT );
         else
             wxFAIL_MSG( wxT( "unknown orientation: " ) + aValue );
+        break;
 
     case FDC_POSX:
     case FDC_POSY:

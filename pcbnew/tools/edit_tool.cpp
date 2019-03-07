@@ -761,7 +761,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
     auto& selection = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
-            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging ); 
+            { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); }, nullptr, ! m_dragging );
 
     if( selection.Empty() )
         return 0;
@@ -1028,7 +1028,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         for( auto selItem : selection )
         {
-            BOARD_ITEM* item = dynamic_cast<BOARD_ITEM*>( selItem );
+            BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selItem );
 
             if( !item->IsNew() && !EditingModules() )
                 m_commit->Modify( item );
