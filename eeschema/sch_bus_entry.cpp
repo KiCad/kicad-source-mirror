@@ -162,8 +162,10 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
 
     if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
+    else if( aPanel->GetScreen() && !aPanel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
+        color = GetLayerColor( LAYER_BRIGHTENED );
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 
