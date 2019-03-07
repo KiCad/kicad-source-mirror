@@ -316,8 +316,10 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
+    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
+        color = GetLayerColor( LAYER_BRIGHTENED );
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -843,8 +845,10 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
+    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
+        color = GetLayerColor( LAYER_BRIGHTENED );
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
+        color = GetLayerColor( m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
@@ -1110,10 +1114,10 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
+    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
+        color = GetLayerColor( LAYER_BRIGHTENED );
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED :
-                               ( conn && conn->IsBus() ) ?
-                               LAYER_BUS : m_Layer );
+        color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 
