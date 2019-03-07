@@ -432,50 +432,40 @@ int OUTPUTFORMATTER::Print( int nestLevel, const char* fmt, ... )
 
 std::string OUTPUTFORMATTER::Quotes( const std::string& aWrapee )
 {
-    static const char quoteThese[] = "\t ()\n\r";
+    std::string ret;
 
-    if( !aWrapee.size() ||  // quote null string as ""
-        aWrapee[0]=='#' ||  // quote a potential s-expression comment, so it is not a comment
-        aWrapee[0]=='"' ||  // NextTok() will travel through DSN_STRING path anyway, then must apply escapes
-        aWrapee.find_first_of( quoteThese ) != std::string::npos )
+    ret.reserve( aWrapee.size()*2 + 2 );
+
+    ret += '"';
+
+    for( std::string::const_iterator it = aWrapee.begin(); it!=aWrapee.end(); ++it )
     {
-        std::string ret;
-
-        ret.reserve( aWrapee.size()*2 + 2 );
-
-        ret += '"';
-
-        for( std::string::const_iterator it = aWrapee.begin(); it!=aWrapee.end(); ++it )
+        switch( *it )
         {
-            switch( *it )
-            {
-            case '\n':
-                ret += '\\';
-                ret += 'n';
-                break;
-            case '\r':
-                ret += '\\';
-                ret += 'r';
-                break;
-            case '\\':
-                ret += '\\';
-                ret += '\\';
-                break;
-            case '"':
-                ret += '\\';
-                ret += '"';
-                break;
-            default:
-                ret += *it;
-            }
+        case '\n':
+            ret += '\\';
+            ret += 'n';
+            break;
+        case '\r':
+            ret += '\\';
+            ret += 'r';
+            break;
+        case '\\':
+            ret += '\\';
+            ret += '\\';
+            break;
+        case '"':
+            ret += '\\';
+            ret += '"';
+            break;
+        default:
+            ret += *it;
         }
-
-        ret += '"';
-
-        return ret;
     }
 
-    return aWrapee;
+    ret += '"';
+
+    return ret;
 }
 
 

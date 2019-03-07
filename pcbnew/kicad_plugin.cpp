@@ -1515,7 +1515,7 @@ void PCB_IO::format( TEXTE_PCB* aText, int aNestLevel ) const
 
 void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
 {
-    wxString type;
+    std::string type;
 
     switch( aText->GetType() )
     {
@@ -1524,8 +1524,7 @@ void PCB_IO::format( TEXTE_MODULE* aText, int aNestLevel ) const
     case TEXTE_MODULE::TEXT_is_DIVERS:    type = "user";
     }
 
-    m_out->Print( aNestLevel, "(fp_text %s %s (at %s",
-                  m_out->Quotew( type ).c_str(),
+    m_out->Print( aNestLevel, "(fp_text %s %s (at %s", type.c_str(),
                   m_out->Quotew( aText->GetText() ).c_str(),
                   FormatInternalUnits( aText->GetPos0() ).c_str() );
 
