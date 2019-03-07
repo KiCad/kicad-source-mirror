@@ -315,30 +315,55 @@ void KICAD_MANAGER_FRAME::OnCreateProjectFromTemplate( wxCommandEvent& event )
     }
 
     // Get project destination folder and project file name.
-    wxString    default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
-    wxString    title = _( "New Project Folder" );
-    wxDirDialog dlg( this, title, default_dir );
+    wxString        default_dir = wxFileName( Prj().GetProjectFullName() ).GetPathWithSep();
+    wxString        title = _( "New Project Folder" );
+    wxFileDialog    dlg( this, title, default_dir, wxEmptyString,
+                        ProjectFileWildcard(), wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+
+    // Add a "Create a new directory" checkbox
+    dlg.SetExtraControlCreator( &DIR_CHECKBOX::Create );
 
     if( dlg.ShowModal() == wxID_CANCEL )
         return;
 
-    // Builds the project .pro filename, from the new project folder name
-    wxFileName fn;
-    fn.AssignDir( dlg.GetPath() );
-    fn.SetName( dlg.GetPath().AfterLast( SEP() ) );
-    fn.SetExt( "pro" );
+    wxFileName fn( dlg.GetPath() );
 
-    // Make sure the user has write permissions to the project path.
-    wxFileName prjPath = fn;
+    // wxFileName automatically extracts an extension.  But if it isn't
+    // a .pro extension, we should keep it as part of the filename
+    if( !fn.GetExt().IsEmpty()
+            && fn.GetExt().ToStdString() != ProjectFileExtension )
+        fn.SetName( fn.GetName() + wxT( "." ) + fn.GetExt() );
 
-    while( !prjPath.DirExists() )
-        prjPath.RemoveLastDir();
+    fn.SetExt( ProjectFileExtension );     // enforce extension
 
-    if( !prjPath.IsDirWritable() )
+    if( !fn.IsAbsolute() )
+        fn.MakeAbsolute();
+
+    // Append a new directory with the same name of the project file.
+    if( static_cast<DIR_CHECKBOX*>( dlg.GetExtraControl() )->CreateNewDir() )
+        fn.AppendDir( fn.GetName() );
+
+    // Check if the project directory is empty if it already exists.
+    wxDir directory( fn.GetPath() );
+
+    if( !fn.DirExists() )
+    {
+        if( !fn.Mkdir() )
+        {
+            wxString msg;
+            msg.Printf( _( "Directory \"%s\" could not be created.\n\n"
+                           "Please make sure you have write permissions and try again." ),
+                        fn.GetPath() );
+            DisplayErrorMessage( this, msg );
+            return;
+        }
+    }
+
+    if( !fn.IsDirWritable() )
     {
         wxString msg;
 
-        msg.Printf( _( "Cannot write to folder \"%s\"." ), prjPath.GetPath() );
+        msg.Printf( _( "Cannot write to folder \"%s\"." ), fn.GetPath() );
         wxMessageDialog msgDlg( this, msg, _( "Error!" ), wxICON_ERROR | wxOK | wxCENTER );
         msgDlg.SetExtendedMessage( _( "Please check your access permissions to this folder "
                                       "and try again." ) );
