@@ -737,7 +737,7 @@ void PCB_EDIT_FRAME::DoShowBoardSetupDialog( const wxString& aInitialPage,
 
     if( dlg.ShowModal() == wxID_OK )
     {
-        Prj().ConfigSave( Kiface().KifaceSearch(), GROUP_PCB, GetProjectFileParameters() );
+        SaveProjectSettings( false );
 
         UpdateUserInterface();
         ReCreateAuxiliaryToolbar();

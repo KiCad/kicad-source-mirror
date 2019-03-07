@@ -57,6 +57,9 @@ DIALOG_IMPORT_SETTINGS_BASE::DIALOG_IMPORT_SETTINGS_BASE( wxWindow* parent, wxWi
 	m_NetclassesOpt = new wxCheckBox( this, wxID_ANY, _("Net Classes"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_NetclassesOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
+	m_TracksAndViasOpt = new wxCheckBox( this, wxID_ANY, _("Predefined Track and Via dimensions"), wxDefaultPosition, wxDefaultSize, 0 );
+	bmiddleSizer->Add( m_TracksAndViasOpt, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	
 	m_MaskAndPasteOpt = new wxCheckBox( this, wxID_ANY, _("Solder Mask/Paste defaults"), wxDefaultPosition, wxDefaultSize, 0 );
 	bmiddleSizer->Add( m_MaskAndPasteOpt, 0, wxRIGHT|wxLEFT, 5 );
 	

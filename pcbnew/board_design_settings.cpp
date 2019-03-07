@@ -41,6 +41,7 @@
 #define LayerKeyPrefix              wxT( "Layer" )
 #define LayerNameKey                wxT( "Name" )
 #define LayerTypeKey                wxT( "Type" )
+#define LayerEnabledKey             wxT( "Enabled" )
 
 #define NetclassNameKey             wxT( "Name" )
 #define ClearanceKey                wxT( "Clearance" )
@@ -77,28 +78,37 @@ public:
 
         BOARD*                 board = m_Pt_param;
         BOARD_DESIGN_SETTINGS& bds = board->GetDesignSettings();
+        LSET                   enabledLayers = bds.GetEnabledLayers();
         wxString               oldPath = aConfig->GetPath();
+        wxString               layerKeyPrefix = LayerKeyPrefix;
 
         bds.SetCopperLayerCount( aConfig->Read( CopperLayerCountKey, 2 ) );
 
         double thickness = aConfig->ReadDouble( BoardThicknessKey, DEFAULT_BOARD_THICKNESS_MM );
         bds.SetBoardThickness( Millimeter2iu( thickness ) );
 
-        for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
+        for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
         {
             PCB_LAYER_ID layer = *seq;
+            wxString     path = layerKeyPrefix + wxT( "." ) + board->GetStandardLayerName( layer );
             wxString     layerName;
             int          layerType;
+            bool         layerEnabled;
 
             aConfig->SetPath( oldPath );
-            aConfig->SetPath( LayerKeyPrefix + board->GetStandardLayerName( layer ) );
+            aConfig->SetPath( path );
 
             if( aConfig->Read( LayerNameKey, &layerName ) )
                 board->SetLayerName( layer, layerName );
 
             if( aConfig->Read( LayerTypeKey, &layerType ) )
                 board->SetLayerType( layer, (LAYER_T) layerType );
+
+            if( aConfig->Read( LayerEnabledKey, &layerEnabled ) )
+                enabledLayers.set( layer, layerEnabled );
         }
+
+        board->SetEnabledLayers( enabledLayers );
 
         aConfig->SetPath( oldPath );
     }
@@ -116,25 +126,23 @@ public:
         aConfig->Write( CopperLayerCountKey, board->GetCopperLayerCount() );
         aConfig->Write( BoardThicknessKey, Iu2Millimeter( bds.GetBoardThickness() ) );
 
-        for( LSEQ seq = LSET::AllCuMask().Seq(); seq; ++seq )
+        for( LSEQ seq = LSET::AllLayersMask().Seq(); seq; ++seq )
         {
             PCB_LAYER_ID layer = *seq;
-            wxString stdName = board->GetStandardLayerName( layer );
-            wxString layerName = board->GetLayerName( layer );
-            LAYER_T layerType = board->GetLayerType( layer );
+            wxString     path = layerKeyPrefix + wxT( "." ) + board->GetStandardLayerName( layer );
+            wxString     layerName = board->GetLayerName( layer );
+            LAYER_T      layerType = board->GetLayerType( layer );
 
             aConfig->SetPath( oldPath );
-            aConfig->SetPath( layerKeyPrefix + wxT( "." ) + stdName );
+            aConfig->SetPath( path );
 
-            if( layerName == stdName && layerType == LT_SIGNAL )
-            {
-                aConfig->DeleteGroup( aConfig->GetPath() );
-            }
-            else
+            if( IsCopperLayer( layer ) )
             {
                 aConfig->Write( LayerNameKey, layerName );
                 aConfig->Write( LayerTypeKey, (int) layerType );
             }
+
+            aConfig->Write( LayerEnabledKey, board->IsLayerEnabled( layer ) );
         }
 
         aConfig->SetPath( oldPath );
@@ -320,19 +328,28 @@ public:
 
         m_Pt_param->Clear();
 
-        for( int index = 1; ; ++index )
+        for( int index = 0; ; ++index )
         {
-            wxString pathIndex = wxString() << index;
-            wxString netclassName;
+            wxString    path = "";
+            NETCLASSPTR netclass;
+            wxString    netclassName;
+
+            if( index == 0 )
+                path = "Default";
+            else
+                path << index;
 
             aConfig->SetPath( oldPath );
             aConfig->SetPath( m_Ident );
-            aConfig->SetPath( pathIndex );
+            aConfig->SetPath( path );
 
             if( !aConfig->Read( NetclassNameKey, &netclassName ) )
                 break;
 
-            NETCLASSPTR netclass = std::make_shared<NETCLASS>( netclassName );
+            if( index == 0 )
+                netclass = m_Pt_param->GetDefault();
+            else
+                netclass = std::make_shared<NETCLASS>( netclassName );
 
 #define READ_MM( aKey, aDefault ) Millimeter2iu( aConfig->ReadDouble( aKey, aDefault ) )
             netclass->SetClearance( READ_MM( ClearanceKey, netclass->GetClearance() ) );
@@ -345,7 +362,8 @@ public:
             netclass->SetDiffPairGap( READ_MM( dPairGapKey, netclass->GetDiffPairGap() ) );
             netclass->SetDiffPairViaGap( READ_MM( dPairViaGapKey, netclass->GetDiffPairViaGap() ) );
 
-            m_Pt_param->Add( netclass );
+            if( index > 0 )
+                m_Pt_param->Add( netclass );
         }
 
         aConfig->SetPath( oldPath );
@@ -356,17 +374,32 @@ public:
         if( !m_Pt_param || !aConfig )
             return;
 
-        wxString oldPath = aConfig->GetPath();
-        int      index = 1;
+        wxString                   oldPath = aConfig->GetPath();
+        NETCLASSES::const_iterator nc = m_Pt_param->begin();
 
-        for( NETCLASSES::const_iterator nc = m_Pt_param->begin(); nc != m_Pt_param->end(); ++nc )
+        for( int index = 0; index <= m_Pt_param->GetCount(); ++index )
         {
-            wxString    pathIndex = wxString() << index++;
-            NETCLASSPTR netclass = nc->second;
+            wxString    path = "";
+            NETCLASSPTR netclass;
+
+            if( index == 0 )
+                path = "Default";
+            else
+                path << index;
 
             aConfig->SetPath( oldPath );
             aConfig->SetPath( m_Ident );
-            aConfig->SetPath( pathIndex );
+            aConfig->SetPath( path );
+
+            if( index == 0 )
+            {
+                netclass = m_Pt_param->GetDefault();
+            }
+            else
+            {
+                netclass = nc->second;
+                ++nc;
+            }
 
             aConfig->Write( NetclassNameKey, netclass->GetName() );
 
@@ -645,7 +678,7 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResu
 
     aResult->push_back( new PARAM_CFG_DOUBLE( wxT( "SolderPasteRatio" ),
           &m_SolderPasteMarginRatio,
-          DEFAULT_SOLDERPASTE_RATIO, 0, 10.0 ) );
+          DEFAULT_SOLDERPASTE_RATIO, -0.5, 1.0 ) );
 }
 
 

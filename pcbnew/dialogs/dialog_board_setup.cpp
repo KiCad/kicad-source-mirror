@@ -82,6 +82,8 @@ void DIALOG_BOARD_SETUP::OnAuxiliaryAction( wxCommandEvent& event )
         m_constraints->ImportSettingsFrom( dummyBoard );
     if( importDlg.m_NetclassesOpt->GetValue() )
         m_netclasses->ImportSettingsFrom( dummyBoard );
+    if( importDlg.m_TracksAndViasOpt->GetValue() )
+        m_tracksAndVias->ImportSettingsFrom( dummyBoard );
     if( importDlg.m_MaskAndPasteOpt->GetValue() )
         m_maskAndPaste->ImportSettingsFrom( dummyBoard );
 

@@ -300,7 +300,7 @@ public:
      * already been populated and return a reference to the array to the caller.
      * </p>
      */
-    PARAM_CFG_ARRAY& GetProjectFileParametersList();
+    PARAM_CFG_ARRAY& GetProjectFileParameters();
 
     /**
      * Save changes to the project settings to the project (.pro) file.

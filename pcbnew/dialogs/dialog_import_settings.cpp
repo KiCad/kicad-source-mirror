@@ -86,5 +86,6 @@ void DIALOG_IMPORT_SETTINGS::OnSelectAll( wxCommandEvent& event )
     m_TextAndGraphicsOpt->SetValue( true );
     m_ConstraintsOpt->SetValue( true );
     m_NetclassesOpt->SetValue( true );
+    m_TracksAndViasOpt->SetValue( true );
     m_MaskAndPasteOpt->SetValue( true );
 }
