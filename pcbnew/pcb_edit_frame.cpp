@@ -518,6 +518,9 @@ void PCB_EDIT_FRAME::SetPageSettings( const PAGE_INFO& aPageSettings )
             worksheet->SetSheetCount( screen->m_NumberOfScreens );
         }
 
+        if( auto board = GetBoard() )
+            worksheet->SetFileName(  TO_UTF8( board->GetFileName() ) );
+
         // PCB_DRAW_PANEL_GAL takes ownership of the worksheet
         drawPanel->SetWorksheet( worksheet );
     }
