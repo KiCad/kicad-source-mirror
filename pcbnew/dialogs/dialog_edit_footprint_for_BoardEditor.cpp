@@ -223,11 +223,11 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::ModuleOrientEvent( wxCommandEvent&  )
     else if( m_Orient180->GetValue() )
         m_OrientValue = 180.0;
 
-    m_OrientValidator.TransferToWindow();
+    updateOrientationControl();
 }
 
 
-void DIALOG_FOOTPRINT_BOARD_EDITOR::OnOtherOrientation( wxKeyEvent& aEvent )
+void DIALOG_FOOTPRINT_BOARD_EDITOR::OnOtherOrientation( wxCommandEvent& aEvent )
 {
     m_OrientOther->SetValue( true );
 
@@ -281,7 +281,7 @@ bool DIALOG_FOOTPRINT_BOARD_EDITOR::TransferDataToWindow()
     else
         m_OrientOther->SetValue( true );
 
-    m_OrientValidator.TransferToWindow();
+    updateOrientationControl();
 
     m_BoardSideCtrl->SetSelection( (m_footprint->GetLayer() == B_Cu) ? 1 : 0 );
 
@@ -898,4 +898,10 @@ void DIALOG_FOOTPRINT_BOARD_EDITOR::OnGridSize( wxSizeEvent& aEvent )
     adjustGridColumns( aEvent.GetSize().GetX());
 
     aEvent.Skip();
+}
+
+
+void DIALOG_FOOTPRINT_BOARD_EDITOR::updateOrientationControl()
+{
+    KIUI::ValidatorTransferToWindowWithoutEvents( m_OrientValidator );
 }

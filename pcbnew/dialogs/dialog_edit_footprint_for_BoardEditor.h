@@ -102,7 +102,7 @@ private:
     void UpdateModule( wxCommandEvent&  ) override;
     void ExchangeModule( wxCommandEvent&  ) override;
     void ModuleOrientEvent( wxCommandEvent&  ) override;
-    void OnOtherOrientation( wxKeyEvent& aEvent ) override;
+    void OnOtherOrientation( wxCommandEvent& aEvent ) override;
     void Cfg3DPath( wxCommandEvent&  ) override;
     void OnGridSize( wxSizeEvent& aEvent ) override;
     void OnAddField( wxCommandEvent&  ) override;
@@ -112,6 +112,12 @@ private:
     void select3DModel( int aModelIdx );
 
     void adjustGridColumns( int aWidth );
+
+    /**
+     * Update the orientation validated control, without triggering a change
+     * event on the control (which would update the radio buttons)
+     */
+    void updateOrientationControl();
 };
 
 

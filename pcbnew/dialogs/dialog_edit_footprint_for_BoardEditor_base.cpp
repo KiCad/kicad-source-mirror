@@ -541,7 +541,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::DIALOG_FOOTPRINT_BOARD_EDITOR_BASE( wxWindow
 	m_Orient270->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
 	m_Orient180->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
 	m_OrientOther->Connect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
-	m_OrientValueCtrl->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
+	m_OrientValueCtrl->Connect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
 	m_buttonUpdate->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditFootprint ), NULL, this );
@@ -567,7 +567,7 @@ DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::~DIALOG_FOOTPRINT_BOARD_EDITOR_BASE()
 	m_Orient270->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
 	m_Orient180->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
 	m_OrientOther->Disconnect( wxEVT_COMMAND_RADIOBUTTON_SELECTED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ModuleOrientEvent ), NULL, this );
-	m_OrientValueCtrl->Disconnect( wxEVT_KEY_DOWN, wxKeyEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
+	m_OrientValueCtrl->Disconnect( wxEVT_COMMAND_TEXT_UPDATED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::OnOtherOrientation ), NULL, this );
 	m_buttonUpdate->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::UpdateModule ), NULL, this );
 	m_buttonExchange->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::ExchangeModule ), NULL, this );
 	m_buttonModuleEditor->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( DIALOG_FOOTPRINT_BOARD_EDITOR_BASE::EditFootprint ), NULL, this );

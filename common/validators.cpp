@@ -218,3 +218,14 @@ void ENV_VAR_NAME_VALIDATOR::OnTextChanged( wxCommandEvent& event )
 
     event.Skip();
 }
+
+
+void KIUI::ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator )
+{
+    wxWindow* ctrl = aValidator.GetWindow();
+
+    wxCHECK_RET( ctrl != nullptr, "Transferring validator data without a control" );
+
+    wxEventBlocker orient_update_blocker( ctrl, wxEVT_ANY );
+    aValidator.TransferToWindow();
+}

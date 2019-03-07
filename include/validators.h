@@ -112,4 +112,23 @@ public:
     void OnTextChanged( wxCommandEvent& event );
 };
 
+namespace KIUI
+{
+/**
+ * Call a text validator's TransferToWindow method without firing
+ * a text change event.
+ *
+ * This is useful when you want to keep a validator in sync with other data,
+ * but the act of changing it should not trigger other updates. It is the
+ * validator equivalent of ChangeValue() compared to SetValue().
+ *
+ * This function blocks all events, but the same technique can be used to
+ * selectively block events.
+ *
+ * @param aValidator the validator to update the control of
+ */
+void ValidatorTransferToWindowWithoutEvents( wxValidator& aValidator );
+
+} // namespace KIUI
+
 #endif  // #ifndef VALIDATORS_H

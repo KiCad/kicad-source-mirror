@@ -128,7 +128,7 @@ class DIALOG_FOOTPRINT_BOARD_EDITOR_BASE : public DIALOG_SHIM
 		virtual void OnAddField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnDeleteField( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ModuleOrientEvent( wxCommandEvent& event ) { event.Skip(); }
-		virtual void OnOtherOrientation( wxKeyEvent& event ) { event.Skip(); }
+		virtual void OnOtherOrientation( wxCommandEvent& event ) { event.Skip(); }
 		virtual void UpdateModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void ExchangeModule( wxCommandEvent& event ) { event.Skip(); }
 		virtual void EditFootprint( wxCommandEvent& event ) { event.Skip(); }
