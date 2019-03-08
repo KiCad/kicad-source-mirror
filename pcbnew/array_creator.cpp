@@ -112,10 +112,13 @@ void ARRAY_CREATOR::Invoke()
                 {
                     new_item.reset( getBoard()->Duplicate( item ) );
 
-                    // Incrementing the reference number won't always be correct, but leaving
-                    // it the same is always incorrect.
-                    if( new_item->Type() == PCB_MODULE_T )
-                        static_cast<MODULE&>( *new_item ).IncrementReference( ptN );
+                    // PCB items keep the same numbering
+
+                    // @TODO: renumber modules if asked. This needs UI to enable.
+                    // something like this, but needs a "block offset" to prevent
+                    // multiple selections overlapping.
+                    // if( new_item->Type() == PCB_MODULE_T )
+                    //     static_cast<MODULE&>( *new_item ).IncrementReference( ptN );
 
                     // @TODO: we should merge zones. This is a bit tricky, because
                     // the undo command needs saving old area, if it is merged.
