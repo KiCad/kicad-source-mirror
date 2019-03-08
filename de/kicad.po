@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad i18n Deutsch\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-07 19:21+0100\n"
+"POT-Creation-Date: 2019-03-08 21:33+0100\n"
 "PO-Revision-Date: 2019-03-07 19:25+0100\n"
 "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 "Language-Team: \n"
@@ -5641,24 +5641,24 @@ msgid "Electrical Rules Checker"
 msgstr "Elektrischer Regel Check"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:70
-#: eeschema/fields_grid_table.cpp:495
+#: eeschema/fields_grid_table.cpp:496
 msgid "Select Footprint..."
 msgstr "Footprint auswählen..."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:70
-#: eeschema/fields_grid_table.cpp:495
+#: eeschema/fields_grid_table.cpp:496
 msgid "Browse for footprint"
 msgstr "Durchsuchen Footprints"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:75
-#: eeschema/fields_grid_table.cpp:500 eeschema/hotkeys.cpp:209
+#: eeschema/fields_grid_table.cpp:501 eeschema/hotkeys.cpp:209
 #: eeschema/libedit/menubar_libedit.cpp:299 eeschema/onrightclick.cpp:363
 #: eeschema/onrightclick.cpp:475
 msgid "Show Datasheet"
 msgstr "Datenblatt"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:75
-#: eeschema/fields_grid_table.cpp:500
+#: eeschema/fields_grid_table.cpp:501
 msgid "Show datasheet in browser"
 msgstr "Anzeige Datenblatt im Browser"
 
@@ -15475,7 +15475,7 @@ msgstr "Länge des Kabels"
 msgid "Error loading board in AppendBoardFile"
 msgstr "Fehler beim Laden der Seitenlayoutdatei"
 
-#: pcbnew/array_creator.cpp:161
+#: pcbnew/array_creator.cpp:164
 msgid "Create an array"
 msgstr "Array erstellen"
 

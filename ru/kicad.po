@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-08 11:35+0200\n"
+"POT-Creation-Date: 2019-03-08 21:33+0100\n"
 "PO-Revision-Date: 2019-03-08 11:36+0200\n"
 "Last-Translator: Baranovskiy Konstantin <baranovskiykonstantin@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -2837,7 +2837,7 @@ msgstr ""
 "Полный текст ошибки:\n"
 "%s"
 
-#: common/filename_resolver.cpp:470 utils/kicad2step/pcb/3d_resolver.cpp:547
+#: common/filename_resolver.cpp:470
 msgid "The given path does not exist"
 msgstr "Заданный путь не существует"
 
@@ -2845,41 +2845,36 @@ msgstr "Заданный путь не существует"
 msgid "3D model search path"
 msgstr "Путь поиска 3D моделей"
 
-#: common/filename_resolver.cpp:499 utils/kicad2step/pcb/3d_resolver.cpp:576
+#: common/filename_resolver.cpp:499
 msgid "Alias: "
 msgstr "Псевдоним: "
 
-#: common/filename_resolver.cpp:502 utils/kicad2step/pcb/3d_resolver.cpp:579
+#: common/filename_resolver.cpp:502
 msgid "This path: "
 msgstr "Текущий путь: "
 
-#: common/filename_resolver.cpp:505 utils/kicad2step/pcb/3d_resolver.cpp:582
+#: common/filename_resolver.cpp:505
 msgid "Existing path: "
 msgstr "Существующий путь: "
 
-#: common/filename_resolver.cpp:507 utils/kicad2step/pcb/3d_resolver.cpp:584
+#: common/filename_resolver.cpp:507
 msgid "Bad alias (duplicate name)"
 msgstr "Плохой псевдоним (дублирует имя)"
 
-#: common/filename_resolver.cpp:629 utils/kicad2step/pcb/3d_resolver.cpp:709
+#: common/filename_resolver.cpp:629
 msgid "3D configuration directory is unknown"
 msgstr "Каталог конфигурации 3D неизвестен"
 
 #: common/filename_resolver.cpp:632 common/filename_resolver.cpp:657
-#: common/filename_resolver.cpp:682 utils/kicad2step/pcb/3d_resolver.cpp:712
-#: utils/kicad2step/pcb/3d_resolver.cpp:733
-#: utils/kicad2step/pcb/3d_resolver.cpp:742
-#: utils/kicad2step/pcb/3d_resolver.cpp:764
-#: utils/kicad2step/pcb/3d_resolver.cpp:789
+#: common/filename_resolver.cpp:682
 msgid "Write 3D search path list"
 msgstr "Написать список путей поиска 3D"
 
-#: common/filename_resolver.cpp:654 utils/kicad2step/pcb/3d_resolver.cpp:741
-#: utils/kicad2step/pcb/3d_resolver.cpp:761
+#: common/filename_resolver.cpp:654
 msgid "Could not open configuration file"
 msgstr "Не удалось открыть файл конфигурации"
 
-#: common/filename_resolver.cpp:681 utils/kicad2step/pcb/3d_resolver.cpp:788
+#: common/filename_resolver.cpp:681
 msgid "Problems writing configuration file"
 msgstr "Проблемы записи файла конфигурации"
 
@@ -3173,7 +3168,7 @@ msgstr "Новая библиотека"
 msgid "Illegal character found in logical library name"
 msgstr "Найден недопустимый символ в логическом имени библиотеки"
 
-#: common/lib_id.cpp:301 new/sch_lpid.cpp:440
+#: common/lib_id.cpp:301
 msgid "Illegal character found in revision"
 msgstr "Найден недопустимый символ в ревизии"
 
@@ -3353,7 +3348,7 @@ msgstr "Не удалось создать файл проекта \"%s\" (за�
 msgid "Error loading project footprint library table"
 msgstr "Ошибка загрузки таблицы библиотек посад.мест проекта"
 
-#: common/richio.cpp:167 qa/qa_utils/stdstream_line_reader.cpp:76
+#: common/richio.cpp:167
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "Не удалось открыть файл \"%s\" для чтения"
@@ -6191,12 +6186,10 @@ msgid "A3"
 msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:222
-#: qa/common/test_hotkey_store.cpp:33
 msgid "A2"
 msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:223
-#: qa/common/test_hotkey_store.cpp:32
 msgid "A1"
 msgstr "A1"
 
@@ -9141,7 +9134,7 @@ msgstr "Перетащить сторону прямоугольника"
 #: eeschema/onrightclick.cpp:541 eeschema/onrightclick.cpp:577
 #: eeschema/onrightclick.cpp:805 pcbnew/footprint_editor_onclick.cpp:347
 #: pcbnew/onrightclick.cpp:747 pcbnew/onrightclick.cpp:832
-#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
+#: pcbnew/tools/edit_tool.cpp:109
 msgid "Rotate Clockwise"
 msgstr "Повернуть по ч.ст."
 
@@ -9227,7 +9220,6 @@ msgstr "Отразить блок вертикально (по оси Y)"
 #: eeschema/onrightclick.cpp:808 eeschema/onrightclick.cpp:934
 #: pcbnew/footprint_editor_onclick.cpp:288 pcbnew/onrightclick.cpp:426
 #: pcbnew/onrightclick.cpp:743 pcbnew/tools/edit_tool.cpp:114
-#: qa/qa_utils/mocks.cpp:329
 msgid "Rotate Counterclockwise"
 msgstr "Повернуть против ч.ст."
 
@@ -13583,86 +13575,6 @@ msgstr "Удалить \"%s\"?"
 msgid "Delete File"
 msgstr "Удалить файл"
 
-#: new/sch_lib.cpp:237
-#, c-format
-msgid "part \"%s\" not found in lib %s"
-msgstr "часть \"%s\" не найдена в библиотеке %s"
-
-#: new/sch_lpid.cpp:208
-msgid "Illegal character found in LPID string"
-msgstr "Найден недопустимый символ в строке LPID"
-
-#: new/sch_lpid.cpp:375
-msgid "Illegal character found in logical lib name"
-msgstr "Найден недопустимый символ в логическом имени библиотеки"
-
-#: new/sch_lpid.cpp:406
-msgid "Illegal character found in category"
-msgstr "Найден недопустимый символ в категории"
-
-#: new/sch_lpid.cpp:417
-msgid "Illegal character found in base name"
-msgstr "Найден недопустимый символ в базовом имени"
-
-#: new/sch_sweet_parser.cpp:338
-msgid "invalid extends LPID"
-msgstr "Недопустимое расширение LPID"
-
-#: new/sch_sweet_parser.cpp:354
-msgid "'extends' may not have self as any ancestor"
-msgstr "'расширение' не может иметь себя в качестве родителя"
-
-#: new/sch_sweet_parser.cpp:364
-msgid "max allowed extends depth exceeded"
-msgstr "превышена максимальная глубина вложенности расширений"
-
-#: new/sch_sweet_parser.cpp:392
-msgid "invalid alternates LPID"
-msgstr "недопустимый псевдоним LPID"
-
-#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
-#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
-#: new/sch_sweet_parser.cpp:821
-msgid "undefined pin"
-msgstr "неопределённый вывод"
-
-#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
-#, c-format
-msgid "undefined pin %s"
-msgstr "неопределённый вывод %s"
-
-#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
-#, c-format
-msgid "pin %s already in pin_merge group %s"
-msgstr "вывод %s уже в группе pin_merge %s"
-
-#: new/sch_sweet_parser.cpp:903
-#, c-format
-msgid "no pins with signal %s"
-msgstr "нет выводов с сигналом %s"
-
-#: new/sch_sweet_parser.cpp:915
-#, c-format
-msgid "signal pin %s already in pin_merge group %s"
-msgstr "сигнальный вывод %s уже в группе pin_merge %s"
-
-#: new/sch_sweet_parser.cpp:998
-#, c-format
-msgid "Unable to find property: %s"
-msgstr "Не удалось найти свойство: %s"
-
-#: new/sweet_editor_panel.cpp:31
-msgid "Sweet"
-msgstr "Sweet"
-
-#: new/sweet_editor_panel.cpp:42
-msgid "Visual Part"
-msgstr "Видимая часть"
-
-#: new/sweet_editor_panel.cpp:59
-msgid "Parsing Errors"
-msgstr "Ошибки разбора"
-
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Начало Y:"
@@ -14510,12 +14422,10 @@ msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "Примечание: минимальные значения (из IPC 2221)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:572
-#: qa/common/test_hotkey_store.cpp:38
 msgid "B1"
 msgstr "B1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:573
-#: qa/common/test_hotkey_store.cpp:39
 msgid "B2"
 msgstr "B2"
 
@@ -15397,7 +15307,7 @@ msgstr "Длина кабеля"
 msgid "Error loading board in AppendBoardFile"
 msgstr "Ошибка загрузки платы в AppendBoardFile"
 
-#: pcbnew/array_creator.cpp:161
+#: pcbnew/array_creator.cpp:164
 msgid "Create an array"
 msgstr "Создать массив"
 
@@ -24739,7 +24649,7 @@ msgstr "Документация на посад.место"
 
 #: pcbnew/onrightclick.cpp:425 pcbnew/onrightclick.cpp:748
 #: pcbnew/onrightclick.cpp:942 pcbnew/tools/edit_tool.cpp:119
-#: pcbnew/tools/edit_tool.cpp:869 qa/qa_utils/mocks.cpp:276
+#: pcbnew/tools/edit_tool.cpp:869
 msgid "Flip"
 msgstr "На другую сторону"
 
@@ -26437,15 +26347,15 @@ msgstr "Переместить выбранный(ые) элемент(ы) на 
 msgid "Create array"
 msgstr "Создать массив"
 
-#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
+#: pcbnew/tools/edit_tool.cpp:109
 msgid "Rotates selected item(s) clockwise"
 msgstr "Вращать выбранный(ые) элемент(ы) по часовой стрелке"
 
-#: pcbnew/tools/edit_tool.cpp:114 qa/qa_utils/mocks.cpp:329
+#: pcbnew/tools/edit_tool.cpp:114
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "Вращать выбранные элементы против часовой стрелки"
 
-#: pcbnew/tools/edit_tool.cpp:119 qa/qa_utils/mocks.cpp:276
+#: pcbnew/tools/edit_tool.cpp:119
 msgid "Flips selected item(s)"
 msgstr "Разместить выбранный(ые) элемент(ы) на другую сторону"
 
@@ -26469,11 +26379,11 @@ msgstr "Обновить посад.место из библиотеки"
 msgid "Assign a different footprint from the library"
 msgstr "Назначить другое посад.место из библиотеки"
 
-#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
+#: pcbnew/tools/edit_tool.cpp:147
 msgid "Properties..."
 msgstr "Свойства..."
 
-#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
+#: pcbnew/tools/edit_tool.cpp:147
 msgid "Displays item properties dialog"
 msgstr "Отобразить диалоговое окно свойств элемента"
 
@@ -26726,7 +26636,7 @@ msgstr "Вставить содержимое из буфер обмена"
 msgid "Invalid clipboard contents"
 msgstr "Содержимое буфера обмена повреждено"
 
-#: pcbnew/tools/pcbnew_control.cpp:951 qa/qa_utils/pcb_test_frame.cpp:152
+#: pcbnew/tools/pcbnew_control.cpp:951
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -27104,206 +27014,213 @@ msgstr "Перезаливка %d зон"
 msgid "Checking Zones"
 msgstr "Проверка зон"
 
-#: plugins/3d/vrml/vrml.cpp:191
-msgid " * [INFO] load failed: input line too long\n"
-msgstr " * [ИНФОРМАЦИЯ] не удалось загрузить: входной файл слишком большой\n"
+#~ msgid "part \"%s\" not found in lib %s"
+#~ msgstr "часть \"%s\" не найдена в библиотеке %s"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:104
-msgid "incompatible plugin (missing function 'GetNExtensions')"
-msgstr "несовместимый плагин (отсутствует функция 'GetNExtensions')"
+#~ msgid "Illegal character found in LPID string"
+#~ msgstr "Найден недопустимый символ в строке LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:117
-msgid "incompatible plugin (missing function 'GetModelExtension')"
-msgstr "несовместимый плагин (отсутствует функция 'GetModelExtension')"
+#~ msgid "Illegal character found in logical lib name"
+#~ msgstr "Найден недопустимый символ в логическом имени библиотеки"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:126
-msgid "missing function 'GetModelExtension'"
-msgstr "отсутствует функция 'GetModelExtension'"
+#~ msgid "Illegal character found in category"
+#~ msgstr "Найден недопустимый символ в категории"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:138
-msgid "incompatible plugin (missing function 'GetNFilters')"
-msgstr "несовместимый плагин (отсутствует функция 'GetNFilters')"
+#~ msgid "Illegal character found in base name"
+#~ msgstr "Найден недопустимый символ в базовом имени"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:147
-msgid "missing function 'GetNFilters'"
-msgstr "отсутствует функция 'GetNFilters'"
+#~ msgid "invalid extends LPID"
+#~ msgstr "Недопустимое расширение LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:159
-msgid "incompatible plugin (missing function 'GetFileFilter')"
-msgstr "несовместимый плагин (отсутствует функция 'GetFileFilter')"
+#~ msgid "'extends' may not have self as any ancestor"
+#~ msgstr "'расширение' не может иметь себя в качестве родителя"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:168
-msgid "missing function 'GetFileFilter'"
-msgstr "отсутствует функция 'GetFileFilter'"
+#~ msgid "max allowed extends depth exceeded"
+#~ msgstr "превышена максимальная глубина вложенности расширений"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:180
-msgid "incompatible plugin (missing function 'CanRender')"
-msgstr "несовместимый плагин (отсутствует функция 'CanRender')"
+#~ msgid "invalid alternates LPID"
+#~ msgstr "недопустимый псевдоним LPID"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:189
-msgid "missing function 'CanRender'"
-msgstr "отсутствует функция 'CanRender'"
+#~ msgid "undefined pin"
+#~ msgstr "неопределённый вывод"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:201
-msgid "incompatible plugin (missing function 'Load')"
-msgstr "несовместимый плагин (отсутствует функция 'Load')"
+#~ msgid "undefined pin %s"
+#~ msgstr "неопределённый вывод %s"
 
-#: plugins/ldr/3d/pluginldr3D.cpp:209
-msgid "missing function 'Load'"
-msgstr "отсутствует функция 'Load'"
+#~ msgid "pin %s already in pin_merge group %s"
+#~ msgstr "вывод %s уже в группе pin_merge %s"
 
-#: plugins/ldr/pluginldr.cpp:92
-msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
-msgstr "несовместимый плагин (отсутствует функция 'GetKicadPluginClass')"
+#~ msgid "no pins with signal %s"
+#~ msgstr "нет выводов с сигналом %s"
 
-#: plugins/ldr/pluginldr.cpp:105
-msgid "incompatible plugin (missing function 'GetClassVersion')"
-msgstr "несовместимый плагин (отсутствует функция 'GetClassVersion')"
+#~ msgid "signal pin %s already in pin_merge group %s"
+#~ msgstr "сигнальный вывод %s уже в группе pin_merge %s"
 
-#: plugins/ldr/pluginldr.cpp:114
-msgid "missing function 'GetClassVersion'"
-msgstr "отсутствует функция 'GetClassVersion'"
+#~ msgid "Unable to find property: %s"
+#~ msgstr "Не удалось найти свойство: %s"
 
-#: plugins/ldr/pluginldr.cpp:126
-msgid "incompatible plugin (missing function 'CheckClassVersion')"
-msgstr "несовместимый плагин (отсутствует функция 'CheckClassVersion')"
+#~ msgid "Sweet"
+#~ msgstr "Sweet"
 
-#: plugins/ldr/pluginldr.cpp:135
-msgid "missing function 'CheckClassVersion'"
-msgstr "отсутствует функция 'CheckClassVersion'"
+#~ msgid "Visual Part"
+#~ msgstr "Видимая часть"
 
-#: plugins/ldr/pluginldr.cpp:147
-msgid "incompatible plugin (missing function 'GetKicadPluginName')"
-msgstr "несовместимый плагин (отсутствует функция 'GetKicadPluginName')"
+#~ msgid "Parsing Errors"
+#~ msgstr "Ошибки разбора"
 
-#: plugins/ldr/pluginldr.cpp:156
-msgid "missing function 'GetKicadPluginName'"
-msgstr "отсутствует функция 'GetKicadPluginName'"
+#~ msgid " * [INFO] load failed: input line too long\n"
+#~ msgstr ""
+#~ " * [ИНФОРМАЦИЯ] не удалось загрузить: входной файл слишком большой\n"
 
-#: plugins/ldr/pluginldr.cpp:168
-msgid "incompatible plugin (missing function 'GetVersion')"
-msgstr "несовместимый плагин (отсутствует функция 'GetVersion')"
+#~ msgid "incompatible plugin (missing function 'GetNExtensions')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetNExtensions')"
 
-#: plugins/ldr/pluginldr.cpp:176
-msgid "missing function 'GetVersion'"
-msgstr "отсутствует функция 'GetVersion'"
+#~ msgid "incompatible plugin (missing function 'GetModelExtension')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetModelExtension')"
 
-#: qa/common_tools/tools/coroutines/coroutines.cpp:91
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:216
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:87
-msgid "displays help on the command line parameters"
-msgstr "показать справку параметров командной строки"
+#~ msgid "missing function 'GetModelExtension'"
+#~ msgstr "отсутствует функция 'GetModelExtension'"
 
-#: qa/common_tools/tools/coroutines/coroutines.cpp:99
-msgid "how high to count"
-msgstr "насколько далеко считать"
+#~ msgid "incompatible plugin (missing function 'GetNFilters')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetNFilters')"
 
-#: qa/common_tools/tools/coroutines/coroutines.cpp:111
-msgid "Test a simple coroutine that yields a given number of times"
-msgstr "Тест простой подпрограммы для выполнения заданного числа циклов"
+#~ msgid "missing function 'GetNFilters'"
+#~ msgstr "отсутствует функция 'GetNFilters'"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:224
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:89
-msgid "print parsing information"
-msgstr "выводить информацию разбора"
+#~ msgid "incompatible plugin (missing function 'GetFileFilter')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetFileFilter')"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:230
-msgid "print DRC timings"
-msgstr "выводить время DRC"
+#~ msgid "missing function 'GetFileFilter'"
+#~ msgstr "отсутствует функция 'GetFileFilter'"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:236
-msgid "print DRC marker information"
-msgstr "выводить информацию о маркерах DRC"
+#~ msgid "incompatible plugin (missing function 'CanRender')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'CanRender')"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:242
-msgid "perform all available DRC checks"
-msgstr "производить все возможные проверки DRC"
+#~ msgid "missing function 'CanRender'"
+#~ msgstr "отсутствует функция 'CanRender'"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:248
-msgid "perform courtyard-overlap (and malformation) checking"
-msgstr "производить проверку перекрытия и корректность контуров"
+#~ msgid "incompatible plugin (missing function 'Load')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'Load')"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:254
-msgid "perform courtyard-missing checking"
-msgstr "производить проверку отсутствия контура"
+#~ msgid "missing function 'Load'"
+#~ msgstr "отсутствует функция 'Load'"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:260
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:90
-msgid "input file"
-msgstr "входной файл"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetKicadPluginClass')"
 
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:286
-msgid ""
-"This program runs DRC tools on given PCB files. This can be used for "
-"debugging, fuzz testing or development, etc."
-msgstr ""
-"Эта программ запускает инструменты DRC для заданного файла платы. Её можно "
-"использовать для отладки, тестирования или разработки."
+#~ msgid "incompatible plugin (missing function 'GetClassVersion')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetClassVersion')"
 
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:112
-msgid ""
-"This program parses PCB files, either from the stdin stream or from the "
-"given filenames. This can be used either for standalone testing of the "
-"parser or for fuzz testing."
-msgstr ""
-"Эта программ разбирает файлы печатных плат, как из стандартного потока "
-"stdin, так и из указанных файлов. Её можно использовать как для "
-"самостоятельной проверки, так для фаззинга."
+#~ msgid "missing function 'GetClassVersion'"
+#~ msgstr "отсутствует функция 'GetClassVersion'"
 
-#: utils/kicad2step/kicad2step.cpp:65
-msgid "pcb_filename"
-msgstr "файл платы"
+#~ msgid "incompatible plugin (missing function 'CheckClassVersion')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'CheckClassVersion')"
 
-#: utils/kicad2step/kicad2step.cpp:67
-msgid "output filename"
-msgstr "выходной файл"
+#~ msgid "missing function 'CheckClassVersion'"
+#~ msgstr "отсутствует функция 'CheckClassVersion'"
 
-#: utils/kicad2step/kicad2step.cpp:70
-msgid "IGES output (default STEP)"
-msgstr "формат IGES (по умолчанию STEP)"
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginName')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetKicadPluginName')"
 
-#: utils/kicad2step/kicad2step.cpp:73
-msgid "overwrite output file"
-msgstr "заменить выходной файл"
+#~ msgid "missing function 'GetKicadPluginName'"
+#~ msgstr "отсутствует функция 'GetKicadPluginName'"
 
-#: utils/kicad2step/kicad2step.cpp:75
-msgid "Use Drill Origin for output origin"
-msgstr "Использовать начало координат сверловки как начало координат вывода"
+#~ msgid "incompatible plugin (missing function 'GetVersion')"
+#~ msgstr "несовместимый плагин (отсутствует функция 'GetVersion')"
 
-#: utils/kicad2step/kicad2step.cpp:77
-msgid "Use Grid Origin for output origin"
-msgstr "Использовать начало координат сетки как начало координат вывода"
+#~ msgid "missing function 'GetVersion'"
+#~ msgstr "отсутствует функция 'GetVersion'"
 
-#: utils/kicad2step/kicad2step.cpp:80
-msgid ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
-msgstr ""
-"Начало координат пользователя, прмеры: 1x1in, 1x1inch, 25.4x25.4mm (по "
-"умолчанию mm)"
+#~ msgid "displays help on the command line parameters"
+#~ msgstr "показать справку параметров командной строки"
 
-#: utils/kicad2step/kicad2step.cpp:83
-msgid "exclude 3D models for components with 'virtual' attribute"
-msgstr "исключить 3D-модели у компонентов с атрибутом 'virtual'"
+#~ msgid "how high to count"
+#~ msgstr "насколько далеко считать"
 
-#: utils/kicad2step/kicad2step.cpp:86
-msgid ""
-"Minimum distance between points to treat them as separate ones (default 0.01 "
-"mm)"
-msgstr ""
-"Минимальное расстояние между точками, при котором они ещё рассматриваются "
-"как отдельные (по умолчанию 0.01 мм)"
+#~ msgid "Test a simple coroutine that yields a given number of times"
+#~ msgstr "Тест простой подпрограммы для выполнения заданного числа циклов"
 
-#: utils/kicad2step/kicad2step.cpp:88
-msgid "display this message"
-msgstr "показать данное сообщение"
+#~ msgid "print parsing information"
+#~ msgstr "выводить информацию разбора"
 
-#: utils/kicad2step/pcb/3d_resolver.cpp:732
-msgid ""
-"3D search path list is empty;\n"
-"continue to write empty file?"
-msgstr ""
-"Список путей для поиска 3D-моделей пуст.\n"
-"Сохранить пустой файл?"
+#~ msgid "print DRC timings"
+#~ msgstr "выводить время DRC"
+
+#~ msgid "print DRC marker information"
+#~ msgstr "выводить информацию о маркерах DRC"
+
+#~ msgid "perform all available DRC checks"
+#~ msgstr "производить все возможные проверки DRC"
+
+#~ msgid "perform courtyard-overlap (and malformation) checking"
+#~ msgstr "производить проверку перекрытия и корректность контуров"
+
+#~ msgid "perform courtyard-missing checking"
+#~ msgstr "производить проверку отсутствия контура"
+
+#~ msgid "input file"
+#~ msgstr "входной файл"
+
+#~ msgid ""
+#~ "This program runs DRC tools on given PCB files. This can be used for "
+#~ "debugging, fuzz testing or development, etc."
+#~ msgstr ""
+#~ "Эта программ запускает инструменты DRC для заданного файла платы. Её "
+#~ "можно использовать для отладки, тестирования или разработки."
+
+#~ msgid ""
+#~ "This program parses PCB files, either from the stdin stream or from the "
+#~ "given filenames. This can be used either for standalone testing of the "
+#~ "parser or for fuzz testing."
+#~ msgstr ""
+#~ "Эта программ разбирает файлы печатных плат, как из стандартного потока "
+#~ "stdin, так и из указанных файлов. Её можно использовать как для "
+#~ "самостоятельной проверки, так для фаззинга."
+
+#~ msgid "pcb_filename"
+#~ msgstr "файл платы"
+
+#~ msgid "output filename"
+#~ msgstr "выходной файл"
+
+#~ msgid "IGES output (default STEP)"
+#~ msgstr "формат IGES (по умолчанию STEP)"
+
+#~ msgid "overwrite output file"
+#~ msgstr "заменить выходной файл"
+
+#~ msgid "Use Drill Origin for output origin"
+#~ msgstr "Использовать начало координат сверловки как начало координат вывода"
+
+#~ msgid "Use Grid Origin for output origin"
+#~ msgstr "Использовать начало координат сетки как начало координат вывода"
+
+#~ msgid ""
+#~ "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+#~ msgstr ""
+#~ "Начало координат пользователя, прмеры: 1x1in, 1x1inch, 25.4x25.4mm (по "
+#~ "умолчанию mm)"
+
+#~ msgid "exclude 3D models for components with 'virtual' attribute"
+#~ msgstr "исключить 3D-модели у компонентов с атрибутом 'virtual'"
+
+#~ msgid ""
+#~ "Minimum distance between points to treat them as separate ones (default "
+#~ "0.01 mm)"
+#~ msgstr ""
+#~ "Минимальное расстояние между точками, при котором они ещё рассматриваются "
+#~ "как отдельные (по умолчанию 0.01 мм)"
+
+#~ msgid "display this message"
+#~ msgstr "показать данное сообщение"
+
+#~ msgid ""
+#~ "3D search path list is empty;\n"
+#~ "continue to write empty file?"
+#~ msgstr ""
+#~ "Список путей для поиска 3D-моделей пуст.\n"
+#~ "Сохранить пустой файл?"
 
 #~ msgid " ========================= GOST ===================================="
 #~ msgstr "========================= ONLY ===================================="

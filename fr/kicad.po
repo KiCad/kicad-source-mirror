@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-05 11:39+0100\n"
+"POT-Creation-Date: 2019-03-08 21:33+0100\n"
 "PO-Revision-Date: 2019-03-05 11:40+0100\n"
 "Last-Translator: \n"
 "Language-Team: jp-charras\n"
@@ -1427,7 +1427,7 @@ msgstr "Infos"
 #: common/confirm.cpp:295 eeschema/dialogs/dialog_annotate.cpp:216
 #: eeschema/dialogs/dialog_annotate.cpp:262 eeschema/libedit/lib_export.cpp:153
 #: eeschema/libedit/pinedit.cpp:218 kicad/import_project.cpp:101
-#: kicad/prjconfig.cpp:372 pcbnew/dialogs/dialog_export_idf.cpp:171
+#: kicad/prjconfig.cpp:397 pcbnew/dialogs/dialog_export_idf.cpp:171
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:126
 #: pcbnew/dialogs/dialog_track_via_properties.cpp:327
 #: pcbnew/footprint_libraries_utils.cpp:484
@@ -5633,24 +5633,24 @@ msgid "Electrical Rules Checker"
 msgstr "Contrôle des Règles Electriques"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:70
-#: eeschema/fields_grid_table.cpp:495
+#: eeschema/fields_grid_table.cpp:496
 msgid "Select Footprint..."
 msgstr "Sélection Empreinte..."
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:70
-#: eeschema/fields_grid_table.cpp:495
+#: eeschema/fields_grid_table.cpp:496
 msgid "Browse for footprint"
 msgstr "Examen des empreintes"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:75
-#: eeschema/fields_grid_table.cpp:500 eeschema/hotkeys.cpp:209
+#: eeschema/fields_grid_table.cpp:501 eeschema/hotkeys.cpp:209
 #: eeschema/libedit/menubar_libedit.cpp:299 eeschema/onrightclick.cpp:363
 #: eeschema/onrightclick.cpp:475
 msgid "Show Datasheet"
 msgstr "Voir Documentation"
 
 #: eeschema/dialogs/dialog_fields_editor_global.cpp:75
-#: eeschema/fields_grid_table.cpp:500
+#: eeschema/fields_grid_table.cpp:501
 msgid "Show datasheet in browser"
 msgstr "Afficher dans un Visualisateur"
 
@@ -8659,7 +8659,7 @@ msgstr "Cercle"
 #: gerbview/gerber_draw_item.cpp:692 pcbnew/class_drawsegment.cpp:442
 #: pcbnew/class_marker_pcb.cpp:96 pcbnew/class_text_mod.cpp:384
 #: pcbnew/class_track.cpp:1172 pcbnew/class_track.cpp:1199
-#: pcbnew/class_track.cpp:1248 pcbnew/class_zone.cpp:819
+#: pcbnew/class_track.cpp:1248 pcbnew/class_zone.cpp:815
 msgid "Type"
 msgstr "Type"
 
@@ -8957,7 +8957,7 @@ msgstr ""
 msgid "Symbol \"%s\" already exists in \"%s\"."
 msgstr "Le symbole \"%s\" existe déjà  en librairie \"%s\"."
 
-#: eeschema/libedit/lib_export.cpp:154 kicad/prjconfig.cpp:374
+#: eeschema/libedit/lib_export.cpp:154 kicad/prjconfig.cpp:399
 #: pcbnew/dialogs/dialog_export_idf.cpp:172
 #: pcbnew/dialogs/dialog_gencad_export_options.cpp:127
 #: pcbnew/footprint_libraries_utils.cpp:485
@@ -10771,7 +10771,7 @@ msgstr "Non Trouvé"
 msgid "The following libraries were not found:"
 msgstr "Les librairies suivantes n'ont pas pu être trouvées:"
 
-#: eeschema/sch_edit_frame.cpp:664 pcbnew/pcb_edit_frame.cpp:585
+#: eeschema/sch_edit_frame.cpp:664 pcbnew/pcb_edit_frame.cpp:588
 #, c-format
 msgid ""
 "Save changes to\n"
@@ -10834,7 +10834,7 @@ msgid "Error: not a symbol or no symbol."
 msgstr "Erreur: ce n'est pas un symbole, ou pas de symbole."
 
 #: eeschema/sch_edit_frame.cpp:1496 kicad/prjconfig.cpp:87
-#: pcbnew/pcb_edit_frame.cpp:1022
+#: pcbnew/pcb_edit_frame.cpp:1025
 msgid " [Read Only]"
 msgstr " [Lecture Seule]"
 
@@ -12005,7 +12005,7 @@ msgstr "Ne pas exporter"
 #: pcbnew/class_drawsegment.cpp:491 pcbnew/class_pad.cpp:776
 #: pcbnew/class_pcb_text.cpp:128 pcbnew/class_text_mod.cpp:394
 #: pcbnew/class_track.cpp:1182 pcbnew/class_track.cpp:1209
-#: pcbnew/class_zone.cpp:865 pcbnew/dialogs/dialog_copper_zones_base.cpp:22
+#: pcbnew/class_zone.cpp:861 pcbnew/dialogs/dialog_copper_zones_base.cpp:22
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:59
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:59
 #: pcbnew/text_mod_grid_table.cpp:91
@@ -12116,7 +12116,7 @@ msgstr "Pas d'éditeur défini.  Veuillez en sélectionner un"
 msgid "No file loaded on the active layer %d"
 msgstr "Pas de fichier chargé sur la couche active %d"
 
-#: gerbview/events_called_functions.cpp:436 pcbnew/pcb_edit_frame.cpp:953
+#: gerbview/events_called_functions.cpp:436 pcbnew/pcb_edit_frame.cpp:956
 msgid "Visibles"
 msgstr "Visibles"
 
@@ -13219,14 +13219,14 @@ msgstr ""
 "Voulez vous créer un nouveau répertoire vide pour le projet?"
 
 #: kicad/import_project.cpp:138 kicad/mainframe.cpp:304
-#: pcbnew/pcb_edit_frame.cpp:1204
+#: pcbnew/pcb_edit_frame.cpp:1207
 msgid "Eeschema failed to load:\n"
 msgstr "Eeschema a échoué pour charger:\n"
 
 #: kicad/import_project.cpp:139 kicad/import_project.cpp:173
 #: kicad/mainframe.cpp:305 kicad/mainframe.cpp:350 kicad/mainframe.cpp:375
-#: kicad/mainframe.cpp:419 pcbnew/pcb_edit_frame.cpp:1175
-#: pcbnew/pcb_edit_frame.cpp:1205
+#: kicad/mainframe.cpp:419 pcbnew/pcb_edit_frame.cpp:1178
+#: pcbnew/pcb_edit_frame.cpp:1208
 msgid "KiCad Error"
 msgstr "KiCad erreur"
 
@@ -13516,7 +13516,7 @@ msgstr "Créer un nouveau répertoire pour le projet"
 msgid "Create New Project"
 msgstr "Créer un Nouveau Projet"
 
-#: kicad/prjconfig.cpp:256
+#: kicad/prjconfig.cpp:256 kicad/prjconfig.cpp:354
 #, c-format
 msgid ""
 "Directory \"%s\" could not be created.\n"
@@ -13555,34 +13555,34 @@ msgstr "Aucun projet modèle sélecté. Impossible de générer le nouveau proje
 msgid "New Project Folder"
 msgstr "Nouveau Répertoire Projet"
 
-#: kicad/prjconfig.cpp:341
+#: kicad/prjconfig.cpp:366
 #, c-format
 msgid "Cannot write to folder \"%s\"."
 msgstr "Ne peut pas écrire dans le répertoire \"%s\"."
 
-#: kicad/prjconfig.cpp:342
+#: kicad/prjconfig.cpp:367
 msgid "Error!"
 msgstr "Erreur!"
 
-#: kicad/prjconfig.cpp:343
+#: kicad/prjconfig.cpp:368
 msgid "Please check your access permissions to this folder and try again."
 msgstr "SVP vérifiez vos autorisations d'accès à ce dossier et réessayez."
 
-#: kicad/prjconfig.cpp:366
+#: kicad/prjconfig.cpp:391
 msgid "Overwriting files:"
 msgstr "Ecrasement des fichiers:"
 
-#: kicad/prjconfig.cpp:371
+#: kicad/prjconfig.cpp:396
 msgid "Similar files already exist in the destination folder."
 msgstr ""
 "Des fichier de nom similaires existent déjà dans le répertoire de "
 "destination."
 
-#: kicad/prjconfig.cpp:389
+#: kicad/prjconfig.cpp:414
 msgid "A problem occurred creating new project from template!"
 msgstr "Problème lors de la cretaion du nouveau projet à partir du modèle!"
 
-#: kicad/prjconfig.cpp:390
+#: kicad/prjconfig.cpp:415
 msgid "Template Error"
 msgstr "Erreur sur Modèle"
 
@@ -15449,7 +15449,7 @@ msgstr "Longueur Câble"
 msgid "Error loading board in AppendBoardFile"
 msgstr "Erreur en chargement du PCB en AppendBoardFile"
 
-#: pcbnew/array_creator.cpp:161
+#: pcbnew/array_creator.cpp:164
 msgid "Create an array"
 msgstr "Créer une matrice"
 
@@ -16115,11 +16115,11 @@ msgstr "NC Diam Via"
 msgid "NC Via Drill"
 msgstr "NC Perçage Via"
 
-#: pcbnew/class_track.cpp:1121 pcbnew/class_zone.cpp:850
+#: pcbnew/class_track.cpp:1121 pcbnew/class_zone.cpp:846
 msgid "NetName"
 msgstr "NetName"
 
-#: pcbnew/class_track.cpp:1125 pcbnew/class_zone.cpp:854
+#: pcbnew/class_track.cpp:1125 pcbnew/class_zone.cpp:850
 msgid "NetCode"
 msgstr "NetCode"
 
@@ -16164,71 +16164,71 @@ msgstr "(Net Classe)"
 msgid "Track %s %s on %s, length: %s"
 msgstr "Piste %s %s sur couche %s, long.: %s"
 
-#: pcbnew/class_zone.cpp:811
+#: pcbnew/class_zone.cpp:807
 msgid "Zone Outline"
 msgstr "Contour de Zone"
 
-#: pcbnew/class_zone.cpp:817 pcbnew/class_zone.cpp:1047
+#: pcbnew/class_zone.cpp:813 pcbnew/class_zone.cpp:1043
 msgid "(Cutout)"
 msgstr "(Cutout)"
 
-#: pcbnew/class_zone.cpp:826
+#: pcbnew/class_zone.cpp:822
 msgid "No via"
 msgstr "Sans via"
 
-#: pcbnew/class_zone.cpp:829
+#: pcbnew/class_zone.cpp:825
 msgid "No track"
 msgstr "Sans piste"
 
-#: pcbnew/class_zone.cpp:832
+#: pcbnew/class_zone.cpp:828
 msgid "No copper pour"
 msgstr "Sans zone cuivre"
 
-#: pcbnew/class_zone.cpp:834
+#: pcbnew/class_zone.cpp:830
 msgid "Keepout"
 msgstr "Zone Interdite"
 
-#: pcbnew/class_zone.cpp:845
+#: pcbnew/class_zone.cpp:841
 msgid "<unknown>"
 msgstr "<inconnu>"
 
-#: pcbnew/class_zone.cpp:858
+#: pcbnew/class_zone.cpp:854
 msgid "Priority"
 msgstr "Priorité"
 
-#: pcbnew/class_zone.cpp:862
+#: pcbnew/class_zone.cpp:858
 msgid "Non Copper Zone"
 msgstr "Zone non Cuivre"
 
-#: pcbnew/class_zone.cpp:868
+#: pcbnew/class_zone.cpp:864
 msgid "Corners"
 msgstr "Sommets"
 
-#: pcbnew/class_zone.cpp:871
+#: pcbnew/class_zone.cpp:867
 msgid "Segments"
 msgstr "Segments"
 
-#: pcbnew/class_zone.cpp:873
+#: pcbnew/class_zone.cpp:869
 msgid "Polygons"
 msgstr "Polygones"
 
-#: pcbnew/class_zone.cpp:875
+#: pcbnew/class_zone.cpp:871
 msgid "Fill Mode"
 msgstr "Mode de Remplissage"
 
-#: pcbnew/class_zone.cpp:879
+#: pcbnew/class_zone.cpp:875
 msgid "Hatch Lines"
 msgstr "Lignes de Hachure"
 
-#: pcbnew/class_zone.cpp:884
+#: pcbnew/class_zone.cpp:880
 msgid "Corner Count"
 msgstr "Nb Points"
 
-#: pcbnew/class_zone.cpp:1050
+#: pcbnew/class_zone.cpp:1046
 msgid "(Keepout)"
 msgstr "(Zone Interdite)"
 
-#: pcbnew/class_zone.cpp:1054
+#: pcbnew/class_zone.cpp:1050
 #, c-format
 msgid "Zone Outline %s on %s"
 msgstr "Contour de Zone %s sur %s"
@@ -25146,20 +25146,20 @@ msgstr "Afficher textes en mode contour"
 msgid "Edit user grid..."
 msgstr "Editer la grille utilisateur..."
 
-#: pcbnew/pcb_edit_frame.cpp:624
+#: pcbnew/pcb_edit_frame.cpp:627
 #, c-format
 msgid "The auto save file \"%s\" could not be removed!"
 msgstr "Le fichier d'auto sauvegarde \"%s\" n'a pas pu être supprimé!"
 
-#: pcbnew/pcb_edit_frame.cpp:1024
+#: pcbnew/pcb_edit_frame.cpp:1027
 msgid " [Unsaved]"
 msgstr " [Non sauvé]"
 
-#: pcbnew/pcb_edit_frame.cpp:1026 pcbnew/pcbnew_config.cpp:99
+#: pcbnew/pcb_edit_frame.cpp:1029 pcbnew/pcbnew_config.cpp:99
 msgid "Pcbnew"
 msgstr "Pcbnew"
 
-#: pcbnew/pcb_edit_frame.cpp:1136
+#: pcbnew/pcb_edit_frame.cpp:1139
 msgid ""
 "Cannot update the PCB, because Pcbnew is opened in stand-alone mode. In "
 "order to create or update PCBs from schematics, you need to launch the KiCad "
@@ -25169,7 +25169,7 @@ msgstr ""
 "Afin de créer/mettre à jour le PCB à partir du schéma, vous devrez lancer "
 "Kicad manager et créez un projet."
 
-#: pcbnew/pcb_edit_frame.cpp:1174
+#: pcbnew/pcb_edit_frame.cpp:1177
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "Fichier schématique\"%s\" non trouvé."

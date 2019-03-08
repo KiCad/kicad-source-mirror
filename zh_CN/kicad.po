@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-09 00:57+0800\n"
+"POT-Creation-Date: 2019-03-08 21:33+0100\n"
 "PO-Revision-Date: 2019-03-09 01:22+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: <Liu Guang>l.g110@163.com\n"
@@ -1149,8 +1149,6 @@ msgstr ""
 "参考编号和值这两个隐藏字段放置在丝印层."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:92
-#: resources/linux/mime/applications/bitmap2component.desktop:9
-#: resources/linux/mime/applications/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "将位图转换成元件"
 
@@ -2788,7 +2786,7 @@ msgstr ""
 "错误提示：\n"
 "%s"
 
-#: common/filename_resolver.cpp:470 utils/kicad2step/pcb/3d_resolver.cpp:547
+#: common/filename_resolver.cpp:470
 msgid "The given path does not exist"
 msgstr "指定的路径不存在"
 
@@ -2796,41 +2794,36 @@ msgstr "指定的路径不存在"
 msgid "3D model search path"
 msgstr "3D模型搜索路径"
 
-#: common/filename_resolver.cpp:499 utils/kicad2step/pcb/3d_resolver.cpp:576
+#: common/filename_resolver.cpp:499
 msgid "Alias: "
 msgstr "别名: "
 
-#: common/filename_resolver.cpp:502 utils/kicad2step/pcb/3d_resolver.cpp:579
+#: common/filename_resolver.cpp:502
 msgid "This path: "
 msgstr "该路径： "
 
-#: common/filename_resolver.cpp:505 utils/kicad2step/pcb/3d_resolver.cpp:582
+#: common/filename_resolver.cpp:505
 msgid "Existing path: "
 msgstr "现有路径： "
 
-#: common/filename_resolver.cpp:507 utils/kicad2step/pcb/3d_resolver.cpp:584
+#: common/filename_resolver.cpp:507
 msgid "Bad alias (duplicate name)"
 msgstr "别名错误（重复名称）"
 
-#: common/filename_resolver.cpp:629 utils/kicad2step/pcb/3d_resolver.cpp:709
+#: common/filename_resolver.cpp:629
 msgid "3D configuration directory is unknown"
 msgstr "未知3D配置目录"
 
 #: common/filename_resolver.cpp:632 common/filename_resolver.cpp:657
-#: common/filename_resolver.cpp:682 utils/kicad2step/pcb/3d_resolver.cpp:712
-#: utils/kicad2step/pcb/3d_resolver.cpp:733
-#: utils/kicad2step/pcb/3d_resolver.cpp:742
-#: utils/kicad2step/pcb/3d_resolver.cpp:764
-#: utils/kicad2step/pcb/3d_resolver.cpp:789
+#: common/filename_resolver.cpp:682
 msgid "Write 3D search path list"
 msgstr "写入3D搜索路径列表"
 
-#: common/filename_resolver.cpp:654 utils/kicad2step/pcb/3d_resolver.cpp:741
-#: utils/kicad2step/pcb/3d_resolver.cpp:761
+#: common/filename_resolver.cpp:654
 msgid "Could not open configuration file"
 msgstr "无法打开配置文件"
 
-#: common/filename_resolver.cpp:681 utils/kicad2step/pcb/3d_resolver.cpp:788
+#: common/filename_resolver.cpp:681
 msgid "Problems writing configuration file"
 msgstr "问题写入配置文件"
 
@@ -3119,7 +3112,7 @@ msgstr "新建库"
 msgid "Illegal character found in logical library name"
 msgstr "在逻辑库名称找到无效字符"
 
-#: common/lib_id.cpp:301 new/sch_lpid.cpp:440
+#: common/lib_id.cpp:301
 msgid "Illegal character found in revision"
 msgstr "在修订版本找到无效字符"
 
@@ -3299,7 +3292,7 @@ msgstr "无法创建工程文件 '%s' (目录不可写)"
 msgid "Error loading project footprint library table"
 msgstr "加载项目占用空间库表时出错"
 
-#: common/richio.cpp:167 qa/qa_utils/stdstream_line_reader.cpp:76
+#: common/richio.cpp:167
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "无法打开文件名 '%s' 阅读"
@@ -6098,12 +6091,10 @@ msgid "A3"
 msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:222
-#: qa/common/test_hotkey_store.cpp:33
 msgid "A2"
 msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:223
-#: qa/common/test_hotkey_store.cpp:32
 msgid "A1"
 msgstr "A1"
 
@@ -9013,7 +9004,7 @@ msgstr "拖动矩形边界"
 #: eeschema/onrightclick.cpp:541 eeschema/onrightclick.cpp:577
 #: eeschema/onrightclick.cpp:805 pcbnew/footprint_editor_onclick.cpp:347
 #: pcbnew/onrightclick.cpp:747 pcbnew/onrightclick.cpp:832
-#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
+#: pcbnew/tools/edit_tool.cpp:109
 msgid "Rotate Clockwise"
 msgstr "顺时针旋转"
 
@@ -9099,7 +9090,6 @@ msgstr "沿垂直(Y)轴镜像块"
 #: eeschema/onrightclick.cpp:808 eeschema/onrightclick.cpp:934
 #: pcbnew/footprint_editor_onclick.cpp:288 pcbnew/onrightclick.cpp:426
 #: pcbnew/onrightclick.cpp:743 pcbnew/tools/edit_tool.cpp:114
-#: qa/qa_utils/mocks.cpp:329
 msgid "Rotate Counterclockwise"
 msgstr "逆时针旋转"
 
@@ -12162,7 +12152,6 @@ msgid "Drawing layer %d not in use"
 msgstr "绘图层%d没有使用"
 
 #: gerbview/gerbview_frame.cpp:739
-#: resources/linux/mime/applications/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -13427,86 +13416,6 @@ msgstr "确认删除 %s 吗?"
 msgid "Delete File"
 msgstr "删除文件"
 
-#: new/sch_lib.cpp:237
-#, c-format
-msgid "part \"%s\" not found in lib %s"
-msgstr "在库 %s 中找不到元件 \"%s\""
-
-#: new/sch_lpid.cpp:208
-msgid "Illegal character found in LPID string"
-msgstr "在 LPID 字符串中发现非法字符"
-
-#: new/sch_lpid.cpp:375
-msgid "Illegal character found in logical lib name"
-msgstr "在逻辑库中存在非法字符"
-
-#: new/sch_lpid.cpp:406
-msgid "Illegal character found in category"
-msgstr "在类别中存在非法字符"
-
-#: new/sch_lpid.cpp:417
-msgid "Illegal character found in base name"
-msgstr "在基本名称中存在非法字符"
-
-#: new/sch_sweet_parser.cpp:338
-msgid "invalid extends LPID"
-msgstr "非法替代 LPID"
-
-#: new/sch_sweet_parser.cpp:354
-msgid "'extends' may not have self as any ancestor"
-msgstr "'扩展' 本身可以没有任何继承"
-
-#: new/sch_sweet_parser.cpp:364
-msgid "max allowed extends depth exceeded"
-msgstr "超出最大允许延伸深度"
-
-#: new/sch_sweet_parser.cpp:392
-msgid "invalid alternates LPID"
-msgstr "非法替代 LPID"
-
-#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
-#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
-#: new/sch_sweet_parser.cpp:821
-msgid "undefined pin"
-msgstr "未定义引脚"
-
-#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
-#, c-format
-msgid "undefined pin %s"
-msgstr "未定义引脚 %s"
-
-#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
-#, c-format
-msgid "pin %s already in pin_merge group %s"
-msgstr "引脚 %s 已经在引脚合并组 %s"
-
-#: new/sch_sweet_parser.cpp:903
-#, c-format
-msgid "no pins with signal %s"
-msgstr "没有信号引脚 %s"
-
-#: new/sch_sweet_parser.cpp:915
-#, c-format
-msgid "signal pin %s already in pin_merge group %s"
-msgstr "信号引脚 %s 已经在引脚合并组 %s"
-
-#: new/sch_sweet_parser.cpp:998
-#, c-format
-msgid "Unable to find property: %s"
-msgstr "未找到属性: %s"
-
-#: new/sweet_editor_panel.cpp:31
-msgid "Sweet"
-msgstr "甜蜜"
-
-#: new/sweet_editor_panel.cpp:42
-msgid "Visual Part"
-msgstr "可视部件"
-
-#: new/sweet_editor_panel.cpp:59
-msgid "Parsing Errors"
-msgstr "语法错误"
-
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "起点 Y："
@@ -14356,12 +14265,10 @@ msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "注：表内数值最小值(来自《IPC-2221印制板通用设计标准》)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:572
-#: qa/common/test_hotkey_store.cpp:38
 msgid "B1"
 msgstr "B1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:573
-#: qa/common/test_hotkey_store.cpp:39
 msgid "B2"
 msgstr "B2"
 
@@ -14780,8 +14687,6 @@ msgid "Board Classes"
 msgstr "电路板类别"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:310
-#: resources/linux/mime/applications/pcbcalculator.desktop:9
-#: resources/linux/mime/applications/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB计算器"
 
@@ -17830,13 +17735,11 @@ msgstr ""
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:69
 #, fuzzy
-#| msgid "Use high contrast display mode"
 msgid "Use alternate drill mode"
 msgstr "使用高对比度显示模式"
 
 #: pcbnew/dialogs/dialog_gendrill_base.cpp:71
 #, fuzzy
-#| msgid "DCodes Display Mode"
 msgid "Oval Holes Drill Mode"
 msgstr "D码显示模式"
 
@@ -24396,7 +24299,7 @@ msgstr "封装文档文件"
 
 #: pcbnew/onrightclick.cpp:425 pcbnew/onrightclick.cpp:748
 #: pcbnew/onrightclick.cpp:942 pcbnew/tools/edit_tool.cpp:119
-#: pcbnew/tools/edit_tool.cpp:869 qa/qa_utils/mocks.cpp:276
+#: pcbnew/tools/edit_tool.cpp:869
 msgid "Flip"
 msgstr "翻转"
 
@@ -26059,15 +25962,15 @@ msgstr "精确移动选择项"
 msgid "Create array"
 msgstr "创建阵列"
 
-#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
+#: pcbnew/tools/edit_tool.cpp:109
 msgid "Rotates selected item(s) clockwise"
 msgstr "将选中的项目顺时针旋转"
 
-#: pcbnew/tools/edit_tool.cpp:114 qa/qa_utils/mocks.cpp:329
+#: pcbnew/tools/edit_tool.cpp:114
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "将选中的项目逆时针旋转"
 
-#: pcbnew/tools/edit_tool.cpp:119 qa/qa_utils/mocks.cpp:276
+#: pcbnew/tools/edit_tool.cpp:119
 msgid "Flips selected item(s)"
 msgstr "翻转选择项"
 
@@ -26091,11 +25994,11 @@ msgstr "从库中更新封装"
 msgid "Assign a different footprint from the library"
 msgstr "从库中分配不同的封装"
 
-#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
+#: pcbnew/tools/edit_tool.cpp:147
 msgid "Properties..."
 msgstr "属性..."
 
-#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
+#: pcbnew/tools/edit_tool.cpp:147
 msgid "Displays item properties dialog"
 msgstr "显示项属性对话框"
 
@@ -26347,7 +26250,7 @@ msgstr "从剪贴板粘贴内容"
 msgid "Invalid clipboard contents"
 msgstr "无效的剪贴板内容"
 
-#: pcbnew/tools/pcbnew_control.cpp:951 qa/qa_utils/pcb_test_frame.cpp:152
+#: pcbnew/tools/pcbnew_control.cpp:951
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -26716,333 +26619,277 @@ msgstr "重新填充 %d 覆铜区域"
 msgid "Checking Zones"
 msgstr "检查区域"
 
-#: plugins/3d/vrml/vrml.cpp:191
-msgid " * [INFO] load failed: input line too long\n"
-msgstr " * [信息] 载入失败: 输入行太长\n"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:104
-msgid "incompatible plugin (missing function 'GetNExtensions')"
-msgstr "不兼容的插件(缺少函数 'GetNExtensions')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:117
-msgid "incompatible plugin (missing function 'GetModelExtension')"
-msgstr "不兼容的插件(缺少函数 'GetModelExtension')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:126
-msgid "missing function 'GetModelExtension'"
-msgstr "缺少函数 'GetModelExtension'"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:138
-msgid "incompatible plugin (missing function 'GetNFilters')"
-msgstr "不兼容的插件(缺少函数 'GetNFilters')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:147
-msgid "missing function 'GetNFilters'"
-msgstr "缺少函数 'GetNFilters'"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:159
-msgid "incompatible plugin (missing function 'GetFileFilter')"
-msgstr "不兼容的插件(缺少函数 'GetFileFilter')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:168
-msgid "missing function 'GetFileFilter'"
-msgstr "缺少函数 'GetFileFilter'"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:180
-msgid "incompatible plugin (missing function 'CanRender')"
-msgstr "不兼容的插件(缺少函数 'CanRender')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:189
-msgid "missing function 'CanRender'"
-msgstr "缺少函数 'CanRender'"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:201
-msgid "incompatible plugin (missing function 'Load')"
-msgstr "不兼容的插件(缺少函数 'Load')"
-
-#: plugins/ldr/3d/pluginldr3D.cpp:209
-msgid "missing function 'Load'"
-msgstr "缺失函数 'Load'"
-
-#: plugins/ldr/pluginldr.cpp:92
-msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
-msgstr "不兼容的插件(缺少函数 'GetKicadPluginClass')"
-
-#: plugins/ldr/pluginldr.cpp:105
-msgid "incompatible plugin (missing function 'GetClassVersion')"
-msgstr "不兼容的插件(缺少函数 'GetClassVersion')"
-
-#: plugins/ldr/pluginldr.cpp:114
-msgid "missing function 'GetClassVersion'"
-msgstr "缺少函数 'GetClassVersion'"
-
-#: plugins/ldr/pluginldr.cpp:126
-msgid "incompatible plugin (missing function 'CheckClassVersion')"
-msgstr "不兼容的插件(缺少函数 'CheckClassVersion')"
-
-#: plugins/ldr/pluginldr.cpp:135
-msgid "missing function 'CheckClassVersion'"
-msgstr "缺少函数 'CheckClassVersion'"
-
-#: plugins/ldr/pluginldr.cpp:147
-msgid "incompatible plugin (missing function 'GetKicadPluginName')"
-msgstr "不兼容的插件(缺少函数 'GetKicadPluginName')"
-
-#: plugins/ldr/pluginldr.cpp:156
-msgid "missing function 'GetKicadPluginName'"
-msgstr "缺少函数 'GetKicadPluginName'"
-
-#: plugins/ldr/pluginldr.cpp:168
-msgid "incompatible plugin (missing function 'GetVersion')"
-msgstr "不兼容的插件(缺少函数 'GetVersion')"
-
-#: plugins/ldr/pluginldr.cpp:176
-msgid "missing function 'GetVersion'"
-msgstr "缺少函数 'GetVersion'"
-
-#: qa/common_tools/tools/coroutines/coroutines.cpp:91
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:216
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:87
-msgid "displays help on the command line parameters"
-msgstr "在命令行参数上显示帮助"
-
-#: qa/common_tools/tools/coroutines/coroutines.cpp:99
-msgid "how high to count"
-msgstr ""
-
-#: qa/common_tools/tools/coroutines/coroutines.cpp:111
-msgid "Test a simple coroutine that yields a given number of times"
-msgstr ""
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:224
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:89
-msgid "print parsing information"
-msgstr "打印解析信息"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:230
-msgid "print DRC timings"
-msgstr "打印DRC计时"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:236
-msgid "print DRC marker information"
-msgstr "打印DRC标记信息"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:242
-msgid "perform all available DRC checks"
-msgstr "执行所有可用的 DRC 检查"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:248
-msgid "perform courtyard-overlap (and malformation) checking"
-msgstr "执行外框重叠 (和变形) 检查"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:254
-msgid "perform courtyard-missing checking"
-msgstr "执行外框缺失检查"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:260
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:90
-msgid "input file"
-msgstr "输入文件"
-
-#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:286
-msgid ""
-"This program runs DRC tools on given PCB files. This can be used for "
-"debugging, fuzz testing or development, etc."
-msgstr ""
-"该程序在给定的PCB文件上运行DRC工具。 这可以用于调试，模糊测试或开发等。"
-
-#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:112
-msgid ""
-"This program parses PCB files, either from the stdin stream or from the "
-"given filenames. This can be used either for standalone testing of the "
-"parser or for fuzz testing."
-msgstr ""
-"该程序从标注输入流或给定的文件名解析PCB文件。 这可以用于解析器的独立测试或模"
-"糊测试。"
-
-#: resources/linux/appdata/kicad.appdata.xml:6
-#: resources/linux/mime/applications/kicad.desktop:10
-msgid "KiCad"
-msgstr "KiCad"
-
-#: resources/linux/appdata/kicad.appdata.xml:9
-#: resources/linux/mime/applications/kicad.desktop:11
-msgid "EDA Suite"
-msgstr "EDA套件"
-
-#: resources/linux/appdata/kicad.appdata.xml:10
-msgid "EDA Lösung"
-msgstr "EDA Lösung"
-
-#: resources/linux/appdata/kicad.appdata.xml:11
-msgid "Suite EDA"
-msgstr "EDA套件"
-
-#: resources/linux/appdata/kicad.appdata.xml:12
-msgid "EDA Programpaket"
-msgstr "EDA程序包"
-
-#: resources/linux/appdata/kicad.appdata.xml:24
-msgid ""
-"A Cross Platform and Open Source Electronics Design Automation Suite. The "
-"programs handle Schematic Capture, and PCB Layout with Gerber output."
-msgstr ""
-"跨平台和开源电子设计自动化套件。这些程序处理原理图绘制，PCB设计和Gerber文件输"
-"出。"
-
-#: resources/linux/appdata/kicad.appdata.xml:28
-msgid ""
-"KiCad ist eine Plattform übergreifende freie Software Lösung für "
-"Elektronische Design-Automation (EDA). KiCad enthält Programme zum "
-"Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten "
-"als auch zum Export von Leiterplatten, z.B. per Gerber Format."
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml:34
-msgid ""
-"KiCad è una soluzione software EDA (Electronic Design Automation) gratuita e "
-"multipiattaforma. Contiene programmi per lo sviluppo e la modifica di schemi "
-"elettrici e circuiti stampati esportabili in formato Gerber."
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml:39
-msgid ""
-"KiCad är ett plattformslös och öppen källkods programpaket för elektronisk "
-"design automatisering. KiCad innehåller program för utveckling och "
-"redigering av kretsscheman och tryckta kretskort samt för export av "
-"kretskort, t.ex. med Gerber-format."
-msgstr ""
-
-#: resources/linux/appdata/kicad.appdata.xml:53
-msgid "Eeschema Schematic Editor"
-msgstr "Eeschema 原理图编辑器"
-
-#: resources/linux/appdata/kicad.appdata.xml:58
-msgid "PcbNew PCB Layout"
-msgstr "PcbNew PCB设计"
-
-#: resources/linux/appdata/kicad.appdata.xml:63
-msgid "PcbNew 3D Viewer"
-msgstr "PcbNew 3D查看器"
-
-#: resources/linux/mime/applications/bitmap2component.desktop:5
-msgid "bitmap2component"
-msgstr "Bitmap2Component 位图转换"
-
-#: resources/linux/mime/applications/bitmap2component.desktop:12
-msgid "Create a component from a bitmap for use with KiCad"
-msgstr "从位图创建一个元件，用于KiCad"
-
-#: resources/linux/mime/applications/eeschema.desktop:5
-msgid "eeschema"
-msgstr "Eeschema"
-
-#: resources/linux/mime/applications/eeschema.desktop:10
-msgid "Eeschema (Standalone)"
-msgstr "Eeschema(独立的)"
-
-#: resources/linux/mime/applications/eeschema.desktop:11
-msgid "Electronic schematic capture"
-msgstr "电子原理图绘制"
-
-#: resources/linux/mime/applications/eeschema.desktop:14
-msgid "KiCad electronic schematic design (standalone)"
-msgstr "KiCad电子原理图设计(独立的)"
-
-#: resources/linux/mime/applications/gerbview.desktop:5
-msgid "gerbview"
-msgstr "GerbView"
-
-#: resources/linux/mime/applications/gerbview.desktop:11
-msgid "Gerber File Viewer"
-msgstr "Gerber文件查看器"
-
-#: resources/linux/mime/applications/gerbview.desktop:13
-msgid "View Gerber files"
-msgstr "查看Gerber文件"
-
-#: resources/linux/mime/applications/kicad.desktop:5
-msgid "kicad"
-msgstr "kicad"
-
-#: resources/linux/mime/applications/kicad.desktop:13
-msgid "Electronic Design Automation suite"
-msgstr "电子设计自动化套件"
-
-#: resources/linux/mime/applications/pcbcalculator.desktop:5
-msgid "pcbcalculator"
-msgstr "PCB计算器"
-
-#: resources/linux/mime/applications/pcbcalculator.desktop:11
-msgid "Calculator for various electronics-related computations"
-msgstr "用于各种电子相关计算的计算器"
-
-#: resources/linux/mime/applications/pcbnew.desktop:5
-msgid "pcbnew"
-msgstr "Pcbnew"
-
-#: resources/linux/mime/applications/pcbnew.desktop:10
-msgid "Pcbnew (Standalone)"
-msgstr "Pcbnew(独立的)"
-
-#: resources/linux/mime/applications/pcbnew.desktop:11
-msgid "PCB layout"
-msgstr "PCB设计"
-
-#: resources/linux/mime/applications/pcbnew.desktop:13
-msgid "KiCad printed circuit board layout (standalone)"
-msgstr "KiCad PCB设计(独立的)"
-
-#: utils/kicad2step/kicad2step.cpp:65
-msgid "pcb_filename"
-msgstr "pcb_filename"
-
-#: utils/kicad2step/kicad2step.cpp:67
-msgid "output filename"
-msgstr "输出文件名"
-
-#: utils/kicad2step/kicad2step.cpp:70
-msgid "IGES output (default STEP)"
-msgstr "IGES输出(默认步骤)"
-
-#: utils/kicad2step/kicad2step.cpp:73
-msgid "overwrite output file"
-msgstr "覆盖输出文件"
-
-#: utils/kicad2step/kicad2step.cpp:75
-msgid "Use Drill Origin for output origin"
-msgstr "使用网格原点输出原点"
-
-#: utils/kicad2step/kicad2step.cpp:77
-msgid "Use Grid Origin for output origin"
-msgstr "使用网格原点输出原点"
-
-#: utils/kicad2step/kicad2step.cpp:80
-msgid ""
-"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
-msgstr "用户指定的输出原点 ex.1x1in，1x1inch，25.4x25.4mm（默认mm）"
-
-#: utils/kicad2step/kicad2step.cpp:83
-msgid "exclude 3D models for components with 'virtual' attribute"
-msgstr "排除具有“虚拟”属性元件的3D模型"
-
-#: utils/kicad2step/kicad2step.cpp:86
-msgid ""
-"Minimum distance between points to treat them as separate ones (default 0.01 "
-"mm)"
-msgstr ""
-
-#: utils/kicad2step/kicad2step.cpp:88
-msgid "display this message"
-msgstr "显示此消息"
-
-#: utils/kicad2step/pcb/3d_resolver.cpp:732
-msgid ""
-"3D search path list is empty;\n"
-"continue to write empty file?"
-msgstr ""
-"3D搜索路径列表是空的;\n"
-"继续写空文件？"
+#~ msgid "part \"%s\" not found in lib %s"
+#~ msgstr "在库 %s 中找不到元件 \"%s\""
+
+#~ msgid "Illegal character found in LPID string"
+#~ msgstr "在 LPID 字符串中发现非法字符"
+
+#~ msgid "Illegal character found in logical lib name"
+#~ msgstr "在逻辑库中存在非法字符"
+
+#~ msgid "Illegal character found in category"
+#~ msgstr "在类别中存在非法字符"
+
+#~ msgid "Illegal character found in base name"
+#~ msgstr "在基本名称中存在非法字符"
+
+#~ msgid "invalid extends LPID"
+#~ msgstr "非法替代 LPID"
+
+#~ msgid "'extends' may not have self as any ancestor"
+#~ msgstr "'扩展' 本身可以没有任何继承"
+
+#~ msgid "max allowed extends depth exceeded"
+#~ msgstr "超出最大允许延伸深度"
+
+#~ msgid "invalid alternates LPID"
+#~ msgstr "非法替代 LPID"
+
+#~ msgid "undefined pin"
+#~ msgstr "未定义引脚"
+
+#~ msgid "undefined pin %s"
+#~ msgstr "未定义引脚 %s"
+
+#~ msgid "pin %s already in pin_merge group %s"
+#~ msgstr "引脚 %s 已经在引脚合并组 %s"
+
+#~ msgid "no pins with signal %s"
+#~ msgstr "没有信号引脚 %s"
+
+#~ msgid "signal pin %s already in pin_merge group %s"
+#~ msgstr "信号引脚 %s 已经在引脚合并组 %s"
+
+#~ msgid "Unable to find property: %s"
+#~ msgstr "未找到属性: %s"
+
+#~ msgid "Sweet"
+#~ msgstr "甜蜜"
+
+#~ msgid "Visual Part"
+#~ msgstr "可视部件"
+
+#~ msgid "Parsing Errors"
+#~ msgstr "语法错误"
+
+#~ msgid " * [INFO] load failed: input line too long\n"
+#~ msgstr " * [信息] 载入失败: 输入行太长\n"
+
+#~ msgid "incompatible plugin (missing function 'GetNExtensions')"
+#~ msgstr "不兼容的插件(缺少函数 'GetNExtensions')"
+
+#~ msgid "incompatible plugin (missing function 'GetModelExtension')"
+#~ msgstr "不兼容的插件(缺少函数 'GetModelExtension')"
+
+#~ msgid "missing function 'GetModelExtension'"
+#~ msgstr "缺少函数 'GetModelExtension'"
+
+#~ msgid "incompatible plugin (missing function 'GetNFilters')"
+#~ msgstr "不兼容的插件(缺少函数 'GetNFilters')"
+
+#~ msgid "missing function 'GetNFilters'"
+#~ msgstr "缺少函数 'GetNFilters'"
+
+#~ msgid "incompatible plugin (missing function 'GetFileFilter')"
+#~ msgstr "不兼容的插件(缺少函数 'GetFileFilter')"
+
+#~ msgid "missing function 'GetFileFilter'"
+#~ msgstr "缺少函数 'GetFileFilter'"
+
+#~ msgid "incompatible plugin (missing function 'CanRender')"
+#~ msgstr "不兼容的插件(缺少函数 'CanRender')"
+
+#~ msgid "missing function 'CanRender'"
+#~ msgstr "缺少函数 'CanRender'"
+
+#~ msgid "incompatible plugin (missing function 'Load')"
+#~ msgstr "不兼容的插件(缺少函数 'Load')"
+
+#~ msgid "missing function 'Load'"
+#~ msgstr "缺失函数 'Load'"
+
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
+#~ msgstr "不兼容的插件(缺少函数 'GetKicadPluginClass')"
+
+#~ msgid "incompatible plugin (missing function 'GetClassVersion')"
+#~ msgstr "不兼容的插件(缺少函数 'GetClassVersion')"
+
+#~ msgid "missing function 'GetClassVersion'"
+#~ msgstr "缺少函数 'GetClassVersion'"
+
+#~ msgid "incompatible plugin (missing function 'CheckClassVersion')"
+#~ msgstr "不兼容的插件(缺少函数 'CheckClassVersion')"
+
+#~ msgid "missing function 'CheckClassVersion'"
+#~ msgstr "缺少函数 'CheckClassVersion'"
+
+#~ msgid "incompatible plugin (missing function 'GetKicadPluginName')"
+#~ msgstr "不兼容的插件(缺少函数 'GetKicadPluginName')"
+
+#~ msgid "missing function 'GetKicadPluginName'"
+#~ msgstr "缺少函数 'GetKicadPluginName'"
+
+#~ msgid "incompatible plugin (missing function 'GetVersion')"
+#~ msgstr "不兼容的插件(缺少函数 'GetVersion')"
+
+#~ msgid "missing function 'GetVersion'"
+#~ msgstr "缺少函数 'GetVersion'"
+
+#~ msgid "displays help on the command line parameters"
+#~ msgstr "在命令行参数上显示帮助"
+
+#~ msgid "print parsing information"
+#~ msgstr "打印解析信息"
+
+#~ msgid "print DRC timings"
+#~ msgstr "打印DRC计时"
+
+#~ msgid "print DRC marker information"
+#~ msgstr "打印DRC标记信息"
+
+#~ msgid "perform all available DRC checks"
+#~ msgstr "执行所有可用的 DRC 检查"
+
+#~ msgid "perform courtyard-overlap (and malformation) checking"
+#~ msgstr "执行外框重叠 (和变形) 检查"
+
+#~ msgid "perform courtyard-missing checking"
+#~ msgstr "执行外框缺失检查"
+
+#~ msgid "input file"
+#~ msgstr "输入文件"
+
+#~ msgid ""
+#~ "This program runs DRC tools on given PCB files. This can be used for "
+#~ "debugging, fuzz testing or development, etc."
+#~ msgstr ""
+#~ "该程序在给定的PCB文件上运行DRC工具。 这可以用于调试，模糊测试或开发等。"
+
+#~ msgid ""
+#~ "This program parses PCB files, either from the stdin stream or from the "
+#~ "given filenames. This can be used either for standalone testing of the "
+#~ "parser or for fuzz testing."
+#~ msgstr ""
+#~ "该程序从标注输入流或给定的文件名解析PCB文件。 这可以用于解析器的独立测试或"
+#~ "模糊测试。"
+
+#~ msgid "KiCad"
+#~ msgstr "KiCad"
+
+#~ msgid "EDA Suite"
+#~ msgstr "EDA套件"
+
+#~ msgid "EDA Lösung"
+#~ msgstr "EDA Lösung"
+
+#~ msgid "Suite EDA"
+#~ msgstr "EDA套件"
+
+#~ msgid "EDA Programpaket"
+#~ msgstr "EDA程序包"
+
+#~ msgid ""
+#~ "A Cross Platform and Open Source Electronics Design Automation Suite. The "
+#~ "programs handle Schematic Capture, and PCB Layout with Gerber output."
+#~ msgstr ""
+#~ "跨平台和开源电子设计自动化套件。这些程序处理原理图绘制，PCB设计和Gerber文"
+#~ "件输出。"
+
+#~ msgid "Eeschema Schematic Editor"
+#~ msgstr "Eeschema 原理图编辑器"
+
+#~ msgid "PcbNew PCB Layout"
+#~ msgstr "PcbNew PCB设计"
+
+#~ msgid "PcbNew 3D Viewer"
+#~ msgstr "PcbNew 3D查看器"
+
+#~ msgid "bitmap2component"
+#~ msgstr "Bitmap2Component 位图转换"
+
+#~ msgid "Create a component from a bitmap for use with KiCad"
+#~ msgstr "从位图创建一个元件，用于KiCad"
+
+#~ msgid "eeschema"
+#~ msgstr "Eeschema"
+
+#~ msgid "Eeschema (Standalone)"
+#~ msgstr "Eeschema(独立的)"
+
+#~ msgid "Electronic schematic capture"
+#~ msgstr "电子原理图绘制"
+
+#~ msgid "KiCad electronic schematic design (standalone)"
+#~ msgstr "KiCad电子原理图设计(独立的)"
+
+#~ msgid "gerbview"
+#~ msgstr "GerbView"
+
+#~ msgid "Gerber File Viewer"
+#~ msgstr "Gerber文件查看器"
+
+#~ msgid "View Gerber files"
+#~ msgstr "查看Gerber文件"
+
+#~ msgid "kicad"
+#~ msgstr "kicad"
+
+#~ msgid "Electronic Design Automation suite"
+#~ msgstr "电子设计自动化套件"
+
+#~ msgid "pcbcalculator"
+#~ msgstr "PCB计算器"
+
+#~ msgid "Calculator for various electronics-related computations"
+#~ msgstr "用于各种电子相关计算的计算器"
+
+#~ msgid "pcbnew"
+#~ msgstr "Pcbnew"
+
+#~ msgid "Pcbnew (Standalone)"
+#~ msgstr "Pcbnew(独立的)"
+
+#~ msgid "PCB layout"
+#~ msgstr "PCB设计"
+
+#~ msgid "KiCad printed circuit board layout (standalone)"
+#~ msgstr "KiCad PCB设计(独立的)"
+
+#~ msgid "pcb_filename"
+#~ msgstr "pcb_filename"
+
+#~ msgid "output filename"
+#~ msgstr "输出文件名"
+
+#~ msgid "IGES output (default STEP)"
+#~ msgstr "IGES输出(默认步骤)"
+
+#~ msgid "overwrite output file"
+#~ msgstr "覆盖输出文件"
+
+#~ msgid "Use Drill Origin for output origin"
+#~ msgstr "使用网格原点输出原点"
+
+#~ msgid "Use Grid Origin for output origin"
+#~ msgstr "使用网格原点输出原点"
+
+#~ msgid ""
+#~ "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+#~ msgstr "用户指定的输出原点 ex.1x1in，1x1inch，25.4x25.4mm（默认mm）"
+
+#~ msgid "exclude 3D models for components with 'virtual' attribute"
+#~ msgstr "排除具有“虚拟”属性元件的3D模型"
+
+#~ msgid "display this message"
+#~ msgstr "显示此消息"
+
+#~ msgid ""
+#~ "3D search path list is empty;\n"
+#~ "continue to write empty file?"
+#~ msgstr ""
+#~ "3D搜索路径列表是空的;\n"
+#~ "继续写空文件？"
 
 #~ msgid "\""
 #~ msgstr "\""
