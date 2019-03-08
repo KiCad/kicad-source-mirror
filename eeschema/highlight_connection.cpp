@@ -32,6 +32,7 @@
 #include <sch_view.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
+#include <sch_component.h>
 #include <erc.h>
 
 #include <netlist_object.h>
@@ -93,38 +94,54 @@ bool SCH_EDIT_FRAME::SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aIte
     if( !screen )
         return true;
 
-    // Disable highlight flag on all items in the current screen
     for( SCH_ITEM* ptr = screen->GetDrawItems(); ptr; ptr = ptr->Next() )
     {
         auto conn = ptr->Connection( *g_CurrentSheet );
-        bool bright = ptr->GetState( BRIGHTENED );
-
-        if( bright && aItemsToRedrawList )
-            aItemsToRedrawList->push_back( ptr );
+        bool redraw = ptr->GetState( BRIGHTENED );
 
         ptr->SetState( BRIGHTENED, ( conn && conn->Name() == m_SelectedNetName ) );
 
-        if( !bright && ptr->GetState( BRIGHTENED ) && aItemsToRedrawList )
-            aItemsToRedrawList->push_back( ptr );
+        redraw |= ptr->GetState( BRIGHTENED );
 
-        if( ptr->Type() == SCH_SHEET_T )
+        if( ptr->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( ptr );
+
+            redraw |= comp->HasBrightenedPins();
+
+            comp->ClearBrightenedPins();
+            std::vector<LIB_PIN*> pins;
+            comp->GetPins( pins );
+
+            for( LIB_PIN* pin : pins )
+            {
+                auto pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
+
+                if( pin_conn && pin_conn->Name( false, true ) == m_SelectedNetName )
+                {
+                    comp->BrightenPin( pin );
+                    redraw = true;
+                }
+            }
+        }
+        else if( ptr->Type() == SCH_SHEET_T )
         {
             for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( ptr )->GetPins() )
             {
                 auto pin_conn = pin.Connection( *g_CurrentSheet );
+                bool redrawPin = pin.GetState( BRIGHTENED );
 
-                bright = pin.GetState( BRIGHTENED );
+                pin.SetState( BRIGHTENED, ( pin_conn && pin_conn->Name() == m_SelectedNetName ) );
 
-                if( bright && aItemsToRedrawList )
-                    aItemsToRedrawList->push_back( &pin );
+                redrawPin |= pin.GetState( BRIGHTENED );
 
-                pin.SetState( BRIGHTENED, ( pin_conn &&
-                                            pin_conn->Name() == m_SelectedNetName ) );
-
-                if( !bright && pin.GetState( BRIGHTENED ) && aItemsToRedrawList )
+                if( redrawPin && aItemsToRedrawList )
                     aItemsToRedrawList->push_back( &pin );
             }
         }
+
+        if( redraw && aItemsToRedrawList )
+            aItemsToRedrawList->push_back( ptr );
     }
 
     if( m_SelectedNetName == "" )

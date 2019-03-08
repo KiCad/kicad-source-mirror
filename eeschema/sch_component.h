@@ -96,6 +96,7 @@ private:
     std::vector<bool> m_isDangling; ///< One isDangling per pin
     std::vector<wxPoint> m_Pins;
     std::set<wxString> m_highlightedPins; ///< God forgive me - Tom
+    std::set<wxString> m_brightenedPins;  ///< ... and me too - Jeff
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -221,9 +222,9 @@ public:
     void UpdatePinConnections( SCH_SHEET_PATH aSheet );
 
     /**
-     * Retrieves the pin connection for a given pin of the component
+     * Retrieves the connection for a given pin of the component
      */
-    SCH_PIN_CONNECTION* GetConnectionForPin( LIB_PIN* aPin );
+    SCH_CONNECTION* GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet );
 
     const std::unordered_map<LIB_PIN*, SCH_PIN_CONNECTION*>& PinConnections()
     {
@@ -661,6 +662,14 @@ public:
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
+
+    void ClearBrightenedPins();
+
+    bool HasBrightenedPins();
+
+    void BrightenPin( LIB_PIN* aPin );
+
+    bool IsPinBrightened( const LIB_PIN* aPin );
 
     void ClearHighlightedPins();
 

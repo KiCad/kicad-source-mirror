@@ -243,7 +243,7 @@ bool SCH_CONNECTION::IsDriver() const
 }
 
 
-wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
+wxString SCH_CONNECTION::Name( bool aIgnoreSheet, bool aForceSheet ) const
 {
     wxString ret = m_name + m_suffix;
 
@@ -271,7 +271,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
         }
     }
 
-    if( prepend_path && !aIgnoreSheet )
+    if( aForceSheet || ( prepend_path && !aIgnoreSheet ) )
         ret = m_sheet.PathHumanReadable() + ret;
 
     return ret;

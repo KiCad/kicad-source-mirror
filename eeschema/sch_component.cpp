@@ -566,17 +566,17 @@ void SCH_COMPONENT::UpdatePinConnections( SCH_SHEET_PATH aSheet )
 }
 
 
-SCH_PIN_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin )
+SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
 {
-    try
+    if( m_pin_connections.count( aPin ) )
     {
-        return m_pin_connections.at( aPin );
-    }
-    catch( const std::out_of_range& oor )
-    {
-        return nullptr;
+        SCH_PIN_CONNECTION* pin_conn = m_pin_connections.at( aPin );
+
+        if( pin_conn )
+            return pin_conn->Connection( aSheet );
     }
 
+    return nullptr;
 }
 
 
@@ -2025,6 +2025,30 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 
         aPlotter->EndBlock( nullptr );
     }
+}
+
+
+bool SCH_COMPONENT::HasBrightenedPins()
+{
+    return m_brightenedPins.size() > 0;
+}
+
+
+void SCH_COMPONENT::ClearBrightenedPins()
+{
+    m_brightenedPins.clear();
+}
+
+
+void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
+{
+    m_brightenedPins.insert( aPin->GetNumber() );
+}
+
+
+bool SCH_COMPONENT::IsPinBrightened( const LIB_PIN* aPin )
+{
+    return m_brightenedPins.find( aPin->GetNumber() ) != m_brightenedPins.end();
 }
 
 

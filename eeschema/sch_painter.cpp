@@ -540,8 +540,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
         isMoving = true;
 
     VECTOR2I pos = mapCoords( aPin->GetPosition() );
+    COLOR4D  color;
 
-    COLOR4D color = getOverlayColor( aPin, m_schSettings.GetLayerColor( LAYER_PIN ), false );
+    if( aPin->IsBrightened() )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+    else
+        color = getOverlayColor( aPin, m_schSettings.GetLayerColor( LAYER_PIN ), false );
 
     if( !aPin->IsVisible() )
     {
@@ -1144,10 +1148,11 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
         if( item.Type() == LIB_PIN_T )
         {
             auto pin = static_cast<LIB_PIN*>( &item );
-            if( aComp->IsPinHighlighted( pin ) )
-            {
+
+            if( aComp->IsPinBrightened( pin ) )
+                pin->SetFlags( BRIGHTENED );
+            else if( aComp->IsPinHighlighted( pin ) )
                 pin->SetFlags( HIGHLIGHTED );
-            }
         }
     }
 

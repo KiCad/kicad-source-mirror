@@ -1774,14 +1774,10 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
 
 #if defined(DEBUG)
 
-    if( auto pin_connection = aComponent->GetConnectionForPin( this ) )
-    {
-        auto conn = pin_connection->Connection( *g_CurrentSheet );
+    auto conn = aComponent->GetConnectionForPin( this, *g_CurrentSheet );
 
-        wxASSERT( conn );
-
+    if( conn )
         conn->AppendDebugInfoToMsgPanel( aList );
-    }
 
 #endif
 }
