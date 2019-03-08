@@ -5,7 +5,6 @@
   <id>kicad.desktop</id>
   <name>KiCad</name>
   <project_license>AGPL-3.0+</project_license>
-  <metadata_license>CC-BY-SA-4.0</metadata_license>
   <summary>EDA Suite</summary>
   <summary xml:lang="de">EDA Lösung</summary>
   <summary xml:lang="it">Suite EDA</summary>
