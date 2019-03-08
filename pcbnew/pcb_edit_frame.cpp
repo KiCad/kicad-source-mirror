@@ -121,6 +121,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU_RANGE( ID_FILE1, ID_FILEMAX, PCB_EDIT_FRAME::OnFileHistory )
 
     EVT_MENU( ID_GEN_PLOT, PCB_EDIT_FRAME::ToPlotter )
+    EVT_MENU( ID_GEN_PLOT_GERBER, PCB_EDIT_FRAME::ToPlotter )
 
     EVT_MENU( ID_GEN_EXPORT_SPECCTRA, PCB_EDIT_FRAME::ExportToSpecctra )
     EVT_MENU( ID_GEN_EXPORT_FILE_GENCADFORMAT, PCB_EDIT_FRAME::ExportToGenCAD )
@@ -1098,8 +1099,23 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     syncRenderStates();
 }
 
+
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
+    PCB_PLOT_PARAMS plotSettings = GetPlotSettings();
+
+    switch( event.GetId() )
+    {
+    case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER ); break;
+    case ID_GEN_PLOT_DXF:    plotSettings.SetFormat( PLOT_FORMAT_DXF );    break;
+    case ID_GEN_PLOT_HPGL:   plotSettings.SetFormat( PLOT_FORMAT_HPGL );   break;
+    case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );    break;
+    case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );   break;
+    case ID_GEN_PLOT_SVG:    wxFAIL_MSG( "Should have gone to ExportSVG()" );  break;
+    }
+
+    SetPlotSettings( plotSettings );
+
     // Force rebuild the dialog if currently open because the old dialog can be not up to date
     // if the board (or units) has changed
     wxWindow* dlg =  wxWindow::FindWindowByName( DLG_WINDOW_NAME );

@@ -833,8 +833,8 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     //----- Import submenu ------------------------------------------------------
     wxMenu* submenuImport = new wxMenu();
 
-    AddMenuItem( aParentMenu, ID_GET_NETLIST,
-                 _( "Import &Netlist..." ),
+    AddMenuItem( submenuImport, ID_GET_NETLIST,
+                 _( "&Netlist..." ),
                  _( "Read netlist and update board connectivity" ),
                  KiBitmap( netlist_xpm ) );
 
@@ -844,7 +844,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( import_xpm ) );
 
     AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
-                 _( "Import &Graphics..." ),
+                 _( "&Graphics..." ),
                  _( "Import 2D Drawing file to Pcbnew on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
@@ -864,18 +864,23 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     //----- Fabrication Outputs submenu -----------------------------------------
     wxMenu* fabricationOutputsMenu = new wxMenu;
-    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
-                 _( "Footprint &Position (.pos) File..." ),
-                 _( "Generate footprint position file for pick and place" ),
+    AddMenuItem( fabricationOutputsMenu, ID_GEN_PLOT_GERBER,
+                 _( "&Gerbers (.gbr)..." ),
+                 _( "Generate Gerbers for fabrication" ),
                  KiBitmap( post_compo_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
-                 _( "&Drill (.drl) File..." ),
-                 _( "Generate excellon2 drill file" ),
+                 _( "&Drill Files (.drl)..." ),
+                 _( "Generate excellon2 drill file(s)" ),
                  KiBitmap( post_drill_xpm ) );
 
+    AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
+                 _( "Footprint &Positions (.pos)..." ),
+                 _( "Generate footprint position file for pick and place" ),
+                 KiBitmap( post_compo_xpm ) );
+
     AddMenuItem( fabricationOutputsMenu, ID_GEN_EXPORT_FILE_MODULE_REPORT,
-                 _( "&Footprint (.rpt) Report..." ),
+                 _( "&Footprint Report (.rpt)..." ),
                  _( "Create report of all footprints from current board" ),
                  KiBitmap( tools_xpm ) );
 
@@ -885,7 +890,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( netlist_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
-                 _( "&BOM File..." ),
+                 _( "&BOM..." ),
                  _( "Create bill of materials from current schematic" ),
                  KiBitmap( bom_xpm ) );
 
