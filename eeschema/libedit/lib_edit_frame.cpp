@@ -617,8 +617,6 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
     else
         filename = part->GetAlias( 0 )->GetDocFileName();
 
-    filename = ResolveUriByEnvVars( filename );
-
     if( !filename.IsEmpty() && filename != wxT( "~" ) )
     {
         SEARCH_STACK* lib_search = Prj().SchSearchS();

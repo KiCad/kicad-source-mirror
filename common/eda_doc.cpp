@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2014-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2014-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,17 +103,18 @@ bool GetAssociatedDocument( wxWindow* aParent,
         wxT( "file:" )
     };
 
+    // Replace before resolving as we might have a URL in a variable
+    docname = ResolveUriByEnvVars( aDocName );
+
     for( unsigned ii = 0; ii < arrayDim(url_header); ii++ )
     {
-        if( aDocName.First( url_header[ii] ) == 0 )   // looks like an internet url
+        if( docname.First( url_header[ii] ) == 0 )   // looks like an internet url
         {
-            wxURI uri( aDocName );
+            wxURI uri( docname );
             wxLaunchDefaultBrowser( uri.BuildURI() );
             return true;
         }
     }
-
-    docname = aDocName;
 
 #ifdef __WINDOWS__
     docname.Replace( UNIX_STRING_DIR_SEP, WIN_STRING_DIR_SEP );
@@ -123,17 +124,17 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
 
     /* Compute the full file name */
-    if( wxIsAbsolutePath( aDocName ) || aPaths == NULL)
-        fullfilename = aDocName;
+    if( wxIsAbsolutePath( docname ) || aPaths == NULL)
+        fullfilename = docname;
     /* If the file exists, this is a trivial case: return the filename
      * "as this".  the name can be an absolute path, or a relative path
      * like ./filename or ../<filename>
      */
-    else if( wxFileName::FileExists( aDocName ) )
-        fullfilename = aDocName;
+    else if( wxFileName::FileExists( docname ) )
+        fullfilename = docname;
     else
     {
-        fullfilename = aPaths->FindValidPath( aDocName );
+        fullfilename = aPaths->FindValidPath( docname );
     }
 
     wxString mask( wxT( "*" ) ), extension;
@@ -160,7 +161,7 @@ bool GetAssociatedDocument( wxWindow* aParent,
 
     if( !wxFileExists( fullfilename ) )
     {
-        msg.Printf( _( "Doc File \"%s\" not found" ), GetChars( aDocName ) );
+        msg.Printf( _( "Doc File \"%s\" not found" ), GetChars( docname ) );
         DisplayError( aParent, msg );
         return false;
     }
