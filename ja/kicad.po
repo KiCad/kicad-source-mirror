@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2019-02-12 00:52+0900\n"
+"POT-Creation-Date: 2019-03-10 13:59+0900\n"
+"PO-Revision-Date: 2019-03-10 22:03+0900\n"
 "Last-Translator: starfort_jp <starfort@nifty.com>\n"
 "Language-Team: kicad_jp <kicad@kicad.jp>\n"
 "Language: ja_JP\n"
@@ -1155,6 +1155,8 @@ msgstr ""
 "２つの不可視フィールド、リファレンスと定数は常にシルク レイヤーへ置かれます。"
 
 #: bitmap2component/bitmap2cmp_gui_base.h:92
+#: resources/linux/mime/applications/bitmap2component.desktop:9
+#: resources/linux/mime/applications/bitmap2component.desktop:10
 msgid "Bitmap to Component Converter"
 msgstr "ビットマップ - コンポーネント変換"
 
@@ -2832,7 +2834,7 @@ msgstr ""
 "エラーの全文:\n"
 "%s"
 
-#: common/filename_resolver.cpp:470
+#: common/filename_resolver.cpp:470 utils/kicad2step/pcb/3d_resolver.cpp:547
 msgid "The given path does not exist"
 msgstr "入力されたパスは存在しません"
 
@@ -2840,36 +2842,41 @@ msgstr "入力されたパスは存在しません"
 msgid "3D model search path"
 msgstr "3D モデルの検索パス"
 
-#: common/filename_resolver.cpp:499
+#: common/filename_resolver.cpp:499 utils/kicad2step/pcb/3d_resolver.cpp:576
 msgid "Alias: "
 msgstr "エイリアス: "
 
-#: common/filename_resolver.cpp:502
+#: common/filename_resolver.cpp:502 utils/kicad2step/pcb/3d_resolver.cpp:579
 msgid "This path: "
 msgstr "このパス: "
 
-#: common/filename_resolver.cpp:505
+#: common/filename_resolver.cpp:505 utils/kicad2step/pcb/3d_resolver.cpp:582
 msgid "Existing path: "
 msgstr "存在するパス: "
 
-#: common/filename_resolver.cpp:507
+#: common/filename_resolver.cpp:507 utils/kicad2step/pcb/3d_resolver.cpp:584
 msgid "Bad alias (duplicate name)"
 msgstr "不正なエイリアス (名前の重複)"
 
-#: common/filename_resolver.cpp:629
+#: common/filename_resolver.cpp:629 utils/kicad2step/pcb/3d_resolver.cpp:709
 msgid "3D configuration directory is unknown"
 msgstr "3D 設定ディレクトリーが未定義です"
 
 #: common/filename_resolver.cpp:632 common/filename_resolver.cpp:657
-#: common/filename_resolver.cpp:682
+#: common/filename_resolver.cpp:682 utils/kicad2step/pcb/3d_resolver.cpp:712
+#: utils/kicad2step/pcb/3d_resolver.cpp:733
+#: utils/kicad2step/pcb/3d_resolver.cpp:742
+#: utils/kicad2step/pcb/3d_resolver.cpp:764
+#: utils/kicad2step/pcb/3d_resolver.cpp:789
 msgid "Write 3D search path list"
 msgstr "3D 検索パスのリストを書き込み"
 
-#: common/filename_resolver.cpp:654
+#: common/filename_resolver.cpp:654 utils/kicad2step/pcb/3d_resolver.cpp:741
+#: utils/kicad2step/pcb/3d_resolver.cpp:761
 msgid "Could not open configuration file"
 msgstr "設定ファイルを開くことができません"
 
-#: common/filename_resolver.cpp:681
+#: common/filename_resolver.cpp:681 utils/kicad2step/pcb/3d_resolver.cpp:788
 msgid "Problems writing configuration file"
 msgstr "設定ファイルの書き込みで問題"
 
@@ -3163,7 +3170,7 @@ msgstr "新規ライブラリー"
 msgid "Illegal character found in logical library name"
 msgstr "論理的なライブラリー名の中に不正な文字があります"
 
-#: common/lib_id.cpp:301
+#: common/lib_id.cpp:301 new/sch_lpid.cpp:440
 msgid "Illegal character found in revision"
 msgstr "リビジョン中に不正な文字があります"
 
@@ -3345,7 +3352,7 @@ msgstr ""
 msgid "Error loading project footprint library table"
 msgstr "プロジェクト フットプリント ライブラリー テーブルのロード エラー"
 
-#: common/richio.cpp:167
+#: common/richio.cpp:167 qa/qa_utils/stdstream_line_reader.cpp:76
 #, c-format
 msgid "Unable to open filename \"%s\" for reading"
 msgstr "読み込み用にファイル \"%s\" を開くことができません"
@@ -3487,7 +3494,6 @@ msgid "Always show crosshairs (not in Legacy)"
 msgstr "常に十字線を表示 (レガシーを除く)"
 
 #: common/widgets/grid_text_button_helpers.cpp:335
-#, fuzzy
 msgid "Select a File"
 msgstr "ファイルを選択"
 
@@ -5292,14 +5298,13 @@ msgid "Map Orphans"
 msgstr "孤立したコンポーネントをマップ"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.cpp:77
-#, fuzzy
 msgid ""
 "If some components are orphan (the linked symbol is found nowhere),\n"
 "try to find a candidate having the same name in one of loaded symbol "
 "libraries."
 msgstr ""
 "コンポーネントが孤立 (接続されたシンボルが見つからない) している場合、\n"
-"ロードされたシンボル ライブラリー内にある同じ名前を持つ候補の検索を試みます"
+"ロードされたシンボル ライブラリー内にある同じ名前を持つ候補の検索を試みます。"
 
 #: eeschema/dialogs/dialog_edit_components_libid_base.h:62
 msgid "Symbol Library References"
@@ -6195,10 +6200,12 @@ msgid "A3"
 msgstr "A3"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:222
+#: qa/common/test_hotkey_store.cpp:33
 msgid "A2"
 msgstr "A2"
 
 #: eeschema/dialogs/dialog_plot_schematic.cpp:223
+#: qa/common/test_hotkey_store.cpp:32
 msgid "A1"
 msgstr "A1"
 
@@ -9147,7 +9154,7 @@ msgstr "矩形の端をドラッグ"
 #: eeschema/onrightclick.cpp:541 eeschema/onrightclick.cpp:577
 #: eeschema/onrightclick.cpp:805 pcbnew/footprint_editor_onclick.cpp:347
 #: pcbnew/onrightclick.cpp:747 pcbnew/onrightclick.cpp:832
-#: pcbnew/tools/edit_tool.cpp:109
+#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
 msgid "Rotate Clockwise"
 msgstr "右回転"
 
@@ -9233,6 +9240,7 @@ msgstr "垂直 (Y) 軸に沿ってブロックをミラー"
 #: eeschema/onrightclick.cpp:808 eeschema/onrightclick.cpp:934
 #: pcbnew/footprint_editor_onclick.cpp:288 pcbnew/onrightclick.cpp:426
 #: pcbnew/onrightclick.cpp:743 pcbnew/tools/edit_tool.cpp:114
+#: qa/qa_utils/mocks.cpp:329
 msgid "Rotate Counterclockwise"
 msgstr "左回転"
 
@@ -12329,6 +12337,7 @@ msgid "Drawing layer %d not in use"
 msgstr "描画レイヤー %d は未使用です"
 
 #: gerbview/gerbview_frame.cpp:739
+#: resources/linux/mime/applications/gerbview.desktop:10
 msgid "GerbView"
 msgstr "GerbView"
 
@@ -13604,6 +13613,86 @@ msgstr "本当に \"%s\" を削除してもよろしいですか？"
 msgid "Delete File"
 msgstr "ファイルの削除"
 
+#: new/sch_lib.cpp:237
+#, c-format
+msgid "part \"%s\" not found in lib %s"
+msgstr "パーツ \"%s\" はライブラリー %s 中に見つかりませんでした"
+
+#: new/sch_lpid.cpp:208
+msgid "Illegal character found in LPID string"
+msgstr "FPID文字列中に不正な文字があります"
+
+#: new/sch_lpid.cpp:375
+msgid "Illegal character found in logical lib name"
+msgstr "論理的なライブラリー名の中に不正な文字があります"
+
+#: new/sch_lpid.cpp:406
+msgid "Illegal character found in category"
+msgstr "カテゴリに不正な文字があります"
+
+#: new/sch_lpid.cpp:417
+msgid "Illegal character found in base name"
+msgstr "ベース名に不正な文字があります"
+
+#: new/sch_sweet_parser.cpp:338
+msgid "invalid extends LPID"
+msgstr "不正な拡張 LPID"
+
+#: new/sch_sweet_parser.cpp:354
+msgid "'extends' may not have self as any ancestor"
+msgstr "\"extends\" はいかなる先祖も持っていないようです"
+
+#: new/sch_sweet_parser.cpp:364
+msgid "max allowed extends depth exceeded"
+msgstr "深度が超過しています"
+
+#: new/sch_sweet_parser.cpp:392
+msgid "invalid alternates LPID"
+msgstr "不正な代替 LPID"
+
+#: new/sch_sweet_parser.cpp:709 new/sch_sweet_parser.cpp:748
+#: new/sch_sweet_parser.cpp:761 new/sch_sweet_parser.cpp:790
+#: new/sch_sweet_parser.cpp:821
+msgid "undefined pin"
+msgstr "未定義のピン"
+
+#: new/sch_sweet_parser.cpp:852 new/sch_sweet_parser.cpp:949
+#, c-format
+msgid "undefined pin %s"
+msgstr "未定義のピン %s"
+
+#: new/sch_sweet_parser.cpp:862 new/sch_sweet_parser.cpp:959
+#, c-format
+msgid "pin %s already in pin_merge group %s"
+msgstr "ピン %s は既にピン グループ %s に存在します"
+
+#: new/sch_sweet_parser.cpp:903
+#, c-format
+msgid "no pins with signal %s"
+msgstr "信号 %s のピンがありません"
+
+#: new/sch_sweet_parser.cpp:915
+#, c-format
+msgid "signal pin %s already in pin_merge group %s"
+msgstr "信号ピン %s は既にピン グループ %s に存在します"
+
+#: new/sch_sweet_parser.cpp:998
+#, c-format
+msgid "Unable to find property: %s"
+msgstr "プロパティが見つかりませんでした: %s"
+
+#: new/sweet_editor_panel.cpp:31
+msgid "Sweet"
+msgstr "Sweet"
+
+#: new/sweet_editor_panel.cpp:42
+msgid "Visual Part"
+msgstr "可視部分"
+
+#: new/sweet_editor_panel.cpp:59
+msgid "Parsing Errors"
+msgstr "構文エラー"
+
 #: pagelayout_editor/dialogs/dialog_new_dataitem_base.cpp:30
 msgid "Y start:"
 msgstr "Y 始点:"
@@ -14277,7 +14366,7 @@ msgstr ""
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:169
 msgid "Standard Type"
-msgstr "スタンダード"
+msgstr "標準タイプ"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:169
 msgid "3 Terminal Type"
@@ -14451,10 +14540,12 @@ msgid "Note: Values are minimal values (from IPC 2221)"
 msgstr "注: 値は最小値です (IPC 2221 より)"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:572
+#: qa/common/test_hotkey_store.cpp:38
 msgid "B1"
 msgstr "B1"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:573
+#: qa/common/test_hotkey_store.cpp:39
 msgid "B2"
 msgstr "B2"
 
@@ -14731,7 +14822,7 @@ msgstr "抵抗分割型"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1055
 msgid "Attenuators:"
-msgstr "アッテネータ:"
+msgstr "アッテネーター:"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1077
 msgid "Attenuation"
@@ -14780,7 +14871,7 @@ msgstr "計算式"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1201
 msgid "RF Attenuators"
-msgstr "RFアッテネータ"
+msgstr "RFアッテネーター"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:1206
 msgid "10% / 5%"
@@ -14872,6 +14963,8 @@ msgid "Board Classes"
 msgstr "ボード クラス"
 
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.h:310
+#: resources/linux/mime/applications/pcbcalculator.desktop:9
+#: resources/linux/mime/applications/pcbcalculator.desktop:10
 msgid "PCB Calculator"
 msgstr "PCB Calculator"
 
@@ -16423,13 +16516,12 @@ msgid "Pad connections:"
 msgstr "パッド接続:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:186
-#, fuzzy
 msgid ""
 "Default pad connection type to zone.\n"
 "This setting can be overridden by local pad settings"
 msgstr ""
 "デフォルトのパッド接続タイプはゾーンです。\n"
-"この設定はローカル パッド設定で上書きできます"
+"この設定はローカル パッド設定で上書きできます。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
 msgid "Thermal reliefs"
@@ -16444,9 +16536,8 @@ msgid "Thermal clearance:"
 msgstr "サーマル クリアランス:"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:201
-#, fuzzy
 msgid "Clearance between pads and filled areas of the same net."
-msgstr "同一ネット内のパッドと塗り潰しエリアのクリアランス。"
+msgstr "同一ネットのパッドと塗り潰しエリア間のクリアランス。"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:209
 msgid "Thermal spoke width:"
@@ -17039,7 +17130,7 @@ msgstr "クリアランス"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:300
 msgid "Set values to 0 to use Board Setup values."
-msgstr "基板セットアップの値を使用するため、値を０に設定"
+msgstr "基板セットアップの値を使用するため、値を 0 に設定します。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:306
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:208
@@ -17048,8 +17139,8 @@ msgstr "基板セットアップの値を使用するため、値を０に設定
 msgid ""
 "Positive clearance means area bigger than the pad (usual for mask clearance)."
 msgstr ""
-"正のクリアランスはパッドより大きな領域を意味します。(通常はマスク クリアラン"
-"ス用)"
+"正のクリアランスはパッドより大きな領域を意味します。(通常はマスクのクリアラン"
+"ス)"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:312
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:214
@@ -17075,8 +17166,8 @@ msgid ""
 "This value can be superseded by a pad local value."
 msgstr ""
 "これはこのフットプリントの全てのパッドのローカル ネット クリアランスです。\n"
-"0ならば、ネットクラスの値が使用されます。\n"
-"パッドにローカル値がある場合、そちらが優先されます。"
+"0 した場合、ネットクラスの値が使用されます。\n"
+"この値は、パッドのローカル値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:337
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:239
@@ -17093,8 +17184,8 @@ msgid ""
 "If 0, the global value is used."
 msgstr ""
 "これはフットプリントのパッドとハンダ マスク間のローカル クリアランスです。\n"
-"この値よりもパッドのローカル値が優先されます。\n"
-"０ならば、グローバル値が使用されます"
+"この値は、パッドのローカル値で置き換えられます。\n"
+"0 した場合、グローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:350
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:252
@@ -17114,9 +17205,10 @@ msgid ""
 msgstr ""
 "これはフットプリントのパッドとハンダ ペースト間のローカル クリアランスで"
 "す。\n"
-"この値よりもパッドのローカル値が優先されます。\n"
-"最終的なクリアランス値はこの値とクリアランス率の合算です\n"
-"マイナス値ならば、パッド サイズよりも小さなマスクが使用されます"
+"この値は、パッドのローカル値で置き換えられます。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
+"す。\n"
+"負値の場合、パッド サイズよりも小さなマスクが使用されます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:363
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:265
@@ -17134,13 +17226,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランス率を"
-"パーセント指定したものです。\n"
-"これが10のとき、クリアランスの値はパッドの10%になります。\n"
-"パッドにローカル値がある場合、そちらが優先されます。\n"
+"これはフットプリントのパッドとハンダ ペースト間のパーセント指定したローカル "
+"クリアランス比率です。\n"
+"値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
+"この値は、パッドのローカル値で置き換えられます。\n"
 "最終的なクリアランスの値は、この値とクリアランス値を合算したものになりま"
 "す。\n"
-"負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
+"負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:379
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:281
@@ -17232,10 +17324,9 @@ msgstr "フットプリント名:"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:202
 msgid "Set values to 0 to use netclass values."
-msgstr "ネットクラスの値を使用するため、値を０に設定"
+msgstr "ネットクラスの値を使用するため、値を０に設定します。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:228
-#, fuzzy
 msgid ""
 "This is the local net clearance for all pads of this footprint.\n"
 "If 0, the Netclass values are used.\n"
@@ -17243,11 +17334,11 @@ msgid ""
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
 "これはこのフットプリントの全てのパッドのローカル ネット クリアランスです。\n"
-"0ならば、ネットクラスの値が使用されます。\n"
-"パッドにローカル値がある場合、そちらが優先されます。"
+"0 した場合、ネットクラスの値が使用されます。\n"
+"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
+"各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:241
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder mask for \n"
 "this footprint.\n"
@@ -17255,12 +17346,13 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"これはフットプリントのパッドとハンダ マスク間のローカル クリアランスです。\n"
-"この値よりもパッドのローカル値が優先されます。\n"
-"０ならば、グローバル値が使用されます"
+"これはフットプリントのパッドとハンダ マスク間の\n"
+"ローカル クリアランスです。\n"
+"0 した場合、グローバル値が使用されます。\n"
+"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
+"各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:254
-#, fuzzy
 msgid ""
 "This is the local clearance between pads and the solder paste for\n"
 "this footprint.\n"
@@ -17270,14 +17362,15 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランスで"
+"これはフットプリントのパッドとハンダ ペースト間の\n"
+"ローカル クリアランスです。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
 "す。\n"
-"この値よりもパッドのローカル値が優先されます。\n"
-"最終的なクリアランス値はこの値とクリアランス率の合算です\n"
-"マイナス値ならば、パッド サイズよりも小さなマスクが使用されます"
+"負値の場合、パッド サイズよりも小さなマスクが使用されます。\n"
+"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
+"各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:267
-#, fuzzy
 msgid ""
 "This is the local clearance ratio in percent between pads and the\n"
 "solder paste for this footprint.\n"
@@ -17287,13 +17380,14 @@ msgid ""
 "This value can be overridden on a pad-by-pad basis in the Local\n"
 "Clearance and Settings tab of Pad Properties."
 msgstr ""
-"これはフットプリントのパッドとハンダ ペースト間のローカル クリアランス率を"
-"パーセント指定したものです。\n"
-"これが10のとき、クリアランスの値はパッドの10%になります。\n"
-"パッドにローカル値がある場合、そちらが優先されます。\n"
+"これはフットプリントのパッドとハンダ ペースト間のパーセント指定した\n"
+"ローカル クリアランス比率です。\n"
+"値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
 "最終的なクリアランスの値は、この値とクリアランス値を合算したものになりま"
 "す。\n"
-"負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
+"負値の場合、マスクのサイズはパッドのサイズより小さくなります。\n"
+"この値は、パッド プロパティの\"ローカル クリアランスと設定\"タブにある\n"
+"各パッドの設定値で置き換えられます。"
 
 #: pcbnew/dialogs/dialog_enum_pads_base.cpp:19
 msgid "Pad names are restricted to 4 characters (including number)."
@@ -19271,7 +19365,7 @@ msgstr "E.C.O.2"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:381
 msgid "Set values to 0 to use parent footprint or netclass values."
-msgstr "親フットプリントまたはネットクラスの値を使用するため、値を０に設定"
+msgstr "親フットプリントまたはネットクラスの値を使用するため、値を 0 に設定。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:407
 msgid ""
@@ -19279,15 +19373,15 @@ msgid ""
 "If 0, the footprint local value or the Netclass value is used."
 msgstr ""
 "これはこのパッドについてのローカル ネット クリアランスです。\n"
-"0とした場合、フットプリントのローカル値かネットクラスの値が使用されます。"
+"0 とした場合、フットプリントのローカル値かネットクラスの値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:420
 msgid ""
 "This is the local clearance between this pad and the solder mask.\n"
 "If 0, the footprint local value or the global value is used."
 msgstr ""
-"これはこのパッドとハンダ マスク間のローカル クリアランスです\n"
-"０とした場合、フットプリントのローカル値かグローバル値が使用されます。"
+"これはこのパッドとハンダ マスク間のローカル クリアランスです。\n"
+"0 とした場合、フットプリントのローカル値かグローバル値が使用されます。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:433
 msgid ""
@@ -19297,10 +19391,10 @@ msgid ""
 "ratio.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"これはこのパッドとハンダ ペースト間のローカル クリアランスです\n"
-"０とした場合、フットプリントの値かグローバル値が使用されます。\n"
-"最終的なクリアランス値はこの値とクリアランス率の合算となります。\n"
-"負値の場合、マスクのサイズはパッドのサイズより小さくなります"
+"これはこのパッドとハンダ ペースト間のローカル クリアランスです。\n"
+"0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
+"最終的なクリアランス値はこの値とクリアランス比率を合算したものになります。\n"
+"負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:446
 msgid ""
@@ -19311,13 +19405,13 @@ msgid ""
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
 msgstr ""
-"これはこのパッドとハンダ ペースト間のローカル クリアランス率をパーセント指定"
-"したものです。\n"
-"10のとき、クリアランスの値はパッド サイズの10%になります。\n"
-"０とした場合、フットプリントの値かグローバル値が使用されます。\n"
+"これはこのパッドとハンダ ペースト間のローカル クリアランス比率をパーセント指"
+"定したものです。\n"
+"値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
+"0 とした場合、フットプリントの値かグローバル値が使用されます。\n"
 "最終的なクリアランスの値は、この値とクリアランス値を合算したものになりま"
 "す。\n"
-"負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
+"負値の場合、マスクのサイズはパッドのサイズより小さくなります。"
 
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:513
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:562
@@ -21404,7 +21498,7 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad."
 msgstr ""
 "これはパッドとハンダ マスク間のグローバル クリアランスです。\n"
-"フットプリントやパッドにローカル値がある場合、そちらが優先されます。"
+"この値は、フットプリントやパッドのローカル値で置き換えられます。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:57
 msgid "Solder mask minimum width:"
@@ -21428,11 +21522,11 @@ msgid ""
 "ratio"
 msgstr ""
 "これはパッドとハンダ ペースト間のグローバル クリアランスです。\n"
-"フットプリントまたはパッドにローカル値がある場合、そちらが優先されます。\n"
-"最終的なクリアランスの値は、この値とクリアランス率の合算となります"
+"この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
+"最終的なクリアランスの値は、この値とクリアランス比率を合算したものになりま"
+"す。"
 
 #: pcbnew/dialogs/panel_setup_mask_and_paste_base.cpp:94
-#, fuzzy
 msgid ""
 "This is the global clearance ratio in percent between pads and the solder "
 "paste\n"
@@ -21440,10 +21534,11 @@ msgid ""
 "This value can be superseded by local values for a footprint or a pad.\n"
 "The final clearance value is the sum of this value and the clearance value"
 msgstr ""
-"これはパッドとハンダ ペースト間の寸法比 (％表記) です。\n"
-"10 とした場合、寸法比はパッド サイズの10%となります。\n"
-"フットプリントやパッドにローカル値がある場合、そちらが優先されます。\n"
-"最終的な値はこの値とローカル値の合算となります"
+"これはパッドとハンダ ペースト間のパーセント指定したグローバル クリアランス比"
+"率です。\n"
+"値 10 は、クリアランスの値がパッド サイズの10%であることを意味します。\n"
+"この値は、フットプリントやパッドのローカル値で置き換えられます。\n"
+"最終的なクリアランスの値は、この値とクリアランス値を合算したものになります。"
 
 #: pcbnew/dialogs/panel_setup_netclasses.cpp:281
 msgid "Netclass must have a name."
@@ -24435,14 +24530,12 @@ msgid "Shape has no points!"
 msgstr "形状に点がありません！"
 
 #: pcbnew/microwave.cpp:707
-#, fuzzy
 msgid "No pad for this footprint."
-msgstr "このフットプリントにはパッドがありません"
+msgstr "このフットプリントにはパッドがありません。"
 
 #: pcbnew/microwave.cpp:715
-#, fuzzy
 msgid "Only one pad for this footprint."
-msgstr "このフットプリントには1つだけパッドがあります"
+msgstr "このフットプリントにはパッドが1つだけです。"
 
 #: pcbnew/microwave.cpp:726
 msgid "Gap:"
@@ -24645,7 +24738,7 @@ msgstr "フットプリントのドキュメントを見る"
 
 #: pcbnew/onrightclick.cpp:425 pcbnew/onrightclick.cpp:748
 #: pcbnew/onrightclick.cpp:942 pcbnew/tools/edit_tool.cpp:119
-#: pcbnew/tools/edit_tool.cpp:869
+#: pcbnew/tools/edit_tool.cpp:869 qa/qa_utils/mocks.cpp:276
 msgid "Flip"
 msgstr "裏返す"
 
@@ -26335,15 +26428,15 @@ msgstr "数値を指定して選択中のアイテムを移動"
 msgid "Create array"
 msgstr "配列を作成"
 
-#: pcbnew/tools/edit_tool.cpp:109
+#: pcbnew/tools/edit_tool.cpp:109 qa/qa_utils/mocks.cpp:324
 msgid "Rotates selected item(s) clockwise"
 msgstr "選択したアイテムを右回転"
 
-#: pcbnew/tools/edit_tool.cpp:114
+#: pcbnew/tools/edit_tool.cpp:114 qa/qa_utils/mocks.cpp:329
 msgid "Rotates selected item(s) counterclockwise"
 msgstr "選択したアイテムを左回転"
 
-#: pcbnew/tools/edit_tool.cpp:119
+#: pcbnew/tools/edit_tool.cpp:119 qa/qa_utils/mocks.cpp:276
 msgid "Flips selected item(s)"
 msgstr "選択したアイテムを反転"
 
@@ -26367,11 +26460,11 @@ msgstr "ライブラリーからフットプリントを更新"
 msgid "Assign a different footprint from the library"
 msgstr "ライブラリーから別のフットプリントを割り付け"
 
-#: pcbnew/tools/edit_tool.cpp:147
+#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
 msgid "Properties..."
 msgstr "プロパティ..."
 
-#: pcbnew/tools/edit_tool.cpp:147
+#: pcbnew/tools/edit_tool.cpp:147 qa/qa_utils/mocks.cpp:281
 msgid "Displays item properties dialog"
 msgstr "プロパティダイアログにアイテムを表示"
 
@@ -26623,7 +26716,7 @@ msgstr "クリップボードから内容を貼り付け"
 msgid "Invalid clipboard contents"
 msgstr "不正なクリップボードのデータ"
 
-#: pcbnew/tools/pcbnew_control.cpp:951
+#: pcbnew/tools/pcbnew_control.cpp:951 qa/qa_utils/pcb_test_frame.cpp:152
 #, c-format
 msgid ""
 "Error loading board.\n"
@@ -26992,65 +27085,380 @@ msgstr "%d ゾーンを再塗り潰し"
 msgid "Checking Zones"
 msgstr "ゾーンをチェック中"
 
+#: plugins/3d/vrml/vrml.cpp:191
+msgid " * [INFO] load failed: input line too long\n"
+msgstr " * [INFO] ロードに失敗しました: 入力行が長すぎます\n"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:104
+msgid "incompatible plugin (missing function 'GetNExtensions')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetNExtensions' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:117
+msgid "incompatible plugin (missing function 'GetModelExtension')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetModelExtension' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:126
+msgid "missing function 'GetModelExtension'"
+msgstr "ファンクション 'GetModelExtension' が見つかりません"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:138
+msgid "incompatible plugin (missing function 'GetNFilters')"
+msgstr "互換性のないプラグイン (ファンクション 'GetNFilters' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:147
+msgid "missing function 'GetNFilters'"
+msgstr "ファンクション 'GetNFilters' が見つかりません"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:159
+msgid "incompatible plugin (missing function 'GetFileFilter')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetFileFilter' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:168
+msgid "missing function 'GetFileFilter'"
+msgstr "ファンクション 'GetFileFilter' が見つかりません"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:180
+msgid "incompatible plugin (missing function 'CanRender')"
+msgstr "互換性のないプラグイン (ファンクション 'CanRender' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:189
+msgid "missing function 'CanRender'"
+msgstr "ファンクション 'CanRender' が見つかりません"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:201
+msgid "incompatible plugin (missing function 'Load')"
+msgstr "互換性のないプラグイン (ファンクション 'Load' が見つかりません)"
+
+#: plugins/ldr/3d/pluginldr3D.cpp:209
+msgid "missing function 'Load'"
+msgstr "ファンクション 'Load' が見つかりません"
+
+#: plugins/ldr/pluginldr.cpp:92
+msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetKicadPluginClass' が見つかりませ"
+"ん)"
+
+#: plugins/ldr/pluginldr.cpp:105
+msgid "incompatible plugin (missing function 'GetClassVersion')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetClassVersion' が見つかりません)"
+
+#: plugins/ldr/pluginldr.cpp:114
+msgid "missing function 'GetClassVersion'"
+msgstr "ファンクション 'GetClassVersion' が見つかりません"
+
+#: plugins/ldr/pluginldr.cpp:126
+msgid "incompatible plugin (missing function 'CheckClassVersion')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'CheckClassVersion' が見つかりません)"
+
+#: plugins/ldr/pluginldr.cpp:135
+msgid "missing function 'CheckClassVersion'"
+msgstr "ファンクション 'CheckClassVersion' が見つかりません"
+
+#: plugins/ldr/pluginldr.cpp:147
+msgid "incompatible plugin (missing function 'GetKicadPluginName')"
+msgstr ""
+"互換性のないプラグイン (ファンクション 'GetKicadPluginName' が見つかりません)"
+
+#: plugins/ldr/pluginldr.cpp:156
+msgid "missing function 'GetKicadPluginName'"
+msgstr "ファンクション 'GetKicadPluginName' が見つかりません"
+
+#: plugins/ldr/pluginldr.cpp:168
+msgid "incompatible plugin (missing function 'GetVersion')"
+msgstr "互換性のないプラグイン (ファンクション 'GetVersion' が見つかりません)"
+
+#: plugins/ldr/pluginldr.cpp:176
+msgid "missing function 'GetVersion'"
+msgstr "ファンクション 'GetVersion' が見つかりません"
+
+#: qa/common_tools/tools/coroutines/coroutines.cpp:91
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:216
+#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:87
+msgid "displays help on the command line parameters"
+msgstr "コマンド ライン パラメーターのヘルプを表示"
+
+#: qa/common_tools/tools/coroutines/coroutines.cpp:99
+msgid "how high to count"
+msgstr "カウントする高さ"
+
+#: qa/common_tools/tools/coroutines/coroutines.cpp:111
+msgid "Test a simple coroutine that yields a given number of times"
+msgstr "フィールドで与えられた回数だけ単純なコルーチンをテストする"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:224
+#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:89
+msgid "print parsing information"
+msgstr "構文解析情報をプリント"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:230
+msgid "print DRC timings"
+msgstr "DRC タイミングを印刷"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:236
+msgid "print DRC marker information"
+msgstr "DRC マーカー情報を印刷"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:242
+msgid "perform all available DRC checks"
+msgstr "有効な DRC チェックを全て実行"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:248
+msgid "perform courtyard-overlap (and malformation) checking"
+msgstr "コートヤードの重複 (と異常) チェックを実行"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:254
+msgid "perform courtyard-missing checking"
+msgstr "コートヤードの欠落チェックを実行"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:260
+#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:90
+msgid "input file"
+msgstr "入力ファイル"
+
+#: qa/pcbnew_tools/tools/drc_tool/drc_tool.cpp:286
+msgid ""
+"This program runs DRC tools on given PCB files. This can be used for "
+"debugging, fuzz testing or development, etc."
+msgstr ""
+"このプログラムは与えられた基板上で DRC ツールを実行します。これはデバッグ、"
+"ファジー テストや開発などに使用することができます。"
+
+#: qa/pcbnew_tools/tools/pcb_parser/pcb_parser_tool.cpp:112
+msgid ""
+"This program parses PCB files, either from the stdin stream or from the "
+"given filenames. This can be used either for standalone testing of the "
+"parser or for fuzz testing."
+msgstr ""
+"このプログラムは stdin ストリームまたは事前に与えられた名前の PCB ファイルを"
+"構文解析します。これは構文解析の単体テストまたはファジー テストに使用できま"
+"す。"
+
+#: resources/linux/appdata/kicad.appdata.xml:6
+#: resources/linux/mime/applications/kicad.desktop:10
+msgid "KiCad"
+msgstr "KiCad"
+
+#: resources/linux/appdata/kicad.appdata.xml:9
+#: resources/linux/mime/applications/kicad.desktop:11
+msgid "EDA Suite"
+msgstr "EDA Suite"
+
+#: resources/linux/appdata/kicad.appdata.xml:10
+msgid "EDA Lösung"
+msgstr "EDA Lösung"
+
+#: resources/linux/appdata/kicad.appdata.xml:11
+msgid "Suite EDA"
+msgstr "Suite EDA"
+
+#: resources/linux/appdata/kicad.appdata.xml:12
+msgid "EDA Programpaket"
+msgstr "EDA Programpaket"
+
+#: resources/linux/appdata/kicad.appdata.xml:24
+msgid ""
+"A Cross Platform and Open Source Electronics Design Automation Suite. The "
+"programs handle Schematic Capture, and PCB Layout with Gerber output."
+msgstr ""
+"クロス プラットホームでオープン ソースな設計自動化支援ツール。このプログラム"
+"は、回路図の作成と基板レイアウトのガーバー出力を扱います。"
+
+#: resources/linux/appdata/kicad.appdata.xml:28
+msgid ""
+"KiCad ist eine Plattform übergreifende freie Software Lösung für "
+"Elektronische Design-Automation (EDA). KiCad enthält Programme zum "
+"Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten "
+"als auch zum Export von Leiterplatten, z.B. per Gerber Format."
+msgstr ""
+"KiCad ist eine Plattform übergreifende freie Software Lösung für "
+"Elektronische Design-Automation (EDA). KiCad enthält Programme zum "
+"Entwickeln und Bearbeiten von elektronischen Schaltplänen und Leiterplatten "
+"als auch zum Export von Leiterplatten, z.B. per Gerber Format."
+
+#: resources/linux/appdata/kicad.appdata.xml:34
+msgid ""
+"KiCad è una soluzione software EDA (Electronic Design Automation) gratuita e "
+"multipiattaforma. Contiene programmi per lo sviluppo e la modifica di schemi "
+"elettrici e circuiti stampati esportabili in formato Gerber."
+msgstr ""
+"KiCad è una soluzione software EDA (Electronic Design Automation) gratuita e "
+"multipiattaforma. Contiene programmi per lo sviluppo e la modifica di schemi "
+"elettrici e circuiti stampati esportabili in formato Gerber."
+
+#: resources/linux/appdata/kicad.appdata.xml:39
+msgid ""
+"KiCad är ett plattformslös och öppen källkods programpaket för elektronisk "
+"design automatisering. KiCad innehåller program för utveckling och "
+"redigering av kretsscheman och tryckta kretskort samt för export av "
+"kretskort, t.ex. med Gerber-format."
+msgstr ""
+"KiCad är ett plattformslös och öppen källkods programpaket för elektronisk "
+"design automatisering. KiCad innehåller program för utveckling och "
+"redigering av kretsscheman och tryckta kretskort samt för export av "
+"kretskort, t.ex. med Gerber-format."
+
+#: resources/linux/appdata/kicad.appdata.xml:53
+msgid "Eeschema Schematic Editor"
+msgstr "Eeschema 回路図エディター"
+
+#: resources/linux/appdata/kicad.appdata.xml:58
+msgid "PcbNew PCB Layout"
+msgstr "PcbNew 基板レイアウト"
+
+#: resources/linux/appdata/kicad.appdata.xml:63
+msgid "PcbNew 3D Viewer"
+msgstr "PcbNew 3D ビューアー"
+
+#: resources/linux/mime/applications/bitmap2component.desktop:5
+msgid "bitmap2component"
+msgstr "bitmap2component"
+
+#: resources/linux/mime/applications/bitmap2component.desktop:12
+msgid "Create a component from a bitmap for use with KiCad"
+msgstr "bitmap から KiCad 用コンポーネントを作成"
+
+#: resources/linux/mime/applications/eeschema.desktop:5
+msgid "eeschema"
+msgstr "eeschema"
+
+#: resources/linux/mime/applications/eeschema.desktop:10
+msgid "Eeschema (Standalone)"
+msgstr "Eeschema (スタンドアロン)"
+
+#: resources/linux/mime/applications/eeschema.desktop:11
+msgid "Electronic schematic capture"
+msgstr "回路図入力"
+
+#: resources/linux/mime/applications/eeschema.desktop:14
+msgid "KiCad electronic schematic design (standalone)"
+msgstr "KiCad 回路図設計 (スタンドアロン)"
+
+#: resources/linux/mime/applications/gerbview.desktop:5
+msgid "gerbview"
+msgstr "gerbview"
+
+#: resources/linux/mime/applications/gerbview.desktop:11
+msgid "Gerber File Viewer"
+msgstr "ガーバー ファイル ビューアー"
+
+#: resources/linux/mime/applications/gerbview.desktop:13
+msgid "View Gerber files"
+msgstr "ガーバー ファイルの閲覧"
+
+#: resources/linux/mime/applications/kicad.desktop:5
+msgid "kicad"
+msgstr "kicad"
+
+#: resources/linux/mime/applications/kicad.desktop:13
+msgid "Electronic Design Automation suite"
+msgstr "回路設計自動化 (EDA) ツール"
+
+#: resources/linux/mime/applications/pcbcalculator.desktop:5
+msgid "pcbcalculator"
+msgstr "pcbcalculator"
+
+#: resources/linux/mime/applications/pcbcalculator.desktop:11
+msgid "Calculator for various electronics-related computations"
+msgstr "様々な電気関係の計算用ツール"
+
+#: resources/linux/mime/applications/pcbnew.desktop:5
+msgid "pcbnew"
+msgstr "pcbnew"
+
+#: resources/linux/mime/applications/pcbnew.desktop:10
+msgid "Pcbnew (Standalone)"
+msgstr "Pcbnew (スタンドアロン)"
+
+#: resources/linux/mime/applications/pcbnew.desktop:11
+msgid "PCB layout"
+msgstr "プリント基板レイアウト"
+
+#: resources/linux/mime/applications/pcbnew.desktop:13
+msgid "KiCad printed circuit board layout (standalone)"
+msgstr "KiCad プリント基板レイアウト (スタンドアロン)"
+
+#: utils/kicad2step/kicad2step.cpp:65
+msgid "pcb_filename"
+msgstr "pcb_filename"
+
+#: utils/kicad2step/kicad2step.cpp:67
+msgid "output filename"
+msgstr "出力ファイル名"
+
+#: utils/kicad2step/kicad2step.cpp:70
+msgid "IGES output (default STEP)"
+msgstr "IGES 出力 (デフォルトは STEP)"
+
+#: utils/kicad2step/kicad2step.cpp:73
+msgid "overwrite output file"
+msgstr "出力ファイルで上書き"
+
+#: utils/kicad2step/kicad2step.cpp:75
+msgid "Use Drill Origin for output origin"
+msgstr "出力の原点にドリル原点を使用"
+
+#: utils/kicad2step/kicad2step.cpp:77
+msgid "Use Grid Origin for output origin"
+msgstr "出力の原点にグリッド原点を使用"
+
+#: utils/kicad2step/kicad2step.cpp:80
+msgid ""
+"User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
+msgstr ""
+"ユーザー定義の出力原点　例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
+
+#: utils/kicad2step/kicad2step.cpp:83
+msgid "exclude 3D models for components with 'virtual' attribute"
+msgstr "\"仮想 (virtual)\" 属性を持つコンポーネントの 3D モデルを除く"
+
+#: utils/kicad2step/kicad2step.cpp:86
+msgid ""
+"Minimum distance between points to treat them as separate ones (default 0.01 "
+"mm)"
+msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
+
+#: utils/kicad2step/kicad2step.cpp:88
+msgid "display this message"
+msgstr "このメッセージを表示"
+
+#: utils/kicad2step/pcb/3d_resolver.cpp:732
+msgid ""
+"3D search path list is empty;\n"
+"continue to write empty file?"
+msgstr ""
+"3D 検索パス リストが空です;\n"
+"空ファイルを書き込んで続行しますか?"
+
 #~ msgid "\""
 #~ msgstr "\""
+
+#~ msgid ""
+#~ "If  some components are orphan (the linked symbol is found nowhere),\n"
+#~ "try to find a candidate having the same name in one of loaded symbol "
+#~ "libraries"
+#~ msgstr ""
+#~ "コンポーネントが孤立 (接続されたシンボルが見つからない) している場合、\n"
+#~ "ロードされたシンボル ライブラリー内にある同じ名前を持つ候補の検索を試みま"
+#~ "す"
 
 #~ msgid "Symbol &name:"
 #~ msgstr "シンボル名 (&n):"
 
-#~ msgid "part \"%s\" not found in lib %s"
-#~ msgstr "パーツ \"%s\" はライブラリー %s 中に見つかりませんでした"
+#~ msgid ""
+#~ "Default pad connection type to zone.\n"
+#~ "This setting can be overridden by local  pad settings"
+#~ msgstr ""
+#~ "デフォルトのパッド接続タイプはゾーンです。\n"
+#~ "この設定はローカル パッド設定で上書きできます"
 
-#~ msgid "Illegal character found in LPID string"
-#~ msgstr "FPID文字列中に不正な文字があります"
-
-#~ msgid "Illegal character found in logical lib name"
-#~ msgstr "論理的なライブラリー名の中に不正な文字があります"
-
-#~ msgid "Illegal character found in category"
-#~ msgstr "カテゴリに不正な文字があります"
-
-#~ msgid "Illegal character found in base name"
-#~ msgstr "ベース名に不正な文字があります"
-
-#~ msgid "invalid extends LPID"
-#~ msgstr "不正な拡張 LPID"
-
-#~ msgid "'extends' may not have self as any ancestor"
-#~ msgstr "\"extends\" はいかなる先祖も持っていないようです"
-
-#~ msgid "max allowed extends depth exceeded"
-#~ msgstr "深度が超過しています"
-
-#~ msgid "invalid alternates LPID"
-#~ msgstr "不正な代替 LPID"
-
-#~ msgid "undefined pin"
-#~ msgstr "未定義のピン"
-
-#~ msgid "undefined pin %s"
-#~ msgstr "未定義のピン %s"
-
-#~ msgid "pin %s already in pin_merge group %s"
-#~ msgstr "ピン %s は既にピン グループ %s に存在します"
-
-#~ msgid "no pins with signal %s"
-#~ msgstr "信号 %s のピンがありません"
-
-#~ msgid "signal pin %s already in pin_merge group %s"
-#~ msgstr "信号ピン %s は既にピン グループ %s に存在します"
-
-#~ msgid "Unable to find property: %s"
-#~ msgstr "プロパティが見つかりませんでした: %s"
-
-#~ msgid "Sweet"
-#~ msgstr "Sweet"
-
-#~ msgid "Visual Part"
-#~ msgstr "可視部分"
-
-#~ msgid "Parsing Errors"
-#~ msgstr "構文エラー"
+#~ msgid "Clearance between pads in the same net and filled areas."
+#~ msgstr "同一ネット内のパッドと塗り潰しエリアのクリアランス。"
 
 #~ msgid ""
 #~ "This is the local clearance between pads and the solder mask\n"
@@ -27096,286 +27504,23 @@ msgstr "ゾーンをチェック中"
 #~ "す。\n"
 #~ "負値が指定された場合、マスクのサイズはパッドのサイズより小さくなります。"
 
-#~ msgid " * [INFO] load failed: input line too long\n"
-#~ msgstr " * [INFO] ロードに失敗しました: 入力行が長すぎます\n"
-
-#~ msgid "incompatible plugin (missing function 'GetNExtensions')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetNExtensions' が見つかりません)"
-
-#~ msgid "incompatible plugin (missing function 'GetModelExtension')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetModelExtension' が見つかりませ"
-#~ "ん)"
-
-#~ msgid "missing function 'GetModelExtension'"
-#~ msgstr "ファンクション 'GetModelExtension' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'GetNFilters')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetNFilters' が見つかりません)"
-
-#~ msgid "missing function 'GetNFilters'"
-#~ msgstr "ファンクション 'GetNFilters' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'GetFileFilter')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetFileFilter' が見つかりません)"
-
-#~ msgid "missing function 'GetFileFilter'"
-#~ msgstr "ファンクション 'GetFileFilter' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'CanRender')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'CanRender' が見つかりません)"
-
-#~ msgid "missing function 'CanRender'"
-#~ msgstr "ファンクション 'CanRender' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'Load')"
-#~ msgstr "互換性のないプラグイン (ファンクション 'Load' が見つかりません)"
-
-#~ msgid "missing function 'Load'"
-#~ msgstr "ファンクション 'Load' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'GetKicadPluginClass')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetKicadPluginClass' が見つかりま"
-#~ "せん)"
-
-#~ msgid "incompatible plugin (missing function 'GetClassVersion')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetClassVersion' が見つかりません)"
-
-#~ msgid "missing function 'GetClassVersion'"
-#~ msgstr "ファンクション 'GetClassVersion' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'CheckClassVersion')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'CheckClassVersion' が見つかりませ"
-#~ "ん)"
-
-#~ msgid "missing function 'CheckClassVersion'"
-#~ msgstr "ファンクション 'CheckClassVersion' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'GetKicadPluginName')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetKicadPluginName' が見つかりませ"
-#~ "ん)"
-
-#~ msgid "missing function 'GetKicadPluginName'"
-#~ msgstr "ファンクション 'GetKicadPluginName' が見つかりません"
-
-#~ msgid "incompatible plugin (missing function 'GetVersion')"
-#~ msgstr ""
-#~ "互換性のないプラグイン (ファンクション 'GetVersion' が見つかりません)"
-
-#~ msgid "missing function 'GetVersion'"
-#~ msgstr "ファンクション 'GetVersion' が見つかりません"
-
-#~ msgid "displays help on the command line parameters"
-#~ msgstr "コマンド ライン パラメーターのヘルプを表示"
-
-#~ msgid "how high to count"
-#~ msgstr "カウントする高さ"
-
-#~ msgid "Test a simple coroutine that yields a given number of times"
-#~ msgstr "フィールドで与えられた回数だけ単純なコルーチンをテストする"
-
-#~ msgid "print parsing information"
-#~ msgstr "構文解析情報をプリント"
-
-#~ msgid "print DRC timings"
-#~ msgstr "DRC タイミングを印刷"
-
-#~ msgid "print DRC marker information"
-#~ msgstr "DRC マーカー情報を印刷"
-
-#~ msgid "perform all available DRC checks"
-#~ msgstr "有効な DRC チェックを全て実行"
-
-#~ msgid "perform courtyard-overlap (and malformation) checking"
-#~ msgstr "コートヤードの重複 (と異常) チェックを実行"
-
-#~ msgid "perform courtyard-missing checking"
-#~ msgstr "コートヤードの欠落チェックを実行"
-
-#~ msgid "input file"
-#~ msgstr "入力ファイル"
-
 #~ msgid ""
-#~ "This program runs DRC tools on given PCB files. This can be used for "
-#~ "debugging, fuzz testing or development, etc."
+#~ "This is the global clearance ratio in per cent between pads and the "
+#~ "solder paste\n"
+#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
+#~ "This value can be superseded by local values for a footprint or a pad.\n"
+#~ "The final clearance value is the sum of this value and the clearance value"
 #~ msgstr ""
-#~ "このプログラムは与えられた基板上で DRC ツールを実行します。これはデバッ"
-#~ "グ、ファジー テストや開発などに使用することができます。"
+#~ "これはパッドとハンダ ペースト間の寸法比 (％表記) です。\n"
+#~ "10 とした場合、寸法比はパッド サイズの10%となります。\n"
+#~ "フットプリントやパッドにローカル値がある場合、そちらが優先されます。\n"
+#~ "最終的な値はこの値とローカル値の合算となります"
 
-#~ msgid ""
-#~ "This program parses PCB files, either from the stdin stream or from the "
-#~ "given filenames. This can be used either for standalone testing of the "
-#~ "parser or for fuzz testing."
-#~ msgstr ""
-#~ "このプログラムは stdin ストリームまたは事前に与えられた名前の PCB ファイル"
-#~ "を構文解析します。これは構文解析の単体テストまたはファジー テストに使用で"
-#~ "きます。"
+#~ msgid "No pad for this footprint"
+#~ msgstr "このフットプリントにはパッドがありません"
 
-#~ msgid "KiCad"
-#~ msgstr "KiCad"
-
-#~ msgid "EDA Suite"
-#~ msgstr "EDA Suite"
-
-#~ msgid "EDA Lösung"
-#~ msgstr "EDA Lösung"
-
-#~ msgid "Suite EDA"
-#~ msgstr "Suite EDA"
-
-#~ msgid "EDA Programpaket"
-#~ msgstr "EDA Programpaket"
-
-#~ msgid ""
-#~ "A Cross Platform and Open Source Electronics Design Automation Suite. The "
-#~ "programs handle Schematic Capture, and PCB Layout with Gerber output."
-#~ msgstr ""
-#~ "クロス プラットホームでオープン ソースな設計自動化支援ツール。このプログラ"
-#~ "ムは、回路図の作成と基板レイアウトのガーバー出力を扱います。"
-
-#~ msgid ""
-#~ "KiCad ist eine Plattform übergreifende freie Software Lösung für "
-#~ "Elektronische Design-Automation (EDA). KiCad enthält Programme zum "
-#~ "Entwickeln und Bearbeiten von elektronischen Schaltplänen und "
-#~ "Leiterplatten als auch zum Export von Leiterplatten, z.B. per Gerber "
-#~ "Format."
-#~ msgstr ""
-#~ "KiCad ist eine Plattform übergreifende freie Software Lösung für "
-#~ "Elektronische Design-Automation (EDA). KiCad enthält Programme zum "
-#~ "Entwickeln und Bearbeiten von elektronischen Schaltplänen und "
-#~ "Leiterplatten als auch zum Export von Leiterplatten, z.B. per Gerber "
-#~ "Format."
-
-#~ msgid ""
-#~ "KiCad è una soluzione software EDA (Electronic Design Automation) "
-#~ "gratuita e multipiattaforma. Contiene programmi per lo sviluppo e la "
-#~ "modifica di schemi elettrici e circuiti stampati esportabili in formato "
-#~ "Gerber."
-#~ msgstr ""
-#~ "KiCad è una soluzione software EDA (Electronic Design Automation) "
-#~ "gratuita e multipiattaforma. Contiene programmi per lo sviluppo e la "
-#~ "modifica di schemi elettrici e circuiti stampati esportabili in formato "
-#~ "Gerber."
-
-#~ msgid ""
-#~ "KiCad är ett plattformslös och öppen källkods programpaket för "
-#~ "elektronisk design automatisering. KiCad innehåller program för "
-#~ "utveckling och redigering av kretsscheman och tryckta kretskort samt för "
-#~ "export av kretskort, t.ex. med Gerber-format."
-#~ msgstr ""
-#~ "KiCad är ett plattformslös och öppen källkods programpaket för "
-#~ "elektronisk design automatisering. KiCad innehåller program för "
-#~ "utveckling och redigering av kretsscheman och tryckta kretskort samt för "
-#~ "export av kretskort, t.ex. med Gerber-format."
-
-#~ msgid "Eeschema Schematic Editor"
-#~ msgstr "Eeschema 回路図エディター"
-
-#~ msgid "PcbNew PCB Layout"
-#~ msgstr "PcbNew 基板レイアウト"
-
-#~ msgid "PcbNew 3D Viewer"
-#~ msgstr "PcbNew 3D ビューアー"
-
-#~ msgid "bitmap2component"
-#~ msgstr "bitmap2component"
-
-#~ msgid "Create a component from a bitmap for use with KiCad"
-#~ msgstr "bitmap から KiCad 用コンポーネントを作成"
-
-#~ msgid "eeschema"
-#~ msgstr "eeschema"
-
-#~ msgid "Eeschema (Standalone)"
-#~ msgstr "Eeschema (スタンドアロン)"
-
-#~ msgid "Electronic schematic capture"
-#~ msgstr "回路図入力"
-
-#~ msgid "KiCad electronic schematic design (standalone)"
-#~ msgstr "KiCad 回路図設計 (スタンドアロン)"
-
-#~ msgid "gerbview"
-#~ msgstr "gerbview"
-
-#~ msgid "Gerber File Viewer"
-#~ msgstr "ガーバー ファイル ビューアー"
-
-#~ msgid "View Gerber files"
-#~ msgstr "ガーバー ファイルの閲覧"
-
-#~ msgid "kicad"
-#~ msgstr "kicad"
-
-#~ msgid "Electronic Design Automation suite"
-#~ msgstr "回路設計自動化 (EDA) ツール"
-
-#~ msgid "pcbcalculator"
-#~ msgstr "pcbcalculator"
-
-#~ msgid "Calculator for various electronics-related computations"
-#~ msgstr "様々な電気関係の計算用ツール"
-
-#~ msgid "pcbnew"
-#~ msgstr "pcbnew"
-
-#~ msgid "Pcbnew (Standalone)"
-#~ msgstr "Pcbnew (スタンドアロン)"
-
-#~ msgid "PCB layout"
-#~ msgstr "プリント基板レイアウト"
-
-#~ msgid "KiCad printed circuit board layout (standalone)"
-#~ msgstr "KiCad プリント基板レイアウト (スタンドアロン)"
-
-#~ msgid "pcb_filename"
-#~ msgstr "pcb_filename"
-
-#~ msgid "output filename"
-#~ msgstr "出力ファイル名"
-
-#~ msgid "IGES output (default STEP)"
-#~ msgstr "IGES 出力 (デフォルトは STEP)"
-
-#~ msgid "overwrite output file"
-#~ msgstr "出力ファイルで上書き"
-
-#~ msgid "Use Drill Origin for output origin"
-#~ msgstr "出力の原点にドリル原点を使用"
-
-#~ msgid "Use Grid Origin for output origin"
-#~ msgstr "出力の原点にグリッド原点を使用"
-
-#~ msgid ""
-#~ "User-specified output origin ex. 1x1in, 1x1inch, 25.4x25.4mm (default mm)"
-#~ msgstr ""
-#~ "ユーザー定義の出力原点　例: 1x1in, 1x1inch, 25.4x25.4mm (デフォルトは mm)"
-
-#~ msgid "exclude 3D models for components with 'virtual' attribute"
-#~ msgstr "\"仮想 (virtual)\" 属性を持つコンポーネントの 3D モデルを除く"
-
-#~ msgid ""
-#~ "Minimum distance between points to treat them as separate ones (default "
-#~ "0.01 mm)"
-#~ msgstr "分離した点として扱う最小間隔 (デフォルトは 0.01mm)"
-
-#~ msgid "display this message"
-#~ msgstr "このメッセージを表示"
-
-#~ msgid ""
-#~ "3D search path list is empty;\n"
-#~ "continue to write empty file?"
-#~ msgstr ""
-#~ "3D 検索パス リストが空です;\n"
-#~ "空ファイルを書き込んで続行しますか?"
+#~ msgid "Only one pad for this footprint"
+#~ msgstr "このフットプリントには1つだけパッドがあります"
 
 #~ msgid ""
 #~ "Grid size( %f, %f ) not in grid list, falling back to grid size( %f, %f )."
