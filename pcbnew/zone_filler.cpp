@@ -750,21 +750,18 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
     if( s_DumpZonesWhenFilling )
         dumper->Write( &solidAreas, "solid-areas-minus-holes" );
 
-    SHAPE_POLY_SET areas_fractured = solidAreas;
-    areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
-
-    if( s_DumpZonesWhenFilling )
-        dumper->Write( &areas_fractured, "areas_fractured" );
-
-    aFinalPolys = areas_fractured;
-
-    SHAPE_POLY_SET thermalHoles;
-
     // Test thermal stubs connections and add polygons to remove unconnected stubs.
     // (this is a refinement for thermal relief shapes)
+    // Note: we are using not fractured solid area polygons, to avoid a side effect of extra segments
+    // created by Fracture(): if a tested point used in buildUnconnectedThermalStubsPolygonList
+    // is on a extra segment, the tested point is seen outside the solid area, but it is inside.
+    // This is not a bug, just the fact when a point is on a polygon outline, it is hard to say
+    // if it is inside or outside the polygon.
+    SHAPE_POLY_SET thermalHoles;
+
     if( aZone->GetNetCode() > 0 )
     {
-        buildUnconnectedThermalStubsPolygonList( thermalHoles, aZone, aFinalPolys,
+        buildUnconnectedThermalStubsPolygonList( thermalHoles, aZone, solidAreas,
                 correctionFactor, s_thermalRot );
 
     }
@@ -789,6 +786,16 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
             dumper->Write( &th_fractured, "th_fractured" );
 
         aFinalPolys = th_fractured;
+    }
+    else
+    {
+        SHAPE_POLY_SET areas_fractured = solidAreas;
+        areas_fractured.Fracture( SHAPE_POLY_SET::PM_FAST );
+
+        if( s_DumpZonesWhenFilling )
+            dumper->Write( &areas_fractured, "areas_fractured" );
+
+        aFinalPolys = areas_fractured;
     }
 
     aRawPolys = aFinalPolys;
