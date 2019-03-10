@@ -279,10 +279,7 @@ protected:
         wxString filename = GetValue();
 
         if( !filename.IsEmpty() && filename != wxT( "~" ) )
-        {
-            wxString uri = ResolveUriByEnvVars( GetValue() );
-            GetAssociatedDocument( m_dlg, uri );
-        }
+            GetAssociatedDocument( m_dlg, GetValue() );
     }
 
     DIALOG_SHIM* m_dlg;

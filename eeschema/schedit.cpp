@@ -1033,7 +1033,6 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         case ID_POPUP_SCH_DISPLAYDOC_CMP:
         {
             wxString text = static_cast<SCH_COMPONENT*>( item )->GetField( DATASHEET )->GetText();
-            text = ResolveUriByEnvVars( text );
 
             if( !text.IsEmpty() )
                 GetAssociatedDocument( this, text );

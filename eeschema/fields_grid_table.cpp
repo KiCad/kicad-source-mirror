@@ -522,7 +522,6 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     else if (event.GetId() == MYID_SHOW_DATASHEET )
     {
         wxString datasheet_uri = m_grid->GetCellValue( DATASHEET, FDC_VALUE );
-        datasheet_uri = ResolveUriByEnvVars( datasheet_uri );
         GetAssociatedDocument( m_dlg, datasheet_uri );
     }
     else
