@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2019-02-19 08:56+0100\n"
+"PO-Revision-Date: 2019-03-10 13:09+0100\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski\n"
@@ -3499,7 +3499,6 @@ msgid "Always show crosshairs (not in Legacy)"
 msgstr "Zawsze pokazuj nitki celownicze (nie w trybie Legacy)"
 
 #: common/widgets/grid_text_button_helpers.cpp:335
-#, fuzzy
 msgid "Select a File"
 msgstr "Wybierz plik"
 
