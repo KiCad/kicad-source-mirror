@@ -73,6 +73,14 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         GRAPHICS_IMPORT_MGR::TYPE_LIST blacklist;
         // Currently: all types are allowed, so the blacklist is empty
         // (no GFX_FILE_T in the blacklist)
+        // To disable SVG import, enable these 2 lines
+        // if( !ADVANCED_CFG::GetCfg().m_enableSvgImport )
+        //    blacklist.push_back( GRAPHICS_IMPORT_MGR::SVG );
+        // The SVG import has currently a flaw:
+        // All SVG shapes are imported as curves and converted to a lot of segments.
+        // A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
+        // arcs and circles as primitives (not yet possible with tinysvg library).
+
         m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
     }
 

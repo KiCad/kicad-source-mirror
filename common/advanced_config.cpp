@@ -49,15 +49,12 @@ namespace AC_KEYS
 {
 
 /**
- * Currently (Version 5.1) SVG import is disabled by default, to avoid issues
  * SVG needs some enhancements.
  *
  * Especially, all SVG shapes are imported as curves and converted to a lot of segments.
  * A better approach is to convert to polylines (not yet existing in Pcbnew) and keep
  * arcs and circles as primitives (not yet possible with tinysvg library.
- * So, until these issues are solved, disable SVG import option.
- *
- * Warning: enable svg import is currently only for developers.
+ * So, until these issues are solved, keep disabling SVG import option available.
  */
 static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
 
