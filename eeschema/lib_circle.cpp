@@ -157,8 +157,14 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
-    aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-    aPlotter->Circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+    auto pen_size = GetPenSize();
+
+    if( !already_filled || pen_size > 0 )
+    {
+        pen_size = std::max( 0, pen_size );
+        aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
+        aPlotter->Circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+    }
 }
 
 
