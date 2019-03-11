@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,6 +105,16 @@ public:
     // But because it is derived from EDA_ITEM, returns a dummy bounding box
     // to avoid useless messages in debug mode
     const EDA_RECT GetBoundingBox() const override;
+
+    /**
+     * Returns a default bounding box for the alias.  This will be set to the full
+     * bounding size, ensuring that the alias is always drawn when it is used on screen.
+     *
+     * N.B. This is acceptable only because there is typically only a single LIB_ALIAS
+     * element being drawn (e.g. in the symbol browser)
+     * @return a maximum size view bounding box
+     */
+    virtual const BOX2I ViewBBox() const override;
 
     /**
      * Get the shared LIB_PART.
