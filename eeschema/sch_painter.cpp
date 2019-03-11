@@ -318,12 +318,18 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
         if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
             color = color.WithAlpha( 0.75 );
 
-        m_gal->SetIsStroke( true );
         m_gal->SetStrokeColor( color );
-        m_gal->SetLineWidth( aItem->GetPenSize() );
-
         m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
         m_gal->SetFillColor( color );
+
+        if( aItem->GetPenSize() > 0 )
+        {
+            m_gal->SetIsStroke( true );
+            m_gal->SetLineWidth( aItem->GetPenSize() );
+        }
+        else
+            m_gal->SetIsStroke( false );
+
         return true;
     }
 
