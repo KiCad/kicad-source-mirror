@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -152,8 +152,19 @@ const EDA_RECT LIB_ALIAS::GetBoundingBox() const
     // a LIB_ALIAS does not really have a bounding box.
     // return a 0 size rect.
     EDA_RECT dummy;
+
     return dummy;
 };
+
+
+const BOX2I LIB_ALIAS::ViewBBox() const
+{
+    // LIB_ALIAS may be displayed in preview windows, so ensure that it is always
+    // selected for drawing.
+    BOX2I bbox;
+    bbox.SetMaximum();
+    return bbox;
+}
 
 
 wxString LIB_ALIAS::GetSearchText()
