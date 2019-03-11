@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,6 +29,7 @@
  */
 
 #include <kicad_string.h>
+#include <confirm.h>
 #include <validators.h>
 
 #include <wx/grid.h>
@@ -217,6 +219,57 @@ void ENV_VAR_NAME_VALIDATOR::OnTextChanged( wxCommandEvent& event )
     }
 
     event.Skip();
+}
+
+
+bool REGEX_VALIDATOR::Validate( wxWindow* aParent )
+{
+    // If window is disabled, simply return
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const textEntry = GetTextEntry();
+
+    if( !textEntry )
+        return false;
+
+    bool valid = true;
+    const wxString& value = textEntry->GetValue();
+
+    if( m_regEx.Matches( value ) )
+    {
+        size_t start, len;
+        m_regEx.GetMatch( &start, &len );
+
+        if( start != 0 || len != value.Length() ) // whole string must match
+            valid = false;
+    }
+    else    // no match at all
+    {
+        valid = false;
+    }
+
+    if( !valid )
+    {
+        m_validatorWindow->SetFocus();
+        DisplayError( aParent, wxString::Format( _( "Incorrect value: %s" ), value ) );
+        return false;
+    }
+
+    return true;
+}
+
+
+void REGEX_VALIDATOR::compileRegEx( const wxString& aRegEx, int aFlags )
+{
+    if( !m_regEx.Compile( aRegEx, aFlags ) )
+    {
+        throw std::runtime_error( "REGEX_VALIDATOR: Invalid regular expression: "
+                + aRegEx.ToStdString() );
+    }
+
+    m_regExString = aRegEx;
+    m_regExFlags = aFlags;
 }
 
 

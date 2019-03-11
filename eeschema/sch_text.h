@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <eda_text.h>
 #include <sch_item_struct.h>
+#include <sch_connection.h>   // for CONNECTION_TYPE
 
 
 class LINE_READER;
@@ -63,6 +64,8 @@ protected:
     /// True if not connected to another object if the object derive from SCH_TEXT
     /// supports connections.
     bool m_isDangling;
+
+    CONNECTION_TYPE m_connectionType;
 
     /**
      * The orientation of text and any associated drawing elements of derived objects.

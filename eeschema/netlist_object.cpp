@@ -30,30 +30,12 @@
 
 #include <fctsys.h>
 #include <macros.h>
-#include <sch_edit_frame.h>
+#include <list>
 
 #include <sch_component.h>
+#include <sch_connection.h>
 #include <netlist_object.h>
-
-#include <wx/regex.h>
-
-
-/**
- * The regular expression string for label bus notation.  Valid bus labels are defined as
- * one or more non-whitespace characters from the beginning of the string followed by the
- * bus notation [nn...mm] with no characters after the closing bracket.
- */
-static wxRegEx busLabelRe( wxT( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])$" ), wxRE_ADVANCED );
-
-
-bool IsBusLabel( const wxString& aLabel )
-{
-    wxCHECK_MSG( busLabelRe.IsValid(), false,
-                 wxT( "Invalid regular expression in IsBusLabel()." ) );
-
-    return busLabelRe.Matches( aLabel );
-}
-
+#include <sch_edit_frame.h>
 
 #if defined(DEBUG)
 
@@ -240,7 +222,8 @@ bool NETLIST_OBJECT::IsLabelConnected( NETLIST_OBJECT* aNetItem )
 
 void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItems )
 {
-    wxCHECK_RET( IsBusLabel( m_Label ),
+    SCH_CONNECTION conn;
+    wxCHECK_RET( conn.IsBusLabel( m_Label ),
                  wxT( "<" ) + m_Label + wxT( "> is not a valid bus label." ) );
 
     if( m_Type == NET_HIERLABEL )
@@ -254,61 +237,109 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
     else
         wxCHECK_RET( false, wxT( "Net list object type is not valid." ) );
 
-    unsigned i;
-    wxString tmp, busName, busNumber;
-    long begin, end, member;
+    // NOTE: all netlist objects generated from a single bus definition need to have different
+    // member codes set.  For bus vectors, the member code matches the vector index, but for
+    // bus groups (including with nested vectors) the code is something arbitrary.
+    long member_offset = 0;
 
-    busName = busLabelRe.GetMatch( m_Label, 1 );
-    busNumber = busLabelRe.GetMatch( m_Label, 2 );
-
-    /* Search for  '[' because a bus label is like "busname[nn..mm]" */
-    i = busNumber.Find( '[' );
-    i++;
-
-    while( i < busNumber.Len() && busNumber[i] != '.' )
+    auto alias = SCH_SCREEN::GetBusAlias( m_Label );
+    if( alias || conn.IsBusGroupLabel( m_Label ) )
     {
-        tmp.Append( busNumber[i] );
-        i++;
+        wxString group_name;
+        bool self_set = false;
+        std::vector<wxString> bus_contents_vec;
+
+        if( alias )
+        {
+            bus_contents_vec = alias->Members();
+        }
+        else
+        {
+            wxCHECK_RET( conn.ParseBusGroup( m_Label, &group_name, bus_contents_vec ),
+                         _( "Failed to parse bus group " ) + m_Label );
+        }
+
+        // For named bus groups, like "USB{DP DM}"
+        auto group_prefix = ( group_name != "" ) ? ( group_name + "." ) : "";
+
+        std::list<wxString> bus_contents( bus_contents_vec.begin(),
+                                          bus_contents_vec.end() );
+
+        for( auto bus_member : bus_contents )
+        {
+            // Nested bus vector inside a bus group
+            if( conn.IsBusVectorLabel( bus_member ) )
+            {
+                wxString prefix;
+                long begin, end;
+
+                conn.ParseBusVector( bus_member, &prefix, &begin, &end );
+                prefix = group_prefix + prefix;
+
+                if( !self_set )
+                {
+                    m_Label = prefix;
+                    m_Label << begin;
+                    m_Member = ( begin++ ) + ( member_offset++ );
+
+                    self_set = true;
+                    begin++;
+                }
+
+                fillBusVector( aNetListItems, prefix, begin, end, member_offset );
+                member_offset += std::abs( end - begin );
+            }
+            else if( auto nested_alias = SCH_SCREEN::GetBusAlias( bus_member ) )
+            {
+                // Nested alias inside a group
+                for( auto alias_member : nested_alias->Members() )
+                {
+                    bus_contents.push_back( alias_member );
+                }
+            }
+            else
+            {
+                if( !self_set )
+                {
+                    m_Label = group_prefix + bus_member;
+                    m_Member = member_offset++;
+                    self_set = true;
+                }
+                else
+                {
+                    auto item = new NETLIST_OBJECT( *this );
+                    item->m_Label = group_prefix + bus_member;
+                    item->m_Member = member_offset++;
+                    aNetListItems.push_back( item );
+                }
+            }
+        }
     }
-
-    tmp.ToLong( &begin );
-
-    while( i < busNumber.Len() && busNumber[i] == '.' )
-        i++;
-
-    tmp.Empty();
-
-    while( i < busNumber.Len() && busNumber[i] != ']' )
+    else
     {
-        tmp.Append( busNumber[i] );
-        i++;
+        // Plain bus vector
+        wxString prefix;
+        long begin, end;
+
+        conn.ParseBusVector( m_Label, &prefix, &begin, &end );
+
+        m_Label = prefix;
+        m_Label << begin;
+        m_Member = begin;
+
+        fillBusVector( aNetListItems, prefix, begin + 1, end, 0 );
     }
+}
 
-    tmp.ToLong( &end );
-
-    if( begin < 0 )
-        begin = 0;
-
-    if( end < 0 )
-        end = 0;
-
-    if( begin > end )
-        std::swap( begin, end );
-
-    member = begin;
-    tmp = busName;
-    tmp << member;
-    m_Label = tmp;
-    m_Member = member;
-
-    for( member++; member <= end; member++ )
+void NETLIST_OBJECT::fillBusVector( NETLIST_OBJECT_LIST& aNetListItems,
+                                    wxString aName, long aBegin, long aEnd, long aOffset )
+{
+    for( long member = aBegin; member <= aEnd; member++ )
     {
-        NETLIST_OBJECT* item = new NETLIST_OBJECT( *this );
+        auto item = new NETLIST_OBJECT( *this );
 
-        // Conversion of bus label to the root name + the current member id.
-        tmp = busName;
-        tmp << member;
-        item->m_Label = tmp;
+        item->m_Label = aName;
+        item->m_Label << member;
         item->m_Member = member;
 
         aNetListItems.push_back( item );

@@ -70,8 +70,8 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 
     if( event.GetFlags() & FR_CURRENT_SHEET_ONLY )
     {
-        sheetFoundIn = m_CurrentSheet;
-        lastMarker = (SCH_MARKER*) m_CurrentSheet->FindNextItem( SCH_MARKER_T, lastMarker, wrap );
+        sheetFoundIn = g_CurrentSheet;
+        lastMarker = (SCH_MARKER*) g_CurrentSheet->FindNextItem( SCH_MARKER_T, lastMarker, wrap );
     }
     else
     {
@@ -81,11 +81,11 @@ void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 
     if( lastMarker != NULL )
     {
-        if( *sheetFoundIn != *m_CurrentSheet )
+        if( *sheetFoundIn != *g_CurrentSheet )
         {
             sheetFoundIn->LastScreen()->SetZoom( GetScreen()->GetZoom() );
-            *m_CurrentSheet = *sheetFoundIn;
-            m_CurrentSheet->UpdateAllScreenReferences();
+            *g_CurrentSheet = *sheetFoundIn;
+            g_CurrentSheet->UpdateAllScreenReferences();
         }
 
         SetCrossHairPosition( lastMarker->GetPosition() );
@@ -122,7 +122,7 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     EDA_ITEM*       foundItem = nullptr;
 
     if( !aSearchHierarchy )
-        sheetList.push_back( *m_CurrentSheet );
+        sheetList.push_back( *g_CurrentSheet );
     else
         sheetList.BuildSheetList( g_RootSheet );
 
@@ -193,10 +193,10 @@ SCH_ITEM* SCH_EDIT_FRAME::FindComponentAndItem( const wxString& aReference,
     {
         sheet = sheetWithComponentFound;
 
-        if( *sheet != *m_CurrentSheet )
+        if( *sheet != *g_CurrentSheet )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
-            *m_CurrentSheet = *sheet;
+            *g_CurrentSheet = *sheet;
             DisplayCurrentSheet();
         }
 
@@ -279,7 +279,7 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     {
         if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
-            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+            m_foundItems.Collect( searchCriteria, g_CurrentSheet );
         }
         else
         {
@@ -317,7 +317,7 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     {
         if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
         {
-            m_foundItems.Collect( searchCriteria, m_CurrentSheet );
+            m_foundItems.Collect( searchCriteria, g_CurrentSheet );
         }
         else
         {
@@ -423,11 +423,11 @@ void SCH_EDIT_FRAME::updateFindReplaceView( wxFindDialogEvent& aEvent )
                 item->SetForceVisible( true );
         }
 
-        if( sheet->PathHumanReadable() != m_CurrentSheet->PathHumanReadable() )
+        if( sheet->PathHumanReadable() != g_CurrentSheet->PathHumanReadable() )
         {
             sheet->LastScreen()->SetZoom( GetScreen()->GetZoom() );
-            *m_CurrentSheet = *sheet;
-            m_CurrentSheet->UpdateAllScreenReferences();
+            *g_CurrentSheet = *sheet;
+            g_CurrentSheet->UpdateAllScreenReferences();
             SetScreen( sheet->LastScreen() );
             sheet->LastScreen()->TestDanglingEnds();
         }

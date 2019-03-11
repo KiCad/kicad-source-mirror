@@ -38,6 +38,7 @@
 #include <kiway.h>
 #include <sch_draw_panel.h>
 #include <sch_item_struct.h>
+#include <draw_graphic_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>
 
@@ -55,6 +56,11 @@
 #include <lib_pin.h>
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
+
+// TODO(JE) Debugging only
+#include <profile.h>
+
+#include <boost/foreach.hpp>
 
 #define EESCHEMA_FILE_STAMP   "EESchema"
 
@@ -198,6 +204,9 @@ void SCH_SCREEN::DeleteItem( SCH_ITEM* aItem )
     }
     else
     {
+        if( GetCurItem() == aItem )
+            SetCurItem( nullptr );
+
         m_drawList.Remove( aItem );
         delete aItem;
     }
@@ -411,6 +420,7 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
     SCH_SHEET_PIN* label;
     SCH_TEXT*      text;
+    SCH_CONNECTION conn;
 
     switch( aLayer )
     {
@@ -421,12 +431,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         label = GetSheetLabel( aPosition );
 
-        if( label && IsBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
+        if( label && conn.IsBusLabel( label->GetText() ) && label->IsConnected( aPosition ) )
             return true;
 
         text = GetLabel( aPosition );
 
-        if( text && IsBusLabel( text->GetText() ) && text->IsConnected( aPosition )
+        if( text && conn.IsBusLabel( text->GetText() ) && text->IsConnected( aPosition )
             && (text->Type() != SCH_LABEL_T) )
             return true;
 
@@ -457,12 +467,12 @@ bool SCH_SCREEN::IsTerminalPoint( const wxPoint& aPosition, int aLayer )
 
         text = GetLabel( aPosition );
 
-        if( text && text->IsConnected( aPosition ) && !IsBusLabel( text->GetText() ) )
+        if( text && text->IsConnected( aPosition ) && !conn.IsBusLabel( text->GetText() ) )
             return true;
 
         label = GetSheetLabel( aPosition );
 
-        if( label && label->IsConnected( aPosition ) && !IsBusLabel( label->GetText() ) )
+        if( label && label->IsConnected( aPosition ) && !conn.IsBusLabel( label->GetText() ) )
             return true;
 
         break;
@@ -525,6 +535,23 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
             // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
             // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
             item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+
+        // TODO(JE) Remove debugging code
+#ifdef DEBUG
+
+        auto conn = item->Connection( *g_CurrentSheet );
+
+        if( conn )
+        {
+            auto pos = item->GetBoundingBox().Centre();
+            int sz = Mils2iu( 15 );
+            auto label = conn->Name( true );
+
+            auto text = SCH_TEXT( pos, label, SCH_TEXT_T );
+            text.SetTextSize( wxSize( sz, sz ) );
+            text.Draw( aCanvas, aDC, wxPoint( 10, 10 ), aDrawMode, COLOR4D( LIGHTRED ) );
+        }
+#endif
     }
 
     for( auto item : junctions )
@@ -1206,6 +1233,48 @@ int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aLis
     ClearDrawingState();
 
     return aList.GetCount();
+}
+
+
+void SCH_SCREEN::AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
+{
+    m_aliases.insert( aAlias );
+}
+
+
+bool SCH_SCREEN::IsBusAlias( const wxString& aLabel )
+{
+    SCH_SHEET_LIST aSheets( g_RootSheet );
+    for( unsigned i = 0; i < aSheets.size(); i++ )
+    {
+        for( auto alias : aSheets[i].LastScreen()->GetBusAliases() )
+        {
+            if( alias->GetName() == aLabel )
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+
+std::shared_ptr<BUS_ALIAS> SCH_SCREEN::GetBusAlias( const wxString& aLabel )
+{
+    SCH_SHEET_LIST aSheets( g_RootSheet );
+    for( unsigned i = 0; i < aSheets.size(); i++ )
+    {
+        for( auto alias : aSheets[i].LastScreen()->GetBusAliases() )
+        {
+            if( alias->GetName() == aLabel )
+            {
+                return alias;
+            }
+        }
+    }
+
+    return NULL;
 }
 
 

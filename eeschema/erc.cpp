@@ -225,6 +225,73 @@ int TestDuplicateSheetNames( bool aCreateMarker )
 }
 
 
+int TestConflictingBusAliases( bool aCreateMarker )
+{
+    using std::pair;
+    using std::shared_ptr;
+    using std::vector;
+
+    int err_count = 0;
+    SCH_SCREENS screens;
+    vector< shared_ptr<BUS_ALIAS> > aliases;
+    vector< pair< shared_ptr<BUS_ALIAS>, shared_ptr<BUS_ALIAS> > > conflicts;
+
+    for( auto screen = screens.GetFirst(); screen != NULL; screen = screens.GetNext() )
+    {
+        auto screen_aliases = screen->GetBusAliases();
+
+        for( auto alias : screen_aliases )
+        {
+            for( auto test : aliases )
+            {
+                if( alias->GetName() == test->GetName() &&
+                    alias->Members() != test->Members() )
+                {
+                    conflicts.push_back( std::make_pair( alias, test ) );
+                }
+            }
+        }
+
+        aliases.insert( aliases.end(),
+                        screen_aliases.begin(), screen_aliases.end() );
+    }
+
+    if( !conflicts.empty() )
+    {
+        if( aCreateMarker )
+        {
+            wxString msg;
+
+            for( auto conflict : conflicts )
+            {
+                auto marker = new SCH_MARKER();
+                auto a1 = conflict.first;
+                auto a2 = conflict.second;
+
+                msg.Printf( _( "Bus alias %s has conflicting definitions on multiple sheets: " ),
+                            GetChars( a1->GetName() ) );
+
+                wxFileName f1 = a1->GetParent()->GetFileName();
+                wxFileName f2 = a2->GetParent()->GetFileName();
+
+                msg << f1.GetFullName() << " and " << f2.GetFullName();
+
+                marker->SetData( ERCE_BUS_ALIAS_CONFLICT, wxPoint( 0, 0 ),
+                                 msg,  wxPoint( 0, 0 ) );
+                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_ERROR );
+
+                a2->GetParent()->Append( marker );
+
+                ++err_count;
+            }
+        }
+    }
+
+    return err_count;
+}
+
+
 int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
 {
     int errors = 0;
@@ -314,6 +381,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     if( aMinConn < 0 )
     {
+#if 0
         if( aNetItemRef->m_Type == NET_HIERLABEL || aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER )
         {
             msg.Printf( _( "Hierarchical label %s is not connected to a sheet label." ),
@@ -341,7 +409,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                              msg,
                              aNetItemRef->m_Start );
         }
-
+#endif
         return;
     }
 

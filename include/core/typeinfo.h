@@ -121,6 +121,7 @@ enum KICAD_T
     SCH_COMPONENT_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
+    SCH_PIN_CONNECTION_T,
 
     // Be prudent with these 3 types:
     // they should be used only to locate a specific field type

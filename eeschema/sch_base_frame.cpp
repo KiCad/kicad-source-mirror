@@ -441,6 +441,8 @@ void SCH_BASE_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointe
     else
         GetCanvas()->GetView()->SetScale( scale );
 
+    GetCanvas()->GetView()->SetCenter( aCenterPoint );
+
     if( aWarpPointer )
         GetCanvas()->GetViewControls()->CenterOnCursor();
 
@@ -623,31 +625,57 @@ void SCH_BASE_FRAME::RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete )
 }
 
 
-void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem )
+void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
 {
-    GetScreen()->Append( aItem );
-    GetCanvas()->GetView()->Add( aItem );
-    RefreshItem( aItem, true );           // handle any additional parent semantics
+    auto screen = aScreen;
+
+    if( aScreen == nullptr )
+        screen = GetScreen();
+
+    screen->Append( aItem );
+
+    if( screen == GetScreen() )
+    {
+        GetCanvas()->GetView()->Add( aItem );
+        RefreshItem( aItem, true );           // handle any additional parent semantics
+    }
 }
 
 
-void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems )
+void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems, SCH_SCREEN* aScreen )
 {
-    for( SCH_ITEM* item = aItems.begin(); item; item = item->Next() )
+    auto screen = aScreen;
+
+    if( aScreen == nullptr )
+        screen = GetScreen();
+
+    if( screen == GetScreen() )
     {
-        GetCanvas()->GetView()->Add( item );
-        RefreshItem( item, true );        // handle any additional parent semantics
+        for( SCH_ITEM* item = aItems.begin(); item; item = item->Next() )
+        {
+            GetCanvas()->GetView()->Add( item );
+            RefreshItem( item, true );        // handle any additional parent semantics
+        }
     }
 
-    GetScreen()->Append( aItems );
+    screen->Append( aItems );
 }
 
 
-void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem )
+void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
 {
-    GetCanvas()->GetView()->Remove( aItem );
-    GetScreen()->Remove( aItem );
-    RefreshItem( aItem, true );           // handle any additional parent semantics
+    auto screen = aScreen;
+
+    if( aScreen == nullptr )
+        screen = GetScreen();
+
+    if( screen == GetScreen() )
+        GetCanvas()->GetView()->Remove( aItem );
+
+    screen->Remove( aItem );
+
+    if( screen == GetScreen() )
+        RefreshItem( aItem, true );           // handle any additional parent semantics
 }
 
 

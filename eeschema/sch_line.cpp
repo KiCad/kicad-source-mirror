@@ -781,6 +781,41 @@ wxPoint SCH_LINE::MidPoint()
 }
 
 
+void SCH_LINE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+{
+    wxString msg;
+
+    switch( GetLayer() )
+    {
+    case LAYER_WIRE:
+        msg = _( "Net Wire" );
+        break;
+
+    case LAYER_BUS:
+        msg = _( "Bus Wire" );
+        break;
+
+    default:
+        msg = _( "Graphical" );
+        return;
+    }
+
+    aList.push_back( MSG_PANEL_ITEM( _( "Line Type" ), msg, DARKCYAN ) );
+
+    if( auto conn = Connection( *g_CurrentSheet ) )
+    {
+#if defined(DEBUG)
+        conn->AppendDebugInfoToMsgPanel( aList );
+
+        msg.Printf( "%zu", m_connected_items.size() );
+        aList.push_back( MSG_PANEL_ITEM( _( "Connections" ), msg, BROWN ) );
+#else
+        conn->AppendInfoToMsgPanel( aList );
+#endif
+    }
+}
+
+
 int SCH_EDIT_FRAME::EditLine( SCH_LINE* aLine, bool aRedraw )
 {
     if( aLine == NULL )

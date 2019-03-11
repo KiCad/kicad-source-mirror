@@ -408,7 +408,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         switch( item->Type() )
         {
         case SCH_SHEET_T:
-            m_CurrentSheet->push_back( (SCH_SHEET*) item );
+            g_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
             break;
 

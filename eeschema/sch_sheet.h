@@ -573,6 +573,6 @@ protected:
 };
 
 
-typedef std::vector< SCH_SHEET* > SCH_SHEETS;   // no ownership over contained SCH_SHEETs
+//typedef std::vector< SCH_SHEET* > SCH_SHEETS;   // no ownership over contained SCH_SHEETs
 
 #endif // SCH_SHEEET_H

@@ -69,6 +69,7 @@
 #include <wildcards_and_files_ext.h>
 
 #include <netlist_exporter_kicad.h>
+#include <connection_graph.h>
 #include <kiway.h>
 #include <dialogs/dialog_fields_editor_global.h>
 
@@ -76,6 +77,9 @@
 #include <sch_painter.h>
 
 #include <gal/graphics_abstraction_layer.h>
+
+SCH_SHEET_PATH* g_CurrentSheet = nullptr; // declared in general.h
+CONNECTION_GRAPH* g_ConnectionGraph = nullptr;
 
 // non-member so it can be moved easily, and kept REALLY private.
 // Do NOT Clear() in here.
@@ -284,6 +288,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, SCH_EDIT_FRAME::OnUpdatePCB )
     EVT_TOOL( ID_GET_TOOLS, SCH_EDIT_FRAME::OnCreateBillOfMaterials )
     EVT_TOOL( ID_OPEN_CMP_TABLE, SCH_EDIT_FRAME::OnLaunchBomManager )
+    EVT_TOOL( ID_BUS_MANAGER, SCH_EDIT_FRAME::OnLaunchBusManager )
     EVT_TOOL( ID_FIND_ITEMS, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( wxID_REPLACE, SCH_EDIT_FRAME::OnFindItems )
     EVT_TOOL( ID_BACKANNO_ITEMS, SCH_EDIT_FRAME::OnLoadCmpToFootprintLinkFile )
@@ -321,6 +326,7 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_SCH_MIRROR_X, ID_SCH_ORIENT_NORMAL, SCH_EDIT_FRAME::OnOrient )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     SCH_EDIT_FRAME::Process_Special_Functions )
+    EVT_MENU( ID_SCH_UNFOLD_BUS, SCH_EDIT_FRAME::OnUnfoldBusHotkey )
     EVT_MENU( ID_POPUP_SCH_DISPLAYDOC_CMP, SCH_EDIT_FRAME::OnEditItem )
 
     EVT_MENU( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnSwitchCanvas )
@@ -371,9 +377,11 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
         wxDefaultPosition, wxDefaultSize, KICAD_DEFAULT_DRAWFRAME_STYLE, SCH_EDIT_FRAME_NAME ),
     m_item_to_repeat( 0 )
 {
+    g_CurrentSheet = new SCH_SHEET_PATH();
+    g_ConnectionGraph = new CONNECTION_GRAPH( this );
+
     m_showAxis = false;                 // true to show axis
     m_showBorderAndTitleBlock = true;   // true to show sheet references
-    m_CurrentSheet = new SCH_SHEET_PATH;
     m_DefaultSchematicFileName = NAMELESS_PROJECT;
     m_DefaultSchematicFileName += wxT( ".sch" );
     m_showAllPins = false;
@@ -386,6 +394,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_findReplaceStatus = new wxString( wxEmptyString );
     m_undoItem = NULL;
     m_hasAutoSave = true;
+    m_busUnfold = {};
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
     m_toolManager = new TOOL_MANAGER;
@@ -458,12 +467,15 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
 
     SetScreen( NULL );
 
-    delete m_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
+    delete g_CurrentSheet;          // a SCH_SHEET_PATH, on the heap.
+    delete g_ConnectionGraph;
     delete m_undoItem;
     delete m_findReplaceData;
     delete m_findReplaceStatus;
-
     delete g_RootSheet;
+
+    g_CurrentSheet = nullptr;
+    g_ConnectionGraph = nullptr;
     g_RootSheet = NULL;
 }
 
@@ -503,7 +515,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
      */
     int            sheet_count = g_RootSheet->CountSheets();
     int            SheetNumber = 1;
-    wxString       current_sheetpath = m_CurrentSheet->Path();
+    wxString       current_sheetpath = g_CurrentSheet->Path();
     SCH_SHEET_LIST sheetList( g_RootSheet );
 
     // Examine all sheets path to find the current sheets path,
@@ -520,7 +532,7 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
                                                  * path */
     }
 
-    m_CurrentSheet->SetPageNumber( SheetNumber );
+    g_CurrentSheet->SetPageNumber( SheetNumber );
 
     for( screen = s_list.GetFirst(); screen != NULL; screen = s_list.GetNext() )
     {
@@ -533,13 +545,13 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
 SCH_SCREEN* SCH_EDIT_FRAME::GetScreen() const
 {
-    return m_CurrentSheet->LastScreen();
+    return g_CurrentSheet->LastScreen();
 }
 
 
 wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
-    wxString s = m_CurrentSheet->PathHumanReadable();
+    wxString s = g_CurrentSheet->PathHumanReadable();
 
     return s;
 }
@@ -562,8 +574,9 @@ void SCH_EDIT_FRAME::CreateScreens()
 
     g_RootSheet->GetScreen()->SetFileName( m_DefaultSchematicFileName );
 
-    m_CurrentSheet->clear();
-    m_CurrentSheet->push_back( g_RootSheet );
+    g_CurrentSheet->clear();
+    g_CurrentSheet->push_back( g_RootSheet );
+    g_ConnectionGraph->Reset();
 
     if( GetScreen() == NULL )
     {
@@ -578,26 +591,26 @@ void SCH_EDIT_FRAME::CreateScreens()
 
 SCH_SHEET_PATH& SCH_EDIT_FRAME::GetCurrentSheet()
 {
-    wxASSERT_MSG( m_CurrentSheet != NULL, wxT( "SCH_EDIT_FRAME m_CurrentSheet member is NULL." ) );
+    wxASSERT_MSG( g_CurrentSheet != NULL, wxT( "SCH_EDIT_FRAME g_CurrentSheet member is NULL." ) );
 
-    return *m_CurrentSheet;
+    return *g_CurrentSheet;
 }
 
 
 void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 {
-    if( aSheet != *m_CurrentSheet )
+    if( aSheet != *g_CurrentSheet )
     {
-        *m_CurrentSheet = aSheet;
+        *g_CurrentSheet = aSheet;
 
-        static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( m_CurrentSheet->LastScreen() );
+        static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( g_CurrentSheet->LastScreen() );
     }
 }
 
 
 void SCH_EDIT_FRAME::HardRedraw()
 {
-    static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( m_CurrentSheet->LastScreen() );
+    static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( g_CurrentSheet->LastScreen() );
     GetCanvas()->Refresh();
 }
 
@@ -709,7 +722,7 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     g_RootSheet->GetScreen()->Clear();
 
     // all sub sheets are deleted, only the main sheet is usable
-    m_CurrentSheet->clear();
+    g_CurrentSheet->clear();
 
     Destroy();
 }
@@ -739,7 +752,7 @@ wxString SCH_EDIT_FRAME::GetUniqueFilenameForCurrentSheet()
     #define FN_LEN_MAX 80   // A reasonable value for the short filename len
 
     wxString filename = fn.GetName();
-    wxString sheetFullName =  m_CurrentSheet->PathHumanReadable();
+    wxString sheetFullName =  g_CurrentSheet->PathHumanReadable();
 
     // Remove the last '/' of the path human readable
     // (and for the root sheet, make sheetFullName empty):
@@ -766,6 +779,9 @@ void SCH_EDIT_FRAME::OnModify()
     GetScreen()->SetSave();
 
     m_foundItems.SetForceSearch();
+
+    //RecalculateConnections( SCH_SHEET_LIST( g_CurrentSheet->Last() ) );
+    RecalculateConnections();
 
     m_canvas->Refresh();
 }
@@ -824,7 +840,7 @@ void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( m_CurrentSheet->Last() != g_RootSheet );
+    aEvent.Enable( g_CurrentSheet->Last() != g_RootSheet );
 }
 
 
@@ -910,7 +926,7 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
     }
 
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-    NETLIST_EXPORTER_KICAD exporter( this, net_atoms );
+    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
     STRING_FORMATTER formatter;
 
     exporter.Format( &formatter, GNL_ALL );
@@ -948,6 +964,12 @@ void SCH_EDIT_FRAME::OnLaunchBomManager( wxCommandEvent& event )
 {
     DIALOG_FIELDS_EDITOR_GLOBAL dlg( this );
     dlg.ShowQuasiModal();
+}
+
+
+void SCH_EDIT_FRAME::OnLaunchBusManager( wxCommandEvent& )
+{
+    InvokeDialogBusManager( this );
 }
 
 
@@ -1393,7 +1415,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, m_CurrentSheet, &doClearAnnotation ) )
+            if( !EditSheet( (SCH_SHEET*)item, g_CurrentSheet, &doClearAnnotation ) )
             {
                 screen->SetCurItem( NULL );
                 delete item;
@@ -1438,6 +1460,9 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
             SCH_SCREENS screensList( g_RootSheet );
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
         }
+
+        // Update connectivity info for new item
+        RecalculateConnections();
     }
     else
     {
@@ -1488,7 +1513,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
         wxFileName  fn = fileName;
 
         title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
-                      fn.GetFullName(), m_CurrentSheet->PathHumanReadable(),
+                      fn.GetFullName(), g_CurrentSheet->PathHumanReadable(),
                       fn.GetPath() );
 
         if( fn.FileExists() )
@@ -1501,6 +1526,18 @@ void SCH_EDIT_FRAME::UpdateTitle()
     }
 
     SetTitle( title );
+}
+
+
+void SCH_EDIT_FRAME::RecalculateConnections()
+{
+    SCH_SHEET_LIST list( g_RootSheet );
+
+    // Ensure schematic graph is accurate
+    for( const auto& sheet : list )
+        SchematicCleanUp( true, sheet.LastScreen() );
+
+    g_ConnectionGraph->Recalculate( list );
 }
 
 

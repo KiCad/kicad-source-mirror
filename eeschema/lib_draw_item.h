@@ -35,6 +35,7 @@
 #include <eda_rect.h>
 #include <transform.h>
 #include <gr_basic.h>
+#include <sch_connection.h>
 
 
 class LINE_READER;

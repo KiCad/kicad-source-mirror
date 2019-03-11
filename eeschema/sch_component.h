@@ -40,6 +40,7 @@
 #include <vector>
 #include <set>
 #include <lib_draw_item.h>
+#include <sch_pin_connection.h>
 
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
@@ -71,6 +72,7 @@ class SCH_COMPONENT : public SCH_ITEM
 {
 public:
     enum AUTOPLACED { AUTOPLACED_NO = 0, AUTOPLACED_AUTO, AUTOPLACED_MANUAL };
+
 private:
 
     wxPoint     m_Pos;
@@ -98,20 +100,14 @@ private:
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
     /**
-     * A temporary sheet path is required to generate the correct reference designator string
-     * in complex hierarchies.  Hopefully this is only a temporary hack to decouple schematic
-     * objects from the drawing window until a better design for handling complex hierarchies
-     * can be implemented.
-     */
-    const SCH_SHEET_PATH* m_currentSheetPath;
-
-    /**
      * Defines the hierarchical path and reference of the component.  This allows support
      * for hierarchical sheets that reference the same schematic.  The format for the path
      * is /&ltsheet time stamp&gt/&ltsheet time stamp&gt/.../&lscomponent time stamp&gt.
      * A single / denotes the root sheet.
      */
     wxArrayString m_PathsAndReferences;
+
+    std::unordered_map<LIB_PIN*, SCH_PIN_CONNECTION*> m_pin_connections;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -218,6 +214,21 @@ public:
      * @param aComponents collector of components in screen
      */
     static void UpdateAllPinCaches( const SCH_COLLECTOR& aComponents );
+
+    /**
+     * Updates the local cache of SCH_PIN_CONNECTION objects for each pin
+     */
+    void UpdatePinConnections( SCH_SHEET_PATH aSheet );
+
+    /**
+     * Retrieves the pin connection for a given pin of the component
+     */
+    SCH_PIN_CONNECTION* GetConnectionForPin( LIB_PIN* aPin );
+
+    const std::unordered_map<LIB_PIN*, SCH_PIN_CONNECTION*>& PinConnections()
+    {
+        return m_pin_connections;
+    }
 
     /**
      * Change the unit number to \a aUnit
@@ -513,11 +524,6 @@ public:
      */
     static bool IsReferenceStringValid( const wxString& aReferenceString );
 
-    void SetCurrentSheetPath( const SCH_SHEET_PATH* aSheetPath )
-    {
-        m_currentSheetPath = aSheetPath;
-    }
-
     /**
      * Return the reference for the given sheet path.
      *
@@ -665,6 +671,5 @@ public:
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;
 };
-
 
 #endif /* COMPONENT_CLASS_H */

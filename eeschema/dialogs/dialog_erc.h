@@ -30,6 +30,7 @@
 #include <lib_pin.h>        // For PINTYPE_COUNT definition
 
 #include <dialog_erc_base.h>
+#include <erc_settings.h>
 #include "dialog_erc_listbox.h"
 
 // DIALOG_ERC class declaration
@@ -43,12 +44,8 @@ private:
     wxBitmapButton* m_buttonList[PINTYPE_COUNT][PINTYPE_COUNT];
     bool            m_initialized;
     const SCH_MARKER* m_lastMarkerFound;
-    static bool     m_writeErcFile;
     static bool     m_diagErcTableInit; // go to true after DiagErc init
-    static bool     m_tstUniqueGlobalLabels;
-
-public:
-    static bool     m_TestSimilarLabels;
+    ERC_SETTINGS    m_settings;
 
 public:
     DIALOG_ERC( SCH_EDIT_FRAME* parent );
@@ -79,6 +76,8 @@ private:
     void ReBuildMatrixPanel();
     void setDRCMatrixButtonState( wxBitmapButton *aButton, int aState );
     void updateMarkerCounts( SCH_SCREENS *screens );
+    void transferSettingsToControls();
+    void transferControlsToSettings();
 };
 
 

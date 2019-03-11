@@ -243,7 +243,7 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aF
     if( !part )
         return NULL;
 
-    SCH_COMPONENT* component = new SCH_COMPONENT( *part, libId, m_CurrentSheet,
+    SCH_COMPONENT* component = new SCH_COMPONENT( *part, libId, g_CurrentSheet,
                                                   sel.Unit, sel.Convert,
                                                   GetCrossHairPosition(), true );
 
@@ -261,7 +261,6 @@ SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aF
 
     MSG_PANEL_ITEMS items;
 
-    component->SetCurrentSheetPath( &GetCurrentSheet() );
     component->GetMsgPanelInfo( m_UserUnits, items );
 
     SetMsgPanel( items );
@@ -333,7 +332,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
         SaveCopyInUndoList( component, UR_CHANGED );
 
     /* Update the unit number. */
-    component->SetUnitSelection( m_CurrentSheet, unit );
+    component->SetUnitSelection( g_CurrentSheet, unit );
     component->SetUnit( unit );
     component->ClearFlags();
     component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()

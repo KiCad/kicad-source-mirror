@@ -43,6 +43,7 @@
 #include <sch_no_connect.h>
 #include <sch_bus_entry.h>
 #include <sch_bitmap.h>
+#include <sch_sheet.h>
 #include <draw_graphic_text.h>
 #include <geometry/geometry_utils.h>
 #include <lib_edit_frame.h>
@@ -54,6 +55,7 @@
 #include <view/view.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <colors_design_settings.h>
+#include <connection_graph.h>
 #include <geometry/shape_line_chain.h>
 #include <bezier_curves.h>
 
@@ -166,6 +168,26 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     auto item = const_cast<EDA_ITEM*>( item2 );
 
     m_schSettings.ImportLegacyColors( nullptr );
+
+#ifdef CONNECTIVITY_DEBUG
+
+    auto sch_item = dynamic_cast<SCH_ITEM*>( item );
+    auto conn = sch_item ? sch_item->Connection( *g_CurrentSheet ) : nullptr;
+
+    if( conn )
+    {
+        auto pos = item->GetBoundingBox().Centre();
+        auto label = conn->Name( true );
+
+        m_gal->SetHorizontalJustify( GR_TEXT_HJUSTIFY_CENTER );
+        m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_CENTER );
+        m_gal->SetStrokeColor( COLOR4D( LIGHTRED ) );
+        m_gal->SetLineWidth( 2 );
+        m_gal->SetGlyphSize( VECTOR2D( 20, 20 ) );
+        m_gal->StrokeText( conn->Name( true ), pos, 0.0 );
+    }
+
+#endif
 
 	switch( item->Type() )
 	{
@@ -903,6 +925,10 @@ static void drawDanglingSymbol( GAL* aGal, const wxPoint& aPos )
 void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 {
     COLOR4D color = m_schSettings.GetLayerColor( LAYER_JUNCTION );
+    auto    conn = aJct->Connection( *g_CurrentSheet );
+
+    if( conn && conn->IsBus() )
+        color = m_schSettings.GetLayerColor( LAYER_BUS );
 
     if( aJct->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
@@ -1002,6 +1028,13 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     case SCH_LABEL_T:              color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
     default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
     }
+
+    auto conn = aText->Connection( *g_CurrentSheet );
+
+    if( conn && conn->IsBus() &&
+        ( aText->Type() == SCH_SHEET_PIN_T ||
+          aText->Type() == SCH_HIERARCHICAL_LABEL_T ) )
+        color = m_schSettings.GetLayerColor( LAYER_BUS );
 
     if( aText->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
@@ -1243,6 +1276,10 @@ void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
     auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
+    auto conn = aLabel->Connection( *g_CurrentSheet );
+
+    if( conn && conn->IsBus() )
+        color = m_schSettings.GetLayerColor( LAYER_BUS );
     if( aLabel->GetState( BRIGHTENED ) )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
 

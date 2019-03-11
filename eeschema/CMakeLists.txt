@@ -37,6 +37,7 @@ set( EESCHEMA_DLGS
     dialogs/dialog_bom.cpp
     dialogs/dialog_bom_base.cpp
     dialogs/dialog_bom_cfg_keywords.cpp
+    dialogs/dialog_bus_manager.cpp
     dialogs/dialog_fields_editor_global.cpp
     dialogs/dialog_fields_editor_global_base.cpp
     dialogs/dialog_choose_component.cpp
@@ -64,6 +65,8 @@ set( EESCHEMA_DLGS
     dialogs/dialog_lib_edit_text_base.cpp
     dialogs/dialog_lib_new_component.cpp
     dialogs/dialog_lib_new_component_base.cpp
+    dialogs/dialog_migrate_buses.cpp
+    dialogs/dialog_migrate_buses_base.cpp
     dialogs/dialog_netlist.cpp
     dialogs/dialog_netlist_base.cpp
     dialogs/dialog_plot_schematic.cpp
@@ -136,6 +139,7 @@ set( EESCHEMA_SRCS
     autoplace_fields.cpp
     backanno.cpp
     block.cpp
+    bus_alias.cpp
     bus-wire-junction.cpp
     busentry.cpp
     class_libentry.cpp
@@ -144,6 +148,7 @@ set( EESCHEMA_SRCS
     cmp_library_lexer.cpp
     component_references_lister.cpp
     controle.cpp
+    connection_graph.cpp
     cross-probing.cpp
     drc_erc_item.cpp
     edit_bitmap.cpp
@@ -195,6 +200,7 @@ set( EESCHEMA_SRCS
     sch_bus_entry.cpp
     sch_collectors.cpp
     sch_component.cpp
+    sch_connection.cpp
     sch_eagle_plugin.cpp
     sch_field.cpp
     sch_io_mgr.cpp
@@ -204,6 +210,7 @@ set( EESCHEMA_SRCS
     sch_line.cpp
     sch_marker.cpp
     sch_no_connect.cpp
+    sch_pin_connection.cpp
     sch_plugin.cpp
     sch_preview_panel.cpp
     sch_screen.cpp

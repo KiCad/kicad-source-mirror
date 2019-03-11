@@ -78,9 +78,9 @@
  * (usable in flat and simple hierarchies).
  */
 
-#include "sch_sheet.h"       // SCH_SHEETS
 
 class wxFindReplaceData;
+class SCH_SHEET;
 class SCH_SCREEN;
 class SCH_MARKER;
 class SCH_ITEM;
@@ -88,6 +88,8 @@ class SCH_REFERENCE_LIST;
 
 
 #define SHEET_NOT_FOUND          -1
+
+typedef std::vector< SCH_SHEET* > SCH_SHEETS;   // no ownership over contained SCH_SHEETs
 
 
 /**
@@ -302,6 +304,15 @@ public:
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
 };
+
+
+namespace std
+{
+    template<> struct hash<SCH_SHEET_PATH>
+    {
+        size_t operator()( const SCH_SHEET_PATH& path ) const;
+    };
+}
 
 
 typedef std::vector< SCH_SHEET_PATH >            SCH_SHEET_PATHS;

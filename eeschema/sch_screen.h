@@ -30,6 +30,8 @@
 #ifndef SCREEN_H
 #define SCREEN_H
 
+#include <unordered_set>
+
 #include <macros.h>
 #include <dlist.h>
 #include <sch_item_struct.h>
@@ -39,12 +41,14 @@
 #include <page_info.h>
 #include <kiway_player.h>
 #include <sch_marker.h>
+#include <bus_alias.h>
 
 #include <../eeschema/general.h>
 
 
 class LIB_PIN;
 class SCH_COMPONENT;
+class SCH_SHEET_LIST;
 class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
 class SCH_LINE;
@@ -94,6 +98,9 @@ private:
 
     int     m_modification_sync;        ///< inequality with PART_LIBS::GetModificationHash()
                                         ///< will trigger ResolveAll().
+
+    /// List of bus aliases stored in this screen
+    std::unordered_set< std::shared_ptr< BUS_ALIAS > > m_aliases;
 
     /**
      * Add items connected at \a aPosition to the block pick list.
@@ -508,6 +515,38 @@ public:
      * @return The number of items in the pick list.
      */
     int UpdatePickList();
+
+    /**
+     * Adds a bus alias definition (and transfers ownership of the pointer)
+     */
+    void AddBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
+
+    /**
+     * Removes all bus alias definitions
+     */
+    void ClearBusAliases()
+    {
+        m_aliases.clear();
+    }
+
+    /**
+     * Returns a list of bus aliases defined in this screen
+     */
+    std::unordered_set< std::shared_ptr<BUS_ALIAS> > GetBusAliases()
+    {
+        return m_aliases;
+    }
+
+    /**
+     * Returns true if the given string is a valid bus alias in a loaded screen
+     */
+    static bool IsBusAlias( const wxString& aLabel );
+
+    /**
+     * Returns a pointer to a bus alias object for the given label,
+     * or null if one doesn't exist
+     */
+    static std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aLabel );
 
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override;

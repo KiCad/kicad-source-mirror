@@ -123,7 +123,6 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
     SCH_ITEM( aParent, SCH_COMPONENT_T )
 {
     Init( aPos );
-    m_currentSheetPath = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
 }
 
@@ -138,7 +137,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     m_convert   = convert;
     m_lib_id    = aLibId;
     m_part      = aPart.SharedPtr();
-    m_currentSheetPath = NULL;
     m_fieldsAutoplaced = AUTOPLACED_NO;
 
     SetTimeStamp( GetNewTimeStamp() );
@@ -163,7 +161,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
 SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     SCH_ITEM( aComponent )
 {
-    m_currentSheetPath = NULL;
     m_Parent    = aComponent.m_Parent;
     m_Pos       = aComponent.m_Pos;
     m_unit      = aComponent.m_unit;
@@ -471,6 +468,7 @@ void SCH_COMPONENT::UpdatePinCache()
     if( PART_SPTR part = m_part.lock() )
     {
         m_Pins.clear();
+
         for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
         {
             wxASSERT( pin->Type() == LIB_PIN_T );
@@ -531,6 +529,54 @@ void SCH_COMPONENT::UpdateAllPinCaches( const SCH_COLLECTOR& aComponents )
             ii = jj;
         }
     }
+}
+
+
+void SCH_COMPONENT::UpdatePinConnections( SCH_SHEET_PATH aSheet )
+{
+    if( PART_SPTR part = m_part.lock() )
+    {
+        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
+        {
+            wxASSERT( pin->Type() == LIB_PIN_T );
+
+            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
+                continue;
+
+            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
+                continue;
+
+            SCH_PIN_CONNECTION* connection = nullptr;
+
+            try
+            {
+                connection = m_pin_connections.at( pin );
+            }
+            catch( const std::out_of_range& oor )
+            {
+                connection = new SCH_PIN_CONNECTION();
+                m_pin_connections[ pin ] = connection;
+            }
+
+            connection->m_pin = pin;
+            connection->m_comp = this;
+            connection->InitializeConnection( aSheet );
+        }
+    }
+}
+
+
+SCH_PIN_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin )
+{
+    try
+    {
+        return m_pin_connections.at( aPin );
+    }
+    catch( const std::out_of_range& oor )
+    {
+        return nullptr;
+    }
+
 }
 
 
@@ -1436,9 +1482,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
             if( !alias )
                 return;
 
-            if( m_currentSheetPath )
+            if( g_CurrentSheet )
                 aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                                 GetRef( m_currentSheetPath ),
+                                                 GetRef( g_CurrentSheet ),
                                                  DARKCYAN ) );
 
             msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
@@ -1476,8 +1522,8 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
     }
     else
     {
-        if( m_currentSheetPath )
-            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( m_currentSheetPath ),
+        if( g_CurrentSheet )
+            aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( g_CurrentSheet ),
                                              DARKCYAN ) );
 
         aList.push_back( MSG_PANEL_ITEM( _( "Value" ), GetField( VALUE )->GetShownText(),

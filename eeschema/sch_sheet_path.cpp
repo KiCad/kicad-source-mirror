@@ -38,11 +38,27 @@
 #include <class_library.h>
 #include <sch_sheet_path.h>
 #include <sch_component.h>
+#include <sch_sheet.h>
 #include <template_fieldnames.h>
 
 #include <dialogs/dialog_schematic_find.h>
 
+#include <boost/functional/hash.hpp>
 #include <wx/filename.h>
+
+
+namespace std
+{
+    size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const
+    {
+        size_t seed = 0;
+
+        for( auto sheet : path )
+            boost::hash_combine( seed, sheet->GetTimeStamp() );
+
+        return seed;
+    }
+}
 
 
 SCH_SHEET_PATH::SCH_SHEET_PATH()

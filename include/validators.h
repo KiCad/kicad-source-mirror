@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
  * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +33,7 @@
 
 #include <wx/valtext.h>
 #include <wx/grid.h>
+#include <wx/regex.h>
 
 /**
  * Class GRID_CELL_TEXT_EDITOR
@@ -110,6 +112,66 @@ public:
     void OnChar( wxKeyEvent& event );
 
     void OnTextChanged( wxCommandEvent& event );
+};
+
+
+/**
+ * Custom validator that checks verifies that a string *exactly* matches a
+ * regular expression.
+ */
+class REGEX_VALIDATOR : public wxTextValidator
+{
+public:
+    /**
+     * Constructor.
+     *
+     * @param aRegEx is a regular expression to validate strings.
+     * @param aValue is a pointer to a wxString containing the value to validate.
+     */
+    REGEX_VALIDATOR( const wxString& aRegEx, wxString* aValue = NULL )
+        : wxTextValidator( wxFILTER_NONE, aValue )
+    {
+        compileRegEx( aRegEx, wxRE_DEFAULT );
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param aRegEx is a regular expression to validate strings.
+     * @param aFlags are compilation flags (normally wxRE_DEFAULT).
+     * @param aValue is a pointer to a wxString containing the value to validate.
+     */
+    REGEX_VALIDATOR( const wxString& aRegEx, int aFlags, wxString* aValue = NULL )
+        : wxTextValidator( wxFILTER_NONE, aValue )
+    {
+        compileRegEx( aRegEx, aFlags );
+    }
+
+    REGEX_VALIDATOR( const REGEX_VALIDATOR& aOther )
+    {
+        wxValidator::Copy( aOther );
+        compileRegEx( aOther.m_regExString, aOther.m_regExFlags );
+    }
+
+    virtual wxObject* Clone() const override
+    {
+        return new REGEX_VALIDATOR( *this );
+    }
+
+    bool Validate( wxWindow* aParent ) override;
+
+protected:
+    ///> Compiles and stores a regular expression
+    void compileRegEx( const wxString& aRegEx, int aFlags );
+
+    ///> Original regular expression (for copy constructor)
+    wxString m_regExString;
+
+    ///> Original compilation flags (for copy constructor)
+    int m_regExFlags;
+
+    ///> Compiled regex
+    wxRegEx m_regEx;
 };
 
 namespace KIUI

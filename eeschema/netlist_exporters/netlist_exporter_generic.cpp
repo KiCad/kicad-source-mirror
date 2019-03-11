@@ -26,6 +26,9 @@
 #include "netlist_exporter_generic.h"
 
 #include <build_version.h>
+#include <sch_base_frame.h>
+#include <class_library.h>
+#include <connection_graph.h>
 #include <refdes_utils.h>
 
 #include <class_library.h>
@@ -499,44 +502,94 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 
     m_LibParts.clear();     // must call this function before using m_LibParts.
 
-    for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
+    if( m_use_graph && m_graph )
     {
-        NETLIST_OBJECT* nitem = m_masterList->GetItem( ii );
-        SCH_COMPONENT*  comp;
-
-        // New net found, write net id;
-        if( ( netCode = nitem->GetNet() ) != lastNetCode )
+        for( auto it : m_graph->m_net_code_to_subgraphs_map )
         {
-            sameNetcodeCount = 0;   // item count for this net
-            netName = nitem->GetNetName();
-            lastNetCode  = netCode;
+            bool added = false;
+
+            auto code = it.first;
+            auto subgraphs = it.second;
+            auto net_name = subgraphs[0]->GetNetName();
+
+            XNODE* xnode;
+
+            for( auto subgraph : subgraphs )
+            {
+                auto sheet = subgraph->m_sheet;
+
+                for( auto item : subgraph->m_items )
+                {
+                    if( item->Type() == SCH_PIN_CONNECTION_T )
+                    {
+                        auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
+
+                        // Skip power symbols
+                        if( (LIB_PART*)( pc->m_pin->GetParent() )->IsPower() )
+                            continue;
+
+                        if( !added )
+                        {
+                            xnets->AddChild( xnet = node( "net" ) );
+                            netCodeTxt.Printf( "%d", code );
+                            xnet->AddAttribute( "code", netCodeTxt );
+                            xnet->AddAttribute( "name", net_name );
+
+                            added = true;
+                        }
+
+                        auto refText = pc->m_comp->GetRef( &sheet );
+                        auto pinText = pc->m_pin->GetNumber();
+
+                        xnet->AddChild( xnode = node( "node" ) );
+                        xnode->AddAttribute( "ref", refText );
+                        xnode->AddAttribute( "pin", pinText );
+                    }
+                }
+            }
         }
-
-        if( nitem->m_Type != NET_PIN )
-            continue;
-
-        if( nitem->m_Flag != 0 )     // Redundant pin, skip it
-            continue;
-
-        comp = nitem->GetComponentParent();
-
-        // Get the reference for the net name and the main parent component
-        ref = comp->GetRef( &nitem->m_SheetPath );
-        if( ref[0] == wxChar( '#' ) )
-            continue;
-
-        if( ++sameNetcodeCount == 1 )
+    }
+    else
+    {
+        for( unsigned ii = 0; ii < m_masterList->size(); ii++ )
         {
-            xnets->AddChild( xnet = node( "net" ) );
-            netCodeTxt.Printf( "%d", netCode );
-            xnet->AddAttribute( "code", netCodeTxt );
-            xnet->AddAttribute( "name", netName );
-        }
+            NETLIST_OBJECT* nitem = m_masterList->GetItem( ii );
+            SCH_COMPONENT*  comp;
 
-        XNODE*      xnode;
-        xnet->AddChild( xnode = node( "node" ) );
-        xnode->AddAttribute( "ref", ref );
-        xnode->AddAttribute( "pin",  nitem->GetPinNumText() );
+            // New net found, write net id;
+            if( ( netCode = nitem->GetNet() ) != lastNetCode )
+            {
+                sameNetcodeCount = 0;   // item count for this net
+                netName = nitem->GetNetName();
+                lastNetCode  = netCode;
+            }
+
+            if( nitem->m_Type != NET_PIN )
+                continue;
+
+            if( nitem->m_Flag != 0 )     // Redundant pin, skip it
+                continue;
+
+            comp = nitem->GetComponentParent();
+
+            // Get the reference for the net name and the main parent component
+            ref = comp->GetRef( &nitem->m_SheetPath );
+            if( ref[0] == wxChar( '#' ) )
+                continue;
+
+            if( ++sameNetcodeCount == 1 )
+            {
+                xnets->AddChild( xnet = node( "net" ) );
+                netCodeTxt.Printf( "%d", netCode );
+                xnet->AddAttribute( "code", netCodeTxt );
+                xnet->AddAttribute( "name", netName );
+            }
+
+            XNODE*      xnode;
+            xnet->AddChild( xnode = node( "node" ) );
+            xnode->AddAttribute( "ref", ref );
+            xnode->AddAttribute( "pin",  nitem->GetPinNumText() );
+        }
     }
 
     return xnets;

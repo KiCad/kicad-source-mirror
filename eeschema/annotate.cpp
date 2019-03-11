@@ -62,7 +62,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
     {
         SCH_SCREEN* screen = GetScreen();
         wxCHECK_RET( screen != NULL, wxT( "Attempt to clear annotation of a NULL screen." ) );
-        screen->ClearAnnotation( m_CurrentSheet );
+        screen->ClearAnnotation( g_CurrentSheet );
     }
     else
     {
@@ -71,7 +71,7 @@ void SCH_EDIT_FRAME::DeleteAnnotation( bool aCurrentSheetOnly )
     }
 
     // Update the references for the sheet that is currently being displayed.
-    m_CurrentSheet->UpdateAllScreenReferences();
+    g_CurrentSheet->UpdateAllScreenReferences();
 
     SyncView();
     GetCanvas()->Refresh();
@@ -125,7 +125,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         }
         else
         {
-            m_CurrentSheet->GetMultiUnitComponents( lockedComponents );
+            g_CurrentSheet->GetMultiUnitComponents( lockedComponents );
         }
     }
 
@@ -146,7 +146,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
     }
     else
     {
-        m_CurrentSheet->GetComponents( references );
+        g_CurrentSheet->GetComponents( references );
     }
 
     // Break full components reference in name (prefix) and number:
@@ -233,7 +233,7 @@ void SCH_EDIT_FRAME::AnnotateComponents( bool              aAnnotateSchematic,
         aReporter.ReportTail( _( "Annotation complete." ), REPORTER::RPT_ACTION );
 
     // Update on screen references, that can be modified by previous calculations:
-    m_CurrentSheet->UpdateAllScreenReferences();
+    g_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
 
     SyncView();
@@ -252,7 +252,7 @@ int SCH_EDIT_FRAME::CheckAnnotate( REPORTER& aReporter, bool aOneSheetOnly )
     if( !aOneSheetOnly )
         sheetList.GetComponents( componentsList );
     else
-        m_CurrentSheet->GetComponents( componentsList );
+        g_CurrentSheet->GetComponents( componentsList );
 
     return componentsList.CheckAnnotation( aReporter );
 }

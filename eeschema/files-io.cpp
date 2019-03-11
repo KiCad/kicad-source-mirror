@@ -51,7 +51,9 @@
 #include <sch_eagle_plugin.h>
 #include <symbol_lib_table.h>
 #include <dialog_symbol_remap.h>
+#include <dialog_migrate_buses.h>
 #include <worksheet_shape_builder.h>
+#include <connection_graph.h>
 
 
 bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
@@ -287,6 +289,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         SetScreen( nullptr );
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
+
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
 
         // This will rename the file if there is an autosave and the user want to recover
@@ -295,8 +298,10 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         try
         {
             g_RootSheet = pi->Load( fullFileName, &Kiway() );
-            m_CurrentSheet->clear();
-            m_CurrentSheet->push_back( g_RootSheet );
+
+            g_CurrentSheet = new SCH_SHEET_PATH();
+            g_CurrentSheet->clear();
+            g_CurrentSheet->push_back( g_RootSheet );
 
             if( !pi->GetError().IsEmpty() )
             {
@@ -362,13 +367,27 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         }
 
         schematic.UpdateSymbolLinks();      // Update all symbol library links for all sheets.
-        SetScreen( m_CurrentSheet->LastScreen() );
+        SetScreen( g_CurrentSheet->LastScreen() );
 
         // Ensure the schematic is fully segmented on first display
         BreakSegmentsOnJunctions();
         SchematicCleanUp( true );
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
+
+        RecalculateConnections(); // Update connectivity graph
+
+        // Migrate conflicting bus definitions
+        // TODO(JE) This should only run once based on schematic file version
+        if( g_ConnectionGraph->GetBusesNeedingMigration().size() > 0 )
+        {
+            DIALOG_MIGRATE_BUSES dlg( this );
+            dlg.ShowQuasiModal();
+
+            RecalculateConnections();
+            OnModify();
+        }
+
         GetScreen()->m_Initialized = true;
     }
 
@@ -816,9 +835,9 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             newfilename.SetName( Prj().GetProjectName() );
             newfilename.SetExt( SchematicFileExtension );
 
-            m_CurrentSheet->clear();
-            m_CurrentSheet->push_back( g_RootSheet );
-            SetScreen( m_CurrentSheet->LastScreen() );
+            g_CurrentSheet->clear();
+            g_CurrentSheet->push_back( g_RootSheet );
+            SetScreen( g_CurrentSheet->LastScreen() );
 
             g_RootSheet->SetFileName( newfilename.GetFullPath() );
             GetScreen()->SetFileName( newfilename.GetFullPath() );

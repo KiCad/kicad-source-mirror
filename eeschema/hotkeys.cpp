@@ -220,6 +220,9 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D',
+                               ID_SCH_UNFOLD_BUS );
+
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
 static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', (int) wxID_OPEN );
@@ -332,6 +335,7 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkLeaveSheet,
     &HkDeleteNode,
     &HkHighlightConnection,
+    &HkUnfoldBus,
     &HkCanvasCairo,
     &HkCanvasOpenGL,
     NULL
@@ -639,6 +643,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_ROTATE:                         // Rotate schematic item.
     case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
     case HK_AUTOPLACE_FIELDS:               // Autoplace all fields around component
+    case HK_UNFOLD_BUS:                     // Unfold a bus wire
     case HK_CANVAS_CAIRO:
     case HK_CANVAS_OPENGL:
         {

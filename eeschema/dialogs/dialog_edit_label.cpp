@@ -29,10 +29,9 @@
  */
 
 #include <fctsys.h>
-#include <wx/valgen.h>
-#include <wx/valnum.h>
 #include <sch_edit_frame.h>
 #include <base_units.h>
+#include <validators.h>
 
 #include <sch_draw_panel.h>
 #include <general.h>
@@ -87,6 +86,7 @@ private:
     wxWindow*       m_activeTextCtrl;
     wxTextEntry*    m_activeTextEntry;
     UNIT_BINDER     m_textSize;
+    REGEX_VALIDATOR m_netNameValidator;
 };
 
 
@@ -108,7 +108,9 @@ const int MAX_TEXTSIZE = INT_MAX;
 
 DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTextItem ) :
     DIALOG_LABEL_EDITOR_BASE( aParent ),
-    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false )
+    m_textSize( aParent, m_textSizeLabel, m_textSizeCtrl, m_textSizeUnits, false ),
+    // first part matches single nets and bus vector, the second part matches complex buses
+    m_netNameValidator( "([^/ ]+)|({[^/]+})" )
 {
     m_Parent = aParent;
     m_CurrentText = aTextItem;
@@ -151,8 +153,9 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
 
     SetInitialFocus( m_activeTextCtrl );
 
+    // Enable validator for net names
     if( m_CurrentText->Type() != SCH_TEXT_T )
-        ( (wxTextValidator*) m_activeTextCtrl->GetValidator() )->SetCharExcludes( wxT( " /" ) );
+        m_activeTextCtrl->SetValidator( m_netNameValidator );
 
     m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
                        m_CurrentText->Type() == SCH_HIERARCHICAL_LABEL_T );

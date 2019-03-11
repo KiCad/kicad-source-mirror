@@ -455,7 +455,7 @@ void SCH_EDIT_FRAME::PasteListOfItems( wxDC* DC )
         return;
     }
 
-    wxFileName destFn = m_CurrentSheet->Last()->GetFileName();
+    wxFileName destFn = g_CurrentSheet->Last()->GetFileName();
 
     if( destFn.IsRelative() )
         destFn.MakeAbsolute( Prj().GetProjectPath() );

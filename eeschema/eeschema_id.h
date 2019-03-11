@@ -66,6 +66,7 @@ enum id_eeschema_frm
     /* Schematic editor main menubar IDs. */
     ID_RESCUE_CACHED,
     ID_EDIT_SYM_LIB_TABLE,
+    ID_BUS_MANAGER,
     ID_REMAP_SYMBOLS,
     ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
     ID_GRID_SETTINGS,
@@ -166,6 +167,10 @@ enum id_eeschema_frm
     ID_POPUP_SCH_GETINFO_MARKER,
     ID_POPUP_END_RANGE,
 
+    // Dynamically bound in AddMenusForBus()
+    ID_POPUP_SCH_UNFOLD_BUS,
+    ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + 64,
+
     ID_POPUP_SCH_DISPLAYDOC_CMP,
     ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
 
@@ -200,6 +205,7 @@ enum id_eeschema_frm
     ID_SCH_EDIT_COMPONENT_FOOTPRINT,
     ID_SCH_MOVE_ITEM,
     ID_SCH_DRAG_ITEM,
+    ID_SCH_UNFOLD_BUS,
 
     ID_AUTOPLACE_FIELDS,
 

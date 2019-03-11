@@ -79,6 +79,7 @@
 #define HELP_RUN_LIB_EDITOR _( "Create, delete, and edit symbols" )
 #define HELP_RUN_LIB_VIEWER _( "Browse symbol libraries" )
 #define HELP_GENERATE_BOM _( "Generate bill of materials" )
+#define HELP_BUS_MANAGER _( "Manage bus definitions" )
 #define HELP_IMPORT_FOOTPRINTS \
     _( "Back-import symbol footprint association fields from the .cmp back import file created by Pcbnew" )
 

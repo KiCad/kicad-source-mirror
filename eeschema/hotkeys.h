@@ -80,6 +80,7 @@ enum hotkey_id_commnand {
     HK_AUTOPLACE_FIELDS,
     HK_UPDATE_PCB_FROM_SCH,
     HK_SELECT_ITEMS_ON_PCB,
+    HK_UNFOLD_BUS,
     HK_CANVAS_OPENGL,
     HK_CANVAS_CAIRO,
 };

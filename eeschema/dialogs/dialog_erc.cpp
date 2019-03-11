@@ -48,6 +48,7 @@
 #include <sch_sheet.h>
 #include <lib_pin.h>
 #include <sch_component.h>
+#include <connection_graph.h>
 
 #include <dialog_erc.h>
 #include <erc.h>
@@ -58,10 +59,7 @@ extern int           DiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
 extern int           DefaultDiagErc[PINTYPE_COUNT][PINTYPE_COUNT];
 
 
-bool DIALOG_ERC::m_writeErcFile = false;            // saved only for the current session
-bool DIALOG_ERC::m_TestSimilarLabels = true;        // Save in project config
 bool DIALOG_ERC::m_diagErcTableInit = false;        // saved only for the current session
-bool DIALOG_ERC::m_tstUniqueGlobalLabels = true;    // saved only for the current session
 
 // Control identifiers for events
 #define ID_MATRIX_0 1800
@@ -102,8 +100,13 @@ DIALOG_ERC::DIALOG_ERC( SCH_EDIT_FRAME* parent ) :
 
 DIALOG_ERC::~DIALOG_ERC()
 {
-    m_TestSimilarLabels = m_cbTestSimilarLabels->GetValue();
-    m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
+    transferControlsToSettings();
+
+    if( m_settings != m_parent->GetErcSettings() )
+    {
+        m_parent->UpdateErcSettings( m_settings );
+        m_parent->SaveProjectSettings( false );
+    }
 }
 
 
@@ -117,9 +120,8 @@ void DIALOG_ERC::Init()
             m_buttonList[ii][jj] = NULL;
     }
 
-    m_WriteResultOpt->SetValue( m_writeErcFile );
-    m_cbTestSimilarLabels->SetValue( m_TestSimilarLabels );
-    m_cbTestUniqueGlbLabels->SetValue( m_tstUniqueGlobalLabels );
+    m_settings = m_parent->GetErcSettings();
+    transferSettingsToControls();
 
     SCH_SCREENS screens;
     updateMarkerCounts( &screens );
@@ -128,6 +130,30 @@ void DIALOG_ERC::Init()
 
     // Init Panel Matrix
     ReBuildMatrixPanel();
+}
+
+
+void DIALOG_ERC::transferSettingsToControls()
+{
+    m_WriteResultOpt->SetValue( m_settings.write_erc_file );
+    m_cbTestSimilarLabels->SetValue( m_settings.check_similar_labels );
+    m_cbTestUniqueGlbLabels->SetValue( m_settings.check_unique_global_labels );
+    m_cbCheckBusDriverConflicts->SetValue( m_settings.check_bus_driver_conflicts );
+    m_cbCheckBusEntries->SetValue( m_settings.check_bus_entry_conflicts );
+    m_cbCheckBusToBusConflicts->SetValue( m_settings.check_bus_to_bus_conflicts );
+    m_cbCheckBusToNetConflicts->SetValue( m_settings.check_bus_to_net_conflicts );
+}
+
+
+void DIALOG_ERC::transferControlsToSettings()
+{
+    m_settings.write_erc_file = m_WriteResultOpt->GetValue();
+    m_settings.check_similar_labels = m_cbTestSimilarLabels->GetValue();
+    m_settings.check_unique_global_labels = m_cbTestUniqueGlbLabels->GetValue();
+    m_settings.check_bus_driver_conflicts = m_cbCheckBusDriverConflicts->GetValue();
+    m_settings.check_bus_entry_conflicts = m_cbCheckBusEntries->GetValue();
+    m_settings.check_bus_to_bus_conflicts = m_cbCheckBusToBusConflicts->GetValue();
+    m_settings.check_bus_to_net_conflicts = m_cbCheckBusToNetConflicts->GetValue();
 }
 
 
@@ -436,10 +462,8 @@ void DIALOG_ERC::ResetDefaultERCDiag( wxCommandEvent& event )
 {
     memcpy( DiagErc, DefaultDiagErc, sizeof( DiagErc ) );
     ReBuildMatrixPanel();
-    m_TestSimilarLabels = true;
-    m_cbTestSimilarLabels->SetValue( m_TestSimilarLabels );
-    m_tstUniqueGlobalLabels = true;
-    m_cbTestUniqueGlbLabels->SetValue( m_tstUniqueGlobalLabels );
+    m_settings.LoadDefaults();
+    transferSettingsToControls();
 }
 
 
@@ -483,9 +507,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 {
     wxFileName fn;
 
-    m_writeErcFile = m_WriteResultOpt->GetValue();
-    m_TestSimilarLabels = m_cbTestSimilarLabels->GetValue();
-    m_tstUniqueGlobalLabels = m_cbTestUniqueGlbLabels->GetValue();
+    transferControlsToSettings();
 
     // Build the whole sheet list in hierarchy (sheet, not screen)
     SCH_SHEET_LIST sheets( g_RootSheet );
@@ -509,6 +531,12 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
      */
     TestDuplicateSheetNames( true );
 
+    TestConflictingBusAliases();
+
+    // The connection graph has a whole set of ERC checks it can run
+    m_parent->RecalculateConnections();
+    g_ConnectionGraph->RunERC( m_settings );
+
     /* Test is all units of each multiunit component have the same footprint assigned.
      */
     TestMultiunitFootprints( sheets );
@@ -518,9 +546,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // Reset the connection type indicator
     objectsConnectedList->ResetConnectionsType();
 
-    unsigned lastItemIdx;
-    unsigned nextItemIdx = lastItemIdx = 0;
-    int MinConn    = NOC;
+    unsigned lastItemIdx = 0;
 
     /* Check that a pin appears in only one net.  This check is necessary
      * because multi-unit components that have shared pins can be wired to
@@ -547,13 +573,6 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
         wxASSERT_MSG( lastNet <= net, wxT( "Netlist not correctly ordered" ) );
 
-        if( lastNet != net )
-        {
-            // New net found:
-            MinConn      = NOC;
-            nextItemIdx = itemIdx;
-        }
-
         switch( item->m_Type )
         {
         // These items do not create erc problems
@@ -567,30 +586,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
         case NET_GLOBBUSLABELMEMBER:
             break;
 
-        case NET_HIERLABEL:
-        case NET_HIERBUSLABELMEMBER:
-        case NET_SHEETLABEL:
-        case NET_SHEETBUSLABELMEMBER:
-            // ERC problems when pin sheets do not match hierarchical labels.
-            // Each pin sheet must match a hierarchical label
-            // Each hierarchical label must match a pin sheet
-            objectsConnectedList->TestforNonOrphanLabel( itemIdx, nextItemIdx );
-            break;
-        case NET_GLOBLABEL:
-            if( m_tstUniqueGlobalLabels )
-                objectsConnectedList->TestforNonOrphanLabel( itemIdx, nextItemIdx );
-            break;
-
-        case NET_NOCONNECT:
-
-            // ERC problems when a noconnect symbol is connected to more than one pin.
-            MinConn = NET_NC;
-
-            if( objectsConnectedList->CountPinsInNet( nextItemIdx ) > 1 )
-                Diagnose( item, NULL, MinConn, UNC );
-
-            break;
-
+        // TODO(JE) Port this to the new system
         case NET_PIN:
         {
             // Check if this pin has appeared before on a different net
@@ -619,10 +615,13 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
                 }
             }
 
+            // TODO(JE) Remove this if new system is finished
             // Look for ERC problems between pins:
-            TestOthersItems( objectsConnectedList.get(), itemIdx, nextItemIdx, &MinConn );
+            //TestOthersItems( objectsConnectedList.get(), itemIdx, nextItemIdx, &MinConn );
             break;
         }
+        default:
+        break;
         }
 
         lastItemIdx = itemIdx;
@@ -630,7 +629,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
 
     // Test similar labels (i;e. labels which are identical when
     // using case insensitive comparisons)
-    if( m_TestSimilarLabels )
+    if( m_settings.check_similar_labels )
         objectsConnectedList->TestforSimilarLabels();
 
     // Displays global results:
@@ -653,7 +652,7 @@ void DIALOG_ERC::TestErc( REPORTER& aReporter )
     // Display message
     aReporter.ReportTail( _( "Finished" ), REPORTER::RPT_INFO );
 
-    if( m_writeErcFile )
+    if( m_settings.write_erc_file )
     {
         fn = g_RootSheet->GetScreen()->GetFileName();
         fn.SetExt( wxT( "erc" ) );

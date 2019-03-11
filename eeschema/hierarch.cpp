@@ -267,7 +267,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     SetRepeatItem( NULL );
     ClearMsgPanel();
 
-    SCH_SCREEN* screen = m_CurrentSheet->LastScreen();
+    SCH_SCREEN* screen = g_CurrentSheet->LastScreen();
 
     // Switch to current sheet,
     // and update the grid size, because it can be modified in latest screen
@@ -275,7 +275,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     GetScreen()->SetGrid( m_LastGridSizeId + ID_POPUP_GRID_LEVEL_1000 );
 
     // update the References
-    m_CurrentSheet->UpdateAllScreenReferences();
+    g_CurrentSheet->UpdateAllScreenReferences();
     SetSheetNumberAndCount();
     m_canvas->SetCanStartBlock( -1 );
 
@@ -284,12 +284,11 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         Zoom_Automatique( false );
         screen->m_Initialized = true;
 
-        // Ensure the schematic is fully segmented on first display
-        BreakSegmentsOnJunctions();
-        SchematicCleanUp( true );
-        screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
+        // TODO(JE) should be able to just recalculate the current sheet path
+        // RecalculateConnections() handles cleanup and dangling ends tests
+        RecalculateConnections();
 
-        screen->TestDanglingEnds();
+        screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
     }
     else
     {

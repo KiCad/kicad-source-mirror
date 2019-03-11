@@ -33,6 +33,7 @@
 #include <trace_helpers.h>
 #include <sch_item_struct.h>
 #include <sch_screen.h>
+#include <sch_sheet_path.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 
@@ -82,6 +83,49 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
         return false;
 
     return doIsConnected( aPosition );
+}
+
+
+SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
+{
+    SCH_CONNECTION* conn = nullptr;
+
+    try
+    {
+        conn = m_connection_map.at( aSheet );
+    }
+    catch( const std::out_of_range& oor )
+    {
+        // TODO(JE) should we just call InitializeConnection here?
+    }
+
+    return conn;
+}
+
+
+std::unordered_set<SCH_ITEM*>& SCH_ITEM::ConnectedItems()
+{
+    return m_connected_items;
+}
+
+
+void SCH_ITEM::AddConnectionTo( SCH_ITEM* aItem )
+{
+    m_connected_items.insert( aItem );
+}
+
+
+void SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
+{
+    if( Connection( aSheet ) )
+    {
+        Connection( aSheet )->Reset();
+        return;
+    }
+
+    auto connection = new SCH_CONNECTION( this );
+    connection->SetSheet( aSheet );
+    m_connection_map.insert( std::make_pair( aSheet, connection ) );
 }
 
 

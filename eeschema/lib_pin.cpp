@@ -47,6 +47,7 @@
 #include <lib_pin.h>
 #include <transform.h>
 #include <sch_component.h>
+#include <sch_sheet_path.h>
 #include <trace_helpers.h>
 
 
@@ -1770,6 +1771,19 @@ void LIB_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
     aList.push_back( MSG_PANEL_ITEM( aComponent->GetField( REFERENCE )->GetShownText(),
                                      aComponent->GetField( VALUE )->GetShownText(),
                                      DARKCYAN ) );
+
+#if defined(DEBUG)
+
+    if( auto pin_connection = aComponent->GetConnectionForPin( this ) )
+    {
+        auto conn = pin_connection->Connection( *g_CurrentSheet );
+
+        wxASSERT( conn );
+
+        conn->AppendDebugInfoToMsgPanel( aList );
+    }
+
+#endif
 }
 
 const EDA_RECT LIB_PIN::GetBoundingBox( bool aIncludeInvisibles ) const

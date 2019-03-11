@@ -36,6 +36,7 @@
 #include <template_fieldnames.h>
 #include <block_commande.h>
 #include <sch_collectors.h>
+#include <erc_settings.h>
 #include <sch_draw_panel.h>
 
 // enum PINSHEETLABEL_SHAPE
@@ -66,6 +67,7 @@ class wxFindDialogEvent;
 class wxFindReplaceData;
 class SCHLIB_FILTER;
 class RESCUER;
+class CONNECTION_GRAPH;
 
 
 /// enum used in RotationMiroir()
@@ -111,18 +113,36 @@ enum SCH_SEARCH_T {
 };
 
 
+/// Collection of data related to the bus unfolding tool
+struct BUS_UNFOLDING_T {
+    bool in_progress;   ///< True if bus unfold operation is running
+
+    bool offset;        ///< True if the bus entry should be offset from origin
+
+    bool label_placed;  ///< True if user has placed the net label
+
+    wxPoint origin;     ///< Origin (on the bus) of the unfold
+
+    wxString net_name;  ///< Net label for the unfolding operation
+
+    SCH_BUS_WIRE_ENTRY* entry;
+
+    SCH_LABEL* label;
+};
+
+
 /**
  * Schematic editor (Eeschema) main window.
  */
 class SCH_EDIT_FRAME : public SCH_BASE_FRAME
 {
 private:
-    SCH_SHEET_PATH*         m_CurrentSheet;    ///< which sheet we are presently working on.
     wxString                m_DefaultSchematicFileName;
     wxString                m_SelectedNetName;
 
     PARAM_CFG_ARRAY         m_projectFileParams;
     PARAM_CFG_ARRAY         m_configSettings;
+    ERC_SETTINGS            m_ercSettings;
     wxPageSetupDialogData   m_pageSetupData;
     wxFindReplaceData*      m_findReplaceData;
     wxString*               m_findReplaceStatus;
@@ -165,6 +185,18 @@ private:
 
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool        m_spiceAjustPassiveValues;
+
+public: // TODO(JE) Make private
+
+    /// Data related to bus unfolding tool
+    BUS_UNFOLDING_T m_busUnfold;
+
+private:
+
+    /*  these are PROJECT specific, not schematic editor specific
+    wxString        m_userLibraryPath;
+    wxArrayString   m_componentLibFiles;
+    */
 
     static PINSHEETLABEL_SHAPE m_lastSheetPinType;  ///< Last sheet pin type.
     static wxSize   m_lastSheetPinTextSize;         ///< Last sheet pin text size.
@@ -251,6 +283,13 @@ public:
     void Process_Config( wxCommandEvent& event );
     void OnSelectTool( wxCommandEvent& aEvent );
 
+    /**
+     * Processes an "Unfold Bus" command from the right-click menu.
+     * Depending on what the user clicked, this can result in the creation
+     * of one or more new objects.
+     */
+    void OnUnfoldBus( wxCommandEvent& event );
+
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
 
     /**
@@ -276,6 +315,10 @@ public:
      * @return True if the project file was loaded correctly.
      */
     bool LoadProjectFile();
+
+    const ERC_SETTINGS& GetErcSettings() { return m_ercSettings; }
+
+    void UpdateErcSettings( const ERC_SETTINGS& aSettings ) { m_ercSettings = aSettings; }
 
     /**
      * Return a default symbol field name for field \a aFieldNdx for all components.
@@ -447,10 +490,12 @@ public:
      * @param aPoint Point at which to break the segment
      * @param aAppend Add the changes to the previous undo state
      * @param aNewSegment Pointer to the newly created segment (if given and created)
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint, bool aAppend = false,
-            SCH_LINE** aNewSegment = NULL );
+    bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
+                       bool aAppend = false, SCH_LINE** aNewSegment = NULL,
+                       SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Checks every wire and bus for a intersection at \a aPoint and break into two segments
@@ -458,18 +503,22 @@ public:
      *
      * @param aPoint Test this point for an intersection.
      * @param aAppend Add the changes to the previous undo state
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegments( const wxPoint& aPoint, bool aAppend = false );
+    bool BreakSegments( const wxPoint& aPoint, bool aAppend = false,
+                        SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Tests all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
      *
      * @param aAppend Add the changes to the previous undo state
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegmentsOnJunctions( bool aApped = false );
+    bool BreakSegmentsOnJunctions( bool aApped = false,
+                                   SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
@@ -795,6 +844,27 @@ public:
      */
     bool AskToSaveChanges();
 
+    /**
+     * Checks if a bus unfolding operation is in progress, so that it can be
+     * properly canceled / commited along with the wire draw operation.
+     */
+    bool IsBusUnfoldInProgress()
+    {
+        return m_busUnfold.in_progress;
+    }
+
+    /**
+     * Cancels a bus unfolding operation, cleaning up the bus entry and label
+     * that were created
+     */
+    void CancelBusUnfold();
+
+    /**
+     * Completes a bus unfolding operation after the user finishes drawing the
+     * unfolded wire
+     */
+    void FinishBusUnfold();
+
 private:
 
     /**
@@ -835,6 +905,11 @@ private:
      */
     void OnOrient( wxCommandEvent& aEvent );
 
+    /**
+     * Handles the keyboard hotkey for unfolding a bus
+     */
+    void OnUnfoldBusHotkey( wxCommandEvent& event );
+
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );
     void OnErc( wxCommandEvent& event );
@@ -843,6 +918,7 @@ private:
     void OnSimulate( wxCommandEvent& event );
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnLaunchBomManager( wxCommandEvent& event );
+    void OnLaunchBusManager( wxCommandEvent& event );
     void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );
     void OnFindDrcMarker( wxFindDialogEvent& event );
@@ -952,9 +1028,10 @@ private:
      * deleting identical objects superimposed on top of each other.
      *
      * @param aAppend The changes to the schematic should be appended to the previous undo
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any schematic clean up was performed.
      */
-    bool SchematicCleanUp( bool aAppend = false );
+    bool SchematicCleanUp( bool aAppend = false, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * If any single wire passes through _both points_, remove the portion between the two points,
@@ -1474,6 +1551,11 @@ public:
     void ClearExecFlags( const int aFlags ) { m_exec_flags &= ~( aFlags ); }
 
     wxString GetNetListerCommand() const { return m_netListerCommand; }
+
+    /**
+     * Generates the connection data for the entire schematic hierarchy.
+     */
+    void RecalculateConnections();
 
     /**
      * Updates netlist and sends it to pcbnew.

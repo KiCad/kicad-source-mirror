@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_label_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_edit_label_base</property>
         <property name="namespace"></property>
@@ -247,10 +246,10 @@
                                 <property name="subclass"></property>
                                 <property name="toolbar_pane">0</property>
                                 <property name="tooltip"></property>
-                                <property name="validator_data_type">wxString</property>
-                                <property name="validator_style">wxFILTER_EXCLUDE_CHAR_LIST</property>
-                                <property name="validator_type">wxTextValidator</property>
-                                <property name="validator_variable">m_labelText</property>
+                                <property name="validator_data_type"></property>
+                                <property name="validator_style">wxFILTER_NONE</property>
+                                <property name="validator_type">wxDefaultValidator</property>
+                                <property name="validator_variable"></property>
                                 <property name="value"></property>
                                 <property name="window_extra_style"></property>
                                 <property name="window_name"></property>
@@ -606,8 +605,6 @@
                                 <property name="window_style"></property>
                                 <event name="OnChar"></event>
                                 <event name="OnCombobox"></event>
-                                <event name="OnComboboxCloseup"></event>
-                                <event name="OnComboboxDropdown"></event>
                                 <event name="OnEnterWindow"></event>
                                 <event name="OnEraseBackground"></event>
                                 <event name="OnKeyDown"></event>

@@ -30,12 +30,16 @@
 #ifndef SCH_ITEM_STRUCT_H
 #define SCH_ITEM_STRUCT_H
 
+#include <unordered_map>
 #include <vector>
+
 #include <base_screen.h>
 #include <general.h>
+#include <sch_connection.h>
+#include <sch_sheet_path.h>
 
 class SCH_ITEM;
-class SCH_SHEET_PATH;
+//class SCH_SHEET_PATH;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;
@@ -69,7 +73,7 @@ class DANGLING_END_ITEM
 {
 private:
     /// A pointer to the connectable object.
-    const EDA_ITEM* m_item;
+    EDA_ITEM* m_item;
 
     /// The position of the connection point.
     wxPoint        m_pos;
@@ -81,7 +85,7 @@ private:
     const EDA_ITEM* m_parent;
 
 public:
-    DANGLING_END_ITEM( DANGLING_END_T aType, const EDA_ITEM* aItem, const wxPoint& aPosition )
+    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem, const wxPoint& aPosition )
     {
         m_item = aItem;
         m_type = aType;
@@ -89,7 +93,7 @@ public:
         m_parent = aItem;
     }
 
-    DANGLING_END_ITEM( DANGLING_END_T aType, const EDA_ITEM* aItem,
+    DANGLING_END_ITEM( DANGLING_END_T aType, EDA_ITEM* aItem,
             const wxPoint& aPosition, const EDA_ITEM* aParent )
     {
         m_item = aItem;
@@ -99,7 +103,7 @@ public:
     }
 
     wxPoint GetPosition() const { return m_pos; }
-    const EDA_ITEM* GetItem() const { return m_item; }
+    EDA_ITEM* GetItem() const { return m_item; }
     const EDA_ITEM* GetParent() const { return m_parent; }
     DANGLING_END_T GetType() const { return m_type; }
 };
@@ -114,11 +118,19 @@ public:
  */
 class SCH_ITEM : public EDA_ITEM
 {
+    friend class CONNECTION_GRAPH;
+
 protected:
     SCH_LAYER_ID   m_Layer;
     EDA_ITEMS      m_connections;   ///< List of items connected to this item.
     wxPoint        m_storedPos;     ///< a temporary variable used in some move commands
                                     ///> to store a initial pos (of the item or mouse cursor)
+
+    /// Stores pointers to other items that are connected to this one (schematic only)
+    std::unordered_set<SCH_ITEM*> m_connected_items;
+
+    /// Stores connectivity information, per sheet
+    std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
 
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
@@ -311,6 +323,33 @@ public:
      * @return True if connection to \a aPoint exists.
      */
     bool IsConnected( const wxPoint& aPoint ) const;
+
+    /**
+     * Retrieves the connection associated with this object in the given sheet
+     */
+    SCH_CONNECTION* Connection( const SCH_SHEET_PATH& aPath ) const;
+
+    /**
+     * Retrieves the set of items connected to this item (schematic only)
+     */
+    std::unordered_set<SCH_ITEM*>& ConnectedItems();
+
+    /**
+     * Adds a connection link between this item and another
+     */
+    void AddConnectionTo( SCH_ITEM* aItem );
+
+    /**
+     * Creates a new connection object associated with this object
+     *
+     * @param aPath is the sheet path to initialize
+     */
+    void InitializeConnection( const SCH_SHEET_PATH& aPath );
+
+    /**
+     * Returns true if this item should propagate connection info to aItem
+     */
+    virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const { return true; }
 
     virtual bool HitTest( const wxPoint& aPosition ) const override
     {

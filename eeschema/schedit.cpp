@@ -279,16 +279,16 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
         if( item && (item->Type() == SCH_SHEET_T) )
         {
-            m_CurrentSheet->push_back( (SCH_SHEET*) item );
+            g_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
 
         break;
 
     case ID_POPUP_SCH_LEAVE_SHEET:
-        if( m_CurrentSheet->Last() != g_RootSheet )
+        if( g_CurrentSheet->Last() != g_RootSheet )
         {
-            m_CurrentSheet->pop_back();
+            g_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
 
@@ -373,6 +373,81 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         SetRepeatItem( NULL );
+}
+
+
+void SCH_EDIT_FRAME::OnUnfoldBus( wxCommandEvent& event )
+{
+    auto screen = GetScreen();
+    auto item = static_cast< wxMenuItem* >( event.GetEventUserData() );
+    auto net = item->GetItemLabelText();
+
+    auto pos = GetCrossHairPosition();
+
+    /**
+     * Unfolding a bus consists of the following user inputs:
+     * 1) User selects a bus to unfold (see AddMenusForBus())
+     *    We land in this event handler.
+     *
+     * 2) User clicks to set the net label location (handled by BeginSegment())
+     *    Before this first click, the posture of the bus entry  follows the
+     *    mouse cursor in X and Y (handled by DrawSegment())
+     *
+     * 3) User is now in normal wiring mode and can exit in any normal way.
+     */
+
+    wxASSERT( !m_busUnfold.in_progress );
+
+    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
+
+    SetSchItemParent( m_busUnfold.entry, screen );
+    AddToScreen( m_busUnfold.entry );
+
+    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), net );
+
+    m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(),
+                                            GetDefaultTextSize() ) );
+    m_busUnfold.label->SetLabelSpinStyle( 0 );
+
+    SetSchItemParent( m_busUnfold.label, screen );
+
+    m_busUnfold.in_progress = true;
+    m_busUnfold.origin = pos;
+    m_busUnfold.net_name = net;
+
+    SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+
+    SetCrossHairPosition( m_busUnfold.entry->m_End() );
+    BeginSegment( LAYER_WIRE );
+    m_canvas->SetAutoPanRequest( true );
+}
+
+
+void SCH_EDIT_FRAME::CancelBusUnfold()
+{
+    if( m_busUnfold.entry )
+    {
+        RemoveFromScreen( m_busUnfold.entry );
+        delete m_busUnfold.entry;
+    }
+
+    if( m_busUnfold.label )
+    {
+        if( m_busUnfold.label_placed )
+            RemoveFromScreen( m_busUnfold.label );
+
+        delete m_busUnfold.label;
+    }
+
+    FinishBusUnfold();
+}
+
+
+void SCH_EDIT_FRAME::FinishBusUnfold()
+{
+    m_busUnfold = {};
+
+    SetToolID( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor(), wxEmptyString );
 }
 
 
@@ -1058,17 +1133,17 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         // Keep trace of existing sheet paths. EditSheet() can modify this list
         SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 
-        doRefresh = EditSheet( (SCH_SHEET*) item, m_CurrentSheet, &doClearAnnotation );
+        doRefresh = EditSheet( (SCH_SHEET*) item, g_CurrentSheet, &doClearAnnotation );
 
         if( doClearAnnotation )     // happens when the current sheet load a existing file
         {                           // we must clear "new" components annotation
             SCH_SCREENS screensList( g_RootSheet );
             // We clear annotation of new sheet paths here:
             screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
-            // Clear annotation of m_CurrentSheet itself, because its sheetpath
+            // Clear annotation of g_CurrentSheet itself, because its sheetpath
             // is not a new path, but components managed by its sheet path must have
             // their annotation cleared, becuase they are new:
-            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( m_CurrentSheet );
+            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( g_CurrentSheet );
         }
 
         if( doRefresh )
@@ -1330,4 +1405,78 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
+}
+
+
+void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
+{
+    auto data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+    auto item = GetScreen()->GetCurItem();
+
+    wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+    if( item == NULL )
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::EditableItems,
+                                  aEvent.GetInt() );
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( (item == NULL) || (item->GetFlags() != 0) )
+            return;
+    }
+
+    auto connection = item->Connection( *g_CurrentSheet );
+
+    if( connection && connection->IsBus() )
+    {
+        int idx = 0;
+        wxMenu* bus_unfolding_menu = new wxMenu;
+
+        for( const auto& member : connection->Members() )
+        {
+            int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+
+            if( member->Type() == CONNECTION_BUS )
+            {
+                wxMenu* submenu = new wxMenu;
+                bus_unfolding_menu->AppendSubMenu( submenu, _( member->Name() ) );
+
+                for( const auto& sub_member : member->Members() )
+                {
+                    id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+
+                    submenu->Append( id, sub_member->Name(), wxEmptyString );
+
+                    // See comment in else clause below
+                    auto sub_item_clone = new wxMenuItem();
+                    sub_item_clone->SetItemLabel( sub_member->Name() );
+
+                    Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus,
+                                 this, id, id, sub_item_clone );
+                }
+            }
+            else
+            {
+                bus_unfolding_menu->Append( id, member->Name(),
+                                            wxEmptyString );
+
+                // Because Bind() takes ownership of the user data item, we
+                // make a new menu item here and set its label.  Why create a
+                // menu item instead of just a wxString or something? Because
+                // Bind() requires a pointer to wxObject rather than a void
+                // pointer.  Maybe at some point I'll think of a better way...
+                auto item_clone = new wxMenuItem();
+                item_clone->SetItemLabel( member->Name() );
+
+                Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus,
+                             this, id, id, item_clone );
+            }
+        }
+
+        GetGalCanvas()->PopupMenu( bus_unfolding_menu, GetCrossHairScreenPosition() );
+    }
 }

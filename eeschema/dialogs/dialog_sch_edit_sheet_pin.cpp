@@ -23,6 +23,7 @@
  */
 
 #include <sch_edit_frame.h>
+#include <sch_sheet.h>
 #include <dialog_sch_edit_sheet_pin.h>
 
 

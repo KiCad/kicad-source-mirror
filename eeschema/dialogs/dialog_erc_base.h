@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Feb 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -65,6 +65,10 @@ class DIALOG_ERC_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbTestUniqueGlbLabels;
 		wxPanel* m_matrixPanel;
 		wxButton* m_ResetOptButton;
+		wxCheckBox* m_cbCheckBusToNetConflicts;
+		wxCheckBox* m_cbCheckBusToBusConflicts;
+		wxCheckBox* m_cbCheckBusEntries;
+		wxCheckBox* m_cbCheckBusDriverConflicts;
 		wxButton* m_buttondelmarkers;
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;

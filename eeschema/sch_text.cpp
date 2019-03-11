@@ -113,6 +113,7 @@ SCH_TEXT::SCH_TEXT( const wxPoint& pos, const wxString& text, KICAD_T aType ) :
     m_Layer = LAYER_NOTES;
     SetTextPos( pos );
     m_isDangling = false;
+    m_connectionType = CONNECTION_NONE;
     m_spin_style = 0;
 
     SetMultilineAllowed( true );
@@ -361,6 +362,7 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
     bool previousState = m_isDangling;
     m_isDangling = true;
+    m_connectionType = CONNECTION_NONE;
 
     for( unsigned ii = 0; ii < aItemList.size(); ii++ )
     {
@@ -376,12 +378,21 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
         case SHEET_LABEL_END:
         case NO_CONNECT_END:
             if( GetTextPos() == item.GetPosition() )
+            {
                 m_isDangling = false;
+
+                if( item.GetType() != PIN_END )
+                    m_connected_items.insert( static_cast< SCH_ITEM* >( item.GetItem() ) );
+            }
 
             break;
 
-        case WIRE_START_END:
+
         case BUS_START_END:
+            m_connectionType = CONNECTION_BUS;
+            // fall through
+
+        case WIRE_START_END:
         {
             // These schematic items have created 2 DANGLING_END_ITEM one per end.  But being
             // a paranoid programmer, I'll check just in case.
@@ -392,6 +403,18 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 
             DANGLING_END_ITEM & nextItem = aItemList[ii];
             m_isDangling = !IsPointOnSegment( item.GetPosition(), nextItem.GetPosition(), GetTextPos() );
+
+            if( !m_isDangling )
+            {
+                if( m_connectionType != CONNECTION_BUS )
+                    m_connectionType = CONNECTION_NET;
+
+                // Add the line to the connected items, since it won't be picked
+                // up by a search of intersecting connection points
+                auto sch_item = static_cast< SCH_ITEM* >( item.GetItem() );
+                AddConnectionTo( sch_item );
+                sch_item->AddConnectionTo( this );
+            }
         }
             break;
 
@@ -402,6 +425,9 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
         if( !m_isDangling )
             break;
     }
+
+    if( m_isDangling )
+        m_connectionType = CONNECTION_NONE;
 
     return previousState != m_isDangling;
 }
@@ -492,8 +518,10 @@ void SCH_TEXT::GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
     aNetListItems.push_back( item );
 
     // If a bus connects to label
-    if( IsBusLabel( m_Text ) )
+    if( Connection( *aSheetPath )->IsBusLabel( m_Text ) )
+    {
         item->ConvertBusToNetListItems( aNetListItems );
+    }
 }
 
 
@@ -629,6 +657,18 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     // Display text size (X or Y value, with are the same value in Eeschema)
     msg = MessageTextFromValue( aUnits, GetTextWidth(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Size" ), msg, RED ) );
+
+#if defined(DEBUG)
+
+    if( auto conn = Connection( *g_CurrentSheet ) )
+    {
+        conn->AppendDebugInfoToMsgPanel( aList );
+    }
+
+    msg.Printf( "%p", this );
+    aList.push_back( MSG_PANEL_ITEM( _( "Object Address" ), msg, RED ) );
+
+#endif
 }
 
 #if defined(DEBUG)
@@ -1066,10 +1106,14 @@ void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
+    auto conn = Connection( *g_CurrentSheet );
+
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED :
+                               ( conn && conn->IsBus() ) ?
+                               LAYER_BUS : m_Layer );
 
     GRSetDrawMode( DC, DrawMode );
 

@@ -120,6 +120,8 @@ public:
 
     void Plot( PLOTTER* aPlotter ) override;
 
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+
 #if defined(DEBUG)
     void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -157,9 +159,17 @@ public:
 
     EDA_ITEM* Clone() const override;
 
+    virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const override;
+
     BITMAP_DEF GetMenuImage() const override;
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+
+    /**
+     * Pointer to the bus item (usually a bus wire) connected to this bus-wire
+     * entry, if it is connected to one.
+     */
+    SCH_ITEM* m_connected_bus_item;
 };
 
 /**
@@ -193,6 +203,12 @@ public:
     BITMAP_DEF GetMenuImage() const override;
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+
+    /**
+     * Pointer to the bus items (usually bus wires) connected to this bus-bus
+     * entry (either or both may be nullptr)
+     */
+    SCH_ITEM* m_connected_bus_items[2];
 };
 
 #endif    // _SCH_BUS_ENTRY_H_

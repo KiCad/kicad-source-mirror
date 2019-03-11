@@ -264,6 +264,21 @@ public:
      *                      the bus label NETLIST_OBJECTs.
      */
     void ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItems );
+
+private:
+    /**
+     * Given a bus vector, append the appropriate members into the list
+     * If given something like "DATA", 7, 0, will append "DATA7", "DATA6", etc.
+     *
+     * @param aNetListItems is the list to append to
+     * @param aName is the prefix for the vector, like "DATA"
+     * @param aBegin is the first entry in the vector
+     * @param aEnd is the last entry in the vector
+     * @param aOffset is an offset to add to the member code for each member
+     */
+    void fillBusVector( NETLIST_OBJECT_LIST& aNetListItems, wxString aName,
+                        long aBegin, long aEnd, long aOffset );
+
 };
 
 

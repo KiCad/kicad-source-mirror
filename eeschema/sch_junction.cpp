@@ -96,10 +96,14 @@ void SCH_JUNCTION::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffs
 {
     COLOR4D color;
 
+    auto conn = Connection( *g_CurrentSheet );
+
     if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
     else
-        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED : m_Layer );
+        color = GetLayerColor( GetState( BRIGHTENED ) ? LAYER_BRIGHTENED :
+                               ( conn && conn->IsBus() ) ?
+                               LAYER_BUS : m_Layer );
 
     GRSetDrawMode( aDC, aDrawMode );
 

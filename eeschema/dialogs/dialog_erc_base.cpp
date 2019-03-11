@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan 17 2019)
+// C++ code generated with wxFormBuilder (version Feb 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -130,6 +130,24 @@ DIALOG_ERC_BASE::DIALOG_ERC_BASE( wxWindow* parent, wxWindowID id, const wxStrin
 
 
 	m_panelMatrixSizer->Add( sbSizer3, 0, wxALL|wxEXPAND, 5 );
+
+	wxStaticBoxSizer* sbSizer31;
+	sbSizer31 = new wxStaticBoxSizer( new wxStaticBox( m_PanelERCOptions, wxID_ANY, _("Bus Connections") ), wxVERTICAL );
+
+	m_cbCheckBusToNetConflicts = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Check that bus wires are not connected to hierarchical net pins and vice versa"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer31->Add( m_cbCheckBusToNetConflicts, 0, wxALL, 5 );
+
+	m_cbCheckBusToBusConflicts = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Check that bus-to-bus connections have shared members"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer31->Add( m_cbCheckBusToBusConflicts, 0, wxALL, 5 );
+
+	m_cbCheckBusEntries = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Check that nets are members of buses they graphically connect to"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer31->Add( m_cbCheckBusEntries, 0, wxALL, 5 );
+
+	m_cbCheckBusDriverConflicts = new wxCheckBox( sbSizer31->GetStaticBox(), wxID_ANY, _("Check buses for conflicting drivers"), wxDefaultPosition, wxDefaultSize, 0 );
+	sbSizer31->Add( m_cbCheckBusDriverConflicts, 0, wxALL, 5 );
+
+
+	m_panelMatrixSizer->Add( sbSizer31, 0, wxALL|wxEXPAND, 5 );
 
 
 	m_PanelERCOptions->SetSizer( m_panelMatrixSizer );

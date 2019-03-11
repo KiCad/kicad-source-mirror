@@ -24,15 +24,22 @@
  */
 
 
+#include <algorithm>
 #include <fctsys.h>
 #include <build_version.h>
 #include <confirm.h>
 
 #include <sch_edit_frame.h>
+#include <xnode.h>
+#include <connection_graph.h>
 #include "netlist_exporter_kicad.h"
 
 bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigned aNetlistOptions )
 {
+    wxASSERT( m_graph );
+
+    m_use_graph = true;
+
     try
     {
         FILE_OUTPUTFORMATTER formatter( aOutFileName );
@@ -43,6 +50,130 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
     {
         DisplayError( NULL, ioe.What() );
         return false;
+    }
+
+    /**
+     * Temporary QC measure:
+     * Generate the netlist again using the old algorithm and compare.
+     * In theory, if the schematic does not use any of the new bus techniques
+     * (bus aliases, bus groups, etc) they should match.  If not, we can throw
+     * a warning and generate some debug output to fix the new netlister.
+     *
+     * This whole block can be removed once we are confident in the new code.
+     */
+
+    if( !m_graph->UsesNewBusFeatures() )
+    {
+        m_use_graph = false;
+        auto old_nets = makeListOfNets();
+
+        bool different = false;
+
+        for( auto it : m_graph->m_net_code_to_subgraphs_map )
+        {
+            // auto code = it.first;
+            auto subgraphs = it.second;
+            auto net_name = subgraphs[0]->GetNetName();
+
+            std::set<wxString> net_pins;
+
+            for( auto subgraph : subgraphs )
+            {
+                auto sheet = subgraph->m_sheet;
+
+                for( auto item : subgraph->m_items )
+                {
+                    if( item->Type() == SCH_PIN_CONNECTION_T )
+                    {
+                        auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
+
+                        if( pc->m_pin->IsPowerConnection() ||
+                            (LIB_PART*)( pc->m_pin->GetParent() )->IsPower() )
+                            continue;
+
+                        wxString refText = pc->m_comp->GetRef( &sheet );
+                        wxString pinText = pc->m_pin->GetNumber();
+
+                        net_pins.insert( refText + "-" + pinText );
+                    }
+                }
+            }
+
+            bool found = false;
+
+            // Yes this is slow, but it's a temporary debugging thing.
+            for( auto kid = old_nets->GetChildren(); kid; kid = kid->GetNext() )
+            {
+                for( auto attr = kid->GetAttributes(); attr; attr = attr->GetNext() )
+                {
+                    if( attr->GetName() == "name" && attr->GetValue() == net_name )
+                    {
+                        found = true;
+
+                        // Check members of this net
+                        std::set<wxString> old_net_pins;
+
+                        for( auto pin_node = kid->GetChildren();
+                             pin_node; pin_node = pin_node->GetNext() )
+                        {
+                            wxString ref, pin;
+
+                            for( auto pin_attr = pin_node->GetAttributes();
+                                 pin_attr; pin_attr = pin_attr->GetNext() )
+                            {
+                                if( pin_attr->GetName() == "ref" )
+                                    ref = pin_attr->GetValue();
+
+                                if( pin_attr->GetName() == "pin" )
+                                    pin = pin_attr->GetValue();
+                            }
+
+                            old_net_pins.insert( ref + "-" + pin );
+                        }
+
+                        std::vector<wxString> difference( std::max( net_pins.size(),
+                                                                    old_net_pins.size() ) );
+
+                        auto end = std::set_symmetric_difference( net_pins.begin(),
+                                                                  net_pins.end(),
+                                                                  old_net_pins.begin(),
+                                                                  old_net_pins.end(),
+                                                                  difference.begin() );
+
+                        difference.resize( end - difference.begin() );
+
+                        if( difference.size() > 0 )
+                        {
+                            different = true;
+                        }
+                    }
+                }
+            }
+
+            if( !found )
+            {
+                different = true;
+            }
+        }
+
+        if( different )
+        {
+            wxLogDebug( "NOTE: New netlist algorithm is inconsistent with old! "
+                        "Please contact Jon Evans <jon@craftyjon.com> "
+                        "to help debug this issue" );
+
+            try
+            {
+                FILE_OUTPUTFORMATTER formatter( aOutFileName + ".old_algo" );
+                Format( &formatter, GNL_ALL );
+            }
+
+            catch( const IO_ERROR& ioe )
+            {
+                DisplayError( NULL, ioe.What() );
+                return false;
+            }
+        }
     }
 
     return true;
