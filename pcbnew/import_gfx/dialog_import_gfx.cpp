@@ -71,10 +71,8 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     // construct an import manager with options from config
     {
         GRAPHICS_IMPORT_MGR::TYPE_LIST blacklist;
-
-        if( !ADVANCED_CFG::GetCfg().m_enableSvgImport )
-            blacklist.push_back( GRAPHICS_IMPORT_MGR::SVG );
-
+        // Currently: all types are allowed, so the blacklist is empty
+        // (no GFX_FILE_T in the blacklist)
         m_gfxImportMgr = std::make_unique<GRAPHICS_IMPORT_MGR>( blacklist );
     }
 
