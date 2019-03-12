@@ -234,6 +234,7 @@ bool DIALOG_SHIM::Enable( bool enable )
 #if defined(DEBUG)
     const char* type_id = typeid( *this ).name();
     printf( "wxDialog %s: %s\n", type_id, enable ? "enabled" : "disabled" );
+    fflush(0);  //Needed on msys2 to immediately print the message
 #endif
 
     return wxDialog::Enable( enable );

@@ -1485,6 +1485,8 @@ void D_PAD::ImportSettingsFromMaster( const D_PAD& aMasterPad )
     SetDrillSize( aMasterPad.GetDrillSize() );
     SetDrillShape( aMasterPad.GetDrillShape() );
     SetRoundRectRadiusRatio( aMasterPad.GetRoundRectRadiusRatio() );
+    SetChamferRectRatio( aMasterPad.GetChamferRectRatio() );
+    SetChamferPositions( aMasterPad.GetChamferPositions() );
 
     switch( aMasterPad.GetShape() )
     {
