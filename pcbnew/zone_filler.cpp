@@ -96,15 +96,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         if( zone->GetIsKeepout() )
             continue;
 
-        toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST(zone) );
-    }
-
-    for( unsigned i = 0; i < toFill.size(); i++ )
-    {
         if( m_commit )
-        {
-            m_commit->Modify( toFill[i].m_zone );
-        }
+            m_commit->Modify( zone );
+
+        // Remove existing fill first to prevent drawing invalid polygons
+        zone->UnFill();
+        toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST(zone) );
     }
 
     if( m_progressReporter )
