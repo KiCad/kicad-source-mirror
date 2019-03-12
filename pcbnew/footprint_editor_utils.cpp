@@ -551,7 +551,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_MODEDIT_IMPORT_PART:
         if( ! Clear_Pcb( true ) )
-            break;                  // //this command is aborted
+            break;                  // this command is aborted
 
         SetCrossHairPosition( wxPoint( 0, 0 ) );
         Import_Module();
@@ -559,7 +559,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( GetBoard()->m_Modules )
             GetBoard()->m_Modules->ClearFlags();
 
-        GetScreen()->ClrModify();
+        GetScreen()->SetModify();
         Zoom_Automatique( false );
         m_canvas->Refresh();
         Update3DView();
