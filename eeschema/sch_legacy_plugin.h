@@ -127,6 +127,9 @@ public:
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
     const wxString& GetError() const override { return m_error; }
+    
+    static LIB_PART * ParsePart( LINE_READER & reader, int major_version = 0, int minor_version = 0 );
+    static void FormatPart( LIB_PART * part, OUTPUTFORMATTER & formatter );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
