@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014-2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
+ * Copyright (C) 2014-2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
  * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
@@ -167,12 +167,12 @@ void SelectReferenceNumber( wxTextEntry* aTextEntry )
     {
         wxString num = ref;
 
-        while( !num.IsEmpty() && ( !wxIsdigit( num.Last() ) || !wxIsdigit( num.GetChar( 0 ) ) ) )
+        while( !num.IsEmpty() && ( !isdigit( num.Last() ) || !isdigit( num.GetChar( 0 ) ) ) )
         {
-            if( !wxIsdigit( num.Last() ) )
+            if( !isdigit( num.Last() ) )
                 num.RemoveLast();
 
-            if( !wxIsdigit( num.GetChar ( 0 ) ) )
+            if( !isdigit( num.GetChar ( 0 ) ) )
                 num = num.Right( num.Length() - 1);
         }
 
@@ -591,8 +591,13 @@ size_t std::hash<wxString>::operator()( const wxString& s ) const
 }
 #endif
 
+#ifdef USE_KICAD_WXPOINT_LESS_AND_HASH
+size_t std::hash<wxPoint>::operator() ( const wxPoint& k ) const
+{
+    return ( ( std::hash<int>()( k.x )
+             ^ ( std::hash<int>()( k.y ) << 1 ) ) >> 1 );
+}
 
-#ifdef USE_KICAD_WXPOINT_LESS
 bool std::less<wxPoint>::operator()( const wxPoint& aA, const wxPoint& aB ) const
 {
     if( aA.x == aB.x )
