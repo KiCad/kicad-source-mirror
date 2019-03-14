@@ -557,8 +557,6 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 	}
 
     case S_CURVE:
-        // Rebuild the poly points shape
-        ((DRAWSEGMENT*)this)->RebuildBezierToSegmentsPointsList( m_Width );
 
         for( unsigned ii = 0; ii < m_BezierPoints.size(); ++ii )
             bbox.Merge( m_BezierPoints[ii] );
