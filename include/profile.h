@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,6 +73,7 @@ public:
     {
         m_running = true;
         m_starttime = std::chrono::high_resolution_clock::now();
+        m_lasttime = m_starttime;
     }
 
 
@@ -97,7 +98,26 @@ public:
                     m_stoptime;
 
         std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
-        std::cerr << m_name << " took " << elapsed.count() << " milliseconds." << std::endl;
+        m_lasttime = display_stoptime;
+        std::cerr << m_name << " took " << elapsed.count() << " ms." << std::endl;
+    }
+
+    /**
+     * Print a message and the elapsed time (in ms) since the start time
+     * and since the last call to STDERR.
+     * @param aMessage is the message to print
+     */
+    void Show( const std::string& aMessage )
+    {
+        TIME_POINT display_stoptime = m_running ?
+                    std::chrono::high_resolution_clock::now() :
+                    m_stoptime;
+
+        std::chrono::duration<double, std::milli> elapsed = display_stoptime - m_starttime;
+        std::chrono::duration<double, std::milli> delta_time = display_stoptime - m_lasttime;
+        std::cerr << m_name << " (" << aMessage << ") took " << elapsed.count() << " ms."
+                  << " delta " << delta_time.count() << " ms." << std::endl;
+        m_lasttime = display_stoptime;
     }
 
     /**
@@ -138,7 +158,7 @@ private:
 
     typedef std::chrono::time_point<std::chrono::high_resolution_clock> TIME_POINT;
 
-    TIME_POINT m_starttime, m_stoptime;
+    TIME_POINT m_starttime, m_lasttime, m_stoptime;
 };
 
 
