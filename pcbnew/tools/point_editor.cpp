@@ -561,7 +561,12 @@ void POINT_EDITOR::updateItem() const
         SHAPE_POLY_SET& outline = *zone->Outline();
 
         for( int i = 0; i < outline.TotalVertices(); ++i )
+        {
+            if( outline.Vertex( i ) != m_editPoints->Point( i ).GetPosition() )
+                zone->SetNeedRefill( true );
+
             outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
+        }
 
         validatePolygon( outline );
         zone->Hatch();
@@ -636,7 +641,7 @@ void POINT_EDITOR::finishItem()
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
 
-        if( zone->IsFilled() && m_refill )
+        if( zone->IsFilled() && m_refill && zone->NeedRefill() )
         {
             ZONE_FILLER filler( board() );
             WX_PROGRESS_REPORTER reporter( getEditFrame<PCB_BASE_FRAME>(), _( "Refill Zones" ), 4 );
@@ -740,7 +745,7 @@ void POINT_EDITOR::updatePoints()
 
     case PCB_ZONE_AREA_T:
     {
-        const ZONE_CONTAINER* zone = static_cast<const ZONE_CONTAINER*>( item );
+        ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
         const SHAPE_POLY_SET* outline = zone->Outline();
 
         if( m_editPoints->PointsSize() != (unsigned) outline->TotalVertices() )
@@ -989,7 +994,11 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         SHAPE_POLY_SET* zoneOutline;
 
         if( item->Type() == PCB_ZONE_AREA_T )
-            zoneOutline = static_cast<ZONE_CONTAINER*>( item )->Outline();
+        {
+            ZONE_CONTAINER* zone = static_cast<ZONE_CONTAINER*>( item );
+            zoneOutline = zone->Outline();
+            zone->SetNeedRefill( true );
+        }
         else
             zoneOutline = &( graphicItem->GetPolyShape() );
 
@@ -1100,6 +1109,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
     {
         auto zone = static_cast<ZONE_CONTAINER*>( item );
         polygon = zone->Outline();
+        zone->SetNeedRefill( true );
     }
     else if( (item->Type() == PCB_MODULE_EDGE_T ) || ( item->Type() == PCB_LINE_T ) )
     {

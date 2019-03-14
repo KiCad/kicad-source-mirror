@@ -805,7 +805,7 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
  * The solid areas can be more than one on copper layers, and do not have holes
  * ( holes are linked by overlapping segments to the main outline)
  */
-bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
+bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPolys,
                                   SHAPE_POLY_SET& aFinalPolys ) const
 {
     SHAPE_POLY_SET smoothedPoly;
@@ -829,10 +829,11 @@ bool ZONE_FILLER::fillSingleZone( const ZONE_CONTAINER* aZone, SHAPE_POLY_SET& a
         aFinalPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
     }
 
+    aZone->SetNeedRefill( false );
     return true;
 }
 
-bool ZONE_FILLER::fillZoneWithSegments( const ZONE_CONTAINER* aZone,
+bool ZONE_FILLER::fillZoneWithSegments( ZONE_CONTAINER* aZone,
                                         const SHAPE_POLY_SET& aFilledPolys,
                                         ZONE_SEGMENT_FILL& aFillSegs ) const
 {
@@ -891,6 +892,7 @@ bool ZONE_FILLER::fillZoneWithSegments( const ZONE_CONTAINER* aZone,
         }
     }
 
+    aZone->SetNeedRefill( false );
     return success;
 }
 

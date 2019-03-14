@@ -3347,6 +3347,9 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
         }
     }
 
+    // Clear flags used in zone edition:
+    zone->SetNeedRefill( false );
+
     return zone.release();
 }
 

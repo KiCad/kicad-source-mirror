@@ -167,14 +167,17 @@ public:
 
     virtual void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    void SetFillMode( ZONE_FILL_MODE aFillMode )                   { m_FillMode = aFillMode; }
-    ZONE_FILL_MODE GetFillMode() const                             { return m_FillMode; }
+    void SetFillMode( ZONE_FILL_MODE aFillMode ) { m_FillMode = aFillMode; }
+    ZONE_FILL_MODE GetFillMode() const { return m_FillMode; }
 
     void SetThermalReliefGap( int aThermalReliefGap )   { m_ThermalReliefGap = aThermalReliefGap; }
     int GetThermalReliefGap( D_PAD* aPad = NULL ) const;
 
     void SetThermalReliefCopperBridge( int aThermalReliefCopperBridge )
     {
+        if( m_ThermalReliefCopperBridge != aThermalReliefCopperBridge )
+            SetNeedRefill( true );
+
         m_ThermalReliefCopperBridge = aThermalReliefCopperBridge;
     }
     int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
@@ -185,6 +188,9 @@ public:
     bool IsFilled() const { return m_IsFilled; }
     void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
 
+    bool NeedRefill() const { return m_needRefill; }
+    void SetNeedRefill( bool aNeedRefill ) { m_needRefill = aNeedRefill; }
+
     int GetZoneClearance() const { return m_ZoneClearance; }
     void SetZoneClearance( int aZoneClearance ) { m_ZoneClearance = aZoneClearance; }
 
@@ -192,7 +198,13 @@ public:
     void SetPadConnection( ZoneConnection aPadConnection ) { m_PadConnection = aPadConnection; }
 
     int GetMinThickness() const { return m_ZoneMinThickness; }
-    void SetMinThickness( int aMinThickness ) { m_ZoneMinThickness = aMinThickness; }
+    void SetMinThickness( int aMinThickness )
+    {
+        if( m_ZoneMinThickness != aMinThickness )
+            SetNeedRefill( true );
+
+        m_ZoneMinThickness = aMinThickness;
+    }
 
     int GetSelectedCorner() const
     {
@@ -488,6 +500,10 @@ public:
         // Convert global to relative indices
         if( m_Poly->GetRelativeIndices( aCornerIndex, &relativeIndices ) )
         {
+            if( m_Poly->Vertex( relativeIndices ).x != new_pos.x ||
+                m_Poly->Vertex( relativeIndices ).y != new_pos.y )
+                SetNeedRefill( true );
+
             m_Poly->Vertex( relativeIndices ).x = new_pos.x;
             m_Poly->Vertex( relativeIndices ).y = new_pos.y;
         }
@@ -722,6 +738,12 @@ private:
 
     /** True when a zone was filled, false after deleting the filled areas. */
     bool                  m_IsFilled;
+
+    /** False when a zone was refilled, true after changes in zone params.
+     * m_needRefill = false does not imply filled areas are up to date, just
+     * the zone was refilled after edition, and does not need refilling
+     */
+    bool                  m_needRefill;
 
     ///< Width of the gap in thermal reliefs.
     int                   m_ThermalReliefGap;

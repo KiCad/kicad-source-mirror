@@ -68,6 +68,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( BOARD* aBoard ) :
     SetLocalFlags( 0 );                         // flags tempoarry used in zone calculations
     m_Poly = new SHAPE_POLY_SET();              // Outlines
     aBoard->GetZoneSettings().ExportSetting( *this );
+
+    m_needRefill = false;   // True only after some edition.
 }
 
 
@@ -107,6 +109,8 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
 
     SetLayerSet( aZone.GetLayerSet() );
     SetLocalFlags( aZone.GetLocalFlags() );
+
+    SetNeedRefill( aZone.NeedRefill() );
 }
 
 
@@ -219,6 +223,9 @@ void ZONE_CONTAINER::SetLayerSet( LSET aLayerSet )
     {
         return;
     }
+
+    if( m_layerSet != aLayerSet )
+        SetNeedRefill( true );
 
     m_layerSet = aLayerSet;
 
@@ -641,6 +648,9 @@ int ZONE_CONTAINER::GetThermalReliefCopperBridge( D_PAD* aPad ) const
 
 void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 {
+    if( m_cornerRadius != aRadius )
+        SetNeedRefill( true );
+
     m_cornerRadius = aRadius;
 }
 
@@ -910,6 +920,8 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
         m_Poly->Vertex( aEdge ) += VECTOR2I( offset );
         m_Poly->Vertex( next_corner ) += VECTOR2I( offset );
         Hatch();
+
+        SetNeedRefill( true );
     }
 }
 
@@ -1013,6 +1025,8 @@ void ZONE_CONTAINER::AddPolygon( std::vector< wxPoint >& aPolygon )
         m_Poly->AddOutline( outline );
     else
         m_Poly->AddHole( outline );
+
+    SetNeedRefill( true );
 }
 
 
@@ -1029,6 +1043,8 @@ bool ZONE_CONTAINER::AppendCorner( wxPoint aPosition, int aHoleIdx, bool aAllowD
         return false;
 
     m_Poly->Append( aPosition.x, aPosition.y, -1, aHoleIdx, aAllowDuplication );
+
+    SetNeedRefill( true );
 
     return true;
 }

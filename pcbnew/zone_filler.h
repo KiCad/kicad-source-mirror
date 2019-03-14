@@ -77,7 +77,7 @@ private:
      * a list of SEGZONE items is built, line per line
      * @return true if success, false on error
      */
-    bool fillZoneWithSegments( const ZONE_CONTAINER* aZone,
+    bool fillZoneWithSegments( ZONE_CONTAINER* aZone,
             const SHAPE_POLY_SET& aFilledPolys,
             ZONE_SEGMENT_FILL& aFillSegs ) const;
 
@@ -111,9 +111,8 @@ private:
      * by aZone->GetMinThickness() / 2 to be drawn with a outline thickness = aZone->GetMinThickness()
      * aFinalPolys are polygons that will be drawn on screen and plotted
      */
-    bool fillSingleZone( const ZONE_CONTAINER* aZone,
-            SHAPE_POLY_SET& aRawPolys,
-            SHAPE_POLY_SET& aFinalPolys ) const;
+    bool fillSingleZone( ZONE_CONTAINER* aZone,
+            SHAPE_POLY_SET& aRawPolys, SHAPE_POLY_SET& aFinalPolys ) const;
 
     BOARD* m_board;
     COMMIT* m_commit;
