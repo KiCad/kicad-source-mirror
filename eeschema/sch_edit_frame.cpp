@@ -444,6 +444,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
           ID_EDIT_SYM_LIB_TABLE );
+
+    UpdateTitle();
 }
 
 
@@ -1478,7 +1480,7 @@ void SCH_EDIT_FRAME::UpdateTitle()
 
     if( GetScreen()->GetFileName() == m_DefaultSchematicFileName )
     {
-        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ), GetChars( GetScreen()->GetFileName() ) );
+        title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s" ), GetScreen()->GetFileName() );
     }
     else
     {
@@ -1486,9 +1488,8 @@ void SCH_EDIT_FRAME::UpdateTitle()
         wxFileName  fn = fileName;
 
         title.Printf( _( "Eeschema" ) + wxT( " \u2014 %s [%s] \u2014 %s" ),
-                      GetChars( fn.GetName() ),
-                      GetChars( m_CurrentSheet->PathHumanReadable() ),
-                      GetChars( fn.GetPath() ) );
+                      fn.GetFullName(), m_CurrentSheet->PathHumanReadable(),
+                      fn.GetPath() );
 
         if( fn.FileExists() )
         {
@@ -1560,4 +1561,3 @@ const BOX2I SCH_EDIT_FRAME::GetDocumentExtents() const
 
     return BOX2I( VECTOR2I(0, 0), VECTOR2I( sizeX, sizeY ) );
 }
-

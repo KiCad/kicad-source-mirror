@@ -375,6 +375,8 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     SyncView();
     GetScreen()->ClearDrawingState();
 
+    UpdateTitle();
+
     return true;
 }
 
