@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  2 2018)
+// C++ code generated with wxFormBuilder (version v3.8.0)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __PCB_CALCULATOR_FRAME_BASE_H__
-#define __PCB_CALCULATOR_FRAME_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -54,7 +53,7 @@ class UNIT_SELECTOR_THICKNESS;
 class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
-	
+
 	protected:
 		wxMenuBar* m_menubar;
 		wxStatusBar* m_statusBar;
@@ -275,7 +274,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextBrdClass;
 		wxGrid* m_gridClassesValuesDisplay;
 		wxPanel* m_panelShowClassPrms;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnClosePcbCalc( wxCloseEvent& event ) { event.Skip(); }
 		virtual void OnRegulTypeSelection( wxCommandEvent& event ) { event.Skip(); }
@@ -303,14 +302,13 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnCalculateAttenuator( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnToleranceSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnBoardClassesUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 877,580 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("pcb_calculator") );
-		
+
 		~PCB_CALCULATOR_FRAME_BASE();
-	
+
 };
 
-#endif //__PCB_CALCULATOR_FRAME_BASE_H__
