@@ -49,6 +49,10 @@ void PCB_CALCULATOR_FRAME::OnTranslineEpsilonR_Button( wxCommandEvent& event )
 
     // EpsilonR ( relative dielectric constant) list
     list.Add( wxT( "4.5  FR4" ) );
+    list.Add( wxT( "3.67  Isola FR408" ) );
+    list.Add( wxT( "4.04  Isola 370HR" ) );
+    list.Add( wxT( "3.55  Rogers RO4003C" ) );
+    list.Add( wxT( "3.66  Rogers R4350B" ) );
     list.Add( wxT( "9.8  alumina (Al2O3)" ) );
     list.Add( wxT( "3.78  fused quartz" ) );
     list.Add( wxT( "3.38  RO4003" ) );
@@ -80,6 +84,12 @@ void PCB_CALCULATOR_FRAME::OnTranslineTanD_Button( wxCommandEvent& event )
     // List of current dielectric loss factor (tangent delta)
     list.Clear();
     list.Add( wxT( "2e-2  FR4 @ 1GHz" ) );
+    list.Add( wxT( "12e-3  Isola FR408 @ 2 GHz" ) );
+    list.Add( wxT( "21e-3  Isola 370HR @ 2 GHz" ) );
+    list.Add( wxT( "27e-4  Rogers RO4003C @ 10 GHz" ) );
+    list.Add( wxT( "21e-4  Rogers RO4003C @ 2.5 GHz" ) );
+    list.Add( wxT( "37e-4  Rogers RO4350B @ 10 GHz" ) );
+    list.Add( wxT( "31e-4  Rogers RO4350B @ 2.5 GHz" ) );
     list.Add( wxT( "3e-4  beryllia @ 10GHz" ) );
     list.Add( wxT( "2e-4  aluminia (Al2O3) @ 10GHz" ) );
     list.Add( wxT( "1e-4  fused quartz @ 10GHz" ) );
