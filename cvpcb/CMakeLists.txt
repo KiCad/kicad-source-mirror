@@ -92,7 +92,7 @@ if( false ) # no CVPCB exe any more, only the *.kiface
         )
     if( MAKE_LINK_MAPS )
         set_target_properties( cvpcb PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=cvpcb.map" )
+            LINK_FLAGS "-Wl,-cref,-Map=cvpcb.map" )
     endif()
 
     if( APPLE )
@@ -182,7 +182,7 @@ set_source_files_properties( cvpcb.cpp PROPERTIES
 
 if( MAKE_LINK_MAPS )
     set_target_properties( cvpcb_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_cvpcb.kiface.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=_cvpcb.kiface.map" )
 endif()
 
 # these 2 binaries are a matched set, keep them together:

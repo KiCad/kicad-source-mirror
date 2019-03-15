@@ -631,7 +631,7 @@ target_link_libraries( pcbnew
 
 if( PCBNEW_LINK_MAPS )
     set_target_properties( pcbnew PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=pcbnew.map" )
 endif()
 
 # the main pcbnew program, in DSO form.
@@ -699,10 +699,10 @@ set_source_files_properties( pcbnew.cpp PROPERTIES
 
 if( PCBNEW_LINK_MAPS )
     set_target_properties( pcbnew_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcbnew.kiface.map"
+        LINK_FLAGS "-Wl,-cref,-Map=_pcbnew.kiface.map"
         )
     set_target_properties( pcbnew PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcbnew.map"
+        LINK_FLAGS "-Wl,-cref,-Map=pcbnew.map"
         )
 endif()
 

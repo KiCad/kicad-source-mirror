@@ -97,7 +97,7 @@ target_link_libraries( pl_editor
 
 if( MAKE_LINK_MAPS )
     set_target_properties( pl_editor PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pl_editor.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=pl_editor.map" )
 endif()
 
 # the main pl_editor program, in DSO form.
@@ -132,7 +132,7 @@ set_source_files_properties( pl_editor.cpp PROPERTIES
 
 if( MAKE_LINK_MAPS )
     set_target_properties( pl_editor_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pl_editor.kiface.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=_pl_editor.kiface.map" )
 endif()
 
 # if building pl_editor, then also build pl_editor_kiface if out of date.

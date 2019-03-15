@@ -125,7 +125,7 @@ target_link_libraries( gerbview
 
 if( MAKE_LINK_MAPS )
     set_target_properties( gerbview PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=gerbview.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=gerbview.map" )
 endif()
 
 # the main gerbview program, in DSO form.
@@ -160,7 +160,7 @@ set_source_files_properties( gerbview.cpp PROPERTIES
 
 if( MAKE_LINK_MAPS )
     set_target_properties( gerbview_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_gerbview.kiface.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=_gerbview.kiface.map" )
 endif()
 
 # if building gerbview, then also build gerbview_kiface if out of date.

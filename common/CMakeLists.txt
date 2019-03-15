@@ -668,7 +668,7 @@ if( false ) # future
 
     if( MAKE_LINK_MAPS )
         set_target_properties( _kiway PROPERTIES
-            LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_kiway.so.map"
+            LINK_FLAGS "-Wl,-cref,-Map=_kiway.so.map"
             )
     endif()
 

@@ -382,10 +382,10 @@ add_dependencies( eeschema eeschema_kiface )
 if( MAKE_LINK_MAPS )
     # generate link map with cross reference
     set_target_properties( eeschema_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map"
+        LINK_FLAGS "-Wl,-cref,-Map=${KIFACE_PREFIX}eeschema${KIFACE_SUFFIX}.map"
         )
     set_target_properties( eeschema PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=eeschema.map"
+        LINK_FLAGS "-Wl,-cref,-Map=eeschema.map"
         )
 endif()
 

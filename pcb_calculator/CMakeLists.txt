@@ -72,7 +72,7 @@ target_link_libraries( pcb_calculator
 
 if( MAKE_LINK_MAPS )
     set_target_properties( pcb_calculator PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=pcb_calculator.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=pcb_calculator.map" )
 endif()
 
 # the main pcb_calculator program, in DSO form.
@@ -96,7 +96,7 @@ set_source_files_properties( pcb_calculator.cpp PROPERTIES
 
 if( MAKE_LINK_MAPS )
     set_target_properties( pcb_calculator_kiface PROPERTIES
-        LINK_FLAGS "${TO_LINKER},-cref ${TO_LINKER},-Map=_pcb_calculator.kiface.map" )
+        LINK_FLAGS "-Wl,-cref,-Map=_pcb_calculator.kiface.map" )
 endif()
 
 # if building pcb_calculator, then also build pcb_calculator_kiface if out of date.
