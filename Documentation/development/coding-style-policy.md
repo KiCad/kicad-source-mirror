@@ -50,7 +50,7 @@ developers. The other KiCad developers will appreciate your effort.
 **Do not modify this document without the consent of the project
 leader. All changes to this document require approval.**
 
-## 1.3 Tools
+## 1.3 Tools ## {#tools}
 
 There are some tools that can help you format your code easily.
 
