@@ -4,7 +4,7 @@
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,7 +172,7 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallbac&k)" ), g_Board_Editor_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
@@ -216,7 +216,7 @@ void prepareRouteMenu( wxMenu* aParentMenu )
                  _( "Tune length of differential pair" ),
                  KiBitmap( ps_diff_pair_tune_length_xpm ) );
 
-    text = AddHotkeyName( _( "Tune Differential Pair &Skew/Phase" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Tune Differential Pair S&kew/Phase" ), g_Board_Editor_Hotkeys_Descr,
                           HK_ROUTE_TUNE_SKEW, IS_ACCELERATOR );
     AddMenuItem( aParentMenu, ID_TUNE_DIFF_PAIR_SKEW_BUTT, text,
                  _( "Tune skew/phase of a differential pair" ),
@@ -326,12 +326,12 @@ void preparePlaceMenu( wxMenu* aParentMenu )
                  KiBitmap( add_dimension_xpm ) );
 
     AddMenuItem( aParentMenu, ID_PCB_TARGET_BUTT, _( "La&yer Alignment Target" ),
-            _( "Add layer alignment target" ), KiBitmap( add_pcb_target_xpm ) );
+                 _( "Add layer alignment target" ), KiBitmap( add_pcb_target_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
-                 _( "Drill and &Place Offset" ),
+                 _( "Dr&ill and Place Offset" ),
                  _( "Place origin point for drill and place files" ),
                  KiBitmap( pcb_offset_xpm ) );
 
@@ -344,17 +344,19 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     wxMenu* autoplaceSubmenu = new wxMenu;
     AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_OFF_BOARD_MODULES,
-               _( "&Autoplace off-board components" ), "", KiBitmap( grid_select_axis_xpm ) // fixme: icons
-              );
+                 _( "A&utomatically Place Off-Board Footprints" ), "",
+                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
+        );
 
     AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES,
-               _( "&Autoplace selected components" ), "", KiBitmap( grid_select_axis_xpm ) // fixme: icons
-              );
+                 _( "Automatically Place &Selected Components" ), "",
+                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
+        );
 
-    AddMenuItem( aParentMenu, autoplaceSubmenu,
-            -1, _( "&Auto-place" ),
-            _( "Automatic component placement" ), KiBitmap( grid_select_axis_xpm ) // fixme: icons
-             );
+    AddMenuItem( aParentMenu, autoplaceSubmenu, -1, _( "Place Footprints Au&tomatically" ),
+                 _( "Automatically place all footprints" ),
+                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
+        );
 }
 
 
@@ -368,14 +370,14 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     AddMenuItem( aParentMenu,
                  ID_UPDATE_PCB_FROM_SCH,
-                 _( "Update PCB from Schematic..." ),
+                 _( "Update &PCB from Schematic..." ),
                  _( "Update PCB design with current schematic (forward annotation)" ),
                  KiBitmap( update_pcb_from_sch_xpm ) );
 
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_UPDATE_FOOTPRINTS,
-                 _( "Update Footprints from Library..." ),
+                 _( "Update &Footprints from Library..." ),
                  _( "Update footprints to include any changes from the library" ),
                  KiBitmap( reload_xpm ) );
 
@@ -465,7 +467,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                      _( "Cuts the selected item(s) to the Clipboard" ),
                      KiBitmap( cut_xpm ) );
 
-        text = AddHotkeyName( _( "&Copy" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_COPY );
+        text = AddHotkeyName( _( "Cop&y" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_COPY );
         AddMenuItem( aParentMenu, ID_EDIT_COPY, text,
                      _( "Copies the selected item(s) to the Clipboard" ),
                      KiBitmap( copy_xpm ) );
@@ -493,7 +495,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Edit Text && &Graphic Properties..." ), KiBitmap( reset_text_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_EXCHANGE_FOOTPRINTS,
-                 _( "Change &Footprints..." ),
+                 _( "C&hange Footprints..." ),
                  _( "Assign different footprints from the library" ),
                  KiBitmap( exchange_xpm ) );
 
@@ -504,13 +506,13 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Fill &All Zones" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Fill All *Zones" ), g_Board_Editor_Hotkeys_Descr,
                 HK_ZONE_FILL_OR_REFILL );
     AddMenuItem( aParentMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                  text, _( "Fill all zones on the board" ),
                  KiBitmap( fill_zone_xpm ) );
 
-    text = AddHotkeyName( _( "&Unfill All Zones" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "U&nfill All Zones" ), g_Board_Editor_Hotkeys_Descr,
                 HK_ZONE_REMOVE_FILLED );
     AddMenuItem( aParentMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
                  text, _( "Remove fill from all zones on the board" ),
@@ -519,12 +521,12 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, ID_PCB_GLOBAL_DELETE,
-                 _( "&Global Deletions..." ),
+                 _( "Glo&bal Deletions..." ),
                  _( "Delete tracks, footprints and graphic items from board" ),
                  KiBitmap( general_deletions_xpm ) );
 
     AddMenuItem( aParentMenu, ID_MENU_PCB_CLEAN,
-                 _( "&Cleanup Tracks and Vias..." ),
+                 _( "C&leanup Tracks and Vias..." ),
                  _( "Clean stubs, vias, delete break points or unconnected tracks" ),
                  KiBitmap( delete_xpm ) );
 }
@@ -606,18 +608,16 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
     // Units submenu
     wxMenu* unitsSubMenu = new wxMenu;
     AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-               _( "&Imperial" ), _( "Use imperial units" ),
-               KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+                 _( "&Imperial" ), _( "Use imperial units" ),
+                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
 
     AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-               _( "&Metric" ), _( "Use metric units" ),
-               KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
+                 _( "&Metric" ), _( "Use metric units" ),
+                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
 
-    AddMenuItem( aParentMenu, unitsSubMenu,
-            -1, _( "&Units" ),
-            _( "Select which units are displayed" ),
-             KiBitmap( unit_mm_xpm ) );
-
+    AddMenuItem( aParentMenu, unitsSubMenu, -1, _( "&Units" ),
+                 _( "Select which units are displayed" ),
+                 KiBitmap( unit_mm_xpm ) );
 
 #ifndef __APPLE__
     AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
@@ -754,13 +754,13 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     {
         text = AddHotkeyName( _( "&New" ), g_Board_Editor_Hotkeys_Descr, HK_NEW );
         AddMenuItem( aParentMenu, ID_NEW_BOARD,
-                text, _( "Create new board" ),
-                KiBitmap( new_board_xpm ) );
+                     text, _( "Create new board" ),
+                     KiBitmap( new_board_xpm ) );
 
         text = AddHotkeyName( _( "&Open..." ), g_Board_Editor_Hotkeys_Descr, HK_OPEN );
         AddMenuItem( aParentMenu, ID_LOAD_FILE, text,
-                _( "Open existing board" ),
-                KiBitmap( open_brd_file_xpm ) );
+                     _( "Open existing board" ),
+                     KiBitmap( open_brd_file_xpm ) );
 
         AddMenuItem( aParentMenu, openRecentMenu,
                      -1, _( "Open &Recent" ),
@@ -812,9 +812,9 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                      KiBitmap( add_board_xpm ) );
 
         AddMenuItem( aParentMenu, ID_IMPORT_NON_KICAD_BOARD,
-                _( "Import Non-KiCad Board File..." ),
-                _( "Import board file from other applications" ),
-                KiBitmap( import_brd_file_xpm ) );
+                     _( "Import Non-KiCad Board File..." ),
+                     _( "Import board file from other applications" ),
+                     KiBitmap( import_brd_file_xpm ) );
     }
 
     AddMenuItem( aParentMenu, ID_MENU_READ_BOARD_BACKUP_FILE,
@@ -869,9 +869,9 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  KiBitmap( tools_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_D356_FILE,
-            _( "IPC-D-356 Netlist File..." ),
-            _( "Generate IPC-D-356 netlist file" ),
-            KiBitmap( netlist_xpm ) );
+                 _( "IPC-D-356 Netlist File..." ),
+                 _( "Generate IPC-D-356 netlist file" ),
+                 KiBitmap( netlist_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_BOM_FILE_FROM_BOARD,
                  _( "&BOM File..." ),
