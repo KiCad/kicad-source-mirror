@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018 CERN
+ * Copyright (C) 2019 CERN
  * Author: Maciej Suminski <maciej.suminski@cern.ch>
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -63,8 +63,14 @@ CAIRO_PRINT_CTX::CAIRO_PRINT_CTX( wxDC* aDC )
 #ifdef __WXGTK__
     m_ctx = static_cast<cairo_t*>( gctx->GetNativeContext() );
     m_surface = cairo_get_target( m_ctx );
-    // Magic value: apparently for linux, all printers are 72 DPI
-    m_dpi = 72.0;
+    // On linux, cairo printers are 72 DPI by default. This is an ususable resolution for us.
+    // A reasonable resolution is 600 DPI
+    // so modify the default:
+    #define DEFAULT_DPI 72.0
+    #define KICAD_PRINTER_DPI 600.0
+    // our device scale is DEFAULT_DPI / KICAD_PRINTER_DPI
+    cairo_surface_set_device_scale( m_surface, DEFAULT_DPI/KICAD_PRINTER_DPI, DEFAULT_DPI/KICAD_PRINTER_DPI );
+    m_dpi = KICAD_PRINTER_DPI;
 #endif /* __WXGTK__ */
 
 #ifdef __WXMSW__
@@ -122,6 +128,7 @@ CAIRO_PRINT_GAL::CAIRO_PRINT_GAL( GAL_DISPLAY_OPTIONS& aDisplayOptions,
     m_clearColor = COLOR4D( 1.0, 1.0, 1.0, 1.0 );
     m_hasNativeLandscapeRotation = false;
     resetContext();
+
     SetScreenDPI( m_printCtx->GetNativeDPI() );
 }
 
