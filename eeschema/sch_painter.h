@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2014 CERN
+ * Copyright (C) 2019 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -131,32 +131,31 @@ public:
     }
 
 private:
-	void draw( LIB_RECTANGLE *, int );
-	void draw( LIB_PIN *, int, bool isDangling = true, bool isMoving = false );
-	void draw( LIB_CIRCLE *, int );
-	void draw( LIB_ITEM *, int );
-	void draw( LIB_PART *, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
-               std::vector<bool>* danglingPinFlags = nullptr );
-    void draw( LIB_ALIAS *, int );
-    void draw( LIB_ARC *, int );
-    void draw( LIB_POLYLINE *, int );
-    void draw( LIB_FIELD *, int );
-    void draw( LIB_TEXT *, int );
-    void draw( LIB_BEZIER *, int );
-    void draw( SCH_COMPONENT *, int );
-    void draw( SCH_JUNCTION *, int );
-    void draw( SCH_FIELD *, int );
-    void draw( SCH_TEXT *, int );
-    void draw( SCH_LABEL *, int );
-    void draw( SCH_HIERLABEL *, int );
-    void draw( SCH_GLOBALLABEL *, int );
-    void draw( SCH_SHEET *, int );
-    void draw( SCH_SHEET_PIN *, int );
-    void draw( SCH_NO_CONNECT *, int );
-    void draw( SCH_MARKER *, int );
-    void draw( SCH_BITMAP *, int );
-    void draw( SCH_LINE *, int );
-    void draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer );
+	void draw( LIB_RECTANGLE* aRect, int aLayer );
+	void draw( LIB_PIN* aPin, int aLayer, bool aIsDangling = true, bool isMoving = false );
+	void draw( LIB_CIRCLE* aCircle, int aLayer );
+	void draw( LIB_ITEM *, int aLayer );
+	void draw( LIB_PART* aComp, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
+               std::vector<bool>* aDanglingPinFlags = nullptr );
+    void draw( LIB_ALIAS* aAlias, int aLayer );
+    void draw( LIB_ARC* aArc, int aLayer );
+    void draw( LIB_POLYLINE* aLine, int aLayer );
+    void draw( LIB_FIELD* aField, int aLayer );
+    void draw( LIB_TEXT* aText, int aLayer );
+    void draw( LIB_BEZIER* aCurve, int aLayer );
+    void draw( SCH_COMPONENT* aComp, int aLayer );
+    void draw( SCH_JUNCTION* aJct, int aLayer );
+    void draw( SCH_FIELD* aField, int aLayer );
+    void draw( SCH_TEXT* aText, int aLayer );
+    void draw( SCH_LABEL* aLabel, int aLayer );
+    void draw( SCH_HIERLABEL* aLabel, int aLayer );
+    void draw( SCH_GLOBALLABEL* aLabel, int aLayer );
+    void draw( SCH_SHEET* aSheet, int aLayer );
+    void draw( SCH_NO_CONNECT* aNC, int aLayer );
+    void draw( SCH_MARKER* aMarker, int aLayer );
+    void draw( SCH_BITMAP* aBitmap, int aLayer );
+    void draw( SCH_LINE* aLine, int aLayer );
+    void draw( SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem );
 

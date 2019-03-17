@@ -223,7 +223,7 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 
 
 void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert,
-                        std::vector<bool>* danglingPinFlags )
+                        std::vector<bool>* aDanglingPinFlags )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -249,8 +249,8 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
             auto pin = static_cast<LIB_PIN*>( &item );
             bool dangling = true;
 
-            if( danglingPinFlags && pinIndex < danglingPinFlags->size() )
-                dangling = (*danglingPinFlags)[ pinIndex ];
+            if( aDanglingPinFlags && pinIndex < aDanglingPinFlags->size() )
+                dangling = (*aDanglingPinFlags)[ pinIndex ];
 
             draw( pin, aLayer, dangling, aComp->IsMoving() );
             pinIndex++;
@@ -506,7 +506,7 @@ static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4
 }
 
 
-void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMoving )
+void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMoving )
 {
     if( aLayer != LAYER_DEVICE )
         return;
@@ -529,7 +529,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
         }
         else
         {
-            if( isDangling && aPin->IsPowerConnection() )
+            if( aIsDangling && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( m_gal, pos, color );
 
             return;
@@ -649,9 +649,11 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool isDangling, bool isMovin
                          pos + VECTOR2D(  1,  1 ) * TARGET_PIN_RADIUS );
         m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
+
+        aIsDangling = false; // PIN_NC pin type is always not connected and dangling.
     }
 
-    if( isDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( aIsDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( m_gal, pos, color );
 
     // Draw the labels
