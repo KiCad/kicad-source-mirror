@@ -150,9 +150,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )
             return false;
-
-        if( item )
-            SetCrossHairPosition( item->GetPosition(), false );
     }
 
     // If a command is in progress: add "cancel" and "end tool" menu

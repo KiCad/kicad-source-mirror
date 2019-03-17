@@ -480,6 +480,8 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
             return;
     }
 
+    SetCrossHairPosition( item->GetPosition(), false );
+
     GetCanvas()->GetViewControls()->WarpCursor( GetCrossHairPosition(), true );
 
     switch( item->Type() )
@@ -1477,6 +1479,10 @@ void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
             }
         }
 
-        GetGalCanvas()->PopupMenu( bus_unfolding_menu, GetCrossHairScreenPosition() );
+        auto controls = GetCanvas()->GetViewControls();
+        auto vmp = controls->GetMousePosition( false );
+        wxPoint mouse_pos( (int) vmp.x, (int) vmp.y );
+
+        GetGalCanvas()->PopupMenu( bus_unfolding_menu, mouse_pos );
     }
 }
