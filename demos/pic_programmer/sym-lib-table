@@ -1,4 +1,3 @@
 (sym_lib_table
   (lib (name pic_programmer_schlib)(type Legacy)(uri ${KIPRJMOD}/libs/pic_programmer_schlib.lib)(options "")(descr ""))
-  (lib (name Logic_74xx)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/Logic_74xx.lib)(options "")(descr ""))
 )
