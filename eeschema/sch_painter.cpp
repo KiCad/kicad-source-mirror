@@ -1421,6 +1421,9 @@ void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
                                 m_schSettings.GetLayerColor( LAYER_BUS )
                                     : m_schSettings.GetLayerColor( LAYER_WIRE );
 
+    if( aEntry->GetState( BRIGHTENED ) )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+
     color = getOverlayColor( aEntry, color, false );
 
     m_gal->SetStrokeColor( color );

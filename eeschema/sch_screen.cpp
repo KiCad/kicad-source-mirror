@@ -961,7 +961,9 @@ int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( item->Type() == SCH_LINE_T && item->HitTest( aPosition )
+        if( ( item->Type() == SCH_LINE_T || item->Type() == SCH_BUS_WIRE_ENTRY_T ||
+              item->Type() == SCH_BUS_BUS_ENTRY_T )
+            && item->HitTest( aPosition )
             && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
         {
             aList.push_back( item );
