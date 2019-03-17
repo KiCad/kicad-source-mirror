@@ -110,7 +110,8 @@ void TOOL_BASE::Reset( RESET_REASON aReason )
 }
 
 
-ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads )
+ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, bool aIgnorePads,
+								 const std::vector<ITEM*> aAvoidItems)
 {
     int tl = getView()->GetTopLayer();
 
@@ -135,6 +136,9 @@ ITEM* TOOL_BASE::pickSingleItem( const VECTOR2I& aWhere, int aNet, int aLayer, b
             continue;
 
         if( !IsCopperLayer( item->Layers().Start() ) )
+            continue;
+
+        if( std::find( aAvoidItems.begin(), aAvoidItems.end(), item ) != aAvoidItems.end() )
             continue;
 
         // fixme: this causes flicker with live loop removal...
@@ -286,7 +290,7 @@ void TOOL_BASE::updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads )
 
     m_startSnapPoint = snapToItem( snapEnabled, m_startItem, p );
 
-    if( checkSnap ( m_startItem ) )
+    if( checkSnap( m_startItem ) )
     {
         controls()->ForceCursorPosition( true, m_startSnapPoint );
     }
@@ -324,7 +328,7 @@ void TOOL_BASE::updateEndItem( const TOOL_EVENT& aEvent )
 
     for( int net : nets )
     {
-        endItem = pickSingleItem( mousePos, net, layer );
+        endItem = pickSingleItem( mousePos, net, layer, false, { m_startItem } );
 
         if( endItem )
             break;

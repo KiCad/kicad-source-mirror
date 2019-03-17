@@ -54,6 +54,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <tools/edit_tool.h>
+#include <tools/grid_helper.h>
 #include <tools/tool_event_utils.h>
 
 #include "router_tool.h"
@@ -1025,6 +1026,7 @@ void ROUTER_TOOL::performDragging( int aMode )
             return;
     }
 
+    m_gridHelper->SetAuxAxes( true, m_startSnapPoint, true );
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem, aMode );
 
     if( !dragStarted )
@@ -1175,10 +1177,11 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     }
 
     VECTOR2I p0 = controls()->GetCursorPosition( false );
-
+    auto p = snapToItem( true, m_startItem, p0 );
+    m_gridHelper->SetAuxAxes( true, p, true );
     int dragMode = aEvent.Parameter<int64_t> ();
 
-    bool dragStarted = m_router->StartDragging( p0, m_startItem, dragMode );
+    bool dragStarted = m_router->StartDragging( p, m_startItem, dragMode );
 
     if( !dragStarted )
         return 0;

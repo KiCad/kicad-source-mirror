@@ -55,7 +55,7 @@ protected:
     bool checkSnap( ITEM* aItem );
     const VECTOR2I snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP);
     virtual ITEM* pickSingleItem( const VECTOR2I& aWhere, int aNet = -1, int aLayer = -1,
-                                  bool aIgnorePads = false );
+                                  bool aIgnorePads = false, const std::vector<ITEM*> aAvoidItems = {} );
     virtual void highlightNet( bool aEnabled, int aNetcode = -1 );
     virtual void updateStartItem( const TOOL_EVENT& aEvent, bool aIgnorePads = false );
     virtual void updateEndItem( const TOOL_EVENT& aEvent );
