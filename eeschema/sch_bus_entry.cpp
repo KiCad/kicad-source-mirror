@@ -445,5 +445,9 @@ bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
         return false;
     }
 
+    // Don't generate connections between two bus-wire entries
+    if( aItem->Type() == SCH_BUS_WIRE_ENTRY_T )
+        return false;
+
     return true;
 }
