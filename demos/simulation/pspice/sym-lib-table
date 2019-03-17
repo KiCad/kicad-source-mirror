@@ -1,4 +1,3 @@
 (sym_lib_table
   (lib (name schematic_libspice)(type Legacy)(uri ${KIPRJMOD}/schematic_libspice.lib)(options "")(descr ""))
-  (lib (name power1)(type Legacy)(uri ${KICAD_SYMBOL_DIR}/power.lib)(options "")(descr ""))
 )
