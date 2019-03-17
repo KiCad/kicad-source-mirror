@@ -524,8 +524,11 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
                     {
                         auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
 
-                        // Skip power symbols
-                        if( (LIB_PART*)( pc->m_pin->GetParent() )->IsPower() )
+                        auto refText = pc->m_comp->GetRef( &sheet );
+                        auto pinText = pc->m_pin->GetNumber();
+
+                        // Skip power symbols and virtual components
+                        if( refText[0] == wxChar( '#' ) )
                             continue;
 
                         if( !added )
@@ -537,9 +540,6 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 
                             added = true;
                         }
-
-                        auto refText = pc->m_comp->GetRef( &sheet );
-                        auto pinText = pc->m_pin->GetNumber();
 
                         xnet->AddChild( xnode = node( "node" ) );
                         xnode->AddAttribute( "ref", refText );
