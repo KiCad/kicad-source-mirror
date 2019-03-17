@@ -930,7 +930,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         else
                         {
                             #ifdef CONNECTIVITY_DEBUG
-                            wxASSERT_MSG( false, "More than one net code for a neighbor!" );
+                            if( c != candidate_net_code )
+                                wxASSERT_MSG( false, "More than one net code for a neighbor!" );
                             #endif
                         }
                     }
