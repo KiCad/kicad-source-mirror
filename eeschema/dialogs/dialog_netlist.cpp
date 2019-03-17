@@ -597,7 +597,10 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
     else
         m_Parent->SetNetListerCommand( wxEmptyString );
 
-    m_Parent->CreateNetlist( currPage->m_IdNetType, fullpath, netlist_opt, NULL, false );
+    auto netlist = m_Parent->CreateNetlist( false, false );
+
+    m_Parent->WriteNetListFile( netlist, currPage->m_IdNetType,
+                                fullpath, netlist_opt, NULL );
 
     WriteCurrentNetlistSetup();
 
@@ -674,8 +677,10 @@ void NETLIST_DIALOG::RunSimulator( wxCommandEvent& event )
     if( currPage->m_SpiceAjustPassiveValues && currPage->m_SpiceAjustPassiveValues->GetValue() )
         netlist_opt |= NET_ADJUST_PASSIVE_VALS;
 
-    if( ! m_Parent->CreateNetlist( currPage->m_IdNetType, fn.GetFullPath(),
-                                   netlist_opt, NULL, false ) )
+    auto netlist = m_Parent->CreateNetlist( false, false );
+
+    if( ! m_Parent->WriteNetListFile( netlist, currPage->m_IdNetType,
+                                      fn.GetFullPath(), netlist_opt, NULL ) )
         return;
 
     ExecuteFile( this, ExecFile, CommandLine );

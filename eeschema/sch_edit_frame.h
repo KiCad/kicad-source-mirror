@@ -241,7 +241,7 @@ protected:
     /**
      * Send the kicad netlist over to CVPCB.
      */
-    void sendNetlist();
+    void sendNetlistToCvpcb();
 
 public:
     SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -562,24 +562,12 @@ public:
      * - Build netlist info
      * - Create the netlist file (different formats)
      *
-     * @param aFormat = netlist format (NET_TYPE_PCBNEW ...)
-     * @param aFullFileName = full netlist file name
-     * @param aNetlistOptions = netlist options using OR'ed bits.
-     * <p>
-     * For SPICE netlist only:
-     *      if NET_USE_NETNAMES is set, use net names from labels in schematic
-     *                             else use net numbers (net codes)
-     *      if NET_USE_X_PREFIX is set : change "U" and "IC" reference prefix to "X"
-     * </p>
-     * @param aReporter = a REPORTER to report error messages,
-     *          mainly if a command line must be run (can be NULL
-     * @return true if success.
+     * @param aSilent is true if annotation error dialog should be skipped
+     * @param aSilentAnnotate is true if components should be reannotated silently
+     * @returns a unique_ptr to the netlist
      */
-    bool CreateNetlist( int             aFormat,
-                        const wxString& aFullFileName,
-                        unsigned        aNetlistOptions,
-                        REPORTER*       aReporter = NULL,
-                        bool silent = false );
+    NETLIST_OBJECT_LIST* CreateNetlist( bool aSilent = false,
+                                        bool aSilentAnnotate = false );
 
     /**
      * Create a netlist file.

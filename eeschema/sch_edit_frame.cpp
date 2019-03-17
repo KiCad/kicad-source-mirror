@@ -907,25 +907,9 @@ void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
         frame->Raise();
     }
 
-    if( aUpdateOptions.Contains( "quiet-annotate" ) )
-    {
-        SCH_SCREENS schematic;
-        schematic.UpdateSymbolLinks();
-        SCH_SHEET_LIST sheets( g_RootSheet );
-        sheets.AnnotatePowerSymbols();
-        AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
-                            NULL_REPORTER::GetInstance() );
-    }
+    auto net_atoms = CreateNetlist( aUpdateOptions.Contains( "no-annotate" ),
+                                    aUpdateOptions.Contains( "quiet-annotate" ) );
 
-    if( !aUpdateOptions.Contains( "no-annotate" ) )
-    {
-        // Ensure the schematic is OK for a netlist creation
-        // (especially all components are annotated):
-        if( !prepareForNetlist() )
-            return;
-    }
-
-    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
     NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
     STRING_FORMATTER formatter;
 
@@ -1173,7 +1157,7 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
             // player->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
         }
 
-        sendNetlist();
+        sendNetlistToCvpcb();
 
         player->Raise();
     }

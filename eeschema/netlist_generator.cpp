@@ -191,11 +191,11 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
 }
 
 
-void SCH_EDIT_FRAME::sendNetlist()
+void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
     NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
 
-    NETLIST_EXPORTER_KICAD exporter( this, net_atoms );
+    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
 
     STRING_FORMATTER    formatter;
 
@@ -210,13 +210,13 @@ void SCH_EDIT_FRAME::sendNetlist()
 }
 
 
-bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
-        unsigned aNetlistOptions, REPORTER* aReporter, bool aSilent )
+NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::CreateNetlist( bool aSilent,
+                                                    bool aSilentAnnotate )
 {
     if( !aSilent ) // checks for errors and invokes annotation dialog as neccessary
     {
         if( !prepareForNetlist() )
-            return false;
+            return nullptr;
     }
     else // performs similar function as prepareForNetlist but without a dialog.
     {
@@ -224,14 +224,16 @@ bool SCH_EDIT_FRAME::CreateNetlist( int aFormat, const wxString& aFullFileName,
         schematic.UpdateSymbolLinks();
         SCH_SHEET_LIST sheets( g_RootSheet );
         sheets.AnnotatePowerSymbols();
+
+        if( aSilentAnnotate )
+            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
+                                NULL_REPORTER::GetInstance() );
     }
 
-    std::unique_ptr<NETLIST_OBJECT_LIST> connectedItemsList( BuildNetListBase() );
+    // TODO(JE) This is really going to turn into "PrepareForNetlist"
+    // when the old netlister (BuildNetListBase) is removed
 
-    bool success = WriteNetListFile( connectedItemsList.release(), aFormat,
-            aFullFileName, aNetlistOptions, aReporter );
-
-    return success;
+    return BuildNetListBase();
 }
 
 
