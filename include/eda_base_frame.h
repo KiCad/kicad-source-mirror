@@ -60,18 +60,6 @@
 #define CREATE_BACKUP_FILE    true
 #define NO_BACKUP_FILE        false
 
-/**
- * Prefix to create filenames for schematic files or other difile when auto-saved
- * to retrieve a crash.
- *
- * The auto-saved filenames are AUTOSAVE_PREFIX_FILENAME + \<sourcefilename\>
- * where \<sourcefilename\> is the flename without path of the auto-saved file
- * Warning: avoid any special charactoer like / \\ \$ \% which can create issues on Unix
- * or Window with filenames or env var expansion.
- */
-#define AUTOSAVE_PREFIX_FILENAME wxT( "_saved_" )
-
-
 class EDA_ITEM;
 class EDA_RECT;
 class EDA_DRAW_PANEL;
@@ -158,6 +146,24 @@ protected:
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
+
+    /**
+     * Function GetBackupSuffix
+     * @return the suffix to be appended to the file extension on backup
+     */
+    static wxString GetBackupSuffix()
+    {
+        return wxT( "-bak" );
+    }
+
+    /**
+     * Function GetAutoSaveFilePrefix
+     * @return the string to prepend to a file name for automatic save.
+     */
+    static wxString GetAutoSaveFilePrefix()
+    {
+        return wxT( "_autosave-" );
+    }
 
     /**
      * Function onAutoSaveTimer
@@ -386,10 +392,8 @@ public:
      * is removed.
      * </p>
      * @param aFileName A wxFileName object containing the file name to check.
-     * @param aBackupFileExtension A wxString object containing the backup file extension
-     *                             used to create the backup file name.
      */
-    void CheckForAutoSaveFile( const wxFileName& aFileName, const wxString& aBackupFileExtension );
+    void CheckForAutoSaveFile( const wxFileName& aFileName );
 
     /**
      * Function ShowChangedLanguage

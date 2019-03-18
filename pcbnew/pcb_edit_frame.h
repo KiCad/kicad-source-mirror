@@ -113,6 +113,8 @@ protected:
     void createPopUpBlockMenu( wxMenu* menu );
     void createPopUpMenuForMarkers( MARKER_PCB* aMarker, wxMenu* aPopMenu );
 
+    wxString createBackupFile( const wxString& aFileName );
+
     /**
      * an helper function to enable some menus only active when the display
      * is switched to GAL mode and which do nothing in legacy mode
@@ -307,12 +309,6 @@ public:
      * (layer and items visibility, colors ...)
      */
     void UpdateUserInterface();
-
-    /**
-     * Function GetAutoSaveFilePrefix
-     * @return the string to prepend to a file name for automatic save.
-     */
-    static wxString GetAutoSaveFilePrefix();
 
     /**
      * Execute a remote command send by Eeschema via a socket,

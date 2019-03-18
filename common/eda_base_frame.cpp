@@ -582,16 +582,14 @@ bool EDA_BASE_FRAME::IsWritable( const wxFileName& aFileName )
 }
 
 
-void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
-                                           const wxString&   aBackupFileExtension )
+void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName )
 {
     wxCHECK_RET( aFileName.IsOk(), wxT( "Invalid file name!" ) );
-    wxCHECK_RET( !aBackupFileExtension.IsEmpty(), wxT( "Invalid backup file extension!" ) );
 
     wxFileName autoSaveFileName = aFileName;
 
     // Check for auto save file.
-    autoSaveFileName.SetName( AUTOSAVE_PREFIX_FILENAME + aFileName.GetName() );
+    autoSaveFileName.SetName( GetAutoSaveFilePrefix() + aFileName.GetName() );
 
     wxLogTrace( traceAutoSave,
                 wxT( "Checking for auto save file " ) + autoSaveFileName.GetFullPath() );
@@ -615,18 +613,14 @@ void EDA_BASE_FRAME::CheckForAutoSaveFile( const wxFileName& aFileName,
     {
         // Get the backup file name.
         wxFileName backupFileName = aFileName;
-        backupFileName.SetExt( aBackupFileExtension );
+        backupFileName.SetExt( aFileName.GetExt() + GetBackupSuffix() );
 
         // If an old backup file exists, delete it.  If an old copy of the file exists, rename
         // it to the backup file name
         if( aFileName.FileExists() )
         {
-            // Remove the old file backup file.
-            if( backupFileName.FileExists() )
-                wxRemoveFile( backupFileName.GetFullPath() );
-
             // Rename the old file to the backup file name.
-            if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath() ) )
+            if( !wxRenameFile( aFileName.GetFullPath(), backupFileName.GetFullPath(), true ) )
             {
                 msg.Printf( _( "Could not create backup file \"%s\"" ),
                             GetChars( backupFileName.GetFullPath() ) );

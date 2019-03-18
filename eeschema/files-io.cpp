@@ -135,7 +135,7 @@ bool SCH_EDIT_FRAME::SaveEEFile( SCH_SCREEN* aScreen, bool aSaveUnderNewName,
     {
         // Delete auto save file.
         wxFileName autoSaveFileName = schematicFileName;
-        autoSaveFileName.SetName( AUTOSAVE_PREFIX_FILENAME + schematicFileName.GetName() );
+        autoSaveFileName.SetName( GetAutoSaveFilePrefix() + schematicFileName.GetName() );
 
         if( autoSaveFileName.FileExists() )
         {
@@ -288,6 +288,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         delete g_RootSheet;   // Delete the current project.
         g_RootSheet = NULL;   // Force CreateScreens() to build new empty project on load failure.
         SCH_PLUGIN::SCH_PLUGIN_RELEASER pi( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_LEGACY ) );
+
+        // This will rename the file if there is an autosave and the user want to recover
+		CheckForAutoSaveFile( fullFileName );
 
         try
         {
@@ -745,8 +748,8 @@ bool SCH_EDIT_FRAME::doAutoSave()
 
         tmpFileName = fn = screen->GetFileName();
 
-        // Auto save file name is the normal file name prefixed with AUTOSAVE_PREFIX_FILENAME.
-        fn.SetName( AUTOSAVE_PREFIX_FILENAME + fn.GetName() );
+        // Auto save file name is the normal file name prefixed with GetAutoSavePrefix().
+        fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
 
         screen->SetFileName( fn.GetFullPath() );
 

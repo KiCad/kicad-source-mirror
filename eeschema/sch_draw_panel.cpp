@@ -690,7 +690,7 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
 void SCH_DRAW_PANEL::onPaint( wxPaintEvent& aEvent )
 {
-    if( !m_gal->IsInitialized() )
+    if( !m_gal->IsInitialized() || !m_gal->IsVisible() )
         // The first wxPaintEvent can be fired at startup before the GAL engine is fully initialized
         // (depending on platforms). Do nothing in this case
         return;
