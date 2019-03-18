@@ -339,6 +339,8 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                 if( !pad->GetNetname().IsEmpty() )
                 {
+                    m_oldToNewNets[ pad->GetNetname() ] = netName;
+
                     msg.Printf( _( "Reconnect %s pin %s from %s to %s."),
                             aPcbComponent->GetReference(),
                             pad->GetName(),
@@ -425,6 +427,13 @@ bool BOARD_NETLIST_UPDATER::updateCopperZoneNets( NETLIST& aNetlist )
                     updatedNetname = getNetname( pad );
                     break;
                 }
+            }
+
+            // Take zone name from name change map if it didn't match to a new pad
+            // (this is useful for zones on internal layers)
+            if( updatedNetname.IsEmpty() && m_oldToNewNets.count( zone->GetNetname() ) )
+            {
+                updatedNetname = m_oldToNewNets[ zone->GetNetname() ];
             }
 
             if( !updatedNetname.IsEmpty() )

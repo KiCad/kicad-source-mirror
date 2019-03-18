@@ -2497,6 +2497,8 @@ void BOARD::updateComponentPadConnections( NETLIST& aNetlist, MODULE* footprint,
 
             if( pad->GetNetname() != netName )
             {
+                m_oldToNewNets[ pad->GetNetname() ] = netName;
+
                 msg.Printf( _( "Changing footprint %s pad %s net from %s to %s." ),
                             footprint->GetReference(),
                             pad->GetName(),
@@ -2532,6 +2534,8 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
     std::vector<MODULE*> newFootprints;
     std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > zoneConnectionsCache;
     MODULE* lastPreexistingFootprint = m_Modules.GetLast();
+
+    m_oldToNewNets.clear();
 
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {
@@ -2884,6 +2888,13 @@ void BOARD::ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
                     updatedNet = pad->GetNet();
                     break;
                 }
+            }
+
+            // Take zone name from name change map if it didn't match to a new pad
+            // (this is useful for zones on internal layers)
+            if( !updatedNet && m_oldToNewNets.count( zone->GetNetname() ) )
+            {
+                updatedNet = FindNet( m_oldToNewNets[ zone->GetNetname() ] );
             }
 
             if( updatedNet )

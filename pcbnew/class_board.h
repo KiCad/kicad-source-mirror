@@ -244,6 +244,9 @@ public:
 private:
     DLIST<BOARD_ITEM>           m_Drawings;             // linked list of lines & texts
 
+    // TODO: remove this when BOARD::updateComponentPadConnections is removed
+    std::map< wxString, wxString > m_oldToNewNets;
+
 public:
 
     DLIST<MODULE>               m_Modules;              // linked list of MODULEs

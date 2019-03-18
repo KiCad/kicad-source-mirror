@@ -149,6 +149,7 @@ private:
     REPORTER*       m_reporter;
 
     std::map< ZONE_CONTAINER*, std::vector<D_PAD*> > m_zoneConnectionsCache;
+    std::map< wxString, wxString> m_oldToNewNets;
     std::map< D_PAD*, wxString > m_padNets;
     std::vector<MODULE*> m_addedComponents;
     std::map<wxString, NETINFO_ITEM*> m_addedNets;
