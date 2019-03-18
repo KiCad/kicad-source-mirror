@@ -86,6 +86,9 @@ public:
     /// True if this subgraph contains multiple power ports to join in one net
     bool m_multiple_power_ports;
 
+    /// True if the driver is "strong": a label or power object
+    bool m_strong_driver;
+
     /// No-connect item in graph, if any
     SCH_ITEM* m_no_connect;
 

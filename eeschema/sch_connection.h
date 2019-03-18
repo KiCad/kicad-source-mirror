@@ -152,9 +152,19 @@ public:
         return m_prefix;
     }
 
+    wxString Suffix() const
+    {
+        return m_suffix;
+    }
+
     void SetPrefix( wxString aPrefix )
     {
         m_prefix = aPrefix;
+    }
+
+    void SetSuffix( wxString aSuffix )
+    {
+        m_suffix = aSuffix;
     }
 
     CONNECTION_TYPE Type() const
@@ -317,6 +327,8 @@ private:
 
     ///< Prefix if connection is member of a labeled bus group (or "" if not)
     wxString m_prefix;
+
+    wxString m_suffix;      ///< Name suffix (used only for disambiguation)
 
     int m_net_code;         // TODO(JE) remove if unused
 

@@ -188,6 +188,7 @@ void SCH_CONNECTION::Reset()
     m_type = CONNECTION_NONE;
     m_name = "<NO NET>";
     m_prefix = "";
+    m_suffix = "";
     m_driver = nullptr;
     m_members.clear();
     m_dirty = true;
@@ -208,6 +209,8 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_sheet = aOther.Sheet();
     m_name = aOther.Name( true );
     m_prefix = aOther.Prefix();
+    // Don't clone suffix, it will be rolled into the name
+    //m_suffix = aOther.Suffix();
     m_members = aOther.Members();
     m_net_code = aOther.NetCode();
     m_bus_code = aOther.BusCode();
@@ -242,7 +245,7 @@ bool SCH_CONNECTION::IsDriver() const
 
 wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
-    wxString ret = m_name;
+    wxString ret = m_name + m_suffix;
 
     if( !Parent() || m_type == CONNECTION_NONE )
         return ret;
@@ -277,7 +280,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     wxString msg, group_name;
     std::vector<wxString> group_members;
 
-    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), m_name, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), Name(), BROWN ) );
 
     msg.Printf( "%d", m_net_code );
     aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg, BROWN ) );

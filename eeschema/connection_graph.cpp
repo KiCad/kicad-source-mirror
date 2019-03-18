@@ -50,6 +50,13 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     m_driver = nullptr;
 
+    // Hierarchical labels are lower priority than local labels here,
+    // because on the first pass we want local labels to drive subgraphs
+    // so that we can identify same-sheet neighbors and link them together.
+    // Hierarchical labels will end up overriding the final net name if
+    // a higher-level sheet has a different name during the hierarchical
+    // pass.
+
     for( auto item : m_drivers )
     {
         int item_priority = 0;
@@ -57,8 +64,8 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         switch( item->Type() )
         {
         case SCH_SHEET_PIN_T:           item_priority = 2; break;
-        case SCH_LABEL_T:               item_priority = 3; break;
-        case SCH_HIERARCHICAL_LABEL_T:  item_priority = 4; break;
+        case SCH_HIERARCHICAL_LABEL_T:  item_priority = 3; break;
+        case SCH_LABEL_T:               item_priority = 4; break;
         case SCH_PIN_CONNECTION_T:
         {
             auto pin_connection = static_cast<SCH_PIN_CONNECTION*>( item );
@@ -90,6 +97,9 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         }
     }
 
+    if( highest_priority >= 4 )
+        m_strong_driver = true;
+
     if( candidates.size() )
     {
         if( candidates.size() > 1 )
@@ -109,9 +119,27 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                                 return name_a < name_b;
                             } );
             }
+
+            if( highest_priority == 2 )
+            {
+                // We have multiple options, and they are all hierarchical
+                // sheet pins.  Let's prefer outputs over inputs.
+
+                for( auto c : candidates )
+                {
+                    auto p = static_cast<SCH_SHEET_PIN*>( c );
+
+                    if( p->GetShape() == NET_OUTPUT )
+                    {
+                        m_driver = c;
+                        break;
+                    }
+                }
+            }
         }
 
-        m_driver = candidates[0];
+        if( !m_driver )
+            m_driver = candidates[0];
     }
 
     // For power connections, we allow multiple drivers
@@ -641,6 +669,56 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     while( threadsFinished < parallelThreadCount )
         std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
+    // Check for subgraphs with the same net name but only weak drivers.
+    // For example, two wires that are both connected to hierarchical
+    // sheet pins that happen to have the same name, but are not the same.
+
+    for( auto subgraph : m_subgraphs )
+        subgraph->m_dirty = true;
+
+    for( auto subgraph : m_subgraphs )
+    {
+        if( !subgraph->m_dirty )
+            continue;
+
+        subgraph->m_dirty = false;
+
+        if( !subgraph->m_driver || subgraph->m_strong_driver )
+            continue;
+
+        auto name = subgraph->m_driver->Connection( subgraph->m_sheet )->Name();
+
+        unsigned suffix = 1;
+
+        for( auto candidate : m_subgraphs )
+        {
+            if( !candidate->m_dirty )
+                continue;
+
+            if( candidate == subgraph || !candidate->m_driver || candidate->m_strong_driver )
+                continue;
+
+            auto conn = candidate->m_driver->Connection( candidate->m_sheet );
+            auto check_name = conn->Name();
+
+            if( check_name == name )
+            {
+                auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
+
+                #ifdef CONNECTIVITY_DEBUG
+                wxLogDebug( "Subgraph %ld and %ld both have name %s. Changing %ld to %s.",
+                            subgraph->m_code, candidate->m_code, name,
+                            candidate->m_code, new_name );
+                #endif
+
+                conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
+
+                candidate->m_dirty = false;
+                suffix++;
+            }
+        }
+    }
+
     // Generate net codes
 
     for( auto subgraph : m_subgraphs )
@@ -720,6 +798,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         {
             connections_to_check.push_back( std::make_shared<SCH_CONNECTION>( *connection ) );
         }
+
+        // Look for "neighbors" for subgraphs that have hierarchical connections.
+        // These are usually other subgraphs that have local labels on the
+        // same sheet and so should be connected together.
 
         for( unsigned i = 0; i < connections_to_check.size(); i++ )
         {
@@ -984,109 +1066,176 @@ void CONNECTION_GRAPH::buildConnectionGraph()
          *     3)  Recurse down onto any subsheets connected to the SSSG.
          */
 
-        for( auto item : subgraph->m_items )
+        std::vector<CONNECTION_SUBGRAPH*> child_subgraphs;
+
+        child_subgraphs.push_back( subgraph );
+
+        for( unsigned i = 0; i < child_subgraphs.size(); i++ )
         {
-            if( item->Type() == SCH_SHEET_PIN_T )
+            // child_subgraphs[i] now refers to the "parent" subgraph that we
+            // are descending the hierarchy with.  If there are multiple levels
+            // of hierarchy, those will get pushed onto child_subgraphs below.
+
+            for( auto item : child_subgraphs[i]->m_items )
             {
-                auto sp = static_cast<SCH_SHEET_PIN*>( item );
-                auto sp_name = sp->GetText();
-                auto subsheet = sheet;
-                subsheet.push_back( sp->GetParent() );
-
-                for( auto candidate : m_subgraphs )
+                if( item->Type() == SCH_SHEET_PIN_T )
                 {
-                    if( !candidate->m_dirty )
-                        continue;
+                    auto sp = static_cast<SCH_SHEET_PIN*>( item );
+                    auto sp_name = sp->GetText();
+                    auto subsheet = child_subgraphs[i]->m_sheet;
+                    subsheet.push_back( sp->GetParent() );
 
-                    if( candidate->m_sheet == subsheet && candidate->m_driver )
+                    #ifdef CONNECTIVITY_DEBUG
+                    wxLogDebug( wxT("Propagating sheet pin %s on %s with connection %s to subsheet %s"),
+                                sp_name, child_subgraphs[i]->m_sheet.PathHumanReadable(),
+                                connection->Name(), subsheet.PathHumanReadable() );
+                    #endif
+
+                    for( auto candidate : m_subgraphs )
                     {
-                        auto driver = candidate->m_driver;
+                        if( !candidate->m_dirty )
+                            continue;
 
-                        if( ( driver->Type() == SCH_HIERARCHICAL_LABEL_T ) &&
-                            ( static_cast<SCH_HIERLABEL*>( driver )->GetText() == sp_name ) )
+                        if( candidate->m_sheet == subsheet && candidate->m_driver )
                         {
-                            // We found a subgraph that is a subsheet child of
-                            // our top-level subgraph, so let's mark it
+                            SCH_ITEM* hier_label = nullptr;
 
-                            candidate->m_dirty = false;
-
-                            auto type = driver->Connection( subsheet )->Type();
-
-                            // Directly update subsheet net connections
-
-                            for( auto c_item : candidate->m_items )
+                            for( auto d : candidate->m_drivers )
                             {
-                                auto c = c_item->Connection( subsheet );
-
-                                wxASSERT( c );
-
-                                if( ( connection->IsBus() && c->IsNet() ) ||
-                                    ( connection->IsNet() && c->IsBus() ) )
-                                {
-                                    continue;
-                                }
-
-                                c->Clone( *connection );
+                                if( ( d->Type() == SCH_HIERARCHICAL_LABEL_T ) &&
+                                    ( static_cast<SCH_HIERLABEL*>( d )->GetText() == sp_name ) )
+                                    hier_label = d;
                             }
 
-                            // Now propagate to subsheet neighbors
-                            for( auto& kv : candidate->m_neighbor_map )
+                            if( hier_label )
                             {
-                                auto member = kv.first;
-                                std::shared_ptr<SCH_CONNECTION> top_level_conn;
+                                #ifdef CONNECTIVITY_DEBUG
+                                wxLogDebug( "Found child %s", static_cast<SCH_HIERLABEL*>( hier_label )->GetText() );
+                                #endif
 
-                                if( type == CONNECTION_BUS_GROUP )
+                                // We found a subgraph that is a subsheet child of
+                                // our top-level subgraph, so let's mark it
+
+                                candidate->m_dirty = false;
+
+                                auto type = hier_label->Connection( subsheet )->Type();
+
+                                bool candidate_has_sheet_pins = false;
+
+                                // Directly update subsheet net connections
+
+                                for( auto c_item : candidate->m_items )
                                 {
-                                    // Bus group: match parent by name
-                                    for( auto parent_member : connection->Members() )
+                                    if( c_item->Type() == SCH_SHEET_PIN_T )
+                                        candidate_has_sheet_pins = true;
+
+                                    auto c = c_item->Connection( subsheet );
+
+                                    wxASSERT( c );
+
+                                    if( ( connection->IsBus() && c->IsNet() ) ||
+                                        ( connection->IsNet() && c->IsBus() ) )
                                     {
-                                        if( parent_member->IsNet() &&
-                                            parent_member->Name( true ) == member->Name( true ) )
+                                        continue;
+                                    }
+
+                                    c->Clone( *connection );
+                                }
+
+                                // Now propagate to subsheet neighbors
+                                for( auto& kv : candidate->m_neighbor_map )
+                                {
+                                    auto member = kv.first;
+                                    std::shared_ptr<SCH_CONNECTION> top_level_conn;
+
+                                    #ifdef CONNECTIVITY_DEBUG
+                                    wxLogDebug( "Found child neighbor from member %s",
+                                                member->Name() );
+                                    #endif
+
+                                    if( type == CONNECTION_BUS_GROUP )
+                                    {
+                                        // Bus group: match parent by name
+                                        for( auto parent_member : connection->Members() )
                                         {
-                                            top_level_conn = parent_member;
-                                        }
-                                        else if( parent_member->IsBus() )
-                                        {
-                                            for( auto& sub_member : parent_member->Members() )
+                                            if( parent_member->IsNet() &&
+                                                parent_member->Name( true ) == member->Name( true ) )
                                             {
-                                                if( sub_member->Name( true ) == member->Name( true ) )
-                                                    top_level_conn = sub_member;
+                                                top_level_conn = parent_member;
+                                            }
+                                            else if( parent_member->IsBus() )
+                                            {
+                                                for( auto& sub_member : parent_member->Members() )
+                                                {
+                                                    if( sub_member->Name( true ) == member->Name( true ) )
+                                                        top_level_conn = sub_member;
+                                                }
                                             }
                                         }
                                     }
-                                }
-                                else if( type == CONNECTION_BUS )
-                                {
-                                    // Bus vector: match parent by index
-                                    for( auto parent_member : connection->Members() )
+                                    else if( type == CONNECTION_BUS )
                                     {
-                                        if( parent_member->VectorIndex() == member->VectorIndex() )
-                                            top_level_conn = parent_member;
+                                        // Bus vector: match parent by index
+                                        for( auto parent_member : connection->Members() )
+                                        {
+                                            if( parent_member->VectorIndex() == member->VectorIndex() )
+                                                top_level_conn = parent_member;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        top_level_conn = connection;
+                                    }
+
+                                    // If top_level_conn was not found, probably it's
+                                    // an ERC error and will be caught by ERC
+
+                                    if( !top_level_conn )
+                                    {
+                                        continue;
+                                    }
+
+                                    for( auto neighbor : kv.second )
+                                    {
+                                        #ifdef CONNECTIVITY_DEBUG
+                                        wxLogDebug( "Propagating to neighbor driven by %s",
+                                                    neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
+                                        #endif
+
+                                        bool neighbor_has_sheet_pins = false;
+
+                                        for( auto n_item : neighbor->m_items )
+                                        {
+                                            auto c = n_item->Connection( subsheet );
+
+                                            wxASSERT( c );
+
+                                            c->Clone( *top_level_conn );
+
+                                            if( n_item->Type() == SCH_SHEET_PIN_T )
+                                                neighbor_has_sheet_pins = true;
+                                        }
+
+                                        if( neighbor_has_sheet_pins )
+                                        {
+                                            #ifdef CONNECTIVITY_DEBUG
+                                            wxLogDebug( "Neighbor driven by %s has subsheet pins",
+                                                        neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
+                                            #endif
+                                            child_subgraphs.push_back( neighbor );
+                                        }
                                     }
                                 }
-                                else
+
+                                // Now, check to see if the candidate also has
+                                // sheet pin members.  If so, add to the queue.
+                                if( candidate_has_sheet_pins)
                                 {
-                                    top_level_conn = connection;
-                                }
-
-                                // If top_level_conn was not found, probably it's
-                                // an ERC error and will be caught by ERC
-
-                                if( !top_level_conn )
-                                {
-                                    continue;
-                                }
-
-                                for( auto neighbor : kv.second )
-                                {
-                                    for( auto n_item : neighbor->m_items )
-                                    {
-                                        auto c = n_item->Connection( subsheet );
-
-                                        wxASSERT( c );
-
-                                        c->Clone( *top_level_conn );
-                                    }
+                                    #ifdef CONNECTIVITY_DEBUG
+                                    wxLogDebug( "Candidate %s has subsheet pins",
+                                                candidate->m_driver->GetSelectMenuText( MILLIMETRES ) );
+                                    #endif
+                                    child_subgraphs.push_back( candidate );
                                 }
                             }
                         }
