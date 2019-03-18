@@ -62,16 +62,6 @@
 #define     USE_INSTRUMENTATION     0
 
 
-static const wxChar backupSuffix[]   = wxT( "-bak" );
-static const wxChar autosavePrefix[] = wxT( "_autosave-" );
-
-
-wxString PCB_EDIT_FRAME::GetAutoSaveFilePrefix()
-{
-    return wxString( autosavePrefix );
-}
-
-
 /**
  * Function AskLoadBoardFileName
  * puts up a wxFileDialog asking for a BOARD filename to open.
@@ -265,12 +255,12 @@ bool PCB_EDIT_FRAME::Files_io_from_id( int id )
 
             if( id == ID_MENU_RECOVER_BOARD_AUTOSAVE )
             {
-                wxString rec_name = wxString( autosavePrefix ) + fn.GetName();
+                wxString rec_name = GetAutoSaveFilePrefix() + fn.GetName();
                 fn.SetName( rec_name );
             }
             else
             {
-                wxString backup_ext = fn.GetExt()+ backupSuffix;
+                wxString backup_ext = fn.GetExt() + GetBackupSuffix();
                 fn.SetExt( backup_ext );
             }
 
@@ -381,10 +371,6 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
         // both legacy and eagle share a common file extension.
         pluginType = ( aCtl & KICTL_EAGLE_BRD ) ? IO_MGR::EAGLE : IO_MGR::LEGACY;
     }
-    else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::LEGACY ) + backupSuffix ) == 0 )
-    {
-        pluginType = IO_MGR::LEGACY;
-    }
     else if( fn.GetExt().CmpNoCase(  IO_MGR::GetFileExtension( IO_MGR::PCAD ) ) == 0 )
     {
         pluginType = IO_MGR::PCAD;
@@ -478,6 +464,9 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         PLUGIN::RELEASER pi( IO_MGR::PluginFind( pluginType ) );
 
+        // This will rename the file if there is an autosave and the user want to recover
+		CheckForAutoSaveFile( fullFileName );
+
         try
         {
             PROPERTIES  props;
@@ -540,11 +529,6 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         loadedBoard->SynchronizeNetsAndNetClasses();
 
         GetScreen()->ClrModify();
-
-        {
-            wxFileName fn = fullFileName;
-            CheckForAutoSaveFile( fullFileName, fn.GetExt() );
-        }
 
         if( pluginType == IO_MGR::LEGACY &&
             loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )
@@ -618,12 +602,12 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 }
 
 
-static wxString create_backup_file( const wxString& aFileName )
+wxString PCB_EDIT_FRAME::createBackupFile( const wxString& aFileName )
 {
     wxFileName  fn = aFileName;
     wxFileName  backupFileName = aFileName;
 
-    backupFileName.SetExt( fn.GetExt() + backupSuffix );
+    backupFileName.SetExt( fn.GetExt() + GetBackupSuffix() );
 
     // If an old backup file exists, delete it.  If an old board file exists,
     // rename it to the backup file name.
@@ -674,11 +658,9 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
 
     wxString backupFileName;
 
-    // aCreateBackupFile == false is mainly used to write autosave files
-    // or new files in save as... command
     if( aCreateBackupFile )
     {
-        backupFileName = create_backup_file( aFileName );
+        backupFileName = createBackupFile( aFileName );
     }
 
     GetBoard()->SynchronizeNetsAndNetClasses();
@@ -729,7 +711,7 @@ bool PCB_EDIT_FRAME::SavePcbFile( const wxString& aFileName, bool aCreateBackupF
     // Delete auto save file on successful save.
     wxFileName autoSaveFileName = pcbFileName;
 
-    autoSaveFileName.SetName( wxString( autosavePrefix ) + pcbFileName.GetName() );
+    autoSaveFileName.SetName( GetAutoSaveFilePrefix() + pcbFileName.GetName() );
 
     if( autoSaveFileName.FileExists() )
         wxRemoveFile( autoSaveFileName.GetFullPath() );
@@ -816,7 +798,7 @@ bool PCB_EDIT_FRAME::doAutoSave()
     wxFileName autoSaveFileName = tmpFileName;
 
     // Auto save file name is the board file name prepended with autosaveFilePrefix string.
-    autoSaveFileName.SetName( wxString( autosavePrefix ) + autoSaveFileName.GetName() );
+    autoSaveFileName.SetName( GetAutoSaveFilePrefix() + autoSaveFileName.GetName() );
 
     if( !autoSaveFileName.IsOk() )
         return false;

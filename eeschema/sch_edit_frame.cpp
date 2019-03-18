@@ -689,8 +689,8 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     {
         fn = Prj().AbsolutePath( screen->GetFileName() );
 
-        // Auto save file name is the normal file name prepended with AUTOSAVE_PREFIX_FILENAME.
-        fn.SetName( AUTOSAVE_PREFIX_FILENAME + fn.GetName() );
+        // Auto save file name is the normal file name prepended with GetAutoSaveFilePrefix().
+        fn.SetName( GetAutoSaveFilePrefix() + fn.GetName() );
 
         if( fn.FileExists() && fn.IsFileWritable() )
             wxRemoveFile( fn.GetFullPath() );
