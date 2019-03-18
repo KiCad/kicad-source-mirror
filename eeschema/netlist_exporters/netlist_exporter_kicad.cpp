@@ -38,8 +38,6 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 {
     wxASSERT( m_graph );
 
-    m_use_graph = true;
-
     try
     {
         FILE_OUTPUTFORMATTER formatter( aOutFileName );
@@ -64,8 +62,7 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
     if( !m_graph->UsesNewBusFeatures() )
     {
-        m_use_graph = false;
-        auto old_nets = makeListOfNets();
+        auto old_nets = makeListOfNets( false );
 
         bool different = false;
 

@@ -480,7 +480,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeLibParts()
 }
 
 
-XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
+XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
 {
     XNODE*      xnets = node( "nets" );      // auto_ptr if exceptions ever get used.
     wxString    netCodeTxt;
@@ -502,8 +502,10 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets()
 
     m_LibParts.clear();     // must call this function before using m_LibParts.
 
-    if( m_use_graph && m_graph )
+    if( aUseGraph )
     {
+        wxASSERT( m_graph );
+
         for( auto it : m_graph->m_net_code_to_subgraphs_map )
         {
             bool added = false;

@@ -67,17 +67,13 @@ private:
 protected:
     CONNECTION_GRAPH*     m_graph;
 
-    // TODO(JE) Remove if not needed
-    bool m_use_graph;
-
 public:
     NETLIST_EXPORTER_GENERIC( SCH_EDIT_FRAME* aFrame,
                               NETLIST_OBJECT_LIST* aMasterList,
                               CONNECTION_GRAPH* aGraph = nullptr  ) :
         NETLIST_EXPORTER( aMasterList ),
         m_libTable( aFrame->Prj().SchSymbolLibTable() ),
-        m_graph( aGraph ),
-        m_use_graph( true )
+        m_graph( aGraph )
     {}
 
     /**
@@ -135,7 +131,7 @@ protected:
      * fills out an XML node with a list of nets and returns it.
      * @return XNODE* - the list of nets nodes
      */
-    XNODE* makeListOfNets();
+    XNODE* makeListOfNets( bool aUseGraph = true );
 
     /**
      * Function makeLibraries
