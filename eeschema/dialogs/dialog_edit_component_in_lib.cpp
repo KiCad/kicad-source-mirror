@@ -91,6 +91,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     // Show/hide columns according to the user's preference
     m_config->Read( LibEditFieldsShownColumnsKey, &m_shownColumns, wxT( "0 1 2 3 4 5 6 7" ) );
     m_grid->ShowHideColumns( m_shownColumns );
+
     // Hide non-overridden rows in aliases grid
     m_aliasGrid->HideRow( REFERENCE );
     m_aliasGrid->HideRow( FOOTPRINT );
@@ -99,7 +100,8 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
     attr->SetReadOnly();
     m_aliasGrid->SetColAttr( FDC_NAME, attr );
     m_aliasGrid->SetCellValue( VALUE, FDC_NAME, TEMPLATE_FIELDNAME::GetDefaultFieldName( VALUE ) );
-    m_aliasGrid->SetCellValue( DATASHEET, FDC_NAME, TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) );
+    m_aliasGrid->SetCellValue( DATASHEET, FDC_NAME,
+                               TEMPLATE_FIELDNAME::GetDefaultFieldName( DATASHEET ) );
 
     attr = new wxGridCellAttr;
     attr->SetEditor( new GRID_CELL_URL_EDITOR( this ) );
@@ -125,8 +127,12 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::DIALOG_EDIT_COMPONENT_IN_LIBRARY( LIB_EDIT_FRA
 #endif
 
     // wxFormBuilder doesn't include this event...
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ), NULL, this );
-    m_aliasGrid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ), NULL, this );
+    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
+                     wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
+                     NULL, this );
+    m_aliasGrid->Connect( wxEVT_GRID_CELL_CHANGING,
+                          wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ),
+                          NULL, this );
 
     m_grid->GetParent()->Layout();
     m_aliasGrid->GetParent()->Layout();
@@ -145,8 +151,12 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY::~DIALOG_EDIT_COMPONENT_IN_LIBRARY()
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ), NULL, this );
-    m_aliasGrid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ), NULL, this );
+    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                        wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnGridCellChanging ),
+                        NULL, this );
+    m_aliasGrid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                             wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAliasGridCellChanging ),
+                             NULL, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -293,7 +303,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::Validate()
 
 bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
 {
-    if( !Validate() )
+    if( !wxDialog::TransferDataFromWindow() )
         return false;
 
     LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
@@ -664,7 +674,8 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::checkAliasName( const wxString& aName )
         if( existing && existing->GetPart()->GetName() != m_libEntry->GetName() )
         {
             wxString msg;
-            msg.Printf( _( "Symbol name \"%s\" already exists in library \"%s\"." ), aName, library );
+            msg.Printf( _( "Symbol name \"%s\" already exists in library \"%s\"." ),
+                        aName, library );
             DisplayErrorMessage( this, msg );
             return false;
         }
@@ -782,6 +793,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnDeleteFootprintFilter( wxCommandEvent& 
             m_FootprintFilterListBox->SetSelection( std::max( 0, ii - 1 ) );
     }
 }
+
 
 void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnEditFootprintFilter( wxCommandEvent& event )
 {
