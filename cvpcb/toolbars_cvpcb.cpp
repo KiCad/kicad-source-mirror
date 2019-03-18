@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -67,7 +67,14 @@ void CVPCB_MAINFRAME::ReCreateHToolbar()
                             KiScaledBitmap( delete_association_xpm, this ),
                             _( "Delete all footprint associations" ) );
 
+    // Add tools for footprint names filtering:
     KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddSpacer( 15 );
+    wxStaticText* text = new wxStaticText( m_mainToolBar, wxID_ANY,
+                                           _( "Footprint Filters:" ) );
+	text->SetFont( m_mainToolBar->GetFont().Bold() );
+    m_mainToolBar->AddControl( text );
+
     m_mainToolBar->AddTool( ID_CVPCB_FOOTPRINT_DISPLAY_FILTERED_LIST,
                             KiScaledBitmap( module_filtered_list_xpm, this ),
                             wxNullBitmap,
