@@ -997,7 +997,9 @@ private:
     /**
      * Add a new junction at \a aPosition.
      */
-    SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aPutInUndoList = false );
+    SCH_JUNCTION* AddJunction( const wxPoint& aPosition,
+                               bool aAppendToUndo = false,
+                               bool aFinal = true );
 
     /**
      * Save a copy of the current wire image in the undo list.

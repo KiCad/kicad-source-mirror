@@ -371,7 +371,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
 
         // Ensure the schematic is fully segmented on first display
         BreakSegmentsOnJunctions();
-        SchematicCleanUp( true );
+        SchematicCleanUp();
         GetScreen()->ClearUndoORRedoList( GetScreen()->m_UndoList, 1 );
         GetScreen()->TestDanglingEnds();    // Only perform the dangling end test on root sheet.
 
@@ -850,7 +850,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             // Ensure the schematic is fully segmented on first display
             BreakSegmentsOnJunctions();
-            SchematicCleanUp( true );
+            SchematicCleanUp();
             GetScreen()->m_Initialized = true;
 
             SCH_TYPE_COLLECTOR components;

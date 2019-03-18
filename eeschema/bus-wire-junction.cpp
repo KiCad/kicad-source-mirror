@@ -434,7 +434,7 @@ void SCH_EDIT_FRAME::EndSegment()
     for( auto i : new_ends )
     {
         if( screen->IsJunctionNeeded( i, true ) )
-            AddJunction( i, true );
+            AddJunction( i, true, false );
     }
 
     if( IsBusUnfoldInProgress() )
@@ -633,6 +633,7 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
 
         SaveCopyInUndoList( (SCH_ITEM*)line, UR_DELETED, aAppend );
         RemoveFromScreen( (SCH_ITEM*)line );
+
         aAppend = true;
         retval = true;
     }
@@ -641,7 +642,7 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
 }
 
 
-bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend, SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
 {
     SCH_ITEM*           item = NULL;
     SCH_ITEM*           secondItem = NULL;
@@ -740,6 +741,9 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend, SCH_SCREEN* aScreen )
             RemoveFromScreen( item, aScreen );
     }
 
+    if( itemList.GetCount() && aUndo )
+        SaveCopyInUndoList( itemList, UR_DELETED, true );
+
     return itemList.GetCount() > 0;
 }
 
@@ -759,6 +763,9 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 
     newSegment->SetStartPoint( aPoint );
     AddToScreen( newSegment, aScreen );
+
+    if( aAppend )
+        SaveCopyInUndoList( newSegment, UR_NEW, true );
 
     RefreshItem( aSegment );
     aSegment->SetEndPoint( aPoint );
@@ -888,21 +895,26 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppend )
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition,
+                                           bool aAppend, bool aFinal )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
     bool broken_segments = false;
 
     AddToScreen( junction );
     broken_segments = BreakSegments( aPosition, aAppend );
-    TestDanglingEnds();
-    OnModify();
     SaveCopyInUndoList( junction, UR_NEW, broken_segments || aAppend );
 
-    auto view = GetCanvas()->GetView();
-    view->ClearPreview();
-    view->ShowPreview( false );
-    view->ClearHiddenFlags();
+    if( aFinal )
+    {
+        TestDanglingEnds();
+        OnModify();
+
+        auto view = GetCanvas()->GetView();
+        view->ClearPreview();
+        view->ShowPreview( false );
+        view->ClearHiddenFlags();
+    }
 
     return junction;
 }

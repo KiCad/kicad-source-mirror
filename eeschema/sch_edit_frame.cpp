@@ -1519,7 +1519,7 @@ void SCH_EDIT_FRAME::RecalculateConnections()
 
     // Ensure schematic graph is accurate
     for( const auto& sheet : list )
-        SchematicCleanUp( true, sheet.LastScreen() );
+        SchematicCleanUp( false, sheet.LastScreen() );
 
     g_ConnectionGraph->Recalculate( list );
 }
