@@ -480,7 +480,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnMoveDown( wxCommandEvent& event )
 
     int i = m_grid->GetGridCursorRow();
 
-    if( i >= MANDATORY_FIELDS )
+    if( i >= MANDATORY_FIELDS && i + 1 < m_fields->GetNumberRows() )
     {
         LIB_FIELD tmp = m_fields->at( (unsigned) i );
         m_fields->erase( m_fields->begin() + i, m_fields->begin() + i + 1 );
