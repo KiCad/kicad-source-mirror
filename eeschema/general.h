@@ -39,7 +39,7 @@ class TRANSFORM;
 class SCH_SHEET;
 class SCH_SHEET_PATH;
 
-#define EESCHEMA_VERSION 4
+#define EESCHEMA_VERSION 5
 #define SCHEMATIC_HEAD_STRING "Schematic File Version"
 
 #define DANGLING_SYMBOL_SIZE 12
