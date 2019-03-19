@@ -51,7 +51,8 @@
  */
 
 // Keywords for read and write config
-#define RefillZonesBeforeDrc        wxT( "RefillZonesBeforeDrc" )
+#define RefillZonesBeforeDrcKey        wxT( "RefillZonesBeforeDrc" )
+#define DrcTrackToZoneTestKey        wxT( "DrcTrackToZoneTest" )
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
@@ -100,7 +101,8 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
-    m_config->Write( RefillZonesBeforeDrc, m_cbRefillZones->GetValue() );
+    m_config->Write( RefillZonesBeforeDrcKey, m_cbRefillZones->GetValue() );
+    m_config->Write( DrcTrackToZoneTestKey, m_cbReportTracksToZonesErrors->GetValue() );
 
     // Disconnect events
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
@@ -154,8 +156,10 @@ void DIALOG_DRC_CONTROL::InitValues()
 
     // read options
     bool value;
-    m_config->Read( RefillZonesBeforeDrc, &value, false );
+    m_config->Read( RefillZonesBeforeDrcKey, &value, false );
     m_cbRefillZones->SetValue( value );
+    m_config->Read( DrcTrackToZoneTestKey, &value, false );
+    m_cbReportTracksToZonesErrors->SetValue( value );
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 
@@ -211,7 +215,8 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     SetDrcParmeters();
     m_tester->SetSettings( true,        // Pad to pad DRC test enabled
                            true,        // unconnected pads DRC test enabled
-                           true,        // DRC test for zones enabled
+                           // DRC test for zones enabled/disabled:
+                           m_cbReportTracksToZonesErrors->GetValue(),
                            true,        // DRC test for keepout areas enabled
                            m_cbRefillZones->GetValue(),
                            m_cbReportAllTrackErrors->GetValue(),
