@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Apr 19 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_DRC_BASE_H__
-#define __DIALOG_DRC_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -23,10 +22,10 @@ class DRCLISTBOX;
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
 #include <wx/listbox.h>
@@ -49,7 +48,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 {
 	private:
 		wxPanel* m_panelUnconnectedBox;
-	
+
 	protected:
 		wxStaticText* m_ClearanceTitle;
 		wxStaticText* m_TrackMinWidthTitle;
@@ -60,6 +59,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStaticText* m_MicroViaMinUnit;
 		wxCheckBox* m_cbRefillZones;
 		wxCheckBox* m_cbReportAllTrackErrors;
+		wxCheckBox* m_cbReportTracksToZonesErrors;
 		wxStaticText* m_messagesLabel;
 		wxTextCtrl* m_Messages;
 		wxCheckBox* m_CreateRptCtrl;
@@ -74,7 +74,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Apply;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -92,8 +92,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnListUnconnectedClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStartdrcClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
 		wxTextCtrl* m_SetClearance;
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
@@ -101,10 +101,9 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxTextCtrl* m_SetMicroViakMinSizeCtrl;
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
-		
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();
-	
+
 };
 
-#endif //__DIALOG_DRC_BASE_H__

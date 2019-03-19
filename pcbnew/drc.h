@@ -180,13 +180,14 @@ class DRC
 private:
 
     //  protected or private functions() are lowercase first character.
-    bool     m_doPad2PadTest;
-    bool     m_doUnconnectedTest;
-    bool     m_doZonesTest;
-    bool     m_doKeepoutTest;
-    bool     m_doCreateRptFile;
-    bool     m_refillZones;
-    bool     m_reportAllTrackErrors;
+    bool     m_doPad2PadTest;           // enable pad to pad clearance tests
+    bool     m_doUnconnectedTest;       // enable unconnected tests
+    bool     m_doZonesTest;             // enable zone to items clearance tests
+    bool     m_doKeepoutTest;           // enable keepout areas to items clearance tests
+    bool     m_doCreateRptFile;         // enable creating a report file
+    bool     m_refillZones;             // refill zones if requested (by user).
+    bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
+    bool     m_do;
 
     wxString m_rptFilename;
 
@@ -313,11 +314,13 @@ private:
      *
      * @param aRefSeg The segment to test
      * @param aStart the first item of track list to test against (usually BOARD::m_Track)
-     * @param doPads true if should do pads test
+     * @param aTestPads true if should do pads test
+     * @param aTestZones true if should do copper zones test. This can be very time consumming
      * @return bool - true if no problems, else false and m_currentMarker is
      *          filled in with the problem information.
      */
-    bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool doPads = true );
+    bool doTrackDrc( TRACK* aRefSeg, TRACK* aStart,
+                     bool aTestPads, bool aTestZones );
 
     /**
      * Test the current segment or via.

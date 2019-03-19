@@ -138,11 +138,11 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
 
     // establish initial values for everything:
     m_drcInLegacyRoutingMode = false;
-    m_doPad2PadTest     = true;     // enable pad to pad clearance tests
-    m_doUnconnectedTest = true;     // enable unconnected tests
-    m_doZonesTest = true;           // enable zone to items clearance tests
-    m_doKeepoutTest = true;         // enable keepout areas to items clearance tests
-    m_refillZones = false;            // Only fill zones if requested by user.
+    m_doPad2PadTest     = true;         // enable pad to pad clearance tests
+    m_doUnconnectedTest = true;         // enable unconnected tests
+    m_doZonesTest = false;              // disable zone to items clearance tests
+    m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
+    m_refillZones = false;              // Only fill zones if requested by user.
     m_reportAllTrackErrors = false;
     m_doCreateRptFile = false;
 
@@ -180,7 +180,8 @@ int DRC::DrcOnCreatingTrack( TRACK* aRefSegm, TRACK* aList )
     int rpt_state = m_reportAllTrackErrors;
     m_reportAllTrackErrors = false;
 
-    if( !doTrackDrc( aRefSegm, aList, true ) )
+    // Test new segment against tracks and pads, not against copper zones
+    if( !doTrackDrc( aRefSegm, aList, true, false ) )
     {
         if( m_currentMarker )
         {
@@ -843,7 +844,8 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
             }
         }
 
-        if( !doTrackDrc( segm, segm->Next(), true ) )
+        // Test new segment against tracks and pads, optionally against copper zones
+        if( !doTrackDrc( segm, segm->Next(), true, m_doZonesTest ) )
         {
             if( m_currentMarker )
             {

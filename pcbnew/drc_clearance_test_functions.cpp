@@ -135,7 +135,7 @@ bool convex2pointDRC( wxPoint* aTref, int aTrefCount, wxPoint aPcompare, int aDi
 }
 
 
-bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
+bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZones )
 {
     TRACK*    track;
     wxPoint   delta;           // length on X and Y axis of segments
@@ -354,7 +354,7 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
     dummypad.SetLayerSet( LSET::AllCuMask() );     // Ensure the hole is on all layers
 
     // Compute the min distance to pads
-    if( testPads )
+    if( aTestPads )
     {
         unsigned pad_count = m_pcb->GetPadCount();
 
@@ -704,28 +704,31 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool testPads )
         }
     }
 
-    /***********************************************/
-    /* Phase 3: test DRC with zones                */
-    /***********************************************/
-
-    SEG refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
-
-    for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+    /***************************************/
+    /* Phase 3: test DRC with copper zones */
+    /***************************************/
+    // Can be *very* time consumming.
+    if( aTestZones )
     {
-        if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
-            continue;
+        SEG refSeg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
-        if( !( layerMask & zone->GetLayerSet() ).any() )
-            continue;
+        for( ZONE_CONTAINER* zone : m_pcb->Zones() )
+        {
+            if( zone->GetFilledPolysList().IsEmpty() || zone->GetIsKeepout() )
+                continue;
 
-        if( zone->GetNetCode() && zone->GetNetCode() == net_code_ref )
-            continue;
+            if( !( layerMask & zone->GetLayerSet() ).any() )
+                continue;
 
-        int clearance = zone->GetClearance( aRefSeg );
-        SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+            if( zone->GetNetCode() && zone->GetNetCode() == net_code_ref )
+                continue;
 
-        if( outline->Distance( refSeg, aRefSeg->GetWidth() ) < clearance )
-            addMarkerToPcb( m_markerFactory.NewMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE ) );
+            int clearance = zone->GetClearance( aRefSeg );
+            SHAPE_POLY_SET* outline = const_cast<SHAPE_POLY_SET*>( &zone->GetFilledPolysList() );
+
+            if( outline->Distance( refSeg, aRefSeg->GetWidth() ) < clearance )
+                addMarkerToPcb( m_markerFactory.NewMarker( aRefSeg, zone, DRCE_TRACK_NEAR_ZONE ) );
+        }
     }
 
     /***********************************************/
