@@ -550,7 +550,9 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
         const VECTOR2I p1 = pts_unique[i + 1];
         int n = i;
 
-        while( n < np - 2 && SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1 )
+        while( n < np - 2
+                && ( SEG( p0, p1 ).LineDistance( pts_unique[n + 2] ) <= 1
+                        || SEG( p0, p1 ).Collinear( SEG( p1, pts_unique[n + 2] ) ) ) )
             n++;
 
         m_points.push_back( p0 );
