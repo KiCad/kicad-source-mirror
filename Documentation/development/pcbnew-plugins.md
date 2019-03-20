@@ -25,7 +25,7 @@ Another documentation source is the auto-generated Doxygen reference of the
 API. It can be found
 [here](http://docs.kicad-pcb.org/doxygen-python/namespacepcbnew.html).
 
-# `Action Plugin` Support # {#ppi_action_pi}
+# \`Action Plugin\` Support # {#ppi_action_pi}
 Besides the stand-alone usage of the generated Python plugin interface,
 additional support regarding online manipulation of board projects is available
 for Pcbnew.  Plugins using this feature are called `Action Plugins` and they are
@@ -44,21 +44,23 @@ In order for the discovery process to work, the following requirements must be m
 
 * The plugin must be installed in the KiCad plugins search paths as documented
   in `scripting/kicadplugins.i`.  You can always discover the search path for your
-  setup by opening the Scripting console and entering the command: `import pcbnew;
-  print pcbnew.PLUGIN_DIRECTORIES_SEARCH`.
+  setup by opening the scripting console and entering the command:
 
-    Currently on a Linux Installation the plugins search path is
+        `import pcbnew; print pcbnew.PLUGIN_DIRECTORIES_SEARCH`
+
+  Currently on a Linux Installation the plugins search path is
 
     * /usr/share/kicad/scripting/plugins/
     * ~/.kicad/scripting/plugins
     * ~/.kicad_plugins/
 
-    On Windows
+  On Windows
 
-    * \{KICAD_INSTALL_PATH\}/share/kicad/scripting/plugins
-    * %APPDATA%/Roaming/kicad/scripting/plugins
+    * \%KICAD_INSTALL_PATH%/share/kicad/scripting/plugins
+    * \%APPDATA%/Roaming/kicad/scripting/plugins
 
-    On macOS, there is a security feature that makes it easier to add scripting plugins to the ~/Library... path than to kicad.app, but the search path is
+  On macOS, there is a security feature that makes it easier to add scripting plugins
+  to the ~/Library... path than to kicad.app, but the search path is
 
     * /Applications/kicad/Kicad/Contents/SharedSupport/scripting/plugins
     * ~/Library/Application Support/kicad/scripting/plugins
