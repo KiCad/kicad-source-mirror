@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Mar 20 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -168,7 +168,7 @@ DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE::DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE( wx
 	sbSizerSymbol->Add( m_AsConvertButt, 0, wxRIGHT|wxLEFT, 5 );
 
 	m_OptionPower = new wxCheckBox( sbSizerSymbol->GetStaticBox(), wxID_ANY, _("Define as power symbol"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_OptionPower->SetToolTip( _("Check this option when the symbol is a power symbol") );
+	m_OptionPower->SetToolTip( _("Setting this option makes the symbol in question appear in the\n\"add power port\" dialog.  It will lock the value text to protect it\nfrom editing in Eeschema.  The symbol will not be included in\nthe BOM and cannot be assigned a footprint.") );
 
 	sbSizerSymbol->Add( m_OptionPower, 0, wxALL, 5 );
 
