@@ -61,12 +61,10 @@ struct CN_DISJOINT_NET_ENTRY
 struct CN_ZONE_ISOLATED_ISLAND_LIST
 {
     CN_ZONE_ISOLATED_ISLAND_LIST( ZONE_CONTAINER* aZone ) :
-        m_zone( aZone ),
-        m_lastPolys( aZone->GetFilledPolysList() )
+        m_zone( aZone )
     {}
 
     ZONE_CONTAINER*      m_zone;
-    const SHAPE_POLY_SET m_lastPolys;
     std::vector<int>     m_islands;
 };
 
