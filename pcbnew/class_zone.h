@@ -680,6 +680,19 @@ public:
     bool   GetHV45() const { return m_hv45; }
     void   SetHV45( bool aConstrain ) { m_hv45 = aConstrain; }
 
+    /** @return the hash value previously calculated by BuildHashValue().
+     * used in zone filling calculations
+     */
+    MD5_HASH GetHashValue() { return m_filledPolysHash; }
+
+    /** Build the hash value of m_FilledPolysList, and store it internally
+     *  in m_filledPolysHash.
+     *  Used in zone filling calculations, to know if m_FilledPolysList is up to date.
+     */
+    void BuildHashValue() { m_filledPolysHash = m_FilledPolysList.GetHash(); }
+
+
+
 #if defined(DEBUG)
     virtual void Show( int nestLevel, std::ostream& os ) const override { ShowDummy( os ); }
 #endif
@@ -754,6 +767,8 @@ private:
      */
     SHAPE_POLY_SET        m_FilledPolysList;
     SHAPE_POLY_SET        m_RawPolysList;
+    MD5_HASH              m_filledPolysHash;    // A hash value used in zone filling calculations
+                                                // to see if the filled areas are up to date
 
     HATCH_STYLE           m_hatchStyle;     // hatch style, see enum above
     int                   m_hatchPitch;     // for DIAGONAL_EDGE, distance between 2 hatch lines

@@ -99,9 +99,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         if( m_commit )
             m_commit->Modify( zone );
 
-        // Remove existing fill first to prevent drawing invalid polygons
-        zone->UnFill();
+        // calculate the hash value for filled areas. it will be used later
+        // to know if the current filled areas are up to date
+        zone->BuildHashValue();
+
+        // Add the zone to the list of zones to test or refill
         toFill.emplace_back( CN_ZONE_ISOLATED_ISLAND_LIST(zone) );
+
+        // Remove existing fill first to prevent drawing invalid polygons
+        // on some platforms
+        zone->UnFill();
     }
 
     if( m_progressReporter )
@@ -202,7 +209,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
         zone.m_zone->SetFilledPolysList( poly );
 
-        if( aCheck && zone.m_lastPolys.GetHash() != poly.GetHash() )
+        if( aCheck && zone.m_zone->GetHashValue() != poly.GetHash() )
             outOfDate = true;
     }
 
