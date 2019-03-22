@@ -44,6 +44,7 @@
 
 #define USE_ICONS_IN_MENUS_KEY          wxT( "UseIconsInMenus" )
 #define ICON_SCALE_KEY                  wxT( "IconScale" )
+#define CANVAS_SCALE_KEY                wxT( "CanvasScale" )
 #define AUTOSAVE_INTERVAL_KEY           wxT( "AutoSaveInterval" )
 #define ENBL_ZOOM_NO_CENTER_KEY         wxT( "ZoomNoCenter" )
 #define ENBL_MOUSEWHEEL_PAN_KEY         wxT( "MousewheelPAN" )

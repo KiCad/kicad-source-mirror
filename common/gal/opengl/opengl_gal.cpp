@@ -336,6 +336,12 @@ bool OPENGL_GAL::updatedGalDisplayOptions( const GAL_DISPLAY_OPTIONS& aOptions )
         refresh = true;
     }
 
+    if( options.m_scaleFactor != GetScaleFactor() )
+    {
+        SetScaleFactor( options.m_scaleFactor );
+        refresh = true;
+    }
+
     if( super::updatedGalDisplayOptions( aOptions ) || refresh )
     {
         Refresh();
@@ -1224,7 +1230,8 @@ void OPENGL_GAL::DrawGrid()
     nonCachedManager->EnableDepthTest( false );
 
     // sub-pixel lines all render the same
-    float minorLineWidth = std::fmax( 1.0f, gridLineWidth ) * getWorldPixelSize();
+    float minorLineWidth =
+            std::fmax( 1.0f, gridLineWidth ) * getWorldPixelSize() / GetBackingScaleFactor();
     float majorLineWidth = minorLineWidth * 2.0f;
 
     // Draw the axis and grid

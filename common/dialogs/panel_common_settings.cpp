@@ -21,20 +21,50 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pgm_base.h>
-#include <dialog_shim.h>
-#include <kiface_i.h>
-#include <bitmap_types.h>
-#include <bitmaps.h>
-#include <wx/graphics.h>
 #include "panel_common_settings.h"
 
-PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent ) :
-        PANEL_COMMON_SETTINGS_BASE( aParent ),
-        m_dialog( aDialog ),
-        m_last_scale( -1 )
+#include <bitmap_types.h>
+#include <bitmaps.h>
+#include <dialog_shim.h>
+#include <dpi_scaling.h>
+#include <kiface_i.h>
+#include <pgm_base.h>
+
+#include <wx/graphics.h>
+
+
+static constexpr int dpi_scaling_precision = 1;
+static constexpr double dpi_scaling_increment = 0.5;
+
+
+PANEL_COMMON_SETTINGS::PANEL_COMMON_SETTINGS( DIALOG_SHIM* aDialog, wxWindow* aParent )
+        : PANEL_COMMON_SETTINGS_BASE( aParent ),
+          m_dialog( aDialog ),
+          m_last_scale( -1 )
 {
-    m_scaleSlider->SetStep( 25 );
+    m_canvasScaleCtrl->SetRange(
+            DPI_SCALING::GetMinScaleFactor(), DPI_SCALING::GetMaxScaleFactor() );
+    m_canvasScaleCtrl->SetDigits( dpi_scaling_precision );
+    m_canvasScaleCtrl->SetIncrement( dpi_scaling_increment );
+    m_canvasScaleCtrl->SetValue( DPI_SCALING::GetDefaultScaleFactor() );
+
+    m_canvasScaleCtrl->SetToolTip(
+            _( "Set the scale for the canvas."
+               "\n\n"
+               "On high-DPI displays on some platforms, KiCad cannot determine the "
+               "scaling factor. In this case you may need to set this to a value to "
+               "match your system's DPI scaling. 2.0 is a common value. "
+               "\n\n"
+               "If this does not match the system DPI scaling, the canvas will "
+               "not match the window size and cursor position." ) );
+
+    m_canvasScaleAuto->SetToolTip(
+            _( "Use an automatic value for the canvas scale."
+               "\n\n"
+               "On some platforms, the automatic value is incorrect and should be "
+               "set manually." ) );
+
+    m_iconScaleSlider->SetStep( 25 );
 
     m_textEditorBtn->SetBitmap( KiBitmap( folder_xpm ) );
     m_pdfViewerBtn->SetBitmap( KiBitmap( folder_xpm ) );
@@ -63,18 +93,24 @@ bool PANEL_COMMON_SETTINGS::TransferDataToWindow()
     commonSettings->Read( CAIRO_ANTIALIASING_MODE_KEY, &antialiasingMode, 0 );
     m_antialiasingFallback->SetSelection( antialiasingMode );
 
-    int scale_fourths;
-    commonSettings->Read( ICON_SCALE_KEY, &scale_fourths );
+    int icon_scale_fourths;
+    commonSettings->Read( ICON_SCALE_KEY, &icon_scale_fourths );
 
-    if( scale_fourths <= 0 )
+    if( icon_scale_fourths <= 0 )
     {
-        m_scaleAuto->SetValue( true );
-        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+        m_iconScaleAuto->SetValue( true );
+        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
     }
     else
     {
-        m_scaleAuto->SetValue( false );
-        m_scaleSlider->SetValue( scale_fourths * 25 );
+        m_iconScaleAuto->SetValue( false );
+        m_iconScaleSlider->SetValue( icon_scale_fourths * 25 );
+    }
+
+    {
+        const DPI_SCALING dpi( commonSettings, this );
+        m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
+        m_canvasScaleAuto->SetValue( dpi.GetCanvasIsAutoScaled() );
     }
 
     bool option;
@@ -111,8 +147,13 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
     commonSettings->Write( CAIRO_ANTIALIASING_MODE_KEY, m_antialiasingFallback->GetSelection() );
 
-    const int scale_fourths = m_scaleAuto->GetValue() ? -1 : m_scaleSlider->GetValue() / 25;
+    const int scale_fourths = m_iconScaleAuto->GetValue() ? -1 : m_iconScaleSlider->GetValue() / 25;
     commonSettings->Write( ICON_SCALE_KEY, scale_fourths );
+
+    {
+        DPI_SCALING dpi( commonSettings, this );
+        dpi.SetDpiConfig( m_canvasScaleAuto->GetValue(), m_canvasScaleCtrl->GetValue() );
+    }
 
     commonSettings->Write( USE_ICONS_IN_MENUS_KEY, m_checkBoxIconsInMenus->GetValue() );
     commonSettings->Write( ENBL_ZOOM_NO_CENTER_KEY, !m_ZoomCenterOpt->GetValue() );
@@ -131,21 +172,42 @@ bool PANEL_COMMON_SETTINGS::TransferDataFromWindow()
 
 void PANEL_COMMON_SETTINGS::OnScaleSlider( wxScrollEvent& aEvent )
 {
-    m_scaleAuto->SetValue( false );
+    m_iconScaleAuto->SetValue( false );
 }
 
 
-void PANEL_COMMON_SETTINGS::OnScaleAuto( wxCommandEvent& aEvent )
+void PANEL_COMMON_SETTINGS::OnIconScaleAuto( wxCommandEvent& aEvent )
 {
-    if( m_scaleAuto->GetValue() )
+    if( m_iconScaleAuto->GetValue() )
     {
-        m_last_scale = m_scaleSlider->GetValue();
-        m_scaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
+        m_last_scale = m_iconScaleAuto->GetValue();
+        m_iconScaleSlider->SetValue( 25 * KiIconScale( GetParent() ) );
     }
     else
     {
         if( m_last_scale >= 0 )
-            m_scaleSlider->SetValue( m_last_scale );
+            m_iconScaleSlider->SetValue( m_last_scale );
+    }
+}
+
+
+void PANEL_COMMON_SETTINGS::OnCanvasScaleChange( wxCommandEvent& aEvent )
+{
+    m_canvasScaleAuto->SetValue( false );
+}
+
+
+void PANEL_COMMON_SETTINGS::OnCanvasScaleAuto( wxCommandEvent& aEvent )
+{
+    const bool automatic = m_canvasScaleAuto->GetValue();
+
+    if( automatic )
+    {
+        // set the scale to the auto value, without consulting the config
+        DPI_SCALING dpi( nullptr, this );
+
+        // update the field (no events sent)
+        m_canvasScaleCtrl->SetValue( dpi.GetScaleFactor() );
     }
 }
 

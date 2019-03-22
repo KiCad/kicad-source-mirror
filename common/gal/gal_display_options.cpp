@@ -22,9 +22,11 @@
 */
 
 #include <gal/gal_display_options.h>
+
 #include <wx/config.h>
 
 #include <config_map.h>
+#include <dpi_scaling.h>
 
 using namespace KIGFX;
 
@@ -55,7 +57,8 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
       m_gridMinSpacing( 10.0 ),
       m_axesEnabled( false ),
       m_fullscreenCursor( false ),
-      m_forceDisplayCursor( false )
+      m_forceDisplayCursor( false ),
+      m_scaleFactor( DPI_SCALING::GetDefaultScaleFactor() )
 {}
 
 

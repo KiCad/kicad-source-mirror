@@ -46,6 +46,7 @@
 #include <math/box2.h>
 #include <lockfile.h>
 #include <trace_helpers.h>
+#include <dpi_scaling.h>
 
 #include <wx/clipbrd.h>
 #include <fctsys.h>
@@ -302,6 +303,11 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     settings->Read( CAIRO_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
     m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) tmp;
+
+    {
+        const DPI_SCALING dpi{ settings, this };
+        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
+    }
 
     m_galDisplayOptions.NotifyChanged();
 }
@@ -870,6 +876,11 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     cmnCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
     m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) temp;
+
+    {
+        const DPI_SCALING dpi{ cmnCfg, this };
+        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
+    }
 
     m_galDisplayOptions.NotifyChanged();
 }

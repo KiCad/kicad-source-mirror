@@ -19,14 +19,17 @@
 
 /**
  * @file env_vars.h
- * Functions to provide helpful hints about what environment vars do
+ * Functions related to environment variables, including help functions
  */
 
 #ifndef ENV_VARS_H
 #define ENV_VARS_H
 
 #include <wx/string.h>
+
 #include <vector>
+
+#include <core/optional.h>
 
 using ENV_VAR_LIST = std::vector<wxString>;
 
@@ -55,5 +58,34 @@ const ENV_VAR_LIST& GetPredefinedEnvVars();
  *                 no help available for this variable.
  */
 wxString LookUpEnvVarHelp( const wxString& aEnvVar );
+
+/**
+ * Get an environment variable as a specific type, if set correctly
+ *
+ * @param aEnvVarName the name of the environment variable
+ * @return an OPT containing the value, if set and parseable, otherwise empty.
+ */
+template <typename VAL_TYPE>
+OPT<VAL_TYPE> GetEnvVar( const wxString& aEnvVarName );
+
+/**
+ * Get a string environment variable, if it is set.
+ *
+ * @param aEnvVarName the name of the environment variable
+ * @return an OPT containing the value, if set, otherwise empty.
+ */
+template<>
+OPT<wxString> GetEnvVar( const wxString& aEnvVarName );
+
+/**
+ * Get a double from an environment variable, if set
+ *
+ * @param aEnvVarName the name of the environment variable
+ * @return an OPT containing the value, if set and parseable as a double,
+ * otherwise empty.
+ */
+template <>
+OPT<double> GetEnvVar( const wxString& aEnvVarName );
+
 
 #endif /* ENV_VARS_H */

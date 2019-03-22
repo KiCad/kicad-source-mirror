@@ -40,10 +40,20 @@ protected:
     bool TransferDataToWindow() override;
 
     void OnScaleSlider( wxScrollEvent& aEvent ) override;
-    void OnScaleAuto( wxCommandEvent& aEvent ) override;
+    void OnIconScaleAuto( wxCommandEvent& aEvent ) override;
     void OnTextEditorClick( wxCommandEvent& event ) override;
     void OnPDFViewerClick( wxCommandEvent& event ) override;
-	void onUpdateUIPdfPath( wxUpdateUIEvent& event ) override;
+    void onUpdateUIPdfPath( wxUpdateUIEvent& event ) override;
+
+    /**
+     * Event fired when the canvas scale field is modified
+     */
+    void OnCanvasScaleChange( wxCommandEvent& aEvent ) override;
+
+    /**
+     * Event fired when the canvas auto-scale option is changed
+     */
+    void OnCanvasScaleAuto( wxCommandEvent& aEvent ) override;
 
     DIALOG_SHIM*  m_dialog;
 

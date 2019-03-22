@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jan  5 2019)
+// C++ code generated with wxFormBuilder (version Nov 10 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -61,9 +61,11 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		wxTextCtrl* m_PDFViewerPath;
 		wxBitmapButton* m_pdfViewerBtn;
 		wxStaticText* m_staticTexticonscale;
-		STEPPED_SLIDER* m_scaleSlider;
-		wxStaticText* m_staticTextPerCent;
-		wxCheckBox* m_scaleAuto;
+		STEPPED_SLIDER* m_iconScaleSlider;
+		wxCheckBox* m_iconScaleAuto;
+		wxStaticText* m_staticTextCanvasScale;
+		wxSpinCtrlDouble* m_canvasScaleCtrl;
+		wxCheckBox* m_canvasScaleAuto;
 		wxCheckBox* m_checkBoxIconsInMenus;
 		wxCheckBox* m_ZoomCenterOpt;
 		wxCheckBox* m_MousewheelPANOpt;
@@ -74,7 +76,9 @@ class PANEL_COMMON_SETTINGS_BASE : public wxPanel
 		virtual void onUpdateUIPdfPath( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnPDFViewerClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnScaleSlider( wxScrollEvent& event ) { event.Skip(); }
-		virtual void OnScaleAuto( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnIconScaleAuto( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCanvasScaleChange( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnCanvasScaleAuto( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
