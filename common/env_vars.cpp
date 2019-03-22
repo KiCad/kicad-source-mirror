@@ -23,6 +23,8 @@
 
 #include <common.h>
 
+#include <wx/utils.h>
+
 using STRING_MAP = std::map<wxString, wxString>;
 
 /*
@@ -102,4 +104,37 @@ wxString LookUpEnvVarHelp( const wxString& aEnvVar )
         initialiseEnvVarHelp( env_var_help_text );
 
     return env_var_help_text[aEnvVar];
+}
+
+
+template<>
+OPT<double> GetEnvVar( const wxString& aEnvVarName )
+{
+    OPT<double> opt_value;
+
+    wxString env;
+    if( wxGetEnv( aEnvVarName, &env ) )
+    {
+        double value;
+        if( env.ToDouble( &value ) )
+        {
+            opt_value = value;
+        }
+    }
+
+    return opt_value;
+}
+
+template<>
+OPT<wxString> GetEnvVar( const wxString& aEnvVarName )
+{
+    OPT<wxString> opt_value;
+
+    wxString env;
+    if( wxGetEnv( aEnvVarName, &env ) )
+    {
+        opt_value = env;
+    }
+
+    return opt_value;
 }

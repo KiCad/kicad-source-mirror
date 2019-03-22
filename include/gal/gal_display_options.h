@@ -100,6 +100,9 @@ namespace KIGFX
 
         ///> Force cursor display
         bool m_forceDisplayCursor;
+
+        ///> The pixel scale factor (>1 for hi-DPI scaled displays)
+        double m_scaleFactor;
     };
 
 }

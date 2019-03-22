@@ -67,6 +67,7 @@
 #include <page_info.h>
 #include <title_block.h>
 #include <advanced_config.h>
+#include <dpi_scaling.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -300,6 +301,11 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
 
     settings->Read( CAIRO_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
     m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) tmp;
+
+    {
+        const DPI_SCALING dpi{ settings, this };
+        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
+    }
 
     m_galDisplayOptions.NotifyChanged();
 }
@@ -851,6 +857,11 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     cmnCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
     m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) temp;
+
+    {
+        const DPI_SCALING dpi{ cmnCfg, this };
+        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
+    }
 
     m_galDisplayOptions.NotifyChanged();
 }

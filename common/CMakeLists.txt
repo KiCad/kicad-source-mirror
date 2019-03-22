@@ -295,6 +295,7 @@ set( COMMON_SRCS
     convert_basic_shapes_to_polygon.cpp
     dialog_shim.cpp
     displlst.cpp
+    dpi_scaling.cpp
     draw_graphic_text.cpp
     dsnlexer.cpp
     eagle_parser.cpp

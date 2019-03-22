@@ -53,6 +53,22 @@ public:
 
     virtual wxSize GetNativePixelSize() const;
     virtual float GetBackingScaleFactor() const;
+
+    /**
+     * Set the canvas scale factor, probably for a hi-DPI display.
+     */
+    void SetScaleFactor( double aFactor );
+
+    /**
+     * Get the current scale factor
+     */
+    double GetScaleFactor() const;
+
+private:
+    /**
+     * The current scale factor (e.g. for hi-DPI displays)
+     */
+    double m_scale_factor;
 };
 
 #endif // HIDPI_GL_CANVAS_H
