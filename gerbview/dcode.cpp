@@ -279,7 +279,7 @@ void D_CODE::DrawFlashedPolygon( GERBER_DRAW_ITEM* aParent,
 
     for( int ii = 0; ii < pointCount; ii++ )
     {
-        wxPoint p( m_Polygon.Vertex( ii ).x, m_Polygon.Vertex( ii ).y );
+        wxPoint p( m_Polygon.CVertex( ii ).x, m_Polygon.CVertex( ii ).y );
         points[ii] = p + aPosition;
         points[ii] = aParent->GetABPosition( points[ii] );
     }

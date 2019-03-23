@@ -209,7 +209,7 @@ void PSLIKE_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aS
     cornerList.reserve( poly.PointCount() );
 
     for( int ii = 0; ii < poly.PointCount(); ++ii )
-        cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
+        cornerList.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
 
     // Close polygon
     cornerList.push_back( cornerList[0] );
@@ -242,7 +242,7 @@ void PSLIKE_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize
         cornerList.clear();
 
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-            cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
+            cornerList.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
 
         // Close polygon
         cornerList.push_back( cornerList[0] );

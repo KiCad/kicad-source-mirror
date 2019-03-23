@@ -248,9 +248,7 @@ static inline bool Collide( const SHAPE_RECT& aA, const SHAPE_LINE_CHAIN& aB, in
 {
     for( int s = 0; s < aB.SegmentCount(); s++ )
     {
-        SEG seg = aB.CSegment( s );
-
-        if( aA.Collide( seg, aClearance ) )
+        if( aA.Collide( aB.CSegment( s ), aClearance ) )
             return true;
     }
 

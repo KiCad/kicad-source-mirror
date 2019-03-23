@@ -111,8 +111,8 @@ void GRMoveTo( int x, int y );
 void GRLineTo( EDA_RECT* ClipBox, wxDC* DC,
                int x, int y, int width, COLOR4D Color );
 
-void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[], bool Fill,
-             int width, COLOR4D Color, COLOR4D BgColor );
+void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, const wxPoint* Points, bool Fill, int width,
+        COLOR4D Color, COLOR4D BgColor );
 
 /** Draw cubic (4 points: start control1, control2, end) bezier curve
  */
@@ -131,13 +131,8 @@ void GRBezier( EDA_RECT* aClipBox, wxDC* aDC, std::vector<wxPoint>& aPoints,
  * @param aPenColor the color of the border.
  * @param aFillColor the fill color of the polygon's interior.
  */
-void GRClosedPoly( EDA_RECT* ClipBox,
-                   wxDC  *   aDC,
-                   int       aPointCount,
-                   wxPoint   aPoints[],
-                   bool      doFill,
-                   COLOR4D   aPenColor,
-                   COLOR4D   aFillColor );
+void GRClosedPoly( EDA_RECT* ClipBox, wxDC* aDC, int aPointCount, const wxPoint* aPoints,
+        bool doFill, COLOR4D aPenColor, COLOR4D aFillColor );
 
 // @todo could make these 2 closed polygons calls a single function and default
 // the aPenWidth argument
@@ -155,14 +150,8 @@ void GRClosedPoly( EDA_RECT* ClipBox,
  * @param aPenColor the color of the border.
  * @param aFillColor the fill color of the polygon's interior.
  */
-void GRClosedPoly( EDA_RECT* ClipBox,
-                   wxDC*     aDC,
-                   int       aPointCount,
-                   wxPoint   aPoints[],
-                   bool      doFill,
-                   int       aPenWidth,
-                   COLOR4D   aPenColor,
-                   COLOR4D   aFillColor );
+void GRClosedPoly( EDA_RECT* ClipBox, wxDC* aDC, int aPointCount, const wxPoint* aPoints,
+        bool doFill, int aPenWidth, COLOR4D aPenColor, COLOR4D aFillColor );
 
 
 /**

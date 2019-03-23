@@ -388,20 +388,8 @@ void D_PAD::CustomShapeAsPolygonToBoardPosition( SHAPE_POLY_SET * aMergedPolygon
 
     // Move, rotate, ... coordinates in aMergedPolygon according to the
     // pad position and orientation
-    for( int cnt = 0; cnt < aMergedPolygon->OutlineCount(); ++cnt )
-    {
-        SHAPE_LINE_CHAIN& poly = aMergedPolygon->Outline( cnt );
-
-        for( int ii = 0; ii < poly.PointCount(); ++ii )
-        {
-            wxPoint corner( poly.Point( ii ).x, poly.Point( ii ).y );
-            RotatePoint( &corner, aRotation );
-            corner += aPosition;
-
-            poly.Point( ii ).x = corner.x;
-            poly.Point( ii ).y = corner.y;
-        }
-    }
+    aMergedPolygon->Rotate( -DECIDEG2RAD( aRotation ) );
+    aMergedPolygon->Move( VECTOR2I( aPosition ) );
 }
 
 bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )

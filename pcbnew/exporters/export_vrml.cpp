@@ -1119,8 +1119,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
 
         cornerList.reserve( poly.PointCount() );
         for( int ii = 0; ii < poly.PointCount(); ++ii )
-            cornerList.emplace_back( poly.Point( ii ).x * BOARD_SCALE,
-                                               -poly.Point( ii ).y * BOARD_SCALE );
+            cornerList.emplace_back(
+                    poly.CPoint( ii ).x * BOARD_SCALE, -poly.CPoint( ii ).y * BOARD_SCALE );
 
         // Close polygon
         cornerList.push_back( cornerList[0] );
@@ -1142,8 +1142,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
             cornerList.clear();
 
             for( int ii = 0; ii < poly.PointCount(); ++ii )
-                cornerList.emplace_back( poly.Point( ii ).x * BOARD_SCALE,
-                                                   -poly.Point( ii ).y * BOARD_SCALE );
+                cornerList.emplace_back(
+                        poly.CPoint( ii ).x * BOARD_SCALE, -poly.CPoint( ii ).y * BOARD_SCALE );
 
             // Close polygon
             cornerList.push_back( cornerList[0] );

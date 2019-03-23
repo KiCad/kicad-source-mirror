@@ -116,7 +116,6 @@ public:
         m_points[3] = aD;
     }
 
-
     SHAPE_LINE_CHAIN( const VECTOR2I* aV, int aCount ) :
         SHAPE( SH_LINE_CHAIN ),
         m_closed( false )
@@ -127,7 +126,6 @@ public:
             m_points[i] = *aV++;
     }
 
-
     SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV ) :
         SHAPE( SH_LINE_CHAIN ),
         m_closed( false )
@@ -136,6 +134,13 @@ public:
 
         for( auto pt : aV )
             m_points.emplace_back( pt.x, pt.y );
+    }
+
+    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV ) :
+        SHAPE( SH_LINE_CHAIN ),
+        m_closed( false )
+    {
+        m_points = aV;
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
@@ -252,22 +257,22 @@ public:
     }
 
     /**
-     * Function Point()
-     *
-     * Returns a reference to a given point in the line chain.
-     * @param aIndex index of the point
-     * @return reference to the point
+     * Accessor Function to move a point to a specific location
+     * @param aIndex Index (wrapping) of the point to move
+     * @param aPos New absolute location of the point
      */
-    VECTOR2I& Point( int aIndex )
+    void SetPoint( int aIndex, const VECTOR2I& aPos )
     {
         if( aIndex < 0 )
             aIndex += PointCount();
+        else if( aIndex >= PointCount() )
+            aIndex -= PointCount();
 
-        return m_points[aIndex];
+        m_points[aIndex] = aPos;
     }
 
     /**
-     * Function CPoint()
+     * Function Point()
      *
      * Returns a const reference to a given point in the line chain.
      * @param aIndex index of the point
@@ -286,14 +291,6 @@ public:
     const std::vector<VECTOR2I>& CPoints() const
     {
         return m_points;
-    }
-
-    /**
-     * Returns the last point in the line chain.
-     */
-    VECTOR2I& LastPoint()
-    {
-        return m_points[PointCount() - 1];
     }
 
     /**
@@ -619,13 +616,6 @@ public:
     SHAPE_LINE_CHAIN& Simplify();
 
     /**
-     * Function convertFromClipper()
-     * Appends the Clipper path to the current SHAPE_LINE_CHAIN
-     *
-     */
-    void convertFromClipper( const ClipperLib::Path& aPath );
-
-    /**
      * Creates a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
      *
      */
@@ -679,12 +669,30 @@ public:
     }
 
     /**
+     * Mirrors the line points about y or x (or both)
+     * @param aX If true, mirror about the y axis (flip X coordinate)
+     * @param aY If true, mirror about the x axis (flip Y coordinate)
+     * @param aRef sets the reference point about which to mirror
+     */
+    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } )
+    {
+        for( auto& pt : m_points )
+        {
+            if( aX )
+                pt.x = -pt.x + 2 * aRef.x;
+
+            if( aY )
+                pt.y = -pt.y + 2 * aRef.y;
+        }
+    }
+
+    /**
      * Function Rotate
      * rotates all vertices by a given angle
      * @param aCenter is the rotation center
      * @param aAngle rotation angle in radians
      */
-    void Rotate( double aAngle, const VECTOR2I& aCenter );
+    void Rotate( double aAngle, const VECTOR2I& aCenter = VECTOR2I( 0, 0 ) );
 
     bool IsSolid() const override
     {

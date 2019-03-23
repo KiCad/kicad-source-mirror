@@ -509,7 +509,7 @@ void POINT_EDITOR::updateItem() const
             SHAPE_POLY_SET& outline = segment->GetPolyShape();
 
             for( int i = 0; i < outline.TotalVertices(); ++i )
-                outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
+                outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
 
             validatePolygon( outline );
             break;
@@ -552,10 +552,10 @@ void POINT_EDITOR::updateItem() const
 
         for( int i = 0; i < outline.TotalVertices(); ++i )
         {
-            if( outline.Vertex( i ) != m_editPoints->Point( i ).GetPosition() )
+            if( outline.CVertex( i ) != m_editPoints->Point( i ).GetPosition() )
                 zone->SetNeedRefill( true );
 
-            outline.Vertex( i ) = m_editPoints->Point( i ).GetPosition();
+            outline.SetVertex( i, m_editPoints->Point( i ).GetPosition() );
         }
 
         validatePolygon( outline );
@@ -902,7 +902,7 @@ findVertex( SHAPE_POLY_SET& aPolySet, const EDIT_POINT& aPoint )
     {
         auto vertexIdx = it.GetIndex();
 
-        if( aPolySet.Vertex( vertexIdx ) == aPoint.GetPosition() )
+        if( aPolySet.CVertex( vertexIdx ) == aPoint.GetPosition() )
             return std::make_pair( true, vertexIdx );
     }
 
@@ -1006,7 +1006,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
                 firstPointInContour = curr_idx+1;     // Prepare next contour analysis
             }
 
-            SEG curr_segment( zoneOutline->Vertex( curr_idx ), zoneOutline->Vertex( jj ) );
+            SEG curr_segment( zoneOutline->CVertex( curr_idx ), zoneOutline->CVertex( jj ) );
 
             unsigned int distance = curr_segment.Distance( cursorPos );
 
@@ -1019,8 +1019,8 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
         }
 
         // Find the point on the closest segment
-        VECTOR2I sideOrigin = zoneOutline->Vertex( nearestIdx );
-        VECTOR2I sideEnd = zoneOutline->Vertex( nextNearestIdx );
+        auto&    sideOrigin = zoneOutline->CVertex( nearestIdx );
+        auto&    sideEnd = zoneOutline->CVertex( nextNearestIdx );
         SEG nearestSide( sideOrigin, sideEnd );
         VECTOR2I nearestPoint = nearestSide.NearestPoint( cursorPos );
 

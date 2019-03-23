@@ -71,8 +71,7 @@ static const bool NOT_FILLED = false;
 GR_DRAWMODE g_XorMode = GR_NXOR;
 
 
-static void ClipAndDrawPoly( EDA_RECT * ClipBox, wxDC * DC, wxPoint Points[],
-                             int n );
+static void ClipAndDrawPoly( EDA_RECT* ClipBox, wxDC* DC, const wxPoint* Points, int n );
 
 /* These functions are used by corresponding functions
  * ( GRSCircle is called by GRCircle for instance) after mapping coordinates
@@ -428,7 +427,7 @@ void GRFilledSegment( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEn
 }
 
 
-static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, wxPoint Points[] )
+static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, const wxPoint* Points, )
 {
     if( !ClipBox )
         return true;
@@ -470,9 +469,8 @@ static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, wxPoint Points[] )
 /*
  * Draw a new polyline and fill it if Fill, in screen space.
  */
-static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
-                     bool      Fill, int width,
-                     COLOR4D Color, COLOR4D BgColor )
+static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, const wxPoint* Points, bool Fill,
+        int width, COLOR4D Color, COLOR4D BgColor )
 {
     if( !IsGRSPolyDrawable( ClipBox, n, Points ) )
         return;
@@ -503,11 +501,8 @@ static void GRSPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
 /*
  * Draw a new closed polyline and fill it if Fill, in screen space.
  */
-static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
-                           int       aPointCount, wxPoint aPoints[],
-                           bool      aFill, int aWidth,
-                           COLOR4D   aColor,
-                           COLOR4D   aBgColor )
+static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC, int aPointCount, const wxPoint* aPoints,
+        bool aFill, int aWidth, COLOR4D aColor, COLOR4D aBgColor )
 {
     if( !IsGRSPolyDrawable( aClipBox, aPointCount, aPoints ) )
         return;
@@ -543,8 +538,8 @@ static void GRSClosedPoly( EDA_RECT* aClipBox, wxDC* aDC,
 /*
  * Draw a new polyline and fill it if Fill, in drawing space.
  */
-void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
-             bool Fill, int width, COLOR4D Color, COLOR4D BgColor )
+void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, const wxPoint* Points, bool Fill, int width,
+        COLOR4D Color, COLOR4D BgColor )
 {
     GRSPoly( ClipBox, DC, n, Points, Fill, width, Color, BgColor );
 }
@@ -553,15 +548,15 @@ void GRPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
 /*
  * Draw a closed polyline and fill it if Fill, in object space.
  */
-void GRClosedPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
-                   bool Fill, COLOR4D Color, COLOR4D BgColor )
+void GRClosedPoly( EDA_RECT* ClipBox, wxDC* DC, int n, const wxPoint* Points, bool Fill,
+        COLOR4D Color, COLOR4D BgColor )
 {
     GRClosedPoly( ClipBox, DC, n, Points, Fill, 0, Color, BgColor );
 }
 
 
-void GRClosedPoly( EDA_RECT* ClipBox, wxDC* DC, int n, wxPoint Points[],
-                   bool Fill, int width, COLOR4D Color, COLOR4D BgColor )
+void GRClosedPoly( EDA_RECT* ClipBox, wxDC* DC, int n, const wxPoint* Points, bool Fill, int width,
+        COLOR4D Color, COLOR4D BgColor )
 {
     GRSClosedPoly( ClipBox, DC, n, Points, Fill, width, Color, BgColor );
 }
@@ -958,7 +953,7 @@ void GRSFilledRect( EDA_RECT* aClipBox, wxDC* aDC, int x1, int y1, int x2, int y
  */
 #include <SutherlandHodgmanClipPoly.h>
 
-void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aPoints[], int n )
+void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint* Points, int n )
 {
     if( aClipBox == NULL )
     {
