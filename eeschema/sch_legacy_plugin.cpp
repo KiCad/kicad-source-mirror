@@ -1498,7 +1498,21 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
             }
 
             component->SetUnit( unit );
-            component->SetConvert( parseInt( aReader, line, &line ) );
+
+            // Same can also happen with the convert parameter
+            int convert = parseInt( aReader, line, &line );
+
+            if( convert == 0 )
+            {
+                convert = 1;
+
+                // Set the file as modified so the user can be warned.
+                if( m_rootSheet && m_rootSheet->GetScreen() )
+                    m_rootSheet->GetScreen()->SetModify();
+            }
+
+            component->SetConvert( convert );
+
             component->SetTimeStamp( parseHex( aReader, line, &line ) );
         }
         else if( strCompare( "P", line, &line ) )
