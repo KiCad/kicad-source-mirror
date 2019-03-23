@@ -156,28 +156,44 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     if( aCreateMarkers && !m_multiple_power_ports &&
         candidates.size() > 1 && highest_priority > 1 )
     {
-        wxString msg;
-        msg.Printf( _( "%s and %s are both attached to the same wires. "
-                       "%s was picked as the label to use for netlisting." ),
-                    candidates[0]->GetSelectMenuText( m_frame->GetUserUnits() ),
-                    candidates[1]->GetSelectMenuText( m_frame->GetUserUnits() ),
-                    candidates[0]->Connection( m_sheet )->Name() );
+        // First check if all the candidates are actually the same
+        bool same = true;
+        auto first = candidates[0]->Connection( m_sheet )->Name();
 
-        wxASSERT( candidates[0] != candidates[1] );
+        for( unsigned i = 1; i < candidates.size(); i++ )
+        {
+            if( candidates[i]->Connection( m_sheet )->Name() != first )
+            {
+                same = false;
+                break;
+            }
+        }
 
-        auto marker = new SCH_MARKER();
-        marker->SetTimeStamp( GetNewTimeStamp() );
-        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-        marker->SetData( ERCE_DRIVER_CONFLICT,
-                         candidates[0]->GetPosition(), msg,
-                         candidates[1]->GetPosition() );
+        if( !same )
+        {
+            wxString msg;
+            msg.Printf( _( "%s and %s are both attached to the same wires. "
+                           "%s was picked as the label to use for netlisting." ),
+                        candidates[0]->GetSelectMenuText( m_frame->GetUserUnits() ),
+                        candidates[1]->GetSelectMenuText( m_frame->GetUserUnits() ),
+                        candidates[0]->Connection( m_sheet )->Name() );
 
-        m_sheet.LastScreen()->Append( marker );
+            wxASSERT( candidates[0] != candidates[1] );
 
-        // If aCreateMarkers is true, then this is part of ERC check, so we
-        // should return false even if the driver was assigned
-        return false;
+            auto marker = new SCH_MARKER();
+            marker->SetTimeStamp( GetNewTimeStamp() );
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( ERCE_DRIVER_CONFLICT,
+                             candidates[0]->GetPosition(), msg,
+                             candidates[1]->GetPosition() );
+
+            m_sheet.LastScreen()->Append( marker );
+
+            // If aCreateMarkers is true, then this is part of ERC check, so we
+            // should return false even if the driver was assigned
+            return false;
+        }
     }
 
     return aCreateMarkers || ( m_driver != nullptr );
@@ -453,6 +469,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                     test_item->ConnectedItems().insert( connected_item );
                 }
 
+                // Set up the link between the bus entry net and the bus
                 if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
                 {
                     if( test_item->Connection( aSheet )->IsBus() )
@@ -1327,7 +1344,14 @@ std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigration()
             continue;
 
         if( subgraph->GetBusLabels().size() > 1 )
+        {
+            #ifdef CONNECTIVITY_DEBUG
+            wxLogDebug( "SG %ld (%s) has multiple bus labels", subgraph->m_code,
+                        connection->Name() );
+            #endif
+
             ret.push_back( subgraph );
+        }
     }
 
     return ret;
@@ -1764,6 +1788,10 @@ bool CONNECTION_GRAPH::ercCheckLabels( CONNECTION_SUBGRAPH* aSubgraph,
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIERARCHICAL_LABEL_T:
             text = static_cast<SCH_TEXT*>( item );
+            break;
+
+        case SCH_PIN_CONNECTION_T:
+            has_other_connections = true;
             break;
 
         default:
