@@ -41,6 +41,7 @@
 #include <general.h>
 #include <sch_bus_entry.h>
 #include <sch_line.h>
+#include <sch_text.h>
 
 
 SCH_BUS_ENTRY_BASE::SCH_BUS_ENTRY_BASE( KICAD_T aType, const wxPoint& pos, char shape ) :
@@ -441,6 +442,14 @@ bool SCH_BUS_WIRE_ENTRY::ConnectionPropagatesTo( const EDA_ITEM* aItem ) const
     // a connectivity change at that point (e.g. A[7..0] to A7)
     if( ( aItem->Type() == SCH_LINE_T ) &&
         ( static_cast<const SCH_LINE*>( aItem )->GetLayer() == LAYER_BUS ) )
+    {
+        return false;
+    }
+
+    // Don't generate connections between bus entries and bus labels that happen
+    // to land at the same point on the bus wire as this bus entry
+    if( ( aItem->Type() == SCH_LABEL_T ) &&
+        SCH_CONNECTION::IsBusLabel( static_cast<const SCH_LABEL*>( aItem )->GetText() ) )
     {
         return false;
     }

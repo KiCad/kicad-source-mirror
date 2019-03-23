@@ -293,7 +293,7 @@ public:
      * @param aLabel A wxString object containing the label to test.
      * @return true if text is a bus notation format otherwise false is returned.
      */
-    bool IsBusLabel( const wxString& aLabel );
+    static bool IsBusLabel( const wxString& aLabel );
 
     /**
      * Test if \a aLabel has a bus vector notation (simple bus, e.g. A[7..0])
@@ -301,7 +301,7 @@ public:
      * @param aLabel A wxString object containing the label to test.
      * @return true if text is a bus notation format otherwise false is returned.
      */
-    bool IsBusVectorLabel( const wxString& aLabel );
+    static bool IsBusVectorLabel( const wxString& aLabel );
 
     /**
      * Test if \a aLabel has a bus group notation.
@@ -309,7 +309,7 @@ public:
      * @param aLabel A wxString object containing the label to test.
      * @return true if text is a bus group notation format
      */
-    bool IsBusGroupLabel( const wxString& aLabel );
+    static bool IsBusGroupLabel( const wxString& aLabel );
 
 private:
 
