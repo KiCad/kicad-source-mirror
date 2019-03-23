@@ -61,19 +61,21 @@ void unfracture( SHAPE_POLY_SET::POLYGON* aPoly, SHAPE_POLY_SET::POLYGON* aResul
 
         bool operator==( const EDGE& aOther ) const
         {
-            return compareSegs( m_poly->CSegment(m_index), aOther.m_poly->CSegment(aOther.m_index) );
+            return compareSegs(
+                    m_poly->Segment( m_index ), aOther.m_poly->Segment( aOther.m_index ) );
         }
 
         bool operator!=( const EDGE& aOther ) const
         {
-            return ! compareSegs( m_poly->CSegment(m_index), aOther.m_poly->CSegment(aOther.m_index) );
+            return !compareSegs(
+                    m_poly->Segment( m_index ), aOther.m_poly->Segment( aOther.m_index ) );
         }
 
         struct HASH
         {
             std::size_t operator()(  const EDGE& aEdge ) const
             {
-                const auto& a = aEdge.m_poly->CSegment(aEdge.m_index);
+                const auto& a = aEdge.m_poly->Segment( aEdge.m_index );
                 return (std::size_t) ( a.A.x + a.B.x + a.A.y + a.B.y );
             }
         };
@@ -178,9 +180,9 @@ aResult->clear();
             queue.erase( edgeBuf[i] );
         }
 
-//        auto p_last = lc.CPoint( edgeBuf[cnt-1]->index + 1 );
-//printf("appendl %d %d\n", p_last.x, p_last.y);
-//        outl.Append( p_last );
+        //        auto p_last = lc.Point( edgeBuf[cnt-1]->index + 1 );
+        //printf("appendl %d %d\n", p_last.x, p_last.y);
+        //        outl.Append( p_last );
 
         outl.SetClosed(true);
 

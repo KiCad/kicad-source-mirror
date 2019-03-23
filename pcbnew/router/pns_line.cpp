@@ -469,7 +469,7 @@ void LINE::dragCorner45( const VECTOR2I& aP, int aIndex, int aSnappingThreshold 
 
 void LINE::dragCornerFree( const VECTOR2I& aP, int aIndex, int aSnappingThreshold )
 {
-    m_line.Point( aIndex ) = aP;
+    m_line.SetPoint( aIndex, aP );
     m_line.Simplify();
 }
 

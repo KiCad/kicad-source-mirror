@@ -229,17 +229,18 @@ class SHAPE_POLY_SET : public SHAPE
                 Advance();
             }
 
-            T& Get()
+            const T& Get()
             {
-                return m_poly->Polygon( m_currentPolygon )[m_currentContour].Point( m_currentVertex );
+                return m_poly->Polygon( m_currentPolygon )[m_currentContour].CPoint(
+                        m_currentVertex );
             }
 
-            T& operator*()
+            const T& operator*()
             {
                 return Get();
             }
 
-            T* operator->()
+            const T* operator->()
             {
                 return &Get();
             }
@@ -509,19 +510,10 @@ class SHAPE_POLY_SET : public SHAPE
         void InsertVertex( int aGlobalIndex, VECTOR2I aNewVertex );
 
         ///> Returns the index-th vertex in a given hole outline within a given outline
-        VECTOR2I& Vertex( int aIndex, int aOutline, int aHole );
-
-        ///> Returns the index-th vertex in a given hole outline within a given outline
         const VECTOR2I& CVertex( int aIndex, int aOutline, int aHole ) const;
 
         ///> Returns the aGlobalIndex-th vertex in the poly set
-        VECTOR2I& Vertex( int aGlobalIndex );
-
-        ///> Returns the aGlobalIndex-th vertex in the poly set
         const VECTOR2I& CVertex( int aGlobalIndex ) const;
-
-        ///> Returns the index-th vertex in a given hole outline within a given outline
-        VECTOR2I& Vertex( VERTEX_INDEX aIndex );
 
         ///> Returns the index-th vertex in a given hole outline within a given outline
         const VECTOR2I& CVertex( VERTEX_INDEX aIndex ) const;
@@ -939,12 +931,20 @@ class SHAPE_POLY_SET : public SHAPE
         void Move( const VECTOR2I& aVector ) override;
 
         /**
+         * Mirrors the line points about y or x (or both)
+         * @param aX If true, mirror about the y axis (flip x coordinate)
+         * @param aY If true, mirror about the x axis
+         * @param aRef sets the reference point about which to mirror
+         */
+        void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
+
+        /**
          * Function Rotate
          * rotates all vertices by a given angle
          * @param aCenter is the rotation center
          * @param aAngle rotation angle in radians
          */
-        void Rotate( double aAngle, const VECTOR2I& aCenter );
+        void Rotate( double aAngle, const VECTOR2I& aCenter = { 0, 0 } );
 
         /// @copydoc SHAPE::IsSolid()
         bool IsSolid() const override
@@ -1074,6 +1074,22 @@ class SHAPE_POLY_SET : public SHAPE
          * @return int - the number of deleted segments.
          */
         int RemoveNullSegments();
+
+        /**
+         * Function SetVertex
+         * Accessor function to set the position of a specific point
+         * @param aIndex VERTEX_INDEX of the point to move
+         * @param aPos destination position of the specified point
+         */
+        void SetVertex( const VERTEX_INDEX& aIndex, const VECTOR2I& aPos );
+
+        /**
+         * Sets the vertex based on the global index.  Throws if the index
+         * doesn't exist
+         * @param aGlobalIndex global index of the to-be-moved vertex
+         * @param aPos New position on the vertex
+         */
+        void SetVertex( int aGlobalIndex, const VECTOR2I& aPos );
 
         ///> Returns total number of vertices stored in the set.
         int TotalVertices() const;

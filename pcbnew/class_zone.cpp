@@ -625,8 +625,8 @@ bool ZONE_CONTAINER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccur
 
         for( int ii = 0; ii < count; ii++ )
         {
-            auto vertex = m_Poly->Vertex( ii );
-            auto vertexNext = m_Poly->Vertex( ( ii + 1 ) % count );
+            auto vertex = m_Poly->CVertex( ii );
+            auto vertexNext = m_Poly->CVertex( ( ii + 1 ) % count );
 
             // Test if the point is within the rect
             if( arect.Contains( ( wxPoint ) vertex ) )
@@ -789,8 +789,8 @@ void ZONE_CONTAINER::MoveEdge( const wxPoint& offset, int aEdge )
 
     if( m_Poly->GetNeighbourIndexes( aEdge, nullptr, &next_corner ) )
     {
-        m_Poly->Vertex( aEdge ) += VECTOR2I( offset );
-        m_Poly->Vertex( next_corner ) += VECTOR2I( offset );
+        m_Poly->SetVertex( aEdge, m_Poly->CVertex( aEdge ) + VECTOR2I( offset ) );
+        m_Poly->SetVertex( next_corner, m_Poly->CVertex( next_corner ) + VECTOR2I( offset ) );
         Hatch();
 
         SetNeedRefill( true );
@@ -802,19 +802,13 @@ void ZONE_CONTAINER::Rotate( const wxPoint& centre, double angle )
 {
     wxPoint pos;
 
-    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
-    {
-        pos = static_cast<wxPoint>( *iterator );
-        RotatePoint( &pos, centre, angle );
-        iterator->x = pos.x;
-        iterator->y = pos.y;
-    }
+    angle = -DECIDEG2RAD( angle );
 
+    m_Poly->Rotate( angle, VECTOR2I( centre ) );
     Hatch();
 
     /* rotate filled areas: */
-    for( auto ic = m_FilledPolysList.Iterate(); ic; ++ic )
-        RotatePoint( &ic->x, &ic->y, centre.x, centre.y, angle );
+    m_FilledPolysList.Rotate( angle, VECTOR2I( centre ) );
 
     for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
     {
@@ -846,23 +840,12 @@ void ZONE_CONTAINER::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 
 void ZONE_CONTAINER::Mirror( const wxPoint& aMirrorRef, bool aMirrorLeftRight )
 {
-    for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
-    {
-        if( aMirrorLeftRight )
-            iterator->x = ( aMirrorRef.x - iterator->x ) + aMirrorRef.x;
-        else
-            iterator->y = ( aMirrorRef.y - iterator->y ) + aMirrorRef.y;
-    }
+    // ZONE_CONTAINERs mirror about the x-axis (why?!?)
+    m_Poly->Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
     Hatch();
 
-    for( auto ic = m_FilledPolysList.Iterate(); ic; ++ic )
-    {
-        if( aMirrorLeftRight )
-            ic->x = ( aMirrorRef.x - ic->x ) + aMirrorRef.x;
-        else
-            ic->y = ( aMirrorRef.y - ic->y ) + aMirrorRef.y;
-    }
+    m_FilledPolysList.Mirror( aMirrorLeftRight, !aMirrorLeftRight, VECTOR2I( aMirrorRef ) );
 
     for( SEG& seg : m_FillSegmList )
     {
@@ -1009,10 +992,10 @@ void ZONE_CONTAINER::Hatch()
         return;
 
     // define range for hatch lines
-    int min_x = m_Poly->Vertex( 0 ).x;
-    int max_x = m_Poly->Vertex( 0 ).x;
-    int min_y = m_Poly->Vertex( 0 ).y;
-    int max_y = m_Poly->Vertex( 0 ).y;
+    int min_x = m_Poly->CVertex( 0 ).x;
+    int max_x = m_Poly->CVertex( 0 ).x;
+    int min_y = m_Poly->CVertex( 0 ).y;
+    int max_y = m_Poly->CVertex( 0 ).y;
 
     for( auto iterator = m_Poly->IterateWithHoles(); iterator; iterator++ )
     {

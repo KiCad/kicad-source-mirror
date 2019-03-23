@@ -650,7 +650,7 @@ void HPGL_PLOTTER::FlashPadRoundRect( const wxPoint& aPadPos, const wxSize& aSiz
     cornerList.reserve( poly.PointCount() );
 
     for( int ii = 0; ii < poly.PointCount(); ++ii )
-        cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
+        cornerList.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
 
     if( cornerList.back() != cornerList.front() )
         cornerList.push_back( cornerList.front() );
@@ -672,7 +672,7 @@ void HPGL_PLOTTER::FlashPadCustom( const wxPoint& aPadPos, const wxSize& aSize,
         cornerList.reserve( poly.PointCount() );
 
         for( int ii = 1; ii < poly.PointCount(); ++ii )
-            cornerList.emplace_back( poly.Point( ii ).x, poly.Point( ii ).y );
+            cornerList.emplace_back( poly.CPoint( ii ).x, poly.CPoint( ii ).y );
 
         if( cornerList.back() != cornerList.front() )
             cornerList.push_back( cornerList.front() );

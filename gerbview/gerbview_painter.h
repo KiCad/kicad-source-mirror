@@ -23,6 +23,8 @@
 
 #include <layers_id_colors_and_visibility.h>
 #include <painter.h>
+
+#include <dcode.h>
 #include <gbr_display_options.h>
 #include <geometry/shape_poly_set.h>
 
@@ -191,8 +193,14 @@ protected:
     // Drawing functions
     void draw( /*const*/ GERBER_DRAW_ITEM* aVia, int aLayer );
 
-    /// Helper routine to draw a polygon
-    void drawPolygon( GERBER_DRAW_ITEM* aParent, SHAPE_POLY_SET& aPolygon, bool aFilled );
+    /**
+     *  Helper routine to draw a polygon
+     * @param aParent Pointer to the draw item for AB Position calculation
+     * @param aCode Flash code pointer
+     * @param aFilled If true, draw the polygon as filled, otherwise only outline
+     * @param aShift If true, draw the polygon relative to the parent item position
+     */
+    void drawPolygon( GERBER_DRAW_ITEM* aParent, D_CODE* aCode, bool aFilled, bool aShift = false );
 
     /// Helper to draw a flashed shape (aka spot)
     void drawFlashedShape( GERBER_DRAW_ITEM* aItem, bool aFilled );

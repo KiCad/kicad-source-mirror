@@ -141,7 +141,6 @@ typedef long time_t;
 
 // ignore warning from nested classes
 #pragma SWIG nowarn=325
-%ignore SHAPE_LINE_CHAIN::convertFromClipper;
 #include <geometry/shape_line_chain.h>
 %include <geometry/shape_line_chain.h>
 

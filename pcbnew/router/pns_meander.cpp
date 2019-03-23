@@ -413,7 +413,7 @@ SHAPE_LINE_CHAIN MEANDER_SHAPE::genMeanderShape( VECTOR2D aP, VECTOR2D aDir,
         SEG axis( aP, aP + aDir );
 
         for( int i = 0; i < lc.PointCount(); i++ )
-            lc.Point( i ) = reflect( lc.CPoint( i ), axis );
+            lc.SetPoint( i, reflect( lc.CPoint( i ), axis ) );
     }
 
     return lc;

@@ -486,12 +486,12 @@ public:
         // Convert global to relative indices
         if( m_Poly->GetRelativeIndices( aCornerIndex, &relativeIndices ) )
         {
-            if( m_Poly->Vertex( relativeIndices ).x != new_pos.x ||
-                m_Poly->Vertex( relativeIndices ).y != new_pos.y )
+            if( m_Poly->CVertex( relativeIndices ).x != new_pos.x
+                    || m_Poly->CVertex( relativeIndices ).y != new_pos.y )
+            {
                 SetNeedRefill( true );
-
-            m_Poly->Vertex( relativeIndices ).x = new_pos.x;
-            m_Poly->Vertex( relativeIndices ).y = new_pos.y;
+                m_Poly->SetVertex( relativeIndices, new_pos );
+            }
         }
         else
             throw( std::out_of_range( "aCornerIndex-th vertex does not exist" ) );

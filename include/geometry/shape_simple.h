@@ -90,20 +90,6 @@ public:
     /**
      * Function Point()
      *
-     * Returns a reference to a given point in the polygon. Negative indices
-     * count from the end of the point list, e.g. -1 means "last point", -2
-     * means "second to last point" and so on.
-     * @param aIndex index of the point
-     * @return reference to the point
-     */
-    VECTOR2I& Point( int aIndex )
-    {
-        return m_points.Point( aIndex );
-    }
-
-    /**
-     * Function CPoint()
-     *
      * Returns a const reference to a given point in the polygon. Negative
      * indices count from the end of the point list, e.g. -1 means "last
      * point", -2 means "second to last point" and so on.

@@ -831,8 +831,8 @@ void DIFF_PAIR::CoupledSegmentPairs( COUPLED_SEGMENTS_VEC& aPairs ) const
     {
         for( int j = 0; j < n.SegmentCount(); j++ )
         {
-            SEG sp = p.CSegment( i );
-            SEG sn = n.CSegment( j );
+            SEG sp = p.Segment( i );
+            SEG sn = n.Segment( j );
 
             SEG p_clip, n_clip;
 
