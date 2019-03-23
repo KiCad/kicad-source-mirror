@@ -657,16 +657,6 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
         itemList.PushItem( ITEM_PICKER( aItem, UR_DELETED ) );
     };
 
-    auto add_junction = [ & ]( const wxPoint& aPosition ) -> void
-    {
-        auto junction = new SCH_JUNCTION( aPosition );
-        AddToScreen( junction, aScreen );
-        BreakSegments( aPosition, aUndo );
-
-        if( aUndo )
-            SaveCopyInUndoList( junction, UR_NEW, true );
-    };
-
     BreakSegmentsOnJunctions( true, aScreen );
 
     for( item = aScreen->GetDrawItems(); item; item = item->Next() )
@@ -749,22 +739,54 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
 
         if( item->GetFlags() & STRUCT_DELETED )
             RemoveFromScreen( item, aScreen );
-        else if( item->Type() == SCH_LINE_T )
-        {
-            auto line = static_cast<SCH_LINE*>( item );
-
-            if( aScreen->IsJunctionNeeded( line->GetStartPoint(), true ) )
-                add_junction( line->GetStartPoint() );
-
-            if( aScreen->IsJunctionNeeded( line->GetEndPoint(), true ) )
-                add_junction( line->GetEndPoint() );
-        }
     }
 
     if( itemList.GetCount() && aUndo )
         SaveCopyInUndoList( itemList, UR_DELETED, true );
 
     return itemList.GetCount() > 0;
+}
+
+
+bool SCH_EDIT_FRAME::AddMissingJunctions( SCH_SCREEN* aScreen )
+{
+     bool added = false;
+
+    auto add_junction = [ & ]( const wxPoint& aPosition ) -> void
+    {
+        auto junction = new SCH_JUNCTION( aPosition );
+        AddToScreen( junction, aScreen );
+        BreakSegments( aPosition, false );
+        added = true;
+    };
+
+    for( auto item = aScreen->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_LINE_T )
+        {
+            auto line = static_cast<SCH_LINE*>( item );
+
+             if( aScreen->IsJunctionNeeded( line->GetStartPoint(), true ) )
+                add_junction( line->GetStartPoint() );
+
+             if( aScreen->IsJunctionNeeded( line->GetEndPoint(), true ) )
+                add_junction( line->GetEndPoint() );
+        }
+    }
+
+    return added;
+}
+
+
+void SCH_EDIT_FRAME::NormalizeSchematicOnFirstLoad()
+{
+    BreakSegmentsOnJunctions();
+    SchematicCleanUp();
+
+    SCH_SHEET_LIST list( g_RootSheet );
+
+    for( const auto& sheet : list )
+        AddMissingJunctions( sheet.LastScreen() );
 }
 
 

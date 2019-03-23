@@ -1035,6 +1035,18 @@ private:
     bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
 
     /**
+     * Checks all wires and adds any junctions that are missing
+     * (Intended to be called only on file load)
+     */
+    bool AddMissingJunctions( SCH_SCREEN* aScreen );
+
+    /**
+     * Perform all cleanup and normalization steps so that the whole schematic
+     * is in a good state.  This should only be called when loading a file.
+     */
+    void NormalizeSchematicOnFirstLoad();
+
+    /**
      * Start moving \a aItem using the mouse.
      *
      * @param aItem A pointer to an SCH_ITEM to move.
