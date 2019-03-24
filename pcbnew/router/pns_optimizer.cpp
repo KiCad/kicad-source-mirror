@@ -723,10 +723,10 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth,
     VECTOR2I d_vert  = VECTOR2I( 0, s.y / 2 + aWidth );
     VECTOR2I d_horiz = VECTOR2I( s.x / 2 + aWidth, 0 );
 
-    breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_horiz ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_horiz ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_vert ) );
-    breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_vert ) );
+    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c + d_horiz } ) );
+    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c - d_horiz } ) );
+    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c + d_vert } ) );
+    breakouts.push_back( SHAPE_LINE_CHAIN( { c, c - d_vert } ) );
 
     if( aPermitDiagonal )
     {
@@ -735,26 +735,26 @@ OPTIMIZER::BREAKOUT_LIST OPTIMIZER::rectBreakouts( int aWidth,
 
         if( s.x >= s.y )
         {
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
-                                                   c + d_offset + VECTOR2I( l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
-                                                   c + d_offset - VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
-                                                   c - d_offset + VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
-                                                   c - d_offset - VECTOR2I( l, l ) ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset - VECTOR2I( -l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset + VECTOR2I( -l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( l, l ) } ) );
         }
         else
         {
             // fixme: this could be done more efficiently
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
-                                                   c + d_offset + VECTOR2I( l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
-                                                   c - d_offset - VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c + d_offset,
-                                                   c + d_offset + VECTOR2I( -l, l ) ) );
-            breakouts.push_back( SHAPE_LINE_CHAIN( c, c - d_offset,
-                                                   c - d_offset - VECTOR2I( l, l ) ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( -l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c + d_offset, c + d_offset + VECTOR2I( -l, l ) } ) );
+            breakouts.push_back(
+                    SHAPE_LINE_CHAIN( { c, c - d_offset, c - d_offset - VECTOR2I( l, l ) } ) );
         }
     }
 

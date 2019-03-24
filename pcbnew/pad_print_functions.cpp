@@ -281,8 +281,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                 if( poly.PointCount() > 0 )
                 {
                     GRClosedPoly( nullptr, aDC, poly.PointCount(),
-                                  static_cast<const wxPoint*>( &poly.CPoint( 0 ) ),
-                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+                            (const wxPoint*) &poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                            aDrawInfo.m_Color );
                 }
             }
         }
@@ -308,9 +308,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
 
         SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
 
-        GRClosedPoly( nullptr, aDC, poly.PointCount(),
-                      static_cast<const wxPoint*>( &poly.CPoint( 0 ) ), filled, 0,
-                      aDrawInfo.m_Color, aDrawInfo.m_Color );
+        GRClosedPoly( nullptr, aDC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ), filled,
+                0, aDrawInfo.m_Color, aDrawInfo.m_Color );
 
         if( aDrawInfo.m_PadClearance )
         {
@@ -329,8 +328,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             SHAPE_LINE_CHAIN& clearance_poly = outline.Outline( 0 );
 
             GRClosedPoly( nullptr, aDC, clearance_poly.PointCount(),
-                          static_cast<const wxPoint*>( &clearance_poly.CPoint( 0 ) ), false, 0,
-                          aDrawInfo.m_Color, aDrawInfo.m_Color );
+                    (const wxPoint*) &clearance_poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                    aDrawInfo.m_Color );
         }
         }
         break;
@@ -390,8 +389,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         {
             auto& poly = outline.Outline( jj );
 
-            GRClosedPoly( nullptr, aDC, poly.PointCount(), static_cast<const wxPoint*>( &poly.CPoint( 0 ) ),
-                          aDrawInfo.m_ShowPadFilled, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+            GRClosedPoly( nullptr, aDC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ),
+                    aDrawInfo.m_ShowPadFilled, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
 
         if( aDrawInfo.m_PadClearance )
@@ -410,8 +409,8 @@ void D_PAD::PrintShape( wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                 if( poly.PointCount() > 0 )
                 {
                     GRClosedPoly( nullptr, aDC, poly.PointCount(),
-                                  static_cast<const wxPoint*>( &poly.CPoint( 0 ) ),
-                                  false, 0, aDrawInfo.m_Color, aDrawInfo.m_Color );
+                            (const wxPoint*) &poly.CPoint( 0 ), false, 0, aDrawInfo.m_Color,
+                            aDrawInfo.m_Color );
                 }
             }
         }

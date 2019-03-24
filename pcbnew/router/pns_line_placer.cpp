@@ -548,8 +548,8 @@ bool LINE_PLACER::rhStopAtNearestObstacle( const VECTOR2I& aP, LINE& aNewHead )
         SEG segL( s.B, leadL.LineProject( aP ) );
         SEG segR( s.B, leadR.LineProject( aP ) );
 
-        LINE finishL( l0, SHAPE_LINE_CHAIN( segL.A, segL.B ) );
-        LINE finishR( l0, SHAPE_LINE_CHAIN( segR.A, segR.B ) );
+        LINE finishL( l0, SHAPE_LINE_CHAIN( { segL.A, segL.B } ) );
+        LINE finishR( l0, SHAPE_LINE_CHAIN( { segR.A, segR.B } ) );
 
         LINE reducedL = reduceToNearestObstacle( finishL );
         LINE reducedR = reduceToNearestObstacle( finishR );
@@ -1213,7 +1213,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
     {
         if( Settings().GetFreeAngleMode() && Settings().Mode() == RM_MarkObstacles )
         {
-            l = SHAPE_LINE_CHAIN( m_p_start, aP );
+            l = SHAPE_LINE_CHAIN( { m_p_start, aP } );
         }
         else
         {
