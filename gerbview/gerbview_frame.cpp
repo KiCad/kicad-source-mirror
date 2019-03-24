@@ -249,8 +249,8 @@ GERBVIEW_FRAME::~GERBVIEW_FRAME()
 
 void GERBVIEW_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
-    GetGalCanvas()->GetView()->Clear();
     GetGalCanvas()->StopDrawing();
+    GetGalCanvas()->GetView()->Clear();
 
     if( m_toolManager )
         m_toolManager->DeactivateTool();

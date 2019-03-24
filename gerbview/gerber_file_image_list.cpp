@@ -117,7 +117,7 @@ void GERBER_FILE_IMAGE_LIST::DeleteImage( int aIdx )
     GERBER_FILE_IMAGE* gbr_image = GetGbrImage( aIdx );
 
     delete gbr_image;
-    m_GERBER_List[ aIdx ] = NULL;
+    m_GERBER_List[ aIdx ] = nullptr;
 }
 
 // Build a name for image aIdx which can be used in layers manager

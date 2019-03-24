@@ -284,6 +284,24 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
 
     for( unsigned ii = 0; ii < aFilenameList.GetCount(); ii++ )
     {
+
+        filename = aFilenameList[ii];
+
+        if( !filename.IsAbsolute() )
+            filename.SetPath( aPath );
+
+        // Check for non existing files, to avoid creating broken or useless data
+        // and report all in one error list:
+        if( !filename.FileExists() )
+        {
+            wxString warning;
+            warning << "<b>" << _( "File not found:" ) << "</b><br>"
+                    << filename.GetFullPath() << "<br>";
+            reporter.Report( warning, REPORTER::RPT_WARNING );
+            success = false;
+            continue;
+        }
+
         if( !progress && wxGetUTCTimeMillis() - startTime > progressShowDelay )
         {
             progress = std::make_unique<WX_PROGRESS_REPORTER>( this,
@@ -295,11 +313,6 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
         {
             progress->KeepRefreshing();
         }
-
-        filename = aFilenameList[ii];
-
-        if( !filename.IsAbsolute() )
-            filename.SetPath( aPath );
 
         m_lastFileName = filename.GetFullPath();
 
