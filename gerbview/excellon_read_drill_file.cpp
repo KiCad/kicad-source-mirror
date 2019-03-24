@@ -247,33 +247,30 @@ bool GERBVIEW_FRAME::Read_EXCELLON_File( const wxString& aFullFileName )
     int layerId = GetActiveLayer();      // current layer used in GerbView
     GERBER_FILE_IMAGE_LIST* images = GetGerberLayout()->GetImagesList();
     auto gerber_layer = images->GetGbrImage( layerId );
-    auto drill_layer = dynamic_cast<EXCELLON_IMAGE*>( gerber_layer );
 
-    if( gerber_layer && !drill_layer )
-    {
-        // The active layer contains old gerber data we have to clear
+    // OIf the active layer contains old gerber or nc drill data, remove it
+    if( gerber_layer )
         Erase_Current_DrawLayer( false );
-    }
 
-    if( drill_layer == nullptr )
-    {
-        drill_layer = new EXCELLON_IMAGE( layerId );
-        layerId = images->AddGbrImage( drill_layer, layerId );
-    }
-
-    if( layerId < 0 )
-    {
-        DisplayError( this, _( "No room to load file" ) );
-        return false;
-    }
+    EXCELLON_IMAGE* drill_layer = new EXCELLON_IMAGE( layerId );
 
     // Read the Excellon drill file:
     bool success = drill_layer->LoadFile( aFullFileName );
 
     if( !success )
     {
-        msg.Printf( _( "File %s not found" ), GetChars( aFullFileName ) );
+        delete drill_layer;
+        msg.Printf( _( "File %s not found" ), aFullFileName );
         DisplayError( this, msg );
+        return false;
+    }
+
+    layerId = images->AddGbrImage( drill_layer, layerId );
+
+    if( layerId < 0 )
+    {
+        delete drill_layer;
+        DisplayError( this, _( "No room to load file" ) );
         return false;
     }
 

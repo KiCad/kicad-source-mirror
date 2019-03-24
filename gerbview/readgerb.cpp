@@ -51,17 +51,20 @@ bool GERBVIEW_FRAME::Read_GERBER_File( const wxString& GERBER_FullFileName )
     }
 
     gerber = new GERBER_FILE_IMAGE( layer );
-    images->AddGbrImage( gerber, layer );
 
-    /* Read the gerber file */
+    // Read the gerber file. The image will be added only if it can be read
+    // to avoid broken data.
     bool success = gerber->LoadGerberFile( GERBER_FullFileName );
 
     if( !success )
     {
-        msg.Printf( _( "File \"%s\" not found" ), GetChars( GERBER_FullFileName ) );
+        delete gerber;
+        msg.Printf( _( "File \"%s\" not found" ), GERBER_FullFileName );
         DisplayError( this, msg, 10 );
         return false;
     }
+
+    images->AddGbrImage( gerber, layer );
 
     // Display errors list
     if( gerber->GetMessages().size() > 0 )
