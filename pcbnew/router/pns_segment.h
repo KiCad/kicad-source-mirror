@@ -97,7 +97,7 @@ public:
 
     const SHAPE_LINE_CHAIN CLine() const
     {
-        return SHAPE_LINE_CHAIN( m_seg.GetSeg().A, m_seg.GetSeg().B );
+        return SHAPE_LINE_CHAIN( { m_seg.GetSeg().A, m_seg.GetSeg().B } );
     }
 
     void SetEnds( const VECTOR2I& a, const VECTOR2I& b )

@@ -427,7 +427,7 @@ void GRFilledSegment( EDA_RECT* aClipBox, wxDC* aDC, wxPoint aStart, wxPoint aEn
 }
 
 
-static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, const wxPoint* Points, )
+static bool IsGRSPolyDrawable( EDA_RECT* ClipBox, int n, const wxPoint* Points )
 {
     if( !ClipBox )
         return true;
@@ -957,7 +957,7 @@ void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint* Points, int 
 {
     if( aClipBox == NULL )
     {
-        aDC->DrawPolygon( n, aPoints );
+        aDC->DrawPolygon( n, Points );
         return;
     }
 
@@ -970,7 +970,7 @@ void ClipAndDrawPoly( EDA_RECT* aClipBox, wxDC* aDC, const wxPoint* Points, int 
     clippedPolygon.clear();
 
     for( int ii = 0; ii < n; ii++ )
-        inputPolygon.push_back( PointF( (REAL) aPoints[ii].x, (REAL) aPoints[ii].y ) );
+        inputPolygon.push_back( PointF( (REAL) Points[ii].x, (REAL) Points[ii].y ) );
 
     RectF window( (REAL) aClipBox->GetX(), (REAL) aClipBox->GetY(),
                   (REAL) aClipBox->GetWidth(), (REAL) aClipBox->GetHeight() );

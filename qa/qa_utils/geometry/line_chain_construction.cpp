@@ -35,7 +35,7 @@ SHAPE_LINE_CHAIN BuildRectChain( const VECTOR2I& aSize, const VECTOR2I& aCentre 
         { aCentre.x + aSize.x / 2, aCentre.y - aSize.y / 2 },
     };
 
-    SHAPE_LINE_CHAIN chain( pts.data(), pts.size() );
+    SHAPE_LINE_CHAIN chain( pts );
     chain.SetClosed( true );
 
     return chain;

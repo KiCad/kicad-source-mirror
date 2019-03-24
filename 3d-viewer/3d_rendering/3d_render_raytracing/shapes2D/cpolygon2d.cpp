@@ -627,15 +627,10 @@ void Convert_path_polygon_to_polygon_blocks_and_dummy_blocks(
 
                 SHAPE_POLY_SET subBlockPoly;
 
-                SHAPE_LINE_CHAIN sb = SHAPE_LINE_CHAIN(
-                                        VECTOR2I( leftToRight,
-                                                  topToBottom ),
-                                        VECTOR2I( leftToRight + leftToRight_inc,
-                                                  topToBottom ),
-                                        VECTOR2I( leftToRight + leftToRight_inc,
-                                                  topToBottom + topToBottom_inc ),
-                                        VECTOR2I( leftToRight,
-                                                  topToBottom + topToBottom_inc ) );
+                SHAPE_LINE_CHAIN sb = SHAPE_LINE_CHAIN( { VECTOR2I( leftToRight, topToBottom ),
+                        VECTOR2I( leftToRight + leftToRight_inc, topToBottom ),
+                        VECTOR2I( leftToRight + leftToRight_inc, topToBottom + topToBottom_inc ),
+                        VECTOR2I( leftToRight, topToBottom + topToBottom_inc ) } );
 
                 //sb.Append( leftToRight, topToBottom );
                 sb.SetClosed( true );

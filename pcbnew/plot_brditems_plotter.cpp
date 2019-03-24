@@ -690,8 +690,7 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& p
 
         for( int ic = 0; ic < outline.PointCount(); ++ic )
         {
-            VECTOR2I& point = outline.Point( ic );
-            cornerList.emplace_back( wxPoint( point.x, point.y ) );
+            cornerList.emplace_back( wxPoint( outline.CPoint( ic ) ) );
         }
 
         if( cornerList.size() )   // Plot the current filled area outline

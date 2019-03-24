@@ -429,9 +429,8 @@ void DRAWSEGMENT::Print( PCB_BASE_FRAME* aFrame, wxDC* DC, const wxPoint& aOffse
             for( int jj = 0; jj < outline.OutlineCount(); ++jj )
             {
                 SHAPE_LINE_CHAIN& poly = outline.Outline( jj );
-                GRClosedPoly( nullptr, DC, poly.PointCount(),
-                              static_cast<const wxPoint*>( &poly.CPoint( 0 ) ),
-                              IsPolygonFilled(), GetWidth(), color, color );
+                GRClosedPoly( nullptr, DC, poly.PointCount(), (const wxPoint*) &poly.CPoint( 0 ),
+                        IsPolygonFilled(), GetWidth(), color, color );
             }
         }
         break;

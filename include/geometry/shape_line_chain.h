@@ -26,8 +26,9 @@
 #ifndef __SHAPE_LINE_CHAIN
 #define __SHAPE_LINE_CHAIN
 
-#include <vector>
 #include <sstream>
+#include <vector>
+#include <wx/gdicmn.h>
 
 #include <core/optional.h>
 
@@ -70,6 +71,7 @@ public:
 
     typedef std::vector<INTERSECTION> INTERSECTIONS;
 
+
     /**
      * Constructor
      * Initializes an empty line chain.
@@ -85,50 +87,8 @@ public:
         SHAPE( SH_LINE_CHAIN ), m_points( aShape.m_points ), m_closed( aShape.m_closed )
     {}
 
-    /**
-     * Constructor
-     * Initializes a 2-point line chain (a single segment)
-     */
-    SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
-    {
-        m_points.resize( 2 );
-        m_points[0] = aA;
-        m_points[1] = aB;
-    }
-
-    SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
-    {
-        m_points.resize( 3 );
-        m_points[0] = aA;
-        m_points[1] = aB;
-        m_points[2] = aC;
-    }
-
-    SHAPE_LINE_CHAIN( const VECTOR2I& aA, const VECTOR2I& aB, const VECTOR2I& aC, const VECTOR2I& aD ) :
-        SHAPE( SH_LINE_CHAIN ), m_closed( false )
-    {
-        m_points.resize( 4 );
-        m_points[0] = aA;
-        m_points[1] = aB;
-        m_points[2] = aC;
-        m_points[3] = aD;
-    }
-
-    SHAPE_LINE_CHAIN( const VECTOR2I* aV, int aCount ) :
-        SHAPE( SH_LINE_CHAIN ),
-        m_closed( false )
-    {
-        m_points.resize( aCount );
-
-        for( int i = 0; i < aCount; i++ )
-            m_points[i] = *aV++;
-    }
-
-    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV ) :
-        SHAPE( SH_LINE_CHAIN ),
-        m_closed( false )
+    SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false )
+            : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed )
     {
         m_points.reserve( aV.size() );
 
@@ -136,9 +96,8 @@ public:
             m_points.emplace_back( pt.x, pt.y );
     }
 
-    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV ) :
-        SHAPE( SH_LINE_CHAIN ),
-        m_closed( false )
+    SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false )
+            : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed )
     {
         m_points = aV;
     }
@@ -153,7 +112,7 @@ public:
             m_points.emplace_back( point.X, point.Y );
     }
 
-    ~SHAPE_LINE_CHAIN()
+    virtual ~SHAPE_LINE_CHAIN()
     {}
 
     SHAPE* Clone() const override;
