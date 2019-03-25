@@ -430,6 +430,7 @@ target_link_libraries( common
     ${Boost_LIBRARIES}
     ${CURL_LIBRARIES}
     ${OPENSSL_LIBRARIES}        # empty on Apple
+    ${wxWidgets_LIBRARIES}
     )
 
 
