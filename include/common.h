@@ -60,11 +60,8 @@ class REPORTER;
  * Long term, this type might be renamed to something like unique_id_t
  * (and then rename all the methods from {Get,Set}TimeStamp()
  * to {Get,Set}Id()) ?
- *
- * The type should be at least 32 bit and simple to map via swig; swig does
- * have issues with types such as 'int32_t', so we choose 'long'.
  */
-typedef long timestamp_t;
+typedef uint32_t timestamp_t;
 
 
 // Flag for special keys

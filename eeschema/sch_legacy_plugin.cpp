@@ -174,37 +174,37 @@ static int parseInt( LINE_READER& aReader, const char* aLine, const char** aOutp
 /**
  * Parse an ASCII hex integer string with possible leading whitespace into
  * a long integer and updates the pointer at \a aOutput if it is not NULL, just
- * like "man strtol".
+ * like "man strtoll".
  *
  * @param aReader - The line reader used to generate exception throw information.
  * @param aLine - A pointer the current position in a string.
  * @param aOutput - The pointer to a string pointer to copy the string pointer position when
  *                  the parsing is complete.
- * @return A valid integer value.
+ * @return A valid uint32_t value.
  * @throw IO_ERROR on an unexpected end of line.
  * @throw PARSE_ERROR if the parsed token is not a valid integer.
  */
-static unsigned long parseHex( LINE_READER& aReader, const char* aLine,
+static uint32_t parseHex( LINE_READER& aReader, const char* aLine,
                                const char** aOutput = NULL )
 {
     if( !*aLine )
         SCH_PARSE_ERROR( _( "unexpected end of line" ), aReader, aLine );
 
-    unsigned long retv;
+    // Due to some issues between some files created by a 64 bits version and those
+    // created by a 32 bits version, we use here a temporary at least 64 bits storage:
+    unsigned long long retv;
 
-    // Clear errno before calling strtoul() in case some other crt call set it.
+    // Clear errno before calling strtoull() in case some other crt call set it.
     errno = 0;
-    retv = strtoul( aLine, (char**) aOutput, 16 );
+    retv = strtoull( aLine, (char**) aOutput, 16 );
 
-    // Make sure no error occurred when calling strtoul().
+    // Make sure no error occurred when calling strtoull().
     if( errno == ERANGE )
         SCH_PARSE_ERROR( "invalid hexadecimal number", aReader, aLine );
 
     // Strip off whitespace before the next token.
     if( aOutput )
     {
-        // const char* next = aLine + strlen( token );
-
         const char* next = *aOutput;
 
         while( *next && isspace( *next ) )
@@ -213,7 +213,7 @@ static unsigned long parseHex( LINE_READER& aReader, const char* aLine,
         *aOutput = next;
     }
 
-    return retv;
+    return (uint32_t)retv;
 }
 
 
@@ -1860,8 +1860,8 @@ void SCH_LEGACY_PLUGIN::saveComponent( SCH_COMPONENT* aComponent )
     m_out->Print( 0, "L %s %s\n", name2.c_str(), name1.c_str() );
 
     // Generate unit number, convert and time stamp
-    m_out->Print( 0, "U %d %d %8.8lX\n", aComponent->GetUnit(), aComponent->GetConvert(),
-                    (unsigned long)aComponent->GetTimeStamp() );
+    m_out->Print( 0, "U %d %d %8.8X\n", aComponent->GetUnit(), aComponent->GetConvert(),
+                  aComponent->GetTimeStamp() );
 
     // Save the position
     m_out->Print( 0, "P %d %d\n", aComponent->GetPosition().x, aComponent->GetPosition().y );
@@ -2007,7 +2007,7 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
                   aSheet->GetPosition().x, aSheet->GetPosition().y,
                   aSheet->GetSize().x, aSheet->GetSize().y );
 
-    m_out->Print( 0, "U %8.8lX\n", (unsigned long) aSheet->GetTimeStamp() );
+    m_out->Print( 0, "U %8.8X\n", aSheet->GetTimeStamp() );
 
     if( !aSheet->GetName().IsEmpty() )
         m_out->Print( 0, "F0 %s %d\n", EscapedUTF8( aSheet->GetName() ).c_str(),
