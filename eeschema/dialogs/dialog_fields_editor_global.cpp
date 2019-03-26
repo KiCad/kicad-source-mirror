@@ -604,7 +604,7 @@ public:
                 SCH_FIELD* destField = comp->FindField( srcName );
 
                 if( !destField && !srcValue.IsEmpty() )
-                    destField = comp->AddField( SCH_FIELD( wxPoint( 0, 0 ), -1, comp, srcName ) );
+                    destField = comp->AddField( SCH_FIELD( comp->GetPosition(), -1, comp, srcName ) );
 
                 if( destField && !srcValue.IsEmpty() )
                     destField->SetText( srcValue );
