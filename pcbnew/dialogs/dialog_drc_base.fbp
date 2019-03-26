@@ -1547,6 +1547,7 @@
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
                                             <event name="OnLeftDClick">OnLeftDClickClearance</event>
+                                            <event name="OnLeftUp">OnLeftUpClearance</event>
                                             <event name="OnListBox">OnMarkerSelectionEvent</event>
                                             <event name="OnRightUp">OnRightUpClearance</event>
                                         </object>
@@ -1676,6 +1677,7 @@
                                             <property name="window_name"></property>
                                             <property name="window_style"></property>
                                             <event name="OnLeftDClick">OnLeftDClickUnconnected</event>
+                                            <event name="OnLeftUp">OnLeftUpUnconnected</event>
                                             <event name="OnListBox">OnUnconnectedSelectionEvent</event>
                                             <event name="OnRightUp">OnRightUpUnconnected</event>
                                         </object>

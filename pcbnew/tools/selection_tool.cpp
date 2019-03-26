@@ -579,7 +579,6 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
 
     if( item )
     {
-        toggleSelection( item );
         return true;
     }
     else
@@ -1517,6 +1516,9 @@ BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
         }
     }
     getView()->Remove( &highlightGroup );
+
+    if( current )
+        toggleSelection( current );
 
     return current;
 }

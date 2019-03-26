@@ -378,22 +378,8 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        // Find the selected MARKER in the PCB, position cursor there.
-        // Then close the dialog.
-        const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
-
-        if( item )
+        if( focusOnItem( m_ClearanceListBox->GetItem( selection ) ) )
         {
-            auto pos = item->GetPointA();
-
-            if( auto marker = item->GetParent() )
-                pos = marker->GetPos();
-
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
-            m_brdEditor->FocusOnLocation( pos, true, center );
-
             if( !IsModal() )
             {
                 // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
@@ -409,11 +395,49 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 }
 
 
+void DIALOG_DRC_CONTROL::OnLeftUpClearance( wxMouseEvent& event )
+{
+    int selection = m_ClearanceListBox->GetSelection();
+
+    if( selection != wxNOT_FOUND )
+        focusOnItem( m_ClearanceListBox->GetItem( selection ) );
+}
+
+
+bool DIALOG_DRC_CONTROL::focusOnItem( const DRC_ITEM* aItem )
+{
+    if( !aItem )
+        return false;
+
+    auto toolmgr = m_brdEditor->GetToolManager();
+    auto pos = aItem->GetPointA();
+    auto marker = static_cast<MARKER_PCB*>( aItem->GetParent() );
+
+    if( marker )
+    {
+        pos = marker->GetPos();
+
+        toolmgr->RunAction( PCB_ACTIONS::selectionClear, true );
+        toolmgr->RunAction( PCB_ACTIONS::selectItem, true, marker );
+    }
+
+    toolmgr->GetView()->SetCenter( pos );
+    m_brdEditor->GetCanvas()->Refresh();
+
+    return true;
+}
+
+
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
+    // Check if user right-clicked on a different item
+    int selection = m_UnconnectedListBox->HitTest( event.GetPosition() );
 
-    int selection = m_UnconnectedListBox->GetSelection();
+    if( selection == wxNOT_FOUND )
+        selection = m_UnconnectedListBox->GetSelection();
+    else
+        m_UnconnectedListBox->SetSelection( selection );
 
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_UnconnectedListBox->GetItem( selection ) );
@@ -423,8 +447,13 @@ void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
+    // Check if user right-clicked on a different item
+    int selection = m_ClearanceListBox->HitTest( event.GetPosition() );
 
-    int selection = m_ClearanceListBox->GetSelection();
+    if( selection == wxNOT_FOUND )
+        selection = m_ClearanceListBox->GetSelection();
+    else
+        m_ClearanceListBox->SetSelection( selection );
 
     if( selection != wxNOT_FOUND )
         doSelectionMenu( m_ClearanceListBox->GetItem( selection ) );
@@ -434,15 +463,29 @@ void DIALOG_DRC_CONTROL::OnRightUpClearance( wxMouseEvent& event )
 void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
+
+    BOARD_ITEM* first = aItem->GetMainItem( m_brdEditor->GetBoard() );
+    BOARD_ITEM* second = nullptr;
+
     GENERAL_COLLECTOR items;
 
-    items.Append( aItem->GetMainItem( m_brdEditor->GetBoard() ) );
+    items.Append( first );
 
     if( aItem->HasSecondItem() )
-        items.Append( aItem->GetAuxiliaryItem( m_brdEditor->GetBoard() ) );
+    {
+        second = aItem->GetAuxiliaryItem( m_brdEditor->GetBoard() );
+        items.Append( second );
+    }
 
     WINDOW_THAWER thawer( m_brdEditor );
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
+
+    // If we got an item, focus on it
+    BOARD_ITEM* selection = m_brdEditor->GetCurItem();
+
+    if( selection && ( selection == first || selection == second ) )
+        m_brdEditor->GetToolManager()->GetView()->SetCenter( selection->GetPosition() );
+
     m_brdEditor->GetCanvas()->Refresh();
 }
 
@@ -455,18 +498,12 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
 
     if( selection != wxNOT_FOUND )
     {
-        // Find the selected DRC_ITEM in the listbox, position cursor there.
-        // Then hide the dialog.
-        const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
-        if( item )
+        if( focusOnItem( m_UnconnectedListBox->GetItem( selection ) ) )
         {
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
-            m_brdEditor->FocusOnLocation( item->GetPointA(), true, center );
-
             if( !IsModal() )
             {
+                // turn control over to m_brdEditor, hide this DIALOG_DRC_CONTROL window,
+                // no destruction so we can preserve listbox cursor
                 Show( false );
 
                 // We do not want the clarify selection popup when releasing the
@@ -475,6 +512,15 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
             }
         }
     }
+}
+
+
+void DIALOG_DRC_CONTROL::OnLeftUpUnconnected( wxMouseEvent& event )
+{
+    int selection = m_UnconnectedListBox->GetSelection();
+
+    if( selection != wxNOT_FOUND )
+        focusOnItem( m_UnconnectedListBox->GetItem( selection ) );
 }
 
 
@@ -502,20 +548,7 @@ void DIALOG_DRC_CONTROL::OnMarkerSelectionEvent( wxCommandEvent& event )
         m_DeleteCurrentMarkerButton->Enable( true );
 
         // Find the selected DRC_ITEM in the listbox, position cursor there.
-        const DRC_ITEM* item = m_ClearanceListBox->GetItem( selection );
-        if( item )
-        {
-            auto pos = item->GetPointA();
-
-            if( auto marker = item->GetParent() )
-                pos = marker->GetPos();
-
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
-            m_brdEditor->FocusOnLocation( pos, false, center );
-            RedrawDrawPanel();
-        }
+        focusOnItem( m_ClearanceListBox->GetItem( selection ) );
     }
 
     event.Skip();
@@ -532,16 +565,7 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
         m_DeleteCurrentMarkerButton->Enable( true );
 
         // Find the selected DRC_ITEM in the listbox, position cursor there.
-        const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
-
-        if( item )
-        {
-            // When selecting a item, center it on GAL and just move the graphic
-            // cursor in legacy mode gives the best result
-            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
-            m_brdEditor->FocusOnLocation( item->GetPointA(), false, center );
-            RedrawDrawPanel();
-        }
+        focusOnItem( m_UnconnectedListBox->GetItem( selection ) );
     }
 
     event.Skip();
