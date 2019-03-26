@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec 30 2017)
+// C++ code generated with wxFormBuilder (version Oct 26 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_DRC_BASE_H__
-#define __DIALOG_DRC_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -23,10 +22,10 @@ class DRCLISTBOX;
 #include <wx/textctrl.h>
 #include <wx/sizer.h>
 #include <wx/checkbox.h>
+#include <wx/bmpbuttn.h>
 #include <wx/bitmap.h>
 #include <wx/image.h>
 #include <wx/icon.h>
-#include <wx/bmpbuttn.h>
 #include <wx/button.h>
 #include <wx/gbsizer.h>
 #include <wx/listbox.h>
@@ -50,7 +49,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 {
 	private:
 		wxPanel* m_panelUnconnectedItems;
-	
+
 	protected:
 		wxStaticText* m_TrackMinWidthTitle;
 		wxStaticText* m_TrackMinWidthUnit;
@@ -75,7 +74,7 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer1;
 		wxButton* m_sdbSizer1OK;
 		wxButton* m_sdbSizer1Cancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnActivateDlg( wxActivateEvent& event ) { event.Skip(); }
 		virtual void OnReportCheckBoxClicked( wxCommandEvent& event ) { event.Skip(); }
@@ -83,9 +82,11 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnButtonBrowseRptFileClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnChangingMarkerList( wxNotebookEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickClearance( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnLeftUpClearance( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnMarkerSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightUpClearance( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickUnconnected( wxMouseEvent& event ) { event.Skip(); }
+		virtual void OnLeftUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnUnconnectedSelectionEvent( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnRightUpUnconnected( wxMouseEvent& event ) { event.Skip(); }
 		virtual void OnLeftDClickFootprints( wxMouseEvent& event ) { event.Skip(); }
@@ -95,8 +96,8 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		virtual void OnDeleteAllClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnStartdrcClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
 		wxTextCtrl* m_SetTrackMinWidthCtrl;
 		wxTextCtrl* m_SetViaMinSizeCtrl;
@@ -104,10 +105,9 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		DRCLISTBOX* m_ClearanceListBox;
 		DRCLISTBOX* m_UnconnectedListBox;
 		DRCLISTBOX* m_FootprintsListBox;
-		
-		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("DRC Control"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_DRC_CONTROL_BASE();
-	
+
 };
 
-#endif //__DIALOG_DRC_BASE_H__
