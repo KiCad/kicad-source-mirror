@@ -506,7 +506,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Fill All *Zones" ), g_Board_Editor_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Fill All &Zones" ), g_Board_Editor_Hotkeys_Descr,
                 HK_ZONE_FILL_OR_REFILL );
     AddMenuItem( aParentMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
                  text, _( "Fill all zones on the board" ),
