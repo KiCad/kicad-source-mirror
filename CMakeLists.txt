@@ -164,6 +164,7 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 # Global setting: Use C++14
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable additional valgrind instrumentation for stack tracking in libcontext
@@ -853,6 +854,12 @@ if( KICAD_SCRIPTING_WXPYTHON AND NOT KICAD_SCRIPTING_WXPYTHON_PHOENIX )
     endif()
 endif()
 
+if( MINGW AND ( ${wxWidgets_VERSION_STRING} VERSION_LESS 3.1 ) )
+    # Work around a bug in wx < 3.1 -- when wx itself is compiled with
+    # compiler extensions enabled, it assumes these are also available for
+    # applications.
+    add_definitions( -U__STRICT_ANSI__ )
+endif()
 
 if( APPLE )
     # Remove app bundles in ${KICAD_BIN} before installing anything new.
