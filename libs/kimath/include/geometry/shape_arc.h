@@ -98,6 +98,41 @@ public:
         m_pc += aVector;
     }
 
+    /**
+     * Function Rotate
+     * rotates the arc by a given angle about a point
+     * @param aCenter is the rotation center
+     * @param aAngle rotation angle in radians
+     */
+    void Rotate( double aAngle, const VECTOR2I& aCenter )
+    {
+        m_p0 -= aCenter;
+        m_pc -= aCenter;
+
+        m_p0.Rotate( aAngle );
+        m_pc.Rotate( aAngle );
+
+        m_pc += aCenter;
+        m_p0 += aCenter;
+    }
+
+    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } )
+    {
+        if( aX )
+        {
+            m_p0.x = -m_p0.x + 2 * aVector.x;
+            m_pc.x = -m_pc.x + 2 * aVector.x;
+            m_centralAngle = - m_centralAngle;
+        }
+
+        if( aY )
+        {
+            m_p0.y = -m_p0.y + 2 * aVector.y;
+            m_pc.y = -m_pc.y + 2 * aVector.y;
+            m_centralAngle = - m_centralAngle;
+        }
+    }
+
     int GetRadius() const;
 
     SEG GetChord() const

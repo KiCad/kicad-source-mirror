@@ -37,6 +37,7 @@
 #include <clipper.hpp>
 #include <geometry/seg.h>
 #include <geometry/shape.h>
+#include <geometry/shape_arc.h>
 #include <math/box2.h>                  // for BOX2I
 #include <math/vector2d.h>
 
@@ -85,10 +86,14 @@ public:
     /**
      * Copy Constructor
      */
+
     SHAPE_LINE_CHAIN( const SHAPE_LINE_CHAIN& aShape )
             : SHAPE( SH_LINE_CHAIN ),
               m_points( aShape.m_points ),
+              m_shapes( aShape.m_shapes ),
+              m_arcs( aShape.m_arcs ),
               m_closed( aShape.m_closed ),
+              m_bbox( aShape.m_bbox ),
               m_width( aShape.m_width )
     {}
 
@@ -99,18 +104,22 @@ public:
 
         for( auto pt : aV )
             m_points.emplace_back( pt.x, pt.y );
+
+        m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
     }
 
     SHAPE_LINE_CHAIN( const std::vector<VECTOR2I>& aV, bool aClosed = false )
             : SHAPE( SH_LINE_CHAIN ), m_closed( aClosed ), m_width( 0 )
     {
         m_points = aV;
+        m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
     }
 
     SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath )
             : SHAPE( SH_LINE_CHAIN ), m_closed( true ), m_width( 0 )
     {
         m_points.reserve( aPath.size() );
+        m_shapes = std::vector<ssize_t>( aPath.size(), ssize_t( SHAPE_IS_PT ) );
 
         for( const auto& point : aPath )
             m_points.emplace_back( point.X, point.Y );
@@ -130,6 +139,8 @@ public:
     void Clear()
     {
         m_points.clear();
+        m_arcs.clear();
+        m_shapes.clear();
         m_closed = false;
     }
 
@@ -252,6 +263,9 @@ public:
             aIndex -= PointCount();
 
         m_points[aIndex] = aPos;
+
+        if( m_shapes[aIndex] != SHAPE_IS_PT )
+            convertArc( m_shapes[aIndex] );
     }
 
     /**
@@ -382,6 +396,7 @@ public:
         if( m_points.size() == 0 || aAllowDuplication || CPoint( -1 ) != aP )
         {
             m_points.push_back( aP );
+            m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
             m_bbox.Merge( aP );
         }
     }
@@ -392,30 +407,13 @@ public:
      * Appends another line chain at the end.
      * @param aOtherLine the line chain to be appended.
      */
-    void Append( const SHAPE_LINE_CHAIN& aOtherLine )
-    {
-        if( aOtherLine.PointCount() == 0 )
-            return;
+    void Append( const SHAPE_LINE_CHAIN& aOtherLine );
 
-        else if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
-        {
-            const VECTOR2I p = aOtherLine.CPoint( 0 );
-            m_points.push_back( p );
-            m_bbox.Merge( p );
-        }
+    void Append( const SHAPE_ARC& aArc );
 
-        for( int i = 1; i < aOtherLine.PointCount(); i++ )
-        {
-            const VECTOR2I p = aOtherLine.CPoint( i );
-            m_points.push_back( p );
-            m_bbox.Merge( p );
-        }
-    }
+    void Insert( size_t aVertex, const VECTOR2I& aP );
 
-    void Insert( int aVertex, const VECTOR2I& aP )
-    {
-        m_points.insert( m_points.begin() + aVertex, aP );
-    }
+    void Insert( size_t aVertex, const SHAPE_ARC& aArc );
 
     /**
      * Function Replace()
@@ -602,6 +600,13 @@ public:
     SHAPE_LINE_CHAIN& Simplify();
 
     /**
+     * Converts an arc to only a point chain by removing the arc and references
+     *
+     * @param aArcIndex index of the arc to convert to points
+     */
+    void convertArc( ssize_t aArcIndex );
+
+    /**
      * Creates a new Clipper path from the SHAPE_LINE_CHAIN in a given orientation
      *
      */
@@ -658,8 +663,11 @@ public:
 
     void Move( const VECTOR2I& aVector ) override
     {
-        for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
-            (*i) += aVector;
+        for( auto& pt : m_points )
+            pt += aVector;
+
+        for( auto& arc : m_arcs )
+            arc.Move( aVector );
     }
 
     /**
@@ -668,17 +676,7 @@ public:
      * @param aY If true, mirror about the x axis (flip Y coordinate)
      * @param aRef sets the reference point about which to mirror
      */
-    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } )
-    {
-        for( auto& pt : m_points )
-        {
-            if( aX )
-                pt.x = -pt.x + 2 * aRef.x;
-
-            if( aY )
-                pt.y = -pt.y + 2 * aRef.y;
-        }
-    }
+    void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aRef = { 0, 0 } );
 
     /**
      * Function Rotate
@@ -701,6 +699,16 @@ private:
     /// array of vertices
     std::vector<VECTOR2I> m_points;
 
+    /**
+     * Array of indices that refer to the index of the shape if the point
+     * is part of a larger shape, e.g. arc or spline.
+     * If the value is -1, the point is just a point
+     */
+    std::vector<ssize_t> m_shapes;
+    constexpr static ssize_t SHAPE_IS_PT = -1;
+
+    std::vector<SHAPE_ARC> m_arcs;
+
     /// is the line chain closed?
     bool m_closed;
 
@@ -713,5 +721,6 @@ private:
     /// cached bounding box
     BOX2I m_bbox;
 };
+
 
 #endif // __SHAPE_LINE_CHAIN

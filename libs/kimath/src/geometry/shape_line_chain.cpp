@@ -53,6 +53,29 @@ ClipperLib::Path SHAPE_LINE_CHAIN::convertToClipper( bool aRequiredOrientation )
 }
 
 
+//TODO(SH): Adjust this into two functions: one to convert and one to split the arc into two arcs
+void SHAPE_LINE_CHAIN::convertArc( ssize_t aArcIndex )
+{
+    if( aArcIndex < 0 )
+        aArcIndex += m_arcs.size();
+
+    if( aArcIndex >= static_cast<ssize_t>( m_arcs.size() ) )
+        return;
+
+    // Clear the shapes references
+    for( auto& sh : m_shapes )
+    {
+        if( sh == aArcIndex )
+            sh = SHAPE_IS_PT;
+
+        if( sh > aArcIndex )
+            --sh;
+    }
+
+    m_arcs.erase( m_arcs.begin() + aArcIndex );
+}
+
+
 bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 {
     // fixme: ugly!
@@ -63,12 +86,15 @@ bool SHAPE_LINE_CHAIN::Collide( const VECTOR2I& aP, int aClearance ) const
 
 void SHAPE_LINE_CHAIN::Rotate( double aAngle, const VECTOR2I& aCenter )
 {
-    for( std::vector<VECTOR2I>::iterator i = m_points.begin(); i != m_points.end(); ++i )
+    for( auto& pt : m_points )
     {
-        (*i) -= aCenter;
-        (*i) = (*i).Rotate( aAngle );
-        (*i) += aCenter;
+        pt -= aCenter;
+        pt = pt.Rotate( aAngle );
+        pt += aCenter;
     }
+
+    for( auto& arc : m_arcs )
+        arc.Rotate( aAngle, aCenter );
 }
 
 
@@ -100,6 +126,16 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Reverse() const
     SHAPE_LINE_CHAIN a( *this );
 
     reverse( a.m_points.begin(), a.m_points.end() );
+    reverse( a.m_shapes.begin(), a.m_shapes.end() );
+    reverse( a.m_arcs.begin(), a.m_arcs.end() );
+
+    for( auto& sh : a.m_shapes )
+    {
+        if( sh != SHAPE_IS_PT )
+            sh = a.m_arcs.size() - sh - 1;
+    }
+
+
     a.m_closed = m_closed;
 
     return a;
@@ -117,6 +153,22 @@ long long int SHAPE_LINE_CHAIN::Length() const
 }
 
 
+void SHAPE_LINE_CHAIN::Mirror( bool aX, bool aY, const VECTOR2I& aRef )
+{
+    for( auto& pt : m_points )
+    {
+        if( aX )
+            pt.x = -pt.x + 2 * aRef.x;
+
+        if( aY )
+            pt.y = -pt.y + 2 * aRef.y;
+    }
+
+    for( auto& arc : m_arcs )
+        arc.Mirror( aX, aY, aRef );
+}
+
+
 void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& aP )
 {
     if( aEndIndex < 0 )
@@ -124,6 +176,15 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const VECTOR2I& 
 
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
+
+    aEndIndex = std::min( aEndIndex, PointCount() - 1 );
+
+    // N.B. This works because convertArc changes m_shapes on the first run
+    for( int ind = aStartIndex; ind <= aEndIndex; ind++ )
+    {
+        if( m_shapes[ind] != SHAPE_IS_PT )
+            convertArc( ind );
+    }
 
     if( aStartIndex == aEndIndex )
         m_points[aStartIndex] = aP;
@@ -143,6 +204,40 @@ void SHAPE_LINE_CHAIN::Replace( int aStartIndex, int aEndIndex, const SHAPE_LINE
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
+    aEndIndex = std::min( aEndIndex, PointCount() - 1 );
+    ssize_t arc_index = -1;
+
+    // N.B. This works because convertArc changes m_shapes on the first run
+    for( int ind = aStartIndex; ind <= aEndIndex; ind++ )
+    {
+        if( m_shapes[ind] != SHAPE_IS_PT )
+        {
+            if( arc_index == -1 )
+                arc_index = m_shapes[ind];
+
+            convertArc( ind );
+        }
+    }
+
+    for( auto remaining_it = m_shapes.erase( m_shapes.begin() + aStartIndex,
+                                             m_shapes.begin() + aEndIndex + 1 );
+              remaining_it != m_shapes.end(); remaining_it++ )
+    {
+        if( *remaining_it != SHAPE_IS_PT )
+            *remaining_it += aLine.m_arcs.size();
+    }
+
+    m_shapes.insert( m_shapes.begin() + aStartIndex, aLine.m_shapes.begin(), aLine.m_shapes.end() );
+
+    for( auto new_it = m_shapes.begin() + aStartIndex;
+              new_it != m_shapes.begin() + aStartIndex + aLine.m_shapes.size() + 1; new_it++ )
+    {
+        if( *new_it != SHAPE_IS_PT )
+            *new_it += arc_index;
+    }
+
+    m_arcs.insert( m_arcs.begin() + arc_index, aLine.m_arcs.begin(), aLine.m_arcs.end() );
+
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
     m_points.insert( m_points.begin() + aStartIndex, aLine.m_points.begin(), aLine.m_points.end() );
 }
@@ -156,6 +251,26 @@ void SHAPE_LINE_CHAIN::Remove( int aStartIndex, int aEndIndex )
     if( aStartIndex < 0 )
         aStartIndex += PointCount();
 
+    if( aStartIndex >= PointCount() )
+        return;
+
+    aEndIndex = std::min( aEndIndex, PointCount() );
+    std::vector<size_t> extra_arcs;
+    ssize_t last_arc = -1;
+
+    for( ssize_t i = aStartIndex; i < aEndIndex; i++)
+    {
+        if( m_shapes[i] != SHAPE_IS_PT && m_shapes[i] != last_arc )
+            extra_arcs.emplace_back( m_shapes[i] );
+    }
+
+    // Reverse the sort order to ensure we maintain valid indices
+    std::sort( extra_arcs.begin(), extra_arcs.end(), std::greater<size_t>() );
+
+    for( auto arc : extra_arcs )
+        convertArc( arc );
+
+    m_shapes.erase( m_shapes.begin() + aStartIndex, m_shapes.begin() + aEndIndex + 1 );
     m_points.erase( m_points.begin() + aStartIndex, m_points.begin() + aEndIndex + 1 );
 }
 
@@ -204,6 +319,7 @@ int SHAPE_LINE_CHAIN::Split( const VECTOR2I& aP )
     if( ii >= 0 )
     {
         m_points.insert( m_points.begin() + ii + 1, aP );
+        m_shapes.insert( m_shapes.begin() + ii + 1, ssize_t( SHAPE_IS_PT ) );
 
         return ii + 1;
     }
@@ -246,6 +362,81 @@ const SHAPE_LINE_CHAIN SHAPE_LINE_CHAIN::Slice( int aStartIndex, int aEndIndex )
         rv.Append( m_points[i] );
 
     return rv;
+}
+
+
+void SHAPE_LINE_CHAIN::Append( const SHAPE_LINE_CHAIN& aOtherLine )
+{
+    if( aOtherLine.PointCount() == 0 )
+        return;
+
+    else if( PointCount() == 0 || aOtherLine.CPoint( 0 ) != CPoint( -1 ) )
+    {
+        const VECTOR2I p = aOtherLine.CPoint( 0 );
+        m_points.push_back( p );
+        m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+        m_bbox.Merge( p );
+    }
+
+    for( int i = 1; i < aOtherLine.PointCount(); i++ )
+    {
+        const VECTOR2I p = aOtherLine.CPoint( i );
+        m_points.push_back( p );
+        m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+        m_bbox.Merge( p );
+    }
+}
+
+
+void SHAPE_LINE_CHAIN::Append( const SHAPE_ARC& aArc )
+{
+    auto& chain = aArc.ConvertToPolyline();
+    m_arcs.push_back( aArc );
+
+    for( auto& pt : chain.CPoints() )
+    {
+        m_points.push_back( pt );
+        m_shapes.push_back( m_arcs.size() );
+    }
+}
+
+
+void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const VECTOR2I& aP )
+{
+    if( m_shapes[aVertex] != SHAPE_IS_PT )
+        convertArc( aVertex );
+
+    m_points.insert( m_points.begin() + aVertex, aP );
+    m_shapes.insert( m_shapes.begin() + aVertex, ssize_t( SHAPE_IS_PT ) );
+}
+
+
+void SHAPE_LINE_CHAIN::Insert( size_t aVertex, const SHAPE_ARC& aArc )
+{
+    if( m_shapes[aVertex] != SHAPE_IS_PT )
+        convertArc( aVertex );
+
+    /// Step 1: Find the position for the new arc in the existing arc vector
+    size_t arc_pos = m_arcs.size();
+
+    for( auto arc_it = m_shapes.rbegin() ;
+              arc_it != m_shapes.rend() + aVertex;
+              arc_it++ )
+    {
+        if( *arc_it != SHAPE_IS_PT )
+            arc_pos = ( *arc_it )++;
+    }
+
+    m_arcs.insert( m_arcs.begin() + arc_pos, aArc );
+
+    /// Step 2: Add the arc polyline points to the chain
+    auto& chain = aArc.ConvertToPolyline();
+    m_points.insert( m_points.begin() + aVertex,
+            chain.CPoints().begin(), chain.CPoints().end() );
+
+    /// Step 3: Add the vector of indices to the shape vector
+    std::vector<size_t> new_points( chain.PointCount(), arc_pos );
+    m_shapes.insert( m_shapes.begin() + aVertex, new_points.begin(), new_points.end() );
 }
 
 
@@ -550,6 +741,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     i = 0;
 
     // stage 1: eliminate collinear segments
+    // TODO(sh): handle arcs Maybe segment-wise?
     while( i < np - 2 )
     {
         const VECTOR2I p0 = pts_unique[i];
@@ -562,6 +754,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
             n++;
 
         m_points.push_back( p0 );
+        m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
 
         if( n > i )
             i = n;
@@ -569,6 +762,7 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
         if( n == np )
         {
             m_points.push_back( pts_unique[n - 1] );
+            m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
             return *this;
         }
 
@@ -576,9 +770,13 @@ SHAPE_LINE_CHAIN& SHAPE_LINE_CHAIN::Simplify()
     }
 
     if( np > 1 )
+    {
         m_points.push_back( pts_unique[np - 2] );
+        m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
+    }
 
     m_points.push_back( pts_unique[np - 1] );
+    m_shapes.push_back( ssize_t( SHAPE_IS_PT ) );
 
     return *this;
 }
@@ -648,10 +846,15 @@ const std::string SHAPE_LINE_CHAIN::Format() const
 {
     std::stringstream ss;
 
-    ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " ";
+    ss << m_points.size() << " " << ( m_closed ? 1 : 0 ) << " " << m_arcs.size() << " ";
 
     for( int i = 0; i < PointCount(); i++ )
-        ss << m_points[i].x << " " << m_points[i].y << " "; // Format() << " ";
+        ss << m_points[i].x << " " << m_points[i].y << " " << m_shapes[i];
+
+    for( size_t i = 0; i < m_arcs.size(); i++ )
+        ss << m_arcs[i].GetCenter().x << " " << m_arcs[i].GetCenter().y << " "
+        << m_arcs[i].GetP0().x << " " << m_arcs[i].GetP0().y << " "
+        << m_arcs[i].GetCentralAngle();
 
     return ss.str();
 }
@@ -687,23 +890,46 @@ SHAPE* SHAPE_LINE_CHAIN::Clone() const
 
 bool SHAPE_LINE_CHAIN::Parse( std::stringstream& aStream )
 {
-    int n_pts;
+    size_t n_pts;
+    size_t n_arcs;
 
     m_points.clear();
     aStream >> n_pts;
 
     // Rough sanity check, just make sure the loop bounds aren't absolutely outlandish
-    if( n_pts < 0 || n_pts > int( aStream.str().size() ) )
+    if( n_pts > aStream.str().size() )
         return false;
 
     aStream >> m_closed;
+    aStream >> n_arcs;
 
-    for( int i = 0; i < n_pts; i++ )
+    if( n_arcs > aStream.str().size() )
+        return false;
+
+    for( size_t i = 0; i < n_pts; i++ )
     {
         int x, y;
+        ssize_t ind;
         aStream >> x;
         aStream >> y;
         m_points.emplace_back( x, y );
+
+        aStream >> ind;
+        m_shapes.push_back( ind );
+    }
+
+    for( size_t i = 0; i < n_arcs; i++ )
+    {
+        VECTOR2I p0, pc;
+        double angle;
+
+        aStream >> pc.x;
+        aStream >> pc.y;
+        aStream >> p0.x;
+        aStream >> p0.y;
+        aStream >> angle;
+
+        m_arcs.emplace_back(  pc, p0, angle );
     }
 
     return true;
