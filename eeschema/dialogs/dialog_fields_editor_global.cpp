@@ -590,26 +590,29 @@ public:
     {
         for( unsigned i = 0; i < m_componentRefs.GetCount(); ++i )
         {
-            SCH_COMPONENT* comp = m_componentRefs[ i ].GetComp();
+            SCH_COMPONENT& comp = *m_componentRefs[i].GetComp();
 
-            m_frame->SetCurrentSheet( m_componentRefs[ i ].GetSheetPath() );
-            m_frame->SaveCopyInUndoList( comp, UR_CHANGED, true );
+            m_frame->SetCurrentSheet( m_componentRefs[i].GetSheetPath() );
+            m_frame->SaveCopyInUndoList( &comp, UR_CHANGED, true );
 
-            std::map<wxString, wxString>& fieldStore = m_dataStore[ comp->GetTimeStamp() ];
+            const std::map<wxString, wxString>& fieldStore = m_dataStore[comp.GetTimeStamp()];
 
-            for( std::pair<wxString, wxString> srcData : fieldStore )
+            for( const std::pair<wxString, wxString> srcData : fieldStore )
             {
-                wxString   srcName = srcData.first;
-                wxString   srcValue = srcData.second;
-                SCH_FIELD* destField = comp->FindField( srcName );
+                const wxString& srcName = srcData.first;
+                const wxString& srcValue = srcData.second;
+                SCH_FIELD*      destField = comp.FindField( srcName );
 
                 if( !destField && !srcValue.IsEmpty() )
-                    destField = comp->AddField( SCH_FIELD( comp->GetPosition(), -1, comp, srcName ) );
+                {
+                    const auto compOrigin = comp.GetPosition();
+                    destField = comp.AddField( SCH_FIELD( compOrigin, -1, &comp, srcName ) );
+                }
 
                 if( destField && !srcValue.IsEmpty() )
                     destField->SetText( srcValue );
                 else
-                    comp->RemoveField( srcName );
+                    comp.RemoveField( srcName );
             }
         }
 
