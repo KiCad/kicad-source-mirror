@@ -193,20 +193,15 @@ bool SCH_EDIT_FRAME::prepareForNetlist()
 
 void SCH_EDIT_FRAME::sendNetlistToCvpcb()
 {
-    NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
-
+    NETLIST_OBJECT_LIST*   net_atoms = BuildNetListBase();
     NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
-
-    STRING_FORMATTER    formatter;
+    STRING_FORMATTER       formatter;
 
     // @todo : trim GNL_ALL down to minimum for CVPCB
     exporter.Format( &formatter, GNL_ALL );
 
-    Kiway().ExpressMail( FRAME_CVPCB,
-        MAIL_EESCHEMA_NETLIST,
-        formatter.GetString(),  // an abbreviated "kicad" (s-expr) netlist
-        this
-        );
+    std::string packet = formatter.GetString();  // an abbreviated "kicad" (s-expr) netlist
+    Kiway().ExpressMail( FRAME_CVPCB, MAIL_EESCHEMA_NETLIST, packet, this );
 }
 
 

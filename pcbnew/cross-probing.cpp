@@ -50,8 +50,6 @@
 
 #include <collectors.h>
 #include <pcbnew.h>
-#include <board_netlist_updater.h>
-#include <netlist_reader.h>
 #include <pcb_netlist.h>
 #include <dialogs/dialog_update_pcb.h>
 
@@ -384,56 +382,12 @@ void PCB_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ExecuteRemoteCommand( payload.c_str() );
         break;
 
-    case MAIL_SCH_PCB_UPDATE:
+    case MAIL_PCB_UPDATE:
     {
         NETLIST netlist;
-        size_t split = payload.find( '\n' );
-        wxCHECK( split != std::string::npos, /*void*/ );
 
-        // Extract options and netlist
-        std::string options = payload.substr( 0, split );
-        std::string netlistData = payload.substr( split + 1 );
-
-        // Quiet update options
-        bool by_reference = options.find( "by-reference" ) != std::string::npos;
-        bool by_timestamp = options.find( "by-timestamp" ) != std::string::npos;
-        wxASSERT( !( by_reference && by_timestamp ) );  // only one at a time please
-
-        try
-        {
-            STRING_LINE_READER* lineReader = new STRING_LINE_READER( netlistData, _( "Eeschema netlist" ) );
-            KICAD_NETLIST_READER netlistReader( lineReader, &netlist );
-            netlistReader.LoadNetlist();
-        }
-        catch( const IO_ERROR& )
-        {
-            assert( false ); // should never happen
-        }
-
-        if( by_reference || by_timestamp )
-        {
-            netlist.SetDeleteExtraFootprints( false );
-            netlist.SetFindByTimeStamp( by_timestamp );
-            netlist.SetReplaceFootprints( true );
-
-            BOARD_NETLIST_UPDATER updater( this, GetBoard() );
-            updater.SetLookupByTimestamp( by_timestamp );
-            updater.SetDeleteUnusedComponents( false );
-            updater.SetReplaceFootprints( true );
-            updater.SetDeleteSinglePadNets( false );
-            updater.UpdateNetlist( netlist );
-        }
-        else
-        {
-            DIALOG_UPDATE_PCB updateDialog( this, &netlist );
-            updateDialog.ShowModal();
-
-            auto selectionTool = static_cast<SELECTION_TOOL*>(
-                    m_toolManager->FindTool( "pcbnew.InteractiveSelection" ) );
-
-            if( !selectionTool->GetSelection().Empty() )
-                GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
-        }
+        if( FetchNetlistFromSchematic( netlist, ANNOTATION_DIALOG ) )
+            UpdatePCBFromNetlist( netlist );
 
         break;
     }

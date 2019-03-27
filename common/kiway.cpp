@@ -149,7 +149,7 @@ KIFACE*  KIWAY::KiFACE( FACE_T aFaceId, bool doLoad )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFaceId.
-    if( unsigned( aFaceId ) >= arrayDim( m_kiface ) )
+    if( (unsigned) aFaceId >= arrayDim( m_kiface ) )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -301,7 +301,7 @@ KIWAY_PLAYER* KIWAY::Player( FRAME_T aFrameType, bool doCreate, wxTopLevelWindow
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
-    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
+    if( (unsigned) aFrameType >= KIWAY_PLAYER_COUNT )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -349,7 +349,7 @@ bool KIWAY::PlayerClose( FRAME_T aFrameType, bool doForce )
 {
     // Since this will be called from python, cannot assume that code will
     // not pass a bad aFrameType.
-    if( unsigned( aFrameType ) >= KIWAY_PLAYER_COUNT )
+    if( (unsigned) aFrameType >= KIWAY_PLAYER_COUNT )
     {
         // @todo : throw an exception here for python's benefit, at least that
         // way it gets some explanatory text.
@@ -383,8 +383,7 @@ bool KIWAY::PlayersClose( bool doForce )
 }
 
 
-void KIWAY::ExpressMail( FRAME_T aDestination,
-                MAIL_T aCommand, std::string aPayload, wxWindow* aSource )
+void KIWAY::ExpressMail( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload, wxWindow* aSource )
 {
     KIWAY_EXPRESS   mail( aDestination, aCommand, aPayload, aSource );
 
@@ -481,9 +480,9 @@ bool KIWAY::ProcessEvent( wxEvent& aEvent )
 
 void KIWAY::OnKiwayEnd()
 {
-    for( unsigned i=0;  i < arrayDim( m_kiface );  ++i )
+    for( KIFACE* i : m_kiface )
     {
-        if( m_kiface[i] )
-            m_kiface[i]->OnKifaceEnd();
+        if( i )
+            i->OnKifaceEnd();
     }
 }

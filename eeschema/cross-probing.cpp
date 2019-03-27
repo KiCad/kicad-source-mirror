@@ -43,7 +43,8 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
-
+#include <reporter.h>
+#include <netlist_exporters/netlist_exporter_kicad.h>
 
 /**
  * Execute a remote command sent by Pcbnew via a socket connection.
@@ -251,7 +252,7 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 
 void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
-    const std::string& payload = mail.GetPayload();
+    std::string& payload = mail.GetPayload();
 
     switch( mail.Command() )
     {
@@ -259,8 +260,33 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         ExecuteRemoteCommand( payload.c_str() );
         break;
 
-    case MAIL_SCH_PCB_UPDATE_REQUEST:
-        doUpdatePcb( payload );
+    case MAIL_SCH_GET_NETLIST:
+        if( payload.find( "quiet-annotate" ) != std::string::npos )
+        {
+            SCH_SCREENS schematic;
+            schematic.UpdateSymbolLinks();
+            SCH_SHEET_LIST sheets( g_RootSheet );
+            sheets.AnnotatePowerSymbols();
+            AnnotateComponents( true, UNSORTED, INCREMENTAL_BY_REF, 0, false, false, true,
+                                NULL_REPORTER::GetInstance() );
+        }
+
+        if( payload.find( "no-annotate" ) == std::string::npos )
+        {
+            // Ensure schematic is OK for netlist creation (especially that it is fully annotated):
+            if( !prepareForNetlist() )
+                return;
+        }
+
+        {
+            NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
+            NETLIST_EXPORTER_KICAD exporter( this, net_atoms );
+            STRING_FORMATTER formatter;
+
+            exporter.Format( &formatter, GNL_ALL );
+
+            payload = formatter.GetString();
+        }
         break;
 
     case MAIL_BACKANNOTATE_FOOTPRINTS:
@@ -311,7 +337,7 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 
     case MAIL_SCH_SAVE:
         if( SaveProject() )
-            Kiway().ExpressMail( FRAME_CVPCB, MAIL_STATUS, _( "Schematic saved" ).ToStdString() );
+            payload = "success";
         break;
 
     default:

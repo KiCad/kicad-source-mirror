@@ -42,15 +42,15 @@ const wxEventType KIWAY_EXPRESS::wxEVENT_ID = 30000;    // commmon accross all l
 
 
 KIWAY_EXPRESS::KIWAY_EXPRESS( const KIWAY_EXPRESS& anOther ) :
-    wxEvent( anOther )
+    wxEvent( anOther ),
+    m_destination( anOther.m_destination ),
+    m_payload( anOther.m_payload )
 {
-    m_destination = anOther.m_destination;
-    m_payload     = anOther.m_payload;
 }
 
 
-KIWAY_EXPRESS::KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand,
-        const std::string& aPayload, wxWindow* aSource ) :
+KIWAY_EXPRESS::KIWAY_EXPRESS( FRAME_T aDestination, MAIL_T aCommand, std::string& aPayload,
+                              wxWindow* aSource ) :
     wxEvent( aCommand, wxEVENT_ID ),
     m_destination( aDestination ),
     m_payload( aPayload )

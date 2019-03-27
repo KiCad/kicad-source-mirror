@@ -1495,7 +1495,8 @@ void LIB_EDIT_FRAME::refreshSchematic()
 {
     // There may be no parent window so use KIWAY message to refresh the schematic editor
     // in case any symbols have changed.
-    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, std::string( "" ), this );
+    std::string dummyPayload;
+    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_REFRESH, dummyPayload, this );
 }
 
 

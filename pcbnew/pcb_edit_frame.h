@@ -1560,6 +1560,28 @@ public:
     void InstallNetlistFrame( wxDC* DC );
 
     /**
+     * Function FetchNetlistFromSchematic
+     * @param aNetlist a NETLIST owned by the caller.  This function fills it in.
+     * @return true if a netlist was fetched.
+     */
+    enum FETCH_NETLIST_MODE { NO_ANNOTATION, QUIET_ANNOTATION, ANNOTATION_DIALOG };
+    bool FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode );
+
+    /**
+     * Function UpdatePCBFromNetlist
+     * @param aNetlist
+     */
+    void UpdatePCBFromNetlist( NETLIST& aNetlist );
+
+    /**
+     * Function DoUpdatePCBFromNetlist
+     * An automated version of UpdatePCBFromNetlist which skips the UI dialog.
+     * @param aNetlist
+     * @param aUseTimestamps
+     */
+    void DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps );
+
+    /**
      * Function ReadPcbNetlist
      * reads \a aNetlistFileName and updates the footprints (load missing footprints and
      * delete on demand extra footprints) on the board.

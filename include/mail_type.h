@@ -40,19 +40,13 @@ enum MAIL_T
     MAIL_BACKANNOTATE_FOOTPRINTS,   ///< CVPCB->SCH footprint stuffing
     MAIL_SCH_SAVE,                  ///< CVPCB->SCH save the schematic
     MAIL_EESCHEMA_NETLIST,          ///< SCH->CVPCB netlist immediately after launching CVPCB
-    MAIL_SCH_PCB_UPDATE,            ///< SCH->PCB forward update
+    MAIL_PCB_UPDATE,                ///< SCH->PCB forward update
     MAIL_IMPORT_FILE,               ///< Import a different format file
-
-    ///< Sch->PCB forward update, requests SCH to re-generate netlist and send it to PCB
-    ///< via another mail (kind of bootstrap)
-    MAIL_SCH_PCB_UPDATE_REQUEST,
+    MAIL_SCH_GET_NETLIST,           ///< Fetch a netlist
     MAIL_SCH_REFRESH,               ///< The the schematic editor to refresh the display.
 
     MAIL_LIB_EDIT,
-    MAIL_FP_EDIT,
-
-    ///< General-puspose messages
-    MAIL_STATUS
+    MAIL_FP_EDIT
 };
 
 #endif  // MAIL_TYPE_H_

@@ -68,9 +68,7 @@
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 
-#include <netlist_exporter_kicad.h>
 #include <connection_graph.h>
-#include <kiway.h>
 #include <dialogs/dialog_fields_editor_global.h>
 
 #include <sch_view.h>
@@ -886,58 +884,8 @@ void SCH_EDIT_FRAME::CloseErc()
 
 void SCH_EDIT_FRAME::OnUpdatePCB( wxCommandEvent& event )
 {
-    doUpdatePcb( "" );
-}
-
-
-void SCH_EDIT_FRAME::doUpdatePcb( const wxString& aUpdateOptions )
-{
-    wxFileName fn = Prj().AbsolutePath( g_RootSheet->GetScreen()->GetFileName() );
-
-    fn.SetExt( PcbFileExtension );
-
-    if( Kiface().IsSingle() )
-    {
-        DisplayError( this,  _( "Cannot update the PCB, because the Schematic Editor is"
-                                " opened in stand-alone mode. In order to create/update"
-                                " PCBs from schematics, you need to launch Kicad shell"
-                                " and create a PCB project." ) );
-        return;
-    }
-    else
-    {
-        KIWAY_PLAYER* frame = Kiway().Player( FRAME_PCB, true );
-
-        // a pcb frame can be already existing, but not yet used.
-        // this is the case when running the footprint editor, or the footprint viewer first
-        // if the frame is not visible, the board is not yet loaded
-        if( !frame->IsVisible() )
-        {
-            frame->OpenProjectFiles( std::vector<wxString>( 1, fn.GetFullPath() ) );
-            frame->Show( true );
-        }
-
-        // On Windows, Raise() does not bring the window on screen, when iconized
-        if( frame->IsIconized() )
-            frame->Iconize( false );
-
-        frame->Raise();
-    }
-
-    auto net_atoms = CreateNetlist( aUpdateOptions.Contains( "no-annotate" ),
-                                    aUpdateOptions.Contains( "quiet-annotate" ) );
-
-    NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
-    STRING_FORMATTER formatter;
-
-    exporter.Format( &formatter, GNL_ALL );
-
-    auto updateOptions = aUpdateOptions.ToStdString();
-    auto netlistString = formatter.GetString();
-    auto finalNetlist = updateOptions + "\n" + netlistString;
-
-    // Now, send the "kicad" (s-expr) netlist to Pcbnew
-    Kiway().ExpressMail( FRAME_PCB, MAIL_SCH_PCB_UPDATE, finalNetlist, this );
+    std::string payload;
+    Kiway().ExpressMail( FRAME_PCB, MAIL_PCB_UPDATE, payload, this );
 }
 
 

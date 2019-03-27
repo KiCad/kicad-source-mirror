@@ -976,10 +976,6 @@ void CVPCB_MAINFRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         */
         break;
 
-    case MAIL_STATUS:
-        SetStatusText( payload, 1 );
-        break;
-
     default:
         ;       // ignore most
     }

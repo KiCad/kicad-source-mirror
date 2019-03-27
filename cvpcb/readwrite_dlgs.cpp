@@ -373,14 +373,22 @@ bool CVPCB_MAINFRAME::ReadNetListAndFpFiles( const std::string& aNetlist )
 
 bool CVPCB_MAINFRAME::SaveFootprintAssociation( bool doSaveSchematic )
 {
+    std::string      payload;
     STRING_FORMATTER sf;
 
     m_netlist.FormatBackAnnotation( &sf );
 
-    Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, sf.GetString() );
+    payload = sf.GetString();
+    Kiway().ExpressMail( FRAME_SCH, MAIL_BACKANNOTATE_FOOTPRINTS, payload );
 
     if( doSaveSchematic )
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_SAVE, std::string( "" ) );
+    {
+        payload = "";
+        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_SAVE, payload );
 
-    return true;    // we can't tell if it was successful, so just assume the best
+        if( payload == "success" )
+            SetStatusText( _( "Schematic saved" ), 1 );
+    }
+
+    return true;
 }

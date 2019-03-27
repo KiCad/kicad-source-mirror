@@ -46,7 +46,7 @@
 #include <kiway_player.h>
 #include <trace_helpers.h>
 #include <lockfile.cpp>
-
+#include <pcb_netlist.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <io_mgr.h>
@@ -967,10 +967,11 @@ bool PCB_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // - first, assign valid timestamps to footprints (no reannotation)
             // - second, perform schematic annotation and update footprint references
             //   based on timestamps
-            Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST,
-                    "no-annotate;by-reference", this );
-            Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST,
-                    "quiet-annotate;by-timestamp", this );
+            NETLIST netlist;
+            FetchNetlistFromSchematic( netlist, NO_ANNOTATION );
+            DoUpdatePCBFromNetlist( netlist, false );
+            FetchNetlistFromSchematic( netlist, QUIET_ANNOTATION );
+            DoUpdatePCBFromNetlist( netlist, true );
 
             std::unordered_map<wxString, wxString> netRemap;
 

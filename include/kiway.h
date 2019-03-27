@@ -344,7 +344,7 @@ public:
      * aCommand in there.
      */
     VTBL_ENTRY void ExpressMail( FRAME_T aDestination, MAIL_T aCommand,
-            std::string aPayload, wxWindow* aSource = NULL );
+                                 std::string& aPayload, wxWindow* aSource = NULL );
 
     /**
      * Function Prj
@@ -395,7 +395,7 @@ private:
 
     bool set_kiface( FACE_T aFaceType, KIFACE* aKiface )
     {
-        if( unsigned( aFaceType ) < unsigned( KIWAY_FACE_COUNT ) )
+        if( (unsigned) aFaceType < (unsigned) KIWAY_FACE_COUNT )
         {
             m_kiface[aFaceType] = aKiface;
             return true;

@@ -51,6 +51,7 @@
 #include <dialog_edit_footprint_for_BoardEditor.h>
 #include <dialog_board_setup.h>
 #include <dialog_configure_paths.h>
+#include <dialog_update_pcb.h>
 #include <convert_to_biu.h>
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -70,9 +71,13 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
 #include <eda_dockart.h>
+#include <board_netlist_updater.h>
+#include <netlist_reader.h>
+#include <pcb_netlist.h>
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
@@ -1151,36 +1156,88 @@ void PCB_EDIT_FRAME::OnConfigurePaths( wxCommandEvent& aEvent )
 
 void PCB_EDIT_FRAME::OnUpdatePCBFromSch( wxCommandEvent& event )
 {
+    NETLIST netlist;
+
+    if( FetchNetlistFromSchematic( netlist, ANNOTATION_DIALOG ) )
+        UpdatePCBFromNetlist( netlist );
+}
+
+
+bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST_MODE aMode )
+{
     if( Kiface().IsSingle() )
     {
         DisplayError( this,  _( "Cannot update the PCB, because Pcbnew is "
                                 "opened in stand-alone mode. In order to create or update "
                                 "PCBs from schematics, you need to launch the KiCad project manager "
                                 "and create a PCB project." ) );
-        return;
+        return false;
     }
-    else
+
+    // Update PCB requires a netlist. Therefore the schematic editor must be running
+    // If this is not the case, open the schematic editor
+    KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
+
+    if( !frame->IsShown() )
     {
-        // Update PCB requires a netlist. Therefore the schematic editor must be running
-        // If this is not the case, open the schematic editor
-        KIWAY_PLAYER* frame = Kiway().Player( FRAME_SCH, true );
+        wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
 
-        if( !frame->IsShown() )
-        {
-            wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
-
-            frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
-            // Because the schematic editor frame is not on screen, iconize it:
-            // However, another valid option is to do not iconize the schematic editor frame
-            // and show it
-            frame->Iconize( true );
-            // we show the schematic editor frame, because do not show is seen as
-            // a not yet opened schematic by Kicad manager, which is not the case
-            frame->Show( true );
-        }
-
-        Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_PCB_UPDATE_REQUEST, "", this );
+        frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
+        // Because the schematic editor frame is not on screen, iconize it:
+        // However, another valid option is to do not iconize the schematic editor frame
+        // and show it
+        frame->Iconize( true );
+        // we show the schematic editor frame, because do not show is seen as
+        // a not yet opened schematic by Kicad manager, which is not the case
+        frame->Show( true );
     }
+
+    std::string payload;
+
+    if( aMode == NO_ANNOTATION )
+        payload = "no-annotate";
+    else if( aMode = QUIET_ANNOTATION )
+        payload = "quiet-annotate";
+
+    Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, this );
+
+    try
+    {
+        auto lineReader = new STRING_LINE_READER( payload, _( "Eeschema netlist" ) );
+        KICAD_NETLIST_READER netlistReader( lineReader, &aNetlist );
+        netlistReader.LoadNetlist();
+    }
+    catch( const IO_ERROR& )
+    {
+        assert( false ); // should never happen
+        return false;
+    }
+
+    return true;
+}
+
+
+void PCB_EDIT_FRAME::UpdatePCBFromNetlist( NETLIST& aNetlist )
+{
+    DIALOG_UPDATE_PCB updateDialog( this, &aNetlist );
+    updateDialog.ShowModal();
+
+    auto selectionTool = static_cast<SELECTION_TOOL*>(
+            m_toolManager->FindTool( "pcbnew.InteractiveSelection" ) );
+
+    if( !selectionTool->GetSelection().Empty() )
+        GetToolManager()->InvokeTool( "pcbnew.InteractiveEdit" );
+}
+
+
+void PCB_EDIT_FRAME::DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps )
+{
+    BOARD_NETLIST_UPDATER updater( this, GetBoard() );
+    updater.SetLookupByTimestamp( aUseTimestamps );
+    updater.SetDeleteUnusedComponents( false );
+    updater.SetReplaceFootprints( true );
+    updater.SetDeleteSinglePadNets( false );
+    updater.UpdateNetlist( aNetlist );
 }
 
 

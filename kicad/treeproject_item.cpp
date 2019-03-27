@@ -256,7 +256,9 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         {
             wxCommandEvent dummy;
             frame->OnRunPcbFpEditor( dummy );
-            kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, fullFileName.ToStdString() );
+
+            std::string packet = fullFileName.ToStdString();
+            kiway.ExpressMail( FRAME_PCB_MODULE_EDITOR, MAIL_FP_EDIT, packet );
         }
         break;
 
@@ -264,7 +266,9 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
         {
             wxCommandEvent dummy;
             frame->OnRunSchLibEditor( dummy );
-            kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, fullFileName.ToStdString() );
+
+            std::string packet = fullFileName.ToStdString();
+            kiway.ExpressMail( FRAME_SCH_LIB_EDITOR, MAIL_LIB_EDIT, packet );
         }
         break;
 
