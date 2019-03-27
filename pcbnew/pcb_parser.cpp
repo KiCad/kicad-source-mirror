@@ -586,6 +586,10 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             m_board->Add( parseTRACK(), ADD_MODE::INSERT );
             break;
 
+        case T_arc:
+            m_board->Add( parseARC(), ADD_INSERT );
+            break;
+
         case T_via:
             m_board->Add( parseVIA(), ADD_MODE::INSERT );
             break;
@@ -3346,6 +3350,77 @@ bool PCB_PARSER::parseD_PAD_option( D_PAD* aPad )
     }
 
     return true;
+}
+
+
+ARC* PCB_PARSER::parseARC()
+{
+    wxCHECK_MSG( CurTok() == T_arc, NULL,
+            wxT( "Cannot parse " ) + GetTokenString( CurTok() ) + wxT( " as ARC." ) );
+
+    wxPoint pt;
+    T       token;
+
+    std::unique_ptr<ARC> arc( new ARC( m_board ) );
+
+    for( token = NextTok(); token != T_RIGHT; token = NextTok() )
+    {
+        if( token != T_LEFT )
+            Expecting( T_LEFT );
+
+        token = NextTok();
+
+        switch( token )
+        {
+        case T_start:
+            pt.x = parseBoardUnits( "start x" );
+            pt.y = parseBoardUnits( "start y" );
+            arc->SetStart( pt );
+            break;
+
+        case T_mid:
+            pt.x = parseBoardUnits( "mid x" );
+            pt.y = parseBoardUnits( "mid y" );
+            arc->SetMid( pt );
+            break;
+
+        case T_end:
+            pt.x = parseBoardUnits( "end x" );
+            pt.y = parseBoardUnits( "end y" );
+            arc->SetEnd( pt );
+            break;
+
+        case T_width:
+            arc->SetWidth( parseBoardUnits( "width" ) );
+            break;
+
+        case T_layer:
+            arc->SetLayer( parseBoardItemLayer() );
+            break;
+
+        case T_net:
+            if( !arc->SetNetCode( getNetCode( parseInt( "net number" ) ), /* aNoAssert */ true ) )
+                THROW_IO_ERROR( wxString::Format(
+                        _( "Invalid net ID in\nfile: \"%s\"\nline: %d\noffset: %d" ),
+                        GetChars( CurSource() ), CurLineNumber(), CurOffset() ) );
+            break;
+
+        case T_tstamp:
+            arc->SetTimeStamp( parseHex() );
+            break;
+
+        case T_status:
+            arc->SetStatus( static_cast<STATUS_FLAGS>( parseHex() ) );
+            break;
+
+        default:
+            Expecting( "start, mid, end, width, layer, net, tstamp, or status" );
+        }
+
+        NeedRIGHT();
+    }
+
+    return arc.release();
 }
 
 

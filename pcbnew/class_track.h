@@ -136,7 +136,7 @@ public:
      * returns the length of the track using the hypotenuse calculation.
      * @return double - the length of the track
      */
-    double GetLength() const
+    virtual double GetLength() const
     {
         return GetLineLength( m_Start, m_End );
     }
@@ -254,6 +254,63 @@ protected:
     wxPoint     m_Start;            ///< Line start point
     wxPoint     m_End;              ///< Line end point
 
+};
+
+
+class ARC : public TRACK
+{
+public:
+    ARC( BOARD_ITEM* aParent ) : TRACK( aParent, PCB_ARC_T ){};
+
+    static inline bool ClassOf( const EDA_ITEM *aItem )
+    {
+        return aItem && PCB_ARC_T == aItem->Type();
+    }
+
+    virtual void Move( const wxPoint& aMoveVector ) override
+    {
+        m_Start += aMoveVector;
+        m_Mid   += aMoveVector;
+        m_End   += aMoveVector;
+    }
+
+    virtual void Rotate( const wxPoint& aRotCentre, double aAngle ) override;
+
+    virtual void Flip( const wxPoint& aCentre, bool aFlipLeftRight ) override;
+
+    void SetMid( const wxPoint& aMid )          { m_Mid = aMid; }
+    const wxPoint& GetMid() const               { return m_Mid; }
+
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+
+    wxString GetClass() const override
+    {
+        return wxT( "ARC" );
+    }
+
+    //TODO(snh): Add GetSelectMenuText() and GetMsgPanelInfoBase()
+
+    /**
+     * Function GetLength
+     * returns the length of the track using the hypotenuse calculation.
+     * @return double - the length of the track
+     */
+    virtual double GetLength() const override
+    {
+        //TODO(snh): Add proper arc length calc
+        return GetLineLength( m_Start, m_Mid ) + GetLineLength( m_Mid, m_End );
+    }
+
+    EDA_ITEM* Clone() const override;
+
+    virtual void SwapData( BOARD_ITEM* aImage ) override;
+
+protected:
+
+private:
+    wxPoint     m_Mid;              ///< Arc mid point, halfway between start and end
 };
 
 

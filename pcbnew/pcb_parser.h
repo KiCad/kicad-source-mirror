@@ -39,6 +39,7 @@
 #include <unordered_map>
 
 
+class ARC;
 class BOARD;
 class BOARD_ITEM;
 class BOARD_ITEM_CONTAINER;
@@ -155,6 +156,7 @@ class PCB_PARSER : public PCB_LEXER
     D_PAD*          parseD_PAD( MODULE* aParent = NULL );
     // Parse only the (option ...) inside a pad description
     bool            parseD_PAD_option( D_PAD* aPad );
+    ARC*            parseARC();
     TRACK*          parseTRACK();
     VIA*            parseVIA();
     ZONE_CONTAINER* parseZONE_CONTAINER( BOARD_ITEM_CONTAINER* aParent );

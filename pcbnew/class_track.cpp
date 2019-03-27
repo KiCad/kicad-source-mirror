@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,8 @@ static bool ShowClearance( const PCB_DISPLAY_OPTIONS& aDisplOpts, const TRACK* a
 {
     // maybe return true for tracks and vias, not for zone segments
     return IsCopperLayer( aTrack->GetLayer() )
-           && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T )
+           && ( aTrack->Type() == PCB_TRACE_T || aTrack->Type() == PCB_VIA_T 
+                    || aTrack->Type() == PCB_ARC_T )
            && ( ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS
                   && ( aTrack->IsDragging() || aTrack->IsMoving() || aTrack->IsNew() ) )
             || ( aDisplOpts.m_ShowTrackClearanceMode == PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS )
@@ -75,7 +76,14 @@ EDA_ITEM* TRACK::Clone() const
 }
 
 
-VIA::VIA( BOARD_ITEM* aParent ) : TRACK( aParent, PCB_VIA_T )
+EDA_ITEM* ARC::Clone() const
+{
+    return new ARC( *this );
+}
+
+
+VIA::VIA( BOARD_ITEM* aParent ) :
+    TRACK( aParent, PCB_VIA_T )
 {
     SetViaType( VIATYPE::THROUGH );
     m_BottomLayer = B_Cu;
@@ -229,6 +237,14 @@ void TRACK::Rotate( const wxPoint& aRotCentre, double aAngle )
 }
 
 
+void ARC::Rotate( const wxPoint& aRotCentre, double aAngle )
+{
+    RotatePoint( &m_Start, aRotCentre, aAngle );
+    RotatePoint( &m_End, aRotCentre, aAngle );
+    RotatePoint( &m_Mid, aRotCentre, aAngle );
+}
+
+
 void TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
 {
     if( aFlipLeftRight )
@@ -240,6 +256,26 @@ void TRACK::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
     {
         m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
         m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
+    }
+
+    int copperLayerCount = GetBoard()->GetCopperLayerCount();
+    SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
+}
+
+
+void ARC::Flip( const wxPoint& aCentre, bool aFlipLeftRight )
+{
+    if( aFlipLeftRight )
+    {
+        m_Start.x = aCentre.x - ( m_Start.x - aCentre.x );
+        m_End.x   = aCentre.x - ( m_End.x - aCentre.x );
+        m_Mid.x = aCentre.x - ( m_Mid.x - aCentre.x );
+    }
+    else
+    {
+        m_Start.y = aCentre.y - ( m_Start.y - aCentre.y );
+        m_End.y   = aCentre.y - ( m_End.y - aCentre.y );
+        m_Mid.y = aCentre.y - ( m_Mid.y - aCentre.y );
     }
 
     int copperLayerCount = GetBoard()->GetCopperLayerCount();
@@ -938,6 +974,22 @@ bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 }
 
 
+bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
+{
+    int max_dist = aAccuracy + ( m_Width / 2 );
+
+    auto rel_start = EuclideanNorm( aPosition - m_Start );
+    auto rel_mid = EuclideanNorm( aPosition - m_Mid );
+    auto rel_end = EuclideanNorm( aPosition - m_End );
+
+    if( rel_start <= max_dist || rel_mid <= max_dist || rel_end <= max_dist )
+        return true;
+
+    //TODO: Calculate along arc
+    return false;
+}
+
+
 bool VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
@@ -960,6 +1012,25 @@ bool TRACK::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) con
         return arect.Contains( GetStart() ) || arect.Contains( GetEnd() );
     else
         return arect.Intersects( GetStart(), GetEnd() );
+}
+
+
+bool ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    EDA_RECT box;
+    EDA_RECT arect = aRect;
+    arect.Inflate( aAccuracy );
+
+    box.SetOrigin( GetStart() );
+    box.Merge( GetMid() );
+    box.Merge( GetEnd() );
+
+    box.Inflate( GetWidth() / 2 );
+
+    if( aContained )
+        return arect.Contains( box );
+    else
+        return arect.Intersects( box );
 }
 
 
@@ -1003,6 +1074,13 @@ void TRACK::SwapData( BOARD_ITEM* aImage )
     assert( aImage->Type() == PCB_TRACE_T );
 
     std::swap( *((TRACK*) this), *((TRACK*) aImage) );
+}
+
+void ARC::SwapData( BOARD_ITEM* aImage )
+{
+    assert( aImage->Type() == PCB_ARC_T );
+
+    std::swap( *this, *static_cast<ARC*>( aImage ) );
 }
 
 void VIA::SwapData( BOARD_ITEM* aImage )

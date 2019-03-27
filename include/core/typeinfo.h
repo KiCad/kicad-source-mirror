@@ -95,6 +95,7 @@ enum KICAD_T
     PCB_MODULE_ZONE_AREA_T, ///< class ZONE_CONTAINER, managed by a footprint
     PCB_TRACE_T,            ///< class TRACK, a track segment (segment on a copper layer)
     PCB_VIA_T,              ///< class VIA, a via (like a track segment on a copper layer)
+    PCB_ARC_T,              ///< class ARC, an arc track segment on a copper layer
     PCB_MARKER_T,           ///< class MARKER_PCB, a marker used to show something
     PCB_DIMENSION_T,        ///< class DIMENSION, a dimension (graphic item)
     PCB_TARGET_T,           ///< class PCB_TARGET, a target (graphic item)

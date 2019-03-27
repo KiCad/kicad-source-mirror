@@ -1706,6 +1706,18 @@ void PCB_IO::format( TRACK* aTrack, int aNestLevel ) const
                       m_out->Quotew( m_board->GetLayerName( layer1 ) ).c_str(),
                       m_out->Quotew( m_board->GetLayerName( layer2 ) ).c_str() );
     }
+    else if( aTrack->Type() == PCB_ARC_T )
+    {
+        const ARC* arc = static_cast<const ARC*>( aTrack );
+
+        m_out->Print( aNestLevel, "(arc (start %s) (mid %s) (end %s) (width %s)",
+                FormatInternalUnits( arc->GetStart() ).c_str(),
+                FormatInternalUnits( arc->GetMid() ).c_str(),
+                FormatInternalUnits( arc->GetEnd() ).c_str(),
+                FormatInternalUnits( arc->GetWidth() ).c_str() );
+
+        m_out->Print( 0, " (layer %s)", m_out->Quotew( aTrack->GetLayerName() ).c_str() );
+    }
     else
     {
         m_out->Print( aNestLevel, "(segment (start %s) (end %s) (width %s)",
