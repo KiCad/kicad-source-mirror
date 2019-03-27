@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2014-2019 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -626,9 +627,8 @@ void SCH_DRAW_PANEL::OnCharHook( wxKeyEvent& event )
 
 void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 {
-    int localkey;
-
-    localkey = event.GetKeyCode();
+    int localkey = event.GetKeyCode();
+    bool keyWasHandled = false;
 
     switch( localkey )
     {
@@ -642,6 +642,8 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
             EndMouseCapture();
         else
             EndMouseCapture( ID_NO_TOOL_SELECTED, 0 /*m_defaultCursor*/, wxEmptyString );
+
+        keyWasHandled = true;   // The key is captured: the key event will be not skipped
         break;
     }
 
@@ -683,7 +685,8 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
 
     GetParent()->SetMousePosition( pos );
 
-    if( !GetParent()->GeneralControl( nullptr, pos, localkey ) )
+    // a Key event has to be skipped only if it is not handled:
+    if( !GetParent()->GeneralControl( nullptr, pos, localkey ) && !keyWasHandled )
         event.Skip();
 }
 
