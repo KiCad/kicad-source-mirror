@@ -22,24 +22,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <dialog_text_properties.h>
+
+#include <class_drawpanel.h>
+#include <confirm.h>
+#include <draw_graphic_text.h>
 #include <fctsys.h>
 #include <gr_basic.h>
-#include <class_drawpanel.h>
-#include <pcbnew.h>
-#include <pcb_edit_frame.h>
-#include <draw_graphic_text.h>
-#include <confirm.h>
-#include <wx/valnum.h>
-#include <pcb_layer_box_selector.h>
-#include <board_commit.h>
+
+#include <widgets/tab_traversal.h>
 #include <widgets/unit_binder.h>
+
+#include <board_commit.h>
 #include <class_board.h>
+#include <class_dimension.h>
+#include <class_module.h>
 #include <class_pcb_text.h>
 #include <class_text_mod.h>
-#include <class_module.h>
-#include <class_dimension.h>
+#include <pcb_edit_frame.h>
+#include <pcb_layer_box_selector.h>
+#include <pcbnew.h>
 
-#include <dialog_text_properties.h>
+#include <wx/valnum.h>
 
 
 /**
@@ -148,6 +152,23 @@ DIALOG_TEXT_PROPERTIES::DIALOG_TEXT_PROPERTIES( PCB_BASE_EDIT_FRAME* aParent, BO
     m_statusLine->SetFont( infoFont );
 
     m_sdbSizerOK->SetDefault();
+
+    // Tab down the left side first
+    KIUI::SetControlsTabOrder( {
+            m_LayerLabel,
+            m_LayerSelectionCtrl,
+            m_SizeXCtrl,
+            m_SizeYCtrl,
+            m_ThicknessCtrl,
+            m_PositionXCtrl,
+            m_PositionYCtrl,
+            m_Visible,
+            m_Italic,
+            m_JustifyChoice,
+            m_OrientCtrl,
+            m_Mirrored,
+            m_KeepUpright,
+    } );
 
     // wxTextCtrls fail to generate wxEVT_CHAR events when the wxTE_MULTILINE flag is set,
     // so we have to listen to wxEVT_CHAR_HOOK events instead.
