@@ -65,6 +65,8 @@ enum TreeFileType {
     TREE_REPORT,            // report file (.rpt)
     TREE_FP_PLACE,          // fooprints position (place) file (.pos)
     TREE_DRILL,             // Excellon drill file (.drl)
+    TREE_DRILL_NC,          // Similar Excellon drill file (.nc)
+    TREE_DRILL_XNC,         // Similar Excellon drill file (.xnc)
     TREE_SVG,               // SVG file (.svg)
     TREE_PAGE_LAYOUT_DESCR, // Page layout and title block descr file (.kicad_wks)
     TREE_FOOTPRINT_FILE,    // footprint file (.kicad_mod)

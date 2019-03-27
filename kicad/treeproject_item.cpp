@@ -224,6 +224,8 @@ void TREEPROJECT_ITEM::Activate( TREE_PROJECT_FRAME* aTreePrjFrame )
 
     case TREE_GERBER:
     case TREE_DRILL:
+    case TREE_DRILL_NC:
+    case TREE_DRILL_XNC:
         frame->Execute( m_parent, GERBVIEW_EXE, fullFileName );
         break;
 

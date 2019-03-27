@@ -41,7 +41,7 @@
 #include "kicad.h"
 
 
-#define     ZipFileExtension    wxT( "zip" )
+#define ZipFileExtension wxT( "zip" )
 
 
 void KICAD_MANAGER_FRAME::OnFileHistory( wxCommandEvent& event )
@@ -148,7 +148,7 @@ void KICAD_MANAGER_FRAME::OnArchiveFiles( wxCommandEvent& event )
         wxT( "*.gp1" ), wxT( "*.gp2" ),
         wxT( "*.gpb" ), wxT( "*.gpt" ),
         wxT( "*.gt?" ),
-        wxT( "*.pos" ), wxT( "*.drl" ),         // Fab files
+        wxT( "*.pos" ), wxT( "*.drl" ), wxT( "*.nc" ), wxT( "*.xnc" ),  // Fab files
         wxT( "*.d356" ), wxT( "*.rpt" ),
         wxT( "*.stp" ), wxT( "*.step" ),        // 3d files
         wxT( "*.wrl" ),
