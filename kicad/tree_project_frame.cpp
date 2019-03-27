@@ -88,6 +88,8 @@ static const wxChar* s_allowedExtensionsToList[] =
     wxT( "^.*\\.pos$" ),            // Footprint position files
     wxT( "^.*\\.cmp$" ),            // Cvpcb cmp/footprint link files
     wxT( "^.*\\.drl$" ),            // Excellon drill files
+    wxT( "^.*\\.nc$" ),             // Excellon NC drill files (alternate file ext)
+    wxT( "^.*\\.xnc$" ),            // Excellon NC drill files (alternate file ext)
     wxT( "^.*\\.svg$" ),            // SVG print/plot files
     NULL                            // end of list
 };
@@ -306,6 +308,14 @@ wxString TREE_PROJECT_FRAME::GetFileExt( TreeFileType type )
         ext = DrillFileExtension;
         break;
 
+    case TREE_DRILL_NC:
+        ext = "nc";
+        break;
+
+    case TREE_DRILL_XNC:
+        ext = "xnc";
+        break;
+
     case TREE_SVG:
         ext = SVGFileExtension;
         break;
@@ -385,6 +395,8 @@ wxString TREE_PROJECT_FRAME::GetFileWildcard( TreeFileType type )
         break;
 
     case TREE_DRILL:
+    case TREE_DRILL_NC:
+    case TREE_DRILL_XNC:
         ext = DrillFileWildcard();
         break;
 

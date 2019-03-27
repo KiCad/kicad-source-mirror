@@ -303,11 +303,12 @@ bool GERBVIEW_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             SetActiveLayer( layer );
 
             // Try to guess the type of file by its ext
-            // if it is .drl (Kicad files), it is a drill file
+            // if it is .drl (Kicad files), .nc or .xnc it is a drill file
             wxFileName fn( aFileSet[i] );
             wxString ext = fn.GetExt();
 
-            if( ext == DrillFileExtension )     // In Excellon format
+            if( ext == DrillFileExtension ||    // our Excellon format
+                ext == "nc" || ext == "xnc" )   // alternate ext for Excellon format
                 LoadExcellonFiles( aFileSet[i] );
             else if( ext == GerberJobFileExtension )
                 LoadGerberJobFile( aFileSet[i] );
