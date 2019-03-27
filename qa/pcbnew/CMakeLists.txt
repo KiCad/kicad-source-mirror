@@ -61,10 +61,9 @@ target_link_libraries( qa_pcbnew
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    common
-    pcbcommon
     legacy_wx
     gal
+    common
     qa_utils
     lib_dxf
     idf3

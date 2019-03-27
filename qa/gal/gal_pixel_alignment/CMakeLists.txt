@@ -63,36 +63,17 @@ include_directories(
 )
 
 target_link_libraries( test_gal_pixel_alignment
+    qa_pcbnew_utils
     polygon
     pnsrouter
-    common
     pcbcommon
-    bitmaps
-    polygon
-    pnsrouter
-    common
-    pcbcommon
-    bitmaps
-    polygon
-    pnsrouter
-    common
-    pcbcommon
-    legacy_gal
-    bitmaps
-    polygon
-    pnsrouter
-    common
-    pcbcommon
-    3d-viewer
-    bitmaps
-    gal
     pcad2kicadpcb
-    common
-    pcbcommon
+    bitmaps
+    3d-viewer
+    gal
     legacy_gal
-    ${GITHUB_PLUGIN_LIBRARIES}
     common
-    pcbcommon
+    ${GITHUB_PLUGIN_LIBRARIES}
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

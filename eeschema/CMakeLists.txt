@@ -320,18 +320,9 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
 target_link_libraries( eeschema
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
-    common
     gal
     legacy_gal
     common
-    gal
-    legacy_gal
-    common
-    gal
-    legacy_gal
-    common
-    gal
-    legacy_gal
     ${wxWidgets_LIBRARIES}
     )
 
@@ -341,18 +332,9 @@ add_library( eeschema_kiface SHARED
     ${EESCHEMA_COMMON_SRCS}
     )
 target_link_libraries( eeschema_kiface
-    common
     gal
     legacy_gal
     common
-    gal
-    legacy_gal
-    common
-    gal
-    legacy_gal
-    common
-    gal
-    legacy_gal
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

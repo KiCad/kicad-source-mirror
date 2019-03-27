@@ -62,26 +62,13 @@ include_directories(
 )
 
 target_link_libraries( test_window
+    pcad2kicadpcb
     pnsrouter
-    common
-    pcbcommon
-    pnsrouter
-    common
-    pcbcommon
-    pnsrouter
-    common
-    pcbcommon
-    pnsrouter
-    common
     pcbcommon
     3d-viewer
     gal
-    pcad2kicadpcb
     common
-    pcbcommon
     ${GITHUB_PLUGIN_LIBRARIES}
-    common
-    pcbcommon
     ${Boost_FILESYSTEM_LIBRARY}
     ${Boost_SYSTEM_LIBRARY}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}

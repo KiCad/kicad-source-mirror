@@ -80,18 +80,9 @@ set_source_files_properties( ../common/single_top.cpp PROPERTIES
 target_link_libraries( pl_editor
     #singletop  # replaces common, giving us restrictive control and link warnings.
     # There's way too much crap coming in from common yet.
-    common
-    gal
     legacy_wx
-    common
     gal
-    legacy_wx
     common
-    gal
-    legacy_wx
-    common
-    gal
-    legacy_wx
     ${wxWidgets_LIBRARIES}
     )
 
@@ -108,15 +99,9 @@ add_library( pl_editor_kiface MODULE
     ${PL_EDITOR_EXTRA_SRCS}
     )
 target_link_libraries( pl_editor_kiface
-    common
-    gal
     legacy_wx
-    common
     gal
-    legacy_wx
     common
-    gal
-    legacy_wx
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )

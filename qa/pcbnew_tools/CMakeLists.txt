@@ -49,13 +49,12 @@ target_link_libraries( qa_pcbnew_tools
     pcbcommon
     pnsrouter
     pcad2kicadpcb
-    common
-    pcbcommon
     legacy_wx
     gal
-    qa_utils
     lib_dxf
     idf3
+    common
+    qa_utils
     unit_test_utils
     ${wxWidgets_LIBRARIES}
     ${GITHUB_PLUGIN_LIBRARIES}
