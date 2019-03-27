@@ -15,5 +15,7 @@ Licensed under BOOSTv1:
 - libcontext [https://github.com/boostorg/context], sources in common/system/libcontext.cpp
 Licensed under ISC:
 - portions of code in include/geometry/polygon_triangulation.h
+Licensed under CC-BY-SA-4.0:
+- All the demo files provided in demos/*
 Licensed under GPLv3 (or later):
 - All remaining code not listed above
