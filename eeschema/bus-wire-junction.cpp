@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jean-pierre.charras@gipsa-lab.inpg.fr
- * Copyright (C) 2004-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,8 +208,8 @@ void SCH_EDIT_FRAME::BeginSegment( int type )
     {
         SCH_LINE* prevSegment = segment->Back();
 
-        // Be aware prevSegment can be null when the horizontal and vertical lines only switch is off
-        // when we create the first segment.
+        // Be aware prevSegment can be null when the horizontal and vertical lines only switch
+        // is off when we create the first segment.
 
         if( !GetForceHVLines() )
         {
@@ -618,7 +618,10 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aAppend )
                 SCH_LINE*   line = NULL;
                 bool needed = false;
 
-                if( !secondLine->IsParallel( firstLine ) )
+                if( !secondLine->IsParallel( firstLine )
+                  || secondLine->GetLineStyle() != firstLine->GetLineStyle()
+                  || secondLine->GetLineColor() != firstLine->GetLineColor()
+                  || secondLine->GetLineSize() != firstLine->GetLineSize() )
                     continue;
 
                 // Remove identical lines
