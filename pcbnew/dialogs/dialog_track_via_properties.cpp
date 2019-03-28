@@ -282,7 +282,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
     else
         m_lockedCbox->Set3StateValue( wxCHK_UNCHECKED );
 
-    SetInitialFocus( m_tracks ? m_TrackStartXCtrl : m_ViaXCtrl );
+    SetInitialFocus( m_tracks ? m_TrackWidthCtrl : m_ViaDiameterCtrl );
 
     m_StdButtonsOK->SetDefault();
 
