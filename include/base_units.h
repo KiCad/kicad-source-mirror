@@ -44,7 +44,7 @@
  * Used for holding indeterminate values, such as with multiple selections
  * holding different values or controls which do not wish to set a value.
  */
-#define INDETERMINATE wxString( "<...>" )
+#define INDETERMINATE wxString( "..." )
 
 
 /// Convert mm to mils.
