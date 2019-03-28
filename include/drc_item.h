@@ -79,6 +79,13 @@ public:
     }
 
 
+    DRC_ITEM( int aErrorCode, const wxString& aMainText )
+    {
+        SetData( aErrorCode, aMainText, wxPoint() );
+        SetShowNoCoordinate();
+    }
+
+
     /**
      * Function SetData
      * initialize all data in item

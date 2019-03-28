@@ -713,12 +713,12 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
             ID_MENU_PCB_FLIP_VIEW
         };
 
-        bool enbl = IsGalCanvasActive();
+        bool enable = IsGalCanvasActive();
 
-        for( unsigned ii = 0; ii < arrayDim( id_list ); ii++ )
+        for( auto& id : id_list )
         {
-            if( GetMenuBar()->FindItem( id_list[ii] ) )
-                GetMenuBar()->FindItem( id_list[ii] )->Enable( enbl );
+            if( GetMenuBar()->FindItem( id ) )
+                GetMenuBar()->FindItem( id )->Enable( enable );
         }
 
         // Update settings for GAL menus
@@ -1112,12 +1112,13 @@ void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 
     switch( event.GetId() )
     {
-    case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER ); break;
-    case ID_GEN_PLOT_DXF:    plotSettings.SetFormat( PLOT_FORMAT_DXF );    break;
-    case ID_GEN_PLOT_HPGL:   plotSettings.SetFormat( PLOT_FORMAT_HPGL );   break;
-    case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );    break;
-    case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );   break;
-    case ID_GEN_PLOT_SVG:    wxFAIL_MSG( "Should have gone to ExportSVG()" );  break;
+    case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER );   break;
+    case ID_GEN_PLOT_DXF:    plotSettings.SetFormat( PLOT_FORMAT_DXF );      break;
+    case ID_GEN_PLOT_HPGL:   plotSettings.SetFormat( PLOT_FORMAT_HPGL );     break;
+    case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );      break;
+    case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );     break;
+    case ID_GEN_PLOT_SVG:    wxFAIL_MSG( "Must be handled by ExportSVG()" ); break;
+    default:                 wxFAIL_MSG( "Unknown plot type" );              break;
     }
 
     SetPlotSettings( plotSettings );
@@ -1183,20 +1184,20 @@ bool PCB_EDIT_FRAME::FetchNetlistFromSchematic( NETLIST& aNetlist, FETCH_NETLIST
         wxFileName schfn( Prj().GetProjectPath(), Prj().GetProjectName(), SchematicFileExtension );
 
         frame->OpenProjectFiles( std::vector<wxString>( 1, schfn.GetFullPath() ) );
-        // Because the schematic editor frame is not on screen, iconize it:
-        // However, another valid option is to do not iconize the schematic editor frame
-        // and show it
-        frame->Iconize( true );
+
         // we show the schematic editor frame, because do not show is seen as
         // a not yet opened schematic by Kicad manager, which is not the case
         frame->Show( true );
+
+        // bring ourselves back to the front
+        Raise();
     }
 
     std::string payload;
 
     if( aMode == NO_ANNOTATION )
         payload = "no-annotate";
-    else if( aMode = QUIET_ANNOTATION )
+    else if( aMode == QUIET_ANNOTATION )
         payload = "quiet-annotate";
 
     Kiway().ExpressMail( FRAME_SCH, MAIL_SCH_GET_NETLIST, payload, this );

@@ -48,6 +48,7 @@
 
 #include <dialog_netlist.h>
 #include <wx_html_report_panel.h>
+#include <drc.h>
 
 #define NETLIST_FILTER_MESSAGES_KEY wxT("NetlistReportFilterMsg")
 #define NETLIST_UPDATEFOOTPRINTS_KEY wxT("NetlistUpdateFootprints")
@@ -182,106 +183,44 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
         return;
     }
 
-    // Lists of duplicates, missing references and not in netlist footprints:
-    std::vector <MODULE*> duplicate;
-    wxArrayString missing;
-    std::vector <MODULE*> notInNetlist;
-    wxString netlistFilename = m_NetlistFilenameCtrl->GetValue();
+    wxString        netlistFilename = m_NetlistFilenameCtrl->GetValue();
+    NETLIST_READER* netlistReader;
+    NETLIST         netlist;
+    wxBusyCursor    dummy;         // Shows an hourglass while calculating.
 
-    if( !verifyFootprints( netlistFilename, wxEmptyString, duplicate, missing, notInNetlist ) )
+    try
+    {
+        netlistReader = NETLIST_READER::GetNetlistReader( &netlist, netlistFilename, "" );
+
+        if( netlistReader == NULL )
+        {
+            wxString msg = wxString::Format( _( "Cannot open netlist file \"%s\"." ),
+                                             netlistFilename );
+            wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR );
+            return;
+        }
+
+        std::unique_ptr< NETLIST_READER > nlr( netlistReader );
+        netlistReader->LoadNetlist();
+
+        m_parent->SetLastNetListRead( netlistFilename );
+    }
+    catch( const IO_ERROR& ioe )
+    {
+        wxString msg = wxString::Format( _( "Error loading netlist file:\n%s" ),
+                                         ioe.What().GetData() );
+        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
         return;
-
-    #define ERR_CNT_MAX 100 // Max number of errors to output in dialog
-                            // to avoid a too long message list
-
-    wxString list;          // The messages to display
-
-    m_parent->SetLastNetListRead( netlistFilename );
-
-    int err_cnt = 0;
-
-    // Search for duplicate footprints.
-    if( duplicate.size() == 0 )
-        list << wxT("<p><b>") << _( "No duplicate." ) << wxT("</b></p>");
-    else
-    {
-        list << wxT("<p><b>") << _( "Duplicates:" ) << wxT("</b></p>");
-
-        for( unsigned ii = 0; ii < duplicate.size(); ii++ )
-        {
-            MODULE* module = duplicate[ii];
-
-            if( module->GetReference().IsEmpty() )
-                list << wxT("<br>") << wxT("[noref)");
-            else
-                list << wxT("<br>") << module->GetReference();
-
-            list << wxT("  (<i>") << module->GetValue() << wxT("</i>)");
-            list << wxT(" @ ");
-            list << MessageTextFromValue( m_units, module->GetPosition().x ),
-            list << wxT(", ") << MessageTextFromValue( m_units, module->GetPosition().y ),
-            err_cnt++;
-
-            if( ERR_CNT_MAX < err_cnt )
-                break;
-        }
-    }
-
-    // Search for missing modules on board.
-    if( missing.size() == 0 )
-        list << wxT("<p><b>") <<  _( "No missing footprints." ) << wxT("</b></p>");
-    else
-    {
-        list << wxT("<p><b>") << _( "Missing:" ) << wxT("</b></p>");
-
-        for( unsigned ii = 0; ii < missing.size(); ii += 2 )
-        {
-            list << wxT("<br>") << missing[ii];
-            list << wxT("  (<i>") << missing[ii+1] << wxT("</i>)");
-            err_cnt++;
-
-            if( ERR_CNT_MAX < err_cnt )
-                break;
-        }
-    }
-
-
-    // Search for modules found on board but not in net list.
-    if( notInNetlist.size() == 0 )
-        list << wxT( "<p><b>" ) << _( "No extra footprints." ) << wxT( "</b></p>" );
-    else
-    {
-        list << wxT( "<p><b>" ) << _( "Not in Netlist:" ) << wxT( "</b></p>" );
-
-        for( unsigned ii = 0; ii < notInNetlist.size(); ii++ )
-        {
-            MODULE* module = notInNetlist[ii];
-
-            if( module->GetReference().IsEmpty() )
-                list << wxT( "<br>" ) << wxT( "[noref)" );
-            else
-                list << wxT( "<br>" ) << module->GetReference() ;
-
-            list << wxT( " (<i>" ) << module->GetValue() << wxT( "</i>)" );
-            list << wxT( " @ " );
-            list << MessageTextFromValue( m_units, module->GetPosition().x ),
-            list << wxT( ", " ) << MessageTextFromValue( m_units, module->GetPosition().y ),
-            err_cnt++;
-
-            if( ERR_CNT_MAX < err_cnt )
-                break;
-        }
-    }
-
-    if( ERR_CNT_MAX < err_cnt )
-    {
-        list << wxT( "<p><b>" )
-             << _( "Too many errors: some are skipped" )
-             << wxT( "</b></p>" );
     }
 
     HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
-    dlg.AddHTML_Text( list );
+    DRC_LIST drcItems;
+
+    DRC::TestFootprints( netlist, m_parent->GetBoard(), GetUserUnits(), drcItems );
+
+    for( DRC_ITEM* item : drcItems )
+        dlg.AddHTML_Text( item->ShowHtml( GetUserUnits() ) );
+
     dlg.ShowModal();
 }
 
@@ -339,91 +278,6 @@ void DIALOG_NETLIST::OnCompileRatsnestClick( wxCommandEvent& event )
 void DIALOG_NETLIST::OnUpdateUIValidNetlistFile( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( !m_NetlistFilenameCtrl->GetValue().IsEmpty() );
-}
-
-
-bool DIALOG_NETLIST::verifyFootprints( const wxString&         aNetlistFilename,
-                                       const wxString &        aCmpFilename,
-                                       std::vector< MODULE* >& aDuplicates,
-                                       wxArrayString&          aMissing,
-                                       std::vector< MODULE* >& aNotInNetlist )
-{
-    wxString        msg;
-    MODULE*         module;
-    MODULE*         nextModule;
-    NETLIST         netlist;
-    wxBusyCursor    dummy;           // Shows an hourglass while calculating.
-    NETLIST_READER* netlistReader;
-    COMPONENT*      component;
-
-    try
-    {
-        netlistReader = NETLIST_READER::GetNetlistReader( &netlist, aNetlistFilename,
-                                                          aCmpFilename );
-
-        if( netlistReader == NULL )
-        {
-            msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aNetlistFilename ) );
-            wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR );
-            return false;
-        }
-
-        std::unique_ptr< NETLIST_READER > nlr( netlistReader );
-        netlistReader->LoadNetlist();
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        msg.Printf( _( "Error loading netlist file:\n%s" ), ioe.What().GetData() );
-        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
-        return false;
-    }
-
-    BOARD* pcb = m_parent->GetBoard();
-
-    // Search for duplicate footprints.
-    module = pcb->m_Modules;
-
-    for( ; module != NULL; module = module->Next() )
-    {
-        nextModule = module->Next();
-
-        for( ; nextModule != NULL; nextModule = nextModule->Next() )
-        {
-            if( module->GetReference().CmpNoCase( nextModule->GetReference() ) == 0 )
-            {
-                aDuplicates.push_back( module );
-                break;
-            }
-        }
-    }
-
-    // Search for component footprints in the netlist but not on the board.
-    for( unsigned ii = 0; ii < netlist.GetCount(); ii++ )
-    {
-        component = netlist.GetComponent( ii );
-
-        module = pcb->FindModuleByReference( component->GetReference() );
-
-        if( module == NULL )
-        {
-            aMissing.Add( component->GetReference() );
-            aMissing.Add( component->GetValue() );
-        }
-    }
-
-    // Search for component footprints found on board but not in netlist.
-    module = pcb->m_Modules;
-
-    for( ; module != NULL; module = module->Next() )
-    {
-
-        component = netlist.GetComponentByReference( module->GetReference() );
-
-        if( component == NULL )
-            aNotInNetlist.push_back( module );
-    }
-
-    return true;
 }
 
 

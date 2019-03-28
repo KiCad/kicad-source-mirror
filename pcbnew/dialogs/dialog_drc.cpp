@@ -51,8 +51,9 @@
  */
 
 // Keywords for read and write config
-#define RefillZonesBeforeDrcKey        wxT( "RefillZonesBeforeDrc" )
-#define DrcTrackToZoneTestKey        wxT( "DrcTrackToZoneTest" )
+#define DrcRefillZonesKey        wxT( "RefillZonesBeforeDrc" )
+#define DrcTrackToZoneTestKey    wxT( "DrcTrackToZoneTest" )
+#define DrcTestFootprintsKey     wxT( "DrcTestFootprints" )
 
 
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
@@ -76,7 +77,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
     // We use a sdbSizer here to get the order right, which is platform-dependent
     m_sdbSizer1OK->SetLabel( _( "Run DRC" ) );
-    m_sdbSizer1Apply->SetLabel( _( "List Unconnected" ) );
     m_sdbSizer1Cancel->SetLabel( _( "Close" ) );
     m_sizerButtons->Layout();
 
@@ -93,6 +93,10 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ), NULL, this );
     m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+    m_FootprintsListBox->Connect( ID_FOOTPRINTS_LIST, wxEVT_LEFT_DCLICK,
+                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ), NULL, this );
+    m_FootprintsListBox->Connect( ID_FOOTPRINTS_LIST, wxEVT_RIGHT_UP,
+                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ), NULL, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -101,8 +105,9 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
 DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 {
-    m_config->Write( RefillZonesBeforeDrcKey, m_cbRefillZones->GetValue() );
+    m_config->Write( DrcRefillZonesKey, m_cbRefillZones->GetValue() );
     m_config->Write( DrcTrackToZoneTestKey, m_cbReportTracksToZonesErrors->GetValue() );
+    m_config->Write( DrcTestFootprintsKey, m_cbTestFootprints->GetValue() );
 
     // Disconnect events
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
@@ -110,9 +115,13 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
                                     wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ), NULL, this );
     m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ), NULL, this );
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ), NULL, this );
     m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+    m_FootprintsListBox->Disconnect( ID_FOOTPRINTS_LIST, wxEVT_LEFT_DCLICK,
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ), NULL, this );
+    m_FootprintsListBox->Disconnect( ID_FOOTPRINTS_LIST, wxEVT_RIGHT_UP,
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ), NULL, this );
 }
 
 
@@ -149,6 +158,7 @@ void DIALOG_DRC_CONTROL::InitValues()
 {
     m_markersTitleTemplate = m_Notebook->GetPageText( 0 );
     m_unconnectedTitleTemplate = m_Notebook->GetPageText( 1 );
+    m_footprintsTitleTemplate = m_Notebook->GetPageText( 2 );
 
     m_DeleteCurrentMarkerButton->Enable( false );
 
@@ -156,10 +166,12 @@ void DIALOG_DRC_CONTROL::InitValues()
 
     // read options
     bool value;
-    m_config->Read( RefillZonesBeforeDrcKey, &value, false );
+    m_config->Read( DrcRefillZonesKey, &value, false );
     m_cbRefillZones->SetValue( value );
     m_config->Read( DrcTrackToZoneTestKey, &value, false );
     m_cbReportTracksToZonesErrors->SetValue( value );
+    m_config->Read( DrcTestFootprintsKey, &value, false );
+    m_cbTestFootprints->SetValue( value );
 
     Layout();      // adding the units above expanded Clearance text, now resize.
 
@@ -213,14 +225,13 @@ void DIALOG_DRC_CONTROL::OnStartdrcClick( wxCommandEvent& event )
     }
 
     SetDrcParmeters();
-    m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                           true,        // unconnected pads DRC test enabled
-                           // DRC test for zones enabled/disabled:
-                           m_cbReportTracksToZonesErrors->GetValue(),
-                           true,        // DRC test for keepout areas enabled
-                           m_cbRefillZones->GetValue(),
-                           m_cbReportAllTrackErrors->GetValue(),
-                           reportName, make_report );
+    m_tester->m_doZonesTest            = m_cbReportTracksToZonesErrors->GetValue();
+    m_tester->m_rptFilename            = reportName;
+    m_tester->m_doCreateRptFile        = make_report;
+    m_tester->m_refillZones            = m_cbRefillZones->GetValue();
+    m_tester->m_drcInLegacyRoutingMode = false;
+    m_tester->m_reportAllTrackErrors   = m_cbReportAllTrackErrors->GetValue();
+    m_tester->m_testFootprints         = m_cbTestFootprints->GetValue();
 
     DelDRCMarkers();
 
@@ -261,71 +272,6 @@ void DIALOG_DRC_CONTROL::OnDeleteAllClick( wxCommandEvent& event )
     DelDRCMarkers();
     RedrawDrawPanel();
     UpdateDisplayedCounts();
-}
-
-
-void DIALOG_DRC_CONTROL::OnListUnconnectedClick( wxCommandEvent& event )
-{
-    wxString reportName, msg;
-
-    bool make_report = m_CreateRptCtrl->IsChecked();
-
-    if( make_report )      // Create a file rpt
-    {
-        reportName = m_RptFilenameCtrl->GetValue();
-
-        if( reportName.IsEmpty() )
-        {
-            wxCommandEvent junk;
-            OnButtonBrowseRptFileClick( junk );
-        }
-
-        if( !reportName.IsEmpty() )
-            reportName = makeValidFileNameReport();
-    }
-
-    SetDrcParmeters();
-
-    m_tester->SetSettings( true,        // Pad to pad DRC test enabled
-                           true,        // unconnected pads DRC test enabled
-                           true,        // DRC test for zones enabled
-                           true,        // DRC test for keepout areas enabled
-                           m_cbRefillZones->GetValue(),
-                           m_cbReportAllTrackErrors->GetValue(),
-                           reportName, make_report );
-
-    DelDRCMarkers();
-
-    wxBeginBusyCursor();
-
-    m_Messages->Clear();
-    m_tester->ListUnconnectedPads();
-
-    m_Notebook->ChangeSelection( 1 );       // display the "Unconnected" tab
-
-    // Generate the report
-    if( !reportName.IsEmpty() )
-    {
-        if( writeReport( reportName ) )
-        {
-            msg.Printf( _( "Report file \"%s\" created" ), GetChars( reportName ) );
-            wxMessageDialog popupWindow( this, msg, _( "Disk File Report Completed" ) );
-            popupWindow.ShowModal();
-        }
-        else
-        {
-            msg.Printf( _( "Unable to create report file \"%s\"" ), GetChars( reportName ) );
-            DisplayError( this, msg );
-        }
-    }
-
-    UpdateDisplayedCounts();
-
-    wxEndBusyCursor();
-
-    /* there is currently nothing visible on the DrawPanel for unconnected pads
-     *  RedrawDrawPanel();
-     */
 }
 
 
@@ -409,6 +355,17 @@ void DIALOG_DRC_CONTROL::OnLeftDClickClearance( wxMouseEvent& event )
 }
 
 
+void DIALOG_DRC_CONTROL::OnRightUpFootprints( wxMouseEvent& event )
+{
+    // popup menu to go to either of the items listed in the DRC_ITEM.
+
+    int selection = m_FootprintsListBox->GetSelection();
+
+    if( selection != wxNOT_FOUND )
+        doSelectionMenu( m_FootprintsListBox->GetItem( selection ) );
+}
+
+
 void DIALOG_DRC_CONTROL::OnRightUpUnconnected( wxMouseEvent& event )
 {
     // popup menu to go to either of the items listed in the DRC_ITEM.
@@ -444,6 +401,37 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     WINDOW_THAWER thawer( m_brdEditor );
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
     m_brdEditor->GetCanvas()->Refresh();
+}
+
+
+void DIALOG_DRC_CONTROL::OnLeftDClickFootprints( wxMouseEvent& event )
+{
+    event.Skip();
+
+    int selection = m_FootprintsListBox->GetSelection();
+
+    if( selection != wxNOT_FOUND )
+    {
+        // Find the selected DRC_ITEM in the listbox, position cursor there.
+        // Then hide the dialog.
+        const DRC_ITEM* item = m_FootprintsListBox->GetItem( selection );
+        if( item )
+        {
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), true, center );
+
+            if( !IsModal() )
+            {
+                Show( false );
+
+                // We do not want the clarify selection popup when releasing the
+                // left button in the main window
+                m_brdEditor->SkipNextLeftButtonReleaseEvent();
+            }
+        }
+    }
 }
 
 
@@ -484,7 +472,8 @@ void DIALOG_DRC_CONTROL::OnLeftDClickUnconnected( wxMouseEvent& event )
 void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
 {
     // Shouldn't be necessary, but is on at least OSX
-    m_Notebook->ChangeSelection( event.GetSelection() );
+    if( event.GetSelection() >= 0 )
+        m_Notebook->ChangeSelection( (unsigned) event.GetSelection() );
 
     m_DeleteCurrentMarkerButton->Enable( false );
     m_ClearanceListBox->SetSelection( -1 );
@@ -533,6 +522,32 @@ void DIALOG_DRC_CONTROL::OnUnconnectedSelectionEvent( wxCommandEvent& event )
 
         // Find the selected DRC_ITEM in the listbox, position cursor there.
         const DRC_ITEM* item = m_UnconnectedListBox->GetItem( selection );
+
+        if( item )
+        {
+            // When selecting a item, center it on GAL and just move the graphic
+            // cursor in legacy mode gives the best result
+            bool center = m_brdEditor->IsGalCanvasActive() ? true : false;
+            m_brdEditor->FocusOnLocation( item->GetPointA(), false, center );
+            RedrawDrawPanel();
+        }
+    }
+
+    event.Skip();
+}
+
+
+void DIALOG_DRC_CONTROL::OnFootprintsSelectionEvent( wxCommandEvent& event )
+{
+    int selection = event.GetSelection();
+
+    if( selection != wxNOT_FOUND )
+    {
+        // until a MARKER is selected, this button is not enabled.
+        m_DeleteCurrentMarkerButton->Enable( true );
+
+        // Find the selected DRC_ITEM in the listbox, position cursor there.
+        const DRC_ITEM* item = m_FootprintsListBox->GetItem( selection );
 
         if( item )
         {
@@ -667,10 +682,37 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 
 void DIALOG_DRC_CONTROL::UpdateDisplayedCounts()
 {
-    int marker_count = m_ClearanceListBox->GetItemCount();
-    int unconnected_count = m_UnconnectedListBox->GetItemCount();
+    wxString msg;
 
-    m_Notebook->SetPageText( 0, wxString::Format( m_markersTitleTemplate, marker_count ) );
-    m_Notebook->SetPageText( 1, wxString::Format( m_unconnectedTitleTemplate, unconnected_count ) );
+    if( m_tester->m_drcRun )
+    {
+        msg.sprintf( m_markersTitleTemplate, (int) m_ClearanceListBox->GetItemCount() );
+        m_Notebook->SetPageText( 0, msg );
 
+        msg.sprintf( m_unconnectedTitleTemplate, (int) m_UnconnectedListBox->GetItemCount() );
+        m_Notebook->SetPageText( 1, msg );
+
+        if( m_tester->m_footprintsTested )
+            msg.sprintf( m_footprintsTitleTemplate, (int) m_FootprintsListBox->GetItemCount() );
+        else
+        {
+            msg = m_footprintsTitleTemplate;
+            msg.Replace( wxT( "%d" ), _( "not run" ) );
+        }
+        m_Notebook->SetPageText( 2, msg );
+    }
+    else
+    {
+        msg = m_markersTitleTemplate;
+        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        m_Notebook->SetPageText( 0, msg );
+
+        msg = m_unconnectedTitleTemplate;
+        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        m_Notebook->SetPageText( 1, msg );
+
+        msg = m_footprintsTitleTemplate;
+        msg.Replace( wxT( "(%d)" ), wxEmptyString );
+        m_Notebook->SetPageText( 2, msg );
+    }
 }

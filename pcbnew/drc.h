@@ -99,6 +99,9 @@
 #define DRCE_DRILLED_HOLES_TOO_CLOSE           51   ///< overlapping drilled holes break drill bits
 #define DRCE_TRACK_NEAR_EDGE                   53   ///< track too close to board edge
 #define DRCE_INVALID_OUTLINE                   54   ///< invalid board outline
+#define DRCE_MISSING_FOOTPRINT                 55   ///< footprint not found for netlist item
+#define DRCE_DUPLICATE_FOOTPRINT               56   ///< more than one footprints found for netlist item
+#define DRCE_EXTRA_FOOTPRINT                   57   ///< netlist item not found for footprint
 
 #define DRCE_SHORT                             58
 #define DRCE_REDUNDANT_VIA                     59
@@ -122,6 +125,7 @@ class DRC_ITEM;
 class NETCLASS;
 class EDA_TEXT;
 class DRAWSEGMENT;
+class NETLIST;
 class wxWindow;
 class wxString;
 class wxTextCtrl;
@@ -195,7 +199,7 @@ private:
     bool     m_doCreateRptFile;         // enable creating a report file
     bool     m_refillZones;             // refill zones if requested (by user).
     bool     m_reportAllTrackErrors;    // Report all tracks errors (or only 4 first errors)
-    bool     m_do;
+    bool     m_testFootprints;          // Test footprints against schematic
 
     wxString m_rptFilename;
 
@@ -239,6 +243,9 @@ private:
     DRC_MARKER_FACTORY  m_markerFactory; ///< Class that generates markers
 
     DRC_LIST            m_unconnected;      ///< list of unconnected pads, as DRC_ITEMs
+    DRC_LIST            m_footprints;       ///< list of footprint warnings, as DRC_ITEMs
+    bool                m_drcRun;
+    bool                m_footprintsTested;
 
 
     /**
@@ -453,6 +460,13 @@ public:
     int TestZoneToZoneOutline( ZONE_CONTAINER* aZone, bool aCreateMarkers );
 
     /**
+     * Test the board footprints against a netlist.  Will report DRCE_MISSING_FOOTPRINT,
+     * DRCE_DUPLICATE_FOOTPRINT and DRCE_EXTRA_FOOTPRINT errors in aDRCList.
+     */
+    static void TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
+                                DRC_LIST& aDRCList );
+
+    /**
      * Open a dialog and prompts the user, then if a test run button is
      * clicked, runs the test(s) and creates the MARKERS.  The dialog is only
      * created if it is not already in existence.
@@ -477,48 +491,12 @@ public:
      */
     void DestroyDRCDialog( int aReason );
 
-
-    /**
-     * Save all the UI or test settings and may be called before running the tests.
-     *
-     * @param aPad2PadTest Tells whether to test pad to pad distances.
-     * @param aUnconnectedTest Tells whether to list unconnected pads.
-     * @param aZonesTest Tells whether to test zones.
-     * @param aRefillZones Refill zones before performing DRC.
-     * @param aKeepoutTest Tells whether to test keepout areas.
-     * @param aReportAllTrackErrors Tells whether or not to stop checking track connections after the first error.
-     * @param aReportName A string telling the disk file report name entered.
-     * @param aSaveReport A boolean telling whether to generate disk file report.
-     */
-    void SetSettings( bool aPad2PadTest, bool aUnconnectedTest,
-                      bool aZonesTest, bool aKeepoutTest, bool aRefillZones,
-                      bool aReportAllTrackErrors,
-                      const wxString& aReportName, bool aSaveReport )
-    {
-        m_doPad2PadTest         = aPad2PadTest;
-        m_doUnconnectedTest     = aUnconnectedTest;
-        m_doZonesTest           = aZonesTest;
-        m_doKeepoutTest         = aKeepoutTest;
-        m_rptFilename           = aReportName;
-        m_doCreateRptFile       = aSaveReport;
-        m_refillZones           = aRefillZones;
-        m_drcInLegacyRoutingMode = false;
-        m_reportAllTrackErrors  = aReportAllTrackErrors;
-    }
-
-
     /**
      * Run all the tests specified with a previous call to
      * SetSettings()
      * @param aMessages = a wxTextControl where to display some activity messages. Can be NULL
      */
     void RunTests( wxTextCtrl* aMessages = NULL );
-
-    /**
-     * Gather a list of all the unconnected pads and shows them in the
-     * dialog, and optionally prints a report of such.
-     */
-    void ListUnconnectedPads();
 
     /**
      * @return a pointer to the current marker (last created marker

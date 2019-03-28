@@ -49,8 +49,10 @@
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 
+#include <kiface_i.h>
 #include <pcbnew.h>
 #include <drc.h>
+#include <pcb_netlist.h>
 
 #include <dialog_drc.h>
 #include <wx/progdlg.h>
@@ -144,8 +146,12 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
     m_doKeepoutTest = true;             // enable keepout areas to items clearance tests
     m_refillZones = false;              // Only fill zones if requested by user.
     m_reportAllTrackErrors = false;
-    m_doCreateRptFile = false;
+    m_testFootprints = false;
 
+    m_drcRun = false;
+    m_footprintsTested = false;
+
+    m_doCreateRptFile = false;
     // m_rptFilename set to empty by its constructor
 
     m_currentMarker = NULL;
@@ -164,9 +170,11 @@ DRC::DRC( PCB_EDIT_FRAME* aPcbWindow )
 
 DRC::~DRC()
 {
-    // maybe someday look at pointainer.h  <- google for "pointainer.h"
-    for( unsigned i = 0; i<m_unconnected.size();  ++i )
-        delete m_unconnected[i];
+    for( DRC_ITEM* unconnectedItem : m_unconnected )
+        delete unconnectedItem;
+
+    for( DRC_ITEM* footprintItem : m_footprints )
+        delete footprintItem;
 }
 
 
@@ -509,7 +517,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
     // find and gather vias, tracks, pads inside text boxes.
     if( aMessages )
     {
-        aMessages->AppendText( _( "Test texts...\n" ) );
+        aMessages->AppendText( _( "Text and graphic clearances...\n" ) );
         wxSafeYield();
     }
 
@@ -528,6 +536,30 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         doFootprintOverlappingDrc();
     }
 
+    for( DRC_ITEM* footprintItem : m_footprints )
+        delete footprintItem;
+
+    m_footprints.clear();
+    m_footprintsTested = false;
+
+    if( m_testFootprints && !Kiface().IsSingle() )
+    {
+        if( aMessages )
+        {
+            aMessages->AppendText( _( "Checking footprints against schematic...\n" ) );
+            aMessages->Refresh();
+        }
+
+        NETLIST netlist;
+        m_pcbEditorFrame->FetchNetlistFromSchematic( netlist, PCB_EDIT_FRAME::ANNOTATION_DIALOG );
+
+        if( m_drcDialog )
+            m_drcDialog->Raise();
+
+        TestFootprints( netlist, m_pcb, m_drcDialog->GetUserUnits(), m_footprints );
+        m_footprintsTested = true;
+    }
+
     // Check if there are items on disabled layers
     testDisabledLayers();
 
@@ -536,6 +568,8 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         aMessages->AppendText( _( "Items on disabled layers...\n" ) );
         aMessages->Refresh();
     }
+
+    m_drcRun = true;
 
     // update the m_drcDialog listboxes
     updatePointers();
@@ -546,15 +580,6 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         // to unnecessarily scroll.
         aMessages->AppendText( _( "Finished" ) );
     }
-}
-
-
-void DRC::ListUnconnectedPads()
-{
-    testUnconnected();
-
-    // update the m_drcDialog listboxes
-    updatePointers();
 }
 
 
@@ -569,6 +594,8 @@ void DRC::updatePointers()
                 m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_MARKERS( m_pcb ) );
         m_drcDialog->m_UnconnectedListBox->SetList(
                 m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_GENERIC( &m_unconnected ) );
+        m_drcDialog->m_FootprintsListBox->SetList(
+                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_GENERIC( &m_footprints ) );
 
         m_drcDialog->UpdateDisplayedCounts();
     }
@@ -1453,3 +1480,61 @@ void DRC::doFootprintOverlappingDrc()
 
     drc_overlap.RunDRC( *m_pcb );
 }
+
+
+void DRC::TestFootprints( NETLIST& aNetlist, BOARD* aPCB, EDA_UNITS_T aUnits,
+                          DRC_LIST& aDRCList )
+{
+    MODULE*                 module;
+    MODULE*                 nextModule;
+
+    // Search for duplicate footprints.
+    for( module = aPCB->m_Modules; module != NULL; module = module->Next() )
+    {
+        nextModule = module->Next();
+
+        for( ; nextModule != NULL; nextModule = nextModule->Next() )
+        {
+            if( module->GetReference().CmpNoCase( nextModule->GetReference() ) == 0 )
+            {
+                aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_DUPLICATE_FOOTPRINT,
+                                                     module, module->GetPosition(),
+                                                     nextModule, nextModule->GetPosition() ) );
+                break;
+            }
+        }
+    }
+
+    // Search for component footprints in the netlist but not on the board.
+    for( unsigned ii = 0; ii < aNetlist.GetCount(); ii++ )
+    {
+        COMPONENT* component = aNetlist.GetComponent( ii );
+
+        module = aPCB->FindModuleByReference( component->GetReference() );
+
+        if( module == NULL )
+        {
+            wxString msg = wxString::Format( wxT( "%s (%s)" ),
+                                             component->GetReference(),
+                                             component->GetValue() );
+
+            aDRCList.emplace_back( new DRC_ITEM( DRCE_MISSING_FOOTPRINT, msg ) );
+        }
+    }
+
+    // Search for component footprints found on board but not in netlist.
+    for( module = aPCB->m_Modules; module != NULL; module = module->Next() )
+    {
+
+        COMPONENT* component = aNetlist.GetComponentByReference( module->GetReference() );
+
+        if( component == NULL )
+        {
+            aDRCList.emplace_back( new DRC_ITEM( aUnits, DRCE_EXTRA_FOOTPRINT,
+                                                 module, module->GetPosition(),
+                                                 nullptr, wxPoint() ) );
+        }
+    }
+}
+
+

@@ -50,27 +50,6 @@ public:
 private:
     void onFilenameChanged();
 
-    /**
-     * Function verifyFootprints
-     * compares the netlist to the board and builds a list of duplicate, missing, and
-     * extra footprints.
-     *
-     * @param aNetlistFilename the netlist filename.
-     * @param aCmpFilename the component link filename.
-     * @param aDuplicate the list of duplicate modules to populate
-     * @param aMissing the list of missing module references and values to populate. For
-     *                 each missing item, the first string is the reference designator and
-     *                 the second is the value.
-     * @param aNotInNetlist is the list of component footprint found in the netlist but not on
-     *                      the board.
-     * @return true if no errors occurred while reading the netlist. Otherwise false.
-     */
-    bool verifyFootprints( const wxString&         aNetlistFilename,
-                           const wxString&         aCmpFilename,
-                           std::vector< MODULE* >& aDuplicate,
-                           wxArrayString&          aMissing,
-                           std::vector< MODULE* >& aNotInNetlist );
-
     void loadNetlist( bool aDryRun );
 
     // Virtual event handlers:

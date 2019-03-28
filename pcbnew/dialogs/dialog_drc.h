@@ -106,9 +106,6 @@ private:
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_STARTDRC
     void OnStartdrcClick( wxCommandEvent& event ) override;
 
-    /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_LIST_UNCONNECTED
-    void OnListUnconnectedClick( wxCommandEvent& event ) override;
-
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for ID_DELETE_ALL
     void OnDeleteAllClick( wxCommandEvent& event ) override;
 
@@ -127,6 +124,12 @@ private:
     /// wxEVT_RIGHT_UP event handler for ID_UNCONNECTED_LIST
     void OnRightUpUnconnected( wxMouseEvent& event ) override;
 
+    /// wxEVT_LEFT_DCLICK event handler for ID_FOOTPRINTS_LIST
+    void OnLeftDClickFootprints( wxMouseEvent& event ) override;
+
+    /// wxEVT_RIGHT_UP event handler for ID_FOOTPRINTS_LIST
+    void OnRightUpFootprints( wxMouseEvent& event ) override;
+
     /// wxEVT_COMMAND_BUTTON_CLICKED event handler for wxID_CANCEL
     void OnCancelClick( wxCommandEvent& event ) override;
 
@@ -136,6 +139,7 @@ private:
 
     void OnMarkerSelectionEvent( wxCommandEvent& event ) override;
     void OnUnconnectedSelectionEvent( wxCommandEvent& event ) override;
+    void OnFootprintsSelectionEvent( wxCommandEvent& event ) override;
     void OnChangingMarkerList( wxNotebookEvent& event ) override;
 
     void DelDRCMarkers();
@@ -152,6 +156,7 @@ private:
 
     wxString            m_markersTitleTemplate;
     wxString            m_unconnectedTitleTemplate;
+    wxString            m_footprintsTitleTemplate;
 
     UNIT_BINDER         m_trackMinWidth;
     UNIT_BINDER         m_viaMinSize;

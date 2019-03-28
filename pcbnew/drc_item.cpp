@@ -143,6 +143,13 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT:
         return wxString( _( "Footprint has incorrect courtyard (not a closed shape)" ) );
 
+    case DRCE_DUPLICATE_FOOTPRINT:
+        return wxString( _( "Duplicate footprints" ) );
+    case DRCE_MISSING_FOOTPRINT:
+        return wxString( _( "Missing footprint" ) );
+    case DRCE_EXTRA_FOOTPRINT:
+        return wxString( _( "Extra footprint" ) );
+
     case DRCE_SHORT:
         return wxString( _( "Remove track shorting two nets" ) );
     case DRCE_REDUNDANT_VIA:
