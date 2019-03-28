@@ -223,12 +223,10 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataToWindow()
     }
 
     if( m_aliasListBox->GetCount() )
-    {
         m_aliasListBox->SetSelection( 0 );
 
-        wxCommandEvent dummy;
-        OnSelectAlias( dummy );
-    }
+    wxCommandEvent dummy;
+    OnSelectAlias( dummy );
 
     adjustAliasGridColumns( m_aliasGrid->GetClientRect().GetWidth() - 4 );
 
@@ -625,21 +623,29 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSelectAlias( wxCommandEvent& event )
 
         m_aliasGrid->SetCellValue( VALUE, FDC_VALUE, alias->GetName() );
         m_aliasGrid->SetCellValue( DATASHEET, FDC_VALUE, alias->GetDocFileName() );
+        m_aliasGrid->Enable( true );
 
         // Use ChangeValue() so we don't generate events
         m_AliasNameCtrl->ChangeValue( alias->GetName() );
+        m_AliasNameCtrl->Enable( true );
         m_AliasDescCtrl->ChangeValue( alias->GetDescription() );
+        m_AliasDescCtrl->Enable( true );
         m_AliasKeywordsCtrl->ChangeValue( alias->GetKeyWords() );
+        m_AliasKeywordsCtrl->Enable( true );
     }
     else
     {
         m_aliasGrid->SetCellValue( VALUE, FDC_VALUE, wxEmptyString );
         m_aliasGrid->SetCellValue( DATASHEET, FDC_VALUE, wxEmptyString );
+        m_aliasGrid->Enable( false );
 
         // Use ChangeValue() so we don't generate events
         m_AliasNameCtrl->ChangeValue( wxEmptyString );
+        m_AliasNameCtrl->Enable( false );
         m_AliasDescCtrl->ChangeValue( wxEmptyString );
+        m_AliasDescCtrl->Enable( false );
         m_AliasKeywordsCtrl->ChangeValue( wxEmptyString );
+        m_AliasKeywordsCtrl->Enable( false );
     }
 
     m_currentAlias = newIdx;
