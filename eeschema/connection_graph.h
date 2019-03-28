@@ -58,7 +58,8 @@ class CONNECTION_SUBGRAPH
 public:
     CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :
         m_dirty( false ), m_code( -1 ), m_multiple_power_ports( false ),
-        m_no_connect( nullptr ), m_driver( nullptr ), m_frame( aFrame )
+        m_strong_driver( false ), m_no_connect( nullptr ), m_driver( nullptr ),
+        m_frame( aFrame )
     {}
     /**
      * Determines which potential driver should drive the subgraph.
@@ -195,7 +196,10 @@ private:
 
     std::map<wxString, int> m_bus_name_to_code_map;
 
-    std::unordered_map<int, CONNECTION_SUBGRAPH*> m_subgraph_code_map;
+    std::map<wxString, std::vector<CONNECTION_SUBGRAPH*>> m_global_label_cache;
+
+    std::map< std::pair<SCH_SHEET_PATH, wxString>,
+              std::vector<CONNECTION_SUBGRAPH*> > m_local_label_cache;
 
     int m_last_net_code;
 

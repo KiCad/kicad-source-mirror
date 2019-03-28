@@ -254,7 +254,6 @@ void CONNECTION_GRAPH::Reset()
     m_bus_alias_cache.clear();
     m_net_name_to_code_map.clear();
     m_bus_name_to_code_map.clear();
-    m_subgraph_code_map.clear();
     m_net_code_to_subgraphs_map.clear();
     m_last_net_code = 1;
     m_last_bus_code = 1;
@@ -648,30 +647,37 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     case SCH_LABEL_T:
                     case SCH_GLOBAL_LABEL_T:
                     case SCH_HIERARCHICAL_LABEL_T:
-                    case SCH_PIN_CONNECTION_T:
-                    case SCH_SHEET_PIN_T:
-                    case SCH_SHEET_T:
                     {
-                        if( driver->Type() == SCH_PIN_CONNECTION_T )
-                        {
-                            auto pin = static_cast<SCH_PIN_CONNECTION*>( driver );
+                        auto text = static_cast<SCH_TEXT*>( driver );
+                        connection->ConfigureFromLabel( text->GetText() );
+                        break;
+                    }
+                    case SCH_SHEET_PIN_T:
+                    {
+                        auto pin = static_cast<SCH_SHEET_PIN*>( driver );
+                        auto txt = pin->GetParent()->GetName() + "/" + pin->GetText();
 
-                            // NOTE(JE) GetDefaultNetName is not thread-safe.
-                            connection->ConfigureFromLabel( pin->GetDefaultNetName( sheet ) );
-                        }
-                        else
-                        {
-                            auto text = static_cast<SCH_TEXT*>( driver );
-                            connection->ConfigureFromLabel( text->GetText() );
-                        }
+                        connection->ConfigureFromLabel( txt );
+                        break;
+                    }
+                    case SCH_PIN_CONNECTION_T:
+                    {
+                        auto pin = static_cast<SCH_PIN_CONNECTION*>( driver );
+                        // NOTE(JE) GetDefaultNetName is not thread-safe.
+                        connection->ConfigureFromLabel( pin->GetDefaultNetName( sheet ) );
 
-                        connection->SetDriver( driver );
-                        connection->ClearDirty();
                         break;
                     }
                     default:
+                        #ifdef CONNECTIVITY_DEBUG
+                        wxLogDebug( "Driver type unsupported: %s",
+                                    driver->GetSelectMenuText( MILLIMETRES ) );
+                        #endif
                         break;
                     }
+
+                    connection->SetDriver( driver );
+                    connection->ClearDirty();
 
                     subgraph->m_dirty = false;
                 }
@@ -691,7 +697,55 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // sheet pins that happen to have the same name, but are not the same.
 
     for( auto subgraph : m_subgraphs )
+    {
         subgraph->m_dirty = true;
+
+        if( subgraph->m_strong_driver )
+        {
+            // Add strong drivers to the cache, for later checking against conflicts
+
+            auto driver = subgraph->m_driver;
+            auto conn = subgraph->m_driver->Connection( subgraph->m_sheet );
+            auto sheet = subgraph->m_sheet;
+            auto name = conn->Name( true );
+
+            switch( driver->Type() )
+            {
+            case SCH_LABEL_T:
+            case SCH_HIERARCHICAL_LABEL_T:
+            {
+                m_local_label_cache[std::make_pair( sheet, name )].push_back( subgraph );
+                break;
+            }
+            case SCH_GLOBAL_LABEL_T:
+            {
+                m_global_label_cache[name].push_back( subgraph );
+                break;
+            }
+            case SCH_PIN_CONNECTION_T:
+            {
+                auto pc = static_cast<SCH_PIN_CONNECTION*>( driver );
+                wxASSERT( pc->m_pin->IsPowerConnection() );
+                m_global_label_cache[name].push_back( subgraph );
+                break;
+            }
+            default:
+                #ifdef CONNECTIVITY_DEBUG
+                wxLogDebug( "Unexpected strong driver %s",
+                            driver->GetSelectMenuText( MILLIMETRES ) );
+                #endif
+                break;
+            }
+        }
+    }
+
+    // Test subgraphs for net name conflicts against higher priority subgraphs
+    // Suffix is a global increment to make things simpler, that way if we have
+    // multiple instances of the same name that needs to get renamed, they will
+    // definitely get unique names.  While this will potentially lead to some
+    // confusing net names, this is really a corner case and won't happen if
+    // users follow best practices to label their nets.
+    unsigned suffix = 1;
 
     for( auto subgraph : m_subgraphs )
     {
@@ -703,9 +757,47 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( !subgraph->m_driver || subgraph->m_strong_driver )
             continue;
 
-        auto name = subgraph->m_driver->Connection( subgraph->m_sheet )->Name();
+        auto conn = subgraph->m_driver->Connection( subgraph->m_sheet );
+        auto name = conn->Name();
 
-        unsigned suffix = 1;
+        bool conflict = false;
+
+
+        if( name == "/TDO" )
+            asm("nop;");
+
+        // First check the caches
+        try
+        {
+            auto v = m_global_label_cache.at( name );
+            conflict = true;
+        }
+        catch( const std::out_of_range& oor )
+        {}
+
+        try
+        {
+            auto local_name = conn->Name( true );
+            auto v = m_local_label_cache.at( std::make_pair( subgraph->m_sheet,
+                                                             local_name ) );
+            conflict = true;
+        }
+        catch( const std::out_of_range& oor )
+        {}
+
+        if( conflict )
+        {
+            auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
+
+            #ifdef CONNECTIVITY_DEBUG
+            wxLogDebug( "Subgraph %ld default name %s conflicts with a label. Changing to %s.",
+                        subgraph->m_code, name, new_name );
+            #endif
+
+            conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
+            suffix++;
+            name = new_name;
+        }
 
         for( auto candidate : m_subgraphs )
         {
@@ -715,8 +807,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             if( candidate == subgraph || !candidate->m_driver || candidate->m_strong_driver )
                 continue;
 
-            auto conn = candidate->m_driver->Connection( candidate->m_sheet );
-            auto check_name = conn->Name();
+            auto c_conn = candidate->m_driver->Connection( candidate->m_sheet );
+            auto check_name = c_conn->Name();
 
             if( check_name == name )
             {
@@ -728,7 +820,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                             candidate->m_code, new_name );
                 #endif
 
-                conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
+                c_conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
 
                 candidate->m_dirty = false;
                 suffix++;
