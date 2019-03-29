@@ -1,0 +1,31 @@
+
+# Custom attribute to mark source files using KiCad C++ formatting
+[attr]kicad-cpp-source whitepace=tab-in-indent format.clang-format-kicad
+
+# Custom attribute to mark KiCad's own CMake files
+[attr]kicad-cmake-source whitespace=tab-in-indent
+
+# Custom attribute for auto-generated sources:
+# * Do not perform whitespace checking
+# * Do not format
+[attr]generated whitespace=-tab-in-indent,-indent-with-non-tab -format.clang-format-kicad
+
+# By default, all C and C++ files conform to KiCad formatting,
+# unless overridden
+*.c         kicad-cpp-source
+*.cpp       kicad-cpp-source
+*.h         kicad-cpp-source
+
+*.cmake     kicad-cmake-source
+*.txt       kicad-cmake-source
+
+# Compiled bitmap sources
+bitmaps_png/cpp_*/*.cpp     generated
+
+# wxFormBuilder-generated files
+**/dialog*/*_base.cpp       generated
+**/dialog*/*_base.h         generated
+
+# Lemon grammars
+common/libeval/grammar.c    generated
+common/libeval/grammar.h    generated
