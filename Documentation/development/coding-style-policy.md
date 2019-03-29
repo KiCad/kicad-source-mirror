@@ -70,9 +70,13 @@ Set the `git clang-format` tool to use the provided `_clang-format` file:
 
     git config clangFormat.style file
 
-Then, to enable the format checker, set the `KICAD_CHECK_FORMAT` environment
-variable in your shell. Without this variable, the format checker will not
-run on commit, but you can still check files staged for commit manually:
+Then, to enable the format checker, set the `kicad.check-format` Git config
+to "true" for the KiCad repo:
+
+    git config kicad.check-format true
+
+Without this config, the format checker will not run on commit, but you can
+still check files staged for commit manually:
 
     tools/check_coding.sh --diff
 

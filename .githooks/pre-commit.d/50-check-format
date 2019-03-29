@@ -7,10 +7,24 @@
 # Based on clang-format pre-commit hook by Alex Eagle
 # https://gist.github.com/alexeagle/c8ed91b14a407342d9a8e112b5ac7dab
 
-# Set KICAD_CHECK_FORMAT to allow this hook to run
-# if not set, the hook always succeeds.
-if [ -z "$KICAD_CHECK_FORMAT" ]; then
-    exit 0
+# Set kicad.check-format to allow this hook to run
+# If not set, the hook always succeeds.
+
+do_format=false
+
+# Check if formatting is configured
+if [ "$(git config --get kicad.check-format)" = true ]; then
+    do_format=true
+fi
+
+# Older env variable method
+if [ ! -z "$KICAD_CHECK_FORMAT" ]; then
+    do_format=true
+fi
+
+if [ ! ${do_format} = true ]; then
+    # No formatting required
+    exit 0;
 fi
 
 check_clang_format() {
