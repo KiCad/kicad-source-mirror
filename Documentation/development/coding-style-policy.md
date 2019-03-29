@@ -72,17 +72,24 @@ Set the `git clang-format` tool to use the provided `_clang-format` file:
 
 Then, to enable the format checker, set the `KICAD_CHECK_FORMAT` environment
 variable in your shell. Without this variable, the format checker will not
-run on commit, but you can still use `git clang-format --diff` to check manually.
+run on commit, but you can still check files staged for commit manually:
 
-If enabled, when you commit a change, you will be told if you have caused any
-style violations (only in your changed code). You can fix them automatically
-with:
+    tools/check_coding.sh --diff
 
-    git clang-format
+If the hook is enabled, when you commit a change, you will be told if you
+have caused any style violations (only in your changed code). You can fix your
+staged changes automatically with this tool:
+
+    tools/check_coding.sh
 
 Or you can proceed anyway, if you are sure your style is correct:
 
     git commit --no-verify
+
+The `check_coding.sh` tool has other modes:
+
+* Make (or see only) changes to files modified in the previous commit:
+    * `check_coding.sh --amend [--diff]`
 
 
 # 2. Naming Conventions # {#naming_conventions}
