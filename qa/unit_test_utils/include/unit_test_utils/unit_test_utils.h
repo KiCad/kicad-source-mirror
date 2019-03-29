@@ -118,9 +118,9 @@
 BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
-struct print_log_value<nullptr_t>
+struct print_log_value<std::nullptr_t>
 {
-    inline void operator()( std::ostream& os, nullptr_t const& p )
+    inline void operator()( std::ostream& os, std::nullptr_t const& p )
     {
         os << "nullptr";
     }
