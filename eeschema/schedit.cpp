@@ -870,7 +870,8 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
         aItem->SetStoredPos( cursorpos );
     }
 
-    OnModify();
+    if( !aItem->IsNew() )
+        OnModify();
 
     GetScreen()->SetCurItem( aItem );
     m_canvas->SetMouseCapture( moveItemWithMouseCursor, abortMoveItem );

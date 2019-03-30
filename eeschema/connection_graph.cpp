@@ -261,13 +261,14 @@ void CONNECTION_GRAPH::Reset()
 }
 
 
-void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList )
+void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional )
 {
-#ifdef CONNECTIVITY_DEBUG
+#ifdef CONNECTIVITY_PROFILE
     PROF_COUNTER phase1;
 #endif
 
-    Reset();
+    if( aUnconditional )
+        Reset();
 
     for( const auto& sheet : aSheetList )
     {
@@ -276,7 +277,8 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList )
         for( auto item = sheet.LastScreen()->GetDrawItems();
              item; item = item->Next() )
         {
-            if( item->IsConnectable() )
+            if( item->IsConnectable() &&
+                ( aUnconditional || item->IsConnectivityDirty() ) )
             {
                 items.push_back( item );
             }
@@ -285,7 +287,7 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList )
         updateItemConnectivity( sheet, items );
     }
 
-#ifdef CONNECTIVITY_DEBUG
+#ifdef CONNECTIVITY_PROFILE
     phase1.Stop();
     std::cout << "UpdateItemConnectivity() " << phase1.msecs() << " ms" << std::endl;
 #endif
@@ -322,7 +324,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 pin.Connection( aSheet )->Reset();
 
                 connection_map[ pin.GetTextPos() ].push_back( &pin );
-                m_items.push_back( &pin );
+                m_items.insert( &pin );
             }
         }
         else if( item->Type() == SCH_COMPONENT_T )
@@ -345,12 +347,12 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 pin_connection->ConnectedItems().clear();
 
                 connection_map[ pos ].push_back( pin_connection );
-                m_items.push_back( pin_connection );
+                m_items.insert( pin_connection );
             }
         }
         else
         {
-            m_items.push_back( item );
+            m_items.insert( item );
 
             if( !item->Connection( aSheet ) )
             {
@@ -387,6 +389,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 connection_map[ point ].push_back( item );
             }
         }
+
+        item->SetConnectivityDirty( false );
     }
 
     for( auto it : connection_map )
@@ -497,7 +501,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
 void CONNECTION_GRAPH::buildConnectionGraph()
 {
-#ifdef CONNECTIVITY_DEBUG
+#ifdef CONNECTIVITY_PROFILE
     PROF_COUNTER phase2;
 #endif
 
@@ -762,10 +766,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         bool conflict = false;
 
-
-        if( name == "/TDO" )
-            asm("nop;");
-
         // First check the caches
         try
         {
@@ -1016,10 +1016,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Collapse net codes between hierarchical sheets
 
-    for( auto it = m_subgraphs.begin(); it < m_subgraphs.end(); it++ )
+    for( auto subgraph : m_subgraphs )
     {
-        auto subgraph = *it;
-
         if( !subgraph->m_driver || !subgraph->m_dirty )
             continue;
 
@@ -1364,9 +1362,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             continue;
 
         if( subgraph->m_dirty )
-        {
             subgraph->m_dirty = false;
-        }
 
         if( subgraph->m_driver->Connection( subgraph->m_sheet )->IsBus() )
             continue;
@@ -1375,7 +1371,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
     }
 
-#ifdef CONNECTIVITY_DEBUG
+#ifdef CONNECTIVITY_PROFILE
     phase2.Stop();
     std::cout << "BuildConnectionGraph() " <<  phase2.msecs() << " ms" << std::endl;
 #endif
@@ -1419,10 +1415,8 @@ std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigration()
 {
     std::vector<CONNECTION_SUBGRAPH*> ret;
 
-    for( auto it = m_subgraphs.begin(); it < m_subgraphs.end(); it++ )
+    for( auto subgraph : m_subgraphs )
     {
-        auto subgraph = *it;
-
         // Graph is supposed to be up-to-date before calling this
         wxASSERT( !subgraph->m_dirty );
 
@@ -1452,11 +1446,8 @@ std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigration()
 
 bool CONNECTION_GRAPH::UsesNewBusFeatures() const
 {
-    for( auto it = m_subgraphs.begin(); it < m_subgraphs.end(); it++ )
+    for( auto subgraph : m_subgraphs )
     {
-        auto subgraph = *it;
-
-
         if( !subgraph->m_driver )
             continue;
 
@@ -1478,10 +1469,8 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
 {
     int error_count = 0;
 
-    for( auto it = m_subgraphs.begin(); it < m_subgraphs.end(); it++ )
+    for( auto subgraph : m_subgraphs )
     {
-        auto subgraph = *it;
-
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
 

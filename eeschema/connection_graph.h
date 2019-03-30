@@ -35,6 +35,14 @@
 // #define CONNECTIVITY_DEBUG
 #endif
 
+#ifdef CONNECTIVITY_DEBUG
+#define CONNECTIVITY_PROFILE
+#endif
+
+// Uncomment this line to enable real-time connectivity updates
+// TODO(JE) re-enable this once performance concerns are sorted out
+// #define CONNECTIVITY_REAL_TIME
+
 class SCH_PIN_CONNECTION;
 
 class SCH_EDIT_FRAME;
@@ -133,9 +141,10 @@ public:
     /**
      * Updates the connection graph for the given list of sheets.
      *
-     * @param aSheetList should be the whole schematic for now
+     * @param aSheetList is the list of possibly modified sheets
+     * @param aUnconditional is true if an unconditional full recalculation should be done
      */
-    void Recalculate( SCH_SHEET_LIST aSheetList );
+    void Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional = false );
 
     /**
      * Updates the connectivity graph based on a single item
@@ -184,7 +193,7 @@ public:
 
 private:
 
-    std::vector<SCH_ITEM*> m_items;
+    std::unordered_set<SCH_ITEM*> m_items;
 
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
 
@@ -254,6 +263,8 @@ private:
      * the driver is first selected by CONNECTION_SUBGRAPH::ResolveDrivers(),
      * and then the connection for the chosen driver is propagated to all the
      * other items in the subgraph.
+     *
+     * @param aUnconditional is true if a full rebuild should be done
      */
     void buildConnectionGraph();
 

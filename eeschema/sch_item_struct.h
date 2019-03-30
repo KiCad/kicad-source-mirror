@@ -132,6 +132,9 @@ protected:
     /// Stores connectivity information, per sheet
     std::unordered_map<SCH_SHEET_PATH, SCH_CONNECTION*> m_connection_map;
 
+    /// True if connectivity info might be out of date
+    bool m_connectivity_dirty;
+
 public:
     SCH_ITEM( EDA_ITEM* aParent, KICAD_T aType );
 
@@ -350,6 +353,10 @@ public:
      * Returns true if this item should propagate connection info to aItem
      */
     virtual bool ConnectionPropagatesTo( const EDA_ITEM* aItem ) const { return true; }
+
+    bool IsConnectivityDirty() { return m_connectivity_dirty; }
+
+    void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
     virtual bool HitTest( const wxPoint& aPosition ) const override
     {

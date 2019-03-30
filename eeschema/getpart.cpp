@@ -299,7 +299,9 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
     TestDanglingEnds();
 
     RefreshItem( item );
-    OnModify();
+
+    if( item->GetFlags() == 0 )
+        OnModify();
 }
 
 

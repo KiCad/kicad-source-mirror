@@ -120,6 +120,9 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     if( aItem == NULL || aCommandType == UR_WIRE_IMAGE )
         return;
 
+    // Connectivity may change
+    aItem->SetConnectivityDirty();
+
     if( aAppend )
         commandToUndo = GetScreen()->PopCommandFromUndoList();
 
@@ -210,6 +213,9 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
     {
         SCH_ITEM* item = (SCH_ITEM*) commandToUndo->GetPickedItem( ii );
         wxASSERT( item );
+
+        // Connectivity may change
+        item->SetConnectivityDirty();
 
         UNDO_REDO_T command = commandToUndo->GetPickedItemStatus( ii );
 

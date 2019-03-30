@@ -780,8 +780,14 @@ void SCH_EDIT_FRAME::OnModify()
 
     m_foundItems.SetForceSearch();
 
-    //RecalculateConnections( SCH_SHEET_LIST( g_CurrentSheet->Last() ) );
+#ifdef CONNECTIVITY_DEBUG
+    // Debug mode: rebuild full graph on each modification (slow)
     RecalculateConnections();
+#else
+    #ifdef CONNECTIVITY_REAL_TIME
+    g_ConnectionGraph->Recalculate( SCH_SHEET_LIST( g_CurrentSheet->Last() ) );
+    #endif
+#endif
 
     m_canvas->Refresh();
 }
@@ -1521,7 +1527,7 @@ void SCH_EDIT_FRAME::RecalculateConnections()
     for( const auto& sheet : list )
         SchematicCleanUp( false, sheet.LastScreen() );
 
-    g_ConnectionGraph->Recalculate( list );
+    g_ConnectionGraph->Recalculate( list, true );
 }
 
 
