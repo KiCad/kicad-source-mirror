@@ -547,6 +547,9 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnDeleteRow( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
+    if( m_pins.size() == 0 )   // empty table
+        return;
+
     int curRow = m_grid->GetGridCursorRow();
 
     if( curRow < 0 )
