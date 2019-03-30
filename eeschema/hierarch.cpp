@@ -283,11 +283,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     {
         Zoom_Automatique( false );
         screen->m_Initialized = true;
-
-        // TODO(JE) should be able to just recalculate the current sheet path
-        // RecalculateConnections() handles cleanup and dangling ends tests
-        RecalculateConnections();
-
         screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
     }
     else
