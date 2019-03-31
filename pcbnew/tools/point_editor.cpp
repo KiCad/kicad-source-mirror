@@ -1155,6 +1155,7 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         }
 
         setEditedPoint( nullptr );
+        updatePoints();
 
         if( valid )
             commit.Push( _( "Remove a zone/polygon corner" ) );
