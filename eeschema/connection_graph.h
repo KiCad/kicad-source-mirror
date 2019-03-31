@@ -112,6 +112,9 @@ public:
     // Needed for m_UserUnits for now; maybe refactor later
     SCH_EDIT_FRAME* m_frame;
 
+    /// Cache for driver connection
+    SCH_CONNECTION* m_driver_connection;
+
     /**
      * This map stores pointers to other subgraphs on the same sheet as this one
      * which should be connected to this one.
@@ -145,11 +148,6 @@ public:
      * @param aUnconditional is true if an unconditional full recalculation should be done
      */
     void Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional = false );
-
-    /**
-     * Updates the connectivity graph based on a single item
-     */
-    void RebuildGraphForItem( SCH_ITEM* aItem );
 
     /**
      * Returns a bus alias pointer for the given name if it exists (from cache)
@@ -263,8 +261,6 @@ private:
      * the driver is first selected by CONNECTION_SUBGRAPH::ResolveDrivers(),
      * and then the connection for the chosen driver is propagated to all the
      * other items in the subgraph.
-     *
-     * @param aUnconditional is true if a full rebuild should be done
      */
     void buildConnectionGraph();
 

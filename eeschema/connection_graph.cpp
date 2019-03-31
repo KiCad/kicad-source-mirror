@@ -290,11 +290,17 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
 #ifdef CONNECTIVITY_PROFILE
     phase1.Stop();
     std::cout << "UpdateItemConnectivity() " << phase1.msecs() << " ms" << std::endl;
+    PROF_COUNTER tde;
 #endif
 
     // IsDanglingStateChanged() also adds connected items for things like SCH_TEXT
     SCH_SCREENS schematic;
     schematic.TestDanglingEnds();
+
+#ifdef CONNECTIVITY_PROFILE
+    tde.Stop();
+    std::cout << "TestDanglingEnds() " << tde.msecs() << " ms" << std::endl;
+#endif
 
     buildConnectionGraph();
 }
@@ -645,6 +651,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     auto sheet = subgraph->m_sheet;
                     auto connection = driver->Connection( sheet );
 
+                    // Cache the driving connection for later use
+                    subgraph->m_driver_connection = connection;
+
                     // TODO(JE) This should live in SCH_CONNECTION probably
                     switch( driver->Type() )
                     {
@@ -709,7 +718,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             // Add strong drivers to the cache, for later checking against conflicts
 
             auto driver = subgraph->m_driver;
-            auto conn = subgraph->m_driver->Connection( subgraph->m_sheet );
+            auto conn = subgraph->m_driver_connection;
             auto sheet = subgraph->m_sheet;
             auto name = conn->Name( true );
 
@@ -761,7 +770,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( !subgraph->m_driver || subgraph->m_strong_driver )
             continue;
 
-        auto conn = subgraph->m_driver->Connection( subgraph->m_sheet );
+        auto conn = subgraph->m_driver_connection;
         auto name = conn->Name();
 
         bool conflict = false;
@@ -807,7 +816,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             if( candidate == subgraph || !candidate->m_driver || candidate->m_strong_driver )
                 continue;
 
-            auto c_conn = candidate->m_driver->Connection( candidate->m_sheet );
+            auto c_conn = candidate->m_driver_connection;
             auto check_name = c_conn->Name();
 
             if( check_name == name )
@@ -835,7 +844,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( !subgraph->m_driver )
             continue;
 
-        auto connection = subgraph->m_driver->Connection( subgraph->m_sheet );
+        auto connection = subgraph->m_driver_connection;
         int code;
 
         auto name = subgraph->GetNetName();
@@ -929,7 +938,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( candidate->m_sheet != sheet || !candidate->m_driver || candidate == subgraph )
                     continue;
 
-                auto candidate_connection = candidate->m_driver->Connection( sheet );
+                auto candidate_connection = candidate->m_driver_connection;
 
                 if( !candidate_connection->IsNet() )
                     continue;
@@ -995,7 +1004,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         if( subgraph && subgraph->m_driver )
         {
-            auto parent = subgraph->m_driver->Connection( subgraph->m_sheet );
+            auto parent = subgraph->m_driver_connection;
             pc->Connection( sheet )->Clone( *parent );
         }
         else
@@ -1022,7 +1031,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             continue;
 
         auto sheet = subgraph->m_sheet;
-        auto connection = std::make_shared<SCH_CONNECTION>( *subgraph->m_driver->Connection( sheet ) );
+        auto connection = std::make_shared<SCH_CONNECTION>( *subgraph->m_driver_connection );
 
         // Collapse power nets that are shorted together
 
@@ -1055,7 +1064,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         continue;
 
                     auto subsheet = subgraph_to_update->m_sheet;
-                    auto conn = subgraph_to_update->m_driver->Connection( subsheet );
+                    auto conn = subgraph_to_update->m_driver_connection;
 
                     if( conn->IsBus() || conn->NetCode() != code )
                         continue;
@@ -1108,7 +1117,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 for( auto neighbor : kv.second )
                 {
-                    auto neighbor_conn = neighbor->m_driver->Connection( sheet );
+                    auto neighbor_conn = neighbor->m_driver_connection;
 
                     try
                     {
@@ -1364,10 +1373,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( subgraph->m_dirty )
             subgraph->m_dirty = false;
 
-        if( subgraph->m_driver->Connection( subgraph->m_sheet )->IsBus() )
+        if( subgraph->m_driver_connection->IsBus() )
             continue;
 
-        int code = subgraph->m_driver->Connection( subgraph->m_sheet )->NetCode();
+        int code = subgraph->m_driver_connection->NetCode();
         m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
     }
 
