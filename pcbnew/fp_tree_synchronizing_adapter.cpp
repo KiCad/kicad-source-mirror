@@ -175,7 +175,10 @@ void FP_TREE_SYNCHRONIZING_ADAPTER::GetValue( wxVariant& aVariant, wxDataViewIte
         break;
 
     case 1:
-        aVariant = node->Desc;
+        if( node->LibId == m_frame->GetLoadedFPID() && !m_frame->IsCurrentFPFromBoard() )
+            aVariant = m_frame->GetBoard()->m_Modules->GetDescription();
+        else
+            aVariant = node->Desc;
         break;
 
     default:    // column == -1 is used for default Compare function
