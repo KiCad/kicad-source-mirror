@@ -143,6 +143,21 @@ wxString DRC_ITEM::GetErrorText() const
     case DRCE_MALFORMED_COURTYARD_IN_FOOTPRINT:
         return wxString( _( "Footprint has incorrect courtyard (not a closed shape)" ) );
 
+    case DRCE_SHORT:
+        return wxString( _( "Remove track shorting two nets" ) );
+    case DRCE_REDUNDANT_VIA:
+        return wxString( _( "Remove redundant via" ) );
+    case DRCE_DUPLICATE_TRACK:
+        return wxString( _( "Remove duplicate track" ) );
+    case DRCE_MERGE_TRACKS:
+        return wxString( _( "Merge co-linear tracks" ) );
+    case DRCE_DANGLING_TRACK:
+        return wxString( _( "Remove dangling track" ) );
+    case DRCE_DANGLING_VIA:
+        return wxString( _( "Remove dangling via" ) );
+    case DRCE_ZERO_LENGTH_TRACK:
+        return wxString( _( "Remove zero-length track" ) );
+
     default:
         return wxString::Format( _( "Unknown DRC error code %d" ), m_ErrorCode );
     }

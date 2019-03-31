@@ -568,7 +568,7 @@ void DRC::updatePointers()
         m_drcDialog->m_ClearanceListBox->SetList(
                 m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_MARKERS( m_pcb ) );
         m_drcDialog->m_UnconnectedListBox->SetList(
-                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_UNCONNECTED( &m_unconnected ) );
+                m_pcbEditorFrame->GetUserUnits(), new DRC_LIST_GENERIC( &m_unconnected ) );
 
         m_drcDialog->UpdateDisplayedCounts();
     }
@@ -862,6 +862,10 @@ void DRC::testTracks( wxWindow *aActiveWindow, bool aShowProgressBar )
 
 void DRC::testUnconnected()
 {
+    for( DRC_ITEM* unconnectedItem : m_unconnected )
+        delete unconnectedItem;
+
+    m_unconnected.clear();
 
     auto connectivity = m_pcb->GetConnectivity();
 

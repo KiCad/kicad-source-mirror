@@ -107,24 +107,24 @@ public:
 
 
 /**
- * Class DRC_LIST_UNCONNECTED
+ * Class DRC_LIST_GENERIC
  * is an implementation of the interface named DRC_ITEM_LIST which uses
  * a vector of pointers to DRC_ITEMs to fulfill the interface.  No ownership is taken of the
  * vector, which will reside in class DRC
  */
-class DRC_LIST_UNCONNECTED : public DRC_ITEM_LIST
+class DRC_LIST_GENERIC : public DRC_ITEM_LIST
 {
     DRC_LIST*         m_vector;
 
 public:
 
-    DRC_LIST_UNCONNECTED( DRC_LIST* aList ) :
+    DRC_LIST_GENERIC( DRC_LIST* aList ) :
         m_vector(aList)
     {
     }
 
     /* no destructor since we do not own anything to delete, not even the BOARD.
-    ~DRC_LIST_UNCONNECTED() {}
+    ~DRC_LIST_GENERIC() {}
     */
 
 

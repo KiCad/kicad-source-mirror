@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,12 +53,6 @@
 #define IGNORE_LOCKED (1 << 1)   ///< if module is locked, do not select for single module operation
 #define MATCH_LAYER   (1 << 2)   ///< if module not on current layer, do not select
 #define VISIBLE_ONLY  (1 << 3)   ///< if module not on a visible layer, do not select
-
-/// Flag used in locate routines (from which endpoint work)
-enum ENDPOINT_T {
-    ENDPOINT_START = 0,
-    ENDPOINT_END = 1
-};
 
 #define DIM_ANCRE_MODULE 3       // Anchor size (footprint center)
 

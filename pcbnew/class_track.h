@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,13 @@ class VIA;
 class D_PAD;
 class MSG_PANEL_ITEM;
 class SHAPE_POLY_SET;
+
+
+// Flag used in locate routines (from which endpoint work)
+enum ENDPOINT_T {
+    ENDPOINT_START = 0,
+    ENDPOINT_END = 1
+};
 
 // Via types
 // Note that this enum must be synchronized to GAL_LAYER_ID

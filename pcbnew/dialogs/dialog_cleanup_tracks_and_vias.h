@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010-2014 Jean-Pierre Charras, jean-pierre.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,32 +22,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef DIALOG_CLEANING_OPTIONS_H_
-#define DIALOG_CLEANING_OPTIONS_H_
+#ifndef DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
+#define DIALOG_CLEANUP_TRACKS_AND_VIAS_H_
 
-#include <dialog_cleaning_options_base.h>
+#include <dialog_cleanup_tracks_and_vias_base.h>
 
-class DIALOG_CLEANING_OPTIONS: public DIALOG_CLEANING_OPTIONS_BASE
+#include <drc.h>
+
+
+class PCB_EDIT_FRAME;
+
+
+class DIALOG_CLEANUP_TRACKS_AND_VIAS: public DIALOG_CLEANUP_TRACKS_AND_VIAS_BASE
 {
-public:
+    PCB_EDIT_FRAME* m_parentFrame;
+    DRC_LIST        m_items;
+
     static bool m_cleanVias;
     static bool m_mergeSegments;
     static bool m_deleteUnconnectedSegm;
     static bool m_deleteShortCircuits;
 
+    void doCleanup( bool aDryRun );
+
+    void OnCheckBox( wxCommandEvent& anEvent ) override;
+    void OnSelectItem( wxCommandEvent& event ) override;
+    void OnLeftDClickItem( wxMouseEvent& event ) override;
+    void OnRightUpItem( wxMouseEvent& event ) override;
+
+    bool TransferDataToWindow() override;
+    bool TransferDataFromWindow() override;
+
 public:
-    DIALOG_CLEANING_OPTIONS( wxWindow* parent );
-
-    bool TransferDataFromWindow() override
-    {
-        m_cleanVias = m_cleanViasOpt->GetValue( );
-        m_mergeSegments = m_mergeSegmOpt->GetValue( );
-        m_deleteUnconnectedSegm = m_deleteUnconnectedOpt->GetValue( );
-        m_deleteShortCircuits = m_cleanShortCircuitOpt->GetValue( );
-
-        return true;
-    }
+    DIALOG_CLEANUP_TRACKS_AND_VIAS( PCB_EDIT_FRAME* parent );
+    ~DIALOG_CLEANUP_TRACKS_AND_VIAS();
 };
 
-#endif
-    // DIALOG_CLEANING_OPTIONS_H_
+#endif // DIALOG_CLEANUP_TRACKS_AND_VIAS_H_

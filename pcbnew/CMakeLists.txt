@@ -56,8 +56,8 @@ set( PCBNEW_DIALOGS
     dialogs/dialog_block_options_base.cpp
     dialogs/dialog_board_setup.cpp
     dialogs/dialog_choose_footprint.cpp
-    dialogs/dialog_cleaning_options.cpp
-    dialogs/dialog_cleaning_options_base.cpp
+    dialogs/dialog_cleanup_tracks_and_vias.cpp
+    dialogs/dialog_cleanup_tracks_and_vias_base.cpp
     dialogs/dialog_copper_zones.cpp
     dialogs/dialog_copper_zones_base.cpp
     dialogs/dialog_create_array.cpp

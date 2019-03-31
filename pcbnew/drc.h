@@ -100,6 +100,14 @@
 #define DRCE_TRACK_NEAR_EDGE                   53   ///< track too close to board edge
 #define DRCE_INVALID_OUTLINE                   54   ///< invalid board outline
 
+#define DRCE_SHORT                             58
+#define DRCE_REDUNDANT_VIA                     59
+#define DRCE_DUPLICATE_TRACK                   60
+#define DRCE_MERGE_TRACKS                      61
+#define DRCE_DANGLING_TRACK                    62
+#define DRCE_DANGLING_VIA                      63
+#define DRCE_ZERO_LENGTH_TRACK                 64
+
 
 class EDA_DRAW_PANEL;
 class PCB_EDIT_FRAME;
