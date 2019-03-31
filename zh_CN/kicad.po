@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KICAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-28 23:37+0800\n"
-"PO-Revision-Date: 2019-03-30 18:46+0800\n"
+"PO-Revision-Date: 2019-03-31 13:51+0800\n"
 "Last-Translator: Liu Guang <l.g110@163.com>\n"
 "Language-Team: <Liu Guang>l.g110@163.com\n"
 "Language: zh_CN\n"
@@ -3894,12 +3894,12 @@ msgstr "过滤 %s"
 #: cvpcb/cvpcb_mainframe.cpp:690
 #, c-format
 msgid "Description: %s;  Key words: %s"
-msgstr "描述：%s；关键字: %s"
+msgstr "描述：%s ；关键字： %s"
 
 #: cvpcb/cvpcb_mainframe.cpp:706
 msgid ""
 "No PCB footprint libraries are listed in the current footprint library table."
-msgstr "在当前封装库列表中没有PCB封装库被列出。"
+msgstr "在当前封装库表中没有列出PCB封装库。"
 
 #: cvpcb/cvpcb_mainframe.cpp:707
 msgid "Configuration Error"
@@ -3911,13 +3911,13 @@ msgid ""
 "Error loading schematic.\n"
 "%s"
 msgstr ""
-"加载原理图时出错\n"
+"加载原理图时出错。\n"
 "%s"
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:52
 #, c-format
 msgid "Project file: \"%s\""
-msgstr "工程文件：'%s'"
+msgstr "工程文件：\"%s\""
 
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:104
 msgid "No editor defined in KiCad. Please choose it."
@@ -3930,7 +3930,7 @@ msgstr "封装关联文件"
 #: cvpcb/dialogs/dialog_config_equfiles.cpp:294
 #, c-format
 msgid "File \"%s\" already exists in list"
-msgstr "文件 '%s' 已经存在于列表中"
+msgstr "文件 \"%s\" 已经存在于列表中"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:20
 msgid "Symbol Footprint Association Files (.equ)"
@@ -3988,7 +3988,7 @@ msgstr "相对"
 
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:101
 msgid "Path Type:"
-msgstr "路径类型:"
+msgstr "路径类型："
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:23
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:23
@@ -3998,17 +3998,17 @@ msgstr "绘制选项"
 #: cvpcb/dialogs/dialog_display_options_base.cpp:25
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:25
 msgid "Graphic items sketch mode"
-msgstr "在草图模式下显示图形项目"
+msgstr "图形项目草图模式"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:28
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:28
 msgid "Texts sketch mode"
-msgstr "在草图模式下显示文本"
+msgstr "文本草图模式"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:31
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:31
 msgid "Pad sketch mode"
-msgstr "在草图模式下显示焊盘"
+msgstr "焊盘草图模式"
 
 #: cvpcb/dialogs/dialog_display_options_base.cpp:37
 #: pcbnew/dialogs/dialog_fp_browser_display_options_base.cpp:37
@@ -4044,7 +4044,7 @@ msgid ""
 "\n"
 "Please choose the assignment."
 msgstr ""
-"从原理图网表和符号封装关联文件(.cmp)的封装分配有冲突\n"
+"原理图网表与符号封装关联文件(.cmp)的封装分配有冲突\n"
 "\n"
 "请选择分配。"
 
@@ -4090,7 +4090,7 @@ msgstr "改变光标形状"
 #: gerbview/toolbars_gerber.cpp:274 pcbnew/menubar_footprint_editor.cpp:274
 #: pcbnew/menubar_pcb_editor.cpp:630 pcbnew/tool_pcb_editor.cpp:383
 msgid "Change cursor shape (not supported in Legacy Toolset)"
-msgstr "更改光标形状(不支持传统工具箱)"
+msgstr "更改光标形状(传统工具箱不支持)"
 
 #: cvpcb/display_footprints_frame.cpp:259
 #: pcbnew/menubar_footprint_editor.cpp:284 pcbnew/menubar_pcb_editor.cpp:661
@@ -4138,17 +4138,17 @@ msgstr "封装ID \"%s\" 无效。"
 #: cvpcb/display_footprints_frame.cpp:515
 #, c-format
 msgid "Footprint \"%s\" not found"
-msgstr "封装 '%s' 没有找到"
+msgstr "封装 \"%s\" 没有找到"
 
 #: cvpcb/display_footprints_frame.cpp:542
 #, c-format
 msgid "Footprint: %s"
-msgstr "封装: %s"
+msgstr "封装：%s"
 
 #: cvpcb/display_footprints_frame.cpp:553
 #, c-format
 msgid "Lib: %s"
-msgstr "库: %s"
+msgstr "库：%s"
 
 #: cvpcb/menubar.cpp:57
 msgid "&Save Schematic\tCtrl+S"
@@ -4164,7 +4164,7 @@ msgstr "配置路径(&C)..."
 #: eeschema/menubar.cpp:622 kicad/menubar.cpp:338
 #: pcbnew/menubar_footprint_editor.cpp:421 pcbnew/menubar_pcb_editor.cpp:264
 msgid "Edit path configuration environment variables"
-msgstr "编辑环境变量路径配置"
+msgstr "编辑路劲配置环境变量"
 
 #: cvpcb/menubar.cpp:72 kicad/menubar.cpp:349
 #: pcbnew/menubar_footprint_editor.cpp:425 pcbnew/menubar_pcb_editor.cpp:268
@@ -4196,7 +4196,7 @@ msgstr "打开 CvPcb 手册"
 #: cvpcb/readwrite_dlgs.cpp:103
 #, c-format
 msgid "\"%s\" is not a valid LIB_ID."
-msgstr "\"%s\"不是有效的LIB_ID。"
+msgstr "\"%s\" 不是有效的LIB_ID。"
 
 #: cvpcb/readwrite_dlgs.cpp:206
 msgid ""
@@ -4205,8 +4205,8 @@ msgid ""
 "required LIB_ID format? (If you answer no, then these assignments will be "
 "cleared out and you will have to re-assign these footprints yourself.)"
 msgstr ""
-"有些分配的封装是旧版本项目（缺少LIB别名）。你希望CvPcb试图将它们转换为新的"
-"LIB_ID格式吗？（如果你回答否，这些配置将被清除，你将必须自己重新指定这些封"
+"有些分配的封装是旧版本项目（缺少 LIB 别名）。你希望 CvPcb 试图将它们转换为新"
+"的LIB_ID格式吗？（如果你回答否，这些分配将被清除，你将必须自己重新指定这些封"
 "装。）"
 
 #: cvpcb/readwrite_dlgs.cpp:239
@@ -4219,15 +4219,15 @@ msgstr "元件 \"%s\" 封装 \"%s\" 在所有库中均 <b>没有找到</b> .\n"
 #, c-format
 msgid ""
 "Component \"%s\" footprint \"%s\" was found in <b>multiple</b> libraries.\n"
-msgstr "元件 \"%s\" 封装 \"%s\" 在 <b>多个</b> 库中被找到.\n"
+msgstr "元件 \"%s\" 封装 \"%s\" 在 <b>多个</b> 库中被找到。\n"
 
 #: cvpcb/readwrite_dlgs.cpp:260
 msgid "First check your footprint library table entries."
-msgstr "首先检查封装库列表项。"
+msgstr "首先检查封装库表条目。"
 
 #: cvpcb/readwrite_dlgs.cpp:262
 msgid "Problematic Footprint Library Tables"
-msgstr "封装库列表问题"
+msgstr "有问题的封装库表"
 
 #: cvpcb/readwrite_dlgs.cpp:270
 msgid ""
@@ -4235,7 +4235,7 @@ msgid ""
 "assignments:\n"
 "\n"
 msgstr ""
-"试图转换指定封装时发生下列错误\n"
+"试图转换封装分配时发生下列错误：\n"
 "\n"
 
 #: cvpcb/readwrite_dlgs.cpp:273
@@ -4245,11 +4245,11 @@ msgid ""
 "correctly the next time you import the netlist in Pcbnew."
 msgstr ""
 "\n"
-"您将需要手动重新分配他们，如果你希望下一次在Pcbnew更新正确导入网表。"
+"如果你希望下次在Pcbnew中导入网表时正确更新它们，则需要手动重新分配它们。"
 
 #: cvpcb/toolbars_cvpcb.cpp:45
 msgid "Edit footprint library table"
-msgstr "编辑封装库列表"
+msgstr "编辑封装库表"
 
 #: cvpcb/toolbars_cvpcb.cpp:50
 msgid "View selected footprint"
@@ -4265,34 +4265,31 @@ msgstr "选择下一个未关联的符号"
 
 #: cvpcb/toolbars_cvpcb.cpp:64
 msgid "Perform automatic footprint association"
-msgstr "封装自动关联"
+msgstr "执行自动封装关联"
 
-# what is associations
 #: cvpcb/toolbars_cvpcb.cpp:68
 msgid "Delete all footprint associations"
 msgstr "删除所有封装关联"
 
 #: cvpcb/toolbars_cvpcb.cpp:74
-#, fuzzy
-#| msgid "Footprint Filters"
 msgid "Footprint Filters:"
-msgstr "封装过滤器"
+msgstr "封装过滤器："
 
 #: cvpcb/toolbars_cvpcb.cpp:82
 msgid "Filter footprint list by schematic symbol keywords"
-msgstr "按原理图元件关键字过滤封装列表"
+msgstr "按原理图符号关键字过滤封装列表"
 
 #: cvpcb/toolbars_cvpcb.cpp:89
 msgid "Filter footprint list by pin count"
-msgstr "引脚数量过滤封装"
+msgstr "按引脚数量过滤封装列表"
 
 #: cvpcb/toolbars_cvpcb.cpp:95
 msgid "Filter footprint list by library"
-msgstr "库过滤封装"
+msgstr "按库过滤封装列表"
 
 #: cvpcb/toolbars_cvpcb.cpp:102
 msgid "Filter footprint list using a partial name or a pattern"
-msgstr "使用关键字或一种模式过滤封装列表"
+msgstr "使用部分名称或模式过滤封装列表"
 
 #: cvpcb/tools/cvpcb_selection_tool.cpp:46 gerbview/tools/selection_tool.cpp:74
 msgid "Measure Tool"
@@ -4314,39 +4311,39 @@ msgstr "测量距离"
 #: eeschema/annotate.cpp:114
 #, c-format
 msgid "%d duplicate time stamps were found and replaced."
-msgstr "共找到 %d 处重复的时间标记和更换。"
+msgstr "找到并替换 %d 个重复的时间戳。"
 
 #: eeschema/annotate.cpp:204
 #, c-format
 msgid "Updated %s (unit %s) from %s to %s"
-msgstr "更新%s(单位%s)从%s到%s"
+msgstr "更新 %s， (单元 %s) 从 %s 到 %s"
 
 #: eeschema/annotate.cpp:210
 #, c-format
 msgid "Updated %s from %s to %s"
-msgstr "更新%s从%s到%s"
+msgstr "更新 %s， 从 %s 到 %s"
 
 #: eeschema/annotate.cpp:218
 #, c-format
 msgid "Annotated %s (unit %s) as %s"
-msgstr "标注 %s(单位 %s)为%s"
+msgstr "标注 %s (单元 %s)为 %s"
 
 #: eeschema/annotate.cpp:223
 #, c-format
 msgid "Annotated %s as %s"
-msgstr "批注%s为%s"
+msgstr "标注 %s 为 %s"
 
 #: eeschema/annotate.cpp:233
 msgid "Annotation complete."
-msgstr "批注完成。"
+msgstr "标注完成。"
 
 #: eeschema/backanno.cpp:225
 msgid "Load Symbol Footprint Link File"
-msgstr "载入符号封装关联文件"
+msgstr "载入符号封装链接文件"
 
 #: eeschema/backanno.cpp:236
 msgid "Keep existing footprint field visibility"
-msgstr "保持当前的封装字段可见性"
+msgstr "保持现有的封装字段可见性"
 
 #: eeschema/backanno.cpp:237
 msgid "Show all footprint fields"
@@ -4367,11 +4364,11 @@ msgstr "修改可见性"
 #: eeschema/backanno.cpp:252
 #, c-format
 msgid "Failed to open component-footprint link file \"%s\""
-msgstr "无法打开元件封装链接文件\"%s\""
+msgstr "无法打开元件封装链接文件 \"%s\""
 
 #: eeschema/block.cpp:454
 msgid "No item to paste."
-msgstr "没有粘贴项。"
+msgstr "没有粘贴项目。"
 
 #: eeschema/block.cpp:489 eeschema/files-io.cpp:478 eeschema/sheet.cpp:276
 #, c-format
@@ -4380,8 +4377,8 @@ msgid ""
 "the sheet \"%s\" or one of it's subsheets as a parent somewhere in the "
 "schematic hierarchy."
 msgstr ""
-"该图页无法作出更改，因为目标图页已经有图页<%s>或它的子图页作为上层某处原理图"
-"层次。"
+"该图页无法作出更改，因为目标图页已经将图页 \"%s\" 或其中一个子图页作为层次结"
+"构中某处的父图页。"
 
 #: eeschema/bom_plugins.cpp:34
 #, c-format
@@ -4398,7 +4395,7 @@ msgstr ""
 #, c-format
 msgid ""
 "An attempt was made to remove the %s field from component %s in library %s."
-msgstr "试图删除字段 %s ，属于元件%s 及库%s。"
+msgstr "试图删除字段 %s ，属于元件 %s (%s 库)。"
 
 #: eeschema/class_library.cpp:54
 #, c-format
@@ -4407,13 +4404,13 @@ msgid ""
 "This may cause some unexpected behavior when loading components into a "
 "schematic."
 msgstr ""
-"库 \"%s\" 有重复的条目名 \"%s\" 。\n"
-"在载入元件到原理图时,可能会导致一些异常情况."
+"库 \"%s\" 有重复的条目名 \"%s\"。\n"
+"在载入元件到原理图时,可能会导致一些异常情况。"
 
 #: eeschema/class_library.cpp:537
 #, c-format
 msgid "Unable to load project's \"%s\" file"
-msgstr "无法读取工程文件%s"
+msgstr "无法加载工程文件 %s"
 
 #: eeschema/class_library.cpp:577 eeschema/libedit/lib_edit_frame.cpp:1609
 #: eeschema/symbol_tree_model_adapter.cpp:61
@@ -4430,7 +4427,7 @@ msgid ""
 "Symbol library \"%s\" failed to load. Error:\n"
 " %s"
 msgstr ""
-"符号库 \"%s\" 载入失败。错误:\n"
+"符号库 \"%s\" 载入失败。错误：\n"
 " %s"
 
 #: eeschema/class_library.cpp:661
@@ -4439,45 +4436,45 @@ msgid ""
 "Symbol library \"%s\" failed to load.\n"
 "Error: %s"
 msgstr ""
-"符号库 <%s> 载入失败。\n"
-"错误: %s"
+"符号库 \"%s\" 载入失败。\n"
+"错误：%s"
 
 #: eeschema/component_references_lister.cpp:555
 #, c-format
 msgid "Item not annotated: %s%s (unit %d)\n"
-msgstr "未注明项: %s%s(单元 %d)\n"
+msgstr "未标注项目： %s%s(单元 %d)\n"
 
 #: eeschema/component_references_lister.cpp:562
 #, c-format
 msgid "Item not annotated: %s%s\n"
-msgstr "未注明项: %s%s\n"
+msgstr "未标注项目： %s%s\n"
 
 #: eeschema/component_references_lister.cpp:583
 #, c-format
 msgid "Error: symbol %s%s unit %d and symbol has only %d units defined\n"
-msgstr "错误：符号%s %s单元%d且符号仅定义了%d个单元\n"
+msgstr "错误：符号 %s%s 单元 %d 且符号仅定义了 %d 个单元\n"
 
 #: eeschema/component_references_lister.cpp:621
 #: eeschema/component_references_lister.cpp:651
 #, c-format
 msgid "Multiple item %s%s (unit %d)\n"
-msgstr "多个项 %s%s (单元 %d)\n"
+msgstr "多重项目 %s%s (单元 %d)\n"
 
 #: eeschema/component_references_lister.cpp:628
 #: eeschema/component_references_lister.cpp:658
 #, c-format
 msgid "Multiple item %s%s\n"
-msgstr "多个项  %s%s\n"
+msgstr "多重项目 %s%s\n"
 
 #: eeschema/component_references_lister.cpp:672
 #, c-format
 msgid "Different values for %s%d%s (%s) and %s%d%s (%s)"
-msgstr "%s%d%s (%s) 和 %s%d%s (%s) 为值不相同"
+msgstr "不同的值：%s%d%s (%s) 和 %s%d%s (%s)"
 
 #: eeschema/component_references_lister.cpp:703
 #, c-format
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
-msgstr "重复时间戳 (%s) 在 %s%d 和 %s%d"
+msgstr "重复时间戳 (%s) ， %s%d 和 %s%d"
 
 #: eeschema/controle.cpp:204 eeschema/libedit/lib_edit_frame.cpp:1361
 #: pcbnew/controle.cpp:229 pcbnew/footprint_editor_utils.cpp:135
@@ -4487,7 +4484,7 @@ msgstr "明确选择"
 
 #: eeschema/cross-probing.cpp:85
 msgid "Selected net: "
-msgstr "选择网络: "
+msgstr "选择网络："
 
 #: eeschema/cross-probing.cpp:314
 msgid "Schematic saved"
@@ -4495,7 +4492,7 @@ msgstr "原理图已保存"
 
 #: eeschema/dialogs/dialog_annotate.cpp:111
 msgid "Annotation Messages:"
-msgstr "批注信息："
+msgstr "标注信息："
 
 #: eeschema/dialogs/dialog_annotate.cpp:115
 msgid "Annotate"
@@ -4503,11 +4500,11 @@ msgstr "标注"
 
 #: eeschema/dialogs/dialog_annotate.cpp:210
 msgid "Clear and annotate all of the symbols on the entire schematic?"
-msgstr "清除并注释整个原理图中的所有符号？"
+msgstr "清除并标注整个原理图中的所有符号？"
 
 #: eeschema/dialogs/dialog_annotate.cpp:212
 msgid "Clear and annotate all of the symbols on the current sheet?"
-msgstr "清除并批注当前图页所有符号?"
+msgstr "清除并标注当前图页中所有符号?"
 
 #: eeschema/dialogs/dialog_annotate.cpp:214
 msgid ""
@@ -4517,15 +4514,15 @@ msgid ""
 msgstr ""
 "\n"
 "\n"
-"该操作将改变当前批注并且不可撤销。"
+"该操作将改变当前标注并且不可撤销。"
 
 #: eeschema/dialogs/dialog_annotate.cpp:217
 msgid "Clear and Annotate"
-msgstr "清除批注"
+msgstr "清除与标注"
 
 #: eeschema/dialogs/dialog_annotate.cpp:256
 msgid "Clear the existing annotation for the entire schematic?"
-msgstr "要清除整个原理图的现有的批注吗？"
+msgstr "要清除整个原理图的现有的标注吗？"
 
 #: eeschema/dialogs/dialog_annotate.cpp:258
 msgid "Clear the existing annotation for the current sheet?"
@@ -4564,19 +4561,19 @@ msgstr "顺序："
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:50
 msgid "Sort components by &X position"
-msgstr "X方向排序元件 (&X)"
+msgstr "X 方向排序元件 (&X)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:65
 msgid "Sort components by &Y position"
-msgstr "Y方向排序元件 (&Y)"
+msgstr "Y 方向排序元件 (&Y)"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Keep existing annotations"
-msgstr "保持现有的批注"
+msgstr "保持现有的标注"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset existing annotations"
-msgstr "重置现有的批注"
+msgstr "重置现有的标注"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:80
 msgid "Reset, but keep order of multi-unit parts"
@@ -4588,11 +4585,11 @@ msgstr "重置，但保持多单元器件的顺序"
 #: pcbnew/dialogs/dialog_block_options_base.cpp:20
 #: pcbnew/dialogs/dialog_pns_settings_base.cpp:26
 msgid "Options:"
-msgstr "选项:"
+msgstr "选项："
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:87
 msgid "Numbering:"
-msgstr "编号："
+msgstr "编号方式："
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:94
 msgid "Use first free number after:"
@@ -4600,15 +4597,15 @@ msgstr "使用该数字之后的编号："
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:100
 msgid "First free after sheet number X 100"
-msgstr "参考编号X100"
+msgstr "参考编号 X 100"
 
 #: eeschema/dialogs/dialog_annotate_base.cpp:103
 msgid "First free after sheet number X 1000"
-msgstr "参考编号X1000"
+msgstr "参考编号 X 1000"
 
 #: eeschema/dialogs/dialog_annotate_base.h:80
 msgid "Annotate Schematic"
-msgstr "批注原理图"
+msgstr "标注原理图"
 
 #: eeschema/dialogs/dialog_bom.cpp:239
 msgid "Generate"
@@ -4625,11 +4622,11 @@ msgstr "添加插件"
 #: eeschema/dialogs/dialog_bom.cpp:517
 #, c-format
 msgid "Nickname \"%s\" already in use."
-msgstr "昵称 \"%s\"已经被占用了。"
+msgstr "昵称 \"%s\" 已经被占用了。"
 
 #: eeschema/dialogs/dialog_bom.cpp:552 eeschema/dialogs/dialog_netlist.cpp:820
 msgid "Plugin files:"
-msgstr "插件文件:"
+msgstr "插件文件："
 
 #: eeschema/dialogs/dialog_bom.cpp:571
 msgid "Plugin file name not found."
@@ -4637,7 +4634,7 @@ msgstr "没有找到插件文件名。"
 
 #: eeschema/dialogs/dialog_bom.cpp:581
 msgid "No text editor selected in KiCad.  Please choose one."
-msgstr "KiCad中未选择任何文本编辑器，请选择一个。"
+msgstr "在 KiCad 中未选择任何文本编辑器，请选择一个。"
 
 #: eeschema/dialogs/dialog_bom.cpp:587
 msgid "Bill of Material Generation Help"
@@ -4645,11 +4642,11 @@ msgstr "BOM 生成帮助"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:25
 msgid "BOM plugins:"
-msgstr "BOM插件:"
+msgstr "BOM插件："
 
 #: eeschema/dialogs/dialog_bom_base.cpp:69
 msgid "Add a new plugin and its command line to the list"
-msgstr "在列表中添加一个新插件及其命令行"
+msgstr "将一个新插件及其命令行添加到列表中"
 
 #: eeschema/dialogs/dialog_bom_base.cpp:74
 msgid "Edit the plugin file in the text editor"
@@ -4678,7 +4675,7 @@ msgstr ""
 
 #: eeschema/dialogs/dialog_bom_base.h:80
 msgid "Bill of Material"
-msgstr "BOM 材料清单"
+msgstr "BOM (材料清单)"
 
 #: eeschema/dialogs/dialog_choose_component.cpp:129
 #: pcbnew/dialogs/dialog_choose_footprint.cpp:104
@@ -4693,7 +4690,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"加载符号%s发生错误，来自于库%s。\n"
+"加载符号 %s 发生错误，来自于库 %s。\n"
 "\n"
 "%s"
 
@@ -4713,7 +4710,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"从库中%s加载符号发生错误%s\n"
+"加载符号 %s 发生错误，来自于库 %s。\n"
 "\n"
 "%s"
 
@@ -4737,22 +4734,22 @@ msgstr "是否删除符号多余单元?"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:291
 msgid "Add new pins for alternate body style (DeMorgan) to symbol?"
-msgstr "添加一个新的引脚到符号的备用主体 ( 德摩根 )？"
+msgstr "添加新的引脚到符号的备用主体 ( 德摩根 )？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:296
 msgid "Delete alternate body style (DeMorgan) draw items from symbol?"
-msgstr "确定从符号中删除备用主体样式（德摩根）的图形项？"
+msgstr "确定从符号中删除备用主体样式（德摩根）的图形项目？"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:443
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:531
 #, c-format
 msgid "The first %d fields are mandatory."
-msgstr "首字段%d是必填字段。"
+msgstr "首字段 %d 是必填字段。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:662
 #, c-format
 msgid "Alias \"%s\" already exists."
-msgstr "别名\"%s\" 已经存在."
+msgstr "别名 \"%s\" 已经存在。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:677
 #, c-format
@@ -4766,7 +4763,7 @@ msgstr "无标题"
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:698
 #, c-format
 msgid "untitled%i"
-msgstr "无标题%i"
+msgstr "无标题 %i"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:767
 msgid "Add Footprint Filter"
@@ -4887,7 +4884,7 @@ msgstr "有备用符号 (德摩根)"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:166
 msgid "Check this option if the symbol has an alternate body style (De Morgan)"
-msgstr "如果符号具有备用的主体样式（德摩根），请选中此选项"
+msgstr "如果符号有备用主体样式（德摩根），请选中此选项"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:170
 msgid "Define as power symbol"
@@ -4900,18 +4897,22 @@ msgid ""
 "from editing in Eeschema.  The symbol will not be included in\n"
 "the BOM and cannot be assigned a footprint."
 msgstr ""
+"设置此选项会使有问题的符号出现在\n"
+"“添加电源端口” 对话框。 它将锁定值文本，防止\n"
+"在 Eeschema 中编辑。 该符号将不包括在\n"
+"BOM中，并且无法分配封装。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:178
 msgid "Number of Units:"
-msgstr "单位数量："
+msgstr "单元数量："
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:180
 msgid "Enter the number of units for a symbol that contains more than one unit"
-msgstr "为包含多于一个单元的元件输入单元数"
+msgstr "为包含多个单元的元件输入单元数量"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:190
 msgid "All units are not interchangeable"
-msgstr "所有单元不可互换"
+msgstr "所有单元不能互换"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:191
 msgid ""
@@ -4924,7 +4925,7 @@ msgstr "创建多单元符号时，勾选这个选项，所有单元都不能互
 #: gerbview/dialogs/panel_gerbview_display_options_base.cpp:28
 #: pcbnew/dialogs/panel_pcbnew_display_options_base.cpp:29
 msgid "Annotations"
-msgstr "批注"
+msgstr "标注"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:207
 msgid "Show pin number"
@@ -4944,15 +4945,15 @@ msgstr "显示或隐藏引脚名称"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:222
 msgid "Place pin names inside"
-msgstr "引脚名称在内部"
+msgstr "将引脚名称放在里面"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:224
 msgid ""
 "Check this option to have pin names inside the body and pin number outside.\n"
 "If not checked pins names and pins numbers are outside."
 msgstr ""
-"勾选此选项，引脚编号在主体外侧,引脚名称在主体内侧。\n"
-"如果未选中引脚名称和引脚编号都在外侧。"
+"勾选此选项，引脚编号在符号主体外侧，引脚名称在内侧。\n"
+"如果未选中，引脚名称和编号都在外侧。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:231
 msgid "Position offset:"
@@ -4964,8 +4965,8 @@ msgid ""
 "body.\n"
 "A value from 10 to 40 is usually good."
 msgstr ""
-"引脚名称的位置和部件主体之间距离。\n"
-"通常设置为10到40的比较理想。"
+"引脚名称的位置和元件主体之间距离。\n"
+"通常设置为 10 到 40 是比较理想的。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:240
 #: eeschema/dialogs/dialog_edit_label_base.cpp:68
@@ -5009,11 +5010,11 @@ msgstr "删除别名"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:306
 msgid "Alias field substitutions:"
-msgstr "别名字段替换:"
+msgstr "别名字段替换："
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:359
 msgid "Alias name:"
-msgstr "别名:"
+msgstr "别名："
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:367
 msgid "Alias description:"
@@ -5037,8 +5038,8 @@ msgid ""
 "Footprints names can used wildcards like sm* to allow all footprints names "
 "starting by sm."
 msgstr ""
-"可以用于这个符号的封装名称列表.\n"
-"封装名称可以使用通配符。如SM*，可以允许所有以SM开头的封装名称。"
+"可以用于这个符号的封装名称列表。\n"
+"可以使用像 sm* 这样的通配符来允许所有以 sm 开头的封装名称。"
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:412
 msgid "Add footprint filter"
@@ -5059,11 +5060,11 @@ msgstr "封装过滤器"
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:452
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:220
 msgid "Edit Spice Model..."
-msgstr "编辑Spice模型..."
+msgstr "编辑 Spice 模型..."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.h:118
 msgid "Library Symbol Properties"
-msgstr "符号库属性"
+msgstr "库符号属性"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:304
 msgid "Library reference is not valid."
@@ -5072,7 +5073,7 @@ msgstr "库参考无效。"
 #: eeschema/dialogs/dialog_edit_component_in_schematic.cpp:324
 #, c-format
 msgid "Symbol \"%s\" not found in library \"%s\"."
-msgstr "符号\"%s\"在库中\"%s\"没有找到。"
+msgstr "符号 \"%s\" 在库中 \"%s\" 没有找到。"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:107
 #: eeschema/menubar.cpp:504
@@ -5097,7 +5098,7 @@ msgstr "浏览库"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:151
 msgid "Unit:"
-msgstr "单位:"
+msgstr "单元："
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:165
 msgid "Alternate symbol (DeMorgan)"
@@ -5109,7 +5110,7 @@ msgid ""
 "For gates, this is the \"De Morgan\" conversion"
 msgstr ""
 "使用此符号的备用形状。\n"
-"对于门而言，这是“德摩根”转换"
+"对于门而言，这是 “德摩根” 转换"
 
 #: eeschema/dialogs/dialog_edit_component_in_schematic_base.cpp:176
 #: eeschema/dialogs/dialog_lib_edit_pin_table_base.cpp:103
