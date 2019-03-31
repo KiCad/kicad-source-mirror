@@ -103,22 +103,12 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	bSizerOptions->Add( bSizerOptSettings, 1, wxEXPAND, 5 );
 	
 	
-	gbSizer1->Add( bSizerOptions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
-	
-	wxBoxSizer* bSizerMessages;
-	bSizerMessages = new wxBoxSizer( wxVERTICAL );
-	
-	m_messagesLabel = new wxStaticText( this, wxID_ANY, _("Messages"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_messagesLabel->Wrap( -1 );
-	bSizerMessages->Add( m_messagesLabel, 0, wxLEFT|wxRIGHT|wxTOP, 5 );
+	gbSizer1->Add( bSizerOptions, wxGBPosition( 0, 0 ), wxGBSpan( 1, 1 ), wxEXPAND|wxRIGHT|wxLEFT, 5 );
 	
 	m_Messages = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxHSCROLL|wxTE_MULTILINE|wxTE_READONLY );
 	m_Messages->SetMinSize( wxSize( 280,-1 ) );
 	
-	bSizerMessages->Add( m_Messages, 1, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT|wxTOP, 2 );
-	
-	
-	gbSizer1->Add( bSizerMessages, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 5 );
+	gbSizer1->Add( m_Messages, wxGBPosition( 0, 1 ), wxGBSpan( 1, 1 ), wxEXPAND|wxTOP|wxLEFT, 5 );
 	
 	wxFlexGridSizer* fgSizerRpt;
 	fgSizerRpt = new wxFlexGridSizer( 0, 3, 0, 0 );
@@ -149,7 +139,7 @@ DIALOG_DRC_CONTROL_BASE::DIALOG_DRC_CONTROL_BASE( wxWindow* parent, wxWindowID i
 	gbSizer1->AddGrowableCol( 0 );
 	gbSizer1->AddGrowableCol( 1 );
 	
-	m_MainSizer->Add( gbSizer1, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	m_MainSizer->Add( gbSizer1, 0, wxEXPAND|wxALL, 5 );
 	
 	m_Notebook = new wxNotebook( this, ID_NOTEBOOK1, wxDefaultPosition, wxDefaultSize, 0 );
 	m_Notebook->SetMinSize( wxSize( 640,280 ) );

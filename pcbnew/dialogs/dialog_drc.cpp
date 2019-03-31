@@ -69,10 +69,6 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
     m_currentBoard = m_brdEditor->GetBoard();
     m_BrdSettings = m_brdEditor->GetBoard()->GetDesignSettings();
 
-    wxFont messagesLabelFont = wxSystemSettings::GetFont( wxSYS_DEFAULT_GUI_FONT );
-    messagesLabelFont.SetSymbolicSize( wxFONTSIZE_SMALL );
-    m_messagesLabel->SetFont( messagesLabelFont );
-
     m_BrowseButton->SetBitmap( KiBitmap( folder_xpm ) );
 
     // We use a sdbSizer here to get the order right, which is platform-dependent

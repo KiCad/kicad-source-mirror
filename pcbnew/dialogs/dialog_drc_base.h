@@ -62,7 +62,6 @@ class DIALOG_DRC_CONTROL_BASE : public DIALOG_SHIM
 		wxCheckBox* m_cbReportAllTrackErrors;
 		wxCheckBox* m_cbReportTracksToZonesErrors;
 		wxCheckBox* m_cbTestFootprints;
-		wxStaticText* m_messagesLabel;
 		wxTextCtrl* m_Messages;
 		wxCheckBox* m_CreateRptCtrl;
 		wxTextCtrl* m_RptFilenameCtrl;
