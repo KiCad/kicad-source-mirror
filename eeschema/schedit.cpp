@@ -561,6 +561,11 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         break;
 
     case ID_HIGHLIGHT:
+        // TODO(JE) remove once real-time connectivity is a given
+        #ifndef CONNECTIVITY_REAL_TIME
+        RecalculateConnections();
+        #endif
+
         SetToolID( ID_HIGHLIGHT, wxCURSOR_HAND, _("Highlight specific net") );
         break;
 
