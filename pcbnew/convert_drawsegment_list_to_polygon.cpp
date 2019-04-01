@@ -324,7 +324,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     // Output the Edge.Cuts perimeter as circle or polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
-        int steps = GetArcToSegmentCount( graphic->GetRadius(), aTolerance, 360.0 );
+        int steps = std::max<int>( 4, GetArcToSegmentCount( graphic->GetRadius(), aTolerance, 360.0 ) );
         TransformCircleToPolygon( aPolygons, graphic->GetCenter(), graphic->GetRadius(), steps );
     }
     else if( graphic->GetShape() == S_POLYGON )
@@ -530,7 +530,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
             double   angle   = 3600.0;
             wxPoint  start   = center;
             int      radius  = graphic->GetRadius();
-            int      steps   = GetArcToSegmentCount( radius, aTolerance, 360.0 );
+            int      steps   = std::max<int>( 4, GetArcToSegmentCount( radius, aTolerance, 360.0 ) );
             wxPoint  nextPt;
 
             start.x += radius;
