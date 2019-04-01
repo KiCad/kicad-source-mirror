@@ -1002,7 +1002,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         {
         }
 
-        if( subgraph && subgraph->m_driver )
+        if( subgraph && subgraph->m_driver_connection )
         {
             auto parent = subgraph->m_driver_connection;
             pc->Connection( sheet )->Clone( *parent );
