@@ -1026,7 +1026,6 @@ void ROUTER_TOOL::performDragging( int aMode )
             return;
     }
 
-    m_gridHelper->SetAuxAxes( true, m_startSnapPoint, true );
     bool dragStarted = m_router->StartDragging( m_startSnapPoint, m_startItem, aMode );
 
     if( !dragStarted )
@@ -1036,7 +1035,7 @@ void ROUTER_TOOL::performDragging( int aMode )
         highlightNet( true, m_startItem->Net() );
 
     ctls->SetAutoPan( true );
-
+    m_gridHelper->SetAuxAxes( true, m_startSnapPoint, true );
     frame()->UndoRedoBlock( true );
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -1066,6 +1065,7 @@ void ROUTER_TOOL::performDragging( int aMode )
 
     m_startItem = nullptr;
 
+    m_gridHelper->SetAuxAxes( false );
     frame()->UndoRedoBlock( false );
     ctls->SetAutoPan( false );
     ctls->ForceCursorPosition( false );
@@ -1178,7 +1178,6 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
 
     VECTOR2I p0 = controls()->GetCursorPosition( false );
     auto p = snapToItem( true, m_startItem, p0 );
-    m_gridHelper->SetAuxAxes( true, p, true );
     int dragMode = aEvent.Parameter<int64_t> ();
 
     bool dragStarted = m_router->StartDragging( p, m_startItem, dragMode );
@@ -1186,6 +1185,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( !dragStarted )
         return 0;
 
+    m_gridHelper->SetAuxAxes( true, p, true );
     controls()->ShowCursor( true );
     controls()->ForceCursorPosition( false );
     controls()->SetAutoPan( true );
@@ -1213,6 +1213,7 @@ int ROUTER_TOOL::InlineDrag( const TOOL_EVENT& aEvent )
     if( m_router->RoutingInProgress() )
         m_router->StopRouting();
 
+    m_gridHelper->SetAuxAxes( false );
     controls()->SetAutoPan( false );
     controls()->ForceCursorPosition( false );
     frame()->UndoRedoBlock( false );
