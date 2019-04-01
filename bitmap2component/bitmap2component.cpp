@@ -1,8 +1,8 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2013 jean-pierre.charras
- * Copyright (C) 1992-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 jean-pierre.charras
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,9 @@
 
 #include "bitmap2component.h"
 
+// Unit conversion. Coord unit from potrace is mm
+#define MM2MICRON 1e3       // For pl_editor
+#define MM2NANOMETER 1e6    // For pcbew
 
 /* free a potrace bitmap */
 static void bm_free( potrace_bitmap_t* bm )
@@ -99,7 +102,7 @@ private:
     /**
      * Function OuputOnePolygon
      * write one polygon to output file.
-     * Polygon coordinates are expected scaled by the polugon extraction function
+     * Polygon coordinates are expected scaled by the polygon extraction function
      */
     void OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName );
 
@@ -166,8 +169,8 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
     {
     case KICAD_LOGO:
         info.m_Format = KICAD_LOGO;
-        info.m_ScaleX = 1e3 * 25.4 / aDpi_X;       // the conversion scale from PPI to micro
-        info.m_ScaleY = 1e3 * 25.4 / aDpi_Y;       // Y axis is top to bottom
+        info.m_ScaleX = MM2MICRON * 25.4 / aDpi_X;  // the conversion scale from PPI to micron
+        info.m_ScaleY = MM2MICRON * 25.4 / aDpi_Y;  // Y axis is top to bottom
         info.CreateOutputFile();
         break;
 
@@ -181,15 +184,15 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
 
     case EESCHEMA_FMT:
         info.m_Format = EESCHEMA_FMT;
-        info.m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to UI
+        info.m_ScaleX = 1000.0 / aDpi_X;       // the conversion scale from PPI to UI (mil)
         info.m_ScaleY = -1000.0 / aDpi_Y;      // Y axis is bottom to Top for components in libs
         info.CreateOutputFile();
         break;
 
     case PCBNEW_KICAD_MOD:
         info.m_Format = PCBNEW_KICAD_MOD;
-        info.m_ScaleX = 1e6 * 25.4 / aDpi_X;       // the conversion scale from PPI to UI
-        info.m_ScaleY = 1e6 * 25.4 / aDpi_Y;       // Y axis is top to bottom in modedit
+        info.m_ScaleX = MM2NANOMETER * 25.4 / aDpi_X;   // the conversion scale from PPI to UI
+        info.m_ScaleY = MM2NANOMETER * 25.4 / aDpi_Y;   // Y axis is top to bottom in modedit
         info.CreateOutputFile( aModLayer );
         break;
 
@@ -204,6 +207,7 @@ int bitmap2component( potrace_bitmap_t* aPotrace_bitmap, FILE* aOutfile,
 
     return 0;
 }
+
 
 const char* BITMAPCONV_INFO::getBrdLayerName( BMP2CMP_MOD_LAYER aChoice )
 {
@@ -230,6 +234,7 @@ const char* BITMAPCONV_INFO::getBrdLayerName( BMP2CMP_MOD_LAYER aChoice )
 
     return layerName;
 }
+
 
 void BITMAPCONV_INFO::OuputFileHeader(  const char * aBrdLayerName )
 {
@@ -303,13 +308,11 @@ void BITMAPCONV_INFO::OuputFileEnd()
     }
 }
 
-/**
- * Function OuputOnePolygon
- * write one polygon to output file.
- * Polygon coordinates are expected scaled by the polygon extraction function
- */
+
 void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* aBrdLayerName )
 {
+    // write one polygon to output file.
+    // coordinates are expected in target unit.
     int ii, jj;
     VECTOR2I currpoint;
 
@@ -351,8 +354,8 @@ void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
         {
             currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " (xy %f %f)",
-                    ( currpoint.x - offsetX ) / 1e6,
-                    ( currpoint.y - offsetY ) / 1e6 );
+                    ( currpoint.x - offsetX ) / MM2NANOMETER,
+                    ( currpoint.y - offsetY ) / MM2NANOMETER );
 
             if( jj++ > 6 )
             {
@@ -360,10 +363,8 @@ void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
                 fprintf( m_Outfile, ("\n    ") );
             }
         }
-        // Close polygon
-        fprintf( m_Outfile, " (xy %f %f) )",
-                ( startpoint.x - offsetX ) / 1e6, ( startpoint.y - offsetY ) / 1e6 );
-
+        // No need to close polygon
+        fprintf( m_Outfile, " )" );
         fprintf( m_Outfile, "(layer %s) (width  %f)\n  )\n", aBrdLayerName, width );
 
     }
@@ -377,8 +378,8 @@ void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
         {
             currpoint = aPolygon.CPoint( ii );
             fprintf( m_Outfile, " (xy %.3f %.3f)",
-                    ( currpoint.x - offsetX ) / 1e3,
-                    ( currpoint.y - offsetY ) / 1e3 );
+                    ( currpoint.x - offsetX ) / MM2MICRON,
+                    ( currpoint.y - offsetY ) / MM2MICRON );
 
             if( jj++ > 4 )
             {
@@ -388,7 +389,8 @@ void BITMAPCONV_INFO::OuputOnePolygon( SHAPE_LINE_CHAIN & aPolygon, const char* 
         }
         // Close polygon
         fprintf( m_Outfile, " (xy %.3f %.3f) )\n",
-                ( startpoint.x - offsetX ) / 1e3, ( startpoint.y - offsetY ) / 1e3 );
+                 ( startpoint.x - offsetX ) / MM2MICRON,
+                 ( startpoint.y - offsetY ) / MM2MICRON );
         break;
 
     case EESCHEMA_FMT:
@@ -490,10 +492,14 @@ void BITMAPCONV_INFO::CreateOutputFile( BMP2CMP_MOD_LAYER aModLayer )
          */
         if( paths->next == NULL || paths->next->sign == '+' )
         {
-            // Substract holes to main polygon:
-            polyset_areas.Simplify( SHAPE_POLY_SET::PM_FAST );
-            polyset_holes.Simplify( SHAPE_POLY_SET::PM_FAST );
-            polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_FAST );
+            polyset_areas.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            polyset_holes.Simplify( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+            polyset_areas.BooleanSubtract( polyset_holes, SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
+
+            // Ensure there are no self intersecting polygons
+            polyset_areas.NormalizeAreaOutlines();
+
+            // Convert polygon with holes to a unique polygon
             polyset_areas.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
 
             // Output current resulting polygon(s)
