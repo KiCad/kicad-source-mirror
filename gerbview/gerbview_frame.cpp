@@ -86,7 +86,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_showAxis = true;                      // true to show X and Y axis on screen
     m_showBorderAndTitleBlock = false;      // true for reference drawings.
-    m_hotkeysDescrList = GerbviewHokeysDescr;
+    m_hotkeysDescrList = GerbviewHotkeysDescr;
     m_SelLayerBox   = NULL;
     m_DCodeSelector = NULL;
     m_SelComponentBox = nullptr;

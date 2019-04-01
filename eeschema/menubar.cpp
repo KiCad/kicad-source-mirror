@@ -140,7 +140,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
                  _( "Navigate schematic hierarchy" ),
                  KiBitmap( hierarchy_nav_xpm ) );
 
-    text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hokeys_Descr, HK_LEAVE_SHEET );
+    text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hotkeys_Descr, HK_LEAVE_SHEET );
     AddMenuItem( aParentMenu,
                  ID_POPUP_SCH_LEAVE_SHEET, text,
                  _( "Return to parent schematic sheet" ),
@@ -163,24 +163,24 @@ void prepareViewMenu( wxMenu* aParentMenu )
      * using in AddHotkeyName call the option "false" (not a shortcut)
      */
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &In" ), g_Schematic_Hotkeys_Descr,
                           HK_ZOOM_IN, IS_ACCELERATOR );  // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &Out" ), g_Schematic_Hotkeys_Descr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );  // add accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Schematic_Hokeys_Descr, HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Schematic_Hotkeys_Descr, HK_ZOOM_AUTO );
 
     AddMenuItem( aParentMenu, ID_ZOOM_PAGE, text,
                  HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to Selection" ), g_Eeschema_Hokeys_Descr, HK_ZOOM_SELECTION );
+    text = AddHotkeyName( _( "Zoom to Selection" ), g_Eeschema_Hotkeys_Descr, HK_ZOOM_SELECTION );
 
     AddMenuItem( aParentMenu, ID_MENU_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hotkeys_Descr, HK_ZOOM_REDRAW );
 
     AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
@@ -232,59 +232,59 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "&Symbol" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Symbol" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_NEW_COMPONENT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_PLACE_COMPONENT, text,
                  HELP_PLACE_COMPONENTS,
                  KiBitmap( add_component_xpm ) );
 
-    text = AddHotkeyName( _( "&Power Port" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Power Port" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_NEW_POWER, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_PLACE_POWER_BUTT, text,
                  HELP_PLACE_POWERPORT,
                  KiBitmap( add_power_xpm ) );
 
-    text = AddHotkeyName( _( "&Wire" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Wire" ), g_Schematic_Hotkeys_Descr,
                           HK_BEGIN_WIRE, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_WIRE_BUTT, text,
                  HELP_PLACE_WIRE,
                  KiBitmap( add_line_xpm ) );
 
-    text = AddHotkeyName( _( "&Bus" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Bus" ), g_Schematic_Hotkeys_Descr,
                           HK_BEGIN_BUS, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_BUS_BUTT, text,
                  HELP_PLACE_BUS,
                  KiBitmap( add_bus_xpm ) );
 
-    text = AddHotkeyName( _( "Wire to Bus &Entry" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Wire to Bus &Entry" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_WIRE_ENTRY, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_WIRETOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_WIRE2BUS_ENTRY,
                  KiBitmap( add_line2bus_xpm ) );
 
-    text = AddHotkeyName( _( "Bus &to Bus Entry" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Bus &to Bus Entry" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_BUS_ENTRY, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_BUSTOBUS_ENTRY_BUTT, text,
                  HELP_PLACE_BUS2BUS_ENTRY,
                  KiBitmap( add_bus2bus_xpm ) );
 
-    text = AddHotkeyName( _( "&No Connect Flag" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&No Connect Flag" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_NOCONN_FLAG, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, KiBitmap( noconn_xpm ) );
 
-    text = AddHotkeyName( _( "&Junction" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Junction" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_JUNCTION, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_JUNCTION_BUTT, text,
                  HELP_PLACE_JUNCTION,
                  KiBitmap( add_junction_xpm ) );
 
-    text = AddHotkeyName( _( "&Label" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Label" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_LABEL, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_LABEL_BUTT, text,
                  HELP_PLACE_NETLABEL,
                  KiBitmap( add_line_label_xpm ) );
 
-    text = AddHotkeyName( _( "Gl&obal Label" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Gl&obal Label" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_GLABEL, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_GLABEL_BUTT, text,
                  HELP_PLACE_GLOBALLABEL,
@@ -292,14 +292,14 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Hierarchical Label" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Hierarchical Label" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_HLABEL, IS_ACCELERATOR );          // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_HIERLABEL_BUTT,
                  text, HELP_PLACE_HIER_LABEL,
                  KiBitmap( add_hierarchical_label_xpm ) );
 
 
-    text = AddHotkeyName( _( "Hierar&chical Sheet" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Hierar&chical Sheet" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_HIER_SHEET, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_SHEET_SYMBOL_BUTT, text,
                  HELP_PLACE_SHEET,
@@ -319,13 +319,13 @@ void preparePlaceMenu( wxMenu* aParentMenu )
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Graphic Pol&yline" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Graphic Pol&yline" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_GRAPHIC_POLYLINE, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_LINE_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICLINES,
                  KiBitmap( add_dashed_line_xpm ) );
 
-    text = AddHotkeyName( _( "&Graphic Text" ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "&Graphic Text" ), g_Schematic_Hotkeys_Descr,
                           HK_ADD_GRAPHIC_TEXT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
     AddMenuItem( aParentMenu, ID_MENU_TEXT_COMMENT_BUTT, text,
                  HELP_PLACE_GRAPHICTEXTS,
@@ -358,12 +358,12 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     if( aIsOutsideProject )   // not when under a project mgr
     {
-        text = AddHotkeyName( _( "&New..." ), g_Schematic_Hokeys_Descr, HK_NEW );
+        text = AddHotkeyName( _( "&New..." ), g_Schematic_Hotkeys_Descr, HK_NEW );
         AddMenuItem( aParentMenu, ID_NEW_PROJECT, text,
                      _( "Start new schematic root sheet" ),
                      KiBitmap( new_document_xpm ) );
 
-        text = AddHotkeyName( _( "&Open..." ), g_Schematic_Hokeys_Descr, HK_OPEN );
+        text = AddHotkeyName( _( "&Open..." ), g_Schematic_Hotkeys_Descr, HK_OPEN );
         AddMenuItem( aParentMenu, ID_LOAD_PROJECT, text,
                      _( "Open existing schematic" ),
                      KiBitmap( open_document_xpm ) );
@@ -375,7 +375,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
         aParentMenu->AppendSeparator();
     }
 
-    text = AddHotkeyName( _( "&Save" ), g_Schematic_Hokeys_Descr, HK_SAVE );
+    text = AddHotkeyName( _( "&Save" ), g_Schematic_Hotkeys_Descr, HK_SAVE );
     AddMenuItem( aParentMenu, ID_SAVE_PROJECT, text,
                  _( "Save changes" ),
                  KiBitmap( save_xpm ) );
@@ -384,7 +384,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Save only the current sheet" ),
                  KiBitmap( save_xpm ) );
 
-    text = AddHotkeyName( _( "Save C&urrent Sheet As..." ), g_Schematic_Hokeys_Descr, HK_SAVEAS );
+    text = AddHotkeyName( _( "Save C&urrent Sheet As..." ), g_Schematic_Hotkeys_Descr, HK_SAVEAS );
     AddMenuItem( aParentMenu, ID_SAVE_ONE_SHEET_UNDER_NEW_NAME, text,
                  _( "Save a copy of the current sheet" ),
                  KiBitmap( save_as_xpm ) );
@@ -431,7 +431,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Settings for sheet size and frame references" ),
                  KiBitmap( sheetset_xpm ) );
 
-    text = AddHotkeyName( _( "&Print..." ), g_Schematic_Hokeys_Descr, HK_PRINT );
+    text = AddHotkeyName( _( "&Print..." ), g_Schematic_Hotkeys_Descr, HK_PRINT );
     AddMenuItem( aParentMenu, wxID_PRINT, text,
                  _( "Print schematic sheet" ),
                  KiBitmap( print_button_xpm ) );
@@ -454,28 +454,28 @@ void prepareEditMenu( wxMenu* aParentMenu )
     wxString text;
 
     // Undo
-    text = AddHotkeyName( _( "&Undo" ), g_Schematic_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), g_Schematic_Hotkeys_Descr, HK_UNDO );
 
     AddMenuItem( aParentMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
 
     // Redo
-    text = AddHotkeyName( _( "&Redo" ), g_Schematic_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), g_Schematic_Hotkeys_Descr, HK_REDO );
 
     AddMenuItem( aParentMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
 
     aParentMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Cut" ), g_Schematic_Hokeys_Descr, HK_EDIT_CUT );
+    text = AddHotkeyName( _( "&Cut" ), g_Schematic_Hotkeys_Descr, HK_EDIT_CUT );
     AddMenuItem( aParentMenu, wxID_CUT, text,
                  _( "Cuts the selected item(s) to the Clipboard" ),
                  KiBitmap( cut_xpm ) );
 
-    text = AddHotkeyName( _( "&Copy" ), g_Schematic_Hokeys_Descr, HK_EDIT_COPY );
+    text = AddHotkeyName( _( "&Copy" ), g_Schematic_Hotkeys_Descr, HK_EDIT_COPY );
     AddMenuItem( aParentMenu, wxID_COPY, text,
                  _( "Copies the selected item(s) to the Clipboard" ),
                  KiBitmap( copy_xpm ) );
 
-    text = AddHotkeyName( _( "&Paste" ), g_Schematic_Hokeys_Descr, HK_EDIT_PASTE );
+    text = AddHotkeyName( _( "&Paste" ), g_Schematic_Hotkeys_Descr, HK_EDIT_PASTE );
     AddMenuItem( aParentMenu, wxID_PASTE, text,
                  _( "Pastes item(s) from the Clipboard" ),
                  KiBitmap( paste_xpm ) );
@@ -488,11 +488,11 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     // Find
     aParentMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Find..." ), g_Schematic_Hokeys_Descr, HK_FIND_ITEM );
+    text = AddHotkeyName( _( "&Find..." ), g_Schematic_Hotkeys_Descr, HK_FIND_ITEM );
     AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
 
     // Find/Replace
-    text = AddHotkeyName( _( "Find and Re&place..." ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Find and Re&place..." ), g_Schematic_Hotkeys_Descr,
                           HK_FIND_REPLACE );
     AddMenuItem( aParentMenu, wxID_REPLACE, text, HELP_REPLACE,
                  KiBitmap( find_replace_xpm ) );
@@ -520,7 +520,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 {
     wxString text;
 
-    text = AddHotkeyName( _( "Update PCB from Schematic..." ), g_Schematic_Hokeys_Descr,
+    text = AddHotkeyName( _( "Update PCB from Schematic..." ), g_Schematic_Hotkeys_Descr,
                           HK_UPDATE_PCB_FROM_SCH );
 
     AddMenuItem( aParentMenu,
@@ -600,7 +600,7 @@ void prepareHelpMenu( wxMenu* aParentMenu )
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Eeschema_Hokeys_Descr, HK_HELP );
+    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Eeschema_Hotkeys_Descr, HK_HELP );
     AddMenuItem( aParentMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, text,
                  _( "Displays current hotkeys table and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );
@@ -639,13 +639,13 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
     aParentMenu->AppendSeparator();
 
-    wxString text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hokeys_Descr,
+    wxString text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Eeschema_Hokeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Eeschema_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),

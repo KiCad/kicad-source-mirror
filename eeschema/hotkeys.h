@@ -85,15 +85,15 @@ enum hotkey_id_commnand {
 };
 
 // List of hotkey descriptors for Eeschema
-extern struct EDA_HOTKEY_CONFIG g_Eeschema_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Eeschema_Hotkeys_Descr[];
 
 // List of hotkey descriptors for the schematic editor only
-extern struct EDA_HOTKEY_CONFIG g_Schematic_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Schematic_Hotkeys_Descr[];
 
 // List of hotkey descriptors for the lib editor only
-extern struct EDA_HOTKEY_CONFIG g_Libedit_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Libedit_Hotkeys_Descr[];
 
 // List of hotkey descriptors for the lib browser only
-extern struct EDA_HOTKEY_CONFIG g_Viewlib_Hokeys_Descr[];
+extern struct EDA_HOTKEY_CONFIG g_Viewlib_Hotkeys_Descr[];
 
 #endif      // EESCHEMA_KOTKEYS_H_

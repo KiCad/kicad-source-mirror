@@ -72,14 +72,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "&Save" ), g_Libedit_Hokeys_Descr, HK_SAVE );
+    text = AddHotkeyName( _( "&Save" ), g_Libedit_Hotkeys_Descr, HK_SAVE );
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE,
                  text,
                  _( "Save changes" ),
                  KiBitmap( save_xpm ) );
 
-    text = AddHotkeyName( _( "Save &As..." ), g_Libedit_Hokeys_Descr, HK_SAVEAS );
+    text = AddHotkeyName( _( "Save &As..." ), g_Libedit_Hotkeys_Descr, HK_SAVEAS );
     AddMenuItem( fileMenu,
                  ID_LIBEDIT_SAVE_AS,
                  text,
@@ -135,14 +135,14 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Edit menu
     wxMenu* editMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "&Undo" ), g_Libedit_Hokeys_Descr, HK_UNDO );
+    text = AddHotkeyName( _( "&Undo" ), g_Libedit_Hotkeys_Descr, HK_UNDO );
     AddMenuItem( editMenu,
                  wxID_UNDO,
                  text,
                  _( "Undo last edit" ),
                  KiBitmap( undo_xpm ) );
 
-    text = AddHotkeyName( _( "&Redo" ), g_Libedit_Hokeys_Descr, HK_REDO );
+    text = AddHotkeyName( _( "&Redo" ), g_Libedit_Hotkeys_Descr, HK_REDO );
     AddMenuItem( editMenu,
                  wxID_REDO,
                  text,
@@ -196,16 +196,16 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
     // Fit on screen
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Libedit_Hokeys_Descr, HK_ZOOM_AUTO );
+    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Libedit_Hotkeys_Descr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
     text = AddHotkeyName( _( "Zoom to Selection" ),
-                          g_Schematic_Hokeys_Descr, HK_ZOOM_SELECTION );
+                          g_Schematic_Hotkeys_Descr, HK_ZOOM_SELECTION );
     AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
     // Redraw
-    text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 
     viewMenu->AppendSeparator();
@@ -296,7 +296,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     wxMenu* inspectMenu = new wxMenu;
 
 
-    text = AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hokeys_Descr, HK_LIBEDIT_VIEW_DOC );
+    text = AddHotkeyName( _( "Show Datasheet" ), g_Libedit_Hotkeys_Descr, HK_LIBEDIT_VIEW_DOC );
     AddMenuItem( inspectMenu,
                  ID_LIBEDIT_VIEW_DOC,
                  text,
@@ -340,13 +340,13 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     preferencesMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Libedit_Hokeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Libedit_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
     AddMenuItem( preferencesMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Libedit_Hokeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), g_Libedit_Hotkeys_Descr,
                           HK_CANVAS_CAIRO );
     AddMenuItem( preferencesMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
@@ -370,7 +370,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Libedit_Hokeys_Descr, HK_HELP );
+    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Libedit_Hotkeys_Descr, HK_HELP );
     AddMenuItem( helpMenu,
                  ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
                  text,

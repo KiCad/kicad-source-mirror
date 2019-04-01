@@ -133,7 +133,7 @@ EDA_HOTKEY* gerbviewHotkeyList[] = {
 static wxString gerbviewSectionTag( wxT( "[gerbview]" ) );
 static wxString gerbviewSectionTitle( _HKI( "Gerbview Hotkeys" ) );
 
-struct EDA_HOTKEY_CONFIG GerbviewHokeysDescr[] =
+struct EDA_HOTKEY_CONFIG GerbviewHotkeysDescr[] =
 {
     { &gerbviewSectionTag, gerbviewHotkeyList, &gerbviewSectionTitle  },
     { NULL,                NULL,               NULL  }
@@ -172,7 +172,7 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         return false;
 
     case HK_HELP:       // Display Current hotkey list
-        DisplayHotkeyList( this, GerbviewHokeysDescr );
+        DisplayHotkeyList( this, GerbviewHotkeysDescr );
         break;
 
     case HK_ZOOM_IN:

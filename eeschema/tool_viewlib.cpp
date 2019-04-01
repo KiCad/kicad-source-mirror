@@ -62,22 +62,22 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             _( "Display next symbol" ) );
 
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hotkeys_Descr,
             HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
             KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), g_Viewlib_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom out" ), g_Viewlib_Hotkeys_Descr,
             HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
             KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Redraw view" ), g_Viewlib_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Redraw view" ), g_Viewlib_Hotkeys_Descr,
             HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom to fit symbol" ), g_Viewlib_Hokeys_Descr,
+    msg = AddHotkeyName( _( "Zoom to fit symbol" ), g_Viewlib_Hotkeys_Descr,
             HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
@@ -147,19 +147,19 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
     // View menu
     wxMenu* viewMenu = new wxMenu;
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Viewlib_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &In" ), g_Viewlib_Hotkeys_Descr,
                           HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Viewlib_Hokeys_Descr,
+    text = AddHotkeyName( _( "Zoom &Out" ), g_Viewlib_Hotkeys_Descr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Viewlib_Hokeys_Descr, HK_ZOOM_AUTO  );
+    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Viewlib_Hotkeys_Descr, HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Viewlib_Hokeys_Descr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), g_Viewlib_Hotkeys_Descr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
 

@@ -133,7 +133,7 @@ void LIB_EDIT_FRAME::Process_Config( wxCommandEvent& event )
     {
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for LibEdit.
-        DisplayHotkeyList( this, g_Libedit_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Libedit_Hotkeys_Descr );
         break;
 
     default:
@@ -182,7 +182,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for eeschema.
-        DisplayHotkeyList( this, g_Schematic_Hokeys_Descr );
+        DisplayHotkeyList( this, g_Schematic_Hotkeys_Descr );
         break;
 
     default:
@@ -193,7 +193,7 @@ void SCH_EDIT_FRAME::Process_Config( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
-    if( ShowPreferences( g_Eeschema_Hokeys_Descr, g_Schematic_Hokeys_Descr, wxT( "eeschema" ) ) )
+    if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Schematic_Hotkeys_Descr, wxT( "eeschema" ) ) )
     {
         SaveSettings( config() );  // save values shared by eeschema applications.
         m_canvas->Refresh( true );
@@ -388,7 +388,7 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     long tmp;
 
-    ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hokeys_Descr );
+    ReadHotkeyConfig( SCH_EDIT_FRAME_NAME, g_Schematic_Hotkeys_Descr );
     wxConfigLoadSetups( aCfg, GetConfigurationSettings() );
 
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
@@ -517,7 +517,7 @@ void LIB_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    ReadHotkeyConfig( LIB_EDIT_FRAME_NAME, g_Libedit_Hokeys_Descr );
+    ReadHotkeyConfig( LIB_EDIT_FRAME_NAME, g_Libedit_Hotkeys_Descr );
 
     SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SetDefaultPinLength( (int) aCfg->Read( DefaultPinLengthEntry, DEFAULTPINLENGTH ) );
@@ -579,7 +579,7 @@ void LIB_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
 void LIB_EDIT_FRAME::OnPreferencesOptions( wxCommandEvent& event )
 {
-    if( ShowPreferences( g_Eeschema_Hokeys_Descr, g_Libedit_Hokeys_Descr, wxT( "eeschema" ) ) )
+    if( ShowPreferences( g_Eeschema_Hotkeys_Descr, g_Libedit_Hotkeys_Descr, wxT( "eeschema" ) ) )
     {
         SaveSettings( config() );  // save values shared by eeschema applications.
         m_canvas->Refresh( true );

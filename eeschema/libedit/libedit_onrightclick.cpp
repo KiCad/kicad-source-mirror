@@ -102,7 +102,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         if( GetToolId() == ID_NO_TOOL_SELECTED )
         {
-            msg = AddHotkeyName( _( "&Paste" ), g_Libedit_Hokeys_Descr, HK_EDIT_PASTE );
+            msg = AddHotkeyName( _( "&Paste" ), g_Libedit_Hotkeys_Descr, HK_EDIT_PASTE );
             AddMenuItem( PopMenu, ID_POPUP_PASTE_BLOCK, msg, _( "Pastes copied item(s)" ),
                          KiBitmap( paste_xpm ) );
             PopMenu->AppendSeparator();
@@ -123,20 +123,20 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_ARC_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_xpm ) );
-            msg = AddHotkeyName( _( "Drag Arc Edge" ), g_Libedit_Hokeys_Descr, HK_DRAG );
+            msg = AddHotkeyName( _( "Drag Arc Edge" ), g_Libedit_Hotkeys_Descr, HK_DRAG );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, KiBitmap( move_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Arc Options" ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Arc Options" ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, KiBitmap( options_arc_xpm ) );
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_xpm ) );
         }
         break;
@@ -144,22 +144,22 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_CIRCLE_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_xpm ) );
-            msg = AddHotkeyName( _( "Drag Circle Outline" ), g_Libedit_Hokeys_Descr, HK_DRAG );
+            msg = AddHotkeyName( _( "Drag Circle Outline" ), g_Libedit_Hotkeys_Descr, HK_DRAG );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg,
                          KiBitmap( move_rectangle_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Circle Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Circle Options..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_circle_xpm ) );
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg,
                          KiBitmap( delete_circle_xpm ) );
         }
@@ -168,22 +168,22 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_RECTANGLE_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move Rectangle" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move Rectangle" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_rectangle_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Rectangle Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Rectangle Options..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_rectangle_xpm ) );
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Drag Rectangle Edge" ), g_Libedit_Hokeys_Descr, HK_DRAG );
+            msg = AddHotkeyName( _( "Drag Rectangle Edge" ), g_Libedit_Hotkeys_Descr, HK_DRAG );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg,
                          KiBitmap( move_rectangle_xpm ) );
-            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg,
                          KiBitmap( delete_rectangle_xpm ) );
         }
@@ -193,21 +193,21 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_TEXT_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
 
-        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hotkeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_xpm ) );
         }
         break;
@@ -215,11 +215,11 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_POLYLINE_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_xpm ) );
-            msg = AddHotkeyName( _( "Drag Edge Point" ), g_Libedit_Hokeys_Descr, HK_DRAG );
+            msg = AddHotkeyName( _( "Drag Edge Point" ), g_Libedit_Hotkeys_Descr, HK_DRAG );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MODIFY_ITEM, msg, KiBitmap( move_exactly_xpm ) );
         }
 
@@ -229,13 +229,13 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                          KiBitmap( checked_ok_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Edit Line Options..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit Line Options..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_BODY_EDIT_ITEM, msg,
                      KiBitmap( options_segment_xpm ) );
 
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+            msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg,
                          KiBitmap( delete_xpm ) );
         }
@@ -244,7 +244,7 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         {
             if( ( (LIB_POLYLINE*) item )->GetCornerCount() > 2 )
             {
-                msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+                msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
                 AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
                              msg, KiBitmap( delete_xpm ) );
             }
@@ -255,15 +255,15 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case LIB_FIELD_T:
         if( not_edited )
         {
-            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+            msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
             AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg,
                          KiBitmap( move_xpm ) );
         }
 
-        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hotkeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
-        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT );
+        msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
         break;
 
@@ -287,20 +287,20 @@ void AddMenusForPin( wxMenu* PopMenu, LIB_PIN* Pin, LIB_EDIT_FRAME* frame )
 
     if( not_in_move )
     {
-        msg = AddHotkeyName( _( "Move" ), g_Libedit_Hokeys_Descr,
+        msg = AddHotkeyName( _( "Move" ), g_Libedit_Hotkeys_Descr,
                                  HK_LIBEDIT_MOVE_GRAPHIC_ITEM );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST, msg, KiBitmap( move_xpm ) );
     }
 
-    msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hokeys_Descr, HK_EDIT);
+    msg = AddHotkeyName( _( "Edit..." ), g_Libedit_Hotkeys_Descr, HK_EDIT);
     AddMenuItem( PopMenu, ID_LIBEDIT_EDIT_PIN, msg, KiBitmap( edit_xpm ) );
 
-    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+    msg = AddHotkeyName( _( "Rotate Clockwise" ), g_Libedit_Hotkeys_Descr, HK_ROTATE );
     AddMenuItem( PopMenu, ID_LIBEDIT_ROTATE_ITEM, msg, KiBitmap( rotate_cw_xpm ) );
 
     if( not_in_move )
     {
-        msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hokeys_Descr, HK_DELETE );
+        msg = AddHotkeyName( _( "Delete" ), g_Libedit_Hotkeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_DELETE_ITEM, msg, KiBitmap( delete_xpm ) );
     }
 
@@ -345,25 +345,25 @@ void AddMenusForBlock( wxMenu* PopMenu, LIB_EDIT_FRAME* frame )
         AddMenuItem( PopMenu, ID_POPUP_SELECT_ITEMS_BLOCK, _( "Select Items" ),
                      KiBitmap( green_xpm ) );
 
-        msg = AddHotkeyName( _( "Cut Block" ), g_Schematic_Hokeys_Descr, HK_EDIT_CUT );
+        msg = AddHotkeyName( _( "Cut Block" ), g_Schematic_Hotkeys_Descr, HK_EDIT_CUT );
         AddMenuItem( PopMenu, ID_POPUP_CUT_BLOCK, msg, KiBitmap( cut_xpm ) );
 
-        msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hokeys_Descr, HK_EDIT_COPY );
+        msg = AddHotkeyName( _( "Copy Block" ), g_Schematic_Hotkeys_Descr, HK_EDIT_COPY );
         AddMenuItem( PopMenu, ID_POPUP_COPY_BLOCK, msg,
                      KiBitmap( copy_xpm ) );
 
         AddMenuItem( PopMenu, ID_POPUP_DUPLICATE_BLOCK, _( "Duplicate Block" ),
                      KiBitmap( duplicate_xpm ) );
 
-        msg = AddHotkeyName( _( "Mirror Block Around Horizontal(X) Axis" ), g_Libedit_Hokeys_Descr, HK_MIRROR_X );
+        msg = AddHotkeyName( _( "Mirror Block Around Horizontal(X) Axis" ), g_Libedit_Hotkeys_Descr, HK_MIRROR_X );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_X_BLOCK, msg,
                      KiBitmap( mirror_v_xpm ) );
 
-        msg = AddHotkeyName( _( "Mirror Block Around Vertical(Y) Axis" ), g_Libedit_Hokeys_Descr, HK_MIRROR_Y );
+        msg = AddHotkeyName( _( "Mirror Block Around Vertical(Y) Axis" ), g_Libedit_Hotkeys_Descr, HK_MIRROR_Y );
         AddMenuItem( PopMenu, ID_POPUP_MIRROR_Y_BLOCK, msg,
                      KiBitmap( mirror_h_xpm ) );
 
-        msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Libedit_Hokeys_Descr, HK_ROTATE );
+        msg = AddHotkeyName( _( "Rotate Counterclockwise" ), g_Libedit_Hotkeys_Descr, HK_ROTATE );
         AddMenuItem( PopMenu, ID_POPUP_ROTATE_BLOCK, msg,
                      KiBitmap( rotate_ccw_xpm ) );
 

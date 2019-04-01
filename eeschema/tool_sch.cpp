@@ -91,16 +91,16 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( HELP_UNDO, g_Schematic_Hokeys_Descr, HK_UNDO, IS_COMMENT );
+    msg = AddHotkeyName( HELP_UNDO, g_Schematic_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ), msg );
 
-    msg = AddHotkeyName( HELP_REDO, g_Schematic_Hokeys_Descr, HK_REDO, IS_COMMENT );
+    msg = AddHotkeyName( HELP_REDO, g_Schematic_Hotkeys_Descr, HK_REDO, IS_COMMENT );
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
 
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( HELP_FIND, g_Schematic_Hokeys_Descr, HK_FIND_ITEM, IS_COMMENT );
+    msg = AddHotkeyName( HELP_FIND, g_Schematic_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
     m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiScaledBitmap( find_xpm, this ), msg );
 
     m_mainToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiScaledBitmap( find_replace_xpm, this ),
@@ -110,17 +110,17 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Schematic_Hokeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Schematic_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_IN, g_Schematic_Hokeys_Descr, HK_ZOOM_IN, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_IN, g_Schematic_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Schematic_Hokeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Schematic_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Schematic_Hokeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
+    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Schematic_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 

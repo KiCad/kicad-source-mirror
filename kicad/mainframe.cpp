@@ -61,7 +61,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
 {
     m_active_project = false;
     m_leftWinWidth = 60;
-    m_manager_Hokeys_Descr = NULL;
+    m_manager_Hotkeys_Descr = NULL;
 
     // Create the status line (bottom of the frame)
     static const int dims[3] = { -1, -1, 100 };
@@ -560,7 +560,7 @@ void KICAD_MANAGER_FRAME::PrintPrjInfo()
 
 void KICAD_MANAGER_FRAME::OnShowHotkeys( wxCommandEvent& event )
 {
-    DisplayHotkeyList( this, m_manager_Hokeys_Descr );
+    DisplayHotkeyList( this, m_manager_Hotkeys_Descr );
 }
 
 
@@ -587,5 +587,5 @@ void KICAD_MANAGER_FRAME::OnEditFpLibTable( wxCommandEvent& aEvent )
 
 void KICAD_MANAGER_FRAME::OnPreferences( wxCommandEvent& aEvent )
 {
-    ShowPreferences( m_manager_Hokeys_Descr, m_manager_Hokeys_Descr, wxT( "kicad" ) );
+    ShowPreferences( m_manager_Hotkeys_Descr, m_manager_Hotkeys_Descr, wxT( "kicad" ) );
 }

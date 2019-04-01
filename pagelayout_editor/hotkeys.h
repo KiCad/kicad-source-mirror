@@ -46,6 +46,6 @@ enum hotkey_id_commnand {
 };
 
 // List of hotkey descriptors for PlEditor.
-extern struct EDA_HOTKEY_CONFIG PlEditorHokeysDescr[];
+extern struct EDA_HOTKEY_CONFIG PlEditorHotkeysDescr[];
 
 #endif		// PL_EDITOR_KOTKEYS_H_
