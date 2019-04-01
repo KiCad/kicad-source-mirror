@@ -1808,21 +1808,7 @@ int DRAWING_TOOL::getSegmentWidth( PCB_LAYER_ID aLayer ) const
 
 PCB_LAYER_ID DRAWING_TOOL::getDrawingLayer() const
 {
-    PCB_LAYER_ID layer = m_frame->GetActiveLayer();
-
-    if( IsCopperLayer( layer ) )
-    {
-        if( layer == F_Cu )
-            layer = F_SilkS;
-        else if( layer == B_Cu )
-            layer = B_SilkS;
-        else
-            layer = Dwgs_User;
-
-        m_frame->SetActiveLayer( layer );
-    }
-
-    return layer;
+    return m_frame->GetActiveLayer();
 }
 
 
