@@ -102,6 +102,14 @@ class PCB_PARSER : public PCB_LEXER
      */
     void init();
 
+    /**
+     * Creates a mapping from the (short-lived) bug where layer names were translated
+     * TODO: Remove this once we support custom layer names
+     *
+     * @param aMap string mapping from translated to English layer names
+     */
+    void createOldLayerMapping( std::unordered_map< std::string, std::string >& aMap );
+
     void parseHeader();
     void parseGeneralSection();
     void parsePAGE_INFO();
