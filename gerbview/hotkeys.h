@@ -50,6 +50,6 @@ enum hotkey_id_commnand {
 };
 
 // List of hotkey descriptors for GerbView.
-extern struct EDA_HOTKEY_CONFIG GerbviewHokeysDescr[];
+extern struct EDA_HOTKEY_CONFIG GerbviewHotkeysDescr[];
 
 #endif		// GERBVIEW_KOTKEYS_H_

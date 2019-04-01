@@ -299,7 +299,7 @@ private:
     wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
 
     int m_leftWinWidth;
-    EDA_HOTKEY_CONFIG* m_manager_Hokeys_Descr;
+    EDA_HOTKEY_CONFIG* m_manager_Hotkeys_Descr;
 
     void language_change( wxCommandEvent& event );
 

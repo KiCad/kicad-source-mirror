@@ -46,12 +46,12 @@ void GERBVIEW_FRAME::Process_Config( wxCommandEvent& event )
     switch( id )
     {
     case wxID_PREFERENCES:
-        ShowPreferences( GerbviewHokeysDescr, GerbviewHokeysDescr, wxT( "gerbview" ) );
+        ShowPreferences( GerbviewHotkeysDescr, GerbviewHotkeysDescr, wxT( "gerbview" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
         // Display current hotkey list for GerbView.
-        DisplayHotkeyList( this, GerbviewHokeysDescr );
+        DisplayHotkeyList( this, GerbviewHotkeysDescr );
         break;
 
     default:

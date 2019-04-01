@@ -66,11 +66,11 @@ void PL_EDITOR_FRAME::Process_Config( wxCommandEvent& event )
         break;
 
     case wxID_PREFERENCES:
-        ShowPreferences( PlEditorHokeysDescr, PlEditorHokeysDescr, wxT( "pl_editor" ) );
+        ShowPreferences( PlEditorHotkeysDescr, PlEditorHotkeysDescr, wxT( "pl_editor" ) );
         break;
 
     case ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST:
-        DisplayHotkeyList( this, PlEditorHokeysDescr );
+        DisplayHotkeyList( this, PlEditorHotkeysDescr );
         break;
 
     default:

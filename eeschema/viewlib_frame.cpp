@@ -126,7 +126,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
     icon.CopyFromBitmap( KiBitmap( library_browse_xpm ) );
     SetIcon( icon );
 
-    m_hotkeysDescrList = g_Viewlib_Hokeys_Descr;
+    m_hotkeysDescrList = g_Viewlib_Hotkeys_Descr;
     m_libListWidth = 200;
     m_cmpListWidth = 300;
     m_listPowerCmpOnly = false;

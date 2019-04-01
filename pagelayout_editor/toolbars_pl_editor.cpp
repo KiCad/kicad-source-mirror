@@ -79,17 +79,17 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     // Standard Zoom controls:
     m_mainToolBar->AddSeparator();
-    msg = AddHotkeyName( _( "Redraw view" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Redraw view" ), PlEditorHotkeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom in" ), PlEditorHokeysDescr, HK_ZOOM_IN,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom in" ), PlEditorHotkeysDescr, HK_ZOOM_IN,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), PlEditorHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom out" ), PlEditorHotkeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom to fit page" ), PlEditorHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom to fit page" ), PlEditorHotkeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 

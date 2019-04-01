@@ -59,12 +59,12 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // File Menu:
     wxMenu* fileMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "&New" ), PlEditorHokeysDescr, HK_NEW );
+    msg = AddHotkeyName( _( "&New" ), PlEditorHotkeysDescr, HK_NEW );
     AddMenuItem( fileMenu, wxID_NEW, msg,
                  _( "Create new page layout design" ),
                  KiBitmap( new_page_layout_xpm ) );
 
-    msg = AddHotkeyName( _( "&Open..." ), PlEditorHokeysDescr, HK_OPEN );
+    msg = AddHotkeyName( _( "&Open..." ), PlEditorHotkeysDescr, HK_OPEN );
     AddMenuItem( fileMenu, wxID_OPEN, msg,
                  _( "Open an existing page layout design file" ),
                  KiBitmap(  open_page_layout_xpm ) );
@@ -78,19 +78,19 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    msg = AddHotkeyName( _( "&Save" ), PlEditorHokeysDescr, HK_SAVE );
+    msg = AddHotkeyName( _( "&Save" ), PlEditorHotkeysDescr, HK_SAVE );
     AddMenuItem( fileMenu, wxID_SAVE, msg,
                  _( "Save current page layout design file" ),
                  KiBitmap( save_xpm ) );
 
-    msg = AddHotkeyName( _( "Save &As..." ), PlEditorHokeysDescr, HK_SAVEAS );
+    msg = AddHotkeyName( _( "Save &As..." ), PlEditorHotkeysDescr, HK_SAVEAS );
     AddMenuItem( fileMenu, wxID_SAVEAS, msg,
                  _( "Save current page layout design file with a different name" ),
                  KiBitmap( save_as_xpm ) );
 
     fileMenu->AppendSeparator();
 
-    msg = AddHotkeyName( _( "&Print..." ), PlEditorHokeysDescr, HK_PRINT );
+    msg = AddHotkeyName( _( "&Print..." ), PlEditorHotkeysDescr, HK_PRINT );
     AddMenuItem( fileMenu, wxID_PRINT, msg, KiBitmap( print_button_xpm ) );
 
     AddMenuItem( fileMenu, wxID_PREVIEW, _( "Print Pre&view..." ), KiBitmap( print_button_xpm ) );
@@ -105,10 +105,10 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Edit Menu:
     wxMenu* editMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Undo" ), PlEditorHokeysDescr, HK_UNDO );
+    msg = AddHotkeyName( _( "Undo" ), PlEditorHotkeysDescr, HK_UNDO );
     AddMenuItem( editMenu, wxID_UNDO, msg, wxEmptyString, KiBitmap( undo_xpm ) );
 
-    msg = AddHotkeyName( _( "Redo" ), PlEditorHokeysDescr, HK_REDO );
+    msg = AddHotkeyName( _( "Redo" ), PlEditorHotkeysDescr, HK_REDO );
     AddMenuItem( editMenu, wxID_REDO, msg, wxEmptyString, KiBitmap( redo_xpm ) );
 
     editMenu->AppendSeparator();
@@ -119,16 +119,16 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // View Menu:
     wxMenu* viewMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHokeysDescr, HK_ZOOM_IN, IS_ACCELERATOR );
+    msg = AddHotkeyName( _( "Zoom In" ), PlEditorHotkeysDescr, HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, msg, wxEmptyString, KiBitmap( zoom_in_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHokeysDescr, HK_ZOOM_OUT, IS_ACCELERATOR );
+    msg = AddHotkeyName( _( "Zoom Out" ), PlEditorHotkeysDescr, HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, msg, wxEmptyString, KiBitmap( zoom_out_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom to Fit" ), PlEditorHokeysDescr, HK_ZOOM_AUTO );
+    msg = AddHotkeyName( _( "Zoom to Fit" ), PlEditorHotkeysDescr, HK_ZOOM_AUTO );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, msg, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ) );
 
-    msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHokeysDescr, HK_ZOOM_SELECTION );
+    msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHotkeysDescr, HK_ZOOM_SELECTION );
     AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ) );
 
     viewMenu->AppendSeparator();
@@ -143,7 +143,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    msg = AddHotkeyName( _( "Redraw View" ), PlEditorHokeysDescr, HK_ZOOM_REDRAW );
+    msg = AddHotkeyName( _( "Redraw View" ), PlEditorHotkeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, msg, wxEmptyString, KiBitmap( zoom_redraw_xpm ) );
 
 
@@ -191,7 +191,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
                  _( "Open \"Getting Started in KiCad\" guide for beginners" ),
                  KiBitmap( help_xpm ) );
 
-    msg = AddHotkeyName( _( "&List Hotkeys" ), PlEditorHokeysDescr, HK_HELP );
+    msg = AddHotkeyName( _( "&List Hotkeys" ), PlEditorHotkeysDescr, HK_HELP );
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, msg,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );

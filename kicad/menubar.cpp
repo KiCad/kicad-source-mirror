@@ -173,7 +173,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
 // here we have only one section.
 static wxString sectionTitle( _HKI( "Kicad Manager Hotkeys" ) );
 
-struct EDA_HOTKEY_CONFIG kicad_Manager_Hokeys_Descr[] = {
+struct EDA_HOTKEY_CONFIG kicad_Manager_Hotkeys_Descr[] = {
     { &g_CommonSectionTag,      common_Hotkey_List,         &sectionTitle      },
     { NULL,                     NULL,                       NULL               }
 };
@@ -189,7 +189,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     static wxMenu* openRecentMenu;  // Open Recent submenu,
                                     // static to remember this menu
 
-    m_manager_Hokeys_Descr = kicad_Manager_Hokeys_Descr;
+    m_manager_Hotkeys_Descr = kicad_Manager_Hotkeys_Descr;
 
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
@@ -208,12 +208,12 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
 
     // New project creation
     wxMenu* newprjSubMenu = new wxMenu();
-    msg = AddHotkeyName( _( "&Project..." ), kicad_Manager_Hokeys_Descr, HK_NEW );
+    msg = AddHotkeyName( _( "&Project..." ), kicad_Manager_Hotkeys_Descr, HK_NEW );
     AddMenuItem( newprjSubMenu, ID_NEW_PROJECT, msg,
                  _( "Create new blank project" ),
                  KiBitmap( new_project_xpm ) );
     msg = AddHotkeyName( _( "Project from &Template..." ),
-                         kicad_Manager_Hokeys_Descr, HK_NEW_PRJ_TEMPLATE );
+                         kicad_Manager_Hotkeys_Descr, HK_NEW_PRJ_TEMPLATE );
     AddMenuItem( newprjSubMenu, ID_NEW_PROJECT_FROM_TEMPLATE, msg,
                  _( "Create new project from template" ),
                  KiBitmap( new_project_with_template_xpm ) );
@@ -224,7 +224,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  KiBitmap( new_project_xpm ) );
 
     // Open
-    msg = AddHotkeyName( _( "&Open Project..." ), kicad_Manager_Hokeys_Descr, HK_OPEN );
+    msg = AddHotkeyName( _( "&Open Project..." ), kicad_Manager_Hotkeys_Descr, HK_OPEN );
     AddMenuItem( fileMenu, ID_LOAD_PROJECT, msg,
                  _( "Open an existing project" ),
                  KiBitmap( open_project_xpm ) );
@@ -243,7 +243,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // (Kicad manager does not save any info in .pro file)
 #if 0
     // Save
-    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hokeys_Descr, HK_SAVE );
+    msg = AddHotkeyName( _( "&Save" ), kicad_Manager_Hotkeys_Descr, HK_SAVE );
     AddMenuItem( fileMenu, ID_SAVE_PROJECT, msg,
                  _( "Save current project" ),
                  KiBitmap( save_project_xpm ) );
@@ -294,7 +294,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
      wxMenu* viewMenu = new wxMenu();
 
      // Refresh project tree
-     msg = AddHotkeyName( _( "&Refresh" ), kicad_Manager_Hokeys_Descr, HK_REFRESH );
+     msg = AddHotkeyName( _( "&Refresh" ), kicad_Manager_Hotkeys_Descr, HK_REFRESH );
      AddMenuItem( viewMenu, ID_PROJECT_TREE_REFRESH, msg,
                   _( "Refresh project tree" ),
                   KiBitmap( reload_xpm ) );
@@ -364,37 +364,37 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Menu Tools:
     wxMenu* toolsMenu = new wxMenu;
 
-    msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hokeys_Descr, HK_RUN_EESCHEMA );
+    msg = AddHotkeyName( _( "Edit Schematic" ), kicad_Manager_Hotkeys_Descr, HK_RUN_EESCHEMA );
     AddMenuItem( toolsMenu, ID_TO_SCH, msg, KiBitmap( eeschema_xpm ) );
 
     msg = AddHotkeyName( _( "Edit Schematic Symbols" ),
-                         kicad_Manager_Hokeys_Descr, HK_RUN_LIBEDIT );
+                         kicad_Manager_Hotkeys_Descr, HK_RUN_LIBEDIT );
     AddMenuItem( toolsMenu, ID_TO_SCH_LIB_EDITOR, msg, KiBitmap( libedit_xpm ) );
 
     msg = AddHotkeyName( _( "Edit PCB" ),
-                         kicad_Manager_Hokeys_Descr, HK_RUN_PCBNEW );
+                         kicad_Manager_Hotkeys_Descr, HK_RUN_PCBNEW );
     AddMenuItem( toolsMenu, ID_TO_PCB, msg, KiBitmap( pcbnew_xpm ) );
 
     msg = AddHotkeyName( _( "Edit PCB Footprints" ),
-                         kicad_Manager_Hokeys_Descr, HK_RUN_FPEDITOR );
+                         kicad_Manager_Hotkeys_Descr, HK_RUN_FPEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_FP_EDITOR, msg, KiBitmap( module_editor_xpm ) );
 
     msg = AddHotkeyName( _( "View Gerber Files" ),
-                         kicad_Manager_Hokeys_Descr, HK_RUN_GERBVIEW );
+                         kicad_Manager_Hotkeys_Descr, HK_RUN_GERBVIEW );
     AddMenuItem( toolsMenu, ID_TO_GERBVIEW, msg, KiBitmap( icon_gerbview_small_xpm ) );
 
     msg = AddHotkeyName( _( "Convert Image" ),
-                         kicad_Manager_Hokeys_Descr, HK_RUN_BM2COMPONENT );
+                         kicad_Manager_Hotkeys_Descr, HK_RUN_BM2COMPONENT );
     AddMenuItem( toolsMenu, ID_TO_BITMAP_CONVERTER, msg,
                  _( "Convert bitmap images to schematic or PCB components." ),
                  KiBitmap( bitmap2component_xpm ) );
 
-    msg = AddHotkeyName( _( "Calculator Tools" ), kicad_Manager_Hokeys_Descr, HK_RUN_PCBCALCULATOR );
+    msg = AddHotkeyName( _( "Calculator Tools" ), kicad_Manager_Hotkeys_Descr, HK_RUN_PCBCALCULATOR );
     AddMenuItem( toolsMenu, ID_TO_PCB_CALCULATOR, msg,
                  _( "Run component calculations, track width calculations, etc." ),
                  KiBitmap( calculator_xpm ) );
 
-    msg = AddHotkeyName( _( "Edit Worksheet" ), kicad_Manager_Hokeys_Descr, HK_RUN_PLEDITOR );
+    msg = AddHotkeyName( _( "Edit Worksheet" ), kicad_Manager_Hotkeys_Descr, HK_RUN_PLEDITOR );
     AddMenuItem( toolsMenu, ID_TO_PL_EDITOR, msg,
                  _( "Edit worksheet graphics and text" ),
                  KiBitmap( pagelayout_load_xpm ) );
@@ -450,7 +450,7 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
     // Note Use wxMenuBar::SetLabel only after the menubar
     // has been associated with a frame. (see wxWidgets doc)
     msg = AddHotkeyName( menuBar->GetLabel( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST ),
-                         kicad_Manager_Hokeys_Descr, HK_HELP );
+                         kicad_Manager_Hotkeys_Descr, HK_HELP );
     menuBar->SetLabel( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, msg );
 }
 

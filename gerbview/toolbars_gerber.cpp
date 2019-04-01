@@ -72,16 +72,16 @@ void GERBVIEW_FRAME::ReCreateHToolbar( void )
                             _( "Print layers" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Redraw view" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Redraw view" ), GerbviewHotkeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom in" ), GerbviewHokeysDescr, HK_ZOOM_IN,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom in" ), GerbviewHotkeysDescr, HK_ZOOM_IN,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom out" ), GerbviewHokeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom out" ), GerbviewHotkeysDescr, HK_ZOOM_OUT,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
 
-    msg = AddHotkeyName( _( "Zoom to fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
+    msg = AddHotkeyName( _( "Zoom to fit" ), GerbviewHotkeysDescr, HK_ZOOM_AUTO,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
                             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 

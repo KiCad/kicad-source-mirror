@@ -200,22 +200,22 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
      * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
      * for Zoom in and Zoom out sub menus
      */
-    text = AddHotkeyName( _( "Zoom &In" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Zoom &In" ), GerbviewHotkeysDescr,
                           HK_ZOOM_IN, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom in" ), KiBitmap( zoom_in_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom &Out" ), GerbviewHokeysDescr,
+    text = AddHotkeyName( _( "Zoom &Out" ), GerbviewHotkeysDescr,
                           HK_ZOOM_OUT, IS_ACCELERATOR );
     AddMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom out" ), KiBitmap( zoom_out_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to &Fit" ), GerbviewHokeysDescr, HK_ZOOM_AUTO  );
+    text = AddHotkeyName( _( "Zoom to &Fit" ), GerbviewHotkeysDescr, HK_ZOOM_AUTO  );
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit" ),
                  KiBitmap( zoom_fit_in_page_xpm ) );
 
-    text = AddHotkeyName( _( "Zoom to Selection" ), GerbviewHokeysDescr, HK_ZOOM_SELECTION );
+    text = AddHotkeyName( _( "Zoom to Selection" ), GerbviewHotkeysDescr, HK_ZOOM_SELECTION );
     AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "&Redraw" ), GerbviewHokeysDescr, HK_ZOOM_REDRAW );
+    text = AddHotkeyName( _( "&Redraw" ), GerbviewHotkeysDescr, HK_ZOOM_REDRAW );
     AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
                  _( "Refresh screen" ), KiBitmap( zoom_redraw_xpm ) );
 
@@ -246,27 +246,27 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     viewMenu->AppendSeparator();
 
-    text = AddHotkeyName( _( "Sketch F&lashed Items" ), GerbviewHokeysDescr, HK_GBR_FLASHED_DISPLAY_MODE );
+    text = AddHotkeyName( _( "Sketch F&lashed Items" ), GerbviewHotkeysDescr, HK_GBR_FLASHED_DISPLAY_MODE );
     AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, text,
                  _( "Show flashed items in outline mode" ),
                  KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Sketch &Lines" ), GerbviewHokeysDescr, HK_GBR_LINES_DISPLAY_MODE );
+    text = AddHotkeyName( _( "Sketch &Lines" ), GerbviewHotkeysDescr, HK_GBR_LINES_DISPLAY_MODE );
     AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LINES_SKETCH, text,
                  _( "Show lines in outline mode" ),
                  KiBitmap( showtrack_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Sketch Pol&ygons" ), GerbviewHokeysDescr, HK_GBR_POLYGON_DISPLAY_MODE );
+    text = AddHotkeyName( _( "Sketch Pol&ygons" ), GerbviewHotkeysDescr, HK_GBR_POLYGON_DISPLAY_MODE );
     AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, text,
                  _( "Show polygons in outline mode" ),
                  KiBitmap( opt_show_polygon_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Show &DCodes" ), GerbviewHokeysDescr, HK_GBR_DCODE_DISPLAY_ONOFF );
+    text = AddHotkeyName( _( "Show &DCodes" ), GerbviewHotkeysDescr, HK_GBR_DCODE_DISPLAY_ONOFF );
     AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_DCODES, text,
                  _( "Show or hide DCodes" ),
                  KiBitmap( show_dcodenumber_xpm ), wxITEM_CHECK );
 
-    text = AddHotkeyName( _( "Show &Negative Objects" ), GerbviewHokeysDescr, HK_GBR_NEGATIVE_DISPLAY_ONOFF );
+    text = AddHotkeyName( _( "Show &Negative Objects" ), GerbviewHotkeysDescr, HK_GBR_NEGATIVE_DISPLAY_ONOFF );
     AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, text,
                  _( "Show negative objects in ghost color" ),
                  KiBitmap( gerbview_show_negative_objects_xpm ), wxITEM_CHECK );
@@ -277,7 +277,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                      _( "Show in Differential Mode" ), _( "Show layers in differential mode" ),
                      KiBitmap( gbr_select_mode2_xpm ), wxITEM_CHECK );
 
-        text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHokeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
+        text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
         AddMenuItem( viewMenu, ID_TB_OPTIONS_HIGH_CONTRAST_MODE, text,
                      _( "Show in high contrast mode" ),
                      KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
@@ -309,18 +309,18 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
 
     if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )
     {
-        text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHokeysDescr, HK_CANVAS_LEGACY );
+        text = AddHotkeyName( _( "Legacy Tool&set" ), GerbviewHotkeysDescr, HK_CANVAS_LEGACY );
         AddMenuItem( configMenu, ID_MENU_CANVAS_LEGACY, text,
                 _( "Use Legacy Toolset (not all features will be available)" ),
                 KiBitmap( tools_xpm ), wxITEM_RADIO );
     }
 
-    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHokeysDescr, HK_CANVAS_OPENGL );
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), GerbviewHotkeysDescr, HK_CANVAS_OPENGL );
     AddMenuItem( configMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHokeysDescr, HK_CANVAS_CAIRO );
+    text = AddHotkeyName( _( "Modern Toolset (Fallba&ck)" ), GerbviewHotkeysDescr, HK_CANVAS_CAIRO );
     AddMenuItem( configMenu, ID_MENU_CANVAS_CAIRO, text,
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
@@ -357,7 +357,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Open the GerbView Manual" ),
                  KiBitmap( online_help_xpm ) );
 
-    text = AddHotkeyName( _( "&List Hotkeys..." ), GerbviewHokeysDescr, HK_HELP );
+    text = AddHotkeyName( _( "&List Hotkeys..." ), GerbviewHotkeysDescr, HK_HELP );
     AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, text,
                  _( "Displays the current hotkeys list and corresponding commands" ),
                  KiBitmap( hotkeys_xpm ) );

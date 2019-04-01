@@ -59,7 +59,7 @@ static EDA_HOTKEY* sectionBHotkeyList[] =
     NULL
 };
 
-static EDA_HOTKEY_CONFIG test_hokeys_descr[] =
+static EDA_HOTKEY_CONFIG test_hotkeys_descr[] =
 {
     { &sectionATag,   sectionAHotkeyList,   &sectionATitle  },
     { &sectionBTag,   sectionBHotkeyList,   &sectionBTitle  },
@@ -68,14 +68,14 @@ static EDA_HOTKEY_CONFIG test_hokeys_descr[] =
 
 // Number of sections in the above table
 static const unsigned num_cfg_sections =
-        sizeof( test_hokeys_descr ) / sizeof( EDA_HOTKEY_CONFIG ) - 1;
+        sizeof( test_hotkeys_descr ) / sizeof( EDA_HOTKEY_CONFIG ) - 1;
 
 // ----------------------------------------------------------------------------
 
 struct HotkeyStoreFixture
 {
     HotkeyStoreFixture():
-        m_hotkey_store( test_hokeys_descr )
+        m_hotkey_store( test_hotkeys_descr )
     {}
 
     HOTKEY_STORE m_hotkey_store;
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE( HotkeyConflict )
     // See if we conflicted with the correct key in the correct section
     BOOST_CHECK_EQUAL( conflict, false );
     BOOST_CHECK_EQUAL( conf_key->m_Idcommand, actionA1.m_Idcommand );
-    BOOST_CHECK_EQUAL( conf_sect, &test_hokeys_descr[0] );
+    BOOST_CHECK_EQUAL( conf_sect, &test_hotkeys_descr[0] );
 }
 
 
