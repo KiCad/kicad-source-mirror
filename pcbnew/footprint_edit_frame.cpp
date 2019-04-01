@@ -637,6 +637,13 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent )
 
 void FOOTPRINT_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 {
+    if( aEvent.GetId() == ID_MODEDIT_SAVE )
+    {
+        wxString text = IsCurrentFPFromBoard() ? _( "&Update Footprint on Board" ) : _( "&Save" );
+        text = AddHotkeyName( text, m_hotkeysDescrList, HK_SAVE );
+        aEvent.SetText( text );
+    }
+
     aEvent.Enable( GetBoard()->m_Modules && GetScreen()->IsModify() );
 }
 

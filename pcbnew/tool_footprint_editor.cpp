@@ -63,11 +63,18 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "New footprint using footprint wizard" ) );
 #endif
 
-    m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
-                            KiScaledBitmap( IsCurrentFPFromBoard() ? save_fp_to_board_xpm : save_xpm,
-                                            this ),
-                            IsCurrentFPFromBoard() ?
-                                _( "Save changes to board" ) : _( "Save changes to library" ) );
+    if( IsCurrentFPFromBoard() )
+    {
+        m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
+                                KiScaledBitmap( save_fp_to_board_xpm, this ),
+                                _( "Update footprint on board" ) );
+    }
+    else
+    {
+        m_mainToolBar->AddTool( ID_MODEDIT_SAVE, wxEmptyString,
+                                KiScaledBitmap( save_xpm, this ),
+                                _( "Save changes to library" ) );
+    }
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( wxID_PRINT, wxEmptyString,
