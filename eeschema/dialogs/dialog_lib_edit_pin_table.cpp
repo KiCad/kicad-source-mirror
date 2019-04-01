@@ -34,6 +34,7 @@
 #include <kiface_i.h>
 #include <kicad_string.h>
 #include <confirm.h>
+#include <lib_edit_frame.h>
 
 #define PinTableShownColumnsKey    wxT( "PinTableShownColumns" )
 
@@ -360,8 +361,9 @@ public:
 };
 
 
-DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART* aPart ) :
+DIALOG_LIB_EDIT_PIN_TABLE::DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LIB_PART* aPart ) :
     DIALOG_LIB_EDIT_PIN_TABLE_BASE( parent ),
+    m_editFrame( parent ),
     m_part( aPart )
 {
     m_config = Kiface().KifaceSettings();
@@ -528,7 +530,27 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnAddRow( wxCommandEvent& event )
     if( !m_grid->CommitPendingChanges() )
         return;
 
-    m_pins.push_back( new LIB_PIN( nullptr ) );
+    LIB_PIN* newPin = new LIB_PIN( nullptr );
+
+    if( m_pins.size() > 0 )
+    {
+        LIB_PIN* last = m_pins.back();
+
+        newPin->SetOrientation( last->GetOrientation() );
+        newPin->SetType( last->GetType() );
+        newPin->SetShape( last->GetShape() );
+
+        wxPoint pos = last->GetPosition();
+
+        if( last->GetOrientation() == PIN_LEFT || last->GetOrientation() == PIN_RIGHT )
+            pos.y -= m_editFrame->GetRepeatPinStep();
+        else
+            pos.x += m_editFrame->GetRepeatPinStep();
+
+        newPin->SetPosition( pos );
+    }
+
+    m_pins.push_back( newPin );
 
     m_dataModel->AppendRow( m_pins[ m_pins.size() - 1 ] );
 

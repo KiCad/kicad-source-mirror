@@ -43,12 +43,13 @@ enum COL_ORDER
 
 
 class PIN_TABLE_DATA_MODEL;
+class LIB_EDIT_FRAME;
 
 
 class DIALOG_LIB_EDIT_PIN_TABLE : public DIALOG_LIB_EDIT_PIN_TABLE_BASE
 {
 public:
-    DIALOG_LIB_EDIT_PIN_TABLE( wxWindow* parent, LIB_PART* aPart );
+    DIALOG_LIB_EDIT_PIN_TABLE( LIB_EDIT_FRAME* parent, LIB_PART* aPart );
     ~DIALOG_LIB_EDIT_PIN_TABLE() override;
 
     bool TransferDataToWindow() override;
@@ -69,6 +70,7 @@ protected:
     void updateSummary();
     void adjustGridColumns( int aWidth );
 
+    LIB_EDIT_FRAME*       m_editFrame;
     wxConfigBase*         m_config;
     bool                  m_initialized = false;
     int                   m_originalColWidths[ COL_COUNT ];
