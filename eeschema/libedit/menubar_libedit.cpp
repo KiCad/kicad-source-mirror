@@ -329,9 +329,8 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     preferencesMenu->AppendSeparator();
 
     // Default values and options
-    AddMenuItem( preferencesMenu,
-                 wxID_PREFERENCES,
-                 _( "&Preferences..." ),
+    text = AddHotkeyName( _( "&Preferences..." ), g_Libedit_Hotkeys_Descr, HK_PREFERENCES );
+    AddMenuItem( preferencesMenu, wxID_PREFERENCES, text,
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 

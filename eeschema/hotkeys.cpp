@@ -116,6 +116,7 @@ static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-', 
 #endif
 
 static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ), HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
                                 ID_POPUP_SCH_LEAVE_SHEET );
@@ -265,6 +266,7 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkUndo,        &HkRedo,
     &HkEditCut,     &HkEditCopy,        &HkEditPaste,
     &HkHelp,
+    &HkPreferences,
     &HkZoomIn,
     &HkZoomOut,
     &HkZoomRedraw,
@@ -464,6 +466,11 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, g_Schematic_Hotkeys_Descr );
+        break;
+
+    case HK_PREFERENCES:
+        cmd.SetId( wxID_PREFERENCES );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
@@ -713,6 +720,11 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, g_Libedit_Hotkeys_Descr );
+        break;
+
+    case HK_PREFERENCES:
+        cmd.SetId( wxID_PREFERENCES );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord

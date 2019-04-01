@@ -88,6 +88,11 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         DisplayHotkeyList( this, g_Module_Editor_Hotkeys_Descr );
         break;
 
+    case HK_PREFERENCES:
+        cmd.SetId( wxID_PREFERENCES );
+        GetEventHandler()->ProcessEvent( cmd );
+        break;
+
     case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;

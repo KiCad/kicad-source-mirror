@@ -172,7 +172,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Menu for preferences
     wxMenu* preferencesMenu = new wxMenu;
 
-    AddMenuItem( preferencesMenu, wxID_PREFERENCES,  _( "&Preferences..." ),
+    msg = AddHotkeyName( _( "&Preferences..." ), PlEditorHotkeysDescr, HK_PREFERENCES );
+    AddMenuItem( preferencesMenu, wxID_PREFERENCES,  msg,
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
