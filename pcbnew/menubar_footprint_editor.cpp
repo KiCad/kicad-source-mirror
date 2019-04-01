@@ -426,8 +426,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                 KiBitmap( library_table_xpm ) );
 
     // Settings
-    AddMenuItem( prefs_menu, wxID_PREFERENCES,
-                 _( "&Preferences..." ), _( "Show preferences for all open tools" ),
+    text = AddHotkeyName( _( "&Preferences..." ), m_hotkeysDescrList, HK_PREFERENCES );
+    AddMenuItem( prefs_menu, wxID_PREFERENCES, text,
+                 _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
     prefs_menu->AppendSeparator();

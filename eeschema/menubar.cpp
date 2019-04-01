@@ -628,7 +628,8 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
                  KiBitmap( library_table_xpm ) );
 
     // Options (Preferences on WXMAC)
-    AddMenuItem( aParentMenu, wxID_PREFERENCES, _( "Preferences..." ),
+    wxString text = AddHotkeyName( _( "&Preferences..." ), g_Eeschema_Hotkeys_Descr, HK_PREFERENCES );
+    AddMenuItem( aParentMenu, wxID_PREFERENCES, text,
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
@@ -639,7 +640,7 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
     aParentMenu->AppendSeparator();
 
-    wxString text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hotkeys_Descr,
+    text = AddHotkeyName( _( "Modern Toolset (&Accelerated)" ), g_Eeschema_Hotkeys_Descr,
                           HK_CANVAS_OPENGL );
     AddMenuItem( aParentMenu, ID_MENU_CANVAS_OPENGL, text,
                  _( "Use Modern Toolset with hardware-accelerated graphics (recommended)" ),

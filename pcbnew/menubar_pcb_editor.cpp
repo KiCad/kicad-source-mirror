@@ -153,8 +153,9 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 
     wxString text;
 
-    AddMenuItem( aParentMenu, wxID_PREFERENCES,
-                 _( "&Preferences..." ), _( "Show preferences for all open tools" ),
+    text = AddHotkeyName( _( "&Preferences..." ), g_Board_Editor_Hotkeys_Descr, HK_PREFERENCES );
+    AddMenuItem( aParentMenu, wxID_PREFERENCES, text,
+                 _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
     if( ADVANCED_CFG::GetCfg().AllowLegacyCanvas() )

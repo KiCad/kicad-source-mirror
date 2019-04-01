@@ -65,6 +65,8 @@ static EDA_HOTKEY   HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 static EDA_HOTKEY   HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 static EDA_HOTKEY   HkZoomSelection( _HKI( "Zoom to Selection" ),
                                      HK_ZOOM_SELECTION, GR_KB_CTRL + WXK_F5 );
+static EDA_HOTKEY   HkPreferences( _HKI( "Preferences" ),
+                                   HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 static EDA_HOTKEY   HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
 static EDA_HOTKEY   HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' );
 static EDA_HOTKEY   HkResetLocalCoord( _HKI( "Reset Local Coordinates" ),
@@ -112,7 +114,7 @@ static EDA_HOTKEY HkMeasureTool( _HKI( "Measure Distance (Modern Toolset only)" 
 
 // List of common hotkey descriptors
 EDA_HOTKEY* gerbviewHotkeyList[] = {
-    &HkHelp,
+    &HkHelp, &HkPreferences,
     &HkZoomIn, &HkZoomOut, &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto, &HkZoomSelection, &HkSwitchUnits, &HkResetLocalCoord,
     &HkLinesDisplayMode, &HkFlashedDisplayMode, &HkPolygonDisplayMode,
@@ -173,6 +175,11 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, GerbviewHotkeysDescr );
+        break;
+
+    case HK_PREFERENCES:
+        cmd.SetId( wxID_PREFERENCES );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_ZOOM_IN:

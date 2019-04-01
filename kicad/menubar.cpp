@@ -151,6 +151,8 @@ static EDA_HOTKEY HkNewProject( _HKI( "New Project" ), HK_NEW, GR_KB_CTRL + 'N' 
 static EDA_HOTKEY HkOpenProject( _HKI( "Open Project" ), HK_OPEN, GR_KB_CTRL + 'O' );
 static EDA_HOTKEY HkSaveProject( _HKI( "Save Project" ), HK_SAVE, GR_KB_CTRL + 'S' );
 static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 );
+static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ),
+                                 HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 
 // List of hotkey descriptors
 EDA_HOTKEY* common_Hotkey_List[] =
@@ -161,7 +163,7 @@ EDA_HOTKEY* common_Hotkey_List[] =
 #if 0
     &HkSaveProject,
 #endif
-    &HkRefresh,     &HkHelp,
+    &HkRefresh,     &HkHelp,        &HkPreferences,
     &HkRunEeschema, &HkRunLibedit,
     &HkRunPcbnew,   &HkRunModedit,  &HkRunGerbview,
     &HkRunBm2Cmp,   &HkRunPcbCalc,  &HkRunPleditor,
@@ -350,9 +352,8 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Configure footprint library table" ),
                  KiBitmap( library_table_xpm ) );
 
-    AddMenuItem( preferencesMenu,
-                 wxID_PREFERENCES,
-                 _( "&Preferences..." ),
+    msg = AddHotkeyName( _( "&Preferences..." ), kicad_Manager_Hotkeys_Descr, HK_PREFERENCES );
+    AddMenuItem( preferencesMenu, wxID_PREFERENCES, msg,
                  _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 

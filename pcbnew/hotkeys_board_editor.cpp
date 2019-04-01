@@ -221,6 +221,10 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         DisplayHotkeyList( this, g_Board_Editor_Hotkeys_Descr );
         break;
 
+    case HK_PREFERENCES:
+        evt_type = wxID_PREFERENCES;
+        break;
+
     case HK_ZOOM_IN:
         evt_type = ID_KEY_ZOOM_IN;
         break;

@@ -299,9 +299,9 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     wxMenu* configMenu = new wxMenu;
 
     // Options (Preferences on WXMAC)
-    AddMenuItem( configMenu, wxID_PREFERENCES,
-                 _( "&Preferences..." ),
-                 wxEmptyString,
+    text = AddHotkeyName( _( "&Preferences..." ), GerbviewHotkeysDescr, HK_PREFERENCES );
+    AddMenuItem( configMenu, wxID_PREFERENCES, text,
+                 _( "Show preferences for all open tools" ),
                  KiBitmap( preference_xpm ) );
 
     // Canvas selection

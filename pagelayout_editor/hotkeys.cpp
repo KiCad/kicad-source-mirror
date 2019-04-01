@@ -99,6 +99,7 @@ static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', (int) wxID_
 static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_CTRL + GR_KB_SHIFT + 'S',
                             (int) wxID_SAVEAS );
 static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
+static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ), HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 
 // List of common hotkey descriptors
 EDA_HOTKEY* s_Common_Hotkey_List[] =
@@ -107,7 +108,7 @@ EDA_HOTKEY* s_Common_Hotkey_List[] =
     &HkUndo, &HkRedo,
     &HkZoomIn,    &HkZoomOut,      &HkZoomRedraw, &HkZoomCenter,
     &HkZoomAuto,  &HkZoomSelection, &HkResetLocalCoord,
-    &HkHelp,
+    &HkHelp, &HkPreferences,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -254,6 +255,11 @@ bool PL_EDITOR_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode,
 
     case HK_HELP:       // Display Current hotkey list
         DisplayHotkeyList( this, PlEditorHotkeysDescr );
+        break;
+
+    case HK_PREFERENCES:
+        cmd.SetId( wxID_PREFERENCES );
+        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_SET_GRID_ORIGIN:
