@@ -928,6 +928,55 @@ void PCB_PARSER::parseLayer( LAYER* aLayer )
 }
 
 
+void PCB_PARSER::createOldLayerMapping( std::unordered_map< std::string, std::string >& aMap )
+{
+    // N.B. This mapping only includes Italian, Polish and French as they were the only languages that
+    // mapped the layer names as of cc2022b1ac739aa673d2a0b7a2047638aa7a47b3 (kicad-i18n) when the
+    // bug was fixed in KiCad source.
+
+    // Italian
+    aMap["Adesivo.Retro"] = "B.Adhes";
+    aMap["Adesivo.Fronte"] = "F.Adhes";
+    aMap["Pasta.Retro"] = "B.Paste";
+    aMap["Pasta.Fronte"] = "F.Paste";
+    aMap["Serigrafia.Retro"] = "B.SilkS";
+    aMap["Serigrafia.Fronte"] = "F.SilkS";
+    aMap["Maschera.Retro"] = "B.Mask";
+    aMap["Maschera.Fronte"] = "F.Mask";
+    aMap["Grafica"] = "Dwgs.User";
+    aMap["Commenti"] = "Cmts.User";
+    aMap["Eco1"] = "Eco1.User";
+    aMap["Eco2"] = "Eco2.User";
+    aMap["Contorno.scheda"] = "Edge.Cuts";
+
+    // Polish
+    aMap["Kleju_Dolna"] = "B.Adhes";
+    aMap["Kleju_Gorna"] = "F.Adhes";
+    aMap["Pasty_Dolna"] = "B.Paste";
+    aMap["Pasty_Gorna"] = "F.Paste";
+    aMap["Opisowa_Dolna"] = "B.SilkS";
+    aMap["Opisowa_Gorna"] = "F.SilkS";
+    aMap["Maski_Dolna"] = "B.Mask";
+    aMap["Maski_Gorna"] = "F.Mask";
+    aMap["Rysunkowa"] = "Dwgs.User";
+    aMap["Komentarzy"] = "Cmts.User";
+    aMap["ECO1"] = "Eco1.User";
+    aMap["ECO2"] = "Eco2.User";
+    aMap["Krawedziowa"] = "Edge.Cuts";
+
+    // French
+    aMap["Dessous.Adhes"] = "B.Adhes";
+    aMap["Dessus.Adhes"] = "F.Adhes";
+    aMap["Dessous.Pate"] = "B.Paste";
+    aMap["Dessus.Pate"] = "F.Paste";
+    aMap["Dessous.SilkS"] = "B.SilkS";
+    aMap["Dessus.SilkS"] = "F.SilkS";
+    aMap["Dessous.Masque"] = "B.Mask";
+    aMap["Dessus.Masque"] = "F.Mask";
+    aMap["Dessin.User"] = "Dwgs.User";
+    aMap["Contours.Ci"] = "Edge.Cuts";
+}
+
 
 void PCB_PARSER::parseLayers()
 {
@@ -940,7 +989,10 @@ void PCB_PARSER::parseLayers()
     int     copperLayerCount = 0;
     LAYER   layer;
 
+    std::unordered_map< std::string, std::string > v3_layer_names;
     std::vector<LAYER>  cu;
+
+    createOldLayerMapping( v3_layer_names );
 
     for( token = NextTok();  token != T_RIGHT;  token = NextTok() )
     {
@@ -994,25 +1046,36 @@ void PCB_PARSER::parseLayers()
 
         if( it == m_layerIndices.end() )
         {
-            wxString error = wxString::Format(
-                _( "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash" ),
-                GetChars( layer.m_name ),
-                GetChars( CurSource() ),
-                CurLineNumber(),
-                CurOffset()
-                );
+            auto new_layer_it = v3_layer_names.find( layer.m_name.ToStdString() );
 
-            THROW_IO_ERROR( error );
+            if( new_layer_it != v3_layer_names.end() )
+                it = m_layerIndices.find( new_layer_it->second );
+
+            if( it == m_layerIndices.end() )
+            {
+                wxString error = wxString::Format(
+                    _( "Layer \"%s\" in file \"%s\" at line %d, is not in fixed layer hash" ),
+                    GetChars( layer.m_name ),
+                    GetChars( CurSource() ),
+                    CurLineNumber(),
+                    CurOffset()
+                    );
+
+                THROW_IO_ERROR( error );
+            }
+
+            // If we are here, then we have found a translated layer name.  Put it in the maps so that
+            // items on this layer get the appropriate layer ID number
+            m_layerIndices[ UTF8( layer.m_name ) ] = it->second;
+            m_layerMasks[   UTF8( layer.m_name ) ] = it->second;
+            layer.m_name = it->first;
         }
 
         layer.m_number = it->second;
-
         enabledLayers.set( layer.m_number );
 
         if( layer.m_visible )
             visibleLayers.set( layer.m_number );
-
-        // DBG( printf( "aux m_visible:%s\n", layer.m_visible ? "true" : "false" );)
 
         m_board->SetLayerDescr( it->second, layer );
 
