@@ -231,9 +231,9 @@ bool DIALOG_SHIM::Enable( bool enable )
 {
     // so we can do logging of this state change:
 
-#if defined(DEBUG)
+#if 0 && defined(DEBUG)
     const char* type_id = typeid( *this ).name();
-    printf( "wxDialog %s: %s\n", type_id, enable ? "enabled" : "disabled" );
+    printf( "DIALOG_SHIM %s: %s\n", type_id, enable ? "enabled" : "disabled" );
     fflush(0);  //Needed on msys2 to immediately print the message
 #endif
 
