@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -543,7 +543,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  _( "Find old symbols in project and rename/rescue them" ),
                  KiBitmap( rescue_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_REMAP_SYMBOLS, _( "Remap Symbols..." ),
+    AddMenuItem( aParentMenu, ID_REMAP_SYMBOLS, _( "Remap S&ymbols..." ),
                  _( "Remap legacy library symbols to symbol library table" ),
                  KiBitmap( rescue_xpm ) );
 
@@ -553,7 +553,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  KiBitmap( spreadsheet_xpm ) );
 
     AddMenuItem( aParentMenu, ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-                 _( "Edit Symbol Library References..." ),
+                 _( "Edit Symbol &Library References..." ),
                  _( "Edit links between schematic symbols and library symbols" ),
                  KiBitmap( edit_cmp_symb_links_xpm ) );
 
@@ -575,7 +575,7 @@ void prepareToolsMenu( wxMenu* aParentMenu )
                  ID_BUS_MANAGER,
                  _( "Bus &Definitions" ),
                  HELP_BUS_MANAGER,
-                 KiBitmap( bom_xpm ) );     // TODO(JE) new icon?
+                 KiBitmap( bus_definition_tool_xpm ) );
 
     aParentMenu->AppendSeparator();
 

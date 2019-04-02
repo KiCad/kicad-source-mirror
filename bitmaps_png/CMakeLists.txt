@@ -168,6 +168,7 @@ set( BMAPS_MID
     break_bus
     break_line
     browse_files
+    bus_definition_tool
     calculator
     cancel
     change_entry_orient
