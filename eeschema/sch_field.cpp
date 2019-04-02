@@ -312,6 +312,18 @@ bool SCH_FIELD::IsHorizJustifyFlipped() const
 }
 
 
+bool SCH_FIELD::IsVoid() const
+{
+    // When in UTF-8 mode, wxString puts string iterators in a linked list, and
+    // that linked list is not thread-safe.
+    std::lock_guard<std::mutex> guard( m_mutex );
+
+    size_t len = m_Text.Len();
+
+    return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
+}
+
+
 void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 {
     frame->GetCanvas()->SetMouseCapture( NULL, NULL );

@@ -59,6 +59,8 @@ class SCH_FIELD : public SCH_ITEM, public EDA_TEXT
 
     wxString m_name;
 
+    mutable UNIQUE_MUTEX m_mutex;
+
 public:
     SCH_FIELD( const wxPoint& aPos, int aFieldId, SCH_COMPONENT* aParent,
                const wxString& aName = wxEmptyString );
@@ -113,12 +115,7 @@ public:
      * Function IsVoid
      * returns true if the field is either empty or holds "~".
      */
-    bool IsVoid() const
-    {
-        size_t len = m_Text.Len();
-
-        return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
-    }
+    bool IsVoid() const;
 
     void SwapData( SCH_ITEM* aItem ) override;
 
