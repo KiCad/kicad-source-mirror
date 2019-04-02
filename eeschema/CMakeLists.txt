@@ -356,6 +356,9 @@ target_link_libraries( eeschema_kiface
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
     )
+target_include_directories( eeschema_kiface PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    )
 
 if( KICAD_SPICE )
     target_link_libraries( eeschema_kiface

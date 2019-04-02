@@ -21,31 +21,44 @@
 # or you may write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
-find_package( Boost COMPONENTS unit_test_framework REQUIRED )
-
 
 include_directories( BEFORE ${INC_BEFORE} )
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/eeschema
-    ${CMAKE_SOURCE_DIR}/common
-    ${INC_AFTER}
+include_directories( AFTER ${INC_AFTER} )
+
+
+add_executable( qa_eeschema
+    # A single top to load the pcnew kiface
+    # ../../common/single_top.cpp
+
+    # stuff from common due to...units?
+    ../../common/base_units.cpp
+    ../../common/eda_text.cpp
+
+    # stuff from common which is needed...why?
+    ../../common/colors.cpp
+    ../../common/observable.cpp
+
+    # The main test entry points
+    test_module.cpp
+
+    test_eagle_plugin.cpp
 )
 
-add_executable( qa_eagle_plugin
-    test_module.cpp
-    test_basic.cpp
-    )
-
-target_compile_definitions( qa_eagle_plugin
-    PRIVATE -DBOOST_TEST_DYN_LINK )
-
-add_dependencies( qa_eagle_plugin common eeschema_kiface )
-
-target_link_libraries( qa_eagle_plugin
-    common
+target_link_libraries( qa_eeschema
     eeschema_kiface
-    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
-    ${wxWidgets_LIBRARIES}
-    )
+    common
+    gal
+    qa_utils
+    unit_test_utils
+    ${GDI_PLUS_LIBRARIES}
+    ${Boost_LIBRARIES}
+)
+
+add_test( NAME eeschema
+    COMMAND qa_eeschema
+)
+
+# Eeschema tests, so pretend to be eeschema (for units, etc)
+target_compile_definitions( qa_eeschema
+    PUBLIC EESCHEMA
+)
