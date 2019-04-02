@@ -197,7 +197,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     wxPoint prevPt;
 
     // Find edge point with minimum x, this should be in the outer polygon
-    // which will define the perimeter Edge.Cuts polygon.
+    // which will define the perimeter polygon polygon.
     wxPoint xmin    = wxPoint( INT_MAX, 0 );
     int     xmini   = 0;
 
@@ -321,7 +321,7 @@ bool ConvertOutlineToPolygon( std::vector<DRAWSEGMENT*>& aSegList, SHAPE_POLY_SE
     // The first DRAWSEGMENT is in 'graphic', ok to remove it from 'items'
     segList.erase( segList.begin() + xmini );
 
-    // Output the Edge.Cuts perimeter as circle or polygon.
+    // Output the outline perimeter as polygon.
     if( graphic->GetShape() == S_CIRCLE )
     {
         int steps = std::max<int>( 4, GetArcToSegmentCount( graphic->GetRadius(), aTolerance, 360.0 ) );
