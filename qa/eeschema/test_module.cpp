@@ -3,6 +3,7 @@
  *
  * Copyright (C) 2017 CERN
  * @author Alejandro García Montoro <alejandro.garciamontoro@gmail.com>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,9 +24,27 @@
  */
 
 /**
- * Main file for the schematic eagle plugin tests to be compiled
+ * Main file for the Eeschema tests to be compiled
  */
-
-#define BOOST_TEST_MODULE "Schematic Eagle plugin"
-
 #include <boost/test/unit_test.hpp>
+
+#include <wx/init.h>
+
+
+bool init_unit_test()
+{
+    boost::unit_test::framework::master_test_suite().p_name.value = "Common Eeschema module tests";
+    return wxInitialize();
+}
+
+
+int main( int argc, char* argv[] )
+{
+    int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+
+    // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
+    // but without it, Valgrind notices a lot of leaks from WX
+    wxUninitialize();
+
+    return ret;
+}

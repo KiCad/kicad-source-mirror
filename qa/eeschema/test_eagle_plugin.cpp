@@ -22,10 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <boost/test/unit_test.hpp>
 #include <boost/test/test_case_template.hpp>
-#include <sch_io_mgr.h>
+#include <boost/test/unit_test.hpp>
 #include <kiway.h>
+#include <sch_io_mgr.h>
 
 #include <data/fixtures_eagle_plugin.h>
 
@@ -34,16 +34,17 @@
  */
 BOOST_AUTO_TEST_CASE( FindPlugin )
 {
-    BOOST_CHECK( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ) != NULL );
+    BOOST_CHECK_NE( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ), nullptr );
 }
 
 /**
  *
  */
-BOOST_AUTO_TEST_CASE( Load )
-{
-    SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
+// BOOST_AUTO_TEST_CASE( Load )
+// {
+//     SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
 
-    pi->Load("/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics/empty.sch",
-             NULL);
-}
+//     pi->Load(
+//             "/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics/empty.sch",
+//             NULL );
+// }
