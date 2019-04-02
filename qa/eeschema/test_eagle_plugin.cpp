@@ -27,7 +27,7 @@
 #include <kiway.h>
 #include <sch_io_mgr.h>
 
-#include <data/fixtures_eagle_plugin.h>
+#include "eeschema_test_utils.h"
 
 /**
  * Checks that the SCH_IO manager finds the Eagle plugin
@@ -37,14 +37,33 @@ BOOST_AUTO_TEST_CASE( FindPlugin )
     BOOST_CHECK_NE( SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE ), nullptr );
 }
 
-/**
- *
- */
-// BOOST_AUTO_TEST_CASE( Load )
-// {
-//     SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
 
-//     pi->Load(
-//             "/home/alejandro/Proyectos/kicad/kicad-alejandro/eeschema/qa/data/eagle_schematics/empty.sch",
-//             NULL );
-// }
+/**
+ * Get a schematic file from the test data eagle subdir
+ */
+static wxFileName getEagleTestSchematic( const wxString& sch_file )
+{
+    wxFileName fn = KI_TEST::GetEeschemaTestDataDir();
+    fn.AppendDir( "eagle_schematics" );
+    fn.SetFullName( sch_file );
+
+    return fn;
+}
+
+
+/**
+ * Check that a file can be loaded.
+ */
+BOOST_AUTO_TEST_CASE( Load )
+{
+    SCH_PLUGIN* pi = SCH_IO_MGR::FindPlugin( SCH_IO_MGR::SCH_EAGLE );
+
+    const auto fn = getEagleTestSchematic( "eagle-import-testfile.sch" );
+
+    BOOST_TEST_MESSAGE( fn.GetFullPath() );
+
+    (void) pi;
+    // This doesn't work with a null KiWay.
+    // const SCH_SHEET* sheet = pi->Load( fn.GetFullPath(), nullptr );
+    // BOOST_CHECK_NE( nullptr, sheet );
+}
