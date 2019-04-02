@@ -1165,18 +1165,24 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
         }
 
         setEditedPoint( nullptr );
-        updatePoints();
 
         if( valid )
+        {
             commit.Push( _( "Remove a zone/polygon corner" ) );
+
+            // Refresh zone hatching
+            if( item->Type() == PCB_ZONE_AREA_T)
+                static_cast<ZONE_CONTAINER*>( item )->Hatch();
+
+            updatePoints();
+        }
         else
+        {
+            m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
+            getView()->Remove( m_editPoints.get() );
             commit.Revert();
-
-        // Refresh zone hatching
-        if( item->Type() == PCB_ZONE_AREA_T)
-            static_cast<ZONE_CONTAINER*>( item )->Hatch();
-
-        updatePoints();
+            m_editPoints.reset();
+        }
     }
 
     return 0;
