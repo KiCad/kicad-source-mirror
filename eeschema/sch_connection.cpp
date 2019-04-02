@@ -252,20 +252,23 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
     bool prepend_path = true;
 
-    switch( Parent()->Type() )
+    if( m_driver )
     {
-    case SCH_PIN_CONNECTION_T:
-        // Pins are either power connections or belong to a uniquely-annotated
-        // component, so they don't need a path
-        prepend_path = false;
-        break;
+        switch( m_driver->Type() )
+        {
+        case SCH_PIN_CONNECTION_T:
+            // Pins are either power connections or belong to a uniquely-annotated
+            // component, so they don't need a path if they are driving the subgraph
+            prepend_path = false;
+            break;
 
-    case SCH_GLOBAL_LABEL_T:
-        prepend_path = false;
-        break;
+        case SCH_GLOBAL_LABEL_T:
+            prepend_path = false;
+            break;
 
-    default:
-        break;
+        default:
+            break;
+        }
     }
 
     if( prepend_path && !aIgnoreSheet )
