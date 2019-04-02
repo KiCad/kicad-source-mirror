@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,6 +30,9 @@
 #include <eda_rect.h>
 #include <geometry/geometry_utils.h>
 
+// To approximate a circle by segments, a minimal seg count is mandatory
+#define MIN_SEGCOUNT_FOR_CIRCLE 6
+
 int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
 {
     // calculate the number of segments to approximate a circle by segments
@@ -38,11 +41,15 @@ int GetArcToSegmentCount( int aRadius, int aErrorMax, double aArcAngleDegree )
     // error relative to the radius value:
     double rel_error = (double)aErrorMax / aRadius;
     // minimal arc increment in degrees:
-    double step = 180 / M_PI * acos( 1.0 - rel_error ) * 2;
-    // the minimal seg count for a arc
-    int segCount = round_nearest( fabs( aArcAngleDegree ) / step );
+    double arc_increment = 180 / M_PI * acos( 1.0 - rel_error ) * 2;
 
-    // Ensure at least one segment is used
+    // Ensure a minimal arc increment reasonable value for a circle
+    // (360.0 degrees). For very small radius values, this is mandatory.
+    arc_increment = std::min( 360.0/MIN_SEGCOUNT_FOR_CIRCLE, arc_increment );
+
+    int segCount = round_nearest( fabs( aArcAngleDegree ) / arc_increment );
+
+    // Ensure at least one segment is used (can happen for small arcs)
     return std::max( segCount, 1 );
 }
 
@@ -53,13 +60,13 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
      * due to the segment approx.
      * For a circle the min radius is radius * cos( 2PI / aSegCountforCircle / 2)
      * this is the distance between the center and the middle of the segment.
-     * therfore, to move the  middle of the segment to the circle (distance = radius)
+     * therefore, to move the middle of the segment to the circle (distance = radius)
      * the correctionFactor is 1 /cos( PI/aSegCountforCircle  )
      */
-    if( aSegCountforCircle < 6 )
-        aSegCountforCircle = 6;
-    if( 1 || aSegCountforCircle > 64 )
-        return 1.0 / cos( M_PI / aSegCountforCircle );
+    if( aSegCountforCircle < MIN_SEGCOUNT_FOR_CIRCLE )
+        aSegCountforCircle = MIN_SEGCOUNT_FOR_CIRCLE;
+
+    return 1.0 / cos( M_PI / aSegCountforCircle );
 }
 
 
@@ -70,16 +77,19 @@ double GetCircletoPolyCorrectionFactor( int aSegCountforCircle )
 inline int clipOutCode( const EDA_RECT *aClipBox, int x, int y )
 {
     int code;
+
     if( y < aClipBox->GetY() )
         code = 2;
     else if( y > aClipBox->GetBottom() )
         code = 1;
     else
         code = 0;
+
     if( x < aClipBox->GetX() )
         code |= 4;
     else if( x > aClipBox->GetRight() )
         code |= 8;
+
     return code;
 }
 
@@ -98,6 +108,7 @@ bool ClipLine( const EDA_RECT *aClipBox, int &x1, int &y1, int &x2, int &y2 )
 
         // Choose a side to clip
         int thisoutcode, x, y;
+
         if( outcode1 )
             thisoutcode = outcode1;
         else
