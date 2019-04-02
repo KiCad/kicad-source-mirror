@@ -293,6 +293,7 @@ set( COMMON_SRCS
     config_params.cpp
     confirm.cpp
     convert_basic_shapes_to_polygon.cpp
+    cursor_store.cpp
     dialog_shim.cpp
     displlst.cpp
     dpi_scaling.cpp

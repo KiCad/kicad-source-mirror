@@ -50,6 +50,7 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>
+#include <simulation_cursors.h>
 
 
 void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
@@ -671,12 +672,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 #ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         SetToolID( id, -1, _( "Add a simulator probe" ) );
-        //GAL TODO: m_canvas->SetCurrentCursor( CURSOR_PROBE );
+        //GAL TODO: m_canvas->SetCurrentCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
         break;
 
     case ID_SIM_TUNE:
         SetToolID( id, -1, _( "Select a value to be tuned" ) );
-        //GAL TODO: m_canvas->SetCurrentCursor( CURSOR_TUNE );
+        //GAL TODO: m_canvas->SetCurrentCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
         break;
 #endif /* KICAD_SPICE */
 
