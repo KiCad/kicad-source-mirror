@@ -30,6 +30,7 @@
 #ifndef ZONE_SETTINGS_H_
 #define ZONE_SETTINGS_H_
 
+#include <layers_id_colors_and_visibility.h>
 #include <zones.h>
 #include <wx/dataview.h>
 
