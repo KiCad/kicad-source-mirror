@@ -1044,7 +1044,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 auto power_object = dynamic_cast<SCH_PIN_CONNECTION*>( obj );
 
-                wxASSERT( power_object );
+                // Skip drivers that aren't power ports
+                if( !power_object )
+                    continue;
 
                 auto name = power_object->GetDefaultNetName( subgraph->m_sheet );
                 int code = -1;
