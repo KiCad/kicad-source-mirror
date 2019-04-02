@@ -38,6 +38,8 @@ add_executable( qa_eeschema
     ../../common/colors.cpp
     ../../common/observable.cpp
 
+    eeschema_test_utils.cpp
+
     # The main test entry points
     test_module.cpp
 
@@ -61,4 +63,9 @@ add_test( NAME eeschema
 # Eeschema tests, so pretend to be eeschema (for units, etc)
 target_compile_definitions( qa_eeschema
     PUBLIC EESCHEMA
+)
+
+# Pass in the default data location
+set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
+    COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_CURRENT_SOURCE_DIR}/data\")"
 )
