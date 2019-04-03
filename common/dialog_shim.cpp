@@ -241,7 +241,6 @@ bool DIALOG_SHIM::Enable( bool enable )
 }
 
 
-#ifdef  __WXMAC__
 // Recursive descent doing a SelectAll() in wxTextCtrls.
 // MacOS User Interface Guidelines state that when tabbing to a text control all its
 // text should be selected.  Since wxWidgets fails to implement this, we do it here.
@@ -262,7 +261,6 @@ static void selectAllInTextCtrls( wxWindowList& children )
             selectAllInTextCtrls( child->GetChildren() );
     }
 }
-#endif
 
 
 #ifdef  __WXMAC__
@@ -296,8 +294,9 @@ void DIALOG_SHIM::OnPaint( wxPaintEvent &event )
     {
 #ifdef __WXMAC__
         fixOSXCancelButtonIssue( this );
-        selectAllInTextCtrls( GetChildren() );
 #endif
+
+        selectAllInTextCtrls( GetChildren() );
 
         if( m_initialFocusTarget )
             m_initialFocusTarget->SetFocus();
