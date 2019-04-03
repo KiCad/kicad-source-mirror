@@ -139,8 +139,12 @@ public:
      * returns the string associated with the text object.
      *
      * @return a const wxString reference containing the string of the item.
+     *
+     * WARNING: this routine MUST NOT return a reference!
+     * While it would be faster, it would also defeat the use of RAII mutex locks
+     * in subclasses to get around wxString's multi-threading bugs in UTF-8 mode.
      */
-    const wxString& GetText() const { return m_Text; }
+    virtual const wxString/* & forbidden */ GetText() const { return m_Text; }
 
     /**
      * Returns the string actually shown after processing of the base

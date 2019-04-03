@@ -90,6 +90,10 @@ public:
 
     void SetId( int aId ) { m_id = aId; }
 
+    const wxString GetText() const override;
+    wxString GetShownText() const override;
+    void SetText( const wxString& aText ) override;
+
     /**
      * Function GetFullyQualifiedText
      * returns the fully qualified field text by allowing for the part suffix to be added
