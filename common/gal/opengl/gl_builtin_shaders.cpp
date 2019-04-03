@@ -333,12 +333,11 @@ int isPixelInSegment( vec2 aCoord )
 
 void strokedCircle( vec2 aCoord, float aRadius, float aWidth )
 {
-    float outerRadius = max( aRadius + ( aWidth / 2 ), 0.0 );
-    float innerRadius = max( aRadius - ( aWidth / 2 ), 0.0 );
-    float relWidth = innerRadius / outerRadius;
+    float outerRadius = max( aRadius, 0.0 );
+    float innerRadius = max( aRadius - aWidth, 0.0 );
 
     if( ( dot( aCoord, aCoord ) < 1.0 ) &&
-        ( dot( aCoord, aCoord ) > relWidth * relWidth ) )
+        ( dot( aCoord, aCoord ) * ( outerRadius * outerRadius ) > innerRadius * innerRadius ) )
         gl_FragColor = gl_Color;
     else
         discard;

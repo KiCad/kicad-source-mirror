@@ -245,6 +245,7 @@ void CAIRO_GAL_BASE::DrawCircle( const VECTOR2D& aCenterPoint, double aRadius )
     auto c = roundp( xform( aCenterPoint ) );
     auto r = ::roundp( xform( aRadius ) );
 
+    cairo_set_line_width( currentContext, std::min( 2.0 * r, lineWidthInPixels ) );
     cairo_new_sub_path( currentContext );
     cairo_arc( currentContext, c.x, c.y, r, 0.0, 2 * M_PI );
     cairo_close_path( currentContext );
