@@ -35,10 +35,6 @@
 // #define CONNECTIVITY_DEBUG
 #endif
 
-#ifdef CONNECTIVITY_DEBUG
-#define CONNECTIVITY_PROFILE
-#endif
-
 // Uncomment this line to enable real-time connectivity updates
 // TODO(JE) re-enable this once performance concerns are sorted out
 // #define CONNECTIVITY_REAL_TIME
@@ -197,7 +193,7 @@ private:
 
     std::vector<SCH_PIN_CONNECTION*> m_invisible_power_pins;
 
-    std::map<wxString, std::shared_ptr<BUS_ALIAS>> m_bus_alias_cache;
+    std::unordered_map<wxString, std::shared_ptr<BUS_ALIAS>> m_bus_alias_cache;
 
     std::map<wxString, int> m_net_name_to_code_map;
 

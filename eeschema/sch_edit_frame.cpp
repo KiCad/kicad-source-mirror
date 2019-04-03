@@ -780,13 +780,8 @@ void SCH_EDIT_FRAME::OnModify()
 
     m_foundItems.SetForceSearch();
 
-#ifdef CONNECTIVITY_DEBUG
-    // Debug mode: rebuild full graph on each modification (slow)
+#ifdef CONNECTIVITY_REAL_TIME
     RecalculateConnections();
-#else
-    #ifdef CONNECTIVITY_REAL_TIME
-    g_ConnectionGraph->Recalculate( SCH_SHEET_LIST( g_CurrentSheet->Last() ) );
-    #endif
 #endif
 
     m_canvas->Refresh();

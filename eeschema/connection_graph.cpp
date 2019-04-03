@@ -263,9 +263,7 @@ void CONNECTION_GRAPH::Reset()
 
 void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional )
 {
-#ifdef CONNECTIVITY_PROFILE
     PROF_COUNTER phase1;
-#endif
 
     if( aUnconditional )
         Reset();
@@ -287,20 +285,17 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
         updateItemConnectivity( sheet, items );
     }
 
-#ifdef CONNECTIVITY_PROFILE
     phase1.Stop();
-    std::cout << "UpdateItemConnectivity() " << phase1.msecs() << " ms" << std::endl;
+    wxLogTrace( "CONN_PROFILE", "UpdateItemConnectivity() %0.4f ms", phase1.msecs() );
+
     PROF_COUNTER tde;
-#endif
 
     // IsDanglingStateChanged() also adds connected items for things like SCH_TEXT
     SCH_SCREENS schematic;
     schematic.TestDanglingEnds();
 
-#ifdef CONNECTIVITY_PROFILE
     tde.Stop();
-    std::cout << "TestDanglingEnds() " << tde.msecs() << " ms" << std::endl;
-#endif
+    wxLogTrace( "CONN_PROFILE", "TestDanglingEnds() %0.4f ms", tde.msecs() );
 
     buildConnectionGraph();
 }
@@ -507,9 +502,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
 void CONNECTION_GRAPH::buildConnectionGraph()
 {
-#ifdef CONNECTIVITY_PROFILE
     PROF_COUNTER phase2;
-#endif
 
     // Recache all bus aliases for later use
 
@@ -682,10 +675,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         break;
                     }
                     default:
-                        #ifdef CONNECTIVITY_DEBUG
-                        wxLogDebug( "Driver type unsupported: %s",
+                        wxLogTrace( "CONN", "Driver type unsupported: %s",
                                     driver->GetSelectMenuText( MILLIMETRES ) );
-                        #endif
                         break;
                     }
 
@@ -743,10 +734,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 break;
             }
             default:
-                #ifdef CONNECTIVITY_DEBUG
-                wxLogDebug( "Unexpected strong driver %s",
+                wxLogTrace( "CONN", "Unexpected strong driver %s",
                             driver->GetSelectMenuText( MILLIMETRES ) );
-                #endif
                 break;
             }
         }
@@ -798,10 +787,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         {
             auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
 
-            #ifdef CONNECTIVITY_DEBUG
-            wxLogDebug( "Subgraph %ld default name %s conflicts with a label. Changing to %s.",
+            wxLogTrace( "CONN", "Subgraph %ld default name %s conflicts with a label. Changing to %s.",
                         subgraph->m_code, name, new_name );
-            #endif
 
             conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
             suffix++;
@@ -823,11 +810,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             {
                 auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
 
-                #ifdef CONNECTIVITY_DEBUG
-                wxLogDebug( "Subgraph %ld and %ld both have name %s. Changing %ld to %s.",
+                wxLogTrace( "CONN", "Subgraph %ld and %ld both have name %s. Changing %ld to %s.",
                             subgraph->m_code, candidate->m_code, name,
                             candidate->m_code, new_name );
-                #endif
 
                 c_conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
 
@@ -1203,11 +1188,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     auto subsheet = child_subgraphs[i]->m_sheet;
                     subsheet.push_back( sp->GetParent() );
 
-                    #ifdef CONNECTIVITY_DEBUG
-                    wxLogDebug( wxT("Propagating sheet pin %s on %s with connection %s to subsheet %s"),
+                    wxLogTrace( "CONN", "Propagating sheet pin %s on %s with connection %s to subsheet %s",
                                 sp_name, child_subgraphs[i]->m_sheet.PathHumanReadable(),
                                 connection->Name(), subsheet.PathHumanReadable() );
-                    #endif
 
                     for( auto candidate : m_subgraphs )
                     {
@@ -1227,9 +1210,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                             if( hier_label )
                             {
-                                #ifdef CONNECTIVITY_DEBUG
-                                wxLogDebug( "Found child %s", static_cast<SCH_HIERLABEL*>( hier_label )->GetText() );
-                                #endif
+                                wxLogTrace( "CONN", "Found child %s", static_cast<SCH_HIERLABEL*>( hier_label )->GetText() );
 
                                 // We found a subgraph that is a subsheet child of
                                 // our top-level subgraph, so let's mark it
@@ -1266,10 +1247,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                     auto member = kv.first;
                                     std::shared_ptr<SCH_CONNECTION> top_level_conn;
 
-                                    #ifdef CONNECTIVITY_DEBUG
-                                    wxLogDebug( "Found child neighbor from member %s",
+                                    wxLogTrace( "CONN", "Found child neighbor from member %s",
                                                 member->Name() );
-                                    #endif
 
                                     if( type == CONNECTION_BUS_GROUP )
                                     {
@@ -1315,10 +1294,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                                     for( auto neighbor : kv.second )
                                     {
-                                        #ifdef CONNECTIVITY_DEBUG
-                                        wxLogDebug( "Propagating to neighbor driven by %s",
+                                        wxLogTrace( "CONN", "Propagating to neighbor driven by %s",
                                                     neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
-                                        #endif
 
                                         bool neighbor_has_sheet_pins = false;
 
@@ -1336,10 +1313,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                                         if( neighbor_has_sheet_pins )
                                         {
-                                            #ifdef CONNECTIVITY_DEBUG
-                                            wxLogDebug( "Neighbor driven by %s has subsheet pins",
+                                            wxLogTrace( "CONN", "Neighbor driven by %s has subsheet pins",
                                                         neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
-                                            #endif
                                             child_subgraphs.push_back( neighbor );
                                         }
                                     }
@@ -1349,10 +1324,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                 // sheet pin members.  If so, add to the queue.
                                 if( candidate_has_sheet_pins)
                                 {
-                                    #ifdef CONNECTIVITY_DEBUG
-                                    wxLogDebug( "Candidate %s has subsheet pins",
+                                    wxLogTrace( "CONN", "Candidate %s has subsheet pins",
                                                 candidate->m_driver->GetSelectMenuText( MILLIMETRES ) );
-                                    #endif
                                     child_subgraphs.push_back( candidate );
                                 }
                             }
@@ -1382,10 +1355,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
     }
 
-#ifdef CONNECTIVITY_PROFILE
     phase2.Stop();
-    std::cout << "BuildConnectionGraph() " <<  phase2.msecs() << " ms" << std::endl;
-#endif
+    wxLogTrace( "CONN_PROFILE", "BuildConnectionGraph() %0.4f ms", phase2.msecs() );
 }
 
 
@@ -1442,10 +1413,8 @@ std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigration()
 
         if( subgraph->GetBusLabels().size() > 1 )
         {
-            #ifdef CONNECTIVITY_DEBUG
-            wxLogDebug( "SG %ld (%s) has multiple bus labels", subgraph->m_code,
+            wxLogTrace( "CONN", "SG %ld (%s) has multiple bus labels", subgraph->m_code,
                         connection->Name() );
-            #endif
 
             ret.push_back( subgraph );
         }
