@@ -24,7 +24,7 @@
 
 // The DXF reader lib (libdxfrw) comes from dxflib project used in QCAD
 // See http://www.ribbonsoft.com
-// Each time a dxf entity is read, a "call back" fuction is called
+// Each time a dxf entity is read, a "call back" function is called
 // like void DXF_IMPORT_PLUGIN::addLine( const DL_LineData& data ) when a line is read.
 // this function just add the BOARD entity from dxf parameters (start and end point ...)
 
@@ -101,7 +101,16 @@ double DXF_IMPORT_PLUGIN::GetImageHeight() const
     return m_maxY - m_minY;
 }
 
-// coordinate conversions from dxf to internal units
+
+void DXF_IMPORT_PLUGIN::SetImporter( GRAPHICS_IMPORTER* aImporter )
+{
+    GRAPHICS_IMPORT_PLUGIN::SetImporter( aImporter );
+
+    if( m_importer )
+        SetDefaultLineWidthMM( m_importer->GetLineWidthMM() );
+}
+
+
 double DXF_IMPORT_PLUGIN::mapX( double aDxfCoordX )
 {
     return SCALE_FACTOR( m_xOffset + ( aDxfCoordX * m_DXF2mm ) );
@@ -130,6 +139,7 @@ double DXF_IMPORT_PLUGIN::mapWidth( double aDxfWidth )
 #endif
     return  SCALE_FACTOR( m_defaultThickness );
 }
+
 
 bool DXF_IMPORT_PLUGIN::ImportDxfFile( const wxString& aFile )
 {
@@ -178,8 +188,10 @@ void DXF_IMPORT_PLUGIN::addSpline( const DL_SplineData& aData )
 void DXF_IMPORT_PLUGIN::addControlPoint( const DL_ControlPointData& aData )
 {
     // Called for every spline control point, when reading a spline entity
-    m_curr_entity.m_SplineControlPointList.push_back( SPLINE_CTRL_POINT( aData.x , aData.y, aData.w ) );
+    m_curr_entity.m_SplineControlPointList.push_back( SPLINE_CTRL_POINT( aData.x , aData.y,
+                                                                         aData.w ) );
 }
+
 
 void DXF_IMPORT_PLUGIN::addFitPoint( const DL_FitPointData& aData )
 {
@@ -259,7 +271,8 @@ void DXF_IMPORT_PLUGIN::addVertex( const DL_VertexData& aData )
     if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
         insertLine( m_curr_entity.m_LastCoordinate, seg_end, lineWidth );
     else
-        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex, lineWidth );
+        insertArc( m_curr_entity.m_LastCoordinate, seg_end, m_curr_entity.m_BulgeVertex,
+                   lineWidth );
 
     m_curr_entity.m_LastCoordinate = seg_end;
     m_curr_entity.m_BulgeVertex = vertex->bulge;
@@ -277,7 +290,8 @@ void DXF_IMPORT_PLUGIN::endEntity()
             double lineWidth = mapWidth( attributes.getWidth() );
 
             if( std::abs( m_curr_entity.m_BulgeVertex ) < MIN_BULGE )
-                insertLine( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart, lineWidth );
+                insertLine( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart,
+                            lineWidth );
             else
                 insertArc( m_curr_entity.m_LastCoordinate, m_curr_entity.m_PolylineStart,
                            m_curr_entity.m_BulgeVertex, lineWidth );
@@ -307,9 +321,6 @@ void DXF_IMPORT_PLUGIN::addCircle( const DL_CircleData& aData )
 }
 
 
-/*
- * Import Arc entities.
- */
 void DXF_IMPORT_PLUGIN::addArc( const DL_ArcData& aData )
 {
     // Init arc centre:
@@ -496,7 +507,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
     VECTOR2D topLeft(0.0, 0.0);
     VECTOR2D topRight(0.0, 0.0);
 
-    /* Some texts start by '\' and have formating chars (font name, font option...)
+    /* Some texts start by '\' and have formatting chars (font name, font option...)
      *  ending with ';'
      *  Here are some mtext formatting codes:
      *  Format code        Purpose
@@ -510,7 +521,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
      \\ \Hvaluex;          Changes the text height to a multiple of the current text height
      \\ \S...^...;         Stacks the subsequent text at the \, #, or ^ symbol
      \\ \Tvalue;           Adjusts the space between characters, from.75 to 4 times
-     \\ \Qangle;           Changes obliquing angle
+     \\ \Qangle;           Changes oblique angle
      \\ \Wvalue;           Changes width factor to produce wide text
      \\ \A                 Sets the alignment value; valid values: 0, 1, 2 (bottom, center, top)    while( text.StartsWith( wxT("\\") ) )
      */
@@ -575,7 +586,7 @@ void DXF_IMPORT_PLUGIN::addMText( const DL_MTextData& aData )
         topLeft.x = -textWidth;
     }
 
-#if 0   // These setting have no mening in Pcbnew
+#if 0   // These setting have no meaning in Pcbnew
     if( data.alignH == 1 )
     {
         // Text is left to right;
@@ -968,7 +979,7 @@ void DXF_IMPORT_PLUGIN::insertSpline( int aWidth )
 
 #if 0   // set to 1 to approximate the spline by segments between 2 control points
     VECTOR2D startpoint( mapX( m_curr_entity.m_SplineControlPointList[0].m_x ),
-                        mapY( m_curr_entity.m_SplineControlPointList[0].m_y ) );
+                         mapY( m_curr_entity.m_SplineControlPointList[0].m_y ) );
 
     for( unsigned int ii = 1; ii < imax; ++ii )
     {

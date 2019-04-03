@@ -1,4 +1,4 @@
-/****************************************************************************
+/*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2019 Jean-Pierre Charras, jp.charras at wanadoo.fr
@@ -20,8 +20,7 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
-**********************************************************************/
-
+ */
 
 #ifndef DXF2BRD_ITEMS_H
 #define DXF2BRD_ITEMS_H
@@ -58,14 +57,15 @@ class DXF2BRD_ENTITY_DATA
 {
 public:
     int m_EntityType;           // the DXF type of entity
-    int m_EntityParseStatus;    // Inside a entity: status od parsing:
+    int m_EntityParseStatus;    // Inside a entity: status of parsing:
                                 // 0 = no entity
                                 // 1 = first item of entity
                                 // 2 = entity in progress
     int m_EntityFlag;           // a info flag to parse entities
 
     VECTOR2D m_LastCoordinate;  // the last vertex coordinate read (unit = mm)
-    VECTOR2D m_PolylineStart;   // The first point of the polyline entity, when reading a polyline (unit = mm)
+    VECTOR2D m_PolylineStart;   // The first point of the polyline entity, when reading a
+                                // polyline (unit = mm)
     double m_BulgeVertex;       // the last vertex bulge value read
 
     // for spline parsing: parameters
@@ -73,10 +73,10 @@ public:
     unsigned int m_SplineKnotsCount;
     unsigned int m_SplineControlCount;
     unsigned int m_SplineFitCount;
-    double m_SplineTangentStartX;   // tangeant dir X for the start point
-    double m_SplineTangentStartY;   // tangeant dir Y for the start point
-    double m_SplineTangentEndX;     // tangeant dir X for the end point
-    double m_SplineTangentEndY;     // tangeant dir Y for the end point
+    double m_SplineTangentStartX;   // tangent dir X for the start point
+    double m_SplineTangentStartY;   // tangent dir Y for the start point
+    double m_SplineTangentEndX;     // tangent dir X for the end point
+    double m_SplineTangentEndY;     // tangent dir Y for the end point
 
     // for spline parsing: buffers to store control points, fit points and knot
     std::vector<double> m_SplineKnotsList;          // knots list, code 40
@@ -159,6 +159,8 @@ public:
 
     void updateImageLimits( const VECTOR2D& aPoint );
 
+    virtual void SetImporter( GRAPHICS_IMPORTER* aImporter ) override;
+
     /**
      * Allows the import DXF items converted to board graphic items or footprint
      * graphic items.
@@ -181,9 +183,10 @@ public:
         m_defaultThickness = aWidth;
     }
 
+    void SetLineWidthMM( double aWidth ) override { SetDefaultLineWidthMM( aWidth ); }
+
     /**
-     * Set the coordinate offset between the imported dxf items
-     * and Pcbnew.
+     * Set the coordinate offset between the imported dxf items and Pcbnew.
      * because dxf files have the Y axis from bottom to top;
      * aOffsetX = 0, and aOffsetY = - vertical page size to import a full page
      * @param aOffsetX = the X offset in mm
@@ -197,7 +200,7 @@ public:
 
     /**
      * Set the layer number to import dxf items.
-     * the layer should be a techicanl layer, not a copper layer
+     * the layer should be a technical layer, not a copper layer
      */
     void SetBrdLayer( int aBrdLayer ) { m_brdLayer = aBrdLayer; }
 
@@ -216,7 +219,6 @@ public:
     {
         return m_messages;
     }
-
 
 private:
     // report message to keep trace of not supported dxf entities:
@@ -238,7 +240,7 @@ private:
     void insertSpline( int aWidth );
 
     // Methods from DL_CreationAdapter:
-    // They are something like"call back" fonctions,
+    // They are something like"call back" functions,
     // called when the corresponding object is read in dxf file
 
     /**
@@ -299,24 +301,46 @@ private:
             const DL_DimAngular3PData& ) override { reportMsg( "DL_Dimension not managed" ); }
     virtual void addDimOrdinate( const DL_DimensionData&,
             const DL_DimOrdinateData& ) override { reportMsg( "DL_Dimension not managed" ); }
-    virtual void addLeader( const DL_LeaderData& ) override { reportMsg( "DL_Leader not managed" ); }
-    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override { reportMsg( "DL_LeaderVertex not managed" ); }
+    virtual void addLeader( const DL_LeaderData& ) override
+    {
+        reportMsg( "DL_Leader not managed" );
+    }
+
+    virtual void addLeaderVertex( const DL_LeaderVertexData& ) override
+    {
+        reportMsg( "DL_LeaderVertex not managed" );
+    }
 
     virtual void addHatch( const DL_HatchData& ) override { reportMsg( "DL_Hatch not managed" ); }
 
     virtual void addTrace( const DL_TraceData& ) override { reportMsg( "DL_Trace not managed" ); }
-    virtual void add3dFace( const DL_3dFaceData& ) override { reportMsg( "DL_3dFace not managed" ); }
+    virtual void add3dFace( const DL_3dFaceData& ) override
+    {
+        reportMsg( "DL_3dFace not managed" );
+    }
+
     virtual void addSolid( const DL_SolidData& ) override { reportMsg( "DL_Solid not managed" ); }
 
     virtual void addImage( const DL_ImageData& ) override { reportMsg( "DL_ImageDa not managed" ); }
-    virtual void linkImage( const DL_ImageDefData& ) override { reportMsg( "DL_ImageDef not managed" ); }
-    virtual void addHatchLoop( const DL_HatchLoopData& ) override { reportMsg( "DL_HatchLoop not managed" ); }
-    virtual void addHatchEdge( const DL_HatchEdgeData& ) override { reportMsg( "DL_HatchEdge not managed" ); }
+    virtual void linkImage( const DL_ImageDefData& ) override
+    {
+        reportMsg( "DL_ImageDef not managed" );
+    }
+
+    virtual void addHatchLoop( const DL_HatchLoopData& ) override
+    {
+        reportMsg( "DL_HatchLoop not managed" );
+    }
+
+    virtual void addHatchEdge( const DL_HatchEdgeData& ) override
+    {
+        reportMsg( "DL_HatchEdge not managed" );
+    }
 
     /**
-     * Converts a native unicode string into a DXF encoded string.
+     * Convert a native unicode string into a DXF encoded string.
      *
-     * DXF endoding includes the following special sequences:
+     * DXF encoding includes the following special sequences:
      * - %%%c for a diameter sign
      * - %%%d for a degree sign
      * - %%%p for a plus/minus sign
