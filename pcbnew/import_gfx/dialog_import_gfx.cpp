@@ -310,7 +310,6 @@ bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
     m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
     m_lineWidth = getPCBdefaultLineWidthMM();
 
-    wxLogDebug( "Default line width = %fmm", m_lineWidth );
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
 
     auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() );
