@@ -1195,7 +1195,7 @@ void PCB_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
     for( auto ii: menuList )
     {
         wxMenuItem* item = menuBar->FindItem( ii.menuId );
-        if( ii.galType == canvasType )
+        if( item && ii.galType == canvasType )
             item->Check( true );
     }
 }
