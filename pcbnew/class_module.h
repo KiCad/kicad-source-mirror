@@ -459,7 +459,7 @@ public:
      * Function GetReference
      * @return const wxString& - the reference designator text.
      */
-    const wxString& GetReference() const
+    const wxString GetReference() const
     {
         return m_Reference->GetText();
     }
@@ -484,7 +484,7 @@ public:
      * Function GetValue
      * @return const wxString& - the value text.
      */
-    const wxString& GetValue() const
+    const wxString GetValue() const
     {
         return m_Value->GetText();
     }
