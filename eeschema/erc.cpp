@@ -332,19 +332,23 @@ int TestMultiunitFootprints( SCH_SHEET_LIST& aSheetList )
             SCH_REFERENCE& ref = refList.GetItem( i );
             SCH_COMPONENT* unit = ref.GetComp();
             SCH_SHEET_PATH sheetPath = refList.GetItem( i ).GetSheetPath();
-            const wxString& curFp = unit->GetField( FOOTPRINT )->GetText();
+            const wxString curFp = unit->GetField( FOOTPRINT )->GetText();
 
             if( !curFp.IsEmpty() && fp != curFp )
             {
                 wxString curUnitName = unit->GetRef( &sheetPath )
                     + LIB_PART::SubReference( unit->GetUnit(), false );
+                wxString msg = wxString::Format( _( "Unit %s has '%s' assigned, "
+                                                    "whereas unit %s has '%s' assigned" ),
+                                                 unitName,
+                                                 fp,
+                                                 curUnitName,
+                                                 curFp );
+                wxPoint pos = unit->GetPosition();
 
                 SCH_MARKER* marker = new SCH_MARKER();
                 marker->SetTimeStamp( GetNewTimeStamp() );
-                marker->SetData( ERCE_DIFFERENT_UNIT_FP, unit->GetPosition(),
-                    wxString::Format( _( "Unit %s has '%s' assigned, "
-                        "whereas unit %s has '%s' assigned" ), unitName, fp, curUnitName, curFp ),
-                    unit->GetPosition() );
+                marker->SetData( ERCE_DIFFERENT_UNIT_FP, pos, msg, pos );
                 marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
                 marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
                 ref.GetSheetPath().LastScreen()->Append( marker );

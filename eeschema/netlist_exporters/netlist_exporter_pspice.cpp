@@ -185,7 +185,7 @@ wxString NETLIST_EXPORTER_PSPICE::GetSpiceFieldDefVal( SPICE_FIELD aField,
     {
     case SF_PRIMITIVE:
     {
-        const wxString& refName = aComponent->GetField( REFERENCE )->GetText();
+        const wxString refName = aComponent->GetField( REFERENCE )->GetText();
         return refName.GetChar( 0 );
         break;
     }
@@ -344,7 +344,7 @@ bool NETLIST_EXPORTER_PSPICE::ProcessNetlist( unsigned aCtl )
             if( fieldSeq )
             {
                 // Get the string containing the sequence of nodes:
-                const wxString& nodeSeqIndexLineStr = fieldSeq->GetText();
+                const wxString nodeSeqIndexLineStr = fieldSeq->GetText();
 
                 // Verify field exists and is not empty:
                 if( !nodeSeqIndexLineStr.IsEmpty() )

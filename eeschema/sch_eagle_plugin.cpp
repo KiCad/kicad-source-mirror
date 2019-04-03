@@ -630,7 +630,7 @@ void SCH_EAGLE_PLUGIN::loadSchematic( wxXmlNode* aSchematicNode )
 
             // Instantiate the missing component unit
             int unit = unitEntry.first;
-            const wxString& reference = origCmp->GetField( REFERENCE )->GetText();
+            const wxString reference = origCmp->GetField( REFERENCE )->GetText();
             std::unique_ptr<SCH_COMPONENT> component( new SCH_COMPONENT( *origCmp ) );
             component->SetUnitSelection( &sheetpath, unit );
             component->SetUnit( unit );
@@ -2559,7 +2559,7 @@ void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
         return;
 
     int unit = aComponent->GetUnit();
-    const wxString& reference = aComponent->GetField( REFERENCE )->GetText();
+    const wxString reference = aComponent->GetField( REFERENCE )->GetText();
     std::vector<LIB_PIN*> pins;
     partRef->GetPins( pins );
     std::set<int> missingUnits;

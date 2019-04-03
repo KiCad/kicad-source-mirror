@@ -370,7 +370,7 @@ bool DIALOG_GLOBAL_EDIT_TEXT_AND_GRAPHICS::TransferDataFromWindow()
         {
             if( boardItem->Type() == PCB_MODULE_TEXT_T )
             {
-                const wxString& text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
+                const wxString text = dynamic_cast<EDA_TEXT*>( boardItem )->GetText();
 
                 if( m_references->GetValue() && text == wxT( "%R" ) )
                     visitItem( commit, boardItem );

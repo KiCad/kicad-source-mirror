@@ -168,8 +168,8 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         return;
 
     SCH_TEXT* newtext = nullptr;
-    const wxPoint &position = text->GetPosition();
-    const wxString &txt = text->GetText();
+    const wxPoint& position = text->GetPosition();
+    const wxString txt = text->GetText();
 
     switch( type )
     {
