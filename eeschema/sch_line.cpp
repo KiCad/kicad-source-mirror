@@ -408,59 +408,72 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
             return lhs.y < rhs.y;
         return lhs.x < rhs.x;
     };
+
     wxCHECK_MSG( aLine != NULL && aLine->Type() == SCH_LINE_T, NULL,
                  wxT( "Cannot test line segment for overlap." ) );
 
     if( this == aLine || GetLayer() != aLine->GetLayer() )
         return NULL;
 
-    SCH_LINE leftmost = SCH_LINE( *aLine );
-    SCH_LINE rightmost = SCH_LINE( *this );
+    auto leftmost_start = aLine->m_start;
+    auto leftmost_end = aLine->m_end;
+
+    auto rightmost_start = m_start;
+    auto rightmost_end = m_end;
 
     // We place the start to the left and below the end of both lines
-    if( leftmost.m_start != std::min( { leftmost.m_start, leftmost.m_end }, less ) )
-        std::swap( leftmost.m_start, leftmost.m_end );
-    if( rightmost.m_start != std::min( { rightmost.m_start, rightmost.m_end }, less ) )
-        std::swap( rightmost.m_start, rightmost.m_end );
+    if( leftmost_start != std::min( { leftmost_start, leftmost_end }, less ) )
+        std::swap( leftmost_start, leftmost_end );
+    if( rightmost_start != std::min( { rightmost_start, rightmost_end }, less ) )
+        std::swap( rightmost_start, rightmost_end );
 
     // -leftmost is the line that starts farthest to the left
     // -other is the line that is _not_ leftmost
     // -rightmost is the line that ends farthest to the right.  This may or
     //   may not be 'other' as the second line may be completely covered by
     //   the first.
-    if( less( rightmost.m_start, leftmost.m_start ) )
-        std::swap( leftmost, rightmost );
+    if( less( rightmost_start, leftmost_start ) )
+    {
+        std::swap( leftmost_start, rightmost_start );
+        std::swap( leftmost_end, rightmost_end );
+    }
 
-    SCH_LINE other = SCH_LINE( rightmost );
+    auto other_start = rightmost_start;
+    auto other_end = rightmost_end;
 
-    if( less( rightmost.m_end, leftmost.m_end ) )
-        rightmost = leftmost;
+    if( less( rightmost_end, leftmost_end ) )
+    {
+        rightmost_start = leftmost_start;
+        rightmost_end = leftmost_end;
+    }
 
     // If we end one before the beginning of the other, no overlap is possible
-    if( less( leftmost.m_end, other.m_start ) )
+    if( less( leftmost_end, other_start ) )
     {
         return NULL;
     }
 
     // Search for a common end:
-    if( ( leftmost.m_start == other.m_start )
-            && ( leftmost.m_end == other.m_end ) )     // Trivial case
+    if( ( leftmost_start == other_start ) &&
+        ( leftmost_end == other_end ) )     // Trivial case
     {
-        return new SCH_LINE( leftmost );
+        auto ret = new SCH_LINE( leftmost_start );
+        ret->SetEndPoint( leftmost_end );
+        return ret;
     }
 
     bool colinear = false;
 
     /* Test alignment: */
-    if( ( leftmost.m_start.y == leftmost.m_end.y )
-            && ( other.m_start.y == other.m_end.y ) )       // Horizontal segment
+    if( ( leftmost_start.y == leftmost_end.y ) &&
+        ( other_start.y == other_end.y ) )       // Horizontal segment
     {
-        colinear = ( leftmost.m_start.y == other.m_start.y );
+        colinear = ( leftmost_start.y == other_start.y );
     }
-    else if( ( leftmost.m_start.x == leftmost.m_end.x )
-            && ( other.m_start.x == other.m_end.x ) )  // Vertical segment
+    else if( ( leftmost_start.x == leftmost_end.x ) &&
+             ( other_start.x == other_end.x ) )  // Vertical segment
     {
-        colinear = ( leftmost.m_start.x == other.m_start.x );
+        colinear = ( leftmost_start.x == other_start.x );
     }
     else
     {
@@ -469,19 +482,22 @@ EDA_ITEM* SCH_LINE::MergeOverlap( SCH_LINE* aLine )
         // The slope of the left-most line is dy/dx.  Then we check that the slope
         // from the left most start to the right most start is the same as well as
         // the slope from the left most start to right most end.
-        long long dx = leftmost.m_end.x - leftmost.m_start.x;
-        long long dy = leftmost.m_end.y - leftmost.m_start.y;
-        colinear = ( ( ( other.m_start.y - leftmost.m_start.y ) * dx ==
-                ( other.m_start.x - leftmost.m_start.x ) * dy ) &&
-            ( ( other.m_end.y - leftmost.m_start.y ) * dx ==
-                ( other.m_end.x - leftmost.m_start.x ) * dy ) );
+        long long dx = leftmost_end.x - leftmost_start.x;
+        long long dy = leftmost_end.y - leftmost_start.y;
+        colinear = ( ( ( other_start.y - leftmost_start.y ) * dx ==
+                       ( other_start.x - leftmost_start.x ) * dy ) &&
+                     ( ( other_end.y - leftmost_start.y ) * dx ==
+                       ( other_end.x - leftmost_start.x ) * dy ) );
     }
 
     // Make a new segment that merges the 2 segments
     if( colinear )
     {
-        leftmost.m_end = rightmost.m_end;
-        return new SCH_LINE( leftmost );
+        leftmost_end = rightmost_end;
+
+        auto ret = new SCH_LINE( leftmost_start );
+        ret->SetEndPoint( leftmost_end );
+        return ret;
     }
 
     return NULL;
