@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -30,7 +31,7 @@
 class GRAPHICS_IMPORTER;
 
 /**
- * @brief Interface for vector graphics import plugins.
+ * Interface for vector graphics import plugins.
  */
 class GRAPHICS_IMPORT_PLUGIN
 {
@@ -40,27 +41,27 @@ public:
     }
 
     /**
-     * @brief Sets the receiver of the imported shapes.
+     * Set the receiver of the imported shapes.
      */
-    void SetImporter( GRAPHICS_IMPORTER* aImporter )
+    virtual void SetImporter( GRAPHICS_IMPORTER* aImporter )
     {
         m_importer = aImporter;
     }
 
     /**
-     * @breif Returns the plugin name.
+     * Return the plugin name.
      *
      * This string will be used as the description in the file dialog.
      */
     virtual const wxString GetName() const = 0;
 
     /**
-     * @brief Returns a string array of the file extensions handled by this plugin.
+     * Return a string array of the file extensions handled by this plugin.
      */
     virtual const wxArrayString GetFileExtensions() const = 0;
 
     /**
-     * @brief Returns a list of wildcards that contains the file extensions
+     * Return a list of wildcards that contains the file extensions
      * handled by this plugin, separated with a coma.
      */
     wxString GetWildcards() const
@@ -82,40 +83,41 @@ public:
     }
 
     /**
-     * @brief Loads file for import.
+     * Load file for import.
      *
      * It is necessary to have the GRAPHICS_IMPORTER object set before.
      */
     virtual bool Load( const wxString& aFileName ) = 0;
 
     /**
-     * @brief Return image height from original imported file.
+     * Return image height from original imported file.
      *
      * @return Original Image height in mm.
      */
     virtual double GetImageHeight() const = 0;
 
     /**
-     * @brief Return image width from original imported file.
+     * Return image width from original imported file.
      *
      * @return Original Image width in mm.
      */
     virtual double GetImageWidth() const = 0;
 
     /**
-     * @brief Actually imports the file.
+     * Actually imports the file.
      *
      * It is necessary to have loaded the file beforehand.
      */
     virtual bool Import() = 0;
 
+    virtual void SetLineWidthMM( double aLineWidth ) {}
+
     /**
-     * @brief collect warning and error messages after loading/importing.
+     * Collect warning and error messages after loading/importing.
+     *
      * @return the list of messages in one string. Each message ends by '\n'
      */
     const virtual std::string& GetMessages() const = 0;
-
-
 
 protected:
     ///> Importer used to create objects representing the imported shapes.
@@ -124,4 +126,3 @@ protected:
 
 
 #endif /* GRAPHICS_IMPORT_PLUGIN_H */
-

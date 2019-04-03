@@ -2,6 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2016 CERN
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -38,7 +39,7 @@
 class EDA_ITEM;
 
 /**
- * @brief Interface that creates objects representing shapes for a given data model.
+ * Interface that creates objects representing shapes for a given data model.
  */
 class GRAPHICS_IMPORTER
 {
@@ -50,22 +51,25 @@ public:
     }
 
     /**
-     * @brief Sets the import plugin used to obtain shapes from a file.
+     * Set the import plugin used to obtain shapes from a file.
      */
     void SetPlugin( std::unique_ptr<GRAPHICS_IMPORT_PLUGIN> aPlugin )
     {
         m_plugin = std::move( aPlugin );
+
+        if( m_plugin )
+            m_plugin->SetImporter( this );
     }
 
     /**
-     * @brief Load file and get its basic data
+     * Load file and get its basic data
      *
      */
     bool  Load( const wxString &aFileName );
 
 
     /**
-     * @brief Imports shapes from loaded file.
+     * Import shapes from loaded file.
      *
      * It is important to have the file loaded before importing.
      *
@@ -75,7 +79,8 @@ public:
     bool Import( double aScale = 1.0 );
 
     /**
-     * @brief collect warning and error messages after loading/importing.
+     * Collect warning and error messages after loading/importing.
+     *
      * @return the list of messages in one string. Each message ends by '\n'
      */
     const std::string& GetMessages() const
@@ -83,9 +88,8 @@ public:
         return m_plugin->GetMessages();
     }
 
-
     /**
-     * @brief Get original image Wigth.
+     * Get original image Width.
      *
      * @return Width of the loaded image in mm.
      */
@@ -95,7 +99,7 @@ public:
     }
 
     /**
-     * @brief Get original image Height
+     * Get original image Height
      *
      * @return Height of the loaded image in mm.
      */
@@ -104,9 +108,8 @@ public:
         return m_originalHeight;
     }
 
-
     /**
-     * @brief Sets the line width for the imported outlines (in mm).
+     * Sets the line width for the imported outlines (in mm).
      */
     void SetLineWidthMM( double aWidth )
     {
@@ -114,21 +117,23 @@ public:
     }
 
     /**
-     * @brief Returns the line width used for importing the outlines (in mm).
+     * Returns the line width used for importing the outlines (in mm).
      */
     double GetLineWidthMM() const
     {
         return m_lineWidth;
     }
 
-    /** @return the scale factor affecting the imported shapes.
+    /**
+     * @return the scale factor affecting the imported shapes.
      */
     double GetScale() const
     {
         return m_scale;
     }
 
-    /** @return the offset to add to coordinates when importing graphic items.
+    /**
+     * @return the offset to add to coordinates when importing graphic items.
      * The offset is always in mm
      */
     const VECTOR2D& GetImportOffsetMM() const
@@ -136,7 +141,8 @@ public:
         return m_offsetCoordmm;
     }
 
-    /** Set the offset to add to coordinates when importing graphic items.
+    /**
+     * Set the offset to add to coordinates when importing graphic items.
      * The offset is always in mm
      */
     void SetImportOffsetMM( const VECTOR2D& aOffset )
@@ -144,7 +150,8 @@ public:
         m_offsetCoordmm = aOffset;
     }
 
-    /** Set the scale factor affecting the imported shapes.
+    /**
+     * Set the scale factor affecting the imported shapes.
      * it allows conversion between imported shapes units and mm
      */
     void SetScale( double aScale )
@@ -152,13 +159,13 @@ public:
         m_scale = aScale;
     }
 
-    /** @return the conversion factor from mm to internal unit
+    /**
+     * @return the conversion factor from mm to internal unit
      */
     double GetMillimeterToIuFactor()
     {
         return m_millimeterToIu;
     }
-
 
     /**
      * @return the overall scale factor to convert the imported shapes dimension to mm.
@@ -169,7 +176,7 @@ public:
     }
 
     /**
-     * @breif Returns the list of objects representing the imported shapes.
+     * Return the list of objects representing the imported shapes.
      */
     std::list<std::unique_ptr<EDA_ITEM>>& GetItems()
     {
@@ -182,7 +189,8 @@ public:
     // Methods to be implemented by derived graphics importers
 
     /**
-     * @brief Creates an object representing a line segment.
+     * Create an object representing a line segment.
+     *
      * @param aOrigin is the segment origin point expressed in mm.
      * @param aEnd is the segment end point expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
@@ -190,7 +198,8 @@ public:
     virtual void AddLine( const VECTOR2D& aOrigin, const VECTOR2D& aEnd, double aWidth ) = 0;
 
     /**
-     * @brief Creates an object representing a circle.
+     * Create an object representing a circle.
+     *
      * @param aCenter is the circle center point expressed in mm.
      * @param aRadius is the circle radius expressed in mm.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
@@ -198,19 +207,22 @@ public:
     virtual void AddCircle( const VECTOR2D& aCenter, double aRadius, double aWidth ) = 0;
 
     /**
-     * @brief Creates an object representing an arc.
+     * Create an object representing an arc.
+     *
      * @param aCenter is the arc center point expressed in mm.
      * @param aStart is the arc arm end point expressed in mm.
      * Its length is the arc radius.
      * @param aAngle is the arc angle expressed in degrees.
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
-    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle, double aWidth ) = 0;
+    virtual void AddArc( const VECTOR2D& aCenter, const VECTOR2D& aStart, double aAngle,
+                         double aWidth ) = 0;
 
     virtual void AddPolygon( const std::vector< VECTOR2D >& aVertices, double aWidth ) = 0;
 
     /**
-     * @brief Creates an object representing a text.
+     * Create an object representing a text.
+     *
      * @param aOrigin is the text position.
      * @param aText is the displayed text.
      * @param aHeight is the text height expressed in mm.
@@ -225,7 +237,8 @@ public:
             EDA_TEXT_HJUSTIFY_T aHJustify, EDA_TEXT_VJUSTIFY_T aVJustify ) = 0;
 
     /**
-     * @brief Creates an object representing an arc.
+     * Create an object representing an arc.
+     *
      * @param aStart is the curve start point expressed in mm.
      * @param aBezierControl1 is the first Bezier control point expressed in mm.
      * @param aBezierControl2 is the second Bezier control point expressed in mm.
@@ -233,7 +246,8 @@ public:
      * @param aWidth is the segment thickness in mm. Use -1 for default line thickness
      */
     virtual void AddSpline( const VECTOR2D& aStart, const VECTOR2D& aBezierControl1,
-                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd, double aWidth ) = 0;
+                            const VECTOR2D& aBezierControl2, const VECTOR2D& aEnd,
+                            double aWidth ) = 0;
 
 protected:
     ///> Adds an item to the imported shapes list.
@@ -255,14 +269,15 @@ private:
     ///> Total image Height;
     double m_originalHeight;
 
-    ///> Default line thickness for the imported graphics
-    double m_lineWidth;
-
-    /** Scale factor applied to the imported graphics.
+    /**
+     * Scale factor applied to the imported graphics.
      * 1.0 does not change the size of imported items
      * scale < 1.0 reduce the size of imported items
      */
     double m_scale;
+
+    ///> Default line thickness for the imported graphics
+    double m_lineWidth;
 
 protected:
     ///> factor to convert millimeters to Internal Units
