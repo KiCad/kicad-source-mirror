@@ -39,7 +39,7 @@
 // TODO(JE) re-enable this once performance concerns are sorted out
 // #define CONNECTIVITY_REAL_TIME
 
-class SCH_PIN_CONNECTION;
+class SCH_PIN;
 
 class SCH_EDIT_FRAME;
 
@@ -191,7 +191,7 @@ private:
 
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
 
-    std::vector<SCH_PIN_CONNECTION*> m_invisible_power_pins;
+    std::vector<SCH_PIN*> m_invisible_power_pins;
 
     std::unordered_map<wxString, std::shared_ptr<BUS_ALIAS>> m_bus_alias_cache;
 

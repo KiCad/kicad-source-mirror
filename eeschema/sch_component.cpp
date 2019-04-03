@@ -148,7 +148,7 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
     UpdateFields( true, true );
 
     // Update the pin locations
-    UpdatePinCache();
+    UpdatePins();
 
     // Update the reference -- just the prefix for now.
     if( sheet )
@@ -167,7 +167,6 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_convert   = aComponent.m_convert;
     m_lib_id    = aComponent.m_lib_id;
     m_part      = aComponent.m_part;
-    m_Pins      = aComponent.m_Pins;
 
     SetTimeStamp( aComponent.m_TimeStamp );
 
@@ -177,12 +176,18 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_Fields = aComponent.m_Fields;
 
     // Re-parent the fields, which before this had aComponent as parent
-    for( int i = 0; i<GetFieldCount(); ++i )
+    for( int i = 0; i < GetFieldCount(); ++i )
     {
         GetField( i )->SetParent( this );
     }
 
-    m_isDangling = aComponent.m_isDangling;
+    // Copy the pins, and re-parent them
+    for( const auto& it : aComponent.m_pins )
+    {
+        m_pins.emplace( std::make_pair( it.first, it.second ) );
+        m_pins.at( it.first ).SetParentComponent( this );
+    }
+
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
 }
 
@@ -391,7 +396,7 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLi
         SCH_COMPONENT* cmp = cmp_list[ii];
         curr_libid = cmp->m_lib_id;
         cmp->Resolve( aLibs );
-        cmp->UpdatePinCache();
+        cmp->UpdatePins();
 
         // Propagate the m_part pointer to other members using the same lib_id
         for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
@@ -403,11 +408,7 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLi
 
             next_cmp->m_part = cmp->m_part;
 
-            if( ( cmp->m_unit == next_cmp->m_unit ) && ( cmp->m_convert == next_cmp->m_convert ) )
-                // Propagate the pin cache vector as well
-                next_cmp->m_Pins = cmp->m_Pins;
-            else
-                next_cmp->UpdatePinCache();
+            next_cmp->UpdatePins();
 
             ii = jj;
         }
@@ -439,7 +440,7 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
         SCH_COMPONENT* cmp = cmp_list[ii];
         curr_libid = cmp->m_lib_id;
         cmp->Resolve( aLibTable, aCacheLib );
-        cmp->UpdatePinCache();
+        cmp->UpdatePins();
 
         // Propagate the m_part pointer to other members using the same lib_id
         for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
@@ -451,35 +452,9 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
 
             next_cmp->m_part = cmp->m_part;
 
-            if( ( cmp->m_unit == next_cmp->m_unit ) && ( cmp->m_convert == next_cmp->m_convert ) )
-                // Propagate the pin cache vector as well
-                next_cmp->m_Pins = cmp->m_Pins;
-            else
-                next_cmp->UpdatePinCache();
+            next_cmp->UpdatePins();
 
             ii = jj;
-        }
-    }
-}
-
-
-void SCH_COMPONENT::UpdatePinCache()
-{
-    if( PART_SPTR part = m_part.lock() )
-    {
-        m_Pins.clear();
-
-        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
-        {
-            wxASSERT( pin->Type() == LIB_PIN_T );
-
-            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
-                continue;
-
-            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
-                continue;
-
-            m_Pins.push_back( pin->GetPosition() );
         }
     }
 }
@@ -487,80 +462,46 @@ void SCH_COMPONENT::UpdatePinCache()
 
 void SCH_COMPONENT::UpdateAllPinCaches( const SCH_COLLECTOR& aComponents )
 {
-    // Usually, many components use the same part lib.
-    // to avoid too long calculation time the list of components is grouped
-    // and once the lib part is found for one member of a group, it is also
-    // set for all other members of this group
-    std::vector<SCH_COMPONENT*> cmp_list;
-
-    // build the cmp list.
     for( int i = 0;  i < aComponents.GetCount();  ++i )
     {
         SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
         wxASSERT( cmp );
 
-        if( cmp )   // cmp == NULL should not occur.
-            cmp_list.push_back( cmp );
-    }
-
-    // sort it by lib part. Cmp will be grouped by same lib part.
-    std::sort( cmp_list.begin(), cmp_list.end(), sort_by_libid );
-
-    LIB_ID curr_libid;
-
-    for( unsigned ii = 0; ii < cmp_list.size (); ++ii )
-    {
-        SCH_COMPONENT* cmp = cmp_list[ii];
-        curr_libid = cmp->m_lib_id;
-        cmp->UpdatePinCache();
-
-        // Propagate the m_Pins vector to other members using the same lib_id
-        for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
-        {
-            SCH_COMPONENT* next_cmp = cmp_list[jj];
-
-            if( ( curr_libid != next_cmp->m_lib_id )
-                || ( cmp->m_unit != next_cmp->m_unit )
-                || ( cmp->m_convert != next_cmp->m_convert ) )
-                break;
-
-            // Propagate the pin cache vector as well
-            next_cmp->m_Pins = cmp->m_Pins;
-            ii = jj;
-        }
+        cmp->UpdatePins();
     }
 }
 
 
-void SCH_COMPONENT::UpdatePinConnections( SCH_SHEET_PATH aSheet )
+void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 {
     if( PART_SPTR part = m_part.lock() )
     {
-        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
+        for( auto& it : m_pins )
+            it.second.ClearFlags( BUSY );
+
+        for( LIB_PIN* libPin = part->GetNextPin(); libPin; libPin = part->GetNextPin( libPin ) )
         {
-            wxASSERT( pin->Type() == LIB_PIN_T );
+            wxASSERT( libPin->Type() == LIB_PIN_T );
 
-            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
+            if( libPin->GetUnit() && m_unit && ( m_unit != libPin->GetUnit() ) )
                 continue;
 
-            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
+            if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
                 continue;
 
-            SCH_PIN_CONNECTION* connection = nullptr;
+            if( !m_pins.count( libPin ) )
+                m_pins.emplace( std::make_pair( libPin, SCH_PIN( libPin, this ) ) );
 
-            try
-            {
-                connection = m_pin_connections.at( pin );
-            }
-            catch( const std::out_of_range& oor )
-            {
-                connection = new SCH_PIN_CONNECTION();
-                m_pin_connections[ pin ] = connection;
-            }
+            if( aSheet )
+                m_pins.at( libPin ).InitializeConnection( *aSheet );
 
-            connection->m_pin = pin;
-            connection->m_comp = this;
-            connection->InitializeConnection( aSheet );
+            m_pins.at( libPin ).SetFlags( BUSY );
+        }
+
+        for( auto& it : m_pins )
+        {
+            if( !( it.second.GetFlags() & BUSY ) )
+                m_pins.erase( it.first );
         }
     }
 }
@@ -568,13 +509,8 @@ void SCH_COMPONENT::UpdatePinConnections( SCH_SHEET_PATH aSheet )
 
 SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
 {
-    if( m_pin_connections.count( aPin ) )
-    {
-        SCH_PIN_CONNECTION* pin_conn = m_pin_connections.at( aPin );
-
-        if( pin_conn )
-            return pin_conn->Connection( aSheet );
-    }
+    if( m_pins.count( aPin ) )
+        return m_pins.at( aPin ).Connection( aSheet );
 
     return nullptr;
 }
@@ -641,12 +577,17 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 
     if( PART_SPTR part = m_part.lock() )
     {
-        // Draw pin targets if part is being dragged
-        bool dragging = aPanel->GetScreen()->GetCurItem() == this && aPanel->IsMouseCaptured();
+        LIB_PINS libPins;
+        part->GetPins( libPins, m_unit, m_convert );
 
-        if( !dragging )
+        for( LIB_PIN *libPin : libPins )
         {
-            opts.dangling = m_isDangling;
+            bool isDangling = true;
+
+            if( m_pins.count( libPin ) )
+                isDangling = m_pins.at( libPin ).IsDangling();
+
+            opts.dangling.push_back( isDangling );
         }
 
         part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, opts );
@@ -1086,6 +1027,12 @@ void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
 }
 
 
+SCH_PINS& SCH_COMPONENT::GetPinMap()
+{
+    return m_pins;
+}
+
+
 void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
 {
     wxCHECK_RET( (aItem != NULL) && (aItem->Type() == SCH_COMPONENT_T),
@@ -1098,9 +1045,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     std::swap( m_Pos, component->m_Pos );
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
-
-    std::swap( m_Pins, component->m_Pins );
-    std::swap( m_isDangling, component->m_isDangling );
+    std::swap( m_pins, component->m_pins );
 
     TRANSFORM tmp = m_transform;
 
@@ -1642,21 +1587,12 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
 {
     bool changed = false;
 
-    for( size_t i = 0; i < m_Pins.size(); ++i )
+    for( auto& it : m_pins )
     {
-        bool previousState;
-        wxPoint pos = m_transform.TransformCoordinate( m_Pins[ i ] ) + m_Pos;
+        bool previousState = it.second.IsDangling();
+        it.second.SetIsDangling( true );
 
-        if( i < m_isDangling.size() )
-        {
-            previousState = m_isDangling[ i ];
-            m_isDangling[ i ] = true;
-        }
-        else
-        {
-            previousState = true;
-            m_isDangling.push_back( true );
-        }
+        wxPoint pos = m_transform.TransformCoordinate( it.second.GetPosition() ) + m_Pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1678,7 +1614,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
             case JUNCTION_END:
 
                 if( pos == each_item.GetPosition() )
-                    m_isDangling[ i ] = false;
+                    it.second.SetIsDangling( false );
 
                 break;
 
@@ -1686,15 +1622,12 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
                 break;
             }
 
-            if( !m_isDangling[ i ] )
+            if( !it.second.IsDangling() )
                 break;
         }
 
-        changed = ( changed || ( previousState != m_isDangling[ i ] ) );
+        changed = ( changed || ( previousState != it.second.IsDangling() ) );
     }
-
-    while( m_isDangling.size() > m_Pins.size() )
-        m_isDangling.pop_back();
 
     return changed;
 }
@@ -1726,31 +1659,17 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
 
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    for( auto pin : m_Pins )
-        aPoints.push_back( m_transform.TransformCoordinate( pin ) + m_Pos );
+    for( auto& it : m_pins )
+        aPoints.push_back( m_transform.TransformCoordinate( it.second.GetPosition() ) + m_Pos );
 }
 
 
 LIB_ITEM* SCH_COMPONENT::GetDrawItem( const wxPoint& aPosition, KICAD_T aType )
 {
+    UpdatePins();
+
     if( PART_SPTR part = m_part.lock() )
     {
-
-        m_Pins.clear();
-
-        for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
-        {
-            wxASSERT( pin->Type() == LIB_PIN_T );
-
-            if( pin->GetUnit() && m_unit && ( m_unit != pin->GetUnit() ) )
-                continue;
-
-            if( pin->GetConvert() && m_convert && ( m_convert != pin->GetConvert() ) )
-                continue;
-
-            m_Pins.push_back( pin->GetPosition() );
-        }
-
         // Calculate the position relative to the component.
         wxPoint libPosition = aPosition - m_Pos;
 
@@ -1948,7 +1867,6 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         m_unit      = c->m_unit;
         m_convert   = c->m_convert;
         m_transform = c->m_transform;
-        m_Pins      = c->m_Pins;
 
         m_PathsAndReferences = c->m_PathsAndReferences;
 
@@ -1958,6 +1876,13 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         for( int ii = 0; ii < GetFieldCount();  ++ii )
         {
             GetField( ii )->SetParent( this );
+        }
+
+        // Copy the pins, and re-parent them
+        for( const auto& it : c->m_pins )
+        {
+            m_pins.emplace( std::make_pair( it.first, it.second ) );
+            m_pins.at( it.first ).SetParentComponent( this );
         }
     }
 
@@ -1996,7 +1921,14 @@ bool SCH_COMPONENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccura
 bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
     wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_Pos );
-    return std::find( m_Pins.begin(), m_Pins.end(), new_pos ) != m_Pins.end();
+
+    for( const auto& it : m_pins )
+    {
+        if( it.second.GetPosition() == new_pos )
+            return true;
+    }
+
+    return false;
 }
 
 
@@ -2030,43 +1962,41 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 
 bool SCH_COMPONENT::HasBrightenedPins()
 {
-    return m_brightenedPins.size() > 0;
+    for( auto& it : m_pins )
+    {
+        if( it.second.IsBrightened() )
+            return true;
+    }
+
+    return false;
 }
 
 
 void SCH_COMPONENT::ClearBrightenedPins()
 {
-    m_brightenedPins.clear();
+    for( auto& it : m_pins )
+        it.second.ClearBrightened();
 }
 
 
 void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
 {
-    m_brightenedPins.insert( aPin->GetNumber() );
-}
-
-
-bool SCH_COMPONENT::IsPinBrightened( const LIB_PIN* aPin )
-{
-    return m_brightenedPins.find( aPin->GetNumber() ) != m_brightenedPins.end();
+    if( m_pins.count( aPin ) )
+        m_pins.at( aPin ).SetBrightened();
 }
 
 
 void SCH_COMPONENT::ClearHighlightedPins()
 {
-    m_highlightedPins.clear();
+    for( auto& it : m_pins )
+        it.second.ClearHighlighted();
 }
 
 
 void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 {
-    m_highlightedPins.insert( aPin->GetNumber() );
-}
-
-
-bool SCH_COMPONENT::IsPinHighlighted( const LIB_PIN* aPin )
-{
-    return m_highlightedPins.find( aPin->GetNumber() ) != m_highlightedPins.end();
+    if( m_pins.count( aPin ) )
+        m_pins.at( aPin ).SetHighlighted();
 }
 
 

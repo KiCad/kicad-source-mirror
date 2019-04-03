@@ -92,11 +92,11 @@ SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
 {
     SCH_CONNECTION* conn = nullptr;
 
-    try
+    if( m_connection_map.count( aSheet ) )
     {
         conn = m_connection_map.at( aSheet );
     }
-    catch( const std::out_of_range& oor )
+    else
     {
         // TODO(JE) should we just call InitializeConnection here?
     }

@@ -244,8 +244,8 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 }
 
 
-void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit, int aConvert,
-                        std::vector<bool>* aDanglingPinFlags )
+void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert,
+                        SCH_PINS* aPinMap )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -253,9 +253,7 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
     if( !aConvert )
         aConvert = m_schSettings.m_ShowConvert;
 
-    size_t pinIndex = 0;
-
-    for( auto& item : aComp->GetDrawItems() )
+    for( auto& item : aPart->GetDrawItems() )
     {
         if( !aDrawFields && item.Type() == LIB_FIELD_T )
             continue;
@@ -268,14 +266,13 @@ void SCH_PAINTER::draw( LIB_PART *aComp, int aLayer, bool aDrawFields, int aUnit
 
         if( item.Type() == LIB_PIN_T )
         {
-            auto pin = static_cast<LIB_PIN*>( &item );
-            bool dangling = true;
+            LIB_PIN* libPin = static_cast<LIB_PIN*>( &item );
+            SCH_PIN* schPin = nullptr;
 
-            if( aDanglingPinFlags && pinIndex < aDanglingPinFlags->size() )
-                dangling = (*aDanglingPinFlags)[ pinIndex ];
+            if( aPinMap && aPinMap->count( libPin ) )
+                schPin = &aPinMap->at( libPin );
 
-            draw( pin, aLayer, dangling, aComp->IsMoving() );
-            pinIndex++;
+            draw( libPin, aLayer, schPin, aPart->IsMoving() );
         }
         else
             Draw( &item, aLayer );
@@ -528,7 +525,7 @@ static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4
 }
 
 
-void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMoving )
+void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isParentMoving )
 {
     if( aLayer != LAYER_DEVICE )
         return;
@@ -536,13 +533,14 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
-    if( aPin->IsMoving() )
-        isMoving = true;
+    bool isMoving = isParentMoving || aPin->IsMoving();
+    bool isDangling = !aSchPin || aSchPin->IsDangling();
+    bool isBrightened = aSchPin && aSchPin->IsBrightened();
 
     VECTOR2I pos = mapCoords( aPin->GetPosition() );
     COLOR4D  color;
 
-    if( aPin->IsBrightened() )
+    if( isBrightened )
         color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
     else
         color = getOverlayColor( aPin, m_schSettings.GetLayerColor( LAYER_PIN ), false );
@@ -555,7 +553,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
         }
         else
         {
-            if( aIsDangling && aPin->IsPowerConnection() )
+            if( isDangling && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( m_gal, pos, color );
 
             return;
@@ -676,10 +674,10 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, bool aIsDangling, bool isMovi
         m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
 
-        aIsDangling = false; // PIN_NC pin type is always not connected and dangling.
+        isDangling = false; // PIN_NC pin type is always not connected and dangling.
     }
 
-    if( aIsDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( isDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( m_gal, pos, color );
 
     // Draw the labels
@@ -1125,11 +1123,27 @@ static void orientComponent( LIB_PART *part, int orientation )
 
 void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
-    PART_SPTR part = aComp->GetPartRef().lock();
-
+    PART_SPTR partSptr = aComp->GetPartRef().lock();
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
-    // In either case copy it so we can re-orient and translate it.
-    std::unique_ptr<LIB_PART> temp( new LIB_PART( part ? *part.get() : *dummy() ) );
+    LIB_PART* part = partSptr ? partSptr.get() : dummy();
+
+    // Copy the source it so we can re-orient and translate it.
+    std::unique_ptr<LIB_PART> temp( new LIB_PART( *part ) );
+
+    // Update the pinMap to be indexed by the temp part's pins
+    LIB_PIN* libPin = part->GetNextPin();
+    LIB_PIN* tempPin = temp->GetNextPin();
+    SCH_PINS& pinMap = aComp->GetPinMap();
+    SCH_PINS tempPinMap;
+
+    while( libPin && tempPin )
+    {
+        if( pinMap.count( libPin ) )
+            tempPinMap.emplace( std::make_pair( tempPin, SCH_PIN( pinMap.at( libPin ) ) ) );
+
+        libPin = part->GetNextPin( libPin );
+        tempPin = temp->GetNextPin( tempPin );
+    }
 
     if( aComp->IsMoving() )
         temp->SetFlags( IS_MOVED );
@@ -1144,20 +1158,9 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
         auto rp = aComp->GetPosition();
         auto ip = item.GetPosition();
         item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
-
-        if( item.Type() == LIB_PIN_T )
-        {
-            auto pin = static_cast<LIB_PIN*>( &item );
-
-            if( aComp->IsPinBrightened( pin ) )
-                pin->SetFlags( BRIGHTENED );
-            else if( aComp->IsPinHighlighted( pin ) )
-                pin->SetFlags( HIGHLIGHTED );
-        }
     }
 
-    draw( temp.get(), aLayer, false,
-          aComp->GetUnit(), aComp->GetConvert(), aComp->GetDanglingPinFlags() );
+    draw( temp.get(), aLayer, false, aComp->GetUnit(), aComp->GetConvert(), &tempPinMap );
 
     // The fields are SCH_COMPONENT-specific and so don't need to be copied/
     // oriented/translated.

@@ -22,7 +22,6 @@
 #include <wx/tokenzr.h>
 
 #include <connection_graph.h>
-#include <sch_pin_connection.h>
 #include <sch_screen.h>
 
 #include <sch_connection.h>
@@ -231,7 +230,7 @@ bool SCH_CONNECTION::IsDriver() const
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIERARCHICAL_LABEL_T:
-    case SCH_PIN_CONNECTION_T:
+    case SCH_PIN_T:
     case SCH_SHEET_PIN_T:
     case SCH_SHEET_T:
     case LIB_PIN_T:
@@ -243,7 +242,7 @@ bool SCH_CONNECTION::IsDriver() const
 }
 
 
-wxString SCH_CONNECTION::Name( bool aIgnoreSheet, bool aForceSheet ) const
+wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
     wxString ret = m_name + m_suffix;
 
@@ -256,7 +255,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet, bool aForceSheet ) const
     {
         switch( m_driver->Type() )
         {
-        case SCH_PIN_CONNECTION_T:
+        case SCH_PIN_T:
             // Pins are either power connections or belong to a uniquely-annotated
             // component, so they don't need a path if they are driving the subgraph
             prepend_path = false;
@@ -271,7 +270,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet, bool aForceSheet ) const
         }
     }
 
-    if( aForceSheet || ( prepend_path && !aIgnoreSheet ) )
+    if( prepend_path && !aIgnoreSheet )
         ret = m_sheet.PathHumanReadable() + ret;
 
     return ret;

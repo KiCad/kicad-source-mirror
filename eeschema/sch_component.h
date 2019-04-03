@@ -40,7 +40,7 @@
 #include <vector>
 #include <set>
 #include <lib_draw_item.h>
-#include <sch_pin_connection.h>
+#include <sch_pin.h>
 
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
@@ -54,6 +54,9 @@ class SCH_COLLECTOR;
 class SCH_SCREEN;
 class SYMBOL_LIB_TABLE;
 
+
+/// Pins, mapped by their corresponding LIB_PINs.
+typedef std::unordered_map<LIB_PIN*, SCH_PIN> SCH_PINS;
 
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD>    SCH_FIELDS;
@@ -93,10 +96,7 @@ private:
 
     PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
 
-    std::vector<bool> m_isDangling; ///< One isDangling per pin
-    std::vector<wxPoint> m_Pins;
-    std::set<wxString> m_highlightedPins; ///< God forgive me - Tom
-    std::set<wxString> m_brightenedPins;  ///< ... and me too - Jeff
+    SCH_PINS      m_pins;
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -107,8 +107,6 @@ private:
      * A single / denotes the root sheet.
      */
     wxArrayString m_PathsAndReferences;
-
-    std::unordered_map<LIB_PIN*, SCH_PIN_CONNECTION*> m_pin_connections;
 
     void Init( const wxPoint& pos = wxPoint( 0, 0 ) );
 
@@ -205,11 +203,6 @@ public:
     int GetUnit() const { return m_unit; }
 
     /**
-     * Updates the local cache of pin positions
-     */
-    void UpdatePinCache();
-
-    /**
      * Update the pin cache for all components in \a aComponents
      *
      * @param aComponents collector of components in screen
@@ -219,17 +212,12 @@ public:
     /**
      * Updates the local cache of SCH_PIN_CONNECTION objects for each pin
      */
-    void UpdatePinConnections( SCH_SHEET_PATH aSheet );
+    void UpdatePins( SCH_SHEET_PATH* aSheet = nullptr );
 
     /**
      * Retrieves the connection for a given pin of the component
      */
     SCH_CONNECTION* GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet );
-
-    const std::unordered_map<LIB_PIN*, SCH_PIN_CONNECTION*>& PinConnections()
-    {
-        return m_pin_connections;
-    }
 
     /**
      * Change the unit number to \a aUnit
@@ -478,13 +466,17 @@ public:
     LIB_PIN* GetPin( const wxString& number );
 
     /**
-     * Populate a vector with all the pins.
+     * Populate a vector with all the pins from the library object.
      *
      * @param aPinsList is the list to populate with all of the pins.
      */
     void GetPins( std::vector<LIB_PIN*>& aPinsList );
 
-    std::vector<bool>* GetDanglingPinFlags() { return &m_isDangling; }
+    /**
+     * Return a map of library pins to their SCH_PIN equivalents.
+     * @return
+     */
+    SCH_PINS& GetPinMap();
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
                GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override
@@ -669,13 +661,9 @@ public:
 
     void BrightenPin( LIB_PIN* aPin );
 
-    bool IsPinBrightened( const LIB_PIN* aPin );
-
     void ClearHighlightedPins();
 
     void HighlightPin( LIB_PIN* aPin );
-
-    bool IsPinHighlighted( const LIB_PIN* aPin );
 
 private:
     bool doIsConnected( const wxPoint& aPosition ) const override;

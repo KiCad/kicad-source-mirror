@@ -29,7 +29,7 @@
 #include <sch_bus_entry.h>
 #include <sch_component.h>
 #include <sch_line.h>
-#include <sch_pin_connection.h>
+#include <sch_pin.h>
 #include <sch_screen.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
@@ -66,17 +66,17 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         case SCH_SHEET_PIN_T:           item_priority = 2; break;
         case SCH_HIERARCHICAL_LABEL_T:  item_priority = 3; break;
         case SCH_LABEL_T:               item_priority = 4; break;
-        case SCH_PIN_CONNECTION_T:
+        case SCH_PIN_T:
         {
-            auto pin_connection = static_cast<SCH_PIN_CONNECTION*>( item );
+            auto sch_pin = static_cast<SCH_PIN*>( item );
 
-            if( pin_connection->m_pin->IsPowerConnection() )
+            if( sch_pin->IsPowerConnection() )
                 item_priority = 5;
             else
                 item_priority = 1;
 
             // Skip power flags, etc
-            if( item_priority == 1 && !pin_connection->m_comp->IsInNetlist() )
+            if( item_priority == 1 && !sch_pin->GetParentComponent()->IsInNetlist() )
                 continue;
 
             break;
@@ -110,8 +110,8 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                 std::sort( candidates.begin(), candidates.end(),
                            [this]( SCH_ITEM* a, SCH_ITEM* b) -> bool
                             {
-                                auto pin_a = static_cast<SCH_PIN_CONNECTION*>( a );
-                                auto pin_b = static_cast<SCH_PIN_CONNECTION*>( b );
+                                auto pin_a = static_cast<SCH_PIN*>( a );
+                                auto pin_b = static_cast<SCH_PIN*>( b );
 
                                 auto name_a = pin_a->GetDefaultNetName( m_sheet );
                                 auto name_b = pin_b->GetDefaultNetName( m_sheet );
@@ -144,11 +144,11 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     // For power connections, we allow multiple drivers
     if( highest_priority == 5 && candidates.size() > 1 &&
-        candidates[0]->Type() == SCH_PIN_CONNECTION_T )
+        candidates[0]->Type() == SCH_PIN_T )
     {
-        auto pc = static_cast<SCH_PIN_CONNECTION*>( candidates[0] );
+        auto pin = static_cast<SCH_PIN*>( candidates[0] );
 
-        wxASSERT( pc->m_pin->IsPowerConnection() );
+        wxASSERT( pin->IsPowerConnection() );
 
         m_multiple_power_ports = true;
     }
@@ -332,23 +332,24 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         {
             auto component = static_cast<SCH_COMPONENT*>( item );
 
-            component->UpdatePinConnections( aSheet );
+            component->UpdatePins( &aSheet );
 
-            for( auto it : component->PinConnections() )
+            for( auto& it : component->GetPinMap() )
             {
-                auto pin_connection = it.second;
+                SCH_PIN* pin = &it.second;
 
                 // TODO(JE) use cached location from m_Pins
-                auto pin_pos = pin_connection->m_pin->GetPosition();
+                // Now needs to be the other way around: move m_Pins to SCH_PINs
+                auto pin_pos = pin->GetLibPin()->GetPosition();
                 auto pos = component->GetTransform().TransformCoordinate( pin_pos ) +
                            component->GetPosition();
 
                 // because calling the first time is not thread-safe
-                pin_connection->GetDefaultNetName( aSheet );
-                pin_connection->ConnectedItems().clear();
+                pin->GetDefaultNetName( aSheet );
+                pin->ConnectedItems().clear();
 
-                connection_map[ pos ].push_back( pin_connection );
-                m_items.insert( pin_connection );
+                connection_map[ pos ].push_back( pin );
+                m_items.insert( pin );
             }
         }
         else
@@ -376,7 +377,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 conn->SetType( CONNECTION_BUS );
                 break;
 
-            case SCH_PIN_CONNECTION_T:
+            case SCH_PIN_T:
             case SCH_BUS_WIRE_ENTRY_T:
                 conn->SetType( CONNECTION_NET );
                 break;
@@ -394,12 +395,12 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         item->SetConnectivityDirty( false );
     }
 
-    for( auto it : connection_map )
+    for( const auto& it : connection_map )
     {
         auto connection_vec = it.second;
         SCH_ITEM* junction = nullptr;
 
-        for( auto connected_item : connection_vec )
+        for( SCH_ITEM* connected_item : connection_vec )
         {
             // Look for junctions.  For points that have a junction, we want all
             // items to connect to the junction but not to each other.
@@ -541,19 +542,18 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     subgraph->m_no_connect = item;
                 }
-                else if( item->Type() == SCH_PIN_CONNECTION_T )
+                else if( item->Type() == SCH_PIN_T )
                 {
-                    auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
+                    auto pin = static_cast<SCH_PIN*>( item );
 
-                    if( pc->m_pin->GetType() == PIN_NC )
+                    if( pin->GetType() == PIN_NC )
                         subgraph->m_no_connect = item;
 
                     // Invisible power pins need to be post-processed later
 
-                    if( pc->m_pin->IsPowerConnection() &&
-                        !pc->m_pin->IsVisible() )
+                    if( pin->IsPowerConnection() && !pin->IsVisible() )
                     {
-                        m_invisible_power_pins.push_back( pc );
+                        m_invisible_power_pins.push_back( pin );
                     }
                 }
 
@@ -666,9 +666,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         connection->ConfigureFromLabel( txt );
                         break;
                     }
-                    case SCH_PIN_CONNECTION_T:
+                    case SCH_PIN_T:
                     {
-                        auto pin = static_cast<SCH_PIN_CONNECTION*>( driver );
+                        auto pin = static_cast<SCH_PIN*>( driver );
                         // NOTE(JE) GetDefaultNetName is not thread-safe.
                         connection->ConfigureFromLabel( pin->GetDefaultNetName( sheet ) );
 
@@ -726,10 +726,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 m_global_label_cache[name].push_back( subgraph );
                 break;
             }
-            case SCH_PIN_CONNECTION_T:
+            case SCH_PIN_T:
             {
-                auto pc = static_cast<SCH_PIN_CONNECTION*>( driver );
-                wxASSERT( pc->m_pin->IsPowerConnection() );
+                auto pin = static_cast<SCH_PIN*>( driver );
+                wxASSERT( pin->IsPowerConnection() );
                 m_global_label_cache[name].push_back( subgraph );
                 break;
             }
@@ -761,27 +761,15 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         auto conn = subgraph->m_driver_connection;
         auto name = conn->Name();
-
+        auto local_name = conn->Name( true );
         bool conflict = false;
 
         // First check the caches
-        try
-        {
-            auto v = m_global_label_cache.at( name );
+        if( m_global_label_cache.count( name ) )
             conflict = true;
-        }
-        catch( const std::out_of_range& oor )
-        {}
 
-        try
-        {
-            auto local_name = conn->Name( true );
-            auto v = m_local_label_cache.at( std::make_pair( subgraph->m_sheet,
-                                                             local_name ) );
+        if( m_local_label_cache.count( std::make_pair( subgraph->m_sheet, local_name ) ) )
             conflict = true;
-        }
-        catch( const std::out_of_range& oor )
-        {}
 
         if( conflict )
         {
@@ -836,11 +824,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         if( connection->IsBus() )
         {
-            try
+            if( m_bus_name_to_code_map.count( name ) )
             {
                 code = m_bus_name_to_code_map.at( name );
             }
-            catch( const std::out_of_range& oor )
+            else
             {
                 code = m_last_bus_code++;
                 m_bus_name_to_code_map[ name ] = code;
@@ -938,13 +926,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( auto pc : m_invisible_power_pins )
     {
-        if( pc->ConnectedItems().size() > 0 && !pc->m_pin->GetParent()->IsPower() )
+        if( pc->ConnectedItems().size() > 0 && !pc->GetLibPin()->GetParent()->IsPower() )
         {
             // ERC will warn about this: user has wired up an invisible pin
             continue;
         }
 
-        auto name = pc->m_pin->GetName();
+        auto name = pc->GetName();
         int code = -1;
         auto sheet = all_sheets[0];
 
@@ -960,11 +948,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             continue;
         }
 
-        try
+        if( m_net_name_to_code_map.count( name ) )
         {
             code = m_net_name_to_code_map.at( name );
         }
-        catch( const std::out_of_range& oor )
+        else
         {
             code = assignNewNetCode( *connection );
         }
@@ -978,14 +966,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         CONNECTION_SUBGRAPH* subgraph = nullptr;
 
-        try
-        {
-            auto subgraphs = m_net_code_to_subgraphs_map.at( code );
-            subgraph = subgraphs[0];
-        }
-        catch( const std::out_of_range& oor )
-        {
-        }
+        if( m_net_code_to_subgraphs_map.count( code ) )
+            subgraph = m_net_code_to_subgraphs_map.at( code )[0];
 
         if( subgraph && subgraph->m_driver_connection )
         {
@@ -1027,7 +1009,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( obj == subgraph->m_driver )
                     continue;
 
-                auto power_object = dynamic_cast<SCH_PIN_CONNECTION*>( obj );
+                auto power_object = dynamic_cast<SCH_PIN*>( obj );
 
                 // Skip drivers that aren't power ports
                 if( !power_object )
@@ -1036,14 +1018,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 auto name = power_object->GetDefaultNetName( subgraph->m_sheet );
                 int code = -1;
 
-                try
-                {
-                    code = m_net_name_to_code_map.at( name );
-                }
-                catch( const std::out_of_range& oor )
-                {
+                if( m_net_name_to_code_map.count( name ) == 0 )
                     continue;
-                }
 
                 for( auto subgraph_to_update : m_subgraphs )
                 {
@@ -1106,7 +1082,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     auto neighbor_conn = neighbor->m_driver_connection;
 
-                    try
+                    if( m_net_name_to_code_map.count( neighbor_conn->Name() ) )
                     {
                         int c = m_net_name_to_code_map.at( neighbor_conn->Name() );
 
@@ -1120,7 +1096,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                             #endif
                         }
                     }
-                    catch( const std::out_of_range& oor )
+                    else
                     {
                         #ifdef CONNECTIVITY_DEBUG
                         wxASSERT_MSG( false, "No net code found for an existing net" );
@@ -1364,11 +1340,11 @@ int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
 {
     int code;
 
-    try
+    if( m_net_name_to_code_map.count( aConnection.Name() ) )
     {
         code = m_net_name_to_code_map.at( aConnection.Name() );
     }
-    catch( const std::out_of_range& oor )
+    else
     {
         code = m_last_net_code++;
         m_net_name_to_code_map[ aConnection.Name() ] = code;
@@ -1382,14 +1358,10 @@ int CONNECTION_GRAPH::assignNewNetCode( SCH_CONNECTION& aConnection )
 
 std::shared_ptr<BUS_ALIAS> CONNECTION_GRAPH::GetBusAlias( wxString aName )
 {
-    try
-    {
+    if( m_bus_alias_cache.count( aName ) )
         return m_bus_alias_cache.at( aName );
-    }
-    catch( const std::out_of_range& oor )
-    {
-        return nullptr;
-    }
+
+    return nullptr;
 }
 
 
@@ -1605,9 +1577,9 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( CONNECTION_SUBGRAPH* aSubgraph
     {
         bool match = false;
 
-        for( auto member : label->Connection( sheet )->Members() )
+        for( const auto& member : label->Connection( sheet )->Members() )
         {
-            for( auto test : port->Connection( sheet )->Members() )
+            for( const auto& test : port->Connection( sheet )->Members() )
             {
                 if( test != member && member->Name() == test->Name() )
                 {
@@ -1736,7 +1708,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
     if( aSubgraph->m_no_connect != nullptr )
     {
         bool has_invalid_items = false;
-        SCH_PIN_CONNECTION* pin = nullptr;
+        SCH_PIN* pin = nullptr;
         std::vector<SCH_ITEM*> invalid_items;
 
         // Any subgraph that contains both a pin and a no-connect should not
@@ -1746,8 +1718,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
         {
             switch( item->Type() )
             {
-            case SCH_PIN_CONNECTION_T:
-                pin = static_cast<SCH_PIN_CONNECTION*>( item );
+            case SCH_PIN_T:
+                pin = static_cast<SCH_PIN*>( item );
                 break;
 
             case SCH_NO_CONNECT_T:
@@ -1764,8 +1736,8 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
         {
             auto pos = pin->GetPosition();
             msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
-                        GetChars( pin->m_pin->GetName() ),
-                        GetChars( pin->m_comp->GetRef( &aSubgraph->m_sheet ) ) );
+                        GetChars( pin->GetName() ),
+                        GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
 
             auto marker = new SCH_MARKER();
             marker->SetTimeStamp( GetNewTimeStamp() );
@@ -1781,7 +1753,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
     else
     {
         bool has_other_connections = false;
-        SCH_PIN_CONNECTION* pin = nullptr;
+        SCH_PIN* pin = nullptr;
 
         // Any subgraph that lacks a no-connect and contains a pin should also
         // contain at least one other connectable item.
@@ -1790,9 +1762,9 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
         {
             switch( item->Type() )
             {
-            case SCH_PIN_CONNECTION_T:
+            case SCH_PIN_T:
                 if( !pin )
-                    pin = static_cast<SCH_PIN_CONNECTION*>( item );
+                    pin = static_cast<SCH_PIN*>( item );
                 else
                     has_other_connections = true;
                 break;
@@ -1804,13 +1776,12 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             }
         }
 
-        if( pin && !has_other_connections &&
-            pin->m_pin->GetType() != PIN_NC )
+        if( pin && !has_other_connections && pin->GetType() != PIN_NC )
         {
             auto pos = pin->GetPosition();
             msg.Printf( _( "Pin %s of component %s is unconnected." ),
-                        GetChars( pin->m_pin->GetName() ),
-                        GetChars( pin->m_comp->GetRef( &aSubgraph->m_sheet ) ) );
+                        GetChars( pin->GetName() ),
+                        GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
 
             auto marker = new SCH_MARKER();
             marker->SetTimeStamp( GetNewTimeStamp() );
@@ -1851,7 +1822,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( CONNECTION_SUBGRAPH* aSubgraph,
             text = static_cast<SCH_TEXT*>( item );
             break;
 
-        case SCH_PIN_CONNECTION_T:
+        case SCH_PIN_T:
             has_other_connections = true;
             break;
 

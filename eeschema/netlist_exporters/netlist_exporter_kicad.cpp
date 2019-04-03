@@ -80,16 +80,16 @@ bool NETLIST_EXPORTER_KICAD::WriteNetlist( const wxString& aOutFileName, unsigne
 
                 for( auto item : subgraph->m_items )
                 {
-                    if( item->Type() == SCH_PIN_CONNECTION_T )
+                    if( item->Type() == SCH_PIN_T )
                     {
-                        auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
+                        auto pin = static_cast<SCH_PIN*>( item );
 
-                        if( pc->m_pin->IsPowerConnection() ||
-                            (LIB_PART*)( pc->m_pin->GetParent() )->IsPower() )
+                        if( pin->IsPowerConnection() ||
+                            (LIB_PART*)( pin->GetLibPin()->GetParent() )->IsPower() )
                             continue;
 
-                        wxString refText = pc->m_comp->GetRef( &sheet );
-                        wxString pinText = pc->m_pin->GetNumber();
+                        const wxString& refText = pin->GetParentComponent()->GetRef( &sheet );
+                        const wxString& pinText = pin->GetNumber();
 
                         net_pins.insert( refText + "-" + pinText );
                     }

@@ -1247,7 +1247,6 @@ void SCH_EAGLE_PLUGIN::loadInstance( wxXmlNode* aInstanceNode )
     // Save the pin positions
     auto& schLibTable = *m_kiway->Prj().SchSymbolLibTable();
     wxCHECK( component->Resolve( schLibTable ), /*void*/ );
-    component->UpdatePinCache();
     std::vector<LIB_PIN*> pins;
     component->GetPins( pins );
 
@@ -2551,7 +2550,6 @@ bool SCH_EAGLE_PLUGIN::checkConnections( const SCH_COMPONENT* aComponent, const 
 void SCH_EAGLE_PLUGIN::addImplicitConnections( SCH_COMPONENT* aComponent,
         SCH_SCREEN* aScreen, bool aUpdateSet )
 {
-    aComponent->UpdatePinCache();
     auto partRef = aComponent->GetPartRef().lock();
     wxCHECK( partRef, /*void*/ );
 

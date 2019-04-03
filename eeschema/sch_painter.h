@@ -25,7 +25,10 @@
 #ifndef __SCH_PAINTER_H
 #define __SCH_PAINTER_H
 
+#include <sch_component.h>
+
 #include <painter.h>
+
 
 class LIB_RECTANGLE;
 class LIB_PIN;
@@ -132,11 +135,11 @@ public:
 
 private:
 	void draw( LIB_RECTANGLE* aRect, int aLayer );
-	void draw( LIB_PIN* aPin, int aLayer, bool aIsDangling = true, bool isMoving = false );
+	void draw( LIB_PIN* aPin, int aLayer, SCH_PIN* aSchPin = nullptr, bool isParentMoving = false );
 	void draw( LIB_CIRCLE* aCircle, int aLayer );
 	void draw( LIB_ITEM *, int aLayer );
-	void draw( LIB_PART* aComp, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
-               std::vector<bool>* aDanglingPinFlags = nullptr );
+	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
+               SCH_PINS* aPinMap = nullptr );
     void draw( LIB_ALIAS* aAlias, int aLayer );
     void draw( LIB_ARC* aArc, int aLayer );
     void draw( LIB_POLYLINE* aLine, int aLayer );

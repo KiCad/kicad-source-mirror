@@ -20,22 +20,36 @@
 
 #include <lib_pin.h>
 #include <sch_component.h>
-#include <sch_pin_connection.h>
+#include <sch_pin.h>
 #include <sch_sheet_path.h>
 
 
-SCH_PIN_CONNECTION::SCH_PIN_CONNECTION( EDA_ITEM* aParent ) :
-    SCH_ITEM( aParent, SCH_PIN_CONNECTION_T )
+SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
+    SCH_ITEM( nullptr, SCH_PIN_T ),
+    m_pin( aLibPin ),
+    m_comp( aParentComponent )
 {
+    SetPosition( aLibPin->GetPosition() );
+    m_isDangling = true;
 }
 
 
-wxString SCH_PIN_CONNECTION::GetSelectMenuText( EDA_UNITS_T aUnits ) const
+SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
+    SCH_ITEM( aPin )
+{
+    m_pin = aPin.m_pin;
+    m_comp = aPin.m_comp;
+    m_position = aPin.m_position;
+    m_isDangling = aPin.m_isDangling;
+}
+
+
+wxString SCH_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
     wxString tmp;
 
 #ifdef DEBUG
-    tmp.Printf( _( "SCH_PIN_CONNECTION for %s %s" ),
+    tmp.Printf( _( "SCH_PIN for %s %s" ),
                 GetChars( m_comp->GetSelectMenuText( aUnits ) ),
                 GetChars( m_pin->GetSelectMenuText( aUnits ) ) );
 #else
@@ -48,7 +62,7 @@ wxString SCH_PIN_CONNECTION::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-wxString SCH_PIN_CONNECTION::GetDefaultNetName( const SCH_SHEET_PATH aPath )
+wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 {
     if( m_pin->IsPowerConnection() )
         return m_pin->GetName();
@@ -72,10 +86,3 @@ wxString SCH_PIN_CONNECTION::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 }
 
 
-wxPoint SCH_PIN_CONNECTION::GetPosition() const
-{
-    auto pos = m_comp->GetPosition();
-    auto transform = m_comp->GetTransform();
-
-    return pos + transform.TransformCoordinate( m_pin->GetPosition() );
-}

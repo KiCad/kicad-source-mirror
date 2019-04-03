@@ -117,7 +117,7 @@ bool SCH_EDIT_FRAME::SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aIte
             {
                 auto pin_conn = comp->GetConnectionForPin( pin, *g_CurrentSheet );
 
-                if( pin_conn && pin_conn->Name( false, true ) == m_SelectedNetName )
+                if( pin_conn && pin_conn->Name( false ) == m_SelectedNetName )
                 {
                     comp->BrightenPin( pin );
                     redraw = true;

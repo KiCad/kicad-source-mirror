@@ -506,7 +506,7 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
     {
         wxASSERT( m_graph );
 
-        for( auto it : m_graph->m_net_code_to_subgraphs_map )
+        for( const auto& it : m_graph->m_net_code_to_subgraphs_map )
         {
             bool added = false;
 
@@ -522,12 +522,12 @@ XNODE* NETLIST_EXPORTER_GENERIC::makeListOfNets( bool aUseGraph )
 
                 for( auto item : subgraph->m_items )
                 {
-                    if( item->Type() == SCH_PIN_CONNECTION_T )
+                    if( item->Type() == SCH_PIN_T )
                     {
-                        auto pc = static_cast<SCH_PIN_CONNECTION*>( item );
+                        auto pin = static_cast<SCH_PIN*>( item );
 
-                        auto refText = pc->m_comp->GetRef( &sheet );
-                        auto pinText = pc->m_pin->GetNumber();
+                        auto refText = pin->GetParentComponent()->GetRef( &sheet );
+                        auto pinText = pin->GetNumber();
 
                         // Skip power symbols and virtual components
                         if( refText[0] == wxChar( '#' ) )

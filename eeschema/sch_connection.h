@@ -145,7 +145,7 @@ public:
         m_dirty = false;
     }
 
-    wxString Name( bool aIgnoreSheet = false, bool aForceSheet = false ) const;
+    wxString Name( bool aIgnoreSheet = false ) const;
 
     wxString Prefix() const
     {
