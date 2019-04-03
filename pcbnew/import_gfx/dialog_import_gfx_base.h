@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 23 2018)
+// C++ code generated with wxFormBuilder (version Mar 20 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -77,12 +77,11 @@ class DIALOG_IMPORT_GFX_BASE : public DIALOG_SHIM
 		virtual void onAbsolutePlacement( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitPositionSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onUnitWidthSelection( wxCommandEvent& event ) { event.Skip(); }
-		virtual void onOKClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import vector graphics file"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 500,500 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
+		DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Import Vector Graphics File"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_IMPORT_GFX_BASE();
 
 };

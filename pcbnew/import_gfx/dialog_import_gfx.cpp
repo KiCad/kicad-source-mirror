@@ -41,22 +41,28 @@
 #include <class_text_mod.h>
 #include <class_pcb_text.h>
 
-// Keys to store setup in config
-#define IMPORT_GFX_LAYER_OPTION_KEY             "GfxImportBrdLayer"
-#define IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY    "GfxImportPlacementInteractive"
-#define IMPORT_GFX_LAST_FILE_KEY                "GfxImportLastFile"
-#define IMPORT_GFX_POSITION_UNITS_KEY           "GfxImportPositionUnits"
-#define IMPORT_GFX_POSITION_X_KEY               "GfxImportPositionX"
-#define IMPORT_GFX_POSITION_Y_KEY               "GfxImportPositionY"
-#define IMPORT_GFX_LINEWIDTH_UNITS_KEY          "GfxImportLineWidthUnits"
-#define IMPORT_GFX_LINEWIDTH_KEY                "GfxImportLineWidth"
+// Configuration path (group) to store entry keys below.
+#define IMPORT_GFX_GROUP                        "ImportGraphics"
 
-// Static members of DIALOG_IMPORT_GFX, to remember
-// the user's choices during the session
+// Entry keys to store setup in config
+#define IMPORT_GFX_LAYER_OPTION_KEY             "BoardLayer"
+#define IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY    "InteractivePlacement"
+#define IMPORT_GFX_LAST_FILE_KEY                "LastFile"
+#define IMPORT_GFX_POSITION_UNITS_KEY           "PositionUnits"
+#define IMPORT_GFX_POSITION_X_KEY               "PositionX"
+#define IMPORT_GFX_POSITION_Y_KEY               "PositionY"
+#define IMPORT_GFX_LINEWIDTH_UNITS_KEY          "LineWidthUnits"
+#define IMPORT_GFX_LINEWIDTH_KEY                "LineWidth"
+
+
+// Static members of DIALOG_IMPORT_GFX, to remember the user's choices during the session
 wxString DIALOG_IMPORT_GFX::m_filename;
 bool DIALOG_IMPORT_GFX::m_placementInteractive = true;
 LAYER_NUM DIALOG_IMPORT_GFX::m_layer = Dwgs_User;
-double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;  // Do not change the imported items size
+double DIALOG_IMPORT_GFX::m_scaleImport = 1.0;     // Do not change the imported items size
+int DIALOG_IMPORT_GFX::m_originUnits = 0;          // millimeter
+int DIALOG_IMPORT_GFX::m_lineWidthUnits = 0;       // millimeter
+
 
 DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFootprintGraphic )
     : DIALOG_IMPORT_GFX_BASE( aParent )
@@ -79,27 +85,31 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     }
 
     m_config = Kiface().KifaceSettings();
-    m_originImportUnits = 0;
-    m_importOrigin.x = 0.0;         // always in mm
-    m_importOrigin.y = 0.0;         // always in mm
-    m_default_lineWidth = 0.2;      // always in mm
-    m_lineWidthImportUnits = 0;
+    m_originUnits = 0;
+    m_origin.x = 0.0;              // always in mm
+    m_origin.y = 0.0;              // always in mm
+    m_lineWidth = 0.2;             // always in mm
+    m_lineWidthUnits = 0;
 
     if( m_config )
     {
+        wxString tmp = m_config->GetPath();
+        m_config->SetPath( IMPORT_GFX_GROUP );
         m_layer = m_config->Read( IMPORT_GFX_LAYER_OPTION_KEY, (long)Dwgs_User );
         m_placementInteractive = m_config->Read( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, true );
         m_filename =  m_config->Read( IMPORT_GFX_LAST_FILE_KEY, wxEmptyString );
-        m_config->Read( IMPORT_GFX_LINEWIDTH_KEY, &m_default_lineWidth, 0.2 );
-        m_config->Read( IMPORT_GFX_POSITION_UNITS_KEY, &m_originImportUnits, 0 );
-        m_config->Read( IMPORT_GFX_POSITION_X_KEY, &m_importOrigin.x, 0.0 );
-        m_config->Read( IMPORT_GFX_POSITION_Y_KEY, &m_importOrigin.y, 0.0 );
+        m_config->Read( IMPORT_GFX_LINEWIDTH_KEY, &m_lineWidth, 0.2 );
+        m_config->Read( IMPORT_GFX_LINEWIDTH_UNITS_KEY, &m_lineWidthUnits, 0 );
+        m_config->Read( IMPORT_GFX_POSITION_UNITS_KEY, &m_originUnits, 0 );
+        m_config->Read( IMPORT_GFX_POSITION_X_KEY, &m_origin.x, 0.0 );
+        m_config->Read( IMPORT_GFX_POSITION_Y_KEY, &m_origin.y, 0.0 );
+        m_config->SetPath( tmp );
     }
 
-    m_choiceUnitLineWidth->SetSelection( m_lineWidthImportUnits );
+    m_choiceUnitLineWidth->SetSelection( m_lineWidthUnits );
     showPCBdefaultLineWidth();
 
-    m_DxfPcbPositionUnits->SetSelection( m_originImportUnits );
+    m_DxfPcbPositionUnits->SetSelection( m_originUnits );
     showPcbImportOffsets();
 
     m_textCtrlFileName->SetValue( m_filename );
@@ -109,8 +119,8 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
     m_textCtrlImportScale->SetValue( wxString::Format( "%f", m_scaleImport ) );
 
     // Configure the layers list selector
-    m_SelLayerBox->SetLayersHotkeys( false );           // Do not display hotkeys
-    m_SelLayerBox->SetNotAllowedLayerSet( LSET::AllCuMask() );    // Do not use copper layers
+    m_SelLayerBox->SetLayersHotkeys( false );                    // Do not display hotkeys
+    m_SelLayerBox->SetNotAllowedLayerSet( LSET::AllCuMask() );   // Do not use copper layers
     m_SelLayerBox->SetBoardFrame( m_parent );
     m_SelLayerBox->Resync();
 
@@ -120,6 +130,7 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
         m_SelLayerBox->SetLayerSelection( m_layer );
     }
 
+    SetInitialFocus( m_textCtrlFileName );
     m_sdbSizerOK->SetDefault();
     GetSizer()->Fit( this );
     GetSizer()->SetSizeHints( this );
@@ -129,22 +140,21 @@ DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aImportAsFoo
 
 DIALOG_IMPORT_GFX::~DIALOG_IMPORT_GFX()
 {
-    updatePcbImportOffsets_mm();
-    m_layer = m_SelLayerBox->GetLayerSelection();
-
     if( m_config )
     {
+        wxString tmp = m_config->GetPath();
+        m_config->SetPath( IMPORT_GFX_GROUP );
         m_config->Write( IMPORT_GFX_LAYER_OPTION_KEY, (long)m_layer );
         m_config->Write( IMPORT_GFX_PLACEMENT_INTERACTIVE_KEY, m_placementInteractive );
         m_config->Write( IMPORT_GFX_LAST_FILE_KEY, m_filename );
 
-        m_config->Write( IMPORT_GFX_POSITION_UNITS_KEY, m_originImportUnits );
-        m_config->Write( IMPORT_GFX_POSITION_X_KEY, m_importOrigin.x );
-        m_config->Write( IMPORT_GFX_POSITION_Y_KEY, m_importOrigin.y );
+        m_config->Write( IMPORT_GFX_POSITION_UNITS_KEY, m_originUnits );
+        m_config->Write( IMPORT_GFX_POSITION_X_KEY, m_origin.x );
+        m_config->Write( IMPORT_GFX_POSITION_Y_KEY, m_origin.y );
 
-        m_lineWidthImportUnits = getPCBdefaultLineWidthMM();
-        m_config->Write( IMPORT_GFX_LINEWIDTH_KEY, m_default_lineWidth );
-        m_config->Write( IMPORT_GFX_LINEWIDTH_UNITS_KEY, m_lineWidthImportUnits );
+        m_config->Write( IMPORT_GFX_LINEWIDTH_KEY, m_lineWidth );
+        m_config->Write( IMPORT_GFX_LINEWIDTH_UNITS_KEY, m_lineWidthUnits );
+        m_config->SetPath( tmp );
     }
 }
 
@@ -154,7 +164,7 @@ void DIALOG_IMPORT_GFX::DIALOG_IMPORT_GFX::onUnitPositionSelection( wxCommandEve
     // Collect last entered values:
     updatePcbImportOffsets_mm();
 
-    m_originImportUnits = m_DxfPcbPositionUnits->GetSelection();;
+    m_originUnits = m_DxfPcbPositionUnits->GetSelection();;
     showPcbImportOffsets();
 }
 
@@ -163,19 +173,19 @@ double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
 {
     double value = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlLineWidth->GetValue() );
 
-    switch( m_lineWidthImportUnits )
+    switch( m_lineWidthUnits )
     {
-        default:
-        case 0:     // display units = mm
-            break;
+    default:
+    case 0:     // display units = mm
+        break;
 
-        case 1:     // display units = mil
-            value *= 25.4 / 1000;
-            break;
+    case 1:     // display units = mil
+        value *= 25.4 / 1000;
+        break;
 
-        case 2:     // display units = inch
-            value *= 25.4;
-            break;
+    case 2:     // display units = inch
+        value *= 25.4;
+        break;
     }
 
     return value;   // value is in mm
@@ -184,21 +194,21 @@ double DIALOG_IMPORT_GFX::getPCBdefaultLineWidthMM()
 
 void DIALOG_IMPORT_GFX::onUnitWidthSelection( wxCommandEvent& event )
 {
-    m_default_lineWidth = getPCBdefaultLineWidthMM();
+    m_lineWidth = getPCBdefaultLineWidthMM();
 
     // Switch to new units
-    m_lineWidthImportUnits = m_choiceUnitLineWidth->GetSelection();
+    m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
     showPCBdefaultLineWidth();
 }
 
 
 void DIALOG_IMPORT_GFX::showPcbImportOffsets()
 {
-    // Display m_importOrigin value according to the unit selection:
-    VECTOR2D offset = m_importOrigin;
+    // Display m_origin value according to the unit selection:
+    VECTOR2D offset = m_origin;
 
-    if( m_originImportUnits )   // Units are inches
-        offset = m_importOrigin / 25.4;
+    if( m_originUnits )   // Units are inches
+        offset = m_origin / 25.4;
 
     m_DxfPcbXCoord->SetValue( wxString::Format( "%f", offset.x ) );
     m_DxfPcbYCoord->SetValue( wxString::Format( "%f", offset.y ) );
@@ -210,20 +220,20 @@ void DIALOG_IMPORT_GFX::showPCBdefaultLineWidth()
 {
     double value;
 
-    switch( m_lineWidthImportUnits )
+    switch( m_lineWidthUnits )
     {
-        default:
-        case 0:     // display units = mm
-            value = m_default_lineWidth;
-            break;
+    default:
+    case 0:     // display units = mm
+        value = m_lineWidth;
+        break;
 
-        case 1:     // display units = mil
-            value = m_default_lineWidth / 25.4 * 1000;
-            break;
+    case 1:     // display units = mil
+        value = m_lineWidth / 25.4 * 1000;
+        break;
 
-        case 2:     // display units = inch
-            value = m_default_lineWidth / 25.4;
-            break;
+    case 2:     // display units = inch
+        value = m_lineWidth / 25.4;
+        break;
     }
 
     m_textCtrlLineWidth->SetValue( wxString::Format( "%f", value ) );
@@ -255,10 +265,10 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
         allWildcards += wildcards + ";";
     }
 
-    wildcardsDesc = "All supported formats|" + allWildcards + wildcardsDesc;
+    wildcardsDesc = _( "All supported formats|" ) + allWildcards + wildcardsDesc;
 
     wxFileDialog dlg( m_parent, _( "Open File" ), path, filename,
-                       wildcardsDesc, wxFD_OPEN|wxFD_FILE_MUST_EXIST );
+                      wildcardsDesc, wxFD_OPEN|wxFD_FILE_MUST_EXIST );
 
     if( dlg.ShowModal() != wxID_OK )
         return;
@@ -273,28 +283,34 @@ void DIALOG_IMPORT_GFX::onBrowseFiles( wxCommandEvent& event )
 }
 
 
-void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
+bool DIALOG_IMPORT_GFX::TransferDataFromWindow()
 {
+    if( !wxDialog::TransferDataFromWindow() )
+        return false;
+
     m_filename = m_textCtrlFileName->GetValue();
 
     if( m_filename.IsEmpty() )
     {
-        wxMessageBox( _( "Error: No DXF filename!" ) );
-        return;
+        wxMessageBox( _( "No file selected!" ) );
+        return false;
     }
 
-    updatePcbImportOffsets_mm();      // Update m_importOriginX and m_importOriginY;
+    m_originUnits = m_DxfPcbPositionUnits->GetSelection();
+    updatePcbImportOffsets_mm();      // Update m_originX and m_originY;
 
     m_layer = m_SelLayerBox->GetLayerSelection();
 
     if( m_layer < 0 )
     {
-        wxMessageBox( _( "Please, select a valid layer" ) );
-        return;
+        wxMessageBox( _( "Please select a valid layer." ) );
+        return false;
     }
 
-    m_default_lineWidth = getPCBdefaultLineWidthMM();
+    m_lineWidthUnits = m_choiceUnitLineWidth->GetSelection();
+    m_lineWidth = getPCBdefaultLineWidthMM();
 
+    wxLogDebug( "Default line width = %fmm", m_lineWidth );
     m_importer->SetLayer( PCB_LAYER_ID( m_layer ) );
 
     auto plugin = m_gfxImportMgr->GetPluginByExt( wxFileName( m_filename ).GetExt() );
@@ -302,10 +318,10 @@ void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
     if( plugin )
     {
         // Set coordinates offset for import (offset is given in mm)
-        m_importer->SetImportOffsetMM( m_importOrigin );
+        m_importer->SetImportOffsetMM( m_origin );
         m_scaleImport = DoubleValueFromString( UNSCALED_UNITS, m_textCtrlImportScale->GetValue() );
 
-        m_importer->SetLineWidthMM( m_default_lineWidth );
+        m_importer->SetLineWidthMM( m_lineWidth );
         m_importer->SetPlugin( std::move( plugin ) );
 
         LOCALE_IO dummy;    // Ensure floats can be read.
@@ -316,15 +332,45 @@ void DIALOG_IMPORT_GFX::onOKClick( wxCommandEvent& event )
         // Get warning messages:
         const std::string& warnings = m_importer->GetMessages();
 
+        // This isn't a fatal error so allow the dialog to close with wxID_OK.
         if( !warnings.empty() )
-            wxMessageBox( warnings.c_str(), _( "Not Handled Items" ) );
-
-        event.Skip();
+            wxMessageBox( warnings.c_str(), _( "Items Not Handled" ) );
     }
     else
     {
-        wxMessageBox( _( "There is no plugin to handle this file type" ) );
+        wxMessageBox( _( "There is no plugin to handle this file type." ) );
+        return false;
     }
+
+    return true;
+}
+
+
+void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
+{
+    if( m_rbInteractivePlacement->GetValue() != m_placementInteractive )
+        m_rbInteractivePlacement->SetValue( m_placementInteractive );
+
+    if( m_rbAbsolutePlacement->GetValue() == m_placementInteractive )
+        m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
+
+    m_DxfPcbPositionUnits->Enable( not m_placementInteractive );
+    m_DxfPcbXCoord->Enable( not m_placementInteractive );
+    m_DxfPcbYCoord->Enable( not m_placementInteractive );
+}
+
+
+void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
+{
+    m_origin.x = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbXCoord->GetValue() );
+    m_origin.y = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
+
+    if( m_originUnits )   // Units are inches
+    {
+        m_origin = m_origin * 25.4;
+    }
+
+    return;
 }
 
 
@@ -341,7 +387,7 @@ bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
     // Ensure the list is not empty:
     if( list.empty() )
     {
-        wxMessageBox( _( "No graphic items found in file to import") );
+        wxMessageBox( _( "No graphic items found in file to import." ) );
         return false;
     }
 
@@ -356,7 +402,7 @@ bool InvokeDialogImportGfxBoard( PCB_BASE_FRAME* aCaller )
     BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
 
     if( dlg.IsPlacementInteractive() )
-        aCaller->HandleBlockBegin( NULL, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0) );
+        aCaller->HandleBlockBegin( NULL, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0 ) );
 
     PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
 
@@ -418,7 +464,7 @@ bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
     // Ensure the list is not empty:
     if( list.empty() )
     {
-        wxMessageBox( _( "No graphic items found in file to import") );
+        wxMessageBox( _( "No graphic items found in file to import" ) );
         return false;
     }
 
@@ -434,7 +480,7 @@ bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
     BLOCK_SELECTOR& blockmove = aCaller->GetScreen()->m_BlockLocate;
 
     if( dlg.IsPlacementInteractive() )
-        aCaller->HandleBlockBegin( nullptr, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0) );
+        aCaller->HandleBlockBegin( nullptr, BLOCK_PRESELECT_MOVE, wxPoint( 0, 0 ) );
 
     PICKED_ITEMS_LIST& blockitemsList = blockmove.GetItems();
 
@@ -471,32 +517,4 @@ bool InvokeDialogImportGfxModule( PCB_BASE_FRAME* aCaller, MODULE* aModule )
     }
 
     return true;
-}
-
-
-void DIALOG_IMPORT_GFX::originOptionOnUpdateUI( wxUpdateUIEvent& event )
-{
-    if( m_rbInteractivePlacement->GetValue() != m_placementInteractive )
-        m_rbInteractivePlacement->SetValue( m_placementInteractive );
-
-    if( m_rbAbsolutePlacement->GetValue() == m_placementInteractive )
-        m_rbAbsolutePlacement->SetValue( not m_placementInteractive );
-
-    m_DxfPcbPositionUnits->Enable( not m_placementInteractive );
-    m_DxfPcbXCoord->Enable( not m_placementInteractive );
-    m_DxfPcbYCoord->Enable( not m_placementInteractive );
-}
-
-
-void DIALOG_IMPORT_GFX::updatePcbImportOffsets_mm()
-{
-    m_importOrigin.x = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbXCoord->GetValue() );
-    m_importOrigin.y = DoubleValueFromString( UNSCALED_UNITS, m_DxfPcbYCoord->GetValue() );
-
-    if( m_originImportUnits )   // Units are inches
-    {
-        m_importOrigin = m_importOrigin * 25.4;
-    }
-
-    return;
 }

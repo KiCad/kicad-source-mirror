@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,6 +22,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#ifndef __DIALOG_IMPORT_GFX_H__
+#define __DIALOG_IMPORT_GFX_H__
+
 #include <pcb_edit_frame.h>
 #include "dialog_import_gfx_base.h"
 #include <import_gfx/graphics_importer_pcbnew.h>
@@ -34,9 +37,7 @@ public:
     DIALOG_IMPORT_GFX( PCB_BASE_FRAME* aParent, bool aUseModuleItems = false );
     ~DIALOG_IMPORT_GFX();
 
-
     /**
-     * Function GetImportedItems()
      * @return a list of items imported from a vector graphics file.
      */
     std::list<std::unique_ptr<EDA_ITEM>>& GetImportedItems()
@@ -44,7 +45,8 @@ public:
         return m_importer->GetItems();
     }
 
-    /** @return true if the placement is interactive, i.e. all imported
+    /**
+     * @return true if the placement is interactive, i.e. all imported
      * items must be moved by the mouse cursor to the final position
      * false means the imported items are placed to the final position after import.
      */
@@ -53,33 +55,37 @@ public:
         return m_placementInteractive;
     }
 
+    bool TransferDataFromWindow() override;
+
 private:
     PCB_BASE_FRAME*      m_parent;
     wxConfigBase*        m_config;              // Current config
     std::unique_ptr<GRAPHICS_IMPORTER_PCBNEW> m_importer;
     std::unique_ptr<GRAPHICS_IMPORT_MGR>      m_gfxImportMgr;
-    int                  m_originImportUnits;
-    VECTOR2D             m_importOrigin;        // This is the offset to add to imported coordinates
+    static int           m_originUnits;
+    VECTOR2D             m_origin;              // This is the offset to add to imported coordinates
                                                 // Always in mm
 
     static wxString      m_filename;
     static bool          m_placementInteractive;
     static LAYER_NUM     m_layer;
-    double               m_default_lineWidth;   // always in mm: line width when a line width is not specified
-    int                  m_lineWidthImportUnits;
-    static double        m_scaleImport;         // a scale factor to change the size of imported items
-                                                // m_scaleImport =1.0 means keep original size
+    double               m_lineWidth;           // always in mm: line width when a line width
+                                                // is not specified
+    static int           m_lineWidthUnits;
+    static double        m_scaleImport;         // a scale factor to change the size of imported
+                                                // items m_scaleImport =1.0 means keep original size
 
     // Virtual event handlers
-    void onOKClick( wxCommandEvent& event ) override;
     void onUnitPositionSelection( wxCommandEvent& event ) override;
     void onUnitWidthSelection( wxCommandEvent& event ) override;
     void onBrowseFiles( wxCommandEvent& event ) override;
     void originOptionOnUpdateUI( wxUpdateUIEvent& event ) override;
+
 	void onInteractivePlacement( wxCommandEvent& event ) override
     {
         m_placementInteractive = true;
     }
+
 	void onAbsolutePlacement( wxCommandEvent& event ) override
     {
         m_placementInteractive = false;
@@ -90,3 +96,5 @@ private:
     void showPCBdefaultLineWidth();
     void showPcbImportOffsets();
 };
+
+#endif    //  __DIALOG_IMPORT_GFX_H__
