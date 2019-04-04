@@ -320,6 +320,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     {
         // If drill size has been set, use that. Otherwise default to 1mm.
         dim = m_dummyPad->GetDrillSize().x;
+
         if( dim == 0 )
             dim = Millimeter2iu( 1.0 );
     }
@@ -343,6 +344,7 @@ void DIALOG_PAD_PROPERTIES::OnPaintShowPanel( wxPaintEvent& event )
     if( dim == 0 )
     {
         dim = m_dummyPad->GetDrillSize().y;
+
         if( dim == 0 )
             dim = Millimeter2iu( 0.1 );
     }
@@ -476,24 +478,20 @@ void DIALOG_PAD_PROPERTIES::onCornerRadiusChange( wxCommandEvent& event )
     if( m_dummyPad->GetShape() != PAD_SHAPE_ROUNDRECT )
         return;
 
-    wxString value = m_tcCornerRadius->GetValue();
-    double rrRadius;
+    double rrRadius = m_cornerRadius.GetValue();
 
-    if( value.ToDouble( &rrRadius ) )
+    if( rrRadius < 0.0 )
     {
-        if( rrRadius < 0.0 )
-        {
-            rrRadius = 0.0;
-            m_tcCornerRadius->ChangeValue( "0.0" );
-        }
-
-        transferDataToPad( m_dummyPad );
-        m_dummyPad->SetRoundRectCornerRadius( Millimeter2iu( rrRadius ) );
-
-        auto ratio = wxString::Format( "%.1f", m_dummyPad->GetRoundRectRadiusRatio() * 100 );
-        m_tcCornerSizeRatio->ChangeValue( ratio );
-        redraw();
+        rrRadius = 0.0;
+        m_tcCornerRadius->ChangeValue( wxString::Format( "%.1f", rrRadius ) );
     }
+
+    transferDataToPad( m_dummyPad );
+    m_dummyPad->SetRoundRectCornerRadius( rrRadius );
+
+    auto ratio = wxString::Format( "%.1f", m_dummyPad->GetRoundRectRadiusRatio() * 100 );
+    m_tcCornerSizeRatio->ChangeValue( ratio );
+    redraw();
 }
 
 
@@ -511,13 +509,15 @@ void DIALOG_PAD_PROPERTIES::onCornerSizePercentChange( wxCommandEvent& event )
         if( rrRadiusRatioPercent < 0.0 )
         {
             rrRadiusRatioPercent = 0.0;
-            m_tcCornerSizeRatio->ChangeValue( "0.0" );
+            value.Printf( "%.1f", rrRadiusRatioPercent );
+            m_tcCornerSizeRatio->ChangeValue( value );
         }
 
         if( rrRadiusRatioPercent > 50.0 )
         {
             rrRadiusRatioPercent = 0.5;
-            m_tcCornerSizeRatio->ChangeValue( "50.0" );
+            value.Printf( "%.1f", rrRadiusRatioPercent*100.0 );
+            m_tcCornerSizeRatio->ChangeValue( value );
         }
 
         transferDataToPad( m_dummyPad );
