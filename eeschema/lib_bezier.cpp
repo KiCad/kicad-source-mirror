@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -229,12 +229,12 @@ int LIB_BEZIER::GetPenSize() const
 
 
 void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
-                              const TRANSFORM& aTransform )
+                              void* aData, const TRANSFORM& aTransform )
 {
     std::vector<wxPoint> PolyPointsTraslated;
 
-    COLOR4D color = GetLayerColor( LAYER_DEVICE );
+    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
     BEZIER_POLY converter( m_BezierPoints );
     converter.GetPoly( m_PolyPoints );
 
@@ -244,43 +244,25 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
         PolyPointsTraslated.push_back( aTransform.TransformCoordinate( m_PolyPoints[i] ) +
                                        aOffset );
 
-    if( aColor == COLOR4D::UNSPECIFIED )                // Used normal color or selected color
-    {
-        if( IsSelected() )
-            color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
-
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != COLOR4D::UNSPECIFIED )
-        fill = NO_FILL;
-
-    GRSetDrawMode( aDC, aDrawMode );
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, GetPenSize(),
-                (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
-                GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+    {
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 1, GetPenSize(),
+                bgColor, bgColor );
+    }
     else if( fill == FILLED_SHAPE  )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 1, GetPenSize(), color, color );
+    {
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 1, GetPenSize(),
+                color, color );
+    }
     else
-        GRPoly( clipbox, aDC, m_PolyPoints.size(),
-                &PolyPointsTraslated[0], 0, GetPenSize(), color, color );
-
-    /* Set to one (1) to draw bounding box around bezier curve to validate
-     * bounding box calculation. */
-#if 0
-    EDA_RECT bBox = GetBoundingBox();
-    GRRect( aPanel->GetClipBox(), aDC, bBox.GetOrigin().x, bBox.GetOrigin().y,
-            bBox.GetEnd().x, bBox.GetEnd().y, 0, LIGHTMAGENTA );
-#endif
+    {
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), &PolyPointsTraslated[0], 0, GetPenSize(),
+                color, color );
+    }
 }
 
 

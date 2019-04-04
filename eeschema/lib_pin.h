@@ -56,14 +56,6 @@ enum DrawPinOrient {
     PIN_DOWN  = 'D'
 };
 
-enum LibPinDrawFlags {
-    PIN_DRAW_TEXTS = 1,
-    PIN_DRAW_DANGLING = 2,      // Draw this pin with a 'dangling' indicator
-    PIN_DANGLING_HIDDEN = 4,    // Draw (only!) the dangling indicator if the pin is hidden
-    PIN_DRAW_ELECTRICAL_TYPE_NAME = 8   // Draw the pin electrical type name
-                                        // used only in component editor and component viewer
-};
-
 
 class LIB_PIN : public LIB_ITEM
 {
@@ -90,17 +82,11 @@ class LIB_PIN : public LIB_ITEM
      * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
-     * @param aColor COLOR4D::UNSPECIFIED to use the normal body item color, or else use this color
-     * @param aDrawMode GR_OR, GR_XOR, ...
-     * @param aData = used here as uintptr_t containing bitwise OR'd flags:
-     *      PIN_DRAW_TEXTS,     -- false to draw only pin shape, useful for fast mode
-     *      PIN_DRAW_DANGLING,  -- true to draw the pin with its target
-     *      PIN_DANGLING_HIDDEN -- draw the target even if the pin is hidden
-     *      PIN_DRAW_ELECTRICAL_TYPE_NAME -- Draw the pin electrical type name
+     * @param aData = used here as a boolean indicating whether or not to draw the pin
+     *                electrical types
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
 
 public:
@@ -379,11 +365,8 @@ public:
      * Draw the pin symbol without text.
      * If \a aColor != 0, draw with \a aColor, else with the normal pin color.
      */
-    void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                        int aOrientation, GR_DRAWMODE aDrawMode,
-                        COLOR4D aColor = COLOR4D::UNSPECIFIED,
-                        bool aDrawDangling = true,
-                        bool aOnlyTarget = false );
+    void DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPos,
+                        int aOrientation );
 
     /**
      * Put the pin number and pin text info, given the pin line coordinates.
@@ -392,18 +375,15 @@ public:
      * If DrawPinNum = false the pin number is not printed.
      * If TextInside then the text is been put inside,otherwise all is drawn outside.
      * Pin Name:    substring between '~' is negated
-     * DrawMode = GR_OR, XOR ...
      */
     void DrawPinTexts( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
-                       int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName,
-                       COLOR4D aColor, GR_DRAWMODE aDrawMode );
+                       int aOrientation, int TextInside, bool DrawPinNum, bool DrawPinName );
 
     /**
      * Draw the electrical type text of the pin (only for the footprint editor)
-     * aDrawMode = GR_OR, XOR ...
      */
     void DrawPinElectricalTypeName( EDA_DRAW_PANEL* aPanel, wxDC* aDC, wxPoint& aPosition,
-                       int aOrientation, COLOR4D aColor, GR_DRAWMODE aDrawMode );
+                                    int aOrientation );
 
     /**
      * Plot the pin number and pin text info, given the pin line coordinates.
@@ -412,13 +392,8 @@ public:
      * If TextInside then the text is been put inside (moving from x1, y1 in
      * the opposite direction to x2,y2), otherwise all is drawn outside.
      */
-    void PlotPinTexts( PLOTTER *aPlotter,
-                       wxPoint& aPosition,
-                       int      aOrientation,
-                       int      aTextInside,
-                       bool     aDrawPinNum,
-                       bool     aDrawPinName,
-                       int      aWidth );
+    void PlotPinTexts( PLOTTER *aPlotter, wxPoint& aPosition, int aOrientation,
+                       int aTextInside, bool aDrawPinNum, bool aDrawPinName, int aWidth );
 
     void PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrientation );
 

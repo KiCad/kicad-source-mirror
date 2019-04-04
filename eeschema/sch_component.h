@@ -282,17 +282,6 @@ public:
      */
     int GetOrientation();
 
-    /**
-     * Returns the coordinate points relative to the orientation of the symbol to \a aPoint.
-     *
-     * The coordinates are always relative to the anchor position of the component.
-     *
-     * @param aPoint The coordinates to transform.
-     *
-     * @return The transformed point.
-     */
-    wxPoint GetScreenCoord( const wxPoint& aPoint );
-
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
@@ -476,28 +465,15 @@ public:
      */
     SCH_PINS& GetPinMap();
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override
-    {
-        Draw( aPanel, aDC, aOffset, aDrawMode, aColor, true );
-    }
-
     /**
-     * Draw a component with or without pin text
+     * Draw a component
      *
      * @param aPanel is the panel to use (can be null) mainly used for clipping purposes.
      * @param aDC is the device context (can be null)
      * @param aOffset is the drawing offset (usually wxPoint(0,0),
      *  but can be different when moving an object)
-     * @param aDrawMode is the drawing mode, GR_OR, GR_XOR, ...
-     * @param aColor use COLOR4D::UNSPECIFIED for the normal body item color or use this
-     *               color if >= 0
-     * @param aDrawPinText use true to draw pin texts, false to draw only the pin shape
-     *  usually false to draw a component when moving it and true otherwise.
      */
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor,
-               bool aDrawPinText );
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override;
 
     void SwapData( SCH_ITEM* aItem ) override;
 

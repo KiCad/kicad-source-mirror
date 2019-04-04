@@ -615,6 +615,22 @@ void SCH_EDIT_FRAME::HardRedraw()
 }
 
 
+/*
+ * Redraws only the active window which is assumed to be whole visible.
+ */
+void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
+{
+    if( GetScreen() == NULL )
+        return;
+
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
+
+    // Display the sheet filename, and the sheet path, for non root sheets
+    UpdateTitle();
+}
+
+
 void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 {
     // if aItem != NULL, delete a previous m_undoItem, if exists
@@ -1304,12 +1320,12 @@ void SCH_EDIT_FRAME::OnPrint( wxCommandEvent& event )
 }
 
 
-void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode,
-                                void* aData )
+void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
     wxString fileName = Prj().AbsolutePath( GetScreen()->GetFileName() );
 
-    GetScreen()->Draw( m_canvas, aDC, GR_DEFAULT_DRAWMODE );
+    GRSetDrawMode( aDC, GR_DEFAULT_DRAWMODE );
+    GetScreen()->Draw( m_canvas, aDC );
     DrawWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS, fileName );
 }
 

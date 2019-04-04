@@ -368,30 +368,17 @@ void LIB_PART::SetName( const wxString& aName )
 
 
 void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-            int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
+                     int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts )
 {
-    BASE_SCREEN*   screen = aPanel ? aPanel->GetScreen() : NULL;
-    GRSetDrawMode( aDc, aOpts.draw_mode );
-
     /* draw background for filled items using background option
      * Solid lines will be drawn after the background
-     * Note also, background is not drawn when:
-     *   printing in black and white
-     *   If the color is not the default color (aColor != -1 )
+     * Note also, background is not drawn when printing in black and white
      */
-    if( ! ( screen && screen->m_IsPrinting && GetGRForceBlackPenState() )
-            && ( aOpts.color == COLOR4D::UNSPECIFIED ) )
+    if( ! GetGRForceBlackPenState() )
     {
         for( LIB_ITEM& drawItem : m_drawings )
         {
             if( drawItem.m_Fill != FILLED_WITH_BG_BODYCOLOR )
-                continue;
-
-            if( aOpts.only_selected && !drawItem.IsSelected() )
-                continue;
-
-            // Do not draw an item while moving (the cursor handler does that)
-            if( drawItem.m_Flags & IS_MOVED )
                 continue;
 
             // Do not draw items not attached to the current part
@@ -404,31 +391,14 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
             if( drawItem.Type() == LIB_FIELD_T )
                 continue;
 
-            if( drawItem.Type() == LIB_FIELD_T )        // TODO dead code?
-            {
-                drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
-                               aOpts.draw_mode, (void*) NULL, aOpts.transform );
-            }
-
             // Now, draw only the background for items with
             // m_Fill == FILLED_WITH_BG_BODYCOLOR:
-            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
-                           aOpts.draw_mode, (void*) false, aOpts.transform );
+            drawItem.Draw( aPanel, aDc, aOffset, (void*) false, aOpts.transform );
         }
     }
 
-    // Track the index into the dangling pins list
-    size_t pin_index = 0;
-
     for( LIB_ITEM& drawItem : m_drawings )
     {
-        if( aOpts.only_selected && !drawItem.IsSelected() )
-            continue;
-
-        // Do not draw an item while moving (the cursor handler does that)
-        if( drawItem.m_Flags & IS_MOVED )
-            continue;
-
         // Do not draw items not attached to the current part
         if( aMulti && drawItem.m_Unit && ( drawItem.m_Unit != aMulti ) )
             continue;
@@ -449,60 +419,18 @@ void LIB_PART::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
 
         if( drawItem.Type() == LIB_PIN_T )
         {
-            LIB_PIN& pin = static_cast<LIB_PIN&>( drawItem );
-
-            uintptr_t flags = 0;
-            if( aOpts.show_pin_text )
-                flags |= PIN_DRAW_TEXTS;
-
-            if( aOpts.show_elec_type )
-                flags |= PIN_DRAW_ELECTRICAL_TYPE_NAME;
-
-            if( aOpts.PinIsDangling( pin_index ) )
-                flags |= PIN_DRAW_DANGLING;
-
-            if( pin.IsPowerConnection() && IsPower() )
-                flags |= PIN_DANGLING_HIDDEN;
-
-            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
-                           aOpts.draw_mode, (void*) flags, aOpts.transform );
-
-            ++pin_index;
+            drawItem.Draw( aPanel, aDc, aOffset, (void*) aOpts.show_elec_type, aOpts.transform );
         }
         else if( drawItem.Type() == LIB_FIELD_T )
         {
-            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
-                           aOpts.draw_mode, (void*) NULL, aOpts.transform );
+            drawItem.Draw( aPanel, aDc, aOffset, (void*) NULL, aOpts.transform );
         }
         else
         {
             bool forceNoFill = drawItem.m_Fill == FILLED_WITH_BG_BODYCOLOR;
-            drawItem.Draw( aPanel, aDc, aOffset, aOpts.color,
-                           aOpts.draw_mode, (void*) forceNoFill,
-                           aOpts.transform );
+            drawItem.Draw( aPanel, aDc, aOffset, (void*) forceNoFill, aOpts.transform );
         }
     }
-
-    // Enable this to draw the anchor of the component.
-#if 0
-    int len = aDc->DeviceToLogicalXRel( 3 );
-    EDA_RECT* const clipbox  = aPanel ? aPanel->GetClipBox() : NULL;
-
-    GRLine( clipbox, aDc, aOffset.x, aOffset.y - len, aOffset.x,
-            aOffset.y + len, 0, aOpts.color );
-    GRLine( clipbox, aDc, aOffset.x - len, aOffset.y, aOffset.x + len,
-            aOffset.y, 0, aOpts.color );
-#endif
-
-    /* Enable this to draw the bounding box around the component to validate
-     * the bounding box calculations. */
-#if 0
-    EDA_RECT bBox = GetUnitBoundingBox( aMulti, aConvert );
-    bBox.RevertYAxis();
-    bBox = aOpts.transform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( aPanel ? aPanel->GetClipBox() : NULL, aDc, bBox, 0, LIGHTMAGENTA );
-#endif
 }
 
 
@@ -612,10 +540,6 @@ void LIB_PART::RemoveDrawItem( LIB_ITEM* aItem, EDA_DRAW_PANEL* aPanel, wxDC* aD
     {
         if( *i == aItem )
         {
-            if( aDc != NULL )
-                aItem->Draw( aPanel, aDc, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED,
-                             g_XorMode, NULL, DefaultTransform );
-
             items.erase( i );
             SetModified();
             break;

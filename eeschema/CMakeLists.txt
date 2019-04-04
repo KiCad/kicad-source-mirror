@@ -154,7 +154,6 @@ set( EESCHEMA_SRCS
     edit_bitmap.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
-    eeredraw.cpp
     eeschema.cpp
     eeschema_config.cpp
     erc.cpp

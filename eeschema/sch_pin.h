@@ -58,8 +58,7 @@ public:
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
-    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-               GR_DRAWMODE aDrawMode, COLOR4D aColor = COLOR4D::UNSPECIFIED ) override {}
+    void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override {}
 
     void Move( const wxPoint& aMoveVector ) override {}
 

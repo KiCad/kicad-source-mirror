@@ -37,8 +37,6 @@
 
 const int fill_tab[3] = { 'N', 'F', 'f' };
 
-//#define DRAW_ARC_WITH_ANGLE       // Used to draw arcs
-
 
 LIB_ITEM::LIB_ITEM( KICAD_T        aType,
                     LIB_PART*      aComponent,
@@ -111,45 +109,10 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                     const wxPoint& aOffset, COLOR4D aColor,
-                     GR_DRAWMODE aDrawMode, void* aData,
+void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {
-    #if 0
-    if( InEditMode() )
-    {
-        // Temporarily disable filling while the item is being edited.
-        FILL_T fillMode = m_Fill;
-        COLOR4D color = GetDefaultColor();
-
-        m_Fill = NO_FILL;
-
-#ifndef USE_WX_OVERLAY
-        // Erase the old items using the previous attributes.
-        if( m_eraseLastDrawItem )
-        {
-            GRSetDrawMode( aDC, g_XorMode );
-            drawEditGraphics( aPanel->GetClipBox(), aDC, color );
-            drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData,
-                         aTransform );
-        }
-#endif
-        // Calculate the new attributes at the current cursor position.
-        CalcEdit( aOffset );
-
-        // Draw the items using the new attributes.
-        drawEditGraphics( aPanel->GetClipBox(), aDC, color );
-        drawGraphic( aPanel, aDC, wxPoint( 0, 0 ), color, g_XorMode, aData,
-                     aTransform );
-
-        m_Fill = fillMode;
-    }
-    else
-    #endif
-    {
-        drawGraphic( aPanel, aDC, aOffset, aColor, aDrawMode, aData, aTransform );
-    }
+    drawGraphic( aPanel, aDC, aOffset, aData, aTransform );
 }
 
 

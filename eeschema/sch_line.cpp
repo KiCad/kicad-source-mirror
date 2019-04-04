@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -305,21 +305,10 @@ int SCH_LINE::GetPenSize() const
 }
 
 
-void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                     GR_DRAWMODE DrawMode, COLOR4D Color )
+void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset )
 {
-    COLOR4D color;
-    int width = GetPenSize();
-
-    if( Color != COLOR4D::UNSPECIFIED )
-        color = Color;
-    else if( m_color != COLOR4D::UNSPECIFIED )
-        color = m_color;
-    else
-        color = GetLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
-
+    COLOR4D color = ( m_color != COLOR4D::UNSPECIFIED ) ? m_color : GetLayerColor( m_Layer );
+    int     width = GetPenSize();
     wxPoint start = m_start;
     wxPoint end = m_end;
 
@@ -331,12 +320,6 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
 
     GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
             getwxPenStyle( (PlotDashType) GetLineStyle() ) );
-
-    if( m_startIsDangling )
-        DrawDanglingSymbol( panel, DC, start, color );
-
-    if( m_endIsDangling )
-        DrawDanglingSymbol( panel, DC, end, color );
 }
 
 

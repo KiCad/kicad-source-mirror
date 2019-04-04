@@ -24,13 +24,9 @@
 #ifndef LIST_OPERATIONS_H
 #define LIST_OPERATIONS_H
 
-namespace KIGFX {
-class COLOR4D;
-}
 
 class wxPoint;
 class wxDC;
-class EDA_DRAW_PANEL;
 class SCH_ITEM;
 class SCH_SCREEN;
 class PICKED_ITEMS_LIST;
@@ -39,21 +35,6 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
 void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& rotationPoint );
 void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
-
-/**
- * Function DeleteItemsInList
- * delete schematic items in aItemsList
- * deleted items are put in undo list
- */
-void DeleteItemsInList( EDA_DRAW_PANEL* panel, PICKED_ITEMS_LIST& aItemsList );
-
-/**
- * Routine to copy a new entity of an object for each object in list and
- * reposition it.
- * Return the new created object list in aItemsList
- */
-void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
-                           const wxPoint& aMoveVector );
 
 /**
  * Routine to create a new copy of given struct.
@@ -67,7 +48,5 @@ void DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
  */
 SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone = false );
 
-void DrawDanglingSymbol( EDA_DRAW_PANEL* panel, wxDC* DC,
-                         const wxPoint& pos, const KIGFX::COLOR4D& Color );
 
 #endif /* LIST_OPERATIONS_H */

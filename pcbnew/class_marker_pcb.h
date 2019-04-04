@@ -91,7 +91,7 @@ public:
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override
     {
-        DrawMarker( aPanel, aDC, aDrawMode, aOffset );
+        DrawMarker( aPanel, aDC, aOffset );
     }
 
     const wxPoint GetPosition() const override { return m_Pos; }

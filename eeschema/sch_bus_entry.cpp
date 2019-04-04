@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,33 +159,13 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 }
 
 
-void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                               GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
-    COLOR4D color;
+    COLOR4D   color = GetLayerColor( m_Layer );
     EDA_RECT* clipbox = aPanel->GetClipBox();
-
-    if( aColor != COLOR4D::UNSPECIFIED )
-        color = aColor;
-    else
-        color = GetLayerColor( m_Layer );
-
-    GRSetDrawMode( aDC, aDrawMode );
 
     GRLine( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
             m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
-
-    if( m_isDanglingStart )
-    {
-        GRCircle( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                  TARGET_BUSENTRY_RADIUS, 0, color );
-    }
-
-    if( m_isDanglingEnd )
-    {
-        GRCircle( clipbox, aDC, m_End().x + aOffset.x, m_End().y + aOffset.y,
-                  TARGET_BUSENTRY_RADIUS, 0, color );
-    }
 }
 
 

@@ -9,7 +9,6 @@
 
 
 
-void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                              const wxPoint& aOffset )
+void MARKER_BASE::DrawMarker( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
 }

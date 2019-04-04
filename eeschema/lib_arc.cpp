@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -325,28 +325,7 @@ int LIB_ARC::GetPenSize() const
 }
 
 
-void LIB_ARC::drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor )
-{
-    // The edit indicators only get drawn when a new arc is being drawn.
-    if( !IsNew() )
-        return;
-
-    // Use the last edit state so when the drawing switches from the end mode to the center
-    // point mode, the last line between the center points gets erased.
-    if( m_lastEditState == 1 )
-    {
-        GRLine( aClipBox, aDC, m_ArcStart.x, -m_ArcStart.y, m_ArcEnd.x, -m_ArcEnd.y, 0, aColor );
-    }
-    else
-    {
-        GRDashedLine( aClipBox, aDC, m_ArcStart.x, -m_ArcStart.y, m_Pos.x, -m_Pos.y, 0, aColor );
-        GRDashedLine( aClipBox, aDC, m_ArcEnd.x, -m_ArcEnd.y, m_Pos.x, -m_Pos.y, 0, aColor );
-    }
-}
-
-
-void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
+void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                            const TRANSFORM& aTransform )
 {
     // Don't draw the arc until the end point is selected.  Only the edit indicators
@@ -355,17 +334,8 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
         return;
 
     wxPoint pos1, pos2, posc;
-    COLOR4D color = GetLayerColor( LAYER_DEVICE );
-
-    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
-    {
-        if( IsSelected() )
-            color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
+    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
     pos1 = aTransform.TransformCoordinate( m_ArcEnd ) + aOffset;
     pos2 = aTransform.TransformCoordinate( m_ArcStart ) + aOffset;
@@ -380,21 +350,14 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
         std::swap( pos1.y, pos2.y );
     }
 
-    GRSetDrawMode( aDC, aDrawMode );
-
     FILL_T fill = aData ? NO_FILL : m_Fill;
-
-    if( aColor != COLOR4D::UNSPECIFIED )
-        fill = NO_FILL;
 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
     {
-        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2,
-                     m_Radius, GetPenSize( ),
-                     (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
-                     GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, GetPenSize( ),
+                     bgColor, bgColor );
     }
     else if( fill == FILLED_SHAPE && !aData )
     {
@@ -404,26 +367,9 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     else
     {
 
-#ifdef DRAW_ARC_WITH_ANGLE
-
-        GRArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius,
-               GetPenSize(), color );
-#else
-
-        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y,
-                posc.x, posc.y, GetPenSize(), color );
-#endif
+        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, GetPenSize(),
+                color );
     }
-
-    /* Set to one (1) to draw bounding box around arc to validate bounding box
-     * calculation. */
-#if 0
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.RevertYAxis();
-    bBox = aTransform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
-#endif
 }
 
 

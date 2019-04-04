@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -367,7 +367,7 @@ public:
     // define pure virtuals:
     wxPoint GetPosition() const override { return wxPoint(); }
     void SetPosition( const wxPoint& ) override {}
-    void Draw( EDA_DRAW_PANEL* , wxDC* , const wxPoint& , GR_DRAWMODE , COLOR4D ) override {}
+    void Draw( EDA_DRAW_PANEL* , wxDC* , const wxPoint&  ) override {}
 
 #if defined(DEBUG)
     void Show( int , std::ostream&  ) const override {}

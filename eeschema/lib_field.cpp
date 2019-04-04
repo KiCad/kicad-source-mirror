@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,28 +134,11 @@ int LIB_FIELD::GetPenSize() const
 
 
 void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                             COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
-                             const TRANSFORM& aTransform )
+                             void* aData, const TRANSFORM& aTransform )
 {
     wxPoint  text_pos;
-    COLOR4D color = COLOR4D::UNSPECIFIED;
+    COLOR4D  color = IsVisible() ? GetDefaultColor() : GetInvisibleItemColor();
     int      linewidth = GetPenSize();
-
-    if( !IsVisible() && ( aColor == COLOR4D::UNSPECIFIED ) )
-    {
-        color = GetInvisibleItemColor();
-    }
-    else if( IsSelected() && ( aColor == COLOR4D::UNSPECIFIED ) )
-    {
-        color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
-
-    if( color == COLOR4D::UNSPECIFIED )
-        color = GetDefaultColor();
 
     text_pos = aTransform.TransformCoordinate( GetTextPos() ) + aOffset;
 
@@ -166,23 +149,10 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     else
         text = m_Text;
 
-    GRSetDrawMode( aDC, aDrawMode );
     EDA_RECT* clipbox = aPanel? aPanel->GetClipBox() : NULL;
 
-    DrawGraphicText( clipbox, aDC, text_pos, color, text,
-                     GetTextAngle(), GetTextSize(),
-                     GetHorizJustify(), GetVertJustify(),
-                     linewidth, IsItalic(), IsBold() );
-
-    /* Set to one (1) to draw bounding box around field text to validate
-     * bounding box calculation. */
-#if 0
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.RevertYAxis();
-    bBox = aTransform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
-#endif
+    DrawGraphicText( clipbox, aDC, text_pos, color, text, GetTextAngle(), GetTextSize(),
+                     GetHorizJustify(), GetVertJustify(), linewidth, IsItalic(), IsBold() );
 }
 
 

@@ -1007,11 +1007,6 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
     if ( ( DrawItem == NULL ) || ( DrawItem->Type() != LIB_TEXT_T ) )
         return;
 
-    // Deleting old text
-    if( DC && !DrawItem->InEditMode() )
-        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                        DefaultTransform );
-
     DIALOG_LIB_EDIT_TEXT dlg( this, (LIB_TEXT*) DrawItem );
 
     if( dlg.ShowModal() != wxID_OK )
@@ -1020,11 +1015,6 @@ void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
     GetCanvas()->GetView()->Update( DrawItem );
     GetCanvas()->Refresh();
     OnModify();
-
-    // Display new text
-    if( DC && !DrawItem->InEditMode() )
-        DrawItem->Draw( m_canvas, DC, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, GR_DEFAULT_DRAWMODE,
-                        NULL, DefaultTransform );
 }
 
 

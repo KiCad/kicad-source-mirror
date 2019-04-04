@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,8 +150,7 @@ int SCH_FIELD::GetPenSize() const
 }
 
 
-void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
     int            orient;
     COLOR4D        color;
@@ -172,8 +171,6 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
 
     if( ( !IsVisible() && !m_forceVisible) || IsVoid() )
         return;
-
-    GRSetDrawMode( aDC, aDrawMode );
 
     // Calculate the text orientation according to the component orientation.
     orient = GetTextAngle();
@@ -201,39 +198,24 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
     textpos = boundaryBox.Centre() + aOffset;
 
     if( m_forceVisible )
-    {
         color = COLOR4D( DARKGRAY );
-    }
+    else if( m_id == REFERENCE )
+        color = GetLayerColor( LAYER_REFERENCEPART );
+    else if( m_id == VALUE )
+        color = GetLayerColor( LAYER_VALUEPART );
     else
-    {
-        if( m_id == REFERENCE )
-            color = GetLayerColor( LAYER_REFERENCEPART );
-        else if( m_id == VALUE )
-            color = GetLayerColor( LAYER_VALUEPART );
-        else
-            color = GetLayerColor( LAYER_FIELDS );
-    }
+        color = GetLayerColor( LAYER_FIELDS );
 
     EDA_RECT* clipbox = aPanel ? aPanel->GetClipBox() : NULL;
     DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
-                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
-                     lineWidth, IsItalic(), IsBold() );
+                     GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, lineWidth, IsItalic(),
+                     IsBold() );
 }
 
 
 void SCH_FIELD::ImportValues( const LIB_FIELD& aSource )
 {
     SetEffects( aSource );
-}
-
-
-void SCH_FIELD::ExportValues( LIB_FIELD& aDest ) const
-{
-    aDest.SetId( GetId() );
-    aDest.SetText( m_Text );        // Set field value
-    aDest.SetName( GetName() );
-
-    aDest.SetEffects( *this );
 }
 
 
@@ -320,9 +302,7 @@ bool SCH_FIELD::IsVoid() const
     // that linked list is not thread-safe.
     std::lock_guard<std::mutex> guard( m_mutex );
 
-    size_t len = m_Text.Len();
-
-    return len == 0 || ( len == 1 && m_Text[0] == wxChar( '~' ) );
+    return m_Text.Len() == 0;
 }
 
 
@@ -335,7 +315,6 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     // save old cmp in undo list
     frame->SaveUndoItemInUndoList( component );
 
-    Draw( frame->GetCanvas(), DC, wxPoint( 0, 0 ), GR_DEFAULT_DRAWMODE );
     ClearFlags();
     frame->GetScreen()->SetCurItem( NULL );
     frame->OnModify();

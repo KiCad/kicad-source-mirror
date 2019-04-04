@@ -513,7 +513,7 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
 }
 
 
-void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC )
 {
     /* note: SCH_SCREEN::Draw is useful only for schematic.
      * library editor and library viewer do not use m_drawList, and therefore
@@ -534,7 +534,7 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
         else
             // uncomment line below when there is a virtual EDA_ITEM::GetBoundingBox()
             // if( panel->GetClipBox().Intersects( item->GetBoundingBox() ) )
-            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+            item->Draw( aCanvas, aDC, wxPoint( 0, 0 ) );
 
         // TODO(JE) Remove debugging code
 #ifdef DEBUG
@@ -549,13 +549,13 @@ void SCH_SCREEN::Draw( EDA_DRAW_PANEL* aCanvas, wxDC* aDC, GR_DRAWMODE aDrawMode
 
             auto text = SCH_TEXT( pos, label, SCH_TEXT_T );
             text.SetTextSize( wxSize( sz, sz ) );
-            text.Draw( aCanvas, aDC, wxPoint( 10, 10 ), aDrawMode, COLOR4D( LIGHTRED ) );
+            text.Draw( aCanvas, aDC, wxPoint( 10, 10 ) );
         }
 #endif
     }
 
     for( auto item : junctions )
-        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ), aDrawMode, aColor );
+        item->Draw( aCanvas, aDC, wxPoint( 0, 0 ) );
 }
 
 

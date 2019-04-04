@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -305,33 +305,22 @@ int SCH_TEXT::GetPenSize() const
 }
 
 
-void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
-                     GR_DRAWMODE DrawMode, COLOR4D Color )
+void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset )
 {
-    COLOR4D     color;
+    COLOR4D     color = GetLayerColor( m_Layer );
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
     EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
-
-    if( Color != COLOR4D::UNSPECIFIED )
-        color = Color;
-    else
-        color = GetLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
 
     wxPoint text_offset = aOffset + GetSchematicTextOffset();
 
     int savedWidth = GetThickness();
     SetThickness( linewidth );              // Set the minimum width
 
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
 
     SetThickness( savedWidth );
-
-    if( m_isDangling && panel)
-        DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
 }
 
 
@@ -823,24 +812,11 @@ void SCH_GLOBALLABEL::SetLabelSpinStyle( int aSpinStyle )
 }
 
 
-void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
-                            wxDC*           DC,
-                            const wxPoint&  aOffset,
-                            GR_DRAWMODE     DrawMode,
-                            COLOR4D        Color )
+void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset )
 {
     static std::vector <wxPoint> Poly;
-    COLOR4D color;
-    wxPoint     text_offset = aOffset + GetSchematicTextOffset();
-
-    if( Color != COLOR4D::UNSPECIFIED )
-        color = Color;
-    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
-        color = GetLayerColor( LAYER_BRIGHTENED );
-    else
-        color = GetLayerColor( m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
+    COLOR4D color = GetLayerColor( m_Layer );
+    wxPoint text_offset = aOffset + GetSchematicTextOffset();
 
     int linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
 
@@ -850,23 +826,12 @@ void SCH_GLOBALLABEL::Draw( EDA_DRAW_PANEL* panel,
     SetThickness( linewidth );
 
     EDA_RECT* clipbox = panel? panel->GetClipBox() : NULL;
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
 
     SetThickness( save_width );   // restore initial value
 
     CreateGraphicShape( Poly, GetTextPos() + aOffset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
-
-    if( m_isDangling && panel )
-        DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
-
-    // Enable these line to draw the bounding box (debug tests purposes only)
-#if DRAW_BBOX
-    {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
-    }
-#endif
 }
 
 
@@ -1087,51 +1052,26 @@ void SCH_HIERLABEL::SetLabelSpinStyle( int aSpinStyle )
 }
 
 
-void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel,
-                          wxDC*           DC,
-                          const wxPoint&  offset,
-                          GR_DRAWMODE     DrawMode,
-                          COLOR4D         Color )
+void SCH_HIERLABEL::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset )
 {
     static std::vector <wxPoint> Poly;
-    COLOR4D color;
+    auto        conn = Connection( *g_CurrentSheet );
+    COLOR4D     color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
     int         linewidth = GetThickness() == 0 ? GetDefaultLineThickness() : GetThickness();
     EDA_RECT*   clipbox = panel? panel->GetClipBox() : NULL;
 
     linewidth = Clamp_Text_PenSize( linewidth, GetTextSize(), IsBold() );
 
-    auto conn = Connection( *g_CurrentSheet );
-
-    if( Color != COLOR4D::UNSPECIFIED )
-        color = Color;
-    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
-        color = GetLayerColor( LAYER_BRIGHTENED );
-    else
-        color = GetLayerColor( ( conn && conn->IsBus() ) ? LAYER_BUS : m_Layer );
-
-    GRSetDrawMode( DC, DrawMode );
-
     int save_width = GetThickness();
     SetThickness( linewidth );
 
     wxPoint text_offset = offset + GetSchematicTextOffset();
-    EDA_TEXT::Draw( clipbox, DC, text_offset, color, DrawMode, FILLED, COLOR4D::UNSPECIFIED );
+    EDA_TEXT::Draw( clipbox, DC, text_offset, color, GR_DEFAULT_DRAWMODE );
 
     SetThickness( save_width );         // restore initial value
 
     CreateGraphicShape( Poly, GetTextPos() + offset );
     GRPoly( clipbox, DC, Poly.size(), &Poly[0], 0, linewidth, color, color );
-
-    if( m_isDangling && panel )
-        DrawDanglingSymbol( panel, DC, GetTextPos() + offset, color );
-
-    // Enable these line to draw the bounding box (debug tests purposes only)
-#if DRAW_BBOX
-    {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
-    }
-#endif
 }
 
 

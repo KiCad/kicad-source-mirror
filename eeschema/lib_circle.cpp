@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -181,49 +181,21 @@ int LIB_CIRCLE::GetPenSize() const
 
 
 void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                              COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
-                              const TRANSFORM& aTransform )
+                              void* aData, const TRANSFORM& aTransform )
 {
-    wxPoint pos1;
-
-    COLOR4D color = GetLayerColor( LAYER_DEVICE );
-
-    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
-    {
-        if( IsSelected() )
-            color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
-
-    pos1 = aTransform.TransformCoordinate( m_Pos ) + aOffset;
-    GRSetDrawMode( aDC, aDrawMode );
-
-    FILL_T fill = aData ? NO_FILL : m_Fill;
-    if( aColor != COLOR4D::UNSPECIFIED )
-        fill = NO_FILL;
+    wxPoint pos1    = aTransform.TransformCoordinate( m_Pos ) + aOffset;
+    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
+    FILL_T  fill    = aData ? NO_FILL : m_Fill;
 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
+
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(),
-                        (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
-                        GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), bgColor, bgColor );
     else if( fill == FILLED_SHAPE )
         GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
     else
         GRCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), color );
-
-    /* Set to one (1) to draw bounding box around circle to validate bounding
-     * box calculation. */
-#if 0
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.RevertYAxis();
-    bBox = aTransform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
-#endif
 }
 
 

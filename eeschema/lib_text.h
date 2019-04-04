@@ -47,8 +47,7 @@ class LIB_TEXT : public LIB_ITEM, public EDA_TEXT
     bool m_rotate;                ///< Flag to indicate a rotation occurred while editing.
     bool m_updateText;            ///< Flag to indicate text change occurred while editing.
 
-    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                      COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
+    void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
 
     void CalcEdit( const wxPoint& aPosition ) override;

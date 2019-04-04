@@ -43,7 +43,6 @@ public:
      * @param aBoard is the PCB to be loaded.
      */
      void DisplayComponent( const LIB_PART *aComponent );
-     void DisplaySheet( const SCH_SHEET *aSheet );
      void DisplaySheet( const SCH_SCREEN *aScreen );
 
     /**

@@ -203,36 +203,19 @@ extern bool operator<( const LIB_ALIAS& aItem1, const LIB_ALIAS& aItem2 );
 
 struct PART_DRAW_OPTIONS
 {
-    GR_DRAWMODE draw_mode;      ///< Device context drawing mode, see wxDC
-    COLOR4D color;              ///< Color to draw part in
     TRANSFORM transform;        ///< Coordinate adjustment settings
-    bool show_pin_text;         ///< Whether to show pin texts
     bool draw_visible_fields;   ///< Whether to draw "visible" fields
     bool draw_hidden_fields;    ///< Whether to draw "hidden" fields
-    bool only_selected;         ///< Draws only the body items that are selected, for block moves
-    std::vector<bool> dangling; ///< which pins should display as dangling, or empty for All
     bool show_elec_type;        ///< Whether to show the pin electrical type
 
     static PART_DRAW_OPTIONS Default()
     {
         PART_DRAW_OPTIONS def;
-        def.draw_mode = GR_DEFAULT_DRAWMODE;
-        def.color     = COLOR4D::UNSPECIFIED;
         def.transform = DefaultTransform;
-        def.show_pin_text       = true;
         def.draw_visible_fields = true;
         def.draw_hidden_fields  = true;
-        def.only_selected       = false;
         def.show_elec_type      = false;
         return def;
-    }
-
-    bool PinIsDangling( size_t aPin ) const
-    {
-        if( aPin < dangling.size() )
-            return dangling[aPin];
-        else
-            return true;
     }
 };
 
@@ -466,8 +449,7 @@ public:
      * @param aOpts - Drawing options
      */
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDc, const wxPoint& aOffset,
-               int aMulti, int aConvert,
-               const PART_DRAW_OPTIONS& aOpts );
+               int aMulti, int aConvert, const PART_DRAW_OPTIONS& aOpts );
 
     /**
      * Plot lib part to plotter.

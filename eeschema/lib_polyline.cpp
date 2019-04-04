@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,14 +130,11 @@ void LIB_POLYLINE::MirrorVertical( const wxPoint& aCenter )
 
 void LIB_POLYLINE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
 {
-    int rot_angle = aRotateCCW ? -900 : 900;
-
+    int    rot_angle = aRotateCCW ? -900 : 900;
     size_t i, imax = m_PolyPoints.size();
 
     for( i = 0; i < imax; i++ )
-    {
         RotatePoint( &m_PolyPoints[i], aCenter, rot_angle );
-   }
 }
 
 
@@ -169,7 +166,7 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     {
         pen_size = std::max( 0, pen_size );
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+        aPlotter->PlotPoly( cornerList, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -193,60 +190,27 @@ int LIB_POLYLINE::GetPenSize() const
 
 
 void LIB_POLYLINE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                                COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
-                                const TRANSFORM& aTransform )
+                                void* aData, const TRANSFORM& aTransform )
 {
-    wxPoint  pos1;
-    COLOR4D color = GetLayerColor( LAYER_DEVICE );
-    wxPoint* buffer = NULL;
+    COLOR4D color   = GetLayerColor( LAYER_DEVICE );
+    COLOR4D bgColor = GetLayerColor( LAYER_DEVICE_BACKGROUND );
 
-    if( aColor == COLOR4D::UNSPECIFIED )                // Used normal color or selected color
-    {
-        if( IsSelected() )
-            color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
-
-    buffer = new wxPoint[ m_PolyPoints.size() ];
+    wxPoint* buffer = new wxPoint[ m_PolyPoints.size() ];
 
     for( unsigned ii = 0; ii < m_PolyPoints.size(); ii++ )
-    {
         buffer[ii] = aTransform.TransformCoordinate( m_PolyPoints[ii] ) + aOffset;
-    }
 
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
-    if( aColor != COLOR4D::UNSPECIFIED )
-        fill = NO_FILL;
-
-    GRSetDrawMode( aDC, aDrawMode );
-
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
-                (m_Flags & IS_MOVED) ? color : GetLayerColor( LAYER_DEVICE_BACKGROUND ),
-                GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), bgColor, bgColor );
     else if( fill == FILLED_SHAPE  )
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(),
-                color, color );
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 1, GetPenSize(), color, color );
     else
-        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(),
-                color, color );
+        GRPoly( clipbox, aDC, m_PolyPoints.size(), buffer, 0, GetPenSize(), color, color );
 
     delete[] buffer;
-
-    /* Set to one (1) to draw bounding box around polyline to validate
-     * bounding box calculation. */
-#if 0
-    EDA_RECT bBox = GetBoundingBox();
-    bBox.RevertYAxis();
-    bBox = aTransform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
-#endif
 }
 
 

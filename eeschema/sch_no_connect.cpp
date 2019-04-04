@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanoadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -99,29 +99,19 @@ int SCH_NO_CONNECT::GetPenSize() const
 }
 
 
-void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                           GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_NO_CONNECT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
     int pX, pY;
-    int delta = GetSize() / 2;
+    int half = GetSize() / 2;
     int width = GetDefaultLineThickness();
 
     pX = m_pos.x + aOffset.x;
     pY = m_pos.y + aOffset.y;
 
-    COLOR4D color;
+    COLOR4D color = GetLayerColor( LAYER_NOCONNECT );
 
-    if( aColor != COLOR4D::UNSPECIFIED )
-        color = aColor;
-    else
-        color = GetLayerColor( LAYER_NOCONNECT );
-
-    GRSetDrawMode( aDC, aDrawMode );
-
-    GRLine( aPanel->GetClipBox(), aDC, pX - delta, pY - delta, pX + delta, pY + delta,
-            width, color );
-    GRLine( aPanel->GetClipBox(), aDC, pX + delta, pY - delta, pX - delta, pY + delta,
-            width, color );
+    GRLine( aPanel->GetClipBox(), aDC, pX - half, pY - half, pX + half, pY + half, width, color );
+    GRLine( aPanel->GetClipBox(), aDC, pX + half, pY - half, pX - half, pY + half, width, color );
 }
 
 

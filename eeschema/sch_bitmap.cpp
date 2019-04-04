@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 jean-pierre.charras
- * Copyright (C) 2011-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2011-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,35 +111,11 @@ const EDA_RECT SCH_BITMAP::GetBoundingBox() const
 }
 
 
-void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                       GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_BITMAP::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset  )
 {
     wxPoint pos = m_pos + aOffset;
 
-    if( aColor == COLOR4D::UNSPECIFIED )    // Use normal drawing function
-    {
-        // https://bugs.launchpad.net/kicad/+bug/1529163
-        // "Moving images in eeschema on OS X uses
-        //  wrong position and shows image flipped"
-        //
-        // Original fix was to only GRSetDrawMode if aColor >= 0, but this made
-        // moving SCH_BITMAP work poorly on other platforms.
-#ifndef __WXMAC__
-        GRSetDrawMode( aDC, aDrawMode );
-#endif
-
-        m_image->DrawBitmap( aDC, pos );
-    }
-    else    // draws bounding box only (used to move items)
-    {
-        GRSetDrawMode( aDC, aDrawMode );
-        // To draw the rect, pos is the upper left corner position
-        wxSize size = m_image->GetSize();
-        pos.x -= size.x / 2;
-        pos.y -= size.y / 2;
-        GRRect( aPanel->GetClipBox(), aDC, pos.x, pos.y,
-                pos.x + size.x, pos.y + size.y, 0, aColor );
-    }
+    m_image->DrawBitmap( aDC, pos );
 }
 
 

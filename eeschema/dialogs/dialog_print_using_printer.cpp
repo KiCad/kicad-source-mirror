@@ -428,6 +428,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 #endif
     OffsetLogicalOrigin( xoffset, yoffset );
 
+    GRSetDrawMode( dc, GR_DEFAULT_DRAWMODE );
     GRResetPenAndBrush( dc );
 
     if( m_parent->GetPrintMonochrome() )
@@ -437,7 +438,7 @@ void SCH_PRINTOUT::DrawPage( SCH_SCREEN* aScreen )
 
     COLOR4D bgColor = m_parent->GetDrawBgColor();
 
-    aScreen->Draw( panel, dc, (GR_DRAWMODE) 0 );
+    aScreen->Draw( panel, dc );
 
     if( printReference )
         m_parent->DrawWorkSheet( dc, aScreen, GetDefaultLineThickness(),

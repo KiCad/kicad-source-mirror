@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,9 +67,6 @@ bool LIB_TEXT::HitTest( const wxPoint& aPosition ) const
 
 bool LIB_TEXT::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
 {
-    if( aThreshold < 0 )
-        aThreshold = 0;
-
     EDA_TEXT tmp_text( *this );
     tmp_text.SetTextPos( aTransform.TransformCoordinate( GetTextPos() ) );
 
@@ -86,7 +83,7 @@ bool LIB_TEXT::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFOR
 
 EDA_ITEM* LIB_TEXT::Clone() const
 {
-    LIB_TEXT* newitem = new LIB_TEXT(NULL);
+    LIB_TEXT* newitem = new LIB_TEXT( nullptr );
 
     newitem->m_Unit      = m_Unit;
     newitem->m_Convert   = m_Convert;
@@ -229,22 +226,9 @@ int LIB_TEXT::GetPenSize() const
 
 
 void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                            COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
-                            const TRANSFORM& aTransform )
+                            void* aData, const TRANSFORM& aTransform )
 {
     COLOR4D color = GetDefaultColor();
-
-    if( aColor == COLOR4D::UNSPECIFIED )       // Used normal color or selected color
-    {
-        if( IsSelected() )
-            color = GetItemSelectedColor();
-    }
-    else
-    {
-        color = aColor;
-    }
-
-    GRSetDrawMode( aDC, aDrawMode );
 
     /* Calculate the text orientation, according to the component
      * orientation/mirror (needed when draw text in schematic)
@@ -283,17 +267,6 @@ void LIB_TEXT::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aO
     DrawGraphicText( clipbox, aDC, txtpos, color, GetShownText(), orient, GetTextSize(),
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER, GetPenSize(),
                      IsItalic(), IsBold() );
-
-
-    /* Enable this to draw the bounding box around the text field to validate
-     * the bounding box calculations.
-     */
-#if 0
-    // bBox already uses libedit Y axis.
-    bBox = aTransform.TransformCoordinate( bBox );
-    bBox.Move( aOffset );
-    GRRect( clipbox, aDC, bBox, 0, LIGHTMAGENTA );
-#endif
 }
 
 
@@ -337,13 +310,9 @@ const EDA_RECT LIB_TEXT::GetBoundingBox() const
 void LIB_TEXT::Rotate()
 {
     if( InEditMode() )
-    {
         m_rotate = true;
-    }
     else
-    {
         SetTextAngle( GetTextAngle() == TEXT_ANGLE_VERT ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-    }
 }
 
 

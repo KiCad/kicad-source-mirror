@@ -69,15 +69,11 @@ EDA_ITEM* SCH_SHEET_PIN::Clone() const
 }
 
 
-void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel,
-                          wxDC*           aDC,
-                          const wxPoint&  aOffset,
-                          GR_DRAWMODE     aDraw_mode,
-                          COLOR4D         aColor )
+void SCH_SHEET_PIN::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&  aOffset )
 {
     // The icon selection is handle by the virtual method CreateGraphicShape
     // called by ::Draw
-    SCH_HIERLABEL::Draw( aPanel, aDC, aOffset, aDraw_mode, aColor );
+    SCH_HIERLABEL::Draw( aPanel, aDC, aOffset );
 }
 
 

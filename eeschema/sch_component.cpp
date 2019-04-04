@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,6 @@
 
 #include <trace_helpers.h>
 
-#define NULL_STRING "_NONAME_"
 
 /**
  * Function toUTFTildaText
@@ -514,32 +513,15 @@ int SCH_COMPONENT::GetUnitCount() const
 }
 
 
-void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, COLOR4D aColor, bool aDrawPinText )
+void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
     auto opts = PART_DRAW_OPTIONS::Default();
-    opts.draw_mode = aDrawMode;
-    opts.color = aColor;
     opts.transform = m_transform;
-    opts.show_pin_text = aDrawPinText;
     opts.draw_visible_fields = false;
     opts.draw_hidden_fields = false;
 
     if( PART_SPTR part = m_part.lock() )
     {
-        LIB_PINS libPins;
-        part->GetPins( libPins, m_unit, m_convert );
-
-        for( LIB_PIN *libPin : libPins )
-        {
-            bool isDangling = true;
-
-            if( m_pins.count( libPin ) )
-                isDangling = m_pins.at( libPin ).IsDangling();
-
-            opts.dangling.push_back( isDangling );
-        }
-
         part->Draw( aPanel, aDC, m_Pos + aOffset, m_unit, m_convert, opts );
     }
     else    // Use dummy() part if the actual cannot be found.
@@ -550,14 +532,12 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
     SCH_FIELD* field = GetField( REFERENCE );
 
     if( field->IsVisible() )
-    {
-        field->Draw( aPanel, aDC, aOffset, aDrawMode );
-    }
+        field->Draw( aPanel, aDC, aOffset );
 
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
     {
         field = GetField( ii );
-        field->Draw( aPanel, aDC, aOffset, aDrawMode );
+        field->Draw( aPanel, aDC, aOffset );
     }
 }
 
@@ -604,7 +584,7 @@ wxString SCH_COMPONENT::GetPath( const SCH_SHEET_PATH* sheet ) const
 const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
 {
     wxString          path = GetPath( sheet );
-    wxString          h_path, h_ref;
+    wxString          h_path;
     wxStringTokenizer tokenizer;
     wxString          separators( wxT( " " ) );
 
@@ -614,13 +594,7 @@ const wxString SCH_COMPONENT::GetRef( const SCH_SHEET_PATH* sheet )
         h_path = tokenizer.GetNextToken();
 
         if( h_path.Cmp( path ) == 0 )
-        {
-            h_ref = tokenizer.GetNextToken();
-
-            /* printf( "GetRef hpath: %s\n",
-             *       TO_UTF8( m_PathsAndReferences[ii] ) ); */
-            return h_ref;
-        }
+            return tokenizer.GetNextToken();
     }
 
     // if it was not found in m_Paths array, then see if it is in
@@ -693,8 +667,7 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
     SCH_FIELD* rf = GetField( REFERENCE );
 
     if( rf->GetText().IsEmpty()
-      || ( abs( rf->GetTextPos().x - m_Pos.x ) +
-           abs( rf->GetTextPos().y - m_Pos.y ) > 10000 ) )
+      || ( abs( rf->GetTextPos().x - m_Pos.x ) + abs( rf->GetTextPos().y - m_Pos.y ) > 10000 ) )
     {
         // move it to a reasonable position
         rf->SetTextPos( m_Pos + wxPoint( 50, 50 ) );
@@ -982,14 +955,10 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     // Reparent items after copying data
     // (after swap(), m_Parent member does not point to the right parent):
     for( int ii = 0; ii < component->GetFieldCount();  ++ii )
-    {
         component->GetField( ii )->SetParent( component );
-    }
 
     for( int ii = 0; ii < GetFieldCount();  ++ii )
-    {
         GetField( ii )->SetParent( this );
-    }
 
     std::swap( m_PathsAndReferences, component->m_PathsAndReferences );
 }
@@ -1237,12 +1206,6 @@ int SCH_COMPONENT::GetOrientation()
 }
 
 
-wxPoint SCH_COMPONENT::GetScreenCoord( const wxPoint& aPoint )
-{
-    return m_transform.TransformCoordinate( aPoint );
-}
-
-
 #if defined(DEBUG)
 
 void SCH_COMPONENT::Show( int nestLevel, std::ostream& os ) const
@@ -1325,9 +1288,7 @@ const EDA_RECT SCH_COMPONENT::GetBoundingBox() const
     EDA_RECT bbox = GetBodyBoundingBox();
 
     for( size_t i = 0; i < m_Fields.size(); i++ )
-    {
         bbox.Merge( m_Fields[i].GetBoundingBox() );
-    }
 
     return bbox;
 }
@@ -1353,8 +1314,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
                 return;
 
             if( g_CurrentSheet )
-                aList.push_back( MSG_PANEL_ITEM( _( "Reference" ),
-                                                 GetRef( g_CurrentSheet ),
+                aList.push_back( MSG_PANEL_ITEM( _( "Reference" ), GetRef( g_CurrentSheet ),
                                                  DARKCYAN ) );
 
             msg = part->IsPower() ? _( "Power symbol" ) : _( "Value" );
@@ -1362,8 +1322,7 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
             aList.push_back( MSG_PANEL_ITEM( msg, GetField( VALUE )->GetShownText(), DARKCYAN ) );
 
             // Display component reference in library and library
-            aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(),
-                                             BROWN ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Name" ), GetLibId().GetLibItemName(), BROWN ) );
 
             if( alias->GetName() != part->GetName() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
@@ -1404,12 +1363,11 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
 
         if( libNickname.empty() )
         {
-            aList.push_back( MSG_PANEL_ITEM( _( "Library" ),
-                                             _( "No library defined!!!" ), RED ) );
+            aList.push_back( MSG_PANEL_ITEM( _( "Library" ), _( "No library defined!" ), RED ) );
         }
         else
         {
-            msg.Printf( _( "Symbol not found in %s!!!" ), libNickname );
+            msg.Printf( _( "Symbol not found in %s!" ), libNickname );
             aList.push_back( MSG_PANEL_ITEM( _( "Library" ), msg , RED ) );
         }
     }
@@ -1876,9 +1834,7 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
         part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
 
         for( size_t i = 0; i < m_Fields.size(); i++ )
-        {
             m_Fields[i].Plot( aPlotter );
-        }
 
         aPlotter->EndBlock( nullptr );
     }

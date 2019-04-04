@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,24 +71,17 @@ void SCH_MARKER::Show( int nestLevel, std::ostream& os ) const
 #endif
 
 
-void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                       const wxPoint& aOffset, GR_DRAWMODE aDrawMode, COLOR4D aColor )
+void SCH_MARKER::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset )
 {
-    COLOR4D color = m_Color;
-    COLOR4D tmp   = color;
+    COLOR4D tmp = m_Color;
 
     if( GetMarkerType() == MARKER_BASE::MARKER_ERC )
     {
-        color = ( GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR ) ?
-                  GetLayerColor( LAYER_ERC_ERR ) : GetLayerColor( LAYER_ERC_WARN );
+        m_Color = ( GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR ) ?
+                    GetLayerColor( LAYER_ERC_ERR ) : GetLayerColor( LAYER_ERC_WARN );
     }
 
-    if( aColor == COLOR4D::UNSPECIFIED )
-        m_Color = color;
-    else
-        m_Color = aColor;
-
-    DrawMarker( aPanel, aDC, aDrawMode, aOffset );
+    DrawMarker( aPanel, aDC, aOffset );
     m_Color = tmp;
 }
 

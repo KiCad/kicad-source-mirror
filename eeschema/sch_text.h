@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -130,8 +130,7 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-                       GR_DRAWMODE draw_mode, COLOR4D Color ) override;
+    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -260,8 +259,7 @@ public:
 
     ~SCH_GLOBALLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-               GR_DRAWMODE draw_mode, COLOR4D Color ) override;
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
 
     wxString GetClass() const override
     {
@@ -306,8 +304,7 @@ public:
 
     ~SCH_HIERLABEL() { }
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
-               GR_DRAWMODE draw_mode, COLOR4D Color ) override;
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
 
     wxString GetClass() const override
     {

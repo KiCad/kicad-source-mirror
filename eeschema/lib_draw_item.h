@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jaen-pierre.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,27 +74,12 @@ class LIB_ITEM : public EDA_ITEM
      * @param aDC A pointer to the device context used to draw the object.
      * @param aOffset A reference to a wxPoint object containing the offset where to draw
      *                from the object's current position.
-     * @param aColor A COLOR4D to draw the object or COLOR4D::UNSPECIFIED to draw
-     *               the object in it's default color.
-     * @param aDrawMode The mode used to perform the draw (#GR_OR, #GR_COPY, etc.).
      * @param aData A pointer to any object specific data required to perform the draw.
      * @param aTransform A reference to a #TRANSFORM object containing drawing transform.
      */
-    virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
-                              const wxPoint& aOffset, COLOR4D aColor,
-                              GR_DRAWMODE aDrawMode, void* aData,
-                              const TRANSFORM& aTransform ) = 0;
+    virtual void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
+                              void* aData, const TRANSFORM& aTransform ) = 0;
 
-    /**
-     * Draw any editing specific graphics when the item is being edited.
-     *
-     * @param aClipBox Clip box of the current device context.
-     * @param aDC The device context to draw on.
-     * @param aColor Draw color
-     */
-    virtual void drawEditGraphics( EDA_RECT* aClipBox, wxDC* aDC, COLOR4D aColor ) {}
-
-    
     friend class LIB_PART;
 
 protected:
@@ -198,16 +183,13 @@ public:
      * @param aPanel DrawPanel to use (can be null) mainly used for clipping purposes.
      * @param aDC Device Context (can be null)
      * @param aOffset Offset to draw
-     * @param aColor Draw color, or COLOR4D::UNSPECIFIED to use the normal body item color
-     * @param aDrawMode GR_OR, GR_XOR, ...
      * @param aData Value or pointer used to pass others parameters, depending on body items.
      *              Used for some items to force to force no fill mode ( has meaning only for
      *              items what can be filled ). used in printing or moving objects mode or to
      *              pass reference to the lib component for pins.
      * @param aTransform Transform Matrix (rotation, mirror ..)
      */
-    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset,
-                       COLOR4D aColor, GR_DRAWMODE aDrawMode, void* aData,
+    virtual void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint &aOffset, void* aData,
                        const TRANSFORM& aTransform );
 
     /**
