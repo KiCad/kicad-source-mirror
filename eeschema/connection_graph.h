@@ -62,8 +62,8 @@ class CONNECTION_SUBGRAPH
 public:
     CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :
         m_dirty( false ), m_code( -1 ), m_multiple_power_ports( false ),
-        m_strong_driver( false ), m_no_connect( nullptr ), m_driver( nullptr ),
-        m_frame( aFrame ), m_driver_connection( nullptr )
+        m_strong_driver( false ), m_no_connect( nullptr ), m_bus_entry( nullptr ),
+        m_driver( nullptr ), m_frame( aFrame ), m_driver_connection( nullptr )
     {}
     /**
      * Determines which potential driver should drive the subgraph.
@@ -96,6 +96,9 @@ public:
 
     /// No-connect item in graph, if any
     SCH_ITEM* m_no_connect;
+
+    /// Bus entry in graph, if any
+    SCH_ITEM* m_bus_entry;
 
     std::vector<SCH_ITEM*> m_items;
 

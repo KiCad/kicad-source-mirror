@@ -538,16 +538,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( connection->IsDriver() )
                     subgraph->m_drivers.push_back( item );
 
-                if( item->Type() == SCH_NO_CONNECT_T )
-                {
-                    subgraph->m_no_connect = item;
-                }
-                else if( item->Type() == SCH_PIN_T )
+                connection->SetSubgraphCode( subgraph->m_code );
+
+                if( item->Type() == SCH_PIN_T )
                 {
                     auto pin = static_cast<SCH_PIN*>( item );
-
-                    if( pin->GetType() == PIN_NC )
-                        subgraph->m_no_connect = item;
 
                     // Invisible power pins need to be post-processed later
 
@@ -556,8 +551,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         m_invisible_power_pins.push_back( pin );
                     }
                 }
-
-                connection->SetSubgraphCode( subgraph->m_code );
 
                 std::list<SCH_ITEM*> members( item->ConnectedItems().begin(),
                                               item->ConnectedItems().end() );
@@ -632,6 +625,34 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 if( !subgraph->m_dirty )
                     continue;
+
+                // Special processing for some items
+                for( auto item : subgraph->m_items )
+                {
+                    switch( item->Type() )
+                    {
+                    case SCH_NO_CONNECT_T:
+                        subgraph->m_no_connect = item;
+                        break;
+
+                    case SCH_BUS_WIRE_ENTRY_T:
+                        subgraph->m_bus_entry = item;
+                        break;
+
+                    case SCH_PIN_T:
+                    {
+                        auto pin = static_cast<SCH_PIN*>( item );
+
+                        if( pin->GetType() == PIN_NC )
+                            subgraph->m_no_connect = item;
+
+                        break;
+                    }
+
+                    default:
+                        break;
+                    }
+                }
 
                 if( !subgraph->ResolveDrivers() )
                 {
@@ -1036,6 +1057,58 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     {
                         auto item_conn = item->Connection( subsheet );
                         item_conn->Clone( *connection );
+                    }
+                }
+            }
+        }
+
+        // Promote local nets connected to a globally-labeled bus to global
+
+        if( subgraph->m_bus_entry && connection->IsNet() )
+        {
+            auto be = static_cast<SCH_BUS_WIRE_ENTRY*>( subgraph->m_bus_entry );
+
+            if( be->m_connected_bus_item )
+            {
+                auto bus_conn = be->m_connected_bus_item->Connection( sheet );
+
+                if( bus_conn->Driver() &&
+                    bus_conn->Driver()->Type() == SCH_GLOBAL_LABEL_T )
+                {
+                    wxLogTrace( "CONN", "Net %s connected to global bus %s",
+                                connection->Name(), bus_conn->Name() );
+
+                    std::shared_ptr<SCH_CONNECTION> parent;
+
+                    for( auto member : bus_conn->Members() )
+                    {
+                        if( member->IsNet() &&
+                            member->Name( true ) == connection->Name( true ) )
+                        {
+                            if( member->NetCode() == 0 )
+                                assignNewNetCode( *member );
+
+                            parent = member;
+                        }
+                    }
+
+                    if( parent && ( parent->Name() != connection->Name() ) )
+                    {
+                        wxLogTrace( "CONN", "Promoting %s to %s", connection->Name(),
+                                    parent->Name() );
+
+                        connection->Clone( *parent );
+
+                        for( auto item : subgraph->m_items )
+                        {
+                            auto item_conn = item->Connection( sheet );
+                            item_conn->Clone( *connection );
+                        }
+                    }
+                    else
+                    {
+                        wxLogTrace( "CONN", "Could not find matching parent for %s!",
+                                    connection->Name() );
                     }
                 }
             }
