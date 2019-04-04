@@ -86,3 +86,9 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 }
 
 
+wxPoint SCH_PIN::GetTransformedPosition() const
+{
+    auto t = m_comp->GetTransform();
+    return ( t.TransformCoordinate( GetPosition() ) +
+             m_comp->GetPosition() );
+}

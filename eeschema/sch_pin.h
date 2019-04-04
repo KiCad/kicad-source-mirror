@@ -77,6 +77,9 @@ public:
 
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
+    /// Returns the pin's position in global coordinates
+    wxPoint GetTransformedPosition() const;
+
 
     /*
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,

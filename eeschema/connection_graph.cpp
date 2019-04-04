@@ -180,13 +180,19 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
             wxASSERT( candidates[0] != candidates[1] );
 
+            auto p0 = ( candidates[0]->Type() == SCH_PIN_T ) ?
+                      static_cast<SCH_PIN*>( candidates[0] )->GetTransformedPosition() :
+                      candidates[0]->GetPosition();
+
+            auto p1 = ( candidates[1]->Type() == SCH_PIN_T ) ?
+                      static_cast<SCH_PIN*>( candidates[1] )->GetTransformedPosition() :
+                      candidates[1]->GetPosition();
+
             auto marker = new SCH_MARKER();
             marker->SetTimeStamp( GetNewTimeStamp() );
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( ERCE_DRIVER_CONFLICT,
-                             candidates[0]->GetPosition(), msg,
-                             candidates[1]->GetPosition() );
+            marker->SetData( ERCE_DRIVER_CONFLICT, p0, msg, p1 );
 
             m_sheet.LastScreen()->Append( marker );
 
