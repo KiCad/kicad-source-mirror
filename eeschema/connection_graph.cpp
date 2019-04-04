@@ -97,7 +97,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         }
     }
 
-    if( highest_priority >= 4 )
+    if( highest_priority >= 3 )
         m_strong_driver = true;
 
     if( candidates.size() )
