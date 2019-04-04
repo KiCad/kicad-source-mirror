@@ -143,26 +143,18 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     }
 
     // For power connections, we allow multiple drivers
-    if( highest_priority == 5 && candidates.size() > 1 &&
-        candidates[0]->Type() == SCH_PIN_T )
-    {
-        auto pin = static_cast<SCH_PIN*>( candidates[0] );
+    if( highest_priority >= 4 && candidates.size() > 1 )
+        m_multiple_drivers = true;
 
-        wxASSERT( pin->IsPowerConnection() );
-
-        m_multiple_power_ports = true;
-    }
-
-    if( aCreateMarkers && !m_multiple_power_ports &&
-        candidates.size() > 1 && highest_priority > 1 )
+    if( aCreateMarkers && m_multiple_drivers )
     {
         // First check if all the candidates are actually the same
         bool same = true;
-        auto first = candidates[0]->Connection( m_sheet )->Name();
+        auto first = GetNameForDriver( candidates[0] );
 
         for( unsigned i = 1; i < candidates.size(); i++ )
         {
-            if( candidates[i]->Connection( m_sheet )->Name() != first )
+            if( GetNameForDriver( candidates[i] ) != first )
             {
                 same = false;
                 break;
@@ -247,6 +239,39 @@ std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels()
 
     return labels;
 }
+
+
+wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
+{
+    wxString name;
+
+    switch( aItem->Type() )
+    {
+    case SCH_PIN_T:
+    {
+        auto power_object = static_cast<SCH_PIN*>( aItem );
+        name = power_object->GetDefaultNetName( m_sheet );
+        break;
+    }
+
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    {
+        auto label = static_cast<SCH_TEXT*>( aItem );
+
+        SCH_CONNECTION conn;
+        conn.ConfigureFromLabel( label->GetText() );
+
+        name = conn.Name();
+        break;
+    }
+
+    default:
+        break;
+    }
+
+    return name;
+};
 
 
 void CONNECTION_GRAPH::Reset()
@@ -1032,24 +1057,19 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         // Collapse power nets that are shorted together
 
-        if( subgraph->m_multiple_power_ports )
+        if( subgraph->m_multiple_drivers )
         {
             for( auto obj : subgraph->m_drivers )
             {
                 if( obj == subgraph->m_driver )
                     continue;
 
-                auto power_object = dynamic_cast<SCH_PIN*>( obj );
-
-                // Skip drivers that aren't power ports
-                if( !power_object )
-                    continue;
-
-                auto name = power_object->GetDefaultNetName( subgraph->m_sheet );
-                int code = -1;
+                wxString name = subgraph->GetNameForDriver( obj );
 
                 if( m_net_name_to_code_map.count( name ) == 0 )
                     continue;
+
+                int code = m_net_name_to_code_map.at( name );
 
                 for( auto subgraph_to_update : m_subgraphs )
                 {

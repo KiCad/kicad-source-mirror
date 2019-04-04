@@ -61,7 +61,7 @@ class CONNECTION_SUBGRAPH
 {
 public:
     CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :
-        m_dirty( false ), m_code( -1 ), m_multiple_power_ports( false ),
+        m_dirty( false ), m_code( -1 ), m_multiple_drivers( false ),
         m_strong_driver( false ), m_no_connect( nullptr ), m_bus_entry( nullptr ),
         m_driver( nullptr ), m_frame( aFrame ), m_driver_connection( nullptr )
     {}
@@ -84,12 +84,19 @@ public:
     /// Returns all the bus labels attached to this subgraph (if any)
     std::vector<SCH_ITEM*> GetBusLabels();
 
+    // Returns the candidate net name for a driver
+    wxString GetNameForDriver( SCH_ITEM* aItem );
+
     bool m_dirty;
 
     long m_code;
 
-    /// True if this subgraph contains multiple power ports to join in one net
-    bool m_multiple_power_ports;
+    /**
+     * True if this subgraph contains more than one driver that should be
+     * shorted together in the netlist.  For example, two labels or
+     * two power ports.
+     */
+    bool m_multiple_drivers;
 
     /// True if the driver is "strong": a label or power object
     bool m_strong_driver;
