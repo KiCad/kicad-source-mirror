@@ -315,8 +315,6 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset,
         color = Color;
     else if( m_color != COLOR4D::UNSPECIFIED )
         color = m_color;
-    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
-        color = GetLayerColor( LAYER_BRIGHTENED );
     else
         color = GetLayerColor( m_Layer );
 

@@ -195,8 +195,6 @@ public:
 
     bool Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib = NULL );
 
-    static void ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs );
-
     static void ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
                             PART_LIB* aCacheLib = NULL );
 
@@ -207,7 +205,7 @@ public:
      *
      * @param aComponents collector of components in screen
      */
-    static void UpdateAllPinCaches( const SCH_COLLECTOR& aComponents );
+    static void UpdatePins( const SCH_COLLECTOR& aComponents );
 
     /**
      * Updates the local cache of SCH_PIN_CONNECTION objects for each pin

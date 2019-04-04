@@ -160,15 +160,13 @@ void SCH_BUS_BUS_ENTRY::GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemLis
 
 
 void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, COLOR4D aColor )
+                               GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
     COLOR4D color;
     EDA_RECT* clipbox = aPanel->GetClipBox();
 
     if( aColor != COLOR4D::UNSPECIFIED )
         color = aColor;
-    else if( aPanel->GetScreen() && !aPanel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
-        color = GetLayerColor( LAYER_BRIGHTENED );
     else
         color = GetLayerColor( m_Layer );
 
@@ -177,20 +175,16 @@ void SCH_BUS_ENTRY_BASE::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint&
     GRLine( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
             m_End().x + aOffset.x, m_End().y + aOffset.y, GetPenSize(), color );
 
-
-    // Draw pin targets if part is being dragged
-    bool dragging = aPanel->GetScreen()->GetCurItem() == this && aPanel->IsMouseCaptured();
-
-    if( m_isDanglingStart || dragging )
+    if( m_isDanglingStart )
     {
         GRCircle( clipbox, aDC, m_pos.x + aOffset.x, m_pos.y + aOffset.y,
-                TARGET_BUSENTRY_RADIUS, 0, color );
+                  TARGET_BUSENTRY_RADIUS, 0, color );
     }
 
-    if( m_isDanglingEnd || dragging )
+    if( m_isDanglingEnd )
     {
         GRCircle( clipbox, aDC, m_End().x + aOffset.x, m_End().y + aOffset.y,
-                TARGET_BUSENTRY_RADIUS, 0, color );
+                  TARGET_BUSENTRY_RADIUS, 0, color );
     }
 }
 

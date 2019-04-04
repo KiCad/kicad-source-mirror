@@ -218,38 +218,6 @@ void SCH_FIELD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
     DrawGraphicText( clipbox, aDC, textpos, color, GetFullyQualifiedText(), orient, GetTextSize(),
                      GR_TEXT_HJUSTIFY_CENTER, GR_TEXT_VJUSTIFY_CENTER,
                      lineWidth, IsItalic(), IsBold() );
-
-    // While moving: don't loose visual contact to which component this label belongs.
-    if ( IsWireImage() )
-    {
-        const wxPoint origin = parentComponent->GetPosition();
-        textpos  = GetTextPos() - origin;
-        textpos  = parentComponent->GetScreenCoord( textpos );
-        textpos += parentComponent->GetPosition();
-        GRLine( clipbox, aDC, origin, textpos, 2, DARKGRAY );
-    }
-
-    /* Enable this to draw the bounding box around the text field to validate
-     * the bounding box calculations.
-     */
-#if 0
-
-    // Draw boundary box:
-    GRRect( aPanel->GetClipBox(), aDC, boundaryBox, 0, BROWN );
-
-    // Draw the text anchor point
-
-    /* Calculate the text position, according to the component
-     * orientation/mirror */
-    textpos  = m_Pos - parentComponent->GetPosition();
-    textpos  = parentComponent->GetScreenCoord( textpos );
-    textpos += parentComponent->GetPosition();
-    const int len = 10;
-    GRLine( clipbox, aDC,
-            textpos.x - len, textpos.y, textpos.x + len, textpos.y, 0, BLUE );
-    GRLine( clipbox, aDC,
-            textpos.x, textpos.y - len, textpos.x, textpos.y + len, 0, BLUE );
-#endif
 }
 
 

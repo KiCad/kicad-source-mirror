@@ -436,15 +436,15 @@ void SCH_SHEET::ViewGetLayers( int aLayers[], int& aCount ) const
 void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
                       const wxPoint& aOffset, GR_DRAWMODE aDrawMode, COLOR4D aColor )
 {
-    COLOR4D txtcolor;
-    wxString Text;
-    COLOR4D color;
-    int      name_orientation;
-    wxPoint  pos_sheetname,pos_filename;
-    wxPoint  pos = m_pos + aOffset;
-    int      lineWidth = GetPenSize();
-    int      textWidth;
-    wxSize   textSize;
+    COLOR4D   txtcolor;
+    wxString  Text;
+    COLOR4D   color;
+    int       name_orientation;
+    wxPoint   pos_sheetname,pos_filename;
+    wxPoint   pos = m_pos + aOffset;
+    int       lineWidth = GetPenSize();
+    int       textWidth;
+    wxSize    textSize;
     EDA_RECT* clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( aColor != COLOR4D::UNSPECIFIED )
@@ -497,18 +497,7 @@ void SCH_SHEET::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
 
     /* Draw text : SheetLabel */
     for( SCH_SHEET_PIN& sheetPin : m_pins )
-    {
-        if( !sheetPin.IsMoving() )
-            sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
-    }
-
-
-#if 0
-    // Only for testing purposes, draw the component bounding box
-    EDA_RECT boundingBox = GetBoundingBox();
-    GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
-    GRFilledCircle( aPanel->GetClipBox(), aDC, m_pos.x, m_pos.y, 10, 0, color, color );
-#endif
+        sheetPin.Draw( aPanel, aDC, aOffset, aDrawMode, aColor );
 }
 
 

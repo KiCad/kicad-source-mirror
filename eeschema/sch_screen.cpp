@@ -508,7 +508,7 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
         // Resolving will update the pin caches but we must ensure that this happens
         // even if the libraries don't change.
         else
-            SCH_COMPONENT::UpdateAllPinCaches( c );
+            SCH_COMPONENT::UpdatePins( c );
     }
 }
 

@@ -368,54 +368,6 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 }
 
 
-void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, PART_LIBS* aLibs )
-{
-    // Usually, many components use the same part lib.
-    // to avoid too long calculation time the list of components is grouped
-    // and once the lib part is found for one member of a group, it is also
-    // set for all other members of this group
-    std::vector<SCH_COMPONENT*> cmp_list;
-
-    // build the cmp list.
-    for( int i = 0;  i < aComponents.GetCount();  ++i )
-    {
-        SCH_COMPONENT* cmp = dynamic_cast<SCH_COMPONENT*>( aComponents[i] );
-        wxASSERT( cmp );
-
-        if( cmp )   // cmp == NULL should not occur.
-            cmp_list.push_back( cmp );
-    }
-
-    // sort it by lib part. Cmp will be grouped by same lib part.
-    std::sort( cmp_list.begin(), cmp_list.end(), sort_by_libid );
-
-    LIB_ID curr_libid;
-
-    for( unsigned ii = 0; ii < cmp_list.size (); ++ii )
-    {
-        SCH_COMPONENT* cmp = cmp_list[ii];
-        curr_libid = cmp->m_lib_id;
-        cmp->Resolve( aLibs );
-        cmp->UpdatePins();
-
-        // Propagate the m_part pointer to other members using the same lib_id
-        for( unsigned jj = ii+1; jj < cmp_list.size (); ++jj )
-        {
-            SCH_COMPONENT* next_cmp = cmp_list[jj];
-
-            if( curr_libid != next_cmp->m_lib_id )
-                break;
-
-            next_cmp->m_part = cmp->m_part;
-
-            next_cmp->UpdatePins();
-
-            ii = jj;
-        }
-    }
-}
-
-
 void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
                                 PART_LIB* aCacheLib )
 {
@@ -460,7 +412,7 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
 }
 
 
-void SCH_COMPONENT::UpdateAllPinCaches( const SCH_COLLECTOR& aComponents )
+void SCH_COMPONENT::UpdatePins( const SCH_COLLECTOR& aComponents )
 {
     for( int i = 0;  i < aComponents.GetCount();  ++i )
     {
@@ -476,8 +428,10 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 {
     if( PART_SPTR part = m_part.lock() )
     {
+        std::set<LIB_PIN*> stalePins;
+
         for( auto& it : m_pins )
-            it.second.ClearFlags( BUSY );
+            stalePins.insert( it.first );
 
         for( LIB_PIN* libPin = part->GetNextPin(); libPin; libPin = part->GetNextPin( libPin ) )
         {
@@ -495,14 +449,11 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
             if( aSheet )
                 m_pins.at( libPin ).InitializeConnection( *aSheet );
 
-            m_pins.at( libPin ).SetFlags( BUSY );
+            stalePins.erase( libPin );
         }
 
-        for( auto& it : m_pins )
-        {
-            if( !( it.second.GetFlags() & BUSY ) )
-                m_pins.erase( it.first );
-        }
+        for( auto& stalePin : stalePins )
+            m_pins.erase( stalePin );
     }
 }
 
@@ -564,8 +515,7 @@ int SCH_COMPONENT::GetUnitCount() const
 
 
 void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset,
-                          GR_DRAWMODE aDrawMode, COLOR4D aColor,
-                          bool aDrawPinText )
+                          GR_DRAWMODE aDrawMode, COLOR4D aColor, bool aDrawPinText )
 {
     auto opts = PART_DRAW_OPTIONS::Default();
     opts.draw_mode = aDrawMode;
@@ -599,7 +549,7 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
 
     SCH_FIELD* field = GetField( REFERENCE );
 
-    if( field->IsVisible() && !field->IsMoving() )
+    if( field->IsVisible() )
     {
         field->Draw( aPanel, aDC, aOffset, aDrawMode );
     }
@@ -607,33 +557,8 @@ void SCH_COMPONENT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOff
     for( int ii = VALUE; ii < GetFieldCount(); ii++ )
     {
         field = GetField( ii );
-
-        if( field->IsMoving() )
-            continue;
-
         field->Draw( aPanel, aDC, aOffset, aDrawMode );
     }
-
-#if 0
-    // Only for testing purposes, draw the component bounding box
-    {
-        EDA_RECT boundingBox = GetBoundingBox();
-        GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
-#if 1
-        if( GetField( REFERENCE )->IsVisible() )
-        {
-            boundingBox = GetField( REFERENCE )->GetBoundingBox();
-            GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
-        }
-
-        if( GetField( VALUE )->IsVisible() )
-        {
-            boundingBox = GetField( VALUE )->GetBoundingBox();
-            GRRect( aPanel->GetClipBox(), aDC, boundingBox, 0, BROWN );
-        }
-#endif
-    }
-#endif
 }
 
 

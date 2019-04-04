@@ -316,8 +316,6 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     if( Color != COLOR4D::UNSPECIFIED )
         color = Color;
-    else if( panel->GetScreen() && !panel->GetScreen()->m_IsPrinting && GetState( BRIGHTENED ) )
-        color = GetLayerColor( LAYER_BRIGHTENED );
     else
         color = GetLayerColor( m_Layer );
 
@@ -334,14 +332,6 @@ void SCH_TEXT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& aOffset,
 
     if( m_isDangling && panel)
         DrawDanglingSymbol( panel, DC, GetTextPos() + aOffset, color );
-
-    // Enable these line to draw the bounding box (debug tests purposes only)
-#if DRAW_BBOX
-    {
-        EDA_RECT BoundaryBox = GetBoundingBox();
-        GRRect( clipbox, DC, BoundaryBox, 0, BROWN );
-    }
-#endif
 }
 
 
