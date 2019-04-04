@@ -3584,15 +3584,7 @@ void SCH_LEGACY_PLUGIN_CACHE::saveSymbol( LIB_PART* aSymbol,
 
     // Save data
     aFormatter->Print( 0, "DEF" );
-
-    if( value.IsVisible() )
-    {
-        aFormatter->Print( 0, " %s", TO_UTF8( value.GetText() ) );
-    }
-    else
-    {
-        aFormatter->Print( 0, " ~%s", TO_UTF8( value.GetText() ) );
-    }
+    aFormatter->Print( 0, " %s", TO_UTF8( value.GetText() ) );
 
     LIB_FIELD& reference = aSymbol->GetReferenceField();
 
