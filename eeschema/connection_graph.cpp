@@ -812,6 +812,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             if( candidate == subgraph || !candidate->m_driver || candidate->m_strong_driver )
                 continue;
 
+            if( candidate->m_sheet != subgraph->m_sheet )
+                continue;
+
             auto c_conn = candidate->m_driver_connection;
             auto check_name = c_conn->Name();
 
