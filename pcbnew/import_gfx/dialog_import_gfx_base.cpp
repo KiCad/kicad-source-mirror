@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Mar 20 2019)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -111,7 +111,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	bSizerPosSettings->Add( m_DxfPcbPositionUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 
-	bSizerUserPos->Add( bSizerPosSettings, 1, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxEXPAND|wxTOP, 5 );
+	bSizerUserPos->Add( bSizerPosSettings, 1, wxBOTTOM|wxEXPAND|wxTOP, 5 );
 
 
 	bSizerOptions->Add( bSizerUserPos, 0, wxEXPAND, 5 );
@@ -151,7 +151,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerImportSettings->Add( m_staticTextLineWidth, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_textCtrlLineWidth = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
-	fgSizerImportSettings->Add( m_textCtrlLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerImportSettings->Add( m_textCtrlLineWidth, 0, wxEXPAND, 5 );
 
 	wxString m_choiceUnitLineWidthChoices[] = { _("mm"), _("mils"), _("inches") };
 	int m_choiceUnitLineWidthNChoices = sizeof( m_choiceUnitLineWidthChoices ) / sizeof( wxString );
@@ -164,7 +164,7 @@ DIALOG_IMPORT_GFX_BASE::DIALOG_IMPORT_GFX_BASE( wxWindow* parent, wxWindowID id,
 	fgSizerImportSettings->Add( m_staticTextBrdlayer, 0, wxALIGN_CENTER_VERTICAL, 5 );
 
 	m_SelLayerBox = new PCB_LAYER_BOX_SELECTOR( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, NULL, 0 );
-	fgSizerImportSettings->Add( m_SelLayerBox, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND, 5 );
+	fgSizerImportSettings->Add( m_SelLayerBox, 0, wxEXPAND, 5 );
 
 
 	fgSizerImportSettings->Add( 0, 0, 0, 0, 5 );
