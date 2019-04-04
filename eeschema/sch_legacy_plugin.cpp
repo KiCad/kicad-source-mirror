@@ -3638,15 +3638,7 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol,
 
     // Save data
     aFormatter.Print( 0, "DEF" );
-
-    if( value.IsVisible() )
-    {
-        aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
-    }
-    else
-    {
-        aFormatter.Print( 0, " ~%s", TO_UTF8( value.GetText() ) );
-    }
+    aFormatter.Print( 0, " %s", TO_UTF8( value.GetText() ) );
 
     LIB_FIELD& reference = aSymbol->GetReferenceField();
 
@@ -3660,11 +3652,11 @@ void SCH_LEGACY_PLUGIN_CACHE::SaveSymbol( LIB_PART* aSymbol,
     }
 
     aFormatter.Print( 0, " %d %d %c %c %d %c %c\n",
-                       0, aSymbol->GetPinNameOffset(),
-                       aSymbol->ShowPinNumbers() ? 'Y' : 'N',
-                       aSymbol->ShowPinNames() ? 'Y' : 'N',
-                       aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
-                       aSymbol->IsPower() ? 'P' : 'N' );
+                      0, aSymbol->GetPinNameOffset(),
+                      aSymbol->ShowPinNumbers() ? 'Y' : 'N',
+                      aSymbol->ShowPinNames() ? 'Y' : 'N',
+                      aSymbol->GetUnitCount(), aSymbol->UnitsLocked() ? 'L' : 'F',
+                      aSymbol->IsPower() ? 'P' : 'N' );
 
     timestamp_t dateModified = aSymbol->GetDateLastEdition();
 
