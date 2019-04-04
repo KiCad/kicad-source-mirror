@@ -606,6 +606,9 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
     components.push_back( &copy );
     InvokeDialogUpdateFields( GetParent(), components, false );
 
+    wxGridTableMessage clear( m_fields, wxGRIDTABLE_NOTIFY_ROWS_DELETED, 0, m_fields->size() );
+    m_grid->ProcessTableMessage( clear );
+
     // Copy fields from the component copy to the dialog buffer
     m_fields->clear();
     std::set<wxString> defined;
@@ -629,7 +632,8 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::UpdateFieldsFromLibrary( wxCommandEvent
         }
     }
 
-    m_grid->ForceRefresh();
+    wxGridTableMessage refresh( m_fields, wxGRIDTABLE_NOTIFY_ROWS_APPENDED, m_fields->size() );
+    m_grid->ProcessTableMessage( refresh );
 }
 
 
