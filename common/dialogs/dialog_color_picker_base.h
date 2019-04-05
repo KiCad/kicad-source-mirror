@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Mar 28 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_COLOR_PICKER_BASE_H__
-#define __DIALOG_COLOR_PICKER_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -41,7 +40,7 @@
 class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxNotebook* m_notebook;
 		wxPanel* m_panelFreeColors;
@@ -72,7 +71,7 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_sdbSizer;
 		wxButton* m_sdbSizerOK;
 		wxButton* m_sdbSizerCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void onRGBMouseClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onRGBMouseDrag( wxMouseEvent& event ) { event.Skip(); }
@@ -85,13 +84,12 @@ class DIALOG_COLOR_PICKER_BASE : public DIALOG_SHIM
 		virtual void OnChangeEditSat( wxSpinEvent& event ) { event.Skip(); }
 		virtual void OnChangeBrightness( wxScrollEvent& event ) { event.Skip(); }
 		virtual void OnChangeAlpha( wxScrollEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_COLOR_PICKER_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Color Picker"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_COLOR_PICKER_BASE();
-	
+
 };
 
-#endif //__DIALOG_COLOR_PICKER_BASE_H__
