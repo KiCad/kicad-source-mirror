@@ -47,6 +47,7 @@ public:
     UNIT_BINDER             m_uviaMinSize;
     UNIT_BINDER             m_uviaMinDrill;
     UNIT_BINDER             m_holeToHoleMin;
+    UNIT_BINDER             m_edgeClearance;
 
 public:
     PANEL_SETUP_FEATURE_CONSTRAINTS( PAGED_DIALOG* aParent, PCB_EDIT_FRAME* aFrame );

@@ -1,4 +1,4 @@
-update=22/05/2015 07:44:53
+update=05/04/2019 20:44:53
 version=1
 last_client=kicad
 [general]
@@ -24,6 +24,7 @@ SolderMaskMinWidth=0.000000000000
 DrawSegmentWidth=0.200000000000
 BoardOutlineThickness=0.100000000000
 ModuleOutlineThickness=0.150000000000
+CopperEdgeClearance=0.000000000000
 [cvpcb]
 version=1
 NetIExt=net

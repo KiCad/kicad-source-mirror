@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -141,6 +141,26 @@ PANEL_SETUP_FEATURE_CONSTRAINTS_BASE::PANEL_SETUP_FEATURE_CONSTRAINTS_BASE( wxWi
 	m_HoleToHoleUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_HoleToHoleUnits->Wrap( -1 );
 	fgFeatureConstraints->Add( m_HoleToHoleUnits, 0, wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxRIGHT|wxTOP, 5 );
+	
+	
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	
+	fgFeatureConstraints->Add( 0, 0, 1, wxEXPAND, 5 );
+	
+	m_EdgeClearanceLabel = new wxStaticText( this, wxID_ANY, _("Copper edge clearance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeClearanceLabel->Wrap( -1 );
+	fgFeatureConstraints->Add( m_EdgeClearanceLabel, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+	
+	m_EdgeClearanceCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgFeatureConstraints->Add( m_EdgeClearanceCtrl, 0, wxALL|wxEXPAND, 5 );
+	
+	m_EdgeClearanceUnits = new wxStaticText( this, wxID_ANY, _("mm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_EdgeClearanceUnits->Wrap( -1 );
+	fgFeatureConstraints->Add( m_EdgeClearanceUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
 	
 	
 	sbFeatureConstraints->Add( fgFeatureConstraints, 1, wxEXPAND|wxTOP|wxLEFT, 5 );

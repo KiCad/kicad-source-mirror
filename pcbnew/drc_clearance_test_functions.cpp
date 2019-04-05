@@ -737,10 +737,10 @@ bool DRC::doTrackDrc( TRACK* aRefSeg, TRACK* aStart, bool aTestPads, bool aTestZ
     {
         SEG test_seg( aRefSeg->GetStart(), aRefSeg->GetEnd() );
 
-        // the minimum distance = clearance plus half the reference track
-        // width.  Board edges do not have width or clearance values, so we
-        // look for simple crossing.
-        SEG::ecoord w_dist = aRefSeg->GetClearance() + aRefSeg->GetWidth() / 2;
+        int clearance = std::max( aRefSeg->GetClearance(), dsnSettings.m_CopperEdgeClearance );
+
+        // the minimum distance = clearance plus half the reference track width
+        SEG::ecoord w_dist = clearance + aRefSeg->GetWidth() / 2;
         w_dist *= w_dist;
 
         for( auto it = m_board_outlines.IterateSegmentsWithHoles(); it; it++ )

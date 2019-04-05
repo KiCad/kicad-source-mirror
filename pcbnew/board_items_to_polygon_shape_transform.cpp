@@ -123,7 +123,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 
         switch( item->Type() )
         {
-        case PCB_LINE_T:    // should not exist on copper layers
+        case PCB_LINE_T:
             ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
                 aOutlines, 0, segcountforcircle, correctionFactor );
             break;

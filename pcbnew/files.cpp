@@ -384,6 +384,48 @@ IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl )
 }
 
 
+int PCB_EDIT_FRAME::inferLegacyEdgeClearance( BOARD* aBoard )
+{
+    PCB_LAYER_COLLECTOR collector;
+
+    collector.SetLayerId( Edge_Cuts );
+    collector.Collect( aBoard, GENERAL_COLLECTOR::AllBoardItems );
+
+    int  edgeWidth = -1;
+    bool mixed = false;
+
+    for( int i = 0; i < collector.GetCount(); i++ )
+    {
+        if( collector[i]->Type() == PCB_LINE_T )
+        {
+            int itemWidth = static_cast<DRAWSEGMENT*>( collector[i] )->GetWidth();
+
+            if( edgeWidth != -1 && edgeWidth != itemWidth )
+            {
+                mixed = true;
+                edgeWidth = std::max( edgeWidth, itemWidth );
+            }
+            else
+            {
+                edgeWidth = itemWidth;
+            }
+        }
+    }
+
+    if( mixed )
+    {
+        // If they had different widths then we can't ensure that fills will be the same.
+        wxMessageBox( _( "If the zones on this board are refilled the Copper Edge Clearance\n"
+                         "setting will be used (see Board Setup > Design Rules).  This may\n"
+                         "result in different fills from previous Kicad versions which used\n"
+                         "the line thickness of the board boundary on the Edge Cuts layer." ),
+                      _( "Edge Clearance Warning" ), wxOK|wxICON_WARNING, this );
+    }
+
+    return std::max( 0, edgeWidth / 2 );
+}
+
+
 bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl )
 {
     // This is for python:
@@ -518,6 +560,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         std::copy( configBds.m_TextItalic,  configBds.m_TextItalic + 4,  bds.m_TextItalic );
         std::copy( configBds.m_TextUpright, configBds.m_TextUpright + 4, bds.m_TextUpright );
         bds.m_DiffPairDimensionsList            = configBds.m_DiffPairDimensionsList;
+        bds.m_CopperEdgeClearance               = configBds.m_CopperEdgeClearance;
 
         bds.SetElementVisibility( LAYER_GRID,     configBds.IsElementVisible( LAYER_GRID ) );
         bds.SetElementVisibility( LAYER_RATSNEST, configBds.IsElementVisible( LAYER_RATSNEST ) );
@@ -527,6 +570,11 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         // we should not ask PLUGINs to do these items:
         loadedBoard->BuildListOfNets();
         loadedBoard->SynchronizeNetsAndNetClasses();
+
+        // If this is a legacy board then we set the copper edge clearance to 1/2 the edge-cut
+        // line width (which was a legacy kludge for implementing edge clearances).
+        if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
+            bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
 
         GetScreen()->ClrModify();
 

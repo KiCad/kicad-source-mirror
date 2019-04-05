@@ -489,11 +489,12 @@ BOARD_DESIGN_SETTINGS::BOARD_DESIGN_SETTINGS() :
     m_customDiffPair.m_Gap = Millimeter2iu( DEFAULT_CUSTOMDPAIRGAP );
     m_customDiffPair.m_ViaGap = Millimeter2iu( DEFAULT_CUSTOMDPAIRVIAGAP );
 
-    m_TrackMinWidth     = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
-    m_ViasMinSize       = Millimeter2iu( DEFAULT_VIASMINSIZE );
-    m_ViasMinDrill      = Millimeter2iu( DEFAULT_VIASMINDRILL );
-    m_MicroViasMinSize  = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
-    m_MicroViasMinDrill = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
+    m_TrackMinWidth       = Millimeter2iu( DEFAULT_TRACKMINWIDTH );
+    m_ViasMinSize         = Millimeter2iu( DEFAULT_VIASMINSIZE );
+    m_ViasMinDrill        = Millimeter2iu( DEFAULT_VIASMINDRILL );
+    m_MicroViasMinSize    = Millimeter2iu( DEFAULT_MICROVIASMINSIZE );
+    m_MicroViasMinDrill   = Millimeter2iu( DEFAULT_MICROVIASMINDRILL );
+    m_CopperEdgeClearance = Millimeter2iu( DEFAULT_COPPEREDGECLEARANCE );
 
     // Global mask margins:
     m_SolderMaskMargin  = Millimeter2iu( DEFAULT_SOLDERMASK_CLEARANCE );
@@ -564,7 +565,14 @@ void BOARD_DESIGN_SETTINGS::AppendConfigs( BOARD* aBoard, PARAM_CFG_ARRAY* aResu
 
     aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "MinHoleToHole" ),
           &m_HoleToHoleMin,
-          Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), 0, Millimeter2iu( 10.0 ),
+          Millimeter2iu( DEFAULT_HOLETOHOLEMIN ), Millimeter2iu( 0.0 ), Millimeter2iu( 10.0 ),
+          nullptr, MM_PER_IU ) );
+
+    // Note: a clearance of -0.01 is a flag indicating we should use the legacy (pre-6.0) method
+    // based on the edge cut thicknesses.
+    aResult->push_back( new PARAM_CFG_INT_WITH_SCALE( wxT( "CopperEdgeClearance" ),
+          &m_CopperEdgeClearance,
+          Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ), Millimeter2iu( -0.01 ), Millimeter2iu( 25.0 ),
           nullptr, MM_PER_IU ) );
 
     aResult->push_back( new PARAM_CFG_TRACKWIDTHS( &m_TrackWidthList ) );
@@ -847,6 +855,12 @@ void BOARD_DESIGN_SETTINGS::SetDiffPairIndex( unsigned aIndex )
 void BOARD_DESIGN_SETTINGS::SetMinHoleSeparation( int aDistance )
 {
     m_HoleToHoleMin = aDistance;
+}
+
+
+void BOARD_DESIGN_SETTINGS::SetCopperEdgeClearance( int aDistance )
+{
+    m_CopperEdgeClearance = aDistance;
 }
 
 

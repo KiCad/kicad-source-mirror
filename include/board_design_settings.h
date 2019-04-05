@@ -66,6 +66,10 @@
 #define DEFAULT_MICROVIASMINDRILL     0.1     // micro vias (not vias) min drill diameter
 #define DEFAULT_HOLETOHOLEMIN         0.25    // separation between drilled hole edges
 
+#define DEFAULT_COPPEREDGECLEARANCE   0.01    // clearance between copper items and edge cuts
+#define LEGACY_COPPEREDGECLEARANCE   -0.01    // A flag to indicate the legacy method (based
+                                              // on edge cut line thicknesses) should be used.
+
 /**
  * Struct VIA_DIMENSION
  * is a small helper container to handle a stock of specific vias each with
@@ -189,6 +193,7 @@ public:
     int        m_ViasMinDrill;              ///< vias (not micro vias) min drill diameter
     int        m_MicroViasMinSize;          ///< micro vias (not vias) min diameter
     int        m_MicroViasMinDrill;         ///< micro vias (not vias) min drill diameter
+    int        m_CopperEdgeClearance;
 
     // Global mask margins:
     int        m_SolderMaskMargin;          ///< Solder mask margin
@@ -630,6 +635,12 @@ public:
      * hole-to-hole separation checking.
      */
     void SetMinHoleSeparation( int aDistance );
+
+    /**
+     * Function SetCopperEdgeClearance
+     * @param aValue The minimum distance between copper items and board edges.
+     */
+    void SetCopperEdgeClearance( int aDistance );
 
     /**
      * Function SetRequireCourtyardDefinitions

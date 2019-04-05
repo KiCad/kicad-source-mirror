@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec 30 2017)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -55,6 +55,9 @@ class PANEL_SETUP_FEATURE_CONSTRAINTS_BASE : public wxPanel
 		wxStaticText* m_HoleToHoleTitle;
 		wxTextCtrl* m_SetHoleToHoleCtrl;
 		wxStaticText* m_HoleToHoleUnits;
+		wxStaticText* m_EdgeClearanceLabel;
+		wxTextCtrl* m_EdgeClearanceCtrl;
+		wxStaticText* m_EdgeClearanceUnits;
 	
 	public:
 		

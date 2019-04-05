@@ -332,15 +332,15 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
     aFeatures.RemoveAllContours();
 
-    int outline_half_thickness = aZone->GetMinThickness() / 2;
+    int zone_clearance = aZone->GetClearance();
+    int edgeClearance = m_board->GetDesignSettings().m_CopperEdgeClearance;
+    int zone_to_edgecut_clearance = std::max( aZone->GetZoneClearance(), edgeClearance );
 
     // When removing holes, the holes must be expanded by outline_half_thickness
     // to take in account the thickness of the zone outlines
-    int zone_clearance = aZone->GetClearance() + outline_half_thickness;
-
-    // When holes are created by non copper items (edge cut items), use only
-    // the m_ZoneClearance parameter (zone clearance with no netclass clearance)
-    int zone_to_edgecut_clearance = aZone->GetZoneClearance() + outline_half_thickness;
+    int outline_half_thickness = aZone->GetMinThickness() / 2;
+    zone_clearance += outline_half_thickness;
+    zone_to_edgecut_clearance += outline_half_thickness;
 
     /* store holes (i.e. tracks and pads areas as polygons outlines)
      * in a polygon list
@@ -531,12 +531,8 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
             // the netclass value, because we do not have a copper item
             zclearance = zone_to_edgecut_clearance;
 
-#if 0
-// 6.0 TODO: we're leaving this off for 5.1 so that people can continue to use the board
-// edge width as a hack for edge clearance.
             // edge cuts by definition don't have a width
             ignoreLineWidth = true;
-#endif
         }
 
         switch( aItem->Type() )
