@@ -117,17 +117,18 @@ void SCH_ITEM::AddConnectionTo( SCH_ITEM* aItem )
 }
 
 
-void SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
+SCH_CONNECTION*  SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
 {
     if( Connection( aSheet ) )
     {
         Connection( aSheet )->Reset();
-        return;
+        return Connection( aSheet );
     }
 
     auto connection = new SCH_CONNECTION( this );
     connection->SetSheet( aSheet );
     m_connection_map.insert( std::make_pair( aSheet, connection ) );
+    return connection;
 }
 
 

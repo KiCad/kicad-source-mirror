@@ -343,7 +343,7 @@ public:
      *
      * @param aPath is the sheet path to initialize
      */
-    void InitializeConnection( const SCH_SHEET_PATH& aPath );
+    SCH_CONNECTION* InitializeConnection( const SCH_SHEET_PATH& aPath );
 
     /**
      * Returns true if this item should propagate connection info to aItem
