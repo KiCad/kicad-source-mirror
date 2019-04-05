@@ -244,7 +244,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
                       wxYES_NO | wxICON_WARNING );
         dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-        if( dlg.ShowModal() == wxYES )
+        int ret = dlg.ShowModal();
+
+        if( ret == wxID_OK || ret == wxID_YES )
             m_settings.m_FillMode = ZFM_POLYGONS;
     }
 
