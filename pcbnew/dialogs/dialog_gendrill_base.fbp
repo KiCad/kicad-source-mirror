@@ -14,6 +14,7 @@
         <property name="file">dialog_gendrill_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
+        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">dialog_gendrill_base</property>
@@ -25,6 +26,7 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
+        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -45,7 +47,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_GENDRILL_BASE</property>
             <property name="pos"></property>
-            <property name="size">568,514</property>
+            <property name="size">-1,-1</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Generate Drill Files</property>
@@ -131,7 +133,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">0</property>
-                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxBOTTOM|wxLEFT|wxTOP</property>
+                            <property name="flag">wxALIGN_CENTER_VERTICAL|wxLEFT</property>
                             <property name="proportion">1</property>
                             <object class="wxTextCtrl" expanded="1">
                                 <property name="BottomDockable">1</property>
@@ -195,7 +197,7 @@
                         </object>
                         <object class="sizeritem" expanded="1">
                             <property name="border">7</property>
-                            <property name="flag">wxRIGHT</property>
+                            <property name="flag">wxLEFT|wxRIGHT</property>
                             <property name="proportion">0</property>
                             <object class="wxBitmapButton" expanded="1">
                                 <property name="BottomDockable">1</property>
