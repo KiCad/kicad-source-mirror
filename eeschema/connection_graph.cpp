@@ -369,11 +369,8 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             {
                 SCH_PIN* pin = &it.second;
 
-                // TODO(JE) use cached location from m_Pins
-                // Now needs to be the other way around: move m_Pins to SCH_PINs
-                auto pin_pos = pin->GetLibPin()->GetPosition();
-                auto pos = component->GetTransform().TransformCoordinate( pin_pos ) +
-                           component->GetPosition();
+                wxPoint pos = component->GetTransform().TransformCoordinate( pin->GetPosition() )
+                              + component->GetPosition();
 
                 // because calling the first time is not thread-safe
                 pin->GetDefaultNetName( aSheet );
@@ -1833,10 +1830,14 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             }
         }
 
-        // TODO: Should it be an error to have a NC item but no pin?
+        // TODO(JE): Should it be an error to have a NC item but no pin?
+        // (JEY) Yes, I think it should
         if( pin && has_invalid_items )
         {
-            auto pos = pin->GetPosition();
+            SCH_COMPONENT* comp = pin->GetParentComponent();
+            wxPoint pos = comp->GetTransform().TransformCoordinate( pin->GetPosition() )
+                          + comp->GetPosition();
+
             msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
                         GetChars( pin->GetName() ),
                         GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
@@ -1880,7 +1881,10 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
 
         if( pin && !has_other_connections && pin->GetType() != PIN_NC )
         {
-            auto pos = pin->GetPosition();
+            SCH_COMPONENT* comp = pin->GetParentComponent();
+            wxPoint pos = comp->GetTransform().TransformCoordinate( pin->GetPosition() )
+                          + comp->GetPosition();
+
             msg.Printf( _( "Pin %s of component %s is unconnected." ),
                         GetChars( pin->GetName() ),
                         GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
