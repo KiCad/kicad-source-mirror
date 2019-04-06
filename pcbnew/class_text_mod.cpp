@@ -143,6 +143,16 @@ void TEXTE_MODULE::Flip( const wxPoint& aCentre )
     SetLayer( FlipLayer( GetLayer() ) );
     SetMirrored( IsBackLayer( GetLayer() ) );
     SetLocalCoord();
+
+    // adjust justified text for mirroring
+    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    {
+        if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
+            m_Pos0.x -= GetTextBox().GetWidth();
+        else
+            m_Pos0.x += GetTextBox().GetWidth();
+        SetDrawCoord();
+    }
 }
 
 bool TEXTE_MODULE::IsParentFlipped() const
