@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jul 11 2018)
+// C++ code generated with wxFormBuilder (version Feb 10 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_RESCUE_EACH_BASE_H__
-#define __DIALOG_RESCUE_EACH_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -37,7 +36,7 @@
 class DIALOG_RESCUE_EACH_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxHtmlWindow* m_htmlPrompt;
 		wxStaticText* m_titleSymbols;
@@ -54,19 +53,18 @@ class DIALOG_RESCUE_EACH_BASE : public DIALOG_SHIM
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void OnDialogResize( wxSizeEvent& event ) { event.Skip(); }
 		virtual void OnConflictSelect( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnNeverShowClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnCancelClick( wxCommandEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
-		DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Rescue Helper"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER ); 
+
+		DIALOG_RESCUE_EACH_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Project Rescue Helper"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
 		~DIALOG_RESCUE_EACH_BASE();
-	
+
 };
 
-#endif //__DIALOG_RESCUE_EACH_BASE_H__
