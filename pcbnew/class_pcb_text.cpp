@@ -175,6 +175,15 @@ void TEXTE_PCB::Flip( const wxPoint& aCentre )
 
     SetLayer( FlipLayer( GetLayer(), copperLayerCount ) );
     SetMirrored( !IsMirrored() );
+
+    // adjust justified text for mirroring
+    if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+    {
+        if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
+            SetTextX( GetTextPos().x - GetTextBox().GetWidth() );
+        else
+            SetTextX( GetTextPos().x + GetTextBox().GetWidth() );
+    }
 }
 
 
