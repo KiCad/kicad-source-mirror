@@ -57,6 +57,10 @@
 #include <symbol_lib_table.h>
 #include <tool/common_tools.h>
 
+#include <thread>
+#include <algorithm>
+#include <future>
+
 // TODO(JE) Debugging only
 #include <profile.h>
 
@@ -1562,8 +1566,36 @@ void SCH_SCREENS::UpdateSymbolLinks( bool aForce )
 
 void SCH_SCREENS::TestDanglingEnds()
 {
+    std::vector<SCH_SCREEN*> screens;
     for( SCH_SCREEN* screen = GetFirst(); screen; screen = GetNext() )
-        screen->TestDanglingEnds();
+        screens.push_back( screen );
+
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+            screens.size() );
+
+    std::atomic<size_t> nextScreen( 0 );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+    auto update_lambda = [&screens, &nextScreen]() -> size_t
+    {
+        for( auto i = nextScreen++; i < screens.size(); i = nextScreen++ )
+            screens[i]->TestDanglingEnds();
+
+        return 1;
+    };
+
+    if( parallelThreadCount == 1 )
+        update_lambda();
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, update_lambda );
+
+        // Finalize the threads
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii].wait();
+    }
+
 }
 
 

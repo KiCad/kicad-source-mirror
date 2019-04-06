@@ -20,6 +20,8 @@
 
 #include <list>
 #include <thread>
+#include <algorithm>
+#include <future>
 #include <unordered_map>
 #include <profile.h>
 
@@ -400,15 +402,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         else
         {
             m_items.insert( item );
-
-            if( !item->Connection( aSheet ) )
-            {
-                item->InitializeConnection( aSheet );
-            }
-
-            auto conn = item->Connection( aSheet );
-
-            conn->Reset();
+            auto conn = item->InitializeConnection( aSheet );
 
             // Set bus/net property here so that the propagation code uses it
             switch( item->Type() )
@@ -445,8 +439,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         auto connection_vec = it.second;
         SCH_ITEM* junction = nullptr;
 
-        for( SCH_ITEM* connected_item : connection_vec )
+        for( auto primary_it = connection_vec.begin(); primary_it != connection_vec.end(); primary_it++ )
         {
+            auto connected_item = *primary_it;
+
             // Look for junctions.  For points that have a junction, we want all
             // items to connect to the junction but not to each other.
 
@@ -503,8 +499,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 }
             }
 
-            for( auto test_item : connection_vec )
+            for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
             {
+                auto test_item = *test_it;
+
                 if( !junction && test_item->Type() == SCH_JUNCTION_T )
                 {
                     junction = test_item;
@@ -550,6 +548,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 {
     PROF_COUNTER phase2;
 
+    std::vector<CONNECTION_SUBGRAPH*> driver_subgraphs;
     // Recache all bus aliases for later use
 
     SCH_SHEET_LIST all_sheets( g_RootSheet );
@@ -585,14 +584,24 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 connection->SetSubgraphCode( subgraph->m_code );
 
-                std::list<SCH_ITEM*> members( item->ConnectedItems().begin(),
-                                              item->ConnectedItems().end() );
+                std::list<SCH_ITEM*> members;
+
+                auto get_items = [ &sheet ] ( SCH_ITEM* aItem ) -> bool
+                    {
+                      auto* conn = aItem->Connection( sheet );
+
+                      if( !conn )
+                          conn = aItem->InitializeConnection( sheet );
+
+                      return ( conn->SubgraphCode() == 0 );
+                    };
+
+                std::copy_if( item->ConnectedItems().begin(),
+                              item->ConnectedItems().end(),
+                              std::back_inserter( members ), get_items );
 
                 for( auto connected_item : members )
                 {
-                    if( !connected_item->Connection( sheet ) )
-                        connected_item->InitializeConnection( sheet );
-
                     if( connected_item->Type() == SCH_NO_CONNECT_T )
                         subgraph->m_no_connect = connected_item;
 
@@ -608,9 +617,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         if( connected_conn->IsDriver() )
                             subgraph->m_drivers.push_back( connected_item );
 
-                        members.insert( members.end(),
-                                        connected_item->ConnectedItems().begin(),
-                                        connected_item->ConnectedItems().end() );
+                        std::copy_if( connected_item->ConnectedItems().begin(),
+                                      connected_item->ConnectedItems().end(),
+                                      std::back_inserter( members ), get_items );
                     }
                 }
 
@@ -642,113 +651,122 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Resolve drivers for subgraphs and propagate connectivity info
 
+    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+            ( m_subgraphs.size() + 7 ) / 8 );
+
     std::atomic<size_t> nextSubgraph( 0 );
-    std::atomic<size_t> threadsFinished( 0 );
-    size_t parallelThreadCount = std::max<size_t>( std::thread::hardware_concurrency(), 2 );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
+    std::vector<CONNECTION_SUBGRAPH*> dirty_graphs;
 
-    for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( dirty_graphs ),
+            [] ( CONNECTION_SUBGRAPH* aNet ) { return aNet->m_dirty; } );
+
+    auto update_lambda = [&nextSubgraph, &dirty_graphs]() -> size_t
     {
-        auto t = std::thread( [&]()
+        for( size_t subgraphId = nextSubgraph++; subgraphId < dirty_graphs.size(); subgraphId = nextSubgraph++ )
         {
-            for( size_t subgraphId = nextSubgraph.fetch_add( 1 );
-                        subgraphId < static_cast<size_t>( m_subgraphs.size() );
-                        subgraphId = nextSubgraph.fetch_add( 1 ) )
+            auto subgraph = dirty_graphs[subgraphId];
+
+            if( !subgraph->m_dirty )
+                continue;
+
+            // Special processing for some items
+            for( auto item : subgraph->m_items )
             {
-                auto subgraph = m_subgraphs[subgraphId];
-
-                if( !subgraph->m_dirty )
-                    continue;
-
-                // Special processing for some items
-                for( auto item : subgraph->m_items )
+                switch( item->Type() )
                 {
-                    switch( item->Type() )
-                    {
-                    case SCH_NO_CONNECT_T:
+                case SCH_NO_CONNECT_T:
+                    subgraph->m_no_connect = item;
+                    break;
+
+                case SCH_BUS_WIRE_ENTRY_T:
+                    subgraph->m_bus_entry = item;
+                    break;
+
+                case SCH_PIN_T:
+                {
+                    auto pin = static_cast<SCH_PIN*>( item );
+
+                    if( pin->GetType() == PIN_NC )
                         subgraph->m_no_connect = item;
-                        break;
 
-                    case SCH_BUS_WIRE_ENTRY_T:
-                        subgraph->m_bus_entry = item;
-                        break;
-
-                    case SCH_PIN_T:
-                    {
-                        auto pin = static_cast<SCH_PIN*>( item );
-
-                        if( pin->GetType() == PIN_NC )
-                            subgraph->m_no_connect = item;
-
-                        break;
-                    }
-
-                    default:
-                        break;
-                    }
+                    break;
                 }
 
-                if( !subgraph->ResolveDrivers() )
-                {
-                    subgraph->m_dirty = false;
-                }
-                else
-                {
-                    // Now the subgraph has only one driver
-                    auto driver = subgraph->m_driver;
-                    auto sheet = subgraph->m_sheet;
-                    auto connection = driver->Connection( sheet );
-
-                    // Cache the driving connection for later use
-                    subgraph->m_driver_connection = connection;
-
-                    // TODO(JE) This should live in SCH_CONNECTION probably
-                    switch( driver->Type() )
-                    {
-                    case SCH_LABEL_T:
-                    case SCH_GLOBAL_LABEL_T:
-                    case SCH_HIERARCHICAL_LABEL_T:
-                    {
-                        auto text = static_cast<SCH_TEXT*>( driver );
-                        connection->ConfigureFromLabel( text->GetText() );
-                        break;
-                    }
-                    case SCH_SHEET_PIN_T:
-                    {
-                        auto pin = static_cast<SCH_SHEET_PIN*>( driver );
-                        auto txt = pin->GetParent()->GetName() + "/" + pin->GetText();
-
-                        connection->ConfigureFromLabel( txt );
-                        break;
-                    }
-                    case SCH_PIN_T:
-                    {
-                        auto pin = static_cast<SCH_PIN*>( driver );
-                        // NOTE(JE) GetDefaultNetName is not thread-safe.
-                        connection->ConfigureFromLabel( pin->GetDefaultNetName( sheet ) );
-
-                        break;
-                    }
-                    default:
-                        wxLogTrace( "CONN", "Driver type unsupported: %s",
-                                    driver->GetSelectMenuText( MILLIMETRES ) );
-                        break;
-                    }
-
-                    connection->SetDriver( driver );
-                    connection->ClearDirty();
-
-                    subgraph->m_dirty = false;
+                default:
+                    break;
                 }
             }
 
-            threadsFinished++;
-        } );
+            if( !subgraph->ResolveDrivers() )
+            {
+                subgraph->m_dirty = false;
+            }
+            else
+            {
+                // Now the subgraph has only one driver
+                auto driver = subgraph->m_driver;
+                auto sheet = subgraph->m_sheet;
+                auto connection = driver->Connection( sheet );
 
-        t.detach();
+                // Cache the driving connection for later use
+                subgraph->m_driver_connection = connection;
+
+                // TODO(JE) This should live in SCH_CONNECTION probably
+                switch( driver->Type() )
+                {
+                case SCH_LABEL_T:
+                case SCH_GLOBAL_LABEL_T:
+                case SCH_HIERARCHICAL_LABEL_T:
+                {
+                    auto text = static_cast<SCH_TEXT*>( driver );
+                    connection->ConfigureFromLabel( text->GetText() );
+                    break;
+                }
+                case SCH_SHEET_PIN_T:
+                {
+                    auto pin = static_cast<SCH_SHEET_PIN*>( driver );
+                    auto txt = pin->GetParent()->GetName() + "/" + pin->GetText();
+
+                    connection->ConfigureFromLabel( txt );
+                    break;
+                }
+                case SCH_PIN_T:
+                {
+                    auto pin = static_cast<SCH_PIN*>( driver );
+                    // NOTE(JE) GetDefaultNetName is not thread-safe.
+                    connection->ConfigureFromLabel( pin->GetDefaultNetName( sheet ) );
+
+                    break;
+                }
+                default:
+                    wxLogTrace( "CONN", "Driver type unsupported: %s",
+                                driver->GetSelectMenuText( MILLIMETRES ) );
+                    break;
+                }
+
+                connection->SetDriver( driver );
+                connection->ClearDirty();
+
+                subgraph->m_dirty = false;
+            }
+        }
+
+        return 1;
+    };
+
+    if( parallelThreadCount == 1 )
+        update_lambda();
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, update_lambda );
+
+        // Finalize the threads
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii].wait();
     }
-
-    while( threadsFinished < parallelThreadCount )
-        std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 
     // Check for subgraphs with the same net name but only weak drivers.
     // For example, two wires that are both connected to hierarchical
@@ -756,10 +774,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( auto subgraph : m_subgraphs )
     {
-        subgraph->m_dirty = true;
 
         if( subgraph->m_strong_driver )
         {
+            subgraph->m_dirty = true;
             // Add strong drivers to the cache, for later checking against conflicts
 
             auto driver = subgraph->m_driver;
@@ -795,6 +813,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
     }
 
+    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( driver_subgraphs ),
+            [&] ( CONNECTION_SUBGRAPH* candidate ) { return candidate->m_driver; } );
+
     // Test subgraphs for net name conflicts against higher priority subgraphs
     // Suffix is a global increment to make things simpler, that way if we have
     // multiple instances of the same name that needs to get renamed, they will
@@ -803,29 +824,25 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // users follow best practices to label their nets.
     unsigned suffix = 1;
 
-    for( auto subgraph : m_subgraphs )
+    for( auto subgraph_it = driver_subgraphs.begin(); subgraph_it != driver_subgraphs.end(); subgraph_it++ )
     {
+        auto subgraph = *subgraph_it;
+
         if( !subgraph->m_dirty )
             continue;
 
         subgraph->m_dirty = false;
 
-        if( !subgraph->m_driver || subgraph->m_strong_driver )
+        if( subgraph->m_strong_driver )
             continue;
 
         auto conn = subgraph->m_driver_connection;
         auto name = conn->Name();
         auto local_name = conn->Name( true );
-        bool conflict = false;
 
         // First check the caches
-        if( m_global_label_cache.count( name ) )
-            conflict = true;
-
-        if( m_local_label_cache.count( std::make_pair( subgraph->m_sheet, local_name ) ) )
-            conflict = true;
-
-        if( conflict )
+        if( m_global_label_cache.count( name )  ||
+                ( m_local_label_cache.count( std::make_pair( subgraph->m_sheet, local_name ) ) ) )
         {
             auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
 
@@ -837,12 +854,14 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             name = new_name;
         }
 
-        for( auto candidate : m_subgraphs )
+        for( auto candidate_it = subgraph_it + 1; candidate_it != driver_subgraphs.end(); candidate_it++ )
         {
+            auto candidate = *candidate_it;
+
             if( !candidate->m_dirty )
                 continue;
 
-            if( candidate == subgraph || !candidate->m_driver || candidate->m_strong_driver )
+            if( candidate == subgraph || candidate->m_strong_driver )
                 continue;
 
             if( candidate->m_sheet != subgraph->m_sheet )
@@ -869,11 +888,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Generate net codes
 
-    for( auto subgraph : m_subgraphs )
+    for( auto subgraph : driver_subgraphs )
     {
-        if( !subgraph->m_driver )
-            continue;
-
         auto connection = subgraph->m_driver_connection;
         int code;
 
@@ -920,7 +936,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         auto sheet = subgraph->m_sheet;
 
-        auto candidate_subgraphs( m_subgraphs );
         auto connections_to_check( connection->Members() );
 
         // Look for "neighbors" for subgraphs: other subgraphs that have matching
@@ -963,6 +978,18 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             }
         }
 
+        std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
+        std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(), std::back_inserter( candidate_subgraphs ),
+                [&] ( CONNECTION_SUBGRAPH* candidate )
+                    { return ( !( candidate->m_sheet != sheet || candidate == subgraph ||
+                                  candidate->m_local_driver ) &&
+                                 candidate->m_driver_connection->IsNet() );
+                    } );
+
+        // Look for "neighbors" for subgraphs that have hierarchical connections.
+        // These are usually other subgraphs that have local labels on the
+        // same sheet and so should be connected together.
+
         for( unsigned i = 0; i < connections_to_check.size(); i++ )
         {
             auto member = connections_to_check[i];
@@ -977,17 +1004,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             for( auto candidate : candidate_subgraphs )
             {
-                if( candidate->m_sheet != sheet || !candidate->m_driver || candidate == subgraph )
-                    continue;
-
-                // Exclude globally-driven subgraphs from neighbor maps
-                if( !candidate->m_local_driver )
-                    continue;
-
                 auto candidate_connection = candidate->m_driver_connection;
-
-                if( !candidate_connection->IsNet() )
-                    continue;
 
                 if( candidate_connection->Name() == member->Name() )
                     subgraph->m_neighbor_map[ member ].push_back( candidate );
@@ -1065,9 +1082,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Collapse net codes between hierarchical sheets
 
-    for( auto subgraph : m_subgraphs )
+    for( auto subgraph : driver_subgraphs )
     {
-        if( !subgraph->m_driver || !subgraph->m_dirty )
+        if( !subgraph->m_dirty )
             continue;
 
         auto sheet = subgraph->m_sheet;
@@ -1091,7 +1108,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     int code = m_net_name_to_code_map.at( name );
 
-                    for( auto subgraph_to_update : m_subgraphs )
+                    for( auto subgraph_to_update : driver_subgraphs )
                     {
                         if( !subgraph_to_update->m_driver )
                             continue;
@@ -1310,7 +1327,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                 sp_name, child_subgraphs[i]->m_sheet.PathHumanReadable(),
                                 connection->Name(), subsheet.PathHumanReadable() );
 
-                    for( auto candidate : m_subgraphs )
+                    for( auto candidate : driver_subgraphs )
                     {
                         if( !candidate->m_dirty )
                             continue;
@@ -1458,11 +1475,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     m_net_code_to_subgraphs_map.clear();
 
-    for( auto subgraph : m_subgraphs )
+    for( auto subgraph : driver_subgraphs )
     {
-        if( !subgraph->m_driver )
-            continue;
-
         if( subgraph->m_dirty )
             subgraph->m_dirty = false;
 
