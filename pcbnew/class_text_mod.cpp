@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,6 +119,33 @@ bool TEXTE_MODULE::TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccu
 }
 
 
+void TEXTE_MODULE::KeepUpright( double aOldOrientation, double aNewOrientation )
+{
+    if( !IsKeepUpright() )
+        return;
+
+    double currentAngle = GetTextAngle() + aOldOrientation;
+    double newAngle = GetTextAngle() + aNewOrientation;
+
+    NORMALIZE_ANGLE_POS( currentAngle );
+    NORMALIZE_ANGLE_POS( newAngle );
+
+    bool   isFlipped = currentAngle >= 1800.0;
+    bool   needsFlipped = newAngle >= 1800.0;
+
+    if( isFlipped != needsFlipped )
+    {
+        if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT )
+            SetHorizJustify( GR_TEXT_HJUSTIFY_RIGHT );
+        else if( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
+            SetHorizJustify(GR_TEXT_HJUSTIFY_LEFT );
+
+        SetTextAngle( GetTextAngle() + 1800.0 );
+        SetDrawCoord();
+    }
+}
+
+
 void TEXTE_MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
     // Used in footprint editing
@@ -148,9 +175,10 @@ void TEXTE_MODULE::Flip( const wxPoint& aCentre )
     if( GetHorizJustify() == GR_TEXT_HJUSTIFY_LEFT || GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT )
     {
         if( ( GetHorizJustify() == GR_TEXT_HJUSTIFY_RIGHT ) == IsMirrored() )
-            m_Pos0.x -= GetTextBox().GetWidth();
+            SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-GetHorizJustify() );
         else
-            m_Pos0.x += GetTextBox().GetWidth();
+            SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-GetHorizJustify() );
+
         SetDrawCoord();
     }
 }
