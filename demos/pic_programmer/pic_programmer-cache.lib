@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# pic_programmer_schlib:24C16
+# pic_programmer_schlib_24C16
 #
-DEF pic_programmer_schlib:24C16 U 0 30 Y Y 1 F N
+DEF pic_programmer_schlib_24C16 U 0 30 Y Y 1 F N
 F0 "U" 150 350 60 H V C CNN
-F1 "pic_programmer_schlib:24C16" 200 -350 60 H V C CNN
+F1 "pic_programmer_schlib_24C16" 200 -350 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS 24C512
@@ -22,11 +22,11 @@ X WP 7 700 100 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:74LS125
+# pic_programmer_schlib_74LS125
 #
-DEF pic_programmer_schlib:74LS125 U 0 10 Y Y 4 F N
+DEF pic_programmer_schlib_74LS125 U 0 10 Y Y 4 F N
 F0 "U" 200 150 50 H V C CNN
-F1 "pic_programmer_schlib:74LS125" 300 -100 50 H V C CNN
+F1 "pic_programmer_schlib_74LS125" 300 -100 50 H V C CNN
 F2 "" 100 50 10 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS 74LVC125
@@ -55,11 +55,11 @@ X ~ 13 100 -200 175 U 50 50 4 0 I I
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:7805
+# pic_programmer_schlib_7805
 #
-DEF pic_programmer_schlib:7805 U 0 30 Y Y 1 F N
+DEF pic_programmer_schlib_7805 U 0 30 Y Y 1 F N
 F0 "U" 150 -196 60 H V C CNN
-F1 "pic_programmer_schlib:7805" 0 200 60 H V C CNN
+F1 "pic_programmer_schlib_7805" 0 200 60 H V C CNN
 F2 "" 50 -296 15 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS LM7805 LM7812 78L05
@@ -71,11 +71,11 @@ X VO 3 400 50 200 L 40 40 1 1 w
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:C
+# pic_programmer_schlib_C
 #
-DEF pic_programmer_schlib:C C 0 10 N Y 1 F N
+DEF pic_programmer_schlib_C C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "pic_programmer_schlib:C" 25 -100 50 H V L CNN
+F1 "pic_programmer_schlib_C" 25 -100 50 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -93,11 +93,11 @@ X ~ 2 0 -150 110 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:CONN_2
+# pic_programmer_schlib_CONN_2
 #
-DEF pic_programmer_schlib:CONN_2 P 0 40 Y N 1 F N
+DEF pic_programmer_schlib_CONN_2 P 0 40 Y N 1 F N
 F0 "P" -50 0 40 V V C CNN
-F1 "pic_programmer_schlib:CONN_2" 50 0 40 V V C CNN
+F1 "pic_programmer_schlib_CONN_2" 50 0 40 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -107,11 +107,11 @@ X PM 2 -350 -100 250 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:CP
+# pic_programmer_schlib_CP
 #
-DEF pic_programmer_schlib:CP C 0 10 N Y 1 F N
+DEF pic_programmer_schlib_CP C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "pic_programmer_schlib:CP" 25 -100 50 H V L CNN
+F1 "pic_programmer_schlib_CP" 25 -100 50 H V L CNN
 F2 "" 38 -150 30 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -135,11 +135,11 @@ X ~ 2 0 -150 110 U 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:D
+# pic_programmer_schlib_D
 #
-DEF pic_programmer_schlib:D D 0 0 Y Y 1 F N
+DEF pic_programmer_schlib_D D 0 0 Y Y 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "pic_programmer_schlib:D" 0 -100 50 H V C CNN
+F1 "pic_programmer_schlib_D" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -157,11 +157,11 @@ X A 2 150 0 100 L 30 30 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:DB9
+# pic_programmer_schlib_DB9
 #
-DEF pic_programmer_schlib:DB9 J 0 40 Y N 1 F N
+DEF pic_programmer_schlib_DB9 J 0 40 Y N 1 F N
 F0 "J" 0 550 70 H V C CNN
-F1 "pic_programmer_schlib:DB9" 0 -550 70 H V C CNN
+F1 "pic_programmer_schlib_DB9" 0 -550 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -210,11 +210,11 @@ X P9 9 -450 300 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:D_Schottky
+# pic_programmer_schlib_D_Schottky
 #
-DEF pic_programmer_schlib:D_Schottky D 0 0 Y Y 1 F N
+DEF pic_programmer_schlib_D_Schottky D 0 0 Y Y 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "pic_programmer_schlib:D_Schottky" 0 -100 50 H V C CNN
+F1 "pic_programmer_schlib_D_Schottky" 0 -100 50 H V C CNN
 F2 "" -100 0 10 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -232,11 +232,11 @@ X A 2 150 0 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:GND
+# pic_programmer_schlib_GND
 #
-DEF ~pic_programmer_schlib:GND #PWR 0 0 Y Y 1 F P
+DEF pic_programmer_schlib_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 0 30 H I C CNN
-F1 "pic_programmer_schlib:GND" 0 -70 30 H I C CNN
+F1 "pic_programmer_schlib_GND" 0 -70 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -245,11 +245,11 @@ X GND 1 0 0 0 U 30 30 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:INDUCTOR
+# pic_programmer_schlib_INDUCTOR
 #
-DEF pic_programmer_schlib:INDUCTOR L 0 40 N N 1 F N
+DEF pic_programmer_schlib_INDUCTOR L 0 40 N N 1 F N
 F0 "L" -50 0 50 V V C CNN
-F1 "pic_programmer_schlib:INDUCTOR" 100 0 50 V V C CNN
+F1 "pic_programmer_schlib_INDUCTOR" 100 0 50 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -262,11 +262,11 @@ X 2 2 0 -300 100 U 70 70 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:JUMPER
+# pic_programmer_schlib_JUMPER
 #
-DEF pic_programmer_schlib:JUMPER JP 0 30 Y N 1 F N
+DEF pic_programmer_schlib_JUMPER JP 0 30 Y N 1 F N
 F0 "JP" 0 150 50 H V C CNN
-F1 "pic_programmer_schlib:JUMPER" 0 -80 50 H V C CNN
+F1 "pic_programmer_schlib_JUMPER" 0 -80 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -278,11 +278,11 @@ X 2 2 300 0 165 L 60 60 0 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:LED
+# pic_programmer_schlib_LED
 #
-DEF pic_programmer_schlib:LED D 0 40 Y N 1 F N
+DEF pic_programmer_schlib_LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "pic_programmer_schlib:LED" 0 -100 50 H V C CNN
+F1 "pic_programmer_schlib_LED" 0 -100 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -304,11 +304,11 @@ X A 2 200 0 150 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:LT1373
+# pic_programmer_schlib_LT1373
 #
-DEF pic_programmer_schlib:LT1373 U 0 30 Y Y 1 F N
+DEF pic_programmer_schlib_LT1373 U 0 30 Y Y 1 F N
 F0 "U" 600 500 60 H V C CNN
-F1 "pic_programmer_schlib:LT1373" -500 500 60 H V C CNN
+F1 "pic_programmer_schlib_LT1373" -500 500 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS LT1373
@@ -325,11 +325,11 @@ X Vsw 8 1000 250 300 L 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:MOUNTING_HOLE
+# pic_programmer_schlib_MOUNTING_HOLE
 #
-DEF ~pic_programmer_schlib:MOUNTING_HOLE P 0 30 N N 1 F N
+DEF pic_programmer_schlib_MOUNTING_HOLE P 0 30 N N 1 F N
 F0 "P" 80 0 40 H V L CNN
-F1 "pic_programmer_schlib:MOUNTING_HOLE" 0 55 30 H I C CNN
+F1 "pic_programmer_schlib_MOUNTING_HOLE" 0 55 30 H I C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -340,11 +340,11 @@ C 0 0 31 0 1 0 N
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:NPN
+# pic_programmer_schlib_NPN
 #
-DEF pic_programmer_schlib:NPN Q 0 0 Y Y 1 F N
+DEF pic_programmer_schlib_NPN Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 50 H V R CNN
-F1 "pic_programmer_schlib:NPN" 0 150 50 H V R CNN
+F1 "pic_programmer_schlib_NPN" 0 150 50 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -360,11 +360,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:PIC12C508A
+# pic_programmer_schlib_PIC12C508A
 #
-DEF pic_programmer_schlib:PIC12C508A U 0 40 Y Y 1 F N
+DEF pic_programmer_schlib_PIC12C508A U 0 40 Y Y 1 F N
 F0 "U" 0 700 60 H V C CNN
-F1 "pic_programmer_schlib:PIC12C508A" 0 -650 60 H V C CNN
+F1 "pic_programmer_schlib_PIC12C508A" 0 -650 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 ALIAS PIC12C509A
@@ -389,11 +389,11 @@ X VSS 8 700 500 300 L 50 50 1 2 W
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:PIC16F54
+# pic_programmer_schlib_PIC16F54
 #
-DEF pic_programmer_schlib:PIC16F54 U? 0 40 Y Y 1 F N
+DEF pic_programmer_schlib_PIC16F54 U? 0 40 Y Y 1 F N
 F0 "U?" 0 -750 60 H V C CNN
-F1 "pic_programmer_schlib:PIC16F54" 0 800 60 H V C CNN
+F1 "pic_programmer_schlib_PIC16F54" 0 800 60 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -437,11 +437,11 @@ X RB3 9 -800 -600 300 R 50 50 1 2 B
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:PNP
+# pic_programmer_schlib_PNP
 #
-DEF pic_programmer_schlib:PNP Q 0 0 Y Y 1 F N
+DEF pic_programmer_schlib_PNP Q 0 0 Y Y 1 F N
 F0 "Q" 0 -150 60 H V R CNN
-F1 "pic_programmer_schlib:PNP" 0 150 60 H V R CNN
+F1 "pic_programmer_schlib_PNP" 0 150 60 H V R CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -457,11 +457,11 @@ X C 3 100 200 100 D 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:POT
+# pic_programmer_schlib_POT
 #
-DEF pic_programmer_schlib:POT RV 0 40 Y N 1 F N
+DEF pic_programmer_schlib_POT RV 0 40 Y N 1 F N
 F0 "RV" 0 -100 50 H V C CNN
-F1 "pic_programmer_schlib:POT" 0 0 50 H V C CNN
+F1 "pic_programmer_schlib_POT" 0 0 50 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -473,11 +473,11 @@ X 3 3 250 0 100 L 40 40 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:PWR_FLAG
+# pic_programmer_schlib_PWR_FLAG
 #
-DEF pic_programmer_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
+DEF pic_programmer_schlib_PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 95 30 H I C CNN
-F1 "pic_programmer_schlib:PWR_FLAG" 0 180 30 H V C CNN
+F1 "pic_programmer_schlib_PWR_FLAG" 0 180 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -486,11 +486,11 @@ X pwr 1 0 0 0 U 20 20 0 0 w
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:R
+# pic_programmer_schlib_R
 #
-DEF pic_programmer_schlib:R R 0 0 N Y 1 F N
+DEF pic_programmer_schlib_R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "pic_programmer_schlib:R" 0 0 50 V V C CNN
+F1 "pic_programmer_schlib_R" 0 0 50 V V C CNN
 F2 "" -70 0 30 V V C CNN
 F3 "" 0 0 30 H V C CNN
 $FPLIST
@@ -504,11 +504,11 @@ X ~ 2 0 -150 50 U 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:SUPP28
+# pic_programmer_schlib_SUPP28
 #
-DEF pic_programmer_schlib:SUPP28 J 0 40 Y Y 1 F N
+DEF pic_programmer_schlib_SUPP28 J 0 40 Y Y 1 F N
 F0 "J" 0 100 70 H V C CNN
-F1 "pic_programmer_schlib:SUPP28" 0 -100 70 H V C CNN
+F1 "pic_programmer_schlib_SUPP28" 0 -100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -544,11 +544,11 @@ X 9 9 -600 -150 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:SUPP40
+# pic_programmer_schlib_SUPP40
 #
-DEF pic_programmer_schlib:SUPP40 P 0 40 Y Y 1 F N
+DEF pic_programmer_schlib_SUPP40 P 0 40 Y Y 1 F N
 F0 "P" 0 1100 70 H V C CNN
-F1 "pic_programmer_schlib:SUPP40" 0 -1100 70 H V C CNN
+F1 "pic_programmer_schlib_SUPP40" 0 -1100 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -596,11 +596,11 @@ X 9 9 -600 150 300 R 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:VCC
+# pic_programmer_schlib_VCC
 #
-DEF pic_programmer_schlib:VCC #PWR 0 0 Y Y 1 F P
+DEF pic_programmer_schlib_VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 100 30 H I C CNN
-F1 "pic_programmer_schlib:VCC" 0 100 30 H V C CNN
+F1 "pic_programmer_schlib_VCC" 0 100 30 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -610,11 +610,11 @@ X VCC 1 0 0 0 U 20 20 0 0 W N
 ENDDRAW
 ENDDEF
 #
-# pic_programmer_schlib:VPP
+# pic_programmer_schlib_VPP
 #
-DEF pic_programmer_schlib:VPP #PWR 0 0 Y Y 1 F N
+DEF pic_programmer_schlib_VPP #PWR 0 0 Y Y 1 F N
 F0 "#PWR" 0 200 40 H I C CNN
-F1 "pic_programmer_schlib:VPP" 0 150 40 H V C CNN
+F1 "pic_programmer_schlib_VPP" 0 150 40 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW

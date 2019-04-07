@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:pic_programmer-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -775,7 +775,7 @@ U 1 1 442A4FE7
 P 1000 6750
 F 0 "P1" V 950 6750 40  0000 C CNN
 F 1 "CONN_2" V 1050 6750 40  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2_1x02_P5.00mm_Horizontal" H 1000 6950 20  0000 C CNN
+F 2 "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" H 1000 6950 20  0000 C CNN
 F 3 "" H 1000 6750 60  0001 C CNN
 	1    1000 6750
 	-1   0    0    1   
@@ -1522,4 +1522,9 @@ F 3 "www.st.com/resource/en/datasheet/l78.pdf" H 2700 6700 30  0001 C CNN
 	1    2700 6700
 	1    0    0    -1  
 $EndComp
+Connection ~ 6550 1600
+Connection ~ 8800 5150
+Connection ~ 8000 6100
+Connection ~ 7450 6100
+Connection ~ 5450 1500
 $EndSCHEMATC

@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:carte_test-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -845,7 +845,7 @@ U 1 1 3EC4C49F
 P 9800 8000
 F 0 "K1" V 9750 8000 50  0000 C CNN
 F 1 "CONN_3" V 9850 8000 40  0000 C CNN
-F 2 "Socket_Strips:Socket_Strip_Straight_1x03" V 9950 8000 30  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" V 9950 8000 30  0000 C CNN
 F 3 "" H 9800 8000 60  0001 C CNN
 	1    9800 8000
 	0    1    1    0   
