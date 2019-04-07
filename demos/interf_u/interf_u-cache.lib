@@ -1,11 +1,11 @@
 EESchema-LIBRARY Version 2.4
 #encoding utf-8
 #
-# interf_u_schlib:4003APG120
+# interf_u_schlib_4003APG120
 #
-DEF interf_u_schlib:4003APG120 U 0 40 Y Y 1 F N
+DEF interf_u_schlib_4003APG120 U 0 40 Y Y 1 F N
 F0 "U" 400 2800 70 H V C CNN
-F1 "interf_u_schlib:4003APG120" 0 -2850 70 H V C CNN
+F1 "interf_u_schlib_4003APG120" 0 -2850 70 H V C CNN
 F2 "PGA120" 0 -2950 40 H V C CNN
 F3 "" 400 2800 60 H V C CNN
 DRAW
@@ -130,11 +130,11 @@ X P N9 1100 100 300 L 60 60 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:628128
+# interf_u_schlib_628128
 #
-DEF interf_u_schlib:628128 U 0 40 Y Y 1 F N
+DEF interf_u_schlib_628128 U 0 40 Y Y 1 F N
 F0 "U" 50 0 70 H V C CNN
-F1 "interf_u_schlib:628128" 300 -1200 70 H V C CNN
+F1 "interf_u_schlib_628128" 300 -1200 70 H V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -173,11 +173,11 @@ X A3 9 -700 750 300 R 60 60 1 1 I
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:74LS245
+# interf_u_schlib_74LS245
 #
-DEF interf_u_schlib:74LS245 U 0 40 Y Y 1 L N
+DEF interf_u_schlib_74LS245 U 0 40 Y Y 1 L N
 F0 "U" -300 650 50 H V C CNN
-F1 "interf_u_schlib:74LS245" -300 -650 50 H V C CNN
+F1 "interf_u_schlib_74LS245" -300 -650 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS 74HC245
@@ -211,11 +211,11 @@ X A7 9 -500 -200 200 R 50 50 1 0 T
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:74LS541
+# interf_u_schlib_74LS541
 #
-DEF interf_u_schlib:74LS541 U 0 40 Y Y 1 L N
+DEF interf_u_schlib_74LS541 U 0 40 Y Y 1 L N
 F0 "U" -300 650 50 H V C CNN
-F1 "interf_u_schlib:74LS541" -300 -650 50 H V C CNN
+F1 "interf_u_schlib_74LS541" -300 -650 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 ALIAS 74HCT541
@@ -250,11 +250,11 @@ X A7 9 -500 -200 200 R 50 50 1 0 I
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:74LS688
+# interf_u_schlib_74LS688
 #
-DEF interf_u_schlib:74LS688 U 0 40 Y Y 1 L N
+DEF interf_u_schlib_74LS688 U 0 40 Y Y 1 L N
 F0 "U" -300 1050 50 H V C CNN
-F1 "interf_u_schlib:74LS688" -300 -1050 50 H V C CNN
+F1 "interf_u_schlib_74LS688" -300 -1050 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -285,11 +285,11 @@ X R3 9 -500 -300 200 R 50 50 1 0 I
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:Bus_ISA_8bit
+# interf_u_schlib_Bus_ISA_8bit
 #
-DEF interf_u_schlib:Bus_ISA_8bit J 0 40 Y Y 1 F N
+DEF interf_u_schlib_Bus_ISA_8bit J 0 40 Y Y 1 F N
 F0 "J" 0 1675 50 H V C CNN
-F1 "interf_u_schlib:Bus_ISA_8bit" 0 -1675 50 H V C CNN
+F1 "interf_u_schlib_Bus_ISA_8bit" 0 -1675 50 H V C CNN
 F2 "" -100 1575 30 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -359,11 +359,11 @@ X +12V 9 -900 700 300 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:C
+# interf_u_schlib_C
 #
-DEF interf_u_schlib:C C 0 10 N Y 1 F N
+DEF interf_u_schlib_C C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "interf_u_schlib:C" 25 -100 50 H V L CNN
+F1 "interf_u_schlib_C" 25 -100 50 H V L CNN
 F2 "" 38 -150 30 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -377,11 +377,11 @@ X ~ 2 0 -150 110 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:CP
+# interf_u_schlib_CP
 #
-DEF interf_u_schlib:CP C 0 10 N Y 1 F N
+DEF interf_u_schlib_CP C 0 10 N Y 1 F N
 F0 "C" 25 100 50 H V L CNN
-F1 "interf_u_schlib:CP" 25 -100 50 H V L CNN
+F1 "interf_u_schlib_CP" 25 -100 50 H V L CNN
 F2 "" 38 -150 30 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -400,11 +400,11 @@ X ~ 2 0 -150 110 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:Conn_02x08_Odd_Even
+# interf_u_schlib_Conn_02x08_Odd_Even
 #
-DEF interf_u_schlib:Conn_02x08_Odd_Even J 0 40 Y N 1 F N
+DEF interf_u_schlib_Conn_02x08_Odd_Even J 0 40 Y N 1 F N
 F0 "J" 0 450 50 H V C CNN
-F1 "interf_u_schlib:Conn_02x08_Odd_Even" 0 -450 50 H V C CNN
+F1 "interf_u_schlib_Conn_02x08_Odd_Even" 0 -450 50 H V C CNN
 F2 "" -50 50 50 H I C CNN
 F3 "" -50 50 50 H I C CNN
 $FPLIST
@@ -452,11 +452,11 @@ X Pin_9 9 -250 -50 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:Crystal
+# interf_u_schlib_Crystal
 #
-DEF interf_u_schlib:Crystal Y 0 40 N N 1 F N
+DEF interf_u_schlib_Crystal Y 0 40 N N 1 F N
 F0 "Y" 0 150 50 H V C CNN
-F1 "interf_u_schlib:Crystal" 0 -150 50 H V C CNN
+F1 "interf_u_schlib_Crystal" 0 -150 50 H V C CNN
 F2 "" -100 50 30 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -473,11 +473,11 @@ X 2 2 150 0 50 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:DB25_Female
+# interf_u_schlib_DB25_Female
 #
-DEF interf_u_schlib:DB25_Female J 0 40 Y N 1 F N
+DEF interf_u_schlib_DB25_Female J 0 40 Y N 1 F N
 F0 "J" 0 1350 50 H V C CNN
-F1 "interf_u_schlib:DB25_Female" 0 -1375 50 H V C CNN
+F1 "interf_u_schlib_DB25_Female" 0 -1375 50 H V C CNN
 F2 "" -100 1250 30 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -563,11 +563,11 @@ X 9 9 -300 -400 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:EP600
+# interf_u_schlib_EP600
 #
-DEF interf_u_schlib:EP600 U 0 40 Y Y 1 F N
+DEF interf_u_schlib_EP600 U 0 40 Y Y 1 F N
 F0 "U" -100 975 50 H V R CNN
-F1 "interf_u_schlib:EP600" -100 900 50 H V R CNN
+F1 "interf_u_schlib_EP600" -100 900 50 H V R CNN
 F2 "" 50 -800 50 H I L CNN
 F3 "" 0 50 50 H I C CNN
 DRAW
@@ -599,11 +599,11 @@ X I/O9 9 -600 -300 150 R 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:GND
+# interf_u_schlib_GND
 #
-DEF interf_u_schlib:GND #PWR 0 0 Y Y 1 F P
+DEF interf_u_schlib_GND #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -250 50 H I C CNN
-F1 "interf_u_schlib:GND" 0 -150 50 H V C CNN
+F1 "interf_u_schlib_GND" 0 -150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -612,11 +612,11 @@ X GND 1 0 0 0 D 50 50 1 1 W N
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:LED
+# interf_u_schlib_LED
 #
-DEF interf_u_schlib:LED D 0 40 Y N 1 F N
+DEF interf_u_schlib_LED D 0 40 Y N 1 F N
 F0 "D" 0 100 50 H V C CNN
-F1 "interf_u_schlib:LED" 0 -100 50 H V C CNN
+F1 "interf_u_schlib_LED" 0 -100 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -633,11 +633,11 @@ X A 2 150 0 100 L 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:PWR_FLAG
+# interf_u_schlib_PWR_FLAG
 #
-DEF interf_u_schlib:PWR_FLAG #FLG 0 0 N N 1 F P
+DEF interf_u_schlib_PWR_FLAG #FLG 0 0 N N 1 F P
 F0 "#FLG" 0 75 50 H I C CNN
-F1 "interf_u_schlib:PWR_FLAG" 0 150 50 H V C CNN
+F1 "interf_u_schlib_PWR_FLAG" 0 150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW
@@ -646,11 +646,11 @@ X pwr 1 0 0 0 U 50 50 0 0 w
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:R
+# interf_u_schlib_R
 #
-DEF interf_u_schlib:R R 0 0 N Y 1 F N
+DEF interf_u_schlib_R R 0 0 N Y 1 F N
 F0 "R" 80 0 50 V V C CNN
-F1 "interf_u_schlib:R" 0 0 50 V V C CNN
+F1 "interf_u_schlib_R" 0 0 50 V V C CNN
 F2 "" -70 0 50 V I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -664,11 +664,11 @@ X ~ 2 0 -150 50 U 50 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:RR9
+# interf_u_schlib_RR9
 #
-DEF interf_u_schlib:RR9 RR 0 40 Y N 1 F N
+DEF interf_u_schlib_RR9 RR 0 40 Y N 1 F N
 F0 "RR" 50 600 70 H V C CNN
-F1 "interf_u_schlib:RR9" 30 0 70 V V C CNN
+F1 "interf_u_schlib_RR9" 30 0 70 V V C CNN
 F2 "" 0 0 60 H V C CNN
 F3 "" 0 0 60 H V C CNN
 DRAW
@@ -686,11 +686,11 @@ X 9 9 -350 -300 300 R 60 60 1 1 P I
 ENDDRAW
 ENDDEF
 #
-# interf_u_schlib:VCC
+# interf_u_schlib_VCC
 #
-DEF interf_u_schlib:VCC #PWR 0 0 Y Y 1 F P
+DEF interf_u_schlib_VCC #PWR 0 0 Y Y 1 F P
 F0 "#PWR" 0 -150 50 H I C CNN
-F1 "interf_u_schlib:VCC" 0 150 50 H V C CNN
+F1 "interf_u_schlib_VCC" 0 150 50 H V C CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 DRAW

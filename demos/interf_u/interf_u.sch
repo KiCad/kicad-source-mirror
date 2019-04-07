@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:interf_u-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -16,7 +16,7 @@ Comment4 "Comment 4"
 $EndDescr
 $Bitmap
 Pos 11050 10550
-Scale 1,000000
+Scale 1.000000
 Data
 89 50 4E 47 0D 0A 1A 0A 00 00 00 0D 49 48 44 52 00 00 00 E5 00 00 01 0E 08 02 00 00 00 F9 5F 47 
 B4 00 00 00 03 73 42 49 54 08 08 08 DB E1 4F E0 00 00 20 00 49 44 41 54 78 9C EC BD 77 94 5D 47 
@@ -2017,7 +2017,7 @@ U 1 1 32568D1E
 P 1700 7250
 F 0 "JP1" H 1700 7700 70  0000 C CNN
 F 1 "CONN_8X2" V 1700 7250 70  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_2x08" H 1700 7800 20  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x08_P2.54mm_Vertical" H 1700 7800 20  0000 C CNN
 F 3 "" H 1700 7250 60  0001 C CNN
 	1    1700 7250
 	1    0    0    1   
@@ -2989,6 +2989,7 @@ Wire Wire Line
 	2200 9400 2850 9400
 Wire Wire Line
 	1650 9400 2200 9400
+Connection ~ 4750 2050
 Wire Bus Line
 	3750 1650 3750 2350
 Wire Bus Line

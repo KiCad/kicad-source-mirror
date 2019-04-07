@@ -1,6 +1,6 @@
-EESchema Schematic File Version 4
+EESchema Schematic File Version 5
 LIBS:complex_hierarchy-cache
-EELAYER 26 0
+EELAYER 29 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -458,7 +458,7 @@ AR Path="/4B3A13A4/4B3A136C" Ref="P5"  Part="1"
 AR Path="/4B3A1333/4B3A136C" Ref="P3"  Part="1" 
 F 0 "P5" V 10700 4400 40  0000 C CNN
 F 1 "CONN_2" V 10800 4400 40  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 10750 4200 10  0000 C CNN
+F 2 "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" H 10750 4200 10  0000 C CNN
 F 3 "" H 10750 4400 60  0001 C CNN
 	1    10750 4400
 	1    0    0    -1  
@@ -525,7 +525,7 @@ AR Path="/4B3A13A4/4B3A1367" Ref="P6"  Part="1"
 AR Path="/4B3A1333/4B3A1367" Ref="P4"  Part="1" 
 F 0 "P6" V 1300 2100 40  0000 C CNN
 F 1 "CONN_2" V 1400 2100 40  0000 C CNN
-F 2 "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" H 1300 1900 10  0000 C CNN
+F 2 "TerminalBlock_Altech:Altech_AK300_1x02_P5.00mm_45-Degree" H 1300 1900 10  0000 C CNN
 F 3 "" H 1350 2100 60  0001 C CNN
 	1    1350 2100
 	-1   0    0    -1  
