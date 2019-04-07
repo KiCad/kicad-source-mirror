@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,6 +86,11 @@ public:
     }
 
     void SetTextAngle( double aAngle );
+
+    /**
+     * Called when rotating the parent footprint.
+     */
+    void KeepUpright( double aOldOrientation, double aNewOrientation );
 
     /**
      * @return force the text rotation to be always between -90 .. 90 deg. Otherwise the text is not easy to read

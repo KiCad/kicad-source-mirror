@@ -1048,10 +1048,21 @@ void MODULE::Move( const wxPoint& aMoveVector )
 
 void MODULE::Rotate( const wxPoint& aRotCentre, double aAngle )
 {
+    double  orientation = GetOrientation();
+    double  newOrientation = orientation + aAngle;
     wxPoint newpos = m_Pos;
     RotatePoint( &newpos, aRotCentre, aAngle );
     SetPosition( newpos );
-    SetOrientation( GetOrientation() + aAngle );
+    SetOrientation( newOrientation );
+
+    m_Reference->KeepUpright( orientation, newOrientation );
+    m_Value->KeepUpright( orientation, newOrientation );
+
+    for( EDA_ITEM* item = m_Drawings; item; item = item->Next() )
+    {
+        if( item->Type() == PCB_MODULE_TEXT_T )
+            static_cast<TEXTE_MODULE*>( item )->KeepUpright(  orientation, newOrientation  );
+    }
 }
 
 
