@@ -646,20 +646,20 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
     }
     else if( m_shape == PINSHAPE_FALLING_EDGE_CLOCK ) /* an alternative for Inverted Clock */
     {
-        const int SIZE = InternalPinDecoSize( *this );
+        const int deco_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1, y1 + SIZE );
-            GRLineTo( clipbox, aDC, x1 + MapX1 * SIZE * 2, y1, width, color );
-            GRLineTo( clipbox, aDC, x1, y1 - SIZE, width, color );
+            GRMoveTo( x1, y1 + deco_size );
+            GRLineTo( clipbox, aDC, x1 + MapX1 * deco_size * 2, y1, width, color );
+            GRLineTo( clipbox, aDC, x1, y1 - deco_size, width, color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1 + SIZE, y1 );
-            GRLineTo( clipbox, aDC, x1, y1 + MapY1 * SIZE * 2, width, color );
-            GRLineTo( clipbox, aDC, x1 - SIZE, y1, width, color );
+            GRMoveTo( x1 + deco_size, y1 );
+            GRLineTo( clipbox, aDC, x1, y1 + MapY1 * deco_size * 2, width, color );
+            GRLineTo( clipbox, aDC, x1 - deco_size, y1, width, color );
         }
-        GRMoveTo( MapX1 * SIZE * 2 + x1, MapY1 * SIZE * 2 + y1 );
+        GRMoveTo( MapX1 * deco_size * 2 + x1, MapY1 * deco_size * 2 + y1 );
         GRLineTo( clipbox, aDC, posX, posY, width, color );
     }
     else
@@ -687,17 +687,17 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     if( m_shape == PINSHAPE_INPUT_LOW || m_shape == PINSHAPE_CLOCK_LOW )
     {
-        const int SIZE = ExternalPinDecoSize( *this );
+        const int deco_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1 + MapX1 * SIZE * 2, y1 );
-            GRLineTo( clipbox, aDC, x1 + MapX1 * SIZE * 2, y1 - SIZE * 2, width, color );
+            GRMoveTo( x1 + MapX1 * deco_size * 2, y1 );
+            GRLineTo( clipbox, aDC, x1 + MapX1 * deco_size * 2, y1 - deco_size * 2, width, color );
             GRLineTo( clipbox, aDC, x1, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1, y1 + MapY1 * SIZE * 2 );
-            GRLineTo( clipbox, aDC, x1 - SIZE * 2, y1 + MapY1 * SIZE * 2, width, color );
+            GRMoveTo( x1, y1 + MapY1 * deco_size * 2 );
+            GRLineTo( clipbox, aDC, x1 - deco_size * 2, y1 + MapY1 * deco_size * 2, width, color );
             GRLineTo( clipbox, aDC, x1, y1, width, color );
         }
     }
@@ -705,34 +705,34 @@ void LIB_PIN::DrawPinSymbol( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 
     if( m_shape == PINSHAPE_OUTPUT_LOW )    /* IEEE symbol "Active Low Output" */
     {
-        const int SIZE = ExternalPinDecoSize( *this );
+        const int deco_size = ExternalPinDecoSize( *this );
         if( MapY1 == 0 )            /* MapX1 = +- 1 */
         {
-            GRMoveTo( x1, y1 - SIZE * 2 );
-            GRLineTo( clipbox, aDC, x1 + MapX1 * SIZE * 2, y1, width, color );
+            GRMoveTo( x1, y1 - deco_size * 2 );
+            GRLineTo( clipbox, aDC, x1 + MapX1 * deco_size * 2, y1, width, color );
         }
         else    /* MapX1 = 0 */
         {
-            GRMoveTo( x1 - SIZE * 2, y1 );
-            GRLineTo( clipbox, aDC, x1, y1 + MapY1 * SIZE * 2, width, color );
+            GRMoveTo( x1 - deco_size * 2, y1 );
+            GRLineTo( clipbox, aDC, x1, y1 + MapY1 * deco_size * 2, width, color );
         }
     }
     else if( m_shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
     {
-        const int SIZE = ExternalPinDecoSize( *this );
-        GRMoveTo( x1 - (MapX1 + MapY1) * SIZE, y1 - (MapY1 - MapX1) * SIZE );
-        GRLineTo( clipbox, aDC, x1 + (MapX1 + MapY1) * SIZE, y1 + (MapY1 - MapX1) * SIZE, width,
+        const int deco_size = ExternalPinDecoSize( *this );
+        GRMoveTo( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size );
+        GRLineTo( clipbox, aDC, x1 + (MapX1 + MapY1) * deco_size, y1 + (MapY1 - MapX1) * deco_size, width,
                   color );
-        GRMoveTo( x1 - (MapX1 - MapY1) * SIZE, y1 - (MapY1 + MapX1) * SIZE );
-        GRLineTo( clipbox, aDC, x1 + (MapX1 - MapY1) * SIZE, y1 + (MapY1 + MapX1) * SIZE, width,
+        GRMoveTo( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size );
+        GRLineTo( clipbox, aDC, x1 + (MapX1 - MapY1) * deco_size, y1 + (MapY1 + MapX1) * deco_size, width,
                   color );
     }
 
     if( m_type == PIN_NC )   // Draw a N.C. symbol
     {
-        const int SIZE = TARGET_PIN_RADIUS;
-        GRLine( clipbox, aDC, posX - SIZE, posY - SIZE, posX + SIZE, posY + SIZE, width, color );
-        GRLine( clipbox, aDC, posX + SIZE, posY - SIZE, posX - SIZE, posY + SIZE, width, color );
+        const int deco_size = TARGET_PIN_RADIUS;
+        GRLine( clipbox, aDC, posX - deco_size, posY - deco_size, posX + deco_size, posY + deco_size, width, color );
+        GRLine( clipbox, aDC, posX + deco_size, posY - deco_size, posX - deco_size, posY + deco_size, width, color );
     }
 }
 
@@ -965,21 +965,21 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
     else if( m_shape == PINSHAPE_FALLING_EDGE_CLOCK )
     {
-        const int SIZE = InternalPinDecoSize( *this );
+        const int deco_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + SIZE ) );
-            aPlotter->LineTo( wxPoint( x1 + MapX1 * SIZE * 2, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 - SIZE ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
+            aPlotter->LineTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 - deco_size ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + SIZE, y1 ) );
-            aPlotter->LineTo( wxPoint( x1, y1 + MapY1 * SIZE * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1 - SIZE, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1 + deco_size, y1 ) );
+            aPlotter->LineTo( wxPoint( x1, y1 + MapY1 * deco_size * 2 ) );
+            aPlotter->FinishTo( wxPoint( x1 - deco_size, y1 ) );
         }
 
-        aPlotter->MoveTo( wxPoint( MapX1 * SIZE * 2 + x1, MapY1 * SIZE * 2 + y1 ) );
+        aPlotter->MoveTo( wxPoint( MapX1 * deco_size * 2 + x1, MapY1 * deco_size * 2 + y1 ) );
         aPlotter->FinishTo( aPosition );
     }
     else
@@ -991,35 +991,35 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     if( m_shape == PINSHAPE_CLOCK || m_shape == PINSHAPE_INVERTED_CLOCK ||
         m_shape == PINSHAPE_CLOCK_LOW )
     {
-        const int SIZE = InternalPinDecoSize( *this );
+        const int deco_size = InternalPinDecoSize( *this );
         if( MapY1 == 0 ) /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + SIZE ) );
-            aPlotter->LineTo( wxPoint( x1 - MapX1 * SIZE * 2, y1 ) );
-            aPlotter->FinishTo( wxPoint( x1, y1 - SIZE ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + deco_size ) );
+            aPlotter->LineTo( wxPoint( x1 - MapX1 * deco_size * 2, y1 ) );
+            aPlotter->FinishTo( wxPoint( x1, y1 - deco_size ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + SIZE, y1 ) );
-            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * SIZE * 2 ) );
-            aPlotter->FinishTo( wxPoint( x1 - SIZE, y1 ) );
+            aPlotter->MoveTo( wxPoint( x1 + deco_size, y1 ) );
+            aPlotter->LineTo( wxPoint( x1, y1 - MapY1 * deco_size * 2 ) );
+            aPlotter->FinishTo( wxPoint( x1 - deco_size, y1 ) );
         }
     }
 
     if( m_shape == PINSHAPE_INPUT_LOW || m_shape == PINSHAPE_CLOCK_LOW )    /* IEEE symbol "Active Low Input" */
     {
-        const int SIZE = ExternalPinDecoSize( *this );
+        const int deco_size = ExternalPinDecoSize( *this );
 
         if( MapY1 == 0 )        /* MapX1 = +- 1 */
         {
-            aPlotter->MoveTo( wxPoint( x1 + MapX1 * SIZE * 2, y1 ) );
-            aPlotter->LineTo( wxPoint( x1 + MapX1 * SIZE * 2, y1 - SIZE * 2 ) );
+            aPlotter->MoveTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 ) );
+            aPlotter->LineTo( wxPoint( x1 + MapX1 * deco_size * 2, y1 - deco_size * 2 ) );
             aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
         else    /* MapX1 = 0 */
         {
-            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * SIZE * 2 ) );
-            aPlotter->LineTo( wxPoint( x1 - SIZE * 2, y1 + MapY1 * SIZE * 2 ) );
+            aPlotter->MoveTo( wxPoint( x1, y1 + MapY1 * deco_size * 2 ) );
+            aPlotter->LineTo( wxPoint( x1 - deco_size * 2, y1 + MapY1 * deco_size * 2 ) );
             aPlotter->FinishTo( wxPoint( x1, y1 ) );
         }
     }
@@ -1042,21 +1042,21 @@ void LIB_PIN::PlotSymbol( PLOTTER* aPlotter, const wxPoint& aPosition, int aOrie
     }
     else if( m_shape == PINSHAPE_NONLOGIC ) /* NonLogic pin symbol */
     {
-        const int SIZE = ExternalPinDecoSize( *this );
-        aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * SIZE, y1 - (MapY1 - MapX1) * SIZE ) );
-        aPlotter->FinishTo( wxPoint( x1 + (MapX1 + MapY1) * SIZE, y1 + (MapY1 - MapX1) * SIZE ) );
-        aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * SIZE, y1 - (MapY1 + MapX1) * SIZE ) );
-        aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * SIZE, y1 + (MapY1 + MapX1) * SIZE ) );
+        const int deco_size = ExternalPinDecoSize( *this );
+        aPlotter->MoveTo( wxPoint( x1 - (MapX1 + MapY1) * deco_size, y1 - (MapY1 - MapX1) * deco_size ) );
+        aPlotter->FinishTo( wxPoint( x1 + (MapX1 + MapY1) * deco_size, y1 + (MapY1 - MapX1) * deco_size ) );
+        aPlotter->MoveTo( wxPoint( x1 - (MapX1 - MapY1) * deco_size, y1 - (MapY1 + MapX1) * deco_size ) );
+        aPlotter->FinishTo( wxPoint( x1 + (MapX1 - MapY1) * deco_size, y1 + (MapY1 + MapX1) * deco_size ) );
     }
     if( m_type == PIN_NC )   // Draw a N.C. symbol
     {
-        const int SIZE = TARGET_PIN_RADIUS;
+        const int deco_size = TARGET_PIN_RADIUS;
         const int ex1 = aPosition.x;
         const int ey1 = aPosition.y;
-        aPlotter->MoveTo( wxPoint( ex1 - SIZE, ey1 - SIZE ) );
-        aPlotter->FinishTo( wxPoint( ex1 + SIZE, ey1 + SIZE ) );
-        aPlotter->MoveTo( wxPoint( ex1 + SIZE, ey1 - SIZE ) );
-        aPlotter->FinishTo( wxPoint( ex1 - SIZE, ey1 + SIZE ) );
+        aPlotter->MoveTo( wxPoint( ex1 - deco_size, ey1 - deco_size ) );
+        aPlotter->FinishTo( wxPoint( ex1 + deco_size, ey1 + deco_size ) );
+        aPlotter->MoveTo( wxPoint( ex1 + deco_size, ey1 - deco_size ) );
+        aPlotter->FinishTo( wxPoint( ex1 - deco_size, ey1 + deco_size ) );
     }
 }
 
