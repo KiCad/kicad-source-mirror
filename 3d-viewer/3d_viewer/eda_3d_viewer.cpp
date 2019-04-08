@@ -879,6 +879,9 @@ void EDA_3D_VIEWER::CommonSettingsChanged()
     // Regen menu bars, etc
     EDA_BASE_FRAME::CommonSettingsChanged();
 
+    // There is no base class that handles toolbars for this frame
+    ReCreateMainToolbar();
+
     loadCommonSettings();
 
     NewDisplay( true );

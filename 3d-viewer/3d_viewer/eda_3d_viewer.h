@@ -197,6 +197,9 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
         DisplayHotkeyList( this, GetHotkeyConfig() );
     }
 
+    /**
+     * Equivalent of EDA_DRAW_FRAME::ReCreateHToolbar
+     */
     void ReCreateMainToolbar();
 
     void SetToolbars();
