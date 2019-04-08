@@ -48,12 +48,13 @@
 #include <lib_manager.h>
 #include <symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
-
+#include <sch_legacy_plugin.h>
 #include <dialog_choose_component.h>
 #include <symbol_tree_model_adapter.h>
 
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
+#include <wx/clipbrd.h>
 
 void LIB_EDIT_FRAME::updateTitle()
 {
@@ -526,7 +527,19 @@ void LIB_EDIT_FRAME::OnCopyCutPart( wxCommandEvent& aEvent )
     if( !part )
         return;
 
-    m_copiedPart.reset( new LIB_PART( *part ) );
+    STRING_FORMATTER formatter;
+    SCH_LEGACY_PLUGIN::FormatPart( part, formatter );
+
+    auto clipboard = wxTheClipboard;
+    wxClipboardLocker clipboardLock( clipboard );
+
+    if( !clipboardLock || !clipboard->IsOpened() )
+        return;
+
+    auto data = new wxTextDataObject( wxString( formatter.GetString().c_str(), wxConvUTF8 ) );
+    clipboard->SetData( data );
+
+    clipboard->Flush();
 
     if( aEvent.GetId() == ID_LIBEDIT_CUT_PART )
         OnRemovePart( aEvent );
@@ -543,22 +556,50 @@ void LIB_EDIT_FRAME::OnPasteDuplicatePart( wxCommandEvent& aEvent )
         return;
 
     LIB_PART* srcPart = nullptr;
+    LIB_PART* newPart = nullptr;
 
     if( aEvent.GetId() == ID_LIBEDIT_DUPLICATE_PART )
+    {
         srcPart = m_libMgr->GetBufferedPart( libId.GetLibItemName(), lib );
+        newPart = new LIB_PART( *srcPart );
+    }
     else if( aEvent.GetId() == ID_LIBEDIT_PASTE_PART )
-        srcPart = m_copiedPart.get();
+    {
+        auto clipboard = wxTheClipboard;
+        wxClipboardLocker clipboardLock( clipboard );
+
+        if( !clipboardLock || ! clipboard->IsSupported( wxDF_TEXT ) )
+            return;
+
+        wxTextDataObject data;
+        clipboard->GetData( data );
+        wxString partSource = data.GetText();
+
+        STRING_LINE_READER reader( TO_UTF8( partSource ), "Clipboard" );
+
+        try
+        {
+            reader.ReadLine();
+            newPart = SCH_LEGACY_PLUGIN::ParsePart( reader );
+        }
+        catch( IO_ERROR& e )
+        {
+            wxLogError( wxString::Format( "Malformed clipboard: %s" ), GetChars( e.What() ) );
+            return;
+        }
+    }
     else
         wxFAIL;
 
-    if( !srcPart )
+    if( !newPart )
         return;
 
-    LIB_PART newPart( *srcPart );
-    fixDuplicateAliases( &newPart, lib );
-    m_libMgr->UpdatePart( &newPart, lib );
+    fixDuplicateAliases( newPart, lib );
+    m_libMgr->UpdatePart( newPart, lib );
     SyncLibraries( false );
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart.GetName() ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, newPart->GetName() ) );
+
+    delete newPart;
 }
 
 

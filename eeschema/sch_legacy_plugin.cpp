@@ -2672,6 +2672,9 @@ LIB_PART* SCH_LEGACY_PLUGIN_CACHE::LoadPart( LINE_READER& aReader, int aMajorVer
 {
     const char* line = aReader.Line();
 
+    while( *line == '#' )
+        aReader.ReadLine();
+
     wxCHECK( strCompare( "DEF", line, &line ), NULL );
 
     long num;
