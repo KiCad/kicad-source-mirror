@@ -426,79 +426,77 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( !m_dragging )    // Prepare to start dragging
             {
-                bool invokedRouter = false;
-
                 if ( !evt->IsAction( &PCB_ACTIONS::move ) && isInteractiveDragEnabled() )
-                    invokedRouter = invokeInlineRouter( PNS::DM_ANY );
-
-                if( !invokedRouter )
                 {
-                    // deal with locked items (override lock or abort the operation)
-                    SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
-
-                    if( lockFlags == SELECTION_LOCKED )
+                    if( invokeInlineRouter( PNS::DM_ANY ) )
                         break;
-
-                    // When editing modules, all items have the same parent
-                    if( EditingModules() )
-                    {
-                        m_commit->Modify( selection.Front() );
-                    }
-                    else
-                    {
-                        // Save items, so changes can be undone
-                        for( auto item : selection )
-                        {
-                            // Don't double move footprint pads, fields, etc.
-                            if( item->GetParent() && item->GetParent()->IsSelected() )
-                                continue;
-
-                            m_commit->Modify( item );
-                        }
-                    }
-
-                    editFrame->UndoRedoBlock( true );
-                    m_cursor = controls->GetCursorPosition();
-
-                    if ( selection.HasReferencePoint() )
-                    {
-                        // start moving with the reference point attached to the cursor
-                        grid.SetAuxAxes( false );
-
-                        auto delta = m_cursor - selection.GetReferencePoint();
-
-                        // Drag items to the current cursor position
-                        for( auto item : selection )
-                        {
-                            // Don't double move footprint pads, fields, etc.
-                            if( item->GetParent() && item->GetParent()->IsSelected() )
-                                continue;
-
-                            static_cast<BOARD_ITEM*>( item )->Move( delta );
-                        }
-
-                        selection.SetReferencePoint( m_cursor );
-                    }
-                    else if( selection.Size() == 1 )
-                    {
-                        // Set the current cursor position to the first dragged item origin, so the
-                        // movement vector could be computed later
-                        updateModificationPoint( selection );
-                        m_cursor = grid.BestDragOrigin( originalCursorPos, curr_item );
-                        grid.SetAuxAxes( true, m_cursor );
-                    }
-                    else
-                    {
-                        updateModificationPoint( selection );
-                        m_cursor = grid.Align( m_cursor );
-                    }
-
-                    controls->SetCursorPosition( m_cursor, false );
-
-                    prevPos = m_cursor;
-                    controls->SetAutoPan( true );
-                    m_dragging = true;
                 }
+
+                // deal with locked items (override lock or abort the operation)
+                SELECTION_LOCK_FLAGS lockFlags = m_selectionTool->CheckLock();
+
+                if( lockFlags == SELECTION_LOCKED )
+                    break;
+
+                // When editing modules, all items have the same parent
+                if( EditingModules() )
+                {
+                    m_commit->Modify( selection.Front() );
+                }
+                else
+                {
+                    // Save items, so changes can be undone
+                    for( auto item : selection )
+                    {
+                        // Don't double move footprint pads, fields, etc.
+                        if( item->GetParent() && item->GetParent()->IsSelected() )
+                            continue;
+
+                        m_commit->Modify( item );
+                    }
+                }
+
+                editFrame->UndoRedoBlock( true );
+                m_cursor = controls->GetCursorPosition();
+
+                if ( selection.HasReferencePoint() )
+                {
+                    // start moving with the reference point attached to the cursor
+                    grid.SetAuxAxes( false );
+
+                    auto delta = m_cursor - selection.GetReferencePoint();
+
+                    // Drag items to the current cursor position
+                    for( auto item : selection )
+                    {
+                        // Don't double move footprint pads, fields, etc.
+                        if( item->GetParent() && item->GetParent()->IsSelected() )
+                            continue;
+
+                        static_cast<BOARD_ITEM*>( item )->Move( delta );
+                    }
+
+                    selection.SetReferencePoint( m_cursor );
+                }
+                else if( selection.Size() == 1 )
+                {
+                    // Set the current cursor position to the first dragged item origin, so the
+                    // movement vector could be computed later
+                    updateModificationPoint( selection );
+                    m_cursor = grid.BestDragOrigin( originalCursorPos, curr_item );
+                    grid.SetAuxAxes( true, m_cursor );
+                }
+                else
+                {
+                    updateModificationPoint( selection );
+                    m_cursor = grid.Align( m_cursor );
+                }
+
+                controls->SetCursorPosition( m_cursor, false );
+
+                prevPos = m_cursor;
+                controls->SetAutoPan( true );
+                m_dragging = true;
             }
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
