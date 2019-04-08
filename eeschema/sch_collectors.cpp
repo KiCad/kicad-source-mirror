@@ -135,6 +135,7 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
 
 const KICAD_T SCH_COLLECTOR::DraggableItems[] = {
     SCH_JUNCTION_T,
+    SCH_NO_CONNECT_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
     SCH_LINE_T,
