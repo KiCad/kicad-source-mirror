@@ -938,7 +938,7 @@ public:
     /**
      * Return the tool manager instance, if any.
      */
-    TOOL_MANAGER* GetToolManager() const            { return m_toolManager; }
+    TOOL_MANAGER* GetToolManager() const override   { return m_toolManager; }
 
     /**
      * A way to pass info to draw functions. the base class has no knowledge about

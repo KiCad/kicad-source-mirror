@@ -372,6 +372,12 @@ public:
      */
     const KIGFX::VC_SETTINGS& GetCurrentToolVC() const;
 
+    void VetoContextMenuMouseWarp()
+    {
+        m_warpMouseAfterContextMenu = false;
+    }
+
+
 private:
     typedef std::pair<TOOL_EVENT_LIST, TOOL_STATE_FUNC> TRANSITION;
 
@@ -530,6 +536,8 @@ private:
 
     /// Right click context menu position.
     VECTOR2D m_menuCursor;
+
+    bool m_warpMouseAfterContextMenu;
 
     /// Flag indicating whether a context menu is currently displayed.
     bool m_menuActive;
