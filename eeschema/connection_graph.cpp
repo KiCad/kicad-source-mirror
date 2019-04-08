@@ -50,6 +50,8 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     m_driver = nullptr;
 
+    vector<SCH_ITEM*> strong_drivers;
+
     // Hierarchical labels are lower priority than local labels here,
     // because on the first pass we want local labels to drive subgraphs
     // so that we can identify same-sheet neighbors and link them together.
@@ -85,6 +87,9 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         default: break;
         }
 
+        if( item_priority >= 3 )
+            strong_drivers.push_back( item );
+
         if( item_priority > highest_priority )
         {
             candidates.clear();
@@ -99,6 +104,9 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     if( highest_priority >= 3 )
         m_strong_driver = true;
+
+    // Power pins are 5, global labels are 6
+    m_local_driver = ( highest_priority < 5 );
 
     if( candidates.size() )
     {
@@ -142,9 +150,11 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
             m_driver = candidates[0];
     }
 
-    // For power connections, we allow multiple drivers
-    if( highest_priority >= 4 && candidates.size() > 1 )
+    if( strong_drivers.size() > 1 )
         m_multiple_drivers = true;
+
+    // Drop weak drivers
+    m_drivers = strong_drivers;
 
     if( aCreateMarkers && m_multiple_drivers )
     {
@@ -256,6 +266,8 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_SHEET_PIN_T:
     {
         auto label = static_cast<SCH_TEXT*>( aItem );
 
@@ -911,33 +923,45 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         auto candidate_subgraphs( m_subgraphs );
         auto connections_to_check( connection->Members() );
 
-        bool contains_hier_stuff = false;
+        // Look for "neighbors" for subgraphs: other subgraphs that have matching
+        // local labels on the same sheet and so should be connected together.
 
-        for( auto item : subgraph->m_items )
-        {
-            if( item->Type() == SCH_HIERARCHICAL_LABEL_T ||
-                item->Type() == SCH_SHEET_PIN_T )
-            {
-                contains_hier_stuff = true;
-                break;
-            }
-        }
-
-        // TODO(JE) maybe it will be better to form these links eventually,
-        // but for now let's only include subgraphs that contain hierarchical
-        // links in one direction or another
-        if( !contains_hier_stuff )
-            continue;
-
-        // For plain nets, just link based on the driver
+        // For plain nets, just link based on the drivers
         if( !connection->IsBus() )
         {
             connections_to_check.push_back( std::make_shared<SCH_CONNECTION>( *connection ) );
-        }
 
-        // Look for "neighbors" for subgraphs that have hierarchical connections.
-        // These are usually other subgraphs that have local labels on the
-        // same sheet and so should be connected together.
+            // Add other labels to link neighbors
+            if( subgraph->m_strong_driver )
+            {
+                for( auto driver : subgraph->m_drivers )
+                {
+                    if( driver == subgraph->m_driver )
+                        continue;
+
+                    // Local labels and hierarchical labels form local neighbor links
+                    switch( driver->Type() )
+                    {
+                    case SCH_HIERARCHICAL_LABEL_T:
+                    case SCH_LABEL_T:
+                    {
+                        // The actual connection attached to this item will have been overwritten
+                        // by the chosen driver of the subgraph, so we need to create a dummy
+                        // connection here as if this particular label were the main driver
+
+                        auto c = std::make_shared<SCH_CONNECTION>( driver,
+                                                                   subgraph->m_sheet );
+                        c->ConfigureFromLabel( static_cast<SCH_TEXT*>( driver )->GetText() );
+                        connections_to_check.push_back( c );
+                        break;
+                    }
+
+                    default:
+                        break;
+                    }
+                }
+            }
+        }
 
         for( unsigned i = 0; i < connections_to_check.size(); i++ )
         {
@@ -956,12 +980,16 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( candidate->m_sheet != sheet || !candidate->m_driver || candidate == subgraph )
                     continue;
 
+                // Exclude globally-driven subgraphs from neighbor maps
+                if( !candidate->m_local_driver )
+                    continue;
+
                 auto candidate_connection = candidate->m_driver_connection;
 
                 if( !candidate_connection->IsNet() )
                     continue;
 
-                if( candidate_connection->Name( false ) == member->Name( false ) )
+                if( candidate_connection->Name() == member->Name() )
                     subgraph->m_neighbor_map[ member ].push_back( candidate );
             }
         }
@@ -1045,10 +1073,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         auto sheet = subgraph->m_sheet;
         auto connection = std::make_shared<SCH_CONNECTION>( *subgraph->m_driver_connection );
 
-        // Collapse power nets that are shorted together
+        // Collapse nets that are shorted together via multiple labels
 
         if( subgraph->m_multiple_drivers )
         {
+            // Check for global neighbors for each driver
             for( auto obj : subgraph->m_drivers )
             {
                 if( obj == subgraph->m_driver )
@@ -1056,25 +1085,46 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 wxString name = subgraph->GetNameForDriver( obj );
 
-                if( m_net_name_to_code_map.count( name ) == 0 )
-                    continue;
+                // If the name is a global, we'll have it in the code map
 
-                int code = m_net_name_to_code_map.at( name );
-
-                for( auto subgraph_to_update : m_subgraphs )
+                if( m_net_name_to_code_map.count( name ) )
                 {
-                    if( !subgraph_to_update->m_driver )
-                        continue;
+                    int code = m_net_name_to_code_map.at( name );
 
-                    auto subsheet = subgraph_to_update->m_sheet;
-                    auto conn = subgraph_to_update->m_driver_connection;
-
-                    if( conn->IsBus() || conn->NetCode() != code )
-                        continue;
-
-                    for( auto item : subgraph_to_update->m_items )
+                    for( auto subgraph_to_update : m_subgraphs )
                     {
-                        auto item_conn = item->Connection( subsheet );
+                        if( !subgraph_to_update->m_driver )
+                            continue;
+
+                        auto subsheet = subgraph_to_update->m_sheet;
+                        auto conn = subgraph_to_update->m_driver_connection;
+
+                        if( conn->IsBus() || conn->NetCode() != code )
+                            continue;
+
+                        for( auto item : subgraph_to_update->m_items )
+                        {
+                            auto item_conn = item->Connection( subsheet );
+                            item_conn->Clone( *connection );
+                        }
+                    }
+                }
+            }
+
+            // Also check for local neighbors
+            for( auto& kv : subgraph->m_neighbor_map )
+            {
+                for( auto sg : kv.second )
+                {
+                    if( sg->m_driver_connection->Name() == connection->Name() )
+                        continue;
+
+                    // Neighbors had better be on the same sheet
+                    wxASSERT( sg->m_sheet == sheet );
+
+                    for( auto item : sg->m_items )
+                    {
+                        auto item_conn = item->Connection( sheet );
                         item_conn->Clone( *connection );
                     }
                 }

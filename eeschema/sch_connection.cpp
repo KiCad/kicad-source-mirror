@@ -108,6 +108,8 @@ bool SCH_CONNECTION::operator!=( const SCH_CONNECTION& aOther ) const
 
 void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
 {
+    m_members.clear();
+
     if( IsBusVectorLabel( aLabel ) )
     {
         m_name = aLabel;

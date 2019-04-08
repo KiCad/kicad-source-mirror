@@ -101,6 +101,9 @@ public:
     /// True if the driver is "strong": a label or power object
     bool m_strong_driver;
 
+    /// True if the driver is a local (i.e. non-global) type
+    bool m_local_driver;
+
     /// No-connect item in graph, if any
     SCH_ITEM* m_no_connect;
 
