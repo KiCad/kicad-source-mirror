@@ -985,4 +985,9 @@ void prepareExportMenu( wxMenu* aParentMenu )
                  _( "&Footprint Association (.cmp) File..." ),
                  _( "Export footprint association file (*.cmp) for schematic back annotation" ),
                  KiBitmap( create_cmp_file_xpm ) );
+
+    AddMenuItem( aParentMenu, ID_GEN_EXPORT_FILE_HYPERLYNX,
+                 _( "&Hyperlynx..." ), _( "Hyperlynx export" ),
+                 KiBitmap( export_step_xpm ) );
+
 }

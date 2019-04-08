@@ -193,6 +193,7 @@ set( PCBNEW_IMPORT_GFX
     )
 
 set( PCBNEW_EXPORTERS
+    exporters/export_hyperlynx.cpp
     exporters/export_d356.cpp
     exporters/export_footprint_associations.cpp
     exporters/export_gencad.cpp

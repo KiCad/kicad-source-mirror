@@ -1050,6 +1050,13 @@ public:
     void OnExportIDF3( wxCommandEvent& event );
 
     /**
+     * Function OnExportHyperlynx
+     * will export the current BOARD to a Hyperlynx HYP file.
+     */
+    void OnExportHyperlynx( wxCommandEvent& event );
+
+
+    /**
      * Function Export_IDF3
      * Creates an IDF3 compliant BOARD (*.emn) and LIBRARY (*.emp) file.
      *

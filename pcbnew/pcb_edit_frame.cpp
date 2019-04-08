@@ -129,6 +129,7 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_MENU( ID_GEN_EXPORT_FILE_VRML, PCB_EDIT_FRAME::OnExportVRML )
     EVT_MENU( ID_GEN_EXPORT_FILE_IDF3, PCB_EDIT_FRAME::OnExportIDF3 )
     EVT_MENU( ID_GEN_EXPORT_FILE_STEP, PCB_EDIT_FRAME::OnExportSTEP )
+    EVT_MENU( ID_GEN_EXPORT_FILE_HYPERLYNX, PCB_EDIT_FRAME::OnExportHyperlynx )
 
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_SESSION,PCB_EDIT_FRAME::ImportSpecctraSession )
     EVT_MENU( ID_GEN_IMPORT_SPECCTRA_DESIGN, PCB_EDIT_FRAME::ImportSpecctraDesign )
@@ -1384,4 +1385,32 @@ void PCB_EDIT_FRAME::LockModule( MODULE* aModule, bool aLocked )
             }
         }
     }
+}
+
+bool ExportBoardToHyperlynx( BOARD* aBoard, const wxFileName& aPath );
+
+void PCB_EDIT_FRAME::OnExportHyperlynx( wxCommandEvent& event )
+{
+    wxString    wildcard =  wxT("*.hyp");
+    wxFileName  fn = GetBoard()->GetFileName();
+
+    fn.SetExt( wxT("hyp") );
+
+    wxFileDialog dlg( this,
+            _( "Export Hyperlynx Layout" ),
+            fn.GetPath(),
+            fn.GetFullName(),
+            wildcard,
+            wxFD_SAVE | wxFD_OVERWRITE_PROMPT
+            );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return;
+
+    fn = dlg.GetPath();
+
+    // always enforce filename extension, user may not have entered it.
+    fn.SetExt( wxT("hyp") );
+
+    ExportBoardToHyperlynx( GetBoard(), fn );
 }

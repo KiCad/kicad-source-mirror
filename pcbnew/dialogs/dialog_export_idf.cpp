@@ -229,3 +229,4 @@ void PCB_EDIT_FRAME::OnExportIDF3( wxCommandEvent& event )
         return;
     }
 }
+
