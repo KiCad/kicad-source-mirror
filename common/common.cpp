@@ -288,7 +288,7 @@ wxString GetKicadConfigPath()
         cfgpath.AssignDir( envstr );
     }
 
-    cfgpath.AppendDir( wxT( "kicad" ) );
+    cfgpath.AppendDir( TO_STR( KICAD_CONFIG_DIR ) );
 
     // Use KICAD_CONFIG_HOME to allow the user to force a specific configuration path.
     if( wxGetEnv( wxT( "KICAD_CONFIG_HOME" ), &envstr ) && !envstr.IsEmpty() )

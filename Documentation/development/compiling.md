@@ -144,7 +144,7 @@ so use at your own risk.
 ## Graphics Context Overlay ## {#overlay_opt}
 
 The USE_WX_OVERLAY option is used to enable the optional wxOverlay class for graphics rendering
-on macOS.  This is enabled on macOS by default and disabled on all other platforms.
+on macOS.  This is enabled on macOS and GTK3 by default and disabled on all other platforms.
 
 ## Scripting Support ## {#scripting_opt}
 
@@ -221,6 +221,18 @@ information as follows:
     (5.0.0-rc2-dev-100-g5a33f0960)
      |
      output of `git describe --dirty` if git is available.
+
+
+## KiCad Config Directory ## {#config_dir_opt}
+
+The default KiCad configuration directory is `kicad`.  On Linux this is located at
+`~/.config/kicad`, on MSW, this is `C:\Documents and Settings\username\Application Data\kicad` and
+on MacOS, this is `~/Library/Preferences/kicad`.  If the installation package would like to, it may
+specify an alternate configuration name instead of `kicad`.  This may be useful for versioning
+the configuration parameters and allowing the use of, e.g. `kicad5` and `kicad6` concurrently without
+losing configuration data.
+
+This is set by specifying the KICAD_CONFIG_DIR string at compile time.
 
 # Getting the KiCad Source Code ## {#getting_src}
 

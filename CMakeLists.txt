@@ -128,10 +128,8 @@ option( KICAD_SPICE "Build KiCad with internal Spice simulator." ON )
 set( CMAKE_CXX_VISIBILITY_PRESET "hidden" )
 set( CMAKE_VISIBILITY_INLINES_HIDDEN ON )
 
-
 # Global setting: build everything position independent
 set( CMAKE_POSITION_INDEPENDENT_CODE ON )
-
 
 # Global setting: Use C++11
 set(CMAKE_CXX_STANDARD 11)
@@ -160,12 +158,9 @@ endif()
 # Add option to add user directories for linker, if any
 LINK_DIRECTORIES( ${LINK_DIRECTORIES_PATH} )
 
-if( UNIX )
-    set( KICAD_USER_CONFIG_DIR $ENV{HOME} CACHE PATH "Location of user specific KiCad config files" )
-elseif( MINGW )
-    set( KICAD_USER_CONFIG_DIR $ENV{APPDATA} CACHE PATH "Location of user specific KiCad config files" )
-endif()
-mark_as_advanced( KICAD_USER_CONFIG_DIR )
+set( KICAD_CONFIG_DIR "kicad" CACHE STRING "Location of user specific KiCad config files" )
+mark_as_advanced( KICAD_CONFIG_DIR )
+add_definitions( -DKICAD_CONFIG_DIR=${KICAD_CONFIG_DIR} )
 
 # Set default data file path to CMAKE_INSTALL_PREFIX if it wasn't specified during the
 # CMake configuration.  The value of DEFAULT_INSTALL_PATH is expanded in config.h and

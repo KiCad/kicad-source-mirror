@@ -47,6 +47,14 @@
 #define TO_UTF8( wxstring )  ( (const char*) (wxstring).utf8_str() )
 
 /**
+ * Stringifies the given parameter by placing in quotes
+ * @param cstring STRING (no spaces)
+ * @return "STRING"
+ */
+#define TO_STR2(x) #x
+#define TO_STR(x) TO_STR2(x)
+
+/**
  * function FROM_UTF8
  * converts a UTF8 encoded C string to a wxString for all wxWidgets build modes.
  */
