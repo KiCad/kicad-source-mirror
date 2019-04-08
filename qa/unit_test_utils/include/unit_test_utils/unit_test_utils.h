@@ -230,6 +230,27 @@ void CheckUnorderedMatches(
     }
 }
 
+
+/**
+ * Get a simple string "aIn -> aOut".
+ *
+ * Useful for BOOST_TEST_CONTEXT blocks as a brief description where a full
+ * case name would be a bit too much.
+ *
+ * @tparam IN   the input type
+ * @tparam OUT  the output type
+ * @param  aIn  the input
+ * @param  aOut the output
+ * @return      "aIn -> aOut"
+ */
+template<typename IN, typename OUT>
+std::string InOutString( const IN& aIn, const OUT& aOut )
+{
+    std::stringstream ss;
+    ss << aIn << " -> " << aOut;
+    return ss.str();
+}
+
 } // namespace KI_TEST
 
 #endif // UNIT_TEST_UTILS__H
