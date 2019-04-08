@@ -117,7 +117,7 @@ static const std::vector<EVAL_CASE> eval_cases_valid = {
     { "1.5", "1.5" },
     { "1,5", "1.5" },
     // Semicolon is valid, but the result is NaN
-    { "1;", "nan" },
+    { "1;", "NaN" },
     // With own unit
     { "1mm", "1" },
     // Unit that's not the evaluator's unit
