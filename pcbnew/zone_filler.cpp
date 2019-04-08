@@ -186,7 +186,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     connectivity->SetProgressReporter( m_progressReporter );
     connectivity->FindIsolatedCopperIslands( toFill );
 
-    // Now remove insulated copper islands
+    // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
 
     for( auto& zone : toFill )
@@ -194,7 +194,7 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
         SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList();
 
-        // only zones with net code > 0 can have islands to remove by definition
+        // only zones with net code > 0 can have insulated islands by definition
         if( zone.m_zone->GetNetCode() > 0 )
         {
             for( auto idx : zone.m_islands )
@@ -202,6 +202,11 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
                 poly.DeletePolygon( idx );
             }
         }
+
+        SHAPE_POLY_SET boardOutline;
+
+        if( m_board->GetBoardPolygonOutlines( boardOutline ) )
+            poly.BooleanIntersection( boardOutline, SHAPE_POLY_SET::PM_FAST );
 
         zone.m_zone->SetFilledPolysList( poly );
 
