@@ -94,6 +94,11 @@ private:
     void initPanel();
 
     /**
+     * Load 3D relevant settings from the user configuration
+     */
+    void loadCommonSettings();
+
+    /**
      * @brief updateOrientation - it will receive the events from editing the fields
      * @param event
      */
