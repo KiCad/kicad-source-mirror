@@ -104,7 +104,17 @@ void NUMERIC_EVALUATOR::parseOk()
 
 void NUMERIC_EVALUATOR::parseSetResult( double val )
 {
-    snprintf( m_token.token, m_token.OutLen, "%.10g", val );
+    if( std::isnan( val ) )
+    {
+        // Naively printing this with %g produces "nan" on some platforms
+        // and "-nan(ind)" on others (e.g. MSVC). So force a "standard" string.
+        snprintf( m_token.token, m_token.OutLen, "%s", "NaN" );
+    }
+    else
+    {
+        // Can be printed as a floating point
+        snprintf( m_token.token, m_token.OutLen, "%.10g", val );
+    }
 }
 
 
