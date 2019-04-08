@@ -689,6 +689,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         }
 
         m_viewControls->ForceCursorPosition( true, m_menuCursor );
+        m_warpMouseAfterContextMenu = true;
 
         // Display a copy of menu
         std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
@@ -703,8 +704,8 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         if( frame )
             frame->PopupMenu( menu.get() );
 
-        // Warp the cursor as long as the menu wasn't clicked out of
-        if( menu->GetSelected() >= 0 )
+        // Warp the cursor if a menu item was selected
+        if( menu->GetSelected() >= 0 && m_warpMouseAfterContextMenu )
             m_viewControls->WarpCursor( m_menuCursor, true, false );
         // Otherwise notify the tool of a cancelled menu
         else

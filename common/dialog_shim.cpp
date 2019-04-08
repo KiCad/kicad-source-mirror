@@ -26,6 +26,7 @@
 #include <kiway_player.h>
 #include <wx/evtloop.h>
 #include <pgm_base.h>
+#include <tool/tool_manager.h>
 #include <eda_rect.h>
 #include <wx/display.h>
 #include <wx/grid.h>
@@ -91,6 +92,12 @@ DIALOG_SHIM::DIALOG_SHIM( wxWindow* aParent, wxWindowID id, const wxString& titl
     {
         // Inherit units from parent
         m_units = kiwayHolder->GetUserUnits();
+
+        // Don't mouse-warp after a dialog run from the context menu
+        TOOL_MANAGER* toolMgr = kiwayHolder->GetToolManager();
+
+        if( toolMgr )
+            toolMgr->VetoContextMenuMouseWarp();
 
         // Set up the message bus
         SetKiway( this, &kiwayHolder->Kiway() );

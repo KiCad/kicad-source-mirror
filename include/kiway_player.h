@@ -34,6 +34,7 @@ class KIWAY;
 class PROJECT;
 struct KIFACE;
 class KIFACE_I;
+class TOOL_MANAGER;
 
 #define VTBL_ENTRY          virtual
 
@@ -77,6 +78,12 @@ public:
      * because their primary superclass must be wxDialog.
      */
     VTBL_ENTRY EDA_UNITS_T GetUserUnits() const;
+
+    /**
+     * Function GetToolManager
+     * Return the tool manager instance, if any.
+     */
+    VTBL_ENTRY TOOL_MANAGER* GetToolManager() const;
 
     /**
      * Function SetKiway
