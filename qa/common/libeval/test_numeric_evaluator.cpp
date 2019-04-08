@@ -26,8 +26,7 @@
  * Test suite for #NUMERIC_EVALUATOR
  */
 
-#include <boost/test/test_case_template.hpp>
-#include <boost/test/unit_test.hpp>
+#include <unit_test_utils/unit_test_utils.h>
 
 #include <libeval/numeric_evaluator.h>
 
@@ -161,17 +160,20 @@ BOOST_AUTO_TEST_CASE( Results )
 {
     for( const auto& c : eval_cases_valid )
     {
-        // Clear for new string input
-        m_eval.Clear();
+        BOOST_TEST_CONTEXT( KI_TEST::InOutString( c.input, c.exp_result ) )
+        {
+            // Clear for new string input
+            m_eval.Clear();
 
-        m_eval.Process( c.input );
+            m_eval.Process( c.input );
 
-        // These are all valid
-        BOOST_CHECK_EQUAL( m_eval.IsValid(), true );
-        BOOST_CHECK_EQUAL( m_eval.Result(), c.exp_result );
+            // These are all valid
+            BOOST_CHECK_EQUAL( m_eval.IsValid(), true );
+            BOOST_CHECK_EQUAL( m_eval.Result(), c.exp_result );
 
-        // Does original text still match?
-        BOOST_CHECK_EQUAL( m_eval.OriginalText(), c.input );
+            // Does original text still match?
+            BOOST_CHECK_EQUAL( m_eval.OriginalText(), c.input );
+        }
     }
 }
 
@@ -214,16 +216,19 @@ BOOST_AUTO_TEST_CASE( ResultsInvalid )
 {
     for( const auto& c : eval_cases_invalid )
     {
-        // Clear for new string input
-        m_eval.Clear();
+        BOOST_TEST_CONTEXT( c.input )
+        {
+            // Clear for new string input
+            m_eval.Clear();
 
-        m_eval.Process( c.input );
+            m_eval.Process( c.input );
 
-        // These are all valid
-        BOOST_CHECK_EQUAL( m_eval.IsValid(), false );
+            // These are all valid
+            BOOST_CHECK_EQUAL( m_eval.IsValid(), false );
 
-        // Does original text still match?
-        BOOST_CHECK_EQUAL( m_eval.OriginalText(), c.input );
+            // Does original text still match?
+            BOOST_CHECK_EQUAL( m_eval.OriginalText(), c.input );
+        }
     }
 }
 
