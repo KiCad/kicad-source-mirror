@@ -70,6 +70,7 @@ private:
     wxString getListColumnHeaderCount() { return _( "Pad Count" ); };
     void adjustListColumns();
 
+    wxArrayString   m_netsInitialNames;   // The list of escaped netnames (original names)
     wxString        m_selection;
     bool            m_wasSelected;
     BOARD*          m_brd;
@@ -122,6 +123,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
     filter.SetPattern( netFilter.MakeUpper() );
 
     m_netsList->DeleteAllItems();
+    m_netsInitialNames.Clear();
 
     // Populate the nets list with nets names matching the filters:
     // Note: the filtering is case insensitive.
@@ -145,6 +147,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
         dataLine.push_back( wxVariant( wxString::Format( "%.3d", netcode ) ) );
         dataLine.push_back( wxVariant( UnescapeString( net->GetNetname() ) ) );
+        m_netsInitialNames.Add( net->GetNetname() );
 
         if( netcode )
             dataLine.push_back( wxVariant( wxString::Format( "%u", nodes ) ) );
@@ -166,7 +169,9 @@ void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( const wxString& aNetName )
     if( !aNetName.IsEmpty() )
     {
         net = m_brd->FindNet( aNetName );
-        netCode = net->GetNet();
+
+        if( net )
+            netCode = net->GetNet();
     }
 
     if( m_frame->IsGalCanvasActive() )
@@ -208,7 +213,9 @@ void DIALOG_SELECT_NET_FROM_LIST::onSelChanged( wxDataViewEvent&  )
 
     if( selected_row >= 0 )
     {
-        m_selection = EscapeString( m_netsList->GetTextValue( selected_row, 1 ), CTX_NETNAME );
+        // We no not use the displayed net name returnded by
+        // m_netsList->GetTextValue( selected_row, 1 ); because we need the initial escaped net name
+        m_selection = m_netsInitialNames[ selected_row ];
         m_wasSelected = true;
 
         HighlightNet( m_selection );
