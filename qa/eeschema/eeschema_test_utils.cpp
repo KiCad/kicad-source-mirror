@@ -23,6 +23,8 @@
 
 #include "eeschema_test_utils.h"
 
+#include <cstdlib>
+
 wxFileName KI_TEST::GetEeschemaTestDataDir()
 {
     const char* env = std::getenv( "KICAD_TEST_EESCHEMA_DATA_DIR" );
