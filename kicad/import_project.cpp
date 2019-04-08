@@ -141,7 +141,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             }
         }
 
-        std::string packet = wxString::Format( "%d\n%s", SCH_IO_MGR::SCH_EAGLE, sch.GetFullPath() );
+        std::string packet = StrPrintf( "%d\n%s", SCH_IO_MGR::SCH_EAGLE,
+                                                  TO_UTF8( sch.GetFullPath() ) );
         schframe->Kiway().ExpressMail( FRAME_SCH, MAIL_IMPORT_FILE, packet, this );
 
         if( !schframe->IsShown() )      // the frame exists, (created by the dialog field editor)
@@ -183,7 +184,8 @@ void KICAD_MANAGER_FRAME::OnImportEagleFiles( wxCommandEvent& event )
             pcbframe->Show( true );
         }
 
-        std::string packet = wxString::Format( "%d\n%s", IO_MGR::EAGLE, pcb.GetFullPath() );
+        std::string packet = StrPrintf( "%d\n%s", IO_MGR::EAGLE,
+                                                  TO_UTF8( pcb.GetFullPath() ) );
         pcbframe->Kiway().ExpressMail( FRAME_PCB, MAIL_IMPORT_FILE, packet, this );
 
         // On Windows, Raise() does not bring the window on screen, when iconized
