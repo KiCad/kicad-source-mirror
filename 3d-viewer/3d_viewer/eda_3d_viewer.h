@@ -154,6 +154,15 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      */
     bool Set3DSilkScreenColorFromUser();
 
+    /**
+     * Notification that common settings are updated.
+     *
+     * This would be private (and only called by the Kiway), but we
+     * need to do this manually from the PCB frame because the 3D viewer isn't
+     * updated via the #KIWAY.
+     */
+    void CommonSettingsChanged() override;
+
  private:
     /// Called when user press the File->Exit
     void Exit3DFrame( wxCommandEvent &event );
@@ -216,6 +225,11 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
     DECLARE_EVENT_TABLE()
 
  private:
+
+    /**
+     * Load configuration from common settings.
+     */
+    void loadCommonSettings();
 
     /**
      *  Filename to propose for save a screenshot
