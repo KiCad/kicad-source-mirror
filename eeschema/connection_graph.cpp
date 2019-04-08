@@ -376,6 +376,11 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 pin->GetDefaultNetName( aSheet );
                 pin->ConnectedItems().clear();
 
+                // Invisible power pins need to be post-processed later
+
+                if( pin->IsPowerConnection() && !pin->IsVisible() )
+                    m_invisible_power_pins.push_back( pin );
+
                 connection_map[ pos ].push_back( pin );
                 m_items.insert( pin );
             }
@@ -567,18 +572,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     subgraph->m_drivers.push_back( item );
 
                 connection->SetSubgraphCode( subgraph->m_code );
-
-                if( item->Type() == SCH_PIN_T )
-                {
-                    auto pin = static_cast<SCH_PIN*>( item );
-
-                    // Invisible power pins need to be post-processed later
-
-                    if( pin->IsPowerConnection() && !pin->IsVisible() )
-                    {
-                        m_invisible_power_pins.push_back( pin );
-                    }
-                }
 
                 std::list<SCH_ITEM*> members( item->ConnectedItems().begin(),
                                               item->ConnectedItems().end() );
@@ -1876,6 +1869,26 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
                 if( item->IsConnectable() )
                     has_other_connections = true;
                 break;
+            }
+        }
+
+        // Check if invisible power pins connect to anything else
+        // Note this won't catch if a component has multiple invisible power
+        // pins but these don't connect to any other net; maybe that should be
+        // added as a further optional ERC check.
+
+        if( pin && !has_other_connections &&
+            pin->IsPowerConnection() && !pin->IsVisible() )
+        {
+            wxString name = pin->Connection( sheet )->Name();
+
+            if( int code = m_net_name_to_code_map.count( name ) )
+            {
+                if( m_net_code_to_subgraphs_map.count( code ) )
+                {
+                    if( m_net_code_to_subgraphs_map.at( code ).size() > 1 )
+                        has_other_connections = true;
+                }
             }
         }
 
