@@ -53,7 +53,7 @@ public:
     void SyncWorld( PNS::NODE* aWorld ) override;
     void EraseView() override;
     void HideItem( PNS::ITEM* aItem ) override;
-    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0 ) override;
+    void DisplayItem( const PNS::ITEM* aItem, int aColor = 0, int aClearance = 0, bool aEdit = false ) override;
     void AddItem( PNS::ITEM* aItem ) override;
     void RemoveItem( PNS::ITEM* aItem ) override;
     void Commit() override;

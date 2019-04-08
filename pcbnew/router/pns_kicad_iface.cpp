@@ -1092,7 +1092,7 @@ void PNS_KICAD_IFACE::EraseView()
 }
 
 
-void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClearance )
+void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClearance, bool aEdit )
 {
     wxLogTrace( "PNS", "DisplayItem %p", aItem );
 
@@ -1107,10 +1107,28 @@ void PNS_KICAD_IFACE::DisplayItem( const PNS::ITEM* aItem, int aColor, int aClea
 
         if( m_dispOptions )
         {
-            auto clearanceDisp = m_dispOptions->m_ShowTrackClearanceMode;
-            pitem->ShowTrackClearance( clearanceDisp != PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE );
-            pitem->ShowViaClearance( clearanceDisp != PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE
-                    && clearanceDisp != PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS );
+            switch( m_dispOptions->m_ShowTrackClearanceMode )
+            {
+            case PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE:
+                pitem->ShowTrackClearance( false );
+                pitem->ShowViaClearance( false );
+                break;
+            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_ALWAYS:
+            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_AND_EDITED_TRACKS_AND_VIA_AREAS:
+                pitem->ShowTrackClearance( true );
+                pitem->ShowViaClearance( true );
+                break;
+
+            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS:
+                pitem->ShowTrackClearance( !aEdit );
+                pitem->ShowViaClearance( !aEdit );
+                break;
+
+            case PCB_DISPLAY_OPTIONS::SHOW_CLEARANCE_NEW_TRACKS:
+                pitem->ShowTrackClearance( !aEdit );
+                pitem->ShowViaClearance( false );
+                break;
+            }
         }
     }
 
