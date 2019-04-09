@@ -234,6 +234,9 @@ NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::CreateNetlist( bool aSilent,
 
 NETLIST_OBJECT_LIST* SCH_EDIT_FRAME::BuildNetListBase( bool updateStatusText )
 {
+    // Ensure netlist is up to date
+    RecalculateConnections();
+
     // I own this list until I return it to the new owner.
     std::unique_ptr<NETLIST_OBJECT_LIST> ret( new NETLIST_OBJECT_LIST() );
 
