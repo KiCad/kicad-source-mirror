@@ -57,7 +57,6 @@ public:
     HYPERLYNX_PAD_STACK( BOARD* aBoard, const VIA* aVia );
     ~HYPERLYNX_PAD_STACK(){};
 
-
     bool isThrough() const
     {
         return m_type == PAD_ATTRIB_HOLE_NOT_PLATED || m_type == PAD_ATTRIB_STANDARD;
@@ -126,7 +125,6 @@ public:
         }
     }
 
-
     bool isEmpty() const
     {
         LSET layerMask = LSET::AllCuMask() & m_board->GetEnabledLayers();
@@ -134,7 +132,6 @@ public:
 
         return outLayers.none();
     }
-
 
 private:
     BOARD*      m_board;
@@ -184,11 +181,12 @@ private:
         case PAD_SHAPE_RECT: shapeId = 1; break;
         default:
             shapeId = 0;
+
             if( m_reporter )
             {
                 m_reporter->Report(
-                        _( "File contains pad shapes that are not supported by the"
-                           "Hyperlynx exporter (oval, rectangle, circle). They have been"
+                        _( "File contains pad shapes that are not supported by the "
+                           "Hyperlynx exporter (oval, rectangle, circle). They have been "
                            "exported as oval pads." ),
                         REPORTER::RPT_WARNING );
             }
@@ -197,7 +195,7 @@ private:
 
         snprintf( buf, sizeof( buf ), "%d, %.9f, %.9f, %.1f, M", shapeId,
                 iu2hyp( aStack.m_sx ),
-                iu2hyp( aStack.m_sy ), 
+                iu2hyp( aStack.m_sy ),
                 aStack.m_angle );
 
         return buf;
@@ -289,6 +287,7 @@ void HYPERLYNX_EXPORTER::writeSinglePadStack( HYPERLYNX_PAD_STACK& aStack )
 
     m_out->Print( 0, "}\n\n" );
 }
+
 
 bool HYPERLYNX_EXPORTER::writeBoardInfo()
 {
