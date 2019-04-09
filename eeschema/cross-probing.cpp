@@ -279,6 +279,9 @@ void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
         }
 
         {
+            // Ensure netlist is up to date
+            RecalculateConnections();
+
             NETLIST_OBJECT_LIST* net_atoms = BuildNetListBase();
             NETLIST_EXPORTER_KICAD exporter( this, net_atoms, g_ConnectionGraph );
             STRING_FORMATTER formatter;
