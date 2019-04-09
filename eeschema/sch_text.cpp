@@ -523,6 +523,7 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 {
     static std::vector <wxPoint> Poly;
     COLOR4D  color = GetLayerColor( GetLayer() );
+    int      tmp = GetThickness();
     int      thickness = GetPenSize();
 
     // Two thicknesses are set here:
@@ -565,12 +566,11 @@ void SCH_TEXT::Plot( PLOTTER* aPlotter )
 
     if( Poly.size() )
         aPlotter->PlotPoly( Poly, NO_FILL );
+
+    SetThickness( tmp );
 }
 
 
-/*
- * Display the type, shape, size and some other props to the Message panel
- */
 void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 {
     wxString msg;
