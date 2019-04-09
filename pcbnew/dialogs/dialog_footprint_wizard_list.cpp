@@ -130,9 +130,11 @@ void DIALOG_FOOTPRINT_WIZARD_LIST::initLists()
     if ( width > m_footprintGeneratorsGrid->GetColMinimalAcceptableWidth() )
         m_footprintGeneratorsGrid->SetColSize( FP_GEN_ROW_DESCR, width );
 
-    // Select the first row
+    // Select the first row if it exists
     m_footprintGeneratorsGrid->ClearSelection();
-    m_footprintGeneratorsGrid->SelectRow( 0, false );
+
+    if( m_footprintGeneratorsGrid->GetNumberRows() > 0 )
+        m_footprintGeneratorsGrid->SelectRow( 0, false );
 
     // Display info about scripts: Search paths
     wxString message;
