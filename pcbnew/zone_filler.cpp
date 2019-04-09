@@ -188,25 +188,34 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     // Now remove insulated copper islands and islands outside the board edge
     bool outOfDate = false;
+    SHAPE_POLY_SET boardOutline;
+    bool clip_to_brd_outlines = m_board->GetBoardPolygonOutlines( boardOutline );
 
     for( auto& zone : toFill )
     {
         std::sort( zone.m_islands.begin(), zone.m_islands.end(), std::greater<int>() );
         SHAPE_POLY_SET poly = zone.m_zone->GetFilledPolysList();
 
+        // Remove solid areas outside the board cutouts and the insulated islands
         // only zones with net code > 0 can have insulated islands by definition
         if( zone.m_zone->GetNetCode() > 0 )
         {
+            // solid areas outside the board cutouts are also removed, because they are usually
+            // insulated islands
             for( auto idx : zone.m_islands )
             {
                 poly.DeletePolygon( idx );
             }
         }
-
-        SHAPE_POLY_SET boardOutline;
-
-        if( m_board->GetBoardPolygonOutlines( boardOutline ) )
+        // zones with no net can have areas outside the board cutouts.
+        // Please, use only this clipping for no nets zones: this is a very time consumming
+        // calculation (x 5 in a test case if made for all zones),
+        // mainly due to poly.Fracture
+        else if( clip_to_brd_outlines )
+        {
             poly.BooleanIntersection( boardOutline, SHAPE_POLY_SET::PM_FAST );
+            poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+        }
 
         zone.m_zone->SetFilledPolysList( poly );
 
