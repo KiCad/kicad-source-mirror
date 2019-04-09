@@ -100,6 +100,8 @@ private:
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
+    bool        m_isInNetlist;  ///< True if the component should appear in the netlist
+
     /**
      * Defines the hierarchical path and reference of the component.  This allows support
      * for hierarchical sheets that reference the same schematic.  The format for the path

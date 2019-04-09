@@ -217,6 +217,7 @@ void SCH_COMPONENT::Init( const wxPoint& pos )
     }
 
     m_prefix = wxString( wxT( "U" ) );
+    m_isInNetlist = true;
 }
 
 
@@ -690,6 +691,9 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 
     if( m_prefix != prefix )
         m_prefix = prefix;
+
+    // Power components have references starting with # and are not included in netlists
+    m_isInNetlist = ! ref.StartsWith( wxT( "#" ) );
 }
 
 
@@ -1817,8 +1821,7 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 
 bool SCH_COMPONENT::IsInNetlist() const
 {
-    SCH_FIELD* rf = GetField( REFERENCE );
-    return ! rf->GetText().StartsWith( wxT( "#" ) );
+    return m_isInNetlist;
 }
 
 
