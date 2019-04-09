@@ -960,7 +960,7 @@ void EDA_3D_VIEWER::takeScreenshot( wxCommandEvent& event )
     }
 
     // Be sure we have the latest 3D view (remember 3D view is buffered)
-    Refresh();
+    m_canvas->Request_refresh( true );
     wxYield();
 
     // Build image from the 3D buffer
