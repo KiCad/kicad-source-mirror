@@ -291,32 +291,62 @@ void EDA_3D_VIEWER::Process_Special_Functions( wxCommandEvent &event )
 
     case ID_ROTATE3D_X_POS:
         m_settings.CameraGet().RotateX( glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_ROTATE3D_X_NEG:
         m_settings.CameraGet().RotateX( -glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_ROTATE3D_Y_POS:
         m_settings.CameraGet().RotateY( glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_ROTATE3D_Y_NEG:
         m_settings.CameraGet().RotateY( -glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_ROTATE3D_Z_POS:
         m_settings.CameraGet().RotateZ( glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_ROTATE3D_Z_NEG:
         m_settings.CameraGet().RotateZ( -glm::radians(ROT_ANGLE) );
-        m_canvas->Request_refresh();
+
+        if( m_settings.RenderEngineGet() == RENDER_ENGINE_OPENGL_LEGACY )
+            m_canvas->Request_refresh();
+        else
+            m_canvas->RenderRaytracingRequest();
+
         break;
 
     case ID_MOVE3D_LEFT:
