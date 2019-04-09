@@ -51,12 +51,7 @@ namespace std
 {
     size_t hash<SCH_SHEET_PATH>::operator()( const SCH_SHEET_PATH& path ) const
     {
-        size_t seed = 0;
-
-        for( auto sheet : path )
-            boost::hash_combine( seed, sheet->GetTimeStamp() );
-
-        return seed;
+        return path.GetCurrentHash();
     }
 }
 
@@ -64,6 +59,16 @@ namespace std
 SCH_SHEET_PATH::SCH_SHEET_PATH()
 {
     m_pageNumber = 0;
+    m_current_hash = 0;
+}
+
+
+void SCH_SHEET_PATH::Rehash()
+{
+    m_current_hash = 0;
+
+    for( auto sheet : m_sheets )
+        boost::hash_combine( m_current_hash, sheet->GetTimeStamp() );
 }
 
 
@@ -339,16 +344,7 @@ bool SCH_SHEET_PATH::SetComponentFootprint( const wxString& aReference, const wx
 
 bool SCH_SHEET_PATH::operator==( const SCH_SHEET_PATH& d1 ) const
 {
-    if( size() != d1.size() )
-        return false;
-
-    for( unsigned i = 0; i < size(); i++ )
-    {
-        if( at( i ) != d1[i] )
-            return false;
-    }
-
-    return true;
+    return m_current_hash == d1.GetCurrentHash();
 }
 
 

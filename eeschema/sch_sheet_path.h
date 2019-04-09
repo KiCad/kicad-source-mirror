@@ -89,8 +89,6 @@ class SCH_REFERENCE_LIST;
 
 #define SHEET_NOT_FOUND          -1
 
-typedef std::vector< SCH_SHEET* > SCH_SHEETS;   // no ownership over contained SCH_SHEETs
-
 
 /**
  * Type SCH_MULTI_UNIT_REFERENCE_MAP
@@ -111,12 +109,51 @@ typedef std::map<wxString, SCH_REFERENCE_LIST> SCH_MULTI_UNIT_REFERENCE_MAP;
  * "path" from the first to the last sheet.
  * </p>
  */
-class SCH_SHEET_PATH : public SCH_SHEETS
+class SCH_SHEET_PATH
 {
+protected:
+    std::vector< SCH_SHEET* > m_sheets;
+
+    size_t m_current_hash;
+
     int m_pageNumber;              /// Page numbers are maintained by the sheet load order.
 
 public:
     SCH_SHEET_PATH();
+
+    /// Forwarded method from std::vector
+    SCH_SHEET* at( size_t aIndex ) const { return m_sheets.at( aIndex ); }
+
+    /// Forwarded method from std::vector
+    void clear()
+    {
+        m_sheets.clear();
+        Rehash();
+    }
+
+    /// Forwarded method from std::vector
+    bool empty() const { return m_sheets.empty(); }
+
+    /// Forwarded method from std::vector
+    void pop_back()
+    {
+        m_sheets.pop_back();
+        Rehash();
+    }
+
+    /// Forwarded method from std::vector
+    void push_back( SCH_SHEET* aSheet )
+    {
+        m_sheets.push_back( aSheet );
+        Rehash();
+    }
+
+    /// Forwarded method from std::vector
+    size_t size() const { return m_sheets.size(); }
+
+    void Rehash();
+
+    size_t GetCurrentHash() const { return m_current_hash; }
 
     void SetPageNumber( int aPageNumber ) { m_pageNumber = aPageNumber; }
 
@@ -303,6 +340,9 @@ public:
     bool operator==( const SCH_SHEET_PATH& d1 ) const;
 
     bool operator!=( const SCH_SHEET_PATH& d1 ) const { return !( *this == d1 ) ; }
+
+    bool operator<( const SCH_SHEET_PATH& d1 ) const { return m_sheets < d1.m_sheets; }
+
 };
 
 
