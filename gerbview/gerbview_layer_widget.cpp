@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2010 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2010 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-
-/**
- * @file class_gerbview_layer_widget.cpp
- * @brief  GerbView layers manager.
- */
 
 #include <fctsys.h>
 #include <common.h>
@@ -172,7 +167,7 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
     int  rowCount;
     int  menuId = event.GetId();
     bool visible = (menuId == ID_SHOW_ALL_LAYERS) ? true : false;
-    long visibleLayers = 0;
+    LSET visibleLayers;
     bool force_active_layer_visible;
 
     switch( menuId )
@@ -185,26 +180,21 @@ void GERBER_LAYER_WIDGET::onPopupSelection( wxCommandEvent& event )
         m_alwaysShowActiveLayer = ( menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
         force_active_layer_visible = ( menuId == ID_SHOW_NO_LAYERS_BUT_ACTIVE ||
                                        menuId == ID_ALWAYS_SHOW_NO_LAYERS_BUT_ACTIVE );
+
         // Update icons and check boxes
         rowCount = GetLayerRowCount();
-        for( int row=0; row < rowCount; ++row )
+
+        for( int row = 0; row < rowCount; ++row )
         {
             wxCheckBox* cb = (wxCheckBox*) getLayerComp( row, COLUMN_COLOR_LYR_CB );
             int layer = getDecodedId( cb->GetId() );
             bool loc_visible = visible;
 
-            if( force_active_layer_visible &&
-                (layer == myframe->GetActiveLayer() ) )
-            {
+            if( force_active_layer_visible && (layer == myframe->GetActiveLayer() ) )
                 loc_visible = true;
-            }
 
             cb->SetValue( loc_visible );
-
-            if( loc_visible )
-                visibleLayers |= 1 << row;
-            else
-                visibleLayers &= ~( 1 << row );
+            visibleLayers[ row ] = loc_visible;
         }
 
         myframe->SetVisibleLayers( visibleLayers );
@@ -309,12 +299,9 @@ bool GERBER_LAYER_WIDGET::OnLayerSelect( int aLayer )
 
 void GERBER_LAYER_WIDGET::OnLayerVisible( int aLayer, bool isVisible, bool isFinal )
 {
-    long visibleLayers = myframe->GetVisibleLayers();
+    LSET visibleLayers = myframe->GetVisibleLayers();
 
-    if( isVisible )
-        visibleLayers |= 1 << aLayer ;
-    else
-        visibleLayers &= ~( 1 << aLayer );
+    visibleLayers[ aLayer ] = isVisible;
 
     myframe->SetVisibleLayers( visibleLayers );
 
