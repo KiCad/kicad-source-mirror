@@ -277,7 +277,7 @@ inline SCH_LAYER_ID operator++( SCH_LAYER_ID& a )
 }
 
 // number of draw layers in Gerbview
-#define GERBER_DRAWLAYERS_COUNT 32
+#define GERBER_DRAWLAYERS_COUNT PCB_LAYER_ID_COUNT
 
 /// GerbView draw layers
 enum GERBVIEW_LAYER_ID: int

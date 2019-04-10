@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,10 +17,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file gerbview_frame.h
  */
 
 #ifndef  WX_GERBER_STRUCT_H
@@ -99,13 +95,6 @@ public:
     unsigned ImagesMaxCount() const;    ///< The max number of file images
 
 
-    /**
-     * Function GetGerberLayoutBoundingBox
-     * calculates the bounding box containing all gerber items.
-     * @return EDA_RECT - the items bounding box
-     */
-    EDA_RECT GetGerberLayoutBoundingBox();
-
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings() const override;
     const wxSize GetPageSizeIU() const override;
@@ -114,10 +103,7 @@ public:
     void SetAuxOrigin( const wxPoint& aPoint ) override;
 
     const wxPoint& GetGridOrigin() const override { return m_grid_origin; }
-    void SetGridOrigin( const wxPoint& aPoint ) override
-    {
-        m_grid_origin = aPoint;
-    }
+    void SetGridOrigin( const wxPoint& aPoint ) override { m_grid_origin = aPoint; }
 
     const TITLE_BLOCK&  GetTitleBlock() const override;
     void SetTitleBlock( const TITLE_BLOCK& aTitleBlock ) override;
@@ -157,17 +143,11 @@ public:
 protected:
     GERBER_LAYER_WIDGET*    m_LayersManager;
 
-    // Auxiliary file history used to store zip files history.
     FILE_HISTORY            m_zipFileHistory;
-
-    // Auxiliary file history used to store drill files history.
     FILE_HISTORY            m_drillFileHistory;
-
-    // Auxiliary file history used to store job files history.
     FILE_HISTORY            m_jobFileHistory;
 
-    /// The last filename chosen to be proposed to the user
-    wxString                m_lastFileName;
+    wxString                m_lastFileName;     // The last filename chosen to be proposed to the user
 
 public:
     wxChoice* m_SelComponentBox;                // a choice box to display and highlight component graphic items
@@ -310,18 +290,16 @@ public:
     /**
      * Function GetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
-     * Returns a bit-mask of all the layers that are visible
-     * @return long - the visible layers in bit-mapped form.
+     * @return LSET of the visible layers
      */
-    long GetVisibleLayers() const;
+    LSET GetVisibleLayers() const;
 
     /**
      * Function SetVisibleLayers
      * is a proxy function that calls the correspondent function in m_BoardSettings
-     * changes the bit-mask of visible layers
-     * @param aLayerMask = The new bit-mask of visible layers
+     * @param aLayerMask = The new set of visible layers
      */
-    void SetVisibleLayers( long aLayerMask );
+    void SetVisibleLayers( LSET aLayerMask );
 
     /**
      * Function IsLayerVisible

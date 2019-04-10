@@ -1,7 +1,3 @@
-/**
- * @file gerbview/files.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -50,6 +46,7 @@
     _( "<b>No more available free graphic layer</b> in Gerbview to load files" )
 #define MSG_NOT_LOADED _( "\n<b>Not loaded:</b> <i>%s</i>" )
 
+
 void GERBVIEW_FRAME::OnGbrFileHistory( wxCommandEvent& event )
 {
     wxString fn;
@@ -93,13 +90,10 @@ void GERBVIEW_FRAME::OnZipFileHistory( wxCommandEvent& event )
 
 void GERBVIEW_FRAME::OnJobFileHistory( wxCommandEvent& event )
 {
-    wxString filename;
-    filename = GetFileFromHistory( event.GetId(), _( "Job files" ), &m_jobFileHistory );
+    wxString filename = GetFileFromHistory( event.GetId(), _( "Job files" ), &m_jobFileHistory );
 
     if( !filename.IsEmpty() )
-    {
         LoadGerberJobFile( filename );
-    }
 }
 
 
@@ -135,8 +129,7 @@ void GERBVIEW_FRAME::Files_io( wxCommandEvent& event )
             if( !GetImagesList()->GetGbrImage( i )->m_InUse )
                 continue;
 
-            EXCELLON_IMAGE* drill_file =
-                dynamic_cast<EXCELLON_IMAGE*>( GetImagesList()->GetGbrImage( i ) );
+            auto* drill_file = dynamic_cast<EXCELLON_IMAGE*>( GetImagesList()->GetGbrImage( i ) );
 
             if( drill_file )
                 fileType.push_back( 1 );
@@ -273,7 +266,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
     // Read gerber files: each file is loaded on a new GerbView layer
     bool success = true;
     int layer = GetActiveLayer();
-    int visibility = GetVisibleLayers();
+    LSET visibility = GetVisibleLayers();
 
     // Manage errors when loading files
     wxString msg;
@@ -287,7 +280,6 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
 
     for( unsigned ii = 0; ii < aFilenameList.GetCount(); ii++ )
     {
-
         filename = aFilenameList[ii];
 
         if( !filename.IsAbsolute() )
@@ -321,7 +313,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
 
         SetActiveLayer( layer, false );
 
-        visibility |= ( 1 << layer );
+        visibility[ layer ] = true;
 
         if( aFileType && (*aFileType)[ii] == 1 )
         {
@@ -346,9 +338,7 @@ bool GERBVIEW_FRAME::loadListOfGerberAndDrillFiles( const wxString& aPath,
                     while( ii < aFilenameList.GetCount() )
                     {
                         filename = aFilenameList[ii++];
-                        wxString txt;
-                        txt.Printf( MSG_NOT_LOADED,
-                                    GetChars( filename.GetFullName() ) );
+                        wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
                         reporter.Report( txt, REPORTER::RPT_ERROR );
                     }
                     break;
@@ -469,9 +459,7 @@ bool GERBVIEW_FRAME::LoadExcellonFiles( const wxString& aFullFileName )
                 while( ii < filenamesList.GetCount() )
                 {
                     filename = filenamesList[ii++];
-                    wxString txt;
-                    txt.Printf( MSG_NOT_LOADED,
-                                GetChars( filename.GetFullName() ) );
+                    wxString txt = wxString::Format( MSG_NOT_LOADED, filename.GetFullName() );
                     reporter.Report( txt, REPORTER::RPT_ERROR );
                 }
                 break;
