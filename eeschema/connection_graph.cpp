@@ -950,8 +950,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Generate net codes
 
-    for( auto subgraph : driver_subgraphs )
+    for( auto subgraph_it = driver_subgraphs.begin(); subgraph_it != driver_subgraphs.end(); subgraph_it++ )
     {
+        auto subgraph = *subgraph_it;
         auto connection = subgraph->m_driver_connection;
         int code;
 
@@ -979,6 +980,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         for( auto item : subgraph->m_items )
         {
             auto item_conn = item->Connection( subgraph->m_sheet );
+
+            if( !item_conn )
+                item_conn = item->InitializeConnection( subgraph->m_sheet );
 
             if( ( connection->IsBus() && item_conn->IsNet() ) ||
                 ( connection->IsNet() && item_conn->IsBus() ) )
@@ -1041,9 +1045,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
 
         std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
-        std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(), std::back_inserter( candidate_subgraphs ),
+        std::copy_if( subgraph_it + 1, driver_subgraphs.end(), std::back_inserter( candidate_subgraphs ),
                 [&] ( CONNECTION_SUBGRAPH* candidate )
-                    { return ( candidate->m_local_driver && candidate != subgraph &&
+                    { return ( candidate->m_local_driver &&
                                candidate->m_sheet == sheet &&
                                candidate->m_driver_connection->IsNet() );
                     } );
