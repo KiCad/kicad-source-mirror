@@ -657,6 +657,14 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::checkAliasName( const wxString& aName )
     if( aName.IsEmpty() )
         return false;
 
+    if( m_SymbolNameCtrl->GetValue().CmpNoCase( aName ) == 0 )
+    {
+        wxString msg;
+        msg.Printf( _( "Alias can not have same name as symbol." ) );
+        DisplayInfoMessage( this, msg );
+        return false;
+    }
+
     for( int i = 0; i < (int)m_aliasListBox->GetCount(); ++i )
     {
         if( i == m_aliasListBox->GetSelection() )
@@ -700,7 +708,7 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnAddAlias( wxCommandEvent& event )
     wxString       aliasname = _( "untitled" );
     int            suffix = 1;
 
-    while( m_libEntry->HasAlias( aliasname ) )
+    while( m_aliasListBox->FindString( aliasname ) != wxNOT_FOUND )
         aliasname = wxString::Format( _( "untitled%i" ), suffix++ );
 
     LIB_ALIAS* alias = new LIB_ALIAS( aliasname, m_libEntry );
