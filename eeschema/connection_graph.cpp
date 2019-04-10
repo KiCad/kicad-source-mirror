@@ -976,9 +976,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
         std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(), std::back_inserter( candidate_subgraphs ),
                 [&] ( CONNECTION_SUBGRAPH* candidate )
-                    { return ( !( candidate->m_sheet != sheet || candidate == subgraph ||
-                                  candidate->m_local_driver ) &&
-                                 candidate->m_driver_connection->IsNet() );
+                    { return ( candidate->m_local_driver && candidate != subgraph &&
+                               candidate->m_sheet == sheet &&
+                               candidate->m_driver_connection->IsNet() );
                     } );
 
         // Look for "neighbors" for subgraphs that have hierarchical connections.
@@ -1105,9 +1105,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                     for( auto subgraph_to_update : driver_subgraphs )
                     {
-                        if( !subgraph_to_update->m_driver )
-                            continue;
-
                         auto subsheet = subgraph_to_update->m_sheet;
                         auto conn = subgraph_to_update->m_driver_connection;
 
@@ -1327,7 +1324,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         if( !candidate->m_dirty )
                             continue;
 
-                        if( candidate->m_sheet == subsheet && candidate->m_driver )
+                        if( candidate->m_sheet == subsheet )
                         {
                             SCH_ITEM* hier_label = nullptr;
 
