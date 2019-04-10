@@ -22,6 +22,7 @@
 #include <thread>
 #include <algorithm>
 #include <future>
+#include <vector>
 #include <unordered_map>
 #include <profile.h>
 
@@ -39,20 +40,14 @@
 
 #include <connection_graph.h>
 
-using std::map;
-using std::unordered_map;
-using std::unordered_set;
-using std::vector;
-
 
 bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 {
     int highest_priority = -1;
-    vector<SCH_ITEM*> candidates;
+    std::vector<SCH_ITEM*> candidates;
+    std::vector<SCH_ITEM*> strong_drivers;
 
     m_driver = nullptr;
-
-    vector<SCH_ITEM*> strong_drivers;
 
     // Hierarchical labels are lower priority than local labels here,
     // because on the first pass we want local labels to drive subgraphs
@@ -230,7 +225,7 @@ wxString CONNECTION_SUBGRAPH::GetNetName()
 
 std::vector<SCH_ITEM*> CONNECTION_SUBGRAPH::GetBusLabels()
 {
-    vector<SCH_ITEM*> labels;
+    std::vector<SCH_ITEM*> labels;
 
     for( auto item : m_drivers )
     {
@@ -347,13 +342,13 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
 
 
 void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
-                                               vector<SCH_ITEM*> aItemList )
+                                               std::vector<SCH_ITEM*> aItemList )
 {
-    unordered_map< wxPoint, vector<SCH_ITEM*> > connection_map;
+    std::unordered_map< wxPoint, std::vector<SCH_ITEM*> > connection_map;
 
     for( auto item : aItemList )
     {
-        vector< wxPoint > points;
+        std::vector< wxPoint > points;
         item->GetConnectionPoints( points );
         item->ConnectedItems().clear();
 
