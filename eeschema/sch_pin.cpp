@@ -67,6 +67,8 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
     if( m_pin->IsPowerConnection() )
         return m_pin->GetName();
 
+    std::lock_guard<std::mutex> lock( m_netmap_mutex );
+
     if( m_net_name_map.count( aPath ) > 0 )
         return m_net_name_map.at( aPath );
 
