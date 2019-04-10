@@ -19,6 +19,7 @@ set( PCB_CALCULATOR_SRCS
     datafile_read_write.cpp
     regulators_funct.cpp
     tracks_width_versus_current.cpp
+    via.cpp
     transline_ident.cpp
     UnitSelector.cpp
     pcb_calculator_datafile_keywords.cpp

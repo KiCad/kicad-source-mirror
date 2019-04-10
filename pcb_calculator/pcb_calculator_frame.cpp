@@ -93,6 +93,8 @@ PCB_CALCULATOR_FRAME::PCB_CALCULATOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     TW_Init( config.get() );
 
+    VS_Init( config.get() );
+
     SetAttenuator( m_AttenuatorsSelection->GetSelection() );
 
     ToleranceSelection( m_rbToleranceSelection->GetSelection() );
@@ -268,6 +270,8 @@ void PCB_CALCULATOR_FRAME::SaveSettings( wxConfigBase* aCfg )
                      m_ElectricalSpacingVoltage->GetValue() );
 
     TW_WriteConfig( aCfg );
+
+    VS_WriteConfig( aCfg );
 
     for( unsigned ii = 0; ii < m_transline_list.size(); ii++ )
         m_transline_list[ii]->WriteConfig( aCfg );

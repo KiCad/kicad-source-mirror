@@ -176,6 +176,44 @@ private:
      */
     void TWUpdateModeDisplay();
 
+    // Via size calculations
+
+    /**
+     * Function VS_Init
+     * Read config and init dialog widgets values
+     */
+    void VS_Init( wxConfigBase* aCfg );
+
+    /**
+     * Function VS_WriteConfig
+     * Write Via Size prameters in config
+     */
+    void VS_WriteConfig( wxConfigBase* aCfg );
+
+    /**
+     * Function OnViaCalculate
+     * Called when the user changes any value in the via calcultor.
+     */
+    void OnViaCalculate( wxCommandEvent& event ) override;
+
+    /**
+     * Function OnViaEpsilonR_Button
+     */
+    void OnViaEpsilonR_Button( wxCommandEvent& event ) override;
+
+    /**
+     * Function OnViaRho_Button
+     */
+    void OnViaRho_Button( wxCommandEvent& event ) override;
+
+    /**
+     * Function VSDisplayValues
+     * Displays the results of the calculation.
+     */
+    void VSDisplayValues( double aViaResistance, double aVoltageDrop, double aPowerLoss,
+                    double aEstimatedAmpacity, double aThermalResistance, double aCapacitance,
+                    double aTimeDegradation, double aInductance, double aReactance );
+
     // Electrical spacing panel:
     void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) override;
     void OnElectricalSpacingRefresh( wxCommandEvent& event ) override;

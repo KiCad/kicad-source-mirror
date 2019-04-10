@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version v3.8.0)
+// C++ code generated with wxFormBuilder (version Aug  8 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -16,6 +16,7 @@ class UNIT_SELECTOR_LEN;
 class UNIT_SELECTOR_RESISTOR;
 class UNIT_SELECTOR_THICKNESS;
 
+#include "UnitSelector.h"
 #include "kiway_player.h"
 #include <wx/string.h>
 #include <wx/menu.h>
@@ -144,6 +145,72 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticText792;
 		wxStaticText* m_IntTrackLossValue;
 		wxStaticText* m_staticText7911;
+		wxPanel* m_panelViaSize;
+		wxStaticText* m_staticTextHoleDia;
+		wxTextCtrl* m_textCtrlHoleDia;
+		UNIT_SELECTOR_LEN* m_choiceHoleDia;
+		wxStaticText* m_staticTextPlatingThickness;
+		wxTextCtrl* m_textCtrlPlatingThickness;
+		UNIT_SELECTOR_LEN* m_choicePlatingThickness;
+		wxStaticText* m_staticTextViaLength;
+		wxTextCtrl* m_textCtrlViaLength;
+		UNIT_SELECTOR_LEN* m_choiceViaLength;
+		wxStaticText* m_staticTextViaPadDia;
+		wxTextCtrl* m_textCtrlViaPadDia;
+		UNIT_SELECTOR_LEN* m_choiceViaPadDia;
+		wxStaticText* m_staticTextClearanceDia;
+		wxTextCtrl* m_textCtrlClearanceDia;
+		UNIT_SELECTOR_LEN* m_choiceClearanceDia;
+		wxStaticText* m_staticTextBoardThickness;
+		wxTextCtrl* m_textCtrlBoardThickness;
+		UNIT_SELECTOR_LEN* m_choiceBoardThickness;
+		wxStaticText* m_staticTextImpedance;
+		wxTextCtrl* m_textCtrlImpedance;
+		UNIT_SELECTOR_RESISTOR* m_choiceImpedance;
+		wxStaticText* m_staticAppliedCurrent;
+		wxTextCtrl* m_textCtrlAppliedCurrent;
+		wxStaticText* m_staticTextAppliedCurrentUnits;
+		wxStaticText* m_staticTextResistivity;
+		wxTextCtrl* m_textCtrlPlatingResistivity;
+		wxButton* m_button_ResistivityVia;
+		wxStaticText* m_staticTextPermittivity;
+		wxTextCtrl* m_textCtrlPlatingPermittivity;
+		wxButton* m_button_Permittivity;
+		wxStaticText* m_staticTextTemperatureDiff;
+		wxTextCtrl* m_textCtrlTemperatureDiff;
+		wxStaticText* m_staticTextTemperatureUnits;
+		wxStaticText* m_staticTextRiseTime;
+		wxTextCtrl* m_textCtrlRiseTime;
+		wxStaticText* m_staticTextRiseTimeUnits;
+		wxStaticLine* m_staticline31;
+		wxStaticBitmap* m_bitmap10;
+		wxStaticText* m_staticTextArea11;
+		wxStaticText* m_ViaResistance;
+		wxStaticText* m_IntTrackAreaUnitLabel1;
+		wxStaticText* m_staticText65111;
+		wxStaticText* m_ViaVoltageDrop;
+		wxStaticText* m_staticText8411;
+		wxStaticText* m_staticText66111;
+		wxStaticText* m_ViaPowerLoss;
+		wxStaticText* m_staticText8311;
+		wxStaticText* m_staticText79211;
+		wxStaticText* m_ViaThermalResistance;
+		wxStaticText* m_staticText791111;
+		wxStaticText* m_staticTextAmpacity;
+		wxStaticText* m_ViaAmpacity;
+		wxStaticText* m_staticTextAmpacityUnits;
+		wxStaticText* m_staticTextCapacitance;
+		wxStaticText* m_ViaCapacitance;
+		wxStaticText* m_staticTextCapacitanceUnits;
+		wxStaticText* m_staticTextRiseTimeOutput;
+		wxStaticText* m_RiseTimeOutput;
+		wxStaticText* m_staticTextRiseTimeOutputUnits;
+		wxStaticText* m_staticTextInductance;
+		wxStaticText* m_Inductance;
+		wxStaticText* m_staticTextInductanceUnits;
+		wxStaticText* m_staticTextReactance;
+		wxStaticText* m_Reactance;
+		wxStaticText* m_staticTextReactanceUnits;
 		wxPanel* m_panelElectricalSpacing;
 		UNIT_SELECTOR_LEN* m_ElectricalSpacingUnitsSelector;
 		wxStaticLine* m_staticline2;
@@ -288,6 +355,9 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		virtual void OnTWParametersChanged( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateFromExtWidth( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTWCalculateFromIntWidth( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnViaCalculate( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnViaRho_Button( wxCommandEvent& event ) { event.Skip(); }
+		virtual void OnViaEpsilonR_Button( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingUnitsSelection( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnElectricalSpacingRefresh( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnTranslineSelection( wxCommandEvent& event ) { event.Skip(); }
@@ -306,7 +376,7 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 
 	public:
 
-		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 877,580 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("pcb_calculator") );
+		PCB_CALCULATOR_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("PCB Calculator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( -1,-1 ), long style = wxDEFAULT_FRAME_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxTAB_TRAVERSAL, const wxString& name = wxT("pcb_calculator") );
 
 		~PCB_CALCULATOR_FRAME_BASE();
 
