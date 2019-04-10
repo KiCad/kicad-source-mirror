@@ -653,7 +653,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
-            ( m_subgraphs.size() + 7 ) / 8 );
+            ( m_subgraphs.size() + 3 ) / 4 );
 
     std::atomic<size_t> nextSubgraph( 0 );
     std::vector<std::future<size_t>> returns( parallelThreadCount );

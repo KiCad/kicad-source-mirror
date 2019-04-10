@@ -81,7 +81,7 @@ void SCH_ITEM::ViewGetLayers( int aLayers[], int& aCount ) const
 
 bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 {
-    if( m_Flags & STRUCT_DELETED || m_Flags & SKIP_STRUCT )
+    if( ( m_Flags & STRUCT_DELETED ) || ( m_Flags & SKIP_STRUCT ) )
         return false;
 
     return doIsConnected( aPosition );
@@ -90,18 +90,14 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 
 SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
 {
-    SCH_CONNECTION* conn = nullptr;
-
-    if( m_connection_map.count( aSheet ) )
+    try
     {
-        conn = m_connection_map.at( aSheet );
+        return m_connection_map.at( aSheet );
     }
-    else
+    catch( ... )
     {
-        // TODO(JE) should we just call InitializeConnection here?
+        return nullptr;
     }
-
-    return conn;
 }
 
 
