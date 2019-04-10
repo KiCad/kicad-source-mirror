@@ -26,6 +26,7 @@
 #include <unordered_map>
 #include <profile.h>
 
+#include <advanced_config.h>
 #include <common.h>
 #include <erc.h>
 #include <sch_edit_frame.h>
@@ -308,22 +309,55 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
     if( aUnconditional )
         Reset();
 
-    for( const auto& sheet : aSheetList )
-    {
-        std::vector<SCH_ITEM*> items;
+    std::map<SCH_ITEM*, std::vector<SCH_SHEET_PATH>> sheets;
 
-        for( auto item = sheet.LastScreen()->GetDrawItems();
-             item; item = item->Next() )
+    for( auto sheet : aSheetList )
+    {
+        if( auto list = sheet.LastDrawList() )
+            sheets[list].push_back( sheet );
+    }
+
+    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
+            ( sheets.size() + 1 ) / 2 );
+    std::atomic<size_t> nextSheet( 0 );
+    std::vector<std::future<size_t>> returns( parallelThreadCount );
+
+    auto update_connectivity = [&]() -> size_t
+    {
+        for( size_t sheetId = nextSheet++; sheetId < sheets.size(); sheetId = nextSheet++ )
         {
-            if( item->IsConnectable() &&
-                ( aUnconditional || item->IsConnectivityDirty() ) )
+            auto sheet = sheets.begin();
+            std::advance( sheet, sheetId );
+            std::vector<SCH_ITEM*> items;
+
+            for( auto item = sheet->first; item; item = item->Next() )
             {
-                items.push_back( item );
+                if( item->IsConnectable() && ( aUnconditional || item->IsConnectivityDirty() ) )
+                    items.push_back( item );
             }
+
+            auto it = sheet->second.begin();
+            updateItemConnectivity( *it, items );
+
+            for( ++it; it != sheet->second.end(); ++it )
+                initializeSheetConnections( *it, items );
         }
 
-        updateItemConnectivity( sheet, items );
+        return 1;
+    };
+
+    if( parallelThreadCount == 1 )
+        update_connectivity();
+    else
+    {
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii] = std::async( std::launch::async, update_connectivity );
+
+        // Finalize the threads
+        for( size_t ii = 0; ii < parallelThreadCount; ++ii )
+            returns[ii].wait();
     }
+
 
     phase1.Stop();
     wxLogTrace( "CONN_PROFILE", "UpdateItemConnectivity() %0.4f ms", phase1.msecs() );
@@ -341,10 +375,50 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
 }
 
 
-void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
-                                               std::vector<SCH_ITEM*> aItemList )
+void CONNECTION_GRAPH::initializeSheetConnections( SCH_SHEET_PATH aSheet,
+                                                   std::vector<SCH_ITEM*>& aItemList )
 {
-    std::unordered_map< wxPoint, std::vector<SCH_ITEM*> > connection_map;
+    for( auto item : aItemList )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            for( auto& pin : static_cast<SCH_SHEET*>( item )->GetPins() )
+                pin.InitializeConnection( aSheet );
+        }
+        else if( item->Type() != SCH_COMPONENT_T )
+        {
+            auto conn = item->InitializeConnection( aSheet );
+
+            // Set bus/net property here so that the propagation code uses it
+            switch( item->Type() )
+            {
+            case SCH_LINE_T:
+                conn->SetType( ( item->GetLayer() == LAYER_BUS ) ?
+                               CONNECTION_BUS : CONNECTION_NET );
+                break;
+
+            case SCH_BUS_BUS_ENTRY_T:
+                conn->SetType( CONNECTION_BUS );
+                break;
+
+            case SCH_PIN_T:
+            case SCH_BUS_WIRE_ENTRY_T:
+                conn->SetType( CONNECTION_NET );
+                break;
+
+            default:
+                break;
+            }
+
+        }
+    }
+}
+
+
+void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
+                                               std::vector<SCH_ITEM*>& aItemList )
+{
+    std::unordered_multimap< wxPoint, SCH_ITEM* > connection_map;
 
     for( auto item : aItemList )
     {
@@ -356,23 +430,16 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         {
             for( auto& pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
-                if( !pin.Connection( aSheet ) )
-                {
-                    pin.InitializeConnection( aSheet );
-                }
-
+                pin.InitializeConnection( aSheet );
                 pin.ConnectedItems().clear();
-                pin.Connection( aSheet )->Reset();
 
-                connection_map[ pin.GetTextPos() ].push_back( &pin );
-                m_items.insert( &pin );
+                connection_map.emplace( pin.GetTextPos(), &pin );
+                InsertItem( &pin );
             }
         }
         else if( item->Type() == SCH_COMPONENT_T )
         {
             auto component = static_cast<SCH_COMPONENT*>( item );
-
-            component->UpdatePins( &aSheet );
 
             for( auto& it : component->GetPinMap() )
             {
@@ -388,15 +455,15 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 // Invisible power pins need to be post-processed later
 
                 if( pin->IsPowerConnection() && !pin->IsVisible() )
-                    m_invisible_power_pins.push_back( pin );
+                    InsertPin( pin );
 
-                connection_map[ pos ].push_back( pin );
-                m_items.insert( pin );
+                connection_map.emplace( pos, pin );
+                InsertItem( pin );
             }
         }
         else
         {
-            m_items.insert( item );
+            InsertItem( item );
             auto conn = item->InitializeConnection( aSheet );
 
             // Set bus/net property here so that the propagation code uses it
@@ -421,22 +488,23 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             }
 
             for( auto point : points )
-            {
-                connection_map[ point ].push_back( item );
-            }
+                connection_map.emplace( point, item );
         }
 
         item->SetConnectivityDirty( false );
     }
 
-    for( const auto& it : connection_map )
+    auto primary_it = connection_map.begin();
+    for( auto it = connection_map.begin(); it != connection_map.end(); it = primary_it )
     {
-        auto connection_vec = it.second;
+        auto range = connection_map.equal_range( it->first );
+        auto count = std::distance( range.first, range.second );
+        primary_it = range.second;
         SCH_ITEM* junction = nullptr;
 
-        for( auto primary_it = connection_vec.begin(); primary_it != connection_vec.end(); primary_it++ )
+        for( primary_it = range.first; primary_it != range.second; ++primary_it )
         {
-            auto connected_item = *primary_it;
+            auto connected_item = primary_it->second;
 
             // Look for junctions.  For points that have a junction, we want all
             // items to connect to the junction but not to each other.
@@ -458,10 +526,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 // entry itself, this means that either the bus entry is not
                 // connected to anything graphically, or that it is connected to
                 // a segment at some point other than at one of the endpoints.
-                if( connection_vec.size() == 1 )
+                if( count == 1 )
                 {
                     auto screen = aSheet.LastScreen();
-                    auto bus = screen->GetBus( it.first );
+                    auto bus = screen->GetBus( primary_it->first );
 
                     if( bus )
                     {
@@ -474,42 +542,41 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             // Bus-to-bus entries are treated just like bus wires
             if( connected_item->Type() == SCH_BUS_BUS_ENTRY_T )
             {
-                if( connection_vec.size() < 2 )
+                if( count < 2 )
                 {
                     auto screen = aSheet.LastScreen();
-                    auto bus = screen->GetBus( it.first );
+                    auto bus = screen->GetBus( primary_it->first );
 
                     if( bus )
                     {
                         auto bus_entry = static_cast<SCH_BUS_BUS_ENTRY*>( connected_item );
 
-                        if( it.first == bus_entry->GetPosition() )
+                        if( primary_it->first == bus_entry->GetPosition() )
                             bus_entry->m_connected_bus_items[0] = bus;
                         else
                             bus_entry->m_connected_bus_items[1] = bus;
 
-                        bus_entry->ConnectedItems().insert( bus );
-                        bus->ConnectedItems().insert( bus_entry );
+                        bus_entry->AddConnectionTo( bus );
+                        bus->AddConnectionTo( bus_entry );
                     }
                 }
             }
 
-            for( auto test_it = primary_it + 1; test_it != connection_vec.end(); test_it++ )
+            for( auto test_it = std::next( primary_it ); test_it != range.second; ++test_it )
             {
-                auto test_item = *test_it;
+                auto test_item = test_it->second;
 
                 if( !junction && test_item->Type() == SCH_JUNCTION_T )
                 {
                     junction = test_item;
                 }
 
-                if( connected_item != test_item &&
-                    connected_item != junction &&
+                if( connected_item != junction &&
                     connected_item->ConnectionPropagatesTo( test_item ) &&
                     test_item->ConnectionPropagatesTo( connected_item ) )
                 {
-                    connected_item->ConnectedItems().insert( test_item );
-                    test_item->ConnectedItems().insert( connected_item );
+                    connected_item->AddConnectionTo( test_item );
+                    test_item->AddConnectionTo( connected_item );
                 }
 
                 // Set up the link between the bus entry net and the bus
@@ -646,7 +713,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Resolve drivers for subgraphs and propagate connectivity info
 
-    // We don't want to spin up a new thread for fewer than 8 nets (overhead costs)
+    // We don't want to spin up a new thread for fewer than 4 nets (overhead costs)
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(),
             ( m_subgraphs.size() + 3 ) / 4 );
 

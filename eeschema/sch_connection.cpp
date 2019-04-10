@@ -21,6 +21,7 @@
 #include <boost/regex.hpp>
 #include <wx/tokenzr.h>
 
+#include <advanced_config.h>
 #include <connection_graph.h>
 #include <sch_screen.h>
 
@@ -281,7 +282,8 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
-#ifdef CONNECTIVITY_REAL_TIME
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+        return;
 
     wxString msg, group_name;
     std::vector<wxString> group_members;
@@ -319,14 +321,14 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
             }
         }
     }
-
-#endif
 }
 
 
 void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
-#ifdef CONNECTIVITY_REAL_TIME
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+        return;
+
     wxString msg;
 
     AppendInfoToMsgPanel( aList );
@@ -345,7 +347,6 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
     msg.Printf( "%s at %p", Parent()->GetSelectMenuText( MILLIMETRES ), Parent() );
     aList.push_back( MSG_PANEL_ITEM( _( "Attached To" ), msg, RED ) );
-#endif
 }
 
 
