@@ -127,20 +127,17 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         for( size_t i = nextItem++; i < toFill.size(); i = nextItem++ )
         {
             ZONE_CONTAINER* zone = toFill[i].m_zone;
+            SHAPE_POLY_SET rawPolys, finalPolys;
+            fillSingleZone( zone, rawPolys, finalPolys );
+
+            zone->SetRawPolysList( rawPolys );
+            zone->SetFilledPolysList( finalPolys );
 
             if( zone->GetFillMode() == ZFM_SEGMENTS )
             {
                 ZONE_SEGMENT_FILL segFill;
                 fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
                 zone->SetFillSegments( segFill );
-            }
-            else
-            {
-                SHAPE_POLY_SET rawPolys, finalPolys;
-                fillSingleZone( zone, rawPolys, finalPolys );
-
-                zone->SetRawPolysList( rawPolys );
-                zone->SetFilledPolysList( finalPolys );
             }
 
             zone->SetIsFilled( true );
