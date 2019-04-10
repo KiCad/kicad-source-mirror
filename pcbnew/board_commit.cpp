@@ -183,7 +183,6 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_DIMENSION_T:           // a dimension (graphic item)
                 case PCB_TARGET_T:              // a target (graphic item)
                 case PCB_MARKER_T:              // a marker used to show something
-                case PCB_SEGZONE_T:                // SEG_ZONE items are now deprecated
                 case PCB_ZONE_AREA_T:
                     itemsToDeselect.push_back( boardItem );
 

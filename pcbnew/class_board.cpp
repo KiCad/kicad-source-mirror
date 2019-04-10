@@ -903,14 +903,6 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
         break;
 
-    case PCB_SEGZONE_T:
-        if( aMode == ADD_APPEND )
-            m_SegZoneDeprecated.PushBack( (SEGZONE*) aBoardItem );
-        else
-            m_SegZoneDeprecated.PushFront( (SEGZONE*) aBoardItem );
-
-        break;
-
     case PCB_MODULE_T:
         if( aMode == ADD_APPEND )
             m_Modules.PushBack( (MODULE*) aBoardItem );
@@ -997,10 +989,6 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
     case PCB_TRACE_T:
     case PCB_VIA_T:
         m_Track.Remove( (TRACK*) aBoardItem );
-        break;
-
-    case PCB_SEGZONE_T:
-        m_SegZoneDeprecated.Remove( (SEGZONE*) aBoardItem );
         break;
 
     case PCB_DIMENSION_T:
@@ -1090,12 +1078,6 @@ int BOARD::GetNumSegmTrack() const
 }
 
 
-int BOARD::GetNumSegmZone() const
-{
-    return m_SegZoneDeprecated.GetCount();
-}
-
-
 unsigned BOARD::GetNodesCount( int aNet )
 {
     unsigned retval = 0;
@@ -1161,18 +1143,7 @@ EDA_RECT BOARD::ComputeBoundingBox( bool aBoardEdgesOnly ) const
             hasItems = true;
         }
 
-        // Check segment zones
-        for( TRACK* track = m_SegZoneDeprecated; track; track = track->Next() )
-        {
-            if( !hasItems )
-                area = track->GetBoundingBox();
-            else
-                area.Merge( track->GetBoundingBox() );
-
-            hasItems = true;
-        }
-
-        // Check polygonal zones
+        // Check zones
         for( auto aZone : m_ZoneDescriptorList )
         {
             if( !hasItems )
@@ -1384,11 +1355,6 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                     break;
             }
 
-            ++p;
-            break;
-
-        case PCB_SEGZONE_T:
-            result = IterateForward( m_SegZoneDeprecated, inspector, testData, p );
             ++p;
             break;
 

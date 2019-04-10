@@ -240,12 +240,6 @@ void PCB_EDIT_FRAME::Swap_Layers( wxCommandEvent& event )
         }
     }
 
-    for( TRACK* segm = GetBoard()->m_SegZoneDeprecated; segm; segm = segm->Next() )
-    {
-        // Note: deprecated zone segment fills only found in very old boards
-        hasChanges |= processBoardItem( this, commit, segm, new_layer );
-    }
-
     for( BOARD_ITEM* zone : GetBoard()->Zones() )
     {
         hasChanges |= processBoardItem( this, commit, zone, new_layer );

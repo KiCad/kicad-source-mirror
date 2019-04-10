@@ -53,7 +53,6 @@ class NETINFO_MAPPING;
 class TEXTE_MODULE;
 class EDGE_MODULE;
 class TRACK;
-class SEGZONE;
 class D_PAD;
 struct LP_CACHE;
 
@@ -128,6 +127,7 @@ protected:
     wxString        m_field;        ///< reused to stuff MODULE fields.
     int             m_loading_format_version;   ///< which BOARD_FORMAT_VERSION am I Load()ing?
     LP_CACHE*       m_cache;
+    bool            m_showLegacyZoneWarning;
 
     NETINFO_MAPPING*    m_mapping;  ///< mapping for net codes, so only not empty nets
                                     ///< are stored with consecutive integers as net codes
@@ -209,8 +209,8 @@ protected:
      * Function loadTrackList
      * reads a list of segments (Tracks and Vias, or Segzones)
      *
-     * @param aStructType is either PCB_TRACE_T to indicate tracks and vias, or
-     *        PCB_SEGZONE_T to indicate oldschool zone segments (before polygons came to be).
+     * @param aStructType is either PCB_TRACE_T to indicate tracks and vias, or NOT_USED
+     *                    to indicate oldschool zone segments (which are discarded).
      */
     void loadTrackList( int aStructType );
 

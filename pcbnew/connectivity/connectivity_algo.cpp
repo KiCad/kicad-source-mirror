@@ -78,7 +78,6 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         break;
     }
 
-    case PCB_SEGZONE_T:
     default:
         return false;
     }
@@ -176,8 +175,6 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
         break;
     }
 
-    //N.B. SEGZONE items are deprecated and not to used for connectivity
-    case PCB_SEGZONE_T:
     default:
         return false;
     }
@@ -440,8 +437,6 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
                 break;
             }
 
-            //N.B. SEGZONE items are deprecated and not to used for connectivity
-            case PCB_SEGZONE_T:
             default:
                 break;
         }

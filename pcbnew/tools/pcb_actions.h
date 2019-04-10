@@ -305,7 +305,6 @@ public:
     static TOOL_ACTION zoneUnfill;
     static TOOL_ACTION zoneUnfillAll;
     static TOOL_ACTION zoneMerge;
-    static TOOL_ACTION zoneDeleteSegzone;
 
     /// Duplicate zone onto another layer
     static TOOL_ACTION zoneDuplicate;

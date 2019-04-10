@@ -437,7 +437,6 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
         case PCB_TEXT_T:
         case PCB_VIA_T:
         case PCB_TRACE_T:
-        case PCB_SEGZONE_T:
         case PCB_MARKER_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:

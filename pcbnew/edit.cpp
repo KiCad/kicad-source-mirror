@@ -111,7 +111,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_PLACE_ZONE_CORNER:
     case ID_POPUP_PCB_PLACE_ZONE_OUTLINES:
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
-    case ID_POPUP_PCB_DELETE_ZONE:
     case ID_POPUP_PCB_DELETE_ZONE_CORNER:
     case ID_POPUP_PCB_MOVE_ZONE_CORNER:
     case ID_POPUP_PCB_DRAG_ZONE_OUTLINE_SEGMENT:
@@ -499,21 +498,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SETFLAGS_TRACK_MNU:
         break;
 
-    case ID_POPUP_PCB_DELETE_ZONE:
-        m_canvas->MoveCursorToCrossHair();
-
-        if( GetCurItem() )
-        {
-            SEGZONE* zsegm   = (SEGZONE*) GetCurItem();
-            int      netcode = zsegm->GetNetCode();
-            Delete_OldZone_Fill( zsegm );
-            SetCurItem( NULL );
-            TestNetConnection( NULL, netcode );
-            OnModify();
-            SetMsgPanel( GetBoard() );
-        }
-        break;
-
     case ID_POPUP_PCB_EDIT_ZONE_PARAMS:
         Edit_Zone_Params( &dc, (ZONE_CONTAINER*) GetCurItem() );
         SetCurItem( NULL ); // Outlines can have changed
@@ -617,7 +601,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         m_canvas->MoveCursorToCrossHair();
-        Fill_All_Zones( this );
+        Fill_All_Zones();
         m_canvas->Refresh();
         SetMsgPanel( GetBoard() );
         break;
@@ -638,9 +622,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES: // Remove all zones :
-        GetBoard()->m_SegZoneDeprecated.DeleteAll();    // remove deprecated zone segments used
-                                                        // to fill zones in very old boards.
-
         for( int ii = 0; ii < GetBoard()->GetAreaCount(); ii++ )
         {
             // Remove filled areas in zone
@@ -1291,10 +1272,6 @@ void PCB_EDIT_FRAME::RemoveStruct( BOARD_ITEM* Item, wxDC* DC )
 
     case PCB_VIA_T:
         Delete_Segment( DC, (TRACK*) Item );
-        break;
-
-    case PCB_SEGZONE_T:
-        Delete_OldZone_Fill( (SEGZONE*) Item );
         break;
 
     case PCB_ZONE_AREA_T:

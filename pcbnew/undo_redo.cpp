@@ -152,10 +152,6 @@ static bool TestForExistingItem( BOARD* aPcb, BOARD_ITEM* aItem )
         for( int ii = 0; ii < aPcb->GetAreaCount(); ii++ )
             itemsList.push_back( aPcb->GetArea( ii ) );
 
-        // Append zones segm (deprecated items):
-        for( item = aPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
-            itemsList.push_back( item );
-
         NETINFO_LIST& netInfo = aPcb->GetNetInfo();
 
         for( NETINFO_LIST::iterator i = netInfo.begin(); i != netInfo.end(); ++i )

@@ -157,16 +157,6 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
         track->Draw( aPanel, DC, aDrawMode );
     }
 
-    // SEGZONE is deprecated, only for compatibility with
-    // very old designs
-    for( SEGZONE* zone = m_SegZoneDeprecated; zone; zone = zone->Next() )
-    {
-        if( zone->IsMoving() )
-            continue;
-
-        zone->Draw( aPanel, DC, aDrawMode );
-    }
-
     // Draw areas (i.e. zones)
     for( int ii = 0; ii < GetAreaCount(); ii++ )
     {

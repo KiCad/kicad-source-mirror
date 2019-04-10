@@ -42,7 +42,7 @@ public:
     ~ZONE_FILLER();
 
     void SetProgressReporter( WX_PROGRESS_REPORTER* aReporter );
-    bool Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck = false );
+    bool Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck = false );
 
 private:
 
@@ -65,21 +65,6 @@ private:
             const SHAPE_POLY_SET& aSmoothedOutline,
             SHAPE_POLY_SET& aRawPolys,
             SHAPE_POLY_SET& aFinalPolys ) const;
-
-    bool fillPolygonWithHorizontalSegments( const SHAPE_LINE_CHAIN& aPolygon,
-            ZONE_SEGMENT_FILL& aFillSegmList, int aStep ) const;
-
-    /**
-     * Function fillZoneWithSegments
-     *  Fill sub areas in a zone with segments with m_ZoneMinThickness width
-     * A scan is made line per line, on the whole filled areas, with a step of m_ZoneMinThickness.
-     * all intersecting points with the horizontal infinite line and polygons to fill are calculated
-     * a list of SEGZONE items is built, line per line
-     * @return true if success, false on error
-     */
-    bool fillZoneWithSegments( ZONE_CONTAINER* aZone,
-            const SHAPE_POLY_SET& aFilledPolys,
-            ZONE_SEGMENT_FILL& aFillSegs ) const;
 
     /**
      * Function buildUnconnectedThermalStubsPolygonList

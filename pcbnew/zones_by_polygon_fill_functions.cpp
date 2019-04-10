@@ -52,54 +52,10 @@
 #include <zone_filler.h>
 
 
-/**
- * Function Delete_OldZone_Fill (obsolete)
- * Used for compatibility with old boards
- * Remove the zone filling which include the segment aZone, or the zone which have the
- * given time stamp.
- * A zone is a group of segments which have the same TimeStamp
- * @param aZone = zone segment within the zone to delete. Can be NULL
- * @param aTimestamp = Timestamp for the zone to delete, used if aZone == NULL
- */
-void PCB_EDIT_FRAME::Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp )
-{
-    bool          modify  = false;
-    timestamp_t   TimeStamp;
-
-    if( aZone == NULL )
-        TimeStamp = aTimestamp;
-    else
-        TimeStamp = aZone->GetTimeStamp(); // Save reference time stamp (aZone will be deleted)
-
-    // SEGZONE is a deprecated item, only used for compatibility with very old boards
-    SEGZONE* next;
-
-    for( SEGZONE* zone = GetBoard()->m_SegZoneDeprecated; zone != NULL; zone = next )
-    {
-        next = zone->Next();
-
-        if( zone->GetTimeStamp() == TimeStamp )
-        {
-            modify = true;
-            // remove item from linked list and free memory
-            zone->DeleteStructure();
-        }
-    }
-
-    if( modify )
-    {
-        OnModify();
-        m_canvas->Refresh();
-    }
-}
-
-
-int PCB_EDIT_FRAME::Fill_All_Zones( wxWindow* aActiveWindow )
+void PCB_EDIT_FRAME::Fill_All_Zones()
 {
     auto toolMgr = GetToolManager();
-    wxCHECK( toolMgr, 1 );
     toolMgr->RunAction( PCB_ACTIONS::zoneFillAll, true );
-    return 0;
 }
 
 

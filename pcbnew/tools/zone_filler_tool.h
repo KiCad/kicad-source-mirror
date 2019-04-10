@@ -50,9 +50,6 @@ public:
     int ZoneUnfill( const TOOL_EVENT& aEvent );
     int ZoneUnfillAll( const TOOL_EVENT& aEvent );
 
-    // Segzone action
-    int SegzoneDeleteFill( const TOOL_EVENT& aEvent );
-
 private:
     ///> Sets up handlers for various events.
     void setTransitions() override;

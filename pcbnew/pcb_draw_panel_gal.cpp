@@ -177,10 +177,6 @@ void PCB_DRAW_PANEL_GAL::DisplayBoard( BOARD* aBoard )
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
         m_view->Add( module );
 
-    // Segzones (deprecated, equivalent of ZONE_CONTAINERfilled areas for very old boards)
-    for( SEGZONE* zone = aBoard->m_SegZoneDeprecated; zone; zone = zone->Next() )
-        m_view->Add( zone );
-
     // DRC markers
     for( int marker_idx = 0; marker_idx < aBoard->GetMARKERCount(); ++marker_idx )
     {

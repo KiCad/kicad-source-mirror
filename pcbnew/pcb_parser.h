@@ -75,6 +75,8 @@ class PCB_PARSER : public PCB_LEXER
     bool                m_tooRecent;        ///< true if version parses as later than supported
     int                 m_requiredVersion;  ///< set to the KiCad format version this board requires
 
+    bool                m_showLegacyZoneWarning;
+
     ///> Converts net code using the mapping table if available,
     ///> otherwise returns unchanged net code if < 0 or if is is out of range
     inline int getNetCode( int aNetCode )

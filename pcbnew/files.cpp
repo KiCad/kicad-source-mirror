@@ -576,7 +576,10 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
         if( bds.m_CopperEdgeClearance == Millimeter2iu( LEGACY_COPPEREDGECLEARANCE ) )
             bds.SetCopperEdgeClearance( inferLegacyEdgeClearance( loadedBoard ) );
 
-        GetScreen()->ClrModify();
+        if( loadedBoard->IsModified() )
+            OnModify();
+        else
+            GetScreen()->ClrModify();
 
         if( pluginType == IO_MGR::LEGACY &&
             loadedBoard->GetFileFormatVersionAtLoad() < LEGACY_BOARD_FILE_VERSION )

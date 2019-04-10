@@ -600,7 +600,6 @@ void PCB_IO::formatGeneral( BOARD* aBoard, int aNestLevel ) const
 
     m_out->Print( aNestLevel+1, "(drawings %d)\n", aBoard->Drawings().Size() );
     m_out->Print( aNestLevel+1, "(tracks %d)\n", aBoard->GetNumSegmTrack() );
-    m_out->Print( aNestLevel+1, "(zones %d)\n", aBoard->GetNumSegmZone() );
     m_out->Print( aNestLevel+1, "(modules %d)\n", aBoard->m_Modules.GetCount() );
     m_out->Print( aNestLevel+1, "(nets %d)\n", m_mapping->GetSize() );
     m_out->Print( aNestLevel, ")\n\n" );
@@ -675,8 +674,7 @@ void PCB_IO::formatBoardLayers( BOARD* aBoard, int aNestLevel ) const
 void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
 {
     const BOARD_DESIGN_SETTINGS& dsnSettings = aBoard->GetDesignSettings();
-    for( NETINFO_MAPPING::iterator net = m_mapping->begin(), netEnd = m_mapping->end();
-            net != netEnd; ++net )
+    for( NETINFO_ITEM* net : *m_mapping )
     {
         m_out->Print( aNestLevel, "(net %d %s)\n",
                                   m_mapping->Translate( net->GetNet() ),
@@ -691,11 +689,9 @@ void PCB_IO::formatNetInformation( BOARD* aBoard, int aNestLevel ) const
     defaultNC.Format( m_out, aNestLevel, m_ctl );
 
     // Save the rest of the net classes alphabetically.
-    for( NETCLASSES::const_iterator it = dsnSettings.m_NetClasses.begin();
-         it != dsnSettings.m_NetClasses.end();
-         ++it )
+    for( const auto& it : dsnSettings.m_NetClasses )
     {
-        NETCLASS netclass = *it->second;
+        NETCLASS netclass = *it.second;
         filterNetClass( *aBoard, netclass );    // Remove empty nets (from a copy of a netclass)
         netclass.Format( m_out, aNestLevel, m_ctl );
     }
@@ -1719,9 +1715,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
         m_out->Print( 0, " yes" );
 
     // Default is polygon filled.
-    if( aZone->GetFillMode() == ZFM_SEGMENTS )  // Now deprecated. Should not be used
-        m_out->Print( 0, " (mode segment)" );
-    else if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+    if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
         m_out->Print( 0, " (mode hatch)" );
 
     m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)",

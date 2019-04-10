@@ -459,7 +459,7 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
     color.a = 0.588;
 
 
-    for ( int ic = 0; ic < m_FilledPolysList.OutlineCount(); ic++ )
+    for( int ic = 0; ic < m_FilledPolysList.OutlineCount(); ic++ )
     {
         const SHAPE_LINE_CHAIN& path = m_FilledPolysList.COutline( ic );
 
@@ -485,40 +485,29 @@ void ZONE_CONTAINER::DrawFilledArea( EDA_DRAW_PANEL* panel,
         if( ( m_ZoneMinThickness > 1 ) || outline_mode )
         {
             int ilim = CornersBuffer.size() - 1;
-
             int line_thickness = m_ZoneMinThickness;
 
             for( int is = 0, ie = ilim; is <= ilim; ie = is, is++ )
             {
                 // Draw only basic outlines, not extra segments.
                 if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                    GRCSegm( panel->GetClipBox(), DC,
-                             CornersBuffer[is], CornersBuffer[ie], line_thickness, color );
+                {
+                    GRCSegm( panel->GetClipBox(), DC, CornersBuffer[is], CornersBuffer[ie],
+                             line_thickness, color );
+                }
                 else
-                    GRFilledSegment( panel->GetClipBox(), DC,
-                                 CornersBuffer[is], CornersBuffer[ie], line_thickness, color );
+                {
+                    GRFilledSegment( panel->GetClipBox(), DC, CornersBuffer[is], CornersBuffer[ie],
+                                     line_thickness, color );
+                }
             }
         }
 
-        // Draw areas:
-        if( m_FillMode != ZFM_SEGMENTS && !outline_mode )
-            GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0],
-                    true, 0, color, color );
-    }
-
-    if( m_FillMode == ZFM_SEGMENTS && !outline_mode )     // filled with segments
-    {
-        for( unsigned ic = 0; ic < m_FillSegmList.size(); ic++ )
+        // Draw fill:
+        if( !outline_mode )
         {
-            wxPoint start = (wxPoint) ( m_FillSegmList[ic].A + VECTOR2I(offset) );
-            wxPoint end   = (wxPoint) ( m_FillSegmList[ic].B + VECTOR2I(offset) );
-
-            if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-                GRCSegm( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y,
-                         m_ZoneMinThickness, color );
-            else
-                GRFillCSegm( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y,
-                             m_ZoneMinThickness, color );
+            GRPoly( panel->GetClipBox(), DC, CornersBuffer.size(), &CornersBuffer[0], true, 0,
+                    color, color );
         }
     }
 }
@@ -882,11 +871,9 @@ void ZONE_CONTAINER::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL
     switch( m_FillMode )
     {
     case ZFM_POLYGONS:
-        msg = _( "Polygons" ); break;
+        msg = _( "Solid" ); break;
     case ZFM_HATCH_PATTERN:
-        msg = _( "Hatch Fill" ); break;
-    case ZFM_SEGMENTS:  // Deprecated: found in old boards
-        msg = _( "Segments" ); break;
+        msg = _( "Hatched" ); break;
     default:
         msg = _( "Unknown" ); break;
     }

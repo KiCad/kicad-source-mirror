@@ -86,7 +86,7 @@
 #include <convert_to_biu.h>
 #include <trigo.h>
 #include <build_version.h>
-
+#include <confirm.h>
 
 typedef LEGACY_PLUGIN::BIU      BIU;
 
@@ -496,7 +496,8 @@ void LEGACY_PLUGIN::loadAllSections( bool doAppend )
 
         else if( TESTLINE( "$ZONE" ) )
         {
-            loadTrackList( PCB_SEGZONE_T );
+            // No longer supported; discard segment fills
+            loadTrackList( NOT_USED );
         }
 
         else if( TESTLINE( "$GENERAL" ) )
@@ -2306,10 +2307,12 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         flags = static_cast<STATUS_FLAGS>( flags_int );
 
-        if( aStructType==PCB_TRACE_T && type==1 )
-            makeType = PCB_VIA_T;
+        if( aStructType == PCB_TRACE_T )
+            makeType = ( type == 1 ) ? PCB_VIA_T : PCB_TRACE_T;
+        else if (aStructType == NOT_USED )
+            continue;
         else
-            makeType = aStructType;
+            wxFAIL_MSG( "Segment type unknown" );
 
         TRACK* newTrack;
 
@@ -2322,10 +2325,6 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
 
         case PCB_VIA_T:
             newTrack = new VIA( m_board );
-            break;
-
-        case PCB_SEGZONE_T:     // this is now deprecated, but exist in old boards
-            newTrack = new SEGZONE( m_board );
             break;
         }
 
@@ -2623,7 +2622,31 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             BIU     thermalReliefGap = biuParse( data += 2 , &data );  // +=2 for " F"
             BIU     thermalReliefCopperBridge = biuParse( data );
 
-            zc->SetFillMode( fillmode ? ZFM_SEGMENTS : ZFM_POLYGONS );
+            if( fillmode)
+            {
+                // SEGMENT fill mode no longer supported.  Make sure user is OK with converting them.
+                if( m_showLegacyZoneWarning )
+                {
+                    KIDIALOG dlg( nullptr,
+                                  _( "The legacy segment fill mode is no longer supported.\n"
+                                     "Convert zones to polygon fills?"),
+                                  _( "Legacy Zone Warning" ),
+                                  wxYES_NO | wxICON_WARNING );
+
+                    dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+                    if( dlg.ShowModal() == wxID_NO )
+                        THROW_IO_ERROR( wxT( "CANCEL" ) );
+
+                    m_showLegacyZoneWarning = false;
+                }
+
+                // User OK'd; switch to polygon mode
+                zc->SetFillMode( ZFM_POLYGONS );
+                m_board->SetModified();
+            }
+            else
+                zc->SetFillMode( ZFM_POLYGONS );
 
             // @todo ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF: don't really want pcbnew.h
             // in here, after all, its a PLUGIN and global data is evil.
@@ -3063,6 +3086,7 @@ void LEGACY_PLUGIN::init( const PROPERTIES* aProperties )
     m_loading_format_version = 0;
     m_cu_count = 16;
     m_board = NULL;
+    m_showLegacyZoneWarning = true;
     m_props = aProperties;
 
     // conversion factor for saving RAM BIUs to KICAD legacy file format.

@@ -40,7 +40,6 @@ class BOARD_ITEM_CONTAINER;
 class TEXTE_PCB;
 class MODULE;
 class TRACK;
-class SEGZONE;
 class VIA;
 class D_PAD;
 class TEXTE_MODULE;
@@ -1390,18 +1389,6 @@ public:
     // zone handling
 
     /**
-     * Function Delete_OldZone_Fill (obsolete)
-     * Used for compatibility with old boards
-     * Remove the zone filling which include the segment aZone, or the zone
-     * which have the given time stamp.
-     * For old boards, a zone is a group of SEGZONE segments which have the same TimeStamp
-     * @param aZone = zone segment within the zone to delete. Can be NULL
-     * @param aTimestamp = Timestamp for the zone to delete, used if aZone ==
-     *                     NULL
-     */
-    void Delete_OldZone_Fill( SEGZONE* aZone, timestamp_t aTimestamp = 0 );
-
-    /**
      * Function Delete_LastCreatedCorner
      * Used only while creating a new zone outline
      * Remove and delete the current outline segment in progress
@@ -1436,19 +1423,13 @@ public:
      *  The filling starts from starting points like pads, tracks.
      * If exists the old filling is removed
      * @param aZone = zone to fill
-     * @return error level (0 = no error)
      */
-    int Fill_Zone( ZONE_CONTAINER* aZone );
+    void Fill_Zone( ZONE_CONTAINER* aZone );
 
     /**
      * Function Fill_All_Zones
-     *  Fill all zones on the board
-     * The old fillings are removed
-     * @param aActiveWindow = the current active window, if a progress bar is shown.
-     * the progress bar will be on top of aActiveWindow
-     * aActiveWindow = NULL to do not display a progress bar
      */
-    int Fill_All_Zones( wxWindow * aActiveWindow );
+    void Fill_All_Zones();
 
     /**
      * Function Check_All_Zones

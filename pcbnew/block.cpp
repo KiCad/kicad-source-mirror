@@ -566,7 +566,6 @@ void PCB_EDIT_FRAME::Block_Delete()
 
         // These items are deleted, but not put in undo list
         case PCB_MARKER_T:                  // a marker used to show something
-        case PCB_SEGZONE_T:                     // SEG_ZONE items are now deprecated
             item->UnLink();
             itemsList->RemovePicker( ii );
             ii--;
@@ -624,12 +623,6 @@ void PCB_EDIT_FRAME::Block_Rotate()
         case PCB_TEXT_T:
         case PCB_TARGET_T:
         case PCB_DIMENSION_T:
-            break;
-
-        // This item is not put in undo list
-        case PCB_SEGZONE_T:         // SEG_ZONE items are now deprecated
-            itemsList->RemovePicker( ii );
-            ii--;
             break;
 
         default:
@@ -695,13 +688,6 @@ void PCB_EDIT_FRAME::Block_Flip()
         case PCB_DIMENSION_T:
             break;
 
-        // This item is not put in undo list
-        case PCB_SEGZONE_T:         // SEG_ZONE items are now deprecated
-            itemsList->RemovePicker( ii );
-            ii--;
-            break;
-
-
         default:
             wxMessageBox( wxT( "PCB_EDIT_FRAME::Block_Flip( ) error: unexpected type" ) );
             break;
@@ -749,12 +735,6 @@ void PCB_EDIT_FRAME::Block_Move()
         case PCB_TEXT_T:
         case PCB_TARGET_T:
         case PCB_DIMENSION_T:
-            break;
-
-        // This item is not put in undo list
-        case PCB_SEGZONE_T:        // SEG_ZONE items are now deprecated
-            itemsList->RemovePicker( ii );
-            ii--;
             break;
 
         default:

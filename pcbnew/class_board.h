@@ -55,7 +55,6 @@ class PCB_EDIT_FRAME;
 class PICKED_ITEMS_LIST;
 class BOARD;
 class ZONE_CONTAINER;
-class SEGZONE;
 class TRACK;
 class D_PAD;
 class MARKER_PCB;
@@ -251,8 +250,6 @@ public:
 
     DLIST<MODULE>               m_Modules;              // linked list of MODULEs
     DLIST<TRACK>                m_Track;                // linked list of TRACKs and VIAs
-    DLIST<SEGZONE>              m_SegZoneDeprecated;    // linked list of SEGZONEs, for really very old boards
-                                                        // should be removed one day
 
     DLIST_ITERATOR_WRAPPER<TRACK> Tracks() { return DLIST_ITERATOR_WRAPPER<TRACK>(m_Track); }
     DLIST_ITERATOR_WRAPPER<MODULE> Modules() { return DLIST_ITERATOR_WRAPPER<MODULE>(m_Modules); }
@@ -275,8 +272,7 @@ public:
 
     bool IsEmpty() const
     {
-        return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 &&
-               m_Track.GetCount() == 0 && m_SegZoneDeprecated.GetCount() == 0;
+        return m_Drawings.GetCount() == 0 && m_Modules.GetCount() == 0 && m_Track.GetCount() == 0;
     }
 
     void Move( const wxPoint& aMoveVector ) override;
@@ -697,9 +693,6 @@ public:
 
     /** Functions to get some items count */
     int GetNumSegmTrack() const;
-
-    /** Calculate the zone segment count */
-    int GetNumSegmZone() const;
 
     /**
      * Function GetNodesCount

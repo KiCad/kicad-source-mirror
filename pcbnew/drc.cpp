@@ -462,7 +462,7 @@ void DRC::RunTests( wxTextCtrl* aMessages )
         if( aMessages )
             aMessages->AppendText( _( "Refilling all zones...\n" ) );
 
-        m_pcbEditorFrame->Fill_All_Zones( caller );
+        m_pcbEditorFrame->Fill_All_Zones();
     }
     else
     {

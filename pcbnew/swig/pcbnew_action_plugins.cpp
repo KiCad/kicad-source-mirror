@@ -248,13 +248,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         itemsList.PushItem( picker );
     }
 
-    // Append zones segm:
-    for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
-    {
-        ITEM_PICKER picker( item, UR_CHANGED );
-        itemsList.PushItem( picker );
-    }
-
     if( itemsList.GetCount() > 0 )
         SaveCopyInUndoList( itemsList, UR_CHANGED, wxPoint( 0.0, 0.0 ) );
     else
@@ -306,7 +299,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
         case PCB_TEXT_T:
         case PCB_DIMENSION_T:
         case PCB_TARGET_T:
-        case PCB_SEGZONE_T:
 
             // If item has a list it's mean that the element is on the board
             if( item->GetList() == NULL )
@@ -367,15 +359,6 @@ void PCB_EDIT_FRAME::RunActionPlugin( ACTION_PLUGIN* aActionPlugin )
     }
 
     for( BOARD_ITEM* item = currentPcb->m_Drawings; item != NULL; item = item->Next() )
-    {
-        if( !oldBuffer->ContainsItem( item ) )
-        {
-            ITEM_PICKER picker( item, UR_NEW );
-            oldBuffer->PushItem( picker );
-        }
-    }
-
-    for( BOARD_ITEM* item = currentPcb->m_SegZoneDeprecated; item != NULL; item = item->Next() )
     {
         if( !oldBuffer->ContainsItem( item ) )
         {

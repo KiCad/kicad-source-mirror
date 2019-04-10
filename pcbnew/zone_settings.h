@@ -37,8 +37,7 @@
 enum ZONE_FILL_MODE
 {
     ZFM_POLYGONS = 0,       // fill zone with polygons
-    ZFM_SEGMENTS = 1,       // fill zone with segments (legacy)
-    ZFM_HATCH_PATTERN = 2    // fill zone using a grid pattern
+    ZFM_HATCH_PATTERN = 1   // fill zone using a grid pattern
 };
 
 /**

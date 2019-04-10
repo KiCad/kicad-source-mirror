@@ -56,6 +56,7 @@ using namespace PCB_KEYS_T;
 
 void PCB_PARSER::init()
 {
+    m_showLegacyZoneWarning = true;
     m_tooRecent = false;
     m_requiredVersion = 0;
     m_layerIndices.clear();
@@ -647,9 +648,6 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             else
                 visitItem( segm );
         }
-
-        for( TRACK* segm = m_board->m_SegZoneDeprecated; segm; segm = segm->Next() )
-            visitItem( segm );
 
         for( BOARD_ITEM* zone : m_board->Zones() )
             visitItem( zone );
@@ -3183,7 +3181,27 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
                         Expecting( "segment, hatch or polygon" );
 
                     if( token == T_segment )    // deprecated
-                        zone->SetFillMode( ZFM_SEGMENTS );
+                    {
+                        // SEGMENT fill mode no longer supported.  Make sure user is OK with converting them.
+                        if( m_showLegacyZoneWarning )
+                        {
+                            KIDIALOG dlg( nullptr,
+                                          _( "The legacy segment fill mode is no longer supported.\n"
+                                             "Convert zones to polygon fills?"),
+                                          _( "Legacy Zone Warning" ),
+                                          wxYES_NO | wxICON_WARNING );
+
+                            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
+
+                            if( dlg.ShowModal() == wxID_NO )
+                                THROW_IO_ERROR( wxT( "CANCEL" ) );
+
+                            m_showLegacyZoneWarning = false;
+                        }
+
+                        zone->SetFillMode( ZFM_POLYGONS );
+                        m_board->SetModified();
+                    }
                     else if( token == T_hatch )
                         zone->SetFillMode( ZFM_HATCH_PATTERN );
                     else

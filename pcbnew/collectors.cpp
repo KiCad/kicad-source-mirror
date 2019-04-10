@@ -51,7 +51,6 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_PAD_T,                   // in modules
     PCB_MODULE_TEXT_T,           // in modules
     PCB_MODULE_T,                // in m_Modules
-    PCB_SEGZONE_T,                  // in m_Zones
     PCB_ZONE_AREA_T,             // in m_ZoneDescriptorList
     EOT
 };
@@ -66,7 +65,6 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_VIA_T,
     PCB_TRACE_T,
     PCB_MODULE_T,
-    PCB_SEGZONE_T,
     PCB_ZONE_AREA_T,
     EOT
 };
@@ -182,10 +180,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         breakhere++;
         break;
 
-    case PCB_SEGZONE_T:
-        breakhere++;
-        break;
-
     case PCB_TEXT_T:
         breakhere++;
         break;
@@ -264,9 +258,6 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
     case PCB_TRACE_T:
         if( m_Guide->IgnoreTracks() )
             goto exit;
-        break;
-
-    case PCB_SEGZONE_T:
         break;
 
     case PCB_ZONE_AREA_T:

@@ -138,17 +138,6 @@ void PlotSilkScreen( BOARD *aBoard, PLOTTER* aPlotter, LSET aLayerMask,
     }
 
     aPlotter->EndBlock( NULL );
-
-    // Plot segments used to fill zone areas (deprecated, but here for very old boards
-    // compatibility):
-    for( SEGZONE* seg = aBoard->m_SegZoneDeprecated; seg; seg = seg->Next() )
-    {
-        if( !aLayerMask[ seg->GetLayer() ] )
-            continue;
-
-        aPlotter->ThickSegment( seg->GetStart(), seg->GetEnd(), seg->GetWidth(),
-                                itemplotter.GetPlotMode(), NULL );
-    }
 }
 
 void PlotOneBoardLayer( BOARD *aBoard, PLOTTER* aPlotter, PCB_LAYER_ID aLayer,
@@ -572,17 +561,6 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
     }
 
     aPlotter->EndBlock( NULL );
-
-    // Plot zones (deprecated, for very old boards compatibility):
-    for( TRACK* track = aBoard->m_SegZoneDeprecated; track; track = track->Next() )
-    {
-        if( !aLayerMask[track->GetLayer()] )
-            continue;
-
-        int width = track->GetWidth() + itemplotter.getFineWidthAdj();
-        aPlotter->SetColor( itemplotter.getColor( track->GetLayer() ) );
-        aPlotter->ThickSegment( track->GetStart(), track->GetEnd(), width, plotMode, NULL );
-    }
 
     // Plot filled ares
     aPlotter->StartBlock( NULL );

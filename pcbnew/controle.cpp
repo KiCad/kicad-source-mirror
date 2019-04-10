@@ -158,43 +158,17 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
         (*m_Collector)[i]->Show( 0, std::cout );
 #endif
 
-    /* Remove redundancies: sometime, legacy zones are found twice,
-     * because zones can be filled by overlapping segments (this is a fill option)
-     * Trigger the selection of the current edge for new-style zones
-     */
-    timestamp_t timestampzone = 0;
-
+    // Trigger the selection of the current edge for zones
     for( int ii = 0;  ii < m_Collector->GetCount(); ii++ )
     {
         item = (*m_Collector)[ii];
 
-        switch( item->Type() )
+        if( item->Type() == PCB_ZONE_AREA_T )
         {
-        case PCB_SEGZONE_T:
-            // Found a TYPE ZONE
-            if( item->GetTimeStamp() == timestampzone )    // Remove it, redundant, zone already found
-            {
-                m_Collector->Remove( ii );
-                ii--;
-            }
-            else
-            {
-                timestampzone = item->GetTimeStamp();
-            }
-            break;
-
-        case PCB_ZONE_AREA_T:
-            {
-                /* We need to do the selection now because the menu text
-                 * depends on it */
-                ZONE_CONTAINER *zone = static_cast<ZONE_CONTAINER*>( item );
-                int  accuracy = KiROUND( 5 * guide.OnePixelInIU() );
-                zone->SetSelectedCorner( RefPos( true ), accuracy );
-            }
-            break;
-
-        default:
-            break;
+            // We need to do the selection now because the menu text depends on it
+            ZONE_CONTAINER *zone = static_cast<ZONE_CONTAINER*>( item );
+            int  accuracy = KiROUND( 5 * guide.OnePixelInIU() );
+            zone->SetSelectedCorner( RefPos( true ), accuracy );
         }
     }
 

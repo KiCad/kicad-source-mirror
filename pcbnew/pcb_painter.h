@@ -43,7 +43,6 @@ class TRACK;
 class D_PAD;
 class DRAWSEGMENT;
 class MODULE;
-class SEGZONE;
 class ZONE_CONTAINER;
 class TEXTE_PCB;
 class TEXTE_MODULE;

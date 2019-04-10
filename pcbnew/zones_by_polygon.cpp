@@ -996,9 +996,6 @@ void PCB_EDIT_FRAME::Delete_Zone_Contour( wxDC* DC, ZONE_CONTAINER* aZone )
 
     EDA_RECT dirty = aZone->GetBoundingBox();
 
-    // For compatibility with old boards: remove old SEGZONE fill segments
-    Delete_OldZone_Fill( NULL, aZone->GetTimeStamp() );
-
     // Remove current filling:
     aZone->UnFill();
 

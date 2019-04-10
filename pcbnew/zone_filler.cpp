@@ -52,6 +52,28 @@
 #include "zone_filler.h"
 
 
+class PROGRESS_REPORTER_HIDER
+{
+public:
+    PROGRESS_REPORTER_HIDER( WX_PROGRESS_REPORTER* aReporter )
+    {
+        m_reporter = aReporter;
+
+        if( aReporter )
+            aReporter->Hide();
+    }
+
+    ~PROGRESS_REPORTER_HIDER()
+    {
+        if( m_reporter )
+            m_reporter->Show();
+    }
+
+private:
+    WX_PROGRESS_REPORTER* m_reporter;
+};
+
+
 extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         const D_PAD& aPad, int aThermalGap, int aCopperThickness,
         int aMinThicknessValue, int aCircleToSegmentsCount,
@@ -59,6 +81,7 @@ extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
 static double s_thermalRot = 450;   // angle of stubs in thermal reliefs for round pads
 static const bool s_DumpZonesWhenFilling = false;
+
 
 ZONE_FILLER::ZONE_FILLER(  BOARD* aBoard, COMMIT* aCommit ) :
     m_board( aBoard ), m_commit( aCommit ), m_progressReporter( nullptr )
@@ -76,7 +99,8 @@ void ZONE_FILLER::SetProgressReporter( WX_PROGRESS_REPORTER* aReporter )
     m_progressReporter = aReporter;
 }
 
-bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
+
+bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck )
 {
     std::vector<CN_ZONE_ISOLATED_ISLAND_LIST> toFill;
     auto connectivity = m_board->GetConnectivity();
@@ -85,6 +109,12 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
     if( !lock )
         return false;
+
+    if( m_progressReporter )
+    {
+        m_progressReporter->Report( _( "Checking zone fills..." ) );
+        m_progressReporter->SetMaxProgress( toFill.size() );
+    }
 
     for( auto zone : aZones )
     {
@@ -107,15 +137,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
         zone->UnFill();
     }
 
-    if( m_progressReporter )
-    {
-        m_progressReporter->Report( _( "Checking zone fills..." ) );
-        m_progressReporter->SetMaxProgress( toFill.size() );
-    }
-
-    // Remove deprecaded segment zones (only found in very old boards)
-    m_board->m_SegZoneDeprecated.DeleteAll();
-
     std::atomic<size_t> nextItem( 0 );
     size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(), toFill.size() );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
@@ -132,14 +153,6 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
 
             zone->SetRawPolysList( rawPolys );
             zone->SetFilledPolysList( finalPolys );
-
-            if( zone->GetFillMode() == ZFM_SEGMENTS )
-            {
-                ZONE_SEGMENT_FILL segFill;
-                fillZoneWithSegments( zone, zone->GetFilledPolysList(), segFill );
-                zone->SetFillSegments( segFill );
-            }
-
             zone->SetIsFilled( true );
 
             if( m_progressReporter )
@@ -204,10 +217,9 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
                 poly.DeletePolygon( idx );
             }
         }
-        // zones with no net can have areas outside the board cutouts.
-        // Please, use only this clipping for no nets zones: this is a very time consumming
-        // calculation (x 5 in a test case if made for all zones),
-        // mainly due to poly.Fracture
+        // Zones with no net can have areas outside the board cutouts.
+        // Please, use only this clipping for no-net zones: this is a very time consumming
+        // calculation (x 5 in a test case if made for all zones), mainly due to poly.Fracture
         else if( clip_to_brd_outlines )
         {
             poly.BooleanIntersection( boardOutline, SHAPE_POLY_SET::PM_FAST );
@@ -220,27 +232,16 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
             outOfDate = true;
     }
 
-    if( aCheck )
+    if( aCheck && outOfDate )
     {
-        bool refill = false;
-        wxCHECK( m_progressReporter, false );
+        PROGRESS_REPORTER_HIDER raii( m_progressReporter );
+        KIDIALOG dlg( m_progressReporter->GetParent(),
+                      _( "Zone fills are out-of-date. Refill?" ),
+                      _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
+        dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
+        dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
-        if( outOfDate )
-        {
-            m_progressReporter->Hide();
-
-            KIDIALOG dlg( m_progressReporter->GetParent(),
-                          _( "Zone fills are out-of-date. Refill?" ),
-                          _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            dlg.SetOKCancelLabels( _( "Refill" ), _( "Continue without Refill" ) );
-            dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
-
-            refill = ( dlg.ShowModal() == wxID_OK );
-
-            m_progressReporter->Show();
-        }
-
-        if( !refill )
+        if( dlg.ShowModal() == wxID_CANCEL )
         {
             if( m_commit )
                 m_commit->Revert();
@@ -312,10 +313,8 @@ bool ZONE_FILLER::Fill( std::vector<ZONE_CONTAINER*> aZones, bool aCheck )
     }
     else
     {
-        for( unsigned i = 0; i < toFill.size(); i++ )
-        {
-            connectivity->Update( toFill[i].m_zone );
-        }
+        for( auto& i : toFill )
+            connectivity->Update( i.m_zone );
 
         connectivity->RecalculateRatsnest();
     }
@@ -865,169 +864,6 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
 #endif
     aZone->SetNeedRefill( false );
     return true;
-}
-
-bool ZONE_FILLER::fillZoneWithSegments( ZONE_CONTAINER* aZone,
-                                        const SHAPE_POLY_SET& aFilledPolys,
-                                        ZONE_SEGMENT_FILL& aFillSegs ) const
-{
-    bool success = true;
-    // segments are on something like a grid. Give it a minimal size
-    // to avoid too many segments, and use the m_ZoneMinThickness when (this is usually the case)
-    // the size is > mingrid_size.
-    // This is not perfect, but the actual purpose of this code
-    // is to allow filling zones on a grid, with grid size > m_ZoneMinThickness,
-    // in order to have really a grid.
-    //
-    // Using a user selectable grid size is for future Kicad versions.
-    // For now the area is fully filled.
-    int mingrid_size = Millimeter2iu( 0.05 );
-    int grid_size = std::max( mingrid_size, aZone->GetMinThickness() );
-    // Make segments slightly overlapping to ensure a good full filling
-    grid_size -= grid_size/20;
-
-    // Creates the horizontal segments
-    for ( int index = 0; index < aFilledPolys.OutlineCount(); index++ )
-    {
-        const SHAPE_LINE_CHAIN& outline0 = aFilledPolys.COutline( index );
-        success = fillPolygonWithHorizontalSegments( outline0, aFillSegs, grid_size );
-
-        if( !success )
-            break;
-
-        // Creates the vertical segments. Because the filling algo creates horizontal segments,
-        // to reuse the fillPolygonWithHorizontalSegments function, we rotate the polygons to fill
-        // then fill them, then inverse rotate the result
-        SHAPE_LINE_CHAIN outline90;
-        outline90.Append( outline0 );
-
-        // Rotate 90 degrees the outline:
-        for( int ii = 0; ii < outline90.PointCount(); ii++ )
-        {
-            VECTOR2I& point = outline90.Point( ii );
-            std::swap( point.x, point.y );
-            point.y = -point.y;
-        }
-
-        int first_point = aFillSegs.size();
-        success = fillPolygonWithHorizontalSegments( outline90, aFillSegs, grid_size );
-
-        if( !success )
-            break;
-
-        // Rotate -90 degrees the segments:
-        for( unsigned ii = first_point; ii < aFillSegs.size(); ii++ )
-        {
-            SEG& segm = aFillSegs[ii];
-            std::swap( segm.A.x, segm.A.y );
-            std::swap( segm.B.x, segm.B.y );
-            segm.A.x = - segm.A.x;
-            segm.B.x = - segm.B.x;
-        }
-    }
-
-    aZone->SetNeedRefill( false );
-    return success;
-}
-
-/** Helper function fillPolygonWithHorizontalSegments
- * fills a polygon with horizontal segments.
- * It can be used for any angle, if the zone outline to fill is rotated by this angle
- * and the result is rotated by -angle
- * @param aPolygon = a SHAPE_LINE_CHAIN polygon to fill
- * @param aFillSegmList = a std::vector\<SEGMENT\> which will be populated by filling segments
- * @param aStep = the horizontal grid size
- */
-bool ZONE_FILLER::fillPolygonWithHorizontalSegments( const SHAPE_LINE_CHAIN& aPolygon,
-                                            ZONE_SEGMENT_FILL& aFillSegmList, int aStep ) const
-{
-    std::vector <int> x_coordinates;
-    bool success = true;
-
-    // Creates the horizontal segments
-    const SHAPE_LINE_CHAIN& outline = aPolygon;
-    const BOX2I& rect = outline.BBox();
-
-    // Calculate the y limits of the zone
-    for( int refy = rect.GetY(), endy = rect.GetBottom(); refy < endy; refy += aStep )
-    {
-        // find all intersection points of an infinite line with polyline sides
-        x_coordinates.clear();
-
-        for( int v = 0; v < outline.PointCount(); v++ )
-        {
-
-            int seg_startX = outline.CPoint( v ).x;
-            int seg_startY = outline.CPoint( v ).y;
-            int seg_endX   = outline.CPoint( v + 1 ).x;
-            int seg_endY   = outline.CPoint( v + 1 ).y;
-
-            /* Trivial cases: skip if ref above or below the segment to test */
-            if( ( seg_startY > refy ) && ( seg_endY > refy ) )
-                continue;
-
-            // segment below ref point, or its Y end pos on Y coordinate ref point: skip
-            if( ( seg_startY <= refy ) && (seg_endY <= refy ) )
-                continue;
-
-            /* at this point refy is between seg_startY and seg_endY
-             * see if an horizontal line at Y = refy is intersecting this segment
-             */
-            // calculate the x position of the intersection of this segment and the
-            // infinite line this is more easier if we move the X,Y axis origin to
-            // the segment start point:
-
-            seg_endX -= seg_startX;
-            seg_endY -= seg_startY;
-            double newrefy = (double) ( refy - seg_startY );
-            double intersec_x;
-
-            if ( seg_endY == 0 )    // horizontal segment on the same line: skip
-                continue;
-
-            // Now calculate the x intersection coordinate of the horizontal line at
-            // y = newrefy and the segment from (0,0) to (seg_endX,seg_endY) with the
-            // horizontal line at the new refy position the line slope is:
-            // slope = seg_endY/seg_endX; and inv_slope = seg_endX/seg_endY
-            // and the x pos relative to the new origin is:
-            // intersec_x = refy/slope = refy * inv_slope
-            // Note: because horizontal segments are already tested and skipped, slope
-            // exists (seg_end_y not O)
-            double inv_slope = (double) seg_endX / seg_endY;
-            intersec_x = newrefy * inv_slope;
-            x_coordinates.push_back( (int) intersec_x + seg_startX );
-        }
-
-        // A line scan is finished: build list of segments
-
-        // Sort intersection points by increasing x value:
-        // So 2 consecutive points are the ends of a segment
-        std::sort( x_coordinates.begin(), x_coordinates.end() );
-
-        // An even number of coordinates is expected, because a segment has 2 ends.
-        // An if this algorithm always works, it must always find an even count.
-        if( ( x_coordinates.size() & 1 ) != 0 )
-        {
-            success = false;
-            break;
-        }
-
-        // Create segments having the same Y coordinate
-        int iimax = x_coordinates.size() - 1;
-
-        for( int ii = 0; ii < iimax; ii += 2 )
-        {
-            VECTOR2I  seg_start, seg_end;
-            seg_start.x = x_coordinates[ii];
-            seg_start.y = refy;
-            seg_end.x = x_coordinates[ii + 1];
-            seg_end.y = refy;
-            SEG segment( seg_start, seg_end );
-            aFillSegmList.push_back( segment );
-        }
-    }   // End examine segments in one area
-
-    return success;
 }
 
 

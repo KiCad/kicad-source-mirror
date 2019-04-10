@@ -1,13 +1,7 @@
-/**
- * @file plot_brditems_plotter.cpp
- * @brief basic plot functions to plot board items, or a group of board items.
- */
-
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -284,25 +278,11 @@ void BRDITEMS_PLOTTER::PlotBoardGraphicItems()
     {
         switch( item->Type() )
         {
-        case PCB_LINE_T:
-            PlotDrawSegment( (DRAWSEGMENT*) item);
-            break;
-
-        case PCB_TEXT_T:
-            PlotTextePcb( (TEXTE_PCB*) item );
-            break;
-
-        case PCB_DIMENSION_T:
-            PlotDimension( (DIMENSION*) item );
-            break;
-
-        case PCB_TARGET_T:
-            PlotPcbTarget( (PCB_TARGET*) item );
-            break;
-
-        case PCB_MARKER_T:
-        default:
-            break;
+        case PCB_LINE_T:      PlotDrawSegment( (DRAWSEGMENT*) item); break;
+        case PCB_TEXT_T:      PlotTextePcb( (TEXTE_PCB*) item );     break;
+        case PCB_DIMENSION_T: PlotDimension( (DIMENSION*) item );    break;
+        case PCB_TARGET_T:    PlotPcbTarget( (PCB_TARGET*) item );   break;
+        default:              break;
         }
     }
 }
@@ -341,9 +321,7 @@ void BRDITEMS_PLOTTER::PlotTextModule( TEXTE_MODULE* pt_texte, COLOR4D aColor )
     MODULE* parent = static_cast<MODULE*> ( pt_texte->GetParent() );
     gbr_metadata.SetCmpReference( parent->GetReference() );
 
-    m_plotter->Text( pos, aColor,
-                     pt_texte->GetShownText(),
-                     orient, size,
+    m_plotter->Text( pos, aColor, pt_texte->GetShownText(), orient, size,
                      pt_texte->GetHorizJustify(), pt_texte->GetVertJustify(),
                      thickness, pt_texte->IsItalic(), allow_bold, false, &gbr_metadata );
 }
@@ -539,10 +517,8 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
 
             cornerList.reserve( polyPoints.size() );
 
-            for( unsigned ii = 0; ii < polyPoints.size(); ii++ )
+            for( wxPoint corner : polyPoints )
             {
-                wxPoint corner = polyPoints[ii];
-
                 if( module )
                 {
                     RotatePoint( &corner, module->GetOrientation() );
@@ -556,12 +532,12 @@ void BRDITEMS_PLOTTER::Plot_1_EdgeModule( EDGE_MODULE* aEdge )
             {
                 for( size_t i = 1; i < cornerList.size(); i++ )
                 {
-                    m_plotter->ThickSegment( cornerList[i-1], cornerList[i],
-                            thickness, GetPlotMode(), &gbr_metadata );
+                    m_plotter->ThickSegment( cornerList[i-1], cornerList[i], thickness,
+                                             GetPlotMode(), &gbr_metadata );
                 }
 
-                m_plotter->ThickSegment( cornerList.back(), cornerList.front(),
-                        thickness, GetPlotMode(), &gbr_metadata );
+                m_plotter->ThickSegment( cornerList.back(), cornerList.front(), thickness,
+                                         GetPlotMode(), &gbr_metadata );
 
             }
             else
@@ -592,9 +568,7 @@ void BRDITEMS_PLOTTER::PlotTextePcb( TEXTE_PCB* pt_texte )
     GBR_METADATA gbr_metadata;
 
     if( IsCopperLayer( pt_texte->GetLayer() ) )
-    {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
-    }
 
     COLOR4D color = getColor( pt_texte->GetLayer() );
     m_plotter->SetColor( color );
@@ -690,43 +664,23 @@ void BRDITEMS_PLOTTER::PlotFilledAreas( ZONE_CONTAINER* aZone )
         {
             // First, close the outline
             if( cornerList[0] != cornerList[cornerList.size() - 1] )
-            {
                 cornerList.push_back( cornerList[0] );
-            }
 
             // Plot the current filled area and its outline
             if( GetPlotMode() == FILLED )
             {
-                // Plot the filled area polygon.
-                // The area can be filled by segments (outdated) or uses solid polygons
-                if( aZone->GetFillMode() != ZONE_FILL_MODE::ZFM_SEGMENTS ) // We are using solid polygons
-                {
-                    m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness(), &gbr_metadata );
-                }
-                else    // We are using areas filled by segments: plot segments and outline
-                {
-                    for( unsigned iseg = 0; iseg < aZone->FillSegments().size(); iseg++ )
-                    {
-                        wxPoint start = (wxPoint) aZone->FillSegments()[iseg].A;
-                        wxPoint end   = (wxPoint) aZone->FillSegments()[iseg].B;
-                        m_plotter->ThickSegment( start, end,
-                                                 aZone->GetMinThickness(),
-                                                 GetPlotMode(), &gbr_metadata );
-                    }
-
-                // Plot the area outline only
-                if( aZone->GetMinThickness() > 0 )
-                    m_plotter->PlotPoly( cornerList, NO_FILL, aZone->GetMinThickness() );
-                }
+                m_plotter->PlotPoly( cornerList, FILLED_SHAPE, aZone->GetMinThickness(), &gbr_metadata );
             }
             else
             {
                 if( aZone->GetMinThickness() > 0 )
                 {
-                    for( unsigned jj = 1; jj<cornerList.size(); jj++ )
+                    for( unsigned jj = 1; jj < cornerList.size(); jj++ )
+                    {
                         m_plotter->ThickSegment( cornerList[jj -1], cornerList[jj],
                                                  aZone->GetMinThickness(),
                                                  GetPlotMode(), &gbr_metadata );
+                    }
                 }
 
                 m_plotter->SetCurrentLineWidth( -1 );
@@ -759,9 +713,7 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
     bool isOnCopperLayer = ( m_layerMask & LSET::AllCuMask() ).any();
 
     if( isOnCopperLayer && aSeg->GetLayer() == Edge_Cuts )   // can happens when plotting copper layers
-    {
         gbr_metadata.SetApertureAttrib( GBR_APERTURE_METADATA::GBR_APERTURE_ATTRIB_NONCONDUCTOR );
-    }
 
     switch( aSeg->GetShape() )
     {
@@ -788,8 +740,10 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
             const std::vector<wxPoint>& bezierPoints = aSeg->GetBezierPoints();
 
             for( unsigned i = 1; i < bezierPoints.size(); i++ )
+            {
                 m_plotter->ThickSegment( bezierPoints[i - 1], bezierPoints[i],
                                          thickness, GetPlotMode(), &gbr_metadata );
+            }
         }
         break;
 
@@ -833,10 +787,9 @@ void BRDITEMS_PLOTTER::PlotDrawSegment( DRAWSEGMENT* aSeg )
 /** Helper function to plot a single drill mark. It compensate and clamp
  *   the drill mark size depending on the current plot options
  */
-void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape,
-                           const wxPoint &aDrillPos, wxSize aDrillSize,
-                           const wxSize &aPadSize,
-                           double aOrientation, int aSmallDrill )
+void BRDITEMS_PLOTTER::plotOneDrillMark( PAD_DRILL_SHAPE_T aDrillShape, const wxPoint &aDrillPos,
+                                         wxSize aDrillSize, const wxSize &aPadSize,
+                                         double aOrientation, int aSmallDrill )
 {
     // Small drill marks have no significance when applied to slots
     if( aSmallDrill && aDrillShape == PAD_DRILL_SHAPE_CIRCLE )
@@ -883,9 +836,11 @@ void BRDITEMS_PLOTTER::PlotDrillMarks()
         const VIA* via = dyn_cast<const VIA*>( pts );
 
         if( via )
+        {
             plotOneDrillMark( PAD_DRILL_SHAPE_CIRCLE, via->GetStart(),
                     wxSize( via->GetDrillValue(), 0 ),
                     wxSize( via->GetWidth(), 0 ), 0, small_drill );
+        }
     }
 
     for( MODULE* Module = m_board->m_Modules; Module != NULL; Module = Module->Next() )

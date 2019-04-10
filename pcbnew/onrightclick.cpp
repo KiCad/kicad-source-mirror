@@ -196,11 +196,6 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
             break;
 
-        case PCB_SEGZONE_T:      // Item used to fill a zone
-            AddMenuItem( aPopMenu, ID_POPUP_PCB_DELETE_ZONE,
-                         _( "Delete Zone Filling" ), KiBitmap( delete_xpm ) );
-            break;
-
         case PCB_ZONE_AREA_T:    // Item used to handle a zone area (outlines, holes ...)
             if( flags & IS_NEW )
             {

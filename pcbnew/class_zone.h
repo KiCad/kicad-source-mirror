@@ -74,8 +74,7 @@ public:
 
     static inline bool ClassOf( const EDA_ITEM* aItem )
     {
-        return aItem && ( ( PCB_ZONE_AREA_T == aItem->Type() ) ||
-                          ( PCB_SEGZONE_T == aItem->Type() ) );
+        return aItem && aItem->Type() == PCB_ZONE_AREA_T;
     }
 
     /**
@@ -782,7 +781,6 @@ private:
 
     /** How to fill areas:
      * ZFM_POLYGONS => use solid polygons
-     * ZFM_SEGMENTS => fill by segments (deprecated).
      * ZFM_HATCH_PATTERN => use a grid pattern as shape
      */
     ZONE_FILL_MODE        m_FillMode;

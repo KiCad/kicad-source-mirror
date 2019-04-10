@@ -108,32 +108,6 @@ EDA_ITEM* TRACK::Clone() const
 }
 
 
-SEGZONE::SEGZONE( BOARD_ITEM* aParent ) :
-    TRACK( aParent, PCB_SEGZONE_T )
-{
-}
-
-
-EDA_ITEM* SEGZONE::Clone() const
-{
-    return new SEGZONE( *this );
-}
-
-
-wxString SEGZONE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
-{
-    return wxString::Format( _( "Zone [%s] on %s" ),
-                             UnescapeString( GetNetnameMsg() ),
-                             GetLayerName() );
-}
-
-
-BITMAP_DEF SEGZONE::GetMenuImage() const
-{
-    return add_zone_xpm;
-}
-
-
 VIA::VIA( BOARD_ITEM* aParent ) :
     TRACK( aParent, PCB_VIA_T )
 {
@@ -454,26 +428,16 @@ void VIA::SanitizeLayers()
 
 TRACK* TRACK::GetBestInsertPoint( BOARD* aPcb )
 {
-    TRACK* track;
-
     // When reading from a file most of the items will already be in the correct order.
     // Searching from the back therefore takes us from n^2 to essentially 0.
 
-    if( Type() == PCB_SEGZONE_T )  // Deprecated items, only found in very old boards
-        track = aPcb->m_SegZoneDeprecated.GetLast();
-    else
-        track = aPcb->m_Track.GetLast();
-
-    for( ; track;  track = track->Back() )
+    for( TRACK* track = aPcb->m_Track.GetLast(); track;  track = track->Back() )
     {
         if( GetNetCode() >= track->GetNetCode() )
             return track->Next();
     }
 
-    if( Type() == PCB_SEGZONE_T )  // Deprecated
-        return aPcb->m_SegZoneDeprecated.GetFirst();
-    else
-        return aPcb->m_Track.GetFirst();
+    return aPcb->m_Track.GetFirst();
 }
 
 
@@ -691,65 +655,6 @@ void TRACK::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     }
 
     DrawShortNetname( panel, aDC, aDrawMode, color );
-}
-
-
-void SEGZONE::Draw( EDA_DRAW_PANEL* panel, wxDC* aDC, GR_DRAWMODE aDrawMode,
-                    const wxPoint& aOffset )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)( panel->GetDisplayOptions() );
-
-    if( displ_opts->m_DisplayZonesMode != 0 )
-        return;
-
-    BOARD* brd = GetBoard();
-
-    auto frame = static_cast<PCB_BASE_FRAME*> ( panel->GetParent() );
-    auto color = frame->Settings().Colors().GetLayerColor( m_Layer );
-
-    if( brd->IsLayerVisible( m_Layer ) == false && !( aDrawMode & GR_HIGHLIGHT ) )
-        return;
-
-#ifdef USE_WX_OVERLAY
-    // If dragged not draw in OnPaint otherwise remains impressed in wxOverlay
-    if( (m_Flags & IS_DRAGGED) && aDC->IsKindOf(wxCLASSINFO(wxPaintDC)))
-      return;
-#endif
-
-    if( ( aDrawMode & GR_ALLOW_HIGHCONTRAST ) && displ_opts->m_ContrastModeDisplay )
-    {
-        PCB_LAYER_ID curr_layer = ( (PCB_SCREEN*) panel->GetScreen() )->m_Active_Layer;
-
-        if( !IsOnLayer( curr_layer ) )
-            color = COLOR4D( DARKDARKGRAY );
-    }
-
-    if( ( aDrawMode & GR_HIGHLIGHT ) && !( aDrawMode & GR_AND ) )
-        color.SetToLegacyHighlightColor();
-
-    color.a = 0.588;
-
-    GRSetDrawMode( aDC, aDrawMode );
-
-    // Draw track as line if width <= 1pixel:
-    if( aDC->LogicalToDeviceXRel( m_Width ) <= 1 )
-    {
-        GRLine( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
-        return;
-    }
-
-    if( !displ_opts->m_DisplayPcbTrackFill || GetState( FORCE_SKETCH ) )
-    {
-        GRCSegm( panel->GetClipBox(), aDC, m_Start + aOffset, m_End + aOffset, m_Width, color );
-    }
-    else
-    {
-        GRFillCSegm( panel->GetClipBox(), aDC, m_Start.x + aOffset.x,
-                     m_Start.y + aOffset.y,
-                     m_End.x + aOffset.x, m_End.y + aOffset.y, m_Width, color );
-    }
-
-    // No clearance or netnames for zones
 }
 
 
@@ -1191,33 +1096,6 @@ void TRACK::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
 
     // Display segment length
     msg = ::MessageTextFromValue( aUnits, GetLength() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
-}
-
-void SEGZONE::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
-{
-    wxString msg;
-    BOARD* board = GetBoard();
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Type" ), _( "Zone " ), DARKCYAN ) );
-
-    GetMsgPanelInfoBase_Common( aUnits, aList );
-
-    // Display layer
-    if( board )
-        msg = board->GetLayerName( m_Layer );
-    else
-        msg.Printf( wxT( "%d" ), m_Layer );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Layer" ), msg, BROWN ) );
-
-    // Display width
-    msg = MessageTextFromValue( aUnits, m_Width );
-
-    aList.push_back( MSG_PANEL_ITEM( _( "Width" ), msg, DARKCYAN ) );
-
-    // Display segment length
-    msg = MessageTextFromValue( aUnits, GetLength() );
     aList.push_back( MSG_PANEL_ITEM( _( "Segment Length" ), msg, DARKCYAN ) );
 }
 
