@@ -191,7 +191,8 @@ void SCH_EDIT_FRAME::BeginSegment( int type )
     segment = (SCH_LINE*) GetScreen()->GetCurItem();
     if( segment )   // a current item exists, but not necessary a currently edited item
     {
-        if( !segment->GetFlags() || ( segment->Type() != SCH_LINE_T ) )
+        if( !segment->GetFlags() || ( segment->Type() != SCH_LINE_T ) ||
+            ( segment->GetLayer() != type ) )
         {
             if( segment->GetFlags() )
                 wxLogDebug( wxT( "BeginSegment: item->GetFlags()== %X" ), segment->GetFlags() );

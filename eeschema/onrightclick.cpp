@@ -765,6 +765,17 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 
     AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), KiBitmap( break_bus_xpm ) );
 
+    // TODO(JE) remove once real-time is enabled
+    #ifndef CONNECTIVITY_REAL_TIME
+    frame->RecalculateConnections();
+
+    // Have to pick up the pointer again because it may have been changed by SchematicCleanUp
+    bool actionCancelled = false;
+    Bus = dynamic_cast<SCH_LINE*>( frame->LocateAndShowItem( pos, SCH_COLLECTOR::AllItemsButPins,
+             0, &actionCancelled ) );
+    wxASSERT( Bus );
+    #endif
+
     // Bus unfolding menu (only available if bus is properly defined)
     auto connection = Bus->Connection( *g_CurrentSheet );
 
