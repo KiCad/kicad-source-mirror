@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file tool_lib.cpp
  */
 
 #include <fctsys.h>
@@ -129,7 +125,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Libedit_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    msg = AddHotkeyName( _( "Refresh libraries and redraw view" ), g_Libedit_Hotkeys_Descr,
+                         HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
                             KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
@@ -218,16 +215,9 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
                                KiScaledBitmap( unit_mm_xpm, this ),
                                _( "Set units to millimeters" ), wxITEM_CHECK );
 
-#ifndef __APPLE__
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
                                KiScaledBitmap( cursor_shape_xpm, this ),
                                _( "Change cursor shape" ), wxITEM_CHECK );
-#else
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                               wxITEM_CHECK  );
-#endif
 
     m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
                                KiScaledBitmap( pin_show_etype_xpm, this ),

@@ -610,7 +610,7 @@ void SCH_EDIT_FRAME::SetCurrentSheet( const SCH_SHEET_PATH& aSheet )
 void SCH_EDIT_FRAME::HardRedraw()
 {
     static_cast<SCH_DRAW_PANEL*>( m_canvas )->DisplaySheet( g_CurrentSheet->LastScreen() );
-    GetCanvas()->Refresh();
+    GetGalCanvas()->ForceRefresh();
 }
 
 

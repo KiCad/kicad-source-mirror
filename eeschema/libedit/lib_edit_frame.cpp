@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file lib_edit_frame.cpp
- * @brief LIB_EDIT_FRAME class is the symbol library editor frame.
  */
 
 #include <fctsys.h>
@@ -745,14 +740,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
 
             m_canvas->MoveCursorToCrossHair();
-            STATUS_FLAGS oldFlags = item->GetFlags();
-            item->ClearFlags();
-    /*        item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                              DefaultTransform );
             ( (LIB_POLYLINE*) item )->DeleteSegment( GetCrossHairPosition( true ) );
-            item->Draw( m_canvas, &dc, wxPoint( 0, 0 ), COLOR4D::UNSPECIFIED, g_XorMode, NULL,
-                              DefaultTransform );*/
-            item->SetFlags( oldFlags );
             m_lastDrawItem = NULL;
         }
         break;
@@ -768,13 +756,10 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             break;
 
         if( item->Type() == LIB_PIN_T )
-        {
             StartMovePin( item );
-        }
         else
-        {
             StartMoveDrawSymbol( nullptr, item );
-        }
+
         break;
 
     case ID_POPUP_LIBEDIT_MODIFY_ITEM:
@@ -801,9 +786,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         m_canvas->CrossHairOff( nullptr );
 
         if( item->Type() == LIB_FIELD_T )
-        {
             EditField( (LIB_FIELD*) item );
-        }
 
         m_canvas->MoveCursorToCrossHair();
         m_canvas->CrossHairOn( );
@@ -1772,6 +1755,7 @@ void LIB_EDIT_FRAME::RebuildView()
 
 void LIB_EDIT_FRAME::HardRedraw()
 {
+    SyncLibraries( true );
     RebuildView();
 }
 

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -102,6 +102,11 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_PCB_PLACE_GRID_COORD_BUTT:
     case ID_MODEDIT_PLACE_GRID_COORD:
         return ACTIONS::gridSetOrigin.MakeEvent();
+
+    case ID_ZOOM_REDRAW:
+    case ID_POPUP_ZOOM_REDRAW:
+    case ID_VIEWER_ZOOM_REDRAW:
+        return ACTIONS::zoomRedraw.MakeEvent();
 
     case ID_ZOOM_IN:        // toolbar button "Zoom In"
     case ID_VIEWER_ZOOM_IN:

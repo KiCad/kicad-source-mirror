@@ -88,7 +88,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Redo last undo command" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
+    msg = AddHotkeyName( _( "Refresh libraries and redraw view" ), g_Module_Editor_Hotkeys_Descr,
+                         HK_ZOOM_REDRAW, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
 
     msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );

@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -15,11 +15,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file footprint_edit_frame.h
- * @brief Definition of class FOOTPRINT_EDIT_FRAME.
  */
 
 #ifndef FOOTPRINT_EDIT_FRAME_H
@@ -116,6 +111,11 @@ public:
      * Draw the footprint editor BOARD, and others elements such as axis and grid.
      */
     void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
+
+    /**
+     * Refresh the library tree and redraw the window
+     */
+    void HardRedraw() override;
 
     /**
      * Create the main horizontal toolbar for the footprint editor.
@@ -401,8 +401,6 @@ public:
     /**
      * Test whether a given element category is visible.
      *
-     * Keep this as an inline function.
-     *
      * @param aElement is from the enum by the same name
      * @return bool - true if the element is visible.
      * @see enum PCB_LAYER_ID
@@ -448,14 +446,10 @@ public:
      * Load a KiCad board (.kicad_pcb) from \a aFileName.
      *
      * @param aFileSet - hold the BOARD file to load, a vector of one element.
-     *
      * @param aCtl      - KICTL_ bits, one to indicate that an append of the board file
      *                      aFileName to the currently loaded file is desired.
      *                    @see #KIWAY_PLAYER for bit defines.
-     *
      * @return bool - false if file load fails, otherwise true.
-    bool LoadOnePcbFile( const wxString& aFileName, bool aAppend = false,
-                         bool aForceFileDialog = false );
      */
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 

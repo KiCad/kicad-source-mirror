@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2015-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -477,8 +477,8 @@ void SCH_BASE_FRAME::CenterScreen( const wxPoint& aCenterPoint, bool aWarpPointe
 
 void SCH_BASE_FRAME::HardRedraw()
 {
-    // Currently: just refresh the screen
-    GetCanvas()->Refresh();
+    GetGalCanvas()->GetView()->UpdateAllItems( KIGFX::ALL );
+    GetGalCanvas()->ForceRefresh();
 }
 
 

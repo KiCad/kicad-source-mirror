@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015-2016 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,11 +18,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file moduleframe.cpp
- * @brief Footprint (module) editor main window.
  */
 
 #include <fctsys.h>
@@ -357,6 +352,13 @@ void FOOTPRINT_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     // We must upate the layer widget to match board visibility states,
     // both layers and render columns, and and some settings dependent on the canvas.
     UpdateUserInterface();
+}
+
+
+void FOOTPRINT_EDIT_FRAME::HardRedraw()
+{
+    SyncLibraryTree( true );
+    GetGalCanvas()->ForceRefresh();
 }
 
 

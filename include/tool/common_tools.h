@@ -45,6 +45,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // View controls
+    int ZoomRedraw( const TOOL_EVENT& aEvent );
     int ZoomInOut( const TOOL_EVENT& aEvent );
     int ZoomInOutCenter( const TOOL_EVENT& aEvent );
     int ZoomCenter( const TOOL_EVENT& aEvent );

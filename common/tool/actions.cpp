@@ -11,6 +11,10 @@ TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
         cancel_xpm, AF_NONE );
 
 // View Controls
+TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_REDRAW ),
+        _( "Refresh View" ), "", zoom_redraw_xpm );
+
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_IN ),
         _( "Zoom In" ), "", zoom_in_xpm );

@@ -74,46 +74,46 @@ int COMMON_TOOLS::CursorControl( const TOOL_EVENT& aEvent )
 
     switch( type )
     {
-        case ACTIONS::CURSOR_UP:
-            cursor -= VECTOR2D( 0, gridSize.y );
-            break;
-
-        case ACTIONS::CURSOR_DOWN:
-            cursor += VECTOR2D( 0, gridSize.y );
-            break;
-
-        case ACTIONS::CURSOR_LEFT:
-            cursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
-            break;
-
-        case ACTIONS::CURSOR_RIGHT:
-            cursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
-            break;
-
-        case ACTIONS::CURSOR_CLICK:              // fall through
-        case ACTIONS::CURSOR_DBL_CLICK:
-        {
-            TOOL_ACTIONS action = TA_NONE;
-            int modifiers = 0;
-
-            modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
-            modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
-            modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
-
-            if( type == ACTIONS::CURSOR_CLICK )
-                action = TA_MOUSE_CLICK;
-            else if( type == ACTIONS::CURSOR_DBL_CLICK )
-                action = TA_MOUSE_DBLCLICK;
-            else
-                wxFAIL;
-
-            TOOL_EVENT evt( TC_MOUSE, action, BUT_LEFT | modifiers );
-            evt.SetMousePosition( getViewControls()->GetCursorPosition() );
-            m_toolMgr->ProcessEvent( evt );
-
-            return 0;
-        }
+    case ACTIONS::CURSOR_UP:
+        cursor -= VECTOR2D( 0, gridSize.y );
         break;
+
+    case ACTIONS::CURSOR_DOWN:
+        cursor += VECTOR2D( 0, gridSize.y );
+        break;
+
+    case ACTIONS::CURSOR_LEFT:
+        cursor -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+        break;
+
+    case ACTIONS::CURSOR_RIGHT:
+        cursor += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+        break;
+
+    case ACTIONS::CURSOR_CLICK:              // fall through
+    case ACTIONS::CURSOR_DBL_CLICK:
+    {
+        TOOL_ACTIONS action = TA_NONE;
+        int modifiers = 0;
+
+        modifiers |= wxGetKeyState( WXK_SHIFT ) ? MD_SHIFT : 0;
+        modifiers |= wxGetKeyState( WXK_CONTROL ) ? MD_CTRL : 0;
+        modifiers |= wxGetKeyState( WXK_ALT ) ? MD_ALT : 0;
+
+        if( type == ACTIONS::CURSOR_CLICK )
+            action = TA_MOUSE_CLICK;
+        else if( type == ACTIONS::CURSOR_DBL_CLICK )
+            action = TA_MOUSE_DBLCLICK;
+        else
+            wxFAIL;
+
+        TOOL_EVENT evt( TC_MOUSE, action, BUT_LEFT | modifiers );
+        evt.SetMousePosition( getViewControls()->GetCursorPosition() );
+        m_toolMgr->ProcessEvent( evt );
+
+        return 0;
+    }
+    break;
     }
 
     getViewControls()->SetCursorPosition( cursor, true, true );
@@ -132,29 +132,36 @@ int COMMON_TOOLS::PanControl( const TOOL_EVENT& aEvent )
 
     switch( type )
     {
-        case ACTIONS::CURSOR_UP:
-            center -= VECTOR2D( 0, gridSize.y );
-            break;
+    case ACTIONS::CURSOR_UP:
+        center -= VECTOR2D( 0, gridSize.y );
+        break;
 
-        case ACTIONS::CURSOR_DOWN:
-            center += VECTOR2D( 0, gridSize.y );
-            break;
+    case ACTIONS::CURSOR_DOWN:
+        center += VECTOR2D( 0, gridSize.y );
+        break;
 
-        case ACTIONS::CURSOR_LEFT:
-            center -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
-            break;
+    case ACTIONS::CURSOR_LEFT:
+        center -= VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+        break;
 
-        case ACTIONS::CURSOR_RIGHT:
-            center += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
-            break;
+    case ACTIONS::CURSOR_RIGHT:
+        center += VECTOR2D( mirroredX ? -gridSize.x : gridSize.x, 0 );
+        break;
 
-        default:
-            wxFAIL;
-            break;
+    default:
+        wxFAIL;
+        break;
     }
 
     view->SetCenter( center );
 
+    return 0;
+}
+
+
+int COMMON_TOOLS::ZoomRedraw( const TOOL_EVENT& aEvent )
+{
+    m_frame->HardRedraw();
     return 0;
 }
 
@@ -389,6 +396,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::PanControl,         ACTIONS::panRight.MakeEvent() );
 
     // Zoom control
+    Go( &COMMON_TOOLS::ZoomRedraw,         ACTIONS::zoomRedraw.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomIn.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOut,          ACTIONS::zoomOut.MakeEvent() );
     Go( &COMMON_TOOLS::ZoomInOutCenter,    ACTIONS::zoomInCenter.MakeEvent() );
