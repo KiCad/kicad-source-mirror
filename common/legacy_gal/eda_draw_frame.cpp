@@ -67,7 +67,6 @@
 #include <page_info.h>
 #include <title_block.h>
 #include <advanced_config.h>
-#include <dpi_scaling.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -295,19 +294,7 @@ void EDA_DRAW_FRAME::CommonSettingsChanged()
     settings->Read( ENBL_AUTO_PAN_KEY, &option );
     m_canvas->SetEnableAutoPan( option );
 
-    int tmp;
-    settings->Read( GAL_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) tmp;
-
-    settings->Read( CAIRO_ANTIALIASING_MODE_KEY, &tmp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-    m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) tmp;
-
-    {
-        const DPI_SCALING dpi{ settings, this };
-        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
-    }
-
-    m_galDisplayOptions.NotifyChanged();
+    m_galDisplayOptions.ReadCommonConfig( *settings, this );
 }
 
 
@@ -849,21 +836,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
-    m_galDisplayOptions.ReadConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
-
-    int temp;
-    cmnCfg->Read( GAL_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-    m_galDisplayOptions.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) temp;
-
-    cmnCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-    m_galDisplayOptions.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) temp;
-
-    {
-        const DPI_SCALING dpi{ cmnCfg, this };
-        m_galDisplayOptions.m_scaleFactor = dpi.GetScaleFactor();
-    }
-
-    m_galDisplayOptions.NotifyChanged();
+    m_galDisplayOptions.ReadConfig( *cmnCfg, *aCfg, baseCfgName, this );
 }
 
 
@@ -881,7 +854,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
     if( GetScreen() )
         aCfg->Write( baseCfgName + MaxUndoItemsEntry, long( GetScreen()->GetMaxUndoItems() ) );
 
-    m_galDisplayOptions.WriteConfig( aCfg, baseCfgName + GAL_DISPLAY_OPTIONS_KEY );
+    m_galDisplayOptions.WriteConfig( *aCfg, baseCfgName );
 }
 
 
