@@ -77,9 +77,16 @@ private:
         FOOTPRINT_STATUS status;
     };
 
-    FOOTPRINT_PREVIEW_PANEL(
-            KIWAY* aKiway, wxWindow* aParent,
-            KIGFX::GAL_DISPLAY_OPTIONS& aOpts, GAL_TYPE aGalType );
+    /**
+     * Create a new panel
+     *
+     * @param aKiway the connected KIWAY
+     * @param aParent the owning WX window
+     * @param aOpts the GAL options (ownership is assumed)
+     * @param aGalType the displayed GAL type
+     */
+    FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
+            std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts, GAL_TYPE aGalType );
 
 
     virtual CACHE_ENTRY CacheAndReturn ( LIB_ID const& aFPID );
@@ -92,7 +99,8 @@ private:
     std::shared_ptr<FP_THREAD_IFACE>    m_iface;
     FOOTPRINT_STATUS_HANDLER            m_handler;
     std::unique_ptr<BOARD>              m_dummyBoard;
-    std::unique_ptr<COLORS_DESIGN_SETTINGS>    m_colorsSettings;
+    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> m_DisplayOptions;
+    std::unique_ptr<COLORS_DESIGN_SETTINGS>     m_colorsSettings;
 
     LIB_ID      m_currentFPID;
     bool        m_footprintDisplayed;

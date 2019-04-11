@@ -245,10 +245,11 @@ public:
 
 
 FOOTPRINT_PREVIEW_PANEL::FOOTPRINT_PREVIEW_PANEL( KIWAY* aKiway, wxWindow* aParent,
-                                                  KIGFX::GAL_DISPLAY_OPTIONS& aOpts,
+                                                  std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> aOpts,
                                                   GAL_TYPE aGalType )
-    : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), aOpts, aGalType  ),
+    : PCB_DRAW_PANEL_GAL ( aParent, -1, wxPoint( 0, 0 ), wxSize(200, 200), *aOpts, aGalType  ),
       KIWAY_HOLDER( aKiway ),
+      m_DisplayOptions( std::move( aOpts ) ),
       m_footprintDisplayed( true )
 {
     m_iface = std::make_shared<FP_THREAD_IFACE>();
@@ -369,7 +370,6 @@ wxWindow* FOOTPRINT_PREVIEW_PANEL::GetWindow()
 FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* aParent )
 {
     PCB_EDIT_FRAME* pcbnew = static_cast<PCB_EDIT_FRAME*>( aKiway->Player( FRAME_PCB, false ) );
-    KIGFX::GAL_DISPLAY_OPTIONS gal_opts;
     wxConfigBase*   cfg = Kiface().KifaceSettings();
     wxConfigBase*   commonCfg = Pgm().CommonSettings();
     bool            btemp;
@@ -379,20 +379,29 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
 
     // Fetch grid & display settings from PCBNew if it's running; otherwise fetch them
     // from PCBNew's config settings.
+    // We need a copy with a lifetime that matches the panel
+    std::unique_ptr<KIGFX::GAL_DISPLAY_OPTIONS> gal_opts;
 
     if( pcbnew )
     {
-        gal_opts = pcbnew->GetGalDisplayOptions();
+        // Copy the existing Pcbnew options
+        // REVIEW: This also copies the current subscription list of the options
+        // to the new options. This is probably not what is intended, but because
+        // this widget doesn't change the options it should be OK.
+        gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>( pcbnew->GetGalDisplayOptions() );
     }
     else
     {
-        gal_opts.ReadConfig( cfg, wxString( PCB_EDIT_FRAME_NAME ) + GAL_DISPLAY_OPTIONS_KEY );
+        // Make and populate a new one from config
+        gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
+
+        gal_opts->ReadConfig( cfg, wxString( PCB_EDIT_FRAME_NAME ) + GAL_DISPLAY_OPTIONS_KEY );
 
         commonCfg->Read( GAL_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-        gal_opts.gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) itemp;
+        gal_opts->gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) itemp;
 
         commonCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-        gal_opts.cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) itemp;
+        gal_opts->cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) itemp;
     }
 
 #ifdef __WXMAC__
@@ -404,7 +413,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
                         cfg->ReadLong( CanvasTypeKeyBase, EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 #endif
 
-    auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, gal_opts, canvasType );
+    auto panel = new FOOTPRINT_PREVIEW_PANEL( aKiway, aParent, std::move( gal_opts ), canvasType );
 
     if( pcbnew )
     {
