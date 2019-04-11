@@ -38,6 +38,7 @@
 #include <html_messagebox.h>
 #include <executable_names.h>
 #include <eda_dockart.h>
+#include <profile.h>
 
 #include <general.h>
 #include <eeschema_id.h>
@@ -1478,9 +1479,14 @@ void SCH_EDIT_FRAME::RecalculateConnections()
 {
     SCH_SHEET_LIST list( g_RootSheet );
 
+    PROF_COUNTER timer;
+
     // Ensure schematic graph is accurate
     for( const auto& sheet : list )
         SchematicCleanUp( false, sheet.LastScreen() );
+
+    timer.Stop();
+    wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
 
     g_ConnectionGraph->Recalculate( list, true );
 }
