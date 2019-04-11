@@ -1109,7 +1109,7 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     PCB_PLOT_PARAMS plotSettings = GetPlotSettings();
-
+wxMessageBox(wxString::Format("ToPlotter id %d (%d)",event.GetId(),ID_GEN_PLOT_GERBER ) );
     switch( event.GetId() )
     {
     case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER );   break;
@@ -1118,7 +1118,9 @@ void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
     case ID_GEN_PLOT_PDF:    plotSettings.SetFormat( PLOT_FORMAT_PDF );      break;
     case ID_GEN_PLOT_PS:     plotSettings.SetFormat( PLOT_FORMAT_POST );     break;
     case ID_GEN_PLOT_SVG:    wxFAIL_MSG( "Must be handled by ExportSVG()" ); break;
-    default:                 wxFAIL_MSG( "Unknown plot type" );              break;
+    case ID_GEN_PLOT:
+    default:    // called with no specified plot type: keep the previous setup
+        break;
     }
 
     SetPlotSettings( plotSettings );

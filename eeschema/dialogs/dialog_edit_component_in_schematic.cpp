@@ -252,7 +252,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event 
             for( int ii = 1; ii <= entry->GetUnitCount(); ii++ )
                 m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
 
-            if( unit < 0 || unit >= m_unitChoice->GetCount() )
+            if( unit < 0 || unit >= (int)m_unitChoice->GetCount() )
                 unit = 0;
 
             m_unitChoice->SetSelection( unit );
