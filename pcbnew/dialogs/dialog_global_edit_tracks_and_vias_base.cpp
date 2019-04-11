@@ -18,38 +18,34 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	wxBoxSizer* bMainSizer;
 	bMainSizer = new wxBoxSizer( wxVERTICAL );
 	
+	wxBoxSizer* bSizerTop;
+	bSizerTop = new wxBoxSizer( wxHORIZONTAL );
+	
 	wxStaticBoxSizer* sbScope;
 	sbScope = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Scope") ), wxVERTICAL );
 	
-	wxFlexGridSizer* fgSizer1;
-	fgSizer1 = new wxFlexGridSizer( 0, 2, 0, 0 );
-	fgSizer1->AddGrowableCol( 0 );
-	fgSizer1->AddGrowableCol( 1 );
-	fgSizer1->SetFlexibleDirection( wxBOTH );
-	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
-	
 	m_tracks = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Tracks"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_tracks->SetValue(true); 
-	fgSizer1->Add( m_tracks, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_tracks, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	m_vias = new wxCheckBox( sbScope->GetStaticBox(), wxID_ANY, _("Vias"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_vias->SetValue(true); 
-	fgSizer1->Add( m_vias, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
+	sbScope->Add( m_vias, 0, wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 	
 	
-	sbScope->Add( fgSizer1, 0, wxEXPAND, 5 );
-	
-	
-	bMainSizer->Add( sbScope, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bSizerTop->Add( sbScope, 1, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	wxStaticBoxSizer* sbFilters;
-	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filters") ), wxVERTICAL );
+	sbFilters = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Filter Items") ), wxVERTICAL );
 	
 	wxFlexGridSizer* fgSizer3;
-	fgSizer3 = new wxFlexGridSizer( 0, 3, 2, 0 );
+	fgSizer3 = new wxFlexGridSizer( 0, 2, 4, 0 );
 	fgSizer3->AddGrowableCol( 1 );
-	fgSizer3->AddGrowableCol( 2 );
-	fgSizer3->SetFlexibleDirection( wxHORIZONTAL );
+	fgSizer3->AddGrowableRow( 0 );
+	fgSizer3->AddGrowableRow( 1 );
+	fgSizer3->AddGrowableRow( 2 );
+	fgSizer3->AddGrowableRow( 3 );
+	fgSizer3->SetFlexibleDirection( wxBOTH );
 	fgSizer3->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 	
 	m_netFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by net:"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -57,9 +53,6 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	
 	m_netFilter = new NET_SELECTOR( sbFilters->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, 0 ); 
 	fgSizer3->Add( m_netFilter, 1, wxEXPAND|wxRIGHT, 5 );
-	
-	
-	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxRIGHT|wxLEFT, 100 );
 	
 	m_netclassFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by net class:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_netclassFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -70,7 +63,10 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizer3->Add( m_netclassFilter, 0, wxALIGN_CENTER_VERTICAL|wxEXPAND|wxRIGHT, 5 );
 	
 	
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
+	
+	
+	fgSizer3->Add( 0, 0, 1, wxEXPAND|wxTOP|wxBOTTOM, 3 );
 	
 	m_layerFilterOpt = new wxCheckBox( sbFilters->GetStaticBox(), wxID_ANY, _("Filter items by layer:"), wxDefaultPosition, wxDefaultSize, 0 );
 	fgSizer3->Add( m_layerFilterOpt, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
@@ -79,13 +75,13 @@ DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE::DIALOG_GLOBAL_EDIT_TRACKS_AND_VIAS_BASE
 	fgSizer3->Add( m_layerFilter, 0, wxEXPAND|wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 	
 	
-	fgSizer3->Add( 0, 0, 1, wxEXPAND, 5 );
+	sbFilters->Add( fgSizer3, 1, wxEXPAND|wxBOTTOM, 5 );
 	
 	
-	sbFilters->Add( fgSizer3, 1, wxEXPAND, 5 );
+	bSizerTop->Add( sbFilters, 2, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
 	
 	
-	bMainSizer->Add( sbFilters, 0, wxEXPAND|wxTOP|wxRIGHT|wxLEFT, 10 );
+	bMainSizer->Add( bSizerTop, 0, wxEXPAND, 5 );
 	
 	wxStaticBoxSizer* sbAction;
 	sbAction = new wxStaticBoxSizer( new wxStaticBox( this, wxID_ANY, _("Action") ), wxVERTICAL );
