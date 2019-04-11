@@ -811,8 +811,12 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
         // So we want to put it to front, second after our CVPCB_MAINFRAME.
         // We do this by a little dance of bringing it to front then the main
         // frame back.
+        wxWindow* focus = FindFocus();
+
         fpframe->Raise();   // Make sure that is visible.
         Raise();            // .. but still we want the focus.
+
+        focus->SetFocus();
     }
 
     fpframe->InitDisplay();
