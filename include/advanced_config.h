@@ -74,11 +74,6 @@ public:
     bool m_enableSvgImport;
 
     /**
-     * Do real-time connectivity
-     */
-    bool m_realTimeConnectivity;
-
-    /**
      * Helper to determine if legacy canvas is allowed (according to platform
      * and config)
      * @return true if legacy canvas should be shown

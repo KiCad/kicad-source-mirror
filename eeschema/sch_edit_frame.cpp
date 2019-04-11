@@ -39,7 +39,6 @@
 #include <executable_names.h>
 #include <eda_dockart.h>
 
-#include <advanced_config.h>
 #include <general.h>
 #include <eeschema_id.h>
 #include <netlist.h>
@@ -795,9 +794,9 @@ void SCH_EDIT_FRAME::OnModify()
 
     m_foundItems.SetForceSearch();
 
-
-    if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
-        RecalculateConnections();
+#ifdef CONNECTIVITY_REAL_TIME
+    RecalculateConnections();
+#endif
 
     m_canvas->Refresh();
 }

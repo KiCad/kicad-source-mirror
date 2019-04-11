@@ -35,6 +35,10 @@
 // #define CONNECTIVITY_DEBUG
 #endif
 
+// Uncomment this line to enable real-time connectivity updates
+// TODO(JE) re-enable this once performance concerns are sorted out
+// #define CONNECTIVITY_REAL_TIME
+
 class SCH_PIN;
 
 class SCH_EDIT_FRAME;
@@ -194,28 +198,11 @@ public:
     // TODO(JE) firm up API and move to private
     std::map<int, std::vector<CONNECTION_SUBGRAPH*> > m_net_code_to_subgraphs_map;
 
-    inline void InsertItem( SCH_ITEM* aItem )
-    {
-        std::lock_guard<std::mutex> lock( m_item_mutex );
-        m_items.insert( aItem );
-    }
-
-    inline void InsertPin( SCH_PIN* aPin )
-    {
-        std::lock_guard<std::mutex> lock( m_power_pin_mutex );
-        m_invisible_power_pins.push_back( aPin );
-    }
-
-
 private:
-
-    std::mutex m_item_mutex;
 
     std::unordered_set<SCH_ITEM*> m_items;
 
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
-
-    std::mutex m_power_pin_mutex;
 
     std::vector<SCH_PIN*> m_invisible_power_pins;
 
@@ -235,6 +222,8 @@ private:
     int m_last_bus_code;
 
     int m_last_subgraph_code;
+
+    std::mutex m_item_mutex;
 
     // Needed for m_UserUnits for now; maybe refactor later
     SCH_EDIT_FRAME* m_frame;
@@ -267,20 +256,7 @@ private:
      * @param aItemList is a list of items to consider
      */
     void updateItemConnectivity( SCH_SHEET_PATH aSheet,
-                                 std::vector<SCH_ITEM*>& aItemList );
-
-    /**
-     * This is a shortcut function to only update the connections for duplicate sheets
-     * Since shared sheets have the same layout, we don't need to re-create the connection
-     * map, only add the sheet path to the item connection.
-     *
-     * N.B. This must be run sequentially after the first shared sheet
-     *
-     * @param aSheet path to the sheet with item list
-     * @param aItemList vector of items
-     */
-    void initializeSheetConnections( SCH_SHEET_PATH aSheet,
-                                     std::vector<SCH_ITEM*>& aItemList );
+                                 std::vector<SCH_ITEM*> aItemList );
 
     /**
      * Generates the connection graph (after all item connectivity has been updated)

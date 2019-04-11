@@ -59,13 +59,6 @@ namespace AC_KEYS
 static const wxChar EnableSvgImport[] = wxT( "EnableSvgImport" );
 
 /**
- * Testing mode for new connectivity algorithm.  Setting this to on will cause all modifications
- * to the netlist to be recalculated on the fly.  This may be slower than the standard process
- * at the moment
- */
-static const wxChar RealtimeConnectivity[] = wxT( "RealtimeConnectivity" );
-
-/**
  * Allow legacy canvas to be shown in GTK3. Legacy canvas is generally pretty
  * broken, but this avoids code in an ifdef where it could become broken
  * on other platforms
@@ -189,9 +182,6 @@ void ADVANCED_CFG::loadSettings( wxConfigBase& aCfg )
 
     configParams.push_back( new PARAM_CFG_BOOL(
             true, AC_KEYS::AllowLegacyCanvasInGtk3, &m_allowLegacyCanvasInGtk3, false ) );
-
-    configParams.push_back(
-            new PARAM_CFG_BOOL( true, AC_KEYS::RealtimeConnectivity, &m_realTimeConnectivity, false ) );
 
     wxConfigLoadSetups( &aCfg, configParams );
 

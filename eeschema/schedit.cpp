@@ -38,7 +38,6 @@
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 
-#include <advanced_config.h>
 #include <general.h>
 #include <eeschema_id.h>
 #include <list_operations.h>
@@ -564,8 +563,9 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     case ID_HIGHLIGHT:
         // TODO(JE) remove once real-time connectivity is a given
-        if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
-            RecalculateConnections();
+        #ifndef CONNECTIVITY_REAL_TIME
+        RecalculateConnections();
+        #endif
 
         SetToolID( ID_HIGHLIGHT, wxCURSOR_HAND, _("Highlight specific net") );
         break;
