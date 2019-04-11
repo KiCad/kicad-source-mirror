@@ -189,8 +189,7 @@ public:
         }
         else
         {
-            wxString netname = EscapeString( selectedNetName, CTX_NETNAME );
-            NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( netname );
+            NETINFO_ITEM* netInfo = m_netinfoList->GetNetItem( selectedNetName );
 
             if( netInfo == nullptr || netInfo->GetNet() == 0 )
             {

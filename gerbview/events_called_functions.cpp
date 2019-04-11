@@ -317,7 +317,7 @@ void GERBVIEW_FRAME::OnSelectHighlightChoice( wxCommandEvent& event )
             break;
 
         case ID_GBR_AUX_TOOLBAR_PCB_NET_CHOICE:
-            settings->m_netHighlightString = EscapeString( m_SelNetnameBox->GetStringSelection(), CTX_NETNAME );
+            settings->m_netHighlightString = m_SelNetnameBox->GetStringSelection();
             break;
 
         case ID_GBR_AUX_TOOLBAR_PCB_APERATTRIBUTES_CHOICE:

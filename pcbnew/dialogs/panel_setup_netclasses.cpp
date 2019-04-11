@@ -265,7 +265,7 @@ bool PANEL_SETUP_NETCLASSES::TransferDataFromWindow()
         NETCLASSPTR nc = netclasses.Find( m_membershipGrid->GetCellValue( row, 1 ) );
 
         if( nc )
-            nc->Add( EscapeString( m_membershipGrid->GetCellValue( row, 0 ), CTX_NETNAME ) );
+            nc->Add( m_membershipGrid->GetCellValue( row, 0 ) );
     }
 
     m_Pcb->SynchronizeNetsAndNetClasses();

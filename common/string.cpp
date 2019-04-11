@@ -59,14 +59,9 @@ wxString EscapeString( const wxString& aSource, ESCAPE_CONTEXT aContext )
         }
         else if( aContext == CTX_NETNAME )
         {
-// Currently, modifying a netname creates mubh more issues than it fixes.
-// Especially the netnames shown on screen are not those living in netlists
-// breaking net info in Spice, Gerber X2 and IPC356 for instance
-#if 0
             if( c == '/' )
                 converted += "{slash}";
             else
-#endif
                 converted += c;
         }
         else if( aContext == CTX_LIBID )

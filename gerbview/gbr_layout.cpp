@@ -99,7 +99,7 @@ void GBR_LAYOUT::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, GR_DRAWMODE aDrawMode,
     wxString netHighlight;
 
     if( gerbFrame->m_SelNetnameBox->GetSelection() > 0 )
-        netHighlight = EscapeString( gerbFrame->m_SelNetnameBox->GetStringSelection(), CTX_NETNAME );
+        netHighlight = gerbFrame->m_SelNetnameBox->GetStringSelection();
 
     wxString aperAttrHighlight = gerbFrame->m_SelAperAttributesBox->GetStringSelection();
 
