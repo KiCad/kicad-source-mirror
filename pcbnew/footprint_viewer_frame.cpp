@@ -513,7 +513,7 @@ void FOOTPRINT_VIEWER_FRAME::LoadSettings( wxConfigBase* aCfg )
         SetGridColor( wtmp );
 
     // Grid shape, etc.
-    GetGalDisplayOptions().ReadConfig( aCfg, footprintEditor + GAL_DISPLAY_OPTIONS_KEY );
+    GetGalDisplayOptions().ReadAppConfig( *aCfg, footprintEditor );
 
     m_configSettings.Load( aCfg );  // mainly, load the color config
 

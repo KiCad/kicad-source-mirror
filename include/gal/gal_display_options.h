@@ -28,6 +28,8 @@
 
 class wxConfigBase;
 class wxString;
+class wxWindow;
+
 
 namespace KIGFX
 {
@@ -74,8 +76,31 @@ namespace KIGFX
     public:
         GAL_DISPLAY_OPTIONS();
 
-        void ReadConfig ( wxConfigBase* aCfg, const wxString& aBaseName );
-        void WriteConfig( wxConfigBase* aCfg, const wxString& aBaseName );
+        /**
+         * Read GAL config options from applicaton-level config
+         * @param aCfg      the application config base
+         * @param aBaseName the application's GAL options key prefix
+         */
+        void ReadAppConfig( wxConfigBase& aCfg, const wxString& aBaseName );
+
+        /**
+         * Read GAL config options from the common config store
+         * @param aCommonConfig the common config store
+         * @param aWindow       the wx parent window (used for DPI scaling)
+         */
+        void ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindow* aWindow );
+
+        /**
+         * Read application and common configs
+         * @param aCommonConfig the common config store
+         * @param aCfg          the application config base
+         * @param aBaseName     the application's GAL options key prefix
+         * @param aWindow       the wx parent window (used for DPI scaling)
+         */
+        void ReadConfig( wxConfigBase& aCommonConfig, wxConfigBase& aAppCondfig,
+                const wxString& aBaseCfgName, wxWindow* aWindow );
+
+        void WriteConfig( wxConfigBase& aCfg, const wxString& aBaseName );
 
         void NotifyChanged();
 

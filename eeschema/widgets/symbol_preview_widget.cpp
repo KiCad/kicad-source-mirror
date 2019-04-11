@@ -39,7 +39,7 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
 {
     wxString eeschemaFrameKey( SCH_EDIT_FRAME_NAME );
     auto eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
-    m_galDisplayOptions.ReadConfig( eeschemaConfig.get(), eeschemaFrameKey + GAL_DISPLAY_OPTIONS_KEY );
+    m_galDisplayOptions.ReadAppConfig( *eeschemaConfig, eeschemaFrameKey );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 

@@ -395,13 +395,7 @@ FOOTPRINT_PREVIEW_PANEL* FOOTPRINT_PREVIEW_PANEL::New( KIWAY* aKiway, wxWindow* 
         // Make and populate a new one from config
         gal_opts = std::make_unique<KIGFX::GAL_DISPLAY_OPTIONS>();
 
-        gal_opts->ReadConfig( cfg, wxString( PCB_EDIT_FRAME_NAME ) + GAL_DISPLAY_OPTIONS_KEY );
-
-        commonCfg->Read( GAL_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
-        gal_opts->gl_antialiasing_mode = (KIGFX::OPENGL_ANTIALIASING_MODE) itemp;
-
-        commonCfg->Read( CAIRO_ANTIALIASING_MODE_KEY, &itemp, (int) KIGFX::CAIRO_ANTIALIASING_MODE::NONE );
-        gal_opts->cairo_antialiasing_mode = (KIGFX::CAIRO_ANTIALIASING_MODE) itemp;
+        gal_opts->ReadConfig( *commonCfg, *cfg, wxString( PCB_EDIT_FRAME_NAME ), aParent );
     }
 
 #ifdef __WXMAC__

@@ -738,7 +738,7 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
         SetGridColor( wtmp );
 
     // Grid shape, etc.
-    GetGalDisplayOptions().ReadConfig( aCfg, symbolEditor + GAL_DISPLAY_OPTIONS_KEY );
+    GetGalDisplayOptions().ReadAppConfig( *aCfg, symbolEditor );
 
     aCfg->Read( LIBLIST_WIDTH_KEY, &m_libListWidth, 150 );
     aCfg->Read( CMPLIST_WIDTH_KEY, &m_cmpListWidth, 150 );
