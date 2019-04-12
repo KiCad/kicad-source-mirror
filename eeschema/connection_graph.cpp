@@ -786,7 +786,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( auto subgraph : m_subgraphs )
     {
-
         if( subgraph->m_strong_driver )
         {
             subgraph->m_dirty = true;
@@ -995,7 +994,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         }
 
         std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
-        std::copy_if( subgraph_it + 1, driver_subgraphs.end(), std::back_inserter( candidate_subgraphs ),
+        std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(),
+                      std::back_inserter( candidate_subgraphs ),
                 [&] ( CONNECTION_SUBGRAPH* candidate )
                     { return ( candidate->m_local_driver &&
                                candidate->m_sheet == sheet &&
@@ -1024,8 +1024,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 if( candidate_connection->Name() == member->Name() )
                 {
-                    wxLogTrace( "CONN", "%lu (%s) has neighbor %lu", subgraph->m_code,
-                                connection->Name(), candidate->m_code );
+                    wxLogTrace( "CONN", "%lu (%s) has neighbor %lu (%s)", subgraph->m_code,
+                                connection->Name(), candidate->m_code, member->Name() );
                     subgraph->m_neighbor_map[member].push_back( candidate );
                     candidate->m_neighbor_map[member].push_back( subgraph );
                 }
@@ -1037,7 +1037,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( auto pc : m_invisible_power_pins )
     {
-        if( pc->ConnectedItems().size() > 0 && !pc->GetLibPin()->GetParent()->IsPower() )
+        if( !pc->ConnectedItems().empty() && !pc->GetLibPin()->GetParent()->IsPower() )
         {
             // ERC will warn about this: user has wired up an invisible pin
             continue;
@@ -1051,8 +1051,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         if( !connection )
         {
-            pc->InitializeConnection( sheet );
-            connection = pc->Connection( sheet );
+            connection = pc->InitializeConnection( sheet );
         }
         else
         {
@@ -1360,15 +1359,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     auto subsheet = child_subgraphs[i]->m_sheet;
                     subsheet.push_back( sp->GetParent() );
 
-                    wxLogTrace( "CONN", "Propagating sheet pin %s on %s with connection %s to subsheet %s",
-                                sp_name, child_subgraphs[i]->m_sheet.PathHumanReadable(),
+                    wxLogTrace( "CONN", "Propagating sheet pin %s on %lu (%s) to subsheet %s",
+                                sp_name, child_subgraphs[i]->m_code,
                                 connection->Name(), subsheet.PathHumanReadable() );
 
                     for( auto candidate : driver_subgraphs )
                     {
-                        if( !candidate->m_dirty )
-                            continue;
-
                         if( candidate->m_sheet == subsheet )
                         {
                             SCH_ITEM* hier_label = nullptr;
@@ -1382,12 +1378,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                             if( hier_label )
                             {
-                                wxLogTrace( "CONN", "Found child %s", static_cast<SCH_HIERLABEL*>( hier_label )->GetText() );
-
-                                // We found a subgraph that is a subsheet child of
-                                // our top-level subgraph, so let's mark it
-
-                                candidate->m_dirty = false;
+                                wxLogTrace( "CONN", "Found child %lu (%s)",
+                                        candidate->m_code,
+                                        static_cast<SCH_HIERLABEL*>( hier_label )->GetText() );
 
                                 auto type = hier_label->Connection( subsheet )->Type();
 
@@ -1419,7 +1412,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                     auto member = kv.first;
                                     std::shared_ptr<SCH_CONNECTION> top_level_conn;
 
-                                    wxLogTrace( "CONN", "Found child neighbor from member %s",
+                                    wxLogTrace( "CONN", "Checking child neighbors for %s",
                                                 member->Name() );
 
                                     if( type == CONNECTION_BUS_GROUP )
@@ -1466,7 +1459,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                                     for( auto neighbor : kv.second )
                                     {
-                                        wxLogTrace( "CONN", "Propagating to neighbor driven by %s",
+                                        wxLogTrace( "CONN", "Propagating to child neighbor %lu (%s)",
+                                                    neighbor->m_code,
                                                     neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
 
                                         bool neighbor_has_sheet_pins = false;
@@ -1485,8 +1479,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                                         if( neighbor_has_sheet_pins )
                                         {
-                                            wxLogTrace( "CONN", "Neighbor driven by %s has subsheet pins",
-                                                        neighbor->m_driver->GetSelectMenuText( MILLIMETRES ) );
+                                            wxLogTrace( "CONN", "Neighbor %lu has subsheet pins",
+                                                        neighbor->m_code );
                                             child_subgraphs.push_back( neighbor );
                                         }
                                     }
@@ -1496,7 +1490,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                 // sheet pin members.  If so, add to the queue.
                                 if( candidate_has_sheet_pins)
                                 {
-                                    wxLogTrace( "CONN", "Candidate %s has subsheet pins",
+                                    wxLogTrace( "CONN", "Candidate %lu (%s) has subsheet pins",
+                                                candidate->m_code,
                                                 candidate->m_driver->GetSelectMenuText( MILLIMETRES ) );
                                     child_subgraphs.push_back( candidate );
                                 }
@@ -1981,8 +1976,6 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             }
         }
 
-        // TODO(JE): Should it be an error to have a NC item but no pin?
-        // (JEY) Yes, I think it should
         if( pin && has_invalid_items )
         {
             wxPoint pos = pin->GetTransformedPosition();
