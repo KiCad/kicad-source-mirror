@@ -25,6 +25,7 @@ include_directories(
     ./widgets
     ./libedit
     ./libview
+    ./tools
     ../common
     ../common/dialogs
     ${INC_AFTER}
@@ -241,6 +242,9 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_kicad.cpp
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
+
+    tools/sch_actions.cpp
+    tools/tools_common.cpp
     )
 
 

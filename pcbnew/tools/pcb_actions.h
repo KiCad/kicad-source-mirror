@@ -54,14 +54,10 @@ public:
 
     /// Selects an item (specified as the event parameter).
     static TOOL_ACTION selectItem;
+    static TOOL_ACTION unselectItem;
 
     /// Selects a list of items (specified as the event parameter)
     static TOOL_ACTION selectItems;
-
-    /// Unselects an item (specified as the event parameter).
-    static TOOL_ACTION unselectItem;
-
-    /// Unselects a list of items (specified as the event parameter)
     static TOOL_ACTION unselectItems;
 
     /// Runs a selection menu to select from a list of items
@@ -95,10 +91,8 @@ public:
     /// move an item
     static TOOL_ACTION move;
 
-    /// Rotation of selected objects clockwise
+    /// Rotation of selected objects
     static TOOL_ACTION rotateCw;
-
-    /// Rotation of selected objects counter-clockwise
     static TOOL_ACTION rotateCcw;
 
     /// Flipping of selected objects
@@ -142,50 +136,21 @@ public:
     static TOOL_ACTION dragFreeAngle;
 
 
-    // Drawing Tool
-    /// Activation of the drawing tool (line)
+    // Drawing Tool Activations
     static TOOL_ACTION drawLine;
-
-    // Activation of the drawing tool (graphic polygons)
     static TOOL_ACTION drawGraphicPolygon;
-
-    /// Activation of the drawing tool (circle)
     static TOOL_ACTION drawCircle;
-
-    /// Activation of the drawing tool (arc)
     static TOOL_ACTION drawArc;
-
-    /// Activation of the drawing tool (text)
     static TOOL_ACTION placeText;
-
-    /// Activation of the drawing tool (dimension)
     static TOOL_ACTION drawDimension;
-
-    /// Activation of the drawing tool (drawing a ZONE)
     static TOOL_ACTION drawZone;
-
-    /// Activation of the drawing tool (drawing a VIA)
     static TOOL_ACTION drawVia;
-
-    /// Activation of the drawing tool (drawing a keepout area)
     static TOOL_ACTION drawZoneKeepout;
-
-    /// Activation of the drawing tool (drawing a ZONE cutout)
     static TOOL_ACTION drawZoneCutout;
-
-    /// Activation of the drawing tool (drawing a similar ZONE to another one)
     static TOOL_ACTION drawSimilarZone;
-
-    /// Activation of the drawing tool (placing a TARGET)
     static TOOL_ACTION placeTarget;
-
-    /// Activation of the drawing tool (placing a MODULE)
     static TOOL_ACTION placeModule;
-
-    /// Activation of the drawing tool (placing a drawing imported from DXF or SVG file)
     static TOOL_ACTION placeImportedGraphics;
-
-    /// Activation of the drawing tool (placing the footprint anchor)
     static TOOL_ACTION setAnchor;
 
     /// Increase width of currently drawn line
@@ -230,28 +195,13 @@ public:
     static TOOL_ACTION pointEditorRemoveCorner;
 
     // Placement tool
-    /// Align items to the top edge of selection bounding box
     static TOOL_ACTION alignTop;
-
-    /// Align items to the bottom edge of selection bounding box
     static TOOL_ACTION alignBottom;
-
-    /// Align items to the left edge of selection bounding box
     static TOOL_ACTION alignLeft;
-
-    /// Align items to the right edge of selection bounding box
     static TOOL_ACTION alignRight;
-
-    /// Align items to the middle of selection bounding box
     static TOOL_ACTION alignCenterX;
-
-    /// Align items to the center of selection bounding box
     static TOOL_ACTION alignCenterY;
-
-    /// Distributes items evenly along the horizontal axis
     static TOOL_ACTION distributeHorizontally;
-
-    /// Distributes items evenly along the vertical axis
     static TOOL_ACTION distributeVertically;
 
     // Position Relative Tool
@@ -322,13 +272,9 @@ public:
     /// Tool for creating an array of objects
     static TOOL_ACTION createArray;
 
-    /// Copy selected items to clipboard
+    /// Clipboard
     static TOOL_ACTION copyToClipboard;
-
-    /// Paste from clipboard
     static TOOL_ACTION pasteFromClipboard;
-
-    /// Paste from clipboard
     static TOOL_ACTION cutToClipboard;
 
     /// Display module edges as outlines

@@ -493,12 +493,6 @@ public:
     bool GetToolToggled( int aToolId );
 
     /**
-     * Checks all the toolbars and returns a reference to the given tool id
-     * or nullptr if not found
-     */
-    wxAuiToolBarItem* GetToolbarTool( int aToolId );
-
-    /**
      * Set the tool command ID to \a aId and sets the cursor to \a aCursor.
      *
      * The command ID must be greater or equal ::ID_NO_TOOL_SELECTED.  If the command

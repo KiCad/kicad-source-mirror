@@ -65,6 +65,8 @@
 #include <dialog_symbol_remap.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tools/sch_actions.h>
 
 #include <wx/display.h>
 #include <build_version.h>
@@ -397,8 +399,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_busUnfold = {};
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
-    m_toolManager = new TOOL_MANAGER;
-
     SetForceHVLines( true );
     SetSpiceAjustPassiveValues( false );
 
@@ -443,6 +443,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_auimgr.Update();
 
+    setupTools();
+
     Zoom_Automatique( false );
 
     if( GetGalCanvas() )
@@ -477,6 +479,22 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     g_CurrentSheet = nullptr;
     g_ConnectionGraph = nullptr;
     g_RootSheet = NULL;
+}
+
+
+void SCH_EDIT_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
+    m_actions = new SCH_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->InitTools();
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 
 

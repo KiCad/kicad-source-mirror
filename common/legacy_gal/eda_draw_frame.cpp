@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2004-2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file draw_frame.cpp
  */
 
 #include <fctsys.h>
@@ -102,13 +98,9 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
-    EVT_MENU_RANGE( ID_ZOOM_BEGIN, ID_ZOOM_END, EDA_DRAW_FRAME::OnZoom )
 
-    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE,
-                    EDA_DRAW_FRAME::OnZoom )
-
-    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
-                    EDA_DRAW_FRAME::OnSelectGrid )
+    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE, EDA_DRAW_FRAME::OnZoom )
+    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER, EDA_DRAW_FRAME::OnSelectGrid )
 
     EVT_TOOL( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnToggleGridState )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
@@ -354,27 +346,6 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 }
 
 
-wxAuiToolBarItem* EDA_DRAW_FRAME::GetToolbarTool( int aToolId )
-{
-    // Checks all the toolbars and returns a reference to the given tool id
-    // (or the first tool found, but only one or 0 tool is expected, because on
-    // Windows, when different tools have the same ID, it creates issues)
-    if( m_mainToolBar && m_mainToolBar->FindTool( aToolId ) )
-        return m_mainToolBar->FindTool( aToolId );
-
-    if( m_optionsToolBar && m_optionsToolBar->FindTool( aToolId ) )
-        return m_optionsToolBar->FindTool( aToolId );
-
-    if( m_drawToolBar && m_drawToolBar->FindTool( aToolId ) )
-        return m_drawToolBar->FindTool( aToolId );
-
-    if( m_auxiliaryToolBar && m_auxiliaryToolBar->FindTool( aToolId ) )
-        return m_auxiliaryToolBar->FindTool( aToolId );
-
-    return nullptr;
-}
-
-
 void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 {
     if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
@@ -557,37 +528,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
 void EDA_DRAW_FRAME::OnSelectZoom( wxCommandEvent& event )
 {
-    if( m_zoomSelectBox == NULL )
-        return;                        // Should not happen!
-
-    int id = m_zoomSelectBox->GetCurrentSelection();
-
-    if( id < 0 || !( id < (int)m_zoomSelectBox->GetCount() ) )
-        return;
-
-    if( id == 0 )                      // Auto zoom (Fit in Page)
-    {
-        Zoom_Automatique( true );
-    }
-    else
-    {
-        double selectedZoom = GetScreen()->m_ZoomList[id-1];
-
-        if( GetScreen()->GetZoom() == selectedZoom )
-            return;
-
-        GetScreen()->SetZoom( selectedZoom );
-        RedrawScreen( GetScrollCenterPosition(), false );
-    }
-
-    // Notify GAL
-    TOOL_MANAGER* mgr = GetToolManager();
-
-    if( mgr && IsGalCanvasActive() )
-    {
-        mgr->RunAction( "common.Control.zoomPreset", true, id );
-        UpdateStatusBar();
-    }
+    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
 }
 
 
@@ -627,7 +568,6 @@ void EDA_DRAW_FRAME::DisplayUnitsMsg()
 
     SetStatusText( msg, 4 );
 }
-
 
 
 void EDA_DRAW_FRAME::OnSize( wxSizeEvent& SizeEv )
@@ -832,7 +772,7 @@ void EDA_DRAW_FRAME::LoadSettings( wxConfigBase* aCfg )
         m_LastGridSizeId = 0;
 
     m_UndoRedoCountMax = aCfg->Read( baseCfgName + MaxUndoItemsEntry,
-            long( DEFAULT_MAX_UNDO_ITEMS ) );
+                                     long( DEFAULT_MAX_UNDO_ITEMS ) );
 
     aCfg->Read( baseCfgName + FirstRunShownKeyword, &m_firstRunDialogSetting, 0L );
 
@@ -858,8 +798,7 @@ void EDA_DRAW_FRAME::SaveSettings( wxConfigBase* aCfg )
 }
 
 
-void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper,
-                                     const wxString& textLower,
+void EDA_DRAW_FRAME::AppendMsgPanel( const wxString& textUpper, const wxString& textLower,
                                      COLOR4D color, int pad )
 {
     if( m_messagePanel == NULL )
@@ -920,7 +859,7 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
 
 
 bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-       int aExplicitCommand )
+                                       int aExplicitCommand )
 {
     BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
 
@@ -1195,37 +1134,13 @@ void EDA_DRAW_FRAME::SetScrollCenterPosition( const wxPoint& aPoint )
 
 //-----</BASE_SCREEN API moved here >--------------------------------------------
 
-void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos,
-                                       const wxPoint &aEvtPos,
-                                       wxDC* aDC )
+void EDA_DRAW_FRAME::RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC )
 {
-    wxFAIL_MSG( "shouldn't be using RefreshCrossHair() anymore; use CallMouseCapture() directly" );
-
-    // CrossHair is no longer XORed; no need for most of this
-#if 0
-    wxPoint newpos = GetCrossHairPosition();
-
-
-    // Redraw the crosshair if it moved
-    if( aOldPos != newpos )
-    {
-        SetCrossHairPosition( aOldPos, false );
-        m_canvas->CrossHairOff( aDC );
-        SetCrossHairPosition( newpos, false );
-        m_canvas->CrossHairOn( aDC );
-#endif
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->CallMouseCapture( aDC, aEvtPos, true );
-        }
-#if 0
-    }
-#endif
+    wxFAIL_MSG( "Obsolete; use CallMouseCapture() directly" );
 }
 
 
-bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos,
-                                                bool aSnapToGrid )
+bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool aSnapToGrid )
 {
     bool key_handled = false;
 
@@ -1369,11 +1284,7 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
     if ( IsGalCanvasActive() )
-    {
         m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
-        return;
-    }
-
 }
 
 
@@ -1387,161 +1298,27 @@ void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
     if( m_canvas == NULL )
         return;
 
-    int          id = event.GetId();
-    bool         warp_cursor = false;
-    VECTOR2D cpos = GetCrossHairPosition();//GetGalCanvas()->GetViewControls()->GetCursorPosition();
-    wxPoint zoom_center( (int)cpos.x, (int)cpos.y );
+    TOOL_MANAGER* mgr = GetToolManager();
+    int           id = event.GetId();
 
-    if ( id == ID_KEY_ZOOM_IN )
+    if( id == ID_KEY_ZOOM_IN )
     {
-        id = GetCanvas()->GetEnableZoomNoCenter() ?
-             ID_OFFCENTER_ZOOM_IN : ID_POPUP_ZOOM_IN;
+        if( GetCanvas()->GetEnableZoomNoCenter() )
+            mgr->RunAction( "common.Control.zoomIn", true, id );
+        else
+            mgr->RunAction( "common.Control.zoomInCenter", true, id );
     }
-    else if ( id == ID_KEY_ZOOM_OUT )
+    else if( id == ID_KEY_ZOOM_OUT )
     {
-        id = GetCanvas()->GetEnableZoomNoCenter() ?
-             ID_OFFCENTER_ZOOM_OUT : ID_POPUP_ZOOM_OUT;
+        if( GetCanvas()->GetEnableZoomNoCenter() )
+            mgr->RunAction( "common.Control.zoomOut", true, id );
+        else
+            mgr->RunAction( "common.Control.zoomOutCenter", true, id );
     }
-
-    switch( id )
+    else if( id >= ID_POPUP_ZOOM_LEVEL_START && id <= ID_POPUP_ZOOM_LEVEL_END )
     {
-    case ID_OFFCENTER_ZOOM_IN:
-        SetPreviousZoomAndRedraw( zoom_center,warp_cursor );
-        break;
-
-    case ID_POPUP_ZOOM_IN:
-        warp_cursor = true;
-        // fall thru
-    case ID_VIEWER_ZOOM_IN:
-    case ID_ZOOM_IN:
-        SetPreviousZoomAndRedraw( zoom_center,warp_cursor );
-        break;
-
-    case ID_OFFCENTER_ZOOM_OUT:
-        SetNextZoomAndRedraw( zoom_center, warp_cursor );
-        break;
-
-    case ID_POPUP_ZOOM_OUT:
-        warp_cursor = true;
-        // fall thru
-    case ID_VIEWER_ZOOM_OUT:
-    case ID_ZOOM_OUT:
-        SetNextZoomAndRedraw( zoom_center, warp_cursor );
-        break;
-
-    case ID_VIEWER_ZOOM_REDRAW:
-    case ID_POPUP_ZOOM_REDRAW:
-    case ID_ZOOM_REDRAW:
-        // This usually means something went wrong.  Do a hard refresh.
-        HardRedraw();
-        break;
-
-    case ID_POPUP_ZOOM_CENTER:
-        GetGalCanvas()->GetView()->SetScale( GetGalCanvas()->GetView()->GetScale(), zoom_center );
-        GetGalCanvas()->GetViewControls()->CenterOnCursor();
-        break;
-
-    case ID_POPUP_ZOOM_PAGE:
-    case ID_VIEWER_ZOOM_PAGE:
-    case ID_ZOOM_PAGE:
-        Zoom_Automatique( false );
-        break;
-
-    case ID_POPUP_ZOOM_SELECT:
-        break;
-
-    case ID_POPUP_CANCEL:
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    default:
-        SetPresetZoom( id - ID_POPUP_ZOOM_LEVEL_START );
+        mgr->RunAction( "common.Control.zoomPreset", true, id - ID_POPUP_ZOOM_LEVEL_START );
     }
-
-    UpdateStatusBar();
-}
-
-
-void EDA_DRAW_FRAME::SetNextZoom()
-{
-    GetScreen()->SetNextZoom();
-}
-
-
-void EDA_DRAW_FRAME::SetPrevZoom()
-{
-    GetScreen()->SetPreviousZoom();
-}
-
-
-void EDA_DRAW_FRAME::SetNextZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer )
-{
-    double zoom = GetGalCanvas()->GetLegacyZoom();
-    zoom *= 1.3;
-
-    // Now look for the next closest menu step
-    std::vector<double>& zoomList = GetScreen()->m_ZoomList;
-    int idx;
-
-    for( idx = 0; idx < (int)zoomList.size(); ++idx )
-    {
-        if( zoomList[idx] > zoom )
-            break;
-    }
-
-    if( idx >= (int)zoomList.size() )
-        return;
-
-    if( m_zoomSelectBox )
-        m_zoomSelectBox->SetSelection( idx );
-
-    GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] );
-    RedrawScreen( aCenterPoint, aWarpPointer );
-}
-
-
-void EDA_DRAW_FRAME::SetPreviousZoomAndRedraw( const wxPoint& aCenterPoint, bool aWarpPointer )
-{
-    double zoom = GetGalCanvas()->GetLegacyZoom();
-    zoom /= 1.3;
-
-    // Now look for the next closest menu step
-    std::vector<double>& zoomList = GetScreen()->m_ZoomList;
-    int idx;
-
-    for( idx = zoomList.size() - 1; idx >= 0; --idx )
-    {
-        if( zoomList[idx] < zoom )
-            break;
-    }
-
-    if( idx < 0 )
-        return;
-
-    if( m_zoomSelectBox )
-        m_zoomSelectBox->SetSelection( idx );
-
-    GetScreen()->SetZoom( GetScreen()->m_ZoomList[idx] );
-    RedrawScreen( aCenterPoint, aWarpPointer );
-}
-
-
-void EDA_DRAW_FRAME::SetPresetZoom( int aIndex )
-{
-    BASE_SCREEN* screen = GetScreen();
-
-    if( aIndex >= (int) screen->m_ZoomList.size() )
-    {
-        wxLogDebug( wxT( "%s %d: index %d is outside the bounds of the zoom list." ),
-                    __TFILE__, __LINE__, aIndex );
-        return;
-    }
-
-    if( m_zoomSelectBox )
-        m_zoomSelectBox->SetSelection( aIndex );
-
-    if( screen->SetZoom( screen->m_ZoomList[aIndex] ) )
-        RedrawScreen( GetScrollCenterPosition(), true );
 
     UpdateStatusBar();
 }
@@ -1591,8 +1368,8 @@ void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
     if( screen->GetGridCount() )
     {
         wxMenu* gridMenu = new wxMenu;
-        AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT,
-                     _( "Grid" ), KiBitmap( grid_select_xpm ) );
+        AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT, _( "Grid" ),
+                     KiBitmap( grid_select_xpm ) );
 
         wxArrayString gridsList;
         int icurr = screen->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
@@ -1729,13 +1506,10 @@ bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame )
     screen->m_IsPrinting = true;
     dc.SetUserScale( scale, scale );
 
-    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ),
-                                     wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
+    aFrame->GetCanvas()->SetClipBox( EDA_RECT( wxPoint( 0, 0 ), wxSize( 0x7FFFFF0, 0x7FFFFF0 ) ) );
 
     if( DrawBlock )
-    {
         dc.SetClippingRegion( DrawArea );
-    }
 
     dc.Clear();
     aFrame->GetCanvas()->EraseScreen( &dc );
@@ -1792,8 +1566,7 @@ void DrawPageLayout( wxDC* aDC, EDA_RECT* aClipBox,
     drawList.SetSheetName( aFullSheetName );
     drawList.SetSheetLayer( aSheetLayer );
 
-    drawList.BuildWorkSheetGraphicList( aPageInfo,
-                               aTitleBlock, aColor, aAltColor );
+    drawList.BuildWorkSheetGraphicList( aPageInfo, aTitleBlock, aColor, aAltColor );
 
     // Draw item list
     drawList.Draw( aClipBox, aDC );
@@ -1814,9 +1587,8 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
     if( !aScreen->m_IsPrinting && m_showPageLimits )
     {
         GRSetDrawMode( aDC, GR_COPY );
-        GRRect( m_canvas->GetClipBox(), aDC, 0, 0,
-                pageSize.x * aScalar, pageSize.y * aScalar, aLineWidth,
-                m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
+        GRRect( m_canvas->GetClipBox(), aDC, 0, 0, pageSize.x * aScalar, pageSize.y * aScalar,
+                aLineWidth, m_drawBgColor == WHITE ? LIGHTGRAY : DARKDARKGRAY );
     }
 
     TITLE_BLOCK t_block = GetTitleBlock();
@@ -1830,10 +1602,9 @@ void EDA_DRAW_FRAME::DrawWorkSheet( wxDC* aDC, BASE_SCREEN* aScreen, int aLineWi
         aDC->SetAxisOrientation( true, false );
     }
 
-    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo,
-                    GetScreenDesc(), aFilename, t_block,
-                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber,
-                    aLineWidth, aScalar, color, color, aSheetLayer );
+    DrawPageLayout( aDC, m_canvas->GetClipBox(), pageInfo, GetScreenDesc(), aFilename, t_block,
+                    aScreen->m_NumberOfScreens, aScreen->m_ScreenNumber, aLineWidth, aScalar,
+                    color, color, aSheetLayer );
 
     if( aScreen->m_IsPrinting && origin.y > 0 )
     {

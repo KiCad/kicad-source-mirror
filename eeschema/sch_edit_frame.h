@@ -203,6 +203,9 @@ private:
     static wxPoint  m_lastSheetPinPosition;         ///< Last sheet pin position.
 
 protected:
+    // The Tool Framework initalization
+    void setupTools();
+
     /**
      * Initializing accessor for the pin text size
      */

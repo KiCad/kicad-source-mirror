@@ -356,27 +356,6 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 }
 
 
-wxAuiToolBarItem* EDA_DRAW_FRAME::GetToolbarTool( int aToolId )
-{
-    // Checks all the toolbars and returns a reference to the given tool id
-    // (or the first tool found, but only one or 0 tool is expected, because on
-    // Windows, when different tools have the same ID, it creates issues)
-    if( m_mainToolBar && m_mainToolBar->FindTool( aToolId ) )
-        return m_mainToolBar->FindTool( aToolId );
-
-    if( m_optionsToolBar && m_optionsToolBar->FindTool( aToolId ) )
-        return m_optionsToolBar->FindTool( aToolId );
-
-    if( m_drawToolBar && m_drawToolBar->FindTool( aToolId ) )
-        return m_drawToolBar->FindTool( aToolId );
-
-    if( m_auxiliaryToolBar && m_auxiliaryToolBar->FindTool( aToolId ) )
-        return m_auxiliaryToolBar->FindTool( aToolId );
-
-    return nullptr;
-}
-
-
 void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 {
     if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
