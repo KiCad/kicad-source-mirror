@@ -522,6 +522,23 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                     }
                 }
             }
+
+            // If we got this far and did not find a connected bus item for a bus entry,
+            // we should do a manual scan in case there is a bus item on this connection
+            // point but we didn't pick it up earlier because there is *also* a net item here.
+            if( connected_item->Type() == SCH_BUS_WIRE_ENTRY_T )
+            {
+                auto bus_entry = static_cast<SCH_BUS_WIRE_ENTRY*>( connected_item );
+
+                if( !bus_entry->m_connected_bus_item )
+                {
+                    auto screen = aSheet.LastScreen();
+                    auto bus = screen->GetBus( it.first );
+
+                    if( bus )
+                        bus_entry->m_connected_bus_item = bus;
+                }
+            }
         }
     }
 }
@@ -1006,7 +1023,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 auto candidate_connection = candidate->m_driver_connection;
 
                 if( candidate_connection->Name() == member->Name() )
-                    subgraph->m_neighbor_map[ member ].push_back( candidate );
+                {
+                    wxLogTrace( "CONN", "%lu (%s) has neighbor %lu", subgraph->m_code,
+                                connection->Name(), candidate->m_code );
+                    subgraph->m_neighbor_map[member].push_back( candidate );
+                    candidate->m_neighbor_map[member].push_back( subgraph );
+                }
             }
         }
     }
@@ -1157,8 +1179,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 if( bus_conn->Driver() &&
                     bus_conn->Driver()->Type() == SCH_GLOBAL_LABEL_T )
                 {
-                    wxLogTrace( "CONN", "Net %s connected to global bus %s",
-                                connection->Name(), bus_conn->Name() );
+                    wxLogTrace( "CONN", "%lu (%s) connected to global bus %s",
+                                subgraph->m_code, connection->Name(), bus_conn->Name() );
 
                     std::shared_ptr<SCH_CONNECTION> parent;
 
@@ -1176,8 +1198,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                     if( parent && ( parent->Name() != connection->Name() ) )
                     {
-                        wxLogTrace( "CONN", "Promoting %s to %s", connection->Name(),
-                                    parent->Name() );
+                        wxLogTrace( "CONN", "Promoting %lu (%s) to %s", subgraph->m_code,
+                                    connection->Name(), parent->Name() );
 
                         connection->Clone( *parent );
 
@@ -1186,11 +1208,30 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                             auto item_conn = item->Connection( sheet );
                             item_conn->Clone( *connection );
                         }
+
+                        // Also check for local neighbors
+                        for( auto& kv : subgraph->m_neighbor_map )
+                        {
+                            for( auto sg : kv.second )
+                            {
+                                // Neighbors had better be on the same sheet
+                                wxASSERT( sg->m_sheet == sheet );
+
+                                wxLogTrace( "CONN", "Promoting neighbor %lu to %s", sg->m_code,
+                                            parent->Name() );
+
+                                for( auto item : sg->m_items )
+                                {
+                                    auto item_conn = item->Connection( sheet );
+                                    item_conn->Clone( *connection );
+                                }
+                            }
+                        }
                     }
                     else
                     {
-                        wxLogTrace( "CONN", "Could not find matching parent for %s!",
-                                    connection->Name() );
+                        wxLogTrace( "CONN", "Could not find matching parent for %lu (%s)!",
+                                    subgraph->m_code, connection->Name() );
                     }
                 }
             }
