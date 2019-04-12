@@ -150,9 +150,9 @@ void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 void PCB_EDIT_FRAME::OnUpdateCurvedRatsnest( wxUpdateUIEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayRatsnestLinesCurved );
+    aEvent.Check( displ_opts->m_DisplayRatsnestLinesCurved );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
-                                        displ_opts->m_DisplayRatsnestLinesCurved ?
+                                        !displ_opts->m_DisplayRatsnestLinesCurved ?
                                         _( "Show ratlines as curves" ) :
                                         _( "Show ratlines as straight lines" ) );
 }
