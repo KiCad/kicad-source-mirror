@@ -1122,6 +1122,23 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                 wxString name = subgraph->GetNameForDriver( obj );
 
+                // Non-power pins should not propagate to neighbors
+                if( obj->Type() == SCH_PIN_T )
+                {
+                    if( static_cast<SCH_PIN*>( obj )->IsPowerConnection() )
+                    {
+                        if( name == connection->Name() )
+                            continue;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                wxLogTrace( "CONN", "Promoting neighbors of %lu (%s) secondary driver %s",
+                            subgraph->m_code, connection->Name(), name );
+
                 // If the name is a global, we'll have it in the code map
 
                 if( m_net_name_to_code_map.count( name ) )
@@ -1135,6 +1152,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                         if( conn->IsBus() || conn->NetCode() != code )
                             continue;
+
+                        wxLogTrace( "CONN", "Promoting %lu (%s) to %s",
+                                    subgraph_to_update->m_code, conn->Name(), name );
 
                         for( auto item : subgraph_to_update->m_items )
                         {
@@ -1152,6 +1172,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                     if( sg->m_driver_connection->Name() == connection->Name() )
                         continue;
+
+                    wxLogTrace( "CONN", "Promoting %lu (%s) to %s",
+                                sg->m_code, sg->m_driver_connection->Name(), connection->Name() );
 
                     // Neighbors had better be on the same sheet
                     wxASSERT( sg->m_sheet == sheet );
