@@ -49,17 +49,19 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_PIN_TO_PIN_ERROR:
         return wxString( _("Conflict problem between pins. Severity: error") );
     case ERCE_HIERACHICAL_LABEL:
-        return wxString( _("Mismatch between hierarchical labels and pins sheets"));
+        return wxString( _("Mismatch between hierarchical labels and pins sheets") );
     case ERCE_NOCONNECT_CONNECTED:
-        return wxString( _("A pin with a \"no connection\" flag is connected"));
+        return wxString( _("A pin with a \"no connection\" flag is connected") );
+    case ERCE_NOCONNECT_NOT_CONNECTED:
+        return wxString( _("A \"no connection\" flag is not connected to anything") );
     case ERCE_LABEL_NOT_CONNECTED:
         return wxString( _("A label not connected to any other item") );
     case ERCE_SIMILAR_LABELS:
-        return wxString( _("Labels are similar (lower/upper case difference only)") );
+        return wxString( _("Labels are similar (lower/upper case difference only)" ) );
     case ERCE_SIMILAR_GLBL_LABELS:
-        return wxString( _("Global labels are similar (lower/upper case difference only)") );
+        return wxString( _("Global labels are similar (lower/upper case difference only)" ) );
     case ERCE_DIFFERENT_UNIT_FP:
-        return wxString( _("Different footprint assigned in another unit of the same component") );
+        return wxString( _("Different footprint assigned in another unit of the same component" ) );
     case ERCE_DIFFERENT_UNIT_NET:
         return wxString( _("Different net assigned to a shared pin in another unit of the same component" ) );
     case ERCE_BUS_ALIAS_CONFLICT:
@@ -73,6 +75,8 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_BUS_TO_BUS_CONFLICT:
         return wxString( _( "No nets are shared between two bus items" ) );
     case ERCE_BUS_TO_NET_CONFLICT:
+        return wxString( _( "Invalid connection between bus and net items" ) );
+    case ERCE_GLOBLABEL:
         return wxString( _( "Invalid connection between bus and net items" ) );
     default:
         wxFAIL_MSG( "Missing ERC error description" );

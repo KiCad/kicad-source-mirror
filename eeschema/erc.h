@@ -59,6 +59,7 @@ enum ERCE_T
     ERCE_PIN_TO_PIN_ERROR,      // pin connected to an other pin: error level
     ERCE_HIERACHICAL_LABEL,     // mismatch between hierarchical labels and pins sheets
     ERCE_NOCONNECT_CONNECTED,   // a no connect symbol is connected to more than 1 pin
+    ERCE_NOCONNECT_NOT_CONNECTED, // a no connect symbol is not connected to anything
     ERCE_LABEL_NOT_CONNECTED,   // label not connected to anything
     ERCE_SIMILAR_LABELS,        // 2 labels are equal fir case insensitive comparisons
     ERCE_SIMILAR_GLBL_LABELS,   // 2 labels are equal fir case insensitive comparisons
@@ -70,6 +71,7 @@ enum ERCE_T
     ERCE_BUS_LABEL_ERROR,       // a label attached to a bus isn't in bus format
     ERCE_BUS_TO_BUS_CONFLICT,   // a connection between bus objects doesn't share at least one net
     ERCE_BUS_TO_NET_CONFLICT,   // a bus wire is graphically connected to a net port/pin (or vice versa)
+    ERCE_GLOBLABEL,             // a global label is unique
 };
 
 /* Minimal connection table */

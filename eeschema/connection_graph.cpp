@@ -1573,10 +1573,21 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
 {
     int error_count = 0;
 
+    std::map< wxString, std::vector< std::pair< SCH_ITEM*, CONNECTION_SUBGRAPH* > > > globals;
+
     for( auto subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
+
+        for( const auto& item : subgraph->m_items )
+        {
+            if( item->Type() == SCH_GLOBAL_LABEL_T )
+            {
+                wxString key = static_cast<SCH_TEXT*>( item )->GetText();
+                globals[ key ].emplace_back( std::make_pair( item, subgraph ) );
+            }
+        }
 
         /**
          * NOTE:
@@ -1615,7 +1626,48 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
             error_count++;
     }
 
+    // Some checks are now run after processing every subgraph
+
+    // Check for lonely global labels
+    if( aSettings.check_unique_global_labels )
+    {
+        for( auto &it : globals )
+        {
+            if( it.second.size() == 1 )
+            {
+                ercReportIsolatedGlobalLabel( it.second.at( 0 ).second, it.second.at( 0 ).first );
+                error_count++;
+            }
+        }
+    }
+
     return error_count;
+}
+
+
+void CONNECTION_GRAPH::ercReportIsolatedGlobalLabel( CONNECTION_SUBGRAPH* aSubgraph,
+                                                     SCH_ITEM* aLabel )
+{
+    wxString msg;
+    auto label = dynamic_cast<SCH_TEXT*>( aLabel );
+
+    if( !label )
+        return;
+
+    msg.Printf( _( "Global label %s is not connected to any other global label." ),
+                label->GetShownText() );
+
+    auto marker = new SCH_MARKER();
+    marker->SetTimeStamp( GetNewTimeStamp() );
+    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+    marker->SetData( ERCE_GLOBLABEL,
+                     label->GetPosition(),
+                     msg,
+                     label->GetPosition() );
+
+    SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
+    screen->Append( marker );
 }
 
 
@@ -1860,11 +1912,12 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
     if( aSubgraph->m_no_connect != nullptr )
     {
         bool has_invalid_items = false;
+        bool has_other_items = false;
         SCH_PIN* pin = nullptr;
         std::vector<SCH_ITEM*> invalid_items;
 
         // Any subgraph that contains both a pin and a no-connect should not
-        // contain any other connectable items.
+        // contain any other driving items.
 
         for( auto item : aSubgraph->m_items )
         {
@@ -1872,13 +1925,17 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             {
             case SCH_PIN_T:
                 pin = static_cast<SCH_PIN*>( item );
+                has_other_items = true;
                 break;
 
+            case SCH_LINE_T:
+            case SCH_JUNCTION_T:
             case SCH_NO_CONNECT_T:
                 break;
 
             default:
                 has_invalid_items = true;
+                has_other_items = true;
                 invalid_items.push_back( item );
             }
         }
@@ -1887,9 +1944,7 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
         // (JEY) Yes, I think it should
         if( pin && has_invalid_items )
         {
-            SCH_COMPONENT* comp = pin->GetParentComponent();
-            wxPoint pos = comp->GetTransform().TransformCoordinate( pin->GetPosition() )
-                          + comp->GetPosition();
+            wxPoint pos = pin->GetTransformedPosition();
 
             msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
                         GetChars( pin->GetName() ),
@@ -1900,6 +1955,23 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
             marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
             marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
+
+            screen->Append( marker );
+
+            return false;
+        }
+
+        if( !has_other_items )
+        {
+            wxPoint pos = aSubgraph->m_no_connect->GetPosition();
+
+            msg.Printf( _( "No-connect marker is not connected to anything" ) );
+
+            auto marker = new SCH_MARKER();
+            marker->SetTimeStamp( GetNewTimeStamp() );
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
 
             screen->Append( marker );
 
@@ -1941,22 +2013,18 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( CONNECTION_SUBGRAPH* aSubgraph,
             pin->IsPowerConnection() && !pin->IsVisible() )
         {
             wxString name = pin->Connection( sheet )->Name();
+            wxString local_name = pin->Connection( sheet )->Name( true );
 
-            if( int code = m_net_name_to_code_map.count( name ) )
+            if( m_global_label_cache.count( name )  ||
+                ( m_local_label_cache.count( std::make_pair( sheet, local_name ) ) ) )
             {
-                if( m_net_code_to_subgraphs_map.count( code ) )
-                {
-                    if( m_net_code_to_subgraphs_map.at( code ).size() > 1 )
-                        has_other_connections = true;
-                }
+                has_other_connections = true;
             }
         }
 
         if( pin && !has_other_connections && pin->GetType() != PIN_NC )
         {
-            SCH_COMPONENT* comp = pin->GetParentComponent();
-            wxPoint pos = comp->GetTransform().TransformCoordinate( pin->GetPosition() )
-                          + comp->GetPosition();
+            wxPoint pos = pin->GetTransformedPosition();
 
             msg.Printf( _( "Pin %s of component %s is unconnected." ),
                         GetChars( pin->GetName() ),

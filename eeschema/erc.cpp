@@ -369,7 +369,7 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
     SCH_SCREEN*     screen;
     ELECTRICAL_PINTYPE ii, jj;
 
-    if( aDiag == OK )
+    if( aDiag == OK || aMinConn < 1 )
         return;
 
     /* Create new marker for ERC error. */
@@ -383,40 +383,6 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     wxString msg;
 
-    if( aMinConn < 0 )
-    {
-#if 0
-        if( aNetItemRef->m_Type == NET_HIERLABEL || aNetItemRef->m_Type == NET_HIERBUSLABELMEMBER )
-        {
-            msg.Printf( _( "Hierarchical label %s is not connected to a sheet label." ),
-                        GetChars( aNetItemRef->m_Label ) );
-            marker->SetData( ERCE_HIERACHICAL_LABEL,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
-        }
-        else if( aNetItemRef->m_Type == NET_GLOBLABEL )
-        {
-            msg.Printf( _( "Global label %s is not connected to any other global label." ),
-                        GetChars( aNetItemRef->m_Label ) );
-            marker->SetData( ERCE_GLOBLABEL,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
-        }
-        else
-        {
-            msg.Printf( _( "Sheet label %s is not connected to a hierarchical label." ),
-                        GetChars( aNetItemRef->m_Label ) );
-            marker->SetData( ERCE_HIERACHICAL_LABEL,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
-        }
-#endif
-        return;
-    }
-
     ii = aNetItemRef->m_ElectricalPinType;
 
     wxString cmp_ref( "?" );
@@ -426,19 +392,6 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
 
     if( aNetItemTst == NULL )
     {
-        if( aMinConn == NOC )    /* Only 1 element in the net. */
-        {
-            msg.Printf( _( "Pin %s (%s) of component %s is unconnected." ),
-                        aNetItemRef->m_PinNum,
-                        GetChars( GetText( ii ) ),
-                        GetChars( cmp_ref ) );
-            marker->SetData( ERCE_PIN_NOT_CONNECTED,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
-            return;
-        }
-
         if( aMinConn == NOD )    /* Nothing driving the net. */
         {
             if( aNetItemRef->m_Type == NET_PIN && aNetItemRef->m_Link )
@@ -451,16 +404,6 @@ void Diagnose( NETLIST_OBJECT* aNetItemRef, NETLIST_OBJECT* aNetItemTst,
                         GetChars( cmp_ref ),
                         aNetItemRef->GetNet() );
             marker->SetData( ERCE_PIN_NOT_DRIVEN,
-                             aNetItemRef->m_Start,
-                             msg,
-                             aNetItemRef->m_Start );
-            return;
-        }
-
-        if( aDiag == UNC )
-        {
-            msg.Printf( _( "More than 1 pin connected to an UnConnect symbol." ) );
-            marker->SetData( ERCE_NOCONNECT_CONNECTED,
                              aNetItemRef->m_Start,
                              msg,
                              aNetItemRef->m_Start );

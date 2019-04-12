@@ -345,6 +345,8 @@ private:
      * @return                true for no errors, false for errors
      */
     bool ercCheckLabels( CONNECTION_SUBGRAPH* aSubgraph, bool aCreateMarkers );
+
+    void ercReportIsolatedGlobalLabel( CONNECTION_SUBGRAPH* aSubgraph, SCH_ITEM* aLabel );
 };
 
 #endif
