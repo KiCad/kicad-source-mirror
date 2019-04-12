@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,17 +74,18 @@ public:
 
     bool m_DisplayPolarCood;
     int  m_DisplayZonesMode;
-    int  m_DisplayNetNamesMode; /* 0 do not show netnames,
-                                 * 1 show netnames on pads
-                                 * 2 show netnames on tracks
-                                 * 3 show netnames on tracks and pads
-                                 */
+    int  m_DisplayNetNamesMode;     /* 0 do not show netnames,
+                                     * 1 show netnames on pads
+                                     * 2 show netnames on tracks
+                                     * 3 show netnames on tracks and pads
+                                     */
 
     bool m_DisplayDrawItemsFill;    // How to display graphic items on board ( sketch/ filled )
     bool m_ContrastModeDisplay;
     int  m_MaxLinksShowed;          // in track creation: number of hairwires shown
     bool m_Show_Module_Ratsnest;    // When moving a footprint: allows displaying a ratsnest
-    bool m_DisplayRatsnestLinesCurved;
+    bool m_DisplayRatsnestLinesCurved;  // Airwires can be drawn as straight lines (false)
+                                        // or curved lines (true)
 
 public:
 

@@ -4,7 +4,7 @@
  * Copyright (C) 2012 Jean-Pierre Charras, jean-pierre.charras@ujf-grenoble.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2012 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,5 +56,5 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_ContrastModeDisplay     = false;
     m_MaxLinksShowed   = 3;             // in track creation: number of hairwires shown
     m_Show_Module_Ratsnest  = true;     // When moving a footprint: allows displaying a ratsnest
-    m_DisplayRatsnestLinesCurved = true;
+    m_DisplayRatsnestLinesCurved = false;
 }

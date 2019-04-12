@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -198,7 +198,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "PcbShowZonesMode" ),
                                                        &displ_opts->m_DisplayZonesMode, 0, 0, 2 ) );
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "CurvedRatsnestLines" ),
-                                                        &displ_opts->m_DisplayRatsnestLinesCurved, true ) );
+                                                        &displ_opts->m_DisplayRatsnestLinesCurved, false ) );
 
         // Miscellaneous:
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "RotationAngle" ),
