@@ -235,10 +235,9 @@ int COMMON_TOOLS::ZoomFitScreen( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW* view = getView();
     EDA_DRAW_PANEL_GAL* galCanvas = m_frame->GetGalCanvas();
-    EDA_ITEM* model = getModel<EDA_ITEM>();
-    EDA_BASE_FRAME* frame = getEditFrame<EDA_BASE_FRAME>();
+    EDA_DRAW_FRAME* frame = getEditFrame<EDA_DRAW_FRAME>();
 
-    BOX2I bBox = model->ViewBBox();
+    BOX2I bBox = frame->GetDocumentExtents();
     VECTOR2D scrollbarSize = VECTOR2D( galCanvas->GetSize() - galCanvas->GetClientSize() );
     VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
 

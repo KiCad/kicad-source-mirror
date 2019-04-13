@@ -133,6 +133,11 @@ public:
      */
     EDA_RECT    GetBoardBoundingBox( bool aBoardEdgesOnly = false ) const;
 
+    const BOX2I GetDocumentExtents() const override
+    {
+        return GetBoardBoundingBox( false );
+    }
+
     virtual void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings() const override;
     const wxSize GetPageSizeIU() const override;
