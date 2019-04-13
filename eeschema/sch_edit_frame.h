@@ -517,7 +517,7 @@ public:
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegmentsOnJunctions( bool aApped = false,
+    bool BreakSegmentsOnJunctions( bool aAppend = false,
                                    SCH_SCREEN* aScreen = nullptr );
 
     /**
@@ -1557,7 +1557,7 @@ public:
     /**
      * Generates the connection data for the entire schematic hierarchy.
      */
-    void RecalculateConnections();
+    void RecalculateConnections( bool aDoCleanup = true );
 
     void SetCurrentSheet( SCH_SHEET_PATH *aSheet );
 

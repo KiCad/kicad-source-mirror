@@ -798,7 +798,7 @@ void SCH_EDIT_FRAME::OnModify()
 
 
     if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
-        RecalculateConnections();
+        RecalculateConnections( false );
 
     m_canvas->Refresh();
 }
@@ -1476,15 +1476,18 @@ void SCH_EDIT_FRAME::UpdateTitle()
 }
 
 
-void SCH_EDIT_FRAME::RecalculateConnections()
+void SCH_EDIT_FRAME::RecalculateConnections( bool aDoCleanup )
 {
     SCH_SHEET_LIST list( g_RootSheet );
 
     PROF_COUNTER timer;
 
     // Ensure schematic graph is accurate
-    for( const auto& sheet : list )
-        SchematicCleanUp( false, sheet.LastScreen() );
+    if( aDoCleanup )
+    {
+        for( const auto& sheet : list )
+            SchematicCleanUp( false, sheet.LastScreen() );
+    }
 
     timer.Stop();
     wxLogTrace( "CONN_PROFILE", "SchematicCleanUp() %0.4f ms", timer.msecs() );
