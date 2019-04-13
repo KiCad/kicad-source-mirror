@@ -158,6 +158,9 @@ bool DIALOG_SIM_SETTINGS::TransferDataFromWindow()
             {
                 wxString dcSource = m_exporter->GetSpiceDevice( m_dcSource2->GetValue() );
 
+                if( m_dcEnable1->IsChecked() )
+                    simCmd += " ";
+
                 simCmd += wxString::Format( "%s %s %s %s",
                     dcSource,
                     SPICE_VALUE( m_dcStart2->GetValue() ).ToSpiceString(),
