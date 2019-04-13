@@ -255,9 +255,10 @@ void DIALOG_ERC::OnLeftClickMarkersList( wxHtmlLinkEvent& event )
 
     if( sheetList[i] != m_parent->GetCurrentSheet() )
     {
-        sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
         m_parent->SetCurrentSheet( sheetList[i] );
-        m_parent->GetCurrentSheet().UpdateAllScreenReferences();
+        m_parent->DisplayCurrentSheet();
+        sheetList[i].LastScreen()->SetZoom( m_parent->GetScreen()->GetZoom() );
+        m_parent->RedrawScreen( m_parent->GetScrollCenterPosition(), false );
     }
 
     m_lastMarkerFound = marker;
