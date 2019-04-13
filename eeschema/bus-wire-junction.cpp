@@ -392,12 +392,8 @@ void SCH_EDIT_FRAME::EndSegment()
     {
         wxASSERT( m_busUnfold.entry && m_busUnfold.label );
 
-        PICKED_ITEMS_LIST bus_items;
-
-        bus_items.PushItem( ITEM_PICKER( m_busUnfold.entry, UR_NEW ) );
-        bus_items.PushItem( ITEM_PICKER( m_busUnfold.label, UR_NEW ) );
-
-        SaveCopyInUndoList( bus_items, UR_NEW, false );
+        itemList.PushItem( ITEM_PICKER( m_busUnfold.entry, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( m_busUnfold.label, UR_NEW ) );
     }
 
     // Get the last non-null wire (this is the last created segment).
@@ -831,8 +827,10 @@ bool SCH_EDIT_FRAME::BreakSegmentsOnJunctions( bool aAppend, SCH_SCREEN* aScreen
             SCH_BUS_ENTRY_BASE* busEntry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( item );
             if( busEntry )
             {
-                if( BreakSegments( busEntry->GetPosition(), brokenSegments || aAppend, aScreen )
-                 || BreakSegments( busEntry->m_End(), brokenSegments || aAppend, aScreen ) )
+                if( BreakSegments( busEntry->GetPosition(), brokenSegments || aAppend, aScreen ) )
+                    brokenSegments = true;
+
+                if( BreakSegments( busEntry->m_End(), brokenSegments || aAppend, aScreen ) )
                     brokenSegments = true;
             }
         }
