@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-13 09:35-0300\n"
-"PO-Revision-Date: 2019-04-09 10:43-0300\n"
+"POT-Creation-Date: 2019-04-13 10:29-0300\n"
+"PO-Revision-Date: 2019-04-13 10:29-0300\n"
 "Last-Translator: Francisco R. Pereira <frosch_bin@yahoo.com.br>\n"
 "Language-Team: kicad team\n"
 "Language: pt_BR\n"
@@ -3443,9 +3443,8 @@ msgid "Cancel current tool"
 msgstr "Cancelar ferramenta atual"
 
 #: common/tool/actions.cpp:16
-#, fuzzy
 msgid "Refresh View"
-msgstr "&Atualizar"
+msgstr "Atualizar a Visualização"
 
 #: common/tool/actions.cpp:40 eeschema/hotkeys.cpp:89
 #: gerbview/gerbview_frame.cpp:1250 gerbview/hotkeys.cpp:61
@@ -4663,9 +4662,8 @@ msgstr ""
 "conectado"
 
 #: eeschema/connection_graph.cpp:2025
-#, fuzzy
 msgid "No-connect marker is not connected to anything"
-msgstr "Um rótulo não conectado a nenhum outro item"
+msgstr "Marcador de não conectado não está conectado a nada"
 
 #: eeschema/connection_graph.cpp:2086
 #, c-format
@@ -4974,7 +4972,7 @@ msgstr "Os primeiros %d campos são obrigatórios."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:663
 msgid "Alias can not have same name as symbol."
-msgstr ""
+msgstr "Alias não pode ter o mesmo nome do símbolo."
 
 #: eeschema/dialogs/dialog_edit_component_in_lib.cpp:676
 #, c-format
@@ -7955,9 +7953,8 @@ msgid "A pin with a \"no connection\" flag is connected"
 msgstr "Um pino sinalizado como \"desconectado\" está conectado"
 
 #: eeschema/drc_erc_item.cpp:56
-#, fuzzy
 msgid "A \"no connection\" flag is not connected to anything"
-msgstr "Um pino sinalizado como \"desconectado\" está conectado"
+msgstr "Um sinalizador “não conectado” não está conectado a nada"
 
 #: eeschema/drc_erc_item.cpp:58
 msgid "A label not connected to any other item"
@@ -10012,7 +10009,7 @@ msgstr "Salvar todas as alterações"
 
 #: eeschema/libedit/tool_lib.cpp:128 pcbnew/tool_footprint_editor.cpp:91
 msgid "Refresh libraries and redraw view"
-msgstr ""
+msgstr "Atualizar bibliotecas e redesenhar a exibição"
 
 #: eeschema/libedit/tool_lib.cpp:161
 msgid "Show associated datasheet or document"
@@ -16769,9 +16766,8 @@ msgid "Thermal reliefs"
 msgstr "Alívios térmicos"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:190
-#, fuzzy
 msgid "Reliefs for PTH"
-msgstr "Alívios apenas para furo passante"
+msgstr "Alívios para furo passante"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:196
 msgid "Thermal clearance:"
@@ -18756,9 +18752,8 @@ msgid "Filter items by parent footprint reference:"
 msgstr "Filtrar itens pela referência do footprint pai:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:78
-#, fuzzy
 msgid "Filter items by parent footprint library id:"
-msgstr "Filtrar itens pela referência do footprint pai:"
+msgstr "Filtrar itens pelo ID da biblioteca de footprint pai:"
 
 #: pcbnew/dialogs/dialog_global_edit_text_and_graphics_base.cpp:100
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:87
@@ -18815,9 +18810,8 @@ msgid "Some items failed DRC and were not modified."
 msgstr "Alguns itens falharam na DRC e não foram modificados."
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:39
-#, fuzzy
 msgid "Filter Items"
-msgstr "Filtrar Redes"
+msgstr "Filtrar Itens"
 
 #: pcbnew/dialogs/dialog_global_edit_tracks_and_vias_base.cpp:51
 msgid "Filter items by net:"
@@ -22590,13 +22584,12 @@ msgid "Could not create file \"%s\"."
 msgstr "Não foi possível criar o arquivo \"%s\"."
 
 #: pcbnew/exporters/export_hyperlynx.cpp:188
-#, fuzzy
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(oval, rectangle, circle). They have been exported as oval pads."
 msgstr ""
 "O arquivo contém formas de ilha não suportadas pelo exportador Hyperlynx "
-"(oval, retângulo, círculo). Foram exportados como ilhas ovais."
+"(oval, retângulo, círculo). Estas foram exportadas como ilhas ovais."
 
 #: pcbnew/exporters/export_idf.cpp:605 pcbnew/exporters/export_idf.cpp:614
 #: pcbnew/exporters/export_idf.cpp:622 pcbnew/exporters/export_vrml.cpp:1659
@@ -24084,18 +24077,16 @@ msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "ZSmoothing ruim para o CZONE_CONTAINER \"%s\""
 
 #: pcbnew/legacy_plugin.cpp:2631 pcbnew/pcb_parser.cpp:3189
-#, fuzzy
 msgid ""
 "The legacy segment fill mode is no longer supported.\n"
 "Convert zones to polygon fills?"
 msgstr ""
-"O modo legado de preenchimento por segmentos não é recomendado. Converter a "
-"zona para preenchimento por polígonos? "
+"O modo legado de preenchimento por segmentos não é mais suportado.\n"
+"Converter zonas para preenchimento por polígonos?"
 
 #: pcbnew/legacy_plugin.cpp:2633 pcbnew/pcb_parser.cpp:3191
-#, fuzzy
 msgid "Legacy Zone Warning"
-msgstr "Aviso Legado"
+msgstr "Aviso de Zona Legada"
 
 #: pcbnew/legacy_plugin.cpp:2678
 #, c-format
@@ -24842,9 +24833,8 @@ msgid "&Drill Files (.drl)..."
 msgstr "Arquivos de &Furação (.drl)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:874
-#, fuzzy
 msgid "Generate Excellon drill file(s)"
-msgstr "Gerar arquivo(s) de perfuração excellon2"
+msgstr "Gerar arquivo(s) de perfuração Excellon"
 
 #: pcbnew/menubar_pcb_editor.cpp:878
 msgid "Footprint &Positions (.pos)..."
@@ -26682,7 +26672,7 @@ msgstr "Ativar Verificaçao de Regras de Desenho"
 
 #: pcbnew/tool_pcb_editor.cpp:421
 msgid "Show ratsnest lines with curved lines"
-msgstr ""
+msgstr "Mostrar linhas de emaranhado com linhas curvas"
 
 #: pcbnew/tool_pcb_editor.cpp:464
 msgid "Display local ratsnest"
@@ -26844,11 +26834,11 @@ msgstr "Modo de alto contraste"
 
 #: pcbnew/toolbars_update_user_interface.cpp:156
 msgid "Show airwires as curves"
-msgstr ""
+msgstr "Mostrar emaranhados como curvas"
 
 #: pcbnew/toolbars_update_user_interface.cpp:157
 msgid "Show airwires as straight lines"
-msgstr ""
+msgstr "Mostrar emaranhados como linhas retas"
 
 #: pcbnew/tools/drawing_tool.cpp:70 pcbnew/tools/drawing_tool.cpp:1087
 msgid "Draw a line"
