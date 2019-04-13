@@ -599,8 +599,11 @@ void NETLIST_DIALOG::GenNetlist( wxCommandEvent& event )
 
     auto netlist = m_Parent->CreateNetlist( false, false );
 
-    m_Parent->WriteNetListFile( netlist, currPage->m_IdNetType,
-                                fullpath, netlist_opt, NULL );
+    if( netlist == nullptr )
+        wxMessageBox( _( "Schematic netlist not available" ) );
+    else
+        m_Parent->WriteNetListFile( netlist, currPage->m_IdNetType,
+                                    fullpath, netlist_opt, NULL );
 
     WriteCurrentNetlistSetup();
 

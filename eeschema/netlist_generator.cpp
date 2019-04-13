@@ -51,6 +51,9 @@ bool SCH_EDIT_FRAME::WriteNetListFile( NETLIST_OBJECT_LIST* aConnectedItemsList,
                                        int aFormat, const wxString& aFullFileName,
                                        unsigned aNetlistOptions, REPORTER* aReporter )
 {
+    if( aConnectedItemsList == nullptr )    // Schematic netlist not available.
+        return false;
+
     bool res = true;
     bool executeCommandLine = false;
 
