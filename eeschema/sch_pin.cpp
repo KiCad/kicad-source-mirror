@@ -49,13 +49,13 @@ wxString SCH_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
     wxString tmp;
 
 #ifdef DEBUG
-    tmp.Printf( _( "SCH_PIN for %s %s" ),
-                GetChars( m_comp->GetSelectMenuText( aUnits ) ),
-                GetChars( m_pin->GetSelectMenuText( aUnits ) ) );
+    tmp.Printf( "SCH_PIN for %s %s",
+                m_comp->GetSelectMenuText( aUnits ),
+                m_pin->GetSelectMenuText( aUnits ) );
 #else
-    tmp.Printf( _( "%s %s" ),
-                GetChars( m_comp->GetSelectMenuText( aUnits ) ),
-                GetChars( m_pin->GetSelectMenuText( aUnits ) ) );
+    tmp.Printf( "%s %s",
+                m_comp->GetSelectMenuText( aUnits ),
+               m_pin->GetSelectMenuText( aUnits ) );
 #endif
 
     return tmp;
@@ -72,7 +72,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
     if( m_net_name_map.count( aPath ) > 0 )
         return m_net_name_map.at( aPath );
 
-    wxString name = wxT( "Net-(" );
+    wxString name = "Net-(";
 
     name << m_comp->GetRef( &aPath );
 
@@ -80,7 +80,7 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
     if( /* adoptTimestamp && */ name.Last() == '?' )
         name << m_comp->GetTimeStamp();
 
-    name << _( "-Pad" ) << m_pin->GetNumber() << _( ")" );
+    name << "-Pad" << m_pin->GetNumber() << ")";
 
     m_net_name_map[ aPath ] = name;
 

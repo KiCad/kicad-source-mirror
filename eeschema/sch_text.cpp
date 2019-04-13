@@ -647,7 +647,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     }
 
     msg.Printf( "%p", this );
-    aList.push_back( MSG_PANEL_ITEM( _( "Object Address" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( "Object Address", msg, RED ) );
 
 #endif
 }

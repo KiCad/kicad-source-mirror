@@ -329,24 +329,25 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
         return;
 
+    // These messages are not flagged as translatable, because they are only debug messges
     wxString msg;
 
     AppendInfoToMsgPanel( aList );
 
     msg.Printf( "%d", m_bus_code );
-    aList.push_back( MSG_PANEL_ITEM( _( "Bus Code" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg, BROWN ) );
 
     msg.Printf( "%d", m_subgraph_code );
-    aList.push_back( MSG_PANEL_ITEM( _( "Subgraph Code" ), msg, BROWN ) );
+    aList.push_back( MSG_PANEL_ITEM( "Subgraph Code", msg, BROWN ) );
 
     if( auto driver = Driver() )
     {
         msg.Printf( "%s at %p", driver->GetSelectMenuText( MILLIMETRES ), driver );
-        aList.push_back( MSG_PANEL_ITEM( _( "Connection Source" ), msg, RED ) );
+        aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg, RED ) );
     }
 
     msg.Printf( "%s at %p", Parent()->GetSelectMenuText( MILLIMETRES ), Parent() );
-    aList.push_back( MSG_PANEL_ITEM( _( "Attached To" ), msg, RED ) );
+    aList.push_back( MSG_PANEL_ITEM( "Attached To", msg, RED ) );
 }
 
 

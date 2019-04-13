@@ -855,12 +855,12 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         if( m_global_label_cache.count( name )  ||
                 ( m_local_label_cache.count( std::make_pair( subgraph->m_sheet, local_name ) ) ) )
         {
-            auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
+            auto new_name = wxString::Format( "%s%u", name, suffix );
 
             wxLogTrace( "CONN", "Subgraph %ld default name %s conflicts with a label. Changing to %s.",
                         subgraph->m_code, name, new_name );
 
-            conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
+            conn->SetSuffix( wxString::Format( "%u", suffix ) );
             suffix++;
             name = new_name;
         }
@@ -883,13 +883,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             if( check_name == name )
             {
-                auto new_name = wxString::Format( _( "%s%u" ), name, suffix );
+                auto new_name = wxString::Format( "%s%u", name, suffix );
 
                 wxLogTrace( "CONN", "Subgraph %ld and %ld both have name %s. Changing %ld to %s.",
                             subgraph->m_code, candidate->m_code, name,
                             candidate->m_code, new_name );
 
-                c_conn->SetSuffix( wxString::Format( _( "%u" ), suffix ) );
+                c_conn->SetSuffix( wxString::Format( "%u", suffix ) );
 
                 candidate->m_dirty = false;
                 suffix++;

@@ -153,8 +153,8 @@ void PCB_EDIT_FRAME::OnUpdateCurvedRatsnest( wxUpdateUIEvent& aEvent )
     aEvent.Check( displ_opts->m_DisplayRatsnestLinesCurved );
     m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
                                         !displ_opts->m_DisplayRatsnestLinesCurved ?
-                                        _( "Show ratlines as curves" ) :
-                                        _( "Show ratlines as straight lines" ) );
+                                        _( "Show airwires as curves" ) :
+                                        _( "Show airwires as straight lines" ) );
 }
 
 

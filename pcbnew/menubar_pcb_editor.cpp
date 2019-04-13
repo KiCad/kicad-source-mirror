@@ -871,7 +871,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_DRILL_FILE,
                  _( "&Drill Files (.drl)..." ),
-                 _( "Generate excellon2 drill file(s)" ),
+                 _( "Generate Excellon drill file(s)" ),
                  KiBitmap( post_drill_xpm ) );
 
     AddMenuItem( fabricationOutputsMenu, ID_PCB_GEN_POS_MODULES_FILE,
