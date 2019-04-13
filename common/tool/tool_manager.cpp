@@ -689,7 +689,6 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         }
 
         m_viewControls->ForceCursorPosition( true, m_menuCursor );
-        m_warpMouseAfterContextMenu = true;
 
         // Display a copy of menu
         std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
@@ -714,6 +713,9 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
             evt.SetParameter( m );
             dispatchInternal( evt );
         }
+
+        // Restore setting in case it was vetoed
+        m_warpMouseAfterContextMenu = true;
 
         // Notify the tools that menu has been closed
         TOOL_EVENT evt( TC_COMMAND, TA_CONTEXT_MENU_CLOSED );
