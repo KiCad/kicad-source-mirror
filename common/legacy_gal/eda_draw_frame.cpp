@@ -63,7 +63,6 @@
 #include <page_info.h>
 #include <title_block.h>
 #include <advanced_config.h>
-#include <eeschema/tools/sch_actions.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
