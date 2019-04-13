@@ -68,7 +68,6 @@ enum UNDO_REDO_T {
     UR_ROTATED,             // Rotated item (counterclockwise), undo by rotating it
     UR_ROTATED_CLOCKWISE,   // Rotated item (clockwise), undo by rotating it
     UR_FLIPPED,             // flipped (board items only), undo by flipping it
-    UR_WIRE_IMAGE,          // Specific to Eeschema for handling wires changes.
     UR_LIBEDIT,             // Specific to the component editor (libedit creates a full copy
                             // of the current component when changed)
     UR_LIB_RENAME,          // As UR_LIBEDIT, but old copy should be removed from library

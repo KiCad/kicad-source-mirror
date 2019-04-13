@@ -554,37 +554,6 @@ void SCH_EDIT_FRAME::DeleteCurrentSegment()
 }
 
 
-void SCH_EDIT_FRAME::SaveWireImage()
-{
-    PICKED_ITEMS_LIST oldItems;
-    oldItems.m_Status = UR_WIRE_IMAGE;
-
-    SCH_ITEM* item;
-    SCH_ITEM* next_item;
-
-    for( item = GetScreen()->GetDrawItems(); item; item = next_item )
-    {
-        next_item = item->Next();
-
-        if( item->Type() == SCH_JUNCTION_T || item->Type() == SCH_LINE_T )
-        {
-            GetScreen()->Remove( item );
-            GetCanvas()->GetView()->Remove( item );
-
-            oldItems.PushItem( ITEM_PICKER( item, UR_WIRE_IMAGE ) );
-
-            SCH_ITEM* item_copy = static_cast<SCH_ITEM*>( item->Clone() );
-
-            GetScreen()->GetDrawList().Insert( item_copy, next_item );
-            GetCanvas()->GetView()->Add( item_copy );
-        }
-    }
-
-    if( oldItems.GetCount() != 0 )
-        SaveCopyInUndoList( oldItems, UR_WIRE_IMAGE );
-}
-
-
 bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend )
 {
     SCH_LINE* line;

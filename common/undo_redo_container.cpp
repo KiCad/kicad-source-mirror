@@ -114,20 +114,6 @@ void PICKED_ITEMS_LIST::ClearListAndDeleteItems()
         {
             delete wrapper.GetItem();
         }
-        else if( wrapper.GetStatus() == UR_WIRE_IMAGE )
-        {
-            // Specific to eeschema: a linked list of wires is stored.  The wrapper picks only
-            // the first item (head of list), and is owner of all picked items.
-            EDA_ITEM* item = wrapper.GetItem();
-
-            while( item )
-            {
-                // Delete old copy of wires
-                EDA_ITEM* nextitem = item->Next();
-                delete item;
-                item = nextitem;
-            }
-        }
         else if( wrapper.GetStatus() == UR_DELETED )
         {
             // This should really be replaced with UR_TRANSIENT, but currently many clients

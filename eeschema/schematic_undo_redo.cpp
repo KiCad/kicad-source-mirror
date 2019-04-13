@@ -113,11 +113,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
 {
      PICKED_ITEMS_LIST* commandToUndo = NULL;
 
-    /* Does not save a null item or a UR_WIRE_IMAGE command type.  UR_WIRE_IMAGE commands
-     * are handled by the overloaded version of SaveCopyInUndoList that takes a reference
-     * to a PICKED_ITEMS_LIST.
-     */
-    if( aItem == NULL || aCommandType == UR_WIRE_IMAGE )
+    if( aItem == NULL )
         return;
 
     // Connectivity may change
@@ -181,15 +177,8 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         return;
 
     // Can't append a WIRE IMAGE, so fail to a new undo point
-    if( aAppend && ( aTypeCommand != UR_WIRE_IMAGE ) )
-    {
+    if( aAppend )
         commandToUndo = GetScreen()->PopCommandFromUndoList();
-        if( commandToUndo && commandToUndo->m_Status == UR_WIRE_IMAGE )
-        {
-            GetScreen()->PushCommandToUndoList( commandToUndo );
-            commandToUndo = NULL;
-        }
-    }
 
     if( !commandToUndo )
     {
@@ -246,7 +235,6 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         case UR_NEW:
         case UR_DELETED:
         case UR_EXCHANGE_T:
-        case UR_WIRE_IMAGE:
             break;
 
         default:
@@ -255,7 +243,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
         }
     }
 
-    if( commandToUndo->GetCount() || aTypeCommand == UR_WIRE_IMAGE )
+    if( commandToUndo->GetCount() )
     {
         /* Save the copy in undo list */
         GetScreen()->PushCommandToUndoList( commandToUndo );
@@ -273,43 +261,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
 void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand )
 {
     SCH_ITEM* item;
-    SCH_ITEM* next_item;
     SCH_ITEM* alt_item;
-
-    // Exchange the current wires, buses, and junctions with the copy save by the last edit.
-    if( aList->m_Status == UR_WIRE_IMAGE )
-    {
-        PICKED_ITEMS_LIST oldItems;
-        oldItems.m_Status = UR_WIRE_IMAGE;
-
-        // Remove all of the wires, buses, and junctions from the current screen.
-        for( item = GetScreen()->GetDrawItems(); item; item = next_item )
-        {
-            next_item = item->Next();
-
-            if( item->Type() == SCH_JUNCTION_T || item->Type() == SCH_LINE_T )
-            {
-                GetScreen()->Remove( item );
-                GetCanvas()->GetView()->Remove( item );
-
-                oldItems.PushItem( ITEM_PICKER( item, UR_WIRE_IMAGE ) );
-            }
-        }
-
-        // Copy the saved wires, buses, and junctions to the current screen.
-        for( unsigned int i = 0;  i < aList->GetCount();  i++ )
-        {
-            item = static_cast<SCH_ITEM*>( aList->GetPickedItem( i ) );
-
-            AddToScreen( item );
-        }
-
-        // Copy the previous wires, buses, and junctions to the picked item list for the
-        // redo operation.
-        *aList = oldItems;
-
-        return;
-    }
 
     // Undo in the reverse order of list creation: (this can allow stacked changes like the
     // same item can be changed and deleted in the same complex command).
@@ -411,7 +363,6 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     GetScreen()->PushCommandToRedoList( List );
 
     SetSheetNumberAndCount();
-
     TestDanglingEnds();
 
     SyncView();

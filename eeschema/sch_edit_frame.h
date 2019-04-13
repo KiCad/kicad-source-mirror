@@ -1002,11 +1002,6 @@ private:
                                bool aFinal = true );
 
     /**
-     * Save a copy of the current wire image in the undo list.
-     */
-    void SaveWireImage();
-
-    /**
      * Collects a unique list of all possible connection points in the schematic.
      *
      * @param aConnections vector of connections

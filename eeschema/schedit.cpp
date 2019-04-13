@@ -202,10 +202,8 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_SCH_BREAK_WIRE:
-        SaveWireImage();
         m_canvas->MoveCursorToCrossHair();
         BreakSegments( GetCrossHairPosition() );
-
         TestDanglingEnds();
         m_canvas->Refresh();
 
