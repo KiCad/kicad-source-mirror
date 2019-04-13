@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kicad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-13 09:48+0200\n"
-"PO-Revision-Date: 2019-04-13 10:01+0200\n"
+"POT-Creation-Date: 2019-04-13 10:32+0200\n"
+"PO-Revision-Date: 2019-04-13 10:33+0200\n"
 "Last-Translator: Kerusey Karyu <keruseykaryu@o2.pl>\n"
 "Language-Team: Polish KiCad Translators: Mateusz Skowroński, Krzysztof Kawa, "
 "Kerusey Karyu, Daniel Dawid Majewski\n"
@@ -4597,16 +4597,6 @@ msgid ""
 msgstr ""
 "Zarówno %s, jak i %s są powiązane z tym samym połączeniem. %s został wybrany "
 "jako nazwa na liście sieci."
-
-#: eeschema/connection_graph.cpp:858 eeschema/connection_graph.cpp:886
-#, c-format
-msgid "%s%u"
-msgstr "%s%u"
-
-#: eeschema/connection_graph.cpp:863 eeschema/connection_graph.cpp:892
-#, c-format
-msgid "%u"
-msgstr "%u"
 
 #: eeschema/connection_graph.cpp:1716
 #, c-format
@@ -10973,22 +10963,6 @@ msgstr "Kod sieci"
 msgid "Bus Alias %s Members"
 msgstr "Zawartość aliasu magistrali %s"
 
-#: eeschema/sch_connection.cpp:337
-msgid "Bus Code"
-msgstr "Kod magistrali"
-
-#: eeschema/sch_connection.cpp:340
-msgid "Subgraph Code"
-msgstr "Kod Subgraph"
-
-#: eeschema/sch_connection.cpp:345
-msgid "Connection Source"
-msgstr "Źródło połączenia"
-
-#: eeschema/sch_connection.cpp:349
-msgid "Attached To"
-msgstr "Dołączona do"
-
 #: eeschema/sch_eagle_plugin.cpp:385 pcbnew/eagle_plugin.cpp:243
 #: pcbnew/eagle_plugin.cpp:2333
 #, c-format
@@ -11224,24 +11198,6 @@ msgstr "Znacznik ERC"
 msgid "No Connect"
 msgstr "Niepołączone"
 
-#: eeschema/sch_pin.cpp:52
-#, c-format
-msgid "SCH_PIN for %s %s"
-msgstr "SCH_PIN for %s %s"
-
-#: eeschema/sch_pin.cpp:56
-#, c-format
-msgid "%s %s"
-msgstr "%s %s"
-
-#: eeschema/sch_pin.cpp:83
-msgid "-Pad"
-msgstr "-Pad"
-
-#: eeschema/sch_pin.cpp:83
-msgid ")"
-msgstr ")"
-
 #: eeschema/sch_plugin.cpp:154
 msgid "Enable <b>debug</b> logging for Symbol*() functions in this SCH_PLUGIN."
 msgstr "Włącz logowanie <b>debug</b> dla funkcji Symbol*() w tym SCH_PLUGIN."
@@ -11348,10 +11304,6 @@ msgstr "Trójstanowy"
 #: pcbnew/microwave.cpp:475
 msgid "Size"
 msgstr "Rozmiar"
-
-#: eeschema/sch_text.cpp:650
-msgid "Object Address"
-msgstr "Adres obietku"
 
 #: eeschema/sch_text.cpp:716
 #, c-format
@@ -24896,8 +24848,8 @@ msgid "&Drill Files (.drl)..."
 msgstr "Plik(i) wierceń (.drl)..."
 
 #: pcbnew/menubar_pcb_editor.cpp:874
-msgid "Generate excellon2 drill file(s)"
-msgstr "Tworzenie plików wierceń w formacie EXCELLON2"
+msgid "Generate Excellon drill file(s)"
+msgstr "Tworzenie plików wierceń w formacie Excellon"
 
 #: pcbnew/menubar_pcb_editor.cpp:878
 msgid "Footprint &Positions (.pos)..."
@@ -26889,11 +26841,11 @@ msgid "High contrast display mode"
 msgstr "Wyświetlaj w trybie wysokiego kontrastu"
 
 #: pcbnew/toolbars_update_user_interface.cpp:156
-msgid "Show ratlines as curves"
+msgid "Show airwires as curves"
 msgstr "Pokazuj nitki połączeniowe jako krzywe"
 
 #: pcbnew/toolbars_update_user_interface.cpp:157
-msgid "Show ratlines as straight lines"
+msgid "Show airwires as straight lines"
 msgstr "Pokaż nitki połączeniowe jako linie proste"
 
 #: pcbnew/tools/drawing_tool.cpp:70 pcbnew/tools/drawing_tool.cpp:1087
@@ -27909,3 +27861,36 @@ msgid ""
 msgstr ""
 "Lista ścieżek przeszukiwań modeli 3D jest pusta;\n"
 "Kontynuować zapisywanie pustego pliku?"
+
+#~ msgid "%s%u"
+#~ msgstr "%s%u"
+
+#~ msgid "%u"
+#~ msgstr "%u"
+
+#~ msgid "Bus Code"
+#~ msgstr "Kod magistrali"
+
+#~ msgid "Subgraph Code"
+#~ msgstr "Kod Subgraph"
+
+#~ msgid "Connection Source"
+#~ msgstr "Źródło połączenia"
+
+#~ msgid "Attached To"
+#~ msgstr "Dołączona do"
+
+#~ msgid "SCH_PIN for %s %s"
+#~ msgstr "SCH_PIN for %s %s"
+
+#~ msgid "%s %s"
+#~ msgstr "%s %s"
+
+#~ msgid "-Pad"
+#~ msgstr "-Pad"
+
+#~ msgid ")"
+#~ msgstr ")"
+
+#~ msgid "Object Address"
+#~ msgstr "Adres obietku"
