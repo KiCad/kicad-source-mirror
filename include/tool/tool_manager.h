@@ -372,6 +372,11 @@ public:
      */
     const KIGFX::VC_SETTINGS& GetCurrentToolVC() const;
 
+    /**
+     * Disables mouse warping after the current context menu is closed.
+     * Must be called before invoking each context menu.
+     * It's a good idea to call this from non-modal dialogs (e.g. DRC window).
+     */
     void VetoContextMenuMouseWarp()
     {
         m_warpMouseAfterContextMenu = false;

@@ -478,6 +478,7 @@ void DIALOG_DRC_CONTROL::doSelectionMenu( const DRC_ITEM* aItem )
     }
 
     WINDOW_THAWER thawer( m_brdEditor );
+    m_brdEditor->GetToolManager()->VetoContextMenuMouseWarp();
     m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionMenu, true, &items );
 
     // If we got an item, focus on it
