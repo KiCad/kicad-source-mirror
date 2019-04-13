@@ -148,11 +148,11 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_SWITCH_GRID_TO_NEXT:
-        SetNextGrid();
+        evt_type = ID_POPUP_GRID_NEXT;
         break;
 
     case HK_SWITCH_GRID_TO_PREVIOUS:
-        SetPrevGrid();
+        evt_type = ID_POPUP_GRID_PREV;
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:

@@ -61,6 +61,7 @@
 
 #include <menus_helpers.h>
 #include <wx/progdlg.h>
+#include <tool/tool_manager.h>
 #include <tool/context_menu.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -231,8 +232,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     SetCrossHairPosition( wxPoint( 0, 0 ) );
 
-    SetPresetGrid( m_LastGridSizeId );
-
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
     if( m_canvas )
@@ -267,6 +266,9 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.AddPane( m_canvas->GetWindow(), wxAuiPaneInfo().Name( "DrawFrame" ).CentrePane() );
 
     m_auimgr.Update();
+
+    setupTools();
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
 
     Raise();
     Show( true );

@@ -48,6 +48,7 @@
 #include <view/view_controls.h>
 #include <sch_painter.h>
 #include <confirm.h>
+#include <tool/tool_manager.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -141,8 +142,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    SetPresetGrid( m_LastGridSizeId );
-
     // Menu bar is not mandatory: uncomment/comment the next line
     // to add/remove the menubar
     ReCreateMenuBar();
@@ -189,12 +188,9 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.Update();
 
-    // Now Drawpanel is sized, we can use BestZoom to show the component (if any)
-#ifdef USE_WX_GRAPHICS_CONTEXT
-    GetScreen()->SetScalingFactor( BestZoom() );
-#else
-    Zoom_Automatique( false );
-#endif
+    setupTools();
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
+    GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
 
     if( !IsModal() )        // For modal mode, calling ShowModal() will show this frame
     {

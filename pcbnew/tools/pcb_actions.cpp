@@ -103,6 +103,12 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
     case ID_MODEDIT_PLACE_GRID_COORD:
         return ACTIONS::gridSetOrigin.MakeEvent();
 
+    case ID_POPUP_GRID_NEXT:
+        return ACTIONS::gridNext.MakeEvent();
+
+    case ID_POPUP_GRID_PREV:
+        return ACTIONS::gridPrev.MakeEvent();
+
     case ID_ZOOM_REDRAW:
     case ID_POPUP_ZOOM_REDRAW:
     case ID_VIEWER_ZOOM_REDRAW:

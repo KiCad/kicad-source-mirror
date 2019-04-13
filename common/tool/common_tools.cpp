@@ -336,28 +336,60 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 // Grid control
 int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetNextGrid();
-    updateGrid();
+    BASE_SCREEN * screen = m_frame->GetScreen();
 
-    return 0;
+    int new_grid_cmd = screen->GetGridCmdId();
+
+    // if the grid id is the not the last, increment it
+    if( screen->GridExists( new_grid_cmd + 1 ) )
+        new_grid_cmd += 1;
+
+    return doGridPreset( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
 }
 
 
 int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetPrevGrid();
-    updateGrid();
+    BASE_SCREEN * screen = m_frame->GetScreen();
 
-    return 0;
+    int new_grid_cmd = screen->GetGridCmdId();
+
+    // if the grid id is the not the first, increment it
+    if( screen->GridExists( new_grid_cmd - 1 ) )
+        new_grid_cmd -= 1;
+
+    return doGridPreset( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
 }
 
 
 int COMMON_TOOLS::GridPreset( const TOOL_EVENT& aEvent )
 {
-    long idx = aEvent.Parameter<intptr_t>();
+    return doGridPreset( aEvent.Parameter<intptr_t>() );
+}
 
-    m_frame->SetPresetGrid( idx );
-    updateGrid();
+
+int COMMON_TOOLS::doGridPreset( int idx )
+{
+    BASE_SCREEN* screen = m_frame->GetScreen();
+
+    if( !screen->GridExists( idx + ID_POPUP_GRID_LEVEL_1000 ) )
+        idx = 0;
+
+    screen->SetGrid( idx + ID_POPUP_GRID_LEVEL_1000 );
+
+    // Be sure m_LastGridSizeId is up to date.
+    m_frame->SetLastGridSizeId( idx );
+
+    // Update the combobox (if any)
+    wxUpdateUIEvent dummy;
+    m_frame->OnUpdateSelectGrid( dummy );
+
+    // Update GAL canvas from screen
+    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
+    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+
+    // Put cursor on new grid
+    m_frame->SetCrossHairPosition( m_frame->RefPos( true ) );
 
     return 0;
 }
@@ -415,9 +447,3 @@ void COMMON_TOOLS::setTransitions()
 }
 
 
-void COMMON_TOOLS::updateGrid()
-{
-    BASE_SCREEN* screen = m_frame->GetScreen();
-    getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
-    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-}

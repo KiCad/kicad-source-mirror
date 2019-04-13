@@ -77,8 +77,7 @@ private:
     ///> Note: idx == 0 is Auto; idx == 1 is first entry in zoomList
     int doZoomToPreset( int idx, bool aCenterOnCursor );
 
-    ///> Applies the legacy canvas grid settings for GAL.
-    void updateGrid();
+    int doGridPreset( int idx );
 };
 
 #endif

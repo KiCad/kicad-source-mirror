@@ -1075,17 +1075,8 @@ void PCB_BASE_FRAME::SetFastGrid1()
     if( m_FastGrid1 >= (int)GetScreen()->GetGridCount() )
         return;
 
-    int cmdId = GetScreen()->GetGrids()[m_FastGrid1].m_CmdId;
-    SetPresetGrid( cmdId - ID_POPUP_GRID_LEVEL_1000 );
-
-    if( m_gridSelectBox )
-    {
-        wxCommandEvent cmd( wxEVT_CHOICE );
-        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
-    }
-    else
-        GetCanvas()->Refresh();
+    int cmdId = GetScreen()->GetGrids()[m_FastGrid1].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, cmdId );
 }
 
 
@@ -1094,46 +1085,8 @@ void PCB_BASE_FRAME::SetFastGrid2()
     if( m_FastGrid2 >= (int)GetScreen()->GetGridCount() )
         return;
 
-    int cmdId = GetScreen()->GetGrids()[m_FastGrid2].m_CmdId;
-    SetPresetGrid( cmdId - ID_POPUP_GRID_LEVEL_1000 );
-
-    if( m_gridSelectBox )
-    {
-        wxCommandEvent cmd( wxEVT_CHOICE );
-        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
-    }
-    else
-        GetCanvas()->Refresh();
-}
-
-void PCB_BASE_FRAME::SetNextGrid()
-{
-    EDA_DRAW_FRAME::SetNextGrid();
-
-    if( m_gridSelectBox )
-    {
-        wxCommandEvent cmd( wxEVT_CHOICE );
-        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
-    }
-    else
-        GetCanvas()->Refresh();
-}
-
-
-void PCB_BASE_FRAME::SetPrevGrid()
-{
-    EDA_DRAW_FRAME::SetPrevGrid();
-
-    if( m_gridSelectBox )
-    {
-        wxCommandEvent cmd( wxEVT_CHOICE );
-        cmd.SetEventObject( this );
-        OnSelectGrid( cmd );
-    }
-    else
-        GetCanvas()->Refresh();
+    int cmdId = GetScreen()->GetGrids()[m_FastGrid2].m_CmdId - ID_POPUP_GRID_LEVEL_1000;
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, cmdId );
 }
 
 

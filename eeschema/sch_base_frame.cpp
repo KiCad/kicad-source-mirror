@@ -37,6 +37,9 @@
 #include <sch_base_frame.h>
 #include <symbol_lib_table.h>
 #include <dialog_configure_paths.h>
+#include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tools/sch_actions.h>
 
 #include "dialogs/panel_sym_lib_table.h"
 
@@ -104,6 +107,22 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
 
 SCH_BASE_FRAME::~SCH_BASE_FRAME()
 {
+}
+
+
+void SCH_BASE_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
+    m_actions = new SCH_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->InitTools();
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 
 

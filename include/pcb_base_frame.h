@@ -599,18 +599,6 @@ public:
      */
     void SetFastGrid2();
 
-    /**
-     * Virtual function SetNextGrid()
-     * changes the grid size settings to the next one available.
-     */
-    void SetNextGrid() override;
-
-    /**
-     * Virtual function SetPrevGrid()
-     * changes the grid size settings to the previous one available.
-     */
-    void SetPrevGrid() override;
-
     ///> @copydoc EDA_DRAW_FRAME::UseGalCanvas
     virtual void UseGalCanvas( bool aEnable ) override;
 

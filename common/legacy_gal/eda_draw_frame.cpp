@@ -63,6 +63,7 @@
 #include <page_info.h>
 #include <title_block.h>
 #include <advanced_config.h>
+#include <eeschema/tools/sch_actions.h>
 
 /**
  * Definition for enabling and disabling scroll bar setting trace output.  See the
@@ -522,7 +523,7 @@ void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 
     int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
 
-    SetPresetGrid( idx );
+    GetToolManager()->RunAction( "common.Control.gridPreset", true, idx );
 }
 
 
@@ -621,69 +622,6 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
         pos = GetNearestGridPosition( aPosition );
 
     return pos;
-}
-
-
-void EDA_DRAW_FRAME::SetNextGrid()
-{
-    BASE_SCREEN * screen = GetScreen();
-
-    int new_grid_cmd = screen->GetGridCmdId();
-
-    // if the grid id is the not the last, increment it
-    if( screen->GridExists( new_grid_cmd + 1 ) )
-        new_grid_cmd += 1;
-
-   SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
-}
-
-
-void EDA_DRAW_FRAME::SetPrevGrid()
-{
-    BASE_SCREEN * screen = GetScreen();
-
-    int new_grid_cmd = screen->GetGridCmdId();
-
-    // if the grid id is the not the first, increment it
-    if( screen->GridExists( new_grid_cmd - 1 ) )
-        new_grid_cmd -= 1;
-
-    SetPresetGrid( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
-}
-
-
-void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
-{
-    BASE_SCREEN* screen = GetScreen();
-    KIGFX::VIEW* view = GetGalCanvas()->GetView();
-
-    if( ! screen->GridExists( aIndex + ID_POPUP_GRID_LEVEL_1000 ) )
-        aIndex = 0;
-
-    // aIndex is a Command Id relative to ID_POPUP_GRID_LEVEL_1000 comand id code.
-    // we need an index in grid list (the cmd id in list is is screen->GetGrids()[0].m_CmdId):
-    int glistIdx = aIndex + ID_POPUP_GRID_LEVEL_1000 - screen->GetGrids()[0].m_CmdId;
-
-    if( m_gridSelectBox )
-    {
-        if( glistIdx < 0 || glistIdx >= (int) m_gridSelectBox->GetCount() )
-        {
-            wxASSERT_MSG( false, "Invalid grid index" );
-            return;
-        }
-
-        m_gridSelectBox->SetSelection( glistIdx );
-    }
-
-    // Be sure m_LastGridSizeId is up to date.
-    m_LastGridSizeId = aIndex;
-
-    screen->SetGrid( aIndex + ID_POPUP_GRID_LEVEL_1000 );
-    view->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
-    view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-
-    // Put cursor on new grid
-    SetCrossHairPosition( RefPos( true ) );
 }
 
 

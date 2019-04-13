@@ -207,8 +207,8 @@ enum main_id
     ID_POPUP_ZOOM_END_RANGE,         // last zoom id
 
     ID_ON_GRID_SELECT,
-    ID_POPUP_GRID_PLUS,
-    ID_POPUP_GRID_MOINS,
+    ID_POPUP_GRID_NEXT,
+    ID_POPUP_GRID_PREV,
     ID_POPUP_GRID_SELECT,
     ID_POPUP_GRID_LEVEL_1000,       // id for first predefined grid in inches (1000 * 0.0001 inch)
     ID_POPUP_GRID_LEVEL_500,

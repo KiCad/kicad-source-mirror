@@ -60,6 +60,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_ZOOM_SELECTION:
         return ACTIONS::zoomTool.MakeEvent();
+
+    case ID_POPUP_GRID_NEXT:
+        return ACTIONS::gridNext.MakeEvent();
+
+    case ID_POPUP_GRID_PREV:
+        return ACTIONS::gridPrev.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
