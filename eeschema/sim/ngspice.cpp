@@ -287,13 +287,10 @@ void NGSPICE::init_dll()
         m_dll.Unload();
 
 // Extra effort to find libngspice
-#if defined(__WINDOWS__) || (__WXMAC__)
-#ifdef __WINDOWS__
     wxFileName dllFile( "", NGSPICE_DLL_FILE );
+#if defined(__WINDOWS__)
     const vector<string> dllPaths = { "", "/mingw64/bin", "/mingw32/bin" };
-#endif /* __WINDOWS__ */
-#ifdef __WXMAC__
-    wxFileName dllFile( "", NGSPICE_DLL_FILE );
+#elif defined(__WXMAC__)
     const vector<string> dllPaths = {
         GetOSXKicadUserDataDir() + "/PlugIns/ngspice",
         GetOSXKicadMachineDataDir() + "/PlugIns/ngspice",
@@ -302,8 +299,11 @@ void NGSPICE::init_dll()
         // when running eeschema.app
         wxFileName( stdPaths.GetExecutablePath() ).GetPath() + "/../../../../../Contents/PlugIns/sim"
     };
-#endif /* __WXMAC__ */
+#else   // Unix systems
+    const vector<string> dllPaths = { "/usr/local/lib" };
+#endif
 
+#if defined(__WINDOWS__) || (__WXMAC__)
     for( const auto& path : dllPaths )
     {
         dllFile.SetPath( path );
@@ -319,9 +319,28 @@ void NGSPICE::init_dll()
 
     if( !m_dll.IsLoaded() ) // try also the system libraries
         m_dll.Load( wxDynamicLibrary::CanonicalizeName( "ngspice" ) );
-#else
-    m_dll.Load( NGSPICE_DLL_FILE );
-#endif /* __WINDOWS || __WXMAC__ */
+
+#else   // here: __LINUX__
+    // First, try the system libraries
+    m_dll.Load( NGSPICE_DLL_FILE, wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
+
+    // If failed, try some other paths:
+    if( !m_dll.IsLoaded() )
+    {
+        for( const auto& path : dllPaths )
+        {
+            dllFile.SetPath( path );
+            wxLogTrace( traceNgspice, "libngspice search path: %s", dllFile.GetFullPath() );
+            m_dll.Load( dllFile.GetFullPath(), wxDL_VERBATIM | wxDL_QUIET | wxDL_NOW );
+
+            if( m_dll.IsLoaded() )
+            {
+                wxLogTrace( traceNgspice, "libngspice path found in: %s", dllFile.GetFullPath() );
+                break;
+            }
+        }
+    }
+#endif
 
     if( !m_dll.IsLoaded() )
         throw std::runtime_error( "Missing ngspice shared library" );
