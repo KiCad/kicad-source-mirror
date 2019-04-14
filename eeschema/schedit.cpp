@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file schedit.cpp
- */
-
 #include <fctsys.h>
 #include <kiway.h>
 #include <gr_basic.h>
@@ -369,8 +365,6 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    // End switch ( id )    (Command execution)
-
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         SetRepeatItem( NULL );
 }
@@ -451,16 +445,54 @@ void SCH_EDIT_FRAME::FinishBusUnfold()
 }
 
 
+void SCH_EDIT_FRAME::OnDuplicateItem( wxCommandEvent& event )
+{
+    SCH_ITEM* curr_item = GetScreen()->GetCurItem();
+
+    if( !curr_item || curr_item->GetFlags() )
+        return;
+
+    GetCanvas()->GetViewControls()->SetCursorPosition( GetCrossHairPosition() );
+
+    switch( curr_item->Type() )
+    {
+    case SCH_COMPONENT_T:
+    {
+         SCH_COMPONENT* newitem = new SCH_COMPONENT( *( (SCH_COMPONENT*) curr_item ) );
+         newitem->SetTimeStamp( GetNewTimeStamp() );
+         newitem->ClearAnnotation( NULL );
+         newitem->SetFlags( IS_NEW );
+         // Draw the new part, MoveItem() expects it to be already on screen.
+         PrepareMoveItem( newitem );
+    }
+        break;
+
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIERARCHICAL_LABEL_T:
+    {
+        SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
+        newitem->SetFlags( IS_NEW );
+        // Draw the new item, MoveItem() expects it to be already on screen.
+        PrepareMoveItem( newitem );
+    }
+        break;
+
+    default:
+        break;
+    }
+}
+
+
 void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 {
     SCH_SCREEN* screen = GetScreen();
     SCH_ITEM*   item = screen->GetCurItem();
 
+    // trying to move an item when there is a block at the same time is not acceptable
     if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-    {
-        // trying to move an item when there is a block at the same time is not acceptable
         return;
-    }
 
     if( item == NULL )
     {
@@ -560,12 +592,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetNoToolSelected();
         break;
 
-    case ID_HIGHLIGHT:
+    case ID_HIGHLIGHT_BUTT:
         // TODO(JE) remove once real-time connectivity is a given
         if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
             RecalculateConnections();
 
-        SetToolID( ID_HIGHLIGHT, wxCURSOR_HAND, _("Highlight specific net") );
+        SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _("Highlight specific net") );
         break;
 
     case ID_MENU_ZOOM_SELECTION:
@@ -852,11 +884,8 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
     if( aItem->Type() == SCH_SHEET_PIN_T || aItem->Type() == SCH_FIELD_T )
         RefreshItem( aItem );
 
-    // For some items, moving the cursor to anchor is not good
-    // (for instance large hierarchical sheets od componants can have
-    // the anchor position outside the canvas)
-    // these items return IsMovableFromAnchorPoint() == false
-    // For these items, do not warp the cursor
+    // For some items, moving the cursor to anchor is not good (for instance large
+    // hierarchical sheets or components can have the anchor outside the view)
     if( aItem->IsMovableFromAnchorPoint() )
     {
         SetCrossHairPosition( aItem->GetPosition() );
@@ -1468,8 +1497,7 @@ void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
             }
             else
             {
-                bus_unfolding_menu->Append( id, member->Name(),
-                                            wxEmptyString );
+                bus_unfolding_menu->Append( id, member->Name(), wxEmptyString );
 
                 // Because Bind() takes ownership of the user data item, we
                 // make a new menu item here and set its label.  Why create a

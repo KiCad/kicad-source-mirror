@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2008-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2008-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema_id.h
- */
-
 #ifndef __EESCHEMA_ID_H__
 #define __EESCHEMA_ID_H__
-
 
 #include <id.h>
 
@@ -82,7 +77,7 @@ enum id_eeschema_frm
 
     /* Schematic editor vertical toolbar IDs */
     ID_SCHEMATIC_VERTICAL_TOOLBAR_START,
-    ID_HIGHLIGHT,
+    ID_HIGHLIGHT_BUTT,
     ID_SCH_PLACE_COMPONENT,
     ID_PLACE_POWER_BUTT,
     ID_BUS_BUTT,
@@ -214,6 +209,7 @@ enum id_eeschema_frm
     ID_CANCEL_CURRENT_COMMAND,
 
     ID_HOTKEY_HIGHLIGHT,
+    ID_HIGHLIGHT_NET,
 
     /* Library editor: edit events */
     ID_LIBEDIT_NEW_LIBRARY,
@@ -240,9 +236,7 @@ enum id_eeschema_frm
     ID_LIBEDIT_VIEW_DOC,
     ID_LIBEDIT_CHECK_PART,
     ID_LIBEDIT_GET_FRAME_EDIT_PART,
-
     ID_LIBEDIT_SELECT_PART_NUMBER,
-    ID_LIBEDIT_SELECT_ALIAS,
 
     /* Library editor vertical toolbar IDs. */
     ID_LIBEDIT_PIN_BUTT,
@@ -295,8 +289,6 @@ enum id_eeschema_frm
     ID_LIBVIEW_SELECT_PART_NUMBER,
     ID_LIBVIEW_LIB_LIST,
     ID_LIBVIEW_CMP_LIST,
-    ID_LIBVIEW_LIBWINDOW,
-    ID_LIBVIEW_CMPWINDOW,
     ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
     ID_SET_RELATIVE_OFFSET,
     ID_LIBVIEW_SHOW_ELECTRICAL_TYPE,

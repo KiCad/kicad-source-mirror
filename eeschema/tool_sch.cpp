@@ -195,7 +195,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
                             HELP_SELECT, wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_HIGHLIGHT, wxEmptyString,
+    m_drawToolBar->AddTool( ID_HIGHLIGHT_BUTT, wxEmptyString,
                             KiScaledBitmap( net_highlight_schematic_xpm, this ),
                             HELP_HIGHLIGHT, wxITEM_CHECK );
 

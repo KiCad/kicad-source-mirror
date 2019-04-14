@@ -158,14 +158,13 @@ set( EESCHEMA_SRCS
     eeschema.cpp
     eeschema_config.cpp
     erc.cpp
-    events_called_functions_for_edit.cpp
     fields_grid_table.cpp
     files-io.cpp
     find.cpp
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp
-    highlight_connection.cpp
+    tools/sch_editor_control.cpp
     hotkeys.cpp
     lib_arc.cpp
     lib_bezier.cpp
@@ -244,7 +243,8 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_pspice.cpp
 
     tools/sch_actions.cpp
-    tools/tools_common.cpp
+    tools/sch_picker_tool.cpp
+    tools/selection.cpp
     )
 
 

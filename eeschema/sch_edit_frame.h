@@ -459,17 +459,6 @@ public:
 
 
     /**
-     * Highlight the connection found at aPosition.
-     *
-     * If no connection to highlight is found, clear the current highlighted connect (if any).
-     *
-     * @param aPosition is the location of the test point (usually cross hair position).
-     * @return true if OK, false if there was an issue to build the netlist
-     * needed to highlight a connection.
-     */
-    bool HighlightConnectionAtPosition( wxPoint aPosition );
-
-    /**
      * Finds a component in the schematic and an item in this component.
      *
      * @param aReference The component reference designator to find.
@@ -541,11 +530,14 @@ public:
     void SendMessageToPCBNEW( EDA_ITEM* aObjectToSync, SCH_COMPONENT* aPart );
 
     /**
-     * Sends a net name to eeschema for highlighting
+     * Sends a net name to pcbnew for highlighting
      *
      * @param aNetName is the name of a net, or empty string to clear highlight
      */
     void SendCrossProbeNetName( const wxString& aNetName );
+
+    const wxString& GetSelectedNetName() const { return m_SelectedNetName; }
+    void SetSelectedNetName( const wxString& aNetName ) { m_SelectedNetName = aNetName; }
 
     /**
      * Create a flat list which stores all connected objects.
@@ -679,18 +671,6 @@ public:
      * and any other local parameter related to the page settings.
      */
     void OnPageSettingsChange() override;
-
-    /**
-     * Set or reset the BRIGHTENED of connected objects inside the current sheet,
-     * according to the highlighted net name.
-     *
-     * @param aItemsToRedrawList is the list of modified items (flag BRIGHTENED modified)
-     * that must be redrawn.
-     * Can be NULL
-     * @return true if the flags are correctly set, and false if something goes wrong
-     * (duplicate sheet names)
-     */
-    bool SetCurrentSheetHighlightFlags( std::vector<EDA_ITEM*>* aItemsToRedrawList );
 
     /**
      * @return a filename that can be used in plot and print functions
@@ -953,7 +933,7 @@ private:
     /**
      * Command event handler for duplicating the item at the current location.
      */
-    void OnCopySchematicItemRequest( wxCommandEvent& event );
+    void OnDuplicateItem( wxCommandEvent& event );
 
     /* User interface update event handlers. */
     void OnUpdatePaste( wxUpdateUIEvent& event );

@@ -343,7 +343,6 @@ set( PCBNEW_CLASS_SRCS
     tools/selection.cpp
     tools/selection_tool.cpp
     tools/tool_event_utils.cpp
-    tools/tools_common.cpp
     tools/zone_create_helper.cpp
     tools/zone_filler_tool.cpp
 

@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/cross-probing.cpp
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
@@ -34,7 +30,7 @@
 #include <macros.h>
 #include <eda_dde.h>
 #include <sch_draw_panel.h>
-
+#include <tool/tool_manager.h>
 #include <sch_edit_frame.h>
 #include <general.h>
 #include <eeschema_id.h>
@@ -45,6 +41,7 @@
 #include <sch_view.h>
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
+#include <tools/sch_actions.h>
 
 /**
  * Execute a remote command sent by Pcbnew via a socket connection.
@@ -79,22 +76,13 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
     if( strcmp( idcmd, "$NET:" ) == 0 )
     {
-        if( GetToolId() == ID_HIGHLIGHT )
+        if( GetToolId() == ID_HIGHLIGHT_BUTT )
         {
             m_SelectedNetName = FROM_UTF8( text );
 
             SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
-            std::vector<EDA_ITEM*> itemsToRedraw;
-            SetCurrentSheetHighlightFlags( &itemsToRedraw );
 
-            // Be sure hightlight change will be redrawn
-            KIGFX::VIEW* view = GetGalCanvas()->GetView();
-
-            for( auto item : itemsToRedraw )
-                view->Update( (KIGFX::VIEW_ITEM*)item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
-
-            //view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-            GetGalCanvas()->Refresh();
+            GetToolManager()->RunAction( SCH_ACTIONS::highlightNetSelection, true );
         }
 
         return;

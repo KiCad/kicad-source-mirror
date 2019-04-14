@@ -698,7 +698,6 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_DELETE_TOOL : ID_PCB_DELETE_ITEM_BUTT,
             wxCURSOR_BULLSEYE, _( "Delete item" ) );
-    picker->SetSnapping( false );
     picker->SetClickHandler( std::bind( deleteItem, m_toolMgr, _1 ) );
     picker->Activate();
     Wait();

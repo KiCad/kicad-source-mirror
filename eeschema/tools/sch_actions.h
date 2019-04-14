@@ -61,19 +61,6 @@ public:
     /// Runs a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
-    // Display modes
-    static TOOL_ACTION ratsnestLineMode;
-    static TOOL_ACTION trackDisplayMode;
-    static TOOL_ACTION padDisplayMode;
-    static TOOL_ACTION viaDisplayMode;
-    static TOOL_ACTION graphicDisplayMode;
-    static TOOL_ACTION zoneDisplayEnable;
-    static TOOL_ACTION zoneDisplayDisable;
-    static TOOL_ACTION zoneDisplayOutlines;
-    static TOOL_ACTION highContrastMode;
-    static TOOL_ACTION highContrastInc;
-    static TOOL_ACTION highContrastDec;
-
     /* Can we share these with PCBNew?
     // Layer control
     static TOOL_ACTION layerTop;
@@ -110,10 +97,11 @@ public:
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;
     static TOOL_ACTION deleteItemCursor;
-    static TOOL_ACTION clearHighlight;
+
+    // Net highlighting
     static TOOL_ACTION highlightNet;
-    static TOOL_ACTION highlightNetCursor;
     static TOOL_ACTION highlightNetSelection;
+    static TOOL_ACTION highlightNetCursor;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;

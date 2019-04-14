@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,39 +21,32 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "picker_tool.h"
-#include "pcb_actions.h"
-#include "grid_helper.h"
+#include <sch_picker_tool.h>
+#include <sch_actions.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
-#include "tool_event_utils.h"
-#include "selection_tool.h"
+#include <sch_base_frame.h>
 
-TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+TOOL_ACTION SCH_ACTIONS::pickerTool( "eeschema.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 
-PICKER_TOOL::PICKER_TOOL()
-    : PCB_TOOL( "pcbnew.Picker" )
+SCH_PICKER_TOOL::SCH_PICKER_TOOL()
+    : TOOL_INTERACTIVE( "eeschema.Picker" )
 {
     reset();
 }
 
 
-int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+int SCH_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    GRID_HELPER grid( frame() );
     int finalize_state = WAIT_CANCEL;
 
     setControls();
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        grid.SetSnap( !evt->Modifier( MD_SHIFT ) );
-        grid.SetUseGrid( !evt->Modifier( MD_ALT ) );
-        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-        VECTOR2I cursorPos = grid.BestSnapAnchor( controls->GetMousePosition(), nullptr );
-        controls->ForceCursorPosition(true, cursorPos );
+        VECTOR2I cursorPos = controls->GetCursorPosition( true );
 
         if( evt->IsClick( BUT_LEFT ) )
         {
@@ -70,7 +62,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    std::cerr << "SCH_PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -85,7 +77,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
+        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
         {
             if( m_cancelHandler )
             {
@@ -95,7 +87,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                    std::cerr << "SCH_PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
@@ -107,12 +99,15 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break;
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
-            m_menu.ShowContextMenu();
-
+        {
+            // TODO...
+            // m_menu.ShowContextMenu();
+        }
         else
+        {
             m_toolMgr->PassEvent();
+        }
     }
 
     if( m_finalizeHandler )
@@ -123,29 +118,28 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         catch( std::exception& e )
         {
-            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+            std::cerr << "SCH_PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 
     reset();
     controls->ForceCursorPosition( false );
-    getEditFrame<PCB_BASE_FRAME>()->SetNoToolSelected();
+    getEditFrame<SCH_BASE_FRAME>()->SetNoToolSelected();
 
     return 0;
 }
 
 
-void PICKER_TOOL::setTransitions()
+void SCH_PICKER_TOOL::setTransitions()
 {
-    Go( &PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
+    Go( &SCH_PICKER_TOOL::Main, SCH_ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void PICKER_TOOL::reset()
+void SCH_PICKER_TOOL::reset()
 {
     m_cursorCapture = false;
     m_autoPanning = false;
-    m_layerMask = LSET::AllLayersMask();
 
     m_picked = NULLOPT;
     m_clickHandler = NULLOPT;
@@ -154,12 +148,9 @@ void PICKER_TOOL::reset()
 }
 
 
-void PICKER_TOOL::setControls()
+void SCH_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    // Ensure that the view controls do not handle our snapping as we use the GRID_HELPER
-    controls->SetSnapping( false );
 
     controls->CaptureCursor( m_cursorCapture );
     controls->SetAutoPan( m_autoPanning );

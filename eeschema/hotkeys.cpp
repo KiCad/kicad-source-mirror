@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file eeschema/hotkeys.cpp
  */
 
 #include <fctsys.h>
@@ -86,8 +82,7 @@
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkZoomAuto( _HKI( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME, ID_ZOOM_PAGE );
 #else
-static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0',
-                              ID_ZOOM_PAGE );
+static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0', ID_ZOOM_PAGE );
 #endif
 
 static EDA_HOTKEY HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
@@ -161,8 +156,7 @@ static EDA_HOTKEY HkOrientNormalComponent( _HKI( "Orient Normal Component" ),
                                            HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
 static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_CLOCKWISE );
 static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
-static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Symbol Value" ),
-                                        HK_EDIT_COMPONENT_VALUE, 'V',
+static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V',
                                         ID_SCH_EDIT_COMPONENT_VALUE );
 static EDA_HOTKEY HkEditComponentReference( _HKI( "Edit Symbol Reference" ),
                                         HK_EDIT_COMPONENT_REFERENCE, 'U',
@@ -177,8 +171,7 @@ static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
                                               ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 
-static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ),
-                          HK_MOVE_COMPONENT_OR_ITEM, 'M',
+static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
 
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Symbol or Label" ),
@@ -221,8 +214,7 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D',
-                               ID_SCH_UNFOLD_BUS );
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D', ID_SCH_UNFOLD_BUS );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
@@ -237,9 +229,7 @@ static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO,
-                       GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                       (int) wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFTCTRL + 'Z', (int) wxID_REDO );
 #endif
 
 static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int) wxID_CUT );
@@ -479,7 +469,10 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case ID_HOTKEY_HIGHLIGHT:
         if( notBusy )
-            HighlightConnectionAtPosition( GetCrossHairPosition() );
+        {
+            cmd.SetId( ID_HIGHLIGHT_NET );
+            GetEventHandler()->ProcessEvent( cmd );
+        }
         break;
 
     case HK_LEFT_CLICK:

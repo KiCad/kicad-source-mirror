@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file hierarch.cpp
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
@@ -41,7 +37,8 @@
 
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
-
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <netlist_object.h>
 #include <sch_sheet_path.h>
 
@@ -91,8 +88,7 @@ HIERARCHY_TREE::HIERARCHY_TREE( HIERARCHY_NAVIG_DLG* parent ) :
     // Make an image list containing small icons
     // All icons are expected having the same size.
     wxBitmap tree_nosel_bm( KiBitmap( tree_nosel_xpm ) );
-    imageList = new wxImageList( tree_nosel_bm.GetWidth(),
-                                 tree_nosel_bm.GetHeight(), true, 2 );
+    imageList = new wxImageList( tree_nosel_bm.GetWidth(), tree_nosel_bm.GetHeight(), true, 2 );
 
     imageList->Add( tree_nosel_bm );
     imageList->Add( KiBitmap( tree_sel_xpm ) );
@@ -115,9 +111,6 @@ public:
     HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos );
 
     ~HIERARCHY_NAVIG_DLG();
-
-    // Select the sheet currently selected in the tree, and close the dialog
-    void SelectNewSheetAndQuit();
 
 private:
     /**
@@ -158,8 +151,7 @@ HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint
     m_nbsheets = 1;
 
     // root is the link to the main sheet.
-    wxTreeItemId root;
-    root = m_Tree->AddRoot( _( "Root" ), 0, 1 );
+    wxTreeItemId root = m_Tree->AddRoot( _( "Root" ), 0, 1 );
     m_Tree->SetItemBold( root, true );
 
     SCH_SHEET_PATH list;
@@ -292,10 +284,8 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
         RedrawScreen( GetScrollCenterPosition(), false );
     }
 
-    // Some items (wires, labels) can be highlighted. So prepare the highlight flag:
-    SetCurrentSheetHighlightFlags( nullptr );
-
     UpdateTitle();
 
+    GetToolManager()->RunAction( SCH_ACTIONS::highlightNetSelection, true );
     GetCanvas()->Refresh();
 }

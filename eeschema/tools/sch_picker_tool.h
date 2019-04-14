@@ -1,8 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2015 CERN
- * @author Maciej Suminski <maciej.suminski@cern.ch>
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,20 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef PICKER_TOOL_H
-#define PICKER_TOOL_H
+#ifndef SCH_PICKER_TOOL_H
+#define SCH_PICKER_TOOL_H
 
 #include <boost/optional/optional.hpp>
 
-#include "pcb_tool.h"
-/**
- * @brief Generic tool for picking a point.
- */
-class PICKER_TOOL : public PCB_TOOL
+#include <tool/tool_interactive.h>
+
+
+class SCH_PICKER_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    PICKER_TOOL();
-    ~PICKER_TOOL() {}
+    SCH_PICKER_TOOL();
+    ~SCH_PICKER_TOOL() {}
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;
@@ -68,12 +66,6 @@ public:
      * Toggles cursor capture mode for the period when the tool is active.
      */
     inline void SetCursorCapture( bool aEnable ) { m_cursorCapture = aEnable; }
-
-    /**
-     * Function SetLayerSet()
-     * Sets the tool's snap layer set
-     */
-    inline void SetLayerSet( LSET aLayerSet ) { m_layerMask = aLayerSet; }
 
     /**
      * Function SetClickHandler()
@@ -113,9 +105,6 @@ private:
     bool m_cursorCapture;
     bool m_autoPanning;
 
-    ///> The layer set to use for optional snapping
-    LSET m_layerMask;
-
     OPT<CLICK_HANDLER> m_clickHandler;
     OPT<CANCEL_HANDLER> m_cancelHandler;
     OPT<FINALIZE_HANDLER> m_finalizeHandler;
@@ -129,4 +118,4 @@ private:
     void setControls();
 };
 
-#endif /* PICKER_TOOL_H */
+#endif /* SCH_PICKER_TOOL_H */

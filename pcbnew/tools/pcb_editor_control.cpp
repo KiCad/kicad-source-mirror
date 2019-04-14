@@ -1172,7 +1172,6 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
         }
         } );
 
-    picker->SetSnapping( false );
     picker->Activate();
     Wait();
 

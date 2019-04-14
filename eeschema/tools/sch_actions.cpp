@@ -23,9 +23,12 @@
 
 #include <common.h>
 #include <eeschema_id.h>
+#include <tool/tool_manager.h>
+#include <tool/common_tools.h>
+#include <tools/sch_editor_control.h>
+#include <tools/sch_picker_tool.h>
 
 #include <sch_actions.h>
-
 
 OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 {
@@ -66,7 +69,21 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_GRID_PREV:
         return ACTIONS::gridPrev.MakeEvent();
+
+    case ID_HIGHLIGHT_BUTT:
+        return SCH_ACTIONS::highlightNetCursor.MakeEvent();
+
+    case ID_HIGHLIGHT_NET:
+        return SCH_ACTIONS::highlightNet.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
+}
+
+
+void SCH_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
+{
+    aToolManager->RegisterTool( new COMMON_TOOLS );
+    aToolManager->RegisterTool( new SCH_EDITOR_CONTROL );
+    aToolManager->RegisterTool( new SCH_PICKER_TOOL );
 }
