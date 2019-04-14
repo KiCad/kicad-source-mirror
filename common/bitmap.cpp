@@ -220,34 +220,39 @@ bool SaveCanvasImageToFile( EDA_DRAW_FRAME* aFrame, const wxString& aFileName,
 }
 
 
-wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
-                         const wxBitmap& aImage, wxItemKind aType = wxITEM_NORMAL )
+void AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage )
 {
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
-
     // Retrieve the global applicaton show icon option:
     bool useImagesInMenus;
     Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
 
+    wxItemKind menu_type = aMenu->GetKind();
+
     if( useImagesInMenus )
     {
-        if( aType == wxITEM_CHECK || aType == wxITEM_RADIO )
+        if( menu_type == wxITEM_CHECK || menu_type == wxITEM_RADIO )
         {
     #if defined(  __WINDOWS__ )
-            item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
+            aMenu->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
             // A workaround to a strange bug on Windows, wx Widgets 3.0:
             // size of bitmaps is not taken in account for wxITEM_{CHECK,RADIO} menu
             // unless we call SetFont
-            item->SetFont( *wxNORMAL_FONT );
+            aMenu->SetFont( *wxNORMAL_FONT );
     #endif
         }
-        else if( aType != wxITEM_RADIO )
+        else if( menu_type != wxITEM_RADIO )
         {
-            item->SetBitmap( aImage );
+            aMenu->SetBitmap( aImage );
         }
     }
+}
+
+
+wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
+                         const wxBitmap& aImage, wxItemKind aType = wxITEM_NORMAL )
+{
+    wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, wxEmptyString, aType );
+    AddBitmapToMenuItem( item, aImage );
 
     aMenu->Append( item );
 
@@ -259,31 +264,8 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
                          const wxString& aHelpText, const wxBitmap& aImage,
                          wxItemKind aType = wxITEM_NORMAL )
 {
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
-
-    // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
-
-    if( useImagesInMenus )
-    {
-        if( aType == wxITEM_CHECK || aType == wxITEM_RADIO )
-        {
-    #if defined(  __WINDOWS__ )
-            item->SetBitmaps( KiBitmap( checked_ok_xpm ), aImage );
-            // A workaround to a strange bug on Windows, wx Widgets 3.0:
-            // size of bitmaps is not taken in account for wxITEM_{CHECK,RADIO} menu
-            // unless we call SetFont
-            item->SetFont( *wxNORMAL_FONT );
-    #endif
-        }
-        else if( aType != wxITEM_RADIO )
-        {
-            item->SetBitmap( aImage );
-        }
-    }
+    wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, aHelpText, aType );
+    AddBitmapToMenuItem( item, aImage );
 
     aMenu->Append( item );
 
@@ -294,17 +276,9 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, int aId, const wxString& aText,
 wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
                          const wxString& aText, const wxBitmap& aImage )
 {
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText );
+    wxMenuItem* item = new wxMenuItem( aMenu, aId, aText );
     item->SetSubMenu( aSubMenu );
-
-    // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
-
-    if( useImagesInMenus )
-        item->SetBitmap( aImage );
+    AddBitmapToMenuItem( item, aImage );
 
     aMenu->Append( item );
 
@@ -316,17 +290,9 @@ wxMenuItem* AddMenuItem( wxMenu* aMenu, wxMenu* aSubMenu, int aId,
                          const wxString& aText, const wxString& aHelpText,
                          const wxBitmap& aImage )
 {
-    wxMenuItem* item;
-
-    item = new wxMenuItem( aMenu, aId, aText, aHelpText );
+    wxMenuItem* item = new wxMenuItem( aMenu, aId, aText, aHelpText );
     item->SetSubMenu( aSubMenu );
-
-    // Retrieve the global applicaton show icon option:
-    bool useImagesInMenus;
-    Pgm().CommonSettings()->Read( USE_ICONS_IN_MENUS_KEY, &useImagesInMenus );
-
-    if( useImagesInMenus )
-        item->SetBitmap( aImage );
+    AddBitmapToMenuItem( item, aImage );
 
     aMenu->Append( item );
 

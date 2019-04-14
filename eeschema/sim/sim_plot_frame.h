@@ -165,6 +165,10 @@ private:
     void LoadSettings( wxConfigBase* aCfg ) override;
     void SaveSettings( wxConfigBase* aCfg ) override;
 
+    /** Give icons to menuitems of the main menubar
+     */
+    void setIconsForMenuItems();
+
     /**
      * @brief Adds a new plot to the current panel.
      * @param aName is the device/net name.

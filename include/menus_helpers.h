@@ -35,6 +35,15 @@
 #include <wx/menuitem.h>
 #include <bitmaps.h>
 
+/**
+ * Add a bitmap to a menuitem
+ * @param aMenu is the menuitem.
+ * @param aImage is the icon to add to aMenu.
+ * It is added only if use images in menus config option allows it.
+ * For wxITEM_CHECK or wxITEM_RADIO menuitems, the bitmap is added only
+ * on Windows, other platforms do not support it
+ */
+void AddBitmapToMenuItem( wxMenuItem* aMenu, const wxBitmap& aImage );
 
 
 /**

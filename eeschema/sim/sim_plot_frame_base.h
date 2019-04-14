@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Jun  5 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __SIM_PLOT_FRAME_BASE_H__
-#define __SIM_PLOT_FRAME_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
@@ -34,6 +33,16 @@
 
 ///////////////////////////////////////////////////////////////////////////
 
+#define ID_SAVE_AS_IMAGE 1000
+#define ID_SAVE_AS_CSV 1001
+#define ID_MENU_RUN_SIM 1002
+#define ID_MENU_ADD_SIGNAL 1003
+#define ID_MENU_PROBE_SIGNALS 1004
+#define ID_MENU_TUNE_SIGNALS 1005
+#define ID_MENU_SHOW_NETLIST 1006
+#define ID_MENU_SET_SIMUL 1007
+#define ID_MENU_SHOW_GRID 1008
+#define ID_MENU_SHOW_LEGEND 1009
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Class SIM_PLOT_FRAME_BASE
@@ -41,7 +50,7 @@
 class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 {
 	private:
-	
+
 	protected:
 		wxMenuBar* m_mainMenu;
 		wxMenu* m_fileMenu;
@@ -80,7 +89,7 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		wxPanel* m_tunePanel;
 		wxStaticBoxSizer* m_tuneSizerStb;
 		wxBoxSizer* m_tuneSizer;
-		
+
 		// Virtual event handlers, overide them in your derived class
 		virtual void menuNewPlot( wxCommandEvent& event ) { event.Skip(); }
 		virtual void menuOpenWorkbook( wxCommandEvent& event ) { event.Skip(); }
@@ -99,38 +108,37 @@ class SIM_PLOT_FRAME_BASE : public KIWAY_PLAYER
 		virtual void onPlotClose( wxAuiNotebookEvent& event ) { event.Skip(); }
 		virtual void onSignalDblClick( wxMouseEvent& event ) { event.Skip(); }
 		virtual void onSignalRClick( wxListEvent& event ) { event.Skip(); }
-		
-	
+
+
 	public:
-		
+
 		SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Spice Simulator"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 511,468 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL, const wxString& name = wxT("SIM_PLOT_FRAME") );
-		
+
 		~SIM_PLOT_FRAME_BASE();
-		
+
 		void m_splitterLeftRightOnIdle( wxIdleEvent& )
 		{
 			m_splitterLeftRight->SetSashPosition( 700 );
 			m_splitterLeftRight->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterLeftRightOnIdle ), NULL, this );
 		}
-		
+
 		void m_splitterPlotAndConsoleOnIdle( wxIdleEvent& )
 		{
 			m_splitterPlotAndConsole->SetSashPosition( 500 );
 			m_splitterPlotAndConsole->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterPlotAndConsoleOnIdle ), NULL, this );
 		}
-		
+
 		void m_splitterSignalsOnIdle( wxIdleEvent& )
 		{
 			m_splitterSignals->SetSashPosition( 0 );
 			m_splitterSignals->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterSignalsOnIdle ), NULL, this );
 		}
-		
+
 		void m_splitterTuneValuesOnIdle( wxIdleEvent& )
 		{
 			m_splitterTuneValues->SetSashPosition( 0 );
 			m_splitterTuneValues->Disconnect( wxEVT_IDLE, wxIdleEventHandler( SIM_PLOT_FRAME_BASE::m_splitterTuneValuesOnIdle ), NULL, this );
 		}
-	
+
 };
 
-#endif //__SIM_PLOT_FRAME_BASE_H__

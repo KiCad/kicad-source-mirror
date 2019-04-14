@@ -139,6 +139,9 @@ SIM_PLOT_FRAME::SIM_PLOT_FRAME( KIWAY* aKiway, wxWindow* aParent )
     // Get the previous size and position of windows:
     LoadSettings( config() );
 
+    // Give icons to menuitems
+    setIconsForMenuItems();
+
     m_simulator = SPICE_SIMULATOR::CreateInstance( "ngspice" );
 
     if( !m_simulator )
@@ -255,6 +258,76 @@ void SIM_PLOT_FRAME::LoadSettings( wxConfigBase* aCfg )
     aCfg->Read( PLOT_PANEL_HEIGHT_ENTRY, &m_splitterPlotAndConsoleSashPosition, -1 );
     aCfg->Read( SIGNALS_PANEL_HEIGHT_ENTRY, &m_splitterSignalsSashPosition, -1 );
     aCfg->Read( CURSORS_PANEL_HEIGHT_ENTRY, &m_splitterTuneValuesSashPosition, -1 );
+}
+
+
+// A small helper struct to handle bitmaps initialisation in menus
+struct BM_MENU_INIT_ITEM
+{
+    int m_MenuId;
+    BITMAP_DEF m_Bitmap;
+};
+
+
+void SIM_PLOT_FRAME::setIconsForMenuItems()
+{
+    // Give icons to menuitems of the main menubar
+    BM_MENU_INIT_ITEM bm_list[]
+    {
+        // File menu:
+        { wxID_NEW, simulator_xpm },
+        { wxID_OPEN,directory_browser_xpm },
+        { wxID_SAVE, directory_xpm},
+        { ID_SAVE_AS_IMAGE, export_xpm},
+        { ID_SAVE_AS_CSV, export_xpm},
+        { wxID_CLOSE, exit_xpm},
+
+        // simulator menu:
+        { ID_MENU_RUN_SIM, sim_run_xpm},
+        { ID_MENU_ADD_SIGNAL, sim_add_signal_xpm},
+        { ID_MENU_PROBE_SIGNALS, sim_probe_xpm},
+        { ID_MENU_TUNE_SIGNALS, sim_tune_xpm},
+        { ID_MENU_SHOW_NETLIST, netlist_xpm},
+        { ID_MENU_SET_SIMUL, sim_settings_xpm},
+
+        // View menu
+        { wxID_ZOOM_IN, zoom_in_xpm},
+        { wxID_ZOOM_OUT, zoom_out_xpm},
+        { wxID_ZOOM_FIT, zoom_fit_in_page_xpm},
+        { ID_MENU_SHOW_GRID, grid_xpm},
+        { ID_MENU_SHOW_LEGEND, text_xpm},
+
+        { 0, nullptr }  // Sentinel
+    };
+
+    // wxMenuItems are already created and attached to the m_mainMenu wxMenuBar.
+    // A problem is the fact setting bitmaps in wxMenuItems after they are attached
+    // to a wxMenu do not work in all cases.
+    // So the trick is:
+    // Remove the wxMenuItem from its wxMenu
+    // Set the bitmap
+    // Insert the modified wxMenuItem to its previous place
+    for( int ii = 0; bm_list[ii].m_MenuId; ++ii )
+    {
+        wxMenuItem* item = m_mainMenu->FindItem( bm_list[ii].m_MenuId );
+
+        if( !item || !bm_list[ii].m_Bitmap)
+            continue;
+
+        wxMenu* menu = item->GetMenu();
+        // Calculate the initial index of item inside the wxMenu parent
+        wxMenuItemList& mlist = menu->GetMenuItems();
+        int mpos = mlist.IndexOf( item );
+
+        if( mpos >= 0 ) // Should be always the case
+        {
+            // Modify the bitmap
+            menu->Remove( item );
+            AddBitmapToMenuItem( item, KiBitmap( bm_list[ii].m_Bitmap ) );
+            // Insert item to its the initial index
+            menu->Insert( mpos, item );
+        }
+    }
 }
 
 
