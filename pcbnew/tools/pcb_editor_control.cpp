@@ -430,6 +430,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
     SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     SELECTION& selection = selTool->GetSelection();
     BOARD_COMMIT commit( m_frame );
+    BOARD* board = getModel<BOARD>();
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
     controls->ShowCursor( true );
@@ -486,6 +487,9 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
                 module->SetFlags( IS_NEW ); // whatever
                 module->SetTimeStamp( GetNewTimeStamp() );
+
+                // Set parent so that clearance can be loaded
+                module->SetParent( board );
 
                 // Put it on FRONT layer,
                 // (Can be stored flipped if the lib is an archive built from a board)
