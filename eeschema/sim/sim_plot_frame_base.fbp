@@ -137,7 +137,7 @@
                         <property name="help"></property>
                         <property name="id">ID_SAVE_AS_IMAGE</property>
                         <property name="kind">wxITEM_NORMAL</property>
-                        <property name="label">Save as image</property>
+                        <property name="label">Save as Image</property>
                         <property name="name">m_saveImage</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>
@@ -329,7 +329,7 @@
                         <property name="help"></property>
                         <property name="id">ID_MENU_SHOW_GRID</property>
                         <property name="kind">wxITEM_CHECK</property>
-                        <property name="label">Show &amp;grid</property>
+                        <property name="label">Show &amp;Grid</property>
                         <property name="name">m_showGrid</property>
                         <property name="permission">none</property>
                         <property name="shortcut"></property>

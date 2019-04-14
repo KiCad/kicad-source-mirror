@@ -32,7 +32,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_fileMenu->AppendSeparator();
 
 	wxMenuItem* m_saveImage;
-	m_saveImage = new wxMenuItem( m_fileMenu, ID_SAVE_AS_IMAGE, wxString( _("Save as image") ) , wxEmptyString, wxITEM_NORMAL );
+	m_saveImage = new wxMenuItem( m_fileMenu, ID_SAVE_AS_IMAGE, wxString( _("Save as Image") ) , wxEmptyString, wxITEM_NORMAL );
 	m_fileMenu->Append( m_saveImage );
 
 	wxMenuItem* m_saveCsv;
@@ -90,7 +90,7 @@ SIM_PLOT_FRAME_BASE::SIM_PLOT_FRAME_BASE( wxWindow* parent, wxWindowID id, const
 	m_viewMenu->AppendSeparator();
 
 	wxMenuItem* m_showGrid;
-	m_showGrid = new wxMenuItem( m_viewMenu, ID_MENU_SHOW_GRID, wxString( _("Show &grid") ) , wxEmptyString, wxITEM_CHECK );
+	m_showGrid = new wxMenuItem( m_viewMenu, ID_MENU_SHOW_GRID, wxString( _("Show &Grid") ) , wxEmptyString, wxITEM_CHECK );
 	m_viewMenu->Append( m_showGrid );
 
 	wxMenuItem* m_showLegend;
