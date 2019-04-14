@@ -36,6 +36,10 @@
 
 #include <connectivity/connectivity_data.h>
 
+
+const wxChar* const traceMask = wxT( "BOARD_CONNECTED_ITEM" );
+
+
 BOARD_CONNECTED_ITEM::BOARD_CONNECTED_ITEM( BOARD_ITEM* aParent, KICAD_T idtype ) :
     BOARD_ITEM( aParent, idtype ), m_netinfo( &NETINFO_LIST::ORPHANED_ITEM )
 {
@@ -94,7 +98,7 @@ int BOARD_CONNECTED_ITEM::GetClearance( BOARD_CONNECTED_ITEM* aItem ) const
     }
     else
     {
-        DBG(printf( "%s: NULL netclass,type %d", __func__, Type() );)
+        wxLogTrace( traceMask, "%s: NULL netclass,type %d", __func__, Type() );
     }
 
     return 0;
@@ -112,7 +116,7 @@ NETCLASSPTR BOARD_CONNECTED_ITEM::GetNetClass() const
 
     if( board == NULL )     // Should not occur
     {
-        DBG(printf( "%s: NULL board,type %d", __func__, Type() );)
+        wxLogTrace( traceMask, "%s: NULL board,type %d", __func__, Type() );
 
         return NETCLASSPTR();
     }
