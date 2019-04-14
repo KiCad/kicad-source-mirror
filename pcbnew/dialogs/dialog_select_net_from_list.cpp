@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_select_net_from_list.cpp
- * @brief methods to show available net names and select and highligth a net
- */
-
 #include <fctsys.h>
 #include <kicad_string.h>
 #include <kicad_device_context.h>
@@ -149,6 +144,7 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
         if( !netFilter.IsEmpty() )
         {
             wxString netname = UnescapeString( net->GetNetname() );
+
             if( filter.Find( netname.MakeUpper() ) == EDA_PATTERN_NOT_FOUND )
                 continue;
         }
@@ -191,10 +187,10 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
                 }
             }
 
-            dataLine.push_back( wxVariant( wxString::Format( "%u", viaCount ) ) ); // vias
-            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, len ).c_str() ) ) ); // board
-            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, lenPadToDie ).c_str() ) ) ); // die
-            dataLine.push_back( wxVariant( wxString::Format( "%s", MessageTextFromValue( units, len + lenPadToDie ).c_str() ) ) ); // length
+            dataLine.push_back( wxVariant( wxString::Format( wxT( "%u" ), viaCount ) ) );
+            dataLine.push_back( wxVariant( MessageTextFromValue( units, len ) ) );
+            dataLine.push_back( wxVariant( MessageTextFromValue( units, lenPadToDie ) ) );
+            dataLine.push_back( wxVariant( MessageTextFromValue( units, len + lenPadToDie ) ) );
         }
         else    // For the net 0 (unconnected pads), the pad count is not known
         {
@@ -204,7 +200,6 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
             dataLine.push_back( wxVariant( wxT( "---" ) ) ); // die
             dataLine.push_back( wxVariant( wxT( "---" ) ) ); // length
         }
-
 
         m_netsList->AppendItem( dataLine );
     }
@@ -342,32 +337,32 @@ bool DIALOG_SELECT_NET_FROM_LIST::GetNetName( wxString& aName )
 
 void DIALOG_SELECT_NET_FROM_LIST::onExport( wxMouseEvent& aEvent )
 {
-    wxFileDialog
-           saveFileDialog(this, _( "Export file" ), "", "",
-                          "Text files (*.txt)|*.txt", wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
-       if (saveFileDialog.ShowModal() == wxID_CANCEL)
-           return;
+    wxFileDialog dlg( this, _( "Export file" ), "", "", "Text files (*.txt)|*.txt",
+                      wxFD_SAVE|wxFD_OVERWRITE_PROMPT );
 
-       wxTextFile f( saveFileDialog.GetPath() );
+   if( dlg.ShowModal() == wxID_CANCEL )
+       return;
 
-       f.Create();
+   wxTextFile f( dlg.GetPath() );
 
-       int rows = m_netsList->GetItemCount();
-       
-       for( int row = 0; row < rows; row++ )
-       {
-           wxString txt = m_netsList->GetTextValue(row, 0)+";"+
-                          m_netsList->GetTextValue(row, 1)+";"+
-                          m_netsList->GetTextValue(row, 2)+";"+
-                          m_netsList->GetTextValue(row, 3)+";"+
-                          m_netsList->GetTextValue(row, 4)+";"+
-                          m_netsList->GetTextValue(row, 5)+";"+
-                          m_netsList->GetTextValue(row, 6)+";";
+   f.Create();
 
-           f.AddLine( txt );
-       }
+   int rows = m_netsList->GetItemCount();
 
-       f.Write();
-       f.Close();
+   for( int row = 0; row < rows; row++ )
+   {
+       wxString txt = m_netsList->GetTextValue( row, 0 ) + ";" +
+                      m_netsList->GetTextValue( row, 1 ) + ";" +
+                      m_netsList->GetTextValue( row, 2 ) + ";" +
+                      m_netsList->GetTextValue( row, 3 ) + ";" +
+                      m_netsList->GetTextValue( row, 4 ) + ";" +
+                      m_netsList->GetTextValue( row, 5 ) + ";" +
+                      m_netsList->GetTextValue( row, 6 ) + ";";
+
+       f.AddLine( txt );
+   }
+
+   f.Write();
+   f.Close();
 }
 
