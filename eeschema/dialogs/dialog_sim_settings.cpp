@@ -63,6 +63,15 @@ DIALOG_SIM_SETTINGS::DIALOG_SIM_SETTINGS( wxWindow* aParent )
     m_transFinal->SetValidator( m_spiceValidator );
     m_transInitial->SetValidator( m_spiceEmptyValidator );
 
+    // Hide pages that aren't fully implemented yet
+    // wxPanel::Hide() isn't enough on some platforms
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgDistortion ) );
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgNoise ) );
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgOP ) );
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgPoleZero ) );
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgSensitivity ) );
+    m_simPages->RemovePage( m_simPages->FindPage( m_pgTransferFunction ) );
+
     m_sdbSizerOK->SetDefault();
     updateNetlistOpts();
 
