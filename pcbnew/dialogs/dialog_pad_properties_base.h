@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -239,6 +239,20 @@ class DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxStaticText* m_startYLabel;
 		TEXT_CTRL_EVAL* m_startYCtrl;
 		wxStaticText* m_startYUnits;
+		wxStaticText* m_staticTextPosCtrl1;
+		wxStaticText* m_ctrl1XLabel;
+		TEXT_CTRL_EVAL* m_ctrl1XCtrl;
+		wxStaticText* m_ctrl1XUnits;
+		wxStaticText* m_ctrl1YLabel;
+		TEXT_CTRL_EVAL* m_ctrl1YCtrl;
+		wxStaticText* m_ctrl1YUnits;
+		wxStaticText* m_staticTextPosCtrl2;
+		wxStaticText* m_ctrl2XLabel;
+		TEXT_CTRL_EVAL* m_ctrl2XCtrl;
+		wxStaticText* m_ctrl2XUnits;
+		wxStaticText* m_ctrl2YLabel;
+		TEXT_CTRL_EVAL* m_ctrl2YCtrl;
+		wxStaticText* m_ctrl2YUnits;
 		wxStaticText* m_staticTextPosEnd;
 		wxStaticText* m_endXLabel;
 		TEXT_CTRL_EVAL* m_endXCtrl;

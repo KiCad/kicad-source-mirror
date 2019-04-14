@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Dec  1 2018)
+// C++ code generated with wxFormBuilder (version Jan 17 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -889,6 +889,58 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE::DIALOG_PAD_PRIMITIVES_PROPERTIES_BASE( wx
 	m_startYUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_startYUnits->Wrap( -1 );
 	fgSizerShapeProperties->Add( m_startYUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_staticTextPosCtrl1 = new wxStaticText( this, wxID_ANY, _("Control Point 1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosCtrl1->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_staticTextPosCtrl1, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_ctrl1XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl1XLabel->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl1XLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+
+	m_ctrl1XCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeProperties->Add( m_ctrl1XCtrl, 0, wxALL, 5 );
+
+	m_ctrl1XUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl1XUnits->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl1XUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_ctrl1YLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl1YLabel->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl1YLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+
+	m_ctrl1YCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeProperties->Add( m_ctrl1YCtrl, 0, wxALL, 5 );
+
+	m_ctrl1YUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl1YUnits->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl1YUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_staticTextPosCtrl2 = new wxStaticText( this, wxID_ANY, _("Control Point 2"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextPosCtrl2->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_staticTextPosCtrl2, 0, wxALIGN_CENTER_VERTICAL|wxLEFT, 5 );
+
+	m_ctrl2XLabel = new wxStaticText( this, wxID_ANY, _("X:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl2XLabel->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl2XLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+
+	m_ctrl2XCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeProperties->Add( m_ctrl2XCtrl, 0, wxALL, 5 );
+
+	m_ctrl2XUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl2XUnits->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl2XUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
+
+	m_ctrl2YLabel = new wxStaticText( this, wxID_ANY, _("Y:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl2YLabel->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl2YLabel, 0, wxALIGN_CENTER_VERTICAL|wxALIGN_RIGHT|wxLEFT, 5 );
+
+	m_ctrl2YCtrl = new TEXT_CTRL_EVAL( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerShapeProperties->Add( m_ctrl2YCtrl, 0, wxALL, 5 );
+
+	m_ctrl2YUnits = new wxStaticText( this, wxID_ANY, _("unit"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_ctrl2YUnits->Wrap( -1 );
+	fgSizerShapeProperties->Add( m_ctrl2YUnits, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT, 5 );
 
 	m_staticTextPosEnd = new wxStaticText( this, wxID_ANY, _("End point"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextPosEnd->Wrap( -1 );

@@ -115,8 +115,11 @@ public:
     /**
      * Function Show
      * Shows/hides the label, widget and units label.
+     *
+     * @param aShow called for the Show() routine in wx
+     * @param aResize if true, the element will be sized to 0 on hide and -1 on show
      */
-    void Show( bool aShow );
+    void Show( bool aShow, bool aResize = false );
 
 protected:
 

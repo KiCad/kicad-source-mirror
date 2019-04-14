@@ -99,6 +99,8 @@ public:
     double m_ArcAngle;  /// angle of an arc, from its starting point, in 0.1 deg
     wxPoint m_Start;    /// is also the center of the circle and arc
     wxPoint m_End;      /// is also the start point of the arc
+    wxPoint m_Ctrl1;    /// Bezier Control point 1
+    wxPoint m_Ctrl2;    /// Bezier Control point 2
     std::vector<wxPoint> m_Poly;
 
     PAD_CS_PRIMITIVE( STROKE_T aShape ):
@@ -285,6 +287,7 @@ public:
      *   a thick segment
      *   a filled circle or ring ( if thickness == 0, this is a filled circle, else a ring)
      *   a arc
+     *   a curve
      */
     void AddPrimitive( const SHAPE_POLY_SET& aPoly, int aThickness );  ///< add a polygonal basic shape
     void AddPrimitive( const std::vector<wxPoint>& aPoly, int aThickness );  ///< add a polygonal basic shape
@@ -292,6 +295,8 @@ public:
     void AddPrimitive( wxPoint aCenter, int aRadius, int aThickness ); ///< ring or circle basic shape
     void AddPrimitive( wxPoint aCenter, wxPoint aStart,
                         int aArcAngle, int aThickness );    ///< arc basic shape
+    void AddPrimitive( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1,
+                        wxPoint aCtrl2, int aThickness );              ///< curve basic shape
 
 
     bool GetBestAnchorPosition( VECTOR2I& aPos );

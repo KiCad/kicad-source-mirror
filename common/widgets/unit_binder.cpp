@@ -259,10 +259,26 @@ void UNIT_BINDER::Enable( bool aEnable )
 }
 
 
-void UNIT_BINDER::Show( bool aShow )
+void UNIT_BINDER::Show( bool aShow, bool aResize )
 {
     m_label->Show( aShow );
     m_value->Show( aShow );
     m_unitLabel->Show( aShow );
+
+    if( aResize )
+    {
+        if( aShow )
+        {
+            m_label->SetSize( -1, -1 );
+            m_value->SetSize( -1, -1 );
+            m_unitLabel->SetSize( -1, -1 );
+        }
+        else
+        {
+            m_label->SetSize( 0, 0 );
+            m_value->SetSize( 0, 0 );
+            m_unitLabel->SetSize( 0, 0 );
+        }
+    }
 }
 

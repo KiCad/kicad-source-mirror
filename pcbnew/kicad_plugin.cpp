@@ -1441,6 +1441,15 @@ void PCB_IO::format( D_PAD* aPad, int aNestLevel ) const
                               FormatInternalUnits( primitive.m_Thickness ).c_str() );
                 break;
 
+            case S_CURVE:          //  Bezier Curve
+                m_out->Print( aNestLevel, "(gr_curve (pts (xy %s) (xy %s) (xy %s) (xy %s)) (width %s))",
+                              FormatInternalUnits( primitive.m_Start ).c_str(),
+                              FormatInternalUnits( primitive.m_Ctrl1 ).c_str(),
+                              FormatInternalUnits( primitive.m_Ctrl2 ).c_str(),
+                              FormatInternalUnits( primitive.m_End ).c_str(),
+                              FormatInternalUnits( primitive.m_Thickness ).c_str() );
+                break;
+
             case S_POLYGON:         // polygon
                 if( primitive.m_Poly.size() < 2 )
                     break;      // Malformed polygon.

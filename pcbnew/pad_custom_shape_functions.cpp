@@ -38,6 +38,8 @@
 #include <convert_basic_shapes_to_polygon.h>
 #include <geometry/shape_rect.h>
 #include <geometry/convex_hull.h>
+#include <geometry/geometry_utils.h>
+#include <bezier_curves.h>
 
 
 void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
@@ -46,6 +48,8 @@ void PAD_CS_PRIMITIVE::ExportTo( DRAWSEGMENT* aTarget )
     aTarget->SetWidth( m_Thickness );
     aTarget->SetStart( m_Start );
     aTarget->SetEnd( m_End );
+    aTarget->SetBezControl1( m_Ctrl1 );
+    aTarget->SetBezControl2( m_Ctrl2 );
 
     // in a DRAWSEGMENT the radius of a circle is calculated from the
     // center and one point on the circle outline (stored in m_End)
@@ -73,6 +77,8 @@ void PAD_CS_PRIMITIVE::Move( wxPoint aMoveVector )
 {
     m_Start += aMoveVector;
     m_End   += aMoveVector;
+    m_Ctrl1 += aMoveVector;
+    m_Ctrl2 += aMoveVector;
 
     for( auto& corner : m_Poly )
     {
@@ -138,6 +144,20 @@ void D_PAD::AddPrimitive( wxPoint aCenter, wxPoint aStart, int aArcAngle, int aT
 }
 
 
+void D_PAD::AddPrimitive( wxPoint aStart, wxPoint aEnd, wxPoint aCtrl1, wxPoint aCtrl2, int aThickness )
+{
+    PAD_CS_PRIMITIVE shape( S_CURVE );
+    shape.m_Start = aStart;
+    shape.m_End = aEnd;
+    shape.m_Ctrl1 = aCtrl1;
+    shape.m_Ctrl2 = aCtrl2;
+    shape.m_Thickness = aThickness;
+    m_basicShapes.push_back( shape );
+
+    MergePrimitivesAsPolygon();
+}
+
+
 void D_PAD::AddPrimitive( wxPoint aCenter, int aRadius, int aThickness )
 {
     PAD_CS_PRIMITIVE shape( S_CIRCLE );
@@ -192,6 +212,21 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
 
         switch( bshape.m_Shape )
         {
+        case S_CURVE:
+        {
+            std::vector<wxPoint> ctrlPoints = { bshape.m_Start, bshape.m_Ctrl1, bshape.m_Ctrl2, bshape.m_End };
+            BEZIER_POLY converter( ctrlPoints );
+            std::vector< wxPoint> poly;
+            converter.GetPoly( poly, bshape.m_Thickness );
+
+            for( unsigned ii = 1; ii < poly.size(); ii++ )
+            {
+                TransformRoundedEndsSegmentToPolygon( aux_polyset,
+                        poly[ii-1], poly[ii], aCircleToSegmentsCount, bshape.m_Thickness );
+            }
+            break;
+        }
+
         case S_SEGMENT:         // usual segment : line with rounded ends
             TransformRoundedEndsSegmentToPolygon( aux_polyset,
                 bshape.m_Start, bshape.m_End, aCircleToSegmentsCount, bshape.m_Thickness );

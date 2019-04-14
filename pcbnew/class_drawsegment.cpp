@@ -64,10 +64,12 @@ DRAWSEGMENT::~DRAWSEGMENT()
 {
 }
 
+
 void DRAWSEGMENT::SetPosition( const wxPoint& aPos )
 {
     m_Start = aPos;
 }
+
 
 const wxPoint DRAWSEGMENT::GetPosition() const
 {
@@ -76,6 +78,28 @@ const wxPoint DRAWSEGMENT::GetPosition() const
     else
         return m_Start;
 }
+
+
+double DRAWSEGMENT::GetLength() const
+{
+    double length = 0.0;
+
+    switch( m_Shape )
+    {
+    case S_CURVE:
+        for( size_t ii = 1; ii < m_BezierPoints.size(); ++ii )
+            length += GetLineLength( m_BezierPoints[ii - 1], m_BezierPoints[ii] );
+
+        break;
+
+    default:
+        length = GetLineLength( GetStart(), GetEnd() );
+        break;
+    }
+
+    return length;
+}
+
 
 void DRAWSEGMENT::Move( const wxPoint& aMoveVector )
 {
@@ -147,6 +171,7 @@ void DRAWSEGMENT::Rotate( const wxPoint& aRotCentre, double aAngle )
         break;
     }
 }
+
 
 void DRAWSEGMENT::Flip( const wxPoint& aCentre )
 {
@@ -234,6 +259,7 @@ const wxPoint DRAWSEGMENT::GetCenter() const
     return c;
 }
 
+
 const wxPoint DRAWSEGMENT::GetArcEnd() const
 {
     wxPoint endPoint( m_End );         // start of arc
@@ -255,6 +281,7 @@ const wxPoint DRAWSEGMENT::GetArcEnd() const
     return endPoint;   // after rotation, the end of the arc.
 }
 
+
 const wxPoint DRAWSEGMENT::GetArcMid() const
 {
     wxPoint endPoint( m_End );
@@ -275,6 +302,7 @@ const wxPoint DRAWSEGMENT::GetArcMid() const
 
     return endPoint;   // after rotation, the end of the arc.
 }
+
 
 double DRAWSEGMENT::GetArcAngleStart() const
 {
@@ -454,6 +482,7 @@ void DRAWSEGMENT::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE draw_mode,
     }
 }
 
+
 void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList )
 {
     wxString msg;
@@ -484,6 +513,9 @@ void DRAWSEGMENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_IT
 
     case S_CURVE:
         aList.push_back( MSG_PANEL_ITEM( shape, _( "Curve" ), RED ) );
+
+        msg = MessageTextFromValue( aUnits, GetLength() );
+        aList.push_back( MSG_PANEL_ITEM( _( "Length" ), msg, DARKGREEN ) );
         break;
 
     default:
@@ -930,6 +962,7 @@ void DRAWSEGMENT::computeArcBBox( EDA_RECT& aBBox ) const
         angle -= 900;
     }
 }
+
 
 void DRAWSEGMENT::SetPolyPoints( const std::vector<wxPoint>& aPoints )
 {

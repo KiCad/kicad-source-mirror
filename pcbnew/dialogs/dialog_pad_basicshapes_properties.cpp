@@ -51,12 +51,18 @@ DIALOG_PAD_PRIMITIVES_PROPERTIES::DIALOG_PAD_PRIMITIVES_PROPERTIES( wxWindow* aP
         m_shape( aShape ),
         m_startX( aFrame, m_startXLabel, m_startXCtrl, m_startXUnits, true ),
         m_startY( aFrame, m_startYLabel, m_startYCtrl, m_startYUnits, true ),
+        m_ctrl1X( aFrame, m_ctrl1XLabel, m_ctrl1XCtrl, m_ctrl1XUnits, true ),
+        m_ctrl1Y( aFrame, m_ctrl1YLabel, m_ctrl1YCtrl, m_ctrl1YUnits, true ),
+        m_ctrl2X( aFrame, m_ctrl2XLabel, m_ctrl2XCtrl, m_ctrl2XUnits, true ),
+        m_ctrl2Y( aFrame, m_ctrl2YLabel, m_ctrl2YCtrl, m_ctrl2YUnits, true ),
         m_endX( aFrame, m_endXLabel, m_endXCtrl, m_endXUnits, true ),
         m_endY( aFrame, m_endYLabel, m_endYCtrl, m_endYUnits, true ),
         m_radius( aFrame, m_radiusLabel, m_radiusCtrl, m_radiusUnits, true ),
         m_thickness( aFrame, m_thicknessLabel, m_thicknessCtrl, m_thicknessUnits, true )
 {
     SetInitialFocus( m_startXCtrl );
+
+    TransferDataToWindow();
 
     m_sdbSizerOK->SetDefault();
 
@@ -82,6 +88,27 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_startY.SetValue( m_shape->m_Start.y );
         m_endX.SetValue( m_shape->m_End.x );
         m_endY.SetValue( m_shape->m_End.y );
+        m_ctrl1X.Show( false, true );
+        m_ctrl1Y.Show( false, true );
+        m_ctrl2X.Show( false, true );
+        m_ctrl2Y.Show( false, true );
+        m_staticTextPosCtrl1->Show( false );
+        m_staticTextPosCtrl1->SetSize( 0, 0 );
+        m_staticTextPosCtrl2->Show( false );
+        m_staticTextPosCtrl2->SetSize( 0, 0 );
+        m_radius.Show( false );
+        break;
+
+    case S_CURVE:         // Bezier line
+        SetTitle( _( "Bezier" ) );
+        m_startX.SetValue( m_shape->m_Start.x );
+        m_startY.SetValue( m_shape->m_Start.y );
+        m_endX.SetValue( m_shape->m_End.x );
+        m_endY.SetValue( m_shape->m_End.y );
+        m_ctrl1X.SetValue( m_shape->m_Ctrl1.x );
+        m_ctrl1Y.SetValue( m_shape->m_Ctrl1.y );
+        m_ctrl2X.SetValue( m_shape->m_Ctrl2.x );
+        m_ctrl2Y.SetValue( m_shape->m_Ctrl2.y );
         m_radius.Show( false );
         break;
 
@@ -95,6 +122,14 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_radiusLabel->SetLabel( _( "Angle:" ) );
         m_radius.SetUnits( DEGREES );
         m_radius.SetValue( m_shape->m_ArcAngle );
+        m_ctrl1X.Show( false, true );
+        m_ctrl1Y.Show( false, true );
+        m_ctrl2X.Show( false, true );
+        m_ctrl2Y.Show( false, true );
+        m_staticTextPosCtrl1->Show( false );
+        m_staticTextPosCtrl1->SetSize( 0, 0 );
+        m_staticTextPosCtrl2->Show( false );
+        m_staticTextPosCtrl2->SetSize( 0, 0 );
         break;
 
     case S_CIRCLE:          //  ring or circle
@@ -113,6 +148,14 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataToWindow()
         m_startX.SetValue( m_shape->m_Start.x );
         m_startY.SetValue( m_shape->m_Start.y );
         m_radius.SetValue( m_shape->m_Radius );
+        m_ctrl1X.Show( false, true );
+        m_ctrl1Y.Show( false, true );
+        m_ctrl2X.Show( false, true );
+        m_ctrl2Y.Show( false, true );
+        m_staticTextPosCtrl1->Show( false );
+        m_staticTextPosCtrl1->SetSize( 0, 0 );
+        m_staticTextPosCtrl2->Show( false );
+        m_staticTextPosCtrl2->SetSize( 0, 0 );
         break;
 
     case S_POLYGON:         // polygon
@@ -139,6 +182,17 @@ bool DIALOG_PAD_PRIMITIVES_PROPERTIES::TransferDataFromWindow()
         m_shape->m_Start.y = m_startY.GetValue();
         m_shape->m_End.x = m_endX.GetValue();
         m_shape->m_End.y = m_endY.GetValue();
+        break;
+
+    case S_CURVE:         // Segment with rounded ends
+        m_shape->m_Start.x = m_startX.GetValue();
+        m_shape->m_Start.y = m_startY.GetValue();
+        m_shape->m_End.x = m_endX.GetValue();
+        m_shape->m_End.y = m_endY.GetValue();
+        m_shape->m_Ctrl1.x = m_ctrl1X.GetValue();
+        m_shape->m_Ctrl1.y = m_ctrl1Y.GetValue();
+        m_shape->m_Ctrl2.x = m_ctrl2X.GetValue();
+        m_shape->m_Ctrl2.y = m_ctrl2Y.GetValue();
         break;
 
     case S_ARC:             // Arc with rounded ends
@@ -194,6 +248,9 @@ DIALOG_PAD_PRIMITIVE_POLY_PROPS::DIALOG_PAD_PRIMITIVE_POLY_PROPS( wxWindow* aPar
 
     // TODO: move wxEVT_GRID_CELL_CHANGING in wxFormbuilder, when it support it
 	m_gridCornersList->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_PAD_PRIMITIVE_POLY_PROPS::onCellChanging ), NULL, this );
+
+    // Now all widgets have the size fixed, call FinishDialogSettings
+    FinishDialogSettings();
 }
 
 
@@ -535,7 +592,7 @@ inline void geom_transf( wxPoint& aCoord, wxPoint& aMove, double aScale, double 
 void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* aList, int aDuplicateCount )
 {
     wxPoint move_vect( m_vectorX.GetValue(), m_vectorY.GetValue() );
-    double  rotation = m_rotation.GetValue() / 10.0;
+    double  rotation = m_rotation.GetValue();
     double scale = DoubleValueFromString( UNSCALED_UNITS, m_scaleCtrl->GetValue() );
 
     // Avoid too small / too large scale, which could create issues:
@@ -579,6 +636,11 @@ void DIALOG_PAD_PRIMITIVES_TRANSFORM::Transform( std::vector<PAD_CS_PRIMITIVE>* 
                 break;
 
             case S_ARC:             // Arc with rounded ends
+                break;
+
+            case S_CURVE:           // Bezier with rounded ends
+                geom_transf( shape->m_Ctrl1, currMoveVect, scale, curr_rotation );
+                geom_transf( shape->m_Ctrl2, currMoveVect, scale, curr_rotation );
                 break;
 
             case S_CIRCLE:          //  ring or circle

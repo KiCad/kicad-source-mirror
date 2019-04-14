@@ -231,10 +231,7 @@ public:
      * returns the length of the track using the hypotenuse calculation.
      * @return double - the length of the track
      */
-    double  GetLength() const
-    {
-        return GetLineLength( GetStart(), GetEnd() );
-    }
+    double  GetLength() const;
 
     virtual void Move( const wxPoint& aMoveVector ) override;
 

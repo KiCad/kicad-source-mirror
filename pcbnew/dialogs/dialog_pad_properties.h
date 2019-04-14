@@ -191,6 +191,10 @@ private:
 
     UNIT_BINDER        m_startX;
     UNIT_BINDER        m_startY;
+    UNIT_BINDER        m_ctrl1X;
+    UNIT_BINDER        m_ctrl1Y;
+    UNIT_BINDER        m_ctrl2X;
+    UNIT_BINDER        m_ctrl2Y;
     UNIT_BINDER        m_endX;
     UNIT_BINDER        m_endY;
     UNIT_BINDER        m_radius;

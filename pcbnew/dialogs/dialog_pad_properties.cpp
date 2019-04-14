@@ -843,6 +843,12 @@ void DIALOG_PAD_PROPERTIES::displayPrimitivesList()
             bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive.m_End );
             break;
 
+        case S_CURVE:         // Bezier segment
+            bs_info[0] = _( "Bezier" );
+            bs_info[1] = _( "from " ) + formatCoord( m_units, primitive.m_Start );
+            bs_info[2] = _( "to " ) +  formatCoord( m_units, primitive.m_End );
+            break;
+
         case S_ARC:             // Arc with rounded ends
             bs_info[0] = _( "Arc" );
             bs_info[1] = _( "center " ) + formatCoord( m_units, primitive.m_Start );// Center
@@ -1355,11 +1361,12 @@ void DIALOG_PAD_PROPERTIES::redraw()
             dummySegment->Rotate( wxPoint( 0, 0), m_dummyPad->GetOrientation() );
             dummySegment->Move( m_dummyPad->GetPosition() );
 
-            // Update selected primitive (highligth selected)
+            // Update selected primitive (highlight selected)
             switch( primitive.m_Shape )
             {
             case S_SEGMENT:
             case S_ARC:
+            case S_CURVE:
                 break;
 
             case S_CIRCLE:          //  ring or circle
@@ -1368,7 +1375,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
                     // but it is easy to create it with a circle having the
                     // right radius and outline width
                     wxPoint end = dummySegment->GetCenter();
-                    end.x += primitive.m_Radius/2;
+                    end.x += primitive.m_Radius / 2;
                     dummySegment->SetEnd( end );
                     dummySegment->SetWidth( primitive.m_Radius );
                 }
@@ -1399,7 +1406,7 @@ void DIALOG_PAD_PROPERTIES::redraw()
             // gives a size to the full drawable area
             BOX2I drawbox;
             drawbox.Move( m_dummyPad->GetPosition() );
-            drawbox.Inflate( bbox.GetSize().x*2, bbox.GetSize().y*2 );
+            drawbox.Inflate( bbox.GetSize().x * 2, bbox.GetSize().y * 2 );
 
             view->SetBoundary( drawbox );
 
@@ -1987,14 +1994,20 @@ void DIALOG_PAD_PROPERTIES::onDeletePrimitive( wxCommandEvent& event )
 void DIALOG_PAD_PROPERTIES::onAddPrimitive( wxCommandEvent& event )
 {
     // Ask user for shape type
-    wxString shapelist[] = { _( "Segment" ), _( "Arc" ), _( "Ring/Circle" ), _( "Polygon" ) };
+    wxString shapelist[] = { _( "Segment" ), _( "Arc" ), _( "Bezier" ),
+                             _( "Ring/Circle" ), _( "Polygon" ) };
 
     int type = wxGetSingleChoiceIndex( _( "Shape type:" ), _( "Add Primitive" ),
                                        arrayDim( shapelist ), shapelist, 0, this );
 
-    STROKE_T listtype[] = { S_SEGMENT, S_ARC, S_CIRCLE, S_POLYGON };
+    // User pressed cancel
+    if( type == -1 )
+        return;
+
+    STROKE_T listtype[] = { S_SEGMENT, S_ARC, S_CURVE, S_CIRCLE, S_POLYGON };
 
     PAD_CS_PRIMITIVE primitive( listtype[type] );
+    primitive.m_Thickness = m_board->GetDesignSettings().GetLineThickness( F_Cu );
 
     if( listtype[type] == S_POLYGON )
     {

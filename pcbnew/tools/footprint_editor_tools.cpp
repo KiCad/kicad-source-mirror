@@ -410,19 +410,14 @@ int MODULE_EDITOR_TOOLS::CreatePadFromShapes( const TOOL_EVENT& aEvent )
             {
                 auto em = static_cast<EDGE_MODULE*> ( item );
 
-                // Currently, S_CURVE shape is not supported. so warn the user
-                if( em->GetShape() == S_CURVE )
-                {
-                    illegalItemsFound = true;
-                    break;
-                }
-
                 PAD_CS_PRIMITIVE shape( em->GetShape() );
                 shape.m_Start = em->GetStart();
                 shape.m_End = em->GetEnd();
                 shape.m_Radius = em->GetRadius();
                 shape.m_Thickness = em->GetWidth();
                 shape.m_ArcAngle = em->GetAngle();
+                shape.m_Ctrl1 = em->GetBezControl1();
+                shape.m_Ctrl2 = em->GetBezControl2();
                 shape.m_Poly = em->BuildPolyPointsList();
 
                 shapes.push_back(shape);

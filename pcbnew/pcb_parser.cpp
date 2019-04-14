@@ -2792,8 +2792,15 @@ D_PAD* PCB_PARSER::parseD_PAD( MODULE* aParent )
                     pad->AddPrimitive( dummysegm->BuildPolyPointsList(), dummysegm->GetWidth() );
                     break;
 
+                case T_gr_curve:
+                    dummysegm = parseDRAWSEGMENT();
+                    pad->AddPrimitive( dummysegm->GetStart(), dummysegm->GetEnd(),
+                                       dummysegm->GetBezControl1(), dummysegm->GetBezControl2(),
+                                       dummysegm->GetWidth() );
+                    break;
+
                 default:
-                    Expecting( "gr_line, gr_arc, gr_circle or gr_poly" );
+                    Expecting( "gr_line, gr_arc, gr_circle, gr_curve or gr_poly" );
                     break;
                 }
 
