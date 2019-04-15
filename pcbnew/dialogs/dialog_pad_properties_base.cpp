@@ -230,7 +230,7 @@ DIALOG_PAD_PROPERTIES_BASE::DIALOG_PAD_PROPERTIES_BASE( wxWindow* parent, wxWind
 
 	m_staticTextChamferRatio = new wxStaticText( m_panelGeneral, wxID_ANY, _("Chamfer size:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticTextChamferRatio->Wrap( -1 );
-	m_staticTextChamferRatio->SetToolTip( _("Chamfer size  in percent  of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
+	m_staticTextChamferRatio->SetToolTip( _("Chamfer size in percent of the pad width.\nThe width is the smaller value between size X and size Y.\nThe max value is 50 percent.") );
 
 	fgSizerShapeType->Add( m_staticTextChamferRatio, 0, wxALIGN_CENTER_VERTICAL|wxRIGHT|wxLEFT, 5 );
 
