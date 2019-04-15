@@ -29,7 +29,7 @@ endif( MINGW )
 
 add_executable( kicad2step ${K2S_FILES} )
 
-target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${OCC_LIBRARIES} )
+target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${OCC_LIBRARIES} Boost::boost )
 
 if( APPLE )
     # puts binaries into the *.app bundle while linking
