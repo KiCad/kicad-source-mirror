@@ -120,6 +120,10 @@ public:
 
     virtual ~LIB_ITEM() { }
 
+
+    // Define the enums for basic
+    enum LIB_CONVERT : int  { BASE = 1, DEMORGAN = 2 };
+
     /**
      * Provide a user-consumable name of the object type.  Perform localization when
      * called so that run-time language selection works.

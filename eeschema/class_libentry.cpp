@@ -910,7 +910,7 @@ bool LIB_PART::HasConversion() const
 {
     for( const LIB_ITEM& item : m_drawings )
     {
-        if( item.m_Convert > 1 )
+        if( item.m_Convert > LIB_ITEM::LIB_CONVERT::BASE )
             return true;
     }
 

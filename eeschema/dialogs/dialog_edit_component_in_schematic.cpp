@@ -175,7 +175,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataToWindow()
 
     if( m_part != nullptr && m_part->HasConversion() )
     {
-        if( m_cmp->GetConvert() > 1 )
+        if( m_cmp->GetConvert() > LIB_ITEM::LIB_CONVERT::BASE )
             m_cbAlternateSymbol->SetValue( true );
     }
     else
@@ -252,7 +252,7 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnBrowseLibrary( wxCommandEvent& event 
             for( int ii = 1; ii <= entry->GetUnitCount(); ii++ )
                 m_unitChoice->Append( LIB_PART::SubReference( ii, false ) );
 
-            if( unit < 0 || unit >= (int)m_unitChoice->GetCount() )
+            if( unit < 0 || static_cast<unsigned>( unit ) >= m_unitChoice->GetCount() )
                 unit = 0;
 
             m_unitChoice->SetSelection( unit );
@@ -405,15 +405,15 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
     m_cmp->SetLibId( id, Prj().SchSymbolLibTable(), Prj().SchLibs()->GetCacheLibrary() );
 
     // For symbols with multiple shapes (De Morgan representation) Set the selected shape:
-    int conversion = m_cbAlternateSymbol->IsEnabled()
-                        ? m_cbAlternateSymbol->GetValue()
-                        : 0;
-    m_cmp->SetConvert( conversion );
+    if( m_cbAlternateSymbol->IsEnabled() && m_cbAlternateSymbol->GetValue() )
+        m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::DEMORGAN );
+    else
+        m_cmp->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
     //Set the part selection in multiple part per package
     int unit_selection = m_unitChoice->IsEnabled()
                             ? m_unitChoice->GetSelection() + 1
-                            : 0;
+                            : 1;
     m_cmp->SetUnitSelection( &GetParent()->GetCurrentSheet(), unit_selection );
     m_cmp->SetUnit( unit_selection );
 

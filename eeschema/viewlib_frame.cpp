@@ -224,7 +224,7 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 void LIB_VIEW_FRAME::SetUnitAndConvert( int aUnit, int aConvert )
 {
     m_unit = aUnit > 0 ? aUnit : 1;
-    m_convert = aConvert > 0 ? aConvert : 1;
+    m_convert = aConvert > 0 ? aConvert : LIB_ITEM::LIB_CONVERT::BASE;
     m_selection_changed = false;
 
     // Update canvas
@@ -542,7 +542,7 @@ bool LIB_VIEW_FRAME::ReCreateListLib()
         m_libraryName = libs[0];
         m_entryName = wxEmptyString;
         m_unit = 1;
-        m_convert = 1;
+        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
     }
 
     bool cmp_changed = ReCreateListCmp();
@@ -573,7 +573,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
     {
         m_libraryName = wxEmptyString;
         m_entryName = wxEmptyString;
-        m_convert = 1;
+        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
         m_unit    = 1;
         return true;
     }
@@ -587,7 +587,7 @@ bool LIB_VIEW_FRAME::ReCreateListCmp()
     {
         // Select the first library entry when the previous entry name does not exist in
         // the current library.
-        m_convert   = 1;
+        m_convert   = LIB_ITEM::LIB_CONVERT::BASE;
         m_unit      = 1;
         index       = 0;
         changed     = true;
@@ -661,7 +661,7 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         if( m_selection_changed )
         {
             m_unit = 1;
-            m_convert = 1;
+            m_convert = LIB_ITEM::LIB_CONVERT::BASE;
             m_selection_changed = false;
         }
 

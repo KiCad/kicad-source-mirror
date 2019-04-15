@@ -144,11 +144,11 @@ void LIB_VIEW_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
     {
     default:
     case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
-        m_convert = 1;
+        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
         break;
 
     case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
-        m_convert = 2;
+        m_convert = LIB_ITEM::LIB_CONVERT::DEMORGAN;
         break;
     }
 
