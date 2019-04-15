@@ -244,6 +244,7 @@ set( EESCHEMA_SRCS
 
     tools/sch_actions.cpp
     tools/sch_picker_tool.cpp
+    tools/sch_selection_tool.cpp
     tools/selection.cpp
     )
 

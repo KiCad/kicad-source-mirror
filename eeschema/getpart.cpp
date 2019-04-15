@@ -209,72 +209,6 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
 }
 
 
-SCH_COMPONENT* SCH_EDIT_FRAME::Load_Component( const SCHLIB_FILTER*           aFilter,
-                                               SCH_BASE_FRAME::HISTORY_LIST&  aHistoryList,
-                                               bool                           aAllowBrowser )
-{
-    wxString msg;
-
-    SetRepeatItem( NULL );
-    m_canvas->SetIgnoreMouseEvents( true );
-
-    auto sel = SelectComponentFromLibTree( aFilter, aHistoryList, aAllowBrowser, 1, 1,
-                                           m_footprintPreview );
-
-    if( !sel.LibId.IsValid() )
-    {
-        m_canvas->SetIgnoreMouseEvents( false );
-        m_canvas->MoveCursorToCrossHair();
-        return NULL;
-    }
-
-    m_canvas->SetIgnoreMouseEvents( false );
-    m_canvas->MoveCursorToCrossHair();
-
-    wxString libsource;     // the library name to use. If empty, load from any lib
-
-    if( aFilter )
-        libsource = aFilter->GetLibSource();
-
-    LIB_ID libId = sel.LibId;
-
-    LIB_PART* part = GetLibPart( libId, true );
-
-    if( !part )
-        return NULL;
-
-    SCH_COMPONENT* component = new SCH_COMPONENT( *part, libId, g_CurrentSheet,
-                                                  sel.Unit, sel.Convert,
-                                                  GetCrossHairPosition(), true );
-
-    // Be sure the link to the corresponding LIB_PART is OK:
-    component->Resolve( *Prj().SchSymbolLibTable() );
-
-    // Set any fields that have been modified
-    for( auto const& i : sel.Fields )
-    {
-        auto field = component->GetField( i.first );
-
-        if( field )
-            field->SetText( i.second );
-    }
-
-    MSG_PANEL_ITEMS items;
-
-    component->GetMsgPanelInfo( m_UserUnits, items );
-
-    SetMsgPanel( items );
-    component->SetFlags( IS_NEW );
-
-    if( m_autoplaceFields )
-        component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
-
-    PrepareMoveItem( component );
-
-    return component;
-}
-
-
 void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 {
     SCH_SCREEN*    screen = GetScreen();
@@ -292,7 +226,7 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     if( item->GetFlags() == 0 )
     {
-        addCurrentItemToScreen();
+        AddItemToScreen( item );
         SchematicCleanUp();
     }
 

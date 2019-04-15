@@ -475,8 +475,8 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     appK2S.SetExt( "exe" );
     #endif
 
-    if( !appK2S.FileExists() )
-        GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
+//    if( !appK2S.FileExists() )
+ //       GetMenuBar()->FindItem( ID_GEN_EXPORT_FILE_STEP )->Enable( false );
 }
 
 

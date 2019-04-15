@@ -1314,22 +1314,21 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::addCurrentItemToScreen()
+void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
 
-    wxCHECK_RET( item != NULL, wxT( "Cannot add current item to list." ) );
+    wxCHECK_RET( aItem != NULL, wxT( "Cannot add current aItem to list." ) );
 
     m_canvas->SetAutoPanRequest( false );
 
     SCH_SHEET*     parentSheet = nullptr;
     SCH_COMPONENT* parentComponent = nullptr;
-    SCH_ITEM*      undoItem = item;
+    SCH_ITEM*      undoItem = aItem;
 
-    if( item->Type() == SCH_SHEET_PIN_T )
+    if( aItem->Type() == SCH_SHEET_PIN_T )
     {
-        parentSheet = (SCH_SHEET*) item->GetParent();
+        parentSheet = (SCH_SHEET*) aItem->GetParent();
 
         wxCHECK_RET( parentSheet && parentSheet->Type() == SCH_SHEET_T,
                      wxT( "Cannot place sheet pin in invalid schematic sheet object." ) );
@@ -1337,9 +1336,9 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         undoItem = parentSheet;
     }
 
-    else if( item->Type() == SCH_FIELD_T )
+    else if( aItem->Type() == SCH_FIELD_T )
     {
-        parentComponent = (SCH_COMPONENT*) item->GetParent();
+        parentComponent = (SCH_COMPONENT*) aItem->GetParent();
 
         wxCHECK_RET( parentComponent && parentComponent->Type() == SCH_COMPONENT_T,
                      wxT( "Cannot place field in invalid schematic component object." ) );
@@ -1347,7 +1346,7 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         undoItem = parentComponent;
     }
 
-    if( item->IsNew() )
+    if( aItem->IsNew() )
     {
         // When a new sheet is added to the hierarchy, a clear annotation can be needed
         // for all new sheet paths added by the new sheet (if this sheet is loaded from
@@ -1355,36 +1354,36 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         bool doClearAnnotation = false;
         SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 
-        if( item->Type() == SCH_SHEET_T )
+        if( aItem->Type() == SCH_SHEET_T )
         {
             // Fix the size and position of the new sheet using the last values set by
             // the m_mouseCaptureCallback function.
             m_canvas->SetMouseCapture( NULL, NULL );
 
-            if( !EditSheet( (SCH_SHEET*)item, g_CurrentSheet, &doClearAnnotation ) )
+            if( !EditSheet( (SCH_SHEET*)aItem, g_CurrentSheet, &doClearAnnotation ) )
             {
                 screen->SetCurItem( NULL );
-                delete item;
+                delete aItem;
 
                 return;
             }
 
             SetSheetNumberAndCount();
 
-            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
-                AddToScreen( item );
+            if( !screen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
+                AddToScreen( aItem );
 
-            SetRepeatItem( item );
+            SetRepeatItem( aItem );
             SaveCopyInUndoList( undoItem, UR_NEW );
         }
-        else if( item->Type() == SCH_SHEET_PIN_T )
+        else if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
             SaveCopyInUndoList( undoItem, UR_CHANGED );     // save the parent sheet
 
-            parentSheet->AddPin( (SCH_SHEET_PIN*) item );
+            parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
         }
-        else if( item->Type() == SCH_FIELD_T )
+        else if( aItem->Type() == SCH_FIELD_T )
         {
             // Component fields are also owned by their parent, but new component fields
             // are handled elsewhere.
@@ -1392,10 +1391,10 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         }
         else
         {
-            if( !screen->CheckIfOnDrawList( item ) )  // don't want a loop!
-                AddToScreen( item );
+            if( !screen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
+                AddToScreen( aItem );
 
-            SetRepeatItem( item );
+            SetRepeatItem( aItem );
             SaveCopyInUndoList( undoItem, UR_NEW );
         }
 
@@ -1415,19 +1414,19 @@ void SCH_EDIT_FRAME::addCurrentItemToScreen()
         SaveUndoItemInUndoList( undoItem );
     }
 
-    item->ClearFlags();
+    aItem->ClearFlags();
 
     screen->SetModify();
     screen->SetCurItem( NULL );
     m_canvas->SetMouseCapture( NULL, NULL );
     m_canvas->EndMouseCapture();
 
-    RefreshItem( item );
+    RefreshItem( aItem );
 
-    if( item->IsConnectable() )
+    if( aItem->IsConnectable() )
     {
         std::vector< wxPoint > pts;
-        item->GetConnectionPoints( pts );
+        aItem->GetConnectionPoints( pts );
 
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {

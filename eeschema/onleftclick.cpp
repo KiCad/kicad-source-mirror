@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,7 +87,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             case SCH_FIELD_T:
             case SCH_BITMAP_T:
             case SCH_NO_CONNECT_T:
-                addCurrentItemToScreen();
+                AddItemToScreen( item );
                 GetCanvas()->GetView()->ClearPreview();
                 GetCanvas()->GetView()->ClearHiddenFlags();
                 return;
@@ -120,7 +120,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_HIGHLIGHT_BUTT:
-        // JEY TODO....
+        // Moved to modern toolset
         break;
 
     case ID_NOCONN_BUTT:
@@ -136,7 +136,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -153,7 +153,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -165,7 +165,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -177,7 +177,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -208,7 +208,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -220,7 +220,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -232,7 +232,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -250,7 +250,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -267,7 +267,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
@@ -288,36 +288,16 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
         {
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
         }
         break;
 
     case ID_SCH_PLACE_COMPONENT:
-        if( item_flags == 0 )
-        {
-            // ERC dialog interferes with moving items so we close it before starting
-            CloseErc();
-            GetScreen()->SetCurItem( Load_Component( NULL, s_CmpNameList, true ) );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            addCurrentItemToScreen();
-        }
+        // Moved to modern toolset
         break;
 
     case ID_PLACE_POWER_BUTT:
-        if( item_flags == 0 )
-        {
-            SCHLIB_FILTER filter;
-            filter.FilterPowerParts( true );
-            GetScreen()->SetCurItem( Load_Component( &filter, s_PowerNameList, false ) );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            addCurrentItemToScreen();
-        }
+        // Moved to modern toolset
         break;
 
 #ifdef KICAD_SPICE

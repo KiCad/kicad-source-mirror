@@ -80,19 +80,26 @@ public:
     static TOOL_ACTION layerChanged;        // notification
      */
 
-    /// Clipboard
-    static TOOL_ACTION copyToClipboard;
-    static TOOL_ACTION pasteFromClipboard;
-    static TOOL_ACTION cutToClipboard;
-
     // Locking
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;
     static TOOL_ACTION unlock;
 
-    // Miscellaneous
+    // Tools
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
+    static TOOL_ACTION placeSymbol;
+    static TOOL_ACTION placePower;
+
+    // Editing
+    static TOOL_ACTION properties;
+
+    /// Clipboard
+    static TOOL_ACTION copyToClipboard;
+    static TOOL_ACTION pasteFromClipboard;
+    static TOOL_ACTION cutToClipboard;
+
+    // Miscellaneous
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;

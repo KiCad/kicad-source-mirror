@@ -25,11 +25,14 @@
 #ifndef SCH_EDITOR_CONTROL_H
 #define SCH_EDITOR_CONTROL_H
 
+#include <sch_base_frame.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_event.h>
 #include <tool/tool_menu.h>
 
 class SCH_EDIT_FRAME;
+class SCH_COMPONENT;
+class SCHLIB_FILTER;
 
 /**
  * Class SCH_EDITOR_CONTROL
@@ -78,7 +81,13 @@ public:
     ///> Launches a tool to pick the item whose net is going to be highlighted.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
+    int PlaceSymbol( const TOOL_EVENT& aEvent );
+    int PlacePower( const TOOL_EVENT& aEvent );
+
 private:
+
+    int placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

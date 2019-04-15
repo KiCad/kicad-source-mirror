@@ -33,9 +33,10 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_picker_tool.h>
-
+#include <project.h>
 #include <tools/sch_editor_control.h>
-
+#include <hotkeys.h>
+#include <class_library.h>
 
 TOOL_ACTION SCH_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
                             AS_GLOBAL, 0, "", "" );
@@ -44,7 +45,18 @@ TOOL_ACTION SCH_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highligh
                             AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
-                            AS_GLOBAL, 0, "", "" );
+                            AS_GLOBAL, 0,
+                            _( "Highlight Net" ), _( "Highlight wires and pins of a net" ),
+                            NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeSymbol( "eeschema.EditorControl.placeSymbol",
+                            AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
+                            _( "Add Symbol" ), _( "Add a symbol" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.EditorControl.placePowerPort",
+                            AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
+                            _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
+
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -245,6 +257,165 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
+// History lists for PlaceSymbol()
+static SCH_BASE_FRAME::HISTORY_LIST s_SymbolHistoryList;
+static SCH_BASE_FRAME::HISTORY_LIST s_PowerHistoryList;
+
+
+int SCH_EDITOR_CONTROL::PlaceSymbol( const TOOL_EVENT& aEvent )
+{
+    SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
+
+    m_frame->SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Symbol" ) );
+
+    return placeComponent( component, nullptr, s_SymbolHistoryList );
+}
+
+
+int SCH_EDITOR_CONTROL::PlacePower( const TOOL_EVENT& aEvent )
+{
+    SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
+    SCHLIB_FILTER  filter;
+
+    filter.FilterPowerParts( true );
+    m_frame->SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
+
+    return placeComponent( component, &filter, s_PowerHistoryList );
+}
+
+
+int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    VECTOR2I              cursorPos = controls->GetCursorPosition();
+    KIGFX::SCH_VIEW*      view = static_cast<KIGFX::SCH_VIEW*>( getView() );
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Add all the drawable parts to preview
+    if( aComponent )
+    {
+        aComponent->SetPosition( (wxPoint)cursorPos );
+        view->ClearPreview();
+        view->AddToPreview( aComponent->Clone() );
+    }
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( aComponent )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                view->ClearPreview();
+                view->ClearHiddenFlags();
+                delete aComponent;
+                aComponent = nullptr;
+            }
+            else    // let's have another chance placing a module
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !aComponent )
+            {
+                // Pick the module to be placed
+                m_frame->SetRepeatItem( NULL );
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                auto sel = m_frame->SelectComponentFromLibTree(
+                                                    aFilter, aHistoryList, true, 1, 1,
+                                                    m_frame->GetShowFootprintPreviews() );
+
+                // Restore cursor after dialog
+                m_frame->GetCanvas()->MoveCursorToCrossHair();
+
+                LIB_PART* part = nullptr;
+
+                if( sel.LibId.IsValid() )
+                    part = m_frame->GetLibPart( sel.LibId );
+
+                if( part )
+                {
+                    aComponent = new SCH_COMPONENT( *part, sel.LibId, g_CurrentSheet, sel.Unit,
+                                                   sel.Convert, (wxPoint)cursorPos, true );
+
+                    // Be sure the link to the corresponding LIB_PART is OK:
+                    aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
+
+                    // Set any fields that have been modified
+                    for( auto const& i : sel.Fields )
+                    {
+                        auto field = aComponent->GetField( i.first );
+
+                        if( field )
+                            field->SetText( i.second );
+                    }
+
+                    MSG_PANEL_ITEMS items;
+                    aComponent->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                    m_frame->SetMsgPanel( items );
+
+                    if( m_frame->GetAutoplaceFields() )
+                        aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+                }
+
+                if( !aComponent )
+                    continue;
+
+                aComponent->SetFlags( IS_MOVED );
+                view->ClearPreview();
+                view->AddToPreview( aComponent->Clone() );
+
+                controls->SetCursorPosition( cursorPos, false );
+            }
+            else
+            {
+                view->ClearPreview();
+
+                m_frame->AddItemToScreen( aComponent );
+
+                aComponent = nullptr;
+            }
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+
+        else if( aComponent && evt->IsMotion() )
+        {
+            aComponent->SetPosition( (wxPoint)cursorPos );
+            view->ClearPreview();
+            view->AddToPreview( aComponent->Clone() );
+        }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        controls->SetAutoPan( !!aComponent );
+        controls->CaptureCursor( !!aComponent );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -263,4 +434,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::HighlightNet,          SCH_ACTIONS::highlightNet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    SCH_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, SCH_ACTIONS::highlightNetSelection.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlacePower,            SCH_ACTIONS::placePower.MakeEvent() );
 }

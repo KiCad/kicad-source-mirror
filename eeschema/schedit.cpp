@@ -222,7 +222,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_SCH_END_SHEET:
         m_canvas->MoveCursorToCrossHair();
-        addCurrentItemToScreen();
+        AddItemToScreen( item );
         break;
 
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -350,7 +350,7 @@ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         item = screen->GetCurItem();
 
         if( item )
-            addCurrentItemToScreen();
+            AddItemToScreen( item );
 
         break;
 

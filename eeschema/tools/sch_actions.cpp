@@ -75,6 +75,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_HIGHLIGHT_NET:
         return SCH_ACTIONS::highlightNet.MakeEvent();
+
+    case ID_SCH_PLACE_COMPONENT:
+        return SCH_ACTIONS::placeSymbol.MakeEvent();
+
+    case ID_PLACE_POWER_BUTT:
+        return SCH_ACTIONS::placePower.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

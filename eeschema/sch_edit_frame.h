@@ -220,12 +220,6 @@ protected:
      */
     virtual bool isAutoSaveRequired() const override;
 
-    /**
-     * Add the item currently being edited to the schematic and adds the changes to
-     * the undo/redo container.
-     */
-    void addCurrentItemToScreen();
-
     void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
     void backAnnotateFootprints( const std::string& aChangedSetOfReferences );
@@ -257,8 +251,8 @@ public:
     bool GetShowAllPins() const { return m_showAllPins; }
     void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
 
-    bool GetFootprintPreview() const { return m_footprintPreview; }
-    void SetFootprintPreview( bool aEnable ) { m_footprintPreview = aEnable; }
+    bool GetShowFootprintPreviews() const { return m_footprintPreview; }
+    void SetShowFootprintPreviews( bool aEnable ) { m_footprintPreview = aEnable; }
 
     bool GetAutoplaceFields() const { return m_autoplaceFields; }
     void SetAutoplaceFields( bool aEnable ) { m_autoplaceFields = aEnable; }
@@ -405,6 +399,12 @@ public:
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
     double BestZoom() override;
+
+    /**
+     * Add the item currently being edited to the schematic and adds the changes to
+     * the undo/redo container.
+     */
+    void AddItemToScreen( SCH_ITEM* aItem );
 
     /**
      * Check the schematic at \a aPosition in logical (drawing) units for a item
@@ -1224,27 +1224,6 @@ public:
     void CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
-
-private:
-
-    /**
-     * Load a symbol library and places it on the current schematic.
-     *.
-     * if libname != "", search in lib "libname"
-     * else search in all loaded libs
-     *
-     * @param aFilter is a filter to pass the allowed lib names list, or library name
-     * to load the component from and/or some other filters
-     *          if NULL, no filtering.
-     * @param aHistoryList     list remembering recently used component names.
-     * @param aUseLibBrowser is the flag to determine if the library browser should be launched.
-     * @return a pointer the SCH_COMPONENT object selected or NULL if no component was selected.
-     * (TODO(hzeller): This really should be a class doing history, but didn't
-     *  want to change too much while other refactoring is going on)
-     */
-    SCH_COMPONENT* Load_Component( const SCHLIB_FILTER*             aFilter,
-                                   SCH_BASE_FRAME::HISTORY_LIST&    aHistoryList,
-                                   bool                             aUseLibBrowser );
 
     /**
      * Display the edit component dialog to edit the parameters of \a aComponent.
