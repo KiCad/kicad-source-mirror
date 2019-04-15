@@ -256,7 +256,7 @@ void NETLIST_OBJECT::ConvertBusToNetListItems( NETLIST_OBJECT_LIST& aNetListItem
         else
         {
             wxCHECK_RET( conn.ParseBusGroup( m_Label, &group_name, bus_contents_vec ),
-                         _( "Failed to parse bus group " ) + m_Label );
+                         wxString::Format( _( "Failed to parse bus group %s" ), m_Label ) );
         }
 
         // For named bus groups, like "USB{DP DM}"

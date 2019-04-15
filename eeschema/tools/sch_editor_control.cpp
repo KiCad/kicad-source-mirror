@@ -137,7 +137,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
                 if( item->Connection( *g_CurrentSheet ) )
                 {
                     netName = item->Connection( *g_CurrentSheet )->Name();
-                    editFrame->SetStatusText( _( "Highlighted net: " ) + UnescapeString( netName ) );
+                    editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ), UnescapeString( netName ) ) );
                 }
             }
         }
@@ -145,7 +145,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     editFrame->SetSelectedNetName( netName );
     editFrame->SendCrossProbeNetName( netName );
-    editFrame->SetStatusText( _( "Selected net: " ) + UnescapeString( netName ) );
+    editFrame->SetStatusText( wxString::Format( _( "Selected net: %s" ), UnescapeString( netName ) ) );
 
     aToolMgr->RunAction( SCH_ACTIONS::highlightNetSelection, true );
 
