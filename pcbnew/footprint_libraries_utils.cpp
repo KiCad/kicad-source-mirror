@@ -855,6 +855,12 @@ bool FOOTPRINT_EDIT_FRAME::SaveFootprintToBoard( bool aAddNew )
         pcbframe->SetCrossHairPosition( cursor_pos );
         newmodule->SetTimeStamp( GetNewTimeStamp() );
         commit.Push( wxT( "Insert module" ) );
+
+        if( pcbframe->IsGalCanvasActive() )
+        {
+            pcbframe->Raise();
+            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
+        }
     }
 
     newmodule->ClearFlags();

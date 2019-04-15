@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2012-2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008-2016 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file footprint_viewer_frame.cpp
  */
 
 #include <fctsys.h>
@@ -60,6 +56,7 @@
 #include "tools/selection_tool.h"
 #include "tools/pcbnew_control.h"
 #include "tools/pcb_actions.h"
+#include "board_commit.h"
 
 #include <functional>
 #include <memory>
@@ -92,7 +89,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_MODVIEW_OPTIONS, FOOTPRINT_VIEWER_FRAME::InstallDisplayOptions )
     EVT_TOOL( ID_MODVIEW_NEXT, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
     EVT_TOOL( ID_MODVIEW_PREVIOUS, FOOTPRINT_VIEWER_FRAME::OnIterateFootprintList )
-    EVT_TOOL( ID_MODVIEW_EXPORT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint )
+    EVT_TOOL( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB )
     EVT_TOOL( ID_MODVIEW_SHOW_3D_VIEW, FOOTPRINT_VIEWER_FRAME::Show3D_Frame )
     EVT_CHOICE( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectZoom )
     EVT_CHOICE( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnSelectGrid )
@@ -240,8 +237,7 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
-    // after changing something to the aui manager,
-    // call Update()() to reflect the changes
+    // after changing something to the aui manager call Update() to reflect the changes
     m_auimgr.Update();
 
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
@@ -452,48 +448,74 @@ void FOOTPRINT_VIEWER_FRAME::ClickOnFootprintList( wxCommandEvent& event )
 
 void FOOTPRINT_VIEWER_FRAME::DClickOnFootprintList( wxCommandEvent& event )
 {
-    if( IsModal() )
-    {
-        // @todo(DICK)
-        ExportSelectedFootprint( event );
+    AddFootprintToPCB( event );
 
-        // Prevent the double click from being as a single mouse button release
-        // event in the parent window which would cause the part to be parked
-        // rather than staying in move mode.
-        // Remember the mouse button will be released in the parent window
-        // thus creating a mouse button release event which should be ignored
-        PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
+    // Prevent the double click from being as a single mouse button release
+    // event in the parent window which would cause the part to be parked
+    // rather than staying in move mode.
+    // Remember the mouse button will be released in the parent window
+    // thus creating a mouse button release event which should be ignored
+    PCB_EDIT_FRAME* pcbframe = dynamic_cast<PCB_EDIT_FRAME*>( GetParent() );
 
-        // The parent may not be the board editor:
-        if( pcbframe )
-        {
-            pcbframe->SkipNextLeftButtonReleaseEvent();
-        }
-    }
+    // The parent may not be the board editor:
+    if( pcbframe )
+        pcbframe->SkipNextLeftButtonReleaseEvent();
 }
 
 
-void FOOTPRINT_VIEWER_FRAME::ExportSelectedFootprint( wxCommandEvent& event )
+void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
 {
-    int ii = m_footprintList->GetSelection();
-
-    if( ii >= 0 )
+    if( IsModal() )
     {
-        wxString fp_name = m_footprintList->GetString( ii );
+        if( m_footprintList->GetSelection() >= 0 )
+        {
+            LIB_ID fpid( getCurNickname(), m_footprintList->GetStringSelection() );
+            DismissModal( true, fpid.Format() );
+        }
+        else
+        {
+            DismissModal( false );
+        }
 
-        LIB_ID fpid;
-
-        fpid.SetLibNickname( getCurNickname() );
-        fpid.SetLibItemName( fp_name );
-
-        DismissModal( true, fpid.Format() );
+        Close( true );
     }
     else
     {
-        DismissModal( false );
-    }
+        PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
-    Close( true );
+        if( pcbframe == NULL )      // happens when the board editor is not active (or closed)
+        {
+            DisplayErrorMessage( this, _( "No board currently open." ) );
+            return;
+        }
+
+        pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+        BOARD_COMMIT commit( pcbframe );
+
+        // Create the "new" module
+        MODULE* newmodule = new MODULE( *GetBoard()->m_Modules );
+        newmodule->SetParent( pcbframe->GetBoard() );
+        newmodule->SetLink( 0 );
+
+        wxPoint cursor_pos = pcbframe->GetCrossHairPosition();
+
+        commit.Add( newmodule );
+        pcbframe->SetCrossHairPosition( wxPoint( 0, 0 ) );
+        pcbframe->PlaceModule( newmodule, NULL );
+        newmodule->SetPosition( wxPoint( 0, 0 ) );
+        pcbframe->SetCrossHairPosition( cursor_pos );
+        newmodule->SetTimeStamp( GetNewTimeStamp() );
+        commit.Push( wxT( "Insert module" ) );
+
+        if( pcbframe->IsGalCanvasActive() )
+        {
+            pcbframe->Raise();
+            pcbframe->GetToolManager()->RunAction( PCB_ACTIONS::placeModule, true, newmodule );
+        }
+
+        newmodule->ClearFlags();
+        pcbframe->SetCurItem( NULL );
+    }
 }
 
 
@@ -735,12 +757,10 @@ void FOOTPRINT_VIEWER_FRAME::UpdateTitle()
     wxString path;
 
     title.Printf( _( "Footprint Library Browser" ) + L" \u2014 %s",
-            getCurNickname().size()
-                ? getCurNickname()
-                : _( "no library selected" ) );
+                  getCurNickname().IsEmpty() ? _( "no library selected" ) : getCurNickname() );
 
     // Now, add the full path, for info
-    if( getCurNickname().size() )
+    if( !getCurNickname().IsEmpty() )
     {
         FP_LIB_TABLE* libtable = Prj().PcbFootprintLibs();
         const LIB_TABLE_ROW* row = libtable->FindRow( getCurNickname() );

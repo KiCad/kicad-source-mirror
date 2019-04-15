@@ -52,8 +52,7 @@
 
 
 SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowser(
-        wxTopLevelWindow* aParent,
-        const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId,
+        wxTopLevelWindow* aParent, const SCHLIB_FILTER* aFilter, const LIB_ID& aPreselectedLibId,
         int aUnit, int aConvert )
 {
     // Close any open non-modal Lib browser, and open a new one, in "modal" mode:
@@ -78,8 +77,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
     viewlibFrame->Refresh();
 
     COMPONENT_SELECTION sel;
-
-    wxString symbol = sel.LibId.Format();
+    wxString            symbol;
 
     if( viewlibFrame->ShowModal( &symbol, aParent ) )
     {

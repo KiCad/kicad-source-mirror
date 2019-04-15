@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jap.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file footprint_viewer_frame.h
  */
 
 #ifndef FOOTPRINT_VIEWER_FRAME_H
@@ -167,10 +163,10 @@ private:
     void SelectCurrentFootprint( wxCommandEvent& event );
 
     /**
-     * Function ExportSelectedFootprint
+     * Function AddFootprintToPCB
      * exports the current footprint name and close the library browser.
      */
-    void ExportSelectedFootprint( wxCommandEvent& event );
+    void AddFootprintToPCB( wxCommandEvent& event );
 
     /**
      * Function SelectAndViewFootprint

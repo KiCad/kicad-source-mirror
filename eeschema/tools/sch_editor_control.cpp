@@ -336,9 +336,8 @@ int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 m_frame->SetRepeatItem( NULL );
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
-                auto sel = m_frame->SelectComponentFromLibTree(
-                                                    aFilter, aHistoryList, true, 1, 1,
-                                                    m_frame->GetShowFootprintPreviews() );
+                auto sel = m_frame->SelectComponentFromLibTree( aFilter, aHistoryList, true, 1, 1,
+                                                             m_frame->GetShowFootprintPreviews() );
 
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();

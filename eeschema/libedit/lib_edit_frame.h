@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2014 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Copyright (C) 2017 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -23,11 +23,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file lib_edit_frame.h
- * @brief Definition of class LIB_EDIT_FRAME
  */
 
 #ifndef LIB_EDIT_FRAME_H
@@ -273,6 +268,11 @@ public:
     void OnExportPart( wxCommandEvent& event );
 
     /**
+     * Add the current part to the schematic
+     */
+    void OnAddPartToSchematic( wxCommandEvent& event );
+
+    /**
      * Saves the selected part or library.
      */
     void OnSave( wxCommandEvent& aEvent );
@@ -297,7 +297,6 @@ public:
      */
     void OnRemovePart( wxCommandEvent& aEvent );
 
-    void OnDuplicatePart( wxCommandEvent& aEvent );
     void OnCopyCutPart( wxCommandEvent& aEvent );
     void OnPasteDuplicatePart( wxCommandEvent& aEvent );
 
@@ -330,7 +329,6 @@ public:
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
-    void OnUpdateSaveAs( wxUpdateUIEvent& aEvent );
     void OnUpdateRevert( wxUpdateUIEvent& aEvent );
     void OnUpdateUndo( wxUpdateUIEvent& event );
     void OnUpdateRedo( wxUpdateUIEvent& event );
@@ -401,38 +399,21 @@ public:
     void OnModify();
 
     int GetUnit() { return m_unit; }
-
-    void SetUnit( int unit )
-    {
-        wxASSERT( unit >= 1 );
-        m_unit = unit;
-    }
+    void SetUnit( int unit ) { m_unit = unit; }
 
     int GetConvert() { return m_convert; }
-
-    void SetConvert( int convert )
-    {
-        wxASSERT( convert >= 0 );
-        m_convert = convert;
-    }
+    void SetConvert( int convert ) { m_convert = convert; }
 
     LIB_ITEM* GetLastDrawItem() { return m_lastDrawItem; }
-
-    void SetLastDrawItem( LIB_ITEM* drawItem )
-    {
-        m_lastDrawItem = drawItem;
-    }
+    void SetLastDrawItem( LIB_ITEM* drawItem ) { m_lastDrawItem = drawItem; }
 
     LIB_ITEM* GetDrawItem() const { return GetScreen()->GetCurLibItem(); }
-
     void SetDrawItem( LIB_ITEM* drawItem ) { GetScreen()->SetCurLibItem( drawItem ); }
 
     bool GetShowDeMorgan() { return m_showDeMorgan; }
-
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
-
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     FILL_T GetFillStyle() { return m_drawFillStyle; }

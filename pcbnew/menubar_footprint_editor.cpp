@@ -405,7 +405,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Load a footprint from the current board into the editor" ),
                  KiBitmap( load_module_board_xpm ) );
 
-    AddMenuItem( toolsMenu, ID_MODEDIT_INSERT_MODULE_IN_BOARD,
+    AddMenuItem( toolsMenu, ID_ADD_FOOTPRINT_TO_BOARD,
                  _( "&Insert Footprint on PCB" ),
                  _( "Insert footprint onto current board" ),
                  KiBitmap( insert_module_board_xpm ) );

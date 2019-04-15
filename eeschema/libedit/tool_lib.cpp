@@ -190,6 +190,12 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_LIBEDIT_SYNC_PIN_EDIT, wxEmptyString,
                             KiScaledBitmap( pin2pin_xpm, this ), msg, wxITEM_CHECK );
 
+    KiScaledSeparator( m_mainToolBar, this );
+
+    m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
+                            KiScaledBitmap( export_xpm, this ),
+                            _( "Add symbol to schematic" ) );
+
     // after adding the buttons to the toolbar, must call Realize() to reflect the changes
     m_mainToolBar->Realize();
 }

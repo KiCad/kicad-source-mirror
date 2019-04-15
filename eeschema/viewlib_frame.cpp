@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file viewlib_frame.cpp
  */
 
 #include <fctsys.h>
@@ -49,6 +45,7 @@
 #include <sch_painter.h>
 #include <confirm.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -71,8 +68,8 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBVIEW_VIEWDOC, LIB_VIEW_FRAME::onViewSymbolDocument )
     EVT_TOOL_RANGE( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT,
                     LIB_VIEW_FRAME::onSelectSymbolBodyStyle )
-    EVT_TOOL( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC, LIB_VIEW_FRAME::ExportToSchematicLibraryPart )
     EVT_CHOICE( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onSelectSymbolUnit )
+    EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_VIEW_FRAME::OnAddPartToSchematic )
 
     // listbox events
     EVT_LISTBOX( ID_LIBVIEW_LIB_LIST, LIB_VIEW_FRAME::ClickOnLibList )
@@ -240,9 +237,7 @@ LIB_ALIAS* LIB_VIEW_FRAME::getSelectedAlias() const
     LIB_ALIAS* alias = NULL;
 
     if( !m_libraryName.IsEmpty() && !m_entryName.IsEmpty() )
-    {
         alias = Prj().SchSymbolLibTable()->LoadSymbol( m_libraryName, m_entryName );
-    }
 
     return alias;
 }
@@ -673,43 +668,19 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
 
 void LIB_VIEW_FRAME::DClickOnCmpList( wxCommandEvent& event )
 {
-    if( IsModal() )
+    OnAddPartToSchematic( event );
+
+    // The schematic editor might not be the parent of the library viewer.
+    // It could be a python window.
+    SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
+
+    if( schframe )
     {
-        ExportToSchematicLibraryPart( event );
-
-        // The schematic editor might not be the parent of the library viewer.
-        // It could be a python window.
-        SCH_EDIT_FRAME* schframe = dynamic_cast<SCH_EDIT_FRAME*>( GetParent() );
-
-        if( schframe )
-        {
-            // Prevent the double click from being as a single click in the parent
-            // window which would cause the part to be parked rather than staying
-            // in drag mode.
-            schframe->SkipNextLeftButtonReleaseEvent();
-        }
+        // Prevent the double click from being as a single click in the parent
+        // window which would cause the part to be parked rather than staying
+        // in drag mode.
+        schframe->SkipNextLeftButtonReleaseEvent();
     }
-}
-
-
-void LIB_VIEW_FRAME::ExportToSchematicLibraryPart( wxCommandEvent& event )
-{
-    int ii = m_cmpList->GetSelection();
-
-    if( ii >= 0 )
-    {
-        wxString part_name = m_libraryName + ':' + m_cmpList->GetString( ii );
-
-        // a selection was made, pass true
-        DismissModal( true, part_name );
-    }
-    else
-    {
-        // no selection was made, pass false
-        DismissModal( false );
-    }
-
-    Close( true );
 }
 
 
@@ -801,6 +772,7 @@ void LIB_VIEW_FRAME::SetFilter( const SCHLIB_FILTER* aFilter )
     ReCreateListLib();
 }
 
+
 const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
 {
     LIB_ALIAS*  alias = getSelectedAlias();
@@ -815,5 +787,51 @@ const BOX2I LIB_VIEW_FRAME::GetDocumentExtents() const
         EDA_RECT bbox = part->GetUnitBoundingBox( m_unit, m_convert );
         return BOX2I( bbox.GetOrigin(), VECTOR2I( bbox.GetWidth(), bbox.GetHeight() ) );
 
+    }
+}
+
+
+void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
+{
+    if( IsModal() )
+    {
+        // if we're modal then we just need to return the symbol selection; the caller is
+        // already in a SCH_ACTIONS::placeSymbol coroutine.
+        if( m_cmpList->GetSelection() >= 0 )
+            DismissModal( true, m_libraryName + ':' + m_cmpList->GetStringSelection() );
+        else
+            DismissModal( false );
+
+        Close( true );
+        return;
+    }
+
+    if( getSelectedSymbol() )
+    {
+        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+
+        if( schframe == NULL )      // happens when the schematic editor is not active (or closed)
+        {
+            DisplayErrorMessage( this, _("No schematic currently open." ) );
+            return;
+        }
+
+        SCH_COMPONENT* component = new SCH_COMPONENT( *getSelectedSymbol(),
+                                                      getSelectedAlias()->GetLibId(),
+                                                      g_CurrentSheet, m_unit, m_convert,
+                                                      wxPoint( 0, 0 ), true );
+
+        // Be sure the link to the corresponding LIB_PART is OK:
+        component->Resolve( *Prj().SchSymbolLibTable() );
+
+        MSG_PANEL_ITEMS items;
+        component->GetMsgPanelInfo( schframe->GetUserUnits(), items );
+        schframe->SetMsgPanel( items );
+
+        if( schframe->GetAutoplaceFields() )
+            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+        schframe->Raise();
+        schframe->GetToolManager()->RunAction( SCH_ACTIONS::placeSymbol, true, component );
     }
 }

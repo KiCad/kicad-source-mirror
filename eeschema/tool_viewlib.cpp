@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -17,11 +17,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file tool_viewlib.cpp
- * @brief Build the toolbars for the library browser.
  */
 
 
@@ -52,7 +47,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             KiScaledBitmap( add_component_xpm, this ),
             _( "Select symbol to browse" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_PREVIOUS, wxEmptyString,
             KiScaledBitmap( lib_previous_xpm, this ),
             _( "Display previous symbol" ) );
@@ -61,7 +56,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             KiScaledBitmap( lib_next_xpm, this ),
             _( "Display next symbol" ) );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hotkeys_Descr,
             HK_ZOOM_IN, IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
@@ -82,7 +77,7 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
             KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
             KiScaledBitmap( morgan1_xpm, this ),
             _( "Show as \"De Morgan\" normal symbol" ),
@@ -93,24 +88,21 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             _( "Show as \"De Morgan\" convert symbol" ),
             wxITEM_CHECK );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
 
     m_unitChoice = new wxChoice( m_mainToolBar, ID_LIBVIEW_SELECT_PART_NUMBER,
             wxDefaultPosition, wxSize( 150, -1 ) );
     m_mainToolBar->AddControl( m_unitChoice );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_VIEWDOC, wxEmptyString,
             KiScaledBitmap( datasheet_xpm, this ),
             _( "View symbol documents" ) );
 
-    if( IsModal() )
-    {
-        m_mainToolBar->AddSeparator();
-        m_mainToolBar->AddTool( ID_LIBVIEW_CMP_EXPORT_TO_SCHEMATIC,
-                wxEmptyString, KiScaledBitmap( export_xpm, this ),
-                _( "Insert symbol in schematic" ) );
-    }
+    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddTool( ID_ADD_PART_TO_SCHEMATIC, wxEmptyString,
+            KiScaledBitmap( export_xpm, this ),
+            _( "Add symbol to schematic" ) );
 
     // after adding the buttons to the toolbar, must call Realize() to
     // reflect the changes

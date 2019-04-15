@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2016 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 
 
 #ifndef LIB_VIEW_FRAME_H__
-
 #define LIB_VIEW_FRAME_H__
 
 #include <sch_base_frame.h>
@@ -164,11 +163,6 @@ private:
      */
     virtual void OnActivate( wxActivateEvent& event ) override;
 
-    /**
-     * Function ExportToSchematicLibraryPart
-     * exports the current component to schematic and close the library browser.
-     */
-    void ExportToSchematicLibraryPart( wxCommandEvent& event );
     bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
     void DClickOnCmpList( wxCommandEvent& event );
 
@@ -177,11 +171,13 @@ private:
     void onUpdateDocButton( wxUpdateUIEvent& aEvent );
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void onUpdateUnitChoice( wxUpdateUIEvent& aEvent );
+
     void onSelectNextSymbol( wxCommandEvent& aEvent );
     void onSelectPreviousSymbol( wxCommandEvent& aEvent );
     void onViewSymbolDocument( wxCommandEvent& aEvent );
     void onSelectSymbolBodyStyle( wxCommandEvent& aEvent );
     void onSelectSymbolUnit( wxCommandEvent& aEvent );
+    void OnAddPartToSchematic( wxCommandEvent& aEvent );
 
     LIB_ALIAS* getSelectedAlias() const;
     LIB_PART* getSelectedSymbol() const;

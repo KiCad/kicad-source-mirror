@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2015-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2015-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file viewlibs.cpp
  */
 
 #include <fctsys.h>
@@ -138,19 +134,10 @@ void LIB_VIEW_FRAME::onViewSymbolDocument( wxCommandEvent& aEvent )
 
 void LIB_VIEW_FRAME::onSelectSymbolBodyStyle( wxCommandEvent& aEvent )
 {
-    int id = aEvent.GetId();
-
-    switch( id )
-    {
-    default:
-    case ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT:
-        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
-        break;
-
-    case ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT:
+    if( aEvent.GetId() == ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT )
         m_convert = LIB_ITEM::LIB_CONVERT::DEMORGAN;
-        break;
-    }
+    else
+        m_convert = LIB_ITEM::LIB_CONVERT::BASE;
 
     updatePreviewSymbol();
 }

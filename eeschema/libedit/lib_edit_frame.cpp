@@ -65,6 +65,7 @@
 #include <tool/context_menu.h>
 #include <sch_view.h>
 #include <sch_painter.h>
+#include <tools/sch_actions.h>
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
@@ -119,6 +120,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
     EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
+    EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
 
@@ -171,7 +173,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_ALL, LIB_EDIT_FRAME::OnUpdateSave )
-    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateSaveAs )
+    EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
@@ -458,16 +460,6 @@ void LIB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateSaveAs( wxUpdateUIEvent& aEvent )
-{
-    LIB_ID libId = getTargetLibId();
-    const wxString& libName = libId.GetLibNickname();
-    const wxString& partName = libId.GetLibItemName();
-
-    aEvent.Enable( !libName.IsEmpty() || !partName.IsEmpty() );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateRevert( wxUpdateUIEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
@@ -627,10 +619,7 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
-    if( event.GetId() == ID_DE_MORGAN_NORMAL_BUTT )
-        m_convert = 1;
-    else
-        m_convert = 2;
+    m_convert = event.GetId() == ID_DE_MORGAN_NORMAL_BUTT ? 1 : 2;
 
     m_lastDrawItem = NULL;
 
@@ -703,10 +692,10 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
         m_canvas->MoveCursorToCrossHair();
+
         if( item )
-        {
             EndDrawGraphicItem( nullptr );
-        }
+
         break;
 
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
@@ -742,7 +731,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
                 break;
 
             m_canvas->MoveCursorToCrossHair();
-            ( (LIB_POLYLINE*) item )->DeleteSegment( GetCrossHairPosition( true ) );
+            static_cast<LIB_POLYLINE*>( item )->DeleteSegment( GetCrossHairPosition( true ) );
             m_lastDrawItem = NULL;
         }
         break;
@@ -765,7 +754,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_LIBEDIT_MODIFY_ITEM:
-
         if( item == NULL )
             break;
 
@@ -773,8 +761,7 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         if( item->Type() == LIB_RECTANGLE_T
             || item->Type() == LIB_CIRCLE_T
             || item->Type() == LIB_POLYLINE_T
-            || item->Type() == LIB_ARC_T
-            )
+            || item->Type() == LIB_ARC_T )
         {
             StartModifyDrawSymbol( nullptr, item );
         }
@@ -1307,15 +1294,14 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
 
 LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] )
 {
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
     if( !part )
         return NULL;
 
     LIB_ITEM* item = NULL;
 
-    m_collectedItems.Collect( part->GetDrawItems(), aFilterList, aPosition,
-                              m_unit, m_convert );
+    m_collectedItems.Collect( part->GetDrawItems(), aFilterList, aPosition, m_unit, m_convert );
 
     if( m_collectedItems.GetCount() == 0 )
     {
@@ -1327,32 +1313,28 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
     }
     else
     {
-        if( item == NULL )
+        wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
+                      "Select item clarification context menu size limit exceeded." );
+
+        wxMenu selectMenu;
+        AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ), KiBitmap( info_xpm ) );
+
+        selectMenu.AppendSeparator();
+
+        for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
         {
-            wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
-                          "Select item clarification context menu size limit exceeded." );
+            wxString    text = m_collectedItems[i]->GetSelectMenuText( m_UserUnits );
+            BITMAP_DEF  xpm = m_collectedItems[i]->GetMenuImage();
 
-            wxMenu selectMenu;
-            AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ),
-                         KiBitmap( info_xpm ) );
-
-            selectMenu.AppendSeparator();
-
-            for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
-            {
-                wxString    text = m_collectedItems[i]->GetSelectMenuText( m_UserUnits );
-                BITMAP_DEF  xpm = m_collectedItems[i]->GetMenuImage();
-
-                AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
-            }
-
-            // Set to NULL in case user aborts the clarification context menu.
-            SetDrawItem( NULL );
-            m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
-            PopupMenu( &selectMenu );
-            m_canvas->MoveCursorToCrossHair();
-            item = GetDrawItem();
+            AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
         }
+
+        // Set to NULL in case user aborts the clarification context menu.
+        SetDrawItem( NULL );
+        m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
+        PopupMenu( &selectMenu );
+        m_canvas->MoveCursorToCrossHair();
+        item = GetDrawItem();
     }
 
     if( item )
@@ -1377,7 +1359,7 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
 
     m_canvas->CrossHairOff( aDC );
 
-    LIB_PART*      part = GetCurPart();
+    LIB_PART* part = GetCurPart();
 
     SaveCopyInUndoList( part );
 
@@ -1476,6 +1458,38 @@ bool LIB_EDIT_FRAME::SynchronizePins()
 }
 
 
+void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
+{
+    if( GetCurPart() )
+    {
+        SCH_EDIT_FRAME* schframe = (SCH_EDIT_FRAME*) Kiway().Player( FRAME_SCH, false );
+
+        if( schframe == NULL )      // happens when the schematic editor is not active (or closed)
+        {
+            DisplayErrorMessage( this, _("No schematic currently open." ) );
+            return;
+        }
+
+        SCH_COMPONENT* component = new SCH_COMPONENT( *GetCurPart(), GetCurPart()->GetLibId(),
+                                                      g_CurrentSheet, GetUnit(), GetConvert(),
+                                                      wxPoint( 0, 0 ), true );
+
+        // Be sure the link to the corresponding LIB_PART is OK:
+        component->Resolve( *Prj().SchSymbolLibTable() );
+
+        MSG_PANEL_ITEMS items;
+        component->GetMsgPanelInfo( schframe->GetUserUnits(), items );
+        schframe->SetMsgPanel( items );
+
+        if( schframe->GetAutoplaceFields() )
+            component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+        schframe->Raise();
+        schframe->GetToolManager()->RunAction( SCH_ACTIONS::placeSymbol, true, component );
+    }
+}
+
+
 void LIB_EDIT_FRAME::refreshSchematic()
 {
     // There may be no parent window so use KIWAY message to refresh the schematic editor
@@ -1489,9 +1503,8 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
 {
     wxFileName fn = m_libMgr->GetUniqueLibraryName();
 
-    if( !LibraryFileBrowser( !aCreateNew, fn,
-                             SchematicLibraryFileWildcard(), SchematicLibraryFileExtension,
-                             false ) )
+    if( !LibraryFileBrowser( !aCreateNew, fn, SchematicLibraryFileWildcard(),
+                             SchematicLibraryFileExtension, false ) )
     {
         return false;
     }
@@ -1670,8 +1683,7 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
 
         if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            DisplayError( this, _( "Failed to save backup document to file " ) +
-                  backupFileName.GetFullPath() );
+            DisplayError( this, _( "Failed to save backup to " ) + backupFileName.GetFullPath() );
             return false;
         }
     }

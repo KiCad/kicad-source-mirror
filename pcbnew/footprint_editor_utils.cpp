@@ -545,7 +545,7 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         }
         break;
 
-    case ID_MODEDIT_INSERT_MODULE_IN_BOARD:
+    case ID_ADD_FOOTPRINT_TO_BOARD:
         SaveFootprintToBoard( true );
         break;
 
