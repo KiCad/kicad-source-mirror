@@ -257,3 +257,27 @@ bool GetXYZRotation( SEXPR::SEXPR* data, TRIPLET& aRotation )
 
     return true;
 }
+
+
+OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem )
+{
+    OPT<std::string> layer;
+
+    if( aLayerElem.GetNumberOfChildren() == 2 )
+    {
+        const auto& layerChild = *aLayerElem.GetChild( 1 );
+
+        // The layer child can be quoted (string) or unquoted (symbol)
+        // depending on PCB version.
+        if( layerChild.IsString() )
+        {
+            layer = layerChild.GetString();
+        }
+        else if( layerChild.IsSymbol() )
+        {
+            layer = layerChild.GetSymbol();
+        }
+    }
+
+    return layer;
+}

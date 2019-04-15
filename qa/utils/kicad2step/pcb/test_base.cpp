@@ -59,11 +59,17 @@ constexpr double DegToRad( double aDeg )
 }
 
 
+class TEST_PCB_BASE_FIXTURE
+{
+public:
+    SEXPR::PARSER m_parser;
+};
+
+
 /**
  * Declare the test suite
  */
-BOOST_AUTO_TEST_SUITE( PcbBase )
-
+BOOST_FIXTURE_TEST_SUITE( PcbBase, TEST_PCB_BASE_FIXTURE )
 
 struct TEST_2D_POS_ROT
 {
@@ -98,14 +104,12 @@ BOOST_AUTO_TEST_CASE( SexprTo2DPosAndRot )
             {},
         },
         {
-            "(att 3.14 4.12 90.4)",
+            "(att 3.14 4.12 90.4)", // bad symbol name
             false,
             {},
             {},
         },
     };
-
-    SEXPR::PARSER parser;
 
     for( const auto& c : cases )
     {
@@ -114,7 +118,7 @@ BOOST_AUTO_TEST_CASE( SexprTo2DPosAndRot )
             DOUBLET gotPos;
             double gotRot;
 
-            std::unique_ptr<SEXPR::SEXPR> sexpr( parser.Parse( c.m_sexp ) );
+            std::unique_ptr<SEXPR::SEXPR> sexpr( m_parser.Parse( c.m_sexp ) );
 
             const bool ret = Get2DPositionAndRotation( sexpr.get(), gotPos, gotRot );
 
@@ -128,6 +132,69 @@ BOOST_AUTO_TEST_CASE( SexprTo2DPosAndRot )
             BOOST_CHECK_CLOSE( gotPos.x, c.m_exp_pos.x, tolPercent );
             BOOST_CHECK_CLOSE( gotPos.y, c.m_exp_pos.y, tolPercent );
             BOOST_CHECK_CLOSE( gotRot, c.m_exp_rot, tolPercent );
+        }
+    }
+}
+
+struct TEST_LAYER_NAME
+{
+    std::string m_sexp;
+    bool        m_valid;
+    std::string m_layer;
+};
+
+/**
+ * Test the layer list parser.
+ */
+BOOST_AUTO_TEST_CASE( TestGetLayerName )
+{
+    const std::vector<TEST_LAYER_NAME> cases = {
+        {
+            // Quoted string - OK
+            "(layer \"Edge.Cuts\")",
+            true,
+            "Edge.Cuts",
+        },
+        {
+            // Old KiCads exported without quotes (so, as symbols)
+            "(layer Edge.Cuts)",
+            true,
+            "Edge.Cuts",
+        },
+        {
+            // No atoms
+            "(layer)",
+            false,
+            {},
+        },
+        {
+            // Too many atoms in list
+            "(layer \"Edge.Cuts\" 2)",
+            false,
+            {},
+        },
+        {
+            // Wrong atom type
+            "(layer 2)",
+            false,
+            {},
+        },
+    };
+
+    for( const auto& c : cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_sexp )
+        {
+            std::unique_ptr<SEXPR::SEXPR> sexpr( m_parser.Parse( c.m_sexp ) );
+
+            const OPT<std::string> ret = GetLayerName( *sexpr );
+
+            BOOST_CHECK_EQUAL( ret.has_value(), c.m_valid );
+
+            if( ret )
+            {
+                BOOST_CHECK_EQUAL( *ret, c.m_layer );
+            }
         }
     }
 }

@@ -30,6 +30,8 @@
 #ifndef KICADBASE_H
 #define KICADBASE_H
 
+#include <core/optional.h>
+
 #include <ostream>
 
 ///> Minimum distance between points to treat them as separate ones (mm)
@@ -94,5 +96,16 @@ bool Get2DPositionAndRotation( SEXPR::SEXPR* data, DOUBLET& aPosition, double& a
 bool Get2DCoordinate( SEXPR::SEXPR* data, DOUBLET& aCoordinate );
 bool Get3DCoordinate( SEXPR::SEXPR* data, TRIPLET& aCoordinate );
 bool GetXYZRotation( SEXPR::SEXPR* data, TRIPLET& aRotation );
+
+/**
+ * Get the layer name from a layer element, if the layer is syntactically
+ * valid.
+ *
+ * E.g. (layer "Edge.Cuts") -> "Edge.Cuts"
+ *
+ * @param  aLayerElem the s-expr element to get the name from
+ * @return            the layer name if valid, else empty
+ */
+OPT<std::string> GetLayerName( const SEXPR::SEXPR& aLayerElem );
 
 #endif  // KICADBASE_H
