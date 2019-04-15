@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-08 21:33+0100\n"
+"POT-Creation-Date: 2019-04-15 21:06+0200\n"
 "PO-Revision-Date: 2018-07-15 17:07+0200\n"
 "Last-Translator: Simon Richter <Simon.Richter@hogyros.de>\n"
 "Language-Team: Simon Richter <Simon.Richter@hogyros.de>\n"
@@ -1446,6 +1446,36 @@ msgstr "Page Setup…"
 msgid "MyLabel"
 msgstr "MyLabel"
 
+msgid ""
+"Set the scale for the canvas.\n"
+"\n"
+"On high-DPI displays on some platforms, KiCad cannot determine the scaling "
+"factor. In this case you may need to set this to a value to match your "
+"system's DPI scaling. 2.0 is a common value. \n"
+"\n"
+"If this does not match the system DPI scaling, the canvas will not match the "
+"window size and cursor position."
+msgstr ""
+"Set the scale for the canvas.\n"
+"\n"
+"On high-DPI displays on some platforms, KiCad cannot determine the scaling "
+"factor. In this case you may need to set this to a value to match your "
+"system's DPI scaling. 2.0 is a common value. \n"
+"\n"
+"If this does not match the system DPI scaling, the canvas will not match the "
+"window size and cursor position."
+
+msgid ""
+"Use an automatic value for the canvas scale.\n"
+"\n"
+"On some platforms, the automatic value is incorrect and should be set "
+"manually."
+msgstr ""
+"Use an automatic value for the canvas scale.\n"
+"\n"
+"On some platforms, the automatic value is incorrect and should be set "
+"manually."
+
 msgid "Executable files ("
 msgstr "Executable files ("
 
@@ -1516,11 +1546,11 @@ msgstr "User Interface"
 msgid "Icon scale:"
 msgstr "Icon scale:"
 
-msgid "%"
-msgstr "%"
-
 msgid "Automatic"
 msgstr "Automatic"
+
+msgid "Canvas scale:"
+msgstr "Canvas scale:"
 
 msgid "Show icons in menus"
 msgstr "Show icons in menus"
@@ -2178,6 +2208,9 @@ msgstr "Colors"
 msgid "Cancel current tool"
 msgstr "Cancel current tool"
 
+msgid "Refresh View"
+msgstr "Refresh View"
+
 msgid "Zoom Auto"
 msgstr "Zoom Auto"
 
@@ -2193,6 +2226,10 @@ msgstr "Toggle display of the cursor, even when not in an interactive tool"
 #, c-format
 msgid "Zoom: %.2f"
 msgstr "Zoom: %.2f"
+
+#, c-format
+msgid "Incorrect value: %s"
+msgstr "Incorrect value: %s"
 
 msgid "Mirroring for Y axis is not supported yet"
 msgstr "Mirroring for Y axis is not supported yet"
@@ -2833,6 +2870,9 @@ msgstr ""
 "You will need to reassign them manually if you want them to be updated "
 "correctly the next time you import the netlist in Pcbnew."
 
+msgid "Schematic saved"
+msgstr "Schematic saved"
+
 msgid "Edit footprint library table"
 msgstr "Edit footprint library table"
 
@@ -2850,6 +2890,9 @@ msgstr "Perform automatic footprint association"
 
 msgid "Delete all footprint associations"
 msgstr "Delete all footprint associations"
+
+msgid "Footprint Filters:"
+msgstr "Footprint Filters:"
 
 msgid "Filter footprint list by schematic symbol keywords"
 msgstr "Filter footprint list by schematic symbol keywords"
@@ -3010,14 +3053,54 @@ msgstr "Different values for %s%d%s (%s) and %s%d%s (%s)"
 msgid "Duplicate time stamp (%s) for %s%d and %s%d"
 msgstr "Duplicate time stamp (%s) for %s%d and %s%d"
 
+#, c-format
+msgid ""
+"%s and %s are both attached to the same wires. %s was picked as the label to "
+"use for netlisting."
+msgstr ""
+"%s and %s are both attached to the same wires. %s was picked as the label to "
+"use for netlisting."
+
+#, c-format
+msgid "Global label %s is not connected to any other global label."
+msgstr "Global label %s is not connected to any other global label."
+
+#, c-format
+msgid ""
+"%s and %s are graphically connected but cannot electrically connect because "
+"one is a bus and the other is a net."
+msgstr ""
+"%s and %s are graphically connected but cannot electrically connect because "
+"one is a bus and the other is a net."
+
+#, c-format
+msgid "%s and %s are graphically connected but do not share any bus members"
+msgstr "%s and %s are graphically connected but do not share any bus members"
+
+#, c-format
+msgid "%s (%s) is connected to %s (%s) but is not a member of the bus"
+msgstr "%s (%s) is connected to %s (%s) but is not a member of the bus"
+
+#, c-format
+msgid "Pin %s of component %s has a no-connect marker but is connected"
+msgstr "Pin %s of component %s has a no-connect marker but is connected"
+
+msgid "No-connect marker is not connected to anything"
+msgstr "No-connect marker is not connected to anything"
+
+#, c-format
+msgid "Pin %s of component %s is unconnected."
+msgstr "Pin %s of component %s is unconnected."
+
+#, c-format
+msgid "Label %s is unconnected."
+msgstr "Label %s is unconnected."
+
 msgid "Clarify Selection"
 msgstr "Clarify Selection"
 
 msgid "Selected net: "
 msgstr "Selected net: "
-
-msgid "Schematic saved"
-msgstr "Schematic saved"
 
 msgid "Annotation Messages:"
 msgstr "Annotation Messages:"
@@ -3161,6 +3244,24 @@ msgstr ""
 msgid "Bill of Material"
 msgstr "Bill of Material"
 
+msgid "Bus Definitions"
+msgstr "Bus Definitions"
+
+msgid "Bus Aliases"
+msgstr "Bus Aliases"
+
+msgid "Alias Name"
+msgstr "Alias Name"
+
+msgid "Rename"
+msgstr "Rename"
+
+msgid "Alias Members"
+msgstr "Alias Members"
+
+msgid "Member Name"
+msgstr "Member Name"
+
 msgid "Select with Browser"
 msgstr "Select with Browser"
 
@@ -3211,6 +3312,9 @@ msgstr "Delete alternate body style (DeMorgan) draw items from symbol?"
 #, c-format
 msgid "The first %d fields are mandatory."
 msgstr "The first %d fields are mandatory."
+
+msgid "Alias can not have same name as symbol."
+msgstr "Alias can not have same name as symbol."
 
 #, c-format
 msgid "Alias \"%s\" already exists."
@@ -3285,8 +3389,16 @@ msgstr ""
 msgid "Define as power symbol"
 msgstr "Define as power symbol"
 
-msgid "Check this option when the symbol is a power symbol"
-msgstr "Check this option when the symbol is a power symbol"
+msgid ""
+"Setting this option makes the symbol in question appear in the\n"
+"\"add power port\" dialog.  It will lock the value text to protect it\n"
+"from editing in Eeschema.  The symbol will not be included in\n"
+"the BOM and cannot be assigned a footprint."
+msgstr ""
+"Setting this option makes the symbol in question appear in the\n"
+"“add power port” dialog.  It will lock the value text to protect it\n"
+"from editing in Eeschema.  The symbol will not be included in\n"
+"the BOM and cannot be assigned a footprint."
 
 msgid "Number of Units:"
 msgstr "Number of Units:"
@@ -3703,6 +3815,25 @@ msgstr "Pin to Pin Connections"
 msgid "Reset to Defaults"
 msgstr "Reset to Defaults"
 
+msgid "Bus Connections"
+msgstr "Bus Connections"
+
+msgid ""
+"Check that bus wires are not connected to hierarchical net pins and vice "
+"versa"
+msgstr ""
+"Check that bus wires are not connected to hierarchical net pins and vice "
+"versa"
+
+msgid "Check that bus-to-bus connections have shared members"
+msgstr "Check that bus-to-bus connections have shared members"
+
+msgid "Check that nets are members of buses they graphically connect to"
+msgstr "Check that nets are members of buses they graphically connect to"
+
+msgid "Check buses for conflicting drivers"
+msgstr "Check buses for conflicting drivers"
+
 msgid "Delete Markers"
 msgstr "Delete Markers"
 
@@ -4019,6 +4150,44 @@ msgstr "Show pin name text"
 msgid "Pin name inside"
 msgstr "Pin name inside"
 
+msgid "Sheet"
+msgstr "Sheet"
+
+msgid "Conflicting Labels"
+msgstr "Conflicting Labels"
+
+msgid "New Label"
+msgstr "New Label"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Updated"
+msgstr "Updated"
+
+msgid ""
+"This schematic has one or more buses with more than one label.  This was "
+"allowed in previous KiCad versions but is no longer permitted."
+msgstr ""
+"This schematic has one or more buses with more than one label.  This was "
+"allowed in previous KiCad versions but is no longer permitted."
+
+msgid ""
+"Please select a new name for each of the buses below.\n"
+"A name has been suggested for you based on the labels attached to the bus."
+msgstr ""
+"Please select a new name for each of the buses below.\n"
+"A name has been suggested for you based on the labels attached to the bus."
+
+msgid "Proposed new name:"
+msgstr "Proposed new name:"
+
+msgid "Accept Name"
+msgstr "Accept Name"
+
+msgid "Migrate Buses"
+msgstr "Migrate Buses"
+
 msgid "Default format"
 msgstr "Default format"
 
@@ -4046,6 +4215,9 @@ msgstr "Save Netlist File"
 #, c-format
 msgid "%s Export"
 msgstr "%s Export"
+
+msgid "Schematic netlist not available"
+msgstr "Schematic netlist not available"
 
 msgid "This plugin already exists. Abort"
 msgstr "This plugin already exists. Abort"
@@ -5136,8 +5308,11 @@ msgstr "Mismatch between hierarchical labels and pins sheets"
 msgid "A pin with a \"no connection\" flag is connected"
 msgstr "A pin with a “no connection” flag is connected"
 
-msgid "Global label not connected to any other global label"
-msgstr "Global label not connected to any other global label"
+msgid "A \"no connection\" flag is not connected to anything"
+msgstr "A “no connection” flag is not connected to anything"
+
+msgid "A label not connected to any other item"
+msgstr "A label not connected to any other item"
 
 msgid "Labels are similar (lower/upper case difference only)"
 msgstr "Labels are similar (lower/upper case difference only)"
@@ -5152,6 +5327,24 @@ msgid ""
 "Different net assigned to a shared pin in another unit of the same component"
 msgstr ""
 "Different net assigned to a shared pin in another unit of the same component"
+
+msgid "Conflict between bus alias definitions across schematic sheets"
+msgstr "Conflict between bus alias definitions across schematic sheets"
+
+msgid "More than one name given to this bus or net"
+msgstr "More than one name given to this bus or net"
+
+msgid "Net is graphically connected to a bus but not a bus member"
+msgstr "Net is graphically connected to a bus but not a bus member"
+
+msgid "Label attached to bus item does not describe a bus"
+msgstr "Label attached to bus item does not describe a bus"
+
+msgid "No nets are shared between two bus items"
+msgstr "No nets are shared between two bus items"
+
+msgid "Invalid connection between bus and net items"
+msgstr "Invalid connection between bus and net items"
 
 #, c-format
 msgid "Couldn't load image from \"%s\""
@@ -5224,31 +5417,16 @@ msgid "Duplicate sheet name"
 msgstr "Duplicate sheet name"
 
 #, c-format
+msgid "Bus alias %s has conflicting definitions on multiple sheets: "
+msgstr "Bus alias %s has conflicting definitions on multiple sheets: "
+
+#, c-format
 msgid "Unit %s has '%s' assigned, whereas unit %s has '%s' assigned"
 msgstr "Unit %s has ‘%s’ assigned, whereas unit %s has ‘%s’ assigned"
 
 #, c-format
-msgid "Hierarchical label %s is not connected to a sheet label."
-msgstr "Hierarchical label %s is not connected to a sheet label."
-
-#, c-format
-msgid "Global label %s is not connected to any other global label."
-msgstr "Global label %s is not connected to any other global label."
-
-#, c-format
-msgid "Sheet label %s is not connected to a hierarchical label."
-msgstr "Sheet label %s is not connected to a hierarchical label."
-
-#, c-format
-msgid "Pin %s (%s) of component %s is unconnected."
-msgstr "Pin %s (%s) of component %s is unconnected."
-
-#, c-format
 msgid "Pin %s (%s) of component %s is not driven (Net %d)."
 msgstr "Pin %s (%s) of component %s is not driven (Net %d)."
-
-msgid "More than 1 pin connected to an UnConnect symbol."
-msgstr "More than 1 pin connected to an UnConnect symbol."
 
 #, c-format
 msgid "Pin %s (%s) of component %s is connected to "
@@ -5570,6 +5748,9 @@ msgstr "Browse symbol libraries"
 msgid "Generate bill of materials"
 msgstr "Generate bill of materials"
 
+msgid "Manage bus definitions"
+msgstr "Manage bus definitions"
+
 msgid ""
 "Back-import symbol footprint association fields from the .cmp back import "
 "file created by Pcbnew"
@@ -5603,9 +5784,6 @@ msgstr "Navigator"
 
 msgid "Root"
 msgstr "Root"
-
-msgid "Error: duplicate sub-sheet names found in current sheet. Fix it"
-msgstr "Error: duplicate sub-sheet names found in current sheet. Fix it"
 
 msgid "Zoom Center"
 msgstr "Zoom Center"
@@ -5741,6 +5919,9 @@ msgstr "Update PCB from Schematic"
 
 msgid "Highlight Connection"
 msgstr "Highlight Connection"
+
+msgid "Unfold Bus"
+msgstr "Unfold Bus"
 
 msgid "New"
 msgstr "New"
@@ -6533,6 +6714,9 @@ msgstr "Create new symbol"
 msgid "Save all changes"
 msgstr "Save all changes"
 
+msgid "Refresh libraries and redraw view"
+msgstr "Refresh libraries and redraw view"
+
 msgid "Show associated datasheet or document"
 msgstr "Show associated datasheet or document"
 
@@ -6695,6 +6879,12 @@ msgstr "Drawing to C&lipboard"
 msgid "Export drawings to clipboard"
 msgstr "Export drawings to clipboard"
 
+msgid "Export &Netlist..."
+msgstr "Export &Netlist…"
+
+msgid "Export netlist file"
+msgstr "Export netlist file"
+
 msgid "E&xport"
 msgstr "E&xport"
 
@@ -6755,8 +6945,8 @@ msgstr "Perform electrical rules check"
 msgid "Update PCB from Schematic..."
 msgstr "Update PCB from Schematic…"
 
-msgid "Updates PCB design with current schematic (forward annotation)."
-msgstr "Updates PCB design with current schematic (forward annotation)."
+msgid "Update PCB design with current schematic."
+msgstr "Update PCB design with current schematic."
 
 msgid "&Open PCB Editor"
 msgstr "&Open PCB Editor"
@@ -6773,8 +6963,8 @@ msgstr "&Rescue Symbols…"
 msgid "Find old symbols in project and rename/rescue them"
 msgstr "Find old symbols in project and rename/rescue them"
 
-msgid "Remap Symbols..."
-msgstr "Remap Symbols…"
+msgid "Remap S&ymbols..."
+msgstr "Remap S&ymbols…"
 
 msgid "Remap legacy library symbols to symbol library table"
 msgstr "Remap legacy library symbols to symbol library table"
@@ -6782,8 +6972,8 @@ msgstr "Remap legacy library symbols to symbol library table"
 msgid "Edit Symbol Field&s..."
 msgstr "Edit Symbol Field&s…"
 
-msgid "Edit Symbol Library References..."
-msgstr "Edit Symbol Library References…"
+msgid "Edit Symbol &Library References..."
+msgstr "Edit Symbol &Library References…"
 
 msgid "Edit links between schematic symbols and library symbols"
 msgstr "Edit links between schematic symbols and library symbols"
@@ -6791,20 +6981,17 @@ msgstr "Edit links between schematic symbols and library symbols"
 msgid "&Annotate Schematic..."
 msgstr "&Annotate Schematic…"
 
-msgid "Generate &Netlist File..."
-msgstr "Generate &Netlist File…"
-
-msgid "Generate netlist file"
-msgstr "Generate netlist file"
-
-msgid "Generate Bill of &Materials..."
-msgstr "Generate Bill of &Materials…"
+msgid "Bus &Definitions..."
+msgstr "Bus &Definitions…"
 
 msgid "A&ssign Footprints..."
 msgstr "A&ssign Footprints…"
 
 msgid "Assign PCB footprints to schematic symbols"
 msgstr "Assign PCB footprints to schematic symbols"
+
+msgid "Generate Bill of &Materials..."
+msgstr "Generate Bill of &Materials…"
 
 msgid "Simula&tor"
 msgstr "Simula&tor"
@@ -6826,9 +7013,6 @@ msgstr "Manage Symbol Libraries…"
 
 msgid "Edit the global and project symbol library lists"
 msgstr "Edit the global and project symbol library lists"
-
-msgid "Preferences..."
-msgstr "Preferences…"
 
 msgid "&Save Project File..."
 msgstr "&Save Project File…"
@@ -6878,6 +7062,9 @@ msgstr "No Objects"
 #, c-format
 msgid "Net count = %d"
 msgstr "Net count = %d"
+
+msgid "Failed to parse bus group "
+msgstr "Failed to parse bus group "
 
 msgid "Edit Text..."
 msgstr "Edit Text…"
@@ -7223,16 +7410,26 @@ msgstr "Undefined!!!"
 msgid "<Unknown>"
 msgstr "<Unknown>"
 
-msgid "No library defined!!!"
-msgstr "No library defined!!!"
+msgid "No library defined!"
+msgstr "No library defined!"
 
 #, c-format
-msgid "Symbol not found in %s!!!"
-msgstr "Symbol not found in %s!!!"
+msgid "Symbol not found in %s!"
+msgstr "Symbol not found in %s!"
 
 #, c-format
 msgid "Symbol %s, %s"
 msgstr "Symbol %s, %s"
+
+msgid "Connection Name"
+msgstr "Connection Name"
+
+msgid "Net Code"
+msgstr "Net Code"
+
+#, c-format
+msgid "Bus Alias %s Members"
+msgstr "Bus Alias %s Members"
 
 #, c-format
 msgid "Unable to read file \"%s\""
@@ -7269,15 +7466,6 @@ msgstr "Do not show hidden pins"
 
 msgid "Show hidden pins"
 msgstr "Show hidden pins"
-
-msgid ""
-"Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, you need to launch "
-"Kicad shell and create a PCB project."
-msgstr ""
-"Cannot update the PCB, because the Schematic Editor is opened in stand-alone "
-"mode. In order to create/update PCBs from schematics, you need to launch "
-"Kicad shell and create a PCB project."
 
 msgid "Schematic"
 msgstr "Schematic"
@@ -7394,6 +7582,21 @@ msgstr "%s Bus from (%s, %s) to (%s, %s)"
 #, c-format
 msgid "%s Line on Unknown Layer from (%s, %s) to (%s, %s)"
 msgstr "%s Line on Unknown Layer from (%s, %s) to (%s, %s)"
+
+msgid "Net Wire"
+msgstr "Net Wire"
+
+msgid "Bus Wire"
+msgstr "Bus Wire"
+
+msgid "Graphical"
+msgstr "Graphical"
+
+msgid "Line Type"
+msgstr "Line Type"
+
+msgid "Connections"
+msgstr "Connections"
 
 msgid "Electronics Rule Check Error"
 msgstr "Electronics Rule Check Error"
@@ -7554,14 +7757,14 @@ msgstr "There are no undefined labels in this sheet to clean up."
 msgid "Do you wish to cleanup this sheet?"
 msgstr "Do you wish to cleanup this sheet?"
 
+msgid "Add wire"
+msgstr "Add wire"
+
 msgid "Highlight specific net"
 msgstr "Highlight specific net"
 
 msgid "Add no connect"
 msgstr "Add no connect"
-
-msgid "Add wire"
-msgstr "Add wire"
 
 msgid "Add bus"
 msgstr "Add bus"
@@ -7764,11 +7967,11 @@ msgstr "Open Workbook"
 msgid "Save Workbook"
 msgstr "Save Workbook"
 
-msgid "Save as image"
-msgstr "Save as image"
+msgid "Save as Image"
+msgstr "Save as Image"
 
-msgid "Save as .csv file"
-msgstr "Save as .csv file"
+msgid "Save as .csv File"
+msgstr "Save as .csv File"
 
 msgid "Exit Simulation"
 msgstr "Exit Simulation"
@@ -7776,14 +7979,14 @@ msgstr "Exit Simulation"
 msgid "File"
 msgstr "File"
 
-msgid "Add signals..."
-msgstr "Add signals…"
+msgid "Add Signals..."
+msgstr "Add Signals…"
 
 msgid "Probe from schematics"
 msgstr "Probe from schematics"
 
-msgid "Tune component value"
-msgstr "Tune component value"
+msgid "Tune Component Value"
+msgstr "Tune Component Value"
 
 msgid "Show SPICE Netlist..."
 msgstr "Show SPICE Netlist…"
@@ -7797,11 +8000,8 @@ msgstr "Settings…"
 msgid "Simulation"
 msgstr "Simulation"
 
-msgid "Show &grid"
-msgstr "Show &grid"
-
-msgid "Show &legend"
-msgstr "Show &legend"
+msgid "Show &Legend"
+msgstr "Show &Legend"
 
 msgid "View"
 msgstr "View"
@@ -7905,9 +8105,6 @@ msgstr "Leave sheet"
 msgid "Footprint Editor - Create/edit footprints"
 msgstr "Footprint Editor - Create/edit footprints"
 
-msgid "Generate netlist"
-msgstr "Generate netlist"
-
 msgid "Edit symbol fields"
 msgstr "Edit symbol fields"
 
@@ -7955,6 +8152,12 @@ msgstr "&About Eeschema"
 
 msgid "About Eeschema schematic designer"
 msgstr "About Eeschema schematic designer"
+
+msgid "Error: duplicate sub-sheet names found in current sheet."
+msgstr "Error: duplicate sub-sheet names found in current sheet."
+
+msgid "Highlighted net: "
+msgstr "Highlighted net: "
 
 #, c-format
 msgid ""
@@ -8036,9 +8239,6 @@ msgstr "Pin number"
 
 msgid "Pin name"
 msgstr "Pin name"
-
-msgid "Sheet"
-msgstr "Sheet"
 
 msgid "Sheet file name"
 msgstr "Sheet file name"
@@ -8229,12 +8429,12 @@ msgstr "No file loaded on the active layer %d"
 msgid "Visibles"
 msgstr "Visibles"
 
-msgid "No room to load file"
-msgstr "No room to load file"
-
 #, c-format
 msgid "File %s not found"
 msgstr "File %s not found"
+
+msgid "No room to load file"
+msgstr "No room to load file"
 
 msgid "Error reading EXCELLON drill file"
 msgstr "Error reading EXCELLON drill file"
@@ -8326,6 +8526,9 @@ msgstr "Bottom Pad Master (*.GPB)|*.GPB;*.gpb|"
 
 msgid "Open Gerber File(s)"
 msgstr "Open Gerber File(s)"
+
+msgid "File not found:"
+msgstr "File not found:"
 
 msgid "Loading Gerber files..."
 msgstr "Loading Gerber files…"
@@ -10898,9 +11101,6 @@ msgstr "Back (Flipped)"
 msgid "Front"
 msgstr "Front"
 
-msgid "Status"
-msgstr "Status"
-
 msgid "Insert"
 msgstr "Insert"
 
@@ -10961,6 +11161,9 @@ msgstr "Trap"
 
 msgid "Roundrect"
 msgstr "Roundrect"
+
+msgid "Chamferedrect"
+msgstr "Chamferedrect"
 
 msgid "CustomShape"
 msgstr "CustomShape"
@@ -11030,10 +11233,6 @@ msgid "Text \"%s\" of %s on %s"
 msgstr "Text “%s” of %s on %s"
 
 #, c-format
-msgid "Zone [%s] on %s"
-msgstr "Zone [%s] on %s"
-
-#, c-format
 msgid "Blind/Buried Via %s %s on %s - %s"
 msgstr "Blind/Buried Via %s %s on %s - %s"
 
@@ -11077,9 +11276,6 @@ msgstr "Track"
 
 msgid "Segment Length"
 msgstr "Segment Length"
-
-msgid "Zone "
-msgstr "Zone "
 
 msgid "Micro Via"
 msgstr "Micro Via"
@@ -11130,14 +11326,11 @@ msgstr "Priority"
 msgid "Non Copper Zone"
 msgstr "Non Copper Zone"
 
-msgid "Corners"
-msgstr "Corners"
+msgid "Vertices"
+msgstr "Vertices"
 
-msgid "Segments"
-msgstr "Segments"
-
-msgid "Polygons"
-msgstr "Polygons"
+msgid "Hatched"
+msgstr "Hatched"
 
 msgid "Fill Mode"
 msgstr "Fill Mode"
@@ -11178,9 +11371,6 @@ msgstr "%s pin %s not found"
 #, c-format
 msgid "%s pin %s found"
 msgstr "%s pin %s found"
-
-msgid "Eeschema netlist"
-msgstr "Eeschema netlist"
 
 msgid "Delete NET?"
 msgstr "Delete NET?"
@@ -11239,8 +11429,14 @@ msgstr "Solder Mask/Paste"
 msgid "No footprint selected"
 msgstr "No footprint selected"
 
-msgid "Delete &track segments connecting different nets"
-msgstr "Delete &track segments connecting different nets"
+msgid "Update PCB"
+msgstr "Update PCB"
+
+msgid "Board cleanup"
+msgstr "Board cleanup"
+
+msgid "Delete &tracks connecting different nets"
+msgstr "Delete &tracks connecting different nets"
 
 msgid ""
 "remove track segments connecting nodes belonging to different nets (short "
@@ -11255,8 +11451,8 @@ msgstr "&Delete redundant vias"
 msgid "remove vias on through hole pads and superimposed vias"
 msgstr "remove vias on through hole pads and superimposed vias"
 
-msgid "&Merge overlapping segments"
-msgstr "&Merge overlapping segments"
+msgid "&Merge co-linear tracks"
+msgstr "&Merge co-linear tracks"
 
 msgid "merge aligned track segments, and remove null segments"
 msgstr "merge aligned track segments, and remove null segments"
@@ -11267,24 +11463,17 @@ msgstr "Delete &dangling tracks"
 msgid "delete tracks having at least one dangling end"
 msgstr "delete tracks having at least one dangling end"
 
-msgid "Cleaning Options"
-msgstr "Cleaning Options"
+msgid "Changes To Be Applied:"
+msgstr "Changes To Be Applied:"
+
+msgid "Cleanup Tracks and Vias"
+msgstr "Cleanup Tracks and Vias"
 
 msgid "Chamfer distance:"
 msgstr "Chamfer distance:"
 
 msgid "Fillet radius:"
 msgstr "Fillet radius:"
-
-msgid ""
-"The legacy segment fill mode is not recommended.Convert zone to polygon "
-"fill? "
-msgstr ""
-"The legacy segment fill mode is not recommended.Convert zone to polygon "
-"fill? "
-
-msgid "Legacy Warning"
-msgstr "Legacy Warning"
 
 msgid "Thermal relief spoke must be greater than the minimum width."
 msgstr "Thermal relief spoke must be greater than the minimum width."
@@ -11364,9 +11553,6 @@ msgstr ""
 msgid "Outline display:"
 msgstr "Outline display:"
 
-msgid "Hatched"
-msgstr "Hatched"
-
 msgid "Fully hatched"
 msgstr "Fully hatched"
 
@@ -11384,28 +11570,74 @@ msgstr "Pad connections:"
 
 msgid ""
 "Default pad connection type to zone.\n"
-"This setting can be overridden by local pad settings"
+"This setting can be overridden by local  pad settings"
 msgstr ""
 "Default pad connection type to zone.\n"
-"This setting can be overridden by local pad settings"
+"This setting can be overridden by local  pad settings"
 
 msgid "Thermal reliefs"
 msgstr "Thermal reliefs"
 
-msgid "Reliefs for PTH only"
-msgstr "Reliefs for PTH only"
+msgid "Reliefs for PTH"
+msgstr "Reliefs for PTH"
 
 msgid "Thermal clearance:"
 msgstr "Thermal clearance:"
 
-msgid "Clearance between pads and filled areas of the same net."
-msgstr "Clearance between pads and filled areas of the same net."
+msgid "Clearance between pads in the same net and filled areas."
+msgstr "Clearance between pads in the same net and filled areas."
 
 msgid "Thermal spoke width:"
 msgstr "Thermal spoke width:"
 
 msgid "Width of copper in thermal reliefs."
 msgstr "Width of copper in thermal reliefs."
+
+msgid "Fill type:"
+msgstr "Fill type:"
+
+msgid "Solid shape"
+msgstr "Solid shape"
+
+msgid "Hatch pattern"
+msgstr "Hatch pattern"
+
+msgid "degree"
+msgstr "degree"
+
+msgid "Hatch width:"
+msgstr "Hatch width:"
+
+msgid "Hatch gap:"
+msgstr "Hatch gap:"
+
+msgid "Smoothing effort:"
+msgstr "Smoothing effort:"
+
+msgid ""
+"Value of smoothing effort\n"
+"0 = no smoothing\n"
+"1 = chamfer\n"
+"2 = round corners\n"
+"3 = round corners (finer shape)"
+msgstr ""
+"Value of smoothing effort\n"
+"0 = no smoothing\n"
+"1 = chamfer\n"
+"2 = round corners\n"
+"3 = round corners (finer shape)"
+
+msgid "Smooth value (0..1):"
+msgstr "Smooth value (0–1):"
+
+msgid ""
+"Ratio between smoothed corners size and the gap between lines\n"
+"0 = no smoothing\n"
+"1.0 = max radius/chamfer size (half gap value)"
+msgstr ""
+"Ratio between smoothed corners size and the gap between lines\n"
+"0 = no smoothing\n"
+"1.0 = max radius/chamfer size (half gap value)"
 
 msgid "Export Settings to Other Zones"
 msgstr "Export Settings to Other Zones"
@@ -11597,9 +11829,6 @@ msgstr "Create Array"
 msgid "Run DRC"
 msgstr "Run DRC"
 
-msgid "List Unconnected"
-msgstr "List Unconnected"
-
 #, c-format
 msgid "Report file \"%s\" created"
 msgstr "Report file “%s” created"
@@ -11614,8 +11843,8 @@ msgstr "Unable to create report file “%s”"
 msgid "Save DRC Report File"
 msgstr "Save DRC Report File"
 
-msgid "by Netclass"
-msgstr "by Netclass"
+msgid "not run"
+msgstr "not run"
 
 msgid "Minimum track width:"
 msgstr "Minimum track width:"
@@ -11654,6 +11883,23 @@ msgstr ""
 "If unselected, only the first DRC violation will be reported for each track "
 "connection."
 
+msgid "Test tracks against filled copper areas (very slow)"
+msgstr "Test tracks against filled copper areas (very slow)"
+
+msgid ""
+"If selected, tracks will be tested against copper zones. \n"
+"If copper zones are up to date, this test should be not needed.\n"
+"\n"
+"This test can be *very slow* for complicated designs."
+msgstr ""
+"If selected, tracks will be tested against copper zones. \n"
+"If copper zones are up to date, this test should be not needed.\n"
+"\n"
+"This test can be *very slow* for complicated designs."
+
+msgid "Test footprints against schematic"
+msgstr "Test footprints against schematic"
+
 msgid "Create report file:"
 msgstr "Create report file:"
 
@@ -11669,8 +11915,8 @@ msgstr ""
 "Left-click to center on problem marker.  Right-click to highlight items."
 
 #, c-format
-msgid "Problems / Markers (%d)"
-msgstr "Problems / Markers (%d)"
+msgid "Violations / Markers (%d)"
+msgstr "Violations / Markers (%d)"
 
 msgid ""
 "Left-click to center on unconnected pair.  Right-click to highlight "
@@ -11682,6 +11928,10 @@ msgstr ""
 #, c-format
 msgid "Unconnected Items (%d)"
 msgstr "Unconnected Items (%d)"
+
+#, c-format
+msgid "Footprint Warnings (%d)"
+msgstr "Footprint Warnings (%d)"
 
 msgid "Delete All Markers"
 msgstr "Delete All Markers"
@@ -11888,6 +12138,9 @@ msgstr ""
 "This value can be superseded by a pad local value.\n"
 "The final clearance value is the sum of this value and the clearance value.\n"
 "A negative value means a smaller mask size than pad size."
+
+msgid "%"
+msgstr "%"
 
 msgid ""
 "Note: solder mask and paste values are used only for pads on copper layers."
@@ -12703,20 +12956,20 @@ msgstr "Scope"
 msgid "Footprint references"
 msgstr "Footprint references"
 
-msgid "PCB text items"
-msgstr "PCB text items"
-
 msgid "Footprint values"
 msgstr "Footprint values"
-
-msgid "PCB graphic items"
-msgstr "PCB graphic items"
 
 msgid "Other footprint fields"
 msgstr "Other footprint fields"
 
 msgid "Footprint graphic items"
 msgstr "Footprint graphic items"
+
+msgid "PCB graphic items"
+msgstr "PCB graphic items"
+
+msgid "PCB text items"
+msgstr "PCB text items"
 
 msgid "Filters"
 msgstr "Filters"
@@ -12727,8 +12980,8 @@ msgstr "Filter items by layer:"
 msgid "Filter items by parent footprint reference:"
 msgstr "Filter items by parent footprint reference:"
 
-msgid "Filter items by parent footprint identifier:"
-msgstr "Filter items by parent footprint identifier:"
+msgid "Filter items by parent footprint library id:"
+msgstr "Filter items by parent footprint library id:"
 
 msgid "Action"
 msgstr "Action"
@@ -12762,6 +13015,9 @@ msgstr "µVia Drill"
 
 msgid "Some items failed DRC and were not modified."
 msgstr "Some items failed DRC and were not modified."
+
+msgid "Filter Items"
+msgstr "Filter Items"
 
 msgid "Filter items by net:"
 msgstr "Filter items by net:"
@@ -12932,6 +13188,9 @@ msgstr "Layers setup"
 msgid "Text && Graphics default properties"
 msgstr "Text && Graphics default properties"
 
+msgid "Predefined Track and Via dimensions"
+msgstr "Predefined Track and Via dimensions"
+
 msgid "Solder Mask/Paste defaults"
 msgstr "Solder Mask/Paste defaults"
 
@@ -13001,9 +13260,6 @@ msgstr "Use polar coordinates"
 msgid "Changes To Be Applied"
 msgstr "Changes To Be Applied"
 
-msgid "Update PCB"
-msgstr "Update PCB"
-
 msgid "Rebuild Ratsnest"
 msgstr "Rebuild Ratsnest"
 
@@ -13027,30 +13283,6 @@ msgstr "Changes Applied To PCB"
 msgid "No footprints."
 msgstr "No footprints."
 
-msgid "No duplicate."
-msgstr "No duplicate."
-
-msgid "Duplicates:"
-msgstr "Duplicates:"
-
-msgid "No missing footprints."
-msgstr "No missing footprints."
-
-msgid "Missing:"
-msgstr "Missing:"
-
-msgid "No extra footprints."
-msgstr "No extra footprints."
-
-msgid "Not in Netlist:"
-msgstr "Not in Netlist:"
-
-msgid "Too many errors: some are skipped"
-msgstr "Too many errors: some are skipped"
-
-msgid "Check footprints"
-msgstr "Check footprints"
-
 #, c-format
 msgid "Cannot open netlist file \"%s\"."
 msgstr "Cannot open netlist file “%s”."
@@ -13069,24 +13301,27 @@ msgstr ""
 msgid "Netlist Load Error"
 msgstr "Netlist Load Error"
 
+msgid "Check footprints"
+msgstr "Check footprints"
+
 #, c-format
 msgid "Reading netlist file \"%s\".\n"
 msgstr "Reading netlist file “%s”.\n"
 
-msgid "Using time stamps to match components and footprints.\n"
-msgstr "Using time stamps to match components and footprints.\n"
-
 msgid "Using references to match components and footprints.\n"
 msgstr "Using references to match components and footprints.\n"
+
+msgid "Using tstamp fields to match components and footprints.\n"
+msgstr "Using tstamp fields to match components and footprints.\n"
 
 msgid "Netlist file:"
 msgstr "Netlist file:"
 
-msgid "Keep existing symbol to footprint associations"
-msgstr "Keep existing symbol to footprint associations"
+msgid "Associate footprints by reference"
+msgstr "Associate footprints by reference"
 
-msgid "Re-associate footprints by reference"
-msgstr "Re-associate footprints by reference"
+msgid "Associate footprints using \"tstamp\" fields"
+msgstr "Associate footprints using “tstamp” fields"
 
 msgid "Match Method"
 msgstr "Match Method"
@@ -13118,8 +13353,17 @@ msgstr "Test Footprints"
 msgid "Read the current netlist file and list missing and extra footprints"
 msgstr "Read the current netlist file and list missing and extra footprints"
 
-msgid "Non-copper Zone Properties"
-msgstr "Non-copper Zone Properties"
+msgid "Import Netlist"
+msgstr "Import Netlist"
+
+msgid "Outline style:"
+msgstr "Outline style:"
+
+msgid "Grid Style:"
+msgstr "Grid Style:"
+
+msgid "Non Copper Zones Properties"
+msgstr "Non Copper Zones Properties"
 
 msgid "Ring"
 msgstr "Ring"
@@ -13308,6 +13552,9 @@ msgstr "Trapezoidal"
 msgid "Rounded Rectangle"
 msgstr "Rounded Rectangle"
 
+msgid "Chamfered Rectangle"
+msgstr "Chamfered Rectangle"
+
 msgid "Custom (Circ. Anchor)"
 msgstr "Custom (Circ. Anchor)"
 
@@ -13372,16 +13619,34 @@ msgstr ""
 "The width is the smaller value between size X and size Y.\n"
 "Note: IPC norm gives a max value = 0.25mm."
 
+msgid "Chamfer size:"
+msgstr "Chamfer size:"
+
 msgid ""
-"Corner radius.\n"
-"Can be no more than half pad width.\n"
-"The width is the smaller value between size X and size Y\n"
-"Note: IPC norm gives a max value = 0.25mm"
+"Chamfer size  in percent  of the pad width.\n"
+"The width is the smaller value between size X and size Y.\n"
+"The max value is 50 percent."
 msgstr ""
-"Corner radius.\n"
-"Can be no more than half pad width.\n"
-"The width is the smaller value between size X and size Y\n"
-"Note: IPC norm gives a max value = 0.25mm"
+"Chamfer size  in percent  of the pad width.\n"
+"The width is the smaller value between size X and size Y.\n"
+"The max value is 50 percent."
+
+msgid "Chamfered corner:"
+msgstr "Chamfered corner:"
+
+msgid ""
+"Chamfered corners. The position is relative to a pad orientation 0 degree."
+msgstr ""
+"Chamfered corners. The position is relative to a pad orientation 0 degree."
+
+msgid "Top left"
+msgstr "Top left"
+
+msgid "Top right"
+msgstr "Top right"
+
+msgid "Bottom right"
+msgstr "Bottom right"
 
 msgid "Hole shape:"
 msgstr "Hole shape:"
@@ -14120,11 +14385,44 @@ msgstr "Scripting Test Window"
 msgid "Pad Count"
 msgstr "Pad Count"
 
+msgid "Via Count"
+msgstr "Via Count"
+
+msgid "Board Length"
+msgstr "Board Length"
+
+msgid "Die Length"
+msgstr "Die Length"
+
+msgid "Report file"
+msgstr "Report file"
+
+msgid "Net Id"
+msgstr "Net Id"
+
+msgid "Pad count"
+msgstr "Pad count"
+
+msgid "Via count"
+msgstr "Via count"
+
+msgid "Board length"
+msgstr "Board length"
+
+msgid "Die length"
+msgstr "Die length"
+
+msgid "Net length"
+msgstr "Net length"
+
 msgid "Net name filter:"
 msgstr "Net name filter:"
 
 msgid "Show zero pad nets"
 msgstr "Show zero pad nets"
+
+msgid "Create Report..."
+msgstr "Create Report…"
 
 msgid "Grid Origin"
 msgstr "Grid Origin"
@@ -14293,6 +14591,12 @@ msgstr "Via drill size has to be smaller than via diameter"
 
 msgid "Track Width and Via Size"
 msgstr "Track Width and Via Size"
+
+msgid "Keep existing symbol to footprint associations"
+msgstr "Keep existing symbol to footprint associations"
+
+msgid "Re-associate footprints by reference"
+msgstr "Re-associate footprints by reference"
 
 msgid ""
 "Select how footprints are recognized:\n"
@@ -14570,6 +14874,9 @@ msgstr "Minimum uVia drill:"
 
 msgid "Minimum hole to hole:"
 msgstr "Minimum hole to hole:"
+
+msgid "Copper edge clearance:"
+msgstr "Copper edge clearance:"
 
 #, c-format
 msgid "Use the \"%s\" control to change the number of copper layers."
@@ -15156,11 +15463,14 @@ msgstr "Unconnected pads…\n"
 msgid "Keepout areas ...\n"
 msgstr "Keepout areas …\n"
 
-msgid "Test texts...\n"
-msgstr "Test texts…\n"
+msgid "Text and graphic clearances...\n"
+msgstr "Text and graphic clearances…\n"
 
 msgid "Courtyard areas...\n"
 msgstr "Courtyard areas…\n"
+
+msgid "Checking footprints against schematic...\n"
+msgstr "Checking footprints against schematic…\n"
 
 msgid "Items on disabled layers...\n"
 msgstr "Items on disabled layers…\n"
@@ -15324,6 +15634,36 @@ msgstr "Footprint has no courtyard defined"
 msgid "Footprint has incorrect courtyard (not a closed shape)"
 msgstr "Footprint has incorrect courtyard (not a closed shape)"
 
+msgid "Duplicate footprints"
+msgstr "Duplicate footprints"
+
+msgid "Missing footprint"
+msgstr "Missing footprint"
+
+msgid "Extra footprint"
+msgstr "Extra footprint"
+
+msgid "Remove track shorting two nets"
+msgstr "Remove track shorting two nets"
+
+msgid "Remove redundant via"
+msgstr "Remove redundant via"
+
+msgid "Remove duplicate track"
+msgstr "Remove duplicate track"
+
+msgid "Merge co-linear tracks"
+msgstr "Merge co-linear tracks"
+
+msgid "Remove dangling track"
+msgstr "Remove dangling track"
+
+msgid "Remove dangling via"
+msgstr "Remove dangling via"
+
+msgid "Remove zero-length track"
+msgstr "Remove zero-length track"
+
 #, c-format
 msgid "Unknown DRC error code %d"
 msgstr "Unknown DRC error code %d"
@@ -15413,6 +15753,13 @@ msgstr "Save Footprint Association File"
 #, c-format
 msgid "Could not create file \"%s\"."
 msgstr "Could not create file “%s”."
+
+msgid ""
+"File contains pad shapes that are not supported by the Hyperlynx exporter "
+"(oval, rectangle, circle). They have been exported as oval pads."
+msgstr ""
+"File contains pad shapes that are not supported by the Hyperlynx exporter "
+"(oval, rectangle, circle). They have been exported as oval pads."
 
 msgid "IDF Export Failed:\n"
 msgstr "IDF Export Failed:\n"
@@ -15506,6 +15853,20 @@ msgstr "OK to load recovery or backup file “%s”"
 msgid "noname"
 msgstr "noname"
 
+msgid ""
+"If the zones on this board are refilled the Copper Edge Clearance\n"
+"setting will be used (see Board Setup > Design Rules).  This may\n"
+"result in different fills from previous Kicad versions which used\n"
+"the line thickness of the board boundary on the Edge Cuts layer."
+msgstr ""
+"If the zones on this board are refilled the Copper Edge Clearance\n"
+"setting will be used (see Board Setup → Design Rules).  This may\n"
+"result in different fills from previous Kicad versions which used\n"
+"the line thickness of the board boundary on the Edge Cuts layer."
+
+msgid "Edge Clearance Warning"
+msgstr "Edge Clearance Warning"
+
 #, c-format
 msgid "PCB file \"%s\" is already open."
 msgstr "PCB file “%s” is already open."
@@ -15580,6 +15941,9 @@ msgstr ""
 
 msgid "Save changes to footprint before closing?"
 msgstr "Save changes to footprint before closing?"
+
+msgid "&Update Footprint on Board"
+msgstr "&Update Footprint on Board"
 
 msgid "[Read Only]"
 msgstr "[Read Only]"
@@ -16307,20 +16671,26 @@ msgstr "Insert Corner (Modern Toolset only)"
 msgid "Board Editor"
 msgstr "Board Editor"
 
+msgid "All supported formats|"
+msgstr "All supported formats|"
+
 msgid "Open File"
 msgstr "Open File"
 
-msgid "Error: No DXF filename!"
-msgstr "Error: No DXF filename!"
+msgid "No file selected!"
+msgstr "No file selected!"
 
-msgid "Please, select a valid layer"
-msgstr "Please, select a valid layer"
+msgid "Please select a valid layer."
+msgstr "Please select a valid layer."
 
-msgid "Not Handled Items"
-msgstr "Not Handled Items"
+msgid "Items Not Handled"
+msgstr "Items Not Handled"
 
-msgid "There is no plugin to handle this file type"
-msgstr "There is no plugin to handle this file type"
+msgid "There is no plugin to handle this file type."
+msgstr "There is no plugin to handle this file type."
+
+msgid "No graphic items found in file to import."
+msgstr "No graphic items found in file to import."
 
 msgid "No graphic items found in file to import"
 msgstr "No graphic items found in file to import"
@@ -16355,8 +16725,8 @@ msgstr "Graphic layer:"
 msgid "Import scale:"
 msgstr "Import scale:"
 
-msgid "Import vector graphics file"
-msgstr "Import vector graphics file"
+msgid "Import Vector Graphics File"
+msgstr "Import Vector Graphics File"
 
 msgid ""
 "Current Board will be lost and this operation cannot be undone. Continue ?"
@@ -16524,6 +16894,16 @@ msgstr "Bad ZAux for CZONE_CONTAINER “%s”"
 #, c-format
 msgid "Bad ZSmoothing for CZONE_CONTAINER \"%s\""
 msgstr "Bad ZSmoothing for CZONE_CONTAINER “%s”"
+
+msgid ""
+"The legacy segment fill mode is no longer supported.\n"
+"Convert zones to polygon fills?"
+msgstr ""
+"The legacy segment fill mode is no longer supported.\n"
+"Convert zones to polygon fills?"
+
+msgid "Legacy Zone Warning"
+msgstr "Legacy Zone Warning"
 
 #, c-format
 msgid "Bad ZClearance padoption for CZONE_CONTAINER \"%s\""
@@ -16746,6 +17126,15 @@ msgstr "Open the Pcbnew Manual"
 msgid "Ro&ute"
 msgstr "Ro&ute"
 
+msgid "Modern Toolset (Fallbac&k)"
+msgstr "Modern Toolset (Fallbac&k)"
+
+msgid "Set &Layer Pair..."
+msgstr "Set &Layer Pair…"
+
+msgid "Change active layer pair"
+msgstr "Change active layer pair"
+
 msgid "&Single Track"
 msgstr "&Single Track"
 
@@ -16770,8 +17159,8 @@ msgstr "Tune Differential Pair &Length"
 msgid "Tune length of differential pair"
 msgstr "Tune length of differential pair"
 
-msgid "Tune Differential Pair &Skew/Phase"
-msgstr "Tune Differential Pair &Skew/Phase"
+msgid "Tune Differential Pair S&kew/Phase"
+msgstr "Tune Differential Pair S&kew/Phase"
 
 msgid "Tune skew/phase of a differential pair"
 msgstr "Tune skew/phase of a differential pair"
@@ -16836,44 +17225,35 @@ msgstr "&Dimension"
 msgid "La&yer Alignment Target"
 msgstr "La&yer Alignment Target"
 
-msgid "Drill and &Place Offset"
-msgstr "Drill and &Place Offset"
+msgid "Dr&ill and Place Offset"
+msgstr "Dr&ill and Place Offset"
 
 msgid "Place origin point for drill and place files"
 msgstr "Place origin point for drill and place files"
 
-msgid "&Autoplace off-board components"
-msgstr "&Autoplace off-board components"
+msgid "A&utomatically Place Off-Board Footprints"
+msgstr "A&utomatically Place Off-Board Footprints"
 
-msgid "&Autoplace selected components"
-msgstr "&Autoplace selected components"
+msgid "Automatically Place &Selected Components"
+msgstr "Automatically Place &Selected Components"
 
-msgid "&Auto-place"
-msgstr "&Auto-place"
+msgid "Place Footprints Au&tomatically"
+msgstr "Place Footprints Au&tomatically"
 
-msgid "Automatic component placement"
-msgstr "Automatic component placement"
+msgid "Automatically place all footprints"
+msgstr "Automatically place all footprints"
 
-msgid "Load &Netlist..."
-msgstr "Load &Netlist…"
-
-msgid "Read netlist and update board connectivity"
-msgstr "Read netlist and update board connectivity"
+msgid "Update &PCB from Schematic..."
+msgstr "Update &PCB from Schematic…"
 
 msgid "Update PCB design with current schematic (forward annotation)"
 msgstr "Update PCB design with current schematic (forward annotation)"
 
-msgid "Update Footprints from Library..."
-msgstr "Update Footprints from Library…"
+msgid "Update &Footprints from Library..."
+msgstr "Update &Footprints from Library…"
 
 msgid "Update footprints to include any changes from the library"
 msgstr "Update footprints to include any changes from the library"
-
-msgid "Set &Layer Pair..."
-msgstr "Set &Layer Pair…"
-
-msgid "Change active layer pair"
-msgstr "Change active layer pair"
 
 msgid "&Scripting Console"
 msgstr "&Scripting Console"
@@ -16896,6 +17276,9 @@ msgstr "Reload all python plugins and refresh plugin menus"
 msgid "Display current hotkeys list and corresponding commands"
 msgstr "Display current hotkeys list and corresponding commands"
 
+msgid "Cop&y"
+msgstr "Cop&y"
+
 msgid "Delete items"
 msgstr "Delete items"
 
@@ -16905,8 +17288,8 @@ msgstr "Edit &Track && Via Properties…"
 msgid "Edit Text && &Graphic Properties..."
 msgstr "Edit Text && &Graphic Properties…"
 
-msgid "Change &Footprints..."
-msgstr "Change &Footprints…"
+msgid "C&hange Footprints..."
+msgstr "C&hange Footprints…"
 
 msgid "Assign different footprints from the library"
 msgstr "Assign different footprints from the library"
@@ -16917,26 +17300,26 @@ msgstr "&Swap Layers…"
 msgid "Move tracks or drawings from a layer to another layer"
 msgstr "Move tracks or drawings from a layer to another layer"
 
-msgid "Fill &All Zones"
-msgstr "Fill &All Zones"
+msgid "Fill All &Zones"
+msgstr "Fill All &Zones"
 
 msgid "Fill all zones on the board"
 msgstr "Fill all zones on the board"
 
-msgid "&Unfill All Zones"
-msgstr "&Unfill All Zones"
+msgid "U&nfill All Zones"
+msgstr "U&nfill All Zones"
 
 msgid "Remove fill from all zones on the board"
 msgstr "Remove fill from all zones on the board"
 
-msgid "&Global Deletions..."
-msgstr "&Global Deletions…"
+msgid "Glo&bal Deletions..."
+msgstr "Glo&bal Deletions…"
 
 msgid "Delete tracks, footprints and graphic items from board"
 msgstr "Delete tracks, footprints and graphic items from board"
 
-msgid "&Cleanup Tracks and Vias..."
-msgstr "&Cleanup Tracks and Vias…"
+msgid "C&leanup Tracks and Vias..."
+msgstr "C&leanup Tracks and Vias…"
 
 msgid "Clean stubs, vias, delete break points or unconnected tracks"
 msgstr "Clean stubs, vias, delete break points or unconnected tracks"
@@ -17043,14 +17426,20 @@ msgstr "Revert to Las&t Backup"
 msgid "Clear board and get previous backup version of board"
 msgstr "Clear board and get previous backup version of board"
 
+msgid "&Netlist..."
+msgstr "&Netlist…"
+
+msgid "Read netlist and update board connectivity"
+msgstr "Read netlist and update board connectivity"
+
 msgid "&Specctra Session..."
 msgstr "&Specctra Session…"
 
 msgid "Import routed \"Specctra Session\" (*.ses) file"
 msgstr "Import routed “Specctra Session” (*.ses) file"
 
-msgid "Import &Graphics..."
-msgstr "Import &Graphics…"
+msgid "&Graphics..."
+msgstr "&Graphics…"
 
 msgid "Import 2D Drawing file to Pcbnew on Drawings layer"
 msgstr "Import 2D Drawing file to Pcbnew on Drawings layer"
@@ -17058,20 +17447,26 @@ msgstr "Import 2D Drawing file to Pcbnew on Drawings layer"
 msgid "Export board"
 msgstr "Export board"
 
-msgid "Footprint &Position (.pos) File..."
-msgstr "Footprint &Position (.pos) File…"
+msgid "&Gerbers (.gbr)..."
+msgstr "&Gerbers (.gbr)…"
+
+msgid "Generate Gerbers for fabrication"
+msgstr "Generate Gerbers for fabrication"
+
+msgid "&Drill Files (.drl)..."
+msgstr "&Drill Files (.drl)…"
+
+msgid "Generate Excellon drill file(s)"
+msgstr "Generate Excellon drill file(s)"
+
+msgid "Footprint &Positions (.pos)..."
+msgstr "Footprint &Positions (.pos)…"
 
 msgid "Generate footprint position file for pick and place"
 msgstr "Generate footprint position file for pick and place"
 
-msgid "&Drill (.drl) File..."
-msgstr "&Drill (.drl) File…"
-
-msgid "Generate excellon2 drill file"
-msgstr "Generate excellon2 drill file"
-
-msgid "&Footprint (.rpt) Report..."
-msgstr "&Footprint (.rpt) Report…"
+msgid "&Footprint Report (.rpt)..."
+msgstr "&Footprint Report (.rpt)…"
 
 msgid "Create report of all footprints from current board"
 msgstr "Create report of all footprints from current board"
@@ -17082,8 +17477,8 @@ msgstr "IPC-D-356 Netlist File…"
 msgid "Generate IPC-D-356 netlist file"
 msgstr "Generate IPC-D-356 netlist file"
 
-msgid "&BOM File..."
-msgstr "&BOM File…"
+msgid "&BOM..."
+msgstr "&BOM…"
 
 msgid "Create bill of materials from current schematic"
 msgstr "Create bill of materials from current schematic"
@@ -17177,6 +17572,12 @@ msgstr "&Footprint Association (.cmp) File…"
 msgid "Export footprint association file (*.cmp) for schematic back annotation"
 msgstr ""
 "Export footprint association file (*.cmp) for schematic back annotation"
+
+msgid "&Hyperlynx..."
+msgstr "&Hyperlynx…"
+
+msgid "Hyperlynx export"
+msgstr "Hyperlynx export"
 
 msgid "Gap Size:"
 msgstr "Gap Size:"
@@ -17274,9 +17675,6 @@ msgstr "Add Polynomial Shape"
 msgid "Net Name"
 msgstr "Net Name"
 
-msgid "Net Code"
-msgstr "Net Code"
-
 msgid "Net Length"
 msgstr "Net Length"
 
@@ -17345,9 +17743,6 @@ msgstr "Via Tool not available in Legacy Toolset"
 
 msgid "Delete All Drawings on Layer"
 msgstr "Delete All Drawings on Layer"
-
-msgid "Delete Zone Filling"
-msgstr "Delete Zone Filling"
 
 msgid "Close Zone Outline"
 msgstr "Close Zone Outline"
@@ -17608,9 +18003,15 @@ msgstr ""
 "order to create or update PCBs from schematics, you need to launch the KiCad "
 "project manager and create a PCB project."
 
+msgid "Eeschema netlist"
+msgstr "Eeschema netlist"
+
 #, c-format
 msgid "Schematic file \"%s\" not found."
 msgstr "Schematic file “%s” not found."
+
+msgid "Export Hyperlynx Layout"
+msgstr "Export Hyperlynx Layout"
 
 msgid "(not activated)"
 msgstr "(not activated)"
@@ -18329,8 +18730,8 @@ msgstr "New footprint"
 msgid "New footprint using footprint wizard"
 msgstr "New footprint using footprint wizard"
 
-msgid "Save changes to board"
-msgstr "Save changes to board"
+msgid "Update footprint on board"
+msgstr "Update footprint on board"
 
 msgid "Save changes to library"
 msgstr "Save changes to library"
@@ -18426,9 +18827,6 @@ msgstr "Open footprint editor"
 msgid "Open footprint viewer"
 msgstr "Open footprint viewer"
 
-msgid "Load netlist"
-msgstr "Load netlist"
-
 msgid "Update PCB from schematic"
 msgstr "Update PCB from schematic"
 
@@ -18440,6 +18838,9 @@ msgstr "Show/Hide the Python Scripting console"
 
 msgid "Enable design rule checking"
 msgstr "Enable design rule checking"
+
+msgid "Show ratsnest lines with curved lines"
+msgstr "Show ratsnest lines with curved lines"
 
 msgid "Display local ratsnest"
 msgstr "Display local ratsnest"
@@ -18560,6 +18961,12 @@ msgstr "Normal contrast display mode"
 
 msgid "High contrast display mode"
 msgstr "High contrast display mode"
+
+msgid "Show airwires as curves"
+msgstr "Show airwires as curves"
+
+msgid "Show airwires as straight lines"
+msgstr "Show airwires as straight lines"
 
 msgid "Draw a line"
 msgstr "Draw a line"
@@ -18985,6 +19392,9 @@ msgstr "Remove corner"
 msgid "Drag a corner"
 msgstr "Drag a corner"
 
+msgid "Refill Zones"
+msgstr "Refill Zones"
+
 msgid "Add a zone corner"
 msgstr "Add a zone corner"
 
@@ -19106,9 +19516,6 @@ msgstr "Unfill Zone"
 msgid "Unfill All Zones"
 msgstr "Unfill All Zones"
 
-msgid "Board cleanup"
-msgstr "Board cleanup"
-
 msgid "Incomplete undo/redo operation: some items not found"
 msgstr "Incomplete undo/redo operation: some items not found"
 
@@ -19166,92 +19573,3 @@ msgstr "Refill %d Zones"
 
 msgid "Checking Zones"
 msgstr "Checking Zones"
-
-#~ msgid "\""
-#~ msgstr "″"
-
-#~ msgid ""
-#~ "If  some components are orphan (the linked symbol is found nowhere),\n"
-#~ "try to find a candidate having the same name in one of loaded symbol "
-#~ "libraries"
-#~ msgstr ""
-#~ "If  some components are orphan (the linked symbol is found nowhere),\n"
-#~ "try to find a candidate having the same name in one of loaded symbol "
-#~ "libraries"
-
-#~ msgid "Symbol &name:"
-#~ msgstr "Symbol &name:"
-
-#~ msgid ""
-#~ "Default pad connection type to zone.\n"
-#~ "This setting can be overridden by local  pad settings"
-#~ msgstr ""
-#~ "Default pad connection type to zone.\n"
-#~ "This setting can be overridden by local  pad settings"
-
-#~ msgid "Clearance between pads in the same net and filled areas."
-#~ msgstr "Clearance between pads in the same net and filled areas."
-
-#~ msgid ""
-#~ "This is the local clearance between pads and the solder mask\n"
-#~ "for this footprint\n"
-#~ "This value can be superseded by a pad local value.\n"
-#~ "If 0, the global value is used"
-#~ msgstr ""
-#~ "This is the local clearance between pads and the solder mask\n"
-#~ "for this footprint\n"
-#~ "This value can be superseded by a pad local value.\n"
-#~ "If 0, the global value is used"
-
-#~ msgid ""
-#~ "This is the local clearance between pads and the solder paste\n"
-#~ "for this footprint.\n"
-#~ "This value can be superseded by a pad local values.\n"
-#~ "The final clearance value is the sum of this value and the clearance "
-#~ "value ratio\n"
-#~ "A negative value means a smaller mask size than pad size"
-#~ msgstr ""
-#~ "This is the local clearance between pads and the solder paste\n"
-#~ "for this footprint.\n"
-#~ "This value can be superseded by a pad local values.\n"
-#~ "The final clearance value is the sum of this value and the clearance "
-#~ "value ratio\n"
-#~ "A negative value means a smaller mask size than pad size"
-
-#~ msgid ""
-#~ "This is the local clearance ratio in per cent between pads and the solder "
-#~ "paste\n"
-#~ "for this footprint.\n"
-#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
-#~ "This value can be superseded by a pad local value.\n"
-#~ "The final clearance value is the sum of this value and the clearance "
-#~ "value\n"
-#~ "A negative value means a smaller mask size than pad size."
-#~ msgstr ""
-#~ "This is the local clearance ratio in per cent between pads and the solder "
-#~ "paste\n"
-#~ "for this footprint.\n"
-#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
-#~ "This value can be superseded by a pad local value.\n"
-#~ "The final clearance value is the sum of this value and the clearance "
-#~ "value\n"
-#~ "A negative value means a smaller mask size than pad size."
-
-#~ msgid ""
-#~ "This is the global clearance ratio in per cent between pads and the "
-#~ "solder paste\n"
-#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
-#~ "This value can be superseded by local values for a footprint or a pad.\n"
-#~ "The final clearance value is the sum of this value and the clearance value"
-#~ msgstr ""
-#~ "This is the global clearance ratio in per cent between pads and the "
-#~ "solder paste\n"
-#~ "A value of 10 means the clearance value is 10 per cent of the pad size\n"
-#~ "This value can be superseded by local values for a footprint or a pad.\n"
-#~ "The final clearance value is the sum of this value and the clearance value"
-
-#~ msgid "No pad for this footprint"
-#~ msgstr "No pad for this footprint"
-
-#~ msgid "Only one pad for this footprint"
-#~ msgstr "Only one pad for this footprint"
