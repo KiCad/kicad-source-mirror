@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/onleftclick.cpp
- */
-
 #include <fctsys.h>
 #include <kiway.h>
 #include <eeschema_id.h>
@@ -35,33 +31,37 @@
 #include <sch_edit_frame.h>
 #include <sim/sim_plot_frame.h>
 #include <menus_helpers.h>
-
-#include <sch_bus_entry.h>
-#include <sch_text.h>
 #include <sch_marker.h>
-#include <sch_junction.h>
 #include <sch_line.h>
-#include <sch_no_connect.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_bitmap.h>
-
 #include <netlist_object.h>
-#include <class_library.h>      // for class SCHLIB_FILTER to filter power parts
-
 #include <sch_view.h>
-
-// TODO(hzeller): These pairs of elmenets should be represented by an object, but don't want
-// to refactor too much right now to not get in the way with other code changes.
-static SCH_BASE_FRAME::HISTORY_LIST s_CmpNameList;
-static SCH_BASE_FRAME::HISTORY_LIST s_PowerNameList;
-
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
+    switch( GetToolId() )
+    {
+    case ID_HIGHLIGHT_BUTT:
+    case ID_NOCONN_BUTT:
+    case ID_JUNCTION_BUTT:
+    case ID_WIRETOBUS_ENTRY_BUTT:
+    case ID_BUSTOBUS_ENTRY_BUTT:
+    case ID_SCH_PLACE_COMPONENT:
+    case ID_PLACE_POWER_BUTT:
+    case ID_LABEL_BUTT:
+    case ID_GLOBALLABEL_BUTT:
+    case ID_HIERLABEL_BUTT:
+    case ID_TEXT_COMMENT_BUTT:
+    case ID_ADD_IMAGE_BUTT:
+        return;            // Moved to modern toolset
+    default:
+        break;
+    }
+
     SCH_ITEM*   item = GetScreen()->GetCurItem();
-    wxPoint     gridPosition = GetGridPosition( aPosition );
     // item_flags != 0 means a current item in edit, or new ...
     int item_flags = item ? (item->GetFlags() & ~HIGHLIGHTED) : 0;
 
@@ -74,19 +74,9 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             switch( item->Type() )
             {
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
-            case SCH_TEXT_T:
             case SCH_SHEET_PIN_T:
             case SCH_SHEET_T:
-            case SCH_BUS_WIRE_ENTRY_T:
-            case SCH_BUS_BUS_ENTRY_T:
-            case SCH_JUNCTION_T:
-            case SCH_COMPONENT_T:
             case SCH_FIELD_T:
-            case SCH_BITMAP_T:
-            case SCH_NO_CONNECT_T:
                 AddItemToScreen( item );
                 GetCanvas()->GetView()->ClearPreview();
                 GetCanvas()->GetView()->ClearHiddenFlags();
@@ -119,68 +109,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_ZOOM_SELECTION:
         break;
 
-    case ID_HIGHLIGHT_BUTT:
-        // Moved to modern toolset
-        break;
-
-    case ID_NOCONN_BUTT:
-        if( item_flags == 0 )
-        {
-            if( GetScreen()->GetItem( gridPosition, 0, SCH_NO_CONNECT_T ) == NULL )
-            {
-                SCH_NO_CONNECT*  no_connect = AddNoConnect( gridPosition );
-                SetRepeatItem( no_connect );
-                GetScreen()->SetCurItem( no_connect );
-                m_canvas->SetAutoPanRequest( true );
-            }
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_JUNCTION_BUTT:
-        if( item_flags == 0 )
-        {
-            if( GetScreen()->GetItem( gridPosition, 0, SCH_JUNCTION_T ) == NULL )
-            {
-                SCH_JUNCTION* junction = AddJunction( gridPosition );
-                SetRepeatItem( junction );
-                GetScreen()->SetCurItem( junction );
-                m_canvas->SetAutoPanRequest( true );
-            }
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_WIRETOBUS_ENTRY_BUTT:
-        if( item_flags == 0 )
-        {
-            CreateBusWireEntry();
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_BUSTOBUS_ENTRY_BUTT:
-        if( item_flags == 0 )
-        {
-            CreateBusBusEntry();
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         DeleteItemAtCrossHair();
         break;
@@ -198,60 +126,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_LINE_COMMENT_BUTT:
         BeginSegment( LAYER_NOTES );
         m_canvas->SetAutoPanRequest( true );
-        break;
-
-    case ID_TEXT_COMMENT_BUTT:
-        if( item_flags == 0 )
-        {
-            GetScreen()->SetCurItem( CreateNewText( LAYER_NOTES ) );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_ADD_IMAGE_BUTT:
-        if( item_flags == 0 )
-        {
-            GetScreen()->SetCurItem( CreateNewImage( aDC ) );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_LABEL_BUTT:
-        if( item_flags == 0 )
-        {
-            GetScreen()->SetCurItem( CreateNewText( LAYER_LOCLABEL ) );
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_GLABEL_BUTT:
-    case ID_HIERLABEL_BUTT:
-        if( item_flags == 0 )
-        {
-            if( GetToolId() == ID_GLABEL_BUTT )
-                GetScreen()->SetCurItem( CreateNewText( LAYER_GLOBLABEL ) );
-
-            if( GetToolId() == ID_HIERLABEL_BUTT )
-                GetScreen()->SetCurItem( CreateNewText( LAYER_HIERLABEL ) );
-
-            m_canvas->SetAutoPanRequest( true );
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
@@ -290,14 +164,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         {
             AddItemToScreen( item );
         }
-        break;
-
-    case ID_SCH_PLACE_COMPONENT:
-        // Moved to modern toolset
-        break;
-
-    case ID_PLACE_POWER_BUTT:
-        // Moved to modern toolset
         break;
 
 #ifdef KICAD_SPICE
@@ -405,7 +271,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
             EditSchematicText( (SCH_TEXT*) item );
             break;
 

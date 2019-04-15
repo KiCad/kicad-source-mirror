@@ -1364,7 +1364,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
     text->SetTextSize( wxSize( size, size ) );
 
     // Parse the global and hierarchical label type.
-    if( text->Type() == SCH_HIERARCHICAL_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
+    if( text->Type() == SCH_HIER_LABEL_T || text->Type() == SCH_GLOBAL_LABEL_T )
     {
         if( strCompare( SheetLabelType[NET_INPUT], line, &line ) )
             text->SetShape( NET_INPUT );
@@ -1847,7 +1847,7 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
             saveText( static_cast< SCH_TEXT* >( item ) );
             break;
         default:

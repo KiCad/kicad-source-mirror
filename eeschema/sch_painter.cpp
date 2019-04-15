@@ -207,7 +207,7 @@ bool SCH_PAINTER::Draw( const VIEW_ITEM *aItem, int aLayer )
     HANDLE_ITEM(SCH_TEXT_T, SCH_TEXT);
     HANDLE_ITEM(SCH_LABEL_T, SCH_TEXT);
     HANDLE_ITEM(SCH_FIELD_T, SCH_FIELD);
-    HANDLE_ITEM(SCH_HIERARCHICAL_LABEL_T, SCH_HIERLABEL);
+    HANDLE_ITEM(SCH_HIER_LABEL_T, SCH_HIERLABEL);
     HANDLE_ITEM(SCH_GLOBAL_LABEL_T, SCH_GLOBALLABEL);
     HANDLE_ITEM(SCH_SHEET_T, SCH_SHEET);
     HANDLE_ITEM(SCH_SHEET_PIN_T, SCH_HIERLABEL);
@@ -1025,7 +1025,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
     switch( aText->Type() )
     {
     case SCH_SHEET_PIN_T:          color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
-    case SCH_HIERARCHICAL_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_HIERLABEL );  break;
+    case SCH_HIER_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_HIERLABEL );  break;
     case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
     case SCH_LABEL_T:              color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
     default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
@@ -1035,7 +1035,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 
     if( conn && conn->IsBus() &&
         ( aText->Type() == SCH_SHEET_PIN_T ||
-          aText->Type() == SCH_HIERARCHICAL_LABEL_T ) )
+          aText->Type() == SCH_HIER_LABEL_T ) )
         color = m_schSettings.GetLayerColor( LAYER_BUS );
 
     if( aText->GetState( BRIGHTENED ) )

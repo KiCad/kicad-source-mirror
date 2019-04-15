@@ -816,10 +816,7 @@ public:
      * Checks if a bus unfolding operation is in progress, so that it can be
      * properly canceled / commited along with the wire draw operation.
      */
-    bool IsBusUnfoldInProgress()
-    {
-        return m_busUnfold.in_progress;
-    }
+    bool IsBusUnfoldInProgress() { return m_busUnfold.in_progress; }
 
     /**
      * Cancels a bus unfolding operation, cleaning up the bus entry and label
@@ -832,6 +829,16 @@ public:
      * unfolded wire
      */
     void FinishBusUnfold();
+
+    SCH_NO_CONNECT* AddNoConnect( const wxPoint& aPosition );
+    SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aAppendToUndo = false,
+                               bool aFinal = true );
+
+    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry();
+    SCH_BUS_BUS_ENTRY* CreateBusBusEntry();
+
+    SCH_TEXT* CreateNewText( int aType );
+    SCH_BITMAP* CreateNewImage();
 
 private:
 
@@ -962,24 +969,7 @@ private:
     void UpdateTitle();
 
     // Bus Entry
-    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry();
-    SCH_BUS_BUS_ENTRY* CreateBusBusEntry();
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
-
-    /**
-     * Add no connect item to the current schematic sheet at \a aPosition.
-     *
-     * @param aPosition The position in logical (drawing) units to add the no connect.
-     * @return The no connect item added.
-     */
-    SCH_NO_CONNECT* AddNoConnect( const wxPoint& aPosition );
-
-    /**
-     * Add a new junction at \a aPosition.
-     */
-    SCH_JUNCTION* AddJunction( const wxPoint& aPosition,
-                               bool aAppendToUndo = false,
-                               bool aFinal = true );
 
     /**
      * Collects a unique list of all possible connection points in the schematic.
@@ -1030,7 +1020,6 @@ private:
     void PrepareMoveItem( SCH_ITEM* aItem );
 
     // Text, label, glabel
-    SCH_TEXT* CreateNewText( int aType );
     void EditSchematicText( SCH_TEXT* TextStruct );
     void ChangeTextOrient( SCH_TEXT* aTextItem );
 
@@ -1063,7 +1052,6 @@ private:
     void DeleteConnection( bool DeleteFullConnection );
 
     // Images:
-    SCH_BITMAP* CreateNewImage( wxDC* aDC );
     void RotateImage( SCH_BITMAP* aItem );
 
     /**

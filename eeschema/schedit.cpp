@@ -33,8 +33,6 @@
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
 #include <hotkeys_basic.h>
-
-#include <advanced_config.h>
 #include <general.h>
 #include <eeschema_id.h>
 #include <list_operations.h>
@@ -48,9 +46,10 @@
 #include <sch_sheet_path.h>
 #include <sch_view.h>
 #include <simulation_cursors.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 
-
-void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
+ void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
     int         id = event.GetId();
     wxPoint     pos;
@@ -470,7 +469,7 @@ void SCH_EDIT_FRAME::OnDuplicateItem( wxCommandEvent& event )
     case SCH_TEXT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     {
         SCH_TEXT* newitem = (SCH_TEXT*) curr_item->Clone();
         newitem->SetFlags( IS_NEW );
@@ -527,7 +526,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     case SCH_TEXT_T:
     case SCH_COMPONENT_T:
     case SCH_SHEET_PIN_T:
@@ -588,16 +587,41 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     switch( id )
     {
+    case ID_HIGHLIGHT_BUTT:
+    case ID_MENU_NOCONN_BUTT:
+    case ID_NOCONN_BUTT:
+    case ID_MENU_JUNCTION_BUTT:
+    case ID_JUNCTION_BUTT:
+    case ID_MENU_LABEL_BUTT:
+    case ID_LABEL_BUTT:
+    case ID_MENU_GLABEL_BUTT:
+    case ID_GLOBALLABEL_BUTT:
+    case ID_MENU_HIERLABEL_BUTT:
+    case ID_HIERLABEL_BUTT:
+    case ID_MENU_TEXT_COMMENT_BUTT:
+    case ID_TEXT_COMMENT_BUTT:
+    case ID_MENU_ADD_IMAGE_BUTT:
+    case ID_ADD_IMAGE_BUTT:
+    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
+    case ID_WIRETOBUS_ENTRY_BUTT:
+    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
+    case ID_BUSTOBUS_ENTRY_BUTT:
+    case ID_MENU_PLACE_COMPONENT:
+    case ID_SCH_PLACE_COMPONENT:
+    case ID_MENU_PLACE_POWER_BUTT:
+    case ID_PLACE_POWER_BUTT:
+        // moved to modern toolset
+        return;
+    default:
+        // since legacy tools don't activate themsleves, we have to deactivate any modern
+        // tools that might be running until all the legacy tools are moved over....
+        m_toolManager->DeactivateTool();
+    }
+
+    switch( id )
+    {
     case ID_NO_TOOL_SELECTED:
         SetNoToolSelected();
-        break;
-
-    case ID_HIGHLIGHT_BUTT:
-        // TODO(JE) remove once real-time connectivity is a given
-        if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
-            RecalculateConnections();
-
-        SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _("Highlight specific net") );
         break;
 
     case ID_MENU_ZOOM_SELECTION:
@@ -607,11 +631,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
             SetNoToolSelected();
-        break;
-
-    case ID_MENU_NOCONN_BUTT:
-    case ID_NOCONN_BUTT:
-        SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
         break;
 
     case ID_MENU_WIRE_BUTT:
@@ -629,46 +648,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
         break;
 
-    case ID_MENU_JUNCTION_BUTT:
-    case ID_JUNCTION_BUTT:
-        SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
-        break;
-
-    case ID_MENU_LABEL_BUTT:
-    case ID_LABEL_BUTT:
-        SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add label" ) );
-        break;
-
-    case ID_MENU_GLABEL_BUTT:
-    case ID_GLABEL_BUTT:
-        SetToolID( ID_GLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
-        break;
-
-    case ID_MENU_HIERLABEL_BUTT:
-    case ID_HIERLABEL_BUTT:
-        SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
-        break;
-
-    case ID_MENU_TEXT_COMMENT_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
-        SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
-        break;
-
-    case ID_MENU_ADD_IMAGE_BUTT:
-    case ID_ADD_IMAGE_BUTT:
-        SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
-        break;
-
-    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
-    case ID_WIRETOBUS_ENTRY_BUTT:
-        SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
-        break;
-
-    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
-    case ID_BUSTOBUS_ENTRY_BUTT:
-        SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
-        break;
-
     case ID_MENU_SHEET_SYMBOL_BUTT:
     case ID_SHEET_SYMBOL_BUTT:
         SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
@@ -682,16 +661,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_MENU_IMPORT_HLABEL_BUTT:
     case ID_IMPORT_HLABEL_BUTT:
         SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
-        break;
-
-    case ID_MENU_PLACE_COMPONENT:
-    case ID_SCH_PLACE_COMPONENT:
-        SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add component" ) );
-        break;
-
-    case ID_MENU_PLACE_POWER_BUTT:
-    case ID_PLACE_POWER_BUTT:
-        SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add power" ) );
         break;
 
     case ID_MENU_DELETE_ITEM_BUTT:
@@ -1005,7 +974,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     case SCH_TEXT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
         m_canvas->MoveCursorToCrossHair();
         ChangeTextOrient( (SCH_TEXT*) item );
         break;
@@ -1061,7 +1030,12 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
     RefreshItem( item );
 
     if( item->IsMoving() )
-        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+    {
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        else
+            m_toolManager->RunAction( SCH_ACTIONS::refreshPreview, true );
+    }
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );
@@ -1194,7 +1168,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
     case SCH_TEXT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
         EditSchematicText( (SCH_TEXT*) item );
         break;
 
@@ -1279,7 +1253,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
     case SCH_COMPONENT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     case SCH_SHEET_T:
     case SCH_TEXT_T:
         m_canvas->MoveCursorToCrossHair();
@@ -1437,7 +1411,12 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
     RefreshItem( item );
 
     if( item->IsMoving() )
-        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+    {
+        if( m_canvas->IsMouseCaptured() )
+            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
+        else
+            m_toolManager->RunAction( SCH_ACTIONS::refreshPreview, true );
+    }
 
     if( item->GetFlags() == 0 )
         screen->SetCurItem( NULL );

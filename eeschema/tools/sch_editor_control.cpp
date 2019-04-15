@@ -26,7 +26,12 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_component.h>
+#include <sch_no_connect.h>
+#include <sch_junction.h>
+#include <sch_bus_entry.h>
+#include <sch_text.h>
 #include <sch_sheet.h>
+#include <sch_bitmap.h>
 #include <erc.h>
 #include <eeschema_id.h>
 #include <netlist_object.h>
@@ -37,26 +42,64 @@
 #include <tools/sch_editor_control.h>
 #include <hotkeys.h>
 #include <class_library.h>
+#include <advanced_config.h>
+
+TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
+        AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
-                            AS_GLOBAL, 0, "", "" );
+        AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highlightNetSelection",
-                            AS_GLOBAL, 0, "", "" );
+        AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
-                            AS_GLOBAL, 0,
-                            _( "Highlight Net" ), _( "Highlight wires and pins of a net" ),
-                            NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0,
+        _( "Highlight Net" ), _( "Highlight wires and pins of a net" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeSymbol( "eeschema.EditorControl.placeSymbol",
-                            AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
-                            _( "Add Symbol" ), _( "Add a symbol" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
+        _( "Add Symbol" ), _( "Add a symbol" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.EditorControl.placePowerPort",
-                            AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
-                            _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
+        _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION SCH_ACTIONS::placeNoConnect( "eeschema.EditorControl.placeNoConnect",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NOCONN_FLAG ),
+        _( "Add No Connect Flag" ), _( "Add a no-connection flag" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeJunction( "eeschema.EditorControl.placeJunction",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_JUNCTION ),
+        _( "Add Junction" ), _( "Add a junction" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeBusWireEntry( "eeschema.EditorControl.placeBusWireEntry",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_WIRE_ENTRY ),
+        _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeBusBusEntry( "eeschema.EditorControl.placeBusBusEntry",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
+        _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.EditorControl.placePLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
+        _( "Add Label" ), _( "Add a net label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeHierarchicalLabel( "eeschema.EditorControl.placeHierarchicalLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
+        _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeGlobalLabel( "eeschema.EditorControl.placeGlobalLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
+        _( "Add Global Label" ), _( "Add a global label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeSchematicText( "eeschema.EditorControl.placeSchematicText",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_TEXT ),
+        _( "Add Text" ), _( "Add text" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.EditorControl.placeImage",
+        AS_GLOBAL, 0,
+        _( "Add Image" ), _( "Add bitmap image" ), NULL, AF_ACTIVATE );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -243,12 +286,16 @@ int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
+    // TODO(JE) remove once real-time connectivity is a given
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+        m_frame->RecalculateConnections();
+
     Activate();
 
     SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
+    m_frame->SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight specific net" ) );
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
@@ -268,7 +315,7 @@ int SCH_EDITOR_CONTROL::PlaceSymbol( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Symbol" ) );
 
-    return placeComponent( component, nullptr, s_SymbolHistoryList );
+    return doPlaceComponent( component, nullptr, s_SymbolHistoryList );
 }
 
 
@@ -280,12 +327,12 @@ int SCH_EDITOR_CONTROL::PlacePower( const TOOL_EVENT& aEvent )
     filter.FilterPowerParts( true );
     m_frame->SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
 
-    return placeComponent( component, &filter, s_PowerHistoryList );
+    return doPlaceComponent( component, &filter, s_PowerHistoryList );
 }
 
 
-int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+int SCH_EDITOR_CONTROL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     VECTOR2I              cursorPos = controls->GetCursorPosition();
@@ -321,13 +368,12 @@ int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 delete aComponent;
                 aComponent = nullptr;
             }
-            else    // let's have another chance placing a module
+            else
                 break;
 
             if( evt->IsActivate() )  // now finish unconditionally
                 break;
         }
-
         else if( evt->IsClick( BUT_LEFT ) )
         {
             if( !aComponent )
@@ -347,35 +393,34 @@ int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 if( sel.LibId.IsValid() )
                     part = m_frame->GetLibPart( sel.LibId );
 
-                if( part )
-                {
-                    aComponent = new SCH_COMPONENT( *part, sel.LibId, g_CurrentSheet, sel.Unit,
-                                                   sel.Convert, (wxPoint)cursorPos, true );
-
-                    // Be sure the link to the corresponding LIB_PART is OK:
-                    aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
-
-                    // Set any fields that have been modified
-                    for( auto const& i : sel.Fields )
-                    {
-                        auto field = aComponent->GetField( i.first );
-
-                        if( field )
-                            field->SetText( i.second );
-                    }
-
-                    MSG_PANEL_ITEMS items;
-                    aComponent->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
-                    m_frame->SetMsgPanel( items );
-
-                    if( m_frame->GetAutoplaceFields() )
-                        aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
-                }
-
-                if( !aComponent )
+                if( !part )
                     continue;
 
+                aComponent = new SCH_COMPONENT( *part, sel.LibId, g_CurrentSheet, sel.Unit,
+                                               sel.Convert, (wxPoint)cursorPos, true );
+
+                // Be sure the link to the corresponding LIB_PART is OK:
+                aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
+
+                // Set any fields that have been modified
+                for( auto const& i : sel.Fields )
+                {
+                    auto field = aComponent->GetField( i.first );
+
+                    if( field )
+                        field->SetText( i.second );
+                }
+
+                MSG_PANEL_ITEMS items;
+                aComponent->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                m_frame->SetMsgPanel( items );
+
+                if( m_frame->GetAutoplaceFields() )
+                    aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
                 aComponent->SetFlags( IS_MOVED );
+                m_frame->SetRepeatItem( aComponent );
+                m_frame->GetScreen()->SetCurItem( aComponent );
                 view->ClearPreview();
                 view->AddToPreview( aComponent->Clone() );
 
@@ -390,14 +435,12 @@ int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 aComponent = nullptr;
             }
         }
-
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // JEY TODO
             // m_menu.ShowContextMenu( selTool->GetSelection() );
         }
-
-        else if( aComponent && evt->IsMotion() )
+        else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             aComponent->SetPosition( (wxPoint)cursorPos );
             view->ClearPreview();
@@ -407,6 +450,223 @@ int SCH_EDITOR_CONTROL::placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         // Enable autopanning and cursor capture only when there is a module to be placed
         controls->SetAutoPan( !!aComponent );
         controls->CaptureCursor( !!aComponent );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceNoConnect( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
+    return doSingleClickPlace( SCH_NO_CONNECT_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceJunction( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
+    return doSingleClickPlace( SCH_JUNCTION_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceBusWireEntry( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
+    return doSingleClickPlace( SCH_BUS_WIRE_ENTRY_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
+    return doSingleClickPlace( SCH_BUS_BUS_ENTRY_T );
+}
+
+
+int SCH_EDITOR_CONTROL::doSingleClickPlace( KICAD_T aType )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        wxPoint cursorPos = (wxPoint)controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            SCH_ITEM* item = nullptr;
+
+            if( !m_frame->GetScreen()->GetItem( cursorPos, 0, aType ) )
+            {
+                switch( aType )
+                {
+                case SCH_NO_CONNECT_T:     item = m_frame->AddNoConnect( cursorPos );  break;
+                case SCH_JUNCTION_T:       item = m_frame->AddJunction( cursorPos );   break;
+                case SCH_BUS_WIRE_ENTRY_T: item = m_frame->CreateBusWireEntry();       break;
+                case SCH_BUS_BUS_ENTRY_T:  item = m_frame->CreateBusBusEntry();        break;
+                default:                   wxFAIL_MSG( "doSingleClickPlace(): unknown type" );
+                }
+            }
+
+            if( item )
+            {
+                m_frame->SetRepeatItem( item );
+                m_frame->GetScreen()->SetCurItem( item );
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add net label" ) );
+    return doTwoClickPlace( SCH_LABEL_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceGlobalLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_GLOBALLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
+    return doTwoClickPlace( SCH_GLOBAL_LABEL_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
+    return doTwoClickPlace( SCH_HIER_LABEL_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceSchematicText( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    return doTwoClickPlace( SCH_TEXT_T );
+}
+
+
+int SCH_EDITOR_CONTROL::PlaceImage( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
+    return doTwoClickPlace( SCH_BITMAP_T );
+}
+
+
+int SCH_EDITOR_CONTROL::doTwoClickPlace( KICAD_T aType )
+{
+    KIGFX::VIEW_CONTROLS* controls = getViewControls();
+    VECTOR2I              cursorPos = controls->GetCursorPosition();
+    KIGFX::SCH_VIEW*      view = static_cast<KIGFX::SCH_VIEW*>( getView() );
+    SCH_ITEM*             item = nullptr;
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    controls->ShowCursor( true );
+    controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( item )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                view->ClearPreview();
+                view->ClearHiddenFlags();
+                delete item;
+                item = nullptr;
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !item )
+            {
+                m_frame->SetRepeatItem( NULL );
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                switch( aType )
+                {
+                case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
+                case SCH_HIER_LABEL_T:   item = m_frame->CreateNewText( LAYER_HIERLABEL );  break;
+                case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
+                case SCH_TEXT_T:         item = m_frame->CreateNewText( LAYER_NOTES );      break;
+                case SCH_BITMAP_T:       item = m_frame->CreateNewImage();                  break;
+                default:                 wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
+                }
+
+                // Restore cursor after dialog
+                m_frame->GetCanvas()->MoveCursorToCrossHair();
+
+                if( item )
+                {
+                    MSG_PANEL_ITEMS items;
+                    item->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                    m_frame->SetMsgPanel( items );
+
+                    item->SetFlags( IS_MOVED );
+                    view->ClearPreview();
+                    view->AddToPreview( item->Clone() );
+                }
+
+                controls->SetCursorPosition( cursorPos, false );
+            }
+            else
+            {
+                view->ClearPreview();
+
+                m_frame->AddItemToScreen( item );
+
+                item = nullptr;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            item->SetPosition( (wxPoint)cursorPos );
+            view->ClearPreview();
+            view->AddToPreview( item->Clone() );
+        }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        controls->SetAutoPan( !!item );
+        controls->CaptureCursor( !!item );
     }
 
     m_frame->SetNoToolSelected();
@@ -436,4 +696,13 @@ void SCH_EDITOR_CONTROL::setTransitions()
 
     Go( &SCH_EDITOR_CONTROL::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::PlacePower,            SCH_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceNoConnect,        SCH_ACTIONS::placeNoConnect.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceJunction,         SCH_ACTIONS::placeJunction.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceBusWireEntry,     SCH_ACTIONS::placeBusWireEntry.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceBusBusEntry,      SCH_ACTIONS::placeBusBusEntry.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceLabel,            SCH_ACTIONS::placeLabel.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
 }

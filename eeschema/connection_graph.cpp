@@ -63,7 +63,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         switch( item->Type() )
         {
         case SCH_SHEET_PIN_T:           item_priority = 2; break;
-        case SCH_HIERARCHICAL_LABEL_T:  item_priority = 3; break;
+        case SCH_HIER_LABEL_T:  item_priority = 3; break;
         case SCH_LABEL_T:               item_priority = 4; break;
         case SCH_PIN_T:
         {
@@ -263,7 +263,7 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem )
 
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     case SCH_SHEET_PIN_T:
     {
         auto label = static_cast<SCH_TEXT*>( aItem );
@@ -730,7 +730,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 {
                 case SCH_LABEL_T:
                 case SCH_GLOBAL_LABEL_T:
-                case SCH_HIERARCHICAL_LABEL_T:
+                case SCH_HIER_LABEL_T:
                 {
                     auto text = static_cast<SCH_TEXT*>( driver );
                     connection->ConfigureFromLabel( text->GetText() );
@@ -799,7 +799,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             switch( driver->Type() )
             {
             case SCH_LABEL_T:
-            case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
             {
                 m_local_label_cache[std::make_pair( sheet, name )].push_back( subgraph );
                 break;
@@ -972,7 +972,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     // Local labels and hierarchical labels form local neighbor links
                     switch( driver->Type() )
                     {
-                    case SCH_HIERARCHICAL_LABEL_T:
+                    case SCH_HIER_LABEL_T:
                     case SCH_LABEL_T:
                     {
                         // The actual connection attached to this item will have been overwritten
@@ -1270,7 +1270,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         for( auto item : subgraph->m_drivers )
         {
-            if( item->Type() == SCH_HIERARCHICAL_LABEL_T )
+            if( item->Type() == SCH_HIER_LABEL_T )
             {
                 contains_hier_labels = true;
                 break;
@@ -1394,7 +1394,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                             for( auto d : candidate->m_drivers )
                             {
-                                if( ( d->Type() == SCH_HIERARCHICAL_LABEL_T ) &&
+                                if( ( d->Type() == SCH_HIER_LABEL_T ) &&
                                     ( static_cast<SCH_HIERLABEL*>( d )->GetText() == sp_name ) )
                                     hier_label = d;
                             }
@@ -1756,7 +1756,7 @@ bool CONNECTION_GRAPH::ercCheckBusToNetConflicts( CONNECTION_SUBGRAPH* aSubgraph
 
         case SCH_GLOBAL_LABEL_T:
         case SCH_SHEET_PIN_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         {
             auto text = static_cast<SCH_TEXT*>( item )->GetText();
             conn.ConfigureFromLabel( text );
@@ -1824,7 +1824,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusConflicts( CONNECTION_SUBGRAPH* aSubgraph
         }
 
         case SCH_SHEET_PIN_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         {
             if( !port && item->Connection( sheet )->IsBus() )
                 port = item;
@@ -2122,7 +2122,7 @@ bool CONNECTION_GRAPH::ercCheckLabels( CONNECTION_SUBGRAPH* aSubgraph,
         {
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
             text = static_cast<SCH_TEXT*>( item );
             break;
 

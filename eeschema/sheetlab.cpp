@@ -116,7 +116,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet )
 
     for( ; item != NULL; item = item->Next() )
     {
-        if( item->Type() != SCH_HIERARCHICAL_LABEL_T )
+        if( item->Type() != SCH_HIER_LABEL_T )
             continue;
 
         label = (SCH_HIERLABEL*) item;

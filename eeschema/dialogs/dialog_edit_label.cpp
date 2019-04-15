@@ -62,7 +62,7 @@ public:
         switch( m_CurrentText->Type() )
         {
         case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         case SCH_LABEL_T:
             // labels can share retained settings probably.
             break;
@@ -119,7 +119,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     switch( m_CurrentText->Type() )
     {
     case SCH_GLOBAL_LABEL_T:       SetTitle( _( "Global Label Properties" ) );           break;
-    case SCH_HIERARCHICAL_LABEL_T: SetTitle( _( "Hierarchical Label Properties" ) );     break;
+    case SCH_HIER_LABEL_T: SetTitle( _( "Hierarchical Label Properties" ) );     break;
     case SCH_LABEL_T:              SetTitle( _( "Label Properties" ) );                  break;
     case SCH_SHEET_PIN_T:          SetTitle( _( "Hierarchical Sheet Pin Properties" ) ); break;
     default:                       SetTitle( _( "Text Properties" ) );                   break;
@@ -155,7 +155,7 @@ DIALOG_LABEL_EDITOR::DIALOG_LABEL_EDITOR( SCH_EDIT_FRAME* aParent, SCH_TEXT* aTe
     SetInitialFocus( m_activeTextCtrl );
 
     m_TextShape->Show( m_CurrentText->Type() == SCH_GLOBAL_LABEL_T ||
-                       m_CurrentText->Type() == SCH_HIERARCHICAL_LABEL_T );
+                       m_CurrentText->Type() == SCH_HIER_LABEL_T );
 
     m_sdbSizer1OK->SetDefault();
     Layout();

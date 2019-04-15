@@ -122,7 +122,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
                 PopMenu->AppendSeparator();
                 break;
 
-            case SCH_HIERARCHICAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
                 msg = AddHotkeyName( _( "Edit Hierarchical Label..." ), g_Schematic_Hotkeys_Descr,
                                      HK_EDIT );
                 AddMenuItem( PopMenu, ID_SCH_EDIT_ITEM, msg, KiBitmap( edit_text_xpm ) );
@@ -253,7 +253,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) item );
         break;
 
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
         AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) item );
         break;
 

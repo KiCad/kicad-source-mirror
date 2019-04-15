@@ -36,7 +36,7 @@
 #include <view/view_group.h>
 
 
-SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage( wxDC* aDC )
+SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage()
 {
     wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                           _( "Image Files " ) + wxImage::GetImageExtWildcard(),

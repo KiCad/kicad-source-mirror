@@ -239,7 +239,7 @@ bool SCH_SHEET::HasUndefinedPins()
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
+            if( DrawStruct->Type() != SCH_HIER_LABEL_T )
                 continue;
 
             HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );
@@ -349,7 +349,7 @@ void SCH_SHEET::CleanupSheet()
 
         for( ; DrawStruct != NULL; DrawStruct = DrawStruct->Next() )
         {
-            if( DrawStruct->Type() != SCH_HIERARCHICAL_LABEL_T )
+            if( DrawStruct->Type() != SCH_HIER_LABEL_T )
                 continue;
 
             HLabel = static_cast<SCH_HIERLABEL*>( DrawStruct );

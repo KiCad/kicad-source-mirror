@@ -34,6 +34,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
+    case ID_CANCEL_CURRENT_COMMAND:
+        return ACTIONS::cancelInteractive.MakeEvent();
+
     case ID_ZOOM_REDRAW:
     case ID_POPUP_ZOOM_REDRAW:
     case ID_VIEWER_ZOOM_REDRAW:
@@ -42,14 +45,14 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_POPUP_ZOOM_IN:
         return ACTIONS::zoomIn.MakeEvent();
 
-    case ID_ZOOM_IN:        // toolbar button "Zoom In"
+    case ID_ZOOM_IN:
     case ID_VIEWER_ZOOM_IN:
         return ACTIONS::zoomInCenter.MakeEvent();
 
     case ID_POPUP_ZOOM_OUT:
         return ACTIONS::zoomOut.MakeEvent();
 
-    case ID_ZOOM_OUT:       // toolbar button "Zoom Out"
+    case ID_ZOOM_OUT:
     case ID_VIEWER_ZOOM_OUT:
         return ACTIONS::zoomOutCenter.MakeEvent();
 
@@ -76,11 +79,49 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_HIGHLIGHT_NET:
         return SCH_ACTIONS::highlightNet.MakeEvent();
 
+    case ID_MENU_PLACE_COMPONENT:
     case ID_SCH_PLACE_COMPONENT:
         return SCH_ACTIONS::placeSymbol.MakeEvent();
 
+    case ID_MENU_PLACE_POWER_BUTT:
     case ID_PLACE_POWER_BUTT:
         return SCH_ACTIONS::placePower.MakeEvent();
+
+    case ID_MENU_NOCONN_BUTT:
+    case ID_NOCONN_BUTT:
+        return SCH_ACTIONS::placeNoConnect.MakeEvent();
+
+    case ID_MENU_JUNCTION_BUTT:
+    case ID_JUNCTION_BUTT:
+        return SCH_ACTIONS::placeJunction.MakeEvent();
+
+    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
+    case ID_WIRETOBUS_ENTRY_BUTT:
+        return SCH_ACTIONS::placeBusWireEntry.MakeEvent();
+
+    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
+    case ID_BUSTOBUS_ENTRY_BUTT:
+        return SCH_ACTIONS::placeBusBusEntry.MakeEvent();
+
+    case ID_MENU_LABEL_BUTT:
+    case ID_LABEL_BUTT:
+        return SCH_ACTIONS::placeLabel.MakeEvent();
+
+    case ID_MENU_GLABEL_BUTT:
+    case ID_GLOBALLABEL_BUTT:
+        return SCH_ACTIONS::placeLabel.MakeEvent();
+
+    case ID_MENU_HIERLABEL_BUTT:
+    case ID_HIERLABEL_BUTT:
+        return SCH_ACTIONS::placeHierarchicalLabel.MakeEvent();
+
+    case ID_MENU_TEXT_COMMENT_BUTT:
+    case ID_TEXT_COMMENT_BUTT:
+        return SCH_ACTIONS::placeSchematicText.MakeEvent();
+
+    case ID_MENU_ADD_IMAGE_BUTT:
+    case ID_ADD_IMAGE_BUTT:
+        return SCH_ACTIONS::placeImage.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

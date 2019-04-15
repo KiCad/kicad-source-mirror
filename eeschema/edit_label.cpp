@@ -114,7 +114,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     lastTextItalic = textItem->IsItalic();
     lastTextOrientation = textItem->GetLabelSpinStyle();
 
-    if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIERARCHICAL_LABEL_T )
+    if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIER_LABEL_T )
         lastGlobalLabelShape = textItem->GetShape();
 
     // Prepare display to move the new item
@@ -152,7 +152,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
-        type = SCH_HIERARCHICAL_LABEL_T;
+        type = SCH_HIER_LABEL_T;
         break;
 
     case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
@@ -181,7 +181,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
         newtext = new SCH_GLOBALLABEL( position, txt );
         break;
 
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
         newtext = new SCH_HIERLABEL( position, txt );
         break;
 

@@ -52,7 +52,7 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
     case SCH_TEXT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     case SCH_COMPONENT_T:
     case SCH_LINE_T:
     case SCH_BUS_BUS_ENTRY_T:
@@ -252,7 +252,7 @@ void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST
         case SCH_TEXT_T:
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
-        case SCH_HIERARCHICAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
         case SCH_SHEET_PIN_T:
         case SCH_MARKER_T:
         case SCH_NO_CONNECT_T:

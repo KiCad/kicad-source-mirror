@@ -224,7 +224,7 @@ void SCH_TEXT::Rotate( wxPoint aPosition )
 
     // Global and hierarchical labels spin backwards.  Fix here because
     // changing SetLabelSpinStyle would break existing designs.
-    if( this->Type() == SCH_GLOBAL_LABEL_T || this->Type() == SCH_HIERARCHICAL_LABEL_T )
+    if( this->Type() == SCH_GLOBAL_LABEL_T || this->Type() == SCH_HIER_LABEL_T )
         SetLabelSpinStyle( ( spin - 1 >= 0 ? ( spin - 1 ) : 3 ) );
     else
         SetLabelSpinStyle( ( spin + 1 ) % 4 );
@@ -594,7 +594,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
     case SCH_TEXT_T:               msg = _( "Graphic Text" );           break;
     case SCH_LABEL_T:              msg = _( "Label" );                  break;
     case SCH_GLOBAL_LABEL_T:       msg = _( "Global Label" );           break;
-    case SCH_HIERARCHICAL_LABEL_T: msg = _( "Hierarchical Label" );     break;
+    case SCH_HIER_LABEL_T: msg = _( "Hierarchical Label" );     break;
     case SCH_SHEET_PIN_T:          msg = _( "Hierarchical Sheet Pin" ); break;
     default: return;
     }
@@ -626,7 +626,7 @@ void SCH_TEXT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     // Display electricat type if it is relevant
     if( (Type() == SCH_GLOBAL_LABEL_T) ||
-        (Type() == SCH_HIERARCHICAL_LABEL_T ) ||
+        (Type() == SCH_HIER_LABEL_T ) ||
         (Type() == SCH_SHEET_PIN_T ) )
     {
         switch( GetShape() )

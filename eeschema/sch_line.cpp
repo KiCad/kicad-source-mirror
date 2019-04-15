@@ -589,7 +589,7 @@ bool SCH_LINE::CanConnect( const SCH_ITEM* aItem ) const
     case SCH_NO_CONNECT_T:
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
-    case SCH_HIERARCHICAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
     case SCH_BUS_WIRE_ENTRY_T:
     case SCH_COMPONENT_T:
     case SCH_SHEET_T:

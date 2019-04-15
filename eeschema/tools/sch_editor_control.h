@@ -51,19 +51,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    /**
-     * Function PlaceComponent()
-     * Displays a dialog to select a module to be added and allows the user to set its position.
-     */
-    int PlaceComponent( const TOOL_EVENT& aEvent );
-
-    ///> Toggles 'lock' property for selected items.
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
-
-    ///> Locks selected items.
     int LockSelected( const TOOL_EVENT& aEvent );
-
-    ///> Unlocks selected items.
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
     ///> Reacts to selection change in pcbnew.
@@ -72,22 +61,35 @@ public:
     ///> Notifies pcbnew about the selected item.
     int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
 
-    ///> Highlights net belonging to the item under the cursor.
+    ///> Highlights net under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
-    ///> Highlight all items which match the frame's SelectedNetName.
+    ///> Highlights frame's SelectedNetName.
     int HighlightNetSelection( const TOOL_EVENT& aEvent );
 
-    ///> Launches a tool to pick the item whose net is going to be highlighted.
+    ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int PlacePower( const TOOL_EVENT& aEvent );
+    int PlaceNoConnect( const TOOL_EVENT& aEvent );
+    int PlaceJunction( const TOOL_EVENT& aEvent );
+    int PlaceBusWireEntry( const TOOL_EVENT& aEvent );
+    int PlaceBusBusEntry( const TOOL_EVENT& aEvent );
+    int PlaceLabel( const TOOL_EVENT& aEvent );
+    int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
+    int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
+    int PlaceSchematicText( const TOOL_EVENT& aEvent );
+    int PlaceImage( const TOOL_EVENT& aEvent );
 
 private:
 
-    int placeComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
+    int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
+
+    int doSingleClickPlace( KICAD_T aType );
+
+    int doTwoClickPlace( KICAD_T aType );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

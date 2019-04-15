@@ -90,6 +90,15 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
     static TOOL_ACTION placePower;
+    static TOOL_ACTION placeNoConnect;
+    static TOOL_ACTION placeJunction;
+    static TOOL_ACTION placeBusWireEntry;
+    static TOOL_ACTION placeBusBusEntry;
+    static TOOL_ACTION placeLabel;
+    static TOOL_ACTION placeGlobalLabel;
+    static TOOL_ACTION placeHierarchicalLabel;
+    static TOOL_ACTION placeSchematicText;
+    static TOOL_ACTION placeImage;
 
     // Editing
     static TOOL_ACTION properties;
@@ -104,6 +113,7 @@ public:
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;
     static TOOL_ACTION deleteItemCursor;
+    static TOOL_ACTION refreshPreview;
 
     // Net highlighting
     static TOOL_ACTION highlightNet;

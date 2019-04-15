@@ -232,7 +232,7 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
                             KiScaledBitmap( add_line_label_xpm, this ),
                             HELP_PLACE_NETLABEL, wxITEM_CHECK );
 
-    m_drawToolBar->AddTool( ID_GLABEL_BUTT, wxEmptyString, KiScaledBitmap( add_glabel_xpm, this ),
+    m_drawToolBar->AddTool( ID_GLOBALLABEL_BUTT, wxEmptyString, KiScaledBitmap( add_glabel_xpm, this ),
                             HELP_PLACE_GLOBALLABEL, wxITEM_CHECK );
 
     m_drawToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
