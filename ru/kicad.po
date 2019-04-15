@@ -16817,7 +16817,7 @@ msgstr ""
 "0 = без скругления\n"
 "1 = фаска\n"
 "2 = скругление\n"
-"3 = скругление (более лучшая форма)\n"
+"3 = скругление (более лучшая форма)"
 
 #: pcbnew/dialogs/dialog_copper_zones_base.cpp:297
 #: pcbnew/dialogs/dialog_non_copper_zones_properties_base.cpp:145
@@ -22177,7 +22177,7 @@ msgstr "Области установки...\n"
 
 #: pcbnew/drc.cpp:549
 msgid "Checking footprints against schematic...\n"
-msgstr "Проверка посад.мест в схеме..."
+msgstr "Проверка посад.мест в схеме...\n"
 
 #: pcbnew/drc.cpp:568
 msgid "Items on disabled layers...\n"
