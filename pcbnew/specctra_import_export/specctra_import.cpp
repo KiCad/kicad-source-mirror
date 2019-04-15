@@ -89,6 +89,13 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         return;
     }
 
+    ImportSpecctraSession( fullFileName );
+}
+
+
+bool PCB_EDIT_FRAME::ImportSpecctraSession( const wxString& fullFileName )
+{
+
     SetCurItem( NULL );
 
     // To avoid issues with undo/redo lists (dangling pointers)
@@ -114,7 +121,7 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
         wxString extra = ioe.What();
 
         DisplayErrorMessage( this, msg, extra);
-        return;
+        return false;
     }
 
     OnModify();
@@ -140,6 +147,8 @@ void PCB_EDIT_FRAME::ImportSpecctraSession( wxCommandEvent& event )
     SetStatusText( wxString( _( "Session file imported and merged OK." ) ) );
 
     Refresh();
+
+    return true;
 }
 
 

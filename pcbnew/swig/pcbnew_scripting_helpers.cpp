@@ -107,6 +107,47 @@ bool SaveBoard( wxString& aFileName, BOARD* aBoard )
 }
 
 
+bool ExportSpecctraDSN( wxString& aFullFilename )
+{
+    if( s_PcbEditFrame )
+    {
+        bool ok = s_PcbEditFrame->ExportSpecctraFile( aFullFilename );
+        return ok;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool ImportSpecctraSES( wxString& aFullFilename )
+{
+    if( s_PcbEditFrame )
+    {
+        bool ok = s_PcbEditFrame->ImportSpecctraSession( aFullFilename );
+        return ok;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool ArchiveModulesOnBoard( bool aStoreInNewLib, const wxString& aLibName, wxString* aLibPath )
+{
+    if( s_PcbEditFrame )
+    {
+        s_PcbEditFrame->ArchiveModulesOnBoard( aStoreInNewLib, aLibName, aLibPath );
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 void Refresh()
 {
     if( s_PcbEditFrame )

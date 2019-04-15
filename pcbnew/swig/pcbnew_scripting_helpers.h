@@ -50,6 +50,39 @@ BOARD*  LoadBoard( wxString& aFileName );
 bool    SaveBoard( wxString& aFileName, BOARD* aBoard );
 
 /**
+ * will export the current BOARD to a specctra dsn file.
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+ * specification.
+ * @return true if OK
+ */
+bool ExportSpecctraDSN( wxString& aFullFilename );
+
+/**
+ * will import a specctra *.ses file and use it to relocate MODULEs and
+ * to replace all vias and tracks in an existing and loaded BOARD.
+ * See http://www.autotraxeda.com/docs/SPECCTRA/SPECCTRA.pdf for the
+ * specification.
+ * @return true if OK
+ */
+bool ImportSpecctraSES( wxString& aFullFilename );
+
+/**
+ * Function ArchiveModulesOnBoard
+ * Save modules in a library:
+ * @param aStoreInNewLib:
+ *              true : save modules in a existing lib. Existing footprints will be kept
+ *              or updated.
+ *              This lib should be in fp lib table, and is type is .pretty
+ *              false: save modules in a new lib. It it is an existing lib,
+ *              previous footprints will be removed
+ *
+ * @param aLibName:
+ *              optional library name to create, stops dialog call.
+ *              must be called with aStoreInNewLib as true
+ */
+bool ArchiveModulesOnBoard(
+        bool aStoreInNewLib, const wxString& aLibName = wxEmptyString, wxString* aLibPath = NULL );
+/**
  * Update the board display after modifying it by a python script
  * (note: it is automatically called by action plugins, after running the plugin,
  * so call this function is usually not needed inside action plugins
