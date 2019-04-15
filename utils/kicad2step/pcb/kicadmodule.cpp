@@ -22,18 +22,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicadmodule.h"
+
+#include "3d_resolver.h"
+#include "kicadcurve.h"
+#include "kicadmodel.h"
+#include "kicadpad.h"
+#include "oce_utils.h"
+
+#include <sexpr/sexpr.h>
+
 #include <wx/log.h>
+
 #include <iostream>
 #include <limits>
 #include <sstream>
-
-#include "3d_resolver.h"
-#include "sexpr/sexpr.h"
-#include "kicadmodel.h"
-#include "kicadmodule.h"
-#include "kicadpad.h"
-#include "kicadcurve.h"
-#include "oce_utils.h"
 
 
 KICADMODULE::KICADMODULE( KICADPCB* aParent )

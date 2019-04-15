@@ -21,14 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/log.h>
-#include <iostream>
-#include <sstream>
-#include <math.h>
-#include "sexpr/sexpr.h"
 #include "kicadcurve.h"
 
+#include <sexpr/sexpr.h>
+
 #include <core/optional.h>
+
+#include <wx/log.h>
+
+#include <iostream>
+#include <math.h>
+#include <sstream>
 
 /**
  * Get the layer name from a layer element, if the layer is syntactically

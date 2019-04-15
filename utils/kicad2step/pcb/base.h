@@ -30,6 +30,8 @@
 #ifndef KICADBASE_H
 #define KICADBASE_H
 
+#include <ostream>
+
 ///> Minimum distance between points to treat them as separate ones (mm)
 static constexpr double MIN_DISTANCE = 0.001;
 

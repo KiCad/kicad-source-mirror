@@ -29,9 +29,11 @@
 #ifndef KICADMODULE_H
 #define KICADMODULE_H
 
+#include "base.h"
+#include "kicadpcb.h"
+
 #include <string>
 #include <vector>
-#include "base.h"
 
 namespace SEXPR
 {

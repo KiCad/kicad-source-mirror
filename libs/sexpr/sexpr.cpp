@@ -145,7 +145,7 @@ namespace SEXPR
         return static_cast< SEXPR_LIST* >(this);
     }
 
-    std::string SEXPR::AsString( size_t aLevel )
+    std::string SEXPR::AsString( size_t aLevel ) const
     {
         std::string result;
 

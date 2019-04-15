@@ -21,21 +21,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <wx/utils.h>
+#include "kicadpcb.h"
+
+#include "kicadcurve.h"
+#include "kicadmodule.h"
+#include "oce_utils.h"
+
+#include <sexpr/sexpr.h>
+#include <sexpr/sexpr_parser.h>
+
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/stdpaths.h>
+#include <wx/utils.h>
+
 #include <iostream>
+#include <memory>
 #include <sstream>
 #include <string>
-#include <memory>
-
-#include "kicadpcb.h"
-#include "sexpr/sexpr.h"
-#include "sexpr/sexpr_parser.h"
-#include "kicadmodule.h"
-#include "kicadcurve.h"
-#include "oce_utils.h"
 
 
 /*

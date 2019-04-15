@@ -931,6 +931,7 @@ endif()
 
 # Binaries ( CMake targets )
 add_subdirectory( bitmaps_png )
+add_subdirectory( libs )
 add_subdirectory( common )
 add_subdirectory( 3d-viewer )
 add_subdirectory( cvpcb )

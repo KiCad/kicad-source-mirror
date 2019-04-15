@@ -32,7 +32,7 @@
 #include <sstream>
 #include <Standard_Failure.hxx>
 
-#include "kicadpcb.h"
+#include "pcb/kicadpcb.h"
 
 class KICAD2MCAD : public wxAppConsole
 {

@@ -67,7 +67,7 @@ namespace SEXPR
         std::string const & GetString() const;
         std::string const & GetSymbol() const;
         SEXPR_LIST* GetList();
-        std::string AsString( size_t aLevel = 0);
+        std::string AsString( size_t aLevel = 0) const;
         size_t GetLineNumber() { return m_lineNumber; }
     };
 
@@ -293,6 +293,7 @@ namespace SEXPR
         size_t doScan( const SEXPR_SCAN_ARG *args, size_t num_args );
         void doAddChildren( const SEXPR_CHILDREN_ARG *args, size_t num_args );
     };
-}
+
+} // namespace SEXPR
 
 #endif

@@ -21,11 +21,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicadpad.h"
+
+#include <sexpr/sexpr.h>
+
 #include <wx/log.h>
+
 #include <iostream>
 #include <sstream>
-#include "sexpr/sexpr.h"
-#include "kicadpad.h"
 
 
 static const char bad_pad[] = "* corrupt module in PCB file; bad pad";

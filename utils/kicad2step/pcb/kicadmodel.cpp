@@ -21,11 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include "kicadmodel.h"
+
+#include <sexpr/sexpr.h>
+
 #include <wx/log.h>
 #include <iostream>
 #include <sstream>
-#include "sexpr/sexpr.h"
-#include "kicadmodel.h"
 
 
 KICADMODEL::KICADMODEL() :
