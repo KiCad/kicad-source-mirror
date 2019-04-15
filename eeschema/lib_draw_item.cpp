@@ -68,11 +68,9 @@ void LIB_ITEM::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM( _( "Unit" ), msg, BROWN ) );
 
-    if( m_Convert == 0 )
-        msg = _( "All" );
-    else if( m_Convert == 1 )
+    if( m_Convert == LIB_ITEM::LIB_CONVERT::BASE )
         msg = _( "no" );
-    else if( m_Convert == 2 )
+    else if( m_Convert == LIB_ITEM::LIB_CONVERT::DEMORGAN )
         msg = _( "yes" );
     else
         msg = wxT( "?" );

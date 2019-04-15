@@ -372,14 +372,14 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
         aComponent->SetConvert( aComponent->GetConvert() + 1 );
 
-        // ensure m_Convert = 0, 1 or 2
-        // 0 and 1 = shape 1 = not converted
+        // ensure m_Convert = 1 or 2
+        // 1 = shape 1 = not converted
         // 2 = shape 2 = first converted shape
         // > 2 is not used but could be used for more shapes
         // like multiple shapes for a programmable component
         // When m_Convert = val max, return to the first shape
-        if( aComponent->GetConvert() > 2 )
-            aComponent->SetConvert( 1 );
+        if( aComponent->GetConvert() > LIB_ITEM::LIB_CONVERT::DEMORGAN )
+            aComponent->SetConvert( LIB_ITEM::LIB_CONVERT::BASE );
 
         // The alternate symbol may cause a change in the connection status so test the
         // connections so the connection indicators are drawn correctly.
