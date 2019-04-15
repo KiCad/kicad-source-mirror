@@ -31,6 +31,7 @@
 #include <class_board.h>
 #include <dialog_select_net_from_list_base.h>
 #include <eda_pattern_match.h>
+#include <wildcards_and_files_ext.h>
 
 #include <view/view.h>
 #include <view/view_controls.h>
@@ -58,7 +59,7 @@ private:
     void onSelChanged( wxDataViewEvent& event ) override;
     void onFilterChange( wxCommandEvent& event ) override;
     void onListSize( wxSizeEvent& event ) override;
-    void onExport( wxMouseEvent& event ) override;
+    void onReport( wxCommandEvent& event ) override;
 
     void buildNetsList();
     wxString getListColumnHeaderNet() { return _( "Net" ); };
@@ -187,18 +188,18 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
                 }
             }
 
-            dataLine.push_back( wxVariant( wxString::Format( wxT( "%u" ), viaCount ) ) );
+            dataLine.push_back( wxVariant( wxString::Format( "%u", viaCount ) ) );
             dataLine.push_back( wxVariant( MessageTextFromValue( units, len ) ) );
             dataLine.push_back( wxVariant( MessageTextFromValue( units, lenPadToDie ) ) );
             dataLine.push_back( wxVariant( MessageTextFromValue( units, len + lenPadToDie ) ) );
         }
         else    // For the net 0 (unconnected pads), the pad count is not known
         {
-            dataLine.push_back( wxVariant( wxT( "---" ) ) );
-            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // vias
-            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // board
-            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // die
-            dataLine.push_back( wxVariant( wxT( "---" ) ) ); // length
+            dataLine.push_back( wxVariant( "---" ) );
+            dataLine.push_back( wxVariant( "---" ) );   // vias
+            dataLine.push_back( wxVariant( "---" ) );   // board
+            dataLine.push_back( wxVariant( "---" ) );   // die
+            dataLine.push_back( wxVariant( "---" ) );   // length
         }
 
         m_netsList->AppendItem( dataLine );
@@ -210,12 +211,11 @@ void DIALOG_SELECT_NET_FROM_LIST::buildNetsList()
 
 void DIALOG_SELECT_NET_FROM_LIST::HighlightNet( const wxString& aNetName )
 {
-    NETINFO_ITEM* net = nullptr;
     int           netCode = -1;
 
     if( !aNetName.IsEmpty() )
     {
-        net = m_brd->FindNet( aNetName );
+        NETINFO_ITEM* net = m_brd->FindNet( aNetName );
 
         if( net )
             netCode = net->GetNet();
@@ -287,7 +287,7 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
      */
 
     wxClientDC dc( GetParent() );
-    int h, minw;
+    int h, minw, minw_col0;
 
     dc.GetTextExtent( getListColumnHeaderNet()+"MM", &w0, &h );
     dc.GetTextExtent( getListColumnHeaderCount()+"MM", &w2, &h );
@@ -296,10 +296,11 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
     dc.GetTextExtent( getListColumnHeaderDie()+"MM", &w5, &h );
     dc.GetTextExtent( getListColumnHeaderLength()+"MM", &w6, &h );
     dc.GetTextExtent( "M00000,000 mmM", &minw, &h );
+    dc.GetTextExtent( "M00000M", &minw_col0, &h );
 
     // Considering left and right margins.
     // For wxRenderGeneric it is 5px.
-    w0 = std::max( w0+10, minw);
+    w0 = std::max( w0+10, minw_col0);
     w2 = std::max( w2+10, minw);
     w3 = std::max( w3+10, minw);
     w4 = std::max( w4+10, minw);
@@ -317,7 +318,13 @@ void DIALOG_SELECT_NET_FROM_LIST::adjustListColumns()
     int width = m_netsList->GetClientSize().x;
     w1 = width - w0 - w2 - w3 - w4 - w5 - w6;
 
+    // Column 1 (net names) need a minimal width to display net names
+    dc.GetTextExtent( "MMMMMMMMMMMMMMMMMMMM", &minw, &h );
+    w1 = std::max( w1, minw );
+
     m_netsList->GetColumn( 1 )->SetWidth( w1 );
+
+    m_netsList->Refresh();
 }
 
 
@@ -335,31 +342,42 @@ bool DIALOG_SELECT_NET_FROM_LIST::GetNetName( wxString& aName )
 }
 
 
-void DIALOG_SELECT_NET_FROM_LIST::onExport( wxMouseEvent& aEvent )
+void DIALOG_SELECT_NET_FROM_LIST::onReport( wxCommandEvent& aEvent )
 {
-    wxFileDialog dlg( this, _( "Export file" ), "", "", "Text files (*.txt)|*.txt",
-                      wxFD_SAVE|wxFD_OVERWRITE_PROMPT );
+    wxFileDialog dlg( this, _( "Report file" ), "", "",
+                      _( "Report file" ) + AddFileExtListToFilter( { "csv" } ),
+                      wxFD_SAVE );
 
-   if( dlg.ShowModal() == wxID_CANCEL )
+    if( dlg.ShowModal() == wxID_CANCEL )
        return;
 
-   wxTextFile f( dlg.GetPath() );
+    wxTextFile f( dlg.GetPath() );
 
-   f.Create();
+    f.Create();
 
-   int rows = m_netsList->GetItemCount();
+    int rows = m_netsList->GetItemCount();
+    wxString txt;
 
-   for( int row = 0; row < rows; row++ )
+    // Print Header:
+    txt.Printf( "\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";\"%s\";",
+                _( "Net Id" ), _( "Net name" ),
+                _( "Pad count" ), _( "Via count" ),
+                _( "Board length" ), _( "Die length" ), _( "Net length" ) );
+    f.AddLine( txt );
+
+    // Print list of nets:
+   for( int row = 1; row < rows; row++ )
    {
-       wxString txt = m_netsList->GetTextValue( row, 0 ) + ";" +
-                      m_netsList->GetTextValue( row, 1 ) + ";" +
-                      m_netsList->GetTextValue( row, 2 ) + ";" +
-                      m_netsList->GetTextValue( row, 3 ) + ";" +
-                      m_netsList->GetTextValue( row, 4 ) + ";" +
-                      m_netsList->GetTextValue( row, 5 ) + ";" +
-                      m_netsList->GetTextValue( row, 6 ) + ";";
+        txt.Printf( "%s;\"%s\";%s;%s;%s;%s;%s;",
+                    m_netsList->GetTextValue( row, 0 ),     // net id
+                    m_netsList->GetTextValue( row, 1 ),     // net name
+                    m_netsList->GetTextValue( row, 2 ),     // Pad count
+                    m_netsList->GetTextValue( row, 3 ),     // Via count
+                    m_netsList->GetTextValue( row, 4 ),     // Board length
+                    m_netsList->GetTextValue( row, 5 ),     // Die length
+                    m_netsList->GetTextValue( row, 6 ) );   // net length
 
-       f.AddLine( txt );
+        f.AddLine( txt );
    }
 
    f.Write();
