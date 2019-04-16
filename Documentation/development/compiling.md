@@ -205,6 +205,11 @@ The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directl
 menu.  This option is disabled by default.  Please note that this option is highly experimental
 and can cause Pcbnew to crash if Python scripts create an invalid object state within Pcbnew.
 
+## Quality assurance (qa) unit tests ## {#quality_assurance_tests_opt}
+
+The KICAD_BUILD_QA_TESTS option allows building unit tests binaries for quality assurance.
+This option is enabled by default.
+
 ## KiCad Build Version ## {#build_version_opt}
 
 The KiCad version string is defined by the output of `git describe --dirty` when git is available

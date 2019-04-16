@@ -102,6 +102,10 @@ option( KICAD_INSTALL_DEMOS
     "Install KiCad demos and examples (default ON)"
     ON )
 
+option( KICAD_BUILD_QA_TESTS
+    "Build software Quality assurance unit tests (default ON)"
+    ON )
+
 # when option KICAD_SCRIPTING OR KICAD_SCRIPTING_MODULES is enabled:
 # PYTHON_EXECUTABLE can be defined when invoking cmake
 # ( use -DPYTHON_EXECUTABLE=<python path>/python.exe or python2 )
@@ -943,7 +947,9 @@ add_subdirectory( plugins )             # 3D plugins must be built before kicad
 add_subdirectory( kicad )               # should follow pcbnew, eeschema
 add_subdirectory( tools )
 add_subdirectory( utils )
-add_subdirectory( qa )
+if( KICAD_BUILD_QA_TESTS )
+    add_subdirectory( qa )
+endif()
 
 # Resources
 if ( KICAD_INSTALL_DEMOS )
