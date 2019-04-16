@@ -10588,7 +10588,7 @@ msgstr "Edytuj właściwości..."
 #: eeschema/onrightclick.cpp:470
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:261
 msgid "Edit Footprint..."
-msgstr "Eydycja footprintu..."
+msgstr "Edycja footprintu..."
 
 #: eeschema/onrightclick.cpp:512
 msgid "Edit with Library Editor"
@@ -12403,11 +12403,11 @@ msgstr "Plik Gerber (.g* .lgr .pho)"
 
 #: gerbview/files.cpp:202
 msgid "Top layer (*.GTL)|*.GTL;*.gtl|"
-msgstr "Top layer (*.GTL)|*.GTL;*.gtl|"
+msgstr "Górna warstwa (*.GTL)|*.GTL;*.gtl|"
 
 #: gerbview/files.cpp:203
 msgid "Bottom layer (*.GBL)|*.GBL;*.gbl|"
-msgstr "Bottom layer (*.GBL)|*.GBL;*.gbl|"
+msgstr "Dolna warstwa (*.GBL)|*.GBL;*.gbl|"
 
 #: gerbview/files.cpp:204
 msgid "Bottom solder resist (*.GBS)|*.GBS;*.gbs|"
@@ -12439,7 +12439,7 @@ msgstr "Keep-out layer (*.GKO)|*.GKO;*.gko|"
 
 #: gerbview/files.cpp:211
 msgid "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
-msgstr "Mechanical layers (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
+msgstr "Warstwy mechaniczne (*.GMx)|*.GM1;*.gm1;*.GM2;*.gm2;*.GM3;*.gm3|"
 
 #: gerbview/files.cpp:212
 msgid "Top Pad Master (*.GPT)|*.GPT;*.gpt|"
@@ -17392,7 +17392,7 @@ msgstr "Zamień footprint..."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:267
 msgid "Edit Library Footprint..."
-msgstr "Eydycja biblioteki footprintu..."
+msgstr "Edycja biblioteki footprintu..."
 
 #: pcbnew/dialogs/dialog_edit_footprint_for_BoardEditor_base.cpp:276
 #: pcbnew/dialogs/dialog_edit_footprint_for_fp_editor_base.cpp:181
@@ -22908,7 +22908,7 @@ msgstr "Przesuń dokładnie..."
 
 #: pcbnew/footprint_editor_onclick.cpp:295
 msgid "Edit Footprint"
-msgstr "Eydycja footprintu"
+msgstr "Edycja footprintu"
 
 #: pcbnew/footprint_editor_onclick.cpp:298
 msgid "Transform Footprint"
@@ -27416,7 +27416,7 @@ msgstr "Przeciągnij narożnik"
 
 #: pcbnew/tools/point_editor.cpp:667
 msgid "Refill Zones"
-msgstr "Wypełnij sterfy"
+msgstr "Wypełnij strefy"
 
 #: pcbnew/tools/point_editor.cpp:1078
 msgid "Add a zone corner"
@@ -27527,7 +27527,7 @@ msgstr "Wybór filtra"
 
 #: pcbnew/tools/zone_create_helper.cpp:149
 msgid "Add a zone cutout"
-msgstr "Dodaje strefę odciętą"
+msgstr "Dodaj strefę odciętą"
 
 #: pcbnew/tools/zone_create_helper.cpp:187
 msgid "Add a zone"
