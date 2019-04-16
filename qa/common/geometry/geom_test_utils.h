@@ -31,6 +31,7 @@
 #include <geometry/shape_poly_set.h>
 
 #include <unit_test_utils/numeric.h>
+#include <unit_test_utils/unit_test_utils.h>
 
 /**
  * @brief Utility functions for testing geometry functions.
@@ -81,7 +82,7 @@ bool IsInQuadrant( const VECTOR2<T>& aPoint, QUADRANT aQuadrant )
 /*
  * @Brief Check if both ends of a segment are in Quadrant 1
  */
-bool SegmentCompletelyInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
+inline bool SegmentCompletelyInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 {
     return IsInQuadrant( aSeg.A, aQuadrant)
             && IsInQuadrant( aSeg.B, aQuadrant );
@@ -90,7 +91,7 @@ bool SegmentCompletelyInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 /*
  * @brief Check if at least one end of the segment is in Quadrant 1
  */
-bool SegmentEndsInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
+inline bool SegmentEndsInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 {
     return IsInQuadrant( aSeg.A, aQuadrant )
             || IsInQuadrant( aSeg.B, aQuadrant );
@@ -99,12 +100,64 @@ bool SegmentEndsInQuadrant( const SEG& aSeg, QUADRANT aQuadrant )
 /*
  * @brief Check if a segment is entirely within a certain radius of a point.
  */
-bool SegmentCompletelyWithinRadius( const SEG& aSeg, const VECTOR2I& aPt,
-    const int aRadius )
+inline bool SegmentCompletelyWithinRadius( const SEG& aSeg, const VECTOR2I& aPt, const int aRadius )
 {
     // This is true iff both ends of the segment are within the radius
     return ( ( aSeg.A - aPt ).EuclideanNorm() < aRadius )
             && ( ( aSeg.B - aPt ).EuclideanNorm() < aRadius );
+}
+
+/**
+ * Check that two points are the given distance apart, within the given tolerance.
+ *
+ * @tparam T the dimension type
+ * @param aPtA the first point
+ * @param aPtB the second point
+ * @param aExpDist the expected distance
+ * @param aTol the permitted tolerance
+ */
+template <typename T>
+bool IsPointAtDistance( const VECTOR2<T>& aPtA, const VECTOR2<T>& aPtB, T aExpDist, T aTol )
+{
+    const int  dist = ( aPtB - aPtA ).EuclideanNorm();
+    const bool ok = KI_TEST::IsWithin( dist, aExpDist, aTol );
+
+    if( !ok )
+    {
+        BOOST_TEST_INFO( "Points not at expected distance: distance is " << dist << ", expected "
+                                                                         << aExpDist );
+    }
+
+    return ok;
+}
+
+/**
+ * Predicate for checking a set of points is within a certain tolerance of
+ * a circle
+ * @param  aPoints   the points to check
+ * @param  aCentre   the circle centre
+ * @param  aRad      the circle radius
+ * @param  aTolEnds  the tolerance for the endpoint-centre distance
+ * @return           true if predicate met
+ */
+template <typename T>
+bool ArePointsNearCircle(
+        const std::vector<VECTOR2<T>>& aPoints, const VECTOR2<T>& aCentre, T aRad, T aTol )
+{
+    bool ok = true;
+
+    for( unsigned i = 0; i < aPoints.size(); ++i )
+    {
+        if( !IsPointAtDistance( aPoints[i], aCentre, aRad, aTol ) )
+        {
+            BOOST_TEST_INFO( "Point " << i << " " << aPoints[i] << " is not within tolerance ("
+                                      << aTol << ") of radius (" << aRad << ") from centre point "
+                                      << aCentre );
+            ok = false;
+        }
+    }
+
+    return ok;
 }
 
 /*
@@ -135,7 +188,7 @@ bool ArePerpendicular( const VECTOR2<T>& a, const VECTOR2<T>& b, double aToleran
  * @param aSize: the side width (must be divisible by 2 if want to avoid rounding)
  * @param aCentre: the centre of the square
  */
-SHAPE_LINE_CHAIN MakeSquarePolyLine( int aSize, const VECTOR2I& aCentre )
+inline SHAPE_LINE_CHAIN MakeSquarePolyLine( int aSize, const VECTOR2I& aCentre )
 {
     SHAPE_LINE_CHAIN polyLine;
 
@@ -154,8 +207,7 @@ SHAPE_LINE_CHAIN MakeSquarePolyLine( int aSize, const VECTOR2I& aCentre )
 /*
  * @brief Fillet every polygon in a set and return a new set
  */
-SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius,
-     int aError )
+inline SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius, int aError )
 {
     SHAPE_POLY_SET filletedPolySet;
 
@@ -169,6 +221,27 @@ SHAPE_POLY_SET FilletPolySet( SHAPE_POLY_SET& aPolySet, int aRadius,
     return filletedPolySet;
 }
 
+} // namespace GEOM_TEST
+
+BOOST_TEST_PRINT_NAMESPACE_OPEN
+{
+template <>
+struct print_log_value<SHAPE_LINE_CHAIN>
+{
+    inline void operator()( std::ostream& os, const SHAPE_LINE_CHAIN& c )
+    {
+        os << "SHAPE_LINE_CHAIN: " << c.PointCount() << " points: [\n";
+
+        for( int i = 0; i < c.PointCount(); ++i )
+        {
+            os << "   " << i << ": " << c.CPoint( i ) << "\n";
+        }
+
+        os << "]";
+    }
+};
 }
+BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
 
 #endif // GEOM_TEST_UTILS_H
