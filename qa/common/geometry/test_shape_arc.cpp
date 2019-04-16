@@ -23,10 +23,13 @@
 
 #include <geometry/shape_arc.h>
 
+#include <geometry/shape_line_chain.h>
+
 #include <unit_test_utils/geometry.h>
 #include <unit_test_utils/numeric.h>
 #include <unit_test_utils/unit_test_utils.h>
 
+#include "geom_test_utils.h"
 
 BOOST_AUTO_TEST_SUITE( ShapeArc )
 
@@ -280,5 +283,97 @@ BOOST_AUTO_TEST_CASE( BasicCPAGeom )
         }
     }
 }
+
+
+struct ARC_TO_POLYLINE_CASE
+{
+    std::string         m_ctx_name;
+    ARC_CENTRE_PT_ANGLE m_geom;
+};
+
+
+/**
+ * Predicate for checking a polyline has all the points on (near) a circle of
+ * given centre and radius
+ * @param  aPolyline the polyline to check
+ * @param  aCentre   the circle centre
+ * @param  aRad      the circle radius
+ * @param  aTolEnds  the tolerance for the endpoint-centre distance
+ * @return           true if predicate met
+ */
+bool ArePolylinePointsNearCircle(
+        const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre, int aRad, int aTolEnds )
+{
+    std::vector<VECTOR2I> points;
+
+    for( int i = 0; i < aPolyline.PointCount(); ++i )
+    {
+        points.push_back( aPolyline.CPoint( i ) );
+    }
+
+    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolEnds );
+}
+
+#ifdef HAVE_EXPECTED_FAILURES
+
+// Failure in zero-radius case
+BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 1 ) )
+{
+    const std::vector<ARC_TO_POLYLINE_CASE> cases = {
+        {
+            "Zero rad",
+            {
+                { 0, 0 },
+                { 0, 0 },
+                180,
+            },
+        },
+        {
+            "Semicircle",
+            {
+                { 0, 0 },
+                { -10, 0 },
+                180,
+            },
+        },
+        {
+            "Larger semicircle",
+            {
+                { 0, 0 },
+                { -1000, 0 },
+                180,
+            },
+        },
+    };
+
+    const int    width = 0;
+    const double accuracy = 1.0;
+
+    for( const auto& c : cases )
+    {
+        BOOST_TEST_CONTEXT( c.m_ctx_name )
+        {
+            const SHAPE_ARC this_arc{ c.m_geom.m_center_point, c.m_geom.m_start_point,
+                c.m_geom.m_center_angle, width };
+
+            const SHAPE_LINE_CHAIN chain = this_arc.ConvertToPolyline( accuracy );
+
+            BOOST_TEST_MESSAGE( "Polyline has " << chain.PointCount() << " points" );
+
+            BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
+
+            const int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
+            const int tol = 2;
+
+            BOOST_CHECK_PREDICATE( ArePolylinePointsNearCircle,
+                    ( chain )( c.m_geom.m_center_point )( radius )( tol ) );
+
+            // TODO: check midpoints are near circle too
+        }
+    }
+}
+
+#endif // HAVE_EXPECTED_FAILURES
+
 
 BOOST_AUTO_TEST_SUITE_END()
