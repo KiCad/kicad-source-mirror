@@ -612,6 +612,12 @@ void PGM_BASE::loadCommonSettings()
     {
         wxLogTrace( traceEnvVars,
                     "Enumerating over entry %s, %ld.", GetChars( entry ), index );
+
+        // Do not store the env var PROJECT_VAR_NAME ("KIPRJMOD") definition if for some reason
+        // it is found in config. (It is reserved and defined as project path)
+        if( entry == PROJECT_VAR_NAME )
+            continue;
+
         entries.Add( entry );
     }
 
@@ -626,7 +632,9 @@ void PGM_BASE::loadCommonSettings()
     }
 
     for( ENV_VAR_MAP_ITER it = m_local_env_vars.begin(); it != m_local_env_vars.end(); ++it )
+    {
         SetLocalEnvVariable( it->first, it->second.GetValue() );
+    }
 
     m_common_settings->SetPath( oldPath );
 }
