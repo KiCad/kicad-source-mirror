@@ -314,10 +314,8 @@ bool ArePolylinePointsNearCircle(
     return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolEnds );
 }
 
-#ifdef HAVE_EXPECTED_FAILURES
 
-// Failure in zero-radius case
-BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 1 ) )
+BOOST_AUTO_TEST_CASE( ArcToPolyline )
 {
     const std::vector<ARC_TO_POLYLINE_CASE> cases = {
         {
@@ -372,8 +370,6 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 1 ) )
         }
     }
 }
-
-#endif // HAVE_EXPECTED_FAILURES
 
 
 BOOST_AUTO_TEST_SUITE_END()
