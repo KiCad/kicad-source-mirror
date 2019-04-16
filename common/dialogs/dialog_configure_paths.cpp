@@ -339,8 +339,15 @@ void DIALOG_CONFIGURE_PATHS::OnGridCellChanging( wxGridEvent& event )
         }
         else if( col == EV_NAME_COL && m_EnvVars->GetCellValue( row, EV_NAME_COL ) != text )
         {
-            // Changing name; clear external flag
-            m_EnvVars->SetCellValue( row, EV_FLAG_COL, wxEmptyString );
+            if( text == PROJECT_VAR_NAME )    // This env var name is reserved and cannot be added here:
+            {
+                wxMessageBox( wxString::Format(
+                              _( "The name %s is reserved, and cannot be used here" ),
+                              PROJECT_VAR_NAME ) );
+                event.Veto();
+            }
+            else    // Changing name; clear external flag
+                m_EnvVars->SetCellValue( row, EV_FLAG_COL, wxEmptyString );
         }
     }
 }
