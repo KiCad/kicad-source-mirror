@@ -36,6 +36,8 @@ add_executable( qa_common_tools
     tools/coroutines/coroutines.cpp
 
     tools/io_benchmark/io_benchmark.cpp
+
+    tools/sexpr_parser/sexpr_parse.cpp
 )
 
 include_directories(
@@ -49,6 +51,7 @@ target_link_libraries( qa_common_tools
     legacy_gal
     gal
     qa_utils
+    sexpr
     ${wxWidgets_LIBRARIES}
 )
 
