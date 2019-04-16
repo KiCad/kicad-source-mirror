@@ -80,8 +80,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-15 14:35+0200\n"
-"PO-Revision-Date: 2019-04-15 15:43+0200\n"
+"POT-Creation-Date: 2019-04-16 12:00+0200\n"
+"PO-Revision-Date: 2019-04-16 12:00+0200\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -1764,16 +1764,21 @@ msgstr ""
 "comportamento, rinominare ogni voce in conflitto o rimuovere\n"
 "dal sistema le definizioni delle variabili ambiente esterne."
 
-#: common/dialogs/dialog_configure_paths.cpp:470
+#: common/dialogs/dialog_configure_paths.cpp:345
+#, c-format
+msgid "The name %s is reserved, and cannot be used here"
+msgstr "Il nome %s è riservato e qui non può essere usato"
+
+#: common/dialogs/dialog_configure_paths.cpp:477
 msgid "File Browser..."
 msgstr "Esplora file..."
 
-#: common/dialogs/dialog_configure_paths.cpp:473
+#: common/dialogs/dialog_configure_paths.cpp:480
 #: common/widgets/grid_text_button_helpers.cpp:343
 msgid "Select Path"
 msgstr "Seleziona percorso"
 
-#: common/dialogs/dialog_configure_paths.cpp:553
+#: common/dialogs/dialog_configure_paths.cpp:560
 msgid ""
 "Enter the name and value for each environment variable.  Grey entries are "
 "names that have been defined externally at the system or user level.  "
@@ -1787,7 +1792,7 @@ msgstr ""
 "hanno la precedenza su quelle definite in questa tabella.  Perciò (N.d.T. in "
 "caso di corrispondenza) i valori in questa tabella vengono ignorati."
 
-#: common/dialogs/dialog_configure_paths.cpp:559
+#: common/dialogs/dialog_configure_paths.cpp:566
 msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
@@ -1797,7 +1802,7 @@ msgstr ""
 "piattaforme, il campo nome accetterà solo lettere maiuscole, numeri, e "
 "caratteri di sottolineatura."
 
-#: common/dialogs/dialog_configure_paths.cpp:574
+#: common/dialogs/dialog_configure_paths.cpp:581
 msgid "Environment Variable Help"
 msgstr "Aiuto variabile ambiente"
 
@@ -2652,7 +2657,7 @@ msgid "Show:"
 msgstr "Mostra:"
 
 #: common/dialogs/wx_html_report_panel_base.cpp:35
-#: eeschema/lib_draw_item.cpp:63 eeschema/lib_draw_item.cpp:70
+#: eeschema/lib_draw_item.cpp:63
 msgid "All"
 msgstr "Tutti"
 
@@ -3457,11 +3462,11 @@ msgstr "Scegli editor preferito"
 msgid "%s is already running. Continue?"
 msgstr "%s è già in esecuzione. Continuare?"
 
-#: common/pgm_base.cpp:833
+#: common/pgm_base.cpp:841
 msgid "Set Language"
 msgstr "Imposta lingua"
 
-#: common/pgm_base.cpp:834
+#: common/pgm_base.cpp:842
 msgid "Select application language (only for testing)"
 msgstr "Seleziona la lingua (solo per prova!)"
 
@@ -6923,15 +6928,15 @@ msgstr "&Dimensione griglia:"
 msgid "Grid Settings"
 msgstr "Impostazioni griglia"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:99
+#: eeschema/dialogs/dialog_sim_settings.cpp:108
 msgid "You need to enable at least one source"
 msgstr "È necessario abilitare almeno una sorgente"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:109
+#: eeschema/dialogs/dialog_sim_settings.cpp:118
 msgid "You need to select DC source (sweep 1)"
 msgstr "È necessario selezionare la sorgente DC (sweep 1)"
 
-#: eeschema/dialogs/dialog_sim_settings.cpp:148
+#: eeschema/dialogs/dialog_sim_settings.cpp:157
 msgid "You need to select DC source (sweep 2)"
 msgstr "È necessario selezionare la sorgente DC (sweep 2)"
 
@@ -8957,15 +8962,15 @@ msgstr "Cerchio"
 msgid "Type"
 msgstr "Tipo"
 
-#: eeschema/lib_draw_item.cpp:72
+#: eeschema/lib_draw_item.cpp:70
 msgid "no"
 msgstr "No"
 
-#: eeschema/lib_draw_item.cpp:74
+#: eeschema/lib_draw_item.cpp:72
 msgid "yes"
 msgstr "Sì"
 
-#: eeschema/lib_draw_item.cpp:78
+#: eeschema/lib_draw_item.cpp:76
 msgid "Converted"
 msgstr "Convertito"
 
@@ -22705,7 +22710,10 @@ msgstr "Impossibile creare il file \"%s\"."
 msgid ""
 "File contains pad shapes that are not supported by the Hyperlynx exporter "
 "(oval, rectangle, circle). They have been exported as oval pads."
-msgstr "Il file contiene forme di piazzole che non sono supportate dall'esportatore Hyperlynx (ovali, rettangolari, circolari). Sono state esportate come come piazzole ovali."
+msgstr ""
+"Il file contiene forme di piazzole che non sono supportate dall'esportatore "
+"Hyperlynx (ovali, rettangolari, circolari). Sono state esportate come come "
+"piazzole ovali."
 
 #: pcbnew/exporters/export_idf.cpp:605 pcbnew/exporters/export_idf.cpp:614
 #: pcbnew/exporters/export_idf.cpp:622 pcbnew/exporters/export_vrml.cpp:1659
