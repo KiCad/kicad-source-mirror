@@ -256,7 +256,11 @@ const SHAPE_LINE_CHAIN SHAPE_ARC::ConvertToPolyline( double aAccuracy ) const
 
     for( int i = 0; i <= n ; i++ )
     {
-        double a = sa + m_centralAngle * (double) i / (double) n;
+        double a = sa;
+
+        if( n != 0 )
+            sa += m_centralAngle * (double) i / (double) n;
+
         double x = c.x + r * cos( a * M_PI / 180.0 );
         double y = c.y + r * sin( a * M_PI / 180.0 );
 
