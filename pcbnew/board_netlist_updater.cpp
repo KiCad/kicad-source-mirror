@@ -11,7 +11,7 @@
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
  *
- * Copyright (C) 1992-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,6 +64,7 @@ BOARD_NETLIST_UPDATER::BOARD_NETLIST_UPDATER( PCB_EDIT_FRAME* aFrame, BOARD* aBo
 
     m_warningCount = 0;
     m_errorCount = 0;
+    m_newFootprintsCount = 0;
 }
 
 
@@ -148,6 +149,8 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
                 aComponent->GetFPID().Format().wx_str() );
     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
+    m_newFootprintsCount++;
+
     if( !m_isDryRun )
     {
         footprint->SetParent( m_board );
@@ -159,6 +162,8 @@ MODULE* BOARD_NETLIST_UPDATER::addNewComponent( COMPONENT* aComponent )
 
         return footprint;
     }
+    else
+        delete footprint;
 
     return NULL;
 }
@@ -197,11 +202,15 @@ MODULE* BOARD_NETLIST_UPDATER::replaceComponent( NETLIST& aNetlist, MODULE* aPcb
                 aNewComponent->GetFPID().Format().wx_str() );
     m_reporter->Report( msg, REPORTER::RPT_ACTION );
 
+    m_newFootprintsCount++;
+
     if( !m_isDryRun )
     {
         m_frame->Exchange_Module( aPcbComponent, newFootprint, m_commit, true, true, true );
         return newFootprint;
     }
+    else
+        delete newFootprint;
 
     return nullptr;
 }
@@ -623,6 +632,7 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     wxString msg;
     m_errorCount = 0;
     m_warningCount = 0;
+    m_newFootprintsCount = 0;
     MODULE* lastPreexistingFootprint = m_board->m_Modules.GetLast();
 
     cacheCopperZoneConnections();
@@ -707,15 +717,22 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
     if( m_deleteUnusedComponents )
         deleteUnusedComponents( aNetlist );
 
-    if( m_deleteSinglePadNets )
-        deleteSinglePadNets();
-
     if( !m_isDryRun )
     {
         m_commit.Push( _( "Update netlist" ) );
         m_board->GetConnectivity()->Build( m_board );
         testConnectivity( aNetlist );
+
+        // Now the connectivity data is rebuilt, we can delete single pads nets
+        if( m_deleteSinglePadNets )
+            deleteSinglePadNets();
     }
+    else if( m_deleteSinglePadNets && !m_newFootprintsCount )
+        // We can delete single net pads in dry run mode only if no new footprints
+        // are added, because these new footprints are not actually added to the board
+        // and the current pad list is wrong in this case.
+        deleteSinglePadNets();
+
 
     // Update the ratsnest
     m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
