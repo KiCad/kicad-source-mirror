@@ -176,7 +176,8 @@ BOOST_AUTO_TEST_CASE( CollideVertex )
     // Check that the set collides with the colliding points
     for( const VECTOR2I& point : common.holeyPoints )
     {
-        BOOST_CHECK( common.holeyPolySet.CollideVertex( point, cornerHit, 0 ) );
+        BOOST_CHECK_MESSAGE( common.holeyPolySet.CollideVertex( point, cornerHit, 0 ), " Point "
+                << point.x << ", " << point.y << " does not collide with holeyPolySet polygon" );
     }
 }
 
