@@ -277,7 +277,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( event.Leaving() )
         m_canStartBlock = -1;
 
-    if( !IsMouseCaptured() )          // No mouse capture in progress.
+    if( !IsMouseCaptured() && !controls->GetSettings().m_cursorCaptured )
         SetAutoPanRequest( false );
 
     if( GetParent()->IsActive() )
