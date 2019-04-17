@@ -113,13 +113,11 @@ BOOST_AUTO_TEST_CASE( PointOnEdge )
     BOOST_CHECK( !common.holeyPolySet.PointOnEdge( VECTOR2I( 200, 200 ) ) );
 }
 
-#ifdef HAVE_EXPECTED_FAILURES
-
 /**
  * This test checks that the function Contains, whose behaviour has been updated to also manage
  * holey polygons, does the right work.
  */
-BOOST_AUTO_TEST_CASE( pointInPolygonSet, *boost::unit_test::expected_failures( 1 ) )
+BOOST_AUTO_TEST_CASE( pointInPolygonSet )
 {
     // Check that the set contains the points that collide with it
     for( const VECTOR2I& point : collidingPoints )
@@ -137,7 +135,7 @@ BOOST_AUTO_TEST_CASE( pointInPolygonSet, *boost::unit_test::expected_failures( 1
 /**
  * This test checks the behaviour of the Collide (with a point) method.
  */
-BOOST_AUTO_TEST_CASE( Collide, *boost::unit_test::expected_failures( 1 ) )
+BOOST_AUTO_TEST_CASE( Collide )
 {
     // When clearance = 0, the behaviour should be the same as with Contains
 
@@ -161,8 +159,6 @@ BOOST_AUTO_TEST_CASE( Collide, *boost::unit_test::expected_failures( 1 ) )
     // Point at the offset zone outside of a hole => collision!
     BOOST_CHECK( common.holeyPolySet.Collide( VECTOR2I( 11, 11 ), 5 ) );
 }
-
-#endif
 
 /**
  * This test checks the behaviour of the CollideVertex method, testing whether the collision with
