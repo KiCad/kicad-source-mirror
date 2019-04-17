@@ -189,7 +189,7 @@ BOOST_AUTO_TEST_CASE( TestGetLayerName )
 
             const OPT<std::string> ret = GetLayerName( *sexpr );
 
-            BOOST_CHECK_EQUAL( ret.has_value(), c.m_valid );
+            BOOST_CHECK_EQUAL( !!ret, c.m_valid );
 
             if( ret )
             {
