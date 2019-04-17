@@ -76,3 +76,6 @@ demos/**/fp-info-cache
 *.gch
 *.orig
 *.patch
+
+# These CMake files are wanted
+!CMakeModules/*.cmake

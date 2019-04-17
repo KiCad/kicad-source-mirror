@@ -63,3 +63,5 @@ target_link_libraries( qa_pcbnew_tools
     ${Boost_LIBRARIES}      # must follow GITHUB
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
+
+kicad_add_utils_executable( qa_pcbnew_tools )

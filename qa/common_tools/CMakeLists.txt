@@ -59,3 +59,5 @@ target_link_libraries( qa_common_tools
 target_compile_definitions( qa_common_tools
     PRIVATE PCBNEW
 )
+
+kicad_add_utils_executable( qa_common_tools )

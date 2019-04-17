@@ -56,10 +56,6 @@ target_link_libraries( qa_eeschema
     ${Boost_LIBRARIES}
 )
 
-add_test( NAME eeschema
-    COMMAND qa_eeschema
-)
-
 # Eeschema tests, so pretend to be eeschema (for units, etc)
 target_compile_definitions( qa_eeschema
     PUBLIC EESCHEMA
@@ -69,3 +65,5 @@ target_compile_definitions( qa_eeschema
 set_source_files_properties( eeschema_test_utils.cpp PROPERTIES
     COMPILE_DEFINITIONS "QA_EESCHEMA_DATA_LOCATION=(\"${CMAKE_CURRENT_SOURCE_DIR}/data\")"
 )
+
+kicad_add_boost_test( qa_eeschema eeschema )

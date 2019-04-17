@@ -205,10 +205,18 @@ The KICAD_SCRIPTING_ACTION_MENU option allows Python scripts to be added directl
 menu.  This option is disabled by default.  Please note that this option is highly experimental
 and can cause Pcbnew to crash if Python scripts create an invalid object state within Pcbnew.
 
-## Quality assurance (qa) unit tests ## {#quality_assurance_tests_opt}
+## Quality assurance (QA) unit tests ## {#quality_assurance_tests_opt}
 
-The KICAD_BUILD_QA_TESTS option allows building unit tests binaries for quality assurance.
-This option is enabled by default.
+The KICAD_BUILD_QA_TESTS option allows building unit tests binaries for quality assurance as part
+of the default build. This option is enabled by default.
+
+If this option is disabled, the QA binaries can still be built by manually specifying the target.
+For example, with `make`:
+
+* Build all QA binaries: `make qa_all`
+* Build a specific test: `make qa_pcbnew`
+* Build all unit tests: `make qa_all_tests`
+* Build all test tool binaries: `make qa_all_tools`
 
 ## KiCad Build Version ## {#build_version_opt}
 

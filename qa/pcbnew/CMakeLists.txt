@@ -76,6 +76,4 @@ target_link_libraries( qa_pcbnew
     ${PCBNEW_EXTRA_LIBS}    # -lrt must follow Boost
 )
 
-add_test( NAME pcbnew
-    COMMAND qa_pcbnew
-)
+kicad_add_boost_test( qa_pcbnew pcbnew )

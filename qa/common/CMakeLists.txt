@@ -93,14 +93,6 @@ include_directories(
     ${INC_AFTER}
 )
 
-add_test( NAME common_gerbview
-    COMMAND qa_common_gerbview
-)
-
-add_test( NAME common_pcbnew
-    COMMAND qa_common_pcbnew
-)
-
-add_test( NAME common_eeschema
-    COMMAND qa_common_eeschema
-)
+kicad_add_boost_test( qa_common_eeschema common_eeschema )
+kicad_add_boost_test( qa_common_pcbnew common_pcbnew )
+kicad_add_boost_test( qa_common_gerbview qa_common_gerbview )
