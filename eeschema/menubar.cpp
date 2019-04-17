@@ -178,7 +178,7 @@ void prepareViewMenu( wxMenu* aParentMenu )
 
     text = AddHotkeyName( _( "Zoom to Selection" ), g_Eeschema_Hotkeys_Descr, HK_ZOOM_SELECTION );
 
-    AddMenuItem( aParentMenu, ID_MENU_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
     text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hotkeys_Descr, HK_ZOOM_REDRAW );
 

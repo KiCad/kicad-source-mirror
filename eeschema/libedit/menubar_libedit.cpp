@@ -202,7 +202,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
 
     text = AddHotkeyName( _( "Zoom to Selection" ),
                           g_Schematic_Hotkeys_Descr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_MENU_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
 
     // Redraw
     text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hotkeys_Descr, HK_ZOOM_REDRAW );

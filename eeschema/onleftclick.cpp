@@ -55,6 +55,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_TEXT_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
     case ID_ADD_IMAGE_BUTT:
+    case ID_ZOOM_SELECTION:
         return;            // Moved to modern toolset
     default:
         break;
@@ -100,9 +101,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        break;
-
-    case ID_ZOOM_SELECTION:
         break;
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:

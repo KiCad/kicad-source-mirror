@@ -109,27 +109,21 @@ bool ZOOM_TOOL::selectRegion()
             view->SetVisible( &area, false );
             auto selectionBox = area.ViewBBox();
 
-            VECTOR2D screenSize = view->ToWorld( canvas->GetClientSize(), false );
-
             if( selectionBox.GetWidth() == 0 || selectionBox.GetHeight() == 0 )
             {
                 break;
             }
             else
             {
-                VECTOR2D vsize = selectionBox.GetSize();
+                VECTOR2D sSize = view->ToWorld( canvas->GetClientSize(), false );
+                VECTOR2D vSize = selectionBox.GetSize();
                 double scale;
-                double ratio = std::max( fabs( vsize.x / screenSize.x ),
-                                         fabs( vsize.y / screenSize.y ) );
+                double ratio = std::max( fabs( vSize.x / sSize.x ), fabs( vSize.y / sSize.y ) );
 
                 if( evt->IsMouseUp( BUT_LEFT ) )
-                {
                     scale = view->GetScale() / ratio;
-                }
                 else
-                {
                     scale = view->GetScale() * ratio;
-                }
 
                 view->SetScale( scale );
                 view->SetCenter( selectionBox.Centre() );

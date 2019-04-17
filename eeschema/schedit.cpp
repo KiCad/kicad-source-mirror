@@ -501,7 +501,6 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
-    int lastToolID = GetToolId();
 
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
@@ -537,6 +536,7 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_BUS_BUTT:
     case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
+    case ID_ZOOM_SELECTION:
         // moved to modern toolset
         return;
     default:
@@ -549,15 +549,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     {
     case ID_NO_TOOL_SELECTED:
         SetNoToolSelected();
-        break;
-
-    case ID_MENU_ZOOM_SELECTION:
-    case ID_ZOOM_SELECTION:
-        // This tool is located on the main toolbar: switch it on or off on click
-        if( lastToolID != ID_ZOOM_SELECTION )
-            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
-        else
-            SetNoToolSelected();
         break;
 
     case ID_MENU_SHEET_SYMBOL_BUTT:
