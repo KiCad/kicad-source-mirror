@@ -165,7 +165,9 @@ class SHAPE_POLY_SET : public SHAPE
 
             operator bool() const
             {
-                return m_currentPolygon <= m_lastPolygon;
+                return ( ( m_currentPolygon < m_lastPolygon ) ||
+                        ( m_currentPolygon == m_lastPolygon &&
+                          m_currentVertex < m_poly->CPolygon( m_currentPolygon )[0].PointCount() ) );
             }
 
             /**
