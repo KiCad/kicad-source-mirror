@@ -44,6 +44,22 @@ Common useful patterns:
 You can rebuild just a specific test with CMake to avoid rebuilding
 everything when working on a small area, e.g. `make qa_common`.
 
+### Automated testing {#automated-testing}
+
+The unit tests can be run on automated Continuous Integration (CI) systems.
+
+By default, tests output human-readable results, which is useful when
+developing or debugging, but not so useful for automated test reporting.
+Systems that can parse XML test results can enable these by setting the
+`KICAD_TEST_XML_OUTPUT` option to `ON`. The test results are then output
+as files ending in `.xml` in the `qa` subdirectory.
+
+Test results are written to the build directory as follows:
+
+* Boost units tests: one XML file per test with the extension `.boost-results.xml`
+* Python unit tests: one directory per test with the extension `.xunit-results.xml`.
+  These directories contain one `.xml` file per Python test case file.
+
 ## Writing Boost tests {#writing-boost-tests}
 
 Boost unit tests are straightforward to write. Individual test cases can be

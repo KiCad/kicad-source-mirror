@@ -24,6 +24,14 @@
 # tests and tools
 #
 
+# CI tools can use this to force tests to output machine-readable formats
+# when possible
+option( KICAD_TEST_XML_OUTPUT
+    "Cause unit tests to output xUnit results where possible for more granular CI reporting."
+    OFF
+)
+mark_as_advanced( KICAD_TEST_XML_OUTPUT ) # Only CI tools need this
+
 # This is a "meta" target that is used to collect all tests
 add_custom_target( qa_all_tests )
 
@@ -41,9 +49,19 @@ add_custom_target( qa_all
 #   * Is a dependency of qa_all_tests
 function( kicad_add_boost_test TEST_EXEC_TARGET TEST_NAME)
 
+set(BOOST_TEST_PARAMS "")
+
+if( KICAD_TEST_XML_OUTPUT )
+    # Provide Boost-test-y XML params if asked
+    # Due to Boost issue in 1.62, have to use the --logger parameter, rather than
+    # separate --log_format, --log_sink, etc parameter
+    # https://svn.boost.org/trac10/ticket/12507
+    set(BOOST_TEST_PARAMS --logger=XML,all,${TEST_NAME}.boost-results.xml --report_level=no --result_code=no)
+endif()
+
 # Add the test to the CTest registry
 add_test( NAME ${TEST_NAME}
-    COMMAND $<TARGET_FILE:${TEST_EXEC_TARGET}>
+    COMMAND $<TARGET_FILE:${TEST_EXEC_TARGET}> ${BOOST_TEST_PARAMS}
 )
 
 # Make the overall test meta-target depend on this test
