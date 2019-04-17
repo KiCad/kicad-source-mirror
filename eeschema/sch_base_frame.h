@@ -106,6 +106,7 @@ public:
 
     SCH_DRAW_PANEL* GetCanvas() const override;
     SCH_SCREEN* GetScreen() const override;
+    void SetScreen( BASE_SCREEN* aScreen ) override;
 
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
 
@@ -301,12 +302,6 @@ public:
      * aScreen is the screen the item is located on, if not the current screen
      */
     void AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
-
-    /**
-     * Add a list of items to the screen (and view)
-     * aScreen is the screen the item is located on, if not the current screen
-     */
-    void AddToScreen( DLIST<SCH_ITEM>& aItems, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Remove an item from the screen (and view)

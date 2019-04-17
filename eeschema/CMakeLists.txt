@@ -243,6 +243,7 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_pspice.cpp
 
     tools/sch_actions.cpp
+    tools/sch_drawing_tool.cpp
     tools/sch_picker_tool.cpp
     tools/sch_selection_tool.cpp
     tools/selection.cpp

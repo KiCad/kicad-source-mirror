@@ -69,7 +69,7 @@
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
-LIB_ITEM* LIB_EDIT_FRAME::m_lastDrawItem = NULL;
+LIB_ITEM* LIB_EDIT_FRAME::     m_lastDrawItem = NULL;
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 int LIB_EDIT_FRAME::           m_textSize        = -1;
@@ -1750,7 +1750,7 @@ void LIB_EDIT_FRAME::ShowChangedLanguage()
 
 void LIB_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
-    EDA_DRAW_FRAME::SetScreen( aScreen );
+    SCH_BASE_FRAME::SetScreen( aScreen );
 }
 
 

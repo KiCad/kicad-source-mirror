@@ -37,30 +37,14 @@ public:
 
     virtual wxWindow* GetWindow() override { return this; }
 
-    /**
-     * Function DisplayBoard FIXME
-     * adds all items from the current board to the VIEW, so they can be displayed by GAL.
-     * @param aBoard is the PCB to be loaded.
-     */
-     void DisplayComponent( const LIB_PART *aComponent );
-     void DisplaySheet( const SCH_SCREEN *aScreen );
-
-    /**
-     * Function UseColorScheme
-     * Applies layer color settings.
-     * @param aSettings are the new settings.
-     */
-    void UseColorScheme( const COLORS_DESIGN_SETTINGS* aSettings );
-
-    ///> @copydoc EDA_DRAW_PANEL_GAL::OnShow()
-    void OnShow() override;
+    void DisplayComponent( const LIB_PART *aComponent );
+    void DisplaySheet( const SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
     void OnMouseEvent( wxMouseEvent& event );
     bool OnRightClick( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
-    void OnTimer( wxTimerEvent& event );
 
     void SetEnableMousewheelPan( bool aEnable ) override;
     void SetEnableZoomNoCenter( bool aEnable ) override;
@@ -90,18 +74,13 @@ public:
 
 
 protected:
-
     virtual void onPaint( wxPaintEvent& WXUNUSED( aEvent ) ) override;
 
     KIGFX::SCH_VIEW* view() const;
-
-    ///> Reassigns layer order to the initial settings.
-    void setDefaultLayerOrder();
-
-    ///> Sets rendering targets & dependencies for layers.
-    void setDefaultLayerDeps();
-
     wxWindow* m_parent;
+
+    void setDefaultLayerOrder();    ///> Reassigns layer order to the initial settings.
+    void setDefaultLayerDeps();     ///> Sets rendering targets & dependencies for layers.
 
     DECLARE_EVENT_TABLE()
 };

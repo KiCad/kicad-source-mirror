@@ -43,22 +43,10 @@ using namespace std::placeholders;
 
 
 // Events used by EDA_DRAW_PANEL
-// GAL TODO: some (most?) of these need to be implemented...
 BEGIN_EVENT_TABLE( SCH_DRAW_PANEL, wxScrolledCanvas )
-//    EVT_LEAVE_WINDOW( EDA_DRAW_PANEL::OnMouseLeaving )
-//    EVT_ENTER_WINDOW( EDA_DRAW_PANEL::OnMouseEntering )
-//    EVT_MOUSEWHEEL( EDA_DRAW_PANEL::OnMouseWheel )
-#if wxCHECK_VERSION( 3, 1, 0 ) || defined( USE_OSX_MAGNIFY_EVENT )
-//    EVT_MAGNIFY( EDA_DRAW_PANEL::OnMagnify )
-#endif
-//    EVT_MOUSE_EVENTS( EDA_DRAW_PANEL::OnMouseEvent )
       EVT_CHAR( SCH_DRAW_PANEL::OnKeyEvent )
       EVT_CHAR_HOOK( SCH_DRAW_PANEL::OnCharHook )
       EVT_PAINT( SCH_DRAW_PANEL::onPaint )
-//    EVT_ERASE_BACKGROUND( EDA_DRAW_PANEL::OnEraseBackground )
-//    EVT_SCROLLWIN( EDA_DRAW_PANEL::OnScroll )
-//    EVT_ACTIVATE( EDA_DRAW_PANEL::OnActivate )
-//    EVT_MENU_RANGE( ID_PAN_UP, ID_PAN_RIGHT, EDA_DRAW_PANEL::OnPan )
 END_EVENT_TABLE()
 
 SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
@@ -103,9 +91,7 @@ SCH_DRAW_PANEL::SCH_DRAW_PANEL( wxWindow* aParentWindow, wxWindowID aWindowId,
     };
 
     for( auto e : events )
-    {
         Connect( e, wxMouseEventHandler( SCH_DRAW_PANEL::OnMouseEvent ), NULL, this );
-    }
 
     Connect( wxEVT_CHAR, wxKeyEventHandler( SCH_DRAW_PANEL::OnKeyEvent ), NULL, this );
     Connect( wxEVT_CHAR_HOOK, wxKeyEventHandler( SCH_DRAW_PANEL::OnCharHook ), NULL, this );
@@ -162,12 +148,6 @@ void SCH_DRAW_PANEL::DisplaySheet( const SCH_SCREEN *aScreen )
 
     if( aScreen )
         view()->DisplaySheet( const_cast<SCH_SCREEN*>( aScreen ) );
-}
-
-
-void SCH_DRAW_PANEL::OnShow()
-{
-    //m_view->RecacheAllItems();
 }
 
 
@@ -523,9 +503,7 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( localbutt == (int) ( GR_M_LEFT_DOWN | GR_M_DCLICK ) )
     {
         if( !screen->IsBlockActive() && IsMouseCaptured() )
-        {
             m_endMouseCaptureCallback( this, nullptr );
-        }
     }
 
     lastPanel = this;
@@ -573,9 +551,7 @@ void SCH_DRAW_PANEL::EndMouseCapture( int id, int cursor, const wxString& title,
                                       bool aCallEndFunc )
 {
     if( m_mouseCaptureCallback && m_endMouseCaptureCallback && aCallEndFunc )
-    {
         m_endMouseCaptureCallback( this, nullptr );
-    }
 
     m_mouseCaptureCallback = NULL;
     m_endMouseCaptureCallback = NULL;

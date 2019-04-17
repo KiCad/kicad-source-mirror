@@ -199,6 +199,7 @@ protected:
     T* getModel() const
     {
         EDA_ITEM* m = getModelInt();
+        wxASSERT( dynamic_cast<T*>( m ) );
 
         return static_cast<T*>( m );
     }

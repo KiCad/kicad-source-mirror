@@ -64,10 +64,9 @@ LIB_ALIAS* SchGetLibAlias( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PA
     {
         if( aShowErrorMsg )
         {
-            wxString msg;
-
-            msg.Printf( _( "Could not load symbol \"%s\" from library \"%s\"." ),
-                        aLibId.GetLibItemName().wx_str(), aLibId.GetLibNickname().wx_str() );
+            wxString msg = wxString::Format( _( "Error loading symbol '%s' from library '%s'." ),
+                                             aLibId.GetLibItemName().wx_str(),
+                                             aLibId.GetLibNickname().wx_str() );
             DisplayErrorMessage( aParent, msg, ioe.What() );
         }
     }
@@ -87,12 +86,10 @@ LIB_PART* SchGetLibPart( const LIB_ID& aLibId, SYMBOL_LIB_TABLE* aLibTable, PART
 
 // Static members:
 
-SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
-        FRAME_T aWindowType, const wxString& aTitle,
-        const wxPoint& aPosition, const wxSize& aSize, long aStyle,
-        const wxString& aFrameName ) :
-    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition,
-            aSize, aStyle, aFrameName )
+SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindowType,
+                                const wxString& aTitle, const wxPoint& aPosition,
+                                const wxSize& aSize, long aStyle, const wxString& aFrameName ) :
+    EDA_DRAW_FRAME( aKiway, aParent, aWindowType, aTitle, aPosition, aSize, aStyle, aFrameName )
 {
     createCanvas();
 
@@ -142,9 +139,7 @@ void SCH_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
     {
         wxMenuItem* item = menuBar->FindItem( ii.menuId );
         if( ii.galType == canvasType )
-        {
             item->Check( true );
-        }
     }
 }
 
@@ -182,6 +177,18 @@ void SCH_BASE_FRAME::OnOpenLibraryViewer( wxCommandEvent& event )
 SCH_SCREEN* SCH_BASE_FRAME::GetScreen() const
 {
     return (SCH_SCREEN*) EDA_DRAW_FRAME::GetScreen();
+}
+
+
+void SCH_BASE_FRAME::SetScreen(  BASE_SCREEN* aScreen )
+{
+    EDA_DRAW_FRAME::SetScreen( aScreen );
+
+    if( m_toolManager )
+    {
+        m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                       GetCanvas()->GetViewControls(), this );
+    }
 }
 
 
@@ -351,7 +358,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
         catch( const IO_ERROR& ioe )
         {
             success = false;
-            msg.Printf( _( "Error saving global symbol library table:\n\n%s" ), ioe.What() );
+            msg.Printf( _( "Error saving global symbol library table:\n%s" ), ioe.What() );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
@@ -367,7 +374,7 @@ bool SCH_BASE_FRAME::saveSymbolLibTables( bool aGlobal, bool aProject )
         catch( const IO_ERROR& ioe )
         {
             success = false;
-            msg.Printf( _( "Error saving project-specific symbol library table:\n\n%s" ), ioe.What() );
+            msg.Printf( _( "Error saving project-specific symbol library table:\n%s" ), ioe.What() );
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
@@ -388,9 +395,7 @@ void SCH_BASE_FRAME::Zoom_Automatique( bool aWarpPointer )
     VECTOR2D screenSize = view->ToWorld( galCanvas->GetClientSize(), false );
 
     if( bBox.GetWidth() == 0 || bBox.GetHeight() == 0 )
-    {
         bBox = galCanvas->GetDefaultViewBBox();
-    }
 
     VECTOR2D vsize = bBox.GetSize();
     double scale = view->GetScale() / std::max( fabs( vsize.x / screenSize.x ),
@@ -434,8 +439,7 @@ void SCH_BASE_FRAME::Window_Zoom( EDA_RECT& aRect )
 
     VECTOR2D vsize = selectionBox.GetSize();
     double scale;
-    double ratio = std::max( fabs( vsize.x / screenSize.x ),
-                             fabs( vsize.y / screenSize.y ) );
+    double ratio = std::max( fabs( vsize.x / screenSize.x ), fabs( vsize.y / screenSize.y ) );
 
     scale = view->GetScale() / ratio;
 
@@ -606,9 +610,11 @@ void SCH_BASE_FRAME::createCanvas()
     m_canvasType = LoadCanvasTypeSetting();
 
     // Allows only a CAIRO or OPENGL canvas:
-    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL &&
-        m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+    if( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL
+            && m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO )
+    {
         m_canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL;
+    }
 
     m_canvas = new SCH_DRAW_PANEL( this, wxID_ANY, wxPoint( 0, 0 ), m_FrameSize,
                                    GetGalDisplayOptions(), m_canvasType );
@@ -658,26 +664,6 @@ void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
         GetCanvas()->GetView()->Add( aItem );
         RefreshItem( aItem, true );           // handle any additional parent semantics
     }
-}
-
-
-void SCH_BASE_FRAME::AddToScreen( DLIST<SCH_ITEM>& aItems, SCH_SCREEN* aScreen )
-{
-    auto screen = aScreen;
-
-    if( aScreen == nullptr )
-        screen = GetScreen();
-
-    if( screen == GetScreen() )
-    {
-        for( SCH_ITEM* item = aItems.begin(); item; item = item->Next() )
-        {
-            GetCanvas()->GetView()->Add( item );
-            RefreshItem( item, true );        // handle any additional parent semantics
-        }
-    }
-
-    screen->Append( aItems );
 }
 
 

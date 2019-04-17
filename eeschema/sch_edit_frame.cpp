@@ -208,23 +208,6 @@ PART_LIBS* PROJECT::SchLibs()
     return libs;
 }
 
-/*
-NETLIST_OBJECT_LIST* PROJECT::Netlist()
-{
-    NETLIST_OBJECT_LIST* netlist = (NETLIST_OBJECT_LIST*)  GetElem( PROJECT::ELEM_SCH_NETLIST );
-
-    wxASSERT( !libs || dynamic_cast<NETLIST_OBJECT_LIST*>( netlist ) );
-
-    if( !netlist )
-    {
-        netlist = new NETLIST_OBJECT_LIST();
-
-        // Make PROJECT the new NETLIST_OBJECT_LIST owner.
-        SetElem( PROJECT::ELEM_SCH_NETLIST, netlist );
-    }
-}
-*/
-
 //-----</SCH "data on demand" functions>------------------------------------------
 
 
@@ -394,7 +377,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_findReplaceStatus = new wxString( wxEmptyString );
     m_undoItem = NULL;
     m_hasAutoSave = true;
-    m_busUnfold = {};
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
     SetForceHVLines( true );
@@ -1537,7 +1519,7 @@ void SCH_EDIT_FRAME::ShowChangedLanguage()
 
 void SCH_EDIT_FRAME::SetScreen( BASE_SCREEN* aScreen )
 {
-    EDA_DRAW_FRAME::SetScreen( aScreen );
+    SCH_BASE_FRAME::SetScreen( aScreen );
     auto c = static_cast<SCH_DRAW_PANEL*>(m_canvas);
     c->DisplaySheet( static_cast<SCH_SCREEN*>( aScreen ) );
 }

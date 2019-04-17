@@ -113,24 +113,6 @@ enum SCH_SEARCH_T {
 };
 
 
-/// Collection of data related to the bus unfolding tool
-struct BUS_UNFOLDING_T {
-    bool in_progress;   ///< True if bus unfold operation is running
-
-    bool offset;        ///< True if the bus entry should be offset from origin
-
-    bool label_placed;  ///< True if user has placed the net label
-
-    wxPoint origin;     ///< Origin (on the bus) of the unfold
-
-    wxString net_name;  ///< Net label for the unfolding operation
-
-    SCH_BUS_WIRE_ENTRY* entry;
-
-    SCH_LABEL* label;
-};
-
-
 /**
  * Schematic editor (Eeschema) main window.
  */
@@ -185,11 +167,6 @@ private:
 
     /// Use netcodes (net number) as net names when generating spice net lists.
     bool        m_spiceAjustPassiveValues;
-
-public: // TODO(JE) Make private
-
-    /// Data related to bus unfolding tool
-    BUS_UNFOLDING_T m_busUnfold;
 
 private:
 
@@ -812,24 +789,6 @@ public:
      */
     bool AskToSaveChanges();
 
-    /**
-     * Checks if a bus unfolding operation is in progress, so that it can be
-     * properly canceled / commited along with the wire draw operation.
-     */
-    bool IsBusUnfoldInProgress() { return m_busUnfold.in_progress; }
-
-    /**
-     * Cancels a bus unfolding operation, cleaning up the bus entry and label
-     * that were created
-     */
-    void CancelBusUnfold();
-
-    /**
-     * Completes a bus unfolding operation after the user finishes drawing the
-     * unfolded wire
-     */
-    void FinishBusUnfold();
-
     SCH_NO_CONNECT* AddNoConnect( const wxPoint& aPosition );
     SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aAppendToUndo = false,
                                bool aFinal = true );
@@ -839,6 +798,34 @@ public:
 
     SCH_TEXT* CreateNewText( int aType );
     SCH_BITMAP* CreateNewImage();
+
+    /**
+     * Performs routine schematic cleaning including breaking wire and buses and
+     * deleting identical objects superimposed on top of each other.
+     *
+     * @param aAppend The changes to the schematic should be appended to the previous undo
+     * @param aScreen is the screen to examine, or nullptr to examine the current screen
+     * @return True if any schematic clean up was performed.
+     */
+    bool SchematicCleanUp( bool aAppend = false, SCH_SCREEN* aScreen = nullptr );
+
+    /**
+     * If any single wire passes through _both points_, remove the portion between the two points,
+     * potentially splitting the wire into two.
+     *
+     * @param aStart The starting point for trimmming
+     * @param aEnd The ending point for trimming
+     * @param aAppend Should the line changes be appended to a previous undo state
+     * @return True if any wires were changed by this operation
+     */
+    bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
+
+    /**
+     * Collects a unique list of all possible connection points in the schematic.
+     *
+     * @param aConnections vector of connections
+     */
+    void GetSchematicConnections( std::vector< wxPoint >& aConnections );
 
 private:
 
@@ -972,34 +959,6 @@ private:
     void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
 
     /**
-     * Collects a unique list of all possible connection points in the schematic.
-     *
-     * @param aConnections vector of connections
-     */
-    void GetSchematicConnections( std::vector< wxPoint >& aConnections );
-
-    /**
-     * Performs routine schematic cleaning including breaking wire and buses and
-     * deleting identical objects superimposed on top of each other.
-     *
-     * @param aAppend The changes to the schematic should be appended to the previous undo
-     * @param aScreen is the screen to examine, or nullptr to examine the current screen
-     * @return True if any schematic clean up was performed.
-     */
-    bool SchematicCleanUp( bool aAppend = false, SCH_SCREEN* aScreen = nullptr );
-
-    /**
-     * If any single wire passes through _both points_, remove the portion between the two points,
-     * potentially splitting the wire into two.
-     *
-     * @param aStart The starting point for trimmming
-     * @param aEnd The ending point for trimming
-     * @param aAppend Should the line changes be appended to a previous undo state
-     * @return True if any wires were changed by this operation
-     */
-    bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
-
-    /**
      * Checks all wires and adds any junctions that are missing
      * (Intended to be called only on file load)
      */
@@ -1041,14 +1000,8 @@ private:
     void BeginSegment( int type );
 
     /**
-     * Terminate a bus, wire, or line creation.
-     */
-    void EndSegment();
-
-    /**
      * Erase the last segment at the current mouse position.
      */
-    void DeleteCurrentSegment();
     void DeleteConnection( bool DeleteFullConnection );
 
     // Images:

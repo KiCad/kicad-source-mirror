@@ -1,0 +1,1038 @@
+/*
+ * This program source code file is part of KiCad, a free EDA CAD application.
+ *
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, you may find one here:
+ * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * or you may search the http://www.gnu.org website for the version 2 license,
+ * or you may write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ */
+
+#include "sch_drawing_tool.h"
+#include <sch_actions.h>
+
+#include <sch_edit_frame.h>
+#include <sch_view.h>
+#include <class_draw_panel_gal.h>
+#include <project.h>
+#include <id.h>
+#include <eeschema_id.h>
+#include <confirm.h>
+#include <view/view_group.h>
+#include <view/view_controls.h>
+#include <view/view.h>
+#include <tool/tool_manager.h>
+#include <hotkeys.h>
+#include <sch_component.h>
+#include <sch_no_connect.h>
+#include <sch_junction.h>
+#include <sch_line.h>
+#include <sch_bus_entry.h>
+#include <sch_text.h>
+#include <sch_sheet.h>
+#include <sch_bitmap.h>
+#include <class_library.h>
+
+
+// Drawing tool actions
+TOOL_ACTION SCH_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
+        _( "Add Symbol" ), _( "Add a symbol" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
+        _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
+        _( "Add Wire" ), _( "Add a wire" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
+        _( "Add Bus" ), _( "Add a bus" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::unfoldBus( "eeschema.InteractiveDrawing.unfoldBus",
+        AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NOCONN_FLAG ),
+        _( "Add No Connect Flag" ), _( "Add a no-connection flag" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_JUNCTION ),
+        _( "Add Junction" ), _( "Add a junction" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_WIRE_ENTRY ),
+        _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
+        _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placePLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
+        _( "Add Label" ), _( "Add a net label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeHierarchicalLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
+        _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
+        _( "Add Global Label" ), _( "Add a global label" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_TEXT ),
+        _( "Add Text" ), _( "Add text" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::drawLines( "eeschema.InteractiveDrawing.drawLines",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
+        _( "Add Lines" ), _( "Add connected lines" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
+        AS_GLOBAL, 0,
+        _( "Add Image" ), _( "Add bitmap image" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::finishDrawing( "eeschema.InteractiveDrawing.finishDrawing",
+        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+
+
+SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
+    TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
+    m_view( nullptr ),
+    m_controls( nullptr ),
+    m_frame( nullptr ),
+    m_menu( *this )
+{
+    m_busUnfold = {};
+};
+
+
+SCH_DRAWING_TOOL::~SCH_DRAWING_TOOL()
+{
+}
+
+
+bool SCH_DRAWING_TOOL::Init()
+{
+    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
+                                 return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
+                             };
+
+    auto& ctxMenu = m_menu.GetMenu();
+
+    // cancel current tool goes in main context menu at the top if present
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
+    ctxMenu.AddSeparator( activeToolFunctor, 1 );
+
+    return true;
+}
+
+
+void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
+{
+    // Init variables used by every drawing tool
+    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
+    m_controls = getViewControls();
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+}
+
+
+// History lists for PlaceSymbol()
+static SCH_BASE_FRAME::HISTORY_LIST s_SymbolHistoryList;
+static SCH_BASE_FRAME::HISTORY_LIST s_PowerHistoryList;
+
+
+int SCH_DRAWING_TOOL::PlaceSymbol( const TOOL_EVENT& aEvent )
+{
+    SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
+
+    m_frame->SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Symbol" ) );
+
+    return doPlaceComponent( component, nullptr, s_SymbolHistoryList );
+}
+
+
+int SCH_DRAWING_TOOL::PlacePower( const TOOL_EVENT& aEvent )
+{
+    SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
+    SCHLIB_FILTER  filter;
+
+    filter.FilterPowerParts( true );
+    m_frame->SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
+
+    return doPlaceComponent( component, &filter, s_PowerHistoryList );
+}
+
+
+int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+{
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Add all the drawable parts to preview
+    if( aComponent )
+    {
+        aComponent->SetPosition( (wxPoint)cursorPos );
+        m_view->ClearPreview();
+        m_view->AddToPreview( aComponent->Clone() );
+    }
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( aComponent )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                m_view->ClearPreview();
+                m_view->ClearHiddenFlags();
+                delete aComponent;
+                aComponent = nullptr;
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !aComponent )
+            {
+                // Pick the module to be placed
+                m_frame->SetRepeatItem( NULL );
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                auto sel = m_frame->SelectComponentFromLibTree( aFilter, aHistoryList, true, 1, 1,
+                                                                m_frame->GetShowFootprintPreviews() );
+
+                // Restore cursor after dialog
+                m_frame->GetCanvas()->MoveCursorToCrossHair();
+
+                LIB_PART* part = nullptr;
+
+                if( sel.LibId.IsValid() )
+                    part = m_frame->GetLibPart( sel.LibId );
+
+                if( !part )
+                    continue;
+
+                aComponent = new SCH_COMPONENT( *part, sel.LibId, g_CurrentSheet, sel.Unit,
+                                                sel.Convert, (wxPoint)cursorPos, true );
+
+                // Be sure the link to the corresponding LIB_PART is OK:
+                aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
+
+                // Set any fields that have been modified
+                for( auto const& i : sel.Fields )
+                {
+                    auto field = aComponent->GetField( i.first );
+
+                    if( field )
+                        field->SetText( i.second );
+                }
+
+                MSG_PANEL_ITEMS items;
+                aComponent->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                m_frame->SetMsgPanel( items );
+
+                if( m_frame->GetAutoplaceFields() )
+                    aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
+
+                aComponent->SetFlags( IS_MOVED );
+                m_frame->SetRepeatItem( aComponent );
+                m_frame->GetScreen()->SetCurItem( aComponent );
+                m_view->ClearPreview();
+                m_view->AddToPreview( aComponent->Clone() );
+
+                m_controls->SetCursorPosition( cursorPos, false );
+            }
+            else
+            {
+                m_view->ClearPreview();
+
+                m_frame->AddItemToScreen( aComponent );
+
+                aComponent = nullptr;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+        else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            aComponent->SetPosition( (wxPoint)cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( aComponent->Clone() );
+        }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        m_controls->SetAutoPan( !!aComponent );
+        m_controls->CaptureCursor( !!aComponent );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::PlaceNoConnect( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
+    return doSingleClickPlace( SCH_NO_CONNECT_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceJunction( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
+    return doSingleClickPlace( SCH_JUNCTION_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceBusWireEntry( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
+    return doSingleClickPlace( SCH_BUS_WIRE_ENTRY_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
+    return doSingleClickPlace( SCH_BUS_BUS_ENTRY_T );
+}
+
+
+int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
+{
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            SCH_ITEM* item = nullptr;
+
+            if( !m_frame->GetScreen()->GetItem( cursorPos, 0, aType ) )
+            {
+                switch( aType )
+                {
+                case SCH_NO_CONNECT_T:     item = m_frame->AddNoConnect( cursorPos );  break;
+                case SCH_JUNCTION_T:       item = m_frame->AddJunction( cursorPos );   break;
+                case SCH_BUS_WIRE_ENTRY_T: item = m_frame->CreateBusWireEntry();       break;
+                case SCH_BUS_BUS_ENTRY_T:  item = m_frame->CreateBusBusEntry();        break;
+                default:                   wxFAIL_MSG( "doSingleClickPlace(): unknown type" );
+                }
+            }
+
+            if( item )
+            {
+                m_frame->SetRepeatItem( item );
+                m_frame->GetScreen()->SetCurItem( item );
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::PlaceLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add net label" ) );
+    return doTwoClickPlace( SCH_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceGlobalLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_GLOBALLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
+    return doTwoClickPlace( SCH_GLOBAL_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
+    return doTwoClickPlace( SCH_HIER_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    return doTwoClickPlace( SCH_TEXT_T );
+}
+
+
+int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
+    return doTwoClickPlace( SCH_BITMAP_T );
+}
+
+
+int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
+{
+    VECTOR2I  cursorPos = m_controls->GetCursorPosition();
+    SCH_ITEM* item = nullptr;
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( item )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                m_view->ClearPreview();
+                m_view->ClearHiddenFlags();
+                delete item;
+                item = nullptr;
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !item )
+            {
+                m_frame->SetRepeatItem( NULL );
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                switch( aType )
+                {
+                case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
+                case SCH_HIER_LABEL_T:   item = m_frame->CreateNewText( LAYER_HIERLABEL );  break;
+                case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
+                case SCH_TEXT_T:         item = m_frame->CreateNewText( LAYER_NOTES );      break;
+                case SCH_BITMAP_T:       item = m_frame->CreateNewImage();                  break;
+                default:                 wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
+                }
+
+                // Restore cursor after dialog
+                m_frame->GetCanvas()->MoveCursorToCrossHair();
+
+                if( item )
+                {
+                    MSG_PANEL_ITEMS items;
+                    item->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                    m_frame->SetMsgPanel( items );
+
+                    item->SetFlags( IS_MOVED );
+                    m_view->ClearPreview();
+                    m_view->AddToPreview( item->Clone() );
+                }
+
+                m_controls->SetCursorPosition( cursorPos, false );
+            }
+            else
+            {
+                m_view->ClearPreview();
+
+                m_frame->AddItemToScreen( item );
+
+                item = nullptr;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            item->SetPosition( (wxPoint)cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( item->Clone() );
+        }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        m_controls->SetAutoPan( !!item );
+        m_controls->CaptureCursor( !!item );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+    return doDrawSegments( LAYER_WIRE );
+}
+
+
+int SCH_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+    return doDrawSegments( LAYER_BUS );
+}
+
+
+int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
+{
+    wxString net = *aEvent.Parameter<wxString*>();
+    wxPoint  pos = m_frame->GetCrossHairPosition();
+
+    /**
+     * Unfolding a bus consists of the following user inputs:
+     * 1) User selects a bus to unfold (see AddMenusForBus())
+     *    We land in this event handler.
+     *
+     * 2) User clicks to set the net label location (handled by BeginSegment())
+     *    Before this first click, the posture of the bus entry  follows the
+     *    mouse cursor in X and Y (handled by DrawSegment())
+     *
+     * 3) User is now in normal wiring mode and can exit in any normal way.
+     */
+
+    wxASSERT( !m_busUnfold.in_progress );
+
+    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
+    m_busUnfold.entry->SetParent( m_frame->GetScreen() );
+    m_frame->AddToScreen( m_busUnfold.entry );
+
+    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), net );
+    m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
+    m_busUnfold.label->SetLabelSpinStyle( 0 );
+    m_busUnfold.label->SetParent( m_frame->GetScreen() );
+
+    m_busUnfold.in_progress = true;
+    m_busUnfold.origin = pos;
+    m_busUnfold.net_name = net;
+
+    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+
+    m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
+    return doDrawSegments( LAYER_WIRE );
+}
+
+
+int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
+{
+    m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
+    return doDrawSegments( LAYER_NOTES );
+}
+
+
+// Storage for the line segments while drawing
+static DLIST<SCH_LINE> s_wires;
+
+
+/**
+ * In a contiguous list of wires, remove wires that backtrack over the previous
+ * wire. Example:
+ *
+ * Wire is added:
+ * ---------------------------------------->
+ *
+ * A second wire backtracks over it:
+ * -------------------<====================>
+ *
+ * RemoveBacktracks is called:
+ * ------------------->
+ */
+static void RemoveBacktracks( DLIST<SCH_LINE>& aWires )
+{
+    SCH_LINE* next = nullptr;
+    std::vector<SCH_LINE*> last_lines;
+
+    for( SCH_LINE* line = aWires.GetFirst(); line; line = next )
+    {
+        next = line->Next();
+
+        if( line->IsNull() )
+        {
+            delete s_wires.Remove( line );
+            continue;
+        }
+
+        if( !last_lines.empty() )
+        {
+            SCH_LINE* last_line = last_lines[last_lines.size() - 1];
+            bool contiguous = ( last_line->GetEndPoint() == line->GetStartPoint() );
+            bool backtracks = IsPointOnSegment( last_line->GetStartPoint(),
+                                                last_line->GetEndPoint(), line->GetEndPoint() );
+            bool total_backtrack = ( last_line->GetStartPoint() == line->GetEndPoint() );
+
+            if( contiguous && backtracks )
+            {
+                if( total_backtrack )
+                {
+                    delete s_wires.Remove( last_line );
+                    delete s_wires.Remove( line );
+                    last_lines.pop_back();
+                }
+                else
+                {
+                    last_line->SetEndPoint( line->GetEndPoint() );
+                    delete s_wires.Remove( line );
+                }
+            }
+            else
+            {
+                last_lines.push_back( line );
+            }
+        }
+        else
+        {
+            last_lines.push_back( line );
+        }
+    }
+}
+
+
+/**
+ * A helper function to find any sheet pins at the specified position.
+ */
+static const SCH_SHEET_PIN* getSheetPin( SCH_SCREEN* aScreen, const wxPoint& aPosition )
+{
+    for( SCH_ITEM* item = aScreen->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+
+            for( const SCH_SHEET_PIN& pin : sheet->GetPins() )
+            {
+                if( pin.GetPosition() == aPosition )
+                    return &pin;
+            }
+        }
+    }
+
+    return nullptr;
+}
+
+
+/**
+ * Function ComputeBreakPoint
+ * computes the middle coordinate for 2 segments from the start point to \a aPosition
+ * with the segments kept in the horizontal or vertical axis only.
+ *
+ * @param aSegment A pointer to a #SCH_LINE object containing the first line break point
+ *                 to compute.
+ * @param aPosition A reference to a wxPoint object containing the coordinates of the
+ *                  position used to calculate the line break point.
+ */
+static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint& aPosition )
+{
+    wxCHECK_RET( aSegment != nullptr, wxT( "Cannot compute break point of NULL line segment." ) );
+
+    SCH_LINE* nextSegment = aSegment->Next();
+
+    wxPoint midPoint;
+    int iDx = aSegment->GetEndPoint().x - aSegment->GetStartPoint().x;
+    int iDy = aSegment->GetEndPoint().y - aSegment->GetStartPoint().y;
+
+    const SCH_SHEET_PIN* connectedPin = getSheetPin( aScreen, aSegment->GetStartPoint() );
+    auto force = connectedPin ? connectedPin->GetEdge() : SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE;
+
+    if( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE || force == SCH_SHEET_PIN::SHEET_RIGHT_SIDE )
+    {
+        if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
+        {
+            int direction = ( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE ) ? -1 : 1;
+            aPosition.x += int( aScreen->GetGridSize().x * direction );
+        }
+
+        midPoint.x = aPosition.x;
+        midPoint.y = aSegment->GetStartPoint().y;     // force horizontal
+    }
+    else if( iDy != 0 )    // keep the first segment orientation (vertical)
+    {
+        midPoint.x = aSegment->GetStartPoint().x;
+        midPoint.y = aPosition.y;
+    }
+    else if( iDx != 0 )    // keep the first segment orientation (horizontal)
+    {
+        midPoint.x = aPosition.x;
+        midPoint.y = aSegment->GetStartPoint().y;
+    }
+    else
+    {
+        if( std::abs( aPosition.x - aSegment->GetStartPoint().x ) <
+            std::abs( aPosition.y - aSegment->GetStartPoint().y ) )
+        {
+            midPoint.x = aSegment->GetStartPoint().x;
+            midPoint.y = aPosition.y;
+        }
+        else
+        {
+            midPoint.x = aPosition.x;
+            midPoint.y = aSegment->GetStartPoint().y;
+        }
+    }
+
+    aSegment->SetEndPoint( midPoint );
+    nextSegment->SetStartPoint( midPoint );
+    nextSegment->SetEndPoint( aPosition );
+}
+
+
+int SCH_DRAWING_TOOL::doDrawSegments( int aType )
+{
+    SCH_LINE* segment = nullptr;
+    bool      forceHV = m_frame->GetForceHVLines();
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( segment || m_busUnfold.in_progress )
+            {
+                segment = nullptr;
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                s_wires.DeleteAll();
+
+                if( m_busUnfold.entry )
+                    m_frame->RemoveFromScreen( m_busUnfold.entry );
+
+                if( m_busUnfold.label && m_busUnfold.label_placed )
+                    m_frame->RemoveFromScreen( m_busUnfold.label );
+
+                delete m_busUnfold.entry;
+                delete m_busUnfold.label;
+                m_busUnfold = {};
+
+                m_view->ClearPreview();
+                m_view->ShowPreview( false );
+                m_view->ClearHiddenFlags();
+
+                // Clear flags used in edit functions.
+                getModel<SCH_SCREEN>()->ClearDrawingState();
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+        else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
+        {
+            if( segment || m_busUnfold.in_progress )
+            {
+                finishSegments();
+                break;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu();
+        }
+        else if( evt->IsClick( BUT_LEFT ) || ( segment && evt->IsDblClick( BUT_LEFT ) ) )
+        {
+            // First click when unfolding places the label and wire-to-bus entry
+            if( m_busUnfold.in_progress && !m_busUnfold.label_placed )
+            {
+                wxASSERT( aType == LAYER_WIRE );
+
+                m_frame->AddToScreen( m_busUnfold.label );
+                m_busUnfold.label_placed = true;
+
+                segment->ClearFlags( IS_NEW );
+                segment->SetFlags( SELECTED );
+
+                segment = new SCH_LINE( *segment );
+                segment->SetFlags( IS_NEW );
+                segment->SetStartPoint( cursorPos );
+                s_wires.PushBack( segment );
+                m_frame->GetScreen()->SetCurItem( segment );
+            }
+            else if( !segment )
+            {
+                switch( aType )
+                {
+                default:         segment = new SCH_LINE( cursorPos, LAYER_NOTES ); break;
+                case LAYER_WIRE: segment = new SCH_LINE( cursorPos, LAYER_WIRE );  break;
+                case LAYER_BUS:  segment = new SCH_LINE( cursorPos, LAYER_BUS );   break;
+                }
+
+                segment->SetFlags( IS_NEW );
+                s_wires.PushBack( segment );
+                m_frame->GetScreen()->SetCurItem( segment );
+
+                // We need 2 segments to go from a given start pin to an end point when the
+                // horizontal and vertical lines only switch is on.
+                if( forceHV )
+                {
+                    segment = new SCH_LINE( *segment );
+                    segment->SetFlags( IS_NEW );
+                    s_wires.PushBack( segment );
+                    m_frame->GetScreen()->SetCurItem( segment );
+                }
+            }
+            // Create a new segment if we're out of previously-created ones
+            else if( !segment->IsNull() || ( forceHV && !segment->Back()->IsNull() ) )
+            {
+                // Terminate the command if the end point is on a pin, junction, or another
+                // wire or bus.
+                if( !m_busUnfold.in_progress &&
+                        m_frame->GetScreen()->IsTerminalPoint( cursorPos, segment->GetLayer() ) )
+                {
+                    finishSegments();
+                    break;
+                }
+
+                segment->SetEndPoint( cursorPos );
+                segment->ClearFlags( IS_NEW );
+                segment->SetFlags( SELECTED );
+
+                // Create a new segment, and chain it after the current new segment.
+                segment = new SCH_LINE( *segment );
+                segment->SetFlags( IS_NEW );
+                segment->SetStartPoint( cursorPos );
+                s_wires.PushBack( segment );
+                m_frame->GetScreen()->SetCurItem( segment );
+            }
+
+            if( evt->IsDblClick( BUT_LEFT ) )
+            {
+                finishSegments();
+                break;
+            }
+        }
+        else if( evt->IsMotion() )
+        {
+            m_view->ClearPreview();
+
+            // Update the bus unfold posture based on the mouse movement
+            if( m_busUnfold.in_progress && !m_busUnfold.label_placed )
+            {
+                wxPoint cursor_delta = cursorPos - m_busUnfold.origin;
+                SCH_BUS_WIRE_ENTRY* entry = m_busUnfold.entry;
+
+                bool offset = ( cursor_delta.x < 0 );
+                char shape = ( offset ? ( ( cursor_delta.y >= 0 ) ? '/' : '\\' )
+                                      : ( ( cursor_delta.y >= 0 ) ? '\\' : '/' ) );
+
+                // Erase and redraw if necessary
+                if( shape != entry->GetBusEntryShape() || offset != m_busUnfold.offset )
+                {
+                    entry->SetBusEntryShape( shape );
+                    wxPoint entry_pos = m_busUnfold.origin;
+
+                    if( offset )
+                        entry_pos -= entry->GetSize();
+
+                    entry->SetPosition( entry_pos );
+                    m_busUnfold.offset = offset;
+
+                    m_frame->RefreshItem( entry );
+
+                    wxPoint wire_start = offset ? entry->GetPosition() : entry->m_End();
+                    s_wires.begin()->SetStartPoint( wire_start );
+                }
+
+                // Update the label "ghost" position
+                m_busUnfold.label->SetPosition( cursorPos );
+                m_view->AddToPreview( m_busUnfold.label->Clone() );
+            }
+
+            if( segment )
+            {
+                // Coerce the line to vertical or horizontal if necessary
+                if( forceHV )
+                    computeBreakPoint( m_frame->GetScreen(), segment->Back(), cursorPos );
+                else
+                    segment->SetEndPoint( cursorPos );
+            }
+
+            for( auto seg = s_wires.begin(); seg; seg = seg->Next() )
+            {
+                if( !seg->IsNull() )  // Add to preview if segment length != 0
+                    m_view->AddToPreview( seg->Clone() );
+            }
+        }
+
+        // Enable autopanning and cursor capture only when there is a segment to be placed
+        m_controls->SetAutoPan( !!segment );
+        m_controls->CaptureCursor( !!segment );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+void SCH_DRAWING_TOOL::finishSegments()
+{
+    PICKED_ITEMS_LIST itemList;
+
+    // Remove segments backtracking over others
+    RemoveBacktracks( s_wires );
+
+    // Collect the possible connection points for the new lines
+    std::vector< wxPoint > connections;
+    std::vector< wxPoint > new_ends;
+    m_frame->GetSchematicConnections( connections );
+
+    // Check each new segment for possible junctions and add/split if needed
+    for( SCH_LINE* wire = s_wires.GetFirst(); wire; wire = wire->Next() )
+    {
+        if( wire->GetFlags() & SKIP_STRUCT )
+            continue;
+
+        wire->GetConnectionPoints( new_ends );
+
+        for( auto i : connections )
+        {
+            if( IsPointOnSegment( wire->GetStartPoint(), wire->GetEndPoint(), i ) )
+                new_ends.push_back( i );
+        }
+        itemList.PushItem( ITEM_PICKER( wire, UR_NEW ) );
+    }
+
+    if( m_busUnfold.in_progress && m_busUnfold.label_placed )
+    {
+        wxASSERT( m_busUnfold.entry && m_busUnfold.label );
+
+        itemList.PushItem( ITEM_PICKER( m_busUnfold.entry, UR_NEW ) );
+        itemList.PushItem( ITEM_PICKER( m_busUnfold.label, UR_NEW ) );
+    }
+
+    // Get the last non-null wire (this is the last created segment).
+    m_frame->SetRepeatItem( s_wires.GetLast() );
+
+    // Add the new wires
+    while( s_wires.GetFirst() )
+        m_frame->AddToScreen( s_wires.PopFront() );
+
+    m_view->ClearPreview();
+    m_view->ShowPreview( false );
+    m_view->ClearHiddenFlags();
+
+    m_controls->CaptureCursor( false );
+    m_controls->SetAutoPan( false );
+
+    m_frame->SaveCopyInUndoList( itemList, UR_NEW );
+
+    // Correct and remove segments that need to be merged.
+    m_frame->SchematicCleanUp( true );
+
+    for( auto item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->Type() != SCH_COMPONENT_T )
+            continue;
+
+        std::vector< wxPoint > pts;
+        item->GetConnectionPoints( pts );
+
+        if( pts.size() > 2 )
+            continue;
+
+        for( auto i = pts.begin(); i != pts.end(); i++ )
+        {
+            for( auto j = i + 1; j != pts.end(); j++ )
+                m_frame->TrimWire( *i, *j, true );
+        }
+    }
+
+    for( auto i : new_ends )
+    {
+        if( m_frame->GetScreen()->IsJunctionNeeded( i, true ) )
+            m_frame->AddJunction( i, true, false );
+    }
+
+    if( m_busUnfold.in_progress )
+        m_busUnfold = {};
+
+    m_frame->TestDanglingEnds();
+
+    m_frame->GetScreen()->ClearDrawingState();
+    m_frame->GetScreen()->SetCurItem( NULL );
+    m_frame->OnModify();
+}
+
+
+void SCH_DRAWING_TOOL::setTransitions()
+{
+    Go( &SCH_DRAWING_TOOL::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlacePower,            SCH_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::DrawWire,              SCH_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::DrawBus,               SCH_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::UnfoldBus,             SCH_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceNoConnect,        SCH_ACTIONS::placeNoConnect.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceJunction,         SCH_ACTIONS::placeJunction.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceBusWireEntry,     SCH_ACTIONS::placeBusWireEntry.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceBusBusEntry,      SCH_ACTIONS::placeBusBusEntry.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceLabel,            SCH_ACTIONS::placeLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::DrawLines,             SCH_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
+}

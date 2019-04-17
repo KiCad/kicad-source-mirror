@@ -27,16 +27,12 @@
 #include <kiway.h>
 #include <eeschema_id.h>
 #include <sch_draw_panel.h>
-#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <sim/sim_plot_frame.h>
 #include <menus_helpers.h>
-#include <sch_marker.h>
-#include <sch_line.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-#include <sch_bitmap.h>
 #include <netlist_object.h>
 #include <sch_view.h>
 
@@ -45,6 +41,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_HIGHLIGHT_BUTT:
+    case ID_WIRE_BUTT:
+    case ID_BUS_BUTT:
     case ID_NOCONN_BUTT:
     case ID_JUNCTION_BUTT:
     case ID_WIRETOBUS_ENTRY_BUTT:
@@ -55,6 +53,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_GLOBALLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
     case ID_TEXT_COMMENT_BUTT:
+    case ID_LINE_COMMENT_BUTT:
     case ID_ADD_IMAGE_BUTT:
         return;            // Moved to modern toolset
     default:
@@ -82,9 +81,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 GetCanvas()->GetView()->ClearHiddenFlags();
                 return;
 
-            case SCH_LINE_T:    // May already be drawing segment.
-                break;
-
             default:
                 wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick error.  Item type <" ) +
                             item->GetClass() + wxT( "> is already being edited." ) );
@@ -111,21 +107,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         DeleteItemAtCrossHair();
-        break;
-
-    case ID_WIRE_BUTT:
-        BeginSegment( LAYER_WIRE );
-        m_canvas->SetAutoPanRequest( true );
-        break;
-
-    case ID_BUS_BUTT:
-        BeginSegment( LAYER_BUS );
-        m_canvas->SetAutoPanRequest( true );
-        break;
-
-    case ID_LINE_COMMENT_BUTT:
-        BeginSegment( LAYER_NOTES );
-        m_canvas->SetAutoPanRequest( true );
         break;
 
     case ID_SHEET_SYMBOL_BUTT:
@@ -244,9 +225,7 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     {
     case ID_NO_TOOL_SELECTED:
         if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
-        {
             item = LocateAndShowItem( aPosition, SCH_COLLECTOR::DoubleClickItems );
-        }
 
         if( ( item == NULL ) || ( item->GetFlags() != 0 ) )
             break;
@@ -276,7 +255,6 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case SCH_BITMAP_T:
-
             // The bitmap is cached in Opengl: clear the cache, because
             // the cache data is perhaps invalid
             if( EditImage( (SCH_BITMAP*) item ) )
@@ -296,14 +274,6 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         default:
             break;
         }
-
-        break;
-
-    case ID_BUS_BUTT:
-    case ID_WIRE_BUTT:
-    case ID_LINE_COMMENT_BUTT:
-        if( item && item->IsNew() )
-            EndSegment();
 
         break;
     }

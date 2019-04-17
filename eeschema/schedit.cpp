@@ -26,12 +26,10 @@
 #include <fctsys.h>
 #include <kiway.h>
 #include <gr_basic.h>
-#include <pgm_base.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <eda_doc.h>
 #include <sch_edit_frame.h>
-#include <kicad_device_context.h>
 #include <hotkeys_basic.h>
 #include <general.h>
 #include <eeschema_id.h>
@@ -71,7 +69,6 @@
     case ID_POPUP_SCH_BEGIN_WIRE:
     case ID_POPUP_SCH_BEGIN_BUS:
     case ID_POPUP_END_LINE:
-    case ID_POPUP_SCH_SET_SHAPE_TEXT:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -161,12 +158,10 @@
         {
             SetNoToolSelected();
         }
-
         break;
 
     case ID_POPUP_END_LINE:
-        m_canvas->MoveCursorToCrossHair();
-        EndSegment();
+        m_toolManager->RunAction( SCH_ACTIONS::finishDrawing, true );
         break;
 
     case ID_POPUP_SCH_BEGIN_WIRE:
@@ -177,10 +172,6 @@
     case ID_POPUP_SCH_BEGIN_BUS:
         m_canvas->MoveCursorToCrossHair();
         OnLeftClick( nullptr, GetCrossHairPosition() );
-        break;
-
-    case ID_POPUP_SCH_SET_SHAPE_TEXT:
-        // Not used
         break;
 
     case ID_POPUP_SCH_DELETE_NODE:
@@ -267,7 +258,6 @@
             m_canvas->MoveCursorToCrossHair();
             ConvertPart( (SCH_COMPONENT*) item );
         }
-
         break;
 
     case ID_POPUP_SCH_ENTER_SHEET:
@@ -277,7 +267,6 @@
             g_CurrentSheet->push_back( (SCH_SHEET*) item );
             DisplayCurrentSheet();
         }
-
         break;
 
     case ID_POPUP_SCH_LEAVE_SHEET:
@@ -286,7 +275,6 @@
             g_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
-
         break;
 
     case ID_POPUP_PLACE_BLOCK:
@@ -344,9 +332,8 @@
 
     case ID_POPUP_SCH_ADD_LABEL:
     case ID_POPUP_SCH_ADD_GLABEL:
-        screen->SetCurItem( CreateNewText( id == ID_POPUP_SCH_ADD_LABEL ? LAYER_LOCLABEL
-                                                                        : LAYER_GLOBLABEL ) );
-        item = screen->GetCurItem();
+        item =  CreateNewText( id == ID_POPUP_SCH_ADD_LABEL ? LAYER_LOCLABEL : LAYER_GLOBLABEL );
+        screen->SetCurItem( item );
 
         if( item )
             AddItemToScreen( item );
@@ -371,76 +358,10 @@
 
 void SCH_EDIT_FRAME::OnUnfoldBus( wxCommandEvent& event )
 {
-    auto screen = GetScreen();
-    auto item = static_cast< wxMenuItem* >( event.GetEventUserData() );
-    auto net = item->GetItemLabelText();
+     wxMenuItem*     item = static_cast< wxMenuItem* >( event.GetEventUserData() );
+     static wxString net = item->GetItemLabelText();
 
-    auto pos = GetCrossHairPosition();
-
-    /**
-     * Unfolding a bus consists of the following user inputs:
-     * 1) User selects a bus to unfold (see AddMenusForBus())
-     *    We land in this event handler.
-     *
-     * 2) User clicks to set the net label location (handled by BeginSegment())
-     *    Before this first click, the posture of the bus entry  follows the
-     *    mouse cursor in X and Y (handled by DrawSegment())
-     *
-     * 3) User is now in normal wiring mode and can exit in any normal way.
-     */
-
-    wxASSERT( !m_busUnfold.in_progress );
-
-    m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
-
-    SetSchItemParent( m_busUnfold.entry, screen );
-    AddToScreen( m_busUnfold.entry );
-
-    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), net );
-
-    m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(),
-                                            GetDefaultTextSize() ) );
-    m_busUnfold.label->SetLabelSpinStyle( 0 );
-
-    SetSchItemParent( m_busUnfold.label, screen );
-
-    m_busUnfold.in_progress = true;
-    m_busUnfold.origin = pos;
-    m_busUnfold.net_name = net;
-
-    SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-
-    SetCrossHairPosition( m_busUnfold.entry->m_End() );
-    BeginSegment( LAYER_WIRE );
-    m_canvas->SetAutoPanRequest( true );
-}
-
-
-void SCH_EDIT_FRAME::CancelBusUnfold()
-{
-    if( m_busUnfold.entry )
-    {
-        RemoveFromScreen( m_busUnfold.entry );
-        delete m_busUnfold.entry;
-    }
-
-    if( m_busUnfold.label )
-    {
-        if( m_busUnfold.label_placed )
-            RemoveFromScreen( m_busUnfold.label );
-
-        delete m_busUnfold.label;
-    }
-
-    FinishBusUnfold();
-}
-
-
-void SCH_EDIT_FRAME::FinishBusUnfold()
-{
-    m_busUnfold = {};
-
-    SetToolID( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor(), wxEmptyString );
+     GetToolManager()->RunAction( SCH_ACTIONS::unfoldBus, true, &net );
 }
 
 
@@ -610,6 +531,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_SCH_PLACE_COMPONENT:
     case ID_MENU_PLACE_POWER_BUTT:
     case ID_PLACE_POWER_BUTT:
+    case ID_MENU_WIRE_BUTT:
+    case ID_WIRE_BUTT:
+    case ID_MENU_BUS_BUTT:
+    case ID_BUS_BUTT:
+    case ID_MENU_LINE_COMMENT_BUTT:
+    case ID_LINE_COMMENT_BUTT:
         // moved to modern toolset
         return;
     default:
@@ -631,21 +558,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
             SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
         else
             SetNoToolSelected();
-        break;
-
-    case ID_MENU_WIRE_BUTT:
-    case ID_WIRE_BUTT:
-        SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-        break;
-
-    case ID_MENU_BUS_BUTT:
-    case ID_BUS_BUTT:
-        SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
-        break;
-
-    case ID_MENU_LINE_COMMENT_BUTT:
-    case ID_LINE_COMMENT_BUTT:
-        SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
         break;
 
     case ID_MENU_SHEET_SYMBOL_BUTT:
@@ -718,10 +630,8 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 
 bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
 {
-    SCH_ITEM*   item;
     SCH_SCREEN* screen = GetScreen();
-
-    item = LocateItem( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
+    SCH_ITEM*   item = LocateItem( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
 
     if( item )
     {
@@ -1194,8 +1104,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
         break;
 
     default:                // Unexpected item
-        wxFAIL_MSG( wxString::Format( wxT( "Cannot edit schematic item type %s." ),
-                                      GetChars( item->GetClass() ) ) );
+        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
     }
 
     RefreshItem( item );
@@ -1272,8 +1181,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
         break;
 
     default:
-        wxFAIL_MSG( wxString::Format( wxT( "Cannot drag schematic item type %s." ),
-                                      GetChars( item->GetClass() ) ) );
+        wxFAIL_MSG( wxString( "Cannot drag schematic item type " ) + item->GetClass() );
     }
 }
 

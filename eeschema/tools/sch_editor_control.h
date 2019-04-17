@@ -31,8 +31,6 @@
 #include <tool/tool_menu.h>
 
 class SCH_EDIT_FRAME;
-class SCH_COMPONENT;
-class SCHLIB_FILTER;
 
 /**
  * Class SCH_EDITOR_CONTROL
@@ -70,26 +68,7 @@ public:
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
-    int PlaceSymbol( const TOOL_EVENT& aEvent );
-    int PlacePower( const TOOL_EVENT& aEvent );
-    int PlaceNoConnect( const TOOL_EVENT& aEvent );
-    int PlaceJunction( const TOOL_EVENT& aEvent );
-    int PlaceBusWireEntry( const TOOL_EVENT& aEvent );
-    int PlaceBusBusEntry( const TOOL_EVENT& aEvent );
-    int PlaceLabel( const TOOL_EVENT& aEvent );
-    int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
-    int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
-    int PlaceSchematicText( const TOOL_EVENT& aEvent );
-    int PlaceImage( const TOOL_EVENT& aEvent );
-
 private:
-
-    int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
-
-    int doSingleClickPlace( KICAD_T aType );
-
-    int doTwoClickPlace( KICAD_T aType );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -99,7 +78,6 @@ private:
 
     /// Menu model displayed by the tool.
     TOOL_MENU m_menu;
-
 };
 
 

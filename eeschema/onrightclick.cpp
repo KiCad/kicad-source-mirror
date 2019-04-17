@@ -54,6 +54,7 @@
 #include <sch_view.h>
 
 #include <iostream>
+#include <tools/sch_actions.h>
 
 static void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame );
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );

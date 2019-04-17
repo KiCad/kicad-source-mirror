@@ -90,6 +90,9 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
     static TOOL_ACTION placePower;
+    static TOOL_ACTION drawWire;
+    static TOOL_ACTION drawBus;
+    static TOOL_ACTION unfoldBus;
     static TOOL_ACTION placeNoConnect;
     static TOOL_ACTION placeJunction;
     static TOOL_ACTION placeBusWireEntry;
@@ -98,7 +101,9 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierarchicalLabel;
     static TOOL_ACTION placeSchematicText;
+    static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
+    static TOOL_ACTION finishDrawing;
 
     // Editing
     static TOOL_ACTION properties;
