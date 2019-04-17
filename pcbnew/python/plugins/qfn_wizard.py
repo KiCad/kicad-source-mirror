@@ -37,7 +37,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
         self.AddParam("Pads", "pitch", self.uMM, 0.4, designator='e')
         self.AddParam("Pads", "width", self.uMM, 0.2, designator='X1')
         self.AddParam("Pads", "length", self.uMM, 0.75, designator='Y1')
-        self.AddParam("Pads", "offset", self.uMM, 0.3)
+        self.AddParam("Pads", "offset", self.uMM, 0.0)
         self.AddParam("Pads", "oval", self.uBool, True)
 
         self.AddParam("EPad", "epad", self.uBool, True)
@@ -82,7 +82,7 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
 
         pad_pitch = self.pads["pitch"]
         pad_length = self.pads["length"]
-        # Fillet allows to define how much of the pad is outside of the package
+        # offset allows to define how much of the pad is outside of the package
         pad_offset = self.pads["offset"]
         pad_width = self.pads["width"]
 
@@ -99,8 +99,8 @@ class QFNWizard(FootprintWizardBase.FootprintWizard):
                                                  shape=pad_shape, rot_degree=90.0)
         v_pad = PA.PadMaker(self.module).SMDPad( pad_length, pad_width, shape=pad_shape)
 
-        h_pitch = h_pitch / 2 - pad_length + (pad_length+pad_offset)/2
-        v_pitch = v_pitch / 2 - pad_length + (pad_length+pad_offset)/2
+        h_pitch = h_pitch / 2 - pad_length + pad_offset + pad_length/2
+        v_pitch = v_pitch / 2 - pad_length +pad_offset + pad_length/2
 
         #left row
         pin1Pos = pcbnew.wxPoint(-h_pitch, 0)
