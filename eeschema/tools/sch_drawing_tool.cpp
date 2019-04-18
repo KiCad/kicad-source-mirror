@@ -91,6 +91,22 @@ TOOL_ACTION SCH_ACTIONS::placeHierarchicalLabel( "eeschema.InteractiveDrawing.pl
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
         _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION SCH_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HIER_SHEET ),
+        _( "Add Sheet" ), _( "Add a hierarchical sheet" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::resizeSheet( "eeschema.InteractiveDrawing.resizeSheet",
+        AS_GLOBAL, 0,
+        _( "Resize Sheet" ), _( "Resize hierarchical sheet" ), NULL, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
+        AS_GLOBAL, 0,
+        _( "Add Sheet Pin" ), _( "Add a sheet pin" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
+        AS_GLOBAL, 0,
+        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ), NULL, AF_ACTIVATE );
+
 TOOL_ACTION SCH_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
         _( "Add Global Label" ), _( "Add a global label" ), NULL, AF_ACTIVATE );
@@ -405,6 +421,20 @@ int SCH_DRAWING_TOOL::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DRAWING_TOOL::PlaceSheetPin( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_SHEET_PIN_BUTT, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
+    return doTwoClickPlace( SCH_SHEET_PIN_T );
+}
+
+
+int SCH_DRAWING_TOOL::ImportSheetPin( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
+    return doTwoClickPlace( SCH_SHEET_PIN_T );
+}
+
+
 int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
@@ -461,12 +491,34 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
                 switch( aType )
                 {
-                case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
-                case SCH_HIER_LABEL_T:   item = m_frame->CreateNewText( LAYER_HIERLABEL );  break;
-                case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
-                case SCH_TEXT_T:         item = m_frame->CreateNewText( LAYER_NOTES );      break;
-                case SCH_BITMAP_T:       item = m_frame->CreateNewImage();                  break;
-                default:                 wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
+                case SCH_LABEL_T:
+                    item = m_frame->CreateNewText( LAYER_LOCLABEL );
+                    break;
+                case SCH_HIER_LABEL_T:
+                    item = m_frame->CreateNewText( LAYER_HIERLABEL );
+                    break;
+                case SCH_GLOBAL_LABEL_T:
+                    item = m_frame->CreateNewText( LAYER_GLOBLABEL );
+                    break;
+                case SCH_TEXT_T:
+                    item = m_frame->CreateNewText( LAYER_NOTES );
+                    break;
+                case SCH_BITMAP_T:
+                    item = m_frame->CreateNewImage();
+                    break;
+                case SCH_SHEET_PIN_T:
+                    item = m_frame->LocateAndShowItem( (wxPoint)cursorPos,
+                                                       SCH_COLLECTOR::SheetsAndSheetLabels );
+                    if( item )
+                    {
+                        if( m_frame->GetToolId() == ID_IMPORT_HLABEL_BUTT )
+                            item = m_frame->ImportSheetPin( (SCH_SHEET*) item );
+                        else
+                            item = m_frame->CreateSheetPin( (SCH_SHEET*) item );
+                    }
+                    break;
+                default:
+                    wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }
 
                 // Restore cursor after dialog
@@ -753,7 +805,6 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
             if( segment || m_busUnfold.in_progress )
             {
                 segment = nullptr;
-                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 s_wires.DeleteAll();
 
                 if( m_busUnfold.entry )
@@ -771,7 +822,8 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
                 m_view->ClearHiddenFlags();
 
                 // Clear flags used in edit functions.
-                getModel<SCH_SCREEN>()->ClearDrawingState();
+                m_frame->GetScreen()->ClearDrawingState();
+                m_frame->GetScreen()->SetCurItem( nullptr );
             }
             else
                 break;
@@ -1013,8 +1065,168 @@ void SCH_DRAWING_TOOL::finishSegments()
     m_frame->TestDanglingEnds();
 
     m_frame->GetScreen()->ClearDrawingState();
-    m_frame->GetScreen()->SetCurItem( NULL );
+    m_frame->GetScreen()->SetCurItem( nullptr );
     m_frame->OnModify();
+}
+
+
+int SCH_DRAWING_TOOL::DrawSheet( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
+    return doDrawSheet( nullptr );
+}
+
+
+int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
+{
+    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetCurItem() );
+
+    if( sheet )
+    {
+        m_frame->SetToolID( ID_POPUP_SCH_RESIZE_SHEET, wxCURSOR_PENCIL, _( "Resize sheet" ) );
+        doDrawSheet( sheet );
+    }
+    else
+        wxFAIL_MSG( "No sheet to resize" );
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
+{
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    if( aSheet )
+    {
+        m_frame->SetUndoItem( aSheet );
+        aSheet->SetFlags( IS_RESIZED );
+
+        m_view->Hide( aSheet );
+        m_view->AddToPreview( aSheet->Clone() );
+
+        m_controls->SetCursorPosition( aSheet->GetResizePosition() );
+        m_controls->SetCrossHairCursorPosition( m_controls->GetCursorPosition() );
+    }
+
+    Activate();
+
+    // Main loop: keep receiving events
+    while( auto evt = Wait() )
+    {
+        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            m_view->ClearPreview();
+
+            if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
+            {
+                if( dynamic_cast<SCH_SHEET*>( m_frame->GetUndoItem() ) )
+                {
+                    delete aSheet;
+                    aSheet = (SCH_SHEET*)m_frame->GetUndoItem();
+                    m_frame->SetUndoItem( nullptr );
+                }
+
+                m_frame->AddToScreen( aSheet );
+                aSheet->ClearFlags();
+                m_view->Hide( aSheet, false );
+
+                m_frame->GetScreen()->SetCurItem( nullptr );
+                break;  // resize sheet is a single-shot command, not a reusable tool
+            }
+            else if( aSheet )
+            {
+                delete aSheet;
+                m_frame->GetScreen()->SetCurItem( nullptr );
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )
+                break;      // exit unconditionally
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
+            {
+                m_frame->SaveUndoItemInUndoList( aSheet );
+                m_frame->OnModify();
+
+                m_view->ClearPreview();
+                m_view->Hide( aSheet, false );
+                m_frame->RefreshItem( aSheet );
+
+                m_frame->GetScreen()->SetCurItem( nullptr );
+                break;  // resize sheet is a single-shot command; when we're done we're done
+            }
+            else if( !aSheet )
+            {
+                aSheet = new SCH_SHEET( cursorPos );
+
+                aSheet->SetFlags( IS_NEW | IS_RESIZED );
+                aSheet->SetTimeStamp( GetNewTimeStamp() );
+                aSheet->SetParent( m_frame->GetScreen() );
+                aSheet->SetScreen( NULL );
+
+                m_frame->SetRepeatItem( nullptr );
+                m_frame->GetScreen()->SetCurItem( aSheet );
+            }
+            else
+            {
+                m_frame->AddItemToScreen( aSheet );
+                aSheet = nullptr;
+
+                m_view->ClearPreview();
+                m_frame->GetScreen()->SetCurItem( nullptr );
+            }
+        }
+        else if( evt->IsMotion() )
+        {
+            m_view->ClearPreview();
+
+            if( aSheet )
+            {
+                wxPoint pos = aSheet->GetPosition();
+                wxPoint size = cursorPos - pos;
+
+                // If the sheet doesn't have any pins, clamp the minimum size to the defaults.
+                size.x = std::max( size.x, MIN_SHEET_WIDTH );
+                size.y = std::max( size.y, MIN_SHEET_HEIGHT );
+
+                if( aSheet->HasPins() )
+                {
+                    int gridSizeX = KiROUND( m_frame->GetScreen()->GetGridSize().x );
+                    int gridSizeY = KiROUND( m_frame->GetScreen()->GetGridSize().y );
+
+                    // Use the pin positions to clamp the minimum width and height.
+                    size.x = std::max( size.x, aSheet->GetMinWidth() + gridSizeX );
+                    size.y = std::max( size.y, aSheet->GetMinHeight() + gridSizeY );
+                }
+
+                wxPoint grid = m_frame->GetNearestGridPosition( pos + size );
+                aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
+
+                m_view->AddToPreview( aSheet->Clone() );
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu();
+        }
+
+        // Enable autopanning and cursor capture only when there is a sheet to be placed
+        m_controls->SetAutoPan( !!aSheet );
+        m_controls->CaptureCursor( !!aSheet );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
 }
 
 
@@ -1032,6 +1244,10 @@ void SCH_DRAWING_TOOL::setTransitions()
     Go( &SCH_DRAWING_TOOL::PlaceLabel,            SCH_ACTIONS::placeLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::DrawSheet,             SCH_ACTIONS::drawSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::ResizeSheet,           SCH_ACTIONS::resizeSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::PlaceSheetPin,         SCH_ACTIONS::placeSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::ImportSheetPin,        SCH_ACTIONS::importSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::DrawLines,             SCH_ACTIONS::drawLines.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );

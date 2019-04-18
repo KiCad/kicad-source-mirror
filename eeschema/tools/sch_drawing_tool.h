@@ -88,6 +88,10 @@ public:
     int PlaceLabel( const TOOL_EVENT& aEvent );
     int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
     int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
+    int DrawSheet( const TOOL_EVENT& aEvent );
+    int ResizeSheet( const TOOL_EVENT& aEvent );
+    int PlaceSheetPin( const TOOL_EVENT& aEvent );
+    int ImportSheetPin( const TOOL_EVENT& aEvent );
     int PlaceSchematicText( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
@@ -103,6 +107,8 @@ private:
 
     int doDrawSegments( int aType );
     void finishSegments();
+
+    int doDrawSheet( SCH_SHEET* aSheet );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

@@ -1335,10 +1335,6 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
 
         if( aItem->Type() == SCH_SHEET_T )
         {
-            // Fix the size and position of the new sheet using the last values set by
-            // the m_mouseCaptureCallback function.
-            m_canvas->SetMouseCapture( NULL, NULL );
-
             if( !EditSheet( (SCH_SHEET*)aItem, g_CurrentSheet, &doClearAnnotation ) )
             {
                 screen->SetCurItem( NULL );

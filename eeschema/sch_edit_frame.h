@@ -1025,8 +1025,6 @@ private:
 
     // Hierarchical Sheet & PinSheet
     void        InstallHierarchyFrame( wxPoint& pos );
-    SCH_SHEET*  CreateSheet( wxDC* DC );
-    void        ReSizeSheet( SCH_SHEET* Sheet, wxDC* DC );
 
     /**
      * Rotate a sheet object.
@@ -1101,8 +1099,7 @@ private:
      */
     bool importFile( const wxString& aFileName, int aFileType );
 
-    bool validateSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy );
-
+public:
     /**
      * Create a new SCH_SHEET_PIN object and add it to \a aSheet at the current cursor position.
      *
@@ -1129,7 +1126,6 @@ private:
      */
     SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet );
 
-public:
     /**
      * Remove \a aItem from the current screen and saves it in the undo list.
      *

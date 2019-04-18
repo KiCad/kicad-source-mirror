@@ -125,6 +125,22 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_HIERLABEL_BUTT:
         return SCH_ACTIONS::placeHierarchicalLabel.MakeEvent();
 
+    case ID_MENU_SHEET_PIN_BUTT:
+    case ID_SHEET_PIN_BUTT:
+        return SCH_ACTIONS::placeSheetPin.MakeEvent();
+
+    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
+    case ID_MENU_IMPORT_HLABEL_BUTT:
+    case ID_IMPORT_HLABEL_BUTT:
+        return SCH_ACTIONS::importSheetPin.MakeEvent();
+
+    case ID_MENU_SHEET_SYMBOL_BUTT:
+    case ID_SHEET_SYMBOL_BUTT:
+        return SCH_ACTIONS::drawSheet.MakeEvent();
+
+    case ID_POPUP_SCH_RESIZE_SHEET:
+        return SCH_ACTIONS::resizeSheet.MakeEvent();
+
     case ID_MENU_TEXT_COMMENT_BUTT:
     case ID_TEXT_COMMENT_BUTT:
         return SCH_ACTIONS::placeSchematicText.MakeEvent();

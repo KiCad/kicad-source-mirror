@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file sheet.cpp
  */
 
 #include <fctsys.h>
@@ -305,157 +301,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
     OnModify();
 
     return true;
-}
-
-
-/* Move selected sheet with the cursor.
- * Callback function used by m_mouseCaptureCallback.
- * Note also now this function is called only when resizing the sheet
- * But the (very small code) relative to sheet move is still present here
- */
-static void resizeSheetWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aPosition,
-                                        bool aErase )
-{
-    BASE_SCREEN*   screen = aPanel->GetScreen();
-    SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( screen->GetCurItem() );
-
-    if( sheet == nullptr )  // Be sure we are using the right object
-        return;
-
-    wxPoint pos = sheet->GetPosition();
-
-    int width  = aPanel->GetParent()->GetCrossHairPosition().x - pos.x;
-    int height = aPanel->GetParent()->GetCrossHairPosition().y - pos.y;
-
-    // If the sheet doesn't have any pins, clamp the minimum size to the default values.
-    width = ( width < MIN_SHEET_WIDTH ) ? MIN_SHEET_WIDTH : width;
-    height = ( height < MIN_SHEET_HEIGHT ) ? MIN_SHEET_HEIGHT : height;
-
-    if( sheet->HasPins() )
-    {
-        int gridSizeX = KiROUND( screen->GetGridSize().x );
-        int gridSizeY = KiROUND( screen->GetGridSize().y );
-
-        // If the sheet has pins, use the pin positions to clamp the minimum width and height.
-        height = ( height < sheet->GetMinHeight() + gridSizeY ) ?
-                 sheet->GetMinHeight() + gridSizeY : height;
-        width = ( width < sheet->GetMinWidth() + gridSizeX ) ?
-                sheet->GetMinWidth() + gridSizeX : width;
-    }
-
-    wxPoint grid = aPanel->GetParent()->GetNearestGridPosition(
-                    wxPoint( pos.x + width, pos.y + height ) );
-    sheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
-
-    auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
-    auto view = panel->GetView();
-
-    view->Hide( sheet );
-    view->ClearPreview();
-    view->AddToPreview( sheet->Clone() );
-}
-
-
-//  Complete sheet move.
-static void ExitSheet( EDA_DRAW_PANEL* aPanel, wxDC* aDC )
-{
-    SCH_SCREEN* screen = (SCH_SCREEN*) aPanel->GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
-
-    SCH_EDIT_FRAME* parent = (SCH_EDIT_FRAME*) aPanel->GetParent();
-
-    if( (item == NULL) || (item->Type() != SCH_SHEET_T) || (parent == NULL) )
-        return;
-
-    parent->SetRepeatItem( NULL );
-
-    if( item->IsNew() )
-    {
-        delete item;
-    }
-    else if( item->IsMoving() || item->IsResized() )
-    {
-        parent->RemoveFromScreen( item );
-        delete item;
-
-        item = parent->GetUndoItem();
-
-        wxCHECK_RET( item != NULL, wxT( "Cannot restore undefined last sheet item." ) );
-
-        parent->AddToScreen( item );
-
-        // the owner of item is no more parent, this is the draw list of screen:
-        parent->SetUndoItem( NULL );
-
-        item->ClearFlags();
-    }
-    else
-    {
-        item->ClearFlags();
-    }
-
-    auto panel = static_cast<SCH_DRAW_PANEL*>( aPanel );
-    auto view = panel->GetView();
-    view->ClearPreview();
-
-    screen->SetCurItem( NULL );
-}
-
-
-// Create hierarchy sheet.
-SCH_SHEET* SCH_EDIT_FRAME::CreateSheet( wxDC* aDC )
-{
-    SetRepeatItem( NULL );
-
-    SCH_SHEET* sheet = new SCH_SHEET( GetCrossHairPosition() );
-
-    sheet->SetFlags( IS_NEW | IS_RESIZED );
-    sheet->SetTimeStamp( GetNewTimeStamp() );
-    sheet->SetParent( GetScreen() );
-    sheet->SetScreen( NULL );
-
-    // need to check if this is being added to the GetDrawItems().
-    // also need to update the hierarchy, if we are adding
-    // a sheet to a screen that already has multiple instances (!)
-    GetScreen()->SetCurItem( sheet );
-    m_canvas->SetMouseCapture( resizeSheetWithMouseCursor, ExitSheet );
-    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, false );
-    m_canvas->CrossHairOff( aDC );
-
-    SetCrossHairPosition( sheet->GetResizePosition() );
-
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->CrossHairOn( aDC );
-
-    return sheet;
-}
-
-
-void SCH_EDIT_FRAME::ReSizeSheet( SCH_SHEET* aSheet, wxDC* aDC )
-{
-    if( aSheet == NULL || aSheet->IsNew() )
-        return;
-
-    wxCHECK_RET( aSheet->Type() == SCH_SHEET_T,
-                 wxString::Format( wxT( "Cannot perform sheet resize on %s object." ),
-                                   GetChars( aSheet->GetClass() ) ) );
-
-    m_canvas->CrossHairOff( aDC );
-    SetCrossHairPosition( aSheet->GetResizePosition() );
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->CrossHairOn( aDC );
-
-    SetUndoItem( aSheet );
-    aSheet->SetFlags( IS_RESIZED );
-
-    std::vector<DANGLING_END_ITEM> emptySet;
-    aSheet->UpdateDanglingState( emptySet );
-
-    m_canvas->SetMouseCapture( resizeSheetWithMouseCursor, ExitSheet );
-    m_canvas->CallMouseCapture( aDC, wxDefaultPosition, true );
-
-    if( aSheet->IsNew() )    // not already in edit, save a copy for undo/redo
-        SetUndoItem( aSheet );
 }
 
 

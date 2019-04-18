@@ -100,6 +100,10 @@ public:
     static TOOL_ACTION placeLabel;
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierarchicalLabel;
+    static TOOL_ACTION drawSheet;
+    static TOOL_ACTION resizeSheet;
+    static TOOL_ACTION placeSheetPin;
+    static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;

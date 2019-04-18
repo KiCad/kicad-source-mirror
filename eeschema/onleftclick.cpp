@@ -29,54 +29,39 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sim/sim_plot_frame.h>
-#include <menus_helpers.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
-#include <sch_sheet_path.h>
+#include <sch_bitmap.h>
 #include <netlist_object.h>
 #include <sch_view.h>
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
-    switch( GetToolId() )
-    {
-    case ID_HIGHLIGHT_BUTT:
-    case ID_WIRE_BUTT:
-    case ID_BUS_BUTT:
-    case ID_NOCONN_BUTT:
-    case ID_JUNCTION_BUTT:
-    case ID_WIRETOBUS_ENTRY_BUTT:
-    case ID_BUSTOBUS_ENTRY_BUTT:
-    case ID_SCH_PLACE_COMPONENT:
-    case ID_PLACE_POWER_BUTT:
-    case ID_LABEL_BUTT:
-    case ID_GLOBALLABEL_BUTT:
-    case ID_HIERLABEL_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
-    case ID_LINE_COMMENT_BUTT:
-    case ID_ADD_IMAGE_BUTT:
-    case ID_ZOOM_SELECTION:
-        return;            // Moved to modern toolset
-    default:
-        break;
-    }
+    SCH_ITEM* item = GetScreen()->GetCurItem();
 
-    SCH_ITEM*   item = GetScreen()->GetCurItem();
-    // item_flags != 0 means a current item in edit, or new ...
-    int item_flags = item ? (item->GetFlags() & ~HIGHLIGHTED) : 0;
-
-    if( ( GetToolId() == ID_NO_TOOL_SELECTED ) || item_flags )
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
         m_canvas->SetAutoPanRequest( false );
         SetRepeatItem( NULL );
 
-        if( item_flags )
+        // item_flags != 0 means a current item in edit
+        if( item && ( item->GetFlags() & ~HIGHLIGHTED ) )
         {
             switch( item->Type() )
             {
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
+            case SCH_TEXT_T:
             case SCH_SHEET_PIN_T:
             case SCH_SHEET_T:
+            case SCH_BUS_WIRE_ENTRY_T:
+            case SCH_BUS_BUS_ENTRY_T:
+            case SCH_JUNCTION_T:
+            case SCH_COMPONENT_T:
             case SCH_FIELD_T:
+            case SCH_BITMAP_T:
+            case SCH_NO_CONNECT_T:
                 AddItemToScreen( item );
                 GetCanvas()->GetView()->ClearPreview();
                 GetCanvas()->GetView()->ClearHiddenFlags();
@@ -100,49 +85,8 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     switch( GetToolId() )
     {
-    case ID_NO_TOOL_SELECTED:
-        break;
-
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         DeleteItemAtCrossHair();
-        break;
-
-    case ID_SHEET_SYMBOL_BUTT:
-        if( item_flags == 0 )
-        {
-            item = CreateSheet( aDC );
-
-            if( item != NULL )
-            {
-                GetScreen()->SetCurItem( item );
-                m_canvas->SetAutoPanRequest( true );
-            }
-        }
-        else
-        {
-            AddItemToScreen( item );
-        }
-        break;
-
-    case ID_IMPORT_HLABEL_BUTT:
-    case ID_SHEET_PIN_BUTT:
-        if( item_flags == 0 )
-            item = LocateAndShowItem( aPosition, SCH_COLLECTOR::SheetsAndSheetLabels );
-
-        if( item == NULL )
-            break;
-
-        if( (item->Type() == SCH_SHEET_T) && (item_flags == 0) )
-        {
-            if( GetToolId() == ID_IMPORT_HLABEL_BUTT )
-                GetScreen()->SetCurItem( ImportSheetPin( (SCH_SHEET*) item ) );
-            else
-                GetScreen()->SetCurItem( CreateSheetPin( (SCH_SHEET*) item ) );
-        }
-        else if( (item->Type() == SCH_SHEET_PIN_T) && (item->GetFlags() != 0) )
-        {
-            AddItemToScreen( item );
-        }
         break;
 
 #ifdef KICAD_SPICE
@@ -199,9 +143,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 #endif /* KICAD_SPICE */
 
     default:
-        SetNoToolSelected();
-        wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick invalid tool ID <" ) +
-                    wxString::Format( wxT( "%d> selected." ), GetToolId() ) );
+        break;
     }
 }
 

@@ -215,15 +215,6 @@
         AddItemToScreen( item );
         break;
 
-    case ID_POPUP_SCH_RESIZE_SHEET:
-        ReSizeSheet( (SCH_SHEET*) item, nullptr );
-        break;
-
-    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
-        if( item != NULL && item->Type() == SCH_SHEET_T )
-            screen->SetCurItem( ImportSheetPin( (SCH_SHEET*) item ) );
-        break;
-
     case ID_POPUP_SCH_CLEANUP_SHEET:
         if( item != NULL && item->Type() == SCH_SHEET_T )
         {
@@ -537,6 +528,12 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
     case ID_ZOOM_SELECTION:
+    case ID_MENU_SHEET_SYMBOL_BUTT:
+    case ID_SHEET_SYMBOL_BUTT:
+    case ID_MENU_SHEET_PIN_BUTT:
+    case ID_SHEET_PIN_BUTT:
+    case ID_MENU_IMPORT_HLABEL_BUTT:
+    case ID_IMPORT_HLABEL_BUTT:
         // moved to modern toolset
         return;
     default:
@@ -549,21 +546,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     {
     case ID_NO_TOOL_SELECTED:
         SetNoToolSelected();
-        break;
-
-    case ID_MENU_SHEET_SYMBOL_BUTT:
-    case ID_SHEET_SYMBOL_BUTT:
-        SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
-        break;
-
-    case ID_MENU_SHEET_PIN_BUTT:
-    case ID_SHEET_PIN_BUTT:
-        SetToolID( ID_SHEET_PIN_BUTT, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
-        break;
-
-    case ID_MENU_IMPORT_HLABEL_BUTT:
-    case ID_IMPORT_HLABEL_BUTT:
-        SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
         break;
 
     case ID_MENU_DELETE_ITEM_BUTT:
