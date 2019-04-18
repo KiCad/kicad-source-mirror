@@ -46,6 +46,23 @@ static MUTEX s_lock;        // for s_initialized
 
 static MUTEX* s_crypto_locks;
 
+/*
+ * From OpenSSL v1.1.0, the CRYPTO_set_locking_callback macro is a no-op.
+ *
+ * Once this is the minimum OpenSSL version, the entire s_crypto_locks
+ * system and related functions can be removed.
+ *
+ * In the meantime, use this macro to determine when to use the callback.
+ * Keep them compiling until then to prevent accidentally breaking older
+ * version builds.
+ *
+ * https://github.com/openssl/openssl/issues/1260
+ */
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
+#define USE_OPENSSL_LOCKING_CALLBACKS
+#endif
+
+
 static void lock_callback( int mode, int type, const char* file, int line )
 {
     (void)file;
@@ -98,6 +115,11 @@ static void init_locks()
     */
 
     CRYPTO_set_locking_callback( &lock_callback );
+
+#ifndef USE_OPENSSL_LOCKING_CALLBACKS
+    // Ignore the unused function (the above macro didn't use it)
+    (void) &lock_callback;
+#endif
 }
 
 
