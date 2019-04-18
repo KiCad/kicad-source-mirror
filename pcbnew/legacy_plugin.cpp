@@ -2308,11 +2308,18 @@ void LEGACY_PLUGIN::loadTrackList( int aStructType )
         flags = static_cast<STATUS_FLAGS>( flags_int );
 
         if( aStructType == PCB_TRACE_T )
+        {
             makeType = ( type == 1 ) ? PCB_VIA_T : PCB_TRACE_T;
+        }
         else if (aStructType == NOT_USED )
+        {
             continue;
+        }
         else
+        {
             wxFAIL_MSG( "Segment type unknown" );
+            continue;
+        }
 
         TRACK* newTrack;
 
