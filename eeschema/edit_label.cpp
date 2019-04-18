@@ -117,9 +117,6 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
     if( textItem->Type() == SCH_GLOBAL_LABEL_T || textItem->Type() == SCH_HIER_LABEL_T )
         lastGlobalLabelShape = textItem->GetShape();
 
-    // Prepare display to move the new item
-    PrepareMoveItem( textItem );
-
     return textItem;
 }
 
