@@ -89,9 +89,15 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_PLACE_POWER_BUTT:
         return SCH_ACTIONS::placePower.MakeEvent();
 
+    case ID_POPUP_SCH_BEGIN_WIRE:
+        return SCH_ACTIONS::startWire.MakeEvent();
+
     case ID_MENU_WIRE_BUTT:
     case ID_WIRE_BUTT:
         return SCH_ACTIONS::drawWire.MakeEvent();
+
+    case ID_POPUP_SCH_BEGIN_BUS:
+        return SCH_ACTIONS::startBus.MakeEvent();
 
     case ID_MENU_BUS_BUTT:
     case ID_BUS_BUTT:
@@ -100,6 +106,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_MENU_NOCONN_BUTT:
     case ID_NOCONN_BUTT:
         return SCH_ACTIONS::placeNoConnect.MakeEvent();
+
+    case ID_POPUP_SCH_ADD_JUNCTION:
+        return SCH_ACTIONS::addJunction.MakeEvent();
 
     case ID_MENU_JUNCTION_BUTT:
     case ID_JUNCTION_BUTT:
@@ -113,13 +122,19 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_BUSTOBUS_ENTRY_BUTT:
         return SCH_ACTIONS::placeBusBusEntry.MakeEvent();
 
+    case ID_POPUP_SCH_ADD_LABEL:
+        return SCH_ACTIONS::addLabel.MakeEvent();
+
     case ID_MENU_LABEL_BUTT:
     case ID_LABEL_BUTT:
         return SCH_ACTIONS::placeLabel.MakeEvent();
 
+    case ID_POPUP_SCH_ADD_GLABEL:
+        return SCH_ACTIONS::addGlobalLabel.MakeEvent();
+
     case ID_MENU_GLABEL_BUTT:
     case ID_GLOBALLABEL_BUTT:
-        return SCH_ACTIONS::placeLabel.MakeEvent();
+        return SCH_ACTIONS::placeGlobalLabel.MakeEvent();
 
     case ID_MENU_HIERLABEL_BUTT:
     case ID_HIERLABEL_BUTT:

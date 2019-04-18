@@ -76,6 +76,12 @@ public:
         return m_menu;
     }
 
+    int StartWire( const TOOL_EVENT& aEvent );
+    int StartBus( const TOOL_EVENT& aEvent );
+    int AddJunction( const TOOL_EVENT& aEvent );
+    int AddLabel( const TOOL_EVENT& aEvent );
+    int AddGlobalLabel( const TOOL_EVENT& aEvent );
+
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int PlacePower( const TOOL_EVENT& aEvent );
     int DrawWire( const TOOL_EVENT& aEvent );
@@ -98,6 +104,8 @@ public:
 
 private:
 
+    int doAddItem( KICAD_T aType );
+
     int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
                           SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
 
@@ -105,7 +113,8 @@ private:
 
     int doTwoClickPlace( KICAD_T aType );
 
-    int doDrawSegments( int aType );
+    int doDrawSegments( int aType, SCH_LINE* aSegment );
+    SCH_LINE* startSegments( int aType, const wxPoint& aPos );
     void finishSegments();
 
     int doDrawSheet( SCH_SHEET* aSheet );

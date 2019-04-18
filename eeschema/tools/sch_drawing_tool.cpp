@@ -56,9 +56,17 @@ TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
         _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
 
+TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
+        _( "Add Wire" ), _( "Start drawing a wire" ), NULL, AF_ACTIVATE );
+
 TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
         _( "Add Wire" ), _( "Add a wire" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
+        _( "Add Bus" ), _( "Start drawing a bus" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
@@ -83,7 +91,7 @@ TOOL_ACTION SCH_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBus
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
         _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placePLabel",
+TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
         _( "Add Label" ), _( "Add a net label" ), NULL, AF_ACTIVATE );
 
@@ -127,6 +135,16 @@ TOOL_ACTION SCH_ACTIONS::finishDrawing( "eeschema.InteractiveDrawing.finishDrawi
         AS_GLOBAL, 0, "", "", NULL, AF_NONE );
 
 
+TOOL_ACTION SCH_ACTIONS::addJunction( "eeschema.InteractiveEditing.addJunction",
+        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::addLabel( "eeschema.InteractiveEditing.addLabel",
+        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::addGlobalLabel( "eeschema.InteractiveEditing.addGlobalLabel",
+        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+
+
 SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
     TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
     m_view( nullptr ),
@@ -165,6 +183,49 @@ void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     m_controls = getViewControls();
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
+}
+
+
+int SCH_DRAWING_TOOL::AddJunction( const TOOL_EVENT& aEvent )
+{
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    m_frame->AddJunction( m_frame->GetCrossHairPosition() );
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::AddLabel( const TOOL_EVENT& aEvent )
+{
+    return doAddItem( SCH_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::AddGlobalLabel( const TOOL_EVENT& aEvent )
+{
+    return doAddItem( SCH_GLOBAL_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::doAddItem( KICAD_T aType )
+{
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+
+    SCH_ITEM* item = nullptr;
+
+    switch( aType )
+    {
+    case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
+    case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
+    default:                 wxFAIL_MSG( "doAddItem(): unknown type" );
+    }
+
+    m_frame->AddItemToScreen( item );
+    m_frame->SetNoToolSelected();
+
+    return 0;
 }
 
 
@@ -569,17 +630,37 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 }
 
 
+int SCH_DRAWING_TOOL::StartWire( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    SCH_LINE* segment = startSegments( LAYER_WIRE, m_frame->GetCrossHairPosition() );
+    return doDrawSegments( LAYER_WIRE, segment );
+}
+
+
 int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-    return doDrawSegments( LAYER_WIRE );
+    return doDrawSegments( LAYER_WIRE, nullptr );
+}
+
+
+int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    SCH_LINE* segment = startSegments( LAYER_BUS, m_frame->GetCrossHairPosition() );
+    return doDrawSegments( LAYER_BUS, segment );
 }
 
 
 int SCH_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
-    return doDrawSegments( LAYER_BUS );
+    return doDrawSegments( LAYER_BUS, nullptr );
 }
 
 
@@ -618,14 +699,14 @@ int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
 
     m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
-    return doDrawSegments( LAYER_WIRE );
+    return doDrawSegments( LAYER_WIRE, nullptr );
 }
 
 
 int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
 {
     m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
-    return doDrawSegments( LAYER_NOTES );
+    return doDrawSegments( LAYER_NOTES, nullptr );
 }
 
 
@@ -784,10 +865,9 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 }
 
 
-int SCH_DRAWING_TOOL::doDrawSegments( int aType )
+int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 {
-    SCH_LINE* segment = nullptr;
-    bool      forceHV = m_frame->GetForceHVLines();
+    bool forceHV = m_frame->GetForceHVLines();
 
     m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -802,9 +882,9 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
 
         if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
         {
-            if( segment || m_busUnfold.in_progress )
+            if( aSegment || m_busUnfold.in_progress )
             {
-                segment = nullptr;
+                aSegment = nullptr;
                 s_wires.DeleteAll();
 
                 if( m_busUnfold.entry )
@@ -833,7 +913,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
         }
         else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
         {
-            if( segment || m_busUnfold.in_progress )
+            if( aSegment || m_busUnfold.in_progress )
             {
                 finishSegments();
                 break;
@@ -844,7 +924,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
             // JEY TODO
             // m_menu.ShowContextMenu();
         }
-        else if( evt->IsClick( BUT_LEFT ) || ( segment && evt->IsDblClick( BUT_LEFT ) ) )
+        else if( evt->IsClick( BUT_LEFT ) || ( aSegment && evt->IsDblClick( BUT_LEFT ) ) )
         {
             // First click when unfolding places the label and wire-to-bus entry
             if( m_busUnfold.in_progress && !m_busUnfold.label_placed )
@@ -854,60 +934,41 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
                 m_frame->AddToScreen( m_busUnfold.label );
                 m_busUnfold.label_placed = true;
 
-                segment->ClearFlags( IS_NEW );
-                segment->SetFlags( SELECTED );
+                aSegment->ClearFlags( IS_NEW );
+                aSegment->SetFlags( SELECTED );
 
-                segment = new SCH_LINE( *segment );
-                segment->SetFlags( IS_NEW );
-                segment->SetStartPoint( cursorPos );
-                s_wires.PushBack( segment );
-                m_frame->GetScreen()->SetCurItem( segment );
+                aSegment = new SCH_LINE( *aSegment );
+                aSegment->SetFlags( IS_NEW );
+                aSegment->SetStartPoint( cursorPos );
+                s_wires.PushBack( aSegment );
+                m_frame->GetScreen()->SetCurItem( aSegment );
             }
-            else if( !segment )
+            else if( !aSegment )
             {
-                switch( aType )
-                {
-                default:         segment = new SCH_LINE( cursorPos, LAYER_NOTES ); break;
-                case LAYER_WIRE: segment = new SCH_LINE( cursorPos, LAYER_WIRE );  break;
-                case LAYER_BUS:  segment = new SCH_LINE( cursorPos, LAYER_BUS );   break;
-                }
-
-                segment->SetFlags( IS_NEW );
-                s_wires.PushBack( segment );
-                m_frame->GetScreen()->SetCurItem( segment );
-
-                // We need 2 segments to go from a given start pin to an end point when the
-                // horizontal and vertical lines only switch is on.
-                if( forceHV )
-                {
-                    segment = new SCH_LINE( *segment );
-                    segment->SetFlags( IS_NEW );
-                    s_wires.PushBack( segment );
-                    m_frame->GetScreen()->SetCurItem( segment );
-                }
+                aSegment = startSegments( aType, cursorPos );
             }
             // Create a new segment if we're out of previously-created ones
-            else if( !segment->IsNull() || ( forceHV && !segment->Back()->IsNull() ) )
+            else if( !aSegment->IsNull() || ( forceHV && !aSegment->Back()->IsNull() ) )
             {
                 // Terminate the command if the end point is on a pin, junction, or another
                 // wire or bus.
                 if( !m_busUnfold.in_progress &&
-                        m_frame->GetScreen()->IsTerminalPoint( cursorPos, segment->GetLayer() ) )
+                        m_frame->GetScreen()->IsTerminalPoint( cursorPos, aSegment->GetLayer() ) )
                 {
                     finishSegments();
                     break;
                 }
 
-                segment->SetEndPoint( cursorPos );
-                segment->ClearFlags( IS_NEW );
-                segment->SetFlags( SELECTED );
+                aSegment->SetEndPoint( cursorPos );
+                aSegment->ClearFlags( IS_NEW );
+                aSegment->SetFlags( SELECTED );
 
                 // Create a new segment, and chain it after the current new segment.
-                segment = new SCH_LINE( *segment );
-                segment->SetFlags( IS_NEW );
-                segment->SetStartPoint( cursorPos );
-                s_wires.PushBack( segment );
-                m_frame->GetScreen()->SetCurItem( segment );
+                aSegment = new SCH_LINE( *aSegment );
+                aSegment->SetFlags( IS_NEW );
+                aSegment->SetStartPoint( cursorPos );
+                s_wires.PushBack( aSegment );
+                m_frame->GetScreen()->SetCurItem( aSegment );
             }
 
             if( evt->IsDblClick( BUT_LEFT ) )
@@ -953,13 +1014,13 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
                 m_view->AddToPreview( m_busUnfold.label->Clone() );
             }
 
-            if( segment )
+            if( aSegment )
             {
                 // Coerce the line to vertical or horizontal if necessary
                 if( forceHV )
-                    computeBreakPoint( m_frame->GetScreen(), segment->Back(), cursorPos );
+                    computeBreakPoint( m_frame->GetScreen(), aSegment->Back(), cursorPos );
                 else
-                    segment->SetEndPoint( cursorPos );
+                    aSegment->SetEndPoint( cursorPos );
             }
 
             for( auto seg = s_wires.begin(); seg; seg = seg->Next() )
@@ -970,13 +1031,43 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType )
         }
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
-        m_controls->SetAutoPan( !!segment );
-        m_controls->CaptureCursor( !!segment );
+        m_controls->SetAutoPan( !!aSegment );
+        m_controls->CaptureCursor( !!aSegment );
     }
 
     m_frame->SetNoToolSelected();
 
     return 0;
+}
+
+
+SCH_LINE* SCH_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
+{
+    SCH_LINE* segment = nullptr;
+    bool      forceHV = m_frame->GetForceHVLines();
+
+    switch( aType )
+    {
+    default:         segment = new SCH_LINE( aPos, LAYER_NOTES ); break;
+    case LAYER_WIRE: segment = new SCH_LINE( aPos, LAYER_WIRE );  break;
+    case LAYER_BUS:  segment = new SCH_LINE( aPos, LAYER_BUS );   break;
+    }
+
+    segment->SetFlags( IS_NEW );
+    s_wires.PushBack( segment );
+    m_frame->GetScreen()->SetCurItem( segment );
+
+    // We need 2 segments to go from a given start pin to an end point when the
+    // horizontal and vertical lines only switch is on.
+    if( forceHV )
+    {
+        segment = new SCH_LINE( *segment );
+        segment->SetFlags( IS_NEW );
+        s_wires.PushBack( segment );
+        m_frame->GetScreen()->SetCurItem( segment );
+    }
+
+    return segment;
 }
 
 
@@ -1251,4 +1342,10 @@ void SCH_DRAWING_TOOL::setTransitions()
     Go( &SCH_DRAWING_TOOL::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::DrawLines,             SCH_ACTIONS::drawLines.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
+
+    Go( &SCH_DRAWING_TOOL::StartWire,             SCH_ACTIONS::startWire.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::StartBus,              SCH_ACTIONS::startBus.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddGlobalLabel,        SCH_ACTIONS::addGlobalLabel.MakeEvent() );
 }

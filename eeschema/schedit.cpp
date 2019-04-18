@@ -164,16 +164,6 @@
         m_toolManager->RunAction( SCH_ACTIONS::finishDrawing, true );
         break;
 
-    case ID_POPUP_SCH_BEGIN_WIRE:
-        m_canvas->MoveCursorToCrossHair();
-        OnLeftClick( nullptr, GetCrossHairPosition() );
-        break;
-
-    case ID_POPUP_SCH_BEGIN_BUS:
-        m_canvas->MoveCursorToCrossHair();
-        OnLeftClick( nullptr, GetCrossHairPosition() );
-        break;
-
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
         m_canvas->MoveCursorToCrossHair();
@@ -309,26 +299,6 @@
         screen->m_BlockLocate.SetCommand( BLOCK_DRAG );
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_SCH_ADD_JUNCTION:
-        m_canvas->MoveCursorToCrossHair();
-        screen->SetCurItem( AddJunction( GetCrossHairPosition() ) );
-
-        TestDanglingEnds();
-        m_canvas->Refresh();
-
-        screen->SetCurItem( NULL );
-        break;
-
-    case ID_POPUP_SCH_ADD_LABEL:
-    case ID_POPUP_SCH_ADD_GLABEL:
-        item =  CreateNewText( id == ID_POPUP_SCH_ADD_LABEL ? LAYER_LOCLABEL : LAYER_GLOBLABEL );
-        screen->SetCurItem( item );
-
-        if( item )
-            AddItemToScreen( item );
-
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:

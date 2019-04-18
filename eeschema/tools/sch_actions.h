@@ -90,7 +90,9 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
     static TOOL_ACTION placePower;
+    static TOOL_ACTION startWire;
     static TOOL_ACTION drawWire;
+    static TOOL_ACTION startBus;
     static TOOL_ACTION drawBus;
     static TOOL_ACTION unfoldBus;
     static TOOL_ACTION placeNoConnect;
@@ -111,6 +113,9 @@ public:
 
     // Editing
     static TOOL_ACTION properties;
+    static TOOL_ACTION addJunction;
+    static TOOL_ACTION addLabel;
+    static TOOL_ACTION addGlobalLabel;
 
     /// Clipboard
     static TOOL_ACTION copyToClipboard;
