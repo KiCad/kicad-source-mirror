@@ -21,6 +21,11 @@
 
 # kicad2step s-expr handling routines
 
+if( NOT TARGET kicad2step_lib )
+    # Can't build this test without the underlying library
+    return()
+endif()
+
 set( K2S_TEST_SRCS
     test_module.cpp
 
