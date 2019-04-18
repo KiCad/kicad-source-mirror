@@ -333,11 +333,12 @@ bool BOARD_NETLIST_UPDATER::updateComponentPadConnections( MODULE* aPcbComponent
 
                 if( netinfo == nullptr )
                 {
+                    netinfo = new NETINFO_ITEM( m_board, netName );
+
                     // It is a new net, we have to add it
                     if( !m_isDryRun )
                     {
                         changed = true;
-                        netinfo = new NETINFO_ITEM( m_board, netName );
                         m_commit.Add( netinfo );
                     }
 
@@ -744,6 +745,13 @@ bool BOARD_NETLIST_UPDATER::UpdateNetlist( NETLIST& aNetlist )
         // and the current pad list is wrong in this case.
         deleteSinglePadNets();
 
+    if( m_isDryRun )
+    {
+        for( auto it : m_addedNets )
+            delete it.second;
+
+        m_addedNets.clear();
+    }
 
     // Update the ratsnest
     m_reporter->ReportTail( wxT( "" ), REPORTER::RPT_ACTION );
