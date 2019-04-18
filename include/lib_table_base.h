@@ -415,6 +415,24 @@ public:
     bool InsertRow( LIB_TABLE_ROW* aRow, bool doReplace = false );
 
     /**
+     * Removes a row from the table.
+     * @param aRow is the row to remove
+     * @return true if the row was found (and removed)
+     */
+    bool RemoveRow( LIB_TABLE_ROW* aRow )
+    {
+        for( auto iter = rows.begin(); iter != rows.end(); ++iter )
+        {
+            if( *iter == *aRow )
+            {
+                rows.erase( iter, iter + 1 );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * @return a #LIB_TABLE_ROW pointer if \a aURI is found in this table or in any chained
      *         fallBack table fragments, else NULL.
      */

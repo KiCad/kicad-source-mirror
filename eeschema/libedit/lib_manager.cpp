@@ -645,14 +645,15 @@ bool LIB_MANAGER::addLibrary( const wxString& aFilePath, bool aCreate, SYMBOL_LI
 
     if( aCreate )
     {
-        // CreateSymbolLib() fails if the file exists
-        if( wxFileName::Exists( aFilePath ) )
+        try
         {
-            if( !wxRemoveFile( aFilePath ) )
-                return false;
+            aTable->CreateSymbolLib( libName );
         }
-
-        aTable->CreateSymbolLib( libName );
+        catch( const IO_ERROR& e )
+        {
+            aTable->RemoveRow( libRow );
+            return false;
+        }
     }
 
     m_frame.SyncLibraries( false );
@@ -682,10 +683,12 @@ std::set<LIB_PART*> LIB_MANAGER::getOriginalParts( const wxString& aLibrary )
             LIB_ALIAS* alias = symTable()->LoadSymbol( aLibrary, aliasName );
             parts.insert( alias->GetPart() );
         }
-    } catch( const IO_ERROR& e )
+    }
+    catch( const IO_ERROR& e )
     {
-        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate "
-                "library \"%s\"" ), aLibrary ), e.What() );
+        DisplayErrorMessage( &m_frame, wxString::Format( _( "Cannot enumerate library \"%s\"" ),
+                                                         aLibrary ),
+                             e.What() );
     }
 
     return parts;
