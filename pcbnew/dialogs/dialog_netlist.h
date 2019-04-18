@@ -52,6 +52,8 @@ private:
 
     void loadNetlist( bool aDryRun );
 
+
+
     // Virtual event handlers:
     void OnOpenNetlistClick( wxCommandEvent& event ) override;
     void OnUpdatePCB( wxCommandEvent& event ) override;

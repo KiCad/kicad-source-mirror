@@ -61,6 +61,7 @@ class REPORTER;
 struct PARSE_ERROR;
 class IO_ERROR;
 class FP_LIB_TABLE;
+class BOARD_NETLIST_UPDATER;
 
 namespace PCB { struct IFACE; }     // KIFACE_I is in pcbnew.cpp
 
@@ -1564,36 +1565,23 @@ public:
     void DoUpdatePCBFromNetlist( NETLIST& aNetlist, bool aUseTimestamps );
 
     /**
-     * Function ReadPcbNetlist
-     * reads \a aNetlistFileName and updates the footprints (load missing footprints and
-     * delete on demand extra footprints) on the board.
-     * Update connectivity info, references, values and "TIME STAMP"
+     * Reads a netlist from a file into a NETLIST object.
      *
-     * @param aNetlistFileName = netlist file name (*.net)
-     * @param aCmpFileName = cmp/footprint link file name (*.cmp).
-     *                       if not found or empty, only the netlist will be used
-     * @param aReporter a #REPORTER object to write display messages.
-     * @param aChangeFootprint if true, footprints that have changed in netlist will be changed
-     * @param aDeleteBadTracks if true, erroneous tracks will be deleted
-     * @param aDeleteExtraFootprints if true, remove unlocked footprints that are not in netlist
-     * @param aSelectByTimestamp if true, use timestamp instead of reference to identify
-     *                           footprints from components (use after reannotation of the
-     *                           schematic)
-     * @param aDeleteSinglePadNets if true, remove nets counting only one pad
-     *                             and set net code to 0 for these pads
-     * @param aIsDryRun performs a dry run without making any changes if true.
-     * @param runDragCommand indicates that a selection was created which should be dragged.
+     * @param aFilename is the netlist to load
+     * @param aNetlist is the object to populate with data
+     * @param aReporter is a #REPORTER object to display messages
+     * @return true if the netlist was read successfully
      */
-    void ReadPcbNetlist( const wxString&  aNetlistFileName,
-                         const wxString&  aCmpFileName,
-                         REPORTER&        aReporter,
-                         bool             aChangeFootprint,
-                         bool             aDeleteBadTracks,
-                         bool             aDeleteExtraFootprints,
-                         bool             aSelectByTimestamp,
-                         bool             aDeleteSinglePadNets,
-                         bool             aIsDryRun,
-                         bool*            runDragCommand );
+    bool ReadNetlistFromFile( const wxString &aFilename,
+                              NETLIST& aNetlist,
+                              REPORTER& aReporter );
+
+    /**
+     * Called after netlist is updated
+     * @param aUpdater is the updater object that was run
+     * @param aRunDragCommand is set to true if the drag command was invoked by this call
+     */
+    void OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater, bool* aRunDragCommand );
 
     /**
      * Function RemoveMisConnectedTracks

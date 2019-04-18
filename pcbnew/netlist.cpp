@@ -49,97 +49,83 @@ using namespace std::placeholders;
 #include <ratsnest_data.h>
 #include <pcbnew.h>
 #include <io_mgr.h>
+#include <board_netlist_updater.h>
 
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
+#include <tools/selection_tool.h>
 #include <view/view.h>
 
 
-void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
-                                     const wxString& aCmpFileName,
-                                     REPORTER&       aReporter,
-                                     bool            aChangeFootprints,
-                                     bool            aDeleteUnconnectedTracks,
-                                     bool            aDeleteExtraFootprints,
-                                     bool            aSelectByTimeStamp,
-                                     bool            aDeleteSinglePadNets,
-                                     bool            aIsDryRun,
-                                     bool*           runDragCommand )
+bool PCB_EDIT_FRAME::ReadNetlistFromFile( const wxString &aFilename,
+                                          NETLIST& aNetlist,
+                                          REPORTER& aReporter )
 {
-    wxString        msg;
-    NETLIST         netlist;
-    KIGFX::VIEW*    view = GetGalCanvas()->GetView();
-    BOARD*          board = GetBoard();
-    std::vector<MODULE*> newFootprints;
-    // keep trace of the initial baord area, if we want to place new footprints
-    // outside the existinag board
-    EDA_RECT bbox = board->GetBoundingBox();
-
-    netlist.SetIsDryRun( aIsDryRun );
-    netlist.SetFindByTimeStamp( aSelectByTimeStamp );
-    netlist.SetDeleteExtraFootprints( aDeleteExtraFootprints );
-    netlist.SetReplaceFootprints( aChangeFootprints );
+    wxString msg;
 
     try
     {
         std::unique_ptr<NETLIST_READER> netlistReader( NETLIST_READER::GetNetlistReader(
-            &netlist, aNetlistFileName, aCmpFileName ) );
+                &aNetlist, aFilename, wxEmptyString ) );
 
         if( !netlistReader.get() )
         {
-            msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aNetlistFileName ) );
+            msg.Printf( _( "Cannot open netlist file \"%s\"." ), GetChars( aFilename ) );
             wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR, this );
-            return;
+            return false;
         }
 
-        SetLastNetListRead( aNetlistFileName );
+        SetLastNetListRead( aFilename );
         netlistReader->LoadNetlist();
-        LoadFootprints( netlist, aReporter );
+        LoadFootprints( aNetlist, aReporter );
     }
     catch( const IO_ERROR& ioe )
     {
         msg.Printf( _( "Error loading netlist.\n%s" ), ioe.What().GetData() );
         wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
-        return;
+        return false;
     }
 
-    // Clear undo and redo lists to avoid inconsistencies between lists
-    if( !netlist.IsDryRun() )
-        GetScreen()->ClearUndoRedoList();
+    SetLastNetListRead( aFilename );
 
-    if( !netlist.IsDryRun() )
-    {
-        // Remove old modules
-        for( MODULE* module = board->m_Modules; module; module = module->Next() )
-            view->Remove( module );
-    }
+    return true;
+}
 
-    // Clear selection, just in case a selected item has to be removed
-    m_toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
-    *runDragCommand = false;
 
-    netlist.SortByReference();
-    board->ReplaceNetlist( netlist, aDeleteSinglePadNets, &newFootprints, aReporter );
+void PCB_EDIT_FRAME::OnNetlistChanged( BOARD_NETLIST_UPDATER& aUpdater,
+                                       bool* aRunDragCommand )
+{
+    BOARD* board = GetBoard();
 
-    // If it was a dry run, nothing has changed so we're done.
-    if( netlist.IsDryRun() )
-        return;
+    SetCurItem( nullptr );
+    SetMsgPanel( board );
 
-    wxPoint placementAreaPosition = GetCrossHairPosition();
+    TOOL_MANAGER* toolManager = GetToolManager();
+
+    // Update rendered tracks and vias net labels
+    auto view = GetGalCanvas()->GetView();
+
+    // TODO is there a way to extract information about which nets were modified?
+    for( auto track : board->Tracks() )
+        view->Update( track );
+
+    std::vector<MODULE*> newFootprints = aUpdater.GetAddedComponents();
+
+    // Spread new footprints.
+    wxPoint areaPosition = GetCrossHairPosition();
+    EDA_RECT bbox = board->GetBoundingBox();
 
     if( !IsGalCanvasActive() )
     {
         // In legacy mode place area to the left side of the board.
         // if the board is empty, the bbox position is (0,0)
-        placementAreaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
-        placementAreaPosition.y = bbox.GetOrigin().y;
+        areaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
+        areaPosition.y = bbox.GetOrigin().y;
     }
 
-    SpreadFootprints( &newFootprints, false, false, placementAreaPosition );
+    toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    // Reload modules
-    for( MODULE* module = board->m_Modules; module; module = module->Next() )
-        view->Add( module );
+    SpreadFootprints( &newFootprints, false, false, areaPosition, false );
 
     if( IsGalCanvasActive() )
     {
@@ -147,31 +133,20 @@ void PCB_EDIT_FRAME::ReadPcbNetlist( const wxString& aNetlistFileName,
         if( !newFootprints.empty() )
         {
             for( MODULE* footprint : newFootprints )
-                m_toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
+                toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
 
-            *runDragCommand = true;
+            *aRunDragCommand = true;
+
+            // Now fix a reference point to move the footprints.
+            // We use the first footprint in list as reference point
+            // The graphic cursor will be on this fp when moving the footprints.
+            SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
+            SELECTION& selection = selTool->GetSelection();
+            selection.SetReferencePoint( newFootprints[0]->GetPosition() );
         }
     }
 
-    OnModify();
-
-    SetCurItem( NULL );
-
-    if( aDeleteUnconnectedTracks && board->m_Track )
-    {
-        // Remove erroneous tracks.  This should probably pushed down to the #BOARD object.
-        RemoveMisConnectedTracks();
-    }
-
-    // Rebuild the board connectivity:
-    board->GetConnectivity()->Build( board );
-
-    // TODO is there a way to extract information about which nets were modified?
-    for( auto track : board->Tracks() )
-        view->Update( track );
-
-    SetMsgPanel( board );
-    m_canvas->Refresh();
+    GetCanvas()->Refresh();
 }
 
 

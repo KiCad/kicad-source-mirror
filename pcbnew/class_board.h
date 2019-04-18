@@ -243,9 +243,6 @@ public:
 private:
     DLIST<BOARD_ITEM>           m_Drawings;             // linked list of lines & texts
 
-    // TODO: remove this when BOARD::updateComponentPadConnections is removed
-    std::map< wxString, wxString > m_oldToNewNets;
-
 public:
 
     DLIST<MODULE>               m_Modules;              // linked list of MODULEs
@@ -869,43 +866,6 @@ public:
      */
     MODULE* FindModule( const wxString& aRefOrTimeStamp, bool aSearchByTimeStamp = false ) const;
 
-    /**
-     * Function ReplaceNetlist
-     * updates the #BOARD according to \a aNetlist.
-     *
-     * The changes are made to the board are as follows they are not disabled in the status
-     * settings in the #NETLIST:
-     * - If a new component is found in the #NETLIST and not in the #BOARD, it is added
-     *   to the #BOARD.
-     * - If a the component in the #NETLIST is already on the #BOARD, then one or more of the
-     *   following actions can occur:
-     *   + If the footprint name in the #NETLIST does not match the footprint name on the
-     *     #BOARD, the footprint on the #BOARD is replaced with the footprint specified in
-     *     the #NETLIST and the proper parameters are copied from the existing footprint.
-     *   + If the reference designator in the #NETLIST does not match the reference designator
-     *     on the #BOARD, the reference designator is updated from the #NETLIST.
-     *   + If the value field in the #NETLIST does not match the value field on the #BOARD,
-     *     the value field is updated from the #NETLIST.
-     *   + If the time stamp in the #NETLIST does not match the time stamp  on the #BOARD,
-     *     the time stamp is updated from the #NETLIST.
-     * - After each footprint is added or update as described above, each footprint pad net
-     *   name is compared and updated to the value defined in the #NETLIST.
-     * - After all of the footprints have been added, updated, and net names properly set,
-     *   any extra unlock footprints are removed from the #BOARD.
-     *
-     * @param aNetlist is the new netlist to revise the contents of the #BOARD with.
-     * @param aDeleteSinglePadNets if true, remove nets counting only one pad
-     *                             and set net code to 0 for these pads
-     * @param aNewFootprints is a pointer the to a list of new footprints used when updating
-     *                       the netlist.
-     * @param aReporter is a #REPORTER object to report the changes \a aNetlist makes to
-     *                  the #BOARD.
-     */
-    void ReplaceNetlist( NETLIST& aNetlist, bool aDeleteSinglePadNets,
-                         std::vector<MODULE*>* aNewFootprints, REPORTER& aReporter );
-
-    void updateComponentPadConnections( NETLIST& aNetlist, MODULE* footprint,
-                                        COMPONENT* component, REPORTER& aReporter );
     /**
      * Function SortedNetnamesList
      * @param aNames An array string to fill with net names.

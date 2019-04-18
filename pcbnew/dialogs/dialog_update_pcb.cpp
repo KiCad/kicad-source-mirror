@@ -103,14 +103,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     m_messagePanel->Clear();
 
     REPORTER& reporter = m_messagePanel->Reporter();
-    TOOL_MANAGER* toolManager = m_frame->GetToolManager();
-    BOARD* board = m_frame->GetBoard();
 
-    // keep trace of the initial baord area, if we want to place new footprints
-    // outside the existinag board
-    EDA_RECT bbox = board->GetBoundingBox();
-
-    toolManager->RunAction( PCB_ACTIONS::selectionClear, true );
     m_runDragCommand = false;
 
     m_netlist->SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
@@ -131,51 +124,7 @@ void DIALOG_UPDATE_PCB::PerformUpdate( bool aDryRun )
     if( aDryRun )
         return;
 
-    m_frame->SetCurItem( nullptr );
-    m_frame->SetMsgPanel( board );
-
-    // Update rendered tracks and vias net labels
-    auto view = m_frame->GetGalCanvas()->GetView();
-
-    // TODO is there a way to extract information about which nets were modified?
-    for( auto track : board->Tracks() )
-        view->Update( track );
-
-    std::vector<MODULE*> newFootprints = updater.GetAddedComponents();
-
-    // Spread new footprints.
-    wxPoint areaPosition = m_frame->GetCrossHairPosition();
-
-    if( !m_frame->IsGalCanvasActive() )
-    {
-        // In legacy mode place area to the left side of the board.
-        // if the board is empty, the bbox position is (0,0)
-        areaPosition.x = bbox.GetEnd().x + Millimeter2iu( 10 );
-        areaPosition.y = bbox.GetOrigin().y;
-    }
-
-    m_frame->SpreadFootprints( &newFootprints, false, false, areaPosition, false );
-
-    if( m_frame->IsGalCanvasActive() )
-    {
-        // Start drag command for new modules
-        if( !newFootprints.empty() )
-        {
-            for( MODULE* footprint : newFootprints )
-                toolManager->RunAction( PCB_ACTIONS::selectItem, true, footprint );
-
-            m_runDragCommand = true;
-
-            // Now fix a reference point to move the footprints.
-            // We use the first footprint in list as reference point
-            // The graphic cursor will be on this fp when moving the footprints.
-            SELECTION_TOOL* selTool = toolManager->GetTool<SELECTION_TOOL>();
-            SELECTION& selection = selTool->GetSelection();
-            selection.SetReferencePoint( newFootprints[0]->GetPosition() );
-        }
-    }
-
-    m_frame->GetCanvas()->Refresh();
+    m_frame->OnNetlistChanged( updater, &m_runDragCommand );
 }
 
 

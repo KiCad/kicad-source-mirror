@@ -45,6 +45,7 @@
 #include <class_module.h>
 #include <connectivity/connectivity_data.h>
 #include <wildcards_and_files_ext.h>
+#include <board_netlist_updater.h>
 
 #include <dialog_netlist.h>
 #include <wx_html_report_panel.h>
@@ -184,34 +185,11 @@ void DIALOG_NETLIST::OnTestFootprintsClick( wxCommandEvent& event )
     }
 
     wxString        netlistFilename = m_NetlistFilenameCtrl->GetValue();
-    NETLIST_READER* netlistReader;
     NETLIST         netlist;
     wxBusyCursor    dummy;         // Shows an hourglass while calculating.
 
-    try
-    {
-        netlistReader = NETLIST_READER::GetNetlistReader( &netlist, netlistFilename, "" );
-
-        if( netlistReader == NULL )
-        {
-            wxString msg = wxString::Format( _( "Cannot open netlist file \"%s\"." ),
-                                             netlistFilename );
-            wxMessageBox( msg, _( "Netlist Load Error." ), wxOK | wxICON_ERROR );
-            return;
-        }
-
-        std::unique_ptr< NETLIST_READER > nlr( netlistReader );
-        netlistReader->LoadNetlist();
-
-        m_parent->SetLastNetListRead( netlistFilename );
-    }
-    catch( const IO_ERROR& ioe )
-    {
-        wxString msg = wxString::Format( _( "Error loading netlist file:\n%s" ),
-                                         ioe.What().GetData() );
-        wxMessageBox( msg, _( "Netlist Load Error" ), wxOK | wxICON_ERROR );
+    if( !m_parent->ReadNetlistFromFile( netlistFilename, netlist, NULL_REPORTER::GetInstance() ) )
         return;
-    }
 
     HTML_MESSAGE_BOX dlg( this, _( "Check footprints" ) );
     DRC_LIST drcItems;
@@ -306,17 +284,31 @@ void DIALOG_NETLIST::loadNetlist( bool aDryRun )
     reporter.ReportHead( msg, REPORTER::RPT_INFO );
     m_MessageWindow->SetLazyUpdate( true ); // Use lazy update to speed the creation of the report
                                             // (the window is not updated for each message)
+    NETLIST netlist;
 
-    m_parent->ReadPcbNetlist( netlistFileName, wxEmptyString, reporter,
-                              m_cbUpdateFootprints->GetValue(),
-                              m_cbDeleteShortingTracks->GetValue(),
-                              m_cbDeleteExtraFootprints->GetValue(),
-                              m_matchByTimestamp->GetSelection() == 1,
-                              m_cbDeleteSinglePadNets->GetValue(),
-                              aDryRun, &m_runDragCommand );
+    netlist.SetDeleteExtraFootprints( m_cbDeleteExtraFootprints->GetValue() );
+    netlist.SetFindByTimeStamp( m_matchByTimestamp->GetSelection() == 1 );
+    netlist.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+
+    if( !m_parent->ReadNetlistFromFile( netlistFileName, netlist, reporter ) )
+        return;
+
+    BOARD_NETLIST_UPDATER updater( m_parent, m_parent->GetBoard() );
+    updater.SetReporter ( &reporter );
+    updater.SetIsDryRun( aDryRun );
+    updater.SetLookupByTimestamp( m_matchByTimestamp->GetSelection() == 1 );
+    updater.SetDeleteUnusedComponents ( m_cbDeleteExtraFootprints->GetValue() );
+    updater.SetReplaceFootprints( m_cbUpdateFootprints->GetValue() );
+    updater.SetDeleteSinglePadNets( m_cbDeleteSinglePadNets->GetValue() );
+    updater.UpdateNetlist( netlist );
 
     // The creation of the report was made without window update: the full page must be displayed
     m_MessageWindow->Flush( true );
+
+    if( aDryRun )
+        return;
+
+    m_parent->OnNetlistChanged( updater, &m_runDragCommand );
 }
 
 
