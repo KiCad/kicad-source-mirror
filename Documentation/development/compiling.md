@@ -125,7 +125,7 @@ section.
 
 ## Ngspice Library ## {#ngspice}
 
-The [Ngspice Library][libngsice] is used to provide Spice simulation support in the schematic
+The [Ngspice Library][libngspice] is used to provide Spice simulation support in the schematic
 editor.  Make sure the the version of ngspice library used was built with the--with-ngshared
 option.  This library needs to be installed unless the Spice build option is disabled.
 
@@ -217,6 +217,8 @@ For example, with `make`:
 * Build a specific test: `make qa_pcbnew`
 * Build all unit tests: `make qa_all_tests`
 * Build all test tool binaries: `make qa_all_tools`
+
+For more information about testing KiCad, see [this page](testing.md).
 
 ## KiCad Build Version ## {#build_version_opt}
 
