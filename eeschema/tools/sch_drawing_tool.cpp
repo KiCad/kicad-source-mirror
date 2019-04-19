@@ -57,16 +57,16 @@ TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort
         _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
-        _( "Add Wire" ), _( "Start drawing a wire" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0,
+        _( "Begin Wire" ), _( "Start drawing a wire" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
         _( "Add Wire" ), _( "Add a wire" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
-        _( "Add Bus" ), _( "Start drawing a bus" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0,
+        _( "Begin Bus" ), _( "Start drawing a bus" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
