@@ -173,18 +173,21 @@ int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
     if( !screen )
         return 0;
 
-    for( SCH_ITEM* ptr = screen->GetDrawItems(); ptr; ptr = ptr->Next() )
+    for( SCH_ITEM* item = screen->GetDrawItems(); item; item = item->Next() )
     {
-        auto conn = ptr->Connection( *g_CurrentSheet );
-        bool redraw = ptr->GetState( BRIGHTENED );
+        SCH_CONNECTION* conn = item->Connection( *g_CurrentSheet );
+        bool redraw = item->IsBrightened();
 
-        ptr->SetState( BRIGHTENED, ( conn && conn->Name() == selectedNetName ) );
+        if( conn && conn->Name() == selectedNetName )
+            item->SetBrightened();
+        else
+            item->ClearBrightened();
 
-        redraw |= ptr->GetState( BRIGHTENED );
+        redraw |= item->IsBrightened();
 
-        if( ptr->Type() == SCH_COMPONENT_T )
+        if( item->Type() == SCH_COMPONENT_T )
         {
-            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( ptr );
+            SCH_COMPONENT* comp = static_cast<SCH_COMPONENT*>( item );
 
             redraw |= comp->HasBrightenedPins();
 
@@ -203,16 +206,19 @@ int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
                 }
             }
         }
-        else if( ptr->Type() == SCH_SHEET_T )
+        else if( item->Type() == SCH_SHEET_T )
         {
-            for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( ptr )->GetPins() )
+            for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( item )->GetPins() )
             {
                 auto pin_conn = pin.Connection( *g_CurrentSheet );
-                bool redrawPin = pin.GetState( BRIGHTENED );
+                bool redrawPin = pin.IsBrightened();
 
-                pin.SetState( BRIGHTENED, ( pin_conn && pin_conn->Name() == selectedNetName ) );
+                if( pin_conn && pin_conn->Name() == selectedNetName )
+                    pin.SetBrightened();
+                else
+                    pin.ClearBrightened();
 
-                redrawPin |= pin.GetState( BRIGHTENED );
+                redrawPin |= pin.IsBrightened();
 
                 if( redrawPin )
                     itemsToRedraw.push_back( &pin );
@@ -220,14 +226,14 @@ int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
         }
 
         if( redraw )
-            itemsToRedraw.push_back( ptr );
+            itemsToRedraw.push_back( item );
     }
 
     // Be sure hightlight change will be redrawn
     KIGFX::VIEW* view = getView();
 
-    for( auto item : itemsToRedraw )
-        view->Update( (KIGFX::VIEW_ITEM*)item, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
+    for( auto redrawItem : itemsToRedraw )
+        view->Update( (KIGFX::VIEW_ITEM*)redrawItem, KIGFX::VIEW_UPDATE_FLAGS::REPAINT );
 
     m_frame->GetGalCanvas()->Refresh();
 

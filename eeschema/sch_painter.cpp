@@ -225,7 +225,7 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer )
 {
-    if( aItem->GetState( BRIGHTENED ) )
+    if( aItem->IsBrightened() )
         return m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
 
     const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
@@ -1121,8 +1121,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
             const SCH_PIN& schPin = pinMap.at( originalPin );
 
             tempPin->ClearFlags();
-            tempPin->SetFlags( schPin.GetFlags() );     // IS_MOVED, SELECTED, HIGHLIGHTED
-            tempPin->SetStatus( schPin.GetStatus() );   // BRIGHTENED
+            tempPin->SetFlags( schPin.GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
 
             if( schPin.IsDangling() )
                 tempPin->SetFlags( IS_DANGLING );
