@@ -33,9 +33,9 @@
 #include <sch_painter.h>
 #include <sch_edit_frame.h>
 #include <preview_items/selection_area.h>
-
+#include <tool/tool_manager.h>
+#include <tool/actions.h>
 #include <functional>
-
 #include <sch_sheet.h>
 #include <pgm_base.h>
 
@@ -610,7 +610,7 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         if( IsMouseCaptured() )
             EndMouseCapture();
         else
-            EndMouseCapture( ID_NO_TOOL_SELECTED, 0 /*m_defaultCursor*/, wxEmptyString );
+            GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
 
         keyWasHandled = true;   // The key is captured: the key event will be not skipped
         break;
