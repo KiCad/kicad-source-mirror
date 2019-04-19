@@ -1275,6 +1275,17 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
                 m_frame->GetScreen()->SetCurItem( nullptr );
             }
         }
+        else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
+        {
+            if( aSheet )
+            {
+                m_frame->AddItemToScreen( aSheet );
+                aSheet = nullptr;
+
+                m_view->ClearPreview();
+                m_frame->GetScreen()->SetCurItem( nullptr );
+            }
+        }
         else if( evt->IsMotion() )
         {
             m_view->ClearPreview();

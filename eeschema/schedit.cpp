@@ -161,6 +161,7 @@
         break;
 
     case ID_POPUP_END_LINE:
+    case ID_POPUP_SCH_END_SHEET:
         m_toolManager->RunAction( SCH_ACTIONS::finishDrawing, true );
         break;
 
@@ -198,11 +199,6 @@
         SetSheetNumberAndCount();
         GetCanvas()->Refresh();
         OnModify();
-        break;
-
-    case ID_POPUP_SCH_END_SHEET:
-        m_canvas->MoveCursorToCrossHair();
-        AddItemToScreen( item );
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -466,51 +462,8 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     // Stop the current command and deselect the current tool.
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
 
-    switch( id )
-    {
-    case ID_HIGHLIGHT_BUTT:
-    case ID_MENU_NOCONN_BUTT:
-    case ID_NOCONN_BUTT:
-    case ID_MENU_JUNCTION_BUTT:
-    case ID_JUNCTION_BUTT:
-    case ID_MENU_LABEL_BUTT:
-    case ID_LABEL_BUTT:
-    case ID_MENU_GLABEL_BUTT:
-    case ID_GLOBALLABEL_BUTT:
-    case ID_MENU_HIERLABEL_BUTT:
-    case ID_HIERLABEL_BUTT:
-    case ID_MENU_TEXT_COMMENT_BUTT:
-    case ID_TEXT_COMMENT_BUTT:
-    case ID_MENU_ADD_IMAGE_BUTT:
-    case ID_ADD_IMAGE_BUTT:
-    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
-    case ID_WIRETOBUS_ENTRY_BUTT:
-    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
-    case ID_BUSTOBUS_ENTRY_BUTT:
-    case ID_MENU_PLACE_COMPONENT:
-    case ID_SCH_PLACE_COMPONENT:
-    case ID_MENU_PLACE_POWER_BUTT:
-    case ID_PLACE_POWER_BUTT:
-    case ID_MENU_WIRE_BUTT:
-    case ID_WIRE_BUTT:
-    case ID_MENU_BUS_BUTT:
-    case ID_BUS_BUTT:
-    case ID_MENU_LINE_COMMENT_BUTT:
-    case ID_LINE_COMMENT_BUTT:
-    case ID_ZOOM_SELECTION:
-    case ID_MENU_SHEET_SYMBOL_BUTT:
-    case ID_SHEET_SYMBOL_BUTT:
-    case ID_MENU_SHEET_PIN_BUTT:
-    case ID_SHEET_PIN_BUTT:
-    case ID_MENU_IMPORT_HLABEL_BUTT:
-    case ID_IMPORT_HLABEL_BUTT:
-        // moved to modern toolset
-        return;
-    default:
-        // since legacy tools don't activate themsleves, we have to deactivate any modern
-        // tools that might be running until all the legacy tools are moved over....
-        m_toolManager->DeactivateTool();
-    }
+    // Same for modern toolset.
+    m_toolManager->DeactivateTool();
 
     switch( id )
     {
