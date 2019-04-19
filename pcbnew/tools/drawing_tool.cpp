@@ -397,7 +397,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textMod->SetThickness( dsnSettings.GetTextThickness( layer ) );
                     textMod->SetItalic( dsnSettings.GetTextItalic( layer ) );
                     textMod->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
-                    textMod->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
+                    textMod->SetTextPos( (wxPoint) cursorPos );
 
                     DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod, NULL );
                     bool placing;
@@ -426,7 +426,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textPcb->SetTextSize( dsnSettings.GetTextSize( layer ) );
                     textPcb->SetThickness( dsnSettings.GetTextThickness( layer ) );
                     textPcb->SetItalic( dsnSettings.GetTextItalic( layer ) );
-                    textPcb->SetTextPos( wxPoint( cursorPos.x, cursorPos.y ) );
+                    textPcb->SetTextPos( (wxPoint) cursorPos );
 
                     RunMainStack([&]() {
                         m_frame->InstallTextOptionsFrame( textPcb, NULL );
@@ -465,7 +465,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
         else if( text && evt->IsMotion() )
         {
-            text->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
+            text->SetPosition( (wxPoint) cursorPos );
             selection.SetReferencePoint( cursorPos );
             m_view->Update( &selection );
             frame()->SetMsgPanel( text );
@@ -588,8 +588,8 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Init the new item attributes
                 dimension = new DIMENSION( m_board );
                 dimension->SetLayer( layer );
-                dimension->SetOrigin( wxPoint( cursorPos.x, cursorPos.y ) );
-                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                dimension->SetOrigin( (wxPoint) cursorPos );
+                dimension->SetEnd( (wxPoint) cursorPos );
                 dimension->Text().SetTextSize( boardSettings.GetTextSize( layer ) );
                 dimension->Text().SetThickness( boardSettings.GetTextThickness( layer ) );
                 dimension->Text().SetItalic( boardSettings.GetTextItalic( layer ) );
@@ -606,7 +606,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             break;
 
             case SET_END:
-                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                dimension->SetEnd( (wxPoint) cursorPos );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
@@ -619,7 +619,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
 
             case SET_HEIGHT:
             {
-                if( wxPoint( cursorPos.x, cursorPos.y ) != dimension->GetPosition() )
+                if( (wxPoint) cursorPos != dimension->GetPosition() )
                 {
                     assert( dimension->GetOrigin() != dimension->GetEnd() );
                     assert( dimension->GetWidth() > 0 );
@@ -645,7 +645,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
             switch( step )
             {
             case SET_END:
-                dimension->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                dimension->SetEnd( (wxPoint) cursorPos );
 
                 if( !!evt->Modifier( MD_CTRL ) )
                     constrainDimension( dimension );
@@ -657,8 +657,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
                 // Calculating the direction of travel perpendicular to the selected axis
                 double angle = dimension->GetAngle() + ( M_PI / 2 );
 
-                wxPoint pos( cursorPos.x, cursorPos.y );
-                wxPoint delta( pos - dimension->m_featureLineDO );
+                wxPoint delta( (wxPoint) cursorPos - dimension->m_featureLineDO );
                 double  height = ( delta.x * cos( angle ) ) + ( delta.y * sin( angle ) );
                 dimension->SetHeight( height );
             }
@@ -813,7 +812,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     VECTOR2I delta = cursorPos - firstItem->GetPosition();
 
     for( auto item : preview )
-        static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
+        static_cast<BOARD_ITEM*>( item )->Move( (wxPoint) delta );
 
     m_view->Update( &preview );
 
@@ -829,7 +828,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             delta = cursorPos - firstItem->GetPosition();
 
             for( auto item : preview )
-                static_cast<BOARD_ITEM*>( item )->Move( wxPoint( delta.x, delta.y ) );
+                static_cast<BOARD_ITEM*>( item )->Move( (wxPoint) delta );
 
             m_view->Update( &preview );
         }
@@ -838,21 +837,18 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
             // TODO it should be handled by EDIT_TOOL, so add items and select?
             if( TOOL_EVT_UTILS::IsRotateToolEvt( *evt ) )
             {
-                const auto  rotationPoint   = wxPoint( cursorPos.x, cursorPos.y );
-                const auto  rotationAngle   = TOOL_EVT_UTILS::GetEventRotationAngle(
-                        *m_frame, *evt );
+                const auto rotationPoint = (wxPoint) cursorPos;
+                const auto rotationAngle = TOOL_EVT_UTILS::GetEventRotationAngle( *m_frame, *evt );
 
                 for( auto item : preview )
-                {
                     static_cast<BOARD_ITEM*>( item )->Rotate( rotationPoint, rotationAngle );
-                }
 
                 m_view->Update( &preview );
             }
             else if( evt->IsAction( &PCB_ACTIONS::flip ) )
             {
                 for( auto item : preview )
-                    static_cast<BOARD_ITEM*>( item )->Flip( wxPoint( cursorPos.x, cursorPos.y ) );
+                    static_cast<BOARD_ITEM*>( item )->Flip( (wxPoint) cursorPos );
 
                 m_view->Update( &preview );
             }
@@ -912,7 +908,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 
             // set the new relative internal local coordinates of footprint items
             VECTOR2I    cursorPos = m_controls->GetCursorPosition();
-            wxPoint     moveVector = module->GetPosition() - wxPoint( cursorPos.x, cursorPos.y );
+            wxPoint     moveVector = module->GetPosition() - (wxPoint) cursorPos;
             module->MoveAnchorPosition( moveVector );
 
             commit.Push( _( "Move the footprint reference anchor" ) );
@@ -935,8 +931,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
 }
 
 
-bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
-        OPT<VECTOR2D> aStartingPoint )
+bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D> aStartingPoint )
 {
     // Only two shapes are currently supported
     assert( aShape == S_SEGMENT || aShape == S_CIRCLE );
@@ -1003,12 +998,12 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 auto newEnd = GetVectorSnapped45( lineVector );
-                aGraphic->SetEnd( aGraphic->GetStart() + wxPoint( newEnd.x, newEnd.y ) );
+                aGraphic->SetEnd( aGraphic->GetStart() + (wxPoint) newEnd );
                 m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
             }
             else
             {
-                aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetEnd( (wxPoint) cursorPos );
             }
 
             m_view->Update( &preview );
@@ -1046,12 +1041,12 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
                 // Init the new item attributes
                 aGraphic->SetShape( (STROKE_T) aShape );
                 aGraphic->SetWidth( m_lineWidth );
-                aGraphic->SetStart( wxPoint( cursorPos.x, cursorPos.y ) );
-                aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetStart( (wxPoint) cursorPos );
+                aGraphic->SetEnd( (wxPoint) cursorPos );
                 aGraphic->SetLayer( getDrawingLayer() );
 
                 if( !IsOCurseurSet )
-                    m_frame->GetScreen()->m_O_Curseur = wxPoint( cursorPos.x, cursorPos.y );
+                    m_frame->GetScreen()->m_O_Curseur = (wxPoint) cursorPos;
 
                 preview.Add( aGraphic );
                 frame()->SetMsgPanel( aGraphic );
@@ -1103,11 +1098,11 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic,
 
                 // get a restricted 45/H/V line from the last fixed point to the cursor
                 auto newEnd = GetVectorSnapped45( lineVector );
-                aGraphic->SetEnd( aGraphic->GetStart() + wxPoint( newEnd.x, newEnd.y ) );
+                aGraphic->SetEnd( aGraphic->GetStart() + (wxPoint) newEnd );
                 m_controls->ForceCursorPosition( true, VECTOR2I( aGraphic->GetEnd() ) );
             }
             else
-                aGraphic->SetEnd( wxPoint( cursorPos.x, cursorPos.y ) );
+                aGraphic->SetEnd( (wxPoint) cursorPos );
 
             m_view->Update( &preview );
 
@@ -1664,7 +1659,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
                 SEG         trackSeg( track->GetStart(), track->GetEnd() );
                 VECTOR2I    snap = m_gridHelper.AlignToSegment( pos, trackSeg );
 
-                aItem->SetPosition( wxPoint( snap.x, snap.y ) );
+                aItem->SetPosition( (wxPoint) snap );
             }
         }
 
