@@ -93,27 +93,6 @@ const COLOR4D& SCH_RENDER_SETTINGS::GetColor( const VIEW_ITEM* aItem, int aLayer
   return m_layerColors[ aLayer ];
 }
 
-static const COLOR4D getOverlayColor( const EDA_ITEM* aItem, const COLOR4D& aColor, bool aOnBackgroundLayer )
-{
-    if( aItem->IsMoving() || ( aItem->GetParent() && aItem->GetParent()->IsMoving() ) )
-    {
-        return aColor.Brightened( 0.5 );
-    }
-    else if( aItem->IsHighlighted() || ( aItem->GetParent() && aItem->GetParent()->IsHighlighted() ) )
-    {
-        if ( aOnBackgroundLayer )
-        {
-            auto bri = aColor.GetBrightness();
-            return COLOR4D( bri, 0.0, 0.0, 0.3 );
-        }
-        else
-        {
-            return COLOR4D( 1.0, 0.3, 0.3, 1.0 );
-        }
-    }
-
-    return aColor;
-}
 
 /**
  * Used when a LIB_PART is not found in library to draw a dummy shape.
@@ -244,8 +223,36 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 }
 
 
-void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert,
-                        SCH_PINS* aPinMap )
+COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer )
+{
+    if( aItem->GetState( BRIGHTENED ) )
+        return m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+
+    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
+    COLOR4D         color = line ? line->GetLineColor() : m_schSettings.GetLayerColor( aLayer );
+
+    if( aItem->IsSelected() )
+    {
+        return color.Brightened( 0.5 );
+    }
+    // JEY TODO: IsMoving checks can go away after seleciton model is fully implemented...
+    else if( aItem->IsMoving() )
+    {
+        return color.Brightened( 0.5 );
+    }
+    else if( aItem->IsHighlighted() )
+    {
+        if ( aOnBackgroundLayer )
+            return COLOR4D( color.GetBrightness(), 0.0, 0.0, 0.3 );
+        else
+            return COLOR4D( 1.0, 0.3, 0.3, 1.0 );
+    }
+
+    return color;
+}
+
+
+void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit, int aConvert )
 {
     if( !aUnit )
         aUnit = m_schSettings.m_ShowUnit;
@@ -264,18 +271,7 @@ void SCH_PAINTER::draw( LIB_PART *aPart, int aLayer, bool aDrawFields, int aUnit
         if( aConvert && item.GetConvert() && aConvert != item.GetConvert() )
             continue;
 
-        if( item.Type() == LIB_PIN_T )
-        {
-            LIB_PIN* libPin = static_cast<LIB_PIN*>( &item );
-            SCH_PIN* schPin = nullptr;
-
-            if( aPinMap && aPinMap->count( libPin ) )
-                schPin = &aPinMap->at( libPin );
-
-            draw( libPin, aLayer, schPin, aPart->IsMoving() );
-        }
-        else
-            Draw( &item, aLayer );
+        Draw( &item, aLayer );
     }
 }
 
@@ -317,7 +313,7 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
 {
     if( aLayer == LAYER_DEVICE_BACKGROUND && aItem->GetFillMode() == FILLED_WITH_BG_BODYCOLOR )
     {
-        COLOR4D color = getOverlayColor( aItem, m_schSettings.GetLayerColor( LAYER_DEVICE_BACKGROUND ), true );
+        COLOR4D color = getRenderColor( aItem, LAYER_DEVICE_BACKGROUND, true );
 
         // These actions place the item over others, so allow a modest transparency here
         if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
@@ -331,7 +327,7 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     }
     else if( aLayer == LAYER_DEVICE )
     {
-        COLOR4D color = getOverlayColor( aItem, m_schSettings.GetLayerColor( LAYER_DEVICE ), false );
+        COLOR4D color = getRenderColor( aItem, LAYER_DEVICE, false );
 
         // These actions place the item over others, so allow a modest transparency here
         if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
@@ -427,7 +423,7 @@ void SCH_PAINTER::draw( LIB_FIELD *aField, int aLayer )
     if( !isUnitAndConversionShown( aField ) )
         return;
 
-    auto color = getOverlayColor( aField, aField->GetDefaultColor(), false );
+    auto color = getRenderColor( aField, aLayer, false );
 
     if( !aField->IsVisible() )
     {
@@ -469,7 +465,7 @@ void SCH_PAINTER::draw( LIB_TEXT *aText, int aLayer )
     if( !isUnitAndConversionShown( aText ) )
         return;
 
-    auto color = getOverlayColor( aText, m_schSettings.GetLayerColor( LAYER_DEVICE ), false );
+    auto color = getRenderColor( aText, LAYER_DEVICE, false );
 
     if( !aText->IsVisible() )
     {
@@ -525,7 +521,7 @@ static void drawPinDanglingSymbol( GAL* aGal, const VECTOR2I& aPos, const COLOR4
 }
 
 
-void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isParentMoving )
+void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer )
 {
     if( aLayer != LAYER_DEVICE )
         return;
@@ -533,17 +529,8 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
     if( !isUnitAndConversionShown( aPin ) )
         return;
 
-    bool isMoving = isParentMoving || aPin->IsMoving();
-    bool isDangling = !aSchPin || aSchPin->IsDangling();
-    bool isBrightened = aSchPin && aSchPin->IsBrightened();
-
     VECTOR2I pos = mapCoords( aPin->GetPosition() );
-    COLOR4D  color;
-
-    if( isBrightened )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-    else
-        color = getOverlayColor( aPin, m_schSettings.GetLayerColor( LAYER_PIN ), false );
+    COLOR4D  color = getRenderColor( aPin, LAYER_PIN, false );
 
     if( !aPin->IsVisible() )
     {
@@ -553,7 +540,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
         }
         else
         {
-            if( isDangling && aPin->IsPowerConnection() )
+            if( ( aPin->GetFlags() & IS_DANGLING ) && aPin->IsPowerConnection() )
                 drawPinDanglingSymbol( m_gal, pos, color );
 
             return;
@@ -674,10 +661,10 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
         m_gal->DrawLine( pos + VECTOR2D(  1, -1 ) * TARGET_PIN_RADIUS ,
                          pos + VECTOR2D( -1,  1 ) * TARGET_PIN_RADIUS );
 
-        isDangling = false; // PIN_NC pin type is always not connected and dangling.
+        aPin->ClearFlags( IS_DANGLING ); // PIN_NC pin type is always not connected and dangling.
     }
 
-    if( isDangling && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
+    if( ( aPin->GetFlags() & IS_DANGLING ) && ( aPin->IsVisible() || aPin->IsPowerConnection() ) )
         drawPinDanglingSymbol( m_gal, pos, color );
 
     // Draw the labels
@@ -704,12 +691,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
     {
         size     [INSIDE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[INSIDE] = nameLineWidth;
-        colour   [INSIDE] = m_schSettings.GetLayerColor( LAYER_PINNAM );
+        colour   [INSIDE] = getRenderColor( aPin, LAYER_PINNAM, false );
         text     [INSIDE] = aPin->GetName();
 
         size     [ABOVE] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[ABOVE] = numLineWidth;
-        colour   [ABOVE] = m_schSettings.GetLayerColor( LAYER_PINNUM );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNUM, false );
         text     [ABOVE] = aPin->GetNumber();
     }
     // Otherwise pin NAMES go above and pin NUMBERS go below
@@ -717,12 +704,12 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
     {
         size     [ABOVE] = libEntry->ShowPinNames() ? aPin->GetNameTextSize() : 0;
         thickness[ABOVE] = nameLineWidth;
-        colour   [ABOVE] = m_schSettings.GetLayerColor( LAYER_PINNAM );
+        colour   [ABOVE] = getRenderColor( aPin, LAYER_PINNAM, false );
         text     [ABOVE] = aPin->GetName();
 
         size     [BELOW] = libEntry->ShowPinNumbers() ? aPin->GetNumberTextSize() : 0;
         thickness[BELOW] = numLineWidth;
-        colour   [BELOW] = m_schSettings.GetLayerColor( LAYER_PINNUM );
+        colour   [BELOW] = getRenderColor( aPin, LAYER_PINNUM, false );
         text     [BELOW] = aPin->GetNumber();
     }
 
@@ -730,7 +717,7 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
     {
         size     [OUTSIDE] = std::max( aPin->GetNameTextSize() * 3 / 4, Millimeter2iu( 0.7 ) );
         thickness[OUTSIDE] = size[OUTSIDE] / 6;
-        colour   [OUTSIDE] = m_schSettings.GetLayerColor( LAYER_NOTES );
+        colour   [OUTSIDE] = getRenderColor( aPin, LAYER_NOTES, false );
         text     [OUTSIDE] = aPin->GetElectricalTypeName();
     }
 
@@ -738,11 +725,6 @@ void SCH_PAINTER::draw( LIB_PIN *aPin, int aLayer, SCH_PIN* aSchPin, bool isPare
     {
         for( COLOR4D& c : colour )
             c = m_schSettings.GetLayerColor( LAYER_HIDDEN );
-    }
-    else if( isMoving )
-    {
-        for( COLOR4D& c : colour )
-            c = getOverlayColor( aPin, c, false );
     }
 
     int insideOffset = textOffset;
@@ -926,16 +908,13 @@ static void drawDanglingSymbol( GAL* aGal, const wxPoint& aPos )
 
 void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 {
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_JUNCTION );
+    COLOR4D color;
     auto    conn = aJct->Connection( *g_CurrentSheet );
 
     if( conn && conn->IsBus() )
-        color = m_schSettings.GetLayerColor( LAYER_BUS );
-
-    if( aJct->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+        color = getRenderColor( aJct, LAYER_BUS, false );
     else
-        color = getOverlayColor( aJct, color, false );
+        color = getRenderColor( aJct, LAYER_JUNCTION, false );
 
     m_gal->SetIsStroke(true);
     m_gal->SetIsFill(true);
@@ -947,12 +926,7 @@ void SCH_PAINTER::draw( SCH_JUNCTION *aJct, int aLayer )
 
 void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 {
-    COLOR4D color = aLine->GetLineColor();
-
-    if( aLine->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-    color = getOverlayColor( aLine, color, false );
+    COLOR4D color = getRenderColor( aLine, aLine->GetLayer(), false );
 
     int width = aLine->GetPenSize();
 
@@ -1020,28 +994,20 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
 
 void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 {
-    COLOR4D color;
+    SCH_CONNECTION* conn = aText->Connection( *g_CurrentSheet );
+    COLOR4D         color;
 
     switch( aText->Type() )
     {
-    case SCH_SHEET_PIN_T:          color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL ); break;
-    case SCH_HIER_LABEL_T: color = m_schSettings.GetLayerColor( LAYER_HIERLABEL );  break;
-    case SCH_GLOBAL_LABEL_T:       color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );  break;
-    case SCH_LABEL_T:              color = m_schSettings.GetLayerColor( LAYER_LOCLABEL );   break;
-    default:                       color = m_schSettings.GetLayerColor( LAYER_NOTES );      break;
+    case SCH_SHEET_PIN_T:     color = getRenderColor( aText, LAYER_SHEETLABEL, false ); break;
+    case SCH_HIER_LABEL_T:    color = getRenderColor( aText, LAYER_HIERLABEL, false );  break;
+    case SCH_GLOBAL_LABEL_T:  color = getRenderColor( aText, LAYER_GLOBLABEL, false );  break;
+    case SCH_LABEL_T:         color = getRenderColor( aText, LAYER_LOCLABEL, false );   break;
+    default:                  color = getRenderColor( aText, LAYER_NOTES, false );      break;
     }
 
-    auto conn = aText->Connection( *g_CurrentSheet );
-
-    if( conn && conn->IsBus() &&
-        ( aText->Type() == SCH_SHEET_PIN_T ||
-          aText->Type() == SCH_HIER_LABEL_T ) )
-        color = m_schSettings.GetLayerColor( LAYER_BUS );
-
-    if( aText->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-    color = getOverlayColor( aText, color, false );
+    if( conn && conn->IsBus() )
+        color = getRenderColor( aText, LAYER_BUS, false );
 
     if( !aText->IsVisible() )
     {
@@ -1071,7 +1037,7 @@ void SCH_PAINTER::draw( SCH_TEXT *aText, int aLayer )
 }
 
 
-static void orientComponent( LIB_PART *part, int orientation )
+static void orientPart( LIB_PART* part, int orientation )
 {
     struct ORIENT
     {
@@ -1123,44 +1089,47 @@ static void orientComponent( LIB_PART *part, int orientation )
 
 void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 {
-    PART_SPTR partSptr = aComp->GetPartRef().lock();
+    PART_SPTR originalPartSptr = aComp->GetPartRef().lock();
+
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
-    LIB_PART* part = partSptr ? partSptr.get() : dummy();
+    LIB_PART* originalPart = originalPartSptr ? originalPartSptr.get() : dummy();
+    LIB_PINS originalPins;
+    originalPart->GetPins( originalPins, aComp->GetUnit(), aComp->GetConvert() );
 
-    // Copy the source it so we can re-orient and translate it.
-    std::unique_ptr<LIB_PART> temp( new LIB_PART( *part ) );
+    // Copy the source so we can re-orient and translate it.
+    LIB_PART tempPart( *originalPart );
+    LIB_PINS tempPins;
+    tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
 
-    // Update the pinMap to be indexed by the temp part's pins
-    LIB_PIN* libPin = part->GetNextPin();
-    LIB_PIN* tempPin = temp->GetNextPin();
-    SCH_PINS& pinMap = aComp->GetPinMap();
-    SCH_PINS tempPinMap;
+    tempPart.SetFlags( aComp->GetFlags() );
 
-    while( libPin && tempPin )
+    orientPart( &tempPart, aComp->GetOrientation());
+
+    for( auto& tempItem : tempPart.GetDrawItems() )
+        tempItem.Move( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition() ) );
+
+    // Copy pin info from the component
+    SCH_PINS pinMap = aComp->GetPinMap();
+
+    for( int i = 0; i < originalPins.size() && i < tempPins.size(); ++i )
     {
-        if( pinMap.count( libPin ) )
-            tempPinMap.emplace( std::make_pair( tempPin, SCH_PIN( pinMap.at( libPin ) ) ) );
+        LIB_PIN* originalPin = originalPins[ i ];
+        LIB_PIN* tempPin = tempPins[ i ];
 
-        libPin = part->GetNextPin( libPin );
-        tempPin = temp->GetNextPin( tempPin );
+        if( pinMap.count( originalPin ) )
+        {
+            const SCH_PIN& schPin = pinMap.at( originalPin );
+
+            tempPin->ClearFlags();
+            tempPin->SetFlags( schPin.GetFlags() );     // IS_MOVED, SELECTED, HIGHLIGHTED
+            tempPin->SetStatus( schPin.GetStatus() );   // BRIGHTENED
+
+            if( schPin.IsDangling() )
+                tempPin->SetFlags( IS_DANGLING );
+        }
     }
 
-    if( aComp->IsMoving() )
-        temp->SetFlags( IS_MOVED );
-
-    if( aComp->IsHighlighted() )
-        temp->SetFlags( HIGHLIGHTED );
-
-    orientComponent( temp.get(), aComp->GetOrientation() );
-
-    for( auto& item : temp->GetDrawItems() )
-    {
-        auto rp = aComp->GetPosition();
-        auto ip = item.GetPosition();
-        item.Move( wxPoint( rp.x + ip.x, ip.y - rp.y ) );
-    }
-
-    draw( temp.get(), aLayer, false, aComp->GetUnit(), aComp->GetConvert(), &tempPinMap );
+    draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );
 
     // The fields are SCH_COMPONENT-specific and so don't need to be copied/
     // oriented/translated.
@@ -1182,12 +1151,10 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
     switch( aField->GetId() )
     {
-    case REFERENCE: color = m_schSettings.GetLayerColor( LAYER_REFERENCEPART ); break;
-    case VALUE:     color = m_schSettings.GetLayerColor( LAYER_VALUEPART );     break;
-    default:        color = m_schSettings.GetLayerColor( LAYER_FIELDS );        break;
+    case REFERENCE: color = getRenderColor( aField, LAYER_REFERENCEPART, false ); break;
+    case VALUE:     color = getRenderColor( aField, LAYER_VALUEPART, false );     break;
+    default:        color = getRenderColor( aField, LAYER_FIELDS, false );        break;
     }
-
-    color = getOverlayColor( aField, color, false );
 
     if( !aField->IsVisible() )
     {
@@ -1250,14 +1217,9 @@ void SCH_PAINTER::draw( SCH_FIELD *aField, int aLayer )
 
 void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 {
-    auto color = m_schSettings.GetLayerColor( LAYER_GLOBLABEL );
+    auto color = getRenderColor( aLabel, LAYER_GLOBLABEL, false );
     auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
-
-    if( aLabel->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-    color = getOverlayColor( aLabel, color, false );
 
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1280,18 +1242,14 @@ void SCH_PAINTER::draw( SCH_GLOBALLABEL *aLabel, int aLayer )
 
 void SCH_PAINTER::draw( SCH_HIERLABEL *aLabel, int aLayer )
 {
-    auto color = m_schSettings.GetLayerColor( LAYER_SHEETLABEL );
+    auto color = getRenderColor( aLabel, LAYER_SHEETLABEL, false );
     auto back_color = m_schSettings.GetLayerColor( LAYER_SCHEMATIC_BACKGROUND );
     int  width = aLabel->GetThickness() ? aLabel->GetThickness() : GetDefaultLineThickness();
 
     auto conn = aLabel->Connection( *g_CurrentSheet );
 
     if( conn && conn->IsBus() )
-        color = m_schSettings.GetLayerColor( LAYER_BUS );
-    if( aLabel->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-    color = getOverlayColor( aLabel, color, false );
+        color = getRenderColor( aLabel, LAYER_BUS, false );
 
     std::vector<wxPoint> pts;
     std::deque<VECTOR2D> pts2;
@@ -1411,7 +1369,9 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
     int delta = aNC->GetSize() / 2;
     int width = GetDefaultLineThickness();
 
-    m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_NOCONNECT ) );
+    COLOR4D color = getRenderColor( aNC, LAYER_NOCONNECT, false );
+
+    m_gal->SetStrokeColor( color );
     m_gal->SetIsStroke( true );
     m_gal->SetIsFill( false );
     m_gal->SetLineWidth( width );
@@ -1425,14 +1385,9 @@ void SCH_PAINTER::draw( SCH_NO_CONNECT *aNC, int aLayer )
 
 void SCH_PAINTER::draw( SCH_BUS_ENTRY_BASE *aEntry, int aLayer )
 {
-    COLOR4D color = aEntry->Type() == SCH_BUS_BUS_ENTRY_T ?
-                                m_schSettings.GetLayerColor( LAYER_BUS )
-                                    : m_schSettings.GetLayerColor( LAYER_WIRE );
-
-    if( aEntry->GetState( BRIGHTENED ) )
-        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
-
-    color = getOverlayColor( aEntry, color, false );
+    COLOR4D color = aEntry->Type() == SCH_BUS_BUS_ENTRY_T
+                        ? getRenderColor( aEntry, LAYER_BUS, false )
+                        : getRenderColor( aEntry, LAYER_WIRE, false );
 
     m_gal->SetStrokeColor( color );
     m_gal->SetIsStroke( true );

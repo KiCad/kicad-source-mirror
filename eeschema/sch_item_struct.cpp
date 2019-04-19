@@ -90,14 +90,10 @@ bool SCH_ITEM::IsConnected( const wxPoint& aPosition ) const
 
 SCH_CONNECTION* SCH_ITEM::Connection( const SCH_SHEET_PATH& aSheet ) const
 {
-    try
-    {
+    if( m_connection_map.count( aSheet ) )
         return m_connection_map.at( aSheet );
-    }
-    catch( ... )
-    {
-        return nullptr;
-    }
+
+    return nullptr;
 }
 
 

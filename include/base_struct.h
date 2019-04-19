@@ -141,6 +141,8 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
                                    ///< (applies to segments only)
 #define UR_TRANSIENT   (1 << 28)   ///< indicates the item is owned by the undo/redo stack
 
+#define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
+
 
 #define EDA_ITEM_ALL_FLAGS -1
 

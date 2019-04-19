@@ -135,11 +135,10 @@ public:
 
 private:
 	void draw( LIB_RECTANGLE* aRect, int aLayer );
-	void draw( LIB_PIN* aPin, int aLayer, SCH_PIN* aSchPin = nullptr, bool isParentMoving = false );
+	void draw( LIB_PIN* aPin, int aLayer );
 	void draw( LIB_CIRCLE* aCircle, int aLayer );
 	void draw( LIB_ITEM *, int aLayer );
-	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0,
-               SCH_PINS* aPinMap = nullptr );
+	void draw( LIB_PART* aPart, int, bool aDrawFields = true,  int aUnit = 0, int aConvert = 0 );
     void draw( LIB_ALIAS* aAlias, int aLayer );
     void draw( LIB_ARC* aArc, int aLayer );
     void draw( LIB_POLYLINE* aLine, int aLayer );
@@ -150,7 +149,6 @@ private:
     void draw( SCH_JUNCTION* aJct, int aLayer );
     void draw( SCH_FIELD* aField, int aLayer );
     void draw( SCH_TEXT* aText, int aLayer );
-    void draw( SCH_LABEL* aLabel, int aLayer );
     void draw( SCH_HIERLABEL* aLabel, int aLayer );
     void draw( SCH_GLOBALLABEL* aLabel, int aLayer );
     void draw( SCH_SHEET* aSheet, int aLayer );
@@ -161,6 +159,8 @@ private:
     void draw( SCH_BUS_ENTRY_BASE* aEntry, int aLayer );
 
     bool isUnitAndConversionShown( const LIB_ITEM* aItem );
+
+    COLOR4D getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer );
 
     bool setColors( const LIB_ITEM* aItem, int aLayer );
 
