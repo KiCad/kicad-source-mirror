@@ -1594,8 +1594,25 @@ std::vector<CONNECTION_SUBGRAPH*> CONNECTION_GRAPH::GetBusesNeedingMigration()
         if( !connection->IsBus() )
             continue;
 
-        if( subgraph->GetBusLabels().size() > 1 )
+        auto labels = subgraph->GetBusLabels();
+
+        if( labels.size() > 1 )
         {
+            bool different = false;
+            wxString first = static_cast<SCH_TEXT*>( labels.at( 0 ) )->GetText();
+
+            for( unsigned i = 1; i < labels.size(); ++i )
+            {
+                if( static_cast<SCH_TEXT*>( labels.at( i ) )->GetText() != first )
+                {
+                    different = true;
+                    break;
+                }
+            }
+
+            if( !different )
+                continue;
+
             wxLogTrace( "CONN", "SG %ld (%s) has multiple bus labels", subgraph->m_code,
                         connection->Name() );
 
