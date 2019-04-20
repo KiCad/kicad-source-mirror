@@ -204,20 +204,10 @@ void DIALOG_MIGRATE_BUSES::onAcceptClicked( wxCommandEvent& aEvent )
     m_items[sel].approved_label = m_cb_new_name->GetStringSelection();
     m_items[sel].approved = true;
 
-    auto sheet = m_items[sel].subgraph->m_sheet;
-    auto screen = sheet.LastScreen();
-
     auto labels =  m_items[sel].subgraph->GetBusLabels();
 
-    static_cast<SCH_TEXT*>( labels[0] )->SetText( m_items[sel].approved_label );
-
-    labels.erase( labels.begin() );
-
     for( auto label : labels )
-    {
-        label->SetFlags( STRUCT_DELETED );
-        screen->Remove( label );
-    }
+        static_cast<SCH_TEXT*>( label )->SetText( m_items[sel].approved_label );
 
     m_migration_list->SetItem( sel, 2, m_items[sel].approved_label );
     m_migration_list->SetItem( sel, 3, _( "Updated" ) );
@@ -226,4 +216,6 @@ void DIALOG_MIGRATE_BUSES::onAcceptClicked( wxCommandEvent& aEvent )
     {
         m_migration_list->Select( sel + 1 );
     }
+
+    m_frame->GetCanvas()->Refresh();
 }
