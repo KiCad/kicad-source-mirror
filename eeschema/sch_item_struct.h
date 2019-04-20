@@ -31,15 +31,16 @@
 #define SCH_ITEM_STRUCT_H
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #include <base_screen.h>
 #include <general.h>
-#include <sch_connection.h>
 #include <sch_sheet_path.h>
 
 class SCH_ITEM;
 //class SCH_SHEET_PATH;
+class SCH_CONNECTION;
 class LINE_READER;
 class SCH_EDIT_FRAME;
 class wxFindReplaceData;

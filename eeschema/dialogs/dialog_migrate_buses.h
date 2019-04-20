@@ -32,7 +32,7 @@ class CONNECTION_SUBGRAPH;
 
 struct BUS_MIGRATION_STATUS
 {
-    CONNECTION_SUBGRAPH* subgraph;
+    const CONNECTION_SUBGRAPH* subgraph;
 
     std::vector<wxString> labels;
 

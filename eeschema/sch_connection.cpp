@@ -124,7 +124,8 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
             wxString name = m_vector_prefix;
             name << i;
             member->m_type = CONNECTION_NET;
-            member->m_name = m_prefix + name;
+            member->m_prefix = m_prefix;
+            member->m_name = name;
             member->m_vector_index = i;
             m_members.push_back( member );
         }
@@ -140,14 +141,14 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
         if( ParseBusGroup( aLabel, &group_name, members ) )
         {
             // Named bus groups generate a net prefix, unnamed ones don't
-            auto prefix = ( group_name != "" ) ? ( group_name + "." ) : "";
+            wxString prefix = group_name != wxT( "" ) ? ( group_name + wxT( "." ) ) : wxT( "" );
 
-            for( auto group_member : members )
+            for( const auto& group_member : members )
             {
                 // Handle alias inside bus group member list
                 if( auto alias = g_ConnectionGraph->GetBusAlias( group_member ) )
                 {
-                    for( auto alias_member : alias->Members() )
+                    for( const auto& alias_member : alias->Members() )
                     {
                         auto member = std::make_shared< SCH_CONNECTION >( m_parent, m_sheet );
                         member->SetPrefix( prefix );
@@ -179,7 +180,7 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
     }
     else
     {
-        m_name = m_prefix + aLabel;
+        m_name = aLabel;
         m_type = CONNECTION_NET;
     }
 }
@@ -209,7 +210,7 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_type = aOther.Type();
     m_driver = aOther.Driver();
     m_sheet = aOther.Sheet();
-    m_name = aOther.Name( true );
+    m_name = aOther.m_name;
     m_prefix = aOther.Prefix();
     // Don't clone suffix, it will be rolled into the name
     //m_suffix = aOther.Suffix();
@@ -247,7 +248,7 @@ bool SCH_CONNECTION::IsDriver() const
 
 wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
-    wxString ret = m_name + m_suffix;
+    wxString ret = m_prefix + m_name + m_suffix;
 
     if( !Parent() || m_type == CONNECTION_NONE )
         return ret;
