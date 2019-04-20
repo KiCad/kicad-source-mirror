@@ -18,7 +18,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <boost/regex.hpp>
+#include <regex>
 #include <wx/tokenzr.h>
 
 #include <advanced_config.h>
@@ -55,9 +55,9 @@
  * just USB_DP and USB_DN.
  *
  */
-static boost::regex bus_label_re( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])$" );
+static std::regex bus_label_re( "^([^[:space:]]+)(\\[[\\d]+\\.+[\\d]+\\])~*$" );
 
-static boost::regex bus_group_label_re( "^([^[:space:]]+)?\\{((?:[^[:space:]]+(?:\\[[\\d]+\\.+[\\d]+\\])? ?)+)\\}$" );
+static std::regex bus_group_label_re( "^([^[:space:]]+)?\\{((?:[^[:space:]]+(?:\\[[\\d]+\\.+[\\d]+\\])? ?)+)\\}~*$" );
 
 
 SCH_CONNECTION::SCH_CONNECTION( SCH_ITEM* aParent, SCH_SHEET_PATH aPath ) :
@@ -359,13 +359,13 @@ bool SCH_CONNECTION::IsBusLabel( const wxString& aLabel )
 
 bool SCH_CONNECTION::IsBusVectorLabel( const wxString& aLabel )
 {
-    return boost::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
+    return std::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
 }
 
 
 bool SCH_CONNECTION::IsBusGroupLabel( const wxString& aLabel )
 {
-    return boost::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
+    return std::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
 }
 
 
@@ -373,9 +373,9 @@ void SCH_CONNECTION::ParseBusVector( wxString aVector, wxString* aName,
                                      long* begin, long* end ) const
 {
     auto ss_vector = std::string( aVector.mb_str() );
-    boost::smatch matches;
+    std::smatch matches;
 
-    if( !boost::regex_match( ss_vector, matches, bus_label_re ) )
+    if( !std::regex_match( ss_vector, matches, bus_label_re ) )
     {
         wxFAIL_MSG( wxT( "<" ) + aVector + wxT( "> is not a valid bus vector." ) );
         return;
@@ -424,9 +424,9 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
                                     std::vector<wxString>& aMemberList ) const
 {
     auto ss_group = std::string( aGroup.mb_str() );
-    boost::smatch matches;
+    std::smatch matches;
 
-    if( !boost::regex_match( ss_group, matches, bus_group_label_re ) )
+    if( !std::regex_match( ss_group, matches, bus_group_label_re ) )
     {
         return false;
     }
