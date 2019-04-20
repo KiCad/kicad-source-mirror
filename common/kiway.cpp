@@ -34,6 +34,7 @@
 
 #include <wx/stdpaths.h>
 #include <wx/debug.h>
+#include <wx/utils.h>
 
 
 KIFACE* KIWAY::m_kiface[KIWAY_FACE_COUNT];
@@ -130,6 +131,19 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 #endif
 
     fn.SetName( name );
+
+#ifdef DEBUG
+    // To speed up development, it's sometimes nice to run kicad from inside
+    // the build path.  In that case, each program will be in a subdirectory.
+    // To find the DSOs, we need to go up one directory and then enter a subdirectory
+    // with the same name as the DSO (without the prefix).
+
+    if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
+    {
+        fn.RemoveLastDir();
+        fn.AppendDir( name + 1 );
+    }
+#endif
 
     // Here a "suffix" == an extension with a preceding '.',
     // so skip the preceding '.' to get an extension
