@@ -139,3 +139,16 @@ TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
 TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
         AS_GLOBAL, 0,
         "", "" );
+
+
+// System-wide selection Events
+
+///> Event sent after an item is selected.
+const TOOL_EVENT EVENTS::SelectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.selected" );
+
+///> Event sent after an item is unselected.
+const TOOL_EVENT EVENTS::UnselectedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.unselected" );
+
+///> Event sent after selection is cleared.
+const TOOL_EVENT EVENTS::ClearedEvent( TC_MESSAGE, TA_ACTION, "common.Interactive.cleared" );
+

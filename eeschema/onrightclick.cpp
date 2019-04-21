@@ -54,7 +54,9 @@
 #include <sch_view.h>
 
 #include <iostream>
+#include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 
 static void AddMenusForBlock( wxMenu* PopMenu, SCH_EDIT_FRAME* frame );
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
@@ -77,9 +79,10 @@ static void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE * aBusEntr
 
 bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    SCH_ITEM*   item = GetScreen()->GetCurItem();
-    bool        blockActive = GetScreen()->IsBlockActive();
-    wxString    msg;
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_ITEM*           item = GetScreen()->GetCurItem();
+    bool                blockActive = GetScreen()->IsBlockActive();
+    wxString            msg;
 
     // Ugly hack, clear any highligthed symbol, because the HIGHLIGHT flag create issues when creating menus
     // Will be fixed later
@@ -147,7 +150,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     if( item == NULL || item->GetEditFlags() == 0 )
     {
         bool actionCancelled = false;
-        item = LocateAndShowItem( aPosition, SCH_COLLECTOR::AllItemsButPins, 0, &actionCancelled );
+        item = selTool->SelectPoint( aPosition, SCH_COLLECTOR::AllItemsButPins, &actionCancelled );
 
         // If the clarify item selection context menu is aborted, don't show the context menu.
         if( item == NULL && actionCancelled )
@@ -744,8 +747,9 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
-    wxPoint     pos = frame->GetCrossHairPosition();
-    wxString    msg;
+    SCH_SELECTION_TOOL* selTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    wxPoint             pos = frame->GetCrossHairPosition();
+    wxString            msg;
 
     if( Bus == NULL )
     {
@@ -773,8 +777,8 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 
         // Have to pick up the pointer again because it may have been changed by SchematicCleanUp
         bool actionCancelled = false;
-        Bus = dynamic_cast<SCH_LINE*>( frame->LocateAndShowItem( pos, SCH_COLLECTOR::AllItemsButPins,
-                 0, &actionCancelled ) );
+        Bus = dynamic_cast<SCH_LINE*>( selTool->SelectPoint( pos, SCH_COLLECTOR::AllItemsButPins,
+                                                             &actionCancelled ) );
         wxASSERT( Bus );
     }
 

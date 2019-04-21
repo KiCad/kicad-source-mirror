@@ -22,6 +22,7 @@
  */
 
 #include "sch_drawing_tool.h"
+#include "sch_selection_tool.h"
 #include <sch_actions.h>
 
 #include <sch_edit_frame.h>
@@ -513,6 +514,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 {
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     VECTOR2I  cursorPos = m_controls->GetCursorPosition();
     SCH_ITEM* item = nullptr;
 
@@ -569,8 +571,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                     item = m_frame->CreateNewImage();
                     break;
                 case SCH_SHEET_PIN_T:
-                    item = m_frame->LocateAndShowItem( (wxPoint)cursorPos,
-                                                       SCH_COLLECTOR::SheetsAndSheetLabels );
+                    item = selTool->SelectPoint( cursorPos, SCH_COLLECTOR::SheetsAndSheetLabels );
                     if( item )
                     {
                         if( m_frame->GetToolId() == ID_IMPORT_HLABEL_BUTT )

@@ -4,7 +4,7 @@
  * Copyright (C) 2013-2017 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -132,15 +132,6 @@ public:
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
-    ///> Event sent after an item is selected.
-    static const TOOL_EVENT SelectedEvent;
-
-    ///> Event sent after an item is unselected.
-    static const TOOL_EVENT UnselectedEvent;
-
-    ///> Event sent after selection is cleared.
-    static const TOOL_EVENT ClearedEvent;
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
@@ -168,11 +159,11 @@ private:
      * Function selectCursor()
      * Selects an item under the cursor unless there is something already selected or aSelectAlways
      * is true.
-     * @param aSelectAlways forces to select an item even if there is an item already selected.
+     * @param aForceSelect forces to select an item even if there is an item already selected.
      * @param aClientFilter allows the client to perform tool- or action-specific filtering.
      * @return true if eventually there is an item selected, false otherwise.
      */
-    bool selectCursor( bool aSelectAlways = false,
+    bool selectCursor( bool aForceSelect = false,
                        CLIENT_SELECTION_FILTER aClientFilter = NULL );
 
     /**
@@ -186,10 +177,12 @@ private:
 
     /**
      * Allows the selection of a single item from a list via pop-up menu.  The items are
-     * highlighted on the canvas when hovered in the menu.
+     * highlighted on the canvas when hovered in the menu.  The collector is trimmed to
+     * the picked item.
      * @param aTitle (optional) Allows the menu to be titled (ie: "Clarify Selection").
+     * @return true if an item was picked
      */
-    BOARD_ITEM* doSelectionMenu( GENERAL_COLLECTOR* aItems, const wxString& aTitle );
+    bool doSelectionMenu( GENERAL_COLLECTOR* aItems, const wxString& aTitle );
 
     ///> Selects a trivial connection (between two junctions) of items in selection
     int selectConnection( const TOOL_EVENT& aEvent );
@@ -295,7 +288,7 @@ private:
     void unselect( BOARD_ITEM* aItem );
 
     /**
-     * Function selectVisually()
+     * Function highlight()
      * Highlights the item visually.
      * @param aItem is an item to be be highlighted.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
@@ -304,7 +297,7 @@ private:
     void highlight( BOARD_ITEM* aItem, int aHighlightMode, SELECTION& aGroup );
 
     /**
-     * Function unselectVisually()
+     * Function unhighlight()
      * Unhighlights the item visually.
      * @param aItem is an item to be be highlighted.
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
@@ -336,28 +329,16 @@ private:
 
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 
-    /// Pointer to the parent frame.
-    PCB_BASE_FRAME* m_frame;
+private:
+    PCB_BASE_FRAME* m_frame;    // Pointer to the parent frame
+    SELECTION m_selection;      // Current state of selection
 
-    /// Current state of selection.
-    SELECTION m_selection;
+    bool m_additive;            // Items should be added to selection (instead of replacing)
+    bool m_subtractive;         // Items should be removed from selection
+    bool m_multiple;            // Multiple selection mode is active
+    bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
+    bool m_locked;              // Other tools are not allowed to modify locked items
 
-    /// Flag saying if items should be added to the current selection or rather replace it.
-    bool m_additive;
-
-    /// Flag saying if items should be removed from the current selection
-    bool m_subtractive;
-
-    /// Flag saying if multiple selection mode is active.
-    bool m_multiple;
-
-    /// Flag saying that heuristics should be skipped while choosing selection
-    bool m_skip_heuristics;
-
-    /// Can other tools modify locked items.
-    bool m_locked;
-
-    /// Menu model displayed by the tool.
     TOOL_MENU m_menu;
 
     /// Private state (opaque pointer/compilation firewall)

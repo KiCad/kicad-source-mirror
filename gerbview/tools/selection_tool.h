@@ -98,15 +98,6 @@ public:
     ///> Launches a tool to measure between points
     int MeasureTool( const TOOL_EVENT& aEvent );
 
-    ///> Event sent after an item is selected.
-    static const TOOL_EVENT SelectedEvent;
-
-    ///> Event sent after an item is unselected.
-    static const TOOL_EVENT UnselectedEvent;
-
-    ///> Event sent after selection is cleared.
-    static const TOOL_EVENT ClearedEvent;
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 

@@ -111,6 +111,11 @@ public:
     KIGFX::SCH_RENDER_SETTINGS* GetRenderSettings();
 
     /**
+     * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
+     */
+    virtual bool GetShowAllPins() const { return true; }
+
+    /**
      * switches currently used canvas ( Cairo / OpenGL).
      */
     virtual void OnSwitchCanvas( wxCommandEvent& aEvent );

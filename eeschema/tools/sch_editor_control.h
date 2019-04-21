@@ -62,6 +62,9 @@ public:
     ///> Highlights net under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 
+    ///> Removes any net highlighting
+    int ClearHighlight( const TOOL_EVENT& aEvent );
+
     ///> Highlights frame's SelectedNetName.
     int HighlightNetSelection( const TOOL_EVENT& aEvent );
 
@@ -73,8 +76,9 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-    ///> Pointer to the currently used edit frame.
-    SCH_EDIT_FRAME* m_frame;
+    SCH_EDIT_FRAME* m_frame;    ///> Pointer to the currently used edit frame
+
+    bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to PCBNew
 
     /// Menu model displayed by the tool.
     TOOL_MENU m_menu;

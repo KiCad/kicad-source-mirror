@@ -34,8 +34,9 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_picker_tool.h>
-#include <project.h>
 #include <tools/sch_editor_control.h>
+#include <tools/sch_selection_tool.h>
+#include <project.h>
 #include <hotkeys.h>
 #include <advanced_config.h>
 
@@ -43,6 +44,9 @@ TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview"
         AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
+        AS_GLOBAL, 0, "", "" );
+
+TOOL_ACTION SCH_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
         AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highlightNetSelection",
@@ -115,6 +119,59 @@ bool SCH_EDITOR_CONTROL::Init()
 }
 
 
+int SCH_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
+{
+    // Don't get in an infinite loop SCH -> PCB -> SCH -> PCB -> SCH -> ...
+    if( m_probingSchToPcb )
+    {
+        m_probingSchToPcb = false;
+        return 0;
+    }
+
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION& selection = selTool->GetSelection();
+
+    if( selection.Size() == 1 )
+    {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
+        SCH_COMPONENT* component;
+
+        switch( item->Type() )
+        {
+        case SCH_FIELD_T:
+        case LIB_FIELD_T:
+            component = (SCH_COMPONENT*) item->GetParent();
+            m_frame->SendMessageToPCBNEW( item, component );
+            break;
+
+        case SCH_COMPONENT_T:
+            component = (SCH_COMPONENT*) item;
+            m_frame->SendMessageToPCBNEW( item, component );
+            break;
+
+        case SCH_PIN_T:
+            component = (SCH_COMPONENT*) item->GetParent();
+            m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), component );
+            break;
+
+#if 0   // This is too slow on larger projects
+            case SCH_SHEET_T:
+        SendMessageToPCBNEW( item, nullptr );
+        break;
+#endif
+        default:
+            ;
+        }
+    }
+
+    return 0;
+}
+
+
+// A magic cookie token for clearing the highlight
+static VECTOR2D CLEAR;
+
+
 // TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
@@ -123,7 +180,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     EDA_ITEMS       nodeList;
     bool            retVal = true;
 
-    if( editFrame->GetScreen()->GetNode( wxPoint( aPosition.x, aPosition.y ), nodeList ) )
+    if( aPosition != CLEAR && editFrame->GetScreen()->GetNode( (wxPoint) aPosition, nodeList ) )
     {
         if( TestDuplicateSheetNames( false ) > 0 )
         {
@@ -156,9 +213,17 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 int SCH_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    VECTOR2I              gridPosition = controls->GetCursorPosition( true );
+    VECTOR2D              gridPosition = controls->GetCursorPosition( true );
 
     highlightNet( m_toolMgr, gridPosition );
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
+{
+    highlightNet( m_toolMgr, CLEAR );
 
     return 0;
 }
@@ -269,14 +334,15 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UnlockSelected,        SCH_ACTIONS::unlock.MakeEvent() );
      */
 
+    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::SelectedEvent );
+    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::UnselectedEvent );
+    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::ClearedEvent );
     /*
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    SELECTION_TOOL::SelectedEvent );
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    SELECTION_TOOL::UnselectedEvent );
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    SELECTION_TOOL::ClearedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbePcbToSch,    SCH_ACTIONS::crossProbeSchToPcb.MakeEvent() );
      */
 
     Go( &SCH_EDITOR_CONTROL::HighlightNet,          SCH_ACTIONS::highlightNet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ClearHighlight,        SCH_ACTIONS::clearHighlight.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    SCH_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, SCH_ACTIONS::highlightNetSelection.MakeEvent() );
 }

@@ -164,7 +164,6 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp
-    tools/sch_editor_control.cpp
     hotkeys.cpp
     lib_arc.cpp
     lib_bezier.cpp
@@ -244,6 +243,8 @@ set( EESCHEMA_SRCS
 
     tools/sch_actions.cpp
     tools/sch_drawing_tool.cpp
+    tools/sch_edit_tool.cpp
+    tools/sch_editor_control.cpp
     tools/sch_picker_tool.cpp
     tools/sch_selection_tool.cpp
     tools/selection.cpp

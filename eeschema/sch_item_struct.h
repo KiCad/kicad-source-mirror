@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -171,6 +171,17 @@ public:
     wxPoint& GetStoredPos() { return m_storedPos; }
     void     SetStoredPos( wxPoint aPos ) { m_storedPos = aPos; }
 
+    /**
+     * Function IsLocked
+     * @return bool - true if the object is locked, else false
+     */
+    virtual bool IsLocked() const { return false; }
+
+    /**
+     * Function SetLocked
+     * modifies 'lock' status for of the item.
+     */
+    virtual void SetLocked( bool aLocked ) {}
 
     /**
      * Function GetLayer

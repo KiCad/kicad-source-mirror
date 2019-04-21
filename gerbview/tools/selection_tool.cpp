@@ -267,7 +267,7 @@ void GERBVIEW_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
         unselect( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
     else
     {
@@ -280,7 +280,7 @@ void GERBVIEW_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem )
             select( aItem );
 
             // Inform other potentially interested tools
-            m_toolMgr->ProcessEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
         }
     }
 
@@ -455,7 +455,7 @@ bool GERBVIEW_SELECTION_TOOL::selectMultiple()
 
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
-                m_toolMgr->ProcessEvent( SelectedEvent );
+                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
             break;  // Stop waiting for events
         }
@@ -516,7 +516,7 @@ int GERBVIEW_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
             select( item );
         }
 
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
     return 0;
@@ -533,7 +533,7 @@ int GERBVIEW_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
         select( item );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
     return 0;
@@ -553,7 +553,7 @@ int GERBVIEW_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
             unselect( item );
         }
 
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
 
     return 0;
@@ -570,7 +570,7 @@ int GERBVIEW_SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
         unselect( item );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
 
     return 0;
@@ -590,7 +590,7 @@ void GERBVIEW_SELECTION_TOOL::clearSelection()
     m_frame->SetCurItem( NULL );
 
     // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
 }
 
 
@@ -950,9 +950,3 @@ const KIGFX::VIEW_GROUP::ITEMS SELECTION::updateDrawList() const
 
     return items;
 }
-
-
-
-const TOOL_EVENT GERBVIEW_SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "gerbview.InteractiveSelection.selected" );
-const TOOL_EVENT GERBVIEW_SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "gerbview.InteractiveSelection.unselected" );
-const TOOL_EVENT GERBVIEW_SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "gerbview.InteractiveSelection.cleared" );

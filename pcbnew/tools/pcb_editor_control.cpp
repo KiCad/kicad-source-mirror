@@ -25,10 +25,11 @@
 #include <cstdint>
 #include <thread>
 #include <mutex>
-
+#include <functional>
 #include "pcb_editor_control.h"
 #include "pcb_actions.h"
 #include <tool/tool_manager.h>
+#include <tools/tool_event_utils.h>
 #include <wx/progdlg.h>
 
 #include "edit_tool.h"
@@ -57,12 +58,8 @@
 #include <view/view_controls.h>
 #include <origin_viewitem.h>
 #include <profile.h>
-
 #include <widgets/progress_reporter.h>
 
-#include <tools/tool_event_utils.h>
-
-#include <functional>
 using namespace std::placeholders;
 
 
@@ -836,6 +833,7 @@ int PCB_EDITOR_CONTROL::ZoneDuplicate( const TOOL_EVENT& aEvent )
 
 int PCB_EDITOR_CONTROL::CrossProbePcbToSch( const TOOL_EVENT& aEvent )
 {
+    // Don't get in an infinite loop PCB -> SCH -> PCB -> SCH -> ...
     if( m_probingSchToPcb )
     {
         m_probingSchToPcb = false;
@@ -1287,9 +1285,9 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::ToggleLockSelected,  PCB_ACTIONS::toggleLock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::LockSelected,        PCB_ACTIONS::lock.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UnlockSelected,      PCB_ACTIONS::unlock.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  SELECTION_TOOL::SelectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  SELECTION_TOOL::UnselectedEvent );
-    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  SELECTION_TOOL::ClearedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::SelectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::UnselectedEvent );
+    Go( &PCB_EDITOR_CONTROL::CrossProbePcbToSch,  EVENTS::ClearedEvent );
     Go( &PCB_EDITOR_CONTROL::CrossProbeSchToPcb,  PCB_ACTIONS::crossProbeSchToPcb.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );

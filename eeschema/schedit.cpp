@@ -46,6 +46,7 @@
 #include <simulation_cursors.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 
  void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
@@ -364,8 +365,9 @@ void SCH_EDIT_FRAME::OnDuplicateItem( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
 
     // trying to move an item when there is a block at the same time is not acceptable
     if( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK )
@@ -381,8 +383,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::MovableItems,
-                                  aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::MovableItems );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )
@@ -526,8 +527,10 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
 
 bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = LocateItem( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+
+    SCH_ITEM* item = selTool->SelectPoint( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
 
     if( item )
     {
@@ -693,12 +696,13 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
 
 void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
 
     if( item != NULL )
     {
-        item = LocateAndShowItem( item->GetPosition() );
+        item = selTool->SelectPoint( item->GetPosition() );
         SendMessageToPCBNEW( item, NULL );
     }
     else
@@ -711,7 +715,7 @@ void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition() );
+        item = selTool->SelectPoint( data->GetPosition() );
         SendMessageToPCBNEW( item, NULL );
     }
 }
@@ -719,9 +723,10 @@ void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN*     screen = GetScreen();
-    SCH_ITEM*       item = screen->GetCurItem();
-    BLOCK_SELECTOR& block = screen->m_BlockLocate;
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
+    BLOCK_SELECTOR&     block = screen->m_BlockLocate;
 
     // Allows block rotate operation on hot key.
     if( block.GetState() != STATE_NO_BLOCK )
@@ -752,8 +757,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::RotatableItems,
-                                  aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::RotatableItems );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )
@@ -852,8 +856,9 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
 
     if( item == NULL )
     {
@@ -894,11 +899,11 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
             break;
         }
 
-        item = LocateAndShowItem( data->GetPosition(), filterList, aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), filterList );
 
         // If no item found, and if an auxiliary filter exists, try to use it
         if( !item && filterListAux )
-            item = LocateAndShowItem( data->GetPosition(), filterListAux, aEvent.GetInt() );
+            item = selTool->SelectPoint( data->GetPosition(), filterListAux );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )
@@ -1014,8 +1019,9 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
 
     // The easiest way to handle a menu or a hot key drag command
     // is to simulate a block drag command
@@ -1036,8 +1042,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::DraggableItems,
-                                  aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::DraggableItems );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )
@@ -1086,9 +1091,10 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen    = GetScreen();
-    SCH_ITEM*   item      = screen->GetCurItem();
-    BLOCK_SELECTOR& block = screen->m_BlockLocate;
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen  = GetScreen();
+    SCH_ITEM*           item    = screen->GetCurItem();
+    BLOCK_SELECTOR&     block   = screen->m_BlockLocate;
 
     // Allows block rotate operation on hot key.
     if( block.GetState() != STATE_NO_BLOCK )
@@ -1149,8 +1155,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
         wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::OrientableItems,
-                                  aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::OrientableItems );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )
@@ -1231,8 +1236,9 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
 {
-    auto data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
-    auto item = GetScreen()->GetCurItem();
+    SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+    SCH_ITEM*               item = GetScreen()->GetCurItem();
 
     wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
 
@@ -1242,8 +1248,7 @@ void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
         if( aEvent.GetInt() == 0 )
             return;
 
-        item = LocateAndShowItem( data->GetPosition(), SCH_COLLECTOR::EditableItems,
-                                  aEvent.GetInt() );
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::EditableItems );
 
         // Exit if no item found at the current location or the item is already being edited.
         if( item == NULL || item->GetEditFlags() != 0 )

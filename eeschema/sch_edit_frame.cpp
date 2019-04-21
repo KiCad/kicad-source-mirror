@@ -62,6 +62,7 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
 
 #include <wx/display.h>
 #include <build_version.h>
@@ -1107,7 +1108,8 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
-    SCH_COMPONENT* component = NULL;
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_COMPONENT*      component = NULL;
 
     if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
     {
@@ -1127,7 +1129,7 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 
             // Set the locat filter, according to the edit command
             const KICAD_T* filterList = SCH_COLLECTOR::ComponentsOnly;
-            item = LocateAndShowItem( data->GetPosition(), filterList, event.GetInt() );
+            item = selTool->SelectPoint( data->GetPosition(), filterList );
 
             // Exit if no item found at the current location or the item is already being edited.
             if( item == NULL || item->GetEditFlags() != 0 )

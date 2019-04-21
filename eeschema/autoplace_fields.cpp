@@ -63,6 +63,8 @@
 #include <kiface_i.h>
 #include <vector>
 #include <algorithm>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 
 #define FIELD_PADDING 10            // arbitrarily chosen for aesthetics
 #define FIELD_PADDING_ALIGNED 18    // aligns 50 mil text to a 100 mil grid
@@ -683,8 +685,9 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 
 void SCH_EDIT_FRAME::OnAutoplaceFields( wxCommandEvent& aEvent )
 {
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM* item = screen->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_SCREEN*         screen = GetScreen();
+    SCH_ITEM*           item = screen->GetCurItem();
 
     // Get the item under cursor if we're not currently moving something
     if( !item )
@@ -692,9 +695,8 @@ void SCH_EDIT_FRAME::OnAutoplaceFields( wxCommandEvent& aEvent )
         if( aEvent.GetInt() == 0 )
             return;
 
-        EDA_HOTKEY_CLIENT_DATA& data = dynamic_cast<EDA_HOTKEY_CLIENT_DATA&>(
-                *aEvent.GetClientObject() );
-        item = LocateItem( data.GetPosition(), SCH_COLLECTOR::MovableItems, aEvent.GetInt() );
+        auto& data = dynamic_cast<EDA_HOTKEY_CLIENT_DATA&>( *aEvent.GetClientObject() );
+        item = selTool->SelectPoint( data.GetPosition(), SCH_COLLECTOR::MovableItems );
         screen->SetCurItem( NULL );
 
         if( !item || item->GetEditFlags() )

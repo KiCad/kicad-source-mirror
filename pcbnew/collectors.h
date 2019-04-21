@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2007-2008 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file collectors.h
- */
-
 #ifndef COLLECTORS_H
 #define COLLECTORS_H
 
@@ -38,9 +34,8 @@
 #include <collector.h>
 #include <layers_id_colors_and_visibility.h>              // LAYER_COUNT, layer defs
 #include <view/view.h>
+#include <class_board_item.h>
 
-
-class BOARD_ITEM;
 
 
 /**
@@ -223,7 +218,7 @@ public:
      * @param ndx The index into the list.
      * @return BOARD_ITEM* - or something derived from it, or NULL.
      */
-    BOARD_ITEM* operator[]( int ndx ) const
+    BOARD_ITEM* operator[]( int ndx ) const override
     {
         if( (unsigned)ndx < (unsigned)GetCount() )
             return (BOARD_ITEM*) m_List[ ndx ];

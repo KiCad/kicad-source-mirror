@@ -51,7 +51,7 @@ const KICAD_T SCH_COLLECTOR::AllItems[] = {
     SCH_HIER_LABEL_T,
     SCH_FIELD_T,
     SCH_COMPONENT_T,
-    LIB_PIN_T,
+    SCH_PIN_T,
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
@@ -238,43 +238,21 @@ const KICAD_T SCH_COLLECTOR::DoubleClickItems[] = {
 
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
-    if( aItem->Type() != LIB_PIN_T && !aItem->HitTest( m_RefPos ) )
-        return SEARCH_CONTINUE;
-
-    // Pins have special hit testing requirements that are relative to their parent
-    // SCH_COMPONENT item.
-    if( aItem->Type() == LIB_PIN_T )
-    {
-        wxCHECK_MSG( aTestData && ( (EDA_ITEM*) aTestData )->Type() == SCH_COMPONENT_T,
-                     SEARCH_CONTINUE, wxT( "Cannot inspect invalid data.  Bad programmer!" ) );
-
-        // Pin hit testing is relative to the components position and orientation in the
-        // schematic.  The hit test position must be converted to library coordinates.
-        SCH_COMPONENT* component = (SCH_COMPONENT*) aTestData;
-        TRANSFORM transform = component->GetTransform().InverseTransform();
-        wxPoint position = transform.TransformCoordinate( m_RefPos - component->GetPosition() );
-
-        position.y *= -1;   // Y axis polarity in schematic is inverted from library.
-
-        if( !aItem->HitTest( position ) )
-            return SEARCH_CONTINUE;
-    }
-
-    Append( aItem );
+    if( aItem->HitTest( m_RefPos ) )
+        Append( aItem );
 
     return SEARCH_CONTINUE;
 }
 
 
-void SCH_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[],
-                             const wxPoint& aPosition )
+void SCH_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos )
 {
     Empty();        // empty the collection just in case
 
     SetScanTypes( aFilterList );
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
-    SetRefPos( aPosition );
+    SetRefPos( aPos );
 
     EDA_ITEM::IterateForward( aItem, m_inspector, NULL, m_ScanTypes );
 }
@@ -319,7 +297,7 @@ bool SCH_COLLECTOR::IsNode( bool aIncludePins ) const
             continue;
         }
 
-        if( type == LIB_PIN_T )
+        if( type == SCH_PIN_T )
         {
             if( !aIncludePins )
                 return false;
@@ -559,7 +537,7 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 
     if( aItem->Matches( m_findReplaceData, m_currentSheetPath, &position ) )
     {
-        if( aItem->Type() == LIB_PIN_T )
+        if( aItem->Type() == SCH_PIN_T )
         {
             wxCHECK_MSG( aTestData && ( (EDA_ITEM*) aTestData )->Type() == SCH_COMPONENT_T,
                          SEARCH_CONTINUE, wxT( "Cannot inspect invalid data.  Bad programmer!" ) );

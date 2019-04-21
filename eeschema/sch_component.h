@@ -606,7 +606,7 @@ public:
     bool operator==( const SCH_COMPONENT& aComponent) const;
     bool operator!=( const SCH_COMPONENT& aComponent) const;
 
-    SCH_ITEM& operator=( const SCH_ITEM& aItem );
+    SCH_COMPONENT& operator=( const SCH_ITEM& aItem );
 
     bool IsReplaceable() const override { return true; }
 

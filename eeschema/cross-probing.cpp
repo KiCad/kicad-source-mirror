@@ -143,22 +143,29 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 }
 
 
-std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
+std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aComp )
 {
     // This is a keyword followed by a quoted string.
 
     // Cross probing to Pcbnew if a pin or a component is found
     switch( aItem->Type() )
     {
-    case SCH_FIELD_T:
+    case LIB_PIN_T:
+        wxFAIL_MSG( "What are we doing with LIB_* items here?" );
+        break;
+
     case LIB_FIELD_T:
-        if( aPart )
-            return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+        wxFAIL_MSG( "What are we doing with LIB_* items here?" );
+        // fall through to SCH_FIELD_T:
+
+    case SCH_FIELD_T:
+        if( aComp )
+            return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
         break;
 
     case SCH_COMPONENT_T:
-        aPart = (SCH_COMPONENT*) aItem;
-        return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+        aComp = (SCH_COMPONENT*) aItem;
+        return StrPrintf( "$PART: \"%s\"", TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
 
     case SCH_SHEET_T:
         {
@@ -166,24 +173,23 @@ std::string FormatProbeItem( EDA_ITEM* aItem, SCH_COMPONENT* aPart )
         return StrPrintf( "$SHEET: \"%8.8lX\"", (unsigned long) sheet->GetTimeStamp() );
         }
 
-    case LIB_PIN_T:
+    case SCH_PIN_T:
         {
-            if( !aPart )
-                break;
-
-            LIB_PIN* pin = (LIB_PIN*) aItem;
+            SCH_PIN* pin = (SCH_PIN*) aItem;
+            aComp = pin->GetParentComponent();
 
             if( !pin->GetNumber().IsEmpty() )
             {
-                return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"", TO_UTF8( pin->GetNumber() ),
-                         TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+                return StrPrintf( "$PIN: \"%s\" $PART: \"%s\"",
+                                  TO_UTF8( pin->GetNumber() ),
+                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
             }
             else
             {
-                return StrPrintf( "$PART: \"%s\"", TO_UTF8( aPart->GetField( REFERENCE )->GetText() ) );
+                return StrPrintf( "$PART: \"%s\"",
+                                  TO_UTF8( aComp->GetField( REFERENCE )->GetText() ) );
             }
         }
-        break;
 
     default:
         break;

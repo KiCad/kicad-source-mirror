@@ -39,6 +39,8 @@
 #include <sch_sheet.h>
 
 #include <dialogs/dialog_schematic_find.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 
 // Remark: the hotkey message info is used as keyword in hotkey config files and
 // as comments in help windows, therefore translated only when displayed
@@ -610,7 +612,8 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
         if( aItem == NULL )
         {
-            aItem = LocateAndShowItem( aPosition, SCH_COLLECTOR::CopyableItems );
+            SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+            aItem = selTool->SelectPoint( aPosition, SCH_COLLECTOR::CopyableItems );
 
             if( aItem == NULL )
                 break;

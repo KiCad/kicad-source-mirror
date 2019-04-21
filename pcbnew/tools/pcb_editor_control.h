@@ -135,17 +135,11 @@ private:
     /// Menu model displayed by the tool.
     TOOL_MENU m_menu;
 
-    ///> Place & drill origin marker.
-    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;
+    std::unique_ptr<KIGFX::ORIGIN_VIEWITEM> m_placeOrigin;    ///> Place & drill origin marker
 
-    ///> Flag to ignore a single crossprobe message from eeschema.
-    bool m_probingSchToPcb;
-
-    ///> Flag to indicate whether the current selection ratsnest is slow to calculate.
-    bool m_slowRatsnest;
-
-    ///> Timer that start ratsnest calculation when it is slow to compute.
-    wxTimer m_ratsnestTimer;
+    bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to EESchema
+    bool m_slowRatsnest;        ///> Indicates current selection ratsnest will be slow to calculate
+    wxTimer m_ratsnestTimer;    ///> Timer to initiate lazy ratsnest calculation (ie: when slow)
 
     ///> How to modify a property for selected items.
     enum MODIFY_MODE { ON, OFF, TOGGLE };

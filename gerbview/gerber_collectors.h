@@ -92,7 +92,7 @@ public:
      * @param ndx The index into the list.
      * @return EDA_ITEM* - or something derived from it, or NULL.
      */
-    EDA_ITEM* operator[]( int ndx ) const
+    EDA_ITEM* operator[]( int ndx ) const override
     {
         if( (unsigned)ndx < (unsigned)GetCount() )
             return (EDA_ITEM*) m_List[ ndx ];

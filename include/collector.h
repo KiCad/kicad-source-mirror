@@ -168,7 +168,7 @@ public:
      * @param aIndex The index into the list.
      * @return EDA_ITEM* - or something derived from it, or NULL.
      */
-    EDA_ITEM* operator[]( int aIndex ) const
+    virtual EDA_ITEM* operator[]( int aIndex ) const
     {
         if( (unsigned)aIndex < (unsigned)GetCount() )  // (unsigned) excludes aIndex<0 also
             return m_List[ aIndex ];

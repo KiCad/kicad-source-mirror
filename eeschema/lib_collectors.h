@@ -99,7 +99,7 @@ public:
      * @param aIndex The index into the list.
      * @return LIB_ITEM* at \a aIndex or NULL.
      */
-    LIB_ITEM* operator[]( int aIndex ) const
+    LIB_ITEM* operator[]( int aIndex ) const override
     {
         if( (unsigned)aIndex < (unsigned)GetCount() )
             return (LIB_ITEM*) m_List[ aIndex ];

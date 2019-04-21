@@ -112,6 +112,10 @@ public:
     static TOOL_ACTION finishDrawing;
 
     // Editing
+    static TOOL_ACTION editActivate;
+    static TOOL_ACTION move;
+    static TOOL_ACTION duplicate;
+    static TOOL_ACTION rotate;
     static TOOL_ACTION properties;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
@@ -131,6 +135,7 @@ public:
 
     // Net highlighting
     static TOOL_ACTION highlightNet;
+    static TOOL_ACTION clearHighlight;
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION highlightNetCursor;
 

@@ -65,44 +65,40 @@ using namespace std::placeholders;
 
 // Selection tool actions
 TOOL_ACTION PCB_ACTIONS::selectionActivate( "pcbnew.InteractiveSelection",
-        AS_GLOBAL, 0,
-        "", "", NULL, AF_ACTIVATE ); // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );      // No description, not shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectionCursor( "pcbnew.InteractiveSelection.Cursor",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectItem( "pcbnew.InteractiveSelection.SelectItem",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectItems( "pcbnew.InteractiveSelection.SelectItems",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::unselectItem( "pcbnew.InteractiveSelection.UnselectItem",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::unselectItems( "pcbnew.InteractiveSelection.UnselectItems",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectionClear( "pcbnew.InteractiveSelection.Clear",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectionMenu( "pcbnew.InteractiveSelection.SelectionMenu",
-        AS_GLOBAL, 0,
-        "", "" );    // No description, it is not supposed to be shown anywhere
+        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
 TOOL_ACTION PCB_ACTIONS::selectConnection( "pcbnew.InteractiveSelection.SelectConnection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_TRIVIAL_CONNECTION ),
-        _( "Single Track" ), _( "Selects all track segments & vias between two junctions." ), add_tracks_xpm );
+        _( "Single Track" ),
+        _( "Selects all track segments & vias between two junctions." ),
+        add_tracks_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectCopper( "pcbnew.InteractiveSelection.SelectCopper",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SEL_COPPER_CONNECTION ),
-        _( "Connected Tracks" ), _( "Selects all connected tracks & vias." ), net_highlight_xpm );
+        _( "Connected Tracks" ),
+        _( "Selects all connected tracks & vias." ),
+        net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.ExpandConnection",
         AS_GLOBAL, 0,
@@ -111,20 +107,27 @@ TOOL_ACTION PCB_ACTIONS::expandSelectedConnection( "pcbnew.InteractiveSelection.
 
 TOOL_ACTION PCB_ACTIONS::selectNet( "pcbnew.InteractiveSelection.SelectNet",
         AS_GLOBAL, 0,
-        _( "All Tracks in Net" ), _( "Selects all tracks & vias belonging to the same net." ), mode_track_xpm );
+        _( "All Tracks in Net" ),
+        _( "Selects all tracks & vias belonging to the same net." ),
+        mode_track_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectOnSheetFromEeschema( "pcbnew.InteractiveSelection.SelectOnSheet",
         AS_GLOBAL,  0,
-        _( "Sheet" ), _( "Selects all modules and tracks in the schematic sheet" ), select_same_sheet_xpm );
+        _( "Sheet" ),
+        _( "Selects all modules and tracks in the schematic sheet" ),
+        select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSameSheet",
         AS_GLOBAL,  0,
         _( "Items in Same Hierarchical Sheet" ),
-        _( "Selects all modules and tracks in the same schematic sheet" ), select_same_sheet_xpm );
+        _( "Selects all modules and tracks in the same schematic sheet" ),
+        select_same_sheet_xpm );
 
 TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
         AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
-        _( "Find Item..." ),_( "Searches the document for an item" ), find_xpm );
+        _( "Find Item..." ),
+        _( "Searches the document for an item" ),
+        find_xpm );
 
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ),
@@ -466,7 +469,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
         unselect( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
     else
     {
@@ -479,7 +482,7 @@ void SELECTION_TOOL::toggleSelection( BOARD_ITEM* aItem, bool aForce )
             select( aItem );
 
             // Inform other potentially interested tools
-            m_toolMgr->ProcessEvent( SelectedEvent );
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
         }
     }
 
@@ -542,60 +545,47 @@ bool SELECTION_TOOL::selectPoint( const VECTOR2I& aWhere, bool aOnDrag,
     if( aClientFilter )
         aClientFilter( aWhere, collector );
 
-    if( collector.GetCount() == 0 )
+    // Apply some ugly heuristics to avoid disambiguation menus whenever possible
+    if( collector.GetCount() > 1 && !m_skip_heuristics )
     {
-        if( !m_additive && anyCollected )
+        guessSelectionCandidates( collector, aWhere );
+    }
+
+    // If still more than one item we're going to have to ask the user.
+    if( collector.GetCount() > 1 )
+    {
+        if( aOnDrag )
         {
-            clearSelection();
+            Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
         }
-        return false;
+
+        if( !doSelectionMenu( &collector, _( "Clarify Selection" ) ) )
+        {
+            if( aSelectionCancelledFlag )
+                *aSelectionCancelledFlag = true;
+
+            return false;
+        }
     }
 
     if( collector.GetCount() == 1 )
     {
-        toggleSelection( collector[0] );
+        BOARD_ITEM* item = collector[ 0 ];
+
+        toggleSelection( item );
         return true;
     }
 
-    // Apply some ugly heuristics to avoid disambiguation menus whenever possible
-    if( !m_skip_heuristics )
-    {
-        guessSelectionCandidates( collector, aWhere );
-
-        if( collector.GetCount() == 1 )
-        {
-            toggleSelection( collector[0] );
-            return true;
-        }
-    }
-
-    // Still more than one item.  We're going to have to ask the user.
-    if( aOnDrag )
-    {
-        Wait( TOOL_EVENT( TC_ANY, TA_MOUSE_UP, BUT_LEFT ) );
-    }
-
-    BOARD_ITEM* item = doSelectionMenu( &collector, _( "Clarify Selection" ) );
-
-    if( item )
-    {
-        return true;
-    }
-    else
-    {
-        if( aSelectionCancelledFlag )
-            *aSelectionCancelledFlag = true;
-
-        return false;
-    }
+    if( !m_additive && anyCollected )
+        clearSelection();
 
     return false;
 }
 
 
-bool SELECTION_TOOL::selectCursor( bool aSelectAlways, CLIENT_SELECTION_FILTER aClientFilter )
+bool SELECTION_TOOL::selectCursor( bool aForceSelect, CLIENT_SELECTION_FILTER aClientFilter )
 {
-    if( aSelectAlways || m_selection.Empty() )
+    if( aForceSelect || m_selection.Empty() )
     {
         clearSelection();
         selectPoint( getViewControls()->GetCursorPosition( false ), false, NULL, aClientFilter );
@@ -710,7 +700,7 @@ bool SELECTION_TOOL::selectMultiple()
 
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
-                m_toolMgr->ProcessEvent( SelectedEvent );
+                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
             break;  // Stop waiting for events
         }
@@ -819,14 +809,11 @@ int SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 
     if( items )
     {
-        // Perform individual selection of each item
-        // before processing the event.
+        // Perform individual selection of each item before processing the event.
         for( auto item : *items )
-        {
             select( item );
-        }
 
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
     return 0;
@@ -843,7 +830,7 @@ int SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
         select( item );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
     return 0;
@@ -856,14 +843,11 @@ int SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 
     if( items )
     {
-        // Perform individual unselection of each item
-        // before processing the event
+        // Perform individual unselection of each item before processing the event
         for( auto item : *items )
-        {
             unselect( item );
-        }
 
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
 
     return 0;
@@ -880,7 +864,7 @@ int SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
         unselect( item );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( UnselectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
 
     return 0;
@@ -935,7 +919,7 @@ int SELECTION_TOOL::expandSelectedConnection( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -987,7 +971,7 @@ int SELECTION_TOOL::selectCopper( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -1056,7 +1040,7 @@ int SELECTION_TOOL::selectNet( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -1201,7 +1185,7 @@ int SELECTION_TOOL::selectOnSheetFromEeschema( const TOOL_EVENT& aEvent )
     zoomFitSelection();
 
     if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -1235,7 +1219,7 @@ int SELECTION_TOOL::selectSameSheet( const TOOL_EVENT& aEvent )
 
     // Inform other potentially interested tools
     if( m_selection.Size() > 0 )
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -1251,7 +1235,7 @@ void SELECTION_TOOL::findCallback( BOARD_ITEM* aItem )
         getView()->SetCenter( aItem->GetPosition() );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( SelectedEvent );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
 
     m_frame->GetGalCanvas()->ForceRefresh();
@@ -1430,14 +1414,12 @@ void SELECTION_TOOL::clearSelection()
     m_selection.ClearReferencePoint();
 
     if( m_frame )
-    {
         m_frame->SetCurItem( NULL );
-    }
 
     m_locked = true;
 
     // Inform other potentially interested tools
-    m_toolMgr->ProcessEvent( ClearedEvent );
+    m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
 }
 
@@ -1451,10 +1433,9 @@ int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 }
 
 
-BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
-                                             const wxString& aTitle )
+bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxString& aTitle )
 {
-    BOARD_ITEM* current = NULL;
+    BOARD_ITEM* current = nullptr;
     SELECTION highlightGroup;
     CONTEXT_MENU menu;
 
@@ -1475,6 +1456,7 @@ BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
 
     if( aTitle.Length() )
         menu.SetTitle( aTitle );
+
     menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );
     SetContextMenu( &menu, CMENU_NOW );
@@ -1518,9 +1500,14 @@ BOARD_ITEM* SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector,
     getView()->Remove( &highlightGroup );
 
     if( current )
+    {
         toggleSelection( current );
+        aCollector->Empty();
+        aCollector->Append( current );
+        return true;
+    }
 
-    return current;
+    return false;
 }
 
 
@@ -1849,8 +1836,8 @@ void SELECTION_TOOL::highlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGroup 
 
     aGroup.Add( aItem );
 
-    // Modules are treated in a special way - when they are selected, we have to
-    // unselect all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are highlighted, we have to
+    // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
@@ -1886,8 +1873,8 @@ void SELECTION_TOOL::unhighlight( BOARD_ITEM* aItem, int aMode, SELECTION& aGrou
     view()->Hide( aItem, false );
     view()->Update( aItem );
 
-    // Modules are treated in a special way - when they are selected, we have to
-    // unselect all the parts that make the module, not the module itself
+    // Modules are treated in a special way - when they are highlighted, we have to
+    // highlight all the parts that make the module, not the module itself
     if( aItem->Type() == PCB_MODULE_T )
     {
         static_cast<MODULE*>( aItem )->RunOnChildren( [&] ( BOARD_ITEM* item )
@@ -2301,6 +2288,3 @@ int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
 }
 
 
-const TOOL_EVENT SELECTION_TOOL::SelectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.selected" );
-const TOOL_EVENT SELECTION_TOOL::UnselectedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.unselected" );
-const TOOL_EVENT SELECTION_TOOL::ClearedEvent( TC_MESSAGE, TA_ACTION, "pcbnew.InteractiveSelection.cleared" );

@@ -1612,18 +1612,11 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
                 return SEARCH_QUIT;
             break;
 
-        case LIB_PIN_T:
-            if( PART_SPTR part = m_part.lock() )
+        case SCH_PIN_T:
+            for( SCH_PIN& pin : m_pins )
             {
-                LIB_PINS pins;
-
-                part->GetPins( pins, m_unit, m_convert );
-
-                for( size_t i = 0;  i < pins.size();  i++ )
-                {
-                    if( SEARCH_QUIT == aInspector( pins[ i ], (void*) this ) )
-                        return SEARCH_QUIT;
-                }
+                if( SEARCH_QUIT == aInspector( &pin, (void*) this ) )
+                    return SEARCH_QUIT;
             }
             break;
 
@@ -1728,7 +1721,7 @@ bool SCH_COMPONENT::operator!=( const SCH_COMPONENT& aComponent ) const
 }
 
 
-SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
+SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 {
     wxCHECK_MSG( Type() == aItem.Type(), *this,
                  wxT( "Cannot assign object type " ) + aItem.GetClass() + wxT( " to type " ) +

@@ -34,10 +34,13 @@
 #include <sch_bitmap.h>
 #include <netlist_object.h>
 #include <sch_view.h>
+#include <tool/tool_manager.h>
+#include <tools/sch_selection_tool.h>
 
 void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 {
     SCH_ITEM* item = GetScreen()->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
@@ -76,7 +79,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         }
         else
         {
-            item = LocateAndShowItem( aPosition );
+            item = selTool->SelectPoint( aPosition );
         }
     }
 
@@ -96,7 +99,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                                                        SCH_COMPONENT_T,
                                                        SCH_SHEET_PIN_T,
                                                        EOT };
-            item = LocateAndShowItem( aPosition, wiresAndComponents );
+            item = selTool->SelectPoint( aPosition, wiresAndComponents );
 
             if( !item )
                 break;
@@ -121,7 +124,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     case ID_SIM_TUNE:
         {
             constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
-            item = LocateAndShowItem( aPosition, fieldsAndComponents );
+            item = selTool->SelectPoint( aPosition, fieldsAndComponents );
 
             if( !item )
                 return;
@@ -159,13 +162,14 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
 
 {
-    EDA_ITEM* item = GetScreen()->GetCurItem();
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EDA_ITEM*           item = GetScreen()->GetCurItem();
 
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
         if( item == NULL || item->GetEditFlags() == 0 )
-            item = LocateAndShowItem( aPosition, SCH_COLLECTOR::DoubleClickItems );
+            item = selTool->SelectPoint( aPosition, SCH_COLLECTOR::DoubleClickItems );
 
         if( item == NULL || item->GetEditFlags() != 0 )
             break;

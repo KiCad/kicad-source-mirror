@@ -286,7 +286,7 @@ public:
         return (BOARD_ITEM*) &myItems[aIndex];
     }
 
-    BOARD_ITEM* operator[]( int aIndex ) const
+    BOARD_ITEM* operator[]( int aIndex ) const override
     {
         return At( aIndex );
     }

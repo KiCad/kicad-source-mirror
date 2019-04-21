@@ -899,7 +899,7 @@ int PCBNEW_CONTROL::placeBoardItems( std::vector<BOARD_ITEM*>& aItems, bool aIsN
 
     selection.SetReferencePoint( VECTOR2I( 0, 0 ) );
 
-    m_toolMgr->ProcessEvent( SELECTION_TOOL::SelectedEvent );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     m_toolMgr->RunAction( PCB_ACTIONS::move, true );
 
     return 0;

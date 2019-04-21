@@ -225,7 +225,7 @@ public:
     bool GetForceHVLines() const { return m_forceHVLines; }
     void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }
 
-    bool GetShowAllPins() const { return m_showAllPins; }
+    bool GetShowAllPins() const override { return m_showAllPins; }
     void SetShowAllPins( bool aEnable ) { m_showAllPins = aEnable; }
 
     bool GetShowFootprintPreviews() const { return m_footprintPreview; }
@@ -382,48 +382,6 @@ public:
      * the undo/redo container.
      */
     void AddItemToScreen( SCH_ITEM* aItem );
-
-    /**
-     * Check the schematic at \a aPosition in logical (drawing) units for a item
-     * matching the types in \a aFilterList.
-     * <p>
-     * The search is first performed at the nearest grid position to \a aPosition.  If no
-     * item if found on grid, then \a aPosition is tested for any items.  If the item found
-     * can be cross probed, a message is send to Pcbnew and the selected item is highlighted
-     * in PCB editor.
-     * </p>
-     *
-     * @param aPosition The wxPoint on the schematic to search.
-     * @param aFilterList A list of #KICAD_T types to to filter.
-     * @param aHotKeyCommandId A hot key command ID for performing additional tests when
-     *                         multiple items are found at \a aPosition.
-     * @param aClarifySelectionMenuCancelled is a pointer to a bool to handle a cancel command
-     * from user when the user cancels the locate menu disambiguation (selection between located items)
-     * @return A SCH_ITEM pointer of the item found or NULL if no item found
-     */
-    SCH_ITEM* LocateAndShowItem( const wxPoint& aPosition,
-                                 const KICAD_T aFilterList[] = SCH_COLLECTOR::AllItems,
-                                 int aHotKeyCommandId = 0,
-                                 bool* aClarifySelectionMenuCancelled = nullptr );
-
-    /**
-     * Check for items at \a aPosition matching the types in \a aFilterList.
-     * <p>
-     * If multiple items are located at \a aPosition, a context menu is displayed to clarify
-     * which item the user intended to select.  If the user aborts the context menu, NULL is
-     * returned and the abort request flag will be set to true.  Make sure to clear this flag
-     * before attempting to display any other context menus.
-     * </p>
-     *
-     * @param aPosition The wxPoint location where to search.
-     * @param aFilterList A list of #KICAD_T types to to filter.
-     * @param aHotKeyCommandId A hot key command ID for performing additional tests when
-     *                         multiple items are found at \a aPosition.
-     * @return The SCH_ITEM pointer of the item found or NULL if no item found.
-     */
-    SCH_ITEM* LocateItem( const wxPoint& aPosition,
-                          const KICAD_T aFilterList[] = SCH_COLLECTOR::AllItems,
-                          int aHotKeyCommandId = 0 );
 
     /**
      * Delete the item found under the cross hair.  If multiple items are found at the

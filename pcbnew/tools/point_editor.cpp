@@ -345,9 +345,9 @@ int POINT_EDITOR::OnSelectionChange( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( !m_editPoints ||
-            evt->Matches( m_selectionTool->ClearedEvent ) ||
-            evt->Matches( m_selectionTool->UnselectedEvent ) ||
-            evt->Matches( m_selectionTool->SelectedEvent ) )
+            evt->Matches( EVENTS::ClearedEvent ) ||
+            evt->Matches( EVENTS::UnselectedEvent ) ||
+            evt->Matches( EVENTS::SelectedEvent ) )
         {
             break;
         }
@@ -905,8 +905,8 @@ void POINT_EDITOR::setTransitions()
     Go( &POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
     Go( &POINT_EDITOR::modifiedSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
-    Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::SelectedEvent );
-    Go( &POINT_EDITOR::OnSelectionChange, SELECTION_TOOL::UnselectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
+    Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
 }
 
 

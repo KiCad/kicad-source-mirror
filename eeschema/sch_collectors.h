@@ -142,7 +142,7 @@ public:
      * @param aIndex The index into the list.
      * @return SCH_ITEM* at \a aIndex or NULL.
      */
-    SCH_ITEM* operator[]( int aIndex ) const
+    SCH_ITEM* operator[]( int aIndex ) const override
     {
         if( (unsigned)aIndex < (unsigned)GetCount() )
             return (SCH_ITEM*) m_List[ aIndex ];
@@ -159,9 +159,9 @@ public:
      * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
      *                    what is to be collected and the priority order of the resulting
      *                    collection.
-     * @param aPosition A wxPoint to use in hit-testing.
+     * @param aPos A wxPoint to use in hit-testing.
      */
-    void Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPosition );
+    void Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos );
 
     /**
      * Function IsCorner
@@ -289,7 +289,7 @@ public:
     }
 
     SCH_ITEM* GetItem( int ndx ) const;
-    SCH_ITEM* operator[]( int ndx ) const;
+    SCH_ITEM* operator[]( int ndx ) const override;
 
     void SetForceSearch( bool doSearch = true ) { m_forceSearch = doSearch; }
 
@@ -405,8 +405,7 @@ class SCH_TYPE_COLLECTOR : public SCH_COLLECTOR
 public:
     /**
      * Function Inspect
-     * is the examining function within the INSPECTOR which is passed to the
-     * Iterate function.
+     * is the examining function within the INSPECTOR which is passed to the Iterate function.
      *
      * @param testItem An EDA_ITEM to examine.
      * @param testData is not used in this class.
@@ -417,12 +416,11 @@ public:
 
     /**
      * Function Collect
-     * scans a BOARD_ITEM using this class's Inspector method, which does
-     * the collection.
-     * @param aBoard The BOARD_ITEM to scan.
+     * scans a DLIST using this class's Inspector method, which does the collection.
+     * @param aItem The head of a DLIST to scan.
      * @param aScanList The KICAD_Ts to gather up.
      */
-    void Collect( SCH_ITEM* aBoard, const KICAD_T aScanList[] );
+    void Collect( SCH_ITEM* aItem, const KICAD_T aScanList[] );
 };
 
 

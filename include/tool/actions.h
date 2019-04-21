@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -108,4 +108,20 @@ public:
     enum class REMOVE_FLAGS { NORMAL = 0x00, ALT = 0x01, CUT = 0x02 };
 };
 
-#endif
+
+/**
+ * Class EVENTS
+ *
+ * Gathers all the events that are shared by tools.
+ */
+class EVENTS
+{
+public:
+    const static TOOL_EVENT SelectedEvent;
+    const static TOOL_EVENT UnselectedEvent;
+    const static TOOL_EVENT ClearedEvent;
+};
+
+#endif // __ACTIONS_H
+
+
