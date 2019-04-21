@@ -310,6 +310,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
 
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
                 LIB_PART* part = nullptr;
 
@@ -584,6 +585,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
                 if( item )
                 {

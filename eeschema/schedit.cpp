@@ -633,6 +633,8 @@ void SCH_EDIT_FRAME::PrepareMoveItem( SCH_ITEM* aItem )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot move invalid schematic item" ) );
 
+    GetToolManager()->DeactivateTool();
+
     SetRepeatItem( NULL );
 
     if( !aItem->IsNew() )
