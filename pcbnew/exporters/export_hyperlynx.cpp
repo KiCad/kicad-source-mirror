@@ -185,9 +185,9 @@ private:
             if( m_reporter )
             {
                 m_reporter->Report(
-                        _( "File contains pad shapes that are not supported by the "
-                           "Hyperlynx exporter (oval, rectangle, circle). They have been "
-                           "exported as oval pads." ),
+                        _( "File contains pad shapes that are not supported by the Hyperlynx exporter\n"
+                           "(Supported shapes are oval, rectangle, circle.)\n"
+                           "They have been exported as oval pads." ),
                         REPORTER::RPT_WARNING );
             }
             break;
