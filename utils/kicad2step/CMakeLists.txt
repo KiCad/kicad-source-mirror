@@ -7,6 +7,7 @@ include_directories( BEFORE
 include_directories( SYSTEM
     ${OCE_INCLUDE_DIRS}
     ${OCC_INCLUDE_DIR}
+    ${Boost_INCLUDE_DIR}
 )
 
 set( K2S_FILES
@@ -29,7 +30,7 @@ endif( MINGW )
 
 add_executable( kicad2step ${K2S_FILES} )
 
-target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${OCC_LIBRARIES} Boost::boost )
+target_link_libraries( kicad2step ${wxWidgets_LIBRARIES} ${OCC_LIBRARIES} )
 
 if( APPLE )
     # puts binaries into the *.app bundle while linking
