@@ -23,11 +23,11 @@ add_library( kicad2step_lib STATIC
 target_include_directories( kicad2step_lib PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_SOURCE_DIR}/include # for core
+    ${Boost_INCLUDE_DIR}
 )
 
 target_link_libraries( kicad2step_lib
     sexpr
-    Boost::boost
 )
 
 set( K2S_FILES
