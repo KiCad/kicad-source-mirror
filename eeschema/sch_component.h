@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2014 Dick Hollenbeck, dick@softplc.com
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file sch_component.h
- * @brief Definition the SCH_COMPONENT class for Eeschema.
  */
 
 #ifndef COMPONENT_CLASS_H
@@ -56,7 +51,10 @@ class SYMBOL_LIB_TABLE;
 
 
 /// Pins, mapped by their corresponding LIB_PINs.
-typedef std::unordered_map<LIB_PIN*, SCH_PIN> SCH_PINS;
+typedef std::unordered_map<LIB_PIN*, SCH_PIN*> SCH_PIN_MAP;
+
+/// A container for several SCH_PIN items
+typedef std::vector<SCH_PIN>      SCH_PINS;
 
 /// A container for several SCH_FIELD items
 typedef std::vector<SCH_FIELD>    SCH_FIELDS;
@@ -96,7 +94,8 @@ private:
 
     PART_REF    m_part;         ///< points into the PROJECT's libraries to the LIB_PART for this component
 
-    SCH_PINS      m_pins;
+    SCH_PINS    m_pins;         ///< the component's pins
+    SCH_PIN_MAP m_pinMap;       ///< the component's pins mapped by LIB_PIN*.
 
     AUTOPLACED  m_fieldsAutoplaced; ///< indicates status of field autoplacement
 
@@ -461,11 +460,7 @@ public:
      */
     void GetPins( std::vector<LIB_PIN*>& aPinsList );
 
-    /**
-     * Return a map of library pins to their SCH_PIN equivalents.
-     * @return
-     */
-    SCH_PINS& GetPinMap();
+    SCH_PINS& GetPins() { return m_pins; }
 
     /**
      * Draw a component

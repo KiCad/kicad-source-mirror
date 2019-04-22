@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2019 KiCad Developers, see change_log.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,9 +26,8 @@
 
 
 SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
-    SCH_ITEM( nullptr, SCH_PIN_T ),
-    m_pin( aLibPin ),
-    m_comp( aParentComponent )
+    SCH_ITEM( aParentComponent, SCH_PIN_T ),
+    m_libPin( aLibPin )
 {
     SetPosition( aLibPin->GetPosition() );
     m_isDangling = true;
@@ -35,37 +35,48 @@ SCH_PIN::SCH_PIN( LIB_PIN* aLibPin, SCH_COMPONENT* aParentComponent ) :
 
 
 SCH_PIN::SCH_PIN( const SCH_PIN& aPin ) :
-    SCH_ITEM( aPin )
+        SCH_ITEM( aPin )
 {
-    m_pin = aPin.m_pin;
-    m_comp = aPin.m_comp;
+    m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
 }
 
 
+SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
+{
+    SCH_ITEM::operator=( aPin );
+
+    m_libPin = aPin.m_libPin;
+    m_position = aPin.m_position;
+    m_isDangling = aPin.m_isDangling;
+}
+
+
+SCH_COMPONENT* SCH_PIN::GetParentComponent() const
+{
+    return static_cast<SCH_COMPONENT*>( GetParent() );
+}
+
+
 wxString SCH_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 {
-    wxString tmp;
+    return wxString::Format( "%s %s",
+                             GetParentComponent()->GetSelectMenuText( aUnits ),
+                             m_libPin->GetSelectMenuText( aUnits ) );
+}
 
-#ifdef DEBUG
-    tmp.Printf( "SCH_PIN for %s %s",
-                m_comp->GetSelectMenuText( aUnits ),
-                m_pin->GetSelectMenuText( aUnits ) );
-#else
-    tmp.Printf( "%s %s",
-                m_comp->GetSelectMenuText( aUnits ),
-               m_pin->GetSelectMenuText( aUnits ) );
-#endif
 
-    return tmp;
+void SCH_PIN::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
+{
+    m_libPin->GetMsgPanelInfo( aUnits, aList, GetParentComponent() );
 }
 
 
 wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 {
-    if( m_pin->IsPowerConnection() )
-        return m_pin->GetName();
+    if( m_libPin->IsPowerConnection() )
+        return m_libPin->GetName();
 
     std::lock_guard<std::mutex> lock( m_netmap_mutex );
 
@@ -74,13 +85,13 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 
     wxString name = "Net-(";
 
-    name << m_comp->GetRef( &aPath );
+    name << GetParentComponent()->GetRef( &aPath );
 
     // TODO(JE) do we need adoptTimestamp?
     if( /* adoptTimestamp && */ name.Last() == '?' )
-        name << m_comp->GetTimeStamp();
+        name << GetParentComponent()->GetTimeStamp();
 
-    name << "-Pad" << m_pin->GetNumber() << ")";
+    name << "-Pad" << m_libPin->GetNumber() << ")";
 
     m_net_name_map[ aPath ] = name;
 
@@ -90,7 +101,32 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 
 wxPoint SCH_PIN::GetTransformedPosition() const
 {
-    auto t = m_comp->GetTransform();
-    return ( t.TransformCoordinate( GetPosition() ) +
-             m_comp->GetPosition() );
+    TRANSFORM t = GetParentComponent()->GetTransform();
+    return ( t.TransformCoordinate( GetPosition() ) + GetParentComponent()->GetPosition() );
 }
+
+
+const EDA_RECT SCH_PIN::GetBoundingBox() const
+{
+    // Due to pins being relative to their component parent's position, this is unlikely
+    // to do what a caller wants.  Use HitTest() directly instead.
+    wxFAIL_MSG( "SCH_PINs bounding box is relative to parent component" );
+
+    return m_libPin->GetBoundingBox();
+}
+
+
+bool SCH_PIN::HitTest( const wxPoint& aPosition ) const
+{
+    // Pin hit testing is relative to the components position and orientation in the
+    // schematic.  The hit test position must be converted to library coordinates.
+    TRANSFORM t = GetParentComponent()->GetTransform().InverseTransform();
+    wxPoint pos = t.TransformCoordinate( aPosition - GetParentComponent()->GetPosition() );
+
+    pos.y *= -1;   // Y axis polarity in schematic is inverted from library.
+
+    return m_libPin->GetBoundingBox().Contains( pos );
+}
+
+
+

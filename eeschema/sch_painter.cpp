@@ -943,7 +943,7 @@ void SCH_PAINTER::draw( SCH_LINE *aLine, int aLayer )
         VECTOR2D start = aLine->GetStartPoint();
         VECTOR2D end = aLine->GetEndPoint();
 
-        EDA_RECT clip( wxPoint( start.x, start.y ), wxSize( end.x - start.x, end.y - start.y ) );
+        EDA_RECT clip( (wxPoint)start, wxSize( end.x - start.x, end.y - start.y ) );
         clip.Normalize();
 
         double theta = atan2( end.y - start.y, end.x - start.x );
@@ -1093,13 +1093,9 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
 
     // Use dummy part if the actual couldn't be found (or couldn't be locked).
     LIB_PART* originalPart = originalPartSptr ? originalPartSptr.get() : dummy();
-    LIB_PINS originalPins;
-    originalPart->GetPins( originalPins, aComp->GetUnit(), aComp->GetConvert() );
 
     // Copy the source so we can re-orient and translate it.
     LIB_PART tempPart( *originalPart );
-    LIB_PINS tempPins;
-    tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
 
     tempPart.SetFlags( aComp->GetFlags() );
 
@@ -1108,24 +1104,21 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     for( auto& tempItem : tempPart.GetDrawItems() )
         tempItem.Move( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition() ) );
 
-    // Copy pin info from the component
-    SCH_PINS pinMap = aComp->GetPinMap();
+    // Copy the pin info from the component to the temp pins
+    LIB_PINS tempPins;
+    tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
+    const SCH_PINS& compPins = aComp->GetPins();
 
-    for( unsigned i = 0; i < originalPins.size() && i < tempPins.size(); ++i )
+    for( int i = 0; i < tempPins.size() && i < compPins.size(); ++ i )
     {
-        LIB_PIN* originalPin = originalPins[ i ];
         LIB_PIN* tempPin = tempPins[ i ];
+        const SCH_PIN& compPin = compPins[ i ];
 
-        if( pinMap.count( originalPin ) )
-        {
-            const SCH_PIN& schPin = pinMap.at( originalPin );
+        tempPin->ClearFlags();
+        tempPin->SetFlags( compPin.GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
 
-            tempPin->ClearFlags();
-            tempPin->SetFlags( schPin.GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
-
-            if( schPin.IsDangling() )
-                tempPin->SetFlags( IS_DANGLING );
-        }
+        if( compPin.IsDangling() )
+            tempPin->SetFlags( IS_DANGLING );
     }
 
     draw( &tempPart, aLayer, false, aComp->GetUnit(), aComp->GetConvert() );

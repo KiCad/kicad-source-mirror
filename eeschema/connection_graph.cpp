@@ -432,27 +432,26 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
         }
         else if( item->Type() == SCH_COMPONENT_T )
         {
-            auto component = static_cast<SCH_COMPONENT*>( item );
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+            TRANSFORM t = component->GetTransform();
 
             component->UpdatePins( &aSheet );
 
-            for( auto& it : component->GetPinMap() )
+            for( SCH_PIN& pin : component->GetPins() )
             {
-                SCH_PIN* pin = &it.second;
-
-                wxPoint pos = pin->GetTransformedPosition();
+                wxPoint pos = t.TransformCoordinate( pin.GetPosition() ) + component->GetPosition();
 
                 // because calling the first time is not thread-safe
-                pin->GetDefaultNetName( aSheet );
-                pin->ConnectedItems().clear();
+                pin.GetDefaultNetName( aSheet );
+                pin.ConnectedItems().clear();
 
                 // Invisible power pins need to be post-processed later
 
-                if( pin->IsPowerConnection() && !pin->IsVisible() )
-                    m_invisible_power_pins.push_back( std::make_pair( aSheet, pin ) );
+                if( pin.IsPowerConnection() && !pin.IsVisible() )
+                    m_invisible_power_pins.push_back( std::make_pair( aSheet, &pin ) );
 
-                connection_map[ pos ].push_back( pin );
-                m_items.insert( pin );
+                connection_map[ pos ].push_back( &pin );
+                m_items.insert( &pin );
             }
         }
         else
@@ -464,8 +463,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             switch( item->Type() )
             {
             case SCH_LINE_T:
-                conn->SetType( ( item->GetLayer() == LAYER_BUS ) ?
-                               CONNECTION_BUS : CONNECTION_NET );
+                conn->SetType( item->GetLayer() == LAYER_BUS ? CONNECTION_BUS : CONNECTION_NET );
                 break;
 
             case SCH_BUS_BUS_ENTRY_T:

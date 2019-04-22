@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2019 KiCad Developers, see change_log.txt for contributors.
  * @author Jon Evans <jon@craftyjon.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -33,8 +34,7 @@ class SCH_COMPONENT;
 
 class SCH_PIN : public SCH_ITEM
 {
-    LIB_PIN*       m_pin;
-    SCH_COMPONENT* m_comp;
+    LIB_PIN*       m_libPin;
 
     wxPoint        m_position;
     bool           m_isDangling;
@@ -48,36 +48,38 @@ public:
 
     SCH_PIN( const SCH_PIN& aPin );
 
+    SCH_PIN& operator=( const SCH_PIN& aPin );
+
     wxString GetClass() const override
     {
         return wxT( "SCH_PIN" );
     }
 
-    LIB_PIN* GetLibPin() const { return m_pin; }
+    SCH_COMPONENT* GetParentComponent() const;
 
-    SCH_COMPONENT* GetParentComponent() const { return m_comp; }
-    void SetParentComponent( SCH_COMPONENT* aComp ) { m_comp = aComp; }
+    LIB_PIN* GetLibPin() const { return m_libPin; }
 
     wxString GetDefaultNetName( const SCH_SHEET_PATH aPath );
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList ) override;
 
     void Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset ) override {}
 
     void Move( const wxPoint& aMoveVector ) override {}
 
     void MirrorY( int aYaxis_position ) override {}
-
     void MirrorX( int aXaxis_position ) override {}
 
     void Rotate( wxPoint aPosition ) override {}
 
     wxPoint GetPosition() const override { return m_position; }
-
     void SetPosition( const wxPoint& aPosition ) override { m_position = aPosition; }
 
-    bool IsDangling() const override { return m_isDangling; }
+    const EDA_RECT GetBoundingBox() const override;
+    bool HitTest( const wxPoint& aPosition ) const override;
 
+    bool IsDangling() const override { return m_isDangling; }
     void SetIsDangling( bool isDangling ) { m_isDangling = isDangling; }
 
     /// Returns the pin's position in global coordinates
@@ -88,15 +90,15 @@ public:
      * While many of these are currently simply covers for the equivalent LIB_PIN methods,
      * the new EESchema file format will soon allow us to override them at the SCH level.
      */
-    bool IsVisible() const { return m_pin->IsVisible(); }
+    bool IsVisible() const { return m_libPin->IsVisible(); }
 
-    const wxString& GetName() const { return m_pin->GetName(); }
+    const wxString& GetName() const { return m_libPin->GetName(); }
 
-    const wxString& GetNumber() const { return m_pin->GetNumber(); }
+    const wxString& GetNumber() const { return m_libPin->GetNumber(); }
 
-    ELECTRICAL_PINTYPE GetType() const { return m_pin->GetType(); }
+    ELECTRICAL_PINTYPE GetType() const { return m_libPin->GetType(); }
 
-    bool IsPowerConnection() const { return m_pin->IsPowerConnection(); }
+    bool IsPowerConnection() const { return m_libPin->IsPowerConnection(); }
 
 
 #if defined(DEBUG)

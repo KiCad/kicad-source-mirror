@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_component.cpp
- * @brief Implementation of the class SCH_COMPONENT.
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <sch_draw_panel.h>
@@ -175,16 +170,17 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_Fields = aComponent.m_Fields;
 
     // Re-parent the fields, which before this had aComponent as parent
-    for( int i = 0; i < GetFieldCount(); ++i )
-    {
-        GetField( i )->SetParent( this );
-    }
+    for( SCH_FIELD field : m_Fields )
+        field.SetParent( this );
 
-    // Copy the pins, and re-parent them
-    for( const auto& it : aComponent.m_pins )
+    m_pins = aComponent.m_pins;
+    m_pinMap.clear();
+
+    // Re-parent the pins and build the pinMap
+    for( SCH_PIN pin : m_pins )
     {
-        m_pins.emplace( std::make_pair( it.first, it.second ) );
-        m_pins.at( it.first ).SetParentComponent( this );
+        pin.SetParent( this );
+        m_pinMap[ pin.GetLibPin() ] = &pin;
     }
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
@@ -428,10 +424,8 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 {
     if( PART_SPTR part = m_part.lock() )
     {
-        std::set<LIB_PIN*> stalePins;
-
-        for( auto& it : m_pins )
-            stalePins.insert( it.first );
+        m_pinMap.clear();
+        int i = 0;
 
         for( LIB_PIN* libPin = part->GetNextPin(); libPin; libPin = part->GetNextPin( libPin ) )
         {
@@ -443,25 +437,29 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
             if( libPin->GetConvert() && m_convert && ( m_convert != libPin->GetConvert() ) )
                 continue;
 
-            if( !m_pins.count( libPin ) )
-                m_pins.emplace( std::make_pair( libPin, SCH_PIN( libPin, this ) ) );
+            if( m_pins.size() <= i || m_pins[ i ].GetLibPin() != libPin )
+            {
+                if( m_pins.size() > i )
+                    m_pins.erase( m_pins.begin() + i, m_pins.end() );
+
+                m_pins.emplace_back( SCH_PIN( libPin, this ) );
+            }
+
+            m_pinMap[ libPin ] = &m_pins[ i ];
 
             if( aSheet )
-                m_pins.at( libPin ).InitializeConnection( *aSheet );
+                m_pins[ i ].InitializeConnection( *aSheet );
 
-            stalePins.erase( libPin );
+            ++i;
         }
-
-        for( auto& stalePin : stalePins )
-            m_pins.erase( stalePin );
     }
 }
 
 
 SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
 {
-    if( m_pins.count( aPin ) )
-        return m_pins.at( aPin ).Connection( aSheet );
+    if( m_pinMap.count( aPin ) )
+        return m_pinMap.at( aPin )->Connection( aSheet );
 
     return nullptr;
 }
@@ -926,12 +924,6 @@ void SCH_COMPONENT::GetPins( std::vector<LIB_PIN*>& aPinsList )
     }
     else
         wxFAIL_MSG( "Could not obtain PART_SPTR lock" );
-}
-
-
-SCH_PINS& SCH_COMPONENT::GetPinMap()
-{
-    return m_pins;
 }
 
 
@@ -1474,12 +1466,12 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
 {
     bool changed = false;
 
-    for( auto& it : m_pins )
+    for( SCH_PIN& pin : m_pins )
     {
-        bool previousState = it.second.IsDangling();
-        it.second.SetIsDangling( true );
+        bool previousState = pin.IsDangling();
+        pin.SetIsDangling( true );
 
-        wxPoint pos = m_transform.TransformCoordinate( it.second.GetPosition() ) + m_Pos;
+        wxPoint pos = m_transform.TransformCoordinate( pin.GetPosition() ) + m_Pos;
 
         for( DANGLING_END_ITEM& each_item : aItemList )
         {
@@ -1501,7 +1493,7 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
             case JUNCTION_END:
 
                 if( pos == each_item.GetPosition() )
-                    it.second.SetIsDangling( false );
+                    pin.SetIsDangling( false );
 
                 break;
 
@@ -1509,11 +1501,11 @@ bool SCH_COMPONENT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemLi
                 break;
             }
 
-            if( !it.second.IsDangling() )
+            if( !pin.IsDangling() )
                 break;
         }
 
-        changed = ( changed || ( previousState != it.second.IsDangling() ) );
+        changed = ( changed || ( previousState != pin.IsDangling() ) );
     }
 
     return changed;
@@ -1546,8 +1538,8 @@ bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
 
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
-    for( auto& it : m_pins )
-        aPoints.push_back( m_transform.TransformCoordinate( it.second.GetPosition() ) + m_Pos );
+    for( const SCH_PIN& pin : m_pins )
+        aPoints.push_back( m_transform.TransformCoordinate( pin.GetPosition() ) + m_Pos );
 }
 
 
@@ -1757,19 +1749,20 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
 
         m_PathsAndReferences = c->m_PathsAndReferences;
 
-        m_Fields = c->m_Fields;    // std::vector's assignment operator.
+        m_Fields    = c->m_Fields;    // std::vector's assignment operator
 
         // Reparent fields after assignment to new component.
-        for( int ii = 0; ii < GetFieldCount();  ++ii )
-        {
-            GetField( ii )->SetParent( this );
-        }
+        for( SCH_FIELD field : m_Fields )
+            field.SetParent( this );
 
-        // Copy the pins, and re-parent them
-        for( const auto& it : c->m_pins )
+        m_pins = c->m_pins;           // std::vector's assignment operator
+        m_pinMap.clear();
+
+        // Re-parent the pins and build the pinMap
+        for( SCH_PIN pin : m_pins )
         {
-            m_pins.emplace( std::make_pair( it.first, it.second ) );
-            m_pins.at( it.first ).SetParentComponent( this );
+            pin.SetParent( this );
+            m_pinMap[ pin.GetLibPin() ] = &pin;
         }
     }
 
@@ -1809,9 +1802,9 @@ bool SCH_COMPONENT::doIsConnected( const wxPoint& aPosition ) const
 {
     wxPoint new_pos = m_transform.InverseTransform().TransformCoordinate( aPosition - m_Pos );
 
-    for( const auto& it : m_pins )
+    for( const SCH_PIN& pin : m_pins )
     {
-        if( it.second.GetPosition() == new_pos )
+        if( pin.GetPosition() == new_pos )
             return true;
     }
 
@@ -1836,8 +1829,8 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 
         part->Plot( aPlotter, GetUnit(), GetConvert(), m_Pos, temp );
 
-        for( size_t i = 0; i < m_Fields.size(); i++ )
-            m_Fields[i].Plot( aPlotter );
+        for( SCH_FIELD field : m_Fields )
+            field.Plot( aPlotter );
 
         aPlotter->EndBlock( nullptr );
     }
@@ -1846,9 +1839,9 @@ void SCH_COMPONENT::Plot( PLOTTER* aPlotter )
 
 bool SCH_COMPONENT::HasBrightenedPins()
 {
-    for( auto& it : m_pins )
+    for( const SCH_PIN& pin : m_pins )
     {
-        if( it.second.IsBrightened() )
+        if( pin.IsBrightened() )
             return true;
     }
 
@@ -1858,29 +1851,29 @@ bool SCH_COMPONENT::HasBrightenedPins()
 
 void SCH_COMPONENT::ClearBrightenedPins()
 {
-    for( auto& it : m_pins )
-        it.second.ClearBrightened();
+    for( SCH_PIN& pin : m_pins )
+        pin.ClearBrightened();
 }
 
 
 void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
 {
-    if( m_pins.count( aPin ) )
-        m_pins.at( aPin ).SetBrightened();
+    if( m_pinMap.count( aPin ) )
+        m_pinMap.at( aPin )->SetBrightened();
 }
 
 
 void SCH_COMPONENT::ClearHighlightedPins()
 {
-    for( auto& it : m_pins )
-        it.second.ClearHighlighted();
+    for( SCH_PIN& pin : m_pins )
+        pin.ClearHighlighted();
 }
 
 
 void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 {
-    if( m_pins.count( aPin ) )
-        m_pins.at( aPin ).SetHighlighted();
+    if( m_pinMap.count( aPin ) )
+        m_pinMap.at( aPin )->SetHighlighted();
 }
 
 
