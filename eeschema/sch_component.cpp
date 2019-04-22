@@ -170,14 +170,14 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_Fields = aComponent.m_Fields;
 
     // Re-parent the fields, which before this had aComponent as parent
-    for( SCH_FIELD field : m_Fields )
+    for( SCH_FIELD& field : m_Fields )
         field.SetParent( this );
 
     m_pins = aComponent.m_pins;
     m_pinMap.clear();
 
     // Re-parent the pins and build the pinMap
-    for( SCH_PIN pin : m_pins )
+    for( SCH_PIN& pin : m_pins )
     {
         pin.SetParent( this );
         m_pinMap[ pin.GetLibPin() ] = &pin;
@@ -1752,14 +1752,14 @@ SCH_ITEM& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         m_Fields    = c->m_Fields;    // std::vector's assignment operator
 
         // Reparent fields after assignment to new component.
-        for( SCH_FIELD field : m_Fields )
+        for( SCH_FIELD& field : m_Fields )
             field.SetParent( this );
 
         m_pins = c->m_pins;           // std::vector's assignment operator
         m_pinMap.clear();
 
         // Re-parent the pins and build the pinMap
-        for( SCH_PIN pin : m_pins )
+        for( SCH_PIN& pin : m_pins )
         {
             pin.SetParent( this );
             m_pinMap[ pin.GetLibPin() ] = &pin;
