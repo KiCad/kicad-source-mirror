@@ -33,7 +33,7 @@
 #include <sch_draw_panel.h>
 #include <confirm.h>
 #include <sch_edit_frame.h>
-
+#include <tool/tool_manager.h>
 #include <general.h>
 #include <class_library.h>
 #include <lib_pin.h>
@@ -201,6 +201,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         BLOCK_COMMAND_T command = block->GetCommand();
 
         m_canvas->CallEndMouseCapture( aDC );
+        m_toolManager->DeactivateTool();
 
         block->SetState( state );
         block->SetCommand( command );
