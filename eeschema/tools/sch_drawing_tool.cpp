@@ -929,7 +929,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             if( aSegment || m_busUnfold.in_progress )
             {
                 finishSegments();
-                break;
+                aSegment = nullptr;
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -969,7 +969,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                         m_frame->GetScreen()->IsTerminalPoint( cursorPos, aSegment->GetLayer() ) )
                 {
                     finishSegments();
-                    break;
+                    aSegment = nullptr;
                 }
 
                 aSegment->SetEndPoint( cursorPos );
@@ -987,7 +987,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             if( evt->IsDblClick( BUT_LEFT ) )
             {
                 finishSegments();
-                break;
+                aSegment = nullptr;
             }
         }
         else if( evt->IsMotion() )
