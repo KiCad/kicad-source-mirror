@@ -646,7 +646,7 @@ int SCH_DRAWING_TOOL::StartWire( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 {
     if( m_frame->GetToolId() == ID_WIRE_BUTT )
-        StartWire( aEvent );
+        return StartWire( aEvent );
     else
     {
         m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
@@ -668,7 +668,7 @@ int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
 {
     if( m_frame->GetToolId() == ID_BUS_BUTT )
-        StartBus( aEvent );
+        return StartBus( aEvent );
     else
     {
         m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
@@ -917,12 +917,19 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 // Clear flags used in edit functions.
                 m_frame->GetScreen()->ClearDrawingState();
                 m_frame->GetScreen()->SetCurItem( nullptr );
-            }
-            else
-                break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
-                break;
+                if( !evt->IsActivate() )
+                    continue;
+            }
+
+            if( evt->IsAction( &SCH_ACTIONS::drawWire ) && aType == LAYER_WIRE )
+                ; // don't cancel tool; we're going to re-enter
+            else if( evt->IsAction( &SCH_ACTIONS::drawBus ) && aType == LAYER_BUS )
+                ; // don't cancel tool; we're going to re-enter
+            else
+                m_frame->SetNoToolSelected();
+
+            break;
         }
         else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
         {
@@ -1047,8 +1054,6 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         m_controls->SetAutoPan( !!aSegment );
         m_controls->CaptureCursor( !!aSegment );
     }
-
-    m_frame->SetNoToolSelected();
 
     return 0;
 }
