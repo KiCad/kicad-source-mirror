@@ -644,8 +644,13 @@ int SCH_DRAWING_TOOL::StartWire( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-    return doDrawSegments( LAYER_WIRE, nullptr );
+    if( m_frame->GetToolId() == ID_WIRE_BUTT )
+        StartWire( aEvent );
+    else
+    {
+        m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+        return doDrawSegments( LAYER_WIRE, nullptr );
+    }
 }
 
 
@@ -661,8 +666,13 @@ int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
-    return doDrawSegments( LAYER_BUS, nullptr );
+    if( m_frame->GetToolId() == ID_BUS_BUTT )
+        StartBus( aEvent );
+    else
+    {
+        m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+        return doDrawSegments( LAYER_BUS, nullptr );
+    }
 }
 
 
