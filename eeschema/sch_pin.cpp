@@ -50,6 +50,8 @@ SCH_PIN& SCH_PIN::operator=( const SCH_PIN& aPin )
     m_libPin = aPin.m_libPin;
     m_position = aPin.m_position;
     m_isDangling = aPin.m_isDangling;
+
+    return *this;
 }
 
 
