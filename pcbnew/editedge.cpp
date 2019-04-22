@@ -117,7 +117,6 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
     if( Segment == NULL )
         return;
 
-    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
     if( Segment->IsNew() )  // Trace in progress.
     {
         // Delete current segment.
@@ -127,7 +126,7 @@ void PCB_EDIT_FRAME::Delete_Segment_Edge( DRAWSEGMENT* Segment, wxDC* DC )
         displ_opts->m_DisplayDrawItemsFill = tmp;
         SetCurItem( NULL );
     }
-    else if( ( Segment->GetFlags() & mask ) == 0 )    // i.e. not edited, or moved
+    else if( Segment->GetEditFlags() == 0 )    // i.e. not edited, or moved
     {
         Segment->Draw( m_canvas, DC, GR_XOR );
         Segment->ClearFlags();

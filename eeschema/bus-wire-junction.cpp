@@ -40,7 +40,7 @@ void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnectio
     for( SCH_ITEM* item = GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
         // Avoid items that are changing
-        if( !( item->GetFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
+        if( !( item->GetEditFlags() & ( IS_DRAGGED | IS_MOVED | IS_DELETED ) ) )
             item->GetConnectionPoints( aConnections );
     }
 
@@ -87,7 +87,7 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
         next_item = item->Next();
 
         // Don't remove wires that are already deleted or are currently being dragged
-        if( item->GetFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
+        if( item->GetEditFlags() & ( STRUCT_DELETED | IS_DRAGGED | IS_MOVED | SKIP_STRUCT ) )
             continue;
 
         if( item->Type() != SCH_LINE_T || item->GetLayer() != LAYER_WIRE )
@@ -155,7 +155,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
             && ( item->Type() != SCH_NO_CONNECT_T ) )
             continue;
 
-        if( item->GetFlags() & STRUCT_DELETED )
+        if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
 
         // Remove unneeded junctions
@@ -176,7 +176,8 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
 
         for( secondItem = item->Next(); secondItem; secondItem = secondItem->Next() )
         {
-            if( item->Type() != secondItem->Type() || ( secondItem->GetFlags() & STRUCT_DELETED ) )
+            if( item->Type() != secondItem->Type()
+              || ( secondItem->GetEditFlags() & STRUCT_DELETED ) )
                 continue;
 
             // Merge overlapping lines
@@ -226,7 +227,7 @@ bool SCH_EDIT_FRAME::SchematicCleanUp( bool aUndo, SCH_SCREEN* aScreen )
     {
         secondItem = item->Next();
 
-        if( item->GetFlags() & STRUCT_DELETED )
+        if( item->GetEditFlags() & STRUCT_DELETED )
             RemoveFromScreen( item, aScreen );
     }
 
@@ -382,7 +383,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
         SCH_LINE* firstLine = dynamic_cast<SCH_LINE*>( item );
 
         if( !firstLine || !firstLine->IsEndPoint( aJunction->GetPosition() )
-                  || ( firstLine->GetFlags() & STRUCT_DELETED ) )
+                  || ( firstLine->GetEditFlags() & STRUCT_DELETED ) )
             continue;
 
         for( SCH_ITEM* secondItem = item->Next(); secondItem; secondItem = secondItem->Next() )
@@ -390,7 +391,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
             SCH_LINE* secondLine = dynamic_cast<SCH_LINE*>( secondItem );
 
             if( !secondLine || !secondLine->IsEndPoint( aJunction->GetPosition() )
-                    || ( secondItem->GetFlags() & STRUCT_DELETED )
+                    || ( secondItem->GetEditFlags() & STRUCT_DELETED )
                     || !secondLine->IsParallel( firstLine ) )
                 continue;
 
@@ -422,7 +423,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
     {
         nextitem = item->Next();
 
-        if( item->GetFlags() & STRUCT_DELETED )
+        if( item->GetEditFlags() & STRUCT_DELETED )
             RemoveFromScreen( item );
     }
 }

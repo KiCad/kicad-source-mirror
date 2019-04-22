@@ -68,7 +68,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
     if( aHotkeyCode == 0 )
         return false;
 
-    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
+    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetEditFlags();
     MODULE* module = NULL;
     int evt_type = 0;       //Used to post a wxCommandEvent on demand
     PCB_SCREEN* screen = GetScreen();
@@ -526,7 +526,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
 bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool ItemFree = (item == NULL) || (item->GetFlags() == 0);
+    bool ItemFree = ( !item || item->GetEditFlags() == 0 );
 
     switch( GetToolId() )
     {
@@ -593,7 +593,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDeleteItem( wxDC* aDC )
 bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->GetFlags();
+    bool itemCurrentlyEdited = item && item->GetEditFlags();
 
     if( itemCurrentlyEdited )
         return false;
@@ -697,7 +697,7 @@ bool PCB_EDIT_FRAME::OnHotkeyEditItem( int aIdCommand )
 int PCB_EDIT_FRAME::OnHotkeyCopyItem()
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->GetFlags();
+    bool itemCurrentlyEdited = item && item->GetEditFlags();
 
     if( itemCurrentlyEdited )
         return 0;
@@ -728,7 +728,7 @@ int PCB_EDIT_FRAME::OnHotkeyCopyItem()
 bool PCB_EDIT_FRAME::OnHotkeyMoveItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->GetFlags();
+    bool itemCurrentlyEdited = item && item->GetEditFlags();
 
     if( itemCurrentlyEdited )
         return false;
@@ -839,7 +839,7 @@ bool PCB_EDIT_FRAME::OnHotkeyPlaceItem( wxDC* aDC )
 {
     BOARD_ITEM* item = GetCurItem();
     bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
-    bool itemCurrentlyEdited = item && item->GetFlags();
+    bool itemCurrentlyEdited = item && item->GetEditFlags();
 
     m_canvas->SetAutoPanRequest( false );
 
@@ -902,7 +902,7 @@ TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
     if( !IsCopperLayer( GetActiveLayer() ) )
         return NULL;
 
-    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetFlags();
+    bool itemCurrentlyEdited = GetCurItem() && GetCurItem()->GetEditFlags();
 
     // Ensure the track tool is active
     if( GetToolId() != ID_TRACK_BUTT && !itemCurrentlyEdited )
@@ -945,7 +945,7 @@ TRACK * PCB_EDIT_FRAME::OnHotkeyBeginRoute( wxDC* aDC )
 bool PCB_EDIT_FRAME::OnHotkeyFlipItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->GetFlags();
+    bool        itemCurrentlyEdited = item && item->GetEditFlags();
     int         evt_type = 0; // Used to post a wxCommandEvent on demand
 
     wxASSERT( aIdCommand == HK_FLIP_ITEM );
@@ -997,7 +997,7 @@ bool PCB_EDIT_FRAME::OnHotkeyFlipItem( int aIdCommand )
 bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->GetFlags();
+    bool        itemCurrentlyEdited = item && item->GetEditFlags();
     int         evt_type = 0; // Used to post a wxCommandEvent on demand
 
     wxASSERT( aIdCommand == HK_ROTATE_ITEM );
@@ -1052,7 +1052,7 @@ bool PCB_EDIT_FRAME::OnHotkeyRotateItem( int aIdCommand )
 bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool itemCurrentlyEdited = item && item->GetFlags();
+    bool itemCurrentlyEdited = item && item->GetEditFlags();
 
     if( itemCurrentlyEdited )
         return false;

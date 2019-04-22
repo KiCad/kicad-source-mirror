@@ -74,7 +74,7 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage()
 
 void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 {
-    if( aItem->GetFlags( ) == 0 )
+    if( aItem->GetEditFlags( ) == 0 )
         SaveCopyInUndoList( aItem, UR_ROTATED, false, aItem->GetPosition() );
 
     aItem->Rotate( aItem->GetPosition() );
@@ -86,7 +86,7 @@ void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
 
 void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
 {
-    if( aItem->GetFlags( ) == 0 )
+    if( aItem->GetEditFlags( ) == 0 )
         SaveCopyInUndoList( aItem, UR_CHANGED );
 
     if( Is_X_axis )
@@ -107,14 +107,9 @@ bool SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
-    // save old image in undo list if not already in edit
-    // or the image to be edited is part of a block
-    int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED );
-    if( ( aItem->GetFlags() & mask ) == 0
-        || GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-    {
+    // save old image in undo list if not already in edit or the image to be edited is part of a block
+    if( aItem->GetEditFlags() == 0 || GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
         SaveCopyInUndoList( aItem, UR_CHANGED );
-    }
 
     dlg.TransfertToImage( aItem->GetImage() );
 

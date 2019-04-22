@@ -143,6 +143,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 
 #define IS_DANGLING    (1 << 29)   ///< indicates a pin is dangling
 
+// WARNING: if you add flags, you'll probably need to adjust the mask in GetEditFlags()
 
 #define EDA_ITEM_ALL_FLAGS -1
 
@@ -258,6 +259,14 @@ public:
     void SetFlags( STATUS_FLAGS aMask ) { m_Flags |= aMask; }
     void ClearFlags( STATUS_FLAGS aMask = EDA_ITEM_ALL_FLAGS ) { m_Flags &= ~aMask; }
     STATUS_FLAGS GetFlags() const { return m_Flags; }
+
+    STATUS_FLAGS GetEditFlags() const
+    {
+        int mask = EDA_ITEM_ALL_FLAGS - ( SELECTED | HIGHLIGHTED | BRIGHTENED |
+                                          STARTPOINT | ENDPOINT | IS_DANGLING |
+                                          BEGIN_ONPAD | END_ONPAD | DP_COUPLED );
+        return m_Flags & mask;
+    }
 
     /**
      * Function IsType

@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -20,10 +20,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file sch_edit_frame.cpp
  */
 
 #include <fctsys.h>
@@ -70,10 +66,8 @@
 #include <wx/display.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
-
 #include <connection_graph.h>
 #include <dialogs/dialog_fields_editor_global.h>
-
 #include <sch_view.h>
 #include <sch_painter.h>
 
@@ -1136,12 +1130,12 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
             item = LocateAndShowItem( data->GetPosition(), filterList, event.GetInt() );
 
             // Exit if no item found at the current location or the item is already being edited.
-            if( (item == NULL) || (item->GetFlags() != 0) )
+            if( item == NULL || item->GetEditFlags() != 0 )
                 return;
         }
 
 
-        if( !item || (item->GetFlags() != 0) || ( item->Type() != SCH_COMPONENT_T ) )
+        if( !item || item->GetEditFlags() != 0 || item->Type() != SCH_COMPONENT_T )
         {
             wxMessageBox( _( "Error: not a symbol or no symbol." ) );
             return;

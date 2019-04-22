@@ -175,7 +175,7 @@ void PCB_EDIT_FRAME::Edit_TrackSegm_Width( wxDC* aDC, TRACK* aTrackItem )
     PICKED_ITEMS_LIST itemsListPicker;
     bool changed = !SetTrackSegmentWidth( aTrackItem, &itemsListPicker, false );
 
-    if( !changed || aTrackItem->GetFlags() )
+    if( !changed || aTrackItem->GetEditFlags() )
         return;     // No change
 
     // The segment has changed: redraw it and save it in undo list

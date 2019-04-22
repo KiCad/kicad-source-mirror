@@ -1170,7 +1170,7 @@ void EDA_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
 
             // If we have an item already selected, or we are using a tool,
             // we won't use the disambiguation menu so process the click immediately
-            if( ( item && item->GetFlags() ) || GetParent()->GetToolId() != ID_NO_TOOL_SELECTED )
+            if( ( item && item->GetEditFlags() ) || GetParent()->GetToolId() != ID_NO_TOOL_SELECTED )
                 GetParent()->OnLeftClick( &DC, m_CursorClickPos );
             else
             {

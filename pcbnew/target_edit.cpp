@@ -130,10 +130,10 @@ bool DIALOG_TARGET_PROPERTIES::TransferDataFromWindow()
         m_Target->Draw( m_Parent->GetCanvas(), m_DC, GR_XOR );
 
     // Save old item in undo list, if is is not currently edited (will be later if so)
-    bool pushCommit = ( m_Target->GetFlags() == 0 );
+    bool pushCommit = ( m_Target->GetEditFlags() == 0 );
 
-    if( m_Target->GetFlags() != 0 )         // other edit in progress (MOVE, NEW ..)
-        m_Target->SetFlags( IN_EDIT );      // set flag in edit to force
+    if( m_Target->GetEditFlags() != 0 )         // other edit in progress (MOVE, NEW ..)
+        m_Target->SetFlags( IN_EDIT );          // set flag in edit to force
     // undo/redo/abort proper operation
 
     m_Target->SetWidth( m_Thickness.GetValue() );
@@ -183,7 +183,7 @@ static void AbortMoveAndEditTarget( EDA_DRAW_PANEL* Panel, wxDC* DC )
     }
     else    // it is an existing item: retrieve initial values of parameters
     {
-        if( ( target->GetFlags() & (IN_EDIT | IS_MOVED) ) )
+        if( ( target->GetEditFlags() & (IN_EDIT | IS_MOVED) ) )
         {
             target->SetPosition( s_TargetCopy.GetPosition() );
             target->SetWidth( s_TargetCopy.GetWidth() );
@@ -245,7 +245,7 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
         return;
     }
 
-    if( aTarget->GetFlags() == IS_MOVED )
+    if( aTarget->GetEditFlags() == IS_MOVED )
     {
         SaveCopyInUndoList( aTarget, UR_MOVED,
                             aTarget->GetPosition() - s_TargetCopy.GetPosition() );
@@ -253,7 +253,7 @@ void PCB_EDIT_FRAME::PlaceTarget( PCB_TARGET* aTarget, wxDC* DC )
         return;
     }
 
-    if( (aTarget->GetFlags() & IN_EDIT) )
+    if( (aTarget->GetEditFlags() & IN_EDIT) )
     {
         aTarget->SwapData( &s_TargetCopy );
         SaveCopyInUndoList( aTarget, UR_CHANGED );

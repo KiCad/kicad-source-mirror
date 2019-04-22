@@ -164,7 +164,7 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* DC, GR_DRAWMODE aDrawMode, const
 
         // Areas must be drawn here only if not moved or dragged,
         // because these areas are drawn by ManageCursor() in a specific manner
-        if( ( zone->GetFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
+        if( ( zone->GetEditFlags() & (IN_EDIT | IS_DRAGGED | IS_MOVED) ) == 0 )
         {
             zone->Draw( aPanel, DC, aDrawMode );
             zone->DrawFilledArea( aPanel, DC, aDrawMode );

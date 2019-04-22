@@ -434,7 +434,7 @@ void SCH_EDIT_FRAME::copyBlockItems( PICKED_ITEMS_LIST& aItemsList, const wxPoin
         /* Make a copy of the original picked item. */
         SCH_ITEM* copy = DuplicateStruct( (SCH_ITEM*) aItemsList.GetPickedItem( ii ) );
         copy->SetParent( NULL );
-        copy->SetFlags( copy->GetFlags() | UR_TRANSIENT );
+        copy->SetFlags( UR_TRANSIENT );
         copy->Move( -center );
         ITEM_PICKER item( copy, UR_NEW );
 

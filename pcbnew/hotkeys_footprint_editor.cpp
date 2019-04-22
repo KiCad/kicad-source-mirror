@@ -61,7 +61,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
 
     bool           blockActive = GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE;
     BOARD_ITEM*    item     = GetCurItem();
-    bool           ItemFree = (item == 0) || (item->GetFlags() == 0);
+    bool           ItemFree = ( !item || item->GetEditFlags() == 0 );
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
@@ -209,7 +209,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
 BOARD_ITEM* FOOTPRINT_EDIT_FRAME::PrepareItemForHotkey( bool aFailIfCurrentlyEdited )
 {
     BOARD_ITEM* item = GetCurItem();
-    bool        itemCurrentlyEdited = item && item->GetFlags();
+    bool        itemCurrentlyEdited = item && item->GetEditFlags();
     bool        blockActive = GetScreen()->m_BlockLocate.GetCommand() != BLOCK_IDLE;
 
     if( aFailIfCurrentlyEdited )

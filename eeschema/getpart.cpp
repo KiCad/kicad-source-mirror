@@ -215,14 +215,14 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     GetCanvas()->MoveCursorToCrossHair();
 
-    if( item->GetFlags() == 0 )
+    if( item->GetEditFlags() == 0 )
         SetUndoItem( item );
 
     component->SetOrientation( aOrientation );
 
     m_canvas->CrossHairOn( );
 
-    if( item->GetFlags() == 0 )
+    if( item->GetEditFlags() == 0 )
     {
         AddItemToScreen( item );
         SchematicCleanUp();
@@ -232,7 +232,7 @@ void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 
     RefreshItem( item );
 
-    if( item->GetFlags() == 0 )
+    if( item->GetEditFlags() == 0 )
         OnModify();
 }
 
@@ -262,7 +262,7 @@ void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
 
     STATUS_FLAGS flags = component->GetFlags();
 
-    if( !flags )    // No command in progress: save in undo list
+    if( !component->GetEditFlags() )    // No command in progress: save in undo list
         SaveCopyInUndoList( component, UR_CHANGED );
 
     /* Update the unit number. */

@@ -167,7 +167,7 @@ void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aApp
     {
         SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
 
-        if( item->GetFlags() & STRUCT_DELETED )
+        if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
 
         DeleteItem( item, aAppend );
@@ -181,7 +181,7 @@ void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aApp
 void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
-    wxCHECK_RET( !( aItem->GetFlags() & STRUCT_DELETED ),
+    wxCHECK_RET( !( aItem->GetEditFlags() & STRUCT_DELETED ),
                  wxT( "Cannot delete item that is already deleted." ) );
 
     // Here, aItem is not null.

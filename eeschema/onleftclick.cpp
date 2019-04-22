@@ -45,7 +45,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         SetRepeatItem( NULL );
 
         // item_flags != 0 means a current item in edit
-        if( item && ( item->GetFlags() & ~HIGHLIGHTED ) )
+        if( item && item->GetEditFlags() )
         {
             switch( item->Type() )
             {
@@ -164,10 +164,10 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
+        if( item == NULL || item->GetEditFlags() == 0 )
             item = LocateAndShowItem( aPosition, SCH_COLLECTOR::DoubleClickItems );
 
-        if( ( item == NULL ) || ( item->GetFlags() != 0 ) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             break;
 
         switch( item->Type() )
@@ -181,8 +181,8 @@ void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             EditComponent( (SCH_COMPONENT*) item );
             GetCanvas()->MoveCursorToCrossHair();
 
-            if( item->GetFlags() == 0 )
-                GetScreen()->SetCurItem( NULL );
+            if( item->GetEditFlags() == 0 )
+                GetScreen()->SetCurItem( nullptr );
 
             GetCanvas()->Refresh();
             break;

@@ -69,7 +69,7 @@ void SCH_EDIT_FRAME::SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, c
         return;
 
     /* Put old item in undo list if it is not currently in edit */
-    if( BusEntry->GetFlags() == 0 )
+    if( BusEntry->GetEditFlags() == 0 )
         SaveCopyInUndoList( BusEntry, UR_CHANGED );
 
     s_LastShape = entry_shape == '/' ? '/' : '\\';

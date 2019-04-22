@@ -40,7 +40,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
     GERBER_DRAW_ITEM* currItem = (GERBER_DRAW_ITEM*) GetScreen()->GetCurItem();
     wxString    msg;
     bool        BlockActive = !GetScreen()->m_BlockLocate.IsIdle();
-    bool        busy = currItem && currItem->GetFlags();
+    bool        busy = currItem && currItem->GetEditFlags();
 
     // Do not initiate a start block validation on menu.
     m_canvas->SetCanStartBlock( -1 );
@@ -49,7 +49,7 @@ bool GERBVIEW_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
     if( !busy )
     {
         currItem = Locate( aPosition, CURSEUR_OFF_GRILLE );
-        busy = currItem && currItem->GetFlags();
+        busy = currItem && currItem->GetEditFlags();
     }
 
     // If command in progress, end command.

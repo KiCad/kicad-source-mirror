@@ -493,7 +493,7 @@ void PCB_BASE_FRAME::Rotate_Module( wxDC* DC, MODULE* module, double angle, bool
             DrawSegmentWhileMovingFootprint( m_canvas, DC );
         }
 
-        if( module->GetFlags() == 0 )  // module not in edit: redraw full screen
+        if( module->GetEditFlags() == 0 )  // module not in edit: redraw full screen
             m_canvas->Refresh();
     }
 }

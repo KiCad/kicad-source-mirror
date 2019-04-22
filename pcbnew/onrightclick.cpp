@@ -77,7 +77,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
 
     if( GetToolId() != ID_NO_TOOL_SELECTED && GetToolId() != ID_ZOOM_SELECTION )
     {
-        if( item && item->GetFlags() )
+        if( item && item->GetEditFlags() )
         {
             AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ),
                          KiBitmap( cancel_xpm ) );
@@ -92,7 +92,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
     else
     {
-        if( item && item->GetFlags() )
+        if( item && item->GetEditFlags() )
         {
             AddMenuItem( aPopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND,
                          _( "Cancel" ), KiBitmap( cancel_xpm ) );
@@ -115,7 +115,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
      * not the current item being edited. In such case we cannot call
      * PcbGeneralLocateAndDisplay().
      */
-    if( !item || (item->GetFlags() == 0) )
+    if( !item || item->GetEditFlags() == 0 )
     {
         // show the "item selector" menu if no item selected or
         // if there is a selected item but the mouse has moved
@@ -133,7 +133,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
     }
 
     item = GetCurItem();
-    flags = item ? item->GetFlags() : 0;
+    flags = item ? item->GetEditFlags() : 0;
 
     // Add the context menu, which depends on the picked item:
     if( item )
@@ -433,7 +433,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
 
     SetCurrentNetClass( Track->GetNetClassName() );
 
-    int flags = Track->GetFlags();
+    int flags = Track->GetEditFlags();
 
     if( flags == 0 )
     {
@@ -623,14 +623,14 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
     wxString msg;
     GENERAL_COLLECTORS_GUIDE guide = GetCollectorsGuide();
 
-    if( edge_zone->GetFlags() == IS_DRAGGED )
+    if( edge_zone->GetEditFlags() == IS_DRAGGED )
     {
         AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_DRAGGED_ZONE_OUTLINE_SEGMENT,
                      _( "Place Edge Outline" ), KiBitmap( checked_ok_xpm ) );
     }
-    else if( edge_zone->GetFlags() )
+    else if( edge_zone->GetEditFlags() )
     {
-        if( (edge_zone->GetFlags() & IN_EDIT ) )
+        if( (edge_zone->GetEditFlags() & IN_EDIT ) )
             AddMenuItem( aPopMenu, ID_POPUP_PCB_PLACE_ZONE_CORNER,
                          _( "Place Corner" ), KiBitmap( checked_ok_xpm ) );
         else
@@ -716,7 +716,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForZones( ZONE_CONTAINER* edge_zone, wxMenu*
 void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu )
 {
     wxMenu*  sub_menu_footprint;
-    int      flags = aModule->GetFlags();
+    int      flags = aModule->GetEditFlags();
     wxString msg;
 
     sub_menu_footprint = new wxMenu;
@@ -804,7 +804,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
 void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* menu )
 {
     wxMenu*  sub_menu_Fp_text;
-    int      flags = FpText->GetFlags();
+    int      flags = FpText->GetEditFlags();
 
     wxString msg = FpText->GetSelectMenuText( m_UserUnits );
 
@@ -863,7 +863,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpTexts( TEXTE_MODULE* FpText, wxMenu* me
 void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 {
     wxMenu* sub_menu_Pad;
-    int     flags = Pad->GetFlags();
+    int     flags = Pad->GetEditFlags();
 
     if( flags )     // Currently in edit, no others commands possible
         return;
@@ -914,7 +914,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFpPads( D_PAD* Pad, wxMenu* menu )
 void PCB_EDIT_FRAME::createPopUpMenuForTexts( TEXTE_PCB* Text, wxMenu* menu )
 {
     wxMenu*  sub_menu_Text;
-    int      flags = Text->GetFlags();
+    int      flags = Text->GetEditFlags();
 
     wxString msg = Text->GetSelectMenuText( m_UserUnits );
 

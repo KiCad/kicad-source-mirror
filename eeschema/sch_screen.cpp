@@ -347,7 +347,7 @@ bool SCH_SCREEN::IsJunctionNeeded( const wxPoint& aPosition, bool aNew )
 
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( item->GetFlags() & STRUCT_DELETED )
+        if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
 
         if( aNew && ( item->Type() == SCH_JUNCTION_T ) && ( item->HitTest( aPosition ) ) )

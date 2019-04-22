@@ -1089,7 +1089,7 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
 
     case ID_POPUP_PCB_DELETE_DRAWING_LAYER:
-        if( GetCurItem()->GetFlags() != 0 )
+        if( GetCurItem()->GetEditFlags() != 0 )
             break;
 
         Delete_Drawings_All_Layer( GetCurItem()->GetLayer() );

@@ -326,7 +326,7 @@ void SCH_EDIT_FRAME::OnDuplicateItem( wxCommandEvent& event )
 {
     SCH_ITEM* curr_item = GetScreen()->GetCurItem();
 
-    if( !curr_item || curr_item->GetFlags() )
+    if( !curr_item || curr_item->GetEditFlags() )
         return;
 
     GetCanvas()->GetViewControls()->SetCursorPosition( GetCrossHairPosition() );
@@ -385,7 +385,7 @@ void SCH_EDIT_FRAME::OnMoveItem( wxCommandEvent& aEvent )
                                   aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
     }
 
@@ -756,7 +756,7 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
                                   aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
     }
 
@@ -845,8 +845,8 @@ void SCH_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
             m_toolManager->RunAction( SCH_ACTIONS::refreshPreview, true );
     }
 
-    if( item->GetFlags() == 0 )
-        screen->SetCurItem( NULL );
+    if( item->GetEditFlags() == 0 )
+        screen->SetCurItem( nullptr );
 }
 
 
@@ -901,7 +901,7 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
             item = LocateAndShowItem( data->GetPosition(), filterListAux, aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
     }
 
@@ -1007,8 +1007,8 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
     RefreshItem( item );
 
-    if( item->GetFlags() == 0 )
-        screen->SetCurItem( NULL );
+    if( item->GetEditFlags() == 0 )
+        screen->SetCurItem( nullptr );
 }
 
 
@@ -1040,7 +1040,7 @@ void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
                                   aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
 
         // When a junction or a node is found, a BLOCK_DRAG is better
@@ -1153,7 +1153,7 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
                                   aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
     }
 
@@ -1224,8 +1224,8 @@ void SCH_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
             m_toolManager->RunAction( SCH_ACTIONS::refreshPreview, true );
     }
 
-    if( item->GetFlags() == 0 )
-        screen->SetCurItem( NULL );
+    if( item->GetEditFlags() == 0 )
+        screen->SetCurItem( nullptr );
 }
 
 
@@ -1246,7 +1246,7 @@ void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
                                   aEvent.GetInt() );
 
         // Exit if no item found at the current location or the item is already being edited.
-        if( (item == NULL) || (item->GetFlags() != 0) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             return;
     }
 

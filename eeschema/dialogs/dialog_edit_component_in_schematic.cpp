@@ -393,8 +393,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
     // save old cmp in undo list if not already in edit, or moving ...
     // or the component to be edited is part of a block
-    if( m_cmp->GetFlags() == 0 || GetParent()->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    if( m_cmp->GetEditFlags() == 0
+            || GetParent()->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    {
         GetParent()->SaveCopyInUndoList( m_cmp, UR_CHANGED );
+    }
 
     // Save current flags which could be modified by next change settings
     STATUS_FLAGS flags = m_cmp->GetFlags();

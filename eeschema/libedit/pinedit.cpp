@@ -201,7 +201,7 @@ void LIB_EDIT_FRAME::PlacePin()
 
     for( LIB_PIN* pin = part->GetNextPin(); pin; pin = part->GetNextPin( pin ) )
     {
-        if( pin == cur_pin || newpos != pin->GetPosition() || pin->GetFlags() )
+        if( pin == cur_pin || newpos != pin->GetPosition() || pin->GetEditFlags() )
             continue;
 
         // test for same body style
@@ -260,7 +260,7 @@ void LIB_EDIT_FRAME::PlacePin()
     // Put linked pins in new position, and clear flags
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {
-        if( pin->GetFlags() == 0 )
+        if( pin->GetEditFlags() == 0 )
             continue;
 
         pin->Move( cur_pin->GetPosition() );

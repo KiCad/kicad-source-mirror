@@ -1181,7 +1181,7 @@ bool EDA_DRAW_FRAME::isBusy() const
     if( !screen )
         return false;
 
-    return ( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
+    return ( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
            || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
 }
 

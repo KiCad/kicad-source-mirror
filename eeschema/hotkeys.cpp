@@ -423,7 +423,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     SCH_SCREEN* screen = GetScreen();
 
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
-    bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetFlags();
+    bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetEditFlags();
 
     // blocInProgress == false means no block in progress.
     // Because a drag command uses a drag block, false means also no drag in progress

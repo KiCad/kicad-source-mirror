@@ -102,7 +102,7 @@ void PCB_BASE_FRAME::RotateTextModule( TEXTE_MODULE* Text, wxDC* DC )
 
     MODULE* module = (MODULE*) Text->GetParent();
 
-    if( module && module->GetFlags() == 0 && Text->GetFlags() == 0 ) // prepare undo command
+    if( module && module->GetEditFlags() == 0 && Text->GetEditFlags() == 0 ) // prepare undo command
     {
         if( IsType( FRAME_PCB ) )
             SaveCopyInUndoList( module, UR_CHANGED );
@@ -134,8 +134,11 @@ void PCB_BASE_FRAME::DeleteTextModule( TEXTE_MODULE* aText )
 
     if( aText->GetType() == TEXTE_MODULE::TEXT_is_DIVERS )
     {
-        if( module && module->GetFlags() == 0 && aText->GetFlags() == 0 && IsType( FRAME_PCB ) )
-            SaveCopyInUndoList( module, UR_CHANGED );
+        if( module && module->GetEditFlags() == 0 && aText->GetEditFlags() == 0 )
+        {
+            if( IsType( FRAME_PCB ) )
+                SaveCopyInUndoList( module, UR_CHANGED );
+        }
 
         m_canvas->RefreshDrawingRect( aText->GetBoundingBox() );
         aText->DeleteStructure();

@@ -386,7 +386,7 @@ bool TRACKS_CLEANER::deleteNullSegments()
 
 void TRACKS_CLEANER::removeDuplicatesOfTrack( const TRACK *aSeg, std::set<BOARD_ITEM*>& aToRemove )
 {
-    if( aSeg->GetFlags() & STRUCT_DELETED )
+    if( aSeg->GetEditFlags() & STRUCT_DELETED )
         return;
 
     for( auto seg2 : m_brd->Tracks() )

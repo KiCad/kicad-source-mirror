@@ -289,7 +289,7 @@ bool SCH_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
             SCH_SCREEN* screen = GetScreen();
             bool hk_handled;
 
-            if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
+            if( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
                 hk_handled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
             else
                 hk_handled = OnHotKey( aDC, aHotKey, aPosition, NULL );
@@ -328,7 +328,7 @@ bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
     {
         SCH_SCREEN* screen = GetScreen();
 
-        if( screen->GetCurItem() && screen->GetCurItem()->GetFlags() )
+        if( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
             eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
         else
             eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );

@@ -696,7 +696,8 @@ void SCH_EDIT_FRAME::OnAutoplaceFields( wxCommandEvent& aEvent )
                 *aEvent.GetClientObject() );
         item = LocateItem( data.GetPosition(), SCH_COLLECTOR::MovableItems, aEvent.GetInt() );
         screen->SetCurItem( NULL );
-        if( !item || item->GetFlags() )
+
+        if( !item || item->GetEditFlags() )
             return;
     }
 

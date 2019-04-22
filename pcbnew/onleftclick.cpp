@@ -60,11 +60,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     bool        exit = false;
     bool no_tool = GetToolId() == ID_NO_TOOL_SELECTED;
 
-    if( no_tool || ( curr_item && curr_item->GetFlags() ) )
+    if( no_tool || ( curr_item && curr_item->GetEditFlags() ) )
     {
         m_canvas->SetAutoPanRequest( false );
 
-        if( curr_item && curr_item->GetFlags() ) // Command in progress
+        if( curr_item && curr_item->GetEditFlags() ) // Command in progress
         {
             m_canvas->SetIgnoreMouseEvents( true );
             m_canvas->CrossHairOff( aDC );
@@ -146,7 +146,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
                 DisplayError( this,
                         wxString::Format(
                         "PCB_EDIT_FRAME::OnLeftClick() err: curr_item type %d m_Flags != 0 (%X)",
-                        curr_item->Type(), curr_item->GetFlags() ) );
+                        curr_item->Type(), curr_item->GetEditFlags() ) );
                 exit = true;
                 break;
             }
@@ -229,7 +229,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_TARGET_BUTT:
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
         {
             SetCurItem( (BOARD_ITEM*) CreateTarget( aDC ) );
             m_canvas->MoveCursorToCrossHair();
@@ -257,7 +257,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             if( GetToolId() == ID_PCB_ARC_BUTT )
                 shape = S_ARC;
 
-            if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+            if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
             {
                 curr_item = (BOARD_ITEM*) Begin_DrawSegment( NULL, shape, aDC );
                 SetCurItem( curr_item );
@@ -281,7 +281,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
         {
             curr_item = (BOARD_ITEM*) Begin_Route( NULL, aDC );
             SetCurItem( curr_item );
@@ -309,7 +309,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
          *  this can be start a new zone or select and move an existing zone outline corner
          *  if found near the mouse cursor
          */
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
         {
             if( Begin_Zone( aDC ) )
             {
@@ -340,7 +340,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
         {
             SetCurItem( CreateTextePcb( aDC ) );
             m_canvas->MoveCursorToCrossHair();
@@ -359,7 +359,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_MODULE_BUTT:
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
         {
             m_canvas->MoveCursorToCrossHair();
             MODULE* module = SelectFootprintFromLibTree();
@@ -397,7 +397,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
             break;
         }
 
-        if( !curr_item || !curr_item->GetFlags() )
+        if( !curr_item || !curr_item->GetEditFlags() )
         {
             curr_item = (BOARD_ITEM*) EditDimension( NULL, aDC );
             SetCurItem( curr_item );
@@ -417,11 +417,11 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_DELETE_ITEM_BUTT:
-        if( !curr_item || !curr_item->GetFlags() )
+        if( !curr_item || !curr_item->GetEditFlags() )
         {
             curr_item = PcbGeneralLocateAndDisplay();
 
-            if( curr_item && (curr_item->GetFlags() == 0) )
+            if( curr_item && curr_item->GetEditFlags() == 0 )
             {
                 RemoveStruct( curr_item, aDC );
                 SetCurItem( curr_item = NULL );
@@ -471,12 +471,10 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( (curr_item == NULL) || (curr_item->GetFlags() == 0) )
-        {
+        if( curr_item == NULL || curr_item->GetEditFlags() == 0 )
             curr_item = PcbGeneralLocateAndDisplay();
-        }
 
-        if( (curr_item == NULL) || (curr_item->GetFlags() != 0) )
+        if( curr_item == NULL || curr_item->GetEditFlags() != 0 )
             break;
 
         SendMessageToEESCHEMA( curr_item );
@@ -493,7 +491,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
                 if( End_Route( (TRACK*) curr_item, aDC ) )
                     m_canvas->SetAutoPanRequest( false );
             }
-            else if( curr_item->GetFlags() == 0 )
+            else if( curr_item->GetEditFlags() == 0 )
             {
                 Edit_TrackSegm_Width( aDC, (TRACK*) curr_item );
             }
@@ -515,7 +513,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
             break;
 
         case PCB_ZONE_AREA_T:
-            if( curr_item->GetFlags() )
+            if( curr_item->GetEditFlags() )
                 break;
 
             OnEditItemRequest( aDC, curr_item );

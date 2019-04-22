@@ -55,7 +55,7 @@ void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
     int orient = ( aTextItem->GetLabelSpinStyle() + 1 ) & 3;
 
     // Save current text orientation in undo list if is not already in edit.
-    if( aTextItem->GetFlags() == 0 )
+    if( aTextItem->GetEditFlags() == 0 )
         SaveCopyInUndoList( aTextItem, UR_CHANGED );
 
     aTextItem->SetLabelSpinStyle( orient );
@@ -249,7 +249,7 @@ void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
     PICKED_ITEMS_LIST pickList;
     ITEM_PICKER picker( text, UR_CHANGED );
 
-    if( text->GetFlags() )
+    if( text->GetEditFlags() )
     {
         // text is being edited, save initial text for undo command
         picker.SetLink( GetUndoItem() );

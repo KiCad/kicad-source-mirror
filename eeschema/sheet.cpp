@@ -310,7 +310,7 @@ void SCH_EDIT_FRAME::RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW )
         return;
 
     // Save old sheet in undo list if not already in edit, or moving.
-    if( aSheet->GetFlags() == 0 )
+    if( aSheet->GetEditFlags() == 0 )
         SaveCopyInUndoList( aSheet, UR_CHANGED );
 
     // Rotate the sheet on itself. Sheets do not have a anchor point.
@@ -341,7 +341,7 @@ void SCH_EDIT_FRAME::MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis )
         return;
 
     // Save old sheet in undo list if not already in edit, or moving.
-    if( aSheet->GetFlags() == 0 )
+    if( aSheet->GetEditFlags() == 0 )
         SaveCopyInUndoList( aSheet, UR_CHANGED );
 
     // Mirror the sheet on itself. Sheets do not have a anchor point.

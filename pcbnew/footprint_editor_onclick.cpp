@@ -53,7 +53,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
     {
-        if( item && item->GetFlags() ) // Move item command in progress
+        if( item && item->GetEditFlags() ) // Move item command in progress
         {
             switch( item->Type() )
             {
@@ -72,7 +72,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
 
             default:
                 wxLogDebug( wxT( "WinEDA_ModEditFrame::OnLeftClick err:Struct %d, m_Flag %X" ),
-                            item->Type(), item->GetFlags() );
+                            item->Type(), item->GetEditFlags() );
                 item->ClearFlags();
             }
         }
@@ -88,7 +88,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
     }
 
     item = GetCurItem();
-    bool no_item_edited = item == NULL || item->GetFlags() == 0;
+    bool no_item_edited = item == NULL || item->GetEditFlags() == 0;
 
     switch( GetToolId() )
     {
@@ -152,8 +152,7 @@ void FOOTPRINT_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& MousePos )
         {
             MODULE* module = GetBoard()->m_Modules;
 
-            if( module == NULL    // No module loaded
-                || (module->GetFlags() != 0) )
+            if( module == NULL || module->GetEditFlags() != 0 )
                 break;
 
             SaveCopyInUndoList( module, UR_CHANGED );
@@ -215,15 +214,13 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     bool        blockActive = !GetScreen()->m_BlockLocate.IsIdle();
 
     // Simple location of elements where possible.
-    if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
-    {
+    if( item == NULL || item->GetEditFlags() == 0 )
         SetCurItem( item = ModeditLocateAndDisplay() );
-    }
 
     // End command in progress.
     if( GetToolId() != ID_NO_TOOL_SELECTED )
     {
-        if( item && item->GetFlags() )
+        if( item && item->GetEditFlags() )
             AddMenuItem( PopMenu, ID_POPUP_CANCEL_CURRENT_COMMAND, _( "Cancel" ),
                          KiBitmap( cancel_xpm ) );
         else
@@ -234,7 +231,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
     }
     else
     {
-        if( (item && item->GetFlags()) || blockActive )
+        if( (item && item->GetEditFlags()) || blockActive )
         {
             if( blockActive )  // Put block commands in list
             {
@@ -279,7 +276,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
 
     if( item  )
     {
-        STATUS_FLAGS flags = item->GetFlags();
+        STATUS_FLAGS flags = item->GetEditFlags();
         switch( item->Type() )
         {
         case PCB_MODULE_T:
@@ -472,12 +469,10 @@ void FOOTPRINT_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
     switch( GetToolId() )
     {
     case ID_NO_TOOL_SELECTED:
-        if( ( item == NULL ) || ( item->GetFlags() == 0 ) )
-        {
+        if( item == NULL || item->GetEditFlags() == 0 )
             item = ModeditLocateAndDisplay();
-        }
 
-        if( ( item == NULL ) || ( item->GetFlags() != 0 ) )
+        if( item == NULL || item->GetEditFlags() != 0 )
             break;
 
         // Item found
