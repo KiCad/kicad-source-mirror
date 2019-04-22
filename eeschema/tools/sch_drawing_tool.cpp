@@ -125,7 +125,7 @@ TOOL_ACTION SCH_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeS
 
 TOOL_ACTION SCH_ACTIONS::drawLines( "eeschema.InteractiveDrawing.drawLines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
-        _( "Add Lines" ), _( "Add connected lines" ), NULL, AF_ACTIVATE );
+        _( "Add Lines" ), _( "Add connected graphic lines" ), NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0,

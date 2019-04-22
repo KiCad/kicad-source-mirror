@@ -1111,7 +1111,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     // Copy pin info from the component
     SCH_PINS pinMap = aComp->GetPinMap();
 
-    for( int i = 0; i < originalPins.size() && i < tempPins.size(); ++i )
+    for( unsigned i = 0; i < originalPins.size() && i < tempPins.size(); ++i )
     {
         LIB_PIN* originalPin = originalPins[ i ];
         LIB_PIN* tempPin = tempPins[ i ];

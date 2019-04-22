@@ -1465,7 +1465,7 @@ void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
 
         if( schframe == NULL )      // happens when the schematic editor is not active (or closed)
         {
-            DisplayErrorMessage( this, _("No schematic currently open." ) );
+            DisplayErrorMessage( this, _( "No schematic currently open." ) );
             return;
         }
 
@@ -1529,7 +1529,10 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
     {
         if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
         {
-            DisplayError( this, _( "Could not create the library file. Check write permission." ) );
+            DisplayError( this,
+                wxString::Format( _( "Could not create the library file \"%s\".\n"
+                                     "Check write permission." ),
+                                  fn.GetFullPath() ) );
             return false;
         }
     }
@@ -1682,7 +1685,8 @@ bool LIB_EDIT_FRAME::backupFile( const wxFileName& aOriginalFile, const wxString
 
         if( !wxCopyFile( aOriginalFile.GetFullPath(), backupFileName.GetFullPath() ) )
         {
-            DisplayError( this, _( "Failed to save backup to " ) + backupFileName.GetFullPath() );
+            DisplayError( this, wxString::Format( _( "Failed to save backup to \"%s\"" ),
+                                                  backupFileName.GetFullPath() ) );
             return false;
         }
     }

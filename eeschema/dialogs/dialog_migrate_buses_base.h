@@ -1,19 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Oct 17 2016)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
-// PLEASE DO "NOT" EDIT THIS FILE!
+// PLEASE DO *NOT* EDIT THIS FILE!
 ///////////////////////////////////////////////////////////////////////////
 
-#ifndef __DIALOG_MIGRATE_BUSES_BASE_H__
-#define __DIALOG_MIGRATE_BUSES_BASE_H__
+#pragma once
 
 #include <wx/artprov.h>
 #include <wx/xrc/xmlres.h>
 #include <wx/intl.h>
-class DIALOG_SHIM;
-class wxListView;
-
 #include "dialog_shim.h"
 #include <wx/string.h>
 #include <wx/stattext.h>
@@ -23,6 +19,9 @@ class wxListView;
 #include <wx/settings.h>
 #include <wx/listctrl.h>
 #include <wx/combobox.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
 #include <wx/button.h>
 #include <wx/sizer.h>
 #include <wx/dialog.h>
@@ -36,7 +35,7 @@ class wxListView;
 class DIALOG_MIGRATE_BUSES_BASE : public DIALOG_SHIM
 {
 	private:
-	
+
 	protected:
 		wxStaticText* m_staticText5;
 		wxStaticText* m_staticText7;
@@ -44,14 +43,13 @@ class DIALOG_MIGRATE_BUSES_BASE : public DIALOG_SHIM
 		wxStaticText* m_staticText6;
 		wxComboBox* m_cb_new_name;
 		wxButton* m_btn_accept;
-		wxStdDialogButtonSizer* m_sdbSizer1;
-		wxButton* m_sdbSizer1OK;
-	
+		wxStdDialogButtonSizer* m_sdbSizer;
+		wxButton* m_sdbSizerOK;
+
 	public:
-		
-		DIALOG_MIGRATE_BUSES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Migrate Buses"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE ); 
+
+		DIALOG_MIGRATE_BUSES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Migrate Buses"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE );
 		~DIALOG_MIGRATE_BUSES_BASE();
-	
+
 };
 
-#endif //__DIALOG_MIGRATE_BUSES_BASE_H__
