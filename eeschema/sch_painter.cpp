@@ -1109,7 +1109,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     tempPart.GetPins( tempPins, aComp->GetUnit(), aComp->GetConvert() );
     const SCH_PINS& compPins = aComp->GetPins();
 
-    for( int i = 0; i < tempPins.size() && i < compPins.size(); ++ i )
+    for( unsigned i = 0; i < tempPins.size() && i < compPins.size(); ++ i )
     {
         LIB_PIN* tempPin = tempPins[ i ];
         const SCH_PIN& compPin = compPins[ i ];

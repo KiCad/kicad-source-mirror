@@ -425,7 +425,7 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
     if( PART_SPTR part = m_part.lock() )
     {
         m_pinMap.clear();
-        int i = 0;
+        unsigned i = 0;
 
         for( LIB_PIN* libPin = part->GetNextPin(); libPin; libPin = part->GetNextPin( libPin ) )
         {
