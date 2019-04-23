@@ -271,6 +271,7 @@ if( KICAD_SPICE )
         sim/simulate.cpp
         sim/spice_simulator.cpp
         sim/spice_value.cpp
+        simulation_cursors.cpp
         dialogs/dialog_signal_list.cpp
         dialogs/dialog_signal_list_base.cpp
         dialogs/dialog_sim_settings.cpp

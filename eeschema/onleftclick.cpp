@@ -28,11 +28,9 @@
 #include <eeschema_id.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <sim/sim_plot_frame.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
-#include <netlist_object.h>
 #include <sch_view.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
@@ -85,65 +83,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     if( !item ) // If clicked on a empty area, clear any highligthed symbol
         GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
-
-    switch( GetToolId() )
-    {
-#ifdef KICAD_SPICE
-    case ID_SIM_PROBE:
-        {
-            constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T,
-                                                       SCH_COMPONENT_T,
-                                                       SCH_SHEET_PIN_T,
-                                                       EOT };
-            item = selTool->SelectPoint( aPosition, wiresAndComponents );
-
-            if( !item )
-                break;
-
-            std::unique_ptr<NETLIST_OBJECT_LIST> netlist( BuildNetListBase() );
-
-            for( NETLIST_OBJECT* obj : *netlist )
-            {
-                if( obj->m_Comp == item )
-                {
-                    SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
-
-                    if( simFrame )
-                        simFrame->AddVoltagePlot( obj->GetNetName() );
-
-                    break;
-                }
-            }
-        }
-        break;
-
-    case ID_SIM_TUNE:
-        {
-            constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
-            item = selTool->SelectPoint( aPosition, fieldsAndComponents );
-
-            if( !item )
-                return;
-
-            if( item->Type() != SCH_COMPONENT_T )
-            {
-                item = static_cast<SCH_ITEM*>( item->GetParent() );
-
-                if( item->Type() != SCH_COMPONENT_T )
-                    return;
-            }
-
-            SIM_PLOT_FRAME* simFrame = (SIM_PLOT_FRAME*) Kiway().Player( FRAME_SIMULATOR, false );
-
-            if( simFrame )
-                simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
-        }
-        break;
-#endif /* KICAD_SPICE */
-
-    default:
-        break;
-    }
 }
 
 

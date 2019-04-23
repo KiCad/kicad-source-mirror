@@ -280,13 +280,8 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
     EVT_MENU( ID_GRID_SETTINGS, SCH_BASE_FRAME::OnGridSettings )
 
-    // Tools and buttons for vertical toolbar.
-    EVT_TOOL( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnSelectTool )
-
 #ifdef KICAD_SPICE
     EVT_TOOL( ID_SIM_SHOW, SCH_EDIT_FRAME::OnSimulate )
-    EVT_TOOL( ID_SIM_PROBE, SCH_EDIT_FRAME::OnSelectTool )
-    EVT_TOOL( ID_SIM_TUNE, SCH_EDIT_FRAME::OnSelectTool )
 #endif /* KICAD_SPICE */
 
     EVT_MENU( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )

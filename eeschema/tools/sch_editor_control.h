@@ -59,6 +59,11 @@ public:
     ///> Notifies pcbnew about the selected item.
     int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
 
+#ifdef KICAD_SPICE
+    int SimProbe( const TOOL_EVENT& aEvent );
+    int SimTune( const TOOL_EVENT& aEvent );
+#endif /* KICAD_SPICE */
+
     ///> Highlights net under the cursor.
     int HighlightNet( const TOOL_EVENT& aEvent );
 

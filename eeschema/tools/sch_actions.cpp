@@ -178,6 +178,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_SCH_DELETE:
         return SCH_ACTIONS::remove.MakeEvent();
+
+    case ID_SIM_PROBE:
+        return SCH_ACTIONS::simProbe.MakeEvent();
+
+    case ID_SIM_TUNE:
+        return SCH_ACTIONS::simTune.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

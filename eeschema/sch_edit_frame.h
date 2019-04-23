@@ -252,7 +252,6 @@ public:
 
     void Process_Special_Functions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
-    void OnSelectTool( wxCommandEvent& aEvent );
 
     /**
      * Processes an "Unfold Bus" command from the right-click menu.

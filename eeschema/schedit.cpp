@@ -456,48 +456,6 @@ void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
 }
 
 
-void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-
-    // Stop the current command and deselect the current tool.
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-
-    // Same for modern toolset.
-    m_toolManager->DeactivateTool();
-
-    switch( id )
-    {
-    case ID_NO_TOOL_SELECTED:
-        SetNoToolSelected();
-        break;
-
-#ifdef KICAD_SPICE
-    case ID_SIM_PROBE:
-        SetToolID( id, -1, _( "Add a simulator probe" ) );
-        //GAL TODO: m_canvas->SetCurrentCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
-        break;
-
-    case ID_SIM_TUNE:
-        SetToolID( id, -1, _( "Select a value to be tuned" ) );
-        //GAL TODO: m_canvas->SetCurrentCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
-        break;
-#endif /* KICAD_SPICE */
-
-    default:
-        SetRepeatItem( NULL );
-    }
-
-    // Simulate left click event if we got here from a hot key.
-    if( aEvent.GetClientObject() != NULL )
-    {
-        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
-
-        OnLeftClick( nullptr, data->GetPosition() );
-    }
-}
-
-
 void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )

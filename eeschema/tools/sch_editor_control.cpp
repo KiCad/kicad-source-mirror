@@ -22,6 +22,7 @@
  */
 
 #include <fctsys.h>
+#include <kiway.h>
 #include <sch_view.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
@@ -40,9 +41,19 @@
 #include <hotkeys.h>
 #include <advanced_config.h>
 #include <status_popup.h>
+#include <simulation_cursors.h>
+#include <sim/sim_plot_frame.h>
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );
+
+TOOL_ACTION SCH_ACTIONS::simProbe( "eeschema.Simulation.probe",
+        AS_GLOBAL, 0,
+        _( "Add a simulator probe" ), "" );
+
+TOOL_ACTION SCH_ACTIONS::simTune( "eeschema.Simulation.tune",
+        AS_GLOBAL, 0,
+        _( "Select a value to be tuned" ), "" );
 
 TOOL_ACTION SCH_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
         AS_GLOBAL, 0, "", "" );
@@ -105,7 +116,7 @@ bool SCH_EDITOR_CONTROL::Init()
     lockMenu->SetTool( this );
 
     // Add the SCH control menus to relevant other tools
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     if( selTool )
     {
@@ -171,6 +182,99 @@ int SCH_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
+#ifdef KICAD_SPICE
+static bool probeSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+{
+    constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
+    SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+
+    SCH_ITEM* item = selTool->SelectPoint( aPosition, wiresAndComponents );
+
+    if( !item )
+        return false;
+
+    std::unique_ptr<NETLIST_OBJECT_LIST> netlist( aFrame->BuildNetListBase() );
+
+    for( NETLIST_OBJECT* obj : *netlist )
+    {
+        if( obj->m_Comp == item )
+        {
+            auto simFrame = (SIM_PLOT_FRAME*) aFrame->Kiway().Player( FRAME_SIMULATOR, false );
+
+            if( simFrame )
+                simFrame->AddVoltagePlot( obj->GetNetName() );
+
+            break;
+        }
+    }
+
+    return true;
+}
+
+
+int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
+{
+    Activate();
+
+    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    assert( picker );
+
+    m_frame->SetToolID( ID_SIM_PROBE, wxCURSOR_DEFAULT, _( "Add a simulator probe" ) );
+    m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::PROBE ) );
+
+    picker->SetClickHandler( std::bind( probeSimulation, m_frame, std::placeholders::_1 ) );
+    picker->Activate();
+    Wait();
+
+    return 0;
+}
+
+
+static bool tuneSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+{
+    constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
+    SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SCH_ITEM* item = selTool->SelectPoint( aPosition, fieldsAndComponents );
+
+    if( !item )
+        return false;
+
+    if( item->Type() != SCH_COMPONENT_T )
+    {
+        item = static_cast<SCH_ITEM*>( item->GetParent() );
+
+        if( item->Type() != SCH_COMPONENT_T )
+            return false;
+    }
+
+    auto simFrame = (SIM_PLOT_FRAME*) aFrame->Kiway().Player( FRAME_SIMULATOR, false );
+
+    if( simFrame )
+        simFrame->AddTuner( static_cast<SCH_COMPONENT*>( item ) );
+
+    return true;
+}
+
+
+int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
+{
+    Activate();
+
+    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    assert( picker );
+
+    m_frame->SetToolID( ID_SIM_TUNE, wxCURSOR_DEFAULT, _( "Select a value to be tuned" ) );
+    m_frame->GetCanvas()->SetCursor( SIMULATION_CURSORS::GetCursor( SIMULATION_CURSORS::CURSOR::TUNE ) );
+
+    picker->SetClickHandler( std::bind( tuneSimulation, m_frame, std::placeholders::_1 ) );
+    picker->Activate();
+    Wait();
+
+    return 0;
+}
+#endif /* KICAD_SPICE */
 
 
 // A magic cookie token for clearing the highlight
@@ -390,6 +494,11 @@ void SCH_EDITOR_CONTROL::setTransitions()
     /*
     Go( &SCH_EDITOR_CONTROL::CrossProbePcbToSch,    SCH_ACTIONS::crossProbeSchToPcb.MakeEvent() );
      */
+
+#ifdef KICAD_SPICE
+    Go( &SCH_EDITOR_CONTROL::SimProbe,              SCH_ACTIONS::simProbe.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SimTune,               SCH_ACTIONS::simTune.MakeEvent() );
+#endif /* KICAD_SPICE */
 
     Go( &SCH_EDITOR_CONTROL::HighlightNet,          SCH_ACTIONS::highlightNet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,        SCH_ACTIONS::clearHighlight.MakeEvent() );

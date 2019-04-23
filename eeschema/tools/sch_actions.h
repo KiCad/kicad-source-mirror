@@ -134,6 +134,10 @@ public:
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
 
+    // SPICE
+    static TOOL_ACTION simProbe;
+    static TOOL_ACTION simTune;
+
     // Net highlighting
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION clearHighlight;
