@@ -35,57 +35,6 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
 
-void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
-{
-    SCH_ITEM* item = GetScreen()->GetCurItem();
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
-    {
-        m_canvas->SetAutoPanRequest( false );
-        SetRepeatItem( NULL );
-
-        // item_flags != 0 means a current item in edit
-        if( item && item->GetEditFlags() )
-        {
-            switch( item->Type() )
-            {
-            case SCH_LABEL_T:
-            case SCH_GLOBAL_LABEL_T:
-            case SCH_HIER_LABEL_T:
-            case SCH_TEXT_T:
-            case SCH_SHEET_PIN_T:
-            case SCH_SHEET_T:
-            case SCH_BUS_WIRE_ENTRY_T:
-            case SCH_BUS_BUS_ENTRY_T:
-            case SCH_JUNCTION_T:
-            case SCH_COMPONENT_T:
-            case SCH_FIELD_T:
-            case SCH_BITMAP_T:
-            case SCH_NO_CONNECT_T:
-                AddItemToScreen( item );
-                GetCanvas()->GetView()->ClearPreview();
-                GetCanvas()->GetView()->ClearHiddenFlags();
-                return;
-
-            default:
-                wxFAIL_MSG( wxT( "SCH_EDIT_FRAME::OnLeftClick error.  Item type <" ) +
-                            item->GetClass() + wxT( "> is already being edited." ) );
-                item->ClearFlags();
-                break;
-            }
-        }
-        else
-        {
-            item = selTool->SelectPoint( aPosition );
-        }
-    }
-
-    if( !item ) // If clicked on a empty area, clear any highligthed symbol
-        GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
-}
-
-
 /**
  * Function OnLeftDClick
  * called on a double click event from the drawpanel mouse handler
@@ -95,7 +44,7 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
  *      validate and finish the command
  */
 void SCH_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
-
+// JEY TODO: move to selection tool double-click handling....
 {
     SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     EDA_ITEM*           item = GetScreen()->GetCurItem();

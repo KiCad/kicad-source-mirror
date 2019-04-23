@@ -304,37 +304,6 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 }
 
 
-void SCH_EDIT_FRAME::RotateHierarchicalSheet( SCH_SHEET* aSheet, bool aRotCCW )
-{
-    if( aSheet == NULL )
-        return;
-
-    // Save old sheet in undo list if not already in edit, or moving.
-    if( aSheet->GetEditFlags() == 0 )
-        SaveCopyInUndoList( aSheet, UR_CHANGED );
-
-    // Rotate the sheet on itself. Sheets do not have a anchor point.
-    // Rotation is made around it center
-    wxPoint rotPoint = aSheet->GetBoundingBox().Centre();
-
-    // Keep this rotation point on the grid, otherwise all items of this sheet
-    // will be moved off grid
-    rotPoint = GetNearestGridPosition( rotPoint );
-
-    // rotate CCW, or CW. to rotate CW, rotate 3 times
-    aSheet->Rotate( rotPoint );
-
-    if( !aRotCCW )
-    {
-        aSheet->Rotate( rotPoint );
-        aSheet->Rotate( rotPoint );
-    }
-
-    GetCanvas()->GetView()->Update( aSheet );
-    OnModify();
-}
-
-
 void SCH_EDIT_FRAME::MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis )
 {
     if( aSheet == NULL )

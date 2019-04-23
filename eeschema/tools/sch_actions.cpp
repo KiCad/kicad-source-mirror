@@ -37,6 +37,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
+    case ID_NO_TOOL_SELECTED:
+        return SCH_ACTIONS::selectionActivate.MakeEvent();
+
     case ID_CANCEL_CURRENT_COMMAND:
         return ACTIONS::cancelInteractive.MakeEvent();
 
@@ -176,6 +179,10 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         return SCH_ACTIONS::deleteItemCursor.MakeEvent();
 
+    case ID_POPUP_MOVE_BLOCK:
+    case ID_SCH_MOVE_ITEM:
+        return SCH_ACTIONS::move.MakeEvent();
+
     case ID_POPUP_SCH_DELETE:
         return SCH_ACTIONS::remove.MakeEvent();
 
@@ -184,6 +191,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_SIM_TUNE:
         return SCH_ACTIONS::simTune.MakeEvent();
+
+    case ID_SCH_ROTATE_CLOCKWISE:
+        return SCH_ACTIONS::rotateCW.MakeEvent();
+
+    case ID_SCH_ROTATE_COUNTERCLOCKWISE:
+        return SCH_ACTIONS::rotateCCW.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

@@ -111,7 +111,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
                                          bool           aAppend,
                                          const wxPoint& aTransformPoint )
 {
-     PICKED_ITEMS_LIST* commandToUndo = NULL;
+    PICKED_ITEMS_LIST* commandToUndo = NULL;
 
     if( aItem == NULL )
         return;
@@ -349,7 +349,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 
 void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 {
-    if( GetScreen()->GetUndoCommandCount() <= 0 || isBusy() )
+    if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
     /* Get the old list */
@@ -373,7 +373,7 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
-    if( GetScreen()->GetRedoCommandCount() == 0 || isBusy() )
+    if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
 
     /* Get the old list */
@@ -393,4 +393,21 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
     SyncView();
     GetCanvas()->Refresh();
     OnModify();
+}
+
+
+void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
+{
+    PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();
+    PutDataInPreviousState( undo, false );
+
+    undo->ClearListAndDeleteItems();
+    delete undo;
+
+    SetSheetNumberAndCount();
+
+    TestDanglingEnds();
+
+    SyncView();
+    GetCanvas()->Refresh();
 }

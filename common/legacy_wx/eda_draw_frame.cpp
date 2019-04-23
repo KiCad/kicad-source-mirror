@@ -586,11 +586,6 @@ void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-void EDA_DRAW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 5 );

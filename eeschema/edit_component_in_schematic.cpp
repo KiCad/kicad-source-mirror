@@ -92,27 +92,6 @@ void SCH_EDIT_FRAME::EditComponentFieldText( SCH_FIELD* aField )
 }
 
 
-void SCH_EDIT_FRAME::RotateField( SCH_FIELD* aField )
-{
-    wxCHECK_RET( aField != NULL && aField->Type() == SCH_FIELD_T && !aField->GetText().IsEmpty(),
-                 wxT( "Cannot rotate invalid schematic field." ) );
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) aField->GetParent();
-
-    // Save old component in undo list if not already in edit, or moving.
-    if( aField->GetEditFlags() == 0 )
-        SaveCopyInUndoList( component, UR_CHANGED );
-
-    if( aField->GetTextAngle() == TEXT_ANGLE_HORIZ )
-        aField->SetTextAngle( TEXT_ANGLE_VERT );
-    else
-        aField->SetTextAngle( TEXT_ANGLE_HORIZ );
-
-    RefreshItem( aField );
-    OnModify();
-}
-
-
 void SCH_EDIT_FRAME::EditComponent( SCH_COMPONENT* aComponent )
 {
     wxCHECK_RET( aComponent != nullptr && aComponent->Type() == SCH_COMPONENT_T,

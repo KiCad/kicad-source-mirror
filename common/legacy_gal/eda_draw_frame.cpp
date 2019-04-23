@@ -544,11 +544,6 @@ void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
 }
 
 
-void EDA_DRAW_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& MousePos )
-{
-}
-
-
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
     SetStatusText( msg, 5 );
@@ -1189,18 +1184,6 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
     }
 
     return key_handled;
-}
-
-
-bool EDA_DRAW_FRAME::isBusy() const
-{
-    const BASE_SCREEN* screen = GetScreen();
-
-    if( !screen )
-        return false;
-
-    return ( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
-           || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
 }
 
 

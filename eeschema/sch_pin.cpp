@@ -110,24 +110,19 @@ wxPoint SCH_PIN::GetTransformedPosition() const
 
 const EDA_RECT SCH_PIN::GetBoundingBox() const
 {
-    // Due to pins being relative to their component parent's position, this is unlikely
-    // to do what a caller wants.  Use HitTest() directly instead.
-    wxFAIL_MSG( "SCH_PINs bounding box is relative to parent component" );
+    TRANSFORM t = GetParentComponent()->GetTransform();
+    EDA_RECT  r = m_libPin->GetBoundingBox();
 
-    return m_libPin->GetBoundingBox();
+    r = t.TransformCoordinate( r );
+    r.Offset( GetParentComponent()->GetPosition() );
+
+    return r;
 }
 
 
 bool SCH_PIN::HitTest( const wxPoint& aPosition ) const
 {
-    // Pin hit testing is relative to the components position and orientation in the
-    // schematic.  The hit test position must be converted to library coordinates.
-    TRANSFORM t = GetParentComponent()->GetTransform().InverseTransform();
-    wxPoint pos = t.TransformCoordinate( aPosition - GetParentComponent()->GetPosition() );
-
-    pos.y *= -1;   // Y axis polarity in schematic is inverted from library.
-
-    return m_libPin->GetBoundingBox().Contains( pos );
+    return GetBoundingBox().Contains( aPosition );
 }
 
 

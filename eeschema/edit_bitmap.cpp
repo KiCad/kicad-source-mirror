@@ -72,18 +72,6 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage()
 }
 
 
-void SCH_EDIT_FRAME::RotateImage( SCH_BITMAP* aItem )
-{
-    if( aItem->GetEditFlags( ) == 0 )
-        SaveCopyInUndoList( aItem, UR_ROTATED, false, aItem->GetPosition() );
-
-    aItem->Rotate( aItem->GetPosition() );
-
-    RefreshItem( aItem );
-    OnModify();
-}
-
-
 void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
 {
     if( aItem->GetEditFlags( ) == 0 )

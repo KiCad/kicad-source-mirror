@@ -478,23 +478,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
 
-    case HK_LEFT_CLICK:
-    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        if( screen->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
-        {
-            GetCanvas()->SetAutoPanRequest( false );
-            HandleBlockPlace( aDC );
-        }
-        else if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-        {
-            auto pos = GetCrossHairPosition();
-            OnLeftClick( aDC, pos );
-
-            if( hotKey->m_Idcommand == HK_LEFT_DCLICK )
-                OnLeftDClick( aDC, pos );
-        }
-        break;
-
     case HK_ZOOM_IN:
     case HK_ZOOM_OUT:
     case HK_ZOOM_REDRAW:

@@ -33,6 +33,7 @@
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
+#include <preview_items/selection_area.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <sch_actions.h>
@@ -74,7 +75,6 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         m_subtractive( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
-        m_locked( true ),
         m_menu( *this )
 {
 }
@@ -100,7 +100,6 @@ bool SCH_SELECTION_TOOL::Init()
 void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_locked = true;
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -182,10 +181,8 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( m_additive || m_subtractive || m_selection.Empty() )
             {
-                // JEY TODO: move block selection to SCH_SELECTION_TOOL
-                //selectMultiple();
+                selectMultiple();
             }
-
             else
             {
                 // Check if dragging has started within any of selected items bounding box
@@ -318,6 +315,15 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
 }
 
 
+static EDA_RECT getRect( const SCH_ITEM* aItem )
+{
+    if( aItem->Type() == SCH_COMPONENT_T )
+        return static_cast<const SCH_COMPONENT*>( aItem )->GetBodyBoundingBox();
+
+    return aItem->GetBoundingBox();
+}
+
+
 SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
     if( m_selection.Empty() )
@@ -366,15 +372,138 @@ bool SCH_SELECTION_TOOL::selectCursor( const KICAD_T aFilterList[], bool aForceS
 }
 
 
+bool SCH_SELECTION_TOOL::selectMultiple()
+{
+    bool cancelled = false;     // Was the tool cancelled while it was running?
+    m_multiple = true;          // Multiple selection mode is active
+    KIGFX::VIEW* view = getView();
+
+    KIGFX::PREVIEW::SELECTION_AREA area;
+    view->Add( &area );
+
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            cancelled = true;
+            break;
+        }
+
+        if( evt->IsDrag( BUT_LEFT ) )
+        {
+            // Start drawing a selection box
+            area.SetOrigin( evt->DragOrigin() );
+            area.SetEnd( evt->Position() );
+            area.SetAdditive( m_additive );
+            area.SetSubtractive( m_subtractive );
+
+            view->SetVisible( &area, true );
+            view->Update( &area );
+            getViewControls()->SetAutoPan( true );
+        }
+
+        if( evt->IsMouseUp( BUT_LEFT ) )
+        {
+            getViewControls()->SetAutoPan( false );
+
+            // End drawing the selection box
+            view->SetVisible( &area, false );
+
+            // Mark items within the selection box as selected
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR> selectedItems;
+
+            // Filter the view items based on the selection box
+            BOX2I selectionBox = area.ViewBBox();
+            view->Query( selectionBox, selectedItems );         // Get the list of selected items
+
+            std::vector<KIGFX::VIEW::LAYER_ITEM_PAIR>::iterator it, it_end;
+
+            int width = area.GetEnd().x - area.GetOrigin().x;
+            int height = area.GetEnd().y - area.GetOrigin().y;
+
+            /* Selection mode depends on direction of drag-selection:
+             * Left > Right : Select objects that are fully enclosed by selection
+             * Right > Left : Select objects that are crossed by selection
+             */
+            bool windowSelection = width >= 0 ? true : false;
+
+            if( view->IsMirroredX() )
+                windowSelection = !windowSelection;
+
+            // Construct an EDA_RECT to determine BOARD_ITEM selection
+            EDA_RECT selectionRect( wxPoint( area.GetOrigin().x, area.GetOrigin().y ),
+                                    wxSize( width, height ) );
+
+            selectionRect.Normalize();
+
+            for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
+            {
+                SCH_ITEM* item = static_cast<SCH_ITEM*>( it->first );
+
+                if( !item || !selectable( item ) )
+                    continue;
+
+                if( windowSelection )
+                {
+                    BOX2I bbox = getRect( item );
+
+                    if( selectionBox.Contains( bbox ) )
+                    {
+                        if( m_subtractive )
+                            unselect( item );
+                        else
+                            select( item );
+                    }
+                }
+                else
+                {
+                    if( item->HitTest( selectionRect, false ) )
+                    {
+                        if( m_subtractive )
+                            unselect( item );
+                        else
+                            select( item );
+                    }
+                }
+            }
+
+            if( m_frame )
+            {
+                if( m_selection.Size() == 1 )
+                    m_frame->GetScreen()->SetCurItem( static_cast<SCH_ITEM*>( m_selection.Front() ) );
+                else
+                    m_frame->GetScreen()->SetCurItem( nullptr );
+            }
+
+            // Inform other potentially interested tools
+            if( !m_selection.Empty() )
+                m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+
+            break;  // Stop waiting for events
+        }
+    }
+
+    getViewControls()->SetAutoPan( false );
+
+    // Stop drawing the selection box
+    view->Remove( &area );
+    m_multiple = false;         // Multiple selection mode is inactive
+
+    if( !cancelled )
+        m_selection.ClearReferencePoint();
+
+    return cancelled;
+}
+
+
 int SCH_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 {
-    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
+    PICKED_ITEMS_LIST* pickedItems = aEvent.Parameter<PICKED_ITEMS_LIST*>();
 
-    if( items )
+    if( pickedItems )
     {
-        // Perform individual selection of each item before processing the event.
-        for( auto item : *items )
-            select( item );
+        for( unsigned ii = 0; ii < pickedItems->GetCount(); ii++ )
+            select( (SCH_ITEM*) pickedItems->GetPickedItem( ii ) );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
@@ -402,13 +531,12 @@ int SCH_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 {
-    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
+    PICKED_ITEMS_LIST* pickedItems = aEvent.Parameter<PICKED_ITEMS_LIST*>();
 
-    if( items )
+    if( pickedItems )
     {
-        // Perform individual unselection of each item before processing the event
-        for( auto item : *items )
-            unselect( item );
+        for( unsigned ii = 0; ii < pickedItems->GetCount(); ii++ )
+            unselect( (SCH_ITEM*) pickedItems->GetPickedItem( ii ) );
 
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
@@ -456,43 +584,6 @@ int SCH_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
 {
     SCH_ITEM* current = nullptr;
-#if 1
-// ====================================================================================
-// JEY TODO: use wxWidgets event loop for showing menu until we move to modern toolset event loop
-    wxMenu selectMenu;
-
-    AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ), KiBitmap( info_xpm ) );
-    selectMenu.AppendSeparator();
-
-    for( int i = 0;  i < aCollector->GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
-    {
-        SCH_ITEM* item = ( *aCollector )[i];
-        wxString text = item->GetSelectMenuText( m_frame->GetUserUnits() );
-        BITMAP_DEF xpm = item->GetMenuImage();
-        AddMenuItem( &selectMenu, i, text, KiBitmap( xpm ) );
-    }
-
-    // Set to NULL in case the user aborts the clarification context menu.
-    m_frame->GetScreen()->SetCurItem( nullptr );
-    int idx = m_frame->GetPopupMenuSelectionFromUser( selectMenu );
-
-    if( idx == wxID_NONE )
-    {
-        m_frame->GetScreen()->SetCurItem( nullptr );
-        return false;
-    }
-
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
-
-    current = ( *aCollector )[ idx ];
-    m_frame->GetScreen()->SetCurItem( current );
-
-    aCollector->Empty();
-    aCollector->Append( current );
-    return true;
-
-// ====================================================================================
-#endif
     CONTEXT_MENU menu;
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
@@ -549,11 +640,17 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
 
             break;
         }
+
+        getView()->UpdateItems();
+        m_frame->GetCanvas()->Refresh();
     }
 
     if( current )
     {
         unhighlight( current, BRIGHTENED );
+
+        getView()->UpdateItems();
+        m_frame->GetCanvas()->Refresh();
 
         aCollector->Empty();
         aCollector->Append( current );
@@ -605,8 +702,6 @@ void SCH_SELECTION_TOOL::clearSelection()
     if( m_frame )
         m_frame->GetScreen()->SetCurItem( nullptr );
 
-    m_locked = true;
-
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
 }
@@ -643,11 +738,7 @@ void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
 
 void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 {
-    if( aItem->IsSelected() )
-        return;
-
     highlight( aItem, SELECTED, &m_selection );
-    getView()->Update( &m_selection );
 
     if( m_frame )
     {
@@ -668,13 +759,9 @@ void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 void SCH_SELECTION_TOOL::unselect( SCH_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
-    getView()->Update( &m_selection );
 
     if( m_frame && m_frame->GetScreen()->GetCurItem() == aItem )
         m_frame->GetScreen()->SetCurItem( nullptr );
-
-    if( m_selection.Empty() )
-        m_locked = true;
 }
 
 
@@ -689,10 +776,10 @@ void SCH_SELECTION_TOOL::highlight( SCH_ITEM* aItem, int aMode, SELECTION* aGrou
         aGroup->Add( aItem );
 
     // Highlight pins and fields.  (All the other component children are currently only
-    // represented in the LIB_PART.)
+    // represented in the LIB_PART and will inherit the settings of the parent component.)
     if( aItem->Type() == SCH_COMPONENT_T )
     {
-        SCH_PINS pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
+        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
 
         for( SCH_PIN& pin : pins )
         {
@@ -705,23 +792,31 @@ void SCH_SELECTION_TOOL::highlight( SCH_ITEM* aItem, int aMode, SELECTION* aGrou
         std::vector<SCH_FIELD*> fields;
         static_cast<SCH_COMPONENT*>( aItem )->GetFields( fields, false );
 
-        for( auto field : fields )
+        for( SCH_FIELD* field : fields )
         {
             if( aMode == SELECTED )
                 field->SetSelected();
             else if( aMode == BRIGHTENED )
                 field->SetBrightened();
+        }
+    }
+    else if( aItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
-            // JEY TODO: do these need hiding from view and adding to aGroup?
+        for( SCH_SHEET_PIN& pin : pins )
+        {
+            if( aMode == SELECTED )
+                pin.SetSelected();
+            else if( aMode == BRIGHTENED )
+                pin.SetBrightened();
         }
     }
 
-    // JEY TODO: Sheets and sheet pins?
-
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
-    if( aMode == BRIGHTENED )
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    if( aItem->Type() == SCH_PIN_T || aItem->Type() == SCH_FIELD_T )
+        getView()->Update( aItem->GetParent() );
+    else
+        getView()->Update( aItem );
 }
 
 
@@ -739,7 +834,7 @@ void SCH_SELECTION_TOOL::unhighlight( SCH_ITEM* aItem, int aMode, SELECTION* aGr
     // represented in the LIB_PART.)
     if( aItem->Type() == SCH_COMPONENT_T )
     {
-        SCH_PINS pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
+        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
 
         for( SCH_PIN& pin : pins )
         {
@@ -752,23 +847,31 @@ void SCH_SELECTION_TOOL::unhighlight( SCH_ITEM* aItem, int aMode, SELECTION* aGr
         std::vector<SCH_FIELD*> fields;
         static_cast<SCH_COMPONENT*>( aItem )->GetFields( fields, false );
 
-        for( auto field : fields )
+        for( SCH_FIELD* field : fields )
         {
             if( aMode == SELECTED )
                 field->ClearSelected();
             else if( aMode == BRIGHTENED )
                 field->ClearBrightened();
+        }
+    }
+    else if( aItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
-            // JEY TODO: do these need showing and updating?
+        for( SCH_SHEET_PIN& pin : pins )
+        {
+            if( aMode == SELECTED )
+                pin.ClearSelected();
+            else if( aMode == BRIGHTENED )
+                pin.ClearBrightened();
         }
     }
 
-    // JEY TODO: Sheets and sheet pins?
-
-    // Many selections are very temporal and updating the display each time just
-    // creates noise.
-    if( aMode == BRIGHTENED )
-        getView()->MarkTargetDirty( KIGFX::TARGET_OVERLAY );
+    if( aItem->Type() == SCH_PIN_T || aItem->Type() == SCH_FIELD_T )
+        getView()->Update( aItem->GetParent() );
+    else
+        getView()->Update( aItem );
 }
 
 

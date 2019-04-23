@@ -235,11 +235,6 @@ COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOn
     {
         return color.Brightened( 0.5 );
     }
-    // JEY TODO: IsMoving checks can go away after seleciton model is fully implemented...
-    else if( aItem->IsMoving() )
-    {
-        return color.Brightened( 0.5 );
-    }
     else if( aItem->IsHighlighted() )
     {
         if ( aOnBackgroundLayer )
@@ -328,10 +323,6 @@ bool SCH_PAINTER::setColors( const LIB_ITEM* aItem, int aLayer )
     else if( aLayer == LAYER_DEVICE )
     {
         COLOR4D color = getRenderColor( aItem, LAYER_DEVICE, false );
-
-        // These actions place the item over others, so allow a modest transparency here
-        if( aItem->IsMoving() || aItem->IsDragging() || aItem->IsResized() )
-            color = color.WithAlpha( 0.75 );
 
         m_gal->SetStrokeColor( color );
         m_gal->SetIsFill( aItem->GetFillMode() == FILLED_SHAPE );
@@ -1102,7 +1093,10 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     orientPart( &tempPart, aComp->GetOrientation());
 
     for( auto& tempItem : tempPart.GetDrawItems() )
+    {
+        tempItem.SetFlags( aComp->GetFlags() );     // SELECTED, HIGHLIGHTED, BRIGHTENED
         tempItem.Move( tempItem.GetPosition() + (wxPoint) mapCoords( aComp->GetPosition() ) );
+    }
 
     // Copy the pin info from the component to the temp pins
     LIB_PINS tempPins;
@@ -1287,7 +1281,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
     }
     else if( aLayer == LAYER_SHEET )
     {
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEET ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEET, false ) );
         m_gal->SetIsStroke( true );
 
         m_gal->SetIsFill( false );
@@ -1302,7 +1296,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         if( aSheet->IsVerticalOrientation() )
             nameAngle = -M_PI/2;
 
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETNAME ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, false ) );
 
         auto text = wxT( "Sheet: " ) + aSheet->GetName();
 
@@ -1319,7 +1313,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
         txtSize = aSheet->GetFileNameSize();
         m_gal->SetGlyphSize( VECTOR2D( txtSize, txtSize ) );
-        m_gal->SetStrokeColor( m_schSettings.GetLayerColor( LAYER_SHEETFILENAME ) );
+        m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETFILENAME, false ) );
         m_gal->SetVerticalJustify( GR_TEXT_VJUSTIFY_TOP );
 
         text = wxT( "File: " ) + aSheet->GetFileName();

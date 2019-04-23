@@ -208,6 +208,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
 }
 
 
+// JEY TODO: obsolete once mover to modern toolset is complete
 void SCH_EDIT_FRAME::OrientComponent( COMPONENT_ORIENTATION_T aOrientation )
 {
     SCH_SCREEN*    screen = GetScreen();

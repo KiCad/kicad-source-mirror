@@ -32,7 +32,6 @@ class SCH_SCREEN;
 class PICKED_ITEMS_LIST;
 
 void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
-void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& rotationPoint );
 void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 

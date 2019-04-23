@@ -222,11 +222,6 @@ protected:
     void RefreshCrossHair( const wxPoint &aOldPos, const wxPoint &aEvtPos, wxDC* aDC );
 
     /**
-     * @return true if an item edit or a block operation is in progress.
-     */
-    bool isBusy() const;
-
-    /**
      * Stores the canvas type in the application settings.
      */
     bool saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvasType );
@@ -744,8 +739,8 @@ public:
 
     void            DisplayToolMsg( const wxString& msg );
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) = 0;
-    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos );
+    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {};
+    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) {};
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars( const wxPoint& aCenterPosition );

@@ -30,6 +30,7 @@
 
 
 class SCH_EDIT_FRAME;
+class SCH_SELECTION_TOOL;
 
 
 class SCH_EDIT_TOOL : public TOOL_INTERACTIVE
@@ -50,19 +51,48 @@ public:
         return m_menu;
     }
 
+    /**
+     * Function Main()
+     *
+     * Main loop in which events are handled.
+     */
+    int Main( const TOOL_EVENT& aEvent );
+
+    int Rotate( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function Remove()
+     *
+     * Deletes the selected items, or the item under the cursor.
+     */
     int Remove( const TOOL_EVENT& aEvent );
 
 private:
+    ///> Returns the right modification point (e.g. for rotation), depending on the number of
+    ///> selected items.
+    bool updateModificationPoint( SELECTION& aSelection );
+
+    ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
+    void updateView( EDA_ITEM* );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
-    KIGFX::SCH_VIEW* m_view;
+    SCH_SELECTION_TOOL*   m_selectionTool;
+    KIGFX::SCH_VIEW*      m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME* m_frame;
+    SCH_EDIT_FRAME*       m_frame;
 
     /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
+    TOOL_MENU             m_menu;
+
+    ///> Flag determining if anything is being dragged right now
+    bool                  m_dragging;
+
+    ///> Last cursor position (needed for getModificationPoint() to avoid changes
+    ///> of edit reference point).
+    VECTOR2I              m_cursor;
 };
 
 #endif //KICAD_SCH_EDIT_TOOL_H

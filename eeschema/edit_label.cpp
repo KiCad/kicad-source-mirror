@@ -47,24 +47,6 @@ static bool                 lastTextBold = false;
 static bool                 lastTextItalic = false;
 
 
-void SCH_EDIT_FRAME::ChangeTextOrient( SCH_TEXT* aTextItem )
-{
-    wxCHECK_RET( (aTextItem != NULL) && aTextItem->CanIncrementLabel(),
-                 wxT( "Invalid schematic text item." )  );
-
-    int orient = ( aTextItem->GetLabelSpinStyle() + 1 ) & 3;
-
-    // Save current text orientation in undo list if is not already in edit.
-    if( aTextItem->GetEditFlags() == 0 )
-        SaveCopyInUndoList( aTextItem, UR_CHANGED );
-
-    aTextItem->SetLabelSpinStyle( orient );
-
-    RefreshItem( aTextItem );
-    OnModify();
-}
-
-
 SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
     SCH_TEXT* textItem = NULL;

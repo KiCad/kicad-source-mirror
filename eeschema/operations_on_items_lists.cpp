@@ -72,17 +72,6 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 }
 
 
-void RotateListOfItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& rotationPoint )
-{
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-        item->Rotate( rotationPoint );      // Place it in its new position.
-        item->ClearFlags();
-    }
-}
-
-
 void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
 {
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
@@ -301,6 +290,24 @@ SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
 
     if( aClone )
         NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );
+
+    NewDrawStruct->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+
+    if( NewDrawStruct->Type() == SCH_COMPONENT_T )
+    {
+        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( NewDrawStruct )->GetPins();
+
+        for( SCH_PIN& pin : pins )
+            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+
+        std::vector<SCH_FIELD*> fields;
+        static_cast<SCH_COMPONENT*>( NewDrawStruct )->GetFields( fields, false );
+
+        for( SCH_FIELD* field : fields )
+            field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    }
+
+    // JEY TODO: sheets and sheet pins?
 
     return NewDrawStruct;
 }

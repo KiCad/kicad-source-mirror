@@ -124,6 +124,15 @@ private:
     bool selectCursor( const KICAD_T aFilterList[], bool aForceSelect = false );
 
     /**
+     * Function selectMultiple()
+     * Handles drawing a selection box that allows one to select many items at
+     * the same time.
+     *
+     * @return true if the function was cancelled (i.e. CancelEvent was received).
+     */
+    bool selectMultiple();
+
+    /**
      * Apply heuristics to try and determine a single object when multiple are found under the
      * cursor.
      */
@@ -213,7 +222,6 @@ private:
     bool m_subtractive;         // Items should be removed from selection
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
-    bool m_locked;              // Other tools are not allowed to modify locked items
 
     TOOL_MENU m_menu;
 };
