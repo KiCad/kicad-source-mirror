@@ -27,9 +27,12 @@
 #include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <unit_test_utils/wx_assert.h>
+
 #include <functional>
 #include <set>
 
+#include <wx/gdicmn.h>
 /**
  * If HAVE_EXPECTED_FAILURES is defined, this means that
  * boost::unit_test::expected_failures is available.
@@ -129,6 +132,43 @@ struct print_log_value<std::nullptr_t>
 BOOST_TEST_PRINT_NAMESPACE_CLOSE
 
 #endif
+
+
+BOOST_TEST_PRINT_NAMESPACE_OPEN
+{
+
+/**
+ * Boost print helper for generic vectors
+ */
+template <typename T>
+struct print_log_value<std::vector<T>>
+{
+    inline void operator()( std::ostream& os, std::vector<T> const& aVec )
+    {
+        os << "std::vector size " << aVec.size() << "[";
+
+        for( const auto& i : aVec )
+        {
+            os << "\n    ";
+            print_log_value<T>()( os, i );
+        }
+
+        os << "]";
+    }
+};
+
+/**
+ * Boost print helper for wxPoint. Note operator<< for this type doesn't
+ * exist in non-DEBUG builds.
+ */
+template <>
+struct print_log_value<wxPoint>
+{
+    void operator()( std::ostream& os, wxPoint const& aVec );
+};
+}
+BOOST_TEST_PRINT_NAMESPACE_CLOSE
+
 
 namespace KI_TEST
 {
@@ -232,6 +272,19 @@ void CheckUnorderedMatches(
 
 
 /**
+ * Predicate to check a collection has no duplicate elements
+ */
+template <typename T>
+bool CollectionHasNoDuplicates( const T& aCollection )
+{
+    T sorted = aCollection;
+    std::sort( sorted.begin(), sorted.end() );
+
+    return std::adjacent_find( sorted.begin(), sorted.end() ) == sorted.end();
+}
+
+
+/**
  * Get a simple string "aIn -> aOut".
  *
  * Useful for BOOST_TEST_CONTEXT blocks as a brief description where a full
@@ -250,6 +303,18 @@ std::string InOutString( const IN& aIn, const OUT& aOut )
     ss << aIn << " -> " << aOut;
     return ss.str();
 }
+
+/**
+ * A test macro to check a wxASSERT is thrown.
+ *
+ * This only happens in DEBUG builds, so prevent test failures in Release builds
+ * by using this macro.
+ */
+#ifdef DEBUG
+#define CHECK_WX_ASSERT( STATEMENT ) BOOST_CHECK_THROW( STATEMENT, KI_TEST::WX_ASSERT_ERROR );
+#else
+#define CHECK_WX_ASSERT( STATEMENT )
+#endif
 
 } // namespace KI_TEST
 

@@ -130,6 +130,15 @@ the triggering of a bug prior to fixing it. This is advantageous, not only from
 a "project history" perspective, but also to ensure that the test you write to
 catch the bug in question does, in fact, catch the bug in the first place.
 
+### Assertions {#test-assertions}
+
+It is possible to check for assertions in unit tests. When running the unit
+tests, `wxASSERT` calls are caught and re-thrown as exceptions. You can then use
+the `CHECK_WX_ASSERT` macro to check this is called in Debug builds. In Release
+builds, the check is not run, as `wxASSERT` is disabled in these builds.
+
+You can use this to ensure that code rejects invalid input correctly.
+
 ## Python modules {#python-tests}
 
 The Pcbnew Python modules have some test programs in the `qa` directory.

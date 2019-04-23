@@ -32,12 +32,20 @@ add_executable( qa_eeschema
     ../../common/colors.cpp
     ../../common/observable.cpp
 
+    # need the mock Pgm for many functions
+    mocks_eeschema.cpp
+
     eeschema_test_utils.cpp
+    timestamp_test_utils.cpp
 
     # The main test entry points
     test_module.cpp
 
     test_eagle_plugin.cpp
+    test_lib_part.cpp
+    test_sch_pin.cpp
+    test_sch_sheet.cpp
+    test_sch_sheet_path.cpp
 
     # Older CMakes cannot link OBJECT libraries
     # https://cmake.org/pipermail/cmake/2013-November/056263.html
