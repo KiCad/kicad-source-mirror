@@ -23,16 +23,10 @@
 
 
 include_directories( BEFORE ${INC_BEFORE} )
-include_directories( AFTER ${INC_AFTER} )
-
 
 add_executable( qa_eeschema
     # A single top to load the pcnew kiface
     # ../../common/single_top.cpp
-
-    # stuff from common due to...units?
-    ../../common/base_units.cpp
-    ../../common/eda_text.cpp
 
     # stuff from common which is needed...why?
     ../../common/colors.cpp
@@ -44,16 +38,26 @@ add_executable( qa_eeschema
     test_module.cpp
 
     test_eagle_plugin.cpp
+
+    # Older CMakes cannot link OBJECT libraries
+    # https://cmake.org/pipermail/cmake/2013-November/056263.html
+    $<TARGET_OBJECTS:eeschema_kiface_objects>
 )
 
 target_link_libraries( qa_eeschema
-    eeschema_kiface
     common
-    gal
+    legacy_gal
     qa_utils
     unit_test_utils
     ${GDI_PLUS_LIBRARIES}
     ${Boost_LIBRARIES}
+)
+
+target_include_directories( qa_eeschema PUBLIC
+    # Paths for eeschema lib usage (should really be in eeschema/common
+    # target_include_directories and made PUBLIC)
+    ${CMAKE_SOURCE_DIR}/eeschema
+    ${INC_AFTER}
 )
 
 # Eeschema tests, so pretend to be eeschema (for units, etc)

@@ -145,7 +145,6 @@ set( EESCHEMA_SRCS
     edit_bitmap.cpp
     edit_component_in_schematic.cpp
     edit_label.cpp
-    eeschema.cpp
     eeschema_config.cpp
     erc.cpp
     fields_grid_table.cpp
@@ -332,20 +331,29 @@ target_link_libraries( eeschema
     ${wxWidgets_LIBRARIES}
     )
 
-# the DSO (KIFACE) housing the main eeschema code:
-add_library( eeschema_kiface SHARED
+# the main Eeschema program, in DSO form.
+add_library( eeschema_kiface_objects OBJECT
     ${EESCHEMA_SRCS}
     ${EESCHEMA_COMMON_SRCS}
     )
+
+# CMake <3.9 can't link anything to object libraries,
+# but we only need include directories, as we will link the kiface MODULE
+target_include_directories( eeschema_kiface_objects PRIVATE
+   $<TARGET_PROPERTY:common,INCLUDE_DIRECTORIES>
+   $<TARGET_PROPERTY:legacy_gal,INCLUDE_DIRECTORIES>
+)
+
+add_library( eeschema_kiface MODULE
+    eeschema.cpp
+    $<TARGET_OBJECTS:eeschema_kiface_objects>
+    )
+
 target_link_libraries( eeschema_kiface
-    gal
     legacy_gal
     common
     ${wxWidgets_LIBRARIES}
     ${GDI_PLUS_LIBRARIES}
-    )
-target_include_directories( eeschema_kiface PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
     )
 
 if( KICAD_SPICE )
