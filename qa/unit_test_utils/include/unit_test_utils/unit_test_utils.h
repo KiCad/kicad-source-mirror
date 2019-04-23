@@ -96,7 +96,7 @@
  */
 #if BOOST_VERSION >= 105900
 #define BOOST_TEST_PRINT_NAMESPACE_OPEN \
-    namespace boost                     \
+    boost                               \
     {                                   \
     namespace test_tools                \
     {                                   \
@@ -104,7 +104,7 @@
 #define BOOST_TEST_PRINT_NAMESPACE_CLOSE }}
 #else
 #define BOOST_TEST_PRINT_NAMESPACE_OPEN \
-    namespace boost                     \
+    boost                               \
     {                                   \
     namespace test_tools
 #define BOOST_TEST_PRINT_NAMESPACE_CLOSE }
@@ -118,7 +118,7 @@
  */
 #if BOOST_VERSION < 106400
 
-BOOST_TEST_PRINT_NAMESPACE_OPEN
+namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 template <>
 struct print_log_value<std::nullptr_t>
@@ -134,7 +134,7 @@ BOOST_TEST_PRINT_NAMESPACE_CLOSE
 #endif
 
 
-BOOST_TEST_PRINT_NAMESPACE_OPEN
+namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
 
 /**
