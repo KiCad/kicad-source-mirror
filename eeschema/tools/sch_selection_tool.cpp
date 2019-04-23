@@ -24,6 +24,7 @@
 
 #include <sch_actions.h>
 #include <core/typeinfo.h>
+#include <sch_item_struct.h>
 #include <sch_selection_tool.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
@@ -313,17 +314,37 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
 }
 
 
-SELECTION& SCH_SELECTION_TOOL::RequestSelection()
+SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
     if( m_selection.Empty() )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
 
         clearSelection();
-        SelectPoint( cursorPos );
-    }
+        SelectPoint( cursorPos, aFilterList );
 
-    return m_selection;
+        return m_selection;
+    }
+    else
+    {
+        // Trim an existing selection by aFilterList
+
+        SELECTION originalSelection( m_selection );
+
+        for( EDA_ITEM* item : originalSelection )
+        {
+            KICAD_T matchType;
+            bool match = false;
+
+            for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
+                match = ( item->Type() == matchType );
+
+            if( !match )
+                toggleSelection( static_cast<SCH_ITEM*>( item ) );
+        }
+
+        return m_selection;
+    }
 }
 
 

@@ -69,9 +69,10 @@ public:
     /**
      * Function RequestSelection()
      *
-     * Similar to GetSelection(), but will run SelectCursor() first if the selection is empty.
+     * Returns either an existing selection (filtered), or the selection at the current
+     * cursor if the existing selection is empty.
      */
-    SELECTION& RequestSelection();
+    SELECTION& RequestSelection( const KICAD_T* aFilterList = SCH_COLLECTOR::AllItems );
 
     /**
      * Function selectPoint()
