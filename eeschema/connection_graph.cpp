@@ -435,13 +435,10 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
             SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
             TRANSFORM t = component->GetTransform();
 
-            // Assumption: we don't need to call UpdatePins() here because anything
-            // that would change the pins of the component will have called it already
+            component->UpdatePins( &aSheet );
 
             for( SCH_PIN& pin : component->GetPins() )
             {
-                pin.InitializeConnection( aSheet );
-
                 wxPoint pos = t.TransformCoordinate( pin.GetPosition() ) + component->GetPosition();
 
                 // because calling the first time is not thread-safe
