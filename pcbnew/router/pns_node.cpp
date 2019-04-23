@@ -116,6 +116,7 @@ NODE* NODE::Branch()
     child->m_parent = this;
     child->m_ruleResolver = m_ruleResolver;
     child->m_root = isRoot() ? this : m_root;
+    child->m_maxClearance = m_maxClearance;
 
     // immmediate offspring of the root branch needs not copy anything.
     // For the rest, deep-copy joints, overridden item map and pointers
