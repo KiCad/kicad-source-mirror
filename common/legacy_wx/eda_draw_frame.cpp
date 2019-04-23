@@ -1532,7 +1532,7 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
 
 bool EDA_DRAW_FRAME::isBusy() const
 {
-    const BASE_SCREEN* screen = const_cast< BASE_SCREEN* >( GetScreen() );
+    const BASE_SCREEN* screen = GetScreen();
 
     if( !screen )
         return false;
