@@ -1427,6 +1427,7 @@ void SELECTION_TOOL::clearSelection()
 int SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     GENERAL_COLLECTOR* collector = aEvent.Parameter<GENERAL_COLLECTOR*>();
+
     doSelectionMenu( collector, wxEmptyString );
 
     return 0;
@@ -1501,7 +1502,6 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
 
     if( current )
     {
-        toggleSelection( current );
         aCollector->Empty();
         aCollector->Append( current );
         return true;

@@ -67,6 +67,13 @@ public:
     SELECTION& GetSelection();
 
     /**
+     * Function RequestSelection()
+     *
+     * Similar to GetSelection(), but will run SelectCursor() first if the selection is empty.
+     */
+    SELECTION& RequestSelection();
+
+    /**
      * Function selectPoint()
      * Selects an item pointed by the parameter aWhere. If there is more than one item at that
      * place, there is a menu displayed that allows one to choose the item.
@@ -97,8 +104,10 @@ public:
 
     /**
      * Function SelectionMenu()
-     * Allows the selection of a single item from a list of items via a popup menu.  The
-     * list is passed as aEvent's parameter.
+     * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
+     * item.
+     *
+     * NOTE: this routine DOES NOT modify the selection.
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 

@@ -38,6 +38,7 @@
 #include <sch_collectors.h>
 #include <painter.h>
 #include <eeschema_id.h>
+#include <menus_helpers.h>
 
 // Selection tool actions
 TOOL_ACTION SCH_ACTIONS::selectionActivate( "eeschema.InteractiveSelection",
@@ -312,6 +313,20 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
 }
 
 
+SELECTION& SCH_SELECTION_TOOL::RequestSelection()
+{
+    if( m_selection.Empty() )
+    {
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+
+        clearSelection();
+        SelectPoint( cursorPos );
+    }
+
+    return m_selection;
+}
+
+
 bool SCH_SELECTION_TOOL::selectCursor( const KICAD_T aFilterList[], bool aForceSelect  )
 {
     if( aForceSelect || m_selection.Empty() )
@@ -405,6 +420,7 @@ int SCH_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 int SCH_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     SCH_COLLECTOR* collector = aEvent.Parameter<SCH_COLLECTOR*>();
+
     doSelectionMenu( collector, wxEmptyString );
 
     return 0;
@@ -414,6 +430,43 @@ int SCH_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxString& aTitle )
 {
     SCH_ITEM* current = nullptr;
+#if 1
+// ====================================================================================
+// JEY TODO: use wxWidgets event loop for showing menu until we move to modern toolset event loop
+    wxMenu selectMenu;
+
+    AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ), KiBitmap( info_xpm ) );
+    selectMenu.AppendSeparator();
+
+    for( int i = 0;  i < aCollector->GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
+    {
+        SCH_ITEM* item = ( *aCollector )[i];
+        wxString text = item->GetSelectMenuText( m_frame->GetUserUnits() );
+        BITMAP_DEF xpm = item->GetMenuImage();
+        AddMenuItem( &selectMenu, i, text, KiBitmap( xpm ) );
+    }
+
+    // Set to NULL in case the user aborts the clarification context menu.
+    m_frame->GetScreen()->SetCurItem( nullptr );
+    int idx = m_frame->GetPopupMenuSelectionFromUser( selectMenu );
+
+    if( idx == wxNOT_FOUND )
+    {
+        m_frame->GetScreen()->SetCurItem( nullptr );
+        return false;
+    }
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+
+    current = ( *aCollector )[ idx ];
+    m_frame->GetScreen()->SetCurItem( current );
+
+    aCollector->Empty();
+    aCollector->Append( current );
+    return true;
+
+// ====================================================================================
+#endif
     CONTEXT_MENU menu;
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
@@ -433,28 +486,6 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxStr
 
     menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );
-
-#if 1
-    // JEY TODO: use wxWidgets event loop for showing menu until we move over to modern toolset event loop
-    m_frame->GetCanvas()->SetAbortRequest( true );   // Changed to false if an item is selected
-    m_frame->PopupMenu( &menu );
-
-    if( m_frame->GetCanvas()->GetAbortRequest() )
-    {
-        m_frame->GetScreen()->SetCurItem( nullptr );
-        return false;
-    }
-
-    m_frame->GetCanvas()->MoveCursorToCrossHair();
-    current = m_frame->GetScreen()->GetCurItem();
-
-    toggleSelection( current );
-
-    aCollector->Empty();
-    aCollector->Append( current );
-    return true;
-
-#endif
     SetContextMenu( &menu, CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )
@@ -497,8 +528,6 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxStr
     if( current )
     {
         unhighlight( current, BRIGHTENED );
-
-        toggleSelection( current );
 
         aCollector->Empty();
         aCollector->Append( current );

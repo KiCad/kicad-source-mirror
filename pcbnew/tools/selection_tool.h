@@ -127,8 +127,10 @@ public:
 
     /**
      * Function SelectionMenu()
-     * Allows the selection of a single item from a list of items via a popup menu.  The
-     * list is passed as aEvent's parameter.
+     * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
+     * item.
+     *
+     * NOTE: this routine DOES NOT modify the selection.
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
