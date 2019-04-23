@@ -119,6 +119,11 @@ void SCH_BASE_FRAME::setupTools()
     // Register tools
     m_actions->RegisterAllTools( m_toolManager );
     m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    // JEY TODO: enable when we move event loop over to modern toolset...
+    //m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 

@@ -433,6 +433,28 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxStr
 
     menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );
+
+#if 1
+    // JEY TODO: use wxWidgets event loop for showing menu until we move over to modern toolset event loop
+    m_frame->GetCanvas()->SetAbortRequest( true );   // Changed to false if an item is selected
+    m_frame->PopupMenu( &menu );
+
+    if( m_frame->GetCanvas()->GetAbortRequest() )
+    {
+        m_frame->GetScreen()->SetCurItem( nullptr );
+        return false;
+    }
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    current = m_frame->GetScreen()->GetCurItem();
+
+    toggleSelection( current );
+
+    aCollector->Empty();
+    aCollector->Append( current );
+    return true;
+
+#endif
     SetContextMenu( &menu, CMENU_NOW );
 
     while( OPT_TOOL_EVENT evt = Wait() )
