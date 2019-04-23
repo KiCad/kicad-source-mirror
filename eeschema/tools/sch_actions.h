@@ -117,6 +117,7 @@ public:
     static TOOL_ACTION duplicate;
     static TOOL_ACTION rotate;
     static TOOL_ACTION properties;
+    static TOOL_ACTION remove;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
     static TOOL_ACTION addGlobalLabel;

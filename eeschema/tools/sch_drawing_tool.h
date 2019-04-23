@@ -122,6 +122,7 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
+private:
     KIGFX::SCH_VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     SCH_EDIT_FRAME* m_frame;

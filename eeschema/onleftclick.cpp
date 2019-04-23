@@ -88,10 +88,6 @@ void SCH_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
 
     switch( GetToolId() )
     {
-    case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        DeleteItemAtCrossHair();
-        break;
-
 #ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         {

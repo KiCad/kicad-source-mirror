@@ -41,6 +41,7 @@
 #include <dialogs/dialog_schematic_find.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_actions.h>
 
 // Remark: the hotkey message info is used as keyword in hotkey config files and
 // as comments in help windows, therefore translated only when displayed
@@ -514,8 +515,8 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             cmd.SetId( ID_POPUP_DELETE_BLOCK );
             GetEventHandler()->ProcessEvent( cmd );
         }
-        else if( notBusy )
-            DeleteItemAtCrossHair();
+        else
+            GetToolManager()->RunAction( SCH_ACTIONS::remove, true );
         break;
 
     case HK_REPEAT_LAST:
@@ -555,54 +556,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
             event.SetFlags( m_findReplaceData->GetFlags() );
             event.SetFindString( m_findReplaceData->GetFindString() );
             GetEventHandler()->ProcessEvent( event );
-        }
-        break;
-
-    case HK_ADD_NEW_COMPONENT:      // Add component
-    case HK_ADD_NEW_POWER:          // Add power component
-    case HK_ADD_LABEL:
-    case HK_ADD_HLABEL:
-    case HK_ADD_GLABEL:
-    case HK_ADD_JUNCTION:
-    case HK_ADD_WIRE_ENTRY:
-    case HK_ADD_BUS_ENTRY:
-    case HK_ADD_HIER_SHEET:
-    case HK_ADD_GRAPHIC_TEXT:
-    case HK_ADD_GRAPHIC_POLYLINE:
-    case HK_ADD_NOCONN_FLAG:        // Add a no connected flag
-    case HK_BEGIN_BUS:
-    case HK_BEGIN_WIRE:
-        if( notBusy )
-        {
-            EDA_HOTKEY_CLIENT_DATA data( aPosition );
-            cmd.SetInt( aHotKey );
-            cmd.SetClientObject( &data );
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        else if( aItem && aItem->IsNew() )
-        {
-            // If the item is a bus or a wire, a begin command is not possible.
-            if( (GetToolId() == ID_BUS_BUTT) && (aItem->Type() == SCH_LINE_T) )
-            {
-                SCH_LINE* segment = (SCH_LINE*) aItem;
-
-                if( segment->GetLayer() != LAYER_BUS )
-                    break;
-
-                // Bus in progress:
-                OnLeftClick( aDC, aPosition );
-            }
-            else if( (GetToolId() == ID_WIRE_BUTT ) && (aItem->Type() == SCH_LINE_T) )
-            {
-                SCH_LINE* segment = (SCH_LINE*) aItem;
-
-                if( segment->GetLayer() != LAYER_WIRE )
-                    break;
-
-                // Wire in progress:
-                OnLeftClick( aDC, aPosition );
-            }
         }
         break;
 

@@ -71,6 +71,9 @@ public:
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
+    ///> Runs the deletion tool.
+    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+
 private:
 
     ///> Sets up handlers for various events.

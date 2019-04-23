@@ -384,16 +384,6 @@ public:
     void AddItemToScreen( SCH_ITEM* aItem );
 
     /**
-     * Delete the item found under the cross hair.  If multiple items are found at the
-     * cross hair position, a context menu is displayed to clarify which item to delete.
-     * See LocateItem() for more information on locating multiple items.
-     *
-     * @return True if an item was deleted.
-     */
-    bool DeleteItemAtCrossHair();
-
-
-    /**
      * Finds a component in the schematic and an item in this component.
      *
      * @param aReference The component reference designator to find.

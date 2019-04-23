@@ -39,6 +39,7 @@
 #include <project.h>
 #include <hotkeys.h>
 #include <advanced_config.h>
+#include <status_popup.h>
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );
@@ -55,6 +56,10 @@ TOOL_ACTION SCH_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highligh
 TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
         AS_GLOBAL, 0,
         _( "Highlight Net" ), _( "Highlight wires and pins of a net" ), NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.EditorControl.deleteItemCursor",
+        AS_GLOBAL, 0,
+        _( "Delete Items" ), _( "Delete clicked items" ), NULL, AF_ACTIVATE );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -326,6 +331,51 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
+static bool deleteItem( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+{
+    SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    wxCHECK( selectionTool, false );
+
+    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::selectionClear, true );
+
+    SCH_ITEM* item = selectionTool->SelectPoint( aPosition );
+
+    if( item )
+    {
+        if( item->IsLocked() )
+        {
+            STATUS_TEXT_POPUP statusPopup( aFrame );
+            statusPopup.SetText( _( "Item locked." ) );
+            statusPopup.Expire( 2000 );
+            statusPopup.Popup();
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        }
+        else
+        {
+            aFrame->GetToolManager()->RunAction( SCH_ACTIONS::remove, true );
+        }
+    }
+
+    return true;
+}
+
+
+int SCH_EDITOR_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+{
+    Activate();
+
+    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    wxCHECK( picker, 0 );
+
+    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
+    picker->Activate();
+    Wait();
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -345,4 +395,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,        SCH_ACTIONS::clearHighlight.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    SCH_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, SCH_ACTIONS::highlightNetSelection.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::DeleteItemCursor,      SCH_ACTIONS::deleteItemCursor.MakeEvent() );
 }

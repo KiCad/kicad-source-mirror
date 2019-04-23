@@ -30,6 +30,7 @@
 #include <tools/sch_drawing_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_actions.h>
+#include <tools/sch_edit_tool.h>
 #include <tool/zoom_tool.h>
 
 OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
@@ -170,6 +171,13 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_END_LINE:
         return SCH_ACTIONS::finishDrawing.MakeEvent();
+
+    case ID_MENU_DELETE_ITEM_BUTT:
+    case ID_SCHEMATIC_DELETE_ITEM_BUTT:
+        return SCH_ACTIONS::deleteItemCursor.MakeEvent();
+
+    case ID_POPUP_SCH_DELETE:
+        return SCH_ACTIONS::remove.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
@@ -184,4 +192,5 @@ void SCH_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
     aToolManager->RegisterTool( new SCH_EDITOR_CONTROL );
     aToolManager->RegisterTool( new SCH_PICKER_TOOL );
     aToolManager->RegisterTool( new SCH_DRAWING_TOOL );
+    aToolManager->RegisterTool( new SCH_EDIT_TOOL );
 }

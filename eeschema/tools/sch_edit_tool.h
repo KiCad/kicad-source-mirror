@@ -25,10 +25,44 @@
 #define KICAD_SCH_EDIT_TOOL_H
 
 #include <tool/tool_interactive.h>
+#include <tool/tool_menu.h>
+#include <sch_base_frame.h>
+
+
+class SCH_EDIT_FRAME;
 
 
 class SCH_EDIT_TOOL : public TOOL_INTERACTIVE
 {
+public:
+    SCH_EDIT_TOOL();
+    ~SCH_EDIT_TOOL();
+
+    /// @copydoc TOOL_INTERACTIVE::Init()
+    bool Init() override;
+
+    /// @copydoc TOOL_INTERACTIVE::Reset()
+    void Reset( RESET_REASON aReason ) override;
+
+    ///> Get the SCH_DRAWING_TOOL top-level context menu
+    inline TOOL_MENU& GetToolMenu()
+    {
+        return m_menu;
+    }
+
+    int Remove( const TOOL_EVENT& aEvent );
+
+private:
+    ///> Sets up handlers for various events.
+    void setTransitions() override;
+
+private:
+    KIGFX::SCH_VIEW* m_view;
+    KIGFX::VIEW_CONTROLS* m_controls;
+    SCH_EDIT_FRAME* m_frame;
+
+    /// Menu model displayed by the tool.
+    TOOL_MENU m_menu;
 };
 
 #endif //KICAD_SCH_EDIT_TOOL_H

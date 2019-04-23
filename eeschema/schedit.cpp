@@ -472,11 +472,6 @@ void SCH_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetNoToolSelected();
         break;
 
-    case ID_MENU_DELETE_ITEM_BUTT:
-    case ID_SCHEMATIC_DELETE_ITEM_BUTT:
-        SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-        break;
-
 #ifdef KICAD_SPICE
     case ID_SIM_PROBE:
         SetToolID( id, -1, _( "Add a simulator probe" ) );
@@ -524,32 +519,6 @@ void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
     }
 }
 
-
-bool SCH_EDIT_FRAME::DeleteItemAtCrossHair()
-{
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_SCREEN*         screen = GetScreen();
-
-    SCH_ITEM* item = selTool->SelectPoint( GetCrossHairPosition(), SCH_COLLECTOR::ParentItems );
-
-    if( item )
-    {
-        bool itemHasConnections = item->IsConnectable();
-
-        screen->SetCurItem( NULL );
-        SetRepeatItem( NULL );
-        DeleteItem( item );
-
-        if( itemHasConnections )
-            TestDanglingEnds();
-
-        GetCanvas()->Refresh();
-        OnModify();
-        return true;
-    }
-
-    return false;
-}
 
 // This function is a callback function, called by the mouse cursor moving event
 static void moveItemWithMouseCursor( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
