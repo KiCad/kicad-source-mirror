@@ -291,8 +291,11 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
     aList.push_back( MSG_PANEL_ITEM( _( "Connection Name" ), Name(), BROWN ) );
 
-    msg.Printf( "%d", m_net_code );
-    aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg, BROWN ) );
+    if( !IsBus() )
+    {
+        msg.Printf( "%d", m_net_code );
+        aList.push_back( MSG_PANEL_ITEM( _( "Net Code" ), msg, BROWN ) );
+    }
 
     if( auto alias = g_ConnectionGraph->GetBusAlias( m_name ) )
     {
@@ -335,8 +338,11 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
     AppendInfoToMsgPanel( aList );
 
-    msg.Printf( "%d", m_bus_code );
-    aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg, BROWN ) );
+    if( IsBus() )
+    {
+        msg.Printf( "%d", m_bus_code );
+        aList.push_back( MSG_PANEL_ITEM( "Bus Code", msg, BROWN ) );
+    }
 
     msg.Printf( "%d", m_subgraph_code );
     aList.push_back( MSG_PANEL_ITEM( "Subgraph Code", msg, BROWN ) );
@@ -346,9 +352,6 @@ void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
         msg.Printf( "%s at %p", driver->GetSelectMenuText( MILLIMETRES ), driver );
         aList.push_back( MSG_PANEL_ITEM( "Connection Source", msg, RED ) );
     }
-
-    msg.Printf( "%s at %p", Parent()->GetSelectMenuText( MILLIMETRES ), Parent() );
-    aList.push_back( MSG_PANEL_ITEM( "Attached To", msg, RED ) );
 }
 
 
