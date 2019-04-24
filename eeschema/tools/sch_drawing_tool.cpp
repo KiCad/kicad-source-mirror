@@ -881,6 +881,7 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 {
     bool forceHV = m_frame->GetForceHVLines();
+    SCH_SCREEN* screen = m_frame->GetScreen();
 
     m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -915,8 +916,8 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 m_view->ClearHiddenFlags();
 
                 // Clear flags used in edit functions.
-                m_frame->GetScreen()->ClearDrawingState();
-                m_frame->GetScreen()->SetCurItem( nullptr );
+                screen->ClearDrawingState();
+                screen->SetCurItem( nullptr );
 
                 if( !evt->IsActivate() )
                     continue;
@@ -961,7 +962,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 aSegment->SetFlags( IS_NEW );
                 aSegment->SetStartPoint( cursorPos );
                 s_wires.PushBack( aSegment );
-                m_frame->GetScreen()->SetCurItem( aSegment );
+                screen->SetCurItem( aSegment );
             }
             else if( !aSegment )
             {
@@ -972,23 +973,25 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             {
                 // Terminate the command if the end point is on a pin, junction, or another
                 // wire or bus.
-                if( !m_busUnfold.in_progress &&
-                        m_frame->GetScreen()->IsTerminalPoint( cursorPos, aSegment->GetLayer() ) )
+                if( !m_busUnfold.in_progress
+                        && screen->IsTerminalPoint( cursorPos, aSegment->GetLayer() ) )
                 {
                     finishSegments();
                     aSegment = nullptr;
                 }
+                else
+                {
+                    aSegment->SetEndPoint( cursorPos );
+                    aSegment->ClearFlags( IS_NEW );
+                    aSegment->SetFlags( SELECTED );
 
-                aSegment->SetEndPoint( cursorPos );
-                aSegment->ClearFlags( IS_NEW );
-                aSegment->SetFlags( SELECTED );
-
-                // Create a new segment, and chain it after the current new segment.
-                aSegment = new SCH_LINE( *aSegment );
-                aSegment->SetFlags( IS_NEW );
-                aSegment->SetStartPoint( cursorPos );
-                s_wires.PushBack( aSegment );
-                m_frame->GetScreen()->SetCurItem( aSegment );
+                    // Create a new segment, and chain it after the current new segment.
+                    aSegment = new SCH_LINE( *aSegment );
+                    aSegment->SetFlags( IS_NEW );
+                    aSegment->SetStartPoint( cursorPos );
+                    s_wires.PushBack( aSegment );
+                    screen->SetCurItem( aSegment );
+                }
             }
 
             if( evt->IsDblClick( BUT_LEFT ) )
@@ -1038,7 +1041,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             {
                 // Coerce the line to vertical or horizontal if necessary
                 if( forceHV )
-                    computeBreakPoint( m_frame->GetScreen(), aSegment->Back(), cursorPos );
+                    computeBreakPoint( screen, aSegment->Back(), cursorPos );
                 else
                     aSegment->SetEndPoint( cursorPos );
             }
