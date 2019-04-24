@@ -422,10 +422,11 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
 
     unsigned char* pix_buffer = cairo_image_surface_get_data( image );
     // The pixel buffer of the initial bitmap:
-    auto bm_pix_buffer = const_cast<BITMAP_BASE&>( aBitmap ).GetImageData();
-    uint32_t mask_color = ( bm_pix_buffer->GetMaskRed() << 16 ) +
-            ( bm_pix_buffer->GetMaskGreen() << 8 ) +
-            ( bm_pix_buffer->GetMaskBlue() );
+    const wxImage& bm_pix_buffer = *aBitmap.GetImageData();
+
+    uint32_t mask_color = ( bm_pix_buffer.GetMaskRed() << 16 ) +
+            ( bm_pix_buffer.GetMaskGreen() << 8 ) +
+            ( bm_pix_buffer.GetMaskBlue() );
 
     // Copy the source bitmap to the cairo bitmap buffer.
     // In cairo bitmap buffer, a ARGB32 bitmap is an ARGB pixel packed into a uint_32
@@ -435,13 +436,13 @@ void CAIRO_GAL_BASE::DrawBitmap( const BITMAP_BASE& aBitmap )
         for( int col = 0; col < w; col++ )
         {
             // Build the RGB24 pixel:
-            uint32_t pixel = bm_pix_buffer->GetRed( col, row ) << 16;
-            pixel += bm_pix_buffer->GetGreen( col, row ) << 8;
-            pixel += bm_pix_buffer->GetBlue( col, row );
+            uint32_t pixel = bm_pix_buffer.GetRed( col, row ) << 16;
+            pixel += bm_pix_buffer.GetGreen( col, row ) << 8;
+            pixel += bm_pix_buffer.GetBlue( col, row );
 
-            if( bm_pix_buffer->HasAlpha() )
-                pixel += bm_pix_buffer->GetAlpha( col, row ) << 24;
-            else if( bm_pix_buffer->HasMask() && pixel == mask_color )
+            if( bm_pix_buffer.HasAlpha() )
+                pixel += bm_pix_buffer.GetAlpha( col, row ) << 24;
+            else if( bm_pix_buffer.HasMask() && pixel == mask_color )
                 pixel += ( wxALPHA_TRANSPARENT << 24 );
             else
                 pixel += ( wxALPHA_OPAQUE << 24 );

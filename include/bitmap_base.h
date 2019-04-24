@@ -74,7 +74,10 @@ public:
      */
     double GetPixelScaleFactor() const { return m_pixelScaleFactor; }
     void SetPixelScaleFactor( double aSF ) { m_pixelScaleFactor = aSF; }
+
     wxImage* GetImageData() { return m_image; }
+    const wxImage* GetImageData() const { return m_image; }
+
     void SetImage( wxImage* aImage )
     {
         delete m_image;

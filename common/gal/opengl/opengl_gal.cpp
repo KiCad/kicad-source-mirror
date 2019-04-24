@@ -143,7 +143,7 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
 
     // make_unique initializes this to 0, so extra pixels are transparent
     auto buf = std::make_unique<uint8_t[]>( ( bmp.w + extra_w ) * bmp.h * 4 );
-    auto imgData = const_cast<BITMAP_BASE*>( aBitmap )->GetImageData();
+    const wxImage& imgData = *aBitmap->GetImageData();
 
     for( int y = 0; y < bmp.h; y++ )
     {
@@ -151,14 +151,14 @@ GLuint GL_BITMAP_CACHE::cacheBitmap( const BITMAP_BASE* aBitmap )
         {
             uint8_t *p = buf.get() + ( ( bmp.w + extra_w ) * y + x ) * 4;
 
-            p[0] = imgData->GetRed( x, y );
-            p[1] = imgData->GetGreen( x, y );
-            p[2] = imgData->GetBlue( x, y );
+            p[0] = imgData.GetRed( x, y );
+            p[1] = imgData.GetGreen( x, y );
+            p[2] = imgData.GetBlue( x, y );
 
-            if( imgData->HasAlpha() )
-                p[3] = imgData->GetAlpha( x, y );
-            else if( imgData->HasMask() && p[0] == imgData->GetMaskRed() &&
-                     p[1] == imgData->GetMaskGreen() && p[2] == imgData->GetMaskBlue() )
+            if( imgData.HasAlpha() )
+                p[3] = imgData.GetAlpha( x, y );
+            else if( imgData.HasMask() && p[0] == imgData.GetMaskRed() &&
+                     p[1] == imgData.GetMaskGreen() && p[2] == imgData.GetMaskBlue() )
                 p[3] = wxALPHA_TRANSPARENT;
             else
                 p[3] = wxALPHA_OPAQUE;

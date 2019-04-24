@@ -2000,7 +2000,7 @@ void SCH_LEGACY_PLUGIN::saveBitmap( SCH_BITMAP* aBitmap )
 {
     wxCHECK_RET( aBitmap != NULL, "SCH_BITMAP* is NULL" );
 
-    wxImage* image = aBitmap->GetImage()->GetImageData();
+    const wxImage* image = aBitmap->GetImage()->GetImageData();
 
     wxCHECK_RET( image != NULL, "wxImage* is NULL" );
 
