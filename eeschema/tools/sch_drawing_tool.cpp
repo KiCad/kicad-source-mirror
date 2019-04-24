@@ -1250,6 +1250,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             else if( aSheet )
             {
                 delete aSheet;
+                aSheet = nullptr;
                 m_frame->GetScreen()->SetCurItem( nullptr );
             }
             else
