@@ -27,12 +27,14 @@
 
 #include <eda_rect.h>
 
-/**
- * @file bitmap_base.h
- *
- */
+#include <wx/bitmap.h>
+#include <wx/image.h>
 
+
+class COLOR4D;
+class LINE_READER;
 class PLOTTER;
+
 
 /**
  * This class handle bitmap images in KiCad.
@@ -163,16 +165,30 @@ public:
     void DrawBitmap( wxDC* aDC, const wxPoint& aPos );
 
     /**
-     * Function ReadImageFile
      * Reads and stores in memory an image file.
+     *
      * Init the bitmap format used to draw this item.
      * supported images formats are format supported by wxImage
      * if all handlers are loaded
-     * by default, .png, .jpeg are alway loaded
+     * by default, .png, .jpeg are always loaded
+     *
      * @param aFullFilename The full filename of the image file to read.
      * @return bool - true if success reading else false.
      */
     bool ReadImageFile( const wxString& aFullFilename );
+
+    /**
+     * Reads and stores in memory an image file.
+     *
+     * Init the bitmap format used to draw this item.
+     * supported images formats are format supported by wxImage
+     * if all handlers are loaded
+     * by default, .png, .jpeg are always loaded
+     *
+     * @param aInStream an input stream containing the file data
+     * @return bool - true if success reading else false.
+     */
+    bool ReadImageFile( wxInputStream& aInStream );
 
     /**
      * writes the bitmap data to aFile

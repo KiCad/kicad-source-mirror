@@ -78,6 +78,23 @@ void BITMAP_BASE::ImportData( BITMAP_BASE* aItem )
 }
 
 
+bool BITMAP_BASE::ReadImageFile( wxInputStream& aInStream )
+{
+    auto new_image = std::make_unique<wxImage>();
+
+    if( !new_image->LoadFile( aInStream ) )
+    {
+        return false;
+    }
+
+    delete m_image;
+    m_image = new_image.release();
+    m_bitmap = new wxBitmap( *m_image );
+
+    return true;
+}
+
+
 bool BITMAP_BASE::ReadImageFile( const wxString& aFullFilename )
 {
     wxImage* new_image = new wxImage();

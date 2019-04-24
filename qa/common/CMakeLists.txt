@@ -36,8 +36,11 @@ set( common_srcs
     ../../common/colors.cpp
     ../../common/observable.cpp
 
+    wximage_test_utils.cpp
+
     test_array_axis.cpp
     test_array_options.cpp
+    test_bitmap_base.cpp
     test_color4d.cpp
     test_coroutine.cpp
     test_format_units.cpp

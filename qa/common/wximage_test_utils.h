@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,37 +21,39 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * Main file for the libcommon tests to be compiled
- */
-#include <boost/test/unit_test.hpp>
+#ifndef QA_COMMON_WXIMAGE_TEST_UTILS__H
+#define QA_COMMON_WXIMAGE_TEST_UTILS__H
+
+#include <unit_test_utils/unit_test_utils.h>
 
 #include <wx/image.h>
-#include <wx/init.h>
 
+#include <gal/color4d.h>
 
-bool init_unit_test()
+namespace KI_TEST
 {
-    boost::unit_test::framework::master_test_suite().p_name.value = "Common library module tests";
-    bool ok = wxInitialize();
+/**
+ * Predicate to check an image pixel matches color and alpha
+ *
+ * @param  aImage  the image to check
+ * @param  aX      pixel x-coordinate
+ * @param  aY      pixel y-coordinate
+ * @param  aColor  expected color (alpha is 1.0 if image doesn't support alpha)
+ * @return         true if colour match
+ */
+bool IsImagePixelOfColor( const wxImage& aImage, int aX, int aY, const KIGFX::COLOR4D& aColor );
 
-    if( ok )
-    {
-        // need these for library image functions
-        wxInitAllImageHandlers();
-    }
-
-    return ok;
-}
+} // namespace KI_TEST
 
 
-int main( int argc, char* argv[] )
+namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
 {
-    int ret = boost::unit_test::unit_test_main( &init_unit_test, argc, argv );
+template <>
+struct print_log_value<wxImage>
+{
+    void operator()( std::ostream& os, wxImage const& aImage );
+};
+} // namespace BOOST_TEST_PRINT_NAMESPACE_OPEN
+BOOST_TEST_PRINT_NAMESPACE_CLOSE
 
-    // This causes some glib warnings on GTK3 (http://trac.wxwidgets.org/ticket/18274)
-    // but without it, Valgrind notices a lot of leaks from WX
-    wxUninitialize();
-
-    return ret;
-}
+#endif

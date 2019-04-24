@@ -24,7 +24,8 @@
 #include <boost/test/test_case_template.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <unit_test_utils/numeric.h>
+#include "color4d_test_utils.h"
+
 #include <unit_test_utils/unit_test_utils.h>
 
 #include <gal/color4d.h>
@@ -35,32 +36,6 @@
 
 // All these tests are of a class in KIGFX
 using namespace KIGFX;
-
-
-/**
- * Checks if a COLOR4D is close enough to another
- */
-bool pred_colour_is_near( const COLOR4D& aCol, const COLOR4D aOther, double aTol )
-{
-    return KI_TEST::IsWithin<double>( aCol.r, aOther.r, aTol )
-           && KI_TEST::IsWithin<double>( aCol.g, aOther.g, aTol )
-           && KI_TEST::IsWithin<double>( aCol.b, aOther.b, aTol )
-           && KI_TEST::IsWithin<double>( aCol.a, aOther.a, aTol );
-}
-
-/**
- * Checks if a COLOR4D is close enough to a given RGB char value
- */
-bool pred_colour_is_near_hex(
-        const COLOR4D& aCol, unsigned char r, unsigned char g, unsigned char b, unsigned char a )
-{
-    const double tol = 0.5 / 255.0; // One bit of quantised error
-
-    return KI_TEST::IsWithin<double>( aCol.r, r / 255.0, tol )
-           && KI_TEST::IsWithin<double>( aCol.g, g / 255.0, tol )
-           && KI_TEST::IsWithin<double>( aCol.b, b / 255.0, tol )
-           && KI_TEST::IsWithin<double>( aCol.a, a / 255.0, tol );
-}
 
 
 /**
@@ -235,7 +210,7 @@ BOOST_AUTO_TEST_CASE( FromHsv )
         col.ToHSV( new_h, new_s, new_v );
         const unsigned char alpha = 0xFF;
 
-        BOOST_CHECK_PREDICATE( pred_colour_is_near_hex, ( col )( c.r )( c.g )( c.b )( alpha ) );
+        BOOST_CHECK_PREDICATE( KI_TEST::IsColorNearHex, ( col )( c.r )( c.g )( c.b )( alpha ) );
         BOOST_CHECK_CLOSE( c.h, new_h, 0.0001 );
         BOOST_CHECK_CLOSE( c.s, new_s, 0.0001 );
         BOOST_CHECK_CLOSE( c.v, new_v, 0.0001 );
@@ -277,7 +252,7 @@ BOOST_AUTO_TEST_CASE( FromHsl )
         col.ToHSL( new_h, new_s, new_l );
         const unsigned char alpha = 0xFF;
 
-        BOOST_CHECK_PREDICATE( pred_colour_is_near_hex, ( col )( c.r )( c.g )( c.b )( alpha ) );
+        BOOST_CHECK_PREDICATE( KI_TEST::IsColorNearHex, ( col )( c.r )( c.g )( c.b )( alpha ) );
         BOOST_CHECK_CLOSE( c.h, new_h, 0.0001 );
         BOOST_CHECK_CLOSE( c.s, new_s, 0.0001 );
         BOOST_CHECK_CLOSE( c.l, new_l, 0.0001 );
@@ -331,7 +306,7 @@ BOOST_AUTO_TEST_CASE( FromWx )
     {
         const auto col = COLOR4D{ c.wx };
 
-        BOOST_CHECK_PREDICATE( pred_colour_is_near, ( col )( c.c4d )( tol ) );
+        BOOST_CHECK_PREDICATE( KI_TEST::IsColorNear, ( col )( c.c4d )( tol ) );
     }
 }
 
