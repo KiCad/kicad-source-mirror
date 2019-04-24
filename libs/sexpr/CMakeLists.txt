@@ -28,7 +28,9 @@ set( SEXPR_LIB_FILES
     sexpr_parser.cpp
 )
 
-add_library( sexpr ${SEXPR_LIB_FILES} )
+add_library( sexpr STATIC
+    ${SEXPR_LIB_FILES}
+)
 
 target_include_directories( sexpr PUBLIC
     include
