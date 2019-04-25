@@ -44,6 +44,7 @@ EDA_TEXT::EDA_TEXT( const wxString& text ) :
 {
     int sz = Mils2iu( DEFAULT_SIZE_TEXT );
     SetTextSize( wxSize( sz, sz ) );
+    m_shown_text = UnescapeString( text );
 }
 
 
