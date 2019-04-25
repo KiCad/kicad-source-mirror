@@ -113,7 +113,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     editMenu->AppendSeparator();
 
-    AddMenuItem( editMenu, wxID_CUT, _( "Delete" ), wxEmptyString, KiBitmap( delete_xpm ) );
+    msg = AddHotkeyName( _( "Delete" ), PlEditorHotkeysDescr, HK_DELETE_ITEM );
+    AddMenuItem( editMenu, wxID_DELETE, msg, wxEmptyString, KiBitmap( delete_xpm ) );
 
 
     // View Menu:

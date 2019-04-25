@@ -82,7 +82,7 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
-    EVT_TOOL( wxID_CUT, PL_EDITOR_FRAME::Process_Special_Functions )
+    EVT_TOOL( wxID_DELETE, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, PL_EDITOR_FRAME::GetLayoutFromUndoList )
     EVT_TOOL( wxID_REDO, PL_EDITOR_FRAME::GetLayoutFromRedoList )
     EVT_TOOL( wxID_PRINT, PL_EDITOR_FRAME::ToPrinter )
@@ -171,7 +171,7 @@ void PL_EDITOR_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_POPUP_DESIGN_TREE_ITEM_DELETE:
     case ID_POPUP_ITEM_DELETE:
-    case wxID_CUT:
+    case wxID_DELETE:
         // Delete item, and select the previous item
         item = m_treePagelayout->GetPageLayoutSelectedItem();
 
