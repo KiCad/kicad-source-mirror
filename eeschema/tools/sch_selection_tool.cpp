@@ -259,7 +259,11 @@ SCH_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
     // If still more than one item we're going to have to ask the user.
     if( collector.GetCount() > 1 )
     {
-        if( !doSelectionMenu( &collector, _( "Clarify Selection" ) ) )
+        collector.m_MenuTitle =  _( "Clarify Selection" );
+        // Must call selectionMenu via RunAction() to avoid event-loop contention
+        m_toolMgr->RunAction( SCH_ACTIONS::selectionMenu, true, &collector );
+
+        if( collector.m_MenuCancelled )
         {
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
@@ -442,13 +446,14 @@ int SCH_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
     SCH_COLLECTOR* collector = aEvent.Parameter<SCH_COLLECTOR*>();
 
-    doSelectionMenu( collector, wxEmptyString );
+    if( !doSelectionMenu( collector ) )
+        collector->m_MenuCancelled = true;
 
     return 0;
 }
 
 
-bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxString& aTitle )
+bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
 {
     SCH_ITEM* current = nullptr;
 #if 1
@@ -471,7 +476,7 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxStr
     m_frame->GetScreen()->SetCurItem( nullptr );
     int idx = m_frame->GetPopupMenuSelectionFromUser( selectMenu );
 
-    if( idx == wxNOT_FOUND )
+    if( idx == wxID_NONE )
     {
         m_frame->GetScreen()->SetCurItem( nullptr );
         return false;
@@ -502,8 +507,8 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector, const wxStr
         menu.Add( menuText, i + 1, item->GetMenuImage() );
     }
 
-    if( aTitle.Length() )
-        menu.SetTitle( aTitle );
+    if( aCollector->m_MenuTitle.Length() )
+        menu.SetTitle( aCollector->m_MenuTitle );
 
     menu.SetIcon( info_xpm );
     menu.DisplayTitle( true );

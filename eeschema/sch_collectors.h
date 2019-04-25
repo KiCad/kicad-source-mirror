@@ -131,7 +131,8 @@ public:
     /**
      * Constructor SCH_COLLECTOR
      */
-    SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
+    SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems ) :
+        m_MenuCancelled( false )
     {
         SetScanTypes( aScanTypes );
     }
@@ -193,6 +194,10 @@ public:
      * @return True if the collection is a draggable junction.
      */
     bool IsDraggableJunction() const;
+
+public:
+    wxString m_MenuTitle;       // The title of selection disambiguation menu (if needed)
+    bool     m_MenuCancelled;   // Indicates selection disambiguation menu was cancelled
 };
 
 
