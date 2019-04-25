@@ -352,6 +352,7 @@ void CONNECTION_GRAPH::Reset()
 
     m_items.clear();
     m_subgraphs.clear();
+    m_driver_subgraphs.clear();
     m_invisible_power_pins.clear();
     m_bus_alias_cache.clear();
     m_net_name_to_code_map.clear();
@@ -620,7 +621,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 {
     PROF_COUNTER phase2;
 
-    std::vector<CONNECTION_SUBGRAPH*> driver_subgraphs;
     // Recache all bus aliases for later use
 
     SCH_SHEET_LIST all_sheets( g_RootSheet );
@@ -833,7 +833,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     // Now discard any non-driven subgraphs from further consideration
 
-    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( driver_subgraphs ),
+    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( m_driver_subgraphs ),
                   [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool {
                     return candidate->m_driver;
                   } );
@@ -842,7 +842,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // For example, two wires that are both connected to hierarchical
     // sheet pins that happen to have the same name, but are not the same.
 
-    for( auto&& subgraph : driver_subgraphs )
+    for( auto&& subgraph : m_driver_subgraphs )
     {
         wxString full_name = subgraph->m_driver_connection->Name();
         wxString name = subgraph->m_driver_connection->Name( true );
@@ -933,7 +933,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
             m_net_code_to_subgraphs_map[ code ].push_back( subgraph );
             m_subgraphs.push_back( subgraph );
-            driver_subgraphs.push_back( subgraph );
+            m_driver_subgraphs.push_back( subgraph );
 
             invisible_pin_subgraphs[code] = subgraph;
         }
@@ -949,8 +949,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     std::unordered_set<CONNECTION_SUBGRAPH*> invalidated_subgraphs;
 
-    for( auto subgraph_it = driver_subgraphs.begin();
-         subgraph_it != driver_subgraphs.end(); subgraph_it++ )
+    for( auto subgraph_it = m_driver_subgraphs.begin();
+         subgraph_it != m_driver_subgraphs.end(); subgraph_it++ )
     {
         auto subgraph = *subgraph_it;
 
@@ -1038,7 +1038,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         // form neighbor links.
 
         std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
-        std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(),
+        std::copy_if( m_driver_subgraphs.begin(), m_driver_subgraphs.end(),
                       std::back_inserter( candidate_subgraphs ),
                       [&] ( const CONNECTION_SUBGRAPH* candidate )
                       { return ( !candidate->m_absorbed &&
@@ -1207,14 +1207,14 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     }
 
     // Absorbed subgraphs should no longer be considered
-    driver_subgraphs.erase( std::remove_if( driver_subgraphs.begin(), driver_subgraphs.end(),
+    m_driver_subgraphs.erase( std::remove_if( m_driver_subgraphs.begin(), m_driver_subgraphs.end(),
                             [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool {
                                 return candidate->m_absorbed;
-                            } ), driver_subgraphs.end() );
+                            } ), m_driver_subgraphs.end() );
 
     // Store global subgraphs for later reference
     std::vector<CONNECTION_SUBGRAPH*> global_subgraphs;
-    std::copy_if( driver_subgraphs.begin(), driver_subgraphs.end(),
+    std::copy_if( m_driver_subgraphs.begin(), m_driver_subgraphs.end(),
                   std::back_inserter( global_subgraphs ),
                   [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool {
                       return !candidate->m_local_driver;
@@ -1224,7 +1224,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // connecting bus members to their neighboring subgraphs, and then propagate connections
     // through the hierarchy
 
-    for( auto subgraph : driver_subgraphs )
+    for( auto subgraph : m_driver_subgraphs )
     {
         if( !subgraph->m_dirty )
             continue;
@@ -1272,7 +1272,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     m_net_code_to_subgraphs_map.clear();
 
-    for( auto subgraph : driver_subgraphs )
+    for( auto subgraph : m_driver_subgraphs )
     {
         if( subgraph->m_dirty )
             subgraph->m_dirty = false;
@@ -1347,13 +1347,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             SCH_SHEET_PATH path = aParent->m_sheet;
             path.push_back( sheet_pin->GetParent() );
 
-            // TODO(JE) is it worth changing this to driver_subgraphs from buildConnectionGraph?
-            for( auto candidate : m_subgraphs )
+            for( auto candidate : m_driver_subgraphs )
             {
                 if( candidate->m_absorbed ||
-                    !candidate->m_driver ||
-                    candidate->m_hier_ports.empty() ||
-                    candidate->m_sheet != path )
+                    !candidate->m_strong_driver ||
+                    candidate->m_sheet != path ||
+                    candidate->m_hier_ports.empty() )
                     continue;
 
                 for( SCH_HIERLABEL* label : candidate->m_hier_ports )

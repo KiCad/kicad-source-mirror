@@ -218,6 +218,8 @@ private:
 
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
 
+    std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
+
     std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
 
     std::unordered_map< wxString, std::shared_ptr<BUS_ALIAS> > m_bus_alias_cache;
