@@ -150,13 +150,13 @@ public:
     /**
      * Returns the string actually shown after processing of the base
      * text. Default is no processing */
-    virtual wxString GetShownText() const { return UnescapeString( m_Text ); }
+    virtual wxString GetShownText() const { return m_shown_text; }
 
     /**
      * Returns a shortened version (max 15 characters) of the shown text */
     wxString ShortenedShownText() const;
 
-    virtual void SetText( const wxString& aText ) { m_Text = aText; }
+    virtual void SetText( const wxString& aText );
 
     /**
      * Function SetThickness
@@ -412,6 +412,9 @@ private:
         TE_MULTILINE,
         TE_VISIBLE,
     };
+
+    /// Cache of unescaped text for efficient access
+    wxString m_shown_text;
 };
 
 

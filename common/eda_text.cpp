@@ -52,6 +52,13 @@ EDA_TEXT::~EDA_TEXT()
 }
 
 
+void EDA_TEXT::SetText( const wxString& aText )
+{
+    m_Text = aText;
+    m_shown_text = UnescapeString( aText );
+}
+
+
 void EDA_TEXT::SetEffects( const EDA_TEXT& aSrc )
 {
     m_e = aSrc.m_e;
