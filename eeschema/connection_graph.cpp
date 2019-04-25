@@ -359,6 +359,8 @@ void CONNECTION_GRAPH::Reset()
     m_bus_name_to_code_map.clear();
     m_net_code_to_subgraphs_map.clear();
     m_net_name_to_subgraphs_map.clear();
+    m_local_label_cache.clear();
+    m_global_label_cache.clear();
     m_last_net_code = 1;
     m_last_bus_code = 1;
     m_last_subgraph_code = 1;
@@ -2061,7 +2063,9 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
         }
         else
         {
-            if( m_local_label_cache.count( std::make_pair( aSubgraph->m_sheet, name ) ) )
+            auto pair = std::make_pair( aSubgraph->m_sheet, name );
+
+            if( m_local_label_cache.count( pair ) && m_local_label_cache.at( pair ).size() > 1 )
                 has_other_connections = true;
         }
     }
