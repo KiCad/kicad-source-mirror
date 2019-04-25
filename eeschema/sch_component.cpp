@@ -177,10 +177,10 @@ SCH_COMPONENT::SCH_COMPONENT( const SCH_COMPONENT& aComponent ) :
     m_pinMap.clear();
 
     // Re-parent the pins and build the pinMap
-    for( SCH_PIN& pin : m_pins )
+    for( unsigned i = 0; i < m_pins.size(); ++i )
     {
-        pin.SetParent( this );
-        m_pinMap[ pin.GetLibPin() ] = &pin;
+        m_pins[ i ].SetParent( this );
+        m_pinMap[ m_pins[ i ].GetLibPin() ] = i;
     }
 
     m_fieldsAutoplaced = aComponent.m_fieldsAutoplaced;
@@ -445,11 +445,13 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
                 m_pins.emplace_back( SCH_PIN( libPin, this ) );
             }
 
+            m_pinMap[ libPin ] = i;
+
+            if( aSheet )
+                m_pins[ i ].InitializeConnection( *aSheet );
+
             ++i;
         }
-
-        for( SCH_PIN& pin : m_pins )
-            m_pinMap[ pin.GetLibPin() ] = &pin;
     }
 }
 
@@ -457,7 +459,7 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
 SCH_CONNECTION* SCH_COMPONENT::GetConnectionForPin( LIB_PIN* aPin, const SCH_SHEET_PATH& aSheet )
 {
     if( m_pinMap.count( aPin ) )
-        return m_pinMap.at( aPin )->Connection( aSheet );
+        return m_pins[ m_pinMap.at( aPin ) ].Connection( aSheet );
 
     return nullptr;
 }
@@ -938,6 +940,7 @@ void SCH_COMPONENT::SwapData( SCH_ITEM* aItem )
     std::swap( m_unit, component->m_unit );
     std::swap( m_convert, component->m_convert );
     std::swap( m_pins, component->m_pins );
+    std::swap( m_pinMap, component->m_pinMap );
 
     TRANSFORM tmp = m_transform;
 
@@ -1750,10 +1753,10 @@ SCH_COMPONENT& SCH_COMPONENT::operator=( const SCH_ITEM& aItem )
         m_pinMap.clear();
 
         // Re-parent the pins and build the pinMap
-        for( SCH_PIN& pin : m_pins )
+        for( unsigned i = 0; i < m_pins.size(); ++i )
         {
-            pin.SetParent( this );
-            m_pinMap[ pin.GetLibPin() ] = &pin;
+            m_pins[ i ].SetParent( this );
+            m_pinMap[ m_pins[ i ].GetLibPin() ] = i;
         }
     }
 
@@ -1850,7 +1853,7 @@ void SCH_COMPONENT::ClearBrightenedPins()
 void SCH_COMPONENT::BrightenPin( LIB_PIN* aPin )
 {
     if( m_pinMap.count( aPin ) )
-        m_pinMap.at( aPin )->SetBrightened();
+        m_pins[ m_pinMap.at( aPin ) ].SetBrightened();
 }
 
 
@@ -1864,7 +1867,7 @@ void SCH_COMPONENT::ClearHighlightedPins()
 void SCH_COMPONENT::HighlightPin( LIB_PIN* aPin )
 {
     if( m_pinMap.count( aPin ) )
-        m_pinMap.at( aPin )->SetHighlighted();
+        m_pins[ m_pinMap.at( aPin ) ].SetHighlighted();
 }
 
 
