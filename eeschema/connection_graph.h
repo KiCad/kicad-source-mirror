@@ -231,6 +231,9 @@ private:
     std::map< std::pair<SCH_SHEET_PATH, wxString>,
               std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
 
+    std::unordered_map<wxString,
+                       std::vector<const CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+
     int m_last_net_code;
 
     int m_last_bus_code;

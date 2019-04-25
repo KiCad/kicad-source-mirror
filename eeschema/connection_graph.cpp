@@ -357,6 +357,7 @@ void CONNECTION_GRAPH::Reset()
     m_net_name_to_code_map.clear();
     m_bus_name_to_code_map.clear();
     m_net_code_to_subgraphs_map.clear();
+    m_net_name_to_subgraphs_map.clear();
     m_last_net_code = 1;
     m_last_bus_code = 1;
     m_last_subgraph_code = 1;
@@ -773,9 +774,9 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             else
             {
                 // Now the subgraph has only one driver
-                auto driver = subgraph->m_driver;
-                auto sheet = subgraph->m_sheet;
-                auto connection = driver->Connection( sheet );
+                SCH_ITEM* driver = subgraph->m_driver;
+                SCH_SHEET_PATH sheet = subgraph->m_sheet;
+                SCH_CONNECTION* connection = driver->Connection( sheet );
 
                 // TODO(JE) This should live in SCH_CONNECTION probably
                 switch( driver->Type() )
@@ -791,14 +792,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 case SCH_SHEET_PIN_T:
                 {
                     auto pin = static_cast<SCH_SHEET_PIN*>( driver );
-                    auto txt = pin->GetShownText();
-
-                    // TODO(JE) we need to check and deal with duplicates if we have more than one
-                    // subgraph driven by different sheet pins with the same name.  We can detect
-                    // these because sheet pins are weak drivers, so we can just scan for weak
-                    // drivers with duplicate names
-
-                    connection->ConfigureFromLabel( txt );
+                    connection->ConfigureFromLabel( pin->GetShownText() );
                     break;
                 }
                 case SCH_PIN_T:
@@ -837,23 +831,29 @@ void CONNECTION_GRAPH::buildConnectionGraph()
             returns[ii].wait();
     }
 
-    // TODO(JE) The below loop may not be needed anymore
-    // TODO(JE) are the label caches even needed anymore?
+    // Now discard any non-driven subgraphs from further consideration
+
+    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( driver_subgraphs ),
+                  [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool {
+                    return candidate->m_driver;
+                  } );
+
     // Check for subgraphs with the same net name but only weak drivers.
     // For example, two wires that are both connected to hierarchical
     // sheet pins that happen to have the same name, but are not the same.
 
-    for( auto&& subgraph : m_subgraphs )
+    for( auto&& subgraph : driver_subgraphs )
     {
+        wxString full_name = subgraph->m_driver_connection->Name();
+        wxString name = subgraph->m_driver_connection->Name( true );
+        m_net_name_to_subgraphs_map[full_name].emplace_back( subgraph );
+
+        subgraph->m_dirty = true;
+
         if( subgraph->m_strong_driver )
         {
-            subgraph->m_dirty = true;
-            // Add strong drivers to the cache, for later checking against conflicts
-
-            auto driver = subgraph->m_driver;
-            auto conn = subgraph->m_driver_connection;
-            auto sheet = subgraph->m_sheet;
-            auto name = conn->Name( true );
+            SCH_ITEM* driver = subgraph->m_driver;
+            SCH_SHEET_PATH sheet = subgraph->m_sheet;
 
             switch( driver->Type() )
             {
@@ -879,83 +879,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 wxLogTrace( "CONN", "Unexpected strong driver %s",
                             driver->GetSelectMenuText( MILLIMETRES ) );
                 break;
-            }
-        }
-    }
-
-    std::copy_if( m_subgraphs.begin(), m_subgraphs.end(), std::back_inserter( driver_subgraphs ),
-                  [&] ( const CONNECTION_SUBGRAPH* candidate ) -> bool {
-                      return candidate->m_driver;
-                  } );
-
-    // Test subgraphs for net name conflicts against higher priority subgraphs
-    // Suffix is a global increment to make things simpler, that way if we have
-    // multiple instances of the same name that needs to get renamed, they will
-    // definitely get unique names.  While this will potentially lead to some
-    // confusing net names, this is really a corner case and won't happen if
-    // users follow best practices to label their nets.
-    unsigned suffix = 1;
-
-    for( auto subgraph_it = driver_subgraphs.begin();
-         subgraph_it != driver_subgraphs.end(); subgraph_it++ )
-    {
-        auto subgraph = *subgraph_it;
-
-        if( !subgraph->m_dirty )
-            continue;
-
-        subgraph->m_dirty = false;
-
-        if( subgraph->m_strong_driver )
-            continue;
-
-        auto conn = subgraph->m_driver_connection;
-        auto name = conn->Name();
-        auto local_name = conn->Name( true );
-
-        // First check the caches
-        if( m_global_label_cache.count( name )  ||
-                ( m_local_label_cache.count( std::make_pair( subgraph->m_sheet, local_name ) ) ) )
-        {
-            auto new_name = wxString::Format( "%s%u", name, suffix );
-
-            wxLogTrace( "CONN", "Subgraph %ld default name %s conflicts with a label. Changing to %s.",
-                        subgraph->m_code, name, new_name );
-
-            conn->SetSuffix( wxString::Format( "%u", suffix ) );
-            suffix++;
-            name = new_name;
-        }
-
-        for( auto candidate_it = subgraph_it + 1;
-             candidate_it != driver_subgraphs.end(); candidate_it++ )
-        {
-            auto candidate = *candidate_it;
-
-            if( !candidate->m_dirty )
-                continue;
-
-            if( candidate == subgraph || candidate->m_strong_driver )
-                continue;
-
-            if( candidate->m_sheet != subgraph->m_sheet )
-                continue;
-
-            auto c_conn = candidate->m_driver_connection;
-            auto check_name = c_conn->Name();
-
-            if( check_name == name )
-            {
-                auto new_name = wxString::Format( "%s%u", name, suffix );
-
-                wxLogTrace( "CONN", "Subgraph %ld and %ld both have name %s. Changing %ld to %s.",
-                            subgraph->m_code, candidate->m_code, name,
-                            candidate->m_code, new_name );
-
-                c_conn->SetSuffix( wxString::Format( "%u", suffix ) );
-
-                candidate->m_dirty = false;
-                suffix++;
             }
         }
     }
@@ -1036,7 +959,42 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         SCH_CONNECTION* connection = subgraph->m_driver_connection;
         SCH_SHEET_PATH sheet = subgraph->m_sheet;
-        wxString name = subgraph->GetNetName();
+        wxString name = connection->Name();
+
+        // Test subgraphs with weak drivers for net name conflicts and fix them
+        unsigned suffix = 1;
+
+        auto create_new_name = [&] ( SCH_CONNECTION* aConn, wxString aName ) -> wxString {
+              wxString new_name = wxString::Format( "%s_%u", aName, suffix );
+              aConn->SetSuffix( wxString::Format( "_%u", suffix ) );
+              suffix++;
+              return new_name;
+        };
+
+        if( !subgraph->m_strong_driver )
+        {
+            auto& vec = m_net_name_to_subgraphs_map.at( name );
+
+            if( vec.size() > 1 )
+            {
+                wxString new_name = create_new_name( connection, name );
+
+                while( m_net_name_to_subgraphs_map.count( new_name ) )
+                    new_name = create_new_name( connection, name );
+
+                wxLogTrace( "CONN", "%ld (%s) is weakly driven and not unique. Changing to %s.",
+                            subgraph->m_code, name, new_name );
+
+                vec.erase( std::remove( vec.begin(), vec.end(), subgraph ), vec.end() );
+
+                m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
+
+                name = new_name;
+            }
+        }
+
+        // Assign net codes
+
         int code = -1;
 
         if( connection->IsBus() )
