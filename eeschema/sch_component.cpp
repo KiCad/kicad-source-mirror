@@ -445,13 +445,11 @@ void SCH_COMPONENT::UpdatePins( SCH_SHEET_PATH* aSheet )
                 m_pins.emplace_back( SCH_PIN( libPin, this ) );
             }
 
-            m_pinMap[ libPin ] = &m_pins[ i ];
-
-            if( aSheet )
-                m_pins[ i ].InitializeConnection( *aSheet );
-
             ++i;
         }
+
+        for( SCH_PIN& pin : m_pins )
+            m_pinMap[ pin.GetLibPin() ] = &pin;
     }
 }
 

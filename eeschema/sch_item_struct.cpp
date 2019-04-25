@@ -68,6 +68,9 @@ SCH_ITEM::~SCH_ITEM()
     // are owned by the sheet object container.
     if( !m_connections.empty() )
         m_connections.clear();
+
+    for( const auto& it : m_connection_map )
+        delete it.second;
 }
 
 
