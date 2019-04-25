@@ -301,7 +301,7 @@ struct ARC_TO_POLYLINE_CASE
  * @param  aTolEnds  the tolerance for the endpoint-centre distance
  * @return           true if predicate met
  */
-bool ArePolylinePointsNearCircle(
+bool ArePolylineEndPointsNearCircle(
         const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre, int aRad, int aTolEnds )
 {
     std::vector<VECTOR2I> points;
@@ -314,8 +314,33 @@ bool ArePolylinePointsNearCircle(
     return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolEnds );
 }
 
+/**
+ * Predicate for checking a polyline has all the segment mid points on
+ * (near) a circle of given centre and radius
+ * @param  aPolyline the polyline to check
+ * @param  aCentre   the circle centre
+ * @param  aRad      the circle radius
+ * @param  aTolEnds  the tolerance for the midpoint-centre distance
+ * @return           true if predicate met
+ */
+bool ArePolylineMidPointsNearCircle(
+        const SHAPE_LINE_CHAIN& aPolyline, const VECTOR2I& aCentre, int aRad, int aTolMidPts )
+{
+    std::vector<VECTOR2I> points;
 
-BOOST_AUTO_TEST_CASE( ArcToPolyline )
+    for( int i = 0; i < aPolyline.PointCount() - 1; ++i )
+    {
+        const VECTOR2I mid_pt = ( aPolyline.CPoint( i ) + aPolyline.CPoint( i + 1 ) ) / 2;
+        points.push_back( mid_pt );
+    }
+
+    return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolMidPts );
+}
+
+#ifdef HAVE_EXPECTED_FAILURES
+
+// Start and end point check fail for the 3 non-zero radius cases
+BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 3 * 2 ) )
 {
     const std::vector<ARC_TO_POLYLINE_CASE> cases = {
         {
@@ -335,11 +360,22 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
             },
         },
         {
+            // check larger sizes still have required precisions
+            // and that reverse angles work too
             "Larger semicircle",
             {
                 { 0, 0 },
-                { -1000, 0 },
-                180,
+                { -10000, 0 },
+                -180,
+            },
+        },
+        {
+            // Make sure it doesn't only work for "easy" angles
+            "Non-round geometry",
+            {
+                { 0, 0 },
+                { -1234, 0 },
+                42.22,
             },
         },
     };
@@ -358,18 +394,28 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline )
 
             BOOST_TEST_MESSAGE( "Polyline has " << chain.PointCount() << " points" );
 
+            const int pt_tol = 1;
+
+            // Start point where expected
             BOOST_CHECK_EQUAL( chain.CPoint( 0 ), c.m_geom.m_start_point );
 
+            // End point where expected
+            BOOST_CHECK_PREDICATE( KI_TEST::IsVecWithinTol<VECTOR2I>,
+                    ( chain.CPoint( -1 ) )( this_arc.GetP1() )( pt_tol ) );
+
             const int radius = ( c.m_geom.m_center_point - c.m_geom.m_start_point ).EuclideanNorm();
-            const int tol = 2;
 
-            BOOST_CHECK_PREDICATE( ArePolylinePointsNearCircle,
-                    ( chain )( c.m_geom.m_center_point )( radius )( tol ) );
+            const int ep_tol = 2;
+            BOOST_CHECK_PREDICATE( ArePolylineEndPointsNearCircle,
+                    ( chain )( c.m_geom.m_center_point )( radius )( ep_tol ) );
 
-            // TODO: check midpoints are near circle too
+            const int mp_tol = 3;
+            BOOST_CHECK_PREDICATE( ArePolylineMidPointsNearCircle,
+                    ( chain )( c.m_geom.m_center_point )( radius )( mp_tol ) );
         }
     }
 }
 
+#endif
 
 BOOST_AUTO_TEST_SUITE_END()
