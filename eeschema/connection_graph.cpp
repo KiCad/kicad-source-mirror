@@ -1589,21 +1589,10 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
 {
     int error_count = 0;
 
-    std::map< wxString, std::vector< std::pair< SCH_ITEM*, const CONNECTION_SUBGRAPH* > > > globals;
-
     for( auto&& subgraph : m_subgraphs )
     {
         // Graph is supposed to be up-to-date before calling RunERC()
         wxASSERT( !subgraph->m_dirty );
-
-        for( const auto& item : subgraph->m_items )
-        {
-            if( item->Type() == SCH_GLOBAL_LABEL_T )
-            {
-                wxString key = static_cast<SCH_TEXT*>( item )->GetText();
-                globals[ key ].emplace_back( std::make_pair( item, subgraph ) );
-            }
-        }
 
         /**
          * NOTE:
@@ -1638,52 +1627,11 @@ int CONNECTION_GRAPH::RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers
         if( !ercCheckNoConnects( subgraph, aCreateMarkers ) )
             error_count++;
 
-        if( !ercCheckLabels( subgraph, aCreateMarkers ) )
+        if( !ercCheckLabels( subgraph, aCreateMarkers, aSettings.check_unique_global_labels ) )
             error_count++;
     }
 
-    // Some checks are now run after processing every subgraph
-
-    // Check for lonely global labels
-    if( aSettings.check_unique_global_labels )
-    {
-        for( auto &it : globals )
-        {
-            if( it.second.size() == 1 )
-            {
-                ercReportIsolatedGlobalLabel( it.second.at( 0 ).second, it.second.at( 0 ).first );
-                error_count++;
-            }
-        }
-    }
-
     return error_count;
-}
-
-
-void CONNECTION_GRAPH::ercReportIsolatedGlobalLabel( const CONNECTION_SUBGRAPH* aSubgraph,
-                                                     SCH_ITEM* aLabel )
-{
-    wxString msg;
-    auto label = dynamic_cast<SCH_TEXT*>( aLabel );
-
-    if( !label )
-        return;
-
-    msg.Printf( _( "Global label %s is not connected to any other global label." ),
-                label->GetShownText() );
-
-    auto marker = new SCH_MARKER();
-    marker->SetTimeStamp( GetNewTimeStamp() );
-    marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-    marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-    marker->SetData( ERCE_GLOBLABEL,
-                     label->GetPosition(),
-                     msg,
-                     label->GetPosition() );
-
-    SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
-    screen->Append( marker );
 }
 
 
@@ -2061,17 +2009,19 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 
 
 bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
-                                       bool aCreateMarkers )
+                                       bool aCreateMarkers, bool aCheckGlobalLabels )
 {
-    wxString msg;
-    auto sheet = aSubgraph->m_sheet;
-    auto screen = sheet.LastScreen();
+    // Label connection rules:
+    // Local labels are flagged if they don't connect to any pins and don't have a no-connect
+    // Global labels are flagged if they appear only once, don't connect to any local labels,
+    // and don't have a no-connect marker
+
+    // So, if there is a no-connect, we will never generate a warning here
+    if( aSubgraph->m_no_connect )
+        return true;
 
     SCH_TEXT* text = nullptr;
     bool has_other_connections = false;
-
-    // Any subgraph that contains a label should also contain at least one other
-    // connectable item.
 
     for( auto item : aSubgraph->m_items )
     {
@@ -2084,29 +2034,60 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
             break;
 
         case SCH_PIN_T:
+        case SCH_SHEET_PIN_T:
             has_other_connections = true;
             break;
 
         default:
-            if( item->IsConnectable() )
-                has_other_connections = true;
             break;
+        }
+    }
+
+    bool is_global = text && ( text->Type() == SCH_GLOBAL_LABEL_T );
+
+    // Global label check can be disabled independently
+    if( !aCheckGlobalLabels && is_global )
+        return true;
+
+    if( text )
+    {
+        wxString name = text->GetShownText();
+
+        if( is_global)
+        {
+            if( m_net_name_to_subgraphs_map.count( name )
+                    && m_net_name_to_subgraphs_map.at( name ).size() > 1 )
+                has_other_connections = true;
+        }
+        else
+        {
+            if( m_local_label_cache.count( std::make_pair( aSubgraph->m_sheet, name ) ) )
+                has_other_connections = true;
         }
     }
 
     if( text && !has_other_connections )
     {
-        auto pos = text->GetPosition();
-        msg.Printf( _( "Label %s is unconnected." ),
-                    GetChars( text->ShortenedShownText() ) );
+        if( aCreateMarkers )
+        {
+            SCH_SCREEN* screen = aSubgraph->m_sheet.LastScreen();
+            wxPoint pos = text->GetPosition();
+            auto marker = new SCH_MARKER();
 
-        auto marker = new SCH_MARKER();
-        marker->SetTimeStamp( GetNewTimeStamp() );
-        marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-        marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-        marker->SetData( ERCE_LABEL_NOT_CONNECTED, pos, msg, pos );
+            wxString msg;
+            wxString prefix = is_global ? _( "Global label" ) : _( "Label" );
+            ERCE_T type = is_global ? ERCE_GLOBLABEL : ERCE_LABEL_NOT_CONNECTED;
 
-        screen->Append( marker );
+            msg.Printf( _( "%s %s is not connected anywhere else in the schematic." ),
+                        prefix, GetChars( text->ShortenedShownText() ) );
+
+            marker->SetTimeStamp( GetNewTimeStamp() );
+            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+            marker->SetData( type, pos, msg, pos );
+
+            screen->Append( marker );
+        }
 
         return false;
     }

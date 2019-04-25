@@ -375,11 +375,12 @@ private:
      *
      * @param  aSubgraph      is the subgraph to examine
      * @param  aCreateMarkers controls whether error markers are created
+     * @param  aCheckGlobalLabels is true if global labels should be checked for loneliness
      * @return                true for no errors, false for errors
      */
-    bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph, bool aCreateMarkers );
+    bool ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph, bool aCreateMarkers,
+                         bool aCheckGlobalLabels );
 
-    void ercReportIsolatedGlobalLabel( const CONNECTION_SUBGRAPH* aSubgraph, SCH_ITEM* aLabel );
 };
 
 #endif

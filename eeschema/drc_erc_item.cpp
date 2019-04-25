@@ -55,7 +55,7 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_NOCONNECT_NOT_CONNECTED:
         return wxString( _("A \"no connection\" flag is not connected to anything") );
     case ERCE_LABEL_NOT_CONNECTED:
-        return wxString( _("A label not connected to any other item") );
+        return wxString( _("Label not connected anywhere else in the schematic") );
     case ERCE_SIMILAR_LABELS:
         return wxString( _("Labels are similar (lower/upper case difference only)" ) );
     case ERCE_SIMILAR_GLBL_LABELS:
@@ -77,7 +77,7 @@ wxString DRC_ITEM::GetErrorText() const
     case ERCE_BUS_TO_NET_CONFLICT:
         return wxString( _( "Invalid connection between bus and net items" ) );
     case ERCE_GLOBLABEL:
-        return wxString( _( "Invalid connection between bus and net items" ) );
+        return wxString( _( "Global label not connected anywhere else in the schematic" ) );
     default:
         wxFAIL_MSG( "Missing ERC error description" );
         return wxString( wxT("Unknown.") );
