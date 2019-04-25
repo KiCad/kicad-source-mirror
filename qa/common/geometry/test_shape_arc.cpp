@@ -337,10 +337,8 @@ bool ArePolylineMidPointsNearCircle(
     return GEOM_TEST::ArePointsNearCircle( points, aCentre, aRad, aTolMidPts );
 }
 
-#ifdef HAVE_EXPECTED_FAILURES
 
-// Start and end point check fail for the 3 non-zero radius cases
-BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 3 * 2 ) )
+BOOST_AUTO_TEST_CASE( ArcToPolyline )
 {
     const std::vector<ARC_TO_POLYLINE_CASE> cases = {
         {
@@ -416,6 +414,5 @@ BOOST_AUTO_TEST_CASE( ArcToPolyline, *boost::unit_test::expected_failures( 3 * 2
     }
 }
 
-#endif
 
 BOOST_AUTO_TEST_SUITE_END()
