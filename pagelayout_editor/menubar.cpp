@@ -113,7 +113,8 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
 
     editMenu->AppendSeparator();
 
-    AddMenuItem( editMenu, wxID_CUT, _( "Delete" ), wxEmptyString, KiBitmap( delete_xpm ) );
+    msg = AddHotkeyName( _( "Delete" ), PlEditorHotkeysDescr, HK_DELETE_ITEM );
+    AddMenuItem( editMenu, wxID_DELETE, msg, wxEmptyString, KiBitmap( delete_xpm ) );
 
 
     // View Menu:
@@ -129,7 +130,7 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_ZOOM_PAGE, msg, wxEmptyString, KiBitmap( zoom_fit_in_page_xpm ) );
 
     msg = AddHotkeyName( _( "Zoom to Selection" ), PlEditorHotkeysDescr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ) );
+    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, msg, wxEmptyString, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
 
     viewMenu->AppendSeparator();
 

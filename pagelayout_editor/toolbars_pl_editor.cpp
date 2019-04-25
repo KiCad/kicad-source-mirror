@@ -66,7 +66,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( wxID_CUT, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
+    m_mainToolBar->AddTool( wxID_DELETE, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
                             _( "Delete selected item" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
