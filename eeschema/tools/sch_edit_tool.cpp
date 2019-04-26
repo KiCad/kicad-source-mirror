@@ -203,6 +203,21 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     m_frame->SaveCopyInUndoList( item, UR_CHANGED, i > 0 );
                 }
 
+                // Mark dangling pins at the edges of the block:
+                std::vector<DANGLING_END_ITEM> internalPoints;
+
+                for( int i = 0; i < selection.GetSize(); ++i )
+                {
+                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+                    item->GetEndPoints( internalPoints );
+                }
+
+                for( int i = 0; i < selection.GetSize(); ++i )
+                {
+                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+                    item->UpdateDanglingState( internalPoints );
+                }
+
                 m_cursor = controls->GetCursorPosition();
 
                 if( selection.HasReferencePoint() )
@@ -301,7 +316,10 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( restore_state )
         m_frame->RollbackSchematicFromUndo();
     else
+    {
+        m_frame->TestDanglingEnds();
         m_frame->OnModify();
+    }
 
     return 0;
 }
