@@ -201,7 +201,6 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
         BLOCK_COMMAND_T command = block->GetCommand();
 
         m_canvas->CallEndMouseCapture( aDC );
-        m_toolManager->DeactivateTool();
 
         block->SetState( state );
         block->SetCommand( command );
@@ -261,6 +260,7 @@ bool SCH_EDIT_FRAME::HandleBlockEnd( wxDC* aDC )
             if( block->GetCount() )
             {
                 nextcmd = true;
+                m_toolManager->DeactivateTool();
                 block->SetState( STATE_BLOCK_MOVE );
 
                 if( block->GetCommand() != BLOCK_DRAG && block->GetCommand() != BLOCK_DRAG_ITEM )
