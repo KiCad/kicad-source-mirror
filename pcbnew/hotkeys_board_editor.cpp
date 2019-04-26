@@ -479,7 +479,7 @@ bool PCB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         break;
 
     case HK_MOVE_ITEM_EXACT:
-    case HK_DUPLICATE_ITEM:
+    case HK_DUPLICATE:
     case HK_DUPLICATE_ITEM_AND_INCREMENT:
     case HK_CREATE_ARRAY:
         OnHotkeyDuplicateOrArrayItem( HK_Descr->m_Idcommand );
@@ -1093,7 +1093,7 @@ bool PCB_EDIT_FRAME::OnHotkeyDuplicateOrArrayItem( int aIdCommand )
                 evt_type = ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT;
             break;
 
-        case HK_DUPLICATE_ITEM:
+        case HK_DUPLICATE:
             if( canDuplicate )
                 evt_type = ID_POPUP_PCB_DUPLICATE_ITEM;
             break;

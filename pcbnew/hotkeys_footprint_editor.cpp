@@ -193,7 +193,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPos
         OnHotkeyRotateItem( HK_ROTATE_ITEM );
         break;
 
-    case HK_DUPLICATE_ITEM:
+    case HK_DUPLICATE:
     case HK_DUPLICATE_ITEM_AND_INCREMENT:
         OnHotkeyDuplicateItem( HK_Descr->m_Idcommand );
         break;
@@ -391,7 +391,7 @@ bool FOOTPRINT_EDIT_FRAME::OnHotkeyDuplicateItem( int aIdCommand )
     case PCB_PAD_T:
     case PCB_MODULE_EDGE_T:
     case PCB_MODULE_TEXT_T:
-        if( aIdCommand == HK_DUPLICATE_ITEM )
+        if( aIdCommand == HK_DUPLICATE )
             evt_type = ID_POPUP_PCB_DUPLICATE_ITEM;
         else
             evt_type = ID_POPUP_PCB_DUPLICATE_ITEM_AND_INCREMENT;

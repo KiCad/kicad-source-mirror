@@ -144,7 +144,7 @@ static EDA_HOTKEY HkMoveItemExact( _HKI( "Move Item Exactly" ), HK_MOVE_ITEM_EXA
                                    'M' + GR_KB_CTRL );
 static EDA_HOTKEY HkPositionItemRelative( _HKI( "Position Item Relative" ), HK_POSITION_RELATIVE,
                                           'P' + GR_KB_SHIFT );
-static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Item" ), HK_DUPLICATE_ITEM, 'D' + GR_KB_CTRL );
+static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Item" ), HK_DUPLICATE, 'D' + GR_KB_CTRL );
 static EDA_HOTKEY HkDuplicateItemAndIncrement( _HKI( "Duplicate Item and Increment" ),
                                                HK_DUPLICATE_ITEM_AND_INCREMENT,
                                                'D' + GR_KB_SHIFTCTRL );

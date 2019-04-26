@@ -88,7 +88,7 @@ TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",

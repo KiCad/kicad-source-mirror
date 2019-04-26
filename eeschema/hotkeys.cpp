@@ -177,9 +177,8 @@ static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
 static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE_COMPONENT_OR_ITEM, 'M',
                           ID_SCH_MOVE_ITEM );
 
-static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate Symbol or Label" ),
-                                         HK_DUPLICATE_ITEM, 'C',
-                                         ID_POPUP_SCH_DUPLICATE_ITEM );
+static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL,
+                                   ID_POPUP_SCH_DUPLICATE );
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
@@ -203,7 +202,7 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
-static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_CTRL,
+static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D',
                              ID_LIBEDIT_VIEW_DOC );
 
 // Autoplace fields
@@ -217,7 +216,8 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D', ID_SCH_UNFOLD_BUS );
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D' + GR_KB_CTRL,
+                               ID_SCH_UNFOLD_BUS );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
@@ -492,16 +492,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_DELETE:
-        if( blocInProgress )
-        {
-            cmd.SetId( ID_POPUP_DELETE_BLOCK );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        else
-            GetToolManager()->RunAction( SCH_ACTIONS::remove, true );
-        break;
-
     case HK_REPEAT_LAST:
         if( notBusy )
             RepeatDrawItem();
@@ -542,29 +532,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
 
-    case HK_DUPLICATE_ITEM:        // Duplicate component or text/label
-        if( itemInEdit )
-            break;
-
-        if( aItem == NULL )
-        {
-            SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-            aItem = selTool->SelectPoint( aPosition, SCH_COLLECTOR::CopyableItems );
-
-            if( aItem == NULL )
-                break;
-        }
-
-        cmd.SetId( hotKey->m_IdMenuEvent );
-        wxPostEvent( this, cmd );
-        break;
-
-    case HK_DRAG:                           // Start drag
-    case HK_MOVE_COMPONENT_OR_ITEM:         // Start move schematic item.
-        if( ! notBusy )
-            break;
-
-        // Fall through
     case HK_EDIT:
         // Edit schematic item. Do not allow sheet editing when mowing because sheet editing
         // can be complex.
@@ -576,10 +543,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
     case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
     case HK_SHOW_COMPONENT_DATASHEET:       // Show component datasheet in browser.
-    case HK_MIRROR_Y:                       // Mirror Y
-    case HK_MIRROR_X:                       // Mirror X
-    case HK_ORIENT_NORMAL_COMPONENT:        // Orient 0, no mirror (Component)
-    case HK_ROTATE:                         // Rotate schematic item.
     case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
     case HK_AUTOPLACE_FIELDS:               // Autoplace all fields around component
     case HK_UNFOLD_BUS:                     // Unfold a bus wire

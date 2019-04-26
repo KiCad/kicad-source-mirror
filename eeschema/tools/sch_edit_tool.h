@@ -54,12 +54,14 @@ public:
     /**
      * Function Main()
      *
-     * Main loop in which events are handled.
+     * Runs an interactive move of the selected items, or the item under the cursor.
      */
     int Main( const TOOL_EVENT& aEvent );
 
     int Rotate( const TOOL_EVENT& aEvent );
     int Mirror( const TOOL_EVENT& aEvent );
+
+    int Duplicate( const TOOL_EVENT& aEvent );
 
     /**
      * Function Remove()

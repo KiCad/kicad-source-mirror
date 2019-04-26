@@ -499,12 +499,12 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 
 int SCH_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 {
-    PICKED_ITEMS_LIST* pickedItems = aEvent.Parameter<PICKED_ITEMS_LIST*>();
+    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
 
-    if( pickedItems )
+    if( items )
     {
-        for( unsigned ii = 0; ii < pickedItems->GetCount(); ii++ )
-            select( (SCH_ITEM*) pickedItems->GetPickedItem( ii ) );
+        for( SCH_ITEM* item : *items )
+            select( item );
 
         m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
@@ -532,12 +532,12 @@ int SCH_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 {
-    PICKED_ITEMS_LIST* pickedItems = aEvent.Parameter<PICKED_ITEMS_LIST*>();
+    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
 
-    if( pickedItems )
+    if( items )
     {
-        for( unsigned ii = 0; ii < pickedItems->GetCount(); ii++ )
-            unselect( (SCH_ITEM*) pickedItems->GetPickedItem( ii ) );
+        for( SCH_ITEM* item : *items )
+            unselect( item );
 
         m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }

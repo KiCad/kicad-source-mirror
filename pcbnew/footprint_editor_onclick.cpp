@@ -313,7 +313,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
             msg = AddHotkeyName( _("Delete Pad" ), g_Module_Editor_Hotkeys_Descr, HK_DELETE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DELETE_PAD, msg, KiBitmap( delete_pad_xpm ) );
 
-            msg = AddHotkeyName( _( "Duplicate Pad" ), g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE_ITEM );
+            msg = AddHotkeyName( _( "Duplicate Pad" ), g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE );
             AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
 
             msg = AddHotkeyName( _("Move Pad Exactly..." ), g_Module_Editor_Hotkeys_Descr, HK_MOVE_ITEM_EXACT );
@@ -355,7 +355,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 if( &module->Reference() != text && &module->Value() != text )
                 {
                     msg = AddHotkeyName( _( "Duplicate" ),
-                                         g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE_ITEM );
+                                         g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE );
                     AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                                  msg, KiBitmap( duplicate_xpm ) );
 
@@ -396,7 +396,7 @@ bool FOOTPRINT_EDIT_FRAME::OnRightClick( const wxPoint& MousePos, wxMenu* PopMen
                 msg = AddHotkeyName( _("Move" ), g_Module_Editor_Hotkeys_Descr, HK_MOVE_ITEM );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_MOVE_EDGE, msg, KiBitmap( move_xpm ) );
 
-                msg = AddHotkeyName( _( "Duplicate" ), g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE_ITEM );
+                msg = AddHotkeyName( _( "Duplicate" ), g_Module_Editor_Hotkeys_Descr, HK_DUPLICATE );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM, msg, KiBitmap( duplicate_xpm ) );
 
                 msg = AddHotkeyName( _("Move Exactly..." ), g_Module_Editor_Hotkeys_Descr, HK_MOVE_ITEM_EXACT );

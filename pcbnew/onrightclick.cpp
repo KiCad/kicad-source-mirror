@@ -167,7 +167,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                              msg, KiBitmap( move_xpm ) );
 
                 msg = AddHotkeyName( _( "Duplicate" ), g_Board_Editor_Hotkeys_Descr,
-                                     HK_DUPLICATE_ITEM );
+                                     HK_DUPLICATE );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                              msg, KiBitmap( duplicate_xpm ) );
 
@@ -238,7 +238,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                              msg, KiBitmap( move_xpm ) );
 
                 msg = AddHotkeyName( _( "Duplicate" ), g_Board_Editor_Hotkeys_Descr,
-                                     HK_DUPLICATE_ITEM );
+                                     HK_DUPLICATE );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                              msg, KiBitmap( duplicate_xpm ) );
 
@@ -269,7 +269,7 @@ bool PCB_EDIT_FRAME::OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu )
                              msg, KiBitmap( move_exactly_xpm ) );
 
                 msg = AddHotkeyName( _( "Duplicate" ), g_Board_Editor_Hotkeys_Descr,
-                                     HK_DUPLICATE_ITEM );
+                                     HK_DUPLICATE );
                 AddMenuItem( aPopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                              msg, KiBitmap( duplicate_xpm ) );
 
@@ -470,7 +470,7 @@ void PCB_EDIT_FRAME::createPopupMenuForTracks( TRACK* Track, wxMenu* PopMenu )
                              msg, KiBitmap( drag_xpm ) );
 
                 msg = AddHotkeyName( _( "Duplicate" ), g_Board_Editor_Hotkeys_Descr,
-                                     HK_DUPLICATE_ITEM );
+                                     HK_DUPLICATE );
                 AddMenuItem( PopMenu, ID_POPUP_PCB_DUPLICATE_ITEM,
                              msg, KiBitmap( duplicate_xpm ) );
 
@@ -771,7 +771,7 @@ void PCB_EDIT_FRAME::createPopUpMenuForFootprints( MODULE* aModule, wxMenu* menu
                      msg, KiBitmap( move_exactly_xpm ) );
 
         msg = AddHotkeyName( _( "Duplicate" ), g_Board_Editor_Hotkeys_Descr,
-                             HK_DUPLICATE_ITEM );
+                             HK_DUPLICATE );
         AddMenuItem( sub_menu_footprint, ID_POPUP_PCB_DUPLICATE_ITEM,
                      msg, KiBitmap( duplicate_xpm ) );
 

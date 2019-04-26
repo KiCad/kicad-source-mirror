@@ -36,39 +36,31 @@
 #include <sch_view.h>
 #include <sch_item_struct.h>
 #include <sch_edit_frame.h>
-
-
-TOOL_ACTION SCH_ACTIONS::editActivate( "eeschema.InteractiveEdit",
-        AS_GLOBAL, 0,
-        _( "Edit Activate" ), "", move_xpm, AF_ACTIVATE );
+#include <list_operations.h>
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
 
 TOOL_ACTION SCH_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
         AS_GLOBAL, 0,
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
-        rotate_cw_xpm, AF_NONE );
+        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ), rotate_cw_xpm );
 
 TOOL_ACTION SCH_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE ),
-        _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
-        rotate_ccw_xpm, AF_NONE );
+        _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ), rotate_ccw_xpm );
 
 TOOL_ACTION SCH_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
-        _( "Mirror X" ), _( "Mirrors selected item(s) across the X axis" ),
-        mirror_h_xpm, AF_NONE );
+        _( "Mirror X" ), _( "Mirrors selected item(s) across the X axis" ), mirror_h_xpm );
 
 TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
-        _( "Mirror Y" ), _( "Mirrors selected item(s) across the Y axis" ),
-        mirror_v_xpm, AF_NONE );
+        _( "Mirror Y" ), _( "Mirrors selected item(s) across the Y axis" ), mirror_v_xpm );
 
 TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
@@ -76,7 +68,7 @@ TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
 
 TOOL_ACTION SCH_ACTIONS::remove( "eeschema.InteractiveEdit.remove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm, AF_NONE );
+        _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm );
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
@@ -88,7 +80,7 @@ SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         m_menu( *this ),
         m_dragging( false )
 {
-};
+}
 
 
 SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
@@ -161,8 +153,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &SCH_ACTIONS::editActivate ) || evt->IsAction( &SCH_ACTIONS::move )
-                || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+        if( evt->IsAction( &SCH_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
         {
             if( m_dragging && evt->Category() == TC_MOUSE )
             {
@@ -624,6 +615,96 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION           selection = selTool->RequestSelection( SCH_COLLECTOR::DraggableItems );
+
+    if( selection.GetSize() == 0 )
+        return 0;
+
+    std::vector<SCH_ITEM*> newItems;
+
+    // Keep track of existing sheet paths. Duplicating a selection can modify this list
+    bool hasSheetCopied = false;
+    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+
+    for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
+    {
+        SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+        SCH_ITEM* newItem = DuplicateStruct( oldItem );
+        newItems.push_back( newItem );
+
+        m_frame->SaveCopyInUndoList( newItem, UR_NEW, ii > 0 );
+
+        switch( newItem->Type() )
+        {
+        case SCH_JUNCTION_T:
+        case SCH_LINE_T:
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        case SCH_MARKER_T:
+        case SCH_NO_CONNECT_T:
+            newItem->SetParent( m_frame->GetScreen() );
+            m_frame->AddToScreen( newItem );
+            break;
+
+        case SCH_SHEET_T:
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) newItem;
+            // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
+            // based sheet name and update the time stamp for each sheet in the block.
+            timestamp_t timeStamp = GetNewTimeStamp();
+
+            sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
+            sheet->SetTimeStamp( timeStamp );
+
+            sheet->SetParent( m_frame->GetScreen() );
+            m_frame->AddToScreen( sheet );
+
+            hasSheetCopied = true;
+            break;
+        }
+
+        case SCH_COMPONENT_T:
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
+
+            component->SetTimeStamp( GetNewTimeStamp() );
+            component->ClearAnnotation( NULL );
+
+            component->SetParent( m_frame->GetScreen() );
+            m_frame->AddToScreen( component );
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
+
+    if( hasSheetCopied )
+    {
+        // We clear annotation of new sheet paths.
+        // Annotation of new components added in current sheet is already cleared.
+        SCH_SCREENS screensList( g_RootSheet );
+        screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+    }
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::selectItems, true, &newItems );
+
+    TOOL_EVENT evt = SCH_ACTIONS::move.MakeEvent();
+    Main( evt );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL*    selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -645,7 +726,7 @@ int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
         m_frame->GetScreen()->SetCurItem( nullptr );
         m_frame->SetRepeatItem( nullptr );
-        m_frame->DeleteItem( item );
+        m_frame->DeleteItem( item, ii > 0 );
 
         if( itemHasConnections )
             m_frame->TestDanglingEnds();
@@ -671,8 +752,8 @@ void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 
 void SCH_EDIT_TOOL::setTransitions()
 {
-    Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::editActivate.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Duplicate,          SCH_ACTIONS::duplicate.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );

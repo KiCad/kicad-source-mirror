@@ -203,6 +203,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_SCH_MIRROR_Y:
         return SCH_ACTIONS::mirrorY.MakeEvent();
+
+    case ID_POPUP_SCH_DUPLICATE:
+        return SCH_ACTIONS::duplicate.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
