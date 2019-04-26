@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 2004-2017 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,15 +22,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file schematic_undo_redo.cpp
- * @brief Eeschema undo and redo functions for schematic editor.
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-
+#include <tool/tool_manager.h>
 #include <general.h>
 #include <list_operations.h>
 #include <sch_bus_entry.h>
@@ -352,6 +347,9 @@ void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
+    // Inform tools that undo command was issued
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
+
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
 
@@ -375,6 +373,9 @@ void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
 {
     if( GetScreen()->GetRedoCommandCount() == 0 )
         return;
+
+    // Inform tools that undo command was issued
+    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
 
     /* Get the old list */
     PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
