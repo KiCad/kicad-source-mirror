@@ -96,9 +96,7 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet )
     m_lastSheetPinTextSize = sheetPin->GetTextSize();
 
     sheetPin->SetPosition( GetCrossHairPosition() );
-    PrepareMoveItem( sheetPin );
 
-    OnModify();
     return sheetPin;
 }
 
@@ -140,8 +138,6 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet )
     m_lastSheetPinType = label->GetShape();
     sheetPin->SetShape( label->GetShape() );
     sheetPin->SetPosition( GetCrossHairPosition() );
-
-    PrepareMoveItem( sheetPin );
 
     return sheetPin;
 }

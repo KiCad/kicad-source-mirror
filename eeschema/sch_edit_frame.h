@@ -751,7 +751,6 @@ public:
     SCH_BUS_BUS_ENTRY* CreateBusBusEntry();
 
     SCH_TEXT* CreateNewText( int aType );
-    SCH_BITMAP* CreateNewImage();
 
     /**
      * Performs routine schematic cleaning including breaking wire and buses and
@@ -911,14 +910,6 @@ private:
      * is in a good state.  This should only be called when loading a file.
      */
     void NormalizeSchematicOnFirstLoad();
-
-    /**
-     * Start moving \a aItem using the mouse.
-     *
-     * @param aItem A pointer to an SCH_ITEM to move.
-     * @param aDC The device context to draw \a aItem.
-     */
-    void PrepareMoveItem( SCH_ITEM* aItem );
 
     // Text, label, glabel
     void EditSchematicText( SCH_TEXT* TextStruct );
@@ -1230,14 +1221,6 @@ public:
      * true if some items found and HandleBlockPlace must be called later
      */
     virtual bool HandleBlockEnd( wxDC* aDC ) override;
-
-    /**
-     * Repeat the last item placement if the last item was a bus, bus entry,
-     * label, or component.
-     *
-     * Labels that end with a number will be incremented.
-     */
-    void RepeatDrawItem();
 
     /**
      * Clone \a aItem and owns that clone in this container.

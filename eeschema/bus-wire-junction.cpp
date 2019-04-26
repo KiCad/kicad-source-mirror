@@ -309,8 +309,7 @@ bool SCH_EDIT_FRAME::BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
 }
 
 
-bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, bool aAppend,
-                                    SCH_SCREEN* aScreen )
+bool SCH_EDIT_FRAME::BreakSegments( const wxPoint& aPoint, bool aAppend, SCH_SCREEN* aScreen )
 {
     if( aScreen == nullptr )
         aScreen = GetScreen();
@@ -429,8 +428,7 @@ void SCH_EDIT_FRAME::DeleteJunction( SCH_ITEM* aJunction, bool aAppend )
 }
 
 
-SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition,
-                                           bool aAppend, bool aFinal )
+SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppend, bool aFinal )
 {
     SCH_JUNCTION* junction = new SCH_JUNCTION( aPosition );
     bool broken_segments = false;
@@ -471,49 +469,6 @@ SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( const wxPoint& aPosition )
 
     SaveCopyInUndoList( no_connect, UR_NEW );
     return no_connect;
-}
-
-
-void SCH_EDIT_FRAME::RepeatDrawItem()
-{
-    SCH_ITEM*   repeater = GetRepeatItem();
-
-    if( !repeater )
-        return;
-
-    // clone the repeater, move it, insert into display list, then save a copy
-    // via SetRepeatItem();
-
-    SCH_ITEM* my_clone = (SCH_ITEM*) repeater->Clone();
-
-    // If cloning a component then put into 'move' mode.
-    if( my_clone->Type() == SCH_COMPONENT_T )
-    {
-        wxPoint pos = GetCrossHairPosition() - ( (SCH_COMPONENT*) my_clone )->GetPosition();
-
-        my_clone->SetFlags( IS_NEW );
-        ( (SCH_COMPONENT*) my_clone )->SetTimeStamp( GetNewTimeStamp() );
-        my_clone->Move( pos );
-        PrepareMoveItem( my_clone );
-    }
-    else
-    {
-        my_clone->Move( GetRepeatStep() );
-
-        if( my_clone->CanIncrementLabel() )
-            ( (SCH_TEXT*) my_clone )->IncrementLabel( GetRepeatDeltaLabel() );
-
-        AddToScreen( my_clone );
-
-        if( my_clone->IsConnectable() )
-            TestDanglingEnds();
-
-        SaveCopyInUndoList( my_clone, UR_NEW );
-        my_clone->ClearFlags();
-    }
-
-    // clone my_clone, now that it has been moved, thus saving new position.
-    SetRepeatItem( my_clone );
 }
 
 

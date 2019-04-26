@@ -62,6 +62,7 @@ public:
     int Mirror( const TOOL_EVENT& aEvent );
 
     int Duplicate( const TOOL_EVENT& aEvent );
+    int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
     /**
      * Function Remove()
@@ -71,12 +72,18 @@ public:
     int Remove( const TOOL_EVENT& aEvent );
 
 private:
+    void moveItem( SCH_ITEM* aItem, VECTOR2I delta );
+
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
     bool updateModificationPoint( SELECTION& aSelection );
 
     ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
     void updateView( EDA_ITEM* );
+
+    ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
+    ///> parents.
+    void saveCopyInUndoList( SCH_ITEM*, UNDO_REDO_T aType, bool aAppend = false );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

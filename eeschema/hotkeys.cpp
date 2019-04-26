@@ -492,11 +492,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_REPEAT_LAST:
-        if( notBusy )
-            RepeatDrawItem();
-        break;
-
     case HK_END_CURR_LINEWIREBUS:
         // this key terminates a new line/bus/wire in progress
         if( aItem && aItem->IsNew() &&

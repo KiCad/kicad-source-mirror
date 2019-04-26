@@ -114,6 +114,7 @@ public:
     // Editing
     static TOOL_ACTION move;
     static TOOL_ACTION duplicate;
+    static TOOL_ACTION repeatDrawItem;
     static TOOL_ACTION rotateCW;
     static TOOL_ACTION rotateCCW;
     static TOOL_ACTION mirrorX;

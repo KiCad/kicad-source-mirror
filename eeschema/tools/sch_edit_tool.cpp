@@ -46,6 +46,10 @@ TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
 
+TOOL_ACTION SCH_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPEAT_LAST ),
+        _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ) );
+
 TOOL_ACTION SCH_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
         AS_GLOBAL, 0,
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ), rotate_cw_xpm );
@@ -133,7 +137,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::DraggableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems );
     bool unselect = selection.IsHover();
 
     if( m_dragging || selection.Empty() )
@@ -169,12 +173,11 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-                    // Don't double move footprint pads, fields, etc.
+                    // Don't double move pins, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    item->Move( (wxPoint)movement );
-                    item->SetFlags( IS_MOVED );
+                    moveItem( item, movement );
                     updateView( item );
                 }
 
@@ -187,11 +190,12 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-                    // Don't double move footprint pads, fields, etc.
+                    // No need to save children of selected items
                     if( item->GetParent() && item->GetParent()->IsSelected() )
                         continue;
 
-                    m_frame->SaveCopyInUndoList( item, UR_CHANGED, i > 0 );
+                    if( !item->IsNew() )
+                        saveCopyInUndoList( item, UR_CHANGED, i > 0 );
                 }
 
                 // Mark dangling pins at the edges of the block:
@@ -221,11 +225,12 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-                        // Don't double move footprint pads, fields, etc.
+                        // Don't double move pins, fields, etc.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        item->Move( (wxPoint)delta );
+                        moveItem( item, delta );
+                        updateView( item );
                     }
 
                     selection.SetReferencePoint( m_cursor );
@@ -316,6 +321,19 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
+void SCH_EDIT_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I delta )
+{
+    KICAD_T itemType = aItem->Type();
+
+    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T )
+        aItem->Move( wxPoint( delta.x, -delta.y ) );
+    else
+        aItem->Move( (wxPoint)delta );
+
+    aItem->SetFlags( IS_MOVED );
+}
+
+
 bool SCH_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
@@ -325,15 +343,21 @@ bool SCH_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
     if( aSelection.Size() == 1 )
     {
         SCH_ITEM* item =  static_cast<SCH_ITEM*>( aSelection.Front() );
-        wxPoint pos = item->GetPosition();
-        aSelection.SetReferencePoint( pos );
+
+        // For some items, moving the cursor to anchor is not good (for instance large
+        // hierarchical sheets or components can have the anchor outside the view)
+        if( item->IsMovableFromAnchorPoint() )
+        {
+            wxPoint pos = item->GetPosition();
+            aSelection.SetReferencePoint( pos );
+
+            return true;
+        }
     }
-        // ...otherwise modify items with regard to the grid-snapped cursor position
-    else
-    {
-        m_cursor = getViewControls()->GetCursorPosition( true );
-        aSelection.SetReferencePoint( m_cursor );
-    }
+
+    // ...otherwise modify items with regard to the grid-snapped cursor position
+    m_cursor = getViewControls()->GetCursorPosition( true );
+    aSelection.SetReferencePoint( m_cursor );
 
     return true;
 }
@@ -356,7 +380,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
     {
         if( !moving )
-            m_frame->SaveCopyInUndoList( item, UR_CHANGED );
+            saveCopyInUndoList( item, UR_CHANGED );
 
         switch( item->Type() )
         {
@@ -449,7 +473,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
             if( !moving )
-                m_frame->SaveCopyInUndoList( item, UR_CHANGED, ii > 0 );
+                saveCopyInUndoList( item, UR_CHANGED, ii > 0 );
 
             item->Rotate( rotPoint );
 
@@ -490,7 +514,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 1 )
     {
         if( !moving )
-            m_frame->SaveCopyInUndoList( item, UR_CHANGED );
+            saveCopyInUndoList( item, UR_CHANGED );
 
         switch( item->Type() )
         {
@@ -588,7 +612,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
 
             if( !moving )
-                m_frame->SaveCopyInUndoList( item, UR_CHANGED, ii > 0 );
+                saveCopyInUndoList( item, UR_CHANGED, ii > 0 );
 
             if( xAxis )
                 item->MirrorX( mirrorPoint.y );
@@ -635,7 +659,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         SCH_ITEM* newItem = DuplicateStruct( oldItem );
         newItems.push_back( newItem );
 
-        m_frame->SaveCopyInUndoList( newItem, UR_NEW, ii > 0 );
+        saveCopyInUndoList( newItem, UR_NEW, ii > 0 );
 
         switch( newItem->Type() )
         {
@@ -705,6 +729,58 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
+{
+    SCH_ITEM* sourceItem = m_frame->GetRepeatItem();
+
+    if( !sourceItem )
+        return 0;
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+
+    SCH_ITEM* newItem = (SCH_ITEM*) sourceItem->Clone();
+    bool      performDrag = false;
+
+    // If cloning a component then put into 'move' mode.
+    if( newItem->Type() == SCH_COMPONENT_T )
+    {
+        ( (SCH_COMPONENT*) newItem )->SetTimeStamp( GetNewTimeStamp() );
+
+        newItem->Move( (wxPoint)m_controls->GetCursorPosition( true ) - newItem->GetPosition() );
+        performDrag = true;
+    }
+    else
+    {
+        if( newItem->CanIncrementLabel() )
+            ( (SCH_TEXT*) newItem )->IncrementLabel( m_frame->GetRepeatDeltaLabel() );
+
+        newItem->Move( m_frame->GetRepeatStep() );
+    }
+
+    newItem->SetFlags( IS_NEW );
+    m_frame->AddToScreen( newItem );
+    m_frame->SaveCopyInUndoList( newItem, UR_NEW );
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, newItem );
+
+    if( performDrag )
+    {
+        TOOL_EVENT evt = SCH_ACTIONS::move.MakeEvent();
+        Main( evt );
+    }
+
+    newItem->ClearFlags();
+
+    if( newItem->IsConnectable() )
+        m_frame->TestDanglingEnds();
+
+    // newItem newItem, now that it has been moved, thus saving new position.
+    m_frame->SetRepeatItem( newItem );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL*    selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -745,8 +821,19 @@ void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
+
+    getView()->Update( aItem );
+}
+
+
+void SCH_EDIT_TOOL::saveCopyInUndoList( SCH_ITEM* aItem, UNDO_REDO_T aType, bool aAppend )
+{
+    KICAD_T itemType = aItem->Type();
+
+    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
+        m_frame->SaveCopyInUndoList( (SCH_ITEM*)aItem->GetParent(), aType, aAppend );
     else
-        getView()->Update( aItem );
+        m_frame->SaveCopyInUndoList( aItem, aType, aAppend );
 }
 
 
@@ -754,6 +841,7 @@ void SCH_EDIT_TOOL::setTransitions()
 {
     Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Duplicate,          SCH_ACTIONS::duplicate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::RepeatDrawItem,     SCH_ACTIONS::repeatDrawItem.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );

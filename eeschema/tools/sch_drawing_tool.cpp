@@ -258,7 +258,7 @@ int SCH_DRAWING_TOOL::PlacePower( const TOOL_EVENT& aEvent )
 
 
 int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+                                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
 {
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
@@ -375,6 +375,128 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         // Enable autopanning and cursor capture only when there is a module to be placed
         m_controls->SetAutoPan( !!aComponent );
         m_controls->CaptureCursor( !!aComponent );
+    }
+
+    m_frame->SetNoToolSelected();
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
+{
+    SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
+
+    m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
+
+    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
+
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_controls->ShowCursor( true );
+    m_controls->SetSnapping( true );
+
+    Activate();
+
+    // Add all the drawable parts to preview
+    if( image )
+    {
+        image->SetPosition( (wxPoint)cursorPos );
+        m_view->ClearPreview();
+        m_view->AddToPreview( image->Clone() );
+    }
+
+    // Main loop: keep receiving events
+    while( OPT_TOOL_EVENT evt = Wait() )
+    {
+        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+
+        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        {
+            if( image )
+            {
+                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
+                m_view->ClearPreview();
+                m_view->ClearHiddenFlags();
+                delete image;
+                image = nullptr;
+            }
+            else
+                break;
+
+            if( evt->IsActivate() )  // now finish unconditionally
+                break;
+        }
+        else if( evt->IsClick( BUT_LEFT ) )
+        {
+            if( !image )
+            {
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+
+                if( dlg.ShowModal() != wxID_OK )
+                    continue;
+
+                // Restore cursor after dialog
+                m_frame->GetCanvas()->MoveCursorToCrossHair();
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
+
+                wxString fullFilename = dlg.GetPath();
+
+                if( !wxFileExists( fullFilename ) )
+                {
+                    wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
+                    continue;
+                }
+
+                image = new SCH_BITMAP( (wxPoint)cursorPos );
+
+                if( !image->ReadImageFile( fullFilename ) )
+                {
+                    wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
+                    image = nullptr;
+                    delete image;
+                    continue;
+                }
+
+                MSG_PANEL_ITEMS items;
+                image->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
+                m_frame->SetMsgPanel( items );
+
+                image->SetFlags( IS_MOVED );
+                m_frame->SetRepeatItem( image );
+                m_frame->GetScreen()->SetCurItem( image );
+                m_view->ClearPreview();
+                m_view->AddToPreview( image->Clone() );
+
+                m_controls->SetCursorPosition( cursorPos, false );
+            }
+            else
+            {
+                m_view->ClearPreview();
+
+                m_frame->AddItemToScreen( image );
+
+                image = nullptr;
+            }
+        }
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // JEY TODO
+            // m_menu.ShowContextMenu( selTool->GetSelection() );
+        }
+        else if( image && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        {
+            image->SetPosition( (wxPoint)cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( image->Clone() );
+        }
+
+        // Enable autopanning and cursor capture only when there is a module to be placed
+        m_controls->SetAutoPan( !!image );
+        m_controls->CaptureCursor( !!image );
     }
 
     m_frame->SetNoToolSelected();
@@ -505,13 +627,6 @@ int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
-{
-    m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
-    return doTwoClickPlace( SCH_BITMAP_T );
-}
-
-
 int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 {
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -566,9 +681,6 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                     break;
                 case SCH_TEXT_T:
                     item = m_frame->CreateNewText( LAYER_NOTES );
-                    break;
-                case SCH_BITMAP_T:
-                    item = m_frame->CreateNewImage();
                     break;
                 case SCH_SHEET_PIN_T:
                     item = selTool->SelectPoint( cursorPos, SCH_COLLECTOR::SheetsAndSheetLabels );

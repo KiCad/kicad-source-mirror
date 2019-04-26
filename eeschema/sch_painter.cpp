@@ -1123,10 +1123,7 @@ void SCH_PAINTER::draw( SCH_COMPONENT *aComp, int aLayer )
     aComp->GetFields( fields, false );
 
     for( SCH_FIELD* field : fields )
-    {
-        if( !field->IsMoving() )
-            draw( field, aLayer );
-    }
+        draw( field, aLayer );
 }
 
 

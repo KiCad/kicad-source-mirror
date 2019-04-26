@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 jean-pierre.charras
- * Copyright (C) 2012-2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file edit_bitmap.cpp
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <sch_view.h>
@@ -34,42 +30,6 @@
 #include <dialog_image_editor.h>
 
 #include <view/view_group.h>
-
-
-SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage()
-{
-    wxFileDialog fileDlg( this, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                          _( "Image Files " ) + wxImage::GetImageExtWildcard(),
-                          wxFD_OPEN );
-
-    if( fileDlg.ShowModal() != wxID_OK )
-        return nullptr;
-
-    wxString fullFilename = fileDlg.GetPath();
-
-    if( !wxFileExists( fullFilename ) )
-    {
-        wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
-        return nullptr;
-    }
-
-    wxPoint     pos = GetCrossHairPosition();
-
-    SCH_BITMAP* image = new SCH_BITMAP( pos );
-
-    if( !image->ReadImageFile( fullFilename ) )
-    {
-        wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
-        delete image;
-        return nullptr;
-    }
-
-    image->SetFlags( IS_NEW );
-    PrepareMoveItem( image );
-
-//    OnModify();
-    return image;
-}
 
 
 bool SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )

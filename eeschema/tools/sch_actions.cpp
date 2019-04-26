@@ -206,6 +206,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_SCH_DUPLICATE:
         return SCH_ACTIONS::duplicate.MakeEvent();
+
+    case ID_REPEAT_BUTT:
+        return SCH_ACTIONS::repeatDrawItem.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
