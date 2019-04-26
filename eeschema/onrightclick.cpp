@@ -408,7 +408,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
     AddMenuItem( orientmenu, ID_SCH_MIRROR_Y, msg, KiBitmap( mirror_h_xpm ) );
     msg = AddHotkeyName( _( "Reset to Default" ), g_Schematic_Hotkeys_Descr,
                          HK_ORIENT_NORMAL_COMPONENT );
-    AddMenuItem( orientmenu, ID_SCH_ORIENT_NORMAL, msg, KiBitmap( normal_xpm ) );
     AddMenuItem( PopMenu, orientmenu, ID_POPUP_SCH_GENERIC_ORIENT_CMP,
                  _( "Orientation" ), KiBitmap( orient_xpm ) );
 

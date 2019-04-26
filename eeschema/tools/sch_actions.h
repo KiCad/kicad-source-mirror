@@ -117,6 +117,8 @@ public:
     static TOOL_ACTION duplicate;
     static TOOL_ACTION rotateCW;
     static TOOL_ACTION rotateCCW;
+    static TOOL_ACTION mirrorX;
+    static TOOL_ACTION mirrorY;
     static TOOL_ACTION properties;
     static TOOL_ACTION remove;
     static TOOL_ACTION addJunction;

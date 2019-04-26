@@ -72,28 +72,6 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 }
 
 
-void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
-{
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-        item->MirrorY( aMirrorPoint.x );      // Place it in its new position.
-        item->ClearFlags();
-    }
-}
-
-
-void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint )
-{
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-        item->MirrorX( aMirrorPoint.y );      // Place it in its new position.
-        item->ClearFlags();
-    }
-}
-
-
 void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
 {
     std::vector< wxPoint > pts;

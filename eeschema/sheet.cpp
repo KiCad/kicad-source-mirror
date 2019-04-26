@@ -304,24 +304,3 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 }
 
 
-void SCH_EDIT_FRAME::MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis )
-{
-    if( aSheet == NULL )
-        return;
-
-    // Save old sheet in undo list if not already in edit, or moving.
-    if( aSheet->GetEditFlags() == 0 )
-        SaveCopyInUndoList( aSheet, UR_CHANGED );
-
-    // Mirror the sheet on itself. Sheets do not have a anchor point.
-    // Mirroring is made around it center
-    wxPoint mirrorPoint = aSheet->GetBoundingBox().Centre();
-
-    if( aFromXaxis )    // mirror relative to Horizontal axis
-        aSheet->MirrorX( mirrorPoint.y );
-    else                // Mirror relative to vertical axis
-        aSheet->MirrorY( mirrorPoint.x );
-
-    GetCanvas()->GetView()->Update( aSheet );
-    OnModify();
-}

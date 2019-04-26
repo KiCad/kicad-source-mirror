@@ -332,6 +332,7 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 
         clearSelection();
         SelectPoint( cursorPos, aFilterList );
+        m_selection.SetIsHover( true );
 
         return m_selection;
     }

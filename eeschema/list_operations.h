@@ -32,8 +32,6 @@ class SCH_SCREEN;
 class PICKED_ITEMS_LIST;
 
 void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
-void MirrorY( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
-void MirrorX( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMirrorPoint );
 
 /**
  * Routine to create a new copy of given struct.

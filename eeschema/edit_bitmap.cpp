@@ -72,21 +72,6 @@ SCH_BITMAP* SCH_EDIT_FRAME::CreateNewImage()
 }
 
 
-void SCH_EDIT_FRAME::MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis )
-{
-    if( aItem->GetEditFlags( ) == 0 )
-        SaveCopyInUndoList( aItem, UR_CHANGED );
-
-    if( Is_X_axis )
-        aItem->MirrorX( aItem->GetPosition().y );
-    else
-        aItem->MirrorY( aItem->GetPosition().x );
-
-    RefreshItem( aItem );
-    OnModify();
-}
-
-
 bool SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
 {
     // TODO: change image scale or more

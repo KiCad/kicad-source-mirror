@@ -1590,18 +1590,6 @@ bool EDA_DRAW_FRAME::GeneralControlKeyMovement( int aHotKey, wxPoint *aPos, bool
 }
 
 
-bool EDA_DRAW_FRAME::isBusy() const
-{
-    const BASE_SCREEN* screen = GetScreen();
-
-    if( !screen )
-        return false;
-
-    return ( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
-           || ( screen->m_BlockLocate.GetState() != STATE_NO_BLOCK );
-}
-
-
 void EDA_DRAW_FRAME::RedrawScreen( const wxPoint& aCenterPoint, bool aWarpPointer )
 {
     if( IsGalCanvasActive() )

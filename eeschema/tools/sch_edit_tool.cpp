@@ -60,6 +60,16 @@ TOOL_ACTION SCH_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm, AF_NONE );
 
+TOOL_ACTION SCH_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
+        _( "Mirror X" ), _( "Mirrors selected item(s) across the X axis" ),
+        mirror_h_xpm, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
+        _( "Mirror Y" ), _( "Mirrors selected item(s) across the Y axis" ),
+        mirror_v_xpm, AF_NONE );
+
 TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
         _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
@@ -285,7 +295,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     for( auto item : selection )
         item->ClearFlags( IS_MOVED );
 
-    //if( unselect || restore_state )
+    if( unselect || restore_state )
         m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
 
     if( restore_state )
@@ -392,30 +402,27 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
         case SCH_BITMAP_T:
             item->Rotate( item->GetPosition() );
+
             // The bitmap is cached in Opengl: clear the cache to redraw
             getView()->RecacheAllItems();
             break;
 
         case SCH_SHEET_T:
-        {
-            SCH_SHEET* sheet = static_cast<SCH_SHEET*>( item );
-
             // Rotate the sheet on itself. Sheets do not have a anchor point.
-            rotPoint = m_frame->GetNearestGridPosition( sheet->GetBoundingBox().Centre() );
+            rotPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
 
             if( clockwise )
             {
-                sheet->Rotate( rotPoint );
+                item->Rotate( rotPoint );
             }
             else
             {
-                sheet->Rotate( rotPoint );
-                sheet->Rotate( rotPoint );
-                sheet->Rotate( rotPoint );
+                item->Rotate( rotPoint );
+                item->Rotate( rotPoint );
+                item->Rotate( rotPoint );
             }
 
             break;
-        }
 
         default:
             break;
@@ -444,6 +451,151 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     if( !item->IsMoving() )
     {
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+
+        if( connections )
+            m_frame->TestDanglingEnds();
+
+        m_frame->OnModify();
+    }
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION           selection = selTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
+
+    if( selection.GetSize() == 0 )
+        return 0;
+
+    wxPoint   mirrorPoint;
+    bool      xAxis = ( aEvent.Matches( SCH_ACTIONS::mirrorX.MakeEvent() ) );
+    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( 0 ) );
+    bool      connections = false;
+    bool      moving = item->IsMoving();
+
+    if( selection.GetSize() == 1 )
+    {
+        if( !moving )
+            m_frame->SaveCopyInUndoList( item, UR_CHANGED );
+
+        switch( item->Type() )
+        {
+        case SCH_COMPONENT_T:
+        {
+            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+
+            if( xAxis )
+                component->SetOrientation( CMP_MIRROR_X );
+            else
+                component->SetOrientation( CMP_MIRROR_Y );
+
+            if( m_frame->GetAutoplaceFields() )
+                component->AutoAutoplaceFields( m_frame->GetScreen() );
+
+            break;
+        }
+
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+        {
+            SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
+            int       spin = textItem->GetLabelSpinStyle();
+
+            if( xAxis && spin % 2 )
+                textItem->SetLabelSpinStyle( ( spin + 2 ) % 4 );
+            else if ( !xAxis && !( spin % 2 ) )
+                textItem->SetLabelSpinStyle( ( spin + 2 ) % 4 );
+            break;
+        }
+
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+            if( xAxis )
+                item->MirrorX( item->GetPosition().y );
+            else
+                item->MirrorY( item->GetPosition().x );
+            break;
+
+        case SCH_FIELD_T:
+        {
+            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
+
+            if( xAxis )
+                field->SetVertJustify( (EDA_TEXT_VJUSTIFY_T)-field->GetVertJustify() );
+            else
+                field->SetHorizJustify( (EDA_TEXT_HJUSTIFY_T)-field->GetHorizJustify() );
+
+            // Now that we're re-justifying a field, they're no longer autoplaced.
+            if( item->GetParent()->Type() == SCH_COMPONENT_T )
+            {
+                SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
+                parent->ClearFieldsAutoplaced();
+            }
+
+            break;
+        }
+
+        case SCH_BITMAP_T:
+            if( xAxis )
+                item->MirrorX( item->GetPosition().y );
+            else
+                item->MirrorY( item->GetPosition().x );
+
+            // The bitmap is cached in Opengl: clear the cache to redraw
+            getView()->RecacheAllItems();
+            break;
+
+        case SCH_SHEET_T:
+            // Mirror the sheet on itself. Sheets do not have a anchor point.
+            mirrorPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
+
+            if( xAxis )
+                item->MirrorX( mirrorPoint.y );
+            else
+                item->MirrorY( mirrorPoint.x );
+
+            break;
+
+        default:
+            break;
+        }
+
+        connections = item->IsConnectable();
+        m_frame->RefreshItem( item );
+    }
+    else if( selection.GetSize() > 1 )
+    {
+        mirrorPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+
+        for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
+        {
+            item = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
+
+            if( !moving )
+                m_frame->SaveCopyInUndoList( item, UR_CHANGED, ii > 0 );
+
+            if( xAxis )
+                item->MirrorX( mirrorPoint.y );
+            else
+                item->MirrorY( mirrorPoint.x );
+
+            connections |= item->IsConnectable();
+            m_frame->RefreshItem( item );
+        }
+    }
+
+    if( !item->IsMoving() )
+    {
+        if( selection.IsHover() )
+            m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+
         if( connections )
             m_frame->TestDanglingEnds();
 
@@ -505,5 +657,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Remove,             SCH_ACTIONS::remove.MakeEvent() );
 }

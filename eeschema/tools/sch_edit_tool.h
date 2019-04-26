@@ -59,6 +59,7 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
     int Rotate( const TOOL_EVENT& aEvent );
+    int Mirror( const TOOL_EVENT& aEvent );
 
     /**
      * Function Remove()

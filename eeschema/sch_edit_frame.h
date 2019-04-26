@@ -810,12 +810,6 @@ private:
     void OnDragItem( wxCommandEvent& aEvent );
 
     /**
-     * Handle the #ID_SCH_MIRROR_X, #ID_SCH_MIRROR_Y, and #ID_SCH_ORIENT_NORMAL events
-     * used to orient schematic items and blocks.
-     */
-    void OnOrient( wxCommandEvent& aEvent );
-
-    /**
      * Handles the keyboard hotkey for unfolding a bus
      */
     void OnUnfoldBusHotkey( wxCommandEvent& event );
@@ -952,15 +946,6 @@ private:
     void DeleteConnection( bool DeleteFullConnection );
 
     /**
-     * Mirror a bitmap.
-     *
-     * @param aItem = the SCH_BITMAP item to mirror
-     * @param Is_X_axis = true to mirror relative to Horizontal axis
-     *                      false to mirror relative to vertical axis
-     */
-    void MirrorImage( SCH_BITMAP* aItem, bool Is_X_axis );
-
-    /**
      * Launches the "Edit Image" dialog to modify an image
      * @param aItem Pointer to the image item to modify
      * @return true if the image was modified, false if the user canceled
@@ -969,17 +954,6 @@ private:
 
     // Hierarchical Sheet & PinSheet
     void        InstallHierarchyFrame( wxPoint& pos );
-
-    /**
-     * Mirror a hierarchical sheet.
-     *
-     * Mirroring is performed around its center.
-     *
-     * @param aSheet = the SCH_SHEET to mirror
-     * @param aFromXaxis = true to mirror relative to Horizontal axis
-     *                     false to mirror relative to vertical axis
-     */
-    void MirrorSheet( SCH_SHEET* aSheet, bool aFromXaxis );
 
     /**
      * Function EditLine

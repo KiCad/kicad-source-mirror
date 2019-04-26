@@ -197,6 +197,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_SCH_ROTATE_COUNTERCLOCKWISE:
         return SCH_ACTIONS::rotateCCW.MakeEvent();
+
+    case ID_SCH_MIRROR_X:
+        return SCH_ACTIONS::mirrorX.MakeEvent();
+
+    case ID_SCH_MIRROR_Y:
+        return SCH_ACTIONS::mirrorY.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
