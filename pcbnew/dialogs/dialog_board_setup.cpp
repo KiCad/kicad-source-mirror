@@ -29,7 +29,7 @@
 #include "dialog_board_setup.h"
 
 DIALOG_BOARD_SETUP::DIALOG_BOARD_SETUP( PCB_EDIT_FRAME* aFrame ) :
-        PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings..." ) ),
+        PAGED_DIALOG( aFrame, _( "Board Setup" ), _( "Import Settings from Another Project..." ) ),
         m_frame( aFrame )
 {
     m_layers = new PANEL_SETUP_LAYERS( this, aFrame );
