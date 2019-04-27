@@ -726,7 +726,8 @@ void LIB_VIEW_FRAME::LoadSettings( wxConfigBase* aCfg )
 {
     EDA_DRAW_FRAME::LoadSettings( aCfg );
 
-    // Fetch grid settings from Symbol Editor
+    // Fetch display settings from Symbol Editor as the Symbol Viewer
+    // doesn't have its own config
     wxString symbolEditor = LIB_EDIT_FRAME_NAME;
     bool     btmp;
     COLOR4D  wtmp;
