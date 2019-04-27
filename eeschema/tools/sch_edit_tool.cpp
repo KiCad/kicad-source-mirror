@@ -38,6 +38,7 @@
 #include <sch_item_struct.h>
 #include <sch_edit_frame.h>
 #include <list_operations.h>
+#include <eeschema_id.h>
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
@@ -74,6 +75,18 @@ TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
 TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
         _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
+
+TOOL_ACTION SCH_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_REFERENCE ),
+        _( "Edit Reference..." ), _( "Displays reference field dialog" ), config_xpm );
+
+TOOL_ACTION SCH_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_VALUE ),
+        _( "Edit Value..." ), _( "Displays value field dialog" ), config_xpm );
+
+TOOL_ACTION SCH_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
+        _( "Edit Footprint..." ), _( "Displays footprint field dialog" ), config_xpm );
 
 TOOL_ACTION SCH_ACTIONS::remove( "eeschema.InteractiveEdit.remove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
@@ -952,6 +965,139 @@ int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
+{
+    static KICAD_T Nothing[]        = { EOT };
+    static KICAD_T CmpOrReference[] = { SCH_FIELD_LOCATE_REFERENCE_T, SCH_COMPONENT_T, EOT };
+    static KICAD_T CmpOrValue[]     = { SCH_FIELD_LOCATE_VALUE_T,     SCH_COMPONENT_T, EOT };
+    static KICAD_T CmpOrFootprint[] = { SCH_FIELD_LOCATE_FOOTPRINT_T, SCH_COMPONENT_T, EOT };
+
+    KICAD_T* filter = Nothing;
+
+    if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
+        filter = CmpOrReference;
+    else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
+        filter = CmpOrValue;
+    else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
+        filter = CmpOrFootprint;
+
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->RequestSelection( filter );
+    SCH_ITEM*           item = nullptr;
+
+    if( selection.GetSize() >= 1 )
+        item = (SCH_ITEM*)selection.GetItem( 0 );
+
+    if( !item )
+        return 0;
+
+    if( item->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+        if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
+            m_frame->EditComponentFieldText( component->GetField( REFERENCE ) );
+        else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
+            m_frame->EditComponentFieldText( component->GetField( VALUE ) );
+        else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
+            m_frame->EditComponentFieldText( component->GetField( FOOTPRINT ) );
+    }
+    else if( item->Type() == SCH_FIELD_T )
+    {
+        m_frame->EditComponentFieldText( (SCH_FIELD*) item );
+    }
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->RequestSelection( SCH_COLLECTOR::EditableItems );
+    SCH_ITEM*           item = nullptr;
+
+    if( selection.GetSize() >= 1 )
+        item = (SCH_ITEM*)selection.GetItem( 0 );
+
+    if( !item )
+        return 0;
+
+    switch( item->Type() )
+    {
+    case SCH_COMPONENT_T:
+        m_frame->EditComponent( (SCH_COMPONENT*) item );
+        break;
+
+    case SCH_SHEET_T:
+    {
+        bool doClearAnnotation;
+        bool doRefresh = false;
+        // Keep track of existing sheet paths. EditSheet() can modify this list
+        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+
+        doRefresh = m_frame->EditSheet( (SCH_SHEET*) item, g_CurrentSheet, &doClearAnnotation );
+
+        if( doClearAnnotation )     // happens when the current sheet load a existing file
+        {                           // we must clear "new" components annotation
+            SCH_SCREENS screensList( g_RootSheet );
+            // We clear annotation of new sheet paths here:
+            screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+            // Clear annotation of g_CurrentSheet itself, because its sheetpath
+            // is not a new path, but components managed by its sheet path must have
+            // their annotation cleared, becuase they are new:
+            ((SCH_SHEET*) item)->GetScreen()->ClearAnnotation( g_CurrentSheet );
+        }
+
+        if( doRefresh )
+            m_frame->GetCanvas()->Refresh();
+
+        break;
+    }
+
+    case SCH_SHEET_PIN_T:
+        m_frame->EditSheetPin( (SCH_SHEET_PIN*) item, true );
+        break;
+
+    case SCH_TEXT_T:
+    case SCH_LABEL_T:
+    case SCH_GLOBAL_LABEL_T:
+    case SCH_HIER_LABEL_T:
+        m_frame->EditSchematicText( (SCH_TEXT*) item );
+        break;
+
+    case SCH_FIELD_T:
+        m_frame->EditComponentFieldText( (SCH_FIELD*) item );
+        break;
+
+    case SCH_BITMAP_T:
+        if( m_frame->EditImage( (SCH_BITMAP*) item ) )
+        {
+            // The bitmap is cached in Opengl: clear the cache in case it has become invalid
+            getView()->RecacheAllItems();
+        }
+
+        break;
+
+    case SCH_LINE_T:
+        m_frame->EditLine( (SCH_LINE*) item, true );
+        break;
+
+    case SCH_MARKER_T:        // These items have no properties to edit
+    case SCH_JUNCTION_T:
+    case SCH_NO_CONNECT_T:
+        break;
+
+    default:                // Unexpected item
+        wxFAIL_MSG( wxString( "Cannot edit schematic item type " ) + item->GetClass() );
+    }
+
+    updateView( item );
+
+    return 0;
+}
+
+
 void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 {
     KICAD_T itemType = aItem->Type();
@@ -985,4 +1131,8 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Remove,             SCH_ACTIONS::remove.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editReference.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
 }

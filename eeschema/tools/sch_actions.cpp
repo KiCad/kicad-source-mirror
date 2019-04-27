@@ -211,6 +211,18 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_REPEAT_BUTT:
         return SCH_ACTIONS::repeatDrawItem.MakeEvent();
+
+    case ID_SCH_EDIT_ITEM:
+        return SCH_ACTIONS::properties.MakeEvent();
+
+    case ID_SCH_EDIT_COMPONENT_REFERENCE:
+        return SCH_ACTIONS::editReference.MakeEvent();
+
+    case ID_SCH_EDIT_COMPONENT_VALUE:
+        return SCH_ACTIONS::editValue.MakeEvent();
+
+    case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
+        return SCH_ACTIONS::editFootprint.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

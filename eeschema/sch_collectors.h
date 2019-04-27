@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2011-2015 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2011-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_collectors.h
- */
-
 #ifndef _SCH_COLLECTORS_H_
 #define _SCH_COLLECTORS_H_
 
@@ -42,90 +38,17 @@
 class SCH_COLLECTOR : public COLLECTOR
 {
 public:
-
-    /**
-     * A scan list for all schematic items.
-     */
     static const KICAD_T AllItems[];
-
-    /**
-     * A scan list for all editable schematic items.
-     */
     static const KICAD_T EditableItems[];
-
-    /**
-     * A scan list for a specific editable field: Value.
-     */
-    static const KICAD_T CmpFieldValueOnly[];
-
-    /**
-     * A scan list for a specific editable field: Reference.
-     */
-    static const KICAD_T CmpFieldReferenceOnly[];
-
-    /**
-     * A scan list for a specific editable field: Footprint.
-     */
-    static const KICAD_T CmpFieldFootprintOnly[];
-
-    /**
-     * A scan list for a specific editable field: Datasheet.
-     */
-    static const KICAD_T CmpFieldDatasheetOnly[];
-
-    /**
-     * A scan list for all movable schematic items.
-     */
     static const KICAD_T MovableItems[];
-
-    /**
-     * A scan list for all draggable schematic items.
-     */
     static const KICAD_T DraggableItems[];
-
-    /**
-     * A scan list for all rotatable schematic items.
-     */
     static const KICAD_T RotatableItems[];
-
-    /**
-     * A scan list for only parent schematic items.
-     */
-    static const KICAD_T ParentItems[];
-
-    /**
-     * A scan list for all schematic items except pins.
-     */
     static const KICAD_T AllItemsButPins[];
-
-    /**
-     * A scan list for schematic component items only.
-     */
     static const KICAD_T ComponentsOnly[];
-
-    /**
-     * A scan list for schematic sheet items only.
-     */
     static const KICAD_T SheetsOnly[];
-
-    /**
-     * A scan list for schematic sheet and sheet label items.
-     */
     static const KICAD_T SheetsAndSheetLabels[];
-
-    /**
-     * A scan list for schematic items that can be mirrored.
-     */
     static const KICAD_T OrientableItems[];
-
-    /**
-     * A scan list for schematic items that can be copied/duplicated.
-     */
     static const KICAD_T CopyableItems[];
-
-    /**
-     * A scan list for schematic items that react to a double-click.
-     */
     static const KICAD_T DoubleClickItems[];
 
     /**

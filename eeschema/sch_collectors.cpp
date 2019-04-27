@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_collectors.cpp
- */
-
 #include <macros.h>
 #include <trace_helpers.h>
 
@@ -92,27 +88,6 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     EOT
 };
 
-const KICAD_T SCH_COLLECTOR::CmpFieldValueOnly[] = {
-    SCH_FIELD_LOCATE_VALUE_T,
-    EOT
-};
-
-const KICAD_T SCH_COLLECTOR::CmpFieldReferenceOnly[] = {
-    SCH_FIELD_LOCATE_REFERENCE_T,
-    EOT
-};
-
-const KICAD_T SCH_COLLECTOR::CmpFieldFootprintOnly[] = {
-        SCH_FIELD_LOCATE_FOOTPRINT_T,
-        EOT
-};
-
-const KICAD_T SCH_COLLECTOR::CmpFieldDatasheetOnly[] = {
-        SCH_FIELD_LOCATE_DATASHEET_T,
-        EOT
-};
-
-
 const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -160,25 +135,6 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_BITMAP_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::ParentItems[] = {
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-    SCH_BITMAP_T,
     EOT
 };
 

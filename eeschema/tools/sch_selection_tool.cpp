@@ -30,6 +30,7 @@
 #include <sch_edit_frame.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
+#include <sch_field.h>
 #include <view/view.h>
 #include <view/view_controls.h>
 #include <view/view_group.h>
@@ -336,22 +337,38 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 
         return m_selection;
     }
-    else
+    else        // Trim an existing selection by aFilterList
     {
-        // Trim an existing selection by aFilterList
-
-        SELECTION originalSelection( m_selection );
-
-        for( EDA_ITEM* item : originalSelection )
+        for( int i = m_selection.GetSize() - 1; i >= 0; --i )
         {
-            KICAD_T matchType;
-            bool match = false;
+            SCH_ITEM* item = (SCH_ITEM*) m_selection.GetItem( i );
+            KICAD_T   matchType;
+            bool      match = false;
 
-            for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
-                match = ( item->Type() == matchType );
+            if( item->Type() == SCH_FIELD_T )
+            {
+                SCH_FIELD* field = (SCH_FIELD*) item;
+
+                for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
+                {
+                    switch( matchType )
+                    {
+                    case SCH_FIELD_LOCATE_REFERENCE_T: match = field->GetId() == REFERENCE; break;
+                    case SCH_FIELD_LOCATE_VALUE_T:     match = field->GetId() == VALUE;     break;
+                    case SCH_FIELD_LOCATE_FOOTPRINT_T: match = field->GetId() == FOOTPRINT; break;
+
+                    default: match = ( item->Type() == matchType ); break;
+                    }
+                }
+            }
+            else
+            {
+                for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
+                    match = ( item->Type() == matchType );
+            }
 
             if( !match )
-                toggleSelection( static_cast<SCH_ITEM*>( item ) );
+                toggleSelection( item );
         }
 
         return m_selection;
@@ -902,13 +919,13 @@ bool SCH_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
 void SCH_SELECTION_TOOL::setTransitions()
 {
-    Go( &SCH_SELECTION_TOOL::Main, SCH_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::ClearSelection, SCH_ACTIONS::selectionClear.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectItem, SCH_ACTIONS::selectItem.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectItems, SCH_ACTIONS::selectItems.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::UnselectItem, SCH_ACTIONS::unselectItem.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::UnselectItems, SCH_ACTIONS::unselectItems.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectionMenu, SCH_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::Main,             SCH_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::ClearSelection,   SCH_ACTIONS::selectionClear.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectItem,       SCH_ACTIONS::selectItem.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectItems,      SCH_ACTIONS::selectItems.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::UnselectItem,     SCH_ACTIONS::unselectItem.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::UnselectItems,    SCH_ACTIONS::unselectItems.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectionMenu,    SCH_ACTIONS::selectionMenu.MakeEvent() );
 }
 
 

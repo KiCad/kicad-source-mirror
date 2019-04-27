@@ -777,6 +777,7 @@ void SCH_SCREEN::SelectBlockItems()
 }
 
 
+// JEY TODO: obsolete once LibEdit is moved to modern toolset
 int SCH_SCREEN::UpdatePickList()
 {
     ITEM_PICKER picker;

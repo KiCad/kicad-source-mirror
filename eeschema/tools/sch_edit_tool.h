@@ -64,6 +64,9 @@ public:
     int Duplicate( const TOOL_EVENT& aEvent );
     int RepeatDrawItem( const TOOL_EVENT& aEvent );
 
+    int Properties( const TOOL_EVENT& aEvent );
+    int EditField( const TOOL_EVENT& aEvent );
+
     /**
      * Function Remove()
      *

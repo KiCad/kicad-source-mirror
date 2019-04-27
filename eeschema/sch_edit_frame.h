@@ -788,16 +788,6 @@ private:
     void OnAutoplaceFields( wxCommandEvent& aEvent );
 
     /**
-     * Handle the #ID_SCH_MOVE_ITEM event used to move schematic items.
-     */
-    void OnMoveItem( wxCommandEvent& aEvent );
-
-    /**
-     * Handle the #ID_SCH_EDIT_ITEM event used to edit schematic items.
-     */
-    void OnEditItem( wxCommandEvent& aEvent );
-
-    /**
      * Handle the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in Pcbnew
      * based on the sheet they are placed on.
      */
@@ -858,8 +848,6 @@ private:
     void OnPreferencesOptions( wxCommandEvent& event );
     void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
-    void OnSelectItem( wxCommandEvent& aEvent );
-
     /**
      * Command event handler for duplicating the item at the current location.
      */
@@ -906,9 +894,6 @@ private:
      */
     void NormalizeSchematicOnFirstLoad();
 
-    // Text, label, glabel
-    void EditSchematicText( SCH_TEXT* TextStruct );
-
     /**
      * Command event handler to change a text type to another one.
      *
@@ -918,18 +903,18 @@ private:
     void OnConvertTextType( wxCommandEvent& aEvent );
 
     /**
-     * Creates a new segment ( WIRE, BUS ) or terminates the current segment in progress.
-     *
-     * If the end of the current segment is on a different segment, place a junction if needed
-     * and terminates the command.  If the end of the current segment is on a pin, terminate
-     * the command.  In all other cases starts a new segment.
-     */
-    void BeginSegment( int type );
-
-    /**
      * Erase the last segment at the current mouse position.
      */
     void DeleteConnection( bool DeleteFullConnection );
+
+    // Hierarchical Sheet & PinSheet
+    void InstallHierarchyFrame( wxPoint& pos );
+
+public:
+    /**
+     * Launches the "Edit Text/Label" dialog
+     */
+    void EditSchematicText( SCH_TEXT* aText );
 
     /**
      * Launches the "Edit Image" dialog to modify an image
@@ -937,9 +922,6 @@ private:
      * @return true if the image was modified, false if the user canceled
      */
     bool EditImage( SCH_BITMAP* aItem );
-
-    // Hierarchical Sheet & PinSheet
-    void        InstallHierarchyFrame( wxPoint& pos );
 
     /**
      * Function EditLine
@@ -950,7 +932,6 @@ private:
      */
     int EditLine( SCH_LINE* aLine, bool aRedraw );
 
-public:
     /**
      * Edit an existing sheet or add a new sheet to the schematic.
      *
@@ -1069,16 +1050,16 @@ public:
      */
     void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
-private:
-    void OnSelectUnit( wxCommandEvent& aEvent );
-    void ConvertPart( SCH_COMPONENT* DrawComponent );
-
     /**
      * Display the edit field dialog to edit the parameters of \a aField.
      *
      * @param aField is a pointer to the SCH_FIELD object to be edited.
      */
     void EditComponentFieldText( SCH_FIELD* aField );
+
+private:
+    void OnSelectUnit( wxCommandEvent& aEvent );
+    void ConvertPart( SCH_COMPONENT* DrawComponent );
 
     /**
      * Paste a list of items from the block stack.

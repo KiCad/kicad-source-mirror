@@ -282,12 +282,9 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 #endif /* KICAD_SPICE */
 
     EVT_MENU( ID_CANCEL_CURRENT_COMMAND, SCH_EDIT_FRAME::OnCancelCurrentCommand )
-    EVT_MENU_RANGE( ID_SCH_EDIT_ITEM, ID_SCH_EDIT_COMPONENT_FOOTPRINT,
-                    SCH_EDIT_FRAME::OnEditItem )
     EVT_MENU_RANGE( ID_POPUP_START_RANGE, ID_POPUP_END_RANGE,
                     SCH_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU( ID_SCH_UNFOLD_BUS, SCH_EDIT_FRAME::OnUnfoldBusHotkey )
-    EVT_MENU( ID_POPUP_SCH_DISPLAYDOC_CMP, SCH_EDIT_FRAME::OnEditItem )
 
     EVT_MENU( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnSwitchCanvas )
@@ -302,9 +299,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::OnSelectUnit )
     EVT_MENU_RANGE( ID_POPUP_SCH_CHANGE_TYPE_TEXT, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
                     SCH_EDIT_FRAME::OnConvertTextType )
-
-    // Multple item selection context menu commands.
-    EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, SCH_EDIT_FRAME::OnSelectItem )
 
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
@@ -1234,21 +1228,6 @@ void SCH_EDIT_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
     GRSetDrawMode( aDC, GR_DEFAULT_DRAWMODE );
     GetScreen()->Draw( m_canvas, aDC );
     DrawWorkSheet( aDC, GetScreen(), GetDefaultLineThickness(), IU_PER_MILS, fileName );
-}
-
-
-void SCH_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-    int index = id - ID_SELECT_ITEM_START;
-
-    if( (id >= ID_SELECT_ITEM_START && id <= ID_SELECT_ITEM_END)
-        && (index >= 0 && index < m_collectedItems.GetCount()) )
-    {
-        SCH_ITEM* item = m_collectedItems[index];
-        m_canvas->SetAbortRequest( false );
-        GetScreen()->SetCurItem( item );
-    }
 }
 
 
