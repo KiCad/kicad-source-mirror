@@ -67,6 +67,7 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataToWindow()
     m_OptDisplayPadNumber->SetValue( displ_opts->m_DisplayPadNum );
     m_OptDisplayPadNoConn->SetValue( m_frame->IsElementVisible( LAYER_NO_CONNECTS ) );
     m_ShowNetNamesOption->SetSelection( displ_opts->m_DisplayNetNamesMode );
+    m_OptDisplayCurvedRatsnestLines->SetValue( displ_opts->m_DisplayRatsnestLinesCurved );
 
     m_galOptsPanel->TransferDataToWindow();
 
@@ -90,6 +91,8 @@ bool PANEL_PCBNEW_DISPLAY_OPTIONS::TransferDataFromWindow()
     m_frame->SetElementVisibility( LAYER_NO_CONNECTS, m_OptDisplayPadNoConn->GetValue() );
 
     displ_opts->m_DisplayNetNamesMode = m_ShowNetNamesOption->GetSelection();
+
+    displ_opts->m_DisplayRatsnestLinesCurved = m_OptDisplayCurvedRatsnestLines->GetValue();
 
     m_galOptsPanel->TransferDataFromWindow();
 

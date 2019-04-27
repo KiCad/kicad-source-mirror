@@ -643,6 +643,10 @@ void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
                  _( "Show Ratsnest" ),
                  _( "Show board ratsnest" ),
                  KiBitmap( general_ratsnest_xpm ), wxITEM_CHECK );
+    AddMenuItem( aParentMenu, ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
+                 _( "Curved Ratsnest Lines" ),
+                 _( "Show ratsnest with curved lines" ),
+                 KiBitmap( curved_ratsnest_xpm ), wxITEM_CHECK );
 
     aParentMenu->AppendSeparator();
 

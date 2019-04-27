@@ -387,6 +387,10 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
                                KiScaledBitmap( general_ratsnest_xpm, this ),
                                _( "Show board ratsnest" ), wxITEM_CHECK );
+    m_optionsToolBar->AddTool( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, wxEmptyString,
+                               KiScaledBitmap( curved_ratsnest_xpm, this ),
+                               _( "Show ratsnest with curved lines" ),
+                               wxITEM_CHECK );
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString, KiScaledBitmap( show_zone_xpm, this ),
@@ -415,10 +419,6 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
                                KiScaledBitmap( contrast_mode_xpm, this ),
                                _( "Enable high contrast display mode" ),
-                               wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, wxEmptyString,
-                               KiScaledBitmap( curved_ratsnest_xpm, this ),
-                               _( "Show ratsnest lines with curved lines" ),
                                wxITEM_CHECK );
 
     // Tools to show/hide toolbars:
@@ -842,11 +842,9 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     }
 
     case ID_TB_OPTIONS_CURVED_RATSNEST_LINES:
-    {
         displ_opts->m_DisplayRatsnestLinesCurved = !state;
         m_canvas->Refresh();
         break;
-    }
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
         m_show_microwave_tools = state;
