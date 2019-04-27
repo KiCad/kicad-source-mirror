@@ -1112,7 +1112,7 @@ void PCB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
 void PCB_EDIT_FRAME::ToPlotter( wxCommandEvent& event )
 {
     PCB_PLOT_PARAMS plotSettings = GetPlotSettings();
-wxMessageBox(wxString::Format("ToPlotter id %d (%d)",event.GetId(),ID_GEN_PLOT_GERBER ) );
+
     switch( event.GetId() )
     {
     case ID_GEN_PLOT_GERBER: plotSettings.SetFormat( PLOT_FORMAT_GERBER );   break;
