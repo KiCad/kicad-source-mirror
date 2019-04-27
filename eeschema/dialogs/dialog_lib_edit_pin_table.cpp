@@ -628,8 +628,10 @@ void DIALOG_LIB_EDIT_PIN_TABLE::OnSize( wxSizeEvent& event )
     if( m_initialized && m_width != new_size )
     {
         adjustGridColumns( new_size );
-        event.Skip();
     }
+
+    // Always propagate for a grid repaint (needed if the height changes, as well as width)
+    event.Skip();
 }
 
 
