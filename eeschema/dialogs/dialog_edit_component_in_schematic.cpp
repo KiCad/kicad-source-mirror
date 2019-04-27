@@ -725,8 +725,10 @@ void DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnSizeGrid( wxSizeEvent& event )
     if( m_width != new_size )
     {
         AdjustGridColumns( new_size );
-        event.Skip();
     }
+
+    // Always propagate for a grid repaint (needed if the height changes, as well as width)
+    event.Skip();
 }
 
 
