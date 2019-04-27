@@ -113,6 +113,7 @@ public:
 
     // Editing
     static TOOL_ACTION move;
+    static TOOL_ACTION drag;
     static TOOL_ACTION duplicate;
     static TOOL_ACTION repeatDrawItem;
     static TOOL_ACTION rotateCW;

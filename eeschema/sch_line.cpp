@@ -327,12 +327,6 @@ void SCH_LINE::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset )
     wxPoint start = m_start;
     wxPoint end = m_end;
 
-    if( ( m_Flags & STARTPOINT ) == 0 )
-        start += offset;
-
-    if( ( m_Flags & ENDPOINT ) == 0 )
-        end += offset;
-
     GRLine( panel->GetClipBox(), DC, start.x, start.y, end.x, end.y, width, color,
             getwxPenStyle( (PlotDashType) GetLineStyle() ) );
 }
@@ -556,34 +550,6 @@ bool SCH_LINE::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
     }
 
     return ( previousStartState != m_startIsDangling ) || ( previousEndState != m_endIsDangling );
-}
-
-
-bool SCH_LINE::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    if( aRect.Contains( m_start ) && aRect.Contains( m_end ) )
-    {
-        SetFlags( SELECTED );
-        ClearFlags( STARTPOINT | ENDPOINT );
-    }
-    else if( aRect.Contains( m_start ) )
-    {
-        ClearFlags( STARTPOINT );
-        SetFlags( SELECTED | ENDPOINT );
-    }
-    else if( aRect.Contains( m_end ) )
-    {
-        ClearFlags( ENDPOINT );
-        SetFlags( SELECTED | STARTPOINT );
-    }
-    else
-    {
-        ClearFlags( SELECTED | STARTPOINT | ENDPOINT );
-    }
-
-    return previousState != IsSelected();
 }
 
 

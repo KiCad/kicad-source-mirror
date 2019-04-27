@@ -95,7 +95,7 @@
         break;
 
     case ID_POPUP_SCH_DELETE_CMP:
-    case ID_POPUP_SCH_DELETE:
+    case ID_SCH_DELETE:
         // Stop the current command (if any) but keep the current tool
         m_canvas->EndMouseCapture();
         break;
@@ -188,7 +188,7 @@
         break;
 
     case ID_POPUP_SCH_DELETE_CMP:
-    case ID_POPUP_SCH_DELETE:
+    case ID_SCH_DELETE:
         if( item == NULL )
             break;
 
@@ -255,18 +255,6 @@
         }
         break;
 
-    case ID_POPUP_PLACE_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( nullptr );
-        break;
-
-    case ID_POPUP_ZOOM_BLOCK:
-        screen->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        break;
-
     case ID_POPUP_DELETE_BLOCK:
         if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
             break;
@@ -276,26 +264,6 @@
         screen->m_BlockLocate.SetMessageBlock( this );
         HandleBlockEnd( nullptr );
         SetSheetNumberAndCount();
-        break;
-
-    case ID_POPUP_DUPLICATE_BLOCK:
-        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
-            break;
-
-        m_canvas->MoveCursorToCrossHair();
-        screen->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_DRAG_BLOCK:
-        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
-            break;
-
-        m_canvas->MoveCursorToCrossHair();
-        screen->m_BlockLocate.SetCommand( BLOCK_DRAG );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:
@@ -562,78 +530,6 @@ void SCH_EDIT_FRAME::OnEditItem( wxCommandEvent& aEvent )
 
     if( item->GetEditFlags() == 0 )
         screen->SetCurItem( nullptr );
-}
-
-
-void SCH_EDIT_FRAME::OnDragItem( wxCommandEvent& aEvent )
-{
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_SCREEN*         screen = GetScreen();
-    SCH_ITEM*           item = screen->GetCurItem();
-
-    // The easiest way to handle a menu or a hot key drag command
-    // is to simulate a block drag command
-    //
-    // When a drag item is requested, some items use a BLOCK_DRAG_ITEM drag type
-    // an some items use a BLOCK_DRAG drag type  (mainly a junction)
-    // a BLOCK_DRAG collects all items in a block (here a 2x2 rect centered on the cursor)
-    // and BLOCK_DRAG_ITEM drag only the selected item
-    BLOCK_COMMAND_T dragType = BLOCK_DRAG_ITEM;
-
-    if( item == NULL )
-    {
-        // If we didn't get here by a hot key, then something has gone wrong.
-        if( aEvent.GetInt() == 0 )
-            return;
-
-        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
-
-        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
-
-        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::DraggableItems );
-
-        // Exit if no item found at the current location or the item is already being edited.
-        if( item == NULL || item->GetEditFlags() != 0 )
-            return;
-
-        // When a junction or a node is found, a BLOCK_DRAG is better
-        if( m_collectedItems.IsCorner() || m_collectedItems.IsNode( false )
-            || m_collectedItems.IsDraggableJunction() )
-        {
-            dragType = BLOCK_DRAG;
-        }
-    }
-
-    switch( item->Type() )
-    {
-    case SCH_BUS_BUS_ENTRY_T:
-    case SCH_BUS_WIRE_ENTRY_T:
-    case SCH_LINE_T:
-    case SCH_JUNCTION_T:
-    case SCH_COMPONENT_T:
-    case SCH_LABEL_T:
-    case SCH_GLOBAL_LABEL_T:
-    case SCH_HIER_LABEL_T:
-    case SCH_SHEET_T:
-    case SCH_TEXT_T:
-        m_canvas->MoveCursorToCrossHair();
-
-        if( screen->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-        {
-            if( !HandleBlockBegin( nullptr, dragType, GetCrossHairPosition() ) )
-                break;
-
-            // Give a non null size to the search block:
-            screen->m_BlockLocate.Inflate( 1 );
-            screen->m_BlockLocate.SetLastCursorPosition( GetCrossHairPosition() );
-            HandleBlockEnd( nullptr );
-        }
-
-        break;
-
-    default:
-        wxFAIL_MSG( wxString( "Cannot drag schematic item type " ) + item->GetClass() );
-    }
 }
 
 

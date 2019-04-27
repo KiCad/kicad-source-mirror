@@ -175,12 +175,12 @@ static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 
 static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE_COMPONENT_OR_ITEM, 'M',
-                          ID_SCH_MOVE_ITEM );
+                          ID_SCH_MOVE );
 
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL,
-                                   ID_POPUP_SCH_DUPLICATE );
+                                   ID_SCH_DUPLICATE );
 
-static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG_ITEM );
+static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G', ID_SCH_DRAG );
 static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );

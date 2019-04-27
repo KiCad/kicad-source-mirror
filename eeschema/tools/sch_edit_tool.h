@@ -72,7 +72,12 @@ public:
     int Remove( const TOOL_EVENT& aEvent );
 
 private:
-    void moveItem( SCH_ITEM* aItem, VECTOR2I delta );
+    void moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
+
+    ///> Selects additional items for a drag operation.
+    ///> Connected items with no wire are selected (as there is no wire to adjust for the drag).
+    ///> Connected wires are selected with any un-connected ends flagged (STARTPOINT or ENDPOINT).
+    void selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPoint );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
@@ -98,7 +103,7 @@ private:
     TOOL_MENU             m_menu;
 
     ///> Flag determining if anything is being dragged right now
-    bool                  m_dragging;
+    bool                  m_moveInProgress;
 
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).

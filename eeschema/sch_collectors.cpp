@@ -119,7 +119,7 @@ const KICAD_T SCH_COLLECTOR::MovableItems[] = {
     SCH_NO_CONNECT_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
-//    SCH_LINE_T,
+    SCH_LINE_T,
     SCH_BITMAP_T,
     SCH_TEXT_T,
     SCH_LABEL_T,

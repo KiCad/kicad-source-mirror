@@ -164,8 +164,6 @@ public:
 
     bool IsDangling() const override { return m_startIsDangling || m_endIsDangling; }
 
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
-
     bool IsConnectable() const override;
 
     void GetConnectionPoints(std::vector< wxPoint >& aPoints ) const override;

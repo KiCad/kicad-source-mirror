@@ -179,11 +179,13 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         return SCH_ACTIONS::deleteItemCursor.MakeEvent();
 
-    case ID_POPUP_MOVE_BLOCK:
-    case ID_SCH_MOVE_ITEM:
+    case ID_SCH_MOVE:
         return SCH_ACTIONS::move.MakeEvent();
 
-    case ID_POPUP_SCH_DELETE:
+    case ID_SCH_DRAG:
+        return SCH_ACTIONS::drag.MakeEvent();
+
+    case ID_SCH_DELETE:
         return SCH_ACTIONS::remove.MakeEvent();
 
     case ID_SIM_PROBE:
@@ -204,7 +206,7 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SCH_MIRROR_Y:
         return SCH_ACTIONS::mirrorY.MakeEvent();
 
-    case ID_POPUP_SCH_DUPLICATE:
+    case ID_SCH_DUPLICATE:
         return SCH_ACTIONS::duplicate.MakeEvent();
 
     case ID_REPEAT_BUTT:
