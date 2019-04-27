@@ -918,7 +918,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL*    selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    std::vector<SCH_ITEM*> lockedItems;
+    std::vector<SCH_ITEM*> items;
 
     // get a copy instead of reference (we're going to clear the selection before removing items)
     SELECTION selectionCopy = selTool->RequestSelection();
@@ -932,15 +932,18 @@ int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     for( unsigned ii = 0; ii < selectionCopy.GetSize(); ii++ )
     {
         SCH_ITEM* item = static_cast<SCH_ITEM*>( selectionCopy.GetItem( ii ) );
-        bool      itemHasConnections = item->IsConnectable();
 
-        m_frame->GetScreen()->SetCurItem( nullptr );
-        m_frame->SetRepeatItem( nullptr );
+        // Junctions, in particular, may have already been deleted if deleting wires made
+        // them redundant
+        if( item->GetEditFlags() & STRUCT_DELETED )
+            continue;
+
         m_frame->DeleteItem( item, ii > 0 );
-
-        if( itemHasConnections )
-            m_frame->TestDanglingEnds();
     }
+
+    m_frame->GetScreen()->SetCurItem( nullptr );
+    m_frame->SetRepeatItem( nullptr );
+    m_frame->TestDanglingEnds();
 
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();

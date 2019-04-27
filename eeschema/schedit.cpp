@@ -76,7 +76,6 @@
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
     case ID_POPUP_DRAG_BLOCK:
@@ -187,21 +186,6 @@
 
         break;
 
-    case ID_POPUP_SCH_DELETE_CMP:
-    case ID_SCH_DELETE:
-        if( item == NULL )
-            break;
-
-        DeleteItem( item );
-        SchematicCleanUp( true );
-        screen->SetCurItem( NULL );
-        SetRepeatItem( NULL );
-        TestDanglingEnds();
-        SetSheetNumberAndCount();
-        GetCanvas()->Refresh();
-        OnModify();
-        break;
-
     case ID_POPUP_SCH_CLEANUP_SHEET:
         if( item != NULL && item->Type() == SCH_SHEET_T )
         {
@@ -253,17 +237,6 @@
             g_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
-        break;
-
-    case ID_POPUP_DELETE_BLOCK:
-        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
-            break;
-
-        m_canvas->MoveCursorToCrossHair();
-        screen->m_BlockLocate.SetCommand( BLOCK_DELETE );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        SetSheetNumberAndCount();
         break;
 
     case ID_POPUP_SCH_GETINFO_MARKER:

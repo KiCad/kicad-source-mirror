@@ -431,9 +431,8 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
 
-            // Construct an EDA_RECT to determine BOARD_ITEM selection
-            EDA_RECT selectionRect( wxPoint( area.GetOrigin().x, area.GetOrigin().y ),
-                                    wxSize( width, height ) );
+            // Construct an EDA_RECT to determine SCH_ITEM selection
+            EDA_RECT selectionRect( (wxPoint)area.GetOrigin(), wxSize( width, height ) );
 
             selectionRect.Normalize();
 
@@ -739,6 +738,9 @@ void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
 
 void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 {
+    if( aItem->IsSelected() )
+        return;
+
     highlight( aItem, SELECTED, &m_selection );
 
     if( m_frame )
@@ -759,6 +761,9 @@ void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 
 void SCH_SELECTION_TOOL::unselect( SCH_ITEM* aItem )
 {
+    if( !aItem->IsSelected() )
+        return;
+
     unhighlight( aItem, SELECTED, &m_selection );
 
     if( m_frame && m_frame->GetScreen()->GetCurItem() == aItem )
