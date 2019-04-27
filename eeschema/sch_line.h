@@ -122,6 +122,8 @@ public:
     int GetPenSize() const override;
 
     void Move( const wxPoint& aMoveVector ) override;
+    void MoveStart( const wxPoint& aMoveVector );
+    void MoveEnd( const wxPoint& aMoveVector );
 
     void MirrorX( int aXaxis_position ) override;
 

@@ -156,13 +156,28 @@ int SCH_LINE::GetLineStyleInternalId( const wxString& aStyleName )
 
 void SCH_LINE::Move( const wxPoint& aOffset )
 {
-    if( (m_Flags & STARTPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
+    if( aOffset != wxPoint( 0, 0 ) )
+    {
+        m_start += aOffset;
+        m_end += aOffset;
+        SetModified();
+    }
+}
+
+
+void SCH_LINE::MoveStart( const wxPoint& aOffset )
+{
+    if( aOffset != wxPoint( 0, 0 ) )
     {
         m_start += aOffset;
         SetModified();
     }
+}
 
-    if( (m_Flags & ENDPOINT) == 0 && aOffset != wxPoint( 0, 0 ) )
+
+void SCH_LINE::MoveEnd( const wxPoint& aOffset )
+{
+    if( aOffset != wxPoint( 0, 0 ) )
     {
         m_end += aOffset;
         SetModified();
