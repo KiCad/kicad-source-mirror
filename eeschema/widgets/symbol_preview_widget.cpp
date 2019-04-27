@@ -38,8 +38,11 @@ SYMBOL_PREVIEW_WIDGET::SYMBOL_PREVIEW_WIDGET( wxWindow* aParent, KIWAY& aKiway,
     m_preview( nullptr ), m_status( nullptr ), m_statusSizer( nullptr ), m_previewItem( nullptr )
 {
     wxString eeschemaFrameKey( SCH_EDIT_FRAME_NAME );
-    auto eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
-    m_galDisplayOptions.ReadAppConfig( *eeschemaConfig, eeschemaFrameKey );
+
+    std::unique_ptr<wxConfigBase> eeschemaConfig = GetNewConfig( Pgm().App().GetAppName() );
+    wxConfigBase&                 commonConfig = *Pgm().CommonSettings();
+
+    m_galDisplayOptions.ReadConfig( commonConfig, *eeschemaConfig, eeschemaFrameKey, this );
 
     EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = aCanvasType;
 
