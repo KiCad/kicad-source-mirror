@@ -24,6 +24,7 @@
 #include <gal/gal_display_options.h>
 
 #include <wx/config.h>
+#include <wx/log.h>
 
 #include <config_map.h>
 #include <dpi_scaling.h>
@@ -50,6 +51,16 @@ static const UTIL::CFG_MAP<KIGFX::GRID_STYLE> gridStyleConfigVals =
 };
 
 
+/**
+ * Flag to enable GAL_DISPLAY_OPTIONS loggin
+ *
+ * Use "KICAD_GAL_DISPLAY_OPTIONS" to enable.
+ *
+ * @ingroup trace_env_vars
+ */
+static const wxChar* traceGalDispOpts = wxT( "KICAD_GAL_DISPLAY_OPTIONS" );
+
+
 GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
     : gl_antialiasing_mode( OPENGL_ANTIALIASING_MODE::NONE ),
       cairo_antialiasing_mode( CAIRO_ANTIALIASING_MODE::NONE ),
@@ -66,6 +77,8 @@ GAL_DISPLAY_OPTIONS::GAL_DISPLAY_OPTIONS()
 void GAL_DISPLAY_OPTIONS::ReadAppConfig( wxConfigBase& aCfg, const wxString& aBaseName )
 {
     const wxString baseName = aBaseName + GAL_DISPLAY_OPTIONS_KEY;
+
+    wxLogTrace( traceGalDispOpts, "Reading options with base name '%s'", baseName );
 
     long readLong; // Temp value buffer
 
@@ -85,6 +98,8 @@ void GAL_DISPLAY_OPTIONS::ReadAppConfig( wxConfigBase& aCfg, const wxString& aBa
 
 void GAL_DISPLAY_OPTIONS::ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindow* aWindow )
 {
+    wxLogTrace( traceGalDispOpts, "Reading common config" );
+
     int temp;
     aCommonConfig.Read(
             GAL_ANTIALIASING_MODE_KEY, &temp, (int) KIGFX::OPENGL_ANTIALIASING_MODE::NONE );
@@ -106,6 +121,8 @@ void GAL_DISPLAY_OPTIONS::ReadCommonConfig( wxConfigBase& aCommonConfig, wxWindo
 void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase& aCommonConfig, wxConfigBase& aAppConfig,
         const wxString& aBaseCfgName, wxWindow* aWindow )
 {
+    wxLogTrace( traceGalDispOpts, "Reading common and app config (%s)", aBaseCfgName );
+
     ReadAppConfig( aAppConfig, aBaseCfgName );
 
     ReadCommonConfig( aCommonConfig, aWindow );
@@ -115,6 +132,8 @@ void GAL_DISPLAY_OPTIONS::ReadConfig( wxConfigBase& aCommonConfig, wxConfigBase&
 void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase& aCfg, const wxString& aBaseName )
 {
     const wxString baseName = aBaseName + GAL_DISPLAY_OPTIONS_KEY;
+
+    wxLogTrace( traceGalDispOpts, "Writing app config (%s)", baseName );
 
     aCfg.Write( baseName + GalGridStyleConfig,
                  UTIL::GetConfigForVal( gridStyleConfigVals, m_gridStyle ) );
@@ -129,5 +148,7 @@ void GAL_DISPLAY_OPTIONS::WriteConfig( wxConfigBase& aCfg, const wxString& aBase
 
 void GAL_DISPLAY_OPTIONS::NotifyChanged()
 {
+    wxLogTrace( traceGalDispOpts, "Change notification" );
+
     Notify( &GAL_DISPLAY_OPTIONS_OBSERVER::OnGalDisplayOptionsChanged, *this );
 }
