@@ -68,11 +68,14 @@ public:
     int EditField( const TOOL_EVENT& aEvent );
 
     /**
-     * Function Remove()
+     * Function DoDelete()
      *
      * Deletes the selected items, or the item under the cursor.
      */
-    int Remove( const TOOL_EVENT& aEvent );
+    int DoDelete( const TOOL_EVENT& aEvent );
+
+    ///> Runs the deletion tool.
+    int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
     void moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag );

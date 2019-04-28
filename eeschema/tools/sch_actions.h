@@ -124,15 +124,15 @@ public:
     static TOOL_ACTION editReference;
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
-    static TOOL_ACTION remove;
+    static TOOL_ACTION doDelete;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
     static TOOL_ACTION addGlobalLabel;
 
     /// Clipboard
-    static TOOL_ACTION copyToClipboard;
-    static TOOL_ACTION pasteFromClipboard;
-    static TOOL_ACTION cutToClipboard;
+    static TOOL_ACTION cut;
+    static TOOL_ACTION copy;
+    static TOOL_ACTION paste;
 
     // Miscellaneous
     static TOOL_ACTION switchCursor;

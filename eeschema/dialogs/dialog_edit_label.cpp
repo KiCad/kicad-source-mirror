@@ -300,12 +300,8 @@ bool DIALOG_LABEL_EDITOR::TransferDataFromWindow()
     wxString text;
 
     /* save old text in undo list if not already in edit */
-    /* or the label to be edited is part of a block */
-    if( m_CurrentText->GetEditFlags() == 0
-            || m_Parent->GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-    {
+    if( m_CurrentText->GetEditFlags() == 0 )
         m_Parent->SaveCopyInUndoList( m_CurrentText, UR_CHANGED );
-    }
 
     m_Parent->GetCanvas()->Refresh();
 

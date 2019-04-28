@@ -26,6 +26,7 @@
 #include <memory>
 #include <sch_io_mgr.h>
 #include <stack>
+#include <general.h>
 
 
 class KIWAY;
@@ -41,6 +42,7 @@ class SCH_TEXT;
 class SCH_COMPONENT;
 class SCH_FIELD;
 class PROPERTIES;
+class SELECTION;
 class SCH_LEGACY_PLUGIN_CACHE;
 class LIB_PART;
 class PART_LIB;
@@ -96,58 +98,64 @@ public:
     int GetModifyHash() const override;
 
     SCH_SHEET* Load( const wxString& aFileName, KIWAY* aKiway,
-                     SCH_SHEET* aAppendToMe = NULL, const PROPERTIES* aProperties = NULL ) override;
+                     SCH_SHEET* aAppendToMe = nullptr, 
+                     const PROPERTIES* aProperties = nullptr ) override;
+
+    void LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen,
+                      int version = EESCHEMA_VERSION );
 
     void Save( const wxString& aFileName, SCH_SCREEN* aScreen, KIWAY* aKiway,
-               const PROPERTIES* aProperties = NULL ) override;
+               const PROPERTIES* aProperties = nullptr ) override;
 
     void Format( SCH_SCREEN* aScreen );
 
+    void Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter );
+
     size_t GetSymbolLibCount( const wxString&   aLibraryPath,
-                              const PROPERTIES* aProperties = NULL ) override;
+                              const PROPERTIES* aProperties = nullptr ) override;
     void EnumerateSymbolLib( wxArrayString&    aAliasNameList,
                              const wxString&   aLibraryPath,
-                             const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = nullptr ) override;
     void EnumerateSymbolLib( std::vector<LIB_ALIAS*>& aAliasList,
                              const wxString&   aLibraryPath,
-                             const PROPERTIES* aProperties = NULL ) override;
+                             const PROPERTIES* aProperties = nullptr ) override;
     LIB_ALIAS* LoadSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                           const PROPERTIES* aProperties = NULL ) override;
+                           const PROPERTIES* aProperties = nullptr ) override;
     void SaveSymbol( const wxString& aLibraryPath, const LIB_PART* aSymbol,
-                     const PROPERTIES* aProperties = NULL ) override;
+                     const PROPERTIES* aProperties = nullptr ) override;
     void DeleteAlias( const wxString& aLibraryPath, const wxString& aAliasName,
-                      const PROPERTIES* aProperties = NULL ) override;
+                      const PROPERTIES* aProperties = nullptr ) override;
     void DeleteSymbol( const wxString& aLibraryPath, const wxString& aAliasName,
-                       const PROPERTIES* aProperties = NULL ) override;
+                       const PROPERTIES* aProperties = nullptr ) override;
     void CreateSymbolLib( const wxString& aLibraryPath,
-                          const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr ) override;
     bool DeleteSymbolLib( const wxString& aLibraryPath,
-                          const PROPERTIES* aProperties = NULL ) override;
-    void SaveLibrary( const wxString& aLibraryPath, const PROPERTIES* aProperties = NULL ) override;
+                          const PROPERTIES* aProperties = nullptr ) override;
+    void SaveLibrary( const wxString& aLibraryPath,
+                      const PROPERTIES* aProperties = nullptr ) override;
 
     bool CheckHeader( const wxString& aFileName ) override;
     bool IsSymbolLibWritable( const wxString& aLibraryPath ) override;
 
     const wxString& GetError() const override { return m_error; }
 
-    static LIB_PART * ParsePart( LINE_READER& reader, int aMajorVersion = 0,
-                                 int aMinorVersion = 0 );
-    static void FormatPart( LIB_PART* part, OUTPUTFORMATTER& formatter );
+    static LIB_PART* ParsePart( LINE_READER& aReader, int majorVersion = 0, int minorVersion = 0 );
+    static void FormatPart( LIB_PART* aPart, OUTPUTFORMATTER& aFormatter );
 
 private:
     void loadHierarchy( SCH_SHEET* aSheet );
-    void loadHeader( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
-    void loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
+    void loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen );
+    void loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScreen );
     void loadFile( const wxString& aFileName, SCH_SCREEN* aScreen );
-    SCH_SHEET* loadSheet( FILE_LINE_READER& aReader );
-    SCH_BITMAP* loadBitmap( FILE_LINE_READER& aReader );
-    SCH_JUNCTION* loadJunction( FILE_LINE_READER& aReader );
-    SCH_NO_CONNECT* loadNoConnect( FILE_LINE_READER& aReader );
-    SCH_LINE* loadWire( FILE_LINE_READER& aReader );
-    SCH_BUS_ENTRY_BASE* loadBusEntry( FILE_LINE_READER& aReader );
-    SCH_TEXT* loadText( FILE_LINE_READER& aReader );
-    SCH_COMPONENT* loadComponent( FILE_LINE_READER& aReader );
-    std::shared_ptr< BUS_ALIAS > loadBusAlias( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen );
+    SCH_SHEET* loadSheet( LINE_READER& aReader );
+    SCH_BITMAP* loadBitmap( LINE_READER& aReader );
+    SCH_JUNCTION* loadJunction( LINE_READER& aReader );
+    SCH_NO_CONNECT* loadNoConnect( LINE_READER& aReader );
+    SCH_LINE* loadWire( LINE_READER& aReader );
+    SCH_BUS_ENTRY_BASE* loadBusEntry( LINE_READER& aReader );
+    SCH_TEXT* loadText( LINE_READER& aReader );
+    SCH_COMPONENT* loadComponent( LINE_READER& aReader );
+    std::shared_ptr<BUS_ALIAS> loadBusAlias( LINE_READER& aReader, SCH_SCREEN* aScreen );
 
     void saveComponent( SCH_COMPONENT* aComponent );
     void saveField( SCH_FIELD* aField );
@@ -158,28 +166,28 @@ private:
     void saveBusEntry( SCH_BUS_ENTRY_BASE* aBusEntry );
     void saveLine( SCH_LINE* aLine );
     void saveText( SCH_TEXT* aText );
-    void saveBusAlias( std::shared_ptr< BUS_ALIAS > aAlias );
+    void saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias );
 
     void cacheLib( const wxString& aLibraryFileName );
     bool writeDocFile( const PROPERTIES* aProperties );
     bool isBuffering( const PROPERTIES* aProperties );
 
 protected:
-    int               m_version;    ///< Version of file being loaded.
+    int                  m_version;    ///< Version of file being loaded.
 
     /** For throwing exceptions or errors on partial schematic loads. */
-    wxString          m_error;
+    wxString             m_error;
 
-    wxString          m_path;       ///< Root project path for loading child sheets.
-    std::stack<wxString>  m_currentPath;    ///< Stack to maintain nested sheet paths
-    const PROPERTIES* m_props;      ///< Passed via Save() or Load(), no ownership, may be NULL.
-    KIWAY*            m_kiway;      ///< Required for path to legacy component libraries.
-    SCH_SHEET*        m_rootSheet;  ///< The root sheet of the schematic being loaded..
-    FILE_OUTPUTFORMATTER* m_out;    ///< The output formatter for saving SCH_SCREEN objects.
+    wxString             m_path;       ///< Root project path for loading child sheets.
+    std::stack<wxString> m_currentPath;///< Stack to maintain nested sheet paths
+    const PROPERTIES*    m_props;      ///< Passed via Save() or Load(), no ownership, may be nullptr.
+    KIWAY*               m_kiway;      ///< Required for path to legacy component libraries.
+    SCH_SHEET*           m_rootSheet;  ///< The root sheet of the schematic being loaded..
+    OUTPUTFORMATTER*     m_out;        ///< The output formatter for saving SCH_SCREEN objects.
     SCH_LEGACY_PLUGIN_CACHE* m_cache;
 
     /// initialize PLUGIN like a constructor would.
-    void init( KIWAY* aKiway, const PROPERTIES* aProperties = NULL );
+    void init( KIWAY* aKiway, const PROPERTIES* aProperties = nullptr );
 };
 
 #endif  // _SCH_LEGACY_PLUGIN_H_

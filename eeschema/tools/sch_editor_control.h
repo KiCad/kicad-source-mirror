@@ -76,10 +76,14 @@ public:
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
-    ///> Runs the deletion tool.
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    ///> Clipboard support.
+    int Cut( const TOOL_EVENT& aEvent );
+    int Copy( const TOOL_EVENT& aEvent );
+    int Paste( const TOOL_EVENT& aEvent );
 
 private:
+    ///> copy selection to clipboard
+    bool doCopy();
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

@@ -207,8 +207,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( GetToolId() == ID_NO_TOOL_SELECTED && m_blockItems.GetCount() > 0 )
        {
             msg = AddHotkeyName( _( "&Paste" ), g_Schematic_Hotkeys_Descr, HK_EDIT_PASTE );
-            AddMenuItem( PopMenu, wxID_PASTE, msg,
-                        _( "Pastes item(s) from the Clipboard" ),
+            AddMenuItem( PopMenu, wxID_PASTE, msg, _( "Pastes item(s) from the Clipboard" ),
                         KiBitmap( paste_xpm ) );
             PopMenu->AppendSeparator();
         }
@@ -216,8 +215,7 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         if( g_CurrentSheet->Last() != g_RootSheet )
         {
             msg = AddHotkeyName( _( "Leave Sheet" ), g_Schematic_Hotkeys_Descr, HK_LEAVE_SHEET );
-            AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, msg,
-                         KiBitmap( leave_sheet_xpm ) );
+            AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, msg, KiBitmap( leave_sheet_xpm ) );
             PopMenu->AppendSeparator();
         }
 
@@ -419,7 +417,7 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
                              HK_DUPLICATE );
         AddMenuItem( PopMenu, ID_SCH_DUPLICATE, msg, KiBitmap( duplicate_xpm ) );
         msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hotkeys_Descr, HK_DELETE );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CMP, msg, KiBitmap( delete_xpm ) );
+        AddMenuItem( PopMenu, ID_SCH_DELETE, msg, KiBitmap( delete_xpm ) );
     }
 
     msg = AddHotkeyName( _( "Autoplace Fields" ), g_Schematic_Hotkeys_Descr, HK_AUTOPLACE_FIELDS );

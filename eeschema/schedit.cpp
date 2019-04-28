@@ -62,13 +62,9 @@
     // If needed, stop the current command and deselect current tool
     switch( id )
     {
-    case wxID_CUT:
-    case wxID_COPY:
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-    case ID_POPUP_SCH_BEGIN_WIRE:
-    case ID_POPUP_SCH_BEGIN_BUS:
     case ID_POPUP_END_LINE:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
@@ -76,10 +72,6 @@
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_DRAG_BLOCK:
-    case ID_POPUP_DUPLICATE_BLOCK:
     case ID_POPUP_SCH_DELETE_NODE:
     case ID_POPUP_SCH_DELETE_CONNECTION:
     case ID_POPUP_SCH_ENTER_SHEET:
@@ -91,12 +83,6 @@
          * current command (mainly a block command) or reset the current state
          * They will be executed later, in next switch structure.
          */
-        break;
-
-    case ID_POPUP_SCH_DELETE_CMP:
-    case ID_SCH_DELETE:
-        // Stop the current command (if any) but keep the current tool
-        m_canvas->EndMouseCapture();
         break;
 
     default:
@@ -112,30 +98,6 @@
     case ID_HIERARCHY:
         InstallHierarchyFrame( pos );
         SetRepeatItem( NULL );
-        break;
-
-    case wxID_CUT: // save and delete block
-    case ID_POPUP_CUT_BLOCK:
-
-        if( screen->m_BlockLocate.GetCommand() != BLOCK_MOVE )
-            break;
-        screen->m_BlockLocate.SetCommand( BLOCK_CUT );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        SetRepeatItem( NULL );
-        SetSheetNumberAndCount();
-        break;
-
-    case wxID_COPY:         // really this is a Save block for paste
-    case ID_POPUP_COPY_BLOCK:
-        screen->m_BlockLocate.SetCommand( BLOCK_COPY );
-        screen->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        break;
-
-    case wxID_PASTE:
-    case ID_POPUP_PASTE_BLOCK:
-        HandleBlockBegin( nullptr, BLOCK_PASTE, GetCrossHairPosition() );
         break;
 
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:

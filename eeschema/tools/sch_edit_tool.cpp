@@ -24,6 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_picker_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
@@ -39,6 +40,7 @@
 #include <sch_edit_frame.h>
 #include <list_operations.h>
 #include <eeschema_id.h>
+#include <status_popup.h>
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
@@ -88,9 +90,14 @@ TOOL_ACTION SCH_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint"
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
         _( "Edit Footprint..." ), _( "Displays footprint field dialog" ), config_xpm );
 
-TOOL_ACTION SCH_ACTIONS::remove( "eeschema.InteractiveEdit.remove",
+TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm );
+
+TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
+        AS_GLOBAL, 0,
+        _( "DoDelete Items" ), _( "DoDelete clicked items" ), NULL, AF_ACTIVATE );
+
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
@@ -323,7 +330,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         // Dispatch TOOL_ACTIONs
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &SCH_ACTIONS::remove ) )
+            if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
             {
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;
@@ -354,16 +361,20 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     for( auto item : selection )
         item->ClearFlags( IS_MOVED );
 
-    if( unselect || restore_state )
-        m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
-
     if( restore_state )
-        m_frame->RollbackSchematicFromUndo();
-    else
     {
-        m_frame->TestDanglingEnds();
-        m_frame->OnModify();
+        m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+        m_frame->RollbackSchematicFromUndo();
+        return 0;
     }
+
+    m_frame->CheckConnections( selection, true );
+    m_frame->SchematicCleanUp( true );
+    m_frame->TestDanglingEnds();
+    m_frame->OnModify();
+
+    if( unselect )
+        m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
 
     return 0;
 }
@@ -928,7 +939,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
+int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL*    selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     std::vector<SCH_ITEM*> items;
@@ -960,6 +971,51 @@ int SCH_EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify();
+
+    return 0;
+}
+
+
+static bool deleteItem( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+{
+    SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    wxCHECK( selectionTool, false );
+
+    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::selectionClear, true );
+
+    SCH_ITEM* item = selectionTool->SelectPoint( aPosition );
+
+    if( item )
+    {
+        if( item->IsLocked() )
+        {
+            STATUS_TEXT_POPUP statusPopup( aFrame );
+            statusPopup.SetText( _( "Item locked." ) );
+            statusPopup.Expire( 2000 );
+            statusPopup.Popup();
+            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        }
+        else
+        {
+            aFrame->GetToolManager()->RunAction( SCH_ACTIONS::doDelete, true );
+        }
+    }
+
+    return true;
+}
+
+
+int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+{
+    Activate();
+
+    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    wxCHECK( picker, 0 );
+
+    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "DoDelete item" ) );
+    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
+    picker->Activate();
+    Wait();
 
     return 0;
 }
@@ -1130,9 +1186,12 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Remove,             SCH_ACTIONS::remove.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DoDelete,             SCH_ACTIONS::doDelete.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   SCH_ACTIONS::deleteItemCursor.MakeEvent() );
+
     Go( &SCH_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editReference.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
+
 }

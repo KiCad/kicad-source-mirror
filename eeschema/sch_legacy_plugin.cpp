@@ -64,6 +64,7 @@
 #include <eeschema_id.h>       // for MAX_UNIT_COUNT_PER_PACKAGE definition
 #include <symbol_lib_table.h>  // for PropPowerSymsOnly definintion.
 #include <confirm.h>
+#include <tool/selection.h>
 
 
 // Must be the first line of part library document (.dcm) files.
@@ -479,27 +480,26 @@ class SCH_LEGACY_PLUGIN_CACHE
     int             m_versionMinor;
     int             m_libType;      // Is this cache a component or symbol library.
 
-    void            loadHeader( FILE_LINE_READER& aReader );
-    static void     loadAliases( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static void     loadField( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static void     loadDrawEntries( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader,
-                                     int aMajorVersion, int aMinorVersion );
-    static void     loadFootprintFilters( std::unique_ptr< LIB_PART >& aPart,
-                                          LINE_READER& aReader );
-    void            loadDocs();
-    static LIB_ARC*        loadArc( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static LIB_CIRCLE*     loadCircle( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static LIB_TEXT*       loadText( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader,
-                                     int aMajorVersion, int aMinorVersion );
-    static LIB_RECTANGLE*  loadRectangle( std::unique_ptr< LIB_PART >& aPart,
-                                          LINE_READER& aReader );
-    static LIB_PIN*        loadPin( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static LIB_POLYLINE*   loadPolyLine( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
-    static LIB_BEZIER*     loadBezier( std::unique_ptr< LIB_PART >& aPart, LINE_READER& aReader );
+    void                  loadHeader( FILE_LINE_READER& aReader );
+    static void           loadAliases( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static void           loadField( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static void           loadDrawEntries( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
+                                           int aMajorVersion, int aMinorVersion );
+    static void           loadFootprintFilters( std::unique_ptr<LIB_PART>& aPart,
+                                                LINE_READER& aReader );
+    void                  loadDocs();
+    static LIB_ARC*       loadArc( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static LIB_CIRCLE*    loadCircle( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static LIB_TEXT*      loadText( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader,
+                                    int aMajorVersion, int aMinorVersion );
+    static LIB_RECTANGLE* loadRectangle( std::unique_ptr<LIB_PART>& aPart,
+                                         LINE_READER& aReader );
+    static LIB_PIN*       loadPin( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static LIB_POLYLINE*  loadPolyLine( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
+    static LIB_BEZIER*    loadBezier( std::unique_ptr<LIB_PART>& aPart, LINE_READER& aReader );
 
-    static FILL_T          parseFillMode( LINE_READER& aReader, const char* aLine,
+    static FILL_T   parseFillMode( LINE_READER& aReader, const char* aLine,
                                           const char** aOutput );
-    // bool            checkForDuplicates( wxString& aAliasName );
     LIB_ALIAS*      removeAlias( LIB_ALIAS* aAlias );
 
     void            saveDocFile();
@@ -735,47 +735,63 @@ void SCH_LEGACY_PLUGIN::loadFile( const wxString& aFileName, SCH_SCREEN* aScreen
 
     loadHeader( reader, aScreen );
 
-    while( reader.ReadLine() )
+    LoadContent( reader, aScreen, m_version );
+
+    // Unfortunately schematic files prior to version 2 are not terminated with $EndSCHEMATC
+    // so checking for it's existance will fail so just exit here and take our chances. :(
+    if( m_version > 1 )
     {
         char* line = reader.Line();
 
-        while( *line && *line == ' ' )
+        while( *line == ' ' )
+            line++;
+
+        if( !strCompare( "$EndSCHEMATC", line ) )
+            THROW_IO_ERROR( "'$EndSCHEMATC' not found" );
+    }
+}
+
+
+void SCH_LEGACY_PLUGIN::LoadContent( LINE_READER& aReader, SCH_SCREEN* aScreen, int version )
+{
+    m_version = version;
+
+    while( aReader.ReadLine() )
+    {
+        char* line = aReader.Line();
+
+        while( *line == ' ' )
             line++;
 
         // Either an object will be loaded properly or the file load will fail and raise
         // an exception.
         if( strCompare( "$Descr", line ) )
-            loadPageSettings( reader, aScreen );
+            loadPageSettings( aReader, aScreen );
         else if( strCompare( "$Comp", line ) )
-            aScreen->Append( loadComponent( reader ) );
+            aScreen->Append( loadComponent( aReader ) );
         else if( strCompare( "$Sheet", line ) )
-            aScreen->Append( loadSheet( reader ) );
+            aScreen->Append( loadSheet( aReader ) );
         else if( strCompare( "$Bitmap", line ) )
-            aScreen->Append( loadBitmap( reader ) );
+            aScreen->Append( loadBitmap( aReader ) );
         else if( strCompare( "Connection", line ) )
-            aScreen->Append( loadJunction( reader ) );
+            aScreen->Append( loadJunction( aReader ) );
         else if( strCompare( "NoConn", line ) )
-            aScreen->Append( loadNoConnect( reader ) );
+            aScreen->Append( loadNoConnect( aReader ) );
         else if( strCompare( "Wire", line ) )
-            aScreen->Append( loadWire( reader ) );
+            aScreen->Append( loadWire( aReader ) );
         else if( strCompare( "Entry", line ) )
-            aScreen->Append( loadBusEntry( reader ) );
+            aScreen->Append( loadBusEntry( aReader ) );
         else if( strCompare( "Text", line ) )
-            aScreen->Append( loadText( reader ) );
+            aScreen->Append( loadText( aReader ) );
         else if( strCompare( "BusAlias", line ) )
-            aScreen->AddBusAlias( loadBusAlias( reader, aScreen ) );
+            aScreen->AddBusAlias( loadBusAlias( aReader, aScreen ) );
         else if( strCompare( "$EndSCHEMATC", line ) )
             return;
     }
-
-    // Unfortunately schematic files prior to version 2 are not terminated with $EndSCHEMATC
-    // so checking for it's existance will fail so just exit here and take our chances. :(
-    if( m_version > 1 )
-        THROW_IO_ERROR( "'$EndSCHEMATC' not found" );
 }
 
 
-void SCH_LEGACY_PLUGIN::loadHeader( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen )
+void SCH_LEGACY_PLUGIN::loadHeader( LINE_READER& aReader, SCH_SCREEN* aScreen )
 {
     const char* line = aReader.ReadLine();
 
@@ -813,7 +829,7 @@ void SCH_LEGACY_PLUGIN::loadHeader( FILE_LINE_READER& aReader, SCH_SCREEN* aScre
 }
 
 
-void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN* aScreen )
+void SCH_LEGACY_PLUGIN::loadPageSettings( LINE_READER& aReader, SCH_SCREEN* aScreen )
 {
     wxASSERT( aScreen != NULL );
 
@@ -917,7 +933,7 @@ void SCH_LEGACY_PLUGIN::loadPageSettings( FILE_LINE_READER& aReader, SCH_SCREEN*
 }
 
 
-SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
+SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_SHEET > sheet( new SCH_SHEET() );
 
@@ -1054,7 +1070,7 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( FILE_LINE_READER& aReader )
 }
 
 
-SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
+SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_BITMAP > bitmap( new SCH_BITMAP );
 
@@ -1139,7 +1155,7 @@ SCH_BITMAP* SCH_LEGACY_PLUGIN::loadBitmap( FILE_LINE_READER& aReader )
 }
 
 
-SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( FILE_LINE_READER& aReader )
+SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_JUNCTION > junction( new SCH_JUNCTION );
 
@@ -1161,7 +1177,7 @@ SCH_JUNCTION* SCH_LEGACY_PLUGIN::loadJunction( FILE_LINE_READER& aReader )
 }
 
 
-SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( FILE_LINE_READER& aReader )
+SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_NO_CONNECT > no_connect( new SCH_NO_CONNECT );
 
@@ -1183,7 +1199,7 @@ SCH_NO_CONNECT* SCH_LEGACY_PLUGIN::loadNoConnect( FILE_LINE_READER& aReader )
 }
 
 
-SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
+SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( LINE_READER& aReader )
 {
     std::unique_ptr< SCH_LINE > wire( new SCH_LINE );
 
@@ -1281,7 +1297,7 @@ SCH_LINE* SCH_LEGACY_PLUGIN::loadWire( FILE_LINE_READER& aReader )
 }
 
 
-SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( FILE_LINE_READER& aReader )
+SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
@@ -1326,7 +1342,7 @@ SCH_BUS_ENTRY_BASE* SCH_LEGACY_PLUGIN::loadBusEntry( FILE_LINE_READER& aReader )
 }
 
 
-SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
+SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( LINE_READER& aReader )
 {
     const char*   line = aReader.Line();
 
@@ -1426,7 +1442,7 @@ SCH_TEXT* SCH_LEGACY_PLUGIN::loadText( FILE_LINE_READER& aReader )
 }
 
 
-SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
+SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( LINE_READER& aReader )
 {
     const char* line = aReader.Line();
 
@@ -1723,8 +1739,8 @@ SCH_COMPONENT* SCH_LEGACY_PLUGIN::loadComponent( FILE_LINE_READER& aReader )
 }
 
 
-std::shared_ptr< BUS_ALIAS > SCH_LEGACY_PLUGIN::loadBusAlias( FILE_LINE_READER& aReader,
-                                                                  SCH_SCREEN* aScreen )
+std::shared_ptr<BUS_ALIAS> SCH_LEGACY_PLUGIN::loadBusAlias( LINE_READER& aReader,
+                                                            SCH_SCREEN* aScreen )
 {
     auto busAlias = std::make_shared< BUS_ALIAS >( aScreen );
     const char* line = aReader.Line();
@@ -1856,6 +1872,51 @@ void SCH_LEGACY_PLUGIN::Format( SCH_SCREEN* aScreen )
     }
 
     m_out->Print( 0, "$EndSCHEMATC\n" );
+}
+
+
+void SCH_LEGACY_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatter )
+{
+    m_out = aFormatter;
+
+    for( int i = 0; i < aSelection->GetSize(); ++i )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) aSelection->GetItem( i );
+
+        switch( item->Type() )
+        {
+        case SCH_COMPONENT_T:
+            saveComponent( static_cast< SCH_COMPONENT* >( item ) );
+            break;
+        case SCH_BITMAP_T:
+            saveBitmap( static_cast< SCH_BITMAP* >( item ) );
+            break;
+        case SCH_SHEET_T:
+            saveSheet( static_cast< SCH_SHEET* >( item ) );
+            break;
+        case SCH_JUNCTION_T:
+            saveJunction( static_cast< SCH_JUNCTION* >( item ) );
+            break;
+        case SCH_NO_CONNECT_T:
+            saveNoConnect( static_cast< SCH_NO_CONNECT* >( item ) );
+            break;
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_BUS_BUS_ENTRY_T:
+            saveBusEntry( static_cast< SCH_BUS_ENTRY_BASE* >( item ) );
+            break;
+        case SCH_LINE_T:
+            saveLine( static_cast< SCH_LINE* >( item ) );
+            break;
+        case SCH_TEXT_T:
+        case SCH_LABEL_T:
+        case SCH_GLOBAL_LABEL_T:
+        case SCH_HIER_LABEL_T:
+            saveText( static_cast< SCH_TEXT* >( item ) );
+            break;
+        default:
+            wxASSERT( "Unexpected schematic object type in SCH_LEGACY_PLUGIN::Format()" );
+        }
+    }
 }
 
 
@@ -2242,7 +2303,7 @@ void SCH_LEGACY_PLUGIN::saveText( SCH_TEXT* aText )
 }
 
 
-void SCH_LEGACY_PLUGIN::saveBusAlias( std::shared_ptr< BUS_ALIAS > aAlias )
+void SCH_LEGACY_PLUGIN::saveBusAlias( std::shared_ptr<BUS_ALIAS> aAlias )
 {
     wxCHECK_RET( aAlias != NULL, "BUS_ALIAS* is NULL" );
 
@@ -2872,7 +2933,7 @@ bool SCH_LEGACY_PLUGIN_CACHE::checkForDuplicates( wxString& aAliasName )
 #endif
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr< LIB_PART >& aPart,
+void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr<LIB_PART>& aPart,
                                            LINE_READER&                 aReader )
 {
     wxString newAlias;
@@ -2892,7 +2953,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadAliases( std::unique_ptr< LIB_PART >& aPart,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
+void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr<LIB_PART>& aPart,
                                          LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3035,7 +3096,7 @@ void SCH_LEGACY_PLUGIN_CACHE::loadField( std::unique_ptr< LIB_PART >& aPart,
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr< LIB_PART >& aPart,
+void SCH_LEGACY_PLUGIN_CACHE::loadDrawEntries( std::unique_ptr<LIB_PART>& aPart,
                                                LINE_READER&                 aReader,
                                                int                          aMajorVersion,
                                                int                          aMinorVersion )
@@ -3111,7 +3172,7 @@ FILL_T SCH_LEGACY_PLUGIN_CACHE::parseFillMode( LINE_READER& aReader, const char*
 }
 
 
-LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
+LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr<LIB_PART>& aPart,
                                            LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3177,7 +3238,7 @@ LIB_ARC* SCH_LEGACY_PLUGIN_CACHE::loadArc( std::unique_ptr< LIB_PART >& aPart,
 }
 
 
-LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr< LIB_PART >& aPart,
+LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr<LIB_PART>& aPart,
                                                  LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3204,7 +3265,7 @@ LIB_CIRCLE* SCH_LEGACY_PLUGIN_CACHE::loadCircle( std::unique_ptr< LIB_PART >& aP
 }
 
 
-LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
+LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr<LIB_PART>& aPart,
                                              LINE_READER&                 aReader,
                                              int                          aMajorVersion,
                                              int                          aMinorVersion )
@@ -3297,7 +3358,7 @@ LIB_TEXT* SCH_LEGACY_PLUGIN_CACHE::loadText( std::unique_ptr< LIB_PART >& aPart,
 }
 
 
-LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr< LIB_PART >& aPart,
+LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr<LIB_PART>& aPart,
                                                        LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3329,7 +3390,7 @@ LIB_RECTANGLE* SCH_LEGACY_PLUGIN_CACHE::loadRectangle( std::unique_ptr< LIB_PART
 }
 
 
-LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
+LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr<LIB_PART>& aPart,
                                            LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3511,7 +3572,7 @@ LIB_PIN* SCH_LEGACY_PLUGIN_CACHE::loadPin( std::unique_ptr< LIB_PART >& aPart,
 }
 
 
-LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr< LIB_PART >& aPart,
+LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr<LIB_PART>& aPart,
                                                      LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3542,7 +3603,7 @@ LIB_POLYLINE* SCH_LEGACY_PLUGIN_CACHE::loadPolyLine( std::unique_ptr< LIB_PART >
 }
 
 
-LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aPart,
+LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr<LIB_PART>& aPart,
                                                  LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();
@@ -3573,7 +3634,7 @@ LIB_BEZIER* SCH_LEGACY_PLUGIN_CACHE::loadBezier( std::unique_ptr< LIB_PART >& aP
 }
 
 
-void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr< LIB_PART >& aPart,
+void SCH_LEGACY_PLUGIN_CACHE::loadFootprintFilters( std::unique_ptr<LIB_PART>& aPart,
                                                     LINE_READER&                 aReader )
 {
     const char* line = aReader.Line();

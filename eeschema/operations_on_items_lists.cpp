@@ -42,7 +42,7 @@
 #include <sch_sheet.h>
 #include <sch_component.h>
 #include <sch_junction.h>
-
+#include <tool/selection.h>
 
 void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 {
@@ -72,15 +72,15 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen )
 }
 
 
-void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
+void SCH_EDIT_FRAME::CheckConnections( SELECTION& aSelection, bool aUndoAppend )
 {
     std::vector< wxPoint > pts;
     std::vector< wxPoint > connections;
 
     GetSchematicConnections( connections );
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    for( unsigned ii = 0; ii < aSelection.GetSize(); ii++ )
     {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( aSelection.GetItem( ii ) );
         std::vector< wxPoint > new_pts;
 
         if( !item->IsConnectable() )
@@ -105,7 +105,7 @@ void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool a
             {
                 for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
                 {
-                    aAppend |= TrimWire( *point, *second_point, aAppend );
+                    aUndoAppend |= TrimWire( *point, *second_point, aUndoAppend );
                 }
             }
         }
@@ -121,8 +121,8 @@ void SCH_EDIT_FRAME::CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool a
     {
         if( GetScreen()->IsJunctionNeeded( point, true ) )
         {
-            AddJunction( point, aAppend );
-            aAppend = true;
+            AddJunction( point, aUndoAppend );
+            aUndoAppend = true;
         }
     }
 }

@@ -40,8 +40,8 @@ bool SCH_EDIT_FRAME::EditImage( SCH_BITMAP* aItem )
     if( dlg.ShowModal() != wxID_OK )
         return false;
 
-    // save old image in undo list if not already in edit or the image to be edited is part of a block
-    if( aItem->GetEditFlags() == 0 || GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
+    // save old image in undo list if not already in edit
+    if( aItem->GetEditFlags() == 0 )
         SaveCopyInUndoList( aItem, UR_CHANGED );
 
     dlg.TransfertToImage( aItem->GetImage() );

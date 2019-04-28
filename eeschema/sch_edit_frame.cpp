@@ -40,20 +40,15 @@
 #include <general.h>
 #include <eeschema_id.h>
 #include <netlist.h>
-#include <lib_pin.h>
 #include <class_library.h>
 #include <sch_edit_frame.h>
-#include <sch_component.h>
 #include <symbol_lib_table.h>
-
-#include <dialog_helpers.h>
 #include <reporter.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
-#include <sch_sheet_path.h>
 #include "sim/sim_plot_frame.h"
 
 #include <invoke_sch_dialog.h>
@@ -253,9 +248,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
     EVT_TOOL( ID_HIERARCHY, SCH_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_CUT, SCH_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_COPY, SCH_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, SCH_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, SCH_EDIT_FRAME::GetSchematicFromUndoList )
     EVT_TOOL( wxID_REDO, SCH_EDIT_FRAME::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, SCH_EDIT_FRAME::OnAnnotate )
@@ -600,7 +592,7 @@ void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
 }
 
 
-void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
+void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend )
 {
     wxCHECK_RET( aItem != NULL,
                  wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
@@ -610,7 +602,7 @@ void SCH_EDIT_FRAME::SaveUndoItemInUndoList( SCH_ITEM* aItem )
                  wxT( "Cannot swap undo item structures.  Bad programmer!." ) );
 
     aItem->SwapData( m_undoItem );
-    SaveCopyInUndoList( aItem, UR_CHANGED );
+    SaveCopyInUndoList( aItem, UR_CHANGED, aAppend );
     aItem->SwapData( m_undoItem );
 }
 
@@ -1251,7 +1243,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
+void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem, bool aUndoAppend )
 {
     SCH_SCREEN* screen = GetScreen();
 
@@ -1307,12 +1299,12 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
                 AddToScreen( aItem );
 
             SetRepeatItem( aItem );
-            SaveCopyInUndoList( undoItem, UR_NEW );
+            SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
         }
         else if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
-            SaveCopyInUndoList( undoItem, UR_CHANGED );     // save the parent sheet
+            SaveCopyInUndoList( undoItem, UR_CHANGED, aUndoAppend );     // save the parent sheet
 
             parentSheet->AddPin( (SCH_SHEET_PIN*) aItem );
         }
@@ -1328,7 +1320,7 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
                 AddToScreen( aItem );
 
             SetRepeatItem( aItem );
-            SaveCopyInUndoList( undoItem, UR_NEW );
+            SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
         }
 
         if( doClearAnnotation )
@@ -1340,11 +1332,12 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
         }
 
         // Update connectivity info for new item
-        RecalculateConnections();
+        if( !aItem->IsMoving() )
+            RecalculateConnections();
     }
     else
     {
-        SaveUndoItemInUndoList( undoItem );
+        SaveUndoItemInUndoList( undoItem, aUndoAppend );
     }
 
     aItem->ClearFlags();
@@ -1356,7 +1349,7 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem )
 
     RefreshItem( aItem );
 
-    if( aItem->IsConnectable() )
+    if( !aItem->IsMoving() && aItem->IsConnectable() )
     {
         std::vector< wxPoint > pts;
         aItem->GetConnectionPoints( pts );

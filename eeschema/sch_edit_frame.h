@@ -23,10 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_edit_frame.h
- */
-
 #ifndef  SCH_EDIT_FRAME_H
 #define  SCH_EDIT_FRAME_H
 
@@ -36,11 +32,13 @@
 #include <template_fieldnames.h>
 #include <block_commande.h>
 #include <sch_collectors.h>
+#include <tool/selection.h>
 #include <erc_settings.h>
 #include <sch_draw_panel.h>
 
 // enum PINSHEETLABEL_SHAPE
 #include <sch_text.h>
+#include <tool/selection.h>
 
 class LIB_EDIT_FRAME;
 class LIB_VIEW_FRAME;
@@ -379,10 +377,10 @@ public:
     double BestZoom() override;
 
     /**
-     * Add the item currently being edited to the schematic and adds the changes to
-     * the undo/redo container.
+     * Add an item to the schematic and adds the changes to the undo/redo container.
+     * @param aUndoAppend True if the action should be appended to the current undo record.
      */
-    void AddItemToScreen( SCH_ITEM* aItem );
+    void AddItemToScreen( SCH_ITEM* aItem, bool aUndoAppend = false );
 
     /**
      * Finds a component in the schematic and an item in this component.
@@ -1030,9 +1028,9 @@ public:
      * moved.
      *
      * @param aItemsList The list of items to check
-     * @param aAppend True if we are updating a previous commit
+     * @param aUndoAppend True if we are updating a previous commit
      */
-    void CheckListConnections( PICKED_ITEMS_LIST& aItemsList, bool aAppend = false );
+    void CheckConnections( SELECTION& aSelection, bool aUndoAppend = false );
 
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 
@@ -1060,11 +1058,6 @@ public:
 private:
     void OnSelectUnit( wxCommandEvent& aEvent );
     void ConvertPart( SCH_COMPONENT* DrawComponent );
-
-    /**
-     * Paste a list of items from the block stack.
-     */
-    void PasteListOfItems( wxDC* DC );
 
     /* Undo - redo */
 public:
@@ -1146,14 +1139,6 @@ private:
     void GetSchematicFromUndoList( wxCommandEvent& event );
 
     /**
-     * Copy the list of block item.
-     *
-     * @sa m_blockItems
-     * @param aItemsList List to copy the block select items into.
-     */
-    void copyBlockItems( PICKED_ITEMS_LIST& aItemsList, const wxPoint& aMoveVector );
-
-    /**
      * Add the context menu items to \a aMenu for \a aJunction.
      *
      * @param aMenu The menu to add the items to.
@@ -1229,8 +1214,9 @@ public:
      * swap the actual item pointers themselves.
      *
      * @param aItem The item to swap with the current undo item.
+     * @param aAppend True if the action should be appended to the current undo record.
      */
-    void SaveUndoItemInUndoList( SCH_ITEM* aItem );
+    void SaveUndoItemInUndoList( SCH_ITEM* aItem, bool aAppend = false );
 
     /**
      * Performs an undo of the last edit WITHOUT logging a corresponding redo.  Used to cancel

@@ -186,7 +186,7 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
         return SCH_ACTIONS::drag.MakeEvent();
 
     case ID_SCH_DELETE:
-        return SCH_ACTIONS::remove.MakeEvent();
+        return SCH_ACTIONS::doDelete.MakeEvent();
 
     case ID_SIM_PROBE:
         return SCH_ACTIONS::simProbe.MakeEvent();
@@ -223,6 +223,15 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_SCH_EDIT_COMPONENT_FOOTPRINT:
         return SCH_ACTIONS::editFootprint.MakeEvent();
+
+    case wxID_CUT:
+        return SCH_ACTIONS::cut.MakeEvent();
+
+    case wxID_COPY:
+        return SCH_ACTIONS::copy.MakeEvent();
+
+    case wxID_PASTE:
+        return SCH_ACTIONS::paste.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

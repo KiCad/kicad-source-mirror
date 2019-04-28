@@ -41,9 +41,11 @@
 #include <project.h>
 #include <hotkeys.h>
 #include <advanced_config.h>
-#include <status_popup.h>
 #include <simulation_cursors.h>
 #include <sim/sim_plot_frame.h>
+#include <sch_legacy_plugin.h>
+#include <class_library.h>
+#include <confirm.h>
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );
@@ -69,9 +71,17 @@ TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNe
         AS_GLOBAL, 0,
         _( "Highlight Net" ), _( "Highlight wires and pins of a net" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.EditorControl.deleteItemCursor",
-        AS_GLOBAL, 0,
-        _( "Delete Items" ), _( "Delete clicked items" ), NULL, AF_ACTIVATE );
+TOOL_ACTION SCH_ACTIONS::cut( "eeschema.EditorControl.cut",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
+        _( "Cut" ), _( "Cut selected item(s) to clipboard" ), NULL );
+
+TOOL_ACTION SCH_ACTIONS::copy( "eeschema.EditorControl.copy",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
+        _( "Copy" ), _( "Copy selected item(s) to clipboard" ), NULL );
+
+TOOL_ACTION SCH_ACTIONS::paste( "eeschema.EditorControl.paste",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
+        _( "Paste" ), _( "Paste clipboard into schematic" ), NULL );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -446,46 +456,171 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 }
 
 
-static bool deleteItem( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+bool SCH_EDITOR_CONTROL::doCopy()
 {
-    SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    wxCHECK( selectionTool, false );
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
 
-    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::selectionClear, true );
+    if( !selection.GetSize() )
+        return false;
 
-    SCH_ITEM* item = selectionTool->SelectPoint( aPosition );
+    STRING_FORMATTER formatter;
+    SCH_LEGACY_PLUGIN plugin;
 
-    if( item )
-    {
-        if( item->IsLocked() )
-        {
-            STATUS_TEXT_POPUP statusPopup( aFrame );
-            statusPopup.SetText( _( "Item locked." ) );
-            statusPopup.Expire( 2000 );
-            statusPopup.Popup();
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        }
-        else
-        {
-            aFrame->GetToolManager()->RunAction( SCH_ACTIONS::remove, true );
-        }
-    }
+    plugin.Format( &selection, &formatter );
 
-    return true;
+    return m_toolMgr->SaveClipboard( formatter.GetString() );
 }
 
 
-int SCH_EDITOR_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
 {
-    Activate();
+    if( doCopy() )
+        m_toolMgr->RunAction( SCH_ACTIONS::doDelete, true );
 
-    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
-    wxCHECK( picker, 0 );
+    return 0;
+}
 
-    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
-    picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
-    picker->Activate();
-    Wait();
+
+int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
+{
+    doCopy();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+
+    DLIST<SCH_ITEM>&    dlist = m_frame->GetScreen()->GetDrawList();
+    SCH_ITEM*           last = dlist.GetLast();
+
+    std::string         text = m_toolMgr->GetClipboard();
+    STRING_LINE_READER  reader( text, "Clipboard" );
+    SCH_LEGACY_PLUGIN   plugin;
+
+    try
+    {
+        plugin.LoadContent( reader, m_frame->GetScreen() );
+    }
+    catch( IO_ERROR& e )
+    {
+        wxLogError( wxString::Format( "Malformed clipboard: %s" ), GetChars( e.What() ) );
+        return 0;
+    }
+
+    // SCH_LEGACY_PLUGIN added the items to the DLIST, but not to the view or anything
+    // else.  Pull them back out to start with.
+    //
+    std::vector<SCH_ITEM*> loadedItems;
+    SCH_ITEM* next = nullptr;
+
+    // We also make sure any pasted sheets will not cause recursion in the destination.
+    // Moreover new sheets create new sheetpaths, and component alternate references must
+    // be created and cleared
+    //
+    bool           hasSheetPasted = false;
+    SCH_SHEET_LIST hierarchy( g_RootSheet );
+    SCH_SHEET_LIST initialHierarchy( g_RootSheet );
+
+    wxFileName     destFn = g_CurrentSheet->Last()->GetFileName();
+
+    if( destFn.IsRelative() )
+        destFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
+
+    for( SCH_ITEM* item = last ? last->Next() : dlist.GetFirst(); item; item = next )
+    {
+        next = item->Next();
+        dlist.Remove( item );
+
+        loadedItems.push_back( item );
+
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+
+            component->SetTimeStamp( GetNewTimeStamp() );
+
+            // clear the annotation, but preserve the selected unit
+            int unit = component->GetUnit();
+            component->ClearAnnotation( nullptr );
+            component->SetUnit( unit );
+        }
+        if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+            wxFileName srcFn = sheet->GetFileName();
+
+            if( srcFn.IsRelative() )
+                srcFn.MakeAbsolute( m_frame->Prj().GetProjectPath() );
+
+            SCH_SHEET_LIST sheetHierarchy( sheet );
+
+            if( hierarchy.TestForRecursion( sheetHierarchy, destFn.GetFullPath( wxPATH_UNIX ) ) )
+            {
+                auto msg = wxString::Format( _( "The pasted sheet \"%s\"\n"
+                                                "was dropped because the destination already has "
+                                                "the sheet or one of its subsheets as a parent." ),
+                                             sheet->GetFileName() );
+                DisplayError( m_frame, msg );
+                loadedItems.pop_back();
+            }
+            else
+            {
+                // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
+                // based sheet name and update the time stamp for each sheet in the block.
+                timestamp_t uid = GetNewTimeStamp();
+
+                sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
+                sheet->SetTimeStamp( uid );
+                hasSheetPasted = true;
+            }
+        }
+    }
+
+    // Now we can resolve the components and add everything to the screen, view, etc.
+    //
+    SYMBOL_LIB_TABLE* symLibTable = m_frame->Prj().SchSymbolLibTable();
+    PART_LIB*         partLib = m_frame->Prj().SchLibs()->GetCacheLibrary();
+
+    for( int i = 0; i < loadedItems.size(); ++i )
+    {
+        SCH_ITEM* item = loadedItems[i];
+
+        if( item->Type() == SCH_COMPONENT_T )
+        {
+            SCH_COMPONENT* component = (SCH_COMPONENT*) item;
+            component->Resolve( *symLibTable, partLib );
+        }
+
+        item->SetFlags( IS_NEW | IS_MOVED );
+        m_frame->AddItemToScreen( item, i > 0 );
+    }
+
+    if( hasSheetPasted )
+    {
+        // We clear annotation of new sheet paths.
+        SCH_SCREENS screensList( g_RootSheet );
+        screensList.ClearAnnotationOfNewSheetPaths( initialHierarchy );
+    }
+
+    // Now clear the previous selection, select the pasted items, and fire up the "move"
+    // tool.
+    //
+    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::selectItems, true, &loadedItems );
+
+    SELECTION& selection = selTool->GetSelection();
+
+    if( !selection.Empty() )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) selection.GetTopLeftItem();
+
+        selection.SetReferencePoint( item->GetPosition() );
+        m_toolMgr->RunAction( SCH_ACTIONS::move, true );
+    }
 
     return 0;
 }
@@ -516,5 +651,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    SCH_ACTIONS::highlightNetCursor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, SCH_ACTIONS::highlightNetSelection.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::DeleteItemCursor,      SCH_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Cut,                   SCH_ACTIONS::cut.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Copy,                  SCH_ACTIONS::copy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Paste,                 SCH_ACTIONS::paste.MakeEvent() );
 }

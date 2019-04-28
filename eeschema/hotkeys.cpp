@@ -428,14 +428,9 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     // itemInEdit == false means no item currently edited. We can ask for editing a new item
     bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetEditFlags();
 
-    // blocInProgress == false means no block in progress.
-    // Because a drag command uses a drag block, false means also no drag in progress
-    // If false, we can ask for editing a new item
-    bool blocInProgress = screen->m_BlockLocate.GetState() != STATE_NO_BLOCK;
-
     // notBusy == true means no item currently edited and no other command in progress
     // We can change active tool and ask for editing a new item
-    bool notBusy = (!itemInEdit) && (!blocInProgress);
+    bool notBusy = !itemInEdit;
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
