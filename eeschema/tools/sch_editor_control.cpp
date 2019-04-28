@@ -105,6 +105,8 @@ void SCH_EDITOR_CONTROL::Reset( RESET_REASON aReason )
 
 bool SCH_EDITOR_CONTROL::Init()
 {
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
@@ -120,7 +122,7 @@ bool SCH_EDITOR_CONTROL::Init()
     ctxMenu.AddSeparator( activeToolCondition, 1000 );
 
     // Finally, add the standard zoom & grid items
-    m_menu.AddStandardSubMenus( *getEditFrame<SCH_BASE_FRAME>() );
+    m_menu.AddStandardSubMenus( m_frame );
 
     /*
     auto lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();

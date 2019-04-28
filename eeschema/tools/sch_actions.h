@@ -109,7 +109,11 @@ public:
     static TOOL_ACTION placeSchematicText;
     static TOOL_ACTION drawLines;
     static TOOL_ACTION placeImage;
-    static TOOL_ACTION finishDrawing;
+    static TOOL_ACTION finishLineWireOrBus;
+    static TOOL_ACTION finishWire;
+    static TOOL_ACTION finishBus;
+    static TOOL_ACTION finishLine;
+    static TOOL_ACTION finishSheet;
 
     // Editing
     static TOOL_ACTION move;
@@ -124,6 +128,8 @@ public:
     static TOOL_ACTION editReference;
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
+    static TOOL_ACTION autoplaceFields;
+    static TOOL_ACTION showDatasheet;
     static TOOL_ACTION doDelete;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;

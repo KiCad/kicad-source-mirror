@@ -71,9 +71,11 @@ void GRID_MENU::update()
 
     for( unsigned int i = 0; i < GetMenuItemCount(); ++i )
     {
-        int menuId = ID_POPUP_GRID_SELECT + 1 + i;
+        GRID_TYPE&  grid = screen->GetGrid( i );
+        wxMenuItem* menuItem = FindItemByPosition( i );
 
-        SetLabel( menuId, gridsList[i] );      // Refresh label in case units have changed
-        Check( menuId, menuId == currentId );  // Refresh checkmark
+        menuItem->SetId( grid.m_CmdId );
+        menuItem->SetItemLabel( gridsList[ i ] );      // Refresh label in case units have changed
+        menuItem->Check( grid.m_CmdId == currentId );  // Refresh checkmark
     }
 }

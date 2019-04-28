@@ -55,7 +55,7 @@ struct BUS_UNFOLDING_T
 /**
  * Class SCH_DRAWING_TOOL
  *
- * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
+ * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
 class SCH_DRAWING_TOOL : public TOOL_INTERACTIVE
@@ -71,10 +71,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     int StartWire( const TOOL_EVENT& aEvent );
     int StartBus( const TOOL_EVENT& aEvent );

@@ -29,6 +29,8 @@
 #include <hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
+#include <eda_doc.h>
+#include <base_struct.h>
 #include <sch_item_struct.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
@@ -41,6 +43,7 @@
 #include <list_operations.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
+#include "sch_drawing_tool.h"
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
@@ -68,11 +71,11 @@ TOOL_ACTION SCH_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
 
 TOOL_ACTION SCH_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
-        _( "Mirror X" ), _( "Mirrors selected item(s) across the X axis" ), mirror_h_xpm );
+        _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ), mirror_h_xpm );
 
 TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
-        _( "Mirror Y" ), _( "Mirrors selected item(s) across the Y axis" ), mirror_v_xpm );
+        _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ), mirror_v_xpm );
 
 TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
@@ -89,6 +92,14 @@ TOOL_ACTION SCH_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
 TOOL_ACTION SCH_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
         _( "Edit Footprint..." ), _( "Displays footprint field dialog" ), config_xpm );
+
+TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_AUTOPLACE_FIELDS ),
+        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ), config_xpm );
+
+TOOL_ACTION SCH_ACTIONS::showDatasheet( "eeschema.InteractiveEdit.showDatasheet",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
+        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ), config_xpm );
 
 TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
@@ -119,24 +130,114 @@ SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
 
 bool SCH_EDIT_TOOL::Init()
 {
-    // Find the selection tool, so they can cooperate
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
 
     if( !m_selectionTool )
     {
         DisplayError( NULL, _( "eeshema.InteractiveSelection tool is not available" ) );
         return false;
     }
+    else if( !drawingTool )
+    {
+        DisplayError( NULL, _( "eeshema.InteractiveDrawing tool is not available" ) );
+        return false;
+    }
 
-    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
+    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto& ctxMenu = m_menu.GetMenu();
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED );
+    };
 
-    // cancel current tool goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
-    ctxMenu.AddSeparator( activeToolFunctor, 1 );
+    auto singleComponentCondition = SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T )
+                                        && SELECTION_CONDITIONS::Count( 1 );
+
+    auto singleSymbolCondition = [] (const SELECTION& aSel ) {
+        if( aSel.GetSize() == 1 )
+        {
+            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.GetItem( 0 ) );
+
+            if( comp )
+            {
+                auto partRef = comp->GetPartRef().lock();
+                return !partRef || !partRef->IsPower();
+            }
+        }
+
+        return false;
+    };
+
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+
+    // Build the edit tool menu (shown when moving or dragging)
+    //
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
+
+    ctxMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
+    ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
+    m_menu.AddStandardSubMenus( m_frame );
+
+    // Add editing actions to the drawing tool menu
+    //
+    CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
+
+    drawingMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
+    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+    drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
+    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+
+    // Add editing actions to the selection tool menu
+    //
+    CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
+
+    selToolMenu.AddItem( SCH_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::drag, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
+
+    selToolMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
+    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition );
+
+    selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
+    // Selection tool handles the context menu for some other tools, such as the Picker.
+    // Don't add things like Paste when another tool is active.
+    selToolMenu.AddItem( SCH_ACTIONS::paste, noActiveToolCondition );
 
     return true;
 }
@@ -167,6 +268,11 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( selection.Empty() )
         return 0;
+
+    if( aEvent.IsAction( &SCH_ACTIONS::move ) )
+        m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
+    else
+        m_frame->SetToolID( ID_SCH_DRAG, wxCURSOR_DEFAULT, _( "Drag Items" ) );
 
     Activate();
     controls->ShowCursor( true );
@@ -340,6 +446,11 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 // Exit on a duplicate action; it will start its own move operation.
                 break;
             }
+        }
+
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            m_menu.ShowContextMenu( selection );
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
@@ -523,8 +634,7 @@ bool SCH_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION           selection = selTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -657,8 +767,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION           selection = selTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -799,8 +908,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION           selection = selTool->RequestSelection( SCH_COLLECTOR::DraggableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::DraggableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -941,11 +1049,9 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL*    selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     std::vector<SCH_ITEM*> items;
-
     // get a copy instead of reference (we're going to clear the selection before removing items)
-    SELECTION selectionCopy = selTool->RequestSelection();
+    SELECTION              selectionCopy = m_selectionTool->RequestSelection();
 
     if( selectionCopy.Empty() )
         return 0;
@@ -1037,15 +1143,12 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
         filter = CmpOrFootprint;
 
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->RequestSelection( filter );
-    SCH_ITEM*           item = nullptr;
+    SELECTION& selection = m_selectionTool->RequestSelection( filter );
 
-    if( selection.GetSize() >= 1 )
-        item = (SCH_ITEM*)selection.GetItem( 0 );
-
-    if( !item )
+    if( selection.Empty() )
         return 0;
+
+    SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
 
     if( item->Type() == SCH_COMPONENT_T )
     {
@@ -1067,17 +1170,52 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+
+    if( selection.Empty() )
+        return 0;
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.GetItem( 0 );
+
+    if( !component->IsNew() )
+        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+
+    component->AutoplaceFields( m_frame->GetScreen(), /* aManual */ true );
+
+    updateView( component );
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+
+    if( selection.Empty() )
+        return 0;
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.GetItem( 0 );
+    wxString       datasheet = component->GetField( DATASHEET )->GetText();
+
+    if( !datasheet.IsEmpty() )
+        GetAssociatedDocument( m_frame, datasheet );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->RequestSelection( SCH_COLLECTOR::EditableItems );
-    SCH_ITEM*           item = nullptr;
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
 
-    if( selection.GetSize() >= 1 )
-        item = (SCH_ITEM*)selection.GetItem( 0 );
-
-    if( !item )
+    if( selection.Empty() )
         return 0;
+
+    SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
 
     switch( item->Type() )
     {
@@ -1193,5 +1331,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editReference.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ShowDatasheet,      SCH_ACTIONS::showDatasheet.MakeEvent() );
 
 }

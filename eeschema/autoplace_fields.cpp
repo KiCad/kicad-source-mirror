@@ -683,40 +683,6 @@ const AUTOPLACER::SIDE AUTOPLACER::SIDE_LEFT( -1, 0 );
 const AUTOPLACER::SIDE AUTOPLACER::SIDE_RIGHT( 1, 0 );
 
 
-void SCH_EDIT_FRAME::OnAutoplaceFields( wxCommandEvent& aEvent )
-{
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_SCREEN*         screen = GetScreen();
-    SCH_ITEM*           item = screen->GetCurItem();
-
-    // Get the item under cursor if we're not currently moving something
-    if( !item )
-    {
-        if( aEvent.GetInt() == 0 )
-            return;
-
-        auto& data = dynamic_cast<EDA_HOTKEY_CLIENT_DATA&>( *aEvent.GetClientObject() );
-        item = selTool->SelectPoint( data.GetPosition(), SCH_COLLECTOR::MovableItems );
-        screen->SetCurItem( NULL );
-
-        if( !item || item->GetEditFlags() )
-            return;
-    }
-
-    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( item );
-    if( !component )
-        return;
-
-    if( !component->IsNew() )
-        SaveCopyInUndoList( component, UR_CHANGED );
-
-    component->AutoplaceFields( screen, /* aManual */ true );
-
-    RefreshItem( component );
-    OnModify();
-}
-
-
 void SCH_COMPONENT::AutoplaceFields( SCH_SCREEN* aScreen, bool aManual )
 {
     if( aManual )

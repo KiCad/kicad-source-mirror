@@ -92,7 +92,7 @@ void TOOL_MENU::CloseContextMenu( OPT_TOOL_EVENT& evt )
 // This makes the factory functions a bit less verbose
 using S_C = SELECTION_CONDITIONS;
 
-void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME& aFrame )
+void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME* aFrame )
 {
     m_menu.AddItem( ACTIONS::zoomCenter, S_C::ShowAlways, 1000 );
     m_menu.AddItem( ACTIONS::zoomIn, S_C::ShowAlways, 1000  );
@@ -101,6 +101,9 @@ void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME& aFrame )
 
     m_menu.AddSeparator(SELECTION_CONDITIONS::ShowAlways, 1000 );
 
-    m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( &aFrame ).get(), false, S_C::ShowAlways, 1000 );
-    m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( &aFrame ).get(), false, S_C::ShowAlways, 1000 );
+    if( aFrame )
+    {
+        m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( aFrame ).get(), false, S_C::ShowAlways, 1000 );
+        m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( aFrame ).get(), false, S_C::ShowAlways, 1000 );
+    }
 }

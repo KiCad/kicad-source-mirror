@@ -62,7 +62,7 @@ CVPCB_SELECTION_TOOL::~CVPCB_SELECTION_TOOL()
 
 bool CVPCB_SELECTION_TOOL::Init()
 {
-    m_menu.AddStandardSubMenus( *getEditFrame<DISPLAY_FOOTPRINTS_FRAME>() );
+    m_menu.AddStandardSubMenus( getEditFrame<DISPLAY_FOOTPRINTS_FRAME>() );
 
     return true;
 }

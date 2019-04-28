@@ -66,6 +66,8 @@ public:
 
     int Properties( const TOOL_EVENT& aEvent );
     int EditField( const TOOL_EVENT& aEvent );
+    int AutoplaceFields( const TOOL_EVENT& aEvent );
+    int ShowDatasheet( const TOOL_EVENT& aEvent );
 
     /**
      * Function DoDelete()

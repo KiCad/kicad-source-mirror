@@ -125,7 +125,7 @@ public:
      * Construct a "basic" menu for a tool, containing only items
      * that apply to all tools (e.g. zoom and grid)
      */
-    void AddStandardSubMenus( EDA_DRAW_FRAME& aFrame );
+    void AddStandardSubMenus( EDA_DRAW_FRAME* aFrame );
 
 private:
 

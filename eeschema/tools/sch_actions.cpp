@@ -172,8 +172,11 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_ADD_IMAGE_BUTT:
         return SCH_ACTIONS::placeImage.MakeEvent();
 
-    case ID_POPUP_END_LINE:
-        return SCH_ACTIONS::finishDrawing.MakeEvent();
+    case ID_SCH_END_LINE_WIRE_OR_BUS:
+        return SCH_ACTIONS::finishLineWireOrBus.MakeEvent();
+
+    case ID_POPUP_SCH_END_SHEET:
+        return SCH_ACTIONS::finishSheet.MakeEvent();
 
     case ID_MENU_DELETE_ITEM_BUTT:
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
@@ -232,6 +235,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case wxID_PASTE:
         return SCH_ACTIONS::paste.MakeEvent();
+
+    case ID_AUTOPLACE_FIELDS:
+        return SCH_ACTIONS::autoplaceFields.MakeEvent();
+
+    case ID_POPUP_SCH_DISPLAYDOC_CMP:
+        return SCH_ACTIONS::showDatasheet.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

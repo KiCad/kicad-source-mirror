@@ -193,7 +193,7 @@ bool DRAWING_TOOL::Init()
     // For example, zone fill/unfill is provided by the PCB control tool
 
     // Finally, add the standard zoom/grid items
-    m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
+    m_menu.AddStandardSubMenus( getEditFrame<PCB_BASE_FRAME>() );
 
     return true;
 }

@@ -132,9 +132,26 @@ TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0,
         _( "Add Image" ), _( "Add bitmap image" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::finishDrawing( "eeschema.InteractiveDrawing.finishDrawing",
-        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+TOOL_ACTION SCH_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawing.finishLineWireOrBus",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),
+        _( "Finish Wire or Bus" ), _( "Complete drawing at current segment" ),
+        checked_ok_xpm, AF_NONE );
 
+TOOL_ACTION SCH_ACTIONS::finishWire( "eeschema.InteractiveDrawing.finishWire",
+        AS_GLOBAL, 0,
+        _( "Finish Bus" ), _( "Complete wire at current segment" ), checked_ok_xpm, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::finishBus( "eeschema.InteractiveDrawing.finishBus",
+        AS_GLOBAL, 0,
+        _( "Finish Bus" ), _( "Complete bus at current segment" ), checked_ok_xpm, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::finishLine( "eeschema.InteractiveDrawing.finishLine",
+        AS_GLOBAL, 0,
+        _( "Finish Line" ), _( "Complete polyline at current segment" ), checked_ok_xpm, AF_NONE );
+
+TOOL_ACTION SCH_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
+        AS_GLOBAL, 0,
+        _( "Finish Sheet" ), _( "Finish drawing sheet" ), checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::addJunction( "eeschema.InteractiveEditing.addJunction",
         AS_GLOBAL, 0, "", "", NULL, AF_NONE );
@@ -164,15 +181,56 @@ SCH_DRAWING_TOOL::~SCH_DRAWING_TOOL()
 
 bool SCH_DRAWING_TOOL::Init()
 {
-    auto activeToolFunctor = [ this ] ( const SELECTION& aSel ) {
-                                 return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-                             };
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+
+    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
+    };
+
+    auto drawingWireCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.GetSize() == 1 )
+        {
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
+
+            return ( line && line->GetLayer() == LAYER_WIRE );
+        }
+
+        return false;
+    };
+
+    auto drawingBusCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.GetSize() == 1 )
+        {
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
+
+            return ( line && line->GetLayer() == LAYER_BUS );
+        }
+
+        return false;
+    };
+
+    auto drawingLineCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.GetSize() == 1 )
+        {
+            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
+
+            return ( line && line->GetLayer() == LAYER_NOTES );
+        }
+
+        return false;
+    };
 
     auto& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolFunctor, 1 );
-    ctxMenu.AddSeparator( activeToolFunctor, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+
+    ctxMenu.AddItem( SCH_ACTIONS::finishWire, drawingWireCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishBus, drawingBusCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishLine, drawingLineCondition, 1 );
+
+    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+    m_menu.AddStandardSubMenus( m_frame );
 
     return true;
 }
@@ -362,8 +420,12 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu( selTool->GetSelection() );
+            SELECTION selection;
+
+            if( aComponent )
+                selection.Add( aComponent );
+
+            m_menu.ShowContextMenu( selection );
         }
         else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -484,8 +546,12 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu( selTool->GetSelection() );
+            SELECTION selection;
+
+            if( image )
+                selection.Add( image );
+
+            m_menu.ShowContextMenu( selection );
         }
         else if( image && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -574,8 +640,9 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu( selTool->GetSelection() );
+            SELECTION emptySelection;
+
+            m_menu.ShowContextMenu( emptySelection );
         }
     }
 
@@ -724,8 +791,12 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu( selTool->GetSelection() );
+            SELECTION selection;
+
+            if( item )
+                selection.Add( item );
+
+            m_menu.ShowContextMenu( selection );
         }
         else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -1045,7 +1116,10 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 
             break;
         }
-        else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
+        else if( evt->IsAction( &SCH_ACTIONS::finishLineWireOrBus )
+                     || evt->IsAction( &SCH_ACTIONS::finishWire )
+                     || evt->IsAction( &SCH_ACTIONS::finishBus )
+                     || evt->IsAction( &SCH_ACTIONS::finishLine ) )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
@@ -1055,8 +1129,12 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu();
+            SELECTION selection;
+
+            if( aSegment )
+                selection.Add( aSegment );
+
+            m_menu.ShowContextMenu( selection );
         }
         else if( evt->IsClick( BUT_LEFT ) || ( aSegment && evt->IsDblClick( BUT_LEFT ) ) )
         {
@@ -1402,7 +1480,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
                 m_frame->GetScreen()->SetCurItem( nullptr );
             }
         }
-        else if( evt->IsAction( &SCH_ACTIONS::finishDrawing ) )
+        else if( evt->IsAction( &SCH_ACTIONS::finishSheet ) )
         {
             if( aSheet )
             {

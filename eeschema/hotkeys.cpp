@@ -127,7 +127,7 @@ static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_
 static EDA_HOTKEY HkBeginWire( _HKI( "Begin Wire" ), HK_BEGIN_WIRE, 'W', ID_WIRE_BUTT );
 static EDA_HOTKEY HkBeginBus( _HKI( "Begin Bus" ), HK_BEGIN_BUS, 'B', ID_BUS_BUTT );
 static EDA_HOTKEY HkEndLineWireBus( _HKI( "End Line Wire Bus" ), HK_END_CURR_LINEWIREBUS, 'K',
-                                  ID_POPUP_END_LINE );
+                                  ID_SCH_END_LINE_WIRE_OR_BUS );
 
 static EDA_HOTKEY HkAddLabel( _HKI( "Add Label" ), HK_ADD_LABEL, 'L', ID_LABEL_BUTT );
 static EDA_HOTKEY HkAddHierarchicalLabel( _HKI( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H',

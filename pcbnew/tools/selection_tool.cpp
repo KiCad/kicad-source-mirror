@@ -220,7 +220,7 @@ bool SELECTION_TOOL::Init()
     if( frame && ( frame->IsType( FRAME_PCB_MODULE_VIEWER )
                    || frame->IsType( FRAME_PCB_MODULE_VIEWER_MODAL ) ) )
     {
-        m_menu.AddStandardSubMenus( *frame );
+        m_menu.AddStandardSubMenus( frame );
         return true;
     }
 
@@ -235,7 +235,7 @@ bool SELECTION_TOOL::Init()
 
     if( frame )
     {
-        m_menu.AddStandardSubMenus( *frame );
+        m_menu.AddStandardSubMenus( frame );
     }
 
     return true;

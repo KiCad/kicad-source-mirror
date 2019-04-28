@@ -781,11 +781,6 @@ public:
 private:
 
     /**
-     * Handle the #ID_AUTOPLACE_FIELDS event.
-     */
-    void OnAutoplaceFields( wxCommandEvent& aEvent );
-
-    /**
      * Handle the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in Pcbnew
      * based on the sheet they are placed on.
      */

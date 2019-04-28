@@ -222,7 +222,7 @@ bool PCB_TOOL::Init()
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1 );
 
     // Finally, add the standard zoom/grid items
-    m_menu.AddStandardSubMenus( *getEditFrame<PCB_BASE_FRAME>() );
+    m_menu.AddStandardSubMenus( getEditFrame<PCB_BASE_FRAME>() );
 
     return true;
 }

@@ -71,7 +71,7 @@ TOOL_ACTION SCH_ACTIONS::selectionClear( "eeschema.InteractiveSelection.Clear",
     
 SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "eeschema.InteractiveSelection" ),
-        m_frame( NULL ),
+        m_frame( nullptr ),
         m_additive( false ),
         m_subtractive( false ),
         m_multiple( false ),
@@ -89,10 +89,10 @@ SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 
 bool SCH_SELECTION_TOOL::Init()
 {
-    auto frame = getEditFrame<SCH_BASE_FRAME>();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    if( frame )
-        m_menu.AddStandardSubMenus( *frame );
+    m_menu.GetMenu().AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
+    m_menu.AddStandardSubMenus( m_frame );
 
     return true;
 }

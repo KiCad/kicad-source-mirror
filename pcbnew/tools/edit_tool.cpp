@@ -272,8 +272,8 @@ bool EDIT_TOOL::Init()
 
 
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
     menu.AddItem( PCB_ACTIONS::cutToClipboard, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
     menu.AddItem( PCB_ACTIONS::pasteFromClipboard, noActiveToolCondition );

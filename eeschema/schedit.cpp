@@ -65,7 +65,6 @@
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
     case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
     case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-    case ID_POPUP_END_LINE:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_END_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
@@ -120,11 +119,6 @@
         {
             SetNoToolSelected();
         }
-        break;
-
-    case ID_POPUP_END_LINE:
-    case ID_POPUP_SCH_END_SHEET:
-        m_toolManager->RunAction( SCH_ACTIONS::finishDrawing, true );
         break;
 
     case ID_POPUP_SCH_DELETE_NODE:

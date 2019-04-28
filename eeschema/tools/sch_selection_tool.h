@@ -66,6 +66,8 @@ public:
      */
     SELECTION& GetSelection();
 
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
+
     /**
      * Function RequestSelection()
      *
