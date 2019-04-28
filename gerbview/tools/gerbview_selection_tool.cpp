@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <gerbview_id.h>
 #include <gerbview_painter.h>
 
-#include "selection_tool.h"
+#include "gerbview_selection_tool.h"
 #include "gerbview_actions.h"
 
 // Selection tool actions

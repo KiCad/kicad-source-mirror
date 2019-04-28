@@ -27,7 +27,7 @@
 
 #include "gerbview_actions.h"
 #include "gerbview_control.h"
-#include "selection_tool.h"
+#include "gerbview_selection_tool.h"
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectionTool( "gerbview.Control.selectionTool",
         AS_GLOBAL, 0,
