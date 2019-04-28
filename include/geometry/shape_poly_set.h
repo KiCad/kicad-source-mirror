@@ -165,9 +165,9 @@ class SHAPE_POLY_SET : public SHAPE
 
             operator bool() const
             {
-                return ( ( m_currentPolygon < m_lastPolygon ) || ( IsLastPolygon() &&
-                            ( m_currentContour < static_cast<int>( m_poly->CPolygon( m_currentPolygon ).size() )  ||
-                            ( IsEndContour() && m_currentVertex < m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
+                return ( ( m_currentPolygon < m_lastPolygon ) || ( m_currentPolygon == m_poly->OutlineCount() - 1 &&
+                            ( m_currentContour < static_cast<int>( m_poly->CPolygon( m_currentPolygon ).size() ) - 1  ||
+                            ( m_currentVertex < m_poly->CPolygon( m_currentPolygon )[m_currentContour].PointCount() )
                             )
                         ) );
             }
