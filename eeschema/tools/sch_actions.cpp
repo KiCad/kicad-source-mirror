@@ -175,9 +175,6 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SCH_END_LINE_WIRE_OR_BUS:
         return SCH_ACTIONS::finishLineWireOrBus.MakeEvent();
 
-    case ID_POPUP_SCH_END_SHEET:
-        return SCH_ACTIONS::finishSheet.MakeEvent();
-
     case ID_MENU_DELETE_ITEM_BUTT:
     case ID_SCHEMATIC_DELETE_ITEM_BUTT:
         return SCH_ACTIONS::deleteItemCursor.MakeEvent();
