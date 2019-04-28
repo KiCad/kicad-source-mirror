@@ -954,17 +954,9 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 
                 m_frame->AddToScreen( m_busUnfold.label );
                 m_busUnfold.label_placed = true;
-
-                aSegment->ClearFlags( IS_NEW );
-                aSegment->SetFlags( SELECTED );
-
-                aSegment = new SCH_LINE( *aSegment );
-                aSegment->SetFlags( IS_NEW );
-                aSegment->SetStartPoint( cursorPos );
-                s_wires.PushBack( aSegment );
-                screen->SetCurItem( aSegment );
             }
-            else if( !aSegment )
+
+            if( !aSegment )
             {
                 aSegment = startSegments( aType, cursorPos );
             }
