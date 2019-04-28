@@ -182,6 +182,22 @@ void LIB_TREE_MODEL_ADAPTER::UpdateSearchString( wxString const& aSearch )
     {
         auto item = wxDataViewItem( bestMatch );
         m_widget->Select( item );
+
+        // Make sure the *parent* item is visible. The selected item is the
+        // first (shown) child of the parent. So it's always right below the parent,
+        // and this way the user can also see what library the selected part belongs to,
+        // without having a case where the selection is off the screen (unless the
+        // window is a single row high, which is unlikely)
+        //
+        // This also happens to circumvent https://bugs.launchpad.net/kicad/+bug/1804400
+        // which appears to be a GTK+3 bug.
+        {
+            wxDataViewItem parent = GetParent( item );
+
+            if( parent.IsOk() )
+                item = parent;
+        }
+
         m_widget->EnsureVisible( item );
     }
 
