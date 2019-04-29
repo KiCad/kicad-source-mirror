@@ -73,15 +73,15 @@ TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNe
 
 TOOL_ACTION SCH_ACTIONS::cut( "eeschema.EditorControl.cut",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
-        _( "Cut" ), _( "Cut selected item(s) to clipboard" ), NULL );
+        _( "Cut" ), _( "Cut selected item(s) to clipboard" ), cut_xpm );
 
 TOOL_ACTION SCH_ACTIONS::copy( "eeschema.EditorControl.copy",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
-        _( "Copy" ), _( "Copy selected item(s) to clipboard" ), NULL );
+        _( "Copy" ), _( "Copy selected item(s) to clipboard" ), copy_xpm );
 
 TOOL_ACTION SCH_ACTIONS::paste( "eeschema.EditorControl.paste",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
-        _( "Paste" ), _( "Paste clipboard into schematic" ), NULL );
+        _( "Paste" ), _( "Paste clipboard into schematic" ), paste_xpm );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :

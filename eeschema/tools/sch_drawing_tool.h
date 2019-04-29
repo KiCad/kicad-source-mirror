@@ -75,6 +75,7 @@ public:
 
     int StartWire( const TOOL_EVENT& aEvent );
     int StartBus( const TOOL_EVENT& aEvent );
+    int StartLines( const TOOL_EVENT& aEvent );
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
     int AddGlobalLabel( const TOOL_EVENT& aEvent );

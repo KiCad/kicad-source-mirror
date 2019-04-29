@@ -164,6 +164,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_TEXT_COMMENT_BUTT:
         return SCH_ACTIONS::placeSchematicText.MakeEvent();
 
+    case ID_POPUP_SCH_BEGIN_LINES:
+        return SCH_ACTIONS::startLines.MakeEvent();
+
     case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
         return SCH_ACTIONS::drawLines.MakeEvent();

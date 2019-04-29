@@ -123,8 +123,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         return true;
     }
 
-    bool is_new = item->IsNew();
-
     switch( item->Type() )
     {
     case SCH_NO_CONNECT_T:
@@ -181,7 +179,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case SCH_SHEET_T:
         AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) item );
         break;
-
     }
 
     PopMenu->AppendSeparator();
@@ -197,12 +194,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
 
 void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
 {
-    if( Component->Type() != SCH_COMPONENT_T )
-    {
-        wxASSERT( 0 );
-        return;
-    }
-
     wxString    msg;
     LIB_PART*   part = NULL;
     LIB_ALIAS*  alias = NULL;
@@ -360,13 +351,6 @@ void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
     wxPoint     pos    = frame->GetCrossHairPosition();
     wxString    msg;
 
-    if( Wire == NULL )
-    {
-        msg = AddHotkeyName( _( "Begin Wire" ), g_Schematic_Hotkeys_Descr, HK_BEGIN_WIRE );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_BEGIN_WIRE, msg, KiBitmap( add_line_xpm ) );
-        return;
-    }
-
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ),
                  KiBitmap( delete_node_xpm ) );
     AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
@@ -397,13 +381,6 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     SCH_SELECTION_TOOL* selTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     wxPoint             pos = frame->GetCrossHairPosition();
     wxString            msg;
-
-    if( Bus == NULL )
-    {
-        msg = AddHotkeyName( _( "Begin Bus" ), g_Schematic_Hotkeys_Descr, HK_BEGIN_BUS );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_BEGIN_BUS, msg, KiBitmap( add_bus_xpm ) );
-        return;
-    }
 
     AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), KiBitmap( break_bus_xpm ) );
 

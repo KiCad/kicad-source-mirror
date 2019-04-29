@@ -51,86 +51,106 @@
 // Drawing tool actions
 TOOL_ACTION SCH_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
-        _( "Add Symbol" ), _( "Add a symbol" ), NULL, AF_ACTIVATE );
+        _( "Add Symbol" ), _( "Add a symbol" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
-        _( "Add Power" ), _( "Add a power port" ), NULL, AF_ACTIVATE );
+        _( "Add Power" ), _( "Add a power port" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
         AS_GLOBAL, 0,
-        _( "Begin Wire" ), _( "Start drawing a wire" ), NULL, AF_ACTIVATE );
+        _( "Begin Wire" ), _( "Start drawing a wire" ),
+        add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
-        _( "Add Wire" ), _( "Add a wire" ), NULL, AF_ACTIVATE );
+        _( "Add Wire" ), _( "Add a wire" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
         AS_GLOBAL, 0,
-        _( "Begin Bus" ), _( "Start drawing a bus" ), NULL, AF_ACTIVATE );
+        _( "Begin Bus" ), _( "Start drawing a bus" ),
+        add_bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
-        _( "Add Bus" ), _( "Add a bus" ), NULL, AF_ACTIVATE );
+        _( "Add Bus" ), _( "Add a bus" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::unfoldBus( "eeschema.InteractiveDrawing.unfoldBus",
         AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NOCONN_FLAG ),
-        _( "Add No Connect Flag" ), _( "Add a no-connection flag" ), NULL, AF_ACTIVATE );
+        _( "Add No Connect Flag" ), _( "Add a no-connection flag" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_JUNCTION ),
-        _( "Add Junction" ), _( "Add a junction" ), NULL, AF_ACTIVATE );
+        _( "Add Junction" ), _( "Add a junction" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_WIRE_ENTRY ),
-        _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ), NULL, AF_ACTIVATE );
+        _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
-        _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ), NULL, AF_ACTIVATE );
+        _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
-        _( "Add Label" ), _( "Add a net label" ), NULL, AF_ACTIVATE );
+        _( "Add Label" ), _( "Add a net label" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeHierarchicalLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
-        _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ), NULL, AF_ACTIVATE );
+        _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HIER_SHEET ),
-        _( "Add Sheet" ), _( "Add a hierarchical sheet" ), NULL, AF_ACTIVATE );
+        _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::resizeSheet( "eeschema.InteractiveDrawing.resizeSheet",
-        AS_GLOBAL, 0,
-        _( "Resize Sheet" ), _( "Resize hierarchical sheet" ), NULL, AF_NONE );
+        AS_GLOBAL, 0, _( "Resize Sheet" ), _( "Resize hierarchical sheet" ),
+        NULL, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
-        AS_GLOBAL, 0,
-        _( "Add Sheet Pin" ), _( "Add a sheet pin" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
-        AS_GLOBAL, 0,
-        _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0, _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
-        _( "Add Global Label" ), _( "Add a global label" ), NULL, AF_ACTIVATE );
+        _( "Add Global Label" ), _( "Add a global label" ),
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_TEXT ),
-        _( "Add Text" ), _( "Add text" ), NULL, AF_ACTIVATE );
+        _( "Add Text" ), _( "Add text" ),
+        NULL, AF_ACTIVATE );
+
+TOOL_ACTION SCH_ACTIONS::startLines( "eeschema.InteractiveDrawing.startLines",
+        AS_GLOBAL, 0, _( "Begin Lines" ), _( "Start drawing connected graphic lines" ),
+        add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawLines( "eeschema.InteractiveDrawing.drawLines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
-        _( "Add Lines" ), _( "Add connected graphic lines" ), NULL, AF_ACTIVATE );
+        _( "Add Lines" ), _( "Add connected graphic lines" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
-        AS_GLOBAL, 0,
-        _( "Add Image" ), _( "Add bitmap image" ), NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0, _( "Add Image" ), _( "Add bitmap image" ),
+        nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawing.finishLineWireOrBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),
@@ -138,29 +158,32 @@ TOOL_ACTION SCH_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawing.finis
         checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::finishWire( "eeschema.InteractiveDrawing.finishWire",
-        AS_GLOBAL, 0,
-        _( "Finish Bus" ), _( "Complete wire at current segment" ), checked_ok_xpm, AF_NONE );
+        AS_GLOBAL, 0, _( "Finish Wire" ), _( "Complete wire with current segment" ),
+        checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::finishBus( "eeschema.InteractiveDrawing.finishBus",
-        AS_GLOBAL, 0,
-        _( "Finish Bus" ), _( "Complete bus at current segment" ), checked_ok_xpm, AF_NONE );
+        AS_GLOBAL, 0, _( "Finish Bus" ), _( "Complete bus with current segment" ),
+        checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::finishLine( "eeschema.InteractiveDrawing.finishLine",
-        AS_GLOBAL, 0,
-        _( "Finish Line" ), _( "Complete polyline at current segment" ), checked_ok_xpm, AF_NONE );
+        AS_GLOBAL, 0, _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
+        checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::finishSheet( "eeschema.InteractiveDrawing.finishSheet",
-        AS_GLOBAL, 0,
-        _( "Finish Sheet" ), _( "Finish drawing sheet" ), checked_ok_xpm, AF_NONE );
+        AS_GLOBAL, 0, _( "Finish Sheet" ), _( "Finish drawing sheet" ),
+        checked_ok_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::addJunction( "eeschema.InteractiveEditing.addJunction",
-        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+        AS_GLOBAL, 0, _( "Add Junction" ), _( "Add a wire or bus junction" ),
+        add_junction_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::addLabel( "eeschema.InteractiveEditing.addLabel",
-        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+        AS_GLOBAL, 0, _( "Add Label" ), _( "Add a label to a wire or bus" ),
+        add_line_label_xpm, AF_NONE );
 
 TOOL_ACTION SCH_ACTIONS::addGlobalLabel( "eeschema.InteractiveEditing.addGlobalLabel",
-        AS_GLOBAL, 0, "", "", NULL, AF_NONE );
+        AS_GLOBAL, 0, _( "Add Global Label" ), _( "Add a global label to a wire or bus" ),
+        add_glabel_xpm, AF_NONE );
 
 
 SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
@@ -187,37 +210,34 @@ bool SCH_DRAWING_TOOL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto drawingWireCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
-
-            return ( line && line->GetLayer() == LAYER_WIRE );
-        }
-
-        return false;
+    auto idleWireCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT && aSel.Empty() );
     };
 
-    auto drawingBusCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
-
-            return ( line && line->GetLayer() == LAYER_BUS );
-        }
-
-        return false;
+    auto idleBusCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_BUS_BUTT && aSel.Empty() );
     };
 
-    auto drawingLineCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_LINE* line = dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) );
+    auto idleLineCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT && aSel.Empty() );
+    };
 
-            return ( line && line->GetLayer() == LAYER_NOTES );
-        }
+    auto drawingWireCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT
+                     && aSel.GetSize() == 1
+                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
+    };
 
-        return false;
+    auto drawingBusCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_BUS_BUTT
+                     && aSel.GetSize() == 1
+                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
+    };
+
+    auto drawingLineCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT
+                     && aSel.GetSize() == 1
+                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
     };
 
     auto& ctxMenu = m_menu.GetMenu();
@@ -225,6 +245,9 @@ bool SCH_DRAWING_TOOL::Init()
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
+    ctxMenu.AddItem( SCH_ACTIONS::startWire, idleWireCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startBus, idleBusCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startLines, idleLineCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishWire, drawingWireCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishBus, drawingBusCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishLine, drawingLineCondition, 1 );
@@ -840,7 +863,7 @@ int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+    m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     SCH_LINE* segment = startSegments( LAYER_BUS, m_frame->GetCrossHairPosition() );
@@ -900,10 +923,25 @@ int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
+int SCH_DRAWING_TOOL::StartLines( const TOOL_EVENT& aEvent)
 {
     m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
-    return doDrawSegments( LAYER_NOTES, nullptr );
+
+    m_frame->GetCanvas()->MoveCursorToCrossHair();
+    SCH_LINE* segment = startSegments( LAYER_NOTES, m_frame->GetCrossHairPosition() );
+    return doDrawSegments( LAYER_BUS, segment );
+}
+
+
+int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
+{
+    if( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT )
+        return StartLines( aEvent );
+    else
+    {
+        m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
+        return doDrawSegments( LAYER_NOTES, nullptr );
+    }
 }
 
 
@@ -1561,6 +1599,7 @@ void SCH_DRAWING_TOOL::setTransitions()
 
     Go( &SCH_DRAWING_TOOL::StartWire,             SCH_ACTIONS::startWire.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::StartBus,              SCH_ACTIONS::startBus.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::StartLines,            SCH_ACTIONS::startLines.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddGlobalLabel,        SCH_ACTIONS::addGlobalLabel.MakeEvent() );

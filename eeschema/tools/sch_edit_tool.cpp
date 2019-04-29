@@ -47,67 +47,83 @@
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
-        _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
+        _( "Move" ), _( "Moves the selected item(s)" ),
+        move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG ),
-        _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );
+        _( "Drag" ), _( "Drags the selected item(s)" ),
+        move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
+        duplicate_xpm );
 
 TOOL_ACTION SCH_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPEAT_LAST ),
-        _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ) );
+        _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ),
+        nullptr );
 
 TOOL_ACTION SCH_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
         AS_GLOBAL, 0,
-        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ), rotate_cw_xpm );
+        _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
+        rotate_cw_xpm );
 
 TOOL_ACTION SCH_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE ),
-        _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ), rotate_ccw_xpm );
+        _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
+        rotate_ccw_xpm );
 
 TOOL_ACTION SCH_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
-        _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ), mirror_h_xpm );
+        _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ),
+        mirror_h_xpm );
 
 TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
-        _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ), mirror_v_xpm );
+        _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ),
+        mirror_v_xpm );
 
 TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
-        _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
+        _( "Properties..." ), _( "Displays item properties dialog" ),
+        edit_xpm );
 
 TOOL_ACTION SCH_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_REFERENCE ),
-        _( "Edit Reference..." ), _( "Displays reference field dialog" ), config_xpm );
+        _( "Edit Reference..." ), _( "Displays reference field dialog" ),
+        edit_comp_ref_xpm );
 
 TOOL_ACTION SCH_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_VALUE ),
-        _( "Edit Value..." ), _( "Displays value field dialog" ), config_xpm );
+        _( "Edit Value..." ), _( "Displays value field dialog" ),
+        edit_comp_value_xpm );
 
 TOOL_ACTION SCH_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
-        _( "Edit Footprint..." ), _( "Displays footprint field dialog" ), config_xpm );
+        _( "Edit Footprint..." ), _( "Displays footprint field dialog" ),
+        edit_comp_footprint_xpm );
 
 TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_AUTOPLACE_FIELDS ),
-        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ), config_xpm );
+        _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
+        autoplace_fields_xpm );
 
 TOOL_ACTION SCH_ACTIONS::showDatasheet( "eeschema.InteractiveEdit.showDatasheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
-        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ), config_xpm );
+        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
+        datasheet_xpm );
 
 TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
-        _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm );
+        _( "Delete" ), _( "Deletes selected item(s)" ),
+        delete_xpm );
 
 TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
         AS_GLOBAL, 0,
-        _( "DoDelete Items" ), _( "DoDelete clicked items" ), NULL, AF_ACTIVATE );
+        _( "DoDelete Items" ), _( "DoDelete clicked items" ),
+        nullptr, AF_ACTIVATE );
 
 
 
@@ -201,43 +217,43 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty, 200 );
 
-    drawingMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
-    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
-    drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
-    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+    drawingMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
 
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::drag, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddItem( SCH_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::drag, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
-    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition );
-    selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition );
-    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition );
-    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition );
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 200 );
 
-    selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
-    selToolMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
+    selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty, 200 );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
-    selToolMenu.AddItem( SCH_ACTIONS::paste, noActiveToolCondition );
+    selToolMenu.AddItem( SCH_ACTIONS::paste, noActiveToolCondition, 200 );
 
     return true;
 }
