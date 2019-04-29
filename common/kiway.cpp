@@ -140,8 +140,15 @@ const wxString KIWAY::dso_search_path( FACE_T aFaceId )
 
     if( wxGetEnv( wxT( "KICAD_RUN_FROM_BUILD_DIR" ), nullptr ) )
     {
+#ifdef __WXMAC__
+        fn = wxStandardPaths::Get().GetExecutablePath();
+        fn.RemoveLastDir();
+        fn.AppendDir( wxT( "PlugIns" ) );
+        fn.SetName( name );
+#else
         fn.RemoveLastDir();
         fn.AppendDir( name + 1 );
+#endif
     }
 #endif
 
