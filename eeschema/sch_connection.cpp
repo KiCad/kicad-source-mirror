@@ -189,9 +189,9 @@ void SCH_CONNECTION::ConfigureFromLabel( wxString aLabel )
 void SCH_CONNECTION::Reset()
 {
     m_type = CONNECTION_NONE;
-    m_name = "<NO NET>";
-    m_prefix = "";
-    m_suffix = "";
+    m_name.Empty();
+    m_prefix.Empty();
+    m_suffix .Empty();
     m_driver = nullptr;
     m_members.clear();
     m_dirty = true;
@@ -201,7 +201,7 @@ void SCH_CONNECTION::Reset()
     m_vector_start = 0;
     m_vector_end = 0;
     m_vector_index = 0;
-    m_vector_prefix = "";
+    m_vector_prefix.Empty();
 }
 
 
@@ -249,6 +249,9 @@ bool SCH_CONNECTION::IsDriver() const
 wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 {
     wxString ret = m_prefix + m_name + m_suffix;
+
+    if( m_name.IsEmpty() )
+        ret = "<NO NET>";
 
     if( !Parent() || m_type == CONNECTION_NONE )
         return ret;
