@@ -247,6 +247,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
         return SCH_ACTIONS::showDatasheet.MakeEvent();
+
+    case ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP:
+        return SCH_ACTIONS::editWithSymbolEditor.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

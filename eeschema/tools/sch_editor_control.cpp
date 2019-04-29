@@ -46,6 +46,7 @@
 #include <sch_legacy_plugin.h>
 #include <class_library.h>
 #include <confirm.h>
+#include <lib_edit_frame.h>
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );
@@ -82,6 +83,11 @@ TOOL_ACTION SCH_ACTIONS::copy( "eeschema.EditorControl.copy",
 TOOL_ACTION SCH_ACTIONS::paste( "eeschema.EditorControl.paste",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
         _( "Paste" ), _( "Paste clipboard into schematic" ), paste_xpm );
+
+TOOL_ACTION SCH_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSymbolEditor",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
+        _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
+        libedit_xpm );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -650,6 +656,34 @@ int SCH_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SCH_COMPONENT*      comp = nullptr;
+    wxString            msg;
+
+    if( selection.GetSize() >= 1 )
+        comp = (SCH_COMPONENT*) selection.GetItem( 0 );
+
+    if( !comp || comp->GetEditFlags() != 0 )
+        return 0;
+
+    wxCommandEvent dummy;
+    m_frame->OnOpenLibraryEditor( dummy );
+
+    auto libeditFrame = (LIB_EDIT_FRAME*) m_frame->Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
+
+    if( libeditFrame )
+    {
+        const LIB_ID& id = comp->GetLibId();
+        libeditFrame->LoadComponentAndSelectLib( id, comp->GetUnit(), comp->GetConvert() );
+    }
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -682,4 +716,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Cut,                   SCH_ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  SCH_ACTIONS::copy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 SCH_ACTIONS::paste.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  SCH_ACTIONS::editWithSymbolEditor.MakeEvent() );
 }

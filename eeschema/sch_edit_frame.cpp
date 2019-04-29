@@ -235,7 +235,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
 
     EVT_TOOL( ID_RUN_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
-    EVT_TOOL( ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP, SCH_EDIT_FRAME::OnOpenLibraryEditor )
     EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
@@ -1076,44 +1075,6 @@ void SCH_EDIT_FRAME::OnOpenCvpcb( wxCommandEvent& event )
 
 void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
 {
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_COMPONENT*      component = NULL;
-
-    if( event.GetId() == ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP )
-    {
-        // We want to edit a component with Libedit.
-        // we are here by a hot key, or by a popup menu
-        SCH_ITEM* item = GetScreen()->GetCurItem();
-
-        if( !item )
-        {
-            // If we didn't get here by a hot key, then something has gone wrong.
-            if( event.GetInt() == 0 )
-                return;
-
-            EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) event.GetClientObject();
-
-            wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
-
-            // Set the locat filter, according to the edit command
-            const KICAD_T* filterList = SCH_COLLECTOR::ComponentsOnly;
-            item = selTool->SelectPoint( data->GetPosition(), filterList );
-
-            // Exit if no item found at the current location or the item is already being edited.
-            if( item == NULL || item->GetEditFlags() != 0 )
-                return;
-        }
-
-
-        if( !item || item->GetEditFlags() != 0 || item->Type() != SCH_COMPONENT_T )
-        {
-            wxMessageBox( _( "Error: not a symbol or no symbol." ) );
-            return;
-        }
-
-        component = (SCH_COMPONENT*) item;
-    }
-
     LIB_EDIT_FRAME* libeditFrame = (LIB_EDIT_FRAME*) Kiway().Player( FRAME_SCH_LIB_EDITOR, false );
 
     if( !libeditFrame )
@@ -1129,34 +1090,6 @@ void SCH_EDIT_FRAME::OnOpenLibraryEditor( wxCommandEvent& event )
         libeditFrame->Iconize( false );
 
     libeditFrame->Raise();
-
-    if( component )
-    {
-        LIB_ID id = component->GetLibId();
-        LIB_ALIAS* entry = nullptr;
-
-        try
-        {
-            entry = Prj().SchSymbolLibTable()->LoadSymbol( id );
-        }
-        catch( const IO_ERROR& ioe )
-        {
-            wxString msg;
-
-            msg.Printf( _( "Error occurred loading symbol \"%s\" from library \"%s\"." ),
-                        id.GetLibItemName().wx_str(), id.GetLibNickname().wx_str() );
-            DisplayErrorMessage( this, msg, ioe.What() );
-            return;
-        }
-
-        if( !entry )     // Should not occur
-            return;
-
-        libeditFrame->LoadComponentAndSelectLib( id, component->GetUnit(), component->GetConvert() );
-    }
-
-    SchematicCleanUp();
-    m_canvas->Refresh();
 }
 
 

@@ -83,6 +83,8 @@ public:
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
+    int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
+
 private:
     ///> copy selection to clipboard
     bool doCopy();

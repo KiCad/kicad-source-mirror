@@ -146,6 +146,7 @@ public:
     /// Inspection
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION showMarkerInfo;
+    static TOOL_ACTION editWithSymbolEditor;
 
     /// Clipboard
     static TOOL_ACTION cut;

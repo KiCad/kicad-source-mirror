@@ -167,14 +167,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
         AddMenuItem( editmenu, sel_unit_menu, ID_POPUP_SCH_SELECT_UNIT_CMP,
                      _( "Unit" ), KiBitmap( component_select_unit_xpm ) );
     }
-
-    if( !Component->GetEditFlags() )
-    {
-        msg = AddHotkeyName( _( "Edit with Library Editor" ), g_Schematic_Hotkeys_Descr,
-                             HK_EDIT_COMPONENT_WITH_LIBEDIT );
-        AddMenuItem( editmenu, ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
-                     msg, KiBitmap( libedit_xpm ) );
-    }
 }
 
 

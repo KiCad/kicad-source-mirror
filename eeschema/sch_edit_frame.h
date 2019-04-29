@@ -647,6 +647,8 @@ public:
 
     bool OpenProjectFiles( const std::vector<wxString>& aFileSet, int aCtl = 0 ) override;
 
+    void OnOpenLibraryEditor( wxCommandEvent& event );
+
     /**
      * Import a KiCad schematic into the current page.
      *
@@ -825,7 +827,6 @@ private:
     void OnOpenPcbnew( wxCommandEvent& event );
     void OnOpenPcbModuleEditor( wxCommandEvent& event );
     void OnOpenCvpcb( wxCommandEvent& event );
-    void OnOpenLibraryEditor( wxCommandEvent& event );
     void OnRescueProject( wxCommandEvent& event );
     void OnRemapSymbols( wxCommandEvent& aEvent );
 

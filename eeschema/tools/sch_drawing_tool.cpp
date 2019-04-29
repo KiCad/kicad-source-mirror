@@ -551,7 +551,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
 
-                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, aComponent );
+                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, image );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
