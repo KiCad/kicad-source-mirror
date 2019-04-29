@@ -151,7 +151,6 @@ enum id_eeschema_frm
     ID_POPUP_SCH_ADD_JUNCTION,
     ID_POPUP_SCH_ADD_LABEL,
     ID_POPUP_SCH_ADD_GLABEL,
-    ID_POPUP_SCH_GETINFO_MARKER,
     ID_POPUP_END_RANGE,
 
     // Dynamically bound in AddMenusForBus()
@@ -175,7 +174,6 @@ enum id_eeschema_frm
     // Change orientation command IDs.
     ID_SCH_MIRROR_X,
     ID_SCH_MIRROR_Y,
-    ID_SCH_ORIENT_NORMAL,
 
     ID_SCH_ROTATE_CLOCKWISE,
     ID_SCH_ROTATE_COUNTERCLOCKWISE,

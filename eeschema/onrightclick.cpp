@@ -26,7 +26,6 @@
 #include <fctsys.h>
 #include <eeschema_id.h>
 #include <sch_draw_panel.h>
-#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <menus_helpers.h>
 
@@ -35,22 +34,15 @@
 #include <connection_graph.h>
 #include <general.h>
 #include <hotkeys.h>
-#include <netlist_object.h>
 #include <sch_bus_entry.h>
-#include <sch_marker.h>
-#include <sch_text.h>
 #include <sch_junction.h>
 #include <sch_component.h>
 #include <sch_line.h>
-#include <sch_no_connect.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-#include <sch_bitmap.h>
 #include <symbol_lib_table.h>
-#include <sch_connection.h>
 #include <sch_view.h>
 
-#include <iostream>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
@@ -60,32 +52,12 @@ static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* fram
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
                                   SYMBOL_LIB_TABLE* aLibs );
-static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
 
 
 bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 {
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     SCH_ITEM*           item = GetScreen()->GetCurItem();
     wxString            msg;
-
-    // Ugly hack, clear any highligthed symbol, because the HIGHLIGHT flag create issues when creating menus
-    // Will be fixed later
-    GetCanvas()->GetView()->HighlightItem( nullptr, nullptr );
-
-    // Do not start a block command on context menu.
-    m_canvas->SetCanStartBlock( -1 );
-
-    // Try to locate items at cursor position.
-    if( item == NULL || item->GetEditFlags() == 0 )
-    {
-        bool actionCancelled = false;
-        item = selTool->SelectPoint( aPosition, SCH_COLLECTOR::AllItemsButPins, &actionCancelled );
-
-        // If the clarify item selection context menu is aborted, don't show the context menu.
-        if( item == NULL && actionCancelled )
-            return false;
-    }
 
     // If a command is in progress: add "cancel" and "end tool" menu
     if( GetToolId() != ID_NO_TOOL_SELECTED )
@@ -118,17 +90,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
     switch( item->Type() )
     {
-    case SCH_NO_CONNECT_T:
-        AddMenuItem( PopMenu, ID_SCH_DELETE, _( "Delete No Connect" ),
-                     KiBitmap( delete_xpm ) );
-        break;
-
     case SCH_JUNCTION_T:
         addJunctionMenuEntries( PopMenu, (SCH_JUNCTION*) item );
-        break;
-
-    case SCH_MARKER_T:
-        AddMenusForMarkers( PopMenu, (SCH_MARKER*) item, this );
         break;
 
     case SCH_COMPONENT_T:
@@ -153,7 +116,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         break;
     }
 
-    PopMenu->AppendSeparator();
     return true;
 }
 
@@ -338,13 +300,6 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hotkeys_Descr, HK_DELETE );
         AddMenuItem( PopMenu, ID_SCH_DELETE, msg, KiBitmap( delete_sheet_xpm ) );
     }
-}
-
-
-void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame )
-{
-    AddMenuItem( aPopMenu, ID_POPUP_SCH_GETINFO_MARKER, _( "Marker Error Info" ),
-                 KiBitmap( info_xpm ) );
 }
 
 

@@ -190,3 +190,9 @@ SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
 {
     return std::bind( &SELECTION_CONDITIONS::andFunc, aConditionA, aConditionB, _1 );
 }
+
+
+SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition )
+{
+    return std::bind( &SELECTION_CONDITIONS::notFunc, aCondition, _1 );
+}

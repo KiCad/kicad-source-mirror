@@ -1141,16 +1141,6 @@ public:
     void InitBlockPasteInfos() override;
 
     /**
-     * Return the block command internal code (BLOCK_MOVE, BLOCK_DUPLICATE...)
-     * corresponding to the keys pressed (ALT, SHIFT, SHIFT ALT ..) when
-     * block command is started by dragging the mouse.
-     *
-     * @param aKey = the key modifiers (Alt, Shift ...)
-     * @return the block command id (BLOCK_MOVE, BLOCK_DUPLICATE...)
-     */
-    virtual int BlockCommand( EDA_KEY aKey ) override;
-
-    /**
      * Call after HandleBlockEnd, when a block command needs to be executed after the block
      * is moved to its new place.
      *

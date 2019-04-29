@@ -244,6 +244,7 @@ set( EESCHEMA_SRCS
     tools/sch_drawing_tool.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
+    tools/sch_inspection_tool.cpp
     tools/sch_picker_tool.cpp
     tools/sch_selection_tool.cpp
     tools/selection.cpp

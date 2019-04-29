@@ -74,7 +74,6 @@
     case ID_POPUP_SCH_LEAVE_SHEET:
     case ID_POPUP_SCH_ADD_JUNCTION:
     case ID_POPUP_SCH_ADD_LABEL:
-    case ID_POPUP_SCH_GETINFO_MARKER:
         /* At this point: Do nothing. these commands do not need to stop the
          * current command (mainly a block command) or reset the current state
          * They will be executed later, in next switch structure.
@@ -180,12 +179,6 @@
             g_CurrentSheet->pop_back();
             DisplayCurrentSheet();
         }
-        break;
-
-    case ID_POPUP_SCH_GETINFO_MARKER:
-        if( item && item->Type() == SCH_MARKER_T )
-            ( (SCH_MARKER*) item )->DisplayMarkerInfo( this );
-
         break;
 
     default:        // Log error:

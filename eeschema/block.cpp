@@ -50,41 +50,6 @@
 #include <view/view_group.h>
 
 
-int SCH_EDIT_FRAME::BlockCommand( EDA_KEY key )
-{
-    int cmd = BLOCK_IDLE;
-
-    switch( key )
-    {
-    default:
-        cmd = key & 0xFF;
-        break;
-
-    case 0:
-        cmd = BLOCK_MOVE;
-        break;
-
-    case GR_KB_SHIFT:
-        cmd = BLOCK_DUPLICATE;
-        break;
-
-    case GR_KB_CTRL:
-        cmd = BLOCK_DRAG;
-        break;
-
-    case GR_KB_SHIFTCTRL:
-        cmd = BLOCK_DELETE;
-        break;
-
-    case MOUSE_MIDDLE:
-        cmd = BLOCK_ZOOM;
-        break;
-    }
-
-    return cmd;
-}
-
-
 void SCH_EDIT_FRAME::InitBlockPasteInfos()
 {
     wxFAIL_MSG( "How did we get here?  Should have gone through modern toolset..." );

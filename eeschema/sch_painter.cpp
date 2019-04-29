@@ -1416,10 +1416,9 @@ void SCH_PAINTER::draw( SCH_MARKER *aMarker, int aLayer )
     SHAPE_LINE_CHAIN polygon;
     aMarker->ShapeToPolygon( polygon );
 
-    COLOR4D color = m_schSettings.GetLayerColor( LAYER_ERC_WARN );
-
-    if( aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR )
-        color = m_schSettings.GetLayerColor( LAYER_ERC_ERR );
+    int layer = aMarker->GetErrorLevel() == MARKER_BASE::MARKER_SEVERITY_ERROR ? LAYER_ERC_ERR
+                                                                               : LAYER_ERC_WARN;
+    COLOR4D color = getRenderColor( aMarker, layer, false );
 
     m_gal->Save();
     m_gal->Translate( aMarker->GetPosition() );

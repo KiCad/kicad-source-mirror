@@ -40,6 +40,8 @@ SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
 SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                 const SELECTION_CONDITION& aConditionB );
 
+SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition );
+
 
 /**
  * Class that groups generic conditions for selected items.
@@ -160,11 +162,19 @@ private:
         return aConditionA( aSelection ) && aConditionB( aSelection );
     }
 
+    ///> Helper function used by operator!
+    static bool notFunc( const SELECTION_CONDITION& aCondition, const SELECTION& aSelection )
+    {
+        return !aCondition( aSelection );
+    }
+
     friend SELECTION_CONDITION operator||( const SELECTION_CONDITION& aConditionA,
                                            const SELECTION_CONDITION& aConditionB );
 
     friend SELECTION_CONDITION operator&&( const SELECTION_CONDITION& aConditionA,
                                            const SELECTION_CONDITION& aConditionB );
+
+    friend SELECTION_CONDITION operator!( const SELECTION_CONDITION& aCondition );
 };
 
 #endif /* SELECTION_CONDITIONS_H_ */

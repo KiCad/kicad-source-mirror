@@ -111,11 +111,6 @@ TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFie
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
-TOOL_ACTION SCH_ACTIONS::showDatasheet( "eeschema.InteractiveEdit.showDatasheet",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
-        _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
-        datasheet_xpm );
-
 TOOL_ACTION SCH_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
         AS_GLOBAL, 0,
         _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
@@ -223,6 +218,29 @@ bool SCH_EDIT_TOOL::Init()
         }
     };
 
+    auto hasPropertiesCondition = []  ( const SELECTION& aSel ) {
+        if( aSel.GetSize() != 1 )
+            return false;
+
+        switch( static_cast<EDA_ITEM*>( aSel.GetItem( 0 ) )->Type() )
+        {
+        case SCH_MARKER_T:
+        case SCH_JUNCTION_T:
+        case SCH_NO_CONNECT_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_LINE_T:
+        case SCH_SHEET_PIN_T:
+        case SCH_PIN_T:
+            return false;
+        default:
+            return true;
+        }
+    };
+
+    auto notJustMarkersCondition = SELECTION_CONDITIONS::MoreThan( 0 )
+                                   && !SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T );
+
     auto toLabelCondition = SELECTION_CONDITIONS::Count( 1 )
                                 && ( SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
                                   || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T )
@@ -275,10 +293,10 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition );
     ctxMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition );
     ctxMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::duplicate, notJustMarkersCondition );
     ctxMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
 
-    ctxMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
+    ctxMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition );
@@ -300,7 +318,7 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
 
-    drawingMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition, 200 );
@@ -321,10 +339,10 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate, notJustMarkersCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editFootprint, singleSymbolCondition, 200 );
@@ -1296,23 +1314,6 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDIT_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
-{
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
-
-    if( selection.Empty() )
-        return 0;
-
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.GetItem( 0 );
-    wxString       datasheet = component->GetField( DATASHEET )->GetText();
-
-    if( !datasheet.IsEmpty() )
-        GetAssociatedDocument( m_frame, datasheet );
-
-    return 0;
-}
-
-
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
@@ -1500,7 +1501,6 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ShowDatasheet,      SCH_ACTIONS::showDatasheet.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeSlash.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeBackslash.MakeEvent() );

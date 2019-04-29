@@ -132,7 +132,6 @@ public:
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
     static TOOL_ACTION autoplaceFields;
-    static TOOL_ACTION showDatasheet;
     static TOOL_ACTION doDelete;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
@@ -143,6 +142,10 @@ public:
     static TOOL_ACTION toHLabel;
     static TOOL_ACTION toGLabel;
     static TOOL_ACTION toText;
+
+    /// Inspection
+    static TOOL_ACTION showDatasheet;
+    static TOOL_ACTION showMarkerInfo;
 
     /// Clipboard
     static TOOL_ACTION cut;

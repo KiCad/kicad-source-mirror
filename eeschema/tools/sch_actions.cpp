@@ -31,6 +31,7 @@
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_edit_tool.h>
+#include <tools/sch_inspection_tool.h>
 #include <tool/zoom_tool.h>
 
 
@@ -261,4 +262,5 @@ void SCH_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
     aToolManager->RegisterTool( new SCH_PICKER_TOOL );
     aToolManager->RegisterTool( new SCH_DRAWING_TOOL );
     aToolManager->RegisterTool( new SCH_EDIT_TOOL );
+    aToolManager->RegisterTool( new SCH_INSPECTION_TOOL );
 }

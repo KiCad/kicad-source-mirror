@@ -46,10 +46,7 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu()
-    {
-        return m_menu;
-    }
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     /**
      * Function Main()
@@ -67,7 +64,6 @@ public:
     int Properties( const TOOL_EVENT& aEvent );
     int EditField( const TOOL_EVENT& aEvent );
     int AutoplaceFields( const TOOL_EVENT& aEvent );
-    int ShowDatasheet( const TOOL_EVENT& aEvent );
 
     int ChangeShape( const TOOL_EVENT& aEvent );
     int ChangeTextType( const TOOL_EVENT& aEvent );
