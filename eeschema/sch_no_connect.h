@@ -76,12 +76,8 @@ public:
     }
 
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
-
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const override { return true; }
 
@@ -103,11 +99,9 @@ public:
     void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
     wxPoint GetPosition() const override { return m_pos; }
-
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-
     bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) override;

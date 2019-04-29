@@ -130,7 +130,7 @@ public:
      */
     virtual wxPoint GetSchematicTextOffset() const;
 
-    virtual void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, const wxPoint& offset ) override;
 
     /**
      * Calculate the graphic shape (a polygon) associated to the text.
@@ -144,66 +144,58 @@ public:
         aPoints.clear();
     }
 
-    virtual void SwapData( SCH_ITEM* aItem ) override;
+    void SwapData( SCH_ITEM* aItem ) override;
 
-    virtual const EDA_RECT GetBoundingBox() const override;
+    const EDA_RECT GetBoundingBox() const override;
 
-    virtual int GetPenSize() const override;
+    int GetPenSize() const override;
 
     // Geometric transforms (used in block operations):
 
-    virtual void Move( const wxPoint& aMoveVector ) override
+    void Move( const wxPoint& aMoveVector ) override
     {
         EDA_TEXT::Offset( aMoveVector );
     }
 
-    virtual void MirrorY( int aYaxis_position ) override;
+    void MirrorY( int aYaxis_position ) override;
+    void MirrorX( int aXaxis_position ) override;
+    void Rotate( wxPoint aPosition ) override;
 
-    virtual void MirrorX( int aXaxis_position ) override;
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
-    virtual void Rotate( wxPoint aPosition ) override;
-
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
-
-    virtual bool Replace( wxFindReplaceData& aSearchData, void* aAuxData ) override
+    bool Replace( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {
         return EDA_ITEM::Replace( aSearchData, m_Text );
     }
 
     virtual bool IsReplaceable() const override { return true; }
 
-    virtual void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
+    void GetEndPoints( std::vector< DANGLING_END_ITEM >& aItemList ) override;
 
-    virtual bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
+    bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    virtual bool IsDangling() const override { return m_isDangling; }
+    bool IsDangling() const override { return m_isDangling; }
+    void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
 
-    virtual void SetIsDangling( bool aIsDangling ) { m_isDangling = aIsDangling; }
+    void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
 
-    virtual bool IsSelectStateChanged( const wxRect& aRect ) override;
+    bool CanIncrementLabel() const override { return true; }
 
-    virtual void GetConnectionPoints( std::vector< wxPoint >& aPoints ) const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
-    virtual bool CanIncrementLabel() const override { return true; }
+    BITMAP_DEF GetMenuImage() const override;
 
-    virtual wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
-    virtual BITMAP_DEF GetMenuImage() const override;
+    wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
 
-    virtual void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                                 SCH_SHEET_PATH*      aSheetPath ) override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const override;
 
-    virtual wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
+    void Plot( PLOTTER* aPlotter ) override;
 
-    virtual void SetPosition( const wxPoint& aPosition ) override { EDA_TEXT::SetTextPos( aPosition ); }
-
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const override;
-
-    virtual void Plot( PLOTTER* aPlotter ) override;
-
-    virtual EDA_ITEM* Clone() const override;
+    EDA_ITEM* Clone() const override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 

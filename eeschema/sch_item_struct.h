@@ -290,18 +290,6 @@ public:
     virtual bool CanConnect( const SCH_ITEM* aItem ) const { return m_Layer == aItem->GetLayer(); }
 
     /**
-     * Function IsSelectStateChanged
-     * checks if the selection state of an item inside \a aRect has changed.
-     *
-     * This is used by the block selection code to verify if an item is selected or not.
-     * True is be return anytime the select state changes.  If you need to know the
-     * the current selection state, use the IsSelected() method.
-     *
-     * @param aRect - Rectangle to test against.
-     */
-    virtual bool IsSelectStateChanged( const wxRect& aRect ) { return false; }
-
-    /**
      * Function IsConnectable
      * returns true if the schematic item can connect to another schematic item.
      */

@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_marker.h
- * @brief SCH_MARKER class definition.
- */
-
 #ifndef TYPE_SCH_MARKER_H_
 #define TYPE_SCH_MARKER_H_
 
@@ -47,6 +42,8 @@ public:
     {
         return wxT( "SCH_MARKER" );
     }
+
+    void SwapData( SCH_ITEM* aItem ) override;
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
@@ -69,11 +66,8 @@ public:
         m_Pos += aMoveVector;
     }
 
-
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
 
     /**
@@ -89,8 +83,6 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
-
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
     {
         return wxString( _( "ERC Marker" ) );
@@ -99,7 +91,6 @@ public:
     BITMAP_DEF GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_Pos; }
-
     void SetPosition( const wxPoint& aPosition ) override { m_Pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;

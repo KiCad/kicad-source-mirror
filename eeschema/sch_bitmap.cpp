@@ -146,19 +146,6 @@ void SCH_BITMAP::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_BITMAP::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    if( aRect.Contains( m_pos ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 #if defined(DEBUG)
 void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 {
@@ -167,8 +154,6 @@ void SCH_BITMAP::Show( int nestLevel, std::ostream& os ) const
 
     NestedSpace( nestLevel, os ) << '<' << s.Lower().mb_str() << m_pos << "/>\n";
 }
-
-
 #endif
 
 

@@ -94,16 +94,11 @@ public:
         m_pos += aMoveVector;
     }
 
-
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
 
     bool IsDangling() const override;
-
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const override { return true; }
 

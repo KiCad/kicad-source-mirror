@@ -974,12 +974,10 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition,
         GENERAL_COLLECTOR collector;
 
         // Find a connected item for which we are going to highlight a net
-        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks,
-                           wxPoint( aPosition.x, aPosition.y ), guide );
+        collector.Collect( board, GENERAL_COLLECTOR::PadsOrTracks, (wxPoint) aPosition, guide );
 
         if( collector.GetCount() == 0 )
-            collector.Collect( board, GENERAL_COLLECTOR::Zones,
-                               wxPoint( aPosition.x, aPosition.y ), guide );
+            collector.Collect( board, GENERAL_COLLECTOR::Zones, (wxPoint) aPosition, guide );
 
         // Clear the previous highlight
         frame->SendMessageToEESCHEMA( nullptr );

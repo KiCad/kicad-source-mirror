@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_sheet.h
- * @brief Definition of the SCH_SHEET class for Eeschema.
- */
-
 #ifndef SCH_SHEEET_H
 #define SCH_SHEEET_H
 
@@ -168,11 +163,9 @@ public:
         Offset( aMoveVector );
     }
 
-    void MirrorY( int aYaxis_position ) override;
-
-    void Rotate( wxPoint aPosition ) override;
-
     void MirrorX( int aXaxis_position ) override;
+    void MirrorY( int aYaxis_position ) override;
+    void Rotate( wxPoint aPosition ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
 
@@ -264,21 +257,17 @@ public:
     bool IsMovableFromAnchorPoint() override { return false; }
 
     wxString GetName() const { return m_name; }
-
     void SetName( const wxString& aName ) { m_name = aName; }
 
     int GetSheetNameSize() const { return m_sheetNameSize; }
-
     void SetSheetNameSize( int aSize ) { m_sheetNameSize = aSize; }
 
     int GetFileNameSize() const { return m_fileNameSize; }
-
     void SetFileNameSize( int aSize ) { m_fileNameSize = aSize; }
 
     SCH_SCREEN* GetScreen() { return m_screen; }
 
     wxSize GetSize() { return m_size; }
-
     void SetSize( const wxSize& aSize ) { m_size = aSize; }
 
     /**
@@ -484,9 +473,7 @@ public:
     }
 
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
@@ -516,8 +503,6 @@ public:
 
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
-
     bool IsConnectable() const override { return true; }
 
     bool CanConnect( const SCH_ITEM* aItem ) const override
@@ -543,11 +528,9 @@ public:
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
     wxPoint GetPosition() const override { return m_pos; }
-
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-
     bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) override;

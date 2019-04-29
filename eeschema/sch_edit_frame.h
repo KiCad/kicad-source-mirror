@@ -371,7 +371,6 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
-    void OnLeftDClick( wxDC* aDC, const wxPoint& aPosition ) override;
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override;
     void OnSelectOptionToolbar( wxCommandEvent& event );
     double BestZoom() override;
@@ -1030,11 +1029,6 @@ public:
     void EditComponent( SCH_COMPONENT* aComponent );
 
 public:
-
-    /**
-     * Rotate and mirror a component.
-     */
-    void OrientComponent( COMPONENT_ORIENTATION_T aOrientation = CMP_NORMAL );
 
     /**
      * Display the edit field dialog to edit the parameters of \a aField.

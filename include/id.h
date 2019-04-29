@@ -161,7 +161,7 @@ enum main_id
     ID_POPUP_CANCEL_CURRENT_COMMAND,
     ID_POPUP_CLOSE_CURRENT_TOOL,
 
-    // JEY TODO: all the block-specific commands are obsolet after LibEdit moves to modern toolset
+    // JEY TODO: all the block-specific commands are obsolete after LibEdit moves to modern toolset
     ID_POPUP_MOVE_BLOCK,
     ID_POPUP_MOVE_BLOCK_EXACT,
     ID_POPUP_DRAG_BLOCK,

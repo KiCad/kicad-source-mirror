@@ -421,19 +421,6 @@ bool SCH_TEXT::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_TEXT::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    if( aRect.Contains( GetTextPos() ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 void SCH_TEXT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     // Normal text labels do not have connection points.  All others do.

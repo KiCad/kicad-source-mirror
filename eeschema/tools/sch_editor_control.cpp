@@ -628,6 +628,28 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
+
+    if( selection.GetSize() == 1 )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
+
+        MSG_PANEL_ITEMS msgItems;
+        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else
+    {
+        m_frame->ClearMsgPanel();
+    }
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -642,6 +664,10 @@ void SCH_EDITOR_CONTROL::setTransitions()
     /*
     Go( &SCH_EDITOR_CONTROL::CrossProbePcbToSch,    SCH_ACTIONS::crossProbeSchToPcb.MakeEvent() );
      */
+
+    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedEvent );
+    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );
+    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::ClearedEvent );
 
 #ifdef KICAD_SPICE
     Go( &SCH_EDITOR_CONTROL::SimProbe,              SCH_ACTIONS::simProbe.MakeEvent() );

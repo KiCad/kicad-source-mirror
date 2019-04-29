@@ -537,9 +537,7 @@ public:
     }
 
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
 
     bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
@@ -560,8 +558,6 @@ public:
     bool UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList ) override;
 
     wxPoint GetPinPhysicalPosition( const LIB_PIN* Pin ) const;
-
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     bool IsConnectable() const override { return true; }
 
@@ -598,8 +594,7 @@ public:
 
     BITMAP_DEF GetMenuImage() const override;
 
-    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems,
-                         SCH_SHEET_PATH*      aSheetPath ) override;
+    void GetNetListItem( NETLIST_OBJECT_LIST& aNetListItems, SCH_SHEET_PATH* aSheetPath ) override;
 
     bool operator <( const SCH_ITEM& aItem ) const override;
 
@@ -611,11 +606,9 @@ public:
     bool IsReplaceable() const override { return true; }
 
     wxPoint GetPosition() const override { return m_Pos; }
-
     void SetPosition( const wxPoint& aPosition ) override { Move( aPosition - m_Pos ); }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-
     bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) override;

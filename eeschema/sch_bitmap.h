@@ -139,12 +139,8 @@ public:
     bool IsMovableFromAnchorPoint() override { return false; }
 
     void MirrorY( int aYaxis_position ) override;
-
     void MirrorX( int aXaxis_position ) override;
-
     void Rotate( wxPoint aPosition ) override;
-
-    bool IsSelectStateChanged( const wxRect& aRect ) override;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override
     {
@@ -154,11 +150,9 @@ public:
     BITMAP_DEF GetMenuImage() const override;
 
     wxPoint GetPosition() const override { return m_pos; }
-
     void SetPosition( const wxPoint& aPosition ) override { m_pos = aPosition; }
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-
     bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) override;

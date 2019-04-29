@@ -271,17 +271,11 @@ SCH_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
         }
     }
 
-    // JEY TODO: move to own action triggered by selection event....
     if( collector.GetCount() == 1 )
     {
         SCH_ITEM* item = collector[ 0 ];
 
         toggleSelection( item );
-
-        MSG_PANEL_ITEMS msgItems;
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
-        m_frame->SetMsgPanel( msgItems );
-
         return item;
     }
 

@@ -419,10 +419,6 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                         field->SetText( i.second );
                 }
 
-                MSG_PANEL_ITEMS items;
-                aComponent->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
-                m_frame->SetMsgPanel( items );
-
                 if( m_frame->GetAutoplaceFields() )
                     aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
@@ -549,15 +545,13 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                     continue;
                 }
 
-                MSG_PANEL_ITEMS items;
-                image->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
-                m_frame->SetMsgPanel( items );
-
                 image->SetFlags( IS_MOVED );
                 m_frame->SetRepeatItem( image );
                 m_frame->GetScreen()->SetCurItem( image );
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
+
+                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, aComponent );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
@@ -813,11 +807,6 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                 if( item )
                 {
                     m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, item );
-
-                    // JEY TODO: this should be handled by selection event....
-                    MSG_PANEL_ITEMS items;
-                    item->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
-                    m_frame->SetMsgPanel( items );
 
                     item->SetFlags( IS_MOVED );
                     m_view->ClearPreview();

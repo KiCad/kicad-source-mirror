@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_marker.cpp
- * @brief Class SCH_MARKER implementation
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <trigo.h>
@@ -56,6 +51,12 @@ SCH_MARKER::SCH_MARKER( const wxPoint& pos, const wxString& text ) :
 EDA_ITEM* SCH_MARKER::Clone() const
 {
     return new SCH_MARKER( *this );
+}
+
+
+void SCH_MARKER::SwapData( SCH_ITEM* aItem )
+{
+    std::swap( *((SCH_MARKER*) this), *((SCH_MARKER*) aItem ) );
 }
 
 
@@ -148,19 +149,6 @@ void SCH_MARKER::MirrorY( int aYaxis_position )
     m_Pos.x -= aYaxis_position;
     m_Pos.x  = -m_Pos.x;
     m_Pos.x += aYaxis_position;
-}
-
-
-bool SCH_MARKER::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    if( aRect.Contains( m_Pos ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
 }
 
 

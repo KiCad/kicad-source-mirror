@@ -1561,21 +1561,6 @@ wxPoint SCH_COMPONENT::GetPinPhysicalPosition( const LIB_PIN* Pin ) const
 }
 
 
-bool SCH_COMPONENT::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    EDA_RECT boundingBox = GetBoundingBox();
-
-    if( aRect.Intersects( boundingBox ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 void SCH_COMPONENT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     for( const SCH_PIN& pin : m_pins )

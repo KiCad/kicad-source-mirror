@@ -179,7 +179,6 @@ set( EESCHEMA_SRCS
     netlist_generator.cpp
     netlist_object_list.cpp
     netlist_object.cpp
-    onleftclick.cpp
     onrightclick.cpp
     operations_on_items_lists.cpp
     pin_number.cpp

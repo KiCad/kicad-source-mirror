@@ -299,21 +299,6 @@ bool SCH_BUS_ENTRY_BASE::IsDangling() const
 }
 
 
-bool SCH_BUS_ENTRY_BASE::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    // If either end of the bus entry is inside the selection rectangle, the entire
-    // bus entry is selected.  Bus entries have a fixed length and angle.
-    if( aRect.Contains( m_pos ) || aRect.Contains( m_End() ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 void SCH_BUS_ENTRY_BASE::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );

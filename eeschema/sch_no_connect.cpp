@@ -133,19 +133,6 @@ void SCH_NO_CONNECT::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_NO_CONNECT::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    if( aRect.Contains( m_pos ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 void SCH_NO_CONNECT::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     aPoints.push_back( m_pos );

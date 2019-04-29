@@ -783,21 +783,6 @@ bool SCH_SHEET::UpdateDanglingState( std::vector<DANGLING_END_ITEM>& aItemList )
 }
 
 
-bool SCH_SHEET::IsSelectStateChanged( const wxRect& aRect )
-{
-    bool previousState = IsSelected();
-
-    EDA_RECT boundingBox = GetBoundingBox();
-
-    if( aRect.Intersects( boundingBox ) )
-        SetFlags( SELECTED );
-    else
-        ClearFlags( SELECTED );
-
-    return previousState != IsSelected();
-}
-
-
 void SCH_SHEET::GetConnectionPoints( std::vector< wxPoint >& aPoints ) const
 {
     for( size_t i = 0; i < GetPins().size(); i++ )
