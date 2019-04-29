@@ -760,8 +760,7 @@ void SCH_EDIT_FRAME::OnModify()
 
     m_foundItems.SetForceSearch();
 
-
-    if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+    if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( false );
 
     m_canvas->Refresh();

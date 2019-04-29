@@ -26,6 +26,7 @@
 #include <unordered_map>
 #include <profile.h>
 
+#include <advanced_config.h>
 #include <common.h>
 #include <erc.h>
 #include <sch_edit_frame.h>
@@ -345,6 +346,9 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
 }
 
 
+bool CONNECTION_GRAPH::m_allowRealTime = true;
+
+
 void CONNECTION_GRAPH::Reset()
 {
     for( auto subgraph : m_subgraphs )
@@ -369,7 +373,8 @@ void CONNECTION_GRAPH::Reset()
 
 void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUnconditional )
 {
-    PROF_COUNTER phase1;
+    PROF_COUNTER recalc_time;
+    PROF_COUNTER update_items;
 
     if( aUnconditional )
         Reset();
@@ -391,8 +396,8 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
         updateItemConnectivity( sheet, items );
     }
 
-    phase1.Stop();
-    wxLogTrace( "CONN_PROFILE", "UpdateItemConnectivity() %0.4f ms", phase1.msecs() );
+    update_items.Stop();
+    wxLogTrace( "CONN_PROFILE", "UpdateItemConnectivity() %0.4f ms", update_items.msecs() );
 
     PROF_COUNTER tde;
 
@@ -403,7 +408,26 @@ void CONNECTION_GRAPH::Recalculate( SCH_SHEET_LIST aSheetList, bool aUncondition
     tde.Stop();
     wxLogTrace( "CONN_PROFILE", "TestDanglingEnds() %0.4f ms", tde.msecs() );
 
+    PROF_COUNTER build_graph;
+
     buildConnectionGraph();
+
+    build_graph.Stop();
+    wxLogTrace( "CONN_PROFILE", "BuildConnectionGraph() %0.4f ms", build_graph.msecs() );
+
+    recalc_time.Stop();
+    wxLogTrace( "CONN_PROFILE", "Recalculate time %0.4f ms", recalc_time.msecs() );
+
+#ifndef DEBUG
+    // Pressure relief valve for release builds
+    const double max_recalc_time_msecs = 250.;
+
+    if( m_allowRealTime && ADVANCED_CFG::GetCfg().m_realTimeConnectivity &&
+        recalc_time.msecs() > max_recalc_time_msecs )
+    {
+        m_allowRealTime = false;
+    }
+#endif
 }
 
 
@@ -624,8 +648,6 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
 
 void CONNECTION_GRAPH::buildConnectionGraph()
 {
-    PROF_COUNTER phase2;
-
     // Recache all bus aliases for later use
 
     SCH_SHEET_LIST all_sheets( g_RootSheet );
@@ -1293,9 +1315,6 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                  [&] ( const CONNECTION_SUBGRAPH* sg ) {
                                          return sg->m_absorbed;
                                      } ), m_subgraphs.end() );
-
-    phase2.Stop();
-    wxLogTrace( "CONN_PROFILE", "BuildConnectionGraph() %0.4f ms", phase2.msecs() );
 }
 
 
@@ -1346,11 +1365,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     std::vector<CONNECTION_SUBGRAPH*> children;
 
     auto add_children = [&] ( CONNECTION_SUBGRAPH* aParent ) {
-        for( SCH_SHEET_PIN* sheet_pin : aParent->m_hier_pins )
+        for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
         {
-            wxString pin_name = sheet_pin->GetShownText();
-            SCH_SHEET_PATH path = aParent->m_sheet;
-            path.push_back( sheet_pin->GetParent() );
+            SCH_SHEET_PATH path = aSubgraph->m_sheet;
+            path.push_back( pin->GetParent() );
 
             for( auto candidate : m_driver_subgraphs )
             {
@@ -1362,7 +1380,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
                 for( SCH_HIERLABEL* label : candidate->m_hier_ports )
                 {
-                    if( label->GetShownText() == pin_name )
+                    if( label->GetShownText() == pin->GetShownText() )
                     {
                         wxLogTrace( "CONN", "Found child %lu (%s)",
                                     candidate->m_code, candidate->m_driver_connection->Name() );

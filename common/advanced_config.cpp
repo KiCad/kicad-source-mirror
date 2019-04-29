@@ -151,6 +151,7 @@ ADVANCED_CFG::ADVANCED_CFG()
     // then the values will remain as set here.
     m_enableSvgImport = false;
     m_allowLegacyCanvasInGtk3 = false;
+    m_realTimeConnectivity = true;
 
     loadFromConfigFile();
 }

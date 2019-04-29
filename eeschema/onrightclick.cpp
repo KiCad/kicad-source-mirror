@@ -36,6 +36,7 @@
 
 #include <advanced_config.h>
 #include <class_library.h>
+#include <connection_graph.h>
 #include <general.h>
 #include <hotkeys.h>
 #include <netlist_object.h>
@@ -771,7 +772,7 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), KiBitmap( break_bus_xpm ) );
 
     // TODO(JE) remove once real-time is enabled
-    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
     {
         frame->RecalculateConnections();
 

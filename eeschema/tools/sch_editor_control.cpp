@@ -29,6 +29,7 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
+#include <connection_graph.h>
 #include <erc.h>
 #include <eeschema_id.h>
 #include <netlist_object.h>
@@ -418,7 +419,7 @@ int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 {
     // TODO(JE) remove once real-time connectivity is a given
-    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         m_frame->RecalculateConnections();
 
     Activate();

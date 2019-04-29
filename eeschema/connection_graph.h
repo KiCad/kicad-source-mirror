@@ -209,6 +209,9 @@ public:
      */
     int RunERC( const ERC_SETTINGS& aSettings, bool aCreateMarkers = true );
 
+    // TODO(JE) Remove this when pressure valve is removed
+    static bool m_allowRealTime;
+
     // TODO(JE) firm up API and move to private
     std::map<int, std::vector<CONNECTION_SUBGRAPH*> > m_net_code_to_subgraphs_map;
 

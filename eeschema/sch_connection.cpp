@@ -286,7 +286,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
-    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         return;
 
     wxString msg, group_name;
@@ -333,7 +333,7 @@ void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 
 void SCH_CONNECTION::AppendDebugInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
-    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity )
+    if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
         return;
 
     // These messages are not flagged as translatable, because they are only debug messges
