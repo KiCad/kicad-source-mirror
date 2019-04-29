@@ -227,17 +227,20 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAll
     std::vector<LIB_TREE_ITEM*> historyInfos;
 
     for( auto const& item : s_ModuleHistoryList )
-        historyInfos.push_back( GFootprintList.GetModuleInfo( item ) );
+    {
+        LIB_TREE_ITEM* fp_info = GFootprintList.GetModuleInfo( item );
+
+        // this can be null, for example, if the footprint has been deleted from a library.
+        if( fp_info != nullptr )
+            historyInfos.push_back( fp_info );
+    }
 
     adapter->DoAddLibrary( "-- " + _( "Recently Used" ) + " --", wxEmptyString, historyInfos, true );
 
     if( aPreselect.IsValid() )
         adapter->SetPreselectNode( aPreselect, 0 );
     else if( historyInfos.size() )
-    {
-        if( historyInfos[0] )   // Can be null if the footprint was deleted since the last call
-            adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
-    }
+        adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
 
     adapter->AddLibraries();
 

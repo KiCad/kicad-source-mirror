@@ -145,6 +145,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
     {
         LIB_ALIAS* alias = GetLibAlias( i.LibId );
 
+        // This can be null, for example when a symbol has been deleted from a library
         if( alias )
             history_list.push_back( alias );
     }
