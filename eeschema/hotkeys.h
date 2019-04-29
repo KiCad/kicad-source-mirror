@@ -31,9 +31,9 @@
 #include <hotkeys_basic.h>
 
 // List of hot keys id.
-// see also enum common_hotkey_id_commnand in hotkeys_basic.h
+// see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
-enum hotkey_id_commnand {
+enum hotkey_id_command {
     HK_FIND_NEXT_ITEM = HK_COMMON_END,
     HK_FIND_NEXT_DRC_MARKER,
     HK_FIND_ITEM,
@@ -54,7 +54,6 @@ enum hotkey_id_commnand {
     HK_EDIT_COMPONENT_WITH_LIBEDIT,
     HK_MIRROR_X,
     HK_MIRROR_Y,
-    HK_ORIENT_NORMAL_COMPONENT,
     HK_MOVE_COMPONENT_OR_ITEM,
     HK_DUPLICATE,
     HK_DRAG,

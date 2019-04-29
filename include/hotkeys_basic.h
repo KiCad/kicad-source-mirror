@@ -64,7 +64,7 @@ private:
 public:
     int      m_KeyCode;      // Key code (ascii value for ascii keys or wxWidgets code for function key
     wxString m_InfoMsg;      // info message.
-    int      m_Idcommand;    // internal id for the corresponding command (see hotkey_id_commnand list)
+    int      m_Idcommand;    // internal id for the corresponding command (see hotkey_id_command list)
     int      m_IdMenuEvent;  // id to call the corresponding event (if any) (see id.h)
 
 public:
@@ -258,7 +258,7 @@ void ParseHotkeyConfig( const wxString& data, struct EDA_HOTKEY_CONFIG* aDescLis
 
 // common hotkeys event id
 // these hotkey ID are used in many files, so they are define here only once.
-enum common_hotkey_id_commnand {
+enum common_hotkey_id_command {
     HK_NOT_FOUND = 0,
     HK_NEW,
     HK_OPEN,
@@ -273,6 +273,10 @@ enum common_hotkey_id_commnand {
     HK_RESET_LOCAL_COORD,
     HK_SET_GRID_ORIGIN,
     HK_RESET_GRID_ORIGIN,
+    HK_SWITCH_GRID_TO_FASTGRID1,
+    HK_SWITCH_GRID_TO_FASTGRID2,
+    HK_SWITCH_GRID_TO_NEXT,
+    HK_SWITCH_GRID_TO_PREVIOUS,
     HK_HELP,
     HK_ZOOM_IN,
     HK_ZOOM_OUT,

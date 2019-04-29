@@ -32,9 +32,9 @@
 #include <hotkeys_basic.h>
 
 // List of hot keys id.
-// see also enum common_hotkey_id_commnand in hotkeys_basic.h
+// see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
-enum hotkey_id_commnand {
+enum hotkey_id_command {
     HK_DELETE = HK_COMMON_END,
     HK_BACK_SPACE,
     HK_ROTATE_ITEM,
@@ -76,10 +76,6 @@ enum hotkey_id_commnand {
     HK_PLACE_ITEM,
     HK_SWITCH_TRACK_WIDTH_TO_NEXT,
     HK_SWITCH_TRACK_WIDTH_TO_PREVIOUS,
-    HK_SWITCH_GRID_TO_FASTGRID1,
-    HK_SWITCH_GRID_TO_FASTGRID2,
-    HK_SWITCH_GRID_TO_NEXT,
-    HK_SWITCH_GRID_TO_PREVIOUS,
     HK_SWITCH_LAYER_TO_COPPER,
     HK_SWITCH_LAYER_TO_COMPONENT,
     HK_SWITCH_LAYER_TO_NEXT,

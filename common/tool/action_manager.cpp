@@ -79,12 +79,10 @@ void ACTION_MANAGER::UnregisterAction( TOOL_ACTION* aAction )
     if( hotkey )
     {
         std::list<TOOL_ACTION*>& actions = m_actionHotKeys[hotkey];
-        std::list<TOOL_ACTION*>::iterator action = std::find( actions.begin(), actions.end(), aAction );
+        auto action = std::find( actions.begin(), actions.end(), aAction );
 
         if( action != actions.end() )
             actions.erase( action );
-        else
-            wxASSERT( false );
     }
 }
 
@@ -208,6 +206,13 @@ void ACTION_MANAGER::UpdateHotKeys()
         // are loaded after
         if( action->GetScope() == AS_GLOBAL && m_actionHotKeys.count( hotkey ) )
         {
+            // Users are free to define colliding hotkeys, but we want to know if
+            // our default set has any collisions.
+            wxFAIL_MSG( wxString::Format( "Duplicate hotkey definitions for %s: %s and %s",
+                                          KeyNameFromKeyCode( hotkey ),
+                                          actionName.first,
+                                          m_actionHotKeys[hotkey].front()->GetName() ) );
+
             for( auto it = m_actionHotKeys[hotkey].begin();
                       it != m_actionHotKeys[hotkey].end(); )
             {

@@ -42,7 +42,7 @@
 
 
 /* How to add a new hotkey:
- *  add a new id in the enum hotkey_id_commnand like MY_NEW_ID_FUNCTION.
+ *  add a new id in the enum hotkey_id_command like MY_NEW_ID_FUNCTION.
  *  add a new EDA_HOTKEY entry like:
  *  static EDA_HOTKEY HkMyNewEntry(_HKI("Command Label"), MY_NEW_ID_FUNCTION, default key value);
  *      "Command Label" is the name used in hotkey list display, and the identifier in the

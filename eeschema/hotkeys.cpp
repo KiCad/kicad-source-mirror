@@ -155,8 +155,6 @@ static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y" ), HK_MIRROR_Y, 'Y',
                              ID_SCH_MIRROR_Y );
 static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X" ), HK_MIRROR_X, 'X',
                              ID_SCH_MIRROR_X );
-static EDA_HOTKEY HkOrientNormalComponent( _HKI( "Orient Normal Component" ),
-                                           HK_ORIENT_NORMAL_COMPONENT, 'N', ID_SCH_ORIENT_NORMAL );
 static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R', ID_SCH_ROTATE_CLOCKWISE );
 static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
 static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V',
@@ -306,7 +304,6 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkAddPower,
     &HkMirrorX,
     &HkMirrorY,
-    &HkOrientNormalComponent,
     &HkEditComponentValue,
     &HkEditComponentReference,
     &HkEditComponentFootprint,

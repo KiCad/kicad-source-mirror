@@ -110,7 +110,7 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
 
 END_EVENT_TABLE()
 
-enum hotkey_id_commnand
+enum hotkey_id_command
 {
     HK_RUN_EESCHEMA = HK_COMMON_END,
     HK_NEW_PRJ_TEMPLATE,

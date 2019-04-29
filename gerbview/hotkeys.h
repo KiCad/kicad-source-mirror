@@ -32,9 +32,9 @@
 #include <hotkeys_basic.h>
 
 // List of hot keys id.
-// see also enum common_hotkey_id_commnand in hotkeys_basic.h
+// see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
-enum hotkey_id_commnand {
+enum hotkey_id_command {
     HK_SWITCH_UNITS = HK_COMMON_END,
     HK_GBR_LINES_DISPLAY_MODE,
     HK_GBR_FLASHED_DISPLAY_MODE,
