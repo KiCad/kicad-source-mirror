@@ -233,8 +233,11 @@ MODULE* PCB_BASE_FRAME::SelectFootprintFromLibTree( LIB_ID aPreselect, bool aAll
 
     if( aPreselect.IsValid() )
         adapter->SetPreselectNode( aPreselect, 0 );
-    else if( !historyInfos.empty() )
-        adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
+    else if( historyInfos.size() )
+    {
+        if( historyInfos[0] )   // Can be null if the footprint was deleted since the last call
+            adapter->SetPreselectNode( historyInfos[0]->GetLibId(), 0 );
+    }
 
     adapter->AddLibraries();
 
