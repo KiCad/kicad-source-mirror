@@ -69,6 +69,9 @@ public:
     int AutoplaceFields( const TOOL_EVENT& aEvent );
     int ShowDatasheet( const TOOL_EVENT& aEvent );
 
+    int ChangeShape( const TOOL_EVENT& aEvent );
+    int ChangeTextType( const TOOL_EVENT& aEvent );
+
     /**
      * Function DoDelete()
      *

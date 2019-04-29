@@ -28,7 +28,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_action.h>
 #include <tool/tool_manager.h>
-
+#include <tool/actions.h>
 
 struct FlagString
 {
@@ -160,3 +160,21 @@ const std::string TOOL_EVENT_LIST::Format() const
 
     return s;
 }
+
+
+bool TOOL_EVT_UTILS::IsCancelInteractive( const TOOL_EVENT& aEvt )
+{
+    return aEvt.IsAction( &ACTIONS::cancelInteractive )
+           || aEvt.IsActivate()
+           || aEvt.IsCancel();
+}
+
+
+bool TOOL_EVT_UTILS::IsSelectionEvent( const TOOL_EVENT& aEvt )
+{
+    return aEvt.Matches( EVENTS::ClearedEvent )
+           || aEvt.Matches( EVENTS::UnselectedEvent )
+           || aEvt.Matches( EVENTS::SelectedEvent );
+}
+
+

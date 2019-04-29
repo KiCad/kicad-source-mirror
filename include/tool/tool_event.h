@@ -610,6 +610,7 @@ private:
     std::deque<TOOL_EVENT> m_events;
 };
 
+
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEventA, const TOOL_EVENT& aEventB )
 {
     TOOL_EVENT_LIST l;
@@ -620,6 +621,7 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEventA, const TOOL_E
     return l;
 }
 
+
 inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEvent,
                                          const TOOL_EVENT_LIST& aEventList )
 {
@@ -628,5 +630,35 @@ inline const TOOL_EVENT_LIST operator||( const TOOL_EVENT& aEvent,
     l.Add( aEvent );
     return l;
 }
+
+
+/**
+ * Namespace TOOL_EVT_UTILS
+ *
+ * Utility functions for dealing with various tool events. These are
+ * free functions, so they interface with any classes exclusively via
+ * the public interfaces, so they don't need to be subsumed into the
+ * "helped" classes.
+ */
+namespace TOOL_EVT_UTILS
+{
+    /**
+     * Function IsCancelInteractive()
+     *
+     * @return true if this event should restart/end an ongoing interactive
+     * tool's event loop (eg esc key, click cancel, start different
+     * tool)
+     */
+    bool IsCancelInteractive( const TOOL_EVENT& aEvt );
+
+    /**
+     * Function IsSelectionEvent()
+     *
+     * Indicates an selection-changed notification event.
+     */
+    bool IsSelectionEvent( const TOOL_EVENT& aEvt );
+
+}
+
 
 #endif

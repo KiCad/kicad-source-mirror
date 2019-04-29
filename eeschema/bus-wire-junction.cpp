@@ -452,23 +452,3 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppen
 }
 
 
-SCH_NO_CONNECT* SCH_EDIT_FRAME::AddNoConnect( const wxPoint& aPosition )
-{
-    SCH_NO_CONNECT* no_connect = new SCH_NO_CONNECT( aPosition );
-
-    SetRepeatItem( no_connect );
-    AddToScreen( no_connect );
-    SchematicCleanUp();
-    TestDanglingEnds();
-    OnModify();
-
-    auto view = GetCanvas()->GetView();
-    view->ClearPreview();
-    view->ShowPreview( false );
-    view->ClearHiddenFlags();
-
-    SaveCopyInUndoList( no_connect, UR_NEW );
-    return no_connect;
-}
-
-

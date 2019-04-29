@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file edit_label.cpp
- * @brief Label, global label and text creation and editing.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <base_struct.h>
@@ -35,10 +30,12 @@
 #include <confirm.h>
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
-
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <general.h>
 #include <sch_text.h>
 #include <eeschema_id.h>
+#include <sch_view.h>
 
 
 static PINSHEETLABEL_SHAPE  lastGlobalLabelShape = NET_INPUT;
@@ -104,163 +101,77 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 
 
 /*
- * OnConvertTextType is a command event handler to change a text type to another one.
- * The new text, label, hierarchical label, or global label is created from the old text
- * The old text is deleted.
- * A tricky case is when the 'old" text is being edited (i.e. moving)
- * because we must create a new text, and prepare the undo/redo command data for this
- * change and the current move/edit command
+ * ConvertTextType changes a text from one type to another.  It creates a new text of the
+ * appropriate type and deletes the old one.
  */
-void SCH_EDIT_FRAME::OnConvertTextType( wxCommandEvent& aEvent )
+void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
 {
     SCH_SCREEN* screen = GetScreen();
-    SCH_TEXT* text = (SCH_TEXT*) screen->GetCurItem();
+    bool        selected = aText->IsSelected();
 
-    wxCHECK_RET( (text != NULL) && text->CanIncrementLabel(), "Cannot convert text type." );
+    wxCHECK_RET( aText->CanIncrementLabel(), "Cannot convert text type." );
 
-    KICAD_T type;
-
-    switch( aEvent.GetId() )
-    {
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL:
-        type = SCH_LABEL_T;
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL:
-        type = SCH_GLOBAL_LABEL_T;
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL:
-        type = SCH_HIER_LABEL_T;
-        break;
-
-    case ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT:
-        type = SCH_TEXT_T;
-        break;
-
-    default:
-        wxFAIL_MSG( wxString::Format( "Invalid text type command ID %d.", aEvent.GetId() ) );
-        return;
-    }
-
-    if( text->Type() == type )
+    if( aText->Type() == aType )
         return;
 
     SCH_TEXT* newtext = nullptr;
-    const wxPoint& position = text->GetPosition();
-    const wxString txt = text->GetText();
+    const wxPoint& position = aText->GetPosition();
+    const wxString txt = aText->GetText();
 
-    switch( type )
+    switch( aType )
     {
-    case SCH_LABEL_T:
-        newtext = new SCH_LABEL( position, txt );
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        newtext = new SCH_GLOBALLABEL( position, txt );
-        break;
-
-    case SCH_HIER_LABEL_T:
-        newtext = new SCH_HIERLABEL( position, txt );
-        break;
-
-    case SCH_TEXT_T:
-        newtext = new SCH_TEXT( position, txt );
-        break;
+    case SCH_LABEL_T:        newtext = new SCH_LABEL( position, txt );        break;
+    case SCH_GLOBAL_LABEL_T: newtext = new SCH_GLOBALLABEL( position, txt );  break;
+    case SCH_HIER_LABEL_T:   newtext = new SCH_HIERLABEL( position, txt );    break;
+    case SCH_TEXT_T:         newtext = new SCH_TEXT( position, txt );         break;
 
     default:
-        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", type ) );
+        wxASSERT_MSG( false, wxString::Format( "Invalid text type: %d.", aType ) );
         return;
     }
 
-    /* Copy the old text item settings to the new one.  Justifications are not copied because
-     * they are not used in labels.  Justifications will be set to default value in the new
-     * text item type.
-     */
-    newtext->SetFlags( text->GetFlags() );
-    newtext->SetShape( text->GetShape() );
-    newtext->SetLabelSpinStyle( text->GetLabelSpinStyle() );
-    newtext->SetTextSize( text->GetTextSize() );
-    newtext->SetThickness( text->GetThickness() );
-    newtext->SetItalic( text->IsItalic() );
-    newtext->SetBold( text->IsBold() );
-    newtext->SetIsDangling( text->IsDangling() );
+    // Copy the old text item settings to the new one.  Justifications are not copied
+    // because they are not used in labels.  Justifications will be set to default value
+    // in the new text item type.
+    //
+    newtext->SetFlags( aText->GetEditFlags() );
+    newtext->SetShape( aText->GetShape() );
+    newtext->SetLabelSpinStyle( aText->GetLabelSpinStyle() );
+    newtext->SetTextSize( aText->GetTextSize() );
+    newtext->SetThickness( aText->GetThickness() );
+    newtext->SetItalic( aText->IsItalic() );
+    newtext->SetBold( aText->IsBold() );
+    newtext->SetIsDangling( aText->IsDangling() );
 
-    /* Save the new text in undo list if the old text was not itself a "new created text"
-     * In this case, the old text is already in undo list as a deleted item.
-     * Of course if the old text was a "new created text" the new text will be
-     * put in undo list later, at the end of the current command (if not aborted)
-     */
+    if( selected )
+        m_toolManager->RunAction( SCH_ACTIONS::unselectItem, true, aText );
 
-    m_canvas->CrossHairOff();   // Erase schematic cursor
-
-    // For an exiting item (i.e. already in list):
-    // replace the existing item by the new text in list
-    for( SCH_ITEM* item = screen->GetDrawItems(); item != NULL; item = item->Next() )
+    if( !aText->IsNew() )
     {
-        if( item == text )
-        {
-            RemoveFromScreen( text );
-            AddToScreen( newtext );
-            break;
-        }
+        SaveCopyInUndoList( aText, UR_DELETED );
+        SaveCopyInUndoList( newtext, UR_NEW, true );
+
+        RemoveFromScreen( aText );
+        AddToScreen( newtext );
     }
 
-    SetRepeatItem( NULL );
-    OnModify();
-    m_canvas->CrossHairOn( );    // redraw schematic cursor
+    if( selected )
+        m_toolManager->RunAction( SCH_ACTIONS::selectItem, true, newtext );
 
     // if the old item is the current schematic item, replace it by the new text:
-    if( screen->GetCurItem() == text )
+    if( screen->GetCurItem() == aText )
         screen->SetCurItem( newtext );
 
-    if( text->IsNew() )
-    {
-        // if the previous text is new, no undo command to prepare here
-        // just delete this previous text.
-        delete text;
-        return;
-    }
+    SetRepeatItem( nullptr );
 
-    // previous text is not new and we replace text by new text.
-    // So this is equivalent to delete text and add newtext
-    // If text if being currently edited (i.e. moved)
-    // we also save the initial copy of text, and prepare undo command for new text modifications.
-    // we must save it as modified text,if it is currently edited, then save as deleted text,
-    // and replace text with newtext
-    PICKED_ITEMS_LIST pickList;
-    ITEM_PICKER picker( text, UR_CHANGED );
+    delete aText;
 
-    if( text->GetEditFlags() )
-    {
-        // text is being edited, save initial text for undo command
-        picker.SetLink( GetUndoItem() );
-        pickList.PushItem( picker );
-
-        // the owner of undoItem is no more "this", it is now "picker":
-        SetUndoItem( NULL );
-
-        // save current newtext copy for undo/abort current command
-        SetUndoItem( newtext );
-    }
-
-    // Prepare undo command for delete old text
-    picker.SetStatus( UR_DELETED );
-    picker.SetLink( NULL );
-    pickList.PushItem( picker );
-
-    // Prepare undo command for new text
-    picker.SetStatus( UR_NEW );
-    picker.SetItem(newtext);
-    pickList.PushItem( picker );
-
-    SaveCopyInUndoList( pickList, UR_UNSPECIFIED );
+    OnModify();
 }
 
 
-/* Function to increment bus label members numbers,
- * i.e. when a text is ending with a number, adds
- * aIncrement to this number
+/*
+ * Function to increment bus label numbers.  Adds aIncrement to labels which end in numbers.
  */
 void IncrementLabelMember( wxString& name, int aIncrement )
 {

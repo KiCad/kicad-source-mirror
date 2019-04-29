@@ -39,6 +39,7 @@
 #include <sch_view.h>
 #include <sch_line.h>
 #include <sch_item_struct.h>
+#include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <list_operations.h>
 #include <eeschema_id.h>
@@ -115,6 +116,36 @@ TOOL_ACTION SCH_ACTIONS::showDatasheet( "eeschema.InteractiveEdit.showDatasheet"
         _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
         datasheet_xpm );
 
+TOOL_ACTION SCH_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
+        AS_GLOBAL, 0,
+        _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
+        change_entry_orient_xpm );
+
+TOOL_ACTION SCH_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
+        AS_GLOBAL, 0,
+        _( "Set Bus Entry Shape \\" ), _( "Change the bus entry shape to \\" ),
+        change_entry_orient_xpm );
+
+TOOL_ACTION SCH_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
+        AS_GLOBAL, 0,
+        _( "Change to Label" ), _( "Change existing item to a label" ),
+        add_line_label_xpm );
+
+TOOL_ACTION SCH_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
+        AS_GLOBAL, 0,
+        _( "Change to Hierarchical Label" ), _( "Change existing item to a hierarchical label" ),
+        add_hierarchical_label_xpm );
+
+TOOL_ACTION SCH_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
+        AS_GLOBAL, 0,
+        _( "Change to Global Label" ), _( "Change existing item to a global label" ),
+        add_glabel_xpm );
+
+TOOL_ACTION SCH_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
+        AS_GLOBAL, 0,
+        _( "Change to Text" ), _( "Change existing item to a text comment" ),
+        text_xpm );
+
 TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
@@ -169,8 +200,54 @@ bool SCH_EDIT_TOOL::Init()
         return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED );
     };
 
+    auto orientatableCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.Empty() )
+            return false;
+
+        if( aSel.GetSize() > 1 )
+            return true;
+
+        switch( static_cast<EDA_ITEM*>( aSel.GetItem( 0 ) )->Type() )
+        {
+        case SCH_MARKER_T:
+        case SCH_JUNCTION_T:
+        case SCH_NO_CONNECT_T:
+        case SCH_BUS_WIRE_ENTRY_T:
+        case SCH_BUS_BUS_ENTRY_T:
+        case SCH_LINE_T:
+        case SCH_SHEET_PIN_T:
+        case SCH_PIN_T:
+            return false;
+        default:
+            return true;
+        }
+    };
+
+    auto toLabelCondition = SELECTION_CONDITIONS::Count( 1 )
+                                && ( SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
+                                  || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T )
+                                  || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+
+    auto toHLabelCondition = SELECTION_CONDITIONS::Count( 1 )
+                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+
+    auto toGLabelCondition = SELECTION_CONDITIONS::Count( 1 )
+                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+
+    auto toTextlCondition = SELECTION_CONDITIONS::Count( 1 )
+                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
+                                 || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T ) );
+
+    auto entryCondition = SELECTION_CONDITIONS::HasType( SCH_BUS_WIRE_ENTRY_T )
+                          || SELECTION_CONDITIONS::HasType( SCH_BUS_BUS_ENTRY_T );
+
     auto singleComponentCondition = SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T )
-                                        && SELECTION_CONDITIONS::Count( 1 );
+                                 && SELECTION_CONDITIONS::Count( 1 );
 
     auto singleSymbolCondition = [] (const SELECTION& aSel ) {
         if( aSel.GetSize() == 1 )
@@ -194,17 +271,17 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition );
     ctxMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty );
     ctxMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
 
     ctxMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ) );
     ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
     ctxMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
@@ -218,15 +295,21 @@ bool SCH_EDIT_TOOL::Init()
     CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
 
     drawingMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
 
     // Add editing actions to the selection tool menu
     //
@@ -234,19 +317,25 @@ bool SCH_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( SCH_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::drag, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::duplicate, SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::properties, SELECTION_CONDITIONS::Count( 1 ), 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editFootprint, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
 
     selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 200 );
@@ -435,7 +524,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsCancel() || evt->IsActivate() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( m_moveInProgress )
                 restore_state = true;
@@ -449,7 +538,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             break;
         }
 
-        // Dispatch TOOL_ACTIONs
+        // Handle TOOL_ACTION special cases
         else if( evt->Category() == TC_COMMAND )
         {
             if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
@@ -1308,6 +1397,69 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
+{
+    SELECTION selection = m_selectionTool->GetSelection();
+    char shape;
+
+    if( aEvent.IsAction( &SCH_ACTIONS::toShapeSlash ) )
+        shape = '/';
+    else if( aEvent.IsAction( &SCH_ACTIONS::toShapeBackslash ) )
+        shape = '\\';
+    else
+        return 0;
+
+    for( int i = 0; i < selection.GetSize(); ++i )
+    {
+        SCH_BUS_ENTRY_BASE* entry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( selection.GetItem( i ) );
+
+        if( entry )
+        {
+            if( entry->GetEditFlags() == 0 )
+                m_frame->SaveCopyInUndoList( entry, UR_CHANGED );
+
+            entry->SetBusEntryShape( shape );
+            m_frame->TestDanglingEnds();
+
+            updateView( entry );
+            m_frame->OnModify( );
+        }
+    }
+
+    g_lastBusEntryShape = shape;
+
+    return 0;
+}
+
+
+int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
+{
+    SELECTION selection = m_selectionTool->GetSelection();
+    KICAD_T type;
+
+    if( aEvent.IsAction( &SCH_ACTIONS::toLabel ) )
+        type = SCH_LABEL_T;
+    else if( aEvent.IsAction( &SCH_ACTIONS::toHLabel ) )
+        type = SCH_HIER_LABEL_T;
+    else if( aEvent.IsAction( &SCH_ACTIONS::toGLabel ) )
+        type = SCH_GLOBAL_LABEL_T;
+    else if( aEvent.IsAction( &SCH_ACTIONS::toText ) )
+        type = SCH_TEXT_T;
+    else
+        return 0;
+
+    for( int i = 0; i < selection.GetSize(); ++i )
+    {
+        SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selection.GetItem( i ) );
+
+        if( text )
+            m_frame->ConvertTextType( text, type );
+    }
+
+    return 0;
+}
+
+
 void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 {
     KICAD_T itemType = aItem->Type();
@@ -1340,7 +1492,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DoDelete,             SCH_ACTIONS::doDelete.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DoDelete,           SCH_ACTIONS::doDelete.MakeEvent() );
     Go( &SCH_EDIT_TOOL::DeleteItemCursor,   SCH_ACTIONS::deleteItemCursor.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
@@ -1350,4 +1502,10 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ShowDatasheet,      SCH_ACTIONS::showDatasheet.MakeEvent() );
 
+    Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeSlash.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeBackslash.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toText.MakeEvent() );
 }

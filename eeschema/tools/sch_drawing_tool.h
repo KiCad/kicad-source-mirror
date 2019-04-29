@@ -35,6 +35,7 @@ class SCH_BUS_WIRE_ENTRY;
 class SCH_LABEL;
 class SCHLIB_FILTER;
 class SCH_EDIT_FRAME;
+class SCH_SELECTION_TOOL;
 
 
 /// Collection of data related to the bus unfolding tool
@@ -121,15 +122,15 @@ private:
     void setTransitions() override;
 
 private:
-    KIGFX::SCH_VIEW* m_view;
+    SCH_SELECTION_TOOL*   m_selectionTool;
+    KIGFX::SCH_VIEW*      m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME* m_frame;
+    SCH_EDIT_FRAME*       m_frame;
 
     /// Data related to bus unfolding tool.
-    BUS_UNFOLDING_T m_busUnfold;
+    BUS_UNFOLDING_T       m_busUnfold;
 
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
+    TOOL_MENU             m_menu;
 };
 
 #endif /* SCH_DRAWING_TOOL_H */

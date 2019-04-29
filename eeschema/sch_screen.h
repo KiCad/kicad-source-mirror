@@ -188,6 +188,7 @@ public:
      *
      * @return SCH_ITEM* - the one selected, or NULL.
      */
+    // JEY TODO: these should go away: if the selection contains one item then it's the curItem...
     SCH_ITEM* GetCurItem() const { return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
     LIB_ITEM* GetCurLibItem() const { return (LIB_ITEM*) BASE_SCREEN::GetCurItem(); }
 

@@ -33,6 +33,11 @@
 #include <tools/sch_edit_tool.h>
 #include <tool/zoom_tool.h>
 
+
+char g_lastBusEntryShape = '/';
+
+
+// JEY TODO: IDs that only appear in popup menus don't need to be here....
 OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )

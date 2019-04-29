@@ -288,8 +288,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                     SCH_EDIT_FRAME::Process_Special_Functions )
     EVT_MENU_RANGE( ID_POPUP_SCH_SELECT_UNIT1, ID_POPUP_SCH_SELECT_UNIT_CMP_MAX,
                     SCH_EDIT_FRAME::OnSelectUnit )
-    EVT_MENU_RANGE( ID_POPUP_SCH_CHANGE_TYPE_TEXT, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                    SCH_EDIT_FRAME::OnConvertTextType )
 
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )

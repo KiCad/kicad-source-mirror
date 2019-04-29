@@ -61,13 +61,10 @@ void TOOL_MENU::AddSubMenu( std::shared_ptr<CONTEXT_MENU> aSubMenu )
 
 void TOOL_MENU::ShowContextMenu( SELECTION& aSelection )
 {
-    m_contextMenu = std::unique_ptr<CONTEXT_MENU>(
-            m_menu.Generate( aSelection ) );
+    m_contextMenu = std::unique_ptr<CONTEXT_MENU>( m_menu.Generate( aSelection ) );
 
     if( m_contextMenu->GetMenuItemCount() > 0 )
-    {
         m_tool.SetContextMenu( m_contextMenu.get(), CMENU_NOW );
-    }
 }
 
 
@@ -83,9 +80,7 @@ void TOOL_MENU::CloseContextMenu( OPT_TOOL_EVENT& evt )
 {
     // m_contextMenu can be null here, that's OK
     if( evt->Parameter<CONTEXT_MENU*>() == m_contextMenu.get() )
-    {
         m_contextMenu = nullptr;
-    }
 }
 
 

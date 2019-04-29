@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
 
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,17 +22,9 @@
  */
 
 #include <tools/tool_event_utils.h>
-
 #include <tools/pcb_actions.h>
-
 #include <pcb_base_edit_frame.h>
 
-bool TOOL_EVT_UTILS::IsCancelInteractive( const TOOL_EVENT& aEvt )
-{
-    return aEvt.IsAction( &ACTIONS::cancelInteractive )
-            || aEvt.IsActivate()
-            || aEvt.IsCancel();
-}
 
 bool TOOL_EVT_UTILS::IsRotateToolEvt( const TOOL_EVENT& aEvt )
 {

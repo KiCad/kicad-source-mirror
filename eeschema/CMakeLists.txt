@@ -142,7 +142,6 @@ set( EESCHEMA_SRCS
     block.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
-    busentry.cpp
     class_libentry.cpp
     class_library.cpp
     cmp_library_keywords.cpp

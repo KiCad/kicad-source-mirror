@@ -741,12 +741,8 @@ public:
      */
     bool AskToSaveChanges();
 
-    SCH_NO_CONNECT* AddNoConnect( const wxPoint& aPosition );
     SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aAppendToUndo = false,
                                bool aFinal = true );
-
-    SCH_BUS_WIRE_ENTRY* CreateBusWireEntry();
-    SCH_BUS_BUS_ENTRY* CreateBusBusEntry();
 
     SCH_TEXT* CreateNewText( int aType );
 
@@ -872,9 +868,6 @@ private:
      */
     void UpdateTitle();
 
-    // Bus Entry
-    void SetBusEntryShape( wxDC* DC, SCH_BUS_ENTRY_BASE* BusEntry, char entry_shape );
-
     /**
      * Checks all wires and adds any junctions that are missing
      * (Intended to be called only on file load)
@@ -888,14 +881,6 @@ private:
     void NormalizeSchematicOnFirstLoad();
 
     /**
-     * Command event handler to change a text type to another one.
-     *
-     * The new text, label, hierarchical label, or global label is created from the old text
-     * and the old text object is deleted.
-     */
-    void OnConvertTextType( wxCommandEvent& aEvent );
-
-    /**
      * Erase the last segment at the current mouse position.
      */
     void DeleteConnection( bool DeleteFullConnection );
@@ -904,6 +889,14 @@ private:
     void InstallHierarchyFrame( wxPoint& pos );
 
 public:
+    /**
+     * Change a text type to another one.
+     *
+     * The new text, label, hierarchical label, or global label is created from the old text
+     * and the old text object is deleted.
+     */
+    void ConvertTextType( SCH_TEXT* aText, KICAD_T aType );
+
     /**
      * Launches the "Edit Text/Label" dialog
      */

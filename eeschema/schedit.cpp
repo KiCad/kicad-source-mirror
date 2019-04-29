@@ -63,8 +63,6 @@
     switch( id )
     {
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
-    case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
-    case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
@@ -96,16 +94,6 @@
     case ID_HIERARCHY:
         InstallHierarchyFrame( pos );
         SetRepeatItem( NULL );
-        break;
-
-    case ID_POPUP_SCH_ENTRY_SELECT_SLASH:
-        m_canvas->MoveCursorToCrossHair();
-        SetBusEntryShape( nullptr, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ), '/' );
-        break;
-
-    case ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH:
-        m_canvas->MoveCursorToCrossHair();
-        SetBusEntryShape( nullptr, dynamic_cast<SCH_BUS_ENTRY_BASE*>( item ), '\\' );
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:

@@ -77,7 +77,7 @@ int SCH_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 setControls();
         }
 
-        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( m_cancelHandler )
             {

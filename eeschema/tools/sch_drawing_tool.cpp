@@ -188,6 +188,7 @@ TOOL_ACTION SCH_ACTIONS::addGlobalLabel( "eeschema.InteractiveEditing.addGlobalL
 
 SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
     TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
+    m_selectionTool( nullptr ),
     m_view( nullptr ),
     m_controls( nullptr ),
     m_frame( nullptr ),
@@ -205,6 +206,7 @@ SCH_DRAWING_TOOL::~SCH_DRAWING_TOOL()
 bool SCH_DRAWING_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
@@ -362,7 +364,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
     {
         cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( aComponent )
             {
@@ -430,6 +432,8 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 m_view->ClearPreview();
                 m_view->AddToPreview( aComponent->Clone() );
 
+                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, aComponent );
+
                 m_controls->SetCursorPosition( cursorPos, false );
             }
             else
@@ -443,12 +447,11 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION selection;
+            // Warp after context menu only if dragging...
+            if( !aComponent )
+                m_toolMgr->VetoContextMenuMouseWarp();
 
-            if( aComponent )
-                selection.Add( aComponent );
-
-            m_menu.ShowContextMenu( selection );
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -474,7 +477,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
 
-    VECTOR2I    cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
     m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
     m_controls->ShowCursor( true );
@@ -495,7 +498,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
     {
         cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( image )
             {
@@ -569,12 +572,11 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION selection;
+            // Warp after context menu only if dragging...
+            if( !image )
+                m_toolMgr->VetoContextMenuMouseWarp();
 
-            if( image )
-                selection.Add( image );
-
-            m_menu.ShowContextMenu( selection );
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( image && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -635,7 +637,7 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
     {
         wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             break;
         }
@@ -647,18 +649,35 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
             {
                 switch( aType )
                 {
-                case SCH_NO_CONNECT_T:     item = m_frame->AddNoConnect( cursorPos );  break;
-                case SCH_JUNCTION_T:       item = m_frame->AddJunction( cursorPos );   break;
-                case SCH_BUS_WIRE_ENTRY_T: item = m_frame->CreateBusWireEntry();       break;
-                case SCH_BUS_BUS_ENTRY_T:  item = m_frame->CreateBusBusEntry();        break;
-                default:                   wxFAIL_MSG( "doSingleClickPlace(): unknown type" );
+                case SCH_NO_CONNECT_T:
+                    item = new SCH_NO_CONNECT( cursorPos );
+                    break;
+                case SCH_JUNCTION_T:
+                    item = m_frame->AddJunction( cursorPos );
+                    break;
+                case SCH_BUS_WIRE_ENTRY_T:
+                    item = new SCH_BUS_WIRE_ENTRY( cursorPos, g_lastBusEntryShape );
+                    break;
+                case SCH_BUS_BUS_ENTRY_T:
+                    item = new SCH_BUS_BUS_ENTRY( cursorPos, g_lastBusEntryShape );
+                    break;
+                default:
+                    wxFAIL_MSG( "doSingleClickPlace(): unknown type" );
                 }
             }
 
             if( item )
             {
+                item->SetFlags( IS_NEW );
+                m_frame->AddItemToScreen( item );
+                m_frame->SaveCopyInUndoList( item, UR_NEW );
+
                 m_frame->SetRepeatItem( item );
                 m_frame->GetScreen()->SetCurItem( item );
+
+                m_frame->SchematicCleanUp();
+                m_frame->TestDanglingEnds();
+                m_frame->OnModify();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -719,7 +738,6 @@ int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     VECTOR2I  cursorPos = m_controls->GetCursorPosition();
     SCH_ITEM* item = nullptr;
 
@@ -734,7 +752,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
     {
         cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( item )
             {
@@ -753,6 +771,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
+            // First click creates...
             if( !item )
             {
                 m_frame->SetRepeatItem( NULL );
@@ -773,7 +792,8 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                     item = m_frame->CreateNewText( LAYER_NOTES );
                     break;
                 case SCH_SHEET_PIN_T:
-                    item = selTool->SelectPoint( cursorPos, SCH_COLLECTOR::SheetsAndSheetLabels );
+                    item = m_selectionTool->SelectPoint( cursorPos, SCH_COLLECTOR::SheetsAndSheetLabels );
+
                     if( item )
                     {
                         if( m_frame->GetToolId() == ID_IMPORT_HLABEL_BUTT )
@@ -792,6 +812,9 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
                 if( item )
                 {
+                    m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, item );
+
+                    // JEY TODO: this should be handled by selection event....
                     MSG_PANEL_ITEMS items;
                     item->GetMsgPanelInfo( m_frame->GetUserUnits(), items );
                     m_frame->SetMsgPanel( items );
@@ -803,6 +826,8 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
+
+            // ... and second click places:
             else
             {
                 m_view->ClearPreview();
@@ -814,12 +839,25 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION selection;
+            // Warp after context menu only if dragging...
+            if( !item )
+                m_toolMgr->VetoContextMenuMouseWarp();
 
-            if( item )
-                selection.Add( item );
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
+        {
+            // This happens if our text was replaced out from under us by CovertTextType()
+            SELECTION& selection = m_selectionTool->GetSelection();
 
-            m_menu.ShowContextMenu( selection );
+            if( selection.GetSize() == 1 )
+            {
+                item = (SCH_ITEM*) selection.GetItem( 0 );
+                m_view->ClearPreview();
+                m_view->AddToPreview( item->Clone() );
+            }
+            else
+                item = nullptr;
         }
         else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
@@ -1116,7 +1154,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     {
         wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
@@ -1167,12 +1205,11 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            SELECTION selection;
+            // Warp after context menu only if dragging...
+            if( !aSegment )
+                m_toolMgr->VetoContextMenuMouseWarp();
 
-            if( aSegment )
-                selection.Add( aSegment );
-
-            m_menu.ShowContextMenu( selection );
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || ( aSegment && evt->IsDblClick( BUT_LEFT ) ) )
         {
@@ -1451,7 +1488,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
     {
         wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsActivate() || evt->IsCancel() )
+        if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             m_view->ClearPreview();
 
@@ -1560,8 +1597,11 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            // JEY TODO
-            // m_menu.ShowContextMenu();
+            // Warp after context menu only if dragging...
+            if( !aSheet )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed

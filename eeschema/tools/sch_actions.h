@@ -31,6 +31,8 @@
 class TOOL_EVENT;
 class TOOL_MANAGER;
 
+extern char g_lastBusEntryShape;
+
 /**
  * Class SCH_ACTIONS
  *
@@ -135,6 +137,12 @@ public:
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;
     static TOOL_ACTION addGlobalLabel;
+    static TOOL_ACTION toShapeSlash;
+    static TOOL_ACTION toShapeBackslash;
+    static TOOL_ACTION toLabel;
+    static TOOL_ACTION toHLabel;
+    static TOOL_ACTION toGLabel;
+    static TOOL_ACTION toText;
 
     /// Clipboard
     static TOOL_ACTION cut;

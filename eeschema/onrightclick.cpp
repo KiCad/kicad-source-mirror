@@ -58,16 +58,9 @@
 static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
 static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
-static void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text );
-static void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label );
-static void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel );
-static void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* GLabel );
-static void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
-                                      SYMBOL_LIB_TABLE* aLibs );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
                                   SYMBOL_LIB_TABLE* aLibs );
 static void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* aFrame );
-static void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE * aBusEntry );
 
 
 bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
@@ -134,29 +127,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         addJunctionMenuEntries( PopMenu, (SCH_JUNCTION*) item );
         break;
 
-    case SCH_BUS_BUS_ENTRY_T:
-    case SCH_BUS_WIRE_ENTRY_T:
-        AddMenusForBusEntry( PopMenu, static_cast<SCH_BUS_ENTRY_BASE*>( item ) );
-        break;
-
     case SCH_MARKER_T:
         AddMenusForMarkers( PopMenu, (SCH_MARKER*) item, this );
-        break;
-
-    case SCH_TEXT_T:
-        AddMenusForText( PopMenu, (SCH_TEXT*) item );
-        break;
-
-    case SCH_LABEL_T:
-        AddMenusForLabel( PopMenu, (SCH_LABEL*) item );
-        break;
-
-    case SCH_GLOBAL_LABEL_T:
-        AddMenusForGLabel( PopMenu, (SCH_GLOBALLABEL*) item );
-        break;
-
-    case SCH_HIER_LABEL_T:
-        AddMenusForHLabel( PopMenu, (SCH_HIERLABEL*) item );
         break;
 
     case SCH_COMPONENT_T:
@@ -187,12 +159,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
 
 void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
-{
-    AddMenusForEditComponent( PopMenu, Component, aLibs );
-}
-
-
-void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
 {
     wxString    msg;
     LIB_PART*   part = NULL;
@@ -246,79 +212,6 @@ void AddMenusForEditComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL
                              HK_EDIT_COMPONENT_WITH_LIBEDIT );
         AddMenuItem( editmenu, ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
                      msg, KiBitmap( libedit_xpm ) );
-    }
-}
-
-
-void AddMenusForGLabel( wxMenu* PopMenu, SCH_GLOBALLABEL* GLabel )
-{
-    wxMenu*  menu_change_type = new wxMenu;
-    wxString msg;
-
-    // add menu change type text (to label, glabel, text):
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                 _( "Change to Hierarchical Label" ), KiBitmap( label2glabel_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                 _( "Change to Label" ), KiBitmap( glabel2label_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                 _( "Change to Text" ), KiBitmap( glabel2text_xpm ) );
-    AddMenuItem( PopMenu, menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT,
-                 _( "Change Type" ), KiBitmap( gl_change_xpm ) );
-}
-
-
-void AddMenusForHLabel( wxMenu* PopMenu, SCH_HIERLABEL* HLabel )
-{
-    wxMenu*  menu_change_type = new wxMenu;
-    wxString msg;
-
-    // add menu change type text (to label, glabel, text):
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                 _( "Change to Label" ), KiBitmap( glabel2label_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                 _( "Change to Text" ), KiBitmap( glabel2text_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                 _( "Change to Global Label" ), KiBitmap( label2glabel_xpm ) );
-    AddMenuItem( PopMenu, menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT,
-                 _( "Change Type" ), KiBitmap( gl_change_xpm ) );
-}
-
-
-void AddMenusForLabel( wxMenu* PopMenu, SCH_LABEL* Label )
-{
-    wxMenu*  menu_change_type = new wxMenu;
-    wxString msg;
-
-    // add menu change type text (to label, glabel, text):
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                 _( "Change to Hierarchical Label" ), KiBitmap( label2glabel_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_COMMENT,
-                 _( "Change to Text" ), KiBitmap( label2text_xpm ) );
-    AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                 _( "Change to Global Label" ), KiBitmap( label2glabel_xpm ) );
-    AddMenuItem( PopMenu, menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT,
-                 _( "Change Type" ), KiBitmap( gl_change_xpm ) );
-}
-
-
-void AddMenusForText( wxMenu* PopMenu, SCH_TEXT* Text )
-{
-    wxString msg;
-    wxMenu*  menu_change_type = new wxMenu;
-
-    /* add menu change type text (to label, glabel, text),
-     * but only if this is a single line text
-     */
-    if( Text->GetText().Find( wxT( "\n" ) ) ==  wxNOT_FOUND )
-    {
-        AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_LABEL,
-                     _( "Change to Label" ), KiBitmap( label2text_xpm ) );
-        AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_HLABEL,
-                     _( "Change to Hierarchical Label" ), KiBitmap( label2glabel_xpm ) );
-        AddMenuItem( menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT_TO_GLABEL,
-                     _( "Change to Global Label" ), KiBitmap( label2glabel_xpm ) );
-        AddMenuItem( PopMenu, menu_change_type, ID_POPUP_SCH_CHANGE_TYPE_TEXT,
-                     _( "Change Type" ), KiBitmap( gl_change_xpm ) );
     }
 }
 
@@ -455,14 +348,3 @@ void AddMenusForMarkers( wxMenu* aPopMenu, SCH_MARKER* aMarker, SCH_EDIT_FRAME* 
 }
 
 
-void AddMenusForBusEntry( wxMenu* aPopMenu, SCH_BUS_ENTRY_BASE* aBusEntry )
-{
-    wxString msg;
-
-    if( aBusEntry->GetBusEntryShape() == '\\' )
-        AddMenuItem( aPopMenu, ID_POPUP_SCH_ENTRY_SELECT_SLASH,
-                     _( "Set Bus Entry Shape /" ), KiBitmap( change_entry_orient_xpm ) );
-    else
-        AddMenuItem( aPopMenu, ID_POPUP_SCH_ENTRY_SELECT_ANTISLASH,
-                     _( "Set Bus Entry Shape \\" ), KiBitmap( change_entry_orient_xpm ) );
-}
