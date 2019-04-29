@@ -219,9 +219,15 @@ private:
 
     std::unordered_set<SCH_ITEM*> m_items;
 
+    // The owner of all CONNECTION_SUBGRAPH objects
     std::vector<CONNECTION_SUBGRAPH*> m_subgraphs;
 
+    // Cache of a subset of m_subgraphs
     std::vector<CONNECTION_SUBGRAPH*> m_driver_subgraphs;
+
+    // Cache to lookup subgraphs in m_driver_subgraphs by sheet path
+    std::unordered_map<SCH_SHEET_PATH,
+                       std::vector<CONNECTION_SUBGRAPH*>> m_sheet_to_subgraphs_map;
 
     std::vector<std::pair<SCH_SHEET_PATH, SCH_PIN*>> m_invisible_power_pins;
 

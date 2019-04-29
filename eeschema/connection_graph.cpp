@@ -357,6 +357,7 @@ void CONNECTION_GRAPH::Reset()
     m_items.clear();
     m_subgraphs.clear();
     m_driver_subgraphs.clear();
+    m_sheet_to_subgraphs_map.clear();
     m_invisible_power_pins.clear();
     m_bus_alias_cache.clear();
     m_net_name_to_code_map.clear();
@@ -974,6 +975,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
     // Here we do all the local (sheet) processing of each subgraph, including assigning net
     // codes, merging subgraphs together that use label connections, etc.
 
+    // Cache remaining valid subgraphs by sheet path
+    for( auto subgraph : m_driver_subgraphs )
+        m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
+
     std::unordered_set<CONNECTION_SUBGRAPH*> invalidated_subgraphs;
 
     for( auto subgraph_it = m_driver_subgraphs.begin();
@@ -1065,13 +1070,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         // form neighbor links.
 
         std::vector<CONNECTION_SUBGRAPH*> candidate_subgraphs;
-        std::copy_if( m_driver_subgraphs.begin(), m_driver_subgraphs.end(),
+        std::copy_if( m_sheet_to_subgraphs_map[ subgraph->m_sheet ].begin(),
+                      m_sheet_to_subgraphs_map[ subgraph->m_sheet ].end(),
                       std::back_inserter( candidate_subgraphs ),
                       [&] ( const CONNECTION_SUBGRAPH* candidate )
                       { return ( !candidate->m_absorbed &&
                                  candidate->m_strong_driver &&
-                                 candidate != subgraph &&
-                                 candidate->m_sheet == sheet );
+                                 candidate != subgraph );
                       } );
 
         // This is a list of connections on the current subgraph to compare to the
@@ -1247,6 +1252,11 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                       return !candidate->m_local_driver;
                   } );
 
+    // Recache remaining valid subgraphs by sheet path
+    m_sheet_to_subgraphs_map.clear();
+    for( auto subgraph : m_driver_subgraphs )
+        m_sheet_to_subgraphs_map[ subgraph->m_sheet ].emplace_back( subgraph );
+
     // Next time through the subgraphs, we do some post-processing to handle things like
     // connecting bus members to their neighboring subgraphs, and then propagate connections
     // through the hierarchy
@@ -1370,11 +1380,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             SCH_SHEET_PATH path = aSubgraph->m_sheet;
             path.push_back( pin->GetParent() );
 
-            for( auto candidate : m_driver_subgraphs )
+            if( !m_sheet_to_subgraphs_map.count( path ) )
+                continue;
+
+            for( auto candidate : m_sheet_to_subgraphs_map.at( path ) )
             {
-                if( candidate->m_absorbed ||
-                    !candidate->m_strong_driver ||
-                    candidate->m_sheet != path ||
+                if( !candidate->m_strong_driver ||
                     candidate->m_hier_ports.empty() )
                     continue;
 
