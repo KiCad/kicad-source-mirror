@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2009 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -238,6 +238,7 @@ public:
      * - when loading a schematic file
      * - before creating a netlist (in case a library is modified)
      * - whenever a symbol library is modified
+     * - whenever the symbol library table is modified.
      *
      * @param aForce true forces a refresh even if the library modification has hasn't changed.
      */
@@ -586,6 +587,7 @@ public:
      * - when loading a schematic file
      * - before creating a netlist (in case a library is modified)
      * - whenever any of the libraries are modified.
+     * - whenever the symbol library table is modified.
      */
     void UpdateSymbolLinks( bool aForce = false );
 

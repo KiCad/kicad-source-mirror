@@ -35,8 +35,11 @@
 #include <wildcards_and_files_ext.h>
 #include <env_paths.h>
 #include <lib_edit_frame.h>
+#include <sch_edit_frame.h>
 #include <viewlib_frame.h>
 #include <kiway.h>
+#include <sch_screen.h>
+
 #include <widgets/grid_readonly_text_helpers.h>
 #include <widgets/grid_text_button_helpers.h>
 
@@ -739,6 +742,15 @@ void InvokeSchEditSymbolLibTable( KIWAY* aKiway, wxWindow *aParent )
             wxMessageBox( msg, _( "File Save Error" ), wxOK | wxICON_ERROR );
         }
     }
+
+    SCH_SCREENS schematic;
+
+    schematic.UpdateSymbolLinks( true );    // Update all symbol library links for all sheets.
+
+    SCH_EDIT_FRAME* schEditor = (SCH_EDIT_FRAME*) aKiway->Player( FRAME_SCH, false );
+
+    if( schEditor )
+        schEditor->SyncView();
 
     auto editor = (LIB_EDIT_FRAME*) aKiway->Player( FRAME_SCH_LIB_EDITOR, false );
 

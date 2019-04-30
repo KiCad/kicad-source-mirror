@@ -333,7 +333,14 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
         // Fall back to cache library.  This is temporary until the new schematic file
         // format is implemented.
         if( !alias && aCacheLib )
-            alias = aCacheLib->FindAlias( m_lib_id.Format().wx_str() );
+        {
+            wxString libId = m_lib_id.Format().wx_str();
+            libId.Replace( ":", "_" );
+            alias = aCacheLib->FindAlias( libId );
+            wxLogTrace( traceSymbolResolver,
+                        "Library symbol %s not found falling back to cache library.",
+                        m_lib_id.Format().wx_str() );
+        }
 
         if( alias && alias->GetPart() )
         {
@@ -341,10 +348,16 @@ bool SCH_COMPONENT::Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib )
             return true;
         }
     }
-    catch( const IO_ERROR& )
+    catch( const IO_ERROR& ioe )
     {
-        wxLogDebug( "Cannot resolve library symbol %s", m_lib_id.Format().wx_str() );
+        wxLogTrace( traceSymbolResolver, "I/O error %s resolving library symbol %s", ioe.What(),
+                    m_lib_id.Format().wx_str() );
     }
+
+    wxLogTrace( traceSymbolResolver, "Cannot resolve library symbol %s",
+                m_lib_id.Format().wx_str() );
+
+    m_part.reset();
 
     return false;
 }
@@ -1429,9 +1442,15 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
             LIB_ALIAS* alias = nullptr;
 
             if( part->GetLib() && part->GetLib()->IsCache() )
-                alias = part->GetAlias( GetLibId().Format() );
+            {
+                wxString libId = GetLibId().Format();
+                libId.Replace( ":", "_" );
+                alias = part->GetAlias( libId );
+            }
             else
+            {
                 alias = part->GetAlias( GetLibId().GetLibItemName() );
+            }
 
             if( !alias )
                 return;
@@ -1452,8 +1471,9 @@ void SCH_COMPONENT::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList 
             if( alias->GetName() != part->GetName() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Alias of" ), part->GetName(), BROWN ) );
 
-            if( alias->GetLib() && alias->GetLib()->IsCache() )
-                aList.push_back( MSG_PANEL_ITEM( _( "Library" ), alias->GetLibNickname(), RED ) );
+            if( part->GetLib() && part->GetLib()->IsCache() )
+                aList.push_back( MSG_PANEL_ITEM( _( "Library" ),
+                                                 part->GetLib()->GetLogicalName(), RED ) );
             else if( !m_lib_id.GetLibNickname().empty() )
                 aList.push_back( MSG_PANEL_ITEM( _( "Library" ), m_lib_id.GetLibNickname(),
                                                  BROWN ) );
