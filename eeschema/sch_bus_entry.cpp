@@ -347,6 +347,10 @@ BITMAP_DEF SCH_BUS_BUS_ENTRY::GetMenuImage() const
 
 bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    // Insure minimum accuracy
+    if( aAccuracy == 0 )
+        aAccuracy = GetPenSize() / 2;
+
     return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
 }
 

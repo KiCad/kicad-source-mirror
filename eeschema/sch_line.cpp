@@ -705,6 +705,10 @@ bool SCH_LINE::operator <( const SCH_ITEM& aItem ) const
 
 bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    // Insure minimum accuracy
+    if( aAccuracy == 0 )
+        aAccuracy = GetPenSize() / 2;
+
     return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
 }
 
