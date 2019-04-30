@@ -170,7 +170,8 @@ SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         m_controls( nullptr ),
         m_frame( nullptr ),
         m_menu( *this ),
-        m_moveInProgress( false )
+        m_moveInProgress( false ),
+        m_totalMovement( 0, 0 )
 {
 }
 
@@ -405,12 +406,16 @@ bool SCH_EDIT_TOOL::Init()
 
 void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
 {
-    m_moveInProgress = false;
+    if( aReason == MODEL_RELOAD )
+    {
+        m_moveInProgress = false;
+        m_totalMovement = { 0, 0 };
 
-    // Init variables used by every drawing tool
-    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-    m_controls = getViewControls();
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+        // Init variables used by every drawing tool
+        m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
+        m_controls = getViewControls();
+        m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    }
 }
 
 
@@ -441,8 +446,8 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetSnapping( true );
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
 
-    // Be sure that there is at least one item that we can modify. If nothing was selected before,
-    // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
+    // Be sure that there is at least one item that we can move. If there's no selection try
+    // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
     bool unselect = selection.IsHover();
 
@@ -459,10 +464,20 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( true );
 
     bool restore_state = false;
-    bool isDragOperation = aEvent.IsAction( &SCH_ACTIONS::drag );
-    VECTOR2I totalMovement;
+    bool chain_commands = false;
     OPT_TOOL_EVENT evt = aEvent;
     VECTOR2I prevPos;
+
+    if( m_moveInProgress )
+    {
+        // User must have switched from move to drag or vice-versa.  Reset the moved items
+        // so we can start again with the current m_isDragOperation and m_totalMovement.
+        m_frame->RollbackSchematicFromUndo();
+        m_moveInProgress = false;
+        // And give it a kick so it doesn't have to wait for the first mouse movement.
+        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+        return 0;
+    }
 
     // Main loop: keep receiving events
     do
@@ -470,33 +485,22 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsAction( &SCH_ACTIONS::move ) || evt->IsAction( &SCH_ACTIONS::drag )
-                || evt->IsMotion() || evt->IsDrag( BUT_LEFT ) )
+                || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+                || evt->IsAction( &SCH_ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
+                // Add connections to the selection for a drag.
                 //
-                // Save items, so changes can be undone
-                //
-                for( int i = 0; i < selection.GetSize(); ++i )
+                if( m_frame->GetToolId() == ID_SCH_DRAG )
                 {
-                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+                    for( unsigned i = 0; i < selection.GetSize(); ++i )
+                    {
+                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-                    item->ClearFlags( STARTPOINT | ENDPOINT );
+                        item->ClearFlags( STARTPOINT | ENDPOINT );
+                    }
 
-                    // No need to save children of selected items
-                    if( item->GetParent() && item->GetParent()->IsSelected() )
-                        continue;
-
-                    if( !item->IsNew() )
-                        saveCopyInUndoList( item, UR_CHANGED, i > 0 );
-                }
-
-                //
-                // Add connections to the selection for a drag; mark the edges of the block
-                // with dangling pins for a move
-                //
-                if( isDragOperation )
-                {
                     for( unsigned i = 0; i < selection.GetSize(); ++i )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
@@ -511,24 +515,49 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         }
                     }
                 }
-                else
+
+                // Mark the edges of the block with dangling flags for a move.
+                //
+                if( m_frame->GetToolId() == ID_SCH_MOVE )
                 {
                     std::vector<DANGLING_END_ITEM> internalPoints;
 
-                    for( int i = 0; i < selection.GetSize(); ++i )
+                    for( unsigned i = 0; i < selection.GetSize(); ++i )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
                         item->GetEndPoints( internalPoints );
                     }
 
-                    for( int i = 0; i < selection.GetSize(); ++i )
+                    for( unsigned i = 0; i < selection.GetSize(); ++i )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
                         item->UpdateDanglingState( internalPoints );
                     }
                 }
 
+                // Save items for undo.
                 //
+                for( unsigned i = 0; i < selection.GetSize(); ++i )
+                {
+                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+
+                    // No need to save children of selected items
+                    if( item->GetParent() && item->GetParent()->IsSelected() )
+                        continue;
+
+                    if( !item->IsNew() )
+                        saveCopyInUndoList( item, UR_CHANGED, i > 0 );
+                }
+
+                // Apply any initial offset in case we're coming from a previous command.
+                //
+                for( unsigned i = 0; i < selection.GetSize(); ++i )
+                {
+                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+
+                    moveItem( item, m_totalMovement, m_frame->GetToolId() == ID_SCH_DRAG );
+                }
+
                 // Set up the starting position and move/drag offset
                 //
                 m_cursor = controls->GetCursorPosition();
@@ -546,7 +575,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        moveItem( item, delta, isDragOperation );
+                        moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
                         updateView( item );
                     }
 
@@ -571,32 +600,28 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_moveInProgress = true;
             }
 
-            else /* m_moveInProgress */
+            // Follow the mouse
+            //
+            m_cursor = controls->GetCursorPosition();
+            VECTOR2I movement( m_cursor - prevPos );
+            selection.SetReferencePoint( m_cursor );
+
+            m_totalMovement += movement;
+            prevPos = m_cursor;
+
+            for( int i = 0; i < selection.GetSize(); ++i )
             {
-                //
-                // Follow the mouse
-                //
-                m_cursor = controls->GetCursorPosition();
-                VECTOR2I movement( m_cursor - prevPos );
-                selection.SetReferencePoint( m_cursor );
+                SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
-                totalMovement += movement;
-                prevPos = m_cursor;
+                // Don't double move pins, fields, etc.
+                if( item->GetParent() && item->GetParent()->IsSelected() )
+                    continue;
 
-                for( int i = 0; i < selection.GetSize(); ++i )
-                {
-                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
-                    // Don't double move pins, fields, etc.
-                    if( item->GetParent() && item->GetParent()->IsSelected() )
-                        continue;
-
-                    moveItem( item, movement, isDragOperation );
-                    updateView( item );
-                }
-
-                m_frame->UpdateMsgPanel();
+                moveItem( item, movement, m_frame->GetToolId() == ID_SCH_DRAG );
+                updateView( item );
             }
+
+            m_frame->UpdateMsgPanel();
         }
 
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
@@ -623,7 +648,10 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsAction( &SCH_ACTIONS::duplicate ) )
             {
-                // Exit on a duplicate action; it will start its own move operation.
+                // Move original back and exit.  The duplicate will run in its own loop.
+                restore_state = true;
+                unselect = false;
+                chain_commands = true;
                 break;
             }
         }
@@ -645,27 +673,31 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetSnapping( false );
     controls->SetAutoPan( false );
 
+    if( !chain_commands )
+        m_totalMovement = { 0, 0 };
+
     m_moveInProgress = false;
+    m_frame->SetNoToolSelected();
 
     selection.ClearReferencePoint();
 
     for( auto item : selection )
         item->ClearFlags( IS_MOVED );
 
-    if( restore_state )
-    {
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-        m_frame->RollbackSchematicFromUndo();
-        return 0;
-    }
-
-    m_frame->CheckConnections( selection, true );
-    m_frame->SchematicCleanUp( true );
-    m_frame->TestDanglingEnds();
-    m_frame->OnModify();
-
     if( unselect )
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
+    if( restore_state )
+    {
+        m_frame->RollbackSchematicFromUndo();
+    }
+    else
+    {
+        m_frame->CheckConnections( selection, true );
+        m_frame->SchematicCleanUp( true );
+        m_frame->TestDanglingEnds();
+        m_frame->OnModify();
+    }
 
     return 0;
 }
@@ -892,16 +924,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             // Rotate the sheet on itself. Sheets do not have a anchor point.
             rotPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
 
-            if( clockwise )
-            {
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
                 item->Rotate( rotPoint );
-            }
-            else
-            {
-                item->Rotate( rotPoint );
-                item->Rotate( rotPoint );
-                item->Rotate( rotPoint );
-            }
 
             break;
 
@@ -1121,6 +1145,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         SCH_ITEM* newItem = DuplicateStruct( oldItem );
         newItems.push_back( newItem );
 
+        newItem->SetFlags( IS_NEW );
         saveCopyInUndoList( newItem, UR_NEW, ii > 0 );
 
         switch( newItem->Type() )

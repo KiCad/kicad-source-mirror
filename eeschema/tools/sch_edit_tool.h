@@ -114,6 +114,9 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
 
+    ///> Used for chaining commands
+    VECTOR2I              m_totalMovement;
+
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I              m_cursor;
