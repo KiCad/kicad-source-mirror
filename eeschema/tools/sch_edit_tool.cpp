@@ -44,10 +44,11 @@
 #include <list_operations.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
+#include <wx/gdicmn.h>
 #include "sch_drawing_tool.h"
 
 TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_COMPONENT_OR_ITEM ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
         _( "Move" ), _( "Moves the selected item(s)" ),
         move_xpm, AF_ACTIVATE );
 
@@ -151,6 +152,15 @@ TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemC
         _( "DoDelete Items" ), _( "DoDelete clicked items" ),
         nullptr, AF_ACTIVATE );
 
+TOOL_ACTION SCH_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
+        AS_GLOBAL, 0,
+        _( "Break Wire" ), _( "Divide a wire into segments which can be dragged independently" ),
+        break_line_xpm );
+
+TOOL_ACTION SCH_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
+        AS_GLOBAL, 0,
+        _( "Break Bus" ), _( "Divide a bus into segments which can be dragged independently" ),
+        break_line_xpm );
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
@@ -239,7 +249,7 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     auto notJustMarkersCondition = SELECTION_CONDITIONS::MoreThan( 0 )
-                                   && !SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T );
+                                   && ! SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T );
 
     auto toLabelCondition = SELECTION_CONDITIONS::Count( 1 )
                                 && ( SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
@@ -264,10 +274,10 @@ bool SCH_EDIT_TOOL::Init()
     auto entryCondition = SELECTION_CONDITIONS::HasType( SCH_BUS_WIRE_ENTRY_T )
                           || SELECTION_CONDITIONS::HasType( SCH_BUS_BUS_ENTRY_T );
 
-    auto singleComponentCondition = SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T )
-                                 && SELECTION_CONDITIONS::Count( 1 );
+    auto singleComponentCondition = SELECTION_CONDITIONS::Count( 1 )
+                                 && SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T );
 
-    auto singleSymbolCondition = [] (const SELECTION& aSel ) {
+    auto singleSymbolCondition = [] ( const SELECTION& aSel ) {
         if( aSel.GetSize() == 1 )
         {
             SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.GetItem( 0 ) );
@@ -282,10 +292,30 @@ bool SCH_EDIT_TOOL::Init()
         return false;
     };
 
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    auto wireTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT
+              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
+    };
+
+    auto busTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_BUS_BUTT
+              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
+    };
+
+    auto wireOrBusTool = wireTool || busTool;
+
+    auto wireSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
+                               && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+
+    auto busSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
+                              && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
+
+    auto wireOrBusSelectionCondition = wireSelectionCondition || busSelectionCondition;
 
     // Build the edit tool menu (shown when moving or dragging)
     //
+    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
@@ -328,6 +358,10 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectNode, wireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakWire, wireTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakBus, busTool, 200 );
 
     // Add editing actions to the selection tool menu
     //
@@ -354,6 +388,9 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::breakWire, wireSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::breakBus, busSelectionCondition, 200 );
 
     selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 200 );
@@ -597,7 +634,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( restore_state )
     {
-        m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
         m_frame->RollbackSchematicFromUndo();
         return 0;
     }
@@ -608,7 +645,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     m_frame->OnModify();
 
     if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     return 0;
 }
@@ -688,7 +725,7 @@ void SCH_EDIT_TOOL::selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPo
 
         if( doSelect )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, item );
+            m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, item );
             saveCopyInUndoList( item, UR_CHANGED, true );
         }
     }
@@ -876,7 +913,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -1017,7 +1054,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -1108,8 +1145,8 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
     }
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::selectItems, true, &newItems );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
 
     TOOL_EVENT evt = SCH_ACTIONS::move.MakeEvent();
     Main( evt );
@@ -1125,7 +1162,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !sourceItem )
         return 0;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     SCH_ITEM* newItem = (SCH_ITEM*) sourceItem->Clone();
     bool      performDrag = false;
@@ -1150,7 +1187,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_frame->AddToScreen( newItem );
     m_frame->SaveCopyInUndoList( newItem, UR_NEW );
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, newItem );
+    m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, newItem );
 
     if( performDrag )
     {
@@ -1180,7 +1217,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // As we are about to remove items, they have to be removed from the selection first
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     for( unsigned ii = 0; ii < selectionCopy.GetSize(); ii++ )
     {
@@ -1210,7 +1247,7 @@ static bool deleteItem( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
     SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     wxCHECK( selectionTool, false );
 
-    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::selectionClear, true );
+    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection, true );
 
     SCH_ITEM* item = selectionTool->SelectPoint( aPosition );
 
@@ -1461,6 +1498,22 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
+{
+    VECTOR2I cursorPos = m_controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+
+    if( m_frame->BreakSegments( (wxPoint) cursorPos ) )
+    {
+        m_frame->TestDanglingEnds();
+
+        m_frame->OnModify();
+        m_frame->GetCanvas()->Refresh();
+    }
+
+    return 0;
+}
+
+
 void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 {
     KICAD_T itemType = aItem->Type();
@@ -1508,4 +1561,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toText.MakeEvent() );
+
+    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakWire.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakBus.MakeEvent() );
 }

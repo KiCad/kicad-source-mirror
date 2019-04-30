@@ -250,6 +250,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP:
         return SCH_ACTIONS::editWithSymbolEditor.MakeEvent();
+
+    case ID_HOTKEY_SELECT_NODE:
+        return SCH_ACTIONS::selectNode.MakeEvent();
+
+    case ID_HOTKEY_SELECT_CONNECTION:
+        return SCH_ACTIONS::selectConnection.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

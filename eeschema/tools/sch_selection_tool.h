@@ -90,17 +90,20 @@ public:
                            const KICAD_T* aFilterList = SCH_COLLECTOR::AllItems,
                            bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
 
-    ///> Item selection event handler.
-    int SelectItem( const TOOL_EVENT& aEvent );
+    int AddItemToSel( const TOOL_EVENT& aEvent );
+    int AddItemsToSel( const TOOL_EVENT& aEvent );
 
-    ///> Multiple item selection event handler
-    int SelectItems( const TOOL_EVENT& aEvent );
+    int RemoveItemFromSel( const TOOL_EVENT& aEvent );
+    int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
 
-    ///> Item unselection event handler.
-    int UnselectItem( const TOOL_EVENT& aEvent );
+    ///> Find (but don't select) node under cursor
+    SCH_ITEM* GetNode( VECTOR2I aPosition );
 
-    ///> Multiple item unselection event handler
-    int UnselectItems( const TOOL_EVENT& aEvent );
+    ///> Select node under cursor
+    int SelectNode( const TOOL_EVENT& aEvent );
+
+    ///> If node selected then expand to connection, otherwise select connection under cursor
+    int SelectConnection( const TOOL_EVENT& aEvent );
 
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
@@ -115,16 +118,6 @@ public:
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
 private:
-    /**
-     * Function selectCursor()
-     * Selects an item under the cursor unless there is something already selected or aForceSelect
-     * is true.
-     * @param aForceSelect forces to select an item even if there is an item already selected.
-     * @param aClientFilter allows the client to perform tool- or action-specific filtering.
-     * @return true if eventually there is an item selected, false otherwise.
-     */
-    bool selectCursor( const KICAD_T aFilterList[], bool aForceSelect = false );
-
     /**
      * Function selectMultiple()
      * Handles drawing a selection box that allows one to select many items at

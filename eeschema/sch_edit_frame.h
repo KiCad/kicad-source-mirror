@@ -880,11 +880,6 @@ private:
      */
     void NormalizeSchematicOnFirstLoad();
 
-    /**
-     * Erase the last segment at the current mouse position.
-     */
-    void DeleteConnection( bool DeleteFullConnection );
-
     // Hierarchical Sheet & PinSheet
     void InstallHierarchyFrame( wxPoint& pos );
 

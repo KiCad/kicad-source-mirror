@@ -274,7 +274,7 @@ public:
      * @param aScanTypes List of item types
      * @return true if the item type is contained in the list aScanTypes
      */
-    bool IsType( const KICAD_T aScanTypes[] )
+    virtual bool IsType( const KICAD_T aScanTypes[] )
     {
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {

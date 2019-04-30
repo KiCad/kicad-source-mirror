@@ -272,7 +272,7 @@ void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
 
 int SCH_DRAWING_TOOL::AddJunction( const TOOL_EVENT& aEvent )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     m_frame->AddJunction( m_frame->GetCrossHairPosition() );
@@ -295,7 +295,7 @@ int SCH_DRAWING_TOOL::AddGlobalLabel( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::doAddItem( KICAD_T aType )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     SCH_ITEM* item = nullptr;
 
@@ -345,7 +345,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
 {
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -368,7 +368,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         {
             if( aComponent )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 m_view->ClearHiddenFlags();
@@ -428,7 +428,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 m_view->ClearPreview();
                 m_view->AddToPreview( aComponent->Clone() );
 
-                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, aComponent );
+                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
@@ -475,7 +475,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -498,7 +498,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             if( image )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 m_view->ClearHiddenFlags();
@@ -551,7 +551,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
 
-                m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, image );
+                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, image );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
@@ -620,7 +620,7 @@ int SCH_DRAWING_TOOL::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -735,7 +735,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
     VECTOR2I  cursorPos = m_controls->GetCursorPosition();
     SCH_ITEM* item = nullptr;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -750,7 +750,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         {
             if( item )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 m_view->ClearHiddenFlags();
@@ -806,7 +806,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
                 if( item )
                 {
-                    m_toolMgr->RunAction( SCH_ACTIONS::selectItem, true, item );
+                    m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, item );
 
                     item->SetFlags( IS_MOVED );
                     m_view->ClearPreview();
@@ -1132,7 +1132,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     bool forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN* screen = m_frame->GetScreen();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 
@@ -1454,7 +1454,7 @@ int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );
 

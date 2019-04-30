@@ -27,6 +27,7 @@
 #include <tool/selection_conditions.h>
 
 #include <functional>
+
 using namespace std::placeholders;
 
 
@@ -48,15 +49,9 @@ SELECTION_CONDITION SELECTION_CONDITIONS::OnlyType( KICAD_T aType )
 }
 
 
-SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const std::vector<KICAD_T>& aTypes )
-{
-    return std::bind( &SELECTION_CONDITIONS::onlyTypesFunc, _1, aTypes );
-}
-
-
 SELECTION_CONDITION SELECTION_CONDITIONS::OnlyTypes( const KICAD_T aTypes[] )
 {
-    return std::bind( &SELECTION_CONDITIONS::onlyTypesFuncArr, _1, aTypes );
+    return std::bind( &SELECTION_CONDITIONS::onlyTypesFunc, _1, aTypes );
 }
 
 
@@ -95,9 +90,11 @@ bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aT
     if( aSelection.Empty() )
         return false;
 
+    KICAD_T types[] = { aType, EOT };
+
     for( const auto& item : aSelection )
     {
-        if( item->Type() != aType )
+        if( !item->IsType( types ) )
             return false;
     }
 
@@ -105,54 +102,14 @@ bool SELECTION_CONDITIONS::onlyTypeFunc( const SELECTION& aSelection, KICAD_T aT
 }
 
 
-bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const std::vector<KICAD_T>& aTypes )
+bool SELECTION_CONDITIONS::onlyTypesFunc( const SELECTION& aSelection, const KICAD_T aTypes[] )
 {
     if( aSelection.Empty() )
         return false;
 
     for( const auto& item : aSelection )
     {
-        bool valid = false;
-
-        for( std::vector<KICAD_T>::const_iterator it = aTypes.begin(); it != aTypes.end(); ++it )
-        {
-            if( item->Type() == *it )
-            {
-                valid = true;
-                break;
-            }
-        }
-
-        if( !valid )
-            return false;
-    }
-
-    return true;
-}
-
-
-bool SELECTION_CONDITIONS::onlyTypesFuncArr( const SELECTION& aSelection, const KICAD_T aTypes[] )
-{
-    if( aSelection.Empty() )
-        return false;
-
-    for( const auto& item : aSelection )
-    {
-        bool valid = false;
-        const KICAD_T* type = aTypes;
-
-        while( *type != EOT )
-        {
-            if( item->Type() == *type )
-            {
-                valid = true;
-                break;
-            }
-
-            ++type;
-        }
-
-        if( !valid )
+        if( !item->IsType( aTypes ) )
             return false;
     }
 

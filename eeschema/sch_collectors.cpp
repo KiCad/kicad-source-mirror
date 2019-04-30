@@ -235,40 +235,6 @@ bool SCH_COLLECTOR::IsCorner() const
 }
 
 
-bool SCH_COLLECTOR::IsNode( bool aIncludePins ) const
-{
-    for( size_t i = 0;  i < m_List.size();  i++ )
-    {
-        SCH_ITEM* item = (SCH_ITEM*) m_List[ i ];
-        KICAD_T type = item->Type();
-
-        if( type == SCH_JUNCTION_T )
-            continue;
-
-        if( type == SCH_LINE_T )
-        {
-            if( item->GetLayer() != LAYER_WIRE )
-                return false;
-
-            continue;
-        }
-
-        if( type == SCH_PIN_T )
-        {
-            if( !aIncludePins )
-                return false;
-
-            continue;
-        }
-
-        // Any other item types indicate that this collection is not a node.
-        return false;
-    }
-
-    return true;
-}
-
-
 bool SCH_COLLECTOR::IsDraggableJunction() const
 {
     for( size_t i = 0;  i < m_List.size();  i++ )

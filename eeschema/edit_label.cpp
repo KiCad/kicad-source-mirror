@@ -144,7 +144,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     newtext->SetIsDangling( aText->IsDangling() );
 
     if( selected )
-        m_toolManager->RunAction( SCH_ACTIONS::unselectItem, true, aText );
+        m_toolManager->RunAction( SCH_ACTIONS::removeItemFromSel, true, aText );
 
     if( !aText->IsNew() )
     {
@@ -156,7 +156,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     }
 
     if( selected )
-        m_toolManager->RunAction( SCH_ACTIONS::selectItem, true, newtext );
+        m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, newtext );
 
     // if the old item is the current schematic item, replace it by the new text:
     if( screen->GetCurItem() == aText )

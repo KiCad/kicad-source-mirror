@@ -296,19 +296,19 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 #endif /* KICAD_SPICE */
 
 
-// A magic cookie token for clearing the highlight
+// A singleton reference for clearing the highlight
 static VECTOR2D CLEAR;
 
 
 // TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
-    wxString        netName;
-    EDA_ITEMS       nodeList;
-    bool            retVal = true;
+    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    SCH_SELECTION_TOOL* selTool = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
+    wxString            netName;
+    bool                retVal = true;
 
-    if( aPosition != CLEAR && editFrame->GetScreen()->GetNode( (wxPoint) aPosition, nodeList ) )
+    if( aPosition != CLEAR )
     {
         if( TestDuplicateSheetNames( false ) > 0 )
         {
@@ -317,14 +317,10 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            if( auto item = dynamic_cast<SCH_ITEM*>( nodeList[0] ) )
-            {
-                if( item->Connection( *g_CurrentSheet ) )
-                {
-                    netName = item->Connection( *g_CurrentSheet )->Name();
-                    editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ), UnescapeString( netName ) ) );
-                }
-            }
+            SCH_ITEM* item = selTool->GetNode( aPosition );
+
+            if( item && item->Connection( *g_CurrentSheet ) )
+                netName = item->Connection( *g_CurrentSheet )->Name();
         }
     }
 
@@ -336,7 +332,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     else
     {
         editFrame->SendCrossProbeNetName( netName );
-        editFrame->SetStatusText( wxString::Format( _( "Selected net: %s" ),
+        editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
                                   UnescapeString( netName ) ) );
     }
 
@@ -351,9 +347,9 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 int SCH_EDITOR_CONTROL::HighlightNet( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    VECTOR2D              gridPosition = controls->GetCursorPosition( true );
+    VECTOR2D              cursorPos = controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
 
-    highlightNet( m_toolMgr, gridPosition );
+    highlightNet( m_toolMgr, cursorPos );
 
     return 0;
 }
@@ -617,8 +613,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Now clear the previous selection, select the pasted items, and fire up the "move"
     // tool.
     //
-    m_toolMgr->RunAction( SCH_ACTIONS::selectionClear, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::selectItems, true, &loadedItems );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &loadedItems );
 
     SELECTION& selection = selTool->GetSelection();
 

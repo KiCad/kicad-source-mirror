@@ -68,6 +68,8 @@ public:
     int ChangeShape( const TOOL_EVENT& aEvent );
     int ChangeTextType( const TOOL_EVENT& aEvent );
 
+    int BreakWire( const TOOL_EVENT& aEvent );
+
     /**
      * Function DoDelete()
      *

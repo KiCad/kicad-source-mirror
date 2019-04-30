@@ -302,19 +302,6 @@ public:
      */
     void MarkConnections( SCH_LINE* aSegment );
 
-    /**
-     * Adds all of the wires and junctions to \a aList that make up a connection to the
-     * object at \a aPosition.
-     *
-     * @param aPosition The position of the first connection object in drawing units.
-     * @param aList The pick list to add the connect item to.
-     * @param aFullConnection If true all the objects that make up this connection are
-     *                        add to \a aList.  Otherwise, only the objects up to the first
-     *                        node are added.
-     * @return The number of items added to \a aList.
-     */
-    int GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList, bool aFullConnection );
-
     /* full undo redo management : */
     // use BASE_SCREEN::PushCommandToUndoList( PICKED_ITEMS_LIST* aItem )
     // use BASE_SCREEN::PushCommandToRedoList( PICKED_ITEMS_LIST* aItem )
@@ -423,15 +410,6 @@ public:
     void GetHierarchicalItems( EDA_ITEMS& aItems );
 
     /**
-     * Return all the items at \a aPosition that form a node.
-     *
-     * @param aPosition The wxPoint to test for node items.
-     * @param aList A #EDA_ITEMS container to place the items found.
-     * @return The number of node items found at \a aPosition.
-     */
-    int GetNode( const wxPoint& aPosition, EDA_ITEMS& aList );
-
-    /**
      * Return a wire or bus item located at \a aPosition.
      *
      * @param aPosition The wxPoint to test for node items.
@@ -487,21 +465,6 @@ public:
      */
     bool SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxString& aReference,
                                 const wxString& aFootPrint, bool aSetVisible );
-
-    /**
-     * Create a list of items found when a block command is initiated.
-     *
-     * The items selected depend on the block command.  If the drag block command is issued,
-     * then any items connected to items in the block are also selected.
-     */
-    void SelectBlockItems();
-
-    /**
-     * Add all the items in the screen within the block selection rectangle to the pick list.
-     *
-     * @return The number of items in the pick list.
-     */
-    int UpdatePickList();
 
     /**
      * Adds a bus alias definition (and transfers ownership of the pointer)

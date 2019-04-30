@@ -172,7 +172,7 @@ static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
                                               ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 
-static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE_COMPONENT_OR_ITEM, 'M',
+static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M',
                           ID_SCH_MOVE );
 
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL,
@@ -183,8 +183,6 @@ static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
                                HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
-static EDA_HOTKEY HkDeleteNode( _HKI( "Delete Node" ), HK_DELETE_NODE, WXK_BACK,
-                                ID_POPUP_SCH_DELETE_NODE );
 
 static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL, ID_FIND_ITEMS );
 static EDA_HOTKEY HkFindNextItem( _HKI( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
@@ -209,6 +207,12 @@ static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FI
 
 static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UPDATE_PCB_FROM_SCH,
                                       WXK_F8 );
+
+// Selection
+static EDA_HOTKEY HkSelectNode( _HKI( "Select Node" ), HK_SELECT_NODE,
+                                GR_KB_ALT + '3', ID_HOTKEY_SELECT_NODE);
+static EDA_HOTKEY HkSelectConnection( _HKI( "Select Connection" ), HK_SELECT_CONNECTION,
+                                      GR_KB_ALT + '4', ID_HOTKEY_SELECT_CONNECTION );
 
 // Higtlight connection
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
@@ -274,7 +278,7 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     NULL
 };
 
-// List of common hotkey descriptors, for the library vierwer
+// List of common hotkey descriptors, for the library viewer
 static EDA_HOTKEY* common_basic_Hotkey_List[] =
 {
     &HkHelp,
@@ -309,6 +313,8 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkEditComponentFootprint,
     &HkShowComponentDatasheet,
     &HkEditComponentWithLibedit,
+    &HkSelectNode,
+    &HkSelectConnection,
     &HkBeginWire,
     &HkBeginBus,
     &HkEndLineWireBus,
@@ -325,7 +331,6 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkUpdatePcbFromSch,
     &HkAutoplaceFields,
     &HkLeaveSheet,
-    &HkDeleteNode,
     &HkHighlightConnection,
     &HkUnfoldBus,
     &HkCanvasCairo,
@@ -460,28 +465,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case ID_HOTKEY_HIGHLIGHT:
-        if( notBusy )
-        {
-            cmd.SetId( ID_HIGHLIGHT_NET );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
-    case HK_ZOOM_IN:
-    case HK_ZOOM_OUT:
-    case HK_ZOOM_REDRAW:
-    case HK_ZOOM_CENTER:
-    case HK_ZOOM_AUTO:
-    case HK_ZOOM_SELECTION:
-    case HK_MOVEBLOCK_TO_DRAGBLOCK:          // Switch to drag mode, when block moving
-    case HK_EDIT_PASTE:
-    case HK_EDIT_COPY:                      // Copy block to paste buffer.
-    case HK_EDIT_CUT:
-        cmd.SetId( hotKey->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_END_CURR_LINEWIREBUS:

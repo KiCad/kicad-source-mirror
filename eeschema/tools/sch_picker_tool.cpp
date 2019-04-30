@@ -46,7 +46,7 @@ int SCH_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        VECTOR2I cursorPos = controls->GetCursorPosition( true );
+        VECTOR2I cursorPos = controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( evt->IsClick( BUT_LEFT ) )
         {

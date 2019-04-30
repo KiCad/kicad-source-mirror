@@ -95,15 +95,6 @@ public:
     bool IsCorner() const;
 
     /**
-     * Function IsNode
-     * tests if the collected items form a node.
-     *
-     * @param aIncludePins Indicate if component pin items should be included in the test.
-     * @return True if the collected items form a node.
-     */
-    bool IsNode( bool aIncludePins = true ) const;
-
-    /**
      * Function IsDraggableJunction
      * tests to see if the collected items form a draggable junction.
      * <p>

@@ -148,22 +148,14 @@ SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*       listStart,
 // many classes inherit this method, be careful:
 SEARCH_RESULT EDA_ITEM::Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] )
 {
-    KICAD_T stype;
-
 #if 0 && defined(DEBUG)
     std::cout << GetClass().mb_str() << ' ';
 #endif
 
-    for( const KICAD_T* p = scanTypes;  (stype = *p) != EOT;   ++p )
+    if( IsType( scanTypes ) )
     {
-        // If caller wants to inspect my type
-        if( stype == Type() )
-        {
-            if( SEARCH_QUIT == inspector( this, testData ) )
-                return SEARCH_QUIT;
-
-            break;
-        }
+        if( SEARCH_QUIT == inspector( this, testData ) )
+            return SEARCH_QUIT;
     }
 
     return SEARCH_CONTINUE;

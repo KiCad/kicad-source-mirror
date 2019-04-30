@@ -42,30 +42,36 @@
 #include <painter.h>
 #include <eeschema_id.h>
 #include <menus_helpers.h>
+#include <hotkeys.h>
 
 // Selection tool actions
 TOOL_ACTION SCH_ACTIONS::selectionActivate( "eeschema.InteractiveSelection",
         AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );      // No description, not shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::selectionCursor( "eeschema.InteractiveSelection.Cursor",
-        AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
+TOOL_ACTION SCH_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_NODE ),
+        _( "Select Node" ), _( "Select a connection item under the cursor" ), nullptr );
+
+TOOL_ACTION SCH_ACTIONS::selectConnection( "eeschema.InteractiveSelection.SelectConnection",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_CONNECTION ),
+        _( "Select Node" ), _( "Select a connection item under the cursor" ), nullptr );
 
 TOOL_ACTION SCH_ACTIONS::selectionMenu( "eeschema.InteractiveSelection.SelectionMenu",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::selectItem( "eeschema.InteractiveSelection.SelectItem",
+TOOL_ACTION SCH_ACTIONS::addItemToSel( "eeschema.InteractiveSelection.AddItemToSel",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::selectItems( "eeschema.InteractiveSelection.SelectItems",
+TOOL_ACTION SCH_ACTIONS::addItemsToSel( "eeschema.InteractiveSelection.AddItemsToSel",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::unselectItem( "eeschema.InteractiveSelection.UnselectItem",
+TOOL_ACTION SCH_ACTIONS::removeItemFromSel( "eeschema.InteractiveSelection.RemoveItemFromSel",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::unselectItems( "eeschema.InteractiveSelection.UnselectItems",
+TOOL_ACTION SCH_ACTIONS::removeItemsFromSel( "eeschema.InteractiveSelection.RemoveItemsFromSel",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-TOOL_ACTION SCH_ACTIONS::selectionClear( "eeschema.InteractiveSelection.Clear",
+TOOL_ACTION SCH_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSelection",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
     
@@ -324,7 +330,7 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
     if( m_selection.Empty() )
     {
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
 
         clearSelection();
         SelectPoint( cursorPos, aFilterList );
@@ -337,51 +343,13 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
         for( int i = m_selection.GetSize() - 1; i >= 0; --i )
         {
             SCH_ITEM* item = (SCH_ITEM*) m_selection.GetItem( i );
-            KICAD_T   matchType;
-            bool      match = false;
 
-            if( item->Type() == SCH_FIELD_T )
-            {
-                SCH_FIELD* field = (SCH_FIELD*) item;
-
-                for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
-                {
-                    switch( matchType )
-                    {
-                    case SCH_FIELD_LOCATE_REFERENCE_T: match = field->GetId() == REFERENCE; break;
-                    case SCH_FIELD_LOCATE_VALUE_T:     match = field->GetId() == VALUE;     break;
-                    case SCH_FIELD_LOCATE_FOOTPRINT_T: match = field->GetId() == FOOTPRINT; break;
-
-                    default: match = ( item->Type() == matchType ); break;
-                    }
-                }
-            }
-            else
-            {
-                for( const KICAD_T* p = aFilterList;  (matchType = *p) != EOT && !match;   ++p )
-                    match = ( item->Type() == matchType );
-            }
-
-            if( !match )
+            if( !item->IsType( aFilterList ) )
                 toggleSelection( item );
         }
 
         return m_selection;
     }
-}
-
-
-bool SCH_SELECTION_TOOL::selectCursor( const KICAD_T aFilterList[], bool aForceSelect  )
-{
-    if( aForceSelect || m_selection.Empty() )
-    {
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( false );
-
-        clearSelection();
-        SelectPoint( cursorPos, aFilterList );
-    }
-
-    return !m_selection.Empty();
 }
 
 
@@ -508,7 +476,67 @@ bool SCH_SELECTION_TOOL::selectMultiple()
 }
 
 
-int SCH_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
+static KICAD_T nodeTypes[] =
+{
+    SCH_LINE_LOCATE_WIRE_T,
+    SCH_LINE_LOCATE_BUS_T,
+    SCH_BUS_WIRE_ENTRY_T,
+    SCH_BUS_BUS_ENTRY_T,
+    SCH_LABEL_T,
+    SCH_HIER_LABEL_T,
+    SCH_GLOBAL_LABEL_T,
+    SCH_SHEET_PIN_T,
+    SCH_JUNCTION_T,
+    EOT
+};
+
+
+SCH_ITEM* SCH_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
+{
+    SCH_COLLECTOR collector;
+
+    collector.Collect( m_frame->GetScreen()->GetDrawItems(), nodeTypes, (wxPoint) aPosition );
+
+    return collector.GetCount() ? collector[ 0 ] : nullptr;
+}
+
+
+int SCH_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
+{
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+
+    SelectPoint( cursorPos, nodeTypes  );
+
+    return 0;
+}
+
+
+int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
+{
+    RequestSelection( (KICAD_T[]) { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT } );
+
+    if( m_selection.Empty() )
+        return 0;
+
+    SCH_LINE* line = (SCH_LINE*) m_selection.GetItem( 0 );
+    EDA_ITEMS items;
+
+    m_frame->GetScreen()->ClearDrawingState();
+    m_frame->GetScreen()->MarkConnections( line );
+
+    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    {
+        if( item->GetFlags() & CANDIDATE )
+            select( item );
+
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
+
+    return 0;
+}
+
+
+int SCH_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
 {
     std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
 
@@ -524,7 +552,7 @@ int SCH_SELECTION_TOOL::SelectItems( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
+int SCH_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
     SCH_ITEM* item = aEvent.Parameter<SCH_ITEM*>();
@@ -541,7 +569,7 @@ int SCH_SELECTION_TOOL::SelectItem( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
+int SCH_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
 {
     std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
 
@@ -557,7 +585,7 @@ int SCH_SELECTION_TOOL::UnselectItems( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_SELECTION_TOOL::UnselectItem( const TOOL_EVENT& aEvent )
+int SCH_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
 {
     // Check if there is an item to be selected
     SCH_ITEM* item = aEvent.Parameter<SCH_ITEM*>();
@@ -914,13 +942,16 @@ bool SCH_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
 void SCH_SELECTION_TOOL::setTransitions()
 {
-    Go( &SCH_SELECTION_TOOL::Main,             SCH_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::ClearSelection,   SCH_ACTIONS::selectionClear.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectItem,       SCH_ACTIONS::selectItem.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectItems,      SCH_ACTIONS::selectItems.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::UnselectItem,     SCH_ACTIONS::unselectItem.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::UnselectItems,    SCH_ACTIONS::unselectItems.MakeEvent() );
-    Go( &SCH_SELECTION_TOOL::SelectionMenu,    SCH_ACTIONS::selectionMenu.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::Main,                SCH_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectNode,          SCH_ACTIONS::selectNode.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectConnection,    SCH_ACTIONS::selectConnection.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::ClearSelection,      SCH_ACTIONS::clearSelection.MakeEvent() );
+
+    Go( &SCH_SELECTION_TOOL::AddItemToSel,        SCH_ACTIONS::addItemToSel.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::AddItemsToSel,       SCH_ACTIONS::addItemsToSel.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::RemoveItemFromSel,   SCH_ACTIONS::removeItemFromSel.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::RemoveItemsFromSel,  SCH_ACTIONS::removeItemsFromSel.MakeEvent() );
+    Go( &SCH_SELECTION_TOOL::SelectionMenu,       SCH_ACTIONS::selectionMenu.MakeEvent() );
 }
 
 

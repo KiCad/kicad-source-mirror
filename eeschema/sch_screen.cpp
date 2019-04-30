@@ -759,62 +759,6 @@ void SCH_SCREEN::GetHierarchicalItems( EDA_ITEMS& aItems )
 }
 
 
-// JEY TODO: obsolete once LibEdit is moved to modern toolset
-void SCH_SCREEN::SelectBlockItems()
-{
-    PICKED_ITEMS_LIST* pickedlist = &m_BlockLocate.GetItems();
-
-    if( pickedlist->GetCount() == 0 )
-        return;
-
-    ClearDrawingState();
-
-    for( unsigned ii = 0; ii < pickedlist->GetCount(); ii++ )
-    {
-        SCH_ITEM* item = (SCH_ITEM*) pickedlist->GetPickedItem( ii );
-        item->SetFlags( SELECTED );
-    }
-}
-
-
-// JEY TODO: obsolete once LibEdit is moved to modern toolset
-int SCH_SCREEN::UpdatePickList()
-{
-    ITEM_PICKER picker;
-    EDA_RECT area;
-    unsigned count;
-
-    area.SetOrigin( m_BlockLocate.GetOrigin() );
-    area.SetSize( m_BlockLocate.GetSize() );
-    area.Normalize();
-
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        // An item is picked if its bounding box intersects the reference area.
-        if( item->HitTest( area ) &&
-                ( !m_BlockLocate.IsDragging() || item->IsType( SCH_COLLECTOR::DraggableItems ) ) )
-        {
-            picker.SetItem( item );
-            m_BlockLocate.PushItem( picker );
-        }
-    }
-
-    // if the block is composed of one item,
-    // select it as the current item
-    count =  m_BlockLocate.GetCount();
-    if( count == 1 )
-    {
-        SetCurItem( (SCH_ITEM*) m_BlockLocate.GetItem( 0 ) );
-    }
-    else
-    {
-        SetCurItem( NULL );
-    }
-
-    return count;
-}
-
-
 bool SCH_SCREEN::TestDanglingEnds()
 {
     SCH_ITEM* item;
@@ -836,54 +780,17 @@ bool SCH_SCREEN::TestDanglingEnds()
 }
 
 
-int SCH_SCREEN::GetNode( const wxPoint& aPosition, EDA_ITEMS& aList )
-{
-    for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-    {
-        switch( item->Type() )
-        {
-        case SCH_LINE_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_BUS_BUS_ENTRY_T:
-        {
-            if( item->HitTest( aPosition ) &&
-                ( item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE ) )
-                aList.push_back( item );
-            break;
-        }
-
-        case SCH_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_SHEET_PIN_T:
-        case SCH_JUNCTION_T:
-        {
-            if( item->HitTest( aPosition ) )
-                aList.push_back( item );
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
-
-    return (int) aList.size();
-}
-
-
 SCH_LINE* SCH_SCREEN::GetWireOrBus( const wxPoint& aPosition )
 {
+    static KICAD_T types[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( (item->Type() == SCH_LINE_T) && item->HitTest( aPosition )
-            && (item->GetLayer() == LAYER_BUS || item->GetLayer() == LAYER_WIRE) )
-        {
+        if( item->IsType( types ) && item->HitTest( aPosition ) )
             return (SCH_LINE*) item;
-        }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 
@@ -985,150 +892,6 @@ bool SCH_SCREEN::SetComponentFootprint( SCH_SHEET_PATH* aSheetPath, const wxStri
     }
 
     return found;
-}
-
-
-int SCH_SCREEN::GetConnection( const wxPoint& aPosition, PICKED_ITEMS_LIST& aList,
-                               bool aFullConnection )
-{
-    SCH_ITEM* item;
-    EDA_ITEM* tmp;
-    EDA_ITEMS list;
-
-    // Clear flags member for all items.
-    ClearDrawingState();
-
-    if( GetNode( aPosition, list ) == 0 )
-        return 0;
-
-    for( size_t i = 0;  i < list.size();  i++ )
-    {
-        item = (SCH_ITEM*) list[ i ];
-        item->SetFlags( SELECTEDNODE | STRUCT_DELETED );
-
-        /* Put this structure in the picked list: */
-        ITEM_PICKER picker( item, UR_DELETED );
-        aList.PushItem( picker );
-    }
-
-    // Mark all wires, junctions, .. connected to the item(s) found.
-    if( aFullConnection )
-    {
-        SCH_LINE* segment;
-
-        for( item = m_drawList.begin(); item; item = item->Next() )
-        {
-            if( !(item->GetFlags() & SELECTEDNODE) )
-                continue;
-
-            if( item->Type() != SCH_LINE_T )
-                continue;
-
-            MarkConnections( (SCH_LINE*) item );
-        }
-
-        // Search all attached wires (i.e wire with one new dangling end )
-        for( item = m_drawList.begin(); item; item = item->Next() )
-        {
-            bool noconnect = false;
-
-            if( item->GetFlags() & STRUCT_DELETED )
-                continue;                                   // Already seen
-
-            if( !(item->GetFlags() & CANDIDATE) )
-                continue;                                   // not a candidate
-
-            if( item->Type() != SCH_LINE_T )
-                continue;
-
-            item->SetFlags( SKIP_STRUCT );
-
-            segment = (SCH_LINE*) item;
-
-            /* If the wire start point is connected to a wire that was already found
-             * and now is not connected, add the wire to the list. */
-            for( tmp = m_drawList.begin(); tmp; tmp = tmp->Next() )
-            {
-                // Ensure tmp is a previously deleted segment:
-                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
-                    continue;
-
-                if( tmp->Type() != SCH_LINE_T )
-                    continue;
-
-                SCH_LINE* testSegment = (SCH_LINE*) tmp;
-
-               // Test for segment connected to the previously deleted segment:
-                if( testSegment->IsEndPoint( segment->GetStartPoint() ) )
-                    break;
-            }
-
-            // when tmp != NULL, segment is a new candidate:
-            // put it in deleted list if
-            // the start point is not connected to another item (like pin)
-            if( tmp && !CountConnectedItems( segment->GetStartPoint(), true ) )
-                noconnect = true;
-
-            /* If the wire end point is connected to a wire that has already been found
-             * and now is not connected, add the wire to the list. */
-            for( tmp = m_drawList.begin(); tmp; tmp = tmp->Next() )
-            {
-                // Ensure tmp is a previously deleted segment:
-                if( ( tmp->GetFlags() & STRUCT_DELETED ) == 0 )
-                    continue;
-
-                if( tmp->Type() != SCH_LINE_T )
-                    continue;
-
-                SCH_LINE* testSegment = (SCH_LINE*) tmp;
-
-                // Test for segment connected to the previously deleted segment:
-                if( testSegment->IsEndPoint( segment->GetEndPoint() ) )
-                    break;
-            }
-
-            // when tmp != NULL, segment is a new candidate:
-            // put it in deleted list if
-            // the end point is not connected to another item (like pin)
-            if( tmp && !CountConnectedItems( segment->GetEndPoint(), true ) )
-                noconnect = true;
-
-            item->ClearFlags( SKIP_STRUCT );
-
-            if( noconnect )
-            {
-                item->SetFlags( STRUCT_DELETED );
-
-                ITEM_PICKER picker( item, UR_DELETED );
-                aList.PushItem( picker );
-
-                item = m_drawList.begin();
-            }
-        }
-
-        for( item = m_drawList.begin(); item;  item = item->Next() )
-        {
-            if( item->GetFlags() & STRUCT_DELETED )
-                continue;
-
-            if( item->Type() != SCH_LABEL_T )
-                continue;
-
-            tmp = GetWireOrBus( ( (SCH_TEXT*) item )->GetPosition() );
-
-            if( tmp && ( tmp->GetFlags() & STRUCT_DELETED ) )
-            {
-                item->SetFlags( STRUCT_DELETED );
-
-                ITEM_PICKER picker( item, UR_DELETED );
-                aList.PushItem( picker );
-            }
-        }
-    }
-
-    ClearDrawingState();
-
-    return aList.GetCount();
 }
 
 

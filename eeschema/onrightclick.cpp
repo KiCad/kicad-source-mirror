@@ -181,35 +181,13 @@ void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunct
             AddMenuItem( aMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
                          KiBitmap( break_line_xpm ) );
     }
-
-    if( screen->GetWireOrBus( aJunction->GetPosition() ) )
-    {
-        AddMenuItem( aMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ),
-                     KiBitmap( delete_node_xpm ) );
-        AddMenuItem( aMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
-                     KiBitmap( delete_connection_xpm ) );
-    }
 }
 
 
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
-    SCH_SCREEN* screen = frame->GetScreen();
     wxPoint     pos    = frame->GetCrossHairPosition();
     wxString    msg;
-
-    AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_NODE, _( "Delete Node" ),
-                 KiBitmap( delete_node_xpm ) );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_DELETE_CONNECTION, _( "Delete Connection" ),
-                 KiBitmap( delete_connection_xpm ) );
-
-    SCH_LINE* line = screen->GetWireOrBus( frame->GetCrossHairPosition() );
-
-    if( line && !line->IsEndPoint( frame->GetCrossHairPosition() ) )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
-                     KiBitmap( break_line_xpm ) );
-
-    PopMenu->AppendSeparator();
 
     msg = AddHotkeyName( _( "Add Junction" ), g_Schematic_Hotkeys_Descr, HK_ADD_JUNCTION );
     AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, msg, KiBitmap( add_junction_xpm ) );
@@ -228,8 +206,6 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     SCH_SELECTION_TOOL* selTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     wxPoint             pos = frame->GetCrossHairPosition();
     wxString            msg;
-
-    AddMenuItem( PopMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Bus" ), KiBitmap( break_bus_xpm ) );
 
     // TODO(JE) remove once real-time is enabled
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )

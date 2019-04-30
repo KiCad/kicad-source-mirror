@@ -66,10 +66,7 @@
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
-    case ID_POPUP_SCH_INIT_CMP:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_DELETE_NODE:
-    case ID_POPUP_SCH_DELETE_CONNECTION:
     case ID_POPUP_SCH_ENTER_SHEET:
     case ID_POPUP_SCH_LEAVE_SHEET:
     case ID_POPUP_SCH_ADD_JUNCTION:
@@ -107,27 +104,6 @@
         }
         break;
 
-    case ID_POPUP_SCH_DELETE_NODE:
-    case ID_POPUP_SCH_DELETE_CONNECTION:
-        m_canvas->MoveCursorToCrossHair();
-        DeleteConnection( id == ID_POPUP_SCH_DELETE_CONNECTION );
-        SchematicCleanUp( true );
-        screen->SetCurItem( NULL );
-        SetRepeatItem( NULL );
-
-        TestDanglingEnds();
-        m_canvas->Refresh();
-
-        break;
-
-    case ID_POPUP_SCH_BREAK_WIRE:
-        m_canvas->MoveCursorToCrossHair();
-        BreakSegments( GetCrossHairPosition() );
-        TestDanglingEnds();
-        m_canvas->Refresh();
-
-        break;
-
     case ID_POPUP_SCH_CLEANUP_SHEET:
         if( item != NULL && item->Type() == SCH_SHEET_T )
         {
@@ -149,10 +125,6 @@
             GetCanvas()->Refresh();
             OnModify();
         }
-        break;
-
-    case ID_POPUP_SCH_INIT_CMP:
-        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
@@ -234,21 +206,6 @@ void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 {
     if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
-}
-
-
-void SCH_EDIT_FRAME::DeleteConnection( bool aFullConnection )
-{
-    PICKED_ITEMS_LIST   pickList;
-    SCH_SCREEN*         screen = GetScreen();
-    wxPoint             pos = GetCrossHairPosition();
-
-    if( screen->GetConnection( pos, pickList, aFullConnection ) != 0 )
-    {
-        DeleteItemsInList( pickList );
-        SchematicCleanUp( true );
-        OnModify();
-    }
 }
 
 

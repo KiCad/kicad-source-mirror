@@ -46,19 +46,23 @@ public:
     /// Activation of the selection tool
     static TOOL_ACTION selectionActivate;
 
-    /// Select a single item under the cursor position
-    static TOOL_ACTION selectionCursor;
+    /// Select the junction, wire or bus segment under the cursor.
+    static TOOL_ACTION selectNode;
+
+    /// If current selection is a wire or bus, expand to entire connection.
+    /// Otherwise, select connection under cursor.
+    static TOOL_ACTION selectConnection;
 
     /// Clears the current selection
-    static TOOL_ACTION selectionClear;
+    static TOOL_ACTION clearSelection;
 
     /// Selects an item (specified as the event parameter).
-    static TOOL_ACTION selectItem;
-    static TOOL_ACTION unselectItem;
+    static TOOL_ACTION addItemToSel;
+    static TOOL_ACTION removeItemFromSel;
 
     /// Selects a list of items (specified as the event parameter)
-    static TOOL_ACTION selectItems;
-    static TOOL_ACTION unselectItems;
+    static TOOL_ACTION addItemsToSel;
+    static TOOL_ACTION removeItemsFromSel;
 
     /// Runs a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
@@ -142,6 +146,8 @@ public:
     static TOOL_ACTION toHLabel;
     static TOOL_ACTION toGLabel;
     static TOOL_ACTION toText;
+    static TOOL_ACTION breakWire;
+    static TOOL_ACTION breakBus;
 
     /// Inspection
     static TOOL_ACTION showDatasheet;

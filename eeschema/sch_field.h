@@ -22,17 +22,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_field.h
- * @brief Definition of the SCH_FIELD class for Eeschema.
- */
-
 #ifndef CLASS_SCH_FIELD_H
 #define CLASS_SCH_FIELD_H
 
 
 #include <eda_text.h>
 #include <sch_item_struct.h>
+#include <template_fieldnames.h>
 #include <general.h>
 
 
@@ -72,6 +68,26 @@ public:
     wxString GetClass() const override
     {
         return wxT( "SCH_FIELD" );
+    }
+
+    bool IsType( const KICAD_T aScanTypes[] ) override
+    {
+        if( SCH_ITEM::IsType( aScanTypes ) )
+            return true;
+
+        for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
+        {
+            if( *p == SCH_FIELD_LOCATE_REFERENCE_T && m_id == REFERENCE )
+                return true;
+            else if ( *p == SCH_FIELD_LOCATE_VALUE_T && m_id == VALUE )
+                return true;
+            else if ( *p == SCH_FIELD_LOCATE_FOOTPRINT_T && m_id == FOOTPRINT )
+                return true;
+            else if ( *p == SCH_FIELD_LOCATE_DATASHEET_T && m_id == DATASHEET )
+                return true;
+        }
+
+        return false;
     }
 
     /**
