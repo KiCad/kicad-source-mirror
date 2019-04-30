@@ -256,6 +256,9 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+
     SetRepeatItem( NULL );
     ClearMsgPanel();
 

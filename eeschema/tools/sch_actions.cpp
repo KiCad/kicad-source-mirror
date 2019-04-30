@@ -256,6 +256,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_HOTKEY_SELECT_CONNECTION:
         return SCH_ACTIONS::selectConnection.MakeEvent();
+
+    case ID_POPUP_SCH_ENTER_SHEET:
+        return SCH_ACTIONS::enterSheet.MakeEvent();
+
+    case ID_POPUP_SCH_LEAVE_SHEET:
+        return SCH_ACTIONS::leaveSheet.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

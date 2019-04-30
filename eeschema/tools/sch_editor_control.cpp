@@ -38,6 +38,7 @@
 #include <tools/sch_picker_tool.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_drawing_tool.h>
 #include <project.h>
 #include <hotkeys.h>
 #include <advanced_config.h>
@@ -89,6 +90,16 @@ TOOL_ACTION SCH_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithS
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
 
+TOOL_ACTION SCH_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
+        AS_GLOBAL, 0,
+        _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
+        enter_sheet_xpm );
+
+TOOL_ACTION SCH_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEAVE_SHEET ),
+        _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
+        leave_sheet_xpm );
+
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
         TOOL_INTERACTIVE( "eeschema.EditorControl" ),
@@ -117,9 +128,14 @@ bool SCH_EDITOR_CONTROL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto inactiveStateCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED && aSel.Size() == 0 );
+    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
+                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
+
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
     };
+
+    auto anySheetCondition = singleSheetCondition || belowRootSheetCondition;
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -130,25 +146,27 @@ bool SCH_EDITOR_CONTROL::Init()
     // Finally, add the standard zoom & grid items
     m_menu.AddStandardSubMenus( m_frame );
 
-    /*
-    auto lockMenu = std::make_shared<LOCK_CONTEXT_MENU>();
-    lockMenu->SetTool( this );
-
     // Add the SCH control menus to relevant other tools
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     if( selTool )
     {
-        auto& toolMenu = selTool->GetToolMenu();
-        auto& menu = toolMenu.GetMenu();
+        CONDITIONAL_MENU& selToolMenu = selTool->GetToolMenu().GetMenu();
 
-        menu.AddSeparator( inactiveStateCondition );
-        toolMenu.AddSubMenu( lockMenu );
-
-        menu.AddMenu( lockMenu.get(), false,
-                      SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 200 );
+        selToolMenu.AddSeparator( anySheetCondition, 600 );
+        selToolMenu.AddItem( SCH_ACTIONS::enterSheet, singleSheetCondition, 600 );
+        selToolMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 600 );
     }
-    */
+
+    SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
+
+    if( drawingTool )
+    {
+        CONDITIONAL_MENU& drawingToolMenu = drawingTool->GetToolMenu().GetMenu();
+
+        drawingToolMenu.AddSeparator( belowRootSheetCondition, 600 );
+        drawingToolMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 600 );
+    }
 
     return true;
 }
@@ -680,6 +698,33 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    const SELECTION&    selection = selTool->RequestSelection( (KICAD_T[]) { SCH_SHEET_T, EOT } );
+
+    if( selection.GetSize() == 1 )
+    {
+        g_CurrentSheet->push_back( (SCH_SHEET*) selection.GetItem( 0 ) );
+        m_frame->DisplayCurrentSheet();
+    }
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
+{
+    if( g_CurrentSheet->Last() != g_RootSheet )
+    {
+        g_CurrentSheet->pop_back();
+        m_frame->DisplayCurrentSheet();
+    }
+
+    return 0;
+}
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -714,4 +759,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Paste,                 SCH_ACTIONS::paste.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  SCH_ACTIONS::editWithSymbolEditor.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::EnterSheet,            SCH_ACTIONS::enterSheet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::LeaveSheet,            SCH_ACTIONS::leaveSheet.MakeEvent() );
 }

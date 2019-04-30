@@ -97,7 +97,7 @@ bool SCH_SELECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    m_menu.GetMenu().AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
+    m_menu.GetMenu().AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;

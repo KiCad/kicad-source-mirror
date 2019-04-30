@@ -67,8 +67,6 @@
     case ID_POPUP_SCH_RESIZE_SHEET:
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_ENTER_SHEET:
-    case ID_POPUP_SCH_LEAVE_SHEET:
     case ID_POPUP_SCH_ADD_JUNCTION:
     case ID_POPUP_SCH_ADD_LABEL:
         /* At this point: Do nothing. these commands do not need to stop the
@@ -133,23 +131,6 @@
         {
             m_canvas->MoveCursorToCrossHair();
             ConvertPart( (SCH_COMPONENT*) item );
-        }
-        break;
-
-    case ID_POPUP_SCH_ENTER_SHEET:
-
-        if( item && (item->Type() == SCH_SHEET_T) )
-        {
-            g_CurrentSheet->push_back( (SCH_SHEET*) item );
-            DisplayCurrentSheet();
-        }
-        break;
-
-    case ID_POPUP_SCH_LEAVE_SHEET:
-        if( g_CurrentSheet->Last() != g_RootSheet )
-        {
-            g_CurrentSheet->pop_back();
-            DisplayCurrentSheet();
         }
         break;
 

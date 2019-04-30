@@ -85,6 +85,9 @@ public:
 
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
 
+    int EnterSheet( const TOOL_EVENT& aEvent );
+    int LeaveSheet( const TOOL_EVENT& aEvent );
+
 private:
     ///> copy selection to clipboard
     bool doCopy();

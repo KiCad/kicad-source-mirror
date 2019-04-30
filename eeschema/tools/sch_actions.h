@@ -67,25 +67,6 @@ public:
     /// Runs a selection menu to select from a list of items
     static TOOL_ACTION selectionMenu;
 
-    /* Can we share these with PCBNew?
-    // Layer control
-    static TOOL_ACTION layerTop;
-    static TOOL_ACTION layerInner1;
-    static TOOL_ACTION layerInner2;
-    static TOOL_ACTION layerInner3;
-    static TOOL_ACTION layerInner4;
-    static TOOL_ACTION layerInner5;
-    static TOOL_ACTION layerInner6;
-    static TOOL_ACTION layerBottom;
-    static TOOL_ACTION layerNext;
-    static TOOL_ACTION layerPrev;
-    static TOOL_ACTION layerAlphaInc;
-    static TOOL_ACTION layerAlphaDec;
-    static TOOL_ACTION layerToggle;
-
-    static TOOL_ACTION layerChanged;        // notification
-     */
-
     // Locking
     static TOOL_ACTION toggleLock;
     static TOOL_ACTION lock;
@@ -160,6 +141,8 @@ public:
     static TOOL_ACTION paste;
 
     // Miscellaneous
+    static TOOL_ACTION enterSheet;
+    static TOOL_ACTION leaveSheet;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;

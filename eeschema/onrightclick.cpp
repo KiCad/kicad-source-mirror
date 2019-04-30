@@ -77,23 +77,8 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
         }
     }
 
-    if( item == NULL )
-    {
-        if( g_CurrentSheet->Last() != g_RootSheet )
-        {
-            msg = AddHotkeyName( _( "Leave Sheet" ), g_Schematic_Hotkeys_Descr, HK_LEAVE_SHEET );
-            AddMenuItem( PopMenu, ID_POPUP_SCH_LEAVE_SHEET, msg, KiBitmap( leave_sheet_xpm ) );
-        }
-
-        return true;
-    }
-
     switch( item->Type() )
     {
-    case SCH_JUNCTION_T:
-        addJunctionMenuEntries( PopMenu, (SCH_JUNCTION*) item );
-        break;
-
     case SCH_COMPONENT_T:
         AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item, Prj().SchSymbolLibTable() );
         break;
@@ -170,20 +155,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
 }
 
 
-void SCH_EDIT_FRAME::addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction )
-{
-    wxString msg;
-    SCH_SCREEN* screen = GetScreen();
-
-    if( !aJunction->IsNew() )
-    {
-        if( screen->GetWire( aJunction->GetPosition(), EXCLUDE_END_POINTS_T ) )
-            AddMenuItem( aMenu, ID_POPUP_SCH_BREAK_WIRE, _( "Break Wire" ),
-                         KiBitmap( break_line_xpm ) );
-    }
-}
-
-
 void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
 {
     wxPoint     pos    = frame->GetCrossHairPosition();
@@ -244,8 +215,6 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 
     if( !Sheet->GetEditFlags() )
     {
-        AddMenuItem( PopMenu, ID_POPUP_SCH_ENTER_SHEET, _( "Enter Sheet" ),
-                     KiBitmap( enter_sheet_xpm ) );
         PopMenu->AppendSeparator();
         msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hotkeys_Descr,
                              HK_SELECT_ITEMS_ON_PCB );
@@ -263,10 +232,6 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
         if( Sheet->HasUndefinedPins() )  // Sheet has pin labels, and can be cleaned
             AddMenuItem( PopMenu, ID_POPUP_SCH_CLEANUP_SHEET, _( "Cleanup Sheet Pins" ),
                          KiBitmap( options_pinsheet_xpm ) );
-
-        PopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Delete" ), g_Schematic_Hotkeys_Descr, HK_DELETE );
-        AddMenuItem( PopMenu, ID_SCH_DELETE, msg, KiBitmap( delete_sheet_xpm ) );
     }
 }
 
