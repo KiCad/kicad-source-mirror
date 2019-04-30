@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -145,6 +145,13 @@ extern const wxChar* const traceScreen;
  * Use "KICAD_ZOOM_SCROLL" to enable.
  */
 extern const wxChar* const traceZoomScroll;
+
+/**
+ * Flag to enable debug output of symbol library resolver results
+ *
+ * Use "KICAD_SYM_RESOLVE" to enable.
+ */
+extern const wxChar* const traceSymbolResolver;
 
 ///@}
 

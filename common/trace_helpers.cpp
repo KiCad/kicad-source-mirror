@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2018 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,6 +44,7 @@ const wxChar* const tracePathsAndFiles = wxT( "KICAD_PATHS_AND_FILES" );
 const wxChar* const traceLocale = wxT( "KICAD_LOCALE" );
 const wxChar* const traceScreen = wxT( "KICAD_SCREEN" );
 const wxChar* const traceZoomScroll = wxT( "KICAD_ZOOM_SCROLL" );
+const wxChar* const traceSymbolResolver = wxT( "KICAD_SYM_RESOLVE" );
 
 
 wxString dump( const wxArrayString& aArray )
