@@ -52,12 +52,12 @@
 TOOL_ACTION SCH_ACTIONS::placeSymbol( "eeschema.InteractiveDrawing.placeSymbol",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_COMPONENT ),
         _( "Add Symbol" ), _( "Add a symbol" ),
-        nullptr, AF_ACTIVATE );
+        add_component_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_POWER ),
         _( "Add Power" ), _( "Add a power port" ),
-        nullptr, AF_ACTIVATE );
+        add_power_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
         AS_GLOBAL, 0,
@@ -67,7 +67,7 @@ TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
 TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
         _( "Add Wire" ), _( "Add a wire" ),
-        nullptr, AF_ACTIVATE );
+        add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
         AS_GLOBAL, 0,
@@ -77,67 +77,67 @@ TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
 TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
         _( "Add Bus" ), _( "Add a bus" ),
-        nullptr, AF_ACTIVATE );
+        add_bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::unfoldBus( "eeschema.InteractiveDrawing.unfoldBus",
-        AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+        AS_GLOBAL, 0, "", "", nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeNoConnect( "eeschema.InteractiveDrawing.placeNoConnect",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NOCONN_FLAG ),
         _( "Add No Connect Flag" ), _( "Add a no-connection flag" ),
-        nullptr, AF_ACTIVATE );
+        noconn_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeJunction( "eeschema.InteractiveDrawing.placeJunction",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_JUNCTION ),
         _( "Add Junction" ), _( "Add a junction" ),
-        NULL, AF_ACTIVATE );
+        add_junction_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeBusWireEntry( "eeschema.InteractiveDrawing.placeBusWireEntry",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_WIRE_ENTRY ),
         _( "Add Wire to Bus Entry" ), _( "Add a wire entry to a bus" ),
-        NULL, AF_ACTIVATE );
+        add_line2bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeBusBusEntry( "eeschema.InteractiveDrawing.placeBusBusEntry",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_BUS_ENTRY ),
         _( "Add Bus to Bus Entry" ), _( "Add a bus entry to a bus" ),
-        NULL, AF_ACTIVATE );
+        add_bus2bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeLabel( "eeschema.InteractiveDrawing.placeLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LABEL ),
         _( "Add Label" ), _( "Add a net label" ),
-        NULL, AF_ACTIVATE );
+        add_line_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeHierarchicalLabel( "eeschema.InteractiveDrawing.placeHierarchicalLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HLABEL ),
         _( "Add Hierarchical Label" ), _( "Add a hierarchical sheet label" ),
-        NULL, AF_ACTIVATE );
+        add_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_HIER_SHEET ),
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
-        NULL, AF_ACTIVATE );
+        add_hierarchical_subsheet_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::resizeSheet( "eeschema.InteractiveDrawing.resizeSheet",
         AS_GLOBAL, 0, _( "Resize Sheet" ), _( "Resize hierarchical sheet" ),
-        NULL, AF_NONE );
+        resize_sheet_xpm );
 
 TOOL_ACTION SCH_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
         AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
-        NULL, AF_ACTIVATE );
+        add_hierar_pin_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::importSheetPin( "eeschema.InteractiveDrawing.importSheetPin",
         AS_GLOBAL, 0, _( "Import Sheet Pin" ), _( "Import a hierarchical sheet pin" ),
-        NULL, AF_ACTIVATE );
+        import_hierarchical_label_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeGlobalLabel( "eeschema.InteractiveDrawing.placeGlobalLabel",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GLABEL ),
         _( "Add Global Label" ), _( "Add a global label" ),
-        NULL, AF_ACTIVATE );
+        add_glabel_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeSchematicText( "eeschema.InteractiveDrawing.placeSchematicText",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_TEXT ),
         _( "Add Text" ), _( "Add text" ),
-        NULL, AF_ACTIVATE );
+        text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startLines( "eeschema.InteractiveDrawing.startLines",
         AS_GLOBAL, 0, _( "Begin Lines" ), _( "Start drawing connected graphic lines" ),
@@ -146,11 +146,11 @@ TOOL_ACTION SCH_ACTIONS::startLines( "eeschema.InteractiveDrawing.startLines",
 TOOL_ACTION SCH_ACTIONS::drawLines( "eeschema.InteractiveDrawing.drawLines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        nullptr, AF_ACTIVATE );
+        add_graphical_segments_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::placeImage( "eeschema.InteractiveDrawing.placeImage",
         AS_GLOBAL, 0, _( "Add Image" ), _( "Add bitmap image" ),
-        nullptr, AF_ACTIVATE );
+        image_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::finishLineWireOrBus( "eeschema.InteractiveDrawing.finishLineWireOrBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),
@@ -212,50 +212,56 @@ bool SCH_DRAWING_TOOL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto idleWireCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT && aSel.Empty() );
+    auto wireToolCondition  = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT );
     };
 
-    auto idleBusCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_BUS_BUTT && aSel.Empty() );
+    auto busToolCondition  = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_BUS_BUTT );
     };
 
-    auto idleLineCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT && aSel.Empty() );
+    auto lineToolCondition  = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT );
     };
 
-    auto drawingWireCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT
-                     && aSel.GetSize() == 1
-                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
+    auto sheetToolCondition  = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
     };
 
-    auto drawingBusCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_BUS_BUTT
-                     && aSel.GetSize() == 1
-                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
+    auto idleCondition = [] ( const SELECTION& aSel ) {
+        return ( aSel.Empty() || dynamic_cast<SCH_ITEM*>( aSel.Front() )->GetEditFlags() == 0 );
     };
 
-    auto drawingLineCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT
-                     && aSel.GetSize() == 1
-                     && dynamic_cast<SCH_LINE*>( aSel.GetItem( 0 ) ) );
+    auto drawingSegmentsCondition = [] ( const SELECTION& aSel ) {
+        return ( aSel.GetSize() >= 1
+                     && dynamic_cast<SCH_LINE*>( aSel.Front() )
+                     && dynamic_cast<SCH_LINE*>( aSel.Front() )->GetEditFlags() );
     };
+
+    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
+                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
 
     auto& ctxMenu = m_menu.GetMenu();
 
     // cancel current tool goes in main context menu at the top if present
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
-    ctxMenu.AddItem( SCH_ACTIONS::startWire, idleWireCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startBus, idleBusCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startLines, idleLineCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishWire, drawingWireCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishBus, drawingBusCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishLine, drawingLineCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startWire, wireToolCondition && idleCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startBus, busToolCondition && idleCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startLines, lineToolCondition && idleCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishWire, wireToolCondition && drawingSegmentsCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishBus, busToolCondition && drawingSegmentsCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishLine, lineToolCondition && drawingSegmentsCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetToolCondition && idleCondition, 1 );
 
     ctxMenu.AddSeparator( activeToolCondition, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
+
+    // Add editing actions to the selection tool menu
+    //
+    CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
+
+    selToolMenu.AddItem( SCH_ACTIONS::resizeSheet, singleSheetCondition, 1 );
 
     return true;
 }
@@ -355,6 +361,8 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
     if( aComponent )
     {
         aComponent->SetPosition( (wxPoint)cursorPos );
+
+        m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
         m_view->ClearPreview();
         m_view->AddToPreview( aComponent->Clone() );
     }
@@ -425,10 +433,10 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 aComponent->SetFlags( IS_MOVED );
                 m_frame->SetRepeatItem( aComponent );
                 m_frame->GetScreen()->SetCurItem( aComponent );
-                m_view->ClearPreview();
-                m_view->AddToPreview( aComponent->Clone() );
 
                 m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
+                m_view->ClearPreview();
+                m_view->AddToPreview( aComponent->Clone() );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
@@ -1147,6 +1155,8 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
                 aSegment = nullptr;
                 s_wires.DeleteAll();
 
@@ -1438,15 +1448,15 @@ int SCH_DRAWING_TOOL::DrawSheet( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
 {
-    SCH_SHEET* sheet = dynamic_cast<SCH_SHEET*>( m_frame->GetScreen()->GetCurItem() );
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
 
-    if( sheet )
+    if( !selection.Empty() )
     {
+        SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+
         m_frame->SetToolID( ID_POPUP_SCH_RESIZE_SHEET, wxCURSOR_PENCIL, _( "Resize sheet" ) );
         doDrawSheet( sheet );
     }
-    else
-        wxFAIL_MSG( "No sheet to resize" );
 
     return 0;
 }
@@ -1463,6 +1473,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
         m_frame->SetUndoItem( aSheet );
         aSheet->SetFlags( IS_RESIZED );
 
+        m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aSheet );
         m_view->Hide( aSheet );
         m_view->AddToPreview( aSheet->Clone() );
 
@@ -1475,11 +1486,12 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
     // Main loop: keep receiving events
     while( auto evt = Wait() )
     {
-        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             m_view->ClearPreview();
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
             if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
             {
@@ -1525,12 +1537,17 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             }
             else if( !aSheet )
             {
-                aSheet = new SCH_SHEET( cursorPos );
+                aSheet = new SCH_SHEET( (wxPoint) cursorPos );
 
                 aSheet->SetFlags( IS_NEW | IS_RESIZED );
                 aSheet->SetTimeStamp( GetNewTimeStamp() );
                 aSheet->SetParent( m_frame->GetScreen() );
                 aSheet->SetScreen( NULL );
+                sizeSheet( aSheet, cursorPos );
+
+                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aSheet );
+                m_view->ClearPreview();
+                m_view->AddToPreview( aSheet->Clone() );
 
                 m_frame->SetRepeatItem( nullptr );
                 m_frame->GetScreen()->SetCurItem( aSheet );
@@ -1561,26 +1578,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 
             if( aSheet )
             {
-                wxPoint pos = aSheet->GetPosition();
-                wxPoint size = cursorPos - pos;
-
-                // If the sheet doesn't have any pins, clamp the minimum size to the defaults.
-                size.x = std::max( size.x, MIN_SHEET_WIDTH );
-                size.y = std::max( size.y, MIN_SHEET_HEIGHT );
-
-                if( aSheet->HasPins() )
-                {
-                    int gridSizeX = KiROUND( m_frame->GetScreen()->GetGridSize().x );
-                    int gridSizeY = KiROUND( m_frame->GetScreen()->GetGridSize().y );
-
-                    // Use the pin positions to clamp the minimum width and height.
-                    size.x = std::max( size.x, aSheet->GetMinWidth() + gridSizeX );
-                    size.y = std::max( size.y, aSheet->GetMinHeight() + gridSizeY );
-                }
-
-                wxPoint grid = m_frame->GetNearestGridPosition( pos + size );
-                aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
-
+                sizeSheet( aSheet, cursorPos );
                 m_view->AddToPreview( aSheet->Clone() );
             }
         }
@@ -1601,6 +1599,30 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
     m_frame->SetNoToolSelected();
 
     return 0;
+}
+
+
+void SCH_DRAWING_TOOL::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
+{
+    wxPoint pos = aSheet->GetPosition();
+    wxPoint size = (wxPoint) aPos - pos;
+
+    // If the sheet doesn't have any pins, clamp the minimum size to the defaults.
+    size.x = std::max( size.x, MIN_SHEET_WIDTH );
+    size.y = std::max( size.y, MIN_SHEET_HEIGHT );
+
+    if( aSheet->HasPins() )
+    {
+        int gridSizeX = KiROUND( m_frame->GetScreen()->GetGridSize().x );
+        int gridSizeY = KiROUND( m_frame->GetScreen()->GetGridSize().y );
+
+        // Use the pin positions to clamp the minimum width and height.
+        size.x = std::max( size.x, aSheet->GetMinWidth() + gridSizeX );
+        size.y = std::max( size.y, aSheet->GetMinHeight() + gridSizeY );
+    }
+
+    wxPoint grid = m_frame->GetNearestGridPosition( pos + size );
+    aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
 }
 
 

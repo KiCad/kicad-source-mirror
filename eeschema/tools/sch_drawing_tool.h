@@ -117,6 +117,7 @@ private:
     void finishSegments();
 
     int doDrawSheet( SCH_SHEET* aSheet );
+    void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
