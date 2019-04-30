@@ -88,42 +88,6 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     EOT
 };
 
-const KICAD_T SCH_COLLECTOR::MovableItems[] = {
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::DraggableItems[] = {
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_T,
-    SCH_TEXT_T,
-    EOT
-};
-
-
 const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_TEXT_T,
     SCH_LABEL_T,
@@ -154,40 +118,6 @@ const KICAD_T SCH_COLLECTOR::SheetsOnly[] = {
 const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::OrientableItems[] = {
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_COMPONENT_T,
-    SCH_BITMAP_T,
-    SCH_SHEET_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::CopyableItems[] = {
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_COMPONENT_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::DoubleClickItems[] = {
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_T,
-    SCH_BITMAP_T,
-    SCH_FIELD_T,
-    SCH_MARKER_T,
     EOT
 };
 

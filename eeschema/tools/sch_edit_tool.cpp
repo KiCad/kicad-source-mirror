@@ -416,6 +416,26 @@ void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
 
 int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    const KICAD_T movableItems[] =
+    {
+        SCH_MARKER_T,
+        SCH_JUNCTION_T,
+        SCH_NO_CONNECT_T,
+        SCH_BUS_BUS_ENTRY_T,
+        SCH_BUS_WIRE_ENTRY_T,
+        SCH_LINE_T,
+        SCH_BITMAP_T,
+        SCH_TEXT_T,
+        SCH_LABEL_T,
+        SCH_GLOBAL_LABEL_T,
+        SCH_HIER_LABEL_T,
+        SCH_FIELD_T,
+        SCH_COMPONENT_T,
+        SCH_SHEET_PIN_T,
+        SCH_SHEET_T,
+        EOT
+    };
+
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
     controls->SetSnapping( true );
@@ -423,7 +443,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     // Be sure that there is at least one item that we can modify. If nothing was selected before,
     // try looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection)
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::MovableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
     bool unselect = selection.IsHover();
 
     if( selection.Empty() )
@@ -1068,7 +1088,23 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::DraggableItems );
+    static KICAD_T duplicatableItems[] =
+    {
+        SCH_JUNCTION_T,
+        SCH_LINE_T,
+        SCH_BUS_BUS_ENTRY_T,
+        SCH_BUS_WIRE_ENTRY_T,
+        SCH_TEXT_T,
+        SCH_LABEL_T,
+        SCH_GLOBAL_LABEL_T,
+        SCH_HIER_LABEL_T,
+        SCH_NO_CONNECT_T,
+        SCH_SHEET_T,
+        SCH_COMPONENT_T,
+        EOT
+    };
+
+    SELECTION& selection = m_selectionTool->RequestSelection( duplicatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1097,7 +1133,6 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         case SCH_LABEL_T:
         case SCH_GLOBAL_LABEL_T:
         case SCH_HIER_LABEL_T:
-        case SCH_MARKER_T:
         case SCH_NO_CONNECT_T:
             newItem->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( newItem );

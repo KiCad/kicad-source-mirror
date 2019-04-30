@@ -513,7 +513,9 @@ int SCH_SELECTION_TOOL::SelectNode( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 {
-    RequestSelection( (KICAD_T[]) { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT } );
+    static KICAD_T wiresAndBusses[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+
+    RequestSelection( wiresAndBusses );
 
     if( m_selection.Empty() )
         return 0;

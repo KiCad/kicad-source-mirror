@@ -701,7 +701,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selTool->RequestSelection( (KICAD_T[]) { SCH_SHEET_T, EOT } );
+    const SELECTION&    selection = selTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
 
     if( selection.GetSize() == 1 )
     {
