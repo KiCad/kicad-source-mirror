@@ -190,33 +190,6 @@ void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 }
 
 
-void SCH_EDIT_FRAME::SelectAllFromSheet( wxCommandEvent& aEvent )
-{
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_SCREEN*         screen = GetScreen();
-    SCH_ITEM*           item = screen->GetCurItem();
-
-    if( item != NULL )
-    {
-        item = selTool->SelectPoint( item->GetPosition() );
-        SendMessageToPCBNEW( item, NULL );
-    }
-    else
-    {
-        // If we didn't get here by a hot key, then something has gone wrong.
-        if( aEvent.GetInt() == 0 )
-            return;
-
-        EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
-
-        wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
-
-        item = selTool->SelectPoint( data->GetPosition() );
-        SendMessageToPCBNEW( item, NULL );
-    }
-}
-
-
 void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
 {
     SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();

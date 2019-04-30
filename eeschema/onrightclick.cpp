@@ -213,15 +213,6 @@ void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
 {
     wxString msg;
 
-    if( !Sheet->GetEditFlags() )
-    {
-        PopMenu->AppendSeparator();
-        msg = AddHotkeyName( _( "Select Items On PCB" ), g_Schematic_Hotkeys_Descr,
-                             HK_SELECT_ITEMS_ON_PCB );
-        AddMenuItem( PopMenu, ID_POPUP_SCH_SELECT_ON_PCB, msg, KiBitmap( select_same_sheet_xpm ) );
-        PopMenu->AppendSeparator();
-    }
-
     {
         AddMenuItem( PopMenu, ID_POPUP_SCH_RESIZE_SHEET, _( "Resize" ),
                      KiBitmap( resize_sheet_xpm ) );

@@ -48,6 +48,8 @@ public:
     int ShowDatasheet( const TOOL_EVENT& aEvent );
     int ShowMarkerInfo( const TOOL_EVENT& aEvent );
 
+    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
+
 private:
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;

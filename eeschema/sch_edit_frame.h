@@ -778,12 +778,6 @@ public:
 private:
 
     /**
-     * Handle the #ID_POPUP_SCH_SELECT_ON_PCB event used to select items in Pcbnew
-     * based on the sheet they are placed on.
-     */
-    void SelectAllFromSheet( wxCommandEvent& aEvent );
-
-    /**
      * Handles the keyboard hotkey for unfolding a bus
      */
     void OnUnfoldBusHotkey( wxCommandEvent& event );

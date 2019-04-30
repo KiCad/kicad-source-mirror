@@ -140,10 +140,36 @@ int SCH_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+{
+    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
+
+    if( selection.GetSize() == 1 )
+    {
+        SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
+
+        MSG_PANEL_ITEMS msgItems;
+        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
+        m_frame->SetMsgPanel( msgItems );
+    }
+    else
+    {
+        m_frame->ClearMsgPanel();
+    }
+
+    return 0;
+}
+
+
 void SCH_INSPECTION_TOOL::setTransitions()
 {
-    Go( &SCH_INSPECTION_TOOL::ShowDatasheet,      SCH_ACTIONS::showDatasheet.MakeEvent() );
-    Go( &SCH_INSPECTION_TOOL::ShowMarkerInfo,     SCH_ACTIONS::showMarkerInfo.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::ShowDatasheet,       SCH_ACTIONS::showDatasheet.MakeEvent() );
+    Go( &SCH_INSPECTION_TOOL::ShowMarkerInfo,      SCH_ACTIONS::showMarkerInfo.MakeEvent() );
+
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
+    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
 }
 
 

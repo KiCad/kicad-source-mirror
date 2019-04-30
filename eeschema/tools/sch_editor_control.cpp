@@ -100,6 +100,11 @@ TOOL_ACTION SCH_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
         _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
         leave_sheet_xpm );
 
+TOOL_ACTION SCH_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_ITEMS_ON_PCB ),
+        _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
+        select_same_sheet_xpm );
+
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
         TOOL_INTERACTIVE( "eeschema.EditorControl" ),
@@ -156,6 +161,7 @@ bool SCH_EDITOR_CONTROL::Init()
         selToolMenu.AddSeparator( anySheetCondition, 600 );
         selToolMenu.AddItem( SCH_ACTIONS::enterSheet, singleSheetCondition, 600 );
         selToolMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 600 );
+        selToolMenu.AddItem( SCH_ACTIONS::explicitCrossProbe, singleSheetCondition, 600 );
     }
 
     SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
@@ -172,52 +178,83 @@ bool SCH_EDITOR_CONTROL::Init()
 }
 
 
-int SCH_EDITOR_CONTROL::CrossProbeSchToPcb( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::CrossProbeToPcb( const TOOL_EVENT& aEvent )
+{
+    doCrossProbeSchToPcb( aEvent, false );
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent )
+{
+    doCrossProbeSchToPcb( aEvent, true );
+    return 0;
+}
+
+
+void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce )
 {
     // Don't get in an infinite loop SCH -> PCB -> SCH -> PCB -> SCH -> ...
     if( m_probingSchToPcb )
     {
         m_probingSchToPcb = false;
-        return 0;
+        return;
     }
 
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION& selection = selTool->GetSelection();
+    SCH_ITEM*           item = nullptr;
+    SCH_COMPONENT*      component = nullptr;
 
-    if( selection.Size() == 1 )
+    if( aForce )
     {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
-        SCH_COMPONENT* component;
+        SELECTION& selection = selTool->RequestSelection();
 
-        switch( item->Type() )
-        {
-        case SCH_FIELD_T:
-        case LIB_FIELD_T:
-            component = (SCH_COMPONENT*) item->GetParent();
-            m_frame->SendMessageToPCBNEW( item, component );
-            break;
+        if( selection.GetSize() >= 1 )
+            item = (SCH_ITEM*) selection.Front();
+    }
+    else
+    {
+        SELECTION& selection = selTool->GetSelection();
 
-        case SCH_COMPONENT_T:
-            component = (SCH_COMPONENT*) item;
-            m_frame->SendMessageToPCBNEW( item, component );
-            break;
-
-        case SCH_PIN_T:
-            component = (SCH_COMPONENT*) item->GetParent();
-            m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), component );
-            break;
-
-#if 0   // This is too slow on larger projects
-            case SCH_SHEET_T:
-        SendMessageToPCBNEW( item, nullptr );
-        break;
-#endif
-        default:
-            ;
-        }
+        if( selection.GetSize() >= 1 )
+            item = (SCH_ITEM*) selection.Front();
     }
 
-    return 0;
+    if( !item )
+    {
+        if( aForce )
+            m_frame->SendMessageToPCBNEW( nullptr, nullptr );
+
+        return;
+    }
+
+
+    switch( item->Type() )
+    {
+    case SCH_FIELD_T:
+    case LIB_FIELD_T:
+        component = (SCH_COMPONENT*) item->GetParent();
+        m_frame->SendMessageToPCBNEW( item, component );
+        break;
+
+    case SCH_COMPONENT_T:
+        component = (SCH_COMPONENT*) item;
+        m_frame->SendMessageToPCBNEW( item, component );
+        break;
+
+    case SCH_PIN_T:
+        component = (SCH_COMPONENT*) item->GetParent();
+        m_frame->SendMessageToPCBNEW( static_cast<SCH_PIN*>( item ), component );
+        break;
+
+    case SCH_SHEET_T:
+        if( aForce )
+            m_frame->SendMessageToPCBNEW( item, nullptr );
+        break;
+
+    default:
+        break;
+    }
 }
 
 
@@ -648,28 +685,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
-{
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
-
-    if( selection.GetSize() == 1 )
-    {
-        SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
-
-        MSG_PANEL_ITEMS msgItems;
-        item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );
-        m_frame->SetMsgPanel( msgItems );
-    }
-    else
-    {
-        m_frame->ClearMsgPanel();
-    }
-
-    return 0;
-}
-
-
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -733,16 +748,10 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UnlockSelected,        SCH_ACTIONS::unlock.MakeEvent() );
      */
 
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::SelectedEvent );
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::UnselectedEvent );
-    Go( &SCH_EDITOR_CONTROL::CrossProbeSchToPcb,    EVENTS::ClearedEvent );
-    /*
-    Go( &SCH_EDITOR_CONTROL::CrossProbePcbToSch,    SCH_ACTIONS::crossProbeSchToPcb.MakeEvent() );
-     */
-
-    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::SelectedEvent );
-    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::UnselectedEvent );
-    Go( &SCH_EDITOR_CONTROL::UpdateMessagePanel,    EVENTS::ClearedEvent );
+    Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::SelectedEvent );
+    Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::UnselectedEvent );
+    Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::ClearedEvent );
+    Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, SCH_ACTIONS::explicitCrossProbe.MakeEvent() );
 
 #ifdef KICAD_SPICE
     Go( &SCH_EDITOR_CONTROL::SimProbe,              SCH_ACTIONS::simProbe.MakeEvent() );

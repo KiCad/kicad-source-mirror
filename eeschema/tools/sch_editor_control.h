@@ -53,13 +53,12 @@ public:
     int LockSelected( const TOOL_EVENT& aEvent );
     int UnlockSelected( const TOOL_EVENT& aEvent );
 
-    ///> Reacts to selection change in pcbnew.
-    int CrossProbePcbToSch( const TOOL_EVENT& aEvent );
-
     ///> Notifies pcbnew about the selected item.
-    int CrossProbeSchToPcb( const TOOL_EVENT& aEvent );
+    int CrossProbeToPcb( const TOOL_EVENT& aEvent );
 
-    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
+    ///> Equivalent to the above, but initiated by the user.  We also do SCH_SHEETs on this
+    ///> one (they're too slow on big projects for the auto version above).
+    int ExplicitCrossProbeToPcb( const TOOL_EVENT& aEvent );
 
 #ifdef KICAD_SPICE
     int SimProbe( const TOOL_EVENT& aEvent );
@@ -91,6 +90,8 @@ public:
 private:
     ///> copy selection to clipboard
     bool doCopy();
+
+    void doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aForce );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

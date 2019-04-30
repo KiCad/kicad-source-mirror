@@ -148,6 +148,7 @@ public:
     static TOOL_ACTION updateUnits;
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
+    static TOOL_ACTION explicitCrossProbe;
 
     // SPICE
     static TOOL_ACTION simProbe;
