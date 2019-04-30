@@ -847,21 +847,23 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     if ( !aZone->BuildSmoothedPoly( smoothedPoly ) )
         return false;
 
-#if 0
     if( aZone->IsOnCopperLayer() )
     {
         computeRawFilledAreas( aZone, smoothedPoly, aRawPolys, aFinalPolys );
     }
     else
     {
+        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+
+        // Remove the non filled areas due to the hatch pattern
+        if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
+            addHatchFillTypeOnZone( aZone, smoothedPoly );
+
         aRawPolys = smoothedPoly;
         aFinalPolys = smoothedPoly;
-        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
-        aFinalPolys.Fracture( SHAPE_POLY_SET::PM_FAST );
+        aFinalPolys.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
     }
-#else
-    computeRawFilledAreas( aZone, smoothedPoly, aRawPolys, aFinalPolys );
-#endif
+
     aZone->SetNeedRefill( false );
     return true;
 }

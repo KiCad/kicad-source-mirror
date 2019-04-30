@@ -246,6 +246,8 @@ void DIALOG_COPPER_ZONE::OnUpdateUI( wxUpdateUIEvent& )
         else
             m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
     }
+
+    m_cornerRadiusCtrl->Enable(m_cornerSmoothingType > ZONE_SETTINGS::SMOOTHING_NONE );
 }
 
 
@@ -342,7 +344,9 @@ bool DIALOG_COPPER_ZONE::AcceptOptions( bool aUseExportableSetupOnly )
     m_settings.m_ZoneMinThickness = m_minWidth.GetValue();
 
     m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
-    m_settings.SetCornerRadius( m_cornerRadius.GetValue() );
+
+    m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE
+                                ? 0 : m_cornerRadius.GetValue() );
 
     m_settings.m_ZonePriority = m_PriorityLevelCtrl->GetValue();
 

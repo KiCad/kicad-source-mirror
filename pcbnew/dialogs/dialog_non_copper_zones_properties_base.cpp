@@ -153,7 +153,52 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	fgSizer1->Add( m_spinCtrlSmoothValue, 0, wxBOTTOM|wxRIGHT|wxLEFT|wxEXPAND, 5 );
 
 
-	bSizerMiddle->Add( fgSizer1, 1, wxEXPAND, 5 );
+	bSizerMiddle->Add( fgSizer1, 0, wxEXPAND, 5 );
+
+	m_staticline3 = new wxStaticLine( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxLI_HORIZONTAL );
+	bSizerMiddle->Add( m_staticline3, 0, wxEXPAND | wxALL, 5 );
+
+	m_staticTextOutlineSmooth = new wxStaticText( this, wxID_ANY, _("Zone Outline Smooth:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextOutlineSmooth->Wrap( -1 );
+	m_staticTextOutlineSmooth->SetFont( wxFont( wxNORMAL_FONT->GetPointSize(), wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxEmptyString ) );
+
+	bSizerMiddle->Add( m_staticTextOutlineSmooth, 0, wxALL|wxALIGN_CENTER_HORIZONTAL, 5 );
+
+	wxFlexGridSizer* fgSizerOutlineSettings;
+	fgSizerOutlineSettings = new wxFlexGridSizer( 0, 3, 0, 0 );
+	fgSizerOutlineSettings->AddGrowableCol( 1 );
+	fgSizerOutlineSettings->SetFlexibleDirection( wxBOTH );
+	fgSizerOutlineSettings->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
+
+	m_staticTextSmoothing = new wxStaticText( this, wxID_ANY, _("Outline smooth:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticTextSmoothing->Wrap( -1 );
+	fgSizerOutlineSettings->Add( m_staticTextSmoothing, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	wxString m_cornerSmoothingChoiceChoices[] = { _("None"), _("Chamfer"), _("Fillet") };
+	int m_cornerSmoothingChoiceNChoices = sizeof( m_cornerSmoothingChoiceChoices ) / sizeof( wxString );
+	m_cornerSmoothingChoice = new wxChoice( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, m_cornerSmoothingChoiceNChoices, m_cornerSmoothingChoiceChoices, 0 );
+	m_cornerSmoothingChoice->SetSelection( 0 );
+	fgSizerOutlineSettings->Add( m_cornerSmoothingChoice, 0, wxALL|wxEXPAND, 5 );
+
+
+	fgSizerOutlineSettings->Add( 0, 0, 0, 0, 5 );
+
+	m_cornerRadiusLabel = new wxStaticText( this, wxID_ANY, _("Chamfer distance:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRadiusLabel->Wrap( -1 );
+	fgSizerOutlineSettings->Add( m_cornerRadiusLabel, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5 );
+
+	m_cornerRadiusCtrl = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizerOutlineSettings->Add( m_cornerRadiusCtrl, 0, wxALL|wxEXPAND, 5 );
+
+	m_cornerRadiusUnits = new wxStaticText( this, wxID_ANY, _("units"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_cornerRadiusUnits->Wrap( -1 );
+	fgSizerOutlineSettings->Add( m_cornerRadiusUnits, 0, wxTOP|wxBOTTOM|wxRIGHT, 5 );
+
+
+	fgSizerOutlineSettings->Add( 0, 0, 0, 0, 5 );
+
+
+	bSizerMiddle->Add( fgSizerOutlineSettings, 0, wxEXPAND, 5 );
 
 
 	m_UpperSizer->Add( bSizerMiddle, 0, wxEXPAND|wxALL, 10 );
@@ -180,6 +225,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 	this->Centre( wxBOTH );
 
 	// Connect Events
+	this->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnUpdateUI ) );
 	m_layers->Connect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
 	m_GridStyleCtrl->Connect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnStyleSelection ), NULL, this );
 }
@@ -187,6 +233,7 @@ DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( 
 DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::~DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE()
 {
 	// Disconnect Events
+	this->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnUpdateUI ) );
 	m_layers->Disconnect( wxEVT_COMMAND_DATAVIEW_ITEM_VALUE_CHANGED, wxDataViewEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnLayerSelection ), NULL, this );
 	m_GridStyleCtrl->Disconnect( wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler( DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE::OnStyleSelection ), NULL, this );
 

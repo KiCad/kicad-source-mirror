@@ -63,19 +63,27 @@ class DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE : public DIALOG_SHIM
 		wxSpinCtrl* m_spinCtrlSmoothLevel;
 		wxStaticText* m_staticTextGridSmootingVal;
 		wxSpinCtrlDouble* m_spinCtrlSmoothValue;
+		wxStaticLine* m_staticline3;
+		wxStaticText* m_staticTextOutlineSmooth;
+		wxStaticText* m_staticTextSmoothing;
+		wxChoice* m_cornerSmoothingChoice;
+		wxStaticText* m_cornerRadiusLabel;
+		wxTextCtrl* m_cornerRadiusCtrl;
+		wxStaticText* m_cornerRadiusUnits;
 		wxStaticLine* m_staticline1;
 		wxStdDialogButtonSizer* m_sdbSizerButtons;
 		wxButton* m_sdbSizerButtonsOK;
 		wxButton* m_sdbSizerButtonsCancel;
 
 		// Virtual event handlers, overide them in your derived class
+		virtual void OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void OnLayerSelection( wxDataViewEvent& event ) { event.Skip(); }
 		virtual void OnStyleSelection( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non Copper Zones Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 547,379 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN );
+		DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = _("Non Copper Zones Properties"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 595,491 ), long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxFULL_REPAINT_ON_RESIZE|wxBORDER_SUNKEN );
 		~DIALOG_NONCOPPER_ZONES_PROPERTIES_BASE();
 
 };

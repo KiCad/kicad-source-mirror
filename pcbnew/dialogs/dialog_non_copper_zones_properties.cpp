@@ -47,12 +47,15 @@ private:
     UNIT_BINDER     m_gridStyleRotation;
     UNIT_BINDER     m_gridStyleThickness;
     UNIT_BINDER     m_gridStyleGap;
+    int             m_cornerSmoothingType;
+    UNIT_BINDER     m_cornerRadius;
 
     bool TransferDataToWindow() override;
     bool TransferDataFromWindow() override;
 
     void OnStyleSelection( wxCommandEvent& event ) override;
     void OnLayerSelection( wxDataViewEvent& event ) override;
+    void OnUpdateUI( wxUpdateUIEvent& ) override;
 
 public:
     DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* aParent, ZONE_SETTINGS* aSettings );
@@ -76,7 +79,9 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
                          false ),
     m_gridStyleThickness( aParent, m_staticTextStyleThickness,
                           m_tcGridStyleThickness, m_GridStyleThicknessUnits, false),
-    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false )
+    m_gridStyleGap( aParent, m_staticTextGridGap, m_tcGridStyleGap, m_GridStyleGapUnits, false ),
+    m_cornerSmoothingType( ZONE_SETTINGS::SMOOTHING_UNDEFINED ),
+    m_cornerRadius( aParent, m_cornerRadiusLabel, m_cornerRadiusCtrl, m_cornerRadiusUnits, true )
 {
     m_parent = aParent;
 
@@ -90,8 +95,27 @@ DIALOG_NON_COPPER_ZONES_EDITOR::DIALOG_NON_COPPER_ZONES_EDITOR( PCB_BASE_FRAME* 
 }
 
 
+void DIALOG_NON_COPPER_ZONES_EDITOR::OnUpdateUI( wxUpdateUIEvent& )
+{
+    if( m_cornerSmoothingType != m_cornerSmoothingChoice->GetSelection() )
+    {
+        m_cornerSmoothingType = m_cornerSmoothingChoice->GetSelection();
+
+        if( m_cornerSmoothingChoice->GetSelection() == ZONE_SETTINGS::SMOOTHING_CHAMFER )
+            m_cornerRadiusLabel->SetLabel( _( "Chamfer distance:" ) );
+        else
+            m_cornerRadiusLabel->SetLabel( _( "Fillet radius:" ) );
+    }
+
+    m_cornerRadiusCtrl->Enable(m_cornerSmoothingType > ZONE_SETTINGS::SMOOTHING_NONE );
+}
+
+
 bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataToWindow()
 {
+    m_cornerSmoothingChoice->SetSelection( m_settings.GetCornerSmoothingType() );
+    m_cornerRadius.SetValue( m_settings.GetCornerRadius() );
+
     m_minWidth.SetValue( m_settings.m_ZoneMinThickness );
     m_ConstrainOpt->SetValue( m_settings.m_Zone_45_Only );
 
@@ -182,6 +206,11 @@ void DIALOG_NON_COPPER_ZONES_EDITOR::OnLayerSelection( wxDataViewEvent& event )
 
 bool DIALOG_NON_COPPER_ZONES_EDITOR::TransferDataFromWindow()
 {
+    m_settings.SetCornerSmoothingType( m_cornerSmoothingChoice->GetSelection() );
+
+    m_settings.SetCornerRadius( m_settings.GetCornerSmoothingType() == ZONE_SETTINGS::SMOOTHING_NONE
+                                ? 0 : m_cornerRadius.GetValue() );
+
     if( !m_gridStyleRotation.Validate( -1800, 1800 ) )
         return false;
 
