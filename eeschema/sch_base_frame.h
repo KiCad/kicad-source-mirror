@@ -222,7 +222,7 @@ public:
      *
      * @return the selected component
      */
-    COMPONENT_SELECTION SelectComponentFromLibTree(
+    COMPONENT_SELECTION SelectCompFromLibTree(
             const SCHLIB_FILTER* aFilter,
             std::vector<COMPONENT_SELECTION>& aHistoryList,
             bool aUseLibBrowser,

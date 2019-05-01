@@ -36,6 +36,7 @@
 #include <set>
 #include <lib_draw_item.h>
 #include <sch_pin.h>
+#include <sch_base_frame.h>
 
 class SCH_SCREEN;
 class SCH_SHEET_PATH;
@@ -129,9 +130,11 @@ public:
      */
     SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* aSheet,
                    int unit = 0, int convert = 0,
-                   const wxPoint& pos = wxPoint( 0, 0 ),
-                   bool setNewItemFlag = false );
+                   const wxPoint& pos = wxPoint( 0, 0 )  );
 
+    SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
+                   SCH_BASE_FRAME::COMPONENT_SELECTION& aSel,
+                   const wxPoint& pos = wxPoint( 0, 0 ) );
     /**
      * Clones \a aComponent into a new schematic symbol object.
      *

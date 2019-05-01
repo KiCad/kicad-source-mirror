@@ -122,7 +122,7 @@ SCH_COMPONENT::SCH_COMPONENT( const wxPoint& aPos, SCH_ITEM* aParent ) :
 
 
 SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sheet,
-                              int unit, int convert, const wxPoint& pos, bool setNewItemFlag ) :
+                              int unit, int convert, const wxPoint& pos ) :
     SCH_ITEM( NULL, SCH_COMPONENT_T )
 {
     Init( pos );
@@ -135,9 +135,6 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
 
     SetTimeStamp( GetNewTimeStamp() );
 
-    if( setNewItemFlag )
-        m_Flags = IS_NEW | IS_MOVED;
-
     // Copy fields from the library component
     UpdateFields( true, true );
 
@@ -149,6 +146,20 @@ SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, LIB_ID aLibId, SCH_SHEET_PATH* sh
         SetRef( sheet, aPart.GetReferenceField().GetText() + wxT( "?" ) );
     else
         m_prefix = aPart.GetReferenceField().GetText() + wxT( "?" );
+}
+
+SCH_COMPONENT::SCH_COMPONENT( LIB_PART& aPart, SCH_SHEET_PATH* aSheet,
+                              SCH_BASE_FRAME::COMPONENT_SELECTION& aSel, const wxPoint& pos ) :
+    SCH_COMPONENT( aPart, aSel.LibId, aSheet, aSel.Unit, aSel.Convert, pos )
+{
+    // Set any fields that were modified as part of the component selection
+    for( auto const& i : aSel.Fields )
+    {
+        auto field = this->GetField( i.first );
+
+        if( field )
+            field->SetText( i.second );
+    }
 }
 
 

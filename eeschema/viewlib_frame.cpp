@@ -819,15 +819,10 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
 
         SCH_COMPONENT* component = new SCH_COMPONENT( *getSelectedSymbol(),
                                                       getSelectedAlias()->GetLibId(),
-                                                      g_CurrentSheet, m_unit, m_convert,
-                                                      wxPoint( 0, 0 ), true );
+                                                      g_CurrentSheet, m_unit, m_convert );
 
         // Be sure the link to the corresponding LIB_PART is OK:
         component->Resolve( *Prj().SchSymbolLibTable() );
-
-        MSG_PANEL_ITEMS items;
-        component->GetMsgPanelInfo( schframe->GetUserUnits(), items );
-        schframe->SetMsgPanel( items );
 
         if( schframe->GetAutoplaceFields() )
             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );

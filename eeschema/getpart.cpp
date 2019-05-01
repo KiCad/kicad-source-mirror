@@ -96,15 +96,15 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibBrowse
 }
 
 
-SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
-        const SCHLIB_FILTER*                aFilter,
-        std::vector<COMPONENT_SELECTION>&   aHistoryList,
-        bool                                aAllowBrowser,
-        int                                 aUnit,
-        int                                 aConvert,
-        bool                                aShowFootprints,
-        const LIB_ID*                       aHighlight,
-        bool                                aAllowFields )
+SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
+        const SCHLIB_FILTER* aFilter,
+        std::vector<COMPONENT_SELECTION>& aHistoryList,
+        bool aUseLibBrowser,
+        int aUnit,
+        int aConvert,
+        bool aShowFootprints,
+        const LIB_ID* aHighlight,
+        bool aAllowFields )
 {
     std::unique_lock<std::mutex> dialogLock( DIALOG_CHOOSE_COMPONENT::g_Mutex, std::defer_lock );
     wxString                     dialogTitle;
@@ -167,7 +167,7 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectComponentFromLibTree(
         dialogTitle.Printf( _( "Choose Symbol (%d items loaded)" ), adapter->GetItemCount() );
 
     DIALOG_CHOOSE_COMPONENT dlg( this, dialogTitle, adapterPtr, aConvert,
-                                 aAllowFields, aShowFootprints, aAllowBrowser );
+                                 aAllowFields, aShowFootprints, aUseLibBrowser );
 
     if( dlg.ShowQuasiModal() == wxID_CANCEL )
         return COMPONENT_SELECTION();

@@ -350,21 +350,21 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                                         SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
 {
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
-
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
 
     Activate();
 
-    // Add all the drawable parts to preview
+    // If a component was passed in get it ready for placement.
     if( aComponent )
     {
-        aComponent->SetPosition( (wxPoint)cursorPos );
+        aComponent->SetFlags( IS_NEW | IS_MOVED );
+        m_frame->SaveCopyInUndoList( aComponent, UR_NEW, false );
 
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
         m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
-        m_view->ClearPreview();
-        m_view->AddToPreview( aComponent->Clone() );
+
+        // Queue up a refresh event so we don't have to wait for the next mouse-moved event
+        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
     }
 
     // Main loop: keep receiving events
@@ -393,44 +393,36 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         {
             if( !aComponent )
             {
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+                m_frame->SetRepeatItem( nullptr );
+
                 // Pick the module to be placed
-                m_frame->SetRepeatItem( NULL );
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
-                auto sel = m_frame->SelectComponentFromLibTree( aFilter, aHistoryList, true, 1, 1,
-                                                                m_frame->GetShowFootprintPreviews() );
+                auto sel = m_frame->SelectCompFromLibTree( aFilter, aHistoryList, true, 1, 1,
+                                                           m_frame->GetShowFootprintPreviews());
+
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
-                LIB_PART* part = nullptr;
-
-                if( sel.LibId.IsValid() )
-                    part = m_frame->GetLibPart( sel.LibId );
+                LIB_PART* part = sel.LibId.IsValid() ? m_frame->GetLibPart( sel.LibId ) : nullptr;
 
                 if( !part )
                     continue;
 
-                aComponent = new SCH_COMPONENT( *part, sel.LibId, g_CurrentSheet, sel.Unit,
-                                                sel.Convert, (wxPoint)cursorPos, true );
+                aComponent = new SCH_COMPONENT( *part, g_CurrentSheet, sel, (wxPoint) cursorPos );
 
                 // Be sure the link to the corresponding LIB_PART is OK:
                 aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
 
-                // Set any fields that have been modified
-                for( auto const& i : sel.Fields )
-                {
-                    auto field = aComponent->GetField( i.first );
-
-                    if( field )
-                        field->SetText( i.second );
-                }
-
                 if( m_frame->GetAutoplaceFields() )
                     aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-                aComponent->SetFlags( IS_MOVED );
+                aComponent->SetFlags( IS_NEW | IS_MOVED );
+                m_frame->SaveCopyInUndoList( aComponent, UR_NEW, false );
+
                 m_frame->SetRepeatItem( aComponent );
                 m_frame->GetScreen()->SetCurItem( aComponent );
 
