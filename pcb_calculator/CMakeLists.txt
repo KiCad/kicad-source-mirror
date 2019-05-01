@@ -13,6 +13,7 @@ set( PCB_CALCULATOR_SRCS
     attenuators.cpp
     board_classes_values.cpp
     colorcode.cpp
+    common_data.cpp
     electrical_spacing_values.cpp
     params_read_write.cpp
     pcb_calculator_frame.cpp

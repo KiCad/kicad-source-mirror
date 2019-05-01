@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Aug  8 2018)
+// C++ code generated with wxFormBuilder (version Dec  1 2018)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -161,9 +161,6 @@ class PCB_CALCULATOR_FRAME_BASE : public KIWAY_PLAYER
 		wxStaticText* m_staticTextClearanceDia;
 		wxTextCtrl* m_textCtrlClearanceDia;
 		UNIT_SELECTOR_LEN* m_choiceClearanceDia;
-		wxStaticText* m_staticTextBoardThickness;
-		wxTextCtrl* m_textCtrlBoardThickness;
-		UNIT_SELECTOR_LEN* m_choiceBoardThickness;
 		wxStaticText* m_staticTextImpedance;
 		wxTextCtrl* m_textCtrlImpedance;
 		UNIT_SELECTOR_RESISTOR* m_choiceImpedance;

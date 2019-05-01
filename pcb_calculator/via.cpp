@@ -1,11 +1,11 @@
 /*
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
- * Copyright (C) 1992-2019 Kicad Developers, see change_log.txt for contributors.
+ * Copyright (C) 1992-2019 Kicad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
+ * as published by the Free Software Foundation; either version 3
  * of the License, or (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -13,12 +13,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, you may find one here:
- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * or you may search the http://www.gnu.org website for the version 2 license,
- * or you may write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+ * You should have received a copy of the GNU General Public License along
+ * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /* All calculations are based on this [1] online calculator:
@@ -56,6 +52,8 @@
 #include <UnitSelector.h>
 #include <units_scales.h>
 
+#include <common_data.h>
+
 extern double DoubleFromString( const wxString& TextValue );
 
 // Key words to read/write some parameters in config:
@@ -69,8 +67,6 @@ extern double DoubleFromString( const wxString& TextValue );
 #define KEYWORD_VS_PAD_DIA_UNIT       wxT( "VS_Pad_Dia_Unit" )
 #define KEYWORD_VS_CLEARANCE_DIA      wxT( "VS_Clearance_Dia" )
 #define KEYWORD_VS_CLEARANCE_DIA_UNIT wxT( "VS_Clearance_Dia_Unit" )
-#define KEYWORD_VS_PCB_THICKNESS      wxT( "VS_PCB_Thickness" )
-#define KEYWORD_VS_PCB_THICKNESS_UNIT wxT( "VS_PCB_Thickness_Unit" )
 #define KEYWORD_VS_CH_IMPEDANCE       wxT( "VS_Characteristic_Impedance" )
 #define KEYWORD_VS_CH_IMPEDANCE_UNIT  wxT( "VS_Characteristic_Impedance_Unit" )
 #define KEYWORD_VS_CURRENT            wxT( "VS_Current" )
@@ -85,22 +81,7 @@ extern double DoubleFromString( const wxString& TextValue );
  */
 void PCB_CALCULATOR_FRAME::OnViaEpsilonR_Button( wxCommandEvent& event )
 {
-    wxArrayString list;
-
-    // EpsilonR ( relative dielectric constant) list
-    list.Add( wxT( "4.5  FR4" ) );
-    list.Add( wxT( "9.8  alumina (Al2O3)" ) );
-    list.Add( wxT( "3.78  fused quartz" ) );
-    list.Add( wxT( "3.38  RO4003" ) );
-    list.Add( wxT( "2.2  RT/duroid 5880" ) );
-    list.Add( wxT( "10.2  RT/duroid 6010LM" ) );
-    list.Add( wxT( "2.1  teflon (PTFE)" ) );
-    list.Add( wxT( "4.0  PVC" ) );
-    list.Add( wxT( "2.3  PE" ) );
-    list.Add( wxT( "6.6  beryllia (BeO)" ) );
-    list.Add( wxT( "8.7  aluminum nitride" ) );
-    list.Add( wxT( "11.9  silicon" ) );
-    list.Add( wxT( "12.9  GaAs" ) );
+    wxArrayString list = StandardRelativeDielectricConstantList();
 
     wxString value = wxGetSingleChoice( wxEmptyString,
             _("Relative Dielectric Constants"), list).BeforeFirst( ' ' );
@@ -114,20 +95,7 @@ void PCB_CALCULATOR_FRAME::OnViaEpsilonR_Button( wxCommandEvent& event )
  */
 void PCB_CALCULATOR_FRAME::OnViaRho_Button( wxCommandEvent& event )
 {
-    wxArrayString list;
-
-    // Specific resistance list in ohms*meters (rho):
-    list.Clear();
-    list.Add( wxT( "2.4e-8  gold" ) );
-    list.Add( wxT( "1.72e-8  copper" ) );
-    list.Add( wxT( "1.62e-8  silver" ) );
-    list.Add( wxT( "12.4e-8  tin" ) );
-    list.Add( wxT( "10.5e-8  platinum" ) );
-    list.Add( wxT( "2.62e-8  aluminum" ) );
-    list.Add( wxT( "6.9e-8  nickel" ) );
-    list.Add( wxT( "3.9e-8  brass (66Cu 34Zn)" ) );
-    list.Add( wxT( "9.71e-8  iron" ) );
-    list.Add( wxT( "6.0e-8  zinc" ) );
+    wxArrayString list = StandardResistivityList();
 
     wxString value = wxGetSingleChoice( wxEmptyString,
             _("Specific Resistance"), list).BeforeFirst( ' ' );
@@ -140,35 +108,38 @@ void PCB_CALCULATOR_FRAME::VS_Init( wxConfigBase* aCfg )
     int      tmp;
     wxString msg;
 
+    #define DEFAULT_UNIT_SEL_MM 0
     // Read parameter values
-    aCfg->Read( KEYWORD_VS_HOLE_DIA,                &msg, wxT( "18" ) );
+    aCfg->Read( KEYWORD_VS_HOLE_DIA,                &msg, wxT( "0.4" ) );
     m_textCtrlHoleDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_HOLE_DIA_UNIT,           &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_HOLE_DIA_UNIT,           &tmp, DEFAULT_UNIT_SEL_MM );
     m_choiceHoleDia->SetSelection( tmp );
-    aCfg->Read( KEYWORD_VS_THICKNESS,               &msg, wxT( "1" ) );
+
+    aCfg->Read( KEYWORD_VS_THICKNESS,               &msg, wxT( "0.035" ) );
     m_textCtrlPlatingThickness->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_THICKNESS_UNIT,          &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_THICKNESS_UNIT,          &tmp, DEFAULT_UNIT_SEL_MM );
     m_choicePlatingThickness->SetSelection( tmp );
-    aCfg->Read( KEYWORD_VS_LENGTH,                  &msg, wxT( "60" ) );
+
+    aCfg->Read( KEYWORD_VS_LENGTH,                  &msg, wxT( "1.6" ) );
     m_textCtrlViaLength->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_LENGTH_UNIT,             &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_LENGTH_UNIT,             &tmp, DEFAULT_UNIT_SEL_MM );
     m_choiceViaLength->SetSelection( tmp );
-    aCfg->Read( KEYWORD_VS_PAD_DIA,                 &msg, wxT( "22" ) );
+
+    aCfg->Read( KEYWORD_VS_PAD_DIA,                 &msg, wxT( "0.6" ) );
     m_textCtrlViaPadDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_PAD_DIA_UNIT,            &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_PAD_DIA_UNIT,            &tmp, DEFAULT_UNIT_SEL_MM );
     m_choiceViaPadDia->SetSelection( tmp );
-    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA,           &msg, wxT( "25" ) );
+
+    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA,           &msg, wxT( "1.0" ) );
     m_textCtrlClearanceDia->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA_UNIT,      &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_CLEARANCE_DIA_UNIT,      &tmp, DEFAULT_UNIT_SEL_MM );
     m_choiceClearanceDia->SetSelection( tmp );
-    aCfg->Read( KEYWORD_VS_PCB_THICKNESS,           &msg, wxT( "70" ) );
-    m_textCtrlBoardThickness->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_PCB_THICKNESS_UNIT,      &tmp, 0 );
-    m_choiceBoardThickness->SetSelection( tmp );
+
     aCfg->Read( KEYWORD_VS_CH_IMPEDANCE,            &msg, wxT( "50" ) );
     m_textCtrlImpedance->SetValue( msg );
-    aCfg->Read( KEYWORD_VS_CH_IMPEDANCE_UNIT ,      &tmp, 0 );
+    aCfg->Read( KEYWORD_VS_CH_IMPEDANCE_UNIT ,      &tmp, DEFAULT_UNIT_SEL_MM );
     m_choiceImpedance->SetSelection( tmp );
+
     aCfg->Read( KEYWORD_VS_CURRENT,                 &msg, wxT( "1" ) );
     m_textCtrlAppliedCurrent->SetValue( msg );
     aCfg->Read( KEYWORD_VS_RESISTIVITY,             &msg, wxT( "1.72e-8" ) );
@@ -194,8 +165,6 @@ void PCB_CALCULATOR_FRAME::VS_WriteConfig( wxConfigBase* aCfg )
     aCfg->Write( KEYWORD_VS_PAD_DIA_UNIT,           m_choiceViaPadDia->GetSelection() );
     aCfg->Write( KEYWORD_VS_CLEARANCE_DIA,          m_textCtrlClearanceDia->GetValue() );
     aCfg->Write( KEYWORD_VS_CLEARANCE_DIA_UNIT,     m_choiceClearanceDia->GetSelection() );
-    aCfg->Write( KEYWORD_VS_PCB_THICKNESS,          m_textCtrlBoardThickness->GetValue() );
-    aCfg->Write( KEYWORD_VS_PCB_THICKNESS_UNIT,     m_choiceBoardThickness->GetSelection() );
     aCfg->Write( KEYWORD_VS_CH_IMPEDANCE,           m_textCtrlImpedance->GetValue() );
     aCfg->Write( KEYWORD_VS_CH_IMPEDANCE_UNIT,      m_choiceImpedance->GetSelection() );
     aCfg->Write( KEYWORD_VS_CURRENT,                m_textCtrlAppliedCurrent->GetValue() );
@@ -213,7 +182,6 @@ void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
     double viaLength           = std::abs( DoubleFromString( m_textCtrlViaLength->GetValue() ) );
     double padDia              = std::abs( DoubleFromString( m_textCtrlViaPadDia->GetValue() ) );
     double clearanceDia        = std::abs( DoubleFromString( m_textCtrlClearanceDia->GetValue() ) );
-    double pcbThickness        = std::abs( DoubleFromString( m_textCtrlBoardThickness->GetValue() ) );
     double charImpedance       = std::abs( DoubleFromString( m_textCtrlImpedance->GetValue() ) );
     double appliedCurrent      = std::abs( DoubleFromString( m_textCtrlAppliedCurrent->GetValue() ) );
     double platingResistivity  = std::abs( DoubleFromString( m_textCtrlPlatingResistivity->GetValue() ) );
@@ -227,7 +195,6 @@ void PCB_CALCULATOR_FRAME::OnViaCalculate( wxCommandEvent& event )
     viaLength          *= m_choiceViaLength->GetUnitScale();
     padDia             *= m_choiceViaPadDia->GetUnitScale();
     clearanceDia       *= m_choiceClearanceDia->GetUnitScale();
-    pcbThickness       *= m_choiceBoardThickness->GetUnitScale();
     charImpedance      *= m_choiceImpedance->GetUnitScale();
     platingResistivity  = platingResistivity / 100; // Ohm-cm to Ohm-m
 
@@ -279,30 +246,30 @@ void PCB_CALCULATOR_FRAME::VSDisplayValues( double aViaResistance, double aVolta
 {
     wxString msg;
 
-    msg.Printf( wxT( "%g" ), aViaResistance );
+    msg.Printf( "%g", aViaResistance );
     m_ViaResistance->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aVoltageDrop );
+    msg.Printf( "%g", aVoltageDrop );
     m_ViaVoltageDrop->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aPowerLoss );
+    msg.Printf( "%g", aPowerLoss );
     m_ViaPowerLoss->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aEstimatedAmpacity );
+    msg.Printf( "%g", aEstimatedAmpacity );
     m_ViaAmpacity->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aThermalResistance );
+    msg.Printf( "%g", aThermalResistance );
     m_ViaThermalResistance->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aCapacitance );
+    msg.Printf( "%g", aCapacitance );
     m_ViaCapacitance->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aTimeDegradation );
+    msg.Printf( "%g", aTimeDegradation );
     m_RiseTimeOutput->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aInductance );
+    msg.Printf( "%g", aInductance );
     m_Inductance->SetLabel( msg );
 
-    msg.Printf( wxT( "%g" ), aReactance );
+    msg.Printf( "%g", aReactance );
     m_Reactance->SetLabel( msg );
 }
