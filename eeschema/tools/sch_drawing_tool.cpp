@@ -246,7 +246,7 @@ bool SCH_DRAWING_TOOL::Init()
 
     auto drawingSegmentsCondition = [] ( const SELECTION& aSel ) {
         SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-        return ( item && item->Type() == SCH_LINE_T && item->GetEditFlags() );
+        return ( item && item->Type() == SCH_LINE_T && item->IsNew() );
     };
 
     auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )

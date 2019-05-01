@@ -208,14 +208,24 @@ bool SCH_EDIT_TOOL::Init()
         return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED );
     };
 
-    auto orientatableCondition = [] ( const SELECTION& aSel ) {
+    auto orientatableCondition = [ this ] ( const SELECTION& aSel ) {
         if( aSel.Empty() )
             return false;
 
-        if( aSel.GetSize() > 1 )
-            return true;
+        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
 
-        switch( static_cast<EDA_ITEM*>( aSel.Front() )->Type() )
+        if( aSel.GetSize() > 1 )
+        {
+            // In general a group is orientatable, except when we're drawing wires/busses
+            if( m_frame->GetToolId() == ID_WIRE_BUTT || m_frame->GetToolId() == ID_BUS_BUTT )
+            {
+                if( item->Type() == SCH_LINE_T && item->IsNew() )
+                    return false;
+            }
+            return true;
+        }
+
+        switch( item->Type() )
         {
         case SCH_MARKER_T:
         case SCH_JUNCTION_T:
@@ -314,24 +324,29 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     auto wireTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT
-              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT );
     };
 
     auto busTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_BUS_BUTT
-              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
+        return ( m_frame->GetToolId() == ID_BUS_BUTT );
     };
 
-    auto wireOrBusTool = wireTool || busTool;
+    auto junctionTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_JUNCTION_BUTT );
+    };
+
+    auto idleCondition = [] ( const SELECTION& aSel ) {
+        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
+        return ( !item || !item->GetEditFlags() );
+    };
+
+    auto idleWireOrBusTool = ( wireTool || busTool || junctionTool ) && idleCondition;
 
     auto wireSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
                                && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
 
     auto busSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
                               && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
-
-    auto wireOrBusSelectionCondition = wireSelectionCondition || busSelectionCondition;
 
     // Build the edit tool menu (shown when moving or dragging)
     //
@@ -383,10 +398,10 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectNode, wireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakWire, wireTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakBus, busTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectNode, idleWireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, idleWireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakWire, idleWireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakBus, idleWireOrBusTool, 200 );
 
     // Add editing actions to the selection tool menu
     //

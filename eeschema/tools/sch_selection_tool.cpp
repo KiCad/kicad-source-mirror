@@ -99,8 +99,17 @@ bool SCH_SELECTION_TOOL::Init()
 
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    auto wireOrBusSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
-                                    && SELECTION_CONDITIONS::OnlyTypes( wireOrBusTypes );
+    auto wireOrBusSelectionCondition = [] ( const SELECTION& aSel ) {
+        for( unsigned i = 0; i < aSel.GetSize(); ++i )
+        {
+            SCH_ITEM* item = (SCH_ITEM*) aSel.GetItem( i );
+
+            if( !item->IsType( wireOrBusTypes ) || item->IsNew() )
+                return false;
+        }
+
+        return aSel.GetSize() >= 1;
+    };
 
     auto& ctxMenu = m_menu.GetMenu();
 
