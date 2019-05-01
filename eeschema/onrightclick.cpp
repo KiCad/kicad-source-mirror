@@ -47,55 +47,6 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 
-static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame );
-static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
-static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
-                                  SYMBOL_LIB_TABLE* aLibs );
-
-
-bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
-{
-    SCH_ITEM*           item = GetScreen()->GetCurItem();
-    wxString            msg;
-
-    // If a command is in progress: add "cancel" and "end tool" menu
-    if( GetToolId() != ID_NO_TOOL_SELECTED )
-    {
-        switch( GetToolId() )
-        {
-        case ID_BUS_BUTT:
-            AddMenusForBus( PopMenu, NULL, this );
-            break;
-
-        default:
-            break;
-        }
-    }
-
-    switch( item->Type() )
-    {
-    case SCH_COMPONENT_T:
-        AddMenusForComponent( PopMenu, (SCH_COMPONENT*) item, Prj().SchSymbolLibTable() );
-        break;
-
-    case SCH_LINE_T:
-        switch( item->GetLayer() )
-        {
-        case LAYER_BUS:
-            AddMenusForBus( PopMenu, (SCH_LINE*) item, this );
-            break;
-        }
-        break;
-
-    case SCH_SHEET_T:
-        AddMenusForHierchicalSheet( PopMenu, (SCH_SHEET*) item );
-        break;
-    }
-
-    return true;
-}
-
-
 void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB_TABLE* aLibs )
 {
     wxString    msg;
@@ -165,13 +116,6 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 
     if( bus_unfold_menu )
         PopMenu->AppendSubMenu( bus_unfold_menu, _( "Unfold Bus" ) );
-}
-
-
-void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet )
-{
-    AddMenuItem( PopMenu, ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN, _( "Import Sheet Pins" ),
-                 KiBitmap( import_hierarchical_label_xpm ) );
 }
 
 

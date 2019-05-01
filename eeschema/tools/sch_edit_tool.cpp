@@ -352,6 +352,7 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition );
+    // JEY TODO: add menu access for changing symbol unit
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
     ctxMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
@@ -375,6 +376,7 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
+    // JEY TODO: add menu access for changing symbol unit
     drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
@@ -405,6 +407,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::editFootprint, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
+    // JEY TODO: add menu access for changing symbol unit
     selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );

@@ -263,6 +263,8 @@ bool SCH_DRAWING_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::finishWire, wireToolCondition && drawingSegmentsCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishBus, busToolCondition && drawingSegmentsCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishLine, lineToolCondition && drawingSegmentsCondition, 1 );
+    // TODO(JE): add menu access to unfold bus...
+
     ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetToolCondition && idleCondition, 1 );
 
     ctxMenu.AddSeparator( idleBusOrLineToolCondition, 100 );
@@ -278,12 +280,15 @@ bool SCH_DRAWING_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
+    // TODO(JE): add menu access to unfold bus on busSelectionCondition...
+
     selToolMenu.AddItem( SCH_ACTIONS::resizeSheet, singleSheetCondition, 1 );
 
     selToolMenu.AddItem( SCH_ACTIONS::addJunction, wireOrBusSelectionCondition, 100 );
     selToolMenu.AddItem( SCH_ACTIONS::addLabel, wireOrBusSelectionCondition, 100 );
     selToolMenu.AddItem( SCH_ACTIONS::addGlobalLabel, wireOrBusSelectionCondition, 100 );
     selToolMenu.AddItem( SCH_ACTIONS::addHierLabel, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::importSheetPin, singleSheetCondition, 100 );
 
     return true;
 }

@@ -371,7 +371,7 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
-    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override;
+    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override { return true; }
     void OnSelectOptionToolbar( wxCommandEvent& event );
     double BestZoom() override;
 
