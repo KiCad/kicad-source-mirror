@@ -389,7 +389,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::breakWire, wireSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::breakBus, busSelectionCondition, 200 );
 

@@ -655,7 +655,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
 
         item->SetFlags( IS_NEW | IS_MOVED );
-        m_frame->AddItemToScreen( item, i > 0 );
+        m_frame->AddItemToScreenAndUndoList( item, i > 0 );
     }
 
     if( hasSheetPasted )

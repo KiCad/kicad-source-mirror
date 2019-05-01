@@ -143,6 +143,7 @@ enum id_eeschema_frm
     ID_POPUP_SCH_ADD_JUNCTION,
     ID_POPUP_SCH_ADD_LABEL,
     ID_POPUP_SCH_ADD_GLABEL,
+    ID_POPUP_SCH_ADD_HLABEL,
     ID_POPUP_END_RANGE,
 
     // Dynamically bound in AddMenusForBus()

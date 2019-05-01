@@ -95,9 +95,18 @@ SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 
 bool SCH_SELECTION_TOOL::Init()
 {
+    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    m_menu.GetMenu().AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+    auto wireOrBusSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
+                                    && SELECTION_CONDITIONS::OnlyTypes( wireOrBusTypes );
+
+    auto& ctxMenu = m_menu.GetMenu();
+
+    ctxMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelectionCondition, 200 );
+
+    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;

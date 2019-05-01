@@ -379,7 +379,7 @@ public:
      * Add an item to the schematic and adds the changes to the undo/redo container.
      * @param aUndoAppend True if the action should be appended to the current undo record.
      */
-    void AddItemToScreen( SCH_ITEM* aItem, bool aUndoAppend = false );
+    void AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppend = false );
 
     /**
      * Finds a component in the schematic and an item in this component.

@@ -1172,7 +1172,7 @@ bool SCH_EDIT_FRAME::isAutoSaveRequired() const
 }
 
 
-void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem, bool aUndoAppend )
+void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppend )
 {
     SCH_SCREEN* screen = GetScreen();
 

@@ -220,7 +220,6 @@ set( EESCHEMA_SRCS
     sch_edit_frame.cpp
     selpart.cpp
     sheet.cpp
-    sheetlab.cpp
     symbol_lib_table.cpp
     symbol_tree_model_adapter.cpp
     symbol_tree_synchronizing_adapter.cpp

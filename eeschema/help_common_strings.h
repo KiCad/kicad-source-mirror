@@ -62,16 +62,15 @@
 
 #define HELP_PLACE_NETLABEL _( "Place net label" )
 #define HELP_PLACE_GLOBALLABEL \
-    _(\
-        "Place global label.\nWarning: inside global hierarchy , all global labels with same name are connected" )
+    _( "Place global label.\nAll global labels with same name are connected throughout the sheet hierarchy" )
 #define HELP_PLACE_HIER_LABEL \
-    _( "Place a hierarchical label. Label will be seen as a hierarchical pin in the sheet" )
+    _( "Place a hierarchical label.\nHierarchical labels are exposed to other sheets through sheet pins" )
 
 #define HELP_PLACE_JUNCTION     _( "Place junction" )
 #define HELP_PLACE_SHEET        _( "Create hierarchical sheet" )
-#define HELP_IMPORT_SHEETPIN    _( \
-        "Place hierarchical pin imported from the corresponding hierarchical label" )
-#define HELP_PLACE_SHEETPIN     _( "Place hierarchical pin in sheet" )
+#define HELP_IMPORT_SHEETPIN \
+    _( "Place hierarchical sheet pin corresponding to a hierarchical label in the sheet" )
+#define HELP_PLACE_SHEETPIN     _( "Place hierarchical sheet pin" )
 #define HELP_PLACE_GRAPHICLINES _( "Place graphic lines or polygons" )
 #define HELP_PLACE_GRAPHICTEXTS _( "Place text" )
 

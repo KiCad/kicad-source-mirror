@@ -185,6 +185,10 @@ TOOL_ACTION SCH_ACTIONS::addGlobalLabel( "eeschema.InteractiveEditing.addGlobalL
         AS_GLOBAL, 0, _( "Add Global Label" ), _( "Add a global label to a wire or bus" ),
         add_glabel_xpm, AF_NONE );
 
+TOOL_ACTION SCH_ACTIONS::addHierLabel( "eeschema.InteractiveEditing.addHierLabel",
+        AS_GLOBAL, 0, _( "Add Hierarchical Label" ), _( "Add a hierarchical label to a wire or bus" ),
+        add_hierarchical_label_xpm, AF_NONE );
+
 
 SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
     TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
@@ -205,6 +209,8 @@ SCH_DRAWING_TOOL::~SCH_DRAWING_TOOL()
 
 bool SCH_DRAWING_TOOL::Init()
 {
+    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
@@ -232,6 +238,11 @@ bool SCH_DRAWING_TOOL::Init()
         return ( aSel.Empty() || dynamic_cast<SCH_ITEM*>( aSel.Front() )->GetEditFlags() == 0 );
     };
 
+    auto idleBusOrLineToolCondition = ( busToolCondition || lineToolCondition ) && idleCondition;
+
+    auto wireOrBusSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
+                                    && SELECTION_CONDITIONS::OnlyTypes( wireOrBusTypes );
+
     auto drawingSegmentsCondition = [] ( const SELECTION& aSel ) {
         return ( aSel.GetSize() >= 1
                      && dynamic_cast<SCH_LINE*>( aSel.Front() )
@@ -240,6 +251,10 @@ bool SCH_DRAWING_TOOL::Init()
 
     auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
                              && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
+
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
+    };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -254,6 +269,12 @@ bool SCH_DRAWING_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::finishLine, lineToolCondition && drawingSegmentsCondition, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetToolCondition && idleCondition, 1 );
 
+    ctxMenu.AddSeparator( idleBusOrLineToolCondition, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addJunction, idleBusOrLineToolCondition, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addLabel, idleBusOrLineToolCondition, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addGlobalLabel, idleBusOrLineToolCondition, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addHierLabel, idleBusOrLineToolCondition, 100 );
+
     ctxMenu.AddSeparator( activeToolCondition, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
@@ -262,6 +283,11 @@ bool SCH_DRAWING_TOOL::Init()
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddItem( SCH_ACTIONS::resizeSheet, singleSheetCondition, 1 );
+
+    selToolMenu.AddItem( SCH_ACTIONS::addJunction, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::addLabel, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::addGlobalLabel, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::addHierLabel, wireOrBusSelectionCondition, 100 );
 
     return true;
 }
@@ -299,6 +325,18 @@ int SCH_DRAWING_TOOL::AddGlobalLabel( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_DRAWING_TOOL::AddHierLabel( const TOOL_EVENT& aEvent )
+{
+    return doAddItem( SCH_HIER_LABEL_T );
+}
+
+
+int SCH_DRAWING_TOOL::ImportHierLable( const TOOL_EVENT& aEvent )
+{
+
+}
+
+
 int SCH_DRAWING_TOOL::doAddItem( KICAD_T aType )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
@@ -309,10 +347,13 @@ int SCH_DRAWING_TOOL::doAddItem( KICAD_T aType )
     {
     case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
     case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
+    case SCH_HIER_LABEL_T:   item = m_frame->CreateNewText( LAYER_HIERLABEL );  break;
+    case SCH_TEXT_T:         item = m_frame->CreateNewText( LAYER_NOTES );      break;
     default:                 wxFAIL_MSG( "doAddItem(): unknown type" );
     }
 
-    m_frame->AddItemToScreen( item );
+    m_frame->AddItemToScreenAndUndoList( item );
+
     m_frame->SetNoToolSelected();
 
     return 0;
@@ -434,8 +475,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
             {
                 m_view->ClearPreview();
 
-                // Will perform SaveCopyInUndoList():
-                m_frame->AddItemToScreen( aComponent );
+                m_frame->AddItemToScreenAndUndoList( aComponent );
 
                 aComponent = nullptr;
             }
@@ -558,7 +598,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             {
                 m_view->ClearPreview();
 
-                m_frame->AddItemToScreen( image );
+                m_frame->AddItemToScreenAndUndoList( image );
 
                 image = nullptr;
             }
@@ -662,8 +702,7 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
             if( item )
             {
                 item->SetFlags( IS_NEW );
-                m_frame->AddItemToScreen( item );
-                m_frame->SaveCopyInUndoList( item, UR_NEW );
+                m_frame->AddItemToScreenAndUndoList( item );
 
                 m_frame->SetRepeatItem( item );
                 m_frame->GetScreen()->SetCurItem( item );
@@ -820,7 +859,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
             {
                 m_view->ClearPreview();
 
-                m_frame->AddItemToScreen( item );
+                m_frame->AddItemToScreenAndUndoList( item );
 
                 item = nullptr;
             }
@@ -1545,7 +1584,6 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             }
             else
             {
-                m_frame->AddItemToScreen( aSheet );
                 aSheet = nullptr;
 
                 m_view->ClearPreview();
@@ -1556,7 +1594,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
         {
             if( aSheet )
             {
-                m_frame->AddItemToScreen( aSheet );
+                m_frame->AddItemToScreenAndUndoList( aSheet );
                 aSheet = nullptr;
 
                 m_view->ClearPreview();
@@ -1645,4 +1683,5 @@ void SCH_DRAWING_TOOL::setTransitions()
     Go( &SCH_DRAWING_TOOL::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddGlobalLabel,        SCH_ACTIONS::addGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddHierLabel,          SCH_ACTIONS::addHierLabel.MakeEvent() );
 }

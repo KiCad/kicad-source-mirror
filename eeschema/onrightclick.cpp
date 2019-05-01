@@ -47,7 +47,6 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 
-static void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame );
 static void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame );
 static void AddMenusForHierchicalSheet( wxMenu* PopMenu, SCH_SHEET* Sheet );
 static void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component,
@@ -64,10 +63,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     {
         switch( GetToolId() )
         {
-        case ID_WIRE_BUTT:
-            AddMenusForWire( PopMenu, NULL, this );
-            break;
-
         case ID_BUS_BUTT:
             AddMenusForBus( PopMenu, NULL, this );
             break;
@@ -86,10 +81,6 @@ bool SCH_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
     case SCH_LINE_T:
         switch( item->GetLayer() )
         {
-        case LAYER_WIRE:
-            AddMenusForWire( PopMenu, (SCH_LINE*) item, this );
-            break;
-
         case LAYER_BUS:
             AddMenusForBus( PopMenu, (SCH_LINE*) item, this );
             break;
@@ -155,23 +146,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
 }
 
 
-void AddMenusForWire( wxMenu* PopMenu, SCH_LINE* Wire, SCH_EDIT_FRAME* frame )
-{
-    wxPoint     pos    = frame->GetCrossHairPosition();
-    wxString    msg;
-
-    msg = AddHotkeyName( _( "Add Junction" ), g_Schematic_Hotkeys_Descr, HK_ADD_JUNCTION );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, msg, KiBitmap( add_junction_xpm ) );
-    msg = AddHotkeyName( _( "Add Label..." ), g_Schematic_Hotkeys_Descr, HK_ADD_LABEL );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, KiBitmap( add_line_label_xpm ) );
-
-    // Add global label command only if the cursor is over one end of the wire.
-    if( Wire->IsEndPoint( pos ) )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label..." ),
-                     KiBitmap( add_glabel_xpm ) );
-}
-
-
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
     SCH_SELECTION_TOOL* selTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
@@ -195,17 +169,6 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 
     if( bus_unfold_menu )
         PopMenu->AppendSubMenu( bus_unfold_menu, _( "Unfold Bus" ) );
-
-    PopMenu->AppendSeparator();
-    msg = AddHotkeyName( _( "Add Junction" ), g_Schematic_Hotkeys_Descr, HK_ADD_JUNCTION );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_JUNCTION, msg, KiBitmap( add_junction_xpm ) );
-    msg = AddHotkeyName( _( "Add Label..." ), g_Schematic_Hotkeys_Descr, HK_ADD_LABEL );
-    AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_LABEL, msg, KiBitmap( add_line_label_xpm ) );
-
-    // Add global label command only if the cursor is over one end of the bus.
-    if( Bus->IsEndPoint( pos ) )
-        AddMenuItem( PopMenu, ID_POPUP_SCH_ADD_GLABEL, _( "Add Global Label..." ),
-                     KiBitmap( add_glabel_xpm ) );
 }
 
 

@@ -80,6 +80,8 @@ public:
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
     int AddGlobalLabel( const TOOL_EVENT& aEvent );
+    int AddHierLabel( const TOOL_EVENT& aEvent );
+    int ImportHierLable( const TOOL_EVENT& aEvent );
 
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int PlacePower( const TOOL_EVENT& aEvent );

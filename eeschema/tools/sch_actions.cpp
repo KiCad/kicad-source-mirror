@@ -146,6 +146,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_GLOBALLABEL_BUTT:
         return SCH_ACTIONS::placeGlobalLabel.MakeEvent();
 
+    case ID_POPUP_SCH_ADD_HLABEL:
+        return SCH_ACTIONS::addHierLabel.MakeEvent();
+
     case ID_MENU_HIERLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
         return SCH_ACTIONS::placeHierarchicalLabel.MakeEvent();

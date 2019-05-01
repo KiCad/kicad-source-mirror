@@ -28,14 +28,13 @@
 #include <kiface_i.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
-
 #include <sch_edit_frame.h>
 #include <sch_legacy_plugin.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>
-
 #include <dialogs/dialog_sch_sheet_props.h>
+#include <dialogs/dialog_sch_edit_sheet_pin.h>
 
 
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
@@ -304,3 +303,103 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
 }
 
 
+PINSHEETLABEL_SHAPE SCH_EDIT_FRAME::m_lastSheetPinType = NET_INPUT;
+wxSize SCH_EDIT_FRAME::m_lastSheetPinTextSize( -1, -1 );
+wxPoint SCH_EDIT_FRAME::m_lastSheetPinPosition;
+
+const wxSize &SCH_EDIT_FRAME::GetLastSheetPinTextSize()
+{
+    // Delayed initialization (need the preferences to be loaded)
+    if( m_lastSheetPinTextSize.x == -1 )
+    {
+        m_lastSheetPinTextSize.x = GetDefaultTextSize();
+        m_lastSheetPinTextSize.y = GetDefaultTextSize();
+    }
+    return m_lastSheetPinTextSize;
+}
+
+
+int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
+{
+    if( aSheetPin == NULL )
+        return wxID_CANCEL;
+
+    DIALOG_SCH_EDIT_SHEET_PIN dlg( this, aSheetPin );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return wxID_CANCEL;
+
+    if( aRedraw )
+        RefreshItem( aSheetPin );
+
+    return wxID_OK;
+}
+
+
+SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet )
+{
+    wxString       line;
+    SCH_SHEET_PIN* sheetPin;
+
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
+    sheetPin->SetFlags( IS_NEW );
+    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
+    sheetPin->SetShape( m_lastSheetPinType );
+
+    int response = EditSheetPin( sheetPin, false );
+
+    if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
+    {
+        delete sheetPin;
+        return NULL;
+    }
+
+    m_lastSheetPinType = sheetPin->GetShape();
+    m_lastSheetPinTextSize = sheetPin->GetTextSize();
+
+    sheetPin->SetPosition( GetCrossHairPosition() );
+
+    return sheetPin;
+}
+
+
+SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet )
+{
+    EDA_ITEM*      item;
+    SCH_SHEET_PIN* sheetPin;
+    SCH_HIERLABEL* label = NULL;
+
+    if( !aSheet->GetScreen() )
+        return NULL;
+
+    item = aSheet->GetScreen()->GetDrawItems();
+
+    for( ; item != NULL; item = item->Next() )
+    {
+        if( item->Type() != SCH_HIER_LABEL_T )
+            continue;
+
+        label = (SCH_HIERLABEL*) item;
+
+        /* A global label has been found: check if there a corresponding sheet label. */
+        if( !aSheet->HasPin( label->GetText() ) )
+            break;
+
+        label = NULL;
+    }
+
+    if( label == NULL )
+    {
+        DisplayInfoMessage( this, _( "No new hierarchical labels found." ) );
+        return NULL;
+    }
+
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->GetText() );
+    sheetPin->SetFlags( IS_NEW );
+    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
+    m_lastSheetPinType = label->GetShape();
+    sheetPin->SetShape( label->GetShape() );
+    sheetPin->SetPosition( GetCrossHairPosition() );
+
+    return sheetPin;
+}
