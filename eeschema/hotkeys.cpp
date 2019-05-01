@@ -166,7 +166,7 @@ static EDA_HOTKEY HkEditComponentFootprint( _HKI( "Edit Symbol Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
 static EDA_HOTKEY HkShowComponentDatasheet( _HKI( "Show Symbol Datasheet" ),
-                                           HK_SHOW_COMPONENT_DATASHEET, 'D' + GR_KB_CTRL,
+                                           HK_SHOW_COMPONENT_DATASHEET, 'D',
                                            ID_POPUP_SCH_DISPLAYDOC_CMP );
 static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
@@ -198,7 +198,7 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
-static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D',
+static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_ALT,
                              ID_LIBEDIT_VIEW_DOC );
 
 // Autoplace fields
@@ -218,8 +218,7 @@ static EDA_HOTKEY HkSelectConnection( _HKI( "Select Connection" ), HK_SELECT_CON
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'D' + GR_KB_CTRL,
-                               ID_SCH_UNFOLD_BUS );
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'C', ID_SCH_UNFOLD_BUS );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
