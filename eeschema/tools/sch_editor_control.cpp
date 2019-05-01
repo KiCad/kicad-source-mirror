@@ -693,7 +693,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
     wxString            msg;
 
     if( selection.GetSize() >= 1 )
-        comp = (SCH_COMPONENT*) selection.GetItem( 0 );
+        comp = (SCH_COMPONENT*) selection.Front();
 
     if( !comp || comp->GetEditFlags() != 0 )
         return 0;
@@ -720,7 +720,7 @@ int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        g_CurrentSheet->push_back( (SCH_SHEET*) selection.GetItem( 0 ) );
+        g_CurrentSheet->push_back( (SCH_SHEET*) selection.Front() );
         m_frame->DisplayCurrentSheet();
     }
 

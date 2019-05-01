@@ -117,6 +117,7 @@ public:
     static TOOL_ACTION editValue;
     static TOOL_ACTION editFootprint;
     static TOOL_ACTION autoplaceFields;
+    static TOOL_ACTION convertDeMorgan;
     static TOOL_ACTION doDelete;
     static TOOL_ACTION addJunction;
     static TOOL_ACTION addLabel;

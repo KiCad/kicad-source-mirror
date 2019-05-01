@@ -1026,9 +1026,10 @@ public:
      */
     void EditComponentFieldText( SCH_FIELD* aField );
 
+    void ConvertPart( SCH_COMPONENT* aComponent );
+
 private:
     void OnSelectUnit( wxCommandEvent& aEvent );
-    void ConvertPart( SCH_COMPONENT* DrawComponent );
 
     /* Undo - redo */
 public:

@@ -72,7 +72,7 @@ bool SCH_INSPECTION_TOOL::Init()
     auto singleSymbolCondition = [] (const SELECTION& aSel ) {
         if( aSel.GetSize() == 1 )
         {
-            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.GetItem( 0 ) );
+            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
             if( comp )
             {
@@ -110,7 +110,7 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.GetItem( 0 );
+    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
     wxString       datasheet = component->GetField( DATASHEET )->GetText();
 
     if( !datasheet.IsEmpty() )
@@ -127,7 +127,7 @@ int SCH_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( selection.GetItem( 0 ) );
+    SCH_MARKER* marker = dynamic_cast<SCH_MARKER*>( selection.Front() );
 
     if( marker )
         marker->DisplayMarkerInfo( m_frame );
@@ -143,7 +143,7 @@ int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
+        SCH_ITEM* item = (SCH_ITEM*) selection.Front();
 
         MSG_PANEL_ITEMS msgItems;
         item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );

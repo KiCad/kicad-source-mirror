@@ -740,6 +740,13 @@ void SCH_EDIT_FRAME::OnModify()
 }
 
 
+void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
+
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_blockItems.GetCount() > 0 );

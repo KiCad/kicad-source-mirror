@@ -154,6 +154,11 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // Single click? Select single object
         if( evt->IsClick( BUT_LEFT ) )
         {
+            // JEY TODO: this is a hack, but I can't figure out why it's needed to
+            // keep from getting the first click when running the Place Symbol tool.
+            if( m_frame->GetToolId() != ID_NO_TOOL_SELECTED )
+                continue;
+
             if( evt->Modifier( MD_CTRL ) && dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::highlightNet, true );
@@ -529,7 +534,7 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     if( m_selection.Empty() )
         return 0;
 
-    SCH_LINE* line = (SCH_LINE*) m_selection.GetItem( 0 );
+    SCH_LINE* line = (SCH_LINE*) m_selection.Front();
     EDA_ITEMS items;
 
     m_frame->GetScreen()->ClearDrawingState();

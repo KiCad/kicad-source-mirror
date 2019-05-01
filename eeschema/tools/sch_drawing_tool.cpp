@@ -391,7 +391,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
         aComponent->SetFlags( IS_NEW | IS_MOVED );
 
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-        m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
+        m_selectionTool->AddItemToSel( aComponent );
 
         // Queue up a refresh event so we don't have to wait for the next mouse-moved event
         m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
@@ -854,7 +854,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
             if( selection.GetSize() == 1 )
             {
-                item = (SCH_ITEM*) selection.GetItem( 0 );
+                item = (SCH_ITEM*) selection.Front();
                 m_view->ClearPreview();
                 m_view->AddToPreview( item->Clone() );
             }

@@ -115,10 +115,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
 
     wxMenu* editmenu = new wxMenu;
 
-    if( part && part->HasConversion() )
-        AddMenuItem( editmenu, ID_POPUP_SCH_EDIT_CONVERT_CMP, _( "Convert" ),
-                     KiBitmap( component_select_alternate_shape_xpm ) );
-
     if( part && part->GetUnitCount() >= 2 )
     {
         wxMenu* sel_unit_menu = new wxMenu; int ii;

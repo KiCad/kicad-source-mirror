@@ -248,6 +248,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_AUTOPLACE_FIELDS:
         return SCH_ACTIONS::autoplaceFields.MakeEvent();
 
+    case ID_POPUP_SCH_EDIT_CONVERT_CMP:
+        return SCH_ACTIONS::convertDeMorgan.MakeEvent();
+
     case ID_POPUP_SCH_DISPLAYDOC_CMP:
         return SCH_ACTIONS::showDatasheet.MakeEvent();
 

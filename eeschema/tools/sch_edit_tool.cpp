@@ -112,6 +112,11 @@ TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFie
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
+TOOL_ACTION SCH_ACTIONS::convertDeMorgan( "eeschema.InteractiveEdit.convertDeMorgan",
+        AS_GLOBAL, 0,
+        _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),
+        nullptr );
+
 TOOL_ACTION SCH_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
         AS_GLOBAL, 0,
         _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
@@ -205,7 +210,7 @@ bool SCH_EDIT_TOOL::Init()
         if( aSel.GetSize() > 1 )
             return true;
 
-        switch( static_cast<EDA_ITEM*>( aSel.GetItem( 0 ) )->Type() )
+        switch( static_cast<EDA_ITEM*>( aSel.Front() )->Type() )
         {
         case SCH_MARKER_T:
         case SCH_JUNCTION_T:
@@ -225,7 +230,7 @@ bool SCH_EDIT_TOOL::Init()
         if( aSel.GetSize() != 1 )
             return false;
 
-        switch( static_cast<EDA_ITEM*>( aSel.GetItem( 0 ) )->Type() )
+        switch( static_cast<EDA_ITEM*>( aSel.Front() )->Type() )
         {
         case SCH_MARKER_T:
         case SCH_JUNCTION_T:
@@ -273,12 +278,27 @@ bool SCH_EDIT_TOOL::Init()
     auto singleSymbolCondition = [] ( const SELECTION& aSel ) {
         if( aSel.GetSize() == 1 )
         {
-            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.GetItem( 0 ) );
+            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
 
             if( comp )
             {
                 auto partRef = comp->GetPartRef().lock();
                 return !partRef || !partRef->IsPower();
+            }
+        }
+
+        return false;
+    };
+
+    auto singleDeMorganSymbolCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.GetSize() == 1 )
+        {
+            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+
+            if( comp )
+            {
+                auto partRef = comp->GetPartRef().lock();
+                return partRef && partRef->HasConversion();
             }
         }
 
@@ -323,6 +343,7 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
     ctxMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
@@ -345,6 +366,7 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
@@ -374,6 +396,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editFootprint, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
@@ -845,7 +868,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     wxPoint   rotPoint;
     bool      clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
-    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( 0 ) );
+    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
     bool      moving = item->IsMoving();
 
@@ -970,7 +993,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     wxPoint   mirrorPoint;
     bool      xAxis = ( aEvent.Matches( SCH_ACTIONS::mirrorX.MakeEvent() ) );
-    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( 0 ) );
+    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
     bool      moving = item->IsMoving();
 
@@ -1360,7 +1383,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
+    SCH_ITEM* item = (SCH_ITEM*) selection.Front();
 
     if( item->Type() == SCH_COMPONENT_T )
     {
@@ -1389,7 +1412,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.GetItem( 0 );
+    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
 
     if( !component->IsNew() )
         m_frame->SaveCopyInUndoList( component, UR_CHANGED );
@@ -1403,6 +1426,26 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+
+    if( selection.Empty() )
+        return 0;
+
+    SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
+
+    if( component->IsNew() )
+        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+    else
+        m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+
+    m_frame->ConvertPart( component );
+
+    return 0;
+}
+
+
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
@@ -1410,7 +1453,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    SCH_ITEM* item = (SCH_ITEM*) selection.GetItem( 0 );
+    SCH_ITEM* item = (SCH_ITEM*) selection.Front();
 
     switch( item->Type() )
     {
@@ -1606,6 +1649,7 @@ void SCH_EDIT_TOOL::setTransitions()
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
     Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
     Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    SCH_ACTIONS::convertDeMorgan.MakeEvent() );
 
     Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeSlash.MakeEvent() );
     Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeBackslash.MakeEvent() );

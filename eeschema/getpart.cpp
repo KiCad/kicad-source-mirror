@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file getpart.cpp
- * @brief functions to get and place library components.
- */
-
 #include <algorithm>
 #include <fctsys.h>
 #include <pgm_base.h>
@@ -38,7 +33,8 @@
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
 #include <msgpanel.h>
-
+#include <tool/tool_manager.h>
+#include <tools/sch_actions.h>
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
@@ -272,7 +268,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
             return;
         }
 
-        STATUS_FLAGS flags = aComponent->GetFlags();
+        STATUS_FLAGS savedFlags = aComponent->GetFlags();
 
         aComponent->SetConvert( aComponent->GetConvert() + 1 );
 
@@ -290,7 +286,11 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
         aComponent->UpdatePins();
         TestDanglingEnds();
         aComponent->ClearFlags();
-        aComponent->SetFlags( flags );   // Restore m_Flag (modified by SetConvert())
+        aComponent->SetFlags( savedFlags );   // Restore m_Flags (modified by SetConvert())
+
+        // If selected make sure all the now-included pins are selected
+        if( aComponent->IsSelected() )
+            m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
 
         RefreshItem( aComponent );
         OnModify();

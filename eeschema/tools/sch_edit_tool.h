@@ -64,6 +64,7 @@ public:
     int Properties( const TOOL_EVENT& aEvent );
     int EditField( const TOOL_EVENT& aEvent );
     int AutoplaceFields( const TOOL_EVENT& aEvent );
+    int ConvertDeMorgan( const TOOL_EVENT& aEvent );
 
     int ChangeShape( const TOOL_EVENT& aEvent );
     int ChangeTextType( const TOOL_EVENT& aEvent );

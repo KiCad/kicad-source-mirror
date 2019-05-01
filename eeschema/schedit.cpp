@@ -57,27 +57,10 @@
 
     pos.y += 20;
 
-    // If needed, stop the current command and deselect current tool
-    switch( id )
-    {
-    case ID_POPUP_SCH_CLEANUP_SHEET:
-    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
-    case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-        /* At this point: Do nothing. these commands do not need to stop the
-         * current command (mainly a block command) or reset the current state
-         * They will be executed later, in next switch structure.
-         */
-        break;
-
-    default:
-        // Stop the current command and deselect the current tool
-        SetNoToolSelected();
-        break;
-    }
-
     switch( id )
     {
     case ID_HIERARCHY:
+        SetNoToolSelected();
         InstallHierarchyFrame( pos );
         SetRepeatItem( NULL );
         break;
@@ -105,22 +88,10 @@
         }
         break;
 
-    case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-        // Ensure the struct is a component (could be a struct of a component, like Field, text..)
-        if( item && item->Type() == SCH_COMPONENT_T )
-        {
-            m_canvas->MoveCursorToCrossHair();
-            ConvertPart( (SCH_COMPONENT*) item );
-        }
-        break;
-
     default:        // Log error:
         wxFAIL_MSG( wxString::Format( "Cannot process command event ID %d", event.GetId() ) );
         break;
     }
-
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
-        SetRepeatItem( NULL );
 }
 
 
@@ -134,13 +105,6 @@ void SCH_EDIT_FRAME::OnUnfoldBus( wxCommandEvent& event )
     // Now that we have handled the chosen bus unfold, disconnect all  the events so they can be
     // recreated with updated data on the next unfold
     Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus, this );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 
