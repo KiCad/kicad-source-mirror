@@ -73,6 +73,9 @@ public:
 
     virtual void Add( EDA_ITEM* aItem )
     {
+        // We're not sorting here; this is just a time-optimized way to do an
+        // inclusion check.  std::lower_bound will return the first i >= aItem
+        // and the second i > aItem check rules out i == aItem.
         ITER i = std::lower_bound( m_items.begin(), m_items.end(), aItem );
 
         if( i == m_items.end() || *i > aItem )

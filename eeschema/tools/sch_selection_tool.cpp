@@ -54,7 +54,7 @@ TOOL_ACTION SCH_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
 
 TOOL_ACTION SCH_ACTIONS::selectConnection( "eeschema.InteractiveSelection.SelectConnection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_CONNECTION ),
-        _( "Select Node" ), _( "Select a connection item under the cursor" ), nullptr );
+        _( "Select Connection" ), _( "Select a complete connection" ), nullptr );
 
 TOOL_ACTION SCH_ACTIONS::selectionMenu( "eeschema.InteractiveSelection.SelectionMenu",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
@@ -565,18 +565,21 @@ int SCH_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 {
-    // Check if there is an item to be selected
-    SCH_ITEM* item = aEvent.Parameter<SCH_ITEM*>();
+    AddItemToSel( aEvent.Parameter<SCH_ITEM*>() );
+    return 0;
+}
 
-    if( item )
+
+void SCH_SELECTION_TOOL::AddItemToSel( SCH_ITEM* aItem, bool aQuietMode )
+{
+    if( aItem )
     {
-        select( item );
+        select( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
-
-    return 0;
 }
 
 
@@ -598,18 +601,21 @@ int SCH_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
 {
-    // Check if there is an item to be selected
-    SCH_ITEM* item = aEvent.Parameter<SCH_ITEM*>();
+    RemoveItemFromSel( aEvent.Parameter<SCH_ITEM*>() );
+    return 0;
+}
 
-    if( item )
+
+void SCH_SELECTION_TOOL::RemoveItemFromSel( SCH_ITEM* aItem, bool aQuietMode )
+{
+    if( aItem )
     {
-        unselect( item );
+        unselect( aItem );
 
         // Inform other potentially interested tools
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
     }
-
-    return 0;
 }
 
 
@@ -789,9 +795,6 @@ void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
 
 void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 {
-    if( aItem->IsSelected() )
-        return;
-
     highlight( aItem, SELECTED, &m_selection );
 
     if( m_frame )
@@ -812,9 +815,6 @@ void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 
 void SCH_SELECTION_TOOL::unselect( SCH_ITEM* aItem )
 {
-    if( !aItem->IsSelected() )
-        return;
-
     unhighlight( aItem, SELECTED, &m_selection );
 
     if( m_frame && m_frame->GetScreen()->GetCurItem() == aItem )

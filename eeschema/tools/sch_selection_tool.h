@@ -91,9 +91,11 @@ public:
                            bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
+    void AddItemToSel( SCH_ITEM* aItem, bool aQuietMode = false );
     int AddItemsToSel( const TOOL_EVENT& aEvent );
 
     int RemoveItemFromSel( const TOOL_EVENT& aEvent );
+    void RemoveItemFromSel( SCH_ITEM* aItem, bool aQuietMode = false );
     int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
 
     ///> Find (but don't select) node under cursor

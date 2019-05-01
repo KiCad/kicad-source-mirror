@@ -187,16 +187,8 @@ bool SCH_EDIT_TOOL::Init()
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
 
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, _( "eeshema.InteractiveSelection tool is not available" ) );
-        return false;
-    }
-    else if( !drawingTool )
-    {
-        DisplayError( NULL, _( "eeshema.InteractiveDrawing tool is not available" ) );
-        return false;
-    }
+    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    wxASSERT_MSG( drawingTool, "eeshema.InteractiveDrawing tool is not available" );
 
     auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
@@ -777,7 +769,7 @@ void SCH_EDIT_TOOL::selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPo
 
         if( doSelect )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, item );
+            m_selectionTool->AddItemToSel( item, true /*quiet mode*/ );
             saveCopyInUndoList( item, UR_CHANGED, true );
         }
     }
@@ -1247,7 +1239,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_frame->AddToScreen( newItem );
     m_frame->SaveCopyInUndoList( newItem, UR_NEW );
 
-    m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, newItem );
+    m_selectionTool->AddItemToSel( newItem );
 
     if( performDrag )
     {

@@ -235,7 +235,8 @@ bool SCH_DRAWING_TOOL::Init()
     };
 
     auto idleCondition = [] ( const SELECTION& aSel ) {
-        return ( aSel.Empty() || dynamic_cast<SCH_ITEM*>( aSel.Front() )->GetEditFlags() == 0 );
+        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
+        return ( !item || !item->GetEditFlags() );
     };
 
     auto idleBusOrLineToolCondition = ( busToolCondition || lineToolCondition ) && idleCondition;
@@ -244,17 +245,12 @@ bool SCH_DRAWING_TOOL::Init()
                                     && SELECTION_CONDITIONS::OnlyTypes( wireOrBusTypes );
 
     auto drawingSegmentsCondition = [] ( const SELECTION& aSel ) {
-        return ( aSel.GetSize() >= 1
-                     && dynamic_cast<SCH_LINE*>( aSel.Front() )
-                     && dynamic_cast<SCH_LINE*>( aSel.Front() )->GetEditFlags() );
+        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
+        return ( item && item->Type() == SCH_LINE_T && item->GetEditFlags() );
     };
 
     auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
                              && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
-
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -328,12 +324,6 @@ int SCH_DRAWING_TOOL::AddGlobalLabel( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::AddHierLabel( const TOOL_EVENT& aEvent )
 {
     return doAddItem( SCH_HIER_LABEL_T );
-}
-
-
-int SCH_DRAWING_TOOL::ImportHierLable( const TOOL_EVENT& aEvent )
-{
-
 }
 
 
@@ -419,7 +409,6 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
-                m_view->ClearHiddenFlags();
                 delete aComponent;
                 aComponent = nullptr;
             }
@@ -465,19 +454,16 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 m_frame->SetRepeatItem( aComponent );
                 m_frame->GetScreen()->SetCurItem( aComponent );
 
-                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
                 m_view->ClearPreview();
                 m_view->AddToPreview( aComponent->Clone() );
-
-                m_controls->SetCursorPosition( cursorPos, false );
+                m_selectionTool->AddItemToSel( aComponent );
             }
             else
             {
-                m_view->ClearPreview();
-
                 m_frame->AddItemToScreenAndUndoList( aComponent );
-
                 aComponent = nullptr;
+
+                m_view->ClearPreview();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -516,7 +502,6 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
 
     Activate();
 
@@ -540,7 +525,6 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
-                m_view->ClearHiddenFlags();
                 delete image;
                 image = nullptr;
             }
@@ -554,33 +538,29 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
         {
             if( !image )
             {
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
-
                 wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
                                   _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 if( dlg.ShowModal() != wxID_OK )
                     continue;
 
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
+
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
                 wxString fullFilename = dlg.GetPath();
 
-                if( !wxFileExists( fullFilename ) )
+                if( wxFileExists( fullFilename ) )
+                    image = new SCH_BITMAP( (wxPoint)cursorPos );
+
+                if( !image || !image->ReadImageFile( fullFilename ) )
                 {
                     wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
-                    continue;
-                }
-
-                image = new SCH_BITMAP( (wxPoint)cursorPos );
-
-                if( !image->ReadImageFile( fullFilename ) )
-                {
-                    wxMessageBox( _( "Couldn't load image from \"%s\"" ), fullFilename );
-                    image = nullptr;
                     delete image;
+                    image = nullptr;
                     continue;
                 }
 
@@ -589,18 +569,16 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                 m_frame->GetScreen()->SetCurItem( image );
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
-
-                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, image );
+                m_selectionTool->AddItemToSel( image );
 
                 m_controls->SetCursorPosition( cursorPos, false );
             }
             else
             {
-                m_view->ClearPreview();
-
                 m_frame->AddItemToScreenAndUndoList( image );
-
                 image = nullptr;
+
+                m_view->ClearPreview();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -775,7 +753,6 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
 
     Activate();
 
@@ -791,7 +768,6 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
-                m_view->ClearHiddenFlags();
                 delete item;
                 item = nullptr;
             }
@@ -838,17 +814,17 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }
 
+                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
+
                 // Restore cursor after dialog
                 m_frame->GetCanvas()->MoveCursorToCrossHair();
-                m_frame->GetCanvas()->SetIgnoreMouseEvents( false );
 
                 if( item )
                 {
-                    m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, item );
-
-                    item->SetFlags( IS_MOVED );
+                    item->SetFlags( IS_NEW | IS_MOVED );
                     m_view->ClearPreview();
                     m_view->AddToPreview( item->Clone() );
+                    m_selectionTool->AddItemToSel( item );
                 }
 
                 m_controls->SetCursorPosition( cursorPos, false );
@@ -857,11 +833,10 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
             // ... and second click places:
             else
             {
-                m_view->ClearPreview();
-
                 m_frame->AddItemToScreenAndUndoList( item );
-
                 item = nullptr;
+
+                m_view->ClearPreview();
             }
         }
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -874,7 +849,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         }
         else if( TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
         {
-            // This happens if our text was replaced out from under us by CovertTextType()
+            // This happens if our text was replaced out from under us by ConvertTextType()
             SELECTION& selection = m_selectionTool->GetSelection();
 
             if( selection.GetSize() == 1 )
@@ -907,6 +882,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 int SCH_DRAWING_TOOL::StartWire( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     SCH_LINE* segment = startSegments( LAYER_WIRE, m_frame->GetCrossHairPosition() );
@@ -921,6 +897,8 @@ int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
     else
     {
         m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
         return doDrawSegments( LAYER_WIRE, nullptr );
     }
 }
@@ -929,6 +907,7 @@ int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     SCH_LINE* segment = startSegments( LAYER_BUS, m_frame->GetCrossHairPosition() );
@@ -943,6 +922,8 @@ int SCH_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
     else
     {
         m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
         return doDrawSegments( LAYER_BUS, nullptr );
     }
 }
@@ -991,6 +972,7 @@ int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::StartLines( const TOOL_EVENT& aEvent)
 {
     m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     SCH_LINE* segment = startSegments( LAYER_NOTES, m_frame->GetCrossHairPosition() );
@@ -1005,6 +987,8 @@ int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
     else
     {
         m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
         return doDrawSegments( LAYER_NOTES, nullptr );
     }
 }
@@ -1012,69 +996,6 @@ int SCH_DRAWING_TOOL::DrawLines( const TOOL_EVENT& aEvent)
 
 // Storage for the line segments while drawing
 static DLIST<SCH_LINE> s_wires;
-
-
-/**
- * In a contiguous list of wires, remove wires that backtrack over the previous
- * wire. Example:
- *
- * Wire is added:
- * ---------------------------------------->
- *
- * A second wire backtracks over it:
- * -------------------<====================>
- *
- * RemoveBacktracks is called:
- * ------------------->
- */
-static void RemoveBacktracks( DLIST<SCH_LINE>& aWires )
-{
-    SCH_LINE* next = nullptr;
-    std::vector<SCH_LINE*> last_lines;
-
-    for( SCH_LINE* line = aWires.GetFirst(); line; line = next )
-    {
-        next = line->Next();
-
-        if( line->IsNull() )
-        {
-            delete s_wires.Remove( line );
-            continue;
-        }
-
-        if( !last_lines.empty() )
-        {
-            SCH_LINE* last_line = last_lines[last_lines.size() - 1];
-            bool contiguous = ( last_line->GetEndPoint() == line->GetStartPoint() );
-            bool backtracks = IsPointOnSegment( last_line->GetStartPoint(),
-                                                last_line->GetEndPoint(), line->GetEndPoint() );
-            bool total_backtrack = ( last_line->GetStartPoint() == line->GetEndPoint() );
-
-            if( contiguous && backtracks )
-            {
-                if( total_backtrack )
-                {
-                    delete s_wires.Remove( last_line );
-                    delete s_wires.Remove( line );
-                    last_lines.pop_back();
-                }
-                else
-                {
-                    last_line->SetEndPoint( line->GetEndPoint() );
-                    delete s_wires.Remove( line );
-                }
-            }
-            else
-            {
-                last_lines.push_back( line );
-            }
-        }
-        else
-        {
-            last_lines.push_back( line );
-        }
-    }
-}
 
 
 /**
@@ -1170,9 +1091,7 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     bool forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN* screen = m_frame->GetScreen();
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
 
     Activate();
 
@@ -1202,7 +1121,6 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 
                 m_view->ClearPreview();
                 m_view->ShowPreview( false );
-                m_view->ClearHiddenFlags();
 
                 // Clear flags used in edit functions.
                 screen->ClearDrawingState();
@@ -1269,14 +1187,13 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 else
                 {
                     aSegment->SetEndPoint( cursorPos );
-                    aSegment->ClearFlags( IS_NEW );
-                    aSegment->SetFlags( SELECTED );
 
-                    // Create a new segment, and chain it after the current new segment.
+                    // Create a new segment, and chain it after the current segment.
                     aSegment = new SCH_LINE( *aSegment );
-                    aSegment->SetFlags( IS_NEW );
+                    aSegment->SetFlags( IS_NEW | IS_MOVED );
                     aSegment->SetStartPoint( cursorPos );
                     s_wires.PushBack( aSegment );
+                    m_selectionTool->AddItemToSel( aSegment, true /*quiet mode*/ );
                     screen->SetCurItem( aSegment );
                 }
             }
@@ -1361,8 +1278,9 @@ SCH_LINE* SCH_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
     case LAYER_BUS:  segment = new SCH_LINE( aPos, LAYER_BUS );   break;
     }
 
-    segment->SetFlags( IS_NEW );
+    segment->SetFlags( IS_NEW | IS_MOVED );
     s_wires.PushBack( segment );
+    m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
     m_frame->GetScreen()->SetCurItem( segment );
 
     // We need 2 segments to go from a given start pin to an end point when the
@@ -1370,8 +1288,9 @@ SCH_LINE* SCH_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
     if( forceHV )
     {
         segment = new SCH_LINE( *segment );
-        segment->SetFlags( IS_NEW );
+        segment->SetFlags( IS_NEW | IS_MOVED );
         s_wires.PushBack( segment );
+        m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
         m_frame->GetScreen()->SetCurItem( segment );
     }
 
@@ -1379,12 +1298,80 @@ SCH_LINE* SCH_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
 }
 
 
+/**
+ * In a contiguous list of wires, remove wires that backtrack over the previous
+ * wire. Example:
+ *
+ * Wire is added:
+ * ---------------------------------------->
+ *
+ * A second wire backtracks over it:
+ * -------------------<====================>
+ *
+ * RemoveBacktracks is called:
+ * ------------------->
+ */
+static void removeBacktracks( DLIST<SCH_LINE>& aWires )
+{
+    SCH_LINE* next = nullptr;
+    std::vector<SCH_LINE*> last_lines;
+
+    for( SCH_LINE* line = aWires.GetFirst(); line; line = next )
+    {
+        next = line->Next();
+
+        if( line->IsNull() )
+        {
+            delete s_wires.Remove( line );
+            continue;
+        }
+
+        if( !last_lines.empty() )
+        {
+            SCH_LINE* last_line = last_lines[last_lines.size() - 1];
+            bool contiguous = ( last_line->GetEndPoint() == line->GetStartPoint() );
+            bool backtracks = IsPointOnSegment( last_line->GetStartPoint(),
+                                                last_line->GetEndPoint(), line->GetEndPoint() );
+            bool total_backtrack = ( last_line->GetStartPoint() == line->GetEndPoint() );
+
+            if( contiguous && backtracks )
+            {
+                if( total_backtrack )
+                {
+                    delete s_wires.Remove( last_line );
+                    delete s_wires.Remove( line );
+                    last_lines.pop_back();
+                }
+                else
+                {
+                    last_line->SetEndPoint( line->GetEndPoint() );
+                    delete s_wires.Remove( line );
+                }
+            }
+            else
+            {
+                last_lines.push_back( line );
+            }
+        }
+        else
+        {
+            last_lines.push_back( line );
+        }
+    }
+}
+
+
 void SCH_DRAWING_TOOL::finishSegments()
 {
+    // Clear selection when done so that a new wire can be started.
+    // NOTE: this must be done before RemoveBacktracks is called or we might end up with
+    // freed selected items.
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
     PICKED_ITEMS_LIST itemList;
 
     // Remove segments backtracking over others
-    RemoveBacktracks( s_wires );
+    removeBacktracks( s_wires );
 
     // Collect the possible connection points for the new lines
     std::vector< wxPoint > connections;
@@ -1496,14 +1483,13 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
 
     if( aSheet )
     {
-        m_frame->SetUndoItem( aSheet );
+        m_frame->SaveCopyInUndoList( aSheet, UR_CHANGED );
         aSheet->SetFlags( IS_RESIZED );
 
-        m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aSheet );
+        m_selectionTool->AddItemToSel( aSheet, true /*quiet mode; should already be selected*/ );
         m_view->Hide( aSheet );
         m_view->AddToPreview( aSheet->Clone() );
 
@@ -1522,28 +1508,17 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
         {
             m_view->ClearPreview();
             m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_frame->GetScreen()->SetCurItem( nullptr );
 
             if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
             {
-                if( dynamic_cast<SCH_SHEET*>( m_frame->GetUndoItem() ) )
-                {
-                    delete aSheet;
-                    aSheet = (SCH_SHEET*)m_frame->GetUndoItem();
-                    m_frame->SetUndoItem( nullptr );
-                }
-
-                m_frame->AddToScreen( aSheet );
-                aSheet->ClearFlags();
-                m_view->Hide( aSheet, false );
-
-                m_frame->GetScreen()->SetCurItem( nullptr );
+                m_frame->RollbackSchematicFromUndo();
                 break;  // resize sheet is a single-shot command, not a reusable tool
             }
             else if( aSheet )
             {
                 delete aSheet;
                 aSheet = nullptr;
-                m_frame->GetScreen()->SetCurItem( nullptr );
             }
             else
                 break;
@@ -1551,21 +1526,9 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             if( evt->IsActivate() )
                 break;      // exit unconditionally
         }
-        else if( evt->IsClick( BUT_LEFT ) )
+        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &SCH_ACTIONS::finishSheet ) )
         {
-            if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
-            {
-                m_frame->SaveUndoItemInUndoList( aSheet );
-                m_frame->OnModify();
-
-                m_view->ClearPreview();
-                m_view->Hide( aSheet, false );
-                m_frame->RefreshItem( aSheet );
-
-                m_frame->GetScreen()->SetCurItem( nullptr );
-                break;  // resize sheet is a single-shot command; when we're done we're done
-            }
-            else if( !aSheet )
+            if( !aSheet && !evt->IsAction( &SCH_ACTIONS::finishSheet ) )
             {
                 aSheet = new SCH_SHEET( (wxPoint) cursorPos );
 
@@ -1575,30 +1538,30 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
                 aSheet->SetScreen( NULL );
                 sizeSheet( aSheet, cursorPos );
 
-                m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aSheet );
+                m_selectionTool->AddItemToSel( aSheet );
                 m_view->ClearPreview();
                 m_view->AddToPreview( aSheet->Clone() );
 
                 m_frame->SetRepeatItem( nullptr );
                 m_frame->GetScreen()->SetCurItem( aSheet );
             }
-            else
+            else if( aSheet )
             {
-                aSheet = nullptr;
-
                 m_view->ClearPreview();
-                m_frame->GetScreen()->SetCurItem( nullptr );
-            }
-        }
-        else if( evt->IsAction( &SCH_ACTIONS::finishSheet ) )
-        {
-            if( aSheet )
-            {
-                m_frame->AddItemToScreenAndUndoList( aSheet );
-                aSheet = nullptr;
 
-                m_view->ClearPreview();
+                if( !aSheet->IsNew() )
+                {
+                    m_view->Hide( aSheet, false );
+                    m_frame->RefreshItem( aSheet );
+
+                    m_frame->OnModify();
+                }
+
+                aSheet = nullptr;
                 m_frame->GetScreen()->SetCurItem( nullptr );
+
+                if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
+                    break;  // resize sheet is a single-shot command; when we're done we're done
             }
         }
         else if( evt->IsMotion() )

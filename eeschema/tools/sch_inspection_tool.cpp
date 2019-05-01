@@ -64,11 +64,7 @@ bool SCH_INSPECTION_TOOL::Init()
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, _( "eeshema.InteractiveSelection tool is not available" ) );
-        return false;
-    }
+    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
     auto singleMarkerCondition = SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T )
                                  && SELECTION_CONDITIONS::Count( 1 );
