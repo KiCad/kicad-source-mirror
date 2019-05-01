@@ -358,7 +358,6 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
     if( aComponent )
     {
         aComponent->SetFlags( IS_NEW | IS_MOVED );
-        m_frame->SaveCopyInUndoList( aComponent, UR_NEW, false );
 
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
         m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
@@ -421,7 +420,6 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                     aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
                 aComponent->SetFlags( IS_NEW | IS_MOVED );
-                m_frame->SaveCopyInUndoList( aComponent, UR_NEW, false );
 
                 m_frame->SetRepeatItem( aComponent );
                 m_frame->GetScreen()->SetCurItem( aComponent );
@@ -436,6 +434,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
             {
                 m_view->ClearPreview();
 
+                // Will perform SaveCopyInUndoList():
                 m_frame->AddItemToScreen( aComponent );
 
                 aComponent = nullptr;

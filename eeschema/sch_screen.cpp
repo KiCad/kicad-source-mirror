@@ -594,7 +594,7 @@ void SCH_SCREEN::ClearUndoORRedoList( UNDO_REDO_CONTAINER& aList, int aItemCount
 void SCH_SCREEN::ClearDrawingState()
 {
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
-        item->ClearFlags();
+        item->ClearTempFlags();
 }
 
 

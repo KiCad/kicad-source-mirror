@@ -1269,7 +1269,7 @@ void SCH_EDIT_FRAME::AddItemToScreen( SCH_ITEM* aItem, bool aUndoAppend )
         SaveUndoItemInUndoList( undoItem, aUndoAppend );
     }
 
-    aItem->ClearFlags();
+    aItem->ClearFlags( aItem->GetEditFlags() );
 
     screen->SetModify();
     screen->SetCurItem( NULL );
