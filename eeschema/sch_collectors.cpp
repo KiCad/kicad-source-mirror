@@ -99,6 +99,8 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
     SCH_BITMAP_T,
     SCH_BUS_BUS_ENTRY_T,
     SCH_BUS_WIRE_ENTRY_T,
+    SCH_LINE_T,
+    SCH_JUNCTION_T,
     EOT
 };
 
