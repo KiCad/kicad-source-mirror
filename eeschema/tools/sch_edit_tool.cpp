@@ -501,7 +501,8 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                         item->ClearFlags( STARTPOINT | ENDPOINT );
                     }
 
-                    for( unsigned i = 0; i < selection.GetSize(); ++i )
+                    int originalEnd = selection.GetSize();
+                    for( unsigned i = 0; i < originalEnd && i < selection.GetSize(); ++i )
                     {
                         SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
 
