@@ -269,6 +269,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_POPUP_SCH_LEAVE_SHEET:
         return SCH_ACTIONS::leaveSheet.MakeEvent();
 
+    case ID_POPUP_SCH_CLEANUP_SHEET:
+        return SCH_ACTIONS::cleanupSheetPins.MakeEvent();
+
     case ID_POPUP_SCH_SELECT_ON_PCB:
         return SCH_ACTIONS::explicitCrossProbe.MakeEvent();
     }

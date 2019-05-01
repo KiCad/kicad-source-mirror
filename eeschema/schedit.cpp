@@ -27,70 +27,26 @@
 #include <kiway.h>
 #include <gr_basic.h>
 #include <sch_draw_panel.h>
-#include <confirm.h>
 #include <sch_edit_frame.h>
 #include <hotkeys_basic.h>
 #include <general.h>
 #include <eeschema_id.h>
-#include <list_operations.h>
-#include <class_library.h>
 #include <sch_bus_entry.h>
-#include <sch_marker.h>
-#include <sch_component.h>
-#include <sch_junction.h>
-#include <sch_line.h>
-#include <sch_sheet.h>
-#include <sch_sheet_path.h>
 #include <sch_view.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 
- void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
+void SCH_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int         id = event.GetId();
-    wxPoint     pos;
-    SCH_SCREEN* screen = GetScreen();
-    SCH_ITEM*   item = screen->GetCurItem();
-
-    pos = wxGetMousePosition();
-
-    pos.y += 20;
-
-    switch( id )
+    if( event.GetId() == ID_HIERARCHY )
     {
-    case ID_HIERARCHY:
+        wxPoint pos = wxGetMousePosition();
+        pos.y += 20;
+
         SetNoToolSelected();
         InstallHierarchyFrame( pos );
         SetRepeatItem( NULL );
-        break;
-
-    case ID_POPUP_SCH_CLEANUP_SHEET:
-        if( item != NULL && item->Type() == SCH_SHEET_T )
-        {
-            SCH_SHEET* sheet = (SCH_SHEET*) item;
-
-            if( !sheet->HasUndefinedPins() )
-            {
-                DisplayInfoMessage( this, _( "There are no undefined labels in this sheet to clean up." ) );
-                return;
-            }
-
-            if( !IsOK( this, _( "Do you wish to cleanup this sheet?" ) ) )
-                return;
-
-            /* Save sheet in undo list before cleaning up unreferenced hierarchical labels. */
-            SaveCopyInUndoList( sheet, UR_CHANGED );
-            sheet->CleanupSheet();
-            SyncView();
-            GetCanvas()->Refresh();
-            OnModify();
-        }
-        break;
-
-    default:        // Log error:
-        wxFAIL_MSG( wxString::Format( "Cannot process command event ID %d", event.GetId() ) );
-        break;
     }
 }
 

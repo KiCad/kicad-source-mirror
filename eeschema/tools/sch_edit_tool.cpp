@@ -147,6 +147,11 @@ TOOL_ACTION SCH_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
         _( "Change to Text" ), _( "Change existing item to a text comment" ),
         text_xpm );
 
+TOOL_ACTION SCH_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
+        AS_GLOBAL, 0,
+        _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ),
+        nullptr );
+
 TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
@@ -274,6 +279,9 @@ bool SCH_EDIT_TOOL::Init()
 
     auto singleComponentCondition = SELECTION_CONDITIONS::Count( 1 )
                                  && SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T );
+
+    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
+                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
 
     auto singleSymbolCondition = [] ( const SELECTION& aSel ) {
         if( aSel.GetSize() == 1 )
@@ -406,6 +414,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::breakWire, wireSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::breakBus, busSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 200 );
@@ -1609,6 +1618,34 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
+{
+    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
+    SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
+
+    if( !sheet )
+        return 0;
+
+    if( !sheet->HasUndefinedPins() )
+    {
+        DisplayInfoMessage( m_frame, _( "There are no unreferenced pins in this sheet to remove." ) );
+        return 0;
+    }
+
+    if( !IsOK( m_frame, _( "Do you wish to delete the unreferenced pins from this sheet?" ) ) )
+        return 0;
+
+    m_frame->SaveCopyInUndoList( sheet, UR_CHANGED );
+
+    sheet->CleanupSheet();
+
+    updateView( sheet );
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
 void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 {
     KICAD_T itemType = aItem->Type();
@@ -1660,4 +1697,6 @@ void SCH_EDIT_TOOL::setTransitions()
 
     Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakWire.MakeEvent() );
     Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakBus.MakeEvent() );
+
+    Go( &SCH_EDIT_TOOL::CleanupSheetPins,   SCH_ACTIONS::cleanupSheetPins.MakeEvent() );
 }

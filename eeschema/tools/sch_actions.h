@@ -145,6 +145,7 @@ public:
     // Miscellaneous
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;
+    static TOOL_ACTION cleanupSheetPins;
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;

@@ -71,6 +71,8 @@ public:
 
     int BreakWire( const TOOL_EVENT& aEvent );
 
+    int CleanupSheetPins( const TOOL_EVENT& aEvent );
+
     /**
      * Function DoDelete()
      *
