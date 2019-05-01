@@ -369,13 +369,27 @@ bool SCH_CONNECTION::IsBusLabel( const wxString& aLabel )
 
 bool SCH_CONNECTION::IsBusVectorLabel( const wxString& aLabel )
 {
-    return std::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
+    try
+    {
+        return std::regex_match( std::string( aLabel.mb_str() ), bus_label_re );
+    }
+    catch( ... )
+    {
+        return false;
+    }
 }
 
 
 bool SCH_CONNECTION::IsBusGroupLabel( const wxString& aLabel )
 {
-    return std::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
+    try
+    {
+        return std::regex_match( std::string( aLabel.mb_str() ), bus_group_label_re );
+    }
+    catch( ... )
+    {
+        return false;
+    }
 }
 
 
@@ -385,9 +399,16 @@ void SCH_CONNECTION::ParseBusVector( wxString aVector, wxString* aName,
     auto ss_vector = std::string( aVector.mb_str() );
     std::smatch matches;
 
-    if( !std::regex_match( ss_vector, matches, bus_label_re ) )
+    try
     {
-        wxFAIL_MSG( wxT( "<" ) + aVector + wxT( "> is not a valid bus vector." ) );
+        if( !std::regex_match( ss_vector, matches, bus_label_re ) )
+        {
+            wxFAIL_MSG( wxT( "<" ) + aVector + wxT( "> is not a valid bus vector." ) );
+            return;
+        }
+    }
+    catch( ... )
+    {
         return;
     }
 
@@ -436,7 +457,14 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
     auto ss_group = std::string( aGroup.mb_str() );
     std::smatch matches;
 
-    if( !std::regex_match( ss_group, matches, bus_group_label_re ) )
+    try
+    {
+        if( !std::regex_match( ss_group, matches, bus_group_label_re ) )
+        {
+            return false;
+        }
+    }
+    catch( ... )
     {
         return false;
     }
