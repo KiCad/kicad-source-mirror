@@ -28,7 +28,6 @@
 #include <gr_basic.h>
 #include <sch_draw_panel.h>
 #include <confirm.h>
-#include <eda_doc.h>
 #include <sch_edit_frame.h>
 #include <hotkeys_basic.h>
 #include <general.h>
@@ -43,7 +42,6 @@
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
 #include <sch_view.h>
-#include <simulation_cursors.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
@@ -62,12 +60,9 @@
     // If needed, stop the current command and deselect current tool
     switch( id )
     {
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
     case ID_POPUP_SCH_CLEANUP_SHEET:
     case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-    case ID_POPUP_SCH_ADD_JUNCTION:
-    case ID_POPUP_SCH_ADD_LABEL:
         /* At this point: Do nothing. these commands do not need to stop the
          * current command (mainly a block command) or reset the current state
          * They will be executed later, in next switch structure.
@@ -80,25 +75,11 @@
         break;
     }
 
-    item = screen->GetCurItem();    // Can be modified by previous calls.
-
     switch( id )
     {
     case ID_HIERARCHY:
         InstallHierarchyFrame( pos );
         SetRepeatItem( NULL );
-        break;
-
-    case ID_POPUP_CANCEL_CURRENT_COMMAND:
-        if( m_canvas->IsMouseCaptured() )
-        {
-            m_canvas->EndMouseCapture();
-            SetToolID( GetToolId(), GetGalCanvas()->GetCurrentCursor(), wxEmptyString );
-        }
-        else
-        {
-            SetNoToolSelected();
-        }
         break;
 
     case ID_POPUP_SCH_CLEANUP_SHEET:
@@ -153,32 +134,6 @@ void SCH_EDIT_FRAME::OnUnfoldBus( wxCommandEvent& event )
     // Now that we have handled the chosen bus unfold, disconnect all  the events so they can be
     // recreated with updated data on the next unfold
     Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus, this );
-}
-
-
-void SCH_EDIT_FRAME::OnCancelCurrentCommand( wxCommandEvent& aEvent )
-{
-    SCH_SCREEN* screen = GetScreen();
-
-    if( screen->IsBlockActive() )
-    {
-        GetCanvas()->SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
-        screen->ClearBlockCommand();
-
-        // Stop the current command (if any) but keep the current tool
-        m_canvas->EndMouseCapture();
-    }
-    else
-    {
-        if( m_canvas->IsMouseCaptured() ) // Stop the current command but keep the current tool
-            m_canvas->EndMouseCapture();
-        else                              // Deselect current tool
-            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-     }
-
-     GetCanvas()->GetView()->ClearHiddenFlags();
-     GetCanvas()->GetView()->ClearPreview();
-     GetCanvas()->GetView()->ShowPreview( false );
 }
 
 

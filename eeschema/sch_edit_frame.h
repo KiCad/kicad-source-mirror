@@ -829,7 +829,6 @@ private:
     // another library
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
-    void OnCancelCurrentCommand( wxCommandEvent& aEvent );
 
     /**
      * Command event handler for duplicating the item at the current location.
