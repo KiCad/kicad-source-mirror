@@ -1022,6 +1022,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                 m_net_name_to_subgraphs_map[new_name].emplace_back( subgraph );
 
                 name = new_name;
+
+                subgraph->UpdateItemConnections();
             }
         }
 

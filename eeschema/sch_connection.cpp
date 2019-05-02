@@ -212,16 +212,16 @@ void SCH_CONNECTION::Clone( SCH_CONNECTION& aOther )
     m_sheet = aOther.Sheet();
     m_name = aOther.m_name;
     m_prefix = aOther.Prefix();
-    // Don't clone suffix, it will be rolled into the name
-    //m_suffix = aOther.Suffix();
+    m_suffix = aOther.Suffix();
     m_members = aOther.Members();
     m_net_code = aOther.NetCode();
     m_bus_code = aOther.BusCode();
-    //m_subgraph_code = aOther.SubgraphCode();
     m_vector_start = aOther.VectorStart();
     m_vector_end = aOther.VectorEnd();
     m_vector_index = aOther.VectorIndex();
     m_vector_prefix = aOther.VectorPrefix();
+
+    // Note: subgraph code isn't cloned, it should remain with the original object
 }
 
 
