@@ -29,6 +29,7 @@
 #include <tool/selection.h>
 #include <tool/tool_menu.h>
 #include <sch_collectors.h>
+#include <sch_component.h>
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;
@@ -38,6 +39,18 @@ namespace KIGFX
 {
     class GAL;
 }
+
+
+class SCH_CONDITIONS : public SELECTION_CONDITIONS
+{
+public:
+    static SELECTION_CONDITION Empty;
+    static SELECTION_CONDITION Idle;
+    static SELECTION_CONDITION IdleSelection;
+
+    static SELECTION_CONDITION SingleSymbol;
+    static SELECTION_CONDITION SingleDeMorganSymbol;
+};
 
 
 class SCH_SELECTION_TOOL : public TOOL_INTERACTIVE

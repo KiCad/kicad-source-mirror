@@ -74,7 +74,59 @@ TOOL_ACTION SCH_ACTIONS::removeItemsFromSel( "eeschema.InteractiveSelection.Remo
 TOOL_ACTION SCH_ACTIONS::clearSelection( "eeschema.InteractiveSelection.ClearSelection",
         AS_GLOBAL, 0, "", "" );    // No description, it is not supposed to be shown anywhere
 
-    
+
+SELECTION_CONDITION SCH_CONDITIONS::Empty = [] (const SELECTION& aSelection )
+{
+    return aSelection.Empty();
+};
+
+
+SELECTION_CONDITION SCH_CONDITIONS::Idle = [] (const SELECTION& aSelection )
+{
+    return ( !aSelection.Front() || aSelection.Front()->GetEditFlags() == 0 );
+};
+
+
+SELECTION_CONDITION SCH_CONDITIONS::IdleSelection = [] (const SELECTION& aSelection )
+{
+    return ( aSelection.Front() && aSelection.Front()->GetEditFlags() == 0 );
+};
+
+
+SELECTION_CONDITION SCH_CONDITIONS::SingleSymbol = [] (const SELECTION& aSel )
+{
+    if( aSel.GetSize() == 1 )
+    {
+        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+
+        if( comp )
+        {
+            auto partRef = comp->GetPartRef().lock();
+            return !partRef || !partRef->IsPower();
+        }
+    }
+
+    return false;
+};
+
+
+SELECTION_CONDITION SCH_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION& aSel )
+{
+    if( aSel.GetSize() == 1 )
+    {
+        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+
+        if( comp )
+        {
+            auto partRef = comp->GetPartRef().lock();
+            return partRef && partRef->HasConversion();
+        }
+    }
+
+    return false;
+};
+
+
 SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "eeschema.InteractiveSelection" ),
         m_frame( nullptr ),
@@ -95,25 +147,15 @@ SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 
 bool SCH_SELECTION_TOOL::Init()
 {
-    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
-
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
-    auto wireOrBusSelectionCondition = [] ( const SELECTION& aSel ) {
-        for( unsigned i = 0; i < aSel.GetSize(); ++i )
-        {
-            SCH_ITEM* item = (SCH_ITEM*) aSel.GetItem( i );
-
-            if( !item->IsType( wireOrBusTypes ) || item->IsNew() )
-                return false;
-        }
-
-        return aSel.GetSize() >= 1;
-    };
+    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    auto wireOrBusSelection = SCH_CONDITIONS::MoreThan( 0 )
+                           && SCH_CONDITIONS::OnlyTypes( wireOrBusTypes );
 
     auto& ctxMenu = m_menu.GetMenu();
 
-    ctxMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelectionCondition, 200 );
+    ctxMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );

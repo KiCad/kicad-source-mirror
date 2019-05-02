@@ -67,28 +67,13 @@ bool SCH_INSPECTION_TOOL::Init()
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
     auto singleMarkerCondition = SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T )
-                                 && SELECTION_CONDITIONS::Count( 1 );
-
-    auto singleSymbolCondition = [] (const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
-
-            if( comp )
-            {
-                auto partRef = comp->GetPartRef().lock();
-                return !partRef || !partRef->IsPower();
-            }
-        }
-
-        return false;
-    };
+                              && SELECTION_CONDITIONS::Count( 1 );
 
     // Add inspection actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 400 );
+    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, SCH_CONDITIONS::SingleSymbol, 400 );
     selToolMenu.AddItem( SCH_ACTIONS::showMarkerInfo, singleMarkerCondition, 400 );
 
     return true;

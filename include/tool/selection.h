@@ -154,7 +154,7 @@ public:
 
     EDA_ITEM* Front() const
     {
-        return m_items.front();
+        return m_items.size() ? m_items.front() : nullptr;
     }
 
     std::deque<EDA_ITEM*>& Items()

@@ -61,7 +61,7 @@ TOOL_ACTION SCH_ACTIONS::placePower( "eeschema.InteractiveDrawing.placePowerPort
 
 TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveDrawing.startWire",
         AS_GLOBAL, 0,
-        _( "Begin Wire" ), _( "Start drawing a wire" ),
+        _( "Start Wire" ), _( "Start drawing a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
@@ -71,7 +71,7 @@ TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.InteractiveDrawing.drawWire",
 
 TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.InteractiveDrawing.startBus",
         AS_GLOBAL, 0,
-        _( "Begin Bus" ), _( "Start drawing a bus" ),
+        _( "Start Bus" ), _( "Start drawing a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.InteractiveDrawing.drawBus",
@@ -214,80 +214,71 @@ bool SCH_DRAWING_TOOL::Init()
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+    auto activeTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto wireToolCondition  = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT );
+    auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT || m_frame->GetToolId() == ID_BUS_BUTT );
     };
 
-    auto busToolCondition  = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_BUS_BUTT );
-    };
-
-    auto lineToolCondition  = [ this ] ( const SELECTION& aSel ) {
+    auto lineTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT );
     };
 
-    auto sheetToolCondition  = [ this ] ( const SELECTION& aSel ) {
+    auto sheetTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
     };
 
-    auto idleCondition = [] ( const SELECTION& aSel ) {
-        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-        return ( !item || !item->GetEditFlags() );
-    };
-
-    auto idleBusOrLineToolCondition = ( busToolCondition || lineToolCondition ) && idleCondition;
-
     auto wireOrBusSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
                                     && SELECTION_CONDITIONS::OnlyTypes( wireOrBusTypes );
-
-    auto drawingSegmentsCondition = [] ( const SELECTION& aSel ) {
-        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-        return ( item && item->Type() == SCH_LINE_T && item->IsNew() );
-    };
 
     auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
                              && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
 
     auto& ctxMenu = m_menu.GetMenu();
 
-    // cancel current tool goes in main context menu at the top if present
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+    //
+    // Build the drawing tool menu
+    //
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
 
-    ctxMenu.AddItem( SCH_ACTIONS::startWire, wireToolCondition && idleCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startBus, busToolCondition && idleCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startLines, lineToolCondition && idleCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishWire, wireToolCondition && drawingSegmentsCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishBus, busToolCondition && drawingSegmentsCondition, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishLine, lineToolCondition && drawingSegmentsCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startWire,  wireOrBusTool && SCH_CONDITIONS::Idle, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startBus,   wireOrBusTool && SCH_CONDITIONS::Idle, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::startLines, lineTool && SCH_CONDITIONS::Idle, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishWire, IsDrawingWire, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishBus,  IsDrawingBus, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishLine, IsDrawingLine, 1 );
     // TODO(JE): add menu access to unfold bus...
 
-    ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetToolCondition && idleCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetTool && SCH_CONDITIONS::Idle, 1 );
 
-    ctxMenu.AddSeparator( idleBusOrLineToolCondition, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addJunction, idleBusOrLineToolCondition, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addLabel, idleBusOrLineToolCondition, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addGlobalLabel, idleBusOrLineToolCondition, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addHierLabel, idleBusOrLineToolCondition, 100 );
+    ctxMenu.AddSeparator( wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addJunction,    wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addLabel,       wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addGlobalLabel, wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( SCH_ACTIONS::addHierLabel,   wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
 
-    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+    ctxMenu.AddSeparator( activeTool, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
-    // Add editing actions to the selection tool menu
+    //
+    // Add drawing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     // TODO(JE): add menu access to unfold bus on busSelectionCondition...
-
     selToolMenu.AddItem( SCH_ACTIONS::resizeSheet, singleSheetCondition, 1 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::addJunction, wireOrBusSelectionCondition, 100 );
-    selToolMenu.AddItem( SCH_ACTIONS::addLabel, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::startWire,  SCH_CONDITIONS::Empty, 1 );
+    selToolMenu.AddItem( SCH_ACTIONS::startBus,   SCH_CONDITIONS::Empty, 1 );
+    selToolMenu.AddItem( SCH_ACTIONS::finishWire, IsDrawingWire, 1 );
+    selToolMenu.AddItem( SCH_ACTIONS::finishBus,  IsDrawingBus, 1 );
+
+    selToolMenu.AddItem( SCH_ACTIONS::addJunction,    wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::addLabel,       wireOrBusSelectionCondition, 100 );
     selToolMenu.AddItem( SCH_ACTIONS::addGlobalLabel, wireOrBusSelectionCondition, 100 );
-    selToolMenu.AddItem( SCH_ACTIONS::addHierLabel, wireOrBusSelectionCondition, 100 );
+    selToolMenu.AddItem( SCH_ACTIONS::addHierLabel,   wireOrBusSelectionCondition, 100 );
     selToolMenu.AddItem( SCH_ACTIONS::importSheetPin, singleSheetCondition, 100 );
 
     return true;
@@ -300,6 +291,42 @@ void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     m_controls = getViewControls();
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
+}
+
+
+static bool isNewSegment( SCH_ITEM* aItem )
+{
+    return aItem && aItem->IsNew() && aItem->Type() == SCH_LINE_T;
+}
+
+
+bool SCH_DRAWING_TOOL::IsDrawingLine( const SELECTION& aSelection )
+{
+    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+    return IsDrawingLineWireOrBus( aSelection ) && !aSelection.Front()->IsType( wireOrBusTypes );
+}
+
+
+bool SCH_DRAWING_TOOL::IsDrawingWire( const SELECTION& aSelection )
+{
+    static KICAD_T wireType[] = { SCH_LINE_LOCATE_WIRE_T, EOT };
+    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( wireType );
+}
+
+
+bool SCH_DRAWING_TOOL::IsDrawingBus( const SELECTION& aSelection )
+{
+    static KICAD_T busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
+    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( busType );
+}
+
+
+bool SCH_DRAWING_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
+{
+    // NOTE: for immediate hotkeys, it is NOT required that the line, wire or bus tool
+    // be selected
+    SCH_ITEM* item = (SCH_ITEM*) aSelection.Front();
+    return isNewSegment( item );
 }
 
 
@@ -316,40 +343,19 @@ int SCH_DRAWING_TOOL::AddJunction( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::AddLabel( const TOOL_EVENT& aEvent )
 {
-    return doAddItem( SCH_LABEL_T );
-}
-
-
-int SCH_DRAWING_TOOL::AddGlobalLabel( const TOOL_EVENT& aEvent )
-{
-    return doAddItem( SCH_GLOBAL_LABEL_T );
-}
-
-
-int SCH_DRAWING_TOOL::AddHierLabel( const TOOL_EVENT& aEvent )
-{
-    return doAddItem( SCH_HIER_LABEL_T );
-}
-
-
-int SCH_DRAWING_TOOL::doAddItem( KICAD_T aType )
-{
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
-    SCH_ITEM* item = nullptr;
+    int layer = LAYER_NOTES;
 
-    switch( aType )
-    {
-    case SCH_LABEL_T:        item = m_frame->CreateNewText( LAYER_LOCLABEL );   break;
-    case SCH_GLOBAL_LABEL_T: item = m_frame->CreateNewText( LAYER_GLOBLABEL );  break;
-    case SCH_HIER_LABEL_T:   item = m_frame->CreateNewText( LAYER_HIERLABEL );  break;
-    case SCH_TEXT_T:         item = m_frame->CreateNewText( LAYER_NOTES );      break;
-    default:                 wxFAIL_MSG( "doAddItem(): unknown type" );
-    }
+    if( aEvent.IsAction( &SCH_ACTIONS::addLabel ) )
+        layer = LAYER_LOCLABEL;
+    else if( aEvent.IsAction( &SCH_ACTIONS::addGlobalLabel ) )
+        layer = LAYER_GLOBLABEL;
+    else if( aEvent.IsAction( &SCH_ACTIONS::addHierLabel ) )
+        layer = LAYER_HIERLABEL;
 
+    SCH_ITEM* item = m_frame->CreateNewText( layer );
     m_frame->AddItemToScreenAndUndoList( item );
-
-    m_frame->SetNoToolSelected();
 
     return 0;
 }
@@ -886,7 +892,6 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 
 int SCH_DRAWING_TOOL::StartWire( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
@@ -911,7 +916,6 @@ int SCH_DRAWING_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::StartBus( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
@@ -977,7 +981,6 @@ int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOL::StartLines( const TOOL_EVENT& aEvent)
 {
-    m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
@@ -1155,6 +1158,9 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 finishSegments();
                 aSegment = nullptr;
             }
+
+            if( m_frame->GetToolId() == ID_NO_TOOL_SELECTED )
+                break;
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
@@ -1189,6 +1195,9 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 {
                     finishSegments();
                     aSegment = nullptr;
+
+                    if( m_frame->GetToolId() == ID_NO_TOOL_SELECTED )
+                        break;
                 }
                 else
                 {
@@ -1208,6 +1217,9 @@ int SCH_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             {
                 finishSegments();
                 aSegment = nullptr;
+
+                if( m_frame->GetToolId() == ID_NO_TOOL_SELECTED )
+                    break;
             }
         }
         else if( evt->IsMotion() )
@@ -1413,11 +1425,13 @@ void SCH_DRAWING_TOOL::finishSegments()
 
     // Add the new wires
     while( s_wires.GetFirst() )
+    {
+        s_wires.GetFirst()->ClearFlags( IS_NEW | IS_MOVED );
         m_frame->AddToScreen( s_wires.PopFront() );
+    }
 
     m_view->ClearPreview();
     m_view->ShowPreview( false );
-    m_view->ClearHiddenFlags();
 
     m_controls->CaptureCursor( false );
     m_controls->SetAutoPan( false );
@@ -1651,6 +1665,6 @@ void SCH_DRAWING_TOOL::setTransitions()
     Go( &SCH_DRAWING_TOOL::StartLines,            SCH_ACTIONS::startLines.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
     Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::AddGlobalLabel,        SCH_ACTIONS::addGlobalLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::AddHierLabel,          SCH_ACTIONS::addHierLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addHierLabel.MakeEvent() );
 }

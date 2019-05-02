@@ -79,9 +79,6 @@ public:
     int StartLines( const TOOL_EVENT& aEvent );
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
-    int AddGlobalLabel( const TOOL_EVENT& aEvent );
-    int AddHierLabel( const TOOL_EVENT& aEvent );
-    int ImportHierLable( const TOOL_EVENT& aEvent );
 
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int PlacePower( const TOOL_EVENT& aEvent );
@@ -102,6 +99,12 @@ public:
     int PlaceSchematicText( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
     int PlaceImage( const TOOL_EVENT& aEvent );
+
+    // SELECTION_CONDITIONs:
+    static bool IsDrawingLine( const SELECTION& aSelection );
+    static bool IsDrawingWire( const SELECTION& aSelection );
+    static bool IsDrawingBus( const SELECTION& aSelection );
+    static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
 private:
 

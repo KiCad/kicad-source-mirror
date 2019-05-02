@@ -204,26 +204,27 @@ bool SCH_EDIT_TOOL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto noActiveToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_NO_TOOL_SELECTED );
+    auto moveCondition = [] ( const SELECTION& aSel ) {
+        if( aSel.Empty() )
+            return false;
+
+        if( SCH_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+            return false;
+
+        return true;
     };
 
-    auto orientatableCondition = [ this ] ( const SELECTION& aSel ) {
+    auto orientCondition = [] ( const SELECTION& aSel ) {
         if( aSel.Empty() )
+            return false;
+
+        if( SCH_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
 
         if( aSel.GetSize() > 1 )
-        {
-            // In general a group is orientatable, except when we're drawing wires/busses
-            if( m_frame->GetToolId() == ID_WIRE_BUTT || m_frame->GetToolId() == ID_BUS_BUTT )
-            {
-                if( item->Type() == SCH_LINE_T && item->IsNew() )
-                    return false;
-            }
             return true;
-        }
 
         switch( item->Type() )
         {
@@ -241,7 +242,7 @@ bool SCH_EDIT_TOOL::Init()
         }
     };
 
-    auto hasPropertiesCondition = []  ( const SELECTION& aSel ) {
+    auto propertiesCondition = []  ( const SELECTION& aSel ) {
         if( aSel.GetSize() != 1 )
             return false;
 
@@ -261,93 +262,45 @@ bool SCH_EDIT_TOOL::Init()
         }
     };
 
-    auto notJustMarkersCondition = SELECTION_CONDITIONS::MoreThan( 0 )
-                                   && ! SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T );
+    KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    auto toLabelCondition = SCH_CONDITIONS::Count( 1 )
+                         && SCH_CONDITIONS::OnlyTypes( toLabelTypes );
 
-    auto toLabelCondition = SELECTION_CONDITIONS::Count( 1 )
-                                && ( SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
-                                  || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T )
-                                  || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+    KICAD_T toHLableTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
+    auto toHLabelCondition = SCH_CONDITIONS::Count( 1 )
+                          && SCH_CONDITIONS::OnlyTypes( toHLableTypes);
 
-    auto toHLabelCondition = SELECTION_CONDITIONS::Count( 1 )
-                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+    KICAD_T toGLableTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    auto toGLabelCondition = SCH_CONDITIONS::Count( 1 )
+                          && SCH_CONDITIONS::OnlyTypes( toGLableTypes);
 
-    auto toGLabelCondition = SELECTION_CONDITIONS::Count( 1 )
-                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_TEXT_T ) );
+    KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
+    auto toTextlCondition = SCH_CONDITIONS::Count( 1 )
+                         && SCH_CONDITIONS::OnlyTypes( toTextTypes);
 
-    auto toTextlCondition = SELECTION_CONDITIONS::Count( 1 )
-                            && ( SELECTION_CONDITIONS::HasType( SCH_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_GLOBAL_LABEL_T )
-                                 || SELECTION_CONDITIONS::HasType( SCH_HIER_LABEL_T ) );
+    KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
+    auto entryCondition = SCH_CONDITIONS::MoreThan( 0 )
+                       && SCH_CONDITIONS::OnlyTypes( entryTypes );
 
-    auto entryCondition = SELECTION_CONDITIONS::HasType( SCH_BUS_WIRE_ENTRY_T )
-                          || SELECTION_CONDITIONS::HasType( SCH_BUS_BUS_ENTRY_T );
+    auto singleComponentCondition = SCH_CONDITIONS::Count( 1 )
+                                 && SCH_CONDITIONS::OnlyType( SCH_COMPONENT_T );
 
-    auto singleComponentCondition = SELECTION_CONDITIONS::Count( 1 )
-                                 && SELECTION_CONDITIONS::OnlyType( SCH_COMPONENT_T );
+    auto wireSelectionCondition = SCH_CONDITIONS::MoreThan( 0 )
+                               && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
 
-    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
-                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
+    auto busSelectionCondition = SCH_CONDITIONS::MoreThan( 0 )
+                              && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
 
-    auto singleSymbolCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+    auto singleSheetCondition = SCH_CONDITIONS::Count( 1 )
+                             && SCH_CONDITIONS::OnlyType( SCH_SHEET_T );
 
-            if( comp )
-            {
-                auto partRef = comp->GetPartRef().lock();
-                return !partRef || !partRef->IsPower();
-            }
-        }
-
-        return false;
+    auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_WIRE_BUTT
+              || m_frame->GetToolId() == ID_BUS_BUTT
+              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
     };
 
-    auto singleDeMorganSymbolCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.GetSize() == 1 )
-        {
-            SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
-
-            if( comp )
-            {
-                auto partRef = comp->GetPartRef().lock();
-                return partRef && partRef->HasConversion();
-            }
-        }
-
-        return false;
-    };
-
-    auto wireTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT );
-    };
-
-    auto busTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_BUS_BUTT );
-    };
-
-    auto junctionTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_JUNCTION_BUTT );
-    };
-
-    auto idleCondition = [] ( const SELECTION& aSel ) {
-        SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
-        return ( !item || !item->GetEditFlags() );
-    };
-
-    auto idleWireOrBusTool = ( wireTool || busTool || junctionTool ) && idleCondition;
-
-    auto wireSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
-                               && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-
-    auto busSelectionCondition = SELECTION_CONDITIONS::MoreThan( 0 )
-                              && SELECTION_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
-
+    //
     // Build the edit tool menu (shown when moving or dragging)
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
@@ -355,91 +308,91 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::duplicate, notJustMarkersCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::duplicate, moveCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::doDelete,  SCH_CONDITIONS::NotEmpty );
 
-    ctxMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition );
+    ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol );
     // JEY TODO: add menu access for changing symbol unit
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
+    ctxMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
+    ctxMenu.AddItem( SCH_ACTIONS::cut,  SCH_CONDITIONS::IdleSelection );
+    ctxMenu.AddItem( SCH_ACTIONS::copy, SCH_CONDITIONS::IdleSelection );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
+    //
     // Add editing actions to the drawing tool menu
     //
     CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
+    ctxMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition, 200 );
 
-    drawingMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editReference, singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editValue, singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editFootprint, singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
     // JEY TODO: add menu access for changing symbol unit
-    drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toLabel,  toLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectNode, idleWireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, idleWireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakWire, idleWireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakBus, idleWireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toText,   toTextlCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectNode,       SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakWire,        SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::breakBus,         SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
 
+    //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::drag, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, orientatableCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW, orientatableCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX, orientatableCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY, orientatableCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate, notJustMarkersCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::doDelete, SELECTION_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::move,      moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::drag,      moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate, moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::doDelete,  SCH_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::properties, hasPropertiesCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editReference, singleSymbolCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editValue, singleSymbolCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editFootprint, singleSymbolCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields, singleComponentCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan, singleDeMorganSymbolCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::properties,       propertiesCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editReference,    SCH_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editValue,        SCH_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::editFootprint,    SCH_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan,  SCH_CONDITIONS::SingleSymbol, 200 );
     // JEY TODO: add menu access for changing symbol unit
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, singleSymbolCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash, entryCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet,    SCH_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toLabel, toLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toText, toTextlCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::breakWire, wireSelectionCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::breakBus, busSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toLabel,   toLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toHLabel,  toHLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toGLabel,  toGLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toText,    toTextlCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::breakWire,        wireSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::breakBus,         busSelectionCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
 
-    selToolMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty, 200 );
-    // Selection tool handles the context menu for some other tools, such as the Picker.
-    // Don't add things like Paste when another tool is active.
-    selToolMenu.AddItem( SCH_ACTIONS::paste, noActiveToolCondition, 200 );
+    selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::cut,   SCH_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::copy,  SCH_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::paste, SCH_CONDITIONS::Idle, 200 );
 
     return true;
 }
