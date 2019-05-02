@@ -37,6 +37,7 @@
 #include <preview_items/selection_area.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
+#include <tools/sch_line_drawing_tool.h>
 #include <sch_actions.h>
 #include <sch_collectors.h>
 #include <painter.h>
@@ -150,14 +151,40 @@ bool SCH_SELECTION_TOOL::Init()
     m_frame = getEditFrame<SCH_BASE_FRAME>();
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
+
+    auto wireSelection = SCH_CONDITIONS::MoreThan( 0 )
+                      && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+
+    auto busSelection = SCH_CONDITIONS::MoreThan( 0 )
+                     && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
+
     auto wireOrBusSelection = SCH_CONDITIONS::MoreThan( 0 )
                            && SCH_CONDITIONS::OnlyTypes( wireOrBusTypes );
 
-    auto& ctxMenu = m_menu.GetMenu();
+    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
+                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
 
-    ctxMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    auto& menu = m_menu.GetMenu();
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
+    // TODO(JE): add menu access to unfold bus on busSelectionCondition...
+    menu.AddItem( SCH_ACTIONS::resizeSheet,      singleSheetCondition && SCH_CONDITIONS::Idle, 1 );
+
+    menu.AddItem( SCH_ACTIONS::startWire,        SCH_CONDITIONS::Empty, 1 );
+    menu.AddItem( SCH_ACTIONS::startBus,         SCH_CONDITIONS::Empty, 1 );
+    menu.AddItem( SCH_ACTIONS::finishWire,       SCH_LINE_DRAWING_TOOL::IsDrawingWire, 1 );
+    menu.AddItem( SCH_ACTIONS::finishBus,        SCH_LINE_DRAWING_TOOL::IsDrawingBus, 1 );
+
+    menu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
+    menu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::addJunction,      wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::addLabel,         wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::addGlobalLabel,   wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::addHierLabel,     wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::breakWire,        wireSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::breakBus,         busSelection && SCH_CONDITIONS::Idle, 200 );
+    menu.AddItem( SCH_ACTIONS::importSheetPin,   singleSheetCondition && SCH_CONDITIONS::Idle, 200 );
+
+    menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;

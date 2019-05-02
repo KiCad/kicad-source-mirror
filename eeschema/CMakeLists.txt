@@ -215,7 +215,6 @@ set( EESCHEMA_SRCS
     sch_sheet_pin.cpp
     sch_text.cpp
     sch_validators.cpp
-    schedit.cpp
     schematic_undo_redo.cpp
     sch_edit_frame.cpp
     selpart.cpp
@@ -243,6 +242,7 @@ set( EESCHEMA_SRCS
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
     tools/sch_inspection_tool.cpp
+    tools/sch_line_drawing_tool.cpp
     tools/sch_picker_tool.cpp
     tools/sch_selection_tool.cpp
     tools/selection.cpp

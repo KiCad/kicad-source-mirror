@@ -108,7 +108,7 @@ private:
     SCH_SHEET_PATH m_currSheet;     // The currently opened scheet in hierarchy
 
 public:
-    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos );
+    HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent );
 
     ~HIERARCHY_NAVIG_DLG();
 
@@ -130,16 +130,16 @@ private:
 };
 
 
-void SCH_EDIT_FRAME::InstallHierarchyFrame( wxPoint& pos )
+void SCH_EDIT_FRAME::InstallHierarchyFrame( wxCommandEvent& event )
 {
-    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this, pos );
+    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this );
 
     treeframe->ShowQuasiModal();
     treeframe->Destroy();
 }
 
 
-HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent, const wxPoint& aPos ) :
+HIERARCHY_NAVIG_DLG::HIERARCHY_NAVIG_DLG( SCH_EDIT_FRAME* aParent ) :
     DIALOG_SHIM( aParent, wxID_ANY, _( "Navigator" ), wxDefaultPosition, wxDefaultSize,
                  wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
 {

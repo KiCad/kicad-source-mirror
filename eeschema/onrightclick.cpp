@@ -96,8 +96,6 @@ void AddMenusForComponent( wxMenu* PopMenu, SCH_COMPONENT* Component, SYMBOL_LIB
 void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
 {
     SCH_SELECTION_TOOL* selTool = frame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    wxPoint             pos = frame->GetCrossHairPosition();
-    wxString            msg;
 
     // TODO(JE) remove once real-time is enabled
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
@@ -105,9 +103,9 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
         frame->RecalculateConnections();
 
         // Have to pick up the pointer again because it may have been changed by SchematicCleanUp
-        bool actionCancelled = false;
-        Bus = dynamic_cast<SCH_LINE*>( selTool->SelectPoint( pos, SCH_COLLECTOR::AllItemsButPins,
-                                                             &actionCancelled ) );
+        KICAD_T    busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
+        SELECTION& selection = selTool->RequestSelection( busType );
+        Bus = (SCH_LINE*) selection.Front();
         wxASSERT( Bus );
     }
 

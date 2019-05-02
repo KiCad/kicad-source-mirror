@@ -73,8 +73,8 @@ bool SCH_INSPECTION_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, SCH_CONDITIONS::SingleSymbol, 400 );
-    selToolMenu.AddItem( SCH_ACTIONS::showMarkerInfo, singleMarkerCondition, 400 );
+    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, SCH_CONDITIONS::SingleSymbol && SCH_CONDITIONS::Idle, 400 );
+    selToolMenu.AddItem( SCH_ACTIONS::showMarkerInfo, singleMarkerCondition && SCH_CONDITIONS::Idle, 400 );
 
     return true;
 }

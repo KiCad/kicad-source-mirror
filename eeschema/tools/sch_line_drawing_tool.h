@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_DRAWING_TOOL_H
-#define SCH_DRAWING_TOOL_H
+#ifndef SCH_LINE_DRAWING_TOOL_H
+#define SCH_LINE_DRAWING_TOOL_H
 
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
@@ -38,17 +38,32 @@ class SCH_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
 
 
+/// Collection of data related to the bus unfolding tool
+struct BUS_UNFOLDING_T
+{
+    bool in_progress;   ///< True if bus unfold operation is running
+    bool offset;        ///< True if the bus entry should be offset from origin
+    bool label_placed;  ///< True if user has placed the net label
+
+    wxPoint origin;     ///< Origin (on the bus) of the unfold
+    wxString net_name;  ///< Net label for the unfolding operation
+
+    SCH_BUS_WIRE_ENTRY* entry;
+    SCH_LABEL* label;
+};
+
+
 /**
- * Class SCH_DRAWING_TOOL
+ * Class SCH_LINE_DRAWING_TOOL
  *
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_DRAWING_TOOL : public TOOL_INTERACTIVE
+class SCH_LINE_DRAWING_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SCH_DRAWING_TOOL();
-    ~SCH_DRAWING_TOOL();
+    SCH_LINE_DRAWING_TOOL();
+    ~SCH_LINE_DRAWING_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -56,39 +71,32 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    ///> Get the SCH_DRAWING_TOOL top-level context menu
+    ///> Get the SCH_LINE_DRAWING_TOOL top-level context menu
     inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
+    int StartWire( const TOOL_EVENT& aEvent );
+    int StartBus( const TOOL_EVENT& aEvent );
+    int StartLines( const TOOL_EVENT& aEvent );
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
 
-    int PlaceSymbol( const TOOL_EVENT& aEvent );
-    int PlacePower( const TOOL_EVENT& aEvent );
-    int PlaceNoConnect( const TOOL_EVENT& aEvent );
-    int PlaceJunction( const TOOL_EVENT& aEvent );
-    int PlaceBusWireEntry( const TOOL_EVENT& aEvent );
-    int PlaceBusBusEntry( const TOOL_EVENT& aEvent );
-    int PlaceLabel( const TOOL_EVENT& aEvent );
-    int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
-    int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
-    int DrawSheet( const TOOL_EVENT& aEvent );
-    int ResizeSheet( const TOOL_EVENT& aEvent );
-    int PlaceSheetPin( const TOOL_EVENT& aEvent );
-    int ImportSheetPin( const TOOL_EVENT& aEvent );
-    int PlaceSchematicText( const TOOL_EVENT& aEvent );
-    int PlaceImage( const TOOL_EVENT& aEvent );
+    int DrawWire( const TOOL_EVENT& aEvent );
+    int DrawBus( const TOOL_EVENT& aEvent );
+    int DrawLines( const TOOL_EVENT& aEvent );
+
+    int UnfoldBus( const TOOL_EVENT& aEvent );
+
+    // SELECTION_CONDITIONs:
+    static bool IsDrawingLine( const SELECTION& aSelection );
+    static bool IsDrawingWire( const SELECTION& aSelection );
+    static bool IsDrawingBus( const SELECTION& aSelection );
+    static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
 private:
 
-    int doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList );
-
-    int doSingleClickPlace( KICAD_T aType );
-
-    int doTwoClickPlace( KICAD_T aType );
-
-    int doDrawSheet( SCH_SHEET* aSheet );
-    void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
+    int doDrawSegments( int aType, SCH_LINE* aSegment );
+    SCH_LINE* startSegments( int aType, const wxPoint& aPos );
+    void finishSegments();
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -99,7 +107,10 @@ private:
     KIGFX::VIEW_CONTROLS* m_controls;
     SCH_EDIT_FRAME*       m_frame;
 
+    /// Data related to bus unfolding tool.
+    BUS_UNFOLDING_T       m_busUnfold;
+
     TOOL_MENU             m_menu;
 };
 
-#endif /* SCH_DRAWING_TOOL_H */
+#endif /* SCH_LINE_DRAWING_TOOL_H */

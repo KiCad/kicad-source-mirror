@@ -24,6 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
+#include <tools/sch_line_drawing_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
@@ -208,7 +209,7 @@ bool SCH_EDIT_TOOL::Init()
         if( aSel.Empty() )
             return false;
 
-        if( SCH_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         return true;
@@ -218,7 +219,7 @@ bool SCH_EDIT_TOOL::Init()
         if( aSel.Empty() )
             return false;
 
-        if( SCH_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         SCH_ITEM* item = (SCH_ITEM*) aSel.Front();
@@ -334,7 +335,7 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
 
-    ctxMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
+    drawingMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition, 200 );
@@ -352,10 +353,6 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toText,   toTextlCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectNode,       SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::selectConnection, SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakWire,        SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::breakBus,         SCH_CONDITIONS::Idle && wireOrBusTool, 200 );
 
     //
     // Add editing actions to the selection tool menu
@@ -380,12 +377,10 @@ bool SCH_EDIT_TOOL::Init()
     // JEY TODO: add menu access for changing symbol unit
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toLabel,   toLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toHLabel,  toHLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toGLabel,  toGLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toText,    toTextlCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::breakWire,        wireSelectionCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::breakBus,         busSelectionCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toLabel,          toLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toHLabel,         toHLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toGLabel,         toGLabelCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::toText,           toTextlCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );

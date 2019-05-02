@@ -33,7 +33,10 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
-
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <tool/tool_manager.h>
+#include "eeschema_id.h"
 
 void SCH_EDIT_FRAME::GetSchematicConnections( std::vector< wxPoint >& aConnections )
 {
@@ -452,3 +455,106 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPosition, bool aAppen
 }
 
 
+void SCH_EDIT_FRAME::OnUnfoldBus( wxCommandEvent& event )
+{
+    wxMenuItem* item = static_cast<wxMenuItem*>( event.GetEventUserData() );
+    wxString net = item->GetItemLabelText();
+
+    GetToolManager()->RunAction( SCH_ACTIONS::unfoldBus, true, &net );
+
+    // Now that we have handled the chosen bus unfold, disconnect all  the events so they can be
+    // recreated with updated data on the next unfold
+    Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus, this );
+}
+
+
+void SCH_EDIT_FRAME::OnUnfoldBusHotkey( wxCommandEvent& aEvent )
+{
+    SCH_SELECTION_TOOL*     selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EDA_HOTKEY_CLIENT_DATA* data = (EDA_HOTKEY_CLIENT_DATA*) aEvent.GetClientObject();
+    SCH_ITEM*               item = GetScreen()->GetCurItem();
+
+    wxCHECK_RET( data != NULL, wxT( "Invalid hot key client object." ) );
+
+    if( item == NULL )
+    {
+        // If we didn't get here by a hot key, then something has gone wrong.
+        if( aEvent.GetInt() == 0 )
+            return;
+
+        item = selTool->SelectPoint( data->GetPosition(), SCH_COLLECTOR::EditableItems );
+
+        // Exit if no item found at the current location or the item is already being edited.
+        if( item == NULL || item->GetEditFlags() != 0 )
+            return;
+    }
+
+    if( item->Type() != SCH_LINE_T )
+        return;
+
+    wxMenu* bus_unfold_menu = GetUnfoldBusMenu( static_cast<SCH_LINE*>( item ) );
+
+    if( bus_unfold_menu )
+    {
+        auto controls = GetCanvas()->GetViewControls();
+        auto vmp = controls->GetMousePosition( false );
+        wxPoint mouse_pos( (int) vmp.x, (int) vmp.y );
+
+        GetGalCanvas()->PopupMenu( bus_unfold_menu, mouse_pos );
+    }
+}
+
+
+wxMenu* SCH_EDIT_FRAME::GetUnfoldBusMenu( SCH_LINE* aBus )
+{
+    auto connection = aBus->Connection( *g_CurrentSheet );
+
+    if( !connection ||  !connection->IsBus() || connection->Members().empty() )
+        return nullptr;
+
+    int idx = 0;
+    wxMenu* bus_unfolding_menu = new wxMenu;
+
+    for( const auto& member : connection->Members() )
+    {
+        int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+        wxString name = member->Name( true );
+
+        if( member->Type() == CONNECTION_BUS )
+        {
+            wxMenu* submenu = new wxMenu;
+            bus_unfolding_menu->AppendSubMenu( submenu, _( name ) );
+
+            for( const auto& sub_member : member->Members() )
+            {
+                id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+
+                submenu->Append( id, sub_member->Name( true ), wxEmptyString );
+
+                // See comment in else clause below
+                auto sub_item_clone = new wxMenuItem();
+                sub_item_clone->SetItemLabel( sub_member->Name( true ) );
+
+                Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus, this, id, id,
+                      sub_item_clone );
+            }
+        }
+        else
+        {
+            bus_unfolding_menu->Append( id, name, wxEmptyString );
+
+            // Because Bind() takes ownership of the user data item, we
+            // make a new menu item here and set its label.  Why create a
+            // menu item instead of just a wxString or something? Because
+            // Bind() requires a pointer to wxObject rather than a void
+            // pointer.  Maybe at some point I'll think of a better way...
+            auto item_clone = new wxMenuItem();
+            item_clone->SetItemLabel( name );
+
+            Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus, this, id, id,
+                  item_clone );
+        }
+    }
+
+    return bus_unfolding_menu;
+}

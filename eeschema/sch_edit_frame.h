@@ -874,7 +874,7 @@ private:
     void NormalizeSchematicOnFirstLoad();
 
     // Hierarchical Sheet & PinSheet
-    void InstallHierarchyFrame( wxPoint& pos );
+    void InstallHierarchyFrame( wxCommandEvent& event );
 
 public:
     /**
