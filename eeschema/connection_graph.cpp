@@ -2077,32 +2077,37 @@ bool CONNECTION_GRAPH::ercCheckLabels( const CONNECTION_SUBGRAPH* aSubgraph,
         }
     }
 
-    bool is_global = text && ( text->Type() == SCH_GLOBAL_LABEL_T );
+    if( !text )
+        return true;
+
+    bool is_global = text->Type() == SCH_GLOBAL_LABEL_T;
 
     // Global label check can be disabled independently
     if( !aCheckGlobalLabels && is_global )
         return true;
 
-    if( text )
+    wxString name = text->GetShownText();
+
+    if( is_global)
     {
-        wxString name = text->GetShownText();
+        // This will be set to true if the global is connected to a pin above, but we
+        // want to reset this to false so that globals get flagged if they only have a
+        // single instance
+        has_other_connections = false;
 
-        if( is_global)
-        {
-            if( m_net_name_to_subgraphs_map.count( name )
-                    && m_net_name_to_subgraphs_map.at( name ).size() > 1 )
-                has_other_connections = true;
-        }
-        else
-        {
-            auto pair = std::make_pair( aSubgraph->m_sheet, name );
+        if( m_net_name_to_subgraphs_map.count( name )
+                && m_net_name_to_subgraphs_map.at( name ).size() > 1 )
+            has_other_connections = true;
+    }
+    else
+    {
+        auto pair = std::make_pair( aSubgraph->m_sheet, name );
 
-            if( m_local_label_cache.count( pair ) && m_local_label_cache.at( pair ).size() > 1 )
-                has_other_connections = true;
-        }
+        if( m_local_label_cache.count( pair ) && m_local_label_cache.at( pair ).size() > 1 )
+            has_other_connections = true;
     }
 
-    if( text && !has_other_connections )
+    if( !has_other_connections )
     {
         if( aCreateMarkers )
         {
