@@ -1016,8 +1016,7 @@ public:
 
     void ConvertPart( SCH_COMPONENT* aComponent );
 
-private:
-    void OnSelectUnit( wxCommandEvent& aEvent );
+    void SelectUnit( SCH_COMPONENT* aComponent, int aUnit );
 
     /* Undo - redo */
 public:

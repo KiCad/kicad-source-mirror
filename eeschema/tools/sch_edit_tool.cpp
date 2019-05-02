@@ -716,10 +716,11 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                     && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
                 {
                     SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+                    int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                     if( component )
                     {
-                        component->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
+                        m_frame->SelectUnit( component, unit );
                         m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
                     }
                 }

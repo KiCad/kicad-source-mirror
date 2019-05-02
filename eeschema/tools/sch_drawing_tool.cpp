@@ -354,9 +354,11 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
             {
+                int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
+
                 if( aComponent )
                 {
-                    aComponent->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
+                    m_frame->SelectUnit( aComponent, unit );
                     m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
                 }
             }

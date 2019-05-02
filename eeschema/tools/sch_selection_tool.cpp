@@ -323,13 +323,10 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
             {
                 SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( m_selection.Front() );
+                int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( component )
-                {
-                    m_frame->SaveCopyInUndoList( component, UR_CHANGED );
-                    component->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
-                    m_frame->RefreshItem( component );
-                }
+                    m_frame->SelectUnit( component, unit );
             }
         }
 
@@ -934,9 +931,6 @@ void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 void SCH_SELECTION_TOOL::unselect( SCH_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
-
-    if( m_frame && m_frame->GetScreen()->GetCurItem() == aItem )
-        m_frame->GetScreen()->SetCurItem( nullptr );
 }
 
 

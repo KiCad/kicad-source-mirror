@@ -204,47 +204,44 @@ SCH_BASE_FRAME::COMPONENT_SELECTION SCH_BASE_FRAME::SelectCompFromLibTree(
 }
 
 
-void SCH_EDIT_FRAME::OnSelectUnit( wxCommandEvent& aEvent )
+void SCH_EDIT_FRAME::SelectUnit( SCH_COMPONENT* aComponent, int aUnit )
 {
-    SCH_SCREEN*    screen = GetScreen();
-    SCH_ITEM*      item = screen->GetCurItem();
-    SCH_COMPONENT* component = (SCH_COMPONENT*) item;
-
     GetCanvas()->MoveCursorToCrossHair();
 
-    int unit = aEvent.GetId() + 1 - ID_POPUP_SCH_SELECT_UNIT1;
-
-    LIB_PART* part = GetLibPart( component->GetLibId() );
+    LIB_PART* part = GetLibPart( aComponent->GetLibId() );
 
     if( !part )
         return;
 
     int unitCount = part->GetUnitCount();
 
-    if( unitCount <= 1 || component->GetUnit() == unit )
+    if( unitCount <= 1 || aComponent->GetUnit() == aUnit )
         return;
 
-    if( unit > unitCount )
-        unit = unitCount;
+    if( aUnit > unitCount )
+        aUnit = unitCount;
 
-    STATUS_FLAGS flags = component->GetFlags();
+    STATUS_FLAGS savedFlags = aComponent->GetFlags();
 
-    if( !component->GetEditFlags() )    // No command in progress: save in undo list
-        SaveCopyInUndoList( component, UR_CHANGED );
+    if( !aComponent->GetEditFlags() )    // No command in progress: save in undo list
+        SaveCopyInUndoList( aComponent, UR_CHANGED );
 
     /* Update the unit number. */
-    component->SetUnitSelection( g_CurrentSheet, unit );
-    component->SetUnit( unit );
-    component->ClearFlags();
-    component->SetFlags( flags );   // Restore m_Flag modified by SetUnit()
+    aComponent->SetUnitSelection( g_CurrentSheet, aUnit );
+    aComponent->SetUnit( aUnit );
+    aComponent->ClearFlags();
+    aComponent->SetFlags( savedFlags ); // Restore m_Flag modified by SetUnit()
 
-    if( m_autoplaceFields )
-        component->AutoAutoplaceFields( GetScreen() );
+    if( !aComponent->GetEditFlags() )   // No command in progress: update schematic
+    {
+        if( m_autoplaceFields )
+            aComponent->AutoAutoplaceFields( GetScreen() );
 
-    TestDanglingEnds();
+        TestDanglingEnds();
 
-    RefreshItem( component );
-    OnModify();
+        RefreshItem( aComponent );
+        OnModify();
+    }
 }
 
 

@@ -158,10 +158,6 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     if( selected )
         m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, newtext );
 
-    // if the old item is the current schematic item, replace it by the new text:
-    if( screen->GetCurItem() == aText )
-        screen->SetCurItem( newtext );
-
     SetRepeatItem( nullptr );
 
     delete aText;

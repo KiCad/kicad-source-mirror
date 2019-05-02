@@ -414,24 +414,16 @@ EDA_HOTKEY* SCH_EDIT_FRAME::GetHotKeyDescription( int aCommand ) const
 
 
 /*
- * Hot keys. Some commands are relative to the item under the mouse cursor
- * Commands are case insensitive
+ * Hot keys.  Commands are case insensitive.
  */
 bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition, EDA_ITEM* aItem )
 {
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-    SCH_SCREEN* screen = GetScreen();
-
-    // itemInEdit == false means no item currently edited. We can ask for editing a new item
-    bool itemInEdit = screen->GetCurItem() && screen->GetCurItem()->GetEditFlags();
-
-    // notBusy == true means no item currently edited and no other command in progress
-    // We can change active tool and ask for editing a new item
-    bool notBusy = !itemInEdit;
+    wxCommandEvent      cmd( wxEVT_COMMAND_MENU_SELECTED );
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -466,23 +458,11 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case HK_END_CURR_LINEWIREBUS:
-        // this key terminates a new line/bus/wire in progress
-        if( aItem && aItem->IsNew() &&
-            aItem->Type() == SCH_LINE_T )
-        {
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
     case HK_UNDO:             // Hot keys that map to command IDs that cannot be called
     case HK_REDO:             // while busy performing another command.
     case HK_FIND_ITEM:
     case HK_FIND_REPLACE:
-    case HK_DELETE_NODE:
-    case HK_LEAVE_SHEET:
-        if( notBusy )
+        if( SCH_CONDITIONS::Idle( selection ) )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
             GetEventHandler()->ProcessEvent( cmd );
@@ -491,7 +471,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_FIND_NEXT_ITEM:
     case HK_FIND_NEXT_DRC_MARKER:
-        if( notBusy )
+        if( SCH_CONDITIONS::Idle( selection ) )
         {
             wxFindDialogEvent event( hotKey->m_IdMenuEvent, GetId() );
             event.SetEventObject( this );
@@ -501,29 +481,9 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         }
         break;
 
-    case HK_EDIT:
-        // Edit schematic item. Do not allow sheet editing when mowing because sheet editing
-        // can be complex.
-        if( itemInEdit && screen->GetCurItem()->Type() == SCH_SHEET_T )
-                break;
-
-        // Fall through
-    case HK_EDIT_COMPONENT_VALUE:           // Edit component value field.
-    case HK_EDIT_COMPONENT_REFERENCE:       // Edit component value reference.
-    case HK_EDIT_COMPONENT_FOOTPRINT:       // Edit component footprint field.
-    case HK_SHOW_COMPONENT_DATASHEET:       // Show component datasheet in browser.
-    case HK_EDIT_COMPONENT_WITH_LIBEDIT:    // Call Libedit and load the current component
-    case HK_AUTOPLACE_FIELDS:               // Autoplace all fields around component
-    case HK_UNFOLD_BUS:                     // Unfold a bus wire
     case HK_CANVAS_CAIRO:
     case HK_CANVAS_OPENGL:
         {
-           // force a new item search on hot keys at current position,
-            // if there is no currently edited item,
-            // to avoid using a previously selected item
-            if( ! itemInEdit )
-                screen->SetCurItem( NULL );
-
             EDA_HOTKEY_CLIENT_DATA data( aPosition );
             cmd.SetInt( hotKey->m_Idcommand );
             cmd.SetClientObject( &data );
