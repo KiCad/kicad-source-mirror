@@ -378,7 +378,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan,  SCH_CONDITIONS::SingleSymbol, 200 );
     // JEY TODO: add menu access for changing symbol unit
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet,    SCH_CONDITIONS::SingleSymbol, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toLabel,   toLabelCondition, 200 );
