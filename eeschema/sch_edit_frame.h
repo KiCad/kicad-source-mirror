@@ -252,13 +252,6 @@ public:
     void Process_Config( wxCommandEvent& event );
 
     /**
-     * Processes an "Unfold Bus" command from the right-click menu.
-     * Depending on what the user clicked, this can result in the creation
-     * of one or more new objects.
-     */
-    void OnUnfoldBus( wxCommandEvent& event );
-
-    /**
      * Builds the context menu for unfolding a bus
      */
     wxMenu* GetUnfoldBusMenu( SCH_LINE* aBus );
@@ -776,11 +769,6 @@ public:
     void GetSchematicConnections( std::vector< wxPoint >& aConnections );
 
 private:
-
-    /**
-     * Handles the keyboard hotkey for unfolding a bus
-     */
-    void OnUnfoldBusHotkey( wxCommandEvent& event );
 
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );

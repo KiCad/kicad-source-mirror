@@ -128,6 +128,23 @@ SELECTION_CONDITION SCH_CONDITIONS::SingleDeMorganSymbol = [] ( const SELECTION&
 };
 
 
+SELECTION_CONDITION SCH_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION& aSel )
+{
+    if( aSel.GetSize() == 1 )
+    {
+        SCH_COMPONENT* comp = dynamic_cast<SCH_COMPONENT*>( aSel.Front() );
+
+        if( comp )
+        {
+            auto partRef = comp->GetPartRef().lock();
+            return partRef && partRef->GetUnitCount() >= 2;
+        }
+    }
+
+    return false;
+};
+
+
 SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "eeschema.InteractiveSelection" ),
         m_frame( nullptr ),
@@ -148,7 +165,7 @@ SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 
 bool SCH_SELECTION_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
@@ -167,6 +184,7 @@ bool SCH_SELECTION_TOOL::Init()
     auto& menu = m_menu.GetMenu();
 
     // TODO(JE): add menu access to unfold bus on busSelectionCondition...
+
     menu.AddItem( SCH_ACTIONS::resizeSheet,      singleSheetCondition && SCH_CONDITIONS::Idle, 1 );
 
     menu.AddItem( SCH_ACTIONS::startWire,        SCH_CONDITIONS::Empty, 1 );
@@ -193,7 +211,7 @@ bool SCH_SELECTION_TOOL::Init()
 
 void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
+    m_frame = getEditFrame<SCH_EDIT_FRAME>();
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -294,6 +312,23 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     // No -> clear the selection list
                     clearSelection();
+                }
+            }
+        }
+
+        // symbol unit selection menu?  Adjust the unit if a symbol is selected
+        else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        {
+            if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
+            {
+                SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( m_selection.Front() );
+
+                if( component )
+                {
+                    m_frame->SaveCopyInUndoList( component, UR_CHANGED );
+                    component->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
+                    m_frame->RefreshItem( component );
                 }
             }
         }

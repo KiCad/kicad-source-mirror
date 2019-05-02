@@ -77,14 +77,10 @@ public:
     int StartWire( const TOOL_EVENT& aEvent );
     int StartBus( const TOOL_EVENT& aEvent );
     int StartLines( const TOOL_EVENT& aEvent );
-    int AddJunction( const TOOL_EVENT& aEvent );
-    int AddLabel( const TOOL_EVENT& aEvent );
 
     int DrawWire( const TOOL_EVENT& aEvent );
     int DrawBus( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
-
-    int UnfoldBus( const TOOL_EVENT& aEvent );
 
     // SELECTION_CONDITIONs:
     static bool IsDrawingLine( const SELECTION& aSelection );
@@ -96,6 +92,7 @@ private:
 
     int doDrawSegments( int aType, SCH_LINE* aSegment );
     SCH_LINE* startSegments( int aType, const wxPoint& aPos );
+    SCH_LINE* unfoldBus( const wxString& aNet );
     void finishSegments();
 
     ///> Sets up handlers for various events.

@@ -322,6 +322,7 @@ void CONTEXT_MENU::updateHotKeys()
 void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT evt;
+    wxString menuText;
 
     wxEventType type = aEvent.GetEventType();
 
@@ -381,7 +382,11 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 
             // Handling non-action menu entries (e.g. items in clarification list)
             if( !evt )
-                evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId() );
+            {
+                menuText = GetLabelText( aEvent.GetId() );
+                evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId(),
+                                  AS_GLOBAL, &menuText );
+            }
         }
     }
 

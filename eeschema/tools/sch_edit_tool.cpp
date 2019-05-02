@@ -116,7 +116,7 @@ TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFie
 TOOL_ACTION SCH_ACTIONS::convertDeMorgan( "eeschema.InteractiveEdit.convertDeMorgan",
         AS_GLOBAL, 0,
         _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),
-        nullptr );
+        morgan2_xpm );
 
 TOOL_ACTION SCH_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
         AS_GLOBAL, 0,
@@ -172,6 +172,65 @@ TOOL_ACTION SCH_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         AS_GLOBAL, 0,
         _( "Break Bus" ), _( "Divide a bus into segments which can be dragged independently" ),
         break_line_xpm );
+
+
+class SYMBOL_UNIT_MENU : public CONTEXT_MENU
+{
+public:
+    SYMBOL_UNIT_MENU()
+    {
+        SetIcon( component_select_unit_xpm );
+        SetTitle( _( "Symbol Unit" ) );
+    }
+
+
+protected:
+    CONTEXT_MENU* create() const override
+    {
+        return new SYMBOL_UNIT_MENU();
+    }
+
+private:
+    void update() override
+    {
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        SELECTION&          selection = selTool->GetSelection();
+        SCH_COMPONENT*      component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+
+        if( !component )
+        {
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no symbol selected" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            return;
+        }
+
+        int  unit = component->GetUnit();
+        auto partRef = component->GetPartRef().lock();
+
+        if( !partRef || partRef->GetUnitCount() < 2 )
+        {
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "symbol is not multi-unit" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            return;
+        }
+
+        for( int ii = 0; ii < partRef->GetUnitCount(); ii++ )
+        {
+            wxString num_unit;
+            num_unit.Printf( _( "Unit %s" ), LIB_PART::SubReference( ii + 1, false ) );
+
+            wxMenuItem * item = Append( ID_POPUP_SCH_SELECT_UNIT1 + ii, num_unit, wxEmptyString,
+                                        wxITEM_CHECK );
+            if( unit == ii + 1 )
+                item->Check(true);
+
+            // The ID max for these submenus is ID_POPUP_SCH_SELECT_UNIT_CMP_MAX
+            // See eeschema_id to modify this value.
+            if( ii >= (ID_POPUP_SCH_SELECT_UNIT_CMP_MAX - ID_POPUP_SCH_SELECT_UNIT1) )
+                break;      // We have used all IDs for these submenus
+        }
+    }
+};
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
@@ -295,12 +354,6 @@ bool SCH_EDIT_TOOL::Init()
     auto singleSheetCondition = SCH_CONDITIONS::Count( 1 )
                              && SCH_CONDITIONS::OnlyType( SCH_SHEET_T );
 
-    auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT
-              || m_frame->GetToolId() == ID_BUS_BUTT
-              || m_frame->GetToolId() == ID_JUNCTION_BUTT );
-    };
-
     //
     // Build the edit tool menu (shown when moving or dragging)
     //
@@ -321,7 +374,11 @@ bool SCH_EDIT_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition );
     ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol );
-    // JEY TODO: add menu access for changing symbol unit
+
+    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
+    symUnitMenu->SetTool( this );
+    m_menu.AddSubMenu( symUnitMenu );
+    ctxMenu.AddMenu( symUnitMenu.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
     ctxMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
     ctxMenu.AddItem( SCH_ACTIONS::cut,  SCH_CONDITIONS::IdleSelection );
@@ -346,7 +403,12 @@ bool SCH_EDIT_TOOL::Init()
     drawingMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
-    // JEY TODO: add menu access for changing symbol unit
+
+    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
+    symUnitMenu2->SetTool( drawingTool );
+    drawingTool->GetToolMenu().AddSubMenu( symUnitMenu2 );
+    drawingMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+
     drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toLabel,  toLabelCondition, 200 );
@@ -374,7 +436,12 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::editFootprint,    SCH_CONDITIONS::SingleSymbol, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan,  SCH_CONDITIONS::SingleSymbol, 200 );
-    // JEY TODO: add menu access for changing symbol unit
+
+    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
+    symUnitMenu3->SetTool( m_selectionTool );
+    m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
+    selToolMenu.AddMenu( symUnitMenu3.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toLabel,          toLabelCondition, 200 );
@@ -642,6 +709,20 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 unselect = false;
                 chain_commands = true;
                 break;
+            }
+            else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
+            {
+                if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                    && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
+                {
+                    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+
+                    if( component )
+                    {
+                        component->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
+                        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+                    }
+                }
             }
         }
 

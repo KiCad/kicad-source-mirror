@@ -50,6 +50,7 @@ public:
 
     static SELECTION_CONDITION SingleSymbol;
     static SELECTION_CONDITION SingleDeMorganSymbol;
+    static SELECTION_CONDITION SingleMultiUnitSymbol;
 };
 
 
@@ -225,7 +226,7 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_BASE_FRAME* m_frame;    // Pointer to the parent frame
+    SCH_EDIT_FRAME* m_frame;    // Pointer to the parent frame
     SELECTION m_selection;      // Current state of selection
 
     bool m_additive;            // Items should be added to selection (instead of replacing)

@@ -21,6 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <connection_graph.h>
 #include <sch_line_drawing_tool.h>
 #include <sch_selection_tool.h>
 #include <sch_actions.h>
@@ -40,7 +41,7 @@
 #include <sch_bus_entry.h>
 #include <sch_text.h>
 #include <sch_sheet.h>
-
+#include <advanced_config.h>
 
 TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.InteractiveLineDrawing.startWire",
         AS_GLOBAL, 0,
@@ -92,6 +93,83 @@ TOOL_ACTION SCH_ACTIONS::finishLine( "eeschema.InteractiveLineDrawing.finishLine
         checked_ok_xpm, AF_NONE );
 
 
+class BUS_UNFOLD_MENU : public CONTEXT_MENU
+{
+public:
+    BUS_UNFOLD_MENU()
+    {
+        SetIcon( add_line2bus_xpm );
+        SetTitle( _( "Unfold Bus" ) );
+    }
+
+
+protected:
+    CONTEXT_MENU* create() const override
+    {
+        return new BUS_UNFOLD_MENU();
+    }
+
+private:
+    void update() override
+    {
+        SCH_EDIT_FRAME*     frame = (SCH_EDIT_FRAME*) getToolManager()->GetEditFrame();
+        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        KICAD_T             busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
+        SELECTION&          selection = selTool->RequestSelection( busType );
+        SCH_LINE*           bus = (SCH_LINE*) selection.Front();
+
+        // TODO(JE) remove once real-time is enabled
+        if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
+        {
+            frame->RecalculateConnections();
+
+            // Have to pick up the pointer again because it may have been changed by SchematicCleanUp
+            selection = selTool->RequestSelection( busType );
+            bus = (SCH_LINE*) selection.Front();
+        }
+        if( !bus )
+        {
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "no bus selected" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            return;
+        }
+
+        SCH_CONNECTION* connection = bus->Connection( *g_CurrentSheet );
+
+        if( !connection ||  !connection->IsBus() || connection->Members().empty() )
+        {
+            Append( ID_POPUP_SCH_UNFOLD_BUS, _( "bus has no connections" ), wxEmptyString );
+            Enable( ID_POPUP_SCH_UNFOLD_BUS, false );
+            return;
+        }
+
+        int idx = 0;
+
+        for( const auto& member : connection->Members() )
+        {
+            int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+            wxString name = member->Name( true );
+
+            if( member->Type() == CONNECTION_BUS )
+            {
+                wxMenu* submenu = new CONTEXT_MENU;
+                AppendSubMenu( submenu, name );
+
+                for( const auto& sub_member : member->Members() )
+                {
+                    id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
+                    submenu->Append( id, sub_member->Name( true ), wxEmptyString );
+                }
+            }
+            else
+            {
+                Append( id, name, wxEmptyString );
+            }
+        }
+    }
+};
+
+
 
 SCH_LINE_DRAWING_TOOL::SCH_LINE_DRAWING_TOOL() :
     TOOL_INTERACTIVE( "eeschema.InteractiveLineDrawing" ),
@@ -141,7 +219,10 @@ bool SCH_LINE_DRAWING_TOOL::Init()
     ctxMenu.AddItem( SCH_ACTIONS::finishBus,  IsDrawingBus, 1 );
     ctxMenu.AddItem( SCH_ACTIONS::finishLine, IsDrawingLine, 1 );
 
-    // TODO(JE): add menu access to unfold bus...
+    std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
+    busUnfoldMenu->SetTool( this );
+    m_menu.AddSubMenu( busUnfoldMenu );
+    ctxMenu.AddMenu( busUnfoldMenu.get(), false, SCH_CONDITIONS::Idle, 1 );
 
     ctxMenu.AddSeparator( wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( SCH_ACTIONS::addJunction,      wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
@@ -255,44 +336,28 @@ int SCH_LINE_DRAWING_TOOL::DrawBus( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_LINE_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
+SCH_LINE* SCH_LINE_DRAWING_TOOL::unfoldBus( const wxString& aNet )
 {
-    wxString net = *aEvent.Parameter<wxString*>();
     wxPoint  pos = m_frame->GetCrossHairPosition();
-
-    /**
-     * Unfolding a bus consists of the following user inputs:
-     * 1) User selects a bus to unfold (see AddMenusForBus())
-     *    We land in this event handler.
-     *
-     * 2) User clicks to set the net label location (handled by BeginSegment())
-     *    Before this first click, the posture of the bus entry  follows the
-     *    mouse cursor in X and Y (handled by DrawSegment())
-     *
-     * 3) User is now in normal wiring mode and can exit in any normal way.
-     */
-
-    wxASSERT( !m_busUnfold.in_progress );
 
     m_busUnfold.entry = new SCH_BUS_WIRE_ENTRY( pos, '\\' );
     m_busUnfold.entry->SetParent( m_frame->GetScreen() );
     m_frame->AddToScreen( m_busUnfold.entry );
 
-    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), net );
+    m_busUnfold.label = new SCH_LABEL( m_busUnfold.entry->m_End(), aNet );
     m_busUnfold.label->SetTextSize( wxSize( GetDefaultTextSize(), GetDefaultTextSize() ) );
     m_busUnfold.label->SetLabelSpinStyle( 0 );
     m_busUnfold.label->SetParent( m_frame->GetScreen() );
 
     m_busUnfold.in_progress = true;
     m_busUnfold.origin = pos;
-    m_busUnfold.net_name = net;
+    m_busUnfold.net_name = aNet;
 
     m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
 
     m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
 
-    SCH_LINE* segment = startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
-    return doDrawSegments( LAYER_WIRE, segment );
+    return startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
 }
 
 
@@ -426,6 +491,9 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     {
         wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
+        //------------------------------------------------------------------------
+        // Handle cancel:
+        //
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             if( aSegment || m_busUnfold.in_progress )
@@ -465,6 +533,9 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 
             break;
         }
+        //------------------------------------------------------------------------
+        // Handle finish:
+        //
         else if( evt->IsAction( &SCH_ACTIONS::finishLineWireOrBus )
                      || evt->IsAction( &SCH_ACTIONS::finishWire )
                      || evt->IsAction( &SCH_ACTIONS::finishBus )
@@ -479,14 +550,9 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             if( m_frame->GetToolId() == ID_NO_TOOL_SELECTED )
                 break;
         }
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            // Warp after context menu only if dragging...
-            if( !aSegment )
-                m_toolMgr->VetoContextMenuMouseWarp();
-
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
-        }
+        //------------------------------------------------------------------------
+        // Handle click:
+        //
         else if( evt->IsClick( BUT_LEFT ) || ( aSegment && evt->IsDblClick( BUT_LEFT ) ) )
         {
             // First click when unfolding places the label and wire-to-bus entry
@@ -539,6 +605,9 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                     break;
             }
         }
+        //------------------------------------------------------------------------
+        // Handle motion:
+        //
         else if( evt->IsMotion() )
         {
             m_view->ClearPreview();
@@ -589,6 +658,28 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             {
                 if( !seg->IsNull() )  // Add to preview if segment length != 0
                     m_view->AddToPreview( seg->Clone() );
+            }
+        }
+        //------------------------------------------------------------------------
+        // Handle context menu:
+        //
+        else if( evt->IsClick( BUT_RIGHT ) )
+        {
+            // Warp after context menu only if dragging...
+            if( !aSegment )
+                m_toolMgr->VetoContextMenuMouseWarp();
+
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+        }
+        else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        {
+            if( evt->GetCommandId().get() >= ID_POPUP_SCH_UNFOLD_BUS
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_UNFOLD_BUS_END )
+            {
+                wxASSERT_MSG( !aSegment, "Bus unfold event recieved when already drawing!" );
+
+                wxString net = *evt->Parameter<wxString*>();
+                aSegment = unfoldBus( net );
             }
         }
 
@@ -797,7 +888,6 @@ void SCH_LINE_DRAWING_TOOL::setTransitions()
 {
     Go( &SCH_LINE_DRAWING_TOOL::DrawWire,              SCH_ACTIONS::drawWire.MakeEvent() );
     Go( &SCH_LINE_DRAWING_TOOL::DrawBus,               SCH_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_LINE_DRAWING_TOOL::UnfoldBus,             SCH_ACTIONS::unfoldBus.MakeEvent() );
     Go( &SCH_LINE_DRAWING_TOOL::DrawLines,             SCH_ACTIONS::drawLines.MakeEvent() );
 
     Go( &SCH_LINE_DRAWING_TOOL::StartWire,             SCH_ACTIONS::startWire.MakeEvent() );

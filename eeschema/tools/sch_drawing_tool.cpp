@@ -349,6 +349,18 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
+        else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
+        {
+            if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
+                && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
+            {
+                if( aComponent )
+                {
+                    aComponent->SetUnit( evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP );
+                    m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+                }
+            }
+        }
         else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             aComponent->SetPosition( (wxPoint)cursorPos );
