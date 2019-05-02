@@ -76,3 +76,12 @@ demos/**/fp-info-cache
 *.gch
 *.orig
 *.patch
+
+# These CMake files are wanted
+!CMakeModules/*.cmake
+
+# Eclipse IDE
+.project
+.cproject
+.pydevproject
+__pycache__
