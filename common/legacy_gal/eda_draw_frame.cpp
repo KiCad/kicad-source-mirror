@@ -624,6 +624,24 @@ wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 }
 
 
+void EDA_DRAW_FRAME::SetNextGrid()
+{
+    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+}
+
+
+void EDA_DRAW_FRAME::SetPrevGrid()
+{
+    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+}
+
+
+void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
+{
+    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+}
+
+
 int EDA_DRAW_FRAME::BlockCommand( EDA_KEY key )
 {
     return 0;
