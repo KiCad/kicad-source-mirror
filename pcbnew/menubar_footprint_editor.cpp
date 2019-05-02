@@ -97,20 +97,37 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     fileMenu->AppendSeparator();
 
-    AddMenuItem( fileMenu, ID_MODEDIT_IMPORT_PART,
-                 _( "Import Footprint from &KiCad File..." ),
-                 _( "Import a footprint from an existing footprint file" ),
+    wxMenu* submenuImport = new wxMenu();
+
+    AddMenuItem( submenuImport, ID_MODEDIT_IMPORT_PART,
+                 _( "&Footprint..." ),
+                 _( "Import a footprint from file" ),
                  KiBitmap( import_module_xpm ) );
 
-    AddMenuItem( fileMenu, ID_GEN_IMPORT_GRAPHICS_FILE,
-                 _( "Import Outlines from &DXF or SVG File..." ),
-                 _( "Import 2D Drawing DXF or SVG file to Footprint Editor on Drawings layer" ),
+    AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
+                 _( "&Graphics..." ),
+                 _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
                  KiBitmap( import_xpm ) );
 
-    AddMenuItem( fileMenu, ID_MODEDIT_EXPORT_PART,
-                 _( "&Export Footprint..." ),
+    AddMenuItem( fileMenu, submenuImport,
+                 ID_GEN_IMPORT_FILE, _( "&Import" ),
+                 _( "Import files" ), KiBitmap( import_xpm ) );
+
+    wxMenu* submenuExport = new wxMenu();
+
+    AddMenuItem( submenuExport, ID_MODEDIT_EXPORT_PART,
+                 _( "&Footprint..." ),
                  _( "Export current footprint to a file" ),
                  KiBitmap( export_module_xpm ) );
+
+    AddMenuItem( submenuExport, ID_MODEDIT_SAVE_PNG,
+                 _( "View as &PNG..." ),
+                 _( "Create a PNG file from the current view" ),
+                 KiBitmap( plot_xpm ) );
+
+    AddMenuItem( fileMenu, submenuExport,
+                 ID_GEN_EXPORT_FILE, _( "&Export" ),
+                 _( "Export files" ), KiBitmap( export_xpm ) );
 
     fileMenu->AppendSeparator();
 
@@ -119,14 +136,6 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( fileMenu, wxID_PRINT, text,
                  _( "Print current footprint" ),
                  KiBitmap( print_button_xpm ) );
-
-    fileMenu->AppendSeparator();
-
-    AddMenuItem( fileMenu,
-                 ID_MODEDIT_SAVE_PNG,
-                 _( "Export View as PN&G..." ),
-                 _( "Create a PNG file from the current view" ),
-                 KiBitmap( plot_xpm ) );
 
     fileMenu->AppendSeparator();
 

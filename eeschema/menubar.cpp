@@ -420,7 +420,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
                  _( "Export drawings to clipboard" ),
                  KiBitmap( copy_xpm ) );
 
-    AddMenuItem( aParentMenu, ID_GET_NETLIST, _( "Export &Netlist..." ),
+    AddMenuItem( submenuExport, ID_GET_NETLIST, _( "&Netlist..." ),
                  _( "Export netlist file" ),
                  KiBitmap( netlist_xpm ) );
 

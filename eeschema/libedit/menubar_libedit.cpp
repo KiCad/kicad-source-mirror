@@ -106,23 +106,30 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Import a symbol to the current library" ),
                  KiBitmap( import_part_xpm ) );
 
-    AddMenuItem( fileMenu,
+    // Export submenu
+    wxMenu* submenuExport = new wxMenu();
+
+    AddMenuItem( submenuExport,
                  ID_LIBEDIT_EXPORT_PART,
-                 _( "&Export Symbol..." ),
+                 _( "S&ymbol..." ),
                  _( "Create a library file containing only the current symbol" ),
                  KiBitmap( export_part_xpm ) );
 
-    AddMenuItem( fileMenu,
+    AddMenuItem( submenuExport,
                  ID_LIBEDIT_GEN_PNG_FILE,
-                 _( "Export View as PNG..." ),
+                 _( "View as &PNG..." ),
                  _( "Create a PNG file from the current view" ),
                  KiBitmap( plot_xpm ) );
 
-    AddMenuItem( fileMenu,
+    AddMenuItem( submenuExport,
                  ID_LIBEDIT_GEN_SVG_FILE,
-                 _( "Export Symbol as SVG..." ),
+                 _( "Symbol as S&VG..." ),
                  _( "Create a SVG file from the current symbol" ),
                  KiBitmap( plot_svg_xpm ) );
+
+    AddMenuItem( fileMenu, submenuExport, ID_GEN_EXPORT_FILE, _( "E&xport" ),
+                 _( "Export files" ),
+                 KiBitmap( export_xpm ) );
 
     fileMenu->AppendSeparator();
 
