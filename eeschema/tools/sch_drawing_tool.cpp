@@ -969,6 +969,7 @@ int SCH_DRAWING_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
 
     m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
+
     SCH_LINE* segment = startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
     return doDrawSegments( LAYER_WIRE, segment );
 }
