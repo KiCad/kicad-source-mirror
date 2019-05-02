@@ -784,56 +784,10 @@ void AddMenusForBus( wxMenu* PopMenu, SCH_LINE* Bus, SCH_EDIT_FRAME* frame )
     }
 
     // Bus unfolding menu (only available if bus is properly defined)
-    auto connection = Bus->Connection( *g_CurrentSheet );
+    wxMenu* bus_unfold_menu = frame->GetUnfoldBusMenu( Bus );
 
-    if( connection && connection->IsBus() && connection->Members().size() > 0 )
-    {
-        int idx = 0;
-        wxMenu* bus_unfolding_menu = new wxMenu;
-
-        PopMenu->AppendSubMenu( bus_unfolding_menu, _( "Unfold Bus" ) );
-
-        for( const auto& member : connection->Members() )
-        {
-            int id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-            auto name = member->Name( true );
-
-            if( member->Type() == CONNECTION_BUS )
-            {
-                wxMenu* submenu = new wxMenu;
-                bus_unfolding_menu->AppendSubMenu( submenu, _( name ) );
-
-                for( const auto& sub_member : member->Members() )
-                {
-                    id = ID_POPUP_SCH_UNFOLD_BUS + ( idx++ );
-
-                    submenu->Append( id, sub_member->Name( true ), wxEmptyString );
-
-                    // See comment in else clause below
-                    auto sub_item_clone = new wxMenuItem();
-                    sub_item_clone->SetItemLabel( sub_member->Name( true ) );
-
-                    frame->Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus,
-                                 frame, id, id, sub_item_clone );
-                }
-            }
-            else
-            {
-                bus_unfolding_menu->Append( id, name, wxEmptyString );
-
-                // Because Bind() takes ownership of the user data item, we
-                // make a new menu item here and set its label.  Why create a
-                // menu item instead of just a wxString or something? Because
-                // Bind() requires a pointer to wxObject rather than a void
-                // pointer.  Maybe at some point I'll think of a better way...
-                auto item_clone = new wxMenuItem();
-                item_clone->SetItemLabel( name );
-
-                frame->Bind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnUnfoldBus,
-                             frame, id, id, item_clone );
-            }
-        }
-    }
+    if( bus_unfold_menu )
+        PopMenu->AppendSubMenu( bus_unfold_menu, _( "Unfold Bus" ) );
 
     PopMenu->AppendSeparator();
     msg = AddHotkeyName( _( "Add Junction" ), g_Schematic_Hotkeys_Descr, HK_ADD_JUNCTION );

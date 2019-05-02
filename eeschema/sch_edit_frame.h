@@ -260,6 +260,11 @@ public:
      */
     void OnUnfoldBus( wxCommandEvent& event );
 
+    /**
+     * Builds the context menu for unfolding a bus
+     */
+    wxMenu* GetUnfoldBusMenu( SCH_LINE* aBus );
+
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
 
     /**
