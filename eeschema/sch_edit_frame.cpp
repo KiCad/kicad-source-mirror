@@ -1203,29 +1203,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
     if( aItem->IsNew() )
     {
-        // When a new sheet is added to the hierarchy, a clear annotation can be needed
-        // for all new sheet paths added by the new sheet (if this sheet is loaded from
-        // and existing sheet or a existing file, it can also contain subsheets)
-        bool doClearAnnotation = false;
-        SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
-
-        if( aItem->Type() == SCH_SHEET_T )
-        {
-            if( !EditSheet( (SCH_SHEET*)aItem, g_CurrentSheet, &doClearAnnotation ) )
-            {
-                delete aItem;
-                return;
-            }
-
-            SetSheetNumberAndCount();
-
-            if( !screen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
-                AddToScreen( aItem );
-
-            SetRepeatItem( aItem );
-            SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
-        }
-        else if( aItem->Type() == SCH_SHEET_PIN_T )
+        if( aItem->Type() == SCH_SHEET_PIN_T )
         {
             // Sheet pins are owned by their parent sheet.
             SaveCopyInUndoList( undoItem, UR_CHANGED, aUndoAppend );     // save the parent sheet
@@ -1245,14 +1223,6 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
 
             SetRepeatItem( aItem );
             SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
-        }
-
-        if( doClearAnnotation )
-        {
-            // Clear annotation of new sheet paths: the new sheet and its sub-sheets
-            // If needed the missing alternate references of components will be created
-            SCH_SCREENS screensList( g_RootSheet );
-            screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
         }
 
         // Update connectivity info for new item

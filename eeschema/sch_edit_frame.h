@@ -818,11 +818,6 @@ private:
     void OnEditComponentSymbolsId( wxCommandEvent& aEvent );
     void OnPreferencesOptions( wxCommandEvent& event );
 
-    /**
-     * Command event handler for duplicating the item at the current location.
-     */
-    void OnDuplicateItem( wxCommandEvent& event );
-
     /* User interface update event handlers. */
     void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateHiddenPins( wxUpdateUIEvent& event );
@@ -923,6 +918,8 @@ public:
      * of a already existing sheet.
      */
     bool EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy, bool* aClearAnnotationNewItems );
+
+    void InitSheet( SCH_SHEET* aSheet, const wxString& aFilename );
 
     wxPoint GetLastSheetPinPosition() const { return m_lastSheetPinPosition; }
 

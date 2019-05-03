@@ -183,11 +183,13 @@ SCH_ITEM* DuplicateItem( SCH_ITEM* aItem, bool doClone )
 
     if( newItem->Type() == SCH_COMPONENT_T )
     {
-        for( SCH_PIN& pin : static_cast<SCH_COMPONENT*>( newItem )->GetPins() )
+        SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
+
+        for( SCH_PIN& pin : component->GetPins() )
             pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
         std::vector<SCH_FIELD*> fields;
-        static_cast<SCH_COMPONENT*>( newItem )->GetFields( fields, false );
+        component->GetFields( fields, false );
 
         for( SCH_FIELD* field : fields )
             field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
@@ -195,7 +197,9 @@ SCH_ITEM* DuplicateItem( SCH_ITEM* aItem, bool doClone )
 
     if( newItem->Type() == SCH_SHEET_T )
     {
-        for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( newItem )->GetPins() )
+        SCH_SHEET* sheet = (SCH_SHEET*) newItem;
+
+        for( SCH_SHEET_PIN& pin : sheet->GetPins() )
             pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
     }
 

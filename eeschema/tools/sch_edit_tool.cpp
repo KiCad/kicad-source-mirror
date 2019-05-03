@@ -682,6 +682,8 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
             if( m_moveInProgress )
                 restore_state = true;
 
@@ -704,6 +706,13 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
             }
             else if( evt->IsAction( &SCH_ACTIONS::duplicate ) )
             {
+                if( selection.Front()->IsNew() )
+                {
+                    // This doesn't really make sense; we'll just end up dragging a stack of
+                    // objects so Duplicate() is going to ignore this and we'll just carry on.
+                    continue;
+                }
+
                 // Move original back and exit.  The duplicate will run in its own loop.
                 restore_state = true;
                 unselect = false;
@@ -1204,19 +1213,22 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
+    // This doesn't really make sense; we'll just end up dragging a stack of objects...
+    if( selection.Front()->IsNew() )
+        return 0;
+
     std::vector<SCH_ITEM*> newItems;
 
     // Keep track of existing sheet paths. Duplicating a selection can modify this list
-    bool hasSheetCopied = false;
+    bool copiedSheets = false;
     SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
 
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
         SCH_ITEM* newItem = DuplicateItem( oldItem );
-        newItems.push_back( newItem );
-
         newItem->SetFlags( IS_NEW );
+        newItems.push_back( newItem );
         saveCopyInUndoList( newItem, UR_NEW, ii > 0 );
 
         switch( newItem->Type() )
@@ -1247,7 +1259,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
             sheet->SetParent( m_frame->GetScreen() );
             m_frame->AddToScreen( sheet );
 
-            hasSheetCopied = true;
+            copiedSheets = true;
             break;
         }
 
@@ -1268,12 +1280,13 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         }
     }
 
-    if( hasSheetCopied )
+    if( copiedSheets )
     {
         // We clear annotation of new sheet paths.
         // Annotation of new components added in current sheet is already cleared.
         SCH_SCREENS screensList( g_RootSheet );
         screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
+        m_frame->SetSheetNumberAndCount();
     }
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );

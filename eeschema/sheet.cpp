@@ -37,6 +37,15 @@
 #include <dialogs/dialog_sch_edit_sheet_pin.h>
 
 
+void SCH_EDIT_FRAME::InitSheet( SCH_SHEET* aSheet, const wxString& aFilename )
+{
+    aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
+    aSheet->GetScreen()->SetModify();
+    aSheet->GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
+    aSheet->GetScreen()->SetFileName( aFilename );
+}
+
+
 bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
                                 bool* aClearAnnotationNewItems )
 {
@@ -108,10 +117,7 @@ bool SCH_EDIT_FRAME::EditSheet( SCH_SHEET* aSheet, SCH_SHEET_PATH* aHierarchy,
         }
         else                                                   // New file.
         {
-            aSheet->SetScreen( new SCH_SCREEN( &Kiway() ) );
-            aSheet->GetScreen()->SetModify();
-            aSheet->GetScreen()->SetMaxUndoItems( m_UndoRedoCountMax );
-            aSheet->GetScreen()->SetFileName( newFilename );
+            InitSheet( aSheet, newFilename );
         }
     }
     else                                                       // Existing sheet.

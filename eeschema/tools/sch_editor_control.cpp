@@ -580,7 +580,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Moreover new sheets create new sheetpaths, and component alternate references must
     // be created and cleared
     //
-    bool           hasSheetPasted = false;
+    bool           sheetsPasted = false;
     SCH_SHEET_LIST hierarchy( g_RootSheet );
     SCH_SHEET_LIST initialHierarchy( g_RootSheet );
 
@@ -634,7 +634,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
                 sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)uid ) );
                 sheet->SetTimeStamp( uid );
-                hasSheetPasted = true;
+                sheetsPasted = true;
             }
         }
     }
@@ -653,16 +653,22 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
             component->Resolve( *symLibTable, partLib );
         }
+        else if( item->Type() == SCH_SHEET_T )
+        {
+            SCH_SHEET* sheet = (SCH_SHEET*) item;
+            m_frame->InitSheet( sheet, sheet->GetFileName() );
+        }
 
         item->SetFlags( IS_NEW | IS_MOVED );
         m_frame->AddItemToScreenAndUndoList( item, i > 0 );
     }
 
-    if( hasSheetPasted )
+    if( sheetsPasted )
     {
         // We clear annotation of new sheet paths.
         SCH_SCREENS screensList( g_RootSheet );
         screensList.ClearAnnotationOfNewSheetPaths( initialHierarchy );
+        m_frame->SetSheetNumberAndCount();
     }
 
     // Now clear the previous selection, select the pasted items, and fire up the "move"
