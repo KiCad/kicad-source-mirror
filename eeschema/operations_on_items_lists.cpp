@@ -128,23 +128,6 @@ void SCH_EDIT_FRAME::CheckConnections( SELECTION& aSelection, bool aUndoAppend )
 }
 
 
-void SCH_EDIT_FRAME::DeleteItemsInList( PICKED_ITEMS_LIST& aItemsList, bool aAppend )
-{
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
-    {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-
-        if( item->GetEditFlags() & STRUCT_DELETED )
-            continue;
-
-        DeleteItem( item, aAppend );
-        aAppend = true;
-    }
-
-    GetScreen()->ClearDrawingState();
-}
-
-
 void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 {
     wxCHECK_RET( aItem != NULL, wxT( "Cannot delete invalid item." ) );
@@ -187,105 +170,34 @@ void SCH_EDIT_FRAME::DeleteItem( SCH_ITEM* aItem, bool aAppend )
 }
 
 
-void SCH_EDIT_FRAME::DuplicateItemsInList( SCH_SCREEN* screen, PICKED_ITEMS_LIST& aItemsList,
-                                           const wxPoint& aMoveVector )
+SCH_ITEM* DuplicateItem( SCH_ITEM* aItem, bool doClone )
 {
-    SCH_ITEM* olditem;
-    SCH_ITEM* newitem;
+    wxCHECK_MSG( aItem != NULL, NULL, "Cannot duplicate NULL schematic item!  Bad programmer." );
 
-    if( aItemsList.GetCount() == 0 )
-        return;
+    SCH_ITEM* newItem = (SCH_ITEM*) aItem->Clone();
 
-    // Keep track of existing sheet paths. Duplicate block can modify this list
-    bool hasSheetCopied = false;
-    SCH_SHEET_LIST initial_sheetpathList( g_RootSheet );
+    if( doClone )
+        newItem->SetTimeStamp( aItem->GetTimeStamp() );
 
+    newItem->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
-    for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
+    if( newItem->Type() == SCH_COMPONENT_T )
     {
-        olditem = static_cast<SCH_ITEM*>( aItemsList.GetPickedItem( ii ) );
-        newitem = DuplicateStruct( olditem );
-        newitem->Move( aMoveVector );
-
-        aItemsList.SetPickedItem( newitem, ii );
-        aItemsList.SetPickedItemStatus( UR_NEW, ii );
-
-        switch( newitem->Type() )
-        {
-        case SCH_JUNCTION_T:
-        case SCH_LINE_T:
-        case SCH_BUS_BUS_ENTRY_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_TEXT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_SHEET_PIN_T:
-        case SCH_MARKER_T:
-        case SCH_NO_CONNECT_T:
-        default:
-            break;
-
-        case SCH_SHEET_T:
-        {
-            SCH_SHEET* sheet = (SCH_SHEET*) newitem;
-            // Duplicate sheet names and sheet time stamps are not valid.  Use a time stamp
-            // based sheet name and update the time stamp for each sheet in the block.
-            timestamp_t timeStamp = GetNewTimeStamp();
-
-                sheet->SetName( wxString::Format( wxT( "sheet%8.8lX" ), (unsigned long)timeStamp ) );
-                sheet->SetTimeStamp( timeStamp );
-                hasSheetCopied = true;
-                break;
-            }
-
-        case SCH_COMPONENT_T:
-            ( (SCH_COMPONENT*) newitem )->SetTimeStamp( GetNewTimeStamp() );
-            ( (SCH_COMPONENT*) newitem )->ClearAnnotation( NULL );
-            break;
-        }
-
-        SetSchItemParent( newitem, screen );
-        AddToScreen( newitem );
-    }
-
-    if( hasSheetCopied )
-    {
-        // We clear annotation of new sheet paths.
-        // Annotation of new components added in current sheet is already cleared.
-        SCH_SCREENS screensList( g_RootSheet );
-        screensList.ClearAnnotationOfNewSheetPaths( initial_sheetpathList );
-    }
-}
-
-
-SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone )
-{
-    wxCHECK_MSG( aDrawStruct != NULL, NULL,
-                 wxT( "Cannot duplicate NULL schematic item!  Bad programmer." ) );
-
-    SCH_ITEM* NewDrawStruct = (SCH_ITEM*) aDrawStruct->Clone();
-
-    if( aClone )
-        NewDrawStruct->SetTimeStamp( aDrawStruct->GetTimeStamp() );
-
-    NewDrawStruct->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
-
-    if( NewDrawStruct->Type() == SCH_COMPONENT_T )
-    {
-        SCH_PINS& pins = static_cast<SCH_COMPONENT*>( NewDrawStruct )->GetPins();
-
-        for( SCH_PIN& pin : pins )
+        for( SCH_PIN& pin : static_cast<SCH_COMPONENT*>( newItem )->GetPins() )
             pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
 
         std::vector<SCH_FIELD*> fields;
-        static_cast<SCH_COMPONENT*>( NewDrawStruct )->GetFields( fields, false );
+        static_cast<SCH_COMPONENT*>( newItem )->GetFields( fields, false );
 
         for( SCH_FIELD* field : fields )
             field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
     }
 
-    // JEY TODO: sheets and sheet pins?
+    if( newItem->Type() == SCH_SHEET_T )
+    {
+        for( SCH_SHEET_PIN& pin : static_cast<SCH_SHEET*>( newItem )->GetPins() )
+            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    }
 
-    return NewDrawStruct;
+    return newItem;
 }

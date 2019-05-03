@@ -1213,7 +1213,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
-        SCH_ITEM* newItem = DuplicateStruct( oldItem );
+        SCH_ITEM* newItem = DuplicateItem( oldItem );
         newItems.push_back( newItem );
 
         newItem->SetFlags( IS_NEW );
@@ -1362,7 +1362,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         m_frame->DeleteItem( item, ii > 0 );
     }
 
-    m_frame->GetScreen()->SetCurItem( nullptr );
     m_frame->SetRepeatItem( nullptr );
     m_frame->TestDanglingEnds();
 

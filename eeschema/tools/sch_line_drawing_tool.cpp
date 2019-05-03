@@ -516,10 +516,6 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 m_view->ClearPreview();
                 m_view->ShowPreview( false );
 
-                // Clear flags used in edit functions.
-                screen->ClearDrawingState();
-                screen->SetCurItem( nullptr );
-
                 if( !evt->IsActivate() )
                     continue;
             }
@@ -591,8 +587,8 @@ int SCH_LINE_DRAWING_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                     aSegment->SetFlags( IS_NEW | IS_MOVED );
                     aSegment->SetStartPoint( cursorPos );
                     s_wires.PushBack( aSegment );
+
                     m_selectionTool->AddItemToSel( aSegment, true /*quiet mode*/ );
-                    screen->SetCurItem( aSegment );
                 }
             }
 
@@ -706,8 +702,8 @@ SCH_LINE* SCH_LINE_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
 
     segment->SetFlags( IS_NEW | IS_MOVED );
     s_wires.PushBack( segment );
+
     m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
-    m_frame->GetScreen()->SetCurItem( segment );
 
     // We need 2 segments to go from a given start pin to an end point when the
     // horizontal and vertical lines only switch is on.
@@ -716,8 +712,8 @@ SCH_LINE* SCH_LINE_DRAWING_TOOL::startSegments( int aType, const wxPoint& aPos )
         segment = new SCH_LINE( *segment );
         segment->SetFlags( IS_NEW | IS_MOVED );
         s_wires.PushBack( segment );
+
         m_selectionTool->AddItemToSel( segment, true /*quiet mode*/ );
-        m_frame->GetScreen()->SetCurItem( segment );
     }
 
     return segment;
@@ -878,8 +874,6 @@ void SCH_LINE_DRAWING_TOOL::finishSegments()
 
     m_frame->TestDanglingEnds();
 
-    m_frame->GetScreen()->ClearDrawingState();
-    m_frame->GetScreen()->SetCurItem( nullptr );
     m_frame->OnModify();
 }
 

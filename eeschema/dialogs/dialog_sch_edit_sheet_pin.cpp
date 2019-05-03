@@ -89,10 +89,7 @@ bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataToWindow()
 bool DIALOG_SCH_EDIT_SHEET_PIN::TransferDataFromWindow()
 {
     if( !m_sheetPin->IsNew() )
-    {
         m_frame->SaveCopyInUndoList( (SCH_ITEM*) m_sheetPin->GetParent(), UR_CHANGED );
-        m_frame->GetScreen()->SetCurItem( nullptr );
-    }
 
     m_sheetPin->SetText( m_textName->GetValue() );
     m_sheetPin->SetTextSize( wxSize( m_textWidth.GetValue(), m_textHeight.GetValue() ) );

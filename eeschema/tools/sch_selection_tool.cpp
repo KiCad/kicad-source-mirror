@@ -396,7 +396,6 @@ SCH_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
             if( aSelectionCancelledFlag )
                 *aSelectionCancelledFlag = true;
 
-            m_frame->GetScreen()->SetCurItem( nullptr );
             return nullptr;
         }
     }
@@ -571,14 +570,6 @@ bool SCH_SELECTION_TOOL::selectMultiple()
                 }
             }
 
-            if( m_frame )
-            {
-                if( m_selection.Size() == 1 )
-                    m_frame->GetScreen()->SetCurItem( static_cast<SCH_ITEM*>( m_selection.Front() ) );
-                else
-                    m_frame->GetScreen()->SetCurItem( nullptr );
-            }
-
             // Inform other potentially interested tools
             if( !m_selection.Empty() )
                 m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
@@ -654,9 +645,10 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     {
         if( item->GetFlags() & CANDIDATE )
             select( item );
-
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
     }
+
+    if( m_selection.GetSize() > 1 )
+        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
 
     return 0;
 }
@@ -871,9 +863,6 @@ void SCH_SELECTION_TOOL::clearSelection()
     m_selection.SetIsHover( false );
     m_selection.ClearReferencePoint();
 
-    if( m_frame )
-        m_frame->GetScreen()->SetCurItem( nullptr );
-
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
 }
@@ -911,20 +900,6 @@ void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
 void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
 {
     highlight( aItem, SELECTED, &m_selection );
-
-    if( m_frame )
-    {
-        if( m_selection.Size() == 1 )
-        {
-            // Set as the current item, so the information about selection is displayed
-            m_frame->GetScreen()->SetCurItem( aItem );
-        }
-        else if( m_selection.Size() == 2 )  // Check only for 2, so it will not be
-        {                                   // called for every next selected item
-            // If multiple items are selected, do not show the information about the selected item
-            m_frame->GetScreen()->SetCurItem( nullptr );
-        }
-    }
 }
 
 

@@ -37,13 +37,13 @@ void SetSchItemParent( SCH_ITEM* Struct, SCH_SCREEN* Screen );
  * Routine to create a new copy of given struct.
  * The new object is not put in draw list (not linked)
  *
- * @param aDrawStruct = the SCH_ITEM to duplicate
- * @param aClone (default = false)
+ * @param aItem = the SCH_ITEM to duplicate
+ * @param doClone (default = false)
  *     if true duplicate also some parameters that must be unique
  *     (timestamp and sheet name)
  *      aClone must be false. use true only is undo/redo duplications
  */
-SCH_ITEM* DuplicateStruct( SCH_ITEM* aDrawStruct, bool aClone = false );
+SCH_ITEM* DuplicateItem( SCH_ITEM* aItem, bool doClone = false );
 
 
 #endif /* LIST_OPERATIONS_H */

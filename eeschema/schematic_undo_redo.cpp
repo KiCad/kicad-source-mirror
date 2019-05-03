@@ -129,7 +129,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of item */
-        itemWrapper.SetLink( DuplicateStruct( aItem, true ) );
+        itemWrapper.SetLink( DuplicateItem( aItem, true ) );
         commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -218,7 +218,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( DuplicateStruct( item, true ), ii );
+                commandToUndo->SetPickedItemLink( DuplicateItem( item, true ), ii );
 
             wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;

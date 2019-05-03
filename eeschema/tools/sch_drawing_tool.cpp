@@ -282,16 +282,15 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
             if( aComponent )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 delete aComponent;
                 aComponent = nullptr;
-            }
-            else
-                break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
-                break;
+                if( !evt->IsActivate() )
+                    continue;
+            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -317,6 +316,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                     continue;
 
                 aComponent = new SCH_COMPONENT( *part, g_CurrentSheet, sel, (wxPoint) cursorPos );
+                aComponent->SetFlags( IS_NEW | IS_MOVED );
 
                 // Be sure the link to the corresponding LIB_PART is OK:
                 aComponent->Resolve( *m_frame->Prj().SchSymbolLibTable() );
@@ -324,10 +324,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
                 if( m_frame->GetAutoplaceFields() )
                     aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-                aComponent->SetFlags( IS_NEW | IS_MOVED );
-
                 m_frame->SetRepeatItem( aComponent );
-                m_frame->GetScreen()->SetCurItem( aComponent );
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( aComponent->Clone() );
@@ -412,16 +409,15 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             if( image )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 delete image;
                 image = nullptr;
-            }
-            else
-                break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
-                break;
+                if( !evt->IsActivate() )
+                    continue;
+            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -453,9 +449,10 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
                     continue;
                 }
 
-                image->SetFlags( IS_MOVED );
+                image->SetFlags( IS_NEW | IS_MOVED );
+
                 m_frame->SetRepeatItem( image );
-                m_frame->GetScreen()->SetCurItem( image );
+
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
                 m_selectionTool->AddItemToSel( image );
@@ -572,7 +569,6 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
                 m_frame->AddItemToScreenAndUndoList( item );
 
                 m_frame->SetRepeatItem( item );
-                m_frame->GetScreen()->SetCurItem( item );
 
                 m_frame->SchematicCleanUp();
                 m_frame->TestDanglingEnds();
@@ -655,16 +651,15 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
             if( item )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-                getModel<SCH_SCREEN>()->SetCurItem( nullptr );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
-            }
-            else
-                break;
 
-            if( evt->IsActivate() )  // now finish unconditionally
-                break;
+                if( !evt->IsActivate() )
+                    continue;
+            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -818,44 +813,41 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_view->ClearPreview();
             m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-            m_frame->GetScreen()->SetCurItem( nullptr );
+            m_view->ClearPreview();
 
             if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
             {
                 m_frame->RollbackSchematicFromUndo();
-                break;  // resize sheet is a single-shot command, not a reusable tool
+                // resize sheet is a single-shot command, when we're done we're done
             }
             else if( aSheet )
             {
                 delete aSheet;
                 aSheet = nullptr;
-            }
-            else
-                break;
 
-            if( evt->IsActivate() )
-                break;      // exit unconditionally
+                if( !evt->IsActivate() )
+                    continue;
+            }
+
+            break;
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &SCH_ACTIONS::finishSheet ) )
         {
             if( !aSheet && !evt->IsAction( &SCH_ACTIONS::finishSheet ) )
             {
                 aSheet = new SCH_SHEET( (wxPoint) cursorPos );
-
                 aSheet->SetFlags( IS_NEW | IS_RESIZED );
                 aSheet->SetTimeStamp( GetNewTimeStamp() );
                 aSheet->SetParent( m_frame->GetScreen() );
                 aSheet->SetScreen( NULL );
                 sizeSheet( aSheet, cursorPos );
 
+                m_frame->SetRepeatItem( nullptr );
+
                 m_selectionTool->AddItemToSel( aSheet );
                 m_view->ClearPreview();
                 m_view->AddToPreview( aSheet->Clone() );
-
-                m_frame->SetRepeatItem( nullptr );
-                m_frame->GetScreen()->SetCurItem( aSheet );
             }
             else if( aSheet )
             {
@@ -865,12 +857,10 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
                 {
                     m_view->Hide( aSheet, false );
                     m_frame->RefreshItem( aSheet );
-
                     m_frame->OnModify();
                 }
 
                 aSheet = nullptr;
-                m_frame->GetScreen()->SetCurItem( nullptr );
 
                 if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
                     break;  // resize sheet is a single-shot command; when we're done we're done

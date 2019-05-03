@@ -1213,9 +1213,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         {
             if( !EditSheet( (SCH_SHEET*)aItem, g_CurrentSheet, &doClearAnnotation ) )
             {
-                screen->SetCurItem( NULL );
                 delete aItem;
-
                 return;
             }
 
@@ -1269,10 +1267,6 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
     aItem->ClearFlags( aItem->GetEditFlags() );
 
     screen->SetModify();
-    screen->SetCurItem( NULL );
-    m_canvas->SetMouseCapture( NULL, NULL );
-    m_canvas->EndMouseCapture();
-
     RefreshItem( aItem );
 
     if( !aItem->IsMoving() && aItem->IsConnectable() )
