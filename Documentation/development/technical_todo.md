@@ -23,9 +23,6 @@ Newer C++ versions include features that make some of our current code unnecessa
 This C++ standard version is already used by KiCad, but much code that pre-dates
 the version switch exists and can be tidied.
 
-* `MUTEX` can use [`std::mutex`](https://en.cppreference.com/w/cpp/thread/mutex)
-  and remove the Boost mutex dependency and the whole `ki_mutex.h` header in
-  favour of `<mutex>`.
 * [`std::auto_ptr`](https://en.cppreference.com/w/cpp/memory/auto_ptr)
   should be changed to [`std::unique_ptr`](https://en.cppreference.com/w/cpp/memory/unique_ptr).
   `auto_ptr` is removed entirely in C++17.

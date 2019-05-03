@@ -34,7 +34,6 @@
 
 #include <import_export.h>
 #include <ki_exception.h>
-#include <ki_mutex.h>
 #include <kicad_string.h>
 #include <sync_queue.h>
 #include <lib_tree_item.h>
