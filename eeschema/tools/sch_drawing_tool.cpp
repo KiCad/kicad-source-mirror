@@ -455,6 +455,8 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
+                m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
+
                 m_selectionTool->AddItemToSel( image );
 
                 m_controls->SetCursorPosition( cursorPos, false );
@@ -480,6 +482,7 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
             image->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( image->Clone() );
+            m_view->RecacheAllItems();  // Bitmaps are cached in Opengl
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
