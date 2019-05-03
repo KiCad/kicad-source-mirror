@@ -290,7 +290,12 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             if( m_selection.Empty() )
                 SelectPoint( evt->Position());
 
-            m_toolMgr->RunAction( SCH_ACTIONS::properties );
+            EDA_ITEM* item = m_selection.Front();
+
+            if( item && item->Type() == SCH_SHEET_T )
+                m_toolMgr->RunAction( SCH_ACTIONS::enterSheet );
+            else
+                m_toolMgr->RunAction( SCH_ACTIONS::properties );
         }
 
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
