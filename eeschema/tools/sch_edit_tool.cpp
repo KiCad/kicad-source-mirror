@@ -264,8 +264,19 @@ bool SCH_EDIT_TOOL::Init()
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
     wxASSERT_MSG( drawingTool, "eeshema.InteractiveDrawing tool is not available" );
 
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
+    auto activeTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
+    };
+
+    auto sheetTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
+    };
+
+    auto anyTextTool = [ this ] ( const SELECTION& aSel ) {
+        return ( m_frame->GetToolId() == ID_LABEL_BUTT
+              || m_frame->GetToolId() == ID_GLOBALLABEL_BUTT
+              || m_frame->GetToolId() == ID_HIERLABEL_BUTT
+              || m_frame->GetToolId() == ID_TEXT_COMMENT_BUTT );
     };
 
     auto moveCondition = [] ( const SELECTION& aSel ) {
@@ -363,7 +374,7 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
 
     ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
     ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition );
@@ -415,24 +426,26 @@ bool SCH_EDIT_TOOL::Init()
 
     drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toLabel,  toLabelCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toHLabel, toHLabelCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toGLabel, toGLabelCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toText,   toTextlCondition, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toLabel,          anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toHLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toGLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::toText,           anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetTool && SCH_CONDITIONS::Idle, 200 );
+    drawingMenu.AddItem( SCH_ACTIONS::resizeSheet,      sheetTool && SCH_CONDITIONS::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move,      moveCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::drag,      moveCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate, moveCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::doDelete,  SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::move,             moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::drag,             moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW,        orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,         orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorX,          orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::mirrorY,          orientCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate,        moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::doDelete,         SCH_CONDITIONS::NotEmpty, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::properties,       propertiesCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::editReference,    SCH_CONDITIONS::SingleSymbol, 200 );
@@ -453,6 +466,7 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::toGLabel,         toGLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toText,           toTextlCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::resizeSheet,      singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cut,   SCH_CONDITIONS::IdleSelection, 200 );
@@ -1644,17 +1658,18 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
-    SELECTION selection = m_selectionTool->GetSelection();
-    KICAD_T type;
+    KICAD_T allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    SELECTION selection = m_selectionTool->RequestSelection( allTextTypes );
+    KICAD_T convertTo;
 
     if( aEvent.IsAction( &SCH_ACTIONS::toLabel ) )
-        type = SCH_LABEL_T;
+        convertTo = SCH_LABEL_T;
     else if( aEvent.IsAction( &SCH_ACTIONS::toHLabel ) )
-        type = SCH_HIER_LABEL_T;
+        convertTo = SCH_HIER_LABEL_T;
     else if( aEvent.IsAction( &SCH_ACTIONS::toGLabel ) )
-        type = SCH_GLOBAL_LABEL_T;
+        convertTo = SCH_GLOBAL_LABEL_T;
     else if( aEvent.IsAction( &SCH_ACTIONS::toText ) )
-        type = SCH_TEXT_T;
+        convertTo = SCH_TEXT_T;
     else
         return 0;
 
@@ -1663,7 +1678,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
         SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selection.GetItem( i ) );
 
         if( text )
-            m_frame->ConvertTextType( text, type );
+            m_frame->ConvertTextType( text, convertTo );
     }
 
     return 0;

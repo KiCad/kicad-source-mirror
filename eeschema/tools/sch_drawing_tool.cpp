@@ -165,8 +165,8 @@ bool SCH_DRAWING_TOOL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto sheetTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
     };
 
     auto& ctxMenu = m_menu.GetMenu();
@@ -175,8 +175,7 @@ bool SCH_DRAWING_TOOL::Init()
     // Build the drawing tool menu
     //
     ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
-
-    ctxMenu.AddItem( SCH_ACTIONS::resizeSheet, sheetTool && SCH_CONDITIONS::Idle, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 1 );
 
     ctxMenu.AddSeparator( activeTool, 1000 );
     m_menu.AddStandardSubMenus( m_frame );

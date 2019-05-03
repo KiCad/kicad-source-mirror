@@ -205,24 +205,30 @@ bool SCH_LINE_DRAWING_TOOL::Init()
         return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT );
     };
 
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
+    };
+
     auto& ctxMenu = m_menu.GetMenu();
 
     //
     // Build the tool menu
     //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,    belowRootSheetCondition, 1 );
 
-    ctxMenu.AddItem( SCH_ACTIONS::startWire,  wireOrBusTool && SCH_CONDITIONS::Idle, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startBus,   wireOrBusTool && SCH_CONDITIONS::Idle, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::startLines, lineTool && SCH_CONDITIONS::Idle, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishWire, IsDrawingWire, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishBus,  IsDrawingBus, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishLine, IsDrawingLine, 1 );
+    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::startWire,     wireOrBusTool && SCH_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::startBus,      wireOrBusTool && SCH_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::startLines,    lineTool && SCH_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishWire,    IsDrawingWire, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishBus,     IsDrawingBus, 10 );
+    ctxMenu.AddItem( SCH_ACTIONS::finishLine,    IsDrawingLine, 10 );
 
     std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     busUnfoldMenu->SetTool( this );
     m_menu.AddSubMenu( busUnfoldMenu );
-    ctxMenu.AddMenu( busUnfoldMenu.get(), false, SCH_CONDITIONS::Idle, 1 );
+    ctxMenu.AddMenu( busUnfoldMenu.get(), false, SCH_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddSeparator( wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( SCH_ACTIONS::addJunction,      wireOrBusTool && SCH_CONDITIONS::Idle, 100 );

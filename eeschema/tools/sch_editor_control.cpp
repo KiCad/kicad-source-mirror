@@ -48,6 +48,7 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <lib_edit_frame.h>
+#include "sch_line_drawing_tool.h"
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );
@@ -133,15 +134,6 @@ bool SCH_EDITOR_CONTROL::Init()
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
     };
 
-    auto singleSheetCondition = SELECTION_CONDITIONS::Count( 1 )
-                             && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
-
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
-
-    auto anySheetCondition = singleSheetCondition || belowRootSheetCondition;
-
     auto& ctxMenu = m_menu.GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
@@ -150,29 +142,6 @@ bool SCH_EDITOR_CONTROL::Init()
 
     // Finally, add the standard zoom & grid items
     m_menu.AddStandardSubMenus( m_frame );
-
-    // Add the SCH control menus to relevant other tools
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-
-    if( selTool )
-    {
-        CONDITIONAL_MENU& selToolMenu = selTool->GetToolMenu().GetMenu();
-
-        selToolMenu.AddSeparator( anySheetCondition, 600 );
-        selToolMenu.AddItem( SCH_ACTIONS::enterSheet, singleSheetCondition, 600 );
-        selToolMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 600 );
-        selToolMenu.AddItem( SCH_ACTIONS::explicitCrossProbe, singleSheetCondition, 600 );
-    }
-
-    SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
-
-    if( drawingTool )
-    {
-        CONDITIONAL_MENU& drawingToolMenu = drawingTool->GetToolMenu().GetMenu();
-
-        drawingToolMenu.AddSeparator( belowRootSheetCondition, 600 );
-        drawingToolMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 600 );
-    }
 
     return true;
 }
