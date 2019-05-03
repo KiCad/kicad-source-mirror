@@ -190,7 +190,7 @@ void SCH_BASE_FRAME::SetScreen(  BASE_SCREEN* aScreen )
 
     if( m_toolManager )
     {
-        m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+        m_toolManager->SetEnvironment( aScreen, GetCanvas()->GetView(),
                                        GetCanvas()->GetViewControls(), this );
     }
 }
