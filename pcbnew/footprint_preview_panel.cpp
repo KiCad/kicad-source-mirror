@@ -29,7 +29,7 @@
 #include <math/box2.h>
 #include <class_module.h>
 #include <class_board.h>
-#include <ki_mutex.h>
+#include <mutex>
 #include <draw_frame.h>
 #include <boost/bind.hpp>
 #include <utility>
@@ -51,7 +51,7 @@ class FP_THREAD_IFACE
         /// Retrieve a cache entry by LIB_ID
         OPT<CACHE_ENTRY> GetFromCache( LIB_ID const & aFPID )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             auto it = m_cachedFootprints.find( aFPID );
 
             if( it != m_cachedFootprints.end() )
@@ -66,7 +66,7 @@ class FP_THREAD_IFACE
          */
         CACHE_ENTRY AddToQueue( LIB_ID const & aEntry )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
 
             CACHE_ENTRY ent = { aEntry, NULL, FPS_LOADING };
             m_cachedFootprints[aEntry] = ent;
@@ -78,7 +78,7 @@ class FP_THREAD_IFACE
         /// Pop an entry from the queue, or empty option if none is available.
         OPT<CACHE_ENTRY> PopFromQueue()
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
 
             if( m_loaderQueue.empty() )
             {
@@ -95,7 +95,7 @@ class FP_THREAD_IFACE
         /// Add an entry to the cache.
         void AddToCache( CACHE_ENTRY const & aEntry )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             m_cachedFootprints[aEntry.fpid] = aEntry;
         }
 
@@ -104,7 +104,7 @@ class FP_THREAD_IFACE
          */
         void SetCurrentFootprint( LIB_ID aFp )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             m_current_fp = std::move( aFp );
         }
 
@@ -113,7 +113,7 @@ class FP_THREAD_IFACE
          */
         LIB_ID GetCurrentFootprint()
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             return m_current_fp;
         }
 
@@ -122,7 +122,7 @@ class FP_THREAD_IFACE
          */
         void SetPanel( FOOTPRINT_PREVIEW_PANEL* aPanel )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             m_panel = aPanel;
         }
 
@@ -131,7 +131,7 @@ class FP_THREAD_IFACE
          */
         FOOTPRINT_PREVIEW_PANEL* GetPanel()
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
             return m_panel;
         }
 
@@ -141,7 +141,7 @@ class FP_THREAD_IFACE
          */
         bool QueueEvent( wxEvent const& aEvent )
         {
-            MUTLOCK lock( m_lock );
+            std::lock_guard<std::mutex> lock( m_lock );
 
             if( m_panel )
             {
@@ -159,7 +159,7 @@ class FP_THREAD_IFACE
          */
         FP_LIB_TABLE* GetTable()
         {
-            MUTLOCK locK( m_lock );
+            std::lock_guard<std::mutex> locK( m_lock );
             return m_panel ? m_panel->Prj().PcbFootprintLibs() : nullptr;
         }
 
@@ -168,7 +168,7 @@ class FP_THREAD_IFACE
         std::map<LIB_ID, CACHE_ENTRY> m_cachedFootprints;
         LIB_ID m_current_fp;
         FOOTPRINT_PREVIEW_PANEL* m_panel = nullptr;
-        MUTEX m_lock;
+        std::mutex m_lock;
 };
 
 

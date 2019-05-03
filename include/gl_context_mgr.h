@@ -26,7 +26,7 @@
 #define GL_CONTEXT_MANAGER_H
 
 #include <wx/glcanvas.h>
-#include <ki_mutex.h>
+#include <mutex>
 #include <map>
 
 class GL_CONTEXT_MANAGER
@@ -89,7 +89,7 @@ private:
     wxGLContext* m_glCtx;
 
     ///> Lock to prevent unexpected GL context switching.
-    MUTEX m_glCtxMutex;
+    std::mutex m_glCtxMutex;
 
     // Singleton
     GL_CONTEXT_MANAGER();

@@ -27,7 +27,7 @@
 // conflicts for some defines, at least on Windows
 #include <kicad_curl/kicad_curl.h>
 
-#include <ki_mutex.h>       // MUTEX and MUTLOCK
+#include <mutex>
 #include <ki_exception.h>   // THROW_IO_ERROR
 
 
@@ -37,14 +37,14 @@
 // client (API) header file.
 static volatile bool s_initialized;
 
-static MUTEX s_lock;        // for s_initialized
+static std::mutex s_lock;        // for s_initialized
 
 // Assume that on these platforms libcurl uses OpenSSL
 #if defined(__linux__) || defined(__MINGW32__)
 
 #include <openssl/crypto.h>
 
-static MUTEX* s_crypto_locks;
+static std::mutex* s_crypto_locks;
 
 /*
  * From OpenSSL v1.1.0, the CRYPTO_set_locking_callback macro is a no-op.
@@ -83,7 +83,7 @@ static void lock_callback( int mode, int type, const char* file, int line )
 
 static void init_locks()
 {
-    s_crypto_locks = new MUTEX[ CRYPTO_num_locks() ];
+    s_crypto_locks = new std::mutex[ CRYPTO_num_locks() ];
 
     // From http://linux.die.net/man/3/crypto_set_id_callback:
 
@@ -154,7 +154,7 @@ void KICAD_CURL::Init()
     // will not need to lock.
     if( !s_initialized )
     {
-        MUTLOCK lock( s_lock );
+        std::lock_guard<std::mutex> lock( s_lock );
 
         if( !s_initialized )
         {
@@ -177,22 +177,22 @@ void KICAD_CURL::Cleanup()
 {
     /*
 
-    Calling MUTLOCK() from a static destructor will typically be bad, since the
+    Calling lock_guard() from a static destructor will typically be bad, since the
     s_lock may already have been statically destroyed itself leading to a boost
     exception. (Remember C++ does not provide certain sequencing of static
     destructor invocation.)
 
-    To prevent this we test s_initialized twice, which ensures that the MUTLOCK
+    To prevent this we test s_initialized twice, which ensures that the lock_guard
     is only instantiated on the first call, which should be from
     PGM_BASE::destroy() which is first called earlier than static destruction.
     Then when called again from the actual PGM_BASE::~PGM_BASE() function,
-    MUTLOCK will not be instantiated because s_initialized will be false.
+    lock_guard will not be instantiated because s_initialized will be false.
 
     */
 
     if( s_initialized )
     {
-        MUTLOCK lock( s_lock );
+        std::lock_guard<std::mutex> lock( s_lock );
 
         if( s_initialized )
         {

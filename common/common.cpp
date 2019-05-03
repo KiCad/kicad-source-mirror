@@ -34,6 +34,7 @@
 #include <macros.h>
 #include <base_units.h>
 #include <reporter.h>
+#include <mutex>
 
 #include <wx/process.h>
 #include <wx/config.h>
@@ -454,14 +455,13 @@ wxString KIwxExpandEnvVars(const wxString& str)
 }
 
 
-#include <ki_mutex.h>
 const wxString ExpandEnvVarSubstitutions( const wxString& aString )
 {
     // wxGetenv( wchar_t* ) is not re-entrant on linux.
     // Put a lock on multithreaded use of wxGetenv( wchar_t* ), called from wxEpandEnvVars(),
-    static MUTEX    getenv_mutex;
+    static std::mutex getenv_mutex;
 
-    MUTLOCK lock( getenv_mutex );
+    std::lock_guard<std::mutex> lock( getenv_mutex );
 
     // We reserve the right to do this another way, by providing our own member function.
     return KIwxExpandEnvVars( aString );
