@@ -174,6 +174,10 @@ TOOL_ACTION SCH_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         break_line_xpm );
 
 
+// For adding to or removing from selections
+#define QUIET_MODE true
+
+
 class SYMBOL_UNIT_MENU : public CONTEXT_MENU
 {
 public:
@@ -241,7 +245,7 @@ SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         m_frame( nullptr ),
         m_menu( *this ),
         m_moveInProgress( false ),
-        m_totalMovement( 0, 0 )
+        m_moveOffset( 0, 0 )
 {
 }
 
@@ -464,7 +468,7 @@ void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
     if( aReason == MODEL_RELOAD )
     {
         m_moveInProgress = false;
-        m_totalMovement = { 0, 0 };
+        m_moveOffset = { 0, 0 };
 
         // Init variables used by every drawing tool
         m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
@@ -504,7 +508,8 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
-    bool unselect = selection.IsHover();
+    EDA_ITEMS  dragAdditions;
+    bool       unselect = selection.IsHover();
 
     if( selection.Empty() )
         return 0;
@@ -526,10 +531,12 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     if( m_moveInProgress )
     {
         // User must have switched from move to drag or vice-versa.  Reset the moved items
-        // so we can start again with the current m_isDragOperation and m_totalMovement.
+        // so we can start again with the current m_isDragOperation and m_moveOffset.
         m_frame->RollbackSchematicFromUndo();
+        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
         m_moveInProgress = false;
-        // And give it a kick so it doesn't have to wait for the first mouse movement.
+        // And give it a kick so it doesn't have to wait for the first mouse movement to
+        // refresh.
         m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
         return 0;
     }
@@ -545,31 +552,37 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
+                //------------------------------------------------------------------------
+                // Setup a drag or a move
+                //
+                for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
+                {
+                    if( it->IsSelected() )
+                        it->SetFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+                    else
+                        it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
+                }
+
                 // Add connections to the selection for a drag.
                 //
                 if( m_frame->GetToolId() == ID_SCH_DRAG )
                 {
-                    for( unsigned i = 0; i < selection.GetSize(); ++i )
+                    for( EDA_ITEM* item : selection )
                     {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
-                        item->ClearFlags( STARTPOINT | ENDPOINT );
-                    }
-
-                    int originalEnd = selection.GetSize();
-                    for( unsigned i = 0; i < originalEnd && i < selection.GetSize(); ++i )
-                    {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
-                        if( item->IsConnectable() )
+                        if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
                         {
                             std::vector<wxPoint> connections;
-                            item->GetConnectionPoints( connections );
+                            static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
 
                             for( wxPoint point : connections )
-                                selectConnectedDragItems( item, point );
+                                getConnectedDragItems( (SCH_ITEM*) item, point, dragAdditions );
                         }
                     }
+
+                    m_selectionTool->AddItemsToSel( &dragAdditions, QUIET_MODE );
+
+                    for( EDA_ITEM* item : dragAdditions )
+                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, true );
                 }
 
                 // Mark the edges of the block with dangling flags for a move.
@@ -578,40 +591,31 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     std::vector<DANGLING_END_ITEM> internalPoints;
 
-                    for( unsigned i = 0; i < selection.GetSize(); ++i )
-                    {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-                        item->GetEndPoints( internalPoints );
-                    }
+                    for( EDA_ITEM* item : selection )
+                        static_cast<SCH_ITEM*>( item )->GetEndPoints( internalPoints );
 
-                    for( unsigned i = 0; i < selection.GetSize(); ++i )
-                    {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-                        item->UpdateDanglingState( internalPoints );
-                    }
+                    for( EDA_ITEM* item : selection )
+                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
                 }
 
-                // Save items for undo.
+                // Generic setup
                 //
-                for( unsigned i = 0; i < selection.GetSize(); ++i )
+                bool first = true;
+                for( EDA_ITEM* item : selection )
                 {
-                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
+                    if( item->IsNew() || ( item->GetParent() && item->GetParent()->IsSelected() ) )
+                    {
+                        // already saved to undo
+                    }
+                    else
+                    {
+                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, !first );
+                        first = false;
+                    }
 
-                    // No need to save children of selected items
-                    if( item->GetParent() && item->GetParent()->IsSelected() )
-                        continue;
-
-                    if( !item->IsNew() )
-                        saveCopyInUndoList( item, UR_CHANGED, i > 0 );
-                }
-
-                // Apply any initial offset in case we're coming from a previous command.
-                //
-                for( unsigned i = 0; i < selection.GetSize(); ++i )
-                {
-                    SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
-                    moveItem( item, m_totalMovement, m_frame->GetToolId() == ID_SCH_DRAG );
+                    // Apply any initial offset in case we're coming from a previous command.
+                    //
+                    moveItem( (SCH_ITEM*) item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
                 }
 
                 // Set up the starting position and move/drag offset
@@ -656,30 +660,31 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_moveInProgress = true;
             }
 
+            //------------------------------------------------------------------------
             // Follow the mouse
             //
             m_cursor = controls->GetCursorPosition();
-            VECTOR2I movement( m_cursor - prevPos );
+            VECTOR2I delta( m_cursor - prevPos );
             selection.SetReferencePoint( m_cursor );
 
-            m_totalMovement += movement;
+            m_moveOffset += delta;
             prevPos = m_cursor;
 
-            for( int i = 0; i < selection.GetSize(); ++i )
+            for( EDA_ITEM* item : selection )
             {
-                SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
                 // Don't double move pins, fields, etc.
                 if( item->GetParent() && item->GetParent()->IsSelected() )
                     continue;
 
-                moveItem( item, movement, m_frame->GetToolId() == ID_SCH_DRAG );
+                moveItem( (SCH_ITEM*) item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
                 updateView( item );
             }
 
             m_frame->UpdateMsgPanel();
         }
-
+        //------------------------------------------------------------------------
+        // Handle cancel
+        //
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
             m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
@@ -689,14 +694,14 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
             break;
         }
-
+        //------------------------------------------------------------------------
+        // Handle TOOL_ACTION special cases
+        //
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             unselect = true;
             break;
         }
-
-        // Handle TOOL_ACTION special cases
         else if( evt->Category() == TC_COMMAND )
         {
             if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
@@ -735,12 +740,16 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
             }
         }
-
+        //------------------------------------------------------------------------
+        // Handle context menu
+        //
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             m_menu.ShowContextMenu( selection );
         }
-
+        //------------------------------------------------------------------------
+        // Handle drop
+        //
         else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
         {
             break; // Finish
@@ -754,7 +763,7 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     controls->SetAutoPan( false );
 
     if( !chain_commands )
-        m_totalMovement = { 0, 0 };
+        m_moveOffset = { 0, 0 };
 
     m_moveInProgress = false;
     m_frame->SetNoToolSelected();
@@ -766,6 +775,8 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
     if( unselect )
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    else
+        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
 
     if( restore_state )
     {
@@ -783,40 +794,35 @@ int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_EDIT_TOOL::selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPoint )
+void SCH_EDIT_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList )
 {
-    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    for( SCH_ITEM* test = m_frame->GetScreen()->GetDrawItems(); test; test = test->Next() )
     {
-        if( item->IsSelected() || !item->IsConnectable() || !item->CanConnect( aSourceItem ) )
+        if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aItem ) )
             continue;
 
-        bool doSelect = false;
-
-        switch( item->Type() )
+        switch( test->Type() )
         {
         default:
         case SCH_LINE_T:
         {
             // Select wires/busses that are connected at one end and/or the other.  Any
             // unconnected ends must be flagged (STARTPOINT or ENDPOINT).
-            SCH_LINE* line = (SCH_LINE*) item;
-
-            if( !line->IsSelected() )
-                line->SetFlags( STARTPOINT | ENDPOINT );
+            SCH_LINE* line = (SCH_LINE*) test;
 
             if( line->GetStartPoint() == aPoint )
             {
-                line->ClearFlags( STARTPOINT );
+                if( !( line->GetFlags() & SELECTEDNODE ) )
+                    aList.push_back( line );
 
-                if( !line->IsSelected() )
-                    doSelect = true;
+                line->SetFlags( STARTPOINT | SELECTEDNODE );
             }
             else if( line->GetEndPoint() == aPoint )
             {
-                line->ClearFlags( ENDPOINT );
+                if( !( line->GetFlags() & SELECTEDNODE ) )
+                    aList.push_back( line );
 
-                if( !line->IsSelected() )
-                    doSelect = true;
+                line->SetFlags( ENDPOINT | SELECTEDNODE );
             }
             break;
         }
@@ -830,8 +836,8 @@ void SCH_EDIT_TOOL::selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPo
         case SCH_NO_CONNECT_T:
         case SCH_JUNCTION_T:
             // Select connected items that have no wire between them.
-            if( aSourceItem->Type() != SCH_LINE_T && item->IsConnected( aPoint ) )
-                doSelect = true;
+            if( aItem->Type() != SCH_LINE_T && test->IsConnected( aPoint ) )
+               aList.push_back( test );
 
             break;
 
@@ -841,24 +847,18 @@ void SCH_EDIT_TOOL::selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPo
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             // Select labels and bus entries that are connected to a wire being moved.
-            if( aSourceItem->Type() == SCH_LINE_T )
+            if( aItem->Type() == SCH_LINE_T )
             {
                 std::vector<wxPoint> connections;
-                item->GetConnectionPoints( connections );
+                test->GetConnectionPoints( connections );
 
                 for( wxPoint& point : connections )
                 {
-                    if( aSourceItem->HitTest( point ) )
-                        doSelect = true;
+                    if( aItem->HitTest( point ) )
+                        aList.push_back( test );
                 }
             }
             break;
-        }
-
-        if( doSelect )
-        {
-            m_selectionTool->AddItemToSel( item, true /*quiet mode*/ );
-            saveCopyInUndoList( item, UR_CHANGED, true );
         }
     }
 }
@@ -869,17 +869,13 @@ void SCH_EDIT_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
     switch( aItem->Type() )
     {
     case SCH_LINE_T:
-    {
-        SCH_LINE* line = (SCH_LINE*) aItem;
+        if( aItem->GetFlags() & STARTPOINT )
+            static_cast<SCH_LINE*>( aItem )->MoveStart( (wxPoint) aDelta );
 
-        if( isDrag && ( line->GetFlags() & STARTPOINT ) )
-            line->MoveEnd( (wxPoint)aDelta );
-        else if( isDrag && ( line->GetFlags() & ENDPOINT ) )
-            line->MoveStart( (wxPoint)aDelta );
-        else
-            line->Move( (wxPoint)aDelta );
+        if( aItem->GetFlags() & ENDPOINT )
+            static_cast<SCH_LINE*>( aItem )->MoveEnd( (wxPoint) aDelta );
+
         break;
-    }
 
     case SCH_PIN_T:
     case SCH_FIELD_T:
@@ -887,7 +883,7 @@ void SCH_EDIT_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
         break;
 
     default:
-        aItem->Move( (wxPoint)aDelta );
+        aItem->Move( (wxPoint) aDelta );
         break;
     }
 
@@ -1027,7 +1023,20 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             if( !moving )
                 saveCopyInUndoList( item, UR_CHANGED, ii > 0 );
 
-            item->Rotate( rotPoint );
+            if( item->Type() == SCH_LINE_T )
+            {
+                SCH_LINE* line = (SCH_LINE*) item;
+
+                if( item->GetFlags() & STARTPOINT )
+                    line->RotateStart( rotPoint );
+
+                if( item->GetFlags() & ENDPOINT )
+                    line->RotateEnd( rotPoint );
+            }
+            else
+            {
+                item->Rotate( rotPoint );
+            }
 
             connections |= item->IsConnectable();
             m_frame->RefreshItem( item );
@@ -1217,7 +1226,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.Front()->IsNew() )
         return 0;
 
-    std::vector<SCH_ITEM*> newItems;
+    EDA_ITEMS newItems;
 
     // Keep track of existing sheet paths. Duplicating a selection can modify this list
     bool copiedSheets = false;

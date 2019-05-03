@@ -86,10 +86,10 @@ public:
 private:
     void moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
 
-    ///> Selects additional items for a drag operation.
-    ///> Connected items with no wire are selected (as there is no wire to adjust for the drag).
-    ///> Connected wires are selected with any un-connected ends flagged (STARTPOINT or ENDPOINT).
-    void selectConnectedDragItems( SCH_ITEM* aSourceItem, wxPoint aPoint );
+    ///> Finds additional items for a drag operation.
+    ///> Connected items with no wire are included (as there is no wire to adjust for the drag).
+    ///> Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
+    void getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.
@@ -118,7 +118,7 @@ private:
     bool                  m_moveInProgress;
 
     ///> Used for chaining commands
-    VECTOR2I              m_totalMovement;
+    VECTOR2I              m_moveOffset;
 
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).

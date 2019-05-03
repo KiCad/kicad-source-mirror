@@ -353,6 +353,18 @@ void SCH_LINE::Rotate( wxPoint aPosition )
 }
 
 
+void SCH_LINE::RotateStart( wxPoint aPosition )
+{
+    RotatePoint( &m_start, aPosition, 900 );
+}
+
+
+void SCH_LINE::RotateEnd( wxPoint aPosition )
+{
+    RotatePoint( &m_end, aPosition, 900 );
+}
+
+
 bool SCH_LINE::IsSameQuadrant( SCH_LINE* aLine, const wxPoint& aPosition )
 {
     wxPoint first;

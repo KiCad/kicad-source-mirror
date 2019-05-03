@@ -659,22 +659,6 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
-{
-    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
-
-    if( items )
-    {
-        for( SCH_ITEM* item : *items )
-            select( item );
-
-        m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
-    }
-
-    return 0;
-}
-
-
 int SCH_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 {
     AddItemToSel( aEvent.Parameter<SCH_ITEM*>() );
@@ -682,7 +666,7 @@ int SCH_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_SELECTION_TOOL::AddItemToSel( SCH_ITEM* aItem, bool aQuietMode )
+void SCH_SELECTION_TOOL::AddItemToSel( EDA_ITEM* aItem, bool aQuietMode )
 {
     if( aItem )
     {
@@ -695,19 +679,24 @@ void SCH_SELECTION_TOOL::AddItemToSel( SCH_ITEM* aItem, bool aQuietMode )
 }
 
 
-int SCH_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
+int SCH_SELECTION_TOOL::AddItemsToSel( const TOOL_EVENT& aEvent )
 {
-    std::vector<SCH_ITEM*>* items = aEvent.Parameter<std::vector<SCH_ITEM*>*>();
-
-    if( items )
-    {
-        for( SCH_ITEM* item : *items )
-            unselect( item );
-
-        m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
-    }
-
+    AddItemsToSel( aEvent.Parameter<EDA_ITEMS*>(), false );
     return 0;
+}
+
+
+void SCH_SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
+{
+    if( aList )
+    {
+        for( EDA_ITEM* item : *aList )
+            select( item );
+
+        // Inform other potentially interested tools
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+    }
 }
 
 
@@ -718,11 +707,32 @@ int SCH_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_SELECTION_TOOL::RemoveItemFromSel( SCH_ITEM* aItem, bool aQuietMode )
+void SCH_SELECTION_TOOL::RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode )
 {
     if( aItem )
     {
         unselect( aItem );
+
+        // Inform other potentially interested tools
+        if( !aQuietMode )
+            m_toolMgr->ProcessEvent( EVENTS::UnselectedEvent );
+    }
+}
+
+
+int SCH_SELECTION_TOOL::RemoveItemsFromSel( const TOOL_EVENT& aEvent )
+{
+    RemoveItemsFromSel( aEvent.Parameter<EDA_ITEMS*>(), false );
+    return 0;
+}
+
+
+void SCH_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
+{
+    if( aList )
+    {
+        for( EDA_ITEM* item : *aList )
+            unselect( item );
 
         // Inform other potentially interested tools
         if( !aQuietMode )
@@ -830,7 +840,7 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
 }
 
 
-bool SCH_SELECTION_TOOL::selectable( const SCH_ITEM* aItem, bool checkVisibilityOnly ) const
+bool SCH_SELECTION_TOOL::selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly ) const
 {
     // NOTE: in the future this is where eeschema layer/itemtype visibility will be handled
 
@@ -873,7 +883,7 @@ void SCH_SELECTION_TOOL::clearSelection()
 }
 
 
-void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
+void SCH_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem, bool aForce )
 {
     if( aItem->IsSelected() )
     {
@@ -902,19 +912,19 @@ void SCH_SELECTION_TOOL::toggleSelection( SCH_ITEM* aItem, bool aForce )
 }
 
 
-void SCH_SELECTION_TOOL::select( SCH_ITEM* aItem )
+void SCH_SELECTION_TOOL::select( EDA_ITEM* aItem )
 {
     highlight( aItem, SELECTED, &m_selection );
 }
 
 
-void SCH_SELECTION_TOOL::unselect( SCH_ITEM* aItem )
+void SCH_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 {
     unhighlight( aItem, SELECTED, &m_selection );
 }
 
 
-void SCH_SELECTION_TOOL::highlight( SCH_ITEM* aItem, int aMode, SELECTION* aGroup )
+void SCH_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->SetSelected();
@@ -969,7 +979,7 @@ void SCH_SELECTION_TOOL::highlight( SCH_ITEM* aItem, int aMode, SELECTION* aGrou
 }
 
 
-void SCH_SELECTION_TOOL::unhighlight( SCH_ITEM* aItem, int aMode, SELECTION* aGroup )
+void SCH_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
     if( aMode == SELECTED )
         aItem->ClearSelected();

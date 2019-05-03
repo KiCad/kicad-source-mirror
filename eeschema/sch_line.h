@@ -137,6 +137,8 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void MirrorY( int aYaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
+    void RotateStart( wxPoint aPosition );
+    void RotateEnd( wxPoint aPosition );
 
     /**
      * Check line against \a aLine to see if it overlaps and merge if it does.

@@ -573,7 +573,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // SCH_LEGACY_PLUGIN added the items to the DLIST, but not to the view or anything
     // else.  Pull them back out to start with.
     //
-    std::vector<SCH_ITEM*> loadedItems;
+    EDA_ITEMS loadedItems;
     SCH_ITEM* next = nullptr;
 
     // We also make sure any pasted sheets will not cause recursion in the destination.
@@ -646,7 +646,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
     for( int i = 0; i < loadedItems.size(); ++i )
     {
-        SCH_ITEM* item = loadedItems[i];
+        EDA_ITEM* item = loadedItems[i];
 
         if( item->Type() == SCH_COMPONENT_T )
         {
@@ -660,7 +660,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         }
 
         item->SetFlags( IS_NEW | IS_MOVED );
-        m_frame->AddItemToScreenAndUndoList( item, i > 0 );
+        m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item, i > 0 );
     }
 
     if( sheetsPasted )

@@ -105,12 +105,14 @@ public:
                            bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
-    void AddItemToSel( SCH_ITEM* aItem, bool aQuietMode = false );
+    void AddItemToSel( EDA_ITEM* aItem, bool aQuietMode = false );
     int AddItemsToSel( const TOOL_EVENT& aEvent );
+    void AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
     int RemoveItemFromSel( const TOOL_EVENT& aEvent );
-    void RemoveItemFromSel( SCH_ITEM* aItem, bool aQuietMode = false );
+    void RemoveItemFromSel( EDA_ITEM* aItem, bool aQuietMode = false );
     int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
+    void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
     ///> Find (but don't select) node under cursor
     SCH_ITEM* GetNode( VECTOR2I aPosition );
@@ -170,7 +172,7 @@ private:
      * @param aItem is the item to have selection status changed.
      * @param aForce causes the toggle to happen without checking selectability
      */
-    void toggleSelection( SCH_ITEM* aItem, bool aForce = false );
+    void toggleSelection( EDA_ITEM* aItem, bool aForce = false );
 
     /**
      * Function selectable()
@@ -178,7 +180,7 @@ private:
      *
      * @return True if the item fulfills conditions to be selected.
      */
-    bool selectable( const SCH_ITEM* aItem, bool checkVisibilityOnly = false ) const;
+    bool selectable( const EDA_ITEM* aItem, bool checkVisibilityOnly = false ) const;
 
     /**
      * Function select()
@@ -186,7 +188,7 @@ private:
      *
      * @param aItem is an item to be selected.
      */
-    void select( SCH_ITEM* aItem );
+    void select( EDA_ITEM* aItem );
 
     /**
      * Function unselect()
@@ -194,7 +196,7 @@ private:
      *
      * @param aItem is an item to be unselected.
      */
-    void unselect( SCH_ITEM* aItem );
+    void unselect( EDA_ITEM* aItem );
 
     /**
      * Function highlight()
@@ -203,7 +205,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to add the item to in the BRIGHTENED mode.
      */
-    void highlight( SCH_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void highlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
 
     /**
      * Function unhighlight()
@@ -212,7 +214,7 @@ private:
      * @param aHighlightMode should be either SELECTED or BRIGHTENED
      * @param aGroup is the group to remove the item from.
      */
-    void unhighlight( SCH_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
+    void unhighlight( EDA_ITEM* aItem, int aHighlightMode, SELECTION* aGroup = nullptr );
 
     /**
      * Function selectionContains()
