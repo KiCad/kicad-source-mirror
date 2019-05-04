@@ -244,6 +244,22 @@ void SCH_EDIT_FRAME::SendCrossProbeNetName( const wxString& aNetName )
 }
 
 
+void SCH_EDIT_FRAME::SendCrossProbeClearHighlight()
+{
+    std::string packet = "$CLEAR\n";
+
+    if( Kiface().IsSingle() )
+        SendCommand( MSG_TO_PCB, packet.c_str() );
+    else
+    {
+        // Typically ExpressMail is going to be s-expression packets, but since
+        // we have existing interpreter of the cross probe packet on the other
+        // side in place, we use that here.
+        Kiway().ExpressMail( FRAME_PCB, MAIL_CROSS_PROBE, packet, this );
+    }
+}
+
+
 void SCH_EDIT_FRAME::KiwayMailIn( KIWAY_EXPRESS& mail )
 {
     std::string& payload = mail.GetPayload();

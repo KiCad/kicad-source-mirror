@@ -465,6 +465,11 @@ public:
      */
     void SendCrossProbeNetName( const wxString& aNetName );
 
+    /**
+     * Tells PcbNew to clear the existing highlighted net, if one exists
+     */
+    void SendCrossProbeClearHighlight();
+
     const wxString& GetSelectedNetName() const { return m_SelectedNetName; }
     void SetSelectedNetName( const wxString& aNetName ) { m_SelectedNetName = aNetName; }
 

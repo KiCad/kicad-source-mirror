@@ -66,6 +66,7 @@
  * $PART: "reference"   put cursor on component
  * $PIN: "pin name"  $PART: "reference" put cursor on the footprint pin
  * $NET: "net name" highlight the given net (if highlight tool is active)
+ * $CLEAR Clear existing highlight
  * They are a keyword followed by a quoted string.
  */
 void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
@@ -95,16 +96,28 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         {
             wxString net_name = FROM_UTF8( text );
             NETINFO_ITEM* netinfo = pcb->FindNet( net_name );
-            int netcode = 0;
+            int netcode = -1;
 
             if( netinfo )
                 netcode = netinfo->GetNet();
+
+            if( netcode > 0 )
+            {
+                pcb->SetHighLightNet( netcode );
+
+                if( netinfo )
+                {
+                    MSG_PANEL_ITEMS items;
+                    netinfo->GetMsgPanelInfo( GetUserUnits(), items );
+                    SetMsgPanel( items );
+                }
+            }
 
             if( IsGalCanvasActive() )
             {
                 auto view = m_toolManager->GetView();
                 auto rs = view->GetPainter()->GetSettings();
-                rs->SetHighlight( true, netcode );
+                rs->SetHighlight( ( netcode >= 0 ), netcode );
                 view->UpdateAllLayersColor();
 
                 BOX2I bbox;
@@ -166,6 +179,18 @@ void PCB_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
         }
 
         return;
+    }
+    else if( strcmp( idcmd, "$CLEAR" ) == 0 )
+    {
+        auto view = m_toolManager->GetView();
+        auto rs = view->GetPainter()->GetSettings();
+        rs->SetHighlight( false );
+        view->UpdateAllLayersColor();
+
+        pcb->ResetHighLight();
+        SetMsgPanel( pcb );
+
+        GetGalCanvas()->Refresh();
     }
 
     if( text == NULL )

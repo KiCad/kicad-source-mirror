@@ -310,9 +310,19 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
     }
 
+    if( netName.empty() )
+    {
+        editFrame->SetStatusText( wxT( "" ) );
+        editFrame->SendCrossProbeClearHighlight();
+    }
+    else
+    {
+        editFrame->SendCrossProbeNetName( netName );
+        editFrame->SetStatusText( wxString::Format( _( "Selected net: %s" ),
+                                  UnescapeString( netName ) ) );
+    }
+
     editFrame->SetSelectedNetName( netName );
-    editFrame->SendCrossProbeNetName( netName );
-    editFrame->SetStatusText( wxString::Format( _( "Selected net: %s" ), UnescapeString( netName ) ) );
 
     aToolMgr->RunAction( SCH_ACTIONS::highlightNetSelection, true );
 
