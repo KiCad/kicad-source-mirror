@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_SCH_EDIT_TOOL_H
-#define KICAD_SCH_EDIT_TOOL_H
+#ifndef KICAD_SCH_MOVE_TOOL_H
+#define KICAD_SCH_MOVE_TOOL_H
 
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
@@ -33,11 +33,11 @@ class SCH_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
 
 
-class SCH_EDIT_TOOL : public TOOL_INTERACTIVE
+class SCH_MOVE_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SCH_EDIT_TOOL();
-    ~SCH_EDIT_TOOL();
+    SCH_MOVE_TOOL();
+    ~SCH_MOVE_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -48,41 +48,31 @@ public:
     ///> Get the SCH_DRAWING_TOOL top-level context menu
     inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
-    int Rotate( const TOOL_EVENT& aEvent );
-    int Mirror( const TOOL_EVENT& aEvent );
-
-    int Duplicate( const TOOL_EVENT& aEvent );
-    int RepeatDrawItem( const TOOL_EVENT& aEvent );
-
-    int Properties( const TOOL_EVENT& aEvent );
-    int EditField( const TOOL_EVENT& aEvent );
-    int AutoplaceFields( const TOOL_EVENT& aEvent );
-    int ConvertDeMorgan( const TOOL_EVENT& aEvent );
-
-    int ChangeShape( const TOOL_EVENT& aEvent );
-    int ChangeTextType( const TOOL_EVENT& aEvent );
-
-    int BreakWire( const TOOL_EVENT& aEvent );
-
-    int CleanupSheetPins( const TOOL_EVENT& aEvent );
-
     /**
-     * Function DoDelete()
+     * Function Main()
      *
-     * Deletes the selected items, or the item under the cursor.
+     * Runs an interactive move of the selected items, or the item under the cursor.
      */
-    int DoDelete( const TOOL_EVENT& aEvent );
-
-    ///> Runs the deletion tool.
-    int DeleteItemCursor( const TOOL_EVENT& aEvent );
+    int Main( const TOOL_EVENT& aEvent );
 
 private:
+    void moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
+
+    ///> Finds additional items for a drag operation.
+    ///> Connected items with no wire are included (as there is no wire to adjust for the drag).
+    ///> Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
+    void getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList );
+
+    ///> Returns the right modification point (e.g. for rotation), depending on the number of
+    ///> selected items.
+    bool updateModificationPoint( SELECTION& aSelection );
+
     ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
     void updateView( EDA_ITEM* );
 
     ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
     ///> parents.
-    void saveCopyInUndoList( EDA_ITEM*, UNDO_REDO_T aType, bool aAppend = false );
+    void saveCopyInUndoList( SCH_ITEM*, UNDO_REDO_T aType, bool aAppend = false );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
@@ -94,6 +84,16 @@ private:
 
     /// Menu model displayed by the tool.
     TOOL_MENU             m_menu;
+
+    ///> Flag determining if anything is being dragged right now
+    bool                  m_moveInProgress;
+
+    ///> Used for chaining commands
+    VECTOR2I              m_moveOffset;
+
+    ///> Last cursor position (needed for getModificationPoint() to avoid changes
+    ///> of edit reference point).
+    VECTOR2I              m_cursor;
 };
 
-#endif //KICAD_SCH_EDIT_TOOL_H
+#endif //KICAD_SCH_MOVE_TOOL_H

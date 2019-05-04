@@ -26,6 +26,7 @@
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_line_drawing_tool.h>
 #include <tools/sch_picker_tool.h>
+#include <tools/sch_move_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
@@ -42,21 +43,11 @@
 #include <sch_item_struct.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
-#include <list_operations.h>
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
 #include "sch_drawing_tool.h"
 
-TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
-        _( "Move" ), _( "Moves the selected item(s)" ),
-        move_xpm, AF_ACTIVATE );
-
-TOOL_ACTION SCH_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG ),
-        _( "Drag" ), _( "Drags the selected item(s)" ),
-        move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
@@ -174,10 +165,6 @@ TOOL_ACTION SCH_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         break_line_xpm );
 
 
-// For adding to or removing from selections
-#define QUIET_MODE true
-
-
 class SYMBOL_UNIT_MENU : public CONTEXT_MENU
 {
 public:
@@ -240,12 +227,8 @@ private:
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
         TOOL_INTERACTIVE( "eeschema.InteractiveEdit" ),
         m_selectionTool( nullptr ),
-        m_view( nullptr ),
-        m_controls( nullptr ),
         m_frame( nullptr ),
-        m_menu( *this ),
-        m_moveInProgress( false ),
-        m_moveOffset( 0, 0 )
+        m_menu( *this )
 {
 }
 
@@ -260,13 +243,10 @@ bool SCH_EDIT_TOOL::Init()
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
+    SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
     wxASSERT_MSG( drawingTool, "eeshema.InteractiveDrawing tool is not available" );
-
-    auto activeTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
@@ -279,10 +259,7 @@ bool SCH_EDIT_TOOL::Init()
               || m_frame->GetToolId() == ID_TEXT_COMMENT_BUTT );
     };
 
-    auto moveCondition = [] ( const SELECTION& aSel ) {
-        if( aSel.Empty() )
-            return false;
-
+    auto duplicateCondition = [] ( const SELECTION& aSel ) {
         if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
@@ -370,81 +347,77 @@ bool SCH_EDIT_TOOL::Init()
                              && SCH_CONDITIONS::OnlyType( SCH_SHEET_T );
 
     //
-    // Build the edit tool menu (shown when moving or dragging)
+    // Add edit actions to the move tool menu
     //
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
+    if( moveTool )
+    {
+        CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
+        moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( SCH_ACTIONS::rotateCCW,       orientCondition );
+        moveMenu.AddItem( SCH_ACTIONS::rotateCW,        orientCondition );
+        moveMenu.AddItem( SCH_ACTIONS::mirrorX,         orientCondition );
+        moveMenu.AddItem( SCH_ACTIONS::mirrorY,         orientCondition );
+        moveMenu.AddItem( SCH_ACTIONS::duplicate,       duplicateCondition );
+        moveMenu.AddItem( SCH_ACTIONS::doDelete,        SCH_CONDITIONS::NotEmpty );
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::duplicate, moveCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::doDelete,  SCH_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition );
+        moveMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition );
+        moveMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition );
+        moveMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition );
+        moveMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol );
 
-    ctxMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition );
-    ctxMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol );
+        std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
+        symUnitMenu->SetTool( this );
+        m_menu.AddSubMenu( symUnitMenu );
+        moveMenu.AddMenu( symUnitMenu.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
-    symUnitMenu->SetTool( this );
-    m_menu.AddSubMenu( symUnitMenu );
-    ctxMenu.AddMenu( symUnitMenu.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
-
-    ctxMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
-    ctxMenu.AddItem( SCH_ACTIONS::cut,  SCH_CONDITIONS::IdleSelection );
-    ctxMenu.AddItem( SCH_ACTIONS::copy, SCH_CONDITIONS::IdleSelection );
-
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
+        moveMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( SCH_ACTIONS::cut,  SCH_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( SCH_ACTIONS::copy, SCH_CONDITIONS::IdleSelection );
+    }
 
     //
     // Add editing actions to the drawing tool menu
     //
-    CONDITIONAL_MENU& drawingMenu = drawingTool->GetToolMenu().GetMenu();
+    CONDITIONAL_MENU& drawMenu = drawingTool->GetToolMenu().GetMenu();
 
-    drawingMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCCW, orientCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::rotateCW,  orientCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorX,   orientCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::mirrorY,   orientCondition, 200 );
+    drawMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::rotateCCW,       orientCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::rotateCW,        orientCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::mirrorX,         orientCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::mirrorY,         orientCondition, 200 );
 
-    drawingMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTool );
     drawingTool->GetToolMenu().AddSubMenu( symUnitMenu2 );
-    drawingMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    drawingMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toLabel,          anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toHLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toGLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::toText,           anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetTool && SCH_CONDITIONS::Idle, 200 );
-    drawingMenu.AddItem( SCH_ACTIONS::resizeSheet,      sheetTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toLabel,          anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toHLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toGLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::toText,           anyTextTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( SCH_ACTIONS::resizeSheet,      sheetTool && SCH_CONDITIONS::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move,             moveCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::drag,             moveCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::rotateCCW,        orientCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::rotateCW,         orientCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::mirrorX,          orientCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::mirrorY,          orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate,        moveCondition, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::duplicate,        duplicateCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::doDelete,         SCH_CONDITIONS::NotEmpty, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::properties,       propertiesCondition, 200 );
@@ -469,9 +442,9 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::resizeSheet,      singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::cut,   SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::copy,  SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::paste, SCH_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::copy,             SCH_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( SCH_ACTIONS::paste,            SCH_CONDITIONS::Idle, 200 );
 
     return true;
 }
@@ -481,456 +454,9 @@ void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
 {
     if( aReason == MODEL_RELOAD )
     {
-        m_moveInProgress = false;
-        m_moveOffset = { 0, 0 };
-
         // Init variables used by every drawing tool
-        m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-        m_controls = getViewControls();
         m_frame = getEditFrame<SCH_EDIT_FRAME>();
     }
-}
-
-
-int SCH_EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
-{
-    const KICAD_T movableItems[] =
-    {
-        SCH_MARKER_T,
-        SCH_JUNCTION_T,
-        SCH_NO_CONNECT_T,
-        SCH_BUS_BUS_ENTRY_T,
-        SCH_BUS_WIRE_ENTRY_T,
-        SCH_LINE_T,
-        SCH_BITMAP_T,
-        SCH_TEXT_T,
-        SCH_LABEL_T,
-        SCH_GLOBAL_LABEL_T,
-        SCH_HIER_LABEL_T,
-        SCH_FIELD_T,
-        SCH_COMPONENT_T,
-        SCH_SHEET_PIN_T,
-        SCH_SHEET_T,
-        EOT
-    };
-
-    KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
-    controls->SetSnapping( true );
-    VECTOR2I originalCursorPos = controls->GetCursorPosition();
-
-    // Be sure that there is at least one item that we can move. If there's no selection try
-    // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
-    SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
-    EDA_ITEMS  dragAdditions;
-    bool       unselect = selection.IsHover();
-
-    if( selection.Empty() )
-        return 0;
-
-    if( aEvent.IsAction( &SCH_ACTIONS::move ) )
-        m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
-    else
-        m_frame->SetToolID( ID_SCH_DRAG, wxCURSOR_DEFAULT, _( "Drag Items" ) );
-
-    Activate();
-    controls->ShowCursor( true );
-    controls->SetAutoPan( true );
-
-    bool restore_state = false;
-    bool chain_commands = false;
-    OPT_TOOL_EVENT evt = aEvent;
-    VECTOR2I prevPos;
-
-    if( m_moveInProgress )
-    {
-        // User must have switched from move to drag or vice-versa.  Reset the moved items
-        // so we can start again with the current m_isDragOperation and m_moveOffset.
-        m_frame->RollbackSchematicFromUndo();
-        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
-        m_moveInProgress = false;
-        // And give it a kick so it doesn't have to wait for the first mouse movement to
-        // refresh.
-        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
-        return 0;
-    }
-
-    // Main loop: keep receiving events
-    do
-    {
-        controls->SetSnapping( !evt->Modifier( MD_ALT ) );
-
-        if( evt->IsAction( &SCH_ACTIONS::move ) || evt->IsAction( &SCH_ACTIONS::drag )
-                || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &SCH_ACTIONS::refreshPreview ) )
-        {
-            if( !m_moveInProgress )    // Prepare to start moving/dragging
-            {
-                //------------------------------------------------------------------------
-                // Setup a drag or a move
-                //
-                for( SCH_ITEM* it = m_frame->GetScreen()->GetDrawItems(); it; it = it->Next() )
-                {
-                    if( it->IsSelected() )
-                        it->SetFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
-                    else
-                        it->ClearFlags( STARTPOINT | ENDPOINT | SELECTEDNODE );
-                }
-
-                // Add connections to the selection for a drag.
-                //
-                if( m_frame->GetToolId() == ID_SCH_DRAG )
-                {
-                    for( EDA_ITEM* item : selection )
-                    {
-                        if( static_cast<SCH_ITEM*>( item )->IsConnectable() )
-                        {
-                            std::vector<wxPoint> connections;
-                            static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
-
-                            for( wxPoint point : connections )
-                                getConnectedDragItems( (SCH_ITEM*) item, point, dragAdditions );
-                        }
-                    }
-
-                    m_selectionTool->AddItemsToSel( &dragAdditions, QUIET_MODE );
-
-                    for( EDA_ITEM* item : dragAdditions )
-                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, true );
-                }
-
-                // Mark the edges of the block with dangling flags for a move.
-                //
-                if( m_frame->GetToolId() == ID_SCH_MOVE )
-                {
-                    std::vector<DANGLING_END_ITEM> internalPoints;
-
-                    for( EDA_ITEM* item : selection )
-                        static_cast<SCH_ITEM*>( item )->GetEndPoints( internalPoints );
-
-                    for( EDA_ITEM* item : selection )
-                        static_cast<SCH_ITEM*>( item )->UpdateDanglingState( internalPoints );
-                }
-
-                // Generic setup
-                //
-                bool first = true;
-                for( EDA_ITEM* item : selection )
-                {
-                    if( item->IsNew() || ( item->GetParent() && item->GetParent()->IsSelected() ) )
-                    {
-                        // already saved to undo
-                    }
-                    else
-                    {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, !first );
-                        first = false;
-                    }
-
-                    // Apply any initial offset in case we're coming from a previous command.
-                    //
-                    moveItem( (SCH_ITEM*) item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
-                }
-
-                // Set up the starting position and move/drag offset
-                //
-                m_cursor = controls->GetCursorPosition();
-
-                if( selection.HasReferencePoint() )
-                {
-                    VECTOR2I delta = m_cursor - selection.GetReferencePoint();
-
-                    // Drag items to the current cursor position
-                    for( int i = 0; i < selection.GetSize(); ++i )
-                    {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
-                        // Don't double move pins, fields, etc.
-                        if( item->GetParent() && item->GetParent()->IsSelected() )
-                            continue;
-
-                        moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
-                        updateView( item );
-                    }
-
-                    selection.SetReferencePoint( m_cursor );
-                }
-                else if( selection.Size() == 1 )
-                {
-                    // Set the current cursor position to the first dragged item origin,
-                    // so the movement vector can be computed later
-                    updateModificationPoint( selection );
-                    m_cursor = originalCursorPos;
-                }
-                else
-                {
-                    updateModificationPoint( selection );
-                }
-
-                controls->SetCursorPosition( m_cursor, false );
-
-                prevPos = m_cursor;
-                controls->SetAutoPan( true );
-                m_moveInProgress = true;
-            }
-
-            //------------------------------------------------------------------------
-            // Follow the mouse
-            //
-            m_cursor = controls->GetCursorPosition();
-            VECTOR2I delta( m_cursor - prevPos );
-            selection.SetReferencePoint( m_cursor );
-
-            m_moveOffset += delta;
-            prevPos = m_cursor;
-
-            for( EDA_ITEM* item : selection )
-            {
-                // Don't double move pins, fields, etc.
-                if( item->GetParent() && item->GetParent()->IsSelected() )
-                    continue;
-
-                moveItem( (SCH_ITEM*) item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
-                updateView( item );
-            }
-
-            m_frame->UpdateMsgPanel();
-        }
-        //------------------------------------------------------------------------
-        // Handle cancel
-        //
-        else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
-        {
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-
-            if( m_moveInProgress )
-                restore_state = true;
-
-            break;
-        }
-        //------------------------------------------------------------------------
-        // Handle TOOL_ACTION special cases
-        //
-        else if( evt->Action() == TA_UNDO_REDO_PRE )
-        {
-            unselect = true;
-            break;
-        }
-        else if( evt->Category() == TC_COMMAND )
-        {
-            if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
-            {
-                // Exit on a remove operation; there is no further processing for removed items.
-                break;
-            }
-            else if( evt->IsAction( &SCH_ACTIONS::duplicate ) )
-            {
-                if( selection.Front()->IsNew() )
-                {
-                    // This doesn't really make sense; we'll just end up dragging a stack of
-                    // objects so Duplicate() is going to ignore this and we'll just carry on.
-                    continue;
-                }
-
-                // Move original back and exit.  The duplicate will run in its own loop.
-                restore_state = true;
-                unselect = false;
-                chain_commands = true;
-                break;
-            }
-            else if( evt->Action() == TA_CONTEXT_MENU_CHOICE )
-            {
-                if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
-                    && evt->GetCommandId().get() <= ID_POPUP_SCH_SELECT_UNIT_CMP_MAX )
-                {
-                    SCH_COMPONENT* component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
-                    int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
-
-                    if( component )
-                    {
-                        m_frame->SelectUnit( component, unit );
-                        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
-                    }
-                }
-            }
-        }
-        //------------------------------------------------------------------------
-        // Handle context menu
-        //
-        else if( evt->IsClick( BUT_RIGHT ) )
-        {
-            m_menu.ShowContextMenu( selection );
-        }
-        //------------------------------------------------------------------------
-        // Handle drop
-        //
-        else if( evt->IsMouseUp( BUT_LEFT ) || evt->IsClick( BUT_LEFT ) )
-        {
-            break; // Finish
-        }
-
-    } while( ( evt = Wait() ) ); //Should be assignment not equality test
-
-    controls->ForceCursorPosition( false );
-    controls->ShowCursor( false );
-    controls->SetSnapping( false );
-    controls->SetAutoPan( false );
-
-    if( !chain_commands )
-        m_moveOffset = { 0, 0 };
-
-    m_moveInProgress = false;
-    m_frame->SetNoToolSelected();
-
-    selection.ClearReferencePoint();
-
-    for( auto item : selection )
-        item->ClearFlags( IS_MOVED );
-
-    if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-    else
-        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
-
-    if( restore_state )
-    {
-        m_frame->RollbackSchematicFromUndo();
-    }
-    else
-    {
-        m_frame->CheckConnections( selection, true );
-        m_frame->SchematicCleanUp( true );
-        m_frame->TestDanglingEnds();
-        m_frame->OnModify();
-    }
-
-    return 0;
-}
-
-
-void SCH_EDIT_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList )
-{
-    for( SCH_ITEM* test = m_frame->GetScreen()->GetDrawItems(); test; test = test->Next() )
-    {
-        if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aItem ) )
-            continue;
-
-        switch( test->Type() )
-        {
-        default:
-        case SCH_LINE_T:
-        {
-            // Select wires/busses that are connected at one end and/or the other.  Any
-            // unconnected ends must be flagged (STARTPOINT or ENDPOINT).
-            SCH_LINE* line = (SCH_LINE*) test;
-
-            if( line->GetStartPoint() == aPoint )
-            {
-                if( !( line->GetFlags() & SELECTEDNODE ) )
-                    aList.push_back( line );
-
-                line->SetFlags( STARTPOINT | SELECTEDNODE );
-            }
-            else if( line->GetEndPoint() == aPoint )
-            {
-                if( !( line->GetFlags() & SELECTEDNODE ) )
-                    aList.push_back( line );
-
-                line->SetFlags( ENDPOINT | SELECTEDNODE );
-            }
-            break;
-        }
-
-        case SCH_SHEET_T:
-            // Dragging a sheet just because it's connected to something else feels a bit like
-            // the tail wagging the dog, but this could be moved down to the next case.
-            break;
-
-        case SCH_COMPONENT_T:
-        case SCH_NO_CONNECT_T:
-        case SCH_JUNCTION_T:
-            // Select connected items that have no wire between them.
-            if( aItem->Type() != SCH_LINE_T && test->IsConnected( aPoint ) )
-               aList.push_back( test );
-
-            break;
-
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_BUS_BUS_ENTRY_T:
-            // Select labels and bus entries that are connected to a wire being moved.
-            if( aItem->Type() == SCH_LINE_T )
-            {
-                std::vector<wxPoint> connections;
-                test->GetConnectionPoints( connections );
-
-                for( wxPoint& point : connections )
-                {
-                    if( aItem->HitTest( point ) )
-                        aList.push_back( test );
-                }
-            }
-            break;
-        }
-    }
-}
-
-
-void SCH_EDIT_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
-{
-    switch( aItem->Type() )
-    {
-    case SCH_LINE_T:
-        if( aItem->GetFlags() & STARTPOINT )
-            static_cast<SCH_LINE*>( aItem )->MoveStart( (wxPoint) aDelta );
-
-        if( aItem->GetFlags() & ENDPOINT )
-            static_cast<SCH_LINE*>( aItem )->MoveEnd( (wxPoint) aDelta );
-
-        break;
-
-    case SCH_PIN_T:
-    case SCH_FIELD_T:
-        aItem->Move( wxPoint( aDelta.x, -aDelta.y ) );
-        break;
-
-    default:
-        aItem->Move( (wxPoint) aDelta );
-        break;
-    }
-
-    aItem->SetFlags( IS_MOVED );
-}
-
-
-bool SCH_EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
-{
-    if( m_moveInProgress && aSelection.HasReferencePoint() )
-        return false;
-
-    // When there is only one item selected, the reference point is its position...
-    if( aSelection.Size() == 1 )
-    {
-        SCH_ITEM* item =  static_cast<SCH_ITEM*>( aSelection.Front() );
-
-        // For some items, moving the cursor to anchor is not good (for instance large
-        // hierarchical sheets or components can have the anchor outside the view)
-        if( item->IsMovableFromAnchorPoint() )
-        {
-            wxPoint pos = item->GetPosition();
-            aSelection.SetReferencePoint( pos );
-
-            return true;
-        }
-    }
-
-    // ...otherwise modify items with regard to the grid-snapped cursor position
-    m_cursor = getViewControls()->GetCursorPosition( true );
-    aSelection.SetReferencePoint( m_cursor );
-
-    return true;
 }
 
 
@@ -1249,7 +775,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     for( unsigned ii = 0; ii < selection.GetSize(); ++ii )
     {
         SCH_ITEM* oldItem = static_cast<SCH_ITEM*>( selection.GetItem( ii ) );
-        SCH_ITEM* newItem = DuplicateItem( oldItem );
+        SCH_ITEM* newItem = oldItem->Duplicate();
         newItem->SetFlags( IS_NEW );
         newItems.push_back( newItem );
         saveCopyInUndoList( newItem, UR_NEW, ii > 0 );
@@ -1314,9 +840,7 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-
-    TOOL_EVENT evt = SCH_ACTIONS::move.MakeEvent();
-    Main( evt );
+    m_toolMgr->RunAction( SCH_ACTIONS::move );
 
     return 0;
 }
@@ -1339,7 +863,8 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     {
         ( (SCH_COMPONENT*) newItem )->SetTimeStamp( GetNewTimeStamp() );
 
-        newItem->Move( (wxPoint)m_controls->GetCursorPosition( true ) - newItem->GetPosition() );
+        wxPoint cursorPos = (wxPoint) getViewControls()->GetCursorPosition( true );
+        newItem->Move( cursorPos - newItem->GetPosition() );
         performDrag = true;
     }
     else
@@ -1357,10 +882,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_selectionTool->AddItemToSel( newItem );
 
     if( performDrag )
-    {
-        TOOL_EVENT evt = SCH_ACTIONS::move.MakeEvent();
-        Main( evt );
-    }
+        m_toolMgr->RunAction( SCH_ACTIONS::move, true );
 
     newItem->ClearFlags();
 
@@ -1376,26 +898,56 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 {
-    std::vector<SCH_ITEM*> items;
-    // get a copy instead of reference (we're going to clear the selection before removing items)
-    SELECTION              selectionCopy = m_selectionTool->RequestSelection();
+    SCH_SCREEN*  screen = m_frame->GetScreen();
+    auto         items = m_selectionTool->RequestSelection().GetItems();
+    bool         appendToUndo = false;
 
-    if( selectionCopy.Empty() )
+    if( items.empty() )
         return 0;
 
-    // As we are about to remove items, they have to be removed from the selection first
+    // Don't leave a freed pointer in the selection
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
-    for( unsigned ii = 0; ii < selectionCopy.GetSize(); ii++ )
+    for( EDA_ITEM* item : items )
     {
-        SCH_ITEM* item = static_cast<SCH_ITEM*>( selectionCopy.GetItem( ii ) );
-
         // Junctions, in particular, may have already been deleted if deleting wires made
         // them redundant
         if( item->GetEditFlags() & STRUCT_DELETED )
             continue;
 
-        m_frame->DeleteItem( item, ii > 0 );
+        if( item->Type() == SCH_JUNCTION_T )
+        {
+            m_frame->DeleteJunction( (SCH_ITEM*) item, appendToUndo );
+            appendToUndo = true;
+        }
+        else
+        {
+            item->SetFlags( STRUCT_DELETED );
+            saveCopyInUndoList( item, UR_DELETED, appendToUndo );
+            appendToUndo = true;
+
+            if( item->Type() == SCH_SHEET_PIN_T )
+                static_cast<SCH_SHEET*>( item->GetParent() )->RemovePin( (SCH_SHEET_PIN*) item );
+            else
+                m_frame->RemoveFromScreen( (SCH_ITEM*) item );
+
+            SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+            if( sch_item && sch_item->IsConnectable() )
+            {
+                std::vector< wxPoint > pts;
+                sch_item->GetConnectionPoints( pts );
+
+                for( auto point : pts )
+                {
+                    SCH_ITEM* junction = screen->GetItem( point, 0, SCH_JUNCTION_T );
+                    if( junction && !screen->IsJunctionNeeded( point ) )
+                        m_frame->DeleteJunction( junction, appendToUndo );
+                }
+            }
+
+            updateView( (SCH_ITEM*) item );
+        }
     }
 
     m_frame->SetRepeatItem( nullptr );
@@ -1687,7 +1239,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 {
-    VECTOR2I cursorPos = m_controls->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
 
     if( m_frame->BreakSegments( (wxPoint) cursorPos ) )
     {
@@ -1740,21 +1292,19 @@ void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
 }
 
 
-void SCH_EDIT_TOOL::saveCopyInUndoList( SCH_ITEM* aItem, UNDO_REDO_T aType, bool aAppend )
+void SCH_EDIT_TOOL::saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO_T aType, bool aAppend )
 {
     KICAD_T itemType = aItem->Type();
 
     if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*)aItem->GetParent(), aType, aAppend );
+        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aItem->GetParent(), UR_CHANGED, aAppend );
     else
-        m_frame->SaveCopyInUndoList( aItem, aType, aAppend );
+        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aItem, aType, aAppend );
 }
 
 
 void SCH_EDIT_TOOL::setTransitions()
 {
-    Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Main,               SCH_ACTIONS::drag.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Duplicate,          SCH_ACTIONS::duplicate.MakeEvent() );
     Go( &SCH_EDIT_TOOL::RepeatDrawItem,     SCH_ACTIONS::repeatDrawItem.MakeEvent() );
     Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );

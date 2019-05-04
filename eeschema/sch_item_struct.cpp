@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,10 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_item_struct.cpp
- */
-
 #include <fctsys.h>
 #include <common.h>
 #include <gr_basic.h>
@@ -36,7 +32,9 @@
 #include <sch_sheet_path.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-
+#include <sch_component.h>
+#include <sch_sheet.h>
+#include <sch_pin.h>
 #include <general.h>
 
 
@@ -71,6 +69,41 @@ SCH_ITEM::~SCH_ITEM()
 
     for( const auto& it : m_connection_map )
         delete it.second;
+}
+
+
+SCH_ITEM* SCH_ITEM::Duplicate( bool doClone )
+{
+    SCH_ITEM* newItem = (SCH_ITEM*) Clone();
+
+    if( doClone )
+        newItem->SetTimeStamp( GetTimeStamp() );
+
+    newItem->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+
+    if( newItem->Type() == SCH_COMPONENT_T )
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) newItem;
+
+        for( SCH_PIN& pin : component->GetPins() )
+            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+
+        std::vector<SCH_FIELD*> fields;
+        component->GetFields( fields, false );
+
+        for( SCH_FIELD* field : fields )
+            field->ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    }
+
+    if( newItem->Type() == SCH_SHEET_T )
+    {
+        SCH_SHEET* sheet = (SCH_SHEET*) newItem;
+
+        for( SCH_SHEET_PIN& pin : sheet->GetPins() )
+            pin.ClearFlags( SELECTED | HIGHLIGHTED | BRIGHTENED );
+    }
+
+    return newItem;
 }
 
 

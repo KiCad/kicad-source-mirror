@@ -48,7 +48,6 @@
 #include <widgets/symbol_tree_pane.h>
 #include <widgets/lib_tree.h>
 #include <symbol_lib_table.h>
-#include <list_operations.h>
 #include <kicad_device_context.h>
 #include <hotkeys.h>
 #include <eeschema_config.h>

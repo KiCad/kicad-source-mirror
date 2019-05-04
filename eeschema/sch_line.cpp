@@ -35,7 +35,6 @@
 #include <base_units.h>
 #include <eeschema_config.h>
 #include <general.h>
-#include <list_operations.h>
 #include <sch_line.h>
 #include <sch_edit_frame.h>
 #include <netlist_object.h>

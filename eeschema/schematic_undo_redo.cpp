@@ -27,7 +27,6 @@
 #include <sch_edit_frame.h>
 #include <tool/tool_manager.h>
 #include <general.h>
-#include <list_operations.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
 #include <sch_junction.h>
@@ -129,7 +128,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( SCH_ITEM*      aItem,
     switch( aCommandType )
     {
     case UR_CHANGED:            /* Create a copy of item */
-        itemWrapper.SetLink( DuplicateItem( aItem, true ) );
+        itemWrapper.SetLink( aItem->Duplicate( true ) );
         commandToUndo->PushItem( itemWrapper );
         break;
 
@@ -218,7 +217,7 @@ void SCH_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
              * If this link is not null, the copy is already done
              */
             if( commandToUndo->GetPickedItemLink( ii ) == NULL )
-                commandToUndo->SetPickedItemLink( DuplicateItem( item, true ), ii );
+                commandToUndo->SetPickedItemLink( item->Duplicate( true ), ii );
 
             wxASSERT( commandToUndo->GetPickedItemLink( ii ) );
             break;

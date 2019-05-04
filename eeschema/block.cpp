@@ -33,7 +33,6 @@
 #include <general.h>
 #include <class_library.h>
 #include <lib_pin.h>
-#include <list_operations.h>
 #include <sch_bus_entry.h>
 #include <sch_marker.h>
 #include <sch_junction.h>
@@ -43,7 +42,6 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-#include <list_operations.h>
 
 #include <preview_items/selection_area.h>
 #include <sch_view.h>

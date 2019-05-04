@@ -962,14 +962,6 @@ public:
     SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet );
 
     /**
-     * Remove \a aItem from the current screen and saves it in the undo list.
-     *
-     * @param aItem The item to remove from the current screen.
-     * @param aAppend True if we are updating a previous Undo state
-     */
-    void DeleteItem( SCH_ITEM* aItem, bool aAppend = false );
-
-    /**
      * Removes a given junction and heals any wire segments under the junction
      *
      * @param aItem The junction to delete

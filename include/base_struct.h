@@ -116,8 +116,8 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define IS_DRAGGED     (1 << 6)    ///< Item being dragged
 #define IS_DELETED     (1 << 7)
 #define IS_WIRE_IMAGE  (1 << 8)    ///< Item to be drawn as wireframe while editing
-#define STARTPOINT     (1 << 9)
-#define ENDPOINT       (1 << 10)
+#define STARTPOINT     (1 << 9)    ///< When a line is selected, these flags indicate which
+#define ENDPOINT       (1 << 10)   ///< ends.  (Used to support dragging.)
 #define SELECTED       (1 << 11)
 #define SELECTEDNODE   (1 << 12)   ///< flag indicating that the structure has already selected
 #define STRUCT_DELETED (1 << 13)   ///< flag indication structures to be erased

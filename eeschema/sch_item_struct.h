@@ -160,6 +160,15 @@ public:
     SCH_ITEM* Back() const { return static_cast<SCH_ITEM*>( Pback ); }
 
     /**
+     * Routine to create a new copy of given item.
+     * The new object is not put in draw list (not linked).
+     *
+     * @param doClone (default = false) indicates unique values (such as timestamp and
+     *     sheet name) should be duplicated.  Use only for undo/redo operations.
+     */
+    SCH_ITEM* Duplicate( bool doClone = false );
+
+    /**
      * Virtual function IsMovableFromAnchorPoint
      * @return true for items which are moved with the anchor point at mouse cursor
      *  and false for items moved with no reference to anchor

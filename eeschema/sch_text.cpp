@@ -40,7 +40,6 @@
 #include <gal/stroke_font.h>
 #include <bitmaps.h>
 
-#include <list_operations.h>
 #include <sch_text.h>
 #include <netlist_object.h>
 #include <trace_helpers.h>
