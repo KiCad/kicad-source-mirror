@@ -39,7 +39,6 @@
 char g_lastBusEntryShape = '/';
 
 
-// JEY TODO: IDs that only appear in popup menus don't need to be here....
 OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
@@ -51,40 +50,23 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
         return ACTIONS::cancelInteractive.MakeEvent();
 
     case ID_ZOOM_REDRAW:
-    case ID_POPUP_ZOOM_REDRAW:
     case ID_VIEWER_ZOOM_REDRAW:
         return ACTIONS::zoomRedraw.MakeEvent();
-
-    case ID_POPUP_ZOOM_IN:
-        return ACTIONS::zoomIn.MakeEvent();
 
     case ID_ZOOM_IN:
     case ID_VIEWER_ZOOM_IN:
         return ACTIONS::zoomInCenter.MakeEvent();
 
-    case ID_POPUP_ZOOM_OUT:
-        return ACTIONS::zoomOut.MakeEvent();
-
     case ID_ZOOM_OUT:
     case ID_VIEWER_ZOOM_OUT:
         return ACTIONS::zoomOutCenter.MakeEvent();
 
-    case ID_POPUP_ZOOM_PAGE:
     case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
     case ID_VIEWER_ZOOM_PAGE:
         return ACTIONS::zoomFitScreen.MakeEvent();
 
-    case ID_POPUP_ZOOM_CENTER:
-        return ACTIONS::zoomCenter.MakeEvent();
-
     case ID_ZOOM_SELECTION:
         return ACTIONS::zoomTool.MakeEvent();
-
-    case ID_POPUP_GRID_NEXT:
-        return ACTIONS::gridNext.MakeEvent();
-
-    case ID_POPUP_GRID_PREV:
-        return ACTIONS::gridPrev.MakeEvent();
 
     case ID_HIGHLIGHT_BUTT:
         return SCH_ACTIONS::highlightNetCursor.MakeEvent();
@@ -100,15 +82,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_PLACE_POWER_BUTT:
         return SCH_ACTIONS::placePower.MakeEvent();
 
-    case ID_POPUP_SCH_BEGIN_WIRE:
-        return SCH_ACTIONS::startWire.MakeEvent();
-
     case ID_MENU_WIRE_BUTT:
     case ID_WIRE_BUTT:
         return SCH_ACTIONS::drawWire.MakeEvent();
-
-    case ID_POPUP_SCH_BEGIN_BUS:
-        return SCH_ACTIONS::startBus.MakeEvent();
 
     case ID_MENU_BUS_BUTT:
     case ID_BUS_BUTT:
@@ -117,9 +93,6 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_MENU_NOCONN_BUTT:
     case ID_NOCONN_BUTT:
         return SCH_ACTIONS::placeNoConnect.MakeEvent();
-
-    case ID_POPUP_SCH_ADD_JUNCTION:
-        return SCH_ACTIONS::addJunction.MakeEvent();
 
     case ID_MENU_JUNCTION_BUTT:
     case ID_JUNCTION_BUTT:
@@ -133,22 +106,13 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_BUSTOBUS_ENTRY_BUTT:
         return SCH_ACTIONS::placeBusBusEntry.MakeEvent();
 
-    case ID_POPUP_SCH_ADD_LABEL:
-        return SCH_ACTIONS::addLabel.MakeEvent();
-
     case ID_MENU_LABEL_BUTT:
     case ID_LABEL_BUTT:
         return SCH_ACTIONS::placeLabel.MakeEvent();
 
-    case ID_POPUP_SCH_ADD_GLABEL:
-        return SCH_ACTIONS::addGlobalLabel.MakeEvent();
-
     case ID_MENU_GLABEL_BUTT:
     case ID_GLOBALLABEL_BUTT:
         return SCH_ACTIONS::placeGlobalLabel.MakeEvent();
-
-    case ID_POPUP_SCH_ADD_HLABEL:
-        return SCH_ACTIONS::addHierLabel.MakeEvent();
 
     case ID_MENU_HIERLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
@@ -158,7 +122,6 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SHEET_PIN_BUTT:
         return SCH_ACTIONS::placeSheetPin.MakeEvent();
 
-    case ID_POPUP_IMPORT_HLABEL_TO_SHEETPIN:
     case ID_MENU_IMPORT_HLABEL_BUTT:
     case ID_IMPORT_HLABEL_BUTT:
         return SCH_ACTIONS::importSheetPin.MakeEvent();
@@ -167,15 +130,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_SHEET_SYMBOL_BUTT:
         return SCH_ACTIONS::drawSheet.MakeEvent();
 
-    case ID_POPUP_SCH_RESIZE_SHEET:
-        return SCH_ACTIONS::resizeSheet.MakeEvent();
-
     case ID_MENU_TEXT_COMMENT_BUTT:
     case ID_TEXT_COMMENT_BUTT:
         return SCH_ACTIONS::placeSchematicText.MakeEvent();
-
-    case ID_POPUP_SCH_BEGIN_LINES:
-        return SCH_ACTIONS::startLines.MakeEvent();
 
     case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
@@ -249,32 +206,11 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_AUTOPLACE_FIELDS:
         return SCH_ACTIONS::autoplaceFields.MakeEvent();
 
-    case ID_POPUP_SCH_EDIT_CONVERT_CMP:
-        return SCH_ACTIONS::convertDeMorgan.MakeEvent();
-
-    case ID_POPUP_SCH_DISPLAYDOC_CMP:
-        return SCH_ACTIONS::showDatasheet.MakeEvent();
-
-    case ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP:
-        return SCH_ACTIONS::editWithSymbolEditor.MakeEvent();
-
     case ID_HOTKEY_SELECT_NODE:
         return SCH_ACTIONS::selectNode.MakeEvent();
 
     case ID_HOTKEY_SELECT_CONNECTION:
         return SCH_ACTIONS::selectConnection.MakeEvent();
-
-    case ID_POPUP_SCH_ENTER_SHEET:
-        return SCH_ACTIONS::enterSheet.MakeEvent();
-
-    case ID_POPUP_SCH_LEAVE_SHEET:
-        return SCH_ACTIONS::leaveSheet.MakeEvent();
-
-    case ID_POPUP_SCH_CLEANUP_SHEET:
-        return SCH_ACTIONS::cleanupSheetPins.MakeEvent();
-
-    case ID_POPUP_SCH_SELECT_ON_PCB:
-        return SCH_ACTIONS::explicitCrossProbe.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();
