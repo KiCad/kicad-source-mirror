@@ -4,7 +4,7 @@
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2013 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2013-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2013-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -18,11 +18,6 @@
  *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-
-/**
- * @file pcb_edit_frame.cpp
- * @brief PCB editor main frame implementation.
  */
 
 #include <fctsys.h>
@@ -70,8 +65,24 @@
 #include <functional>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/pcb_actions.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
 #include <tools/selection_tool.h>
+#include <tools/picker_tool.h>
+#include <tools/edit_tool.h>
+#include <tools/drawing_tool.h>
+#include <tools/point_editor.h>
+#include <tools/pcbnew_control.h>
+#include <tools/pcb_editor_control.h>
+#include <tools/placement_tool.h>
+#include <tools/pad_tool.h>
+#include <tools/microwave_tool.h>
+#include <tools/position_relative_tool.h>
+#include <tools/zone_filler_tool.h>
+#include <tools/pcb_actions.h>
+#include <router/router_tool.h>
+#include <router/length_tuner_tool.h>
+#include <autorouter/autoplacer_tool.h>
 #include <gestfich.h>
 #include <executable_names.h>
 #include <eda_dockart.h>
@@ -81,6 +92,8 @@
 
 #if defined(KICAD_SCRIPTING) || defined(KICAD_SCRIPTING_WXPYTHON)
 #include <python_scripting.h>
+#include <tool/common_tools.h>
+
 #endif
 
 
@@ -556,7 +569,23 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
-    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new ROUTER_TOOL );
+    m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
+    m_toolManager->RegisterTool( new EDIT_TOOL );
+    m_toolManager->RegisterTool( new PAD_TOOL );
+    m_toolManager->RegisterTool( new DRAWING_TOOL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
+    m_toolManager->RegisterTool( new MICROWAVE_TOOL );
+    m_toolManager->RegisterTool( new POSITION_RELATIVE_TOOL );
+    m_toolManager->RegisterTool( new ZONE_FILLER_TOOL );
+    m_toolManager->RegisterTool( new AUTOPLACE_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

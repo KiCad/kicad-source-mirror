@@ -45,7 +45,10 @@
 #include <sch_painter.h>
 #include <confirm.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 #include <tools/sch_actions.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -215,6 +218,28 @@ LIB_VIEW_FRAME::~LIB_VIEW_FRAME()
 {
     if( m_previewItem )
         GetCanvas()->GetView()->Remove( m_previewItem );
+}
+
+
+void LIB_VIEW_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
+    m_actions = new SCH_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+
+    m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 
 

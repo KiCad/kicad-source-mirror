@@ -61,9 +61,6 @@ public:
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
-
-    ///> @copydoc COMMON_ACTIONS::RegisterAllTools()
-    virtual void RegisterAllTools( TOOL_MANAGER* aToolManager ) override;
 };
 
 #endif

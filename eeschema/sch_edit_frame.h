@@ -769,6 +769,8 @@ public:
     void GetSchematicConnections( std::vector< wxPoint >& aConnections );
 
 private:
+    // Sets up the tool framework
+    void setupTools();
 
     void OnExit( wxCommandEvent& event );
     void OnAnnotate( wxCommandEvent& event );

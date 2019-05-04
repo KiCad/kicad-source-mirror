@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,22 +19,9 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tool/common_tools.h>
-#include <tool/zoom_tool.h>
 #include <gerbview_id.h>
-
 #include "gerbview_actions.h"
-#include "gerbview_selection_tool.h"
-#include "gerbview_control.h"
 
-
-void GERBVIEW_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
-{
-    aToolManager->RegisterTool( new COMMON_TOOLS );
-    aToolManager->RegisterTool( new GERBVIEW_SELECTION_TOOL );
-    aToolManager->RegisterTool( new GERBVIEW_CONTROL );
-    aToolManager->RegisterTool( new ZOOM_TOOL );
-}
 
 OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 {

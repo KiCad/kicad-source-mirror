@@ -107,26 +107,6 @@ SCH_BASE_FRAME::~SCH_BASE_FRAME()
 }
 
 
-void SCH_BASE_FRAME::setupTools()
-{
-    // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
-                                   GetCanvas()->GetViewControls(), this );
-    m_actions = new SCH_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
-
-    // Register tools
-    m_actions->RegisterAllTools( m_toolManager );
-    m_toolManager->InitTools();
-
-    // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
-
-    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
-}
-
-
 void SCH_BASE_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
 {
     wxMenuBar* menuBar = GetMenuBar();

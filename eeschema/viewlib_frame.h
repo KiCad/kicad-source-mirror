@@ -48,8 +48,7 @@ public:
      * Constructor
      * @param aKiway
      * @param aParent = the parent frame
-     * @param aFrameType must be given either FRAME_SCH_LIB_VIEWER or
-     *  FRAME_SCH_LIB_VIEWER_MODAL
+     * @param aFrameType must be either FRAME_SCH_LIB_VIEWER or FRAME_SCH_LIB_VIEWER_MODAL
      * @param aLibrary = the library to open when starting (default = NULL)
      */
     LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -83,6 +82,7 @@ public:
      * exists)
      */
     bool ReCreateListCmp();
+
     void DisplayLibInfos();
     void RedrawActiveWindow( wxDC* DC, bool EraseBg ) override;
     void OnCloseWindow( wxCloseEvent& Event );
@@ -157,6 +157,9 @@ public:
     const BOX2I GetDocumentExtents() const override;
 
 private:
+    // Sets up the tool framework
+    void setupTools();
+
     /**
      * Called when the frame is activated to reload the libraries and component lists
      * that can be changed by the schematic editor or the library editor.

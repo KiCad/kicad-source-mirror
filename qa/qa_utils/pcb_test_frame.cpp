@@ -107,10 +107,6 @@ public:
     {
         return NULLOPT;
     }
-
-    void RegisterAllTools( TOOL_MANAGER* aToolManager ) override
-    {
-    }
 };
 
 void PCB_TEST_FRAME::OnMenuFileOpen( wxCommandEvent& WXUNUSED( event ) )

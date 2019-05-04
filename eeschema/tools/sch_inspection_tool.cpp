@@ -61,7 +61,7 @@ SCH_INSPECTION_TOOL::SCH_INSPECTION_TOOL()
 
 bool SCH_INSPECTION_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
@@ -84,7 +84,7 @@ void SCH_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     m_controls = getViewControls();
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
 }
 
 

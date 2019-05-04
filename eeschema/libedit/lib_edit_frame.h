@@ -444,6 +444,9 @@ public:
     bool IsEditingDrawItem() { return GetDrawItem() && GetDrawItem()->InEditMode(); }
 
 private:
+    // Sets up the tool framework
+    void setupTools();
+
     void loadPart( const wxString& aLibrary, const wxString& aPart, int Unit );
 
     void savePartAs();

@@ -23,17 +23,7 @@
 
 #include <common.h>
 #include <eeschema_id.h>
-#include <tool/tool_manager.h>
-#include <tool/common_tools.h>
-#include <tools/sch_editor_control.h>
-#include <tools/sch_picker_tool.h>
-#include <tools/sch_drawing_tool.h>
-#include <tools/sch_line_drawing_tool.h>
-#include <tools/sch_selection_tool.h>
 #include <tools/sch_actions.h>
-#include <tools/sch_edit_tool.h>
-#include <tools/sch_inspection_tool.h>
-#include <tool/zoom_tool.h>
 
 
 char g_lastBusEntryShape = '/';
@@ -214,18 +204,4 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     }
 
     return OPT<TOOL_EVENT>();
-}
-
-
-void SCH_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
-{
-    aToolManager->RegisterTool( new COMMON_TOOLS );
-    aToolManager->RegisterTool( new ZOOM_TOOL );
-    aToolManager->RegisterTool( new SCH_SELECTION_TOOL );
-    aToolManager->RegisterTool( new SCH_PICKER_TOOL );
-    aToolManager->RegisterTool( new SCH_DRAWING_TOOL );
-    aToolManager->RegisterTool( new SCH_LINE_DRAWING_TOOL );
-    aToolManager->RegisterTool( new SCH_EDIT_TOOL );
-    aToolManager->RegisterTool( new SCH_INSPECTION_TOOL );
-    aToolManager->RegisterTool( new SCH_EDITOR_CONTROL );
 }

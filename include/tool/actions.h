@@ -97,9 +97,6 @@ public:
      */
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) = 0;
 
-    ///> Registers all valid tools for an application with the tool manager
-    virtual void RegisterAllTools( TOOL_MANAGER* aToolManager ) = 0;
-
     ///> Cursor control event types
     enum CURSOR_EVENT_TYPE { CURSOR_UP, CURSOR_DOWN, CURSOR_LEFT, CURSOR_RIGHT,
                              CURSOR_CLICK, CURSOR_DBL_CLICK, CURSOR_FAST_MOVE = 0x8000 };

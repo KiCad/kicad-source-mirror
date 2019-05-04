@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2007-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2007-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,10 +21,6 @@
  * or you may search the http://www.gnu.org website for the version 2 license,
  * or you may write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
- */
-
-/**
- * @file display_footprints_frame.cpp
  */
 
 #include <fctsys.h>
@@ -58,7 +54,10 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/common_tools.h>
-#include "tools/cvpcb_actions.h"
+#include <tool/zoom_tool.h>
+#include <tools/cvpcb_selection_tool.h>
+#include <tools/cvpcb_actions.h>
+#include <tools/cvpcb_control.h>
 
 // Colors for layers and items
 COLORS_DESIGN_SETTINGS g_ColorsSettings( FRAME_CVPCB_DISPLAY );
@@ -156,7 +155,10 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
     gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
 
-    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new CVPCB_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new CVPCB_CONTROL );
     m_toolManager->InitTools();
 
     // Run the control tool, it is supposed to be always active

@@ -49,17 +49,23 @@
 #include <hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
-#include "sim/sim_plot_frame.h"
-
+#include <sim/sim_plot_frame.h>
 #include <invoke_sch_dialog.h>
 #include <dialogs/dialog_schematic_find.h>
 #include <dialog_symbol_remap.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
-
-#include <wx/display.h>
+#include <tools/sch_picker_tool.h>
+#include <tools/sch_drawing_tool.h>
+#include <tools/sch_line_drawing_tool.h>
+#include <tools/sch_edit_tool.h>
+#include <tools/sch_inspection_tool.h>
+#include <tools/sch_editor_control.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
 #include <connection_graph.h>
@@ -405,6 +411,34 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     g_CurrentSheet = nullptr;
     g_ConnectionGraph = nullptr;
     g_RootSheet = NULL;
+}
+
+
+void SCH_EDIT_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
+    m_actions = new SCH_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
+    m_toolManager->RegisterTool( new SCH_DRAWING_TOOL );
+    m_toolManager->RegisterTool( new SCH_LINE_DRAWING_TOOL );
+    m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
+    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
+    m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 
 

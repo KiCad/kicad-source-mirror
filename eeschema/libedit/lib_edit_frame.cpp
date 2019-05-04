@@ -62,10 +62,16 @@
 #include <menus_helpers.h>
 #include <wx/progdlg.h>
 #include <tool/tool_manager.h>
+#include <tool/tool_dispatcher.h>
 #include <tool/context_menu.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
+#include <tools/sch_actions.h>
+#include <tools/sch_selection_tool.h>
+#include <tools/sch_picker_tool.h>
 #include <sch_view.h>
 #include <sch_painter.h>
-#include <tools/sch_actions.h>
+
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
@@ -313,6 +319,29 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     delete m_tempCopyComponent;
     delete m_libMgr;
     delete m_my_part;
+}
+
+
+void LIB_EDIT_FRAME::setupTools()
+{
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
+                                   GetCanvas()->GetViewControls(), this );
+    m_actions = new SCH_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+
+    // Register tools
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
+    m_toolManager->InitTools();
+
+    // Run the selection tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+
+    GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
 
 

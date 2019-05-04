@@ -46,7 +46,11 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
+#include <tool/common_tools.h>
+#include <tool/zoom_tool.h>
 #include <tools/gerbview_actions.h>
+#include <tools/gerbview_selection_tool.h>
+#include <tools/gerbview_control.h>
 #include <view/view.h>
 #include <gerbview_painter.h>
 
@@ -1208,7 +1212,10 @@ void GERBVIEW_FRAME::setupTools()
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
-    m_actions->RegisterAllTools( m_toolManager );
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new GERBVIEW_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new GERBVIEW_CONTROL );
+    m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

@@ -326,10 +326,6 @@ public:
 
 
 protected:
-
-    // Sets up the tool framework
-    void setupTools();
-
     /**
      * Open the library viewer only to browse library contents.
      * If the viewed is already opened from this, raise the viewer

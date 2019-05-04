@@ -22,23 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tool/tool_manager.h>
-#include <tool/common_tools.h>
-#include <tool/zoom_tool.h>
-
 #include "cvpcb_actions.h"
-#include "cvpcb_control.h"
-#include "cvpcb_selection_tool.h"
 #include <cvpcb_id.h>
-
-
-void CVPCB_ACTIONS::RegisterAllTools( TOOL_MANAGER* aToolManager )
-{
-    aToolManager->RegisterTool( new COMMON_TOOLS );
-    aToolManager->RegisterTool( new ZOOM_TOOL );
-    aToolManager->RegisterTool( new CVPCB_SELECTION_TOOL );
-    aToolManager->RegisterTool( new CVPCB_CONTROL );
-}
 
 
 OPT<TOOL_EVENT> CVPCB_ACTIONS::TranslateLegacyId( int aId )

@@ -58,7 +58,7 @@ private:
     SCH_SELECTION_TOOL*   m_selectionTool;
     KIGFX::SCH_VIEW*      m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME*       m_frame;
+    SCH_BASE_FRAME*       m_frame;
 };
 
 #endif /* SCH_INSPECTION_TOOL_H */
