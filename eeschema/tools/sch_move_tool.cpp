@@ -175,6 +175,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     bool restore_state = false;
     bool chain_commands = false;
+    bool appendUndo = false;
     OPT_TOOL_EVENT evt = aEvent;
     VECTOR2I prevPos;
 
@@ -230,9 +231,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
 
                     m_selectionTool->AddItemsToSel( &dragAdditions, QUIET_MODE );
-
-                    for( EDA_ITEM* item : dragAdditions )
-                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, true );
                 }
 
                 // Mark the edges of the block with dangling flags for a move.
@@ -250,7 +248,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Generic setup
                 //
-                bool first = true;
                 for( EDA_ITEM* item : selection )
                 {
                     if( item->IsNew() || ( item->GetParent() && item->GetParent()->IsSelected() ) )
@@ -259,8 +256,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     }
                     else
                     {
-                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, !first );
-                        first = false;
+                        saveCopyInUndoList( (SCH_ITEM*) item, UR_CHANGED, appendUndo );
+                        appendUndo = true;
                     }
 
                     // Apply any initial offset in case we're coming from a previous command.
@@ -434,7 +431,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
     else
     {
-        m_frame->CheckConnections( selection, true );
+        addJunctionsIfNeeded( selection, &appendUndo );
         m_frame->SchematicCleanUp( true );
         m_frame->TestDanglingEnds();
         m_frame->OnModify();
@@ -509,6 +506,61 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_
                 }
             }
             break;
+        }
+    }
+}
+
+
+void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUndo )
+{
+    std::vector< wxPoint > pts;
+    std::vector< wxPoint > connections;
+
+    m_frame->GetSchematicConnections( connections );
+
+    for( unsigned ii = 0; ii < aSelection.GetSize(); ii++ )
+    {
+        SCH_ITEM* item = static_cast<SCH_ITEM*>( aSelection.GetItem( ii ) );
+        std::vector< wxPoint > new_pts;
+
+        if( !item->IsConnectable() )
+            continue;
+
+        item->GetConnectionPoints( new_pts );
+        pts.insert( pts.end(), new_pts.begin(), new_pts.end() );
+
+        // If the item is a line, we also add any connection points from the rest of the schematic
+        // that terminate on the line after it is moved.
+        if( item->Type() == SCH_LINE_T )
+        {
+            SCH_LINE* line = (SCH_LINE*) item;
+            for( auto i : connections )
+                if( IsPointOnSegment( line->GetStartPoint(), line->GetEndPoint(), i ) )
+                    pts.push_back( i );
+        }
+        else
+        {
+            // Clean up any wires that short non-wire connections in the list
+            for( auto point = new_pts.begin(); point != new_pts.end(); point++ )
+            {
+                for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
+                    *aAppendUndo |= m_frame->TrimWire( *point, *second_point, *aAppendUndo );
+            }
+        }
+    }
+
+    // We always have some overlapping connection points.  Drop duplicates here
+    std::sort( pts.begin(), pts.end(), []( const wxPoint& a, const wxPoint& b ) -> bool
+                                           { return a.x < b.x || (a.x == b.x && a.y < b.y); } );
+
+    pts.erase( unique( pts.begin(), pts.end() ), pts.end() );
+
+    for( auto point : pts )
+    {
+        if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
+        {
+            m_frame->AddJunction( point, aAppendUndo );
+            *aAppendUndo = true;
         }
     }
 }

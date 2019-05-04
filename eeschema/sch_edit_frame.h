@@ -134,7 +134,6 @@ private:
     BLOCK_SELECTOR          m_blockItems;         ///< List of selected items.
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
-    SCH_COLLECTOR           m_collectedItems;     ///< List of collected items.
     SCH_FIND_COLLECTOR      m_foundItems;         ///< List of find/replace items.
     SCH_ITEM*               m_undoItem;           ///< Copy of the current item being edited.
     wxString                m_simulatorCommand;   ///< Command line used to call the circuit
@@ -969,15 +968,6 @@ public:
      */
     void DeleteJunction( SCH_ITEM* aItem, bool aAppend = false );
 
-    /**
-     * Adds junctions if needed to each item in the list after they have been
-     * moved.
-     *
-     * @param aItemsList The list of items to check
-     * @param aUndoAppend True if we are updating a previous commit
-     */
-    void CheckConnections( SELECTION& aSelection, bool aUndoAppend = false );
-
     int GetLabelIncrement() const { return m_repeatLabelDelta; }
 
     /**
@@ -1078,14 +1068,6 @@ private:
      *  - Get an old version of the schematic from Undo list
      */
     void GetSchematicFromUndoList( wxCommandEvent& event );
-
-    /**
-     * Add the context menu items to \a aMenu for \a aJunction.
-     *
-     * @param aMenu The menu to add the items to.
-     * @param aJunction The SCH_JUNCTION object selected.
-     */
-    void addJunctionMenuEntries( wxMenu* aMenu, SCH_JUNCTION* aJunction );
 
 public:
     /**
