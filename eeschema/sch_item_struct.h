@@ -363,35 +363,6 @@ public:
 
     void SetConnectivityDirty( bool aDirty = true ) { m_connectivity_dirty = aDirty; }
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override
-    {
-        return HitTest( aPosition, 0 );
-    }
-
-    /**
-     * Function HitTest
-     * tests if \a aPosition is contained within or on the bounding box of an item.
-     *
-     * @param aPosition A reference to a wxPoint object containing the coordinates to test.
-     * @param aAccuracy Increase the item bounding box by this amount.
-     * @return True if \a aPosition is within the item bounding box.
-     */
-    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy ) const { return false; }
-
-    /**
-     * Function HitTest
-     * tests if \a aRect intersects or is contained within the bounding box of an item.
-     *
-     * @param aRect A reference to a EDA_RECT object containing the rectangle to test.
-     * @param aContained Set to true to test for containment instead of an intersection.
-     * @param aAccuracy Increase \a aRect by this amount.
-     * @return True if \a aRect contains or intersects the item bounding box.
-     */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const
-    {
-        return false;
-    }
-
     virtual bool CanIncrementLabel() const { return false; }
 
     /**

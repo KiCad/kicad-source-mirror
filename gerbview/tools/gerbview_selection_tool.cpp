@@ -424,27 +424,12 @@ bool GERBVIEW_SELECTION_TOOL::selectMultiple()
                  * Left > Right : Select objects that are fully enclosed by selection
                  * Right > Left : Select objects that are crossed by selection
                  */
-
-                if( width >= 0 )
+                if( item->HitTest( selectionRect, width >= 0 ) )
                 {
-                    if( selectionBox.Contains( item->ViewBBox() ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
-                }
-                else
-                {
-                    if( item->HitTest( selectionRect ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
-
+                    if( m_subtractive )
+                        unselect( item );
+                    else
+                        select( item );
                 }
             }
 

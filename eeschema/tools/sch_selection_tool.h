@@ -100,7 +100,7 @@ public:
      * was cancelled (for instance, by clicking outside of the disambiguation menu).
      * @param aCheckLocked indicates if locked items should be excluded
      */
-    SCH_ITEM* SelectPoint( const VECTOR2I& aWhere,
+    EDA_ITEM* SelectPoint( const VECTOR2I& aWhere,
                            const KICAD_T* aFilterList = SCH_COLLECTOR::AllItems,
                            bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
 
@@ -115,7 +115,7 @@ public:
     void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
     ///> Find (but don't select) node under cursor
-    SCH_ITEM* GetNode( VECTOR2I aPosition );
+    EDA_ITEM* GetNode( VECTOR2I aPosition );
 
     ///> Select node under cursor
     int SelectNode( const TOOL_EVENT& aEvent );
@@ -228,7 +228,7 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_EDIT_FRAME* m_frame;    // Pointer to the parent frame
+    SCH_BASE_FRAME* m_frame;    // Pointer to the parent frame
     SELECTION m_selection;      // Current state of selection
 
     bool m_additive;            // Items should be added to selection (instead of replacing)

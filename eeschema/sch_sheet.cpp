@@ -372,7 +372,7 @@ SCH_SHEET_PIN* SCH_SHEET::GetPin( const wxPoint& aPosition )
 {
     for( SCH_SHEET_PIN& pin : m_pins )
     {
-        if( pin.HitTest( aPosition, 0 ) )
+        if( pin.HitTest( aPosition ) )
             return &pin;
     }
 

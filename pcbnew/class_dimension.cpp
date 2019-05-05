@@ -386,12 +386,12 @@ void DIMENSION::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM
 }
 
 
-bool DIMENSION::HitTest( const wxPoint& aPosition ) const
+bool DIMENSION::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     if( m_Text.TextHitTest( aPosition ) )
         return true;
 
-    int dist_max = m_Width / 2;
+    int dist_max = aAccuracy + ( m_Width / 2 );
 
     // Locate SEGMENTS
 

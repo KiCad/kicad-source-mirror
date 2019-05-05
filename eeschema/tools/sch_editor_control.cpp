@@ -233,7 +233,7 @@ static bool probeSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
     constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
     SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
 
-    SCH_ITEM* item = selTool->SelectPoint( aPosition, wiresAndComponents );
+    EDA_ITEM* item = selTool->SelectPoint( aPosition, wiresAndComponents );
 
     if( !item )
         return false;
@@ -279,14 +279,14 @@ static bool tuneSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
 {
     constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
     SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SCH_ITEM* item = selTool->SelectPoint( aPosition, fieldsAndComponents );
+    EDA_ITEM* item = selTool->SelectPoint( aPosition, fieldsAndComponents );
 
     if( !item )
         return false;
 
     if( item->Type() != SCH_COMPONENT_T )
     {
-        item = static_cast<SCH_ITEM*>( item->GetParent() );
+        item = item->GetParent();
 
         if( item->Type() != SCH_COMPONENT_T )
             return false;
@@ -341,7 +341,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
         }
         else
         {
-            SCH_ITEM* item = selTool->GetNode( aPosition );
+            SCH_ITEM* item = (SCH_ITEM*) selTool->GetNode( aPosition );
 
             if( item && item->Connection( *g_CurrentSheet ) )
                 netName = item->Connection( *g_CurrentSheet )->Name();

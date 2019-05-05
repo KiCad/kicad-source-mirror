@@ -868,7 +868,7 @@ void D_PAD::GetOblongDrillGeometry( wxPoint& aStartPoint,
 }
 
 
-bool D_PAD::HitTest( const wxPoint& aPosition ) const
+bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int dx, dy;
 

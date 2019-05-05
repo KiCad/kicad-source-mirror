@@ -538,27 +538,11 @@ void LIB_PIN::EnableEditMode( bool aEnable, bool aEditPinByPin )
 }
 
 
-bool LIB_PIN::HitTest( const wxPoint& aPosition ) const
+bool LIB_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return HitTest( aPosition, 0, DefaultTransform );
-}
-
-
-bool LIB_PIN::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
-{
-    if( aThreshold < 0 )
-        aThreshold = 0;
-
-    TRANSFORM transform = DefaultTransform;
-    DefaultTransform = aTransform;
-
     EDA_RECT rect = GetBoundingBox();
-    rect.Inflate( aThreshold );
 
-    //Restore matrix
-    DefaultTransform = transform;
-
-    return rect.Contains( aPosition );
+    return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
 

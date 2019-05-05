@@ -960,30 +960,28 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 }
 
 
-static bool deleteItem( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
+static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 {
     SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
     wxCHECK( selectionTool, false );
 
     aFrame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection, true );
 
-    SCH_ITEM* item = selectionTool->SelectPoint( aPosition );
+    EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
+    SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
+
+    if( sch_item && sch_item->IsLocked() )
+    {
+        STATUS_TEXT_POPUP statusPopup( aFrame );
+        statusPopup.SetText( _( "Item locked." ) );
+        statusPopup.Expire( 2000 );
+        statusPopup.Popup();
+        statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+        return true;
+    }
 
     if( item )
-    {
-        if( item->IsLocked() )
-        {
-            STATUS_TEXT_POPUP statusPopup( aFrame );
-            statusPopup.SetText( _( "Item locked." ) );
-            statusPopup.Expire( 2000 );
-            statusPopup.Popup();
-            statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-        }
-        else
-        {
-            aFrame->GetToolManager()->RunAction( SCH_ACTIONS::doDelete, true );
-        }
-    }
+        aFrame->GetToolManager()->RunAction( SCH_ACTIONS::doDelete, true );
 
     return true;
 }

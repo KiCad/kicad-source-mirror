@@ -53,6 +53,11 @@ public:
     /// @copydoc VIEW_ITEM::ViewGetLayers()
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
+    bool HitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override
+    {
+        return false;   // Not selectable
+    }
+
 #if defined(DEBUG)
     /// @copydoc EDA_ITEM::Show()
     void Show( int x, std::ostream& st ) const override

@@ -714,8 +714,7 @@ public:
         return m_layerMask[aLayer];
     }
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override

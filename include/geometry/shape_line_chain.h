@@ -551,10 +551,10 @@ public:
      *
      * Checks if point aP lies inside a polygon (any type) defined by the line chain.
      * For closed shapes only.
-     * @param aP point to check
+     * @param aPt point to check
      * @return true if the point is inside the shape (edge is not treated as being inside).
      */
-     bool PointInside( const VECTOR2I& aP ) const;
+     bool PointInside( const VECTOR2I& aPt, int aAccuracy = 0 ) const;
 
     /**
      * Function PointOnEdge()
@@ -563,7 +563,7 @@ public:
      * @param aP point to check
      * @return true if the point lies on the edge.
      */
-    bool PointOnEdge( const VECTOR2I& aP ) const;
+    bool PointOnEdge( const VECTOR2I& aP, int aAccuracy = 0 ) const;
 
     /**
      * Function EdgeContainingPoint()
@@ -572,7 +572,7 @@ public:
      * @param aP point to check
      * @return index of the first edge containing the point, otherwise negative
      */
-    int EdgeContainingPoint( const VECTOR2I& aP ) const;
+    int EdgeContainingPoint( const VECTOR2I& aP, int aAccuracy = 0 ) const;
 
     /**
      * Function CheckClearance()

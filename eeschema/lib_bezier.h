@@ -78,9 +78,8 @@ public:
         return m_BezierPoints;
     }
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint& aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -91,7 +90,6 @@ public:
     wxPoint GetPosition() const override; 
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
 
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
@@ -100,7 +98,6 @@ public:
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return m_Width; }
-
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     int GetPenSize( ) const override;

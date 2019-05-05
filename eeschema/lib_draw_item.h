@@ -201,27 +201,21 @@ public:
      */
     virtual int GetPenSize() const = 0;
 
-    LIB_PART*      GetParent() const
+    LIB_PART* GetParent() const
     {
-        return (LIB_PART *)m_Parent;
+        return (LIB_PART*) m_Parent;
     }
 
     void ViewGetLayers( int aLayers[], int& aCount ) const override;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
     {
-        return EDA_ITEM::HitTest( aPosition );
+        // This is just here to prevent annoying compiler warnings about hidden overloaded
+        // virtual functions
+        return EDA_ITEM::HitTest( aPosition, aAccuracy );
     }
 
-    /**
-     * @param aPosition A wxPoint to test.
-     * @param aThreshold Maximum distance to this object (usually the half thickness of a line)
-     *                   if < 0, it will be automatically set to half pen size when locating
-     *                   lines or arcs and set to 0 for other items.
-     * @param aTransform The transform matrix.
-     * @return True if the point \a aPosition is near this object
-     */
-    virtual bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const = 0;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
    /**
      * @return the boundary box for this, in library coordinates

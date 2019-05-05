@@ -219,25 +219,11 @@ const EDA_RECT LIB_RECTANGLE::GetBoundingBox() const
 }
 
 
-bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition ) const
+bool LIB_RECTANGLE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int mindist = ( GetPenSize() / 2 ) + 1;
-
-    // Have a minimal tolerance for hit test
-    if( mindist < MINIMUM_SELECTION_DISTANCE )
-        mindist = MINIMUM_SELECTION_DISTANCE;
-
-    return HitTest( aPosition, mindist, DefaultTransform );
-}
-
-
-bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
-{
-    if( aThreshold < 0 )
-        aThreshold = GetPenSize() / 2;
-
-    wxPoint actualStart = aTransform.TransformCoordinate( m_Pos );
-    wxPoint actualEnd   = aTransform.TransformCoordinate( m_End );
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    wxPoint actualStart = DefaultTransform.TransformCoordinate( m_Pos );
+    wxPoint actualEnd   = DefaultTransform.TransformCoordinate( m_End );
 
     // locate lower segment
     wxPoint start, end;
@@ -246,21 +232,21 @@ bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRA
     end.x = actualEnd.x;
     end.y = actualStart.y;
 
-    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, mindist ) )
         return true;
 
     // locate right segment
     start.x = actualEnd.x;
     end.y   = actualEnd.y;
 
-    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, mindist ) )
         return true;
 
     // locate upper segment
     start.y = actualEnd.y;
     end.x   = actualStart.x;
 
-    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, mindist ) )
         return true;
 
     // locate left segment
@@ -268,7 +254,7 @@ bool LIB_RECTANGLE::HitTest( const wxPoint &aPosition, int aThreshold, const TRA
     end.x = actualStart.x;
     end.y = actualEnd.y;
 
-    if( TestSegmentHit( aPosition, start, end, aThreshold ) )
+    if( TestSegmentHit( aPosition, start, end, mindist ) )
         return true;
 
     return false;

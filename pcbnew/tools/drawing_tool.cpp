@@ -770,25 +770,21 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     BOARD_COMMIT commit( m_frame );
 
     // Build the undo list & add items to the current view
-    for( auto it = list.begin(), itEnd = list.end(); it != itEnd; ++it )
+    for( auto& ptr : list)
     {
-        EDA_ITEM* item = it->get();
+        EDA_ITEM* item = ptr.get();
 
         if( m_editModules )
-        {
             wxASSERT( item->Type() == PCB_MODULE_EDGE_T || item->Type() == PCB_MODULE_TEXT_T );
-        }
         else
-        {
             wxASSERT( item->Type() == PCB_LINE_T || item->Type() == PCB_TEXT_T );
-        }
 
         if( dlg.IsPlacementInteractive() )
             preview.Add( item );
         else
             commit.Add( item );
 
-        it->release();
+        ptr.release();
     }
 
     if( !dlg.IsPlacementInteractive() )
@@ -811,7 +807,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
     VECTOR2I delta = cursorPos - firstItem->GetPosition();
 
-    for( auto item : preview )
+    for( EDA_ITEM* item : preview )
         static_cast<BOARD_ITEM*>( item )->Move( (wxPoint) delta );
 
     m_view->Update( &preview );
@@ -890,8 +886,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::ANCHOR );
 
     Activate();
-    m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL,
-            _( "Place the footprint anchor" ) );
+    m_frame->SetToolID( ID_MODEDIT_ANCHOR_TOOL, wxCURSOR_PENCIL, _( "Place the footprint anchor" ) );
 
     m_controls->ShowCursor( true );
     m_controls->SetSnapping( true );

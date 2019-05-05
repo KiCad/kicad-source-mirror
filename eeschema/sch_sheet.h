@@ -186,7 +186,7 @@ public:
 
     void SetPosition( const wxPoint& aPosition ) override { ConstrainOnEdge( aPosition ); }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     EDA_ITEM* Clone() const override;
 };
@@ -531,7 +531,7 @@ public:
     void SetPosition( const wxPoint& aPosition ) override;
 
     bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
-    bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     void Plot( PLOTTER* aPlotter ) override;
 

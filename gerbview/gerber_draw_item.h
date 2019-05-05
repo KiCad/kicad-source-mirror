@@ -263,7 +263,7 @@ public:
      * @param aRefPos a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const wxPoint& aRefPos ) const override;
+    bool HitTest( const wxPoint& aRefPos, int aAccuracy = 0 ) const override;
 
     /**
      * Function HitTest (overloaded)
@@ -272,7 +272,7 @@ public:
      * @param aRefArea a wxPoint to test
      * @return bool - true if a hit, else false
      */
-    bool HitTest( const EDA_RECT& aRefArea ) const;
+    bool HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * Function GetClass

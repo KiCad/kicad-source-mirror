@@ -230,9 +230,8 @@ public:
 
     SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override;
-
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * Function GetVia
@@ -411,9 +410,8 @@ public:
     const wxPoint GetPosition() const override {  return m_Start; }
     void SetPosition( const wxPoint& aPoint ) override { m_Start = aPoint;  m_End = aPoint; }
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override;
-
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {

@@ -93,7 +93,7 @@ public:
     wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPosition ) override { m_Pos = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     EDA_ITEM* Clone() const override;
 

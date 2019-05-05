@@ -866,7 +866,7 @@ int MarkItemsInBloc( MODULE* module, EDA_RECT& Rect )
         switch( item->Type() )
         {
         case PCB_MODULE_EDGE_T:
-            if( ((EDGE_MODULE*)item )->HitTest( Rect ) )
+            if( ((EDGE_MODULE*)item )->HitTest( Rect, false ) )
             {
                 item->SetFlags( SELECTED );
                 ItemsCount++;

@@ -26,6 +26,7 @@
 
 #include <geometry/shape_line_chain.h>
 #include <geometry/shape_circle.h>
+#include <trigo.h>
 #include "clipper.hpp"
 
 
@@ -348,9 +349,12 @@ int SHAPE_LINE_CHAIN::PathLength( const VECTOR2I& aP ) const
 }
 
 
-bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
+bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aPt, int aAccuracy ) const
 {
-    if( !m_closed || PointCount() < 3 || !BBox().Contains( aP ) )
+    BOX2I bbox = BBox();
+    bbox.Inflate( aAccuracy );
+
+    if( !m_closed || PointCount() < 3 || !BBox().Contains( aPt ) )
         return false;
 
     bool inside = false;
@@ -371,37 +375,40 @@ bool SHAPE_LINE_CHAIN::PointInside( const VECTOR2I& aP ) const
 
         if( diff.y != 0 )
         {
-            const int d = rescale( diff.x, ( aP.y - p1.y ), diff.y );
+            const int d = rescale( diff.x, ( aPt.y - p1.y ), diff.y );
 
-            if( ( ( p1.y > aP.y ) != ( p2.y > aP.y ) ) && ( aP.x - p1.x < d ) )
+            if( ( ( p1.y > aPt.y ) != ( p2.y > aPt.y ) ) && ( aPt.x - p1.x < d ) )
                 inside = !inside;
         }
     }
-    return inside && !PointOnEdge( aP );
+    return inside && !PointOnEdge( aPt, aAccuracy );
 }
 
 
-bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aP ) const
+bool SHAPE_LINE_CHAIN::PointOnEdge( const VECTOR2I& aPt, int aAccuracy ) const
 {
-	return EdgeContainingPoint( aP ) >= 0;
+	return EdgeContainingPoint( aPt, aAccuracy ) >= 0;
 }
 
-int SHAPE_LINE_CHAIN::EdgeContainingPoint( const VECTOR2I& aP ) const
+int SHAPE_LINE_CHAIN::EdgeContainingPoint( const VECTOR2I& aPt, int aAccuracy ) const
 {
     if( !PointCount() )
 		return -1;
 
 	else if( PointCount() == 1 )
-        return m_points[0] == aP ? 0 : -1;
+    {
+	    VECTOR2I dist = m_points[0] - aPt;
+	    return ( hypot( dist.x, dist.y ) <= aAccuracy + 1 ) ? 0 : -1;
+    }
 
     for( int i = 0; i < SegmentCount(); i++ )
     {
         const SEG s = CSegment( i );
 
-        if( s.A == aP || s.B == aP )
+        if( s.A == aPt || s.B == aPt )
             return i;
 
-        if( s.Distance( aP ) <= 1 )
+        if( s.Distance( aPt ) <= aAccuracy + 1 )
             return i;
     }
 

@@ -160,9 +160,10 @@ void MARKER_BASE::SetData( int aErrorCode, const wxPoint& aMarkerPos,
 }
 
 
-bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition ) const
+bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) const
 {
     EDA_RECT bbox = GetBoundingBoxMarker();
+    bbox.Inflate( aAccuracy );
 
     // Fast hit test using boundary box. A finer test will be made if requested
     bool hit = bbox.Contains( aHitPosition );
@@ -172,7 +173,7 @@ bool MARKER_BASE::HitTestMarker( const wxPoint& aHitPosition ) const
         SHAPE_LINE_CHAIN polygon;
         ShapeToPolygon( polygon );
         VECTOR2I rel_pos( aHitPosition - m_Pos );
-        hit = polygon.PointInside( rel_pos );
+        hit = polygon.PointInside( rel_pos, aAccuracy );
     }
 
     return hit;

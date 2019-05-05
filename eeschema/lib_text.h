@@ -83,13 +83,11 @@ public:
      */
     void SetText( const wxString& aText ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
-    bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
-
-    bool HitTest( const EDA_RECT& aRect ) const
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
-        return TextHitTest( aRect );
+        return TextHitTest( aRect, aContained, aAccuracy );
     }
 
 

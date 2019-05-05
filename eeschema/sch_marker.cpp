@@ -154,5 +154,5 @@ void SCH_MARKER::MirrorY( int aYaxis_position )
 
 bool SCH_MARKER::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return HitTestMarker( aPosition );
+    return HitTestMarker( aPosition, aAccuracy );
 }

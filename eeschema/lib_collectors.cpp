@@ -114,7 +114,7 @@ SEARCH_RESULT LIB_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 
     if( ( m_data.m_unit && item->GetUnit() && ( m_data.m_unit != item->GetUnit() ) )
         || ( m_data.m_convert && item->GetConvert() && ( m_data.m_convert != item->GetConvert() ) )
-        || !item->HitTest( m_RefPos, -1, DefaultTransform ) )
+        || !item->HitTest( m_RefPos ) )
         return SEARCH_CONTINUE;
 
     Append( aItem );

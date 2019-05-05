@@ -213,7 +213,7 @@ void GERBVIEW_FRAME::Block_Move()
         {
             GERBER_DRAW_ITEM* gerb_item = item;
 
-            if( gerb_item->HitTest( GetScreen()->m_BlockLocate ) )
+            if( gerb_item->HitTest( GetScreen()->m_BlockLocate, true ) )
                 gerb_item->MoveAB( delta );
         }
     }

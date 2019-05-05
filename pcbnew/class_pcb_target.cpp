@@ -137,11 +137,11 @@ void PCB_TARGET::Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE mode_color,
 }
 
 
-bool PCB_TARGET::HitTest( const wxPoint& aPosition ) const
+bool PCB_TARGET::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int dX = aPosition.x - m_Pos.x;
     int dY = aPosition.y - m_Pos.y;
-    int radius = m_Size / 2;
+    int radius = aAccuracy + ( m_Size / 2 );
     return abs( dX ) <= radius && abs( dY ) <= radius;
 }
 

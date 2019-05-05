@@ -203,7 +203,6 @@ SELECTION_TOOL::SELECTION_TOOL() :
         m_menu( *this ),
         m_priv( std::make_unique<PRIV>() )
 {
-
 }
 
 
@@ -234,9 +233,7 @@ bool SELECTION_TOOL::Init()
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
 
     if( frame )
-    {
         m_menu.AddStandardSubMenus( frame );
-    }
 
     return true;
 }
@@ -256,8 +253,10 @@ void SELECTION_TOOL::Reset( RESET_REASON aReason )
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
     }
     else
+    {
         // Restore previous properties of selected items and remove them from containers
         clearSelection();
+    }
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     view()->Remove( &m_selection );
@@ -386,15 +385,6 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 SELECTION& SELECTION_TOOL::GetSelection()
 {
     return m_selection;
-}
-
-
-static EDA_RECT getRect( const BOARD_ITEM* aItem )
-{
-    if( aItem->Type() == PCB_MODULE_T )
-        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
-
-    return aItem->GetBoundingBox();
 }
 
 
@@ -666,27 +656,12 @@ bool SELECTION_TOOL::selectMultiple()
                 if( !item || !selectable( item ) )
                     continue;
 
-                if( windowSelection )
+                if( item->HitTest( selectionRect, windowSelection ) )
                 {
-                    BOX2I bbox = getRect( item );
-
-                    if( selectionBox.Contains( bbox ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
-                }
-                else
-                {
-                    if( item->HitTest( selectionRect, false ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
+                    if( m_subtractive )
+                        unselect( item );
+                    else
+                        select( item );
                 }
             }
 
@@ -1915,6 +1890,15 @@ bool SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
     }
 
     return false;
+}
+
+
+static EDA_RECT getRect( const BOARD_ITEM* aItem )
+{
+    if( aItem->Type() == PCB_MODULE_T )
+        return static_cast<const MODULE*>( aItem )->GetFootprintRect();
+
+    return aItem->GetBoundingBox();
 }
 
 

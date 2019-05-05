@@ -268,7 +268,7 @@ public:
      * @param aPosition the wxPoint to test
      * @return bool - true if a hit, else false
      */
-    virtual bool HitTest( const wxPoint& aPosition ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     /**
      * Function HitTest

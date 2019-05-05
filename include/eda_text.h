@@ -303,7 +303,7 @@ public:
      * @param aAccuracy - Amount to inflate the bounding box.
      * @return bool - true if a hit, else false
      */
-    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const;
+    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const;
 
     /**
      * Function LenSize

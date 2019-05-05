@@ -65,9 +65,7 @@ public:
 
     void SetEndPosition( const wxPoint& aPosition ) { m_End = aPosition; }
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     int GetPenSize( ) const override;
 
@@ -76,9 +74,7 @@ public:
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
-
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-
     void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
 
     void SetOffset( const wxPoint& aOffset ) override;

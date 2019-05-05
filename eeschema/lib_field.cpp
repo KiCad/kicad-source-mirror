@@ -156,21 +156,11 @@ void LIB_FIELD::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& a
 }
 
 
-bool LIB_FIELD::HitTest( const wxPoint& aPosition ) const
+bool LIB_FIELD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    // Because HitTest is mainly used to select the field
-    // return always false if this field is void
+    // Because HitTest is mainly used to select the field return false if it is void
     if( IsVoid() )
         return false;
-
-    return HitTest( aPosition, 0, DefaultTransform );
-}
-
-
-bool LIB_FIELD::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
-{
-    if( aThreshold < 0 )
-        aThreshold = 0;
 
     // Build a temporary copy of the text for hit testing
     EDA_TEXT tmp_text( *this );
@@ -188,16 +178,16 @@ bool LIB_FIELD::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFO
         tmp_text.SetText( extended_text );
     }
 
-    tmp_text.SetTextPos( aTransform.TransformCoordinate( GetTextPos() ) );
+    tmp_text.SetTextPos( DefaultTransform.TransformCoordinate( GetTextPos() ) );
 
     /* The text orientation may need to be flipped if the
      *  transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
      */
-    bool t1 = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
+    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
     tmp_text.SetTextAngle( t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
 
-    return tmp_text.TextHitTest( aPosition );
+    return tmp_text.TextHitTest( aPosition, aAccuracy );
 }
 
 

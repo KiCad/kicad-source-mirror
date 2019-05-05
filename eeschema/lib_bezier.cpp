@@ -266,35 +266,39 @@ void LIB_BEZIER::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
 }
 
 
-bool LIB_BEZIER::HitTest( const wxPoint& aRefPos ) const
+bool LIB_BEZIER::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 {
-    int mindist = GetPenSize() / 2;
-
-    // Have a minimal tolerance for hit test
-    if ( mindist < MINIMUM_SELECTION_DISTANCE )
-        mindist = MINIMUM_SELECTION_DISTANCE;
-
-    return HitTest( aRefPos, mindist, DefaultTransform );
-}
-
-
-bool LIB_BEZIER::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
-{
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
     wxPoint start, end;
-
-    if( aThreshold < 0 )
-        aThreshold = GetPenSize() / 2;
 
     for( unsigned ii = 1; ii < GetCornerCount(); ii++ )
     {
-        start = aTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
-        end   = aTransform.TransformCoordinate( m_PolyPoints[ii] );
+        start = DefaultTransform.TransformCoordinate( m_PolyPoints[ii - 1] );
+        end   = DefaultTransform.TransformCoordinate( m_PolyPoints[ii] );
 
-        if ( TestSegmentHit( aPosRef, start, end, aThreshold ) )
+        if ( TestSegmentHit( aRefPos, start, end, mindist ) )
             return true;
     }
 
     return false;
+}
+
+
+bool LIB_BEZIER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+
+    if ( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Contains( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse for filled beziers,
+                                                // egregiously coarse for unfilled...
 }
 
 

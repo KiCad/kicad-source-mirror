@@ -211,18 +211,15 @@ public:
 
     void SetPolyPoints( const std::vector<wxPoint>& aPoints );
 
-    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
-               GR_DRAWMODE aDrawMode, const wxPoint& aOffset = ZeroOffset ) override;
+    void Draw( EDA_DRAW_PANEL* panel, wxDC* DC, GR_DRAWMODE aDrawMode,
+               const wxPoint& aOffset = ZeroOffset ) override;
 
-    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits,
-                                  std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    virtual const EDA_RECT GetBoundingBox() const override;
+    const EDA_RECT GetBoundingBox() const override;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true,
-                  int aAccuracy = 0 ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {

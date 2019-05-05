@@ -370,17 +370,18 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     auto curr_item = static_cast<BOARD_ITEM*>( selection.Front() );
     std::vector<BOARD_ITEM*> sel_items;
 
-    for( auto it : selection )
+    for( EDA_ITEM* item : selection )
     {
-        if( auto item = dynamic_cast<BOARD_ITEM*>( it ) )
-        {
-            sel_items.push_back( item );
+        BOARD_ITEM* boardItem = dynamic_cast<BOARD_ITEM*>( item );
+        MODULE*     module = dynamic_cast<MODULE*>( item );
 
-            if( auto mod = dyn_cast<MODULE*>( item ) )
-            {
-                for( auto pad : mod->Pads() )
-                    sel_items.push_back( pad );
-            }
+        if( boardItem )
+            sel_items.push_back( boardItem );
+
+        if( module )
+        {
+            for( D_PAD* pad : module->Pads() )
+                sel_items.push_back( pad );
         }
     }
 
@@ -413,7 +414,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 prevPos = m_cursor;
 
                 // Drag items to the current cursor position
-                for( auto item : selection )
+                for( EDA_ITEM* item : selection )
                 {
                     // Don't double move footprint pads, fields, etc.
                     if( item->GetParent() && item->GetParent()->IsSelected() )
@@ -501,7 +502,6 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
 
             m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
-
         }
 
         else if( evt->IsCancel() || evt->IsActivate() )
@@ -687,9 +687,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     // When editing modules, all items have the same parent
     if( EditingModules() )
-    {
         m_commit->Modify( selection.Front() );
-    }
 
     for( auto item : selection )
     {
@@ -770,11 +768,9 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     // When editing modules, all items have the same parent
     if( EditingModules() )
-    {
         m_commit->Modify( selection.Front() );
-    }
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         // only modify items we can mirror
         switch( item->Type() )
@@ -851,11 +847,9 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
 
     // When editing modules, all items have the same parent
     if( EditingModules() )
-    {
         m_commit->Modify( selection.Front() );
-    }
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         if( !item->IsNew() && !EditingModules() )
             m_commit->Modify( item );
@@ -896,11 +890,15 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
 
     // If we are in a "Cut" operation, then the copied selection exists already
     if( isCut )
+    {
         selectionCopy = m_selectionTool->GetSelection();
+    }
     else
+    {
         selectionCopy = m_selectionTool->RequestSelection(
             []( const VECTOR2I& aPt, GENERAL_COLLECTOR& aCollector )
             { EditToolSelectionFilter( aCollector, EXCLUDE_LOCKED_PADS | EXCLUDE_TRANSIENTS ); } );
+    }
 
     bool isHover = selectionCopy.IsHover();
 
@@ -930,7 +928,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
     // As we are about to remove items, they have to be removed from the selection first
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    for( auto item : selectionCopy )
+    for( EDA_ITEM* item : selectionCopy )
     {
         if( m_editModules )
         {
@@ -1020,11 +1018,9 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
 
         // When editing modules, all items have the same parent
         if( EditingModules() )
-        {
             m_commit->Modify( selection.Front() );
-        }
 
-        for( auto selItem : selection )
+        for( EDA_ITEM* selItem : selection )
         {
             BOARD_ITEM* item = static_cast<BOARD_ITEM*>( selItem );
 
@@ -1091,7 +1087,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     // Each selected item is duplicated and pushed to new_items list
     // Old selection is cleared, and new items are then selected.
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
     {
         if( !item )
             continue;
@@ -1134,8 +1130,7 @@ int EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( !selection.Empty() )
     {
         editFrame->DisplayToolMsg( wxString::Format( _( "Duplicated %d item(s)" ),
-                (int) new_items.size() ) );
-
+                                                     (int) new_items.size() ) );
 
         // If items were duplicated, pick them up
         // this works well for "dropping" copies around and pushes the commit

@@ -594,8 +594,10 @@ const EDA_RECT DRAWSEGMENT::GetBoundingBox() const
 }
 
 
-bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
+bool DRAWSEGMENT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
+    int maxdist = aAccuracy + ( m_Width / 2 );
+
     switch( m_Shape )
     {
     case S_CIRCLE:
@@ -605,7 +607,7 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
         int radius = GetRadius();
         int dist   = KiROUND( EuclideanNorm( relPos ) );
 
-        if( abs( radius - dist ) <= ( m_Width / 2 ) )
+        if( abs( radius - dist ) <= maxdist )
         {
             if( m_Shape == S_CIRCLE )
                 return true;
@@ -647,13 +649,13 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
 
         for( unsigned int i= 1; i < m_BezierPoints.size(); i++)
         {
-            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], m_Width / 2 ) )
+            if( TestSegmentHit( aPosition, m_BezierPoints[i-1], m_BezierPoints[i-1], maxdist ) )
                 return true;
         }
         break;
 
     case S_SEGMENT:
-        if( TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 ) )
+        if( TestSegmentHit( aPosition, m_Start, m_End, maxdist ) )
             return true;
         break;
 
@@ -663,11 +665,11 @@ bool DRAWSEGMENT::HitTest( const wxPoint& aPosition ) const
             {
                 SHAPE_POLY_SET::VERTEX_INDEX i;
                 auto poly = m_Poly;  //todo: Fix CollideEdge to be const
-                return poly.CollideEdge(VECTOR2I( aPosition ), i,
-                        std::max( m_Width / 2, Millimeter2iu( 0.25 ) ) );
+                return poly.CollideEdge( VECTOR2I( aPosition ), i,
+                                         std::max( maxdist, Millimeter2iu( 0.25 ) ) );
             }
             else
-                return m_Poly.Collide( VECTOR2I( aPosition ), m_Width / 2 );
+                return m_Poly.Collide( VECTOR2I( aPosition ), maxdist );
         }
         break;
 

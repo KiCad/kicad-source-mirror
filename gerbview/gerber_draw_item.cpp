@@ -791,7 +791,7 @@ BITMAP_DEF GERBER_DRAW_ITEM::GetMenuImage() const
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
+bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos, int aAccuracy ) const
 {
     // In case the item has a very tiny width defined, allow it to be selected
     const int MIN_HIT_TEST_RADIUS = Millimeter2iu( 0.01 );
@@ -878,7 +878,7 @@ bool GERBER_DRAW_ITEM::HitTest( const wxPoint& aRefPos ) const
 }
 
 
-bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea ) const
+bool GERBER_DRAW_ITEM::HitTest( const EDA_RECT& aRefArea, bool aContained, int aAccuracy ) const
 {
     wxPoint pos = GetABPosition( m_Start );
 

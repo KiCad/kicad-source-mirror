@@ -168,9 +168,7 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     void operator=( const LIB_FIELD& field );
 
@@ -191,9 +189,7 @@ public:
     COLOR4D GetDefaultColor() override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
-
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-
     void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
 
     void Rotate() override;
@@ -220,7 +216,6 @@ public:
     wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
 
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
@@ -229,7 +224,6 @@ public:
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return GetThickness(); }
-
     void SetWidth( int aWidth ) override { SetThickness( aWidth ); }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;

@@ -343,7 +343,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 int unit = evt->GetCommandId().get() - ID_POPUP_SCH_SELECT_UNIT_CMP;
 
                 if( component )
-                    m_frame->SelectUnit( component, unit );
+                    static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( component, unit );
             }
         }
 
@@ -374,7 +374,7 @@ SELECTION& SCH_SELECTION_TOOL::GetSelection()
 }
 
 
-SCH_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
+EDA_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
                                            bool* aSelectionCancelledFlag, bool aCheckLocked )
 {
     SCH_COLLECTOR collector;
@@ -419,7 +419,7 @@ SCH_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
 
     if( collector.GetCount() == 1 )
     {
-        SCH_ITEM* item = collector[ 0 ];
+        EDA_ITEM* item = collector[ 0 ];
 
         toggleSelection( item );
         return item;
@@ -442,8 +442,8 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
     // all the various overlap and coverage issues that we do in Pcbnew.
     if( collector.GetCount() == 2 )
     {
-        SCH_ITEM* a = collector[ 0 ];
-        SCH_ITEM* b = collector[ 1 ];
+        EDA_ITEM* a = collector[ 0 ];
+        EDA_ITEM* b = collector[ 1 ];
 
         if( a->GetParent() == b )
             collector.Remove( b );
@@ -454,15 +454,6 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
         else if( b->Type() == SCH_SHEET_T && a->Type() != SCH_SHEET_T )
             collector.Remove( b );
     }
-}
-
-
-static EDA_RECT getRect( const SCH_ITEM* aItem )
-{
-    if( aItem->Type() == SCH_COMPONENT_T )
-        return static_cast<const SCH_COMPONENT*>( aItem )->GetBodyBoundingBox();
-
-    return aItem->GetBoundingBox();
 }
 
 
@@ -482,7 +473,7 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
     {
         for( int i = m_selection.GetSize() - 1; i >= 0; --i )
         {
-            SCH_ITEM* item = (SCH_ITEM*) m_selection.GetItem( i );
+            EDA_ITEM* item = (EDA_ITEM*) m_selection.GetItem( i );
 
             if( !item->IsType( aFilterList ) )
                 toggleSelection( item );
@@ -551,39 +542,24 @@ bool SCH_SELECTION_TOOL::selectMultiple()
             if( view->IsMirroredX() )
                 windowSelection = !windowSelection;
 
-            // Construct an EDA_RECT to determine SCH_ITEM selection
+            // Construct an EDA_RECT to determine EDA_ITEM selection
             EDA_RECT selectionRect( (wxPoint)area.GetOrigin(), wxSize( width, height ) );
 
             selectionRect.Normalize();
 
             for( it = selectedItems.begin(), it_end = selectedItems.end(); it != it_end; ++it )
             {
-                SCH_ITEM* item = static_cast<SCH_ITEM*>( it->first );
+                EDA_ITEM* item = static_cast<EDA_ITEM*>( it->first );
 
                 if( !item || !selectable( item ) )
                     continue;
 
-                if( windowSelection )
+                if( item->HitTest( selectionRect, windowSelection ) )
                 {
-                    BOX2I bbox = getRect( item );
-
-                    if( selectionBox.Contains( bbox ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
-                }
-                else
-                {
-                    if( item->HitTest( selectionRect, false ) )
-                    {
-                        if( m_subtractive )
-                            unselect( item );
-                        else
-                            select( item );
-                    }
+                    if( m_subtractive )
+                        unselect( item );
+                    else
+                        select( item );
                 }
             }
 
@@ -623,7 +599,7 @@ static KICAD_T nodeTypes[] =
 };
 
 
-SCH_ITEM* SCH_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
+EDA_ITEM* SCH_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
     SCH_COLLECTOR collector;
 
@@ -658,7 +634,7 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
     m_frame->GetScreen()->ClearDrawingState();
     m_frame->GetScreen()->MarkConnections( line );
 
-    for( SCH_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
+    for( EDA_ITEM* item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
         if( item->GetFlags() & CANDIDATE )
             select( item );
@@ -673,7 +649,7 @@ int SCH_SELECTION_TOOL::SelectConnection( const TOOL_EVENT& aEvent )
 
 int SCH_SELECTION_TOOL::AddItemToSel( const TOOL_EVENT& aEvent )
 {
-    AddItemToSel( aEvent.Parameter<SCH_ITEM*>() );
+    AddItemToSel( aEvent.Parameter<EDA_ITEM*>() );
     return 0;
 }
 
@@ -714,7 +690,7 @@ void SCH_SELECTION_TOOL::AddItemsToSel( EDA_ITEMS* aList, bool aQuietMode )
 
 int SCH_SELECTION_TOOL::RemoveItemFromSel( const TOOL_EVENT& aEvent )
 {
-    RemoveItemFromSel( aEvent.Parameter<SCH_ITEM*>() );
+    RemoveItemFromSel( aEvent.Parameter<EDA_ITEM*>() );
     return 0;
 }
 
@@ -774,7 +750,7 @@ int SCH_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 
 bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
 {
-    SCH_ITEM* current = nullptr;
+    EDA_ITEM* current = nullptr;
     CONTEXT_MENU menu;
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
@@ -782,7 +758,7 @@ bool SCH_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
     for( int i = 0; i < limit; ++i )
     {
         wxString text;
-        SCH_ITEM* item = ( *aCollector )[i];
+        EDA_ITEM* item = ( *aCollector )[i];
         text = item->GetSelectMenuText( m_frame->GetUserUnits() );
 
         wxString menuText = wxString::Format("&%d. %s", i + 1, text );
@@ -883,7 +859,7 @@ void SCH_SELECTION_TOOL::clearSelection()
         return;
 
     while( m_selection.GetSize() )
-        unhighlight( static_cast<SCH_ITEM*>( m_selection.Front() ), SELECTED, &m_selection );
+        unhighlight( (EDA_ITEM*) m_selection.Front(), SELECTED, &m_selection );
 
     getView()->Update( &m_selection );
 

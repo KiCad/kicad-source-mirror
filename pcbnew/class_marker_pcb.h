@@ -97,9 +97,9 @@ public:
     const wxPoint GetPosition() const override { return m_Pos; }
     void SetPosition( const wxPoint& aPos ) override { m_Pos = aPos; }
 
-    bool HitTest( const wxPoint& aPosition ) const override
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override
     {
-        return HitTestMarker( aPosition );
+        return HitTestMarker( aPosition, aAccuracy );
     }
 
     bool IsOnLayer( PCB_LAYER_ID aLayer ) const override;

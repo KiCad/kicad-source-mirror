@@ -440,7 +440,7 @@ public:
     ///> @copydoc EDA_ITEM::GetMsgPanelInfo
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector<MSG_PANEL_ITEM>& aList ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     /**
      * Tests if a point is inside the bounding polygon of the module
@@ -451,9 +451,9 @@ public:
      * @param aPosition is the point to test
      * @return true if aPosition is inside the bounding polygon
      */
-    bool HitTestAccurate( const wxPoint& aPosition ) const;
+    bool HitTestAccurate( const wxPoint& aPosition, int aAccuracy = 0 ) const;
 
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     /**
      * Function GetReference

@@ -59,25 +59,19 @@ void LIB_TEXT::ViewGetLayers( int aLayers[], int& aCount ) const
 }
 
 
-bool LIB_TEXT::HitTest( const wxPoint& aPosition ) const
-{
-    return HitTest( aPosition, 0, DefaultTransform );
-}
-
-
-bool LIB_TEXT::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
+bool LIB_TEXT::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     EDA_TEXT tmp_text( *this );
-    tmp_text.SetTextPos( aTransform.TransformCoordinate( GetTextPos() ) );
+    tmp_text.SetTextPos( DefaultTransform.TransformCoordinate( GetTextPos() ) );
 
     /* The text orientation may need to be flipped if the
      * transformation matrix causes xy axes to be flipped.
      * this simple algo works only for schematic matrix (rot 90 or/and mirror)
      */
-    bool t1 = ( aTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
+    bool t1 = ( DefaultTransform.x1 != 0 ) ^ ( GetTextAngle() != 0 );
 
     tmp_text.SetTextAngle( t1 ? TEXT_ANGLE_HORIZ : TEXT_ANGLE_VERT );
-    return tmp_text.TextHitTest( aPosition );
+    return tmp_text.TextHitTest( aPosition, aAccuracy );
 }
 
 

@@ -205,16 +205,15 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    virtual bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const wxPoint& aPoint, int aAccuracy = 0 ) const override;
+    bool TextHitTest( const EDA_RECT& aRect, bool aContains, int aAccuracy = 0 ) const override;
 
-    virtual bool TextHitTest( const EDA_RECT& aRect, bool aContains = false, int aAccuracy = 0 ) const override;
-
-    virtual bool HitTest( const wxPoint& aPosition ) const override
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override
     {
-        return TextHitTest( aPosition );
+        return TextHitTest( aPosition, aAccuracy );
     }
 
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = false, int aAccuracy = 0 ) const override
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );
     }

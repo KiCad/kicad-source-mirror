@@ -256,7 +256,7 @@ public:
      * @param aHitPosition is the wxPoint to test (in internal units)
      * @return bool - true if a hit, else false
      */
-    bool HitTestMarker( const wxPoint& aHitPosition ) const;
+    bool HitTestMarker( const wxPoint& aHitPosition, int aAccuracy ) const;
 
     /**
      * Function GetBoundingBoxMarker

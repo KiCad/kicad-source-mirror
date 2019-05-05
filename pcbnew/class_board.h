@@ -263,9 +263,8 @@ public:
     BOARD();
     ~BOARD();
 
-    virtual const wxPoint GetPosition() const override;
-
-    virtual void SetPosition( const wxPoint& aPos ) override;
+    const wxPoint GetPosition() const override;
+    void SetPosition( const wxPoint& aPos ) override;
 
     bool IsEmpty() const
     {

@@ -120,9 +120,10 @@ const EDA_RECT SCH_PIN::GetBoundingBox() const
 }
 
 
-bool SCH_PIN::HitTest( const wxPoint& aPosition ) const
+bool SCH_PIN::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return GetBoundingBox().Contains( aPosition );
+    EDA_RECT rect = GetBoundingBox();
+    return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
 

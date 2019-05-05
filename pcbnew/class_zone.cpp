@@ -650,11 +650,11 @@ void ZONE_CONTAINER::SetCornerRadius( unsigned int aRadius )
 }
 
 
-bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition ) const
+bool ZONE_CONTAINER::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // Normally accuracy is zoom-relative, but for the generic HitTest we just use
     // a fixed (small) value.
-    int accuracy = Millimeter2iu( 0.05 );
+    int accuracy = std::max( aAccuracy, Millimeter2iu( 0.1 ) );
 
     return HitTestForCorner( aPosition, accuracy * 2 ) || HitTestForEdge( aPosition, accuracy );
 }

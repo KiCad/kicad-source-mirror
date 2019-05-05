@@ -631,15 +631,18 @@ void MODULE::GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >&
 }
 
 
-bool MODULE::HitTest( const wxPoint& aPosition ) const
+bool MODULE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return m_BoundaryBox.Contains( aPosition );
+    EDA_RECT rect = m_BoundaryBox;
+    return rect.Inflate( aAccuracy ).Contains( aPosition );
 }
 
 
-bool MODULE::HitTestAccurate( const wxPoint& aPosition ) const
+bool MODULE::HitTestAccurate( const wxPoint& aPosition, int aAccuracy ) const
 {
-    auto shape = GetBoundingPoly();
+    SHAPE_POLY_SET shape = GetBoundingPoly();
+
+    shape.Inflate( aAccuracy, 4 );
     return shape.Contains( aPosition, -1, true );
 }
 

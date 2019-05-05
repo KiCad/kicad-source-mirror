@@ -220,13 +220,12 @@ public:
      * the layer is not changed
      * @param axis_pos : vertical axis position
      */
-    void            Mirror( const wxPoint& axis_pos );
+    void Mirror( const wxPoint& axis_pos );
 
-    void            GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    bool            HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     wxString GetClass() const override
     {
@@ -234,13 +233,13 @@ public:
     }
 
     // Virtual function
-    const EDA_RECT    GetBoundingBox() const override;
+    const EDA_RECT GetBoundingBox() const override;
 
-    wxString    GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
+    wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 
     BITMAP_DEF GetMenuImage() const override;
 
-    EDA_ITEM*   Clone() const override;
+    EDA_ITEM* Clone() const override;
 
     virtual const BOX2I ViewBBox() const override;
 

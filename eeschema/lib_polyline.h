@@ -76,9 +76,8 @@ public:
      */
     unsigned GetCornerCount() const { return m_PolyPoints.size(); }
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -87,9 +86,7 @@ public:
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
-
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-
     void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
 
     void SetOffset( const wxPoint& aOffset ) override;
@@ -101,7 +98,6 @@ public:
     wxPoint GetPosition() const override { return m_PolyPoints[0]; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
 
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
@@ -110,7 +106,6 @@ public:
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return m_Width; }
-
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;

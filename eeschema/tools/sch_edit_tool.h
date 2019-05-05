@@ -89,7 +89,6 @@ private:
 
 private:
     SCH_SELECTION_TOOL*   m_selectionTool;
-    KIGFX::VIEW_CONTROLS* m_controls;
     SCH_EDIT_FRAME*       m_frame;
 
     /// Menu model displayed by the tool.

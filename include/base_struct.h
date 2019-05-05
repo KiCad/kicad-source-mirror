@@ -318,16 +318,30 @@ public:
 
     /**
      * Function HitTest
-     * tests if \a aPosition is contained within or on the bounding area of an item.
+     * tests if \a aPosition is contained within or on the bounding box of an item.
      *
      * @param aPosition A reference to a wxPoint object containing the coordinates to test.
-     * @return True if \a aPosition is within or on the item bounding area.
+     * @param aAccuracy Increase the item bounding box by this amount.
+     * @return True if \a aPosition is within the item bounding box.
      */
-    virtual bool HitTest( const wxPoint& aPosition ) const
+    virtual bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const
     {
         return false;   // derived classes should override this function
     }
 
+    /**
+     * Function HitTest
+     * tests if \a aRect intersects or is contained within the bounding box of an item.
+     *
+     * @param aRect A reference to a EDA_RECT object containing the rectangle to test.
+     * @param aContained Set to true to test for containment instead of an intersection.
+     * @param aAccuracy Increase \a aRect by this amount.
+     * @return True if \a aRect contains or intersects the item bounding box.
+     */
+    virtual bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const
+    {
+        return false;   // derived classes should override this function
+    }
 
     /**
      * Function GetBoundingBox

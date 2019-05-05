@@ -107,6 +107,23 @@ bool LIB_ITEM::operator<( const LIB_ITEM& aOther ) const
 }
 
 
+bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+
+    if ( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Contains( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() );
+}
+
+
 void LIB_ITEM::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                      const TRANSFORM& aTransform )
 {

@@ -110,9 +110,7 @@ public:
     void Show( int nestLevel, std::ostream& os ) const override;
 #endif
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 

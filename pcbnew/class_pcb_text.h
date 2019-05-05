@@ -80,15 +80,15 @@ public:
 
     void GetMsgPanelInfo(  EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    virtual bool HitTest( const wxPoint& aPosition ) const override
+    bool HitTest( const wxPoint& aPosition, int aAccuracy ) const override
     {
-        return TextHitTest( aPosition );
+        return TextHitTest( aPosition, aAccuracy );
     }
 
     /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
      *                               bool aContained = true, int aAccuracy ) const
      */
-    virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override
     {
         return TextHitTest( aRect, aContained, aAccuracy );
     }

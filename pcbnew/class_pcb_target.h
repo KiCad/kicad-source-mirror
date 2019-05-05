@@ -87,17 +87,13 @@ public:
     void Draw( EDA_DRAW_PANEL* panel, wxDC* DC,
                GR_DRAWMODE aDrawMode, const wxPoint& offset = ZeroOffset ) override;
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
     wxString GetClass() const override
     {
         return wxT( "PCB_TARGET" );
     }
 
-    /** @copydoc BOARD_ITEM::HitTest(const EDA_RECT& aRect,
-     *                               bool aContained = true, int aAccuracy ) const
-     */
-    bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     // Virtual function
     const EDA_RECT GetBoundingBox() const override;

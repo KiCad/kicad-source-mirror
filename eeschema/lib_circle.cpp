@@ -52,28 +52,32 @@ LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
 }
 
 
-bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef ) const
+bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
 {
-    int mindist = GetPenSize() / 2;
+    int mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    int dist = KiROUND( GetLineLength( aPosRef, DefaultTransform.TransformCoordinate( m_Pos ) ) );
 
-    // Have a minimal tolerance for hit test
-    if( mindist < MINIMUM_SELECTION_DISTANCE )
-        mindist = MINIMUM_SELECTION_DISTANCE;
+    if( abs( dist - m_Radius ) <= mindist )
+        return true;
 
-    return HitTest( aPosRef, mindist, DefaultTransform );
+    return false;
 }
 
 
-bool LIB_CIRCLE::HitTest( const wxPoint &aPosRef, int aThreshold, const TRANSFORM& aTransform ) const
+bool LIB_CIRCLE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
 {
-    if( aThreshold < 0 )
-        aThreshold = GetPenSize() / 2;
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
 
-    int dist = KiROUND( GetLineLength( aPosRef, aTransform.TransformCoordinate( m_Pos ) ) );
+    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
 
-    if( abs( dist - m_Radius ) <= aThreshold )
-        return true;
-    return false;
+    if ( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Contains( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse...
 }
 
 

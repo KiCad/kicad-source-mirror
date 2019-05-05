@@ -1184,14 +1184,14 @@ void VIA::GetMsgPanelInfoBase( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >
 }
 
 
-bool TRACK::HitTest( const wxPoint& aPosition ) const
+bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    return TestSegmentHit( aPosition, m_Start, m_End, m_Width / 2 );
+    return TestSegmentHit( aPosition, m_Start, m_End, aAccuracy + ( m_Width / 2 ) );
 }
 
-bool VIA::HitTest( const wxPoint& aPosition ) const
+bool VIA::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
-    int max_dist = m_Width / 2;
+    int max_dist = aAccuracy + ( m_Width / 2 );
 
     // rel_pos is aPosition relative to m_Start (or the center of the via)
     wxPoint rel_pos = aPosition - m_Start;

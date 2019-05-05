@@ -636,7 +636,7 @@ int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 {
     VECTOR2I  cursorPos = m_controls->GetCursorPosition();
-    SCH_ITEM* item = nullptr;
+    EDA_ITEM* item = nullptr;
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
@@ -719,7 +719,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
             // ... and second click places:
             else
             {
-                m_frame->AddItemToScreenAndUndoList( item );
+                m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item );
                 item = nullptr;
 
                 m_view->ClearPreview();
@@ -749,7 +749,7 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
         }
         else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
-            item->SetPosition( (wxPoint)cursorPos );
+            static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
             m_view->AddToPreview( item->Clone() );
         }

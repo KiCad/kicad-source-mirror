@@ -99,32 +99,16 @@ LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 }
 
 
-bool LIB_ARC::HitTest( const wxPoint& aRefPoint ) const
+bool LIB_ARC::HitTest( const wxPoint& aRefPoint, int aAccuracy ) const
 {
-    int mindist = GetPenSize() / 2;
-
-    // Have a minimal tolerance for hit test
-    if( mindist < MINIMUM_SELECTION_DISTANCE )
-        mindist = MINIMUM_SELECTION_DISTANCE;
-
-    return HitTest( aRefPoint, mindist, DefaultTransform );
-}
-
-
-bool LIB_ARC::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM& aTransform ) const
-{
-
-    if( aThreshold < 0 )
-        aThreshold = GetPenSize() / 2;
-
-    // TODO: use aTransMat to calculates parameters
-    wxPoint relativePosition = aPosition;
+    int     mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
+    wxPoint relativePosition = aRefPoint;
 
     relativePosition.y = -relativePosition.y; // reverse Y axis
 
     int distance = KiROUND( GetLineLength( m_Pos, relativePosition ) );
 
-    if( abs( distance - m_Radius ) > aThreshold )
+    if( abs( distance - m_Radius ) > mindist )
         return false;
 
     // We are on the circle, ensure we are only on the arc, i.e. between
@@ -151,8 +135,26 @@ bool LIB_ARC::HitTest( const wxPoint &aPosition, int aThreshold, const TRANSFORM
     // When the cross products have a different sign, the point lies in sector
     // also check, if the reference is near start or end point
     return 	HitTestPoints( m_ArcStart, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-            HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
-            ( crossProductStart <= 0 && crossProductEnd >= 0 );
+              HitTestPoints( m_ArcEnd, relativePosition, MINIMUM_SELECTION_DISTANCE ) ||
+              ( crossProductStart <= 0 && crossProductEnd >= 0 );
+}
+
+
+bool LIB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) const
+{
+    if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
+        return false;
+
+    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+
+    if ( aAccuracy )
+        rect.Inflate( aAccuracy );
+
+    if( aContained )
+        return rect.Contains( GetBoundingBox() );
+
+    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse for filled arcs,
+                                                // egregiously coarse for unfilled...
 }
 
 

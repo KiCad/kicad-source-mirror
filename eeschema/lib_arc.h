@@ -90,9 +90,8 @@ public:
         return _( "Arc" );
     }
 
-    bool HitTest( const wxPoint& aPosition ) const override;
-
-    bool HitTest( const wxPoint& aPosition, int aThreshold, const TRANSFORM& aTransform ) const override;
+    bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
+    bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
     const EDA_RECT GetBoundingBox() const override;
 
@@ -101,9 +100,7 @@ public:
     int GetPenSize() const override;
 
     void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
-
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-
     void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
 
     void SetOffset( const wxPoint& aOffset ) override;
@@ -115,7 +112,6 @@ public:
     wxPoint GetPosition() const override { return m_Pos; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
 
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
@@ -124,27 +120,21 @@ public:
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return m_Width; }
-
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     void SetRadius( int aRadius ) { m_Radius = aRadius; }
-
     int GetRadius() const { return m_Radius; }
 
     void SetFirstRadiusAngle( int aAngle ) { m_t1 = aAngle; }
-
     int GetFirstRadiusAngle() const { return m_t1; }
 
     void SetSecondRadiusAngle( int aAngle ) { m_t2 = aAngle; }
-
     int GetSecondRadiusAngle() const { return m_t2; }
 
     wxPoint GetStart() const { return m_ArcStart; }
-
     void SetStart( const wxPoint& aPoint ) { m_ArcStart = aPoint; }
 
     wxPoint GetEnd() const { return m_ArcEnd; }
-
     void SetEnd( const wxPoint& aPoint ) { m_ArcEnd = aPoint; }
 
     /**
