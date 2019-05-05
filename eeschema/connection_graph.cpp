@@ -110,22 +110,6 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     {
         if( candidates.size() > 1 )
         {
-            if( highest_priority == 1 || highest_priority == 5 )
-            {
-                // We have multiple options and they are all component pins.
-                std::sort( candidates.begin(), candidates.end(),
-                           [this]( SCH_ITEM* a, SCH_ITEM* b) -> bool
-                            {
-                                auto pin_a = static_cast<SCH_PIN*>( a );
-                                auto pin_b = static_cast<SCH_PIN*>( b );
-
-                                auto name_a = pin_a->GetDefaultNetName( m_sheet );
-                                auto name_b = pin_b->GetDefaultNetName( m_sheet );
-
-                                return name_a < name_b;
-                            } );
-            }
-
             if( highest_priority == 2 )
             {
                 // We have multiple options, and they are all hierarchical
@@ -141,6 +125,15 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
                         break;
                     }
                 }
+            }
+            else
+            {
+                // For all other driver types, sort by name
+                std::sort( candidates.begin(), candidates.end(),
+                           [&] ( SCH_ITEM* a, SCH_ITEM* b) -> bool
+                           {
+                               return GetNameForDriver( a ) < GetNameForDriver( b );
+                           } );
             }
         }
 
