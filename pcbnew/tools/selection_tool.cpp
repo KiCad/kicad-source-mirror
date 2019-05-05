@@ -2170,6 +2170,10 @@ void SELECTION_TOOL::guessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                 // footprint then it should be considered for selection
                 else if( calcRatio( calcArea( mod ), maxArea ) <= footprintToFootprintMinRatio )
                     continue;
+                // if there are multiple footprints for selection at this point, prefer
+                // one that is on the active layer
+                else if( moduleCount > 1 && mod->GetLayer() == activeLayer )
+                    preferred.insert( mod );
                 // reject ALL OTHER footprints if there's still something else left
                 // to select
                 else if( (int)( rejected.size() + 1 ) < aCollector.GetCount() )
