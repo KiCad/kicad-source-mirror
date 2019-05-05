@@ -1386,6 +1386,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 {
     SCH_CONNECTION* conn = aSubgraph->m_driver_connection;
     std::vector<CONNECTION_SUBGRAPH*> children;
+    std::vector<CONNECTION_SUBGRAPH*> visited;
 
     auto add_children = [&] ( CONNECTION_SUBGRAPH* aParent ) {
         for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
@@ -1513,6 +1514,8 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     if( !aSubgraph->m_hier_ports.empty() )
         return;
 
+    visited.push_back( aSubgraph );
+
     // If we are a bus, we must propagate to local neighbors and then the hierarchy
     if( conn->IsBus() )
         propagate_bus_neighbors( aSubgraph );
@@ -1528,10 +1531,22 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
         if( !child->m_dirty )
         {
-            wxLogTrace( "CONN", "Child %lu (%s) is not dirty",
+            wxLogTrace( "CONN", "Child %lu (%s) is not dirty, backpropagating it",
                         child->m_code, child->m_driver_connection->Name() );
+
+            for( CONNECTION_SUBGRAPH* subgraph : visited )
+            {
+                subgraph->m_driver_connection->Clone( *child->m_driver_connection );
+                subgraph->UpdateItemConnections();
+
+                if( conn->IsBus() )
+                    propagate_bus_neighbors( subgraph );
+            }
+
             continue;
         }
+
+        visited.push_back( child );
 
         // Check for grandchildren
         if( !child->m_hier_pins.empty() )
