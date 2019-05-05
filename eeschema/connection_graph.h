@@ -96,6 +96,7 @@ public:
 
     bool m_dirty;
 
+    /// True if this subgraph has been absorbed into another.  No pointers here are safe if so!
     bool m_absorbed;
 
     long m_code;

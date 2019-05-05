@@ -1304,6 +1304,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
                         conn->Clone( *subgraph->m_driver_connection );
                         candidate->UpdateItemConnections();
+
+                        candidate->m_dirty = false;
                     }
                 }
             }
@@ -1311,16 +1313,19 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         // This call will handle descending the hierarchy and updating child subgraphs
         propagateToNeighbors( subgraph );
-
-        subgraph->m_dirty = false;
     }
 
     m_net_code_to_subgraphs_map.clear();
 
     for( auto subgraph : m_driver_subgraphs )
     {
+        // Every driven subgraph should have been marked by now
         if( subgraph->m_dirty )
+        {
+            // TODO(JE) this should be caught by hierarchical sheet port/pin ERC, check this
+            // Reset to false so no complaints come up later
             subgraph->m_dirty = false;
+        }
 
         if( subgraph->m_driver_connection->IsBus() )
             continue;
@@ -1385,7 +1390,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     auto add_children = [&] ( CONNECTION_SUBGRAPH* aParent ) {
         for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
         {
-            SCH_SHEET_PATH path = aSubgraph->m_sheet;
+            SCH_SHEET_PATH path = aParent->m_sheet;
             path.push_back( pin->GetParent() );
 
             if( !m_sheet_to_subgraphs_map.count( path ) )
@@ -1492,41 +1497,25 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
         }
     };
 
-    // If this is a plain net, all neighbors on the same sheet will already have been
-    // absorbed into this one.  So, the only thing to do is check the hierarchy.
-
-    if( conn->IsNet() )
+    // If we don't have any hier pins (i.e. no children), nothing to do
+    if( aSubgraph->m_hier_pins.empty() )
     {
-        if( aSubgraph->m_hier_pins.empty() )
-            return;
-
-        wxLogTrace( "CONN", "Propagating %lu (%s) to subsheets",
-                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name() );
-
-        add_children( aSubgraph );
-
-        for( unsigned i = 0; i < children.size(); i++ )
-        {
-            auto child = children[i];
-
-            // Check for grandchildren
-            if( !child->m_hier_pins.empty() )
-                add_children( child );
-
-            child->m_driver_connection->Clone( *conn );
-            child->UpdateItemConnections();
-        }
+        // If we also don't have any parents, we'll never be visited again
+        if( aSubgraph->m_hier_ports.empty() )
+            aSubgraph->m_dirty = false;
 
         return;
     }
 
-    // Otherwise, we are a bus, so we must propagate to local neighbors and then the hierarchy
-    propagate_bus_neighbors( aSubgraph );
-
-    if( aSubgraph->m_hier_pins.empty() )
+    // If we do have hier ports, skip this subgraph as it will be visited by a parent
+    // TODO(JE) this will leave the subgraph dirty if there is no matching parent subgraph,
+    // which should be flagged as an ERC error
+    if( !aSubgraph->m_hier_ports.empty() )
         return;
 
-    // TODO(JE) this code looks very similar to the Net loop above, can it be merged?
+    // If we are a bus, we must propagate to local neighbors and then the hierarchy
+    if( conn->IsBus() )
+        propagate_bus_neighbors( aSubgraph );
 
     wxLogTrace( "CONN", "Propagating %lu (%s) to subsheets",
                 aSubgraph->m_code, aSubgraph->m_driver_connection->Name() );
@@ -1537,15 +1526,26 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     {
         auto child = children[i];
 
+        if( !child->m_dirty )
+        {
+            wxLogTrace( "CONN", "Child %lu (%s) is not dirty",
+                        child->m_code, child->m_driver_connection->Name() );
+            continue;
+        }
+
         // Check for grandchildren
         if( !child->m_hier_pins.empty() )
             add_children( child );
 
         child->m_driver_connection->Clone( *conn );
         child->UpdateItemConnections();
+        child->m_dirty = false;
 
-        propagate_bus_neighbors( child );
+        if( conn->IsBus() )
+            propagate_bus_neighbors( child );
     }
+
+    aSubgraph->m_dirty = false;
 }
 
 
