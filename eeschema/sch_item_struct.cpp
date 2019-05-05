@@ -117,6 +117,7 @@ SCH_CONNECTION*  SCH_ITEM::InitializeConnection( const SCH_SHEET_PATH& aSheet )
     if( Connection( aSheet ) )
     {
         Connection( aSheet )->Reset();
+        Connection( aSheet )->SetSheet( aSheet );
         return Connection( aSheet );
     }
 

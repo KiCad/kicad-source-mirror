@@ -1107,7 +1107,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                                                        aSubgraph->m_sheet );
                             c->SetName( static_cast<SCH_PIN *>( possible_driver )->GetName() );
                             connections_to_check.push_back( c );
-                            wxLogTrace( "CONN", "Adding secondary pin %s", c->Name( true ) );
+                            wxLogTrace( "CONN", "%lu (%s): Adding secondary pin %s",
+                                        aSubgraph->m_code,
+                                        aSubgraph->m_driver_connection->Name( true ),
+                                        c->Name( true ) );
                         }
                         break;
                     }
@@ -1120,7 +1123,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                                                                    aSubgraph->m_sheet );
                         c->SetName( static_cast<SCH_TEXT*>( possible_driver )->GetShownText() );
                         connections_to_check.push_back( c );
-                        wxLogTrace( "CONN", "Adding secondary label %s", c->Name( true ) );
+                        wxLogTrace( "CONN", "%lu (%s): Adding secondary label %s",
+                                    aSubgraph->m_code,
+                                    aSubgraph->m_driver_connection->Name( true ),
+                                    c->Name( true ) );
                         break;
                     }
 
