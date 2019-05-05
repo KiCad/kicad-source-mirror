@@ -37,7 +37,7 @@
 #include <preview_items/selection_area.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_line_drawing_tool.h>
+#include <tools/sch_wire_bus_tool.h>
 #include <sch_actions.h>
 #include <sch_collectors.h>
 #include <painter.h>
@@ -187,8 +187,6 @@ bool SCH_SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
-    // TODO(JE): add menu access to unfold bus on busSelectionCondition...
-
     menu.AddItem( SCH_ACTIONS::enterSheet,         sheetSelection && SCH_CONDITIONS::Idle, 1 );
     menu.AddItem( SCH_ACTIONS::explicitCrossProbe, sheetSelection && SCH_CONDITIONS::Idle, 1 );
     menu.AddItem( SCH_ACTIONS::resizeSheet,        sheetSelection && SCH_CONDITIONS::Idle, 1 );
@@ -198,11 +196,11 @@ bool SCH_SELECTION_TOOL::Init()
     menu.AddItem( SCH_ACTIONS::startWire,        SCH_CONDITIONS::Empty, 100 );
     menu.AddItem( SCH_ACTIONS::startBus,         SCH_CONDITIONS::Empty, 100 );
 
-    menu.AddSeparator( SCH_LINE_DRAWING_TOOL::IsDrawingWire, 100 );
-    menu.AddItem( SCH_ACTIONS::finishWire,       SCH_LINE_DRAWING_TOOL::IsDrawingWire, 100 );
+    menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
+    menu.AddItem( SCH_ACTIONS::finishWire,       SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
-    menu.AddSeparator( SCH_LINE_DRAWING_TOOL::IsDrawingBus, 100 );
-    menu.AddItem( SCH_ACTIONS::finishBus,        SCH_LINE_DRAWING_TOOL::IsDrawingBus, 100 );
+    menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddItem( SCH_ACTIONS::finishBus,        SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
     menu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusSelection && SCH_CONDITIONS::Idle, 200 );
@@ -333,7 +331,7 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        // symbol unit selection menu?  Adjust the unit if a symbol is selected
+        // context sub-menu selection?  Handle unit selection or bus unfolding
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
             if( evt->GetCommandId().get() >= ID_POPUP_SCH_SELECT_UNIT_CMP
@@ -345,6 +343,13 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( component )
                     static_cast<SCH_EDIT_FRAME*>( m_frame )->SelectUnit( component, unit );
             }
+            else if( evt->GetCommandId().get() >= ID_POPUP_SCH_UNFOLD_BUS
+                     && evt->GetCommandId().get() <= ID_POPUP_SCH_UNFOLD_BUS_END )
+            {
+                wxString* net = new wxString( *evt->Parameter<wxString*>() );
+                m_toolMgr->RunAction( SCH_ACTIONS::unfoldBus, true, net );
+            }
+
         }
 
         else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )

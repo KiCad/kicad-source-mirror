@@ -25,7 +25,7 @@
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_drawing_tool.h>
-#include <tools/sch_line_drawing_tool.h>
+#include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
@@ -86,7 +86,7 @@ bool SCH_MOVE_TOOL::Init()
         if( aSel.Empty() )
             return false;
 
-        if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         return true;

@@ -30,10 +30,8 @@
 #include <sch_base_frame.h>
 
 
-class SCH_COMPONENT;
 class SCH_BUS_WIRE_ENTRY;
 class SCH_LABEL;
-class SCHLIB_FILTER;
 class SCH_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
 
@@ -59,11 +57,11 @@ struct BUS_UNFOLDING_T
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_LINE_DRAWING_TOOL : public TOOL_INTERACTIVE
+class SCH_WIRE_BUS_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SCH_LINE_DRAWING_TOOL();
-    ~SCH_LINE_DRAWING_TOOL();
+    SCH_WIRE_BUS_TOOL();
+    ~SCH_WIRE_BUS_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -82,6 +80,8 @@ public:
     int DrawBus( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
 
+    int UnfoldBus( const TOOL_EVENT& aEvent );
+
     // SELECTION_CONDITIONs:
     static bool IsDrawingLine( const SELECTION& aSelection );
     static bool IsDrawingWire( const SELECTION& aSelection );
@@ -92,7 +92,7 @@ private:
 
     int doDrawSegments( int aType, SCH_LINE* aSegment );
     SCH_LINE* startSegments( int aType, const wxPoint& aPos );
-    SCH_LINE* unfoldBus( const wxString& aNet );
+    SCH_LINE* doUnfoldBus( const wxString& aNet );
     void finishSegments();
 
     ///> Sets up handlers for various events.

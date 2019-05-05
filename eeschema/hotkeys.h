@@ -63,6 +63,7 @@ enum hotkey_id_command {
     HK_ADD_NEW_POWER,
     HK_BEGIN_WIRE,
     HK_BEGIN_BUS,
+    HK_UNFOLD_BUS,
     HK_END_CURR_LINEWIREBUS,
     HK_ADD_WIRE_ENTRY,
     HK_ADD_BUS_ENTRY,
@@ -81,7 +82,6 @@ enum hotkey_id_command {
     HK_AUTOPLACE_FIELDS,
     HK_UPDATE_PCB_FROM_SCH,
     HK_SELECT_ITEMS_ON_PCB,
-    HK_UNFOLD_BUS,
     HK_CANVAS_OPENGL,
     HK_CANVAS_CAIRO,
 };

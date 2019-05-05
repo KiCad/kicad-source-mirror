@@ -201,6 +201,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_HOTKEY_SELECT_CONNECTION:
         return SCH_ACTIONS::selectConnection.MakeEvent();
+
+    case ID_SCH_UNFOLD_BUS:
+        return SCH_ACTIONS::unfoldBus.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

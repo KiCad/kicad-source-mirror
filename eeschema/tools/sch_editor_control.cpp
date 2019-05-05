@@ -48,7 +48,7 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <lib_edit_frame.h>
-#include "sch_line_drawing_tool.h"
+#include "sch_wire_bus_tool.h"
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
         AS_GLOBAL, 0, "", "" );

@@ -62,7 +62,7 @@
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <tools/sch_drawing_tool.h>
-#include <tools/sch_line_drawing_tool.h>
+#include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_inspection_tool.h>
@@ -430,7 +430,7 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOL );
-    m_toolManager->RegisterTool( new SCH_LINE_DRAWING_TOOL );
+    m_toolManager->RegisterTool( new SCH_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
     m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );

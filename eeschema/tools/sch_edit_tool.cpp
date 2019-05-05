@@ -24,7 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_line_drawing_tool.h>
+#include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <tools/sch_move_tool.h>
 #include <sch_actions.h>
@@ -260,7 +260,7 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     auto duplicateCondition = [] ( const SELECTION& aSel ) {
-        if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         return true;
@@ -270,7 +270,7 @@ bool SCH_EDIT_TOOL::Init()
         if( aSel.Empty() )
             return false;
 
-        if( SCH_LINE_DRAWING_TOOL::IsDrawingLineWireOrBus( aSel ) )
+        if( SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( aSel ) )
             return false;
 
         SCH_ITEM* item = (SCH_ITEM*) aSel.Front();

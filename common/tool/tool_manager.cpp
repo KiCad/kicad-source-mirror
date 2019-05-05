@@ -637,6 +637,8 @@ bool TOOL_MANAGER::dispatchActivation( const TOOL_EVENT& aEvent )
 {
     if( aEvent.IsActivate() )
     {
+        wxString cmdStr( *aEvent.GetCommandStr() );
+
         std::map<std::string, TOOL_STATE*>::iterator tool = m_toolNameIndex.find( *aEvent.GetCommandStr() );
 
         if( tool != m_toolNameIndex.end() )
