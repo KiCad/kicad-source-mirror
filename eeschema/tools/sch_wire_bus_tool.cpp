@@ -380,6 +380,8 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString  net;
     SCH_LINE* segment = nullptr;
 
+    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
     Activate();
 
     if( netPtr )
@@ -392,7 +394,6 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
         BUS_UNFOLD_MENU unfoldMenu;
         unfoldMenu.SetTool( this );
         unfoldMenu.SetShowTitle();
-        unfoldMenu.UpdateAll();
 
         SetContextMenu( &unfoldMenu, CMENU_NOW );
 
@@ -403,10 +404,9 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
                 OPT<int> id = evt->GetCommandId();
 
                 if( id && ( *id > 0 ) )
-                {
                     net = *evt->Parameter<wxString*>();
-                    break;
-                }
+
+                break;
             }
         }
     }
@@ -417,12 +417,17 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
         segment = doUnfoldBus( net );
     }
 
+    // If we have an unfolded wire to draw, then draw it
     if( segment )
-    {
-        // Continue drawing with the unfolded wire
-        doDrawSegments( LAYER_WIRE, segment );
-    }
+        return doDrawSegments( LAYER_WIRE, segment );
 
+    // If we came from one of our tools then re-enter it in the idle state
+    if( m_frame->GetToolId() == ID_WIRE_BUTT )
+        return doDrawSegments( LAYER_WIRE, nullptr );
+    else if( m_frame->GetToolId() == ID_BUS_BUTT )
+        return doDrawSegments( LAYER_BUS, nullptr );
+
+    m_frame->SetNoToolSelected();
     return 0;
 }
 
@@ -610,12 +615,17 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                     continue;
             }
 
-            if( evt->IsAction( &SCH_ACTIONS::drawWire ) && aType == LAYER_WIRE )
-                ; // don't cancel tool; we're going to re-enter
-            else if( evt->IsAction( &SCH_ACTIONS::drawBus ) && aType == LAYER_BUS )
-                ; // don't cancel tool; we're going to re-enter
+            if( ( evt->IsAction( &SCH_ACTIONS::drawWire ) && aType == LAYER_WIRE )
+                    || ( evt->IsAction( &SCH_ACTIONS::drawBus ) && aType == LAYER_BUS )
+                    || ( evt->IsAction( &SCH_ACTIONS::unfoldBus ) && aType == LAYER_WIRE ) )
+            {
+                // Don't reset tool.  If we do the next command will think it needs to
+                // re-select the tool rather than start a wire or bus.
+            }
             else
+            {
                 m_frame->SetNoToolSelected();
+            }
 
             break;
         }
