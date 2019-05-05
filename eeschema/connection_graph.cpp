@@ -94,7 +94,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
             candidates.push_back( item );
             highest_priority = item_priority;
         }
-        else if( candidates.size() && ( item_priority == highest_priority ) )
+        else if( !candidates.empty() && ( item_priority == highest_priority ) )
         {
             candidates.push_back( item );
         }
@@ -106,7 +106,7 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
     // Power pins are 5, global labels are 6
     m_local_driver = ( highest_priority < 5 );
 
-    if( candidates.size() )
+    if( !candidates.empty() )
     {
         if( candidates.size() > 1 )
         {
@@ -276,7 +276,7 @@ wxString CONNECTION_SUBGRAPH::GetNameForDriver( SCH_ITEM* aItem ) const
     }
 
     return name;
-};
+}
 
 
 void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
@@ -290,11 +290,13 @@ void CONNECTION_SUBGRAPH::Absorb( CONNECTION_SUBGRAPH* aOther )
     }
 
     m_bus_neighbors.insert( aOther->m_bus_neighbors.begin(), aOther->m_bus_neighbors.end() );
+    m_bus_parents.insert( aOther->m_bus_parents.begin(), aOther->m_bus_parents.end() );
 
     aOther->m_absorbed = true;
     aOther->m_dirty = false;
     aOther->m_driver = nullptr;
     aOther->m_driver_connection = nullptr;
+    aOther->m_absorbed_by = this;
 }
 
 
@@ -473,7 +475,7 @@ void CONNECTION_GRAPH::updateItemConnectivity( SCH_SHEET_PATH aSheet,
                 // Invisible power pins need to be post-processed later
 
                 if( pin.IsPowerConnection() && !pin.IsVisible() )
-                    m_invisible_power_pins.push_back( std::make_pair( aSheet, &pin ) );
+                    m_invisible_power_pins.emplace_back( std::make_pair( aSheet, &pin ) );
 
                 connection_map[ pos ].push_back( &pin );
                 m_items.insert( &pin );
@@ -648,7 +650,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
     for( unsigned i = 0; i < all_sheets.size(); i++ )
     {
-        for( auto alias : all_sheets[i].LastScreen()->GetBusAliases() )
+        for( const auto& alias : all_sheets[i].LastScreen()->GetBusAliases() )
         {
             m_bus_alias_cache[ alias->GetName() ] = alias;
         }
@@ -702,7 +704,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     if( connected_conn->SubgraphCode() == 0 )
                     {
                         connected_conn->SetSubgraphCode( subgraph->m_code );
-                        subgraph->AddItem( connected_item);
+                        subgraph->AddItem( connected_item );
 
                         std::copy_if( connected_item->ConnectedItems().begin(),
                                       connected_item->ConnectedItems().end(),
@@ -1022,10 +1024,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
 
         // Assign net codes
 
-        int code = -1;
-
         if( connection->IsBus() )
         {
+            int code = -1;
+
             if( m_bus_name_to_code_map.count( name ) )
             {
                 code = m_bus_name_to_code_map.at( name );
@@ -1201,7 +1203,8 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                          wxLogTrace( "CONN", "%lu (%s) has neighbor %lu (%s)", subgraph->m_code,
                                      connection->Name(), candidate->m_code, member->Name() );
 
-                        subgraph->m_bus_neighbors[ member ].push_back( candidate );
+                        subgraph->m_bus_neighbors[member].insert( candidate );
+                        candidate->m_bus_parents[member].insert( subgraph );
                     }
                     else
                     {
@@ -1308,6 +1311,65 @@ void CONNECTION_GRAPH::buildConnectionGraph()
         propagateToNeighbors( subgraph );
     }
 
+    // Handle buses that have been linked together somewhere by member (net) connections.
+    // This feels a bit hacky, perhaps this algorithm should be revisited in the future.
+
+    // For net subgraphs that have more than one bus parent, we need to ensure that those
+    // buses are linked together in the final netlist.  The final name of each bus might not
+    // match the local name that was used to establish the parent-child relationship, because
+    // the bus may have been renamed by a hierarchical connection.  So, for each of these cases,
+    // we need to identify the appropriate bus members to link together (and their final names),
+    // and then update all instances of the old name in the hierarchy.
+
+    for( CONNECTION_SUBGRAPH* subgraph : m_driver_subgraphs )
+    {
+        if( subgraph->m_bus_parents.size() < 2 )
+            continue;
+
+        SCH_CONNECTION* conn = subgraph->m_driver_connection;
+
+        wxASSERT( conn->IsNet() );
+
+        for( const auto& it : subgraph->m_bus_parents )
+        {
+            SCH_CONNECTION* link_member = it.first.get();
+
+            for( CONNECTION_SUBGRAPH* parent : it.second )
+            {
+                SCH_CONNECTION* match = matchBusMember( parent->m_driver_connection, link_member );
+
+                if( !match )
+                {
+                    wxLogTrace( "CONN", "Warning: could not match %s inside %lu (%s)", conn->Name(),
+                            parent->m_code, parent->m_driver_connection->Name() );
+                    continue;
+                }
+
+                if( conn->Name() != match->Name() )
+                {
+                    wxString old_name = match->Name();
+
+                    wxLogTrace( "CONN", "Updating %lu (%s) member %s to %s", parent->m_code,
+                            parent->m_driver_connection->Name(), old_name, conn->Name() );
+
+                    match->Clone( *conn );
+
+                    if( !m_net_name_to_subgraphs_map.count( old_name ) )
+                        continue;
+
+                    for( CONNECTION_SUBGRAPH* old_sg : m_net_name_to_subgraphs_map.at( old_name ) )
+                    {
+                        if( old_sg->m_absorbed )
+                            old_sg = old_sg->m_absorbed_by;
+
+                        old_sg->m_driver_connection->Clone( *conn );
+                        old_sg->UpdateItemConnections();
+                    }
+                }
+            }
+        }
+    }
+
     m_net_code_to_subgraphs_map.clear();
 
     for( auto subgraph : m_driver_subgraphs )
@@ -1411,62 +1473,21 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
         }
     };
 
-    auto propagate_bus_neighbors = [&] ( CONNECTION_SUBGRAPH* aParent ) {
-        for( const auto& kv : aParent->m_bus_neighbors )
+    auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph ) {
+        for( const auto& kv : aParentGraph->m_bus_neighbors )
         {
             for( CONNECTION_SUBGRAPH* neighbor : kv.second )
             {
                 // May have been absorbed but won't have been deleted
                 if( neighbor->m_absorbed )
-                    continue;
+                    neighbor = neighbor->m_absorbed_by;
 
-                SCH_CONNECTION* parent = aParent->m_driver_connection;
-                SCH_CONNECTION* member = nullptr;
+                SCH_CONNECTION* parent = aParentGraph->m_driver_connection;
 
                 // Now member may be out of date, since we just cloned the
                 // connection from higher up in the hierarchy.  We need to
                 // figure out what the actual new connection is.
-
-                if( parent->Type() == CONNECTION_BUS )
-                {
-                    // Vector bus: compare against index, because we allow the name
-                    // to be different
-
-                    for( const auto &bus_member : parent->Members() )
-                    {
-                        if( bus_member->VectorIndex() == kv.first->VectorIndex() )
-                        {
-                            member = bus_member.get();
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    // Group bus
-                    for( const auto &c : parent->Members() )
-                    {
-                        // Vector inside group: compare names, because for bus groups
-                        // we expect the naming to be consistent across all usages
-                        // TODO(JE) explain this in the docs
-                        if( c->Type() == CONNECTION_BUS )
-                        {
-                            for( const auto &bus_member : c->Members() )
-                            {
-                                if( bus_member->RawName() == kv.first->RawName() )
-                                {
-                                    member = bus_member.get();
-                                    break;
-                                }
-                            }
-                        }
-                        else if( c->RawName() == kv.first->RawName() )
-                        {
-                            member = c.get();
-                            break;
-                        }
-                    }
-                }
+                SCH_CONNECTION* member = matchBusMember( parent, kv.first.get() );
 
                 // This is bad, probably an ERC error
                 if( !member )
@@ -1477,16 +1498,18 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                 }
 
                 auto neighbor_conn = neighbor->m_driver_connection;
+                auto neighbor_name = neighbor_conn->Name();
 
-                // TODO(JE) check if this is too slow
-                if( neighbor_conn->Name() == member->Name() )
+                if( neighbor_name == member->Name() )
                     continue;
 
-                wxLogTrace( "CONN", "%lu (%s) connected to bus member %s",
-                            neighbor->m_code, neighbor_conn->Name(), member->Name() );
+                wxLogTrace( "CONN", "%lu (%s) connected to bus member %s", neighbor->m_code,
+                        neighbor_name, member->Name() );
 
                 neighbor_conn->Clone( *member );
                 neighbor->UpdateItemConnections();
+
+                recacheSubgraphName( neighbor, neighbor_name );
             }
         }
     };
@@ -1529,8 +1552,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
             for( CONNECTION_SUBGRAPH* subgraph : visited )
             {
+                wxString old_name = subgraph->m_driver_connection->Name();
+
                 subgraph->m_driver_connection->Clone( *child->m_driver_connection );
                 subgraph->UpdateItemConnections();
+
+                recacheSubgraphName( subgraph, old_name );
 
                 if( conn->IsBus() )
                     propagate_bus_neighbors( subgraph );
@@ -1545,8 +1572,13 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
         if( !child->m_hier_pins.empty() )
             add_children( child );
 
+        wxString old_name = child->m_driver_connection->Name();
+
         child->m_driver_connection->Clone( *conn );
         child->UpdateItemConnections();
+
+        recacheSubgraphName( child, old_name );
+
         child->m_dirty = false;
 
         if( conn->IsBus() )
@@ -1557,7 +1589,72 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 }
 
 
-std::shared_ptr<BUS_ALIAS> CONNECTION_GRAPH::GetBusAlias( wxString aName )
+SCH_CONNECTION* CONNECTION_GRAPH::matchBusMember(
+        SCH_CONNECTION* aBusConnection, SCH_CONNECTION* aSearch )
+{
+    wxASSERT( aBusConnection->IsBus() );
+
+    SCH_CONNECTION* match = nullptr;
+
+    if( aBusConnection->Type() == CONNECTION_BUS )
+    {
+        // Vector bus: compare against index, because we allow the name
+        // to be different
+
+        for( const auto& bus_member : aBusConnection->Members() )
+        {
+            if( bus_member->VectorIndex() == aSearch->VectorIndex() )
+            {
+                match = bus_member.get();
+                break;
+            }
+        }
+    }
+    else
+    {
+        // Group bus
+        for( const auto& c : aBusConnection->Members() )
+        {
+            // Vector inside group: compare names, because for bus groups
+            // we expect the naming to be consistent across all usages
+            // TODO(JE) explain this in the docs
+            if( c->Type() == CONNECTION_BUS )
+            {
+                for( const auto& bus_member : c->Members() )
+                {
+                    if( bus_member->RawName() == aSearch->RawName() )
+                    {
+                        match = bus_member.get();
+                        break;
+                    }
+                }
+            }
+            else if( c->RawName() == aSearch->RawName() )
+            {
+                match = c.get();
+                break;
+            }
+        }
+    }
+
+    return match;
+}
+
+
+void CONNECTION_GRAPH::recacheSubgraphName(
+        CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName )
+{
+    if( m_net_name_to_subgraphs_map.count( aOldName ) )
+    {
+        auto& vec = m_net_name_to_subgraphs_map.at( aOldName );
+        vec.erase( std::remove( vec.begin(), vec.end(), aSubgraph ), vec.end() );
+    }
+
+    m_net_name_to_subgraphs_map[aSubgraph->m_driver_connection->Name()].push_back( aSubgraph );
+}
+
+
+std::shared_ptr<BUS_ALIAS> CONNECTION_GRAPH::GetBusAlias( const wxString& aName )
 {
     if( m_bus_alias_cache.count( aName ) )
         return m_bus_alias_cache.at( aName );
@@ -1872,7 +1969,7 @@ bool CONNECTION_GRAPH::ercCheckBusToBusEntryConflicts( const CONNECTION_SUBGRAPH
 
         auto test_name = bus_entry->Connection( sheet )->Name();
 
-        for( auto member : bus_wire->Connection( sheet )->Members() )
+        for( const auto& member : bus_wire->Connection( sheet )->Members() )
         {
             if( member->Type() == CONNECTION_BUS )
             {
@@ -1956,36 +2053,42 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 
         if( pin && has_invalid_items )
         {
-            wxPoint pos = pin->GetTransformedPosition();
+            if( aCreateMarkers )
+            {
+                wxPoint pos = pin->GetTransformedPosition();
 
-            msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
+                msg.Printf( _( "Pin %s of component %s has a no-connect marker but is connected" ),
                         GetChars( pin->GetName() ),
                         GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
 
-            auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
+                auto marker = new SCH_MARKER();
+                marker->SetTimeStamp( GetNewTimeStamp() );
+                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+                marker->SetData( ERCE_NOCONNECT_CONNECTED, pos, msg, pos );
 
-            screen->Append( marker );
+                screen->Append( marker );
+            }
 
             return false;
         }
 
         if( !has_other_items )
         {
-            wxPoint pos = aSubgraph->m_no_connect->GetPosition();
+            if( aCreateMarkers )
+            {
+                wxPoint pos = aSubgraph->m_no_connect->GetPosition();
 
-            msg.Printf( _( "No-connect marker is not connected to anything" ) );
+                msg.Printf( _( "No-connect marker is not connected to anything" ) );
 
-            auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
+                auto marker = new SCH_MARKER();
+                marker->SetTimeStamp( GetNewTimeStamp() );
+                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+                marker->SetData( ERCE_NOCONNECT_NOT_CONNECTED, pos, msg, pos );
 
-            screen->Append( marker );
+                screen->Append( marker );
+            }
 
             return false;
         }
@@ -2036,19 +2139,22 @@ bool CONNECTION_GRAPH::ercCheckNoConnects( const CONNECTION_SUBGRAPH* aSubgraph,
 
         if( pin && !has_other_connections && pin->GetType() != PIN_NC )
         {
-            wxPoint pos = pin->GetTransformedPosition();
+            if( aCreateMarkers )
+            {
+                wxPoint pos = pin->GetTransformedPosition();
 
-            msg.Printf( _( "Pin %s of component %s is unconnected." ),
+                msg.Printf( _( "Pin %s of component %s is unconnected." ),
                         GetChars( pin->GetName() ),
                         GetChars( pin->GetParentComponent()->GetRef( &aSubgraph->m_sheet ) ) );
 
-            auto marker = new SCH_MARKER();
-            marker->SetTimeStamp( GetNewTimeStamp() );
-            marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
-            marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
-            marker->SetData( ERCE_PIN_NOT_CONNECTED, pos, msg, pos );
+                auto marker = new SCH_MARKER();
+                marker->SetTimeStamp( GetNewTimeStamp() );
+                marker->SetMarkerType( MARKER_BASE::MARKER_ERC );
+                marker->SetErrorLevel( MARKER_BASE::MARKER_SEVERITY_WARNING );
+                marker->SetData( ERCE_PIN_NOT_CONNECTED, pos, msg, pos );
 
-            screen->Append( marker );
+                screen->Append( marker );
+            }
 
             return false;
         }

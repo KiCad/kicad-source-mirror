@@ -99,6 +99,9 @@ public:
     /// True if this subgraph has been absorbed into another.  No pointers here are safe if so!
     bool m_absorbed;
 
+    /// If this subgraph is absorbed, points to the absorbing (and valid) subgraph
+    CONNECTION_SUBGRAPH* m_absorbed_by;
+
     long m_code;
 
     /**
@@ -143,7 +146,15 @@ public:
      * the vector will contain a pointer to the D7 net subgraph.
      */
     std::unordered_map< std::shared_ptr<SCH_CONNECTION>,
-                        std::vector<CONNECTION_SUBGRAPH*> > m_bus_neighbors;
+                        std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_neighbors;
+
+    /**
+     * If this is a net, this vector contains links to any same-sheet buses that contain it.
+     * The string key is the name of the connection that forms the link (which isn't necessarily
+     * the same as the name of the connection driving this subgraph)
+     */
+    std::unordered_map< std::shared_ptr<SCH_CONNECTION>,
+                        std::unordered_set<CONNECTION_SUBGRAPH*> > m_bus_parents;
 
     // Cache for lookup of any hierarchical (sheet) pins on this subgraph (for referring down)
     std::vector<SCH_SHEET_PIN*> m_hier_pins;
@@ -179,7 +190,7 @@ public:
      * CONNECTION_GRAPH caches these, they are owned by the SCH_SCREEN that
      * the alias was defined on.  The cache is only used to update the graph.
      */
-    std::shared_ptr<BUS_ALIAS> GetBusAlias( wxString aName );
+    std::shared_ptr<BUS_ALIAS> GetBusAlias( const wxString& aName );
 
     /**
      * Determines which subgraphs have more than one conflicting bus label.
@@ -244,7 +255,7 @@ private:
               std::vector<const CONNECTION_SUBGRAPH*> > m_local_label_cache;
 
     std::unordered_map<wxString,
-                       std::vector<const CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
+                       std::vector<CONNECTION_SUBGRAPH*>> m_net_name_to_subgraphs_map;
 
     int m_last_net_code;
 
@@ -322,6 +333,21 @@ private:
      * hierarchy and propagate the connectivity across all linked sheets.
      */
     void propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph );
+
+    /**
+     * Search for a matching bus member inside a bus connection
+     *
+     * For bus groups, this returns a bus member that matches aSearch by name.
+     * For bus vectors, this returns a bus member that matches by vector index.
+     *
+     * @param aBusConnection is the bus connection to search
+     * @param aSearch is the net connection to search for
+     * @returns a member of aBusConnection that matches aSearch
+     */
+    static SCH_CONNECTION* matchBusMember( SCH_CONNECTION* aBusConnection,
+                                           SCH_CONNECTION* aSearch );
+
+    void recacheSubgraphName( CONNECTION_SUBGRAPH* aSubgraph, const wxString& aOldName );
 
     /**
      * Checks one subgraph for conflicting connections between net and bus labels
