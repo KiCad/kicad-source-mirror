@@ -65,7 +65,7 @@ TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBus",
 
 TOOL_ACTION SCH_ACTIONS::unfoldBus( "eeschema.WireBusDrawing.unfoldBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UNFOLD_BUS ),
-        _( "Unfold Bus" ), _( "Break a wire out of a bus" ),
+        _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
         nullptr, AF_ACTIVATE );
 
 TOOL_ACTION SCH_ACTIONS::startLines( "eeschema.WireBusDrawing.startLines",
@@ -102,7 +102,7 @@ public:
         m_showTitle( false )
     {
         SetIcon( add_line2bus_xpm );
-        SetTitle( _( "Unfold Bus" ) );
+        SetTitle( _( "Unfold from Bus" ) );
     }
 
     void SetShowTitle()
@@ -766,6 +766,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             {
                 wxASSERT_MSG( !aSegment, "Bus unfold event recieved when already drawing!" );
 
+                aType = LAYER_WIRE;
                 wxString net = *evt->Parameter<wxString*>();
                 aSegment = doUnfoldBus( net );
             }

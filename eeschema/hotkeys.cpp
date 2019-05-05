@@ -218,7 +218,7 @@ static EDA_HOTKEY HkSelectConnection( _HKI( "Select Connection" ), HK_SELECT_CON
 static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Connection" ), ID_HOTKEY_HIGHLIGHT,
                                          'B' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold Bus" ), HK_UNFOLD_BUS, 'C', ID_SCH_UNFOLD_BUS );
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold from Bus" ), HK_UNFOLD_BUS, 'C', ID_SCH_UNFOLD_BUS );
 
 // Common: hotkeys_basic.h
 static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', (int) wxID_NEW );
