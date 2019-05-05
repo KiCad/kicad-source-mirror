@@ -682,8 +682,11 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                 }
             }
 
-            if( evt->IsDblClick( BUT_LEFT ) )
+            if( evt->IsDblClick( BUT_LEFT ) && aSegment )
             {
+                if( forceHV )
+                    computeBreakPoint( screen, aSegment->Back(), cursorPos );
+
                 finishSegments();
                 aSegment = nullptr;
 
