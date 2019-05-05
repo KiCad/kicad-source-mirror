@@ -444,8 +444,6 @@ SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
     m_busUnfold.origin = pos;
     m_busUnfold.net_name = aNet;
 
-    m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-
     m_frame->SetCrossHairPosition( m_busUnfold.entry->m_End() );
 
     return startSegments( LAYER_WIRE, m_busUnfold.entry->m_End() );
