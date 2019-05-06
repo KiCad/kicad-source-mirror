@@ -123,8 +123,8 @@ bool SCH_EDIT_FRAME::TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool 
         if( IsPointOnSegment( return_line->GetStartPoint(), return_line->GetEndPoint(), aStart ) )
             line = return_line;
 
-        SaveCopyInUndoList( (SCH_ITEM*)line, UR_DELETED, aAppend );
-        RemoveFromScreen( (SCH_ITEM*)line );
+        SaveCopyInUndoList( line, UR_DELETED, aAppend );
+        RemoveFromScreen( line );
 
         aAppend = true;
         retval = true;

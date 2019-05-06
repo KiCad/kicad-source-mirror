@@ -926,10 +926,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
             saveCopyInUndoList( item, UR_DELETED, appendToUndo );
             appendToUndo = true;
 
-            if( item->Type() == SCH_SHEET_PIN_T )
-                static_cast<SCH_SHEET*>( item->GetParent() )->RemovePin( (SCH_SHEET_PIN*) item );
-            else
-                m_frame->RemoveFromScreen( (SCH_ITEM*) item );
+            updateView( item );
 
             SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
 
@@ -946,7 +943,10 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
                 }
             }
 
-            updateView( (SCH_ITEM*) item );
+            if( item->Type() == SCH_SHEET_PIN_T )
+                static_cast<SCH_SHEET*>( item->GetParent() )->RemovePin( (SCH_SHEET_PIN*) item );
+            else
+                m_frame->RemoveFromScreen( item );
         }
     }
 

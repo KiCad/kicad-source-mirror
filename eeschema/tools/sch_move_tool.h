@@ -56,7 +56,7 @@ public:
     int Main( const TOOL_EVENT& aEvent );
 
 private:
-    void moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
+    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag );
 
     ///> Finds additional items for a drag operation.
     ///> Connected items with no wire are included (as there is no wire to adjust for the drag).

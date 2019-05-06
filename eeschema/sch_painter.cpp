@@ -1320,28 +1320,25 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
     {
         for( auto& sheetPin : aSheet->GetPins() )
         {
-            if( !sheetPin.IsMoving() )
+            // For aesthetic reasons, the SHEET_PIN is drawn with a small offset
+            // of width / 2
+            int width = aSheet->GetPenSize();
+            wxPoint initial_pos = sheetPin.GetTextPos();
+            wxPoint offset_pos = initial_pos;
+
+            switch( sheetPin.GetEdge() )
             {
-                // For aesthetic reasons, the SHEET_PIN is drawn with a small offset
-                // of width / 2
-                int width = aSheet->GetPenSize();
-                wxPoint initial_pos = sheetPin.GetTextPos();
-                wxPoint offset_pos = initial_pos;
-
-                switch( sheetPin.GetEdge() )
-                {
-                case SCH_SHEET_PIN::SHEET_TOP_SIDE:    offset_pos.y -= width / 2; break;
-                case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: offset_pos.y += width / 2; break;
-                case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
-                case SCH_SHEET_PIN::SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
-                default: break;
-                }
-
-                sheetPin.SetTextPos( offset_pos );
-                draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
-                m_gal->DrawLine( offset_pos, initial_pos );
-                sheetPin.SetTextPos( initial_pos );
+            case SCH_SHEET_PIN::SHEET_TOP_SIDE:    offset_pos.y -= width / 2; break;
+            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: offset_pos.y += width / 2; break;
+            case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
+            case SCH_SHEET_PIN::SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
+            default: break;
             }
+
+            sheetPin.SetTextPos( offset_pos );
+            draw( static_cast<SCH_HIERLABEL*>( &sheetPin ), aLayer );
+            m_gal->DrawLine( offset_pos, initial_pos );
+            sheetPin.SetTextPos( initial_pos );
         }
     }
 }

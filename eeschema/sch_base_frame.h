@@ -306,18 +306,18 @@ public:
      * Add an item to the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
+    void AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Remove an item from the screen (and view)
      * aScreen is the screen the item is located on, if not the current screen
      */
-    void RemoveFromScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
+    void RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Mark an item for refresh.
      */
-    void RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete = false );
+    void RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete = false );
 
     /**
      * Mark all items for refresh.

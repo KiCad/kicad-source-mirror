@@ -609,7 +609,7 @@ void SCH_BASE_FRAME::createCanvas()
 }
 
 
-void SCH_BASE_FRAME::RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete )
+void SCH_BASE_FRAME::RefreshItem( EDA_ITEM* aItem, bool isAddOrDelete )
 {
     EDA_ITEM* parent = aItem->GetParent();
 
@@ -633,14 +633,14 @@ void SCH_BASE_FRAME::RefreshItem( SCH_ITEM* aItem, bool isAddOrDelete )
 }
 
 
-void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
+void SCH_BASE_FRAME::AddToScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
 {
     auto screen = aScreen;
 
     if( aScreen == nullptr )
         screen = GetScreen();
 
-    screen->Append( aItem );
+    screen->Append( (SCH_ITEM*) aItem );
 
     if( screen == GetScreen() )
     {
@@ -650,7 +650,7 @@ void SCH_BASE_FRAME::AddToScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
 }
 
 
-void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
+void SCH_BASE_FRAME::RemoveFromScreen( EDA_ITEM* aItem, SCH_SCREEN* aScreen )
 {
     auto screen = aScreen;
 
@@ -660,7 +660,7 @@ void SCH_BASE_FRAME::RemoveFromScreen( SCH_ITEM* aItem, SCH_SCREEN* aScreen )
     if( screen == GetScreen() )
         GetCanvas()->GetView()->Remove( aItem );
 
-    screen->Remove( aItem );
+    screen->Remove( (SCH_ITEM*) aItem );
 
     if( screen == GetScreen() )
         RefreshItem( aItem, true );           // handle any additional parent semantics

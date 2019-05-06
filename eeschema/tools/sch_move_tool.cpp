@@ -262,7 +262,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     // Apply any initial offset in case we're coming from a previous command.
                     //
-                    moveItem( (SCH_ITEM*) item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
+                    moveItem( item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
                 }
 
                 // Set up the starting position and move/drag offset
@@ -274,10 +274,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     VECTOR2I delta = m_cursor - selection.GetReferencePoint();
 
                     // Drag items to the current cursor position
-                    for( int i = 0; i < selection.GetSize(); ++i )
+                    for( EDA_ITEM* item : selection )
                     {
-                        SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.GetItem( i ) );
-
                         // Don't double move pins, fields, etc.
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
@@ -323,7 +321,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( item->GetParent() && item->GetParent()->IsSelected() )
                     continue;
 
-                moveItem( (SCH_ITEM*) item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
+                moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
                 updateView( item );
             }
 
@@ -566,7 +564,7 @@ void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUn
 }
 
 
-void SCH_MOVE_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
+void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
 {
     switch( aItem->Type() )
     {
@@ -581,11 +579,11 @@ void SCH_MOVE_TOOL::moveItem( SCH_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
 
     case SCH_PIN_T:
     case SCH_FIELD_T:
-        aItem->Move( wxPoint( aDelta.x, -aDelta.y ) );
+        static_cast<SCH_ITEM*>( aItem )->Move( wxPoint( aDelta.x, -aDelta.y ) );
         break;
 
     default:
-        aItem->Move( (wxPoint) aDelta );
+        static_cast<SCH_ITEM*>( aItem )->Move( (wxPoint) aDelta );
         break;
     }
 
