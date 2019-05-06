@@ -196,6 +196,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_AUTOPLACE_FIELDS:
         return SCH_ACTIONS::autoplaceFields.MakeEvent();
 
+    case ID_POPUP_SCH_LEAVE_SHEET:
+        return SCH_ACTIONS::leaveSheet.MakeEvent();
+
     case ID_HOTKEY_SELECT_NODE:
         return SCH_ACTIONS::selectNode.MakeEvent();
 
