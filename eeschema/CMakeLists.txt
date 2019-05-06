@@ -124,7 +124,7 @@ set ( EESCHEMA_LIBEDIT_SRCS
     libedit/pinedit.cpp
     libedit/symbdraw.cpp
     libedit/symbedit.cpp
-    libedit/tool_lib.cpp
+    libedit/toolbars_libedit.cpp
     libedit/lib_export.cpp
     libedit/lib_manager.cpp
 
@@ -221,8 +221,8 @@ set( EESCHEMA_SRCS
     symbol_tree_synchronizing_adapter.cpp
     template_fieldnames.cpp
     template_fieldnames_keywords.cpp
-    tool_sch.cpp
-    tool_viewlib.cpp
+    toolbars_sch_editor.cpp
+    toolbars_viewlib.cpp
     transform.cpp
     viewlib_frame.cpp
     viewlibs.cpp

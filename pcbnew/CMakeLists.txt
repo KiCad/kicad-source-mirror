@@ -309,10 +309,10 @@ set( PCBNEW_CLASS_SRCS
     specctra_import_export/specctra_keywords.cpp
     target_edit.cpp
     text_mod_grid_table.cpp
-    tool_footprint_editor.cpp
-    tool_footprint_viewer.cpp
-    tool_onrightclick.cpp
-    tool_pcb_editor.cpp
+    toolbars_footprint_editor.cpp
+    toolbars_footprint_viewer.cpp
+    toolbar_onrightclick.cpp
+    toolbars_pcb_editor.cpp
     toolbars_update_user_interface.cpp
     tracks_cleaner.cpp
     undo_redo.cpp

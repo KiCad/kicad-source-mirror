@@ -72,12 +72,20 @@ public:
     ///> Get the SCH_LINE_DRAWING_TOOL top-level context menu
     inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
+    /*
+     * These are the immediate actions.  They start drawing at the mouse location.  They
+     * do not select the tool.
+     */
     int StartWire( const TOOL_EVENT& aEvent );
     int StartBus( const TOOL_EVENT& aEvent );
-    int StartLines( const TOOL_EVENT& aEvent );
+    int StartLine( const TOOL_EVENT& aEvent );
 
-    int DrawWire( const TOOL_EVENT& aEvent );
-    int DrawBus( const TOOL_EVENT& aEvent );
+    /*
+     * These are the two-step actions.  They select the tool on the first call, and start
+     * drawing on subsequent calls.
+     */
+    int DrawWires( const TOOL_EVENT& aEvent );
+    int DrawBusses( const TOOL_EVENT& aEvent );
     int DrawLines( const TOOL_EVENT& aEvent );
 
     int UnfoldBus( const TOOL_EVENT& aEvent );

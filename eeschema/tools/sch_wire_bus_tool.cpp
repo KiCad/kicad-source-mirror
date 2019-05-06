@@ -48,7 +48,7 @@ TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.WireBusDrawing.startWire",
         _( "Start Wire" ), _( "Start drawing a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.WireBusDrawing.drawWire",
+TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.WireBusDrawing.drawWires",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
         _( "Add Wire" ), _( "Add a wire" ),
         add_line_xpm, AF_ACTIVATE );
@@ -58,7 +58,7 @@ TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.WireBusDrawing.startBus",
         _( "Start Bus" ), _( "Start drawing a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBus",
+TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBusses",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
         _( "Add Bus" ), _( "Add a bus" ),
         add_bus_xpm, AF_ACTIVATE );
@@ -322,6 +322,9 @@ bool SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
 }
 
 
+/*
+ * Immediate action: start drawing a wire.  Does not select the wire tool.
+ */
 int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
@@ -334,7 +337,10 @@ int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_WIRE_BUS_TOOL::DrawWire( const TOOL_EVENT& aEvent )
+/*
+ * Tool action: first call selects the tool; subsequent calls start wires.
+ */
+int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
 {
     if( m_frame->GetToolId() == ID_WIRE_BUTT )
         return StartWire( aEvent );
@@ -348,6 +354,9 @@ int SCH_WIRE_BUS_TOOL::DrawWire( const TOOL_EVENT& aEvent )
 }
 
 
+/*
+ * Immediate action: start drawing a bus.  Does not select the bus tool.
+ */
 int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
@@ -360,7 +369,10 @@ int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_WIRE_BUS_TOOL::DrawBus( const TOOL_EVENT& aEvent )
+/*
+ * Tool action: first call selects the tool; subsequent calls start busses.
+ */
+int SCH_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
 {
     if( m_frame->GetToolId() == ID_BUS_BUTT )
         return StartBus( aEvent );
@@ -455,7 +467,10 @@ SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
 }
 
 
-int SCH_WIRE_BUS_TOOL::StartLines( const TOOL_EVENT& aEvent)
+/*
+ * Immediate action: start drawing a line.  Does not select the line tool.
+ */
+int SCH_WIRE_BUS_TOOL::StartLine( const TOOL_EVENT& aEvent)
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
@@ -465,10 +480,13 @@ int SCH_WIRE_BUS_TOOL::StartLines( const TOOL_EVENT& aEvent)
 }
 
 
+/*
+ * Tool action: first call selects the tool; subsequent calls start lines.
+ */
 int SCH_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
 {
     if( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT )
-        return StartLines( aEvent );
+        return StartLine( aEvent );
     else
     {
         m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
@@ -984,13 +1002,13 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
 
 void SCH_WIRE_BUS_TOOL::setTransitions()
 {
-    Go( &SCH_WIRE_BUS_TOOL::DrawWire,              SCH_ACTIONS::drawWire.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawBus,               SCH_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawLines,             SCH_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawWires,      SCH_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawBusses,     SCH_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawLines,      SCH_ACTIONS::drawLines.MakeEvent() );
 
-    Go( &SCH_WIRE_BUS_TOOL::StartWire,             SCH_ACTIONS::startWire.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::StartBus,              SCH_ACTIONS::startBus.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::StartLines,            SCH_ACTIONS::startLines.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartWire,      SCH_ACTIONS::startWire.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartBus,       SCH_ACTIONS::startBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartLine,      SCH_ACTIONS::startLines.MakeEvent() );
 
-    Go( &SCH_WIRE_BUS_TOOL::UnfoldBus,             SCH_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::UnfoldBus,      SCH_ACTIONS::unfoldBus.MakeEvent() );
 }
