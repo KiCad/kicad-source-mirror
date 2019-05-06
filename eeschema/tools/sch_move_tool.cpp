@@ -579,9 +579,14 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
 
     case SCH_PIN_T:
     case SCH_FIELD_T:
-        static_cast<SCH_ITEM*>( aItem )->Move( wxPoint( aDelta.x, -aDelta.y ) );
-        break;
+    {
+        SCH_COMPONENT* component = (SCH_COMPONENT*) aItem->GetParent();
+        TRANSFORM      transform = component->GetTransform().InverseTransform();
+        wxPoint        transformedDelta = transform.TransformCoordinate( (wxPoint) aDelta );
 
+        static_cast<SCH_ITEM*>( aItem )->Move( transformedDelta );
+        break;
+    }
     default:
         static_cast<SCH_ITEM*>( aItem )->Move( (wxPoint) aDelta );
         break;

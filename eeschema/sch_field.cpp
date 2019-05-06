@@ -539,7 +539,7 @@ void SCH_FIELD::SetPosition( const wxPoint& aPosition )
     wxPoint pos = ( (SCH_COMPONENT*) GetParent() )->GetPosition();
 
     // Actual positions are calculated by the rotation/mirror transform of the
-    // parent component of the field.  The inverse transfrom is used to calculate
+    // parent component of the field.  The inverse transform is used to calculate
     // the position relative to the parent component.
     wxPoint pt = aPosition - pos;
 
