@@ -855,7 +855,14 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             {
                 m_view->ClearPreview();
 
-                if( !aSheet->IsNew() )
+                if( aSheet->IsNew() )
+                {
+                    if( m_frame->EditSheet( (SCH_SHEET*)aSheet, g_CurrentSheet, nullptr ) )
+                        m_frame->AddItemToScreenAndUndoList( aSheet );
+                    else
+                        delete aSheet;
+                }
+                else
                 {
                     m_view->Hide( aSheet, false );
                     m_frame->RefreshItem( aSheet );
