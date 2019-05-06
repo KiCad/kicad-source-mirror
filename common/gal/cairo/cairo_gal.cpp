@@ -259,6 +259,17 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 {
     syncLineWidth();
 
+    // When the view is flipped, the coordinates are flipped by the matrix transform
+    // However, arc angles need a small change: swapping start and end, *without changing*
+    // the arc orientation.
+    // TODO: see the changes if the flip is for the Y axis
+    if( IsFlippedX() )
+    {
+        double delta = aEndAngle - aStartAngle;
+        aEndAngle = aStartAngle;
+        aStartAngle -= delta;
+    }
+
     SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
@@ -304,6 +315,18 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
     }
 
     syncLineWidth();
+
+    // When the view is flipped, the coordinates are flipped by the matrix transform
+    // However, arc angles need a small change: swapping start and end, *without changing*
+    // the arc orientation.
+    // TODO: see the changes if the flip is for the Y axis
+    if( IsFlippedX() )
+    {
+        double delta = aEndAngle - aStartAngle;
+        aEndAngle = aStartAngle;
+        aStartAngle -= delta;
+    }
+
     SWAP( aStartAngle, >, aEndAngle );
     auto startAngleS = angle_xform( aStartAngle );
     auto endAngleS = angle_xform( aEndAngle );
