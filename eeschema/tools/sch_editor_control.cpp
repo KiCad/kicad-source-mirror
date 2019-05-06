@@ -630,6 +630,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
         item->SetFlags( IS_NEW | IS_MOVED );
         m_frame->AddItemToScreenAndUndoList( (SCH_ITEM*) item, i > 0 );
+
+        // Reset flags for subsequent move operation
+        item->SetFlags( IS_NEW | IS_MOVED );
     }
 
     if( sheetsPasted )

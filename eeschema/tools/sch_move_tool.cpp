@@ -253,6 +253,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( item->IsNew() || ( item->GetParent() && item->GetParent()->IsSelected() ) )
                     {
                         // already saved to undo
+                        appendUndo = true;
                     }
                     else
                     {
