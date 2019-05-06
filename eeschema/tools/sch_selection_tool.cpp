@@ -461,8 +461,6 @@ EDA_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
     if( !m_additive && anyCollected )
         clearSelection();
 
-    m_frame->ClearMsgPanel();
-
     return nullptr;
 }
 

@@ -772,7 +772,7 @@ void EDA_DRAW_FRAME::SetMsgPanel( const MSG_PANEL_ITEMS& aList )
     if( m_messagePanel == NULL )
         return;
 
-    ClearMsgPanel();
+    m_messagePanel->EraseMsgBox();
 
     for( unsigned i = 0;  i < aList.size();  i++ )
         m_messagePanel->AppendMessage( aList[i] );

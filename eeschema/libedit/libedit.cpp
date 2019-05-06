@@ -147,7 +147,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     SetShowDeMorgan( GetCurPart()->HasConversion() );
 
     if( aUnit > 0 )
-        UpdatePartSelectList();
+        RebuildSymbolUnitsList();
 
     return true;
 }
@@ -206,7 +206,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
 
     Zoom_Automatique( false );
     updateTitle();
-    UpdatePartSelectList();
+    RebuildSymbolUnitsList();
 
     // Display the document information based on the entry selected just in
     // case the entry is an alias.
@@ -791,7 +791,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     wxString msg1;
     msg1.Printf( _( "Symbol library documentation file \"%s\" saved" ), docFileName.GetFullPath() );
     AppendMsgPanel( msg, msg1, BLUE );
-    UpdatePartSelectList();
+    RebuildSymbolUnitsList();
 
     return true;
 }
@@ -845,7 +845,7 @@ void LIB_EDIT_FRAME::DisplayCmpDoc()
 {
     LIB_PART* part = GetCurPart();
 
-    ClearMsgPanel();
+    EDA_DRAW_FRAME::ClearMsgPanel();
 
     if( !part )
         return;

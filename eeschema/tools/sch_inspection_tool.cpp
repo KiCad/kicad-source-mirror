@@ -128,7 +128,7 @@ int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 
     if( selection.GetSize() == 1 )
     {
-        SCH_ITEM* item = (SCH_ITEM*) selection.Front();
+        EDA_ITEM* item = (EDA_ITEM*) selection.Front();
 
         MSG_PANEL_ITEMS msgItems;
         item->GetMsgPanelInfo( m_frame->GetUserUnits(), msgItems );

@@ -50,24 +50,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         return;
 
     if( ( GetToolId() == ID_NO_TOOL_SELECTED ) && no_item_edited )
-    {
         item = LocateItemUsingCursor( aPosition );
-
-        if( item )
-        {
-            MSG_PANEL_ITEMS items;
-            item->GetMsgPanelInfo( m_UserUnits, items );
-
-            SetMsgPanel( items );
-        }
-        else
-        {
-            DisplayCmpDoc();
-
-            if( m_canvas->GetAbortRequest() )
-                m_canvas->SetAbortRequest( false );
-        }
-    }
 
     switch( GetToolId() )
     {
@@ -118,16 +101,7 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         item = LocateItemUsingCursor( aPosition );
 
         if( item )
-        {
             deleteItem( DC, item );
-        }
-        else
-        {
-            DisplayCmpDoc();
-
-            if( m_canvas->GetAbortRequest() )
-                m_canvas->SetAbortRequest( false );
-        }
         break;
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:

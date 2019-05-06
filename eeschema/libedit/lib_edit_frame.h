@@ -338,7 +338,7 @@ public:
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
-    void UpdatePartSelectList();
+    void RebuildSymbolUnitsList();
 
     /**
      * Redraw the current component loaded in library editor
@@ -397,10 +397,8 @@ public:
     void OnModify();
 
     int GetUnit() { return m_unit; }
-    void SetUnit( int unit ) { m_unit = unit; }
 
     int GetConvert() { return m_convert; }
-    void SetConvert( int convert ) { m_convert = convert; }
 
     LIB_ITEM* GetLastDrawItem() { return m_lastDrawItem; }
     void SetLastDrawItem( LIB_ITEM* drawItem ) { m_lastDrawItem = drawItem; }
@@ -440,6 +438,8 @@ public:
     void ClearTempCopyComponent();
 
     bool IsEditingDrawItem() { return GetDrawItem() && GetDrawItem()->InEditMode(); }
+
+    void ClearMsgPanel() override { DisplayCmpDoc(); }
 
 private:
     // Sets up the tool framework

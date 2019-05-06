@@ -68,6 +68,7 @@
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_picker_tool.h>
+#include <tools/sch_inspection_tool.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 
@@ -253,7 +254,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     updateTitle();
     DisplayCmpDoc();
-    UpdatePartSelectList();
+    RebuildSymbolUnitsList();
 
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
@@ -335,6 +336,7 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
+    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -380,7 +382,7 @@ double LIB_EDIT_FRAME::BestZoom()
 }
 
 
-void LIB_EDIT_FRAME::UpdatePartSelectList()
+void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
 {
     if( m_partSelectBox == NULL )
         return;
@@ -598,11 +600,14 @@ void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
     if( ( i == wxNOT_FOUND ) || ( ( i + 1 ) == m_unit ) )
         return;
 
+    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+
     m_lastDrawItem = NULL;
     m_unit = i + 1;
 
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
-    DisplayCmpDoc();
 }
 
 
@@ -647,11 +652,11 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
 
     m_convert = event.GetId() == ID_DE_MORGAN_NORMAL_BUTT ? 1 : 2;
 
-    m_lastDrawItem = NULL;
-
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
 }
 
@@ -945,6 +950,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     if( !aPart && !m_my_part )
         return;
 
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
     GetScreen()->SetCurItem( nullptr );
 
     if( m_my_part != aPart )
@@ -968,6 +974,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
     m_syncPinEdit = aPart && aPart->IsMulti() && !aPart->UnitsLocked();
 
+    m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
 }
 
@@ -1026,6 +1033,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     wxArrayString oldAliases = GetCurPart()->GetAliasNames( false );
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
 
     if( GetDrawItem() && GetDrawItem()->Type() == LIB_FIELD_T )
         SetDrawItem( nullptr );     // selected LIB_FIELD might be deleted
@@ -1061,7 +1069,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
             SyncLibraries( false );
     }
 
-    UpdatePartSelectList();
+    RebuildSymbolUnitsList();
     updateTitle();
     DisplayCmpDoc();
 
@@ -1321,18 +1329,6 @@ LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPos, const KICA
             item = selTool->SelectPoint( gridPos, aFilter );
     }
 
-    // JEY TODO: move to a selection event...
-    if( item )
-    {
-        MSG_PANEL_ITEMS items;
-        item->GetMsgPanelInfo( m_UserUnits, items );
-        SetMsgPanel( items );
-    }
-    else
-    {
-        ClearMsgPanel();
-    }
-
     return (LIB_ITEM*) item;
 }
 
@@ -1342,9 +1338,10 @@ void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
     if( !aItem )
         return;
 
-    m_canvas->CrossHairOff( aDC );
-
     LIB_PART* part = GetCurPart();
+
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_canvas->CrossHairOff( aDC );
 
     SaveCopyInUndoList( part );
 
@@ -1421,8 +1418,11 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
 void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
-    SaveCopyInUndoList( part );
+
     SetDrawItem( nullptr );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+
+    SaveCopyInUndoList( part );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( this, part );
 

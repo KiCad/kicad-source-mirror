@@ -855,7 +855,7 @@ public:
     /**
      * Clear all messages from the message panel.
      */
-    void ClearMsgPanel( void );
+    virtual void ClearMsgPanel();
 
     /**
      * Clear the message panel and populates it with the contents of \a aList.
