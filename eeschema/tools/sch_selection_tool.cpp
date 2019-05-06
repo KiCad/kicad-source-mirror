@@ -374,12 +374,15 @@ int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         }
 
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
+        else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsCancel() )
         {
             clearSelection();
+            m_toolMgr->RunAction( SCH_ACTIONS::clearHighlight, true );
+        }
 
-            if( evt->IsCancel() && dynamic_cast<SCH_EDIT_FRAME*>( m_frame ) )
-                m_toolMgr->RunAction( SCH_ACTIONS::clearHighlight, true );
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
+        {
+            clearSelection();
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
