@@ -780,7 +780,7 @@ int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
     {
         SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
 
-        m_frame->SetToolID( ID_POPUP_SCH_RESIZE_SHEET, wxCURSOR_PENCIL, _( "Resize sheet" ) );
+        m_frame->SetToolID( ID_SCH_RESIZE_SHEET, wxCURSOR_PENCIL, _( "Resize sheet" ) );
         doDrawSheet( sheet );
     }
 
@@ -818,7 +818,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
             m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
 
-            if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
+            if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
             {
                 m_frame->RollbackSchematicFromUndo();
                 // resize sheet is a single-shot command, when we're done we're done
@@ -871,7 +871,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 
                 aSheet = nullptr;
 
-                if( m_frame->GetToolId() == ID_POPUP_SCH_RESIZE_SHEET )
+                if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
                     break;  // resize sheet is a single-shot command; when we're done we're done
             }
         }

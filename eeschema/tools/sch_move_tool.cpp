@@ -417,7 +417,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     selection.ClearReferencePoint();
 
     for( auto item : selection )
-        item->ClearFlags( IS_MOVED );
+        item->ClearFlags( item->GetEditFlags() );
 
     if( unselect )
         m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );

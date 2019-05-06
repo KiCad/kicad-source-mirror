@@ -30,7 +30,6 @@
 #include <iterator>
 
 #include <math/vector2d.h>
-
 #include <core/optional.h>
 
 #ifdef WX_COMPATIBILITY
@@ -274,26 +273,18 @@ public:
         return m_mouseButtons;
     }
 
-    bool IsClick( int aButtonMask = BUT_ANY ) const
-    {
-        return ( m_actions == TA_MOUSE_CLICK )
-               && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
-    }
+    bool IsClick( int aButtonMask = BUT_ANY ) const;
 
-    bool IsDblClick( int aButtonMask = BUT_ANY ) const
-    {
-        return ( m_actions == TA_MOUSE_DBLCLICK )
-               && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
-    }
+    bool IsDblClick( int aButtonMask = BUT_ANY ) const;
 
     bool IsDrag( int aButtonMask = BUT_ANY ) const
     {
-        return ( m_actions == TA_MOUSE_DRAG ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
+        return m_actions == TA_MOUSE_DRAG && ( m_mouseButtons & aButtonMask ) == aButtonMask;
     }
 
     bool IsMouseUp( int aButtonMask = BUT_ANY ) const
     {
-        return ( m_actions == TA_MOUSE_UP ) && ( ( m_mouseButtons & aButtonMask ) == aButtonMask );
+        return m_actions == TA_MOUSE_UP && ( m_mouseButtons & aButtonMask ) == aButtonMask;
     }
 
     bool IsMotion() const

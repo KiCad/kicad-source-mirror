@@ -24,6 +24,7 @@
  */
 
 #include <fctsys.h>
+#include <id.h>
 #include <eeschema_id.h>
 #include <hotkeys.h>
 #include <sch_edit_frame.h>
@@ -117,11 +118,13 @@ static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 )
 static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ), HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
 static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
-                                ID_POPUP_SCH_LEAVE_SHEET );
+                                ID_SCH_LEAVE_SHEET );
 
 // mouse click command:
-static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN, 0 );
-static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END, 0 );
+static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN,
+                                    ID_MOUSE_CLICK );
+static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_DCLICK, WXK_END,
+                                     ID_MOUSE_DOUBLECLICK );
 
 // Schematic editor
 static EDA_HOTKEY HkBeginWire( _HKI( "Begin Wire" ), HK_BEGIN_WIRE, 'W', ID_WIRE_BUTT );
@@ -160,17 +163,17 @@ static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E', ID_SCH_EDIT_ITEM );
 static EDA_HOTKEY HkEditComponentValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V',
                                         ID_SCH_EDIT_COMPONENT_VALUE );
 static EDA_HOTKEY HkEditComponentReference( _HKI( "Edit Symbol Reference" ),
-                                        HK_EDIT_COMPONENT_REFERENCE, 'U',
-                                        ID_SCH_EDIT_COMPONENT_REFERENCE );
+                                            HK_EDIT_COMPONENT_REFERENCE, 'U',
+                                            ID_SCH_EDIT_COMPONENT_REFERENCE );
 static EDA_HOTKEY HkEditComponentFootprint( _HKI( "Edit Symbol Footprint" ),
                                             HK_EDIT_COMPONENT_FOOTPRINT, 'F',
                                             ID_SCH_EDIT_COMPONENT_FOOTPRINT );
 static EDA_HOTKEY HkShowComponentDatasheet( _HKI( "Show Symbol Datasheet" ),
-                                           HK_SHOW_COMPONENT_DATASHEET, 'D',
-                                           ID_POPUP_SCH_DISPLAYDOC_CMP );
+                                            HK_SHOW_COMPONENT_DATASHEET, 'D',
+                                            ID_SCH_DISPLAYDOC_CMP );
 static EDA_HOTKEY HkEditComponentWithLibedit( _HKI( "Edit with Symbol Editor" ),
                                               HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
-                                              ID_POPUP_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
+                                              ID_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 
 static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M',
                           ID_SCH_MOVE );

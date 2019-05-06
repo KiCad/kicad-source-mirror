@@ -341,11 +341,9 @@ void LIB_EDIT_FRAME::setupTools()
 
     // Run the selection tool, it is supposed to be always active
     // JEY TODO: not ready for modern toolset event processing yet....
-#if 0
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+    //m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
-#endif
 }
 
 

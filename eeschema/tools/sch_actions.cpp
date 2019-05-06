@@ -196,7 +196,7 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
     case ID_AUTOPLACE_FIELDS:
         return SCH_ACTIONS::autoplaceFields.MakeEvent();
 
-    case ID_POPUP_SCH_LEAVE_SHEET:
+    case ID_SCH_LEAVE_SHEET:
         return SCH_ACTIONS::leaveSheet.MakeEvent();
 
     case ID_HOTKEY_SELECT_NODE:
@@ -207,6 +207,12 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_SCH_UNFOLD_BUS:
         return SCH_ACTIONS::unfoldBus.MakeEvent();
+
+    case ID_MOUSE_CLICK:
+        return SCH_ACTIONS::cursorClick.MakeEvent();
+
+    case ID_MOUSE_DOUBLECLICK:
+        return SCH_ACTIONS::cursorDblClick.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

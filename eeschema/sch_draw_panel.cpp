@@ -269,6 +269,10 @@ void SCH_DRAW_PANEL::OnMouseEvent( wxMouseEvent& event )
     if( !screen )
         return;
 
+    // JEY TODO: this whole routine can go once libEdit is moved over to modern toolset
+    if( dynamic_cast<SCH_EDIT_FRAME*>( m_parent ) )
+        return;
+
     /* Adjust value to filter mouse displacement before consider the drag
      * mouse is really a drag command, not just a movement while click
      */

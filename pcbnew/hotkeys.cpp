@@ -32,7 +32,6 @@
 #include <footprint_viewer_frame.h>
 #include <footprint_wizard_frame.h>
 #include <pcbnew_id.h>
-
 #include <hotkeys.h>
 
 // Remark: the hotkey message info is used as keyword in hotkey config files and

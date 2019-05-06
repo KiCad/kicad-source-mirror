@@ -399,6 +399,9 @@ bool SCH_EDIT_TOOL::Init()
     drawingTool->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
+    drawMenu.AddItem( SCH_ACTIONS::editWithSymbolEditor,
+                                         singleComponentCondition && SCH_CONDITIONS::Idle, 200 );
+
     drawMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     drawMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
     drawMenu.AddItem( SCH_ACTIONS::toLabel,          anyTextTool && SCH_CONDITIONS::Idle, 200 );
@@ -431,6 +434,9 @@ bool SCH_EDIT_TOOL::Init()
     symUnitMenu3->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
     selToolMenu.AddMenu( symUnitMenu3.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+
+    selToolMenu.AddItem( SCH_ACTIONS::editWithSymbolEditor,
+                                          singleComponentCondition && SCH_CONDITIONS::Idle, 200 );
 
     selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
