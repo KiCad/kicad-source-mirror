@@ -146,7 +146,7 @@ SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         if( m_Unit && lib_item && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
             return SEARCH_CONTINUE;
 
-        if( m_Convert && lib_item && lib_item->GetConvert() != m_Convert )
+        if( m_Convert && lib_item && lib_item->GetConvert() && lib_item->GetConvert() != m_Convert )
             return SEARCH_CONTINUE;
     }
 
