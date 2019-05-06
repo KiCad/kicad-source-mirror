@@ -276,7 +276,6 @@ public:
     }
 
     virtual void SetName( const wxString& aName );
-
     const wxString& GetName() const;
 
     const LIB_ID& GetLibId() const { return m_libId; }
@@ -285,7 +284,6 @@ public:
     const wxString GetLibraryName();
 
     PART_LIB* GetLib()              { return m_library; }
-
     void SetLib( PART_LIB* aLibrary ) { m_library = aLibrary; }
 
     wxArrayString GetAliasNames( bool aIncludeRoot = true ) const;
@@ -295,7 +293,6 @@ public:
     size_t GetAliasCount() const    { return m_aliases.size(); }
 
     LIB_ALIAS* GetAlias( size_t aIndex );
-
     LIB_ALIAS* GetAlias( const wxString& aName );
 
     timestamp_t GetDateLastEdition() const { return m_dateLastEdition; }
@@ -619,6 +616,8 @@ public:
     {
         return m_drawings;
     }
+
+    SEARCH_RESULT Visit( INSPECTOR inspector, void* testData, const KICAD_T scanTypes[] ) override;
 
     /**
      * Set the units per part count.

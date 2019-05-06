@@ -964,6 +964,22 @@ LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert, KICAD_T aType,
 }
 
 
+SEARCH_RESULT LIB_PART::Visit( INSPECTOR aInspector, void* aTestData, const KICAD_T aFilterTypes[] )
+{
+    // The part itself is never inspected, only its children
+    for( LIB_ITEM& item : m_drawings )
+    {
+        if( item.IsType( aFilterTypes ) )
+        {
+            if( aInspector( &item, aTestData ) == SEARCH_QUIT )
+                return SEARCH_QUIT;
+        }
+    }
+
+    return SEARCH_CONTINUE;
+}
+
+
 void LIB_PART::SetUnitCount( int aCount )
 {
     if( m_unitCount == aCount )

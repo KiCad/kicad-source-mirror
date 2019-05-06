@@ -133,6 +133,9 @@ enum KICAD_T
     SCH_LINE_LOCATE_WIRE_T,
     SCH_LINE_LOCATE_BUS_T,
 
+    // matches any type
+    SCH_LOCATE_ANY_T,
+
     // General
     SCH_SCREEN_T,
 

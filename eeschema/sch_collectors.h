@@ -39,6 +39,7 @@ class SCH_COLLECTOR : public COLLECTOR
 {
 public:
     static const KICAD_T AllItems[];
+    static const KICAD_T LibItems[];
     static const KICAD_T EditableItems[];
     static const KICAD_T RotatableItems[];
     static const KICAD_T AllItemsButPins[];
@@ -73,14 +74,17 @@ public:
 
     /**
      * Function Collect
-     * scans a SCH_ITEM using this class's Inspector method, which does the collection.
-     * @param aItem A SCH_ITEM to scan.
+     * scans a EDA_ITEM using this class's Inspector method, which does the collection.
+     * @param aItem A EDA_ITEM to scan.
      * @param aFilterList A list of #KICAD_T types with a terminating #EOT, that determines
      *                    what is to be collected and the priority order of the resulting
      *                    collection.
      * @param aPos A wxPoint to use in hit-testing.
+     * @param aUnit A symbol unit filter (for symbol editor)
+     * @param aConvert A DeMorgan filter (for symbol editor)
      */
-    void Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos );
+    void Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
+                  int aUnit = 0, int aConvert = 0 );
 
     /**
      * Function IsCorner
@@ -105,6 +109,9 @@ public:
     bool IsDraggableJunction() const;
 
 public:
+    int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
+    int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
+
     wxString m_MenuTitle;       // The title of selection disambiguation menu (if needed)
     bool     m_MenuCancelled;   // Indicates selection disambiguation menu was cancelled
 };

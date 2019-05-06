@@ -283,6 +283,9 @@ public:
      */
     virtual bool IsType( const KICAD_T aScanTypes[] )
     {
+        if( aScanTypes[0] == SCH_LOCATE_ANY_T )
+            return true;
+
         for( const KICAD_T* p = aScanTypes; *p != EOT; ++p )
         {
             if( m_StructType == *p )

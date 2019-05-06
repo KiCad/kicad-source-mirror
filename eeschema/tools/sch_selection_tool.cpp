@@ -28,6 +28,7 @@
 #include <sch_selection_tool.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>
+#include <lib_edit_frame.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_field.h>
@@ -152,6 +153,9 @@ SCH_SELECTION_TOOL::SCH_SELECTION_TOOL() :
         m_subtractive( false ),
         m_multiple( false ),
         m_skip_heuristics( false ),
+        m_isLibEdit( false ),
+        m_unit( 0 ),
+        m_convert( 0 ),
         m_menu( *this )
 {
 }
@@ -165,7 +169,16 @@ SCH_SELECTION_TOOL::~SCH_SELECTION_TOOL()
 
 bool SCH_SELECTION_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
+
+    LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+
+    if( libEditFrame )
+    {
+        m_isLibEdit = true;
+        m_unit = libEditFrame->GetUnit();
+        m_convert = libEditFrame->GetConvert();
+    }
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
@@ -221,7 +234,7 @@ bool SCH_SELECTION_TOOL::Init()
 
 void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    m_frame = getEditFrame<SCH_BASE_FRAME>();
 
     if( aReason == TOOL_BASE::MODEL_RELOAD )
     {
@@ -229,6 +242,15 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
         // properties (as they are already deleted while a new sheet is loaded)
         m_selection.Clear();
         getView()->GetPainter()->GetSettings()->SetHighlight( false );
+
+        LIB_EDIT_FRAME* libEditFrame = dynamic_cast<LIB_EDIT_FRAME*>( m_frame );
+
+        if( libEditFrame )
+        {
+            m_isLibEdit = true;
+            m_unit = libEditFrame->GetUnit();
+            m_convert = libEditFrame->GetConvert();
+        }
     }
     else
         // Restore previous properties of selected items and remove them from containers
@@ -382,9 +404,15 @@ SELECTION& SCH_SELECTION_TOOL::GetSelection()
 EDA_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
                                            bool* aSelectionCancelledFlag, bool aCheckLocked )
 {
+    EDA_ITEM*     start;
     SCH_COLLECTOR collector;
 
-    collector.Collect( m_frame->GetScreen()->GetDrawItems(), aFilterList, (wxPoint) aWhere );
+    if( m_isLibEdit )
+        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+    else
+        start = m_frame->GetScreen()->GetDrawItems();
+
+    collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
     bool anyCollected = collector.GetCount() != 0;
 

@@ -47,6 +47,9 @@
 
 bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
 {
+    bool    keyHandled = false;
+    wxPoint pos = aPosition;
+
     // Filter out the 'fake' mouse motion after a keyboard movement
     if( !aHotKey && m_movingCursorWithKeyboard )
     {
@@ -54,28 +57,16 @@ bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KE
         return false;
     }
 
-    // when moving mouse, use the "magnetic" grid, unless the shift+ctrl keys is pressed
-    // for next cursor position
-    // ( shift or ctrl key down are PAN command with mouse wheel)
-    bool snapToGrid = true;
-
-    if( !aHotKey && wxGetKeyState( WXK_SHIFT ) && wxGetKeyState( WXK_CONTROL ) )
-        snapToGrid = false;
-
-    // Cursor is left off grid only if no block in progress
-    if( GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK )
-        snapToGrid = true;
-
-    wxPoint pos = aPosition;
-    bool keyHandled = GeneralControlKeyMovement( aHotKey, &pos, snapToGrid );
+    if( aHotKey )
+        keyHandled = GeneralControlKeyMovement( aHotKey, &pos, true );
 
     if( GetToolId() == ID_NO_TOOL_SELECTED )
         m_canvas->CrossHairOff( aDC );
     else
         m_canvas->CrossHairOn( aDC );
 
-    GetGalCanvas()->GetViewControls()->SetSnapping( snapToGrid );
-    SetCrossHairPosition( pos, snapToGrid );
+    GetGalCanvas()->GetViewControls()->SetSnapping( false );
+    SetCrossHairPosition( pos, false );
 
     if( m_canvas->IsMouseCaptured() )
         m_canvas->CallMouseCapture( aDC, aPosition, true );

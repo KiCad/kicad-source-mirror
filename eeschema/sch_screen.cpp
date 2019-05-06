@@ -60,6 +60,7 @@
 #include <thread>
 #include <algorithm>
 #include <future>
+#include <array>
 
 // TODO(JE) Debugging only
 #include <profile.h>
@@ -235,9 +236,13 @@ bool SCH_SCREEN::CheckIfOnDrawList( SCH_ITEM* aItem )
 
 SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T aType ) const
 {
+    KICAD_T types[] = { aType, EOT };
+
     for( SCH_ITEM* item = m_drawList.begin(); item; item = item->Next() )
     {
-        if( (aType == SCH_FIELD_T) && (item->Type() == SCH_COMPONENT_T) )
+        switch( item->Type() )
+        {
+        case SCH_COMPONENT_T:
         {
             SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
@@ -245,24 +250,29 @@ SCH_ITEM* SCH_SCREEN::GetItem( const wxPoint& aPosition, int aAccuracy, KICAD_T 
             {
                 SCH_FIELD* field = component->GetField( i );
 
-                if( field->HitTest( aPosition, aAccuracy ) )
-                    return (SCH_ITEM*) field;
+                if( field->IsType( types ) && field->HitTest( aPosition, aAccuracy ) )
+                    return field;
             }
+
+            break;
         }
-        else if( (aType == SCH_SHEET_PIN_T) && (item->Type() == SCH_SHEET_T) )
+        case SCH_SHEET_T:
         {
             SCH_SHEET* sheet = (SCH_SHEET*)item;
 
-            SCH_SHEET_PIN* label = sheet->GetPin( aPosition );
+            SCH_SHEET_PIN* pin = sheet->GetPin( aPosition );
 
-            if( label )
-                return (SCH_ITEM*) label;
+            if( pin && pin->IsType( types ) )
+                return pin;
+
+            break;
         }
-        else if( ( ( item->Type() == aType ) || ( aType == NOT_USED ) )
-                && item->HitTest( aPosition, aAccuracy ) )
-        {
+        default:
+            break;
+        }
+
+        if( item->IsType( types ) && item->HitTest( aPosition, aAccuracy ) )
             return item;
-        }
     }
 
     return NULL;

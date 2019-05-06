@@ -217,11 +217,11 @@ public:
      *
      * @param aPosition Position in drawing units.
      * @param aAccuracy The maximum distance within \a Position to check for an item.
-     * @param aType The type of item to find or #NOT_USED to find any item type.
+     * @param aType The type of item to find.
      * @return The item found that meets the search criteria or NULL if none found.
      */
     SCH_ITEM* GetItem( const wxPoint& aPosition, int aAccuracy = 0,
-                       KICAD_T aType = NOT_USED ) const;
+                       KICAD_T aType = SCH_LOCATE_ANY_T ) const;
 
     void Place( SCH_EDIT_FRAME* frame, wxDC* DC ) { };
 

@@ -236,6 +236,10 @@ private:
     bool m_multiple;            // Multiple selection mode is active
     bool m_skip_heuristics;     // Heuristics are not allowed when choosing item under cursor
 
+    bool m_isLibEdit;
+    int  m_unit;                // Fixed unit filter (for symbol editor)
+    int  m_convert;             // Fixed DeMorgan filter (for symbol editor)
+
     TOOL_MENU m_menu;
 };
 

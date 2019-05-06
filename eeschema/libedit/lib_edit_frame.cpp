@@ -338,9 +338,12 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
+    // JEY TODO: not ready for modern toolset event processing yet....
+#if 0
     m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
+#endif
 }
 
 
@@ -1326,9 +1329,13 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
     if( !part )
         return NULL;
 
+#if 0
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    EDA_ITEM* item = selTool->SelectPoint( aPosition, aFilterList );
+#else
     LIB_ITEM* item = NULL;
 
-    m_collectedItems.Collect( part->GetDrawItems(), aFilterList, aPosition, m_unit, m_convert );
+    m_collectedItems.Collect( part, aFilterList, aPosition, m_unit, m_convert );
 
     if( m_collectedItems.GetCount() == 0 )
     {
@@ -1336,7 +1343,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
     }
     else if( m_collectedItems.GetCount() == 1 )
     {
-        item = m_collectedItems[0];
+        item = (LIB_ITEM*) m_collectedItems[0];
     }
     else
     {
@@ -1363,6 +1370,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
         m_canvas->MoveCursorToCrossHair();
         item = GetDrawItem();
     }
+#endif
 
     if( item )
     {
@@ -1375,7 +1383,7 @@ LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aF
         ClearMsgPanel();
     }
 
-    return item;
+    return (LIB_ITEM*) item;
 }
 
 
@@ -1453,9 +1461,9 @@ void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
     if( (id >= ID_SELECT_ITEM_START && id <= ID_SELECT_ITEM_END)
         && (index >= 0 && index < m_collectedItems.GetCount()) )
     {
-        LIB_ITEM* item = m_collectedItems[index];
+        EDA_ITEM* item = m_collectedItems[index];
         m_canvas->SetAbortRequest( false );
-        SetDrawItem( item );
+        SetDrawItem( (LIB_ITEM*) item );
     }
 }
 

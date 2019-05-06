@@ -54,6 +54,19 @@ const KICAD_T SCH_COLLECTOR::AllItems[] = {
 };
 
 
+const KICAD_T SCH_COLLECTOR::LibItems[] = {
+        LIB_ARC_T,
+        LIB_CIRCLE_T,
+        LIB_TEXT_T,
+        LIB_RECTANGLE_T,
+        LIB_POLYLINE_T,
+        LIB_BEZIER_T,
+        LIB_PIN_T,
+        LIB_FIELD_T,
+        EOT
+};
+
+
 const KICAD_T SCH_COLLECTOR::AllItemsButPins[] = {
     SCH_MARKER_T,
     SCH_JUNCTION_T,
@@ -126,6 +139,17 @@ const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
 
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
+    if( m_Unit || m_Convert )
+    {
+        LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( aItem );
+
+        if( m_Unit && lib_item && lib_item->GetUnit() && lib_item->GetUnit() != m_Unit )
+            return SEARCH_CONTINUE;
+
+        if( m_Convert && lib_item && lib_item->GetConvert() != m_Convert )
+            return SEARCH_CONTINUE;
+    }
+
     if( aItem->HitTest( m_RefPos ) )
         Append( aItem );
 
@@ -133,16 +157,22 @@ SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void SCH_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos )
+void SCH_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
+                             int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 
     SetScanTypes( aFilterList );
+    m_Unit = aUnit;
+    m_Convert = aConvert;
 
     // remember where the snapshot was taken from and pass refPos to the Inspect() function.
     SetRefPos( aPos );
 
-    EDA_ITEM::IterateForward( aItem, m_inspector, NULL, m_ScanTypes );
+    if( aItem->Type() == LIB_PART_T )
+        static_cast<LIB_PART*>( aItem )->Visit( m_inspector, nullptr, m_ScanTypes );
+    else
+        EDA_ITEM::IterateForward( aItem, m_inspector, nullptr, m_ScanTypes );
 }
 
 

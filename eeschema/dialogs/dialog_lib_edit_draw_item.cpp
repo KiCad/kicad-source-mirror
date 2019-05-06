@@ -26,6 +26,7 @@
  */
 
 #include <lib_draw_item.h>
+#include <class_libentry.h>
 #include <dialog_lib_edit_draw_item.h>
 #include <lib_edit_frame.h>
 

@@ -159,7 +159,7 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
 
     if( !item || !item->InEditMode() )
     {   // We can locate an item
-        item = LocateItemUsingCursor( aPosition, LIB_COLLECTOR::DoubleClickItems );
+        item = LocateItemUsingCursor( aPosition, SCH_COLLECTOR::LibItems );
 
         if( item == NULL )
         {

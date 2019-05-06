@@ -31,7 +31,7 @@
 #include <sch_base_frame.h>
 #include <sch_screen.h>
 #include <lib_draw_item.h>
-#include <lib_collectors.h>
+#include <sch_collectors.h>
 #include <core/optional.h>
 
 class SCH_EDIT_FRAME;
@@ -52,7 +52,7 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
     LIB_PART*          m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
     LIB_PART*          m_tempCopyComponent;    ///< temp copy of a part during edit, I own it here.
-    LIB_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
+    SCH_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
     wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
@@ -596,7 +596,7 @@ private:
     void EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
     void EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
     LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPosition,
-                                     const KICAD_T aFilterList[] = LIB_COLLECTOR::AllItems );
+                                     const KICAD_T aFilterList[] = SCH_COLLECTOR::LibItems );
     void EditField( LIB_FIELD* Field );
 
     void refreshSchematic();
