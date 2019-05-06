@@ -138,8 +138,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     friend class DIALOG_LIB_EDIT_TEXT;
 
-    LIB_ITEM* locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] );
-
 public:
 
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -595,8 +593,8 @@ private:
 
     void EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
     void EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
-    LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPosition,
-                                     const KICAD_T aFilterList[] = SCH_COLLECTOR::LibItems );
+    LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPos,
+                                     const KICAD_T aFilter[] = SCH_COLLECTOR::LibItems );
     void EditField( LIB_FIELD* Field );
 
     void refreshSchematic();

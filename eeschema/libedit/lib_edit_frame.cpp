@@ -1297,81 +1297,31 @@ void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
 }
 
 
-LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPosition,
-                                                 const KICAD_T aFilterList[] )
+LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPos, const KICAD_T aFilter[] )
 {
-    wxPoint        pos;
-    LIB_PART*      part = GetCurPart();
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    LIB_PART*           part = GetCurPart();
+    bool                cancelled = false;
+    wxPoint             gridPos;
 
     if( !part )
         return NULL;
 
-    LIB_ITEM* item = locateItem( aPosition, aFilterList );
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+
+    EDA_ITEM* item = selTool->SelectPoint( aPos, aFilter, &cancelled );
 
     // If the user aborted the clarification context menu, don't show it again at the
     // grid position.
-    if( !item && m_canvas->GetAbortRequest() )
-        return NULL;
-
-    pos = GetNearestGridPosition( aPosition );
-
-    if( item == NULL && aPosition != pos )
-        item = locateItem( pos, aFilterList );
-
-    return item;
-}
-
-
-LIB_ITEM* LIB_EDIT_FRAME::locateItem( const wxPoint& aPosition, const KICAD_T aFilterList[] )
-{
-    LIB_PART* part = GetCurPart();
-
-    if( !part )
-        return NULL;
-
-#if 0
-    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
-    EDA_ITEM* item = selTool->SelectPoint( aPosition, aFilterList );
-#else
-    LIB_ITEM* item = NULL;
-
-    m_collectedItems.Collect( part, aFilterList, aPosition, m_unit, m_convert );
-
-    if( m_collectedItems.GetCount() == 0 )
+    if( !item && !cancelled )
     {
-        ClearMsgPanel();
+        gridPos = GetNearestGridPosition( aPos );
+
+        if( aPos != gridPos )
+            item = selTool->SelectPoint( gridPos, aFilter );
     }
-    else if( m_collectedItems.GetCount() == 1 )
-    {
-        item = (LIB_ITEM*) m_collectedItems[0];
-    }
-    else
-    {
-        wxASSERT_MSG( m_collectedItems.GetCount() <= MAX_SELECT_ITEM_IDS,
-                      "Select item clarification context menu size limit exceeded." );
 
-        wxMenu selectMenu;
-        AddMenuItem( &selectMenu, wxID_NONE, _( "Clarify Selection" ), KiBitmap( info_xpm ) );
-
-        selectMenu.AppendSeparator();
-
-        for( int i = 0;  i < m_collectedItems.GetCount() && i < MAX_SELECT_ITEM_IDS;  i++ )
-        {
-            wxString    text = m_collectedItems[i]->GetSelectMenuText( m_UserUnits );
-            BITMAP_DEF  xpm = m_collectedItems[i]->GetMenuImage();
-
-            AddMenuItem( &selectMenu, ID_SELECT_ITEM_START + i, text, KiBitmap( xpm ) );
-        }
-
-        // Set to NULL in case user aborts the clarification context menu.
-        SetDrawItem( NULL );
-        m_canvas->SetAbortRequest( true );   // Changed to false if an item is selected
-        PopupMenu( &selectMenu );
-        m_canvas->MoveCursorToCrossHair();
-        item = GetDrawItem();
-    }
-#endif
-
+    // JEY TODO: move to a selection event...
     if( item )
     {
         MSG_PANEL_ITEMS items;
