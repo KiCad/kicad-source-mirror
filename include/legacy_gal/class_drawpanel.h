@@ -75,6 +75,11 @@ protected:
     /// Abort mouse capture callback function.
     END_MOUSE_CAPTURE_CALLBACK m_endMouseCaptureCallback;
 
+    /// useful to avoid false start block in certain cases
+    /// (like switch from a sheet to another sheet
+    /// >= 0 (or >= n) if a block can start
+    int     m_canStartBlock;
+
     int     m_doubleClickInterval;
 
 public:
@@ -95,6 +100,7 @@ public:
         m_PrintIsMirrored( false ),
         m_mouseCaptureCallback( nullptr ),
         m_endMouseCaptureCallback( nullptr ),
+        m_canStartBlock( true ),
         m_doubleClickInterval( 0 )
     {};
 
@@ -144,7 +150,7 @@ public:
     bool GetPrintMirrored() const               { return m_PrintIsMirrored; }
     void SetPrintMirrored( bool aMirror )       { m_PrintIsMirrored = aMirror; }
 
-    void SetCanStartBlock( int aStartBlock ) { /* JEY TODO: remove */ }
+    void SetCanStartBlock( int aStartBlock ) { m_canStartBlock = aStartBlock; }
 
     /**
      * Function DrawBackGround
