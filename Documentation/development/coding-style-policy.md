@@ -467,6 +467,20 @@ The case statement is to be indented to the same level as the switch.
     }
 ~~~~~~~~~~~~~
 
+It is permitted to place all cases on a single line each, if that makes the
+code more readable. This is often done for look-ups or translation functions. In
+this case, you will have to manually align for readability as appropriate and
+reject clang-format's suggested changes, if you use it:
+
+~~~~~~~~~~~~~{.cpp}
+    switch( m_orientation )
+    {
+    case PIN_RIGHT: m_orientation = PIN_UP;    break;
+    case PIN_UP:    m_orientation = PIN_LEFT;  break;
+    case PIN_LEFT:  m_orientation = PIN_DOWN;  break;
+    case PIN_DOWN:  m_orientation = PIN_RIGHT; break;
+    }
+~~~~~~~~~~~~~
 
 # 5. License Statement # {#license_statement}
 There is a the file copyright.h which you can copy into the top of
