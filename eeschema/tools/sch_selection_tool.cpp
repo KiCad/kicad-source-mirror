@@ -264,6 +264,17 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
 int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    // JEY TODO: temp hack for LibEdit legacy selection tool
+    if( m_isLibEdit )
+    {
+        LIB_EDIT_FRAME* libEditFrame = (LIB_EDIT_FRAME*) m_frame;
+        wxCommandEvent  selectArrow;
+        selectArrow.SetId( ID_NO_TOOL_SELECTED );
+        libEditFrame->OnSelectTool( selectArrow );
+
+        return 0;
+    }
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {

@@ -38,6 +38,8 @@
 #include <functional>
 #include <sch_sheet.h>
 #include <pgm_base.h>
+#include <tools/sch_actions.h>          // JEY TODO: temp LibEdit requirement
+#include <tools/sch_selection_tool.h>   // JEY TODO: temp LibEdit requirement
 
 using namespace std::placeholders;
 
@@ -614,7 +616,12 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
         if( IsMouseCaptured() )
             EndMouseCapture();
         else
-            GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        {
+            if( SCH_CONDITIONS::Idle( GetParent()->GetToolManager()->GetTool<SCH_SELECTION_TOOL>()->GetSelection() ) )
+                GetParent()->GetToolManager()->RunAction( SCH_ACTIONS::selectionActivate, true );
+            else
+                GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
+        }
 
         keyWasHandled = true;   // The key is captured: the key event will be not skipped
         break;
