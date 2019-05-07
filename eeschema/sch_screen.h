@@ -43,8 +43,6 @@
 #include <sch_marker.h>
 #include <bus_alias.h>
 
-#include <../eeschema/general.h>
-
 
 class LIB_PIN;
 class SCH_COMPONENT;

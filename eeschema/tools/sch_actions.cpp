@@ -213,6 +213,15 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_MOUSE_DOUBLECLICK:
         return SCH_ACTIONS::cursorDblClick.MakeEvent();
+
+    case ID_LIBEDIT_PIN_BUTT:
+        return SCH_ACTIONS::placeSymbolPin.MakeEvent();
+
+    case ID_LIBEDIT_BODY_TEXT_BUTT:
+        return SCH_ACTIONS::placeSymbolText.MakeEvent();
+
+    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
+        return SCH_ACTIONS::placeSymbolAnchor.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

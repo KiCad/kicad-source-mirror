@@ -72,7 +72,7 @@ public:
     static TOOL_ACTION lock;
     static TOOL_ACTION unlock;
 
-    // Tools
+    // Schematic Tools
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION placeSymbol;
@@ -102,6 +102,15 @@ public:
     static TOOL_ACTION finishBus;
     static TOOL_ACTION finishLine;
     static TOOL_ACTION finishSheet;
+
+    // Symbol Tools
+    static TOOL_ACTION placeSymbolPin;
+    static TOOL_ACTION placeSymbolText;
+    static TOOL_ACTION drawSymbolRectangle;
+    static TOOL_ACTION drawSymbolCircle;
+    static TOOL_ACTION drawSymbolArc;
+    static TOOL_ACTION drawSymbolLines;
+    static TOOL_ACTION placeSymbolAnchor;
 
     // Editing
     static TOOL_ACTION move;

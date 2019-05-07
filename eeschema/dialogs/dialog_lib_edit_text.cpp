@@ -89,10 +89,10 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
     }
     else
     {
-        m_textSize.SetValue( m_parent->m_textSize );
+        m_textSize.SetValue( m_parent->g_LastTextSize );
 
-        m_CommonUnit->SetValue( !m_parent->m_drawSpecificUnit );
-        m_CommonConvert->SetValue( !m_parent->m_drawSpecificConvert );
+        m_CommonUnit->SetValue( !m_parent->m_DrawSpecificUnit );
+        m_CommonConvert->SetValue( !m_parent->m_DrawSpecificConvert );
         m_orientChoice->SetSelection( m_graphicText->GetTextAngle() == TEXT_ANGLE_HORIZ ? 0 : 1 );
     }
 
@@ -102,11 +102,11 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataToWindow()
 
 bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
 {
-    m_parent->m_current_text_angle = m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
+    m_parent->g_LastTextAngle = m_orientChoice->GetSelection() ? TEXT_ANGLE_VERT
                                                                     : TEXT_ANGLE_HORIZ;
-    m_parent->m_textSize = m_textSize.GetValue();
-    m_parent->m_drawSpecificConvert = !m_CommonConvert->GetValue();
-    m_parent->m_drawSpecificUnit = !m_CommonUnit->GetValue();
+    m_parent->g_LastTextSize = m_textSize.GetValue();
+    m_parent->m_DrawSpecificConvert = !m_CommonConvert->GetValue();
+    m_parent->m_DrawSpecificUnit = !m_CommonUnit->GetValue();
 
     if( m_graphicText )
     {
@@ -116,15 +116,15 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
             m_graphicText->SetText( m_TextValue->GetValue() );
 
         m_graphicText->SetPosition( wxPoint( m_posX.GetValue(), m_posY.GetValue() ) );
-        m_graphicText->SetTextSize( wxSize( m_parent->m_textSize, m_parent->m_textSize ) );
-        m_graphicText->SetTextAngle( m_parent->m_current_text_angle );
+        m_graphicText->SetTextSize( wxSize( m_parent->g_LastTextSize, m_parent->g_LastTextSize ) );
+        m_graphicText->SetTextAngle( m_parent->g_LastTextAngle );
 
-        if( m_parent->m_drawSpecificUnit )
+        if( m_parent->m_DrawSpecificUnit )
             m_graphicText->SetUnit( m_parent->GetUnit() );
         else
             m_graphicText->SetUnit( 0 );
 
-        if( m_parent->m_drawSpecificConvert )
+        if( m_parent->m_DrawSpecificConvert )
             m_graphicText->SetConvert( m_parent->GetConvert() );
         else
             m_graphicText->SetConvert( 0 );

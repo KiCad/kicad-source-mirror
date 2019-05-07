@@ -57,17 +57,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
-    /** Convert of the item currently being drawn. */
-    bool m_drawSpecificConvert;
-
-    /**
-     * Specify which component parts the current draw item applies to.
-     *
-     * If true, the item being drawn or edited applies only to the selected
-     * part.  Otherwise it applies to all parts in the component.
-     */
-    bool m_drawSpecificUnit;
-
     /**
      * Set to true to not synchronize pins at the same position when editing
      * symbols with multiple units or multiple body styles.
@@ -116,12 +105,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     // these tools must left enabled
     static bool m_showDeMorgan;
 
-    /// The current text size setting.
-    static int m_textSize;
-
-    /// Current text angle setting.
-    static double m_current_text_angle;
-
     /// The default pin num text size setting.
     static int m_textPinNumDefaultSize;
 
@@ -136,10 +119,22 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 
     int m_defaultLibWidth;
 
-    friend class DIALOG_LIB_EDIT_TEXT;
+public:
+    /** Convert of the item currently being drawn. */
+    bool          m_DrawSpecificConvert;
+
+    /**
+     * Specify which component parts the current draw item applies to.
+     *
+     * If true, the item being drawn or edited applies only to the selected
+     * part.  Otherwise it applies to all parts in the component.
+     */
+    bool          m_DrawSpecificUnit;
+
+    static int    g_LastTextSize;
+    static double g_LastTextAngle;
 
 public:
-
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
 
     ~LIB_EDIT_FRAME();

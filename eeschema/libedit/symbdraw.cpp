@@ -63,8 +63,8 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
 
     // Init default values (used to create a new draw item)
     m_drawLineWidth       = dialog.GetWidth();
-    m_drawSpecificConvert = !dialog.GetApplyToAllConversions();
-    m_drawSpecificUnit    = !dialog.GetApplyToAllUnits();
+    m_DrawSpecificConvert = !dialog.GetApplyToAllConversions();
+    m_DrawSpecificUnit    = !dialog.GetApplyToAllUnits();
 
 #if 0
     /* TODO: see if m_drawFillStyle must retain the last fill option or not.
@@ -80,12 +80,12 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     if( !DrawItem->InEditMode() )
         SaveCopyInUndoList( DrawItem->GetParent() );
 
-    if( m_drawSpecificUnit )
+    if( m_DrawSpecificUnit )
         DrawItem->SetUnit( GetUnit() );
     else
         DrawItem->SetUnit( 0 );
 
-    if( m_drawSpecificConvert )
+    if( m_DrawSpecificConvert )
         DrawItem->SetConvert( GetConvert() );
     else
         DrawItem->SetConvert( 0 );
@@ -163,28 +163,7 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
         break;
 
     case ID_LIBEDIT_BODY_TEXT_BUTT:
-        {
-            LIB_TEXT* text = new LIB_TEXT( LibEntry );
-            text->SetTextSize( wxSize( m_textSize, m_textSize ) );
-            text->SetTextAngle( m_current_text_angle );
-
-            // Enter the graphic text info
-            m_canvas->SetIgnoreMouseEvents( true );
-            EditSymbolText( NULL, text );
-
-            m_canvas->SetIgnoreMouseEvents( false );
-            m_canvas->MoveCursorToCrossHair();
-
-            if( text->GetText().IsEmpty() )
-            {
-                delete text;
-                item = NULL;
-            }
-            else
-            {
-                item = text;
-            }
-        }
+        // Moved to modern toolset
         break;
 
     default:
@@ -203,10 +182,10 @@ LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
             item->SetFillMode( m_drawFillStyle );
         }
 
-        if( m_drawSpecificUnit )
+        if( m_DrawSpecificUnit )
             item->SetUnit( m_unit );
 
-        if( m_drawSpecificConvert )
+        if( m_DrawSpecificConvert )
             item->SetConvert( m_convert );
 
         // Draw initial symbol:

@@ -74,18 +74,10 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         }
         break;
 
-    case ID_LIBEDIT_PIN_BUTT:
-        if( no_item_edited )
-            CreatePin( DC );
-        else
-            PlacePin();
-        break;
-
     case ID_LIBEDIT_BODY_LINE_BUTT:
     case ID_LIBEDIT_BODY_ARC_BUTT:
     case ID_LIBEDIT_BODY_CIRCLE_BUTT:
     case ID_LIBEDIT_BODY_RECT_BUTT:
-    case ID_LIBEDIT_BODY_TEXT_BUTT:
         if( no_item_edited )
             SetDrawItem( CreateGraphicItem( part, DC ) );
         else if( item )
@@ -104,10 +96,10 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
             deleteItem( DC, item );
         break;
 
+    case ID_LIBEDIT_BODY_TEXT_BUTT:
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-        SaveCopyInUndoList( part );
-        PlaceAnchor();
-        SetNoToolSelected();
+    case ID_LIBEDIT_PIN_BUTT:
+        // Moved to modern toolset
         break;
 
     default:

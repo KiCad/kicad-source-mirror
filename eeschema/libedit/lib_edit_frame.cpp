@@ -69,17 +69,18 @@
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <tools/sch_inspection_tool.h>
+#include <tools/lib_pin_tool.h>
+#include <tools/lib_drawing_tools.h>
 #include <sch_view.h>
 #include <sch_painter.h>
-
 
 int LIB_EDIT_FRAME::           m_unit    = 1;
 int LIB_EDIT_FRAME::           m_convert = 1;
 LIB_ITEM* LIB_EDIT_FRAME::     m_lastDrawItem = NULL;
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
-int LIB_EDIT_FRAME::           m_textSize        = -1;
-double LIB_EDIT_FRAME::        m_current_text_angle = TEXT_ANGLE_HORIZ;
+int LIB_EDIT_FRAME::           g_LastTextSize    = -1;
+double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
 int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
 
 // these values are overridden when reading the config
@@ -205,8 +206,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 {
     m_showAxis   = true;            // true to draw axis
     SetShowDeMorgan( false );
-    m_drawSpecificConvert = true;
-    m_drawSpecificUnit    = false;
+    m_DrawSpecificConvert = true;
+    m_DrawSpecificUnit    = false;
     m_hotkeysDescrList    = g_Libedit_Hotkeys_Descr;
     m_syncPinEdit         = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
@@ -219,8 +220,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
 
     // Delayed initialization
-    if( m_textSize == -1 )
-        m_textSize = GetDefaultTextSize();
+    if( g_LastTextSize == -1 )
+        g_LastTextSize = GetDefaultTextSize();
 
     // Initialize grid id to the default value 50 mils:
     m_LastGridSizeId = ID_POPUP_GRID_LEVEL_50 - ID_POPUP_GRID_LEVEL_1000;
@@ -337,6 +338,8 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new LIB_PIN_TOOL );
+    m_toolManager->RegisterTool( new LIB_DRAWING_TOOLS );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -1054,7 +1057,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
         // also set default edit options to the better value
         // Usually if units are locked, graphic items are specific to each unit
         // and if units are interchangeable, graphic items are common to units
-        m_drawSpecificUnit = GetCurPart()->UnitsLocked();
+        m_DrawSpecificUnit = GetCurPart()->UnitsLocked();
     }
 
     if( oldName != GetCurPart()->GetName() )
@@ -1091,7 +1094,11 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     switch( id )
     {
+    case ID_NO_TOOL_SELECTED:
     case ID_ZOOM_SELECTION:
+    case ID_LIBEDIT_PIN_BUTT:
+    case ID_LIBEDIT_BODY_TEXT_BUTT:
+    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
         // moved to modern toolset
         return;
     default:
@@ -1102,31 +1109,6 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     switch( id )
     {
-    case ID_NO_TOOL_SELECTED:
-        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), wxEmptyString );
-        break;
-
-    case ID_LIBEDIT_PIN_BUTT:
-        if( part )
-        {
-            SetToolID( id, wxCURSOR_PENCIL, _( "Add pin" ) );
-        }
-        else
-        {
-            SetToolID( id, wxCURSOR_ARROW, _( "Set pin options" ) );
-
-            wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-            cmd.SetId( ID_LIBEDIT_EDIT_PIN );
-            GetEventHandler()->ProcessEvent( cmd );
-            SetNoToolSelected();
-        }
-        break;
-
-    case ID_LIBEDIT_BODY_TEXT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add text" ) );
-        break;
-
     case ID_LIBEDIT_BODY_RECT_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add rectangle" ) );
         break;
@@ -1141,10 +1123,6 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     case ID_LIBEDIT_BODY_LINE_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
-        break;
-
-    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-        SetToolID( id, wxCURSOR_HAND, _( "Set anchor position" ) );
         break;
 
     case ID_LIBEDIT_IMPORT_BODY_BUTT:

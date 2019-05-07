@@ -21,7 +21,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "sch_drawing_tool.h"
+#include "sch_drawing_tools.h"
 #include "sch_selection_tool.h"
 #include <sch_actions.h>
 
@@ -140,7 +140,7 @@ TOOL_ACTION SCH_ACTIONS::addHierLabel( "eeschema.InteractiveEditing.addHierLabel
         add_hierarchical_label_xpm, AF_NONE );
 
 
-SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
+SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
     TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
     m_selectionTool( nullptr ),
     m_view( nullptr ),
@@ -151,12 +151,12 @@ SCH_DRAWING_TOOL::SCH_DRAWING_TOOL() :
 };
 
 
-SCH_DRAWING_TOOL::~SCH_DRAWING_TOOL()
+SCH_DRAWING_TOOLS::~SCH_DRAWING_TOOLS()
 {
 }
 
 
-bool SCH_DRAWING_TOOL::Init()
+bool SCH_DRAWING_TOOLS::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -184,7 +184,7 @@ bool SCH_DRAWING_TOOL::Init()
 }
 
 
-void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
+void SCH_DRAWING_TOOLS::Reset( RESET_REASON aReason )
 {
     // Init variables used by every drawing tool
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
@@ -193,7 +193,7 @@ void SCH_DRAWING_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int SCH_DRAWING_TOOL::AddJunction( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::AddJunction( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
@@ -204,7 +204,7 @@ int SCH_DRAWING_TOOL::AddJunction( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::AddLabel( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::AddLabel( const TOOL_EVENT& aEvent )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
@@ -229,7 +229,7 @@ static SCH_BASE_FRAME::HISTORY_LIST s_SymbolHistoryList;
 static SCH_BASE_FRAME::HISTORY_LIST s_PowerHistoryList;
 
 
-int SCH_DRAWING_TOOL::PlaceSymbol( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
 
@@ -239,7 +239,7 @@ int SCH_DRAWING_TOOL::PlaceSymbol( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::PlacePower( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlacePower( const TOOL_EVENT& aEvent )
 {
     SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
     SCHLIB_FILTER  filter;
@@ -251,8 +251,8 @@ int SCH_DRAWING_TOOL::PlacePower( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
-                                        SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
+int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
+                                         SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
 {
     VECTOR2I cursorPos = m_controls->GetCursorPosition();
     m_controls->ShowCursor( true );
@@ -377,7 +377,7 @@ int SCH_DRAWING_TOOL::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER
 }
 
 
-int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 {
     SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
 
@@ -495,35 +495,35 @@ int SCH_DRAWING_TOOL::PlaceImage( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::PlaceNoConnect( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceNoConnect( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
     return doSingleClickPlace( SCH_NO_CONNECT_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceJunction( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceJunction( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
     return doSingleClickPlace( SCH_JUNCTION_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceBusWireEntry( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceBusWireEntry( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
     return doSingleClickPlace( SCH_BUS_WIRE_ENTRY_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
     return doSingleClickPlace( SCH_BUS_BUS_ENTRY_T );
 }
 
 
-int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
+int SCH_DRAWING_TOOLS::doSingleClickPlace( KICAD_T aType )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
@@ -591,49 +591,49 @@ int SCH_DRAWING_TOOL::doSingleClickPlace( KICAD_T aType )
 }
 
 
-int SCH_DRAWING_TOOL::PlaceLabel( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceLabel( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add net label" ) );
     return doTwoClickPlace( SCH_LABEL_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceGlobalLabel( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceGlobalLabel( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_GLOBALLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
     return doTwoClickPlace( SCH_GLOBAL_LABEL_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
     return doTwoClickPlace( SCH_HIER_LABEL_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceSheetPin( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceSheetPin( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_SHEET_PIN_BUTT, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
     return doTwoClickPlace( SCH_SHEET_PIN_T );
 }
 
 
-int SCH_DRAWING_TOOL::ImportSheetPin( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::ImportSheetPin( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
     return doTwoClickPlace( SCH_SHEET_PIN_T );
 }
 
 
-int SCH_DRAWING_TOOL::PlaceSchematicText( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::PlaceSchematicText( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
     return doTwoClickPlace( SCH_TEXT_T );
 }
 
 
-int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
+int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 {
     VECTOR2I  cursorPos = m_controls->GetCursorPosition();
     EDA_ITEM* item = nullptr;
@@ -765,14 +765,14 @@ int SCH_DRAWING_TOOL::doTwoClickPlace( KICAD_T aType )
 }
 
 
-int SCH_DRAWING_TOOL::DrawSheet( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
     return doDrawSheet( nullptr );
 }
 
 
-int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
+int SCH_DRAWING_TOOLS::ResizeSheet( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
 
@@ -788,7 +788,7 @@ int SCH_DRAWING_TOOL::ResizeSheet( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
+int SCH_DRAWING_TOOLS::doDrawSheet( SCH_SHEET *aSheet )
 {
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
@@ -905,7 +905,7 @@ int SCH_DRAWING_TOOL::doDrawSheet( SCH_SHEET *aSheet )
 }
 
 
-void SCH_DRAWING_TOOL::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
+void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
 {
     wxPoint pos = aSheet->GetPosition();
     wxPoint size = (wxPoint) aPos - pos;
@@ -929,26 +929,26 @@ void SCH_DRAWING_TOOL::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
 }
 
 
-void SCH_DRAWING_TOOL::setTransitions()
+void SCH_DRAWING_TOOLS::setTransitions()
 {
-    Go( &SCH_DRAWING_TOOL::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlacePower,            SCH_ACTIONS::placePower.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceNoConnect,        SCH_ACTIONS::placeNoConnect.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceJunction,         SCH_ACTIONS::placeJunction.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceBusWireEntry,     SCH_ACTIONS::placeBusWireEntry.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceBusBusEntry,      SCH_ACTIONS::placeBusBusEntry.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceLabel,            SCH_ACTIONS::placeLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::DrawSheet,             SCH_ACTIONS::drawSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::ResizeSheet,           SCH_ACTIONS::resizeSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceSheetPin,         SCH_ACTIONS::placeSheetPin.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::ImportSheetPin,        SCH_ACTIONS::importSheetPin.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSymbol,           SCH_ACTIONS::placeSymbol.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlacePower,            SCH_ACTIONS::placePower.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceNoConnect,        SCH_ACTIONS::placeNoConnect.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceJunction,         SCH_ACTIONS::placeJunction.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceBusWireEntry,     SCH_ACTIONS::placeBusWireEntry.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceBusBusEntry,      SCH_ACTIONS::placeBusBusEntry.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceLabel,            SCH_ACTIONS::placeLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::DrawSheet,             SCH_ACTIONS::drawSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ResizeSheet,           SCH_ACTIONS::resizeSheet.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSheetPin,         SCH_ACTIONS::placeSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::ImportSheetPin,        SCH_ACTIONS::importSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::PlaceImage,            SCH_ACTIONS::placeImage.MakeEvent() );
 
-    Go( &SCH_DRAWING_TOOL::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addGlobalLabel.MakeEvent() );
-    Go( &SCH_DRAWING_TOOL::AddLabel,              SCH_ACTIONS::addHierLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddJunction,           SCH_ACTIONS::addJunction.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddLabel,              SCH_ACTIONS::addLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddLabel,              SCH_ACTIONS::addGlobalLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddLabel,              SCH_ACTIONS::addHierLabel.MakeEvent() );
 }

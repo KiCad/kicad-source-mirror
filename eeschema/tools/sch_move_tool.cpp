@@ -24,7 +24,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_drawing_tool.h>
+#include <tools/sch_drawing_tools.h>
 #include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_picker_tool.h>
 #include <sch_actions.h>

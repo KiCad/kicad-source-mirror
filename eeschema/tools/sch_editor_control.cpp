@@ -38,7 +38,7 @@
 #include <tools/sch_picker_tool.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_drawing_tool.h>
+#include <tools/sch_drawing_tools.h>
 #include <project.h>
 #include <hotkeys.h>
 #include <advanced_config.h>

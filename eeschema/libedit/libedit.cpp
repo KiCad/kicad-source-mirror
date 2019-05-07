@@ -707,7 +707,7 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit
     // and if units are interchangeable, graphic items are common to units
-    m_drawSpecificUnit = part->UnitsLocked() ? true : false;
+    m_DrawSpecificUnit = part->UnitsLocked() ? true : false;
 
     LoadOneLibraryPartAux( alias, aLibrary, aUnit, 0 );
 }

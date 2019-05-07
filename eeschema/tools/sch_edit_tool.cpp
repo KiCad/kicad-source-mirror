@@ -46,7 +46,7 @@
 #include <eeschema_id.h>
 #include <status_popup.h>
 #include <wx/gdicmn.h>
-#include "sch_drawing_tool.h"
+#include "sch_drawing_tools.h"
 
 
 TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
@@ -242,7 +242,7 @@ bool SCH_EDIT_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SCH_DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOL>();
+    SCH_DRAWING_TOOLS* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
     SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );

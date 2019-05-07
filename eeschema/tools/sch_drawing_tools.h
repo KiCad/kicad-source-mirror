@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_DRAWING_TOOL_H
-#define SCH_DRAWING_TOOL_H
+#ifndef SCH_DRAWING_TOOLS_H
+#define SCH_DRAWING_TOOLS_H
 
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
@@ -39,16 +39,16 @@ class SCH_SELECTION_TOOL;
 
 
 /**
- * Class SCH_DRAWING_TOOL
+ * Class SCH_DRAWING_TOOLS
  *
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_DRAWING_TOOL : public TOOL_INTERACTIVE
+class SCH_DRAWING_TOOLS : public TOOL_INTERACTIVE
 {
 public:
-    SCH_DRAWING_TOOL();
-    ~SCH_DRAWING_TOOL();
+    SCH_DRAWING_TOOLS();
+    ~SCH_DRAWING_TOOLS();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -102,4 +102,4 @@ private:
     TOOL_MENU             m_menu;
 };
 
-#endif /* SCH_DRAWING_TOOL_H */
+#endif /* SCH_DRAWING_TOOLS_H */

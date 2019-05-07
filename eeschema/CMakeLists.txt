@@ -121,7 +121,6 @@ set ( EESCHEMA_LIBEDIT_SRCS
     libedit/lib_edit_frame.cpp
     libedit/libfield.cpp
     libedit/menubar_libedit.cpp
-    libedit/pinedit.cpp
     libedit/symbdraw.cpp
     libedit/symbedit.cpp
     libedit/toolbars_libedit.cpp
@@ -234,8 +233,10 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
 
+    tools/lib_drawing_tools.cpp
+    tools/lib_pin_tool.cpp
     tools/sch_actions.cpp
-    tools/sch_drawing_tool.cpp
+    tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
     tools/sch_inspection_tool.cpp
