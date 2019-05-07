@@ -58,6 +58,17 @@ class SCH_SHEET_PIN;
 class CONNECTION_SUBGRAPH
 {
 public:
+    enum PRIORITY {
+        PRIORITY_NONE = 0,
+        PRIORITY_PIN,
+        PRIORITY_SHEET_PIN,
+        PRIORITY_HIER_LABEL,
+        PRIORITY_LOCAL_LABEL,
+        PRIORITY_POWER_PIN,
+        PRIORITY_GLOBAL
+    };
+
+
     CONNECTION_SUBGRAPH( SCH_EDIT_FRAME* aFrame ) :
         m_dirty( false ), m_absorbed( false ), m_code( -1 ), m_multiple_drivers( false ),
         m_strong_driver( false ), m_no_connect( nullptr ), m_bus_entry( nullptr ),
@@ -93,6 +104,22 @@ public:
 
     /// Updates all items to match the driver connection
     void UpdateItemConnections();
+
+    /**
+     * Returns the priority (higher is more important) of a candidate driver
+     *
+     * 0: Invalid driver
+     * 1: Component pin
+     * 2: Hierarchical sheet pin
+     * 3: Hierarchical label
+     * 4: Local label
+     * 5: Power pin
+     * 6: Global label
+     *
+     * @param aDriver is the item to inspect
+     * @return a PRIORITY
+     */
+    static PRIORITY GetDriverPriority( SCH_ITEM* aDriver );
 
     bool m_dirty;
 

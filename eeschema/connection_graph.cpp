@@ -59,33 +59,13 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
 
     for( auto item : m_drivers )
     {
-        int item_priority = 0;
+        PRIORITY item_priority = GetDriverPriority( item );
 
-        switch( item->Type() )
-        {
-        case SCH_SHEET_PIN_T:           item_priority = 2; break;
-        case SCH_HIER_LABEL_T:  item_priority = 3; break;
-        case SCH_LABEL_T:               item_priority = 4; break;
-        case SCH_PIN_T:
-        {
-            auto sch_pin = static_cast<SCH_PIN*>( item );
+        if( item_priority == PRIORITY_PIN &&
+            !static_cast<SCH_PIN*>( item )->GetParentComponent()->IsInNetlist() )
+            continue;
 
-            if( sch_pin->IsPowerConnection() )
-                item_priority = 5;
-            else
-                item_priority = 1;
-
-            // Skip power flags, etc
-            if( item_priority == 1 && !sch_pin->GetParentComponent()->IsInNetlist() )
-                continue;
-
-            break;
-        }
-        case SCH_GLOBAL_LABEL_T:        item_priority = 6; break;
-        default: break;
-        }
-
-        if( item_priority >= 3 )
+        if( item_priority >= PRIORITY_HIER_LABEL )
             strong_drivers.push_back( item );
 
         if( item_priority > highest_priority )
@@ -100,17 +80,17 @@ bool CONNECTION_SUBGRAPH::ResolveDrivers( bool aCreateMarkers )
         }
     }
 
-    if( highest_priority >= 3 )
+    if( highest_priority >= PRIORITY_HIER_LABEL )
         m_strong_driver = true;
 
     // Power pins are 5, global labels are 6
-    m_local_driver = ( highest_priority < 5 );
+    m_local_driver = ( highest_priority < PRIORITY_POWER_PIN );
 
     if( !candidates.empty() )
     {
         if( candidates.size() > 1 )
         {
-            if( highest_priority == 2 )
+            if( highest_priority == PRIORITY_SHEET_PIN )
             {
                 // We have multiple options, and they are all hierarchical
                 // sheet pins.  Let's prefer outputs over inputs.
@@ -337,6 +317,32 @@ void CONNECTION_SUBGRAPH::UpdateItemConnections()
             item_conn->Clone( *m_driver_connection );
             item_conn->ClearDirty();
         }
+    }
+}
+
+
+CONNECTION_SUBGRAPH::PRIORITY CONNECTION_SUBGRAPH::GetDriverPriority( SCH_ITEM* aDriver )
+{
+    if( !aDriver )
+        return PRIORITY_NONE;
+
+    switch( aDriver->Type() )
+    {
+    case SCH_SHEET_PIN_T:     return PRIORITY_SHEET_PIN;
+    case SCH_HIER_LABEL_T:    return PRIORITY_HIER_LABEL;
+    case SCH_LABEL_T:         return PRIORITY_LOCAL_LABEL;
+    case SCH_GLOBAL_LABEL_T:  return PRIORITY_GLOBAL;
+    case SCH_PIN_T:
+    {
+        auto sch_pin = static_cast<SCH_PIN*>( aDriver );
+
+        if( sch_pin->IsPowerConnection() )
+            return PRIORITY_POWER_PIN;
+        else
+            return PRIORITY_PIN;
+    }
+
+    default: return PRIORITY_NONE;
     }
 }
 
@@ -1440,10 +1446,10 @@ void CONNECTION_GRAPH::assignNetCodesToBus( SCH_CONNECTION* aConnection )
 void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 {
     SCH_CONNECTION* conn = aSubgraph->m_driver_connection;
-    std::vector<CONNECTION_SUBGRAPH*> children;
-    std::vector<CONNECTION_SUBGRAPH*> visited;
+    std::vector<CONNECTION_SUBGRAPH*> search_list;
+    std::unordered_set<CONNECTION_SUBGRAPH*> visited;
 
-    auto add_children = [&] ( CONNECTION_SUBGRAPH* aParent ) {
+    auto visit = [&] ( CONNECTION_SUBGRAPH* aParent ) {
         for( SCH_SHEET_PIN* pin : aParent->m_hier_pins )
         {
             SCH_SHEET_PATH path = aParent->m_sheet;
@@ -1465,12 +1471,47 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                         wxLogTrace( "CONN", "Found child %lu (%s)",
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
-                        children.push_back( candidate );
+                        search_list.push_back( candidate );
                         break;
                     }
                 }
             }
         }
+
+        for( SCH_HIERLABEL* label : aParent->m_hier_ports )
+        {
+            SCH_SHEET_PATH path = aParent->m_sheet;
+            path.pop_back();
+
+            if( !m_sheet_to_subgraphs_map.count( path ) )
+                continue;
+
+            for( auto candidate : m_sheet_to_subgraphs_map.at( path ) )
+            {
+                if( !candidate->m_strong_driver ||
+                    candidate->m_hier_pins.empty() ||
+                    visited.count( candidate ) )
+                    continue;
+
+                for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
+                {
+                    SCH_SHEET_PATH pin_path = path;
+                    pin_path.push_back( pin->GetParent() );
+
+                    if( pin_path != aParent->m_sheet )
+                        continue;
+
+                    if( label->GetShownText() == pin->GetShownText() )
+                    {
+                        wxLogTrace( "CONN", "Found additional parent %lu (%s)",
+                                    candidate->m_code, candidate->m_driver_connection->Name() );
+
+                        search_list.push_back( candidate );
+                        break;
+                    }
+                }
+            }
+      }
     };
 
     auto propagate_bus_neighbors = [&]( CONNECTION_SUBGRAPH* aParentGraph ) {
@@ -1530,7 +1571,7 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     if( !aSubgraph->m_hier_ports.empty() )
         return;
 
-    visited.push_back( aSubgraph );
+    visited.insert( aSubgraph );
 
     // If we are a bus, we must propagate to local neighbors and then the hierarchy
     if( conn->IsBus() )
@@ -1539,50 +1580,57 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
     wxLogTrace( "CONN", "Propagating %lu (%s) to subsheets",
                 aSubgraph->m_code, aSubgraph->m_driver_connection->Name() );
 
-    add_children( aSubgraph );
+    visit( aSubgraph );
 
-    for( unsigned i = 0; i < children.size(); i++ )
+    for( unsigned i = 0; i < search_list.size(); i++ )
     {
-        auto child = children[i];
+        auto child = search_list[i];
 
-        if( !child->m_dirty )
-        {
-            wxLogTrace( "CONN", "Child %lu (%s) is not dirty, backpropagating it",
-                        child->m_code, child->m_driver_connection->Name() );
+        visited.insert( child );
 
-            for( CONNECTION_SUBGRAPH* subgraph : visited )
-            {
-                wxString old_name = subgraph->m_driver_connection->Name();
-
-                subgraph->m_driver_connection->Clone( *child->m_driver_connection );
-                subgraph->UpdateItemConnections();
-
-                recacheSubgraphName( subgraph, old_name );
-
-                if( conn->IsBus() )
-                    propagate_bus_neighbors( subgraph );
-            }
-
-            continue;
-        }
-
-        visited.push_back( child );
-
-        // Check for grandchildren
-        if( !child->m_hier_pins.empty() )
-            add_children( child );
-
-        wxString old_name = child->m_driver_connection->Name();
-
-        child->m_driver_connection->Clone( *conn );
-        child->UpdateItemConnections();
-
-        recacheSubgraphName( child, old_name );
+        visit( child );
 
         child->m_dirty = false;
+    }
+
+    // Now, find the best driver for this chain of subgraphs
+    CONNECTION_SUBGRAPH* driver = aSubgraph;
+    CONNECTION_SUBGRAPH::PRIORITY highest =
+            CONNECTION_SUBGRAPH::GetDriverPriority( aSubgraph->m_driver );
+
+    // Check if a subsheet has a higher-priority connection to the same net
+    if( highest < CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN )
+    {
+        for( CONNECTION_SUBGRAPH* subgraph : visited )
+        {
+            CONNECTION_SUBGRAPH::PRIORITY priority =
+                    CONNECTION_SUBGRAPH::GetDriverPriority( subgraph->m_driver );
+
+            if( priority >= CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN )
+                driver = subgraph;
+        }
+    }
+
+    if( driver != aSubgraph )
+    {
+        wxLogTrace( "CONN", "%lu (%s) overridden by new driver %lu (%s)",
+                    aSubgraph->m_code, aSubgraph->m_driver_connection->Name(),
+                    driver->m_code, driver->m_driver_connection->Name() );
+    }
+
+    conn = driver->m_driver_connection;
+
+    for( CONNECTION_SUBGRAPH* subgraph : visited )
+    {
+        wxString old_name = subgraph->m_driver_connection->Name();
+
+        subgraph->m_driver_connection->Clone( *conn );
+        subgraph->UpdateItemConnections();
+
+        recacheSubgraphName( subgraph, old_name );
 
         if( conn->IsBus() )
-            propagate_bus_neighbors( child );
+            propagate_bus_neighbors( subgraph );
     }
 
     aSubgraph->m_dirty = false;
