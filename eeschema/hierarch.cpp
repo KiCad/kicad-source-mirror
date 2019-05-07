@@ -303,5 +303,5 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     UpdateTitle();
 
-    GetCanvas()->Refresh();
+    HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
 }
