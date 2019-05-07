@@ -113,6 +113,7 @@ const EDA_RECT SCH_PIN::GetBoundingBox() const
     TRANSFORM t = GetParentComponent()->GetTransform();
     EDA_RECT  r = m_libPin->GetBoundingBox();
 
+    t.y2 = -t.y2;
     r = t.TransformCoordinate( r );
     r.Offset( GetParentComponent()->GetPosition() );
 
