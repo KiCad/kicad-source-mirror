@@ -191,6 +191,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
         return 0;
     }
+    else if( selection.Front()->IsNew() )
+    {
+        // New items will already be on the undo list
+        appendUndo = true;
+    }
 
     // Main loop: keep receiving events
     do
@@ -250,10 +255,23 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 //
                 for( EDA_ITEM* item : selection )
                 {
-                    if( item->IsNew() || ( item->GetParent() && item->GetParent()->IsSelected() ) )
+                    if( item->IsNew() )
                     {
-                        // already saved to undo
-                        appendUndo = true;
+                        if( ( item->GetFlags() & SELECTEDNODE ) != 0 )
+                        {
+                            // Item was added in getConnectedDragItems
+                            saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
+                            appendUndo = true;
+                        }
+                        else
+                        {
+                            // Item was added in a previous command (and saved to undo by
+                            // that command)
+                        }
+                    }
+                    else if( item->GetParent() && item->GetParent()->IsSelected() )
+                    {
+                        // Item will be (or has been) saved to undo by parent
                     }
                     else
                     {
@@ -452,8 +470,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         {
         case SCH_LINE_T:
         {
-            // Select wires/busses that are connected at one end and/or the other.  Any
-            // unconnected ends must be flagged (STARTPOINT or ENDPOINT).
+            // Select the connected end of wires/bus connections.
             SCH_LINE* testLine = (SCH_LINE*) test;
 
             if( testLine->GetStartPoint() == aPoint )
@@ -483,18 +500,27 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
         case SCH_JUNCTION_T:
             if( test->IsConnected( aPoint ) )
             {
-                // Connected to a wire: anchor the wire
+                // Connected to a wire: anchor the connected end of the wire
                 if( aOriginalItem->Type() == SCH_LINE_T )
                 {
-                    SCH_LINE* originalLine = (SCH_LINE*) aOriginalItem;
+                    SCH_LINE* originalWire = (SCH_LINE*) aOriginalItem;
 
-                    if( originalLine->GetStartPoint() == aPoint )
-                        originalLine->ClearFlags( STARTPOINT );
-                    else if( originalLine->GetEndPoint() == aPoint )
-                        originalLine->ClearFlags( ENDPOINT );
+                    if( originalWire->GetStartPoint() == aPoint )
+                        originalWire->ClearFlags( STARTPOINT );
+                    else if( originalWire->GetEndPoint() == aPoint )
+                        originalWire->ClearFlags( ENDPOINT );
                 }
-                // Connected directly to something else with no wire to adjust: pick up the
-                // component/no-connect/junction
+                // Connected directly to a component: add a new wire and pick up the end
+                else if( test->Type() == SCH_COMPONENT_T)
+                {
+                    SCH_LINE* newWire = new SCH_LINE( aPoint, LAYER_WIRE );
+                    newWire->SetFlags( IS_NEW );
+                    m_frame->AddToScreen( newWire, m_frame->GetScreen() );
+
+                    newWire->SetFlags( SELECTEDNODE | STARTPOINT );
+                    aList.push_back( newWire );
+                }
+                // Connected to a no-connect or junction: pick it up
                 else
                 {
                     aList.push_back( test );
