@@ -493,17 +493,8 @@ void SCH_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
 
 SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
 {
-    if( m_selection.Empty() )
-    {
-        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
-
-        clearSelection();
-        SelectPoint( cursorPos, aFilterList );
-        m_selection.SetIsHover( true );
-
-        return m_selection;
-    }
-    else        // Trim an existing selection by aFilterList
+    // Filter an existing selection
+    if( !m_selection.Empty() )
     {
         for( int i = m_selection.GetSize() - 1; i >= 0; --i )
         {
@@ -513,8 +504,19 @@ SELECTION& SCH_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
                 toggleSelection( item );
         }
 
-        return m_selection;
     }
+
+    // If nothing was selected, or we filtered everything out, do a hover selection
+    if( m_selection.Empty() )
+    {
+        VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
+
+        clearSelection();
+        SelectPoint( cursorPos, aFilterList );
+        m_selection.SetIsHover( true );
+    }
+
+    return m_selection;
 }
 
 
