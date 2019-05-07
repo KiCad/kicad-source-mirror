@@ -159,6 +159,12 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     m_lastTimestamp = aEvent.GetTimestamp();
 #endif
 
+    // Fix issue caused by modern mice that feature horizontal scrolling by only handling
+    // vertical axis, otherwise horizontal scrolling events end up interpreted as vertical
+    // scroll events and confuse the user.
+    if( aEvent.GetWheelAxis() > 0 )
+        return;
+
     // mousewheelpan disabled:
     //      wheel + ctrl    -> horizontal scrolling;
     //      wheel + shift   -> vertical scrolling;
