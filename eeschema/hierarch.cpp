@@ -290,5 +290,5 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     UpdateTitle();
 
     GetToolManager()->RunAction( SCH_ACTIONS::highlightNetSelection, true );
-    GetCanvas()->Refresh();
+    HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
 }
