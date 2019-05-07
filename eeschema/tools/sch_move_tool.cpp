@@ -78,10 +78,6 @@ bool SCH_MOVE_TOOL::Init()
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
-    auto activeTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
-
     auto moveCondition = [] ( const SELECTION& aSel ) {
         if( aSel.Empty() )
             return false;
@@ -97,9 +93,9 @@ bool SCH_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
 
-    ctxMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
+    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     //

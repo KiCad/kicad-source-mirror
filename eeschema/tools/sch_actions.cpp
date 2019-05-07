@@ -222,6 +222,18 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
         return SCH_ACTIONS::placeSymbolAnchor.MakeEvent();
+
+    case ID_LIBEDIT_BODY_ARC_BUTT:
+        return SCH_ACTIONS::drawSymbolArc.MakeEvent();
+
+    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
+        return SCH_ACTIONS::drawSymbolCircle.MakeEvent();
+
+    case ID_LIBEDIT_BODY_LINE_BUTT:
+        return SCH_ACTIONS::drawSymbolLines.MakeEvent();
+
+    case ID_LIBEDIT_BODY_RECT_BUTT:
+        return SCH_ACTIONS::drawSymbolRectangle.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

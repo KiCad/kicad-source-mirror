@@ -225,8 +225,8 @@ bool LIB_EDIT_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu )
 
         if( item->IsNew() )
         {
-            AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_END_CREATE_ITEM, _( "Line End" ),
-                         KiBitmap( checked_ok_xpm ) );
+ //           AddMenuItem( PopMenu, ID_POPUP_LIBEDIT_END_CREATE_ITEM, _( "Line End" ),
+ //                        KiBitmap( checked_ok_xpm ) );
         }
 
         msg = AddHotkeyName( _( "Edit Line Options..." ), g_Libedit_Hotkeys_Descr, HK_EDIT );

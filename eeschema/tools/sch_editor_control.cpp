@@ -137,10 +137,9 @@ bool SCH_EDITOR_CONTROL::Init()
     auto& ctxMenu = m_menu.GetMenu();
 
     // "Cancel" goes at the top of the context menu when a tool is active
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1000 );
-    ctxMenu.AddSeparator( activeToolCondition, 1000 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
 
-    // Finally, add the standard zoom & grid items
+    ctxMenu.AddSeparator( activeToolCondition, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;

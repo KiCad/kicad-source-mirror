@@ -144,7 +144,10 @@ public:
      *                  started.  This may or may not be required depending on the item
      *                  being edited and the edit mode.
      */
-    virtual void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition = wxPoint( 0, 0 ) ) {}
+    virtual void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
+    {
+        SetFlags( aEditMode );
+    }
 
     /**
      * Continue an edit in progress at \a aPosition.
@@ -156,7 +159,10 @@ public:
      * @param aPosition The position of the mouse left click in drawing coordinates.
      * @return True if additional mouse clicks are required to complete the edit in progress.
      */
-    virtual bool ContinueEdit( const wxPoint aPosition ) { return false; }
+    virtual bool ContinueEdit( const wxPoint aPosition )
+    {
+        return false;
+    }
 
     /**
      * End an object editing action.
@@ -164,9 +170,11 @@ public:
      * This is used to end or abort an edit action in progress initiated by BeginEdit().
      *
      * @param aPosition The position of the last edit event in drawing coordinates.
-     * @param aAbort Set to true to abort the current edit in progress.
      */
-    virtual void EndEdit( const wxPoint& aPosition, bool aAbort = false ) { m_Flags = 0; }
+    virtual void EndEdit( const wxPoint& aPosition )
+    {
+        ClearFlags( GetEditFlags() );
+    }
 
     /**
      * Calculates the attributes of an item at \a aPosition when it is being edited.
@@ -216,10 +224,10 @@ public:
 
     bool HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy = 0 ) const override;
 
-   /**
+    /**
      * @return the boundary box for this, in library coordinates
      */
-    virtual const EDA_RECT GetBoundingBox() const override { return EDA_ITEM::GetBoundingBox(); }
+    const EDA_RECT GetBoundingBox() const override { return EDA_ITEM::GetBoundingBox(); }
 
     /**
      * Display basic info (type, part and convert) about the current item in message panel.
@@ -230,8 +238,7 @@ public:
      * </p>
      * @param aList is the list to populate.
      */
-    virtual void GetMsgPanelInfo( EDA_UNITS_T aUnits,
-                                  std::vector< MSG_PANEL_ITEM >& aList ) override;
+    void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
     /**
      * Test LIB_ITEM objects for equivalence.

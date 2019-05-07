@@ -74,21 +74,19 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 
-int LIB_EDIT_FRAME::           m_unit    = 1;
-int LIB_EDIT_FRAME::           m_convert = 1;
 LIB_ITEM* LIB_EDIT_FRAME::     m_lastDrawItem = NULL;
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 int LIB_EDIT_FRAME::           g_LastTextSize    = -1;
 double LIB_EDIT_FRAME::        g_LastTextAngle   = TEXT_ANGLE_HORIZ;
-int LIB_EDIT_FRAME::           m_drawLineWidth   = 0;
+int LIB_EDIT_FRAME::           g_LastLineWidth   = 0;
 
 // these values are overridden when reading the config
 int LIB_EDIT_FRAME::           m_textPinNumDefaultSize = DEFAULTPINNUMSIZE;
 int LIB_EDIT_FRAME::           m_textPinNameDefaultSize = DEFAULTPINNAMESIZE;
 int LIB_EDIT_FRAME::           m_defaultPinLength = DEFAULTPINLENGTH;
 
-FILL_T LIB_EDIT_FRAME::        m_drawFillStyle   = NO_FILL;
+FILL_T LIB_EDIT_FRAME::        g_LastFillStyle   = NO_FILL;
 
 
 BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
@@ -218,6 +216,8 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tempCopyComponent = NULL;
     m_treePane = nullptr;
     m_libMgr = nullptr;
+    m_unit = 1;
+    m_convert = 1;
 
     // Delayed initialization
     if( g_LastTextSize == -1 )
@@ -681,7 +681,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_COPY_BLOCK:
     case wxID_CUT:
     case ID_POPUP_CUT_BLOCK:
-    case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
     case ID_LIBEDIT_EDIT_PIN:
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
     case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
@@ -723,14 +722,6 @@ void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_LIBEDIT_SYNC_PIN_EDIT:
         m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
-        break;
-
-    case ID_POPUP_LIBEDIT_END_CREATE_ITEM:
-        m_canvas->MoveCursorToCrossHair();
-
-        if( item )
-            EndDrawGraphicItem( nullptr );
-
         break;
 
     case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
@@ -1099,6 +1090,10 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     case ID_LIBEDIT_PIN_BUTT:
     case ID_LIBEDIT_BODY_TEXT_BUTT:
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
+    case ID_LIBEDIT_BODY_RECT_BUTT:
+    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
+    case ID_LIBEDIT_BODY_ARC_BUTT:
+    case ID_LIBEDIT_BODY_LINE_BUTT:
         // moved to modern toolset
         return;
     default:
@@ -1109,22 +1104,6 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
     switch( id )
     {
-    case ID_LIBEDIT_BODY_RECT_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add rectangle" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add circle" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_ARC_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add arc" ) );
-        break;
-
-    case ID_LIBEDIT_BODY_LINE_BUTT:
-        SetToolID( id, wxCURSOR_PENCIL, _( "Add line" ) );
-        break;
-
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
         SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
         LoadOneSymbol();

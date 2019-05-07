@@ -233,7 +233,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     // Build the tool menu
     //
     ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,    belowRootSheetCondition, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,    belowRootSheetCondition, 2 );
 
     ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 10 );
     ctxMenu.AddItem( SCH_ACTIONS::startWire,     wireOrBusTool && SCH_CONDITIONS::Idle, 10 );

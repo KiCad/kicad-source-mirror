@@ -63,16 +63,6 @@ class LIB_ARC : public LIB_ITEM
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
 
-    /**
-     * Calculates the center, radius, and angles at \a aPosition when the arc is being edited.
-     *
-     * Note: The center may not necessarily be on the grid.
-     *
-     * @param aPosition - The current mouse position in drawing coordinates.
-     */
-    void CalcEdit( const wxPoint& aPosition ) override;
-
-
 public:
     LIB_ARC( LIB_PART * aParent );
 
@@ -99,9 +89,10 @@ public:
 
     int GetPenSize() const override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
+    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void CalcEdit( const wxPoint& aPosition ) override;
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
+    void EndEdit( const wxPoint& aPosition ) override;
 
     void SetOffset( const wxPoint& aOffset ) override;
 

@@ -62,19 +62,9 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
         return;
 
     // Init default values (used to create a new draw item)
-    m_drawLineWidth       = dialog.GetWidth();
+    g_LastLineWidth       = dialog.GetWidth();
     m_DrawSpecificConvert = !dialog.GetApplyToAllConversions();
     m_DrawSpecificUnit    = !dialog.GetApplyToAllUnits();
-
-#if 0
-    /* TODO: see if m_drawFillStyle must retain the last fill option or not.
-     * if the last is Filled, having next new graphic items created
-     * with filled body is often bad.
-     * currently m_drawFillStyle is left with the default value (not filled)
-     */
-    if( DrawItem->IsFillable() )
-        m_drawFillStyle = (FILL_T) dialog.GetFillStyle();
-#endif
 
     // Save copy for undo if not in edit (edit command already handle the save copy)
     if( !DrawItem->InEditMode() )
@@ -93,7 +83,7 @@ void LIB_EDIT_FRAME::EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem )
     if( DrawItem->IsFillable() )
         DrawItem->SetFillMode( (FILL_T) dialog.GetFillStyle() );
 
-    DrawItem->SetWidth( m_drawLineWidth );
+    DrawItem->SetWidth( g_LastLineWidth );
 
     GetCanvas()->GetView()->Update( DrawItem );
     GetCanvas()->Refresh();
@@ -114,7 +104,7 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
         return;
 
     bool newItem = item->IsNew();
-    item->EndEdit( parent->GetCrossHairPosition( true ), true );
+    item->EndEdit( parent->GetCrossHairPosition( true ) );
 
     if( newItem )
         delete item;
@@ -128,98 +118,6 @@ static void AbortSymbolTraceOn( EDA_DRAW_PANEL* aPanel, wxDC* DC )
     view->ShowPreview( false );
     view->ClearHiddenFlags();
     parent->RebuildView();
-}
-
-
-LIB_ITEM* LIB_EDIT_FRAME::CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC )
-{
-    LIB_ITEM* item = GetDrawItem();
-    m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
-    wxPoint drawPos = GetCrossHairPosition( true );
-
-    // no temp copy -> the current version of symbol will be used for Undo
-    // This is normal when adding new items to the current symbol
-    ClearTempCopyComponent();
-
-    auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
-    view->ShowPreview( true );
-
-    switch( GetToolId() )
-    {
-    case ID_LIBEDIT_BODY_ARC_BUTT:
-        item = new LIB_ARC( LibEntry );
-        break;
-
-    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-        item = new LIB_CIRCLE( LibEntry );
-        break;
-
-    case ID_LIBEDIT_BODY_RECT_BUTT:
-        item = new LIB_RECTANGLE( LibEntry );
-        break;
-
-    case ID_LIBEDIT_BODY_LINE_BUTT:
-        item = new LIB_POLYLINE( LibEntry );
-        break;
-
-    case ID_LIBEDIT_BODY_TEXT_BUTT:
-        // Moved to modern toolset
-        break;
-
-    default:
-        DisplayError( this, wxT( "LIB_EDIT_FRAME::CreateGraphicItem() error" ) );
-        return NULL;
-    }
-
-    if( item )
-    {
-        item->BeginEdit( IS_NEW, drawPos );
-
-        // Don't set line parameters for text objects.
-        if( item->Type() != LIB_TEXT_T )
-        {
-            item->SetWidth( m_drawLineWidth );
-            item->SetFillMode( m_drawFillStyle );
-        }
-
-        if( m_DrawSpecificUnit )
-            item->SetUnit( m_unit );
-
-        if( m_DrawSpecificConvert )
-            item->SetConvert( m_convert );
-
-        // Draw initial symbol:
-        m_canvas->CallMouseCapture( DC, wxDefaultPosition, false );
-    }
-    else
-    {
-        m_canvas->EndMouseCapture();
-        return NULL;
-    }
-
-    m_canvas->MoveCursorToCrossHair();
-    m_canvas->SetIgnoreMouseEvents( false );
-    SetDrawItem( item );
-
-    return item;
-}
-
-
-void LIB_EDIT_FRAME::GraphicItemBeginDraw( wxDC* DC )
-{
-    if( GetDrawItem() == NULL )
-        return;
-
-    wxPoint pos = GetCrossHairPosition( true );
-
-    auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
-    view->ShowPreview( true );
-
-
-    if( GetDrawItem()->ContinueEdit( pos ) )
-        return;
-
-    EndDrawGraphicItem( DC );
 }
 
 
@@ -279,51 +177,4 @@ void LIB_EDIT_FRAME::StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem )
     aItem->BeginEdit( IS_RESIZED, GetCrossHairPosition( true ) );
     m_canvas->SetMouseCapture( RedrawWhileMovingCursor, AbortSymbolTraceOn );
     m_canvas->CallMouseCapture( DC, wxDefaultPosition, true );
-}
-
-
-void LIB_EDIT_FRAME::EndDrawGraphicItem( wxDC* DC )
-{
-    LIB_ITEM* item = GetDrawItem();
-
-    if( item == NULL )
-        return;
-
-    if( LIB_PART* part = GetCurPart() )
-    {
-        if( GetToolId() != ID_NO_TOOL_SELECTED )
-            SetCursor( wxCURSOR_PENCIL );
-        else
-            SetCursor( (wxStockCursor) GetGalCanvas()->GetDefaultCursor() );
-
-        if( GetTempCopyComponent() )    // used when editing an existing item
-            SaveCopyInUndoList( GetTempCopyComponent() );
-        else
-        {
-            // When creating a new item, there is still no change for the
-            // current symbol. So save it.
-            SaveCopyInUndoList( part );
-        }
-
-        if( item->IsNew() )
-            part->AddDrawItem( item );
-
-        item->EndEdit( GetCrossHairPosition( true ) );
-
-        SetDrawItem( NULL );
-
-        m_canvas->SetMouseCapture( NULL, NULL );
-
-        auto view = static_cast<SCH_DRAW_PANEL*>(m_canvas)->GetView();
-
-        DBG(printf("end: pos %d %d\n", item->GetPosition().x, item->GetPosition().y );)
-
-        view->ClearHiddenFlags();
-        view->ClearPreview();
-
-        OnModify();
-    }
-
-    RebuildView();
-    GetCanvas()->Refresh();
 }

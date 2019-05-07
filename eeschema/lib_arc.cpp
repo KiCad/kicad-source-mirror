@@ -473,8 +473,7 @@ BITMAP_DEF LIB_ARC::GetMenuImage() const
 
 void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_ARC object." ) );
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_NEW )
     {
@@ -516,17 +515,12 @@ void LIB_ARC::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 
         m_editState = 0;
     }
-
-    m_Flags = aEditMode;
 }
 
 
 bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
 {
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
-                   wxT( "Bad call to ContinueEdit().  LIB_ARC is not being edited." ) );
-
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         if( m_editState == 1 )        // Second position yields the arc segment length.
         {
@@ -540,20 +534,18 @@ bool LIB_ARC::ContinueEdit( const wxPoint aPosition )
 }
 
 
-void LIB_ARC::EndEdit( const wxPoint& aPosition, bool aAbort )
+void LIB_ARC::EndEdit( const wxPoint& aPosition )
 {
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                   wxT( "Bad call to EndEdit().  LIB_ARC is not being edited." ) );
+    LIB_ITEM::EndEdit( aPosition );
 
     m_lastEditState = 0;
     m_editState = 0;
-    m_Flags = 0;
 }
 
 
 void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_Flags == IS_RESIZED )
+    if( IsResized() )
     {
         wxPoint newCenterPoint, startPos, endPos;
 
@@ -627,7 +619,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
         m_Pos = newCenterPoint;
         CalcRadiusAngles();
     }
-    else if( m_Flags == IS_NEW )
+    else if( IsNew() )
     {
         if( m_editState == 1 )
         {
@@ -664,7 +656,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
         CalcRadiusAngles();
 
     }
-    else if( m_Flags == IS_MOVED )
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }

@@ -111,6 +111,7 @@ public:
     static TOOL_ACTION drawSymbolArc;
     static TOOL_ACTION drawSymbolLines;
     static TOOL_ACTION placeSymbolAnchor;
+    static TOOL_ACTION finishDrawing;
 
     // Editing
     static TOOL_ACTION move;

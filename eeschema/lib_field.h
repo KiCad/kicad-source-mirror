@@ -188,9 +188,8 @@ public:
 
     COLOR4D GetDefaultColor() override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
-    bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
+    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void EndEdit( const wxPoint& aPosition ) override;
 
     void Rotate() override;
 

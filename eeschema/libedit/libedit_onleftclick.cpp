@@ -58,35 +58,6 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
         break;
 
     case ID_NO_TOOL_SELECTED:
-        // If an item is currently in edit, finish edit
-        if( item_in_edit )
-        {
-            switch( item->Type() )
-            {
-            case LIB_PIN_T:
-                PlacePin();
-                break;
-
-            default:
-                EndDrawGraphicItem( DC );
-                break;
-            }
-        }
-        break;
-
-    case ID_LIBEDIT_BODY_LINE_BUTT:
-    case ID_LIBEDIT_BODY_ARC_BUTT:
-    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-    case ID_LIBEDIT_BODY_RECT_BUTT:
-        if( no_item_edited )
-            SetDrawItem( CreateGraphicItem( part, DC ) );
-        else if( item )
-        {
-            if( item->IsNew() )
-                GraphicItemBeginDraw( DC );
-            else
-                EndDrawGraphicItem( DC );
-        }
         break;
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
@@ -99,6 +70,10 @@ void LIB_EDIT_FRAME::OnLeftClick( wxDC* DC, const wxPoint& aPosition )
     case ID_LIBEDIT_BODY_TEXT_BUTT:
     case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
     case ID_LIBEDIT_PIN_BUTT:
+    case ID_LIBEDIT_BODY_LINE_BUTT:
+    case ID_LIBEDIT_BODY_ARC_BUTT:
+    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
+    case ID_LIBEDIT_BODY_RECT_BUTT:
         // Moved to modern toolset
         break;
 
@@ -167,15 +142,9 @@ void LIB_EDIT_FRAME::OnLeftDClick( wxDC* DC, const wxPoint& aPosition )
     case LIB_ARC_T:
     case LIB_CIRCLE_T:
     case LIB_RECTANGLE_T:
-        if( not_edited )
-            EditGraphicSymbol( DC, item );
-        break;
-
     case LIB_POLYLINE_T:
         if( not_edited )
             EditGraphicSymbol( DC, item );
-        else if( item->IsNew() )
-            EndDrawGraphicItem( DC );
         break;
 
     case LIB_TEXT_T:

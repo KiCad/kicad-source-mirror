@@ -279,8 +279,7 @@ BITMAP_DEF LIB_RECTANGLE::GetMenuImage() const
 
 void LIB_RECTANGLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_RECTANGLE object." ) );
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_NEW )
     {
@@ -308,26 +307,13 @@ void LIB_RECTANGLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
     }
-
-    m_Flags = aEditMode;
 }
 
 
-bool LIB_RECTANGLE::ContinueEdit( const wxPoint aPosition )
+void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition )
 {
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
-                   wxT( "Bad call to ContinueEdit().  LIB_RECTANGLE is not being edited." ) );
+    LIB_ITEM::EndEdit( aPosition );
 
-    return false;
-}
-
-
-void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition, bool aAbort )
-{
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                   wxT( "Bad call to EndEdit().  LIB_RECTANGLE is not being edited." ) );
-
-    m_Flags = 0;
     m_isHeightLocked = false;
     m_isWidthLocked  = false;
 }
@@ -335,11 +321,11 @@ void LIB_RECTANGLE::EndEdit( const wxPoint& aPosition, bool aAbort )
 
 void LIB_RECTANGLE::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         m_End = aPosition;
     }
-    else if( m_Flags == IS_RESIZED )
+    else if( IsResized() )
     {
         if( m_isHeightLocked )
         {
@@ -363,7 +349,7 @@ void LIB_RECTANGLE::CalcEdit( const wxPoint& aPosition )
                 m_End = aPosition;
         }
     }
-    else if( m_Flags == IS_MOVED )
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }

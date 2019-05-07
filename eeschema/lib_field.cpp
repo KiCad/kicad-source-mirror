@@ -504,8 +504,7 @@ wxString LIB_FIELD::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 
 void LIB_FIELD::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_FIELD object." ) );
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_MOVED )
     {
@@ -516,26 +515,13 @@ void LIB_FIELD::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         SetTextPos( aPosition );
     }
-
-    m_Flags = aEditMode;
 }
 
 
-bool LIB_FIELD::ContinueEdit( const wxPoint aPosition )
+void LIB_FIELD::EndEdit( const wxPoint& aPosition )
 {
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0, false,
-                   wxT( "Bad call to ContinueEdit().  Text is not being edited." ) );
+    LIB_ITEM::EndEdit( aPosition );
 
-    return false;
-}
-
-
-void LIB_FIELD::EndEdit( const wxPoint& aPosition, bool aAbort )
-{
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0,
-                   wxT( "Bad call to EndEdit().  Text is not being edited." ) );
-
-    m_Flags = 0;
     m_rotate = false;
     m_updateText = false;
 }
@@ -555,11 +541,11 @@ void LIB_FIELD::CalcEdit( const wxPoint& aPosition )
         m_updateText = false;
     }
 
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         SetTextPos( aPosition );
     }
-    else if( m_Flags == IS_MOVED )
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }

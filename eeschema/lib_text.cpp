@@ -341,8 +341,8 @@ BITMAP_DEF LIB_TEXT::GetMenuImage() const
 
 void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_TEXT object." ) );
+    // JEY TODO: this should all move to modern toolset....
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_MOVED )
     {
@@ -353,26 +353,14 @@ void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         SetTextPos( aPosition );
     }
-
-    m_Flags = aEditMode;
 }
 
 
-bool LIB_TEXT::ContinueEdit( const wxPoint aPosition )
+void LIB_TEXT::EndEdit( const wxPoint& aPosition )
 {
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0, false,
-                   wxT( "Bad call to ContinueEdit().  Text is not being edited." ) );
+    // JEY TODO: this should all move to modern toolset....
+    LIB_ITEM::EndEdit( aPosition );
 
-    return false;
-}
-
-
-void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
-{
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED ) ) != 0,
-                   wxT( "Bad call to EndEdit().  Text is not being edited." ) );
-
-    m_Flags = 0;
     m_rotate = false;
     m_updateText = false;
 }
@@ -380,6 +368,7 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition, bool aAbort )
 
 void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
 {
+    // JEY TODO: this should all move to modern toolset....
     DBG(printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );)
 
     if( m_rotate )
@@ -394,11 +383,11 @@ void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
         m_updateText = false;
     }
 
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         SetTextPos( aPosition );
     }
-    else if( m_Flags == IS_MOVED )
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
         DBG(printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );)

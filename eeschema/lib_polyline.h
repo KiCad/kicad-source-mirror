@@ -42,8 +42,6 @@ class LIB_POLYLINE : public LIB_ITEM
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
                       const TRANSFORM& aTransform ) override;
 
-    void CalcEdit( const wxPoint& aPosition ) override;
-
 public:
     LIB_POLYLINE( LIB_PART * aParent );
 
@@ -85,9 +83,10 @@ public:
 
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList ) override;
 
-    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint = wxPoint( 0, 0 ) ) override;
+    void BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aStartPoint ) override;
+    void CalcEdit( const wxPoint& aPosition ) override;
     bool ContinueEdit( const wxPoint aNextPoint ) override;
-    void EndEdit( const wxPoint& aPosition, bool aAbort = false ) override;
+    void EndEdit( const wxPoint& aPosition ) override;
 
     void SetOffset( const wxPoint& aOffset ) override;
 

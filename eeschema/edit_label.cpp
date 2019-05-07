@@ -106,8 +106,7 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
  */
 void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
 {
-    SCH_SCREEN* screen = GetScreen();
-    bool        selected = aText->IsSelected();
+    bool selected = aText->IsSelected();
 
     wxCHECK_RET( aText->CanIncrementLabel(), "Cannot convert text type." );
 

@@ -327,8 +327,7 @@ BITMAP_DEF LIB_POLYLINE::GetMenuImage() const
 
 void LIB_POLYLINE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_POLYLINE object." ) );
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_NEW )
     {
@@ -387,17 +386,12 @@ void LIB_POLYLINE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
         m_initialCursorPos = aPosition;
         m_initialPos = m_PolyPoints[0];
     }
-
-    m_Flags = aEditMode;
 }
 
 
 bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
 {
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
-                wxT( "Bad call to ContinueEdit().  LIB_POLYLINE is not being edited." ) );
-
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         // do not add zero length segments
         if( m_PolyPoints[m_PolyPoints.size() - 2] != m_PolyPoints.back() )
@@ -410,10 +404,9 @@ bool LIB_POLYLINE::ContinueEdit( const wxPoint aPosition )
 }
 
 
-void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
+void LIB_POLYLINE::EndEdit( const wxPoint& aPosition )
 {
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                 wxT( "Bad call to EndEdit().  LIB_POLYLINE is not being edited." ) );
+    LIB_ITEM::EndEdit( aPosition );
 
     // do not include last point twice
     if( m_Flags == IS_NEW && 2 < m_PolyPoints.size() )
@@ -432,18 +425,16 @@ void LIB_POLYLINE::EndEdit( const wxPoint& aPosition, bool aAbort )
             m_PolyPoints.erase( m_PolyPoints.begin() + m_ModifyIndex ); // delete a point on this
         }
     }
-
-    m_Flags = 0;
 }
 
 
 void LIB_POLYLINE::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_Flags == IS_NEW )
+    if( IsNew() )
     {
         m_PolyPoints[ GetCornerCount() - 1 ] = aPosition;
     }
-    else if( m_Flags == IS_RESIZED )
+    else if( IsResized() )
     {
         if( m_ModifyIndex < 0 ) // negative indicates new vertex is to be inserted
         {
@@ -453,7 +444,7 @@ void LIB_POLYLINE::CalcEdit( const wxPoint& aPosition )
 
         m_PolyPoints[ m_ModifyIndex ] = aPosition;
     }
-    else if( m_Flags == IS_MOVED )
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }

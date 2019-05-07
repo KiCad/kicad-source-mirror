@@ -83,20 +83,14 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
      */
     bool m_showPinElectricalTypeName;
 
-    /** The current draw or edit graphic item fill style. */
-    static FILL_T m_drawFillStyle;
-
-    /** Default line width for drawing or editing graphic items. */
-    static int m_drawLineWidth;
-
     static LIB_ITEM*    m_lastDrawItem;
 
     // The unit number to edit and show
-    static int m_unit;
+    int m_unit;
 
     // Show the normal shape ( m_convert <= 1 ) or the converted shape
     // ( m_convert > 1 )
-    static int m_convert;
+    int m_convert;
 
     // true to force DeMorgan/normal tools selection enabled.
     // They are enabled when the loaded component has
@@ -133,6 +127,8 @@ public:
 
     static int    g_LastTextSize;
     static double g_LastTextAngle;
+    static FILL_T g_LastFillStyle;
+    static int    g_LastLineWidth;
 
 public:
     LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent );
@@ -407,7 +403,7 @@ public:
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
-    FILL_T GetFillStyle() { return m_drawFillStyle; }
+    FILL_T GetFillStyle() { return g_LastFillStyle; }
 
     /**
      * Create a temporary copy of the current edited component.
@@ -539,9 +535,6 @@ private:
     void GetComponentFromUndoList( wxCommandEvent& event );
     void GetComponentFromRedoList( wxCommandEvent& event );
 
-    // Editing pins
-    void CreatePin( wxDC* DC );
-
     /**
      * Prepare the displacement of a pin
      *
@@ -556,20 +549,9 @@ private:
      */
     void CreateImagePins( LIB_PIN* aPin );
 
-    /**
-     * Places an  anchor reference coordinate for the current component.
-     * <p>
-     * All object coordinates are offset to the current cursor position.
-     * </p>
-     */
-    void PlaceAnchor();
-
     // Editing graphic items
-    LIB_ITEM* CreateGraphicItem( LIB_PART* LibEntry, wxDC* DC );
-    void GraphicItemBeginDraw( wxDC* DC );
     void StartMoveDrawSymbol( wxDC* DC, LIB_ITEM* aItem );
     void StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem ); //<! Modify the item, adjust size etc.
-    void EndDrawGraphicItem( wxDC* DC );
 
     /**
      * Read a component symbol file (*.sym ) and add graphic items to the current component.

@@ -161,10 +161,6 @@ bool SCH_DRAWING_TOOLS::Init()
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
 
-    auto activeTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
-
     auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
         return g_CurrentSheet->Last() != g_RootSheet;
     };
@@ -174,10 +170,10 @@ bool SCH_DRAWING_TOOLS::Init()
     //
     // Build the drawing tool menu
     //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeTool, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet, belowRootSheetCondition, 2 );
 
-    ctxMenu.AddSeparator( activeTool, 1000 );
+    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;
@@ -359,7 +355,8 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
                 }
             }
         }
-        else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( aComponent && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+                              || evt->IsMotion() ) )
         {
             aComponent->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -476,7 +473,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( image && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( image && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+                         || evt->IsMotion() ) )
         {
             image->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -747,7 +745,8 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             else
                 item = nullptr;
         }
-        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+                        || evt->IsMotion() ) )
         {
             static_cast<SCH_ITEM*>( item )->SetPosition( (wxPoint)cursorPos );
             m_view->ClearPreview();
@@ -834,57 +833,56 @@ int SCH_DRAWING_TOOLS::doDrawSheet( SCH_SHEET *aSheet )
 
             break;
         }
-        else if( evt->IsClick( BUT_LEFT ) || evt->IsAction( &SCH_ACTIONS::finishSheet ) )
+
+        else if( evt->IsClick( BUT_LEFT ) && !aSheet )
         {
-            if( !aSheet && !evt->IsAction( &SCH_ACTIONS::finishSheet ) )
-            {
-                aSheet = new SCH_SHEET( (wxPoint) cursorPos );
-                aSheet->SetFlags( IS_NEW | IS_RESIZED );
-                aSheet->SetTimeStamp( GetNewTimeStamp() );
-                aSheet->SetParent( m_frame->GetScreen() );
-                aSheet->SetScreen( NULL );
-                sizeSheet( aSheet, cursorPos );
+            aSheet = new SCH_SHEET( (wxPoint) cursorPos );
+            aSheet->SetFlags( IS_NEW | IS_RESIZED );
+            aSheet->SetTimeStamp( GetNewTimeStamp() );
+            aSheet->SetParent( m_frame->GetScreen() );
+            aSheet->SetScreen( NULL );
+            sizeSheet( aSheet, cursorPos );
 
-                m_frame->SetRepeatItem( nullptr );
+            m_frame->SetRepeatItem( nullptr );
 
-                m_selectionTool->AddItemToSel( aSheet );
-                m_view->ClearPreview();
-                m_view->AddToPreview( aSheet->Clone() );
-            }
-            else if( aSheet )
-            {
-                m_view->ClearPreview();
-
-                if( aSheet->IsNew() )
-                {
-                    if( m_frame->EditSheet( (SCH_SHEET*)aSheet, g_CurrentSheet, nullptr ) )
-                        m_frame->AddItemToScreenAndUndoList( aSheet );
-                    else
-                        delete aSheet;
-                }
-                else
-                {
-                    m_view->Hide( aSheet, false );
-                    m_frame->RefreshItem( aSheet );
-                    m_frame->OnModify();
-                }
-
-                aSheet = nullptr;
-
-                if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
-                    break;  // resize sheet is a single-shot command; when we're done we're done
-            }
+            m_selectionTool->AddItemToSel( aSheet );
+            m_view->ClearPreview();
+            m_view->AddToPreview( aSheet->Clone() );
         }
-        else if( evt->IsMotion() )
+
+        else if( aSheet && ( evt->IsClick( BUT_LEFT )
+                          || evt->IsAction( &SCH_ACTIONS::finishSheet ) ) )
         {
             m_view->ClearPreview();
 
-            if( aSheet )
+            if( aSheet->IsNew() )
             {
-                sizeSheet( aSheet, cursorPos );
-                m_view->AddToPreview( aSheet->Clone() );
+                if( m_frame->EditSheet( (SCH_SHEET*)aSheet, g_CurrentSheet, nullptr ) )
+                    m_frame->AddItemToScreenAndUndoList( aSheet );
+                else
+                    delete aSheet;
             }
+            else
+            {
+                m_view->Hide( aSheet, false );
+                m_frame->RefreshItem( aSheet );
+                m_frame->OnModify();
+            }
+
+            aSheet = nullptr;
+
+            if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
+                break;  // resize sheet is a single-shot command; when we're done we're done
         }
+
+        else if( aSheet && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+                          || evt->IsMotion() ) )
+        {
+            sizeSheet( aSheet, cursorPos );
+            m_view->ClearPreview();
+            m_view->AddToPreview( aSheet->Clone() );
+        }
+
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...

@@ -255,8 +255,7 @@ BITMAP_DEF LIB_CIRCLE::GetMenuImage() const
 
 void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    wxCHECK_RET( ( aEditMode & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                 wxT( "Invalid edit mode for LIB_CIRCLE object." ) );
+    LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_NEW )
     {
@@ -267,32 +266,12 @@ void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
         m_initialPos = m_Pos;
         m_initialCursorPos = aPosition;
     }
-
-    m_Flags = aEditMode;
-}
-
-
-bool LIB_CIRCLE::ContinueEdit( const wxPoint aPosition )
-{
-    wxCHECK_MSG( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0, false,
-                   wxT( "Bad call to ContinueEdit().  LIB_CIRCLE is not being edited." ) );
-
-    return false;
-}
-
-
-void LIB_CIRCLE::EndEdit( const wxPoint& aPosition, bool aAbort )
-{
-    wxCHECK_RET( ( m_Flags & ( IS_NEW | IS_MOVED | IS_RESIZED ) ) != 0,
-                   wxT( "Bad call to EndEdit().  LIB_CIRCLE is not being edited." ) );
-
-    m_Flags = 0;
 }
 
 
 void LIB_CIRCLE::CalcEdit( const wxPoint& aPosition )
 {
-    if( m_Flags == IS_NEW || m_Flags == IS_RESIZED )
+    if( IsNew() || IsResized() )
     {
         m_Radius = KiROUND( GetLineLength( m_Pos, aPosition ) );
     }

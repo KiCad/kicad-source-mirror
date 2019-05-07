@@ -57,19 +57,12 @@ public:
 
     int PlacePin( const TOOL_EVENT& aEvent );
     int PlaceText( const TOOL_EVENT& aEvent );
-    int DrawRectangle( const TOOL_EVENT& aEvent );
-    int DrawCircle( const TOOL_EVENT& aEvent );
-    int DrawArc( const TOOL_EVENT& aEvent );
-    int DrawLines( const TOOL_EVENT& aEvent );
+    int DrawShape( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
 
 private:
 
-    void createPin();
-
     int doTwoClickPlace( KICAD_T aType );
-
-    int doSingleClickPlace( KICAD_T aType );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
