@@ -61,7 +61,7 @@ private:
     ///> Finds additional items for a drag operation.
     ///> Connected items with no wire are included (as there is no wire to adjust for the drag).
     ///> Connected wires are included with any un-connected ends flagged (STARTPOINT or ENDPOINT).
-    void getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList );
+    void getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint, EDA_ITEMS& aList );
 
     ///> Adds junctions if needed to each item in the list after they have been
     ///> moved.

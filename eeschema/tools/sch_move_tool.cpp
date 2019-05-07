@@ -440,35 +440,35 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_ITEMS& aList )
+void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoint,
+                                           EDA_ITEMS& aList )
 {
     for( SCH_ITEM* test = m_frame->GetScreen()->GetDrawItems(); test; test = test->Next() )
     {
-        if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aItem ) )
+        if( test->IsSelected() || !test->IsConnectable() || !test->CanConnect( aOriginalItem ) )
             continue;
 
         switch( test->Type() )
         {
-        default:
         case SCH_LINE_T:
         {
             // Select wires/busses that are connected at one end and/or the other.  Any
             // unconnected ends must be flagged (STARTPOINT or ENDPOINT).
-            SCH_LINE* line = (SCH_LINE*) test;
+            SCH_LINE* testLine = (SCH_LINE*) test;
 
-            if( line->GetStartPoint() == aPoint )
+            if( testLine->GetStartPoint() == aPoint )
             {
-                if( !( line->GetFlags() & SELECTEDNODE ) )
-                    aList.push_back( line );
+                if( !( testLine->GetFlags() & SELECTEDNODE ) )
+                    aList.push_back( testLine );
 
-                line->SetFlags( STARTPOINT | SELECTEDNODE );
+                testLine->SetFlags( STARTPOINT | SELECTEDNODE );
             }
-            else if( line->GetEndPoint() == aPoint )
+            else if( testLine->GetEndPoint() == aPoint )
             {
-                if( !( line->GetFlags() & SELECTEDNODE ) )
-                    aList.push_back( line );
+                if( !( testLine->GetFlags() & SELECTEDNODE ) )
+                    aList.push_back( testLine );
 
-                line->SetFlags( ENDPOINT | SELECTEDNODE );
+                testLine->SetFlags( ENDPOINT | SELECTEDNODE );
             }
             break;
         }
@@ -481,10 +481,25 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_
         case SCH_COMPONENT_T:
         case SCH_NO_CONNECT_T:
         case SCH_JUNCTION_T:
-            // Select connected items that have no wire between them.
-            if( aItem->Type() != SCH_LINE_T && test->IsConnected( aPoint ) )
-               aList.push_back( test );
+            if( test->IsConnected( aPoint ) )
+            {
+                // Connected to a wire: anchor the wire
+                if( aOriginalItem->Type() == SCH_LINE_T )
+                {
+                    SCH_LINE* originalLine = (SCH_LINE*) aOriginalItem;
 
+                    if( originalLine->GetStartPoint() == aPoint )
+                        originalLine->ClearFlags( STARTPOINT );
+                    else if( originalLine->GetEndPoint() == aPoint )
+                        originalLine->ClearFlags( ENDPOINT );
+                }
+                // Connected directly to something else with no wire to adjust: pick up the
+                // component/no-connect/junction
+                else
+                {
+                    aList.push_back( test );
+                }
+            }
             break;
 
         case SCH_LABEL_T:
@@ -493,17 +508,20 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aItem, wxPoint aPoint, EDA_
         case SCH_BUS_WIRE_ENTRY_T:
         case SCH_BUS_BUS_ENTRY_T:
             // Select labels and bus entries that are connected to a wire being moved.
-            if( aItem->Type() == SCH_LINE_T )
+            if( aOriginalItem->Type() == SCH_LINE_T )
             {
                 std::vector<wxPoint> connections;
                 test->GetConnectionPoints( connections );
 
                 for( wxPoint& point : connections )
                 {
-                    if( aItem->HitTest( point ) )
+                    if( aOriginalItem->HitTest( point ) )
                         aList.push_back( test );
                 }
             }
+            break;
+
+        default:
             break;
         }
     }
