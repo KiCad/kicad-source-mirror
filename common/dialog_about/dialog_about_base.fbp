@@ -510,7 +510,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_COPY</property>
-                                <property name="label">Show Version Info</property>
+                                <property name="label">&amp;Show Version Info</property>
                                 <property name="margins"></property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
@@ -583,7 +583,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_COPY</property>
-                                <property name="label">Copy Version Info</property>
+                                <property name="label">&amp;Copy Version Info</property>
                                 <property name="margins"></property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>
@@ -656,7 +656,7 @@
                                 <property name="gripper">0</property>
                                 <property name="hidden">0</property>
                                 <property name="id">wxID_OK</property>
-                                <property name="label">OK</property>
+                                <property name="label">&amp;OK</property>
                                 <property name="margins"></property>
                                 <property name="markup">0</property>
                                 <property name="max_size"></property>

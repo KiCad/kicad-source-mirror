@@ -64,15 +64,15 @@ DIALOG_ABOUT_BASE::DIALOG_ABOUT_BASE( wxWindow* parent, wxWindowID id, const wxS
 	wxBoxSizer* bSizerButtons;
 	bSizerButtons = new wxBoxSizer( wxHORIZONTAL );
 
-	m_btShowVersionInfo = new wxButton( this, wxID_COPY, _("Show Version Info"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btShowVersionInfo = new wxButton( this, wxID_COPY, _("&Show Version Info"), wxDefaultPosition, wxDefaultSize, 0 );
 	bSizerButtons->Add( m_btShowVersionInfo, 0, wxALL, 5 );
 
-	m_btCopyVersionInfo = new wxButton( this, wxID_COPY, _("Copy Version Info"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btCopyVersionInfo = new wxButton( this, wxID_COPY, _("&Copy Version Info"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_btCopyVersionInfo->SetToolTip( _("Copy KiCad version info to the clipboard") );
 
 	bSizerButtons->Add( m_btCopyVersionInfo, 0, wxALL, 5 );
 
-	m_btOk = new wxButton( this, wxID_OK, _("OK"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_btOk = new wxButton( this, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
 
 	m_btOk->SetDefault();
 	bSizerButtons->Add( m_btOk, 0, wxALL, 5 );
