@@ -850,7 +850,7 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
                  _( "&Graphics..." ),
                  _( "Import 2D Drawing file to Pcbnew on Drawings layer" ),
-                 KiBitmap( import_xpm ) );
+                 KiBitmap( import_vector_xpm ) );
 
     AddMenuItem( aParentMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "&Import" ),

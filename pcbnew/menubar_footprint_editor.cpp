@@ -107,7 +107,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     AddMenuItem( submenuImport, ID_GEN_IMPORT_GRAPHICS_FILE,
                  _( "&Graphics..." ),
                  _( "Import 2D Drawing file to Footprint Editor on Drawings layer" ),
-                 KiBitmap( import_xpm ) );
+                 KiBitmap( import_vector_xpm ) );
 
     AddMenuItem( fileMenu, submenuImport,
                  ID_GEN_IMPORT_FILE, _( "&Import" ),

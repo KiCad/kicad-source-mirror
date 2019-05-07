@@ -296,6 +296,7 @@ set( BMAPS_MID
     import_part
     import_project
     import_setup
+    import_vector
     import
     info
     insert_module_board
