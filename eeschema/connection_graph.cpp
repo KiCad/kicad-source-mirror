@@ -1461,14 +1461,15 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             for( auto candidate : m_sheet_to_subgraphs_map.at( path ) )
             {
                 if( !candidate->m_strong_driver ||
-                    candidate->m_hier_ports.empty() )
+                    candidate->m_hier_ports.empty() ||
+                    visited.count( candidate ) )
                     continue;
 
                 for( SCH_HIERLABEL* label : candidate->m_hier_ports )
                 {
                     if( label->GetShownText() == pin->GetShownText() )
                     {
-                        wxLogTrace( "CONN", "Found child %lu (%s)",
+                        wxLogTrace( "CONN", "%lu: found child %lu (%s)", aParent->m_code,
                                     candidate->m_code, candidate->m_driver_connection->Name() );
 
                         search_list.push_back( candidate );
@@ -1488,9 +1489,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
             for( auto candidate : m_sheet_to_subgraphs_map.at( path ) )
             {
-                if( !candidate->m_strong_driver ||
-                    candidate->m_hier_pins.empty() ||
-                    visited.count( candidate ) )
+                if( candidate->m_hier_pins.empty() ||
+                    visited.count( candidate ) ||
+                    ( candidate->m_driver_connection->Type() !=
+                      aParent->m_driver_connection->Type() ) )
                     continue;
 
                 for( SCH_SHEET_PIN* pin : candidate->m_hier_pins )
@@ -1503,8 +1505,9 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
 
                     if( label->GetShownText() == pin->GetShownText() )
                     {
-                        wxLogTrace( "CONN", "Found additional parent %lu (%s)",
-                                    candidate->m_code, candidate->m_driver_connection->Name() );
+                        wxLogTrace( "CONN", "%lu: found additional parent %lu (%s)",
+                                    aParent->m_code, candidate->m_code,
+                                    candidate->m_driver_connection->Name() );
 
                         search_list.push_back( candidate );
                         break;
