@@ -22,7 +22,7 @@
  */
 
 #include <tools/sch_actions.h>
-#include <tools/sch_inspection_tool.h>
+#include <tools/inspection_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <view/view_controls.h>
 #include <sch_component.h>
@@ -49,7 +49,7 @@ TOOL_ACTION SCH_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo
         info_xpm );
 
 
-SCH_INSPECTION_TOOL::SCH_INSPECTION_TOOL()
+INSPECTION_TOOL::INSPECTION_TOOL()
     : TOOL_INTERACTIVE( "eeschema.InspectionTool" ),
       m_selectionTool( nullptr ),
       m_view( nullptr ),
@@ -59,7 +59,7 @@ SCH_INSPECTION_TOOL::SCH_INSPECTION_TOOL()
 }
 
 
-bool SCH_INSPECTION_TOOL::Init()
+bool INSPECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
@@ -80,7 +80,7 @@ bool SCH_INSPECTION_TOOL::Init()
 }
 
 
-void SCH_INSPECTION_TOOL::Reset( RESET_REASON aReason )
+void INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     m_controls = getViewControls();
@@ -88,7 +88,7 @@ void SCH_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
+int INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
 
@@ -105,7 +105,7 @@ int SCH_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
+int INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -121,7 +121,7 @@ int SCH_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+int INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
     SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
     SELECTION&          selection = selTool->GetSelection();
@@ -143,14 +143,14 @@ int SCH_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
-void SCH_INSPECTION_TOOL::setTransitions()
+void INSPECTION_TOOL::setTransitions()
 {
-    Go( &SCH_INSPECTION_TOOL::ShowDatasheet,       SCH_ACTIONS::showDatasheet.MakeEvent() );
-    Go( &SCH_INSPECTION_TOOL::ShowMarkerInfo,      SCH_ACTIONS::showMarkerInfo.MakeEvent() );
+    Go( &INSPECTION_TOOL::ShowDatasheet,       SCH_ACTIONS::showDatasheet.MakeEvent() );
+    Go( &INSPECTION_TOOL::ShowMarkerInfo,      SCH_ACTIONS::showMarkerInfo.MakeEvent() );
 
-    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
-    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
-    Go( &SCH_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
+    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
+    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
+    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
 }
 
 

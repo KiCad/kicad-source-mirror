@@ -35,7 +35,7 @@
 #include <netlist_object.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_actions.h>
-#include <tools/sch_picker_tool.h>
+#include <tools/picker_tool.h>
 #include <tools/sch_editor_control.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
@@ -51,7 +51,7 @@
 #include "sch_wire_bus_tool.h"
 
 TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
-        AS_GLOBAL, 0, "", "" );
+         AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION SCH_ACTIONS::simProbe( "eeschema.Simulation.probe",
         AS_GLOBAL, 0,
@@ -260,7 +260,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_SIM_PROBE, wxCURSOR_DEFAULT, _( "Add a simulator probe" ) );
@@ -304,7 +304,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_SIM_TUNE, wxCURSOR_DEFAULT, _( "Select a value to be tuned" ) );
@@ -471,7 +471,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight specific net" ) );

@@ -267,7 +267,7 @@ LIB_PART::LIB_PART( LIB_PART& aPart, PART_LIB* aLibrary ) :
 
     for( LIB_ITEM& oldItem : aPart.m_drawings )
     {
-        if( oldItem.IsNew() )
+        if( ( oldItem.GetFlags() & ( IS_NEW | STRUCT_DELETED ) ) != 0 )
             continue;
 
         newItem = (LIB_ITEM*) oldItem.Clone();

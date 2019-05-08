@@ -60,6 +60,8 @@ public:
     int DrawShape( const TOOL_EVENT& aEvent );
     int PlaceAnchor( const TOOL_EVENT& aEvent );
 
+    int RepeatDrawItem( const TOOL_EVENT& aEvent );
+
 private:
 
     int doTwoClickPlace( KICAD_T aType );

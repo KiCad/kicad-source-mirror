@@ -129,7 +129,7 @@ int POSITION_RELATIVE_TOOL::RelativeItemSelectionMove( wxPoint aPosAnchor, wxPoi
     if( m_selection.IsHover() )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     canvas()->Refresh();
     return 0;

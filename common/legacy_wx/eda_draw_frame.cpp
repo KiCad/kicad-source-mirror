@@ -588,6 +588,7 @@ void EDA_DRAW_FRAME::OnMouseEvent( wxMouseEvent& event )
 
 void EDA_DRAW_FRAME::DisplayToolMsg( const wxString& msg )
 {
+    m_toolMsg = msg;
     SetStatusText( msg, 5 );
 }
 

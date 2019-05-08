@@ -34,55 +34,7 @@
 
 
 const KICAD_T SCH_COLLECTOR::AllItems[] = {
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_PIN_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
-    EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::LibItems[] = {
-        LIB_ARC_T,
-        LIB_CIRCLE_T,
-        LIB_TEXT_T,
-        LIB_RECTANGLE_T,
-        LIB_POLYLINE_T,
-        LIB_BEZIER_T,
-        LIB_PIN_T,
-        LIB_FIELD_T,
-        EOT
-};
-
-
-const KICAD_T SCH_COLLECTOR::AllItemsButPins[] = {
-    SCH_MARKER_T,
-    SCH_JUNCTION_T,
-    SCH_NO_CONNECT_T,
-    SCH_BUS_BUS_ENTRY_T,
-    SCH_BUS_WIRE_ENTRY_T,
-    SCH_LINE_T,
-    SCH_BITMAP_T,
-    SCH_TEXT_T,
-    SCH_LABEL_T,
-    SCH_GLOBAL_LABEL_T,
-    SCH_HIER_LABEL_T,
-    SCH_FIELD_T,
-    SCH_COMPONENT_T,
-    SCH_SHEET_PIN_T,
-    SCH_SHEET_T,
+    SCH_LOCATE_ANY_T,
     EOT
 };
 
@@ -139,7 +91,13 @@ const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
 
 SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
-    if( m_Unit || m_Convert )
+    if( aItem->Type() == LIB_PIN_T )
+    {
+        // Special selection rules apply to pins of different units when edited in
+        // synchronized pins mode.  Leave it to SCH_SELECTION_TOOL::isSelectable() to
+        // decide what to do with them.
+    }
+    else if( m_Unit || m_Convert )
     {
         LIB_ITEM* lib_item = dynamic_cast<LIB_ITEM*>( aItem );
 

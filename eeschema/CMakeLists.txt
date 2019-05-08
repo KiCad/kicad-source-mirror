@@ -111,17 +111,14 @@ set( EESCHEMA_WIDGETS
 
 
 set ( EESCHEMA_LIBEDIT_SRCS
-    libedit/block_libedit.cpp
     libedit/controller.cpp
     libedit/libedit.cpp
-    libedit/libedit_onleftclick.cpp
     libedit/libedit_onrightclick.cpp
     libedit/libedit_plot_component.cpp
     libedit/libedit_undo_redo.cpp
     libedit/lib_edit_frame.cpp
     libedit/libfield.cpp
     libedit/menubar_libedit.cpp
-    libedit/symbdraw.cpp
     libedit/symbedit.cpp
     libedit/toolbars_libedit.cpp
     libedit/lib_export.cpp
@@ -138,7 +135,6 @@ set( EESCHEMA_SRCS
     annotate.cpp
     autoplace_fields.cpp
     backanno.cpp
-    block.cpp
     bus_alias.cpp
     bus-wire-junction.cpp
     class_libentry.cpp
@@ -234,15 +230,18 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_pspice.cpp
 
     tools/lib_drawing_tools.cpp
+    tools/lib_edit_tool.cpp
+    tools/lib_move_tool.cpp
     tools/lib_pin_tool.cpp
+    tools/point_editor.cpp
     tools/sch_actions.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
-    tools/sch_inspection_tool.cpp
+    tools/inspection_tool.cpp
     tools/sch_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
-    tools/sch_picker_tool.cpp
+    tools/picker_tool.cpp
     tools/sch_selection_tool.cpp
     tools/selection.cpp
     )

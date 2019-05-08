@@ -47,42 +47,6 @@ static inline wxPoint twoPointVector( const wxPoint &startPoint, const wxPoint &
 }
 
 
-//! @brief Given three points A B C, compute the circumcenter of the resulting triangle
-//! reference: http://en.wikipedia.org/wiki/Circumscribed_circle
-//! Coordinates of circumcenter in Cartesian coordinates
-static wxPoint calcCenter( const wxPoint& A, const wxPoint& B, const wxPoint& C )
-{
-    double  circumCenterX, circumCenterY;
-    double  Ax = (double) A.x;
-    double  Ay = (double) A.y;
-    double  Bx = (double) B.x;
-    double  By = (double) B.y;
-    double  Cx = (double) C.x;
-    double  Cy = (double) C.y;
-
-    wxPoint circumCenter;
-
-    double  D = 2.0 * ( Ax * ( By - Cy ) + Bx * ( Cy - Ay ) + Cx * ( Ay - By ) );
-
-    // prevent division / 0
-    if( fabs( D ) < 1e-7 )
-        D = 1e-7;
-
-    circumCenterX = ( (Ay * Ay + Ax * Ax) * (By - Cy) +
-                      (By * By + Bx * Bx) * (Cy - Ay) +
-                      (Cy * Cy + Cx * Cx) * (Ay - By) ) / D;
-
-    circumCenterY = ( (Ay * Ay + Ax * Ax) * (Cx - Bx) +
-                      (By * By + Bx * Bx) * (Ax - Cx) +
-                      (Cy * Cy + Cx * Cx) * (Bx - Ax) ) / D;
-
-    circumCenter.x = (int) circumCenterX;
-    circumCenter.y = (int) circumCenterY;
-
-    return circumCenter;
-}
-
-
 LIB_ARC::LIB_ARC( LIB_PART*      aParent ) : LIB_ITEM( LIB_ARC_T, aParent )
 {
     m_Radius        = 0;
@@ -310,7 +274,7 @@ void LIB_ARC::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     {
         pen_size = std::max( 0, pen_size );
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+        aPlotter->Arc( pos, -t2, -t1, m_Radius, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -355,23 +319,14 @@ void LIB_ARC::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOf
     FILL_T fill = aData ? NO_FILL : m_Fill;
 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
+    int penSize = GetPenSize();
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-    {
-        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, GetPenSize( ),
-                     bgColor, bgColor );
-    }
+        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, penSize, bgColor, bgColor );
     else if( fill == FILLED_SHAPE && !aData )
-    {
-        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius,
-                     color, color );
-    }
+        GRFilledArc( clipbox, aDC, posc.x, posc.y, pt1, pt2, m_Radius, color, color );
     else
-    {
-
-        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, GetPenSize(),
-                color );
-    }
+        GRArc1( clipbox, aDC, pos1.x, pos1.y, pos2.x, pos2.y, posc.x, posc.y, penSize, color );
 }
 
 
@@ -545,81 +500,7 @@ void LIB_ARC::EndEdit( const wxPoint& aPosition )
 
 void LIB_ARC::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsResized() )
-    {
-        wxPoint newCenterPoint, startPos, endPos;
-
-        // Choose the point of the arc to be adjusted
-        if( m_editSelectPoint == ARC_STATUS_START )
-        {
-            startPos = aPosition;
-            endPos   = m_ArcEnd;
-        }
-        else if( m_editSelectPoint == ARC_STATUS_END )
-        {
-            endPos   = aPosition;
-            startPos = m_ArcStart;
-        }
-        else
-        {
-            // Use the cursor for adjusting the arc curvature
-            startPos = m_ArcStart;
-            endPos   = m_ArcEnd;
-
-            // If the distance is too small, use the old center point
-            // else the new center point is calculated over the three points start/end/cursor
-            if( DistanceLinePoint( startPos, endPos, aPosition ) > MINIMUM_SELECTION_DISTANCE )
-            {
-                newCenterPoint = calcCenter( startPos, aPosition, endPos );
-            }
-            else
-            {
-                newCenterPoint = m_Pos;
-            }
-
-            // Determine if the arc angle is larger than 180 degrees -> this happens if both
-            // points (cursor position, center point) lie on the same side of the vector
-            // start-end
-            double  crossA = CrossProduct( twoPointVector( startPos, endPos ),
-                                        twoPointVector( endPos, aPosition ) );
-            double  crossB = CrossProduct( twoPointVector( startPos, endPos ),
-                                        twoPointVector( endPos, newCenterPoint ) );
-
-            if( ( crossA < 0 && crossB < 0 ) || ( crossA >= 0 && crossB >= 0 ) )
-                newCenterPoint = m_Pos;
-        }
-
-        if( m_editSelectPoint == ARC_STATUS_START || m_editSelectPoint == ARC_STATUS_END )
-        {
-            // Compute the new center point when the start/end points are modified
-            wxPoint middlePoint = wxPoint( (startPos.x + endPos.x) / 2,
-                                           (startPos.y + endPos.y) / 2 );
-
-            wxPoint startEndVector = twoPointVector( startPos, endPos );
-            wxPoint perpendicularVector = wxPoint( -startEndVector.y, startEndVector.x );
-            double  lengthPerpendicularVector = EuclideanNorm( perpendicularVector );
-
-            // prevent too large values, division / 0
-            if( lengthPerpendicularVector < 1e-1 )
-                lengthPerpendicularVector = 1e-1;
-
-            perpendicularVector.x = (int) ( (double) perpendicularVector.x *
-                                            m_editCenterDistance /
-                                            lengthPerpendicularVector ) * m_editDirection;
-            perpendicularVector.y = (int) ( (double) perpendicularVector.y *
-                                            m_editCenterDistance /
-                                            lengthPerpendicularVector ) * m_editDirection;
-
-            newCenterPoint = middlePoint + perpendicularVector;
-
-            m_ArcStart = startPos;
-            m_ArcEnd   = endPos;
-        }
-
-        m_Pos = newCenterPoint;
-        CalcRadiusAngles();
-    }
-    else if( IsNew() )
+    if( IsNew() )
     {
         if( m_editState == 1 )
         {

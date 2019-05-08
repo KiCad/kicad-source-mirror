@@ -350,12 +350,8 @@ public:
      * and of type POWER_IN.
      */
     bool IsPowerConnection() const {
-
-        return (
-            ( !IsVisible() && GetType() == PIN_POWER_IN )
-            ||
-            ( (LIB_PART*)GetParent()->IsPower()  && GetType() == PIN_POWER_IN )
-        ) ; }
+        return GetType() == PIN_POWER_IN && ( !IsVisible() || (LIB_PART*) GetParent()->IsPower() );
+    }
 
     int GetPenSize() const override;
 
@@ -444,16 +440,13 @@ public:
     void SetPinPosition( wxPoint aPosition );
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return m_width; }
-
     void SetWidth( int aWidth ) override;
 
     BITMAP_DEF GetMenuImage() const override;

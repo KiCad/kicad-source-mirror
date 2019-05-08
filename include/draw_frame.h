@@ -86,6 +86,7 @@ class EDA_DRAW_FRAME : public KIWAY_PLAYER
 
     ///< Id of active button on the vertical toolbar.
     int                 m_toolId;
+    wxString            m_toolMsg;
 
     BASE_SCREEN*        m_currentScreen;      ///< current used SCREEN
 
@@ -738,9 +739,10 @@ public:
                          const wxString &aSheetLayer = wxEmptyString );
 
     void            DisplayToolMsg( const wxString& msg );
+    wxString        GetToolMsg() { return m_toolMsg; }
     virtual void    RedrawActiveWindow( wxDC* DC, bool EraseBg ) = 0;
-    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {};
-    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) {};
+    virtual void    OnLeftClick( wxDC* DC, const wxPoint& MousePos ) {}
+    virtual void    OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) {}
     virtual bool    OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) = 0;
     virtual void    ToolOnRightClick( wxCommandEvent& event );
     void            AdjustScrollBars( const wxPoint& aCenterPosition );
@@ -750,7 +752,7 @@ public:
      * In derived classes it can be used to modify parameters like draw area size,
      * and any other local parameter related to the page settings.
      */
-    virtual void OnPageSettingsChange() {};
+    virtual void OnPageSettingsChange() {}
 
     /**
      * Called when activating the frame.

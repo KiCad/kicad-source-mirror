@@ -39,7 +39,6 @@
 void LIB_EDIT_FRAME::OnImportPart( wxCommandEvent& event )
 {
     wxString msg;
-    m_lastDrawItem = NULL;
     wxString libName = getTargetLib();
 
     if( !m_libMgr->LibraryExists( libName ) )
@@ -183,8 +182,6 @@ void LIB_EDIT_FRAME::OnExportPart( wxCommandEvent& event )
     }
 
     m_mruPath = fn.GetPath();
-    m_lastDrawItem = NULL;
-    SetDrawItem( NULL );
 
     msg.Printf( _( "Symbol \"%s\" saved in library \"%s\"" ), part->GetName(), fn.GetFullPath() );
     SetStatusText( msg );

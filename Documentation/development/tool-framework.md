@@ -71,8 +71,7 @@ or not, has a `TOOL_ACTION` instance. This provides:
 
 GAL tools inherit the `TOOL_BASE` class. A Pcbnew tool will generally
 inherit from `PCB_TOOL`, which is a `TOOL_INTERACTIVE`, which is
-a `TOOL_BASE`. In the future, Eeschema tools will be developed in a similar
-manner.
+a `TOOL_BASE`. Eeschema tools inherit directly from `TOOL_INTERACTIVE`.
 
 The tool class for a tool can be fairly lightweight - much of the
 functionality is inherited from the tool's base classes. These base
@@ -546,22 +545,8 @@ Below you will find the contents of useless_tool.cpp:
 
 The last step is to register the tool in the tool manager.
 
-This is done by adding a new instance of the tool to the
-`registerAllTools()` function in `pcbnew/tools/tools_common.cpp`.
-
-    // add your tool header
-    #include <tools/useless_tool.h>
-
-    void registerAllTools( TOOL_MANAGER *aToolManager )
-    {
-        ....
-        aToolManager->RegisterTool( new USELESS_TOOL );
-        ....
-    }
-
-If your new tool applies in the module editor, you also need to do this
-in `FOOTPRINT_EDIT_FRAME::setupTools()`. Generally, each kind of
-`EDA_DRAW_FRAME` that can use GAL will have a place to do this.
+This is done in the frame's  `setupTools()` function for whichever 
+`EDA_DRAW_FRAME` support that tool.
 
 ## Build and run {#tutorial-summary}
 

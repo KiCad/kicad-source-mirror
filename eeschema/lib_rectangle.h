@@ -84,20 +84,16 @@ public:
     wxPoint GetPosition() const override { return m_Pos; }
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
-
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
                const TRANSFORM& aTransform ) override;
 
     int GetWidth() const override { return m_Width; }
-
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
     void SetEnd( const wxPoint& aEnd ) { m_End = aEnd; }
-
     wxPoint GetEnd() const { return m_End; }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;

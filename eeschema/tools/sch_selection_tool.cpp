@@ -194,6 +194,10 @@ bool SCH_SELECTION_TOOL::Init()
     auto sheetSelection = SELECTION_CONDITIONS::Count( 1 )
                        && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
 
+    auto libEdit = [this] ( const SELECTION& aSel ) {
+        return m_isLibEdit;
+    };
+
     auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
         return g_CurrentSheet->Last() != g_RootSheet;
     };
@@ -202,12 +206,11 @@ bool SCH_SELECTION_TOOL::Init()
 
     menu.AddItem( SCH_ACTIONS::enterSheet,         sheetSelection && SCH_CONDITIONS::Idle, 1 );
     menu.AddItem( SCH_ACTIONS::explicitCrossProbe, sheetSelection && SCH_CONDITIONS::Idle, 1 );
-    menu.AddItem( SCH_ACTIONS::resizeSheet,        sheetSelection && SCH_CONDITIONS::Idle, 1 );
     menu.AddItem( SCH_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
     menu.AddSeparator( SCH_CONDITIONS::Empty, 100 );
-    menu.AddItem( SCH_ACTIONS::startWire,        SCH_CONDITIONS::Empty, 100 );
-    menu.AddItem( SCH_ACTIONS::startBus,         SCH_CONDITIONS::Empty, 100 );
+    menu.AddItem( SCH_ACTIONS::startWire,        !libEdit && SCH_CONDITIONS::Empty, 100 );
+    menu.AddItem( SCH_ACTIONS::startBus,         !libEdit && SCH_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
     menu.AddItem( SCH_ACTIONS::finishWire,       SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
@@ -264,17 +267,6 @@ void SCH_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
 int SCH_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
-    // JEY TODO: temp hack for LibEdit legacy selection tool
-    if( m_isLibEdit )
-    {
-        LIB_EDIT_FRAME* libEditFrame = (LIB_EDIT_FRAME*) m_frame;
-        wxCommandEvent  selectArrow;
-        selectArrow.SetId( ID_NO_TOOL_SELECTED );
-        libEditFrame->OnSelectTool( selectArrow );
-
-        return 0;
-    }
-
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -893,6 +885,27 @@ bool SCH_SELECTION_TOOL::selectable( const EDA_ITEM* aItem, bool checkVisibility
     case LIB_PART_T:    // In libedit we do not want to select the symbol itself.
         return false;
 
+    case LIB_PIN_T:
+    {
+        LIB_EDIT_FRAME* editFrame = (LIB_EDIT_FRAME*) m_frame;
+        LIB_PIN*        pin = (LIB_PIN*) aItem;
+
+        if( ( pin->GetUnit() && pin->GetUnit() != editFrame->GetUnit() )
+         || ( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() ) )
+        {
+            // Specific rules for pins:
+            // - do not select pins in other units when synchronized pin edit mode is disabled
+            // - do not select pins in other units when units are not interchangeable
+            // - in other cases verify if the pin belongs to the requested DeMorgan variant
+            if( !editFrame->SynchronizePins()
+                || editFrame->GetCurPart()->UnitsLocked()
+                || ( pin->GetConvert() && pin->GetConvert() != editFrame->GetConvert() ) )
+            {
+                return false;
+            }
+        }
+        break;
+    }
     case SCH_MARKER_T:  // Always selectable
         return true;
 

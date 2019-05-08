@@ -59,6 +59,7 @@ public:
         return _( "PolyLine" );
     }
 
+    void ClearPoints() { m_PolyPoints.clear(); }
     void Reserve( size_t aPointCount ) { m_PolyPoints.reserve( aPointCount ); }
     void AddPoint( const wxPoint& aPoint );
 
@@ -68,6 +69,9 @@ public:
      * Delete the segment at \a aPosition.
      */
     void DeleteSegment( const wxPoint aPosition );
+
+    void AddCorner( const wxPoint& aPosition );
+    void RemoveCorner( int aIdx );
 
     /**
      * @return the number of corners
@@ -98,7 +102,6 @@ public:
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,

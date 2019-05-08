@@ -132,6 +132,7 @@ enum KICAD_T
     // Same for picking wires and busses from SCH_LINE_T items
     SCH_LINE_LOCATE_WIRE_T,
     SCH_LINE_LOCATE_BUS_T,
+    SCH_LINE_LOCATE_GRAPHIC_LINE_T,
 
     // matches any type
     SCH_LOCATE_ANY_T,

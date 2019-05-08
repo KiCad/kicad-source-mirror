@@ -285,23 +285,6 @@ void LIB_RECTANGLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
     {
         m_Pos = m_End = aPosition;
     }
-    else if( aEditMode == IS_RESIZED )
-    {
-        m_isStartPointSelected = abs( m_Pos.x - aPosition.x ) < MINIMUM_SELECTION_DISTANCE
-            || abs( m_Pos.y - aPosition.y ) < MINIMUM_SELECTION_DISTANCE;
-
-        if( m_isStartPointSelected )
-        {
-            m_isWidthLocked = abs( m_Pos.x - aPosition.x ) >= MINIMUM_SELECTION_DISTANCE;
-            m_isHeightLocked = abs( m_Pos.y - aPosition.y ) >= MINIMUM_SELECTION_DISTANCE;
-        }
-        else
-        {
-            m_isWidthLocked = abs( m_End.x - aPosition.x ) >= MINIMUM_SELECTION_DISTANCE;
-            m_isHeightLocked = abs( m_End.y - aPosition.y ) >= MINIMUM_SELECTION_DISTANCE;
-        }
-
-    }
     else if( aEditMode == IS_MOVED )
     {
         m_initialPos = m_Pos;
@@ -324,30 +307,6 @@ void LIB_RECTANGLE::CalcEdit( const wxPoint& aPosition )
     if( IsNew() )
     {
         m_End = aPosition;
-    }
-    else if( IsResized() )
-    {
-        if( m_isHeightLocked )
-        {
-            if( m_isStartPointSelected )
-                m_Pos.x = aPosition.x;
-            else
-                m_End.x = aPosition.x;
-        }
-        else if( m_isWidthLocked )
-        {
-            if( m_isStartPointSelected )
-                m_Pos.y = aPosition.y;
-            else
-                m_End.y = aPosition.y;
-        }
-        else
-        {
-            if( m_isStartPointSelected )
-                m_Pos = aPosition;
-            else
-                m_End = aPosition;
-        }
     }
     else if( IsMoving() )
     {

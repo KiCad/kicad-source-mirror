@@ -161,23 +161,16 @@ enum main_id
     ID_POPUP_CANCEL_CURRENT_COMMAND,
     ID_POPUP_CLOSE_CURRENT_TOOL,
 
-    // JEY TODO: all the block-specific commands are obsolete after LibEdit moves to modern toolset
-    ID_POPUP_MOVE_BLOCK,
+    // JEY TODO: all the block-specific commands are obsolete after PCBNew's legacy canvas goes...
     ID_POPUP_MOVE_BLOCK_EXACT,
-    ID_POPUP_DRAG_BLOCK,
-    ID_POPUP_COPY_BLOCK,
-    ID_POPUP_PASTE_BLOCK,
-    ID_POPUP_CUT_BLOCK,
     ID_POPUP_DUPLICATE_BLOCK,
     ID_POPUP_ROTATE_BLOCK,
     ID_POPUP_DELETE_BLOCK,
     ID_POPUP_FLIP_BLOCK,
     ID_POPUP_PLACE_BLOCK,
     ID_POPUP_ZOOM_BLOCK,
-    ID_POPUP_SELECT_ITEMS_BLOCK,
     ID_POPUP_MIRROR_X_BLOCK,
     ID_POPUP_MIRROR_Y_BLOCK,
-    ID_POPUP_OTHER_COMMANDS,
     ID_POPUP_GENERAL_END_RANGE, // last number
 
     ID_POPUP_ENTER_MENU,
@@ -260,6 +253,8 @@ enum main_id
 
     ID_MOUSE_CLICK,
     ID_MOUSE_DOUBLECLICK,
+
+    ID_DRAG_POINT,
 
     ID_GET_NETLIST,
     ID_OPEN_CMP_TABLE,

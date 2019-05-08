@@ -193,8 +193,6 @@ static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_K
 
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G',
                           ID_SCH_DRAG );
-static EDA_HOTKEY HkMove2Drag( _HKI( "Move Block -> Drag Block" ),
-                               HK_MOVEBLOCK_TO_DRAGBLOCK, '\t', ID_POPUP_DRAG_BLOCK );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
@@ -213,7 +211,6 @@ static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTIO
 static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P',
                                ID_LIBEDIT_PIN_BUTT );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
-static EDA_HOTKEY HkMoveLibItem( _HKI( "Move Library Item" ), HK_LIBEDIT_MOVE_GRAPHIC_ITEM, 'M' );
 static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_ALT,
                              ID_LIBEDIT_VIEW_DOC );
 
@@ -296,9 +293,13 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkZoomSelection,
     &HkResetLocalCoord,
     &HkEdit,
+    &HkDuplicateItem,
     &HkDelete,
     &HkRotate,
     &HkDrag,
+    &HkMove,
+    &HkMirrorX,
+    &HkMirrorY,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -314,6 +315,13 @@ static EDA_HOTKEY* common_basic_Hotkey_List[] =
     &HkZoomCenter,
     &HkZoomAuto,
     &HkResetLocalCoord,
+    &HkEdit,
+    &HkDuplicateItem,
+    &HkDelete,
+    &HkRotate,
+    &HkMove,
+    &HkMirrorX,
+    &HkMirrorY,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -327,13 +335,8 @@ static EDA_HOTKEY* schematic_Hotkey_List[] =
     &HkFindNextMarker,
     &HkFindReplace,
     &HkInsert,
-    &HkMove2Drag,
-    &HkMove,
-    &HkDuplicateItem,
     &HkAddComponent,
     &HkAddPower,
-    &HkMirrorX,
-    &HkMirrorY,
     &HkEditValue,
     &HkEditReference,
     &HkEditFootprint,
@@ -369,9 +372,6 @@ static EDA_HOTKEY* libEdit_Hotkey_List[] =
 {
     &HkCreatePin,
     &HkInsertPin,
-    &HkMoveLibItem,
-    &HkMirrorX,
-    &HkMirrorY,
     &HkViewDoc,
     NULL
 };
@@ -541,7 +541,9 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+    wxCommandEvent      cmd( wxEVT_COMMAND_MENU_SELECTED );
+    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    SELECTION&          selection = selTool->GetSelection();
 
     cmd.SetEventObject( this );
 
@@ -557,11 +559,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     if( hotKey == NULL )
         return false;
-
-    // itemInEdit == false means no item currently edited. We can ask for editing a new item
-    bool itemInEdit = IsEditingDrawItem();
-
-    bool blocInProgress = GetScreen()->m_BlockLocate.GetState() != STATE_NO_BLOCK;
 
     switch( hotKey->m_Idcommand )
     {
@@ -582,11 +579,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case HK_ZOOM_IN:
-    case HK_ZOOM_OUT:
-    case HK_ZOOM_REDRAW:
-    case HK_ZOOM_CENTER:
-    case HK_ZOOM_AUTO:
     case HK_EDIT_PASTE:
     case HK_EDIT_COPY:
     case HK_EDIT_CUT:
@@ -596,136 +588,10 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_UNDO:
     case HK_REDO:
-        if( !itemInEdit )
+        if( SCH_CONDITIONS::Idle( selection ) )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
             GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
-    case HK_REPEAT_LAST:
-        if( ! itemInEdit )
-        {
-            if( m_lastDrawItem && !m_lastDrawItem->InEditMode() &&
-                ( m_lastDrawItem->Type() == LIB_PIN_T ) )
-                RepeatPinItem( aDC, (LIB_PIN*) m_lastDrawItem );
-        }
-        break;
-
-    case HK_EDIT:
-        if ( !itemInEdit )
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-        if( GetDrawItem() )
-        {
-            switch( GetDrawItem()->Type() )
-            {
-            case LIB_PIN_T:
-                cmd.SetId( ID_LIBEDIT_EDIT_PIN );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            case LIB_ARC_T:
-            case LIB_CIRCLE_T:
-            case LIB_RECTANGLE_T:
-            case LIB_POLYLINE_T:
-            case LIB_TEXT_T:
-                cmd.SetId( ID_POPUP_LIBEDIT_BODY_EDIT_ITEM );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            case LIB_FIELD_T:
-                cmd.SetId( ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM );
-                GetEventHandler()->ProcessEvent( cmd );
-                break;
-
-            default:
-                break;
-            }
-        }
-        break;
-
-    case HK_ROTATE:
-        if ( !itemInEdit && !blocInProgress )
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-        if( blocInProgress || GetDrawItem() )
-        {
-            cmd.SetId( ID_LIBEDIT_ROTATE_ITEM );
-            OnRotate( cmd );
-        }
-        break;
-
-    case HK_LIBEDIT_CREATE_PIN:
-        if( ! itemInEdit )
-        {
-            SetToolID( ID_LIBEDIT_PIN_BUTT, wxCURSOR_PENCIL, _( "Add Pin" ) );
-            OnLeftClick( aDC, aPosition );
-        }
-        break;
-
-    case HK_LIBEDIT_MOVE_GRAPHIC_ITEM:
-        if( !itemInEdit && !blocInProgress )
-        {
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-            if( GetDrawItem() )
-            {
-                cmd.SetId( ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST );
-                Process_Special_Functions( cmd );
-            }
-        }
-        break;
-
-    case HK_DRAG:
-        if( !itemInEdit && !blocInProgress  )
-        {
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-            if( GetDrawItem() )
-            {
-                cmd.SetId( ID_POPUP_LIBEDIT_MODIFY_ITEM );
-                Process_Special_Functions( cmd );
-            }
-        }
-        break;
-
-    case HK_MIRROR_Y:                       // Mirror Y
-        if( !itemInEdit && !blocInProgress )
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-        if( blocInProgress || GetDrawItem() )
-        {
-            cmd.SetId( ID_LIBEDIT_MIRROR_Y );
-            OnOrient( cmd );
-        }
-        break;
-
-    case HK_MIRROR_X:                       // Mirror X
-        if( !itemInEdit && !blocInProgress )
-            SetDrawItem( LocateItemUsingCursor( aPosition ) );
-
-        if( blocInProgress || GetDrawItem() )
-        {
-            cmd.SetId( ID_LIBEDIT_MIRROR_X );
-            OnOrient( cmd );
-        }
-        break;
-
-    case HK_LEFT_CLICK:
-    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        if( GetScreen()->m_BlockLocate.GetState() == STATE_BLOCK_MOVE )
-        {
-            GetCanvas()->SetAutoPanRequest( false );
-            HandleBlockPlace( aDC );
-        }
-        else if( GetScreen()->m_BlockLocate.GetState() == STATE_NO_BLOCK )
-        {
-            auto pos = GetCrossHairPosition();
-            OnLeftClick( aDC, pos );
-
-            if( hotKey->m_Idcommand == HK_LEFT_DCLICK )
-                OnLeftDClick( aDC, pos );
         }
         break;
     }
@@ -779,15 +645,6 @@ bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_LEFT_CLICK:
-        OnLeftClick( aDC, aPosition );
-        break;
-
-    case HK_LEFT_DCLICK:    // Simulate a double left click: generate 2 events
-        OnLeftClick( aDC, aPosition );
-        OnLeftDClick( aDC, aPosition );
         break;
 
     case HK_ZOOM_IN:

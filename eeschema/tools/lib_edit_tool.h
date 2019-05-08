@@ -21,44 +21,68 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_INSPECTION_TOOL_H
-#define SCH_INSPECTION_TOOL_H
+#ifndef KICAD_LIB_EDIT_TOOL_H
+#define KICAD_LIB_EDIT_TOOL_H
 
-#include <boost/optional/optional.hpp>
 #include <tool/tool_interactive.h>
+#include <tool/tool_menu.h>
 #include <sch_base_frame.h>
 
 
+class LIB_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
-class SCH_EDIT_FRAME;
 
 
-class SCH_INSPECTION_TOOL : public TOOL_INTERACTIVE
+class LIB_EDIT_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SCH_INSPECTION_TOOL();
-    ~SCH_INSPECTION_TOOL() {}
+    LIB_EDIT_TOOL();
+    ~LIB_EDIT_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    ///> @copydoc TOOL_INTERACTIVE::Reset()
+    /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    int ShowDatasheet( const TOOL_EVENT& aEvent );
-    int ShowMarkerInfo( const TOOL_EVENT& aEvent );
+    ///> Get the SCH_DRAWING_TOOL top-level context menu
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
-    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
+    int Rotate( const TOOL_EVENT& aEvent );
+    int Mirror( const TOOL_EVENT& aEvent );
+
+    int Duplicate( const TOOL_EVENT& aEvent );
+
+    int Properties( const TOOL_EVENT& aEvent );
+
+    int Cut( const TOOL_EVENT& aEvent );
+    int Copy( const TOOL_EVENT& aEvent );
+    int Paste( const TOOL_EVENT& aEvent );
+
+    /**
+     * Function DoDelete()
+     *
+     * Deletes the selected items, or the item under the cursor.
+     */
+    int DoDelete( const TOOL_EVENT& aEvent );
+
+    ///> Runs the deletion tool.
+    int DeleteItemCursor( const TOOL_EVENT& aEvent );
 
 private:
-    ///> @copydoc TOOL_INTERACTIVE::setTransitions();
+    void editGraphicProperties( LIB_ITEM* aItem );
+    void editTextProperties( LIB_ITEM* aItem );
+    void editFieldProperties( LIB_FIELD* aField );
+
+    ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
     SCH_SELECTION_TOOL*   m_selectionTool;
-    KIGFX::SCH_VIEW*      m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_BASE_FRAME*       m_frame;
+    LIB_EDIT_FRAME*       m_frame;
+
+    /// Menu model displayed by the tool.
+    TOOL_MENU             m_menu;
 };
 
-#endif /* SCH_INSPECTION_TOOL_H */
+#endif //KICAD_LIB_EDIT_TOOL_H

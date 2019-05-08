@@ -104,9 +104,6 @@ public:
     /// Activation of the edit tool
     static TOOL_ACTION properties;
 
-    /// Modified selection notification
-    static TOOL_ACTION selectionModified;
-
     /// Activation of the exact move tool
     static TOOL_ACTION moveExact;
 

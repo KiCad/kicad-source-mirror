@@ -41,8 +41,6 @@ public:
     void DisplaySheet( const SCH_SCREEN *aScreen );
 
     bool SwitchBackend( GAL_TYPE aGalType ) override;
-    void OnMouseEvent( wxMouseEvent& event );
-    bool OnRightClick( wxMouseEvent& event );
     void OnKeyEvent( wxKeyEvent& event );
     void OnCharHook( wxKeyEvent& event );
 
@@ -53,12 +51,6 @@ public:
 
     BASE_SCREEN* GetScreen() override;
     virtual EDA_DRAW_FRAME* GetParent() const override;
-
-    virtual void CallMouseCapture( wxDC* aDC, const wxPoint& aPosition, bool aErase ) override;
-    virtual void CallEndMouseCapture( wxDC* aDC ) override;
-    virtual void EndMouseCapture( int aId = -1, int aCursorId = -1,
-                          const wxString& aTitle = wxEmptyString,
-                          bool aCallEndFunc = true ) override;
 
     virtual void CrossHairOff( wxDC* DC=nullptr ) override;
 

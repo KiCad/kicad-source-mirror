@@ -23,7 +23,7 @@
  */
 
 #include "edit_constraints.h"
-#include "edit_points.h"
+#include "tool/edit_points.h"
 
 #include <geometry/seg.h>
 

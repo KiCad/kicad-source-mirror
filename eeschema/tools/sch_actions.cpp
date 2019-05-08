@@ -234,6 +234,9 @@ OPT<TOOL_EVENT> SCH_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_LIBEDIT_BODY_RECT_BUTT:
         return SCH_ACTIONS::drawSymbolRectangle.MakeEvent();
+
+    case ID_LIBEDIT_DELETE_ITEM_BUTT:
+        return SCH_ACTIONS::deleteItemCursor.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

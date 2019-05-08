@@ -347,9 +347,9 @@ public:
 
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the
-     * current screen* and update the date in frame reference.
+     * current screen and update the date in frame reference.
      */
-    void OnModify();
+    void OnModify() override;
 
     virtual wxString GetScreenDesc() const override;
 
@@ -1070,32 +1070,6 @@ private:
     void GetSchematicFromUndoList( wxCommandEvent& event );
 
 public:
-    /**
-     * Initialize the parameters used by the block paste command.
-     */
-    void InitBlockPasteInfos() override;
-
-    /**
-     * Call after HandleBlockEnd, when a block command needs to be executed after the block
-     * is moved to its new place.
-     *
-     * Parameters must be initialized in GetScreen()->m_BlockLocate
-     */
-    virtual void HandleBlockPlace( wxDC* DC ) override;
-
-    /**
-     * Handle the "end"  of a block command,
-     * i.e. is called at the end of the definition of the area of a block.
-     * depending on the current block command, this command is executed
-     * or parameters are initialized to prepare a call to HandleBlockPlace
-     * in GetScreen()->m_BlockLocate
-     *
-     * @param aDC is a device context to draw on.
-     * @return false if no item selected, or command finished,
-     * true if some items found and HandleBlockPlace must be called later
-     */
-    virtual bool HandleBlockEnd( wxDC* aDC ) override;
-
     /**
      * Clone \a aItem and owns that clone in this container.
      */

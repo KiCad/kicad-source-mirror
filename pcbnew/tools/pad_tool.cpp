@@ -223,7 +223,7 @@ int PAD_TOOL::pastePadProperties( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Paste Pad Properties" ) );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     frame.Refresh();
 
     return 0;
@@ -335,7 +335,7 @@ int PAD_TOOL::pushPadSettings( const TOOL_EVENT& aEvent )
 
     commit.Push( _( "Push Pad Settings" ) );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     frame.Refresh();
 
     return 0;

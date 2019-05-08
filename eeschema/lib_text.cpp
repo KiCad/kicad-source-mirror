@@ -341,7 +341,6 @@ BITMAP_DEF LIB_TEXT::GetMenuImage() const
 
 void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 {
-    // JEY TODO: this should all move to modern toolset....
     LIB_ITEM::BeginEdit( aEditMode, aPosition );
 
     if( aEditMode == IS_MOVED )
@@ -358,7 +357,6 @@ void LIB_TEXT::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 
 void LIB_TEXT::EndEdit( const wxPoint& aPosition )
 {
-    // JEY TODO: this should all move to modern toolset....
     LIB_ITEM::EndEdit( aPosition );
 
     m_rotate = false;
@@ -368,7 +366,6 @@ void LIB_TEXT::EndEdit( const wxPoint& aPosition )
 
 void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
 {
-    // JEY TODO: this should all move to modern toolset....
     DBG(printf("textCalcEdit %d %d\n", aPosition.x, aPosition.y );)
 
     if( m_rotate )

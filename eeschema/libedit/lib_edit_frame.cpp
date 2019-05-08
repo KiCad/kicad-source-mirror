@@ -67,14 +67,16 @@
 #include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_picker_tool.h>
-#include <tools/sch_inspection_tool.h>
+#include <tools/picker_tool.h>
+#include <tools/inspection_tool.h>
 #include <tools/lib_pin_tool.h>
+#include <tools/lib_edit_tool.h>
+#include <tools/lib_move_tool.h>
 #include <tools/lib_drawing_tools.h>
+#include <tools/point_editor.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 
-LIB_ITEM* LIB_EDIT_FRAME::     m_lastDrawItem = NULL;
 
 bool LIB_EDIT_FRAME::          m_showDeMorgan    = false;
 int LIB_EDIT_FRAME::           g_LastTextSize    = -1;
@@ -127,7 +129,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
     EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
-    EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectPart )
+    EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
 
     // Right vertical toolbar.
     EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
@@ -152,24 +154,15 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
 
-    // Multiple item selection context menu commands.
-    EVT_MENU_RANGE( ID_SELECT_ITEM_START, ID_SELECT_ITEM_END, LIB_EDIT_FRAME::OnSelectItem )
-
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
 
     // Context menu events and commands.
-    EVT_MENU( ID_LIBEDIT_EDIT_PIN, LIB_EDIT_FRAME::OnEditPin )
-    EVT_MENU( ID_LIBEDIT_ROTATE_ITEM, LIB_EDIT_FRAME::OnRotate )
-
     EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
                     ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
                     LIB_EDIT_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     LIB_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU_RANGE( ID_LIBEDIT_MIRROR_X, ID_LIBEDIT_ORIENT_NORMAL,
-                    LIB_EDIT_FRAME::OnOrient )
 
     // Update user interface elements.
     EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
@@ -213,7 +206,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
 
     m_my_part = NULL;
-    m_tempCopyComponent = NULL;
     m_treePane = nullptr;
     m_libMgr = nullptr;
     m_unit = 1;
@@ -314,10 +306,6 @@ LIB_EDIT_FRAME::~LIB_EDIT_FRAME()
     // current screen is destroyed in EDA_DRAW_FRAME
     SetScreen( m_dummyScreen );
 
-    m_lastDrawItem = NULL;
-    SetDrawItem( m_lastDrawItem );
-
-    delete m_tempCopyComponent;
     delete m_libMgr;
     delete m_my_part;
 }
@@ -336,15 +324,17 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
-    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new INSPECTION_TOOL );
     m_toolManager->RegisterTool( new LIB_PIN_TOOL );
     m_toolManager->RegisterTool( new LIB_DRAWING_TOOLS );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
+    m_toolManager->RegisterTool( new LIB_EDIT_TOOL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
-    // JEY TODO: not ready for modern toolset event processing yet....
-    //m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
+    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -530,15 +520,21 @@ void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateUndo( wxUpdateUIEvent& event )
 {
-    event.Enable( GetCurPart() && GetScreen() &&
-        GetScreen()->GetUndoCommandCount() != 0 && !IsEditingDrawItem() );
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+
+    event.Enable( GetCurPart() && GetScreen()
+        && GetScreen()->GetUndoCommandCount() != 0
+        && SCH_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 {
-    event.Enable( GetCurPart() && GetScreen() &&
-        GetScreen()->GetRedoCommandCount() != 0 && !IsEditingDrawItem() );
+    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+
+    event.Enable( GetCurPart() && GetScreen()
+        && GetScreen()->GetRedoCommandCount() != 0
+        && SCH_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
@@ -594,7 +590,7 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
 {
     int i = event.GetSelection();
 
@@ -604,7 +600,6 @@ void LIB_EDIT_FRAME::OnSelectPart( wxCommandEvent& event )
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
     m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
 
-    m_lastDrawItem = NULL;
     m_unit = i + 1;
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
@@ -664,238 +659,16 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 {
-    int     id = event.GetId();
-    wxPoint pos;
-    SCH_SCREEN* screen = GetScreen();
-    BLOCK_SELECTOR& block = screen->m_BlockLocate;
-    LIB_ITEM* item = screen->GetCurLibItem();
-
-    m_canvas->SetIgnoreMouseEvents( true );
-
-    wxGetMousePosition( &pos.x, &pos.y );
-    pos.y += 20;
-
-    switch( id )   // Stop placement commands before handling new command.
+    switch( event.GetId() )
     {
-    case wxID_COPY:
-    case ID_POPUP_COPY_BLOCK:
-    case wxID_CUT:
-    case ID_POPUP_CUT_BLOCK:
-    case ID_LIBEDIT_EDIT_PIN:
-    case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
-    case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-    case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_DELETE_BLOCK:
-    case ID_POPUP_DUPLICATE_BLOCK:
-    case ID_POPUP_SELECT_ITEMS_BLOCK:
-    case ID_POPUP_MIRROR_X_BLOCK:
-    case ID_POPUP_MIRROR_Y_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-        break;
-
-    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->EndMouseCapture();
-        else
-            m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-        break;
-
-    case ID_POPUP_LIBEDIT_DELETE_ITEM:
-        m_canvas->EndMouseCapture();
-        break;
-
-    default:
-        m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor(),
-                                   wxEmptyString );
-        break;
-    }
-
-    switch( id )
-    {
-    case ID_POPUP_LIBEDIT_CANCEL_EDITING:
-        break;
-
     case ID_LIBEDIT_SYNC_PIN_EDIT:
         m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
-        break;
-
-    case ID_POPUP_LIBEDIT_BODY_EDIT_ITEM:
-        if( item )
-        {
-            m_canvas->CrossHairOff( );
-
-            switch( item->Type() )
-            {
-            case LIB_ARC_T:
-            case LIB_CIRCLE_T:
-            case LIB_RECTANGLE_T:
-            case LIB_POLYLINE_T:
-                EditGraphicSymbol( nullptr, item );
-                break;
-
-            case LIB_TEXT_T:
-                EditSymbolText( nullptr, item );
-                break;
-
-            default:
-                ;
-            }
-
-            m_canvas->CrossHairOn( );
-        }
-        break;
-
-    case ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT:
-        {
-            // Delete the last created segment, while creating a polyline draw item
-            if( item == NULL )
-                break;
-
-            m_canvas->MoveCursorToCrossHair();
-            static_cast<LIB_POLYLINE*>( item )->DeleteSegment( GetCrossHairPosition( true ) );
-            m_lastDrawItem = NULL;
-        }
-        break;
-
-    case ID_POPUP_LIBEDIT_DELETE_ITEM:
-        if( item )
-            deleteItem( nullptr, item );
-
-        break;
-
-    case ID_POPUP_LIBEDIT_MOVE_ITEM_REQUEST:
-        if( item == NULL )
-            break;
-
-        if( item->Type() == LIB_PIN_T )
-            StartMovePin( item );
-        else
-            StartMoveDrawSymbol( nullptr, item );
-
-        break;
-
-    case ID_POPUP_LIBEDIT_MODIFY_ITEM:
-        if( item == NULL )
-            break;
-
-        m_canvas->MoveCursorToCrossHair();
-        if( item->Type() == LIB_RECTANGLE_T
-            || item->Type() == LIB_CIRCLE_T
-            || item->Type() == LIB_POLYLINE_T
-            || item->Type() == LIB_ARC_T )
-        {
-            StartModifyDrawSymbol( nullptr, item );
-        }
-
-        break;
-
-    case ID_POPUP_LIBEDIT_FIELD_EDIT_ITEM:
-        if( item == NULL )
-            break;
-
-        m_canvas->CrossHairOff( nullptr );
-
-        if( item->Type() == LIB_FIELD_T )
-            EditField( (LIB_FIELD*) item );
-
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->CrossHairOn( );
-        break;
-
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-    case ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-        {
-            if( !item || item->Type() != LIB_PIN_T )
-                break;
-
-            LIB_PART*      part = GetCurPart();
-
-            SaveCopyInUndoList( part );
-
-            GlobalSetPins( (LIB_PIN*) item, id );
-            m_canvas->MoveCursorToCrossHair();
-        }
-        break;
-
-    case ID_POPUP_ZOOM_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_ZOOM );
-        HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_DELETE_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_DELETE );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_DUPLICATE_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_DUPLICATE );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_SELECT_ITEMS_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        block.SetCommand( BLOCK_SELECT_ITEMS_ONLY );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockEnd( nullptr );
-        break;
-
-    case ID_POPUP_MIRROR_X_BLOCK:
-    case ID_POPUP_MIRROR_Y_BLOCK:
-        OnOrient( event );
-        break;
-
-    case ID_POPUP_ROTATE_BLOCK:
-        OnRotate( event );
-        break;
-
-    case ID_POPUP_PLACE_BLOCK:
-        m_canvas->SetAutoPanRequest( false );
-        m_canvas->MoveCursorToCrossHair();
-        HandleBlockPlace( nullptr );
-        break;
-
-    case wxID_COPY:
-    case ID_POPUP_COPY_BLOCK:
-        block.SetCommand( BLOCK_COPY );
-        block.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
-        break;
-
-    case wxID_PASTE:
-    case ID_POPUP_PASTE_BLOCK:
-        HandleBlockBegin( nullptr, BLOCK_PASTE, GetCrossHairPosition() );
-        break;
-
-    case wxID_CUT:
-    case ID_POPUP_CUT_BLOCK:
-        if( block.GetCommand() != BLOCK_MOVE )
-            break;
-
-        block.SetCommand( BLOCK_CUT );
-        block.SetMessageBlock( this );
-        HandleBlockEnd( nullptr );
         break;
 
     default:
         wxFAIL_MSG( "LIB_EDIT_FRAME::Process_Special_Functions error" );
         break;
     }
-
-    m_canvas->SetIgnoreMouseEvents( false );
-
-    if( GetToolId() == ID_NO_TOOL_SELECTED )
-        m_lastDrawItem = NULL;
 }
 
 
@@ -971,53 +744,6 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
 }
 
 
-void LIB_EDIT_FRAME::TempCopyComponent()
-{
-    delete m_tempCopyComponent;
-
-    if( LIB_PART* part = GetCurPart() )
-        // clone it and own the clone.
-        m_tempCopyComponent = new LIB_PART( *part );
-    else
-        // clear it, there was no CurPart
-        m_tempCopyComponent = NULL;
-}
-
-
-void LIB_EDIT_FRAME::RestoreComponent()
-{
-    if( m_tempCopyComponent )
-    {
-        // transfer ownership to CurPart
-        SetCurPart( m_tempCopyComponent );
-        m_tempCopyComponent = NULL;
-    }
-}
-
-
-void LIB_EDIT_FRAME::ClearTempCopyComponent()
-{
-    delete m_tempCopyComponent;
-    m_tempCopyComponent = NULL;
-}
-
-
-void LIB_EDIT_FRAME::EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem )
-{
-    if ( ( DrawItem == NULL ) || ( DrawItem->Type() != LIB_TEXT_T ) )
-        return;
-
-    DIALOG_LIB_EDIT_TEXT dlg( this, (LIB_TEXT*) DrawItem );
-
-    if( dlg.ShowModal() != wxID_OK )
-        return;
-
-    GetCanvas()->GetView()->Update( DrawItem );
-    GetCanvas()->Refresh();
-    OnModify();
-}
-
-
 void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 {
     bool partLocked = GetCurPart()->UnitsLocked();
@@ -1026,9 +752,6 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
     m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
-
-    if( GetDrawItem() && GetDrawItem()->Type() == LIB_FIELD_T )
-        SetDrawItem( nullptr );     // selected LIB_FIELD might be deleted
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this, GetCurPart() );
 
@@ -1075,55 +798,20 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 {
     int id = aEvent.GetId();
 
-    if( GetToolId() == ID_NO_TOOL_SELECTED || GetToolId() == ID_ZOOM_SELECTION )
-        m_lastDrawItem = NULL;
-
-    // Stop the current command and deselect the current tool.
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-
-    LIB_PART*      part = GetCurPart();
-
-    switch( id )
-    {
-    case ID_NO_TOOL_SELECTED:
-    case ID_ZOOM_SELECTION:
-    case ID_LIBEDIT_PIN_BUTT:
-    case ID_LIBEDIT_BODY_TEXT_BUTT:
-    case ID_LIBEDIT_ANCHOR_ITEM_BUTT:
-    case ID_LIBEDIT_BODY_RECT_BUTT:
-    case ID_LIBEDIT_BODY_CIRCLE_BUTT:
-    case ID_LIBEDIT_BODY_ARC_BUTT:
-    case ID_LIBEDIT_BODY_LINE_BUTT:
-        // moved to modern toolset
-        return;
-    default:
-        // since legacy tools don't activate themsleves, we have to deactivate any modern
-        // tools that might be running until all the legacy tools are moved over....
-        m_toolManager->DeactivateTool();
-    }
-
     switch( id )
     {
     case ID_LIBEDIT_IMPORT_BODY_BUTT:
+        m_toolManager->DeactivateTool();
         SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
         LoadOneSymbol();
         SetNoToolSelected();
         break;
 
     case ID_LIBEDIT_EXPORT_BODY_BUTT:
+        m_toolManager->DeactivateTool();
         SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
         SaveOneSymbol();
         SetNoToolSelected();
-        break;
-
-    case ID_LIBEDIT_DELETE_ITEM_BUTT:
-        if( !part )
-        {
-            wxBell();
-            break;
-        }
-
-        SetToolID( id, wxCURSOR_BULLSEYE, _( "Delete item" ) );
         break;
 
     default:
@@ -1131,218 +819,6 @@ void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
     }
 
     m_canvas->SetIgnoreMouseEvents( false );
-}
-
-
-void LIB_EDIT_FRAME::OnRotate( wxCommandEvent& aEvent )
-{
-    LIB_PART*       part = GetCurPart();
-    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
-    LIB_ITEM*       item = GetDrawItem();
-
-    // Allows block rotate operation on hot key.
-    if( block.GetState() != STATE_NO_BLOCK )
-    {
-        // Compute the rotation center and put it on grid:
-        wxPoint rotationPoint = block.Centre();
-        rotationPoint = GetNearestGridPosition( rotationPoint );
-
-        // The Y axis orientation is bottom to top for symbol items.
-        // so change the Y coord value of the rotation center
-        rotationPoint.y = -rotationPoint.y;
-
-        if( block.AppendUndo() )
-            ; // UR_LIBEDIT saves entire state, so no need to append anything more
-        else
-        {
-            SaveCopyInUndoList( part, UR_LIBEDIT );
-            block.SetAppendUndo();
-        }
-
-        for( unsigned ii = 0; ii < block.GetCount(); ii++ )
-        {
-            item = static_cast<LIB_ITEM*>( block.GetItem( ii ) );
-            item->Rotate( rotationPoint );
-        }
-
-        GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        GetCanvas()->Refresh();
-    }
-    else if( item )
-    {
-        wxPoint rotationPoint = item->GetPosition();
-
-        if( !item->InEditMode() )
-            SaveCopyInUndoList( part, UR_LIBEDIT );
-
-        item->Rotate( rotationPoint );
-
-        if( item->InEditMode() )
-            GetCanvas()->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        else
-            GetCanvas()->GetView()->Update( item );
-        GetCanvas()->Refresh();
-        OnModify();
-
-        if( !item->InEditMode() )
-            item->ClearFlags();
-
-        if( GetToolId() == ID_NO_TOOL_SELECTED )
-            m_lastDrawItem = NULL;
-    }
-}
-
-
-void LIB_EDIT_FRAME::OnOrient( wxCommandEvent& aEvent )
-{
-    LIB_PART*       part = GetCurPart();
-    BLOCK_SELECTOR& block = GetScreen()->m_BlockLocate;
-    LIB_ITEM*       item = GetDrawItem();
-
-    // Allows block rotate operation on hot key.
-    if( block.GetState() != STATE_NO_BLOCK )
-    {
-        // Compute the mirror center and put it on grid.
-        wxPoint mirrorPoint = block.Centre();
-        mirrorPoint = GetNearestGridPosition( mirrorPoint );
-
-        // The Y axis orientation is bottom to top for symbol items.
-        // so change the Y coord value of the rotation center
-        mirrorPoint.y = -mirrorPoint.y;
-
-        if( block.AppendUndo() )
-            ; // UR_LIBEDIT saves entire state, so no need to append anything more
-        else
-        {
-            SaveCopyInUndoList( part, UR_LIBEDIT );
-            block.SetAppendUndo();
-        }
-
-        for( unsigned ii = 0; ii < block.GetCount(); ii++ )
-        {
-            item = static_cast<LIB_ITEM*>( block.GetItem( ii ) );
-
-            if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y || aEvent.GetId() == ID_POPUP_MIRROR_Y_BLOCK )
-                item->MirrorHorizontal( mirrorPoint );
-            else
-                item->MirrorVertical( mirrorPoint );
-        }
-
-        m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        GetCanvas()->Refresh();
-    }
-    else if( item )
-    {
-        wxPoint mirrorPoint = item->GetPosition();
-        mirrorPoint.y = -mirrorPoint.y;
-
-        if( !item->InEditMode() )
-            SaveCopyInUndoList( part, UR_LIBEDIT );
-
-        if( aEvent.GetId() == ID_LIBEDIT_MIRROR_Y || aEvent.GetId() == ID_POPUP_MIRROR_Y_BLOCK )
-            item->MirrorHorizontal( mirrorPoint );
-        else
-            item->MirrorVertical( mirrorPoint );
-
-        if( item->InEditMode() )
-            m_canvas->CallMouseCapture( nullptr, wxDefaultPosition, false );
-        else
-            GetCanvas()->GetView()->Update( item );
-        GetCanvas()->Refresh();
-        OnModify();
-
-        if( !item->InEditMode() )
-            item->ClearFlags();
-
-        if( GetToolId() == ID_NO_TOOL_SELECTED )
-            m_lastDrawItem = NULL;
-    }
-}
-
-
-LIB_ITEM* LIB_EDIT_FRAME::LocateItemUsingCursor( const wxPoint& aPos, const KICAD_T aFilter[] )
-{
-    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
-    LIB_PART*           part = GetCurPart();
-    bool                cancelled = false;
-    wxPoint             gridPos;
-
-    if( !part )
-        return NULL;
-
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
-
-    EDA_ITEM* item = selTool->SelectPoint( aPos, aFilter, &cancelled );
-
-    // If the user aborted the clarification context menu, don't show it again at the
-    // grid position.
-    if( !item && !cancelled )
-    {
-        gridPos = GetNearestGridPosition( aPos );
-
-        if( aPos != gridPos )
-            item = selTool->SelectPoint( gridPos, aFilter );
-    }
-
-    return (LIB_ITEM*) item;
-}
-
-
-void LIB_EDIT_FRAME::deleteItem( wxDC* aDC, LIB_ITEM* aItem )
-{
-    if( !aItem )
-        return;
-
-    LIB_PART* part = GetCurPart();
-
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
-    m_canvas->CrossHairOff( aDC );
-
-    SaveCopyInUndoList( part );
-
-    if( aItem->Type() == LIB_PIN_T )
-    {
-        LIB_PIN*    pin = static_cast<LIB_PIN*>( aItem );
-        wxPoint     pos = pin->GetPosition();
-
-        part->RemoveDrawItem( (LIB_ITEM*) pin, m_canvas, aDC );
-
-        // when pin editing is synchronized, all pins of the same body style are removed:
-        if( SynchronizePins() )
-        {
-            int curr_convert = pin->GetConvert();
-            LIB_PIN* next_pin = part->GetNextPin();
-
-            while( next_pin != NULL )
-            {
-                pin = next_pin;
-                next_pin = part->GetNextPin( pin );
-
-                if( pin->GetPosition() != pos )
-                    continue;
-
-                if( pin->GetConvert() != curr_convert )
-                    continue;
-
-                part->RemoveDrawItem( pin );
-            }
-        }
-    }
-    else
-    {
-        if( m_canvas->IsMouseCaptured() )
-            m_canvas->CallEndMouseCapture( aDC );
-        else
-            part->RemoveDrawItem( aItem, m_canvas, aDC );
-    }
-
-    SetDrawItem( NULL );
-    m_lastDrawItem = NULL;
-    OnModify();
-    m_canvas->CrossHairOn( aDC );
-
-    RebuildView();
-    GetCanvas()->Refresh();
 }
 
 
@@ -1355,26 +831,10 @@ void LIB_EDIT_FRAME::OnModify()
 }
 
 
-void LIB_EDIT_FRAME::OnSelectItem( wxCommandEvent& aEvent )
-{
-    int id = aEvent.GetId();
-    int index = id - ID_SELECT_ITEM_START;
-
-    if( (id >= ID_SELECT_ITEM_START && id <= ID_SELECT_ITEM_END)
-        && (index >= 0 && index < m_collectedItems.GetCount()) )
-    {
-        EDA_ITEM* item = m_collectedItems[index];
-        m_canvas->SetAbortRequest( false );
-        SetDrawItem( (LIB_ITEM*) item );
-    }
-}
-
-
 void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
 
-    SetDrawItem( nullptr );
     m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
 
     SaveCopyInUndoList( part );
@@ -1651,8 +1111,6 @@ void LIB_EDIT_FRAME::emptyScreen()
 {
     SetCurLib( wxEmptyString );
     SetCurPart( nullptr );
-    m_lastDrawItem = nullptr;
-    SetDrawItem( NULL );
     SetScreen( m_dummyScreen );
     m_dummyScreen->ClearUndoRedoList();
     Zoom_Automatique( false );

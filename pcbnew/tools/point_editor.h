@@ -26,7 +26,7 @@
 #define __POINT_EDITOR_H
 
 #include <tool/tool_interactive.h>
-#include "edit_points.h"
+#include "tool/edit_points.h"
 #include <status_popup.h>
 
 #include <memory>
@@ -119,12 +119,6 @@ private:
 
     ///> Returns a point that should be used as a constrainer for 45 degrees mode.
     EDIT_POINT get45DegConstrainer() const;
-
-    ///> Adds a new edit point on a zone outline/line.
-    void addCorner( const VECTOR2I& aPoint );
-
-    ///> Removes a corner.
-    void removeCorner( EDIT_POINT* aPoint );
 
     ///> Condition to display "Create corner" context menu entry.
     static bool addCornerCondition( const SELECTION& aSelection );

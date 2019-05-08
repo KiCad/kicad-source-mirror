@@ -73,6 +73,8 @@ public:
                 return true;
             else if ( *p == SCH_LINE_LOCATE_BUS_T && m_Layer == LAYER_BUS )
                 return true;
+            else if ( *p == SCH_LINE_LOCATE_GRAPHIC_LINE_T && m_Layer == LAYER_NOTES )
+                return true;
         }
 
         return false;

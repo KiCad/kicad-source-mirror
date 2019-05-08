@@ -87,6 +87,9 @@ TOOL_ACTION SCH_ACTIONS::finishDrawing( "libedit.InteractiveDrawing.finishDrawin
         checked_ok_xpm, AF_NONE );
 
 
+static void* g_lastPinWeakPtr;
+
+
 LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
     TOOL_INTERACTIVE( "libedit.InteractiveDrawing" ),
     m_selectionTool( nullptr ),
@@ -153,8 +156,9 @@ int LIB_DRAWING_TOOLS::PlaceText( const TOOL_EVENT& aEvent )
 
 int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 {
-    VECTOR2I  cursorPos = m_controls->GetCursorPosition();
-    EDA_ITEM* item = nullptr;
+    LIB_PIN_TOOL* pinTool = aType == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
+    VECTOR2I      cursorPos = m_controls->GetCursorPosition();
+    EDA_ITEM*     item = nullptr;
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
@@ -198,9 +202,8 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                 {
                 case LIB_PIN_T:
                 {
-                    LIB_PIN_TOOL* pinTool = m_toolMgr->GetTool<LIB_PIN_TOOL>();
-
                     item = pinTool->CreatePin( wxPoint( cursorPos.x, -cursorPos.y), part );
+                    g_lastPinWeakPtr = item;
                     break;
                 }
                 case LIB_TEXT_T:
@@ -219,7 +222,6 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
                     break;
                 }
-
                 default:
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }
@@ -245,10 +247,19 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             {
                 m_frame->SaveCopyInUndoList( part );
 
-                part->AddDrawItem( (LIB_ITEM*) item );
-                item->ClearFlags( item->GetEditFlags() );
+                switch( item->Type() )
+                {
+                case LIB_PIN_T:
+                    pinTool->PlacePin( (LIB_PIN*) item );
+                    break;
+                case LIB_TEXT_T:
+                    part->AddDrawItem( (LIB_TEXT*) item );
+                    item->ClearFlags( item->GetEditFlags() );
+                    break;
+                default:
+                    wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
+                }
 
-                m_frame->SetDrawItem( nullptr );
                 item = nullptr;
                 m_view->ClearPreview();
 
@@ -272,7 +283,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             m_view->AddToPreview( item->Clone() );
         }
 
-        // Enable autopanning and cursor capture only when there is a module to be placed
+        // Enable autopanning and cursor capture only when there is an item to be placed
         m_controls->SetAutoPan( !!item );
         m_controls->CaptureCursor( !!item );
     }
@@ -355,7 +366,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
                         || evt->IsDblClick( BUT_LEFT )
                         || evt->IsAction( &SCH_ACTIONS::finishDrawing ) ) )
         {
-            if( evt->IsDblClick()
+            if( evt->IsDblClick( BUT_LEFT )
              || evt->IsAction( &SCH_ACTIONS::finishDrawing )
              || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
             {
@@ -381,9 +392,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
-            // JEY TODO: handle edit action...
-            // This will need to be a RunAction() as the user might have double-clicked
-            // a text or pin or something
+            m_toolMgr->RunAction( SCH_ACTIONS::properties, true );
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -456,6 +465,37 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
+{
+    LIB_PIN_TOOL* pinTool = m_toolMgr->GetTool<LIB_PIN_TOOL>();
+    LIB_PART*     part = m_frame->GetCurPart();
+    LIB_PIN*      sourcePin = nullptr;
+
+    if( !part )
+        return 0;
+
+    // See if we have a pin matching our weak ptr
+    for( LIB_PIN* test = part->GetNextPin();  test;  test = part->GetNextPin( test ) )
+    {
+        if( (void*) test == g_lastPinWeakPtr )
+            sourcePin = test;
+    }
+
+    if( sourcePin )
+    {
+        LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
+        g_lastPinWeakPtr = pin;
+
+        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
+        if( pin )
+            m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, pin );
+    }
+
+    return 0;
+}
+
+
 void LIB_DRAWING_TOOLS::setTransitions()
 {
     Go( &LIB_DRAWING_TOOLS::PlacePin,             SCH_ACTIONS::placeSymbolPin.MakeEvent() );
@@ -465,4 +505,5 @@ void LIB_DRAWING_TOOLS::setTransitions()
     Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolArc.MakeEvent() );
     Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolLines.MakeEvent() );
     Go( &LIB_DRAWING_TOOLS::PlaceAnchor,          SCH_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::RepeatDrawItem,       SCH_ACTIONS::repeatDrawItem.MakeEvent() );
 }

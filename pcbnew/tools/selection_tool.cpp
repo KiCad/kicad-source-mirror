@@ -713,7 +713,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
     Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
     Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
-    Go( &SELECTION_TOOL::updateSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
+    Go( &SELECTION_TOOL::updateSelection, EVENTS::SelectedItemsModified );
 }
 
 

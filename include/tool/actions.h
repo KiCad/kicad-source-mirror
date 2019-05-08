@@ -117,6 +117,8 @@ public:
     const static TOOL_EVENT SelectedEvent;
     const static TOOL_EVENT UnselectedEvent;
     const static TOOL_EVENT ClearedEvent;
+
+    const static TOOL_EVENT SelectedItemsModified;
 };
 
 #endif // __ACTIONS_H

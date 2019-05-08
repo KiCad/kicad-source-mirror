@@ -48,6 +48,14 @@ EDA_TEXT::EDA_TEXT( const wxString& text ) :
 }
 
 
+EDA_TEXT::EDA_TEXT( const EDA_TEXT& aText ) :
+    m_Text( aText.m_Text ),
+    m_e( aText.m_e )
+{
+    m_shown_text = UnescapeString( m_Text );
+}
+
+
 EDA_TEXT::~EDA_TEXT()
 {
 }

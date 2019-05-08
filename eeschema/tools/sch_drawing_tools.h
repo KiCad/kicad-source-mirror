@@ -72,7 +72,6 @@ public:
     int PlaceGlobalLabel( const TOOL_EVENT& aEvent );
     int PlaceHierarchicalLabel( const TOOL_EVENT& aEvent );
     int DrawSheet( const TOOL_EVENT& aEvent );
-    int ResizeSheet( const TOOL_EVENT& aEvent );
     int PlaceSheetPin( const TOOL_EVENT& aEvent );
     int ImportSheetPin( const TOOL_EVENT& aEvent );
     int PlaceSchematicText( const TOOL_EVENT& aEvent );
@@ -87,7 +86,6 @@ private:
 
     int doTwoClickPlace( KICAD_T aType );
 
-    int doDrawSheet( SCH_SHEET* aSheet );
     void sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos );
 
     ///> Sets up handlers for various events.

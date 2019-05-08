@@ -51,8 +51,11 @@ public:
      *
      * @param aPoint stores coordinates for EDIT_POINT.
      */
-    EDIT_POINT( const VECTOR2I& aPoint ) :
-        m_position( aPoint ) {};
+    EDIT_POINT( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr ) :
+        m_position( aPoint ),
+        m_connection( aConnection )
+    {
+    }
 
     virtual ~EDIT_POINT() {}
 
@@ -65,6 +68,11 @@ public:
     virtual VECTOR2I GetPosition() const
     {
         return m_position;
+    }
+
+    virtual EDA_ITEM* GetConnection() const
+    {
+        return m_connection;
     }
 
     /**
@@ -97,6 +105,12 @@ public:
     virtual void SetPosition( const VECTOR2I& aPosition )
     {
         m_position = aPosition;
+    }
+
+    virtual void SetPosition( int x, int y )
+    {
+        m_position.x = x;
+        m_position.y = y;
     }
 
     /**
@@ -172,7 +186,11 @@ public:
 
 private:
     ///> Position of EDIT_POINT
-    VECTOR2I m_position;
+    VECTOR2I  m_position;
+
+    ///> An optional item to a connected item.  Used to mimic polyLine behaviour
+    ///> with individual line segments.
+    EDA_ITEM* m_connection;
 
     ///> Constraint for the point, NULL if none
     std::shared_ptr<EDIT_CONSTRAINT<EDIT_POINT> > m_constraint;
@@ -347,9 +365,9 @@ public:
      * Adds an EDIT_POINT.
      * @param aPoint are coordinates of the new point.
      */
-    void AddPoint( const VECTOR2I& aPoint )
+    void AddPoint( const VECTOR2I& aPoint, EDA_ITEM* aConnection = nullptr )
     {
-        AddPoint( EDIT_POINT( aPoint ) );
+        AddPoint( EDIT_POINT( aPoint, aConnection ) );
     }
 
     /**

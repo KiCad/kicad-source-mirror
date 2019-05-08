@@ -92,7 +92,6 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
-    SetDrawItem( NULL );
     RebuildSymbolUnitsList();
     SetShowDeMorgan( part->HasConversion() );
     updateTitle();
@@ -142,7 +141,6 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
         m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
     }
 
-    SetDrawItem( NULL );
     RebuildSymbolUnitsList();
     SetShowDeMorgan( part->HasConversion() );
     updateTitle();
@@ -150,4 +148,24 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     RebuildView();
     GetCanvas()->Refresh();
     OnModify();
+}
+
+
+void LIB_EDIT_FRAME::RollbackPartFromUndo()
+{
+    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+
+    // Load the last undo entry
+    PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();
+    ITEM_PICKER undoWrapper = undoCommand->PopItem();
+    delete undoCommand;
+    LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
+    part->ClearFlags( UR_TRANSIENT );
+    SetCurPart( part );
+
+    RebuildSymbolUnitsList();
+    SetShowDeMorgan( part->HasConversion() );
+
+    RebuildView();
+    GetCanvas()->Refresh();
 }

@@ -90,7 +90,6 @@ public:
     static TOOL_ACTION placeGlobalLabel;
     static TOOL_ACTION placeHierarchicalLabel;
     static TOOL_ACTION drawSheet;
-    static TOOL_ACTION resizeSheet;
     static TOOL_ACTION placeSheetPin;
     static TOOL_ACTION importSheetPin;
     static TOOL_ACTION placeSchematicText;
@@ -142,6 +141,8 @@ public:
     static TOOL_ACTION toText;
     static TOOL_ACTION breakWire;
     static TOOL_ACTION breakBus;
+    static TOOL_ACTION pointEditorAddCorner;
+    static TOOL_ACTION pointEditorRemoveCorner;
 
     /// Inspection
     static TOOL_ACTION showDatasheet;
@@ -163,6 +164,9 @@ public:
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION explicitCrossProbe;
+    static TOOL_ACTION pushPinLength;
+    static TOOL_ACTION pushPinNameSize;
+    static TOOL_ACTION pushPinNumSize;
 
     // SPICE
     static TOOL_ACTION simProbe;
@@ -177,5 +181,27 @@ public:
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()
     virtual OPT<TOOL_EVENT> TranslateLegacyId( int aId ) override;
 };
+
+
+//
+// For LibEdit
+//
+inline VECTOR2I mapCoords( const wxPoint& aCoord )
+{
+    return VECTOR2I( aCoord.x, -aCoord.y );
+}
+
+inline wxPoint mapCoords( const VECTOR2I& aCoord )
+{
+    return wxPoint( aCoord.x, -aCoord.y );
+}
+
+inline wxPoint mapCoords( const int x, const int y )
+{
+    return wxPoint( x, -y );
+}
+
+
+
 
 #endif

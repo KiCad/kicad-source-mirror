@@ -797,12 +797,13 @@ SEARCH_RESULT SCH_SHEET::Visit( INSPECTOR aInspector, void* testData, const KICA
     for( const KICAD_T* p = aFilterTypes;  (stype = *p) != EOT;   ++p )
     {
         // If caller wants to inspect my type
-        if( stype == Type() )
+        if( stype == SCH_LOCATE_ANY_T || stype == Type() )
         {
             if( SEARCH_QUIT == aInspector( this, NULL ) )
                 return SEARCH_QUIT;
         }
-        else if( stype == SCH_SHEET_PIN_T )
+
+        if( stype == SCH_LOCATE_ANY_T || stype == SCH_SHEET_PIN_T )
         {
             // Test the sheet labels.
             for( size_t i = 0;  i < m_pins.size();  i++ )

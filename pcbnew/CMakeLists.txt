@@ -323,8 +323,6 @@ set( PCBNEW_CLASS_SRCS
     zones_test_and_combine_areas.cpp
 
     tools/drawing_tool.cpp
-    tools/edit_constraints.cpp
-    tools/edit_points.cpp
     tools/edit_tool.cpp
     tools/grid_helper.cpp
     tools/microwave_tool.cpp

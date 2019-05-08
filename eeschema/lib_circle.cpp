@@ -45,7 +45,6 @@
 LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
-    m_Radius     = 0;
     m_Width      = 0;
     m_Fill       = NO_FILL;
     m_isFillable = true;
@@ -57,7 +56,7 @@ bool LIB_CIRCLE::HitTest( const wxPoint& aPosRef, int aAccuracy ) const
     int mindist = std::max( aAccuracy + GetPenSize() / 2, MINIMUM_SELECTION_DISTANCE );
     int dist = KiROUND( GetLineLength( aPosRef, DefaultTransform.TransformCoordinate( m_Pos ) ) );
 
-    if( abs( dist - m_Radius ) <= mindist )
+    if( abs( dist - GetRadius() ) <= mindist )
         return true;
 
     return false;
@@ -99,8 +98,11 @@ int LIB_CIRCLE::compare( const LIB_ITEM& aOther ) const
     if( m_Pos.y != tmp->m_Pos.y )
         return m_Pos.y - tmp->m_Pos.y;
 
-    if( m_Radius != tmp->m_Radius )
-        return m_Radius - tmp->m_Radius;
+    if( m_EndPos.x != tmp->m_EndPos.x )
+        return m_EndPos.x - tmp->m_EndPos.x;
+
+    if( m_EndPos.y != tmp->m_EndPos.y )
+        return m_EndPos.y - tmp->m_EndPos.y;
 
     return 0;
 }
@@ -109,19 +111,20 @@ int LIB_CIRCLE::compare( const LIB_ITEM& aOther ) const
 void LIB_CIRCLE::SetOffset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
+    m_EndPos += aOffset;
 }
 
 
 bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
 {
     wxPoint center(m_Pos.x, -m_Pos.y);
-    return aRect.IntersectsCircle( center, m_Radius );
+    return aRect.IntersectsCircle( center, GetRadius() );
 }
 
 
 void LIB_CIRCLE::Move( const wxPoint& aPosition )
 {
-    m_Pos = aPosition;
+    SetOffset( aPosition - m_Pos );
 }
 
 
@@ -157,7 +160,7 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     if( aFill && m_Fill == FILLED_WITH_BG_BODYCOLOR )
     {
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE_BACKGROUND ) );
-        aPlotter->Circle( pos, m_Radius * 2, FILLED_WITH_BG_BODYCOLOR, 0 );
+        aPlotter->Circle( pos, GetRadius() * 2, FILLED_WITH_BG_BODYCOLOR, 0 );
     }
 
     bool already_filled = m_Fill == FILLED_WITH_BG_BODYCOLOR;
@@ -167,7 +170,7 @@ void LIB_CIRCLE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
     {
         pen_size = std::max( 0, pen_size );
         aPlotter->SetColor( GetLayerColor( LAYER_DEVICE ) );
-        aPlotter->Circle( pos, m_Radius * 2, already_filled ? NO_FILL : m_Fill, GetPenSize() );
+        aPlotter->Circle( pos, GetRadius() * 2, already_filled ? NO_FILL : m_Fill, pen_size );
     }
 }
 
@@ -195,20 +198,21 @@ void LIB_CIRCLE::drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& 
     EDA_RECT* const clipbox  = aPanel? aPanel->GetClipBox() : NULL;
 
     if( fill == FILLED_WITH_BG_BODYCOLOR )
-        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), bgColor, bgColor );
+        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, GetRadius(), GetPenSize(), bgColor, bgColor );
     else if( fill == FILLED_SHAPE )
-        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, 0, color, color );
+        GRFilledCircle( clipbox, aDC, pos1.x, pos1.y, GetRadius(), 0, color, color );
     else
-        GRCircle( clipbox, aDC, pos1.x, pos1.y, m_Radius, GetPenSize(), color );
+        GRCircle( clipbox, aDC, pos1.x, pos1.y, GetRadius(), GetPenSize(), color );
 }
 
 
 const EDA_RECT LIB_CIRCLE::GetBoundingBox() const
 {
     EDA_RECT rect;
+    int radius = GetRadius();
 
-    rect.SetOrigin( m_Pos.x - m_Radius, m_Pos.y - m_Radius );
-    rect.SetEnd( m_Pos.x + m_Radius, m_Pos.y + m_Radius );
+    rect.SetOrigin( m_Pos.x - radius, m_Pos.y - radius );
+    rect.SetEnd( m_Pos.x + radius, m_Pos.y + radius );
     rect.Inflate( ( GetPenSize()+1 ) / 2 );
 
     rect.RevertYAxis();
@@ -228,7 +232,7 @@ void LIB_CIRCLE::GetMsgPanelInfo( EDA_UNITS_T aUnits, MSG_PANEL_ITEMS& aList )
 
     aList.push_back( MSG_PANEL_ITEM(  _( "Line Width" ), msg, BLUE ) );
 
-    msg = MessageTextFromValue( aUnits, m_Radius, true );
+    msg = MessageTextFromValue( aUnits, GetRadius(), true );
     aList.push_back( MSG_PANEL_ITEM( _( "Radius" ), msg, RED ) );
 
     msg.Printf( wxT( "(%d, %d, %d, %d)" ), bBox.GetOrigin().x,
@@ -243,7 +247,7 @@ wxString LIB_CIRCLE::GetSelectMenuText( EDA_UNITS_T aUnits ) const
     return wxString::Format( _( "Circle center (%s, %s), radius %s" ),
                              MessageTextFromValue( aUnits, m_Pos.x ),
                              MessageTextFromValue( aUnits, m_Pos.y ),
-                             MessageTextFromValue( aUnits, m_Radius ) );
+                             MessageTextFromValue( aUnits, GetRadius() ) );
 }
 
 
@@ -271,11 +275,11 @@ void LIB_CIRCLE::BeginEdit( STATUS_FLAGS aEditMode, const wxPoint aPosition )
 
 void LIB_CIRCLE::CalcEdit( const wxPoint& aPosition )
 {
-    if( IsNew() || IsResized() )
+    if( IsNew() )
     {
-        m_Radius = KiROUND( GetLineLength( m_Pos, aPosition ) );
+        SetEnd( aPosition );
     }
-    else
+    else if( IsMoving() )
     {
         Move( m_initialPos + aPosition - m_initialCursorPos );
     }

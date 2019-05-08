@@ -103,6 +103,12 @@ bool LIB_EDIT_FRAME::saveCurrentPart()
 
 bool LIB_EDIT_FRAME::LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert )
 {
+    if( GetCurPart() && GetCurPart()->GetLibId() == aLibId
+            && GetUnit() == aUnit && GetConvert() == aConvert )
+    {
+        return true;
+    }
+
     if( GetScreen()->IsModify() && GetCurPart() )
     {
         if( !HandleUnsavedChanges( this, _( "The current symbol has been modified.  Save changes?" ),
@@ -278,7 +284,6 @@ void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-    SetDrawItem( NULL );
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -497,6 +502,33 @@ void LIB_EDIT_FRAME::savePartAs()
 }
 
 
+void LIB_EDIT_FRAME::UpdateAfterRename( LIB_PART* aPart, const wxString& aOldName,
+                                        const wxString& aNewName )
+{
+    wxString msg;
+    wxString lib = GetCurLib();
+
+    // Test the current library for name conflicts
+    if( !lib.empty() && m_libMgr->PartExists( aNewName, lib ) )
+    {
+        msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
+                    aNewName,
+                    lib );
+
+        DisplayErrorMessage( this, msg );
+        return;
+    }
+
+    SaveCopyInUndoList( aPart, UR_LIB_RENAME );
+    aPart->SetName( aNewName );
+
+    m_libMgr->UpdatePartAfterRename( aPart, aOldName, lib );
+
+    // Reselect the renamed part
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, aNewName ) );
+}
+
+
 void LIB_EDIT_FRAME::OnRemovePart( wxCommandEvent& aEvent )
 {
     LIB_ID libId = getTargetLibId();
@@ -700,9 +732,6 @@ void LIB_EDIT_FRAME::loadPart( const wxString& aAlias, const wxString& aLibrary,
         DisplayError( this, msg );
         return;
     }
-
-    m_lastDrawItem = nullptr;
-    SetDrawItem( NULL );
 
     // Optimize default edit options for this symbol
     // Usually if units are locked, graphic items are specific to each unit

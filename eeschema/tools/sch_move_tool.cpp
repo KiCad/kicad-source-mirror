@@ -22,11 +22,8 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_drawing_tools.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <tools/sch_picker_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
@@ -316,6 +313,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
 
                 controls->SetCursorPosition( m_cursor, false );
+                m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
                 prevPos = m_cursor;
                 controls->SetAutoPan( true );
@@ -339,9 +337,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     continue;
 
                 moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
+
                 updateView( item );
             }
 
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->UpdateMsgPanel();
         }
         //------------------------------------------------------------------------

@@ -25,7 +25,7 @@
 #include <tools/sch_edit_tool.h>
 #include <tools/sch_selection_tool.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <tools/sch_picker_tool.h>
+#include <tools/picker_tool.h>
 #include <tools/sch_move_tool.h>
 #include <sch_actions.h>
 #include <hotkeys.h>
@@ -242,11 +242,11 @@ bool SCH_EDIT_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
     m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SCH_DRAWING_TOOLS* drawingTool = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
+    SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
     SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
-    wxASSERT_MSG( drawingTool, "eeshema.InteractiveDrawing tool is not available" );
+    wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
@@ -380,7 +380,7 @@ bool SCH_EDIT_TOOL::Init()
     //
     // Add editing actions to the drawing tool menu
     //
-    CONDITIONAL_MENU& drawMenu = drawingTool->GetToolMenu().GetMenu();
+    CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
     drawMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
     drawMenu.AddItem( SCH_ACTIONS::rotateCCW,       orientCondition, 200 );
@@ -395,8 +395,8 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
-    symUnitMenu2->SetTool( drawingTool );
-    drawingTool->GetToolMenu().AddSubMenu( symUnitMenu2 );
+    symUnitMenu2->SetTool( drawingTools );
+    drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
     drawMenu.AddItem( SCH_ACTIONS::editWithSymbolEditor,
@@ -409,7 +409,6 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( SCH_ACTIONS::toGLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
     drawMenu.AddItem( SCH_ACTIONS::toText,           anyTextTool && SCH_CONDITIONS::Idle, 200 );
     drawMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetTool && SCH_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::resizeSheet,      sheetTool && SCH_CONDITIONS::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
@@ -445,7 +444,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( SCH_ACTIONS::toGLabel,         toGLabelCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::toText,           toTextlCondition, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::resizeSheet,      singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
     selToolMenu.AddItem( SCH_ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 200 );
@@ -589,6 +587,8 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         }
     }
 
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
@@ -730,6 +730,8 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         }
     }
 
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
+
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
@@ -768,7 +770,8 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
     if( selection.GetSize() == 0 )
         return 0;
 
-    // This doesn't really make sense; we'll just end up dragging a stack of objects...
+    // Doing a duplicate of a new object doesn't really make any sense; we'd just end
+    // up dragging around a stack of objects...
     if( selection.Front()->IsNew() )
         return 0;
 
@@ -997,10 +1000,10 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    SCH_PICKER_TOOL* picker = m_toolMgr->GetTool<SCH_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "DoDelete item" ) );
+    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
@@ -1129,7 +1132,10 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         }
 
         if( doRefresh )
+        {
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_frame->GetCanvas()->Refresh();
+        }
 
         break;
     }
@@ -1179,7 +1185,7 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 {
-    SELECTION selection = m_selectionTool->GetSelection();
+    SELECTION& selection = m_selectionTool->GetSelection();
     char shape;
 
     if( aEvent.IsAction( &SCH_ACTIONS::toShapeSlash ) )
@@ -1214,9 +1220,9 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
 {
-    KICAD_T allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    SELECTION selection = m_selectionTool->RequestSelection( allTextTypes );
-    KICAD_T convertTo;
+    KICAD_T    allTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
+    SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
+    KICAD_T    convertTo;
 
     if( aEvent.IsAction( &SCH_ACTIONS::toLabel ) )
         convertTo = SCH_LABEL_T;

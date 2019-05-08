@@ -267,10 +267,6 @@ TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
-        AS_GLOBAL, 0,
-        "", "", nullptr, AF_NOTIFY );
-
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
         _( "Flip" ), _( "Flips selected item(s)" ), nullptr );

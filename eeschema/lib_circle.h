@@ -34,8 +34,8 @@
 
 class LIB_CIRCLE : public LIB_ITEM
 {
-    int     m_Radius;
     wxPoint m_Pos;            // Position or centre (Arc and Circle) or start point (segments).
+    wxPoint m_EndPos;         // A point on the circumference of the circle.
     int     m_Width;          // Line width.
 
     void drawGraphic( EDA_DRAW_PANEL* aPanel, wxDC* aDC, const wxPoint& aOffset, void* aData,
@@ -78,6 +78,9 @@ public:
 
     wxPoint GetPosition() const override { return m_Pos; }
 
+    void SetEnd( const wxPoint& aPosition ) { m_EndPos = aPosition; }
+    wxPoint GetEnd() const { return m_EndPos; }
+
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
 
@@ -89,8 +92,8 @@ public:
     int GetWidth() const override { return m_Width; }
     void SetWidth( int aWidth ) override { m_Width = aWidth; }
 
-    void SetRadius( int aRadius ) { m_Radius = aRadius; }
-    int GetRadius() const { return m_Radius; }
+    void SetRadius( int aRadius ) { m_EndPos = wxPoint( m_Pos.x + aRadius, m_Pos.y ); }
+    int GetRadius() const { return KiROUND( GetLineLength( m_EndPos, m_Pos ) ); }
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 

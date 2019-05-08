@@ -182,23 +182,6 @@ public:
     }
 
     /**
-     * Return the currently selected SCH_ITEM, overriding BASE_SCREEN::GetCurItem().
-     *
-     * @return SCH_ITEM* - the one selected, or NULL.
-     */
-    // JEY TODO: these should go away: if the selection contains one item then it's the curItem...
-    SCH_ITEM* GetCurItem() const { return (SCH_ITEM*) BASE_SCREEN::GetCurItem(); }
-    LIB_ITEM* GetCurLibItem() const { return (LIB_ITEM*) BASE_SCREEN::GetCurItem(); }
-
-    /**
-     * Sets the currently selected object, m_CurrentItem.
-     *
-     * @param aItem Any object derived from SCH_ITEM
-     */
-    void SetCurItem( SCH_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*) aItem ); }
-    void SetCurLibItem( LIB_ITEM* aItem ) { BASE_SCREEN::SetCurItem( (EDA_ITEM*) aItem ); }
-
-    /**
      * Delete all draw items and clears the project settings.
      */
     void Clear();

@@ -1712,13 +1712,7 @@ void LIB_PIN::Show( int nestLevel, std::ostream& os ) const
 
 void LIB_PIN::CalcEdit( const wxPoint& aPosition )
 {
-    DBG(printf("m_Flags %x\n", m_Flags );)
-
-    if( IsNew() )
-    {
-        SetPosition( aPosition );
-    }
-    else if( IsMoving() )
+    if( IsMoving() )
     {
         DBG(printf("MOVEPIN\n");)
         Move( aPosition );

@@ -39,10 +39,8 @@ class SCH_COLLECTOR : public COLLECTOR
 {
 public:
     static const KICAD_T AllItems[];
-    static const KICAD_T LibItems[];
     static const KICAD_T EditableItems[];
     static const KICAD_T RotatableItems[];
-    static const KICAD_T AllItemsButPins[];
     static const KICAD_T ComponentsOnly[];
     static const KICAD_T SheetsOnly[];
     static const KICAD_T SheetsAndSheetLabels[];

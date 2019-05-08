@@ -171,9 +171,35 @@ void LIB_POLYLINE::Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,
 }
 
 
-void LIB_POLYLINE::AddPoint( const wxPoint& point )
+void LIB_POLYLINE::AddPoint( const wxPoint& aPosition )
 {
-    m_PolyPoints.push_back( point );
+    m_PolyPoints.push_back( aPosition );
+}
+
+
+void LIB_POLYLINE::AddCorner( const wxPoint& aPosition )
+{
+    int currentMinDistance = INT_MAX;
+    int closestLineStart = 0;
+
+    for( int i = 0; i < m_PolyPoints.size() - 1; ++i )
+    {
+        int distance = (int) DistanceLinePoint( m_PolyPoints[i], m_PolyPoints[i + 1], aPosition );
+
+        if( distance < currentMinDistance )
+        {
+            currentMinDistance = distance;
+            closestLineStart = i;
+        }
+    }
+
+    m_PolyPoints.insert( m_PolyPoints.begin() + closestLineStart, aPosition );
+}
+
+
+void LIB_POLYLINE::RemoveCorner( int aIdx )
+{
+    m_PolyPoints.erase( m_PolyPoints.begin() + aIdx );
 }
 
 

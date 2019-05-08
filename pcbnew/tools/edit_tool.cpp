@@ -146,10 +146,6 @@ TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
         _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
 
-TOOL_ACTION PCB_ACTIONS::selectionModified( "pcbnew.InteractiveEdit.ModifiedSelection",
-        AS_GLOBAL, 0,
-        "", "", nullptr, AF_NOTIFY );
-
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
@@ -500,7 +496,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
                 m_dragging = true;
             }
 
-            m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, false );
+            m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
         }
 
@@ -655,7 +651,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         editFrame->OnEditItemRequest( NULL, item );
 
         // Notify other tools of the changes
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     }
 
     if( selection.IsHover() )
@@ -663,7 +659,7 @@ int EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
         // Notify other tools of the changes -- This updates the visual ratsnest
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
     }
 
     return 0;
@@ -703,7 +699,7 @@ int EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
@@ -824,7 +820,7 @@ int EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
@@ -863,7 +859,7 @@ int EDIT_TOOL::Flip( const TOOL_EVENT& aEvent )
     if( selection.IsHover() && !m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-    m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+    m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
     if( m_dragging )
         m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );
@@ -1054,7 +1050,7 @@ int EDIT_TOOL::MoveExact( const TOOL_EVENT& aEvent )
         if( selection.IsHover() )
             m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
-        m_toolMgr->RunAction( PCB_ACTIONS::selectionModified, true );
+        m_toolMgr->ProcessEvent( EVENTS::SelectedItemsModified );
 
         if( m_dragging )
             m_toolMgr->RunAction( PCB_ACTIONS::updateLocalRatsnest, false );

@@ -239,8 +239,12 @@ private:
 
 
 POINT_EDITOR::POINT_EDITOR() :
-    PCB_TOOL( "pcbnew.PointEditor" ), m_selectionTool( NULL ), m_editedPoint( NULL ),
-    m_original( VECTOR2I( 0, 0 ) ), m_altConstrainer( VECTOR2I( 0, 0 ) ), m_refill( false )
+    PCB_TOOL( "pcbnew.PointEditor" ),
+    m_selectionTool( NULL ),
+    m_editedPoint( NULL ),
+    m_original( VECTOR2I( 0, 0 ) ),
+    m_altConstrainer( VECTOR2I( 0, 0 ) ),
+    m_refill( false )
 {
 }
 
@@ -261,13 +265,9 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 bool POINT_EDITOR::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, _( "pcbnew.InteractiveSelection tool is not available" ) );
-        return false;
-    }
+    wxASSERT_MSG( m_selectionTool, _( "pcbnew.InteractiveSelection tool is not available" ) );
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( PCB_ACTIONS::pointEditorAddCorner, POINT_EDITOR::addCornerCondition );
@@ -904,7 +904,7 @@ void POINT_EDITOR::setTransitions()
 {
     Go( &POINT_EDITOR::addCorner, PCB_ACTIONS::pointEditorAddCorner.MakeEvent() );
     Go( &POINT_EDITOR::removeCorner, PCB_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &POINT_EDITOR::modifiedSelection, PCB_ACTIONS::selectionModified.MakeEvent() );
+    Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::SelectedEvent );
     Go( &POINT_EDITOR::OnSelectionChange, EVENTS::UnselectedEvent );
 }

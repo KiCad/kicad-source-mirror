@@ -93,10 +93,6 @@ TOOL_ACTION SCH_ACTIONS::drawSheet( "eeschema.InteractiveDrawing.drawSheet",
         _( "Add Sheet" ), _( "Add a hierarchical sheet" ),
         add_hierarchical_subsheet_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::resizeSheet( "eeschema.InteractiveDrawing.resizeSheet",
-        AS_GLOBAL, 0, _( "Resize Sheet" ), _( "Resize hierarchical sheet" ),
-        resize_sheet_xpm );
-
 TOOL_ACTION SCH_ACTIONS::placeSheetPin( "eeschema.InteractiveDrawing.placeSheetPin",
         AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin" ),
         add_hierar_pin_xpm, AF_ACTIVATE );
@@ -767,43 +763,10 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
-    return doDrawSheet( nullptr );
-}
-
-
-int SCH_DRAWING_TOOLS::ResizeSheet( const TOOL_EVENT& aEvent )
-{
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
-
-    if( !selection.Empty() )
-    {
-        SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
-
-        m_frame->SetToolID( ID_SCH_RESIZE_SHEET, wxCURSOR_PENCIL, _( "Resize sheet" ) );
-        doDrawSheet( sheet );
-    }
-
-    return 0;
-}
-
-
-int SCH_DRAWING_TOOLS::doDrawSheet( SCH_SHEET *aSheet )
-{
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
 
-    if( aSheet )
-    {
-        m_frame->SaveCopyInUndoList( aSheet, UR_CHANGED );
-        aSheet->SetFlags( IS_RESIZED );
-
-        m_selectionTool->AddItemToSel( aSheet, true /*quiet mode; should already be selected*/ );
-        m_view->Hide( aSheet );
-        m_view->AddToPreview( aSheet->Clone() );
-
-        m_controls->SetCursorPosition( aSheet->GetResizePosition() );
-        m_controls->SetCrossHairCursorPosition( m_controls->GetCursorPosition() );
-    }
+    SCH_SHEET* sheet = nullptr;
 
     Activate();
 
@@ -817,15 +780,10 @@ int SCH_DRAWING_TOOLS::doDrawSheet( SCH_SHEET *aSheet )
             m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
 
-            if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
+            if( sheet )
             {
-                m_frame->RollbackSchematicFromUndo();
-                // resize sheet is a single-shot command, when we're done we're done
-            }
-            else if( aSheet )
-            {
-                delete aSheet;
-                aSheet = nullptr;
+                delete sheet;
+                sheet = nullptr;
 
                 if( !evt->IsActivate() )
                     continue;
@@ -834,67 +792,55 @@ int SCH_DRAWING_TOOLS::doDrawSheet( SCH_SHEET *aSheet )
             break;
         }
 
-        else if( evt->IsClick( BUT_LEFT ) && !aSheet )
+        else if( evt->IsClick( BUT_LEFT ) && !sheet )
         {
-            aSheet = new SCH_SHEET( (wxPoint) cursorPos );
-            aSheet->SetFlags( IS_NEW | IS_RESIZED );
-            aSheet->SetTimeStamp( GetNewTimeStamp() );
-            aSheet->SetParent( m_frame->GetScreen() );
-            aSheet->SetScreen( NULL );
-            sizeSheet( aSheet, cursorPos );
+            sheet = new SCH_SHEET( (wxPoint) cursorPos );
+            sheet->SetFlags( IS_NEW | IS_RESIZED );
+            sheet->SetTimeStamp( GetNewTimeStamp() );
+            sheet->SetParent( m_frame->GetScreen() );
+            sheet->SetScreen( NULL );
+            sizeSheet( sheet, cursorPos );
 
             m_frame->SetRepeatItem( nullptr );
 
-            m_selectionTool->AddItemToSel( aSheet );
+            m_selectionTool->AddItemToSel( sheet );
             m_view->ClearPreview();
-            m_view->AddToPreview( aSheet->Clone() );
+            m_view->AddToPreview( sheet->Clone() );
         }
 
-        else if( aSheet && ( evt->IsClick( BUT_LEFT )
-                          || evt->IsAction( &SCH_ACTIONS::finishSheet ) ) )
+        else if( sheet && ( evt->IsClick( BUT_LEFT )
+                         || evt->IsAction( &SCH_ACTIONS::finishSheet ) ) )
         {
             m_view->ClearPreview();
 
-            if( aSheet->IsNew() )
-            {
-                if( m_frame->EditSheet( (SCH_SHEET*)aSheet, g_CurrentSheet, nullptr ) )
-                    m_frame->AddItemToScreenAndUndoList( aSheet );
-                else
-                    delete aSheet;
-            }
+            if( m_frame->EditSheet( (SCH_SHEET*)sheet, g_CurrentSheet, nullptr ) )
+                m_frame->AddItemToScreenAndUndoList( sheet );
             else
-            {
-                m_view->Hide( aSheet, false );
-                m_frame->RefreshItem( aSheet );
-                m_frame->OnModify();
-            }
+                delete sheet;
 
-            aSheet = nullptr;
-
-            if( m_frame->GetToolId() == ID_SCH_RESIZE_SHEET )
-                break;  // resize sheet is a single-shot command; when we're done we're done
+            sheet = nullptr;
         }
 
-        else if( aSheet && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
-                          || evt->IsMotion() ) )
+        else if( sheet && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+                         || evt->IsMotion() ) )
         {
-            sizeSheet( aSheet, cursorPos );
+            sizeSheet( sheet, cursorPos );
             m_view->ClearPreview();
-            m_view->AddToPreview( aSheet->Clone() );
+            m_view->AddToPreview( sheet->Clone() );
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
             // Warp after context menu only if dragging...
-            if( !aSheet )
+            if( !sheet )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
-        m_controls->SetAutoPan( !!aSheet );
-        m_controls->CaptureCursor( !!aSheet );
+        m_controls->SetAutoPan( !!sheet );
+        m_controls->CaptureCursor( !!sheet );
     }
 
     m_frame->SetNoToolSelected();
@@ -908,19 +854,8 @@ void SCH_DRAWING_TOOLS::sizeSheet( SCH_SHEET* aSheet, VECTOR2I aPos )
     wxPoint pos = aSheet->GetPosition();
     wxPoint size = (wxPoint) aPos - pos;
 
-    // If the sheet doesn't have any pins, clamp the minimum size to the defaults.
     size.x = std::max( size.x, MIN_SHEET_WIDTH );
     size.y = std::max( size.y, MIN_SHEET_HEIGHT );
-
-    if( aSheet->HasPins() )
-    {
-        int gridSizeX = KiROUND( m_frame->GetScreen()->GetGridSize().x );
-        int gridSizeY = KiROUND( m_frame->GetScreen()->GetGridSize().y );
-
-        // Use the pin positions to clamp the minimum width and height.
-        size.x = std::max( size.x, aSheet->GetMinWidth() + gridSizeX );
-        size.y = std::max( size.y, aSheet->GetMinHeight() + gridSizeY );
-    }
 
     wxPoint grid = m_frame->GetNearestGridPosition( pos + size );
     aSheet->Resize( wxSize( grid.x - pos.x, grid.y - pos.y ) );
@@ -939,7 +874,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::PlaceHierarchicalLabel,SCH_ACTIONS::placeHierarchicalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceGlobalLabel,      SCH_ACTIONS::placeGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::DrawSheet,             SCH_ACTIONS::drawSheet.MakeEvent() );
-    Go( &SCH_DRAWING_TOOLS::ResizeSheet,           SCH_ACTIONS::resizeSheet.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceSheetPin,         SCH_ACTIONS::placeSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::ImportSheetPin,        SCH_ACTIONS::importSheetPin.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::PlaceSchematicText,    SCH_ACTIONS::placeSchematicText.MakeEvent() );

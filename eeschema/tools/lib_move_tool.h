@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_LIB_PIN_TOOL_H
-#define KICAD_LIB_PIN_TOOL_H
+#ifndef KICAD_LIB_MOVE_TOOL_H
+#define KICAD_LIB_MOVE_TOOL_H
 
 #include <tool/tool_interactive.h>
 #include <tool/tool_menu.h>
@@ -33,11 +33,11 @@ class LIB_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
 
 
-class LIB_PIN_TOOL : public TOOL_INTERACTIVE
+class LIB_MOVE_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    LIB_PIN_TOOL();
-    ~LIB_PIN_TOOL();
+    LIB_MOVE_TOOL();
+    ~LIB_MOVE_TOOL();
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -45,22 +45,43 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    LIB_PIN* CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart );
-    LIB_PIN* RepeatPin( const LIB_PIN* aSourcePin );
+    ///> Get the SCH_DRAWING_TOOL top-level context menu
+    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
-    bool PlacePin( LIB_PIN* aPin );
-    void CreateImagePins( LIB_PIN* aPin );
-
-    bool EditPinProperties( LIB_PIN* aPin );
-    int PushPinProperties( const TOOL_EVENT& aEvent );
+    /**
+     * Function Main()
+     *
+     * Runs an interactive move of the selected items, or the item under the cursor.
+     */
+    int Main( const TOOL_EVENT& aEvent );
 
 private:
+    void moveItem( EDA_ITEM* aItem, VECTOR2I aDelta );
+
+    ///> Returns the right modification point (e.g. for rotation), depending on the number of
+    ///> selected items.
+    bool updateModificationPoint( SELECTION& aSelection );
+
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
     SCH_SELECTION_TOOL*   m_selectionTool;
+    KIGFX::VIEW_CONTROLS* m_controls;
     LIB_EDIT_FRAME*       m_frame;
+
+    /// Menu model displayed by the tool.
+    TOOL_MENU             m_menu;
+
+    ///> Flag determining if anything is being dragged right now
+    bool                  m_moveInProgress;
+
+    ///> Used for chaining commands
+    VECTOR2I              m_moveOffset;
+
+    ///> Last cursor position (needed for getModificationPoint() to avoid changes
+    ///> of edit reference point).
+    VECTOR2I              m_cursor;
 };
 
-#endif //KICAD_LIB_PIN_TOOL_H
+#endif //KICAD_LIB_MOVE_TOOL_H

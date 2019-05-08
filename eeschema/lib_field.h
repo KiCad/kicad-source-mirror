@@ -216,7 +216,6 @@ public:
 
     void MirrorHorizontal( const wxPoint& aCenter ) override;
     void MirrorVertical( const wxPoint& aCenter ) override;
-
     void Rotate( const wxPoint& aCenter, bool aRotateCCW = true ) override;
 
     void Plot( PLOTTER* aPlotter, const wxPoint& aOffset, bool aFill,

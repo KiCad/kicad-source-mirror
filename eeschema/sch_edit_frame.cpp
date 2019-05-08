@@ -60,12 +60,13 @@
 #include <tool/zoom_tool.h>
 #include <tools/sch_actions.h>
 #include <tools/sch_selection_tool.h>
-#include <tools/sch_picker_tool.h>
+#include <tools/picker_tool.h>
+#include <tools/point_editor.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_edit_tool.h>
-#include <tools/sch_inspection_tool.h>
+#include <tools/inspection_tool.h>
 #include <tools/sch_editor_control.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
@@ -428,13 +429,14 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
     m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new SCH_PICKER_TOOL );
+    m_toolManager->RegisterTool( new PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
-    m_toolManager->RegisterTool( new SCH_INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

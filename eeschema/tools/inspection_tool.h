@@ -21,46 +21,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef KICAD_LIB_PIN_TOOL_H
-#define KICAD_LIB_PIN_TOOL_H
+#ifndef SCH_INSPECTION_TOOL_H
+#define SCH_INSPECTION_TOOL_H
 
+#include <boost/optional/optional.hpp>
 #include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
 #include <sch_base_frame.h>
 
 
-class LIB_EDIT_FRAME;
 class SCH_SELECTION_TOOL;
+class SCH_EDIT_FRAME;
 
 
-class LIB_PIN_TOOL : public TOOL_INTERACTIVE
+class INSPECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    LIB_PIN_TOOL();
-    ~LIB_PIN_TOOL();
+    INSPECTION_TOOL();
+    ~INSPECTION_TOOL() {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
-    /// @copydoc TOOL_INTERACTIVE::Reset()
+    ///> @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
-    LIB_PIN* CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart );
-    LIB_PIN* RepeatPin( const LIB_PIN* aSourcePin );
+    int ShowDatasheet( const TOOL_EVENT& aEvent );
+    int ShowMarkerInfo( const TOOL_EVENT& aEvent );
 
-    bool PlacePin( LIB_PIN* aPin );
-    void CreateImagePins( LIB_PIN* aPin );
-
-    bool EditPinProperties( LIB_PIN* aPin );
-    int PushPinProperties( const TOOL_EVENT& aEvent );
+    int UpdateMessagePanel( const TOOL_EVENT& aEvent );
 
 private:
-    ///> Sets up handlers for various events.
+    ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
 private:
     SCH_SELECTION_TOOL*   m_selectionTool;
-    LIB_EDIT_FRAME*       m_frame;
+    KIGFX::SCH_VIEW*      m_view;
+    KIGFX::VIEW_CONTROLS* m_controls;
+    SCH_BASE_FRAME*       m_frame;
 };
 
-#endif //KICAD_LIB_PIN_TOOL_H
+#endif /* SCH_INSPECTION_TOOL_H */

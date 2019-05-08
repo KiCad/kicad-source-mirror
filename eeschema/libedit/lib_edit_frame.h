@@ -51,7 +51,6 @@ class LIB_MANAGER;
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
     LIB_PART*          m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
-    LIB_PART*          m_tempCopyComponent;    ///< temp copy of a part during edit, I own it here.
     SCH_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
     wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
@@ -82,8 +81,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
      * the option to show the pin electrical name in the component editor
      */
     bool m_showPinElectricalTypeName;
-
-    static LIB_ITEM*    m_lastDrawItem;
 
     // The unit number to edit and show
     int m_unit;
@@ -151,10 +148,7 @@ public:
      *
      * This is a LIB_PART that I own, it is at best a copy of one in a library.
      */
-    LIB_PART* GetCurPart() const
-    {
-        return m_my_part;
-    }
+    LIB_PART* GetCurPart() const { return m_my_part; }
 
     /**
      * Take ownership of aPart and notes that it is the one currently being edited.
@@ -289,7 +283,7 @@ public:
     void OnCopyCutPart( wxCommandEvent& aEvent );
     void OnPasteDuplicatePart( wxCommandEvent& aEvent );
 
-    void OnSelectPart( wxCommandEvent& event );
+    void OnSelectUnit( wxCommandEvent& event );
 
     /**
      * From Option toolbar: option to show the electrical pin type name
@@ -308,8 +302,6 @@ public:
     void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
-    void OnEditPin( wxCommandEvent& event );
-    void OnSelectItem( wxCommandEvent& aEvent );
 
     void OnOpenPinTable( wxCommandEvent& aEvent );
 
@@ -329,6 +321,7 @@ public:
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
+    void UpdateAfterRename( LIB_PART* aPart, const wxString& aOldName, const wxString& aNewName );
     void RebuildSymbolUnitsList();
 
     /**
@@ -353,10 +346,8 @@ public:
     void ReCreateHToolbar() override;
     void ReCreateVToolbar() override;
     void ReCreateOptToolbar();
-    void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
-    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override;
+    bool OnRightClick( const wxPoint& MousePos, wxMenu* PopMenu ) override { return true; }
     double BestZoom() override;         // Returns the best zoom
-    void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
 
     ///> @copydoc EDA_DRAW_FRAME::GetHotKeyDescription()
     EDA_HOTKEY* GetHotKeyDescription( int aCommand ) const override;
@@ -383,52 +374,19 @@ public:
 
     /**
      * Must be called after a schematic change in order to set the "modify" flag of the
-     * current screen.
+     * current symbol.
      */
-    void OnModify();
+    void OnModify() override;
 
     int GetUnit() { return m_unit; }
 
     int GetConvert() { return m_convert; }
-
-    LIB_ITEM* GetLastDrawItem() { return m_lastDrawItem; }
-    void SetLastDrawItem( LIB_ITEM* drawItem ) { m_lastDrawItem = drawItem; }
-
-    LIB_ITEM* GetDrawItem() const { return GetScreen()->GetCurLibItem(); }
-    void SetDrawItem( LIB_ITEM* drawItem ) { GetScreen()->SetCurLibItem( drawItem ); }
 
     bool GetShowDeMorgan() { return m_showDeMorgan; }
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
 
     bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
     void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
-
-    FILL_T GetFillStyle() { return g_LastFillStyle; }
-
-    /**
-     * Create a temporary copy of the current edited component.
-     *
-     * Used to prepare an undo and/or abort command before editing the symbol.
-     */
-    void TempCopyComponent();
-
-    /**
-     * Restore the current edited component from its temporary copy.
-     * Used to abort a command
-     */
-    void RestoreComponent();
-
-    /**
-     * @return the temporary copy of the current component.
-     */
-    LIB_PART*      GetTempCopyComponent() { return m_tempCopyComponent; }
-
-    /**
-     * Delete temporary copy of the current component and clear pointer
-     */
-    void ClearTempCopyComponent();
-
-    bool IsEditingDrawItem() { return GetDrawItem() && GetDrawItem()->InEditMode(); }
 
     void ClearMsgPanel() override { DisplayCmpDoc(); }
 
@@ -503,24 +461,6 @@ private:
      */
     void DisplayCmpDoc();
 
-    /**
-     * Rotates the current item.
-     */
-    void OnRotate( wxCommandEvent& aEvent );
-
-    /**
-     * Handles the ID_LIBEDIT_MIRROR_X and ID_LIBEDIT_MIRROR_Y events.
-     */
-    void OnOrient( wxCommandEvent& aEvent );
-
-    /**
-     * Deletes the currently selected draw item.
-     *
-     * @param aDC The device context to draw upon when removing item.
-     * @param aItem The item to delete
-     */
-    void deleteItem( wxDC* aDC, LIB_ITEM* aItem );
-
     // General editing
 public:
     /**
@@ -530,6 +470,8 @@ public:
      * the full data is duplicated. It is not worth to try to optimize this save function.
      */
     void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType = UR_LIBEDIT );
+
+    void RollbackPartFromUndo();
 
 private:
     void GetComponentFromUndoList( wxCommandEvent& event );
@@ -549,10 +491,6 @@ private:
      */
     void CreateImagePins( LIB_PIN* aPin );
 
-    // Editing graphic items
-    void StartMoveDrawSymbol( wxDC* DC, LIB_ITEM* aItem );
-    void StartModifyDrawSymbol( wxDC* DC, LIB_ITEM* aItem ); //<! Modify the item, adjust size etc.
-
     /**
      * Read a component symbol file (*.sym ) and add graphic items to the current component.
      *
@@ -568,12 +506,6 @@ private:
      */
     void SaveOneSymbol();
 
-    void EditGraphicSymbol( wxDC* DC, LIB_ITEM* DrawItem );
-    void EditSymbolText( wxDC* DC, LIB_ITEM* DrawItem );
-    LIB_ITEM* LocateItemUsingCursor( const wxPoint& aPos,
-                                     const KICAD_T aFilter[] = SCH_COLLECTOR::LibItems );
-    void EditField( LIB_FIELD* Field );
-
     void refreshSchematic();
 
 public:
@@ -586,51 +518,6 @@ public:
      * @return true if the symbol defined by \a aLibId was loaded.
      */
     bool LoadComponentAndSelectLib( const LIB_ID& aLibId, int aUnit, int aConvert );
-
-    /* Block commands: */
-
-    /**
-     * Returns the block command (BLOCK_MOVE, BLOCK_DUPLICATE...) corresponding to
-     * the \a aKey (ALT, SHIFT ALT ..)
-     */
-    virtual int BlockCommand( EDA_KEY aKey ) override;
-
-    /**
-     * Handles the block place command.
-     */
-    virtual void HandleBlockPlace( wxDC* DC ) override;
-
-    /**
-     * Performs a block end command.
-     *
-     * @return If command finished (zoom, delete ...) false is returned otherwise true
-     *         is returned indicating more processing is required.
-     */
-    virtual bool HandleBlockEnd( wxDC* DC ) override;
-
-    /**
-     * Place at cursor location the pin currently moved (i.e. pin pointed by m_drawItem)
-     * (and the linked pins, if any)
-     */
-    void PlacePin();
-
-    /**
-     * @param aMasterPin is the "template" pin
-     * @param aId is a param to select what should be mofified:
-     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNAMESIZE_ITEM:
-     *          Change pins text name size
-     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINNUMSIZE_ITEM:
-     *          Change pins text num size
-     * - aId = ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_PINSIZE_ITEM:
-     *          Change pins length.
-     *
-     * If aMasterPin is selected ( .m_flag == IS_SELECTED ),
-     * only the other selected pins are modified
-     */
-    void GlobalSetPins( LIB_PIN* aMasterPin, int aId );
-
-    // Automatic placement of pins
-    void RepeatPinItem( wxDC* DC, LIB_PIN* Pin );
 
     /**
      * Creates an image (screenshot) of the current symbol.
@@ -687,30 +574,6 @@ public:
      */
     void HardRedraw() override;
 
-    /**
-     * Checks all draw objects of part to see if they are with block.
-     *
-     * Use this method to mark draw objects as selected during block
-     * functions.
-     *
-     * @param aRect - The bounding rectangle to test in draw items are inside.
-     * @param aUnit - The current unit number to test against.
-     * @param aConvert - Are the draw items being selected a conversion.
-     * @param aSyncPinEdit - Enable pin selection in other units.
-     * @return The number of draw objects found inside the block select
-     *         rectangle.
-     */
-    int BlockSelectItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock, int aUnit, int aConvert, bool aSyncPinEdit );
-
-    /**
-     * Clears all the draw items marked by a block select.
-     */
-    void BlockClearSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-
-    void BlockMoveSelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-    void BlockDeleteSelectedItems( LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-    void BlockCopySelectedItems( const wxPoint& aOffset, LIB_PART* aPart, BLOCK_SELECTOR* aBlock );
-
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
 private:
@@ -761,8 +624,6 @@ private:
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
-
-    void InitBlockPasteInfos() override;
 
     /**
      * Copies items selected in the current part to the internal clipboard.

@@ -411,47 +411,22 @@ wxString LIB_FIELD::GetName( bool aTranslate ) const
 
     switch( m_id )
     {
-    case REFERENCE:
-        if( aTranslate )
-            name = _( "Reference" );
-        else
-            name = wxT( "Reference" );
-        break;
-
-    case VALUE:
-        if( aTranslate )
-            name = _( "Value" );
-        else
-            name = wxT( "Value" );
-        break;
-
-    case FOOTPRINT:
-        if( aTranslate )
-            name = _( "Footprint" );
-        else
-            name = wxT( "Footprint" );
-        break;
-
-    case DATASHEET:
-        if( aTranslate )
-           name = _( "Datasheet" );
-        else
-           name = wxT( "Datasheet" );
-        break;
+    case REFERENCE: return aTranslate ? _( "Reference" ) : wxT( "Reference" );
+    case VALUE:     return aTranslate ? _( "Value" ) : wxT( "Value" );
+    case FOOTPRINT: return aTranslate ? _( "Footprint" ) : wxT( "Footprint" );
+    case DATASHEET: return aTranslate ? _( "Datasheet" ) : wxT( "Datasheet" );
 
     default:
         if( m_name.IsEmpty() )
         {
-            if( aTranslate )
-                name.Printf( _( "Field%d" ), m_id );
-            else
-                name.Printf( wxT( "Field%d" ), m_id );
+            return aTranslate ? wxString::Format( _( "Field%d" ), m_id )
+                              : wxString::Format( wxT( "Field%d" ), m_id );
         }
         else
-            name = m_name;
+        {
+            return m_name;
+        }
     }
-
-    return name;
 }
 
 

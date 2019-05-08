@@ -294,8 +294,8 @@ static bool isNewSegment( SCH_ITEM* aItem )
 
 bool SCH_WIRE_BUS_TOOL::IsDrawingLine( const SELECTION& aSelection )
 {
-    static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
-    return IsDrawingLineWireOrBus( aSelection ) && !aSelection.Front()->IsType( wireOrBusTypes );
+    static KICAD_T graphicLineType[] = { SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
+    return IsDrawingLineWireOrBus( aSelection ) && aSelection.Front()->IsType( graphicLineType );
 }
 
 

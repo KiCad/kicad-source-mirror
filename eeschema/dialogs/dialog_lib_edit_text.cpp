@@ -147,8 +147,7 @@ bool DIALOG_LIB_EDIT_TEXT::TransferDataFromWindow()
         }
     }
 
-    if( m_parent->GetDrawItem() )
-        m_parent->SetMsgPanel( m_parent->GetDrawItem() );
+    m_parent->SetMsgPanel( m_graphicText );
 
     return true;
 }

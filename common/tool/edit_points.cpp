@@ -23,7 +23,8 @@
  */
 
 #include <gal/graphics_abstraction_layer.h>
-#include "edit_points.h"
+#include <gal/color4d.h>
+#include "tool/edit_points.h"
 
 bool EDIT_POINT::WithinPoint( const VECTOR2I& aPoint, unsigned int aSize ) const
 {
@@ -244,7 +245,10 @@ void EDIT_POINTS::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
 {
     auto gal = aView->GetGAL();
 
-    gal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
+    if( aView->GetGAL()->GetClearColor().GetBrightness() > 0.5 )
+        gal->SetFillColor( KIGFX::COLOR4D( 0, 0, 0, 1.0 ) );
+    else
+        gal->SetFillColor( KIGFX::COLOR4D( 1.0, 1.0, 1.0, 1.0 ) );
     gal->SetIsFill( true );
     gal->SetIsStroke( false );
     gal->PushDepth();
