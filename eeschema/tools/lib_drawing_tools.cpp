@@ -75,7 +75,7 @@ TOOL_ACTION SCH_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbol
 
 TOOL_ACTION SCH_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0,
-        _( "Move symbol anchor" ), _( "Specify a new location for the symobl anchor" ),
+        _( "Move Symbol Anchor" ), _( "Specify a new location for the symbol anchor" ),
         anchor_xpm, AF_ACTIVATE );
 
 
