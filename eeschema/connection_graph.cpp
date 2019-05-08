@@ -1554,6 +1554,10 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
                 neighbor->UpdateItemConnections();
 
                 recacheSubgraphName( neighbor, neighbor_name );
+
+                // Recurse onto this neighbor in case it needs to re-propagate
+                neighbor->m_dirty = true;
+                propagateToNeighbors( neighbor );
             }
         }
     };
