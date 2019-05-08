@@ -117,9 +117,37 @@ const VECTOR2D CAIRO_GAL_BASE::xform( const VECTOR2D& aP )
 
 const double CAIRO_GAL_BASE::angle_xform( const double aAngle )
 {
-    double world_angle = -std::atan2( currentWorld2Screen.xy, currentWorld2Screen.xx );
+    // calculate rotation angle due to the rotation transform
+    // and if flipped on X axis.
+    double world_rotation = -std::atan2( currentWorld2Screen.xy, currentWorld2Screen.xx );
 
-    return std::fmod( aAngle + world_angle, 2.0 * M_PI );
+    // When flipped on X axis, the rotation angle is M_PI - initial angle:
+    if( IsFlippedX() )
+        world_rotation = M_PI - world_rotation;
+
+    return std::fmod( aAngle + world_rotation, 2.0 * M_PI );
+}
+
+
+void CAIRO_GAL_BASE::arc_angles_xform_and_normalize( double& aStartAngle, double& aEndAngle )
+{
+    double startAngle = aStartAngle;
+    double endAngle = aEndAngle;
+
+    // When the view is flipped, the coordinates are flipped by the matrix transform
+    // However, arc angles need to be "flipped": the flipped angle is M_PI - initial angle.
+    if( IsFlippedX() )
+    {
+        startAngle = M_PI - startAngle;
+        endAngle = M_PI - endAngle;
+    }
+
+    // Normalize arc angles
+    SWAP( startAngle, >, endAngle );
+
+    // now rotate arc according to the rotation transform matrix
+    aStartAngle = angle_xform( startAngle );
+    aEndAngle = angle_xform( endAngle );
 }
 
 
@@ -259,21 +287,11 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
 {
     syncLineWidth();
 
-    // When the view is flipped, the coordinates are flipped by the matrix transform
-    // However, arc angles need a small change: swapping start and end, *without changing*
-    // the arc orientation.
-    // TODO: see the changes if the flip is for the Y axis
-    if( IsFlippedX() )
-    {
-        double delta = aEndAngle - aStartAngle;
-        aEndAngle = aStartAngle;
-        aStartAngle -= delta;
-    }
+    // calculate start and end arc angles according to the rotation transform matrix
+    // and normalize:
+    arc_angles_xform_and_normalize( aStartAngle, aEndAngle );
 
-    SWAP( aStartAngle, >, aEndAngle );
-    auto startAngleS = angle_xform( aStartAngle );
-    auto endAngleS = angle_xform( aEndAngle );
-    auto r = xform( aRadius );
+    double r = xform( aRadius );
 
     // N.B. This is backwards. We set this because we want to adjust the center
     // point that changes both endpoints.  In the worst case, this is twice as far.
@@ -289,7 +307,7 @@ void CAIRO_GAL_BASE::DrawArc( const VECTOR2D& aCenterPoint, double aRadius, doub
     if( isFillEnabled )
         cairo_move_to( currentContext, mid.x, mid.y );
 
-    cairo_arc( currentContext, mid.x, mid.y, r, startAngleS, endAngleS );
+    cairo_arc( currentContext, mid.x, mid.y, r, aStartAngle, aEndAngle );
 
     if( isFillEnabled )
         cairo_close_path( currentContext );
@@ -316,21 +334,13 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
 
     syncLineWidth();
 
-    // When the view is flipped, the coordinates are flipped by the matrix transform
-    // However, arc angles need a small change: swapping start and end, *without changing*
-    // the arc orientation.
-    // TODO: see the changes if the flip is for the Y axis
-    if( IsFlippedX() )
-    {
-        double delta = aEndAngle - aStartAngle;
-        aEndAngle = aStartAngle;
-        aStartAngle -= delta;
-    }
+    // calculate start and end arc angles according to the rotation transform matrix
+    // and normalize:
+    double startAngleS = aStartAngle;
+    double endAngleS = aEndAngle;
+    arc_angles_xform_and_normalize( startAngleS, endAngleS );
 
-    SWAP( aStartAngle, >, aEndAngle );
-    auto startAngleS = angle_xform( aStartAngle );
-    auto endAngleS = angle_xform( aEndAngle );
-    auto r = xform( aRadius );
+    double r = xform( aRadius );
 
     // N.B. This is backwards. We set this because we want to adjust the center
     // point that changes both endpoints.  In the worst case, this is twice as far.
@@ -339,7 +349,7 @@ void CAIRO_GAL_BASE::DrawArcSegment( const VECTOR2D& aCenterPoint, double aRadiu
     lineWidthIsOdd = !( static_cast<int>( aRadius ) % 1 );
 
     auto mid = roundp( xform( aCenterPoint ) );
-    auto width = xform( aWidth / 2.0 );
+    double width = xform( aWidth / 2.0 );
     auto startPointS = VECTOR2D( r, 0.0 ).Rotate( startAngleS );
     auto endPointS = VECTOR2D( r, 0.0 ).Rotate( endAngleS );
 

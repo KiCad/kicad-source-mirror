@@ -219,10 +219,23 @@ public:
 
 
 protected:
-    const double xform( double x );
-    const VECTOR2D xform( double x, double y );
-    const VECTOR2D xform( const VECTOR2D& aP );
+    // Geometric transforms according to the currentWorld2Screen transform matrix:
+    const double xform( double x );             // scale
+    const VECTOR2D xform( double x, double y ); // rotation, scale and offset
+    const VECTOR2D xform( const VECTOR2D& aP ); // rotation, scale and offset
+
+    /** Transform according to the rotation from currentWorld2Screen transform matrix:
+     * @param aAngle is the angle in radians to transform
+     * @return the modified angle
+     */
     const double angle_xform( const double aAngle );
+
+    /** Transform according to the rotation from currentWorld2Screen transform matrix
+     * for the start angle and the end angle of an arc
+     * @param aStartAngle is the arc starting point in radians to transform
+     * @param aEndAngle is the arc ending point in radians to transform
+     */
+    void arc_angles_xform_and_normalize( double& aStartAngle, double& aEndAngle );
 
     /// @copydoc GAL::BeginDrawing()
     virtual void beginDrawing() override;
