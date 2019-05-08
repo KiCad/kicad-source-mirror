@@ -105,18 +105,18 @@ The major parts of tool's implementation are the functions used by the
   when the GAL canvas is switched, and also just after tool registration.
   Any resource claimed from the GAL view or the model must be released
   in this function, as they could become invalid.
-* `SetTransitions()` function, which maps tool actions to functions
+* `setTransitions()` function, which maps tool actions to functions
   within the tool class.
 * One or more functions to call when actions are invoked. Many actions
   can invoke the same function if desired. The functions have the
   following signature:
     * int TOOL_CLASS::FunctionName( const TOOL_EVENT& aEvent )
-        * Returning 0 means success.
+    * Returning 0 means success.
     * These functions are called by the `TOOL_MANAGER` in case an associated
       event arrives (association is created with TOOL_INTERACTIVE::Go() function).
     * These can generally be private, as they are not called directly
       by any other code, but are invoked by the tool manager's coroutine
-      framework according to the `SetTransitions()` map.
+      framework according to the `setTransitions()` map.
 
 ### Interactive actions {#interactive-actions}
 
@@ -171,7 +171,7 @@ provide their own context menu. Tools that are called only from other
 tools' interactive modes add their menu items to those tools' menus.
 
 To use a `TOOL_MENU` in a top level tool, simply add one as a member
-and initialise it with a reference to the tools at construction time:
+and initialize it with a reference to the tools at construction time:
 
     TOOL_NAME: public PCB_TOOL
     {
@@ -215,7 +215,7 @@ The procedure of a commit is:
   unless you are going to abort the commit.
 * When removing an item, call `Remove( item )`. You should not delete the
   removed item, it will be stored in the undo buffer.
-* Finalise the commit with `Push( "Description" )`. If you performed
+* Finalize the commit with `Push( "Description" )`. If you performed
   no modifications, additions or removals, this is a no-op, so you
   don't need to check if you made any changes before pushing.
 
@@ -284,7 +284,7 @@ In `pcbnew/tools/pcb_actions.h`, we add the following to the
     static TOOL_ACTION uselessFixedCircle;
 
 Definitions of actions generally happen in the .cpp of the relevant tool.
-It doesn't actually matter where the defintion occurs (the declaration
+It doesn't actually matter where the definition occurs (the declaration
 is enough to use the action), as long as it's linked in the end.
 Similar tools should always be defined together.
 
@@ -337,11 +337,11 @@ the following class:
         ///> React to model/view changes
         void Reset( RESET_REASON aReason ) override;
 
-        ///> Basic initalization
+        ///> Basic initialization
         bool Init() override;
 
         ///> Bind handlers to corresponding TOOL_ACTIONs
-        void SetTransitions() override;
+        void setTransitions() override;
 
     private:
         ///> 'Move selected left' interactive tool
@@ -392,7 +392,7 @@ Below you will find the contents of useless_tool.cpp:
 
 
     /*
-     * Tool-specific action defintions
+     * Tool-specific action definitions
      */
     TOOL_ACTION PCB_ACTIONS::uselessMoveItemLeft(
             "pcbnew.UselessTool.MoveItemLeft",
@@ -443,7 +443,7 @@ Below you will find the contents of useless_tool.cpp:
     void USELESS_TOOL::moveLeftInt()
     {
         // we will call actions on the selection tool to get the current
-        // selection. The selection tools will handle item deisambiguation
+        // selection. The selection tools will handle item disambiguation
         SELECTION_TOOL* selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
         assert( selectionTool );
 
@@ -535,7 +535,7 @@ Below you will find the contents of useless_tool.cpp:
     }
 
 
-    void USELESS_TOOL::SetTransitions()
+    void USELESS_TOOL::setTransitions()
     {
         Go( &USELESS_TOOL::fixedCircle, PCB_ACTIONS::uselessFixedCircle.MakeEvent() );
         Go( &USELESS_TOOL::moveLeft,    PCB_ACTIONS::uselessMoveItemLeft.MakeEvent() );

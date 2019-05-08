@@ -849,6 +849,6 @@ learn something new.
 
 [clang-format]: https://clang.llvm.org/docs/ClangFormat.html
 [cppstandard]:http://www.possibility.com/Cpp/CppCodingStandard.html
-[kernel]:http://git.kernel.org/cgit/linux/kernel/git/stable/linux-stable.git/tree/Documentation/CodingStyle
+[kernel]:https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/Documentation/process/coding-style.rst
 [overloading]:http://www.cs.caltech.edu/courses/cs11/material/cpp/donnie/cpp-ops.html
 [style]:http://en.wikipedia.org/wiki/Programming_style
