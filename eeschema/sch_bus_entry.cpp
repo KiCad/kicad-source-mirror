@@ -334,7 +334,7 @@ bool SCH_BUS_ENTRY_BASE::HitTest( const wxPoint& aPosition, int aAccuracy ) cons
 {
     // Insure minimum accuracy
     if( aAccuracy == 0 )
-        aAccuracy = GetPenSize() / 2;
+        aAccuracy = ( GetPenSize() / 2 ) + 4;
 
     return TestSegmentHit( aPosition, m_pos, m_End(), aAccuracy );
 }

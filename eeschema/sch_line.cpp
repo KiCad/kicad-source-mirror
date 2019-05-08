@@ -699,7 +699,7 @@ bool SCH_LINE::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     // Insure minimum accuracy
     if( aAccuracy == 0 )
-        aAccuracy = GetPenSize() / 2;
+        aAccuracy = ( GetPenSize() / 2 ) + 4;
 
     return TestSegmentHit( aPosition, m_start, m_end, aAccuracy );
 }
