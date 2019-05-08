@@ -147,8 +147,6 @@ void WX_VIEW_CONTROLS::onMotion( wxMouseEvent& aEvent )
 
 void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
 {
-    const double wheelPanSpeed = 0.001;
-
 #ifdef __WXGTK3__
     if( aEvent.GetTimestamp() == m_lastTimestamp )
     {
@@ -159,11 +157,8 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     m_lastTimestamp = aEvent.GetTimestamp();
 #endif
 
-    // Fix issue caused by modern mice that feature horizontal scrolling by only handling
-    // vertical axis, otherwise horizontal scrolling events end up interpreted as vertical
-    // scroll events and confuse the user.
-    if( aEvent.GetWheelAxis() > 0 )
-        return;
+    const double wheelPanSpeed = 0.001;
+    const int    axis = aEvent.GetWheelAxis();
 
     // mousewheelpan disabled:
     //      wheel + ctrl    -> horizontal scrolling;
@@ -180,7 +175,6 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
         // Scrolling
         VECTOR2D scrollVec = m_view->ToWorld( m_view->GetScreenPixelSize(), false ) *
                              ( (double) aEvent.GetWheelRotation() * wheelPanSpeed );
-        int axis = aEvent.GetWheelAxis();
         double scrollX = 0.0;
         double scrollY = 0.0;
 
@@ -206,18 +200,24 @@ void WX_VIEW_CONTROLS::onWheel( wxMouseEvent& aEvent )
     }
     else
     {
-        int    rotation = aEvent.GetWheelRotation();
-        double zoomScale = m_zoomController->GetScaleForRotation( rotation );
+        // Restrict zoom handling to the vertical axis, otherwise horizontal
+        // scrolling events (e.g. touchpads and some mice) end up interpreted
+        // as vertical scroll events and confuse the user.
+        if( axis == wxMOUSE_WHEEL_VERTICAL )
+        {
+            const int    rotation = aEvent.GetWheelRotation();
+            const double zoomScale = m_zoomController->GetScaleForRotation( rotation );
 
-        if( IsCursorWarpingEnabled() )
-        {
-            CenterOnCursor();
-            m_view->SetScale( m_view->GetScale() * zoomScale );
-        }
-        else
-        {
-            VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
-            m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+            if( IsCursorWarpingEnabled() )
+            {
+                CenterOnCursor();
+                m_view->SetScale( m_view->GetScale() * zoomScale );
+            }
+            else
+            {
+                const VECTOR2D anchor = m_view->ToWorld( VECTOR2D( aEvent.GetX(), aEvent.GetY() ) );
+                m_view->SetScale( m_view->GetScale() * zoomScale, anchor );
+            }
         }
     }
 
