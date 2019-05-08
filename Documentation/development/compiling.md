@@ -336,6 +336,12 @@ configure pacman to prevent upgrading the 64-bit Boost package by adding:
 
 to your /etc/pacman.conf file.
 
+### Building with Boost 1.70 ### {#ki_msys2_boost_1_70}
+
+There is an issue building KiCad with Boost version 1.70 due to CMake not defining the proper
+link libraries during configuration.  Boost 1.70 can be used but `-DBoost_NO_BOOST_CMAKE=ON`
+needs to be added during CMake configuration to insure the link libraries are properly generated.
+
 ### Building OCE from source
 
 KiCad requires OCE by default, and the version installed by `pacman` can cause build errors in
