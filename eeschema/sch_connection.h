@@ -167,15 +167,9 @@ public:
         return m_suffix;
     }
 
-    void SetPrefix( const wxString& aPrefix )
-    {
-        m_prefix = aPrefix;
-    }
+    void SetPrefix( const wxString& aPrefix );
 
-    void SetSuffix( const wxString& aSuffix )
-    {
-        m_suffix = aSuffix;
-    }
+    void SetSuffix( const wxString& aSuffix );
 
     CONNECTION_TYPE Type() const
     {

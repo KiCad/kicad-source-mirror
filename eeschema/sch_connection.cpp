@@ -287,6 +287,24 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 }
 
 
+void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
+{
+    m_suffix = aPrefix;
+
+    for( auto m : Members() )
+        m->SetPrefix( aPrefix );
+}
+
+
+void SCH_CONNECTION::SetSuffix( const wxString& aSuffix )
+{
+    m_suffix = aSuffix;
+
+    for( auto m : Members() )
+        m->SetSuffix( aSuffix );
+}
+
+
 void SCH_CONNECTION::AppendInfoToMsgPanel( MSG_PANEL_ITEMS& aList ) const
 {
     if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
