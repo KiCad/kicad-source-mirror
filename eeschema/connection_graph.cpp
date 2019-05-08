@@ -1613,7 +1613,12 @@ void CONNECTION_GRAPH::propagateToNeighbors( CONNECTION_SUBGRAPH* aSubgraph )
             CONNECTION_SUBGRAPH::PRIORITY priority =
                     CONNECTION_SUBGRAPH::GetDriverPriority( subgraph->m_driver );
 
-            if( priority >= CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN )
+            // Upgrade driver to be this subgraph if this subgraph has a power pin or global
+            // Also upgrade if we found something with a shorter sheet path (higher in hierarchy)
+            // but with an equivalent priority
+
+            if( ( priority >= CONNECTION_SUBGRAPH::PRIORITY_POWER_PIN ) ||
+                ( priority >= highest && subgraph->m_sheet.size() < aSubgraph->m_sheet.size() ) )
                 driver = subgraph;
         }
     }
