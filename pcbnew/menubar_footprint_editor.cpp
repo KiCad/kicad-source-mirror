@@ -85,8 +85,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  _( "Save changes" ),
                  KiBitmap( save_xpm ) );
 
-    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_AS,
-                 _( "Save &As..." ),
+    text = AddHotkeyName( _( "Save &As..." ), m_hotkeysDescrList, HK_SAVEAS );
+    AddMenuItem( fileMenu, ID_MODEDIT_SAVE_AS, text,
                  _( "Save a copy to a new name and/or location" ),
                  KiBitmap( save_as_xpm ) );
 
