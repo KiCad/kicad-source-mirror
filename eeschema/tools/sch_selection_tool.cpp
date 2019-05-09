@@ -426,6 +426,10 @@ EDA_ITEM* SCH_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T
     else
         start = m_frame->GetScreen()->GetDrawItems();
 
+    // Empty schematics have no draw items
+    if( !start )
+        return nullptr;
+
     collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
     bool anyCollected = collector.GetCount() != 0;
