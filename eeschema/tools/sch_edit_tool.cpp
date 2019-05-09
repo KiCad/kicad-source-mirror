@@ -1189,7 +1189,7 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
     else
         return 0;
 
-    for( int i = 0; i < selection.GetSize(); ++i )
+    for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
         SCH_BUS_ENTRY_BASE* entry = dynamic_cast<SCH_BUS_ENTRY_BASE*>( selection.GetItem( i ) );
 
@@ -1229,7 +1229,7 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     else
         return 0;
 
-    for( int i = 0; i < selection.GetSize(); ++i )
+    for( unsigned int i = 0; i < selection.GetSize(); ++i )
     {
         SCH_TEXT* text = dynamic_cast<SCH_TEXT*>( selection.GetItem( i ) );
 
