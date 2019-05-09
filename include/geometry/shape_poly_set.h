@@ -830,11 +830,23 @@ class SHAPE_POLY_SET : public SHAPE
         void BooleanIntersection( const SHAPE_POLY_SET& a, const SHAPE_POLY_SET& b,
                                   POLYGON_MODE aFastMode );
 
-        ///> Performs outline inflation/deflation, using round corners.
+        /** Performs outline inflation/deflation, using round corners.
+         * Polygons cna have holes, but not linked holes with main outlines,
+         * if aFactor < 0.
+         * When aFactor is < 0 a bad shape can result from these extra-segments used to
+         * link holes to main outlines
+         * Use InflateWithLinkedHoles for these polygons, especially if aFactor < 0
+         */
         void Inflate( int aFactor, int aCircleSegmentsCount );
 
-        ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures" connecting the outer ring
-        ///> to the inner holes
+        ///> Performs outline inflation/deflation, using round corners.
+        ///> Polygons can have holes, and/or linked holes with main outlines.
+        ///> The resulting polygons are laso polygons with linked holes to main outlines
+        ///> For aFastMode meaning, see function booleanOp
+        void InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode );
+
+        ///> Converts a set of polygons with holes to a singe outline with "slits"/"fractures"
+        ///> connecting the outer ring to the inner holes
         ///> For aFastMode meaning, see function booleanOp
         void Fracture( POLYGON_MODE aFastMode );
 

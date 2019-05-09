@@ -451,7 +451,11 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
                 D_PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
                 pad->MergePrimitivesAsPolygon( &shape, 64 );
-                shape.Inflate( margin.x, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+                // shape polygon can have holes linked to the main outline.
+                // So use InflateWithLinkedHoles(), not Inflate() that can create
+                // bad shapes if margin.x is < 0
+                shape.InflateWithLinkedHoles( margin.x, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF,
+                                              SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitive( shape, 0 );
                 dummy.MergePrimitivesAsPolygon();
