@@ -257,7 +257,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                 {
                     if( item->IsNew() )
                     {
-                        if( ( item->GetFlags() & SELECTEDNODE ) != 0 )
+                        // TODO(snh): Remove extra tooling check after moving to schematic_commit model
+                        if( ( item->GetFlags() & SELECTEDNODE ) != 0
+                                && ( m_frame->GetToolId() == ID_SCH_DRAG ) )
                         {
                             // Item was added in getConnectedDragItems
                             saveCopyInUndoList( (SCH_ITEM*) item, UR_NEW, appendUndo );
