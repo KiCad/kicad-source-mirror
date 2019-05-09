@@ -32,11 +32,42 @@
 #include <common.h>
 #include <convert_basic_shapes_to_polygon.h>
 
+/**
+ * Function TransformCircleToPolygon
+ * convert a circle to a polygon, using multiple straight lines
+ * @param aBuffer = a SHAPE_LINE_CHAIN to store the polygon corners
+ * @param aCenter = the center of the circle
+ * @param aRadius = the radius of the circle
+ * @param aCircleToSegmentsCount = the number of segments to approximate a circle
+ * Note: the polygon is inside the circle, so if you want to have the polygon
+ * outside the circle, you should give aRadius calculated with a correction factor
+ */
+void TransformCircleToPolygon( SHAPE_LINE_CHAIN& aBuffer,
+                               wxPoint aCenter, int aRadius,
+                               int aCircleToSegmentsCount )
+{
+    wxPoint corner_position;
+    double delta    = 3600.0 / aCircleToSegmentsCount;    // rot angle in 0.1 degree
+    double halfstep = delta/2;    // the starting value for rot angles
+
+    for( int ii = 0; ii < aCircleToSegmentsCount; ii++ )
+    {
+        corner_position.x   = aRadius;
+        corner_position.y   = 0;
+        double angle = (ii * delta) + halfstep;
+        RotatePoint( &corner_position, angle );
+        corner_position += aCenter;
+        aBuffer.Append( corner_position.x, corner_position.y );
+    }
+
+    aBuffer.SetClosed( true );
+}
+
 
 /**
  * Function TransformCircleToPolygon
  * convert a circle to a polygon, using multiple straight lines
- * @param aCornerBuffer = a buffer to store the polygon
+ * @param aCornerBuffer = a SHAPE_POLY_SET to store the polygon
  * @param aCenter = the center of the circle
  * @param aRadius = the radius of the circle
  * @param aCircleToSegmentsCount = the number of segments to approximate a circle
@@ -397,40 +428,14 @@ void TransformRingToPolygon( SHAPE_POLY_SET& aCornerBuffer,
         return;
     }
 
-    aCornerBuffer.NewOutline();
+    SHAPE_POLY_SET buffer;
 
-    // Draw the inner circle of the ring
-    int     delta = 3600 / aCircleToSegmentsCount;   // rotate angle in 0.1 degree
+    TransformCircleToPolygon( buffer, aCentre, outer_radius, aCircleToSegmentsCount );
 
-    for( int ii = 0; ii < 3600; ii += delta )
-    {
-        curr_point.x    = inner_radius;
-        curr_point.y    = 0;
-        RotatePoint( &curr_point, ii );
-        curr_point      += aCentre;
-        aCornerBuffer.Append( curr_point.x, curr_point.y );
-    }
+    // Build the hole:
+    buffer.NewHole();
+    TransformCircleToPolygon( buffer.Hole( 0, 0 ), aCentre, inner_radius, aCircleToSegmentsCount );
 
-    // Draw the last point of inner circle
-    aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
-
-    // Draw the outer circle of the ring
-    // the first point creates also a segment from the inner to the outer polygon
-    for( int ii = 0; ii < 3600; ii += delta )
-    {
-        curr_point.x    = outer_radius;
-        curr_point.y    = 0;
-        RotatePoint( &curr_point, -ii );
-        curr_point      += aCentre;
-        aCornerBuffer.Append( curr_point.x, curr_point.y );
-    }
-
-    // Draw the last point of outer circle
-    aCornerBuffer.Append( aCentre.x + outer_radius, aCentre.y );
-
-    // And connect the outer polygon to the inner polygon,.
-    // because a segment from inner to the outer polygon was already created,
-    // the final polygon is the inner and the outer outlines connected by
-    // 2 overlapping segments
-    aCornerBuffer.Append( aCentre.x + inner_radius, aCentre.y );
+    buffer.Fracture( SHAPE_POLY_SET::PM_FAST );
+    aCornerBuffer.Append( buffer );
 }

@@ -544,6 +544,14 @@ void SHAPE_POLY_SET::BooleanIntersection( const SHAPE_POLY_SET& a,
 }
 
 
+void SHAPE_POLY_SET::InflateWithLinkedHoles( int aFactor, int aCircleSegmentsCount, POLYGON_MODE aFastMode )
+{
+    Simplify( aFastMode );
+    Inflate( aFactor, aCircleSegmentsCount );
+    Fracture( aFastMode );
+}
+
+
 void SHAPE_POLY_SET::Inflate( int aFactor, int aCircleSegmentsCount )
 {
     // A static table to avoid repetitive calculations of the coefficient

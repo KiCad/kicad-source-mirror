@@ -840,7 +840,10 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
             SHAPE_POLY_SET outline;
             outline.Append( aPad->GetCustomShapeAsPolygon() );
             const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-            outline.Inflate( custom_margin, segmentToCircleCount );
+            // outline polygon can have holes linked to the main outline.
+            // So use InflateWithLinkedHoles(), not Inflate() that can create
+            // bad shapes if custom_margin is < 0
+            outline.InflateWithLinkedHoles( custom_margin, segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
             m_gal->DrawPolygon( outline );
         }
         else

@@ -546,24 +546,19 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
 
         if( aDrawInfo.m_Mask_margin.x )
-        {
-            SHAPE_POLY_SET clearance_outline;
-            clearance_outline.Append( outline );
-            clearance_outline.Inflate( aDrawInfo.m_Mask_margin.x, segmentToCircleCount );
-        }
-        else
-        {
-            // Draw the polygon: only one polygon is expected
-            // However we provide a multi polygon shape drawing
-            // ( for the future or to show a non expected shape )
-            for( int jj = 0; jj < outline.OutlineCount(); ++jj )
-            {
-                poly = &outline.Outline( jj );
+            outline.InflateWithLinkedHoles( aDrawInfo.m_Mask_margin.x,
+                        segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
 
-                GRClosedPoly( aClipBox, aDC, poly->PointCount(),
-                        (wxPoint*)&poly->Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
-                        aDrawInfo.m_Color, aDrawInfo.m_Color );
-            }
+        // Draw the polygon: only one polygon is expected
+        // However we provide a multi polygon shape drawing
+        // ( can happen with CUSTOM pads and negative margins )
+        for( int jj = 0; jj < outline.OutlineCount(); ++jj )
+        {
+            poly = &outline.Outline( jj );
+
+            GRClosedPoly( aClipBox, aDC, poly->PointCount(),
+                    (wxPoint*)&poly->Point( 0 ), aDrawInfo.m_ShowPadFilled, 0,
+                    aDrawInfo.m_Color, aDrawInfo.m_Color );
         }
 
         if( aDrawInfo.m_PadClearance )

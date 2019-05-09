@@ -787,11 +787,12 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_CUSTOM:
     {
         int clearance = KiROUND( aClearanceValue * aCorrectionFactor );
-
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
         CustomShapeAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
+        outline.Simplify( SHAPE_POLY_SET::PM_FAST );
         outline.Inflate( clearance, aCircleToSegmentsCount );
+        outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( outline );
     }
         break;
