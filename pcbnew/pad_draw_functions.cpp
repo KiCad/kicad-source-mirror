@@ -550,7 +550,8 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             SHAPE_POLY_SET clearance_outline;
             clearance_outline.Append( outline );
 
-            clearance_outline.Inflate( aDrawInfo.m_PadClearance, segmentToCircleCount );
+            clearance_outline.InflateWithLinkedHoles( aDrawInfo.m_PadClearance,
+                                        segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
 
             for( int jj = 0; jj < clearance_outline.OutlineCount(); ++jj )
             {
