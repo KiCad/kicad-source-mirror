@@ -206,11 +206,11 @@ public:
      */
     void SetText( const wxString& aText ) override;
 
-    void SetOffset( const wxPoint& aOffset ) override;
+    void Offset( const wxPoint& aOffset ) override;
 
     bool Inside( EDA_RECT& aRect ) const override;
 
-    void Move( const wxPoint& aPosition ) override;
+    void MoveTo( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const override { return EDA_TEXT::GetTextPos(); }
 

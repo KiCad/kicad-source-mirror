@@ -65,7 +65,7 @@ public:
     void Reserve( size_t aCount ) { m_BezierPoints.reserve( aCount ); }
     void AddPoint( const wxPoint& aPoint ) { m_BezierPoints.push_back( aPoint ); }
 
-    void SetOffset( const wxPoint& aOffset ) override;
+    void Offset( const wxPoint& aOffset ) override;
     const wxPoint GetOffset() const;
 
     /**
@@ -85,7 +85,7 @@ public:
 
     bool Inside( EDA_RECT& aRect ) const override;
 
-    void Move( const wxPoint& aPosition ) override;
+    void MoveTo( const wxPoint& aPosition ) override;
 
     wxPoint GetPosition() const override; 
 

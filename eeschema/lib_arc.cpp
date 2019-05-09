@@ -150,7 +150,7 @@ int LIB_ARC::compare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_ARC::SetOffset( const wxPoint& aOffset )
+void LIB_ARC::Offset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_ArcStart += aOffset;
@@ -165,7 +165,7 @@ bool LIB_ARC::Inside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_ARC::Move( const wxPoint& aPosition )
+void LIB_ARC::MoveTo( const wxPoint& aPosition )
 {
     wxPoint offset = aPosition - m_Pos;
     m_Pos = aPosition;
@@ -539,7 +539,7 @@ void LIB_ARC::CalcEdit( const wxPoint& aPosition )
     }
     else if( IsMoving() )
     {
-        Move( m_initialPos + aPosition - m_initialCursorPos );
+        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
     }
 }
 

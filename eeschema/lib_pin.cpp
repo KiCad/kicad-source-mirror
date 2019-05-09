@@ -1314,7 +1314,7 @@ int LIB_PIN::compare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_PIN::SetOffset( const wxPoint& aOffset )
+void LIB_PIN::Offset( const wxPoint& aOffset )
 {
     m_position += aOffset;
 }
@@ -1328,7 +1328,7 @@ bool LIB_PIN::Inside( EDA_RECT& rect ) const
 }
 
 
-void LIB_PIN::Move( const wxPoint& newPosition )
+void LIB_PIN::MoveTo( const wxPoint& newPosition )
 {
     if( m_position != newPosition )
     {
@@ -1715,6 +1715,6 @@ void LIB_PIN::CalcEdit( const wxPoint& aPosition )
     if( IsMoving() )
     {
         DBG(printf("MOVEPIN\n");)
-        Move( aPosition );
+        MoveTo( aPosition );
     }
 }

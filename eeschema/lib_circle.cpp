@@ -108,7 +108,7 @@ int LIB_CIRCLE::compare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_CIRCLE::SetOffset( const wxPoint& aOffset )
+void LIB_CIRCLE::Offset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_EndPos += aOffset;
@@ -122,9 +122,9 @@ bool LIB_CIRCLE::Inside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_CIRCLE::Move( const wxPoint& aPosition )
+void LIB_CIRCLE::MoveTo( const wxPoint& aPosition )
 {
-    SetOffset( aPosition - m_Pos );
+    Offset( aPosition - m_Pos );
 }
 
 
@@ -281,6 +281,6 @@ void LIB_CIRCLE::CalcEdit( const wxPoint& aPosition )
     }
     else if( IsMoving() )
     {
-        Move( m_initialPos + aPosition - m_initialCursorPos );
+        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
     }
 }

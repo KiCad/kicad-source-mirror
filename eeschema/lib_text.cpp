@@ -117,7 +117,7 @@ int LIB_TEXT::compare( const LIB_ITEM& other ) const
 }
 
 
-void LIB_TEXT::SetOffset( const wxPoint& aOffset )
+void LIB_TEXT::Offset( const wxPoint& aOffset )
 {
     EDA_TEXT::Offset( aOffset );
 }
@@ -129,7 +129,7 @@ bool LIB_TEXT::Inside( EDA_RECT& rect ) const
 }
 
 
-void LIB_TEXT::Move( const wxPoint& newPosition )
+void LIB_TEXT::MoveTo( const wxPoint& newPosition )
 {
     SetTextPos( newPosition );
 }
@@ -386,7 +386,7 @@ void LIB_TEXT::CalcEdit( const wxPoint& aPosition )
     }
     else if( IsMoving() )
     {
-        Move( m_initialPos + aPosition - m_initialCursorPos );
+        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
         DBG(printf("%p: move %d %d\n", this, GetPosition().x, GetPosition().y );)
     }
 

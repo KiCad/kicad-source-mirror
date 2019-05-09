@@ -226,7 +226,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
         if( pin->GetEditFlags() == 0 )
             continue;
 
-        pin->Move( aPin->GetPosition() );
+        pin->MoveTo( aPin->GetPosition() );
         pin->ClearFlags();
     }
 
@@ -252,7 +252,7 @@ LIB_PIN* LIB_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart )
     if( m_frame->SynchronizePins() )
         pin->SetFlags( IS_LINKED );
 
-    pin->Move( (wxPoint) aPosition );
+    pin->MoveTo((wxPoint) aPosition );
     pin->SetLength( GetLastPinLength() );
     pin->SetOrientation( g_LastPinOrient );
     pin->SetType( g_LastPinType );
@@ -362,7 +362,7 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
     case PIN_RIGHT: step.y = -m_frame->GetRepeatPinStep();  break;
     }
 
-    pin->SetOffset( step );
+    pin->Offset( step );
 
     wxString nextName = pin->GetName();
     IncrementLabelMember( nextName, m_frame->GetRepeatDeltaLabel() );

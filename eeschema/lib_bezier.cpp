@@ -77,7 +77,7 @@ int LIB_BEZIER::compare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_BEZIER::SetOffset( const wxPoint& aOffset )
+void LIB_BEZIER::Offset( const wxPoint& aOffset )
 {
     size_t i;
 
@@ -101,14 +101,14 @@ bool LIB_BEZIER::Inside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_BEZIER::Move( const wxPoint& aPosition )
+void LIB_BEZIER::MoveTo( const wxPoint& aPosition )
 {
     if ( !m_PolyPoints.size() )
     {
         m_PolyPoints.push_back( wxPoint(0, 0) );
     }
 
-    SetOffset( aPosition - m_PolyPoints[0] );
+    Offset( aPosition - m_PolyPoints[ 0 ] );
 }
 
 const wxPoint LIB_BEZIER::GetOffset() const

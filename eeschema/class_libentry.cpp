@@ -896,7 +896,7 @@ bool LIB_PART::LoadDateAndTime( char* aLine )
 void LIB_PART::SetOffset( const wxPoint& aOffset )
 {
     for( LIB_ITEM& item : m_drawings )
-        item.SetOffset( aOffset );
+        item.Offset( aOffset );
 }
 
 

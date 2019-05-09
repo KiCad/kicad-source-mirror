@@ -81,7 +81,7 @@ int LIB_RECTANGLE::compare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_RECTANGLE::SetOffset( const wxPoint& aOffset )
+void LIB_RECTANGLE::Offset( const wxPoint& aOffset )
 {
     m_Pos += aOffset;
     m_End += aOffset;
@@ -94,7 +94,7 @@ bool LIB_RECTANGLE::Inside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_RECTANGLE::Move( const wxPoint& aPosition )
+void LIB_RECTANGLE::MoveTo( const wxPoint& aPosition )
 {
     wxPoint size = m_End - m_Pos;
     m_Pos = aPosition;
@@ -310,6 +310,6 @@ void LIB_RECTANGLE::CalcEdit( const wxPoint& aPosition )
     }
     else if( IsMoving() )
     {
-        Move( m_initialPos + aPosition - m_initialCursorPos );
+        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
     }
 }

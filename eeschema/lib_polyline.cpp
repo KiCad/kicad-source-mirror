@@ -79,7 +79,7 @@ int LIB_POLYLINE::compare( const LIB_ITEM& aOther ) const
 }
 
 
-void LIB_POLYLINE::SetOffset( const wxPoint& aOffset )
+void LIB_POLYLINE::Offset( const wxPoint& aOffset )
 {
     for( size_t i = 0; i < m_PolyPoints.size(); i++ )
         m_PolyPoints[i] += aOffset;
@@ -98,9 +98,9 @@ bool LIB_POLYLINE::Inside( EDA_RECT& aRect ) const
 }
 
 
-void LIB_POLYLINE::Move( const wxPoint& aPosition )
+void LIB_POLYLINE::MoveTo( const wxPoint& aPosition )
 {
-    SetOffset( aPosition - m_PolyPoints[0] );
+    Offset( aPosition - m_PolyPoints[ 0 ] );
 }
 
 
@@ -472,6 +472,6 @@ void LIB_POLYLINE::CalcEdit( const wxPoint& aPosition )
     }
     else if( IsMoving() )
     {
-        Move( m_initialPos + aPosition - m_initialCursorPos );
+        MoveTo( m_initialPos + aPosition - m_initialCursorPos );
     }
 }

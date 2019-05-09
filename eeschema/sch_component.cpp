@@ -97,7 +97,7 @@ static LIB_PART* dummy()
 
         LIB_RECTANGLE* square = new LIB_RECTANGLE( part );
 
-        square->Move( wxPoint( -200, 200 ) );
+        square->MoveTo( wxPoint( -200, 200 ));
         square->SetEndPosition( wxPoint( 200, -200 ) );
 
         LIB_TEXT* text = new LIB_TEXT( part );

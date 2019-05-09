@@ -265,7 +265,7 @@ public:
      *
      * @param aOffset Coordinates to offset the item position.
      */
-    virtual void SetOffset( const wxPoint& aOffset ) = 0;
+    virtual void Offset( const wxPoint& aOffset ) = 0;
 
     /**
      * Test if any part of the draw object is inside rectangle bounds of \a aRect.
@@ -280,7 +280,7 @@ public:
      *
      * @param aPosition Position to move draw item to.
      */
-    virtual void Move( const wxPoint& aPosition ) = 0;
+    virtual void MoveTo( const wxPoint& aPosition ) = 0;
 
     /**
      * Return the current draw object position.
@@ -289,7 +289,7 @@ public:
      */
     virtual wxPoint GetPosition() const = 0;
 
-    void SetPosition( const wxPoint& aPosition ) { Move( aPosition ); }
+    void SetPosition( const wxPoint& aPosition ) { MoveTo( aPosition ); }
 
     /**
      * Mirror the draw object along the horizontal (X) axis about \a aCenter point.
