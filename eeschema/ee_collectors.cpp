@@ -108,7 +108,7 @@ SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
             return SEARCH_CONTINUE;
     }
 
-    if( aItem->HitTest( m_RefPos ) )
+    if( aItem->HitTest( m_RefPos, m_Threshold ) )
         Append( aItem );
 
     return SEARCH_CONTINUE;
@@ -463,7 +463,7 @@ SEARCH_RESULT EE_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 }
 
 
-void EE_TYPE_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[] )
+void EE_TYPE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[] )
 {
     Empty();        // empty the collection
 

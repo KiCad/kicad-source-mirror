@@ -149,6 +149,9 @@ SELECTION_CONDITION EE_CONDITIONS::SingleMultiUnitSymbol = [] ( const SELECTION&
 };
 
 
+#define HITTEST_THRESHOLD_PIXELS 5
+
+
 EE_SELECTION_TOOL::EE_SELECTION_TOOL() :
         TOOL_INTERACTIVE( "eeschema.InteractiveSelection" ),
         m_frame( nullptr ),
@@ -425,6 +428,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     if( !start )
         return nullptr;
 
+    collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
     collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
     bool anyCollected = collector.GetCount() != 0;

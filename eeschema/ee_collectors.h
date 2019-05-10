@@ -46,6 +46,7 @@ public:
     static const KICAD_T SheetsAndSheetLabels[];
 
     EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
+        m_Threshold( 0 ),
         m_MenuCancelled( false )
     {
         SetScanTypes( aScanTypes );
@@ -106,6 +107,8 @@ public:
 public:
     int      m_Unit;            // Fixed symbol unit filter (for symbol editor)
     int      m_Convert;         // Fixed DeMorgan filter (for symbol editor)
+
+    int      m_Threshold;       // Hit-test threshold in internal units.
 
     wxString m_MenuTitle;       // The title of selection disambiguation menu (if needed)
     bool     m_MenuCancelled;   // Indicates selection disambiguation menu was cancelled
