@@ -36,7 +36,7 @@
 #include <invoke_sch_dialog.h>
 #include <lib_edit_frame.h>
 #include <eeschema_config.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <worksheet_shape_builder.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>

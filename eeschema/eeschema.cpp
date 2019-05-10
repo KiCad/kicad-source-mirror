@@ -42,7 +42,7 @@
 
 #include <general.h>
 #include <class_libentry.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <transform.h>
 #include <wildcards_and_files_ext.h>
 #include <symbol_lib_table.h>

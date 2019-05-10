@@ -24,7 +24,7 @@
  */
 
 #include <fctsys.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <eeschema_id.h>
 
 #include <general.h>

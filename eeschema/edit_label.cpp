@@ -31,7 +31,7 @@
 #include <sch_edit_frame.h>
 #include <kicad_device_context.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 #include <general.h>
 #include <sch_text.h>
 #include <eeschema_id.h>
@@ -141,7 +141,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     newtext->SetIsDangling( aText->IsDangling() );
 
     if( selected )
-        m_toolManager->RunAction( SCH_ACTIONS::removeItemFromSel, true, aText );
+        m_toolManager->RunAction( EE_ACTIONS::removeItemFromSel, true, aText );
 
     if( !aText->IsNew() )
     {
@@ -153,7 +153,7 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
     }
 
     if( selected )
-        m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, newtext );
+        m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, newtext );
 
     delete aText;
 

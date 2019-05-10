@@ -41,7 +41,7 @@
 #include <sch_view.h>
 #include <reporter.h>
 #include <netlist_exporters/netlist_exporter_kicad.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 
 /**
  * Execute a remote command sent by Pcbnew via a socket connection.
@@ -82,7 +82,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
             SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
 
-            GetToolManager()->RunAction( SCH_ACTIONS::highlightNetSelection, true );
+            GetToolManager()->RunAction( EE_ACTIONS::highlightNetSelection, true );
         }
 
         return;

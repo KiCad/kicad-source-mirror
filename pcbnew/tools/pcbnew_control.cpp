@@ -604,7 +604,7 @@ int PCBNEW_CONTROL::GridSetOrigin( const TOOL_EVENT& aEvent )
     {
         Activate();
 
-        PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+        EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
         wxCHECK( picker, 0 );
 
         // TODO it will not check the toolbar button in module editor, as it uses a different ID..
@@ -693,7 +693,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     m_frame->SetToolID( m_editModules ? ID_MODEDIT_DELETE_TOOL : ID_PCB_DELETE_ITEM_BUTT,

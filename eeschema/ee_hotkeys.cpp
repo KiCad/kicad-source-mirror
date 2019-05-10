@@ -26,7 +26,7 @@
 #include <fctsys.h>
 #include <id.h>
 #include <eeschema_id.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <sch_edit_frame.h>
 #include <sch_draw_panel.h>
 
@@ -41,8 +41,8 @@
 
 #include <dialogs/dialog_schematic_find.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_actions.h>
 
 // Remark: the hotkey message info is used as keyword in hotkey config files and
 // as comments in help windows, therefore translated only when displayed
@@ -448,9 +448,9 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent      cmd( wxEVT_COMMAND_MENU_SELECTED );
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
+    wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->GetSelection();
 
     /* Convert lower to upper case (the usual toupper function has problem
      * with non ascii codes like function keys */
@@ -489,7 +489,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_REDO:             // while busy performing another command.
     case HK_FIND_ITEM:
     case HK_FIND_REPLACE:
-        if( SCH_CONDITIONS::Idle( selection ) )
+        if( EE_CONDITIONS::Idle( selection ) )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
             GetEventHandler()->ProcessEvent( cmd );
@@ -498,7 +498,7 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_FIND_NEXT_ITEM:
     case HK_FIND_NEXT_DRC_MARKER:
-        if( SCH_CONDITIONS::Idle( selection ) )
+        if( EE_CONDITIONS::Idle( selection ) )
         {
             wxFindDialogEvent event( hotKey->m_IdMenuEvent, GetId() );
             event.SetEventObject( this );
@@ -541,9 +541,9 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent      cmd( wxEVT_COMMAND_MENU_SELECTED );
-    SCH_SELECTION_TOOL* selTool = GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
+    wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
+    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->GetSelection();
 
     cmd.SetEventObject( this );
 
@@ -588,7 +588,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_UNDO:
     case HK_REDO:
-        if( SCH_CONDITIONS::Idle( selection ) )
+        if( EE_CONDITIONS::Idle( selection ) )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
             GetEventHandler()->ProcessEvent( cmd );

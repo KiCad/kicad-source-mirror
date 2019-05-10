@@ -34,13 +34,13 @@
 #include <eeschema_id.h>
 #include <netlist_object.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_actions.h>
-#include <tools/picker_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_picker_tool.h>
 #include <tools/sch_editor_control.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
 #include <project.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <advanced_config.h>
 #include <simulation_cursors.h>
 #include <sim/sim_plot_frame.h>
@@ -50,58 +50,58 @@
 #include <lib_edit_frame.h>
 #include "sch_wire_bus_tool.h"
 
-TOOL_ACTION SCH_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
+TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION SCH_ACTIONS::simProbe( "eeschema.Simulation.probe",
+TOOL_ACTION EE_ACTIONS::simProbe( "eeschema.Simulation.probe",
         AS_GLOBAL, 0,
         _( "Add a simulator probe" ), "" );
 
-TOOL_ACTION SCH_ACTIONS::simTune( "eeschema.Simulation.tune",
+TOOL_ACTION EE_ACTIONS::simTune( "eeschema.Simulation.tune",
         AS_GLOBAL, 0,
         _( "Select a value to be tuned" ), "" );
 
-TOOL_ACTION SCH_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
+TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
         AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION SCH_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
+TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
         AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION SCH_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highlightNetSelection",
+TOOL_ACTION EE_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highlightNetSelection",
         AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION SCH_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
+TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
         AS_GLOBAL, 0,
         _( "Highlight Net" ), _( "Highlight wires and pins of a net" ), NULL, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::cut( "eeschema.EditorControl.cut",
+TOOL_ACTION EE_ACTIONS::cut( "eeschema.EditorControl.cut",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
         _( "Cut" ), _( "Cut selected item(s) to clipboard" ), cut_xpm );
 
-TOOL_ACTION SCH_ACTIONS::copy( "eeschema.EditorControl.copy",
+TOOL_ACTION EE_ACTIONS::copy( "eeschema.EditorControl.copy",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
         _( "Copy" ), _( "Copy selected item(s) to clipboard" ), copy_xpm );
 
-TOOL_ACTION SCH_ACTIONS::paste( "eeschema.EditorControl.paste",
+TOOL_ACTION EE_ACTIONS::paste( "eeschema.EditorControl.paste",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
         _( "Paste" ), _( "Paste clipboard into schematic" ), paste_xpm );
 
-TOOL_ACTION SCH_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSymbolEditor",
+TOOL_ACTION EE_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
 
-TOOL_ACTION SCH_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
+TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
         AS_GLOBAL, 0,
         _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
         enter_sheet_xpm );
 
-TOOL_ACTION SCH_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
+TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEAVE_SHEET ),
         _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
         leave_sheet_xpm );
 
-TOOL_ACTION SCH_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
+TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_ITEMS_ON_PCB ),
         _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
         select_same_sheet_xpm );
@@ -169,9 +169,9 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
         return;
     }
 
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SCH_ITEM*           item = nullptr;
-    SCH_COMPONENT*      component = nullptr;
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_ITEM*          item = nullptr;
+    SCH_COMPONENT*     component = nullptr;
 
     if( aForce )
     {
@@ -230,7 +230,7 @@ void SCH_EDITOR_CONTROL::doCrossProbeSchToPcb( const TOOL_EVENT& aEvent, bool aF
 static bool probeSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
 {
     constexpr KICAD_T wiresAndComponents[] = { SCH_LINE_T, SCH_COMPONENT_T, SCH_SHEET_PIN_T, EOT };
-    SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
 
     EDA_ITEM* item = selTool->SelectPoint( aPosition, wiresAndComponents );
 
@@ -260,7 +260,7 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_SIM_PROBE, wxCURSOR_DEFAULT, _( "Add a simulator probe" ) );
@@ -277,8 +277,8 @@ int SCH_EDITOR_CONTROL::SimProbe( const TOOL_EVENT& aEvent )
 static bool tuneSimulation( SCH_EDIT_FRAME* aFrame, const VECTOR2D& aPosition )
 {
     constexpr KICAD_T fieldsAndComponents[] = { SCH_COMPONENT_T, SCH_FIELD_T, EOT };
-    SCH_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
-    EDA_ITEM* item = selTool->SelectPoint( aPosition, fieldsAndComponents );
+    EE_SELECTION_TOOL* selTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
+    EDA_ITEM*          item = selTool->SelectPoint( aPosition, fieldsAndComponents );
 
     if( !item )
         return false;
@@ -304,7 +304,7 @@ int SCH_EDITOR_CONTROL::SimTune( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_SIM_TUNE, wxCURSOR_DEFAULT, _( "Select a value to be tuned" ) );
@@ -326,10 +326,10 @@ static VECTOR2D CLEAR;
 // TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
-    SCH_SELECTION_TOOL* selTool = aToolMgr->GetTool<SCH_SELECTION_TOOL>();
-    wxString            netName;
-    bool                retVal = true;
+    SCH_EDIT_FRAME*    editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    EE_SELECTION_TOOL* selTool = aToolMgr->GetTool<EE_SELECTION_TOOL>();
+    wxString           netName;
+    bool               retVal = true;
 
     if( aPosition != CLEAR )
     {
@@ -361,7 +361,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     editFrame->SetSelectedNetName( netName );
 
-    aToolMgr->RunAction( SCH_ACTIONS::highlightNetSelection, true );
+    aToolMgr->RunAction( EE_ACTIONS::highlightNetSelection, true );
 
     return retVal;
 }
@@ -471,7 +471,7 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight specific net" ) );
@@ -485,8 +485,8 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
 bool SCH_EDITOR_CONTROL::doCopy()
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->GetSelection();
 
     if( !selection.GetSize() )
         return false;
@@ -503,7 +503,7 @@ bool SCH_EDITOR_CONTROL::doCopy()
 int SCH_EDITOR_CONTROL::Cut( const TOOL_EVENT& aEvent )
 {
     if( doCopy() )
-        m_toolMgr->RunAction( SCH_ACTIONS::doDelete, true );
+        m_toolMgr->RunAction( EE_ACTIONS::doDelete, true );
 
     return 0;
 }
@@ -519,14 +519,14 @@ int SCH_EDITOR_CONTROL::Copy( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
-    DLIST<SCH_ITEM>&    dlist = m_frame->GetScreen()->GetDrawList();
-    SCH_ITEM*           last = dlist.GetLast();
+    DLIST<SCH_ITEM>&   dlist = m_frame->GetScreen()->GetDrawList();
+    SCH_ITEM*          last = dlist.GetLast();
 
-    std::string         text = m_toolMgr->GetClipboard();
-    STRING_LINE_READER  reader( text, "Clipboard" );
-    SCH_LEGACY_PLUGIN   plugin;
+    std::string        text = m_toolMgr->GetClipboard();
+    STRING_LINE_READER reader( text, "Clipboard" );
+    SCH_LEGACY_PLUGIN  plugin;
 
     try
     {
@@ -645,8 +645,8 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     // Now clear the previous selection, select the pasted items, and fire up the "move"
     // tool.
     //
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &loadedItems );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &loadedItems );
 
     SELECTION& selection = selTool->GetSelection();
 
@@ -655,7 +655,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         SCH_ITEM* item = (SCH_ITEM*) selection.GetTopLeftItem();
 
         selection.SetReferencePoint( item->GetPosition() );
-        m_toolMgr->RunAction( SCH_ACTIONS::move, false );
+        m_toolMgr->RunAction( EE_ACTIONS::move, false );
     }
 
     return 0;
@@ -664,10 +664,9 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
-    SCH_COMPONENT*      comp = nullptr;
-    wxString            msg;
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SCH_COMPONENT*     comp = nullptr;
 
     if( selection.GetSize() >= 1 )
         comp = (SCH_COMPONENT*) selection.Front();
@@ -692,8 +691,8 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    const SELECTION&    selection = selTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    const SELECTION&   selection = selTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
 
     if( selection.GetSize() == 1 )
     {
@@ -720,32 +719,32 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
-    Go( &SCH_EDITOR_CONTROL::ToggleLockSelected,    SCH_ACTIONS::toggleLock.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::LockSelected,          SCH_ACTIONS::lock.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::UnlockSelected,        SCH_ACTIONS::unlock.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleLockSelected,    EE_ACTIONS::toggleLock.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::LockSelected,          EE_ACTIONS::lock.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UnlockSelected,        EE_ACTIONS::unlock.MakeEvent() );
      */
 
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::SelectedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::UnselectedEvent );
     Go( &SCH_EDITOR_CONTROL::CrossProbeToPcb,       EVENTS::ClearedEvent );
-    Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, SCH_ACTIONS::explicitCrossProbe.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ExplicitCrossProbeToPcb, EE_ACTIONS::explicitCrossProbe.MakeEvent() );
 
 #ifdef KICAD_SPICE
-    Go( &SCH_EDITOR_CONTROL::SimProbe,              SCH_ACTIONS::simProbe.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::SimTune,               SCH_ACTIONS::simTune.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SimProbe,              EE_ACTIONS::simProbe.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::SimTune,               EE_ACTIONS::simTune.MakeEvent() );
 #endif /* KICAD_SPICE */
 
-    Go( &SCH_EDITOR_CONTROL::HighlightNet,          SCH_ACTIONS::highlightNet.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::ClearHighlight,        SCH_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    SCH_ACTIONS::highlightNetCursor.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, SCH_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::HighlightNet,          EE_ACTIONS::highlightNet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ClearHighlight,        EE_ACTIONS::clearHighlight.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    EE_ACTIONS::highlightNetCursor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, EE_ACTIONS::highlightNetSelection.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::Cut,                   SCH_ACTIONS::cut.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::Copy,                  SCH_ACTIONS::copy.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::Paste,                 SCH_ACTIONS::paste.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Cut,                   EE_ACTIONS::cut.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Copy,                  EE_ACTIONS::copy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Paste,                 EE_ACTIONS::paste.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  SCH_ACTIONS::editWithSymbolEditor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithSymbolEditor.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::EnterSheet,            SCH_ACTIONS::enterSheet.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::LeaveSheet,            SCH_ACTIONS::leaveSheet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
 }

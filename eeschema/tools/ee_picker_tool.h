@@ -29,11 +29,11 @@
 #include <tool/tool_interactive.h>
 
 
-class PICKER_TOOL : public TOOL_INTERACTIVE
+class EE_PICKER_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    PICKER_TOOL();
-    ~PICKER_TOOL() {}
+    EE_PICKER_TOOL();
+    ~EE_PICKER_TOOL() {}
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;

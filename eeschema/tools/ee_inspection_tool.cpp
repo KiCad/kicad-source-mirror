@@ -21,13 +21,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <tools/sch_actions.h>
-#include <tools/inspection_tool.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_inspection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <view/view_controls.h>
 #include <sch_component.h>
 #include <sch_marker.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <confirm.h>
 #include <tool/conditional_menu.h>
 #include <tool/selection_conditions.h>
@@ -38,18 +38,18 @@
 #include <eda_doc.h>
 
 
-TOOL_ACTION SCH_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
+TOOL_ACTION EE_ACTIONS::showDatasheet( "eeschema.InspectionTool.showDatasheet",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SHOW_COMPONENT_DATASHEET ),
         _( "Show Datasheet" ), _( "Opens the datasheet in a browser" ),
         datasheet_xpm );
 
-TOOL_ACTION SCH_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
+TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo",
         AS_GLOBAL, 0,
         _( "Show Marker Info" ), _( "Display the marker's info in a dialog" ),
         info_xpm );
 
 
-INSPECTION_TOOL::INSPECTION_TOOL()
+EE_INSPECTION_TOOL::EE_INSPECTION_TOOL()
     : TOOL_INTERACTIVE( "eeschema.InspectionTool" ),
       m_selectionTool( nullptr ),
       m_view( nullptr ),
@@ -59,10 +59,10 @@ INSPECTION_TOOL::INSPECTION_TOOL()
 }
 
 
-bool INSPECTION_TOOL::Init()
+bool EE_INSPECTION_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
@@ -73,14 +73,14 @@ bool INSPECTION_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::showDatasheet, SCH_CONDITIONS::SingleSymbol && SCH_CONDITIONS::Idle, 400 );
-    selToolMenu.AddItem( SCH_ACTIONS::showMarkerInfo, singleMarkerCondition && SCH_CONDITIONS::Idle, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::showDatasheet, EE_CONDITIONS::SingleSymbol && EE_CONDITIONS::Idle, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 400 );
 
     return true;
 }
 
 
-void INSPECTION_TOOL::Reset( RESET_REASON aReason )
+void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 {
     m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
     m_controls = getViewControls();
@@ -88,7 +88,7 @@ void INSPECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
-int INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
+int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
 
@@ -105,7 +105,7 @@ int INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 }
 
 
-int INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
+int EE_INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->GetSelection();
 
@@ -121,10 +121,10 @@ int INSPECTION_TOOL::ShowMarkerInfo( const TOOL_EVENT& aEvent )
 }
 
 
-int INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
+int EE_INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
-    SELECTION&          selection = selTool->GetSelection();
+    EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    SELECTION&         selection = selTool->GetSelection();
 
     if( selection.GetSize() == 1 )
     {
@@ -143,14 +143,14 @@ int INSPECTION_TOOL::UpdateMessagePanel( const TOOL_EVENT& aEvent )
 }
 
 
-void INSPECTION_TOOL::setTransitions()
+void EE_INSPECTION_TOOL::setTransitions()
 {
-    Go( &INSPECTION_TOOL::ShowDatasheet,       SCH_ACTIONS::showDatasheet.MakeEvent() );
-    Go( &INSPECTION_TOOL::ShowMarkerInfo,      SCH_ACTIONS::showMarkerInfo.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::ShowDatasheet,       EE_ACTIONS::showDatasheet.MakeEvent() );
+    Go( &EE_INSPECTION_TOOL::ShowMarkerInfo,      EE_ACTIONS::showMarkerInfo.MakeEvent() );
 
-    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
-    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
-    Go( &INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
+    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::SelectedEvent );
+    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::UnselectedEvent );
+    Go( &EE_INSPECTION_TOOL::UpdateMessagePanel,  EVENTS::ClearedEvent );
 }
 
 

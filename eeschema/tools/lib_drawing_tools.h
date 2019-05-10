@@ -31,7 +31,7 @@
 
 
 class LIB_EDIT_FRAME;
-class SCH_SELECTION_TOOL;
+class EE_SELECTION_TOOL;
 
 
 /**
@@ -70,7 +70,7 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_SELECTION_TOOL*   m_selectionTool;
+    EE_SELECTION_TOOL*    m_selectionTool;
     KIGFX::SCH_VIEW*      m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     LIB_EDIT_FRAME*       m_frame;

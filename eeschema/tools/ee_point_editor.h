@@ -28,7 +28,7 @@
 #include <tool/edit_points.h>
 #include <tool/selection.h>
 
-class SCH_SELECTION_TOOL;
+class EE_SELECTION_TOOL;
 class SCH_BASE_FRAME;
 
 /**
@@ -36,10 +36,10 @@ class SCH_BASE_FRAME;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class POINT_EDITOR : public TOOL_INTERACTIVE
+class EE_POINT_EDITOR : public TOOL_INTERACTIVE
 {
 public:
-    POINT_EDITOR();
+    EE_POINT_EDITOR();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
@@ -94,9 +94,9 @@ private:
     void rollbackFromUndo();
 
 private:
-    SCH_BASE_FRAME*     m_frame;
-    SCH_SELECTION_TOOL* m_selectionTool;
-    bool                m_isLibEdit;
+    SCH_BASE_FRAME*    m_frame;
+    EE_SELECTION_TOOL* m_selectionTool;
+    bool               m_isLibEdit;
 
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;

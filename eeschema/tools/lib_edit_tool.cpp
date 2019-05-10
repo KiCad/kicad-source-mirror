@@ -22,13 +22,13 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
-#include <tools/picker_tool.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_picker_tool.h>
 #include <tools/lib_pin_tool.h>
 #include <tools/lib_drawing_tools.h>
 #include <tools/lib_move_tool.h>
-#include <sch_actions.h>
-#include <hotkeys.h>
+#include <ee_actions.h>
+#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <base_struct.h>
@@ -58,7 +58,7 @@ LIB_EDIT_TOOL::~LIB_EDIT_TOOL()
 bool LIB_EDIT_TOOL::Init()
 {
     m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
     LIB_MOVE_TOOL* moveTool = m_toolMgr->GetTool<LIB_MOVE_TOOL>();
 
@@ -73,18 +73,18 @@ bool LIB_EDIT_TOOL::Init()
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::rotateCCW,       SCH_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::rotateCW,        SCH_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::mirrorX,         SCH_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::mirrorY,         SCH_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::duplicate,       SCH_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::doDelete,        SCH_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::duplicate,       EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty );
 
-        moveMenu.AddItem( SCH_ACTIONS::properties,      SCH_CONDITIONS::Count( 1 ) );
+        moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ) );
 
-        moveMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( SCH_ACTIONS::cut,             SCH_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( SCH_ACTIONS::copy,            SCH_CONDITIONS::IdleSelection );
+        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( EE_ACTIONS::cut,             EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( EE_ACTIONS::copy,            EE_CONDITIONS::IdleSelection );
     }
 
     //
@@ -92,32 +92,32 @@ bool LIB_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::rotateCCW,       SCH_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::rotateCW,        SCH_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::mirrorX,         SCH_CONDITIONS::IdleSelection, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::mirrorY,         SCH_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::IdleSelection, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::IdleSelection, 200 );
 
-    drawMenu.AddItem( SCH_ACTIONS::properties,      SCH_CONDITIONS::Count( 1 ), 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW,        SCH_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,         SCH_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX,          SCH_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY,          SCH_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate,        SCH_CONDITIONS::NotEmpty, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::doDelete,         SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,        EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCW,         EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorX,          EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorY,          EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::duplicate,        EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::doDelete,         EE_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::properties,       SCH_CONDITIONS::Count( 1 ), 200 );
+    selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
 
-    selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::copy,             SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::paste,            SCH_CONDITIONS::Idle, 200 );
+    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 200 );
 
     return true;
 }
@@ -141,7 +141,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         return 0;
 
     wxPoint   rotPoint;
-    bool      ccw = ( aEvent.Matches( SCH_ACTIONS::rotateCCW.MakeEvent() ) );
+    bool      ccw = ( aEvent.Matches( EE_ACTIONS::rotateCCW.MakeEvent() ) );
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
@@ -164,7 +164,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         m_frame->OnModify();
     }
@@ -181,7 +181,7 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
 
     wxPoint   mirrorPoint;
-    bool      xAxis = ( aEvent.Matches( SCH_ACTIONS::mirrorX.MakeEvent() ) );
+    bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorX.MakeEvent() ) );
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
@@ -209,7 +209,7 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         m_frame->OnModify();
     }
@@ -262,9 +262,9 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         getView()->Add( newItem );
     }
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( SCH_ACTIONS::move, false );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
+    m_toolMgr->RunAction( EE_ACTIONS::move, false );
 
     return 0;
 }
@@ -279,7 +279,7 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_frame->SaveCopyInUndoList( part );
 
@@ -328,15 +328,15 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 {
-    SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
     wxCHECK( selectionTool, false );
 
-    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection, true );
+    aFrame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
     EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
 
     if( item )
-        aFrame->GetToolManager()->RunAction( SCH_ACTIONS::doDelete, true );
+        aFrame->GetToolManager()->RunAction( EE_ACTIONS::doDelete, true );
 
     return true;
 }
@@ -346,7 +346,7 @@ int LIB_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     m_frame->SetToolID( ID_LIBEDIT_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
@@ -583,9 +583,9 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     delete newPart;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( SCH_ACTIONS::move, false );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
+    m_toolMgr->RunAction( EE_ACTIONS::move, false );
 
     return 0;
 }
@@ -593,17 +593,17 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
 void LIB_EDIT_TOOL::setTransitions()
 {
-    Go( &LIB_EDIT_TOOL::Duplicate,          SCH_ACTIONS::duplicate.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DoDelete,           SCH_ACTIONS::doDelete.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::DeleteItemCursor,   SCH_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Duplicate,          EE_ACTIONS::duplicate.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteItemCursor.MakeEvent() );
 
-    Go( &LIB_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
 
-    Go( &LIB_EDIT_TOOL::Cut,                SCH_ACTIONS::cut.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Copy,               SCH_ACTIONS::copy.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Paste,              SCH_ACTIONS::paste.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Cut,                EE_ACTIONS::cut.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Copy,               EE_ACTIONS::copy.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Paste,              EE_ACTIONS::paste.MakeEvent() );
 }

@@ -39,7 +39,7 @@
 #include <dialog_configure_paths.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 
 #include "dialogs/panel_sym_lib_table.h"
 

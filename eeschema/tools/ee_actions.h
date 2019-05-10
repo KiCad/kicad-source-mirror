@@ -21,8 +21,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_ACTIONS_H
-#define SCH_ACTIONS_H
+#ifndef EESCHEMA_ACTIONS_H
+#define EESCHEMA_ACTIONS_H
 
 #include <tool/tool_action.h>
 #include <tool/actions.h>
@@ -34,12 +34,12 @@ class TOOL_MANAGER;
 extern char g_lastBusEntryShape;
 
 /**
- * Class SCH_ACTIONS
+ * Class EESCHEMA_ACTIONS
  *
  * Gathers all the actions that are shared by tools. The instance of SCH_ACTIONS is created
  * inside of ACTION_MANAGER object that registers the actions.
  */
-class SCH_ACTIONS : public ACTIONS
+class EE_ACTIONS : public ACTIONS
 {
 public:
     // Selection Tool

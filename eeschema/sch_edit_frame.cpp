@@ -46,7 +46,7 @@
 #include <reporter.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <eeschema_config.h>
 #include <sch_sheet.h>
 #include <sim/sim_plot_frame.h>
@@ -58,15 +58,15 @@
 #include <tool/tool_dispatcher.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
-#include <tools/sch_actions.h>
-#include <tools/sch_selection_tool.h>
-#include <tools/picker_tool.h>
-#include <tools/point_editor.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_picker_tool.h>
+#include <tools/ee_point_editor.h>
 #include <tools/sch_drawing_tools.h>
 #include <tools/sch_wire_bus_tool.h>
 #include <tools/sch_move_tool.h>
 #include <tools/sch_edit_tool.h>
-#include <tools/inspection_tool.h>
+#include <tools/ee_inspection_tool.h>
 #include <tools/sch_editor_control.h>
 #include <build_version.h>
 #include <wildcards_and_files_ext.h>
@@ -422,21 +422,21 @@ void SCH_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), this );
-    m_actions = new SCH_ACTIONS();
+    m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new EE_PICKER_TOOL );
     m_toolManager->RegisterTool( new SCH_DRAWING_TOOLS );
     m_toolManager->RegisterTool( new SCH_WIRE_BUS_TOOL );
     m_toolManager->RegisterTool( new SCH_MOVE_TOOL );
     m_toolManager->RegisterTool( new SCH_EDIT_TOOL );
-    m_toolManager->RegisterTool( new INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new SCH_EDITOR_CONTROL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active

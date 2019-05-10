@@ -41,7 +41,7 @@ namespace KIGFX
 }
 
 
-class SCH_CONDITIONS : public SELECTION_CONDITIONS
+class EE_CONDITIONS : public SELECTION_CONDITIONS
 {
 public:
     static SELECTION_CONDITION Empty;
@@ -54,11 +54,11 @@ public:
 };
 
 
-class SCH_SELECTION_TOOL : public TOOL_INTERACTIVE
+class EE_SELECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    SCH_SELECTION_TOOL();
-    ~SCH_SELECTION_TOOL();
+    EE_SELECTION_TOOL();
+    ~EE_SELECTION_TOOL();
 
     /// @copydoc TOOL_BASE::Init()
     bool Init() override;

@@ -1462,7 +1462,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 {
     STATUS_TEXT_POPUP statusPopup( frame() );
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     bool picking = true;
     bool retVal = true;
 

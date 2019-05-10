@@ -158,7 +158,7 @@ set( EESCHEMA_SRCS
     generate_alias_info.cpp
     getpart.cpp
     hierarch.cpp
-    hotkeys.cpp
+    ee_hotkeys.cpp
     lib_arc.cpp
     lib_bezier.cpp
     lib_circle.cpp
@@ -233,16 +233,16 @@ set( EESCHEMA_SRCS
     tools/lib_edit_tool.cpp
     tools/lib_move_tool.cpp
     tools/lib_pin_tool.cpp
-    tools/point_editor.cpp
-    tools/sch_actions.cpp
+    tools/ee_point_editor.cpp
+    tools/ee_actions.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
-    tools/inspection_tool.cpp
+    tools/ee_inspection_tool.cpp
     tools/sch_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
-    tools/picker_tool.cpp
-    tools/sch_selection_tool.cpp
+    tools/ee_picker_tool.cpp
+    tools/ee_selection_tool.cpp
     tools/selection.cpp
     )
 

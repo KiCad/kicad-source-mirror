@@ -906,7 +906,7 @@ int PCB_EDITOR_CONTROL::DrillOrigin( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxCURSOR_HAND, _( "Adjust zero" ) );
@@ -1087,7 +1087,7 @@ int PCB_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
 
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
     m_frame->SetToolID( ID_PCB_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight net" ) );
@@ -1153,7 +1153,7 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    auto picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    auto picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     auto board = getModel<BOARD>();
     wxASSERT( picker );
     wxASSERT( board );
@@ -1164,7 +1164,7 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
     picker->SetFinalizeHandler( [ board ]( int aCondition ){
         auto vis = board->IsElementVisible( LAYER_RATSNEST );
 
-        if( aCondition != PICKER_TOOL::END_ACTIVATE )
+        if( aCondition != EE_PICKER_TOOL::END_ACTIVATE )
         {
             for( auto mod : board->Modules() )
                 for( auto pad : mod->Pads() )

@@ -35,7 +35,7 @@
 #include <sch_view.h>
 #include <sch_painter.h>
 #include <general.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <eeschema_id.h>
 
 #include <help_common_strings.h>

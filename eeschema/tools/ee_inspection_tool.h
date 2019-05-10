@@ -29,15 +29,15 @@
 #include <sch_base_frame.h>
 
 
-class SCH_SELECTION_TOOL;
+class EE_SELECTION_TOOL;
 class SCH_EDIT_FRAME;
 
 
-class INSPECTION_TOOL : public TOOL_INTERACTIVE
+class EE_INSPECTION_TOOL : public TOOL_INTERACTIVE
 {
 public:
-    INSPECTION_TOOL();
-    ~INSPECTION_TOOL() {}
+    EE_INSPECTION_TOOL();
+    ~EE_INSPECTION_TOOL() {}
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
@@ -55,7 +55,7 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_SELECTION_TOOL*   m_selectionTool;
+    EE_SELECTION_TOOL*    m_selectionTool;
     KIGFX::SCH_VIEW*      m_view;
     KIGFX::VIEW_CONTROLS* m_controls;
     SCH_BASE_FRAME*       m_frame;

@@ -30,7 +30,7 @@
 
 
 class SCH_EDIT_FRAME;
-class SCH_SELECTION_TOOL;
+class EE_SELECTION_TOOL;
 
 
 class SCH_MOVE_TOOL : public TOOL_INTERACTIVE
@@ -82,7 +82,7 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_SELECTION_TOOL*   m_selectionTool;
+    EE_SELECTION_TOOL*    m_selectionTool;
     KIGFX::VIEW_CONTROLS* m_controls;
     SCH_EDIT_FRAME*       m_frame;
 

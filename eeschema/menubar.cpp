@@ -36,7 +36,7 @@
 #include "eeschema_id.h"
 #include "general.h"
 #include "help_common_strings.h"
-#include "hotkeys.h"
+#include "ee_hotkeys.h"
 #include "sch_edit_frame.h"
 
 // helper functions that build specific submenus:

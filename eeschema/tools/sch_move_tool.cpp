@@ -22,10 +22,10 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <sch_actions.h>
-#include <hotkeys.h>
+#include <ee_actions.h>
+#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <base_struct.h>
 #include <sch_item_struct.h>
@@ -38,11 +38,11 @@
 #include "sch_move_tool.h"
 
 
-TOOL_ACTION SCH_ACTIONS::move( "eeschema.InteractiveEdit.move",
+TOOL_ACTION EE_ACTIONS::move( "eeschema.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE ),
         _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
+TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG ),
         _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
@@ -71,7 +71,7 @@ SCH_MOVE_TOOL::~SCH_MOVE_TOOL()
 bool SCH_MOVE_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
@@ -90,9 +90,9 @@ bool SCH_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
 
-    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 1000 );
+    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     //
@@ -100,8 +100,8 @@ bool SCH_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move, moveCondition, 150 );
-    selToolMenu.AddItem( SCH_ACTIONS::drag, moveCondition, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::move, moveCondition, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::drag, moveCondition, 150 );
 
     return true;
 }
@@ -157,7 +157,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    if( aEvent.IsAction( &SCH_ACTIONS::move ) )
+    if( aEvent.IsAction( &EE_ACTIONS::move ) )
         m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
     else
         m_frame->SetToolID( ID_SCH_DRAG, wxCURSOR_DEFAULT, _( "Drag Items" ) );
@@ -181,7 +181,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         m_moveInProgress = false;
         // And give it a kick so it doesn't have to wait for the first mouse movement to
         // refresh.
-        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
         return 0;
     }
     else if( selection.Front()->IsNew() )
@@ -195,9 +195,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &SCH_ACTIONS::move ) || evt->IsAction( &SCH_ACTIONS::drag )
+        if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &SCH_ACTIONS::refreshPreview ) )
+                || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
@@ -349,7 +349,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             if( m_moveInProgress )
                 restore_state = true;
@@ -366,12 +366,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
+            if( evt->IsAction( &EE_ACTIONS::doDelete ) )
             {
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;
             }
-            else if( evt->IsAction( &SCH_ACTIONS::duplicate ) )
+            else if( evt->IsAction( &EE_ACTIONS::duplicate ) )
             {
                 if( selection.Front()->IsNew() )
                 {
@@ -397,7 +397,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     if( component )
                     {
                         m_frame->SelectUnit( component, unit );
-                        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+                        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
                     }
                 }
             }
@@ -436,7 +436,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         item->ClearFlags( item->GetEditFlags() );
 
     if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     else
         m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
 
@@ -692,6 +692,6 @@ void SCH_MOVE_TOOL::saveCopyInUndoList( SCH_ITEM* aItem, UNDO_REDO_T aType, bool
 
 void SCH_MOVE_TOOL::setTransitions()
 {
-    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
-    Go( &SCH_MOVE_TOOL::Main,               SCH_ACTIONS::drag.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
+    Go( &SCH_MOVE_TOOL::Main,               EE_ACTIONS::drag.MakeEvent() );
 }

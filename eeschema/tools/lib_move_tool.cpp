@@ -22,9 +22,9 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
-#include <sch_actions.h>
-#include <hotkeys.h>
+#include <tools/ee_selection_tool.h>
+#include <ee_actions.h>
+#include <ee_hotkeys.h>
 #include <view/view.h>
 #include <bitmaps.h>
 #include <base_struct.h>
@@ -54,7 +54,7 @@ LIB_MOVE_TOOL::~LIB_MOVE_TOOL()
 bool LIB_MOVE_TOOL::Init()
 {
     m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
@@ -63,9 +63,9 @@ bool LIB_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
 
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
 
-    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 1000 );
+    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     //
@@ -73,7 +73,7 @@ bool LIB_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::move, SCH_CONDITIONS::Idle, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::move, EE_CONDITIONS::Idle, 150 );
 
     return true;
 }
@@ -127,8 +127,8 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &SCH_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
-                || evt->IsAction( &SCH_ACTIONS::refreshPreview ) )
+        if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
+                || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
@@ -220,7 +220,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             if( m_moveInProgress )
                 restore_state = true;
@@ -237,12 +237,12 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         else if( evt->Category() == TC_COMMAND )
         {
-            if( evt->IsAction( &SCH_ACTIONS::doDelete ) )
+            if( evt->IsAction( &EE_ACTIONS::doDelete ) )
             {
                 // Exit on a remove operation; there is no further processing for removed items.
                 break;
             }
-            else if( evt->IsAction( &SCH_ACTIONS::duplicate ) )
+            else if( evt->IsAction( &EE_ACTIONS::duplicate ) )
             {
                 if( selection.Front()->IsNew() )
                 {
@@ -300,7 +300,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         item->ClearFlags( item->GetEditFlags() );
 
     if( unselect )
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     if( restore_state )
         m_frame->RollbackPartFromUndo();
@@ -342,5 +342,5 @@ bool LIB_MOVE_TOOL::updateModificationPoint( SELECTION& aSelection )
 
 void LIB_MOVE_TOOL::setTransitions()
 {
-    Go( &LIB_MOVE_TOOL::Main,               SCH_ACTIONS::move.MakeEvent() );
+    Go( &LIB_MOVE_TOOL::Main,               EE_ACTIONS::move.MakeEvent() );
 }

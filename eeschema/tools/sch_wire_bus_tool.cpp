@@ -23,8 +23,8 @@
 
 #include <connection_graph.h>
 #include <sch_wire_bus_tool.h>
-#include <sch_selection_tool.h>
-#include <sch_actions.h>
+#include <ee_selection_tool.h>
+#include <ee_actions.h>
 #include <sch_edit_frame.h>
 #include <sch_view.h>
 #include <class_draw_panel_gal.h>
@@ -35,7 +35,7 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <sch_junction.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
@@ -43,54 +43,54 @@
 #include <sch_sheet.h>
 #include <advanced_config.h>
 
-TOOL_ACTION SCH_ACTIONS::startWire( "eeschema.WireBusDrawing.startWire",
+TOOL_ACTION EE_ACTIONS::startWire( "eeschema.WireBusDrawing.startWire",
         AS_GLOBAL, 0,
         _( "Start Wire" ), _( "Start drawing a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawWire( "eeschema.WireBusDrawing.drawWires",
+TOOL_ACTION EE_ACTIONS::drawWire( "eeschema.WireBusDrawing.drawWires",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_WIRE ),
         _( "Add Wire" ), _( "Add a wire" ),
         add_line_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::startBus( "eeschema.WireBusDrawing.startBus",
+TOOL_ACTION EE_ACTIONS::startBus( "eeschema.WireBusDrawing.startBus",
         AS_GLOBAL, 0,
         _( "Start Bus" ), _( "Start drawing a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBusses",
+TOOL_ACTION EE_ACTIONS::drawBus( "eeschema.WireBusDrawing.drawBusses",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BEGIN_BUS ),
         _( "Add Bus" ), _( "Add a bus" ),
         add_bus_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::unfoldBus( "eeschema.WireBusDrawing.unfoldBus",
+TOOL_ACTION EE_ACTIONS::unfoldBus( "eeschema.WireBusDrawing.unfoldBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UNFOLD_BUS ),
         _( "Unfold from Bus" ), _( "Break a wire out of a bus" ),
         nullptr, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::startLines( "eeschema.WireBusDrawing.startLines",
+TOOL_ACTION EE_ACTIONS::startLines( "eeschema.WireBusDrawing.startLines",
         AS_GLOBAL, 0, _( "Begin Lines" ), _( "Start drawing connected graphic lines" ),
         add_line_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawLines( "eeschema.WireBusDrawing.drawLines",
+TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.WireBusDrawing.drawLines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
         add_graphical_segments_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::finishLineWireOrBus( "eeschema.WireBusDrawing.finishLineWireOrBus",
+TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.WireBusDrawing.finishLineWireOrBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),
         _( "Finish Wire or Bus" ), _( "Complete drawing at current segment" ),
         checked_ok_xpm, AF_NONE );
 
-TOOL_ACTION SCH_ACTIONS::finishWire( "eeschema.WireBusDrawing.finishWire",
+TOOL_ACTION EE_ACTIONS::finishWire( "eeschema.WireBusDrawing.finishWire",
         AS_GLOBAL, 0, _( "Finish Wire" ), _( "Complete wire with current segment" ),
         checked_ok_xpm, AF_NONE );
 
-TOOL_ACTION SCH_ACTIONS::finishBus( "eeschema.WireBusDrawing.finishBus",
+TOOL_ACTION EE_ACTIONS::finishBus( "eeschema.WireBusDrawing.finishBus",
         AS_GLOBAL, 0, _( "Finish Bus" ), _( "Complete bus with current segment" ),
         checked_ok_xpm, AF_NONE );
 
-TOOL_ACTION SCH_ACTIONS::finishLine( "eeschema.WireBusDrawing.finishLine",
+TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.WireBusDrawing.finishLine",
         AS_GLOBAL, 0, _( "Finish Lines" ), _( "Complete connected lines with current segment" ),
         checked_ok_xpm, AF_NONE );
 
@@ -120,11 +120,11 @@ protected:
 private:
     void update() override
     {
-        SCH_EDIT_FRAME*     frame = (SCH_EDIT_FRAME*) getToolManager()->GetEditFrame();
-        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
-        KICAD_T             busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
-        SELECTION&          selection = selTool->RequestSelection( busType );
-        SCH_LINE*           bus = (SCH_LINE*) selection.Front();
+        SCH_EDIT_FRAME*    frame = (SCH_EDIT_FRAME*) getToolManager()->GetEditFrame();
+        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
+        KICAD_T            busType[] = { SCH_LINE_LOCATE_BUS_T, EOT };
+        SELECTION&         selection = selTool->RequestSelection( busType );
+        SCH_LINE*          bus = (SCH_LINE*) selection.Front();
 
         // TODO(JE) remove once real-time is enabled
         if( !ADVANCED_CFG::GetCfg().m_realTimeConnectivity || !CONNECTION_GRAPH::m_allowRealTime )
@@ -206,7 +206,7 @@ SCH_WIRE_BUS_TOOL::~SCH_WIRE_BUS_TOOL()
 bool SCH_WIRE_BUS_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     auto activeTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
@@ -224,41 +224,41 @@ bool SCH_WIRE_BUS_TOOL::Init()
         return g_CurrentSheet->Last() != g_RootSheet;
     };
 
-    auto busSelection = SCH_CONDITIONS::MoreThan( 0 )
-                        && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto busSelection = EE_CONDITIONS::MoreThan( 0 )
+                        && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
 
     auto& ctxMenu = m_menu.GetMenu();
 
     //
     // Build the tool menu
     //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::leaveSheet,    belowRootSheetCondition, 2 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( EE_ACTIONS::leaveSheet,    belowRootSheetCondition, 2 );
 
-    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::startWire,     wireOrBusTool && SCH_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::startBus,      wireOrBusTool && SCH_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::startLines,    lineTool && SCH_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishWire,    IsDrawingWire, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishBus,     IsDrawingBus, 10 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishLine,    IsDrawingLine, 10 );
+    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startWire,     wireOrBusTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startBus,      wireOrBusTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startLines,    lineTool && EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishWire,    IsDrawingWire, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishBus,     IsDrawingBus, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishLine,    IsDrawingLine, 10 );
 
     std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     busUnfoldMenu->SetTool( this );
     m_menu.AddSubMenu( busUnfoldMenu );
-    ctxMenu.AddMenu( busUnfoldMenu.get(), false, SCH_CONDITIONS::Idle, 10 );
+    ctxMenu.AddMenu( busUnfoldMenu.get(), false, EE_CONDITIONS::Idle, 10 );
 
-    ctxMenu.AddSeparator( wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addJunction,      wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addLabel,         wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addGlobalLabel,   wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::addHierLabel,     wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::breakWire,        wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( SCH_ACTIONS::breakBus,         wireOrBusTool && SCH_CONDITIONS::Idle, 100 );
+    ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addJunction,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addLabel,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addGlobalLabel,   wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addHierLabel,     wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakWire,        wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakBus,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
 
-    ctxMenu.AddSeparator( wireOrBusTool && SCH_CONDITIONS::Idle, 200 );
-    ctxMenu.AddItem( SCH_ACTIONS::selectNode,       wireOrBusTool && SCH_CONDITIONS::Idle, 200 );
-    ctxMenu.AddItem( SCH_ACTIONS::selectConnection, wireOrBusTool && SCH_CONDITIONS::Idle, 200 );
+    ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectNode,       wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectConnection, wireOrBusTool && EE_CONDITIONS::Idle, 200 );
 
     ctxMenu.AddSeparator( activeTool, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
@@ -271,7 +271,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     selBusUnfoldMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( selBusUnfoldMenu );
-    selToolMenu.AddMenu( selBusUnfoldMenu.get(), false, busSelection && SCH_CONDITIONS::Idle, 100 );
+    selToolMenu.AddMenu( selBusUnfoldMenu.get(), false, busSelection && EE_CONDITIONS::Idle, 100 );
 
     return true;
 }
@@ -327,7 +327,7 @@ bool SCH_WIRE_BUS_TOOL::IsDrawingLineWireOrBus( const SELECTION& aSelection )
  */
 int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     Activate();
 
@@ -347,7 +347,7 @@ int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
     else
     {
         m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_WIRE, nullptr );
     }
@@ -359,7 +359,7 @@ int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
  */
 int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     Activate();
 
@@ -379,7 +379,7 @@ int SCH_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
     else
     {
         m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_BUS, nullptr );
     }
@@ -392,7 +392,7 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
     wxString  net;
     SCH_LINE* segment = nullptr;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     Activate();
 
@@ -472,7 +472,7 @@ SCH_LINE* SCH_WIRE_BUS_TOOL::doUnfoldBus( const wxString& aNet )
  */
 int SCH_WIRE_BUS_TOOL::StartLine( const TOOL_EVENT& aEvent)
 {
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_frame->GetCanvas()->MoveCursorToCrossHair();
     SCH_LINE* segment = startSegments( LAYER_NOTES, m_frame->GetCrossHairPosition() );
@@ -490,7 +490,7 @@ int SCH_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
     else
     {
         m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_NOTES, nullptr );
     }
@@ -611,7 +611,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
                 aSegment = nullptr;
                 s_wires.DeleteAll();
@@ -633,9 +633,9 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
                     continue;
             }
 
-            if( ( evt->IsAction( &SCH_ACTIONS::drawWire ) && aType == LAYER_WIRE )
-                    || ( evt->IsAction( &SCH_ACTIONS::drawBus ) && aType == LAYER_BUS )
-                    || ( evt->IsAction( &SCH_ACTIONS::unfoldBus ) && aType == LAYER_WIRE ) )
+            if( ( evt->IsAction( &EE_ACTIONS::drawWire ) && aType == LAYER_WIRE )
+                    || ( evt->IsAction( &EE_ACTIONS::drawBus ) && aType == LAYER_BUS )
+                    || ( evt->IsAction( &EE_ACTIONS::unfoldBus ) && aType == LAYER_WIRE ) )
             {
                 // Don't reset tool.  If we do the next command will think it needs to
                 // re-select the tool rather than start a wire or bus.
@@ -650,10 +650,10 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         //------------------------------------------------------------------------
         // Handle finish:
         //
-        else if( evt->IsAction( &SCH_ACTIONS::finishLineWireOrBus )
-                     || evt->IsAction( &SCH_ACTIONS::finishWire )
-                     || evt->IsAction( &SCH_ACTIONS::finishBus )
-                     || evt->IsAction( &SCH_ACTIONS::finishLine ) )
+        else if( evt->IsAction( &EE_ACTIONS::finishLineWireOrBus )
+                     || evt->IsAction( &EE_ACTIONS::finishWire )
+                     || evt->IsAction( &EE_ACTIONS::finishBus )
+                     || evt->IsAction( &EE_ACTIONS::finishLine ) )
         {
             if( aSegment || m_busUnfold.in_progress )
             {
@@ -910,7 +910,7 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
     // Clear selection when done so that a new wire can be started.
     // NOTE: this must be done before RemoveBacktracks is called or we might end up with
     // freed selected items.
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     PICKED_ITEMS_LIST itemList;
 
@@ -1002,13 +1002,13 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
 
 void SCH_WIRE_BUS_TOOL::setTransitions()
 {
-    Go( &SCH_WIRE_BUS_TOOL::DrawWires,      SCH_ACTIONS::drawWire.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawBusses,     SCH_ACTIONS::drawBus.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::DrawLines,      SCH_ACTIONS::drawLines.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawWires,      EE_ACTIONS::drawWire.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawBusses,     EE_ACTIONS::drawBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::DrawLines,      EE_ACTIONS::drawLines.MakeEvent() );
 
-    Go( &SCH_WIRE_BUS_TOOL::StartWire,      SCH_ACTIONS::startWire.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::StartBus,       SCH_ACTIONS::startBus.MakeEvent() );
-    Go( &SCH_WIRE_BUS_TOOL::StartLine,      SCH_ACTIONS::startLines.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartWire,      EE_ACTIONS::startWire.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartBus,       EE_ACTIONS::startBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::StartLine,      EE_ACTIONS::startLines.MakeEvent() );
 
-    Go( &SCH_WIRE_BUS_TOOL::UnfoldBus,      SCH_ACTIONS::unfoldBus.MakeEvent() );
+    Go( &SCH_WIRE_BUS_TOOL::UnfoldBus,      EE_ACTIONS::unfoldBus.MakeEvent() );
 }

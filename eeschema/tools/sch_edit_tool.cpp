@@ -23,12 +23,12 @@
 
 #include <tool/tool_manager.h>
 #include <tools/sch_edit_tool.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <tools/picker_tool.h>
+#include <tools/ee_picker_tool.h>
 #include <tools/sch_move_tool.h>
-#include <sch_actions.h>
-#include <hotkeys.h>
+#include <ee_actions.h>
+#include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <confirm.h>
 #include <eda_doc.h>
@@ -49,117 +49,117 @@
 #include "sch_drawing_tools.h"
 
 
-TOOL_ACTION SCH_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
+TOOL_ACTION EE_ACTIONS::duplicate( "eeschema.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
         _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
         duplicate_xpm );
 
-TOOL_ACTION SCH_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
+TOOL_ACTION EE_ACTIONS::repeatDrawItem( "eeschema.InteractiveEdit.repeatDrawItem",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPEAT_LAST ),
         _( "Repeat Last Item" ), _( "Duplicates the last drawn item" ),
         nullptr );
 
-TOOL_ACTION SCH_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
+TOOL_ACTION EE_ACTIONS::rotateCW( "eeschema.InteractiveEdit.rotateCW",
         AS_GLOBAL, 0,
         _( "Rotate Clockwise" ), _( "Rotates selected item(s) clockwise" ),
         rotate_cw_xpm );
 
-TOOL_ACTION SCH_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
+TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE ),
         _( "Rotate" ), _( "Rotates selected item(s) counter-clockwise" ),
         rotate_ccw_xpm );
 
-TOOL_ACTION SCH_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
+TOOL_ACTION EE_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
         _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ),
         mirror_h_xpm );
 
-TOOL_ACTION SCH_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
+TOOL_ACTION EE_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
         _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ),
         mirror_v_xpm );
 
-TOOL_ACTION SCH_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
+TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
         _( "Properties..." ), _( "Displays item properties dialog" ),
         edit_xpm );
 
-TOOL_ACTION SCH_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
+TOOL_ACTION EE_ACTIONS::editReference( "eeschema.InteractiveEdit.editReference",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_REFERENCE ),
         _( "Edit Reference..." ), _( "Displays reference field dialog" ),
         edit_comp_ref_xpm );
 
-TOOL_ACTION SCH_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
+TOOL_ACTION EE_ACTIONS::editValue( "eeschema.InteractiveEdit.editValue",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_VALUE ),
         _( "Edit Value..." ), _( "Displays value field dialog" ),
         edit_comp_value_xpm );
 
-TOOL_ACTION SCH_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
+TOOL_ACTION EE_ACTIONS::editFootprint( "eeschema.InteractiveEdit.editFootprint",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_FOOTPRINT ),
         _( "Edit Footprint..." ), _( "Displays footprint field dialog" ),
         edit_comp_footprint_xpm );
 
-TOOL_ACTION SCH_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
+TOOL_ACTION EE_ACTIONS::autoplaceFields( "eeschema.InteractiveEdit.autoplaceFields",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_AUTOPLACE_FIELDS ),
         _( "Autoplace Fields" ), _( "Runs the automatic placement algorithm on the symbol's fields" ),
         autoplace_fields_xpm );
 
-TOOL_ACTION SCH_ACTIONS::convertDeMorgan( "eeschema.InteractiveEdit.convertDeMorgan",
+TOOL_ACTION EE_ACTIONS::convertDeMorgan( "eeschema.InteractiveEdit.convertDeMorgan",
         AS_GLOBAL, 0,
         _( "DeMorgan Conversion" ), _( "Switch between DeMorgan representations" ),
         morgan2_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
+TOOL_ACTION EE_ACTIONS::toShapeSlash( "eeschema.InteractiveEdit.toShapeSlash",
         AS_GLOBAL, 0,
         _( "Set Bus Entry Shape /" ), _( "Change the bus entry shape to /" ),
         change_entry_orient_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
+TOOL_ACTION EE_ACTIONS::toShapeBackslash( "eeschema.InteractiveEdit.toShapeBackslash",
         AS_GLOBAL, 0,
         _( "Set Bus Entry Shape \\" ), _( "Change the bus entry shape to \\" ),
         change_entry_orient_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
+TOOL_ACTION EE_ACTIONS::toLabel( "eeschema.InteractiveEdit.toLabel",
         AS_GLOBAL, 0,
         _( "Change to Label" ), _( "Change existing item to a label" ),
         add_line_label_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
+TOOL_ACTION EE_ACTIONS::toHLabel( "eeschema.InteractiveEdit.toHLabel",
         AS_GLOBAL, 0,
         _( "Change to Hierarchical Label" ), _( "Change existing item to a hierarchical label" ),
         add_hierarchical_label_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
+TOOL_ACTION EE_ACTIONS::toGLabel( "eeschema.InteractiveEdit.toGLabel",
         AS_GLOBAL, 0,
         _( "Change to Global Label" ), _( "Change existing item to a global label" ),
         add_glabel_xpm );
 
-TOOL_ACTION SCH_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
+TOOL_ACTION EE_ACTIONS::toText( "eeschema.InteractiveEdit.toText",
         AS_GLOBAL, 0,
         _( "Change to Text" ), _( "Change existing item to a text comment" ),
         text_xpm );
 
-TOOL_ACTION SCH_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
+TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheetPins",
         AS_GLOBAL, 0,
         _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ),
         nullptr );
 
-TOOL_ACTION SCH_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
+TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm );
 
-TOOL_ACTION SCH_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
+TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
         AS_GLOBAL, 0,
         _( "DoDelete Items" ), _( "DoDelete clicked items" ),
         nullptr, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
+TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
         AS_GLOBAL, 0,
         _( "Break Wire" ), _( "Divide a wire into segments which can be dragged independently" ),
         break_line_xpm );
 
-TOOL_ACTION SCH_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
+TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         AS_GLOBAL, 0,
         _( "Break Bus" ), _( "Divide a bus into segments which can be dragged independently" ),
         break_line_xpm );
@@ -184,9 +184,9 @@ protected:
 private:
     void update() override
     {
-        SCH_SELECTION_TOOL* selTool = getToolManager()->GetTool<SCH_SELECTION_TOOL>();
-        SELECTION&          selection = selTool->GetSelection();
-        SCH_COMPONENT*      component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
+        EE_SELECTION_TOOL* selTool = getToolManager()->GetTool<EE_SELECTION_TOOL>();
+        SELECTION&         selection = selTool->GetSelection();
+        SCH_COMPONENT*     component = dynamic_cast<SCH_COMPONENT*>( selection.Front() );
 
         if( !component )
         {
@@ -241,7 +241,7 @@ SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
 bool SCH_EDIT_TOOL::Init()
 {
     m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
     SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
 
@@ -315,36 +315,36 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toLabelCondition = SCH_CONDITIONS::Count( 1 )
-                         && SCH_CONDITIONS::OnlyTypes( toLabelTypes );
+    auto toLabelCondition = EE_CONDITIONS::Count( 1 )
+                         && EE_CONDITIONS::OnlyTypes( toLabelTypes );
 
     KICAD_T toHLableTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
-    auto toHLabelCondition = SCH_CONDITIONS::Count( 1 )
-                          && SCH_CONDITIONS::OnlyTypes( toHLableTypes);
+    auto toHLabelCondition = EE_CONDITIONS::Count( 1 )
+                          && EE_CONDITIONS::OnlyTypes( toHLableTypes);
 
     KICAD_T toGLableTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toGLabelCondition = SCH_CONDITIONS::Count( 1 )
-                          && SCH_CONDITIONS::OnlyTypes( toGLableTypes);
+    auto toGLabelCondition = EE_CONDITIONS::Count( 1 )
+                          && EE_CONDITIONS::OnlyTypes( toGLableTypes);
 
     KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-    auto toTextlCondition = SCH_CONDITIONS::Count( 1 )
-                         && SCH_CONDITIONS::OnlyTypes( toTextTypes);
+    auto toTextlCondition = EE_CONDITIONS::Count( 1 )
+                         && EE_CONDITIONS::OnlyTypes( toTextTypes);
 
     KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
-    auto entryCondition = SCH_CONDITIONS::MoreThan( 0 )
-                       && SCH_CONDITIONS::OnlyTypes( entryTypes );
+    auto entryCondition = EE_CONDITIONS::MoreThan( 0 )
+                       && EE_CONDITIONS::OnlyTypes( entryTypes );
 
-    auto singleComponentCondition = SCH_CONDITIONS::Count( 1 )
-                                 && SCH_CONDITIONS::OnlyType( SCH_COMPONENT_T );
+    auto singleComponentCondition = EE_CONDITIONS::Count( 1 )
+                                 && EE_CONDITIONS::OnlyType( SCH_COMPONENT_T );
 
-    auto wireSelectionCondition = SCH_CONDITIONS::MoreThan( 0 )
-                               && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+    auto wireSelectionCondition = EE_CONDITIONS::MoreThan( 0 )
+                               && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
 
-    auto busSelectionCondition = SCH_CONDITIONS::MoreThan( 0 )
-                              && SCH_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto busSelectionCondition = EE_CONDITIONS::MoreThan( 0 )
+                              && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
 
-    auto singleSheetCondition = SCH_CONDITIONS::Count( 1 )
-                             && SCH_CONDITIONS::OnlyType( SCH_SHEET_T );
+    auto singleSheetCondition = EE_CONDITIONS::Count( 1 )
+                             && EE_CONDITIONS::OnlyType( SCH_SHEET_T );
 
     //
     // Add edit actions to the move tool menu
@@ -354,27 +354,27 @@ bool SCH_EDIT_TOOL::Init()
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( SCH_ACTIONS::rotateCCW,       orientCondition );
-        moveMenu.AddItem( SCH_ACTIONS::rotateCW,        orientCondition );
-        moveMenu.AddItem( SCH_ACTIONS::mirrorX,         orientCondition );
-        moveMenu.AddItem( SCH_ACTIONS::mirrorY,         orientCondition );
-        moveMenu.AddItem( SCH_ACTIONS::duplicate,       duplicateCondition );
-        moveMenu.AddItem( SCH_ACTIONS::doDelete,        SCH_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
+        moveMenu.AddItem( EE_ACTIONS::duplicate,       duplicateCondition );
+        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty );
 
-        moveMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition );
-        moveMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition );
-        moveMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition );
-        moveMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition );
-        moveMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol );
+        moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
+        moveMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition );
+        moveMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition );
+        moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition );
+        moveMenu.AddItem( EE_ACTIONS::convertDeMorgan, EE_CONDITIONS::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
         symUnitMenu->SetTool( this );
         m_menu.AddSubMenu( symUnitMenu );
-        moveMenu.AddMenu( symUnitMenu.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+        moveMenu.AddMenu( symUnitMenu.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-        moveMenu.AddSeparator( SCH_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( SCH_ACTIONS::cut,  SCH_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( SCH_ACTIONS::copy, SCH_CONDITIONS::IdleSelection );
+        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( EE_ACTIONS::cut,  EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( EE_ACTIONS::copy, EE_CONDITIONS::IdleSelection );
     }
 
     //
@@ -382,73 +382,73 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddSeparator( SCH_CONDITIONS::NotEmpty, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::rotateCCW,       orientCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::rotateCW,        orientCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::mirrorX,         orientCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::mirrorY,         orientCondition, 200 );
+    drawMenu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition, 200 );
 
-    drawMenu.AddItem( SCH_ACTIONS::properties,      propertiesCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::editReference,   singleComponentCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::editValue,       singleComponentCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::editFootprint,   singleComponentCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::convertDeMorgan, SCH_CONDITIONS::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan, EE_CONDITIONS::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
-    drawMenu.AddMenu( symUnitMenu2.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( symUnitMenu2.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( SCH_ACTIONS::editWithSymbolEditor,
-                                         singleComponentCondition && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
+                                         singleComponentCondition && EE_CONDITIONS::Idle, 200 );
 
-    drawMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::toLabel,          anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::toHLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::toGLabel,         anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::toText,           anyTextTool && SCH_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, sheetTool && SCH_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toLabel,          anyTextTool && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetTool && EE_CONDITIONS::Idle, 200 );
 
     //
     // Add editing actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCCW,        orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::rotateCW,         orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorX,          orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::mirrorY,          orientCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::duplicate,        duplicateCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::doDelete,         SCH_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::duplicate,        duplicateCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::doDelete,         EE_CONDITIONS::NotEmpty, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::properties,       propertiesCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editReference,    SCH_CONDITIONS::SingleSymbol, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editValue,        SCH_CONDITIONS::SingleSymbol, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::editFootprint,    SCH_CONDITIONS::SingleSymbol, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::convertDeMorgan,  SCH_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editReference,    EE_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editValue,        EE_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editFootprint,    EE_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::convertDeMorgan,  EE_CONDITIONS::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
-    selToolMenu.AddMenu( symUnitMenu3.get(), false, SCH_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( symUnitMenu3.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::editWithSymbolEditor,
-                                          singleComponentCondition && SCH_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
+                                          singleComponentCondition && EE_CONDITIONS::Idle, 200 );
 
-    selToolMenu.AddItem( SCH_ACTIONS::toShapeSlash,     entryCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toLabel,          toLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toHLabel,         toHLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toGLabel,         toGLabelCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::toText,           toTextlCondition, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toLabel,          toLabelCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toGLabel,         toGLabelCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::toText,           toTextlCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
 
-    selToolMenu.AddSeparator( SCH_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::cut,              SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::copy,             SCH_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( SCH_ACTIONS::paste,            SCH_CONDITIONS::Idle, 200 );
+    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 200 );
 
     return true;
 }
@@ -472,7 +472,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         return 0;
 
     wxPoint   rotPoint;
-    bool      clockwise = ( aEvent.Matches( SCH_ACTIONS::rotateCW.MakeEvent() ) );
+    bool      clockwise = ( aEvent.Matches( EE_ACTIONS::rotateCW.MakeEvent() ) );
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
     bool      moving = item->IsMoving();
@@ -592,7 +592,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -612,7 +612,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
         return 0;
 
     wxPoint   mirrorPoint;
-    bool      xAxis = ( aEvent.Matches( SCH_ACTIONS::mirrorX.MakeEvent() ) );
+    bool      xAxis = ( aEvent.Matches( EE_ACTIONS::mirrorX.MakeEvent() ) );
     SCH_ITEM* item = static_cast<SCH_ITEM*>( selection.Front() );
     bool      connections = false;
     bool      moving = item->IsMoving();
@@ -735,7 +735,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     if( !item->IsMoving() )
     {
         if( selection.IsHover() )
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         if( connections )
             m_frame->TestDanglingEnds();
@@ -847,9 +847,9 @@ int SCH_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         m_frame->SetSheetNumberAndCount();
     }
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-    m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( SCH_ACTIONS::move, false );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::addItemsToSel, true, &newItems );
+    m_toolMgr->RunAction( EE_ACTIONS::move, false );
 
     return 0;
 }
@@ -862,7 +862,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     if( !sourceItem )
         return 0;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     SCH_ITEM* newItem = (SCH_ITEM*) sourceItem->Clone();
     bool      performDrag = false;
@@ -891,7 +891,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
     m_selectionTool->AddItemToSel( newItem );
 
     if( performDrag )
-        m_toolMgr->RunAction( SCH_ACTIONS::move, true );
+        m_toolMgr->RunAction( EE_ACTIONS::move, true );
 
     newItem->ClearFlags();
 
@@ -915,7 +915,7 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         return 0;
 
     // Don't leave a freed pointer in the selection
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     for( EDA_ITEM* item : items )
     {
@@ -970,10 +970,10 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
 
 static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
 {
-    SCH_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selectionTool = aFrame->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
     wxCHECK( selectionTool, false );
 
-    aFrame->GetToolManager()->RunAction( SCH_ACTIONS::clearSelection, true );
+    aFrame->GetToolManager()->RunAction( EE_ACTIONS::clearSelection, true );
 
     EDA_ITEM* item = selectionTool->SelectPoint( aPosition );
     SCH_ITEM* sch_item = dynamic_cast<SCH_ITEM*>( item );
@@ -989,7 +989,7 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
     }
 
     if( item )
-        aFrame->GetToolManager()->RunAction( SCH_ACTIONS::doDelete, true );
+        aFrame->GetToolManager()->RunAction( EE_ACTIONS::doDelete, true );
 
     return true;
 }
@@ -999,7 +999,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 {
     Activate();
 
-    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
+    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
     m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
@@ -1020,11 +1020,11 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
     KICAD_T* filter = Nothing;
 
-    if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
+    if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
         filter = CmpOrReference;
-    else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
         filter = CmpOrValue;
-    else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
         filter = CmpOrFootprint;
 
     SELECTION& selection = m_selectionTool->RequestSelection( filter );
@@ -1038,11 +1038,11 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
     {
         SCH_COMPONENT* component = (SCH_COMPONENT*) item;
 
-        if( aEvent.IsAction( &SCH_ACTIONS::editReference ) )
+        if( aEvent.IsAction( &EE_ACTIONS::editReference ) )
             m_frame->EditComponentFieldText( component->GetField( REFERENCE ) );
-        else if( aEvent.IsAction( &SCH_ACTIONS::editValue ) )
+        else if( aEvent.IsAction( &EE_ACTIONS::editValue ) )
             m_frame->EditComponentFieldText( component->GetField( VALUE ) );
-        else if( aEvent.IsAction( &SCH_ACTIONS::editFootprint ) )
+        else if( aEvent.IsAction( &EE_ACTIONS::editFootprint ) )
             m_frame->EditComponentFieldText( component->GetField( FOOTPRINT ) );
     }
     else if( item->Type() == SCH_FIELD_T )
@@ -1085,7 +1085,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
     SCH_COMPONENT* component = (SCH_COMPONENT*) selection.Front();
 
     if( component->IsNew() )
-        m_toolMgr->RunAction( SCH_ACTIONS::refreshPreview );
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
     else
         m_frame->SaveCopyInUndoList( component, UR_CHANGED );
 
@@ -1187,9 +1187,9 @@ int SCH_EDIT_TOOL::ChangeShape( const TOOL_EVENT& aEvent )
     SELECTION& selection = m_selectionTool->GetSelection();
     char shape;
 
-    if( aEvent.IsAction( &SCH_ACTIONS::toShapeSlash ) )
+    if( aEvent.IsAction( &EE_ACTIONS::toShapeSlash ) )
         shape = '/';
-    else if( aEvent.IsAction( &SCH_ACTIONS::toShapeBackslash ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::toShapeBackslash ) )
         shape = '\\';
     else
         return 0;
@@ -1223,13 +1223,13 @@ int SCH_EDIT_TOOL::ChangeTextType( const TOOL_EVENT& aEvent )
     SELECTION& selection = m_selectionTool->RequestSelection( allTextTypes );
     KICAD_T    convertTo;
 
-    if( aEvent.IsAction( &SCH_ACTIONS::toLabel ) )
+    if( aEvent.IsAction( &EE_ACTIONS::toLabel ) )
         convertTo = SCH_LABEL_T;
-    else if( aEvent.IsAction( &SCH_ACTIONS::toHLabel ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::toHLabel ) )
         convertTo = SCH_HIER_LABEL_T;
-    else if( aEvent.IsAction( &SCH_ACTIONS::toGLabel ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::toGLabel ) )
         convertTo = SCH_GLOBAL_LABEL_T;
-    else if( aEvent.IsAction( &SCH_ACTIONS::toText ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::toText ) )
         convertTo = SCH_TEXT_T;
     else
         return 0;
@@ -1314,31 +1314,31 @@ void SCH_EDIT_TOOL::saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO_T aType, bool
 
 void SCH_EDIT_TOOL::setTransitions()
 {
-    Go( &SCH_EDIT_TOOL::Duplicate,          SCH_ACTIONS::duplicate.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::RepeatDrawItem,     SCH_ACTIONS::repeatDrawItem.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCW.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Rotate,             SCH_ACTIONS::rotateCCW.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorX.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::Mirror,             SCH_ACTIONS::mirrorY.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DoDelete,           SCH_ACTIONS::doDelete.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   SCH_ACTIONS::deleteItemCursor.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Duplicate,          EE_ACTIONS::duplicate.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::RepeatDrawItem,     EE_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCW.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Rotate,             EE_ACTIONS::rotateCCW.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorX.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Mirror,             EE_ACTIONS::mirrorY.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DoDelete,           EE_ACTIONS::doDelete.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteItemCursor.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::Properties,         SCH_ACTIONS::properties.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editReference.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editValue.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::EditField,          SCH_ACTIONS::editFootprint.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::AutoplaceFields,    SCH_ACTIONS::autoplaceFields.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    SCH_ACTIONS::convertDeMorgan.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editReference.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editValue.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::EditField,          EE_ACTIONS::editFootprint.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::AutoplaceFields,    EE_ACTIONS::autoplaceFields.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ConvertDeMorgan,    EE_ACTIONS::convertDeMorgan.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeSlash.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeShape,        SCH_ACTIONS::toShapeBackslash.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toHLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toGLabel.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::ChangeTextType,     SCH_ACTIONS::toText.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeSlash.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeShape,        EE_ACTIONS::toShapeBackslash.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toHLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toGLabel.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::ChangeTextType,     EE_ACTIONS::toText.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakWire.MakeEvent() );
-    Go( &SCH_EDIT_TOOL::BreakWire,          SCH_ACTIONS::breakBus.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakWire.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::BreakWire,          EE_ACTIONS::breakBus.MakeEvent() );
 
-    Go( &SCH_EDIT_TOOL::CleanupSheetPins,   SCH_ACTIONS::cleanupSheetPins.MakeEvent() );
+    Go( &SCH_EDIT_TOOL::CleanupSheetPins,   EE_ACTIONS::cleanupSheetPins.MakeEvent() );
 }

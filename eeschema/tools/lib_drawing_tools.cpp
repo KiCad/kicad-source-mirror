@@ -23,7 +23,7 @@
 
 #include "lib_drawing_tools.h"
 #include "lib_pin_tool.h"
-#include <sch_actions.h>
+#include <ee_actions.h>
 #include <lib_edit_frame.h>
 #include <sch_view.h>
 #include <class_draw_panel_gal.h>
@@ -35,8 +35,8 @@
 #include <view/view_controls.h>
 #include <view/view.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
-#include <hotkeys.h>
+#include <tools/ee_selection_tool.h>
+#include <ee_hotkeys.h>
 #include <class_libentry.h>
 #include <bitmaps.h>
 #include <lib_text.h>
@@ -47,42 +47,42 @@
 #include <lib_rectangle.h>
 
 // Drawing tool actions
-TOOL_ACTION SCH_ACTIONS::placeSymbolPin( "libedit.InteractiveDrawing.placeSymbolPin",
+TOOL_ACTION EE_ACTIONS::placeSymbolPin( "libedit.InteractiveDrawing.placeSymbolPin",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LIBEDIT_CREATE_PIN ),
         _( "Add Pin" ), _( "Add a pin" ),
         pin_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::placeSymbolText( "libedit.InteractiveDrawing.placeSymbolText",
+TOOL_ACTION EE_ACTIONS::placeSymbolText( "libedit.InteractiveDrawing.placeSymbolText",
         AS_GLOBAL, 0,
         _( "Add Text" ), _( "Add a text item" ),
         text_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawSymbolRectangle( "libedit.InteractiveDrawing.drawSymbolRectangle",
+TOOL_ACTION EE_ACTIONS::drawSymbolRectangle( "libedit.InteractiveDrawing.drawSymbolRectangle",
         AS_GLOBAL, 0,
         _( "Add Rectangle" ), _( "Add a rectangle" ),
         add_rectangle_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawSymbolCircle( "libedit.InteractiveDrawing.drawSymbolCircle",
+TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "libedit.InteractiveDrawing.drawSymbolCircle",
         AS_GLOBAL, 0,
         _( "Add Circle" ), _( "Add a circle" ),
         add_circle_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawSymbolArc( "libedit.InteractiveDrawing.drawSymbolArc",
+TOOL_ACTION EE_ACTIONS::drawSymbolArc( "libedit.InteractiveDrawing.drawSymbolArc",
         AS_GLOBAL, 0,
         _( "Add Arc" ), _( "Add an arc" ),
         add_circle_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbolLines",
+TOOL_ACTION EE_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbolLines",
         AS_GLOBAL, 0,
         _( "Add Lines" ), _( "Add connected graphic lines" ),
         add_circle_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
+TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0,
         _( "Move Symbol Anchor" ), _( "Specify a new location for the symbol anchor" ),
         anchor_xpm, AF_ACTIVATE );
 
-TOOL_ACTION SCH_ACTIONS::finishDrawing( "libedit.InteractiveDrawing.finishDrawing",
+TOOL_ACTION EE_ACTIONS::finishDrawing( "libedit.InteractiveDrawing.finishDrawing",
         AS_GLOBAL, 0, _( "Finish Drawing" ), _( "Finish drawing shape" ),
         checked_ok_xpm, AF_NONE );
 
@@ -109,7 +109,7 @@ LIB_DRAWING_TOOLS::~LIB_DRAWING_TOOLS()
 bool LIB_DRAWING_TOOLS::Init()
 {
     m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     auto isDrawingCondition = [] ( const SELECTION& aSel ) {
         LIB_ITEM* item = (LIB_ITEM*) aSel.Front();
@@ -121,10 +121,10 @@ bool LIB_DRAWING_TOOLS::Init()
     //
     // Build the drawing tool menu
     //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, SCH_CONDITIONS::ShowAlways, 1 );
-    ctxMenu.AddItem( SCH_ACTIONS::finishDrawing, isDrawingCondition, 2 );
+    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
+    ctxMenu.AddItem( EE_ACTIONS::finishDrawing, isDrawingCondition, 2 );
 
-    ctxMenu.AddSeparator( SCH_CONDITIONS::ShowAlways, 1000 );
+    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
 
     return true;
@@ -160,7 +160,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
     VECTOR2I      cursorPos = m_controls->GetCursorPosition();
     EDA_ITEM*     item = nullptr;
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
 
     Activate();
@@ -174,7 +174,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
         {
             if( item )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_view->ClearPreview();
                 delete item;
                 item = nullptr;
@@ -196,7 +196,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             // First click creates...
             if( !item )
             {
-                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+                m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 switch( aType )
@@ -277,7 +277,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
-        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
+        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
         {
             static_cast<LIB_ITEM*>( item )->SetPosition( wxPoint( cursorPos.x, -cursorPos.y) );
             m_view->ClearPreview();
@@ -297,16 +297,16 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
-    if( aEvent.IsAction( &SCH_ACTIONS::drawSymbolArc ) )
+    if( aEvent.IsAction( &EE_ACTIONS::drawSymbolArc ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_ARC_BUTT, wxCURSOR_PENCIL, _( "Draw Arc" ) );
-    else if( aEvent.IsAction( &SCH_ACTIONS::drawSymbolCircle ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolCircle ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxCURSOR_PENCIL, _( "Draw Circle" ) );
-    else if( aEvent.IsAction( &SCH_ACTIONS::drawSymbolLines ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolLines ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_LINE_BUTT, wxCURSOR_PENCIL, _( "Draw Lines" ) );
-    else if( aEvent.IsAction( &SCH_ACTIONS::drawSymbolRectangle ) )
+    else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolRectangle ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_RECT_BUTT, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
 
-    m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     m_controls->ShowCursor( true );
 
     Activate();
@@ -321,7 +321,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
             m_view->ClearPreview();
 
             if( item )
@@ -341,7 +341,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( !part )
                 continue;
 
-            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
             switch( m_frame->GetToolId() )
             {
@@ -367,10 +367,10 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         else if( item && ( evt->IsClick( BUT_LEFT )
                         || evt->IsDblClick( BUT_LEFT )
-                        || evt->IsAction( &SCH_ACTIONS::finishDrawing ) ) )
+                        || evt->IsAction( &EE_ACTIONS::finishDrawing ) ) )
         {
             if( evt->IsDblClick( BUT_LEFT )
-             || evt->IsAction( &SCH_ACTIONS::finishDrawing )
+             || evt->IsAction( &EE_ACTIONS::finishDrawing )
              || !item->ContinueEdit( wxPoint( cursorPos.x, -cursorPos.y ) ) )
             {
                 item->EndEdit( wxPoint( cursorPos.x, -cursorPos.y ) );
@@ -385,7 +385,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( item && ( evt->IsAction( &SCH_ACTIONS::refreshPreview )
+        else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
                         || evt->IsMotion() ) )
         {
             item->CalcEdit( wxPoint( cursorPos.x, -cursorPos.y) );
@@ -395,7 +395,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 
         else if( evt->IsDblClick( BUT_LEFT ) && !item )
         {
-            m_toolMgr->RunAction( SCH_ACTIONS::properties, true );
+            m_toolMgr->RunAction( EE_ACTIONS::properties, true );
         }
 
         else if( evt->IsClick( BUT_RIGHT ) )
@@ -489,10 +489,10 @@ int LIB_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
         LIB_PIN* pin = pinTool->RepeatPin( sourcePin );
         g_lastPinWeakPtr = pin;
 
-        m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         if( pin )
-            m_toolMgr->RunAction( SCH_ACTIONS::addItemToSel, true, pin );
+            m_toolMgr->RunAction( EE_ACTIONS::addItemToSel, true, pin );
     }
 
     return 0;
@@ -501,12 +501,12 @@ int LIB_DRAWING_TOOLS::RepeatDrawItem( const TOOL_EVENT& aEvent )
 
 void LIB_DRAWING_TOOLS::setTransitions()
 {
-    Go( &LIB_DRAWING_TOOLS::PlacePin,             SCH_ACTIONS::placeSymbolPin.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::PlaceText,            SCH_ACTIONS::placeSymbolText.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolRectangle.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolCircle.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolArc.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::DrawShape,            SCH_ACTIONS::drawSymbolLines.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::PlaceAnchor,          SCH_ACTIONS::placeSymbolAnchor.MakeEvent() );
-    Go( &LIB_DRAWING_TOOLS::RepeatDrawItem,       SCH_ACTIONS::repeatDrawItem.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::PlacePin,             EE_ACTIONS::placeSymbolPin.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::PlaceText,            EE_ACTIONS::placeSymbolText.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolRectangle.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolCircle.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolArc.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::DrawShape,            EE_ACTIONS::drawSymbolLines.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::PlaceAnchor,          EE_ACTIONS::placeSymbolAnchor.MakeEvent() );
+    Go( &LIB_DRAWING_TOOLS::RepeatDrawItem,       EE_ACTIONS::repeatDrawItem.MakeEvent() );
 }

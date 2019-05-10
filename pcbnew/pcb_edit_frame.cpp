@@ -572,13 +572,13 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new SELECTION_TOOL );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new PICKER_TOOL );
+    m_toolManager->RegisterTool( new EE_PICKER_TOOL );
     m_toolManager->RegisterTool( new ROUTER_TOOL );
     m_toolManager->RegisterTool( new LENGTH_TUNER_TOOL );
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );

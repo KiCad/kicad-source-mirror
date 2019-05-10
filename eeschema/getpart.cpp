@@ -34,7 +34,7 @@
 #include <kicad_device_context.h>
 #include <msgpanel.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 #include <general.h>
 #include <class_library.h>
 #include <sch_component.h>
@@ -287,7 +287,7 @@ void SCH_EDIT_FRAME::ConvertPart( SCH_COMPONENT* aComponent )
 
         // If selected make sure all the now-included pins are selected
         if( aComponent->IsSelected() )
-            m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, aComponent );
+            m_toolManager->RunAction( EE_ACTIONS::addItemToSel, true, aComponent );
 
         RefreshItem( aComponent );
         OnModify();

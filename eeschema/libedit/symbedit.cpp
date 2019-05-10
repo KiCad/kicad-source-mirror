@@ -39,15 +39,15 @@
 #include <view/view.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 
 void LIB_EDIT_FRAME::LoadOneSymbol()
 {
-    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
-    LIB_PART*           part = GetCurPart();
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    LIB_PART*          part = GetCurPart();
 
     // Exit if no library entry is selected or a command is in progress.
-    if( !part || !SCH_CONDITIONS::Idle( selTool->GetSelection() ) )
+    if( !part || !EE_CONDITIONS::Idle( selTool->GetSelection() ) )
         return;
 
     PROJECT&        prj = Prj();

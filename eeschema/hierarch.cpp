@@ -38,7 +38,7 @@
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 #include <netlist_object.h>
 #include <sch_sheet_path.h>
 
@@ -257,7 +257,7 @@ void HIERARCHY_NAVIG_DLG::onSelectSheetPath( wxTreeEvent& event )
 void SCH_EDIT_FRAME::DisplayCurrentSheet()
 {
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     SCH_SCREEN* screen = g_CurrentSheet->LastScreen();
 
@@ -286,6 +286,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     UpdateTitle();
 
-    GetToolManager()->RunAction( SCH_ACTIONS::highlightNetSelection, true );
+    GetToolManager()->RunAction( EE_ACTIONS::highlightNetSelection, true );
     HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
 }

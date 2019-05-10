@@ -40,10 +40,10 @@ class SHAPE_POLY_SET;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class POINT_EDITOR : public PCB_TOOL
+class EE_POINT_EDITOR : public PCB_TOOL
 {
 public:
-    POINT_EDITOR();
+    EE_POINT_EDITOR();
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;

@@ -30,7 +30,7 @@
 
 
 class LIB_EDIT_FRAME;
-class SCH_SELECTION_TOOL;
+class EE_SELECTION_TOOL;
 
 
 class LIB_EDIT_TOOL : public TOOL_INTERACTIVE
@@ -78,11 +78,11 @@ private:
     void setTransitions() override;
 
 private:
-    SCH_SELECTION_TOOL*   m_selectionTool;
-    LIB_EDIT_FRAME*       m_frame;
+    EE_SELECTION_TOOL*   m_selectionTool;
+    LIB_EDIT_FRAME*      m_frame;
 
     /// Menu model displayed by the tool.
-    TOOL_MENU             m_menu;
+    TOOL_MENU            m_menu;
 };
 
 #endif //KICAD_LIB_EDIT_TOOL_H

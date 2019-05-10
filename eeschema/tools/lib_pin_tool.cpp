@@ -22,26 +22,26 @@
  */
 
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 #include <lib_edit_frame.h>
 #include <eeschema_id.h>
 #include <confirm.h>
-#include <sch_actions.h>
+#include <ee_actions.h>
 #include <sch_view.h>
 #include <dialogs/dialog_display_info_HTML_base.h>
 #include <dialogs/dialog_lib_edit_pin.h>
 #include "lib_pin_tool.h"
 
 
-TOOL_ACTION SCH_ACTIONS::pushPinLength( "libedit.PinEditing.pushPinLength",
+TOOL_ACTION EE_ACTIONS::pushPinLength( "libedit.PinEditing.pushPinLength",
         AS_GLOBAL, 0, _( "Push Pin Length" ), _( "Copy pin length to other pins in symbol" ),
         pin_size_to_xpm );
 
-TOOL_ACTION SCH_ACTIONS::pushPinNameSize( "libedit.PinEditing.pushPinNameSize",
+TOOL_ACTION EE_ACTIONS::pushPinNameSize( "libedit.PinEditing.pushPinNameSize",
         AS_GLOBAL, 0, _( "Push Pin Name Size" ), _( "Copy pin name size to other pins in symbol" ),
         pin_size_to_xpm );
 
-TOOL_ACTION SCH_ACTIONS::pushPinNumSize( "libedit.PinEditing.pushPinNumSize",
+TOOL_ACTION EE_ACTIONS::pushPinNumSize( "libedit.PinEditing.pushPinNumSize",
         AS_GLOBAL, 0, _( "Push Pin Number Size" ), _( "Copy pin number size to other pins in symbol" ),
         pin_size_to_xpm );
 
@@ -102,18 +102,18 @@ LIB_PIN_TOOL::~LIB_PIN_TOOL()
 bool LIB_PIN_TOOL::Init()
 {
     m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
-    auto singlePinCondition = SCH_CONDITIONS::Count( 1 ) && SCH_CONDITIONS::OnlyType( LIB_PIN_T );
+    auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyType( LIB_PIN_T );
 
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
     selToolMenu.AddSeparator( singlePinCondition, 400 );
-    selToolMenu.AddItem( SCH_ACTIONS::pushPinLength,    singlePinCondition, 400 );
-    selToolMenu.AddItem( SCH_ACTIONS::pushPinNameSize,  singlePinCondition, 400 );
-    selToolMenu.AddItem( SCH_ACTIONS::pushPinNumSize,   singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinLength,    singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNameSize,  singlePinCondition, 400 );
+    selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   singlePinCondition, 400 );
 
     return true;
 }
@@ -330,11 +330,11 @@ int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
         if( pin == sourcePin )
             continue;
 
-        if( aEvent.IsAction( &SCH_ACTIONS::pushPinLength ) )
+        if( aEvent.IsAction( &EE_ACTIONS::pushPinLength ) )
             pin->SetLength( sourcePin->GetLength() );
-        else if( aEvent.IsAction( &SCH_ACTIONS::pushPinNameSize ) )
+        else if( aEvent.IsAction( &EE_ACTIONS::pushPinNameSize ) )
             pin->SetNameTextSize( sourcePin->GetNameTextSize() );
-        else if( aEvent.IsAction( &SCH_ACTIONS::pushPinNumSize ) )
+        else if( aEvent.IsAction( &EE_ACTIONS::pushPinNumSize ) )
             pin->SetNumberTextSize( sourcePin->GetNumberTextSize() );
     }
 
@@ -383,8 +383,8 @@ LIB_PIN* LIB_PIN_TOOL::RepeatPin( const LIB_PIN* aSourcePin )
 
 void LIB_PIN_TOOL::setTransitions()
 {
-    Go( &LIB_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinLength.MakeEvent() );
-    Go( &LIB_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinNameSize.MakeEvent() );
-    Go( &LIB_PIN_TOOL::PushPinProperties,    SCH_ACTIONS::pushPinNumSize.MakeEvent() );
+    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinLength.MakeEvent() );
+    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNameSize.MakeEvent() );
+    Go( &LIB_PIN_TOOL::PushPinProperties,    EE_ACTIONS::pushPinNumSize.MakeEvent() );
 }
 

@@ -31,7 +31,7 @@
 #include <widgets/lib_tree.h>
 #include <symbol_tree_pane.h>
 #include <tool/tool_manager.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 
 void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType )
 {
@@ -58,7 +58,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last redo entry
     PICKED_ITEMS_LIST* redoCommand = GetScreen()->PopCommandFromRedoList();
@@ -107,7 +107,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();
@@ -153,7 +153,7 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::RollbackPartFromUndo()
 {
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     // Load the last undo entry
     PICKED_ITEMS_LIST* undoCommand = GetScreen()->PopCommandFromUndoList();

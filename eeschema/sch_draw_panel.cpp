@@ -38,8 +38,8 @@
 #include <functional>
 #include <sch_sheet.h>
 #include <pgm_base.h>
-#include <tools/sch_actions.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 
 using namespace std::placeholders;
 
@@ -285,10 +285,10 @@ void SCH_DRAW_PANEL::OnKeyEvent( wxKeyEvent& event )
     {
         m_abortRequest = true;
 
-        SCH_SELECTION_TOOL* selTool = GetParent()->GetToolManager()->GetTool<SCH_SELECTION_TOOL>();
+        EE_SELECTION_TOOL* selTool = GetParent()->GetToolManager()->GetTool<EE_SELECTION_TOOL>();
 
-        if( SCH_CONDITIONS::Idle( selTool->GetSelection() ) )
-            GetParent()->GetToolManager()->RunAction( SCH_ACTIONS::selectionActivate, true );
+        if( EE_CONDITIONS::Idle( selTool->GetSelection() ) )
+            GetParent()->GetToolManager()->RunAction( EE_ACTIONS::selectionActivate, true );
         else
             GetParent()->GetToolManager()->RunAction( ACTIONS::cancelInteractive, true );
 

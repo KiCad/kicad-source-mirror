@@ -49,7 +49,7 @@
 #include <widgets/lib_tree.h>
 #include <symbol_lib_table.h>
 #include <kicad_device_context.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <eeschema_config.h>
 
 #include <dialogs/dialog_lib_edit_text.h>
@@ -65,15 +65,15 @@
 #include <tool/context_menu.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
-#include <tools/sch_actions.h>
-#include <tools/sch_selection_tool.h>
-#include <tools/picker_tool.h>
-#include <tools/inspection_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_picker_tool.h>
+#include <tools/ee_inspection_tool.h>
 #include <tools/lib_pin_tool.h>
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
 #include <tools/lib_drawing_tools.h>
-#include <tools/point_editor.h>
+#include <tools/ee_point_editor.h>
 #include <sch_view.h>
 #include <sch_painter.h>
 
@@ -317,18 +317,18 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), this );
-    m_actions = new SCH_ACTIONS();
+    m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
-    m_toolManager->RegisterTool( new SCH_SELECTION_TOOL );
-    m_toolManager->RegisterTool( new PICKER_TOOL );
-    m_toolManager->RegisterTool( new INSPECTION_TOOL );
+    m_toolManager->RegisterTool( new EE_SELECTION_TOOL );
+    m_toolManager->RegisterTool( new EE_PICKER_TOOL );
+    m_toolManager->RegisterTool( new EE_INSPECTION_TOOL );
     m_toolManager->RegisterTool( new LIB_PIN_TOOL );
     m_toolManager->RegisterTool( new LIB_DRAWING_TOOLS );
-    m_toolManager->RegisterTool( new POINT_EDITOR );
+    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
     m_toolManager->RegisterTool( new LIB_EDIT_TOOL );
     m_toolManager->InitTools();
@@ -520,21 +520,21 @@ void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateUndo( wxUpdateUIEvent& event )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
     event.Enable( GetCurPart() && GetScreen()
         && GetScreen()->GetUndoCommandCount() != 0
-        && SCH_CONDITIONS::Idle( selTool->GetSelection() ) );
+        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
 void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 {
-    SCH_SELECTION_TOOL* selTool = m_toolManager->GetTool<SCH_SELECTION_TOOL>();
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
     event.Enable( GetCurPart() && GetScreen()
         && GetScreen()->GetRedoCommandCount() != 0
-        && SCH_CONDITIONS::Idle( selTool->GetSelection() ) );
+        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
@@ -598,7 +598,7 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
         return;
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_unit = i + 1;
 
@@ -648,7 +648,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_convert = event.GetId() == ID_DE_MORGAN_NORMAL_BUTT ? 1 : 2;
 
@@ -715,7 +715,7 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     if( !aPart && !m_my_part )
         return;
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
     GetScreen()->SetCurItem( nullptr );
 
     if( m_my_part != aPart )
@@ -751,7 +751,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     wxArrayString oldAliases = GetCurPart()->GetAliasNames( false );
 
     m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this, GetCurPart() );
 
@@ -835,7 +835,7 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
 {
     LIB_PART* part = GetCurPart();
 
-    m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
+    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     SaveCopyInUndoList( part );
 
@@ -880,7 +880,7 @@ void LIB_EDIT_FRAME::OnAddPartToSchematic( wxCommandEvent& event )
             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
         schframe->Raise();
-        schframe->GetToolManager()->RunAction( SCH_ACTIONS::placeSymbol, true, component );
+        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
     }
 }
 

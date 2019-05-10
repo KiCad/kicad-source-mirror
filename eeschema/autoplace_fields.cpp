@@ -64,7 +64,7 @@
 #include <vector>
 #include <algorithm>
 #include <tool/tool_manager.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_selection_tool.h>
 
 #define FIELD_PADDING 10            // arbitrarily chosen for aesthetics
 #define FIELD_PADDING_ALIGNED 18    // aligns 50 mil text to a 100 mil grid

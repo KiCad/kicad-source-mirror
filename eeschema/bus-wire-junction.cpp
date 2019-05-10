@@ -33,8 +33,8 @@
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_view.h>
-#include <tools/sch_actions.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 #include <tool/tool_manager.h>
 #include "eeschema_id.h"
 

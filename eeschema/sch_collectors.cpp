@@ -94,7 +94,7 @@ SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
     if( aItem->Type() == LIB_PIN_T )
     {
         // Special selection rules apply to pins of different units when edited in
-        // synchronized pins mode.  Leave it to SCH_SELECTION_TOOL::isSelectable() to
+        // synchronized pins mode.  Leave it to EE_SELECTION_TOOL::isSelectable() to
         // decide what to do with them.
     }
     else if( m_Unit || m_Convert )

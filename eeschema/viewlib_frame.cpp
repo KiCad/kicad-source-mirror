@@ -37,7 +37,7 @@
 #include <viewlib_frame.h>
 #include <symbol_lib_table.h>
 #include <sch_legacy_plugin.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <dialog_helpers.h>
 #include <class_libentry.h>
 #include <class_library.h>
@@ -46,7 +46,7 @@
 #include <confirm.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/sch_actions.h>
+#include <tools/ee_actions.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 
@@ -227,7 +227,7 @@ void LIB_VIEW_FRAME::setupTools()
     m_toolManager = new TOOL_MANAGER;
     m_toolManager->SetEnvironment( GetScreen(), GetCanvas()->GetView(),
                                    GetCanvas()->GetViewControls(), this );
-    m_actions = new SCH_ACTIONS();
+    m_actions = new EE_ACTIONS();
     m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
 
     // Register tools
@@ -822,7 +822,7 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
     if( IsModal() )
     {
         // if we're modal then we just need to return the symbol selection; the caller is
-        // already in a SCH_ACTIONS::placeSymbol coroutine.
+        // already in a EE_ACTIONS::placeSymbol coroutine.
         if( m_cmpList->GetSelection() >= 0 )
             DismissModal( true, m_libraryName + ':' + m_cmpList->GetStringSelection() );
         else
@@ -853,6 +853,6 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
             component->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
         schframe->Raise();
-        schframe->GetToolManager()->RunAction( SCH_ACTIONS::placeSymbol, true, component );
+        schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
     }
 }

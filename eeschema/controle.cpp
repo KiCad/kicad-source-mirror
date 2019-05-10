@@ -27,7 +27,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <sch_view.h>

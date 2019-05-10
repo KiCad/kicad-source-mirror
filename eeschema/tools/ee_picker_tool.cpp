@@ -21,23 +21,23 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <picker_tool.h>
-#include <sch_actions.h>
+#include <ee_picker_tool.h>
+#include <ee_actions.h>
 #include <view/view_controls.h>
 #include <tool/tool_manager.h>
 #include <sch_base_frame.h>
 
-TOOL_ACTION SCH_ACTIONS::pickerTool( "eeschema.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
+TOOL_ACTION EE_ACTIONS::pickerTool( "eeschema.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 
-PICKER_TOOL::PICKER_TOOL()
+EE_PICKER_TOOL::EE_PICKER_TOOL()
     : TOOL_INTERACTIVE( "eeschema.Picker" )
 {
     reset();
 }
 
 
-int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     int finalize_state = WAIT_CANCEL;
@@ -62,7 +62,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    std::cerr << "EE_PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -87,7 +87,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                    std::cerr << "EE_PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
@@ -118,7 +118,7 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         catch( std::exception& e )
         {
-            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+            std::cerr << "EE_PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 
@@ -130,13 +130,13 @@ int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void PICKER_TOOL::setTransitions()
+void EE_PICKER_TOOL::setTransitions()
 {
-    Go( &PICKER_TOOL::Main, SCH_ACTIONS::pickerTool.MakeEvent() );
+    Go( &EE_PICKER_TOOL::Main, EE_ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void PICKER_TOOL::reset()
+void EE_PICKER_TOOL::reset()
 {
     m_cursorCapture = false;
     m_autoPanning = false;
@@ -148,7 +148,7 @@ void PICKER_TOOL::reset()
 }
 
 
-void PICKER_TOOL::setControls()
+void EE_PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 

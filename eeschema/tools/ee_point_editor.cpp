@@ -24,15 +24,15 @@
 #include <functional>
 using namespace std::placeholders;
 
-#include "point_editor.h"
+#include "ee_point_editor.h"
 #include <tool/tool_manager.h>
 #include <view/view_controls.h>
 #include <gal/graphics_abstraction_layer.h>
 #include <geometry/seg.h>
 #include <confirm.h>
 
-#include <tools/sch_actions.h>
-#include <tools/sch_selection_tool.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 #include <bitmaps.h>
 #include <status_popup.h>
 #include <sch_edit_frame.h>
@@ -47,11 +47,11 @@ using namespace std::placeholders;
 
 
 // Point editor
-TOOL_ACTION SCH_ACTIONS::pointEditorAddCorner( "eeschema.PointEditor.addCorner",
+TOOL_ACTION EE_ACTIONS::pointEditorAddCorner( "eeschema.PointEditor.addCorner",
         AS_GLOBAL, 0,
         _( "Create Corner" ), _( "Create a corner" ), add_corner_xpm );
 
-TOOL_ACTION SCH_ACTIONS::pointEditorRemoveCorner( "eeschema.PointEditor.removeCorner",
+TOOL_ACTION EE_ACTIONS::pointEditorRemoveCorner( "eeschema.PointEditor.removeCorner",
         AS_GLOBAL, 0,
         _( "Remove Corner" ), _( "Remove corner" ), delete_xpm );
 
@@ -197,7 +197,7 @@ private:
 };
 
 
-POINT_EDITOR::POINT_EDITOR() :
+EE_POINT_EDITOR::EE_POINT_EDITOR() :
     TOOL_INTERACTIVE( "eeschema.PointEditor" ),
     m_frame( nullptr ),
     m_selectionTool( nullptr ),
@@ -206,7 +206,7 @@ POINT_EDITOR::POINT_EDITOR() :
 }
 
 
-void POINT_EDITOR::Reset( RESET_REASON aReason )
+void EE_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
     m_editPoints.reset();
     getViewControls()->SetAutoPan( false );
@@ -215,25 +215,25 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 }
 
 
-bool POINT_EDITOR::Init()
+bool EE_POINT_EDITOR::Init()
 {
     m_frame = getEditFrame<SCH_BASE_FRAME>();
     m_isLibEdit = dynamic_cast<LIB_EDIT_FRAME*>( m_frame ) != nullptr;
-    m_selectionTool = m_toolMgr->GetTool<SCH_SELECTION_TOOL>();
+    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
 
     wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
-    menu.AddItem( SCH_ACTIONS::pointEditorAddCorner,
-                              std::bind( &POINT_EDITOR::addCornerCondition, this, _1 ) );
-    menu.AddItem( SCH_ACTIONS::pointEditorRemoveCorner,
-                              std::bind( &POINT_EDITOR::removeCornerCondition, this, _1 ) );
+    menu.AddItem( EE_ACTIONS::pointEditorAddCorner,
+                              std::bind( &EE_POINT_EDITOR::addCornerCondition, this, _1 ) );
+    menu.AddItem( EE_ACTIONS::pointEditorRemoveCorner,
+                              std::bind( &EE_POINT_EDITOR::removeCornerCondition, this, _1 ) );
 
     return true;
 }
 
 
-void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
+void EE_POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 {
     EDIT_POINT* point = m_editedPoint;
 
@@ -251,7 +251,7 @@ void POINT_EDITOR::updateEditedPoint( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
+int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 {
     static KICAD_T pointTypes[] = { LIB_ARC_T, LIB_CIRCLE_T, LIB_POLYLINE_T, LIB_RECTANGLE_T,
                                     SCH_SHEET_T, SCH_LINE_LOCATE_GRAPHIC_LINE_T, EOT };
@@ -420,7 +420,7 @@ void pinEditedCorner( int editedPointIndex, int minWidth, int minHeight, VECTOR2
 }
 
 
-void POINT_EDITOR::updateItem() const
+void EE_POINT_EDITOR::updateItem() const
 {
     EDA_ITEM* item = m_editPoints->GetParent();
 
@@ -535,7 +535,7 @@ void POINT_EDITOR::updateItem() const
 }
 
 
-void POINT_EDITOR::updatePoints()
+void EE_POINT_EDITOR::updatePoints()
 {
     if( !m_editPoints )
         return;
@@ -630,7 +630,7 @@ void POINT_EDITOR::updatePoints()
 }
 
 
-void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
+void EE_POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 
@@ -649,7 +649,7 @@ void POINT_EDITOR::setEditedPoint( EDIT_POINT* aPoint )
 }
 
 
-bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
+bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 {
     if( !m_editPoints || !m_editedPoint )
         return false;
@@ -671,7 +671,7 @@ bool POINT_EDITOR::removeCornerCondition( const SELECTION& )
 }
 
 
-bool POINT_EDITOR::addCornerCondition( const SELECTION& )
+bool EE_POINT_EDITOR::addCornerCondition( const SELECTION& )
 {
     if( !m_editPoints || !m_editedPoint )
         return false;
@@ -688,7 +688,7 @@ bool POINT_EDITOR::addCornerCondition( const SELECTION& )
 }
 
 
-int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
+int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints )
         return 0;
@@ -708,7 +708,7 @@ int POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
+int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 {
     if( !m_editPoints || !m_editedPoint )
         return 0;
@@ -727,14 +727,14 @@ int POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 }
 
 
-int POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
+int EE_POINT_EDITOR::modifiedSelection( const TOOL_EVENT& aEvent )
 {
     updatePoints();
     return 0;
 }
 
 
-void POINT_EDITOR::saveItemsToUndo()
+void EE_POINT_EDITOR::saveItemsToUndo()
 {
     if( m_isLibEdit )
     {
@@ -762,7 +762,7 @@ void POINT_EDITOR::saveItemsToUndo()
 }
 
 
-void POINT_EDITOR::rollbackFromUndo()
+void EE_POINT_EDITOR::rollbackFromUndo()
 {
     if( m_isLibEdit )
         static_cast<LIB_EDIT_FRAME*>( m_frame )->RollbackPartFromUndo();
@@ -771,12 +771,12 @@ void POINT_EDITOR::rollbackFromUndo()
 }
 
 
-void POINT_EDITOR::setTransitions()
+void EE_POINT_EDITOR::setTransitions()
 {
-    Go( &POINT_EDITOR::addCorner,         SCH_ACTIONS::pointEditorAddCorner.MakeEvent() );
-    Go( &POINT_EDITOR::removeCorner,      SCH_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
-    Go( &POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
-    Go( &POINT_EDITOR::Main,              EVENTS::SelectedEvent );
+    Go( &EE_POINT_EDITOR::addCorner,         EE_ACTIONS::pointEditorAddCorner.MakeEvent() );
+    Go( &EE_POINT_EDITOR::removeCorner,      EE_ACTIONS::pointEditorRemoveCorner.MakeEvent() );
+    Go( &EE_POINT_EDITOR::modifiedSelection, EVENTS::SelectedItemsModified );
+    Go( &EE_POINT_EDITOR::Main,              EVENTS::SelectedEvent );
 }
 
 

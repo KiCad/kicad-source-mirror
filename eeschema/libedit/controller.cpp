@@ -34,7 +34,7 @@
 
 #include <eeschema_id.h>
 #include <general.h>
-#include <hotkeys.h>
+#include <ee_hotkeys.h>
 #include <lib_edit_frame.h>
 #include <viewlib_frame.h>
 #include <lib_draw_item.h>
