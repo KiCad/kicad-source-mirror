@@ -71,7 +71,8 @@ struct TOOL_MANAGER::TOOL_STATE
 
     ~TOOL_STATE()
     {
-        wxASSERT( stateStack.empty() );
+        if( !stateStack.empty() )
+            wxFAIL;
     }
 
     /// The tool itself
