@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2016 Wayne Stambaugh, stambaughw@gmail.com
- * Copyright (C) 2016 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see change_log.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@
 
 /**
  * @file sch_validators.h
- * @brief Defintions of control validators for schematic dialogs.
+ * @brief Definitions of control validators for schematic dialogs.
  */
 
 #ifndef _SCH_VALIDATORS_H_
@@ -37,15 +37,12 @@
 
 
 /**
- * class SCH_FILED_VALIDATOR
- *
- * is the text control validator used for validating the text allowed in library and
+ * A text control validator used for validating the text allowed in library and
  * schematic component fields.
- * Note
- * Reference field does not accept spaces
- * Value field does not accept spaces in Component Library Editor, because in .lib component
- * libraries, the value field is the component name in lib, and spaces are not allowed
- * in component names in lib
+ *
+ * - The reference field does not accept spaces.
+ * - The value field does not accept spaces in the symbol library editor because in symbol
+ *   libraries, the value field is the symbol name in the library.
  */
 class SCH_FIELD_VALIDATOR : public wxTextValidator
 {
@@ -60,9 +57,7 @@ public:
     virtual wxObject* Clone() const override { return new SCH_FIELD_VALIDATOR( *this ); }
 
     /**
-     * Function Validate
-     *
-     * overrides the default Validate() function provided by wxTextValidate to provide
+     * Override the default Validate() function provided by wxTextValidator to provide
      * better error messages.
      *
      * @param aParent - a pointer to the parent window of the error message dialog.

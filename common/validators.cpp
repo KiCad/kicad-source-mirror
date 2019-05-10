@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -135,7 +135,7 @@ ENV_VAR_NAME_VALIDATOR::~ENV_VAR_NAME_VALIDATOR()
 
 void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
 {
-    if (!m_validatorWindow)
+    if( !m_validatorWindow )
     {
         aEvent.Skip();
         return;
@@ -144,7 +144,7 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
     int keyCode = aEvent.GetKeyCode();
 
     // we don't filter special keys and delete
-    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START)
+    if( keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START )
     {
         aEvent.Skip();
         return;
@@ -162,6 +162,7 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
         // not as first character
         long from, to;
         GetTextEntry()->GetSelection( &from, &to );
+
         if( from < 1 )
             wxBell();
         else
@@ -270,6 +271,50 @@ void REGEX_VALIDATOR::compileRegEx( const wxString& aRegEx, int aFlags )
 
     m_regExString = aRegEx;
     m_regExFlags = aFlags;
+}
+
+
+bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
+{
+    LIB_ID dummy;
+
+    // If window is disabled, simply return
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const text = GetTextEntry();
+
+    if( !text )
+        return false;
+
+    wxString msg;
+    wxString val( text->GetValue() );
+    wxString tmp = val.Clone();          // For trailing and leading white space tests.
+
+    if( tmp.Trim() != val )              // Trailing white space.
+    {
+        msg = _( "Entry contains trailing white space." );
+    }
+    else if( tmp.Trim( false ) != val )  // Leading white space.
+    {
+        msg = _( "Entry contains leading white space." );
+    }
+    else if( dummy.Parse( val, m_idType ) != -1 || !dummy.IsValid() )   // Is valid LIB_ID.
+    {
+        msg.Printf( _( "\"%s\" is not a valid library identifier format." ), val );
+    }
+
+    if( !msg.empty() )
+    {
+        m_validatorWindow->SetFocus();
+
+        wxMessageBox( msg, _( "Library Identifier Validation Error" ),
+                      wxOK | wxICON_EXCLAMATION, aParent );
+
+        return false;
+    }
+
+    return true;
 }
 
 

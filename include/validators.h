@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
  * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
@@ -35,9 +35,9 @@
 #include <wx/grid.h>
 #include <wx/regex.h>
 
+#include <lib_id.h>
+
 /**
- * Class GRID_CELL_TEXT_EDITOR
- *
  * This class works around a bug in wxGrid where the first keystroke doesn't get sent through
  * the validator if the editor wasn't already open.
  */
@@ -55,8 +55,6 @@ protected:
 
 
 /**
- * Class FILE_NAME_CHAR_VALIDATOR
- *
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining footprint names.  Since the introduction of the PRETTY footprint library format,
  * footprint names cannot have any characters that would prevent file creation on any platform.
@@ -70,8 +68,6 @@ public:
 
 
 /**
- * Class FILE_NAME_WITH_PATH_CHAR_VALIDATOR
- *
  * This class provides a custom wxValidator object for limiting the allowable characters when
  * defining file names with path, for instance in schematic sheet file names.
  * The characters *?|"<> are illegal and filtered by the validator,
@@ -85,10 +81,8 @@ public:
 
 
 /**
- * Class ENV_VAR_NAME_VALIDATOR
- *
  * This class provides a custom wxValidator object for limiting the allowable characters
- * when defining an environment varaible name in a text edit control.  Only uppercase,
+ * when defining an environment variable name in a text edit control.  Only uppercase,
  * numbers, and underscore (_) characters are valid and the first character of the name
  * cannot start with a number.  This is according to IEEE Std 1003.1-2001.  Even though
  * most systems support other characters, these characters guarantee compatibility for
@@ -123,8 +117,6 @@ class REGEX_VALIDATOR : public wxTextValidator
 {
 public:
     /**
-     * Constructor.
-     *
      * @param aRegEx is a regular expression to validate strings.
      * @param aValue is a pointer to a wxString containing the value to validate.
      */
@@ -135,8 +127,6 @@ public:
     }
 
     /**
-     * Constructor.
-     *
      * @param aRegEx is a regular expression to validate strings.
      * @param aFlags are compilation flags (normally wxRE_DEFAULT).
      * @param aValue is a pointer to a wxString containing the value to validate.
@@ -174,10 +164,38 @@ protected:
     wxRegEx m_regEx;
 };
 
+/**
+ * Custom validator that verifies that a string defines a valid #LIB_ID.
+ */
+class LIB_ID_VALIDATOR : public wxTextValidator
+{
+public:
+    /**
+     * @param aLibIdType is the type of #LIB_ID object to validate.
+     * @param aValue is a pointer to a wxString containing the value to validate.
+     */
+    LIB_ID_VALIDATOR( LIB_ID::LIB_ID_TYPE aLibIdType, wxString* aValue = NULL ) :
+        wxTextValidator( wxFILTER_EXCLUDE_CHAR_LIST, aValue ),
+        m_idType( aLibIdType )
+    {
+        SetCharExcludes( "\r\n\t" );
+    }
+
+    virtual wxObject* Clone() const override
+    {
+        return new LIB_ID_VALIDATOR( *this );
+    }
+
+    bool Validate( wxWindow* aParent ) override;
+
+protected:
+    LIB_ID::LIB_ID_TYPE m_idType;
+};
+
 namespace KIUI
 {
 /**
- * Call a text validator's TransferToWindow method without firing
+ * Call a text validator's TransferDataToWindow method without firing
  * a text change event.
  *
  * This is useful when you want to keep a validator in sync with other data,

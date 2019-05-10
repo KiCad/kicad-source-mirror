@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,6 +47,7 @@ wxString GRID_CELL_TEXT_BUTTON::GetValue() const
     return Combo()->GetValue();
 }
 
+
 void GRID_CELL_TEXT_BUTTON::SetSize( const wxRect& aRect )
 {
     wxRect rect( aRect );
@@ -76,7 +77,8 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
 
 #if wxUSE_UNICODE
     ch = event.GetUnicodeKey();
-    if ( ch != WXK_NONE )
+
+    if( ch != WXK_NONE )
         isPrintable = true;
     else
 #endif // wxUSE_UNICODE
@@ -85,24 +87,24 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
         isPrintable = ch >= WXK_SPACE && ch < WXK_START;
     }
 
-    switch (ch)
+    switch( ch )
     {
     case WXK_DELETE:
         // Delete the initial character when starting to edit with DELETE.
-        textEntry->Remove(0, 1);
+        textEntry->Remove( 0, 1 );
         break;
 
     case WXK_BACK:
         // Delete the last character when starting to edit with BACKSPACE.
     {
         const long pos = textEntry->GetLastPosition();
-        textEntry->Remove(pos - 1, pos);
+        textEntry->Remove( pos - 1, pos );
     }
         break;
 
     default:
-        if ( isPrintable )
-            textEntry->WriteText(static_cast<wxChar>(ch));
+        if( isPrintable )
+            textEntry->WriteText( static_cast<wxChar>( ch ) );
         break;
     }
 }
@@ -110,7 +112,7 @@ void GRID_CELL_TEXT_BUTTON::StartingKey( wxKeyEvent& event )
 
 void GRID_CELL_TEXT_BUTTON::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 {
-    auto evtHandler = static_cast<wxGridCellEditorEvtHandler*>( m_control->GetEventHandler() );
+    auto evtHandler = static_cast< wxGridCellEditorEvtHandler* >( m_control->GetEventHandler() );
 
     // Don't immediately end if we get a kill focus event within BeginEdit
     evtHandler->SetInSetFocus( true );
@@ -122,7 +124,7 @@ void GRID_CELL_TEXT_BUTTON::BeginEdit( int aRow, int aCol, wxGrid* aGrid )
 }
 
 
-bool GRID_CELL_TEXT_BUTTON::EndEdit( int , int , const wxGrid* , const wxString& , wxString *aNewVal )
+bool GRID_CELL_TEXT_BUTTON::EndEdit( int, int, const wxGrid*, const wxString&, wxString *aNewVal )
 {
     const wxString value = Combo()->GetValue();
 
@@ -150,9 +152,13 @@ void GRID_CELL_TEXT_BUTTON::Reset()
 }
 
 
-/**
- * Symbol Picker
- */
+#if wxUSE_VALIDATORS
+void GRID_CELL_TEXT_BUTTON::SetValidator( const wxValidator& validator )
+{
+    m_validator.reset( static_cast< wxValidator* >( validator.Clone() ) );
+}
+#endif
+
 
 class TEXT_BUTTON_SYMBOL_CHOOSER : public wxComboCtrl
 {
@@ -198,13 +204,9 @@ void GRID_CELL_SYMBOL_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_SYMBOL_CHOOSER( aParent, m_dlg, m_preselect );
 
-    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
-
-/**
- * Footprint Picker
- */
 
 class TEXT_BUTTON_FP_CHOOSER : public wxComboCtrl
 {
@@ -250,13 +252,17 @@ void GRID_CELL_FOOTPRINT_ID_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_FP_CHOOSER( aParent, m_dlg, m_preselect );
 
-    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+#if wxUSE_VALIDATORS
+    // validate text in textctrl, if validator is set
+    if ( m_validator )
+    {
+        Combo()->SetValidator( *m_validator );
+    }
+#endif
+
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
-
-/**
- * URL Viewer
- */
 
 class TEXT_BUTTON_URL : public wxComboCtrl
 {
@@ -291,13 +297,17 @@ void GRID_CELL_URL_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_URL( aParent, m_dlg );
 
-    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+#if wxUSE_VALIDATORS
+    // validate text in textctrl, if validator is set
+    if ( m_validator )
+    {
+        Combo()->SetValidator( *m_validator );
+    }
+#endif
+
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
-
-/**
- * Path Picker
- */
 
 class TEXT_BUTTON_FILE_BROWSER : public wxComboCtrl
 {
@@ -341,7 +351,7 @@ protected:
         else
         {
             wxDirDialog dlg( nullptr, _( "Select Path" ), path,
-                         wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
+                             wxDD_DEFAULT_STYLE | wxDD_DIR_MUST_EXIST );
 
             if( dlg.ShowModal() == wxID_OK )
             {
@@ -362,16 +372,32 @@ void GRID_CELL_PATH_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
 {
     m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir );
 
-    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+#if wxUSE_VALIDATORS
+    // validate text in textctrl, if validator is set
+    if ( m_validator )
+    {
+        Combo()->SetValidator( *m_validator );
+    }
+#endif
+
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
 
 void GRID_CELL_SYMLIB_EDITOR::Create( wxWindow* aParent, wxWindowID aId,
-                                    wxEvtHandler* aEventHandler )
+                                      wxEvtHandler* aEventHandler )
 {
     m_control = new TEXT_BUTTON_FILE_BROWSER( aParent, m_dlg, m_currentDir, &m_ext );
 
-    wxGridCellEditor::Create(aParent, aId, aEventHandler);
+#if wxUSE_VALIDATORS
+    // validate text in textctrl, if validator is set
+    if ( m_validator )
+    {
+        Combo()->SetValidator( *m_validator );
+    }
+#endif
+
+    wxGridCellEditor::Create( aParent, aId, aEventHandler );
 }
 
 

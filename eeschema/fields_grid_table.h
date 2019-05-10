@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -112,6 +112,7 @@ private:
     wxGridCellAttr*       m_valueAttr;
     wxGridCellAttr*       m_footprintAttr;
     wxGridCellAttr*       m_urlAttr;
+    wxGridCellAttr*       m_nonUrlAttr;
     wxGridCellAttr*       m_boolAttr;
     wxGridCellAttr*       m_vAlignAttr;
     wxGridCellAttr*       m_hAlignAttr;

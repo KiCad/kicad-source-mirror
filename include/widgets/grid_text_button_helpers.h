@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,8 +48,16 @@ public:
     void ApplyEdit( int aRow, int aCol, wxGrid* aGrid ) override;
     void Reset() override;
 
+#if wxUSE_VALIDATORS
+    void SetValidator( const wxValidator& validator );
+#endif
+
 protected:
     wxComboCtrl* Combo() const { return static_cast<wxComboCtrl*>( m_control ); }
+
+#if wxUSE_VALIDATORS
+    wxScopedPtr< wxValidator > m_validator;
+#endif
 
     wxString     m_value;
 
