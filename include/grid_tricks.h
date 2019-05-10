@@ -75,6 +75,7 @@ protected:
     void onGridCellLeftClick( wxGridEvent& event );
     void onGridCellLeftDClick( wxGridEvent& event );
     void onGridCellRightClick( wxGridEvent& event );
+    void onGridLabelLeftClick( wxGridEvent& event );
     void onGridLabelRightClick( wxGridEvent& event );
     void onPopupSelection( wxCommandEvent& event );
     void onKeyDown( wxKeyEvent& ev );

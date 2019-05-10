@@ -48,6 +48,7 @@ GRID_TRICKS::GRID_TRICKS( WX_GRID* aGrid ):
     aGrid->Connect( wxEVT_GRID_CELL_LEFT_DCLICK, wxGridEventHandler( GRID_TRICKS::onGridCellLeftDClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_CELL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridCellRightClick ), NULL, this );
     aGrid->Connect( wxEVT_GRID_LABEL_RIGHT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridLabelRightClick ), NULL, this );
+    aGrid->Connect( wxEVT_GRID_LABEL_LEFT_CLICK, wxGridEventHandler( GRID_TRICKS::onGridLabelLeftClick ), NULL, this );
     aGrid->Connect( GRIDTRICKS_FIRST_ID, GRIDTRICKS_LAST_ID, wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler( GRID_TRICKS::onPopupSelection ), NULL, this );
     aGrid->Connect( wxEVT_KEY_DOWN, wxKeyEventHandler( GRID_TRICKS::onKeyDown ), NULL, this );
     aGrid->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( GRID_TRICKS::onUpdateUI ), NULL, this );
@@ -205,6 +206,14 @@ void GRID_TRICKS::onGridCellRightClick( wxGridEvent&  )
     wxMenu menu;
 
     showPopupMenu( menu );
+}
+
+
+void GRID_TRICKS::onGridLabelLeftClick( wxGridEvent& aEvent )
+{
+    m_grid->CommitPendingChanges();
+
+    aEvent.Skip();
 }
 
 
