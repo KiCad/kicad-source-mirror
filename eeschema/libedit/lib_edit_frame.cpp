@@ -581,7 +581,7 @@ void LIB_EDIT_FRAME::OnSelectUnit( wxCommandEvent& event )
     if( ( i == wxNOT_FOUND ) || ( ( i + 1 ) == m_unit ) )
         return;
 
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_unit = i + 1;
@@ -631,7 +631,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 {
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     m_convert = event.GetId() == ID_DE_MORGAN_NORMAL_BUTT ? 1 : 2;
@@ -725,7 +725,7 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     wxString oldName = GetCurPart()->GetName();
     wxArrayString oldAliases = GetCurPart()->GetAliasNames( false );
 
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
 
     DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this, GetCurPart() );

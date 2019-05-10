@@ -33,6 +33,7 @@
 #include <gestfich.h>
 
 #include <eeschema_id.h>
+#include <tool/ee_actions.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
@@ -46,7 +47,7 @@
 #include <sch_legacy_plugin.h>
 #include <dialog_choose_component.h>
 #include <symbol_tree_model_adapter.h>
-
+#include <tool/tool_manager.h>
 #include <dialogs/dialog_lib_new_component.h>
 #include <dialog_helpers.h>
 #include <wx/clipbrd.h>
@@ -326,7 +327,7 @@ void LIB_EDIT_FRAME::OnSaveAll( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnCreateNewPart( wxCommandEvent& event )
 {
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     wxString lib = getTargetLib();
 
     if( !m_libMgr->LibraryExists( lib ) )
@@ -791,7 +792,7 @@ bool LIB_EDIT_FRAME::saveLibrary( const wxString& aLibrary, bool aNewFile )
     wxString   msg;
     PROJECT&   prj = Prj();
 
-    m_canvas->EndMouseCapture( ID_NO_TOOL_SELECTED, GetGalCanvas()->GetDefaultCursor() );
+    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
 
     if( !aNewFile && ( aLibrary.empty() || !prj.SchSymbolLibTable()->HasLibrary( aLibrary ) ) )
     {
