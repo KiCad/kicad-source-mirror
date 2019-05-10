@@ -508,9 +508,9 @@ void SCH_SCREEN::UpdateSymbolLinks( bool aForce )
     {
         SYMBOL_LIB_TABLE* libs = Prj().SchSymbolLibTable();
         int mod_hash = libs->GetModifyHash();
-        SCH_TYPE_COLLECTOR c;
+        EE_TYPE_COLLECTOR c;
 
-        c.Collect( GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
+        c.Collect( GetDrawItems(), EE_COLLECTOR::ComponentsOnly );
 
         // Must we resolve?
         if( (m_modification_sync != mod_hash) || aForce )

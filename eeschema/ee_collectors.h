@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef _SCH_COLLECTORS_H_
-#define _SCH_COLLECTORS_H_
+#ifndef EE_COLLECTORS_H
+#define EE_COLLECTORS_H
 
 
 #include <collector.h>
@@ -33,9 +33,9 @@
 
 
 /**
- * Class SCH_COLLECTOR
+ * Class EE_COLLECTOR
  */
-class SCH_COLLECTOR : public COLLECTOR
+class EE_COLLECTOR : public COLLECTOR
 {
 public:
     static const KICAD_T AllItems[];
@@ -45,10 +45,7 @@ public:
     static const KICAD_T SheetsOnly[];
     static const KICAD_T SheetsAndSheetLabels[];
 
-    /**
-     * Constructor SCH_COLLECTOR
-     */
-    SCH_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems ) :
+    EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
         m_MenuCancelled( false )
     {
         SetScanTypes( aScanTypes );
@@ -191,7 +188,7 @@ public:
     /**
      * Constructor SCH_FIND_COLLECTOR
      */
-    SCH_FIND_COLLECTOR( const KICAD_T* aScanTypes = SCH_COLLECTOR::AllItems )
+    SCH_FIND_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems )
     {
         SetScanTypes( aScanTypes );
         m_foundIndex = 0;
@@ -313,13 +310,13 @@ public:
 
 
 /**
- * Class TYPE_COLLECTOR
+ * Class EE_TYPE_COLLECTOR
  * merely gathers up all SCH_ITEMs of a given set of KICAD_T type(s).  It does
  * no hit-testing.
  *
  * @see class COLLECTOR
  */
-class SCH_TYPE_COLLECTOR : public SCH_COLLECTOR
+class EE_TYPE_COLLECTOR : public EE_COLLECTOR
 {
 public:
     /**
@@ -339,8 +336,8 @@ public:
      * @param aItem The head of a DLIST to scan.
      * @param aScanList The KICAD_Ts to gather up.
      */
-    void Collect( SCH_ITEM* aItem, const KICAD_T aScanList[] );
+    void Collect( EDA_ITEM* aItem, const KICAD_T aScanList[] );
 };
 
 
-#endif // _SCH_COLLECTORS_H_
+#endif // EE_COLLECTORS_H

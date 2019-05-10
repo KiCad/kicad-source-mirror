@@ -40,7 +40,7 @@
 #include <tool/tool_manager.h>
 #include <tools/sch_wire_bus_tool.h>
 #include <ee_actions.h>
-#include <sch_collectors.h>
+#include <ee_collectors.h>
 #include <painter.h>
 #include <eeschema_id.h>
 #include <menus_helpers.h>
@@ -314,7 +314,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
             if( m_selection.Empty() )
             {
-                SelectPoint( evt->Position(), SCH_COLLECTOR::AllItems, &selectionCancelled );
+                SelectPoint( evt->Position(), EE_COLLECTOR::AllItems, &selectionCancelled );
                 m_selection.SetIsHover( true );
             }
 
@@ -413,8 +413,8 @@ SELECTION& EE_SELECTION_TOOL::GetSelection()
 EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T* aFilterList,
                                            bool* aSelectionCancelledFlag, bool aCheckLocked )
 {
-    EDA_ITEM*     start;
-    SCH_COLLECTOR collector;
+    EDA_ITEM*    start;
+    EE_COLLECTOR collector;
 
     if( m_isLibEdit )
         start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
@@ -478,8 +478,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 }
 
 
-void EE_SELECTION_TOOL::guessSelectionCandidates( SCH_COLLECTOR& collector,
-                                                   const VECTOR2I& aWhere )
+void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
 {
     // There are certain parent/child and enclosure combinations that can be handled
     // automatically.  Since schematics are meant to be human-readable we don't have
@@ -647,7 +646,7 @@ static KICAD_T nodeTypes[] =
 
 EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
-    SCH_COLLECTOR collector;
+    EE_COLLECTOR collector;
 
     collector.Collect( m_frame->GetScreen()->GetDrawItems(), nodeTypes, (wxPoint) aPosition );
 
@@ -785,7 +784,7 @@ int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 {
-    SCH_COLLECTOR* collector = aEvent.Parameter<SCH_COLLECTOR*>();
+    EE_COLLECTOR* collector = aEvent.Parameter<EE_COLLECTOR*>();
 
     if( !doSelectionMenu( collector ) )
         collector->m_MenuCancelled = true;
@@ -794,7 +793,7 @@ int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 }
 
 
-bool EE_SELECTION_TOOL::doSelectionMenu( SCH_COLLECTOR* aCollector )
+bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 {
     EDA_ITEM* current = nullptr;
     CONTEXT_MENU menu;

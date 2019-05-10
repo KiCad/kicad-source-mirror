@@ -388,7 +388,7 @@ static bool sort_by_libid( const SCH_COMPONENT* ref, SCH_COMPONENT* cmp )
 }
 
 
-void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
+void SCH_COMPONENT::ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
                                 PART_LIB* aCacheLib )
 {
     std::vector<SCH_COMPONENT*> cmp_list;
@@ -432,7 +432,7 @@ void SCH_COMPONENT::ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TAB
 }
 
 
-void SCH_COMPONENT::UpdatePins( const SCH_COLLECTOR& aComponents )
+void SCH_COMPONENT::UpdatePins( const EE_COLLECTOR& aComponents )
 {
     for( int i = 0;  i < aComponents.GetCount();  ++i )
     {

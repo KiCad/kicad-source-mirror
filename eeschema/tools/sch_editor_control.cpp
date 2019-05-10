@@ -665,7 +665,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SELECTION&         selection = selTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SELECTION&         selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
     SCH_COMPONENT*     comp = nullptr;
 
     if( selection.GetSize() >= 1 )
@@ -692,7 +692,7 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    const SELECTION&   selection = selTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
+    const SELECTION&   selection = selTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
 
     if( selection.GetSize() == 1 )
     {

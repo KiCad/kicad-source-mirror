@@ -31,7 +31,7 @@
 #include <undo_redo_container.h>
 #include <template_fieldnames.h>
 #include <block_commande.h>
-#include <sch_collectors.h>
+#include <ee_collectors.h>
 #include <tool/selection.h>
 #include <erc_settings.h>
 #include <sch_draw_panel.h>

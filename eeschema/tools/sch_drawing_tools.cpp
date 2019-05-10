@@ -681,7 +681,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     item = m_frame->CreateNewText( LAYER_NOTES );
                     break;
                 case SCH_SHEET_PIN_T:
-                    item = m_selectionTool->SelectPoint( cursorPos, SCH_COLLECTOR::SheetsAndSheetLabels );
+                    item = m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsAndSheetLabels );
 
                     if( item )
                     {

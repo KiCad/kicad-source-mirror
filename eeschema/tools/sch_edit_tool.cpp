@@ -466,7 +466,7 @@ void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
 
 int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -606,7 +606,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::RotatableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::RotatableItems );
 
     if( selection.GetSize() == 0 )
         return 0;
@@ -1056,7 +1056,7 @@ int SCH_EDIT_TOOL::EditField( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( selection.Empty() )
         return 0;
@@ -1077,7 +1077,7 @@ int SCH_EDIT_TOOL::AutoplaceFields( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( selection.Empty() )
         return 0;
@@ -1097,7 +1097,7 @@ int SCH_EDIT_TOOL::ConvertDeMorgan( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::EditableItems );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::EditableItems );
 
     if( selection.Empty() )
         return 0;
@@ -1264,7 +1264,7 @@ int SCH_EDIT_TOOL::BreakWire( const TOOL_EVENT& aEvent )
 
 int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::SheetsOnly );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::SheetsOnly );
     SCH_SHEET* sheet = (SCH_SHEET*) selection.Front();
 
     if( !sheet )

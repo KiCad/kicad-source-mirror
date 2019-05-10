@@ -46,7 +46,7 @@ class LIB_PART;
 class NETLIST_OBJECT_LIST;
 class PART_LIB;
 class PART_LIBS;
-class SCH_COLLECTOR;
+class EE_COLLECTOR;
 class SCH_SCREEN;
 class SYMBOL_LIB_TABLE;
 
@@ -199,7 +199,7 @@ public:
 
     bool Resolve( SYMBOL_LIB_TABLE& aLibTable, PART_LIB* aCacheLib = NULL );
 
-    static void ResolveAll( const SCH_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
+    static void ResolveAll( const EE_COLLECTOR& aComponents, SYMBOL_LIB_TABLE& aLibTable,
                             PART_LIB* aCacheLib = NULL );
 
     int GetUnit() const { return m_unit; }
@@ -209,7 +209,7 @@ public:
      *
      * @param aComponents collector of components in screen
      */
-    static void UpdatePins( const SCH_COLLECTOR& aComponents );
+    static void UpdatePins( const EE_COLLECTOR& aComponents );
 
     /**
      * Updates the local cache of SCH_PIN_CONNECTION objects for each pin

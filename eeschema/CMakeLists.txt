@@ -186,7 +186,7 @@ set( EESCHEMA_SRCS
     sch_base_frame.cpp
     sch_bitmap.cpp
     sch_bus_entry.cpp
-    sch_collectors.cpp
+    ee_collectors.cpp
     sch_component.cpp
     sch_connection.cpp
     sch_eagle_plugin.cpp

@@ -606,9 +606,9 @@ bool SCH_EDIT_FRAME::AppendSchematic()
 
     // Check for duplicate sheet names in the current page.
     wxArrayString duplicateSheetNames;
-    SCH_TYPE_COLLECTOR sheets;
+    EE_TYPE_COLLECTOR sheets;
 
-    sheets.Collect( screen->GetDrawItems(), SCH_COLLECTOR::SheetsOnly );
+    sheets.Collect( screen->GetDrawItems(), EE_COLLECTOR::SheetsOnly );
 
     for( int i = 0;  i < sheets.GetCount();  ++i )
     {
@@ -853,12 +853,12 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
 
             GetScreen()->m_Initialized = true;
 
-            SCH_TYPE_COLLECTOR components;
+            EE_TYPE_COLLECTOR components;
             SCH_SCREENS allScreens;
 
             for( SCH_SCREEN* screen = allScreens.GetFirst(); screen; screen = allScreens.GetNext() )
             {
-                components.Collect( screen->GetDrawItems(), SCH_COLLECTOR::ComponentsOnly );
+                components.Collect( screen->GetDrawItems(), EE_COLLECTOR::ComponentsOnly );
 
                 for( int cmpIdx = 0; cmpIdx < components.GetCount(); ++cmpIdx )
                 {

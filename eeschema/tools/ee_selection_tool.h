@@ -28,12 +28,12 @@
 #include <tool/context_menu.h>
 #include <tool/selection.h>
 #include <tool/tool_menu.h>
-#include <sch_collectors.h>
+#include <ee_collectors.h>
 #include <sch_component.h>
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;
-class SCH_COLLECTOR;
+class EE_COLLECTOR;
 
 namespace KIGFX
 {
@@ -88,7 +88,7 @@ public:
      * Returns either an existing selection (filtered), or the selection at the current
      * cursor if the existing selection is empty.
      */
-    SELECTION& RequestSelection( const KICAD_T* aFilterList = SCH_COLLECTOR::AllItems );
+    SELECTION& RequestSelection( const KICAD_T* aFilterList = EE_COLLECTOR::AllItems );
 
     /**
      * Function selectPoint()
@@ -101,7 +101,7 @@ public:
      * @param aCheckLocked indicates if locked items should be excluded
      */
     EDA_ITEM* SelectPoint( const VECTOR2I& aWhere,
-                           const KICAD_T* aFilterList = SCH_COLLECTOR::AllItems,
+                           const KICAD_T* aFilterList = EE_COLLECTOR::AllItems,
                            bool* aSelectionCancelledFlag = NULL, bool aCheckLocked = false );
 
     int AddItemToSel( const TOOL_EVENT& aEvent );
@@ -149,7 +149,7 @@ private:
      * Apply heuristics to try and determine a single object when multiple are found under the
      * cursor.
      */
-    void guessSelectionCandidates( SCH_COLLECTOR& collector, const VECTOR2I& aWhere );
+    void guessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aWhere );
 
     /**
      * Allows the selection of a single item from a list via pop-up menu.  The items are
@@ -157,7 +157,7 @@ private:
      * the picked item.
      * @return true if an item was picked
      */
-    bool doSelectionMenu( SCH_COLLECTOR* aItems );
+    bool doSelectionMenu( EE_COLLECTOR* aItems );
 
     /**
      * Function clearSelection()

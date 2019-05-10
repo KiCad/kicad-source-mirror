@@ -194,7 +194,7 @@ jp charras:
 
   * Add item clarification context menu to EESchema when multiple unresolved
     items are found at the current cross hair position.
-  * Add collector class SCH_COLLECTOR for supporting multiple item hit testing.
+  * Add collector class EE_COLLECTOR for supporting multiple item hit testing.
   * Removed bit wise masked filtering from schematic item hit testing.
   * Removed all old hit testing functions and methods scattered about the
     EESchema source code.

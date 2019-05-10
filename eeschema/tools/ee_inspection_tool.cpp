@@ -90,7 +90,7 @@ void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
 
 int EE_INSPECTION_TOOL::ShowDatasheet( const TOOL_EVENT& aEvent )
 {
-    SELECTION& selection = m_selectionTool->RequestSelection( SCH_COLLECTOR::ComponentsOnly );
+    SELECTION& selection = m_selectionTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
 
     if( selection.Empty() )
         return 0;

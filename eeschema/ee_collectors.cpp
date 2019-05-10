@@ -27,19 +27,19 @@
 
 #include <sch_sheet_path.h>
 #include <transform.h>
-#include <sch_collectors.h>
+#include <ee_collectors.h>
 #include <sch_component.h>
 #include <sch_line.h>
 #include <sch_bus_entry.h>
 
 
-const KICAD_T SCH_COLLECTOR::AllItems[] = {
+const KICAD_T EE_COLLECTOR::AllItems[] = {
     SCH_LOCATE_ANY_T,
     EOT
 };
 
 
-const KICAD_T SCH_COLLECTOR::EditableItems[] = {
+const KICAD_T EE_COLLECTOR::EditableItems[] = {
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -53,7 +53,7 @@ const KICAD_T SCH_COLLECTOR::EditableItems[] = {
     EOT
 };
 
-const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
+const KICAD_T EE_COLLECTOR::RotatableItems[] = {
     SCH_TEXT_T,
     SCH_LABEL_T,
     SCH_GLOBAL_LABEL_T,
@@ -70,26 +70,26 @@ const KICAD_T SCH_COLLECTOR::RotatableItems[] = {
 };
 
 
-const KICAD_T SCH_COLLECTOR::ComponentsOnly[] = {
+const KICAD_T EE_COLLECTOR::ComponentsOnly[] = {
     SCH_COMPONENT_T,
     EOT
 };
 
 
-const KICAD_T SCH_COLLECTOR::SheetsOnly[] = {
+const KICAD_T EE_COLLECTOR::SheetsOnly[] = {
     SCH_SHEET_T,
     EOT
 };
 
 
-const KICAD_T SCH_COLLECTOR::SheetsAndSheetLabels[] = {
+const KICAD_T EE_COLLECTOR::SheetsAndSheetLabels[] = {
     SCH_SHEET_PIN_T,
     SCH_SHEET_T,
     EOT
 };
 
 
-SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
+SEARCH_RESULT EE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 {
     if( aItem->Type() == LIB_PIN_T )
     {
@@ -115,8 +115,8 @@ SEARCH_RESULT SCH_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
 }
 
 
-void SCH_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
-                             int aUnit, int aConvert )
+void EE_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const wxPoint& aPos,
+                            int aUnit, int aConvert )
 {
     Empty();        // empty the collection just in case
 
@@ -134,7 +134,7 @@ void SCH_COLLECTOR::Collect( EDA_ITEM* aItem, const KICAD_T aFilterList[], const
 }
 
 
-bool SCH_COLLECTOR::IsCorner() const
+bool EE_COLLECTOR::IsCorner() const
 {
     if( GetCount() != 2 )
         return false;
@@ -155,7 +155,7 @@ bool SCH_COLLECTOR::IsCorner() const
 }
 
 
-bool SCH_COLLECTOR::IsDraggableJunction() const
+bool EE_COLLECTOR::IsDraggableJunction() const
 {
     for( size_t i = 0;  i < m_List.size();  i++ )
         if( ( (SCH_ITEM*) m_List[ i ] )->Type() == SCH_JUNCTION_T )
@@ -230,7 +230,7 @@ SCH_ITEM* SCH_FIND_COLLECTOR::GetItem( int ndx ) const
     for( unsigned i = 0; i < m_sheetPaths.size(); i++ )
     {
         EDA_ITEM::IterateForward( m_sheetPaths[ i ].LastDrawList(),
-                                  inspector, nullptr, SCH_COLLECTOR::AllItems );
+                                  inspector, nullptr, EE_COLLECTOR::AllItems );
     }
 
     return item;
@@ -453,7 +453,7 @@ void SCH_FIND_COLLECTOR::Collect( SCH_FIND_REPLACE_DATA& aFindReplaceData,
 }
 
 
-SEARCH_RESULT SCH_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
+SEARCH_RESULT EE_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 {
     // The Vist() function only visits the testItem if its type was in the
     // the scanList, so therefore we can collect anything given to us here.
@@ -463,7 +463,7 @@ SEARCH_RESULT SCH_TYPE_COLLECTOR::Inspect( EDA_ITEM* aItem, void* testData )
 }
 
 
-void SCH_TYPE_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[] )
+void EE_TYPE_COLLECTOR::Collect( SCH_ITEM* aItem, const KICAD_T aFilterList[] )
 {
     Empty();        // empty the collection
 

@@ -31,7 +31,7 @@
 #include <sch_base_frame.h>
 #include <sch_screen.h>
 #include <lib_draw_item.h>
-#include <sch_collectors.h>
+#include <ee_collectors.h>
 #include <core/optional.h>
 
 class SCH_EDIT_FRAME;
@@ -51,7 +51,6 @@ class LIB_MANAGER;
 class LIB_EDIT_FRAME : public SCH_BASE_FRAME
 {
     LIB_PART*          m_my_part;              ///< a part I own, it is not in any library, but a copy could be.
-    SCH_COLLECTOR      m_collectedItems;       ///< Used for hit testing.
     wxComboBox*        m_partSelectBox;        ///< a Box to select a part to edit (if any)
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
