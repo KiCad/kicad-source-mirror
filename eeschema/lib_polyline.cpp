@@ -263,16 +263,37 @@ bool LIB_POLYLINE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccurac
     if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = aRect;
+    EDA_RECT sel = aRect;
 
     if ( aAccuracy )
-        rect.Inflate( aAccuracy );
+        sel.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return sel.Contains( GetBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse for filled polylines,
-                                                // egregiously coarse for unfilled...
+    // Fast test: if rect is outside the polygon bounding box, then they cannot intersect
+    if( !sel.Intersects( GetBoundingBox() ) )
+        return false;
+
+    // Account for the width of the line
+    sel.Inflate( GetWidth() / 2 );
+    int count = m_PolyPoints.size();
+
+    for( int ii = 0; ii < count; ii++ )
+    {
+        wxPoint pt = DefaultTransform.TransformCoordinate( m_PolyPoints[ ii ] );
+        wxPoint ptNext = DefaultTransform.TransformCoordinate( m_PolyPoints[ (ii+1) % count ] );
+
+        // Test if the point is within aRect
+        if( sel.Contains( pt ) )
+            return true;
+
+        // Test if this edge intersects aRect
+        if( sel.Intersects( pt, ptNext ) )
+            return true;
+    }
+
+    return false;
 }
 
 

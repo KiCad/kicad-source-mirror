@@ -68,15 +68,22 @@ bool LIB_CIRCLE::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
     if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+    wxPoint  center = DefaultTransform.TransformCoordinate( GetPosition() );
+    int      radius = GetRadius();
+    int      lineWidth = GetWidth();
+    EDA_RECT sel = aRect ;
 
     if ( aAccuracy )
-        rect.Inflate( aAccuracy );
+        sel.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return sel.Contains( GetBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse...
+    // If the rectangle does not intersect the bounding box, this is a much quicker test
+    if( !sel.Intersects( GetBoundingBox() ) )
+        return false;
+    else
+        return sel.IntersectsCircleEdge( center, radius, lineWidth );
 }
 
 

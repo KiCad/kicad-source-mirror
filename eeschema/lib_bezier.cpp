@@ -289,16 +289,37 @@ bool LIB_BEZIER::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy 
     if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+    EDA_RECT sel = aRect;
 
     if ( aAccuracy )
-        rect.Inflate( aAccuracy );
+        sel.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return sel.Contains( GetBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse for filled beziers,
-                                                // egregiously coarse for unfilled...
+    // Fast test: if aRect is outside the polygon bounding box, rectangles cannot intersect
+    if( !sel.Intersects( GetBoundingBox() ) )
+        return false;
+
+    // Account for the width of the line
+    sel.Inflate( GetWidth() / 2 );
+    unsigned count = m_BezierPoints.size();
+
+    for( unsigned ii = 1; ii < count; ii++ )
+    {
+        wxPoint vertex = DefaultTransform.TransformCoordinate( m_BezierPoints[ii-1] );
+        wxPoint vertexNext = DefaultTransform.TransformCoordinate( m_BezierPoints[ii] );
+
+        // Test if the point is within aRect
+        if( sel.Contains( vertex ) )
+            return true;
+
+        // Test if this edge intersects aRect
+        if( sel.Intersects( vertex, vertexNext ) )
+            return true;
+    }
+
+    return false;
 }
 
 

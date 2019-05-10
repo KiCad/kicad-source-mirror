@@ -112,15 +112,15 @@ bool LIB_ITEM::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) 
     if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+    EDA_RECT sel = aRect;
 
     if ( aAccuracy )
-        rect.Inflate( aAccuracy );
+        sel.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return sel.Contains( GetBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() );
+    return sel.Intersects( GetBoundingBox() );
 }
 
 

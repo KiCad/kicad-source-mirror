@@ -109,16 +109,24 @@ bool LIB_ARC::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy ) c
     if( m_Flags & ( STRUCT_DELETED | SKIP_STRUCT ) )
         return false;
 
-    EDA_RECT rect = DefaultTransform.TransformCoordinate( aRect );
+    wxPoint  center = DefaultTransform.TransformCoordinate( GetPosition() );
+    int      radius = GetRadius();
+    int      lineWidth = GetWidth();
+    EDA_RECT sel = aRect ;
 
     if ( aAccuracy )
-        rect.Inflate( aAccuracy );
+        sel.Inflate( aAccuracy );
 
     if( aContained )
-        return rect.Contains( GetBoundingBox() );
+        return sel.Contains( GetBoundingBox() );
 
-    return rect.Intersects( GetBoundingBox() ); // JEY TODO somewhat coarse for filled arcs,
-                                                // egregiously coarse for unfilled...
+    EDA_RECT arcRect = GetBoundingBox().Common( sel );
+
+    /* All following tests must pass:
+     * 1. Rectangle must intersect arc BoundingBox
+     * 2. Rectangle must cross the outside of the arc
+     */
+    return arcRect.Intersects( sel ) && arcRect.IntersectsCircleEdge( center, radius, lineWidth );
 }
 
 

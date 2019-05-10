@@ -740,7 +740,6 @@ bool DRAWSEGMENT::HitTest( const EDA_RECT& aRect, bool aContained, int aAccuracy
             {
                 return arect.IntersectsCircleEdge( GetCenter(), GetRadius(), GetWidth() );
             }
-
         }
         break;
 
