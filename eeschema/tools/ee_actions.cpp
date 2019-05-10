@@ -34,7 +34,7 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
     switch( aId )
     {
     case ID_NO_TOOL_SELECTED:
-        return EE_ACTIONS::selectionActivate.MakeEvent();
+        return EE_ACTIONS::selectionTool.MakeEvent();
 
     case ID_CANCEL_CURRENT_COMMAND:
         return ACTIONS::cancelInteractive.MakeEvent();

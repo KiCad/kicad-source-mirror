@@ -297,6 +297,10 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
 int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
 {
+    // We might be running as the same shape in another co-routine.  Make sure that one
+    // gets whacked.
+    m_toolMgr->DeactivateTool();
+
     if( aEvent.IsAction( &EE_ACTIONS::drawSymbolArc ) )
         m_frame->SetToolID( ID_LIBEDIT_BODY_ARC_BUTT, wxCURSOR_PENCIL, _( "Draw Arc" ) );
     else if( aEvent.IsAction( &EE_ACTIONS::drawSymbolCircle ) )

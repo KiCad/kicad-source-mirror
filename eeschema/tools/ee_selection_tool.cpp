@@ -50,6 +50,9 @@
 TOOL_ACTION EE_ACTIONS::selectionActivate( "eeschema.InteractiveSelection",
         AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );      // No description, not shown anywhere
 
+TOOL_ACTION EE_ACTIONS::selectionTool( "eeschema.InteractiveSelection.selectionTool",
+        AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );      // No description, not shown anywhere
+
 TOOL_ACTION EE_ACTIONS::selectNode( "eeschema.InteractiveSelection.SelectNode",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_NODE ),
         _( "Select Node" ), _( "Select a connection item under the cursor" ), nullptr );
