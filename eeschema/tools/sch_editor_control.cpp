@@ -326,10 +326,11 @@ static VECTOR2D CLEAR;
 // TODO(JE) Probably use netcode rather than connection name here eventually
 static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
-    SCH_EDIT_FRAME*    editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
-    EE_SELECTION_TOOL* selTool = aToolMgr->GetTool<EE_SELECTION_TOOL>();
-    wxString           netName;
-    bool               retVal = true;
+    SCH_EDIT_FRAME*     editFrame = static_cast<SCH_EDIT_FRAME*>( aToolMgr->GetEditFrame() );
+    EE_SELECTION_TOOL*  selTool = aToolMgr->GetTool<EE_SELECTION_TOOL>();
+    SCH_EDITOR_CONTROL* editorControl = aToolMgr->GetTool<SCH_EDITOR_CONTROL>();
+    wxString            netName;
+    bool                retVal = true;
 
     if( aPosition != CLEAR )
     {
@@ -360,8 +361,8 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     }
 
     editFrame->SetSelectedNetName( netName );
-
-    aToolMgr->RunAction( EE_ACTIONS::highlightNetSelection, true );
+    TOOL_EVENT dummy;
+    editorControl->HighlightNetSelection( dummy );
 
     return retVal;
 }
