@@ -259,9 +259,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
     m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
     m_toolManager->RunAction( SCH_ACTIONS::clearSelection, true );
 
-    SetRepeatItem( NULL );
-    ClearMsgPanel();
-
     SCH_SCREEN* screen = g_CurrentSheet->LastScreen();
 
     // Switch to current sheet,

@@ -899,7 +899,7 @@ int SCH_EDIT_TOOL::RepeatDrawItem( const TOOL_EVENT& aEvent )
         m_frame->TestDanglingEnds();
 
     // newItem newItem, now that it has been moved, thus saving new position.
-    m_frame->SetRepeatItem( newItem );
+    m_frame->SaveCopyForRepeatItem( newItem );
 
     return 0;
 }
@@ -959,7 +959,6 @@ int SCH_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
         }
     }
 
-    m_frame->SetRepeatItem( nullptr );
     m_frame->TestDanglingEnds();
 
     m_frame->GetCanvas()->Refresh();

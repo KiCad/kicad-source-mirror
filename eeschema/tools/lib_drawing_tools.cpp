@@ -196,6 +196,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             // First click creates...
             if( !item )
             {
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 switch( aType )
@@ -339,6 +340,8 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         {
             if( !part )
                 continue;
+
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
             switch( m_frame->GetToolId() )
             {

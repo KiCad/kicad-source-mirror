@@ -399,7 +399,7 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     Unbind( wxEVT_COMMAND_MENU_SELECTED, &SCH_EDIT_FRAME::OnEditSymbolLibTable, this,
             ID_EDIT_SYM_LIB_TABLE );
 
-    delete m_item_to_repeat;        // we own the cloned object, see this->SetRepeatItem()
+    delete m_item_to_repeat;        // we own the cloned object, see this->SaveCopyForRepeatItem()
 
     SetScreen( NULL );
 
@@ -446,7 +446,7 @@ void SCH_EDIT_FRAME::setupTools()
 }
 
 
-void SCH_EDIT_FRAME::SetRepeatItem( SCH_ITEM* aItem )
+void SCH_EDIT_FRAME::SaveCopyForRepeatItem( SCH_ITEM* aItem )
 {
     // we cannot store a pointer to an item in the display list here since
     // that item may be deleted, such as part of a line concatonation or other.
@@ -594,24 +594,6 @@ void SCH_EDIT_FRAME::RedrawActiveWindow( wxDC* DC, bool EraseBg )
 
     // Display the sheet filename, and the sheet path, for non root sheets
     UpdateTitle();
-}
-
-
-void SCH_EDIT_FRAME::SetUndoItem( const SCH_ITEM* aItem )
-{
-    // if aItem != NULL, delete a previous m_undoItem, if exists
-    // if aItme = NULL, just clear m_undoItem,
-    // because when calling SetUndoItem( NULL ), we only clear m_undoItem,
-    // because the owner of m_undoItem is no more me.
-    if( aItem && m_undoItem )
-    {
-        delete m_undoItem;
-    }
-
-    m_undoItem = NULL;
-
-    if( aItem )
-        m_undoItem = (SCH_ITEM*) aItem->Clone();
 }
 
 
@@ -1259,7 +1241,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
             if( !screen->CheckIfOnDrawList( aItem ) )  // don't want a loop!
                 AddToScreen( aItem );
 
-            SetRepeatItem( aItem );
+            SaveCopyForRepeatItem( aItem );
             SaveCopyInUndoList( undoItem, UR_NEW, aUndoAppend );
         }
 

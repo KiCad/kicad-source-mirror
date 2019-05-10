@@ -335,8 +335,6 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
             if( undoItem == NULL )
                 undoItem = item;
 
-            SetUndoItem( undoItem );
-
             sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
             wxCHECK_RET( sheet != NULL, wxT( "Could not find sheet path " ) + data.GetSheetPath() );
@@ -365,8 +363,6 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 
         if( undoItem == NULL )
             undoItem = item;
-
-        SetUndoItem( undoItem );
 
         sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 

@@ -1073,7 +1073,7 @@ public:
     /**
      * Clone \a aItem and owns that clone in this container.
      */
-    void SetRepeatItem( SCH_ITEM* aItem );
+    void SaveCopyForRepeatItem( SCH_ITEM* aItem );
 
     /**
      * Return the item which is to be repeated with the insert key.
@@ -1081,17 +1081,6 @@ public:
      * Such object is owned by this container, and must be cloned.
      */
     SCH_ITEM* GetRepeatItem() const             { return m_item_to_repeat; }
-
-    /**
-     * Clone \a aItem which can be used to restore the state of the item being edited
-     * when the user cancels the editing in progress.
-     *
-     * @param aItem The item to make a clone of for undoing the last change.  Set to
-     *              NULL to free the current undo item.
-     */
-    void SetUndoItem( const SCH_ITEM* aItem );
-
-    SCH_ITEM* GetUndoItem() const { return m_undoItem; }
 
     /**
      * Swap the cloned item in member variable m_undoItem with \a aItem and saves it to

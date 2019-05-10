@@ -144,7 +144,7 @@ SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
     m_frame( nullptr ),
     m_menu( *this )
 {
-};
+}
 
 
 SCH_DRAWING_TOOLS::~SCH_DRAWING_TOOLS()
@@ -288,7 +288,6 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
             if( !aComponent )
             {
                 m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
-                m_frame->SetRepeatItem( nullptr );
 
                 // Pick the module to be placed
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
@@ -315,7 +314,7 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
                 if( m_frame->GetAutoplaceFields() )
                     aComponent->AutoplaceFields( /* aScreen */ NULL, /* aManual */ false );
 
-                m_frame->SetRepeatItem( aComponent );
+                m_frame->SaveCopyForRepeatItem( aComponent );
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( aComponent->Clone() );
@@ -415,10 +414,12 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         {
             if( !image )
             {
-                wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
-                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
 
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
+
+                wxFileDialog dlg( m_frame, _( "Choose Image" ), wxEmptyString, wxEmptyString,
+                                  _( "Image Files " ) + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 
                 if( dlg.ShowModal() != wxID_OK )
                     continue;
@@ -443,7 +444,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 image->SetFlags( IS_NEW | IS_MOVED );
 
-                m_frame->SetRepeatItem( image );
+                m_frame->SaveCopyForRepeatItem( image );
 
                 m_view->ClearPreview();
                 m_view->AddToPreview( image->Clone() );
@@ -564,7 +565,7 @@ int SCH_DRAWING_TOOLS::doSingleClickPlace( KICAD_T aType )
                 item->SetFlags( IS_NEW );
                 m_frame->AddItemToScreenAndUndoList( item );
 
-                m_frame->SetRepeatItem( item );
+                m_frame->SaveCopyForRepeatItem( item );
 
                 m_frame->SchematicCleanUp();
                 m_frame->TestDanglingEnds();
@@ -662,7 +663,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             // First click creates...
             if( !item )
             {
-                m_frame->SetRepeatItem( NULL );
+                m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
                 m_frame->GetCanvas()->SetIgnoreMouseEvents( true );
 
                 switch( aType )
@@ -794,14 +795,14 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_LEFT ) && !sheet )
         {
+            m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
+
             sheet = new SCH_SHEET( (wxPoint) cursorPos );
             sheet->SetFlags( IS_NEW | IS_RESIZED );
             sheet->SetTimeStamp( GetNewTimeStamp() );
             sheet->SetParent( m_frame->GetScreen() );
             sheet->SetScreen( NULL );
             sizeSheet( sheet, cursorPos );
-
-            m_frame->SetRepeatItem( nullptr );
 
             m_selectionTool->AddItemToSel( sheet );
             m_view->ClearPreview();

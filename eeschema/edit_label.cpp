@@ -48,8 +48,6 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 {
     SCH_TEXT* textItem = NULL;
 
-    SetRepeatItem( NULL );
-
     switch( aType )
     {
     case LAYER_NOTES:
@@ -156,8 +154,6 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
 
     if( selected )
         m_toolManager->RunAction( SCH_ACTIONS::addItemToSel, true, newtext );
-
-    SetRepeatItem( nullptr );
 
     delete aText;
 
