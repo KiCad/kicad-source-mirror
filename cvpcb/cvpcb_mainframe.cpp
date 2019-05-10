@@ -816,7 +816,8 @@ void CVPCB_MAINFRAME::CreateScreenCmp()
         fpframe->Raise();   // Make sure that is visible.
         Raise();            // .. but still we want the focus.
 
-        focus->SetFocus();
+        if( focus )
+            focus->SetFocus();
     }
 
     fpframe->InitDisplay();
