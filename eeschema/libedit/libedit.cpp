@@ -33,7 +33,7 @@
 #include <gestfich.h>
 
 #include <eeschema_id.h>
-#include <tool/ee_actions.h>
+#include <tools/ee_actions.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
