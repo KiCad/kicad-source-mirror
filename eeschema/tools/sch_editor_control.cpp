@@ -655,7 +655,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
         SCH_ITEM* item = (SCH_ITEM*) selection.GetTopLeftItem();
 
         selection.SetReferencePoint( item->GetPosition() );
-        m_toolMgr->RunAction( SCH_ACTIONS::move, true );
+        m_toolMgr->RunAction( SCH_ACTIONS::move, false );
     }
 
     return 0;

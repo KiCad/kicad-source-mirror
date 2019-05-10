@@ -264,7 +264,7 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( SCH_ACTIONS::move, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::move, false );
 
     return 0;
 }
@@ -585,7 +585,7 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( SCH_ACTIONS::clearSelection, true );
     m_toolMgr->RunAction( SCH_ACTIONS::addItemsToSel, true, &newItems );
-    m_toolMgr->RunAction( SCH_ACTIONS::move, true );
+    m_toolMgr->RunAction( SCH_ACTIONS::move, false );
 
     return 0;
 }

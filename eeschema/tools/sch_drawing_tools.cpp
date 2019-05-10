@@ -727,7 +727,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
             m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
-        else if( TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
+        else if( item && TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
         {
             // This happens if our text was replaced out from under us by ConvertTextType()
             SELECTION& selection = m_selectionTool->GetSelection();
