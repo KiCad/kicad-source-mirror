@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -75,10 +75,21 @@ FIELDS_GRID_TABLE<T>::FIELDS_GRID_TABLE( DIALOG_SHIM* aDialog, SCH_BASE_FRAME* a
     m_valueAttr->SetEditor( valueEditor );
 
     m_footprintAttr = new wxGridCellAttr;
-    m_footprintAttr->SetEditor( new GRID_CELL_FOOTPRINT_ID_EDITOR( aDialog ) );
+    GRID_CELL_FOOTPRINT_ID_EDITOR* fpIdEditor = new GRID_CELL_FOOTPRINT_ID_EDITOR( aDialog );
+    fpIdEditor->SetValidator( LIB_ID_VALIDATOR( LIB_ID::ID_PCB ) );
+    m_footprintAttr->SetEditor( fpIdEditor );
 
     m_urlAttr = new wxGridCellAttr;
-    m_urlAttr->SetEditor( new GRID_CELL_URL_EDITOR( aDialog ) );
+    GRID_CELL_URL_EDITOR* urlEditor = new GRID_CELL_URL_EDITOR( aDialog );
+    urlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
+                                                  DATASHEET ) );
+    m_urlAttr->SetEditor( urlEditor );
+
+    m_nonUrlAttr = new wxGridCellAttr;
+    wxGridCellTextEditor* nonUrlEditor = new wxGridCellTextEditor();
+    nonUrlEditor->SetValidator( SCH_FIELD_VALIDATOR( aFrame->IsType( FRAME_SCH_LIB_EDITOR ),
+                                                     DATASHEET ) );
+    m_nonUrlAttr->SetEditor( nonUrlEditor );
 
     m_boolAttr = new wxGridCellAttr;
     m_boolAttr->SetRenderer( new wxGridCellBoolRenderer() );
@@ -239,6 +250,11 @@ wxGridCellAttr* FIELDS_GRID_TABLE<T>::GetAttr( int aRow, int aCol, wxGridCellAtt
                 m_urlAttr->IncRef();
                 return m_urlAttr;
             }
+            else
+            {
+                m_nonUrlAttr->IncRef();
+                return m_nonUrlAttr;
+            }
         }
         return nullptr;
 
@@ -281,7 +297,7 @@ wxString FIELDS_GRID_TABLE<T>::GetValue( int aRow, int aCol )
     switch( aCol )
     {
     case FDC_NAME:
-        // Use default field name for mandatory fields, because they are transalted
+        // Use default field name for mandatory fields, because they are translated
         // according to the current locale
         if( aRow < MANDATORY_FIELDS )
             return TEMPLATE_FIELDNAME::GetDefaultFieldName( aRow );
@@ -488,17 +504,18 @@ template class FIELDS_GRID_TABLE<SCH_FIELD>;
 template class FIELDS_GRID_TABLE<LIB_FIELD>;
 
 
-
 void FIELDS_GRID_TRICKS::showPopupMenu( wxMenu& menu )
 {
     if( m_grid->GetGridCursorRow() == FOOTPRINT && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
-        menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ), _( "Browse for footprint" ) );
+        menu.Append( MYID_SELECT_FOOTPRINT, _( "Select Footprint..." ),
+                     _( "Browse for footprint" ) );
         menu.AppendSeparator();
     }
     else if( m_grid->GetGridCursorRow() == DATASHEET && m_grid->GetGridCursorCol() == FDC_VALUE )
     {
-        menu.Append( MYID_SHOW_DATASHEET,   _( "Show Datasheet" ),      _( "Show datasheet in browser" ) );
+        menu.Append( MYID_SHOW_DATASHEET, _( "Show Datasheet" ),
+                     _( "Show datasheet in browser" ) );
         menu.AppendSeparator();
     }
 
@@ -530,6 +547,7 @@ void FIELDS_GRID_TRICKS::doPopupSelection( wxCommandEvent& event )
     }
 }
 
+
 template <class T>
 wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue )
 {
@@ -539,20 +557,22 @@ wxString FIELDS_GRID_TABLE<T>::StringFromBool( bool aValue )
         return wxT( "0" );
 }
 
+
 template <class T>
 bool FIELDS_GRID_TABLE<T>::BoolFromString( wxString aValue )
 {
-    if( aValue == wxT( "1" ) )
+    if( aValue == "1" )
     {
         return true;
     }
-    else if( aValue == wxT( "0" ) )
+    else if( aValue == "0" )
     {
         return false;
     }
     else
     {
-        wxFAIL_MSG( wxString::Format( wxT( "string \"%s\" can't be converted to boolean correctly, it will have been perceived as FALSE" ), aValue ) );
+        wxFAIL_MSG( wxString::Format( "string \"%s\" can't be converted to boolean "
+                                      "correctly, it will have been perceived as FALSE", aValue ) );
         return false;
     }
 }

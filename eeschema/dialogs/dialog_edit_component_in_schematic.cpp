@@ -39,6 +39,7 @@
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <sch_reference_list.h>
+#include <sch_validators.h>
 #include <symbol_lib_table.h>
 
 #ifdef KICAD_SPICE
@@ -97,7 +98,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::DIALOG_EDIT_COMPONENT_IN_SCHEMATIC( SCH_EDIT
     m_bpMoveDown->SetBitmap( KiBitmap( small_down_xpm ) );
 
     // wxFormBuilder doesn't include this event...
-    m_grid->Connect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ), NULL, this );
+    m_grid->Connect( wxEVT_GRID_CELL_CHANGING,
+                     wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                     NULL, this );
 
     FinishDialogSettings();
 }
@@ -110,7 +113,9 @@ DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::~DIALOG_EDIT_COMPONENT_IN_SCHEMATIC()
     // Prevents crash bug in wxGrid's d'tor
     m_grid->DestroyTable( m_fields );
 
-    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING, wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ), NULL, this );
+    m_grid->Disconnect( wxEVT_GRID_CELL_CHANGING,
+                        wxGridEventHandler( DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::OnGridCellChanging ),
+                        NULL, this );
 
     // Delete the GRID_TRICKS.
     m_grid->PopEventHandler( true );
@@ -316,7 +321,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
     wxString msg;
     LIB_ID   id;
 
-    if( !m_grid->CommitPendingChanges() )
+    if( !m_grid->CommitPendingChanges() || !m_grid->Validate() )
         return false;
 
     if( !SCH_COMPONENT::IsReferenceStringValid( m_fields->at( REFERENCE ).GetText() ) )
@@ -388,7 +393,7 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::Validate()
 
 bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 {
-    if( !Validate() )
+    if( !wxDialog::TransferDataFromWindow() )  // Calls our Validate() method.
         return false;
 
     // save old cmp in undo list if not already in edit, or moving ...
@@ -485,9 +490,11 @@ bool DIALOG_EDIT_COMPONENT_IN_SCHEMATIC::TransferDataFromWindow()
 
         SCH_REFERENCE_LIST components;
         GetParent()->GetCurrentSheet().GetComponents( components );
+
         for( unsigned i = 0; i < components.GetCount(); i++ )
         {
             SCH_REFERENCE component = components[i];
+
             if( component.GetLibPart()->GetLibId() == thisLibId
                     && component.GetRef() == thisRef
                     && component.GetUnit() != thisUnit )

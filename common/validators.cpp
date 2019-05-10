@@ -2,7 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2004-2013 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see change_log.txt for contributors.
+ * Copyright (C) 2018 CERN
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +28,7 @@
  * @brief Custom text control validator implementations.
  */
 
+#include <confirm.h>
 #include <kicad_string.h>
 #include <validators.h>
 
@@ -133,7 +135,7 @@ ENV_VAR_NAME_VALIDATOR::~ENV_VAR_NAME_VALIDATOR()
 
 void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
 {
-    if (!m_validatorWindow)
+    if( !m_validatorWindow )
     {
         aEvent.Skip();
         return;
@@ -142,7 +144,7 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
     int keyCode = aEvent.GetKeyCode();
 
     // we don't filter special keys and delete
-    if (keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START)
+    if( keyCode < WXK_SPACE || keyCode == WXK_DELETE || keyCode >= WXK_START )
     {
         aEvent.Skip();
         return;
@@ -160,6 +162,7 @@ void ENV_VAR_NAME_VALIDATOR::OnChar( wxKeyEvent& aEvent  )
         // not as first character
         long from, to;
         GetTextEntry()->GetSelection( &from, &to );
+
         if( from < 1 )
             wxBell();
         else
@@ -217,6 +220,101 @@ void ENV_VAR_NAME_VALIDATOR::OnTextChanged( wxCommandEvent& event )
     }
 
     event.Skip();
+}
+
+
+bool REGEX_VALIDATOR::Validate( wxWindow* aParent )
+{
+    // If window is disabled, simply return
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const textEntry = GetTextEntry();
+
+    if( !textEntry )
+        return false;
+
+    bool valid = true;
+    const wxString& value = textEntry->GetValue();
+
+    if( m_regEx.Matches( value ) )
+    {
+        size_t start, len;
+        m_regEx.GetMatch( &start, &len );
+
+        if( start != 0 || len != value.Length() ) // whole string must match
+            valid = false;
+    }
+    else    // no match at all
+    {
+        valid = false;
+    }
+
+    if( !valid )
+    {
+        m_validatorWindow->SetFocus();
+        DisplayError( aParent, wxString::Format( _( "Incorrect value: %s" ), value ) );
+        return false;
+    }
+
+    return true;
+}
+
+
+void REGEX_VALIDATOR::compileRegEx( const wxString& aRegEx, int aFlags )
+{
+    if( !m_regEx.Compile( aRegEx, aFlags ) )
+    {
+        throw std::runtime_error( "REGEX_VALIDATOR: Invalid regular expression: "
+                + aRegEx.ToStdString() );
+    }
+
+    m_regExString = aRegEx;
+    m_regExFlags = aFlags;
+}
+
+
+bool LIB_ID_VALIDATOR::Validate( wxWindow *aParent )
+{
+    LIB_ID dummy;
+
+    // If window is disabled, simply return
+    if( !m_validatorWindow->IsEnabled() )
+        return true;
+
+    wxTextEntry* const text = GetTextEntry();
+
+    if( !text )
+        return false;
+
+    wxString msg;
+    wxString val( text->GetValue() );
+    wxString tmp = val.Clone();          // For trailing and leading white space tests.
+
+    if( tmp.Trim() != val )              // Trailing white space.
+    {
+        msg = _( "Entry contains trailing white space." );
+    }
+    else if( tmp.Trim( false ) != val )  // Leading white space.
+    {
+        msg = _( "Entry contains leading white space." );
+    }
+    else if( dummy.Parse( val, m_idType ) != -1 || !dummy.IsValid() )   // Is valid LIB_ID.
+    {
+        msg.Printf( _( "\"%s\" is not a valid library identifier format." ), val );
+    }
+
+    if( !msg.empty() )
+    {
+        m_validatorWindow->SetFocus();
+
+        wxMessageBox( msg, _( "Library Identifier Validation Error" ),
+                      wxOK | wxICON_EXCLAMATION, aParent );
+
+        return false;
+    }
+
+    return true;
 }
 
 
