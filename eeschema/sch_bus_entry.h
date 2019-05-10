@@ -30,7 +30,7 @@
 #ifndef _SCH_BUS_ENTRY_H_
 #define _SCH_BUS_ENTRY_H_
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 #define TARGET_BUSENTRY_RADIUS 12   // Circle diameter drawn at the ends
 

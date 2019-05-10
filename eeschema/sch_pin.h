@@ -22,7 +22,7 @@
 #ifndef _SCH_PIN_CONNECTION_H
 #define _SCH_PIN_CONNECTION_H
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_sheet_path.h>
 #include <lib_pin.h>
 

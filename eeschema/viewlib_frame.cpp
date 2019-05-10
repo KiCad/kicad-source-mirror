@@ -36,7 +36,6 @@
 #include <general.h>
 #include <viewlib_frame.h>
 #include <symbol_lib_table.h>
-#include <sch_legacy_plugin.h>
 #include <ee_hotkeys.h>
 #include <dialog_helpers.h>
 #include <class_libentry.h>
@@ -235,9 +234,6 @@ void LIB_VIEW_FRAME::setupTools()
     m_toolManager->RegisterTool( new ZOOM_TOOL );
 
     m_toolManager->InitTools();
-
-    // Run the selection tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "eeschema.InteractiveSelection" );
 
     GetCanvas()->SetEventDispatcher( m_toolDispatcher );
 }
@@ -855,4 +851,38 @@ void LIB_VIEW_FRAME::OnAddPartToSchematic( wxCommandEvent& aEvent )
         schframe->Raise();
         schframe->GetToolManager()->RunAction( EE_ACTIONS::placeSymbol, true, component );
     }
+}
+
+
+bool LIB_VIEW_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
+{
+    bool eventHandled = true;
+
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return false;
+    }
+
+    wxPoint pos = aPosition;
+    GeneralControlKeyMovement( aHotKey, &pos, true );
+
+    // Update cursor position.
+    m_canvas->CrossHairOn( aDC );
+    SetCrossHairPosition( pos, true );
+
+    if( aHotKey )
+    {
+        SCH_SCREEN* screen = GetScreen();
+
+        if( screen->GetCurItem() && screen->GetCurItem()->GetEditFlags() )
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, screen->GetCurItem() );
+        else
+            eventHandled = OnHotKey( aDC, aHotKey, aPosition, NULL );
+    }
+
+    UpdateStatusBar();    // Display cursor coordinates info.
+
+    return eventHandled;
 }

@@ -24,7 +24,7 @@
  */
 
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 #include <lib_draw_item.h>
 #include <lib_rectangle.h>

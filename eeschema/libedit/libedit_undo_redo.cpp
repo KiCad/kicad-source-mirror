@@ -97,7 +97,6 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
     updateTitle();
 
     RebuildView();
-    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -146,7 +145,6 @@ void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
     updateTitle();
 
     RebuildView();
-    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -167,5 +165,4 @@ void LIB_EDIT_FRAME::RollbackPartFromUndo()
     SetShowDeMorgan( part->HasConversion() );
 
     RebuildView();
-    GetCanvas()->Refresh();
 }

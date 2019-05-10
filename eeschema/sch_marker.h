@@ -25,7 +25,7 @@
 #ifndef TYPE_SCH_MARKER_H_
 #define TYPE_SCH_MARKER_H_
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <marker_base.h>
 
 

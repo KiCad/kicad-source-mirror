@@ -23,11 +23,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file libedit.cpp
- * @brief Eeschema component library editor.
- */
-
 #include <fctsys.h>
 #include <kiway.h>
 #include <gr_basic.h>
@@ -79,6 +74,54 @@ void LIB_EDIT_FRAME::SelectActiveLibrary( const wxString& aLibrary )
         SetCurLib( selectedLib );
 
     updateTitle();
+}
+
+
+wxString LIB_EDIT_FRAME::SelectLibraryFromList()
+{
+    PROJECT& prj = Prj();
+
+    if( prj.SchSymbolLibTable()->IsEmpty() )
+    {
+        DisplayError( this, _( "No symbol libraries are loaded." ) );
+        return wxEmptyString;
+    }
+
+    wxArrayString headers;
+
+    headers.Add( _( "Library" ) );
+
+    std::vector< wxArrayString > itemsToDisplay;
+    std::vector< wxString > libNicknames = prj.SchSymbolLibTable()->GetLogicalLibs();
+
+    // Conversion from wxArrayString to vector of ArrayString
+    for( const auto& name : libNicknames )
+    {
+        wxArrayString item;
+
+        item.Add( name );
+        itemsToDisplay.push_back( item );
+    }
+
+    wxString old_lib_name = prj.GetRString( PROJECT::SCH_LIB_SELECT );
+
+    EDA_LIST_DIALOG dlg( this, _( "Select Symbol Library" ), headers, itemsToDisplay,
+                         old_lib_name );
+
+    if( dlg.ShowModal() != wxID_OK )
+        return wxEmptyString;
+
+    wxString libname = dlg.GetTextSelection();
+
+    if( !libname.empty() )
+    {
+        if( prj.SchSymbolLibTable()->HasLibrary( libname ) )
+            prj.SetRString( PROJECT::SCH_LIB_SELECT, libname );
+        else
+            libname = wxEmptyString;
+    }
+
+    return libname;
 }
 
 

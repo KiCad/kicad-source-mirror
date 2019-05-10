@@ -22,13 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_item_struct.h
- * @brief Base schematic object class definition.
- */
-
-#ifndef SCH_ITEM_STRUCT_H
-#define SCH_ITEM_STRUCT_H
+#ifndef SCH_ITEM_H
+#define SCH_ITEM_H
 
 #include <unordered_map>
 #include <unordered_set>
@@ -39,7 +34,6 @@
 #include <sch_sheet_path.h>
 
 class SCH_ITEM;
-//class SCH_SHEET_PATH;
 class SCH_CONNECTION;
 class LINE_READER;
 class SCH_EDIT_FRAME;
@@ -420,4 +414,4 @@ private:
     virtual bool doIsConnected( const wxPoint& aPosition ) const { return false; }
 };
 
-#endif /* SCH_ITEM_STRUCT_H */
+#endif /* SCH_ITEM_H */

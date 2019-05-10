@@ -478,6 +478,8 @@ void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMod
 
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
+    wxMessageBox( "EDA_DRAW_FRAME::OnSelectGrid(): should be handled by common tools now...." );
+
     int* clientData;
     int  eventId = ID_POPUP_GRID_LEVEL_100;
 
@@ -1234,6 +1236,8 @@ void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 
 void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
+    wxMessageBox( "EDA_DRAW_FRAME::OnZoom(): should be handled by zoom tool now...." );
+
     if( m_canvas == NULL )
         return;
 

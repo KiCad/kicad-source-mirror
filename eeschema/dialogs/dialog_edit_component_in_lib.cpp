@@ -39,7 +39,7 @@
 #include <lib_edit_frame.h>
 #include <class_library.h>
 #include <symbol_lib_table.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_component.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>

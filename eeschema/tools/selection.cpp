@@ -25,7 +25,7 @@
 
 #include <functional>
 #include <tool/selection.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 
 VECTOR2I SELECTION::GetPosition() const

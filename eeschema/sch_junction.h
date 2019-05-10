@@ -26,7 +26,7 @@
 #define _SCH_JUNCTION_H_
 
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 class NETLIST_OBJECT_LIST;
 
 class SCH_JUNCTION : public SCH_ITEM

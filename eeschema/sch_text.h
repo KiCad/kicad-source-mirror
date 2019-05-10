@@ -33,7 +33,7 @@
 
 #include <macros.h>
 #include <eda_text.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_connection.h>   // for CONNECTION_TYPE
 
 

@@ -206,8 +206,10 @@ public:
      * Plot the current symbol in SVG or PNG format.
      */
     void OnPlotCurrentComponent( wxCommandEvent& event );
-    void Process_Special_Functions( wxCommandEvent& event );
-    void OnSelectTool( wxCommandEvent& aEvent );
+    void OnSyncPinEditClick( wxCommandEvent& event );
+
+    void OnImportBody( wxCommandEvent& aEvent );
+    void OnExportBody( wxCommandEvent& aEvent );
 
     /**
      * Creates a new library. The library is added to the project libraries table.
@@ -430,6 +432,16 @@ private:
      *                 then display list of available libraries to select from.
      */
     void SelectActiveLibrary( const wxString& aLibrary = wxEmptyString );
+
+    /**
+     * Dispaly a list of loaded libraries in the symbol library and allows the user to select
+     * a library.
+     *
+     * This list is sorted, with the library cache always at end of the list
+     *
+     * @return the library nickname used in the symbol library table.
+     */
+    wxString SelectLibraryFromList();
 
     /**
      * Loads a symbol from the current active library, optionally setting the selected

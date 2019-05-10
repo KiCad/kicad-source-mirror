@@ -28,7 +28,7 @@
 #include <ee_hotkeys.h>
 #include <bitmaps.h>
 #include <base_struct.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_view.h>

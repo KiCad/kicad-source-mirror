@@ -27,7 +27,7 @@
 
 
 #include <collector.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_sheet_path.h>
 #include <dialogs/dialog_schematic_find.h>
 

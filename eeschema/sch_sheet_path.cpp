@@ -32,7 +32,7 @@
 
 #include <dlist.h>
 #include <sch_screen.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 #include <sch_reference_list.h>
 #include <class_library.h>

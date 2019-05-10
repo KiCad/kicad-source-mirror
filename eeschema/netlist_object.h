@@ -34,7 +34,7 @@
 
 #include <sch_sheet_path.h>
 #include <lib_pin.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 class NETLIST_OBJECT_LIST;
 class SCH_COMPONENT;

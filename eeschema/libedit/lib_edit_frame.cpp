@@ -115,9 +115,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
-    EVT_TOOL( wxID_COPY, LIB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_PASTE, LIB_EDIT_FRAME::Process_Special_Functions )
-    EVT_TOOL( wxID_CUT, LIB_EDIT_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
@@ -125,16 +122,15 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
-    EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
     EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
     EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
 
     // Right vertical toolbar.
-    EVT_TOOL( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnSelectTool )
-    EVT_TOOL_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
-                    LIB_EDIT_FRAME::OnSelectTool )
+    EVT_TOOL( ID_LIBEDIT_IMPORT_BODY_BUTT, LIB_EDIT_FRAME::OnImportBody )
+    EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, LIB_EDIT_FRAME::OnExportBody )
 
     // Left vertical toolbar (option toolbar).
     EVT_TOOL( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnShowElectricalType )
@@ -155,14 +151,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_PREFERENCES, LIB_EDIT_FRAME::OnPreferencesOptions )
 
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
-
-    // Context menu events and commands.
-    EVT_MENU_RANGE( ID_POPUP_LIBEDIT_PIN_GLOBAL_CHANGE_ITEM,
-                    ID_POPUP_LIBEDIT_DELETE_CURRENT_POLY_SEGMENT,
-                    LIB_EDIT_FRAME::Process_Special_Functions )
-
-    EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
-                    LIB_EDIT_FRAME::Process_Special_Functions )
 
     // Update user interface elements.
     EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
@@ -522,9 +510,10 @@ void LIB_EDIT_FRAME::OnUpdateUndo( wxUpdateUIEvent& event )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
-    event.Enable( GetCurPart() && GetScreen()
-        && GetScreen()->GetUndoCommandCount() != 0
-        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
+    event.Enable( GetCurPart()
+                        && GetScreen()
+                        && GetScreen()->GetUndoCommandCount() != 0
+                        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
@@ -532,9 +521,10 @@ void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
 {
     EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
 
-    event.Enable( GetCurPart() && GetScreen()
-        && GetScreen()->GetRedoCommandCount() != 0
-        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
+    event.Enable( GetCurPart()
+                        && GetScreen()
+                        && GetScreen()->GetRedoCommandCount() != 0
+                        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
 }
 
 
@@ -568,9 +558,6 @@ void LIB_EDIT_FRAME::OnUpdatePartNumber( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
 {
-    if( m_mainToolBar == NULL )
-        return;
-
     LIB_PART*      part = GetCurPart();
 
     event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
@@ -580,9 +567,6 @@ void LIB_EDIT_FRAME::OnUpdateDeMorganNormal( wxUpdateUIEvent& event )
 
 void LIB_EDIT_FRAME::OnUpdateDeMorganConvert( wxUpdateUIEvent& event )
 {
-    if( m_mainToolBar == NULL )
-        return;
-
     LIB_PART*      part = GetCurPart();
 
     event.Enable( GetShowDeMorgan() || ( part && part->HasConversion() ) );
@@ -657,18 +641,9 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
+void LIB_EDIT_FRAME::OnSyncPinEditClick( wxCommandEvent& event )
 {
-    switch( event.GetId() )
-    {
-    case ID_LIBEDIT_SYNC_PIN_EDIT:
-        m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
-        break;
-
-    default:
-        wxFAIL_MSG( "LIB_EDIT_FRAME::Process_Special_Functions error" );
-        break;
-    }
+    m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
 }
 
 
@@ -789,35 +764,26 @@ void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
     DisplayCmpDoc();
 
     RebuildView();
-    GetCanvas()->Refresh();
     OnModify();
 }
 
 
-void LIB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
+void LIB_EDIT_FRAME::OnImportBody( wxCommandEvent& aEvent )
 {
-    int id = aEvent.GetId();
+    m_toolManager->DeactivateTool();
+    SetToolID( ID_LIBEDIT_IMPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
+    LoadOneSymbol();
+    SetNoToolSelected();
+    m_canvas->SetIgnoreMouseEvents( false );
+}
 
-    switch( id )
-    {
-    case ID_LIBEDIT_IMPORT_BODY_BUTT:
-        m_toolManager->DeactivateTool();
-        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Import" ) );
-        LoadOneSymbol();
-        SetNoToolSelected();
-        break;
 
-    case ID_LIBEDIT_EXPORT_BODY_BUTT:
-        m_toolManager->DeactivateTool();
-        SetToolID( id, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
-        SaveOneSymbol();
-        SetNoToolSelected();
-        break;
-
-    default:
-        break;
-    }
-
+void LIB_EDIT_FRAME::OnExportBody( wxCommandEvent& aEvent )
+{
+    m_toolManager->DeactivateTool();
+    SetToolID( ID_LIBEDIT_EXPORT_BODY_BUTT, GetGalCanvas()->GetDefaultCursor(), _( "Export" ) );
+    SaveOneSymbol();
+    SetNoToolSelected();
     m_canvas->SetIgnoreMouseEvents( false );
 }
 
@@ -845,7 +811,6 @@ void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
         return;
 
     RebuildView();
-    GetCanvas()->Refresh();
     OnModify();
 }
 
@@ -925,10 +890,9 @@ bool LIB_EDIT_FRAME::addLibraryFile( bool aCreateNew )
     {
         if( !m_libMgr->CreateLibrary( fn.GetFullPath(), libTable ) )
         {
-            DisplayError( this,
-                wxString::Format( _( "Could not create the library file \"%s\".\n"
-                                     "Check write permission." ),
-                                  fn.GetFullPath() ) );
+            DisplayError( this, wxString::Format( _( "Could not create the library file '%s'.\n"
+                                                     "Check write permission." ),
+                                                  fn.GetFullPath() ) );
             return false;
         }
     }
@@ -1249,3 +1213,42 @@ void LIB_EDIT_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
     // Set options specific to symbol editor (axies are always enabled):
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
 }
+
+
+bool LIB_EDIT_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey )
+{
+    bool    keyHandled = false;
+    wxPoint pos = aPosition;
+
+    // Filter out the 'fake' mouse motion after a keyboard movement
+    if( !aHotKey && m_movingCursorWithKeyboard )
+    {
+        m_movingCursorWithKeyboard = false;
+        return false;
+    }
+
+    if( aHotKey )
+        keyHandled = GeneralControlKeyMovement( aHotKey, &pos, true );
+
+    if( GetToolId() == ID_NO_TOOL_SELECTED )
+        m_canvas->CrossHairOff( aDC );
+    else
+        m_canvas->CrossHairOn( aDC );
+
+    GetGalCanvas()->GetViewControls()->SetSnapping( false );
+    SetCrossHairPosition( pos, false );
+
+    if( m_canvas->IsMouseCaptured() )
+        m_canvas->CallMouseCapture( aDC, aPosition, true );
+
+    if( aHotKey && OnHotKey( aDC, aHotKey, aPosition, NULL ) )
+        keyHandled = true;
+
+    // Make sure current-part highlighting doesn't get lost in seleciton highlighting
+    ClearSearchTreeSelection();
+
+    UpdateStatusBar();
+
+    return keyHandled;
+}
+

@@ -24,7 +24,7 @@
 
 #include <ee_actions.h>
 #include <core/typeinfo.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <ee_selection_tool.h>
 #include <sch_base_frame.h>
 #include <sch_edit_frame.h>

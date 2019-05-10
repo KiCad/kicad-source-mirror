@@ -30,7 +30,7 @@
 #define _SCH_NO_CONNECT_H_
 
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 
 class NETLIST_OBJECT_LIST;
 

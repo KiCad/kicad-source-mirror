@@ -27,7 +27,7 @@
 #include <gr_basic.h>
 #include <base_struct.h>
 #include <trace_helpers.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_screen.h>
 #include <sch_sheet_path.h>
 #include <sch_draw_panel.h>

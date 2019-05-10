@@ -31,7 +31,7 @@
 #define _SCH_BITMAP_H_
 
 
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <bitmap_base.h>
 
 

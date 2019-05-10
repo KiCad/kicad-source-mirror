@@ -37,7 +37,7 @@
 #include <pgm_base.h>
 #include <kiway.h>
 #include <sch_draw_panel.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <draw_graphic_text.h>
 #include <sch_edit_frame.h>
 #include <plotter.h>

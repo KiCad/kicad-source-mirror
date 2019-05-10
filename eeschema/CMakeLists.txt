@@ -111,13 +111,10 @@ set( EESCHEMA_WIDGETS
 
 
 set ( EESCHEMA_LIBEDIT_SRCS
-    libedit/controller.cpp
     libedit/libedit.cpp
-    libedit/libedit_onrightclick.cpp
     libedit/libedit_plot_component.cpp
     libedit/libedit_undo_redo.cpp
     libedit/lib_edit_frame.cpp
-    libedit/libfield.cpp
     libedit/menubar_libedit.cpp
     libedit/symbedit.cpp
     libedit/toolbars_libedit.cpp
@@ -142,7 +139,6 @@ set( EESCHEMA_SRCS
     cmp_library_keywords.cpp
     cmp_library_lexer.cpp
     component_references_lister.cpp
-    controle.cpp
     connection_graph.cpp
     cross-probing.cpp
     drc_erc_item.cpp
@@ -192,7 +188,7 @@ set( EESCHEMA_SRCS
     sch_eagle_plugin.cpp
     sch_field.cpp
     sch_io_mgr.cpp
-    sch_item_struct.cpp
+    sch_item.cpp
     sch_junction.cpp
     sch_legacy_plugin.cpp
     sch_line.cpp
@@ -209,7 +205,6 @@ set( EESCHEMA_SRCS
     sch_validators.cpp
     schematic_undo_redo.cpp
     sch_edit_frame.cpp
-    selpart.cpp
     sheet.cpp
     symbol_lib_table.cpp
     symbol_tree_model_adapter.cpp

@@ -339,44 +339,6 @@ protected:
     void OnOpenLibraryViewer( wxCommandEvent& event );
 
     /**
-     * Select a component from the list of components in a library
-     *
-     * @param aLibrary  a reference to the library nickname to explore
-     *                  If empty, the user will be prompted tp chose a library
-     * @param aBuffer = a wxString to put the selected component name
-     * @param aPreviousChoice = the previously selected component name.
-     * it will be added to the selection list. Can be empty.
-     *
-     * @return true if a component is selected
-     *         false on cancel
-     */
-    bool DisplayListComponentsInLib( wxString& aLibrary, wxString& aBuffer,
-                                     wxString& aPreviousChoice );
-
-    /**
-     * Dispaly a list of loaded libraries in the symbol library and allows the user to select
-     * a library.
-     *
-     * This list is sorted, with the library cache always at end of the list
-     *
-     * @return the library nickname used in the symbol library table.
-     */
-    wxString SelectLibraryFromList();
-
-    /**
-     * Function SelectPartNameToLoad
-     * Select a part name from the list of components (parts) found in a library.
-     *
-     * @param aLibrary is the nickname of the library in the symbol library table.
-     *                 If empty the user will be prompted tp chose a library
-     * @param aBufName a wxString to put the selected component name
-     *
-     * @return true if a component is selected
-     *         false on cancel
-     */
-    bool SelectPartNameToLoad( wxString& aLibrary, wxString& aBufName );
-
-    /**
      * Saves Symbol Library Tables to disk.
      *
      * @param aGlobal when true, the Global Table is saved.

@@ -33,14 +33,14 @@
 #include <confirm.h>
 #include <eda_doc.h>
 #include <base_struct.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_component.h>
 #include <sch_sheet.h>
 #include <sch_text.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>
 #include <sch_line.h>
-#include <sch_item_struct.h>
+#include <sch_item.h>
 #include <sch_bus_entry.h>
 #include <sch_edit_frame.h>
 #include <eeschema_id.h>
