@@ -433,7 +433,10 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     } );
 
                     if( textPcb->GetText().IsEmpty() )
+                    {
+                        m_controls->ForceCursorPosition( false );
                         delete textPcb;
+                    }
                     else
                         text = textPcb;
                 }
@@ -677,6 +680,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         delete dimension;
 
     m_controls->SetAutoPan( false );
+    m_controls->ForceCursorPosition( false );
 
     m_view->Remove( &preview );
     frame()->SetMsgPanel( board() );
