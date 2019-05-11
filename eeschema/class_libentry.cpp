@@ -917,12 +917,16 @@ bool LIB_PART::HasConversion() const
     return false;
 }
 
-void LIB_PART::ClearStatus()
+void LIB_PART::ClearTempFlags()
 {
     for( LIB_ITEM& item : m_drawings )
-    {
-        item.m_Flags = 0;
-    }
+        item.ClearTempFlags();
+}
+
+void LIB_PART::ClearEditFlags()
+{
+    for( LIB_ITEM& item : m_drawings )
+        item.ClearEditFlags();
 }
 
 LIB_ITEM* LIB_PART::LocateDrawItem( int aUnit, int aConvert,

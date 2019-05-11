@@ -255,7 +255,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     break;
                 case LIB_TEXT_T:
                     part->AddDrawItem( (LIB_TEXT*) item );
-                    item->ClearFlags( item->GetEditFlags() );
+                    item->ClearEditFlags();
                     break;
                 default:
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );

@@ -32,6 +32,7 @@
 #include <symbol_tree_pane.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 
 void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType )
 {
@@ -41,7 +42,8 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
     CopyItem = new LIB_PART( * (LIB_PART*) ItemToCopy );
 
     // Clear current flags (which can be temporary set by a current edit command).
-    CopyItem->ClearStatus();
+    CopyItem->ClearTempFlags();
+    CopyItem->ClearEditFlags();
     CopyItem->SetFlags( UR_TRANSIENT );
 
     ITEM_PICKER wrapper( CopyItem, undoType );
@@ -160,6 +162,9 @@ void LIB_EDIT_FRAME::RollbackPartFromUndo()
     LIB_PART* part = (LIB_PART*) undoWrapper.GetItem();
     part->ClearFlags( UR_TRANSIENT );
     SetCurPart( part );
+
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
 
     RebuildSymbolUnitsList();
     SetShowDeMorgan( part->HasConversion() );

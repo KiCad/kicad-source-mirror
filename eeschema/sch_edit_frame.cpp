@@ -1254,7 +1254,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         SaveUndoItemInUndoList( undoItem, aUndoAppend );
     }
 
-    aItem->ClearFlags( aItem->GetEditFlags() );
+    aItem->ClearEditFlags();
 
     screen->SetModify();
     RefreshItem( aItem );
@@ -1267,7 +1267,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {
             for( auto j = i + 1; j != pts.end(); j++ )
-                TrimWire( *i, *j, true );
+                TrimWire( *i, *j );
 
             if( screen->IsJunctionNeeded( *i, true ) )
                 AddJunction( *i, true );
@@ -1320,7 +1320,7 @@ void SCH_EDIT_FRAME::RecalculateConnections( bool aDoCleanup )
     if( aDoCleanup )
     {
         for( const auto& sheet : list )
-            SchematicCleanUp( false, sheet.LastScreen() );
+            SchematicCleanUp( sheet.LastScreen() );
     }
 
     timer.Stop();

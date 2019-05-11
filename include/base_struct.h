@@ -124,8 +124,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
 #define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
-#define IS_CANCELLED   (1 << 17)   ///< flag set when edit dialogs are canceled when editing a
-                                   ///< new object
+// empty spot          (1 << 17)
 #define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
 #define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
 #define FLAG1          (1 << 20)   ///< Pcbnew: flag used in local computations
@@ -271,8 +270,12 @@ public:
 
     void ClearTempFlags()
     {
-        ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE |
-                    SKIP_STRUCT | DO_NOT_DRAW | IS_CANCELLED );
+        ClearFlags( STARTPOINT | ENDPOINT | CANDIDATE | IS_LINKED | SKIP_STRUCT | DO_NOT_DRAW );
+    }
+
+    void ClearEditFlags()
+    {
+        ClearFlags( GetEditFlags() );
     }
 
     /**

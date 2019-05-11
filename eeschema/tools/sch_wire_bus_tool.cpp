@@ -965,7 +965,7 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
     m_frame->SaveCopyInUndoList( itemList, UR_NEW );
 
     // Correct and remove segments that need to be merged.
-    m_frame->SchematicCleanUp( true );
+    m_frame->SchematicCleanUp();
 
     for( auto item = m_frame->GetScreen()->GetDrawItems(); item; item = item->Next() )
     {
@@ -981,7 +981,7 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
         for( auto i = pts.begin(); i != pts.end(); i++ )
         {
             for( auto j = i + 1; j != pts.end(); j++ )
-                m_frame->TrimWire( *i, *j, true );
+                m_frame->TrimWire( *i, *j );
         }
     }
 

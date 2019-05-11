@@ -126,6 +126,12 @@ public:
     int UnselectItems( const TOOL_EVENT& aEvent );
 
     /**
+     * Rebuilds the selection from the EDA_ITEMs' selection flags.  Commonly called after
+     * rolling back an undo state to make sure there aren't any stale pointers.
+     */
+    void RebuildSelection();
+
+    /**
      * Function SelectionMenu()
      * Shows a popup menu to trim the COLLECTOR passed as aEvent's parameter down to a single
      * item.

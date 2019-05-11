@@ -135,6 +135,12 @@ public:
      */
     int SelectionMenu( const TOOL_EVENT& aEvent );
 
+    /**
+     * Rebuilds the selection from the EDA_ITEMs' selection flags.  Commonly called after
+     * rolling back an undo state to make sure there aren't any stale pointers.
+     */
+    void RebuildSelection();
+
 private:
     /**
      * Function selectMultiple()

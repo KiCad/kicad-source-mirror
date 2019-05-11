@@ -581,8 +581,8 @@ public:
     /**
      * Clears the status flag all draw objects in this part.
      */
-    void ClearStatus();
-
+    void ClearTempFlags();
+    void ClearEditFlags();
     /**
      * Locate a draw object.
      *

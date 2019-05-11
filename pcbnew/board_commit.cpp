@@ -26,6 +26,7 @@
 #include <class_module.h>
 #include <pcb_edit_frame.h>
 #include <tool/tool_manager.h>
+#include <tools/selection_tool.h>
 #include <view/view.h>
 #include <board_commit.h>
 #include <tools/pcb_tool.h>
@@ -324,12 +325,6 @@ void BOARD_COMMIT::Revert()
             if( !( changeFlags & CHT_DONE ) )
                 break;
 
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind( &EDA_ITEM::ClearFlags, _1, SELECTED ) );
-            }
-
             view->Add( item );
             connectivity->Add( item );
             board->Add( item );
@@ -341,7 +336,6 @@ void BOARD_COMMIT::Revert()
             connectivity->Remove( item );
 
             item->SwapData( copy );
-            item->ClearFlags( SELECTED );
 
             // Update all pads/drawings/texts, as they become invalid
             // for the VIEW after SwapData() called for modules
@@ -365,6 +359,9 @@ void BOARD_COMMIT::Revert()
 
     if ( !m_editModules )
         connectivity->RecalculateRatsnest();
+
+    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
+    selTool->RebuildSelection();
 
     clear();
 }

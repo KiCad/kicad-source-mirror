@@ -220,8 +220,6 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
             if( m_moveInProgress )
                 restore_state = true;
 
@@ -297,7 +295,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     selection.ClearReferencePoint();
 
     for( auto item : selection )
-        item->ClearFlags( item->GetEditFlags() );
+        item->ClearEditFlags();
 
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );

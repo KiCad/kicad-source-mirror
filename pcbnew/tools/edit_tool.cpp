@@ -503,7 +503,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsCancel() || evt->IsActivate() )
         {
             restore_state = true; // Canceling the tool means that items have to be restored
-            break;          // Finish
+            break;                // Finish
         }
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
@@ -572,7 +572,7 @@ int EDIT_TOOL::Main( const TOOL_EVENT& aEvent )
     // Discard reference point when selection is "dropped" onto the board (ie: not dragging anymore)
     selection.ClearReferencePoint();
 
-    if( unselect || restore_state )
+    if( unselect )
         m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
 
     if( restore_state )

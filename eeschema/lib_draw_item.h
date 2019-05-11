@@ -173,7 +173,7 @@ public:
      */
     virtual void EndEdit( const wxPoint& aPosition )
     {
-        ClearFlags( GetEditFlags() );
+        ClearEditFlags();
     }
 
     /**

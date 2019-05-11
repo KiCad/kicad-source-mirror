@@ -315,7 +315,7 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
     // save old cmp in undo list
     frame->SaveUndoItemInUndoList( component );
 
-    ClearFlags( GetEditFlags() );
+    ClearEditFlags();
     frame->OnModify();
 }
 

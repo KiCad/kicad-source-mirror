@@ -349,8 +349,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
-            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-
             if( m_moveInProgress )
                 restore_state = true;
 
@@ -433,7 +431,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     selection.ClearReferencePoint();
 
     for( auto item : selection )
-        item->ClearFlags( item->GetEditFlags() );
+        item->ClearEditFlags();
 
     if( unselect )
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -446,8 +444,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     }
     else
     {
-        addJunctionsIfNeeded( selection, &appendUndo );
-        m_frame->SchematicCleanUp( true );
+        addJunctionsIfNeeded( selection );
+        m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
         m_frame->OnModify();
     }
@@ -552,7 +550,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 }
 
 
-void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUndo )
+void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection )
 {
     std::vector< wxPoint > pts;
     std::vector< wxPoint > connections;
@@ -585,7 +583,7 @@ void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUn
             for( auto point = new_pts.begin(); point != new_pts.end(); point++ )
             {
                 for( auto second_point = point + 1; second_point != new_pts.end(); second_point++ )
-                    *aAppendUndo |= m_frame->TrimWire( *point, *second_point, *aAppendUndo );
+                   m_frame->TrimWire( *point, *second_point );
             }
         }
     }
@@ -599,10 +597,7 @@ void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUn
     for( auto point : pts )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
-        {
-            m_frame->AddJunction( point, aAppendUndo );
-            *aAppendUndo = true;
-        }
+            m_frame->AddJunction( point, true );
     }
 }
 

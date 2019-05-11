@@ -36,6 +36,7 @@
 #include <sch_sheet.h>
 #include <sch_bitmap.h>
 #include <sch_view.h>
+#include <tools/ee_selection_tool.h>
 
 /* Functions to undo and redo edit commands.
  *  commands to undo are stored in CurrentScreen->m_UndoList
@@ -265,7 +266,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
         item = (SCH_ITEM*) aList->GetPickedItem( (unsigned) ii );
         alt_item = (SCH_ITEM*) aList->GetPickedItemLink( (unsigned) ii );
 
-        item->ClearFlags();
+        item->SetFlags( aList->GetPickerFlags( (unsigned) ii ) );
+        item->ClearEditFlags();
+        item->ClearTempFlags();
 
         if( status == UR_NEW )
         {
@@ -291,9 +294,7 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
                 break;
 
             case UR_MOVED:
-                item->SetFlags( aList->GetPickerFlags( (unsigned) ii ) );
                 item->Move( aRedoCommand ? aList->m_TransformPoint : -aList->m_TransformPoint );
-                item->ClearFlags();
                 break;
 
             case UR_MIRRORED_Y:
@@ -333,6 +334,9 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
             AddToScreen( item );
         }
     }
+
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    selTool->RebuildSelection();
 
     // Bitmaps are cached in Opengl: clear the cache, because
     // the cache data can be invalid

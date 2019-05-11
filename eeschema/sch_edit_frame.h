@@ -388,41 +388,41 @@ public:
                                     const wxString& aSearchText );
 
     /**
-     * Breaks a single segment into two at the specified point
+     * Breaks a single segment into two at the specified point.
+     *
+     * NOTE: always appends to the existing undo state.
      *
      * @param aSegment Line segment to break
      * @param aPoint Point at which to break the segment
-     * @param aAppend Add the changes to the previous undo state
      * @param aNewSegment Pointer to the newly created segment (if given and created)
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
     bool BreakSegment( SCH_LINE* aSegment, const wxPoint& aPoint,
-                       bool aAppend = false, SCH_LINE** aNewSegment = NULL,
-                       SCH_SCREEN* aScreen = nullptr );
+                       SCH_LINE** aNewSegment = NULL, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Checks every wire and bus for a intersection at \a aPoint and break into two segments
      * at \a aPoint if an intersection is found.
      *
+     * NOTE: always appends to the existing undo state.
+     *
      * @param aPoint Test this point for an intersection.
-     * @param aAppend Add the changes to the previous undo state
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegments( const wxPoint& aPoint, bool aAppend = false,
-                        SCH_SCREEN* aScreen = nullptr );
+    bool BreakSegments( const wxPoint& aPoint, SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Tests all junctions and bus entries in the schematic for intersections with wires and
      * buses and breaks any intersections into multiple segments.
      *
-     * @param aAppend Add the changes to the previous undo state
+     * NOTE: always appends to the existing undo state.
+     *
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any wires or buses were broken.
      */
-    bool BreakSegmentsOnJunctions( bool aAppend = false,
-                                   SCH_SCREEN* aScreen = nullptr );
+    bool BreakSegmentsOnJunctions( SCH_SCREEN* aScreen = nullptr );
 
     /**
      * Test all of the connectable objects in the schematic for unused connection points.
@@ -734,7 +734,7 @@ public:
      */
     bool AskToSaveChanges();
 
-    SCH_JUNCTION* AddJunction( const wxPoint& aPosition, bool aAppendToUndo = false,
+    SCH_JUNCTION* AddJunction( const wxPoint& aPos, bool aAppendToUndo = false,
                                bool aFinal = true );
 
     SCH_TEXT* CreateNewText( int aType );
@@ -743,22 +743,24 @@ public:
      * Performs routine schematic cleaning including breaking wire and buses and
      * deleting identical objects superimposed on top of each other.
      *
-     * @param aAppend The changes to the schematic should be appended to the previous undo
+     * NOTE: always appends to the existing undo state.
+     *
      * @param aScreen is the screen to examine, or nullptr to examine the current screen
      * @return True if any schematic clean up was performed.
      */
-    bool SchematicCleanUp( bool aAppend = false, SCH_SCREEN* aScreen = nullptr );
+    bool SchematicCleanUp( SCH_SCREEN* aScreen = nullptr );
 
     /**
      * If any single wire passes through _both points_, remove the portion between the two points,
      * potentially splitting the wire into two.
      *
+     * NOTE: always appends to the existing undo state.
+     *
      * @param aStart The starting point for trimmming
      * @param aEnd The ending point for trimming
-     * @param aAppend Should the line changes be appended to a previous undo state
      * @return True if any wires were changed by this operation
      */
-    bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd, bool aAppend = true );
+    bool TrimWire( const wxPoint& aStart, const wxPoint& aEnd );
 
     /**
      * Collects a unique list of all possible connection points in the schematic.
@@ -855,7 +857,7 @@ private:
      * Perform all cleanup and normalization steps so that the whole schematic
      * is in a good state.  This should only be called when loading a file.
      */
-    void NormalizeSchematicOnFirstLoad();
+    void NormalizeSchematicOnFirstLoad( bool recalculateConnections );
 
     // Hierarchical Sheet & PinSheet
     void InstallHierarchyFrame( wxCommandEvent& event );

@@ -242,7 +242,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
  */
 LIB_PIN* LIB_PIN_TOOL::CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart )
 {
-    aPart->ClearStatus();
+    aPart->ClearTempFlags();
 
     LIB_PIN* pin = new LIB_PIN( aPart );
 

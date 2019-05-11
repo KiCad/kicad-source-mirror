@@ -65,7 +65,7 @@ private:
 
     ///> Adds junctions if needed to each item in the list after they have been
     ///> moved.
-    void addJunctionsIfNeeded( SELECTION& aSelection, bool* aAppendUndo );
+    void addJunctionsIfNeeded( SELECTION& aSelection );
 
     ///> Returns the right modification point (e.g. for rotation), depending on the number of
     ///> selected items.

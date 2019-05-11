@@ -205,7 +205,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( BOARD_ITEM* aItem, UNDO_REDO_T aCo
 
 
 void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList,
-                                         UNDO_REDO_T aTypeCommand, const wxPoint& aTransformPoint )
+                                              UNDO_REDO_T aTypeCommand,
+                                              const wxPoint& aTransformPoint )
 {
     PICKED_ITEMS_LIST* commandToUndo = new PICKED_ITEMS_LIST();
 
@@ -217,7 +218,7 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
     for( unsigned ii = 0; ii < aItemsList.GetCount(); ii++ )
     {
         ITEM_PICKER curr_picker = aItemsList.GetItemWrapper(ii);
-        BOARD_ITEM* item    = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
+        BOARD_ITEM* item        = (BOARD_ITEM*) aItemsList.GetPickedItem( ii );
 
         // For items belonging to modules, we need to save state of the parent module
         if( item->Type() == PCB_MODULE_TEXT_T || item->Type() == PCB_MODULE_EDGE_T
@@ -235,7 +236,8 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
 
             for( unsigned j = 0; j < commandToUndo->GetCount(); j++ )
             {
-                if( commandToUndo->GetPickedItem( j ) == item && commandToUndo->GetPickedItemStatus( j ) == UR_CHANGED )
+                if( commandToUndo->GetPickedItem( j ) == item
+                        && commandToUndo->GetPickedItemStatus( j ) == UR_CHANGED )
                 {
                     found = true;
                     break;
@@ -250,15 +252,14 @@ void PCB_BASE_EDIT_FRAME::SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsLis
                 clone->SetParent( GetBoard() );
 
                 // Clear current flags (which can be temporary set by a current edit command)
-                for( EDA_ITEM* loc_item = clone->GraphicalItemsList(); loc_item;
-                        loc_item = loc_item->Next() )
-                    loc_item->ClearFlags();
+                for( EDA_ITEM* child = clone->GraphicalItemsList(); child; child = child->Next() )
+                    child->ClearEditFlags();
 
                 for( D_PAD* pad = clone->PadsList(); pad; pad = pad->Next() )
-                    pad->ClearFlags();
+                    pad->ClearEditFlags();
 
-                clone->Reference().ClearFlags();
-                clone->Value().ClearFlags();
+                clone->Reference().ClearEditFlags();
+                clone->Value().ClearEditFlags();
 
                 ITEM_PICKER picker( item, UR_CHANGED );
                 picker.SetLink( clone );
@@ -455,8 +456,6 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             }
         }
 
-        item->ClearFlags();
-
         // see if we must rebuild ratsnets and pointers lists
         switch( item->Type() )
         {
@@ -494,18 +493,8 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
 
             SwapItemData( item, image );
 
-            // Update all pads/drawings/texts, as they become invalid
-            // for the VIEW after SwapData() called for modules
-            if( item->Type() == PCB_MODULE_T )
-            {
-                MODULE* newModule = static_cast<MODULE*>( item );
-                newModule->RunOnChildren( std::bind( &BOARD_ITEM::ClearFlags, _1, EDA_ITEM_ALL_FLAGS ));
-            }
-
             view->Add( item );
             connectivity->Add( item );
-            item->ClearFlags();
-
         }
         break;
 
@@ -580,6 +569,9 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
     {
         Compile_Ratsnest( NULL, false );
     }
+
+    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
+    selTool->RebuildSelection();
 
     GetBoard()->SanitizeNetcodes();
 }

@@ -361,12 +361,15 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
         }
 
-        else if( evt->IsCancel() || evt->Action() == TA_UNDO_REDO_PRE )
+        else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
             clearSelection();
+        }
 
-            if( evt->IsCancel() && !m_editModules )
-                m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
+        else if( evt->IsCancel() )
+        {
+            clearSelection();
+            m_toolMgr->RunAction( PCB_ACTIONS::clearHighlight, true );
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
@@ -1396,6 +1399,31 @@ void SELECTION_TOOL::clearSelection()
     // Inform other potentially interested tools
     m_toolMgr->ProcessEvent( EVENTS::ClearedEvent );
     m_toolMgr->RunAction( PCB_ACTIONS::hideLocalRatsnest, true );
+}
+
+
+void SELECTION_TOOL::RebuildSelection()
+{
+    m_selection.Clear();
+
+    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
+    {
+        if( item->IsSelected() )
+        {
+            EDA_ITEM* parent = item->GetParent();
+
+            // Flags on module children might be set only because the parent is selected.
+            if( parent && parent->Type() == PCB_MODULE_T && parent->IsSelected() )
+                return SEARCH_CONTINUE;
+
+            highlight( (BOARD_ITEM*) item, SELECTED, m_selection );
+        }
+
+        return SEARCH_CONTINUE;
+    };
+
+    board()->Visit( inspector, nullptr,  m_editModules ? GENERAL_COLLECTOR::ModuleItems
+                                                       : GENERAL_COLLECTOR::AllBoardItems );
 }
 
 
