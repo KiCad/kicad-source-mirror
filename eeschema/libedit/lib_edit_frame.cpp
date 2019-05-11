@@ -117,13 +117,11 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
     EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
-    EVT_TOOL( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnEditComponentProperties )
     EVT_TOOL( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnCheckComponent )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_LIBEDIT_VIEW_DOC, LIB_EDIT_FRAME::OnViewEntryDoc )
     EVT_TOOL( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnSyncPinEditClick )
-    EVT_TOOL( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnOpenPinTable )
     EVT_TOOL( ID_ADD_PART_TO_SCHEMATIC, LIB_EDIT_FRAME::OnAddPartToSchematic )
 
     EVT_COMBOBOX( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnSelectUnit )
@@ -160,7 +158,7 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_GET_FRAME_EDIT_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
+    EVT_UPDATE_UI( ID_LIBEDIT_SYMBOL_PROPERTIES, LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
@@ -188,7 +186,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_DrawSpecificConvert = true;
     m_DrawSpecificUnit    = false;
     m_hotkeysDescrList    = g_Libedit_Hotkeys_Descr;
-    m_syncPinEdit         = false;
+    m_SyncPinEdit         = false;
     m_repeatPinStep = DEFAULT_REPEAT_OFFSET_PIN;
     SetShowElectricalType( true );
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
@@ -532,7 +530,7 @@ void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
     event.Enable( part && part->IsMulti() && !part->UnitsLocked() );
-    event.Check( m_syncPinEdit );
+    event.Check( m_SyncPinEdit );
 }
 
 
@@ -643,7 +641,7 @@ void LIB_EDIT_FRAME::OnSelectBodyStyle( wxCommandEvent& event )
 
 void LIB_EDIT_FRAME::OnSyncPinEditClick( wxCommandEvent& event )
 {
-    m_syncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
+    m_SyncPinEdit = m_mainToolBar->GetToolToggled( ID_LIBEDIT_SYNC_PIN_EDIT );
 }
 
 
@@ -712,59 +710,10 @@ void LIB_EDIT_FRAME::SetCurPart( LIB_PART* aPart )
     Prj().SetRString( PROJECT::SCH_LIBEDIT_CUR_PART, partName );
 
     // Ensure synchronized pin edit can be enabled only symbols with interchangeable units
-    m_syncPinEdit = aPart && aPart->IsMulti() && !aPart->UnitsLocked();
+    m_SyncPinEdit = aPart && aPart->IsMulti() && !aPart->UnitsLocked();
 
     m_toolManager->ResetTools( TOOL_BASE::MODEL_RELOAD );
     RebuildView();
-}
-
-
-void LIB_EDIT_FRAME::OnEditComponentProperties( wxCommandEvent& event )
-{
-    bool partLocked = GetCurPart()->UnitsLocked();
-    wxString oldName = GetCurPart()->GetName();
-    wxArrayString oldAliases = GetCurPart()->GetAliasNames( false );
-
-    m_toolManager->RunAction( ACTIONS::cancelInteractive, true );
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-
-    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( this, GetCurPart() );
-
-    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
-    // frame. Therefore this dialog as a modal frame parent, MUST be run under
-    // quasimodal mode for the quasimodal frame support to work.  So don't use
-    // the QUASIMODAL macros here.
-    if( dlg.ShowQuasiModal() != wxID_OK )
-        return;
-
-    // if m_UnitSelectionLocked has changed, set some edit options or defaults
-    // to the best value
-    if( partLocked != GetCurPart()->UnitsLocked() )
-    {
-        // Enable synchronized pin edit mode for symbols with interchangeable units
-        m_syncPinEdit = !GetCurPart()->UnitsLocked();
-        // also set default edit options to the better value
-        // Usually if units are locked, graphic items are specific to each unit
-        // and if units are interchangeable, graphic items are common to units
-        m_DrawSpecificUnit = GetCurPart()->UnitsLocked();
-    }
-
-    if( oldName != GetCurPart()->GetName() )
-        m_libMgr->UpdatePartAfterRename( GetCurPart(), oldName, GetCurLib() );
-    else
-    {
-        m_libMgr->UpdatePart( GetCurPart(), GetCurLib() );
-
-        if( oldAliases != GetCurPart()->GetAliasNames( false ) )
-            SyncLibraries( false );
-    }
-
-    RebuildSymbolUnitsList();
-    updateTitle();
-    DisplayCmpDoc();
-
-    RebuildView();
-    OnModify();
 }
 
 
@@ -797,29 +746,11 @@ void LIB_EDIT_FRAME::OnModify()
 }
 
 
-void LIB_EDIT_FRAME::OnOpenPinTable( wxCommandEvent& aEvent )
-{
-    LIB_PART* part = GetCurPart();
-
-    m_toolManager->RunAction( EE_ACTIONS::clearSelection, true );
-
-    SaveCopyInUndoList( part );
-
-    DIALOG_LIB_EDIT_PIN_TABLE dlg( this, part );
-
-    if( dlg.ShowModal() == wxID_CANCEL )
-        return;
-
-    RebuildView();
-    OnModify();
-}
-
-
 bool LIB_EDIT_FRAME::SynchronizePins()
 {
     LIB_PART* part = GetCurPart();
 
-    return m_syncPinEdit && part && part->IsMulti() && !part->UnitsLocked();
+    return m_SyncPinEdit && part && part->IsMulti() && !part->UnitsLocked();
 }
 
 

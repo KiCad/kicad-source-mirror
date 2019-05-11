@@ -215,24 +215,28 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
     menu.AddSeparator( EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startWire,        !libEdit && EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startBus,         !libEdit && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::startWire,          !libEdit && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::startBus,           !libEdit && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
-    menu.AddItem( EE_ACTIONS::finishWire,       SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
+    menu.AddItem( EE_ACTIONS::finishWire,         SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
 
     menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
-    menu.AddItem( EE_ACTIONS::finishBus,        SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
+    menu.AddItem( EE_ACTIONS::finishBus,          SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
-    menu.AddItem( EE_ACTIONS::selectConnection, wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addJunction,      wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addLabel,         wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addGlobalLabel,   wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addHierLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::breakWire,        wireSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::breakBus,         busSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::importSheetPin,   sheetSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::addJunction,        wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::addLabel,           wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::addGlobalLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::addHierLabel,       wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 200 );
+
+    menu.AddSeparator( libEdit && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::symbolProperties,   libEdit && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::pinTable,           libEdit && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );

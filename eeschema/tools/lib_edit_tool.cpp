@@ -38,6 +38,8 @@
 #include <dialogs/dialog_lib_edit_draw_item.h>
 #include <dialogs/dialog_lib_edit_text.h>
 #include <dialogs/dialog_edit_one_field.h>
+#include <dialogs/dialog_edit_component_in_lib.h>
+#include <dialogs/dialog_lib_edit_pin_table.h>
 #include <sch_legacy_plugin.h>
 #include "lib_edit_tool.h"
 
@@ -362,12 +364,10 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 {
     SELECTION& selection = m_selectionTool->RequestSelection();
 
-    if( selection.Empty() )
+    if( selection.Empty() || aEvent.IsAction( &EE_ACTIONS::symbolProperties ) )
     {
-        wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-        cmd.SetId( ID_LIBEDIT_GET_FRAME_EDIT_PART );
-        m_frame->GetEventHandler()->ProcessEvent( cmd );
+        if( m_frame->GetCurPart() )
+            editSymbolProperties();
     }
     else if( selection.Size() == 1 )
     {
@@ -488,13 +488,78 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     bool     renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 
     if( renamed )
-        m_frame->UpdateAfterRename( parent, oldFieldValue, newFieldValue );
+        m_frame->SaveCopyInUndoList( parent, UR_LIB_RENAME );
+    else
+        m_frame->SaveCopyInUndoList( parent );
 
     dlg.UpdateField( aField );
 
-    m_frame->GetCanvas()->GetView()->Update( aField );
-    m_frame->GetCanvas()->Refresh();
-    m_frame->OnModify( );
+    if( renamed )
+    {
+        parent->SetName( newFieldValue );
+        m_frame->UpdateAfterSymbolProperties( &oldFieldValue, nullptr );
+    }
+    else
+    {
+        m_frame->GetCanvas()->GetView()->Update( aField );
+        m_frame->GetCanvas()->Refresh();
+        m_frame->OnModify( );
+    }
+}
+
+
+void LIB_EDIT_TOOL::editSymbolProperties()
+{
+    LIB_PART*     part = m_frame->GetCurPart();
+    bool          partLocked = part->UnitsLocked();
+    wxString      oldName = part->GetName();
+    wxArrayString oldAliases = part->GetAliasNames( false );
+
+    m_toolMgr->RunAction( ACTIONS::cancelInteractive, true );
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    DIALOG_EDIT_COMPONENT_IN_LIBRARY dlg( m_frame, part );
+
+    // This dialog itself subsequently can invoke a KIWAY_PLAYER as a quasimodal
+    // frame. Therefore this dialog as a modal frame parent, MUST be run under
+    // quasimodal mode for the quasimodal frame support to work.  So don't use
+    // the QUASIMODAL macros here.
+    if( dlg.ShowQuasiModal() != wxID_OK )
+        return;
+
+    // if m_UnitSelectionLocked has changed, set some edit options or defaults
+    // to the best value
+    if( partLocked != part->UnitsLocked() )
+    {
+        // Enable synchronized pin edit mode for symbols with interchangeable units
+        m_frame->m_SyncPinEdit = !part->UnitsLocked();
+        // also set default edit options to the better value
+        // Usually if units are locked, graphic items are specific to each unit
+        // and if units are interchangeable, graphic items are common to units
+        m_frame->m_DrawSpecificUnit = part->UnitsLocked();
+    }
+
+    m_frame->UpdateAfterSymbolProperties( &oldName, &oldAliases );
+}
+
+
+int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
+{
+    LIB_PART* part = m_frame->GetCurPart();
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    m_frame->SaveCopyInUndoList( part );
+
+    DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, part );
+
+    if( dlg.ShowModal() == wxID_CANCEL )
+        return -1;
+
+    m_frame->RebuildView();
+    m_frame->OnModify();
+
+    return 0;
 }
 
 
@@ -602,6 +667,8 @@ void LIB_EDIT_TOOL::setTransitions()
     Go( &LIB_EDIT_TOOL::DeleteItemCursor,   EE_ACTIONS::deleteItemCursor.MakeEvent() );
 
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::properties.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
 
     Go( &LIB_EDIT_TOOL::Cut,                EE_ACTIONS::cut.MakeEvent() );
     Go( &LIB_EDIT_TOOL::Copy,               EE_ACTIONS::copy.MakeEvent() );

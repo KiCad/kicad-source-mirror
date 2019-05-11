@@ -196,7 +196,7 @@ enum id_eeschema_frm
     ID_LIBEDIT_EDIT_PIN_BY_TABLE,
     ID_LIBEDIT_VIEW_DOC,
     ID_LIBEDIT_CHECK_PART,
-    ID_LIBEDIT_GET_FRAME_EDIT_PART,
+    ID_LIBEDIT_SYMBOL_PROPERTIES,
     ID_LIBEDIT_SELECT_PART_NUMBER,
 
     /* Library editor vertical toolbar IDs. */

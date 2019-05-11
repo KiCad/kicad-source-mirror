@@ -54,6 +54,7 @@ public:
     int Duplicate( const TOOL_EVENT& aEvent );
 
     int Properties( const TOOL_EVENT& aEvent );
+    int PinTable( const TOOL_EVENT& aEvent );
 
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
@@ -73,6 +74,7 @@ private:
     void editGraphicProperties( LIB_ITEM* aItem );
     void editTextProperties( LIB_ITEM* aItem );
     void editFieldProperties( LIB_FIELD* aField );
+    void editSymbolProperties();
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

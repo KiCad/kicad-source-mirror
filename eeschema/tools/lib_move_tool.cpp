@@ -73,7 +73,7 @@ bool LIB_MOVE_TOOL::Init()
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
 
-    selToolMenu.AddItem( EE_ACTIONS::move, EE_CONDITIONS::Idle, 150 );
+    selToolMenu.AddItem( EE_ACTIONS::move, EE_CONDITIONS::IdleSelection, 150 );
 
     return true;
 }

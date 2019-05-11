@@ -146,7 +146,7 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
 
-    m_mainToolBar->AddTool( ID_LIBEDIT_GET_FRAME_EDIT_PART, wxEmptyString,
+    m_mainToolBar->AddTool( ID_LIBEDIT_SYMBOL_PROPERTIES, wxEmptyString,
                             KiScaledBitmap( part_properties_xpm, this ),
                             _( "Edit symbol properties" ) );
 

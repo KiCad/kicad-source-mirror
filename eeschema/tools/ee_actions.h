@@ -161,6 +161,8 @@ public:
     static TOOL_ACTION switchCursor;
     static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;
+    static TOOL_ACTION symbolProperties;
+    static TOOL_ACTION pinTable;
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION refreshPreview;
     static TOOL_ACTION explicitCrossProbe;

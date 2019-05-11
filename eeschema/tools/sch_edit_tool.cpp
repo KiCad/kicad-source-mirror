@@ -144,6 +144,16 @@ TOOL_ACTION EE_ACTIONS::cleanupSheetPins( "eeschema.InteractiveEdit.cleanupSheet
         _( "Cleanup Sheet Pins" ), _( "Delete unreferenced sheet pins" ),
         nullptr );
 
+TOOL_ACTION EE_ACTIONS::symbolProperties( "eeschema.InteractiveEdit.symbolProperties",
+        AS_GLOBAL, 0,
+        _( "Symbol Properties..." ), _( "Displays symbol properties dialog" ),
+        part_properties_xpm );
+
+TOOL_ACTION EE_ACTIONS::pinTable( "eeschema.InteractiveEdit.pinTable",
+        AS_GLOBAL, 0,
+        _( "Pin Table..." ), _( "Displays pin table for bulk editing of pins" ),
+        pin_table_xpm );
+
 TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
         _( "Delete" ), _( "Deletes selected item(s)" ),

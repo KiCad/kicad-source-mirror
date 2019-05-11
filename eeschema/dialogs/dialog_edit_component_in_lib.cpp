@@ -1,7 +1,3 @@
-/**
- * @file dialog_edit_component_in_lib.cpp
- */
-
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
@@ -305,8 +301,13 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
         return false;
 
     LIB_ALIAS* rootAlias = m_libEntry->GetAlias( m_libEntry->GetName() );
+    // We need to keep the name and the value the same at the moment!
+    wxString   newName = m_libEntry->GetValueField().GetText();
 
-    m_Parent->SaveCopyInUndoList( m_libEntry );
+    if( m_libEntry->GetName() != newName )
+        m_Parent->SaveCopyInUndoList( m_libEntry, UR_LIB_RENAME );
+    else
+        m_Parent->SaveCopyInUndoList( m_libEntry );
 
     // The Y axis for components in lib is from bottom to top while the screen axis is top
     // to bottom: we must change the y coord sign when writing back to the library
@@ -324,7 +325,7 @@ bool DIALOG_EDIT_COMPONENT_IN_LIBRARY::TransferDataFromWindow()
     m_libEntry->SetFields( *m_fields );
 
     // We need to keep the name and the value the same at the moment!
-    m_libEntry->SetName( m_libEntry->GetValueField().GetText() );
+    m_libEntry->SetName( newName );
 
     rootAlias->SetDescription( m_DescCtrl->GetValue() );
     rootAlias->SetKeyWords( m_KeywordCtrl->GetValue() );

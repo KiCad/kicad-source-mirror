@@ -56,27 +56,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
     /**
-     * Set to true to not synchronize pins at the same position when editing
-     * symbols with multiple units or multiple body styles.
-     * Therefore deleting, moving pins are made for all pins at the same location
-     * When units are interchangeable, synchronizing editing of pins is usually
-     * the best way, because if units are interchangeable, it imply all similar
-     * pins are on the same location.
-     * When units are non interchangeable, do not synchronize editing of pins, because
-     * each part is specific, and there are no similar pins between units.
-     *
-     * Setting this to false allows editing each pin per part or body style
-     * regardless other pins at the same location.
-     * This requires the user to open each part or body style to make changes
-     * to the other pins at the same location.
-     * To know if others pins must be coupled when editing a pin, use
-     * SynchronizePins() instead of m_syncPinEdit, because SynchronizePins()
-     * is more reliable (takes in account the fact units are interchangeable,
-     * there are more than one unit).
-     */
-    bool m_syncPinEdit;
-
-    /**
      * the option to show the pin electrical name in the component editor
      */
     bool m_showPinElectricalTypeName;
@@ -110,6 +89,27 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     int m_defaultLibWidth;
 
 public:
+    /**
+     * Set to true to not synchronize pins at the same position when editing
+     * symbols with multiple units or multiple body styles.
+     * Therefore deleting, moving pins are made for all pins at the same location
+     * When units are interchangeable, synchronizing editing of pins is usually
+     * the best way, because if units are interchangeable, it imply all similar
+     * pins are on the same location.
+     * When units are non interchangeable, do not synchronize editing of pins, because
+     * each part is specific, and there are no similar pins between units.
+     *
+     * Setting this to false allows editing each pin per part or body style
+     * regardless other pins at the same location.
+     * This requires the user to open each part or body style to make changes
+     * to the other pins at the same location.
+     * To know if others pins must be coupled when editing a pin, use
+     * SynchronizePins() instead of m_syncPinEdit, because SynchronizePins()
+     * is more reliable (takes in account the fact units are interchangeable,
+     * there are more than one unit).
+     */
+    bool m_SyncPinEdit;
+
     /** Convert of the item currently being drawn. */
     bool          m_DrawSpecificConvert;
 
@@ -298,13 +298,9 @@ public:
     bool IsSearchTreeShown();
     void ClearSearchTreeSelection();
 
-    void OnEditComponentProperties( wxCommandEvent& event );
-
     void OnViewEntryDoc( wxCommandEvent& event );
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
-
-    void OnOpenPinTable( wxCommandEvent& aEvent );
 
     void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
@@ -322,7 +318,7 @@ public:
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
     void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
-    void UpdateAfterRename( LIB_PART* aPart, const wxString& aOldName, const wxString& aNewName );
+    void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
     void RebuildSymbolUnitsList();
 
     /**
@@ -489,20 +485,6 @@ private:
     void GetComponentFromRedoList( wxCommandEvent& event );
 
     /**
-     * Prepare the displacement of a pin
-     *
-     * @param aPin the pin to prepare for movement.
-     */
-    void StartMovePin( LIB_ITEM* aPin );
-
-    /**
-     * Adds copies of \a aPin in components with multiple units in all units
-     *
-     * @param aPin The pin to copy to others units.
-     */
-    void CreateImagePins( LIB_PIN* aPin );
-
-    /**
      * Read a component symbol file (*.sym ) and add graphic items to the current component.
      *
      * A symbol file *.sym has the same format as a library, and contains only one symbol.
@@ -635,17 +617,6 @@ private:
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
-
-    /**
-     * Copies items selected in the current part to the internal clipboard.
-     */
-    void copySelectedItems();
-
-    /**
-     * Pastes items from the internal clipboard to the current part.
-     * @param aOffset is the offset where the pasted items should be located.
-     */
-    void pasteClipboard( const wxPoint& aOffset );
 
     ///> Clipboard buffer storing LIB_ITEMs
     BLOCK_SELECTOR m_clipboard;

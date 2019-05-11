@@ -159,7 +159,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AppendSeparator();
 
     AddMenuItem( editMenu,
-                 ID_LIBEDIT_GET_FRAME_EDIT_PART,
+                 ID_LIBEDIT_SYMBOL_PROPERTIES,
                  _( "&Properties..." ),
                  _( "Edit symbol properties" ),
                  KiBitmap( part_properties_xpm ) );

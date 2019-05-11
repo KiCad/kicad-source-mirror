@@ -237,6 +237,12 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
 
     case ID_LIBEDIT_DELETE_ITEM_BUTT:
         return EE_ACTIONS::deleteItemCursor.MakeEvent();
+
+    case ID_LIBEDIT_SYMBOL_PROPERTIES:
+        return EE_ACTIONS::symbolProperties.MakeEvent();
+
+    case ID_LIBEDIT_EDIT_PIN_BY_TABLE:
+        return EE_ACTIONS::pinTable.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

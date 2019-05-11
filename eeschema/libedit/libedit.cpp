@@ -190,7 +190,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
         return false;
 
     // Enable synchronized pin edit mode for symbols with interchangeable units
-    m_syncPinEdit = !GetCurPart()->UnitsLocked();
+    m_SyncPinEdit = !GetCurPart()->UnitsLocked();
 
     GetScreen()->ClearUndoRedoList();
     Zoom_Automatique( false );
@@ -546,30 +546,40 @@ void LIB_EDIT_FRAME::savePartAs()
 }
 
 
-void LIB_EDIT_FRAME::UpdateAfterRename( LIB_PART* aPart, const wxString& aOldName,
-                                        const wxString& aNewName )
+void LIB_EDIT_FRAME::UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases )
 {
-    wxString msg;
-    wxString lib = GetCurLib();
+    wxString  msg;
+    wxString  lib = GetCurLib();
+    LIB_PART* part = GetCurPart();
 
-    // Test the current library for name conflicts
-    if( !lib.empty() && m_libMgr->PartExists( aNewName, lib ) )
+    if( aOldName && *aOldName != part->GetName() )
     {
-        msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
-                    aNewName,
-                    lib );
+        // Test the current library for name conflicts
+        if( !lib.empty() && m_libMgr->PartExists( part->GetName(), lib ) )
+        {
+            msg.Printf( _( "The name '%s' conflicts with an existing entry in the library '%s'." ),
+                        part->GetName(),
+                        lib );
 
-        DisplayErrorMessage( this, msg );
-        return;
+            DisplayErrorMessage( this, msg );
+            part->SetName( *aOldName );
+        }
+        else
+            m_libMgr->UpdatePartAfterRename( part, *aOldName, lib );
     }
 
-    SaveCopyInUndoList( aPart, UR_LIB_RENAME );
-    aPart->SetName( aNewName );
-
-    m_libMgr->UpdatePartAfterRename( aPart, aOldName, lib );
+    if( aOldAliases && *aOldAliases != part->GetAliasNames( false ) )
+        SyncLibraries( false );
 
     // Reselect the renamed part
-    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, aNewName ) );
+    m_treePane->GetLibTree()->SelectLibId( LIB_ID( lib, part->GetName() ) );
+
+    RebuildSymbolUnitsList();
+    updateTitle();
+    DisplayCmpDoc();
+
+    RebuildView();
+    OnModify();
 }
 
 
