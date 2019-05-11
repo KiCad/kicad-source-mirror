@@ -42,7 +42,7 @@
 #include <transform.h>
 
 
-LIB_CIRCLE::LIB_CIRCLE( LIB_PART*      aParent ) :
+LIB_CIRCLE::LIB_CIRCLE( LIB_PART* aParent ) :
     LIB_ITEM( LIB_CIRCLE_T, aParent )
 {
     m_Width      = 0;
@@ -140,6 +140,9 @@ void LIB_CIRCLE::MirrorHorizontal( const wxPoint& aCenter )
     m_Pos.x -= aCenter.x;
     m_Pos.x *= -1;
     m_Pos.x += aCenter.x;
+    m_EndPos.x -= aCenter.x;
+    m_EndPos.x *= -1;
+    m_EndPos.x += aCenter.x;
 }
 
 
@@ -148,6 +151,9 @@ void LIB_CIRCLE::MirrorVertical( const wxPoint& aCenter )
     m_Pos.y -= aCenter.y;
     m_Pos.y *= -1;
     m_Pos.y += aCenter.y;
+    m_EndPos.y -= aCenter.y;
+    m_EndPos.y *= -1;
+    m_EndPos.y += aCenter.y;
 }
 
 
@@ -156,6 +162,7 @@ void LIB_CIRCLE::Rotate( const wxPoint& aCenter, bool aRotateCCW )
     int rot_angle = aRotateCCW ? -900 : 900;
 
     RotatePoint( &m_Pos, aCenter, rot_angle );
+    RotatePoint( &m_EndPos, aCenter, rot_angle );
 }
 
 
