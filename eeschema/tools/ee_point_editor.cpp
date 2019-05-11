@@ -454,7 +454,7 @@ void EE_POINT_EDITOR::updateItem() const
 
         lines->ClearPoints();
 
-        for( int i = 0; i < m_editPoints->PointsSize(); ++i )
+        for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
             lines->AddPoint( mapCoords( m_editPoints->Point( i ).GetPosition() ) );
 
         break;
@@ -661,7 +661,7 @@ bool EE_POINT_EDITOR::removeCornerCondition( const SELECTION& )
 
     const std::vector<wxPoint>& pts = polyLine->GetPolyPoints();
 
-    for( int i = 0; i < polyLine->GetCornerCount(); ++i )
+    for( unsigned i = 0; i < polyLine->GetCornerCount(); ++i )
     {
         if( pts[i] == mapCoords( m_editedPoint->GetPosition() ) )
             return true;

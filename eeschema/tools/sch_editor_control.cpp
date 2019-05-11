@@ -612,7 +612,7 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
     SYMBOL_LIB_TABLE* symLibTable = m_frame->Prj().SchSymbolLibTable();
     PART_LIB*         partLib = m_frame->Prj().SchLibs()->GetCacheLibrary();
 
-    for( int i = 0; i < loadedItems.size(); ++i )
+    for( unsigned i = 0; i < loadedItems.size(); ++i )
     {
         EDA_ITEM* item = loadedItems[i];
 

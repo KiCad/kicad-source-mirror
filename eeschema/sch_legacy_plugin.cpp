@@ -1879,7 +1879,7 @@ void SCH_LEGACY_PLUGIN::Format( SELECTION* aSelection, OUTPUTFORMATTER* aFormatt
 {
     m_out = aFormatter;
 
-    for( int i = 0; i < aSelection->GetSize(); ++i )
+    for( unsigned i = 0; i < aSelection->GetSize(); ++i )
     {
         SCH_ITEM* item = (SCH_ITEM*) aSelection->GetItem( i );
 

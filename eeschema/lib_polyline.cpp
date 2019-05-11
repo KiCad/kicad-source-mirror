@@ -182,7 +182,7 @@ void LIB_POLYLINE::AddCorner( const wxPoint& aPosition )
     int currentMinDistance = INT_MAX;
     int closestLineStart = 0;
 
-    for( int i = 0; i < m_PolyPoints.size() - 1; ++i )
+    for( unsigned i = 0; i < m_PolyPoints.size() - 1; ++i )
     {
         int distance = (int) DistanceLinePoint( m_PolyPoints[i], m_PolyPoints[i + 1], aPosition );
 

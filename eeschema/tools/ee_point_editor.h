@@ -73,7 +73,7 @@ private:
 
     inline int getEditedPointIndex() const
     {
-        for( int i = 0; i < m_editPoints->PointsSize(); ++i )
+        for( unsigned i = 0; i < m_editPoints->PointsSize(); ++i )
         {
             if( m_editedPoint == &m_editPoints->Point( i ) )
                 return i;
