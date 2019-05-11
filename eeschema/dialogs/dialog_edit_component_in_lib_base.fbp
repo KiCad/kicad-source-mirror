@@ -14,7 +14,6 @@
         <property name="file">dialog_edit_component_in_lib_base</property>
         <property name="first_id">1000</property>
         <property name="help_provider">none</property>
-        <property name="image_path_wrapper_function_name"></property>
         <property name="indent_with_spaces"></property>
         <property name="internationalize">1</property>
         <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_FBP</property>
@@ -26,7 +25,6 @@
         <property name="skip_php_events">1</property>
         <property name="skip_python_events">1</property>
         <property name="ui_table">UI</property>
-        <property name="use_array_enum">0</property>
         <property name="use_enum">0</property>
         <property name="use_microsoft_bom">0</property>
         <object class="Dialog" expanded="1">
@@ -47,7 +45,7 @@
             <property name="minimum_size"></property>
             <property name="name">DIALOG_EDIT_COMPONENT_IN_LIBRARY_BASE</property>
             <property name="pos"></property>
-            <property name="size">-1,-1</property>
+            <property name="size">855,579</property>
             <property name="style">wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</property>
             <property name="subclass">DIALOG_SHIM; dialog_shim.h</property>
             <property name="title">Library Symbol Properties</property>
@@ -202,7 +200,7 @@
                                                     <object class="sizeritem" expanded="0">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxTOP|wxBOTTOM|wxEXPAND</property>
-                                                        <property name="proportion">0</property>
+                                                        <property name="proportion">1</property>
                                                         <object class="wxGrid" expanded="0">
                                                             <property name="BottomDockable">1</property>
                                                             <property name="LeftDockable">1</property>
@@ -291,7 +289,7 @@
                                                     <object class="sizeritem" expanded="1">
                                                         <property name="border">5</property>
                                                         <property name="flag">wxEXPAND|wxBOTTOM</property>
-                                                        <property name="proportion">1</property>
+                                                        <property name="proportion">0</property>
                                                         <object class="wxBoxSizer" expanded="1">
                                                             <property name="minimum_size"></property>
                                                             <property name="name">bButtonSize</property>

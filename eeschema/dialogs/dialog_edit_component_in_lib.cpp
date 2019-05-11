@@ -940,8 +940,10 @@ void DIALOG_EDIT_COMPONENT_IN_LIBRARY::OnSizeGrid( wxSizeEvent& event )
     if( new_size != m_width )
     {
         adjustGridColumns( event.GetSize().GetX() );
-        event.Skip();
     }
+
+    // Always propagate a wxSizeEvent:
+    event.Skip();
 }
 
 
