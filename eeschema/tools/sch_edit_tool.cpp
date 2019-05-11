@@ -72,12 +72,12 @@ TOOL_ACTION EE_ACTIONS::rotateCCW( "eeschema.InteractiveEdit.rotateCCW",
 TOOL_ACTION EE_ACTIONS::mirrorX( "eeschema.InteractiveEdit.mirrorX",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_X ),
         _( "Mirror Around Horizontal Axis" ), _( "Flips selected item(s) from top to bottom" ),
-        mirror_h_xpm );
+        mirror_v_xpm );
 
 TOOL_ACTION EE_ACTIONS::mirrorY( "eeschema.InteractiveEdit.mirrorY",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MIRROR_Y ),
         _( "Mirror Around Vertical Axis" ), _( "Flips selected item(s) from left to right" ),
-        mirror_v_xpm );
+        mirror_h_xpm );
 
 TOOL_ACTION EE_ACTIONS::properties( "eeschema.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT ),
