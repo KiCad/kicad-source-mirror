@@ -34,8 +34,10 @@
 #include <tools/ee_actions.h>
 #include <tools/ee_selection_tool.h>
 
-void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType )
+void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType, bool aAppend )
 {
+    wxASSERT_MSG( !aAppend, "Append not needed/supported for LibEdit" );
+
     LIB_PART*          CopyItem;
     PICKED_ITEMS_LIST* lastcmd = new PICKED_ITEMS_LIST();
 

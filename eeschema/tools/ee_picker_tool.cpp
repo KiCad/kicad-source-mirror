@@ -31,9 +31,9 @@ TOOL_ACTION EE_ACTIONS::pickerTool( "eeschema.Picker", AS_GLOBAL, 0, "", "", NUL
 
 
 EE_PICKER_TOOL::EE_PICKER_TOOL()
-    : TOOL_INTERACTIVE( "eeschema.Picker" )
+    : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.Picker" )
 {
-    reset();
+    resetPicker();
 }
 
 
@@ -122,7 +122,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
     }
 
-    reset();
+    resetPicker();
     controls->ForceCursorPosition( false );
     getEditFrame<SCH_BASE_FRAME>()->SetNoToolSelected();
 
@@ -136,7 +136,7 @@ void EE_PICKER_TOOL::setTransitions()
 }
 
 
-void EE_PICKER_TOOL::reset()
+void EE_PICKER_TOOL::resetPicker()
 {
     m_cursorCapture = false;
     m_autoPanning = false;

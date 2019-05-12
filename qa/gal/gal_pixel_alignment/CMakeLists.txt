@@ -38,7 +38,7 @@ add_executable(test_gal_pixel_alignment WIN32
   ../../qa_utils/pcb_test_frame.cpp
   ../../qa_utils/mocks.cpp
   ../../../common/base_units.cpp
-  ../../../pcbnew/tools/pcb_tool.cpp
+    ../../../pcbnew/tools/pcb_tool_base.cpp
   ../../../pcbnew/tools/selection.cpp
   ../../../pcbnew/tools/selection_tool.cpp
   ../../../pcbnew/tools/tool_event_utils.cpp

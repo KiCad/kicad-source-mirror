@@ -54,7 +54,7 @@
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <tools/selection_tool.h>
 #include <kicad_plugin.h>

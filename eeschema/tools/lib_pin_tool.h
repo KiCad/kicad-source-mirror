@@ -24,16 +24,14 @@
 #ifndef KICAD_LIB_PIN_TOOL_H
 #define KICAD_LIB_PIN_TOOL_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
+#include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
 
 
 class LIB_EDIT_FRAME;
-class EE_SELECTION_TOOL;
 
 
-class LIB_PIN_TOOL : public TOOL_INTERACTIVE
+class LIB_PIN_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_PIN_TOOL();
@@ -41,9 +39,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
 
     LIB_PIN* CreatePin( const VECTOR2I& aPosition, LIB_PART* aPart );
     LIB_PIN* RepeatPin( const LIB_PIN* aSourcePin );
@@ -57,10 +52,6 @@ public:
 private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
-
-private:
-    EE_SELECTION_TOOL*   m_selectionTool;
-    LIB_EDIT_FRAME*      m_frame;
 };
 
 #endif //KICAD_LIB_PIN_TOOL_H

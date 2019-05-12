@@ -29,7 +29,7 @@
 
 class BOARD_ITEM;
 class PICKED_ITEMS_LIST;
-class PCB_TOOL;
+class PCB_TOOL_BASE;
 class TOOL_MANAGER;
 class EDA_DRAW_FRAME;
 class TOOL_BASE;
@@ -38,7 +38,7 @@ class BOARD_COMMIT : public COMMIT
 {
 public:
     BOARD_COMMIT( EDA_DRAW_FRAME* aFrame );
-    BOARD_COMMIT( PCB_TOOL *aTool );
+    BOARD_COMMIT( PCB_TOOL_BASE *aTool );
 
     virtual ~BOARD_COMMIT();
 

@@ -58,7 +58,7 @@ TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autopla
         AS_GLOBAL, 0, _( "Auto-place off-board components" ),
         _( "Performs automatic placement of components outside board area" ) );
 
-AUTOPLACE_TOOL::AUTOPLACE_TOOL() : PCB_TOOL( "pcbnew.Autoplacer" )
+AUTOPLACE_TOOL::AUTOPLACE_TOOL() : PCB_TOOL_BASE( "pcbnew.Autoplacer" )
 {
 }
 

@@ -24,14 +24,10 @@
 #ifndef LIB_DRAWING_TOOLS_H
 #define LIB_DRAWING_TOOLS_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
-#include <core/optional.h>
-#include <sch_base_frame.h>
+#include <tools/ee_tool_base.h>
 
 
 class LIB_EDIT_FRAME;
-class EE_SELECTION_TOOL;
 
 
 /**
@@ -40,7 +36,7 @@ class EE_SELECTION_TOOL;
  * Tool responsible for drawing/placing items (body outlines, pins, etc.)
  */
 
-class LIB_DRAWING_TOOLS : public TOOL_INTERACTIVE
+class LIB_DRAWING_TOOLS : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_DRAWING_TOOLS();
@@ -48,12 +44,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     int PlacePin( const TOOL_EVENT& aEvent );
     int PlaceText( const TOOL_EVENT& aEvent );
@@ -68,14 +58,6 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
-
-private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::SCH_VIEW*      m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    LIB_EDIT_FRAME*       m_frame;
-
-    TOOL_MENU             m_menu;
 };
 
 #endif /* LIB_DRAWING_TOOLS_H */

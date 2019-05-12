@@ -30,7 +30,7 @@
 #include <memory>
 
 #include <math/vector2d.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <tool/context_menu.h>
 #include <tool/selection.h>
 
@@ -61,7 +61,7 @@ typedef void (*CLIENT_SELECTION_FILTER)( const VECTOR2I&, GENERAL_COLLECTOR& );
  * - takes into account high-contrast & layer visibility settings
  * - invokes InteractiveEdit tool when user starts to drag selected items
  */
-class SELECTION_TOOL : public PCB_TOOL
+class SELECTION_TOOL : public PCB_TOOL_BASE
 {
 public:
     SELECTION_TOOL();

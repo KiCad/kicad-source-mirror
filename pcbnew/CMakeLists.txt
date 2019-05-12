@@ -332,7 +332,7 @@ set( PCBNEW_CLASS_SRCS
     tools/pcb_bright_box.cpp
     tools/pcb_editor_control.cpp
     tools/pcb_selection_conditions.cpp
-    tools/pcb_tool.cpp
+    tools/pcb_tool_base.cpp
     tools/pcbnew_control.cpp
     tools/picker_tool.cpp
     tools/placement_tool.cpp

@@ -24,16 +24,14 @@
 #ifndef KICAD_LIB_MOVE_TOOL_H
 #define KICAD_LIB_MOVE_TOOL_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
-#include <sch_base_frame.h>
-
+#include <tools/ee_tool_base.h>
+#include <lib_edit_frame.h>
 
 class LIB_EDIT_FRAME;
 class EE_SELECTION_TOOL;
 
 
-class LIB_MOVE_TOOL : public TOOL_INTERACTIVE
+class LIB_MOVE_TOOL : public EE_TOOL_BASE<LIB_EDIT_FRAME>
 {
 public:
     LIB_MOVE_TOOL();
@@ -44,9 +42,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Reset()
     void Reset( RESET_REASON aReason ) override;
-
-    ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     /**
      * Function Main()
@@ -66,13 +61,6 @@ private:
     void setTransitions() override;
 
 private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    LIB_EDIT_FRAME*       m_frame;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU             m_menu;
-
     ///> Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
 

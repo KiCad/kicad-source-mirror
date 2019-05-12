@@ -142,7 +142,7 @@ private:
 
 
 PAD_TOOL::PAD_TOOL() :
-        PCB_TOOL( "pcbnew.PadTool" ),
+        PCB_TOOL_BASE( "pcbnew.PadTool" ),
         m_padCopied( false )
 {}
 

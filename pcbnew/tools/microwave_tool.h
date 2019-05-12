@@ -24,7 +24,7 @@
 #ifndef TOOLS_MICROWAVE_TOOL_H
 #define TOOLS_MICROWAVE_TOOL_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 #include <tool/tool_menu.h>
 
@@ -34,7 +34,7 @@
  *
  * Tool responsible for adding microwave features to PCBs
  */
-class MICROWAVE_TOOL : public PCB_TOOL
+class MICROWAVE_TOOL : public PCB_TOOL_BASE
 {
 public:
     MICROWAVE_TOOL();

@@ -27,7 +27,7 @@
 #define __EDIT_TOOL_H
 
 #include <math/vector2d.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <tools/selection_tool.h>
 #include <status_popup.h>
 
@@ -56,7 +56,7 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags );
  * using the pcbnew.InteractiveSelection tool.
  */
 
-class EDIT_TOOL : public PCB_TOOL
+class EDIT_TOOL : public PCB_TOOL_BASE
 {
 public:
     EDIT_TOOL();

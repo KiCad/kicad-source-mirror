@@ -50,21 +50,14 @@ TOOL_ACTION EE_ACTIONS::showMarkerInfo( "eeschema.InspectionTool.showMarkerInfo"
 
 
 EE_INSPECTION_TOOL::EE_INSPECTION_TOOL()
-    : TOOL_INTERACTIVE( "eeschema.InspectionTool" ),
-      m_selectionTool( nullptr ),
-      m_view( nullptr ),
-      m_controls( nullptr ),
-      m_frame( nullptr )
+    : EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.InspectionTool" )
 {
 }
 
 
 bool EE_INSPECTION_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    EE_TOOL_BASE::Init();
 
     auto singleMarkerCondition = SELECTION_CONDITIONS::OnlyType( SCH_MARKER_T )
                               && SELECTION_CONDITIONS::Count( 1 );
@@ -77,14 +70,6 @@ bool EE_INSPECTION_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::showMarkerInfo, singleMarkerCondition && EE_CONDITIONS::Idle, 400 );
 
     return true;
-}
-
-
-void EE_INSPECTION_TOOL::Reset( RESET_REASON aReason )
-{
-    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-    m_controls = getViewControls();
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
 }
 
 

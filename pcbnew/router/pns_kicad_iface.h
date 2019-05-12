@@ -32,7 +32,7 @@ class PNS_PCBNEW_DEBUG_DECORATOR;
 class BOARD;
 class BOARD_COMMIT;
 class PCB_DISPLAY_OPTIONS;
-class PCB_TOOL;
+class PCB_TOOL_BASE;
 
 namespace KIGFX
 {
@@ -45,7 +45,7 @@ public:
     ~PNS_KICAD_IFACE();
 
     void SetRouter( PNS::ROUTER* aRouter ) override;
-    void SetHostTool( PCB_TOOL* aTool );
+    void SetHostTool( PCB_TOOL_BASE* aTool );
     void SetDisplayOptions( PCB_DISPLAY_OPTIONS* aDispOptions );
 
     void SetBoard( BOARD* aBoard );
@@ -80,7 +80,7 @@ private:
 
     PNS::ROUTER* m_router;
     BOARD* m_board;
-    PCB_TOOL* m_tool;
+    PCB_TOOL_BASE* m_tool;
     std::unique_ptr<BOARD_COMMIT> m_commit;
     PCB_DISPLAY_OPTIONS* m_dispOptions;
 };

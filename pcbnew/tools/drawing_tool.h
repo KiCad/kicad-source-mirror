@@ -25,7 +25,7 @@
 #ifndef __DRAWING_TOOL_H
 #define __DRAWING_TOOL_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <core/optional.h>
 
 #include <tool/tool_menu.h>
@@ -46,7 +46,7 @@ class POLYGON_GEOM_MANAGER;
  * Tool responsible for drawing graphical elements like lines, arcs, circles, etc.
  */
 
-class DRAWING_TOOL : public PCB_TOOL
+class DRAWING_TOOL : public PCB_TOOL_BASE
 {
 public:
     DRAWING_TOOL();

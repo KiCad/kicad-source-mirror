@@ -35,11 +35,7 @@
 
 
 LIB_MOVE_TOOL::LIB_MOVE_TOOL() :
-        TOOL_INTERACTIVE( "libedit.InteractiveMove" ),
-        m_selectionTool( nullptr ),
-        m_controls( nullptr ),
-        m_frame( nullptr ),
-        m_menu( *this ),
+        EE_TOOL_BASE( "libedit.InteractiveMove" ),
         m_moveInProgress( false ),
         m_moveOffset( 0, 0 )
 {
@@ -53,21 +49,6 @@ LIB_MOVE_TOOL::~LIB_MOVE_TOOL()
 
 bool LIB_MOVE_TOOL::Init()
 {
-    m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
-
-    //
-    // Build the tool menu
-    //
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
-
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
-
-    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
-
     //
     // Add move actions to the selection tool menu
     //
@@ -81,14 +62,12 @@ bool LIB_MOVE_TOOL::Init()
 
 void LIB_MOVE_TOOL::Reset( RESET_REASON aReason )
 {
+    EE_TOOL_BASE::Reset( aReason );
+
     if( aReason == MODEL_RELOAD )
     {
         m_moveInProgress = false;
         m_moveOffset = { 0, 0 };
-
-        // Init variables used by every drawing tool
-        m_controls = getViewControls();
-        m_frame = getEditFrame<LIB_EDIT_FRAME>();
     }
 }
 
@@ -120,7 +99,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     VECTOR2I prevPos;
 
     if( !selection.Front()->IsNew() )
-        m_frame->SaveCopyInUndoList( m_frame->GetCurPart() );
+        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
     // Main loop: keep receiving events
     do
@@ -172,7 +151,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             continue;
 
                         moveItem( item, delta );
-                        getView()->Update( item );
+                        updateView( item );
                     }
 
                     selection.SetReferencePoint( m_cursor );
@@ -209,7 +188,7 @@ int LIB_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             for( EDA_ITEM* item : selection )
             {
                 moveItem( item, delta );
-                getView()->Update( item );
+                updateView( item );
             }
 
             m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );

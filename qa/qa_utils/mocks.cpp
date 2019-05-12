@@ -65,7 +65,7 @@
 #include <tools/pcb_actions.h>
 #include <router/router_tool.h>
 
-#include "pcb_tool.h"
+#include "pcb_tool_base.h"
 #include <dialog_find.h>
 #include <dialog_block_options.h>
 

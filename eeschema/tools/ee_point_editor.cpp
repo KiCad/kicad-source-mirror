@@ -198,9 +198,7 @@ private:
 
 
 EE_POINT_EDITOR::EE_POINT_EDITOR() :
-    TOOL_INTERACTIVE( "eeschema.PointEditor" ),
-    m_frame( nullptr ),
-    m_selectionTool( nullptr ),
+    EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.PointEditor" ),
     m_editedPoint( nullptr )
 {
 }
@@ -208,20 +206,15 @@ EE_POINT_EDITOR::EE_POINT_EDITOR() :
 
 void EE_POINT_EDITOR::Reset( RESET_REASON aReason )
 {
+    EE_TOOL_BASE::Reset( aReason );
+
     m_editPoints.reset();
-    getViewControls()->SetAutoPan( false );
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_isLibEdit = dynamic_cast<LIB_EDIT_FRAME*>( m_frame ) != nullptr;
 }
 
 
 bool EE_POINT_EDITOR::Init()
 {
-    m_frame = getEditFrame<SCH_BASE_FRAME>();
-    m_isLibEdit = dynamic_cast<LIB_EDIT_FRAME*>( m_frame ) != nullptr;
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    EE_TOOL_BASE::Init();
 
     auto& menu = m_selectionTool->GetToolMenu().GetMenu();
     menu.AddItem( EE_ACTIONS::pointEditorAddCorner,
@@ -530,7 +523,7 @@ void EE_POINT_EDITOR::updateItem() const
         break;
     }
 
-    getView()->Update( item, KIGFX::GEOMETRY );
+    updateView( item );
     m_frame->SetMsgPanel( item );
 }
 
@@ -701,7 +694,7 @@ int EE_POINT_EDITOR::addCorner( const TOOL_EVENT& aEvent )
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !aEvent.Modifier( MD_ALT ) );
     polyLine->AddCorner( mapCoords( cursorPos ) );
 
-    m_frame->RefreshItem( polyLine );
+    updateView( polyLine );
     updatePoints();
 
     return 0;
@@ -720,7 +713,7 @@ int EE_POINT_EDITOR::removeCorner( const TOOL_EVENT& aEvent )
 
     polyLine->RemoveCorner( getEditedPointIndex() );
 
-    m_frame->RefreshItem( polyLine );
+    updateView( polyLine );
     updatePoints();
 
     return 0;
@@ -738,25 +731,23 @@ void EE_POINT_EDITOR::saveItemsToUndo()
 {
     if( m_isLibEdit )
     {
-        LIB_EDIT_FRAME* editFrame = static_cast<LIB_EDIT_FRAME*>( m_frame );
-        editFrame->SaveCopyInUndoList( m_editPoints->GetParent()->GetParent() );
+        saveCopyInUndoList( m_editPoints->GetParent()->GetParent(), UR_LIBEDIT );
     }
     else
     {
-        SCH_EDIT_FRAME* editFrame = static_cast<SCH_EDIT_FRAME*>( m_frame );
-        editFrame->SaveCopyInUndoList( (SCH_ITEM*) m_editPoints->GetParent(), UR_CHANGED );
+        saveCopyInUndoList( (SCH_ITEM*) m_editPoints->GetParent(), UR_CHANGED );
 
         if( m_editPoints->GetParent()->Type() == SCH_LINE_T )
         {
             EDA_ITEM* connection = m_editPoints->Point( LINE_START ).GetConnection();
 
             if( connection )
-                editFrame->SaveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
+                saveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
 
             connection = m_editPoints->Point( LINE_END ).GetConnection();
 
             if( connection )
-                editFrame->SaveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
+                saveCopyInUndoList( (SCH_ITEM*) connection, UR_CHANGED, true );
         }
     }
 }

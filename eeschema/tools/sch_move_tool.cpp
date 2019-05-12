@@ -52,11 +52,7 @@ TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
 
 
 SCH_MOVE_TOOL::SCH_MOVE_TOOL() :
-        TOOL_INTERACTIVE( "eeschema.InteractiveMove" ),
-        m_selectionTool( nullptr ),
-        m_controls( nullptr ),
-        m_frame( nullptr ),
-        m_menu( *this ),
+        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveMove" ),
         m_moveInProgress( false ),
         m_moveOffset( 0, 0 )
 {
@@ -70,10 +66,7 @@ SCH_MOVE_TOOL::~SCH_MOVE_TOOL()
 
 bool SCH_MOVE_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    EE_TOOL_BASE::Init();
 
     auto moveCondition = [] ( const SELECTION& aSel ) {
         if( aSel.Empty() )
@@ -86,16 +79,6 @@ bool SCH_MOVE_TOOL::Init()
     };
 
     //
-    // Build the tool menu
-    //
-    CONDITIONAL_MENU& ctxMenu = m_menu.GetMenu();
-
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
-
-    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
-
-    //
     // Add move actions to the selection tool menu
     //
     CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
@@ -104,20 +87,6 @@ bool SCH_MOVE_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::drag, moveCondition, 150 );
 
     return true;
-}
-
-
-void SCH_MOVE_TOOL::Reset( RESET_REASON aReason )
-{
-    if( aReason == MODEL_RELOAD )
-    {
-        m_moveInProgress = false;
-        m_moveOffset = { 0, 0 };
-
-        // Init variables used by every drawing tool
-        m_controls = getViewControls();
-        m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    }
 }
 
 
@@ -660,28 +629,6 @@ bool SCH_MOVE_TOOL::updateModificationPoint( SELECTION& aSelection )
     aSelection.SetReferencePoint( m_cursor );
 
     return true;
-}
-
-
-void SCH_MOVE_TOOL::updateView( EDA_ITEM* aItem )
-{
-    KICAD_T itemType = aItem->Type();
-
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        getView()->Update( aItem->GetParent() );
-
-    getView()->Update( aItem );
-}
-
-
-void SCH_MOVE_TOOL::saveCopyInUndoList( SCH_ITEM* aItem, UNDO_REDO_T aType, bool aAppend )
-{
-    KICAD_T itemType = aItem->Type();
-
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*)aItem->GetParent(), UR_CHANGED, aAppend );
-    else
-        m_frame->SaveCopyInUndoList( aItem, aType, aAppend );
 }
 
 

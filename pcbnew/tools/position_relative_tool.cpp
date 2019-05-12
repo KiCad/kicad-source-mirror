@@ -53,7 +53,7 @@ TOOL_ACTION PCB_ACTIONS::selectpositionRelativeItem(
 
 
 POSITION_RELATIVE_TOOL::POSITION_RELATIVE_TOOL() :
-    PCB_TOOL( "pcbnew.PositionRelative" ),
+    PCB_TOOL_BASE( "pcbnew.PositionRelative" ),
     m_dialog( NULL ),
     m_selectionTool( NULL ),
     m_anchor_item( NULL )
@@ -140,7 +140,7 @@ int POSITION_RELATIVE_TOOL::SelectPositionRelativeItem( const TOOL_EVENT& aEvent
 {
     Activate();
 
-    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     STATUS_TEXT_POPUP statusPopup( frame() );
     bool picking = true;
 

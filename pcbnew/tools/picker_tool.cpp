@@ -33,14 +33,14 @@
 TOOL_ACTION PCB_ACTIONS::pickerTool( "pcbnew.Picker", AS_GLOBAL, 0, "", "", NULL, AF_ACTIVATE );
 
 
-EE_PICKER_TOOL::EE_PICKER_TOOL()
-    : PCB_TOOL( "pcbnew.Picker" )
+PICKER_TOOL::PICKER_TOOL()
+    : PCB_TOOL_BASE( "pcbnew.Picker" )
 {
     reset();
 }
 
 
-int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
+int PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     GRID_HELPER grid( frame() );
@@ -70,7 +70,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "EE_PICKER_TOOL click handler error: " << e.what() << std::endl;
+                    std::cerr << "PICKER_TOOL click handler error: " << e.what() << std::endl;
                     finalize_state = EXCEPTION_CANCEL;
                     break;
                 }
@@ -95,7 +95,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
                 }
                 catch( std::exception& e )
                 {
-                    std::cerr << "EE_PICKER_TOOL cancel handler error: " << e.what() << std::endl;
+                    std::cerr << "PICKER_TOOL cancel handler error: " << e.what() << std::endl;
                 }
             }
 
@@ -123,7 +123,7 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         catch( std::exception& e )
         {
-            std::cerr << "EE_PICKER_TOOL finalize handler error: " << e.what() << std::endl;
+            std::cerr << "PICKER_TOOL finalize handler error: " << e.what() << std::endl;
         }
     }
 
@@ -135,13 +135,13 @@ int EE_PICKER_TOOL::Main( const TOOL_EVENT& aEvent )
 }
 
 
-void EE_PICKER_TOOL::setTransitions()
+void PICKER_TOOL::setTransitions()
 {
-    Go( &EE_PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
+    Go( &PICKER_TOOL::Main, PCB_ACTIONS::pickerTool.MakeEvent() );
 }
 
 
-void EE_PICKER_TOOL::reset()
+void PICKER_TOOL::reset()
 {
     m_cursorCapture = false;
     m_autoPanning = false;
@@ -154,7 +154,7 @@ void EE_PICKER_TOOL::reset()
 }
 
 
-void EE_PICKER_TOOL::setControls()
+void PICKER_TOOL::setControls()
 {
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
 

@@ -187,12 +187,7 @@ private:
 
 
 SCH_WIRE_BUS_TOOL::SCH_WIRE_BUS_TOOL() :
-    TOOL_INTERACTIVE( "eeschema.WireBusDrawing" ),
-    m_selectionTool( nullptr ),
-    m_view( nullptr ),
-    m_controls( nullptr ),
-    m_frame( nullptr ),
-    m_menu( *this )
+    EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.WireBusDrawing" )
 {
     m_busUnfold = {};
 }
@@ -205,8 +200,7 @@ SCH_WIRE_BUS_TOOL::~SCH_WIRE_BUS_TOOL()
 
 bool SCH_WIRE_BUS_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_TOOL_BASE::Init();
 
     auto activeTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
@@ -232,7 +226,6 @@ bool SCH_WIRE_BUS_TOOL::Init()
     //
     // Build the tool menu
     //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet,    belowRootSheetCondition, 2 );
 
     ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 10 );
@@ -260,9 +253,6 @@ bool SCH_WIRE_BUS_TOOL::Init()
     ctxMenu.AddItem( EE_ACTIONS::selectNode,       wireOrBusTool && EE_CONDITIONS::Idle, 200 );
     ctxMenu.AddItem( EE_ACTIONS::selectConnection, wireOrBusTool && EE_CONDITIONS::Idle, 200 );
 
-    ctxMenu.AddSeparator( activeTool, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
-
     //
     // Add bus unfolding to the selection tool
     //
@@ -274,15 +264,6 @@ bool SCH_WIRE_BUS_TOOL::Init()
     selToolMenu.AddMenu( selBusUnfoldMenu.get(), false, busSelection && EE_CONDITIONS::Idle, 100 );
 
     return true;
-}
-
-
-void SCH_WIRE_BUS_TOOL::Reset( RESET_REASON aReason )
-{
-    // Init variables used by every drawing tool
-    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-    m_controls = getViewControls();
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
 }
 
 
@@ -591,10 +572,11 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
 
 int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
 {
-    bool forceHV = m_frame->GetForceHVLines();
+    bool        forceHV = m_frame->GetForceHVLines();
     SCH_SCREEN* screen = m_frame->GetScreen();
+    wxPoint     cursorPos;
 
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     if( aSegment == nullptr )
         Activate();
@@ -602,7 +584,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = (wxPoint)getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         //------------------------------------------------------------------------
         // Handle cancel:
@@ -802,8 +784,8 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
         }
 
         // Enable autopanning and cursor capture only when there is a segment to be placed
-        m_controls->SetAutoPan( !!aSegment );
-        m_controls->CaptureCursor( !!aSegment );
+        getViewControls()->SetAutoPan( !!aSegment );
+        getViewControls()->CaptureCursor( !!aSegment );
     }
 
     return 0;
@@ -959,8 +941,8 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
     m_view->ClearPreview();
     m_view->ShowPreview( false );
 
-    m_controls->CaptureCursor( false );
-    m_controls->SetAutoPan( false );
+    getViewControls()->CaptureCursor( false );
+    getViewControls()->SetAutoPan( false );
 
     m_frame->SaveCopyInUndoList( itemList, UR_NEW );
 

@@ -81,7 +81,7 @@ TOOL_ACTION PCB_ACTIONS::enumeratePads( "pcbnew.ModuleEditor.enumeratePads",
 
 
 MODULE_EDITOR_TOOLS::MODULE_EDITOR_TOOLS() :
-    PCB_TOOL( "pcbnew.ModuleEditor" )
+    PCB_TOOL_BASE( "pcbnew.ModuleEditor" )
 {
 }
 

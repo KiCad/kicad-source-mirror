@@ -137,12 +137,7 @@ TOOL_ACTION EE_ACTIONS::addHierLabel( "eeschema.InteractiveEditing.addHierLabel"
 
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
-    TOOL_INTERACTIVE( "eeschema.InteractiveDrawing" ),
-    m_selectionTool( nullptr ),
-    m_view( nullptr ),
-    m_controls( nullptr ),
-    m_frame( nullptr ),
-    m_menu( *this )
+    EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" )
 {
 }
 
@@ -154,34 +149,16 @@ SCH_DRAWING_TOOLS::~SCH_DRAWING_TOOLS()
 
 bool SCH_DRAWING_TOOLS::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_TOOL_BASE::Init();
 
     auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
         return g_CurrentSheet->Last() != g_RootSheet;
     };
 
     auto& ctxMenu = m_menu.GetMenu();
-
-    //
-    // Build the drawing tool menu
-    //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet, belowRootSheetCondition, 2 );
 
-    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
-
     return true;
-}
-
-
-void SCH_DRAWING_TOOLS::Reset( RESET_REASON aReason )
-{
-    // Init variables used by every drawing tool
-    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-    m_controls = getViewControls();
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
 }
 
 
@@ -246,8 +223,8 @@ int SCH_DRAWING_TOOLS::PlacePower( const TOOL_EVENT& aEvent )
 int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTER* aFilter,
                                          SCH_BASE_FRAME::HISTORY_LIST aHistoryList )
 {
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
-    m_controls->ShowCursor( true );
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
+    getViewControls()->ShowCursor( true );
 
     Activate();
 
@@ -266,7 +243,7 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -359,8 +336,8 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        m_controls->SetAutoPan( !!aComponent );
-        m_controls->CaptureCursor( !!aComponent );
+        getViewControls()->SetAutoPan( !!aComponent );
+        getViewControls()->CaptureCursor( !!aComponent );
     }
 
     m_frame->SetNoToolSelected();
@@ -375,10 +352,10 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
     m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
 
-    VECTOR2I cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     Activate();
 
@@ -393,7 +370,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -452,7 +429,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
                 m_selectionTool->AddItemToSel( image );
 
-                m_controls->SetCursorPosition( cursorPos, false );
+                getViewControls()->SetCursorPosition( cursorPos, false );
             }
             else
             {
@@ -480,8 +457,8 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        m_controls->SetAutoPan( !!image );
-        m_controls->CaptureCursor( !!image );
+        getViewControls()->SetAutoPan( !!image );
+        getViewControls()->CaptureCursor( !!image );
     }
 
     m_frame->SetNoToolSelected();
@@ -520,16 +497,18 @@ int SCH_DRAWING_TOOLS::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::doSingleClickPlace( KICAD_T aType )
 {
+    wxPoint cursorPos;
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
+    getViewControls()->ShowCursor( true );
+    getViewControls()->SetSnapping( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        wxPoint cursorPos = (wxPoint)m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = (wxPoint) getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -630,18 +609,18 @@ int SCH_DRAWING_TOOLS::PlaceSchematicText( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 {
-    VECTOR2I  cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I  cursorPos;
     EDA_ITEM* item = nullptr;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -708,7 +687,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     m_selectionTool->AddItemToSel( item );
                 }
 
-                m_controls->SetCursorPosition( cursorPos, false );
+                getViewControls()->SetCursorPosition( cursorPos, false );
             }
 
             // ... and second click places:
@@ -751,8 +730,8 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
         }
 
         // Enable autopanning and cursor capture only when there is a module to be placed
-        m_controls->SetAutoPan( !!item );
-        m_controls->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( !!item );
+        getViewControls()->CaptureCursor( !!item );
     }
 
     m_frame->SetNoToolSelected();
@@ -765,7 +744,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     SCH_SHEET* sheet = nullptr;
 
@@ -774,7 +753,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( auto evt = Wait() )
     {
-        VECTOR2I cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -840,8 +819,8 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed
-        m_controls->SetAutoPan( !!sheet );
-        m_controls->CaptureCursor( !!sheet );
+        getViewControls()->SetAutoPan( !!sheet );
+        getViewControls()->CaptureCursor( !!sheet );
     }
 
     m_frame->SetNoToolSelected();

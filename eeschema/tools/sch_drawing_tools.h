@@ -24,9 +24,7 @@
 #ifndef SCH_DRAWING_TOOLS_H
 #define SCH_DRAWING_TOOLS_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
-#include <core/optional.h>
+#include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
 
 
@@ -44,7 +42,7 @@ class EE_SELECTION_TOOL;
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_DRAWING_TOOLS : public TOOL_INTERACTIVE
+class SCH_DRAWING_TOOLS : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_DRAWING_TOOLS();
@@ -52,12 +50,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
@@ -90,14 +82,6 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
-
-private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::SCH_VIEW*      m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME*       m_frame;
-
-    TOOL_MENU             m_menu;
 };
 
 #endif /* SCH_DRAWING_TOOLS_H */

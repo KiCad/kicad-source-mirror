@@ -48,7 +48,7 @@
 #include <geometry/shape_arc.h>
 #include <geometry/convex_hull.h>
 
-#include "tools/pcb_tool.h"
+#include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
 
@@ -1260,7 +1260,7 @@ void PNS_KICAD_IFACE::SetRouter( PNS::ROUTER* aRouter )
 }
 
 
-void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL* aTool )
+void PNS_KICAD_IFACE::SetHostTool( PCB_TOOL_BASE* aTool )
 {
     m_tool = aTool;
     m_commit.reset( new BOARD_COMMIT( m_tool ) );

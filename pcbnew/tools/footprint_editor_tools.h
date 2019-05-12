@@ -25,7 +25,7 @@
 #ifndef MODULE_EDITOR_TOOLS_H
 #define MODULE_EDITOR_TOOLS_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 namespace KIGFX
 {
@@ -40,7 +40,7 @@ class PCB_EDIT_FRAME;
  *
  * Module editor specific tools.
  */
-class MODULE_EDITOR_TOOLS : public PCB_TOOL
+class MODULE_EDITOR_TOOLS : public PCB_TOOL_BASE
 {
 public:
     MODULE_EDITOR_TOOLS();

@@ -40,7 +40,7 @@ class SHAPE_POLY_SET;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class EE_POINT_EDITOR : public PCB_TOOL
+class EE_POINT_EDITOR : public PCB_TOOL_BASE
 {
 public:
     EE_POINT_EDITOR();

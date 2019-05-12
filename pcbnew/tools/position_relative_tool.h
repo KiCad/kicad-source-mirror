@@ -25,7 +25,7 @@
 #define __POSITION_RELATIVE_TOOL_H
 
 #include <math/vector2d.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include "selection_tool.h"
 #include "dialogs/dialog_position_relative.h"
 #include "dialogs/dialog_position_relative_base.h"
@@ -42,7 +42,7 @@ class DIALOG_POSITION_RELATIVE;
  * using the pcbnew.InteractiveSelection tool.
  */
 
-class POSITION_RELATIVE_TOOL : public PCB_TOOL
+class POSITION_RELATIVE_TOOL : public PCB_TOOL_BASE
 {
 public:
     POSITION_RELATIVE_TOOL();

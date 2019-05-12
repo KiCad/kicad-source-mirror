@@ -21,8 +21,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include "lib_drawing_tools.h"
-#include "lib_pin_tool.h"
 #include <ee_actions.h>
 #include <lib_edit_frame.h>
 #include <sch_view.h>
@@ -36,6 +34,8 @@
 #include <view/view.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_selection_tool.h>
+#include <tools/lib_drawing_tools.h>
+#include <tools/lib_pin_tool.h>
 #include <ee_hotkeys.h>
 #include <class_libentry.h>
 #include <bitmaps.h>
@@ -91,12 +91,7 @@ static void* g_lastPinWeakPtr;
 
 
 LIB_DRAWING_TOOLS::LIB_DRAWING_TOOLS() :
-    TOOL_INTERACTIVE( "libedit.InteractiveDrawing" ),
-    m_selectionTool( nullptr ),
-    m_view( nullptr ),
-    m_controls( nullptr ),
-    m_frame( nullptr ),
-    m_menu( *this )
+    EE_TOOL_BASE<LIB_EDIT_FRAME>( "libedit.InteractiveDrawing" )
 {
 }
 
@@ -108,35 +103,16 @@ LIB_DRAWING_TOOLS::~LIB_DRAWING_TOOLS()
 
 bool LIB_DRAWING_TOOLS::Init()
 {
-    m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
+    EE_TOOL_BASE::Init();
 
     auto isDrawingCondition = [] ( const SELECTION& aSel ) {
         LIB_ITEM* item = (LIB_ITEM*) aSel.Front();
         return item && item->IsNew();
     };
 
-    auto& ctxMenu = m_menu.GetMenu();
-
-    //
-    // Build the drawing tool menu
-    //
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, EE_CONDITIONS::ShowAlways, 1 );
-    ctxMenu.AddItem( EE_ACTIONS::finishDrawing, isDrawingCondition, 2 );
-
-    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
+    m_menu.GetMenu().AddItem( EE_ACTIONS::finishDrawing, isDrawingCondition, 2 );
 
     return true;
-}
-
-
-void LIB_DRAWING_TOOLS::Reset( RESET_REASON aReason )
-{
-    // Init variables used by every drawing tool
-    m_view = static_cast<KIGFX::SCH_VIEW*>( getView() );
-    m_controls = getViewControls();
-    m_frame = getEditFrame<LIB_EDIT_FRAME>();
 }
 
 
@@ -157,18 +133,18 @@ int LIB_DRAWING_TOOLS::PlaceText( const TOOL_EVENT& aEvent )
 int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 {
     LIB_PIN_TOOL* pinTool = aType == LIB_PIN_T ? m_toolMgr->GetTool<LIB_PIN_TOOL>() : nullptr;
-    VECTOR2I      cursorPos = m_controls->GetCursorPosition();
+    VECTOR2I      cursorPos;
     EDA_ITEM*     item = nullptr;
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     Activate();
 
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
-        cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -240,7 +216,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     m_selectionTool->AddItemToSel( item );
                 }
 
-                m_controls->SetCursorPosition( cursorPos, false );
+                getViewControls()->SetCursorPosition( cursorPos, false );
             }
 
             // ... and second click places:
@@ -285,8 +261,8 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
         }
 
         // Enable autopanning and cursor capture only when there is an item to be placed
-        m_controls->SetAutoPan( !!item );
-        m_controls->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( !!item );
+        getViewControls()->CaptureCursor( !!item );
     }
 
     m_frame->SetNoToolSelected();
@@ -311,7 +287,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         m_frame->SetToolID( ID_LIBEDIT_BODY_RECT_BUTT, wxCURSOR_PENCIL, _( "Draw Rectangle" ) );
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    m_controls->ShowCursor( true );
+    getViewControls()->ShowCursor( true );
 
     Activate();
 
@@ -321,7 +297,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
     // Main loop: keep receiving events
     while( auto evt = Wait() )
     {
-        VECTOR2I cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+        VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
 
         if( TOOL_EVT_UTILS::IsCancelInteractive( evt.get() ) )
         {
@@ -412,8 +388,8 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
         }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
-        m_controls->SetAutoPan( !!item );
-        m_controls->CaptureCursor( !!item );
+        getViewControls()->SetAutoPan( !!item );
+        getViewControls()->CaptureCursor( !!item );
     }
 
     m_frame->SetNoToolSelected();
@@ -426,8 +402,8 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
 {
     m_frame->SetToolID( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxCURSOR_PENCIL, _( "Move symbol anchor" ) );
 
-    m_controls->ShowCursor( true );
-    m_controls->SetSnapping( true );
+    getViewControls()->ShowCursor( true );
+    getViewControls()->SetSnapping( true );
 
     Activate();
 
@@ -445,7 +421,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
             if( !part )
                 continue;
 
-            VECTOR2I cursorPos = m_controls->GetCursorPosition( !evt->Modifier( MD_ALT ) );
+            VECTOR2I cursorPos = getViewControls()->GetCursorPosition( !evt->Modifier( MD_ALT ) );
             wxPoint  offset( -cursorPos.x, cursorPos.y );
 
             part->SetOffset( offset );

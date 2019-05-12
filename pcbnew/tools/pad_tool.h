@@ -25,7 +25,7 @@
 #define __PAD_TOOL_H
 
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 class CONTEXT_MENU;
 
@@ -34,7 +34,7 @@ class CONTEXT_MENU;
  *
  * Tools relating to pads and pad settings
  */
-class PAD_TOOL : public PCB_TOOL
+class PAD_TOOL : public PCB_TOOL_BASE
 {
 public:
     PAD_TOOL();

@@ -43,11 +43,9 @@
 #include <sch_legacy_plugin.h>
 #include "lib_edit_tool.h"
 
+
 LIB_EDIT_TOOL::LIB_EDIT_TOOL() :
-        TOOL_INTERACTIVE( "libedit.InteractiveEdit" ),
-        m_selectionTool( nullptr ),
-        m_frame( nullptr ),
-        m_menu( *this )
+        EE_TOOL_BASE( "libedit.InteractiveEdit" )
 {
 }
 
@@ -59,12 +57,11 @@ LIB_EDIT_TOOL::~LIB_EDIT_TOOL()
 
 bool LIB_EDIT_TOOL::Init()
 {
-    m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
-    LIB_MOVE_TOOL* moveTool = m_toolMgr->GetTool<LIB_MOVE_TOOL>();
+    EE_TOOL_BASE::Init();
 
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    LIB_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<LIB_DRAWING_TOOLS>();
+    LIB_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<LIB_MOVE_TOOL>();
+
     wxASSERT_MSG( drawingTools, "libedit.InteractiveDrawing tool is not available" );
 
     //
@@ -75,18 +72,18 @@ bool LIB_EDIT_TOOL::Init()
         CONDITIONAL_MENU& moveMenu = moveTool->GetToolMenu().GetMenu();
 
         moveMenu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::duplicate,       EE_CONDITIONS::NotEmpty );
-        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::rotateCCW,       EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::rotateCW,        EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::mirrorX,         EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::mirrorY,         EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::duplicate,       EE_CONDITIONS::NotEmpty, 200 );
+        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty, 200 );
 
-        moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ) );
+        moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
 
-        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( EE_ACTIONS::cut,             EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( EE_ACTIONS::copy,            EE_CONDITIONS::IdleSelection );
+        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( EE_ACTIONS::cut,             EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( EE_ACTIONS::copy,            EE_CONDITIONS::IdleSelection, 300 );
     }
 
     //
@@ -116,22 +113,12 @@ bool LIB_EDIT_TOOL::Init()
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
 
-    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 300 );
 
     return true;
-}
-
-
-void LIB_EDIT_TOOL::Reset( RESET_REASON aReason )
-{
-    if( aReason == MODEL_RELOAD )
-    {
-        // Init variables used by every drawing tool
-        m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    }
 }
 
 
@@ -147,7 +134,7 @@ int LIB_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        m_frame->SaveCopyInUndoList( m_frame->GetCurPart() );
+        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
     if( selection.GetSize() == 1 )
         rotPoint = item->GetPosition();
@@ -187,7 +174,7 @@ int LIB_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     LIB_ITEM* item = static_cast<LIB_ITEM*>( selection.Front() );
 
     if( !item->IsMoving() )
-        m_frame->SaveCopyInUndoList( m_frame->GetCurPart() );
+        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
     if( selection.GetSize() == 1 )
         mirrorPoint = item->GetPosition();
@@ -249,7 +236,7 @@ int LIB_EDIT_TOOL::Duplicate( const TOOL_EVENT& aEvent )
         return 0;
 
     if( !selection.Front()->IsMoving() )
-        m_frame->SaveCopyInUndoList( m_frame->GetCurPart() );
+        saveCopyInUndoList( m_frame->GetCurPart(), UR_LIBEDIT );
 
     EDA_ITEMS newItems;
 
@@ -283,7 +270,7 @@ int LIB_EDIT_TOOL::DoDelete( const TOOL_EVENT& aEvent )
     // Don't leave a freed pointer in the selection
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->SaveCopyInUndoList( part );
+    saveCopyInUndoList( part, UR_LIBEDIT );
 
     for( EDA_ITEM* item : items )
     {
@@ -375,7 +362,7 @@ int LIB_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
         // Save copy for undo if not in edit (edit command already handle the save copy)
         if( !item->InEditMode() )
-            m_frame->SaveCopyInUndoList( item->GetParent() );
+            saveCopyInUndoList( item->GetParent(), UR_LIBEDIT );
 
         switch( item->Type() )
         {
@@ -430,7 +417,7 @@ void LIB_EDIT_TOOL::editGraphicProperties( LIB_ITEM* aItem )
 
     aItem->SetWidth( dialog.GetWidth() );
 
-    m_frame->GetCanvas()->GetView()->Update( aItem );
+    updateView( aItem );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 
@@ -454,7 +441,7 @@ void LIB_EDIT_TOOL::editTextProperties( LIB_ITEM* aItem )
     if( dlg.ShowModal() != wxID_OK )
         return;
 
-    m_frame->GetCanvas()->GetView()->Update( aItem );
+    updateView( aItem );
     m_frame->GetCanvas()->Refresh();
     m_frame->OnModify( );
 }
@@ -488,9 +475,9 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     bool     renamed = aField->GetId() == VALUE && newFieldValue != oldFieldValue;
 
     if( renamed )
-        m_frame->SaveCopyInUndoList( parent, UR_LIB_RENAME );
+        saveCopyInUndoList( parent, UR_LIB_RENAME );
     else
-        m_frame->SaveCopyInUndoList( parent );
+        saveCopyInUndoList( parent, UR_LIBEDIT );
 
     dlg.UpdateField( aField );
 
@@ -501,7 +488,7 @@ void LIB_EDIT_TOOL::editFieldProperties( LIB_FIELD* aField )
     }
     else
     {
-        m_frame->GetCanvas()->GetView()->Update( aField );
+        updateView( aField );
         m_frame->GetCanvas()->Refresh();
         m_frame->OnModify( );
     }
@@ -549,7 +536,7 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
-    m_frame->SaveCopyInUndoList( part );
+    saveCopyInUndoList( part, UR_LIBEDIT );
 
     DIALOG_LIB_EDIT_PIN_TABLE dlg( m_frame, part );
 

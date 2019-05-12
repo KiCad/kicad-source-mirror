@@ -63,7 +63,7 @@ namespace PNS {
 
 
 TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
-    PCB_TOOL( aToolName )
+    PCB_TOOL_BASE( aToolName )
 {
     m_gridHelper = nullptr;
     m_iface = nullptr;

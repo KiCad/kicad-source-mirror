@@ -224,20 +224,20 @@ set( EESCHEMA_SRCS
     netlist_exporters/netlist_exporter_orcadpcb2.cpp
     netlist_exporters/netlist_exporter_pspice.cpp
 
+    tools/ee_actions.cpp
+    tools/ee_inspection_tool.cpp
+    tools/ee_picker_tool.cpp
+    tools/ee_point_editor.cpp
+    tools/ee_selection_tool.cpp
     tools/lib_drawing_tools.cpp
     tools/lib_edit_tool.cpp
     tools/lib_move_tool.cpp
     tools/lib_pin_tool.cpp
-    tools/ee_point_editor.cpp
-    tools/ee_actions.cpp
     tools/sch_drawing_tools.cpp
     tools/sch_edit_tool.cpp
     tools/sch_editor_control.cpp
-    tools/ee_inspection_tool.cpp
     tools/sch_wire_bus_tool.cpp
     tools/sch_move_tool.cpp
-    tools/ee_picker_tool.cpp
-    tools/ee_selection_tool.cpp
     tools/selection.cpp
     )
 

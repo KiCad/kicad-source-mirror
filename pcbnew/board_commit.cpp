@@ -29,7 +29,7 @@
 #include <tools/selection_tool.h>
 #include <view/view.h>
 #include <board_commit.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <tools/pcb_actions.h>
 #include <connectivity/connectivity_data.h>
 
@@ -38,7 +38,7 @@ using namespace std::placeholders;
 
 #include "pcb_draw_panel_gal.h"
 
-BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL* aTool )
+BOARD_COMMIT::BOARD_COMMIT( PCB_TOOL_BASE* aTool )
 {
     m_toolMgr = aTool->GetManager();
     m_editModules = aTool->EditingModules();

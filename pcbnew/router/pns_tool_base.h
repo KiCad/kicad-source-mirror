@@ -27,7 +27,7 @@
 #include <import_export.h>
 
 #include <math/vector2d.h>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <board_commit.h>
 
 #include <msgpanel.h>
@@ -41,7 +41,7 @@ class PNS_TUNE_STATUS_POPUP;
 
 namespace PNS {
 
-class APIEXPORT TOOL_BASE : public PCB_TOOL
+class APIEXPORT TOOL_BASE : public PCB_TOOL_BASE
 {
 public:
     TOOL_BASE( const std::string& aToolName );

@@ -87,9 +87,7 @@ extern void IncrementLabelMember( wxString& name, int aIncrement );
 
 
 LIB_PIN_TOOL::LIB_PIN_TOOL() :
-        TOOL_INTERACTIVE( "eeschema.PinEditing" ),
-        m_selectionTool( nullptr ),
-        m_frame( nullptr )
+        EE_TOOL_BASE<LIB_EDIT_FRAME>( "eeschema.PinEditing" )
 {
 }
 
@@ -101,10 +99,7 @@ LIB_PIN_TOOL::~LIB_PIN_TOOL()
 
 bool LIB_PIN_TOOL::Init()
 {
-    m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    EE_TOOL_BASE::Init();
 
     auto singlePinCondition = EE_CONDITIONS::Count( 1 ) && EE_CONDITIONS::OnlyType( LIB_PIN_T );
 
@@ -116,16 +111,6 @@ bool LIB_PIN_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::pushPinNumSize,   singlePinCondition, 400 );
 
     return true;
-}
-
-
-void LIB_PIN_TOOL::Reset( RESET_REASON aReason )
-{
-    if( aReason == MODEL_RELOAD )
-    {
-        // Init variables used by every drawing tool
-        m_frame = getEditFrame<LIB_EDIT_FRAME>();
-    }
 }
 
 
@@ -320,7 +305,7 @@ int LIB_PIN_TOOL::PushPinProperties( const TOOL_EVENT& aEvent )
     if( !sourcePin )
         return 0;
 
-    m_frame->SaveCopyInUndoList( part );
+    saveCopyInUndoList( part, UR_LIBEDIT );
 
     for( LIB_PIN* pin = part->GetNextPin();  pin;  pin = part->GetNextPin( pin ) )
     {

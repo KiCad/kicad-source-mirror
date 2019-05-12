@@ -24,8 +24,7 @@
 #ifndef SCH_LINE_DRAWING_TOOL_H
 #define SCH_LINE_DRAWING_TOOL_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
+#include <tools/ee_tool_base.h>
 #include <core/optional.h>
 #include <sch_base_frame.h>
 
@@ -57,7 +56,7 @@ struct BUS_UNFOLDING_T
  * Tool responsible for drawing/placing items (symbols, wires, busses, labels, etc.)
  */
 
-class SCH_WIRE_BUS_TOOL : public TOOL_INTERACTIVE
+class SCH_WIRE_BUS_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_WIRE_BUS_TOOL();
@@ -65,12 +64,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    ///> Get the SCH_LINE_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     /*
      * These are the immediate actions.  They start drawing at the mouse location.  They
@@ -97,7 +90,6 @@ public:
     static bool IsDrawingLineWireOrBus( const SELECTION& aSelection );
 
 private:
-
     int doDrawSegments( int aType, SCH_LINE* aSegment );
     SCH_LINE* startSegments( int aType, const wxPoint& aPos );
     SCH_LINE* doUnfoldBus( const wxString& aNet );
@@ -107,15 +99,8 @@ private:
     void setTransitions() override;
 
 private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::SCH_VIEW*      m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME*       m_frame;
-
     /// Data related to bus unfolding tool.
     BUS_UNFOLDING_T       m_busUnfold;
-
-    TOOL_MENU             m_menu;
 };
 
 #endif /* SCH_LINE_DRAWING_TOOL_H */

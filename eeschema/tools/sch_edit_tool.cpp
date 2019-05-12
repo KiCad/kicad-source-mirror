@@ -235,10 +235,7 @@ private:
 
 
 SCH_EDIT_TOOL::SCH_EDIT_TOOL() :
-        TOOL_INTERACTIVE( "eeschema.InteractiveEdit" ),
-        m_selectionTool( nullptr ),
-        m_frame( nullptr ),
-        m_menu( *this )
+        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveEdit" )
 {
 }
 
@@ -250,12 +247,11 @@ SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
 
 bool SCH_EDIT_TOOL::Init()
 {
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    m_selectionTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
-    SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
-    SCH_MOVE_TOOL* moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
+    EE_TOOL_BASE::Init();
 
-    wxASSERT_MSG( m_selectionTool, "eeshema.InteractiveSelection tool is not available" );
+    SCH_DRAWING_TOOLS* drawingTools = m_toolMgr->GetTool<SCH_DRAWING_TOOLS>();
+    SCH_MOVE_TOOL*     moveTool = m_toolMgr->GetTool<SCH_MOVE_TOOL>();
+
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
@@ -461,16 +457,6 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 200 );
 
     return true;
-}
-
-
-void SCH_EDIT_TOOL::Reset( RESET_REASON aReason )
-{
-    if( aReason == MODEL_RELOAD )
-    {
-        // Init variables used by every drawing tool
-        m_frame = getEditFrame<SCH_EDIT_FRAME>();
-    }
 }
 
 
@@ -1297,28 +1283,6 @@ int SCH_EDIT_TOOL::CleanupSheetPins( const TOOL_EVENT& aEvent )
     m_frame->OnModify();
 
     return 0;
-}
-
-
-void SCH_EDIT_TOOL::updateView( EDA_ITEM* aItem )
-{
-    KICAD_T itemType = aItem->Type();
-
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        getView()->Update( aItem->GetParent() );
-
-    getView()->Update( aItem );
-}
-
-
-void SCH_EDIT_TOOL::saveCopyInUndoList( EDA_ITEM* aItem, UNDO_REDO_T aType, bool aAppend )
-{
-    KICAD_T itemType = aItem->Type();
-
-    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aItem->GetParent(), UR_CHANGED, aAppend );
-    else
-        m_frame->SaveCopyInUndoList( (SCH_ITEM*) aItem, aType, aAppend );
 }
 
 

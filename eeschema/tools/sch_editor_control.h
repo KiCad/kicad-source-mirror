@@ -26,9 +26,7 @@
 #define SCH_EDITOR_CONTROL_H
 
 #include <sch_base_frame.h>
-#include <tool/tool_interactive.h>
-#include <tool/tool_event.h>
-#include <tool/tool_menu.h>
+#include <tools/ee_tool_base.h>
 
 class SCH_EDIT_FRAME;
 
@@ -37,17 +35,11 @@ class SCH_EDIT_FRAME;
  *
  * Handles actions specific to the schematic editor in eeschema.
  */
-class SCH_EDITOR_CONTROL : public wxEvtHandler, public TOOL_INTERACTIVE
+class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_EDITOR_CONTROL();
     ~SCH_EDITOR_CONTROL();
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    /// @copydoc TOOL_INTERACTIVE::Init()
-    bool Init() override;
 
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
     int LockSelected( const TOOL_EVENT& aEvent );
@@ -96,12 +88,8 @@ private:
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
-    SCH_EDIT_FRAME* m_frame;    ///> Pointer to the currently used edit frame
-
+private:
     bool m_probingSchToPcb;     ///> Recursion guard when cross-probing to PCBNew
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU m_menu;
 };
 
 

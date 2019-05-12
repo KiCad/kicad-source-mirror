@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __PCB_TOOL_H
-#define __PCB_TOOL_H
+#ifndef PCB_TOOL_BASE_H
+#define PCB_TOOL_BASE_H
 
 #include <string>
 
@@ -39,12 +39,12 @@
 #include <tool/tool_menu.h>
 
 /**
- * Class PCB_TOOL
+ * Class PCB_TOOL_BASE
  *
  * A tool operating on a BOARD object
 **/
 
-class PCB_TOOL;
+class PCB_TOOL_BASE;
 class PCB_EDIT_FRAME;
 class PCB_DISPLAY_OPTIONS;
 class SELECTION;
@@ -61,14 +61,14 @@ struct INTERACTIVE_PLACER_BASE
 };
 
 
-class PCB_TOOL : public TOOL_INTERACTIVE
+class PCB_TOOL_BASE : public TOOL_INTERACTIVE
 {
 public:
     /**
      * Constructor
      *
      * Creates a tool with given id & name. The name must be unique. */
-    PCB_TOOL( TOOL_ID aId, const std::string& aName ) :
+    PCB_TOOL_BASE( TOOL_ID aId, const std::string& aName ) :
         TOOL_INTERACTIVE ( aId, aName ),
         m_menu( *this ),
         m_editModules( false ) {};
@@ -77,12 +77,12 @@ public:
      * Constructor
      *
      * Creates a tool with given name. The name must be unique. */
-    PCB_TOOL( const std::string& aName ) :
+    PCB_TOOL_BASE( const std::string& aName ) :
         TOOL_INTERACTIVE ( aName ),
         m_menu( *this ),
         m_editModules( false ) {};
 
-    virtual ~PCB_TOOL() {};
+    virtual ~PCB_TOOL_BASE() {};
 
     virtual bool Init() override;
     virtual void Reset( RESET_REASON aReason ) override;

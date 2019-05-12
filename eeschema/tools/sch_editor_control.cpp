@@ -108,41 +108,13 @@ TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCros
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
-        TOOL_INTERACTIVE( "eeschema.EditorControl" ),
-        m_frame( nullptr ),
-        m_menu( *this )
+        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" )
 {
 }
 
 
 SCH_EDITOR_CONTROL::~SCH_EDITOR_CONTROL()
 {
-}
-
-
-void SCH_EDITOR_CONTROL::Reset( RESET_REASON aReason )
-{
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-}
-
-
-bool SCH_EDITOR_CONTROL::Init()
-{
-    m_frame = getEditFrame<SCH_EDIT_FRAME>();
-
-    auto activeToolCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
-
-    auto& ctxMenu = m_menu.GetMenu();
-
-    // "Cancel" goes at the top of the context menu when a tool is active
-    ctxMenu.AddItem( ACTIONS::cancelInteractive, activeToolCondition, 1 );
-
-    ctxMenu.AddSeparator( activeToolCondition, 1000 );
-    m_menu.AddStandardSubMenus( m_frame );
-
-    return true;
 }
 
 

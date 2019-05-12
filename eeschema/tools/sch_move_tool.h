@@ -24,8 +24,7 @@
 #ifndef KICAD_SCH_MOVE_TOOL_H
 #define KICAD_SCH_MOVE_TOOL_H
 
-#include <tool/tool_interactive.h>
-#include <tool/tool_menu.h>
+#include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
 
 
@@ -33,7 +32,7 @@ class SCH_EDIT_FRAME;
 class EE_SELECTION_TOOL;
 
 
-class SCH_MOVE_TOOL : public TOOL_INTERACTIVE
+class SCH_MOVE_TOOL : public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
     SCH_MOVE_TOOL();
@@ -41,12 +40,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    /// @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
-
-    ///> Get the SCH_DRAWING_TOOL top-level context menu
-    inline TOOL_MENU& GetToolMenu() { return m_menu; }
 
     /**
      * Function Main()
@@ -71,24 +64,10 @@ private:
     ///> selected items.
     bool updateModificationPoint( SELECTION& aSelection );
 
-    ///> Similar to getView()->Update(), but handles items that are redrawn by their parents.
-    void updateView( EDA_ITEM* );
-
-    ///> Similar to m_frame->SaveCopyInUndoList(), but handles items that are owned by their
-    ///> parents.
-    void saveCopyInUndoList( SCH_ITEM*, UNDO_REDO_T aType, bool aAppend = false );
-
     ///> Sets up handlers for various events.
     void setTransitions() override;
 
 private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_EDIT_FRAME*       m_frame;
-
-    /// Menu model displayed by the tool.
-    TOOL_MENU             m_menu;
-
     ///> Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
 

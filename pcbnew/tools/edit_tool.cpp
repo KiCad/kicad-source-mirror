@@ -208,8 +208,10 @@ void EditToolSelectionFilter( GENERAL_COLLECTOR& aCollector, int aFlags )
 
 
 EDIT_TOOL::EDIT_TOOL() :
-    PCB_TOOL( "pcbnew.InteractiveEdit" ), m_selectionTool( NULL ),
-    m_dragging( false ), m_lockedSelected( false )
+    PCB_TOOL_BASE( "pcbnew.InteractiveEdit" ),
+    m_selectionTool( NULL ),
+    m_dragging( false ),
+    m_lockedSelected( false )
 {
 }
 
@@ -1462,7 +1464,7 @@ int EDIT_TOOL::editFootprintInFpEditor( const TOOL_EVENT& aEvent )
 bool EDIT_TOOL::pickCopyReferencePoint( VECTOR2I& aP )
 {
     STATUS_TEXT_POPUP statusPopup( frame() );
-    EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
+    PICKER_TOOL* picker = m_toolMgr->GetTool<PICKER_TOOL>();
     bool picking = true;
     bool retVal = true;
 

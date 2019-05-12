@@ -25,7 +25,7 @@
 #ifndef ZONE_FILLER_TOOL_H
 #define ZONE_FILLER_TOOL_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 
 class PCB_EDIT_FRAME;
@@ -35,7 +35,7 @@ class PCB_EDIT_FRAME;
  *
  * Handles actions specific to filling copper zones.
  */
-class ZONE_FILLER_TOOL : public PCB_TOOL
+class ZONE_FILLER_TOOL : public PCB_TOOL_BASE
 {
 public:
     ZONE_FILLER_TOOL();

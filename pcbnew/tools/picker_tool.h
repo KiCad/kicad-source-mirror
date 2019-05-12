@@ -26,16 +26,16 @@
 #define PICKER_TOOL_H
 
 #include <boost/optional/optional.hpp>
+#include <tools/pcb_tool_base.h>
 
-#include "pcb_tool.h"
 /**
  * @brief Generic tool for picking a point.
  */
-class EE_PICKER_TOOL : public PCB_TOOL
+class PICKER_TOOL : public PCB_TOOL_BASE
 {
 public:
-    EE_PICKER_TOOL();
-    ~EE_PICKER_TOOL() {}
+    PICKER_TOOL();
+    ~PICKER_TOOL() {}
 
     ///> Event handler types.
     typedef std::function<bool(const VECTOR2D&)> CLICK_HANDLER;

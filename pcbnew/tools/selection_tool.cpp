@@ -193,7 +193,7 @@ public:
 
 
 SELECTION_TOOL::SELECTION_TOOL() :
-        PCB_TOOL( "pcbnew.InteractiveSelection" ),
+        PCB_TOOL_BASE( "pcbnew.InteractiveSelection" ),
         m_frame( NULL ),
         m_additive( false ),
         m_subtractive( false ),

@@ -148,7 +148,7 @@ static TOOL_ACTION closeZoneOutline( "pcbnew.InteractiveDrawing.closeZoneOutline
 
 
 DRAWING_TOOL::DRAWING_TOOL() :
-    PCB_TOOL( "pcbnew.InteractiveDrawing" ),
+    PCB_TOOL_BASE( "pcbnew.InteractiveDrawing" ),
     m_view( nullptr ), m_controls( nullptr ),
     m_board( nullptr ), m_frame( nullptr ), m_mode( MODE::NONE ),
     m_lineWidth( 1 )

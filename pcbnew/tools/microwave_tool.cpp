@@ -91,7 +91,7 @@ TOOL_ACTION PCB_ACTIONS::microwaveCreateLine(
 
 
 MICROWAVE_TOOL::MICROWAVE_TOOL() :
-        PCB_TOOL( "pcbnew.MicrowaveTool" )
+        PCB_TOOL_BASE( "pcbnew.MicrowaveTool" )
 {
 }
 

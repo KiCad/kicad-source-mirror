@@ -27,7 +27,7 @@
 
 #include <io_mgr.h>
 #include <memory>
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 namespace KIGFX {
     class ORIGIN_VIEWITEM;
@@ -41,7 +41,7 @@ class BOARD_ITEM;
  * Handles actions that are shared between different frames in pcbnew.
  */
 
-class PCBNEW_CONTROL : public PCB_TOOL
+class PCBNEW_CONTROL : public PCB_TOOL_BASE
 {
 public:
     PCBNEW_CONTROL();

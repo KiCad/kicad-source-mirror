@@ -239,7 +239,7 @@ private:
 
 
 EE_POINT_EDITOR::EE_POINT_EDITOR() :
-    PCB_TOOL( "pcbnew.PointEditor" ),
+    PCB_TOOL_BASE( "pcbnew.PointEditor" ),
     m_selectionTool( NULL ),
     m_editedPoint( NULL ),
     m_original( VECTOR2I( 0, 0 ) ),

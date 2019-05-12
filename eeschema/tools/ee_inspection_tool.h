@@ -21,19 +21,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_INSPECTION_TOOL_H
-#define SCH_INSPECTION_TOOL_H
+#ifndef EE_INSPECTION_TOOL_H
+#define EE_INSPECTION_TOOL_H
 
 #include <boost/optional/optional.hpp>
-#include <tool/tool_interactive.h>
+#include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
 
 
 class EE_SELECTION_TOOL;
-class SCH_EDIT_FRAME;
+class SCH_BASE_FRAME;
 
 
-class EE_INSPECTION_TOOL : public TOOL_INTERACTIVE
+class EE_INSPECTION_TOOL : public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     EE_INSPECTION_TOOL();
@@ -41,9 +41,6 @@ public:
 
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
-
-    ///> @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override;
 
     int ShowDatasheet( const TOOL_EVENT& aEvent );
     int ShowMarkerInfo( const TOOL_EVENT& aEvent );
@@ -53,12 +50,6 @@ public:
 private:
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
-
-private:
-    EE_SELECTION_TOOL*    m_selectionTool;
-    KIGFX::SCH_VIEW*      m_view;
-    KIGFX::VIEW_CONTROLS* m_controls;
-    SCH_BASE_FRAME*       m_frame;
 };
 
-#endif /* SCH_INSPECTION_TOOL_H */
+#endif /* EE_INSPECTION_TOOL_H */

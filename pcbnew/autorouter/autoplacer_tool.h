@@ -24,7 +24,7 @@
 #ifndef TOOLS_AUTOPLACE_TOOL_H
 #define TOOLS_AUTOPLACE_TOOL_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 
 
 /**
@@ -32,7 +32,7 @@
  *
  * Tool responsible for automagic placement of components.
  */
-class AUTOPLACE_TOOL : public PCB_TOOL
+class AUTOPLACE_TOOL : public PCB_TOOL_BASE
 {
 public:
     AUTOPLACE_TOOL();

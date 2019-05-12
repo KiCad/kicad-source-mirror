@@ -59,7 +59,7 @@ TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         _( "Unfill All" ), _( "Unfill all zones" ) );
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
-    PCB_TOOL( "pcbnew.ZoneFiller" )
+    PCB_TOOL_BASE( "pcbnew.ZoneFiller" )
 {
 }
 

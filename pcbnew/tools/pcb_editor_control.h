@@ -25,7 +25,7 @@
 #ifndef PCB_EDITOR_CONTROL_H
 #define PCB_EDITOR_CONTROL_H
 
-#include <tools/pcb_tool.h>
+#include <tools/pcb_tool_base.h>
 #include <tool/tool_menu.h>
 
 namespace KIGFX {
@@ -39,7 +39,7 @@ class PCB_EDIT_FRAME;
  *
  * Handles actions specific to the board editor in pcbnew.
  */
-class PCB_EDITOR_CONTROL : public wxEvtHandler, public PCB_TOOL
+class PCB_EDITOR_CONTROL : public wxEvtHandler, public PCB_TOOL_BASE
 {
 public:
     PCB_EDITOR_CONTROL();

@@ -21,15 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef SCH_PICKER_TOOL_H
-#define SCH_PICKER_TOOL_H
+#ifndef EE_PICKER_TOOL_H
+#define EE_PICKER_TOOL_H
 
 #include <boost/optional/optional.hpp>
+#include <tools/ee_tool_base.h>
 
-#include <tool/tool_interactive.h>
+
+class SCH_BASE_FRAME;
 
 
-class EE_PICKER_TOOL : public TOOL_INTERACTIVE
+class EE_PICKER_TOOL : public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     EE_PICKER_TOOL();
@@ -48,9 +50,6 @@ public:
         EVT_CANCEL,
         EXCEPTION_CANCEL
     };
-
-    ///> @copydoc TOOL_INTERACTIVE::Reset()
-    void Reset( RESET_REASON aReason ) override {}
 
     ///> Main event loop.
     int Main( const TOOL_EVENT& aEvent );
@@ -98,6 +97,13 @@ public:
         m_finalizeHandler = aHandler;
     }
 
+private:
+    ///> Reinitializes tool to its initial state.
+    void resetPicker();
+
+    ///> Applies the requested VIEW_CONTROLS settings.
+    void setControls();
+
     ///> @copydoc TOOL_INTERACTIVE::setTransitions();
     void setTransitions() override;
 
@@ -110,12 +116,6 @@ private:
     OPT<FINALIZE_HANDLER> m_finalizeHandler;
 
     OPT<VECTOR2D> m_picked;
-
-    ///> Reinitializes tool to its initial state.
-    void reset();
-
-    ///> Applies the requested VIEW_CONTROLS settings.
-    void setControls();
 };
 
-#endif /* SCH_PICKER_TOOL_H */
+#endif /* EE_PICKER_TOOL_H */

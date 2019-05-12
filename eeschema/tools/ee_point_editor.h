@@ -24,7 +24,7 @@
 #ifndef SCH_POINT_EDITOR_H
 #define SCH_POINT_EDITOR_H
 
-#include <tool/tool_interactive.h>
+#include <tools/ee_tool_base.h>
 #include <tool/edit_points.h>
 #include <tool/selection.h>
 
@@ -36,7 +36,7 @@ class SCH_BASE_FRAME;
  *
  * Tool that displays edit points allowing to modify items by dragging the points.
  */
-class EE_POINT_EDITOR : public TOOL_INTERACTIVE
+class EE_POINT_EDITOR : public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
     EE_POINT_EDITOR();
@@ -94,10 +94,6 @@ private:
     void rollbackFromUndo();
 
 private:
-    SCH_BASE_FRAME*    m_frame;
-    EE_SELECTION_TOOL* m_selectionTool;
-    bool               m_isLibEdit;
-
     ///> Currently edited point, NULL if there is none.
     EDIT_POINT* m_editedPoint;
 
