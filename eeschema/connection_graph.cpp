@@ -1176,6 +1176,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         if( driver == candidate->m_driver )
                             continue;
 
+                        // Sheet pins are not candidates for merging
+                        if( driver->Type() == SCH_SHEET_PIN_T )
+                            continue;
+
                         if( driver->Type() == SCH_PIN_T )
                         {
                             if( static_cast<SCH_PIN*>( driver )->GetName() == test_name )
@@ -1188,8 +1192,7 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         {
                             wxASSERT( driver->Type() == SCH_LABEL_T ||
                                       driver->Type() == SCH_GLOBAL_LABEL_T ||
-                                      driver->Type() == SCH_HIER_LABEL_T ||
-                                      driver->Type() == SCH_SHEET_PIN_T );
+                                      driver->Type() == SCH_HIER_LABEL_T );
 
                             auto text = static_cast<SCH_TEXT*>( driver );
 
