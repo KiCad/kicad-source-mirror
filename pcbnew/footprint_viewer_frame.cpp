@@ -96,6 +96,7 @@ BEGIN_EVENT_TABLE( FOOTPRINT_VIEWER_FRAME, EDA_DRAW_FRAME )
 
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, FOOTPRINT_VIEWER_FRAME::OnUpdateSelectZoom )
+    EVT_UPDATE_UI( ID_ADD_FOOTPRINT_TO_BOARD, FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton )
 
     // listbox events
     EVT_LISTBOX( ID_MODVIEW_LIB_LIST, FOOTPRINT_VIEWER_FRAME::ClickOnLibList )
@@ -479,7 +480,7 @@ void FOOTPRINT_VIEWER_FRAME::AddFootprintToPCB( wxCommandEvent& event )
 
         Close( true );
     }
-    else
+    else if( GetBoard()->m_Modules )
     {
         PCB_EDIT_FRAME* pcbframe = (PCB_EDIT_FRAME*) Kiway().Player( FRAME_PCB, false );
 
@@ -605,6 +606,12 @@ void FOOTPRINT_VIEWER_FRAME::OnActivate( wxActivateEvent& event )
     // If we are here, the library list has changed, rebuild it
     ReCreateLibraryList();
     UpdateTitle();
+}
+
+
+void FOOTPRINT_VIEWER_FRAME::OnUpdateFootprintButton( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( GetBoard()->m_Modules != nullptr );
 }
 
 

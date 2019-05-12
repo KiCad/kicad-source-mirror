@@ -76,6 +76,11 @@ public:
     void ReCreateLibraryList();
 
     /**
+     * Update the ID_ADD_FOOTPRINT_TO_BOARD tool state in main toolbar
+     */
+    void OnUpdateFootprintButton(  wxUpdateUIEvent& aEvent );
+
+    /**
      * Function ShowModal
      *
      * Runs the Footprint Viewer as a modal dialog.
