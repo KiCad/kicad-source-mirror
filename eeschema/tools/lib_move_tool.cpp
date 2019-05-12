@@ -49,6 +49,8 @@ LIB_MOVE_TOOL::~LIB_MOVE_TOOL()
 
 bool LIB_MOVE_TOOL::Init()
 {
+    EE_TOOL_BASE::Init();
+    
     //
     // Add move actions to the selection tool menu
     //
