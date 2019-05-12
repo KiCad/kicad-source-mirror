@@ -1270,7 +1270,7 @@ void SCH_EDIT_FRAME::AddItemToScreenAndUndoList( SCH_ITEM* aItem, bool aUndoAppe
                 TrimWire( *i, *j );
 
             if( screen->IsJunctionNeeded( *i, true ) )
-                AddJunction( *i, true );
+                AddJunction( *i, true, false );
         }
 
         TestDanglingEnds();

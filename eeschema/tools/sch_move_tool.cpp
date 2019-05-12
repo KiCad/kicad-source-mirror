@@ -566,7 +566,7 @@ void SCH_MOVE_TOOL::addJunctionsIfNeeded( SELECTION& aSelection )
     for( auto point : pts )
     {
         if( m_frame->GetScreen()->IsJunctionNeeded( point, true ) )
-            m_frame->AddJunction( point, true );
+            m_frame->AddJunction( point, true, false );
     }
 }
 

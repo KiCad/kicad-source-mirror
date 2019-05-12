@@ -177,7 +177,7 @@ public:
     // Net highlighting
     static TOOL_ACTION highlightNet;
     static TOOL_ACTION clearHighlight;
-    static TOOL_ACTION highlightNetSelection;
+    static TOOL_ACTION updateNetHighlighting;
     static TOOL_ACTION highlightNetCursor;
 
     ///> @copydoc COMMON_ACTIONS::TranslateLegacyId()

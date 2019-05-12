@@ -82,7 +82,7 @@ void SCH_EDIT_FRAME::ExecuteRemoteCommand( const char* cmdline )
 
             SetStatusText( _( "Selected net: " ) + UnescapeString( m_SelectedNetName ) );
 
-            GetToolManager()->RunAction( EE_ACTIONS::highlightNetSelection, true );
+            GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
         }
 
         return;

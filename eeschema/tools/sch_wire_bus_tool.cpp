@@ -202,10 +202,6 @@ bool SCH_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
 
-    auto activeTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() != ID_NO_TOOL_SELECTED );
-    };
-
     auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
         return ( m_frame->GetToolId() == ID_WIRE_BUTT || m_frame->GetToolId() == ID_BUS_BUTT );
     };
@@ -977,6 +973,7 @@ void SCH_WIRE_BUS_TOOL::finishSegments()
         m_busUnfold = {};
 
     m_frame->TestDanglingEnds();
+    m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
     m_frame->OnModify();
 }

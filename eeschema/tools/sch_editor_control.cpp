@@ -67,7 +67,7 @@ TOOL_ACTION EE_ACTIONS::highlightNet( "eeschema.EditorControl.highlightNet",
 TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
         AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION EE_ACTIONS::highlightNetSelection( "eeschema.EditorControl.highlightNetSelection",
+TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
         AS_GLOBAL, 0, "", "" );
 
 TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
@@ -334,7 +334,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 
     editFrame->SetSelectedNetName( netName );
     TOOL_EVENT dummy;
-    editorControl->HighlightNetSelection( dummy );
+    editorControl->UpdateNetHighlighting( dummy );
 
     return retVal;
 }
@@ -359,7 +359,7 @@ int SCH_EDITOR_CONTROL::ClearHighlight( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::HighlightNetSelection( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::UpdateNetHighlighting( const TOOL_EVENT& aEvent )
 {
     SCH_SCREEN*            screen = g_CurrentSheet->LastScreen();
     std::vector<EDA_ITEM*> itemsToRedraw;
@@ -710,7 +710,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::HighlightNet,          EE_ACTIONS::highlightNet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ClearHighlight,        EE_ACTIONS::clearHighlight.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::HighlightNetCursor,    EE_ACTIONS::highlightNetCursor.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::HighlightNetSelection, EE_ACTIONS::highlightNetSelection.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EVENTS::SelectedItemsModified );
+    Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EE_ACTIONS::updateNetHighlighting.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::Cut,                   EE_ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  EE_ACTIONS::copy.MakeEvent() );

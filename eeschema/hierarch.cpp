@@ -286,6 +286,6 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     UpdateTitle();
 
-    GetToolManager()->RunAction( EE_ACTIONS::highlightNetSelection, true );
+    GetToolManager()->RunAction( EE_ACTIONS::updateNetHighlighting, true );
     HardRedraw();   // Ensure any item has its view updated, especially the worksheet items
 }

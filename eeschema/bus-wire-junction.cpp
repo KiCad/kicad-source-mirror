@@ -434,6 +434,8 @@ SCH_JUNCTION* SCH_EDIT_FRAME::AddJunction( const wxPoint& aPos, bool aUndoAppend
 
     if( aFinal )
     {
+        m_toolManager->PostEvent( EVENTS::SelectedItemsModified );
+
         TestDanglingEnds();
         OnModify();
 

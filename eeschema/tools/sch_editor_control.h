@@ -63,8 +63,8 @@ public:
     ///> Removes any net highlighting
     int ClearHighlight( const TOOL_EVENT& aEvent );
 
-    ///> Highlights frame's SelectedNetName.
-    int HighlightNetSelection( const TOOL_EVENT& aEvent );
+    ///> Updates net highlighting after an edit
+    int UpdateNetHighlighting( const TOOL_EVENT& aEvent );
 
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
