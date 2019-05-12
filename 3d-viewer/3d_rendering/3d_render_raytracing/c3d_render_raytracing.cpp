@@ -166,7 +166,7 @@ bool C3D_RENDER_RAYTRACING::Redraw( bool aIsMoving, REPORTER *aStatusTextReporte
         initialize_block_positions();
     }
 
-    wxBusyCursor dummy;
+    std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
 
     // Reload board if it was requested
     // /////////////////////////////////////////////////////////////////////////

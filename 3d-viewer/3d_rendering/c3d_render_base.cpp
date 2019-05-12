@@ -54,3 +54,19 @@ C3D_RENDER_BASE::~C3D_RENDER_BASE()
 {
 }
 
+
+void C3D_RENDER_BASE::SetBusyIndicatorFactory( BUSY_INDICATOR::FACTORY aNewFactory )
+{
+    m_busyIndicatorFactory = aNewFactory;
+}
+
+
+std::unique_ptr<BUSY_INDICATOR> C3D_RENDER_BASE::CreateBusyIndicator() const
+{
+    std::unique_ptr<BUSY_INDICATOR> busy;
+
+    if( m_busyIndicatorFactory )
+        busy = m_busyIndicatorFactory();
+
+    return busy;
+}

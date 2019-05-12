@@ -232,6 +232,7 @@ set( COMMON_WIDGET_SRCS
     widgets/unit_binder.cpp
     widgets/widget_save_restore.cpp
     widgets/widget_hotkey_list.cpp
+    widgets/wx_busy_indicator.cpp
     widgets/wx_grid.cpp
     )
 

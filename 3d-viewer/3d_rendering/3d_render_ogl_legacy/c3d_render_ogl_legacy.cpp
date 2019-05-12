@@ -472,7 +472,7 @@ bool C3D_RENDER_OGL_LEGACY::Redraw( bool aIsMoving,
 
     if( m_reloadRequested )
     {
-        wxBusyCursor dummy;
+        std::unique_ptr<BUSY_INDICATOR> busy = CreateBusyIndicator();
 
         if( aStatusTextReporter )
             aStatusTextReporter->Report( _( "Loading..." ) );

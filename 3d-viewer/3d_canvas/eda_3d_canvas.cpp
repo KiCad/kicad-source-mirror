@@ -45,6 +45,8 @@
 #include <hotkeys_basic.h>
 #include <menus_helpers.h>
 
+#include <widgets/wx_busy_indicator.h>
+
 
 /**
  * Flag to enable 3D canvas debug tracing.
@@ -140,6 +142,11 @@ EDA_3D_CANVAS::EDA_3D_CANVAS( wxWindow *aParent,
 
     wxASSERT( m_3d_render_raytracing != NULL );
     wxASSERT( m_3d_render_ogl_legacy != NULL );
+
+    auto busy_indicator_factory = []() { return std::make_unique<WX_BUSY_INDICATOR>(); };
+
+    m_3d_render_raytracing->SetBusyIndicatorFactory( busy_indicator_factory );
+    m_3d_render_ogl_legacy->SetBusyIndicatorFactory( busy_indicator_factory );
 
     RenderEngineChanged();
 
