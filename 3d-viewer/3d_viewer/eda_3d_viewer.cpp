@@ -35,7 +35,6 @@
 #include <bitmaps.h>
 #include <dpi_scaling.h>
 #include <gestfich.h>
-#include <lru_cache.h>
 #include <pgm_base.h>
 #include <project.h>
 #include <wildcards_and_files_ext.h>
