@@ -2,8 +2,8 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
+ * Copyright (C) 2013-2019 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Last changes: 2018
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -470,7 +470,7 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
         aEvent.Skip();
 #endif
 
-    updateUI( aEvent );
+    m_toolMgr->UpdateUI();
 }
 
 
@@ -483,19 +483,7 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
     else
         aEvent.Skip();
 
-    updateUI( aEvent );
+    m_toolMgr->UpdateUI();
 }
 
 
-void TOOL_DISPATCHER::updateUI( wxEvent& aEvent )
-{
-    // TODO I don't feel it is the right place for updating UI,
-    // but at the moment I cannot think of a better one..
-
-    auto frame = dynamic_cast<EDA_DRAW_FRAME*>( m_toolMgr->GetEditFrame() );
-    if( frame )
-    {
-        frame->UpdateStatusBar();
-        frame->SyncMenusAndToolbars( aEvent );
-    }
-}

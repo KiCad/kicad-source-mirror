@@ -58,77 +58,66 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
     case ID_ZOOM_SELECTION:
         return ACTIONS::zoomTool.MakeEvent();
 
+    case ID_HIERARCHY:
+        return EE_ACTIONS::navigateHierarchy.MakeEvent();
+
+    case ID_TO_LIBVIEW:
+        return EE_ACTIONS::showLibraryBrowser.MakeEvent();
+
     case ID_HIGHLIGHT_BUTT:
         return EE_ACTIONS::highlightNetCursor.MakeEvent();
 
     case ID_HIGHLIGHT_NET:
         return EE_ACTIONS::highlightNet.MakeEvent();
 
-    case ID_MENU_PLACE_COMPONENT:
     case ID_SCH_PLACE_COMPONENT:
         return EE_ACTIONS::placeSymbol.MakeEvent();
 
-    case ID_MENU_PLACE_POWER_BUTT:
     case ID_PLACE_POWER_BUTT:
         return EE_ACTIONS::placePower.MakeEvent();
 
-    case ID_MENU_WIRE_BUTT:
     case ID_WIRE_BUTT:
         return EE_ACTIONS::drawWire.MakeEvent();
 
-    case ID_MENU_BUS_BUTT:
     case ID_BUS_BUTT:
         return EE_ACTIONS::drawBus.MakeEvent();
 
-    case ID_MENU_NOCONN_BUTT:
     case ID_NOCONN_BUTT:
         return EE_ACTIONS::placeNoConnect.MakeEvent();
 
-    case ID_MENU_JUNCTION_BUTT:
     case ID_JUNCTION_BUTT:
         return EE_ACTIONS::placeJunction.MakeEvent();
 
-    case ID_MENU_WIRETOBUS_ENTRY_BUTT:
     case ID_WIRETOBUS_ENTRY_BUTT:
         return EE_ACTIONS::placeBusWireEntry.MakeEvent();
 
-    case ID_MENU_BUSTOBUS_ENTRY_BUTT:
     case ID_BUSTOBUS_ENTRY_BUTT:
         return EE_ACTIONS::placeBusBusEntry.MakeEvent();
 
-    case ID_MENU_LABEL_BUTT:
     case ID_LABEL_BUTT:
         return EE_ACTIONS::placeLabel.MakeEvent();
 
-    case ID_MENU_GLABEL_BUTT:
     case ID_GLOBALLABEL_BUTT:
         return EE_ACTIONS::placeGlobalLabel.MakeEvent();
 
-    case ID_MENU_HIERLABEL_BUTT:
     case ID_HIERLABEL_BUTT:
         return EE_ACTIONS::placeHierarchicalLabel.MakeEvent();
 
-    case ID_MENU_SHEET_PIN_BUTT:
     case ID_SHEET_PIN_BUTT:
         return EE_ACTIONS::placeSheetPin.MakeEvent();
 
-    case ID_MENU_IMPORT_HLABEL_BUTT:
     case ID_IMPORT_HLABEL_BUTT:
         return EE_ACTIONS::importSheetPin.MakeEvent();
 
-    case ID_MENU_SHEET_SYMBOL_BUTT:
     case ID_SHEET_SYMBOL_BUTT:
         return EE_ACTIONS::drawSheet.MakeEvent();
 
-    case ID_MENU_TEXT_COMMENT_BUTT:
     case ID_TEXT_COMMENT_BUTT:
         return EE_ACTIONS::placeSchematicText.MakeEvent();
 
-    case ID_MENU_LINE_COMMENT_BUTT:
     case ID_LINE_COMMENT_BUTT:
         return EE_ACTIONS::drawLines.MakeEvent();
 
-    case ID_MENU_ADD_IMAGE_BUTT:
     case ID_ADD_IMAGE_BUTT:
         return EE_ACTIONS::placeImage.MakeEvent();
 

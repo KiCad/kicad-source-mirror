@@ -303,6 +303,7 @@ void TOOL_MANAGER::RunAction( const TOOL_ACTION& aAction, bool aNow, void* aPara
         TOOL_STATE* current = m_activeState;
         processEvent( event );
         setActiveState( current );
+        UpdateUI();
     }
     else
     {
@@ -696,8 +697,6 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         // Display a copy of menu
         std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
 
-        // Run update handlers on the created copy
-        menu->UpdateAll();
         m_menuOwner = toolId;
         m_menuActive = true;
 
@@ -860,7 +859,7 @@ TOOL_ID TOOL_MANAGER::MakeToolId( const std::string& aToolName )
 
 
 void TOOL_MANAGER::SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-                                   KIGFX::VIEW_CONTROLS* aViewControls, wxWindow* aFrame )
+                                   KIGFX::VIEW_CONTROLS* aViewControls, EDA_DRAW_FRAME* aFrame )
 {
     m_model = aModel;
     m_view = aView;
@@ -964,4 +963,16 @@ bool TOOL_MANAGER::IsToolActive( TOOL_ID aId ) const
 {
     auto it = m_toolIdIndex.find( aId );
     return !it->second->idle;
+}
+
+
+void TOOL_MANAGER::UpdateUI()
+{
+    EDA_DRAW_FRAME* frame = GetEditFrame();
+
+    if( frame )
+    {
+        frame->UpdateStatusBar();
+        frame->SyncMenusAndToolbars();
+    }
 }

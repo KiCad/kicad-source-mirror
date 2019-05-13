@@ -46,6 +46,7 @@ public:
 
     // Generic actions
     static TOOL_ACTION cancelInteractive;
+    static TOOL_ACTION updateMenu;
 
     // View controls
     static TOOL_ACTION zoomRedraw;
@@ -58,6 +59,8 @@ public:
     static TOOL_ACTION zoomPreset;
     static TOOL_ACTION zoomTool;
     static TOOL_ACTION centerContents;
+    static TOOL_ACTION toggleCursor;
+    static TOOL_ACTION toggleCursorStyle;
 
     /// Cursor control with keyboard
     static TOOL_ACTION cursorUp;
@@ -87,6 +90,13 @@ public:
     static TOOL_ACTION gridSetOrigin;
     static TOOL_ACTION gridResetOrigin;
     static TOOL_ACTION gridPreset;
+    static TOOL_ACTION toggleGrid;
+    static TOOL_ACTION gridProperties;
+
+    // Units
+    static TOOL_ACTION imperialUnits;
+    static TOOL_ACTION metricUnits;
+    static TOOL_ACTION toggleUnits;
 
     /**
      * Function TranslateLegacyId()

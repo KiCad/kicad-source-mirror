@@ -110,10 +110,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
 
     EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnUpdateGrid )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnUpdateCrossHairStyle )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                         EDA_DRAW_FRAME::OnUpdateUnits )
 END_EVENT_TABLE()
 
 
@@ -323,6 +319,7 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
+    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
     SetGridVisibility( !IsGridVisible() );
 
     if( IsGalCanvasActive() )
@@ -363,6 +360,7 @@ void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
+    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
 
@@ -387,29 +385,10 @@ void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
 }
 
 
-void EDA_DRAW_FRAME::OnUpdateUnits( wxUpdateUIEvent& aEvent )
-{
-    bool enable;
-
-    enable = ( ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM) && (m_UserUnits == MILLIMETRES))
-            || ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH) && (m_UserUnits == INCHES)) );
-
-    aEvent.Check( enable );
-    DisplayUnitsMsg();
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
-{
-    wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
-
-    aEvent.Check( IsGridVisible() );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
-}
-
-
 void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
+    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
+
     // No need to update the grid select box if it doesn't exist or the grid setting change
     // was made using the select box.
     if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
@@ -428,12 +407,6 @@ void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 
     if( select != m_gridSelectBox->GetSelection() )
         m_gridSelectBox->SetSelection( select );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetGalDisplayOptions().m_fullscreenCursor );
 }
 
 

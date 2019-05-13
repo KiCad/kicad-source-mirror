@@ -235,3 +235,14 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->Realize();
 }
+
+
+void LIB_EDIT_FRAME::SyncMenusAndToolbars()
+{
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, GetUserUnits() != INCHES );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, GetUserUnits() == INCHES );
+
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, galOpts.m_fullscreenCursor );
+}

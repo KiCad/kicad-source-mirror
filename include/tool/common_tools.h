@@ -59,11 +59,18 @@ public:
     // Cursor control
     int CursorControl( const TOOL_EVENT& aEvent );
     int ToggleCursor( const TOOL_EVENT& aEvent );
+    int ToggleCursorStyle( const TOOL_EVENT& aEvent );
+
+    // Units control
+    int ImperialUnits( const TOOL_EVENT& aEvent );
+    int MetricUnits( const TOOL_EVENT& aEvent );
+    int ToggleUnits( const TOOL_EVENT& aEvent );
 
     // Grid control
     int GridNext( const TOOL_EVENT& aEvent );
     int GridPrev( const TOOL_EVENT& aEvent );
     int GridPreset( const TOOL_EVENT& aEvent );
+    int ToggleGrid( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

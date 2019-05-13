@@ -88,18 +88,9 @@ public:
     }
 
     /**
-     * Function HasHotKey()
-     * Checks if the action has a hot key assigned.
-     *
-     * @return True if there is a hot key assigned, false otherwise.
-     */
-
-    /**
      * Function MakeEvent()
      * Returns the event associated with the action (i.e. the event that will be sent after
      * activating the action).
-     *
-     * @return The event associated with the action.
      */
     TOOL_EVENT MakeEvent() const
     {

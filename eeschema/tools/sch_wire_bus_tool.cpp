@@ -235,7 +235,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     busUnfoldMenu->SetTool( this );
     m_menu.AddSubMenu( busUnfoldMenu );
-    ctxMenu.AddMenu( busUnfoldMenu.get(), false, EE_CONDITIONS::Idle, 10 );
+    ctxMenu.AddMenu( busUnfoldMenu.get(), EE_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 100 );
     ctxMenu.AddItem( EE_ACTIONS::addJunction,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
@@ -257,7 +257,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     selBusUnfoldMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( selBusUnfoldMenu );
-    selToolMenu.AddMenu( selBusUnfoldMenu.get(), false, busSelection && EE_CONDITIONS::Idle, 100 );
+    selToolMenu.AddMenu( selBusUnfoldMenu.get(), busSelection && EE_CONDITIONS::Idle, 100 );
 
     return true;
 }
@@ -764,7 +764,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             if( !aSegment )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
+            m_menu.ShowContextMenu();
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {

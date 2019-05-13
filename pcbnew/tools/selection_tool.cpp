@@ -229,7 +229,7 @@ bool SELECTION_TOOL::Init()
 
     auto& menu = m_menu.GetMenu();
 
-    menu.AddMenu( selectMenu.get(), false, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddMenu( selectMenu.get(), SELECTION_CONDITIONS::NotEmpty );
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty, 1000 );
 
     if( frame )
@@ -310,7 +310,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             if( !selectionCancelled )
-                m_menu.ShowContextMenu( m_selection );
+                m_menu.ShowContextMenu();
         }
 
         // double click? Display the properties window

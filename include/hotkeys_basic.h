@@ -277,6 +277,7 @@ enum common_hotkey_id_command {
     HK_SWITCH_GRID_TO_FASTGRID2,
     HK_SWITCH_GRID_TO_NEXT,
     HK_SWITCH_GRID_TO_PREVIOUS,
+    HK_SWITCH_UNITS,
     HK_HELP,
     HK_ZOOM_IN,
     HK_ZOOM_OUT,

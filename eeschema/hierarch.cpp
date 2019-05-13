@@ -29,17 +29,16 @@
 #include <id.h>
 #include <bitmaps.h>
 #include <dialog_shim.h>
-
 #include <sch_edit_frame.h>
 #include <general.h>
 #include <sch_sheet.h>
 #include <sch_sheet_path.h>
-
 #include <wx/imaglist.h>
 #include <wx/treectrl.h>
 #include <tool/tool_manager.h>
 #include <tools/ee_actions.h>
-#include <netlist_object.h>
+#include <tools/sch_editor_control.h>
+//#include <netlist_object.h>
 #include <sch_sheet_path.h>
 
 #include <view/view.h>
@@ -130,12 +129,14 @@ private:
 };
 
 
-void SCH_EDIT_FRAME::InstallHierarchyFrame( wxCommandEvent& event )
+int SCH_EDITOR_CONTROL::NavigateHierarchy( const TOOL_EVENT& aEvent )
 {
-    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( this );
+    HIERARCHY_NAVIG_DLG* treeframe = new HIERARCHY_NAVIG_DLG( m_frame );
 
     treeframe->ShowQuasiModal();
     treeframe->Destroy();
+
+    return 0;
 }
 
 

@@ -204,8 +204,8 @@ bool EE_SELECTION_TOOL::Init()
         return m_isLibEdit;
     };
 
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
+    auto belowRootSheetCondition = [this] ( const SELECTION& aSel ) {
+        return !m_isLibEdit && g_CurrentSheet->Last() != g_RootSheet;
     };
 
     auto& menu = m_menu.GetMenu();
@@ -275,6 +275,21 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
 }
 
 
+int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
+{
+    CONTEXT_MENU* actionMenu = aEvent.Parameter<CONTEXT_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
+
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( m_selection );
+
+    if( actionMenu )
+        actionMenu->UpdateAll();
+
+    return 0;
+}
+
+
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     // Main loop: keep receiving events
@@ -326,7 +341,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             if( !selectionCancelled )
-                m_menu.ShowContextMenu( m_selection );
+                m_menu.ShowContextMenu();
         }
 
         // double click? Display the properties window
@@ -1140,6 +1155,8 @@ bool EE_SELECTION_TOOL::selectionContains( const VECTOR2I& aPoint ) const
 
 void EE_SELECTION_TOOL::setTransitions()
 {
+    Go( &EE_SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
+
     Go( &EE_SELECTION_TOOL::Main,                EE_ACTIONS::selectionActivate.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectNode,          EE_ACTIONS::selectNode.MakeEvent() );
     Go( &EE_SELECTION_TOOL::SelectConnection,    EE_ACTIONS::selectConnection.MakeEvent() );

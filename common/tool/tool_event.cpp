@@ -164,15 +164,13 @@ const std::string TOOL_EVENT_LIST::Format() const
 
 bool TOOL_EVENT::IsClick( int aButtonMask ) const
 {
-    return IsAction( &ACTIONS::cursorClick )
-           || ( m_actions == TA_MOUSE_CLICK && ( m_mouseButtons & aButtonMask ) == aButtonMask );
+    return m_actions == TA_MOUSE_CLICK && ( m_mouseButtons & aButtonMask ) == aButtonMask;
 }
 
 
 bool TOOL_EVENT::IsDblClick( int aButtonMask ) const
 {
-    return IsAction( &ACTIONS::cursorDblClick )
-           || ( m_actions == TA_MOUSE_DBLCLICK && ( m_mouseButtons & aButtonMask ) == aButtonMask );
+    return m_actions == TA_MOUSE_DBLCLICK && ( m_mouseButtons & aButtonMask ) == aButtonMask;
 }
 
 

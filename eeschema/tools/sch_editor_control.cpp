@@ -48,6 +48,7 @@
 #include <class_library.h>
 #include <confirm.h>
 #include <lib_edit_frame.h>
+#include <sch_painter.h>
 #include "sch_wire_bus_tool.h"
 
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
@@ -91,6 +92,11 @@ TOOL_ACTION EE_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSy
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
 
+TOOL_ACTION EE_ACTIONS::showLibraryBrowser( "eeschema.EditorControl.showLibraryBrowser",
+        AS_GLOBAL, 0,
+        _( "Symbol Library Browser" ), "",
+        library_browse_xpm );
+
 TOOL_ACTION EE_ACTIONS::enterSheet( "eeschema.EditorControl.enterSheet",
         AS_GLOBAL, 0,
         _( "Enter Sheet" ), _( "Display the selected sheet's contents in the Eeschema window" ),
@@ -101,10 +107,20 @@ TOOL_ACTION EE_ACTIONS::leaveSheet( "eeschema.EditorControl.leaveSheet",
         _( "Leave Sheet" ), _( "Display the parent sheet in the Eeschema window" ),
         leave_sheet_xpm );
 
+TOOL_ACTION EE_ACTIONS::navigateHierarchy( "eeschema.EditorControl.navigateHierarchy",
+        AS_GLOBAL, 0,
+        _( "Show Hierarchy Navigator" ), "",
+        hierarchy_nav_xpm );
+
 TOOL_ACTION EE_ACTIONS::explicitCrossProbe( "eeschema.EditorControl.explicitCrossProbe",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SELECT_ITEMS_ON_PCB ),
         _( "Highlight on PCB" ), _( "Highlight corresponding items in PCBNew" ),
         select_same_sheet_xpm );
+
+TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins",
+        AS_GLOBAL, 0,
+        _( "Show Hidden Pins" ), "",
+        hidden_pin_xpm );
 
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
@@ -662,6 +678,15 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnOpenLibraryViewer( dummy );
+
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::EnterSheet( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -684,6 +709,20 @@ int SCH_EDITOR_CONTROL::LeaveSheet( const TOOL_EVENT& aEvent )
         g_CurrentSheet->pop_back();
         m_frame->DisplayCurrentSheet();
     }
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetShowAllPins( !m_frame->GetShowAllPins() );
+
+    auto painter = static_cast<KIGFX::SCH_PAINTER*>( getView()->GetPainter() );
+    painter->GetSettings()->m_ShowHiddenPins = m_frame->GetShowAllPins();
+
+    getView()->UpdateAllItems( KIGFX::REPAINT );
+    m_frame->GetCanvas()->Refresh();
 
     return 0;
 }
@@ -718,7 +757,11 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Paste,                 EE_ACTIONS::paste.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithSymbolEditor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::LeaveSheet,            EE_ACTIONS::leaveSheet.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::NavigateHierarchy,     EE_ACTIONS::navigateHierarchy.MakeEvent() );
+
+    Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
 }

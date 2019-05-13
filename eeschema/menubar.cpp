@@ -23,15 +23,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/menubar.cpp
- * @brief (Re)Create the main menubar for the schematic frame
- */
-
 
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_selection_tool.h>
+#include <tools/ee_actions.h>
 
 #include "eeschema_id.h"
 #include "general.h"
@@ -39,10 +38,12 @@
 #include "ee_hotkeys.h"
 #include "sch_edit_frame.h"
 
+class CONDITIONAL_MENU;
+
 // helper functions that build specific submenus:
 
 // Build the place submenu
-static void preparePlaceMenu( wxMenu* aParentMenu );
+static void preparePlaceMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool );
 
 // Build the files menu. Because some commands are available only if
 // Eeschemat is run outside a project (run alone), aIsOutsideProject is false
@@ -62,7 +63,7 @@ static void prepareHelpMenu( wxMenu* aParentMenu );
 static void prepareEditMenu( wxMenu* aParentMenu );
 
 // Build the view menu
-static void prepareViewMenu( wxMenu* aParentMenu );
+static void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool );
 
 // Build the preferences menu
 static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
@@ -70,6 +71,7 @@ static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
 void SCH_EDIT_FRAME::ReCreateMenuBar()
 {
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -87,12 +89,12 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     prepareEditMenu( editMenu );
 
     // Menu View:
-    wxMenu* viewMenu = new wxMenu;
-    prepareViewMenu( viewMenu );
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+    prepareViewMenu( viewMenu, selTool );
 
     // Menu place:
-    wxMenu* placeMenu = new wxMenu;
-    preparePlaceMenu( placeMenu );
+    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+    preparePlaceMenu( placeMenu, selTool );
 
     // Menu Inspect:
     wxMenu* inspectMenu = new wxMenu;
@@ -125,102 +127,60 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 }
 
 
-void prepareViewMenu( wxMenu* aParentMenu )
+void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool )
 {
-    wxString text;
+    SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( selTool->GetManager()->GetEditFrame() );
 
-    AddMenuItem( aParentMenu,
-                 ID_TO_LIBVIEW,
-                 _( "Symbol Library &Browser" ),  HELP_RUN_LIB_VIEWER,
-                 KiBitmap( library_browse_xpm ) );
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
+    };
 
-    AddMenuItem( aParentMenu,
-                 ID_HIERARCHY,
-                 _( "Show &Hierarchical Navigator" ),
-                 _( "Navigate schematic hierarchy" ),
-                 KiBitmap( hierarchy_nav_xpm ) );
+    auto gridShownCondition = [ frame ] ( const SELECTION& aSel ) {
+        return frame->IsGridVisible();
+    };
 
-    text = AddHotkeyName( _( "&Leave Sheet" ), g_Schematic_Hotkeys_Descr, HK_LEAVE_SHEET );
-    AddMenuItem( aParentMenu,
-                 ID_SCH_LEAVE_SHEET, text,
-                 _( "Return to parent schematic sheet" ),
-                 KiBitmap( leave_sheet_xpm ) );
+    auto imperialUnitsCondition = [ frame ] ( const SELECTION& aSel ) {
+        return frame->GetUserUnits() == INCHES;
+    };
 
-    aParentMenu->AppendSeparator();
+    auto metricUnitsCondition = [ frame ] ( const SELECTION& aSel ) {
+        return frame->GetUserUnits() == MILLIMETRES;
+    };
 
-    /**
-     * Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey shortcut here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
-     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
-     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zooming is made around the screen center
-     * From hotkeys, zooming is made around the mouse cursor position
-     * (obviously not possible from the toolbar or menubar command)
-     *
-     * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
-     * for Zoom in and Zoom out sub menus
-     * SO WE ADD THE NAME OF THE CORRESPONDING HOTKEY AS A COMMENT, NOT AS A SHORTCUT
-     * using in AddHotkeyName call the option "false" (not a shortcut)
-     */
+    auto fullCrosshairCondition = [ frame ] ( const SELECTION& aSel ) {
+        return frame->GetGalDisplayOptions().m_fullscreenCursor;
+    };
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Schematic_Hotkeys_Descr,
-                          HK_ZOOM_IN, IS_ACCELERATOR );  // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
+    auto hiddenPinsCondition = [ frame ] ( const SELECTION& aSel ) {
+        return frame->GetShowAllPins();
+    };
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Schematic_Hotkeys_Descr,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );  // add accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
+    aParentMenu->AddItem( EE_ACTIONS::showLibraryBrowser, EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::navigateHierarchy,  EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition );
 
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Schematic_Hotkeys_Descr, HK_ZOOM_AUTO );
+    aParentMenu->AddSeparator();
+    aParentMenu->AddItem( ACTIONS::zoomInCenter,    EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( ACTIONS::zoomOutCenter,   EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( ACTIONS::zoomFitScreen,   EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( ACTIONS::zoomTool,        EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( ACTIONS::zoomRedraw,      EE_CONDITIONS::ShowAlways );
 
-    AddMenuItem( aParentMenu, ID_ZOOM_PAGE, text,
-                 HELP_ZOOM_FIT, KiBitmap( zoom_fit_in_page_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to Selection" ), g_Eeschema_Hotkeys_Descr, HK_ZOOM_SELECTION );
-
-    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
-
-    text = AddHotkeyName( _( "&Redraw" ), g_Schematic_Hotkeys_Descr, HK_ZOOM_REDRAW );
-
-    AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,
-                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_GRID,
-                 _( "Show &Grid" ), wxEmptyString,
-                 KiBitmap( grid_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( aParentMenu, ID_GRID_SETTINGS,
-                 _( "Grid Settings..." ), wxEmptyString,
-                 KiBitmap( grid_xpm ) );
+    aParentMenu->AddSeparator();
+    aParentMenu->AddCheckItem( ACTIONS::toggleGrid, gridShownCondition );
+    aParentMenu->AddItem( ACTIONS::gridProperties,  EE_CONDITIONS::ShowAlways );
 
     // Units submenu
-    wxMenu* unitsSubMenu = new wxMenu;
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                 _( "&Imperial" ), _( "Use imperial units" ),
-                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,      imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,        metricUnitsCondition );
+    aParentMenu->AddMenu( unitsSubMenu );
 
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-                 _( "&Metric" ), _( "Use metric units" ),
-                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
+    aParentMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
 
-    AddMenuItem( aParentMenu, unitsSubMenu,
-                 -1, _( "&Units" ),
-                 _( "Select which units are displayed" ),
-                 KiBitmap( unit_mm_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full &Window Crosshair" ),
-                 _( "Change cursor shape" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_HIDDEN_PINS,
-                 _( "Show Hidden &Pins" ),
-                 wxEmptyString,
-                 KiBitmap( hidden_pin_xpm ), wxITEM_CHECK );
+    aParentMenu->AddSeparator();
+    aParentMenu->AddCheckItem( EE_ACTIONS::toggleHiddenPins, hiddenPinsCondition );
 
 #ifdef __APPLE__
     aParentMenu->AppendSeparator();
@@ -228,113 +188,29 @@ void prepareViewMenu( wxMenu* aParentMenu )
 }
 
 
-void preparePlaceMenu( wxMenu* aParentMenu )
+void preparePlaceMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool )
 {
-    wxString text;
+    aParentMenu->AddItem( EE_ACTIONS::placeSymbol,            EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placePower,             EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::drawWire,               EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::drawBus,                EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeBusWireEntry,      EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeBusBusEntry,       EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeNoConnect,         EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeJunction,          EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeLabel,             EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeGlobalLabel,       EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&Symbol" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_NEW_COMPONENT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_PLACE_COMPONENT, text,
-                 HELP_PLACE_COMPONENTS,
-                 KiBitmap( add_component_xpm ) );
+    aParentMenu->AddSeparator();
+    aParentMenu->AddItem( EE_ACTIONS::placeHierarchicalLabel, EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeSheetPin,          EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&Power Port" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_NEW_POWER, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_PLACE_POWER_BUTT, text,
-                 HELP_PLACE_POWERPORT,
-                 KiBitmap( add_power_xpm ) );
-
-    text = AddHotkeyName( _( "&Wire" ), g_Schematic_Hotkeys_Descr,
-                          HK_BEGIN_WIRE, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_WIRE_BUTT, text,
-                 HELP_PLACE_WIRE,
-                 KiBitmap( add_line_xpm ) );
-
-    text = AddHotkeyName( _( "&Bus" ), g_Schematic_Hotkeys_Descr,
-                          HK_BEGIN_BUS, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_BUS_BUTT, text,
-                 HELP_PLACE_BUS,
-                 KiBitmap( add_bus_xpm ) );
-
-    text = AddHotkeyName( _( "Wire to Bus &Entry" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_WIRE_ENTRY, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_WIRETOBUS_ENTRY_BUTT, text,
-                 HELP_PLACE_WIRE2BUS_ENTRY,
-                 KiBitmap( add_line2bus_xpm ) );
-
-    text = AddHotkeyName( _( "Bus &to Bus Entry" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_BUS_ENTRY, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_BUSTOBUS_ENTRY_BUTT, text,
-                 HELP_PLACE_BUS2BUS_ENTRY,
-                 KiBitmap( add_bus2bus_xpm ) );
-
-    text = AddHotkeyName( _( "&No Connect Flag" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_NOCONN_FLAG, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_NOCONN_BUTT, text, HELP_PLACE_NC_FLAG, KiBitmap( noconn_xpm ) );
-
-    text = AddHotkeyName( _( "&Junction" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_JUNCTION, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_JUNCTION_BUTT, text,
-                 HELP_PLACE_JUNCTION,
-                 KiBitmap( add_junction_xpm ) );
-
-    text = AddHotkeyName( _( "&Label" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_LABEL, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_LABEL_BUTT, text,
-                 HELP_PLACE_NETLABEL,
-                 KiBitmap( add_line_label_xpm ) );
-
-    text = AddHotkeyName( _( "Gl&obal Label" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_GLABEL, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_GLABEL_BUTT, text,
-                 HELP_PLACE_GLOBALLABEL,
-                 KiBitmap( add_glabel_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Hierarchical Label" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_HLABEL, IS_ACCELERATOR );          // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_HIERLABEL_BUTT,
-                 text, HELP_PLACE_HIER_LABEL,
-                 KiBitmap( add_hierarchical_label_xpm ) );
-
-
-    text = AddHotkeyName( _( "Hierar&chical Sheet" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_HIER_SHEET, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_SHEET_SYMBOL_BUTT, text,
-                 HELP_PLACE_SHEET,
-                 KiBitmap( add_hierarchical_subsheet_xpm ) );
-
-    AddMenuItem( aParentMenu,
-                 ID_MENU_IMPORT_HLABEL_BUTT,
-                 _( "I&mport Hierarchical Label" ),
-                 HELP_IMPORT_SHEETPIN,
-                 KiBitmap( import_hierarchical_label_xpm ) );
-
-    AddMenuItem( aParentMenu,
-                 ID_MENU_SHEET_PIN_BUTT,
-                 _( "Hierarchical Pi&n to Sheet" ),
-                 HELP_PLACE_SHEETPIN,
-                 KiBitmap( add_hierar_pin_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Graphic Pol&yline" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_GRAPHIC_POLYLINE, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_LINE_COMMENT_BUTT, text,
-                 HELP_PLACE_GRAPHICLINES,
-                 KiBitmap( add_dashed_line_xpm ) );
-
-    text = AddHotkeyName( _( "&Graphic Text" ), g_Schematic_Hotkeys_Descr,
-                          HK_ADD_GRAPHIC_TEXT, IS_ACCELERATOR );    // add an accelerator, not a shortcut
-    AddMenuItem( aParentMenu, ID_MENU_TEXT_COMMENT_BUTT, text,
-                 HELP_PLACE_GRAPHICTEXTS,
-                 KiBitmap( text_xpm ) );
-
-    // Add graphic image
-    AddMenuItem( aParentMenu, ID_MENU_ADD_IMAGE_BUTT, _( "&Image" ),
-                 HELP_PLACE_GRAPHICIMAGES,
-                 KiBitmap( image_xpm ) );
+    aParentMenu->AddSeparator();
+    aParentMenu->AddItem( EE_ACTIONS::drawLines,              EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
+    aParentMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
 }
 
 

@@ -947,7 +947,7 @@ public:
      * Update the toolbars and menus (mostly settings/check buttons/checkboxes)
      * with the current controller state
      */
-    virtual void SyncMenusAndToolbars( wxEvent& aEvent ) {};
+    virtual void SyncMenusAndToolbars() {};
 
     bool GetShowAxis() const { return m_showAxis; }
     bool GetShowGridAxis() const { return m_showGridAxis; }

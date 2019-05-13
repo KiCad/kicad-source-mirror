@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015 CERN
+ * Copyright (C) 2015-2019 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -25,18 +26,35 @@
 #include <tool/conditional_menu.h>
 #include <tool/context_menu.h>
 
+
+CONTEXT_MENU* CONDITIONAL_MENU::create() const
+{
+    CONDITIONAL_MENU* clone = new CONDITIONAL_MENU( m_isContextMenu, m_tool );
+    clone->m_entries = m_entries;
+    return clone;
+}
+
+
 void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
     assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
-    addEntry( ENTRY( &aAction, aCondition, aOrder ) );
+    addEntry( ENTRY( &aAction, aCondition, aOrder, false ) );
 }
 
 
-void CONDITIONAL_MENU::AddMenu( CONTEXT_MENU* aMenu, bool aExpand,
-                                const SELECTION_CONDITION& aCondition, int aOrder )
+void CONDITIONAL_MENU::AddCheckItem( const TOOL_ACTION& aAction,
+                                     const SELECTION_CONDITION& aCondition, int aOrder )
 {
-    addEntry( ENTRY( aMenu, aExpand, aCondition, aOrder ) );
+    assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
+    addEntry( ENTRY( &aAction, aCondition, aOrder, true ) );
+}
+
+
+void CONDITIONAL_MENU::AddMenu( CONTEXT_MENU* aMenu, const SELECTION_CONDITION& aCondition,
+                                int aOrder )
+{
+    addEntry( ENTRY( aMenu, aCondition, aOrder ) );
 }
 
 
@@ -46,50 +64,49 @@ void CONDITIONAL_MENU::AddSeparator( const SELECTION_CONDITION& aCondition, int 
 }
 
 
-CONTEXT_MENU* CONDITIONAL_MENU::Generate( SELECTION& aSelection )
+void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
 {
-    CONTEXT_MENU* m_menu = new CONTEXT_MENU;
-    m_menu->SetTool( m_tool );
+    Clear();
 
-    for( std::list<ENTRY>::iterator it = m_entries.begin(); it != m_entries.end(); ++it )
+    for( const ENTRY& entry : m_entries )
     {
-        const SELECTION_CONDITION& cond = it->Condition();
+        const SELECTION_CONDITION& cond = entry.Condition();
+        bool                       result;
+        wxMenuItem*                menuItem = nullptr;
 
         try
         {
-            if( !cond( aSelection ) )
-                continue;
+            result = cond( aSelection );
         }
         catch( std::exception& )
         {
             continue;
         }
 
-        switch( it->Type() )
+        if( m_isContextMenu && !result )
+            continue;
+
+        switch( entry.Type() )
         {
             case ENTRY::ACTION:
-                m_menu->Add( *it->Action() );
+                menuItem = Add( *entry.Action(), entry.IsCheckmarkEntry() );
                 break;
-
             case ENTRY::MENU:
-                m_menu->Add( it->Menu(), it->Expand() );
+                menuItem = Add( entry.Menu() );
                 break;
-
-            case ENTRY::WXITEM:
-                m_menu->Append( it->wxItem() );
-                break;
-
             case ENTRY::SEPARATOR:
-                m_menu->AppendSeparator();
+                menuItem = AppendSeparator();
                 break;
-
             default:
                 assert( false );
                 break;
         }
-    }
 
-    return m_menu;
+        if( entry.IsCheckmarkEntry() )
+            menuItem->Check( result );
+        else
+            menuItem->Enable( result );
+    }
 }
 
 

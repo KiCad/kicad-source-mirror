@@ -376,7 +376,7 @@ bool SCH_EDIT_TOOL::Init()
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
         symUnitMenu->SetTool( this );
         m_menu.AddSubMenu( symUnitMenu );
-        moveMenu.AddMenu( symUnitMenu.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+        moveMenu.AddMenu( symUnitMenu.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
         moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
         moveMenu.AddItem( EE_ACTIONS::cut,  EE_CONDITIONS::IdleSelection );
@@ -403,7 +403,7 @@ bool SCH_EDIT_TOOL::Init()
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
-    drawMenu.AddMenu( symUnitMenu2.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( symUnitMenu2.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
     drawMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
                                          singleComponentCondition && EE_CONDITIONS::Idle, 200 );
@@ -438,7 +438,7 @@ bool SCH_EDIT_TOOL::Init()
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
-    selToolMenu.AddMenu( symUnitMenu3.get(), false, EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( symUnitMenu3.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
     selToolMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
                                           singleComponentCondition && EE_CONDITIONS::Idle, 200 );

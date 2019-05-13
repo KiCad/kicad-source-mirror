@@ -246,7 +246,7 @@ public:
      * when the board is set up.
      */
     void SetEnvironment( EDA_ITEM* aModel, KIGFX::VIEW* aView,
-            KIGFX::VIEW_CONTROLS* aViewControls, wxWindow* aFrame );
+            KIGFX::VIEW_CONTROLS* aViewControls, EDA_DRAW_FRAME* aFrame );
 
     /* Accessors for the environment objects (view, model, etc.) */
     KIGFX::VIEW* GetView() const
@@ -264,7 +264,7 @@ public:
         return m_model;
     }
 
-    inline wxWindow* GetEditFrame() const
+    inline EDA_DRAW_FRAME* GetEditFrame() const
     {
         return m_editFrame;
     }
@@ -323,6 +323,11 @@ public:
     void ClearTransitions( TOOL_BASE* aTool );
 
     void RunMainStack( TOOL_BASE* aTool, std::function<void()> aFunc );
+
+    /**
+     * Synchronizes toolbars.
+     */
+    void UpdateUI();
 
     /**
      * Pauses execution of a given tool until one or more events matching aConditions arrives.
@@ -531,7 +536,7 @@ private:
     EDA_ITEM* m_model;
     KIGFX::VIEW* m_view;
     KIGFX::VIEW_CONTROLS* m_viewControls;
-    wxWindow* m_editFrame;
+    EDA_DRAW_FRAME* m_editFrame;
 
     /// Queue that stores events to be processed at the end of the event processing cycle.
     std::list<TOOL_EVENT> m_eventQueue;

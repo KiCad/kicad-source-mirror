@@ -244,7 +244,7 @@ public:
     ///> Returns if it this event has a valid position (true for mouse events)
     bool HasPosition() const
     {
-        return m_category == TC_MOUSE;
+        return m_category == TC_MOUSE || m_category == TC_COMMAND;
     }
 
     ///> Returns information about difference between current mouse cursor position and the place
@@ -434,7 +434,7 @@ private:
 
     /**
      * Ensure that the event is a type that has a position before returning a
-     * position, otherwise return a mull-constructed position.
+     * position, otherwise return a null-constructed position.
      * Used to defend the position accessors from runtime access when the event
      * does not have a valid position.
      *

@@ -557,6 +557,8 @@ public:
 
     void ShowChangedLanguage() override;
 
+    void SyncMenusAndToolbars() override;
+
     virtual void SetScreen( BASE_SCREEN* aScreen ) override;
 
     virtual const BOX2I GetDocumentExtents() const override;

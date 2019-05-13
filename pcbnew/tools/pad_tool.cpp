@@ -191,7 +191,7 @@ bool PAD_TOOL::Init()
                         ( SELECTION_CONDITIONS::HasType( PCB_PAD_T )
                             || SELECTION_CONDITIONS::Count( 0 ) );
 
-        menu.AddMenu( contextMenu.get(), false, showCond, 1000 );
+        menu.AddMenu( contextMenu.get(), showCond, 1000 );
 
         // we need a separator only when the selection is empty
         auto separatorCond = canShowMenuCond && SELECTION_CONDITIONS::Count( 0 );

@@ -25,24 +25,31 @@
 #ifndef CONDITIONAL_MENU_H
 #define CONDITIONAL_MENU_H
 
-#include "selection_conditions.h"
+#include <tool/selection_conditions.h>
+#include <tool/context_menu.h>
 #include <list>
 #include <wx/wx.h>
+
 
 class SELECTION_TOOL;
 class TOOL_ACTION;
 class TOOL_INTERACTIVE;
-class CONTEXT_MENU;
 
-class CONDITIONAL_MENU
+
+class CONDITIONAL_MENU : public CONTEXT_MENU
 {
 public:
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
-    CONDITIONAL_MENU( TOOL_INTERACTIVE* aTool ) :
-        m_tool( aTool )
-    {}
+
+    CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
+        m_isContextMenu( isContextMenu )
+    {
+        m_tool = aTool;
+    }
+
+    CONTEXT_MENU* create() const override;
 
     /**
      * Function AddItem()
@@ -53,9 +60,20 @@ public:
      * @param aOrder determines location of the added item, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
-    void AddItem( const TOOL_ACTION& aAction,
-                  const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
+    void AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                   int aOrder = ANY_ORDER );
+
+    /**
+     * Function AddCheckItem()
+     *
+     * Adds a checked menu entry to run a TOOL_ACTION on selected items.
+     * @param aAction is a menu entry to be added.
+     * @param aCondition is a condition that has to be fulfilled to check the menu entry.
+     * @param aOrder determines location of the added item, higher numbers are put on the bottom.
+     * You may use ANY_ORDER here if you think it does not matter.
+     */
+    void AddCheckItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
+                       int aOrder = ANY_ORDER );
 
     /**
      * Function AddMenu()
@@ -69,7 +87,7 @@ public:
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
-    void AddMenu( CONTEXT_MENU* aMenu, bool aExpand = false,
+    void AddMenu( CONTEXT_MENU* aMenu,
                   const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
                   int aOrder = ANY_ORDER );
 
@@ -85,55 +103,49 @@ public:
                        int aOrder = ANY_ORDER );
 
     /**
-     * Function Generate()
+     * Function Evaluate()
      *
-     * Generates a context menu that contains only entries that are satisfying assigned conditions.
-     * @param aSelection is selection for which the conditions are checked against.
-     * @return Menu filtered by the entry conditions.
+     * Updates the contents of the menu based on the supplied conditions.
      */
-    CONTEXT_MENU* Generate( SELECTION& aSelection );
+    void Evaluate( SELECTION& aSelection );
 
 private:
     ///> Helper class to organize menu entries.
     class ENTRY
     {
     public:
-        ENTRY( const TOOL_ACTION* aAction,
-                            const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
-                            int aOrder = ANY_ORDER ) :
-            m_type( ACTION ), m_condition( aCondition ), m_order( aOrder ), m_expand( false )
+        ENTRY( const TOOL_ACTION* aAction, SELECTION_CONDITION aCondition, int aOrder,
+               bool aCheckmark ) :
+            m_type( ACTION ),
+            m_condition( aCondition ),
+            m_order( aOrder ),
+            m_isCheckmarkEntry( aCheckmark )
         {
             m_data.action = aAction;
         }
 
-        ENTRY( CONTEXT_MENU* aMenu, bool aExpand = false,
-                            const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
-                            int aOrder = ANY_ORDER ) :
-            m_type( MENU ), m_condition( aCondition ), m_order( aOrder ), m_expand( aExpand )
+        ENTRY( CONTEXT_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
+            m_type( MENU ),
+            m_condition( aCondition ),
+            m_order( aOrder ),
+            m_isCheckmarkEntry( false )
         {
             m_data.menu = aMenu;
         }
 
-        ENTRY( wxMenuItem* aItem, const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
-                            int aOrder = ANY_ORDER ) :
-            m_type( WXITEM ), m_condition( aCondition ), m_order( aOrder ), m_expand( false )
-        {
-            m_data.wxItem = aItem;
-        }
-
         // Separator
-        ENTRY( const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
-                            int aOrder = ANY_ORDER ) :
-            m_type( SEPARATOR ), m_condition( aCondition ), m_order( aOrder ), m_expand( false )
+        ENTRY( SELECTION_CONDITION aCondition, int aOrder ) :
+            m_type( SEPARATOR ),
+            m_condition( aCondition ),
+            m_order( aOrder ),
+            m_isCheckmarkEntry( false )
         {
-            m_data.wxItem = NULL;
         }
 
         ///> Possible entry types.
         enum ENTRY_TYPE {
             ACTION,
             MENU,
-            WXITEM,
             SEPARATOR
         };
 
@@ -154,16 +166,9 @@ private:
             return m_data.menu;
         }
 
-        inline wxMenuItem* wxItem() const
+        inline bool IsCheckmarkEntry() const
         {
-            assert( m_type == WXITEM );
-            return m_data.wxItem;
-        }
-
-        inline bool Expand() const
-        {
-            assert( m_type == MENU );
-            return m_expand;
+            return m_isCheckmarkEntry;
         }
 
         inline const SELECTION_CONDITION& Condition() const
@@ -187,7 +192,6 @@ private:
         union {
             const TOOL_ACTION* action;
             CONTEXT_MENU* menu;
-            wxMenuItem* wxItem;
         } m_data;
 
         ///> Condition to be fulfilled to show the entry in menu.
@@ -196,18 +200,18 @@ private:
         ///> Order number, the higher the number the lower position it takes it is in the menu.
         int m_order;
 
-        ///> CONTEXT_MENU expand flag
-        bool m_expand;
+        bool m_isCheckmarkEntry;
     };
 
     ///> Inserts the entry, preserving the requested order.
     void addEntry( ENTRY aEntry );
 
+    ///> Context menus include only items that resolve to true;
+    ///> Regular menus enable only menu items that resolve to true.
+    bool             m_isContextMenu;
+
     ///> List of all menu entries.
     std::list<ENTRY> m_entries;
-
-    ///> tool owning the menu
-    TOOL_INTERACTIVE* m_tool;
 };
 
 #endif /* CONDITIONAL_MENU_H */

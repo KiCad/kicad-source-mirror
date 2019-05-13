@@ -35,8 +35,7 @@
 // see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_command {
-    HK_SWITCH_UNITS = HK_COMMON_END,
-    HK_MOVE_ITEM,
+    HK_MOVE_ITEM = HK_COMMON_END,
     HK_MOVE_START_POINT,
     HK_MOVE_END_POINT,
     HK_PLACE_ITEM,

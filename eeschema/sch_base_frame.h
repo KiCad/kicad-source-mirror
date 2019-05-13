@@ -330,7 +330,6 @@ public:
      */
     virtual void OnModify() {}
 
-protected:
     /**
      * Open the library viewer only to browse library contents.
      * If the viewed is already opened from this, raise the viewer
@@ -338,6 +337,7 @@ protected:
      */
     void OnOpenLibraryViewer( wxCommandEvent& event );
 
+protected:
     /**
      * Saves Symbol Library Tables to disk.
      *

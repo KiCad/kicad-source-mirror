@@ -242,7 +242,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_CONFIGURE_PATHS, SCH_EDIT_FRAME::OnConfigurePaths )
 
     EVT_TOOL( ID_RUN_LIBRARY, SCH_EDIT_FRAME::OnOpenLibraryEditor )
-    EVT_TOOL( ID_TO_LIBVIEW, SCH_EDIT_FRAME::OnOpenLibraryViewer )
     EVT_TOOL( ID_RESCUE_CACHED, SCH_EDIT_FRAME::OnRescueProject )
     EVT_MENU( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnRemapSymbols )
     EVT_MENU( ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID, SCH_EDIT_FRAME::OnEditComponentSymbolsId )
@@ -253,7 +252,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_RUN_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
 
     EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
-    EVT_TOOL( ID_HIERARCHY, SCH_EDIT_FRAME::InstallHierarchyFrame )
     EVT_TOOL( wxID_UNDO, SCH_EDIT_FRAME::GetSchematicFromUndoList )
     EVT_TOOL( wxID_REDO, SCH_EDIT_FRAME::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, SCH_EDIT_FRAME::OnAnnotate )
@@ -287,8 +285,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnUpdateHiddenPins )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_BUS_WIRES_ORIENT, SCH_EDIT_FRAME::OnUpdateBusOrientation )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_HIGHLIGHT_BUTT, SCH_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, SCH_EDIT_FRAME::OnUpdateSelectTool )
@@ -356,6 +352,7 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
 
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -378,7 +375,6 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_auimgr.Update();
 
-    setupTools();
     GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
     GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
 
@@ -762,27 +758,6 @@ void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 {
     event.Enable( m_blockItems.GetCount() > 0 );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateBusOrientation( wxUpdateUIEvent& aEvent )
-{
-    wxString tool_tip = GetForceHVLines() ?
-                        _( "Draw wires and buses in any direction" ) :
-                        _( "Draw horizontal and vertical wires and buses only" );
-
-    aEvent.Check( GetForceHVLines() );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_BUS_WIRES_ORIENT, tool_tip );
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateHiddenPins( wxUpdateUIEvent& aEvent )
-{
-    wxString tool_tip = m_showAllPins ? _( "Do not show hidden pins" ) :
-                        _( "Show hidden pins" );
-
-    aEvent.Check( m_showAllPins );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIDDEN_PINS, tool_tip );
 }
 
 

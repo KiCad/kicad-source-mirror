@@ -94,13 +94,9 @@ ALIGN_DISTRIBUTE_TOOL::~ALIGN_DISTRIBUTE_TOOL()
 bool ALIGN_DISTRIBUTE_TOOL::Init()
 {
     // Find the selection tool, so they can cooperate
-    m_selectionTool = static_cast<SELECTION_TOOL*>( m_toolMgr->FindTool( "pcbnew.InteractiveSelection" ) );
+    m_selectionTool = m_toolMgr->GetTool<SELECTION_TOOL>();
 
-    if( !m_selectionTool )
-    {
-        DisplayError( NULL, _( "pcbnew.InteractiveSelection tool is not available" ) );
-        return false;
-    }
+    wxASSERT_MSG( m_selectionTool, _( "pcbnew.InteractiveSelection tool is not available" ) );
 
     m_frame = getEditFrame<PCB_BASE_FRAME>();
 
@@ -120,8 +116,8 @@ bool ALIGN_DISTRIBUTE_TOOL::Init()
     m_placementMenu->Add( PCB_ACTIONS::distributeHorizontally );
     m_placementMenu->Add( PCB_ACTIONS::distributeVertically );
 
-    m_selectionTool->GetToolMenu().GetMenu().AddMenu( m_placementMenu, false,
-            SELECTION_CONDITIONS::MoreThan( 1 ) );
+    CONDITIONAL_MENU& selToolMenu = m_selectionTool->GetToolMenu().GetMenu();
+    selToolMenu.AddMenu( m_placementMenu, SELECTION_CONDITIONS::MoreThan( 1 ) );
 
     return true;
 }

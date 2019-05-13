@@ -10,38 +10,49 @@ TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
         _( "Cancel" ), _( "Cancel current tool" ),
         cancel_xpm, AF_NONE );
 
+TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
+        AS_GLOBAL, 0, "", "" );   // This is an internal event
+
 // View Controls
 TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_REDRAW ),
-        _( "Refresh View" ), "", zoom_redraw_xpm );
+        _( "Refresh View" ), "",
+        zoom_redraw_xpm );
 
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_IN ),
-        _( "Zoom In" ), "", zoom_in_xpm );
+        _( "Zoom In" ), "",
+        zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOut( "common.Control.zoomOut",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_OUT ),
-        _( "Zoom Out" ), "", zoom_out_xpm );
+        _( "Zoom Out" ), "",
+        zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomInCenter( "common.Control.zoomInCenter",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Zoom In" ), "",
+        zoom_in_xpm );
 
 TOOL_ACTION ACTIONS::zoomOutCenter( "common.Control.zoomOutCenter",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Zoom Out" ), "",
+        zoom_out_xpm );
 
 TOOL_ACTION ACTIONS::zoomCenter( "common.Control.zoomCenter",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_CENTER ),
-        _( "Center" ), "", zoom_center_on_screen_xpm );
+        _( "Center" ), "",
+        zoom_center_on_screen_xpm );
 
 TOOL_ACTION ACTIONS::zoomFitScreen( "common.Control.zoomFitScreen",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_AUTO ),
-        _( "Zoom Auto" ), "", zoom_fit_in_page_xpm );
+        _( "Zoom to Fit" ), "",
+        zoom_fit_in_page_xpm );
 
 TOOL_ACTION ACTIONS::zoomTool( "common.Control.zoomTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_SELECTION ),
-        _( "Zoom to Selection" ), "", NULL, AF_ACTIVATE );
+        _( "Zoom to Selection" ), "",
+        zoom_area_xpm, AF_ACTIVATE );
 
 TOOL_ACTION ACTIONS::zoomPreset( "common.Control.zoomPreset",
         AS_GLOBAL, 0,
@@ -139,6 +150,31 @@ TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
 TOOL_ACTION ACTIONS::gridPreset( "common.Control.gridPreset",
         AS_GLOBAL, 0,
         "", "" );
+
+TOOL_ACTION ACTIONS::toggleGrid( "common.Control.toggleGrid",
+        AS_GLOBAL, 0,
+        _( "Show Grid" ), _( "Display grid dots or lines in the edit window" ),
+        grid_xpm );
+
+TOOL_ACTION ACTIONS::gridProperties( "common.Control.gridProperties",
+        AS_GLOBAL, 0,
+        _( "Grid Properties..." ), _( "Set grid dimensions" ),
+        grid_xpm );
+
+TOOL_ACTION ACTIONS::imperialUnits( "common.Control.imperialUnits",
+        AS_GLOBAL, 0,
+        _( "Imperial" ), _( "Use inches and mils" ),
+        unit_inch_xpm );
+
+TOOL_ACTION ACTIONS::metricUnits( "common.Control.metricUnits",
+        AS_GLOBAL, 0,
+        _( "Metric" ), _( "Use millimeters" ),
+        unit_mm_xpm );
+
+TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
+        _( "Switch units" ), _( "Switch between inches and millimeters" ),
+        unit_mm_xpm );
 
 
 // System-wide selection Events

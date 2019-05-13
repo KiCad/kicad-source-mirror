@@ -188,10 +188,10 @@ void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::SyncMenusAndToolbars( wxEvent& aEvent )
+void PCB_EDIT_FRAME::SyncMenusAndToolbars()
 {
-    auto displOpts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    auto menuBar = GetMenuBar();
+    PCB_DISPLAY_OPTIONS* displOpts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    wxMenuBar*           menuBar = GetMenuBar();
 
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, false );
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, false );

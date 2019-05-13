@@ -150,14 +150,9 @@ private:
     }
 
     /**
-     * The conditional model of the menu displayed by the tool
+     * The conditional menu displayed by the tool
      */
     CONDITIONAL_MENU m_menu;
-
-    /**
-     * The actual menu displayed by the tool
-     */
-    std::unique_ptr<CONTEXT_MENU> m_contextMenu;
 
     /**
      * The tool that owns this menu

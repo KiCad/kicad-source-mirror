@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2017 CERN
+ * Copyright (C) 2013-2019 KiCad Developers, see CHANGELOG.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  * @author Maciej Suminski <maciej.suminski@cern.ch>
  *
@@ -23,6 +24,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <functional>
+#include <tool/actions.h>
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
@@ -30,11 +33,16 @@
 #include <wx/log.h>
 #include <pgm_base.h>
 
-#include <functional>
+
 using namespace std::placeholders;
 
+
 CONTEXT_MENU::CONTEXT_MENU() :
-    m_titleDisplayed( false ), m_selected( -1 ), m_tool( nullptr ), m_icon( nullptr )
+    m_Dirty( true ),
+    m_titleDisplayed( false ),
+    m_selected( -1 ),
+    m_tool( nullptr ),
+    m_icon( nullptr )
 {
     setupEvents();
 }
@@ -47,7 +55,6 @@ CONTEXT_MENU::~CONTEXT_MENU()
         menu->SetParent( nullptr );
 
     CONTEXT_MENU* parent = dynamic_cast<CONTEXT_MENU*>( GetParent() );
-    wxASSERT( parent || !GetParent() );
 
     if( parent )
         parent->m_submenus.remove( this );
@@ -80,6 +87,7 @@ void CONTEXT_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
 
 void CONTEXT_MENU::setupEvents()
 {
+    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
     Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
     Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( CONTEXT_MENU::onMenuEvent ), NULL, this );
 }
@@ -148,13 +156,14 @@ wxMenuItem* CONTEXT_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPA
 }
 
 
-wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
+wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry )
 {
     /// ID numbers for tool actions need to have a value higher than ACTION_ID
     const BITMAP_OPAQUE* icon = aAction.GetIcon();
 
     wxMenuItem* item = new wxMenuItem( this, getMenuId( aAction ), aAction.GetMenuItem(),
-                                       aAction.GetDescription(), wxITEM_NORMAL );
+                                       aAction.GetDescription(),
+                                       aIsCheckmarkEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
     set_wxMenuIcon( item, icon );
 
@@ -165,38 +174,24 @@ wxMenuItem* CONTEXT_MENU::Add( const TOOL_ACTION& aAction )
 }
 
 
-std::list<wxMenuItem*> CONTEXT_MENU::Add( CONTEXT_MENU* aMenu, bool aExpand )
+wxMenuItem* CONTEXT_MENU::Add( CONTEXT_MENU* aMenu )
 {
-    std::list<wxMenuItem*> items;
     CONTEXT_MENU* menuCopy = aMenu->Clone();
     m_submenus.push_back( menuCopy );
 
-    if( aExpand )
+    wxASSERT_MSG( !menuCopy->m_title.IsEmpty(), "Set a title for CONTEXT_MENU using SetTitle()" );
+
+    if( aMenu->m_icon )
     {
-        for( int i = 0; i < (int) aMenu->GetMenuItemCount(); ++i )
-        {
-            wxMenuItem* item = aMenu->FindItemByPosition( i );
-            items.push_back( appendCopy( item ) );
-        }
+        wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
+        set_wxMenuIcon( newItem, aMenu->m_icon );
+        newItem->SetSubMenu( menuCopy );
+        return Append( newItem );
     }
     else
     {
-        wxASSERT_MSG( !menuCopy->m_title.IsEmpty(), "Set a title for CONTEXT_MENU using SetTitle()" );
-
-        if( aMenu->m_icon )
-        {
-            wxMenuItem* newItem = new wxMenuItem( this, -1, menuCopy->m_title );
-            set_wxMenuIcon( newItem, aMenu->m_icon );
-            newItem->SetSubMenu( menuCopy );
-            items.push_back( Append( newItem ) );
-        }
-        else
-        {
-            items.push_back( AppendSubMenu( menuCopy, menuCopy->m_title ) );
-        }
+        return AppendSubMenu( menuCopy, menuCopy->m_title );
     }
-
-    return items;
 }
 
 
@@ -326,10 +321,17 @@ void CONTEXT_MENU::onMenuEvent( wxMenuEvent& aEvent )
 
     wxEventType type = aEvent.GetEventType();
 
+    if( type == wxEVT_MENU_OPEN && m_Dirty )
+    {
+        getToolManager()->RunAction( ACTIONS::updateMenu, true, this );
+        aEvent.Skip();
+        return;
+    }
+
     // When the currently chosen item in the menu is changed, an update event is issued.
     // For example, the selection tool can use this to dynamically highlight the current item
     // from selection clarification popup.
-    if( type == wxEVT_MENU_HIGHLIGHT )
+    else if( type == wxEVT_MENU_HIGHLIGHT )
         evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_UPDATE, aEvent.GetId() );
 
     // One of menu entries was selected..

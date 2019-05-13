@@ -66,6 +66,8 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    int UpdateMenu( const TOOL_EVENT& aEvent );
+
     /**
      * Function Main()
      *

@@ -115,9 +115,6 @@ private:
         return mods;
     }
 
-    ///> Redraws the status bar and message panel, synchronizes menus and toolbars.
-    void updateUI( wxEvent& aEvent );
-
     ///> Stores all the informations regarding a mouse button state.
     struct BUTTON_STATE;
 

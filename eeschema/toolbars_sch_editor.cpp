@@ -37,9 +37,9 @@
 #include <general.h>
 #include <ee_hotkeys.h>
 #include <eeschema_id.h>
-
+#include <tool/tool_manager.h>
 #include <help_common_strings.h>
-
+#include <tools/ee_actions.h>
 
 /* Create  the main Horizontal Toolbar for the schematic editor
  */
@@ -317,15 +317,7 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
     switch( id )
     {
     case ID_TB_OPTIONS_HIDDEN_PINS:
-    {
-        m_showAllPins = !m_showAllPins;
-
-        auto painter = static_cast<KIGFX::SCH_PAINTER*>( GetCanvas()->GetView()->GetPainter() );
-        painter->GetSettings()->m_ShowHiddenPins = m_showAllPins;
-
-        GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
-        GetCanvas()->Refresh();
-    }
+        m_toolManager->RunAction( EE_ACTIONS::toggleHiddenPins, true );
         break;
 
     case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
@@ -336,4 +328,20 @@ void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         wxFAIL_MSG( wxT( "Unexpected select option tool bar ID." ) );
         break;
     }
+}
+
+
+void SCH_EDIT_FRAME::SyncMenusAndToolbars()
+{
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, GetUserUnits() != INCHES );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, GetUserUnits() == INCHES );
+
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, galOpts.m_fullscreenCursor );
+
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_HIDDEN_PINS, GetShowAllPins() );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, GetForceHVLines() );
+
+    m_optionsToolBar->Refresh();
 }

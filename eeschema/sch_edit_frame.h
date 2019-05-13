@@ -823,7 +823,6 @@ private:
 
     /* User interface update event handlers. */
     void OnUpdatePaste( wxUpdateUIEvent& event );
-    void OnUpdateHiddenPins( wxUpdateUIEvent& event );
     void OnUpdateBusOrientation( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
@@ -858,9 +857,6 @@ private:
      * is in a good state.  This should only be called when loading a file.
      */
     void NormalizeSchematicOnFirstLoad( bool recalculateConnections );
-
-    // Hierarchical Sheet & PinSheet
-    void InstallHierarchyFrame( wxCommandEvent& event );
 
 public:
     /**
@@ -1195,6 +1191,8 @@ public:
     void CommonSettingsChanged() override;
 
     void ShowChangedLanguage() override;
+
+    void SyncMenusAndToolbars() override;
 
     virtual void SetScreen( BASE_SCREEN* aScreen ) override;
 

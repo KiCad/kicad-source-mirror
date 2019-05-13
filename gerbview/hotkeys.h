@@ -35,8 +35,7 @@
 // see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_command {
-    HK_SWITCH_UNITS = HK_COMMON_END,
-    HK_GBR_LINES_DISPLAY_MODE,
+    HK_GBR_LINES_DISPLAY_MODE = HK_COMMON_END,
     HK_GBR_FLASHED_DISPLAY_MODE,
     HK_GBR_POLYGON_DISPLAY_MODE,
     HK_GBR_NEGATIVE_DISPLAY_ONOFF,

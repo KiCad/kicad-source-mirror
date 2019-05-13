@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see CHANGELOG.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,12 +22,9 @@
  */
 
 #include <draw_frame.h>
-
 #include <tool/tool_menu.h>
 #include <tool/tool_interactive.h>
-
 #include <tool/context_menu.h>
-
 #include <tool/actions.h>
 #include <tool/zoom_menu.h>
 #include <tool/grid_menu.h>
@@ -35,7 +32,7 @@
 
 
 TOOL_MENU::TOOL_MENU( TOOL_INTERACTIVE& aTool ) :
-    m_menu( &aTool ),
+    m_menu( true, &aTool ),
     m_tool( aTool )
 {
 }
@@ -61,26 +58,22 @@ void TOOL_MENU::AddSubMenu( std::shared_ptr<CONTEXT_MENU> aSubMenu )
 
 void TOOL_MENU::ShowContextMenu( SELECTION& aSelection )
 {
-    m_contextMenu = std::unique_ptr<CONTEXT_MENU>( m_menu.Generate( aSelection ) );
-
-    if( m_contextMenu->GetMenuItemCount() > 0 )
-        m_tool.SetContextMenu( m_contextMenu.get(), CMENU_NOW );
+    m_menu.Evaluate( aSelection );
+    m_menu.UpdateAll();
+    m_menu.m_Dirty = false;
+    m_tool.SetContextMenu( &m_menu, CMENU_NOW );
 }
 
 
 void TOOL_MENU::ShowContextMenu()
 {
-    SELECTION dummySelection;
-
-    ShowContextMenu( dummySelection );
+    m_menu.m_Dirty = true;
+    m_tool.SetContextMenu( &m_menu, CMENU_NOW );
 }
 
 
 void TOOL_MENU::CloseContextMenu( OPT_TOOL_EVENT& evt )
 {
-    // m_contextMenu can be null here, that's OK
-    if( evt->Parameter<CONTEXT_MENU*>() == m_contextMenu.get() )
-        m_contextMenu = nullptr;
 }
 
 
@@ -98,7 +91,7 @@ void TOOL_MENU::AddStandardSubMenus( EDA_DRAW_FRAME* aFrame )
 
     if( aFrame )
     {
-        m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( aFrame ).get(), false, S_C::ShowAlways, 1000 );
-        m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( aFrame ).get(), false, S_C::ShowAlways, 1000 );
+        m_menu.AddMenu( createOwnSubMenu<ZOOM_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
+        m_menu.AddMenu( createOwnSubMenu<GRID_MENU>( aFrame ).get(), S_C::ShowAlways, 1000 );
     }
 }

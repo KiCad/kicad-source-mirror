@@ -1733,7 +1733,7 @@ public:
      */
     void CommonSettingsChanged() override;
 
-    void SyncMenusAndToolbars( wxEvent& aEvent ) override;
+    void SyncMenusAndToolbars() override;
 
     DECLARE_EVENT_TABLE()
 };

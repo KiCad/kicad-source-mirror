@@ -35,10 +35,16 @@
 #include <tool/common_tools.h>
 
 
-static TOOL_ACTION ACT_toggleCursor( "common.Control.toggleCursor",
+TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
-        _( "Toggle Always Show Cursor" ),
-        _( "Toggle display of the cursor, even when not in an interactive tool" ) );
+        _( "Always Show Cursor" ),
+        _( "Switch whether the cursor is displayed even when not in an editing tool" ) );
+
+
+TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
+        AS_GLOBAL, 0,
+        _( "Full-Window Crosshairs" ),
+        _( "Switch display of full-window crosshairs" ) );
 
 
 COMMON_TOOLS::COMMON_TOOLS() :
@@ -394,11 +400,68 @@ int COMMON_TOOLS::doGridPreset( int idx )
 }
 
 
+int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetGridVisibility( !m_frame->IsGridVisible() );
+
+    m_frame->GetGalCanvas()->GetGAL()->SetGridVisibility( m_frame->IsGridVisible() );
+    getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
+    m_frame->GetGalCanvas()->Refresh();
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::MetricUnits( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
+    cmd.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
+    m_frame->ProcessEvent( cmd );
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::ImperialUnits( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
+    cmd.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
+    m_frame->ProcessEvent( cmd );
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
+
+    cmd.SetId( ( m_frame->GetUserUnits() == INCHES) ? ID_TB_OPTIONS_SELECT_UNIT_MM
+                                                    : ID_TB_OPTIONS_SELECT_UNIT_INCH );
+    m_frame->ProcessEvent( cmd );
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 {
     auto& galOpts = m_frame->GetGalDisplayOptions();
 
     galOpts.m_forceDisplayCursor = !galOpts.m_forceDisplayCursor;
+    galOpts.NotifyChanged();
+
+    return 0;
+}
+
+
+int COMMON_TOOLS::ToggleCursorStyle( const TOOL_EVENT& aEvent )
+{
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = m_frame->GetGalDisplayOptions();
+
+    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
     galOpts.NotifyChanged();
 
     return 0;
@@ -441,8 +504,14 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::GridNext,           ACTIONS::gridNext.MakeEvent() );
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
     Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleGrid,         ACTIONS::toggleGrid.MakeEvent() );
 
-    Go( &COMMON_TOOLS::ToggleCursor,       ACT_toggleCursor.MakeEvent() );
+    Go( &COMMON_TOOLS::ImperialUnits,      ACTIONS::imperialUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
+
+    Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
+    Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );
 }
 
 

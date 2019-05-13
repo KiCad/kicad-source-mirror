@@ -312,11 +312,8 @@ bool PCB_EDITOR_CONTROL::Init()
         toolMenu.AddSubMenu( zoneMenu );
         toolMenu.AddSubMenu( lockMenu );
 
-        menu.AddMenu( zoneMenu.get(), false,
-                      SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ), 200 );
-
-        menu.AddMenu( lockMenu.get(), false,
-                      SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 200 );
+        menu.AddMenu( zoneMenu.get(), SELECTION_CONDITIONS::OnlyType( PCB_ZONE_AREA_T ), 200 );
+        menu.AddMenu( lockMenu.get(), SELECTION_CONDITIONS::OnlyTypes( GENERAL_COLLECTOR::LockableItems ), 200 );
     }
 
     DRAWING_TOOL* drawingTool = m_toolMgr->GetTool<DRAWING_TOOL>();
@@ -338,7 +335,7 @@ bool PCB_EDITOR_CONTROL::Init()
             };
         };
 
-        menu.AddMenu( zoneMenu.get(), false, toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 200 );
+        menu.AddMenu( zoneMenu.get(), toolActiveFunctor( DRAWING_TOOL::MODE::ZONE ), 200 );
     }
 
     m_ratsnestTimer.SetOwner( this );
@@ -508,7 +505,7 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selTool->GetSelection() );
+            m_menu.ShowContextMenu();
         }
 
         else if( module && evt->IsMotion() )
@@ -664,7 +661,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu( selTool->GetSelection() );
+            m_menu.ShowContextMenu();
         }
 
         else if( evt->IsMotion() )

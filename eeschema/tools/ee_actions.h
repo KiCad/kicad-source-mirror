@@ -148,6 +148,7 @@ public:
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION showMarkerInfo;
     static TOOL_ACTION editWithSymbolEditor;
+    static TOOL_ACTION showLibraryBrowser;
 
     /// Clipboard
     static TOOL_ACTION cut;
@@ -157,10 +158,9 @@ public:
     // Miscellaneous
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;
+    static TOOL_ACTION navigateHierarchy;
     static TOOL_ACTION cleanupSheetPins;
-    static TOOL_ACTION switchCursor;
-    static TOOL_ACTION switchUnits;
-    static TOOL_ACTION updateUnits;
+    static TOOL_ACTION toggleHiddenPins;
     static TOOL_ACTION symbolProperties;
     static TOOL_ACTION pinTable;
     static TOOL_ACTION deleteItemCursor;

@@ -89,17 +89,15 @@ public:
      * a TOOL_EVENT command containing name of the action is sent.
      * @param aAction is the action to be added to menu entry.
      */
-    wxMenuItem* Add( const TOOL_ACTION& aAction );
+    wxMenuItem* Add( const TOOL_ACTION& aAction, bool aIsCheckmarkEntry = false );
 
     /**
      * Function Add()
      * Adds a context menu as a submenu. The difference between this function and wxMenu::AppendSubMenu()
      * is the capability to handle icons.
      * @param aMenu is the submenu to be added.
-     * @param aExpand allows one to add all entries from the menu as individual
-     *                entries rather than add everything as a submenu.
      */
-    std::list<wxMenuItem*> Add( CONTEXT_MENU* aMenu, bool aExpand = false );
+    wxMenuItem* Add( CONTEXT_MENU* aMenu );
 
     /**
      * Function Clear()
@@ -144,6 +142,10 @@ public:
      */
     CONTEXT_MENU* Clone() const;
 
+public:
+    ///> Menu requires updating before display.
+    bool m_Dirty;
+
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.
     virtual CONTEXT_MENU* create() const;
@@ -180,7 +182,7 @@ protected:
      */
     void copyFrom( const CONTEXT_MENU& aMenu );
 
-private:
+protected:
     /**
      * Function appendCopy
      * Appends a copy of wxMenuItem.
@@ -219,7 +221,7 @@ private:
     TOOL_INTERACTIVE* m_tool;
 
     ///> Menu items with ID higher than that are considered TOOL_ACTIONs
-    static const int ACTION_ID = 2000;
+    static const int ACTION_ID = 10000;
 
     ///> Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;

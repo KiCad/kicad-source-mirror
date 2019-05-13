@@ -75,9 +75,13 @@ public:
     int Paste( const TOOL_EVENT& aEvent );
 
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
+    int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
 
     int EnterSheet( const TOOL_EVENT& aEvent );
     int LeaveSheet( const TOOL_EVENT& aEvent );
+    int NavigateHierarchy( const TOOL_EVENT& aEvent );
+
+    int ToggleHiddenPins( const TOOL_EVENT& aEvent );
 
 private:
     ///> copy selection to clipboard
