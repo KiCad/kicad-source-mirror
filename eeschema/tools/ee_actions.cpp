@@ -39,6 +39,24 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
     case ID_CANCEL_CURRENT_COMMAND:
         return ACTIONS::cancelInteractive.MakeEvent();
 
+    case ID_TB_OPTIONS_SHOW_GRID:
+        return ACTIONS::toggleGrid.MakeEvent();
+
+    case ID_TB_OPTIONS_SELECT_CURSOR:
+        return ACTIONS::toggleCursorStyle.MakeEvent();
+
+    case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
+        return EE_ACTIONS::toggleForceHV.MakeEvent();
+
+    case ID_TB_OPTIONS_SELECT_UNIT_INCH:
+        return ACTIONS::imperialUnits.MakeEvent();
+
+    case ID_TB_OPTIONS_SELECT_UNIT_MM:
+        return ACTIONS::metricUnits.MakeEvent();
+
+    case ID_TB_OPTIONS_HIDDEN_PINS:
+        return EE_ACTIONS::toggleHiddenPins.MakeEvent();
+
     case ID_ZOOM_REDRAW:
     case ID_VIEWER_ZOOM_REDRAW:
         return ACTIONS::zoomRedraw.MakeEvent();

@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2007 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
  * Copyright (C) 2009 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,13 +23,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file eeschema/menubar_libedit.cpp
- * @brief (Re)Create the main menubar for the part editor frame (LibEdit)
- */
-
 #include <menus_helpers.h>
 #include <pgm_base.h>
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
+#include <tools/ee_selection_tool.h>
 
 #include "eeschema_id.h"
 #include "general.h"
@@ -40,6 +39,7 @@
 
 void LIB_EDIT_FRAME::ReCreateMenuBar()
 {
+    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -170,136 +170,71 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Show pin table" ),
                  KiBitmap( pin_table_xpm ) );
 
+    //
     // Menu View:
-    wxMenu* viewMenu = new wxMenu;
+    //
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( viewMenu,
-                 ID_TO_LIBVIEW,
-                 _( "Symbol Library Browser" ),
-                 _( "Open the symbol viewer" ),
-                 KiBitmap( library_browse_xpm ) );
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
 
-    viewMenu->AppendSeparator();
+    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == INCHES;
+    };
 
-    /**
-     * Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
-     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
-     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zooming is made around the screen center
-     * From hotkeys, zooming is made around the mouse cursor position
-     * (obviously not possible from the toolbar or menubar command)
-     *
-     * in others words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
-     * for Zoom in and Zoom out sub menus
-     */
+    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == MILLIMETRES;
+    };
 
-    // Zoom in
-    text = _( "Zoom &In" );
-    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
+    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalDisplayOptions().m_fullscreenCursor;
+    };
 
-    // Zoom out
-    text = _( "Zoom &Out" );
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
+    auto compTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsSearchTreeShown();
+    };
 
-    // Fit on screen
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Libedit_Hotkeys_Descr, HK_ZOOM_AUTO );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
-                 KiBitmap( zoom_fit_in_page_xpm ) );
+    viewMenu->AddItem( EE_ACTIONS::showLibraryBrowser,     EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "Zoom to Selection" ),
-                          g_Schematic_Hotkeys_Descr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,              EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,             EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,             EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                  EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                EE_CONDITIONS::ShowAlways );
 
-    // Redraw
-    text = AddHotkeyName( _( "&Redraw" ), g_Libedit_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text, HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
-
-    viewMenu->AppendSeparator();
-
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
-                 _( "Show &Grid" ), wxEmptyString,
-                 KiBitmap( grid_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( viewMenu, ID_GRID_SETTINGS,
-                 _( "Grid Settings..." ), wxEmptyString,
-                 KiBitmap( grid_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,           gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,            EE_CONDITIONS::ShowAlways );
 
     // Units submenu
-    wxMenu* unitsSubMenu = new wxMenu;
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                 _( "&Imperial" ), _( "Use imperial units" ),
-                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,    imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,      metricUnitsCondition );
+    viewMenu->AddMenu( unitsSubMenu );
 
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-                 _( "&Metric" ), _( "Use metric units" ),
-                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,    fullCrosshairCondition );
 
-    AddMenuItem( viewMenu, unitsSubMenu,
-                 -1, _( "&Units" ),
-                 _( "Select which units are displayed" ),
-                 KiBitmap( unit_mm_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( EE_ACTIONS::showComponentTree, compTreeShownCondition );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full &Window Crosshair" ),
-                 _( "Change cursor shape" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-
-    // Separator
-    viewMenu->AppendSeparator();
-
-    AddMenuItem( viewMenu,
-                 ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE,
-                 _( "&Search Tree" ),
-                 _( "Toggles the search tree visibility" ),
-                 KiBitmap( search_tree_xpm ), wxITEM_CHECK );
-
+    //
     // Menu Place:
-    wxMenu* placeMenu = new wxMenu;
+    //
+    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Pin
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_PIN_BUTT,
-                 _( "&Pin" ),
-                 HELP_ADD_PIN,
-                 KiBitmap( pin_xpm ) );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolPin,        EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeSymbolText,       EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolRectangle,   EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolCircle,      EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolArc,         EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawSymbolLines,       EE_CONDITIONS::ShowAlways );
 
-    // Graphic text
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_BODY_TEXT_BUTT,
-                 _( "Graphic &Text" ),
-                 HELP_ADD_BODYTEXT,
-                 KiBitmap( text_xpm ) );
-
-    // Graphic rectangle
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_BODY_RECT_BUTT,
-                 _( "&Rectangle" ),
-                 HELP_ADD_BODYRECT,
-                 KiBitmap( add_rectangle_xpm ) );
-
-    // Graphic Circle
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_BODY_CIRCLE_BUTT,
-                 _( "&Circle" ),
-                 HELP_ADD_BODYCIRCLE,
-                 KiBitmap( add_circle_xpm ) );
-
-    // Graphic Arc
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_BODY_ARC_BUTT,
-                 _( "&Arc" ),
-                 HELP_ADD_BODYARC,
-                 KiBitmap( add_arc_xpm ) );
-
-    // Graphic Line or Polygon
-    AddMenuItem( placeMenu,
-                 ID_LIBEDIT_BODY_LINE_BUTT,
-                 _( "&Line or Polygon" ),
-                 HELP_ADD_BODYPOLYGON,
-                 KiBitmap( add_polygon_xpm ) );
-
+    //
     // Menu Inspect:
+    //
     wxMenu* inspectMenu = new wxMenu;
 
 

@@ -82,6 +82,7 @@ public:
     int NavigateHierarchy( const TOOL_EVENT& aEvent );
 
     int ToggleHiddenPins( const TOOL_EVENT& aEvent );
+    int ToggleForceHV( const TOOL_EVENT& aEvent );
 
 private:
     ///> copy selection to clipboard

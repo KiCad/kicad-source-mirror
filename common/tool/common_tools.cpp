@@ -31,7 +31,6 @@
 #include <gal/graphics_abstraction_layer.h>
 #include <base_screen.h>
 #include <hotkeys.h>
-
 #include <tool/common_tools.h>
 
 
@@ -412,36 +411,34 @@ int COMMON_TOOLS::ToggleGrid( const TOOL_EVENT& aEvent )
 }
 
 
-int COMMON_TOOLS::MetricUnits( const TOOL_EVENT& aEvent )
+int COMMON_TOOLS::GridProperties( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
 
-    cmd.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
+    cmd.SetId( ID_GRID_SETTINGS );
     m_frame->ProcessEvent( cmd );
 
+    return 0;
+}
+
+
+int COMMON_TOOLS::MetricUnits( const TOOL_EVENT& aEvent )
+{
+    m_frame->ChangeUserUnits( MILLIMETRES );
     return 0;
 }
 
 
 int COMMON_TOOLS::ImperialUnits( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-    cmd.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
-    m_frame->ProcessEvent( cmd );
-
+    m_frame->ChangeUserUnits( INCHES );
     return 0;
 }
 
 
 int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
 {
-    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
-
-    cmd.SetId( ( m_frame->GetUserUnits() == INCHES) ? ID_TB_OPTIONS_SELECT_UNIT_MM
-                                                    : ID_TB_OPTIONS_SELECT_UNIT_INCH );
-    m_frame->ProcessEvent( cmd );
-
+    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
     return 0;
 }
 
@@ -505,6 +502,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::GridPrev,           ACTIONS::gridPrev.MakeEvent() );
     Go( &COMMON_TOOLS::GridPreset,         ACTIONS::gridPreset.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleGrid,         ACTIONS::toggleGrid.MakeEvent() );
+    Go( &COMMON_TOOLS::GridProperties,     ACTIONS::gridProperties.MakeEvent() );
 
     Go( &COMMON_TOOLS::ImperialUnits,      ACTIONS::imperialUnits.MakeEvent() );
     Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );

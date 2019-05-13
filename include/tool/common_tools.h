@@ -71,6 +71,7 @@ public:
     int GridPrev( const TOOL_EVENT& aEvent );
     int GridPreset( const TOOL_EVENT& aEvent );
     int ToggleGrid( const TOOL_EVENT& aEvent );
+    int GridProperties( const TOOL_EVENT& aEvent );
 
     ///> Sets up handlers for various events.
     void setTransitions() override;

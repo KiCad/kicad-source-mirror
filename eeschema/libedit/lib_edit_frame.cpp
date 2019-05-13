@@ -31,7 +31,6 @@
 #include <base_screen.h>
 #include <confirm.h>
 #include <eda_doc.h>
-#include <gr_basic.h>
 #include <sch_edit_frame.h>
 #include <msgpanel.h>
 #include <confirm.h>
@@ -41,8 +40,6 @@
 #include <eeschema_id.h>
 #include <lib_edit_frame.h>
 #include <class_library.h>
-#include <lib_polyline.h>
-#include <lib_pin.h>
 
 #include <lib_manager.h>
 #include <widgets/symbol_tree_pane.h>
@@ -51,14 +48,7 @@
 #include <kicad_device_context.h>
 #include <ee_hotkeys.h>
 #include <eeschema_config.h>
-
-#include <dialogs/dialog_lib_edit_text.h>
-#include <dialogs/dialog_edit_component_in_lib.h>
-#include <dialogs/dialog_lib_edit_pin_table.h>
-
 #include <wildcards_and_files_ext.h>
-
-#include <menus_helpers.h>
 #include <wx/progdlg.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
@@ -73,6 +63,7 @@
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
 #include <tools/lib_drawing_tools.h>
+#include <tools/lib_editor_control.h>
 #include <tools/ee_point_editor.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -171,7 +162,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
     EVT_UPDATE_UI( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnUpdateElectricalType )
-    EVT_UPDATE_UI( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, LIB_EDIT_FRAME::OnUpdateSearchTreeTool )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
 
@@ -227,6 +217,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     SyncLibraries( true );
     m_treePane = new SYMBOL_TREE_PANE( this, m_libMgr );
 
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -253,7 +244,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
 
     m_auimgr.Update();
 
-    setupTools();
     GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
 
     Raise();
@@ -318,6 +308,7 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
     m_toolManager->RegisterTool( new LIB_EDIT_TOOL );
+    m_toolManager->RegisterTool( new LIB_EDITOR_CONTROL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -446,12 +437,6 @@ void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
 void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
 {
     aEvent.Check( GetShowElectricalType() );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( IsSearchTreeShown() );
 }
 
 
@@ -1009,7 +994,7 @@ void LIB_EDIT_FRAME::emptyScreen()
     SetCurPart( nullptr );
     SetScreen( m_dummyScreen );
     m_dummyScreen->ClearUndoRedoList();
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     Refresh();
 }
 

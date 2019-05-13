@@ -193,7 +193,7 @@ bool LIB_EDIT_FRAME::LoadComponentFromCurrentLib( const wxString& aAliasName, in
     m_SyncPinEdit = !GetCurPart()->UnitsLocked();
 
     GetScreen()->ClearUndoRedoList();
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     SetShowDeMorgan( GetCurPart()->HasConversion() );
 
     if( aUnit > 0 )
@@ -254,7 +254,7 @@ bool LIB_EDIT_FRAME::LoadOneLibraryPartAux( LIB_ALIAS* aEntry, const wxString& a
     SetCurPart( new LIB_PART( *lib_part ) );
     SetCurLib( aLibrary );
 
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     updateTitle();
     RebuildSymbolUnitsList();
 

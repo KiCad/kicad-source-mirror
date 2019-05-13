@@ -169,6 +169,8 @@ public:
     static TOOL_ACTION pushPinLength;
     static TOOL_ACTION pushPinNameSize;
     static TOOL_ACTION pushPinNumSize;
+    static TOOL_ACTION showComponentTree;
+    static TOOL_ACTION toggleForceHV;
 
     // SPICE
     static TOOL_ACTION simProbe;

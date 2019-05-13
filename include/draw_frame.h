@@ -287,6 +287,12 @@ public:
     EDA_UNITS_T GetUserUnits() const override { return m_UserUnits; }
     void SetUserUnits( EDA_UNITS_T aUnits ) { m_UserUnits = aUnits; }
 
+    void ChangeUserUnits( EDA_UNITS_T aUnits )
+    {
+        SetUserUnits( aUnits );
+        unitsChangeRefresh();
+    }
+
     /**
      * Return the origin of the axis used for plotting and various exports.
      */

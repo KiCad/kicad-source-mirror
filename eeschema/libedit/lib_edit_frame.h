@@ -185,10 +185,8 @@ public:
      */
     void SetRepeatPinStep( int aStep) { m_repeatPinStep = aStep; }
 
-
     void ReCreateMenuBar() override;
 
-    void InstallConfigFrame( wxCommandEvent& event );
     void OnPreferencesOptions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
 
@@ -316,7 +314,6 @@ public:
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
     void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
-    void OnUpdateSearchTreeTool( wxUpdateUIEvent& aEvent );
 
     void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
     void RebuildSymbolUnitsList();
@@ -354,7 +351,6 @@ public:
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey = 0 ) override;
 
     void LoadSettings( wxConfigBase* aCfg ) override;
-
     void SaveSettings( wxConfigBase* aCfg ) override;
 
     /**
@@ -418,8 +414,6 @@ private:
      * and the current library can point a non existent lib.
      */
     virtual void OnActivate( wxActivateEvent& event ) override;
-
-    // General:
 
     /**
      * Set the current active library to \a aLibrary.

@@ -64,7 +64,6 @@ enum id_eeschema_frm
     ID_BUS_MANAGER,
     ID_REMAP_SYMBOLS,
     ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
-    ID_GRID_SETTINGS,
 
     /* Schematic editor horizontal toolbar IDs */
     ID_HIERARCHY,

@@ -108,16 +108,7 @@ int CVPCB_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
 
 int CVPCB_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
 {
-    // TODO should not it be refactored to pcb_frame member function?
-    wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
-
-    if( m_frame->GetUserUnits() == INCHES )
-        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
-    else
-        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
-
-    m_frame->ProcessEvent( evt );
-
+    m_frame->ChangeUserUnits( m_frame->GetUserUnits() == INCHES ? MILLIMETRES : INCHES );
     return 0;
 }
 

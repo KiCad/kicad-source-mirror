@@ -682,7 +682,7 @@ void LIB_VIEW_FRAME::SetSelectedComponent( const wxString& aComponentName )
         }
 
         updatePreviewSymbol();
-        Zoom_Automatique( false );
+        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     }
 }
 

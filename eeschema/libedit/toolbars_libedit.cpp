@@ -245,4 +245,8 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
 
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, galOpts.m_fullscreenCursor );
+
+    m_optionsToolBar->ToggleTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, IsSearchTreeShown() );
+
+    m_optionsToolBar->Refresh();
 }

@@ -122,6 +122,11 @@ TOOL_ACTION EE_ACTIONS::toggleHiddenPins( "eeschema.EditorControl.showHiddenPins
         _( "Show Hidden Pins" ), "",
         hidden_pin_xpm );
 
+TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
+        AS_GLOBAL, 0,
+        _( "Force H/V Wires and Busses" ), "",
+        lines90_xpm );
+
 
 SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
         EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" )
@@ -728,6 +733,15 @@ int SCH_EDITOR_CONTROL::ToggleHiddenPins( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ToggleForceHV( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetForceHVLines( !m_frame->GetForceHVLines() );
+
+    return 0;
+}
+
+
+
 void SCH_EDITOR_CONTROL::setTransitions()
 {
     /*
@@ -764,4 +778,5 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::NavigateHierarchy,     EE_ACTIONS::navigateHierarchy.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::ToggleHiddenPins,      EE_ACTIONS::toggleHiddenPins.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ToggleForceHV,         EE_ACTIONS::toggleForceHV.MakeEvent() );
 }

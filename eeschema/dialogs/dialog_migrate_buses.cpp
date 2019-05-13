@@ -20,7 +20,7 @@
 
 #include <sch_connection.h>
 #include <connection_graph.h>
-
+#include <tool/tool_manager.h>
 #include <dialog_migrate_buses.h>
 
 /**
@@ -65,7 +65,7 @@ DIALOG_MIGRATE_BUSES::DIALOG_MIGRATE_BUSES( SCH_EDIT_FRAME* aParent ) :
     loadGraphData();
     updateUi();
 
-    m_frame->Zoom_Automatique( false );
+    aParent->GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
 }
 
 

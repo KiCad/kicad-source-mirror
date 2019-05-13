@@ -279,10 +279,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnSwitchCanvas )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnSwitchCanvas )
 
-    // Tools and buttons options toolbar
-    EVT_TOOL( ID_TB_OPTIONS_HIDDEN_PINS, SCH_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_BUS_WIRES_ORIENT, SCH_EDIT_FRAME::OnSelectOptionToolbar )
-
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnUpdateSelectTool )
@@ -292,7 +288,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
                          SCH_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
-    EVT_UPDATE_UI( ID_SCH_LEAVE_SHEET, SCH_EDIT_FRAME::OnUpdateHierarchySheet )
     EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
@@ -782,12 +777,6 @@ void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( GetScreen()->IsModify() );
 
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( g_CurrentSheet->Last() != g_RootSheet );
 }
 
 

@@ -40,16 +40,8 @@
 #include <sch_text.h>
 #include <tool/selection.h>
 
-class LIB_EDIT_FRAME;
-class LIB_VIEW_FRAME;
-class DRAWSEGMENT;
 class SCH_ITEM;
-class SCH_NO_CONNECT;
 class EDA_ITEM;
-class SCH_BUS_ENTRY_BASE;
-class SCH_BUS_WIRE_ENTRY;
-class SCH_BUS_BUS_ENTRY;
-class SCH_GLOBALLABEL;
 class SCH_TEXT;
 class SCH_BITMAP;
 class SCH_SHEET;
@@ -57,15 +49,11 @@ class SCH_SHEET_PATH;
 class SCH_SHEET_PIN;
 class SCH_COMPONENT;
 class SCH_FIELD;
-class LIB_PIN;
 class SCH_JUNCTION;
 class DIALOG_SCH_FIND;
-class DIALOG_ANNOTATE;
 class wxFindDialogEvent;
 class wxFindReplaceData;
-class SCHLIB_FILTER;
 class RESCUER;
-class CONNECTION_GRAPH;
 
 
 /// enum used in RotationMiroir()
@@ -247,13 +235,7 @@ public:
     const wxString& GetPlotDirectoryName() const { return m_plotDirectoryName; }
     void SetPlotDirectoryName( const wxString& aDirName ) { m_plotDirectoryName = aDirName; }
 
-    void Process_Special_Functions( wxCommandEvent& event );
     void Process_Config( wxCommandEvent& event );
-
-    /**
-     * Builds the context menu for unfolding a bus
-     */
-    wxMenu* GetUnfoldBusMenu( SCH_LINE* aBus );
 
     /**
      * Return the project file parameter list for Eeschema.
@@ -282,15 +264,6 @@ public:
     const ERC_SETTINGS& GetErcSettings() { return m_ercSettings; }
 
     void UpdateErcSettings( const ERC_SETTINGS& aSettings ) { m_ercSettings = aSettings; }
-
-    /**
-     * Return a default symbol field name for field \a aFieldNdx for all components.
-     *
-     * These field names are not modifiable, but template field names are.
-     *
-     * @param aFieldNdx The field number index
-     */
-    static wxString GetDefaultFieldName( int aFieldNdx );
 
     /**
      * Insert or append a wanted symbol field name into the field names template.
@@ -364,7 +337,6 @@ public:
     void KiwayMailIn( KIWAY_EXPRESS& aEvent ) override;
 
     bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override { return true; }
-    void OnSelectOptionToolbar( wxCommandEvent& event );
     double BestZoom() override;
 
     /**
@@ -785,7 +757,6 @@ private:
     void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );
     void OnFindDrcMarker( wxFindDialogEvent& event );
-    void OnFindCompnentInLib( wxFindDialogEvent& event );
 
     /**
      * Find an item in the schematic matching the search criteria in \a aEvent.
@@ -823,11 +794,9 @@ private:
 
     /* User interface update event handlers. */
     void OnUpdatePaste( wxUpdateUIEvent& event );
-    void OnUpdateBusOrientation( wxUpdateUIEvent& event );
     void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
-    void OnUpdateHierarchySheet( wxUpdateUIEvent& aEvent );
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
 
     /**
@@ -1177,8 +1146,6 @@ public:
      * Generates the connection data for the entire schematic hierarchy.
      */
     void RecalculateConnections( bool aDoCleanup = true );
-
-    void SetCurrentSheet( SCH_SHEET_PATH *aSheet );
 
     /**
      * Allows Eeschema to install its preferences panels into the preferences dialog.

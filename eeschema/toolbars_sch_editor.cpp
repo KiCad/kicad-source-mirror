@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2008 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,18 +23,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file tool_sch.cpp
- */
-
 #include <fctsys.h>
 #include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
 #include <kiface_i.h>
 #include <bitmaps.h>
-#include <sch_view.h>
-#include <sch_painter.h>
-#include <general.h>
 #include <ee_hotkeys.h>
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
@@ -310,29 +303,10 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
-void SCH_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
-{
-    int id = event.GetId();
-
-    switch( id )
-    {
-    case ID_TB_OPTIONS_HIDDEN_PINS:
-        m_toolManager->RunAction( EE_ACTIONS::toggleHiddenPins, true );
-        break;
-
-    case ID_TB_OPTIONS_BUS_WIRES_ORIENT:
-        SetForceHVLines( m_optionsToolBar->GetToolToggled( id ) );
-        break;
-
-    default:
-        wxFAIL_MSG( wxT( "Unexpected select option tool bar ID." ) );
-        break;
-    }
-}
-
-
 void SCH_EDIT_FRAME::SyncMenusAndToolbars()
 {
+    m_mainToolBar->EnableTool( ID_SCH_LEAVE_SHEET, g_CurrentSheet->Last() != g_RootSheet );
+
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, GetUserUnits() != INCHES );
     m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, GetUserUnits() == INCHES );

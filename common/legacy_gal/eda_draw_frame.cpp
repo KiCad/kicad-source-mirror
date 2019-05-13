@@ -26,8 +26,6 @@
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <kiface_i.h>
-#include <gr_basic.h>
-#include <common.h>
 #include <bitmaps.h>
 #include <macros.h>
 #include <id.h>
@@ -38,27 +36,14 @@
 #include <confirm.h>
 #include <kicad_device_context.h>
 #include <dialog_helpers.h>
-#include <base_units.h>
-#include <math/box2.h>
 #include <lockfile.h>
 #include <trace_helpers.h>
-#include <wx/fontdlg.h>
 #include <wx/snglinst.h>
 #include <view/view.h>
-#include <view/view_controls.h>
-#include <gal/graphics_abstraction_layer.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
 #include <wx/clipbrd.h>
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <id.h>
-#include <base_screen.h>
-#include <confirm.h>
-#include <draw_frame.h>
-#include <menus_helpers.h>
 #include <worksheet_shape_builder.h>
 #include <page_info.h>
 #include <title_block.h>
@@ -98,15 +83,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
-
-    EVT_MENU_RANGE( ID_POPUP_ZOOM_START_RANGE, ID_POPUP_ZOOM_END_RANGE, EDA_DRAW_FRAME::OnZoom )
-    EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER, EDA_DRAW_FRAME::OnSelectGrid )
-
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnToggleGridState )
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                    EDA_DRAW_FRAME::OnSelectUnits )
-
-    EVT_TOOL( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnToggleCrossHairStyle )
 
     EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
@@ -304,9 +280,7 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
-    if( m_canvas )
-        m_canvas->SetCanStartBlock( -1 );
-
+    // TODO Obsolete!
     event.Skip();
 }
 
@@ -319,16 +293,7 @@ void EDA_DRAW_FRAME::SkipNextLeftButtonReleaseEvent()
 
 void EDA_DRAW_FRAME::OnToggleGridState( wxCommandEvent& aEvent )
 {
-    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
-    SetGridVisibility( !IsGridVisible() );
-
-    if( IsGalCanvasActive() )
-    {
-        GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
-        GetGalCanvas()->GetView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-    }
-
-    m_canvas->Refresh();
+    wxFAIL_MSG( "Obsolete!  Should go through EDITOR_CONTROL." );
 }
 
 
@@ -343,31 +308,9 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 }
 
 
-void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
-{
-    if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
-    {
-        m_UserUnits = MILLIMETRES;
-        unitsChangeRefresh();
-    }
-    else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && m_UserUnits != INCHES )
-    {
-        m_UserUnits = INCHES;
-        unitsChangeRefresh();
-    }
-}
-
-
 void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
-    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
-    auto& galOpts = GetGalDisplayOptions();
-    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
-
-    galOpts.NotifyChanged();
-
-    // make sure the cursor is redrawn
-    GetCanvas()->Refresh();
+    wxFAIL_MSG( "Obsolete!  Should go through EDITOR_CONTROL." );
 }
 
 
@@ -387,8 +330,6 @@ void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
 
 void EDA_DRAW_FRAME::OnUpdateSelectGrid( wxUpdateUIEvent& aEvent )
 {
-    // JEY TODO: obsolete when everything moves to COMMON_TOOLS
-
     // No need to update the grid select box if it doesn't exist or the grid setting change
     // was made using the select box.
     if( m_gridSelectBox == NULL || m_auxiliaryToolBar == NULL )
@@ -445,59 +386,12 @@ void EDA_DRAW_FRAME::ToolOnRightClick( wxCommandEvent& event )
 
 void EDA_DRAW_FRAME::PrintPage( wxDC* aDC, LSET aPrintMask, bool aPrintMirrorMode, void* aData )
 {
-    wxMessageBox( wxT("EDA_DRAW_FRAME::PrintPage() error") );
 }
 
 
 void EDA_DRAW_FRAME::OnSelectGrid( wxCommandEvent& event )
 {
-    wxMessageBox( "EDA_DRAW_FRAME::OnSelectGrid(): should be handled by common tools now...." );
-
-    int* clientData;
-    int  eventId = ID_POPUP_GRID_LEVEL_100;
-
-    if( event.GetEventType() == wxEVT_CHOICE )
-    {
-        if( m_gridSelectBox == NULL )   // Should not happen
-            return;
-
-        /*
-         * Don't use wxCommandEvent::GetClientData() here.  It always
-         * returns NULL in GTK.  This solution is not as elegant but
-         * it works.
-         */
-        int index = m_gridSelectBox->GetSelection();
-        wxASSERT( index != wxNOT_FOUND );
-
-        if( index == int( m_gridSelectBox->GetCount() - 2 ) )
-        {
-            // this is the separator
-            wxUpdateUIEvent dummy;
-            OnUpdateSelectGrid( dummy );
-            return;
-        }
-        else if( index == int( m_gridSelectBox->GetCount() - 1 ) )
-        {
-            wxUpdateUIEvent dummy;
-            OnUpdateSelectGrid( dummy );
-            wxCommandEvent dummy2;
-            OnGridSettings( dummy2 );
-            return;
-        }
-
-        clientData = (int*) m_gridSelectBox->wxItemContainer::GetClientData( index );
-
-        if( clientData != NULL )
-            eventId = *clientData;
-    }
-    else
-    {
-        eventId = event.GetId();
-    }
-
-    int idx = eventId - ID_POPUP_GRID_LEVEL_1000;
-
-    GetToolManager()->RunAction( "common.Control.gridPreset", true, idx );
+    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
 }
 
 
@@ -586,53 +480,58 @@ void EDA_DRAW_FRAME::SetNoToolSelected()
 
 wxPoint EDA_DRAW_FRAME::GetGridPosition( const wxPoint& aPosition ) const
 {
-    wxPoint pos = aPosition;
-
-    if( m_currentScreen != NULL && m_snapToGrid )
-        pos = GetNearestGridPosition( aPosition );
-
-    return pos;
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
+    return aPosition;
 }
 
 
 void EDA_DRAW_FRAME::SetNextGrid()
 {
-    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 void EDA_DRAW_FRAME::SetPrevGrid()
 {
-    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 void EDA_DRAW_FRAME::SetPresetGrid( int aIndex )
 {
-    wxFAIL_MSG( "Obsolete!  Should go through ToolManager." );
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 int EDA_DRAW_FRAME::BlockCommand( EDA_KEY key )
 {
+    wxFAIL_MSG( "Obsolete; how'd we get here?" );
     return 0;
 }
 
 
 void EDA_DRAW_FRAME::InitBlockPasteInfos()
 {
-    GetScreen()->m_BlockLocate.ClearItemsList();
-    m_canvas->SetMouseCaptureCallback( NULL );
+    wxFAIL_MSG( "Obsolete; how'd we get here?" );
+}
+
+
+bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* , EDA_KEY , const wxPoint& , int  )
+{
+    wxFAIL_MSG( "Obsolete; how'd we get here?" );
+    return false;
 }
 
 
 void EDA_DRAW_FRAME::HandleBlockPlace( wxDC* DC )
 {
+    wxFAIL_MSG( "Obsolete; how'd we get here?" );
 }
 
 
 bool EDA_DRAW_FRAME::HandleBlockEnd( wxDC* DC )
 {
+    wxFAIL_MSG( "Obsolete; how'd we get here?" );
     return false;
 }
 
@@ -651,23 +550,9 @@ void EDA_DRAW_FRAME::UpdateStatusBar()
 
 const wxString EDA_DRAW_FRAME::GetZoomLevelIndicator() const
 {
-    wxString Line;
-    double level = 0.0;
-
-    if( IsGalCanvasActive() )
-    {
-        level = m_galCanvas->GetGAL()->GetZoomFactor();
-    }
-    else if( BASE_SCREEN* screen = GetScreen() )
-    {
-        level = m_zoomLevelCoeff / screen->GetZoom();
-    }
-
     // returns a human readable value which can be displayed as zoom
     // level indicator in dialogs.
-    Line.Printf( wxT( "Z %.2f" ), level );
-
-    return Line;
+    return wxString::Format( wxT( "Z %.2f" ), m_galCanvas->GetGAL()->GetZoomFactor() );
 }
 
 
@@ -781,84 +666,6 @@ void EDA_DRAW_FRAME::PushPreferences( const EDA_DRAW_PANEL* aParentCanvas )
 {
     m_canvas->SetEnableZoomNoCenter( aParentCanvas->GetEnableZoomNoCenter() );
     m_canvas->SetEnableAutoPan( aParentCanvas->GetEnableAutoPan() );
-}
-
-
-bool EDA_DRAW_FRAME::HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-                                       int aExplicitCommand )
-{
-    BLOCK_SELECTOR* block = &GetScreen()->m_BlockLocate;
-
-    if( ( block->GetCommand() != BLOCK_IDLE ) || ( block->GetState() != STATE_NO_BLOCK ) )
-        return false;
-
-    if( aExplicitCommand == 0 )
-        block->SetCommand( (BLOCK_COMMAND_T) BlockCommand( aKey ) );
-    else
-        block->SetCommand( (BLOCK_COMMAND_T) aExplicitCommand );
-
-    if( block->GetCommand() == 0 )
-        return false;
-
-    switch( block->GetCommand() )
-    {
-    case BLOCK_IDLE:
-        break;
-
-    case BLOCK_MOVE:                // Move
-    case BLOCK_DRAG:                // Drag (block defined)
-    case BLOCK_DRAG_ITEM:           // Drag from a drag item command
-    case BLOCK_DUPLICATE:           // Duplicate
-    case BLOCK_DUPLICATE_AND_INCREMENT: // Duplicate and increment relevant references
-    case BLOCK_DELETE:              // Delete
-    case BLOCK_COPY:                // Copy
-    case BLOCK_FLIP:                // Flip
-    case BLOCK_ZOOM:                // Window Zoom
-    case BLOCK_PRESELECT_MOVE:      // Move with preselection list
-        block->InitData( m_canvas, aPosition );
-        break;
-
-    case BLOCK_PASTE:
-        block->InitData( m_canvas, aPosition );
-        block->SetLastCursorPosition( wxPoint( 0, 0 ) );
-        InitBlockPasteInfos();
-
-        if( block->GetCount() == 0 )      // No data to paste
-        {
-            DisplayError( this, wxT( "No block to paste" ), 20 );
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_IDLE );
-            m_canvas->SetMouseCaptureCallback( NULL );
-            block->SetState( STATE_NO_BLOCK );
-            block->SetMessageBlock( this );
-            return true;
-        }
-
-        if( !m_canvas->IsMouseCaptured() )
-        {
-            block->ClearItemsList();
-            DisplayError( this,
-                          wxT( "EDA_DRAW_FRAME::HandleBlockBegin() Err: m_mouseCaptureCallback NULL" ) );
-            block->SetState( STATE_NO_BLOCK );
-            block->SetMessageBlock( this );
-            return true;
-        }
-
-        block->SetState( STATE_BLOCK_MOVE );
-        m_canvas->CallMouseCapture( aDC, aPosition, false );
-        break;
-
-    default:
-        {
-            wxString msg;
-            msg << wxT( "EDA_DRAW_FRAME::HandleBlockBegin() error: Unknown command " ) <<
-            block->GetCommand();
-            DisplayError( this, msg );
-        }
-        break;
-    }
-
-    block->SetMessageBlock( this );
-    return true;
 }
 
 
@@ -997,22 +804,14 @@ wxPoint EDA_DRAW_FRAME::GetCrossHairPosition( bool aInvertY ) const
 
 void EDA_DRAW_FRAME::SetCrossHairPosition( const wxPoint& aPosition, bool aSnapToGrid )
 {
-    // While we're now a GAL canvas, we still have a pre-GAL toolset so some code is going
-    // to look for the crosshair position in the BASE_SCREEN and some code is going to look
-    // for it in the VIEW_CONTROLS.  Better set it in both.
-
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    screen->setCrossHairPosition( aPosition, GetGridOrigin(), aSnapToGrid );
-
-    wxPoint snappedPosition = screen->getCrossHairPosition( false );
-    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( snappedPosition, false );
+    GetGalCanvas()->GetViewControls()->SetCrossHairCursorPosition( aPosition, false );
 }
 
 
-wxPoint EDA_DRAW_FRAME::GetCursorPosition( bool aOnGrid, wxRealPoint* aGridSize ) const
+wxPoint EDA_DRAW_FRAME::GetCursorPosition( bool , wxRealPoint*  ) const
 {
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCursorPosition( aOnGrid, GetGridOrigin(), aGridSize );
+    wxFAIL_MSG( "Obsolete; use VIEW_CONTROLS instead" );
+    return wxPoint();
 }
 
 
@@ -1026,8 +825,8 @@ wxPoint EDA_DRAW_FRAME::GetNearestGridPosition( const wxPoint& aPosition,
 
 wxPoint EDA_DRAW_FRAME::GetCrossHairScreenPosition() const
 {
-    BASE_SCREEN* screen = GetScreen();  // virtual call
-    return screen->getCrossHairScreenPosition();
+    wxFAIL_MSG( "Obsolete; use VIEW_CONTROLS instead" );
+    return wxPoint();
 }
 
 
@@ -1197,111 +996,25 @@ double EDA_DRAW_FRAME::bestZoom( double sizeX, double sizeY, double scaleFactor,
 
 void EDA_DRAW_FRAME::Zoom_Automatique( bool aWarpPointer )
 {
-    if ( IsGalCanvasActive() )
-        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 void EDA_DRAW_FRAME::Window_Zoom( EDA_RECT& Rect )
 {
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 void EDA_DRAW_FRAME::OnZoom( wxCommandEvent& event )
 {
-    wxMessageBox( "EDA_DRAW_FRAME::OnZoom(): should be handled by zoom tool now...." );
-
-    if( m_canvas == NULL )
-        return;
-
-    TOOL_MANAGER* mgr = GetToolManager();
-    int           id = event.GetId();
-
-    if( id == ID_KEY_ZOOM_IN )
-    {
-        if( GetCanvas()->GetEnableZoomNoCenter() )
-            mgr->RunAction( "common.Control.zoomIn", true, id );
-        else
-            mgr->RunAction( "common.Control.zoomInCenter", true, id );
-    }
-    else if( id == ID_KEY_ZOOM_OUT )
-    {
-        if( GetCanvas()->GetEnableZoomNoCenter() )
-            mgr->RunAction( "common.Control.zoomOut", true, id );
-        else
-            mgr->RunAction( "common.Control.zoomOutCenter", true, id );
-    }
-    else if( id >= ID_POPUP_ZOOM_LEVEL_START && id <= ID_POPUP_ZOOM_LEVEL_END )
-    {
-        mgr->RunAction( "common.Control.zoomPreset", true, id - ID_POPUP_ZOOM_LEVEL_START );
-    }
-
-    UpdateStatusBar();
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
 void EDA_DRAW_FRAME::AddMenuZoomAndGrid( wxMenu* MasterMenu )
 {
-    int         maxZoomIds;
-    double      zoom;
-    wxString    msg;
-    BASE_SCREEN* screen = m_canvas->GetScreen();
-
-    msg = AddHotkeyName( _( "Center" ), m_hotkeysDescrList, HK_ZOOM_CENTER );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_CENTER, msg, KiBitmap( zoom_center_on_screen_xpm ) );
-    msg = AddHotkeyName( _( "Zoom In" ), m_hotkeysDescrList, HK_ZOOM_IN );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_IN, msg, KiBitmap( zoom_in_xpm ) );
-    msg = AddHotkeyName( _( "Zoom Out" ), m_hotkeysDescrList, HK_ZOOM_OUT );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_OUT, msg, KiBitmap( zoom_out_xpm ) );
-    msg = AddHotkeyName( _( "Redraw View" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_REDRAW, msg, KiBitmap( zoom_redraw_xpm ) );
-    msg = AddHotkeyName( _( "Zoom to Fit" ), m_hotkeysDescrList, HK_ZOOM_AUTO );
-    AddMenuItem( MasterMenu, ID_POPUP_ZOOM_PAGE, msg, KiBitmap( zoom_fit_in_page_xpm ) );
-
-
-    wxMenu* zoom_choice = new wxMenu;
-    AddMenuItem( MasterMenu, zoom_choice,
-                 ID_POPUP_ZOOM_SELECT, _( "Zoom" ),
-                 KiBitmap( zoom_selection_xpm ) );
-
-    zoom = screen->GetZoom();
-    maxZoomIds = ID_POPUP_ZOOM_LEVEL_END - ID_POPUP_ZOOM_LEVEL_START;
-    maxZoomIds = ( (size_t) maxZoomIds < screen->m_ZoomList.size() ) ?
-                 maxZoomIds : screen->m_ZoomList.size();
-
-    // Populate zoom submenu.
-    for( int i = 0; i < maxZoomIds; i++ )
-    {
-        msg.Printf( wxT( "%.2f" ), m_zoomLevelCoeff / screen->m_ZoomList[i] );
-
-        zoom_choice->Append( ID_POPUP_ZOOM_LEVEL_START + i, _( "Zoom: " ) + msg,
-                             wxEmptyString, wxITEM_CHECK );
-        if( zoom == screen->m_ZoomList[i] )
-            zoom_choice->Check( ID_POPUP_ZOOM_LEVEL_START + i, true );
-    }
-
-    // Create grid submenu as required.
-    if( screen->GetGridCount() )
-    {
-        wxMenu* gridMenu = new wxMenu;
-        AddMenuItem( MasterMenu, gridMenu, ID_POPUP_GRID_SELECT, _( "Grid" ),
-                     KiBitmap( grid_select_xpm ) );
-
-        wxArrayString gridsList;
-        int icurr = screen->BuildGridsChoiceList( gridsList, GetUserUnits() != INCHES );
-
-        for( unsigned i = 0; i < gridsList.GetCount(); i++ )
-        {
-            GRID_TYPE& grid = screen->GetGrid( i );
-            gridMenu->Append( grid.m_CmdId, gridsList[i], wxEmptyString, wxITEM_CHECK );
-
-            if( (int)i == icurr )
-                gridMenu->Check( grid.m_CmdId, true );
-        }
-    }
-
-    MasterMenu->AppendSeparator();
-    AddMenuItem( MasterMenu, ID_POPUP_CANCEL, _( "Close" ), KiBitmap( cancel_xpm ) );
+    wxFAIL_MSG( "Obsolete!  Should go through COMMON_TOOLS." );
 }
 
 
@@ -1347,15 +1060,6 @@ static bool DrawPageOnClipboard( EDA_DRAW_FRAME* aFrame );
 void EDA_DRAW_FRAME::CopyToClipboard( wxCommandEvent& event )
 {
     DrawPageOnClipboard( this );
-
-    if( event.GetId() == ID_GEN_COPY_BLOCK_TO_CLIPBOARD )
-    {
-        // fixme-gal
-        //if( GetScreen()->IsBlockActive() )
-            //m_canvas->SetCursor( wxCursor( (wxStockCursor) m_canvas->GetDefaultCursor() ) );
-
-        m_canvas->EndMouseCapture();
-    }
 }
 
 

@@ -42,11 +42,8 @@ class CONDITIONAL_MENU;
 
 // helper functions that build specific submenus:
 
-// Build the place submenu
-static void preparePlaceMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool );
-
 // Build the files menu. Because some commands are available only if
-// Eeschemat is run outside a project (run alone), aIsOutsideProject is false
+// Eeschema is run outside a project (run alone), aIsOutsideProject is false
 // when Eeschema is run from Kicad manager, and true is run as stand alone app.
 static void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject );
 
@@ -62,9 +59,6 @@ static void prepareHelpMenu( wxMenu* aParentMenu );
 // Build the edit menu
 static void prepareEditMenu( wxMenu* aParentMenu );
 
-// Build the view menu
-static void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool );
-
 // Build the preferences menu
 static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
 
@@ -78,37 +72,126 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     wxMenuBar* menuBar = new wxMenuBar();
     wxString   text;
 
-    // Recreate all menus:
-
+    //
     // Menu File:
+    //
     wxMenu* fileMenu = new wxMenu;
     prepareFilesMenu( fileMenu, Kiface().IsSingle() );
 
+    //
     // Menu Edit:
+    //
     wxMenu* editMenu = new wxMenu;
     prepareEditMenu( editMenu );
 
+    //
     // Menu View:
+    //
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
-    prepareViewMenu( viewMenu, selTool );
 
+    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
+        return g_CurrentSheet->Last() != g_RootSheet;
+    };
+
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
+
+    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == INCHES;
+    };
+
+    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == MILLIMETRES;
+    };
+
+    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalDisplayOptions().m_fullscreenCursor;
+    };
+
+    auto hiddenPinsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetShowAllPins();
+    };
+
+    viewMenu->AddItem( EE_ACTIONS::showLibraryBrowser,    EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EE_ACTIONS::navigateHierarchy,     EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( EE_ACTIONS::leaveSheet,            belowRootSheetCondition );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,            EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,            EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                 EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,               EE_CONDITIONS::ShowAlways );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,          gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,           EE_CONDITIONS::ShowAlways );
+
+    // Units submenu
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
+    viewMenu->AddMenu( unitsSubMenu );
+
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( EE_ACTIONS::toggleHiddenPins, hiddenPinsCondition );
+
+#ifdef __APPLE__
+    viewMenu->AppendSeparator();
+#endif
+
+    //
     // Menu place:
+    //
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
-    preparePlaceMenu( placeMenu, selTool );
 
+    placeMenu->AddItem( EE_ACTIONS::placeSymbol,            EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placePower,             EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawWire,               EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawBus,                EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeBusWireEntry,      EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeBusBusEntry,       EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeNoConnect,         EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeJunction,          EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeLabel,             EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeGlobalLabel,       EE_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( EE_ACTIONS::placeHierarchicalLabel, EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeSheetPin,          EE_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( EE_ACTIONS::drawLines,              EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
+
+    //
     // Menu Inspect:
+    //
     wxMenu* inspectMenu = new wxMenu;
     prepareInspectMenu( inspectMenu );
 
+    //
     // Menu Tools:
+    //
     wxMenu* toolsMenu = new wxMenu;
     prepareToolsMenu( toolsMenu );
 
+    //
     // Menu Preferences:
+    //
     wxMenu* preferencesMenu = new wxMenu;
     preparePreferencesMenu( this, preferencesMenu );
 
+    //
     // Help Menu:
+    //
     wxMenu* helpMenu = new wxMenu;
     prepareHelpMenu( helpMenu );
 
@@ -124,93 +207,6 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
-}
-
-
-void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool )
-{
-    SCH_EDIT_FRAME* frame = static_cast<SCH_EDIT_FRAME*>( selTool->GetManager()->GetEditFrame() );
-
-    auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
-        return g_CurrentSheet->Last() != g_RootSheet;
-    };
-
-    auto gridShownCondition = [ frame ] ( const SELECTION& aSel ) {
-        return frame->IsGridVisible();
-    };
-
-    auto imperialUnitsCondition = [ frame ] ( const SELECTION& aSel ) {
-        return frame->GetUserUnits() == INCHES;
-    };
-
-    auto metricUnitsCondition = [ frame ] ( const SELECTION& aSel ) {
-        return frame->GetUserUnits() == MILLIMETRES;
-    };
-
-    auto fullCrosshairCondition = [ frame ] ( const SELECTION& aSel ) {
-        return frame->GetGalDisplayOptions().m_fullscreenCursor;
-    };
-
-    auto hiddenPinsCondition = [ frame ] ( const SELECTION& aSel ) {
-        return frame->GetShowAllPins();
-    };
-
-    aParentMenu->AddItem( EE_ACTIONS::showLibraryBrowser, EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::navigateHierarchy,  EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition );
-
-    aParentMenu->AddSeparator();
-    aParentMenu->AddItem( ACTIONS::zoomInCenter,    EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( ACTIONS::zoomOutCenter,   EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( ACTIONS::zoomFitScreen,   EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( ACTIONS::zoomTool,        EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( ACTIONS::zoomRedraw,      EE_CONDITIONS::ShowAlways );
-
-    aParentMenu->AddSeparator();
-    aParentMenu->AddCheckItem( ACTIONS::toggleGrid, gridShownCondition );
-    aParentMenu->AddItem( ACTIONS::gridProperties,  EE_CONDITIONS::ShowAlways );
-
-    // Units submenu
-    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
-    unitsSubMenu->SetTitle( _( "&Units" ) );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,      imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,        metricUnitsCondition );
-    aParentMenu->AddMenu( unitsSubMenu );
-
-    aParentMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
-
-    aParentMenu->AddSeparator();
-    aParentMenu->AddCheckItem( EE_ACTIONS::toggleHiddenPins, hiddenPinsCondition );
-
-#ifdef __APPLE__
-    aParentMenu->AppendSeparator();
-#endif
-}
-
-
-void preparePlaceMenu( CONDITIONAL_MENU* aParentMenu, EE_SELECTION_TOOL* selTool )
-{
-    aParentMenu->AddItem( EE_ACTIONS::placeSymbol,            EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placePower,             EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::drawWire,               EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::drawBus,                EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeBusWireEntry,      EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeBusBusEntry,       EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeNoConnect,         EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeJunction,          EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeLabel,             EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeGlobalLabel,       EE_CONDITIONS::ShowAlways );
-
-    aParentMenu->AddSeparator();
-    aParentMenu->AddItem( EE_ACTIONS::placeHierarchicalLabel, EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::drawSheet,              EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::importSheetPin,         EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeSheetPin,          EE_CONDITIONS::ShowAlways );
-
-    aParentMenu->AddSeparator();
-    aParentMenu->AddItem( EE_ACTIONS::drawLines,              EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeSchematicText,     EE_CONDITIONS::ShowAlways );
-    aParentMenu->AddItem( EE_ACTIONS::placeImage,             EE_CONDITIONS::ShowAlways );
 }
 
 

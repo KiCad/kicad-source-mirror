@@ -37,7 +37,7 @@
 #include <kiface_i.h>
 #include <richio.h>
 #include <trace_helpers.h>
-
+#include <tool/tool_manager.h>
 #include <eeschema_id.h>
 #include <class_library.h>
 #include <lib_edit_frame.h>
@@ -317,7 +317,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            Zoom_Automatique( false );
+            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
 
             wxString msg;
             msg.Printf( _( "Error loading schematic file \"%s\".\n%s" ),
@@ -390,7 +390,7 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     SetSheetNumberAndCount();
     SyncView();
     GetScreen()->ClearDrawingState();
@@ -653,7 +653,7 @@ bool SCH_EDIT_FRAME::AppendSchematic()
     screens.TestDanglingEnds();
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-    Zoom_Automatique( false );
+    m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
     SetSheetNumberAndCount();
 
     SyncView();
@@ -881,7 +881,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             GetScreen()->TestDanglingEnds();
 
             GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId );
-            Zoom_Automatique( false );
+            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
             SetSheetNumberAndCount();
             SyncView();
             UpdateTitle();
@@ -891,7 +891,7 @@ bool SCH_EDIT_FRAME::importFile( const wxString& aFileName, int aFileType )
             // Do not leave g_RootSheet == NULL because it is expected to be
             // a valid sheet. Therefore create a dummy empty root sheet and screen.
             CreateScreens();
-            Zoom_Automatique( false );
+            m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
 
             wxString msg;
             msg.Printf( _( "Error loading schematic \"%s\".\n%s" ), aFileName, ioe.What() );

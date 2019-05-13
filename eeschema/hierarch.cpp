@@ -274,7 +274,7 @@ void SCH_EDIT_FRAME::DisplayCurrentSheet()
 
     if( !screen->m_Initialized )
     {
-        Zoom_Automatique( false );
+        m_toolManager->RunAction( "common.Control.zoomFitScreen", true );
         screen->m_Initialized = true;
         screen->ClearUndoORRedoList( screen->m_UndoList, 1 );
     }
