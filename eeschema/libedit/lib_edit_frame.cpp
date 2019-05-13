@@ -196,6 +196,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_libMgr = nullptr;
     m_unit = 1;
     m_convert = 1;
+    m_AboutTitle = "LibEdit";
 
     // Delayed initialization
     if( g_LastTextSize == -1 )

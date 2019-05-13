@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Rafael Sokolowski <Rafael.Sokolowski@web.de>
- * Copyright (C) 2017 KiCad Developers, see CHANGELOG.TXT for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see CHANGELOG.TXT for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,6 +68,8 @@ extern std::string GetCurlLibVersion();
 DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
     : DIALOG_ABOUT_BASE( aParent ), m_info( aAppInfo )
 {
+    wxASSERT( aParent != nullptr );
+
     m_picInformation = KiBitmap( info_xpm );
     m_picDevelopers  = KiBitmap( preference_xpm );
     m_picDocWriters  = KiBitmap( editor_xpm );
@@ -89,11 +91,13 @@ DIALOG_ABOUT::DIALOG_ABOUT( EDA_BASE_FRAME *aParent, ABOUT_APP_INFO& aAppInfo )
         m_bitmapApp->SetBitmap( icon );
     }
 
-    m_staticTextAppTitle->SetLabel( m_info.GetAppName() );
+    m_titleName = aParent->GetAboutTitle();
+    m_staticTextAppTitle->SetLabel( m_titleName );
     m_staticTextCopyright->SetLabel( m_info.GetCopyright() );
     m_staticTextBuildVersion->SetLabel( "Version: " + m_info.GetBuildVersion() );
     m_staticTextLibVersion->SetLabel( m_info.GetLibVersion() );
 
+    SetTitle( wxString::Format( _( "About %s" ), m_titleName ) );
     createNotebooks();
 
     GetSizer()->SetSizeHints( this );
@@ -124,10 +128,13 @@ void DIALOG_ABOUT::createNotebooks()
     createNotebookHtmlPage( m_auiNotebook, _( "Information" ), m_picInformation,
                             m_info.GetDescription() );
 
-    createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers, m_info.GetDevelopers() );
-    createNotebookPage( m_auiNotebook, _( "Doc Writers" ), m_picDocWriters, m_info.GetDocWriters() );
+    createNotebookPage( m_auiNotebook, _( "Developers" ) , m_picDevelopers,
+                        m_info.GetDevelopers() );
+    createNotebookPage( m_auiNotebook, _( "Doc Writers" ), m_picDocWriters,
+                        m_info.GetDocWriters() );
 
-    createNotebookPageByCategory( m_auiNotebook, _( "Artists" ), m_picArtists, m_info.GetArtists() );
+    createNotebookPageByCategory( m_auiNotebook, _( "Artists" ), m_picArtists,
+                                  m_info.GetArtists() );
     createNotebookPageByCategory( m_auiNotebook, _( "Translators" ), m_picTranslators,
                                   m_info.GetTranslators() );
     createNotebookPageByCategory( m_auiNotebook, _( "Packagers" ), m_picPackagers,
@@ -237,7 +244,8 @@ void DIALOG_ABOUT::createNotebookPageByCategory(wxAuiNotebook* aParent, const wx
             wxStaticText* m_staticText1 = new wxStaticText( m_scrolledWindow1, wxID_ANY,
                                                             contributor->GetCategory() + wxT( ":" ),
                                                             wxDefaultPosition, wxDefaultSize, 0 );
-            m_staticText1->SetFont( wxFont( -1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false,
+            m_staticText1->SetFont( wxFont( -1, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL,
+                                            wxFONTWEIGHT_BOLD, false,
                                             wxEmptyString ) ); // bold font
             m_staticText1->Wrap( -1 );
             fgSizer1->Add( m_staticText1, 0, wxALIGN_LEFT|wxBOTTOM, 2 );
@@ -444,7 +452,7 @@ void DIALOG_ABOUT::buildVersionInfoData( wxString& aMsg, bool aFormatHtml )
     #define OFF "OFF" << eol
 
     wxPlatformInfo platform;
-    aMsg << "Application: " << m_info.GetAppName() << eol;
+    aMsg << "Application: " << m_titleName << eol;
     aMsg << "Version: " << m_info.GetBuildVersion() << eol;
     aMsg << "Libraries:" << eol;
     aMsg << indent4 << wxGetLibraryVersionInfo().GetVersionString() << eol;
