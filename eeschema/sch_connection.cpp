@@ -289,7 +289,7 @@ wxString SCH_CONNECTION::Name( bool aIgnoreSheet ) const
 
 void SCH_CONNECTION::SetPrefix( const wxString& aPrefix )
 {
-    m_suffix = aPrefix;
+    m_prefix = aPrefix;
 
     for( auto m : Members() )
         m->SetPrefix( aPrefix );
