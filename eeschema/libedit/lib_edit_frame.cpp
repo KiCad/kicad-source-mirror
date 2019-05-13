@@ -215,6 +215,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_tempCopyComponent = NULL;
     m_treePane = nullptr;
     m_libMgr = nullptr;
+    m_AboutTitle = "LibEdit";
 
     // Delayed initialization
     if( m_textSize == -1 )

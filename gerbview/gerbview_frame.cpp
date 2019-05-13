@@ -89,9 +89,11 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_SelNetnameBox = nullptr;
     m_SelAperAttributesBox = nullptr;
     m_displayMode   = 0;
+    m_AboutTitle = "GerbView";
 
     int fileHistorySize;
-    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize, DEFAULT_FILE_HISTORY_SIZE );
+    Pgm().CommonSettings()->Read( FILE_HISTORY_SIZE_KEY, &fileHistorySize,
+                                  DEFAULT_FILE_HISTORY_SIZE );
     m_drillFileHistory.SetMaxFiles( fileHistorySize );
     m_zipFileHistory.SetMaxFiles( fileHistorySize );
     m_jobFileHistory.SetMaxFiles( fileHistorySize );
@@ -888,6 +890,7 @@ void GERBVIEW_FRAME::SetVisibleElementColor( int aLayerID, COLOR4D aColor )
         wxLogDebug( wxT( "GERBVIEW_FRAME::SetVisibleElementColor(): bad arg %d" ), aLayerID );
     }
 }
+
 
 COLOR4D GERBVIEW_FRAME::GetNegativeItemsColor()
 {

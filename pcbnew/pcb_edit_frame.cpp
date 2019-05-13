@@ -312,6 +312,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_ZoneFillsDirty = true;
 
     m_rotationAngle = 900;
+    m_AboutTitle = "Pcbnew";
 
     // Create GAL canvas
     EDA_DRAW_PANEL_GAL* galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),

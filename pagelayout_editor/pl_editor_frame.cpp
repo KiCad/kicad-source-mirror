@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013 CERN
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Jean-Pierre Charras, jp.charras at wanadoo.fr
  *
  * This program is free software; you can redistribute it and/or
@@ -49,9 +49,6 @@
 #include <wildcards_and_files_ext.h>
 #include <confirm.h>
 
-/*************************/
-/* class PL_EDITOR_FRAME */
-/*************************/
 
 PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     EDA_DRAW_FRAME( aKiway, aParent, FRAME_PL_EDITOR, wxT( "PlEditorFrame" ),
@@ -70,6 +67,7 @@ PL_EDITOR_FRAME::PL_EDITOR_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_originSelectChoice = 0;
     SetDrawBgColor( WHITE );            // default value, user option (WHITE/BLACK)
     SetShowPageLimits( true );
+    m_AboutTitle = "PlEditor";
 
     m_designTreeWidth = 150;
     m_propertiesFrameWidth = 200;
@@ -185,7 +183,8 @@ void PL_EDITOR_FRAME::OnCloseWindow( wxCloseEvent& Event )
 {
     if( GetScreen()->IsModify() )
     {
-        if( !HandleUnsavedChanges( this, _( "The current page layout has been modified. Save changes?" ),
+        if( !HandleUnsavedChanges( this,
+                                   _( "The current page layout has been modified. Save changes?" ),
                                    [&]()->bool { return saveCurrentPageLayout(); } ) )
         {
             Event.Veto();
@@ -325,7 +324,7 @@ void PL_EDITOR_FRAME::UpdateStatusBar()
     // Display Zoom level:
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    // coodinate origin can be the paper Top Left corner,
+    // coordinate origin can be the paper Top Left corner,
     // or each of 4 page corners
     // We know the origin, and the orientation of axis
     wxPoint originCoord;

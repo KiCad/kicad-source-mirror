@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2009-2015 Jean-Pierre Charras, jp.charras wanadoo.fr
  * Copyright (C) 2011 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -87,20 +87,20 @@ enum id_librarytype {
 
 
 /**
- * Class EDA_BASE_FRAME
- * is the base frame for deriving all KiCad main window classes.  This class is not
- * intended to be used directly.  It provides support for automatic calls to
- * a SaveSettings() function.  SaveSettings() for a derived class can choose
- * to do nothing, or rely on basic SaveSettings() support in this base class to do
- * most of the work by calling it from the derived class's SaveSettings().
+ * The base frame for deriving all KiCad main window classes.
+ *
+ * This class is not intended to be used directly.  It provides support for automatic calls
+ * to SaveSettings() function.  SaveSettings() for a derived class can choose to do nothing,
+ * or rely on basic SaveSettings() support in this base class to do most of the work by
+ * calling it from the derived class's SaveSettings().
  * <p>
  * This class is not a KIWAY_PLAYER because KICAD_MANAGER_FRAME is derived from it
  * and that class is not a player.
+ * </p>
  */
 class EDA_BASE_FRAME : public wxFrame
 {
     /**
-     * Function windowClosing
      * (with its unexpected name so it does not collide with the real OnWindowClose()
      * function provided in derived classes) is called just before a window
      * closing, and is used to call a derivation specific
@@ -148,7 +148,6 @@ protected:
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;
 
     /**
-     * Function GetBackupSuffix
      * @return the suffix to be appended to the file extension on backup
      */
     static wxString GetBackupSuffix()
@@ -157,7 +156,6 @@ protected:
     }
 
     /**
-     * Function GetAutoSaveFilePrefix
      * @return the string to prepend to a file name for automatic save.
      */
     static wxString GetAutoSaveFilePrefix()
@@ -166,37 +164,35 @@ protected:
     }
 
     /**
-     * Function onAutoSaveTimer
-     * handles the auto save timer event.
+     * Handle the auto save timer event.
      */
     void onAutoSaveTimer( wxTimerEvent& aEvent );
 
     /**
-     * Function autoSaveRequired
-     * returns the auto save status of the application.  Override this function if
-     * your derived frame supports automatic file saving.
+     * Return the auto save status of the application.
+     *
+     * Override this function if your derived frame supports automatic file saving.
      */
     virtual bool isAutoSaveRequired() const { return false; }
 
     /**
-     * Function doAutoSave
-     * should be overridden by the derived class to handle the auto save feature.
+     * This should be overridden by the derived class to handle the auto save feature.
      *
      * @return true if the auto save was successful otherwise false.
      */
     virtual bool doAutoSave();
 
     /**
-     * Function config
-     * returns the wxConfigBase used in SaveSettings(), and is overloaded in
-     * KICAD_MANAGER_FRAME
+     * Return the wxConfigBase used in SaveSettings().
+     *
+     * This is overloaded in #KICAD_MANAGER_FRAME
      */
     virtual wxConfigBase* config();
 
     /**
-     * Function sys_search
-     * returns a SEARCH_STACK pertaining to entire program, and is overloaded in
-     * KICAD_MANAGER_FRAME
+     * Return a SEARCH_STACK pertaining to entire program.
+     *
+     * This is overloaded in #KICAD_MANAGER_FRAME
      */
     virtual const SEARCH_STACK& sys_search();
 
@@ -210,8 +206,7 @@ public:
     ~EDA_BASE_FRAME();
 
     /**
-     * Function ProcessEvent
-     * overrides the default process event handler to implement the auto save feature.
+     * Override the default process event handler to implement the auto save feature.
      *
      * @warning If you override this function in a derived class, make sure you call
      *          down to this or the auto save feature will be disabled.
@@ -236,16 +231,14 @@ public:
     void PrintMsg( const wxString& text );
 
     /**
-     * Function InstallPreferences
-     * allows a Frame to load its preference panels (if any) into the preferences
-     * dialog.
+     * Allow a frame to load its preference panels (if any) into the preferences dialog.
+     *
      * @param aParent a paged dialog into which the preference panels should be installed
      */
     virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }
 
     /**
-     * Function LoadSettings
-     * loads common frame parameters from a configuration file.
+     * Load common frame parameters from a configuration file.
      *
      * Don't forget to call the base method or your frames won't
      * remember their positions and sizes.
@@ -253,8 +246,7 @@ public:
     virtual void LoadSettings( wxConfigBase* aCfg );
 
     /**
-     * Function SaveSettings
-     * saves common frame parameters to a configuration data file.
+     * Saves common frame parameters to a configuration data file.
      *
      * Don't forget to call the base class's SaveSettings() from
      * your derived SaveSettings() otherwise the frames won't remember their
@@ -263,7 +255,6 @@ public:
     virtual void SaveSettings( wxConfigBase* aCfg );
 
     /**
-     * Function ConfigBaseName
      * @return a base name prefix used in Load/Save settings to build
      * the full name of keys used in config.
      * This is usually the name of the frame set by CTOR, unless m_configFrameName
@@ -280,8 +271,8 @@ public:
 
 
     /**
-     * Function SaveProjectSettings
-     * saves changes to the project settings to the project (.pro) file.
+     * Save changes to the project settings to the project (.pro) file.
+     *
      * The method is virtual so you can override it to call the suitable save method.
      * The base method do nothing
      * @param aAskForSave = true to open a dialog before saving the settings
@@ -291,9 +282,9 @@ public:
     // Read/Save and Import/export hotkeys config
 
     /**
-     * Function WriteHotkeyConfig
      * Store the current hotkey list
-     * It is stored using the standard wxConfig mechanism or a file.
+     *
+     * The hotkey list is stored using the standard wxConfig mechanism or a file.
      *
      * @param aDescList = pointer to the current hotkey list.
      * @param aFullFileName = a wxString pointer to a full file name.
@@ -301,34 +292,35 @@ public:
      * the output format is: shortcut  "key"  "function"
      * lines starting with # are comments
      */
-    virtual int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList, wxString* aFullFileName = NULL );
+    virtual int WriteHotkeyConfig( struct EDA_HOTKEY_CONFIG* aDescList,
+                                   wxString* aFullFileName = NULL );
 
     /**
-     * Function ImportHotkeyConfigFromFile
      * Prompt the user for an old hotkey file to read, and read it.
+     *
      * @param aDescList = current hotkey list descr. to initialize.
-     * @param aDefaultShortname = a default short name (extention not needed)
+     * @param aDefaultShortname = a default short name (extension not needed)
      *     like eechema, kicad...
      */
     void ImportHotkeyConfigFromFile( EDA_HOTKEY_CONFIG* aDescList,
                                      const wxString& aDefaultShortname );
 
     /**
-     * Function ExportHotkeyConfigToFile
      * Prompt the user for an old hotkey file to read, and read it.
+     *
      * @param aDescList = current hotkey list descr. to initialize.
-     * @param aDefaultShortname = a default short name (extention not needed)
+     * @param aDefaultShortname = a default short name (extension not needed)
      *     like eechema, kicad...
      */
     void ExportHotkeyConfigToFile( EDA_HOTKEY_CONFIG* aDescList,
                                    const wxString& aDefaultShortname );
 
     /**
-     * Function GetFileFromHistory
-     * fetches the file name from the file history list.
-     * and removes the selected file, if this file does not exists
-     * Note also the menu is updated, if wxFileHistory::UseMenu
-     * was called at init time
+     * Fetches the file name from the file history list.
+     *
+     * This removes the selected file, if this file does not exist.  The menu is also updated,
+     * if wxFileHistory::UseMenu was called at init time
+     *
      * @param cmdId The command ID associated with the \a aFileHistory object.
      * @param type Please document me!
      * @param aFileHistory The wxFileHistory in use. If null, the main application file
@@ -339,10 +331,10 @@ public:
                                  wxFileHistory* aFileHistory = NULL );
 
     /**
-     * Function UpdateFileHistory
-     * Updates the list of recently opened files.
-     * Note also the menu is updated, if wxFileHistory::UseMenu
-     * was called at init time
+     * Update the list of recently opened files.
+     *
+     * The menu is also updated, if wxFileHistory::UseMenu was called at init time.
+     *
      * @param FullFileName The full file name including the path.
      * @param aFileHistory The wxFileHistory in use.
      * If NULL, the main application file history is used.
@@ -354,15 +346,14 @@ public:
     wxString GetMruPath() const { return m_mruPath; }
 
     /**
-     * Function ReCreateMenuBar
-     * Creates recreates the menu bar.
+     * Recreates the menu bar.
+     *
      * Needed when the language is changed
      */
     virtual void ReCreateMenuBar();
 
     /**
-     * Function IsWritable
-     * checks if \a aFileName can be written.
+     * Checks if \a aFileName can be written.
      * <p>
      * The function performs a number of tests on \a aFileName to verify that it
      * can be saved.  If \a aFileName defines a path with no file name, them the
@@ -380,8 +371,7 @@ public:
     bool IsWritable( const wxFileName& aFileName );
 
     /**
-     * Function CheckForAutoSaveFile
-     * checks if an auto save file exists for \a aFileName and takes the appropriate
+     * Check if an auto save file exists for \a aFileName and takes the appropriate
      * action depending on the user input.
      * <p>
      * If an auto save file exists for \a aFileName, the user is prompted if they wish
@@ -396,25 +386,23 @@ public:
     void CheckForAutoSaveFile( const wxFileName& aFileName );
 
     /**
-     * Function ShowChangedLanguage
-     * redraws the menus and what not in current language.
+     * Redraw the menus and what not in current language.
      */
     virtual void ShowChangedLanguage();
 
     /**
-     * Function CommonSettingsChanged
      * Notification event that some of the common (suite-wide) settings have changed.
      * Update menus, toolbars, local variables, etc.
      */
     virtual void CommonSettingsChanged();
 
     /**
-     * Function PostCommandMenuEvent
-     *
      * Post a menu event to the frame, which can be used to trigger actions
      * bound to menu items.
      */
     bool PostCommandMenuEvent( int evt_type );
+
+    const wxString& GetAboutTitle() const { return m_AboutTitle; }
 };
 
 
@@ -450,7 +438,6 @@ public:
     }
 
     /**
-     * Function HToolbar
      * Turn *this to a horizontal toolbar for KiCad.
      */
     EDA_PANE& HToolbar()
@@ -465,7 +452,6 @@ public:
     }
 
     /**
-     * Function VToolbar
      * Turn *this into a vertical toolbar for KiCad.
      */
     EDA_PANE& VToolbar()
@@ -480,7 +466,6 @@ public:
     }
 
     /**
-     * Function Palette
      * Turn *this into a captioned palette suitable for a symbol tree, layers manager, etc.
      */
     EDA_PANE& Palette()
@@ -491,7 +476,6 @@ public:
     }
 
     /**
-     * Function Canvas
      * Turn *this into an undecorated pane suitable for a drawing canvas.
      */
     EDA_PANE& Canvas()
@@ -504,7 +488,6 @@ public:
     }
 
     /**
-     * Function Messages
      * Turn *this into a messages pane for KiCad.
      */
     EDA_PANE& Messages()
