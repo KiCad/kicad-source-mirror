@@ -138,6 +138,7 @@ EDA_ITEM* SCH_TEXT::Clone() const
 void SCH_TEXT::IncrementLabel( int aIncrement )
 {
     IncrementLabelMember( m_Text, aIncrement );
+    m_shown_text = UnescapeString( m_Text );
 }
 
 

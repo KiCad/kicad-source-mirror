@@ -377,6 +377,9 @@ public:
 protected:
     wxString    m_Text;
 
+    /// Cache of unescaped text for efficient access
+    wxString    m_shown_text;
+
     // wxString isn't thread-safe, so make use of this in multi-threaded situations
     mutable UNIQUE_MUTEX m_mutex;
 
@@ -411,9 +414,6 @@ private:
         TE_MULTILINE,
         TE_VISIBLE,
     };
-
-    /// Cache of unescaped text for efficient access
-    wxString m_shown_text;
 };
 
 
