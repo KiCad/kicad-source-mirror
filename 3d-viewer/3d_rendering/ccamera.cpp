@@ -310,7 +310,7 @@ void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
 
     case PROJECTION_ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
-        aOutDirection = -m_dir;
+        aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
 }
@@ -341,7 +341,7 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &
 
     case PROJECTION_ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
-        aOutDirection = -m_dir;
+        aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
 }
