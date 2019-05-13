@@ -1107,6 +1107,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                             auto c = std::make_shared<SCH_CONNECTION>( possible_driver,
                                                                        aSubgraph->m_sheet );
                             c->SetName( static_cast<SCH_PIN *>( possible_driver )->GetName() );
+
+                            if( c->Name( true ) == aSubgraph->m_driver_connection->Name( true ) )
+                                continue;
+
                             connections_to_check.push_back( c );
                             wxLogTrace( "CONN", "%lu (%s): Adding secondary pin %s",
                                         aSubgraph->m_code,
@@ -1123,6 +1127,10 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                         auto c = std::make_shared<SCH_CONNECTION>( possible_driver,
                                                                    aSubgraph->m_sheet );
                         c->SetName( static_cast<SCH_TEXT*>( possible_driver )->GetShownText() );
+
+                        if( c->Name( true ) == aSubgraph->m_driver_connection->Name( true ) )
+                            continue;
+
                         connections_to_check.push_back( c );
                         wxLogTrace( "CONN", "%lu (%s): Adding secondary label %s",
                                     aSubgraph->m_code,
@@ -1219,13 +1227,13 @@ void CONNECTION_GRAPH::buildConnectionGraph()
                     {
                         wxLogTrace( "CONN", "%lu (%s) absorbs neighbor %lu (%s)",
                                     subgraph->m_code, connection->Name(),
-                                    candidate->m_code, member->Name() );
-
-                        // Candidate may have other non-chosen drivers we need to follow
-                        add_connections_to_check( candidate );
+                                    candidate->m_code, candidate->m_driver_connection->Name() );
 
                         subgraph->Absorb( candidate );
                         invalidated_subgraphs.insert( subgraph );
+
+                        // Candidate may have other non-chosen drivers we need to follow
+                        add_connections_to_check( subgraph );
                     }
                 }
             }
