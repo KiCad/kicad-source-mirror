@@ -464,8 +464,8 @@ void EE_POINT_EDITOR::updateItem() const
         pinEditedCorner( getEditedPointIndex(), Mils2iu( 1 ), Mils2iu( 1 ),
                          topLeft, topRight, botLeft, botRight );
 
-        rect->SetPosition( (wxPoint) topLeft );
-        rect->SetEnd( (wxPoint) botRight );
+        rect->SetPosition( mapCoords( topLeft ) );
+        rect->SetEnd( mapCoords( botRight ) );
         break;
     }
 
