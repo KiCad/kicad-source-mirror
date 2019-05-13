@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2015-2016 Mario Luzeiro <mrluzeiro@ua.pt>
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -310,7 +310,7 @@ void CCAMERA::MakeRay( const SFVEC2I &aWindowPos,
 
     case PROJECTION_ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
-        aOutDirection = -m_dir;
+        aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
 }
@@ -341,7 +341,7 @@ void CCAMERA::MakeRay( const SFVEC2F &aWindowPos, SFVEC3F &aOutOrigin, SFVEC3F &
 
     case PROJECTION_ORTHO:
         aOutOrigin = up_plus_right * 0.5f + m_frustum.nc;
-        aOutDirection = -m_dir;
+        aOutDirection = -m_dir + SFVEC3F( FLT_EPSILON );
         break;
     }
 }
