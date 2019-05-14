@@ -7,7 +7,7 @@
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2009-2016 Dick Hollenbeck, dick@softplc.com
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,9 +59,11 @@
 DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFrame,
                                         wxWindow* aParent ) :
     DIALOG_DRC_CONTROL_BASE( aParent ),
-    m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl, m_TrackMinWidthUnit, true ),
+    m_trackMinWidth( aEditorFrame, m_TrackMinWidthTitle, m_SetTrackMinWidthCtrl,
+                     m_TrackMinWidthUnit, true ),
     m_viaMinSize( aEditorFrame, m_ViaMinTitle, m_SetViaMinSizeCtrl, m_ViaMinUnit, true ),
-    m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl, m_MicroViaMinUnit, true )
+    m_uviaMinSize( aEditorFrame, m_MicroViaMinTitle, m_SetMicroViakMinSizeCtrl,
+                   m_MicroViaMinUnit, true )
 {
     m_config = Kiface().KifaceSettings();
     m_tester = aTester;
@@ -82,17 +84,23 @@ DIALOG_DRC_CONTROL::DIALOG_DRC_CONTROL( DRC* aTester, PCB_EDIT_FRAME* aEditorFra
 
     // Connect events
     m_ClearanceListBox->Connect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
-                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ), NULL, this );
+                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ),
+                                 NULL, this );
     m_ClearanceListBox->Connect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
-                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ), NULL, this );
+                                 wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ),
+                                 NULL, this );
     m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ), NULL, this );
+                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ),
+                                   NULL, this );
     m_UnconnectedListBox->Connect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ),
+                                   NULL, this );
     m_FootprintsListBox->Connect( ID_FOOTPRINTS_LIST, wxEVT_LEFT_DCLICK,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ), NULL, this );
+                                  wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ),
+                                  NULL, this );
     m_FootprintsListBox->Connect( ID_FOOTPRINTS_LIST, wxEVT_RIGHT_UP,
-                                   wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ), NULL, this );
+                                  wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ),
+                                  NULL, this );
 
     // Now all widgets have the size fixed, call FinishDialogSettings
     FinishDialogSettings();
@@ -107,17 +115,23 @@ DIALOG_DRC_CONTROL::~DIALOG_DRC_CONTROL()
 
     // Disconnect events
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_LEFT_DCLICK,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ), NULL, this );
+                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickClearance ),
+                                    NULL, this );
     m_ClearanceListBox->Disconnect( ID_CLEARANCE_LIST, wxEVT_RIGHT_UP,
-                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ), NULL, this );
+                                    wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpClearance ),
+                                    NULL, this );
     m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_LEFT_DCLICK,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ), NULL, this );
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickUnconnected ),
+                                      NULL, this );
     m_UnconnectedListBox->Disconnect( ID_UNCONNECTED_LIST, wxEVT_RIGHT_UP,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ), NULL, this );
+                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpUnconnected ),
+                                      NULL, this );
     m_FootprintsListBox->Disconnect( ID_FOOTPRINTS_LIST, wxEVT_LEFT_DCLICK,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ), NULL, this );
+                                     wxMouseEventHandler( DIALOG_DRC_CONTROL::OnLeftDClickFootprints ),
+                                     NULL, this );
     m_FootprintsListBox->Disconnect( ID_FOOTPRINTS_LIST, wxEVT_RIGHT_UP,
-                                      wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ), NULL, this );
+                                     wxMouseEventHandler( DIALOG_DRC_CONTROL::OnRightUpFootprints ),
+                                     NULL, this );
 }
 
 
@@ -174,8 +188,7 @@ void DIALOG_DRC_CONTROL::InitValues()
     SetFocus();
 }
 
-/* accept DRC parameters (min clearance value and min sizes
-*/
+
 void DIALOG_DRC_CONTROL::SetDrcParmeters( )
 {
     m_BrdSettings.m_TrackMinWidth = m_trackMinWidth.GetValue();
@@ -508,9 +521,6 @@ void DIALOG_DRC_CONTROL::OnLeftUpUnconnected( wxMouseEvent& event )
 }
 
 
-/* called when switching from Error list to Unconnected list
- * To avoid mistakes, the current marker is selection is cleared
- */
 void DIALOG_DRC_CONTROL::OnChangingMarkerList( wxNotebookEvent& event )
 {
     // Shouldn't be necessary, but is on at least OSX
@@ -667,7 +677,25 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 
         if( selectedIndex != wxNOT_FOUND )
         {
+            // Clear the current item.  It may be the selected DRC marker.
+            m_brdEditor->SetCurItem( NULL );
+            m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
+
+            size_t newIndex = wxNOT_FOUND;
+
+            if( m_ClearanceListBox->GetItemCount() > 1 )
+            {
+                newIndex = ( selectedIndex == m_ClearanceListBox->GetItemCount() - 1 ) ?
+                           selectedIndex - 1 : selectedIndex;
+            }
+
             m_ClearanceListBox->DeleteItem( selectedIndex );
+
+            if( newIndex != wxNOT_FOUND )
+            {
+                focusOnItem( m_ClearanceListBox->GetItem( newIndex ) );
+                m_ClearanceListBox->SetSelection( newIndex );
+            }
 
             // redraw the pcb
             RedrawDrawPanel();
