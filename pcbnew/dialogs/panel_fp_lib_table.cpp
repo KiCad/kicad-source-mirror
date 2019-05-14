@@ -340,6 +340,9 @@ PANEL_FP_LIB_TABLE::PANEL_FP_LIB_TABLE( DIALOG_EDIT_LIBRARY_TABLES* aParent,
         g->SetColSize( COL_OPTIONS, 80 );
     }
 
+    m_path_subs_grid->SetColLabelValue( 0, _( "Name" ) );
+    m_path_subs_grid->SetColLabelValue( 1, _( "Value" ) );
+
     // select the last selected page
     m_auinotebook->SetSelection( m_pageNdx );
     m_cur_grid = ( m_pageNdx == 0 ) ? m_global_grid : m_project_grid;
