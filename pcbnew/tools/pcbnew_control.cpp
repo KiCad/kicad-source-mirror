@@ -187,14 +187,6 @@ TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::switchCursor( "pcbnew.Control.switchCursor",
-        AS_GLOBAL, 0,
-        "", "" );
-
-TOOL_ACTION PCB_ACTIONS::switchUnits( "pcbnew.Control.switchUnits",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
-        "", "" );
-
 TOOL_ACTION PCB_ACTIONS::deleteItemCursor( "pcbnew.Control.deleteItemCursor",
         AS_GLOBAL, 0,
         "", "" );
@@ -642,33 +634,6 @@ int PCBNEW_CONTROL::ResetCoords( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::SwitchCursor( const TOOL_EVENT& aEvent )
-{
-    auto& galOpts = m_frame->GetGalDisplayOptions();
-
-    galOpts.m_fullscreenCursor = !galOpts.m_fullscreenCursor;
-    galOpts.NotifyChanged();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::SwitchUnits( const TOOL_EVENT& aEvent )
-{
-    // TODO should not it be refactored to pcb_frame member function?
-    wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED );
-
-    if( m_frame->GetUserUnits() == INCHES )
-        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_MM );
-    else
-        evt.SetId( ID_TB_OPTIONS_SELECT_UNIT_INCH );
-
-    m_frame->ProcessEvent( evt );
-
-    return 0;
-}
-
-
 static bool deleteItem( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
 {
     SELECTION_TOOL* selectionTool = aToolMgr->GetTool<SELECTION_TOOL>();
@@ -1047,8 +1012,6 @@ void PCBNEW_CONTROL::setTransitions()
 
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        PCB_ACTIONS::resetCoords.MakeEvent() );
-    Go( &PCBNEW_CONTROL::SwitchCursor,       PCB_ACTIONS::switchCursor.MakeEvent() );
-    Go( &PCBNEW_CONTROL::SwitchUnits,        PCB_ACTIONS::switchUnits.MakeEvent() );
     Go( &PCBNEW_CONTROL::DeleteItemCursor,   PCB_ACTIONS::deleteItemCursor.MakeEvent() );
     Go( &PCBNEW_CONTROL::ShowHelp,           PCB_ACTIONS::showHelp.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );

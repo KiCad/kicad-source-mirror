@@ -81,10 +81,6 @@ TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_DCODE_DISPLAY_ONOFF ),
         "", "" );
 
-TOOL_ACTION GERBVIEW_ACTIONS::switchUnits( "gerbview.Control.switchUnits",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
-        "", "" );
-
 TOOL_ACTION GERBVIEW_ACTIONS::resetCoords( "gerbview.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
@@ -265,6 +261,5 @@ void GERBVIEW_CONTROL::setTransitions()
     Go( &GERBVIEW_CONTROL::DisplayControl,     GERBVIEW_ACTIONS::dcodeDisplay.MakeEvent() );
 
     Go( &GERBVIEW_CONTROL::ResetCoords,        GERBVIEW_ACTIONS::resetCoords.MakeEvent() );
-    Go( &GERBVIEW_CONTROL::SwitchUnits,        GERBVIEW_ACTIONS::switchUnits.MakeEvent() );
     Go( &GERBVIEW_CONTROL::ShowHelp,           GERBVIEW_ACTIONS::showHelp.MakeEvent() );
 }

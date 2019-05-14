@@ -58,24 +58,12 @@ public:
 
     static TOOL_ACTION measureTool;
 
-    // View controls
-    static TOOL_ACTION zoomIn;
-    static TOOL_ACTION zoomOut;
-    static TOOL_ACTION zoomInCenter;
-    static TOOL_ACTION zoomOutCenter;
-    static TOOL_ACTION zoomCenter;
-    static TOOL_ACTION zoomFitScreen;
-    static TOOL_ACTION zoomPreset;
-
     // Display modes
     static TOOL_ACTION linesDisplayOutlines;
     static TOOL_ACTION flashedDisplayOutlines;
     static TOOL_ACTION polygonsDisplayOutlines;
     static TOOL_ACTION negativeObjectDisplay;
     static TOOL_ACTION dcodeDisplay;
-    static TOOL_ACTION highContrastMode;
-    static TOOL_ACTION highContrastInc;
-    static TOOL_ACTION highContrastDec;
 
     // Layer control
     static TOOL_ACTION layerPrev;
@@ -86,29 +74,11 @@ public:
 
     static TOOL_ACTION layerChanged;        // notification
 
-    // Grid control
-    static TOOL_ACTION gridFast1;
-    static TOOL_ACTION gridFast2;
-    static TOOL_ACTION gridNext;
-    static TOOL_ACTION gridPrev;
-    static TOOL_ACTION gridSetOrigin;
-    static TOOL_ACTION gridResetOrigin;
-    static TOOL_ACTION gridPreset;
-
-    /// Cursor control
-    static TOOL_ACTION cursorClick;
-    static TOOL_ACTION cursorDblClick;
-
     // Miscellaneous
     static TOOL_ACTION selectionTool;
     static TOOL_ACTION zoomTool;
-    static TOOL_ACTION panTool;
-    static TOOL_ACTION pickerTool;
     static TOOL_ACTION resetCoords;
-    static TOOL_ACTION switchCursor;
-    static TOOL_ACTION switchUnits;
     static TOOL_ACTION showHelp;
-    static TOOL_ACTION toBeDone;
 
     // Highlighting
     static TOOL_ACTION highlightClear;

@@ -87,8 +87,6 @@ public:
 
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );
-    int SwitchCursor( const TOOL_EVENT& aEvent );
-    int SwitchUnits( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
     int PasteItemsFromClipboard( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );

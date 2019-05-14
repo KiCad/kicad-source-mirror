@@ -311,8 +311,6 @@ public:
     static TOOL_ACTION pickerTool;
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION measureTool;
-    static TOOL_ACTION switchCursor;
-    static TOOL_ACTION switchUnits;
     static TOOL_ACTION updateUnits;
     static TOOL_ACTION deleteItemCursor;
     static TOOL_ACTION clearHighlight;
