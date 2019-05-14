@@ -27,7 +27,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_interactive.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 
 TOOL_INTERACTIVE::TOOL_INTERACTIVE( TOOL_ID aId, const std::string& aName ) :
     TOOL_BASE( INTERACTIVE, aId, aName )
@@ -71,7 +71,7 @@ void TOOL_INTERACTIVE::goInternal( TOOL_STATE_FUNC& aState, const TOOL_EVENT_LIS
 }
 
 
-void TOOL_INTERACTIVE::SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger )
+void TOOL_INTERACTIVE::SetContextMenu( ACTION_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger )
 {
     if( aMenu )
         aMenu->SetTool( this );

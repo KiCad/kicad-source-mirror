@@ -130,7 +130,7 @@ private:
 
     SELECTION_TOOL* m_selectionTool;
 
-    CONTEXT_MENU* m_placementMenu;
+    ACTION_MENU* m_placementMenu;
 
     PCB_BASE_FRAME* m_frame;
 

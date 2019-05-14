@@ -24,10 +24,10 @@
  */
 
 #include <tool/conditional_menu.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 
 
-CONTEXT_MENU* CONDITIONAL_MENU::create() const
+ACTION_MENU* CONDITIONAL_MENU::create() const
 {
     CONDITIONAL_MENU* clone = new CONDITIONAL_MENU( m_isContextMenu, m_tool );
     clone->m_entries = m_entries;
@@ -51,7 +51,7 @@ void CONDITIONAL_MENU::AddCheckItem( const TOOL_ACTION& aAction,
 }
 
 
-void CONDITIONAL_MENU::AddMenu( CONTEXT_MENU* aMenu, const SELECTION_CONDITION& aCondition,
+void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
     addEntry( ENTRY( aMenu, aCondition, aOrder ) );

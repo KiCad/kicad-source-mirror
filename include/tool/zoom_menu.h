@@ -25,17 +25,17 @@
 #ifndef ZOOM_MENU_H
 #define ZOOM_MENU_H
 
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;
 
-class ZOOM_MENU : public CONTEXT_MENU
+class ZOOM_MENU : public ACTION_MENU
 {
 public:
     ZOOM_MENU( EDA_DRAW_FRAME* aParent );
 
 private:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new ZOOM_MENU( m_parent );
     }

@@ -31,7 +31,7 @@
 #include <tool/tool_event.h>
 #include <tool/tool_base.h>
 
-class CONTEXT_MENU;
+class ACTION_MENU;
 
 class TOOL_INTERACTIVE : public TOOL_BASE
 {
@@ -62,7 +62,7 @@ public:
      * @param aMenu is the menu to be assigned.
      * @param aTrigger determines conditions upon which the context menu is activated.
      */
-    void SetContextMenu( CONTEXT_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
+    void SetContextMenu( ACTION_MENU* aMenu, CONTEXT_MENU_TRIGGER aTrigger = CMENU_BUTTON );
 
     /**
      * Function RunMainStack()

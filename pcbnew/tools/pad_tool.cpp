@@ -61,7 +61,7 @@ TOOL_ACTION PCB_ACTIONS::pushPadSettings(
         push_pad_settings_xpm );
 
 
-class PAD_CONTEXT_MENU : public CONTEXT_MENU
+class PAD_CONTEXT_MENU : public ACTION_MENU
 {
 public:
 
@@ -88,7 +88,7 @@ public:
 
 protected:
 
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new PAD_CONTEXT_MENU( m_editingFootprint, m_haveGlobalPadSettings );
     }

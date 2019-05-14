@@ -36,25 +36,24 @@
 class TOOL_INTERACTIVE;
 
 /**
- * Class CONTEXT_MENU
+ * Class ACTION_MENU
  *
- * Defines the structure of a context (usually right-click) popup menu
- * for a given tool.
+ * Defines the structure of a menu based on ACTIONs.
  */
-class CONTEXT_MENU : public wxMenu
+class ACTION_MENU : public wxMenu
 {
 public:
     ///> Default constructor
-    CONTEXT_MENU();
+    ACTION_MENU();
 
-    virtual ~CONTEXT_MENU();
+    virtual ~ACTION_MENU();
 
-    CONTEXT_MENU( const CONTEXT_MENU& aMenu ) = delete;
-    CONTEXT_MENU& operator=( const CONTEXT_MENU& aMenu ) = delete;
+    ACTION_MENU( const ACTION_MENU& aMenu ) = delete;
+    ACTION_MENU& operator=( const ACTION_MENU& aMenu ) = delete;
 
     /**
      * Function SetTitle()
-     * Sets title for the context menu. The title is shown as a text label shown on the top of
+     * Sets title for the menu. The title is shown as a text label shown on the top of
      * the menu.
      * @param aTitle is the new title.
      */
@@ -93,11 +92,11 @@ public:
 
     /**
      * Function Add()
-     * Adds a context menu as a submenu. The difference between this function and wxMenu::AppendSubMenu()
-     * is the capability to handle icons.
+     * Adds an action menu as a submenu. The difference between this function and
+     * wxMenu::AppendSubMenu() is the capability to handle icons.
      * @param aMenu is the submenu to be added.
      */
-    wxMenuItem* Add( CONTEXT_MENU* aMenu );
+    wxMenuItem* Add( ACTION_MENU* aMenu );
 
     /**
      * Function Clear()
@@ -117,7 +116,7 @@ public:
      * Function GetSelected()
      * Returns the position of selected item. If the returned value is negative, that means that
      * menu was dismissed.
-     * @return The position of selected item in the context menu.
+     * @return The position of selected item in the action menu.
      */
     inline int GetSelected() const
     {
@@ -138,9 +137,9 @@ public:
     void SetTool( TOOL_INTERACTIVE* aTool );
 
     /**
-     * Creates a deep, recursive copy of this CONTEXT_MENU.
+     * Creates a deep, recursive copy of this ACTION_MENU.
      */
-    CONTEXT_MENU* Clone() const;
+    ACTION_MENU* Clone() const;
 
 public:
     ///> Menu requires updating before display.
@@ -148,7 +147,7 @@ public:
 
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.
-    virtual CONTEXT_MENU* create() const;
+    virtual ACTION_MENU* create() const;
 
     ///> Returns an instance of TOOL_MANAGER class.
     TOOL_MANAGER* getToolManager() const;
@@ -180,7 +179,7 @@ protected:
      * Copies another menus data to this instance. Old entries are preserved, and ones form aMenu
      * are copied.
      */
-    void copyFrom( const CONTEXT_MENU& aMenu );
+    void copyFrom( const ACTION_MENU& aMenu );
 
 protected:
     /**
@@ -203,7 +202,7 @@ protected:
     void runEventHandlers( const wxMenuEvent& aMenuEvent, OPT_TOOL_EVENT& aToolEvent );
 
     ///> Runs a function on the menu and all its submenus.
-    void runOnSubmenus( std::function<void(CONTEXT_MENU*)> aFunction );
+    void runOnSubmenus( std::function<void(ACTION_MENU*)> aFunction );
 
     ///> Checks if any of submenus contains a TOOL_ACTION with a specific ID.
     OPT_TOOL_EVENT findToolAction( int aId );
@@ -227,7 +226,7 @@ protected:
     std::map<int, const TOOL_ACTION*> m_toolActions;
 
     ///> List of submenus.
-    std::list<CONTEXT_MENU*> m_submenus;
+    std::list<ACTION_MENU*> m_submenus;
 
     ///> Optional icon
     const BITMAP_OPAQUE* m_icon;

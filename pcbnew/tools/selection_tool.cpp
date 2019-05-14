@@ -140,7 +140,7 @@ TOOL_ACTION PCB_ACTIONS::filterSelection( "pcbnew.InteractiveSelection.FilterSel
         _( "Filter Selection..." ), _( "Filter the types of items in the selection" ),
         options_generic_xpm );
 
-class SELECT_MENU: public CONTEXT_MENU
+class SELECT_MENU: public ACTION_MENU
 {
 public:
     SELECT_MENU()
@@ -175,7 +175,7 @@ private:
         Enable( getMenuId( PCB_ACTIONS::selectSameSheet ), sheetSelEnabled );
     }
 
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new SELECT_MENU();
     }
@@ -1441,7 +1441,7 @@ bool SELECTION_TOOL::doSelectionMenu( GENERAL_COLLECTOR* aCollector, const wxStr
 {
     BOARD_ITEM* current = nullptr;
     SELECTION highlightGroup;
-    CONTEXT_MENU menu;
+    ACTION_MENU menu;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );

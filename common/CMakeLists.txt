@@ -398,7 +398,7 @@ set( COMMON_SRCS
     tool/actions.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
-    tool/context_menu.cpp
+    tool/action_menu.cpp
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/grid_menu.cpp

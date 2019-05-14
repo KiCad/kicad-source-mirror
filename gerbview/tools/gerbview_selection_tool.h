@@ -25,7 +25,7 @@
 #include <math/vector2d.h>
 
 #include <tool/tool_interactive.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/selection.h>
 #include <tool/selection_conditions.h>
 #include <tool/tool_menu.h>

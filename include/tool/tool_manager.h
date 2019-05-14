@@ -36,7 +36,7 @@
 
 class TOOL_BASE;
 class ACTION_MANAGER;
-class CONTEXT_MENU;
+class ACTION_MENU;
 class wxWindow;
 
 /**
@@ -347,7 +347,7 @@ public:
      *  CMENU_OFF: menu is disabled.
      * May be called from a coroutine context.
      */
-    void ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
+    void ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
             CONTEXT_MENU_TRIGGER aTrigger );
 
     /**

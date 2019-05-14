@@ -30,7 +30,7 @@
 #include <vector>
 #include <memory>
 
-class CONTEXT_MENU;
+class ACTION_MENU;
 
 /**
  * Class TOOL_MENU
@@ -87,14 +87,13 @@ public:
      *
      * @param aSubMenu: a sub menu to add
      */
-    void AddSubMenu( std::shared_ptr<CONTEXT_MENU> aSubMenu );
+    void AddSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu );
 
     /**
      * Function ShowContextMenu
      *
-     * Helper function to set and immediately show a CONTEXT_MENU
-     * based on the internal CONDITIONAL_MENU in concert with
-     * the given SELECTION
+     * Helper function to set and immediately show a CONDITIONAL_MENU
+     * in concert with the given SELECTION
      *
      * You don't have to use this function, if the caller has a
      * different way to show the menu, it can create one from
@@ -162,7 +161,7 @@ private:
     /**
      * Lifetime-managing container of submenus
      */
-    std::vector<std::shared_ptr<CONTEXT_MENU> > m_subMenus;
+    std::vector<std::shared_ptr<ACTION_MENU> > m_subMenus;
 };
 
 #endif    // TOOLS_TOOL_MENU__H_

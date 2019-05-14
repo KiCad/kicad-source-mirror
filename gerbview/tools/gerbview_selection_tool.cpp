@@ -75,7 +75,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::measureTool( "gerbview.InteractiveSelection.measur
         nullptr, AF_ACTIVATE );
 
 
-class HIGHLIGHT_MENU: public CONTEXT_MENU
+class HIGHLIGHT_MENU: public ACTION_MENU
 {
 public:
     HIGHLIGHT_MENU()
@@ -131,7 +131,7 @@ private:
         Add( GERBVIEW_ACTIONS::highlightClear );
     }
 
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new HIGHLIGHT_MENU();
     }
@@ -606,7 +606,7 @@ EDA_ITEM* GERBVIEW_SELECTION_TOOL::disambiguationMenu( GERBER_COLLECTOR* aCollec
 {
     EDA_ITEM* current = NULL;
     KIGFX::VIEW_GROUP highlightGroup;
-    CONTEXT_MENU menu;
+    ACTION_MENU menu;
 
     highlightGroup.SetLayer( LAYER_SELECT_OVERLAY );
     getView()->Add( &highlightGroup );

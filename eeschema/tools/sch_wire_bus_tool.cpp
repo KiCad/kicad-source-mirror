@@ -95,7 +95,7 @@ TOOL_ACTION EE_ACTIONS::finishLine( "eeschema.WireBusDrawing.finishLine",
         checked_ok_xpm, AF_NONE );
 
 
-class BUS_UNFOLD_MENU : public CONTEXT_MENU
+class BUS_UNFOLD_MENU : public ACTION_MENU
 {
 public:
     BUS_UNFOLD_MENU() :
@@ -112,7 +112,7 @@ public:
 
 
 protected:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new BUS_UNFOLD_MENU();
     }
@@ -166,7 +166,7 @@ private:
 
             if( member->Type() == CONNECTION_BUS )
             {
-                wxMenu* submenu = new CONTEXT_MENU;
+                wxMenu* submenu = new ACTION_MENU;
                 AppendSubMenu( submenu, name );
 
                 for( const auto& sub_member : member->Members() )

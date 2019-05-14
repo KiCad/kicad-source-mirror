@@ -37,7 +37,7 @@
 #include <tool/tool_base.h>
 #include <tool/tool_interactive.h>
 #include <tool/tool_manager.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/coroutine.h>
 #include <tool/action_manager.h>
 
@@ -89,7 +89,7 @@ struct TOOL_MANAGER::TOOL_STATE
     bool pendingContextMenu;
 
     /// Context menu currently used by the tool
-    CONTEXT_MENU* contextMenu;
+    ACTION_MENU* contextMenu;
 
     /// Defines when the context menu is opened
     CONTEXT_MENU_TRIGGER contextMenuTrigger;
@@ -671,7 +671,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         st->waitEvents = TOOL_EVENT( TC_ANY, TA_ANY );
 
         // Store the menu pointer in case it is changed by the TOOL when handling menu events
-        CONTEXT_MENU* m = st->contextMenu;
+        ACTION_MENU* m = st->contextMenu;
 
         if( st->contextMenuTrigger == CMENU_NOW )
             st->contextMenuTrigger = CMENU_OFF;
@@ -695,7 +695,7 @@ void TOOL_MANAGER::dispatchContextMenu( const TOOL_EVENT& aEvent )
         m_viewControls->ForceCursorPosition( true, m_menuCursor );
 
         // Display a copy of menu
-        std::unique_ptr<CONTEXT_MENU> menu( m->Clone() );
+        std::unique_ptr<ACTION_MENU> menu( m->Clone() );
 
         m_menuOwner = toolId;
         m_menuActive = true;
@@ -796,7 +796,7 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 }
 
 
-void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, CONTEXT_MENU* aMenu,
+void TOOL_MANAGER::ScheduleContextMenu( TOOL_BASE* aTool, ACTION_MENU* aMenu,
                                         CONTEXT_MENU_TRIGGER aTrigger )
 {
     TOOL_STATE* st = m_toolState[aTool];

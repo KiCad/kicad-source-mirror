@@ -277,7 +277,7 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
 
 int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 {
-    CONTEXT_MENU* actionMenu = aEvent.Parameter<CONTEXT_MENU*>();
+    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
     CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
 
     if( conditionalMenu )
@@ -841,8 +841,8 @@ int EE_SELECTION_TOOL::SelectionMenu( const TOOL_EVENT& aEvent )
 
 bool EE_SELECTION_TOOL::doSelectionMenu( EE_COLLECTOR* aCollector )
 {
-    EDA_ITEM* current = nullptr;
-    CONTEXT_MENU menu;
+    EDA_ITEM*   current = nullptr;
+    ACTION_MENU menu;
 
     int limit = std::min( MAX_SELECT_ITEM_IDS, aCollector->GetCount() );
 

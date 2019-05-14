@@ -41,7 +41,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <hotkeys.h>
 
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
 

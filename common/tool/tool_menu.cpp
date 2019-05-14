@@ -24,7 +24,7 @@
 #include <draw_frame.h>
 #include <tool/tool_menu.h>
 #include <tool/tool_interactive.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/actions.h>
 #include <tool/zoom_menu.h>
 #include <tool/grid_menu.h>
@@ -49,7 +49,7 @@ CONDITIONAL_MENU& TOOL_MENU::GetMenu()
 }
 
 
-void TOOL_MENU::AddSubMenu( std::shared_ptr<CONTEXT_MENU> aSubMenu )
+void TOOL_MENU::AddSubMenu( std::shared_ptr<ACTION_MENU> aSubMenu )
 {
     // store a copy of the menu (keeps a reference)
     m_subMenus.push_back( std::move( aSubMenu ) );

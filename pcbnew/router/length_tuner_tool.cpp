@@ -31,7 +31,7 @@
 #include <dialogs/dialog_pns_settings.h>
 #include <dialogs/dialog_pns_length_tuning_settings.h>
 
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>
 #include <hotkeys.h>
@@ -86,7 +86,7 @@ LENGTH_TUNER_TOOL::LENGTH_TUNER_TOOL() :
 }
 
 
-class TUNER_TOOL_MENU : public CONTEXT_MENU
+class TUNER_TOOL_MENU : public ACTION_MENU
 {
 public:
     TUNER_TOOL_MENU()
@@ -107,7 +107,7 @@ public:
     }
 
 private:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new TUNER_TOOL_MENU();
     }

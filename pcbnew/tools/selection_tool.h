@@ -31,7 +31,7 @@
 
 #include <math/vector2d.h>
 #include <tools/pcb_tool_base.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/selection.h>
 
 #include <tools/pcb_selection_conditions.h>

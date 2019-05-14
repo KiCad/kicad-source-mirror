@@ -27,7 +27,7 @@
 
 #include <tools/pcb_tool_base.h>
 
-class CONTEXT_MENU;
+class ACTION_MENU;
 
 /**
  * Class PAD_TOOL

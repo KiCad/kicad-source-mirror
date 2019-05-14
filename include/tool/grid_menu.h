@@ -25,17 +25,17 @@
 #ifndef GRID_MENU_H
 #define GRID_MENU_H
 
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 
 class EDA_DRAW_FRAME;
 
-class GRID_MENU : public CONTEXT_MENU
+class GRID_MENU : public ACTION_MENU
 {
 public:
     GRID_MENU( EDA_DRAW_FRAME* aParent );
 
 private:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new GRID_MENU( m_parent );
     }

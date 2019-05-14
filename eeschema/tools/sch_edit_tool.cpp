@@ -175,7 +175,7 @@ TOOL_ACTION EE_ACTIONS::breakBus( "eeschema.InteractiveEdit.breakBus",
         break_line_xpm );
 
 
-class SYMBOL_UNIT_MENU : public CONTEXT_MENU
+class SYMBOL_UNIT_MENU : public ACTION_MENU
 {
 public:
     SYMBOL_UNIT_MENU()
@@ -186,7 +186,7 @@ public:
 
 
 protected:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new SYMBOL_UNIT_MENU();
     }

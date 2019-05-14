@@ -153,7 +153,7 @@ TOOL_ACTION PCB_ACTIONS::updateLocalRatsnest( "pcbnew.Control.updateLocalRatsnes
         AS_GLOBAL, 0,
         "", "" );
 
-class ZONE_CONTEXT_MENU : public CONTEXT_MENU
+class ZONE_CONTEXT_MENU : public ACTION_MENU
 {
 public:
     ZONE_CONTEXT_MENU()
@@ -176,7 +176,7 @@ public:
 
 
 protected:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new ZONE_CONTEXT_MENU();
     }
@@ -212,7 +212,7 @@ private:
 };
 
 
-class LOCK_CONTEXT_MENU : public CONTEXT_MENU
+class LOCK_CONTEXT_MENU : public ACTION_MENU
 {
 public:
     LOCK_CONTEXT_MENU()
@@ -226,7 +226,7 @@ public:
         Add( PCB_ACTIONS::toggleLock );
     }
 
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new LOCK_CONTEXT_MENU();
     }

@@ -45,7 +45,7 @@ using namespace std::placeholders;
 #include <bitmaps.h>
 #include <collectors.h>
 
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_settings.h>
 #include <tool/grid_menu.h>
@@ -205,7 +205,7 @@ ROUTER_TOOL::ROUTER_TOOL() :
 }
 
 
-class TRACK_WIDTH_MENU: public CONTEXT_MENU
+class TRACK_WIDTH_MENU: public ACTION_MENU
 {
 public:
     TRACK_WIDTH_MENU( PCB_EDIT_FRAME& aFrame ) :
@@ -216,7 +216,7 @@ public:
     }
 
 protected:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new TRACK_WIDTH_MENU( m_frame );
     }
@@ -333,7 +333,7 @@ private:
 };
 
 
-class DIFF_PAIR_MENU: public CONTEXT_MENU
+class DIFF_PAIR_MENU: public ACTION_MENU
 {
 public:
     DIFF_PAIR_MENU( PCB_EDIT_FRAME& aFrame ) :
@@ -344,7 +344,7 @@ public:
     }
 
 protected:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new DIFF_PAIR_MENU( m_frame );
     }
@@ -423,7 +423,7 @@ private:
 };
 
 
-class ROUTER_TOOL_MENU : public CONTEXT_MENU
+class ROUTER_TOOL_MENU : public ACTION_MENU
 {
 public:
     ROUTER_TOOL_MENU( PCB_EDIT_FRAME& aFrame, PNS::ROUTER_MODE aMode ) :
@@ -467,7 +467,7 @@ public:
     }
 
 private:
-    CONTEXT_MENU* create() const override
+    ACTION_MENU* create() const override
     {
         return new ROUTER_TOOL_MENU( m_frame, m_mode );
     }

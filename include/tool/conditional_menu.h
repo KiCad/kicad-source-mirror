@@ -26,7 +26,7 @@
 #define CONDITIONAL_MENU_H
 
 #include <tool/selection_conditions.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <list>
 #include <wx/wx.h>
 
@@ -36,7 +36,7 @@ class TOOL_ACTION;
 class TOOL_INTERACTIVE;
 
 
-class CONDITIONAL_MENU : public CONTEXT_MENU
+class CONDITIONAL_MENU : public ACTION_MENU
 {
 public:
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
@@ -49,7 +49,7 @@ public:
         m_tool = aTool;
     }
 
-    CONTEXT_MENU* create() const override;
+    ACTION_MENU* create() const override;
 
     /**
      * Function AddItem()
@@ -87,7 +87,7 @@ public:
      * @param aOrder determines location of the added menu, higher numbers are put on the bottom.
      * You may use ANY_ORDER here if you think it does not matter.
      */
-    void AddMenu( CONTEXT_MENU* aMenu,
+    void AddMenu( ACTION_MENU* aMenu,
                   const SELECTION_CONDITION& aCondition = SELECTION_CONDITIONS::ShowAlways,
                   int aOrder = ANY_ORDER );
 
@@ -124,7 +124,7 @@ private:
             m_data.action = aAction;
         }
 
-        ENTRY( CONTEXT_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
+        ENTRY( ACTION_MENU* aMenu, SELECTION_CONDITION aCondition, int aOrder ) :
             m_type( MENU ),
             m_condition( aCondition ),
             m_order( aOrder ),
@@ -160,7 +160,7 @@ private:
             return m_data.action;
         }
 
-        inline CONTEXT_MENU* Menu() const
+        inline ACTION_MENU* Menu() const
         {
             assert( m_type == MENU );
             return m_data.menu;
@@ -191,7 +191,7 @@ private:
 
         union {
             const TOOL_ACTION* action;
-            CONTEXT_MENU* menu;
+            ACTION_MENU*       menu;
         } m_data;
 
         ///> Condition to be fulfilled to show the entry in menu.

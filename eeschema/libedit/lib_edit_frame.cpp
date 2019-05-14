@@ -52,7 +52,7 @@
 #include <wx/progdlg.h>
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
-#include <tool/context_menu.h>
+#include <tool/action_menu.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
 #include <tools/ee_actions.h>
@@ -586,7 +586,7 @@ void LIB_EDIT_FRAME::OnViewEntryDoc( wxCommandEvent& event )
 
     if( part->GetAliasCount() > 1 )
     {
-        CONTEXT_MENU popup;
+        ACTION_MENU  popup;
         wxString     msg;
         int          id = 0;
 
