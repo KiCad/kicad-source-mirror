@@ -153,12 +153,6 @@ void ARC_ASSISTANT::ViewDraw( int aLayer, KIGFX::VIEW* aView ) const
         cursorStrings.push_back( DimensionLabel( wxString::FromUTF8( "θ" ), endAngleDeg, DEGREES ) );
     }
 
-    // FIXME: spaces choke OpenGL lp:1668455
-    for( auto& str : cursorStrings )
-    {
-        str.erase( std::remove( str.begin(), str.end(), ' ' ), str.end() );
-    }
-
     // place the text next to cursor, on opposite side from radius
     DrawTextNextToCursor( aView, m_constructMan.GetLastPoint(),
             origin - m_constructMan.GetLastPoint(),
