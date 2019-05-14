@@ -28,10 +28,11 @@
  */
 
 #include <GL/glew.h>
-#include <climits>
+#include <algorithm>
 #include <atomic>
-#include <thread>
 #include <chrono>
+#include <climits>
+#include <thread>
 
 #include "c3d_render_raytracing.h"
 #include "mortoncodes.h"
@@ -2074,6 +2075,13 @@ bool C3D_RENDER_RAYTRACING::initializeOpenGL()
 }
 
 
+static float distance( const SFVEC2UI& a, const SFVEC2UI& b )
+{
+    const float dx = (float) a.x - (float) b.x;
+    const float dy = (float) a.y - (float) b.y;
+    return hypotf( dx, dy );
+}
+
 void C3D_RENDER_RAYTRACING::initialize_block_positions()
 {
 
@@ -2123,26 +2131,24 @@ void C3D_RENDER_RAYTRACING::initialize_block_positions()
     m_postshader_ssao.UpdateSize( m_realBufferSize );
 
 
-    // Calc block positions
+    // Calc block positions for regular rendering. Choose an 'inside out'
+    // style of rendering
     // /////////////////////////////////////////////////////////////////////
     m_blockPositions.clear();
-    m_blockPositions.reserve( (m_realBufferSize.x / RAYPACKET_DIM) *
-                              (m_realBufferSize.y / RAYPACKET_DIM) );
+    const int blocks_x = m_realBufferSize.x / RAYPACKET_DIM;
+    const int blocks_y = m_realBufferSize.y / RAYPACKET_DIM;
+    m_blockPositions.reserve( blocks_x * blocks_y );
 
-    i = 0;
+    for( int x = 0; x < blocks_x; ++x )
+        for( int y = 0; y < blocks_y; ++y )
+            m_blockPositions.push_back( SFVEC2UI( x * RAYPACKET_DIM, y * RAYPACKET_DIM ) );
 
-    while(1)
-    {
-        SFVEC2UI blockPos( DecodeMorton2X(i) * RAYPACKET_DIM,
-                           DecodeMorton2Y(i) * RAYPACKET_DIM );
-        i++;
-
-        if( (blockPos.x >= m_realBufferSize.x) && (blockPos.y >= m_realBufferSize.y) )
-            break;
-
-        if( (blockPos.x < m_realBufferSize.x) && (blockPos.y < m_realBufferSize.y) )
-            m_blockPositions.push_back( blockPos );
-    }
+    const SFVEC2UI center( m_realBufferSize.x / 2, m_realBufferSize.y / 2 );
+    std::sort( m_blockPositions.begin(), m_blockPositions.end(),
+            [&]( const SFVEC2UI& a, const SFVEC2UI& b ) {
+                // Sort order: inside out.
+                return distance( a, center ) < distance( b, center );
+            } );
 
     // Create m_shader buffer
     delete[] m_shaderBuffer;
