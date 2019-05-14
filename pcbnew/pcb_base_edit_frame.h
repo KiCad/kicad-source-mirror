@@ -101,6 +101,7 @@ public:
      */
     void SaveCopyInUndoList( const PICKED_ITEMS_LIST& aItemsList, UNDO_REDO_T aTypeCommand,
                             const wxPoint& aTransformPoint = wxPoint( 0, 0 ) ) override;
+
     /**
      * Function RestoreCopyFromRedoList
      *  Redo the last edit:

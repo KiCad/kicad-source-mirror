@@ -167,7 +167,11 @@ static EDA_HOTKEY HkAddArc( _HKI( "Draw Arc" ), HK_ADD_ARC, 'A' + GR_KB_SHIFTCTR
 static EDA_HOTKEY HkAddText( _HKI( "Add Text" ), HK_ADD_TEXT, 'T' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddDimension( _HKI( "Add Dimension" ), HK_ADD_DIMENSION,
                                   'H' + GR_KB_SHIFTCTRL );
+#ifdef __WXMAC__
+static EDA_HOTKEY HkAddFilledZone( _HKI( "Add Filled Zone" ), HK_ADD_ZONE, 'Z' + GR_KB_ALT );
+#else
 static EDA_HOTKEY HkAddFilledZone( _HKI( "Add Filled Zone" ), HK_ADD_ZONE, 'Z' + GR_KB_SHIFTCTRL );
+#endif
 static EDA_HOTKEY HkAddFreeVia( _HKI( "Add Vias" ), HK_ADD_FREE_VIA, 'V' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddKeepout( _HKI( "Add Keepout Area" ), HK_ADD_KEEPOUT, 'K' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkAddZoneCutout( _HKI( "Add a Zone Cutout" ), HK_ADD_CUTOUT, 'C' + GR_KB_SHIFT );
@@ -318,9 +322,7 @@ static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_
 #if !defined( __WXMAC__ )
 static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
 #else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO,
-                          GR_KB_SHIFT + GR_KB_CTRL + 'Z',
-                          (int) wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z', (int) wxID_REDO );
 #endif
 
 static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int) wxID_CUT );

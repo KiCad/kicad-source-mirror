@@ -143,6 +143,7 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateOptToolbar();
@@ -165,8 +166,6 @@ GERBVIEW_FRAME::GERBVIEW_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     ReFillLayerWidget();                // this is near end because contents establish size
     m_auimgr.Update();
-
-    setupTools();
 
     SetActiveLayer( 0, true );
     Zoom_Automatique( false );           // Gives a default zoom value

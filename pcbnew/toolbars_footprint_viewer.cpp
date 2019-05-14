@@ -23,7 +23,7 @@
 #include <dialog_helpers.h>
 #include <macros.h>
 #include <menus_helpers.h>
-
+#include <tool/actions.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "footprint_viewer_frame.h"
@@ -45,8 +45,8 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT  );
+        m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT  );
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_MODVIEW_SELECT_PART, wxEmptyString,
@@ -54,45 +54,28 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateHToolbar()
                             _( "Select footprint to browse" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-
     m_mainToolBar->AddTool( ID_MODVIEW_OPTIONS, wxEmptyString,
                             KiScaledBitmap( config_xpm, this ),
                             _( "Display options" ) );
 
     m_mainToolBar->AddSeparator();
-
     m_mainToolBar->AddTool( ID_MODVIEW_PREVIOUS, wxEmptyString,
                             KiScaledBitmap( lib_previous_xpm, this ),
                             _( "Display previous footprint" ) );
-
     m_mainToolBar->AddTool( ID_MODVIEW_NEXT, wxEmptyString,
                             KiScaledBitmap( lib_next_xpm, this ),
                             _( "Display next footprint" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-
-    msg = AddHotkeyName( _( "Redraw view" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_IN, wxEmptyString,
-                            KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_OUT, wxEmptyString,
-                            KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom to fit" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_AUTO );
-    m_mainToolBar->AddTool( ID_VIEWER_ZOOM_PAGE, wxEmptyString,
-                            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
     KiScaledSeparator( m_mainToolBar, this );
-
     m_mainToolBar->AddTool( ID_MODVIEW_SHOW_3D_VIEW, wxEmptyString,
                             KiScaledBitmap( three_d_xpm, this ),
                             _( "Show footprint in 3D viewer" ) );
-
     m_mainToolBar->AddTool( ID_ADD_FOOTPRINT_TO_BOARD, wxEmptyString,
                             KiScaledBitmap( export_xpm, this ),
                             _( "Insert footprint in board" ) );

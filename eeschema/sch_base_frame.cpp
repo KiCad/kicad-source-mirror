@@ -99,6 +99,7 @@ SCH_BASE_FRAME::SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aWindo
                                 // but this is an acceptable value
     m_repeatStep = wxPoint( DEFAULT_REPEAT_OFFSET_X, DEFAULT_REPEAT_OFFSET_Y );
     m_repeatDeltaLabel = DEFAULT_REPEAT_LABEL_INC;
+    m_showPinElectricalTypeName = false;
 }
 
 

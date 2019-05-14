@@ -22,6 +22,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
+#include <bitmaps.h>
 #include <tool/actions.h>
 #include <tool/tool_manager.h>
 #include <draw_frame.h>
@@ -32,29 +33,6 @@
 #include <base_screen.h>
 #include <hotkeys.h>
 #include <tool/common_tools.h>
-
-
-TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
-        _( "Always Show Cursor" ),
-        _( "Switch whether the cursor is displayed even when not in an editing tool" ) );
-
-
-TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
-        AS_GLOBAL, 0,
-        _( "Full-Window Crosshairs" ),
-        _( "Switch display of full-window crosshairs" ) );
-
-
-COMMON_TOOLS::COMMON_TOOLS() :
-    TOOL_INTERACTIVE( "common.Control" ), m_frame( NULL )
-{
-}
-
-
-COMMON_TOOLS::~COMMON_TOOLS()
-{
-}
 
 
 void COMMON_TOOLS::Reset( RESET_REASON aReason )

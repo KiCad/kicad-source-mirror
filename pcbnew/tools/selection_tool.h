@@ -196,7 +196,7 @@ private:
     int selectConnection( const TOOL_EVENT& aEvent );
 
     ///> Expands the current selection to select a connection between two junctions
-    int expandSelectedConnection( const TOOL_EVENT& aEvent );
+    int expandConnection( const TOOL_EVENT& aEvent );
 
     ///> Selects items with a continuous copper connection to items in selection
     int selectCopper( const TOOL_EVENT& aEvent );
@@ -230,7 +230,7 @@ private:
 
     ///> Selects all modules belonging to same sheet, from Eeschema,
     ///> using crossprobing
-    int selectOnSheetFromEeschema( const TOOL_EVENT& aEvent );
+    int selectSheetContents( const TOOL_EVENT& aEvent );
 
     ///> Selects all modules belonging to same hierarchical sheet
     ///> as the selected footprint.
@@ -334,6 +334,11 @@ private:
      * Event handler to update the selection VIEW_ITEM.
      */
     int updateSelection( const TOOL_EVENT& aEvent );
+
+    /**
+     * Pass the selection to a conditional menu for updating.
+     */
+    int UpdateMenu( const TOOL_EVENT& aEvent );
 
     const GENERAL_COLLECTORS_GUIDE getCollectorsGuide() const;
 

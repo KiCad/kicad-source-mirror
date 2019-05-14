@@ -24,11 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file tool_pcb_editor.cpp
- * @brief PCB editor toolbars build/rebuild functions
- */
-
 #include <fctsys.h>
 #include <kiface_i.h>
 #include <help_common_strings.h>
@@ -37,9 +32,8 @@
 #include <class_drawpanel.h>
 #include <confirm.h>
 #include <bitmaps.h>
-
 #include <class_board.h>
-
+#include <tool/actions.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
 #include <hotkeys.h>
@@ -246,8 +240,8 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
 #define ADD_TOOL( id, xpm, tooltip ) \
     m_mainToolBar->AddTool( id, wxEmptyString, KiScaledBitmap( xpm, this ), tooltip );
@@ -279,18 +273,12 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
     ADD_TOOL( ID_FIND_ITEMS, find_xpm, msg );
 
-    KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    ADD_TOOL( ID_ZOOM_REDRAW, zoom_redraw_xpm, msg );
-    msg = AddHotkeyName( HELP_ZOOM_IN, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    ADD_TOOL( ID_ZOOM_IN, zoom_in_xpm, msg );
-    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    ADD_TOOL( ID_ZOOM_OUT, zoom_out_xpm, msg );
-    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Board_Editor_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    ADD_TOOL( ID_ZOOM_PAGE, zoom_fit_in_page_xpm, msg );
-
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
     ADD_TOOL( ID_OPEN_MODULE_EDITOR, module_editor_xpm, _( "Open footprint editor" ) );
@@ -355,33 +343,21 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
     if( m_optionsToolBar )
         m_optionsToolBar->Clear();
     else
-        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
+                                               wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, KiScaledBitmap( drc_off_xpm, this ),
                                _( "Enable design rule checking" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
-                               _( "Hide grid" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiScaledBitmap( unit_inch_xpm, this ),
-                               _( "Set units to inches" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiScaledBitmap( unit_mm_xpm, this ),
-                               _( "Set units to millimeters" ), wxITEM_CHECK );
 
-#ifndef __APPLE__
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape" ), wxITEM_CHECK );
-#else
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                               wxITEM_CHECK  );
-#endif
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
@@ -447,8 +423,8 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         m_drawToolBar->Clear();
     else
-        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
@@ -594,8 +570,9 @@ void PCB_EDIT_FRAME::ReCreateAuxiliaryToolbar()
         return;
     }
 
-    m_auxiliaryToolBar = new wxAuiToolBar( this, ID_AUX_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                           KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    m_auxiliaryToolBar = new ACTION_TOOLBAR( this, ID_AUX_TOOLBAR,
+                                             wxDefaultPosition, wxDefaultSize,
+                                             KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     /* Set up toolbar items */
 

@@ -13,10 +13,35 @@ TOOL_ACTION ACTIONS::cancelInteractive( "common.Interactive.cancel",
 TOOL_ACTION ACTIONS::updateMenu( "common.Interactive.updateMenu",
         AS_GLOBAL, 0, "", "" );   // This is an internal event
 
+TOOL_ACTION ACTIONS::undo( "common.Interactive.undo",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_UNDO ),
+        _( "Undo" ), _( "Undo last edit" ),
+        undo_xpm );
+
+TOOL_ACTION ACTIONS::redo( "common.Interactive.redo",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REDO ),
+        _( "Redo" ), _( "Redo last edit" ),
+        redo_xpm );
+
+TOOL_ACTION ACTIONS::cut( "common.Interactive.cut",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
+        _( "Cut" ), _( "Cut selected item(s) to clipboard" ),
+        cut_xpm );
+
+TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
+        _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
+        copy_xpm );
+
+TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
+        _( "Paste" ), _( "Paste clipboard into schematic" ),
+        paste_xpm );
+
 // View Controls
 TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZOOM_REDRAW ),
-        _( "Refresh View" ), "",
+        _( "Refresh" ), "",
         zoom_redraw_xpm );
 
 TOOL_ACTION ACTIONS::zoomIn( "common.Control.zoomIn",
@@ -105,7 +130,6 @@ TOOL_ACTION ACTIONS::cursorDblClick( "common.Control.cursorDblClick",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LEFT_DCLICK ),
         "", "", NULL, AF_NONE, (void*) CURSOR_DBL_CLICK );
 
-
 TOOL_ACTION ACTIONS::panUp( "common.Control.panUp",
         AS_GLOBAL, MD_SHIFT + WXK_UP,
         "", "", NULL, AF_NONE, (void*) CURSOR_UP );
@@ -175,6 +199,18 @@ TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_UNITS ),
         _( "Switch units" ), _( "Switch between inches and millimeters" ),
         unit_mm_xpm );
+
+
+TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
+        _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),
+        cursor_xpm );
+
+
+TOOL_ACTION ACTIONS::toggleCursorStyle( "common.Control.toggleCursorStyle",
+        AS_GLOBAL, 0,
+        _( "Full-Window Crosshairs" ), _( "Switch display of full-window crosshairs" ),
+        cursor_shape_xpm );
 
 
 // System-wide selection Events

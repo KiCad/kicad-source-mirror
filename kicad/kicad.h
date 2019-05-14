@@ -296,7 +296,7 @@ private:
     TREE_PROJECT_FRAME* m_LeftWin;
     LAUNCHER_PANEL*     m_Launcher;
     wxTextCtrl*         m_MessagesBox;
-    wxAuiToolBar*       m_VToolBar;             // Vertical toolbar (not used)
+    wxAuiToolBar*       m_mainToolBar;
 
     int m_leftWinWidth;
     EDA_HOTKEY_CONFIG* m_manager_Hotkeys_Descr;

@@ -57,7 +57,7 @@ void LIB_EDIT_FRAME::SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoT
 }
 
 
-void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
+void LIB_EDIT_FRAME::GetComponentFromRedoList()
 {
     if( GetScreen()->GetRedoCommandCount() <= 0 )
         return;
@@ -105,7 +105,7 @@ void LIB_EDIT_FRAME::GetComponentFromRedoList( wxCommandEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::GetComponentFromUndoList( wxCommandEvent& event )
+void LIB_EDIT_FRAME::GetComponentFromUndoList()
 {
     if( GetScreen()->GetUndoCommandCount() <= 0 )
         return;

@@ -215,13 +215,13 @@ OPT<TOOL_EVENT> PCB_ACTIONS::TranslateLegacyId( int aId )
         return PCB_ACTIONS::microwaveCreateLine.MakeEvent();
 
     case ID_EDIT_CUT:
-        return PCB_ACTIONS::cutToClipboard.MakeEvent();
+        return ACTIONS::cut.MakeEvent();
 
     case ID_EDIT_COPY:
-        return PCB_ACTIONS::copyToClipboard.MakeEvent();
+        return ACTIONS::copy.MakeEvent();
 
     case ID_EDIT_PASTE:
-        return PCB_ACTIONS::pasteFromClipboard.MakeEvent();
+        return PCB_ACTIONS::paste.MakeEvent();
 
     case ID_POPUP_PCB_FILL_ALL_ZONES:
         return PCB_ACTIONS::zoneFillAll.MakeEvent();

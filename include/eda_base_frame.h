@@ -50,6 +50,8 @@
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>
+#include <tool/action_toolbar.h>
+
 #endif
 
 // Option for main frames
@@ -115,34 +117,32 @@ class EDA_BASE_FRAME : public wxFrame
     wxWindow* findQuasiModalDialog();
 
 protected:
-    FRAME_T      m_Ident;           ///< Id Type (pcb, schematic, library..)
-    wxPoint      m_FramePos;
-    wxSize       m_FrameSize;
+    FRAME_T         m_Ident;           ///< Id Type (pcb, schematic, library..)
+    wxPoint         m_FramePos;
+    wxSize          m_FrameSize;
 
-    wxString     m_configFrameName; ///< prefix used in config to identify some params (frame size...)
+    wxString        m_configFrameName; ///< prefix used in config to identify some params (frame size...)
                                     ///< if empty, the frame name defined in CTOR is used
 
-    wxAuiToolBar* m_mainToolBar;    ///< Standard horizontal Toolbar
+    wxString        m_AboutTitle;      ///< Name of program displayed in About.
 
-    wxString     m_AboutTitle;      ///< Name of program displayed in About.
-
-    wxAuiManager m_auimgr;
+    wxAuiManager    m_auimgr;
 
     /// Flag to indicate if this frame supports auto save.
-    bool         m_hasAutoSave;
+    bool            m_hasAutoSave;
 
     /// Flag to indicate the last auto save state.
-    bool         m_autoSaveState;
+    bool            m_autoSaveState;
 
     /// The auto save interval time in seconds.
-    int          m_autoSaveInterval;
+    int             m_autoSaveInterval;
 
     /// The timer used to implement the auto save feature;
-    wxTimer*     m_autoSaveTimer;
+    wxTimer*        m_autoSaveTimer;
 
-    wxString     m_perspective;     ///< wxAuiManager perspective.
+    wxString        m_perspective;     ///< wxAuiManager perspective.
 
-    wxString     m_mruPath;         ///< Most recently used path.
+    wxString        m_mruPath;         ///< Most recently used path.
 
     ///> Default style flags used for wxAUI toolbars
     static constexpr int KICAD_AUI_TB_STYLE = wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_PLAIN_BACKGROUND;

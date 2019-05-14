@@ -60,6 +60,7 @@ KICAD_MANAGER_FRAME::KICAD_MANAGER_FRAME( wxWindow* parent,
     KIWAY_HOLDER( &::Kiway )
 {
     m_active_project = false;
+    m_mainToolBar = nullptr;
     m_leftWinWidth = 60;
     m_manager_Hotkeys_Descr = NULL;
     m_AboutTitle = "KiCad";

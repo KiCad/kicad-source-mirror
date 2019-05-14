@@ -181,19 +181,9 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    // Menu bar is not mandatory: uncomment/comment the next line
-    // to add/remove the menubar
-    ReCreateMenuBar();
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-
-    ReCreateLibraryList();
-    UpdateTitle();
-
     // Create GAL canvas
-    PCB_DRAW_PANEL_GAL* drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
-                                                            GetGalDisplayOptions(),
-                                                            LoadCanvasTypeSetting() );
+    auto drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                             GetGalDisplayOptions(), LoadCanvasTypeSetting() );
     SetGalCanvas( drawPanel );
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
@@ -205,10 +195,17 @@ FOOTPRINT_VIEWER_FRAME::FOOTPRINT_VIEWER_FRAME( KIWAY* aKiway, wxWindow* aParent
     drawPanel->SetEventDispatcher( m_toolDispatcher );
 
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );  // for std context menus (zoom & grid)
-    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->RegisterTool( new SELECTION_TOOL );
+    m_toolManager->RegisterTool( new COMMON_TOOLS );    // for std context menus (zoom & grid)
     m_toolManager->InitTools();
     m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+    ReCreateMenuBar();
+    ReCreateHToolbar();
+    ReCreateVToolbar();
+
+    ReCreateLibraryList();
+    UpdateTitle();
 
     // If a footprint was previously loaded, reload it
     if( getCurNickname().size() && getCurFootprintName().size() )

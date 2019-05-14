@@ -686,6 +686,8 @@ public:
      */
     void CommonSettingsChanged() override;
 
+    void SyncMenusAndToolbars() override;
+
     DECLARE_EVENT_TABLE()
 };
 

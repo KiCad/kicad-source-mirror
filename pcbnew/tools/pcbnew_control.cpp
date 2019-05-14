@@ -199,11 +199,6 @@ TOOL_ACTION PCB_ACTIONS::toBeDone( "pcbnew.Control.toBeDone",
         AS_GLOBAL, 0,           // dialog saying it is not implemented yet
         "", "" );               // so users are aware of that
 
-TOOL_ACTION PCB_ACTIONS::pasteFromClipboard( "pcbnew.InteractiveEdit.pasteFromClipboard",
-        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
-        _( "Paste" ), _( "Paste content from clipboard" ),
-        paste_xpm );
-
 
 PCBNEW_CONTROL::PCBNEW_CONTROL() :
     PCB_TOOL_BASE( "pcbnew.Control" ), m_frame( NULL )
@@ -956,6 +951,29 @@ int PCBNEW_CONTROL::AppendBoard( PLUGIN& pi, wxString& fileName )
 }
 
 
+int PCBNEW_CONTROL::Undo( const TOOL_EVENT& aEvent )
+{
+    PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
+    wxCommandEvent       dummy;
+
+    if( editFrame )
+        editFrame->RestoreCopyFromUndoList( dummy );
+
+    return 0;
+}
+
+
+int PCBNEW_CONTROL::Redo( const TOOL_EVENT& aEvent )
+{
+    PCB_BASE_EDIT_FRAME* editFrame = dynamic_cast<PCB_BASE_EDIT_FRAME*>( m_frame );
+    wxCommandEvent       dummy;
+
+    if( editFrame )
+        editFrame->RestoreCopyFromRedoList( dummy );
+    return 0;
+}
+
+
 int PCBNEW_CONTROL::ShowHelp( const TOOL_EVENT& aEvent )
 {
     DisplayHotkeyList( m_frame, m_frame->GetHotkeyConfig() );
@@ -1010,6 +1028,9 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::GridSetOrigin,      ACTIONS::gridSetOrigin.MakeEvent() );
     Go( &PCBNEW_CONTROL::GridResetOrigin,    ACTIONS::gridResetOrigin.MakeEvent() );
 
+    Go( &PCBNEW_CONTROL::Undo,               ACTIONS::undo.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Redo,               ACTIONS::redo.MakeEvent() );
+
     // Miscellaneous
     Go( &PCBNEW_CONTROL::ResetCoords,        PCB_ACTIONS::resetCoords.MakeEvent() );
     Go( &PCBNEW_CONTROL::DeleteItemCursor,   PCB_ACTIONS::deleteItemCursor.MakeEvent() );
@@ -1019,7 +1040,7 @@ void PCBNEW_CONTROL::setTransitions()
     // Append control
     Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
 
-    Go( &PCBNEW_CONTROL::PasteItemsFromClipboard, PCB_ACTIONS::pasteFromClipboard.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PasteItemsFromClipboard, PCB_ACTIONS::paste.MakeEvent() );
 }
 
 

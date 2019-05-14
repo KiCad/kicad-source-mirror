@@ -82,8 +82,8 @@ bool LIB_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::properties,      EE_CONDITIONS::Count( 1 ), 200 );
 
         moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( EE_ACTIONS::cut,             EE_CONDITIONS::IdleSelection, 300 );
-        moveMenu.AddItem( EE_ACTIONS::copy,            EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::cut,                EE_CONDITIONS::IdleSelection, 300 );
+        moveMenu.AddItem( ACTIONS::copy,               EE_CONDITIONS::IdleSelection, 300 );
     }
 
     //
@@ -114,9 +114,9 @@ bool LIB_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::properties,       EE_CONDITIONS::Count( 1 ), 200 );
 
     selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 300 );
-    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
 
     return true;
 }
@@ -550,6 +550,20 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 }
 
 
+int LIB_EDIT_TOOL::Undo( const TOOL_EVENT& aEvent )
+{
+    m_frame->GetComponentFromUndoList();
+    return 0;
+}
+
+
+int LIB_EDIT_TOOL::Redo( const TOOL_EVENT& aEvent )
+{
+    m_frame->GetComponentFromRedoList();
+    return 0;
+}
+
+
 int LIB_EDIT_TOOL::Cut( const TOOL_EVENT& aEvent )
 {
     int retVal = Copy( aEvent );
@@ -657,7 +671,9 @@ void LIB_EDIT_TOOL::setTransitions()
     Go( &LIB_EDIT_TOOL::Properties,         EE_ACTIONS::symbolProperties.MakeEvent() );
     Go( &LIB_EDIT_TOOL::PinTable,           EE_ACTIONS::pinTable.MakeEvent() );
 
-    Go( &LIB_EDIT_TOOL::Cut,                EE_ACTIONS::cut.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Copy,               EE_ACTIONS::copy.MakeEvent() );
-    Go( &LIB_EDIT_TOOL::Paste,              EE_ACTIONS::paste.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Undo,               ACTIONS::undo.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Redo,               ACTIONS::redo.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Cut,                ACTIONS::cut.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Copy,               ACTIONS::copy.MakeEvent() );
+    Go( &LIB_EDIT_TOOL::Paste,              ACTIONS::paste.MakeEvent() );
 }

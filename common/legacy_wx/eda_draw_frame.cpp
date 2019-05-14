@@ -114,18 +114,8 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     EDA_DRAW_FRAME::OnSelectGrid )
 
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnToggleGridState )
-    EVT_TOOL_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                    EDA_DRAW_FRAME::OnSelectUnits )
-
-    EVT_TOOL( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnToggleCrossHairStyle )
-
     EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRID, EDA_DRAW_FRAME::OnUpdateGrid )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SELECT_CURSOR, EDA_DRAW_FRAME::OnUpdateCrossHairStyle )
-    EVT_UPDATE_UI_RANGE( ID_TB_OPTIONS_SELECT_UNIT_MM, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                         EDA_DRAW_FRAME::OnUpdateUnits )
 END_EVENT_TABLE()
 
 
@@ -137,6 +127,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     KIWAY_PLAYER( aKiway, aParent, aFrameType, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_socketServer        = nullptr;
+    m_mainToolBar         = NULL;
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_auxiliaryToolBar    = NULL;
@@ -356,21 +347,6 @@ bool EDA_DRAW_FRAME::GetToolToggled( int aToolId )
 }
 
 
-void EDA_DRAW_FRAME::OnSelectUnits( wxCommandEvent& aEvent )
-{
-    if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM && m_UserUnits != MILLIMETRES )
-    {
-        m_UserUnits = MILLIMETRES;
-        unitsChangeRefresh();
-    }
-    else if( aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH && m_UserUnits != INCHES )
-    {
-        m_UserUnits = INCHES;
-        unitsChangeRefresh();
-    }
-}
-
-
 void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
 {
     INSTALL_UNBUFFERED_DC( dc, m_canvas );
@@ -395,27 +371,6 @@ void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
 {
     if( GetScreen() )
         aEvent.Enable( GetScreen()->GetRedoCommandCount() > 0 );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateUnits( wxUpdateUIEvent& aEvent )
-{
-    bool enable;
-
-    enable = ( ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_MM) && (m_UserUnits == MILLIMETRES))
-            || ((aEvent.GetId() == ID_TB_OPTIONS_SELECT_UNIT_INCH) && (m_UserUnits == INCHES)) );
-
-    aEvent.Check( enable );
-    DisplayUnitsMsg();
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateGrid( wxUpdateUIEvent& aEvent )
-{
-    wxString tool_tip = IsGridVisible() ? _( "Hide grid" ) : _( "Show grid" );
-
-    aEvent.Check( IsGridVisible() );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_GRID, tool_tip );
 }
 
 

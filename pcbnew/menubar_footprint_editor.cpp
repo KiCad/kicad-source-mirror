@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2015 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2015 Wayne Stambaugh <stambaughw@gmail.com>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
 *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,17 +24,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file pcbnew/menubar_footprint_editor.cpp
- * @brief (Re)Create the main menubar for the footprint editor
- */
-
 #include "footprint_edit_frame.h"
 
 #include <advanced_config.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-
+#include <tool/tool_manager.h>
+#include <tool/conditional_menu.h>
+#include <tool/actions.h>
+#include <tools/selection_tool.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "pcbnew.h"
@@ -43,6 +41,7 @@
 
 void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 {
+    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -165,6 +164,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
     if( IsGalCanvasActive() )
     {
+        // JEY TODO: move to ACTIONS...
         text = AddHotkeyName( _( "Cu&t" ), m_hotkeysDescrList, HK_EDIT_CUT );
         AddMenuItem( editMenu, ID_EDIT_CUT, text,
                      _( "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
@@ -197,125 +197,99 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( delete_xpm ) );
 
     //--------- View menu ----------------
-    wxMenu* viewMenu = new wxMenu;
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    AddMenuItem( viewMenu, ID_OPEN_MODULE_VIEWER,
-                 _( "Footprint &Library Browser" ),
-                 _( "Browse footprint libraries" ),
-                 KiBitmap( modview_icon_xpm ) );
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
+    auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPolarCood;
+    };
+    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == INCHES;
+    };
+    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == MILLIMETRES;
+    };
+    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalDisplayOptions().m_fullscreenCursor;
+    };
+    auto sketchPadsCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPadFill;
+    };
+    auto sketchEdgesCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayModEdgeFill;
+    };
+    auto searchTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsSearchTreeShown();
+    };
+
+    viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
+                       _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
+                       modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     text = AddHotkeyName( _( "&3D Viewer" ), m_hotkeysDescrList, HK_3D_VIEWER );
-    AddMenuItem( viewMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                 text, _( "Show footprint in 3D viewer" ),
-                 KiBitmap( three_d_xpm ) );
+    viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
+                       text, _( "Show footprint in 3D viewer" ),
+                       three_d_xpm, SELECTION_CONDITIONS::ShowAlways );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,        SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
+
 
     viewMenu->AppendSeparator();
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid, gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,  SELECTION_CONDITIONS::ShowAlways );
 
-    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
-     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
-     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zooming is made around the screen center
-     * From hotkeys, zooming is made around the mouse cursor position
-     * (obviously not possible from the toolbar or menubar command)
-     *
-     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
-     * for Zoom in and Zoom out sub menus
-     */
-    text = AddHotkeyName( _( "Zoom &In" ), m_hotkeysDescrList,
-                          HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom &Out" ), m_hotkeysDescrList,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
-
-    text = AddHotkeyName( _( "&Zoom to Fit" ), m_hotkeysDescrList,
-                          HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
-                 KiBitmap( zoom_fit_in_page_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to Selection" ), m_hotkeysDescrList, HK_ZOOM_SELECTION );
-
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "&Redraw" ), m_hotkeysDescrList, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
-
-    viewMenu->AppendSeparator();
-
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
-                 _( "Show &Grid" ), wxEmptyString,
-                 KiBitmap( grid_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( viewMenu, ID_PCB_USER_GRID_SETUP,
-                 _( "Grid &Settings..." ),_( "Adjust custom user-defined grid dimensions" ),
-                 KiBitmap( grid_xpm ) );
-
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                 _( "Display &Polar Coordinates" ), wxEmptyString,
-                 KiBitmap( polar_coord_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                            _( "Display &Polar Coordinates" ), wxEmptyString,
+                            polar_coord_xpm, polarCoordsCondition );
 
     // Units submenu
-    wxMenu* unitsSubMenu = new wxMenu;
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                 _( "&Imperial" ), _( "Use imperial units" ),
-                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
+    viewMenu->AddMenu( unitsSubMenu );
 
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-                 _( "&Metric" ), _( "Use metric units" ),
-                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( viewMenu, unitsSubMenu,
-                 -1, _( "&Units" ),
-                 _( "Select which units are displayed" ),
-                 KiBitmap( unit_mm_xpm ) );
-
-#ifndef __APPLE__
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full Window Crosshair" ),
-                 _( "Change cursor shape" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#else
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full Window Crosshair" ),
-                 _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#endif
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
 
     viewMenu->AppendSeparator();
 
+    viewMenu->AddSeparator();
+
     // Drawing Mode Submenu
-    wxMenu* drawingModeSubMenu = new wxMenu;
+    CONDITIONAL_MENU* drawingModeSubMenu = new CONDITIONAL_MENU( false, selTool );
+    drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
+    drawingModeSubMenu->SetIcon( add_zone_xpm );
 
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                 _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
-                 KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                                      _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
+                                      pad_sketch_xpm, sketchPadsCondition );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                      _( "Sketch Footprint &Edges" ), _( "Show footprint edges in outline mode" ),
+                                      show_mod_edge_xpm, sketchEdgesCondition );
 
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                 _( "Sketch Footprint &Edges" ), _( "Show footprint edges in outline mode" ),
-                 KiBitmap( show_mod_edge_xpm ), wxITEM_CHECK );
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                 _( "Sketch Footprint Te&xt" ), _( "Show footprint text in outline mode" ),
-                 KiBitmap( text_sketch_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( viewMenu, drawingModeSubMenu,
-                 -1, _( "&Drawing Mode" ),
-                 _( "Select how items are displayed" ),
-                 KiBitmap( add_zone_xpm ) );
+    viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
-    wxMenu* contrastModeSubMenu = new wxMenu;
+    ACTION_MENU* contrastModeSubMenu = new ACTION_MENU;
+    contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
+    contrastModeSubMenu->SetIcon( contrast_mode_xpm );
+    contrastModeSubMenu->SetTool( selTool );
 
     text = AddHotkeyName( _( "&High Contrast Mode" ), m_hotkeysDescrList,
                           HK_SWITCH_HIGHCONTRAST_MODE );
-    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, text,
-                 _( "Use high contrast display mode" ),
+    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                 text, _( "Use high contrast display mode" ),
                  KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
 
     contrastModeSubMenu->AppendSeparator();
-
     text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
                           HK_DEC_LAYER_ALPHA );
     AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
@@ -328,19 +302,14 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  text, _( "Make the current layer less transparent" ),
                  KiBitmap( contrast_mode_xpm ) );
 
-    AddMenuItem( viewMenu, contrastModeSubMenu,
-                 -1, _( "&Contrast Mode" ),
-                 _( "Select how items are displayed" ),
-                 KiBitmap( contrast_mode_xpm ) );
+    viewMenu->AddMenu( contrastModeSubMenu );
 
     // Separator
     viewMenu->AppendSeparator();
 
-    AddMenuItem( viewMenu,
-                 ID_MODEDIT_SHOW_HIDE_SEARCH_TREE,
-                 _( "&Search Tree" ),
-                 _( "Toggles the search tree visibility" ),
-                 KiBitmap( search_tree_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE,
+                            _( "&Search Tree" ), _( "Toggles the search tree visibility" ),
+                            search_tree_xpm, searchTreeShownCondition );
 
 
     //-------- Place menu --------------------

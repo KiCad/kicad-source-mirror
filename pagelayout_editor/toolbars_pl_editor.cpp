@@ -38,14 +38,10 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     wxString      msg;
-
-    // Standard file commands
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->AddTool( wxID_NEW, wxEmptyString, KiScaledBitmap( new_page_layout_xpm, this ),
                             _( "New page layout design" ) );
@@ -78,6 +74,7 @@ void PL_EDITOR_FRAME::ReCreateHToolbar( void )
                             KiScaledBitmap( redo_xpm, this ), _( "Redo" ) );
 
     // Standard Zoom controls:
+    // JEY TODO: move to COMMON_TOOLS....
     m_mainToolBar->AddSeparator();
     msg = AddHotkeyName( _( "Redraw view" ), PlEditorHotkeysDescr, HK_ZOOM_REDRAW,  IS_COMMENT );
     m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
@@ -161,8 +158,8 @@ void PL_EDITOR_FRAME::ReCreateVToolbar( void )
     if( m_drawToolBar )
         m_drawToolBar->Clear();
     else
-        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,

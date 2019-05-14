@@ -22,8 +22,8 @@
  */
 
 
-#ifndef LIB_EDITOR_CONTROL_H
-#define LIB_EDITOR_CONTROL_H
+#ifndef LIB_CONTROL_H
+#define LIB_CONTROL_H
 
 #include <sch_base_frame.h>
 #include <tools/ee_tool_base.h>
@@ -31,21 +31,21 @@
 class LIB_EDIT_FRAME;
 
 /**
- * Class LIB_EDITOR_CONTROL
+ * Class LIB_CONTROL
  *
- * Handles actions specific to the schematic editor in eeschema.
+ * Handles actions for the various symbol editor and viewers.
  */
-class LIB_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<LIB_EDIT_FRAME>
+class LIB_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_BASE_FRAME>
 {
 public:
-    LIB_EDITOR_CONTROL();
-    ~LIB_EDITOR_CONTROL();
+    LIB_CONTROL() :
+        EE_TOOL_BASE<SCH_BASE_FRAME>( "eeschema.SymbolLibraryControl" )
+    { }
 
-    int ToggleLockSelected( const TOOL_EVENT& aEvent );
-    int LockSelected( const TOOL_EVENT& aEvent );
-    int UnlockSelected( const TOOL_EVENT& aEvent );
+    virtual ~LIB_CONTROL() { }
 
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
+    int ShowElectricalTypes( const TOOL_EVENT& aEvent );
     int ShowComponentTree( const TOOL_EVENT& aEvent );
 
 private:

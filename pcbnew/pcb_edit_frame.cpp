@@ -69,6 +69,7 @@
 #include <tool/zoom_tool.h>
 #include <tools/selection_tool.h>
 #include <tools/picker_tool.h>
+#include <tools/point_editor.h>
 #include <tools/edit_tool.h>
 #include <tools/drawing_tool.h>
 #include <tools/point_editor.h>
@@ -233,20 +234,14 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
 #endif
 
     // Option toolbar
-    EVT_TOOL( ID_TB_OPTIONS_DRC_OFF,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_RATSNEST,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_DRC_OFF, PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_RATSNEST, PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, PCB_EDIT_FRAME::OnSelectOptionToolbar )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
-                    PCB_EDIT_FRAME::OnSelectOptionToolbar )
+              PCB_EDIT_FRAME::OnSelectOptionToolbar )
+    EVT_TOOL( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, PCB_EDIT_FRAME::OnSelectOptionToolbar )
 
     EVT_TOOL( ID_UPDATE_PCB_FROM_SCH, PCB_EDIT_FRAME::OnUpdatePCBFromSch )
     EVT_TOOL( ID_RUN_EESCHEMA, PCB_EDIT_FRAME::OnRunEeschema )
@@ -284,16 +279,8 @@ BEGIN_EVENT_TABLE( PCB_EDIT_FRAME, PCB_BASE_FRAME )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR, PCB_EDIT_FRAME::OnUpdateLayerPair )
     EVT_UPDATE_UI( ID_TOOLBARH_PCB_SELECT_LAYER, PCB_EDIT_FRAME::OnUpdateLayerSelectBox )
     EVT_UPDATE_UI( ID_TB_OPTIONS_DRC_OFF, PCB_EDIT_FRAME::OnUpdateDrcEnable )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_RATSNEST, PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, PCB_EDIT_FRAME::OnUpdateViaDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, PCB_EDIT_FRAME::OnUpdateCurvedRatsnest )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, PCB_EDIT_FRAME::OnUpdateTraceDrawMode )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                    PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                   PCB_EDIT_FRAME::OnUpdateShowLayerManager )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                   PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar )
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_ZOOM_SELECTION, PCB_EDIT_FRAME::OnUpdateVerticalToolbar )
     EVT_UPDATE_UI( ID_AUX_TOOLBAR_PCB_TRACK_WIDTH, PCB_EDIT_FRAME::OnUpdateSelectTrackWidth )
@@ -338,10 +325,9 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_AboutTitle = "Pcbnew";
 
     // Create GAL canvas
-    EDA_DRAW_PANEL_GAL* galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ),
-                                                m_FrameSize,
-                                                GetGalDisplayOptions(),
-                                                EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
+    auto galCanvas = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
+                                             GetGalDisplayOptions(),
+                                             EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO );
 
     SetGalCanvas( galCanvas );
 
@@ -374,6 +360,7 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     if( m_canvas )
         m_canvas->SetEnableBlockCommands( true );
 
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateAuxiliaryToolbar();
@@ -409,8 +396,6 @@ PCB_EDIT_FRAME::PCB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     syncLayerWidgetLayer();
 
     m_auimgr.Update();
-
-    setupTools();
 
     Zoom_Automatique( false );
 
@@ -579,7 +564,7 @@ void PCB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new PCB_EDITOR_CONTROL );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );
@@ -753,10 +738,6 @@ void PCB_EDIT_FRAME::enableGALSpecificMenus()
             if( GetMenuBar()->FindItem( id ) )
                 GetMenuBar()->FindItem( id )->Enable( enable );
         }
-
-        // Update settings for GAL menus
-        auto view = GetGalCanvas()->GetView();
-        GetMenuBar()->FindItem( ID_MENU_PCB_FLIP_VIEW )->Check( view->IsMirroredX() );
     }
 }
 

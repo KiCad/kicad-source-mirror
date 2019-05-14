@@ -112,8 +112,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
 
-    EVT_MENU( ID_ZOOM_SELECTION, GERBVIEW_FRAME::Process_Special_Functions )
-
     // Vertical toolbar:
     EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
 
@@ -121,8 +119,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
                     GERBVIEW_FRAME::Process_Special_Functions )
 
     // Option toolbar
-    //EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions ) // mentioned below
-    EVT_TOOL( ID_ZOOM_SELECTION, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnToggleCoordType )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnTogglePolygonDrawMode )
@@ -152,7 +148,6 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_HIGHLIGHT_REMOVE_ALL, GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, GERBVIEW_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
@@ -222,14 +217,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_NO_TOOL_SELECTED:
         SetNoToolSelected();
-        break;
-
-    case ID_ZOOM_SELECTION:
-        // This tool is located on the main toolbar: switch it on or off on click
-        if( GetToolId() != ID_ZOOM_SELECTION )
-            SetToolID( ID_ZOOM_SELECTION, wxCURSOR_MAGNIFIER, _( "Zoom to selection" ) );
-        else
-            SetNoToolSelected();
         break;
 
     case ID_TB_MEASUREMENT_TOOL:
@@ -481,7 +468,6 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
         needs_refresh = true;
         break;
 
-    // collect GAL-only tools here:
     case ID_TB_MEASUREMENT_TOOL:
         SetToolID( id, wxCURSOR_DEFAULT, _( "Unsupported tool in this canvas" ) );
         break;
@@ -567,9 +553,8 @@ void GERBVIEW_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
     for( auto ii: menuList )
     {
         wxMenuItem* item = menuBar->FindItem( ii.menuId );
+
         if( item && ii.galType == canvasType )
-        {
             item->Check( true );
-        }
     }
 }

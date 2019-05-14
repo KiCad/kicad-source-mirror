@@ -31,17 +31,22 @@
 #include "ee_hotkeys.h"
 #include "viewlib_frame.h"
 #include <symbol_lib_table.h>
-
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/ee_actions.h>
+#include <tools/lib_control.h>
 
 void LIB_VIEW_FRAME::ReCreateHToolbar()
 {
-    wxString    msg;
-
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
+                                            wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+
+    ACTION_TOOLBAR* toolbar = static_cast<ACTION_TOOLBAR*>( m_mainToolBar );
+    wxString msg;
 
     m_mainToolBar->AddTool( ID_LIBVIEW_SELECT_PART, wxEmptyString,
             KiScaledBitmap( add_component_xpm, this ),
@@ -56,26 +61,11 @@ void LIB_VIEW_FRAME::ReCreateHToolbar()
             KiScaledBitmap( lib_next_xpm, this ),
             _( "Display next symbol" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Zoom in" ), g_Viewlib_Hotkeys_Descr,
-            HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-            KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom out" ), g_Viewlib_Hotkeys_Descr,
-            HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-            KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Redraw view" ), g_Viewlib_Hotkeys_Descr,
-            HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom to fit symbol" ), g_Viewlib_Hotkeys_Descr,
-            HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
+    toolbar->AddSeparator();
+    toolbar->Add( ACTIONS::zoomRedraw );
+    toolbar->Add( ACTIONS::zoomInCenter );
+    toolbar->Add( ACTIONS::zoomOutCenter );
+    toolbar->Add( ACTIONS::zoomFitScreen );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, wxEmptyString,
@@ -118,8 +108,9 @@ void LIB_VIEW_FRAME::ReCreateVToolbar()
 
 
 // Virtual function
-void LIB_VIEW_FRAME::ReCreateMenuBar( void )
+void LIB_VIEW_FRAME::ReCreateMenuBar()
 {
+    LIB_CONTROL* libControl = m_toolManager->GetTool<LIB_CONTROL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -137,27 +128,23 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
                  KiBitmap( exit_xpm ) );
 
     // View menu
-    wxMenu* viewMenu = new wxMenu;
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, libControl );
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Viewlib_Hotkeys_Descr,
-                          HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
 
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Viewlib_Hotkeys_Descr,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
+    viewMenu->AddItem( ACTIONS::zoomInCenter,             EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,            EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,            EE_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,               EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&Zoom to Fit" ), g_Viewlib_Hotkeys_Descr, HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit symbol" ),
-                 KiBitmap( zoom_fit_in_page_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,          gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,           EE_CONDITIONS::ShowAlways );
 
-    text = AddHotkeyName( _( "&Redraw" ), g_Viewlib_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
-
-    viewMenu->AppendSeparator();
-    AddMenuItem( viewMenu, ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, _( "&Show Pin Electrical Type" ),
-                 wxEmptyString, KiBitmap( pin_show_etype_xpm ), wxITEM_CHECK );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( EE_ACTIONS::showElectricalTypes,   EE_CONDITIONS::ShowAlways );
 
     // Menu Help:
     wxMenu* helpMenu = new wxMenu;
@@ -184,7 +171,6 @@ void LIB_VIEW_FRAME::ReCreateMenuBar( void )
                  _( "&About Eeschema" ),
                  _( "About Eeschema schematic designer" ),
                  KiBitmap( info_xpm ) );
-
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
 

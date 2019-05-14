@@ -229,7 +229,7 @@ set( EESCHEMA_SRCS
     tools/ee_picker_tool.cpp
     tools/ee_point_editor.cpp
     tools/ee_selection_tool.cpp
-    tools/lib_editor_control.cpp
+    tools/lib_control.cpp
     tools/lib_drawing_tools.cpp
     tools/lib_edit_tool.cpp
     tools/lib_move_tool.cpp

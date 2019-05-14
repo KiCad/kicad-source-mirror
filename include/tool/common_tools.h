@@ -38,8 +38,12 @@ class EDA_DRAW_FRAME;
 class COMMON_TOOLS : public TOOL_INTERACTIVE
 {
 public:
-    COMMON_TOOLS();
-    ~COMMON_TOOLS();
+    COMMON_TOOLS() :
+        TOOL_INTERACTIVE( "common.Control" ),
+        m_frame( NULL )
+    { }
+
+    virtual ~COMMON_TOOLS() { }
 
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;

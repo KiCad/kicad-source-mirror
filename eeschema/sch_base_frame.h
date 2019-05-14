@@ -91,7 +91,7 @@ protected:
                                     ///< when it is repeated
     int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
                                     ///< when they are repeated
-
+    bool     m_showPinElectricalTypeName;
 
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -114,6 +114,12 @@ public:
      * Allow some frames to show/hide hidden pins.  The default impl shows all pins.
      */
     virtual bool GetShowAllPins() const { return true; }
+
+    /**
+     * Allow some frames to show/hide pin electrical type names.
+     */
+    bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
+    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     /**
      * switches currently used canvas ( Cairo / OpenGL).

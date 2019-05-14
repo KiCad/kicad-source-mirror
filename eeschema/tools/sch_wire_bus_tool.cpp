@@ -203,11 +203,11 @@ bool SCH_WIRE_BUS_TOOL::Init()
     EE_TOOL_BASE::Init();
 
     auto wireOrBusTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_WIRE_BUTT || m_frame->GetToolId() == ID_BUS_BUTT );
+        return ( m_frame->GetToolId() == ID_WIRE_TOOL || m_frame->GetToolId() == ID_BUS_TOOL );
     };
 
     auto lineTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT );
+        return ( m_frame->GetToolId() == ID_SCHEMATIC_LINE_TOOL );
     };
 
     auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
@@ -319,11 +319,11 @@ int SCH_WIRE_BUS_TOOL::StartWire( const TOOL_EVENT& aEvent )
  */
 int SCH_WIRE_BUS_TOOL::DrawWires( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->GetToolId() == ID_WIRE_BUTT )
+    if( m_frame->GetToolId() == ID_WIRE_TOOL )
         return StartWire( aEvent );
     else
     {
-        m_frame->SetToolID( ID_WIRE_BUTT, wxCURSOR_PENCIL, _( "Add wire" ) );
+        m_frame->SetToolID( ID_WIRE_TOOL, wxCURSOR_PENCIL, _( "Add wire" ) );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_WIRE, nullptr );
@@ -351,11 +351,11 @@ int SCH_WIRE_BUS_TOOL::StartBus( const TOOL_EVENT& aEvent )
  */
 int SCH_WIRE_BUS_TOOL::DrawBusses( const TOOL_EVENT& aEvent )
 {
-    if( m_frame->GetToolId() == ID_BUS_BUTT )
+    if( m_frame->GetToolId() == ID_BUS_TOOL )
         return StartBus( aEvent );
     else
     {
-        m_frame->SetToolID( ID_BUS_BUTT, wxCURSOR_PENCIL, _( "Add bus" ) );
+        m_frame->SetToolID( ID_BUS_TOOL, wxCURSOR_PENCIL, _( "Add bus" ) );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_BUS, nullptr );
@@ -411,9 +411,9 @@ int SCH_WIRE_BUS_TOOL::UnfoldBus( const TOOL_EVENT& aEvent )
         return doDrawSegments( LAYER_WIRE, segment );
 
     // If we came from one of our tools then re-enter it in the idle state
-    if( m_frame->GetToolId() == ID_WIRE_BUTT )
+    if( m_frame->GetToolId() == ID_WIRE_TOOL )
         return doDrawSegments( LAYER_WIRE, nullptr );
-    else if( m_frame->GetToolId() == ID_BUS_BUTT )
+    else if( m_frame->GetToolId() == ID_BUS_TOOL )
         return doDrawSegments( LAYER_BUS, nullptr );
 
     m_frame->SetNoToolSelected();
@@ -462,11 +462,11 @@ int SCH_WIRE_BUS_TOOL::StartLine( const TOOL_EVENT& aEvent)
  */
 int SCH_WIRE_BUS_TOOL::DrawLines( const TOOL_EVENT& aEvent)
 {
-    if( m_frame->GetToolId() == ID_LINE_COMMENT_BUTT )
+    if( m_frame->GetToolId() == ID_SCHEMATIC_LINE_TOOL )
         return StartLine( aEvent );
     else
     {
-        m_frame->SetToolID( ID_LINE_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add lines" ) );
+        m_frame->SetToolID( ID_SCHEMATIC_LINE_TOOL, wxCURSOR_PENCIL, _( "Add lines" ) );
         m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
         return doDrawSegments( LAYER_NOTES, nullptr );

@@ -252,8 +252,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_RUN_CVPCB, SCH_EDIT_FRAME::OnOpenCvpcb )
 
     EVT_TOOL( ID_SHEET_SET, EDA_DRAW_FRAME::Process_PageSettings )
-    EVT_TOOL( wxID_UNDO, SCH_EDIT_FRAME::GetSchematicFromUndoList )
-    EVT_TOOL( wxID_REDO, SCH_EDIT_FRAME::GetSchematicFromRedoList )
     EVT_TOOL( ID_GET_ANNOTATE, SCH_EDIT_FRAME::OnAnnotate )
     EVT_TOOL( wxID_PRINT, SCH_EDIT_FRAME::OnPrint )
     EVT_TOOL( ID_GET_ERC, SCH_EDIT_FRAME::OnErc )
@@ -281,11 +279,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
 
     /* Handle user interface update events. */
     EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, SCH_EDIT_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_HIGHLIGHT_BUTT, SCH_EDIT_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, SCH_EDIT_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI_RANGE( ID_SCHEMATIC_VERTICAL_TOOLBAR_START, ID_SCHEMATIC_VERTICAL_TOOLBAR_END,
-                         SCH_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
     EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
@@ -370,8 +363,8 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
 
     m_auimgr.Update();
 
-    GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
-    GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
+    GetToolManager()->RunAction( ACTIONS::gridPreset, true, m_LastGridSizeId );
+    GetToolManager()->RunAction( ACTIONS::zoomFitScreen, true );
 
     if( GetGalCanvas() )
         GetGalCanvas()->GetGAL()->SetGridVisibility( IsGridVisible() );
@@ -740,13 +733,6 @@ void SCH_EDIT_FRAME::OnModify()
         RecalculateConnections( false );
 
     m_canvas->Refresh();
-}
-
-
-void SCH_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

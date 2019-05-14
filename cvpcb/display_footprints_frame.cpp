@@ -119,9 +119,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     displ_opts->m_ShowTrackClearanceMode = PCB_DISPLAY_OPTIONS::DO_NOT_SHOW_CLEARANCE;
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-    ReCreateOptToolbar();
 
     // Create GAL canvas
 #ifdef __WXMAC__
@@ -133,19 +130,6 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
     auto* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                   GetGalDisplayOptions(), backend );
     SetGalCanvas( gal_drawPanel );
-
-    m_auimgr.SetManagedWindow( this );
-    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
-
-    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
-    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
-
-    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
-
-    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
-    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
-
-    m_auimgr.Update();
 
     // Create the manager and dispatcher & route draw panel events to the dispatcher
     m_toolManager = new TOOL_MANAGER;
@@ -163,6 +147,23 @@ DISPLAY_FOOTPRINTS_FRAME::DISPLAY_FOOTPRINTS_FRAME( KIWAY* aKiway, wxWindow* aPa
 
     // Run the control tool, it is supposed to be always active
     m_toolManager->InvokeTool( "cvpcb.InteractiveSelection" );
+
+    ReCreateHToolbar();
+    ReCreateVToolbar();
+    ReCreateOptToolbar();
+
+    m_auimgr.SetManagedWindow( this );
+    m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
+
+    m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
+    m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
+
+    m_auimgr.AddPane( m_optionsToolBar, EDA_PANE().VToolbar().Name( "OptToolbar" ).Left().Layer(3) );
+
+    m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
+    m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
+
+    m_auimgr.Update();
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_axesEnabled = true;
@@ -212,8 +213,8 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
         return;
 
     // Create options tool bar.
-    m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                         KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+    m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                           KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // TODO: these can be moved to the 'proper' right vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
@@ -223,37 +224,20 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateOptToolbar()
                                wxEmptyString, wxITEM_CHECK );
 
     m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
-                                   KiScaledBitmap( measurement_xpm, this ),
-                                   _( "Measure distance between two points" ),
-                                   wxITEM_CHECK );
+                               KiScaledBitmap( measurement_xpm, this ),
+                               _( "Measure distance between two points" ),
+                               wxITEM_CHECK );
 
-    KiScaledSeparator( m_optionsToolBar, this );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString, KiScaledBitmap( grid_xpm, this ),
-                               _( "Hide grid" ), wxITEM_CHECK );
+    m_optionsToolBar->AddSeparator();
+    m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiScaledBitmap( unit_inch_xpm, this ),
-                               _( "Set units to inches" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiScaledBitmap( unit_mm_xpm, this ),
-                               _( "Set units to millimeters" ), wxITEM_CHECK );
-
-#ifndef __APPLE__
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape" ), wxITEM_CHECK  );
-#else
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                               wxITEM_CHECK  );
-#endif
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle, ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
@@ -277,28 +261,18 @@ void DISPLAY_FOOTPRINTS_FRAME::ReCreateHToolbar()
     if( m_mainToolBar != NULL )
         return;
 
-    m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                      KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+    m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                        KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     m_mainToolBar->AddTool( ID_OPTIONS_SETUP, wxEmptyString, KiScaledBitmap( config_xpm, this ),
                             _( "Display options" ) );
 
     m_mainToolBar->AddSeparator();
-
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ),
-                            _( "Zoom in (F1)" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ),
-                            _( "Zoom out (F2)" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ),
-                            _( "Redraw view (F3)" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ),
-                            _( "Zoom to fit footprint (Home)" ) );
-
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->AddTool( ID_CVPCB_SHOW3D_FRAME, wxEmptyString, KiScaledBitmap( three_d_xpm, this ),
@@ -623,6 +597,13 @@ void DISPLAY_FOOTPRINTS_FRAME::OnUIToolSelection( wxUpdateUIEvent& aEvent )
 }
 
 
+void DISPLAY_FOOTPRINTS_FRAME::SyncMenusAndToolbars()
+{
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
+}
+
+
 /*
  * Redraw the BOARD items but not cursors, axis or grid.
  */
@@ -634,3 +615,4 @@ void BOARD::Draw( EDA_DRAW_PANEL* aPanel, wxDC* aDC,
         m_Modules->Draw( aPanel, aDC, GR_COPY );
     }
 }
+

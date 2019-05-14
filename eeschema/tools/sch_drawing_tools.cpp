@@ -202,7 +202,7 @@ int SCH_DRAWING_TOOLS::PlaceSymbol( const TOOL_EVENT& aEvent )
 {
     SCH_COMPONENT* component = aEvent.Parameter<SCH_COMPONENT*>();
 
-    m_frame->SetToolID( ID_SCH_PLACE_COMPONENT, wxCURSOR_PENCIL, _( "Add Symbol" ) );
+    m_frame->SetToolID( ID_PLACE_SYMBOL_TOOL, wxCURSOR_PENCIL, _( "Add Symbol" ) );
 
     return doPlaceComponent( component, nullptr, s_SymbolHistoryList );
 }
@@ -214,7 +214,7 @@ int SCH_DRAWING_TOOLS::PlacePower( const TOOL_EVENT& aEvent )
     SCHLIB_FILTER  filter;
 
     filter.FilterPowerParts( true );
-    m_frame->SetToolID( ID_PLACE_POWER_BUTT, wxCURSOR_PENCIL, _( "Add Power" ) );
+    m_frame->SetToolID( ID_PLACE_POWER_TOOL, wxCURSOR_PENCIL, _( "Add Power" ) );
 
     return doPlaceComponent( component, &filter, s_PowerHistoryList );
 }
@@ -350,7 +350,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 {
     SCH_BITMAP* image = aEvent.Parameter<SCH_BITMAP*>();
 
-    m_frame->SetToolID( ID_ADD_IMAGE_BUTT, wxCURSOR_PENCIL, _( "Add image" ) );
+    m_frame->SetToolID( ID_PLACE_IMAGE_TOOL, wxCURSOR_PENCIL, _( "Add image" ) );
 
     VECTOR2I cursorPos = getViewControls()->GetCursorPosition();
 
@@ -469,28 +469,28 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
 
 int SCH_DRAWING_TOOLS::PlaceNoConnect( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_NOCONN_BUTT, wxCURSOR_PENCIL, _( "Add no connect" ) );
+    m_frame->SetToolID( ID_NOCONNECT_TOOL, wxCURSOR_PENCIL, _( "Add no connect" ) );
     return doSingleClickPlace( SCH_NO_CONNECT_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceJunction( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_JUNCTION_BUTT, wxCURSOR_PENCIL, _( "Add junction" ) );
+    m_frame->SetToolID( ID_JUNCTION_TOOL, wxCURSOR_PENCIL, _( "Add junction" ) );
     return doSingleClickPlace( SCH_JUNCTION_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceBusWireEntry( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_WIRETOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
+    m_frame->SetToolID( ID_WIRETOBUS_ENTRY_TOOL, wxCURSOR_PENCIL, _( "Add wire to bus entry" ) );
     return doSingleClickPlace( SCH_BUS_WIRE_ENTRY_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceBusBusEntry( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_BUSTOBUS_ENTRY_BUTT, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
+    m_frame->SetToolID( ID_BUSTOBUS_ENTRY_TOOL, wxCURSOR_PENCIL, _( "Add bus to bus entry" ) );
     return doSingleClickPlace( SCH_BUS_BUS_ENTRY_T );
 }
 
@@ -565,42 +565,42 @@ int SCH_DRAWING_TOOLS::doSingleClickPlace( KICAD_T aType )
 
 int SCH_DRAWING_TOOLS::PlaceLabel( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_LABEL_BUTT, wxCURSOR_PENCIL, _( "Add net label" ) );
+    m_frame->SetToolID( ID_LABEL_TOOL, wxCURSOR_PENCIL, _( "Add net label" ) );
     return doTwoClickPlace( SCH_LABEL_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceGlobalLabel( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_GLOBALLABEL_BUTT, wxCURSOR_PENCIL, _( "Add global label" ) );
+    m_frame->SetToolID( ID_GLOBALLABEL_TOOL, wxCURSOR_PENCIL, _( "Add global label" ) );
     return doTwoClickPlace( SCH_GLOBAL_LABEL_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceHierarchicalLabel( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_HIERLABEL_BUTT, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
+    m_frame->SetToolID( ID_HIERLABEL_TOOL, wxCURSOR_PENCIL, _( "Add hierarchical label" ) );
     return doTwoClickPlace( SCH_HIER_LABEL_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceSheetPin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_SHEET_PIN_BUTT, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
+    m_frame->SetToolID( ID_SHEETPIN_TOOL, wxCURSOR_PENCIL, _( "Add sheet pins" ) );
     return doTwoClickPlace( SCH_SHEET_PIN_T );
 }
 
 
 int SCH_DRAWING_TOOLS::ImportSheetPin( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_IMPORT_HLABEL_BUTT, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
+    m_frame->SetToolID( ID_IMPORT_SHEETPIN_TOOL, wxCURSOR_PENCIL, _( "Import sheet pins" ) );
     return doTwoClickPlace( SCH_SHEET_PIN_T );
 }
 
 
 int SCH_DRAWING_TOOLS::PlaceSchematicText( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_TEXT_COMMENT_BUTT, wxCURSOR_PENCIL, _( "Add text" ) );
+    m_frame->SetToolID( ID_SCHEMATIC_TEXT_TOOL, wxCURSOR_PENCIL, _( "Add text" ) );
     return doTwoClickPlace( SCH_TEXT_T );
 }
 
@@ -662,7 +662,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
                     if( item )
                     {
-                        if( m_frame->GetToolId() == ID_IMPORT_HLABEL_BUTT )
+                        if( m_frame->GetToolId() == ID_IMPORT_SHEETPIN_TOOL )
                             item = m_frame->ImportSheetPin( (SCH_SHEET*) item );
                         else
                             item = m_frame->CreateSheetPin( (SCH_SHEET*) item );
@@ -740,7 +740,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
 
 int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
 {
-    m_frame->SetToolID( ID_SHEET_SYMBOL_BUTT, wxCURSOR_PENCIL, _( "Add sheet" ) );
+    m_frame->SetToolID( ID_SHEET_TOOL, wxCURSOR_PENCIL, _( "Add sheet" ) );
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
     getViewControls()->ShowCursor( true );
 

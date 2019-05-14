@@ -55,11 +55,6 @@ class LIB_EDIT_FRAME : public SCH_BASE_FRAME
     SYMBOL_TREE_PANE*  m_treePane;             ///< component search tree widget
     LIB_MANAGER*       m_libMgr;               ///< manager taking care of temporary modificatoins
 
-    /**
-     * the option to show the pin electrical name in the component editor
-     */
-    bool m_showPinElectricalTypeName;
-
     // The unit number to edit and show
     int m_unit;
 
@@ -284,11 +279,6 @@ public:
 
     void OnSelectUnit( wxCommandEvent& event );
 
-    /**
-     * From Option toolbar: option to show the electrical pin type name
-     */
-    void OnShowElectricalType( wxCommandEvent& event );
-
     void OnToggleSearchTree( wxCommandEvent& event );
 
     void OnEditSymbolLibTable( wxCommandEvent& aEvent ) override;
@@ -301,19 +291,14 @@ public:
     void OnSelectBodyStyle( wxCommandEvent& event );
 
     void OnUpdatePaste( wxUpdateUIEvent& event );
-    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateRevert( wxUpdateUIEvent& aEvent );
-    void OnUpdateUndo( wxUpdateUIEvent& event );
-    void OnUpdateRedo( wxUpdateUIEvent& event );
     void OnUpdateSyncPinEdit( wxUpdateUIEvent& event );
-    void OnUpdatePinTable( wxUpdateUIEvent& event );
     void OnUpdatePartNumber( wxUpdateUIEvent& event );
     void OnUpdateDeMorganNormal( wxUpdateUIEvent& event );
     void OnUpdateDeMorganConvert( wxUpdateUIEvent& event );
-    void OnUpdateElectricalType( wxUpdateUIEvent& aEvent );
 
     void UpdateAfterSymbolProperties( wxString* aOldName, wxArrayString* aOldAliases );
     void RebuildSymbolUnitsList();
@@ -377,9 +362,6 @@ public:
 
     bool GetShowDeMorgan() { return m_showDeMorgan; }
     void SetShowDeMorgan( bool show ) { m_showDeMorgan = show; }
-
-    bool GetShowElectricalType() { return m_showPinElectricalTypeName; }
-    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     void ClearMsgPanel() override { DisplayCmpDoc(); }
 
@@ -473,12 +455,12 @@ public:
     void SaveCopyInUndoList( EDA_ITEM* ItemToCopy, UNDO_REDO_T undoType = UR_LIBEDIT,
                              bool aAppend = false );
 
+    void GetComponentFromUndoList();
+    void GetComponentFromRedoList();
+
     void RollbackPartFromUndo();
 
 private:
-    void GetComponentFromUndoList( wxCommandEvent& event );
-    void GetComponentFromRedoList( wxCommandEvent& event );
-
     /**
      * Read a component symbol file (*.sym ) and add graphic items to the current component.
      *

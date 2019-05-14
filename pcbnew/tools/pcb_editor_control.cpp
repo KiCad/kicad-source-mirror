@@ -135,7 +135,8 @@ TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
 
 TOOL_ACTION PCB_ACTIONS::highlightNetCursor( "pcbnew.EditorControl.highlightNetCursor",
         AS_GLOBAL, 0,
-        "", "" );
+        "Highlight Nets", "Highlight all copper items of a net",
+        net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHLIGHT_NET_SELECTION ),
@@ -594,7 +595,6 @@ int PCB_EDITOR_CONTROL::modifyLockSelected( MODIFY_MODE aMode )
 
 int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 {
-    auto selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
     KIGFX::VIEW* view = getView();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
     BOARD* board = getModel<BOARD>();

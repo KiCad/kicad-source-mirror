@@ -794,7 +794,6 @@ private:
 
     /* User interface update event handlers. */
     void OnUpdatePaste( wxUpdateUIEvent& event );
-    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );
@@ -1008,8 +1007,6 @@ public:
                              bool aAppend = false,
                              const wxPoint& aTransformPoint = wxPoint( 0, 0 ) );
 
-private:
-
     /**
      * Restore an undo or redo command to put data pointed by \a aList in the previous state.
      *
@@ -1018,25 +1015,6 @@ private:
      */
     void PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRedoCommand );
 
-    /**
-     *  Redo the last edit.
-     *
-     *  - Save the current schematic in Undo list
-     *  - Get an old version of the schematic from Redo list
-     *
-     *  @return none
-     */
-    void GetSchematicFromRedoList( wxCommandEvent& event );
-
-    /**
-     * Perform an undo the last edit.
-     *
-     *  - Save the current schematic in Redo list
-     *  - Get an old version of the schematic from Undo list
-     */
-    void GetSchematicFromUndoList( wxCommandEvent& event );
-
-public:
     /**
      * Clone \a aItem and owns that clone in this container.
      */

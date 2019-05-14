@@ -151,16 +151,6 @@ TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
         nullptr, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::copyToClipboard( "pcbnew.InteractiveEdit.CopyToClipboard",
-        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
-        _( "Copy" ), _( "Copy selected content to clipboard" ),
-        copy_xpm );
-
-TOOL_ACTION PCB_ACTIONS::cutToClipboard( "pcbnew.InteractiveEdit.CutToClipboard",
-        AS_GLOBAL, 0,   // do not define a hotkey and let TranslateLegacyId() handle the event
-        _( "Cut" ), _( "Cut selected content to clipboard" ),
-        cut_xpm );
-
 TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
         AS_GLOBAL, 0,
         "", "" );
@@ -270,11 +260,11 @@ bool EDIT_TOOL::Init()
 
 
     menu.AddSeparator( SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::cutToClipboard, SELECTION_CONDITIONS::NotEmpty );
-    menu.AddItem( PCB_ACTIONS::copyToClipboard, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( ACTIONS::cut, SELECTION_CONDITIONS::NotEmpty );
+    menu.AddItem( ACTIONS::copy, SELECTION_CONDITIONS::NotEmpty );
     // Selection tool handles the context menu for some other tools, such as the Picker.
     // Don't add things like Paste when another tool is active.
-    menu.AddItem( PCB_ACTIONS::pasteFromClipboard, noActiveToolCondition );
+    menu.AddItem( ACTIONS::paste, noActiveToolCondition );
 
     // Mirror only available in modedit
     menu.AddSeparator( editingModuleCondition && SELECTION_CONDITIONS::NotEmpty );
@@ -1374,33 +1364,6 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 }
 
 
-void EDIT_TOOL::setTransitions()
-{
-    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
-    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
-    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );
-    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCcw.MakeEvent() );
-    Go( &EDIT_TOOL::Flip,       PCB_ACTIONS::flip.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::remove.MakeEvent() );
-    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::removeAlt.MakeEvent() );
-    Go( &EDIT_TOOL::Properties, PCB_ACTIONS::properties.MakeEvent() );
-    Go( &EDIT_TOOL::MoveExact,  PCB_ACTIONS::moveExact.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicate.MakeEvent() );
-    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicateIncrement.MakeEvent() );
-    Go( &EDIT_TOOL::CreateArray,PCB_ACTIONS::createArray.MakeEvent() );
-    Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
-
-    Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::updateFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
-    Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
-    Go( &EDIT_TOOL::copyToClipboard,         PCB_ACTIONS::copyToClipboard.MakeEvent() );
-    Go( &EDIT_TOOL::cutToClipboard,          PCB_ACTIONS::cutToClipboard.MakeEvent() );
-}
-
-
 bool EDIT_TOOL::updateModificationPoint( SELECTION& aSelection )
 {
     if( m_dragging && aSelection.HasReferencePoint() )
@@ -1558,3 +1521,33 @@ int EDIT_TOOL::cutToClipboard( const TOOL_EVENT& aEvent )
 
     return 0;
 }
+
+
+void EDIT_TOOL::setTransitions()
+{
+    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::editActivate.MakeEvent() );
+    Go( &EDIT_TOOL::Main,       PCB_ACTIONS::move.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::drag45Degree.MakeEvent() );
+    Go( &EDIT_TOOL::Drag,       PCB_ACTIONS::dragFreeAngle.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCw.MakeEvent() );
+    Go( &EDIT_TOOL::Rotate,     PCB_ACTIONS::rotateCcw.MakeEvent() );
+    Go( &EDIT_TOOL::Flip,       PCB_ACTIONS::flip.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::remove.MakeEvent() );
+    Go( &EDIT_TOOL::Remove,     PCB_ACTIONS::removeAlt.MakeEvent() );
+    Go( &EDIT_TOOL::Properties, PCB_ACTIONS::properties.MakeEvent() );
+    Go( &EDIT_TOOL::MoveExact,  PCB_ACTIONS::moveExact.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicate.MakeEvent() );
+    Go( &EDIT_TOOL::Duplicate,  PCB_ACTIONS::duplicateIncrement.MakeEvent() );
+    Go( &EDIT_TOOL::CreateArray,PCB_ACTIONS::createArray.MakeEvent() );
+    Go( &EDIT_TOOL::Mirror,     PCB_ACTIONS::mirror.MakeEvent() );
+
+    Go( &EDIT_TOOL::editFootprintInFpEditor, PCB_ACTIONS::editFootprintInFpEditor.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::updateFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::ExchangeFootprints,      PCB_ACTIONS::exchangeFootprints.MakeEvent() );
+    Go( &EDIT_TOOL::MeasureTool,             PCB_ACTIONS::measureTool.MakeEvent() );
+
+    Go( &EDIT_TOOL::copyToClipboard,         ACTIONS::copy.MakeEvent() );
+    Go( &EDIT_TOOL::cutToClipboard,          ACTIONS::cut.MakeEvent() );
+}
+
+

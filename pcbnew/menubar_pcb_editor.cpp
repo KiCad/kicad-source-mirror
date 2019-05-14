@@ -24,17 +24,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file menubar_pcb_editor.cpp
- * board editor menubars
- */
 #include <pcb_edit_frame.h>
 
 #include <advanced_config.h>
 #include <kiface_i.h>
 #include <menus_helpers.h>
 #include <pgm_base.h>
-
+#include <tool/tool_manager.h>
+#include <tool/conditional_menu.h>
+#include <tool/actions.h>
+#include <tool/selection_conditions.h>
+#include <tools/selection_tool.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "pcbnew.h"
@@ -51,9 +51,6 @@ static void prepareExportMenu( wxMenu* aParentMenu );
 
 // Build the edit menu
 static void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal );
-
-// Build the view menu
-static void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal );
 
 // Build the place submenu
 static void preparePlaceMenu( wxMenu* aParentMenu );
@@ -79,6 +76,7 @@ static void prepareHelpMenu( wxMenu* aParentMenu );
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
 {
+    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -96,8 +94,172 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prepareEditMenu( editMenu, IsGalCanvasActive() );
 
     //----- View menu -----------------------------------------------------------
-    wxMenu* viewMenu = new wxMenu;
-    prepareViewMenu( viewMenu, IsGalCanvasActive() );
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+
+    auto layersPaletteShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return LayerManagerShown();
+    };
+    auto microwaveToolbarShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return MicrowaveToolbarShown();
+    };
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
+    auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPolarCood;
+    };
+    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == INCHES;
+    };
+    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == MILLIMETRES;
+    };
+    auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalDisplayOptions().m_fullscreenCursor;
+    };
+    auto ratsnestShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetBoard()->IsElementVisible( LAYER_RATSNEST );
+    };
+    auto curvedRatsnestCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayRatsnestLinesCurved;
+    };
+    auto boardFlippedCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetGalCanvas()->GetView()->IsMirroredX();
+    };
+    auto zonesFilledCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayZonesMode == 0;
+    };
+    auto zonesWireframedCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayZonesMode == 1;
+    };
+    auto zonesOutlinedCondition = [ this ] ( const SELECTION& aSel ) {
+        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayZonesMode == 2;
+    };
+    auto sketchTracksCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPcbTrackFill;
+    };
+    auto sketchViasCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayViaFill;
+    };
+
+    auto sketchPadsCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPadFill;
+    };
+
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
+                            _( "Show La&yers Manager" ), HELP_SHOW_HIDE_LAYERMANAGER,
+                            layers_manager_xpm, layersPaletteShownCondition );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
+                            _( "Show Microwa&ve Toolbar" ), HELP_SHOW_HIDE_MICROWAVE_TOOLS,
+                             mw_toolbar_xpm, microwaveToolbarShownCondition );
+    viewMenu->AddItem( ID_OPEN_MODULE_VIEWER,
+                       _( "Footprint &Library Browser" ), _( "Browse footprint libraries" ),
+                       modview_icon_xpm, SELECTION_CONDITIONS::ShowAlways );
+    text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
+    viewMenu->AddItem( ID_MENU_PCB_SHOW_3D_FRAME,
+                       text, _( "Show board in 3D viewer" ),
+                       three_d_xpm, SELECTION_CONDITIONS::ShowAlways );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,        SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
+
+    viewMenu->AppendSeparator();
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid, gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,  SELECTION_CONDITIONS::ShowAlways );
+
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                            _( "Display &Polar Coordinates" ), wxEmptyString,
+                            polar_coord_xpm, polarCoordsCondition );
+
+    // Units submenu
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
+    viewMenu->AddMenu( unitsSubMenu );
+
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
+
+    viewMenu->AddSeparator();
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_RATSNEST,
+                            _( "Show Ratsnest" ), _( "Show board ratsnest" ),
+                            general_ratsnest_xpm, ratsnestShownCondition );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
+                            _( "Curved Ratsnest Lines" ), _( "Show ratsnest with curved lines" ),
+                            curved_ratsnest_xpm, curvedRatsnestCondition );
+
+    viewMenu->AddSeparator();
+
+    // Drawing Mode Submenu
+    CONDITIONAL_MENU* drawingModeSubMenu = new CONDITIONAL_MENU( false, selTool );
+    drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
+    drawingModeSubMenu->SetIcon( add_zone_xpm );
+
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES,
+                                      _( "&Fill Zones" ), _( "Show filled areas of zones" ),
+                                      show_zone_xpm, zonesFilledCondition );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES_DISABLE,
+                                      _( "&Wireframe Zones" ), _( "Show only zone outlines" ),
+                                      show_zone_disable_xpm, zonesWireframedCondition );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
+                                      _( "&Sketch Zones" ),
+                                      _( "Hatch outline of filled areas of zones" ) ,
+                                      show_zone_outline_only_xpm , zonesOutlinedCondition );
+
+    drawingModeSubMenu->AddSeparator();
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
+                                      _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
+                                      pad_sketch_xpm, sketchPadsCondition );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
+                                      _( "Sketch &Vias" ), _( "Show vias in outline mode" ),
+                                      via_sketch_xpm, sketchViasCondition );
+    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Board_Editor_Hotkeys_Descr,
+                          HK_SWITCH_TRACK_DISPLAY_MODE );
+    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
+                                      text, _( "Show tracks in outline mode" ),
+                                      showtrack_xpm, sketchTracksCondition );
+
+    viewMenu->AddMenu( drawingModeSubMenu );
+
+    // Contrast Mode Submenu
+    ACTION_MENU* contrastModeSubMenu = new ACTION_MENU;
+    contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
+    contrastModeSubMenu->SetIcon( contrast_mode_xpm );
+    contrastModeSubMenu->SetTool( selTool );
+
+    text = AddHotkeyName( _( "&High Contrast Mode" ), g_Board_Editor_Hotkeys_Descr,
+                          HK_SWITCH_HIGHCONTRAST_MODE );
+    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
+                 text, _( "Use high contrast display mode" ),
+                 KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+
+    contrastModeSubMenu->AppendSeparator();
+    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
+                          HK_DEC_LAYER_ALPHA );
+    AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
+                 text, _( "Make the current layer more transparent" ),
+                 KiBitmap( contrast_mode_xpm ) );
+
+    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
+                          HK_INC_LAYER_ALPHA );
+    AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
+                 text, _( "Make the current layer less transparent" ),
+                 KiBitmap( contrast_mode_xpm ) );
+
+    viewMenu->AddMenu( contrastModeSubMenu );
+
+    viewMenu->AddCheckItem( ID_MENU_PCB_FLIP_VIEW,
+                            _( "Flip &Board View" ), _( "Flip (mirror) the board view" ),
+                            flip_board_xpm, boardFlippedCondition );
+
+#ifdef __APPLE__
+    viewMenu->AppendSeparator();
+#endif
 
     //----- Place Menu ----------------------------------------------------------
     wxMenu* placeMenu = new wxMenu;
@@ -458,6 +620,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 {
     wxString text;
 
+    // JEY TODO: convert to actions (PCB_CONTROL is already ready)...
     text  = AddHotkeyName( _( "&Undo" ), g_Board_Editor_Hotkeys_Descr, HK_UNDO );
     AddMenuItem( aParentMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
 
@@ -466,6 +629,7 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
     aParentMenu->AppendSeparator();
 
+    // JEY TODO: convert to actions:
     if( aUseGal )
     {
         text = AddHotkeyName( _( "&Cut" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_CUT );
@@ -539,201 +703,11 @@ void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
 
 
 // Build the view menu
-void prepareViewMenu( wxMenu* aParentMenu, bool aUseGal )
+void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, PCB_EDIT_FRAME* aFrame )
 {
     wxString text;
 
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
-                 _( "Show La&yers Manager" ),
-                 HELP_SHOW_HIDE_LAYERMANAGER,
-                 KiBitmap( layers_manager_xpm ), wxITEM_CHECK );
 
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE,
-                 _( "Show Microwa&ve Toolbar" ),
-                 HELP_SHOW_HIDE_MICROWAVE_TOOLS,
-                 KiBitmap( mw_toolbar_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( aParentMenu, ID_OPEN_MODULE_VIEWER,
-                 _( "Footprint &Library Browser" ),
-                 _( "Browse footprint libraries" ),
-                 KiBitmap( modview_icon_xpm ) );
-
-    text = AddHotkeyName( _( "&3D Viewer" ), g_Board_Editor_Hotkeys_Descr, HK_3D_VIEWER );
-    AddMenuItem( aParentMenu, ID_MENU_PCB_SHOW_3D_FRAME,
-                 text, _( "Show board in 3D viewer" ),
-                 KiBitmap( three_d_xpm ) );
-
-   aParentMenu->AppendSeparator();
-
-    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
-     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
-     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zooming is made around the screen center
-     * From hotkeys, zooming is made around the mouse cursor position
-     * (obviously not possible from the toolbar or menubar command)
-     *
-     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
-     * for Zoom in and Zoom out sub menus
-     */
-    text = AddHotkeyName( _( "Zoom &In" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( aParentMenu, ID_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to &Fit" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ZOOM_AUTO  );
-    AddMenuItem( aParentMenu, ID_ZOOM_PAGE, text, HELP_ZOOM_FIT,
-                 KiBitmap( zoom_fit_in_page_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to Selection" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_ZOOM_SELECTION );
-    AddMenuItem( aParentMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "&Redraw" ), g_Board_Editor_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( aParentMenu, ID_ZOOM_REDRAW, text,
-                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_GRID,
-                 _( "Show &Grid" ), wxEmptyString,
-                 KiBitmap( grid_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( aParentMenu, ID_PCB_USER_GRID_SETUP,
-                 _( "Grid &Settings..." ),_( "Adjust custom user-defined grid dimensions" ),
-                 KiBitmap( grid_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                 _( "Display &Polar Coordinates" ), wxEmptyString,
-                 KiBitmap( polar_coord_xpm ), wxITEM_CHECK );
-
-    // Units submenu
-    wxMenu* unitsSubMenu = new wxMenu;
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                 _( "&Imperial" ), _( "Use imperial units" ),
-                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-                 _( "&Metric" ), _( "Use metric units" ),
-                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( aParentMenu, unitsSubMenu, -1, _( "&Units" ),
-                 _( "Select which units are displayed" ),
-                 KiBitmap( unit_mm_xpm ) );
-
-#ifndef __APPLE__
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full Window Crosshair" ),
-                 _( "Change cursor shape" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#else
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SELECT_CURSOR,
-                 _( "Full Window Crosshair" ),
-                 _( "Change cursor shape (not supported in Legacy Toolset)" ),
-                 KiBitmap( cursor_shape_xpm ), wxITEM_CHECK );
-#endif
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_SHOW_RATSNEST,
-                 _( "Show Ratsnest" ),
-                 _( "Show board ratsnest" ),
-                 KiBitmap( general_ratsnest_xpm ), wxITEM_CHECK );
-    AddMenuItem( aParentMenu, ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
-                 _( "Curved Ratsnest Lines" ),
-                 _( "Show ratsnest with curved lines" ),
-                 KiBitmap( curved_ratsnest_xpm ), wxITEM_CHECK );
-
-    aParentMenu->AppendSeparator();
-
-    // Drawing Mode Submenu
-    wxMenu* drawingModeSubMenu = new wxMenu;
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_ZONES,
-                 _( "&Fill Zones" ), _( "Show filled areas in zones" ),
-                 KiBitmap( show_zone_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_ZONES_DISABLE,
-                 _( "&Wireframe Zones" ), _( "Show outlines of filled areas only in zones" ),
-                 KiBitmap( show_zone_disable_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
-                 _( "&Sketch Zones" ), _( "Do not show filled areas in zones" ),
-                 KiBitmap( show_zone_outline_only_xpm ), wxITEM_RADIO );
-
-    drawingModeSubMenu->AppendSeparator();
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                 _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
-                 KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                 _( "Sketch &Vias" ), _( "Show vias in outline mode" ),
-                 KiBitmap( via_sketch_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_SWITCH_TRACK_DISPLAY_MODE );
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, text,
-                 _( "Show tracks in outline mode" ),
-                 KiBitmap( showtrack_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH,
-                 _( "Sketch &Graphic Items" ), _( "Show graphic items in outline mode" ),
-                 KiBitmap( text_sketch_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH,
-                 _( "Sketch Footprint &Edges" ), _( "Show footprint edges in outline mode" ),
-                 KiBitmap( show_mod_edge_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( drawingModeSubMenu, ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH,
-                 _( "Sketch Footprint Te&xt" ), _( "Show footprint text in outline mode" ),
-                 KiBitmap( text_sketch_xpm ), wxITEM_CHECK );
-
-    AddMenuItem( aParentMenu, drawingModeSubMenu,
-                 -1, _( "&Drawing Mode" ),
-                 _( "Select how items are displayed" ),
-                 KiBitmap( add_zone_xpm ) );
-
-    // Contrast Mode Submenu
-    wxMenu* contrastModeSubMenu = new wxMenu;
-
-    text = AddHotkeyName( _( "&High Contrast Mode" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_SWITCH_HIGHCONTRAST_MODE );
-    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                 text, _( "Use high contrast display mode" ),
-                 KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
-
-    contrastModeSubMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_DEC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
-                 text, _( "Make the current layer more transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
-
-    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_INC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
-                 text, _( "Make the current layer less transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
-
-    AddMenuItem( aParentMenu, contrastModeSubMenu,
-                 -1, _( "&Contrast Mode" ),
-                 _( "Select how items are displayed" ),
-                 KiBitmap( contrast_mode_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_FLIP_VIEW,
-                 _( "Flip &Board View" ),
-                 _( "Flip (mirror) the board view" ),
-                 KiBitmap( flip_board_xpm ), wxITEM_CHECK );
-
-#ifdef __APPLE__
-    aParentMenu->AppendSeparator();
-#endif
 }
 
 

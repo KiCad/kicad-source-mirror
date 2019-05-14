@@ -147,6 +147,7 @@ public:
     /// Inspection
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION showMarkerInfo;
+    static TOOL_ACTION showSymbolEditor;
     static TOOL_ACTION editWithSymbolEditor;
     static TOOL_ACTION showLibraryBrowser;
 
@@ -169,6 +170,7 @@ public:
     static TOOL_ACTION pushPinLength;
     static TOOL_ACTION pushPinNameSize;
     static TOOL_ACTION pushPinNumSize;
+    static TOOL_ACTION showElectricalTypes;
     static TOOL_ACTION showComponentTree;
     static TOOL_ACTION toggleForceHV;
 

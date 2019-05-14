@@ -138,63 +138,52 @@ static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_
 
 // Schematic editor
 static EDA_HOTKEY HkBeginWire( _HKI( "Begin Wire" ), HK_BEGIN_WIRE, 'W',
-                               ID_WIRE_BUTT );
+                               ID_WIRE_TOOL );
 static EDA_HOTKEY HkBeginBus( _HKI( "Begin Bus" ), HK_BEGIN_BUS, 'B',
-                              ID_BUS_BUTT );
-static EDA_HOTKEY HkEndLineWireBus( _HKI( "End Line Wire Bus" ), HK_END_CURR_LINEWIREBUS, 'K',
-                                  ID_SCH_END_LINE_WIRE_OR_BUS );
+                              ID_BUS_TOOL );
+static EDA_HOTKEY HkEndLineWireBus( _HKI( "End Line Wire Bus" ), HK_END_CURR_LINEWIREBUS, 'K' );
 
 static EDA_HOTKEY HkAddLabel( _HKI( "Add Label" ), HK_ADD_LABEL, 'L',
-                              ID_LABEL_BUTT );
+                              ID_LABEL_TOOL );
 static EDA_HOTKEY HkAddHierarchicalLabel( _HKI( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H',
-                                          ID_HIERLABEL_BUTT );
+                                          ID_HIERLABEL_TOOL );
 static EDA_HOTKEY HkAddGlobalLabel( _HKI( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'H',
-                                    ID_GLOBALLABEL_BUTT );
+                                    ID_GLOBALLABEL_TOOL );
 static EDA_HOTKEY HkAddJunction( _HKI( "Add Junction" ), HK_ADD_JUNCTION, 'J',
-                                 ID_JUNCTION_BUTT );
+                                 ID_JUNCTION_TOOL );
 static EDA_HOTKEY HkAddComponent( _HKI( "Add Symbol" ), HK_ADD_NEW_COMPONENT, 'A',
-                                  ID_SCH_PLACE_COMPONENT );
+                                  ID_PLACE_SYMBOL_TOOL );
 static EDA_HOTKEY HkAddPower( _HKI( "Add Power" ), HK_ADD_NEW_POWER, 'P',
-                              ID_PLACE_POWER_BUTT );
+                              ID_PLACE_POWER_TOOL );
 static EDA_HOTKEY HkAddNoConn( _HKI( "Add No Connect Flag" ), HK_ADD_NOCONN_FLAG, 'Q',
-                               ID_NOCONN_BUTT );
+                               ID_NOCONNECT_TOOL );
 static EDA_HOTKEY HkAddHierSheet( _HKI( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S',
-                                  ID_SHEET_SYMBOL_BUTT );
+                                  ID_SHEET_TOOL );
 static EDA_HOTKEY HkAddBusEntry( _HKI( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/',
-                                 ID_BUSTOBUS_ENTRY_BUTT );
+                                 ID_BUSTOBUS_ENTRY_TOOL );
 static EDA_HOTKEY HkAddWireEntry( _HKI( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z',
-                                  ID_WIRETOBUS_ENTRY_BUTT );
+                                  ID_WIRETOBUS_ENTRY_TOOL );
 static EDA_HOTKEY HkAddGraphicPolyLine( _HKI( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I',
-                                        ID_LINE_COMMENT_BUTT );
+                                        ID_SCHEMATIC_LINE_TOOL );
 static EDA_HOTKEY HkAddGraphicText( _HKI( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T',
-                                    ID_TEXT_COMMENT_BUTT );
-static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y" ), HK_MIRROR_Y, 'Y',
-                             ID_SCH_MIRROR_Y );
-static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X" ), HK_MIRROR_X, 'X',
-                             ID_SCH_MIRROR_X );
-static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R',
-                            ID_SCH_ROTATE_CLOCKWISE );
-static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E',
-                          ID_SCH_EDIT_ITEM );
-static EDA_HOTKEY HkEditValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V',
-                               ID_SCH_EDIT_COMPONENT_VALUE );
-static EDA_HOTKEY HkEditReference( _HKI( "Edit Symbol Reference" ), HK_EDIT_COMPONENT_REFERENCE, 'U',
-                                   ID_SCH_EDIT_COMPONENT_REFERENCE );
-static EDA_HOTKEY HkEditFootprint( _HKI( "Edit Symbol Footprint" ), HK_EDIT_COMPONENT_FOOTPRINT, 'F',
-                                   ID_SCH_EDIT_COMPONENT_FOOTPRINT );
+                                    ID_SCHEMATIC_TEXT_TOOL );
+static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y" ), HK_MIRROR_Y, 'Y' );
+static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X" ), HK_MIRROR_X, 'X' );
+static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R' );
+static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E' );
+static EDA_HOTKEY HkEditValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V' );
+static EDA_HOTKEY HkEditReference( _HKI( "Edit Symbol Reference" ), HK_EDIT_COMPONENT_REFERENCE, 'U' );
+static EDA_HOTKEY HkEditFootprint( _HKI( "Edit Symbol Footprint" ), HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
 static EDA_HOTKEY HkShowDatasheet( _HKI( "Show Symbol Datasheet" ), HK_SHOW_COMPONENT_DATASHEET, 'D',
                                    ID_SCH_DISPLAYDOC_CMP );
 static EDA_HOTKEY HkEditWithLibedit( _HKI( "Edit with Symbol Editor" ), HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
                                      ID_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
 
-static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M',
-                          ID_SCH_MOVE );
+static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M' );
 
-static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL,
-                                   ID_SCH_DUPLICATE );
+static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G',
-                          ID_SCH_DRAG );
+static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G' );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
@@ -217,8 +206,7 @@ static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' 
                              ID_LIBEDIT_VIEW_DOC );
 
 // Autoplace fields
-static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O',
-                                     ID_AUTOPLACE_FIELDS );
+static EDA_HOTKEY HkAutoplaceFields( _HKI( "Autoplace Fields" ), HK_AUTOPLACE_FIELDS, 'O' );
 
 static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UPDATE_PCB_FROM_SCH, WXK_F8,
                                       ID_UPDATE_PCB_FROM_SCH );
@@ -293,6 +281,7 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkZoomCenter,
     &HkZoomAuto,
     &HkZoomSelection,
+    &HkSwitchUnits,
     &HkResetLocalCoord,
     &HkEdit,
     &HkDuplicateItem,

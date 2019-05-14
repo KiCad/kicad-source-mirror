@@ -26,13 +26,14 @@
 #include <fctsys.h>
 #include <ee_hotkeys.h>
 #include <eeschema_id.h>
-
+#include <tool/action_toolbar.h>
 #include <general.h>
 #include <lib_edit_frame.h>
 #include <dialog_helpers.h>
 #include <bitmaps.h>
 
 #include <help_common_strings.h>
+#include <tools/ee_actions.h>
 
 #ifdef __UNIX__
 #define LISTBOX_WIDTH 140
@@ -46,39 +47,18 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         m_drawToolBar->Clear();
     else
-        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            HELP_SELECT, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_PIN_BUTT, wxEmptyString, KiScaledBitmap( pin_xpm, this ),
-                            HELP_ADD_PIN, wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_TEXT_BUTT, wxEmptyString,
-                            KiScaledBitmap( text_xpm, this ),
-                            HELP_ADD_BODYTEXT, wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_RECT_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_rectangle_xpm, this ),
-                            HELP_ADD_BODYRECT, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_CIRCLE_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_circle_xpm, this ),
-                            HELP_ADD_BODYCIRCLE, wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_ARC_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_arc_xpm, this ),
-                            HELP_ADD_BODYARC, wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_BODY_LINE_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_polygon_xpm, this ),
-                            HELP_ADD_BODYPOLYGON, wxITEM_CHECK  );
-
-    m_drawToolBar->AddTool( ID_LIBEDIT_ANCHOR_ITEM_BUTT, wxEmptyString,
-                            KiScaledBitmap( anchor_xpm, this ),
-                            _( "Move symbol anchor" ), wxITEM_CHECK  );
+    m_drawToolBar->Add( EE_ACTIONS::selectionTool,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolText,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolRectangle,  ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolCircle,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolArc,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSymbolLines,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbolAnchor,    ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->AddTool( ID_LIBEDIT_IMPORT_BODY_BUTT, wxEmptyString,
                             KiScaledBitmap( import_xpm, this ),
@@ -88,9 +68,7 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
                             KiScaledBitmap( export_xpm, this ),
                             _( "Export current drawing" ), wxITEM_CHECK  );
 
-    m_drawToolBar->AddTool( ID_LIBEDIT_DELETE_ITEM_BUTT, wxEmptyString,
-                            KiScaledBitmap( delete_xpm, this ),
-                            HELP_DELETE_ITEMS, wxITEM_CHECK  );
+    m_drawToolBar->Add( EE_ACTIONS::deleteItemCursor,       ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -103,8 +81,8 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     // Set up toolbar
     m_mainToolBar->AddTool( ID_LIBEDIT_NEW_PART, wxEmptyString,
@@ -115,44 +93,20 @@ void LIB_EDIT_FRAME::ReCreateHToolbar()
                             KiScaledBitmap( save_xpm, this ),
                             _( "Save all changes" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
 
-    msg = AddHotkeyName( HELP_UNDO, g_Libedit_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ), msg );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    msg = AddHotkeyName( HELP_REDO, g_Libedit_Hotkeys_Descr, HK_REDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    msg = AddHotkeyName( _( "Refresh libraries and redraw view" ), g_Libedit_Hotkeys_Descr,
-                         HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_ZOOM_IN, g_Libedit_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Libedit_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom to fit symbol" ), g_Libedit_Hotkeys_Descr,
-                         HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
-
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_SYMBOL_PROPERTIES, wxEmptyString,
-                            KiScaledBitmap( part_properties_xpm, this ),
-                            _( "Edit symbol properties" ) );
-
-    m_mainToolBar->AddTool( ID_LIBEDIT_EDIT_PIN_BY_TABLE, wxEmptyString,
-                            KiScaledBitmap( pin_table_xpm, this ),
-                            _( "Show pin table" ) );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( EE_ACTIONS::symbolProperties );
+    m_mainToolBar->Add( EE_ACTIONS::pinTable );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -206,32 +160,18 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
     if( m_optionsToolBar )
         m_optionsToolBar->Clear();
     else
-        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
+                                               wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
-                               KiScaledBitmap( grid_xpm, this ),
-                               _( "Turn grid off" ), wxITEM_CHECK );
+    ACTION_TOOLBAR* optToolbar = static_cast<ACTION_TOOLBAR*>( m_optionsToolBar );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiScaledBitmap( unit_inch_xpm, this ), _( "Set units to inches" ),
-                               wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiScaledBitmap( unit_mm_xpm, this ),
-                               _( "Set units to millimeters" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, wxEmptyString,
-                               KiScaledBitmap( pin_show_etype_xpm, this ),
-                               _( "Show pins electrical type" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
-                               KiScaledBitmap( search_tree_xpm, this ),
-                               _( "Toggles the search tree" ), wxITEM_CHECK );
+    optToolbar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
+    optToolbar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
+    optToolbar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
+    optToolbar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
+    optToolbar->Add( EE_ACTIONS::showElectricalTypes, ACTION_TOOLBAR::TOGGLE );
+    optToolbar->Add( EE_ACTIONS::showComponentTree,   ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }
@@ -239,14 +179,29 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
 
 void LIB_EDIT_FRAME::SyncMenusAndToolbars()
 {
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, GetUserUnits() != INCHES );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, GetUserUnits() == INCHES );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
+
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
 
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle, galOpts.m_fullscreenCursor );
 
-    m_optionsToolBar->ToggleTool( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, IsSearchTreeShown() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, GetShowElectricalType() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree, IsSearchTreeShown() );
 
     m_optionsToolBar->Refresh();
+
+    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,        GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolPin,       GetToolId() == ID_LIBEDIT_PIN_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolText,      GetToolId() == ID_LIBEDIT_BODY_TEXT_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolRectangle,  GetToolId() == ID_LIBEDIT_BODY_RECT_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolCircle,     GetToolId() == ID_LIBEDIT_BODY_CIRCLE_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,        GetToolId() == ID_LIBEDIT_BODY_ARC_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,      GetToolId() == ID_LIBEDIT_BODY_LINE_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,    GetToolId() == ID_LIBEDIT_ANCHOR_ITEM_BUTT );
+
+    m_drawToolBar->Refresh();
 }

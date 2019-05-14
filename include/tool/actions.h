@@ -47,6 +47,11 @@ public:
     // Generic actions
     static TOOL_ACTION cancelInteractive;
     static TOOL_ACTION updateMenu;
+    static TOOL_ACTION undo;
+    static TOOL_ACTION redo;
+    static TOOL_ACTION cut;
+    static TOOL_ACTION copy;
+    static TOOL_ACTION paste;
 
     // View controls
     static TOOL_ACTION zoomRedraw;

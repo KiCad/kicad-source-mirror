@@ -4,7 +4,7 @@
  * Copyright (C) 2015 Jean-Pierre Charras, jp.charras at wanadoo.fr
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
  * Copyright (C) 2012 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -20,13 +20,8 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * @file tool_footprint_editor.cpp
- * @brief methods to build Footprint Editor toolbars
- */
-
 #include <fctsys.h>
-
+#include <tool/actions.h>
 #include <pcbnew.h>
 #include <footprint_edit_frame.h>
 #include <dialog_helpers.h>
@@ -47,8 +42,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
     wxString msg;
 
@@ -87,22 +82,12 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ),
                             _( "Redo last undo command" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( _( "Refresh libraries and redraw view" ), g_Module_Editor_Hotkeys_Descr,
-                         HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString, KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString, KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
-
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->AddTool( ID_MODEDIT_EDIT_MODULE_PROPERTIES, wxEmptyString,
@@ -159,8 +144,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         m_drawToolBar->Clear();
     else
-        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
     m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
@@ -214,30 +199,20 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
     if( m_optionsToolBar )
         m_optionsToolBar->Clear();
     else
-        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
-                               KiScaledBitmap( grid_xpm, this ),
-                               _( "Hide grid" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display Polar Coord ON" ), wxITEM_CHECK );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiScaledBitmap( unit_inch_xpm, this ),
-                               _( "Set units to inches" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiScaledBitmap( unit_mm_xpm, this ),
-                               _( "Set units to millimeters" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape" ), wxITEM_CHECK  );
-
-    KiScaledSeparator( m_optionsToolBar, this );
+    m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
                                KiScaledBitmap( pad_sketch_xpm, this ),
                                _( "Show Pads Sketch" ), wxITEM_CHECK  );
@@ -264,3 +239,17 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
 }
 
 
+void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
+{
+    PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, !opts->m_DisplayPadFill );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, !opts->m_DisplayModTextFill );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, !opts->m_DisplayModEdgeFill );
+
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
+
+    m_optionsToolBar->Refresh();
+}

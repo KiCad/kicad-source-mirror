@@ -38,8 +38,12 @@ class SCH_EDIT_FRAME;
 class SCH_EDITOR_CONTROL : public wxEvtHandler, public EE_TOOL_BASE<SCH_EDIT_FRAME>
 {
 public:
-    SCH_EDITOR_CONTROL();
-    ~SCH_EDITOR_CONTROL();
+    SCH_EDITOR_CONTROL()  :
+        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" ),
+        m_probingSchToPcb( false )
+    { }
+
+    ~SCH_EDITOR_CONTROL() { }
 
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
     int LockSelected( const TOOL_EVENT& aEvent );
@@ -69,12 +73,16 @@ public:
     ///> Launches a tool to highlight nets.
     int HighlightNetCursor( const TOOL_EVENT& aEvent );
 
+    int Undo( const TOOL_EVENT& aEvent );
+    int Redo( const TOOL_EVENT& aEvent );
+
     ///> Clipboard support.
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
+    int ShowSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
 
     int EnterSheet( const TOOL_EVENT& aEvent );

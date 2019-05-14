@@ -395,10 +395,11 @@ set( COMMON_SRCS
     math/math_util.cpp
 
     tool/action_manager.cpp
+    tool/action_menu.cpp
+    tool/action_toolbar.cpp
     tool/actions.cpp
     tool/common_tools.cpp
     tool/conditional_menu.cpp
-    tool/action_menu.cpp
     tool/edit_constraints.cpp
     tool/edit_points.cpp
     tool/grid_menu.cpp

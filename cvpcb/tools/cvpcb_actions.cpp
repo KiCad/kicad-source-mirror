@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,21 +30,6 @@ OPT<TOOL_EVENT> CVPCB_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
-    case ID_ZOOM_IN:        // toolbar button "Zoom In"
-    case ID_VIEWER_ZOOM_IN:
-        return ACTIONS::zoomInCenter.MakeEvent();
-
-    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
-    case ID_VIEWER_ZOOM_OUT:
-        return ACTIONS::zoomOutCenter.MakeEvent();
-
-    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
-    case ID_VIEWER_ZOOM_PAGE:
-        return ACTIONS::zoomFitScreen.MakeEvent();
-
-    case ID_ZOOM_SELECTION:
-        return ACTIONS::zoomTool.MakeEvent();
-
     case ID_TB_MEASUREMENT_TOOL:
         return CVPCB_ACTIONS::measureTool.MakeEvent();
 

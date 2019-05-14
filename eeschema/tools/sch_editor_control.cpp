@@ -73,19 +73,13 @@ TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNet
 
 TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
         AS_GLOBAL, 0,
-        _( "Highlight Net" ), _( "Highlight wires and pins of a net" ), NULL, AF_ACTIVATE );
+        _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
+        net_highlight_schematic_xpm, AF_ACTIVATE );
 
-TOOL_ACTION EE_ACTIONS::cut( "eeschema.EditorControl.cut",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
-        _( "Cut" ), _( "Cut selected item(s) to clipboard" ), cut_xpm );
-
-TOOL_ACTION EE_ACTIONS::copy( "eeschema.EditorControl.copy",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
-        _( "Copy" ), _( "Copy selected item(s) to clipboard" ), copy_xpm );
-
-TOOL_ACTION EE_ACTIONS::paste( "eeschema.EditorControl.paste",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
-        _( "Paste" ), _( "Paste clipboard into schematic" ), paste_xpm );
+TOOL_ACTION EE_ACTIONS::showSymbolEditor( "eeschema.EditorControl.showSymbolEditor",
+        AS_GLOBAL, 0,
+        _( "Show Symbol Editor" ), _( "Create, delete and edit symbols" ),
+        libedit_xpm );
 
 TOOL_ACTION EE_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
@@ -126,17 +120,6 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0,
         _( "Force H/V Wires and Busses" ), "",
         lines90_xpm );
-
-
-SCH_EDITOR_CONTROL::SCH_EDITOR_CONTROL() :
-        EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.EditorControl" )
-{
-}
-
-
-SCH_EDITOR_CONTROL::~SCH_EDITOR_CONTROL()
-{
-}
 
 
 int SCH_EDITOR_CONTROL::CrossProbeToPcb( const TOOL_EVENT& aEvent )
@@ -468,10 +451,69 @@ int SCH_EDITOR_CONTROL::HighlightNetCursor( const TOOL_EVENT& aEvent )
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     assert( picker );
 
-    m_frame->SetToolID( ID_HIGHLIGHT_BUTT, wxCURSOR_HAND, _( "Highlight specific net" ) );
+    m_frame->SetToolID( ID_HIGHLIGHT_TOOL, wxCURSOR_HAND, _( "Highlight specific net" ) );
     picker->SetClickHandler( std::bind( highlightNet, m_toolMgr, std::placeholders::_1 ) );
     picker->Activate();
     Wait();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Undo( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->GetScreen()->GetUndoCommandCount() <= 0 )
+        return 0;
+
+    // Inform tools that undo command was issued
+    m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
+
+    /* Get the old list */
+    PICKED_ITEMS_LIST* List = m_frame->GetScreen()->PopCommandFromUndoList();
+
+    /* Undo the command */
+    m_frame->PutDataInPreviousState( List, false );
+
+    /* Put the old list in RedoList */
+    List->ReversePickersListOrder();
+    m_frame->GetScreen()->PushCommandToRedoList( List );
+
+    m_frame->SetSheetNumberAndCount();
+    m_frame->TestDanglingEnds();
+
+    m_frame->SyncView();
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::Redo( const TOOL_EVENT& aEvent )
+{
+    if( m_frame->GetScreen()->GetRedoCommandCount() == 0 )
+        return 0;
+
+    // Inform tools that undo command was issued
+    m_toolMgr->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
+
+    /* Get the old list */
+    PICKED_ITEMS_LIST* List = m_frame->GetScreen()->PopCommandFromRedoList();
+
+    /* Redo the command: */
+    m_frame->PutDataInPreviousState( List, true );
+
+    /* Put the old list in UndoList */
+    List->ReversePickersListOrder();
+    m_frame->GetScreen()->PushCommandToUndoList( List );
+
+    m_frame->SetSheetNumberAndCount();
+
+    m_frame->TestDanglingEnds();
+
+    m_frame->SyncView();
+    m_frame->GetCanvas()->Refresh();
+    m_frame->OnModify();
 
     return 0;
 }
@@ -683,11 +725,18 @@ int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::ShowSymbolEditor( const TOOL_EVENT& aEvent )
+{
+    wxCommandEvent dummy;
+    m_frame->OnOpenLibraryEditor( dummy );
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::ShowLibraryBrowser( const TOOL_EVENT& aEvent )
 {
     wxCommandEvent dummy;
     m_frame->OnOpenLibraryViewer( dummy );
-
     return 0;
 }
 
@@ -766,11 +815,14 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EVENTS::SelectedItemsModified );
     Go( &SCH_EDITOR_CONTROL::UpdateNetHighlighting, EE_ACTIONS::updateNetHighlighting.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::Cut,                   EE_ACTIONS::cut.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::Copy,                  EE_ACTIONS::copy.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::Paste,                 EE_ACTIONS::paste.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Undo,                  ACTIONS::undo.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Redo,                  ACTIONS::redo.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Cut,                   ACTIONS::cut.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithSymbolEditor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EnterSheet,            EE_ACTIONS::enterSheet.MakeEvent() );

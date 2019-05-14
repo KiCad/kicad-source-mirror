@@ -348,22 +348,17 @@ public:
     void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent );
-    void OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowMicrowaveToolbar( wxUpdateUIEvent& aEvent );
+    bool LayerManagerShown();
+    bool MicrowaveToolbarShown();
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent );
-    void OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent );
     void OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent );
     void OnLayerColorChange( wxCommandEvent& aEvent );
     void OnConfigurePaths( wxCommandEvent& aEvent );
     void OnUpdatePCBFromSch( wxCommandEvent& event );
     void OnRunEeschema( wxCommandEvent& event );
-    void OnUpdateCurvedRatsnest( wxUpdateUIEvent& aEvent );
 
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit = true );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit = true );

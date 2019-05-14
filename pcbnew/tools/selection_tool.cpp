@@ -697,29 +697,6 @@ bool SELECTION_TOOL::selectMultiple()
 }
 
 
-void SELECTION_TOOL::setTransitions()
-{
-    Go( &SELECTION_TOOL::Main, PCB_ACTIONS::selectionActivate.MakeEvent() );
-    Go( &SELECTION_TOOL::CursorSelection, PCB_ACTIONS::selectionCursor.MakeEvent() );
-    Go( &SELECTION_TOOL::ClearSelection, PCB_ACTIONS::selectionClear.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectItem, PCB_ACTIONS::selectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectItems, PCB_ACTIONS::selectItems.MakeEvent() );
-    Go( &SELECTION_TOOL::UnselectItem, PCB_ACTIONS::unselectItem.MakeEvent() );
-    Go( &SELECTION_TOOL::UnselectItems, PCB_ACTIONS::unselectItems.MakeEvent() );
-    Go( &SELECTION_TOOL::SelectionMenu, PCB_ACTIONS::selectionMenu.MakeEvent() );
-    Go( &SELECTION_TOOL::find, PCB_ACTIONS::find.MakeEvent() );
-    Go( &SELECTION_TOOL::findMove, PCB_ACTIONS::findMove.MakeEvent() );
-    Go( &SELECTION_TOOL::filterSelection, PCB_ACTIONS::filterSelection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectConnection, PCB_ACTIONS::selectConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::expandSelectedConnection, PCB_ACTIONS::expandSelectedConnection.MakeEvent() );
-    Go( &SELECTION_TOOL::selectCopper, PCB_ACTIONS::selectCopper.MakeEvent() );
-    Go( &SELECTION_TOOL::selectNet, PCB_ACTIONS::selectNet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectSameSheet, PCB_ACTIONS::selectSameSheet.MakeEvent() );
-    Go( &SELECTION_TOOL::selectOnSheetFromEeschema, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
-    Go( &SELECTION_TOOL::updateSelection, EVENTS::SelectedItemsModified );
-}
-
-
 SELECTION_LOCK_FLAGS SELECTION_TOOL::CheckLock()
 {
     if( !m_locked || m_editModules )
@@ -872,11 +849,11 @@ int SELECTION_TOOL::selectConnection( const TOOL_EVENT& aEvent )
     if( !m_selection.HasType( PCB_TRACE_T ) && !m_selection.HasType( PCB_VIA_T ) )
         return 0;
 
-    return expandSelectedConnection( aEvent );
+    return expandConnection( aEvent );
 }
 
 
-int SELECTION_TOOL::expandSelectedConnection( const TOOL_EVENT& aEvent )
+int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 {
     // copy the selection, since we're going to iterate and modify
     auto selection = m_selection.GetItems();
@@ -1153,7 +1130,7 @@ void SELECTION_TOOL::zoomFitSelection()
 }
 
 
-int SELECTION_TOOL::selectOnSheetFromEeschema( const TOOL_EVENT& aEvent )
+int SELECTION_TOOL::selectSheetContents( const TOOL_EVENT& aEvent )
 {
     clearSelection();
     wxString* sheetpath = aEvent.Parameter<wxString*>();
@@ -2301,6 +2278,49 @@ int SELECTION_TOOL::updateSelection( const TOOL_EVENT& aEvent )
     getView()->Update( &m_selection );
 
     return 0;
+}
+
+
+int SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
+{
+    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
+
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( m_selection );
+
+    if( actionMenu )
+        actionMenu->UpdateAll();
+
+    return 0;
+}
+
+
+void SELECTION_TOOL::setTransitions()
+{
+    Go( &SELECTION_TOOL::UpdateMenu,          ACTIONS::updateMenu.MakeEvent() );
+
+    Go( &SELECTION_TOOL::Main,                PCB_ACTIONS::selectionActivate.MakeEvent() );
+    Go( &SELECTION_TOOL::CursorSelection,     PCB_ACTIONS::selectionCursor.MakeEvent() );
+    Go( &SELECTION_TOOL::ClearSelection,      PCB_ACTIONS::selectionClear.MakeEvent() );
+
+    Go( &SELECTION_TOOL::SelectItem,          PCB_ACTIONS::selectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectItems,         PCB_ACTIONS::selectItems.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItem,        PCB_ACTIONS::unselectItem.MakeEvent() );
+    Go( &SELECTION_TOOL::UnselectItems,       PCB_ACTIONS::unselectItems.MakeEvent() );
+    Go( &SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
+
+    Go( &SELECTION_TOOL::find,                PCB_ACTIONS::find.MakeEvent() );
+    Go( &SELECTION_TOOL::findMove,            PCB_ACTIONS::findMove.MakeEvent() );
+
+    Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );
+    Go( &SELECTION_TOOL::selectConnection,    PCB_ACTIONS::selectConnection.MakeEvent() );
+    Go( &SELECTION_TOOL::expandConnection,    PCB_ACTIONS::expandSelectedConnection.MakeEvent() );
+    Go( &SELECTION_TOOL::selectCopper,        PCB_ACTIONS::selectCopper.MakeEvent() );
+    Go( &SELECTION_TOOL::selectNet,           PCB_ACTIONS::selectNet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectSameSheet,     PCB_ACTIONS::selectSameSheet.MakeEvent() );
+    Go( &SELECTION_TOOL::selectSheetContents, PCB_ACTIONS::selectOnSheetFromEeschema.MakeEvent() );
+    Go( &SELECTION_TOOL::updateSelection,     EVENTS::SelectedItemsModified );
 }
 
 

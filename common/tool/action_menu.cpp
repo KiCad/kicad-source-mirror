@@ -383,11 +383,11 @@ void ACTION_MENU::onMenuEvent( wxMenuEvent& aEvent )
 #endif
 
             // Handling non-action menu entries (e.g. items in clarification list)
-            if( !evt )
+            if( !evt && m_selected < wxID_LOWEST )
             {
                 menuText = GetLabelText( aEvent.GetId() );
-                evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, aEvent.GetId(),
-                                  AS_GLOBAL, &menuText );
+                evt = TOOL_EVENT( TC_COMMAND, TA_CONTEXT_MENU_CHOICE, m_selected, AS_GLOBAL,
+                                  &menuText );
             }
         }
     }
@@ -398,6 +398,10 @@ void ACTION_MENU::onMenuEvent( wxMenuEvent& aEvent )
     {
         //aEvent.StopPropagation();
         m_tool->GetManager()->ProcessEvent( *evt );
+    }
+    else
+    {
+        aEvent.Skip();
     }
 }
 

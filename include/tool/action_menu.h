@@ -220,7 +220,7 @@ protected:
     TOOL_INTERACTIVE* m_tool;
 
     ///> Menu items with ID higher than that are considered TOOL_ACTIONs
-    static const int ACTION_ID = 10000;
+    static const int ACTION_ID = 20000;
 
     ///> Associates tool actions with menu item IDs. Non-owning.
     std::map<int, const TOOL_ACTION*> m_toolActions;

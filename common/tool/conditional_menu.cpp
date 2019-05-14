@@ -51,6 +51,32 @@ void CONDITIONAL_MENU::AddCheckItem( const TOOL_ACTION& aAction,
 }
 
 
+void CONDITIONAL_MENU::AddItem( int aId, const wxString& aText, const wxString& aTooltip,
+                                BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
+                                int aOrder )
+{
+    wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_NORMAL );
+
+    if( aIcon )
+        item->SetBitmap( KiBitmap( aIcon ) );
+
+    addEntry( ENTRY( item, aCondition, aOrder, false ) );
+}
+
+
+void CONDITIONAL_MENU::AddCheckItem( int aId, const wxString& aText, const wxString& aTooltip,
+                                     BITMAP_DEF aIcon, const SELECTION_CONDITION& aCondition,
+                                     int aOrder )
+{
+    wxMenuItem* item = new wxMenuItem( nullptr, aId, aText, aTooltip, wxITEM_CHECK );
+
+    if( aIcon )
+        item->SetBitmap( KiBitmap( aIcon ) );
+
+    addEntry( ENTRY( item, aCondition, aOrder, true ) );
+}
+
+
 void CONDITIONAL_MENU::AddMenu( ACTION_MENU* aMenu, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
@@ -93,6 +119,10 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 break;
             case ENTRY::MENU:
                 menuItem = Add( entry.Menu() );
+                break;
+            case ENTRY::WXITEM:
+                menuItem = Append( entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
+                                   entry.wxItem()->GetHelp(), entry.wxItem()->GetKind() );
                 break;
             case ENTRY::SEPARATOR:
                 menuItem = AppendSeparator();

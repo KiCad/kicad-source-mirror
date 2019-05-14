@@ -47,6 +47,8 @@ public:
     int Properties( const TOOL_EVENT& aEvent );
     int PinTable( const TOOL_EVENT& aEvent );
 
+    int Undo( const TOOL_EVENT& aEvent );
+    int Redo( const TOOL_EVENT& aEvent );
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );

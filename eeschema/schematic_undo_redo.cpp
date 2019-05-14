@@ -345,61 +345,6 @@ void SCH_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool aRed
 }
 
 
-void SCH_EDIT_FRAME::GetSchematicFromUndoList( wxCommandEvent& event )
-{
-    if( GetScreen()->GetUndoCommandCount() <= 0 )
-        return;
-
-    // Inform tools that undo command was issued
-    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
-
-    /* Get the old list */
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromUndoList();
-
-    /* Undo the command */
-    PutDataInPreviousState( List, false );
-
-    /* Put the old list in RedoList */
-    List->ReversePickersListOrder();
-    GetScreen()->PushCommandToRedoList( List );
-
-    SetSheetNumberAndCount();
-    TestDanglingEnds();
-
-    SyncView();
-    GetCanvas()->Refresh();
-    OnModify();
-}
-
-
-void SCH_EDIT_FRAME::GetSchematicFromRedoList( wxCommandEvent& event )
-{
-    if( GetScreen()->GetRedoCommandCount() == 0 )
-        return;
-
-    // Inform tools that undo command was issued
-    m_toolManager->ProcessEvent( { TC_MESSAGE, TA_UNDO_REDO_PRE, AS_GLOBAL } );
-
-    /* Get the old list */
-    PICKED_ITEMS_LIST* List = GetScreen()->PopCommandFromRedoList();
-
-    /* Redo the command: */
-    PutDataInPreviousState( List, true );
-
-    /* Put the old list in UndoList */
-    List->ReversePickersListOrder();
-    GetScreen()->PushCommandToUndoList( List );
-
-    SetSheetNumberAndCount();
-
-    TestDanglingEnds();
-
-    SyncView();
-    GetCanvas()->Refresh();
-    OnModify();
-}
-
-
 void SCH_EDIT_FRAME::RollbackSchematicFromUndo()
 {
     PICKED_ITEMS_LIST* undo = GetScreen()->PopCommandFromUndoList();

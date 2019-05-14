@@ -792,6 +792,8 @@ bool TOOL_MANAGER::ProcessEvent( const TOOL_EVENT& aEvent )
 #endif
     }
 
+    UpdateUI();
+
     return hotkey_handled;
 }
 

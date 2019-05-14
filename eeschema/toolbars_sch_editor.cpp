@@ -31,6 +31,7 @@
 #include <ee_hotkeys.h>
 #include <eeschema_id.h>
 #include <tool/tool_manager.h>
+#include <tool/action_toolbar.h>
 #include <help_common_strings.h>
 #include <tools/ee_actions.h>
 
@@ -41,9 +42,9 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     if( m_mainToolBar )
         m_mainToolBar->Clear();
     else
-        m_mainToolBar = new wxAuiToolBar( this, ID_H_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
-
+        m_mainToolBar = new ACTION_TOOLBAR( this, ID_H_TOOLBAR,
+                                            wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
     wxString msg;
 
     // Set up toolbar
@@ -74,20 +75,12 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_GEN_PLOT_SCHEMATIC, wxEmptyString, KiScaledBitmap( plot_xpm, this ),
                             _( "Plot schematic" ) );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::paste );
 
-    m_mainToolBar->AddTool( wxID_PASTE, wxEmptyString, KiScaledBitmap( paste_xpm, this ),
-                            _( "Paste" ) );
-
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    msg = AddHotkeyName( HELP_UNDO, g_Schematic_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_REDO, g_Schematic_Hotkeys_Descr, HK_REDO, IS_COMMENT );
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ), msg );
-
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
 
     KiScaledSeparator( m_mainToolBar, this );
 
@@ -98,43 +91,20 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
                             wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
                             HELP_REPLACE, nullptr );
 
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( ACTIONS::zoomRedraw );
+    m_mainToolBar->Add( ACTIONS::zoomInCenter );
+    m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+    m_mainToolBar->Add( ACTIONS::zoomFitScreen );
+    m_mainToolBar->Add( ACTIONS::zoomTool, ACTION_TOOLBAR::TOGGLE );
 
-    KiScaledSeparator( m_mainToolBar, this );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( EE_ACTIONS::navigateHierarchy );
+    m_mainToolBar->Add( EE_ACTIONS::leaveSheet );
 
-    msg = AddHotkeyName( HELP_ZOOM_REDRAW, g_Schematic_Hotkeys_Descr, HK_ZOOM_REDRAW, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                            KiScaledBitmap( zoom_redraw_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_ZOOM_IN, g_Schematic_Hotkeys_Descr, HK_ZOOM_IN, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString, KiScaledBitmap( zoom_in_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_ZOOM_OUT, g_Schematic_Hotkeys_Descr, HK_ZOOM_OUT, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString, KiScaledBitmap( zoom_out_xpm, this ), msg );
-
-    msg = AddHotkeyName( HELP_ZOOM_FIT, g_Schematic_Hotkeys_Descr, HK_ZOOM_AUTO, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                            KiScaledBitmap( zoom_fit_in_page_xpm, this ), msg );
-
-    m_mainToolBar->AddTool( ID_ZOOM_SELECTION, wxEmptyString, KiScaledBitmap( zoom_area_xpm, this ),
-                            _( "Zoom to selection" ), wxITEM_CHECK );
-
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_HIERARCHY, wxEmptyString, KiScaledBitmap( hierarchy_nav_xpm, this ),
-                            _( "Navigate schematic hierarchy" ) );
-
-
-    m_mainToolBar->AddTool( ID_SCH_LEAVE_SHEET, wxEmptyString,
-                            KiScaledBitmap( leave_sheet_xpm, this ), _( "Leave sheet" ) );
-
-    KiScaledSeparator( m_mainToolBar, this );
-
-    m_mainToolBar->AddTool( ID_RUN_LIBRARY, wxEmptyString, KiScaledBitmap( libedit_xpm, this ),
-                            HELP_RUN_LIB_EDITOR );
-
-    m_mainToolBar->AddTool( ID_TO_LIBVIEW, wxEmptyString,
-                            KiScaledBitmap( library_browse_xpm, this ), HELP_RUN_LIB_VIEWER );
+    m_mainToolBar->AddSeparator();
+    m_mainToolBar->Add( EE_ACTIONS::showSymbolEditor );
+    m_mainToolBar->Add( EE_ACTIONS::showLibraryBrowser );
 
     // modedit is with libedit in a "library section" because the user must have footprints before
     // they can be assigned.
@@ -181,82 +151,30 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     if( m_drawToolBar )
         m_drawToolBar->Clear();
     else
-        m_drawToolBar = new wxAuiToolBar( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            HELP_SELECT, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_HIGHLIGHT_BUTT, wxEmptyString,
-                            KiScaledBitmap( net_highlight_schematic_xpm, this ),
-                            HELP_HIGHLIGHT, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_SCH_PLACE_COMPONENT, wxEmptyString,
-                            KiScaledBitmap( add_component_xpm, this ), HELP_PLACE_COMPONENTS,
-                            wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PLACE_POWER_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_power_xpm, this ),
-                            HELP_PLACE_POWERPORT, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_WIRE_BUTT, wxEmptyString, KiScaledBitmap( add_line_xpm, this ),
-                            HELP_PLACE_WIRE, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_BUS_BUTT, wxEmptyString, KiScaledBitmap( add_bus_xpm, this ),
-                            HELP_PLACE_BUS, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_WIRETOBUS_ENTRY_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_line2bus_xpm, this ),
-                            HELP_PLACE_WIRE2BUS_ENTRY, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_BUSTOBUS_ENTRY_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_bus2bus_xpm, this ),
-                            HELP_PLACE_BUS2BUS_ENTRY, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_NOCONN_BUTT, wxEmptyString, KiScaledBitmap( noconn_xpm, this ),
-                            HELP_PLACE_NC_FLAG, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_JUNCTION_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_junction_xpm, this ),
-                            HELP_PLACE_JUNCTION, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_LABEL_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_line_label_xpm, this ),
-                            HELP_PLACE_NETLABEL, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_GLOBALLABEL_BUTT, wxEmptyString, KiScaledBitmap( add_glabel_xpm, this ),
-                            HELP_PLACE_GLOBALLABEL, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_HIERLABEL_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_hierarchical_label_xpm, this ),
-                            HELP_PLACE_HIER_LABEL, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_SHEET_SYMBOL_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_hierarchical_subsheet_xpm, this ),
-                            HELP_PLACE_SHEET, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_IMPORT_HLABEL_BUTT, wxEmptyString,
-                            KiScaledBitmap( import_hierarchical_label_xpm, this ),
-                            HELP_IMPORT_SHEETPIN, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_SHEET_PIN_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_hierar_pin_xpm, this ),
-                            HELP_PLACE_SHEETPIN, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_LINE_COMMENT_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_dashed_line_xpm, this ),
-                            HELP_PLACE_GRAPHICLINES, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_TEXT_COMMENT_BUTT, wxEmptyString, KiScaledBitmap( text_xpm, this ),
-                            HELP_PLACE_GRAPHICTEXTS, wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_ADD_IMAGE_BUTT, wxEmptyString, KiScaledBitmap( image_xpm, this ),
-                            _("Add bitmap image"), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxEmptyString,
-                            KiScaledBitmap( delete_xpm, this ),
-                            HELP_DELETE_ITEMS, wxITEM_CHECK );
+    m_drawToolBar->Add( EE_ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::highlightNetCursor,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placePower,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawWire,               ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawBus,                ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeBusWireEntry,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeBusBusEntry,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeNoConnect,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeJunction,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeLabel,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeGlobalLabel,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeHierarchicalLabel, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSheetPin,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( EE_ACTIONS::deleteItemCursor,       ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -269,35 +187,16 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
     if( m_optionsToolBar )
         m_optionsToolBar->Clear();
     else
-        m_optionsToolBar = new wxAuiToolBar( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
-                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
+        m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR,
+                                               wxDefaultPosition, wxDefaultSize,
+                                               KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_GRID, wxEmptyString,
-                               KiScaledBitmap( grid_xpm, this ),
-                               _( "Turn grid off" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, wxEmptyString,
-                               KiScaledBitmap( unit_inch_xpm, this ),
-                               _( "Set unit to inch" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_UNIT_MM, wxEmptyString,
-                               KiScaledBitmap( unit_mm_xpm, this ),
-                               _( "Set unit to mm" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SELECT_CURSOR, wxEmptyString,
-                               KiScaledBitmap( cursor_shape_xpm, this ),
-                               _( "Change cursor shape" ), wxITEM_CHECK );
-
-    //KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_HIDDEN_PINS, wxEmptyString,
-                               KiScaledBitmap( hidden_pin_xpm, this ),
-                               _( "Show hidden pins" ), wxITEM_CHECK );
-
-    //KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, wxEmptyString,
-                               KiScaledBitmap( lines90_xpm, this ),
-                               _( "HV orientation for wires and bus" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::toggleHiddenPins, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( EE_ACTIONS::toggleForceHV,    ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->Realize();
 }
@@ -305,17 +204,41 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::SyncMenusAndToolbars()
 {
-    m_mainToolBar->EnableTool( ID_SCH_LEAVE_SHEET, g_CurrentSheet->Last() != g_RootSheet );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
 
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_GRID, IsGridVisible() );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, GetUserUnits() != INCHES );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
 
     KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_CURSOR, galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle, galOpts.m_fullscreenCursor );
 
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_HIDDEN_PINS, GetShowAllPins() );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_BUS_WIRES_ORIENT, GetForceHVLines() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins, GetShowAllPins() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV, GetForceHVLines() );
 
     m_optionsToolBar->Refresh();
+    
+    m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,          GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( EE_ACTIONS::highlightNetCursor,     GetToolId() == ID_HIGHLIGHT_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSymbol,            GetToolId() == ID_COMPONENT_BUTT );
+    m_drawToolBar->Toggle( EE_ACTIONS::placePower,             GetToolId() == ID_PLACE_POWER_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawWire,               GetToolId() == ID_WIRE_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawBus,                GetToolId() == ID_BUS_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeBusWireEntry,      GetToolId() == ID_WIRETOBUS_ENTRY_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeBusBusEntry,       GetToolId() == ID_BUSTOBUS_ENTRY_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeNoConnect,         GetToolId() == ID_NOCONNECT_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeJunction,          GetToolId() == ID_JUNCTION_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeLabel,             GetToolId() == ID_LABEL_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeGlobalLabel,       GetToolId() == ID_GLOBALLABEL_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeHierarchicalLabel, GetToolId() == ID_HIERLABEL_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawSheet,              GetToolId() == ID_SHEET_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::importSheetPin,         GetToolId() == ID_IMPORT_SHEETPIN_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSheetPin,          GetToolId() == ID_SHEETPIN_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::drawLines,              GetToolId() == ID_SCHEMATIC_LINE_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeSchematicText,     GetToolId() == ID_SCHEMATIC_TEXT_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::placeImage,             GetToolId() == ID_PLACE_IMAGE_TOOL );
+    m_drawToolBar->Toggle( EE_ACTIONS::deleteItemCursor,       GetToolId() == ID_DELETE_TOOL );
+
+    m_drawToolBar->Refresh();
 }

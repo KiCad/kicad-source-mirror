@@ -63,6 +63,9 @@ public:
     void AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                   int aOrder = ANY_ORDER );
 
+    void AddItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAP_DEF aIcon,
+                  const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
+
     /**
      * Function AddCheckItem()
      *
@@ -74,6 +77,9 @@ public:
      */
     void AddCheckItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                        int aOrder = ANY_ORDER );
+
+    void AddCheckItem( int aId, const wxString& aText, const wxString& aTooltip, BITMAP_DEF aIcon,
+                       const SELECTION_CONDITION& aCondition, int aOrder = ANY_ORDER );
 
     /**
      * Function AddMenu()
@@ -133,6 +139,15 @@ private:
             m_data.menu = aMenu;
         }
 
+        ENTRY( wxMenuItem* aItem, SELECTION_CONDITION aCondition, int aOrder, bool aCheckmark ) :
+            m_type( WXITEM ),
+            m_condition( aCondition ),
+            m_order( aOrder ),
+            m_isCheckmarkEntry( aCheckmark )
+        {
+            m_data.wxItem = aItem;
+        }
+
         // Separator
         ENTRY( SELECTION_CONDITION aCondition, int aOrder ) :
             m_type( SEPARATOR ),
@@ -146,6 +161,7 @@ private:
         enum ENTRY_TYPE {
             ACTION,
             MENU,
+            WXITEM,
             SEPARATOR
         };
 
@@ -164,6 +180,12 @@ private:
         {
             assert( m_type == MENU );
             return m_data.menu;
+        }
+
+        inline wxMenuItem* wxItem() const
+        {
+            assert( m_type == WXITEM );
+            return m_data.wxItem;
         }
 
         inline bool IsCheckmarkEntry() const
@@ -192,6 +214,7 @@ private:
         union {
             const TOOL_ACTION* action;
             ACTION_MENU*       menu;
+            wxMenuItem*        wxItem;
         } m_data;
 
         ///> Condition to be fulfilled to show the entry in menu.

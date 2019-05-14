@@ -36,6 +36,7 @@
 
 class wxSingleInstanceChecker;
 class EDA_HOTKEY;
+class ACTION_TOOLBAR;
 
 using KIGFX::COLOR4D;
 
@@ -152,16 +153,17 @@ protected:
     wxChoice*       m_gridSelectBox;
     wxChoice*       m_zoomSelectBox;
 
+    ACTION_TOOLBAR* m_mainToolBar;
     /// Auxiliary tool bar typically shown below the main tool bar at the top of the
     /// main window.
-    wxAuiToolBar*   m_auxiliaryToolBar;
+    ACTION_TOOLBAR* m_auxiliaryToolBar;
 
     /// The tool bar that contains the buttons for quick access to the application draw
     /// tools.  It typically is located on the right side of the main window.
-    wxAuiToolBar*   m_drawToolBar;
+    ACTION_TOOLBAR* m_drawToolBar;
 
     /// The options tool bar typcially located on the left edge of the main window.
-    wxAuiToolBar*   m_optionsToolBar;
+    ACTION_TOOLBAR* m_optionsToolBar;
 
     /// Panel used to display information at the bottom of the main window.
     EDA_MSG_PANEL*  m_messagePanel;
@@ -481,10 +483,10 @@ public:
     virtual void ReCreateAuxiliaryToolbar();
 
     // Toolbar accessors
-    wxAuiToolBar* GetMainToolBar() const { return m_mainToolBar; }
-    wxAuiToolBar* GetOptionsToolBar() const { return m_optionsToolBar; }
-    wxAuiToolBar* GetDrawToolBar() const { return m_drawToolBar; }
-    wxAuiToolBar* GetAuxiliaryToolBar() const { return m_auxiliaryToolBar; }
+    ACTION_TOOLBAR* GetMainToolBar() const { return m_mainToolBar; }
+    ACTION_TOOLBAR* GetOptionsToolBar() const { return m_optionsToolBar; }
+    ACTION_TOOLBAR* GetDrawToolBar() const { return m_drawToolBar; }
+    ACTION_TOOLBAR* GetAuxiliaryToolBar() const { return m_auxiliaryToolBar; }
 
     /**
      * Checks all the toolbars and returns true if the given tool id is toggled.
@@ -610,16 +612,13 @@ public:
 
     // Command event handlers shared by all applications derived from EDA_DRAW_FRAME.
     void OnToggleGridState( wxCommandEvent& aEvent );
-    void OnSelectUnits( wxCommandEvent& aEvent );
     void OnToggleCrossHairStyle( wxCommandEvent& aEvent );
 
     // Update user interface event handlers shared by all applications derived from
     // EDA_DRAW_FRAME.
     void OnUpdateUndo( wxUpdateUIEvent& aEvent );
     void OnUpdateRedo( wxUpdateUIEvent& aEvent );
-    void OnUpdateGrid( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectGrid( wxUpdateUIEvent& aEvent );
-    void OnUpdateUnits( wxUpdateUIEvent& aEvent );
     void OnUpdateCrossHairStyle( wxUpdateUIEvent& aEvent );
 
     /**

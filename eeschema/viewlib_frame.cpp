@@ -48,6 +48,7 @@
 #include <tools/ee_actions.h>
 #include <tool/common_tools.h>
 #include <tool/zoom_tool.h>
+#include <tools/lib_control.h>
 
 // Save previous component library viewer state.
 wxString LIB_VIEW_FRAME::m_libraryName;
@@ -83,11 +84,9 @@ BEGIN_EVENT_TABLE( LIB_VIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( wxID_EXIT, LIB_VIEW_FRAME::CloseLibraryViewer )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
     EVT_MENU( ID_SET_RELATIVE_OFFSET, LIB_VIEW_FRAME::OnSetRelativeOffset )
-    EVT_MENU( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnShowElectricalType )
 
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_NORMAL_BUTT, LIB_VIEW_FRAME::onUpdateNormalBodyStyleButton )
     EVT_UPDATE_UI( ID_LIBVIEW_DE_MORGAN_CONVERT_BUTT, LIB_VIEW_FRAME::onUpdateAltBodyStyleButton )
-    EVT_UPDATE_UI( ID_LIBVIEW_SHOW_ELECTRICAL_TYPE, LIB_VIEW_FRAME::OnUpdateElectricalType )
     EVT_UPDATE_UI( ID_LIBVIEW_SELECT_PART_NUMBER, LIB_VIEW_FRAME::onUpdateUnitChoice )
     EVT_UPDATE_UI( ID_LIBEDIT_VIEW_DOC, LIB_VIEW_FRAME::onUpdateDocButton )
 
@@ -141,8 +140,7 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     SetSize( m_FramePos.x, m_FramePos.y, m_FrameSize.x, m_FrameSize.y );
 
-    // Menu bar is not mandatory: uncomment/comment the next line
-    // to add/remove the menubar
+    setupTools();
     ReCreateMenuBar();
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -187,7 +185,6 @@ LIB_VIEW_FRAME::LIB_VIEW_FRAME( KIWAY* aKiway, wxWindow* aParent, FRAME_T aFrame
 
     m_auimgr.Update();
 
-    setupTools();
     GetToolManager()->RunAction( "common.Control.gridPreset", true, m_LastGridSizeId );
     GetToolManager()->RunAction( "common.Control.zoomFitScreen", true );
 
@@ -232,6 +229,7 @@ void LIB_VIEW_FRAME::setupTools()
     // Register tools
     m_toolManager->RegisterTool( new COMMON_TOOLS );
     m_toolManager->RegisterTool( new ZOOM_TOOL );
+    m_toolManager->RegisterTool( new LIB_CONTROL );
 
     m_toolManager->InitTools();
 
@@ -403,23 +401,6 @@ void LIB_VIEW_FRAME::OnSetRelativeOffset( wxCommandEvent& event )
 {
     GetScreen()->m_O_Curseur = GetCrossHairPosition();
     UpdateStatusBar();
-}
-
-
-void LIB_VIEW_FRAME::OnShowElectricalType( wxCommandEvent& event )
-{
-    m_showPinElectricalTypeName = !m_showPinElectricalTypeName;
-
-    // Update canvas
-    GetRenderSettings()->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
-    GetCanvas()->GetView()->MarkDirty();
-    GetCanvas()->Refresh();
-}
-
-
-void LIB_VIEW_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetShowElectricalType() );
 }
 
 

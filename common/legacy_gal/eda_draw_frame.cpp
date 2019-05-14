@@ -81,8 +81,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
     EVT_CHAR_HOOK( EDA_DRAW_FRAME::OnCharHook )
 
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
-    EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
-    EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
 
     EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
     EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
@@ -98,6 +96,7 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
 {
     m_useSingleCanvasPane = false;
     m_socketServer        = nullptr;
+    m_mainToolBar         = NULL;
     m_drawToolBar         = NULL;
     m_optionsToolBar      = NULL;
     m_auxiliaryToolBar    = NULL;
@@ -271,9 +270,7 @@ void EDA_DRAW_FRAME::EraseMsgBox()
 
 void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 {
-    if( m_canvas )
-        m_canvas->SetCanStartBlock( -1 );
-
+    // TODO Obsolete!
     event.Skip();   // required under wxMAC
 }
 

@@ -494,6 +494,8 @@ public:
 
     void KiwayMailIn( KIWAY_EXPRESS& mail ) override;
 
+    void SyncMenusAndToolbars() override;
+
     DECLARE_EVENT_TABLE()
 
 protected:

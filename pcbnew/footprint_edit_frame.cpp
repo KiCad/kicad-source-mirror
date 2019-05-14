@@ -197,8 +197,6 @@ BEGIN_EVENT_TABLE( FOOTPRINT_EDIT_FRAME, PCB_BASE_FRAME )
     // Option toolbar:
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
                    FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
-    EVT_UPDATE_UI( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE,
-                   FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar )
 
     EVT_UPDATE_UI( ID_GEN_IMPORT_GRAPHICS_FILE, FOOTPRINT_EDIT_FRAME::OnUpdateModuleSelected )
 
@@ -282,6 +280,9 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     initLibraryTree();
     m_treePane = new FOOTPRINT_TREE_PANE( this );
 
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    setupTools();
+
     // ReCreateMenuBar();       // UseGalCanvas() will do this for us.
     ReCreateHToolbar();
     ReCreateVToolbar();
@@ -318,8 +319,6 @@ FOOTPRINT_EDIT_FRAME::FOOTPRINT_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_auimgr.AddPane( m_canvas, EDA_PANE().Canvas().Name( "DrawFrame" ).Center() );
     m_auimgr.AddPane( GetGalCanvas(), EDA_PANE().Canvas().Name( "DrawFrameGal" ).Center().Hide() );
 
-    // Create the manager and dispatcher & route draw panel events to the dispatcher
-    setupTools();
     GetGalCanvas()->GetGAL()->SetAxesEnabled( true );
     UseGalCanvas( m_canvasType != EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE );
 
@@ -611,10 +610,6 @@ void FOOTPRINT_EDIT_FRAME::OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent )
     {
     case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
         state = displ_opts->m_ContrastModeDisplay;
-        break;
-
-    case ID_MODEDIT_SHOW_HIDE_SEARCH_TREE:
-        state = IsSearchTreeShown();
         break;
 
     default:
@@ -1023,7 +1018,7 @@ void FOOTPRINT_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EDIT_TOOL );
     m_toolManager->RegisterTool( new PAD_TOOL );
     m_toolManager->RegisterTool( new DRAWING_TOOL );
-    m_toolManager->RegisterTool( new EE_POINT_EDITOR );
+    m_toolManager->RegisterTool( new POINT_EDITOR );
     m_toolManager->RegisterTool( new PCBNEW_CONTROL );
     m_toolManager->RegisterTool( new MODULE_EDITOR_TOOLS );
     m_toolManager->RegisterTool( new ALIGN_DISTRIBUTE_TOOL );

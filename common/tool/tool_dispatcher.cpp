@@ -469,8 +469,6 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
     if( type == wxEVT_CHAR && !keyIsSpecial )
         aEvent.Skip();
 #endif
-
-    m_toolMgr->UpdateUI();
 }
 
 
@@ -482,8 +480,6 @@ void TOOL_DISPATCHER::DispatchWxCommand( wxCommandEvent& aEvent )
         m_toolMgr->ProcessEvent( *evt );
     else
         aEvent.Skip();
-
-    m_toolMgr->UpdateUI();
 }
 
 

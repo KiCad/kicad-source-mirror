@@ -74,26 +74,14 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
     EVT_ACTIVATE( FOOTPRINT_WIZARD_FRAME::OnActivate )
 
      // Toolbar events
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD,
-              FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
-
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT,
-              FOOTPRINT_WIZARD_FRAME::DefaultParameters )
-
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT,
-              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
-
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS,
-              FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
-
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE,
-              FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
-
-    EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW,
-              FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, FOOTPRINT_WIZARD_FRAME::SelectCurrentWizard )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, FOOTPRINT_WIZARD_FRAME::DefaultParameters )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_NEXT, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_PREVIOUS, FOOTPRINT_WIZARD_FRAME::Process_Special_Functions )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_DONE, FOOTPRINT_WIZARD_FRAME::ExportSelectedFootprint )
+    EVT_TOOL( ID_FOOTPRINT_WIZARD_SHOW_3D_VIEW, FOOTPRINT_WIZARD_FRAME::Show3D_Frame )
 
     // listbox events
-
     EVT_LISTBOX( ID_FOOTPRINT_WIZARD_PAGE_LIST, FOOTPRINT_WIZARD_FRAME::ClickOnPageList )
     EVT_GRID_CMD_CELL_CHANGED( ID_FOOTPRINT_WIZARD_PARAMETER_LIST,
                                FOOTPRINT_WIZARD_FRAME::ParametersUpdated )
@@ -102,27 +90,16 @@ BEGIN_EVENT_TABLE( FOOTPRINT_WIZARD_FRAME, EDA_DRAW_FRAME )
 END_EVENT_TABLE()
 
 
-/* Note: our FOOTPRINT_WIZARD_FRAME is always modal.
- * Note:
- * On windows, when the frame with type wxFRAME_FLOAT_ON_PARENT is displayed
- * its parent frame is sometimes brought to the foreground when closing the
- * LIB_VIEW_FRAME frame.
- * If it still happens, it could be better to use wxSTAY_ON_TOP
- * instead of wxFRAME_FLOAT_ON_PARENT
- */
-#ifdef __WINDOWS__
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT   // could be wxSTAY_ON_TOP if issues
-#else
-#define MODAL_MODE_EXTRASTYLE wxFRAME_FLOAT_ON_PARENT
-#endif
+// Note: our FOOTPRINT_WIZARD_FRAME is always modal.
 
-FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
-        wxWindow* aParent, FRAME_T aFrameType ) :
-    PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
-                wxDefaultPosition, wxDefaultSize,
-                aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | MODAL_MODE_EXTRASTYLE
-                          : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
-                FOOTPRINT_WIZARD_FRAME_NAME ), m_wizardListShown( false )
+FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway, wxWindow* aParent,
+                                                FRAME_T aFrameType ) :
+        PCB_BASE_FRAME( aKiway, aParent, aFrameType, _( "Footprint Wizard" ),
+                        wxDefaultPosition, wxDefaultSize,
+                        aParent ? KICAD_DEFAULT_DRAWFRAME_STYLE | wxFRAME_FLOAT_ON_PARENT
+                                : KICAD_DEFAULT_DRAWFRAME_STYLE | wxSTAY_ON_TOP,
+                        FOOTPRINT_WIZARD_FRAME_NAME ),
+        m_wizardListShown( false )
 {
     wxASSERT( aFrameType == FRAME_PCB_FOOTPRINT_WIZARD );
 
@@ -158,9 +135,7 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     PCB_BASE_FRAME* caller = dynamic_cast<PCB_BASE_FRAME*>( aParent );
 
     if( caller )
-    {
         SetUserUnits( caller->GetUserUnits() );
-    }
 
     auto disp_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
     // In viewer, the default net clearance is not known (it depends on the actual board).
@@ -174,9 +149,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     GetScreen()->SetGrid( ID_POPUP_GRID_LEVEL_1000 + m_LastGridSizeId  );
 
-    ReCreateHToolbar();
-    ReCreateVToolbar();
-
     // Create GAL canvas
 #ifdef __WXMAC__
     // Cairo renderer doesn't handle Retina displays
@@ -187,6 +159,26 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
     PCB_DRAW_PANEL_GAL* gal_drawPanel = new PCB_DRAW_PANEL_GAL( this, -1, wxPoint( 0, 0 ), m_FrameSize,
                                                             GetGalDisplayOptions(), backend );
     SetGalCanvas( gal_drawPanel );
+
+    // Create the manager and dispatcher & route draw panel events to the dispatcher
+    m_toolManager = new TOOL_MANAGER;
+    m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
+                                   gal_drawPanel->GetViewControls(), this );
+    m_actions = new PCB_ACTIONS();
+    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
+    gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
+
+    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
+    m_toolManager->RegisterTool( new SELECTION_TOOL );  // for std context menus (zoom & grid)
+    m_toolManager->RegisterTool( new COMMON_TOOLS );
+    m_toolManager->InitTools();
+
+    // Run the control tool, it is supposed to be always active
+    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
+
+    // Create the toolbars
+    ReCreateHToolbar();
+    ReCreateVToolbar();
 
     // Create the parameters panel
     m_parametersPanel = new wxPanel( this, wxID_ANY );
@@ -233,22 +225,6 @@ FOOTPRINT_WIZARD_FRAME::FOOTPRINT_WIZARD_FRAME( KIWAY* aKiway,
 
     m_auimgr.AddPane( (wxWindow*) GetGalCanvas(),
                       wxAuiPaneInfo().Name( "DrawFrameGal" ).CentrePane().Hide() );
-
-    // Create the manager and dispatcher & route draw panel events to the dispatcher
-    m_toolManager = new TOOL_MANAGER;
-    m_toolManager->SetEnvironment( GetBoard(), gal_drawPanel->GetView(),
-                                   gal_drawPanel->GetViewControls(), this );
-    m_actions = new PCB_ACTIONS();
-    m_toolDispatcher = new TOOL_DISPATCHER( m_toolManager, m_actions );
-    gal_drawPanel->SetEventDispatcher( m_toolDispatcher );
-
-    m_toolManager->RegisterTool( new PCBNEW_CONTROL );
-    m_toolManager->RegisterTool( new SELECTION_TOOL );  // for std context menus (zoom & grid)
-    m_toolManager->RegisterTool( new COMMON_TOOLS );
-    m_toolManager->InitTools();
-
-    // Run the control tool, it is supposed to be always active
-    m_toolManager->InvokeTool( "pcbnew.InteractiveSelection" );
 
     auto& galOpts = GetGalDisplayOptions();
     galOpts.m_fullscreenCursor = true;
@@ -453,11 +429,11 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
         return;
 
     // Get the list of names, values, types, hints and designators
-    wxArrayString designatorsList    = footprintWizard->GetParameterDesignators( m_parameterGridPage );
-    wxArrayString namesList          = footprintWizard->GetParameterNames( m_parameterGridPage );
-    wxArrayString valuesList         = footprintWizard->GetParameterValues( m_parameterGridPage );
-    wxArrayString typesList          = footprintWizard->GetParameterTypes( m_parameterGridPage );
-    wxArrayString hintsList          = footprintWizard->GetParameterHints( m_parameterGridPage );
+    wxArrayString designatorsList = footprintWizard->GetParameterDesignators( m_parameterGridPage );
+    wxArrayString namesList       = footprintWizard->GetParameterNames( m_parameterGridPage );
+    wxArrayString valuesList      = footprintWizard->GetParameterValues( m_parameterGridPage );
+    wxArrayString typesList       = footprintWizard->GetParameterTypes( m_parameterGridPage );
+    wxArrayString hintsList       = footprintWizard->GetParameterHints( m_parameterGridPage );
 
     // Dimension the wxGrid
     if( m_parameterGrid->GetNumberRows() > 0 )
@@ -536,7 +512,6 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateParameterList()
 
 void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
 {
-
     // Parameter grid is not yet configured
     if( ( m_parameterGrid == NULL ) || ( m_parameterGrid->GetNumberCols() == 0 ) )
         return;
@@ -559,14 +534,12 @@ void FOOTPRINT_WIZARD_FRAME::ResizeParamColumns()
 
 void FOOTPRINT_WIZARD_FRAME::ClickOnPageList( wxCommandEvent& event )
 {
-    int ii = m_pageList->GetSelection();
-
-    if( ii < 0 )
-        return;
-
-    ReCreateParameterList();
-    m_canvas->Refresh();
-    DisplayWizardInfos();
+    if( m_pageList->GetSelection() > 0 )
+    {
+        ReCreateParameterList();
+        m_canvas->Refresh();
+        DisplayWizardInfos();
+    }
 }
 
 
@@ -636,36 +609,6 @@ bool FOOTPRINT_WIZARD_FRAME::GeneralControl( wxDC* aDC, const wxPoint& aPosition
 
     switch( aHotKey )
     {
-    case WXK_F1:
-        cmd.SetId( ID_KEY_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        keyHandled = true;
-        break;
-
-    case WXK_F2:
-        cmd.SetId( ID_KEY_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        keyHandled = true;
-        break;
-
-    case WXK_F3:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        keyHandled = true;
-        break;
-
-    case WXK_F4:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        keyHandled = true;
-        break;
-
-    case WXK_HOME:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        keyHandled = true;
-        break;
-
     case ' ':
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         keyHandled = true;
@@ -737,8 +680,8 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
 
     if( !m_mainToolBar )
     {
-        m_mainToolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                          KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
+        m_mainToolBar = new ACTION_TOOLBAR( this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                            KICAD_AUI_TB_STYLE | wxAUI_TB_HORZ_LAYOUT );
 
         // Set up toolbar
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_SELECT_WIZARD, wxEmptyString,
@@ -746,17 +689,14 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                                 _( "Select wizard script to run" ) );
 
         m_mainToolBar->AddSeparator();
-
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_RESET_TO_DEFAULT, wxEmptyString,
                                 KiBitmap( reload_xpm ),
                                 _( "Reset wizard parameters to default") );
 
         m_mainToolBar->AddSeparator();
-
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_PREVIOUS, wxEmptyString,
                                 KiBitmap( lib_previous_xpm ),
                                 _( "Select previous parameters page" ) );
-
         m_mainToolBar->AddTool( ID_FOOTPRINT_WIZARD_NEXT, wxEmptyString,
                                 KiBitmap( lib_next_xpm ),
                                 _( "Select next parameters page" ) );
@@ -767,25 +707,10 @@ void FOOTPRINT_WIZARD_FRAME::ReCreateHToolbar()
                                 _( "Show footprint in 3D viewer" ) );
 
         m_mainToolBar->AddSeparator();
-        msg = AddHotkeyName( _( "Zoom in" ), g_Module_Editor_Hotkeys_Descr,
-                             HK_ZOOM_IN, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_IN, wxEmptyString,
-                                KiBitmap( zoom_in_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Zoom out" ), g_Module_Editor_Hotkeys_Descr,
-                             HK_ZOOM_OUT, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_OUT, wxEmptyString,
-                                KiBitmap( zoom_out_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Redraw view" ), g_Module_Editor_Hotkeys_Descr,
-                             HK_ZOOM_REDRAW, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_REDRAW, wxEmptyString,
-                                KiBitmap( zoom_redraw_xpm ), msg );
-
-        msg = AddHotkeyName( _( "Zoom auto" ), g_Module_Editor_Hotkeys_Descr,
-                             HK_ZOOM_AUTO, IS_COMMENT );
-        m_mainToolBar->AddTool( ID_ZOOM_PAGE, wxEmptyString,
-                                KiBitmap( zoom_fit_in_page_xpm ), msg );
+        m_mainToolBar->Add( ACTIONS::zoomRedraw );
+        m_mainToolBar->Add( ACTIONS::zoomInCenter );
+        m_mainToolBar->Add( ACTIONS::zoomOutCenter );
+        m_mainToolBar->Add( ACTIONS::zoomFitScreen );
 
         // The footprint wizard always can export the current footprint
         m_mainToolBar->AddSeparator();

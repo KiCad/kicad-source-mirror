@@ -85,6 +85,9 @@ public:
     static bool DoSetGridOrigin( KIGFX::VIEW* aView, PCB_BASE_FRAME* aFrame,
                                  BOARD_ITEM* originViewItem, const VECTOR2D& aPoint );
 
+    int Undo( const TOOL_EVENT& aEvent );
+    int Redo( const TOOL_EVENT& aEvent );
+
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );

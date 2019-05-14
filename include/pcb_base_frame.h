@@ -582,10 +582,6 @@ public:
 
     // User interface update event handlers.
     void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
-    void OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateGraphicDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}

@@ -63,7 +63,7 @@
 #include <tools/lib_edit_tool.h>
 #include <tools/lib_move_tool.h>
 #include <tools/lib_drawing_tools.h>
-#include <tools/lib_editor_control.h>
+#include <tools/lib_control.h>
 #include <tools/ee_point_editor.h>
 #include <sch_view.h>
 #include <sch_painter.h>
@@ -106,8 +106,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
 
     // Main horizontal toolbar.
     EVT_TOOL( ID_TO_LIBVIEW, LIB_EDIT_FRAME::OnOpenLibraryViewer )
-    EVT_TOOL( wxID_UNDO, LIB_EDIT_FRAME::GetComponentFromUndoList )
-    EVT_TOOL( wxID_REDO, LIB_EDIT_FRAME::GetComponentFromRedoList )
     EVT_TOOL( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnCheckComponent )
     EVT_TOOL( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
     EVT_TOOL( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnSelectBodyStyle )
@@ -120,10 +118,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     // Right vertical toolbar.
     EVT_TOOL( ID_LIBEDIT_IMPORT_BODY_BUTT, LIB_EDIT_FRAME::OnImportBody )
     EVT_TOOL( ID_LIBEDIT_EXPORT_BODY_BUTT, LIB_EDIT_FRAME::OnExportBody )
-
-    // Left vertical toolbar (option toolbar).
-    EVT_TOOL( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnShowElectricalType )
-    EVT_TOOL( ID_LIBEDIT_SHOW_HIDE_SEARCH_TREE, LIB_EDIT_FRAME::OnToggleSearchTree )
 
     // menubar commands
     EVT_MENU( wxID_EXIT, LIB_EDIT_FRAME::CloseWindow )
@@ -149,19 +143,12 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_AS, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_REVERT, LIB_EDIT_FRAME::OnUpdateRevert )
     EVT_UPDATE_UI( ID_LIBEDIT_CHECK_PART, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SYMBOL_PROPERTIES, LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( wxID_UNDO, LIB_EDIT_FRAME::OnUpdateUndo )
-    EVT_UPDATE_UI( wxID_REDO, LIB_EDIT_FRAME::OnUpdateRedo )
     EVT_UPDATE_UI( ID_LIBEDIT_SYNC_PIN_EDIT, LIB_EDIT_FRAME::OnUpdateSyncPinEdit )
-    EVT_UPDATE_UI( ID_LIBEDIT_EDIT_PIN_BY_TABLE, LIB_EDIT_FRAME::OnUpdatePinTable )
     EVT_UPDATE_UI( ID_LIBEDIT_SELECT_PART_NUMBER, LIB_EDIT_FRAME::OnUpdatePartNumber )
     EVT_UPDATE_UI( ID_DE_MORGAN_NORMAL_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganNormal )
     EVT_UPDATE_UI( ID_DE_MORGAN_CONVERT_BUTT, LIB_EDIT_FRAME::OnUpdateDeMorganConvert )
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, LIB_EDIT_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_ZOOM_SELECTION, LIB_EDIT_FRAME::OnUpdateSelectTool )
     EVT_UPDATE_UI_RANGE( ID_LIBEDIT_PIN_BUTT, ID_LIBEDIT_DELETE_ITEM_BUTT,
                          LIB_EDIT_FRAME::OnUpdateEditingPart )
-    EVT_UPDATE_UI( ID_LIBEDIT_SHOW_ELECTRICAL_TYPE, LIB_EDIT_FRAME::OnUpdateElectricalType )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, LIB_EDIT_FRAME::OnUpdateSwitchCanvas )
 
@@ -230,7 +217,6 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     m_auimgr.SetManagedWindow( this );
     m_auimgr.SetArtProvider( new EDA_DOCKART( this ) );
 
-
     m_auimgr.AddPane( m_mainToolBar, EDA_PANE().HToolbar().Name( "MainToolbar" ).Top().Layer(6) );
     m_auimgr.AddPane( m_messagePanel, EDA_PANE().Messages().Name( "MsgPanel" ).Bottom().Layer(6) );
 
@@ -255,8 +241,7 @@ LIB_EDIT_FRAME::LIB_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ) :
     Bind( wxEVT_COMMAND_MENU_SELECTED, &LIB_EDIT_FRAME::OnEditSymbolLibTable, this,
           ID_EDIT_SYM_LIB_TABLE );
 
-    wxCommandEvent evt( wxEVT_COMMAND_MENU_SELECTED, ID_ZOOM_PAGE );
-    wxPostEvent( this, evt );
+    m_toolManager->RunAction( ACTIONS::zoomFitScreen, true );
 
     SyncView();
     GetGalCanvas()->GetViewControls()->SetSnapping( true );
@@ -308,7 +293,7 @@ void LIB_EDIT_FRAME::setupTools()
     m_toolManager->RegisterTool( new EE_POINT_EDITOR );
     m_toolManager->RegisterTool( new LIB_MOVE_TOOL );
     m_toolManager->RegisterTool( new LIB_EDIT_TOOL );
-    m_toolManager->RegisterTool( new LIB_EDITOR_CONTROL );
+    m_toolManager->RegisterTool( new LIB_CONTROL );
     m_toolManager->InitTools();
 
     // Run the selection tool, it is supposed to be always active
@@ -385,17 +370,6 @@ void LIB_EDIT_FRAME::RebuildSymbolUnitsList()
 }
 
 
-void LIB_EDIT_FRAME::OnShowElectricalType( wxCommandEvent& event )
-{
-    m_showPinElectricalTypeName = !m_showPinElectricalTypeName;
-
-    // Update canvas
-    GetRenderSettings()->m_ShowPinsElectricalType = m_showPinElectricalTypeName;
-    GetCanvas()->GetView()->UpdateAllItems( KIGFX::REPAINT );
-    GetCanvas()->Refresh();
-}
-
-
 void LIB_EDIT_FRAME::OnToggleSearchTree( wxCommandEvent& event )
 {
     auto& treePane = m_auimgr.GetPane( m_treePane );
@@ -424,19 +398,6 @@ bool LIB_EDIT_FRAME::IsSearchTreeShown()
 void LIB_EDIT_FRAME::ClearSearchTreeSelection()
 {
     m_treePane->GetLibTree()->Unselect();
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
-{
-    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
-        aEvent.Check( GetToolId() == aEvent.GetId() );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateElectricalType( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetShowElectricalType() );
 }
 
 
@@ -490,40 +451,11 @@ void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
 }
 
 
-void LIB_EDIT_FRAME::OnUpdateUndo( wxUpdateUIEvent& event )
-{
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-
-    event.Enable( GetCurPart()
-                        && GetScreen()
-                        && GetScreen()->GetUndoCommandCount() != 0
-                        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdateRedo( wxUpdateUIEvent& event )
-{
-    EE_SELECTION_TOOL* selTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
-
-    event.Enable( GetCurPart()
-                        && GetScreen()
-                        && GetScreen()->GetRedoCommandCount() != 0
-                        && EE_CONDITIONS::Idle( selTool->GetSelection() ) );
-}
-
-
 void LIB_EDIT_FRAME::OnUpdateSyncPinEdit( wxUpdateUIEvent& event )
 {
     LIB_PART* part = GetCurPart();
     event.Enable( part && part->IsMulti() && !part->UnitsLocked() );
     event.Check( m_SyncPinEdit );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdatePinTable( wxUpdateUIEvent& event )
-{
-    LIB_PART* part = GetCurPart();
-    event.Enable( part != NULL );
 }
 
 

@@ -162,7 +162,7 @@ TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
 TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
         AS_GLOBAL, 0,
         _( "DoDelete Items" ), _( "DoDelete clicked items" ),
-        nullptr, AF_ACTIVATE );
+        delete_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
         AS_GLOBAL, 0,
@@ -255,14 +255,14 @@ bool SCH_EDIT_TOOL::Init()
     wxASSERT_MSG( drawingTools, "eeshema.InteractiveDrawing tool is not available" );
 
     auto sheetTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_SHEET_SYMBOL_BUTT );
+        return ( m_frame->GetToolId() == ID_SHEET_TOOL );
     };
 
     auto anyTextTool = [ this ] ( const SELECTION& aSel ) {
-        return ( m_frame->GetToolId() == ID_LABEL_BUTT
-              || m_frame->GetToolId() == ID_GLOBALLABEL_BUTT
-              || m_frame->GetToolId() == ID_HIERLABEL_BUTT
-              || m_frame->GetToolId() == ID_TEXT_COMMENT_BUTT );
+        return ( m_frame->GetToolId() == ID_LABEL_TOOL
+              || m_frame->GetToolId() == ID_GLOBALLABEL_TOOL
+              || m_frame->GetToolId() == ID_HIERLABEL_TOOL
+              || m_frame->GetToolId() == ID_SCHEMATIC_TEXT_TOOL );
     };
 
     auto duplicateCondition = [] ( const SELECTION& aSel ) {
@@ -379,8 +379,8 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddMenu( symUnitMenu.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
         moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( EE_ACTIONS::cut,  EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( EE_ACTIONS::copy, EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( ACTIONS::cut,      EE_CONDITIONS::IdleSelection );
+        moveMenu.AddItem( ACTIONS::copy,     EE_CONDITIONS::IdleSelection );
     }
 
     //
@@ -452,9 +452,9 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
 
     selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::cut,              EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::copy,             EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::paste,            EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 200 );
+    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 200 );
 
     return true;
 }
@@ -998,7 +998,7 @@ int SCH_EDIT_TOOL::DeleteItemCursor( const TOOL_EVENT& aEvent )
     EE_PICKER_TOOL* picker = m_toolMgr->GetTool<EE_PICKER_TOOL>();
     wxCHECK( picker, 0 );
 
-    m_frame->SetToolID( ID_SCHEMATIC_DELETE_ITEM_BUTT, wxCURSOR_BULLSEYE, _( "Delete item" ) );
+    m_frame->SetToolID( ID_DELETE_TOOL, wxCURSOR_BULLSEYE, _( "Delete item" ) );
     picker->SetClickHandler( std::bind( deleteItem, m_frame, std::placeholders::_1 ) );
     picker->Activate();
     Wait();

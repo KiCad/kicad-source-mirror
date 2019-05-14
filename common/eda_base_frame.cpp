@@ -74,7 +74,6 @@ EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
     wxFrame( aParent, wxID_ANY, aTitle, aPos, aSize, aStyle, aFrameName )
 {
     m_Ident = aFrameType;
-    m_mainToolBar = NULL;
     m_hasAutoSave = false;
     m_autoSaveState = false;
     m_autoSaveInterval = -1;

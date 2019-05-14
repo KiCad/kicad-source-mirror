@@ -234,22 +234,13 @@ class EDA_3D_VIEWER : public KIWAY_PLAYER
      */
     void loadCommonSettings();
 
-    /**
-     *  Filename to propose for save a screenshot
-     */
-    wxFileName m_defaultSaveScreenshotFileName;
+    wxFileName     m_defaultSaveScreenshotFileName;
 
-    /**
-     *  The canvas where the openGL context will be rendered
-     */
-    EDA_3D_CANVAS *m_canvas;
+    wxAuiToolBar*  m_mainToolBar;
+    EDA_3D_CANVAS* m_canvas;
+    CINFO3D_VISU   m_settings;
 
-    /**
-     *  Store all the settings and options to be used by the renders
-     */
-    CINFO3D_VISU m_settings;
-
-    bool m_disable_ray_tracing;
+    bool           m_disable_ray_tracing;
 
     /**
      *  Trace mask used to enable or disable the trace output of this class.

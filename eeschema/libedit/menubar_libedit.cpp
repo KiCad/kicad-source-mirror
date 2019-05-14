@@ -139,36 +139,29 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Quit Library Editor" ),
                  KiBitmap( exit_xpm ) );
 
+    //
     // Edit menu
-    wxMenu* editMenu = new wxMenu;
+    //
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
-    text = AddHotkeyName( _( "&Undo" ), g_Libedit_Hotkeys_Descr, HK_UNDO );
-    AddMenuItem( editMenu,
-                 wxID_UNDO,
-                 text,
-                 _( "Undo last edit" ),
-                 KiBitmap( undo_xpm ) );
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetCurPart() && GetScreen() && GetScreen()->GetUndoCommandCount() != 0
+                      && EE_CONDITIONS::Idle( sel );
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetCurPart() && GetScreen() && GetScreen()->GetRedoCommandCount() != 0
+                      && EE_CONDITIONS::Idle( sel );
+    };
+    auto havePartCondition = [ this ] ( const SELECTION& sel ) {
+        return GetCurPart();
+    };
 
-    text = AddHotkeyName( _( "&Redo" ), g_Libedit_Hotkeys_Descr, HK_REDO );
-    AddMenuItem( editMenu,
-                 wxID_REDO,
-                 text,
-                 _( "Redo the last undo command" ),
-                 KiBitmap( redo_xpm ) );
+    editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                enableRedoCondition );
 
-    editMenu->AppendSeparator();
-
-    AddMenuItem( editMenu,
-                 ID_LIBEDIT_SYMBOL_PROPERTIES,
-                 _( "&Properties..." ),
-                 _( "Edit symbol properties" ),
-                 KiBitmap( part_properties_xpm ) );
-
-    AddMenuItem( editMenu,
-                 ID_LIBEDIT_EDIT_PIN_BY_TABLE,
-                 _( "Pin &Table..." ),
-                 _( "Show pin table" ),
-                 KiBitmap( pin_table_xpm ) );
+    editMenu->AddSeparator();
+    editMenu->AddItem( EE_ACTIONS::symbolProperties, havePartCondition );
+    editMenu->AddItem( EE_ACTIONS::pinTable,         havePartCondition );
 
     //
     // Menu View:
@@ -178,19 +171,15 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsGridVisible();
     };
-
     auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetUserUnits() == INCHES;
     };
-
     auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetUserUnits() == MILLIMETRES;
     };
-
     auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
         return GetGalDisplayOptions().m_fullscreenCursor;
     };
-
     auto compTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsSearchTreeShown();
     };
@@ -211,6 +200,7 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     // Units submenu
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->SetIcon( unit_mm_xpm );
     unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,    imperialUnitsCondition );
     unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,      metricUnitsCondition );
     viewMenu->AddMenu( unitsSubMenu );

@@ -88,10 +88,6 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnToggleTextDrawMode )
 
     EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnUpdateCoordType )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnUpdatePadDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnUpdateGraphicDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnUpdateEdgeDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnUpdateTextDrawMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
     // Switching canvases
@@ -642,50 +638,6 @@ void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
                                         displ_opts->m_DisplayPolarCood ?
                                         _( "Display rectangular coordinates" ) :
                                         _( "Display polar coordinates" ) );
-}
-
-
-void PCB_BASE_FRAME::OnUpdatePadDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    aEvent.Check( !displ_opts->m_DisplayPadFill );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                        displ_opts->m_DisplayPadFill ?
-                                        _( "Show pads in outline mode" ) :
-                                        _( "Show pads in fill mode" ) );
-}
-
-
-void PCB_BASE_FRAME::OnUpdateGraphicDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayDrawItemsFill);
-}
-
-
-void PCB_BASE_FRAME::OnUpdateEdgeDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayModEdgeFill );
-
-    wxString msgEdgesFill[2] = { _( "Show outlines in filled mode" ),
-                                 _( "Show outlines in sketch mode" ) };
-
-    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, msgEdgesFill[i] );
-}
-
-
-void PCB_BASE_FRAME::OnUpdateTextDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayModTextFill );
-
-    wxString msgTextsFill[2] = { _( "Show texts in filled mode" ),
-                                 _( "Show texts in sketch mode" ) };
-    unsigned i = displ_opts->m_DisplayModTextFill == SKETCH ? 0 : 1;
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, msgTextsFill[i] );
 }
 
 

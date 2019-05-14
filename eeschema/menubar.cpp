@@ -92,23 +92,18 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     auto belowRootSheetCondition = [] ( const SELECTION& aSel ) {
         return g_CurrentSheet->Last() != g_RootSheet;
     };
-
     auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsGridVisible();
     };
-
     auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetUserUnits() == INCHES;
     };
-
     auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetUserUnits() == MILLIMETRES;
     };
-
     auto fullCrosshairCondition = [ this ] ( const SELECTION& aSel ) {
         return GetGalDisplayOptions().m_fullscreenCursor;
     };
-
     auto hiddenPinsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetShowAllPins();
     };
@@ -131,6 +126,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Units submenu
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->SetIcon( unit_mm_xpm );
     unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
     unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
     viewMenu->AddMenu( unitsSubMenu );
@@ -358,8 +354,8 @@ void prepareEditMenu( wxMenu* aParentMenu )
 
     // Delete
     aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, ID_MENU_DELETE_ITEM_BUTT,
-                 _( "&Delete" ), HELP_DELETE_ITEMS,
+    AddMenuItem( aParentMenu, ID_DELETE_TOOL,
+                 _( "&Delete Tool" ), HELP_DELETE_ITEMS,
                  KiBitmap( delete_xpm ) );
 
     // Find

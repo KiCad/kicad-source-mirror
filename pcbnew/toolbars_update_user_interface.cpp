@@ -24,11 +24,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file toolbars_update_user_interface.cpp
- * @brief Function to update toolbars UI after changing parameters.
- */
-
 #include <fctsys.h>
 #include <pgm_base.h>
 #include <class_drawpanel.h>
@@ -37,6 +32,7 @@
 #include <class_board.h>
 #include <pcbnew.h>
 #include <pcbnew_id.h>
+#include <tool/actions.h>
 #include <drc.h>
 #include <pcb_layer_box_selector.h>
 
@@ -89,12 +85,6 @@ void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
 #endif
 
 
-void PCB_EDIT_FRAME::OnUpdateZoneDisplayStyle( wxUpdateUIEvent& aEvent )
-{
-
-}
-
-
 void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
 {
     bool state = !Settings().m_legacyDrcOn;
@@ -104,38 +94,6 @@ void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
                                         _( "Disable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) :
                                         _( "Enable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) );
 }
-
-void PCB_EDIT_FRAME::OnUpdateShowBoardRatsnest( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetBoard()->IsElementVisible( LAYER_RATSNEST ) );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_RATSNEST,
-                                        GetBoard()->IsElementVisible( LAYER_RATSNEST ) ?
-                                        _( "Hide board ratsnest" ) :
-                                        _( "Show board ratsnest" ) );
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateViaDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayViaFill );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                        displ_opts->m_DisplayViaFill ?
-                                        _( "Show vias in outline mode" ) :
-                                        _( "Show vias in fill mode" ) );
-}
-
-
-void PCB_EDIT_FRAME::OnUpdateTraceDrawMode( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( !displ_opts->m_DisplayPcbTrackFill );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                        displ_opts->m_DisplayPcbTrackFill ?
-                                        _( "Show tracks in outline mode" ) :
-                                        _( "Show tracks in fill mode" ) );
-}
-
 
 void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
 {
@@ -147,25 +105,14 @@ void PCB_EDIT_FRAME::OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent )
                                         _( "High contrast display mode" ) );
 }
 
-void PCB_EDIT_FRAME::OnUpdateCurvedRatsnest( wxUpdateUIEvent& aEvent )
+bool PCB_EDIT_FRAME::LayerManagerShown()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    aEvent.Check( displ_opts->m_DisplayRatsnestLinesCurved );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
-                                        !displ_opts->m_DisplayRatsnestLinesCurved ?
-                                        _( "Show ratsnest with curved lines" ) :
-                                        _( "Show ratsnest with straight lines" ) );
+    return m_auimgr.GetPane( "LayersManager" ).IsShown();
 }
 
-
-void PCB_EDIT_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
+bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
 {
-    aEvent.Check( m_auimgr.GetPane( "LayersManager" ).IsShown() );
-}
-
-void PCB_EDIT_FRAME::OnUpdateShowMicrowaveToolbar( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown() );
+    return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
 }
 
 
@@ -190,42 +137,19 @@ void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
 
 void PCB_EDIT_FRAME::SyncMenusAndToolbars()
 {
-    PCB_DISPLAY_OPTIONS* displOpts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
-    wxMenuBar*           menuBar = GetMenuBar();
+    PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    int                  zoneMode = opts->m_DisplayZonesMode;
 
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, false );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, false );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, false );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, zoneMode == 0 );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, zoneMode == 1 );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, zoneMode == 2 );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, !opts->m_DisplayPcbTrackFill );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, !opts->m_DisplayViaFill );
+    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, !opts->m_DisplayPadFill );
 
-    switch( displOpts->m_DisplayZonesMode )
-    {
-        case 0:
-            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES )->Check( true );
-            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES, true );
-            break;
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
 
-        case 1:
-            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES_DISABLE )->Check( true );
-            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, true );
-            break;
-
-        case 2:
-            menuBar->FindItem( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY )->Check( true );
-            m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, true );
-            break;
-    }
-
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, false );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, false );
-
-    if( GetUserUnits() == INCHES )
-    {
-        menuBar->FindItem( ID_TB_OPTIONS_SELECT_UNIT_INCH )->Check( true );
-        m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_INCH, true );
-    }
-    else
-    {
-        menuBar->FindItem( ID_TB_OPTIONS_SELECT_UNIT_MM )->Check( true );
-        m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SELECT_UNIT_MM, true );
-    }
+    m_optionsToolBar->Refresh();
 }

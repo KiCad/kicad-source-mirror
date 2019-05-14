@@ -97,7 +97,6 @@ public:
     void ClickOnCmpList( wxCommandEvent& event );
     void OnSetRelativeOffset( wxCommandEvent& event );
     void OnSelectSymbol( wxCommandEvent& aEvent );
-    void OnShowElectricalType( wxCommandEvent& event );
 
     bool GeneralControl( wxDC* aDC, const wxPoint& aPosition, EDA_KEY aHotKey ) override;
 
@@ -150,9 +149,6 @@ public:
     void SetUnitAndConvert( int aUnit, int aConvert );
     int GetUnit() const { return m_unit; }
     int GetConvert() const { return m_convert; }
-
-    bool GetShowElectricalType() const { return m_showPinElectricalTypeName; }
-    void SetShowElectricalType( bool aShow ) { m_showPinElectricalTypeName = aShow; }
 
     const BOX2I GetDocumentExtents() const override;
 
@@ -218,11 +214,6 @@ private:
     bool m_selection_changed;
 
     LIB_ALIAS*      m_previewItem;
-
-    /**
-     * the option to show the pin electrical name in the component editor
-     */
-    bool m_showPinElectricalTypeName;
 
     DECLARE_EVENT_TABLE()
 };
