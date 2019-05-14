@@ -290,22 +290,19 @@ public:
      */
     bool HitTestFilledArea( const wxPoint& aRefPos ) const;
 
-     /**
+    /**
      * Function TransformSolidAreasShapesToPolygonSet
      * Convert solid areas full shapes to polygon set
      * (the full shape is the polygon area with a thick outline)
      * Used in 3D view
      * Arcs (ends of segments) are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygons
-     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
-     * @param aCorrectionFactor = the correction to apply to arcs radius to roughly
-     * keep arc radius when approximated by segments
+     * @param aError = Maximum error allowed between true arc and polygon approx
      */
-    void TransformSolidAreasShapesToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                                int             aCircleToSegmentsCount,
-                                                double          aCorrectionFactor ) const;
+    void TransformSolidAreasShapesToPolygonSet(
+            SHAPE_POLY_SET& aCornerBuffer, int aError = ARC_HIGH_DEF ) const;
 
-     /**
+    /**
      * Function TransformOutlinesShapeWithClearanceToPolygon
      * Convert the outlines shape to a polygon with no holes
      * inflated (optional) by max( aClearanceValue, the zone clearance)
@@ -330,18 +327,12 @@ public:
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the pad
-     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
-     * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approximated by segment bigger or equal
-     * to the real clearance value (usually near from 1.0)
+     * @param aError = the maximum deviation from true circle
      * @param ignoreLineWidth = used for edge cut items where the line width is only
      * for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               int aClearanceValue,
-                                               int aCircleToSegmentsCount,
-                                               double aCorrectionFactor,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
+            int aError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
 
     /**
      * Function HitTestForCorner

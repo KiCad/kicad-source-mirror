@@ -74,10 +74,9 @@ private:
 };
 
 
-extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
-        const D_PAD& aPad, int aThermalGap, int aCopperThickness,
-        int aMinThicknessValue, int aCircleToSegmentsCount,
-        double aCorrectionFactor, double aThermalRot );
+extern void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer, const D_PAD& aPad,
+        int aThermalGap, int aCopperThickness, int aMinThicknessValue, int aError,
+        double aThermalRot );
 
 static double s_thermalRot = 450;   // angle of stubs in thermal reliefs for round pads
 static const bool s_DumpZonesWhenFilling = false;
@@ -138,7 +137,8 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
     }
 
     std::atomic<size_t> nextItem( 0 );
-    size_t parallelThreadCount = std::min<size_t>( std::thread::hardware_concurrency(), toFill.size() );
+    size_t              parallelThreadCount =
+            std::min<size_t>( std::thread::hardware_concurrency(), aZones.size() );
     std::vector<std::future<size_t>> returns( parallelThreadCount );
 
     auto fill_lambda = [&] ( PROGRESS_REPORTER* aReporter ) -> size_t
@@ -218,12 +218,18 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
             }
         }
         // Zones with no net can have areas outside the board cutouts.
-        // Please, use only this clipping for no-net zones: this is a very time consumming
-        // calculation (x 5 in a test case if made for all zones), mainly due to poly.Fracture
+        // By definition, the island has all points outside the outline, so we only
+        // need to check one point for each island
         else if( clip_to_brd_outlines )
         {
-            poly.BooleanIntersection( boardOutline, SHAPE_POLY_SET::PM_FAST );
-            poly.Fracture( SHAPE_POLY_SET::PM_FAST );
+            for( auto idx : zone.m_islands )
+            {
+                if( poly.Polygon( idx ).empty()
+                        || !boardOutline.Contains( poly.Polygon( idx ).front().CPoint( 0 ) ) )
+                {
+                    poly.DeletePolygon( idx );
+                }
+            }
         }
 
         zone.m_zone->SetFilledPolysList( poly );
@@ -326,20 +332,6 @@ bool ZONE_FILLER::Fill( const std::vector<ZONE_CONTAINER*>& aZones, bool aCheck 
 void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         SHAPE_POLY_SET& aFeatures ) const
 {
-    // Set the number of segments in arc approximations
-    // Since we can no longer edit the segment count in pcbnew, we set
-    // the fill to our high-def count to avoid jagged knock-outs
-    // However, if the user has edited their zone to increase the segment count,
-    // we keep this preference
-    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
-
-    /* calculates the coeff to compensate radius reduction of holes clearance
-     * due to the segment approx.
-     * For a circle the min radius is radius * cos( 2PI / segsPerCircle / 2)
-     * correctionFactor is 1 /cos( PI/segsPerCircle  )
-     */
-    double correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
-
     aFeatures.RemoveAllContours();
 
     int zone_clearance = aZone->GetClearance();
@@ -428,9 +420,12 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                         // the pad shape in zone can be its convex hull or
                         // the shape itself
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
-                        outline.Inflate( KiROUND( clearance * correctionFactor ), segsPerCircle );
-                        pad->CustomShapeAsPolygonToBoardPosition( &outline,
-                                pad->GetPosition(), pad->GetOrientation() );
+                        int            numSegs = std::max(
+                                GetArcToSegmentCount( clearance, ARC_HIGH_DEF, 360.0 ), 6 );
+                        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+                        outline.Inflate( KiROUND( clearance * correction ), numSegs );
+                        pad->CustomShapeAsPolygonToBoardPosition(
+                                &outline, pad->GetPosition(), pad->GetOrientation() );
 
                         if( pad->GetCustomShapeInZoneOpt() == CUST_PAD_SHAPE_IN_ZONE_CONVEXHULL )
                         {
@@ -446,10 +441,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                             aFeatures.Append( outline );
                     }
                     else
-                        pad->TransformShapeWithClearanceToPolygon( aFeatures,
-                                clearance,
-                                segsPerCircle,
-                                correctionFactor );
+                        pad->TransformShapeWithClearanceToPolygon( aFeatures, clearance );
                 }
 
                 continue;
@@ -477,10 +469,13 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                     {
                         // the pad shape in zone can be its convex hull or
                         // the shape itself
+                        int numSegs =
+                                std::max( GetArcToSegmentCount( gap, ARC_HIGH_DEF, 360.0 ), 6 );
+                        double         correction = GetCircletoPolyCorrectionFactor( numSegs );
                         SHAPE_POLY_SET outline( pad->GetCustomShapeAsPolygon() );
-                        outline.Inflate( KiROUND( gap * correctionFactor ), segsPerCircle );
-                        pad->CustomShapeAsPolygonToBoardPosition( &outline,
-                                pad->GetPosition(), pad->GetOrientation() );
+                        outline.Inflate( KiROUND( gap * correction ), numSegs );
+                        pad->CustomShapeAsPolygonToBoardPosition(
+                                &outline, pad->GetPosition(), pad->GetOrientation() );
 
                         std::vector<wxPoint> convex_hull;
                         BuildConvexHull( convex_hull, outline );
@@ -491,8 +486,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
                             aFeatures.Append( convex_hull[ii] );
                     }
                     else
-                        pad->TransformShapeWithClearanceToPolygon( aFeatures,
-                                gap, segsPerCircle, correctionFactor );
+                        pad->TransformShapeWithClearanceToPolygon( aFeatures, gap );
                 }
             }
         }
@@ -515,8 +509,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         if( item_boundingbox.Intersects( zone_boundingbox ) )
         {
             int clearance = std::max( zone_clearance, item_clearance );
-            track->TransformShapeWithClearanceToPolygon( aFeatures,
-                    clearance, segsPerCircle, correctionFactor );
+            track->TransformShapeWithClearanceToPolygon( aFeatures, clearance );
         }
     }
 
@@ -549,7 +542,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
         {
         case PCB_LINE_T:
             static_cast<DRAWSEGMENT*>( aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
+                    aFeatures, zclearance, ARC_HIGH_DEF, ignoreLineWidth );
             break;
 
         case PCB_TEXT_T:
@@ -559,7 +552,7 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
         case PCB_MODULE_EDGE_T:
             static_cast<EDGE_MODULE*>( aItem )->TransformShapeWithClearanceToPolygon(
-                    aFeatures, zclearance, segsPerCircle, correctionFactor, ignoreLineWidth );
+                    aFeatures, zclearance, ARC_HIGH_DEF, ignoreLineWidth );
             break;
 
         case PCB_MODULE_TEXT_T:
@@ -667,12 +660,9 @@ void ZONE_FILLER::buildZoneFeatureHoleList( const ZONE_CONTAINER* aZone,
 
             if( item_boundingbox.Intersects( zone_boundingbox ) )
             {
-                CreateThermalReliefPadPolygon( aFeatures,
-                        *pad, thermalGap,
-                        aZone->GetThermalReliefCopperBridge( pad ),
-                        aZone->GetMinThickness(),
-                        segsPerCircle,
-                        correctionFactor, s_thermalRot );
+                CreateThermalReliefPadPolygon( aFeatures, *pad, thermalGap,
+                        aZone->GetThermalReliefCopperBridge( pad ), aZone->GetMinThickness(),
+                        ARC_HIGH_DEF, s_thermalRot );
             }
         }
     }
@@ -717,19 +707,16 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
     std::unique_ptr<SHAPE_FILE_IO> dumper( new SHAPE_FILE_IO(
                     s_DumpZonesWhenFilling ? "zones_dump.txt" : "", SHAPE_FILE_IO::IOM_APPEND ) );
 
-    // Set the number of segments in arc approximations
-    int segsPerCircle = std::max( aZone->GetArcSegmentCount(), ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
-
-    /* calculates the coeff to compensate radius reduction of holes clearance
-     */
-    double correctionFactor = GetCircletoPolyCorrectionFactor( segsPerCircle );
-
     if( s_DumpZonesWhenFilling )
         dumper->BeginGroup( "clipper-zone" );
 
     SHAPE_POLY_SET solidAreas = aSmoothedOutline;
 
-    solidAreas.Inflate( -outline_half_thickness, segsPerCircle );
+    int numSegs =
+            std::max( GetArcToSegmentCount( outline_half_thickness, ARC_HIGH_DEF, 360.0 ), 6 );
+    double correction = GetCircletoPolyCorrectionFactor( numSegs );
+
+    solidAreas.Inflate( -outline_half_thickness, numSegs );
     solidAreas.Simplify( SHAPE_POLY_SET::PM_FAST );
 
     SHAPE_POLY_SET holes;
@@ -788,9 +775,8 @@ void ZONE_FILLER::computeRawFilledAreas( const ZONE_CONTAINER* aZone,
 
     if( aZone->GetNetCode() > 0 )
     {
-        buildUnconnectedThermalStubsPolygonList( thermalHoles, aZone, solidAreas,
-                correctionFactor, s_thermalRot );
-
+        buildUnconnectedThermalStubsPolygonList(
+                thermalHoles, aZone, solidAreas, correction, s_thermalRot );
     }
 
     // remove copper areas corresponding to not connected stubs
@@ -853,7 +839,9 @@ bool ZONE_FILLER::fillSingleZone( ZONE_CONTAINER* aZone, SHAPE_POLY_SET& aRawPol
     }
     else
     {
-        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+        int numSegs = std::max(
+                GetArcToSegmentCount( aZone->GetMinThickness() / 2, ARC_HIGH_DEF, 360.0 ), 6 );
+        aFinalPolys.Inflate( -aZone->GetMinThickness() / 2, numSegs );
 
         // Remove the non filled areas due to the hatch pattern
         if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )

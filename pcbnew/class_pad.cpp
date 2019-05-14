@@ -35,8 +35,9 @@
 #include <base_units.h>
 #include <bitmaps.h>
 
-#include <view/view.h>
+#include <geometry/geometry_utils.h>
 #include <pcbnew.h>
+#include <view/view.h>
 
 #include <class_board.h>
 #include <class_module.h>
@@ -936,7 +937,8 @@ bool D_PAD::HitTest( const wxPoint& aPosition, int aAccuracy ) const
         {
         // Check for hit in polygon
         SHAPE_POLY_SET outline;
-        const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
+        int            segmentToCircleCount = std::max<int>(
+                GetArcToSegmentCount( GetRoundRectCornerRadius(), ARC_HIGH_DEF, 360.0 ), 3 );
         bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( outline, wxPoint(0,0), GetSize(), m_Orient,

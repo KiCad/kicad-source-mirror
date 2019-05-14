@@ -616,9 +616,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             case PAD_SHAPE_ROUNDRECT:
             {
                 SHAPE_POLY_SET outline;
-                const int segmentToCircleCount = 64;
-
-                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ), segmentToCircleCount, 1.0 );
+                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ) );
 
                 // TransformRoundRectToPolygon creates only one convex polygon
                 SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );
@@ -711,9 +709,7 @@ std::unique_ptr<PNS::SOLID> PNS_KICAD_IFACE::syncPad( D_PAD* aPad )
             case PAD_SHAPE_ROUNDRECT:
             {
                 SHAPE_POLY_SET outline;
-                const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ),
-                                            segmentToCircleCount, 1.0 );
+                aPad->BuildPadShapePolygon( outline, wxSize( 0, 0 ) );
 
                 // TransformRoundRectToPolygon creates only one convex polygon
                 SHAPE_LINE_CHAIN& poly = outline.Outline( 0 );

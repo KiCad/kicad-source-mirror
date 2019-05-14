@@ -24,7 +24,6 @@
 
 #include <preview_items/bright_box.h>
 #include <gal/graphics_abstraction_layer.h>
-#include <class_track.h>
 
 using namespace KIGFX;
 

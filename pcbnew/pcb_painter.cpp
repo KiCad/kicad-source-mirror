@@ -40,8 +40,9 @@
 #include <pcb_painter.h>
 #include <pcb_display_options.h>
 
-#include <gal/graphics_abstraction_layer.h>
 #include <convert_basic_shapes_to_polygon.h>
+#include <gal/graphics_abstraction_layer.h>
+#include <geometry/geometry_utils.h>
 #include <geometry/shape_line_chain.h>
 
 using namespace KIGFX;
@@ -845,11 +846,11 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
         {
             SHAPE_POLY_SET outline;
             outline.Append( aPad->GetCustomShapeAsPolygon() );
-            const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
             // outline polygon can have holes linked to the main outline.
             // So use InflateWithLinkedHoles(), not Inflate() that can create
             // bad shapes if custom_margin is < 0
-            outline.InflateWithLinkedHoles( custom_margin, segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
+            int numSegs = std::max( GetArcToSegmentCount( custom_margin, ARC_HIGH_DEF, 360.0 ), 6 );
+            outline.InflateWithLinkedHoles( custom_margin, numSegs, SHAPE_POLY_SET::PM_FAST );
             m_gal->DrawPolygon( outline );
         }
         else
@@ -900,8 +901,7 @@ void PCB_PAINTER::draw( const D_PAD* aPad, int aLayer )
                 || aLayer == LAYER_PADS_TH ) )
     {
         SHAPE_POLY_SET polySet;
-        constexpr int SEGCOUNT = 64;
-        aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance(), SEGCOUNT, 1.0 );
+        aPad->TransformShapeWithClearanceToPolygon( polySet, aPad->GetClearance() );
         m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
         m_gal->SetIsStroke( true );
         m_gal->SetIsFill( false );

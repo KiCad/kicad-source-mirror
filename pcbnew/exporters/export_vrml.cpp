@@ -1142,9 +1142,8 @@ static void export_vrml_padshape( MODEL_VRML& aModel, VRML_LAYER* aTinLayer, D_P
     case PAD_SHAPE_CUSTOM:
     {
         SHAPE_POLY_SET polySet;
-        int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
         std::vector< wxRealPoint > cornerList;
-        aPad->MergePrimitivesAsPolygon( &polySet, segmentToCircleCount );
+        aPad->MergePrimitivesAsPolygon( &polySet );
 
         for( int cnt = 0; cnt < polySet.OutlineCount(); ++cnt )
         {

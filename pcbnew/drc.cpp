@@ -1136,13 +1136,8 @@ void DRC::testCopperDrawItem( DRAWSEGMENT* aItem )
         if( pad->GetParent() == aItem->GetParent() )
             continue;
 
-        const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-        double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
-
-        // We incorporate "minDist" into the pad's outline
-        pad->TransformShapeWithClearanceToPolygon( padOutline, pad->GetClearance( NULL ),
-                                                   segmentCount, correctionFactor );
+        pad->TransformShapeWithClearanceToPolygon( padOutline, pad->GetClearance( NULL ) );
 
         for( const auto& itemSeg : itemShape )
         {
@@ -1219,13 +1214,10 @@ void DRC::testCopperTextItem( BOARD_ITEM* aTextItem )
         if( !rect_area.Collide( SEG( shape_pos, shape_pos ), bb_radius ) )
             continue;
 
-        const int      segmentCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-        double         correctionFactor = GetCircletoPolyCorrectionFactor( segmentCount );
         SHAPE_POLY_SET padOutline;
 
         int minDist = textWidth/2 + pad->GetClearance( NULL );
-        pad->TransformShapeWithClearanceToPolygon( padOutline, 0,
-                                                   segmentCount, correctionFactor );
+        pad->TransformShapeWithClearanceToPolygon( padOutline, 0 );
 
         for( unsigned jj = 0; jj < textShape.size(); jj += 2 )
         {

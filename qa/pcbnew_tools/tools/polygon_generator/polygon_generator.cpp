@@ -46,12 +46,7 @@ void process( const BOARD_CONNECTED_ITEM* item, int net )
 
     SHAPE_POLY_SET pset;
 
-    const int segsPerCircle = 64;
-
-    double correctionFactor = 1.0 / cos( M_PI / (double) segsPerCircle );
-
-
-    item->TransformShapeWithClearanceToPolygon( pset, 1, segsPerCircle, correctionFactor );
+    item->TransformShapeWithClearanceToPolygon( pset, 1, ARC_HIGH_DEF );
 
     SHAPE_FILE_IO shapeIo; // default = stdout
     shapeIo.Write( &pset );

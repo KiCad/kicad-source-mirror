@@ -34,7 +34,6 @@ set( GAL_SRCS
     draw_panel_gal.cpp
     gl_context_mgr.cpp
     newstroke_font.cpp
-    origin_viewitem.cpp
     painter.cpp
     text_utils.cpp
     worksheet_viewitem.cpp
@@ -322,7 +321,6 @@ set( COMMON_SRCS
     getrunningmicrosecs.cpp
     gr_basic.cpp
     grid_tricks.cpp
-    hash_eda.cpp
     hotkey_store.cpp
     hotkeys_basic.cpp
     html_messagebox.cpp
@@ -444,7 +442,9 @@ set( PCB_COMMON_SRCS
     base_screen.cpp
     eda_text.cpp
     fp_lib_table.cpp
+    hash_eda.cpp
     lset.cpp
+    origin_viewitem.cpp
     page_info.cpp
     pcb_keywords.cpp
     pcb_plot_params_keywords.cpp

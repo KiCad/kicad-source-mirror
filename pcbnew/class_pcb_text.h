@@ -105,15 +105,10 @@ public:
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the text
-     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
-     * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approximated by segment bigger or equal
-     * to the real clearance value (usually near from 1.0)
+     * @param aError = deviation from true arc position to segment approx
      */
-    void TransformShapeWithClearanceToPolygonSet( SHAPE_POLY_SET& aCornerBuffer,
-                                               int                aClearanceValue,
-                                               int                aCircleToSegmentsCount,
-                                               double             aCorrectionFactor ) const;
+    void TransformShapeWithClearanceToPolygonSet(
+            SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError = ARC_HIGH_DEF ) const;
 
     wxString GetSelectMenuText( EDA_UNITS_T aUnits ) const override;
 

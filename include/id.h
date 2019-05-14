@@ -31,6 +31,8 @@
 #ifndef ID_H_
 #define ID_H_
 
+#include <wx/defs.h>
+
 /**
  * Common command IDs shared by more than one of the KiCad applications.
  *

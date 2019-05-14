@@ -30,13 +30,14 @@
 #ifndef PAD_H_
 #define PAD_H_
 
-#include <pcbnew.h>
-#include <class_board_item.h>
-#include <board_connected_item.h>
-#include <pad_shapes.h>
-#include <geometry/shape_poly_set.h>
-#include <config_params.h>       // PARAM_CFG_ARRAY
 #include "zones.h"
+#include <board_connected_item.h>
+#include <class_board_item.h>
+#include <config_params.h> // PARAM_CFG_ARRAY
+#include <convert_to_biu.h>
+#include <geometry/shape_poly_set.h>
+#include <pad_shapes.h>
+#include <pcbnew.h>
 
 class DRAWSEGMENT;
 
@@ -312,8 +313,7 @@ public:
      * (default = 32)
      * Note: The corners coordinates are relative to the pad position, orientation 0,
      */
-    bool MergePrimitivesAsPolygon( SHAPE_POLY_SET * aMergedPolygon = NULL,
-                                    int aCircleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+    bool MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon = NULL );
 
     /**
      * clear the basic shapes list
@@ -443,18 +443,12 @@ public:
      * Circles and arcs are approximated by segments
      * @param aCornerBuffer = a buffer to store the polygon
      * @param aClearanceValue = the clearance around the pad
-     * @param aCircleToSegmentsCount = the number of segments to approximate a circle
-     * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     * clearance when the circle is approximated by segment bigger or equal
-     * to the real clearance value (usually near from 1.0)
+     * @param aMaxError = Maximum error from true when converting arcs
      * @param ignoreLineWidth = used for edge cut items where the line width is only
      * for visualization
      */
-    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                               int aClearanceValue,
-                                               int aCircleToSegmentsCount,
-                                               double aCorrectionFactor,
-                                               bool ignoreLineWidth = false ) const override;
+    void TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue,
+            int aMaxError = ARC_HIGH_DEF, bool ignoreLineWidth = false ) const override;
 
     /**
      * Function GetClearance
@@ -576,14 +570,10 @@ public:
      *              value > 0: inflate, < 0 deflate, = 0 : no change
      *              the clearance can have different values for x and y directions
      *              (relative to the pad)
-     * @param aSegmentsPerCircle = number of segments to approximate a circle
-     *              (used for round and oblong shapes only (16 to 32 is a good value)
-     * @param aCorrectionFactor = the correction to apply to circles radius to keep
-     *        the pad size/clearance when the arcs are approximated by segments
+     * @param aError = Maximum deviation of an arc from the polygon segment
      */
-    void BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
-                               wxSize aInflateValue, int aSegmentsPerCircle,
-                               double aCorrectionFactor ) const;
+    void BuildPadShapePolygon(
+            SHAPE_POLY_SET& aCornerBuffer, wxSize aInflateValue, int aError = ARC_HIGH_DEF ) const;
 
     /**
      * Function BuildPadDrillShapePolygon
@@ -592,12 +582,11 @@ public:
      * @param aCornerBuffer = a buffer to fill.
      * @param aInflateValue = the clearance or margin value.
      *              value > 0: inflate, < 0 deflate, = 0 : no change
-     * @param aSegmentsPerCircle = number of segments to approximate a circle
-     *              (used for round and oblong shapes only(16 to 32 is a good value)
+     * @param aError = Maximum deviation of an arc from the polygon approximation
      * @return false if the pad has no hole, true otherwise
      */
-    bool BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                    int aInflateValue, int aSegmentsPerCircle ) const;
+    bool BuildPadDrillShapePolygon(
+            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
 
     /**
      * Function BuildSegmentFromOvalShape
@@ -832,8 +821,7 @@ private:
      */
     int boundingRadius() const;
 
-    bool buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
-                                int aCircleToSegmentsCount );
+    bool buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError );
 
 private:    // Private variable members:
 

@@ -28,7 +28,6 @@
  * and their documentation (comments and keywords)
  */
 
-#include <class_module.h>
 #include <common.h>
 #include <fctsys.h>
 #include <footprint_info.h>

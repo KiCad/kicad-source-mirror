@@ -182,13 +182,6 @@ protected:
     virtual bool doAutoSave();
 
     /**
-     * Return the wxConfigBase used in SaveSettings().
-     *
-     * This is overloaded in #KICAD_MANAGER_FRAME
-     */
-    virtual wxConfigBase* config();
-
-    /**
      * Return a SEARCH_STACK pertaining to entire program.
      *
      * This is overloaded in #KICAD_MANAGER_FRAME
@@ -230,8 +223,14 @@ public:
     void PrintMsg( const wxString& text );
 
     /**
+     * Returns the wxConfigBase used in SaveSettings(), and is overloaded in
+     * KICAD_MANAGER_FRAME
+     */
+    virtual wxConfigBase* config();
+
+    /**
+     * Function InstallPreferences
      * Allow a frame to load its preference panels (if any) into the preferences dialog.
-     *
      * @param aParent a paged dialog into which the preference panels should be installed
      */
     virtual void InstallPreferences( PAGED_DIALOG* aParent ) { }

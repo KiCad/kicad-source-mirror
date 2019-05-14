@@ -25,7 +25,8 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 
-#include <pcb_edit_frame.h>
+#include <draw_frame.h>
+#include <eda_base_frame.h>
 
 bool TOOL_BASE::IsToolActive() const
 {
@@ -94,9 +95,8 @@ wxConfigBase* TOOL_SETTINGS::getConfigBase() const
     if( !m_tool )
         return NULL;
 
-    // fixme: make independent of pcbnew (post-stable)
-    if( PCB_EDIT_FRAME* frame = m_tool->getEditFrame<PCB_EDIT_FRAME>() )
-        return frame->GetSettings();
+    if( EDA_BASE_FRAME* frame = m_tool->getEditFrame<EDA_BASE_FRAME>() )
+        return frame->config();
 
     return NULL;
 }

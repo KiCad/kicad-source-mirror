@@ -836,12 +836,9 @@ void CINFO3D_VISU::AddShapeWithClearanceToContainer( const DRAWSEGMENT* aDrawSeg
     case S_CURVE:
     case S_POLYGON:
     {
-        const int segcountforcircle = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-        const double correctionFactor = GetCircleCorrectionFactor( segcountforcircle );
         SHAPE_POLY_SET polyList;
 
-        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue,
-                                                        segcountforcircle, correctionFactor );
+        aDrawSegment->TransformShapeWithClearanceToPolygon( polyList, aClearanceValue );
 
         polyList.Simplify( SHAPE_POLY_SET::PM_FAST );
 
@@ -967,15 +964,7 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
 
     // For other shapes, draw polygon outlines
     SHAPE_POLY_SET corners;
-
-    const int segcountforcircle = GetNrSegmentsCircle( glm::min( aPad->GetSize().x,
-                                                                 aPad->GetSize().y) );
-
-    const double correctionFactor = GetCircleCorrectionFactor( segcountforcircle );
-
-    aPad->BuildPadShapePolygon( corners, wxSize( 0, 0 ),
-                                // This two factors are only expected to be used if render an oval
-                                segcountforcircle, correctionFactor );
+    aPad->BuildPadShapePolygon( corners, wxSize( 0, 0 ) );
 
 
     // Add outlines as thick segments in polygon buffer
@@ -992,15 +981,13 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsSegments( const D_PAD*  aPad,
 
         if( Is_segment_a_circle( start3DU, end3DU ) )
         {
-            aDstContainer->Add( new CFILLEDCIRCLE2D( start3DU,
-                                                     (aWidth / 2) * m_biuTo3Dunits,
-                                                     *aPad ) );
+            aDstContainer->Add(
+                    new CFILLEDCIRCLE2D( start3DU, ( aWidth / 2 ) * m_biuTo3Dunits, *aPad ) );
         }
         else
         {
-            aDstContainer->Add( new CROUNDSEGMENT2D( start3DU, end3DU,
-                                                     aWidth * m_biuTo3Dunits,
-                                                     *aPad ) );
+            aDstContainer->Add(
+                    new CROUNDSEGMENT2D( start3DU, end3DU, aWidth * m_biuTo3Dunits, *aPad ) );
         }
     }
 }

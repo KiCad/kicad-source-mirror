@@ -28,16 +28,17 @@
  * @brief Implementation of class to handle copper zones.
  */
 
-#include <fctsys.h>
-#include <trigo.h>
-#include <pcb_screen.h>
-#include <class_drawpanel.h>
-#include <kicad_string.h>
-#include <richio.h>
-#include <macros.h>
-#include <pcb_base_frame.h>
-#include <msgpanel.h>
 #include <bitmaps.h>
+#include <class_drawpanel.h>
+#include <fctsys.h>
+#include <geometry/geometry_utils.h>
+#include <kicad_string.h>
+#include <macros.h>
+#include <msgpanel.h>
+#include <pcb_base_frame.h>
+#include <pcb_screen.h>
+#include <richio.h>
+#include <trigo.h>
 
 #include <convert_to_biu.h>
 #include <class_board.h>
@@ -1304,12 +1305,7 @@ bool ZONE_CONTAINER::BuildSmoothedPoly( SHAPE_POLY_SET& aSmoothedPoly ) const
         break;
 
     case ZONE_SETTINGS::SMOOTHING_FILLET:
-        // Note: we're now using m_ArcToSegmentsCount only as a hint to determine accuracy
-        // vs. speed.
-        if( m_ArcToSegmentsCount > SEGMENT_COUNT_CROSSOVER )
-            aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_HIGH_DEF );
-        else
-            aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_LOW_DEF );
+        aSmoothedPoly = m_Poly->Fillet( m_cornerRadius, ARC_HIGH_DEF );
         break;
 
     default:
@@ -1353,8 +1349,10 @@ void ZONE_CONTAINER::TransformOutlinesShapeWithClearanceToPolygon(
     // Calculate the polygon with clearance
     // holes are linked to the main outline, so only one polygon is created.
     if( clearance )
-        polybuffer.Inflate( clearance, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
-
+    {
+        int segCount = std::max( GetArcToSegmentCount( clearance, ARC_HIGH_DEF, 360.0 ), 3 );
+        polybuffer.Inflate( clearance, segCount );
+    }
     polybuffer.Fracture( SHAPE_POLY_SET::PM_FAST );
     aCornerBuffer.Append( polybuffer );
 }

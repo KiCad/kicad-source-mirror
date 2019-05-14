@@ -28,20 +28,20 @@
  * @file class_pad_draw_functions.cpp
  */
 
-#include <fctsys.h>
-#include <gr_basic.h>
-#include <common.h>
-#include <trigo.h>
-#include <pcb_screen.h>
+#include <class_board.h>
 #include <class_drawpanel.h>
+#include <common.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <draw_graphic_text.h>
+#include <fctsys.h>
+#include <geometry/geometry_utils.h>
+#include <gr_basic.h>
 #include <layers_id_colors_and_visibility.h>
 #include <pcb_edit_frame.h>
-#include <pcbnew_id.h>             // ID_TRACK_BUTT
+#include <pcb_screen.h>
 #include <pcbnew.h>
-#include <class_board.h>
-#include <convert_basic_shapes_to_polygon.h>
-
+#include <pcbnew_id.h> // ID_TRACK_BUTT
+#include <trigo.h>
 
 
 /* uncomment this line to show this pad with its specfic size and color
@@ -420,7 +420,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         if( aDrawInfo.m_PadClearance )
         {
             SHAPE_POLY_SET outline;
-            TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF, 1.0 );
+            TransformShapeWithClearanceToPolygon( outline, aDrawInfo.m_PadClearance );
 
             // Draw the polygon: Inflate creates only one convex polygon
             if( outline.OutlineCount() > 0 )
@@ -527,11 +527,12 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
         CustomShapeAsPolygonToBoardPosition( &outline, pad_pos, GetOrientation() );
         SHAPE_LINE_CHAIN* poly;
 
-        const int segmentToCircleCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-
         if( aDrawInfo.m_Mask_margin.x )
-            outline.InflateWithLinkedHoles( aDrawInfo.m_Mask_margin.x,
-                        segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
+        {
+            int numSegs = GetArcToSegmentCount( aDrawInfo.m_Mask_margin.x, ARC_HIGH_DEF, 360.0 );
+            outline.InflateWithLinkedHoles(
+                    aDrawInfo.m_Mask_margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
+        }
 
         // Draw the polygon: only one polygon is expected
         // However we provide a multi polygon shape drawing
@@ -550,8 +551,9 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
             SHAPE_POLY_SET clearance_outline;
             clearance_outline.Append( outline );
 
-            clearance_outline.InflateWithLinkedHoles( aDrawInfo.m_PadClearance,
-                                        segmentToCircleCount, SHAPE_POLY_SET::PM_FAST );
+            int numSegs = GetArcToSegmentCount( aDrawInfo.m_PadClearance, ARC_HIGH_DEF, 360.0 );
+            clearance_outline.InflateWithLinkedHoles(
+                    aDrawInfo.m_PadClearance, numSegs, SHAPE_POLY_SET::PM_FAST );
 
             for( int jj = 0; jj < clearance_outline.OutlineCount(); ++jj )
             {
@@ -565,6 +567,7 @@ void D_PAD::DrawShape( EDA_RECT* aClipBox, wxDC* aDC, PAD_DRAWINFO& aDrawInfo )
                 }
             }
         }
+
         break;
         }
     }

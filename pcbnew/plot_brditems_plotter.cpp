@@ -201,7 +201,7 @@ void BRDITEMS_PLOTTER::PlotPad( D_PAD* aPad, COLOR4D aColor, EDA_DRAW_MODE_T aPl
     case PAD_SHAPE_CUSTOM:
         {
         SHAPE_POLY_SET polygons;
-        aPad->MergePrimitivesAsPolygon(&polygons, 64 );
+        aPad->MergePrimitivesAsPolygon( &polygons );
 
         if( polygons.OutlineCount() == 0 )
             break;

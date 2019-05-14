@@ -450,12 +450,12 @@ void PlotStandardLayer( BOARD *aBoard, PLOTTER* aPlotter,
 
                 D_PAD dummy( *pad );
                 SHAPE_POLY_SET shape;
-                pad->MergePrimitivesAsPolygon( &shape, 64 );
+                pad->MergePrimitivesAsPolygon( &shape );
                 // shape polygon can have holes linked to the main outline.
                 // So use InflateWithLinkedHoles(), not Inflate() that can create
                 // bad shapes if margin.x is < 0
-                shape.InflateWithLinkedHoles( margin.x, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF,
-                                              SHAPE_POLY_SET::PM_FAST );
+                int numSegs = std::max( GetArcToSegmentCount( margin.x, ARC_HIGH_DEF, 360.0 ), 6 );
+                shape.InflateWithLinkedHoles( margin.x, numSegs, SHAPE_POLY_SET::PM_FAST );
                 dummy.DeletePrimitivesList();
                 dummy.AddPrimitive( shape, 0 );
                 dummy.MergePrimitivesAsPolygon();
@@ -801,21 +801,13 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     SHAPE_POLY_SET areas;           // Contains shapes to plot
     SHAPE_POLY_SET initialPolys;    // Contains exact shapes to plot
 
-    /* calculates the coeff to compensate radius reduction of holes clearance
-     * due to the segment approx ( 1 /cos( PI/circleToSegmentsCount )
-     */
-    int circleToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-    double correction = GetCircletoPolyCorrectionFactor( circleToSegmentsCount );
-
     // Plot pads
     for( MODULE* module = aBoard->m_Modules; module; module = module->Next() )
     {
         // add shapes with exact size
-        module->TransformPadsShapesWithClearanceToPolygon( layer,
-                        initialPolys, 0, circleToSegmentsCount, correction );
+        module->TransformPadsShapesWithClearanceToPolygon( layer, initialPolys, 0 );
         // add shapes inflated by aMinThickness/2
-        module->TransformPadsShapesWithClearanceToPolygon( layer,
-                        areas, inflate, circleToSegmentsCount, correction );
+        module->TransformPadsShapesWithClearanceToPolygon( layer, areas, inflate );
     }
 
     // Plot vias on solder masks, if aPlotOpt.GetPlotViaOnMaskLayer() is true,
@@ -846,12 +838,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
             if( !( via_set & aLayerMask ).any() )
                 continue;
 
-            via->TransformShapeWithClearanceToPolygon( areas, via_margin,
-                    circleToSegmentsCount,
-                    correction );
-            via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance,
-                    circleToSegmentsCount,
-                    correction );
+            via->TransformShapeWithClearanceToPolygon( areas, via_margin );
+            via->TransformShapeWithClearanceToPolygon( initialPolys, via_clearance );
         }
     }
 
@@ -869,10 +857,8 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
         if( zone->GetLayer() != layer )
             continue;
 
-        zone->TransformOutlinesShapeWithClearanceToPolygon( areas,
-                    inflate+zone_margin, false );
-        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys,
-                    zone_margin, false );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( areas, inflate + zone_margin, false );
+        zone->TransformOutlinesShapeWithClearanceToPolygon( initialPolys, zone_margin, false );
     }
 
     // To avoid a lot of code, use a ZONE_CONTAINER
@@ -885,9 +871,10 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     zone.SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer ( layer );
+    int numSegs = std::max( GetArcToSegmentCount( inflate, ARC_HIGH_DEF, 360.0 ), 6 );
 
     areas.BooleanAdd( initialPolys, SHAPE_POLY_SET::PM_FAST );
-    areas.Inflate( -inflate, circleToSegmentsCount );
+    areas.Inflate( -inflate, numSegs );
 
     // Combine the current areas to initial areas. This is mandatory because
     // inflate/deflate transform is not perfect, and we want the initial areas perfectly kept

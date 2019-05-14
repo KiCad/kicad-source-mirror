@@ -200,8 +200,7 @@ void D_PAD::DeletePrimitivesList()
 }
 
 
-bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
-                                   int aCircleToSegmentsCount )
+bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon, int aError )
 
 {
     SHAPE_POLY_SET aux_polyset;
@@ -221,33 +220,42 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                TransformRoundedEndsSegmentToPolygon( aux_polyset,
-                        poly[ii-1], poly[ii], aCircleToSegmentsCount, bshape.m_Thickness );
+                int numSegs = std::max(
+                        GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
+                TransformRoundedEndsSegmentToPolygon(
+                        aux_polyset, poly[ii - 1], poly[ii], numSegs, bshape.m_Thickness );
             }
             break;
         }
 
         case S_SEGMENT:         // usual segment : line with rounded ends
-            TransformRoundedEndsSegmentToPolygon( aux_polyset,
-                bshape.m_Start, bshape.m_End, aCircleToSegmentsCount, bshape.m_Thickness );
+        {
+            int numSegs =
+                    std::max( GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
+            TransformRoundedEndsSegmentToPolygon(
+                    aux_polyset, bshape.m_Start, bshape.m_End, numSegs, bshape.m_Thickness );
             break;
+        }
 
         case S_ARC:             // Arc with rounded ends
-            TransformArcToPolygon( aux_polyset,
-                                   bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
-                                   aCircleToSegmentsCount, bshape.m_Thickness );
+        {
+            int radius = KiROUND( EuclideanNorm( ( bshape.m_Start - bshape.m_End ) ) );
+            int numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+            TransformArcToPolygon( aux_polyset, bshape.m_Start, bshape.m_End, bshape.m_ArcAngle,
+                    numSegs, bshape.m_Thickness );
             break;
+        }
 
         case S_CIRCLE:          //  ring or circle
+        {
+            int numSegs = std::max( GetArcToSegmentCount( bshape.m_Radius, aError, 360.0 ), 6 );
             if( bshape.m_Thickness )    // ring
-                TransformRingToPolygon( aux_polyset,
-                                    bshape.m_Start, bshape.m_Radius,
-                                    aCircleToSegmentsCount, bshape.m_Thickness ) ;
+                TransformRingToPolygon(
+                        aux_polyset, bshape.m_Start, bshape.m_Radius, numSegs, bshape.m_Thickness );
             else                // Filled circle
-                TransformCircleToPolygon( aux_polyset,
-                                    bshape.m_Start, bshape.m_Radius,
-                                    aCircleToSegmentsCount ) ;
+                TransformCircleToPolygon( aux_polyset, bshape.m_Start, bshape.m_Radius, numSegs );
             break;
+        }
 
         case S_POLYGON:         // polygon
             if( bshape.m_Poly.size() < 2 )
@@ -268,7 +276,9 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
                     polyset.Append( poly[ii].x, poly[ii].y );
                 }
 
-                polyset.Inflate( bshape.m_Thickness/2, ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
+                int numSegs = std::max(
+                        GetArcToSegmentCount( bshape.m_Thickness / 2, aError, 360.0 ), 6 );
+                polyset.Inflate( bshape.m_Thickness / 2, numSegs );
 
                 aux_polyset.Append( polyset );
             }
@@ -300,8 +310,7 @@ bool D_PAD::buildCustomPadPolygon( SHAPE_POLY_SET* aMergedPolygon,
  * return true if OK, false in there is more than one polygon
  * in aMergedPolygon
  */
-bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
-                                        int aCircleToSegmentsCount )
+bool D_PAD::MergePrimitivesAsPolygon( SHAPE_POLY_SET* aMergedPolygon )
 {
     // if aMergedPolygon == NULL, use m_customShapeAsPolygon as target
 
@@ -316,19 +325,23 @@ bool D_PAD::MergePrimitivesAsPolygon(  SHAPE_POLY_SET* aMergedPolygon,
     {
     default:
     case PAD_SHAPE_CIRCLE:
-        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0,0 ), GetSize().x/2,
-                              aCircleToSegmentsCount );
-        break;
+    {
+        int numSegs = std::max( GetArcToSegmentCount( GetSize().x / 2, ARC_HIGH_DEF, 360.0 ), 6 );
+        TransformCircleToPolygon( *aMergedPolygon, wxPoint( 0, 0 ), GetSize().x / 2, numSegs );
 
-    case PAD_SHAPE_RECT:
-        {
-        SHAPE_RECT rect( -GetSize().x/2, -GetSize().y/2, GetSize().x, GetSize().y );
-        aMergedPolygon->AddOutline( rect.Outline() );
-        }
         break;
     }
 
-    if ( !buildCustomPadPolygon( aMergedPolygon, aCircleToSegmentsCount ) )
+    case PAD_SHAPE_RECT:
+    {
+        SHAPE_RECT rect( -GetSize().x / 2, -GetSize().y / 2, GetSize().x, GetSize().y );
+        aMergedPolygon->AddOutline( rect.Outline() );
+
+        break;
+    }
+    }
+
+    if( !buildCustomPadPolygon( aMergedPolygon, ARC_HIGH_DEF ) )
         return false;
 
     m_boundingRadius = -1;  // The current bouding radius is no more valid.
@@ -364,7 +377,7 @@ bool D_PAD::GetBestAnchorPosition( VECTOR2I& aPos )
 {
     SHAPE_POLY_SET poly;
 
-    if ( !buildCustomPadPolygon( &poly, ARC_APPROX_SEGMENTS_COUNT_LOW_DEF ) )
+    if( !buildCustomPadPolygon( &poly, ARC_LOW_DEF ) )
         return false;
 
     const int minSteps = 10;

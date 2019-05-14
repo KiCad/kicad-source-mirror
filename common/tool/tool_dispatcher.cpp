@@ -23,7 +23,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
+#include <macros.h>
 #include <trace_helpers.h>
 
 #include <tool/tool_manager.h>
@@ -33,6 +33,7 @@
 #include <view/wx_view_controls.h>
 
 #include <class_draw_panel_gal.h>
+#include <draw_frame.h>
 #include <pcbnew_id.h>
 
 #include <core/optional.h>
@@ -319,10 +320,10 @@ void TOOL_DISPATCHER::DispatchWxEvent( wxEvent& aEvent )
 
     // Sometimes there is no window that has the focus (it happens when another PCB_BASE_FRAME
     // is opened and is iconized on Windows).
-    // In this case, gives the focus to the parent PCB_BASE_FRAME (for an obscure reason,
+    // In this case, gives the focus to the parent frame (for an obscure reason,
     // when happens, the GAL canvas itself does not accept the focus)
     if( wxWindow::FindFocus() == nullptr )
-        static_cast<PCB_BASE_FRAME*>( m_toolMgr->GetEditFrame() )->SetFocus();
+        m_toolMgr->GetEditFrame()->SetFocus();
 
     // Mouse handling
     // Note: wxEVT_LEFT_DOWN event must always be skipped.

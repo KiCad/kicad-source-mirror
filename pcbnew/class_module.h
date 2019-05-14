@@ -32,13 +32,14 @@
 #define MODULE_H_
 
 
-#include <list>
-#include <dlist.h>
-#include <layers_id_colors_and_visibility.h>       // ALL_LAYERS definition.
-#include <class_board_item.h>
 #include <board_item_container.h>
+#include <class_board_item.h>
 #include <collectors.h>
+#include <convert_to_biu.h>
+#include <dlist.h>
+#include <layers_id_colors_and_visibility.h> // ALL_LAYERS definition.
 #include <lib_id.h>
+#include <list>
 
 #include <class_text_mod.h>
 #include "zones.h"
@@ -351,12 +352,7 @@ public:
      * @param aCornerBuffer = the buffer to store polygons
      * @param aInflateValue = an additionnal size to add to pad shapes
      *          aInflateValue = 0 to have the exact pad size
-     * @param aCircleToSegmentsCount = number of segments to generate a circle
-     * @param aCorrectionFactor = the correction to apply to a circle radius
-     *  to approximate a circle by the polygon.
-     *  if aCorrectionFactor = 1.0, the polygon is inside the circle
-     *  the radius of circle approximated by segments is
-     *  initial radius * aCorrectionFactor
+     * @param aMaxError = Maximum deviation from true for arcs
      * @param aSkipNPTHPadsWihNoCopper = if true, do not add a NPTH pad shape,
      *  if the shape has same size and position as the hole. Usually, these
      *  pads are not drawn on copper layers, because there is actually no copper
@@ -365,10 +361,7 @@ public:
      *  default = false
      */
     void TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer,
-            int aInflateValue,
-            int aCircleToSegmentsCount,
-            double aCorrectionFactor,
+            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError = ARC_HIGH_DEF,
             bool aSkipNPTHPadsWihNoCopper = false ) const;
 
     /**
@@ -381,41 +374,25 @@ public:
      * @param aCornerBuffer = the buffer to store polygons
      * @param aInflateValue = a value to inflate shapes
      *          aInflateValue = 0 to have the exact shape size
-     * @param aCircleToSegmentsCount = number of segments to generate a circle
-     * @param aCorrectionFactor = the correction to apply to a circle radius
-     *  to approximate a circle by the polygon.
-     *  if aCorrectionFactor = 1.0, the polygon is inside the circle
-     *  the radius of circle approximated by segments is
-     *  initial radius * aCorrectionFactor
-     * @param aCircleToSegmentsCountForTexts = number of segments to generate
-     *       a circle when building the texts polygonal shapes of the stroke font
-     *       if 0, use the aCircleToSegmentsCount value
+     * @param aError = Maximum error between true arc and polygon approx
+     * @param aIncludeText = True to transform text shapes
      */
     void TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer,
-            int aInflateValue,
-            int aCircleToSegmentsCount,
-            double aCorrectionFactor,
-            int aCircleToSegmentsCountForTexts = 0,
+            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF,
             bool aIncludeText = true ) const;
 
     /**
      * @brief TransformGraphicTextWithClearanceToPolygonSet
      * This function is the same as TransformGraphicShapesWithClearanceToPolygonSet
      * but only generate text
-     * @param aLayer
-     * @param aCornerBuffer
-     * @param aInflateValue
-     * @param aCircleToSegmentsCount
-     * @param aCorrectionFactor
-     * @param aCircleToSegmentsCountForTexts
+     * @param aLayer = the layer to consider, or UNDEFINED_LAYER to consider all
+     * @param aCornerBuffer = the buffer to store polygons
+     * @param aInflateValue = a value to inflate shapes
+     *          aInflateValue = 0 to have the exact shape size
+     * @param aError = Maximum error between true arc and polygon approx
      */
     void TransformGraphicTextWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
-            SHAPE_POLY_SET& aCornerBuffer,
-            int aInflateValue,
-            int aCircleToSegmentsCount,
-            double aCorrectionFactor,
-            int aCircleToSegmentsCountForTexts = 0 ) const;
+            SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError = ARC_HIGH_DEF ) const;
 
     /**
      * Function DrawEdgesOnly

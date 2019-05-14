@@ -61,12 +61,6 @@ struct TSEGM_2_POLY_PRMS {
 };
 TSEGM_2_POLY_PRMS prms;
 
-// The max error is the distance between the middle of a segment, and the circle
-// for circle/arc to segment approximation.
-// Warning: too small values can create very long calculation time in zone filling
-// 0.05 to 0.01 mm is a reasonable value
-double s_error_max = Millimeter2iu( 0.02 );
-
 // This is a call back function, used by DrawGraphicText to draw the 3D text shape:
 static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 {
@@ -79,29 +73,22 @@ static void addTextSegmToPoly( int x0, int y0, int xf, int yf, void* aData )
 
 void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aOutlines )
 {
-    // Number of segments to convert a circle to a polygon
-    const int       segcountforcircle   = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-    double          correctionFactor    = GetCircletoPolyCorrectionFactor( segcountforcircle );
-
     // convert tracks and vias:
     for( TRACK* track = m_Track; track != NULL; track = track->Next() )
     {
         if( !track->IsOnLayer( aLayer ) )
             continue;
 
-        track->TransformShapeWithClearanceToPolygon( aOutlines,
-                0, segcountforcircle, correctionFactor );
+        track->TransformShapeWithClearanceToPolygon( aOutlines, 0 );
     }
 
     // convert pads
     for( MODULE* module = m_Modules; module != NULL; module = module->Next() )
     {
-        module->TransformPadsShapesWithClearanceToPolygon( aLayer,
-                aOutlines, 0, segcountforcircle, correctionFactor );
+        module->TransformPadsShapesWithClearanceToPolygon( aLayer, aOutlines, 0 );
 
         // Micro-wave modules may have items on copper layers
-        module->TransformGraphicShapesWithClearanceToPolygonSet( aLayer,
-                aOutlines, 0, segcountforcircle, correctionFactor );
+        module->TransformGraphicShapesWithClearanceToPolygonSet( aLayer, aOutlines, 0 );
     }
 
     // convert copper zones
@@ -111,8 +98,7 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         PCB_LAYER_ID        zonelayer = zone->GetLayer();
 
         if( zonelayer == aLayer )
-            zone->TransformSolidAreasShapesToPolygonSet(
-                aOutlines, segcountforcircle, correctionFactor );
+            zone->TransformSolidAreasShapesToPolygonSet( aOutlines );
     }
 
     // convert graphic items on copper layers (texts)
@@ -124,13 +110,11 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
         switch( item->Type() )
         {
         case PCB_LINE_T:
-            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                aOutlines, 0, segcountforcircle, correctionFactor );
+            ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( aOutlines, 0 );
             break;
 
         case PCB_TEXT_T:
-            ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
-                aOutlines, 0, segcountforcircle, correctionFactor );
+            ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( aOutlines, 0 );
             break;
 
         default:
@@ -141,11 +125,8 @@ void BOARD::ConvertBrdLayerToPolygonalContours( PCB_LAYER_ID aLayer, SHAPE_POLY_
 
 
 void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
-                        SHAPE_POLY_SET& aCornerBuffer,
-                        int                    aInflateValue,
-                        int                    aCircleToSegmentsCount,
-                        double                 aCorrectionFactor,
-                        bool                   aSkipNPTHPadsWihNoCopper ) const
+        SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aMaxError,
+        bool aSkipNPTHPadsWihNoCopper ) const
 {
     D_PAD* pad = PadsList();
 
@@ -198,8 +179,7 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
             break;
         }
 
-        pad->BuildPadShapePolygon( aCornerBuffer, margin,
-                                   aCircleToSegmentsCount, aCorrectionFactor );
+        pad->BuildPadShapePolygon( aCornerBuffer, margin );
     }
 }
 
@@ -214,14 +194,8 @@ void MODULE::TransformPadsShapesWithClearanceToPolygon( PCB_LAYER_ID aLayer,
  *  the radius of circle approximated by segments is
  *  initial radius * aCorrectionFactor
  */
-void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
-                        PCB_LAYER_ID        aLayer,
-                        SHAPE_POLY_SET& aCornerBuffer,
-                        int             aInflateValue,
-                        int             aCircleToSegmentsCount,
-                        double          aCorrectionFactor,
-                        int             aCircleToSegmentsCountForTexts,
-                        bool            aIncludeText ) const
+void MODULE::TransformGraphicShapesWithClearanceToPolygonSet( PCB_LAYER_ID aLayer,
+        SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError, bool aIncludeText ) const
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
     EDGE_MODULE* outline;
@@ -231,15 +205,14 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
         switch( item->Type() )
         {
         case PCB_MODULE_TEXT_T:
-            {
-                TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
+        {
+            TEXTE_MODULE* text = static_cast<TEXTE_MODULE*>( item );
 
-                if( ( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer )
-                    && text->IsVisible() )
-                    texts.push_back( text );
+            if( ( aLayer != UNDEFINED_LAYER && text->GetLayer() == aLayer ) && text->IsVisible() )
+                texts.push_back( text );
 
-                break;
-            }
+            break;
+        }
 
         case PCB_MODULE_EDGE_T:
             outline = (EDGE_MODULE*) item;
@@ -247,12 +220,11 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
             if( aLayer != UNDEFINED_LAYER && outline->GetLayer() != aLayer )
                 break;
 
-            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
-                                                    aCircleToSegmentsCount, aCorrectionFactor );
+            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0, aError );
             break;
 
-            default:
-                break;
+        default:
+            break;
         }
     }
 
@@ -268,16 +240,12 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 
     prms.m_cornerBuffer = &aCornerBuffer;
 
-    // To allow optimization of circles approximated by segments,
-    // aCircleToSegmentsCountForTexts, when not 0, is used.
-    // if 0 (default value) the aCircleToSegmentsCount is used
-    prms.m_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
-                                aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
-
     for( unsigned ii = 0; ii < texts.size(); ii++ )
     {
         TEXTE_MODULE *textmod = texts[ii];
         prms.m_textWidth  = textmod->GetThickness() + ( 2 * aInflateValue );
+        prms.m_textCircle2SegmentCount =
+                std::max( GetArcToSegmentCount( prms.m_textWidth / 2, aError, 360.0 ), 6 );
         wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
@@ -296,12 +264,7 @@ void MODULE::TransformGraphicShapesWithClearanceToPolygonSet(
 // Same as function TransformGraphicShapesWithClearanceToPolygonSet but
 // this only render text
 void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
-                        PCB_LAYER_ID        aLayer,
-                        SHAPE_POLY_SET& aCornerBuffer,
-                        int             aInflateValue,
-                        int             aCircleToSegmentsCount,
-                        double          aCorrectionFactor,
-                        int             aCircleToSegmentsCountForTexts ) const
+        PCB_LAYER_ID aLayer, SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError ) const
 {
     std::vector<TEXTE_MODULE *> texts;  // List of TEXTE_MODULE to convert
 
@@ -337,16 +300,12 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
 
     prms.m_cornerBuffer = &aCornerBuffer;
 
-    // To allow optimization of circles approximated by segments,
-    // aCircleToSegmentsCountForTexts, when not 0, is used.
-    // if 0 (default value) the aCircleToSegmentsCount is used
-    prms.m_textCircle2SegmentCount = aCircleToSegmentsCountForTexts ?
-                                aCircleToSegmentsCountForTexts : aCircleToSegmentsCount;
-
     for( unsigned ii = 0; ii < texts.size(); ii++ )
     {
         TEXTE_MODULE *textmod = texts[ii];
         prms.m_textWidth = textmod->GetThickness() + ( 2 * aInflateValue );
+        prms.m_textCircle2SegmentCount =
+                std::max( GetArcToSegmentCount( prms.m_textWidth / 2, aError, 360.0 ), 6 );
         wxSize size = textmod->GetTextSize();
 
         if( textmod->IsMirrored() )
@@ -361,23 +320,14 @@ void MODULE::TransformGraphicTextWithClearanceToPolygonSet(
 
 }
 
- /* Function TransformSolidAreasShapesToPolygonSet
- * Convert solid areas full shapes to polygon set
- * (the full shape is the polygon area with a thick outline)
- * Used in 3D view
- * Arcs (ends of segments) are approximated by segments
- * aCornerBuffer = a buffer to store the polygons
- * aCircleToSegmentsCount = the number of segments to approximate a circle
- * aCorrectionFactor = the correction to apply to arcs radius to roughly
- * keep arc radius when approximated by segments
- */
+
 void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
-        SHAPE_POLY_SET& aCornerBuffer,
-        int                    aCircleToSegmentsCount,
-        double                 aCorrectionFactor ) const
+        SHAPE_POLY_SET& aCornerBuffer, int aError ) const
 {
     if( GetFilledPolysList().IsEmpty() )
         return;
+
+    int numSegs = std::max( GetArcToSegmentCount( GetMinThickness() / 2, aError, 360.0 ), 6 );
 
     // add filled areas polygons
     aCornerBuffer.Append( m_FilledPolysList );
@@ -392,24 +342,15 @@ void ZONE_CONTAINER::TransformSolidAreasShapesToPolygonSet(
             const VECTOR2I& a = path.CPoint( j );
             const VECTOR2I& b = path.CPoint( j + 1 );
 
-            TransformRoundedEndsSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ), wxPoint( b.x, b.y ),
-                                                    aCircleToSegmentsCount,
-                                                    GetMinThickness() );
+            TransformRoundedEndsSegmentToPolygon( aCornerBuffer, wxPoint( a.x, a.y ),
+                    wxPoint( b.x, b.y ), numSegs, GetMinThickness() );
         }
     }
 }
 
-/**
- * Function TransformBoundingBoxWithClearanceToPolygon
- * Convert the text bounding box to a rectangular polygon
- * Used in filling zones calculations
- * Circles and arcs are approximated by segments
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aClearanceValue = the clearance around the text bounding box
- */
+
 void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon(
-                    SHAPE_POLY_SET* aCornerBuffer,
-                    int             aClearanceValue ) const
+        SHAPE_POLY_SET* aCornerBuffer, int aClearanceValue ) const
 {
     // Oh dear.  When in UTF-8 mode, wxString puts string iterators in a linked list, and
     // that linked list is not thread-safe.
@@ -455,10 +396,7 @@ void EDA_TEXT::TransformBoundingBoxWithClearanceToPolygon(
  */
 
 void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
-                            SHAPE_POLY_SET& aCornerBuffer,
-                            int                    aClearanceValue,
-                            int                    aCircleToSegmentsCount,
-                            double                 aCorrectionFactor ) const
+        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError ) const
 {
     wxSize size = GetTextSize();
 
@@ -466,8 +404,9 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
         size.x = -size.x;
 
     prms.m_cornerBuffer = &aCornerBuffer;
-    prms.m_textWidth  = GetThickness() + ( 2 * aClearanceValue );
-    prms.m_textCircle2SegmentCount = aCircleToSegmentsCount;
+    prms.m_textWidth = GetThickness() + ( 2 * aClearanceValue );
+    prms.m_textCircle2SegmentCount =
+            std::max( GetArcToSegmentCount( prms.m_textWidth / 2, aError, 360.0 ), 6 );
     COLOR4D color = COLOR4D::BLACK;  // not actually used, but needed by DrawGraphicText
 
     if( IsMultilineAllowed() )
@@ -499,61 +438,39 @@ void TEXTE_PCB::TransformShapeWithClearanceToPolygonSet(
 }
 
 
-/**
- * Function TransformShapeWithClearanceToPolygon
- * Convert the track shape to a closed polygon
- * Used in filling zones calculations
- * Circles and arcs are approximated by segments
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aClearanceValue = the clearance around the pad
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aCorrectionFactor = the correction to apply to circles radius to keep
- * clearance when the circle is approxiamted by segment bigger or equal
- * to the real clearance value (usually near from 1.0)
- * @param ignoreLineWidth = used for edge cut items where the line width is only
- * for visualization
- */
-void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int             aClearanceValue,
-                                                        int             aCircleToSegmentsCount,
-                                                        double          aCorrectionFactor,
-                                                        bool            ignoreLineWidth ) const
+void DRAWSEGMENT::TransformShapeWithClearanceToPolygon(
+        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
 {
     // The full width of the lines to create:
     int linewidth = ignoreLineWidth ? 0 : m_Width;
 
     linewidth += 2 * aClearanceValue;
 
+    int    numSegs = std::max( GetArcToSegmentCount( linewidth / 2, aError, 360.0 ), 6 );
+    double correction = GetCircletoPolyCorrectionFactor( numSegs );
+
     // Creating a reliable clearance shape for circles and arcs is not so easy, due to
     // the error created by segment approximation.
-    // for a cicle this is not so hard: create a polygon from a circle slightly bigger:
+    // for a circle this is not so hard: create a polygon from a circle slightly bigger:
     // thickness = linewidth + s_error_max, and radius = initial radius + s_error_max/2
     // giving a shape with a suitable internal radius and external radius
     // For an arc this is more tricky: TODO
-    if( m_Shape == S_CIRCLE || m_Shape == S_ARC )
-    {
-        int segCount = GetArcToSegmentCount( GetRadius(), s_error_max, 360.0 );
-
-        if( segCount > aCircleToSegmentsCount )
-            aCircleToSegmentsCount = segCount;
-    }
 
     switch( m_Shape )
     {
     case S_CIRCLE:
-        TransformRingToPolygon( aCornerBuffer, GetCenter(), GetRadius() + (s_error_max/2),
-                                aCircleToSegmentsCount, linewidth + s_error_max ) ;
+        TransformRingToPolygon(
+                aCornerBuffer, GetCenter(), GetRadius(), numSegs, correction * linewidth );
         break;
 
     case S_ARC:
-        TransformArcToPolygon( aCornerBuffer, GetCenter(),
-                               GetArcStart(), m_Angle,
-                               aCircleToSegmentsCount, linewidth );
+        TransformArcToPolygon(
+                aCornerBuffer, GetCenter(), GetArcStart(), m_Angle, numSegs, linewidth );
         break;
 
     case S_SEGMENT:
-        TransformOvalClearanceToPolygon( aCornerBuffer, m_Start, m_End, linewidth,
-                                         aCircleToSegmentsCount, aCorrectionFactor );
+        TransformOvalClearanceToPolygon(
+                aCornerBuffer, m_Start, m_End, linewidth, numSegs, correction );
         break;
 
     case S_POLYGON:
@@ -583,12 +500,12 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
             {
                 for( size_t ii = 1; ii < poly.size(); ii++ )
                 {
-                    TransformOvalClearanceToPolygon( aCornerBuffer, poly[ii - 1], poly[ii],
-                            linewidth, aCircleToSegmentsCount, aCorrectionFactor );
+                    TransformOvalClearanceToPolygon(
+                            aCornerBuffer, poly[ii - 1], poly[ii], linewidth, numSegs, correction );
                 }
 
-                TransformOvalClearanceToPolygon( aCornerBuffer, poly.back(), poly.front(),
-                        linewidth, aCircleToSegmentsCount, aCorrectionFactor );
+                TransformOvalClearanceToPolygon(
+                        aCornerBuffer, poly.back(), poly.front(), linewidth, numSegs, correction );
                 break;
             }
 
@@ -612,8 +529,8 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
                     if( corner2 != corner1 )
                     {
-                        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                                corner1, corner2, aCircleToSegmentsCount, linewidth );
+                        TransformRoundedEndsSegmentToPolygon(
+                                aCornerBuffer, corner1, corner2, numSegs, linewidth );
                     }
 
                     corner1 = corner2;
@@ -631,8 +548,8 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 
             for( unsigned ii = 1; ii < poly.size(); ii++ )
             {
-                TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                        poly[ii-1], poly[ii], aCircleToSegmentsCount, linewidth );
+                TransformRoundedEndsSegmentToPolygon(
+                        aCornerBuffer, poly[ii - 1], poly[ii], numSegs, linewidth );
             }
         }
         break;
@@ -643,66 +560,34 @@ void DRAWSEGMENT::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerB
 }
 
 
-/**
- * Function TransformShapeWithClearanceToPolygon
- * Convert the track shape to a closed polygon
- * Used in filling zones calculations
- * Circles (vias) and arcs (ends of tracks) are approximated by segments
- * @param aCornerBuffer = a buffer to store the polygon
- * @param aClearanceValue = the clearance around the pad
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aCorrectionFactor = the correction to apply to circles radius to keep
- * clearance when the circle is approximated by segment bigger or equal
- * to the real clearance value (usually near from 1.0)
- * @param ignoreLineWidth = used for edge cut items where the line width is only
- * for visualization
- */
-void TRACK::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   int  aClearanceValue,
-                                                   int  aCircleToSegmentsCount,
-                                                   double aCorrectionFactor,
-                                                   bool ignoreLineWidth ) const
+void TRACK::TransformShapeWithClearanceToPolygon(
+        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for tracks." );
+
+    int    radius = ( m_Width / 2 ) + aClearanceValue;
+    int    numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+    double correction = GetCircletoPolyCorrectionFactor( numSegs );
 
     switch( Type() )
     {
     case PCB_VIA_T:
     {
-        int radius = (m_Width / 2) + aClearanceValue;
-        radius = KiROUND( radius * aCorrectionFactor );
-        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, aCircleToSegmentsCount );
+        radius = KiROUND( radius * correction );
+        TransformCircleToPolygon( aCornerBuffer, m_Start, radius, numSegs );
     }
         break;
 
     default:
         TransformOvalClearanceToPolygon( aCornerBuffer, m_Start, m_End,
-                                         m_Width + ( 2 * aClearanceValue),
-                                         aCircleToSegmentsCount,
-                                         aCorrectionFactor );
+                m_Width + ( 2 * aClearanceValue ), numSegs, correction );
         break;
     }
 }
 
 
-/* Function TransformShapeWithClearanceToPolygon
- * Convert the pad shape to a closed polygon
- * Used in filling zones calculations and 3D view generation
- * Circles and arcs are approximated by segments
- * aCornerBuffer = a SHAPE_POLY_SET to store the polygon corners
- * aClearanceValue = the clearance around the pad
- * aCircleToSegmentsCount = the number of segments to approximate a circle
- * aCorrectionFactor = the correction to apply to circles radius to keep
- * clearance when the circle is approximated by segment bigger or equal
- * to the real clearance value (usually near from 1.0)
- * @param ignoreLineWidth = used for edge cut items where the line width is only
- * for visualization
- */
-void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                   int             aClearanceValue,
-                                                   int             aCircleToSegmentsCount,
-                                                   double          aCorrectionFactor,
-                                                   bool            ignoreLineWidth ) const
+void D_PAD::TransformShapeWithClearanceToPolygon(
+        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for pads." );
 
@@ -716,9 +601,12 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     switch( GetShape() )
     {
     case PAD_SHAPE_CIRCLE:
-        dx = KiROUND( dx * aCorrectionFactor );
-        TransformCircleToPolygon( aCornerBuffer, padShapePos, dx,
-                                  aCircleToSegmentsCount );
+    {
+        int    numSegs = std::max( GetArcToSegmentCount( dx, aError, 360.0 ), 6 );
+        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+        dx = KiROUND( dx * correction );
+        TransformCircleToPolygon( aCornerBuffer, padShapePos, dx, numSegs );
+    }
         break;
 
     case PAD_SHAPE_OVAL:
@@ -737,11 +625,13 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             width = dy * 2;
         }
 
+        int    numSegs = std::max( GetArcToSegmentCount( width / 2, aError, 360.0 ), 6 );
+        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+
         RotatePoint( &shape_offset, angle );
         wxPoint start = padShapePos - shape_offset;
         wxPoint end = padShapePos + shape_offset;
-        TransformOvalClearanceToPolygon( aCornerBuffer, start, end, width,
-                                aCircleToSegmentsCount, aCorrectionFactor );
+        TransformOvalClearanceToPolygon( aCornerBuffer, start, end, width, numSegs, correction );
         }
         break;
 
@@ -760,8 +650,11 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
             outline.Append( corners[ii].x, corners[ii].y );
         }
 
-        int rounding_radius = int( aClearanceValue * aCorrectionFactor );
-        outline.Inflate( rounding_radius, aCircleToSegmentsCount );
+        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ), 6 );
+        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+
+        int rounding_radius = KiROUND( aClearanceValue * correction );
+        outline.Inflate( rounding_radius, numSegs );
 
         aCornerBuffer.Append( outline );
     }
@@ -771,18 +664,20 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
     case PAD_SHAPE_ROUNDRECT:
     {
         SHAPE_POLY_SET outline;
-        int clearance = int( aClearanceValue * aCorrectionFactor );
-        int rounding_radius = GetRoundRectCornerRadius() + clearance;
-        wxSize shapesize( m_Size );
+        int            radius = GetRoundRectCornerRadius() + aClearanceValue;
+        int            numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+        double         correction = GetCircletoPolyCorrectionFactor( numSegs );
+        int            clearance = KiROUND( aClearanceValue * correction );
+        int            rounding_radius = GetRoundRectCornerRadius() + clearance;
+        wxSize         shapesize( m_Size );
+
         shapesize.x += clearance*2;
         shapesize.y += clearance*2;
         bool doChamfer = GetShape() == PAD_SHAPE_CHAMFERED_RECT;
 
         TransformRoundChamferedRectToPolygon( outline, padShapePos, shapesize, angle,
-                                     rounding_radius,
-                                     doChamfer ? GetChamferRectRatio() : 0.0,
-                                     doChamfer ? GetChamferPositions() : 0,
-                                     aCircleToSegmentsCount );
+                rounding_radius, doChamfer ? GetChamferRectRatio() : 0.0,
+                doChamfer ? GetChamferPositions() : 0, numSegs );
 
         aCornerBuffer.Append( outline );
     }
@@ -790,12 +685,14 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     case PAD_SHAPE_CUSTOM:
     {
-        int clearance = KiROUND( aClearanceValue * aCorrectionFactor );
+        int    numSegs = std::max( GetArcToSegmentCount( aClearanceValue, aError, 360.0 ), 6 );
+        double correction = GetCircletoPolyCorrectionFactor( numSegs );
+        int    clearance = KiROUND( aClearanceValue * correction );
         SHAPE_POLY_SET outline;     // Will contain the corners in board coordinates
         outline.Append( m_customShapeAsPolygon );
         CustomShapeAsPolygonToBoardPosition( &outline, GetPosition(), GetOrientation() );
         outline.Simplify( SHAPE_POLY_SET::PM_FAST );
-        outline.Inflate( clearance, aCircleToSegmentsCount );
+        outline.Inflate( clearance, numSegs );
         outline.Fracture( SHAPE_POLY_SET::PM_FAST );
         aCornerBuffer.Append( outline );
     }
@@ -812,9 +709,8 @@ void D_PAD::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
  * Note: for Round and oval pads this function is equivalent to
  * TransformShapeWithClearanceToPolygon, but not for other shapes
  */
-void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                  wxSize aInflateValue, int aSegmentsPerCircle,
-                                  double aCorrectionFactor ) const
+void D_PAD::BuildPadShapePolygon(
+        SHAPE_POLY_SET& aCornerBuffer, wxSize aInflateValue, int aError ) const
 {
     wxPoint corners[4];
     wxPoint padShapePos = ShapePos();       /* Note: for pad having a shape offset,
@@ -834,8 +730,7 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
         // a wxSize to inflate the pad size
         D_PAD dummy( *this );
         dummy.SetSize( GetSize() + aInflateValue + aInflateValue );
-        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
-                                                    aSegmentsPerCircle, aCorrectionFactor );
+        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0 );
     }
         break;
 
@@ -856,21 +751,15 @@ void D_PAD::BuildPadShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
         // for a custom shape, that is in fact a polygon (with holes), we can use only a inflate value.
         // so use ( aInflateValue.x + aInflateValue.y ) / 2 as polygon inflate value.
         // (different values for aInflateValue.x and aInflateValue.y has no sense for a custom pad)
-        TransformShapeWithClearanceToPolygon( aCornerBuffer,
-                                              ( aInflateValue.x + aInflateValue.y ) / 2,
-                                              aSegmentsPerCircle, aCorrectionFactor );
+        TransformShapeWithClearanceToPolygon(
+                aCornerBuffer, ( aInflateValue.x + aInflateValue.y ) / 2 );
         break;
     }
 }
 
-/*
- * Function BuildPadDrillShapePolygon
- * Build the Corner list of the polygonal drill shape,
- * depending on shape pad hole and orientation
- * return false if the pad has no hole, true otherwise
- */
-bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                       int aInflateValue, int aSegmentsPerCircle ) const
+
+bool D_PAD::BuildPadDrillShapePolygon(
+        SHAPE_POLY_SET& aCornerBuffer, int aInflateValue, int aError ) const
 {
     wxSize drillsize = GetDrillSize();
 
@@ -879,8 +768,9 @@ bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
 
     if( drillsize.x == drillsize.y )    // usual round hole
     {
-        TransformCircleToPolygon( aCornerBuffer, GetPosition(),
-                (drillsize.x / 2) + aInflateValue, aSegmentsPerCircle );
+        int radius = ( drillsize.x / 2 ) + aInflateValue;
+        int numSegs = std::max( GetArcToSegmentCount( radius, aError, 360.0 ), 6 );
+        TransformCircleToPolygon( aCornerBuffer, GetPosition(), radius, numSegs );
     }
     else    // Oblong hole
     {
@@ -890,9 +780,10 @@ bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
         GetOblongDrillGeometry( start, end, width );
 
         width += aInflateValue * 2;
+        int numSegs = std::max( GetArcToSegmentCount( width / 2, aError, 360.0 ), 6 );
 
-        TransformRoundedEndsSegmentToPolygon( aCornerBuffer,
-                GetPosition() + start, GetPosition() + end, aSegmentsPerCircle, width );
+        TransformRoundedEndsSegmentToPolygon(
+                aCornerBuffer, GetPosition() + start, GetPosition() + end, numSegs, width );
     }
 
     return true;
@@ -907,8 +798,7 @@ bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
  * @param aThermalGap = gap in thermal shape
  * @param aCopperThickness = stubs thickness in thermal shape
  * @param aMinThicknessValue = min copper thickness allowed
- * @param aCircleToSegmentsCount = the number of segments to approximate a circle
- * @param aCorrectionFactor = the correction to apply to circles radius to keep
+ * @param aError = maximum error allowed when approximating arcs
  * @param aThermalRot = for rond pads the rotation of thermal stubs (450 usually for 45 deg.)
  */
 
@@ -926,21 +816,18 @@ bool D_PAD::BuildPadDrillShapePolygon( SHAPE_POLY_SET& aCornerBuffer,
  *      and are used in microwave applications and they *DO NOT* have a thermal relief that
  *      change the shape by creating stubs and destroy their properties.
  */
-void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                       const D_PAD&          aPad,
-                                       int             aThermalGap,
-                                       int             aCopperThickness,
-                                       int             aMinThicknessValue,
-                                       int             aCircleToSegmentsCount,
-                                       double          aCorrectionFactor,
-                                       double          aThermalRot )
+void CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
+                                    const D_PAD&    aPad,
+                                    int             aThermalGap,
+                                    int             aCopperThickness,
+                                    int             aMinThicknessValue,
+                                    int             aError,
+                                    double          aThermalRot )
 {
     wxPoint corner, corner_end;
+    wxSize  copper_thickness;
     wxPoint padShapePos = aPad.ShapePos();      // Note: for pad having a shape offset,
                                                 // the pad position is NOT the shape position
-    wxSize  copper_thickness;
-
-    double  delta = 3600.0 / aCircleToSegmentsCount; // rot angle in 0.1 degree
 
     /* Keep in account the polygon outline thickness
      * aThermalGap must be increased by aMinThicknessValue/2 because drawing external outline
@@ -984,8 +871,12 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             // The pattern roughtly is a 90 deg arc pie
             std::vector <wxPoint> corners_buffer;
 
+            int    numSegs = std::max( GetArcToSegmentCount( dx + aThermalGap, aError, 360.0 ), 6 );
+            double correction = GetCircletoPolyCorrectionFactor( numSegs );
+            double delta = 3600.0 / numSegs;
+
             // Radius of outer arcs of the shape corrected for arc approximation by lines
-            int outer_radius = KiROUND( (dx + aThermalGap) * aCorrectionFactor );
+            int outer_radius = KiROUND( ( dx + aThermalGap ) * correction );
 
             // Crosspoint of thermal spoke sides, the first point of polygon buffer
             corners_buffer.push_back( wxPoint( copper_thickness.x / 2, copper_thickness.y / 2 ) );
@@ -1006,7 +897,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
                                       ( (double) corner.x * corner.x ) ) );
             RotatePoint( &corner, 90 ); // 9 degrees is the spoke fillet size
 
-            // calculate the ending point of the outter arc
+            // calculate the ending point of the outer arc
             corner_end.x = corner.y;
             corner_end.y = corner.x;
 
@@ -1073,6 +964,10 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             // here we have dx > dy
             // Radius of outer arcs of the shape:
             int outer_radius = dy;     // The radius of the outer arc is radius end + aThermalGap
+
+
+            int    numSegs = std::max( GetArcToSegmentCount( outer_radius, aError, 360.0 ), 6 );
+            double delta = 3600.0 / numSegs;
 
             // Some coordinate fiddling, depending on the shape offset direction
             shape_offset = wxPoint( deltasize, 0 );
@@ -1236,11 +1131,13 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
             wxPoint arc_start_point( -(aThermalGap / 4 + copper_thickness.x / 2) , -dy );
             corners_buffer.push_back( arc_start_point );
 
-            int rounding_radius = KiROUND( aThermalGap * aCorrectionFactor );   // Corner rounding radius
+            int    numSegs = std::max( GetArcToSegmentCount( aThermalGap, aError, 360.0 ), 6 );
+            double correction = GetCircletoPolyCorrectionFactor( numSegs );
+            int    rounding_radius = KiROUND( aThermalGap * correction ); // Corner rounding radius
 
             // Calculate arc angle parameters.
             // the start angle id near 900 decidegrees, the final angle is near 1800.0 decidegrees.
-            double arc_increment = 3600.0 / aCircleToSegmentsCount;
+            double arc_increment = 3600.0 / numSegs;
 
             // the arc_angle_start is 900.0 or slighly more, depending on the actual arc starting point
             double arc_angle_start = atan2( -arc_start_point.y -corner_origin_pos.y, arc_start_point.x - corner_origin_pos.x ) * 1800/M_PI;
@@ -1319,8 +1216,7 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
         EDA_RECT bbox = aPad.GetBoundingBox();
         int stub_len = std::max( bbox.GetWidth(), bbox.GetHeight() );
 
-        aPad.TransformShapeWithClearanceToPolygon( antipad, aThermalGap,
-                    aCircleToSegmentsCount, aCorrectionFactor );
+        aPad.TransformShapeWithClearanceToPolygon( antipad, aThermalGap );
 
         SHAPE_POLY_SET stub;          // A basic stub ( a rectangle)
         SHAPE_POLY_SET stubs;        // the full stubs shape
@@ -1388,11 +1284,8 @@ void    CreateThermalReliefPadPolygon( SHAPE_POLY_SET& aCornerBuffer,
     }
 }
 
-void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon( SHAPE_POLY_SET& aCornerBuffer,
-                                                        int             aClearanceValue,
-                                                        int             aCircleToSegmentsCount,
-                                                        double          aCorrectionFactor,
-                                                        bool            ignoreLineWidth ) const
+void ZONE_CONTAINER::TransformShapeWithClearanceToPolygon(
+        SHAPE_POLY_SET& aCornerBuffer, int aClearanceValue, int aError, bool ignoreLineWidth ) const
 {
     wxASSERT_MSG( !ignoreLineWidth, "IgnoreLineWidth has no meaning for zones." );
 

@@ -140,17 +140,6 @@ void CINFO3D_VISU::destroyLayers()
 
 void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
 {
-    // Number of segments to draw a circle using segments (used on countour zones
-    // and text copper elements )
-    const int    segcountforcircle = 12;
-    const double correctionFactor  = GetCircleCorrectionFactor( segcountforcircle );
-
-    // segments to draw a circle to build texts. Is is used only to build
-    // the shape of each segment of the stroke font, therefore no need to have
-    // many segments per circle.
-    const int segcountInStrokeFont  = 12;
-    const double correctionFactorStroke = GetCircleCorrectionFactor( segcountInStrokeFont );
-
     destroyLayers();
 
     // Build Copper layers
@@ -563,28 +552,16 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             // The hole in the body is inflated by copper thickness.
             const int inflate = GetCopperThicknessBIU();
 
-            // we use the hole diameter to calculate the seg count.
-            // for round holes, padHole.x == padHole.y
-            // for oblong holes, the diameter is the smaller of (padHole.x, padHole.y)
-            const int diam = std::min( padHole.x, padHole.y );
-
-
             if( pad->GetAttribute () != PAD_ATTRIB_HOLE_NOT_PLATED )
             {
-                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly,
-                                                inflate,
-                                                GetNrSegmentsCircle( diam ) );
+                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly, inflate );
 
-                pad->BuildPadDrillShapePolygon( m_through_inner_holes_poly,
-                                                0,
-                                                GetNrSegmentsCircle( diam ) );
+                pad->BuildPadDrillShapePolygon( m_through_inner_holes_poly, 0 );
             }
             else
             {
                 // If not plated, no copper.
-                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly_NPTH,
-                                                inflate,
-                                                GetNrSegmentsCircle( diam ) );
+                pad->BuildPadDrillShapePolygon( m_through_outer_holes_poly_NPTH, inflate );
             }
         }
     }
@@ -656,11 +633,8 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                                                            true );
 
                 // Micro-wave modules may have items on copper layers
-                module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id,
-                                                                        *layerPoly,
-                                                                        0,
-                                                                        segcountforcircle,
-                                                                        correctionFactor );
+                module->TransformGraphicTextWithClearanceToPolygonSet(
+                        curr_layer_id, *layerPoly, 0 );
 
                 transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
             }
@@ -749,31 +723,17 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                 switch( item->Type() )
                 {
                 case PCB_LINE_T:
-                {
-                    const int nrSegments =
-                            GetNrSegmentsCircle( item->GetBoundingBox().GetSizeMax() );
-
-                    ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon(
-                                *layerPoly,
-                                0,
-                                nrSegments,
-                                GetCircleCorrectionFactor( nrSegments ) );
-                }
-                break;
+                    ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
+                    break;
 
                 case PCB_TEXT_T:
-                    ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet(
-                                *layerPoly,
-                                0,
-                                segcountforcircle,
-                                correctionFactor );
-                break;
+                    ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
+                    break;
 
                 default:
-                    wxLogTrace( m_logTrace,
-                                wxT( "createLayers: item type: %d not implemented" ),
-                                item->Type() );
-                break;
+                    wxLogTrace( m_logTrace, wxT( "createLayers: item type: %d not implemented" ),
+                            item->Type() );
+                    break;
                 }
             }
         }
@@ -846,7 +806,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             auto layerContainer = m_layers_poly.find( zone->GetLayer() );
 
             if( layerContainer != m_layers_poly.end() )
-                zone->TransformSolidAreasShapesToPolygonSet( *layerContainer->second, segcountforcircle, correctionFactor );
+                zone->TransformSolidAreasShapesToPolygonSet( *layerContainer->second );
         }
     }
 
@@ -1034,22 +994,11 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             switch( item->Type() )
             {
             case PCB_LINE_T:
-            {
-                const unsigned int nr_segments =
-                        GetNrSegmentsCircle( item->GetBoundingBox().GetSizeMax() );
-
-                ((DRAWSEGMENT*) item)->TransformShapeWithClearanceToPolygon( *layerPoly,
-                                                                             0,
-                                                                             nr_segments,
-                                                                             0.0 );
-            }
+                ( (DRAWSEGMENT*) item )->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
                 break;
 
             case PCB_TEXT_T:
-                ((TEXTE_PCB*) item)->TransformShapeWithClearanceToPolygonSet( *layerPoly,
-                                                                              0,
-                                                                              segcountInStrokeFont,
-                                                                              1.0 );
+                ( (TEXTE_PCB*) item )->TransformShapeWithClearanceToPolygonSet( *layerPoly, 0 );
                 break;
 
             default:
@@ -1072,24 +1021,16 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                     if( !pad->IsOnLayer( curr_layer_id ) )
                         continue;
 
-                    buildPadShapeThickOutlineAsSegments( pad,
-                                                         layerContainer,
-                                                         linewidth );
+                    buildPadShapeThickOutlineAsSegments( pad, layerContainer, linewidth );
                 }
             }
             else
             {
-                AddPadsShapesWithClearanceToContainer( module,
-                                                       layerContainer,
-                                                       curr_layer_id,
-                                                       0,
-                                                       false );
+                AddPadsShapesWithClearanceToContainer(
+                        module, layerContainer, curr_layer_id, 0, false );
             }
 
-            AddGraphicsShapesWithClearanceToContainer( module,
-                                                       layerContainer,
-                                                       curr_layer_id,
-                                                       0 );
+            AddGraphicsShapesWithClearanceToContainer( module, layerContainer, curr_layer_id, 0 );
         }
 
 
@@ -1112,20 +1053,12 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
             }
             else
             {
-                transformPadsShapesWithClearanceToPolygon( module->PadsList(),
-                                                           curr_layer_id,
-                                                           *layerPoly,
-                                                           0,
-                                                           false );
+                transformPadsShapesWithClearanceToPolygon(
+                        module->PadsList(), curr_layer_id, *layerPoly, 0, false );
             }
 
             // On tech layers, use a poor circle approximation, only for texts (stroke font)
-            module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id,
-                                                                   *layerPoly,
-                                                                   0,
-                                                                   segcountInStrokeFont,
-                                                                   correctionFactorStroke,
-                                                                   segcountInStrokeFont );
+            module->TransformGraphicTextWithClearanceToPolygonSet( curr_layer_id, *layerPoly, 0 );
 
             // Add the remaining things with dynamic seg count for circles
             transformGraphicModuleEdgeToPolygonSet( module, curr_layer_id, *layerPoly );
@@ -1155,10 +1088,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                 if( !zone->IsOnLayer( curr_layer_id ) )
                     continue;
 
-                zone->TransformSolidAreasShapesToPolygonSet( *layerPoly,
-                                                             // Use the same segcount as stroke font
-                                                             segcountInStrokeFont,
-                                                             correctionFactorStroke );
+                zone->TransformSolidAreasShapesToPolygonSet( *layerPoly );
             }
         }
 
