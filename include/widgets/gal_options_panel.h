@@ -24,12 +24,14 @@
 #ifndef WIDGETS_GAL_OPTIONS_PANEL__H_
 #define WIDGETS_GAL_OPTIONS_PANEL__H_
 
-#include <wx/wx.h>
-#include <wx/spinctrl.h>
+#include <wx/panel.h>
 
 #include <gal/gal_display_options.h>
 
-class INCREMENTAL_TEXT_CTRL;
+class wxBoxSizer;
+class wxRadioBox;
+class wxSpinCtrlDouble;
+class wxStaticText;
 
 class GAL_OPTIONS_PANEL: public wxPanel
 {
@@ -54,13 +56,11 @@ private:
     wxRadioBox* m_gridStyle;
 
     wxStaticText* l_gridLineWidth;
-    wxTextCtrl* m_gridLineWidth;
-    wxSpinButton* m_gridLineWidthSpinBtn;
+    wxSpinCtrlDouble* m_gridLineWidth;
     wxStaticText* l_gridLineWidthUnits;
 
     wxStaticText* l_gridMinSpacing;
-    wxTextCtrl* m_gridMinSpacing;
-    wxSpinButton* m_gridMinSpacingSpinBtn;
+    wxSpinCtrlDouble* m_gridMinSpacing;
     wxStaticText* l_gridMinSpacingUnits;
 
     wxRadioBox* m_cursorShape;
@@ -68,9 +68,6 @@ private:
 
     ///> The GAL options to read/write
     KIGFX::GAL_DISPLAY_OPTIONS& m_galOptions;
-
-    std::unique_ptr<INCREMENTAL_TEXT_CTRL> m_gridSizeIncrementer;
-    std::unique_ptr<INCREMENTAL_TEXT_CTRL> m_gridMinSpacingIncrementer;
 };
 
 

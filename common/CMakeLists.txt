@@ -325,7 +325,6 @@ set( COMMON_SRCS
     hotkey_store.cpp
     hotkeys_basic.cpp
     html_messagebox.cpp
-    incremental_text_ctrl.cpp
     kiface_i.cpp
     kiway.cpp
     kiway_express.cpp
