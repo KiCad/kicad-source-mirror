@@ -56,9 +56,6 @@ static void prepareToolsMenu( wxMenu* aParentMenu );
 // Build the help menu
 static void prepareHelpMenu( wxMenu* aParentMenu );
 
-// Build the edit menu
-static void prepareEditMenu( wxMenu* aParentMenu );
-
 // Build the preferences menu
 static void preparePreferencesMenu( SCH_EDIT_FRAME* aFrame, wxMenu* aParentMenu );
 
@@ -81,8 +78,39 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     //
     // Menu Edit:
     //
-    wxMenu* editMenu = new wxMenu;
-    prepareEditMenu( editMenu );
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
+    };
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetToolId() == ID_NO_TOOL_SELECTED;
+    };
+
+    editMenu->AddItem( ACTIONS::undo,                enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                enableRedoCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,                 SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,               noActiveToolCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( EE_ACTIONS::deleteItemCursor, SELECTION_CONDITIONS::ShowAlways );
+
+    // Find
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::find,                SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::replace,             SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    // Update field values
+    editMenu->AddItem( ID_UPDATE_FIELDS, _( "Update Fields from Library..." ),
+                       _( "Sets symbol fields to original library values" ),
+                       update_fields_xpm,            SELECTION_CONDITIONS::ShowAlways );
 
     //
     // Menu View:
@@ -318,64 +346,6 @@ void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject )
     AddMenuItem( aParentMenu, wxID_EXIT, _( "&Exit" ),
                  _( "Close Eeschema" ),
                  KiBitmap( exit_xpm ) );
-}
-
-
-void prepareEditMenu( wxMenu* aParentMenu )
-{
-    wxString text;
-
-    // Undo
-    text = AddHotkeyName( _( "&Undo" ), g_Schematic_Hotkeys_Descr, HK_UNDO );
-
-    AddMenuItem( aParentMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
-
-    // Redo
-    text = AddHotkeyName( _( "&Redo" ), g_Schematic_Hotkeys_Descr, HK_REDO );
-
-    AddMenuItem( aParentMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Cut" ), g_Schematic_Hotkeys_Descr, HK_EDIT_CUT );
-    AddMenuItem( aParentMenu, wxID_CUT, text,
-                 _( "Cuts the selected item(s) to the Clipboard" ),
-                 KiBitmap( cut_xpm ) );
-
-    text = AddHotkeyName( _( "&Copy" ), g_Schematic_Hotkeys_Descr, HK_EDIT_COPY );
-    AddMenuItem( aParentMenu, wxID_COPY, text,
-                 _( "Copies the selected item(s) to the Clipboard" ),
-                 KiBitmap( copy_xpm ) );
-
-    text = AddHotkeyName( _( "&Paste" ), g_Schematic_Hotkeys_Descr, HK_EDIT_PASTE );
-    AddMenuItem( aParentMenu, wxID_PASTE, text,
-                 _( "Pastes item(s) from the Clipboard" ),
-                 KiBitmap( paste_xpm ) );
-
-    // Delete
-    aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, ID_DELETE_TOOL,
-                 _( "&Delete Tool" ), HELP_DELETE_ITEMS,
-                 KiBitmap( delete_xpm ) );
-
-    // Find
-    aParentMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Find..." ), g_Schematic_Hotkeys_Descr, HK_FIND_ITEM );
-    AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND, KiBitmap( find_xpm ) );
-
-    // Find/Replace
-    text = AddHotkeyName( _( "Find and Re&place..." ), g_Schematic_Hotkeys_Descr,
-                          HK_FIND_REPLACE );
-    AddMenuItem( aParentMenu, wxID_REPLACE, text, HELP_REPLACE,
-                 KiBitmap( find_replace_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // Update field values
-    AddMenuItem( aParentMenu, ID_UPDATE_FIELDS,
-                 _( "Update Fields from Library..." ),
-                 _( "Sets symbol fields to original library values" ),
-                 KiBitmap( update_fields_xpm ) );
 }
 
 

@@ -113,9 +113,6 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
 
     EVT_MENU_RANGE( ID_POPUP_GRID_LEVEL_1000, ID_POPUP_GRID_USER,
                     EDA_DRAW_FRAME::OnSelectGrid )
-
-    EVT_UPDATE_UI( wxID_UNDO, EDA_DRAW_FRAME::OnUpdateUndo )
-    EVT_UPDATE_UI( wxID_REDO, EDA_DRAW_FRAME::OnUpdateRedo )
 END_EVENT_TABLE()
 
 
@@ -357,20 +354,6 @@ void EDA_DRAW_FRAME::OnToggleCrossHairStyle( wxCommandEvent& aEvent )
     galOpts.NotifyChanged();
 
     m_canvas->CrossHairOn( &dc );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateUndo( wxUpdateUIEvent& aEvent )
-{
-    if( GetScreen() )
-        aEvent.Enable( GetScreen()->GetUndoCommandCount() > 0 );
-}
-
-
-void EDA_DRAW_FRAME::OnUpdateRedo( wxUpdateUIEvent& aEvent )
-{
-    if( GetScreen() )
-        aEvent.Enable( GetScreen()->GetRedoCommandCount() > 0 );
 }
 
 

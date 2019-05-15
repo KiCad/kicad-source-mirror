@@ -182,74 +182,8 @@ bool GERBVIEW_FRAME::OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosit
         GetEventHandler()->ProcessEvent( cmd );
         break;
 
-    case HK_ZOOM_IN:
-        cmd.SetId( ID_KEY_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_OUT:
-        cmd.SetId( ID_KEY_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_SELECTION:
-        //cmd.SetId( ID_ZOOM_SELECTION );
-        //GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_SWITCH_UNITS:
-        cmd.SetId( (GetUserUnits() == INCHES) ?
-                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_GBR_LINES_DISPLAY_MODE:
-        CHANGE(  m_DisplayOptions.m_DisplayLinesFill );
-        m_canvas->Refresh();
-        break;
-
-    case HK_GBR_FLASHED_DISPLAY_MODE:
-        CHANGE( m_DisplayOptions.m_DisplayFlashedItemsFill );
-        m_canvas->Refresh( true );
-        break;
-
-    case HK_GBR_POLYGON_DISPLAY_MODE:
-        CHANGE( m_DisplayOptions.m_DisplayPolygonsFill );
-        m_canvas->Refresh();
-        break;
-
-    case HK_GBR_NEGATIVE_DISPLAY_ONOFF:
-        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, not IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
-        m_canvas->Refresh();
-        break;
-
-    case HK_GBR_DCODE_DISPLAY_ONOFF:
-        SetElementVisibility( LAYER_DCODES, not IsElementVisible( LAYER_DCODES ) );
-        m_canvas->Refresh();
-        break;
-
-    case HK_SWITCH_HIGHCONTRAST_MODE:
-        CHANGE( m_DisplayOptions.m_HighContrastMode );
-        m_canvas->Refresh();
         break;
 
     case HK_SWITCH_LAYER_TO_PREVIOUS:

@@ -194,9 +194,3 @@ void DIALOG_FIND::onClose( wxCloseEvent& aEvent )
 }
 
 
-void PCB_EDIT_FRAME::InstallFindFrame()
-{
-    DIALOG_FIND dlg( this );
-    dlg.ShowModal();
-}
-

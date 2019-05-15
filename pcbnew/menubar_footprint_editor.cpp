@@ -33,6 +33,7 @@
 #include <tool/conditional_menu.h>
 #include <tool/actions.h>
 #include <tools/selection_tool.h>
+#include <tools/pcb_actions.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "pcbnew.h"
@@ -145,38 +146,26 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
                  KiBitmap( exit_xpm ) );
 
     //----- Edit menu ------------------
-    wxMenu* editMenu = new wxMenu;
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Undo
-    text = AddHotkeyName( _( "&Undo" ), m_hotkeysDescrList, HK_UNDO );
-    AddMenuItem( editMenu, wxID_UNDO,
-                 text, _( "Undo last action" ),
-                 KiBitmap( undo_xpm ) );
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
+    };
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetToolId() == ID_NO_TOOL_SELECTED;
+    };
 
-    // Redo
-    text = AddHotkeyName( _( "&Redo" ), m_hotkeysDescrList, HK_REDO );
-    AddMenuItem( editMenu, wxID_REDO,
-                 text, _( "Redo last action" ),
-                 KiBitmap( redo_xpm ) );
+    text  = AddHotkeyName( _( "&Undo" ), g_Board_Editor_Hotkeys_Descr, HK_UNDO );
+    editMenu->AddItem( ACTIONS::undo,    enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,    enableRedoCondition );
 
-    // Separator
-    editMenu->AppendSeparator();
-
-    if( IsGalCanvasActive() )
-    {
-        // JEY TODO: move to ACTIONS...
-        text = AddHotkeyName( _( "Cu&t" ), m_hotkeysDescrList, HK_EDIT_CUT );
-        AddMenuItem( editMenu, ID_EDIT_CUT, text,
-                     _( "Cuts the selected item(s) to the Clipboard" ), KiBitmap( cut_xpm ) );
-        text = AddHotkeyName( _( "&Copy" ), m_hotkeysDescrList, HK_EDIT_COPY );
-        AddMenuItem( editMenu, ID_EDIT_COPY, text,
-                     _( "Copies the selected item(s) to the Clipboard" ), KiBitmap( copy_xpm ) );
-        text = AddHotkeyName( _( "&Paste" ), m_hotkeysDescrList, HK_EDIT_PASTE );
-        AddMenuItem( editMenu, ID_EDIT_PASTE, text,
-                     _( "Pastes item(s) from the Clipboard" ), KiBitmap( paste_xpm ) );
-
-        editMenu->AppendSeparator();
-    }
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,     SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,    SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,   noActiveToolCondition );
 
     // Properties
     AddMenuItem( editMenu, ID_MODEDIT_EDIT_MODULE_PROPERTIES,
@@ -219,6 +208,9 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     };
     auto sketchEdgesCondition = [ this ] ( const SELECTION& aSel ) {
         return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayModEdgeFill;
+    };
+    auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_ContrastModeDisplay;
     };
     auto searchTreeShownCondition = [ this ] ( const SELECTION& aSel ) {
         return IsSearchTreeShown();
@@ -268,39 +260,21 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
     drawingModeSubMenu->SetIcon( add_zone_xpm );
 
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                      _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
-                                      pad_sketch_xpm, sketchPadsCondition );
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                      _( "Sketch Footprint &Edges" ), _( "Show footprint edges in outline mode" ),
-                                      show_mod_edge_xpm, sketchEdgesCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,     sketchPadsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::moduleEdgeOutlines, sketchEdgesCondition );
 
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
-    ACTION_MENU* contrastModeSubMenu = new ACTION_MENU;
+    CONDITIONAL_MENU* contrastModeSubMenu = new CONDITIONAL_MENU( false, selTool );
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
-    contrastModeSubMenu->SetTool( selTool );
 
-    text = AddHotkeyName( _( "&High Contrast Mode" ), m_hotkeysDescrList,
-                          HK_SWITCH_HIGHCONTRAST_MODE );
-    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                 text, _( "Use high contrast display mode" ),
-                 KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+    contrastModeSubMenu->AddCheckItem( PCB_ACTIONS::highContrastMode,   contrastModeCondition );
 
-    contrastModeSubMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_DEC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
-                 text, _( "Make the current layer more transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
-
-    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Pcbnew_Editor_Hotkeys_Descr,
-                          HK_INC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
-                 text, _( "Make the current layer less transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
+    contrastModeSubMenu->AddSeparator();
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddMenu( contrastModeSubMenu );
 
@@ -313,58 +287,20 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
 
 
     //-------- Place menu --------------------
-    wxMenu* placeMenu = new wxMenu;
+    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
 
-    // Pad
-    AddMenuItem( placeMenu, ID_MODEDIT_PAD_TOOL,
-                 _( "&Pad" ), _( "Add pad" ),
-                 KiBitmap( pad_xpm ) );
+    placeMenu->AddItem( PCB_ACTIONS::placePad,    SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AppendSeparator();
-
-    // Text
-    text = AddHotkeyName( _( "&Text" ), m_hotkeysDescrList, HK_ADD_TEXT );
-    AddMenuItem( placeMenu, ID_MODEDIT_TEXT_TOOL,
-                 text, _( "Add graphic text" ),
-                 KiBitmap( text_xpm ) );
-
-    // Arc
-    text = AddHotkeyName( _( "&Arc" ), m_hotkeysDescrList, HK_ADD_ARC );
-    AddMenuItem( placeMenu, ID_MODEDIT_ARC_TOOL,
-                 text, _( "Add graphic arc" ),
-                 KiBitmap( add_arc_xpm ) );
-
-    // Circle
-    text = AddHotkeyName( _( "&Circle" ), m_hotkeysDescrList, HK_ADD_CIRCLE );
-    AddMenuItem( placeMenu, ID_MODEDIT_CIRCLE_TOOL,
-                 text, _( "Add graphic circle" ),
-                 KiBitmap( add_circle_xpm ) );
-
-    // Line
-    text = AddHotkeyName( _( "&Line" ), m_hotkeysDescrList, HK_ADD_LINE );
-    AddMenuItem( placeMenu, ID_MODEDIT_LINE_TOOL,
-                 text, _( "Add graphic line" ),
-                 KiBitmap( add_graphical_segments_xpm ) );
-
-    // Polygon
-    text = AddHotkeyName( _( "&Polygon" ), m_hotkeysDescrList, HK_ADD_POLYGON );
-    AddMenuItem( placeMenu, ID_MODEDIT_POLYGON_TOOL,
-                 text, _( "Add graphic polygon" ),
-                 KiBitmap( add_graphical_polygon_xpm ) );
+    placeMenu->AddItem( PCB_ACTIONS::placeText,   SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle,  SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine,    SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawPolygon, SELECTION_CONDITIONS::ShowAlways );
 
     placeMenu->AppendSeparator();
-
-    // Anchor
-    text = AddHotkeyName( _( "A&nchor" ), m_hotkeysDescrList, HK_ADD_ANCHOR );
-    AddMenuItem( placeMenu, ID_MODEDIT_ANCHOR_TOOL,
-                 text, _( "Place footprint reference anchor" ),
-                 KiBitmap( anchor_xpm ) );
-
-    // Origin
-    AddMenuItem( placeMenu, ID_MODEDIT_PLACE_GRID_COORD,
-                 _( "&Grid Origin" ),
-                 _( "Set grid origin point" ),
-                 KiBitmap( grid_select_axis_xpm ) );
+    placeMenu->AddItem( PCB_ACTIONS::setAnchor,   SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin,   SELECTION_CONDITIONS::ShowAlways );
 
 
     //----- Inspect menu ---------------------

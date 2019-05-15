@@ -75,7 +75,7 @@ TOOL_ACTION EE_ACTIONS::startLines( "eeschema.WireBusDrawing.startLines",
 TOOL_ACTION EE_ACTIONS::drawLines( "eeschema.WireBusDrawing.drawLines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_GRAPHIC_POLYLINE ),
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_graphical_segments_xpm, AF_ACTIVATE );
+        add_dashed_line_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::finishLineWireOrBus( "eeschema.WireBusDrawing.finishLineWireOrBus",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_END_CURR_LINEWIREBUS ),

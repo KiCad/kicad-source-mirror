@@ -145,12 +145,10 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetCurPart() && GetScreen() && GetScreen()->GetUndoCommandCount() != 0
-                      && EE_CONDITIONS::Idle( sel );
+        return GetCurPart() && GetScreen() && GetScreen()->GetUndoCommandCount() != 0;
     };
     auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
-        return GetCurPart() && GetScreen() && GetScreen()->GetRedoCommandCount() != 0
-                      && EE_CONDITIONS::Idle( sel );
+        return GetCurPart() && GetScreen() && GetScreen()->GetRedoCommandCount() != 0;
     };
     auto havePartCondition = [ this ] ( const SELECTION& sel ) {
         return GetCurPart();

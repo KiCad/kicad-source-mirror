@@ -51,14 +51,13 @@ public:
     void Reset( RESET_REASON aReason ) override;
 
     // Display modes
-    int RatsnestLineMode( const TOOL_EVENT& aEvent );
+    int ToggleRatsnest( const TOOL_EVENT& aEvent );
     int ZoneDisplayMode( const TOOL_EVENT& aEvent );
     int TrackDisplayMode( const TOOL_EVENT& aEvent );
     int PadDisplayMode( const TOOL_EVENT& aEvent );
     int ViaDisplayMode( const TOOL_EVENT& aEvent );
     int GraphicDisplayMode( const TOOL_EVENT& aEvent );
     int ModuleEdgeOutlines( const TOOL_EVENT& aEvent );
-    int ModuleTextOutlines( const TOOL_EVENT& aEvent );
     int HighContrastMode( const TOOL_EVENT& aEvent );
     int HighContrastInc( const TOOL_EVENT& aEvent );
     int HighContrastDec( const TOOL_EVENT& aEvent );
@@ -91,7 +90,7 @@ public:
     // Miscellaneous
     int ResetCoords( const TOOL_EVENT& aEvent );
     int DeleteItemCursor( const TOOL_EVENT& aEvent );
-    int PasteItemsFromClipboard( const TOOL_EVENT& aEvent );
+    int Paste( const TOOL_EVENT& aEvent );
     int AppendBoardFromFile( const TOOL_EVENT& aEvent );
     int AppendBoard( PLUGIN& pi, wxString& fileName );
     int ShowHelp( const TOOL_EVENT& aEvent );

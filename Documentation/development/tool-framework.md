@@ -131,7 +131,7 @@ a cursor change and by setting a status string.
         auto& frame = *getEditFrame<PCB_EDIT_FRAME>();
 
         // set tool hint and cursor (actually looks like a crosshair)
-        frame.SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT,
+        frame.SetToolID( ID_LOCAL_RATSNEST_BUTT,
                 wxCURSOR_PENCIL, _( "Select item to move left" ) );
         getViewControls()->ShowCursor( true );
 

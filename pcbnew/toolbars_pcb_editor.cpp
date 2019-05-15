@@ -43,6 +43,7 @@
 #include <wx/wupdlock.h>
 #include <memory>
 #include <pgm_base.h>
+#include <tools/pcb_actions.h>
 
 extern bool IsWxPythonLoaded();
 
@@ -264,16 +265,13 @@ void PCB_EDIT_FRAME::ReCreateHToolbar()
     ADD_TOOL( ID_GEN_PLOT, plot_xpm, _( "Plot (HPGL, PostScript, or GERBER format)" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( HELP_UNDO, g_Board_Editor_Hotkeys_Descr, HK_UNDO, IS_COMMENT );
-    ADD_TOOL( wxID_UNDO, undo_xpm, msg );
-    msg = AddHotkeyName( HELP_REDO, g_Board_Editor_Hotkeys_Descr, HK_REDO, IS_COMMENT );
-    ADD_TOOL( wxID_REDO, redo_xpm, msg );
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
 
     KiScaledSeparator( m_mainToolBar, this );
-    msg = AddHotkeyName( HELP_FIND, g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
-    ADD_TOOL( ID_FIND_ITEMS, find_xpm, msg );
+    m_mainToolBar->Add( ACTIONS::find );
 
-    m_mainToolBar->AddSeparator();
+    KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
     m_mainToolBar->Add( ACTIONS::zoomInCenter );
     m_mainToolBar->Add( ACTIONS::zoomOutCenter );
@@ -349,53 +347,30 @@ void PCB_EDIT_FRAME::ReCreateOptToolbar()
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_DRC_OFF, wxEmptyString, KiScaledBitmap( drc_off_xpm, this ),
                                _( "Enable design rule checking" ), wxITEM_CHECK );
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,              ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,           ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,             ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,       ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_RATSNEST, wxEmptyString,
-                               KiScaledBitmap( general_ratsnest_xpm, this ),
-                               _( "Show board ratsnest" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_CURVED_RATSNEST_LINES, wxEmptyString,
-                               KiScaledBitmap( curved_ratsnest_xpm, this ),
-                               _( "Show ratsnest with curved lines" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( PCB_ACTIONS::showRatsnest,        ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::ratsnestLineMode,    ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES, wxEmptyString, KiScaledBitmap( show_zone_xpm, this ),
-                               _( "Show filled areas in zones" ), wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES_DISABLE, wxEmptyString,
-                               KiScaledBitmap( show_zone_disable_xpm, this ),
-                               _( "Do not show filled areas in zones" ) , wxITEM_CHECK );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY, wxEmptyString,
-                               KiScaledBitmap( show_zone_outline_only_xpm, this ),
-                               _( "Show outlines of filled areas only in zones" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayEnable,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayDisable,  ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::zoneDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_optionsToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( pad_sketch_xpm, this ),
-                               _( "Show pads in outline mode" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_VIAS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( via_sketch_xpm, this ),
-                               _( "Show vias in outline mode" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( showtrack_xpm, this ),
-                               _( "Show tracks in outline mode" ),
-                               wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
-                               KiScaledBitmap( contrast_mode_xpm, this ),
-                               _( "Enable high contrast display mode" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::viaDisplayMode,      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::trackDisplayMode,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::highContrastMode,    ACTION_TOOLBAR::TOGGLE );
 
     // Tools to show/hide toolbars:
     KiScaledSeparator( m_optionsToolBar, this );
@@ -426,80 +401,31 @@ void PCB_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            _( "Select item" ), wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::selectionTool,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::highlightNetTool,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::localRatsnestTool,    ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-
-    m_drawToolBar->AddTool( ID_PCB_HIGHLIGHT_BUTT, wxEmptyString, KiScaledBitmap( net_highlight_xpm, this ),
-                            _( "Highlight net" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_SHOW_1_RATSNEST_BUTT, wxEmptyString,
-                            KiScaledBitmap( tool_ratsnest_xpm, this ),
-                            _( "Display local ratsnest" ), wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::placeModule,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::routerActivateSingle, ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawVia,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawZone,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawZoneKeepout,      ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_PCB_MODULE_BUTT, wxEmptyString, KiScaledBitmap( module_xpm, this ),
-                            _( "Add footprints" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_TRACK_BUTT, wxEmptyString, KiScaledBitmap( add_tracks_xpm, this ),
-                            _( "Route tracks" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_DRAW_VIA_BUTT, wxEmptyString, KiScaledBitmap( add_via_xpm, this ),
-                            _( "Add vias" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_ZONES_BUTT, wxEmptyString, KiScaledBitmap( add_zone_xpm, this ),
-                            _( "Add filled zones" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_KEEPOUT_AREA_BUTT, wxEmptyString,
-                            KiScaledBitmap( add_keepout_area_xpm, this ),
-                            _( "Add keepout areas" ), wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::drawLine,             ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawCircle,           ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawArc,              ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placeText,            ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawDimension,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placeTarget,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::deleteTool,           ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-
-    m_drawToolBar->AddTool( ID_PCB_ADD_LINE_BUTT, wxEmptyString, KiScaledBitmap( add_graphical_segments_xpm, this ),
-                            _( "Add graphic lines" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_CIRCLE_BUTT, wxEmptyString, KiScaledBitmap( add_circle_xpm, this ),
-                            _( "Add graphic circle" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_ARC_BUTT, wxEmptyString, KiScaledBitmap( add_arc_xpm, this ),
-                            _( "Add graphic arc" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_ADD_POLYGON_BUTT, wxEmptyString, KiScaledBitmap( add_graphical_polygon_xpm, this ),
-                            _( "Add graphic polygon" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_ADD_TEXT_BUTT, wxEmptyString, KiScaledBitmap( text_xpm, this ),
-                            _( "Add text on copper layers or graphic text" ), wxITEM_CHECK );
-
-    KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_PCB_DIMENSION_BUTT, wxEmptyString, KiScaledBitmap( add_dimension_xpm, this ),
-                            _( "Add dimension" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_TARGET_BUTT, wxEmptyString, KiScaledBitmap( add_pcb_target_xpm, this ),
-                            _( "Add layer alignment target" ), wxITEM_CHECK );
-
-    KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_PCB_DELETE_ITEM_BUTT, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
-                            _( "Delete items" ), wxITEM_CHECK );
-
-    KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_PCB_PLACE_OFFSET_COORD_BUTT, wxEmptyString,
-                            KiScaledBitmap( pcb_offset_xpm, this ),
-                            _( "Place the auxiliary axis origin for some plot file formats,\n"
-                               "and for drill and place files" ),
-                            wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_PLACE_GRID_COORD_BUTT, wxEmptyString,
-                            KiScaledBitmap( grid_select_axis_xpm, this ),
-                            _( "Set the origin point for the grid" ),
-                            wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_PCB_MEASUREMENT_TOOL, wxEmptyString,
-                            KiScaledBitmap( measurement_xpm, this ),
-                            _( "Measure distance" ),
-                            wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::drillOrigin,          ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::measureTool,          ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -754,7 +680,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 {
     int id = event.GetId();
     bool state = event.IsChecked();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     switch( id )
     {
@@ -768,59 +693,6 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
             else
                 m_canvas->SetCursor( wxCURSOR_QUESTION_ARROW );
         }
-        break;
-
-    case ID_TB_OPTIONS_SHOW_RATSNEST:
-        SetElementVisibility( LAYER_RATSNEST, state );
-        PCB_BASE_FRAME::OnModify();
-        Compile_Ratsnest( NULL, true );
-
-        if( IsGalCanvasActive() )
-        {
-            // keep the ratsnest layer enabled in view, so it shows up when an item is dragged
-            auto view = GetGalCanvas()->GetView();
-            view->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
-            view->SetLayerVisible( LAYER_RATSNEST, true );
-        }
-
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_ZONES:
-        displ_opts->m_DisplayZonesMode = 0;
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_ZONES_DISABLE:
-        displ_opts->m_DisplayZonesMode = 1;
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY:
-        displ_opts->m_DisplayZonesMode = 2;
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        displ_opts->m_DisplayViaFill = !state;
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_TRACKS_SKETCH:
-        displ_opts->m_DisplayPcbTrackFill = !state;
-        m_canvas->Refresh();
-        break;
-
-    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
-    {
-        displ_opts->m_ContrastModeDisplay = state;
-        m_canvas->Refresh();
-        break;
-    }
-
-    case ID_TB_OPTIONS_CURVED_RATSNEST_LINES:
-        displ_opts->m_DisplayRatsnestLinesCurved = !state;
-        m_canvas->Refresh();
         break;
 
     case ID_TB_OPTIONS_SHOW_EXTRA_VERTICAL_TOOLBAR_MICROWAVE:
@@ -841,4 +713,142 @@ void PCB_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
                        "PCB_EDIT_FRAME::OnSelectOptionToolbar error \n (event not handled!)" );
         break;
     }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateLayerPair( wxUpdateUIEvent& aEvent )
+{
+    PrepareLayerIndicator();
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectTrackWidth( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_TRACK_WIDTH )
+    {
+        if( m_SelTrackWidthBox->GetSelection() != (int) GetDesignSettings().GetTrackWidthIndex() )
+            m_SelTrackWidthBox->SetSelection( GetDesignSettings().GetTrackWidthIndex() );
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSelectViaSize( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetId() == ID_AUX_TOOLBAR_PCB_VIA_SIZE )
+    {
+        if( m_SelViaSizeBox->GetSelection() != (int) GetDesignSettings().GetViaSizeIndex() )
+            m_SelViaSizeBox->SetSelection( GetDesignSettings().GetViaSizeIndex() );
+    }
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
+{
+    m_SelLayerBox->SetLayerSelection( GetActiveLayer() );
+}
+
+
+#if defined( KICAD_SCRIPTING_WXPYTHON )
+
+// Used only when the DKICAD_SCRIPTING_WXPYTHON option is on
+void PCB_EDIT_FRAME::OnUpdateScriptingConsoleState( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() != m_mainToolBar )
+        return;
+
+    wxMiniFrame* pythonPanelFrame = (wxMiniFrame *) findPythonConsole();
+    bool pythonPanelShown = pythonPanelFrame ? pythonPanelFrame->IsShown() : false;
+    aEvent.Check( pythonPanelShown );
+}
+
+#endif
+
+
+void PCB_EDIT_FRAME::OnUpdateDrcEnable( wxUpdateUIEvent& aEvent )
+{
+    bool state = !Settings().m_legacyDrcOn;
+    aEvent.Check( state );
+    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DRC_OFF,
+                                        Settings().m_legacyDrcOn ?
+                                        _( "Disable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) :
+                                        _( "Enable design rule checking while routing/editing tracks using Legacy Toolset.\nUse Route > Interactive Router Settings... for Modern Toolset." ) );
+}
+
+bool PCB_EDIT_FRAME::LayerManagerShown()
+{
+    return m_auimgr.GetPane( "LayersManager" ).IsShown();
+}
+
+bool PCB_EDIT_FRAME::MicrowaveToolbarShown()
+{
+    return m_auimgr.GetPane( "MicrowaveToolbar" ).IsShown();
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateSave( wxUpdateUIEvent& aEvent )
+{
+    aEvent.Enable( GetScreen()->IsModify() );
+}
+
+
+void PCB_EDIT_FRAME::OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_drawToolBar || aEvent.GetEventObject() == m_mainToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
+void PCB_EDIT_FRAME::OnUpdateMuWaveToolbar( wxUpdateUIEvent& aEvent )
+{
+    if( aEvent.GetEventObject() == m_microWaveToolBar )
+        aEvent.Check( GetToolId() == aEvent.GetId() );
+}
+
+
+void PCB_EDIT_FRAME::SyncMenusAndToolbars()
+{
+    PCB_DISPLAY_OPTIONS*        opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+    int                         zoneMode = opts->m_DisplayZonesMode;
+
+    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
+
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,           IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,          GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,        GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,    !galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::showRatsnest,     GetBoard()->IsElementVisible( LAYER_RATSNEST ) );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::ratsnestLineMode, opts->m_DisplayRatsnestLinesCurved );
+
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayEnable,   zoneMode == 0 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayDisable,  zoneMode == 1 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::zoneDisplayOutlines, zoneMode == 2 );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::trackDisplayMode,    !opts->m_DisplayPcbTrackFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::viaDisplayMode,      !opts->m_DisplayViaFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,      !opts->m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::highContrastMode,    opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Refresh();
+
+    m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool,    GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( PCB_ACTIONS::highlightNetTool, GetToolId() == ID_PCB_HIGHLIGHT_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::localRatsnestTool,GetToolId() == ID_LOCAL_RATSNEST_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::placeModule,      GetToolId() == ID_PCB_MODULE_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::routerActivateSingle, GetToolId() == ID_TRACK_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawVia,          GetToolId() == ID_PCB_DRAW_VIA_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawZone,         GetToolId() == ID_PCB_ZONES_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawZoneKeepout,  GetToolId() == ID_PCB_KEEPOUT_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,         GetToolId() == ID_PCB_ADD_LINE_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,       GetToolId() == ID_PCB_CIRCLE_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,          GetToolId() == ID_PCB_ARC_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,      GetToolId() == ID_PCB_ADD_POLYGON_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::placeText,        GetToolId() == ID_PCB_ADD_TEXT_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawDimension,    GetToolId() == ID_PCB_DIMENSION_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::placeTarget,      GetToolId() == ID_PCB_TARGET_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,       GetToolId() == ID_PCB_DELETE_ITEM_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drillOrigin,      GetToolId() == ID_PCB_PLACE_OFFSET_COORD_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin,    GetToolId() == ID_PCB_PLACE_GRID_COORD_BUTT );
+    m_drawToolBar->Toggle( PCB_ACTIONS::measureTool,      GetToolId() == ID_PCB_MEASUREMENT_TOOL );
+    m_drawToolBar->Refresh();
 }

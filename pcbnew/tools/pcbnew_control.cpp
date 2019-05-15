@@ -68,49 +68,59 @@ extern IO_MGR::PCB_FILE_T plugin_type( const wxString& aFileName, int aCtl );
 
 
 // Display modes
+TOOL_ACTION PCB_ACTIONS::showRatsnest( "pcbnew.Control.showRatsnest",
+        AS_GLOBAL, 0,
+        _( "Show Ratsnest" ), _( "Show board ratsnest" ),
+        general_ratsnest_xpm );
+
 TOOL_ACTION PCB_ACTIONS::ratsnestLineMode( "pcbnew.Control.ratsnestLineMode",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Curved Ratsnest Lines" ), _( "Show ratsnest with curved lines" ),
+        curved_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::trackDisplayMode( "pcbnew.Control.trackDisplayMode",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_TRACK_DISPLAY_MODE ),
-        "", "" );
+        _( "Sketch Tracks" ), _( "Show tracks in outline mode" ),
+        showtrack_xpm );
 
 TOOL_ACTION PCB_ACTIONS::padDisplayMode( "pcbnew.Control.padDisplayMode",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Sketch Pads" ), _( "Show pads in outline mode" ),
+        pad_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::viaDisplayMode( "pcbnew.Control.viaDisplayMode",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Sketch Vias" ), _( "Show vias in outline mode" ),
+        via_sketch_xpm );
 
 TOOL_ACTION PCB_ACTIONS::graphicDisplayMode( "pcbnew.Control.graphicDisplayMode",
-      AS_GLOBAL, 0,
-      "", "" );
+        AS_GLOBAL, 0,
+        "", "" );
 
 TOOL_ACTION PCB_ACTIONS::moduleEdgeOutlines( "pcbnew.Control.graphicOutlines",
         AS_GLOBAL, 0,
-        "", "" );
-
-TOOL_ACTION PCB_ACTIONS::moduleTextOutlines( "pcbnew.Control.textOutlines",
-       AS_GLOBAL, 0,
-       "", "" );
+        _( "Sketch Graphics" ), _( "Show footprint graphic items in outline mode" ),
+        show_mod_edge_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayEnable( "pcbnew.Control.zoneDisplayEnable",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Fill Zones" ), _( "Show filled areas of zones" ),
+        show_zone_xpm);
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayDisable( "pcbnew.Control.zoneDisplayDisable",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Wireframe Zones" ), _( "Show only zone boundaries" ),
+        show_zone_disable_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneDisplayOutlines( "pcbnew.Control.zoneDisplayOutlines",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Sketch Zones" ), _( "Outline filled areas of zones" ),
+        show_zone_outline_only_xpm);
 
 TOOL_ACTION PCB_ACTIONS::highContrastMode( "pcbnew.Control.highContrastMode",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_HIGHCONTRAST_MODE ),
-        "", "" );
+        _( "High Contrast Mode" ), _( "Use high contrast display mode" ),
+        contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highContrastInc( "pcbnew.Control.highContrastInc",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHCONTRAST_INC ),
@@ -168,28 +178,33 @@ TOOL_ACTION PCB_ACTIONS::layerToggle( "pcbnew.Control.layerToggle",
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaInc( "pcbnew.Control.layerAlphaInc",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_INC_LAYER_ALPHA ),
-        "", "" );
+        _( "Increase Layer Opacity" ), _( "Make the current layer more transparent" ),
+        contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::layerAlphaDec( "pcbnew.Control.layerAlphaDec",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DEC_LAYER_ALPHA ),
-        "", "" );
+        _( "Decrease Layer Opacity" ), _( "Make the current layer more transparent" ),
+        contrast_mode_xpm );
 
 TOOL_ACTION PCB_ACTIONS::layerChanged( "pcbnew.Control.layerChanged",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_NOTIFY );
+        "", "",
+        NULL, AF_NOTIFY );
 
 // Miscellaneous
 TOOL_ACTION PCB_ACTIONS::selectionTool( "pcbnew.Control.selectionTool",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_ACTIVATE );
+        _( "Select item(s)" ), "",
+        cursor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::resetCoords( "pcbnew.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::deleteItemCursor( "pcbnew.Control.deleteItemCursor",
+TOOL_ACTION PCB_ACTIONS::deleteTool( "pcbnew.Control.deleteTool",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Delete Items Tool" ), _( "Click on items to delete them" ),
+        delete_xpm );
 
 TOOL_ACTION PCB_ACTIONS::showHelp( "pcbnew.Control.showHelp",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HELP ),
@@ -248,17 +263,28 @@ int PCBNEW_CONTROL::TrackDisplayMode( const TOOL_EVENT& aEvent )
     return 0;
 }
 
-int PCBNEW_CONTROL::RatsnestLineMode( const TOOL_EVENT& aEvent )
+
+int PCBNEW_CONTROL::ToggleRatsnest( const TOOL_EVENT& aEvent )
 {
     auto opts = displayOptions();
 
-    Flip( opts->m_DisplayRatsnestLinesCurved );
-    view()->UpdateDisplayOptions( opts );
+    if( aEvent.IsAction( &PCB_ACTIONS::showRatsnest ) )
+    {
+        PCB_EDIT_FRAME* frame = (PCB_EDIT_FRAME*) m_frame;
+        frame->SetElementVisibility( LAYER_RATSNEST, !frame->IsElementVisible( LAYER_RATSNEST ) );
+    }
+    else if( aEvent.IsAction( &PCB_ACTIONS::ratsnestLineMode ) )
+    {
+        Flip( opts->m_DisplayRatsnestLinesCurved );
+        view()->UpdateDisplayOptions( opts );
+    }
+
     canvas()->RedrawRatsnest();
     canvas()->Refresh();
 
     return 0;
 }
+
 
 int PCBNEW_CONTROL::PadDisplayMode( const TOOL_EVENT& aEvent )
 {
@@ -330,31 +356,6 @@ int PCBNEW_CONTROL::ModuleEdgeOutlines( const TOOL_EVENT& aEvent )
             if( item->Type() == PCB_MODULE_EDGE_T )
                 view()->Update( item, KIGFX::GEOMETRY );
         }
-    }
-
-    canvas()->Refresh();
-
-    return 0;
-}
-
-
-int PCBNEW_CONTROL::ModuleTextOutlines( const TOOL_EVENT& aEvent )
-{
-    auto opts = displayOptions();
-
-    Flip( opts->m_DisplayModTextFill );
-    view()->UpdateDisplayOptions( opts );
-
-    for( auto module : board()->Modules() )
-    {
-        for( auto item : module->GraphicalItems() )
-        {
-            if( item->Type() == PCB_MODULE_TEXT_T )
-                view()->Update( item, KIGFX::GEOMETRY );
-        }
-
-        view()->Update( &module->Reference(), KIGFX::GEOMETRY );
-        view()->Update( &module->Value(), KIGFX::GEOMETRY );
     }
 
     canvas()->Refresh();
@@ -666,7 +667,7 @@ int PCBNEW_CONTROL::DeleteItemCursor( const TOOL_EVENT& aEvent )
 }
 
 
-int PCBNEW_CONTROL::PasteItemsFromClipboard( const TOOL_EVENT& aEvent )
+int PCBNEW_CONTROL::Paste( const TOOL_EVENT& aEvent )
 {
     CLIPBOARD_IO pi;
     BOARD_ITEM* clipItem = pi.Parse();
@@ -990,60 +991,6 @@ int PCBNEW_CONTROL::ToBeDone( const TOOL_EVENT& aEvent )
 }
 
 
-void PCBNEW_CONTROL::setTransitions()
-{
-    // Display modes
-    Go( &PCBNEW_CONTROL::TrackDisplayMode,   PCB_ACTIONS::trackDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::RatsnestLineMode,   PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::PadDisplayMode,     PCB_ACTIONS::padDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ViaDisplayMode,     PCB_ACTIONS::viaDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GraphicDisplayMode, PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines, PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ModuleTextOutlines, PCB_ACTIONS::moduleTextOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ZoneDisplayMode,    PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastMode,   PCB_ACTIONS::highContrastMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastInc,    PCB_ACTIONS::highContrastInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::HighContrastDec,    PCB_ACTIONS::highContrastDec.MakeEvent() );
-
-    // Layer control
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerTop.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner3.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner4.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner5.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerInner6.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerSwitch,        PCB_ACTIONS::layerBottom.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerNext,          PCB_ACTIONS::layerNext.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerPrev,          PCB_ACTIONS::layerPrev.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerToggle,        PCB_ACTIONS::layerToggle.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaInc,      PCB_ACTIONS::layerAlphaInc.MakeEvent() );
-    Go( &PCBNEW_CONTROL::LayerAlphaDec,      PCB_ACTIONS::layerAlphaDec.MakeEvent() );
-
-    // Grid control
-    Go( &PCBNEW_CONTROL::GridFast1,          ACTIONS::gridFast1.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridFast2,          ACTIONS::gridFast2.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridSetOrigin,      ACTIONS::gridSetOrigin.MakeEvent() );
-    Go( &PCBNEW_CONTROL::GridResetOrigin,    ACTIONS::gridResetOrigin.MakeEvent() );
-
-    Go( &PCBNEW_CONTROL::Undo,               ACTIONS::undo.MakeEvent() );
-    Go( &PCBNEW_CONTROL::Redo,               ACTIONS::redo.MakeEvent() );
-
-    // Miscellaneous
-    Go( &PCBNEW_CONTROL::ResetCoords,        PCB_ACTIONS::resetCoords.MakeEvent() );
-    Go( &PCBNEW_CONTROL::DeleteItemCursor,   PCB_ACTIONS::deleteItemCursor.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ShowHelp,           PCB_ACTIONS::showHelp.MakeEvent() );
-    Go( &PCBNEW_CONTROL::ToBeDone,           PCB_ACTIONS::toBeDone.MakeEvent() );
-
-    // Append control
-    Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
-
-    Go( &PCBNEW_CONTROL::PasteItemsFromClipboard, PCB_ACTIONS::paste.MakeEvent() );
-}
-
-
 void PCBNEW_CONTROL::updateGrid()
 {
     BASE_SCREEN* screen = m_frame->GetScreen();
@@ -1051,3 +998,59 @@ void PCBNEW_CONTROL::updateGrid()
     getView()->GetGAL()->SetGridSize( VECTOR2D( screen->GetGridSize() ) );
     getView()->MarkTargetDirty( KIGFX::TARGET_NONCACHED );
 }
+
+
+void PCBNEW_CONTROL::setTransitions()
+{
+    // Display modes
+    Go( &PCBNEW_CONTROL::TrackDisplayMode,    PCB_ACTIONS::trackDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::showRatsnest.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::PadDisplayMode,      PCB_ACTIONS::padDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ViaDisplayMode,      PCB_ACTIONS::viaDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GraphicDisplayMode,  PCB_ACTIONS::graphicDisplayMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ModuleEdgeOutlines,  PCB_ACTIONS::moduleEdgeOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayEnable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayDisable.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ZoneDisplayMode,     PCB_ACTIONS::zoneDisplayOutlines.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastMode,    PCB_ACTIONS::highContrastMode.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastInc,     PCB_ACTIONS::highContrastInc.MakeEvent() );
+    Go( &PCBNEW_CONTROL::HighContrastDec,     PCB_ACTIONS::highContrastDec.MakeEvent() );
+
+    // Layer control
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerTop.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner1.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner2.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner3.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner4.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner5.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerInner6.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerSwitch,         PCB_ACTIONS::layerBottom.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerNext,           PCB_ACTIONS::layerNext.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerPrev,           PCB_ACTIONS::layerPrev.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerToggle,         PCB_ACTIONS::layerToggle.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerAlphaInc,       PCB_ACTIONS::layerAlphaInc.MakeEvent() );
+    Go( &PCBNEW_CONTROL::LayerAlphaDec,       PCB_ACTIONS::layerAlphaDec.MakeEvent() );
+
+    // Grid control
+    Go( &PCBNEW_CONTROL::GridFast1,           ACTIONS::gridFast1.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridFast2,           ACTIONS::gridFast2.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridSetOrigin,       ACTIONS::gridSetOrigin.MakeEvent() );
+    Go( &PCBNEW_CONTROL::GridResetOrigin,     ACTIONS::gridResetOrigin.MakeEvent() );
+
+    Go( &PCBNEW_CONTROL::Undo,                ACTIONS::undo.MakeEvent() );
+    Go( &PCBNEW_CONTROL::Redo,                ACTIONS::redo.MakeEvent() );
+
+    // Miscellaneous
+    Go( &PCBNEW_CONTROL::ResetCoords,         PCB_ACTIONS::resetCoords.MakeEvent() );
+    Go( &PCBNEW_CONTROL::DeleteItemCursor,    PCB_ACTIONS::deleteTool.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ShowHelp,            PCB_ACTIONS::showHelp.MakeEvent() );
+    Go( &PCBNEW_CONTROL::ToBeDone,            PCB_ACTIONS::toBeDone.MakeEvent() );
+
+    // Append control
+    Go( &PCBNEW_CONTROL::AppendBoardFromFile, PCB_ACTIONS::appendBoard.MakeEvent() );
+
+    Go( &PCBNEW_CONTROL::Paste,               ACTIONS::paste.MakeEvent() );
+}
+
+

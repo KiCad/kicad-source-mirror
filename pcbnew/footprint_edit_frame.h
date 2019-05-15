@@ -179,13 +179,6 @@ public:
 
     BOARD_ITEM* PrepareItemForHotkey( bool failIfCurrentlyEdited );
 
-    bool OnHotkeyEditItem( int aIdCommand );
-    bool OnHotkeyDeleteItem( int aIdCommand );
-    bool OnHotkeyMoveItem( int aIdCommand );
-    bool OnHotkeyMoveItemExact();
-    bool OnHotkeyRotateItem( int aIdCommand );
-    bool OnHotkeyDuplicateItem( int aIdCommand );
-
     /**
      * Display 3D view of the footprint (module) being edited.
      */
@@ -195,16 +188,10 @@ public:
     void OnVerticalToolbar( wxCommandEvent& aEvent );
 
     /**
-     * Handle ID_ZOOM_SELECTION and ID_NO_TOOL_SELECTED tools
-     */
-    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
-
-    /**
      * Handle most of tools og the vertical right toolbar ("Tools" toolbar)
      */
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
 
-    void OnUpdateOptionsToolbar( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleSelected( wxUpdateUIEvent& aEvent );
     void OnUpdateModuleTargeted( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );

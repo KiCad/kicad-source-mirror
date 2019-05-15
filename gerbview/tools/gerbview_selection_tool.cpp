@@ -72,7 +72,7 @@ TOOL_ACTION GERBVIEW_ACTIONS::selectionClear( "gerbview.InteractiveSelection.Cle
 TOOL_ACTION GERBVIEW_ACTIONS::measureTool( "gerbview.InteractiveSelection.measureTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measure Tool" ), _( "Interactively measure distance between points" ),
-        nullptr, AF_ACTIVATE );
+        measurement_xpm, AF_ACTIVATE );
 
 
 class HIGHLIGHT_MENU: public ACTION_MENU

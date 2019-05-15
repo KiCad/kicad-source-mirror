@@ -79,18 +79,9 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_AUX_TOOLBAR_PCB_SELECT_LAYER_PAIR:
-    case ID_POPUP_PCB_ROTATE_TEXTEPCB:
-    case ID_POPUP_PCB_FLIP_TEXTEPCB:
-    case ID_POPUP_PCB_COPY_TEXTEPCB:
-    case ID_POPUP_PCB_EDIT_TEXTEPCB:
     case ID_POPUP_PCB_EDIT_PCB_TARGET:
-    case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-    case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
-    case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
-    case ID_POPUP_PCB_CHANGE_SIDE_MODULE:
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
     case ID_POPUP_PCB_EDIT_MODULE_WITH_MODEDIT:
-    case ID_POPUP_PCB_EDIT_TEXTMODULE:
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
     case ID_POPUP_PCB_BEGIN_TRACK:
     case ID_POPUP_PCB_END_TRACK:
@@ -126,7 +117,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_SELECT_LAYER_PAIR:
     case ID_POPUP_PCB_SELECT_NO_CU_LAYER:
     case ID_POPUP_PCB_MOVE_TRACK_NODE:
-    case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT_KEEP_SLOPE:
     case ID_POPUP_PCB_DRAG_TRACK_SEGMENT:
     case ID_POPUP_PCB_MOVE_TRACK_SEGMENT:
@@ -141,18 +131,8 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_LOCK_OFF_TRACK:
     case ID_POPUP_PCB_LOCK_ON_NET:
     case ID_POPUP_PCB_LOCK_OFF_NET:
-    case ID_POPUP_DELETE_BLOCK:
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_FLIP_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_DUPLICATE_BLOCK:
-    case ID_POPUP_PCB_EDIT_DRAWING:
     case ID_POPUP_PCB_GETINFO_MARKER:
     case ID_POPUP_PCB_MOVE_TEXT_DIMENSION_REQUEST:
-    case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
-    case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
-    case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
     case ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST:
         break;
 
@@ -300,10 +280,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GET_NETLIST:
         InstallNetlistFrame( &dc );
-        break;
-
-    case ID_FIND_ITEMS:
-        InstallFindFrame();
         break;
 
     case ID_POPUP_CLOSE_CURRENT_TOOL:
@@ -647,40 +623,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         break;
     }
 
-    case ID_POPUP_PCB_MOVE_TEXTEPCB_REQUEST:
-        StartMoveTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->SetAutoPanRequest( true );
-        break;
-
-    case ID_POPUP_PCB_DRAG_MODULE_REQUEST:
-    case ID_POPUP_PCB_MOVE_MODULE_REQUEST:
-        if( GetCurItem() == NULL )
-            break;
-
-        // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != PCB_MODULE_T )
-            SetCurItem( GetCurItem()->GetParent() );
-
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        module = (MODULE*) GetCurItem();
-
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-
-        SendMessageToEESCHEMA( module );
-        SetCrossHairPosition( module->GetPosition() );
-        m_canvas->MoveCursorToCrossHair();
-        StartMoveModule( module, &dc, id == ID_POPUP_PCB_DRAG_MODULE_REQUEST );
-        break;
-
     case ID_POPUP_PCB_GET_AND_MOVE_MODULE_REQUEST:      // get module by name and move it
         SetCurItem( GetFootprintFromBoardByReference() );
         module = (MODULE*) GetCurItem();
@@ -700,118 +642,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SendMessageToEESCHEMA( module );
         m_canvas->MoveCursorToCrossHair();
         StartMoveModule( module, &dc, false );
-        break;
-
-    case ID_POPUP_PCB_DELETE_MODULE:
-        m_canvas->MoveCursorToCrossHair();
-
-        // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != PCB_MODULE_T )
-            SetCurItem( GetCurItem()->GetParent() );
-
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        module = (MODULE*) GetCurItem();
-
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-
-        if( Delete_Module( (MODULE*) GetCurItem(), &dc ) )
-        {
-            SetCurItem( NULL );
-        }
-
-        break;
-
-    case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
-        m_canvas->MoveCursorToCrossHair();
-
-        // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != PCB_MODULE_T )
-            SetCurItem( GetCurItem()->GetParent() );
-
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        module = (MODULE*) GetCurItem();
-
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-
-        // This is a simple rotation, no other editing in progress
-        if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList( GetCurItem(), UR_CHANGED, ((MODULE*)GetCurItem())->GetPosition() );
-
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), m_rotationAngle, true );
-        break;
-
-    case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
-        m_canvas->MoveCursorToCrossHair();
-
-        // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != PCB_MODULE_T )
-            SetCurItem( GetCurItem()->GetParent() );
-
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        module = (MODULE*) GetCurItem();
-
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-
-        // This is a simple rotation, no other editing in progress
-        if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList( GetCurItem(), UR_CHANGED, ((MODULE*)GetCurItem())->GetPosition() );
-
-        Rotate_Module( &dc, (MODULE*) GetCurItem(), -m_rotationAngle, true );
-        break;
-
-    case ID_POPUP_PCB_CHANGE_SIDE_MODULE:
-        m_canvas->MoveCursorToCrossHair();
-
-        // If the current Item is a pad, text module ...: Get its parent
-        if( GetCurItem()->Type() != PCB_MODULE_T )
-            SetCurItem( GetCurItem()->GetParent() );
-
-        if( !GetCurItem() || GetCurItem()->Type() != PCB_MODULE_T )
-            break;
-
-        module = (MODULE*) GetCurItem();
-
-        if( module->IsLocked() )
-        {
-            wxString msg;
-            msg.Printf( _( "Footprint %s found, but it is locked" ),
-                        module->GetReference().GetData() );
-            DisplayInfoMessage( this, msg );
-            break;
-        }
-
-        // This is a simple flip, no other editing in progress
-        if( !GetCurItem()->IsMoving() )
-            SaveCopyInUndoList( GetCurItem(), UR_FLIPPED, ((MODULE*)GetCurItem())->GetPosition() );
-
-        Change_Side_Module( (MODULE*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_UPDATE_FOOTPRINTS:
@@ -929,37 +759,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         Export_Pad_Settings( (D_PAD*) GetCurItem() );
         break;
 
-    case ID_POPUP_PCB_DELETE_PAD:
-        SaveCopyInUndoList( GetCurItem()->GetParent(), UR_CHANGED );
-        DeletePad( (D_PAD*) GetCurItem() );
-        SetCurItem( NULL );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextOptionsFrame( GetCurItem(), &dc );
-        break;
-
-    case ID_POPUP_PCB_RESET_TEXT_SIZE:
-        ResetTextSize( GetCurItem(), &dc );
-        break;
-
-    case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
-        m_canvas->MoveCursorToCrossHair();
-        StartMoveTexteModule( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
-        break;
-
-    case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-        RotateTextModule( static_cast<TEXTE_MODULE*>( GetCurItem() ), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        DeleteTextModule( static_cast<TEXTE_MODULE*>( GetCurItem() ) );
-        SetCurItem( NULL );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
     case ID_POPUP_PCB_SELECT_LAYER:
         {
             PCB_LAYER_ID itmp = SelectLayer( GetActiveLayer() );
@@ -1015,31 +814,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
             m_canvas->Refresh( true );
         break;
 
-    case ID_POPUP_PCB_EDIT_TEXTEPCB:
-        InstallTextOptionsFrame( GetCurItem(), &dc );
-        break;
-
-    case ID_POPUP_PCB_ROTATE_TEXTEPCB:
-        Rotate_Texte_Pcb( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_COPY_TEXTEPCB:
-        CreateTextePcb( &dc, (TEXTE_PCB*) GetCurItem() );
-        m_canvas->MoveCursorToCrossHair();
-        m_canvas->SetAutoPanRequest( true );
-        break;
-
-    case ID_POPUP_PCB_FLIP_TEXTEPCB:
-        FlipTextePcb( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_DELETE_TEXTEPCB:
-        Delete_Texte_Pcb( (TEXTE_PCB*) GetCurItem(), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
     case ID_POPUP_PCB_MOVE_PCB_TARGET_REQUEST:
         BeginMoveTarget( (PCB_TARGET*) GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
@@ -1071,11 +845,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         BeginMoveDimensionText( (DIMENSION*) GetCurItem(), &dc );
         break;
 
-    case ID_POPUP_PCB_DELETE_DRAWING:
-        Delete_Segment_Edge( (DRAWSEGMENT*) GetCurItem(), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
     case ID_POPUP_PCB_DELETE_MARKER:
         RemoveStruct( GetCurItem(), &dc );
         m_canvas->MoveCursorToCrossHair();
@@ -1096,15 +865,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SetCurItem( NULL );
         m_canvas->MoveCursorToCrossHair();
         m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PCB_EDIT_DRAWING:
-        InstallGraphicItemPropertiesDialog( GetCurItem() );
-        break;
-
-    case ID_POPUP_PCB_MOVE_DRAWING_REQUEST:
-        m_canvas->MoveCursorToCrossHair();
-        Start_Move_DrawItem( (DRAWSEGMENT*) GetCurItem(), &dc );
         break;
 
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:
@@ -1429,7 +1189,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
 
         break;
 
-    case ID_PCB_KEEPOUT_AREA_BUTT:
+    case ID_PCB_KEEPOUT_BUTT:
         SetToolID( id, wxCURSOR_PENCIL, _( "Add keepout" ) );
         break;
 
@@ -1477,7 +1237,7 @@ void PCB_EDIT_FRAME::OnSelectTool( wxCommandEvent& aEvent )
         SetToolID( id, wxCURSOR_HAND, _( "Highlight net" ) );
         break;
 
-    case ID_PCB_SHOW_1_RATSNEST_BUTT:
+    case ID_LOCAL_RATSNEST_BUTT:
         SetToolID( id, wxCURSOR_HAND, _( "Select rats nest" ) );
 
         Compile_Ratsnest( &dc, true );

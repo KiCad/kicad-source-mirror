@@ -44,19 +44,23 @@
 // Zone actions
 TOOL_ACTION PCB_ACTIONS::zoneFill( "pcbnew.ZoneFiller.zoneFill",
         AS_GLOBAL, 0,
-        _( "Fill" ), _( "Fill zone(s)" ), fill_zone_xpm );
+        _( "Fill" ), _( "Fill zone(s)" ),
+        fill_zone_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneFillAll( "pcbnew.ZoneFiller.zoneFillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_FILL_OR_REFILL ),
-        _( "Fill All" ), _( "Fill all zones" ) );
+        _( "Fill All" ), _( "Fill all zones" ),
+        fill_zone_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneUnfill( "pcbnew.ZoneFiller.zoneUnfill",
         AS_GLOBAL, 0,
-        _( "Unfill" ), _( "Unfill zone(s)" ), zone_unfill_xpm );
+        _( "Unfill" ), _( "Unfill zone(s)" ),
+        zone_unfill_xpm );
 
 TOOL_ACTION PCB_ACTIONS::zoneUnfillAll( "pcbnew.ZoneFiller.zoneUnfillAll",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ZONE_REMOVE_FILLED ),
-        _( "Unfill All" ), _( "Unfill all zones" ) );
+        _( "Unfill All" ), _( "Unfill all zones" ),
+        zone_unfill_xpm );
 
 ZONE_FILLER_TOOL::ZONE_FILLER_TOOL() :
     PCB_TOOL_BASE( "pcbnew.ZoneFiller" )

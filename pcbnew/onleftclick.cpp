@@ -219,7 +219,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
     }
     break;
 
-    case ID_PCB_SHOW_1_RATSNEST_BUTT:
+    case ID_LOCAL_RATSNEST_BUTT:
         curr_item = PcbGeneralLocateAndDisplay();
         Show_1_Ratsnest( curr_item, aDC );
 
@@ -304,7 +304,7 @@ void PCB_EDIT_FRAME::OnLeftClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ZONES_BUTT:
-    case ID_PCB_KEEPOUT_AREA_BUTT:
+    case ID_PCB_KEEPOUT_BUTT:
         /* ZONE or KEEPOUT Tool is selected. Determine action for a left click:
          *  this can be start a new zone or select and move an existing zone outline corner
          *  if found near the mouse cursor
@@ -535,7 +535,7 @@ void PCB_EDIT_FRAME::OnLeftDClick( wxDC* aDC, const wxPoint& aPosition )
         break;
 
     case ID_PCB_ZONES_BUTT:
-    case ID_PCB_KEEPOUT_AREA_BUTT:
+    case ID_PCB_KEEPOUT_BUTT:
         if( End_Zone( aDC ) )
         {
             m_canvas->SetAutoPanRequest( false );

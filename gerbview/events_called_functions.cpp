@@ -105,15 +105,10 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
     EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
 
-    EVT_TOOL( wxID_UNDO, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_PRINT, GERBVIEW_FRAME::ToPrinter )
-    EVT_COMBOBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
-                  GERBVIEW_FRAME::OnSelectActiveLayer )
+    EVT_COMBOBOX( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER, GERBVIEW_FRAME::OnSelectActiveLayer )
 
     EVT_SELECT_DCODE( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnSelectActiveDCode )
-
-    // Vertical toolbar:
-    EVT_TOOL( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::Process_Special_Functions )
 
     EVT_MENU_RANGE( ID_POPUP_GENERAL_START_RANGE, ID_POPUP_GENERAL_END_RANGE,
                     GERBVIEW_FRAME::Process_Special_Functions )
@@ -121,13 +116,8 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     // Option toolbar
     EVT_TOOL( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnToggleCoordType )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnTogglePolygonDrawMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, GERBVIEW_FRAME::OnToggleFlashItemDrawMode )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnToggleLineDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
               GERBVIEW_FRAME::OnToggleShowLayerManager )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnSelectOptionToolbar )
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnSelectOptionToolbar )
     EVT_TOOL_RANGE( ID_TB_OPTIONS_SHOW_GBR_MODE_0, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
                     GERBVIEW_FRAME::OnSelectDisplayMode )
     EVT_TOOL( ID_TB_OPTIONS_DIFF_MODE, GERBVIEW_FRAME::OnSelectOptionToolbar )
@@ -147,22 +137,7 @@ BEGIN_EVENT_TABLE( GERBVIEW_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_HIGHLIGHT_APER_ATTRIBUTE_ITEMS, GERBVIEW_FRAME::Process_Special_Functions )
     EVT_MENU( ID_HIGHLIGHT_REMOVE_ALL, GERBVIEW_FRAME::Process_Special_Functions )
 
-    EVT_UPDATE_UI( ID_NO_TOOL_SELECTED, GERBVIEW_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_TB_MEASUREMENT_TOOL, GERBVIEW_FRAME::OnUpdateSelectTool )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, GERBVIEW_FRAME::OnUpdateCoordType )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
-                   GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LINES_SKETCH, GERBVIEW_FRAME::OnUpdateLineDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, GERBVIEW_FRAME::OnUpdatePolygonDrawMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_DCODES, GERBVIEW_FRAME::OnUpdateShowDCodes )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, GERBVIEW_FRAME::OnUpdateShowNegativeItems )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                   GERBVIEW_FRAME::OnUpdateShowLayerManager )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_DIFF_MODE, GERBVIEW_FRAME::OnUpdateDiffMode )
-    EVT_UPDATE_UI( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, GERBVIEW_FRAME::OnUpdateHighContrastMode )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, GERBVIEW_FRAME::OnUpdateSelectGrid )
-    EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, GERBVIEW_FRAME::OnUpdateSelectZoom )
-
     EVT_UPDATE_UI( ID_TOOLBARH_GERBER_SELECT_ACTIVE_DCODE, GERBVIEW_FRAME::OnUpdateSelectDCode )
     EVT_UPDATE_UI( ID_TOOLBARH_GERBVIEW_SELECT_ACTIVE_LAYER,
                    GERBVIEW_FRAME::OnUpdateLayerSelectBox )
@@ -213,10 +188,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_GERBVIEW_ERASE_CURR_LAYER:
         Erase_Current_DrawLayer( true );
         ClearMsgPanel();
-        break;
-
-    case ID_NO_TOOL_SELECTED:
-        SetNoToolSelected();
         break;
 
     case ID_TB_MEASUREMENT_TOOL:
@@ -448,16 +419,6 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_TB_OPTIONS_SHOW_DCODES:
-        SetElementVisibility( LAYER_DCODES, !IsElementVisible( LAYER_DCODES ) );
-        m_canvas->Refresh( true );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS:
-        SetElementVisibility( LAYER_NEGATIVE_OBJECTS, !IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
-        m_canvas->Refresh( true );
-        break;
-
     case ID_TB_OPTIONS_DIFF_MODE:
         options.m_DiffMode = !options.m_DiffMode;
         needs_refresh = true;
@@ -479,39 +440,6 @@ void GERBVIEW_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
 
     if( needs_refresh )
         UpdateDisplayOptions( options );
-}
-
-
-void GERBVIEW_FRAME::OnTogglePolygonDrawMode( wxCommandEvent& aEvent )
-{
-    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
-    options.m_DisplayPolygonsFill = !m_DisplayOptions.m_DisplayPolygonsFill;
-
-    UpdateDisplayOptions( options );
-}
-
-
-void GERBVIEW_FRAME::OnToggleLineDrawMode( wxCommandEvent& aEvent )
-{
-    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
-    options.m_DisplayLinesFill = !m_DisplayOptions.m_DisplayLinesFill;
-
-    UpdateDisplayOptions( options );
-}
-
-
-void GERBVIEW_FRAME::OnToggleFlashItemDrawMode( wxCommandEvent& aEvent )
-{
-    GBR_DISPLAY_OPTIONS options = m_DisplayOptions;
-    options.m_DisplayFlashedItemsFill = !m_DisplayOptions.m_DisplayFlashedItemsFill;
-
-    UpdateDisplayOptions( options );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateSelectTool( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( GetToolId() == aEvent.GetId() );
 }
 
 

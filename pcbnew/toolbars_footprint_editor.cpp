@@ -28,7 +28,7 @@
 #include <pcbnew_id.h>
 #include <hotkeys.h>
 #include <bitmaps.h>
-
+#include <tools/pcb_actions.h>
 
 void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
 {
@@ -77,10 +77,8 @@ void FOOTPRINT_EDIT_FRAME::ReCreateHToolbar()
                             _( "Print footprint" ) );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_mainToolBar->AddTool( wxID_UNDO, wxEmptyString, KiScaledBitmap( undo_xpm, this ),
-                            _( "Undo last edit" ) );
-    m_mainToolBar->AddTool( wxID_REDO, wxEmptyString, KiScaledBitmap( redo_xpm, this ),
-                            _( "Redo last undo command" ) );
+    m_mainToolBar->Add( ACTIONS::undo );
+    m_mainToolBar->Add( ACTIONS::redo );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
@@ -147,48 +145,21 @@ void FOOTPRINT_EDIT_FRAME::ReCreateVToolbar()
         m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                             KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    // Set up toolbar
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString, KiScaledBitmap( cursor_xpm, this ),
-                            _( "Select item" ), wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::selectionTool,  ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_MODEDIT_PAD_TOOL, wxEmptyString, KiScaledBitmap( pad_xpm, this ),
-                            _( "Add pad" ), wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::placePad,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawLine,       ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawCircle,     ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawArc,        ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::drawPolygon,    ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::placeText,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::deleteTool,     ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_MODEDIT_LINE_TOOL, wxEmptyString, KiScaledBitmap( add_graphical_segments_xpm, this ),
-                            _( "Add graphic line" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_CIRCLE_TOOL, wxEmptyString, KiScaledBitmap( add_circle_xpm, this ),
-                            _( "Add graphic circle" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_ARC_TOOL, wxEmptyString, KiScaledBitmap( add_arc_xpm, this ),
-                            _( "Add graphic arc" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_POLYGON_TOOL, wxEmptyString, KiScaledBitmap( add_graphical_polygon_xpm, this ),
-                            _( "Add graphic polygon" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_TEXT_TOOL, wxEmptyString, KiScaledBitmap( text_xpm, this ),
-                            _( "Add Text" ), wxITEM_CHECK );
-
-    KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_MODEDIT_ANCHOR_TOOL, wxEmptyString, KiScaledBitmap( anchor_xpm, this ),
-                            _( "Place footprint reference anchor" ),
-                            wxITEM_CHECK );
-
-    KiScaledSeparator( m_drawToolBar, this );
-    m_drawToolBar->AddTool( ID_MODEDIT_DELETE_TOOL, wxEmptyString, KiScaledBitmap( delete_xpm, this ),
-                            _( "Delete item" ), wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_PLACE_GRID_COORD, wxEmptyString,
-                            KiScaledBitmap( grid_select_axis_xpm, this ),
-                            _( "Set grid origin" ),
-                            wxITEM_CHECK );
-
-    m_drawToolBar->AddTool( ID_MODEDIT_MEASUREMENT_TOOL, wxEmptyString,
-                            KiScaledBitmap( measurement_xpm, this ),
-                            _( "Measure distance" ),
-                            wxITEM_CHECK );
+    m_drawToolBar->Add( PCB_ACTIONS::setAnchor,      ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::gridSetOrigin,  ACTION_TOOLBAR::TOGGLE );
+    m_drawToolBar->Add( PCB_ACTIONS::measureTool,    ACTION_TOOLBAR::TOGGLE );
 
     m_drawToolBar->Realize();
 }
@@ -202,35 +173,22 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
         m_optionsToolBar = new ACTION_TOOLBAR( this, ID_OPT_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_optionsToolBar->Add( ACTIONS::toggleGrid,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display Polar Coord ON" ), wxITEM_CHECK );
 
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,         ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( pad_sketch_xpm, this ),
-                               _( "Show Pads Sketch" ), wxITEM_CHECK  );
+    m_optionsToolBar->Add( PCB_ACTIONS::padDisplayMode,     ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::moduleEdgeOutlines, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( PCB_ACTIONS::highContrastMode,   ACTION_TOOLBAR::TOGGLE );
 
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, wxEmptyString,
-                               KiScaledBitmap( text_sketch_xpm, this ),
-                               _( "Show Texts Sketch" ), wxITEM_CHECK  );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, wxEmptyString,
-                               KiScaledBitmap( show_mod_edge_xpm, this ),
-                               _( "Show Edges Sketch" ), wxITEM_CHECK  );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE, wxEmptyString,
-                               KiScaledBitmap( contrast_mode_xpm, this ),
-                               _( "Enable high contrast display mode" ),
-                               wxITEM_CHECK );
-
-    KiScaledSeparator( m_optionsToolBar, this );
+    m_optionsToolBar->AddSeparator();
     m_optionsToolBar->AddTool( ID_MODEDIT_SHOW_HIDE_SEARCH_TREE, wxEmptyString,
                                KiScaledBitmap( search_tree_xpm, this ),
                                _( "Toggles the search tree" ), wxITEM_CHECK );
@@ -243,13 +201,29 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
 {
     PCB_DISPLAY_OPTIONS* opts = (PCB_DISPLAY_OPTIONS*) GetDisplayOptions();
 
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_PADS_SKETCH, !opts->m_DisplayPadFill );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, !opts->m_DisplayModTextFill );
-    m_optionsToolBar->ToggleTool( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, !opts->m_DisplayModEdgeFill );
+    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
+    m_mainToolBar->Refresh();
 
     m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
     m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
     m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
-
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode, !opts->m_DisplayPadFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts->m_DisplayModEdgeFill );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::highContrastMode, opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
+
+    m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    m_drawToolBar->Toggle( PCB_ACTIONS::placePad,      GetToolId() == ID_MODEDIT_PAD_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawLine,      GetToolId() == ID_MODEDIT_LINE_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawCircle,    GetToolId() == ID_MODEDIT_CIRCLE_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawArc,       GetToolId() == ID_MODEDIT_ARC_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::drawPolygon,   GetToolId() == ID_MODEDIT_POLYGON_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::placeText,     GetToolId() == ID_MODEDIT_TEXT_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::deleteTool,    GetToolId() == ID_MODEDIT_DELETE_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::setAnchor,     GetToolId() == ID_MODEDIT_ANCHOR_TOOL );
+    m_drawToolBar->Toggle( PCB_ACTIONS::gridSetOrigin, GetToolId() == ID_MODEDIT_PLACE_GRID_COORD );
+    m_drawToolBar->Toggle( PCB_ACTIONS::measureTool,   GetToolId() == ID_MODEDIT_MEASUREMENT_TOOL );
+    m_drawToolBar->Refresh();
 }

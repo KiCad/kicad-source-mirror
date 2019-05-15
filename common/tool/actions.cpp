@@ -24,19 +24,29 @@ TOOL_ACTION ACTIONS::redo( "common.Interactive.redo",
         redo_xpm );
 
 TOOL_ACTION ACTIONS::cut( "common.Interactive.cut",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_CUT ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CUT ),
         _( "Cut" ), _( "Cut selected item(s) to clipboard" ),
         cut_xpm );
 
 TOOL_ACTION ACTIONS::copy( "common.Interactive.copy",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COPY ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_COPY ),
         _( "Copy" ), _( "Copy selected item(s) to clipboard" ),
         copy_xpm );
 
 TOOL_ACTION ACTIONS::paste( "common.Interactive.paste",
-        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_PASTE ),
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_PASTE ),
         _( "Paste" ), _( "Paste clipboard into schematic" ),
         paste_xpm );
+
+TOOL_ACTION ACTIONS::find( "common.Interactive.find",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FIND ),
+        _( "Find" ), _( "Find text" ),
+        find_xpm );
+
+TOOL_ACTION ACTIONS::replace( "common.Interactive.findAndReplace",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPLACE ),
+        _( "Find and Replace" ), _( "Find and replace text" ),
+        find_replace_xpm );
 
 // View Controls
 TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",
@@ -165,7 +175,8 @@ TOOL_ACTION ACTIONS::gridPrev( "common.Control.gridPrev",
 
 TOOL_ACTION ACTIONS::gridSetOrigin( "common.Control.gridSetOrigin",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SET_GRID_ORIGIN ),
-        "", "" );
+        _( "Grid Origin" ), _( "Set the grid origin point" ),
+        grid_select_axis_xpm );
 
 TOOL_ACTION ACTIONS::gridResetOrigin( "common.Control.gridResetOrigin",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_GRID_ORIGIN ),

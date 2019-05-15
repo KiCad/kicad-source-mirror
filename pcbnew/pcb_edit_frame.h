@@ -348,7 +348,6 @@ public:
     void OnUpdateLayerPair( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
     void OnUpdateDrcEnable( wxUpdateUIEvent& aEvent );
-    void OnUpdateHighContrastDisplayMode( wxUpdateUIEvent& aEvent );
     bool LayerManagerShown();
     bool MicrowaveToolbarShown();
     void OnUpdateVerticalToolbar( wxUpdateUIEvent& aEvent );
@@ -510,39 +509,6 @@ public:
     bool OnHotKey( wxDC* aDC, int aHotkeyCode, const wxPoint& aPosition, EDA_ITEM* aItem = NULL ) override;
 
     /**
-     * Function OnHotkeyDeleteItem
-     * Delete the item found under the mouse cursor
-     *  Depending on the current active tool::
-     *      Tool track
-     *          if a track is in progress: Delete the last segment
-     *          else delete the entire track
-     *      Tool module (footprint):
-     *          Delete the module.
-     * @param aDC = current device context
-     * @return true if an item was deleted
-     */
-    bool OnHotkeyDeleteItem( wxDC* aDC );
-
-    /**
-     * Function OnHotkeyPlaceItem
-     * Place the item (footprint, track, text .. ) found under the mouse cursor
-     * An item can be placed only if there is this item currently edited
-     * Only a footprint, a pad or a track can be placed
-     * @param aDC = current device context
-     * @return true if an item was placed
-     */
-    bool OnHotkeyPlaceItem( wxDC* aDC );
-
-    bool OnHotkeyEditItem( int aIdCommand );
-
-    /**
-     * Function OnHotkeyCopyItem
-     * returns the copy event id for copyable items.
-     * @return Event id of a suitable copy event, zero when no copyable item found.
-     */
-    int OnHotkeyCopyItem();
-
-    /**
      * Function OnHotkeyDuplicateOrArrayItem
      * Duplicate an item (optionally incrementing if necessary and possible)
      * or invoke array dialog and create an array
@@ -550,35 +516,6 @@ public:
      * @return true if item duplicated or arrayed
      */
     bool OnHotkeyDuplicateOrArrayItem( int aIdCommand );
-
-    /**
-     * Function OnHotkeyMoveItem
-     * Moves or drag the item (footprint, track, text .. ) found under the mouse cursor
-     * Only a footprint or a track can be dragged
-     * @param aIdCommand = the hotkey command id
-     * @return true if an item was moved
-     */
-    bool OnHotkeyMoveItem( int aIdCommand );
-
-    /**
-     * Function OnHotkeyRotateItem
-     * Rotate the item (text or footprint) found under the mouse cursor
-     * @note This command can be used with an item currently in edit.
-     *       Only some items can be rotated (footprints and texts).
-     * @param aIdCommand = the hotkey command id
-     * @return true if an item was moved
-     */
-    bool OnHotkeyRotateItem( int aIdCommand );
-
-    /**
-     * Function OnHotkeyFlipItem
-     * Flip the item (text or footprint) found under the mouse cursor
-     * @note This command can be used with an item currently in edit.
-     *       Only some items can be rotated (footprints and texts).
-     * @param aIdCommand = the hotkey command id
-     * @return true if an item was moved
-     */
-    bool OnHotkeyFlipItem( int aIdCommand );
 
     /**
      * Function OnHotkeyBeginRoute
@@ -725,15 +662,7 @@ public:
     /* mouse functions events: */
     void OnLeftClick( wxDC* DC, const wxPoint& MousePos ) override;
     void OnLeftDClick( wxDC* DC, const wxPoint& MousePos ) override;
-
-    /**
-     * Function OnRightClick
-     * populates a popup menu with the choices appropriate for the current context.
-     * The caller will add the ZOOM menu choices afterward.
-     * @param aMousePos The current mouse position
-     * @param aPopMenu The menu to add to.
-     */
-    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
+    bool OnRightClick( const wxPoint& aPosition, wxMenu* PopMenu ) override { return true; }
 
     void OnSelectOptionToolbar( wxCommandEvent& event );
     void OnFlipPcbView( wxCommandEvent& event );
@@ -1655,8 +1584,6 @@ public:
      * and run the cleanup function
      */
     void Clean_Pcb();
-
-    void InstallFindFrame();
 
     /**
      * Function SendMessageToEESCHEMA

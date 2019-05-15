@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 Jon Evans <jon@craftyjon.com>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -31,27 +31,33 @@
 
 TOOL_ACTION GERBVIEW_ACTIONS::selectionTool( "gerbview.Control.selectionTool",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_ACTIVATE );
+        _( "Select item(s)" ), "",
+        cursor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerChanged( "gerbview.Control.layerChanged",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_NOTIFY );
+        "", "",
+        NULL, AF_NOTIFY );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightClear( "gerbview.Control.highlightClear",
         AS_GLOBAL, 0,
-        _( "Clear Highlight" ), "", highlight_remove_xpm );
+        _( "Clear Highlight" ), "",
+        highlight_remove_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightNet( "gerbview.Control.highlightNet",
         AS_GLOBAL, 0,
-        _( "Highlight Net" ), "", general_ratsnest_xpm );
+        _( "Highlight Net" ), "",
+        general_ratsnest_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightComponent( "gerbview.Control.highlightComponent",
         AS_GLOBAL, 0,
-        _( "Highlight Component" ), "", file_footprint_xpm );
+        _( "Highlight Component" ), "",
+        file_footprint_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::highlightAttribute( "gerbview.Control.highlightAttribute",
         AS_GLOBAL, 0,
-        _( "Highlight Attribute" ), "", flag_xpm );
+        _( "Highlight Attribute" ), "",
+        flag_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::layerNext( "gerbview.Control.layerNext",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_SWITCH_LAYER_TO_NEXT ),
@@ -63,23 +69,28 @@ TOOL_ACTION GERBVIEW_ACTIONS::layerPrev( "gerbview.Control.layerPrev",
 
 TOOL_ACTION GERBVIEW_ACTIONS::linesDisplayOutlines( "gerbview.Control.linesDisplayOutlines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_LINES_DISPLAY_MODE ),
-        "", "" );
+        _( "Sketch Lines" ), _( "Show lines in outline mode" ),
+        showtrack_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::flashedDisplayOutlines( "gerbview.Control.flashedDisplayOutlines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_FLASHED_DISPLAY_MODE ),
-        "", "" );
+        _( "Sketch Flashed Items" ), _( "Show flashed items in outline mode" ),
+        pad_sketch_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::polygonsDisplayOutlines( "gerbview.Control.polygonsDisplayOutlines",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_POLYGON_DISPLAY_MODE ),
-        "", "" );
+        _( "Sketch Polygons" ), _( "Show polygons in outline mode" ),
+        opt_show_polygon_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::negativeObjectDisplay( "gerbview.Control.negativeObjectDisplay",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_NEGATIVE_DISPLAY_ONOFF ),
-        "", "" );
+        _( "Ghost Negative Objects" ), _( "Show negative objects in ghost color" ),
+        gerbview_show_negative_objects_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::dcodeDisplay( "gerbview.Control.dcodeDisplay",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GBR_DCODE_DISPLAY_ONOFF ),
-        "", "" );
+        _( "Show DCodes" ), _( "Show dcode number" ),
+        show_dcodenumber_xpm );
 
 TOOL_ACTION GERBVIEW_ACTIONS::resetCoords( "gerbview.Control.resetCoords",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_RESET_LOCAL_COORD ),

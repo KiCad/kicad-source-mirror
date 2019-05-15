@@ -51,6 +51,8 @@ public:
     /// @copydoc TOOL_INTERACTIVE::Init()
     bool Init() override;
 
+    int Find( const TOOL_EVENT& aEvent );
+
     // Track & via size control
     int TrackWidthInc( const TOOL_EVENT& aEvent );
     int TrackWidthDec( const TOOL_EVENT& aEvent );
@@ -117,7 +119,7 @@ public:
     int HideSelectionRatsnest( const TOOL_EVENT& aEvent );
 
     ///> Shows local ratsnest of a component
-    int ShowLocalRatsnest( const TOOL_EVENT& aEvent );
+    int LocalRatsnestTool( const TOOL_EVENT& aEvent );
 
 private:
     ///> Event handler to recalculate dynamic ratsnest

@@ -233,7 +233,6 @@ public:
     void OnLeftClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     void OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
-    void OnUpdateSelectTool( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;
@@ -486,17 +485,8 @@ public:
     void Process_Config( wxCommandEvent& event );
 
     void OnUpdateDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
-    void OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdatePolygonDrawMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowDCodes( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent );
-    void OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectDCode( wxUpdateUIEvent& aEvent );
     void OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent );
-    void OnUpdateDiffMode( wxUpdateUIEvent& aEvent );
-    void OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent );
 
     /**
      * Function BlockCommand

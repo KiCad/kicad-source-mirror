@@ -123,12 +123,6 @@ TOOL_ACTION PCB_ACTIONS::selectSameSheet( "pcbnew.InteractiveSelection.SelectSam
         _( "Selects all modules and tracks in the same schematic sheet" ),
         select_same_sheet_xpm );
 
-TOOL_ACTION PCB_ACTIONS::find( "pcbnew.InteractiveSelection.Find",
-        AS_GLOBAL, 0, //TOOL_ACTION::LegacyHotKey( HK_FIND_ITEM ), // handled by wxWidgets
-        _( "Find Item..." ),
-        _( "Searches the document for an item" ),
-        find_xpm );
-
 TOOL_ACTION PCB_ACTIONS::findMove( "pcbnew.InteractiveSelection.FindMove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_GET_AND_MOVE_FOOTPRINT ),
         _( "Get and Move Footprint" ),
@@ -2310,7 +2304,7 @@ void SELECTION_TOOL::setTransitions()
     Go( &SELECTION_TOOL::UnselectItems,       PCB_ACTIONS::unselectItems.MakeEvent() );
     Go( &SELECTION_TOOL::SelectionMenu,       PCB_ACTIONS::selectionMenu.MakeEvent() );
 
-    Go( &SELECTION_TOOL::find,                PCB_ACTIONS::find.MakeEvent() );
+    Go( &SELECTION_TOOL::find,                ACTIONS::find.MakeEvent() );
     Go( &SELECTION_TOOL::findMove,            PCB_ACTIONS::findMove.MakeEvent() );
 
     Go( &SELECTION_TOOL::filterSelection,     PCB_ACTIONS::filterSelection.MakeEvent() );

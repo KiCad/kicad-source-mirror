@@ -27,24 +27,6 @@ OPT<TOOL_EVENT> GERBVIEW_ACTIONS::TranslateLegacyId( int aId )
 {
     switch( aId )
     {
-    case ID_ZOOM_IN:        // toolbar button "Zoom In"
-        return ACTIONS::zoomInCenter.MakeEvent();
-
-    case ID_ZOOM_OUT:       // toolbar button "Zoom In"
-        return ACTIONS::zoomOutCenter.MakeEvent();
-
-    case ID_ZOOM_PAGE:      // toolbar button "Fit on Screen"
-        return ACTIONS::zoomFitScreen.MakeEvent();
-
-    case ID_ZOOM_SELECTION:
-        return ACTIONS::zoomTool.MakeEvent();
-
-    case ID_TB_MEASUREMENT_TOOL:
-        return GERBVIEW_ACTIONS::measureTool.MakeEvent();
-
-    case ID_NO_TOOL_SELECTED:
-        return GERBVIEW_ACTIONS::selectionTool.MakeEvent();
-
     case ID_HIGHLIGHT_REMOVE_ALL:
         return GERBVIEW_ACTIONS::highlightClear.MakeEvent();
 

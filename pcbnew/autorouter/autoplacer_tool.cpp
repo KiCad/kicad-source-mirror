@@ -51,12 +51,16 @@
 
 
 TOOL_ACTION PCB_ACTIONS::autoplaceSelectedComponents( "pcbnew.Autoplacer.autoplaceSelected",
-        AS_GLOBAL, 0, _( "Auto-place selected components" ),
-        _( "Performs automatic placement of selected components" ) );
+        AS_GLOBAL, 0,
+        _( "Place Selected Footprints" ),
+        _( "Performs automatic placement of selected components" )
+        /* // fixme: icon */ );
 
 TOOL_ACTION PCB_ACTIONS::autoplaceOffboardComponents( "pcbnew.Autoplacer.autoplaceOffboard",
-        AS_GLOBAL, 0, _( "Auto-place off-board components" ),
-        _( "Performs automatic placement of components outside board area" ) );
+        AS_GLOBAL, 0,
+        _( "Place Off-Board Footprints" ),
+        _( "Performs automatic placement of components outside board area" )
+        /* // fixme: icon */ );
 
 AUTOPLACE_TOOL::AUTOPLACE_TOOL() : PCB_TOOL_BASE( "pcbnew.Autoplacer" )
 {

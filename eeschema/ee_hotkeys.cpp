@@ -84,41 +84,32 @@
 
 // Fit on Screen
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomAuto( _HKI( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME,
-                              ID_ZOOM_PAGE );
+static EDA_HOTKEY HkZoomAuto( _HKI( "Fit on Screen" ), HK_ZOOM_AUTO, WXK_HOME );
 #else
-static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0',
-                              ID_ZOOM_PAGE );
+static EDA_HOTKEY HkZoomAuto( _HKI( "Zoom Auto" ), HK_ZOOM_AUTO, GR_KB_CTRL + '0' );
 #endif
 
-static EDA_HOTKEY HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4,
-                                ID_POPUP_ZOOM_CENTER );
+static EDA_HOTKEY HkZoomCenter( _HKI( "Zoom Center" ), HK_ZOOM_CENTER, WXK_F4 );
 
 // Refresh Screen
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3,
-                                ID_ZOOM_REDRAW );
+static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, WXK_F3 );
 #else
-static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R',
-                                ID_ZOOM_REDRAW );
+static EDA_HOTKEY HkZoomRedraw( _HKI( "Zoom Redraw" ), HK_ZOOM_REDRAW, GR_KB_CTRL + 'R' );
 #endif
 
 // Zoom In
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1,
-                            ID_KEY_ZOOM_IN );
+static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, WXK_F1 );
 #else
-static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+',
-                            ID_KEY_ZOOM_IN );
+static EDA_HOTKEY HkZoomIn( _HKI( "Zoom In" ), HK_ZOOM_IN, GR_KB_CTRL + '+' );
 #endif
 
 // Zoom Out
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2,
-                             ID_KEY_ZOOM_OUT );
+static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, WXK_F2 );
 #else
-static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-',
-                             ID_KEY_ZOOM_OUT );
+static EDA_HOTKEY HkZoomOut( _HKI( "Zoom Out" ), HK_ZOOM_OUT, GR_KB_CTRL + '-' );
 #endif
 
 static EDA_HOTKEY HkSwitchUnits( _HKI( "Switch Units" ), HK_SWITCH_UNITS, 'U' + GR_KB_CTRL );
@@ -127,8 +118,7 @@ static EDA_HOTKEY HkHelp( _HKI( "List Hotkeys" ), HK_HELP, GR_KB_CTRL + WXK_F1 )
 static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ), HK_PREFERENCES, GR_KB_CTRL + ',',
                                  wxID_PREFERENCES );
 static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET_LOCAL_COORD, ' ' );
-static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
-                                ID_SCH_LEAVE_SHEET );
+static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK );
 
 static EDA_HOTKEY HkSwitchGridToNext( _HKI( "Switch Grid To Next" ),
                                       HK_SWITCH_GRID_TO_NEXT, 'N' );
@@ -142,36 +132,22 @@ static EDA_HOTKEY HkMouseLeftDClick( _HKI( "Mouse Left Double Click" ), HK_LEFT_
                                      ID_MOUSE_DOUBLECLICK );
 
 // Schematic editor
-static EDA_HOTKEY HkBeginWire( _HKI( "Begin Wire" ), HK_BEGIN_WIRE, 'W',
-                               ID_WIRE_TOOL );
-static EDA_HOTKEY HkBeginBus( _HKI( "Begin Bus" ), HK_BEGIN_BUS, 'B',
-                              ID_BUS_TOOL );
+static EDA_HOTKEY HkBeginWire( _HKI( "Begin Wire" ), HK_BEGIN_WIRE, 'W' );
+static EDA_HOTKEY HkBeginBus( _HKI( "Begin Bus" ), HK_BEGIN_BUS, 'B' );
 static EDA_HOTKEY HkEndLineWireBus( _HKI( "End Line Wire Bus" ), HK_END_CURR_LINEWIREBUS, 'K' );
 
-static EDA_HOTKEY HkAddLabel( _HKI( "Add Label" ), HK_ADD_LABEL, 'L',
-                              ID_LABEL_TOOL );
-static EDA_HOTKEY HkAddHierarchicalLabel( _HKI( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H',
-                                          ID_HIERLABEL_TOOL );
-static EDA_HOTKEY HkAddGlobalLabel( _HKI( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'H',
-                                    ID_GLOBALLABEL_TOOL );
-static EDA_HOTKEY HkAddJunction( _HKI( "Add Junction" ), HK_ADD_JUNCTION, 'J',
-                                 ID_JUNCTION_TOOL );
-static EDA_HOTKEY HkAddComponent( _HKI( "Add Symbol" ), HK_ADD_NEW_COMPONENT, 'A',
-                                  ID_PLACE_SYMBOL_TOOL );
-static EDA_HOTKEY HkAddPower( _HKI( "Add Power" ), HK_ADD_NEW_POWER, 'P',
-                              ID_PLACE_POWER_TOOL );
-static EDA_HOTKEY HkAddNoConn( _HKI( "Add No Connect Flag" ), HK_ADD_NOCONN_FLAG, 'Q',
-                               ID_NOCONNECT_TOOL );
-static EDA_HOTKEY HkAddHierSheet( _HKI( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S',
-                                  ID_SHEET_TOOL );
-static EDA_HOTKEY HkAddBusEntry( _HKI( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/',
-                                 ID_BUSTOBUS_ENTRY_TOOL );
-static EDA_HOTKEY HkAddWireEntry( _HKI( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z',
-                                  ID_WIRETOBUS_ENTRY_TOOL );
-static EDA_HOTKEY HkAddGraphicPolyLine( _HKI( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I',
-                                        ID_SCHEMATIC_LINE_TOOL );
-static EDA_HOTKEY HkAddGraphicText( _HKI( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T',
-                                    ID_SCHEMATIC_TEXT_TOOL );
+static EDA_HOTKEY HkAddLabel( _HKI( "Add Label" ), HK_ADD_LABEL, 'L' );
+static EDA_HOTKEY HkAddHierarchicalLabel( _HKI( "Add Hierarchical Label" ), HK_ADD_HLABEL, 'H' );
+static EDA_HOTKEY HkAddGlobalLabel( _HKI( "Add Global Label" ), HK_ADD_GLABEL, GR_KB_CTRL + 'H' );
+static EDA_HOTKEY HkAddJunction( _HKI( "Add Junction" ), HK_ADD_JUNCTION, 'J' );
+static EDA_HOTKEY HkAddComponent( _HKI( "Add Symbol" ), HK_ADD_NEW_COMPONENT, 'A' );
+static EDA_HOTKEY HkAddPower( _HKI( "Add Power" ), HK_ADD_NEW_POWER, 'P' );
+static EDA_HOTKEY HkAddNoConn( _HKI( "Add No Connect Flag" ), HK_ADD_NOCONN_FLAG, 'Q' );
+static EDA_HOTKEY HkAddHierSheet( _HKI( "Add Sheet" ), HK_ADD_HIER_SHEET, 'S' );
+static EDA_HOTKEY HkAddBusEntry( _HKI( "Add Bus Entry" ), HK_ADD_BUS_ENTRY, '/' );
+static EDA_HOTKEY HkAddWireEntry( _HKI( "Add Wire Entry" ), HK_ADD_WIRE_ENTRY, 'Z' );
+static EDA_HOTKEY HkAddGraphicPolyLine( _HKI( "Add Graphic PolyLine" ), HK_ADD_GRAPHIC_POLYLINE, 'I' );
+static EDA_HOTKEY HkAddGraphicText( _HKI( "Add Graphic Text" ), HK_ADD_GRAPHIC_TEXT, 'T' );
 static EDA_HOTKEY HkMirrorY( _HKI( "Mirror Y" ), HK_MIRROR_Y, 'Y' );
 static EDA_HOTKEY HkMirrorX( _HKI( "Mirror X" ), HK_MIRROR_X, 'X' );
 static EDA_HOTKEY HkRotate( _HKI( "Rotate Item" ), HK_ROTATE, 'R' );
@@ -179,33 +155,28 @@ static EDA_HOTKEY HkEdit( _HKI( "Edit Item" ), HK_EDIT, 'E' );
 static EDA_HOTKEY HkEditValue( _HKI( "Edit Symbol Value" ), HK_EDIT_COMPONENT_VALUE, 'V' );
 static EDA_HOTKEY HkEditReference( _HKI( "Edit Symbol Reference" ), HK_EDIT_COMPONENT_REFERENCE, 'U' );
 static EDA_HOTKEY HkEditFootprint( _HKI( "Edit Symbol Footprint" ), HK_EDIT_COMPONENT_FOOTPRINT, 'F' );
-static EDA_HOTKEY HkShowDatasheet( _HKI( "Show Symbol Datasheet" ), HK_SHOW_COMPONENT_DATASHEET, 'D',
-                                   ID_SCH_DISPLAYDOC_CMP );
-static EDA_HOTKEY HkEditWithLibedit( _HKI( "Edit with Symbol Editor" ), HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL,
-                                     ID_SCH_CALL_LIBEDIT_AND_LOAD_CMP );
-
-static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M' );
+static EDA_HOTKEY HkShowDatasheet( _HKI( "Show Symbol Datasheet" ), HK_SHOW_COMPONENT_DATASHEET, 'D' );
+static EDA_HOTKEY HkEditWithLibedit( _HKI( "Edit with Symbol Editor" ), HK_EDIT_COMPONENT_WITH_LIBEDIT, 'E' + GR_KB_CTRL );
 
 static EDA_HOTKEY HkDuplicateItem( _HKI( "Duplicate" ), HK_DUPLICATE, 'D' + GR_KB_CTRL );
 
+static EDA_HOTKEY HkMove( _HKI( "Move Schematic Item" ), HK_MOVE, 'M' );
 static EDA_HOTKEY HkDrag( _HKI( "Drag Item" ), HK_DRAG, 'G' );
 static EDA_HOTKEY HkInsert( _HKI( "Repeat Last Item" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
 
-static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL,
-                              ID_FIND_ITEMS );
+static EDA_HOTKEY HkFind( _HKI( "Find" ), HK_FIND, 'F' + GR_KB_CTRL  );
+static EDA_HOTKEY HkReplace( _HKI( "Find and Replace" ), HK_REPLACE, 'F' + GR_KB_CTRL + GR_KB_ALT );
+
 static EDA_HOTKEY HkFindNextItem( _HKI( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
                                   wxEVT_COMMAND_FIND );
-static EDA_HOTKEY HkFindReplace( _HKI( "Find and Replace" ), HK_FIND_REPLACE, 'F' + GR_KB_CTRL + GR_KB_ALT,
-                                 wxID_REPLACE );
 static EDA_HOTKEY HkFindNextMarker( _HKI( "Find Next Marker" ), HK_FIND_NEXT_DRC_MARKER, WXK_F5 + GR_KB_SHIFT,
                                     EVT_COMMAND_FIND_DRC_MARKER );
 static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, GR_KB_CTRL + WXK_F5,
                                    ID_ZOOM_SELECTION );
 
 // Special keys for library editor:
-static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P',
-                               ID_LIBEDIT_PIN_BUTT );
+static EDA_HOTKEY HkCreatePin( _HKI( "Create Pin" ), HK_LIBEDIT_CREATE_PIN, 'P' );
 static EDA_HOTKEY HkInsertPin( _HKI( "Repeat Pin" ), HK_REPEAT_LAST, WXK_INSERT );
 static EDA_HOTKEY HkViewDoc( _HKI( "Show Datasheet" ), HK_LIBEDIT_VIEW_DOC, 'D' + GR_KB_ALT,
                              ID_LIBEDIT_VIEW_DOC );
@@ -217,47 +188,32 @@ static EDA_HOTKEY HkUpdatePcbFromSch( _HKI( "Update PCB from Schematic" ), HK_UP
                                       ID_UPDATE_PCB_FROM_SCH );
 
 // Selection
-static EDA_HOTKEY HkSelectNode( _HKI( "Select Node" ), HK_SELECT_NODE, GR_KB_ALT + '3',
-                                      ID_HOTKEY_SELECT_NODE);
-static EDA_HOTKEY HkSelectConnection( _HKI( "Select Connection" ), HK_SELECT_CONNECTION, GR_KB_ALT + '4',
-                                      ID_HOTKEY_SELECT_CONNECTION );
+static EDA_HOTKEY HkSelectNode( _HKI( "Select Node" ), HK_SELECT_NODE, GR_KB_ALT + '3' );
+static EDA_HOTKEY HkSelectConnection( _HKI( "Select Connection" ), HK_SELECT_CONNECTION, GR_KB_ALT + '4' );
 
 // Higtlight connection
-static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Net" ), ID_HOTKEY_HIGHLIGHT, 'B' + GR_KB_CTRL,
-                                         ID_HIGHLIGHT_NET );
+static EDA_HOTKEY HkHighlightConnection( _HKI( "Highlight Net" ), ID_HOTKEY_HIGHLIGHT, 'B' + GR_KB_CTRL );
 
-static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold from Bus" ), HK_UNFOLD_BUS, 'C',
-                               ID_SCH_UNFOLD_BUS );
+static EDA_HOTKEY HkUnfoldBus( _HKI( "Unfold from Bus" ), HK_UNFOLD_BUS, 'C', ID_SCH_UNFOLD_BUS );
 
 // Common: hotkeys_basic.h
-static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N',
-                         wxID_NEW );
-static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O',
-                          wxID_OPEN );
-static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S',
-                          wxID_SAVE );
-static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CTRL + 'S',
-                            wxID_SAVEAS );
-static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P',
-                           wxID_PRINT );
+static EDA_HOTKEY HkNew( _HKI( "New" ), HK_NEW, GR_KB_CTRL + 'N', wxID_NEW );
+static EDA_HOTKEY HkOpen( _HKI( "Open" ), HK_OPEN, GR_KB_CTRL + 'O', wxID_OPEN );
+static EDA_HOTKEY HkSave( _HKI( "Save" ), HK_SAVE, GR_KB_CTRL + 'S', wxID_SAVE );
+static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFTCTRL + 'S', wxID_SAVEAS );
+static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', wxID_PRINT );
 
-static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z',
-                          wxID_UNDO );
+static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z' );
 
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y',
-                          wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y' );
 #else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFTCTRL + 'Z',
-                          wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFTCTRL + 'Z' );
 #endif
 
-static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X',
-                             wxID_CUT );
-static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C',
-                              wxID_COPY );
-static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V',
-                               wxID_PASTE );
+static EDA_HOTKEY HkCut( _HKI( "Cut" ), HK_CUT, GR_KB_CTRL + 'X' );
+static EDA_HOTKEY HkCopy( _HKI( "Copy" ), HK_COPY, GR_KB_CTRL + 'C' );
+static EDA_HOTKEY HkPaste( _HKI( "Paste" ), HK_PASTE, GR_KB_CTRL + 'V' );
 
 static EDA_HOTKEY HkCanvasOpenGL( _HKI( "Switch to Modern Toolset with hardware-accelerated graphics (recommended)" ),
                                   HK_CANVAS_OPENGL,
@@ -277,7 +233,8 @@ static EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkNew,         &HkOpen,            &HkSave,          &HkSaveAs,        &HkPrint,
     &HkUndo,        &HkRedo,
-    &HkEditCut,     &HkEditCopy,        &HkEditPaste,
+    &HkCut,         &HkCopy,            &HkPaste,
+    &HkFind,        &HkReplace,
     &HkHelp,
     &HkPreferences,
     &HkZoomIn,
@@ -306,6 +263,7 @@ static EDA_HOTKEY* common_Hotkey_List[] =
 // List of common hotkey descriptors, for the library viewer
 static EDA_HOTKEY* common_basic_Hotkey_List[] =
 {
+    &HkCut,         &HkCopy,            &HkPaste,
     &HkHelp,
     &HkZoomIn,
     &HkZoomOut,
@@ -328,10 +286,8 @@ static EDA_HOTKEY* common_basic_Hotkey_List[] =
 // List of hotkey descriptors for schematic
 static EDA_HOTKEY* schematic_Hotkey_List[] =
 {
-    &HkFindItem,
     &HkFindNextItem,
     &HkFindNextMarker,
-    &HkFindReplace,
     &HkInsert,
     &HkAddComponent,
     &HkAddPower,
@@ -483,10 +439,8 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case HK_UNDO:             // Hot keys that map to command IDs that cannot be called
-    case HK_REDO:             // while busy performing another command.
-    case HK_FIND_ITEM:
-    case HK_FIND_REPLACE:
+    case HK_FIND:
+    case HK_REPLACE:
         if( EE_CONDITIONS::Idle( selection ) )
         {
             cmd.SetId( hotKey->m_IdMenuEvent );
@@ -576,22 +530,6 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     case HK_RESET_LOCAL_COORD:         // Reset the relative coord
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
-
-    case HK_EDIT_PASTE:
-    case HK_EDIT_COPY:
-    case HK_EDIT_CUT:
-        cmd.SetId( hotKey->m_IdMenuEvent );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_UNDO:
-    case HK_REDO:
-        if( EE_CONDITIONS::Idle( selection ) )
-        {
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
     }
 
     // Hot key handled.
@@ -643,31 +581,6 @@ bool LIB_VIEW_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
 
     case HK_RESET_LOCAL_COORD:      // set local (relative) coordinate origin
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
-        break;
-
-    case HK_ZOOM_IN:
-        cmd.SetId( ID_KEY_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_OUT:
-        cmd.SetId( ID_KEY_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
         break;
 
     case HK_CANVAS_CAIRO:

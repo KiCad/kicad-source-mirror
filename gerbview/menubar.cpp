@@ -33,14 +33,18 @@
 #include <advanced_config.h>
 #include <kiface_i.h>
 #include <pgm_base.h>
-
 #include "gerbview_id.h"
 #include "hotkeys.h"
 #include <menus_helpers.h>
-
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
+#include <tool/conditional_menu.h>
+#include <tools/gerbview_selection_tool.h>
+#include <tools/gerbview_actions.h>
 
 void GERBVIEW_FRAME::ReCreateMenuBar()
 {
+    GERBVIEW_SELECTION_TOOL* selTool = m_toolManager->GetTool<GERBVIEW_SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -180,120 +184,91 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  KiBitmap( exit_xpm ) );
 
     //--------- View menu ----------------
-    wxMenu* viewMenu = new wxMenu;
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
+
+    auto gridShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return IsGridVisible();
+    };
+    auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_DisplayOptions.m_DisplayPolarCood;
+    };
+    auto layersManagerShownCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_show_layer_manager_tools;
+    };
+    auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == INCHES;
+    };
+    auto metricUnitsCondition = [ this ] ( const SELECTION& aSel ) {
+        return GetUserUnits() == MILLIMETRES;
+    };
+    auto sketchFlashedCondition = [ this ] ( const SELECTION& aSel ) {
+        return !m_DisplayOptions.m_DisplayFlashedItemsFill;
+    };
+    auto sketchLinesCondition = [ this ] ( const SELECTION& aSel ) {
+        return !m_DisplayOptions.m_DisplayLinesFill;
+    };
+    auto sketchPolygonsCondition = [ this ] ( const SELECTION& aSel ) {
+        return !m_DisplayOptions.m_DisplayPolygonsFill;
+    };
+    auto showDcodes = [ this ] ( const SELECTION& aSel ) {
+        return IsElementVisible( LAYER_DCODES );
+    };
+    auto showNegativeObjects = [ this ] ( const SELECTION& aSel ) {
+        return IsElementVisible( LAYER_NEGATIVE_OBJECTS );
+    };
+    auto diffModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_DisplayOptions.m_DiffMode;
+    };
+    auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return m_DisplayOptions.m_HighContrastMode;
+    };
 
     // Hide layer manager
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
-                 _( "Show &Layers Manager" ), _( "Show or hide the layer manager" ),
-                 KiBitmap( layers_manager_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_LAYERS_MANAGER_VERTICAL_TOOLBAR,
+                            _( "Show &Layers Manager" ), _( "Show or hide the layer manager" ),
+                            layers_manager_xpm, layersManagerShownCondition );
 
     viewMenu->AppendSeparator();
 
-    /* Important Note for ZOOM IN and ZOOM OUT commands from menubar:
-     * we cannot add hotkey info here, because the hotkey HK_ZOOM_IN and HK_ZOOM_OUT
-     * events(default = WXK_F1 and WXK_F2) are *NOT* equivalent to this menu command:
-     * zoom in and out from hotkeys are equivalent to the pop up menu zoom
-     * From here, zooming is made around the screen center
-     * From hotkeys, zooming is made around the mouse cursor position
-     * (obviously not possible from the toolbar or menubar command)
-     *
-     * in other words HK_ZOOM_IN and HK_ZOOM_OUT *are NOT* accelerators
-     * for Zoom in and Zoom out sub menus
-     */
-    text = AddHotkeyName( _( "Zoom &In" ), GerbviewHotkeysDescr,
-                          HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_IN, text, _( "Zoom in" ), KiBitmap( zoom_in_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom &Out" ), GerbviewHotkeysDescr,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_ZOOM_OUT, text, _( "Zoom out" ), KiBitmap( zoom_out_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to &Fit" ), GerbviewHotkeysDescr, HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_ZOOM_PAGE, text, _( "Zoom to fit" ),
-                 KiBitmap( zoom_fit_in_page_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom to Selection" ), GerbviewHotkeysDescr, HK_ZOOM_SELECTION );
-    AddMenuItem( viewMenu, ID_ZOOM_SELECTION, text, KiBitmap( zoom_area_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "&Redraw" ), GerbviewHotkeysDescr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_ZOOM_REDRAW, text,
-                 _( "Refresh screen" ), KiBitmap( zoom_redraw_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,        SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GRID,
-                 _( "Show &Grid" ), wxEmptyString,
-                 KiBitmap( grid_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,              gridShownCondition );
 
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                 _( "Display &Polar Coordinates" ), wxEmptyString,
-                 KiBitmap( polar_coord_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_POLAR_COORD,
+                            _( "Display &Polar Coordinates" ), wxEmptyString,
+                            polar_coord_xpm,                  polarCoordsCondition );
 
     // Units submenu
-    wxMenu* unitsSubMenu = new wxMenu;
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_INCH,
-                 _( "&Imperial" ), _( "Use imperial units" ),
-                 KiBitmap( unit_inch_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( unitsSubMenu, ID_TB_OPTIONS_SELECT_UNIT_MM,
-                 _( "&Metric" ), _( "Use metric units" ),
-                 KiBitmap( unit_mm_xpm ), wxITEM_RADIO );
-
-    AddMenuItem( viewMenu, unitsSubMenu,
-                 -1, _( "&Units" ),
-                 _( "Select which units are displayed" ),
-                 KiBitmap( unit_mm_xpm ) );
+    CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
+    unitsSubMenu->SetTitle( _( "&Units" ) );
+    unitsSubMenu->SetIcon( unit_mm_xpm );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,       imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,         metricUnitsCondition );
+    viewMenu->AddMenu( unitsSubMenu );
 
     viewMenu->AppendSeparator();
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::flashedDisplayOutlines,  sketchFlashedCondition );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::linesDisplayOutlines,    sketchLinesCondition );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::polygonsDisplayOutlines, sketchPolygonsCondition );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::dcodeDisplay,            showDcodes );
+    viewMenu->AddCheckItem( GERBVIEW_ACTIONS::negativeObjectDisplay,   showNegativeObjects );
 
-    text = AddHotkeyName( _( "Sketch F&lashed Items" ), GerbviewHotkeysDescr, HK_GBR_FLASHED_DISPLAY_MODE );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, text,
-                 _( "Show flashed items in outline mode" ),
-                 KiBitmap( pad_sketch_xpm ), wxITEM_CHECK );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_DIFF_MODE,
+                            _( "Show in Differential Mode" ),
+                            _( "Show layers in differential mode" ),
+                            gbr_select_mode2_xpm, diffModeCondition );
 
-    text = AddHotkeyName( _( "Sketch &Lines" ), GerbviewHotkeysDescr, HK_GBR_LINES_DISPLAY_MODE );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_LINES_SKETCH, text,
-                 _( "Show lines in outline mode" ),
-                 KiBitmap( showtrack_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "Sketch Pol&ygons" ), GerbviewHotkeysDescr, HK_GBR_POLYGON_DISPLAY_MODE );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, text,
-                 _( "Show polygons in outline mode" ),
-                 KiBitmap( opt_show_polygon_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "Show &DCodes" ), GerbviewHotkeysDescr, HK_GBR_DCODE_DISPLAY_ONOFF );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_DCODES, text,
-                 _( "Show or hide DCodes" ),
-                 KiBitmap( show_dcodenumber_xpm ), wxITEM_CHECK );
-
-    text = AddHotkeyName( _( "Show &Negative Objects" ), GerbviewHotkeysDescr, HK_GBR_NEGATIVE_DISPLAY_ONOFF );
-    AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, text,
-                 _( "Show negative objects in ghost color" ),
-                 KiBitmap( gerbview_show_negative_objects_xpm ), wxITEM_CHECK );
-
-    if( IsGalCanvasActive() )
-    {
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_DIFF_MODE,
-                     _( "Show in Differential Mode" ), _( "Show layers in differential mode" ),
-                     KiBitmap( gbr_select_mode2_xpm ), wxITEM_CHECK );
-
-        text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_HIGH_CONTRAST_MODE, text,
-                     _( "Show in high contrast mode" ),
-                     KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
-    }
-    else
-    {
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_0,
-                     _( "Show Normal Mode" ), _( "Show layers in normal mode" ),
-                     KiBitmap( gbr_select_mode0_xpm ), wxITEM_RADIO );
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_1,
-                     _( "Show Stacked Mode" ), _( "Show layers in stacked mode" ),
-                     KiBitmap( gbr_select_mode1_xpm ), wxITEM_RADIO );
-        AddMenuItem( viewMenu, ID_TB_OPTIONS_SHOW_GBR_MODE_2,
-                     _( "Show Transparency Mode" ), _( "Show layers in transparency mode" ),
-                     KiBitmap( gbr_select_mode2_xpm ), wxITEM_RADIO );
-    }
+    text = AddHotkeyName( _( "Show in High Contrast" ), GerbviewHotkeysDescr, HK_SWITCH_HIGHCONTRAST_MODE );
+    viewMenu->AddCheckItem( ID_TB_OPTIONS_HIGH_CONTRAST_MODE, text,
+                            _( "Show in high contrast mode" ),
+                            contrast_mode_xpm, contrastModeCondition );
 
     // Menu for configuration and preferences
     wxMenu* configMenu = new wxMenu;

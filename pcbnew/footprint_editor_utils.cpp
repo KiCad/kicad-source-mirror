@@ -254,12 +254,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case wxID_COPY:
     case ID_TOOLBARH_PCB_SELECT_LAYER:
     case ID_MODEDIT_PAD_SETTINGS:
-    case ID_POPUP_PCB_ROTATE_TEXTEPCB:
-    case ID_POPUP_PCB_EDIT_TEXTEPCB:
-    case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-    case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
-    case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
-    case ID_POPUP_PCB_EDIT_TEXTMODULE:
     case ID_POPUP_PCB_APPLY_PAD_SETTINGS:
     case ID_POPUP_PCB_COPY_PAD_SETTINGS:
     case ID_POPUP_PCB_GLOBAL_IMPORT_PAD_SETTINGS:
@@ -268,8 +262,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
     case ID_POPUP_PCB_DELETE_EDGE:
-    case ID_POPUP_PCB_DELETE_TEXTMODULE:
-    case ID_POPUP_PCB_DELETE_PAD:
     case ID_POPUP_DELETE_BLOCK:
     case ID_POPUP_PLACE_BLOCK:
     case ID_POPUP_ZOOM_BLOCK:
@@ -623,18 +615,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         break;
 
-    case ID_POPUP_PCB_ROTATE_MODULE_COUNTERCLOCKWISE:
-        m_canvas->MoveCursorToCrossHair();
-        Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), 900, true );
-        m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PCB_ROTATE_MODULE_CLOCKWISE:
-        m_canvas->MoveCursorToCrossHair();
-        Rotate_Module( NULL, (MODULE*) GetScreen()->GetCurItem(), -900, true );
-        m_canvas->Refresh();
-        break;
-
     case ID_POPUP_PCB_EDIT_MODULE_PRMS:
         editFootprintProperties( (MODULE*) GetScreen()->GetCurItem() );
         m_canvas->MoveCursorToCrossHair();
@@ -650,13 +630,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         InstallPadOptionsFrame( (D_PAD*) GetScreen()->GetCurItem() );
         m_canvas->MoveCursorToCrossHair();
     break;
-
-    case ID_POPUP_PCB_DELETE_PAD:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        DeletePad( (D_PAD*) GetScreen()->GetCurItem(), false );
-        SetCurItem( NULL );
-        m_canvas->MoveCursorToCrossHair();
-        break;
 
     case ID_POPUP_PCB_DUPLICATE_ITEM:
         duplicateItems( false );
@@ -690,32 +663,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_PCB_COPY_PAD_SETTINGS:
         m_canvas->MoveCursorToCrossHair();
         Export_Pad_Settings( (D_PAD*) GetScreen()->GetCurItem() );
-        break;
-
-    case ID_POPUP_PCB_EDIT_TEXTMODULE:
-        InstallTextOptionsFrame( GetScreen()->GetCurItem(), &dc );
-        break;
-
-    case ID_POPUP_PCB_MOVE_TEXTMODULE_REQUEST:
-        m_canvas->MoveCursorToCrossHair();
-        StartMoveTexteModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
-        break;
-
-    case ID_POPUP_PCB_ROTATE_TEXTMODULE:
-        RotateTextModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_DELETE_TEXTMODULE:
-        SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
-        DeleteTextModule( static_cast<TEXTE_MODULE*>( GetScreen()->GetCurItem() ) );
-        SetCurItem( NULL );
-        m_canvas->MoveCursorToCrossHair();
-        break;
-
-    case ID_POPUP_PCB_MOVE_EDGE:
-        Start_Move_EdgeMod( static_cast<EDGE_MODULE*>( GetScreen()->GetCurItem() ), &dc );
-        m_canvas->MoveCursorToCrossHair();
         break;
 
     case ID_POPUP_PCB_STOP_CURRENT_DRAWING:

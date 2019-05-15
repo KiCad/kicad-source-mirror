@@ -59,6 +59,7 @@
 #include <origin_viewitem.h>
 #include <profile.h>
 #include <widgets/progress_reporter.h>
+#include <dialogs/dialog_find.h>
 
 using namespace std::placeholders;
 
@@ -82,7 +83,8 @@ TOOL_ACTION PCB_ACTIONS::viaSizeDec( "pcbnew.EditorControl.viaSizeDec",
 
 TOOL_ACTION PCB_ACTIONS::trackViaSizeChanged( "pcbnew.EditorControl.trackViaSizeChanged",
         AS_GLOBAL, 0,
-        "", "", NULL, AF_NOTIFY );
+        "", "",
+        nullptr, AF_NOTIFY );
 
 TOOL_ACTION PCB_ACTIONS::zoneMerge( "pcbnew.EditorControl.zoneMerge",
         AS_GLOBAL, 0,
@@ -95,15 +97,18 @@ TOOL_ACTION PCB_ACTIONS::zoneDuplicate( "pcbnew.EditorControl.zoneDuplicate",
 
 TOOL_ACTION PCB_ACTIONS::placeTarget( "pcbnew.EditorControl.placeTarget",
         AS_GLOBAL, 0,
-        _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ), NULL, AF_ACTIVATE );
+        _( "Add Layer Alignment Target" ), _( "Add a layer alignment target" ),
+        add_pcb_target_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeModule( "pcbnew.EditorControl.placeModule",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_MODULE ),
-        _( "Add Footprint" ), _( "Add a footprint" ), NULL, AF_ACTIVATE );
+        _( "Add Footprint" ), _( "Add a footprint" ),
+        module_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drillOrigin( "pcbnew.EditorControl.drillOrigin",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Drill and Place Offset" ), _( "Place origin point for drill and place files" ),
+        pcb_offset_xpm );
 
 TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchToPcb",
         AS_GLOBAL, 0,
@@ -111,15 +116,18 @@ TOOL_ACTION PCB_ACTIONS::crossProbeSchToPcb( "pcbnew.EditorControl.crossProbSchT
 
 TOOL_ACTION PCB_ACTIONS::toggleLock( "pcbnew.EditorControl.toggleLock",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_LOCK_UNLOCK_FOOTPRINT ),
-        "Toggle Lock", "", lock_unlock_xpm );
+        "Toggle Lock", "",
+        lock_unlock_xpm );
 
 TOOL_ACTION PCB_ACTIONS::lock( "pcbnew.EditorControl.lock",
         AS_GLOBAL, 0,
-        _( "Lock" ), "", locked_xpm );
+        _( "Lock" ), "",
+        locked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::unlock( "pcbnew.EditorControl.unlock",
         AS_GLOBAL, 0,
-        _( "Unlock" ), "", unlocked_xpm );
+        _( "Unlock" ), "",
+        unlocked_xpm );
 
 TOOL_ACTION PCB_ACTIONS::appendBoard( "pcbnew.EditorControl.appendBoard",
         AS_GLOBAL, 0,
@@ -133,18 +141,20 @@ TOOL_ACTION PCB_ACTIONS::clearHighlight( "pcbnew.EditorControl.clearHighlight",
         AS_GLOBAL, 0,
         "", "" );
 
-TOOL_ACTION PCB_ACTIONS::highlightNetCursor( "pcbnew.EditorControl.highlightNetCursor",
+TOOL_ACTION PCB_ACTIONS::highlightNetTool( "pcbnew.EditorControl.highlightNetTool",
         AS_GLOBAL, 0,
-        "Highlight Nets", "Highlight all copper items of a net",
+        _( "Highlight Nets" ), _( "Highlight all copper items of a net" ),
         net_highlight_xpm );
 
 TOOL_ACTION PCB_ACTIONS::highlightNetSelection( "pcbnew.EditorControl.highlightNetSelection",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_HIGHLIGHT_NET_SELECTION ),
-        "", "" );
+        _( "Highlight Net" ), _( "Highlight all copper items of a net" ),
+        net_highlight_xpm );
 
-TOOL_ACTION PCB_ACTIONS::showLocalRatsnest( "pcbnew.Control.showLocalRatsnest",
+TOOL_ACTION PCB_ACTIONS::localRatsnestTool( "pcbnew.Control.localRatsnestTool",
         AS_GLOBAL, 0,
-        "", "" );
+        _( "Highlight Ratsnest" ), "",
+        tool_ratsnest_xpm );
 
 TOOL_ACTION PCB_ACTIONS::hideLocalRatsnest( "pcbnew.Control.hideLocalRatsnest",
         AS_GLOBAL, 0,
@@ -344,6 +354,15 @@ bool PCB_EDITOR_CONTROL::Init()
             wxTimerEventHandler( PCB_EDITOR_CONTROL::ratsnestTimer ), NULL, this );
 
     return true;
+}
+
+
+int PCB_EDITOR_CONTROL::Find( const TOOL_EVENT& aEvent )
+{
+    DIALOG_FIND dlg( m_frame );
+    dlg.ShowModal();
+
+    return 0;
 }
 
 
@@ -1146,7 +1165,7 @@ static bool showLocalRatsnest( TOOL_MANAGER* aToolMgr, BOARD* aBoard, const VECT
 }
 
 
-int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
+int PCB_EDITOR_CONTROL::LocalRatsnestTool( const TOOL_EVENT& aEvent )
 {
     Activate();
 
@@ -1155,7 +1174,7 @@ int PCB_EDITOR_CONTROL::ShowLocalRatsnest( const TOOL_EVENT& aEvent )
     wxASSERT( picker );
     wxASSERT( board );
 
-    m_frame->SetToolID( ID_PCB_SHOW_1_RATSNEST_BUTT, wxCURSOR_PENCIL,
+    m_frame->SetToolID( ID_LOCAL_RATSNEST_BUTT, wxCURSOR_PENCIL,
                         _( "Pick Components for Local Ratsnest" ) );
     picker->SetClickHandler( std::bind( showLocalRatsnest, m_toolMgr, board, _1 ) );
     picker->SetFinalizeHandler( [ board ]( int aCondition ){
@@ -1262,6 +1281,8 @@ void PCB_EDITOR_CONTROL::calculateSelectionRatsnest()
 
 void PCB_EDITOR_CONTROL::setTransitions()
 {
+    Go( &PCB_EDITOR_CONTROL::Find,               ACTIONS::find.MakeEvent() );
+
     // Track & via size control
     Go( &PCB_EDITOR_CONTROL::TrackWidthInc,      PCB_ACTIONS::trackWidthInc.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::TrackWidthDec,      PCB_ACTIONS::trackWidthDec.MakeEvent() );
@@ -1287,10 +1308,10 @@ void PCB_EDITOR_CONTROL::setTransitions()
     Go( &PCB_EDITOR_CONTROL::DrillOrigin,         PCB_ACTIONS::drillOrigin.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNet,        PCB_ACTIONS::highlightNet.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::ClearHighlight,      PCB_ACTIONS::clearHighlight.MakeEvent() );
-    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetCursor.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HighlightNetCursor,  PCB_ACTIONS::highlightNetSelection.MakeEvent() );
 
-    Go( &PCB_EDITOR_CONTROL::ShowLocalRatsnest,   PCB_ACTIONS::showLocalRatsnest.MakeEvent() );
+    Go( &PCB_EDITOR_CONTROL::LocalRatsnestTool,   PCB_ACTIONS::localRatsnestTool.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::HideSelectionRatsnest, PCB_ACTIONS::hideLocalRatsnest.MakeEvent() );
     Go( &PCB_EDITOR_CONTROL::UpdateSelectionRatsnest, PCB_ACTIONS::updateLocalRatsnest.MakeEvent() );
 }

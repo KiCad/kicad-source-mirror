@@ -40,46 +40,6 @@
 #include <pcbnew_id.h>
 
 
-void FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar( wxCommandEvent& event )
-{
-    int        id = event.GetId();
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    bool state = m_optionsToolBar->GetToolToggled( id );
-
-    switch( id )
-    {
-    case ID_TB_OPTIONS_SHOW_PADS_SKETCH:
-        displ_opts->m_DisplayPadFill = !state;
-        m_canvas->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_VIAS_SKETCH:
-        displ_opts->m_DisplayViaFill = !state;
-        m_canvas->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH:
-        displ_opts->m_DisplayModTextFill = state ? SKETCH : FILLED;
-        m_canvas->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH:
-        displ_opts->m_DisplayModEdgeFill = state ? SKETCH : FILLED;
-        m_canvas->Refresh( );
-        break;
-
-    case ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE:
-        displ_opts->m_ContrastModeDisplay = state;
-        m_canvas->Refresh( );
-        break;
-
-    default:
-        wxLogDebug( wxT( "FOOTPRINT_EDIT_FRAME::OnSelectOptionToolbar error" ) );
-        break;
-    }
-}
-
-
 PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();

@@ -159,7 +159,7 @@ TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
         _( "Delete" ), _( "Deletes selected item(s)" ),
         delete_xpm );
 
-TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteItemCursor",
+TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0,
         _( "DoDelete Items" ), _( "DoDelete clicked items" ),
         delete_xpm, AF_ACTIVATE );

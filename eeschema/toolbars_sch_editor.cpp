@@ -83,13 +83,8 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->Add( ACTIONS::redo );
 
     KiScaledSeparator( m_mainToolBar, this );
-
-    msg = AddHotkeyName( HELP_FIND, g_Schematic_Hotkeys_Descr, HK_FIND_ITEM, IS_COMMENT );
-    m_mainToolBar->AddTool( ID_FIND_ITEMS, wxEmptyString, KiScaledBitmap( find_xpm, this ), msg );
-
-    m_mainToolBar->AddTool( wxID_REPLACE, wxEmptyString, KiScaledBitmap( find_replace_xpm, this ),
-                            wxNullBitmap, wxITEM_NORMAL, _( "Find and replace text" ),
-                            HELP_REPLACE, nullptr );
+    m_mainToolBar->Add( ACTIONS::find );
+    m_mainToolBar->Add( ACTIONS::replace );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::zoomRedraw );
@@ -126,7 +121,6 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
     m_mainToolBar->AddTool( ID_OPEN_CMP_TABLE, wxEmptyString,
                             KiScaledBitmap( spreadsheet_xpm, this ), _( "Edit symbol fields"  ) );
 
-
     m_mainToolBar->AddTool( ID_GET_TOOLS, wxEmptyString, KiScaledBitmap( bom_xpm, this ),
                             HELP_GENERATE_BOM );
 
@@ -157,6 +151,8 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     // Set up toolbar
     m_drawToolBar->Add( EE_ACTIONS::selectionTool,          ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::highlightNetCursor,     ACTION_TOOLBAR::TOGGLE );
+
+    KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbol,            ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placePower,             ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawWire,               ACTION_TOOLBAR::TOGGLE );
@@ -171,6 +167,8 @@ void SCH_EDIT_FRAME::ReCreateVToolbar()
     m_drawToolBar->Add( EE_ACTIONS::drawSheet,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::importSheetPin,         ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSheetPin,          ACTION_TOOLBAR::TOGGLE );
+
+    KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::drawLines,              ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSchematicText,     ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeImage,             ACTION_TOOLBAR::TOGGLE );
@@ -204,21 +202,21 @@ void SCH_EDIT_FRAME::ReCreateOptToolbar()
 
 void SCH_EDIT_FRAME::SyncMenusAndToolbars()
 {
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+
+    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
-
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle, galOpts.m_fullscreenCursor );
-
-    m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins, GetShowAllPins() );
-    m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV, GetForceHVLines() );
-
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleHiddenPins,    GetShowAllPins() );
+    m_optionsToolBar->Toggle( EE_ACTIONS::toggleForceHV,       GetForceHVLines() );
     m_optionsToolBar->Refresh();
-    
+
     m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,          GetToolId() == ID_NO_TOOL_SELECTED );
     m_drawToolBar->Toggle( EE_ACTIONS::highlightNetCursor,     GetToolId() == ID_HIGHLIGHT_TOOL );
     m_drawToolBar->Toggle( EE_ACTIONS::placeSymbol,            GetToolId() == ID_COMPONENT_BUTT );
@@ -239,6 +237,5 @@ void SCH_EDIT_FRAME::SyncMenusAndToolbars()
     m_drawToolBar->Toggle( EE_ACTIONS::placeSchematicText,     GetToolId() == ID_SCHEMATIC_TEXT_TOOL );
     m_drawToolBar->Toggle( EE_ACTIONS::placeImage,             GetToolId() == ID_PLACE_IMAGE_TOOL );
     m_drawToolBar->Toggle( EE_ACTIONS::deleteItemCursor,       GetToolId() == ID_DELETE_TOOL );
-
     m_drawToolBar->Refresh();
 }

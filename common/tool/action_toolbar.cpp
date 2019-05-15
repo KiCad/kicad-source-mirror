@@ -46,13 +46,19 @@ void ACTION_TOOLBAR::Add( const TOOL_ACTION& aAction, bool aIsToggleEntry )
     AddTool( toolId, wxEmptyString, KiBitmap( aAction.GetIcon() ), aAction.GetDescription(),
              aIsToggleEntry ? wxITEM_CHECK : wxITEM_NORMAL );
 
+    m_toolKinds[ toolId ] = aIsToggleEntry;
     m_toolActions[ toolId ] = &aAction;
 }
 
 
 void ACTION_TOOLBAR::Toggle( const TOOL_ACTION& aAction, bool aState )
 {
-    ToggleTool( aAction.GetId() + ACTION_ID, aState );
+    int toolId = aAction.GetId() + ACTION_ID;
+
+    if( m_toolKinds[ toolId ] )
+        ToggleTool( toolId, aState );
+    else
+        EnableTool( toolId, aState );
 }
 
 

@@ -70,12 +70,12 @@ TOOL_ACTION EE_ACTIONS::drawSymbolCircle( "libedit.InteractiveDrawing.drawSymbol
 TOOL_ACTION EE_ACTIONS::drawSymbolArc( "libedit.InteractiveDrawing.drawSymbolArc",
         AS_GLOBAL, 0,
         _( "Add Arc" ), _( "Add an arc" ),
-        add_circle_xpm, AF_ACTIVATE );
+        add_arc_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::drawSymbolLines( "libedit.InteractiveDrawing.drawSymbolLines",
         AS_GLOBAL, 0,
         _( "Add Lines" ), _( "Add connected graphic lines" ),
-        add_circle_xpm, AF_ACTIVATE );
+        add_polygon_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::placeSymbolAnchor( "libedit.InteractiveDrawing.placeSymbolAnchor",
         AS_GLOBAL, 0,

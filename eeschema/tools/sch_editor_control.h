@@ -81,6 +81,8 @@ public:
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
 
+    int FindReplace( const TOOL_EVENT& aEvent );
+
     int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );

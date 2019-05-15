@@ -82,17 +82,20 @@ enum VIA_ACTION_FLAGS
 TOOL_ACTION PCB_ACTIONS::routerActivateSingle( "pcbnew.InteractiveRouter.SingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
         _( "Interactive Router (Single Tracks)" ),
-        _( "Run push & shove router (single tracks)" ), ps_router_xpm, AF_ACTIVATE );
+        _( "Run push & shove router (single tracks)" ),
+        add_tracks_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateDiffPair( "pcbnew.InteractiveRouter.DiffPair",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_DIFF_PAIR ),
         _( "Interactive Router (Differential Pairs)" ),
-        _( "Run push & shove router (differential pairs)" ), ps_diff_pair_xpm, AF_ACTIVATE );
+        _( "Run push & shove router (differential pairs)" ),
+        ps_diff_pair_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateSettingsDialog( "pcbnew.InteractiveRouter.SettingsDialog",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTING_OPTIONS ),
         _( "Interactive Router Settings..." ),
-        _( "Open Interactive Router settings" ), tools_xpm );
+        _( "Open Interactive Router settings" ),
+        tools_xpm );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRouter.DpDimensionsDialog",
         AS_GLOBAL, 0,
@@ -102,15 +105,18 @@ TOOL_ACTION PCB_ACTIONS::routerActivateDpDimensionsDialog( "pcbnew.InteractiveRo
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneSingleTrace( "pcbnew.LengthTuner.TuneSingleTrack",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SINGLE ),
-        _( "Tune length of a single track" ), "", ps_tune_length_xpm, AF_ACTIVATE );
+        _( "Tune length of a single track" ), "",
+        ps_tune_length_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPair( "pcbnew.LengthTuner.TuneDiffPair",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_DIFF_PAIR ),
-        _( "Tune length of a differential pair" ), "", NULL, AF_ACTIVATE );
+        _( "Tune length of a differential pair" ), "",
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerActivateTuneDiffPairSkew( "pcbnew.LengthTuner.TuneDiffPairSkew",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROUTE_TUNE_SKEW ),
-        _( "Tune skew of a differential pair" ), "", NULL, AF_ACTIVATE );
+        _( "Tune skew of a differential pair" ), "",
+        NULL, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::routerInlineDrag( "pcbnew.InteractiveRouter.InlineDrag",
         AS_CONTEXT, 0,
@@ -143,10 +149,12 @@ TOOL_ACTION PCB_ACTIONS::dragFreeAngle( "pcbnew.InteractiveRouter.DragFreeAngle"
 
 static const TOOL_ACTION ACT_NewTrack( "pcbnew.InteractiveRouter.NewTrack", AS_CONTEXT,
     TOOL_ACTION::LegacyHotKey( HK_ADD_NEW_TRACK ),
-    _( "New Track" ),  _( "Starts laying a new track." ), add_tracks_xpm );
+    _( "New Track" ),  _( "Starts laying a new track." ),
+    add_tracks_xpm );
 
 static const TOOL_ACTION ACT_EndTrack( "pcbnew.InteractiveRouter.EndTrack", AS_CONTEXT, WXK_END,
-    _( "End Track" ),  _( "Stops laying the current track." ), checked_ok_xpm );
+    _( "End Track" ),  _( "Stops laying the current track." ),
+    checked_ok_xpm );
 
 static const TOOL_ACTION ACT_AutoEndRoute( "pcbnew.InteractiveRouter.AutoEndRoute", AS_CONTEXT, 'F',
     _( "Auto-end Track" ),  _( "Automagically finishes currently routed track." ) );

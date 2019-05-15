@@ -36,6 +36,7 @@
 #include <kicad_string.h>
 #include <wx/wupdlock.h>
 #include <tool/actions.h>
+#include <tools/gerbview_actions.h>
 
 void GERBVIEW_FRAME::ReCreateHToolbar( void )
 {
@@ -201,8 +202,7 @@ void GERBVIEW_FRAME::ReCreateVToolbar()
     m_drawToolBar = new ACTION_TOOLBAR( this, ID_V_TOOLBAR, wxDefaultPosition, wxDefaultSize,
                                         KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
-    m_drawToolBar->AddTool( ID_NO_TOOL_SELECTED, _( "Select item" ),
-                            KiScaledBitmap( cursor_xpm, this ) );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::selectionTool, ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->AddSeparator();
 
     m_drawToolBar->Realize();
@@ -220,14 +220,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     // TODO: these can be moved to the 'proper' vertical toolbar if and when there are
     // actual tools to put there. That, or I'll get around to implementing configurable
     // toolbars.
-    m_optionsToolBar->AddTool( ID_NO_TOOL_SELECTED, wxEmptyString,
-                               KiScaledBitmap( cursor_xpm, this ),
-                               wxEmptyString, wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_MEASUREMENT_TOOL, wxEmptyString,
-                               KiScaledBitmap( measurement_xpm, this ),
-                               _( "Measure distance between two points" ),
-                               wxITEM_CHECK );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::selectionTool,           ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::measureTool,             ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
     m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
@@ -236,32 +230,16 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
                                KiScaledBitmap( polar_coord_xpm, this ),
                                _( "Display polar coordinates" ), wxITEM_CHECK );
 
-    m_optionsToolBar->Add( ACTIONS::imperialUnits,     ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::metricUnits,       ACTION_TOOLBAR::TOGGLE );
-    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::imperialUnits,                    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::metricUnits,                      ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,                ACTION_TOOLBAR::TOGGLE );
 
     KiScaledSeparator( m_mainToolBar, this );
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( pad_sketch_xpm, this ),
-                               _( "Show flashed items in outline mode" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_LINES_SKETCH, wxEmptyString,
-                               KiScaledBitmap( showtrack_xpm, this ),
-                               _( "Show lines in outline mode" ), wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH, wxEmptyString,
-                               KiScaledBitmap( opt_show_polygon_xpm, this ),
-                               _( "Show polygons in outline mode" ),
-                               wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS, wxEmptyString,
-                               KiScaledBitmap( gerbview_show_negative_objects_xpm, this ),
-                               _( "Show negatives objects in ghost color" ),
-                               wxITEM_CHECK );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_DCODES, wxEmptyString,
-                               KiScaledBitmap( show_dcodenumber_xpm, this ),
-                               _( "Show dcode number" ), wxITEM_CHECK );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::flashedDisplayOutlines,  ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::linesDisplayOutlines,    ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::polygonsDisplayOutlines, ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::negativeObjectDisplay,   ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( GERBVIEW_ACTIONS::dcodeDisplay,            ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddTool( ID_TB_OPTIONS_DIFF_MODE, wxEmptyString,
                                KiScaledBitmap( gbr_select_mode2_xpm, this ),
@@ -476,115 +454,6 @@ void GERBVIEW_FRAME::OnToggleCoordType( wxCommandEvent& aEvent )
 }
 
 
-void GERBVIEW_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_DisplayOptions.m_DisplayPolarCood );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                            m_DisplayOptions.m_DisplayPolarCood ?
-                                            _( "Turn on rectangular coordinates" ) :
-                                            _( "Turn on polar coordinates" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateFlashedItemsDrawMode( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( !m_DisplayOptions.m_DisplayFlashedItemsFill );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_FLASHED_ITEMS_SKETCH,
-                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
-                                            _( "Show flashed items in outline mode" ) :
-                                            _( "Show flashed items in fill mode" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateLineDrawMode( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( !m_DisplayOptions.m_DisplayLinesFill );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_LINES_SKETCH,
-                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
-                                            _( "Show lines in outline mode" ) :
-                                            _( "Show lines in fill mode" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdatePolygonDrawMode( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( !m_DisplayOptions.m_DisplayPolygonsFill );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLYGONS_SKETCH,
-                                            m_DisplayOptions.m_DisplayFlashedItemsFill ?
-                                            _( "Show polygons in outline mode" ) :
-                                            _( "Show polygons in fill mode" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateShowDCodes( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( IsElementVisible( LAYER_DCODES ) );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_DCODES,
-                                            IsElementVisible( LAYER_DCODES ) ?
-                                            _( "Hide DCodes" ) : _( "Show DCodes" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateShowNegativeItems( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_NEGATIVE_ITEMS,
-                                            IsElementVisible( LAYER_NEGATIVE_OBJECTS ) ?
-                                            _( "Show negative objects in normal color" ) :
-                                            _( "Show negative objects in ghost color" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateDiffMode( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_DisplayOptions.m_DiffMode );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_DIFF_MODE,
-                                            m_DisplayOptions.m_DiffMode ?
-                                            _( "Show layers in normal mode" ) :
-                                            _( "Show layers in differential mode" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateHighContrastMode( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_DisplayOptions.m_HighContrastMode );
-
-    if( m_optionsToolBar )
-        m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_HIGH_CONTRAST_MODE,
-                                            m_DisplayOptions.m_HighContrastMode ?
-                                            _( "Disable high contrast mode" ) :
-                                            _( "Enable high contrast mode" ) );
-}
-
-
-void GERBVIEW_FRAME::OnUpdateShowLayerManager( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Check( m_show_layer_manager_tools );
-
-    if( m_optionsToolBar )
-    {
-        if( m_show_layer_manager_tools )
-            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _( "Hide layers manager" ) );
-        else
-            m_optionsToolBar->SetToolShortHelp( aEvent.GetId(), _( "Show layers manager" ) );
-    }
-}
-
-
 void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 {
     if( !m_DCodeSelector )
@@ -610,23 +479,31 @@ void GERBVIEW_FRAME::OnUpdateSelectDCode( wxUpdateUIEvent& aEvent )
 void GERBVIEW_FRAME::OnUpdateLayerSelectBox( wxUpdateUIEvent& aEvent )
 {
     if( m_SelLayerBox->GetSelection() != GetActiveLayer() )
-    {
         m_SelLayerBox->SetSelection( GetActiveLayer() );
-    }
 }
 
 
 void GERBVIEW_FRAME::SyncMenusAndToolbars()
 {
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
-
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle, galOpts.m_fullscreenCursor );
-
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      !galOpts.m_fullscreenCursor );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::flashedDisplayOutlines,
+                                                  !m_DisplayOptions.m_DisplayFlashedItemsFill );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::linesDisplayOutlines,
+                                                  !m_DisplayOptions.m_DisplayLinesFill );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::polygonsDisplayOutlines,
+                                                  !m_DisplayOptions.m_DisplayPolygonsFill );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::negativeObjectDisplay,
+                                                  IsElementVisible( LAYER_NEGATIVE_OBJECTS ) );
+    m_optionsToolBar->Toggle( GERBVIEW_ACTIONS::dcodeDisplay,
+                                                  IsElementVisible( LAYER_DCODES ) );
     m_optionsToolBar->Refresh();
 }

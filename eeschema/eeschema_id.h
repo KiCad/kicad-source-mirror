@@ -66,7 +66,6 @@ enum id_eeschema_frm
     ID_EDIT_COMPONENTS_TO_SYMBOLS_LIB_ID,
 
     /* Schematic editor horizontal toolbar IDs */
-    ID_SCH_LEAVE_SHEET,
     ID_TO_LIBVIEW,
     ID_GET_ANNOTATE,
     ID_GET_ERC,
@@ -99,9 +98,6 @@ enum id_eeschema_frm
     ID_POPUP_SCH_UNFOLD_BUS,
     ID_POPUP_SCH_UNFOLD_BUS_END = ID_POPUP_SCH_UNFOLD_BUS + 64,
 
-    ID_SCH_DISPLAYDOC_CMP,
-    ID_SCH_CALL_LIBEDIT_AND_LOAD_CMP,
-
     // Unit select context menus command IDs.
     ID_POPUP_SCH_SELECT_UNIT_CMP,
     ID_POPUP_SCH_SELECT_UNIT1,
@@ -118,10 +114,7 @@ enum id_eeschema_frm
     // events (menus, toolbar, context menu, etc.) that result in the same event handler.
     ID_CANCEL_CURRENT_COMMAND,
 
-    ID_HOTKEY_SELECT_NODE,
-    ID_HOTKEY_SELECT_CONNECTION,
     ID_HOTKEY_HIGHLIGHT,
-    ID_HIGHLIGHT_NET,
     ID_ADD_PART_TO_SCHEMATIC,
 
     /* Library editor: edit events */

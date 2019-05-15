@@ -135,7 +135,7 @@ public:
 
     // Drawing Tool Activations
     static TOOL_ACTION drawLine;
-    static TOOL_ACTION drawGraphicPolygon;
+    static TOOL_ACTION drawPolygon;
     static TOOL_ACTION drawCircle;
     static TOOL_ACTION drawArc;
     static TOOL_ACTION placeText;
@@ -209,6 +209,7 @@ public:
     static TOOL_ACTION selectpositionRelativeItem;
 
     // Display modes
+    static TOOL_ACTION showRatsnest;
     static TOOL_ACTION ratsnestLineMode;
     static TOOL_ACTION trackDisplayMode;
     static TOOL_ACTION padDisplayMode;
@@ -272,9 +273,6 @@ public:
     /// Display module edges as outlines
     static TOOL_ACTION moduleEdgeOutlines;
 
-    /// Display module texts as outlines
-    static TOOL_ACTION moduleTextOutlines;
-
     // Pad tools
     /// Copy the selected pad's settings to the board design settings
     static TOOL_ACTION copyPadSettings;
@@ -307,10 +305,10 @@ public:
     static TOOL_ACTION resetCoords;
     static TOOL_ACTION measureTool;
     static TOOL_ACTION updateUnits;
-    static TOOL_ACTION deleteItemCursor;
+    static TOOL_ACTION deleteTool;
     static TOOL_ACTION clearHighlight;
     static TOOL_ACTION highlightNet;
-    static TOOL_ACTION highlightNetCursor;
+    static TOOL_ACTION highlightNetTool;
     static TOOL_ACTION highlightNetSelection;
     static TOOL_ACTION drillOrigin;
     static TOOL_ACTION crossProbeSchToPcb;
@@ -319,7 +317,7 @@ public:
     static TOOL_ACTION toBeDone;
 
     // Ratsnest
-    static TOOL_ACTION showLocalRatsnest;
+    static TOOL_ACTION localRatsnestTool;
     static TOOL_ACTION hideLocalRatsnest;
     static TOOL_ACTION updateLocalRatsnest;
 

@@ -36,20 +36,11 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
     case ID_CANCEL_CURRENT_COMMAND:
         return ACTIONS::cancelInteractive.MakeEvent();
 
-    case ID_DELETE_TOOL:
-        return EE_ACTIONS::deleteItemCursor.MakeEvent();
-
     case ID_SIM_PROBE:
         return EE_ACTIONS::simProbe.MakeEvent();
 
     case ID_SIM_TUNE:
         return EE_ACTIONS::simTune.MakeEvent();
-
-    case ID_HOTKEY_SELECT_NODE:
-        return EE_ACTIONS::selectNode.MakeEvent();
-
-    case ID_HOTKEY_SELECT_CONNECTION:
-        return EE_ACTIONS::selectConnection.MakeEvent();
 
     case ID_SCH_UNFOLD_BUS:
         return EE_ACTIONS::unfoldBus.MakeEvent();

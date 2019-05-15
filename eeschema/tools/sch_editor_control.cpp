@@ -71,7 +71,7 @@ TOOL_ACTION EE_ACTIONS::clearHighlight( "eeschema.EditorControl.clearHighlight",
 TOOL_ACTION EE_ACTIONS::updateNetHighlighting( "eeschema.EditorControl.updateNetHighlighting",
         AS_GLOBAL, 0, "", "" );
 
-TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetCursor",
+TOOL_ACTION EE_ACTIONS::highlightNetCursor( "eeschema.EditorControl.highlightNetTool",
         AS_GLOBAL, 0,
         _( "Highlight Nets" ), _( "Highlight wires and pins of a net" ),
         net_highlight_schematic_xpm, AF_ACTIVATE );
@@ -698,6 +698,13 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
+int SCH_EDITOR_CONTROL::FindReplace( const TOOL_EVENT& aEvent )
+{
+    m_frame->DoFindReplace( aEvent.IsAction( &ACTIONS::replace ) );
+    return 0;
+}
+
+
 int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -820,6 +827,8 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Cut,                   ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::find.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::replace.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithSymbolEditor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );

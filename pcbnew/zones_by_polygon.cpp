@@ -88,7 +88,7 @@ void PCB_EDIT_FRAME::Add_Similar_Zone( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Use the general event handler to set others params (like toolbar)
     wxCommandEvent evt;
-    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_AREA_BUTT : ID_PCB_ZONES_BUTT );
+    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_BUTT : ID_PCB_ZONES_BUTT );
     OnSelectTool( evt );
 }
 
@@ -108,7 +108,7 @@ void PCB_EDIT_FRAME::Add_Zone_Cutout( wxDC* DC, ZONE_CONTAINER* aZone )
 
     // Use the general event handle to set others params (like toolbar)
     wxCommandEvent evt;
-    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_AREA_BUTT : ID_PCB_ZONES_BUTT );
+    evt.SetId( aZone->GetIsKeepout() ? ID_PCB_KEEPOUT_BUTT : ID_PCB_ZONES_BUTT );
     OnSelectTool( evt );
 }
 
@@ -536,7 +536,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
     // Verify if a new zone is allowed on this layer:
     if( zone == NULL  )
     {
-        if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT && !IsCopperLayer( GetActiveLayer() ) )
+        if( GetToolId() == ID_PCB_KEEPOUT_BUTT && !IsCopperLayer( GetActiveLayer() ) )
         {
             DisplayErrorMessage( this,
                           _( "Error: a keepout area is allowed only on copper layers" ) );
@@ -588,7 +588,7 @@ int PCB_EDIT_FRAME::Begin_Zone( wxDC* DC )
                 cfg->Read( ZONE_MIN_THICKNESS_WIDTH_STRING_KEY, &tmp );
                 zoneInfo.m_ZoneMinThickness = KiROUND( tmp * IU_PER_MILS );
 
-                if( GetToolId() == ID_PCB_KEEPOUT_AREA_BUTT )
+                if( GetToolId() == ID_PCB_KEEPOUT_BUTT )
                 {
                     zoneInfo.SetIsKeepout( true );
                     // Netcode, netname and some other settings are irrelevant,

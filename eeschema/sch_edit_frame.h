@@ -360,6 +360,11 @@ public:
                                     const wxString& aSearchText );
 
     /**
+     * Run the Find or Find & Replace dialog.
+     */
+    void DoFindReplace( bool aReplace );
+
+    /**
      * Breaks a single segment into two at the specified point.
      *
      * NOTE: always appends to the existing undo state.
@@ -754,7 +759,6 @@ private:
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnLaunchBomManager( wxCommandEvent& event );
     void OnLaunchBusManager( wxCommandEvent& event );
-    void OnFindItems( wxCommandEvent& event );
     void OnFindDialogClose( wxFindDialogEvent& event );
     void OnFindDrcMarker( wxFindDialogEvent& event );
 

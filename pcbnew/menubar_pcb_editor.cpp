@@ -35,6 +35,7 @@
 #include <tool/actions.h>
 #include <tool/selection_conditions.h>
 #include <tools/selection_tool.h>
+#include <tools/pcb_actions.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "pcbnew.h"
@@ -48,9 +49,6 @@ static void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject );
 
 // Build the export submenu (inside files menu)
 static void prepareExportMenu( wxMenu* aParentMenu );
-
-// Build the edit menu
-static void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal );
 
 // Build the place submenu
 static void preparePlaceMenu( wxMenu* aParentMenu );
@@ -90,8 +88,58 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     prepareFilesMenu( filesMenu, Kiface().IsSingle() );
 
     //----- Edit menu -----------------------------------------------------------
-    wxMenu* editMenu = new wxMenu;
-    prepareEditMenu( editMenu, IsGalCanvasActive() );
+    CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+
+    auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
+    };
+    auto enableRedoCondition = [ this ] ( const SELECTION& sel ) {
+        return GetScreen() && GetScreen()->GetRedoCommandCount() > 0;
+    };
+    auto noActiveToolCondition = [ this ] ( const SELECTION& aSelection ) {
+        return GetToolId() == ID_NO_TOOL_SELECTED;
+    };
+
+    editMenu->AddItem( ACTIONS::undo,                   enableUndoCondition );
+    editMenu->AddItem( ACTIONS::redo,                   enableRedoCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::cut,                    SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::copy,                   SELECTION_CONDITIONS::NotEmpty );
+    editMenu->AddItem( ACTIONS::paste,                  noActiveToolCondition );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::deleteTool,         SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ACTIONS::find,                   SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ID_PCB_EDIT_TRACKS_AND_VIAS,
+                       _( "Edit &Track && Via Properties..." ), "",
+                       width_track_via_xpm,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
+                       _( "Edit Text && &Graphic Properties..." ), "",
+                       reset_text_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::exchangeFootprints, SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_SWAP_LAYERS,
+                       _( "&Swap Layers..." ),
+                       _( "Move tracks or drawings from a layer to another layer" ),
+                       swap_layer_xpm,                  SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( PCB_ACTIONS::zoneFillAll,        SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( PCB_ACTIONS::zoneUnfillAll,      SELECTION_CONDITIONS::ShowAlways );
+
+    editMenu->AddSeparator();
+    editMenu->AddItem( ID_PCB_GLOBAL_DELETE,
+                       _( "Glo&bal Deletions..." ),
+                       _( "Delete tracks, footprints and graphic items from board" ),
+                       general_deletions_xpm,           SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ID_MENU_PCB_CLEAN,
+                       _( "C&leanup Tracks and Vias..." ),
+                       _( "Clean stubs, vias, delete break points or unconnected tracks" ),
+                       delete_xpm,                      SELECTION_CONDITIONS::ShowAlways );
 
     //----- View menu -----------------------------------------------------------
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
@@ -141,9 +189,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     auto sketchViasCondition = [ this ] ( const SELECTION& aSel ) {
         return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayViaFill;
     };
-
     auto sketchPadsCondition = [ this ] ( const SELECTION& aSel ) {
         return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPadFill;
+    };
+    auto contrastModeCondition = [ this ] ( const SELECTION& aSel ) {
+        return !( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_ContrastModeDisplay;
     };
 
     viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_MANAGE_LAYERS_VERTICAL_TOOLBAR,
@@ -179,19 +229,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
     unitsSubMenu->SetTitle( _( "&Units" ) );
     unitsSubMenu->SetIcon( unit_mm_xpm );
-    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,   imperialUnitsCondition );
-    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,     metricUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::imperialUnits,    imperialUnitsCondition );
+    unitsSubMenu->AddCheckItem( ACTIONS::metricUnits,      metricUnitsCondition );
     viewMenu->AddMenu( unitsSubMenu );
 
-    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,   fullCrosshairCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleCursorStyle,    fullCrosshairCondition );
 
     viewMenu->AddSeparator();
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_RATSNEST,
-                            _( "Show Ratsnest" ), _( "Show board ratsnest" ),
-                            general_ratsnest_xpm, ratsnestShownCondition );
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_CURVED_RATSNEST_LINES,
-                            _( "Curved Ratsnest Lines" ), _( "Show ratsnest with curved lines" ),
-                            curved_ratsnest_xpm, curvedRatsnestCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::showRatsnest,     ratsnestShownCondition );
+    viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode, curvedRatsnestCondition );
 
     viewMenu->AddSeparator();
 
@@ -200,56 +246,27 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
     drawingModeSubMenu->SetIcon( add_zone_xpm );
 
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES,
-                                      _( "&Fill Zones" ), _( "Show filled areas of zones" ),
-                                      show_zone_xpm, zonesFilledCondition );
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES_DISABLE,
-                                      _( "&Wireframe Zones" ), _( "Show only zone outlines" ),
-                                      show_zone_disable_xpm, zonesWireframedCondition );
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_ZONES_OUTLINES_ONLY,
-                                      _( "&Sketch Zones" ),
-                                      _( "Hatch outline of filled areas of zones" ) ,
-                                      show_zone_outline_only_xpm , zonesOutlinedCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayEnable,   zonesFilledCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayDisable,  zonesWireframedCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::zoneDisplayOutlines, zonesOutlinedCondition );
 
     drawingModeSubMenu->AddSeparator();
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_PADS_SKETCH,
-                                      _( "Sketch &Pads" ), _( "Show pads in outline mode" ),
-                                      pad_sketch_xpm, sketchPadsCondition );
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_VIAS_SKETCH,
-                                      _( "Sketch &Vias" ), _( "Show vias in outline mode" ),
-                                      via_sketch_xpm, sketchViasCondition );
-    text = AddHotkeyName( _( "Sketch &Tracks" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_SWITCH_TRACK_DISPLAY_MODE );
-    drawingModeSubMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_TRACKS_SKETCH,
-                                      text, _( "Show tracks in outline mode" ),
-                                      showtrack_xpm, sketchTracksCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,      sketchPadsCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::viaDisplayMode,      sketchViasCondition );
+    drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::trackDisplayMode,    sketchTracksCondition );
 
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
-    ACTION_MENU* contrastModeSubMenu = new ACTION_MENU;
+    CONDITIONAL_MENU* contrastModeSubMenu = new CONDITIONAL_MENU( false, selTool );
     contrastModeSubMenu->SetTitle( _( "&Contrast Mode" ) );
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
-    contrastModeSubMenu->SetTool( selTool );
 
-    text = AddHotkeyName( _( "&High Contrast Mode" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_SWITCH_HIGHCONTRAST_MODE );
-    AddMenuItem( contrastModeSubMenu, ID_TB_OPTIONS_SHOW_HIGH_CONTRAST_MODE,
-                 text, _( "Use high contrast display mode" ),
-                 KiBitmap( contrast_mode_xpm ), wxITEM_CHECK );
+    contrastModeSubMenu->AddCheckItem( PCB_ACTIONS::highContrastMode,   contrastModeCondition );
 
-    contrastModeSubMenu->AppendSeparator();
-    text = AddHotkeyName( _( "&Decrease Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_DEC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_DEC_LAYER_ALPHA,
-                 text, _( "Make the current layer more transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
-
-    text = AddHotkeyName( _( "&Increase Layer Opacity" ), g_Board_Editor_Hotkeys_Descr,
-                          HK_INC_LAYER_ALPHA );
-    AddMenuItem( contrastModeSubMenu, ID_INC_LAYER_ALPHA,
-                 text, _( "Make the current layer less transparent" ),
-                 KiBitmap( contrast_mode_xpm ) );
+    contrastModeSubMenu->AddSeparator();
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
+    contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddMenu( contrastModeSubMenu );
 
@@ -262,8 +279,38 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 #endif
 
     //----- Place Menu ----------------------------------------------------------
-    wxMenu* placeMenu = new wxMenu;
-    preparePlaceMenu( placeMenu );
+    CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
+
+    placeMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
+    placeMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
+
+    placeMenu->AddSeparator();
+
+    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
+    autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
+    autoplaceSubmenu->SetTool( selTool );
+
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
+
+    placeMenu->AddMenu( autoplaceSubmenu );
 
     //----- Route Menu ----------------------------------------------------------
     wxMenu* routeMenu = new wxMenu;
@@ -447,88 +494,6 @@ void prepareLibraryMenu( wxMenu* aParentMenu )
 }
 
 
-// Build the place menu
-void preparePlaceMenu( wxMenu* aParentMenu )
-{
-    wxString text;
-
-    text = AddHotkeyName( _( "&Footprint" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_MODULE );
-    AddMenuItem( aParentMenu, ID_PCB_MODULE_BUTT, text, _( "Add footprint" ),
-                 KiBitmap( module_xpm ) );
-
-    text = AddHotkeyName( _( "&Via" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_FREE_VIA );
-    AddMenuItem( aParentMenu, ID_PCB_DRAW_VIA_BUTT, text, _( "Add via" ),
-                 KiBitmap( add_via_xpm ) );
-
-    text = AddHotkeyName( _( "&Zone" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_ZONE );
-    AddMenuItem( aParentMenu, ID_PCB_ZONES_BUTT, text, _( "Add filled zone" ),
-                 KiBitmap( add_zone_xpm ) );
-
-    text = AddHotkeyName( _( "&Keepout Area" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_KEEPOUT );
-    AddMenuItem( aParentMenu, ID_PCB_KEEPOUT_AREA_BUTT, text, _( "Add keepout area" ),
-                 KiBitmap( add_keepout_area_xpm ) );
-
-    text = AddHotkeyName( _( "Te&xt" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_TEXT );
-    AddMenuItem( aParentMenu, ID_PCB_ADD_TEXT_BUTT, text,
-                 _( "Add text on copper layers or graphic text" ), KiBitmap( text_xpm ) );
-
-    text = AddHotkeyName( _( "&Arc" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_ARC );
-    AddMenuItem( aParentMenu, ID_PCB_ARC_BUTT, text, _( "Add graphic arc" ),
-                 KiBitmap( add_arc_xpm ) );
-
-    text = AddHotkeyName( _( "&Circle" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_CIRCLE );
-    AddMenuItem( aParentMenu, ID_PCB_CIRCLE_BUTT, text, _( "Add graphic circle" ),
-                 KiBitmap( add_circle_xpm ) );
-
-    text = AddHotkeyName( _( "&Line" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_LINE );
-    AddMenuItem( aParentMenu, ID_PCB_ADD_LINE_BUTT, text, _( "Add graphic line" ),
-                 KiBitmap( add_graphical_segments_xpm ) );
-
-    text = AddHotkeyName( _( "&Polygon" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_POLYGON );
-    AddMenuItem( aParentMenu, ID_PCB_ADD_POLYGON_BUTT, text, _( "Add graphic polygon" ),
-                 KiBitmap( add_graphical_polygon_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Dimension" ), g_Board_Editor_Hotkeys_Descr, HK_ADD_DIMENSION );
-    AddMenuItem( aParentMenu, ID_PCB_DIMENSION_BUTT, text, _( "Add dimension" ),
-                 KiBitmap( add_dimension_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_TARGET_BUTT, _( "La&yer Alignment Target" ),
-                 _( "Add layer alignment target" ), KiBitmap( add_pcb_target_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_PCB_PLACE_OFFSET_COORD_BUTT,
-                 _( "Dr&ill and Place Offset" ),
-                 _( "Place origin point for drill and place files" ),
-                 KiBitmap( pcb_offset_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_PCB_PLACE_GRID_COORD_BUTT,
-                 _( "&Grid Origin" ),
-                 _( "Set grid origin point" ),
-                 KiBitmap( grid_select_axis_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    wxMenu* autoplaceSubmenu = new wxMenu;
-    AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_OFF_BOARD_MODULES,
-                 _( "A&utomatically Place Off-Board Footprints" ), "",
-                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
-        );
-
-    AddMenuItem( autoplaceSubmenu, ID_POPUP_PCB_AUTOPLACE_SELECTED_MODULES,
-                 _( "Automatically Place &Selected Components" ), "",
-                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
-        );
-
-    AddMenuItem( aParentMenu, autoplaceSubmenu, -1, _( "Place Footprints Au&tomatically" ),
-                 _( "Automatically place all footprints" ),
-                 KiBitmap( grid_select_axis_xpm )   // fixme: icons
-        );
-}
-
-
 // Build the tools menu
 void prepareToolsMenu( wxMenu* aParentMenu )
 {
@@ -612,102 +577,6 @@ void prepareHelpMenu( wxMenu* aParentMenu )
     aParentMenu->AppendSeparator();
 
     AddMenuItem( aParentMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-}
-
-
-// Build the edit menu
-void prepareEditMenu( wxMenu* aParentMenu, bool aUseGal )
-{
-    wxString text;
-
-    // JEY TODO: convert to actions (PCB_CONTROL is already ready)...
-    text  = AddHotkeyName( _( "&Undo" ), g_Board_Editor_Hotkeys_Descr, HK_UNDO );
-    AddMenuItem( aParentMenu, wxID_UNDO, text, HELP_UNDO, KiBitmap( undo_xpm ) );
-
-    text  = AddHotkeyName( _( "&Redo" ), g_Board_Editor_Hotkeys_Descr, HK_REDO );
-    AddMenuItem( aParentMenu, wxID_REDO, text, HELP_REDO, KiBitmap( redo_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    // JEY TODO: convert to actions:
-    if( aUseGal )
-    {
-        text = AddHotkeyName( _( "&Cut" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_CUT );
-        AddMenuItem( aParentMenu, ID_EDIT_CUT, text,
-                     _( "Cuts the selected item(s) to the Clipboard" ),
-                     KiBitmap( cut_xpm ) );
-
-        text = AddHotkeyName( _( "Cop&y" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_COPY );
-        AddMenuItem( aParentMenu, ID_EDIT_COPY, text,
-                     _( "Copies the selected item(s) to the Clipboard" ),
-                     KiBitmap( copy_xpm ) );
-
-        text = AddHotkeyName( _( "&Paste" ), g_Board_Editor_Hotkeys_Descr, HK_EDIT_PASTE );
-        AddMenuItem( aParentMenu, ID_EDIT_PASTE, text,
-                     _( "Pastes item(s) from the Clipboard" ),
-                     KiBitmap( paste_xpm ) );
-    }
-
-    AddMenuItem( aParentMenu, ID_PCB_DELETE_ITEM_BUTT,
-                 _( "&Delete" ), _( "Delete items" ),
-                 KiBitmap( delete_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "&Find..." ), g_Board_Editor_Hotkeys_Descr, HK_FIND_ITEM );
-    AddMenuItem( aParentMenu, ID_FIND_ITEMS, text, HELP_FIND , KiBitmap( find_xpm ) );
-
-    aParentMenu->AppendSeparator();
-    AddMenuItem( aParentMenu, ID_PCB_EDIT_TRACKS_AND_VIAS,
-                 _( "Edit &Track && Via Properties..." ), KiBitmap( width_track_via_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_EDIT_TEXT_AND_GRAPHICS,
-                 _( "Edit Text && &Graphic Properties..." ), KiBitmap( reset_text_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_EXCHANGE_FOOTPRINTS,
-                 _( "C&hange Footprints..." ),
-                 _( "Assign different footprints from the library" ),
-                 KiBitmap( exchange_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_SWAP_LAYERS,
-                 _( "&Swap Layers..." ),
-                 _( "Move tracks or drawings from a layer to another layer" ),
-                 KiBitmap( swap_layer_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    text = AddHotkeyName( _( "Fill All &Zones" ), g_Board_Editor_Hotkeys_Descr,
-                HK_ZONE_FILL_OR_REFILL );
-    AddMenuItem( aParentMenu, ID_POPUP_PCB_FILL_ALL_ZONES,
-                 text, _( "Fill all zones on the board" ),
-                 KiBitmap( fill_zone_xpm ) );
-
-    text = AddHotkeyName( _( "U&nfill All Zones" ), g_Board_Editor_Hotkeys_Descr,
-                HK_ZONE_REMOVE_FILLED );
-    AddMenuItem( aParentMenu, ID_POPUP_PCB_REMOVE_FILLED_AREAS_IN_ALL_ZONES,
-                 text, _( "Remove fill from all zones on the board" ),
-                 KiBitmap( zone_unfill_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_PCB_GLOBAL_DELETE,
-                 _( "Glo&bal Deletions..." ),
-                 _( "Delete tracks, footprints and graphic items from board" ),
-                 KiBitmap( general_deletions_xpm ) );
-
-    AddMenuItem( aParentMenu, ID_MENU_PCB_CLEAN,
-                 _( "C&leanup Tracks and Vias..." ),
-                 _( "Clean stubs, vias, delete break points or unconnected tracks" ),
-                 KiBitmap( delete_xpm ) );
-}
-
-
-// Build the view menu
-void prepareViewMenu( CONDITIONAL_MENU* aParentMenu, PCB_EDIT_FRAME* aFrame )
-{
-    wxString text;
-
-
 }
 
 

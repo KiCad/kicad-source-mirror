@@ -67,39 +67,48 @@ using SCOPED_DRAW_MODE = SCOPED_SET_RESET<DRAWING_TOOL::MODE>;
 // Drawing tool actions
 TOOL_ACTION PCB_ACTIONS::drawLine( "pcbnew.InteractiveDrawing.line",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_LINE ),
-        _( "Draw Line" ), _( "Draw a line" ), NULL, AF_ACTIVATE );
+        _( "Draw Line" ), _( "Draw a line" ),
+        add_polygon_xpm, AF_ACTIVATE );
 
-TOOL_ACTION PCB_ACTIONS::drawGraphicPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
+TOOL_ACTION PCB_ACTIONS::drawPolygon( "pcbnew.InteractiveDrawing.graphicPolygon",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_POLYGON ),
-        _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ), NULL, AF_ACTIVATE );
+        _( "Draw Graphic Polygon" ), _( "Draw a graphic polygon" ),
+        add_polygon_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawCircle( "pcbnew.InteractiveDrawing.circle",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CIRCLE ),
-        _( "Draw Circle" ), _( "Draw a circle" ), NULL, AF_ACTIVATE );
+        _( "Draw Circle" ), _( "Draw a circle" ),
+        add_circle_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawArc( "pcbnew.InteractiveDrawing.arc",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ARC ),
-        _( "Draw Arc" ), _( "Draw an arc" ), NULL, AF_ACTIVATE );
+        _( "Draw Arc" ), _( "Draw an arc" ),
+        add_arc_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::placeText( "pcbnew.InteractiveDrawing.text",
         AS_GLOBAL,  TOOL_ACTION::LegacyHotKey( HK_ADD_TEXT ),
-        _( "Add Text" ), _( "Add a text" ), NULL, AF_ACTIVATE );
+        _( "Add Text" ), _( "Add a text item" ),
+        text_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawDimension( "pcbnew.InteractiveDrawing.dimension",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DIMENSION ),
-        _( "Add Dimension" ), _( "Add a dimension" ), NULL, AF_ACTIVATE );
+        _( "Add Dimension" ), _( "Add a dimension" ),
+        add_dimension_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZone( "pcbnew.InteractiveDrawing.zone",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ZONE ),
-        _( "Add Filled Zone" ), _( "Add a filled zone" ), NULL, AF_ACTIVATE );
+        _( "Add Filled Zone" ), _( "Add a filled zone" ),
+        add_zone_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawVia( "pcbnew.InteractiveDrawing.via",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_FREE_VIA ),
-        _( "Add Vias" ), _( "Add free-standing vias" ), NULL, AF_ACTIVATE );
+        _( "Add Vias" ), _( "Add free-standing vias" ),
+        add_via_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneKeepout( "pcbnew.InteractiveDrawing.keepout",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_KEEPOUT ),
-        _( "Add Keepout Area" ), _( "Add a keepout area" ), NULL, AF_ACTIVATE );
+        _( "Add Keepout Area" ), _( "Add a keepout area" ),
+        add_keepout_area_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::drawZoneCutout( "pcbnew.InteractiveDrawing.zoneCutout",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_CUTOUT ),
@@ -113,12 +122,13 @@ TOOL_ACTION PCB_ACTIONS::drawSimilarZone( "pcbnew.InteractiveDrawing.similarZone
 
 TOOL_ACTION PCB_ACTIONS::placeImportedGraphics( "pcbnew.InteractiveDrawing.placeImportedGraphics",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_DXF ),
-        "Place Imported Graphics", "", NULL, AF_ACTIVATE );
+        _( "Place Imported Graphics" ), "",
+        import_vector_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::setAnchor( "pcbnew.InteractiveDrawing.setAnchor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ADD_ANCHOR ),
-        _( "Place the Footprint Anchor" ), _( "Place the footprint anchor" ),
-        NULL, AF_ACTIVATE );
+        _( "Place the Footprint Anchor" ), "",
+        anchor_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::incWidth( "pcbnew.InteractiveDrawing.incWidth",
         AS_CONTEXT, TOOL_ACTION::LegacyHotKey( HK_INC_LINE_WIDTH ),
@@ -704,7 +714,7 @@ int DRAWING_TOOL::DrawZoneKeepout( const TOOL_EVENT& aEvent )
 {
     SCOPED_DRAW_MODE scopedDrawMode( m_mode, MODE::KEEPOUT );
 
-    m_frame->SetToolID( ID_PCB_KEEPOUT_AREA_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
+    m_frame->SetToolID( ID_PCB_KEEPOUT_BUTT, wxCURSOR_PENCIL, _( "Add keepout" ) );
 
     return drawZone( true, ZONE_MODE::ADD );
 }
@@ -1778,7 +1788,7 @@ int DRAWING_TOOL::DrawVia( const TOOL_EVENT& aEvent )
 void DRAWING_TOOL::setTransitions()
 {
     Go( &DRAWING_TOOL::DrawLine, PCB_ACTIONS::drawLine.MakeEvent() );
-    Go( &DRAWING_TOOL::DrawGraphicPolygon, PCB_ACTIONS::drawGraphicPolygon.MakeEvent() );
+    Go( &DRAWING_TOOL::DrawGraphicPolygon, PCB_ACTIONS::drawPolygon.MakeEvent() );
     Go( &DRAWING_TOOL::DrawCircle, PCB_ACTIONS::drawCircle.MakeEvent() );
     Go( &DRAWING_TOOL::DrawArc, PCB_ACTIONS::drawArc.MakeEvent() );
     Go( &DRAWING_TOOL::DrawDimension, PCB_ACTIONS::drawDimension.MakeEvent() );

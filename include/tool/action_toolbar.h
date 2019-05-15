@@ -66,6 +66,7 @@ protected:
     static const int ACTION_ID = 10000;
 
     TOOL_MANAGER* m_toolManager;
+    std::map<int, bool>               m_toolKinds;
     std::map<int, const TOOL_ACTION*> m_toolActions;
 };
 

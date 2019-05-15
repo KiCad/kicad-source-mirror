@@ -126,7 +126,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
     {
         switch( GetToolId() )
         {
-        case ID_PCB_SHOW_1_RATSNEST_BUTT:
+        case ID_LOCAL_RATSNEST_BUTT:
             scanList = GENERAL_COLLECTOR::PadsOrModules;
             break;
 
@@ -139,7 +139,7 @@ BOARD_ITEM* PCB_BASE_FRAME::PcbGeneralLocateAndDisplay( int aHotKeyCode )
             break;
 
         case ID_PCB_ZONES_BUTT:
-        case ID_PCB_KEEPOUT_AREA_BUTT:
+        case ID_PCB_KEEPOUT_BUTT:
             scanList = GENERAL_COLLECTOR::Zones;
             break;
 

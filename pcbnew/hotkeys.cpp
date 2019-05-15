@@ -93,7 +93,8 @@ static EDA_HOTKEY HkSwitch2NextCopperLayer( _HKI( "Switch to Next Layer" ),
 static EDA_HOTKEY HkSwitch2PreviousCopperLayer( _HKI( "Switch to Previous Layer" ),
                                                 HK_SWITCH_LAYER_TO_PREVIOUS, '-' );
 
-static EDA_HOTKEY HkFindItem( _HKI( "Find Item" ), HK_FIND_ITEM, 'F' + GR_KB_CTRL );
+static EDA_HOTKEY HkFind( _HKI( "Find" ), HK_FIND, 'F' + GR_KB_CTRL );
+static EDA_HOTKEY HkReplace( _HKI( "Find and Replace" ), HK_REPLACE, 'F' + GR_KB_CTRL + GR_KB_ALT );
 static EDA_HOTKEY HkBackspace( _HKI( "Delete Track Segment" ), HK_BACK_SPACE, WXK_BACK );
 static EDA_HOTKEY HkAddNewTrack( _HKI( "Add New Track" ), HK_ADD_NEW_TRACK, 'X' );
 
@@ -148,7 +149,6 @@ static EDA_HOTKEY HkDuplicateItemAndIncrement( _HKI( "Duplicate Item and Increme
                                                HK_DUPLICATE_ITEM_AND_INCREMENT,
                                                'D' + GR_KB_SHIFTCTRL );
 static EDA_HOTKEY HkCreateArray( _HKI( "Create Array" ), HK_CREATE_ARRAY, 'T' + GR_KB_CTRL );
-static EDA_HOTKEY HkCopyItem( _HKI( "Copy Item" ), HK_COPY_ITEM, 'C' );
 static EDA_HOTKEY HkDragFootprint( _HKI( "Drag Item" ), HK_DRAG_ITEM, 'G' );
 static EDA_HOTKEY HkGetAndMoveFootprint( _HKI( "Get and Move Footprint" ),
                                          HK_GET_AND_MOVE_FOOTPRINT, 'T' );
@@ -317,17 +317,18 @@ static EDA_HOTKEY HkSaveAs( _HKI( "Save As" ), HK_SAVEAS, GR_KB_SHIFT + GR_KB_CT
                             (int) wxID_SAVEAS );
 static EDA_HOTKEY HkPrint( _HKI( "Print" ), HK_PRINT, GR_KB_CTRL + 'P', (int) wxID_PRINT );
 
-static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z', (int) wxID_UNDO );
+static EDA_HOTKEY HkUndo( _HKI( "Undo" ), HK_UNDO, GR_KB_CTRL + 'Z' );
 
 #if !defined( __WXMAC__ )
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y', (int) wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_CTRL + 'Y' );
 #else
-static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z', (int) wxID_REDO );
+static EDA_HOTKEY HkRedo( _HKI( "Redo" ), HK_REDO, GR_KB_SHIFT + GR_KB_CTRL + 'Z' );
 #endif
 
-static EDA_HOTKEY HkEditCut( _HKI( "Cut" ), HK_EDIT_CUT, GR_KB_CTRL + 'X', (int) wxID_CUT );
-static EDA_HOTKEY HkEditCopy( _HKI( "Copy" ), HK_EDIT_COPY, GR_KB_CTRL + 'C', (int) wxID_COPY );
-static EDA_HOTKEY HkEditPaste( _HKI( "Paste" ), HK_EDIT_PASTE, GR_KB_CTRL + 'V', (int) wxID_PASTE );
+static EDA_HOTKEY HkCut( _HKI( "Cut" ), HK_CUT, GR_KB_CTRL + 'X' );
+static EDA_HOTKEY HkCopy( _HKI( "Copy" ), HK_COPY, GR_KB_CTRL + 'C' );
+static EDA_HOTKEY HkPaste( _HKI( "Paste" ), HK_PASTE, GR_KB_CTRL + 'V' );
+
 static EDA_HOTKEY HkPreferences( _HKI( "Preferences" ),
                                  HK_PREFERENCES, GR_KB_CTRL + ',', (int) wxID_PREFERENCES );
 
@@ -344,7 +345,8 @@ EDA_HOTKEY* common_Hotkey_List[] =
 {
     &HkNew,         &HkOpen,            &HkSave,          &HkSaveAs,        &HkPrint,
     &HkUndo,        &HkRedo,
-    &HkEditCut,     &HkEditCopy,        &HkEditPaste,
+    &HkCut,         &HkCopy,            &HkPaste,
+    &HkFind,        &HkReplace,
     &HkHelp,        &HkPreferences,
     &HkZoomIn,      &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,      &HkZoomSelection,
@@ -364,6 +366,8 @@ EDA_HOTKEY* common_basic_Hotkey_List[] =
     &HkHelp,        &HkZoomIn,          &HkZoomOut,
     &HkZoomRedraw,  &HkZoomCenter,      &HkZoomAuto,   &Hk3DViewer,
     &HkSwitchUnits, &HkResetLocalCoord,
+    &HkCut,         &HkCopy,            &HkPaste,
+    &HkFind,        &HkReplace,
     &HkMouseLeftClick,
     &HkMouseLeftDClick,
     NULL
@@ -437,7 +441,6 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
 
     // Edit placement
     &HkDragFootprint,
-    &HkCopyItem,
     &HkMoveItem,
     &HkGetAndMoveFootprint,
     &HkMoveItemExact,
@@ -454,7 +457,6 @@ EDA_HOTKEY* board_edit_Hotkey_List[] =
     &HkCreateArray,
     &HkLock_Unlock_Footprint,
 
-    &HkFindItem,
     &HkEditBoardItem,
     &HkEditWithModedit,
 
@@ -625,37 +627,6 @@ bool FOOTPRINT_VIEWER_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
         OnLeftClick( aDC, aPosition );
         OnLeftDClick( aDC, aPosition );
         break;
-
-    case HK_SWITCH_UNITS:
-        cmd.SetId( (GetUserUnits() == INCHES) ?
-                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_IN:
-        cmd.SetId( ID_KEY_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_OUT:
-        cmd.SetId( ID_KEY_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
     }
 
     return true;
@@ -712,38 +683,6 @@ bool FOOTPRINT_WIZARD_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aP
         OnLeftClick( aDC, aPosition );
         OnLeftDClick( aDC, aPosition );
         break;
-
-    case HK_SWITCH_UNITS:
-        cmd.SetId( (GetUserUnits() == INCHES) ?
-                    ID_TB_OPTIONS_SELECT_UNIT_MM : ID_TB_OPTIONS_SELECT_UNIT_INCH );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_IN:
-        cmd.SetId( ID_KEY_ZOOM_IN );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_OUT:
-        cmd.SetId( ID_KEY_ZOOM_OUT );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_REDRAW:
-        cmd.SetId( ID_ZOOM_REDRAW );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_CENTER:
-        cmd.SetId( ID_POPUP_ZOOM_CENTER );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
-
-    case HK_ZOOM_AUTO:
-        cmd.SetId( ID_ZOOM_PAGE );
-        GetEventHandler()->ProcessEvent( cmd );
-        break;
     }
-
     return true;
 }

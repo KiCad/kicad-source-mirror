@@ -58,17 +58,12 @@ using namespace std::placeholders;
 #include "grid_helper.h"
 #include "kicad_clipboard.h"
 #include "pcbnew_control.h"
-
 #include <router/router_tool.h>
-
 #include <dialogs/dialog_move_exact.h>
 #include <dialogs/dialog_track_via_properties.h>
 #include <dialogs/dialog_exchange_footprints.h>
-
 #include <tools/tool_event_utils.h>
-
 #include <preview_items/ruler_item.h>
-
 #include <board_commit.h>
 
 
@@ -81,19 +76,23 @@ TOOL_ACTION PCB_ACTIONS::editFootprintInFpEditor( "pcbnew.InteractiveEdit.editFo
 
 TOOL_ACTION PCB_ACTIONS::editActivate( "pcbnew.InteractiveEdit",
         AS_GLOBAL, 0,
-        _( "Edit Activate" ), "", move_xpm, AF_ACTIVATE );
+        _( "Edit Activate" ), "",
+        move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::move( "pcbnew.InteractiveEdit.move",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM ),
-        _( "Move" ), _( "Moves the selected item(s)" ), move_xpm, AF_ACTIVATE );
+        _( "Move" ), _( "Moves the selected item(s)" ),
+        move_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::duplicate( "pcbnew.InteractiveEdit.duplicate",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s)" ), duplicate_xpm );
+        _( "Duplicate" ), _( "Duplicates the selected item(s)" ),
+        duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::duplicateIncrement( "pcbnew.InteractiveEdit.duplicateIncrementPads",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DUPLICATE_ITEM_AND_INCREMENT ),
-        _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ) );
+        _( "Duplicate" ), _( "Duplicates the selected item(s), incrementing pad numbers" ),
+        duplicate_xpm );
 
 TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MOVE_ITEM_EXACT ),
@@ -102,7 +101,8 @@ TOOL_ACTION PCB_ACTIONS::moveExact( "pcbnew.InteractiveEdit.moveExact",
 
 TOOL_ACTION PCB_ACTIONS::createArray( "pcbnew.InteractiveEdit.createArray",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_CREATE_ARRAY ),
-        _( "Create Array..." ), _( "Create array" ), array_xpm, AF_ACTIVATE );
+        _( "Create Array..." ), _( "Create array" ),
+        array_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::rotateCw( "pcbnew.InteractiveEdit.rotateCw",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_ROTATE_ITEM_CLOCKWISE ),
@@ -116,16 +116,18 @@ TOOL_ACTION PCB_ACTIONS::rotateCcw( "pcbnew.InteractiveEdit.rotateCcw",
 
 TOOL_ACTION PCB_ACTIONS::flip( "pcbnew.InteractiveEdit.flip",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FLIP_ITEM ),
-        _( "Flip" ), _( "Flips selected item(s)" ), swap_layer_xpm );
+        _( "Flip" ), _( "Flips selected item(s)" ),
+        swap_layer_xpm );
 
 TOOL_ACTION PCB_ACTIONS::mirror( "pcbnew.InteractiveEdit.mirror",
         AS_GLOBAL, 0,
-        _( "Mirror" ), _( "Mirrors selected item" ), mirror_h_xpm );
+        _( "Mirror" ), _( "Mirrors selected item" ),
+        mirror_h_xpm );
 
 TOOL_ACTION PCB_ACTIONS::remove( "pcbnew.InteractiveEdit.remove",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_BACK_SPACE ),
-        _( "Delete" ), _( "Deletes selected item(s)" ), delete_xpm,
-        AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
+        _( "Delete" ), _( "Deletes selected item(s)" ),
+        delete_xpm, AF_NONE, (void*) REMOVE_FLAGS::NORMAL );
 
 TOOL_ACTION PCB_ACTIONS::removeAlt( "pcbnew.InteractiveEdit.removeAlt",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DELETE ),
@@ -144,12 +146,13 @@ TOOL_ACTION PCB_ACTIONS::exchangeFootprints( "pcbnew.InteractiveEdit.ExchangeFoo
 
 TOOL_ACTION PCB_ACTIONS::properties( "pcbnew.InteractiveEdit.properties",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_ITEM ),
-        _( "Properties..." ), _( "Displays item properties dialog" ), config_xpm );
+        _( "Properties..." ), _( "Displays item properties dialog" ),
+        config_xpm );
 
 TOOL_ACTION PCB_ACTIONS::measureTool( "pcbnew.InteractiveEdit.measureTool",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_MEASURE_TOOL ),
         _( "Measuring Tool" ), _( "Interactively measure distance between points" ),
-        nullptr, AF_ACTIVATE );
+        measurement_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::updateUnits( "pcbnew.InteractiveEdit.updateUnits",
         AS_GLOBAL, 0,

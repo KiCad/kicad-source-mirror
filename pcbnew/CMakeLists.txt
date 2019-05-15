@@ -286,7 +286,6 @@ set( PCBNEW_CLASS_SRCS
     muwave_command.cpp
     netlist.cpp
     onleftclick.cpp
-    onrightclick.cpp
     pad_edit_functions.cpp
     pad_naming.cpp
     pcb_base_edit_frame.cpp
@@ -313,7 +312,6 @@ set( PCBNEW_CLASS_SRCS
     toolbars_footprint_viewer.cpp
     toolbar_onrightclick.cpp
     toolbars_pcb_editor.cpp
-    toolbars_update_user_interface.cpp
     tracks_cleaner.cpp
     undo_redo.cpp
     zone_filler.cpp

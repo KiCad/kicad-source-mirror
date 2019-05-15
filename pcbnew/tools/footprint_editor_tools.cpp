@@ -61,7 +61,8 @@ using namespace std::placeholders;
 // Module editor tools
 TOOL_ACTION PCB_ACTIONS::placePad( "pcbnew.ModuleEditor.placePad",
         AS_GLOBAL, 0,
-        _( "Add Pad" ), _( "Add a pad" ), NULL, AF_ACTIVATE );
+        _( "Add Pad" ), _( "Add a pad" ),
+        pad_xpm, AF_ACTIVATE );
 
 TOOL_ACTION PCB_ACTIONS::createPadFromShapes( "pcbnew.ModuleEditor.createPadFromShapes",
         AS_CONTEXT, 0,

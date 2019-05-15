@@ -52,6 +52,8 @@ void LIB_EDIT_FRAME::ReCreateVToolbar()
 
     // Set up toolbar
     m_drawToolBar->Add( EE_ACTIONS::selectionTool,        ACTION_TOOLBAR::TOGGLE );
+
+    KiScaledSeparator( m_drawToolBar, this );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolPin,       ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::placeSymbolText,      ACTION_TOOLBAR::TOGGLE );
     m_drawToolBar->Add( EE_ACTIONS::drawSymbolRectangle,  ACTION_TOOLBAR::TOGGLE );
@@ -179,19 +181,19 @@ void LIB_EDIT_FRAME::ReCreateOptToolbar()
 
 void LIB_EDIT_FRAME::SyncMenusAndToolbars()
 {
+    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
+
+    m_mainToolBar->Toggle( ACTIONS::undo, GetScreen() && GetScreen()->GetUndoCommandCount() > 0 );
+    m_mainToolBar->Toggle( ACTIONS::redo, GetScreen() && GetScreen()->GetRedoCommandCount() > 0 );
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
-
-    KIGFX::GAL_DISPLAY_OPTIONS& galOpts = GetGalDisplayOptions();
-    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle, galOpts.m_fullscreenCursor );
-
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::toggleCursorStyle,      galOpts.m_fullscreenCursor );
     m_optionsToolBar->Toggle( EE_ACTIONS::showElectricalTypes, GetShowElectricalType() );
-    m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree, IsSearchTreeShown() );
-
+    m_optionsToolBar->Toggle( EE_ACTIONS::showComponentTree,   IsSearchTreeShown() );
     m_optionsToolBar->Refresh();
 
     m_drawToolBar->Toggle( EE_ACTIONS::selectionTool,        GetToolId() == ID_NO_TOOL_SELECTED );
@@ -202,6 +204,5 @@ void LIB_EDIT_FRAME::SyncMenusAndToolbars()
     m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolArc,        GetToolId() == ID_LIBEDIT_BODY_ARC_BUTT );
     m_drawToolBar->Toggle( EE_ACTIONS::drawSymbolLines,      GetToolId() == ID_LIBEDIT_BODY_LINE_BUTT );
     m_drawToolBar->Toggle( EE_ACTIONS::placeSymbolAnchor,    GetToolId() == ID_LIBEDIT_ANCHOR_ITEM_BUTT );
-
     m_drawToolBar->Refresh();
 }
