@@ -697,8 +697,8 @@ public:
     /**
      * has meaning only for chamfered rect pads
      * set the position of the chamfer for a 0 orientation, one of
-     * PAD_CHAMFER_TOP_LEFT, PAD_CHAMFER_TOP_RIGHT,
-     * PAD_CHAMFER_BOTTOM_LEFT, PAD_CHAMFER_BOTTOM_RIGHT
+     * RECT_CHAMFER_TOP_LEFT, RECT_CHAMFER_TOP_RIGHT,
+     * RECT_CHAMFER_BOTTOM_LEFT, RECT_CHAMFER_BOTTOM_RIGHT
      */
     void SetChamferPositions( int aChamferPositions )
     {

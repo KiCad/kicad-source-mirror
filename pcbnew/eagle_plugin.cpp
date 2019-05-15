@@ -56,13 +56,13 @@ Load() TODO's
 #include <wx/xml/xml.h>
 
 #include <common.h>
-#include <macros.h>
+#include <convert_basic_shapes_to_polygon.h>
 #include <fctsys.h>
-#include <trigo.h>
-#include <macros.h>
 #include <geometry/geometry_utils.h>
 #include <kicad_string.h>
+#include <macros.h>
 #include <properties.h>
+#include <trigo.h>
 #include <wx/filename.h>
 
 #include <class_board.h>
@@ -1454,24 +1454,24 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     pad->SetDrillSize( wxSize( e.drill.ToPcbUnits(), e.drill.ToPcbUnits() ) );
     pad->SetLayerSet( LSET::AllCuMask().set( B_Mask ).set( F_Mask ) );
 
-    if( shape == EPAD::ROUND || shape == EPAD::SQUARE )
+    if( shape == EPAD::ROUND || shape == EPAD::SQUARE || shape == EPAD::OCTAGON )
         e.shape = shape;
-
-    if( shape == EPAD::OCTAGON )
-        e.shape = EPAD::ROUND;
 
     if( e.shape )
     {
         switch( *e.shape )
         {
         case EPAD::ROUND:
-            wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
+            pad->SetShape( PAD_SHAPE_CIRCLE );
             break;
 
         case EPAD::OCTAGON:
             // no KiCad octagonal pad shape, use PAD_CIRCLE for now.
             // pad->SetShape( PAD_OCTAGON );
             wxASSERT( pad->GetShape() == PAD_SHAPE_CIRCLE );    // verify set in D_PAD constructor
+            pad->SetShape( PAD_SHAPE_CHAMFERED_RECT );
+            pad->SetChamferPositions( RECT_CHAMFER_ALL );
+            pad->SetChamferRectRatio( 0.25 );
             break;
 
         case EPAD::LONG:
@@ -1483,7 +1483,8 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
             break;
 
         case EPAD::OFFSET:
-            ;   // don't know what to do here.
+            pad->SetShape( PAD_SHAPE_OVAL );
+            break;
         }
     }
     else
@@ -1512,6 +1513,12 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
         wxSize sz = pad->GetSize();
         sz.x = ( sz.x * ( 100 + m_rules->psElongationLong ) ) / 100;
         pad->SetSize( sz );
+
+        if( e.shape && *e.shape == EPAD::OFFSET )
+        {
+            int offset = KiROUND( ( sz.x - sz.y ) / 2.0 );
+            pad->SetOffset( wxPoint( offset, 0 ) );
+        }
     }
 
     if( e.rot )

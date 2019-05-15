@@ -41,13 +41,15 @@
 // the position is relative to a pad with orientation = 0
 // we can have 1 to 4 chamfered corners (0 corner = roundrect)
 // The position list is the OR of corner to chamfer
-enum RECT_CHAMFER_POSITIONS
+enum RECT_CHAMFER_POSITIONS : int
 {
     RECT_NO_CHAMFER = 0,
     RECT_CHAMFER_TOP_LEFT = 1,
     RECT_CHAMFER_TOP_RIGHT = 2,
     RECT_CHAMFER_BOTTOM_LEFT = 4,
     RECT_CHAMFER_BOTTOM_RIGHT = 8,
+    RECT_CHAMFER_ALL = RECT_CHAMFER_BOTTOM_RIGHT | RECT_CHAMFER_BOTTOM_LEFT
+                     | RECT_CHAMFER_TOP_RIGHT | RECT_CHAMFER_TOP_LEFT
 };
 
 
