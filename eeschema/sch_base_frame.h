@@ -92,6 +92,10 @@ protected:
     int      m_repeatDeltaLabel;    ///< the increment value of labels like bus members
                                     ///< when they are repeated
     bool     m_showPinElectricalTypeName;
+    bool     m_moveTakesCursorAsOrigin; ///< eemodern: always take the cursor (instead of item origin) as move anchor
+    bool     m_dragActionIsMove;        ///< eemodern: if true, drag action defaults to move, otherwise it's drag
+    bool     m_dragAlwaysSelects;       ///< eemodern: if true, drag action only selects items (and never drags/moves)
+    bool     m_moveWarpsCursor;         ///< eemodern: if true, cursor is warped to move/drag origin
 
 public:
     SCH_BASE_FRAME( KIWAY* aKiway, wxWindow* aParent,
@@ -165,6 +169,18 @@ public:
      * Virtual from the base class
      */
     const wxString GetZoomLevelIndicator() const override;
+
+    void SetMoveTakesCursorAsOrigin( bool aValue ) { m_moveTakesCursorAsOrigin = aValue; }
+    bool GetMoveTakesCursorAsOrigin() const { return m_moveTakesCursorAsOrigin; }
+
+    void SetDragActionIsMove( bool aValue ) { m_dragActionIsMove = aValue; }
+    bool GetDragActionIsMove() const { return m_dragActionIsMove; }
+
+    void SetDragAlwaysSelects( bool aValue ) { m_dragAlwaysSelects = aValue; }
+    bool GetDragAlwaysSelects() const { return m_dragAlwaysSelects; }
+
+    void SetMoveWarpsCursor( bool aValue ) { m_moveWarpsCursor = aValue; }
+    bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
 
     void SetPageSettings( const PAGE_INFO& aPageSettings ) override;
     const PAGE_INFO& GetPageSettings () const override;

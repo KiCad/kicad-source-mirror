@@ -379,14 +379,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            bool stillEmpty = true;
-            if( m_selection.Empty() )
+            bool empty = m_selection.Empty();
+            if( empty )
             {
                 m_selection = RequestSelection( movableItems );
-                stillEmpty = m_selection.Empty();
+                empty = m_selection.Empty();
             }
 
-            if( m_additive || m_subtractive || stillEmpty )
+            if( m_additive || m_subtractive || empty || m_frame->GetDragAlwaysSelects() )
             {
                 selectMultiple();
             }

@@ -51,6 +51,16 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataToWindow()
     m_checkAutoplaceJustify->SetValue( m_frame->GetAutoplaceJustify() );
     m_checkAutoplaceAlign->SetValue( m_frame->GetAutoplaceAlign() );
 
+    m_moveWarpsCursor->SetValue( m_frame->GetMoveWarpsCursor() );
+    m_moveTakesCursorAsOrigin->SetValue( m_frame->GetMoveTakesCursorAsOrigin() );
+
+    if( m_frame->GetDragAlwaysSelects() )
+        m_choiceMouseAction->SetSelection( 2 );
+    else if( m_frame->GetDragActionIsMove() )
+        m_choiceMouseAction->SetSelection( 0 );
+    else
+        m_choiceMouseAction->SetSelection( 1 );
+
     return true;
 }
 
@@ -77,6 +87,26 @@ bool PANEL_EESCHEMA_SETTINGS::TransferDataFromWindow()
     m_frame->SetAutoplaceFields( m_checkAutoplaceFields->GetValue() );
     m_frame->SetAutoplaceJustify( m_checkAutoplaceJustify->GetValue() );
     m_frame->SetAutoplaceAlign( m_checkAutoplaceAlign->GetValue() );
+
+    m_frame->SetMoveWarpsCursor( m_moveWarpsCursor->GetValue() );
+    m_frame->SetMoveTakesCursorAsOrigin( m_moveTakesCursorAsOrigin->GetValue() );
+
+    switch( m_choiceMouseAction->GetSelection() )
+    {
+        case 0:
+            m_frame->SetDragAlwaysSelects( false );
+            m_frame->SetDragActionIsMove( true);
+            break;
+        case 1:
+            m_frame->SetDragAlwaysSelects( false );
+            m_frame->SetDragActionIsMove( false );
+            break;
+        case 2:
+            m_frame->SetDragAlwaysSelects( true );
+            break;
+        default:
+            break;
+    }
 
     return true;
 }
