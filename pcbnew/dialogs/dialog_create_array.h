@@ -41,8 +41,6 @@ class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE
 {
 public:
 
-    #define NUMBERING_TYPE_MAX NUMBERING_ALPHA_FULL
-
     // Constructor and destructor
     DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNumbering,
                          wxPoint aOrigPos );

@@ -21,14 +21,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <pcb_edit_frame.h>
+#include "dialogs/dialog_create_array.h"
+
 #include <base_units.h>
-#include <boost/algorithm/string/join.hpp>
+
 #include <widgets/text_ctrl_eval.h>
+
 #include <class_board.h>
 #include <class_module.h>
+#include <pcb_edit_frame.h>
 
-#include "dialog_create_array.h"
+#include <boost/algorithm/string/join.hpp>
 
 /**
  * Struct containing the last-entered values for the dialog.
@@ -94,6 +97,37 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
 // Persistent options settings
 static CREATE_ARRAY_DIALOG_ENTRIES saved_array_options;
 
+/**
+ * Local mapping for list-box <-> numbering type
+ */
+struct NUMBERING_LIST_DATA
+{
+    ARRAY_AXIS::NUMBERING_TYPE m_numbering_type;
+    wxString                   m_label;
+};
+
+/**
+ * List of type <--> name mappings (in order) for the numbering type
+ * list boxes
+ */
+static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
+    {
+        ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
+        _( "Numerals (0,1,2,...,9,10)" ),
+    },
+    {
+        ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_HEX,
+        _( "Hexadecimal (0,1,...,F,10,...)" ),
+    },
+    {
+        ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_NO_IOSQXZ,
+        _( "Alphabet, minus IOSQXZ" ),
+    },
+    {
+        ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+        _( "Alphabet, full 26 characters" ),
+    },
+};
 
 DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
         PCB_BASE_FRAME* aParent, bool enableNumbering, wxPoint aOrigPos )
@@ -111,19 +145,15 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
           m_originalItemPosition( aOrigPos ),
           m_numberingEnabled( enableNumbering )
 {
-    // Set up numbering scheme drop downs
-    //
-    // character set
-    // NOTE: do not change the order of this relative to the NUMBERING_TYPE enum
-    const wxString charSetDescriptions[] =
+    // Set up numbering scheme drop downs character set strings
+    for( const auto& numData : numberingTypeData )
     {
-        _( "Numerals (0,1,2,...,9,10)" ),
-        _( "Hexadecimal (0,1,...,F,10,...)" ),
-        _( "Alphabet, minus IOSQXZ" ),
-        _( "Alphabet, full 26 characters" )
-    };
-    m_choicePriAxisNumbering->Set( arrayDim( charSetDescriptions ), charSetDescriptions );
-    m_choiceSecAxisNumbering->Set( arrayDim( charSetDescriptions ), charSetDescriptions );
+        const wxString label = wxGetTranslation( numData.m_label );
+        void*          clientData = (void*) &numData;
+
+        m_choicePriAxisNumbering->Append( label, clientData );
+        m_choiceSecAxisNumbering->Append( label, clientData );
+    }
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );
@@ -208,26 +238,16 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
         const wxChoice& typeEntry, ARRAY_AXIS& aAxis, wxArrayString& errors )
 {
-    const int typeVal = typeEntry.GetSelection();
-    // mind undefined casts to enums (should not be able to happen)
-    bool ok = typeVal <= ARRAY_AXIS::NUMBERING_TYPE_MAX;
+    const auto* typeData = static_cast<NUMBERING_LIST_DATA*>(
+            typeEntry.GetClientData( typeEntry.GetSelection() ) );
 
-    if( ok )
-    {
-        aAxis.SetAxisType( static_cast<ARRAY_AXIS::NUMBERING_TYPE>( typeVal ) );
-    }
-    else
-    {
-        wxString err;
-        err.Printf( _("Unrecognized numbering scheme: %d"), typeVal );
-        errors.Add( err );
-        // we can't proceed - we don't know the numbering type
-        return false;
-    }
+    wxCHECK_MSG( typeData, false, "Failed to get client data from list control." );
+
+    aAxis.SetAxisType( typeData->m_numbering_type );
 
     const wxString text = offsetEntry.GetValue();
 
-    ok = aAxis.SetOffset( text );
+    bool ok = aAxis.SetOffset( text );
 
     if( !ok )
     {
