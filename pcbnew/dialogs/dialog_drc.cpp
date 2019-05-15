@@ -668,7 +668,7 @@ bool DIALOG_DRC_CONTROL::writeReport( const wxString& aFullFileName )
 
 void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
 {
-    int selectedIndex;
+    ssize_t selectedIndex;
     int curTab = m_Notebook->GetSelection();
 
     if( curTab == 0 )
@@ -681,12 +681,12 @@ void DIALOG_DRC_CONTROL::OnDeleteOneClick( wxCommandEvent& event )
             m_brdEditor->SetCurItem( NULL );
             m_brdEditor->GetToolManager()->RunAction( PCB_ACTIONS::selectionClear, true );
 
-            size_t newIndex = wxNOT_FOUND;
+            ssize_t newIndex = wxNOT_FOUND;
 
             if( m_ClearanceListBox->GetItemCount() > 1 )
             {
-                newIndex = ( selectedIndex == m_ClearanceListBox->GetItemCount() - 1 ) ?
-                           selectedIndex - 1 : selectedIndex;
+                newIndex = std::min( selectedIndex,
+                        static_cast<ssize_t>( m_ClearanceListBox->GetItemCount() - 2 ) );
             }
 
             m_ClearanceListBox->DeleteItem( selectedIndex );
