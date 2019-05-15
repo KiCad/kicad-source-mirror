@@ -89,6 +89,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_circAngle;
     long     m_circCount;
     long     m_circNumberingStartSet;
+    long     m_gridCircNumScheme;
     wxString m_circNumberingOffset;
     bool     m_circRotate;
     long     m_arrayTypeTab;
@@ -153,10 +154,12 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
 
         m_choicePriAxisNumbering->Append( label, clientData );
         m_choiceSecAxisNumbering->Append( label, clientData );
+        m_choiceCircNumbering->Append( label, clientData );
     }
 
     m_choicePriAxisNumbering->SetSelection( 0 );
     m_choiceSecAxisNumbering->SetSelection( 0 );
+    m_choiceCircNumbering->SetSelection( 0 );
 
     m_circAngle.SetUnits( EDA_UNITS_T::DEGREES );
 
@@ -195,6 +198,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
     m_cfg_persister.Add( *m_entryRotateItemsCb, saved_array_options.m_circRotate );
 
     m_cfg_persister.Add( *m_rbCircStartNumberingOpt, saved_array_options.m_circNumberingStartSet );
+    m_cfg_persister.Add( *m_choiceCircNumbering, saved_array_options.m_gridCircNumScheme );
     m_cfg_persister.Add( *m_entryCircNumberingStart, saved_array_options.m_circNumberingOffset );
 
     m_cfg_persister.Add( *m_gridTypeNotebook, saved_array_options.m_arrayTypeTab );
@@ -377,22 +381,13 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
             if( newCirc->GetNumberingStartIsSpecified() )
             {
-                newCirc->m_axis.SetAxisType( ARRAY_AXIS::NUMBERING_NUMERIC );
-
-                long offset;
-
-                ok = ok
-                     && validateLongEntry(
-                             *m_entryCircNumberingStart, offset, _( "numbering start" ), errors );
-
-                if( ok )
-                {
-                    newCirc->m_axis.SetOffset( offset );
-                }
+                ok = ok && validateNumberingTypeAndOffset( *m_entryCircNumberingStart,
+                        *m_choiceCircNumbering, newCirc->m_axis, errors );
             }
             else
             {
                 // artificial linear numeric scheme from 1
+                newCirc->m_axis.SetAxisType( ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC );
                 newCirc->m_axis.SetOffset( 1 ); // Start at "1"
             }
         }

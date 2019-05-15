@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 10 2018)
+// C++ code generated with wxFormBuilder (version Mar 28 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -266,6 +266,15 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_rbCircStartNumberingOpt = new wxRadioBox( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Initial Pad Number:"), wxDefaultPosition, wxDefaultSize, m_rbCircStartNumberingOptNChoices, m_rbCircStartNumberingOptChoices, 1, wxRA_SPECIFY_COLS );
 	m_rbCircStartNumberingOpt->SetSelection( 0 );
 	m_circPadNumberingSizer->Add( m_rbCircStartNumberingOpt, 0, wxALL|wxEXPAND, 5 );
+
+	m_labelCircNumbering = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad Numbering:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumbering->Wrap( -1 );
+	m_circPadNumberingSizer->Add( m_labelCircNumbering, 0, wxALL, 5 );
+
+	wxArrayString m_choiceCircNumberingChoices;
+	m_choiceCircNumbering = new wxChoice( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, wxDefaultPosition, wxDefaultSize, m_choiceCircNumberingChoices, 0 );
+	m_choiceCircNumbering->SetSelection( 0 );
+	m_circPadNumberingSizer->Add( m_choiceCircNumbering, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxHORIZONTAL );

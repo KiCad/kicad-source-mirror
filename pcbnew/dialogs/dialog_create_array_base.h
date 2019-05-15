@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////
-// C++ code generated with wxFormBuilder (version Nov 10 2018)
+// C++ code generated with wxFormBuilder (version Mar 28 2019)
 // http://www.wxformbuilder.org/
 //
 // PLEASE DO *NOT* EDIT THIS FILE!
@@ -98,6 +98,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxCheckBox* m_entryRotateItemsCb;
 		wxStaticBoxSizer* m_circPadNumberingSizer;
 		wxRadioBox* m_rbCircStartNumberingOpt;
+		wxStaticText* m_labelCircNumbering;
+		wxChoice* m_choiceCircNumbering;
 		wxStaticText* m_labelCircNumStart;
 		wxTextCtrl* m_entryCircNumberingStart;
 		wxStdDialogButtonSizer* m_stdButtons;
