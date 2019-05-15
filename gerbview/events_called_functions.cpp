@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2011-2014 Jean-Pierre Charras  jp.charras at wanadoo.fr
- * Copyright (C) 1992-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -354,6 +354,9 @@ void GERBVIEW_FRAME::OnSelectActiveDCode( wxCommandEvent& event )
 void GERBVIEW_FRAME::OnSelectActiveLayer( wxCommandEvent& event )
 {
     SetActiveLayer( event.GetSelection(), true );
+
+    // Rebuild the DCode list in toolbar (but not the Layer Box) after change
+    syncLayerBox( false );
 }
 
 
