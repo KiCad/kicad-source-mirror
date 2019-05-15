@@ -64,10 +64,11 @@ void ARRAY_CREATOR::Invoke()
     const bool enableArrayNumbering = isModuleEditor;
     const wxPoint rotPoint = getRotationCentre();
 
-    DIALOG_CREATE_ARRAY dialog( &m_parent, enableArrayNumbering, rotPoint );
-    int ret = dialog.ShowModal();
+    std::unique_ptr<ARRAY_OPTIONS> array_opts;
 
-    ARRAY_OPTIONS* const array_opts = dialog.GetArrayOptions();
+    DIALOG_CREATE_ARRAY dialog( &m_parent, array_opts, enableArrayNumbering, rotPoint );
+
+    int ret = dialog.ShowModal();
 
     if( ret != wxID_OK || array_opts == NULL )
         return;

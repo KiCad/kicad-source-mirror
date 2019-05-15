@@ -130,10 +130,12 @@ static const std::vector<NUMBERING_LIST_DATA> numberingTypeData {
     },
 };
 
-DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
-        PCB_BASE_FRAME* aParent, bool enableNumbering, wxPoint aOrigPos )
+DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
+        std::unique_ptr<ARRAY_OPTIONS>& aSettings, bool enableNumbering, wxPoint aOrigPos )
         : DIALOG_CREATE_ARRAY_BASE( aParent ),
-          m_settings( NULL ),
+          m_settings( aSettings ),
+          m_originalItemPosition( aOrigPos ),
+          m_numberingEnabled( enableNumbering ),
           m_hSpacing( aParent, m_labelDx, m_entryDx, m_unitLabelDx ),
           m_vSpacing( aParent, m_labelDy, m_entryDy, m_unitLabelDy ),
           m_hOffset( aParent, m_labelOffsetX, m_entryOffsetX, m_unitLabelOffsetX ),
@@ -142,9 +144,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
           m_vCentre( aParent, m_labelCentreY, m_entryCentreY, m_unitLabelCentreY ),
           m_circRadius( aParent, m_labelCircRadius, m_valueCircRadius, m_unitLabelCircRadius ),
           m_circAngle( aParent, m_labelCircAngle, m_entryCircAngle, m_unitLabelCircAngle ),
-          m_cfg_persister( saved_array_options.m_optionsSet ),
-          m_originalItemPosition( aOrigPos ),
-          m_numberingEnabled( enableNumbering )
+          m_cfg_persister( saved_array_options.m_optionsSet )
 {
     // Set up numbering scheme drop downs character set strings
     for( const auto& numData : numberingTypeData )
@@ -212,13 +212,6 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
     m_stdButtonsOK->SetDefault();
     Fit();
     SetMinSize( GetSize() );
-}
-
-
-DIALOG_CREATE_ARRAY::~DIALOG_CREATE_ARRAY()
-{
-    if( m_settings != NULL )
-        delete m_settings;
 }
 
 
@@ -297,13 +290,14 @@ static bool validateLongEntry( const wxTextEntry& entry, long& dest, const wxStr
 
 bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 {
-    ARRAY_OPTIONS*  newSettings = NULL;
+    std::unique_ptr<ARRAY_OPTIONS> newSettings;
+
     wxArrayString   errors;
     const wxWindow* page = m_gridTypeNotebook->GetCurrentPage();
 
     if( page == m_gridPanel )
     {
-        ARRAY_GRID_OPTIONS* newGrid = new ARRAY_GRID_OPTIONS();
+        auto newGrid = std::make_unique<ARRAY_GRID_OPTIONS>();
         bool ok = true;
 
         // ints
@@ -357,13 +351,11 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         // Only use settings if all values are good
         if( ok )
-            newSettings = newGrid;
-        else
-            delete newGrid;
+            newSettings = std::move( newGrid );
     }
     else if( page == m_circularPanel )
     {
-        ARRAY_CIRCULAR_OPTIONS* newCirc = new ARRAY_CIRCULAR_OPTIONS();
+        auto newCirc = std::make_unique<ARRAY_CIRCULAR_OPTIONS>();
         bool ok = true;
 
         newCirc->m_centre.x = m_hCentre.GetValue();
@@ -381,8 +373,9 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
             if( newCirc->GetNumberingStartIsSpecified() )
             {
-                ok = ok && validateNumberingTypeAndOffset( *m_entryCircNumberingStart,
-                        *m_choiceCircNumbering, newCirc->m_axis, errors );
+                ok = ok
+                     && validateNumberingTypeAndOffset( *m_entryCircNumberingStart,
+                             *m_choiceCircNumbering, newCirc->m_axis, errors );
             }
             else
             {
@@ -394,18 +387,16 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
         // Only use settings if all values are good
         if( ok )
-            newSettings = newCirc;
-        else
-            delete newCirc;
+            newSettings = std::move( newCirc );
     }
 
     // If we got good settings, send them out and finish
     if( newSettings )
     {
-        delete m_settings;
-
         // assign pointer and ownership here
-        m_settings = newSettings;
+        m_settings = std::move( newSettings );
+
+        // persist the control state for next time
         m_cfg_persister.ReadConfigFromControls();
 
         return true;

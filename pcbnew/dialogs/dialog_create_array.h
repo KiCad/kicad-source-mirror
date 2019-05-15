@@ -22,8 +22,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#ifndef __DIALOG_CREATE_ARRAY__
-#define __DIALOG_CREATE_ARRAY__
+#ifndef DIALOG_CREATE_ARRAY__H_
+#define DIALOG_CREATE_ARRAY__H_
 
 // Include the wxFormBuider header base:
 #include <dialog_create_array_base.h>
@@ -32,53 +32,28 @@
 #include <class_board_item.h>
 #include <pcb_base_frame.h>
 
-#include <boost/bimap.hpp>
 #include <widgets/unit_binder.h>
 #include <widgets/widget_save_restore.h>
 
+#include <memory>
 
 class DIALOG_CREATE_ARRAY : public DIALOG_CREATE_ARRAY_BASE
 {
 public:
-
-    // Constructor and destructor
-    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, bool enableNumbering,
-                         wxPoint aOrigPos );
-
-    ~DIALOG_CREATE_ARRAY();
-
-    /*!
-     * @return the array options set by this dialogue, or NULL if they were
-     * not set, or could not be set
+    /**
+     * Construct a new dialog.
+     *
+     * @param aParent the parent window
+     * @param aOptions the options that will be re-seated when dialog is validly closed
+     * @param aEnableNumbering enable pad numbering
+     * @param aOrigPos original item position (used for computing the circular array radius)
      */
-    ARRAY_OPTIONS* GetArrayOptions() const
-    {
-        return m_settings;
-    }
+    DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent, std::unique_ptr<ARRAY_OPTIONS>& aOptions,
+            bool enableNumbering, wxPoint aOrigPos );
 
 private:
-
-    /**
-     * The settings object returned to the caller.
-     * We retain ownership of this
-     */
-    ARRAY_OPTIONS* m_settings;
-
-    UNIT_BINDER    m_hSpacing, m_vSpacing;
-    UNIT_BINDER    m_hOffset, m_vOffset;
-    UNIT_BINDER    m_hCentre, m_vCentre;
-    UNIT_BINDER    m_circRadius;
-    UNIT_BINDER    m_circAngle;
-
-    WIDGET_SAVE_RESTORE m_cfg_persister;
-
-    /*
-     * The position of the original item(s), used for finding radius, etc
-     */
-    const wxPoint m_originalItemPosition;
-
     // Event callbacks
-    void    OnParameterChanged( wxCommandEvent& event ) override;
+    void OnParameterChanged( wxCommandEvent& event ) override;
 
     // Internal callback handlers
     void setControlEnablement();
@@ -86,8 +61,26 @@ private:
 
     bool TransferDataFromWindow() override;
 
+    /**
+     * The settings to re-seat on dialog OK.
+     */
+    std::unique_ptr<ARRAY_OPTIONS>& m_settings;
+
+    /*
+     * The position of the original item(s), used for finding radius, etc
+     */
+    const wxPoint m_originalItemPosition;
+
     // some uses of arrays might not allow component renumbering
     bool m_numberingEnabled;
+
+    UNIT_BINDER m_hSpacing, m_vSpacing;
+    UNIT_BINDER m_hOffset, m_vOffset;
+    UNIT_BINDER m_hCentre, m_vCentre;
+    UNIT_BINDER m_circRadius;
+    UNIT_BINDER m_circAngle;
+
+    WIDGET_SAVE_RESTORE m_cfg_persister;
 };
 
-#endif      // __DIALOG_CREATE_ARRAY__
+#endif // DIALOG_CREATE_ARRAY__H_
