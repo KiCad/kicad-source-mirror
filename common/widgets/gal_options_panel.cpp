@@ -1,7 +1,7 @@
 /*
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -100,12 +100,13 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 0 );
+        sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0,
+                wxEXPAND | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 3 );
 
         l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _( "px" ) );
         l_gridLineWidthUnits->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+        sGridSettingsGrid->Add( l_gridLineWidthUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
         l_gridMinSpacing = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _( "Min grid spacing:" ) );
@@ -117,30 +118,31 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
                 wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0, wxALL | wxALIGN_CENTER_VERTICAL, 0 );
+        sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0,
+                wxEXPAND | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 3 );
 
         l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _( "px" ) );
         l_gridMinSpacingUnits->Wrap( -1 );
-        sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALL, 5 );
+        sGridSettingsGrid->Add( l_gridMinSpacingUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5 );
 
-        sGridSettings->Add( sGridSettingsGrid, 1, wxALL|wxEXPAND, 5 );
+        sGridSettings->Add( sGridSettingsGrid, 1, wxALL | wxEXPAND, 5 );
 
         sLeftSizer->Add( sGridSettings, 0, wxTOP | wxBOTTOM | wxRIGHT | wxEXPAND, 5 );
 
         // bind the spin buttons and text boxes
         m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                    *m_gridLineWidthSpinBtn, *m_gridLineWidth );
+                *m_gridLineWidthSpinBtn, *m_gridLineWidth );
 
         m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
                                         gridThicknessStep );
         m_gridSizeIncrementer->SetPrecision( 0 );
 
         m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                    *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
+                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
 
         m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
-                                              gridMinSpacingStep );
+                gridMinSpacingStep );
         m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
     }
 
@@ -168,7 +170,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
 
         int m_CursorShapeNChoices = sizeof( m_CursorShapeChoices ) / sizeof( wxString );
         m_cursorShape = new wxRadioBox( this, wxID_ANY,
-                                        _( "Cursor shape:" ), wxDefaultPosition, wxDefaultSize,
+                                        _( "Cursor Shape:" ), wxDefaultPosition, wxDefaultSize,
                                         m_CursorShapeNChoices, m_CursorShapeChoices, 1,
                                         wxRA_SPECIFY_COLS );
 
