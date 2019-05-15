@@ -449,8 +449,16 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     if( !start )
         return nullptr;
 
-    collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-    collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+    int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+
+    for( int threshold : { 0, thresholdMax/2, thresholdMax } )
+    {
+        collector.m_Threshold = threshold;
+        collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
+
+        if( collector.GetCount() > 0 )
+            break;
+    }
 
     bool anyCollected = collector.GetCount() != 0;
 
@@ -673,7 +681,16 @@ EDA_ITEM* EE_SELECTION_TOOL::GetNode( VECTOR2I aPosition )
 {
     EE_COLLECTOR collector;
 
-    collector.Collect( m_frame->GetScreen()->GetDrawItems(), nodeTypes, (wxPoint) aPosition );
+    int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+
+    for( int threshold : { 0, thresholdMax/2, thresholdMax } )
+    {
+        collector.m_Threshold = threshold;
+        collector.Collect( m_frame->GetScreen()->GetDrawItems(), nodeTypes, (wxPoint) aPosition );
+
+        if( collector.GetCount() > 0 )
+            break;
+    }
 
     return collector.GetCount() ? collector[ 0 ] : nullptr;
 }
