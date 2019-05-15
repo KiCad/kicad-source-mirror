@@ -35,7 +35,7 @@ static bool schemeNonUnitColsStartAt0( ARRAY_AXIS::NUMBERING_TYPE type )
 }
 
 
-ARRAY_AXIS::ARRAY_AXIS() : m_type( NUMBERING_TYPE::NUMBERING_NUMERIC ), m_offset( 0 )
+ARRAY_AXIS::ARRAY_AXIS() : m_type( NUMBERING_TYPE::NUMBERING_NUMERIC ), m_offset( 0 ), m_step( 1 )
 {
 }
 
@@ -124,6 +124,12 @@ int ARRAY_AXIS::GetOffset() const
 }
 
 
+void ARRAY_AXIS::SetStep( int aStep )
+{
+    m_step = aStep;
+}
+
+
 wxString ARRAY_AXIS::GetItemNumber( int n ) const
 {
     wxString        itemNum;
@@ -134,7 +140,7 @@ wxString ARRAY_AXIS::GetItemNumber( int n ) const
     bool firstRound = true;
     int  radix = alphabet.Length();
 
-    n += m_offset;
+    n = m_offset + m_step * n;
 
     do
     {

@@ -150,25 +150,42 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 
 	m_gridPadNumberingSizer->Add( m_choiceSecAxisNumbering, 0, wxEXPAND|wxBOTTOM|wxRIGHT|wxLEFT, 5 );
 
-	wxBoxSizer* bSizer5;
-	bSizer5 = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer1;
+	fgSizer1 = new wxFlexGridSizer( 2, 3, 0, 0 );
+	fgSizer1->AddGrowableCol( 0 );
+	fgSizer1->SetFlexibleDirection( wxBOTH );
+	fgSizer1->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
 	m_labelGridNumberingOffset = new wxStaticText( m_gridPanel, wxID_ANY, _("Pad numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelGridNumberingOffset->Wrap( -1 );
-	bSizer5->Add( m_labelGridNumberingOffset, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer1->Add( m_labelGridNumberingOffset, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_entryGridPriNumberingOffset = new wxTextCtrl( m_gridPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryGridPriNumberingOffset->SetMinSize( wxSize( 72,-1 ) );
 
-	bSizer5->Add( m_entryGridPriNumberingOffset, 0, wxALL, 5 );
+	fgSizer1->Add( m_entryGridPriNumberingOffset, 0, wxALL, 5 );
 
 	m_entryGridSecNumberingOffset = new wxTextCtrl( m_gridPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_entryGridSecNumberingOffset->SetMinSize( wxSize( 72,-1 ) );
 
-	bSizer5->Add( m_entryGridSecNumberingOffset, 0, wxALL, 5 );
+	fgSizer1->Add( m_entryGridSecNumberingOffset, 0, wxALL, 5 );
+
+	m_labelGridNumberingStep = new wxStaticText( m_gridPanel, wxID_ANY, _("Pad numbering skip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelGridNumberingStep->Wrap( -1 );
+	fgSizer1->Add( m_labelGridNumberingStep, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_entryGridPriNumberingStep = new wxTextCtrl( m_gridPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryGridPriNumberingStep->SetMinSize( wxSize( 72,-1 ) );
+
+	fgSizer1->Add( m_entryGridPriNumberingStep, 0, wxALL, 5 );
+
+	m_entryGridSecNumberingStep = new wxTextCtrl( m_gridPanel, wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_entryGridSecNumberingStep->SetMinSize( wxSize( 72,-1 ) );
+
+	fgSizer1->Add( m_entryGridSecNumberingStep, 0, wxALL, 5 );
 
 
-	m_gridPadNumberingSizer->Add( bSizer5, 0, wxEXPAND, 5 );
+	m_gridPadNumberingSizer->Add( fgSizer1, 1, wxEXPAND, 5 );
 
 
 	bSizer2->Add( m_gridPadNumberingSizer, 0, wxALL|wxEXPAND, 5 );
@@ -276,18 +293,28 @@ DIALOG_CREATE_ARRAY_BASE::DIALOG_CREATE_ARRAY_BASE( wxWindow* parent, wxWindowID
 	m_choiceCircNumbering->SetSelection( 0 );
 	m_circPadNumberingSizer->Add( m_choiceCircNumbering, 0, wxBOTTOM|wxEXPAND|wxLEFT|wxRIGHT, 5 );
 
-	wxBoxSizer* bSizer7;
-	bSizer7 = new wxBoxSizer( wxHORIZONTAL );
+	wxFlexGridSizer* fgSizer2;
+	fgSizer2 = new wxFlexGridSizer( 0, 2, 0, 0 );
+	fgSizer2->AddGrowableCol( 0 );
+	fgSizer2->SetFlexibleDirection( wxBOTH );
+	fgSizer2->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
 
-	m_labelCircNumStart = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering start value:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumStart = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering start:"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_labelCircNumStart->Wrap( -1 );
-	bSizer7->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+	fgSizer2->Add( m_labelCircNumStart, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_entryCircNumberingStart = new wxTextCtrl( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer7->Add( m_entryCircNumberingStart, 1, wxALL, 5 );
+	fgSizer2->Add( m_entryCircNumberingStart, 1, wxALL, 5 );
+
+	m_labelCircNumStep = new wxStaticText( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("Pad numbering skip:"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_labelCircNumStep->Wrap( -1 );
+	fgSizer2->Add( m_labelCircNumStep, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+	m_entryCircNumberingStep = new wxTextCtrl( m_circPadNumberingSizer->GetStaticBox(), wxID_ANY, _("1"), wxDefaultPosition, wxDefaultSize, 0 );
+	fgSizer2->Add( m_entryCircNumberingStep, 0, wxALL, 5 );
 
 
-	m_circPadNumberingSizer->Add( bSizer7, 0, wxEXPAND, 5 );
+	m_circPadNumberingSizer->Add( fgSizer2, 1, wxEXPAND, 5 );
 
 
 	bSizer4->Add( m_circPadNumberingSizer, 0, wxEXPAND|wxALL, 5 );

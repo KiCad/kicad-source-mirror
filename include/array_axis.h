@@ -87,6 +87,12 @@ public:
     int GetOffset() const;
 
     /**
+     * Set the skip between consecutive numbers (useful when doing a partial
+     * array, e.g. only one side of a connector)
+     */
+    void SetStep( int aStep );
+
+    /**
      * Get the position number (name) for the n'th axis point
      *
      * @param  n array point index, from 0
@@ -105,6 +111,9 @@ private:
 
     NUMBERING_TYPE m_type;
     int            m_offset;
+
+    ///< Skip every 'n' numbers
+    int m_step;
 };
 
 #endif // ARRAY_AXIS__H

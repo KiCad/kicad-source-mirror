@@ -131,6 +131,7 @@ struct ARRAY_AXIS_NAMING_PARAMS
 {
     ARRAY_AXIS::NUMBERING_TYPE m_axis_type;
     std::string                m_start_at;
+    int                        m_step;
 };
 
 struct ARRAY_AXIS_NAMING_CASE
@@ -145,10 +146,11 @@ struct ARRAY_AXIS_NAMING_CASE
 // clang-format off
 static const std::vector<ARRAY_AXIS_NAMING_CASE> axis_name_cases = {
     {
-        "Linear",
+        "Numeric",
         {
             ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
             "1",
+            1,
         },
         6,
         { "1", "2", "3", "4", "5", "6" },
@@ -159,6 +161,7 @@ static const std::vector<ARRAY_AXIS_NAMING_CASE> axis_name_cases = {
         {
             ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
             "A",
+            1,
         },
         3,
         { "A", "B", "C" },
@@ -169,9 +172,20 @@ static const std::vector<ARRAY_AXIS_NAMING_CASE> axis_name_cases = {
         {
             ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
             "Y",
+            1,
         },
         4,
         { "Y", "Z", "AA", "AB" },
+    },
+    {
+        "Numeric skip",
+        {
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
+            "11",
+            2,
+        },
+        6,
+        { "11", "13", "15", "17", "19", "21" },
     },
 };
 // clang-format on
@@ -187,6 +201,7 @@ BOOST_AUTO_TEST_CASE( Numbering )
         {
             ARRAY_AXIS axis;
             axis.SetAxisType( c.m_prms.m_axis_type );
+            axis.SetStep( c.m_prms.m_step );
 
             bool start_ok = axis.SetOffset( c.m_prms.m_start_at );
 

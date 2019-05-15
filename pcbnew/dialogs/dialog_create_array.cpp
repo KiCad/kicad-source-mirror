@@ -60,12 +60,15 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
               m_gridSecAxisNumScheme( 0 ),     // numeric
               m_gridPriNumberingOffset( "1" ), // numeric
               m_gridSecNumberingOffset( "1" ), // numeric
+              m_gridPriAxisStep( 1 ),
+              m_gridSecAxisStep( 1 ),
               m_circCentreX( 0 ),
               m_circCentreY( 0 ),
               m_circAngle( 0.0 ),
               m_circCount( 4 ),
               m_circNumberingStartSet( 1 ), // use specified start
               m_circNumberingOffset( "1" ),
+              m_circNumberingStep( 1 ),
               m_circRotate( false ),
               m_arrayTypeTab( 0 ) // start on grid view
     {
@@ -84,6 +87,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_grid2dArrayNumbering;
     long     m_gridPriAxisNumScheme, m_gridSecAxisNumScheme;
     wxString m_gridPriNumberingOffset, m_gridSecNumberingOffset;
+    long     m_gridPriAxisStep, m_gridSecAxisStep;
 
     long     m_circCentreX, m_circCentreY;
     long     m_circAngle;
@@ -91,6 +95,7 @@ struct CREATE_ARRAY_DIALOG_ENTRIES
     long     m_circNumberingStartSet;
     long     m_gridCircNumScheme;
     wxString m_circNumberingOffset;
+    long     m_circNumberingStep;
     bool     m_circRotate;
     long     m_arrayTypeTab;
 };
@@ -189,6 +194,8 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
             *m_entryGridPriNumberingOffset, saved_array_options.m_gridPriNumberingOffset );
     m_cfg_persister.Add(
             *m_entryGridSecNumberingOffset, saved_array_options.m_gridSecNumberingOffset );
+    m_cfg_persister.Add( *m_entryGridPriNumberingStep, saved_array_options.m_gridPriAxisStep );
+    m_cfg_persister.Add( *m_entryGridSecNumberingStep, saved_array_options.m_gridSecAxisStep );
 
     // bind circular options to persister
     m_cfg_persister.Add( m_hCentre, saved_array_options.m_circCentreX );
@@ -200,6 +207,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY( PCB_BASE_FRAME* aParent,
     m_cfg_persister.Add( *m_rbCircStartNumberingOpt, saved_array_options.m_circNumberingStartSet );
     m_cfg_persister.Add( *m_choiceCircNumbering, saved_array_options.m_gridCircNumScheme );
     m_cfg_persister.Add( *m_entryCircNumberingStart, saved_array_options.m_circNumberingOffset );
+    m_cfg_persister.Add( *m_entryCircNumberingStep, saved_array_options.m_circNumberingStep );
 
     m_cfg_persister.Add( *m_gridTypeNotebook, saved_array_options.m_arrayTypeTab );
 
@@ -223,6 +231,32 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
 
 
 /**
+ * Validate and save a long integer entry
+ *
+ * @param entry the text entry to read from
+ * @param dest the value destination
+ * @param description description of the field (used if the value is not OK)
+ * @param errors a list of errors to add any error to
+ * @return valid
+ */
+static bool validateLongEntry(
+        const wxTextEntry& entry, long& dest, const wxString& description, wxArrayString& errors )
+{
+    bool ok = true;
+
+    if( !entry.GetValue().ToLong( &dest ) )
+    {
+        wxString err;
+        err.Printf( _( "Bad numeric value for %s: %s" ), description, entry.GetValue() );
+        errors.Add( err );
+        ok = false;
+    }
+
+    return ok;
+}
+
+
+/**
  * Validates and saves (if valid) the type and offset of an array axis numbering
  *
  * @param offsetEntry the entry of the offset (text)
@@ -232,8 +266,8 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
  * @param errors error string accumulator
  * @return if all valid
  */
-static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
-        const wxChoice& typeEntry, ARRAY_AXIS& aAxis, wxArrayString& errors )
+static bool validateAxisOptions( const wxTextCtrl& offsetEntry, const wxChoice& typeEntry,
+        const wxTextCtrl& aStepEntry, ARRAY_AXIS& aAxis, wxArrayString& errors )
 {
     const auto* typeData = static_cast<NUMBERING_LIST_DATA*>(
             typeEntry.GetClientData( typeEntry.GetSelection() ) );
@@ -258,31 +292,11 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
         return false;
     }
 
-    return ok;
-}
+    long step;
+    ok = validateLongEntry( aStepEntry, step, _( "step" ), errors );
 
-
-/**
- * Validate and save a long integer entry
- *
- * @param entry the text entry to read from
- * @param dest the value destination
- * @param description description of the field (used if the value is not OK)
- * @param errors a list of errors to add any error to
- * @return valid
- */
-static bool validateLongEntry( const wxTextEntry& entry, long& dest, const wxString& description,
-                               wxArrayString& errors )
-{
-    bool ok = true;
-
-    if( !entry.GetValue().ToLong( &dest ) )
-    {
-        wxString err;
-        err.Printf( _("Bad numeric value for %s: %s"), description, entry.GetValue() );
-        errors.Add( err );
-        ok = false;
-     }
+    if( ok )
+        aAxis.SetStep( step );
 
     return ok;
 }
@@ -328,13 +342,15 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
                 newGrid->m_2dArrayNumbering = m_radioBoxGridNumberingScheme->GetSelection() != 0;
 
                 // validate from the input fields
-                bool numOk = validateNumberingTypeAndOffset( *m_entryGridPriNumberingOffset,
-                        *m_choicePriAxisNumbering, newGrid->m_pri_axis, errors );
+                bool numOk = validateAxisOptions( *m_entryGridPriNumberingOffset,
+                        *m_choicePriAxisNumbering, *m_entryGridPriNumberingStep,
+                        newGrid->m_pri_axis, errors );
 
                 if( newGrid->m_2dArrayNumbering )
                 {
-                    numOk = validateNumberingTypeAndOffset( *m_entryGridSecNumberingOffset,
-                                    *m_choiceSecAxisNumbering, newGrid->m_sec_axis, errors )
+                    numOk = validateAxisOptions( *m_entryGridSecNumberingOffset,
+                                    *m_choiceSecAxisNumbering, *m_entryGridSecNumberingStep,
+                                    newGrid->m_sec_axis, errors )
                             && numOk;
                 }
 
@@ -374,8 +390,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
             if( newCirc->GetNumberingStartIsSpecified() )
             {
                 ok = ok
-                     && validateNumberingTypeAndOffset( *m_entryCircNumberingStart,
-                             *m_choiceCircNumbering, newCirc->m_axis, errors );
+                     && validateAxisOptions( *m_entryCircNumberingStart, *m_choiceCircNumbering,
+                             *m_entryCircNumberingStep, newCirc->m_axis, errors );
             }
             else
             {

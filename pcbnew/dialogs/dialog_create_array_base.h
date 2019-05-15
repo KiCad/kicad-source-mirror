@@ -79,6 +79,9 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxStaticText* m_labelGridNumberingOffset;
 		wxTextCtrl* m_entryGridPriNumberingOffset;
 		wxTextCtrl* m_entryGridSecNumberingOffset;
+		wxStaticText* m_labelGridNumberingStep;
+		wxTextCtrl* m_entryGridPriNumberingStep;
+		wxTextCtrl* m_entryGridSecNumberingStep;
 		wxPanel* m_circularPanel;
 		wxStaticText* m_labelCentreX;
 		wxTextCtrl* m_entryCentreX;
@@ -102,6 +105,8 @@ class DIALOG_CREATE_ARRAY_BASE : public DIALOG_SHIM
 		wxChoice* m_choiceCircNumbering;
 		wxStaticText* m_labelCircNumStart;
 		wxTextCtrl* m_entryCircNumberingStart;
+		wxStaticText* m_labelCircNumStep;
+		wxTextCtrl* m_entryCircNumberingStep;
 		wxStdDialogButtonSizer* m_stdButtons;
 		wxButton* m_stdButtonsOK;
 		wxButton* m_stdButtonsCancel;
