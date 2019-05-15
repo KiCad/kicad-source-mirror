@@ -166,6 +166,7 @@ public:
 
         m_sdbSizerOK->SetLabel( aOKLabel );
         m_sdbSizerCancel->SetLabel( aCancelLabel );
+        m_sdbSizerOK->SetFocus();
         m_sdbSizerOK->SetDefault();
 
         FinishDialogSettings();
