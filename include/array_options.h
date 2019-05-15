@@ -26,6 +26,8 @@
 
 #include <math/vector2d.h>
 
+#include <array_axis.h>
+
 /**
  * Options that govern the setup of an "array" of multiple item.
  * The base #ARRAY_OPTIONS do not encode a specific geometry or numbering
@@ -40,49 +42,12 @@ public:
         ARRAY_CIRCULAR, ///< A circular array
     };
 
-    // NOTE: do not change order relative to charSetDescriptions
-    enum NUMBERING_TYPE_T
-    {
-        NUMBERING_NUMERIC = 0, ///< Arabic numerals: 0,1,2,3,4,5,6,7,8,9,10,11...
-        NUMBERING_HEX,
-        NUMBERING_ALPHA_NO_IOSQXZ, /*!< Alphabet, excluding IOSQXZ
-                                     *
-                                     * Per ASME Y14.35M-1997 sec. 5.2 (previously MIL-STD-100 sec. 406.5)
-                                     * as these can be confused with numerals and are often not used
-                                     * for pin numbering on BGAs, etc
-                                     */
-        NUMBERING_ALPHA_FULL,      ///< Full 26-character alphabet
-    };
-
     ARRAY_OPTIONS( ARRAY_TYPE_T aType )
             : m_type( aType ), m_shouldNumber( false ), m_numberingStartIsSpecified( false )
     {
     }
 
     virtual ~ARRAY_OPTIONS(){};
-
-    /**
-     * Get the alphabet for a particular numbering scheme.
-     * @param  type the numbering scheme
-     * @return      the alphabet (as a string)
-     */
-    static const wxString& AlphabetFromNumberingScheme( NUMBERING_TYPE_T type );
-
-    /**
-     * @return False for schemes like 0,1...9,10
-     *         True for schemes like A,B..Z,AA (where the tens column starts with char 0)
-     */
-    static bool SchemeNonUnitColsStartAt0( NUMBERING_TYPE_T type );
-
-    /**
-     * Get the numbering offset for a given numbering string
-     * @param  str   a numbering string, say "B" or "5"
-     * @param  type  the type this string should be
-     * @param  offsetToFill the offset to set, if found
-     * @return       true if the string is a valid offset of this type
-     */
-    static bool GetNumberingOffset(
-            const wxString& str, ARRAY_OPTIONS::NUMBERING_TYPE_T type, int& offsetToFill );
 
     /**
      * Transform applied to an object by this array
@@ -143,7 +108,6 @@ public:
     }
 
 protected:
-    static wxString getCoordinateNumber( int n, NUMBERING_TYPE_T type );
 
     ARRAY_TYPE_T m_type;
 
@@ -166,11 +130,7 @@ struct ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
               m_reverseNumberingAlternate( false ),
               m_stagger( 0 ),
               m_stagger_rows( true ),
-              m_2dArrayNumbering( false ),
-              m_numberingOffsetX( 0 ),
-              m_numberingOffsetY( 0 ),
-              m_priAxisNumType( NUMBERING_NUMERIC ),
-              m_secAxisNumType( NUMBERING_NUMERIC )
+              m_2dArrayNumbering( false )
     {
     }
 
@@ -181,8 +141,7 @@ struct ARRAY_GRID_OPTIONS : public ARRAY_OPTIONS
     long             m_stagger;
     bool             m_stagger_rows;
     bool             m_2dArrayNumbering;
-    int              m_numberingOffsetX, m_numberingOffsetY;
-    NUMBERING_TYPE_T m_priAxisNumType, m_secAxisNumType;
+    ARRAY_AXIS       m_pri_axis, m_sec_axis;
 
     TRANSFORM GetTransform( int aN, const VECTOR2I& aPos ) const override;
     int       GetArraySize() const override;
@@ -199,9 +158,7 @@ struct ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
             : ARRAY_OPTIONS( ARRAY_CIRCULAR ),
               m_nPts( 0 ),
               m_angle( 0.0f ),
-              m_rotateItems( false ),
-              m_numberingType( NUMBERING_NUMERIC ),
-              m_numberingOffset( 0 )
+              m_rotateItems( false )
     {
     }
 
@@ -211,8 +168,7 @@ struct ARRAY_CIRCULAR_OPTIONS : public ARRAY_OPTIONS
     double           m_angle;
     VECTOR2I         m_centre;
     bool             m_rotateItems;
-    NUMBERING_TYPE_T m_numberingType;
-    long             m_numberingOffset;
+    ARRAY_AXIS       m_axis;
 
     TRANSFORM GetTransform( int aN, const VECTOR2I& aPos ) const override;
     int       GetArraySize() const override;

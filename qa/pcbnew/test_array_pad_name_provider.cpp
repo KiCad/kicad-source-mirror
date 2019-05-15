@@ -82,8 +82,8 @@ std::vector<APNP_CASE> GetModuleAPNPCases()
 
     // simple linear numbering
     opts->m_2dArrayNumbering = false;
-    opts->m_numberingOffsetX = 1;
-    opts->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
+    opts->m_pri_axis.SetOffset( 1 );
+    opts->m_pri_axis.SetAxisType( ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC );
 
     cases.push_back( {
             "Simple linear, skip some",
@@ -98,8 +98,8 @@ std::vector<APNP_CASE> GetModuleAPNPCases()
 
     // simple linear numbering (again)
     opts->m_2dArrayNumbering = false;
-    opts->m_numberingOffsetX = 1;
-    opts->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
+    opts->m_pri_axis.SetOffset( 1 );
+    opts->m_pri_axis.SetAxisType( ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC );
 
     cases.push_back( {
             "Simple linear, no module",

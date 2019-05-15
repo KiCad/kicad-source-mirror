@@ -25,86 +25,6 @@
 
 #include <trigo.h>
 
-const wxString& ARRAY_OPTIONS::AlphabetFromNumberingScheme( NUMBERING_TYPE_T type )
-{
-    static const wxString alphaNumeric = "0123456789";
-    static const wxString alphaHex = "0123456789ABCDEF";
-    static const wxString alphaFull = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    static const wxString alphaNoIOSQXZ = "ABCDEFGHJKLMNPRTUVWY";
-
-    switch( type )
-    {
-    default:
-    case NUMBERING_NUMERIC: return alphaNumeric;
-    case NUMBERING_HEX: return alphaHex;
-    case NUMBERING_ALPHA_NO_IOSQXZ: return alphaNoIOSQXZ;
-    case NUMBERING_ALPHA_FULL: return alphaFull;
-    }
-}
-
-
-bool ARRAY_OPTIONS::SchemeNonUnitColsStartAt0( NUMBERING_TYPE_T type )
-{
-    return type == NUMBERING_ALPHA_FULL || type == NUMBERING_ALPHA_NO_IOSQXZ;
-}
-
-
-bool ARRAY_OPTIONS::GetNumberingOffset(
-        const wxString& str, ARRAY_OPTIONS::NUMBERING_TYPE_T type, int& offsetToFill )
-{
-    const wxString& alphabet = ARRAY_OPTIONS::AlphabetFromNumberingScheme( type );
-
-    int       offset = 0;
-    const int radix = alphabet.length();
-
-    for( unsigned i = 0; i < str.length(); i++ )
-    {
-        int chIndex = alphabet.Find( str[i], false );
-
-        if( chIndex == wxNOT_FOUND )
-            return false;
-
-        const bool start0 = ARRAY_OPTIONS::SchemeNonUnitColsStartAt0( type );
-
-        // eg "AA" is actually index 27, not 26
-        if( start0 && i < str.length() - 1 )
-            chIndex++;
-
-        offset *= radix;
-        offset += chIndex;
-    }
-
-    offsetToFill = offset;
-    return true;
-}
-
-
-wxString ARRAY_OPTIONS::getCoordinateNumber( int n, NUMBERING_TYPE_T type )
-{
-    wxString        itemNum;
-    const wxString& alphabet = AlphabetFromNumberingScheme( type );
-
-    const bool nonUnitColsStartAt0 = SchemeNonUnitColsStartAt0( type );
-
-    bool firstRound = true;
-    int  radix = alphabet.Length();
-
-    do
-    {
-        int modN = n % radix;
-
-        if( nonUnitColsStartAt0 && !firstRound )
-            modN--; // Start the "tens/hundreds/etc column" at "Ax", not "Bx"
-
-        itemNum.insert( 0, 1, alphabet[modN] );
-
-        n /= radix;
-        firstRound = false;
-    } while( n );
-
-    return itemNum;
-}
-
 
 int ARRAY_GRID_OPTIONS::GetArraySize() const
 {
@@ -167,12 +87,12 @@ wxString ARRAY_GRID_OPTIONS::GetItemNumber( int n ) const
     {
         VECTOR2I coords = getGridCoords( n );
 
-        itemNum += getCoordinateNumber( coords.x + m_numberingOffsetX, m_priAxisNumType );
-        itemNum += getCoordinateNumber( coords.y + m_numberingOffsetY, m_secAxisNumType );
+        itemNum << m_pri_axis.GetItemNumber( coords.x );
+        itemNum << m_sec_axis.GetItemNumber( coords.y );
     }
     else
     {
-        itemNum += getCoordinateNumber( n + m_numberingOffsetX, m_priAxisNumType );
+        itemNum << m_pri_axis.GetItemNumber( n );
     }
 
     return itemNum;
@@ -209,5 +129,5 @@ ARRAY_OPTIONS::TRANSFORM ARRAY_CIRCULAR_OPTIONS::GetTransform( int n, const VECT
 
 wxString ARRAY_CIRCULAR_OPTIONS::GetItemNumber( int aN ) const
 {
-    return getCoordinateNumber( aN + m_numberingOffset, m_numberingType );
+    return m_axis.GetItemNumber( aN );
 }

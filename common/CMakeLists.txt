@@ -280,6 +280,7 @@ set( COMMON_SRCS
     ${COMMON_PREVIEW_ITEMS_SRCS}
     ${PLOTTERS_CONTROL_SRCS}
     advanced_config.cpp
+    array_axis.cpp
     array_options.cpp
     base_struct.cpp
     bezier_curves.cpp

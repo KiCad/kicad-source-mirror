@@ -114,7 +114,7 @@ DIALOG_CREATE_ARRAY::DIALOG_CREATE_ARRAY(
     // Set up numbering scheme drop downs
     //
     // character set
-    // NOTE: do not change the order of this relative to the NUMBERING_TYPE_T enum
+    // NOTE: do not change the order of this relative to the NUMBERING_TYPE enum
     const wxString charSetDescriptions[] =
     {
         _( "Numerals (0,1,2,...,9,10)" ),
@@ -206,17 +206,15 @@ void DIALOG_CREATE_ARRAY::OnParameterChanged( wxCommandEvent& event )
  * @return if all valid
  */
 static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
-                                            const wxChoice& typeEntry,
-                                            ARRAY_OPTIONS::NUMBERING_TYPE_T& type,
-                                            int& offset, wxArrayString& errors )
+        const wxChoice& typeEntry, ARRAY_AXIS& aAxis, wxArrayString& errors )
 {
     const int typeVal = typeEntry.GetSelection();
     // mind undefined casts to enums (should not be able to happen)
-    bool ok = typeVal <= ARRAY_OPTIONS::NUMBERING_TYPE_MAX;
+    bool ok = typeVal <= ARRAY_AXIS::NUMBERING_TYPE_MAX;
 
     if( ok )
     {
-        type = (ARRAY_OPTIONS::NUMBERING_TYPE_T) typeVal;
+        aAxis.SetAxisType( static_cast<ARRAY_AXIS::NUMBERING_TYPE>( typeVal ) );
     }
     else
     {
@@ -228,17 +226,19 @@ static bool validateNumberingTypeAndOffset( const wxTextCtrl& offsetEntry,
     }
 
     const wxString text = offsetEntry.GetValue();
-    ok = ARRAY_OPTIONS::GetNumberingOffset( text, type, offset );
+
+    ok = aAxis.SetOffset( text );
 
     if( !ok )
     {
-        const wxString& alphabet = ARRAY_OPTIONS::AlphabetFromNumberingScheme( type );
+        const wxString& alphabet = aAxis.GetAlphabet();
 
         wxString err;
         err.Printf( _( "Could not determine numbering start from \"%s\": "
                        "expected value consistent with alphabet \"%s\"" ),
                     text, alphabet );
         errors.Add(err);
+        return false;
     }
 
     return ok;
@@ -311,14 +311,12 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
                 // validate from the input fields
                 bool numOk = validateNumberingTypeAndOffset( *m_entryGridPriNumberingOffset,
-                        *m_choicePriAxisNumbering, newGrid->m_priAxisNumType,
-                        newGrid->m_numberingOffsetX, errors );
+                        *m_choicePriAxisNumbering, newGrid->m_pri_axis, errors );
 
                 if( newGrid->m_2dArrayNumbering )
                 {
                     numOk = validateNumberingTypeAndOffset( *m_entryGridSecNumberingOffset,
-                                    *m_choiceSecAxisNumbering, newGrid->m_secAxisNumType,
-                                    newGrid->m_numberingOffsetY, errors )
+                                    *m_choiceSecAxisNumbering, newGrid->m_sec_axis, errors )
                             && numOk;
                 }
 
@@ -328,8 +326,8 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
             {
                 // artificial linear numeric scheme from 1
                 newGrid->m_2dArrayNumbering = false;
-                newGrid->m_priAxisNumType = ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC;
-                newGrid->m_numberingOffsetX = 1; // Start at "1"
+                newGrid->m_pri_axis.SetAxisType( ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC );
+                newGrid->m_pri_axis.SetOffset( 1 );
             }
         }
 
@@ -359,16 +357,23 @@ bool DIALOG_CREATE_ARRAY::TransferDataFromWindow()
 
             if( newCirc->GetNumberingStartIsSpecified() )
             {
-                newCirc->m_numberingType = ARRAY_OPTIONS::NUMBERING_NUMERIC;
+                newCirc->m_axis.SetAxisType( ARRAY_AXIS::NUMBERING_NUMERIC );
+
+                long offset;
 
                 ok = ok
-                     && validateLongEntry( *m_entryCircNumberingStart, newCirc->m_numberingOffset,
-                                _( "numbering start" ), errors );
+                     && validateLongEntry(
+                             *m_entryCircNumberingStart, offset, _( "numbering start" ), errors );
+
+                if( ok )
+                {
+                    newCirc->m_axis.SetOffset( offset );
+                }
             }
             else
             {
                 // artificial linear numeric scheme from 1
-                newCirc->m_numberingOffset = 1; // Start at "1"
+                newCirc->m_axis.SetOffset( 1 ); // Start at "1"
             }
         }
 

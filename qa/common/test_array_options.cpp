@@ -392,14 +392,14 @@ void CheckArrayNumbering( const ARRAY_OPTIONS& aOpts, const std::vector<std::str
 
 struct GRID_ARRAY_NAMING_PARAMS
 {
-    ARRAY_OPTIONS::NUMBERING_TYPE_T m_pri_type;
-    ARRAY_OPTIONS::NUMBERING_TYPE_T m_sec_type;
-    std::string                     m_start_at_x;
-    std::string                     m_start_at_y;
-    bool                            m_2d_numbering;
-    bool                            m_h_then_v;
-    int                             m_nx;
-    int                             m_ny;
+    ARRAY_AXIS::NUMBERING_TYPE m_pri_type;
+    ARRAY_AXIS::NUMBERING_TYPE m_sec_type;
+    std::string                m_start_at_x;
+    std::string                m_start_at_y;
+    bool                       m_2d_numbering;
+    bool                       m_h_then_v;
+    int                        m_nx;
+    int                        m_ny;
 };
 
 
@@ -416,8 +416,8 @@ static const std::vector<GRID_ARRAY_NAMING_CASE> grid_name_cases = {
     {
         "Linear grid",
         {
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC, // doesn't matter here
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC, // doesn't matter here
             "1",
             "2",
             false,
@@ -431,8 +431,8 @@ static const std::vector<GRID_ARRAY_NAMING_CASE> grid_name_cases = {
         // Tests a 2d grid
         "2D grid A1",
         {
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_ALPHA_FULL,
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
             "A",
             "1",
             true,
@@ -446,8 +446,8 @@ static const std::vector<GRID_ARRAY_NAMING_CASE> grid_name_cases = {
         // Tests a 2d grid
         "2D grid 11",
         {
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
             "1",
             "1",
             true,
@@ -463,8 +463,8 @@ static const std::vector<GRID_ARRAY_NAMING_CASE> grid_name_cases = {
         // Tests a 2d grid, with different types and offsets (and alphabet wrap)
         "2D grid offsets",
         {
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_NUMERIC,
-            ARRAY_OPTIONS::NUMBERING_TYPE_T::NUMBERING_ALPHA_FULL,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_NUMERIC,
+            ARRAY_AXIS::NUMBERING_TYPE::NUMBERING_ALPHA_FULL,
             "5",
             "Z",
             true,
@@ -494,13 +494,11 @@ BOOST_AUTO_TEST_CASE( GridNaming )
 
             grid_opts.m_horizontalThenVertical = c.m_prms.m_h_then_v;
 
-            ARRAY_OPTIONS::GetNumberingOffset(
-                    c.m_prms.m_start_at_x, c.m_prms.m_pri_type, grid_opts.m_numberingOffsetX );
-            ARRAY_OPTIONS::GetNumberingOffset(
-                    c.m_prms.m_start_at_y, c.m_prms.m_sec_type, grid_opts.m_numberingOffsetY );
+            grid_opts.m_pri_axis.SetAxisType( c.m_prms.m_pri_type );
+            grid_opts.m_sec_axis.SetAxisType( c.m_prms.m_sec_type );
 
-            grid_opts.m_priAxisNumType = c.m_prms.m_pri_type;
-            grid_opts.m_secAxisNumType = c.m_prms.m_sec_type;
+            grid_opts.m_pri_axis.SetOffset( c.m_prms.m_start_at_x );
+            grid_opts.m_sec_axis.SetOffset( c.m_prms.m_start_at_y );
 
             grid_opts.m_2dArrayNumbering = c.m_prms.m_2d_numbering;
 
