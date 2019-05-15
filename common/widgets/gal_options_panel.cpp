@@ -22,11 +22,16 @@
  */
 
 
+#include <wx/sizer.h>
+#include <wx/checkbox.h>
+#include <wx/radiobox.h>
+#include <wx/spinctrl.h>
+#include <wx/stattext.h>
+
 #include <widgets/gal_options_panel.h>
 
 #include <common.h>
 
-#include <incremental_text_ctrl.h>
 #include <config_map.h>
 
 /*
@@ -34,7 +39,7 @@
  */
 static const double gridThicknessMin = 1.0;
 static const double gridThicknessMax = 10.0;
-static const double gridThicknessStep = 1.0;
+static const double gridThicknessStep = 0.5;
 
 static const double gridMinSpacingMin = 5;
 static const double gridMinSpacingMax = 200;
@@ -85,7 +90,7 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettings->Add( m_gridStyle, 0, wxALL|wxEXPAND, 5 );
 
         wxFlexGridSizer* sGridSettingsGrid;
-        sGridSettingsGrid = new wxFlexGridSizer( 0, 4, 0, 0 );
+        sGridSettingsGrid = new wxFlexGridSizer( 0, 3, 0, 0 );
         sGridSettingsGrid->AddGrowableCol( 1 );
         sGridSettingsGrid->SetFlexibleDirection( wxBOTH );
         sGridSettingsGrid->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_SPECIFIED );
@@ -95,13 +100,11 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         l_gridLineWidth->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridLineWidth, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-        m_gridLineWidth = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY );
+        m_gridLineWidth = new wxSpinCtrlDouble( sGridSettings->GetStaticBox(), wxID_ANY );
+        m_gridLineWidth->SetRange( gridThicknessMin, gridThicknessMax );
+        m_gridLineWidth->SetIncrement( gridThicknessStep );
+        m_gridLineWidth->SetDigits( 1 );
         sGridSettingsGrid->Add( m_gridLineWidth, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
-
-        m_gridLineWidthSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
-                wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridLineWidthSpinBtn, 0,
-                wxEXPAND | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 3 );
 
         l_gridLineWidthUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _( "px" ) );
@@ -113,13 +116,11 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         l_gridMinSpacing->Wrap( -1 );
         sGridSettingsGrid->Add( l_gridMinSpacing, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
-        m_gridMinSpacing = new wxTextCtrl( sGridSettings->GetStaticBox(), wxID_ANY);
+        m_gridMinSpacing = new wxSpinCtrlDouble( sGridSettings->GetStaticBox(), wxID_ANY);
+        m_gridMinSpacing->SetRange( gridMinSpacingMin, gridMinSpacingMax );
+        m_gridMinSpacing->SetIncrement( gridMinSpacingStep );
+        m_gridMinSpacing->SetDigits( 0 );
         sGridSettingsGrid->Add( m_gridMinSpacing, 0, wxEXPAND | wxTOP | wxBOTTOM, 5 );
-
-        m_gridMinSpacingSpinBtn = new wxSpinButton( sGridSettings->GetStaticBox(),
-                wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSP_ARROW_KEYS );
-        sGridSettingsGrid->Add( m_gridMinSpacingSpinBtn, 0,
-                wxEXPAND | wxTOP | wxBOTTOM | wxALIGN_CENTER_VERTICAL, 3 );
 
         l_gridMinSpacingUnits = new wxStaticText( sGridSettings->GetStaticBox(),
                 wxID_ANY, _( "px" ) );
@@ -129,21 +130,6 @@ GAL_OPTIONS_PANEL::GAL_OPTIONS_PANEL( wxWindow* aParent, KIGFX::GAL_DISPLAY_OPTI
         sGridSettings->Add( sGridSettingsGrid, 1, wxALL | wxEXPAND, 5 );
 
         sLeftSizer->Add( sGridSettings, 0, wxTOP | wxBOTTOM | wxRIGHT | wxEXPAND, 5 );
-
-        // bind the spin buttons and text boxes
-        m_gridSizeIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridLineWidthSpinBtn, *m_gridLineWidth );
-
-        m_gridSizeIncrementer->SetStep( gridThicknessMin, gridThicknessMax,
-                                        gridThicknessStep );
-        m_gridSizeIncrementer->SetPrecision( 0 );
-
-        m_gridMinSpacingIncrementer = std::make_unique<SPIN_INCREMENTAL_TEXT_CTRL>(
-                *m_gridMinSpacingSpinBtn, *m_gridMinSpacing );
-
-        m_gridMinSpacingIncrementer->SetStep( gridMinSpacingMin, gridMinSpacingMax,
-                gridMinSpacingStep );
-        m_gridMinSpacingIncrementer->SetPrecision( 0 ); // restrict to ints
     }
 
     /*
@@ -199,9 +185,9 @@ bool GAL_OPTIONS_PANEL::TransferDataToWindow()
     m_gridStyle->SetSelection( UTIL::GetConfigForVal(
             gridStyleSelectMap, m_galOptions.m_gridStyle ) );
 
-    m_gridSizeIncrementer->SetValue( m_galOptions.m_gridLineWidth );
+    m_gridLineWidth->SetValue( m_galOptions.m_gridLineWidth );
 
-    m_gridMinSpacingIncrementer->SetValue( m_galOptions.m_gridMinSpacing );
+    m_gridMinSpacing->SetValue( m_galOptions.m_gridMinSpacing );
 
     m_cursorShape->SetSelection( m_galOptions.m_fullscreenCursor );
 
@@ -216,9 +202,9 @@ bool GAL_OPTIONS_PANEL::TransferDataFromWindow()
     m_galOptions.m_gridStyle = UTIL::GetValFromConfig(
             gridStyleSelectMap, m_gridStyle->GetSelection() );
 
-    m_galOptions.m_gridLineWidth = std::floor( m_gridSizeIncrementer->GetValue() + 0.5 );
+    m_galOptions.m_gridLineWidth = m_gridLineWidth->GetValue();
 
-    m_galOptions.m_gridMinSpacing = m_gridMinSpacingIncrementer->GetValue();
+    m_galOptions.m_gridMinSpacing = m_gridMinSpacing->GetValue();
 
     m_galOptions.m_fullscreenCursor = m_cursorShape->GetSelection();
 
