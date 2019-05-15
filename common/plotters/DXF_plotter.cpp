@@ -139,14 +139,14 @@ void DXF_PLOTTER::SetViewport( const wxPoint& aOffset, double aIusPerDecimil,
     paperSize.y = 0;
 
     /* Like paper size DXF units are abstract too. Anyway there is a
-     * system variable (MEASUREMENT) which will be set to 1 to indicate
-     * metric units */
+     * system variable (MEASUREMENT) which will be set to 0 to indicate
+     * english units */
     m_IUsPerDecimil = aIusPerDecimil;
     iuPerDeviceUnit = 1.0 / aIusPerDecimil; // Gives a DXF in decimils
-    iuPerDeviceUnit *= 0.00254;             // ... now in mm
+    iuPerDeviceUnit *= 0.0001;              // ... now in inches
 
     SetDefaultLineWidth( 0 );               // No line width on DXF
-    m_plotMirror = false;                     // No mirroring on DXF
+    m_plotMirror = false;                   // No mirroring on DXF
     m_currentColor = COLOR4D::BLACK;
 }
 
@@ -176,7 +176,7 @@ bool DXF_PLOTTER::StartPlot()
            "$MEASUREMENT\n"
            "  70\n"
            "0\n"
-           "  0\n"              // This means 'metric units'
+           "  0\n"              // This means 'english units'
            "ENDSEC\n"
            "  0\n"
            "SECTION\n"
