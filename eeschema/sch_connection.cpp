@@ -489,7 +489,7 @@ bool SCH_CONNECTION::ParseBusGroup( wxString aGroup, wxString* aName,
 
     *aName = wxString( matches[1] );
 
-    wxStringTokenizer tokenizer( wxString( matches[2] ), " " );
+    wxStringTokenizer tokenizer( wxString( matches[2] ), wxT( ", \t" ) );
     while( tokenizer.HasMoreTokens() )
     {
         aMemberList.push_back( tokenizer.GetNextToken() );
