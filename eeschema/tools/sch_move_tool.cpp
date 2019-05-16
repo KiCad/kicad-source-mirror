@@ -399,16 +399,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     selection.ClearReferencePoint();
 
-    for( auto item : selection )
+    for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
-
-    if( unselect )
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
-    else
-        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
 
     if( restore_state )
     {
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
         m_frame->RollbackSchematicFromUndo();
     }
     else
@@ -416,6 +412,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         addJunctionsIfNeeded( selection );
         m_frame->SchematicCleanUp();
         m_frame->TestDanglingEnds();
+
+        if( unselect )
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        else
+            m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
+
         m_frame->OnModify();
     }
 
@@ -592,6 +594,12 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
         wxPoint        transformedDelta = transform.TransformCoordinate( (wxPoint) aDelta );
 
         static_cast<SCH_ITEM*>( aItem )->Move( transformedDelta );
+        break;
+    }
+    case SCH_SHEET_PIN_T:
+    {
+        SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
+        pin->ConstrainOnEdge( pin->GetPosition() + (wxPoint) aDelta );
         break;
     }
     default:

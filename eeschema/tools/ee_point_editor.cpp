@@ -482,6 +482,24 @@ void EE_POINT_EDITOR::updateItem() const
 
         sheet->SetPosition( (wxPoint) topLeft );
         sheet->SetSize( wxSize( botRight.x - topLeft.x, botRight.y - topLeft.y ) );
+
+        // Keep sheet pins attached to edges:
+        for( SCH_SHEET_PIN& pin : sheet->GetPins() )
+        {
+            wxPoint pos = pin.GetPosition();
+
+            switch( pin.GetEdge() )
+            {
+            case SCH_SHEET_PIN::SHEET_LEFT_SIDE:      pos.x = topLeft.x;  break;
+            case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:     pos.x = topRight.x; break;
+            case SCH_SHEET_PIN::SHEET_TOP_SIDE:       pos.y = topLeft.y;  break;
+            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE:    pos.y = botLeft.y;  break;
+            case SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE: break;
+            }
+
+            pin.SetPosition( pos );
+        }
+
         break;
     }
 

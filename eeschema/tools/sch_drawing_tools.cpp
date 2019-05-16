@@ -658,7 +658,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     item = m_frame->CreateNewText( LAYER_NOTES );
                     break;
                 case SCH_SHEET_PIN_T:
-                    item = m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsAndSheetLabels );
+                    item = m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly );
 
                     if( item )
                     {
@@ -666,6 +666,15 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                             item = m_frame->ImportSheetPin( (SCH_SHEET*) item );
                         else
                             item = m_frame->CreateSheetPin( (SCH_SHEET*) item );
+                    }
+                    else
+                    {
+                        m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                        m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
+                        m_statusPopup->SetText( _( "Click over a sheet to create a sheet pin" ) );
+                        m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                        m_statusPopup->Popup();
+                        m_statusPopup->Expire( 1500 );
                     }
                     break;
                 default:

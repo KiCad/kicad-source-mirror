@@ -26,7 +26,7 @@
 
 #include <tools/ee_tool_base.h>
 #include <sch_base_frame.h>
-
+#include <status_popup.h>
 
 class SCH_COMPONENT;
 class SCH_BUS_WIRE_ENTRY;
@@ -82,6 +82,9 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
+
+private:
+    std::unique_ptr<STATUS_TEXT_POPUP> m_statusPopup;
 };
 
 #endif /* SCH_DRAWING_TOOLS_H */
