@@ -192,22 +192,20 @@ bool EE_SELECTION_TOOL::Init()
 
     auto wireSelection = EE_CONDITIONS::MoreThan( 0 )
                       && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-
     auto busSelection = EE_CONDITIONS::MoreThan( 0 )
                      && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
-
     auto wireOrBusSelection = EE_CONDITIONS::MoreThan( 0 )
                            && EE_CONDITIONS::OnlyTypes( wireOrBusTypes );
-
     auto sheetSelection = SELECTION_CONDITIONS::Count( 1 )
                        && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
-
-    auto libEdit = [this] ( const SELECTION& aSel ) {
-        return m_isLibEdit;
+    auto schEditCondition = [this] ( const SELECTION& aSel ) {
+        return !m_isLibEdit;
     };
-
     auto belowRootSheetCondition = [this] ( const SELECTION& aSel ) {
         return !m_isLibEdit && g_CurrentSheet->Last() != g_RootSheet;
+    };
+    auto havePartCondition = [ this ] ( const SELECTION& sel ) {
+        return m_isLibEdit && ( (LIB_EDIT_FRAME*) m_frame )->GetCurPart();
     };
 
     auto& menu = m_menu.GetMenu();
@@ -217,8 +215,8 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::leaveSheet,         belowRootSheetCondition, 1 );
 
     menu.AddSeparator( EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startWire,          !libEdit && EE_CONDITIONS::Empty, 100 );
-    menu.AddItem( EE_ACTIONS::startBus,           !libEdit && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::startWire,          schEditCondition && EE_CONDITIONS::Empty, 100 );
+    menu.AddItem( EE_ACTIONS::startBus,           schEditCondition && EE_CONDITIONS::Empty, 100 );
 
     menu.AddSeparator( SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
     menu.AddItem( EE_ACTIONS::finishWire,         SCH_WIRE_BUS_TOOL::IsDrawingWire, 100 );
@@ -236,9 +234,9 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 200 );
     menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 200 );
 
-    menu.AddSeparator( libEdit && EE_CONDITIONS::Empty, 400 );
-    menu.AddItem( EE_ACTIONS::symbolProperties,   libEdit && EE_CONDITIONS::Empty, 400 );
-    menu.AddItem( EE_ACTIONS::pinTable,           libEdit && EE_CONDITIONS::Empty, 400 );
+    menu.AddSeparator( havePartCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );
+    menu.AddItem( EE_ACTIONS::pinTable,           havePartCondition && EE_CONDITIONS::Empty, 400 );
 
     menu.AddSeparator( SELECTION_CONDITIONS::ShowAlways, 1000 );
     m_menu.AddStandardSubMenus( m_frame );
