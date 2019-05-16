@@ -534,6 +534,9 @@ int LIB_EDIT_TOOL::PinTable( const TOOL_EVENT& aEvent )
 {
     LIB_PART* part = m_frame->GetCurPart();
 
+    if( !part )
+        return 0;
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
     saveCopyInUndoList( part, UR_LIBEDIT );
@@ -634,13 +637,15 @@ int LIB_EDIT_TOOL::Paste( const TOOL_EVENT& aEvent )
         return -1;
     }
 
+    m_frame->SaveCopyInUndoList( part );
+
     for( LIB_ITEM& item : newPart->GetDrawItems() )
     {
         if( item.Type() == LIB_FIELD_T )
             continue;
 
         LIB_ITEM* newItem = (LIB_ITEM*) item.Clone();
-        newItem->SetFlags( IS_NEW );
+        newItem->SetFlags( IS_NEW | IS_PASTED );
         newItems.push_back( newItem );
 
         part->GetDrawItems().push_back( newItem );

@@ -171,7 +171,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
                         test->GetUnit() );
 
             KIDIALOG dlg( m_frame, msg, _( "Confirmation" ), wxOK | wxCANCEL | wxICON_WARNING );
-            dlg.SetOKLabel( _( "Create Pin Anyway" ) );
+            dlg.SetOKLabel( _( "Place Pin Anyway" ) );
             dlg.DoNotShowCheckbox( __FILE__, __LINE__ );
 
             bool status = dlg.ShowModal() == wxID_OK;
@@ -193,7 +193,7 @@ bool LIB_PIN_TOOL::PlacePin( LIB_PIN* aPin )
         }
     }
 
-    if( aPin->IsNew() )
+    if( aPin->IsNew() && !( aPin->GetFlags() & IS_PASTED ) )
     {
         g_LastPinOrient = aPin->GetOrientation();
         g_LastPinType   = aPin->GetType();

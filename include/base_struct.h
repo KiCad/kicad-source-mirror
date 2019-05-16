@@ -124,7 +124,7 @@ typedef const INSPECTOR_FUNC& INSPECTOR;    /// std::function passed to nested u
 #define CANDIDATE      (1 << 14)   ///< flag indicating that the structure is connected
 #define SKIP_STRUCT    (1 << 15)   ///< flag indicating that the structure should be ignored
 #define DO_NOT_DRAW    (1 << 16)   ///< Used to disable draw function
-// empty spot          (1 << 17)
+#define IS_PASTED      (1 << 17)   ///< Modifier on IS_NEW which indicates it came from clipboard
 #define TRACK_LOCKED   (1 << 18)   ///< Pcbnew: track locked: protected from global deletion
 #define TRACK_AR       (1 << 19)   ///< Pcbnew: autorouted track
 #define FLAG1          (1 << 20)   ///< Pcbnew: flag used in local computations
