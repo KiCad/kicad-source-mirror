@@ -392,6 +392,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
+            bool placing = text != nullptr;
+
             if( !text )
             {
                 m_controls->ForceCursorPosition( true, m_controls->GetCursorPosition() );
@@ -409,17 +411,26 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
                     textMod->SetKeepUpright( dsnSettings.GetTextUpright( layer ) );
                     textMod->SetTextPos( (wxPoint) cursorPos );
 
+                    text = textMod;
+
                     DIALOG_TEXT_PROPERTIES textDialog( m_frame, textMod, NULL );
-                    bool placing;
+                    bool cancelled;
 
                     RunMainStack([&]() {
-                        placing = textDialog.ShowModal() && ( textMod->GetText().Length() > 0 );
+                        cancelled = !textDialog.ShowModal() || textMod->GetText().IsEmpty();
                     } );
 
-                    if( placing )
-                        text = textMod;
-                    else
-                        delete textMod;
+                    if( cancelled )
+                    {
+                        delete text;
+                        text = nullptr;
+                    }
+                    else if( textMod->GetTextPos() != (wxPoint) cursorPos )
+                    {
+                        // If the user modified the location then go ahead and place it there.
+                        // Otherwise we'll drag.
+                        placing = true;
+                    }
                 }
                 else
                 {
@@ -461,7 +472,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
                 m_toolMgr->RunAction( PCB_ACTIONS::selectItem, true, text );
             }
-            else
+
+            if( placing )
             {
                 text->ClearFlags();
                 m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
