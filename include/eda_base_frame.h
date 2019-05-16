@@ -47,11 +47,10 @@
 #include <layers_id_colors_and_visibility.h>
 #include <frame_type.h>
 #include "hotkeys_basic.h"
+#include <tool/action_toolbar.h>
 
 #ifdef USE_WX_OVERLAY
 #include <wx/overlay.h>
-#include <tool/action_toolbar.h>
-
 #endif
 
 // Option for main frames
