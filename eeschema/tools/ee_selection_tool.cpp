@@ -447,16 +447,8 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     if( !start )
         return nullptr;
 
-    int thresholdMax = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
-
-    for( int threshold : { 0, thresholdMax/2, thresholdMax } )
-    {
-        collector.m_Threshold = threshold;
-        collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
-
-        if( collector.GetCount() > 0 )
-            break;
-    }
+    collector.m_Threshold = KiROUND( getView()->ToWorld( HITTEST_THRESHOLD_PIXELS ) );
+    collector.Collect( start, aFilterList, (wxPoint) aWhere, m_unit, m_convert );
 
     bool anyCollected = collector.GetCount() != 0;
 
@@ -512,21 +504,46 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
 void EE_SELECTION_TOOL::guessSelectionCandidates( EE_COLLECTOR& collector, const VECTOR2I& aPos )
 {
     // There are certain parent/child and enclosure combinations that can be handled
-    // automatically.  Since schematics are meant to be human-readable we don't have
-    // all the various overlap and coverage issues that we do in Pcbnew.
-    if( collector.GetCount() == 2 )
-    {
-        EDA_ITEM* a = collector[ 0 ];
-        EDA_ITEM* b = collector[ 1 ];
+    // automatically.
 
-        if( a->GetParent() == b )
-            collector.Remove( b );
-        else if( a == b->GetParent() )
-            collector.Remove( a );
-        else if( a->Type() == SCH_SHEET_T && b->Type() != SCH_SHEET_T )
-            collector.Remove( a );
-        else if( b->Type() == SCH_SHEET_T && a->Type() != SCH_SHEET_T )
-            collector.Remove( b );
+    // Prefer a non-sheet to a sheet
+    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
+    {
+        EDA_ITEM* item = collector[ i ];
+        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
+
+        if( item->Type() != SCH_SHEET_T && other->Type() == SCH_SHEET_T )
+            collector.Remove( other );
+    }
+
+    // Prefer a symbol to a pin
+    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
+    {
+        EDA_ITEM* item = collector[ i ];
+        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
+
+        if( item->Type() == SCH_COMPONENT_T && other->Type() == SCH_PIN_T )
+            collector.Remove( other );
+    }
+
+    // Prefer an exact hit to a sloppy one
+    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
+    {
+        EDA_ITEM* item = collector[ i ];
+        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
+
+        if( item->HitTest( (wxPoint) aPos, 0 ) && !other->HitTest( (wxPoint) aPos, 0 ) )
+            collector.Remove( other );
+    }
+
+    // Prefer a field to a symbol
+    for( int i = 0; collector.GetCount() == 2 && i < 2; ++i )
+    {
+        EDA_ITEM* item = collector[ i ];
+        EDA_ITEM* other = collector[ ( i + 1 ) % 2 ];
+
+        if( item->Type() == SCH_FIELD_T && other->Type() == SCH_COMPONENT_T )
+            collector.Remove( other );
     }
 }
 
