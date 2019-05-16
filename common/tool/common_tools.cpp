@@ -315,32 +315,56 @@ int COMMON_TOOLS::doZoomToPreset( int idx, bool aCenterOnCursor )
 }
 
 
+/**
+ * Advance a BASE_SCREEN's grid forwards or backwards by the given offset and
+ * return the cmd ID of that grid (doesn't change the grid).
+ *
+ * This works even if the base screen's grid do not have consecutive command IDs.
+ *
+ * @param aScreen the base screen to use
+ * @param aOffset how many grids to advance by (negative to go backwards)
+ * @return the cmd ID of the requested grid, or empty if it can't be found
+ */
+static OPT<int> getNextPreviousGrid( const BASE_SCREEN& aScreen, int aOffset )
+{
+    const GRIDS&     grids = aScreen.GetGrids();
+    const GRID_TYPE& currGrid = aScreen.GetGrid();
+
+    auto iter = std::find_if( grids.begin(), grids.end(),
+            [&]( const GRID_TYPE& aCandidate ) { return aCandidate.m_CmdId == currGrid.m_CmdId; } );
+
+    wxCHECK_MSG( iter != grids.end(), {}, "Grid not found in screen's grid list" );
+
+    int index = std::distance( grids.begin(), iter ) + aOffset;
+
+    // If we go off the end, return invalid, but we could also wrap around if wanted.
+    if( index < 0 || static_cast<size_t>( index ) >= grids.size() )
+        return {};
+
+    return grids[index].m_CmdId;
+}
+
+
 // Grid control
 int COMMON_TOOLS::GridNext( const TOOL_EVENT& aEvent )
 {
-    BASE_SCREEN * screen = m_frame->GetScreen();
+    const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), 1 );
 
-    int new_grid_cmd = screen->GetGridCmdId();
+    if( next_grid_id )
+        return doGridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
 
-    // if the grid id is the not the last, increment it
-    if( screen->GridExists( new_grid_cmd + 1 ) )
-        new_grid_cmd += 1;
-
-    return doGridPreset( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
+    return 1;
 }
 
 
 int COMMON_TOOLS::GridPrev( const TOOL_EVENT& aEvent )
 {
-    BASE_SCREEN * screen = m_frame->GetScreen();
+    const OPT<int> next_grid_id = getNextPreviousGrid( *m_frame->GetScreen(), -1 );
 
-    int new_grid_cmd = screen->GetGridCmdId();
+    if( next_grid_id )
+        return doGridPreset( *next_grid_id - ID_POPUP_GRID_LEVEL_1000 );
 
-    // if the grid id is the not the first, increment it
-    if( screen->GridExists( new_grid_cmd - 1 ) )
-        new_grid_cmd -= 1;
-
-    return doGridPreset( new_grid_cmd - ID_POPUP_GRID_LEVEL_1000 );
+    return 1;
 }
 
 

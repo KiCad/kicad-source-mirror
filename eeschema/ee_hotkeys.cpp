@@ -130,6 +130,11 @@ static EDA_HOTKEY HkResetLocalCoord( _HKI( "Reset Local Coordinates" ), HK_RESET
 static EDA_HOTKEY HkLeaveSheet( _HKI( "Leave Sheet" ), HK_LEAVE_SHEET, GR_KB_ALT + WXK_BACK,
                                 ID_SCH_LEAVE_SHEET );
 
+static EDA_HOTKEY HkSwitchGridToNext( _HKI( "Switch Grid To Next" ),
+                                      HK_SWITCH_GRID_TO_NEXT, 'N' );
+static EDA_HOTKEY HkSwitchGridToPrevious( _HKI( "Switch Grid To Previous" ),
+                                          HK_SWITCH_GRID_TO_PREVIOUS, 'N' + GR_KB_SHIFT );
+
 // mouse click command:
 static EDA_HOTKEY HkMouseLeftClick( _HKI( "Mouse Left Click" ), HK_LEFT_CLICK, WXK_RETURN,
                                     ID_MOUSE_CLICK );
@@ -283,6 +288,8 @@ static EDA_HOTKEY* common_Hotkey_List[] =
     &HkZoomSelection,
     &HkSwitchUnits,
     &HkResetLocalCoord,
+    &HkSwitchGridToNext,
+    &HkSwitchGridToPrevious,
     &HkEdit,
     &HkDuplicateItem,
     &HkDelete,
