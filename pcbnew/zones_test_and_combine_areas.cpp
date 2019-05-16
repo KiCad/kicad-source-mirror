@@ -208,9 +208,6 @@ bool BOARD::TestAreaIntersections( ZONE_CONTAINER* area_to_test )
             if( area_to_test->GetThermalReliefCopperBridge() != area2->GetThermalReliefCopperBridge() )
                 continue;
 
-            if( area_to_test->GetArcSegmentCount() != area2->GetArcSegmentCount() )
-                continue;
-
             if( area_to_test->GetZoneClearance() != area2->GetZoneClearance() )
                 continue;
 

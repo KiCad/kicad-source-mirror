@@ -88,9 +88,6 @@ bool ZONE_CONTAINER::IsSame( const ZONE_CONTAINER& aZoneToCompare )
             return false;
     }
 
-    if( m_ArcToSegmentsCount != aZoneToCompare.GetArcSegmentCount() )
-        return false;
-
     if( m_ZoneClearance != aZoneToCompare.m_ZoneClearance )
         return false;
 

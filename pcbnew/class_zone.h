@@ -181,9 +181,6 @@ public:
     }
     int GetThermalReliefCopperBridge( D_PAD* aPad = NULL ) const;
 
-    void SetArcSegmentCount( int aArcSegCount ) { m_ArcToSegmentsCount = aArcSegCount; }
-    int GetArcSegmentCount() const { return m_ArcToSegmentsCount; }
-
     bool IsFilled() const { return m_IsFilled; }
     void SetIsFilled( bool isFilled ) { m_IsFilled = isFilled; }
 
@@ -751,10 +748,6 @@ private:
     ZoneConnection        m_PadConnection;
     int                   m_ZoneClearance;           ///< Clearance value in internal units.
     int                   m_ZoneMinThickness;        ///< Minimum thickness value in filled areas.
-
-    /** The number of segments to convert a circle to a polygon.  Valid values are
-        #ARC_APPROX_SEGMENTS_COUNT_LOW_DEF or #ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF. */
-    int                   m_ArcToSegmentsCount;
 
     /** True when a zone was filled, false after deleting the filled areas. */
     bool                  m_IsFilled;

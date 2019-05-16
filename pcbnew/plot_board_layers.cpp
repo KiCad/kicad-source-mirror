@@ -868,7 +868,6 @@ void PlotSolderMaskLayer( BOARD *aBoard, PLOTTER* aPlotter,
     // However it is not complex, and fast enough for plot purposes (copy/convert data
     // is only a very small calculation time for these calculations)
     ZONE_CONTAINER zone( aBoard );
-    zone.SetArcSegmentCount( ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF );
     zone.SetMinThickness( 0 );      // trace polygons only
     zone.SetLayer ( layer );
     int numSegs = std::max( GetArcToSegmentCount( inflate, ARC_HIGH_DEF, 360.0 ), 6 );

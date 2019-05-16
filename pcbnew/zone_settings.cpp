@@ -59,10 +59,6 @@ ZONE_SETTINGS::ZONE_SETTINGS()
     m_Zone_HatchingStyle = ZONE_CONTAINER::DIAGONAL_EDGE;   // Option to show the zone area (outlines only,
                                                             //short hatches or full hatches
 
-    m_ArcToSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF; // Option to select number of segments to approximate a circle
-                                                                // ARC_APPROX_SEGMENTS_COUNT_LOW_DEF
-                                                                // or ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF segments
-
     // thickness of the gap in thermal reliefs:
     m_ThermalReliefGap = Mils2iu( ZONE_THERMAL_RELIEF_GAP_MIL );
     // thickness of the copper bridge in thermal reliefs:
@@ -95,7 +91,6 @@ ZONE_SETTINGS& ZONE_SETTINGS::operator << ( const ZONE_CONTAINER& aSource )
     m_HatchFillTypeSmoothingValue = aSource.GetHatchFillTypeSmoothingValue();
     m_NetcodeSelection   = aSource.GetNetCode();
     m_Zone_HatchingStyle = aSource.GetHatchStyle();
-    m_ArcToSegmentsCount = aSource.GetArcSegmentCount();
     m_ThermalReliefGap = aSource.GetThermalReliefGap();
     m_ThermalReliefCopperBridge = aSource.GetThermalReliefCopperBridge();
     m_PadConnection = aSource.GetPadConnection();
@@ -124,7 +119,6 @@ void ZONE_SETTINGS::ExportSetting( ZONE_CONTAINER& aTarget, bool aFullExport ) c
     aTarget.SetHatchFillTypeOrientation( m_HatchFillTypeOrientation );
     aTarget.SetHatchFillTypeSmoothingLevel( m_HatchFillTypeSmoothingLevel );
     aTarget.SetHatchFillTypeSmoothingValue( m_HatchFillTypeSmoothingValue );
-    aTarget.SetArcSegmentCount( m_ArcToSegmentsCount );
     aTarget.SetThermalReliefGap( m_ThermalReliefGap );
     aTarget.SetThermalReliefCopperBridge( m_ThermalReliefCopperBridge );
     aTarget.SetPadConnection( m_PadConnection );

@@ -3242,7 +3242,7 @@ ZONE_CONTAINER* PCB_PARSER::parseZONE_CONTAINER()
                     break;
 
                 case T_arc_segments:
-                    zone->SetArcSegmentCount( parseInt( "arc segment count" ) );
+                    static_cast<void>( parseInt( "arc segment count" ) );
                     NeedRIGHT();
                     break;
 

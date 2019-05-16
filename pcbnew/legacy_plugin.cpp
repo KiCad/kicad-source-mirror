@@ -2624,7 +2624,7 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
         {
             // e.g. "ZOptions 0 32 F 200 200"
             int     fillmode    = intParse( line + SZ( "ZOptions" ), &data );
-            int     arcsegcount = intParse( data, &data );
+            static_cast<void>( intParse( data, &data ) ); // Ignored
             char    fillstate   = data[1];      // here e.g. " F"
             BIU     thermalReliefGap = biuParse( data += 2 , &data );  // +=2 for " F"
             BIU     thermalReliefCopperBridge = biuParse( data );
@@ -2655,13 +2655,6 @@ void LEGACY_PLUGIN::loadZONE_CONTAINER()
             else
                 zc->SetFillMode( ZFM_POLYGONS );
 
-            // @todo ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF: don't really want pcbnew.h
-            // in here, after all, its a PLUGIN and global data is evil.
-            // put in accessor
-            if( arcsegcount >= 32 )
-                arcsegcount = 32;
-
-            zc->SetArcSegmentCount( arcsegcount );
             zc->SetIsFilled( fillstate == 'S' );
             zc->SetThermalReliefGap( thermalReliefGap );
             zc->SetThermalReliefCopperBridge( thermalReliefCopperBridge );

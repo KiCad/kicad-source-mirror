@@ -95,7 +95,6 @@ ZONE_CONTAINER::ZONE_CONTAINER( const ZONE_CONTAINER& aZone ) :
     m_FillMode = aZone.m_FillMode;               // Filling mode (segments/polygons)
     m_hv45 = aZone.m_hv45;
     m_priority = aZone.m_priority;
-    m_ArcToSegmentsCount = aZone.m_ArcToSegmentsCount;
     m_PadConnection = aZone.m_PadConnection;
     m_ThermalReliefGap = aZone.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aZone.m_ThermalReliefCopperBridge;
@@ -133,7 +132,6 @@ ZONE_CONTAINER& ZONE_CONTAINER::operator=( const ZONE_CONTAINER& aOther )
     m_ZoneClearance    = aOther.m_ZoneClearance;            // clearance value
     m_ZoneMinThickness = aOther.m_ZoneMinThickness;
     m_FillMode = aOther.m_FillMode;                         // filling mode (segments/polygons)
-    m_ArcToSegmentsCount = aOther.m_ArcToSegmentsCount;
     m_PadConnection = aOther.m_PadConnection;
     m_ThermalReliefGap = aOther.m_ThermalReliefGap;
     m_ThermalReliefCopperBridge = aOther.m_ThermalReliefCopperBridge;

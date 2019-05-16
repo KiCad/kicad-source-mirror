@@ -50,6 +50,7 @@
 #include "../../kicad/kicad.h"
 
 #include <convert_basic_shapes_to_polygon.h>
+#include <geometry/geometry_utils.h>
 
 #include <zone_filler.h>
 
@@ -679,8 +680,6 @@ static void export_vrml_arc( MODEL_VRML& aModel, LAYER_NUM layer,
 static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
         DRAWSEGMENT *aOutline, double aOrientation, wxPoint aPos )
 {
-    const int circleSegmentsCount = ARC_APPROX_SEGMENTS_COUNT_HIGH_DEF;
-
     if( aOutline->IsPolyShapeValid() )
     {
         SHAPE_POLY_SET shape = aOutline->GetPolyShape();
@@ -691,7 +690,9 @@ static void export_vrml_polygon( MODEL_VRML& aModel, LAYER_NUM layer,
 
         if( aOutline->GetWidth() )
         {
-            shape.Inflate( aOutline->GetWidth()/2, circleSegmentsCount );
+            int numSegs = std::max(
+                    GetArcToSegmentCount( aOutline->GetWidth() / 2, ARC_HIGH_DEF, 360.0 ), 6 );
+            shape.Inflate( aOutline->GetWidth() / 2, numSegs );
             shape.Fracture( SHAPE_POLY_SET::PM_STRICTLY_SIMPLE );
         }
 

@@ -49,7 +49,8 @@ class NETINFO_MAPPING;
 //#define SEXPR_BOARD_FILE_VERSION    20171125  // Locked/unlocked TEXTE_MODULE
 //#define SEXPR_BOARD_FILE_VERSION    20171130  // 3D model offset written using "offset" parameter
 //#define SEXPR_BOARD_FILE_VERSION    20190331  // hatched zones and chamfered round rect pads
-#define SEXPR_BOARD_FILE_VERSION      20190421  // curves in custom pads
+//#define SEXPR_BOARD_FILE_VERSION    20190421  // curves in custom pads
+#define SEXPR_BOARD_FILE_VERSION      20190516  // Remove segment count from zones
 
 #define CTL_STD_LAYER_NAMES         (1 << 0)    ///< Use English Standard layer names
 #define CTL_OMIT_NETS               (1 << 1)    ///< Omit pads net names (useless in library)

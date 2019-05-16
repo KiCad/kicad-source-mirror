@@ -26,9 +26,10 @@
 #include <wx/wx.h>
 
 #include <base_units.h>
-#include <validators.h>
 #include <dialog_text_entry.h>
+#include <geometry/geometry_utils.h>
 #include <pcb_edit_frame.h>
+#include <validators.h>
 
 #include <class_pad.h>
 #include <class_edge_mod.h>
@@ -52,12 +53,9 @@ static void gen_arc( std::vector <wxPoint>& aBuffer,
                      const wxPoint&         aCenter,
                      int                     a_ArcAngle )
 {
-    const int SEGM_COUNT_PER_360DEG = ARC_APPROX_SEGMENTS_COUNT_LOW_DEF;
-    auto    first_point = aStartPoint - aCenter;
-    int     seg_count   = ( ( abs( a_ArcAngle ) ) * SEGM_COUNT_PER_360DEG ) / 3600;
-
-    if( seg_count == 0 )
-        seg_count = 1;
+    auto first_point = aStartPoint - aCenter;
+    auto radius = KiROUND( EuclideanNorm( first_point ) );
+    int  seg_count = std::max( GetArcToSegmentCount( radius, ARC_HIGH_DEF, a_ArcAngle / 10.0 ), 3 );
 
     double increment_angle = (double) a_ArcAngle * M_PI / 1800 / seg_count;
 

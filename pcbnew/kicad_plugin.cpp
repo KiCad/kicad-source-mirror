@@ -1727,8 +1727,7 @@ void PCB_IO::format( ZONE_CONTAINER* aZone, int aNestLevel ) const
     if( aZone->GetFillMode() == ZFM_HATCH_PATTERN )
         m_out->Print( 0, " (mode hatch)" );
 
-    m_out->Print( 0, " (arc_segments %d) (thermal_gap %s) (thermal_bridge_width %s)",
-                  aZone->GetArcSegmentCount(),
+    m_out->Print( 0, " (thermal_gap %s) (thermal_bridge_width %s)",
                   FormatInternalUnits( aZone->GetThermalReliefGap() ).c_str(),
                   FormatInternalUnits( aZone->GetThermalReliefCopperBridge() ).c_str() );
 
