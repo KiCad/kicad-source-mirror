@@ -342,22 +342,31 @@ int SCH_EDIT_FRAME::EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw )
 }
 
 
-SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet )
+SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel )
 {
-    wxString       line;
+    wxString       text;
     SCH_SHEET_PIN* sheetPin;
 
-    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), line );
+    if( aLabel )
+    {
+        text = aLabel->GetText();
+        m_lastSheetPinType = aLabel->GetShape();
+    }
+
+    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), text );
     sheetPin->SetFlags( IS_NEW );
     sheetPin->SetTextSize( GetLastSheetPinTextSize() );
     sheetPin->SetShape( m_lastSheetPinType );
 
-    int response = EditSheetPin( sheetPin, false );
-
-    if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
+    if( !aLabel )
     {
-        delete sheetPin;
-        return NULL;
+        int response = EditSheetPin( sheetPin, false );
+
+        if( sheetPin->GetText().IsEmpty() || (response == wxID_CANCEL) )
+        {
+            delete sheetPin;
+            return NULL;
+        }
     }
 
     m_lastSheetPinType = sheetPin->GetShape();
@@ -369,43 +378,22 @@ SCH_SHEET_PIN* SCH_EDIT_FRAME::CreateSheetPin( SCH_SHEET* aSheet )
 }
 
 
-SCH_SHEET_PIN* SCH_EDIT_FRAME::ImportSheetPin( SCH_SHEET* aSheet )
+SCH_HIERLABEL* SCH_EDIT_FRAME::ImportHierLabel( SCH_SHEET* aSheet )
 {
-    EDA_ITEM*      item;
-    SCH_SHEET_PIN* sheetPin;
-    SCH_HIERLABEL* label = NULL;
-
     if( !aSheet->GetScreen() )
         return NULL;
 
-    item = aSheet->GetScreen()->GetDrawItems();
-
-    for( ; item != NULL; item = item->Next() )
+    for( EDA_ITEM* item = aSheet->GetScreen()->GetDrawItems(); item != NULL; item = item->Next() )
     {
         if( item->Type() != SCH_HIER_LABEL_T )
             continue;
 
-        label = (SCH_HIERLABEL*) item;
+        SCH_HIERLABEL* label = (SCH_HIERLABEL*) item;
 
         /* A global label has been found: check if there a corresponding sheet label. */
         if( !aSheet->HasPin( label->GetText() ) )
-            break;
-
-        label = NULL;
+            return label;
     }
 
-    if( label == NULL )
-    {
-        DisplayInfoMessage( this, _( "No new hierarchical labels found." ) );
-        return NULL;
-    }
-
-    sheetPin = new SCH_SHEET_PIN( aSheet, wxPoint( 0, 0 ), label->GetText() );
-    sheetPin->SetFlags( IS_NEW );
-    sheetPin->SetTextSize( GetLastSheetPinTextSize() );
-    m_lastSheetPinType = label->GetShape();
-    sheetPin->SetShape( label->GetShape() );
-    sheetPin->SetPosition( GetCrossHairPosition() );
-
-    return sheetPin;
+    return nullptr;
 }

@@ -333,7 +333,7 @@ static bool highlightNet( TOOL_MANAGER* aToolMgr, const VECTOR2D& aPosition )
     {
         editFrame->SendCrossProbeNetName( netName );
         editFrame->SetStatusText( wxString::Format( _( "Highlighted net: %s" ),
-                                  UnescapeString( netName ) ) );
+                                                    UnescapeString( netName ) ) );
     }
 
     editFrame->SetSelectedNetName( netName );

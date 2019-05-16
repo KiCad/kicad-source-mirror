@@ -658,25 +658,40 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     item = m_frame->CreateNewText( LAYER_NOTES );
                     break;
                 case SCH_SHEET_PIN_T:
-                    item = m_selectionTool->SelectPoint( cursorPos, EE_COLLECTOR::SheetsOnly );
-
-                    if( item )
-                    {
-                        if( m_frame->GetToolId() == ID_IMPORT_SHEETPIN_TOOL )
-                            item = m_frame->ImportSheetPin( (SCH_SHEET*) item );
-                        else
-                            item = m_frame->CreateSheetPin( (SCH_SHEET*) item );
-                    }
-                    else
+                {
+                    SCH_HIERLABEL* label = nullptr;
+                    SCH_SHEET*     sheet = (SCH_SHEET*) m_selectionTool->SelectPoint( cursorPos,
+                                                                       EE_COLLECTOR::SheetsOnly );
+                    if( !sheet )
                     {
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
                         m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
-                        m_statusPopup->SetText( _( "Click over a sheet to create a sheet pin" ) );
+                        m_statusPopup->SetText( _( "Click over a sheet." ) );
                         m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
                         m_statusPopup->Popup();
-                        m_statusPopup->Expire( 1500 );
+                        m_statusPopup->Expire( 2000 );
+                        break;
                     }
+
+                    if( m_frame->GetToolId() == ID_IMPORT_SHEETPIN_TOOL )
+                    {
+                        label = m_frame->ImportHierLabel( sheet );
+
+                        if( !label )
+                        {
+                            m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+                            m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
+                            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+                            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+                            m_statusPopup->Popup();
+                            m_statusPopup->Expire( 2000 );
+                            break;
+                        }
+                    }
+
+                    item = m_frame->CreateSheetPin( sheet, label );
                     break;
+                }
                 default:
                     wxFAIL_MSG( "doTwoClickPlace(): unknown type" );
                 }

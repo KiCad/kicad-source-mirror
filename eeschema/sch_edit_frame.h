@@ -910,7 +910,7 @@ public:
      * @param aSheet The sheet to add the new sheet pin to.
      * @return The new sheet pin object created or NULL if the task was aborted by the user.
      */
-    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet );
+    SCH_SHEET_PIN* CreateSheetPin( SCH_SHEET* aSheet, SCH_HIERLABEL* aLabel );
 
     /**
      * Display the dialog for editing the parameters of \a aSheetPin.
@@ -922,13 +922,11 @@ public:
     int EditSheetPin( SCH_SHEET_PIN* aSheetPin, bool aRedraw );
 
     /**
-     * Automatically create a sheet pin from the hierarchical labels in the schematic
-     * referenced by \a aSheet.
+     * Import a hierarchical label with no attached sheet pin.
      *
      * @param aSheet The sheet to import the new sheet pin to.
-     * @return The new sheet pin object imported or NULL if the task was aborted by the user.
      */
-    SCH_SHEET_PIN* ImportSheetPin( SCH_SHEET* aSheet );
+    SCH_HIERLABEL* ImportHierLabel( SCH_SHEET* aSheet );
 
     /**
      * Removes a given junction and heals any wire segments under the junction
