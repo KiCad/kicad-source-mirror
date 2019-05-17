@@ -233,6 +233,7 @@ public:
 
     void SaveSettings( wxConfigBase* aCfg ) override;
 
+    void ShowChangedLanguage() override;
     void CommonSettingsChanged() override;
 
     /**
@@ -323,13 +324,13 @@ public: LAUNCHER_PANEL( wxWindow* parent );
     int GetPanelHeight() const;
     int GetPanelWidth() const;
 
-private:
-
     /**
      * Function CreateCommandToolbar
      * creates the main tool bar buttons (fast launch buttons)
      */
-    void            CreateCommandToolbar( void );
+    void ReCreateCommandToolbar();
+
+private:
 
     void AddButton( wxWindowID aId, const wxBitmap& aBitmap, const wxString& aToolTip );
 };

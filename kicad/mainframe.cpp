@@ -524,6 +524,19 @@ void KICAD_MANAGER_FRAME::language_change( wxCommandEvent& event )
 }
 
 
+void KICAD_MANAGER_FRAME::ShowChangedLanguage()
+{
+    // call my base class
+    EDA_BASE_FRAME::ShowChangedLanguage();
+
+    // tooltips in toolbars
+    RecreateBaseHToolbar();
+    m_Launcher->ReCreateCommandToolbar();
+
+    PrintPrjInfo();
+}
+
+
 void KICAD_MANAGER_FRAME::CommonSettingsChanged()
 {
     int historySize;

@@ -40,11 +40,12 @@ const int BUTTON_SEPARATION = 5;
 const int BUTTON_EXPANSION  = 6;
 
 LAUNCHER_PANEL::LAUNCHER_PANEL( wxWindow* parent ) :
-    wxPanel( parent, wxID_ANY )
+    wxPanel( parent, wxID_ANY ),
+    m_buttonSizer( nullptr )
 {
 
     // Add bitmap buttons to launch KiCad utilities:
-    CreateCommandToolbar();
+    ReCreateCommandToolbar();
 }
 
 int LAUNCHER_PANEL::GetPanelHeight() const
@@ -61,11 +62,17 @@ int LAUNCHER_PANEL::GetPanelWidth() const
  * Add application launcher buttons
  * e.g. Eeschema, CvPcb, Pcbnew, GerbView
  */
-void LAUNCHER_PANEL::CreateCommandToolbar()
+void LAUNCHER_PANEL::ReCreateCommandToolbar()
 {
-    wxStaticLine* separator;
+    if( m_buttonSizer )
+        m_buttonSizer->Clear( true );
+    else
+    {
+        m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+        SetSizer( m_buttonSizer );
+    }
 
-    m_buttonSizer = new wxBoxSizer( wxHORIZONTAL );
+    wxStaticLine* separator;
 
     AddButton( ID_TO_SCH,
                KiBitmap( icon_eeschema_xpm ),
@@ -111,7 +118,7 @@ void LAUNCHER_PANEL::CreateCommandToolbar()
     // Add a stretchy spacer to make button bar fill the entire screen
     m_buttonSizer->AddStretchSpacer();
 
-    SetSizer( m_buttonSizer );
+    Layout();
 }
 
 /**
