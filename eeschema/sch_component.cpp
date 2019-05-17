@@ -1627,25 +1627,25 @@ SEARCH_RESULT SCH_COMPONENT::Visit( INSPECTOR aInspector, void* aTestData,
             }
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_LOCATE_REFERENCE_T )
+        if( stype == SCH_FIELD_LOCATE_REFERENCE_T )
         {
             if( SEARCH_QUIT == aInspector( GetField( REFERENCE ), (void*) this ) )
                 return SEARCH_QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_LOCATE_VALUE_T )
+        if( stype == SCH_FIELD_LOCATE_VALUE_T )
         {
             if( SEARCH_QUIT == aInspector( GetField( VALUE ), (void*) this ) )
                 return SEARCH_QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
+        if( stype == SCH_FIELD_LOCATE_FOOTPRINT_T )
         {
             if( SEARCH_QUIT == aInspector( GetField( FOOTPRINT ), (void*) this ) )
                 return SEARCH_QUIT;
         }
 
-        if( stype == SCH_LOCATE_ANY_T || stype == SCH_FIELD_LOCATE_DATASHEET_T )
+        if( stype == SCH_FIELD_LOCATE_DATASHEET_T )
         {
             if( SEARCH_QUIT == aInspector( GetField( DATASHEET ), (void*) this ) )
                 return SEARCH_QUIT;
