@@ -494,12 +494,10 @@ class CINFO3D_VISU
 
     void buildPadShapePolygon( const D_PAD *aPad,
                                SHAPE_POLY_SET &aCornerBuffer,
-                               wxSize aInflateValue,
-                               int aSegmentsPerCircle,
-                               double aCorrectionFactor ) const;
+                               wxSize aInflateValue ) const;
 
 
- public:
+public:
     SFVEC3D m_BgColorBot;       ///< background bottom color
     SFVEC3D m_BgColorTop;       ///< background top color
     SFVEC3D m_BoardBodyColor;   ///< in realistic mode: FR4 board color
@@ -509,7 +507,7 @@ class CINFO3D_VISU
     SFVEC3D m_CopperColor;      ///< in realistic mode: copper color
 
 
- private:
+private:
 
     /// Current board
     BOARD *m_board;

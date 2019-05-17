@@ -40,9 +40,7 @@
 // but it adds the rect/trapezoid shapes with a different winding
 void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
                                          SHAPE_POLY_SET& aCornerBuffer,
-                                         wxSize aInflateValue,
-                                         int aSegmentsPerCircle,
-                                         double aCorrectionFactor ) const
+                                         wxSize aInflateValue ) const
 {
     wxPoint corners[4];
     wxPoint PadShapePos = aPad->ShapePos(); /* Note: for pad having a shape offset,
@@ -63,8 +61,7 @@ void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
         D_PAD dummy( *aPad );
         wxSize new_size = aPad->GetSize() + aInflateValue + aInflateValue;
         dummy.SetSize( new_size );
-        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0,
-                                                    aSegmentsPerCircle, aCorrectionFactor );
+        dummy.TransformShapeWithClearanceToPolygon( aCornerBuffer, 0 );
     }
         break;
 
@@ -90,8 +87,17 @@ void CINFO3D_VISU::buildPadShapePolygon( const D_PAD* aPad,
     case PAD_SHAPE_CUSTOM:
         {
         SHAPE_POLY_SET polyList;     // Will contain the pad outlines in board coordinates
+        auto           inflate_val = std::max( aInflateValue.x, aInflateValue.y );
+
         polyList.Append( aPad->GetCustomShapeAsPolygon() );
         aPad->CustomShapeAsPolygonToBoardPosition( &polyList, aPad->ShapePos(), aPad->GetOrientation() );
+
+        if( inflate_val > 0 )
+        {
+            int numSegs = GetNrSegmentsCircle( inflate_val );
+            polyList.Inflate( inflate_val, numSegs );
+        }
+
         aCornerBuffer.Append( polyList );
         }
         break;
@@ -117,11 +123,9 @@ void CINFO3D_VISU::buildPadShapeThickOutlineAsPolygon( const D_PAD* aPad,
     // For other shapes, draw polygon outlines
     SHAPE_POLY_SET corners;
 
-    unsigned int nr_sides_per_circle = GetNrSegmentsCircle( glm::min( aPad->GetSize().x,
-                                                                      aPad->GetSize().y) );
-    buildPadShapePolygon( aPad, corners, wxSize( 0, 0 ),
-                          nr_sides_per_circle,
-                          GetCircleCorrectionFactor( nr_sides_per_circle ) );
+    auto nr_sides_per_circle =
+            GetNrSegmentsCircle( std::min( aPad->GetSize().x, aPad->GetSize().y ) );
+    buildPadShapePolygon( aPad, corners, wxSize( 0, 0 ) );
 
     // Add outlines as thick segments in polygon buffer
 
@@ -200,11 +204,7 @@ void CINFO3D_VISU::transformPadsShapesWithClearanceToPolygon( const DLIST<D_PAD>
             break;
         }
 
-        unsigned int aCircleToSegmentsCount = GetNrSegmentsCircle( pad->GetSize().x );
-        double aCorrectionFactor = GetCircleCorrectionFactor( aCircleToSegmentsCount );
-
-        buildPadShapePolygon( pad, aCornerBuffer, margin,
-                                   aCircleToSegmentsCount, aCorrectionFactor );
+        buildPadShapePolygon( pad, aCornerBuffer, margin );
     }
 }
 
@@ -225,15 +225,7 @@ void CINFO3D_VISU::transformGraphicModuleEdgeToPolygonSet( const MODULE *aModule
             if( outline->GetLayer() != aLayer )
                 break;
 
-            unsigned int aCircleToSegmentsCount =
-                    GetNrSegmentsCircle( outline->GetBoundingBox().GetSizeMax() );
-
-            double aCorrectionFactor = GetCircleCorrectionFactor( aCircleToSegmentsCount );
-
-            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer,
-                                                           0,
-                                                           aCircleToSegmentsCount,
-                                                           aCorrectionFactor );
+            outline->TransformShapeWithClearanceToPolygon( aCornerBuffer, 0 );
         }
             break;
 

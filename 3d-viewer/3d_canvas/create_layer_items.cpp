@@ -486,13 +486,7 @@ void CINFO3D_VISU::createLayers( REPORTER *aStatusTextReporter )
                     continue;
 
                 // Add the track contour
-                int nrSegments = GetNrSegmentsCircle( track->GetWidth() );
-
-                track->TransformShapeWithClearanceToPolygon(
-                            *layerPoly,
-                            0,
-                            nrSegments,
-                            GetCircleCorrectionFactor( nrSegments ) );
+                track->TransformShapeWithClearanceToPolygon( *layerPoly, 0 );
             }
         }
     }
