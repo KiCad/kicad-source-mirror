@@ -1026,21 +1026,10 @@ SCH_SHEET* SCH_LEGACY_PLUGIN::loadSheet( LINE_READER& aReader )
 
                 switch( parseChar( aReader, line, &line ) )
                 {
-                case 'R': /* pin on right side */
-                    sheetPin->SetEdge( SCH_SHEET_PIN::SHEET_RIGHT_SIDE );
-                    break;
-
-                case 'T': /* pin on top side */
-                    sheetPin->SetEdge( SCH_SHEET_PIN::SHEET_TOP_SIDE );
-                    break;
-
-                case 'B': /* pin on bottom side */
-                    sheetPin->SetEdge( SCH_SHEET_PIN::SHEET_BOTTOM_SIDE );
-                    break;
-
-                case 'L': /* pin on left side */
-                    sheetPin->SetEdge( SCH_SHEET_PIN::SHEET_LEFT_SIDE );
-                    break;
+                case 'R':  sheetPin->SetEdge( SHEET_RIGHT_SIDE );  break;
+                case 'T':  sheetPin->SetEdge( SHEET_TOP_SIDE );    break;
+                case 'B':  sheetPin->SetEdge( SHEET_BOTTOM_SIDE ); break;
+                case 'L':  sheetPin->SetEdge( SHEET_LEFT_SIDE );   break;
                 default:
                     SCH_PARSE_ERROR( "invalid sheet pin side", aReader, line );
                 }
@@ -2124,40 +2113,20 @@ void SCH_LEGACY_PLUGIN::saveSheet( SCH_SHEET* aSheet )
         switch( pin.GetEdge() )
         {
         default:
-        case SCH_SHEET_PIN::SHEET_LEFT_SIDE:
-            side = 'L';
-            break;
-
-        case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:
-            side = 'R';
-            break;
-
-        case SCH_SHEET_PIN::SHEET_TOP_SIDE:
-            side = 'T';
-            break;
-
-        case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE:
-            side = 'B';
-            break;
+        case SHEET_LEFT_SIDE:   side = 'L'; break;
+        case SHEET_RIGHT_SIDE:  side = 'R'; break;
+        case SHEET_TOP_SIDE:    side = 'T'; break;
+        case SHEET_BOTTOM_SIDE: side = 'B'; break;
         }
 
         switch( pin.GetShape() )
         {
-        case NET_INPUT:
-            type = 'I'; break;
-
-        case NET_OUTPUT:
-            type = 'O'; break;
-
-        case NET_BIDI:
-            type = 'B'; break;
-
-        case NET_TRISTATE:
-            type = 'T'; break;
-
+        case NET_INPUT:       type = 'I'; break;
+        case NET_OUTPUT:      type = 'O'; break;
+        case NET_BIDI:        type = 'B'; break;
+        case NET_TRISTATE:    type = 'T'; break;
         default:
-        case NET_UNSPECIFIED:
-            type = 'U'; break;
+        case NET_UNSPECIFIED: type = 'U'; break;
         }
 
         m_out->Print( 0, "F%d %s %c %c %-3d %-3d %-3d\n", pin.GetNumber(),

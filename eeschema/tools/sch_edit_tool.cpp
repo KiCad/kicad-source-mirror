@@ -245,6 +245,8 @@ SCH_EDIT_TOOL::~SCH_EDIT_TOOL()
 }
 
 
+using E_C = EE_CONDITIONS;
+
 bool SCH_EDIT_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
@@ -289,10 +291,7 @@ bool SCH_EDIT_TOOL::Init()
         case SCH_MARKER_T:
         case SCH_JUNCTION_T:
         case SCH_NO_CONNECT_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-        case SCH_BUS_BUS_ENTRY_T:
         case SCH_LINE_T:
-        case SCH_SHEET_PIN_T:
         case SCH_PIN_T:
             return false;
         default:
@@ -321,36 +320,24 @@ bool SCH_EDIT_TOOL::Init()
     };
 
     KICAD_T toLabelTypes[] = { SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toLabelCondition = EE_CONDITIONS::Count( 1 )
-                         && EE_CONDITIONS::OnlyTypes( toLabelTypes );
+    auto toLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toLabelTypes );
 
     KICAD_T toHLableTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_TEXT_T, EOT };
-    auto toHLabelCondition = EE_CONDITIONS::Count( 1 )
-                          && EE_CONDITIONS::OnlyTypes( toHLableTypes);
+    auto toHLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toHLableTypes);
 
     KICAD_T toGLableTypes[] = { SCH_LABEL_T, SCH_HIER_LABEL_T, SCH_TEXT_T, EOT };
-    auto toGLabelCondition = EE_CONDITIONS::Count( 1 )
-                          && EE_CONDITIONS::OnlyTypes( toGLableTypes);
+    auto toGLabelCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toGLableTypes);
 
     KICAD_T toTextTypes[] = { SCH_LABEL_T, SCH_GLOBAL_LABEL_T, SCH_HIER_LABEL_T, EOT };
-    auto toTextlCondition = EE_CONDITIONS::Count( 1 )
-                         && EE_CONDITIONS::OnlyTypes( toTextTypes);
+    auto toTextlCondition = E_C::Count( 1 ) && E_C::OnlyTypes( toTextTypes);
 
     KICAD_T entryTypes[] = { SCH_BUS_WIRE_ENTRY_T, SCH_BUS_BUS_ENTRY_T, EOT };
-    auto entryCondition = EE_CONDITIONS::MoreThan( 0 )
-                       && EE_CONDITIONS::OnlyTypes( entryTypes );
+    auto entryCondition = E_C::MoreThan( 0 ) && E_C::OnlyTypes( entryTypes );
 
-    auto singleComponentCondition = EE_CONDITIONS::Count( 1 )
-                                 && EE_CONDITIONS::OnlyType( SCH_COMPONENT_T );
-
-    auto wireSelectionCondition = EE_CONDITIONS::MoreThan( 0 )
-                               && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-
-    auto busSelectionCondition = EE_CONDITIONS::MoreThan( 0 )
-                              && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
-
-    auto singleSheetCondition = EE_CONDITIONS::Count( 1 )
-                             && EE_CONDITIONS::OnlyType( SCH_SHEET_T );
+    auto singleComponentCondition = E_C::Count( 1 )    && E_C::OnlyType( SCH_COMPONENT_T );
+    auto wireSelectionCondition =   E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+    auto busSelectionCondition =    E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto singleSheetCondition =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
 
     //
     // Add edit actions to the move tool menu
@@ -365,22 +352,22 @@ bool SCH_EDIT_TOOL::Init()
         moveMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition );
         moveMenu.AddItem( EE_ACTIONS::duplicate,       duplicateCondition );
-        moveMenu.AddItem( EE_ACTIONS::doDelete,        EE_CONDITIONS::NotEmpty );
+        moveMenu.AddItem( EE_ACTIONS::doDelete,        E_C::NotEmpty );
 
         moveMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition );
         moveMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition );
         moveMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition );
         moveMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition );
-        moveMenu.AddItem( EE_ACTIONS::convertDeMorgan, EE_CONDITIONS::SingleDeMorganSymbol );
+        moveMenu.AddItem( EE_ACTIONS::convertDeMorgan, E_C::SingleDeMorganSymbol );
 
         std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu = std::make_shared<SYMBOL_UNIT_MENU>();
         symUnitMenu->SetTool( this );
         m_menu.AddSubMenu( symUnitMenu );
-        moveMenu.AddMenu( symUnitMenu.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+        moveMenu.AddMenu( symUnitMenu.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-        moveMenu.AddSeparator( EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( ACTIONS::cut,      EE_CONDITIONS::IdleSelection );
-        moveMenu.AddItem( ACTIONS::copy,     EE_CONDITIONS::IdleSelection );
+        moveMenu.AddSeparator( E_C::IdleSelection );
+        moveMenu.AddItem( ACTIONS::cut,                E_C::IdleSelection );
+        moveMenu.AddItem( ACTIONS::copy,               E_C::IdleSelection );
     }
 
     //
@@ -398,23 +385,22 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::editValue,        singleComponentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleComponentCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan,  EE_CONDITIONS::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan,  E_C::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
-    drawMenu.AddMenu( symUnitMenu2.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    drawMenu.AddMenu( symUnitMenu2.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleComponentCondition
-                                                        && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toLabel,          anyTextTool && EE_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && EE_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetTool && EE_CONDITIONS::Idle, 250 );
+    drawMenu.AddItem( EE_ACTIONS::toShapeSlash,        entryCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toShapeBackslash,    entryCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toLabel,             anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toHLabel,            anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toGLabel,            anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::toText,              anyTextTool && E_C::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::cleanupSheetPins,    sheetTool && E_C::Idle, 250 );
 
     //
     // Add editing actions to the selection tool menu
@@ -426,22 +412,21 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::duplicate,        duplicateCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::doDelete,         EE_CONDITIONS::NotEmpty, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::doDelete,         E_C::NotEmpty, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editReference,    EE_CONDITIONS::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editValue,        EE_CONDITIONS::SingleSymbol, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::editFootprint,    EE_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editReference,    E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editValue,        E_C::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editFootprint,    E_C::SingleSymbol, 200 );
     selToolMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::convertDeMorgan,  EE_CONDITIONS::SingleSymbol, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::convertDeMorgan,  E_C::SingleSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu3 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu3->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
-    selToolMenu.AddMenu( symUnitMenu3.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
+    selToolMenu.AddMenu( symUnitMenu3.get(), E_C::SingleMultiUnitSymbol, 1 );
 
-    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleComponentCondition
-                                                           && EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit, singleComponentCondition && E_C::Idle, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
@@ -451,10 +436,10 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::toText,           toTextlCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 250 );
 
-    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 300 );
-    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
-    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddSeparator( E_C::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,                 E_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,                E_C::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,               E_C::Idle, 300 );
 
     return true;
 }
@@ -478,75 +463,83 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
         if( !moving )
             saveCopyInUndoList( item, UR_CHANGED );
 
-        switch( item->Type() )
+        for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
         {
-        case SCH_COMPONENT_T:
-        {
-            SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
-
-            if( clockwise )
-                component->SetOrientation( CMP_ROTATE_CLOCKWISE );
-            else
-                component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
-
-            if( m_frame->GetAutoplaceFields() )
-                component->AutoAutoplaceFields( m_frame->GetScreen() );
-
-            break;
-        }
-
-        case SCH_TEXT_T:
-        case SCH_LABEL_T:
-        case SCH_GLOBAL_LABEL_T:
-        case SCH_HIER_LABEL_T:
-        {
-            SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
-            textItem->SetLabelSpinStyle( ( textItem->GetLabelSpinStyle() + 1 ) & 3 );
-            break;
-        }
-
-        case SCH_BUS_BUS_ENTRY_T:
-        case SCH_BUS_WIRE_ENTRY_T:
-            item->Rotate( item->GetPosition() );
-            break;
-
-        case SCH_FIELD_T:
-        {
-            SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
-
-            if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
-                field->SetTextAngle( TEXT_ANGLE_VERT );
-            else
-                field->SetTextAngle( TEXT_ANGLE_HORIZ );
-
-            // Now that we're moving a field, they're no longer autoplaced.
-            if( item->GetParent()->Type() == SCH_COMPONENT_T )
+            switch( item->Type() )
             {
-                SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
-                parent->ClearFieldsAutoplaced();
+            case SCH_COMPONENT_T:
+            {
+                SCH_COMPONENT* component = static_cast<SCH_COMPONENT*>( item );
+
+                if( clockwise )
+                    component->SetOrientation( CMP_ROTATE_CLOCKWISE );
+                else
+                    component->SetOrientation( CMP_ROTATE_COUNTERCLOCKWISE );
+
+                if( m_frame->GetAutoplaceFields() )
+                    component->AutoAutoplaceFields( m_frame->GetScreen() );
+
+                break;
             }
 
-            break;
-        }
+            case SCH_TEXT_T:
+            case SCH_LABEL_T:
+            case SCH_GLOBAL_LABEL_T:
+            case SCH_HIER_LABEL_T:
+            {
+                SCH_TEXT* textItem = static_cast<SCH_TEXT*>( item );
+                textItem->SetLabelSpinStyle( ( textItem->GetLabelSpinStyle() + 1 ) & 3 );
+                break;
+            }
 
-        case SCH_BITMAP_T:
-            item->Rotate( item->GetPosition() );
+            case SCH_SHEET_PIN_T:
+            {
+                // Rotate pin within parent sheet
+                SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+                SCH_SHEET*     sheet = pin->GetParent();
+                pin->Rotate( sheet->GetBoundingBox().GetCenter() );
+                break;
+            }
 
-            // The bitmap is cached in Opengl: clear the cache to redraw
-            getView()->RecacheAllItems();
-            break;
+            case SCH_BUS_BUS_ENTRY_T:
+            case SCH_BUS_WIRE_ENTRY_T:
+                item->Rotate( item->GetPosition() );
+                break;
 
-        case SCH_SHEET_T:
-            // Rotate the sheet on itself. Sheets do not have a anchor point.
-            rotPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
+            case SCH_FIELD_T:
+            {
+                SCH_FIELD* field = static_cast<SCH_FIELD*>( item );
 
-            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
+                if( field->GetTextAngle() == TEXT_ANGLE_HORIZ )
+                    field->SetTextAngle( TEXT_ANGLE_VERT );
+                else
+                    field->SetTextAngle( TEXT_ANGLE_HORIZ );
+
+                // Now that we're moving a field, they're no longer autoplaced.
+                if( item->GetParent()->Type() == SCH_COMPONENT_T )
+                {
+                    SCH_COMPONENT *parent = static_cast<SCH_COMPONENT*>( item->GetParent() );
+                    parent->ClearFieldsAutoplaced();
+                }
+
+                break;
+            }
+
+            case SCH_BITMAP_T:
+                item->Rotate( item->GetPosition() );
+                // The bitmap is cached in Opengl: clear the cache to redraw
+                getView()->RecacheAllItems();
+                break;
+
+            case SCH_SHEET_T:
+                // Rotate the sheet on itself. Sheets do not have an anchor point.
+                rotPoint = m_frame->GetNearestGridPosition( item->GetBoundingBox().Centre() );
                 item->Rotate( rotPoint );
+                break;
 
-            break;
-
-        default:
-            break;
+            default:
+                break;
+            }
         }
 
         connections = item->IsConnectable();
@@ -563,19 +556,37 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
             if( !moving )
                 saveCopyInUndoList( item, UR_CHANGED, ii > 0 );
 
-            if( item->Type() == SCH_LINE_T )
+            for( int i = 0; clockwise ? i < 1 : i < 3; ++i )
             {
-                SCH_LINE* line = (SCH_LINE*) item;
+                if( item->Type() == SCH_LINE_T )
+                {
+                    SCH_LINE* line = (SCH_LINE*) item;
 
-                if( item->GetFlags() & STARTPOINT )
-                    line->RotateStart( rotPoint );
+                    if( item->GetFlags() & STARTPOINT )
+                        line->RotateStart( rotPoint );
 
-                if( item->GetFlags() & ENDPOINT )
-                    line->RotateEnd( rotPoint );
-            }
-            else
-            {
-                item->Rotate( rotPoint );
+                    if( item->GetFlags() & ENDPOINT )
+                        line->RotateEnd( rotPoint );
+                }
+                else if( item->Type() == SCH_SHEET_PIN_T )
+                {
+                    if( item->GetParent()->IsSelected() )
+                    {
+                        // parent will rotate us
+                    }
+                    else
+                    {
+                        // rotate within parent
+                        SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+                        SCH_SHEET*     sheet = pin->GetParent();
+
+                        pin->Rotate( sheet->GetBoundingBox().GetCenter() );
+                    }
+                }
+                else
+                {
+                    item->Rotate( rotPoint );
+                }
             }
 
             connections |= item->IsConnectable();
@@ -650,6 +661,20 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             break;
         }
 
+        case SCH_SHEET_PIN_T:
+        {
+            // mirror within parent sheet
+            SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+            SCH_SHEET*     sheet = pin->GetParent();
+
+            if( xAxis )
+                pin->MirrorX( sheet->GetBoundingBox().GetCenter().y );
+            else
+                pin->MirrorY( sheet->GetBoundingBox().GetCenter().x );
+
+            break;
+        }
+
         case SCH_BUS_BUS_ENTRY_T:
         case SCH_BUS_WIRE_ENTRY_T:
             if( xAxis )
@@ -716,10 +741,31 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
             if( !moving )
                 saveCopyInUndoList( item, UR_CHANGED, ii > 0 );
 
-            if( xAxis )
-                item->MirrorX( mirrorPoint.y );
+            if( item->Type() == SCH_SHEET_PIN_T )
+            {
+                if( item->GetParent()->IsSelected() )
+                {
+                    // parent will mirror us
+                }
+                else
+                {
+                    // mirror within parent sheet
+                    SCH_SHEET_PIN* pin = static_cast<SCH_SHEET_PIN*>( item );
+                    SCH_SHEET*     sheet = pin->GetParent();
+
+                    if( xAxis )
+                        pin->MirrorX( sheet->GetBoundingBox().GetCenter().y );
+                    else
+                        pin->MirrorY( sheet->GetBoundingBox().GetCenter().x );
+                }
+            }
             else
-                item->MirrorY( mirrorPoint.x );
+            {
+                if( xAxis )
+                    item->MirrorX( mirrorPoint.y );
+                else
+                    item->MirrorY( mirrorPoint.x );
+            }
 
             connections |= item->IsConnectable();
             m_frame->RefreshItem( item );

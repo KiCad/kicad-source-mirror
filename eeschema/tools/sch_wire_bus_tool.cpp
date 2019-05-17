@@ -198,6 +198,8 @@ SCH_WIRE_BUS_TOOL::~SCH_WIRE_BUS_TOOL()
 }
 
 
+using E_C = EE_CONDITIONS;
+
 bool SCH_WIRE_BUS_TOOL::Init()
 {
     EE_TOOL_BASE::Init();
@@ -214,8 +216,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
         return g_CurrentSheet->Last() != g_RootSheet;
     };
 
-    auto busSelection = EE_CONDITIONS::MoreThan( 0 )
-                        && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto busSelection = E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
 
     auto& ctxMenu = m_menu.GetMenu();
 
@@ -224,13 +225,13 @@ bool SCH_WIRE_BUS_TOOL::Init()
     //
     ctxMenu.AddItem( EE_ACTIONS::leaveSheet,    belowRootSheetCondition, 2 );
 
-    ctxMenu.AddSeparator( EE_CONDITIONS::ShowAlways, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::startWire,     wireOrBusTool && EE_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::startBus,      wireOrBusTool && EE_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::startLines,    lineTool && EE_CONDITIONS::Idle, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::finishWire,    IsDrawingWire, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::finishBus,     IsDrawingBus, 10 );
-    ctxMenu.AddItem( EE_ACTIONS::finishLine,    IsDrawingLine, 10 );
+    ctxMenu.AddSeparator( E_C::ShowAlways, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startWire,          wireOrBusTool && E_C::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startBus,           wireOrBusTool && E_C::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::startLines,         lineTool && E_C::Idle, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishWire,         IsDrawingWire, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishBus,          IsDrawingBus, 10 );
+    ctxMenu.AddItem( EE_ACTIONS::finishLine,         IsDrawingLine, 10 );
 
     std::shared_ptr<BUS_UNFOLD_MENU> busUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     busUnfoldMenu->SetTool( this );
@@ -238,16 +239,16 @@ bool SCH_WIRE_BUS_TOOL::Init()
     ctxMenu.AddMenu( busUnfoldMenu.get(), EE_CONDITIONS::Idle, 10 );
 
     ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::addJunction,      wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::addLabel,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::addGlobalLabel,   wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::addHierLabel,     wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::breakWire,        wireOrBusTool && EE_CONDITIONS::Idle, 100 );
-    ctxMenu.AddItem( EE_ACTIONS::breakBus,         wireOrBusTool && EE_CONDITIONS::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addJunction,        wireOrBusTool && E_C::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addLabel,           wireOrBusTool && E_C::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addGlobalLabel,     wireOrBusTool && E_C::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::addHierLabel,       wireOrBusTool && E_C::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakWire,          wireOrBusTool && E_C::Idle, 100 );
+    ctxMenu.AddItem( EE_ACTIONS::breakBus,           wireOrBusTool && E_C::Idle, 100 );
 
     ctxMenu.AddSeparator( wireOrBusTool && EE_CONDITIONS::Idle, 200 );
-    ctxMenu.AddItem( EE_ACTIONS::selectNode,       wireOrBusTool && EE_CONDITIONS::Idle, 200 );
-    ctxMenu.AddItem( EE_ACTIONS::selectConnection, wireOrBusTool && EE_CONDITIONS::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectNode,         wireOrBusTool && E_C::Idle, 200 );
+    ctxMenu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusTool && E_C::Idle, 200 );
 
     //
     // Add bus unfolding to the selection tool
@@ -257,7 +258,7 @@ bool SCH_WIRE_BUS_TOOL::Init()
     std::shared_ptr<BUS_UNFOLD_MENU> selBusUnfoldMenu = std::make_shared<BUS_UNFOLD_MENU>();
     selBusUnfoldMenu->SetTool( m_selectionTool );
     m_selectionTool->GetToolMenu().AddSubMenu( selBusUnfoldMenu );
-    selToolMenu.AddMenu( selBusUnfoldMenu.get(), busSelection && EE_CONDITIONS::Idle, 100 );
+    selToolMenu.AddMenu( selBusUnfoldMenu.get(), busSelection && E_C::Idle, 100 );
 
     return true;
 }
@@ -522,13 +523,13 @@ static void computeBreakPoint( SCH_SCREEN* aScreen, SCH_LINE* aSegment, wxPoint&
     int iDy = aSegment->GetEndPoint().y - aSegment->GetStartPoint().y;
 
     const SCH_SHEET_PIN* connectedPin = getSheetPin( aScreen, aSegment->GetStartPoint() );
-    auto force = connectedPin ? connectedPin->GetEdge() : SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE;
+    auto force = connectedPin ? connectedPin->GetEdge() : SHEET_UNDEFINED_SIDE;
 
-    if( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE || force == SCH_SHEET_PIN::SHEET_RIGHT_SIDE )
+    if( force == SHEET_LEFT_SIDE || force == SHEET_RIGHT_SIDE )
     {
         if( aPosition.x == connectedPin->GetPosition().x )  // push outside sheet boundary
         {
-            int direction = ( force == SCH_SHEET_PIN::SHEET_LEFT_SIDE ) ? -1 : 1;
+            int direction = ( force == SHEET_LEFT_SIDE ) ? -1 : 1;
             aPosition.x += int( aScreen->GetGridSize().x * direction );
         }
 

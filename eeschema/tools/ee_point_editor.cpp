@@ -490,11 +490,11 @@ void EE_POINT_EDITOR::updateItem() const
 
             switch( pin.GetEdge() )
             {
-            case SCH_SHEET_PIN::SHEET_LEFT_SIDE:      pos.x = topLeft.x;  break;
-            case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:     pos.x = topRight.x; break;
-            case SCH_SHEET_PIN::SHEET_TOP_SIDE:       pos.y = topLeft.y;  break;
-            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE:    pos.y = botLeft.y;  break;
-            case SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE: break;
+            case SHEET_LEFT_SIDE:      pos.x = topLeft.x;  break;
+            case SHEET_RIGHT_SIDE:     pos.x = topRight.x; break;
+            case SHEET_TOP_SIDE:       pos.y = topLeft.y;  break;
+            case SHEET_BOTTOM_SIDE:    pos.y = botLeft.y;  break;
+            case SHEET_UNDEFINED_SIDE: break;
             }
 
             pin.SetPosition( pos );

@@ -43,7 +43,6 @@ public:
     static const KICAD_T RotatableItems[];
     static const KICAD_T ComponentsOnly[];
     static const KICAD_T SheetsOnly[];
-    static const KICAD_T SheetsAndSheetLabels[];
 
     EE_COLLECTOR( const KICAD_T* aScanTypes = EE_COLLECTOR::AllItems ) :
         m_Threshold( 0 ),

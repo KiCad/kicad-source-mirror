@@ -267,9 +267,9 @@ int SCH_SHEET::GetMinWidth() const
         int edge = m_pins[i].GetEdge();
         EDA_RECT pinRect = m_pins[i].GetBoundingBox();
 
-        wxASSERT( edge != SCH_SHEET_PIN::SHEET_UNDEFINED_SIDE );
+        wxASSERT( edge != SHEET_UNDEFINED_SIDE );
 
-        if( edge == SCH_SHEET_PIN::SHEET_TOP_SIDE || edge == SCH_SHEET_PIN::SHEET_BOTTOM_SIDE )
+        if( edge == SHEET_TOP_SIDE || edge == SHEET_BOTTOM_SIDE )
         {
             if( width < pinRect.GetRight() - m_pos.x )
                 width = pinRect.GetRight() - m_pos.x;
@@ -308,7 +308,7 @@ int SCH_SHEET::GetMinHeight() const
         EDA_RECT pinRect = m_pins[i].GetBoundingBox();
 
         // Make sure pin is on top or bottom side of sheet.
-        if( edge == SCH_SHEET_PIN::SHEET_RIGHT_SIDE || edge == SCH_SHEET_PIN::SHEET_LEFT_SIDE )
+        if( edge == SHEET_RIGHT_SIDE || edge == SHEET_LEFT_SIDE )
         {
             if( height < pinRect.GetBottom() - m_pos.y )
                 height = pinRect.GetBottom() - m_pos.y;

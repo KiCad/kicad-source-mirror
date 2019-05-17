@@ -174,6 +174,7 @@ EE_SELECTION_TOOL::~EE_SELECTION_TOOL()
     getView()->Remove( &m_selection );
 }
 
+using E_C = EE_CONDITIONS;
 
 bool EE_SELECTION_TOOL::Init()
 {
@@ -190,14 +191,10 @@ bool EE_SELECTION_TOOL::Init()
 
     static KICAD_T wireOrBusTypes[] = { SCH_LINE_LOCATE_WIRE_T, SCH_LINE_LOCATE_BUS_T, EOT };
 
-    auto wireSelection = EE_CONDITIONS::MoreThan( 0 )
-                      && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_WIRE_T );
-    auto busSelection = EE_CONDITIONS::MoreThan( 0 )
-                     && EE_CONDITIONS::OnlyType( SCH_LINE_LOCATE_BUS_T );
-    auto wireOrBusSelection = EE_CONDITIONS::MoreThan( 0 )
-                           && EE_CONDITIONS::OnlyTypes( wireOrBusTypes );
-    auto sheetSelection = SELECTION_CONDITIONS::Count( 1 )
-                       && SELECTION_CONDITIONS::OnlyType( SCH_SHEET_T );
+    auto wireSelection =      E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_WIRE_T );
+    auto busSelection =       E_C::MoreThan( 0 ) && E_C::OnlyType( SCH_LINE_LOCATE_BUS_T );
+    auto wireOrBusSelection = E_C::MoreThan( 0 ) && E_C::OnlyTypes( wireOrBusTypes );
+    auto sheetSelection =     E_C::Count( 1 )    && E_C::OnlyType( SCH_SHEET_T );
     auto schEditCondition = [this] ( const SELECTION& aSel ) {
         return !m_isLibEdit;
     };
@@ -1061,6 +1058,8 @@ void EE_SELECTION_TOOL::unselect( EDA_ITEM* aItem )
 
 void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
+    KICAD_T itemType = aItem->Type();
+
     if( aMode == SELECTED )
         aItem->SetSelected();
     else if( aMode == BRIGHTENED )
@@ -1071,7 +1070,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 
     // Highlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART and will inherit the settings of the parent component.)
-    if( aItem->Type() == SCH_COMPONENT_T )
+    if( itemType == SCH_COMPONENT_T )
     {
         SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
 
@@ -1094,7 +1093,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
                 field->SetBrightened();
         }
     }
-    else if( aItem->Type() == SCH_SHEET_T )
+    else if( itemType == SCH_SHEET_T )
     {
         SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
@@ -1107,7 +1106,7 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
         }
     }
 
-    if( aItem->Type() == SCH_PIN_T || aItem->Type() == SCH_FIELD_T )
+    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
     else
         getView()->Update( aItem );
@@ -1116,6 +1115,8 @@ void EE_SELECTION_TOOL::highlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup
 
 void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGroup )
 {
+    KICAD_T itemType = aItem->Type();
+
     if( aMode == SELECTED )
         aItem->ClearSelected();
     else if( aMode == BRIGHTENED )
@@ -1126,7 +1127,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
 
     // Unhighlight pins and fields.  (All the other component children are currently only
     // represented in the LIB_PART.)
-    if( aItem->Type() == SCH_COMPONENT_T )
+    if( itemType == SCH_COMPONENT_T )
     {
         SCH_PINS& pins = static_cast<SCH_COMPONENT*>( aItem )->GetPins();
 
@@ -1149,7 +1150,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
                 field->ClearBrightened();
         }
     }
-    else if( aItem->Type() == SCH_SHEET_T )
+    else if( itemType == SCH_SHEET_T )
     {
         SCH_SHEET_PINS& pins = static_cast<SCH_SHEET*>( aItem )->GetPins();
 
@@ -1162,7 +1163,7 @@ void EE_SELECTION_TOOL::unhighlight( EDA_ITEM* aItem, int aMode, SELECTION* aGro
         }
     }
 
-    if( aItem->Type() == SCH_PIN_T || aItem->Type() == SCH_FIELD_T )
+    if( itemType == SCH_PIN_T || itemType == SCH_FIELD_T || itemType == SCH_SHEET_PIN_T )
         getView()->Update( aItem->GetParent() );
     else
         getView()->Update( aItem );

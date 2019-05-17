@@ -1328,10 +1328,10 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
             switch( sheetPin.GetEdge() )
             {
-            case SCH_SHEET_PIN::SHEET_TOP_SIDE:    offset_pos.y += width / 2; break;
-            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: offset_pos.y -= width / 2; break;
-            case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
-            case SCH_SHEET_PIN::SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
+            case SHEET_TOP_SIDE:    offset_pos.y += width / 2; break;
+            case SHEET_BOTTOM_SIDE: offset_pos.y -= width / 2; break;
+            case SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
+            case SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
             default: break;
             }
 

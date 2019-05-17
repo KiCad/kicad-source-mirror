@@ -44,6 +44,25 @@ class NETLIST_OBJECT_LIST;
 
 
 /**
+ * Defines the edge of the sheet that the sheet pin is positioned
+ * SHEET_LEFT_SIDE = 0: pin on left side
+ * SHEET_RIGHT_SIDE = 1: pin on right side
+ * SHEET_TOP_SIDE = 2: pin on top side
+ * SHEET_BOTTOM_SIDE =3: pin on bottom side
+ *
+ * For compatibility reasons, this does not follow same values as text orientation.
+ */
+enum SHEET_SIDE
+{
+    SHEET_LEFT_SIDE = 0,
+    SHEET_RIGHT_SIDE,
+    SHEET_TOP_SIDE,
+    SHEET_BOTTOM_SIDE,
+    SHEET_UNDEFINED_SIDE
+};
+
+
+/**
  * Define a sheet pin (label) used in sheets to create hierarchical schematics.
  *
  * A SCH_SHEET_PIN is used to create a hierarchical sheet in the same way a
@@ -55,25 +74,6 @@ class NETLIST_OBJECT_LIST;
  */
 class SCH_SHEET_PIN : public SCH_HIERLABEL
 {
-public:
-    /**
-     * Defines the edge of the sheet that the sheet pin is positioned
-     * SHEET_LEFT_SIDE = 0: pin on left side
-     * SHEET_RIGHT_SIDE = 1: pin on right side
-     * SHEET_TOP_SIDE = 2: pin on top side
-     * SHEET_BOTTOM_SIDE =3: pin on bottom side
-     *
-     * For compatibility reasons, this does not follow same values as text orientation.
-     */
-    enum SHEET_SIDE
-    {
-        SHEET_LEFT_SIDE = 0,
-        SHEET_RIGHT_SIDE,
-        SHEET_TOP_SIDE,
-        SHEET_BOTTOM_SIDE,
-        SHEET_UNDEFINED_SIDE
-    };
-
 private:
     int m_number;       ///< Label number use for saving sheet label to file.
                         ///< Sheet label numbering begins at 2.

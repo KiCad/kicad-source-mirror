@@ -243,6 +243,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         appendUndo = true;
                     }
 
+                    SCH_ITEM* schItem = (SCH_ITEM*) item;
+                    schItem->SetStoredPos( schItem->GetPosition() );
+
                     // Apply any initial offset in case we're coming from a previous command.
                     //
                     moveItem( item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
@@ -599,7 +602,8 @@ void SCH_MOVE_TOOL::moveItem( EDA_ITEM* aItem, VECTOR2I aDelta, bool isDrag )
     case SCH_SHEET_PIN_T:
     {
         SCH_SHEET_PIN* pin = (SCH_SHEET_PIN*) aItem;
-        pin->ConstrainOnEdge( pin->GetPosition() + (wxPoint) aDelta );
+        pin->SetStoredPos( pin->GetStoredPos() + (wxPoint) aDelta );
+        pin->ConstrainOnEdge( pin->GetStoredPos() );
         break;
     }
     default:

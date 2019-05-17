@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2006 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,11 +22,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file sch_sheet_pin.cpp
- * @brief Implementation of the SCH_SHEET_PIN class.
- */
-
 #include <fctsys.h>
 #include <gr_basic.h>
 #include <sch_draw_panel.h>
@@ -44,7 +39,8 @@
 
 
 SCH_SHEET_PIN::SCH_SHEET_PIN( SCH_SHEET* parent, const wxPoint& pos, const wxString& text ) :
-    SCH_HIERLABEL( pos, text, SCH_SHEET_PIN_T )
+    SCH_HIERLABEL( pos, text, SCH_SHEET_PIN_T ),
+    m_edge( SHEET_UNDEFINED_SIDE )
 {
     SetParent( parent );
     wxASSERT( parent );
@@ -114,7 +110,7 @@ void SCH_SHEET_PIN::SetNumber( int aNumber )
 }
 
 
-void SCH_SHEET_PIN::SetEdge( SCH_SHEET_PIN::SHEET_SIDE aEdge )
+void SCH_SHEET_PIN::SetEdge( SHEET_SIDE aEdge )
 {
     SCH_SHEET* Sheet = GetParent();
 
@@ -152,7 +148,7 @@ void SCH_SHEET_PIN::SetEdge( SCH_SHEET_PIN::SHEET_SIDE aEdge )
 }
 
 
-enum SCH_SHEET_PIN::SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
+enum SHEET_SIDE SCH_SHEET_PIN::GetEdge() const
 {
     return m_edge;
 }
@@ -170,13 +166,9 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
     if( m_edge == SHEET_LEFT_SIDE || m_edge == SHEET_RIGHT_SIDE )
     {
         if( Pos.x > center.x )
-        {
             SetEdge( SHEET_RIGHT_SIDE );
-        }
         else
-        {
             SetEdge( SHEET_LEFT_SIDE );
-        }
 
         SetTextY( Pos.y );
 
@@ -189,13 +181,9 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
     else
     {
         if( Pos.y > center.y )
-        {
             SetEdge( SHEET_BOTTOM_SIDE );
-        }
         else
-        {
             SetEdge( SHEET_TOP_SIDE );
-        }
 
         SetTextX( Pos.x );
 
@@ -236,16 +224,9 @@ void SCH_SHEET_PIN::MirrorX( int aXaxis_position )
 
     switch( m_edge )
     {
-    case SHEET_TOP_SIDE:
-        SetEdge( SHEET_BOTTOM_SIDE );
-        break;
-
-    case SHEET_BOTTOM_SIDE:
-        SetEdge( SHEET_TOP_SIDE );
-        break;
-
-    default:
-        break;
+    case SHEET_TOP_SIDE:    SetEdge( SHEET_BOTTOM_SIDE ); break;
+    case SHEET_BOTTOM_SIDE: SetEdge( SHEET_TOP_SIDE );    break;
+    default: break;
     }
 }
 
@@ -258,16 +239,9 @@ void SCH_SHEET_PIN::MirrorY( int aYaxis_position )
 
     switch( m_edge )
     {
-    case SHEET_LEFT_SIDE:
-        SetEdge( SHEET_RIGHT_SIDE );
-        break;
-
-    case SHEET_RIGHT_SIDE:
-        SetEdge( SHEET_LEFT_SIDE );
-        break;
-
-    default:
-        break;
+    case SHEET_LEFT_SIDE:  SetEdge( SHEET_RIGHT_SIDE ); break;
+    case SHEET_RIGHT_SIDE: SetEdge( SHEET_LEFT_SIDE );  break;
+    default: break;
     }
 }
 
@@ -280,24 +254,11 @@ void SCH_SHEET_PIN::Rotate( wxPoint aPosition )
 
     switch( m_edge )
     {
-    case SHEET_LEFT_SIDE:     //pin on left side
-        SetEdge( SHEET_BOTTOM_SIDE );
-        break;
-
-    case SHEET_RIGHT_SIDE:     //pin on right side
-        SetEdge( SHEET_TOP_SIDE );
-        break;
-
-    case SHEET_TOP_SIDE:      //pin on top side
-        SetEdge( SHEET_LEFT_SIDE );
-        break;
-
-    case SHEET_BOTTOM_SIDE:     //pin on bottom side
-        SetEdge( SHEET_RIGHT_SIDE );
-        break;
-
-    default:
-        break;
+    case SHEET_LEFT_SIDE:   SetEdge( SHEET_BOTTOM_SIDE ); break;
+    case SHEET_RIGHT_SIDE:  SetEdge( SHEET_TOP_SIDE );    break;
+    case SHEET_TOP_SIDE:    SetEdge( SHEET_LEFT_SIDE );   break;
+    case SHEET_BOTTOM_SIDE: SetEdge( SHEET_RIGHT_SIDE );  break;
+    default: break;
     }
 }
 
