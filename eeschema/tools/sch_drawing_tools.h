@@ -53,6 +53,7 @@ public:
 
     int AddJunction( const TOOL_EVENT& aEvent );
     int AddLabel( const TOOL_EVENT& aEvent );
+    int AddSheetPin( const TOOL_EVENT& aEvent );
 
     int PlaceSymbol( const TOOL_EVENT& aEvent );
     int PlacePower( const TOOL_EVENT& aEvent );

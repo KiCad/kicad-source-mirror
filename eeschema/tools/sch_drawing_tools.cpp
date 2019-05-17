@@ -39,6 +39,7 @@
 #include <ee_hotkeys.h>
 #include <sch_component.h>
 #include <sch_no_connect.h>
+#include <sch_line.h>
 #include <sch_junction.h>
 #include <sch_bus_entry.h>
 #include <sch_text.h>
@@ -135,6 +136,14 @@ TOOL_ACTION EE_ACTIONS::addHierLabel( "eeschema.InteractiveEditing.addHierLabel"
         AS_GLOBAL, 0, _( "Add Hierarchical Label" ), _( "Add a hierarchical label to a wire or bus" ),
         add_hierarchical_label_xpm, AF_NONE );
 
+TOOL_ACTION EE_ACTIONS::addSheetPin( "eeschema.InteractiveEditing.addSheetPin",
+        AS_GLOBAL, 0, _( "Add Sheet Pin" ), _( "Add a sheet pin to the selected sheet" ),
+        add_hierarchical_label_xpm, AF_NONE );
+
+TOOL_ACTION EE_ACTIONS::addImportedSheetPin( "eeschema.InteractiveEditing.addImportedSheetPin",
+        AS_GLOBAL, 0, _( "Add Imported Sheet Pin" ), _( "Add an imported sheet pin" ),
+        add_hierarchical_label_xpm, AF_NONE );
+
 
 SCH_DRAWING_TOOLS::SCH_DRAWING_TOOLS() :
     EE_TOOL_BASE<SCH_EDIT_FRAME>( "eeschema.InteractiveDrawing" )
@@ -164,10 +173,21 @@ bool SCH_DRAWING_TOOLS::Init()
 
 int SCH_DRAWING_TOOLS::AddJunction( const TOOL_EVENT& aEvent )
 {
+    SELECTION&  selection = m_selectionTool->GetSelection();
+    SCH_LINE*   wire = dynamic_cast<SCH_LINE*>( selection.Front() );
+
     m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
 
+    if( wire )
+    {
+        SEG seg( wire->GetStartPoint(), wire->GetEndPoint() );
+        VECTOR2I nearest = seg.NearestPoint( m_frame->GetCrossHairPosition() );
+        m_frame->SetCrossHairPosition( (wxPoint) nearest, false );
+    }
+
     m_frame->GetCanvas()->MoveCursorToCrossHair();
-    m_frame->AddJunction( m_frame->GetCrossHairPosition() );
+    SCH_JUNCTION* junction = m_frame->AddJunction( m_frame->GetCrossHairPosition() );
+    m_selectionTool->AddItemToSel( junction );
 
     return 0;
 }
@@ -188,6 +208,42 @@ int SCH_DRAWING_TOOLS::AddLabel( const TOOL_EVENT& aEvent )
 
     SCH_ITEM* item = m_frame->CreateNewText( layer );
     m_frame->AddItemToScreenAndUndoList( item );
+    m_selectionTool->AddItemToSel( item );
+
+    return 0;
+}
+
+
+int SCH_DRAWING_TOOLS::AddSheetPin( const TOOL_EVENT& aEvent )
+{
+    SELECTION&     selection = m_selectionTool->GetSelection();
+    SCH_SHEET*     sheet = dynamic_cast<SCH_SHEET*>( selection.Front() );
+    SCH_HIERLABEL* label = nullptr;
+
+    if( !sheet )
+        return 0;
+
+    m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+
+    if( aEvent.IsAction( &EE_ACTIONS::addImportedSheetPin ) )
+    {
+        label = m_frame->ImportHierLabel( sheet );
+
+        if( !label )
+        {
+            m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
+            m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
+            m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
+            m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
+            m_statusPopup->Popup();
+            m_statusPopup->Expire( 2000 );
+            return 0;
+        }
+    }
+
+    SCH_SHEET_PIN* pin = m_frame->CreateSheetPin( sheet, label );
+    m_frame->AddItemToScreenAndUndoList( pin );
+    m_selectionTool->AddItemToSel( pin );
 
     return 0;
 }
@@ -885,4 +941,6 @@ void SCH_DRAWING_TOOLS::setTransitions()
     Go( &SCH_DRAWING_TOOLS::AddLabel,              EE_ACTIONS::addLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::AddLabel,              EE_ACTIONS::addGlobalLabel.MakeEvent() );
     Go( &SCH_DRAWING_TOOLS::AddLabel,              EE_ACTIONS::addHierLabel.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddSheetPin,           EE_ACTIONS::addSheetPin.MakeEvent() );
+    Go( &SCH_DRAWING_TOOLS::AddSheetPin,           EE_ACTIONS::addImportedSheetPin.MakeEvent() );
 }

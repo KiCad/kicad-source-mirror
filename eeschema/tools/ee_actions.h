@@ -133,6 +133,8 @@ public:
     static TOOL_ACTION addLabel;
     static TOOL_ACTION addGlobalLabel;
     static TOOL_ACTION addHierLabel;
+    static TOOL_ACTION addSheetPin;
+    static TOOL_ACTION addImportedSheetPin;
     static TOOL_ACTION toShapeSlash;
     static TOOL_ACTION toShapeBackslash;
     static TOOL_ACTION toLabel;

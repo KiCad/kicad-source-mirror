@@ -225,14 +225,15 @@ bool EE_SELECTION_TOOL::Init()
     menu.AddItem( EE_ACTIONS::finishBus,          SCH_WIRE_BUS_TOOL::IsDrawingBus, 100 );
 
     menu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
-    menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addJunction,        wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addLabel,           wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addGlobalLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::addHierLabel,       wireOrBusSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 200 );
-    menu.AddItem( EE_ACTIONS::importSheetPin,     sheetSelection && EE_CONDITIONS::Idle, 200 );
+    menu.AddItem( EE_ACTIONS::selectConnection,   wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addJunction,        wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addLabel,           wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addGlobalLabel,     wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addHierLabel,       wireOrBusSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::breakWire,          wireSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::breakBus,           busSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addSheetPin,        sheetSelection && EE_CONDITIONS::Idle, 250 );
+    menu.AddItem( EE_ACTIONS::addImportedSheetPin,sheetSelection && EE_CONDITIONS::Idle, 250 );
 
     menu.AddSeparator( havePartCondition && EE_CONDITIONS::Empty, 400 );
     menu.AddItem( EE_ACTIONS::symbolProperties,   havePartCondition && EE_CONDITIONS::Empty, 400 );

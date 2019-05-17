@@ -388,7 +388,6 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddSeparator( EE_CONDITIONS::NotEmpty, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition, 200 );
@@ -414,7 +413,7 @@ bool SCH_EDIT_TOOL::Init()
     drawMenu.AddItem( EE_ACTIONS::toHLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toGLabel,         anyTextTool && EE_CONDITIONS::Idle, 200 );
     drawMenu.AddItem( EE_ACTIONS::toText,           anyTextTool && EE_CONDITIONS::Idle, 200 );
-    drawMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetTool && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::cleanupSheetPins, sheetTool && EE_CONDITIONS::Idle, 250 );
 
     //
     // Add editing actions to the selection tool menu
@@ -449,12 +448,12 @@ bool SCH_EDIT_TOOL::Init()
     selToolMenu.AddItem( EE_ACTIONS::toHLabel,         toHLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toGLabel,         toGLabelCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toText,           toTextlCondition, 200 );
-    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::cleanupSheetPins, singleSheetCondition, 250 );
 
-    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 200 );
-    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 200 );
-    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddSeparator( EE_CONDITIONS::Idle, 300 );
+    selToolMenu.AddItem( ACTIONS::cut,                 EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::copy,                EE_CONDITIONS::IdleSelection, 300 );
+    selToolMenu.AddItem( ACTIONS::paste,               EE_CONDITIONS::Idle, 300 );
 
     return true;
 }
