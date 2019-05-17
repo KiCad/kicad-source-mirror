@@ -123,6 +123,7 @@ protected:
     int         m_UndoRedoCountMax;         ///< default Undo/Redo command Max depth, to be handed
                                             // to screens
     EDA_UNITS_T m_UserUnits;
+    bool        m_PolarCoords;              //< for those frames that support polar coordinates
 
     /// The area to draw on.
     EDA_DRAW_PANEL* m_canvas;
@@ -294,6 +295,12 @@ public:
         SetUserUnits( aUnits );
         unitsChangeRefresh();
     }
+
+    /**
+     * For those frames that support polar coordinates.
+     */
+    bool GetShowPolarCoords() const { return m_PolarCoords; }
+    void SetShowPolarCoords( bool aShow ) { m_PolarCoords = aShow; }
 
     /**
      * Return the origin of the axis used for plotting and various exports.

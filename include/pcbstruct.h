@@ -73,7 +73,6 @@ public:
     /// How trace clearances are displayed.  @see TRACE_CLEARANCE_DISPLAY_MODE_T.
     TRACE_CLEARANCE_DISPLAY_MODE_T  m_ShowTrackClearanceMode;
 
-    bool m_DisplayPolarCood;
     int  m_DisplayZonesMode;
     int  m_DisplayNetNamesMode; /* 0 do not show netnames,
                                  * 1 show netnames on pads

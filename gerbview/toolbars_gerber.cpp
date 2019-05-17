@@ -224,12 +224,8 @@ void GERBVIEW_FRAME::ReCreateOptToolbar()
     m_optionsToolBar->Add( GERBVIEW_ACTIONS::measureTool,             ACTION_TOOLBAR::TOGGLE );
 
     m_optionsToolBar->AddSeparator();
-    m_optionsToolBar->Add( ACTIONS::toggleGrid, ACTION_TOOLBAR::TOGGLE );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               KiScaledBitmap( polar_coord_xpm, this ),
-                               _( "Display polar coordinates" ), wxITEM_CHECK );
-
+    m_optionsToolBar->Add( ACTIONS::toggleGrid,                       ACTION_TOOLBAR::TOGGLE );
+    m_optionsToolBar->Add( ACTIONS::togglePolarCoords,                ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::imperialUnits,                    ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::metricUnits,                      ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,                ACTION_TOOLBAR::TOGGLE );
@@ -443,14 +439,6 @@ void GERBVIEW_FRAME::OnUpdateDrawMode( wxUpdateUIEvent& aEvent )
     default:
         break;
     }
-}
-
-
-void GERBVIEW_FRAME::OnToggleCoordType( wxCommandEvent& aEvent )
-{
-    m_DisplayOptions.m_DisplayPolarCood = !m_DisplayOptions.m_DisplayPolarCood;
-
-    UpdateStatusBar();
 }
 
 

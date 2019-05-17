@@ -174,11 +174,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateOptToolbar()
                                                KICAD_AUI_TB_STYLE | wxAUI_TB_VERTICAL );
 
     m_optionsToolBar->Add( ACTIONS::toggleGrid,             ACTION_TOOLBAR::TOGGLE );
-
-    m_optionsToolBar->AddTool( ID_TB_OPTIONS_SHOW_POLAR_COORD, wxEmptyString,
-                               KiScaledBitmap( polar_coord_xpm, this ),
-                               _( "Display Polar Coord ON" ), wxITEM_CHECK );
-
+    m_optionsToolBar->Add( PCB_ACTIONS::togglePolarCoords,  ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::imperialUnits,          ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::metricUnits,            ACTION_TOOLBAR::TOGGLE );
     m_optionsToolBar->Add( ACTIONS::toggleCursorStyle,      ACTION_TOOLBAR::TOGGLE );
@@ -206,12 +202,13 @@ void FOOTPRINT_EDIT_FRAME::SyncMenusAndToolbars()
     m_mainToolBar->Toggle( ACTIONS::zoomTool, GetToolId() == ID_ZOOM_SELECTION );
     m_mainToolBar->Refresh();
 
-    m_optionsToolBar->Toggle( ACTIONS::toggleGrid, IsGridVisible() );
-    m_optionsToolBar->Toggle( ACTIONS::metricUnits, GetUserUnits() != INCHES );
-    m_optionsToolBar->Toggle( ACTIONS::imperialUnits, GetUserUnits() == INCHES );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode, !opts->m_DisplayPadFill );
+    m_optionsToolBar->Toggle( ACTIONS::toggleGrid,             IsGridVisible() );
+    m_optionsToolBar->Toggle( ACTIONS::metricUnits,            GetUserUnits() != INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::imperialUnits,          GetUserUnits() == INCHES );
+    m_optionsToolBar->Toggle( ACTIONS::togglePolarCoords,      GetShowPolarCoords() );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::padDisplayMode,     !opts->m_DisplayPadFill );
     m_optionsToolBar->Toggle( PCB_ACTIONS::moduleEdgeOutlines, !opts->m_DisplayModEdgeFill );
-    m_optionsToolBar->Toggle( PCB_ACTIONS::highContrastMode, opts->m_ContrastModeDisplay );
+    m_optionsToolBar->Toggle( PCB_ACTIONS::highContrastMode,   opts->m_ContrastModeDisplay );
     m_optionsToolBar->Refresh();
 
     m_drawToolBar->Toggle( PCB_ACTIONS::selectionTool, GetToolId() == ID_NO_TOOL_SELECTED );

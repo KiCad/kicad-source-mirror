@@ -94,7 +94,7 @@ PARAM_CFG_ARRAY& GERBVIEW_FRAME::GetConfigurationSettings()
             &g_ColorsSettings.m_LayersColors[LAYER_PCB_BACKGROUND], BLACK ) );
     m_configSettings.push_back( new PARAM_CFG_BOOL(
             true, wxT( "DisplayPolarCoordinates" ),
-            &m_DisplayOptions.m_DisplayPolarCood, false ) );
+            &m_PolarCoords, false ) );
 
     // Default colors for layers 0 to 31
     static const COLOR4D color_default[] = {

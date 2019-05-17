@@ -81,13 +81,11 @@ BEGIN_EVENT_TABLE( PCB_BASE_FRAME, EDA_DRAW_FRAME )
     EVT_MENU_RANGE( ID_POPUP_PCB_ITEM_SELECTION_START, ID_POPUP_PCB_ITEM_SELECTION_END,
                     PCB_BASE_FRAME::ProcessItemSelection )
 
-    EVT_TOOL( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnTogglePolarCoords )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_PADS_SKETCH, PCB_BASE_FRAME::OnTogglePadDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_GRAPHIC_SKETCH, PCB_BASE_FRAME::OnToggleGraphicDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_EDGE_SKETCH, PCB_BASE_FRAME::OnToggleEdgeDrawMode )
     EVT_TOOL( ID_TB_OPTIONS_SHOW_MODULE_TEXT_SKETCH, PCB_BASE_FRAME::OnToggleTextDrawMode )
 
-    EVT_UPDATE_UI( ID_TB_OPTIONS_SHOW_POLAR_COORD, PCB_BASE_FRAME::OnUpdateCoordType )
     EVT_UPDATE_UI( ID_ON_GRID_SELECT, PCB_BASE_FRAME::OnUpdateSelectGrid )
     EVT_UPDATE_UI( ID_ON_ZOOM_SELECT, PCB_BASE_FRAME::OnUpdateSelectZoom )
     // Switching canvases
@@ -529,17 +527,6 @@ void PCB_BASE_FRAME::SwitchLayer( wxDC* DC, PCB_LAYER_ID layer )
 }
 
 
-void PCB_BASE_FRAME::OnTogglePolarCoords( wxCommandEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-    SetStatusText( wxEmptyString );
-
-    displ_opts->m_DisplayPolarCood = !displ_opts->m_DisplayPolarCood;
-
-    UpdateStatusBar();
-}
-
-
 void PCB_BASE_FRAME::OnTogglePadDrawMode( wxCommandEvent& aEvent )
 {
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
@@ -626,18 +613,6 @@ void PCB_BASE_FRAME::OnSwitchCanvas( wxCommandEvent& aEvent )
         SwitchCanvas( EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL );
         break;
     }
-}
-
-
-void PCB_BASE_FRAME::OnUpdateCoordType( wxUpdateUIEvent& aEvent )
-{
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
-
-    aEvent.Check( displ_opts->m_DisplayPolarCood );
-    m_optionsToolBar->SetToolShortHelp( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                                        displ_opts->m_DisplayPolarCood ?
-                                        _( "Display rectangular coordinates" ) :
-                                        _( "Display polar coordinates" ) );
 }
 
 
@@ -784,11 +759,10 @@ void PCB_BASE_FRAME::UpdateStatusBar()
 
     wxString line;
     wxString locformatter;
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)GetDisplayOptions();
 
     EDA_DRAW_FRAME::UpdateStatusBar();
 
-    if( displ_opts->m_DisplayPolarCood )  // display polar coordinates
+    if( GetShowPolarCoords() )  // display polar coordinates
     {
         double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;
         double dy = (double)GetCrossHairPosition().y - (double)screen->m_O_Curseur.y;
@@ -853,7 +827,7 @@ void PCB_BASE_FRAME::UpdateStatusBar()
     line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( line, 2 );
 
-    if( !displ_opts->m_DisplayPolarCood )  // display relative cartesian coordinates
+    if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
         double dx = (double)GetCrossHairPosition().x - (double)screen->m_O_Curseur.x;

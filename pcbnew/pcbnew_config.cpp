@@ -172,7 +172,7 @@ PARAM_CFG_ARRAY& PCB_EDIT_FRAME::GetConfigurationSettings()
     if( m_configParams.empty() )
     {
         m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "DisplayPolarCoords" ),
-                                                        &displ_opts->m_DisplayPolarCood, false ) );
+                                                        &m_PolarCoords, false ) );
         // Display options and modes:
         m_configParams.push_back( new PARAM_CFG_INT( true, wxT( "ShowNetNamesMode" ),
                                                        &displ_opts->m_DisplayNetNamesMode, 3, 0, 3 ) );

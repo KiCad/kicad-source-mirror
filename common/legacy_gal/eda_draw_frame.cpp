@@ -126,6 +126,8 @@ EDA_DRAW_FRAME::EDA_DRAW_FRAME( KIWAY* aKiway, wxWindow* aParent,
     m_MsgFrameHeight      = EDA_MSG_PANEL::GetRequiredHeight();
     m_movingCursorWithKeyboard = false;
     m_zoomLevelCoeff      = 1.0;
+    m_UserUnits           = MILLIMETRES;
+    m_PolarCoords         = false;
 
     m_auimgr.SetFlags(wxAUI_MGR_DEFAULT);
 

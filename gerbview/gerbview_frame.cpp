@@ -1059,7 +1059,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     double dYpos;
     wxString line;
 
-    if( m_DisplayOptions.m_DisplayPolarCood )  // display relative polar coordinates
+    if( GetShowPolarCoords() )  // display relative polar coordinates
     {
         double       theta, ro;
 
@@ -1116,7 +1116,7 @@ void GERBVIEW_FRAME::UpdateStatusBar()
     line.Printf( absformatter, dXpos, dYpos );
     SetStatusText( line, 2 );
 
-    if( !m_DisplayOptions.m_DisplayPolarCood )  // display relative cartesian coordinates
+    if( !GetShowPolarCoords() )  // display relative cartesian coordinates
     {
         // Display relative coordinates:
         dx = GetCrossHairPosition().x - screen->m_O_Curseur.x;

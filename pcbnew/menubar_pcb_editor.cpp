@@ -154,7 +154,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
         return IsGridVisible();
     };
     auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
-        return ( (PCB_DISPLAY_OPTIONS*) GetDisplayOptions() )->m_DisplayPolarCood;
+        return GetShowPolarCoords();
     };
     auto imperialUnitsCondition = [ this ] ( const SELECTION& aSel ) {
         return GetUserUnits() == INCHES;
@@ -211,19 +211,16 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
                        three_d_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AddSeparator();
-    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomTool,        SELECTION_CONDITIONS::ShowAlways );
-    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomInCenter,               SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,              SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,              SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomTool,                   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,                 SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
-    viewMenu->AddCheckItem( ACTIONS::toggleGrid, gridShownCondition );
-    viewMenu->AddItem( ACTIONS::gridProperties,  SELECTION_CONDITIONS::ShowAlways );
-
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                            _( "Display &Polar Coordinates" ), wxEmptyString,
-                            polar_coord_xpm, polarCoordsCondition );
+    viewMenu->AddCheckItem( ACTIONS::toggleGrid,            gridShownCondition );
+    viewMenu->AddItem( ACTIONS::gridProperties,             SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddCheckItem( PCB_ACTIONS::togglePolarCoords, polarCoordsCondition );
 
     // Units submenu
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );
@@ -240,7 +237,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     viewMenu->AddCheckItem( PCB_ACTIONS::ratsnestLineMode, curvedRatsnestCondition );
 
     viewMenu->AddSeparator();
-
     // Drawing Mode Submenu
     CONDITIONAL_MENU* drawingModeSubMenu = new CONDITIONAL_MENU( false, selTool );
     drawingModeSubMenu->SetTitle( _( "&Drawing Mode" ) );
@@ -254,7 +250,6 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::padDisplayMode,      sketchPadsCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::viaDisplayMode,      sketchViasCondition );
     drawingModeSubMenu->AddCheckItem( PCB_ACTIONS::trackDisplayMode,    sketchTracksCondition );
-
     viewMenu->AddMenu( drawingModeSubMenu );
 
     // Contrast Mode Submenu
@@ -263,11 +258,8 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     contrastModeSubMenu->SetIcon( contrast_mode_xpm );
 
     contrastModeSubMenu->AddCheckItem( PCB_ACTIONS::highContrastMode,   contrastModeCondition );
-
-    contrastModeSubMenu->AddSeparator();
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaDec, SELECTION_CONDITIONS::ShowAlways );
     contrastModeSubMenu->AddItem( PCB_ACTIONS::layerAlphaInc, SELECTION_CONDITIONS::ShowAlways );
-
     viewMenu->AddMenu( contrastModeSubMenu );
 
     viewMenu->AddCheckItem( ID_MENU_PCB_FLIP_VIEW,

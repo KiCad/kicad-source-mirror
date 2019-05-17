@@ -43,8 +43,6 @@ PCB_DISPLAY_OPTIONS::PCB_DISPLAY_OPTIONS()
     m_DisplayPcbTrackFill     = FILLED;   // false = sketch , true = filled
     m_ShowTrackClearanceMode  = SHOW_CLEARANCE_NEW_TRACKS_AND_VIA_AREAS;
 
-    m_DisplayPolarCood        = false;  /* false = display absolute coordinates,
-                                         * true = display polar cordinates */
     m_DisplayZonesMode        = 0;      /* 0 = Show filled areas outlines in zones,
                                          * 1 = do not show filled areas outlines
                                          * 2 = show outlines of filled areas */

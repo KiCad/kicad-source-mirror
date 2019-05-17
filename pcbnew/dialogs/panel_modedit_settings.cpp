@@ -43,7 +43,7 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
 
     // Display options
-    m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
+    m_PolarDisplay->SetSelection( m_frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_frame->GetUserUnits() == INCHES ? 0 : 1 );
 
     // Editing options
@@ -58,9 +58,7 @@ bool PANEL_MODEDIT_SETTINGS::TransferDataToWindow()
 bool PANEL_MODEDIT_SETTINGS::TransferDataFromWindow()
 {
     // Display options
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_frame->GetDisplayOptions();
-    displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
-
+    m_frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
     m_frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
 
     // Editing options

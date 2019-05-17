@@ -212,6 +212,11 @@ TOOL_ACTION ACTIONS::toggleUnits( "common.Control.toggleUnits",
         unit_mm_xpm );
 
 
+TOOL_ACTION ACTIONS::togglePolarCoords( "common.Control.togglePolarCoords",
+        AS_GLOBAL, 0,
+        _( "Polar Coordinates" ), _( "Switch between polar and cartesian coordinate systems" ),
+        polar_coord_xpm );
+
 TOOL_ACTION ACTIONS::toggleCursor( "common.Control.toggleCursor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_TOGGLE_CURSOR ),
         _( "Always Show Cursor" ), _( "Display crosshairs even in selection tool" ),

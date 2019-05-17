@@ -104,6 +104,7 @@ public:
     static TOOL_ACTION imperialUnits;
     static TOOL_ACTION metricUnits;
     static TOOL_ACTION toggleUnits;
+    static TOOL_ACTION togglePolarCoords;
 
     /**
      * Function TranslateLegacyId()

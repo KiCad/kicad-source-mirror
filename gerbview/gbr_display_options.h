@@ -42,7 +42,6 @@ public:
     bool    m_DisplayFlashedItemsFill;  ///< Option to draw flashed items (filled/sketch)
     bool    m_DisplayLinesFill;         ///< Option to draw line items (filled/sketch)
     bool    m_DisplayPolygonsFill;      ///< Option to draw polygons (filled/sketch)
-    bool    m_DisplayPolarCood;         ///< Option to display coordinates in status bar in X,Y or Polar coords
     bool    m_DisplayDCodes;            ///< Option to show dcode values on items drawn with a dcode tool
     bool    m_DisplayPageLimits;
     bool    m_DisplayNegativeObjects;   ///< Option to draw negative objects in a specific color
@@ -61,7 +60,6 @@ public:
         m_DisplayFlashedItemsFill = true;
         m_DisplayLinesFill = true;
         m_DisplayPolygonsFill = true;
-        m_DisplayPolarCood = false;
         m_DisplayDCodes = false;
         m_DisplayPageLimits = false;
         m_IsPrinting = false;

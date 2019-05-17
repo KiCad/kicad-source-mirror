@@ -572,7 +572,6 @@ public:
 
     void CommonSettingsChanged() override;
 
-    void OnTogglePolarCoords( wxCommandEvent& aEvent );
     void OnTogglePadDrawMode( wxCommandEvent& aEvent );
     void OnToggleGraphicDrawMode( wxCommandEvent& aEvent );
     void OnToggleEdgeDrawMode( wxCommandEvent& aEvent );
@@ -581,7 +580,6 @@ public:
     virtual void OnSwitchCanvas( wxCommandEvent& aEvent );
 
     // User interface update event handlers.
-    void OnUpdateCoordType( wxUpdateUIEvent& aEvent );
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
 
     virtual void OnUpdateLayerAlpha( wxUpdateUIEvent& aEvent ) {}

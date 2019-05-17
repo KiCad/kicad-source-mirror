@@ -267,9 +267,6 @@ enum main_id
     ID_EDA_SOCKET_EVENT,
 
     // Common to all
-    ID_TB_OPTIONS_SELECT_CURSOR,
-    ID_TB_OPTIONS_SHOW_POLAR_COORD,
-    ID_TB_OPTIONS_SHOW_GRID,
     ID_HELP_GET_INVOLVED,
 
     // Common to Pcbnew and CvPcb

@@ -445,6 +445,16 @@ int COMMON_TOOLS::ToggleUnits( const TOOL_EVENT& aEvent )
 }
 
 
+int COMMON_TOOLS::TogglePolarCoords( const TOOL_EVENT& aEvent )
+{
+    m_frame->SetStatusText( wxEmptyString );
+    m_frame->SetShowPolarCoords( !m_frame->GetShowPolarCoords() );
+    m_frame->UpdateStatusBar();
+
+    return 0;
+}
+
+
 int COMMON_TOOLS::ToggleCursor( const TOOL_EVENT& aEvent )
 {
     auto& galOpts = m_frame->GetGalDisplayOptions();
@@ -509,6 +519,7 @@ void COMMON_TOOLS::setTransitions()
     Go( &COMMON_TOOLS::ImperialUnits,      ACTIONS::imperialUnits.MakeEvent() );
     Go( &COMMON_TOOLS::MetricUnits,        ACTIONS::metricUnits.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleUnits,        ACTIONS::toggleUnits.MakeEvent() );
+    Go( &COMMON_TOOLS::TogglePolarCoords,  ACTIONS::togglePolarCoords.MakeEvent() );
 
     Go( &COMMON_TOOLS::ToggleCursor,       ACTIONS::toggleCursor.MakeEvent() );
     Go( &COMMON_TOOLS::ToggleCursorStyle,  ACTIONS::toggleCursorStyle.MakeEvent() );

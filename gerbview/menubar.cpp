@@ -190,7 +190,7 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
         return IsGridVisible();
     };
     auto polarCoordsCondition = [ this ] ( const SELECTION& aSel ) {
-        return m_DisplayOptions.m_DisplayPolarCood;
+        return GetShowPolarCoords();
     };
     auto layersManagerShownCondition = [ this ] ( const SELECTION& aSel ) {
         return m_show_layer_manager_tools;
@@ -238,12 +238,8 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
     viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
-
     viewMenu->AddCheckItem( ACTIONS::toggleGrid,              gridShownCondition );
-
-    viewMenu->AddCheckItem( ID_TB_OPTIONS_SHOW_POLAR_COORD,
-                            _( "Display &Polar Coordinates" ), wxEmptyString,
-                            polar_coord_xpm,                  polarCoordsCondition );
+    viewMenu->AddCheckItem( ACTIONS::togglePolarCoords,       polarCoordsCondition );
 
     // Units submenu
     CONDITIONAL_MENU* unitsSubMenu = new CONDITIONAL_MENU( false, selTool );

@@ -50,7 +50,7 @@ PARAM_CFG_ARRAY& FOOTPRINT_EDIT_FRAME::GetConfigurationSettings()
 
     // Display options:
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorDisplayPolarCoords" ),
-                                                    &displ_opts->m_DisplayPolarCood, false ) );
+                                                    &m_PolarCoords, false ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorPadDisplayMode" ),
                                                     &displ_opts->m_DisplayPadFill, true ) );
     m_configParams.push_back( new PARAM_CFG_BOOL( true, wxT( "FpEditorGraphicLinesDisplayMode" ),

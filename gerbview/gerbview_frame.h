@@ -413,13 +413,8 @@ public:
     PARAM_CFG_ARRAY& GetConfigurationSettings( void );
 
     void LoadSettings( wxConfigBase* aCfg ) override;
-
     void SaveSettings( wxConfigBase* aCfg ) override;
 
-    void OnToggleCoordType( wxCommandEvent& aEvent );
-    void OnToggleFlashItemDrawMode( wxCommandEvent& aEvent );
-    void OnToggleLineDrawMode( wxCommandEvent& aEvent );
-    void OnTogglePolygonDrawMode( wxCommandEvent& aEvent );
     void OnToggleShowLayerManager( wxCommandEvent& aEvent );
 
     void ShowChangedLanguage() override;

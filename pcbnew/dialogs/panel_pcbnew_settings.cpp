@@ -44,7 +44,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
     auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Frame->GetDisplayOptions();
 
     /* Set display options */
-    m_PolarDisplay->SetSelection( displ_opts->m_DisplayPolarCood ? 1 : 0 );
+    m_PolarDisplay->SetSelection( m_Frame->GetShowPolarCoords() ? 1 : 0 );
     m_UnitsSelection->SetSelection( m_Frame->GetUserUnits() == INCHES ? 0 : 1 );
 
     wxString rotationAngle;
@@ -70,9 +70,7 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataToWindow()
 
 bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
 {
-    auto displ_opts = (PCB_DISPLAY_OPTIONS*)m_Frame->GetDisplayOptions();
-    displ_opts->m_DisplayPolarCood = m_PolarDisplay->GetSelection() != 0;
-
+    m_Frame->SetShowPolarCoords( m_PolarDisplay->GetSelection() != 0 );
     m_Frame->SetUserUnits( m_UnitsSelection->GetSelection() == 0 ? INCHES : MILLIMETRES );
 
     m_Frame->SetRotationAngle( wxRound( 10.0 * wxAtof( m_RotationAngle->GetValue() ) ) );
@@ -94,8 +92,9 @@ bool PANEL_PCBNEW_SETTINGS::TransferDataFromWindow()
     m_Frame->SetShowPageLimits( m_Show_Page_Limits->GetValue() );
 
     // Apply changes to the GAL
-    KIGFX::VIEW* view = m_Frame->GetGalCanvas()->GetView();
-    KIGFX::PCB_PAINTER* painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
+    PCB_DISPLAY_OPTIONS*        displ_opts = (PCB_DISPLAY_OPTIONS*) m_Frame->GetDisplayOptions();
+    KIGFX::VIEW*                view = m_Frame->GetGalCanvas()->GetView();
+    KIGFX::PCB_PAINTER*         painter = static_cast<KIGFX::PCB_PAINTER*>( view->GetPainter() );
     KIGFX::PCB_RENDER_SETTINGS* settings = painter->GetSettings();
     settings->LoadDisplayOptions( displ_opts, m_Frame->ShowPageLimits() );
 
