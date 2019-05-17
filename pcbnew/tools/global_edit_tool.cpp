@@ -22,6 +22,7 @@
  */
 
 #include <bitmaps.h>
+#include <class_track.h>
 #include <class_zone.h>
 #include <tool/tool_manager.h>
 #include <tools/pcb_actions.h>

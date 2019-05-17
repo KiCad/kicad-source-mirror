@@ -411,16 +411,17 @@ OPT_VECTOR2I DIFF_PAIR_PLACER::getDanglingAnchor( NODE* aNode, ITEM* aItem )
     case ITEM::SOLID_T:
         return aItem->Anchor( 0 );
 
+    case ITEM::ARC_T:
     case ITEM::SEGMENT_T:
     {
-        SEGMENT* s =static_cast<SEGMENT*>( aItem );
+        SEGMENT* s = static_cast<SEGMENT*>( aItem );
 
-        JOINT* jA = aNode->FindJoint( s->Seg().A, s );
-        JOINT* jB = aNode->FindJoint( s->Seg().B, s );
+        JOINT* jA = aNode->FindJoint( aItem->Anchor( 0 ), aItem );
+        JOINT* jB = aNode->FindJoint( aItem->Anchor( 1 ), aItem );
 
-        if( jA->LinkCount() == 1 )
+        if( jA && jA->LinkCount() == 1 )
             return s->Seg().A;
-        else if( jB->LinkCount() == 1 )
+        else if( jB && jB->LinkCount() == 1 )
             return s->Seg().B;
         else
             return OPT_VECTOR2I();

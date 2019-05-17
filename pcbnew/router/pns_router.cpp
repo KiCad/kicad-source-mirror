@@ -509,6 +509,12 @@ bool ROUTER::IsPlacingVia() const
 }
 
 
+void ROUTER::ToggleRounded()
+{
+    m_settings->SetRounded( !m_settings->GetRounded() );
+}
+
+
 void ROUTER::SetOrthoMode( bool aEnable )
 {
     if( !m_placer )

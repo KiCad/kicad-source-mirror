@@ -136,6 +136,12 @@ static const TOOL_ACTION ACT_SwitchPosture( "pcbnew.InteractiveRouter.SwitchPost
         _( "Switches posture of the currently routed track." ),
         change_entry_orient_xpm );
 
+static const TOOL_ACTION ACT_SwitchRounding( "pcbnew.InteractiveRouter.SwitchRounding",
+        AS_CONTEXT,
+        0, LEGACY_HK_NAME( "Switch Rounding" ),
+        _( "Switch Rounding" ),
+        _( "Switches the corner type of the currently routed track." ) );
+
 #undef _
 #define _(s) wxGetTranslation((s))
 
@@ -787,6 +793,12 @@ void ROUTER_TOOL::performRouting()
             m_router->Move( m_endSnapPoint, m_endItem );
             m_startItem = nullptr;
         }
+        else if( evt->IsAction( &ACT_SwitchRounding ) )
+        {
+            m_router->ToggleRounded();
+            updateEndItem( *evt );
+            m_router->Move( m_endSnapPoint, m_endItem );        // refresh
+        }
         else if( evt->IsAction( &ACT_SwitchPosture ) )
         {
             m_router->FlipPosture();
@@ -1078,8 +1090,9 @@ void ROUTER_TOOL::NeighboringSegmentFilter( const VECTOR2I& aPt, GENERAL_COLLECT
     // First make sure we've got something that *might* match.
     int vias = aCollector.CountType( PCB_VIA_T );
     int traces = aCollector.CountType( PCB_TRACE_T );
+    int arcs = aCollector.CountType( PCB_ARC_T );
 
-    if( vias > 1 || traces > 2 || vias + traces < 1 )
+    if( arcs > 0 || vias > 1 || traces > 2 || vias + traces < 1 )
         return;
 
     // Fetch first TRACK (via or trace) as our reference

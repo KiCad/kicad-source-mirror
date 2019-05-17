@@ -60,6 +60,7 @@ set( common_srcs
     geometry/test_shape_poly_set_collision.cpp
     geometry/test_shape_poly_set_distance.cpp
     geometry/test_shape_poly_set_iterator.cpp
+    geometry/test_shape_line_chain.cpp
 
     view/test_zoom_controller.cpp
 )

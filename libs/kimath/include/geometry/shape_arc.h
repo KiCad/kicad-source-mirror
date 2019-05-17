@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -50,6 +51,7 @@ public:
         SHAPE( SH_ARC ), m_p0( aArcStartPoint ), m_pc( aArcCenter ), m_centralAngle( aCenterAngle ),
         m_width( aWidth )
     {
+        update_bbox();
     }
 
     SHAPE_ARC( const SHAPE_ARC& aOther )
@@ -59,6 +61,7 @@ public:
         m_pc = aOther.m_pc;
         m_centralAngle = aOther.m_centralAngle;
         m_width = aOther.m_width;
+        m_bbox = aOther.m_bbox;
     }
 
     ~SHAPE_ARC() {}
@@ -70,6 +73,7 @@ public:
 
     const VECTOR2I& GetP0() const { return m_p0; }
     const VECTOR2I GetP1() const;
+    const VECTOR2I GetArcMid() const;
     const VECTOR2I& GetCenter() const { return m_pc; }
 
     const BOX2I BBox( int aClearance = 0 ) const override;
@@ -96,6 +100,7 @@ public:
     {
         m_p0 += aVector;
         m_pc += aVector;
+        update_bbox();
     }
 
     /**
@@ -114,6 +119,7 @@ public:
 
         m_pc += aCenter;
         m_p0 += aCenter;
+        update_bbox();
     }
 
     void Mirror( bool aX = true, bool aY = false, const VECTOR2I& aVector = { 0, 0 } )
@@ -131,6 +137,8 @@ public:
             m_pc.y = -m_pc.y + 2 * aVector.y;
             m_centralAngle = - m_centralAngle;
         }
+
+        update_bbox();
     }
 
     int GetRadius() const;
@@ -176,11 +184,14 @@ private:
                (ecoord) ( aB.y - aA.y ) * ( aC.x - aA.x );
     }
 
+    void update_bbox();
+
 
     VECTOR2I m_p0, m_pc;
     double m_centralAngle;
 
     int m_width;
+    BOX2I m_bbox;
 };
 
 #endif

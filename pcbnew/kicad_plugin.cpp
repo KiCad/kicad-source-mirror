@@ -442,6 +442,7 @@ void PCB_IO::Format( BOARD_ITEM* aItem, int aNestLevel ) const
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
     case PCB_VIA_T:
         format( static_cast<TRACK*>( aItem ), aNestLevel );
         break;

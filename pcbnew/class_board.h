@@ -58,6 +58,9 @@ class SHAPE_POLY_SET;
 class CONNECTIVITY_DATA;
 class COMPONENT;
 
+// Forward declare endpoint from class_track.h
+enum ENDPOINT_T : int;
+
 /**
  * Enum LAYER_T
  * gives the allowed types of layers, same as Specctra DSN spec.

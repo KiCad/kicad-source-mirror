@@ -1449,6 +1449,7 @@ double MODULE::CoverageRatio( const GENERAL_COLLECTOR& aCollector ) const
         case PCB_TEXT_T:
         case PCB_MODULE_TEXT_T:
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         case PCB_VIA_T:
             addRect( holes, item->GetBoundingBox() );
             break;

@@ -111,17 +111,15 @@ bool DP_PRIMITIVE_PAIR::Directional() const
 }
 
 
-DIRECTION_45 DP_PRIMITIVE_PAIR::anchorDirection( ITEM* aItem, const VECTOR2I& aP ) const
+DIRECTION_45 DP_PRIMITIVE_PAIR::anchorDirection( const ITEM* aItem, const VECTOR2I& aP ) const
 {
-    if( !aItem->OfKind ( ITEM::SEGMENT_T ) )
+    if( !aItem->OfKind ( ITEM::SEGMENT_T | ITEM::ARC_T ) )
         return DIRECTION_45();
 
-    SEGMENT* s = static_cast<SEGMENT*>( aItem );
-
-    if( s->Seg().A == aP )
-        return DIRECTION_45( s->Seg().A - s->Seg().B );
+    if( aItem->Anchor( 0 ) == aP )
+        return DIRECTION_45( aItem->Anchor( 0 ) - aItem->Anchor( 1 ) );
     else
-        return DIRECTION_45( s->Seg().B - s->Seg().A );
+        return DIRECTION_45( aItem->Anchor( 1 ) - aItem->Anchor( 0 ) );
 }
 
 void DP_PRIMITIVE_PAIR::CursorOrientation( const VECTOR2I& aCursorPos, VECTOR2I& aMidpoint, VECTOR2I& aDirection ) const

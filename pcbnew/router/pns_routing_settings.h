@@ -141,6 +141,28 @@ public:
     bool GetSnapToTracks() const { return m_snapToTracks; }
     bool GetSnapToPads() const { return m_snapToPads; }
 
+    bool GetRounded() const { return m_roundedCorners; }
+    void SetRounded( bool aRound ) { m_roundedCorners = aRound; }
+
+    void SetMinRadius( int aRadius )
+    {
+        m_minRadius = aRadius;
+
+        if( m_maxRadius < m_minRadius )
+            m_maxRadius = m_minRadius;
+    }
+
+    void SetMaxRadius( int aRadius )
+    {
+        m_maxRadius = aRadius;
+
+        if( m_maxRadius < m_minRadius )
+            m_minRadius = m_maxRadius;
+    }
+
+    int GetMinRadius() const { return m_minRadius; }
+    int GetMaxRadius() const { return m_maxRadius; }
+
 private:
     bool m_shoveVias;
     bool m_startDiagonal;
@@ -155,6 +177,10 @@ private:
     bool m_inlineDragEnabled;
     bool m_snapToTracks;
     bool m_snapToPads;
+    bool m_roundedCorners;
+
+    int m_minRadius;
+    int m_maxRadius;
 
     PNS_MODE m_routingMode;
     PNS_OPTIMIZATION_EFFORT m_optimizerEffort;

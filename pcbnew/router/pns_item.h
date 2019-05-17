@@ -62,8 +62,9 @@ public:
         LINE_T      =    2,
         JOINT_T     =    4,
         SEGMENT_T   =    8,
-        VIA_T       =   16,
-        DIFF_PAIR_T =   32,
+        ARC_T       =   16,
+        VIA_T       =   32,
+        DIFF_PAIR_T =   64,
         ANY_T       = 0xff
     };
 

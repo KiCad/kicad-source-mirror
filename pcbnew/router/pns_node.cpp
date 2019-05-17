@@ -1,7 +1,7 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
+ * Copyright (C) 2013-2019 CERN
  * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
@@ -21,12 +21,14 @@
 
 #include <vector>
 #include <cassert>
+#include <utility>
 
 #include <math/vector2d.h>
 
 #include <geometry/seg.h>
 #include <geometry/shape_line_chain.h>
 
+#include "pns_arc.h"
 #include "pns_item.h"
 #include "pns_line.h"
 #include "pns_node.h"
@@ -564,8 +566,26 @@ void NODE::Add( LINE& aLine, bool aAllowRedundant )
 
     SHAPE_LINE_CHAIN& l = aLine.Line();
 
+    for( size_t i = 0; i < l.ArcCount(); i++ )
+    {
+        auto s = l.Arc( i );
+        ARC* rarc;
+
+        if( !aAllowRedundant && ( rarc = findRedundantArc( s.GetP0(), s.GetP1(), aLine.Layers(), aLine.Net() ) ) )
+            aLine.LinkSegment( rarc );
+        else
+        {
+            auto newarc = std::make_unique< ARC >( aLine, s );
+            aLine.LinkSegment( newarc.get() );
+            Add( std::move( newarc ), true );
+        }
+    }
+
     for( int i = 0; i < l.SegmentCount(); i++ )
     {
+        if( l.isArc( i ) )
+            continue;
+
         SEG s = l.CSegment( i );
 
         if( s.A != s.B )
@@ -612,6 +632,20 @@ bool NODE::Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant )
     return true;
 }
 
+void NODE::addArc( ARC* aArc )
+{
+    linkJoint( aArc->Anchor( 0 ), aArc->Layers(), aArc->Net(), aArc );
+    linkJoint( aArc->Anchor( 1 ), aArc->Layers(), aArc->Net(), aArc );
+
+    m_index->Add( aArc );
+}
+
+void NODE::Add( std::unique_ptr< ARC > aArc )
+{
+    aArc->SetOwner( this );
+    addArc( aArc.release() );
+}
+
 void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
 {
     switch( aItem->Kind() )
@@ -619,6 +653,11 @@ void NODE::Add( std::unique_ptr< ITEM > aItem, bool aAllowRedundant )
     case ITEM::SOLID_T:   Add( ItemCast<SOLID>( std::move( aItem ) ) );                    break;
     case ITEM::SEGMENT_T: Add( ItemCast<SEGMENT>( std::move( aItem ) ), aAllowRedundant ); break;
     case ITEM::VIA_T:     Add( ItemCast<VIA>( std::move( aItem ) ) );                      break;
+
+    case ITEM::ARC_T:
+        //todo(snh): Add redundant search
+        Add( ItemCast<ARC>( std::move( aItem ) ) );
+        break;
 
     case ITEM::LINE_T:
     default:
@@ -653,6 +692,14 @@ void NODE::removeSegmentIndex( SEGMENT* aSeg )
     unlinkJoint( aSeg->Seg().A, aSeg->Layers(), aSeg->Net(), aSeg );
     unlinkJoint( aSeg->Seg().B, aSeg->Layers(), aSeg->Net(), aSeg );
 }
+
+
+void NODE::removeArcIndex( ARC* aArc )
+{
+    unlinkJoint( aArc->Anchor( 0 ), aArc->Layers(), aArc->Net(), aArc );
+    unlinkJoint( aArc->Anchor( 1 ), aArc->Layers(), aArc->Net(), aArc );
+}
+
 
 void NODE::removeViaIndex( VIA* aVia )
 {
@@ -738,10 +785,20 @@ void NODE::Remove( SEGMENT* aSegment )
     doRemove( aSegment );
 }
 
+void NODE::Remove( ARC* aArc )
+{
+    removeArcIndex( aArc );
+    doRemove( aArc );
+}
+
 void NODE::Remove( ITEM* aItem )
 {
     switch( aItem->Kind() )
     {
+    case ITEM::ARC_T:
+        Remove( static_cast<ARC*>( aItem ) );
+        break;
+
     case ITEM::SOLID_T:
         Remove( static_cast<SOLID*>( aItem ) );
         break;
@@ -773,11 +830,14 @@ void NODE::Remove( ITEM* aItem )
 void NODE::Remove( LINE& aLine )
 {
     // LINE does not have a seperate remover, as LINEs are never truly a member of the tree
-    std::vector<SEGMENT*>& segRefs = aLine.LinkedSegments();
+    std::vector<LINKED_ITEM*>& segRefs = aLine.LinkedSegments();
 
-    for( SEGMENT* seg : segRefs )
+    for( auto li : segRefs )
     {
-        Remove( seg );
+        if( li->OfKind( ITEM::SEGMENT_T ) )
+            Remove( static_cast<SEGMENT*>( li ) );
+        else if( li->OfKind( ITEM::ARC_T ) )
+            Remove( static_cast<ARC*>( li ) );
     }
 
     aLine.SetOwner( nullptr );
@@ -785,18 +845,16 @@ void NODE::Remove( LINE& aLine )
 }
 
 
-void NODE::followLine( SEGMENT* aCurrent, bool aScanDirection, int& aPos,
-        int aLimit, VECTOR2I* aCorners, SEGMENT** aSegments, bool& aGuardHit,
-        bool aStopAtLockedJoints )
+void NODE::followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int aLimit, VECTOR2I* aCorners,
+        LINKED_ITEM** aSegments, bool& aGuardHit, bool aStopAtLockedJoints )
 {
     bool prevReversed = false;
 
-    const VECTOR2I guard = aScanDirection ? aCurrent->Seg().B : aCurrent->Seg().A;
+    const VECTOR2I guard = aCurrent->Anchor( aScanDirection );
 
     for( int count = 0 ; ; ++count )
     {
-        const VECTOR2I p =
-            ( aScanDirection ^ prevReversed ) ? aCurrent->Seg().B : aCurrent->Seg().A;
+        const VECTOR2I p = aCurrent->Anchor( aScanDirection ^ prevReversed );
         const JOINT* jt = FindJoint( p, aCurrent );
 
         assert( jt );
@@ -819,18 +877,17 @@ void NODE::followLine( SEGMENT* aCurrent, bool aScanDirection, int& aPos,
 
         aCurrent = jt->NextSegment( aCurrent );
 
-        prevReversed =
-            ( jt->Pos() == ( aScanDirection ? aCurrent->Seg().B : aCurrent->Seg().A ) );
+        prevReversed = ( jt->Pos() == aCurrent->Anchor( aScanDirection ) );
     }
 }
 
 
-const LINE NODE::AssembleLine( SEGMENT* aSeg, int* aOriginSegmentIndex, bool aStopAtLockedJoints )
+const LINE NODE::AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex, bool aStopAtLockedJoints )
 {
     const int MaxVerts = 1024 * 16;
 
     VECTOR2I corners[MaxVerts + 1];
-    SEGMENT* segs[MaxVerts + 1];
+    LINKED_ITEM* segs[MaxVerts + 1];
 
     LINE pl;
     bool guardHit = false;
@@ -849,7 +906,7 @@ const LINE NODE::AssembleLine( SEGMENT* aSeg, int* aOriginSegmentIndex, bool aSt
 
     int n = 0;
 
-    SEGMENT* prev_seg = NULL;
+    LINKED_ITEM* prev_seg = NULL;
     bool originSet = false;
 
     for( int i = i_start + 1; i < i_end; i++ )
@@ -1299,6 +1356,37 @@ SEGMENT* NODE::findRedundantSegment( const VECTOR2I& A, const VECTOR2I& B, const
 SEGMENT* NODE::findRedundantSegment( SEGMENT* aSeg )
 {
     return findRedundantSegment( aSeg->Seg().A, aSeg->Seg().B, aSeg->Layers(), aSeg->Net() );
+}
+
+ARC* NODE::findRedundantArc( const VECTOR2I& A, const VECTOR2I& B, const LAYER_RANGE& lr,
+                                     int aNet )
+{
+    JOINT* jtStart = FindJoint( A, lr.Start(), aNet );
+
+    if( !jtStart )
+        return nullptr;
+
+    for( ITEM* item : jtStart->LinkList() )
+    {
+        if( item->OfKind( ITEM::ARC_T ) )
+        {
+            ARC* seg2 = static_cast<ARC*>( item );
+
+            const VECTOR2I a2( seg2->Anchor( 0 ) );
+            const VECTOR2I b2( seg2->Anchor( 1 ) );
+
+            if( seg2->Layers().Start() == lr.Start() &&
+                ((A == a2 && B == b2) || (A == b2 && B == a2)) )
+                return seg2;
+        }
+    }
+
+    return nullptr;
+}
+
+ARC* NODE::findRedundantArc( ARC* aArc )
+{
+    return findRedundantArc( aArc->Anchor( 0 ), aArc->Anchor( 1 ), aArc->Layers(), aArc->Net() );
 }
 
 

@@ -977,16 +977,28 @@ bool TRACK::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 bool ARC::HitTest( const wxPoint& aPosition, int aAccuracy ) const
 {
     int max_dist = aAccuracy + ( m_Width / 2 );
+    wxPoint center = GetPosition();
+    wxPoint relpos = aPosition - center;
+    double dist = EuclideanNorm( relpos );
+    double radius = GetRadius();
 
-    auto rel_start = EuclideanNorm( aPosition - m_Start );
-    auto rel_mid = EuclideanNorm( aPosition - m_Mid );
-    auto rel_end = EuclideanNorm( aPosition - m_End );
+    if( std::abs( dist - radius ) > max_dist )
+        return false;
 
-    if( rel_start <= max_dist || rel_mid <= max_dist || rel_end <= max_dist )
-        return true;
+    double arc_angle_start = GetArcAngleStart();    // Always 0.0 ... 360 deg, in 0.1 deg
+    double arc_hittest = ArcTangente( relpos.y, relpos.x );
 
-    //TODO: Calculate along arc
-    return false;
+    // Calculate relative angle between the starting point of the arc, and the test point
+    arc_hittest -= arc_angle_start;
+
+    // Normalise arc_hittest between 0 ... 360 deg
+    NORMALIZE_ANGLE_POS( arc_hittest );
+    double arc_angle = GetAngle();
+
+    if( arc_angle < 0 )
+        return arc_hittest >= 3600 + arc_angle;
+
+    return  arc_hittest <= GetAngle();
 }
 
 
@@ -1089,6 +1101,50 @@ void VIA::SwapData( BOARD_ITEM* aImage )
 
     std::swap( *((VIA*) this), *((VIA*) aImage) );
 }
+
+
+const wxPoint ARC::GetPosition() const
+{
+    auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
+    return wxPoint( center.x, center.y );
+}
+
+double ARC::GetRadius() const
+{
+    auto center = GetArcCenter( VECTOR2I( m_Start ), VECTOR2I( m_Mid ), VECTOR2I( m_End ) );
+    return GetLineLength( wxPoint( center ), m_Start );
+}
+
+double ARC::GetAngle() const
+{
+    wxPoint center = GetPosition();
+    wxPoint p0 = m_Start - center;
+    wxPoint p1 = m_Mid - center;
+    wxPoint p2 = m_End - center;
+    double angle1 = ArcTangente( p1.y, p1.x ) - ArcTangente( p0.y, p0.x );
+    double angle2 = ArcTangente( p2.y, p2.x ) - ArcTangente( p1.y, p1.x );
+
+    return NormalizeAngle180( angle1 ) + NormalizeAngle180( angle2 );
+}
+
+double ARC::GetArcAngleStart() const
+{
+    wxPoint center = GetPosition();
+
+    double angleStart = ArcTangente( m_Start.y - center.y,
+                                     m_Start.x - center.x );
+    return NormalizeAnglePos( angleStart );
+}
+
+double ARC::GetArcAngleEnd() const
+{
+    wxPoint center = GetPosition();
+
+    double angleEnd = ArcTangente( m_End.y - center.y,
+                                   m_End.x - center.x );
+    return NormalizeAnglePos( angleEnd );
+}
+
 
 #if defined(DEBUG)
 

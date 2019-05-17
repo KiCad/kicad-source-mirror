@@ -72,6 +72,7 @@ std::string ITEM::KindStr() const
 {
     switch( m_kind )
     {
+    case ARC_T:     return "arc";
     case LINE_T:    return "line";
     case SEGMENT_T: return "segment";
     case VIA_T:     return "via";

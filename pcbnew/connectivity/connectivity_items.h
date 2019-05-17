@@ -32,6 +32,7 @@
 #include <class_board.h>
 #include <class_pad.h>
 #include <class_module.h>
+#include <class_track.h>
 #include <class_zone.h>
 
 #include <geometry/shape_poly_set.h>
@@ -475,6 +476,8 @@ public:
     CN_ITEM* Add( D_PAD* pad );
 
     CN_ITEM* Add( TRACK* track );
+
+    CN_ITEM* Add( ARC* track );
 
     CN_ITEM* Add( VIA* via );
 

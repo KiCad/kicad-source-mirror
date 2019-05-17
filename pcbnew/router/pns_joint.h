@@ -100,11 +100,11 @@ public:
     /// segments of the same net, on the same layer.
     bool IsLineCorner() const
     {
-        if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T ) != 2 )
+        if( m_linkedItems.Size() != 2 || m_linkedItems.Count( SEGMENT_T | ARC_T ) != 2 )
             return false;
 
-        SEGMENT* seg1 = static_cast<SEGMENT*>( m_linkedItems[0] );
-        SEGMENT* seg2 = static_cast<SEGMENT*>( m_linkedItems[1] );
+        auto seg1 = static_cast<LINKED_ITEM*>( m_linkedItems[0] );
+        auto seg2 = static_cast<LINKED_ITEM*>( m_linkedItems[1] );
 
         // joints between segments of different widths are not considered trivial.
         return seg1->Width() == seg2->Width();
@@ -114,6 +114,7 @@ public:
     {
         int vias = m_linkedItems.Count( VIA_T );
         int segs = m_linkedItems.Count( SEGMENT_T );
+        segs += m_linkedItems.Count( ARC_T );
 
         return ( m_linkedItems.Size() == 3 && vias == 1 && segs == 2 );
     }
@@ -156,12 +157,12 @@ public:
 
     ///> For trivial joints, returns the segment adjacent to (aCurrent). For non-trival ones, returns
     ///> NULL, indicating the end of line.
-    SEGMENT* NextSegment( SEGMENT* aCurrent ) const
+    LINKED_ITEM* NextSegment( ITEM* aCurrent ) const
     {
         if( !IsLineCorner() )
             return NULL;
 
-        return static_cast<SEGMENT*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
+        return static_cast<LINKED_ITEM*>( m_linkedItems[m_linkedItems[0] == aCurrent ? 1 : 0] );
     }
 
     VIA* Via()

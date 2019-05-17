@@ -47,6 +47,7 @@
             break;
 
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         case PCB_VIA_T:
             obj = SWIG_NewPointerObj( SWIG_as_voidptr(aItem),
                                       SWIGTYPE_p_TRACK,

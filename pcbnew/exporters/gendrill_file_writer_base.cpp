@@ -26,6 +26,7 @@
 
 #include <class_board.h>
 #include <class_module.h>
+#include <class_track.h>
 #include <collectors.h>
 #include <reporter.h>
 

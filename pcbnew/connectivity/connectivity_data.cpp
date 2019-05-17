@@ -2,7 +2,7 @@
  * This program source code file is part of KICAD, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
- * Copyright (C) 2018-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2018-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -248,8 +248,8 @@ void CONNECTIVITY_DATA::ComputeDynamicRatsnest( const std::vector<BOARD_ITEM*>& 
 
     if( std::none_of( aItems.begin(), aItems.end(), []( const BOARD_ITEM* aItem )
             { return( aItem->Type() == PCB_TRACE_T || aItem->Type() == PCB_PAD_T ||
-                      aItem->Type() == PCB_ZONE_AREA_T || aItem->Type() == PCB_MODULE_T ||
-                      aItem->Type() == PCB_VIA_T ); } ) )
+                      aItem->Type() == PCB_ARC_T || aItem->Type() == PCB_ZONE_AREA_T ||
+                      aItem->Type() == PCB_MODULE_T || aItem->Type() == PCB_VIA_T ); } ) )
     {
         return ;
     }
@@ -448,7 +448,10 @@ const
     {
         for( auto connected : citem->ConnectedItems() )
         {
-            if( connected->Valid() && ( connected->Parent()->Type() == PCB_TRACE_T || connected->Parent()->Type() == PCB_VIA_T ) )
+            if( connected->Valid() &&
+                    ( connected->Parent()->Type() == PCB_TRACE_T ||
+                            connected->Parent()->Type() == PCB_VIA_T ||
+                            connected->Parent()->Type() == PCB_ARC_T ) )
                 tracks.insert( static_cast<TRACK*> ( connected->Parent() ) );
         }
     }

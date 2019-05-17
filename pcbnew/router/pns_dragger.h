@@ -109,6 +109,7 @@ private:
     bool dragMarkObstacles( const VECTOR2I& aP );
     bool dragShove(const VECTOR2I& aP );
     bool startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg );
+    bool startDragArc( const VECTOR2D& aP, ARC* aArc );
     bool startDragVia( VIA* aVia );
     void dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2I& aP );
 
@@ -126,7 +127,11 @@ private:
     bool     m_dragStatus;
     PNS_MODE m_currentMode;
     ITEM_SET m_origViaConnections;
+
+    ///< Contains the list of items that are currently modified by the dragger
     ITEM_SET m_draggedItems;
+
+    ///< If true, moves the connection lines without maintaining 45° corners
     bool     m_freeAngleMode;
 };
 

@@ -32,6 +32,7 @@
 #include <origin_viewitem.h>
 #include <layers_id_colors_and_visibility.h>
 #include <geometry/seg.h>
+#include <geometry/shape_arc.h>
 
 class PCB_BASE_FRAME;
 
@@ -60,6 +61,9 @@ public:
     VECTOR2I AlignToSegment ( const VECTOR2I& aPoint, const SEG& aSeg );
 
     VECTOR2I BestDragOrigin( const VECTOR2I& aMousePos, std::vector<BOARD_ITEM*>& aItem );
+
+    VECTOR2I AlignToArc ( const VECTOR2I& aPoint, const SHAPE_ARC& aSeg );
+
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, BOARD_ITEM* aDraggedItem );
     VECTOR2I BestSnapAnchor( const VECTOR2I& aOrigin, const LSET& aLayers,
                              const std::vector<BOARD_ITEM*>& aSkip = {} );

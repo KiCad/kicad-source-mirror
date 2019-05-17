@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2004 Jean-Pierre Charras, jaen-pierre.charras@gipsa-lab.inpg.com
- * Copyright (C) 1992-2019 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 1992-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +38,7 @@
 #include <pcbnew.h>
 
 #include <geometry/seg.h>
+#include <geometry/shape_arc.h>
 
 #include <trigo.h>
 
@@ -50,14 +51,15 @@ class SHAPE_POLY_SET;
 
 
 // Flag used in locate routines (from which endpoint work)
-enum ENDPOINT_T {
+enum ENDPOINT_T : int
+{
     ENDPOINT_START = 0,
     ENDPOINT_END = 1
 };
 
 // Via types
 // Note that this enum must be synchronized to GAL_LAYER_ID
-enum class VIATYPE
+enum class VIATYPE : int
 {
     THROUGH      = 3, /* Always a through hole via */
     BLIND_BURIED = 2, /* this via can be on internal layers */
@@ -262,6 +264,14 @@ class ARC : public TRACK
 public:
     ARC( BOARD_ITEM* aParent ) : TRACK( aParent, PCB_ARC_T ){};
 
+    ARC( BOARD_ITEM* aParent, const SHAPE_ARC* aArc ) :
+        TRACK( aParent, PCB_ARC_T )
+    {
+        m_Start = wxPoint( aArc->GetP0() );
+        m_End = wxPoint( aArc->GetP1() );
+        m_Mid = wxPoint( aArc->GetArcMid() );
+    }
+
     static inline bool ClassOf( const EDA_ITEM *aItem )
     {
         return aItem && PCB_ARC_T == aItem->Type();
@@ -281,6 +291,19 @@ public:
     void SetMid( const wxPoint& aMid )          { m_Mid = aMid; }
     const wxPoint& GetMid() const               { return m_Mid; }
 
+    void SetPosition( const wxPoint& aPos ) override
+    {
+        printf("Setting the arc position\n");
+        m_Start = aPos;
+    }
+
+    virtual const wxPoint GetPosition() const override;
+
+    double GetRadius() const;
+    double GetAngle() const;
+    double GetArcAngleStart() const;
+    double GetArcAngleEnd() const;
+
     virtual bool HitTest( const wxPoint& aPosition, int aAccuracy = 0 ) const override;
 
     virtual bool HitTest( const EDA_RECT& aRect, bool aContained = true, int aAccuracy = 0 ) const override;
@@ -294,7 +317,7 @@ public:
 
     /**
      * Function GetLength
-     * returns the length of the track using the hypotenuse calculation.
+     * returns the length of the arc track using a series of segment approximations.
      * @return double - the length of the track
      */
     virtual double GetLength() const override

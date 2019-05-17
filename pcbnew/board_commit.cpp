@@ -212,6 +212,7 @@ void BOARD_COMMIT::Push( const wxString& aMessage, bool aCreateUndoEntry, bool a
                 case PCB_LINE_T:                // a segment not on copper layers
                 case PCB_TEXT_T:                // a text on a layer
                 case PCB_TRACE_T:               // a track segment (segment on a copper layer)
+                case PCB_ARC_T:                 // an arced track segment (segment on a copper layer)
                 case PCB_VIA_T:                 // a via (like track segment on a copper layer)
                 case PCB_DIMENSION_T:           // a dimension (graphic item)
                 case PCB_TARGET_T:              // a target (graphic item)

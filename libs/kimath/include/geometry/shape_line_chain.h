@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013 CERN
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2013-2019
+ * Copyright (C) 2013-2020 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,8 +93,8 @@ public:
               m_shapes( aShape.m_shapes ),
               m_arcs( aShape.m_arcs ),
               m_closed( aShape.m_closed ),
-              m_bbox( aShape.m_bbox ),
-              m_width( aShape.m_width )
+              m_width( aShape.m_width ),
+              m_bbox( aShape.m_bbox )
     {}
 
     SHAPE_LINE_CHAIN( const std::vector<wxPoint>& aV, bool aClosed = false )
@@ -115,8 +115,20 @@ public:
         m_shapes = std::vector<ssize_t>( aV.size(), ssize_t( SHAPE_IS_PT ) );
     }
 
-    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath )
-            : SHAPE( SH_LINE_CHAIN ), m_closed( true ), m_width( 0 )
+    SHAPE_LINE_CHAIN( const SHAPE_ARC& aArc, bool aClosed = false )
+            : SHAPE( SH_LINE_CHAIN ),
+              m_closed( aClosed ),
+              m_width( 0 )
+    {
+        m_points = aArc.ConvertToPolyline().CPoints();
+        m_arcs.emplace_back( aArc );
+        m_shapes = std::vector<ssize_t>( m_points.size(), 0 );
+    }
+
+    SHAPE_LINE_CHAIN( const ClipperLib::Path& aPath ) :
+        SHAPE( SH_LINE_CHAIN ),
+        m_closed( true ),
+        m_width( 0 )
     {
         m_points.reserve( aPath.size() );
         m_shapes = std::vector<ssize_t>( aPath.size(), ssize_t( SHAPE_IS_PT ) );
@@ -296,6 +308,22 @@ public:
     const VECTOR2I& CLastPoint() const
     {
         return m_points[PointCount() - 1];
+    }
+
+    /**
+     * @return the vector of stored arcs
+     */
+    const std::vector<SHAPE_ARC>& CArcs() const
+    {
+        return m_arcs;
+    }
+
+    /**
+     * @return the vector of values indicating shape type and location
+     */
+    const std::vector<ssize_t>& CShapes() const
+    {
+        return m_shapes;
     }
 
     /// @copydoc SHAPE::BBox()
@@ -695,7 +723,33 @@ public:
 
     double Area() const;
 
+    size_t ArcCount() const
+    {
+        return m_arcs.size();
+    }
+
+    ssize_t ArcIndex( size_t aSegment ) const
+    {
+        if( aSegment >= m_shapes.size() )
+            return SHAPE_IS_PT;
+
+        return m_shapes[aSegment];
+    }
+
+    const SHAPE_ARC& Arc( size_t aArc ) const
+    {
+        return m_arcs[aArc];
+    }
+
+    bool isArc( size_t aSegment ) const
+    {
+        return aSegment < m_shapes.size() && m_shapes[aSegment] != SHAPE_IS_PT;
+    }
+
 private:
+
+    constexpr static ssize_t SHAPE_IS_PT = -1;
+
     /// array of vertices
     std::vector<VECTOR2I> m_points;
 
@@ -705,7 +759,6 @@ private:
      * If the value is -1, the point is just a point
      */
     std::vector<ssize_t> m_shapes;
-    constexpr static ssize_t SHAPE_IS_PT = -1;
 
     std::vector<SHAPE_ARC> m_arcs;
 

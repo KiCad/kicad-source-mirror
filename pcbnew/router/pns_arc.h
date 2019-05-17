@@ -1,9 +1,8 @@
 /*
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
- * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
- * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
+ * Copyright (C) 2019 CERN
+ * Author: Seth Hillbrand <hillbrand@ucdavis.edu>
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -19,12 +18,12 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __PNS_SEGMENT_H
-#define __PNS_SEGMENT_H
+#ifndef __PNS_ARC_H
+#define __PNS_ARC_H
 
 #include <math/vector2d.h>
 
-#include <geometry/seg.h>
+#include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
 #include <geometry/shape_line_chain.h>
 
@@ -35,22 +34,30 @@ namespace PNS {
 
 class NODE;
 
-class SEGMENT : public LINKED_ITEM
+class ARC : public LINKED_ITEM
 {
 public:
-    SEGMENT() :
-        LINKED_ITEM( SEGMENT_T )
+    ARC() : LINKED_ITEM( ARC_T )
     {}
 
-    SEGMENT( const SEG& aSeg, int aNet ) :
-        LINKED_ITEM( SEGMENT_T ), m_seg( aSeg, 0 )
+    ARC( const SHAPE_ARC& aArc, int aNet ) : LINKED_ITEM( ARC_T ), m_arc( aArc )
     {
         m_net = aNet;
     }
 
-    SEGMENT( const LINE& aParentLine, const SEG& aSeg ) :
-        LINKED_ITEM( SEGMENT_T ),
-        m_seg( aSeg, aParentLine.Width() )
+    ARC( const ARC& aParentArc, const SHAPE_ARC& aArc )
+            : LINKED_ITEM( ARC_T ),
+              m_arc( aArc )
+    {
+        m_net = aParentArc.Net();
+        m_layers = aParentArc.Layers();
+        m_marker = aParentArc.Marker();
+        m_rank = aParentArc.Rank();
+    }
+
+    ARC( const LINE& aParentLine, const SHAPE_ARC& aArc ) :
+        LINKED_ITEM( ARC_T ),
+        m_arc( aArc.GetCenter(), aArc.GetP0(), aArc.GetCentralAngle(), aParentLine.Width() )
     {
         m_net = aParentLine.Net();
         m_layers = aParentLine.Layers();
@@ -60,45 +67,29 @@ public:
 
     static inline bool ClassOf( const ITEM* aItem )
     {
-        return aItem && SEGMENT_T == aItem->Kind();
+        return aItem && ARC_T == aItem->Kind();
     }
 
-    SEGMENT* Clone() const override;
+    ARC* Clone() const override;
 
     const SHAPE* Shape() const override
     {
-        return static_cast<const SHAPE*>( &m_seg );
+        return static_cast<const SHAPE*>( &m_arc );
     }
 
     void SetWidth( int aWidth ) override
     {
-        m_seg.SetWidth(aWidth);
+        m_arc.SetWidth(aWidth);
     }
 
     int Width() const override
     {
-        return m_seg.GetWidth();
-    }
-
-    const SEG& Seg() const
-    {
-        return m_seg.GetSeg();
+        return m_arc.GetWidth();
     }
 
     const SHAPE_LINE_CHAIN CLine() const
     {
-        return SHAPE_LINE_CHAIN( { m_seg.GetSeg().A, m_seg.GetSeg().B } );
-    }
-
-    void SetEnds( const VECTOR2I& a, const VECTOR2I& b )
-    {
-        m_seg.SetSeg( SEG ( a, b ) );
-    }
-
-    void SwapEnds()
-    {
-        SEG tmp = m_seg.GetSeg();
-        m_seg.SetSeg( SEG (tmp.B , tmp.A ) );
+        return SHAPE_LINE_CHAIN( m_arc );
     }
 
     const SHAPE_LINE_CHAIN Hull( int aClearance, int aWalkaroundThickness ) const override;
@@ -106,9 +97,9 @@ public:
     virtual VECTOR2I Anchor( int n ) const override
     {
         if( n == 0 )
-            return m_seg.GetSeg().A;
+            return m_arc.GetP0();
         else
-            return m_seg.GetSeg().B;
+            return m_arc.GetP1();
     }
 
     virtual int AnchorCount() const override
@@ -116,8 +107,10 @@ public:
         return 2;
     }
 
+    OPT_BOX2I ChangedArea( const ARC* aOther ) const;
+
 private:
-    SHAPE_SEGMENT m_seg;
+    SHAPE_ARC m_arc;
 };
 
 }

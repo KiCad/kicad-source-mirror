@@ -30,6 +30,7 @@
 
 #include "router_preview_item.h"
 
+#include "pns_arc.h"
 #include "pns_line.h"
 #include "pns_segment.h"
 #include "pns_via.h"
@@ -90,16 +91,18 @@ void ROUTER_PREVIEW_ITEM::Update( const PNS::ITEM* aItem )
     {
     case PNS::ITEM::LINE_T:
         m_type  = PR_SHAPE;
-        m_width = ( (PNS::LINE*) aItem )->Width();
+        m_width = static_cast<const PNS::LINE*>( aItem )->Width();
+        break;
+
+    case PNS::ITEM::ARC_T:
+        m_type = PR_SHAPE;
+        m_width = static_cast<const PNS::ARC*>( aItem )->Width();
         break;
 
     case PNS::ITEM::SEGMENT_T:
-    {
-        PNS::SEGMENT* seg = (PNS::SEGMENT*) aItem;
         m_type  = PR_SHAPE;
-        m_width = seg->Width();
+        m_width = static_cast<const PNS::SEGMENT*>( aItem )->Width();
         break;
-    }
 
     case PNS::ITEM::VIA_T:
         m_originLayer = m_layer = LAYER_VIAS;

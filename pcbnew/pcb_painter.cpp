@@ -348,6 +348,10 @@ bool PCB_PAINTER::Draw( const VIEW_ITEM* aItem, int aLayer )
         draw( static_cast<const TRACK*>( item ), aLayer );
         break;
 
+    case PCB_ARC_T:
+        draw( static_cast<const ARC*>( item ), aLayer );
+        break;
+
     case PCB_VIA_T:
         draw( static_cast<const VIA*>( item ), aLayer );
         break;
@@ -470,6 +474,45 @@ void PCB_PAINTER::draw( const TRACK* aTrack, int aLayer )
             m_gal->SetIsStroke( true );
             m_gal->SetStrokeColor( color );
             m_gal->DrawSegment( start, end, width + aTrack->GetClearance() * 2 );
+        }
+    }
+}
+
+
+void PCB_PAINTER::draw( const ARC* aArc, int aLayer )
+{
+    VECTOR2D center( aArc->GetCenter() );
+    int      width = aArc->GetWidth();
+
+    if( IsCopperLayer( aLayer ) )
+    {
+        // Draw a regular track
+        const COLOR4D& color = m_pcbSettings.GetColor( aArc, aLayer );
+        bool outline_mode = m_pcbSettings.m_sketchMode[LAYER_TRACKS];
+        m_gal->SetStrokeColor( color );
+        m_gal->SetFillColor( color );
+        m_gal->SetIsStroke( outline_mode );
+        m_gal->SetIsFill( not outline_mode );
+        m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+
+        auto radius = aArc->GetRadius();
+        auto start_angle = DECIDEG2RAD( aArc->GetArcAngleStart() );
+        auto angle = DECIDEG2RAD( aArc->GetAngle() );
+
+        m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle, width );
+
+        // Clearance lines
+        constexpr int clearanceFlags = PCB_RENDER_SETTINGS::CL_EXISTING | PCB_RENDER_SETTINGS::CL_TRACKS;
+
+        if( ( m_pcbSettings.m_clearance & clearanceFlags ) == clearanceFlags )
+        {
+            m_gal->SetLineWidth( m_pcbSettings.m_outlineWidth );
+            m_gal->SetIsFill( false );
+            m_gal->SetIsStroke( true );
+            m_gal->SetStrokeColor( color );
+
+            m_gal->DrawArcSegment( center, radius, start_angle, start_angle + angle,
+                    width + aArc->GetClearance() * 2 );
         }
     }
 }

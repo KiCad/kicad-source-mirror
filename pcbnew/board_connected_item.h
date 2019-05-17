@@ -58,6 +58,7 @@ public:
         {
         case PCB_PAD_T:
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         case PCB_VIA_T:
         case PCB_ZONE_AREA_T:
             return true;

@@ -36,7 +36,8 @@ int CN_ITEM::AnchorCount() const
     case PCB_PAD_T:
         return 5;  // center, north, south, east and west
     case PCB_TRACE_T:
-        return 2;  // stard and end
+    case PCB_ARC_T:
+        return 2;  // start and end
     default:
         return 1;
     }
@@ -125,6 +126,7 @@ const VECTOR2I CN_ITEM::GetAnchor( int n ) const
         break;
     }
     case PCB_TRACE_T:
+    case PCB_ARC_T:
         if( n == 0 )
             return static_cast<const TRACK*>( m_parent )->GetStart();
         else
@@ -236,17 +238,29 @@ CN_ITEM* CN_LIST::Add( D_PAD* pad )
      return item;
 }
 
- CN_ITEM* CN_LIST::Add( TRACK* track )
- {
-     auto item = new CN_ITEM( track, true );
-     m_items.push_back( item );
-     item->AddAnchor( track->GetStart() );
-     item->AddAnchor( track->GetEnd() );
-     item->SetLayer( track->GetLayer() );
-     addItemtoTree( item );
-     SetDirty();
-     return item;
- }
+CN_ITEM* CN_LIST::Add( TRACK* track )
+{
+    auto item = new CN_ITEM( track, true );
+    m_items.push_back( item );
+    item->AddAnchor( track->GetStart() );
+    item->AddAnchor( track->GetEnd() );
+    item->SetLayer( track->GetLayer() );
+    addItemtoTree( item );
+    SetDirty();
+    return item;
+}
+
+CN_ITEM* CN_LIST::Add( ARC* aArc )
+{
+    auto item = new CN_ITEM( aArc, true );
+    m_items.push_back( item );
+    item->AddAnchor( aArc->GetStart() );
+    item->AddAnchor( aArc->GetEnd() );
+    item->SetLayer( aArc->GetLayer() );
+    addItemtoTree( item );
+    SetDirty();
+    return item;
+}
 
  CN_ITEM* CN_LIST::Add( VIA* via )
  {

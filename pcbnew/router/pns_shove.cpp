@@ -23,6 +23,7 @@
 #include <cassert>
 #include <math/box2.h>
 
+#include "pns_arc.h"
 #include "pns_line.h"
 #include "pns_node.h"
 #include "pns_debug_decorator.h"
@@ -98,9 +99,9 @@ SHOVE::~SHOVE()
 }
 
 
-LINE SHOVE::assembleLine( const SEGMENT* aSeg, int* aIndex )
+LINE SHOVE::assembleLine( const LINKED_ITEM* aSeg, int* aIndex )
 {
-    return m_currentNode->AssembleLine( const_cast<SEGMENT*>( aSeg ), aIndex, true );
+    return m_currentNode->AssembleLine( const_cast<LINKED_ITEM*>( aSeg ), aIndex, true );
 }
 
 // A dumb function that checks if the shoved line is shoved the right way, e.g.
@@ -267,7 +268,7 @@ SHOVE::SHOVE_STATUS SHOVE::ProcessSingleLine( LINE& aCurrent, LINE& aObstacle, L
 
     bool obstacleIsHead = false;
 
-    for( SEGMENT* s : aObstacle.LinkedSegments() )
+    for( auto s : aObstacle.LinkedSegments() )
     {
         if( s->Marker() & MK_HEAD )
         {
@@ -325,6 +326,67 @@ SHOVE::SHOVE_STATUS SHOVE::onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacl
     LINE obstacleLine = assembleLine( aObstacleSeg, &segIndex );
     LINE shovedLine( obstacleLine );
     SEGMENT tmp( *aObstacleSeg );
+
+    if( obstacleLine.HasLockedSegments() )
+        return SH_TRY_WALK;
+
+    SHOVE_STATUS rv = ProcessSingleLine( aCurrent, obstacleLine, shovedLine );
+
+    const double extensionWalkThreshold = 1.0;
+
+    double obsLen = obstacleLine.CLine().Length();
+    double shovedLen = shovedLine.CLine().Length();
+    double extensionFactor = 0.0;
+
+    if( obsLen != 0.0f )
+        extensionFactor = shovedLen / obsLen - 1.0;
+
+    if( extensionFactor > extensionWalkThreshold )
+        return SH_TRY_WALK;
+
+    assert( obstacleLine.LayersOverlap( &shovedLine ) );
+
+#ifdef DEBUG
+    m_logger.NewGroup( "on-colliding-segment", m_iter );
+    m_logger.Log( &tmp, 0, "obstacle-segment" );
+    m_logger.Log( &aCurrent, 1, "current-line" );
+    m_logger.Log( &obstacleLine, 2, "obstacle-line" );
+    m_logger.Log( &shovedLine, 3, "shoved-line" );
+#endif
+
+    if( rv == SH_OK )
+    {
+        if( shovedLine.Marker() & MK_HEAD )
+        {
+            if( m_multiLineMode )
+                return SH_INCOMPLETE;
+
+            m_newHead = shovedLine;
+        }
+
+        int rank = aCurrent.Rank();
+        shovedLine.SetRank( rank - 1 );
+
+        sanityCheck( &obstacleLine, &shovedLine );
+        replaceLine( obstacleLine, shovedLine );
+
+        if( !pushLineStack( shovedLine ) )
+            rv = SH_INCOMPLETE;
+    }
+
+    return rv;
+}
+
+
+/*
+ * TODO describe....
+ */
+SHOVE::SHOVE_STATUS SHOVE::onCollidingArc( LINE& aCurrent, ARC* aObstacleArc )
+{
+    int segIndex;
+    LINE obstacleLine = assembleLine( aObstacleArc, &segIndex );
+    LINE shovedLine( obstacleLine );
+    ARC tmp( *aObstacleArc );
 
     if( obstacleLine.HasLockedSegments() )
         return SH_TRY_WALK;
@@ -658,12 +720,13 @@ SHOVE::SHOVE_STATUS SHOVE::pushOrShoveVia( VIA* aVia, const VECTOR2I& aForce, in
 
     for( ITEM* item : jt->LinkList() )
     {
-        if( SEGMENT* seg = dyn_cast<SEGMENT*>( item ) )
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
         {
+            LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
             LINE_PAIR lp;
             int segIndex;
 
-            lp.first = assembleLine( seg, &segIndex );
+            lp.first = assembleLine( li, &segIndex );
 
             if( lp.first.HasLockedSegments() )
                 return SH_TRY_WALK;
@@ -835,10 +898,10 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 
     for( ITEM* item : jt->LinkList() )
     {
-        if( item->OfKind( ITEM::SEGMENT_T ) && item->LayersOverlap( &aCurrent ) )
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) && item->LayersOverlap( &aCurrent ) )
         {
-            SEGMENT* seg = (SEGMENT*) item;
-            LINE head = assembleLine( seg );
+            LINKED_ITEM* li = static_cast<LINKED_ITEM*>( item );
+            LINE head = assembleLine( li );
 
             head.AppendVia( *aObstacleVia );
 
@@ -903,7 +966,7 @@ SHOVE::SHOVE_STATUS SHOVE::onReverseCollidingVia( LINE& aCurrent, VIA* aObstacle
 }
 
 
-void SHOVE::unwindLineStack( SEGMENT* aSeg )
+void SHOVE::unwindLineStack( LINKED_ITEM* aSeg )
 {
     for( std::vector<LINE>::iterator i = m_lineStack.begin(); i != m_lineStack.end() ; )
     {
@@ -925,13 +988,13 @@ void SHOVE::unwindLineStack( SEGMENT* aSeg )
 
 void SHOVE::unwindLineStack( ITEM* aItem )
 {
-    if( aItem->OfKind( ITEM::SEGMENT_T ) )
-        unwindLineStack( static_cast<SEGMENT*>( aItem ));
+    if( aItem->OfKind( ITEM::SEGMENT_T  | ITEM::ARC_T ) )
+        unwindLineStack( static_cast<LINKED_ITEM*>( aItem ) );
     else if( aItem->OfKind( ITEM::LINE_T ) )
     {
         LINE* l = static_cast<LINE*>( aItem );
 
-        for( SEGMENT* seg : l->LinkedSegments() )
+        for( auto seg : l->LinkedSegments() )
             unwindLineStack( seg );
     }
 }
@@ -964,7 +1027,7 @@ void SHOVE::popLineStack( )
     {
         bool found = false;
 
-        for( SEGMENT *s : l.LinkedSegments() )
+        for( auto s : l.LinkedSegments() )
         {
             if( i->ContainsSegment( s ) )
             {
@@ -1035,7 +1098,21 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
         case ITEM::SEGMENT_T:
         {
             wxLogTrace( "PNS", "iter %d: reverse-collide-segment ", aIter );
-            LINE revLine = assembleLine( (SEGMENT*) ni );
+            LINE revLine = assembleLine( static_cast<SEGMENT*>( ni ) );
+
+            popLineStack();
+            st = onCollidingLine( revLine, currentLine );
+            if( !pushLineStack( revLine ) )
+                return SH_INCOMPLETE;
+
+            break;
+        }
+
+        case ITEM::ARC_T:
+        {
+            //TODO(snh): Handle Arc shove separate from track
+            wxLogTrace( "PNS", "iter %d: reverse-collide-arc ", aIter );
+            LINE revLine = assembleLine( static_cast<ARC*>( ni ) );
 
             popLineStack();
             st = onCollidingLine( revLine, currentLine );
@@ -1059,6 +1136,17 @@ SHOVE::SHOVE_STATUS SHOVE::shoveIteration( int aIter )
             wxLogTrace( "PNS", "iter %d: collide-segment ", aIter );
 
             st = onCollidingSegment( currentLine, (SEGMENT*) ni );
+
+            if( st == SH_TRY_WALK )
+                st = onCollidingSolid( currentLine, ni );
+
+            break;
+
+            //TODO(snh): Customize Arc collide
+        case ITEM::ARC_T:
+            wxLogTrace( "PNS", "iter %d: collide-arc ", aIter );
+
+            st = onCollidingArc( currentLine, static_cast<ARC*>( ni ) );
 
             if( st == SH_TRY_WALK )
                 st = onCollidingSolid( currentLine, ni );

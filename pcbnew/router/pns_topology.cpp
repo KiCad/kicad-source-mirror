@@ -39,7 +39,7 @@ bool TOPOLOGY::SimplifyLine( LINE* aLine )
     if( !aLine->IsLinked() || !aLine->SegmentCount() )
         return false;
 
-    SEGMENT* root = aLine->GetLink(0);
+    LINKED_ITEM* root = aLine->GetLink( 0 );
     LINE l = m_world->AssembleLine( root );
     SHAPE_LINE_CHAIN simplified( l.CLine() );
 
@@ -180,9 +180,10 @@ bool TOPOLOGY::followTrivialPath( LINE* aLine, bool aLeft, ITEM_SET& aSet, std::
 {
     assert( aLine->IsLinked() );
 
-    VECTOR2I anchor = aLeft ? aLine->CPoint( 0 )              : aLine->CPoint( -1 );
-    SEGMENT* last   = aLeft ? aLine->LinkedSegments().front() : aLine->LinkedSegments().back();
-    JOINT* jt = m_world->FindJoint( anchor, aLine );
+        VECTOR2I anchor = aLeft ? aLine->CPoint( 0 ) : aLine->CPoint( -1 );
+        LINKED_ITEM* last =
+                aLeft ? aLine->LinkedSegments().front() : aLine->LinkedSegments().back();
+        JOINT* jt = m_world->FindJoint( anchor, aLine );
 
     assert( jt != NULL );
 

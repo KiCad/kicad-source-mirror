@@ -445,6 +445,7 @@ void PCB_BASE_EDIT_FRAME::PutDataInPreviousState( PICKED_ITEMS_LIST* aList, bool
             // Fall through
         case PCB_ZONE_AREA_T:
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         case PCB_VIA_T:
             reBuild_ratsnest = true;
             break;

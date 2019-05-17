@@ -24,6 +24,7 @@
 #include <geometry/shape_simple.h>
 #include <cmath>
 
+#include "pns_arc.h"
 #include "pns_line.h"
 #include "pns_diff_pair.h"
 #include "pns_node.h"
@@ -190,7 +191,7 @@ void OPTIMIZER::removeCachedSegments( LINE* aLine, int aStartVertex, int aEndVer
 
     for( int i = aStartVertex; i < aEndVertex - 1; i++ )
     {
-        SEGMENT* s = segs[i];
+        LINKED_ITEM* s = segs[i];
         m_cacheTags.erase( s );
         m_cache.Remove( s );
     }
@@ -273,17 +274,19 @@ int LINE_RESTRICTIONS::allowedAngles( NODE* aWorld, const LINE* aLine, const VEC
 
     for( const ITEM* item : jt->Links().CItems() )
     {
-        if( item->OfKind( ITEM::VIA_T ) || item->OfKind( ITEM::SOLID_T ) )
+        if( item->OfKind( ITEM::VIA_T | ITEM::SOLID_T ) )
             return 0xff;
-        else if( const SEGMENT* seg = dyn_cast<const SEGMENT*>( item ) )
+        else if( auto segment = dynamic_cast<const SEGMENT*>( item ) )
         {
-            SEG s = seg->Seg();
+            SEG s( segment->Seg() );
             if( s.A != aP )
                 s.Reverse();
 
-            if( n_dirs < 8 )
-                dirs[n_dirs++] = aFirst ? DIRECTION_45( s ) : DIRECTION_45( s ).Opposite();
+            dirs[n_dirs] = aFirst ? DIRECTION_45( s ) : DIRECTION_45( s ).Opposite();
         }
+
+        if( ++n_dirs >= 8 )
+            break;
     }
 
     const int angleMask = DIRECTION_45::ANG_OBTUSE | DIRECTION_45::ANG_HALF_FULL | DIRECTION_45::ANG_STRAIGHT;
@@ -452,10 +455,13 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
         }
 
         bool found_anything = false;
-        int n = 0;
 
-        while( n < n_segs - step )
+        for( int n = 0; n < n_segs - step; n++ )
         {
+            // Don't try to optimize the arc segments
+            if( current_path.isArc( n ) || current_path.isArc( n + step ) )
+                continue;
+
             const SEG s1 = current_path.CSegment( n );
             const SEG s2 = current_path.CSegment( n + step );
             SEG s1opt, s2opt;
@@ -494,8 +500,6 @@ bool OPTIMIZER::mergeObtuse( LINE* aLine )
                     }
                 }
             }
-
-            n++;
         }
 
         if( !found_anything )
@@ -580,7 +584,6 @@ bool OPTIMIZER::Optimize( LINE* aLine, LINE* aResult )
 
 bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step )
 {
-    int n = 0;
     int n_segs = aCurrentPath.SegmentCount();
 
     int cost_orig = COST_ESTIMATOR::CornerCost( aCurrentPath );
@@ -595,8 +598,12 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
 
     restr.Build( m_world, aLine, aCurrentPath, m_restrictArea, m_restrictAreaActive );
 
-    while( n < n_segs - step )
+    for( int n = 0; n < n_segs - step; n++ )
     {
+        // Do not attempt to merge false segments that are part of an arc
+        if( aCurrentPath.isArc( n ) || aCurrentPath.isArc( n + step ) )
+            continue;
+
         const SEG s1    = aCurrentPath.CSegment( n );
         const SEG s2    = aCurrentPath.CSegment( n + step );
 
@@ -637,8 +644,6 @@ bool OPTIMIZER::mergeStep( LINE* aLine, SHAPE_LINE_CHAIN& aCurrentPath, int step
             aCurrentPath = *picked;
             return true;
         }
-
-        n++;
     }
 
     return false;

@@ -53,6 +53,7 @@ class DIFF_PAIR_PLACER;
 class PLACEMENT_ALGO;
 class LINE_PLACER;
 class ITEM;
+class ARC;
 class LINE;
 class SOLID;
 class SEGMENT;
@@ -76,7 +77,8 @@ enum DRAG_MODE
     DM_SEGMENT = 0x2,
     DM_VIA = 0x4,
     DM_FREE_ANGLE = 0x8,
-    DM_ANY = 0x7
+    DM_ARC = 0x10,
+    DM_ANY = 0x17
 };
 /**
  * ROUTER
@@ -157,6 +159,8 @@ public:
 
     void ToggleViaPlacement();
     void SetOrthoMode( bool aEnable );
+
+    void ToggleRounded();
 
     int GetCurrentLayer() const;
     const std::vector<int> GetCurrentNets() const;

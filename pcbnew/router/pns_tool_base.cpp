@@ -44,6 +44,7 @@ using namespace std::placeholders;
 #include <tools/pcb_actions.h>
 #include <tools/grid_helper.h>
 
+#include "pns_arc.h"
 #include "pns_kicad_iface.h"
 #include "pns_tool_base.h"
 #include "pns_segment.h"
@@ -67,6 +68,7 @@ TOOL_BASE::TOOL_BASE( const std::string& aToolName ) :
     m_gridHelper = nullptr;
     m_iface = nullptr;
     m_router = nullptr;
+    m_cancelled = false;
 
     m_startItem = nullptr;
     m_startLayer = 0;
@@ -256,7 +258,7 @@ bool TOOL_BASE::checkSnap( ITEM *aItem )
 
     if( aItem )
     {
-        if( aItem->OfKind( ITEM::VIA_T ) || aItem->OfKind( ITEM::SEGMENT_T )  )
+        if( aItem->OfKind( ITEM::VIA_T | ITEM::SEGMENT_T | ITEM::ARC_T )  )
             return pnss.GetSnapToTracks();
         else if( aItem->OfKind( ITEM::SOLID_T ) )
             return pnss.GetSnapToPads();
@@ -406,18 +408,23 @@ const VECTOR2I TOOL_BASE::snapToItem( bool aEnabled, ITEM* aItem, VECTOR2I aP)
         break;
 
     case ITEM::SEGMENT_T:
+    case ITEM::ARC_T:
     {
-        SEGMENT* seg = static_cast<SEGMENT*>( aItem );
-        const SEG& s = seg->Seg();
-        int w = seg->Width();
+        LINKED_ITEM* li = static_cast<LINKED_ITEM*>( aItem );
+        int w = li->Width();
+        auto A = li->Anchor( 0 );
+        auto B = li->Anchor( 1 );
 
-
-        if( ( aP - s.A ).EuclideanNorm() < w / 2 )
-            anchor = s.A;
-        else if( ( aP - s.B ).EuclideanNorm() < w / 2 )
-            anchor = s.B;
-        else
-            anchor = m_gridHelper->AlignToSegment( aP, s );
+        if( ( aP - A ).EuclideanNorm() < w / 2 )
+            anchor = A;
+        else if( ( aP - B ).EuclideanNorm() < w / 2 )
+            anchor = B;
+        else // TODO(snh): Clean this up
+            if( aItem->Kind() == ITEM::SEGMENT_T )
+                anchor = m_gridHelper->AlignToSegment( aP, static_cast<SEGMENT*>( li )->Seg() );
+            else if( aItem->Kind() == ITEM::ARC_T )
+                anchor = m_gridHelper->AlignToArc( aP,
+                        *static_cast<const SHAPE_ARC*>( static_cast<ARC*>( li )->Shape() ) );
 
         break;
     }

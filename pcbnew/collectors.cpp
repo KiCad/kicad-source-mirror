@@ -51,6 +51,7 @@ const KICAD_T GENERAL_COLLECTOR::AllBoardItems[] = {
     PCB_TARGET_T,                // in m_Drawings
     PCB_VIA_T,                   // in m_Tracks
     PCB_TRACE_T,                 // in m_Tracks
+    PCB_ARC_T,                   // in m_Tracks
     PCB_PAD_T,                   // in modules
     PCB_MODULE_TEXT_T,           // in modules
     PCB_MODULE_T,                // in m_Modules
@@ -66,6 +67,7 @@ const KICAD_T GENERAL_COLLECTOR::BoardLevelItems[] = {
     PCB_DIMENSION_T,
     PCB_TARGET_T,
     PCB_VIA_T,
+    PCB_ARC_T,
     PCB_TRACE_T,
     PCB_MODULE_T,
     PCB_ZONE_AREA_T,
@@ -81,6 +83,7 @@ const KICAD_T GENERAL_COLLECTOR::AllButZones[] = {
     PCB_TARGET_T,
     PCB_VIA_T,
     PCB_TRACE_T,
+    PCB_ARC_T,
     PCB_PAD_T,
     PCB_MODULE_TEXT_T,
     PCB_MODULE_T,
@@ -106,6 +109,7 @@ const KICAD_T GENERAL_COLLECTOR::PadsOrTracks[] = {
     PCB_PAD_T,
     PCB_VIA_T,
     PCB_TRACE_T,
+    PCB_ARC_T,
     EOT
 };
 
@@ -131,6 +135,7 @@ const KICAD_T GENERAL_COLLECTOR::ModuleItems[] = {
 
 const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
     PCB_TRACE_T,
+    PCB_ARC_T,
     PCB_VIA_T,
     EOT
 };
@@ -139,6 +144,7 @@ const KICAD_T GENERAL_COLLECTOR::Tracks[] = {
 const KICAD_T GENERAL_COLLECTOR::LockableItems[] = {
     PCB_MODULE_T,
     PCB_TRACE_T,
+    PCB_ARC_T,
     PCB_VIA_T,
     EOT
 };
@@ -184,6 +190,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
         breakhere++;
         break;
 
@@ -263,6 +270,7 @@ SEARCH_RESULT GENERAL_COLLECTOR::Inspect( EDA_ITEM* testItem, void* testData )
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
         if( m_Guide->IgnoreTracks() )
             goto exit;
         break;

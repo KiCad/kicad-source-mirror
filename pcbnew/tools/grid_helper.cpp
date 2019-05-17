@@ -33,6 +33,7 @@ using namespace std::placeholders;
 #include <class_draw_panel_gal.h>
 #include <class_edge_mod.h>
 #include <class_module.h>
+#include <class_track.h>
 #include <class_zone.h>
 
 #include <gal/graphics_abstraction_layer.h>
@@ -171,6 +172,39 @@ VECTOR2I GRID_HELPER::AlignToSegment( const VECTOR2I& aPoint, const SEG& aSeg )
                 nearest = *pts[i];
             }
         }
+    }
+
+    return nearest;
+}
+
+
+VECTOR2I GRID_HELPER::AlignToArc( const VECTOR2I& aPoint, const SHAPE_ARC& aArc )
+{
+    OPT_VECTOR2I pts[6];
+
+    if( !m_enableSnap )
+        return aPoint;
+
+    const VECTOR2D gridOffset( GetOrigin() );
+    const VECTOR2D gridSize( GetGrid() );
+
+    VECTOR2I nearest( KiROUND( ( aPoint.x - gridOffset.x ) / gridSize.x ) * gridSize.x + gridOffset.x,
+                      KiROUND( ( aPoint.y - gridOffset.y ) / gridSize.y ) * gridSize.y + gridOffset.y );
+
+    auto line = aArc.ConvertToPolyline();
+    int min_d = std::numeric_limits<int>::max();
+
+    for( auto pt : line.CPoints() )
+    {
+        int d = ( pt - aPoint ).EuclideanNorm();
+
+        if( d < min_d )
+        {
+            min_d = d;
+            nearest = pt;
+        }
+        else
+            break;
     }
 
     return nearest;
@@ -460,6 +494,7 @@ void GRID_HELPER::computeAnchors( BOARD_ITEM* aItem, const VECTOR2I& aRefPos, bo
         }
 
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         {
             if( aFrom || m_frame->Settings().m_MagneticTracks == MAGNETIC_OPTIONS::CAPTURE_ALWAYS )
             {

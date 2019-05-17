@@ -2,6 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2017 CERN
+ * Copyright (C) 2019-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * @author Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software; you can redistribute it and/or
@@ -22,17 +23,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-#include <assert.h>                     // for assert
-#include <math.h>                       // for cos, sin, M_PI, atan2, ceil
-#include <type_traits>                  // for swap
+#include <algorithm>
+#include <math.h>
 #include <vector>
 
 #include <geometry/geometry_utils.h>
 #include <geometry/seg.h>               // for SEG
 #include <geometry/shape_arc.h>
 #include <geometry/shape_line_chain.h>
+#include <math.h>                       // for cos, sin, M_PI, atan2, ceil
 #include <math/box2.h>                  // for BOX2I
 #include <math/vector2d.h>              // for VECTOR2I, VECTOR2D, VECTOR2
+#include <type_traits>                  // for swap
 
 
 bool SHAPE_ARC::Collide( const SEG& aSeg, int aClearance ) const
@@ -150,16 +152,28 @@ const VECTOR2I SHAPE_ARC::GetP1() const
     auto ca = m_centralAngle * M_PI / 180.0;
     VECTOR2I p1;
 
-    p1.x = (int) ( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
-    p1.y = (int) ( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
+    p1.x = KiROUND( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
+    p1.y = KiROUND( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
 
     return p1;
 }
 
 
-const BOX2I SHAPE_ARC::BBox( int aClearance ) const
+const VECTOR2I SHAPE_ARC::GetArcMid() const
 {
-    BOX2I bbox;
+    VECTOR2D rvec = m_p0 - m_pc;
+    auto ca = m_centralAngle / 2.0 * M_PI / 180.0;
+    VECTOR2I p1;
+
+    p1.x = KiROUND( m_pc.x + rvec.x * cos( ca ) - rvec.y * sin( ca ) );
+    p1.y = KiROUND( m_pc.y + rvec.x * sin( ca ) + rvec.y * cos( ca ) );
+
+    return p1;
+}
+
+
+void SHAPE_ARC::update_bbox()
+{
     std::vector<VECTOR2I> points;
     // Put start and end points in the point list
     points.push_back( m_p0 );
@@ -197,7 +211,13 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
         points.push_back( quad_pt );
     }
 
-    bbox.Compute( points );
+    m_bbox.Compute( points );
+}
+
+
+const BOX2I SHAPE_ARC::BBox( int aClearance ) const
+{
+    BOX2I bbox( m_bbox );
 
     if( aClearance != 0 )
         bbox.Inflate( aClearance );
@@ -208,8 +228,15 @@ const BOX2I SHAPE_ARC::BBox( int aClearance ) const
 
 bool SHAPE_ARC::Collide( const VECTOR2I& aP, int aClearance ) const
 {
-    assert( false );
-    return false;
+    int minDist = aClearance + m_width / 2;
+    auto bbox = BBox( minDist );
+
+    if( !bbox.Contains( aP ) )
+        return false;
+
+    auto dist =  ( aP - GetCenter() ).SquaredEuclideanNorm();
+
+    return dist <= ( GetRadius() + minDist ) && dist >= ( GetRadius() - minDist );
 }
 
 

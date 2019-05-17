@@ -39,6 +39,7 @@
 
 namespace PNS {
 
+class ARC;
 class SEGMENT;
 class LINE;
 class SOLID;
@@ -285,6 +286,7 @@ public:
     bool Add( std::unique_ptr< SEGMENT > aSegment, bool aAllowRedundant = false );
     void Add( std::unique_ptr< SOLID >   aSolid );
     void Add( std::unique_ptr< VIA >     aVia );
+    void Add( std::unique_ptr< ARC >     aArc );
 
     void Add( LINE& aLine, bool aAllowRedundant = false );
 
@@ -297,6 +299,7 @@ public:
      *
      * Just as the name says, removes an item from this branch.
      */
+    void Remove( ARC* aArc );
     void Remove( SOLID* aSolid );
     void Remove( VIA* aVia );
     void Remove( SEGMENT* aSegment );
@@ -340,7 +343,7 @@ public:
      * @param aOriginSegmentIndex index of aSeg in the resulting line
      * @return the line
      */
-    const LINE AssembleLine( SEGMENT* aSeg, int* aOriginSegmentIndex = NULL,
+    const LINE AssembleLine( LINKED_ITEM* aSeg, int* aOriginSegmentIndex = NULL,
                                  bool aStopAtLockedJoints = false );
 
     ///> Prints the contents and joints structure
@@ -449,11 +452,13 @@ private:
     void addSolid( SOLID* aSeg );
     void addSegment( SEGMENT* aSeg );
     void addVia( VIA* aVia );
+    void addArc( ARC* aVia );
 
     void removeLine( LINE& aLine );
     void removeSolidIndex( SOLID* aSeg );
     void removeSegmentIndex( SEGMENT* aSeg );
     void removeViaIndex( VIA* aVia );
+    void removeArcIndex( ARC* aVia );
 
     void doRemove( ITEM* aItem );
     void unlinkParent();
@@ -469,15 +474,13 @@ private:
                                    const LAYER_RANGE & lr, int aNet );
     SEGMENT* findRedundantSegment( SEGMENT* aSeg );
 
+    ARC* findRedundantArc( const VECTOR2I& A, const VECTOR2I& B,
+                                   const LAYER_RANGE & lr, int aNet );
+    ARC* findRedundantArc( ARC* aSeg );
+
     ///> scans the joint map, forming a line starting from segment (current).
-    void followLine( SEGMENT*    aCurrent,
-                     bool        aScanDirection,
-                     int&        aPos,
-                     int         aLimit,
-                     VECTOR2I*   aCorners,
-                     SEGMENT**   aSegments,
-                     bool&       aGuardHit,
-                     bool        aStopAtLockedJoints );
+    void followLine( LINKED_ITEM* aCurrent, int aScanDirection, int& aPos, int aLimit, VECTOR2I* aCorners,
+            LINKED_ITEM** aSegments, bool& aGuardHit, bool aStopAtLockedJoints );
 
     ///> hash table with the joints, linking the items. Joints are hashed by
     ///> their position, layer set and net.

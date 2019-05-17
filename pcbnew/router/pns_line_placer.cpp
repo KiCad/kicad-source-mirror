@@ -21,14 +21,15 @@
 
 #include <core/optional.h>
 
-#include "pns_node.h"
-#include "pns_line_placer.h"
-#include "pns_walkaround.h"
-#include "pns_shove.h"
-#include "pns_utils.h"
-#include "pns_router.h"
-#include "pns_topology.h"
+#include "pns_arc.h"
 #include "pns_debug_decorator.h"
+#include "pns_line_placer.h"
+#include "pns_node.h"
+#include "pns_router.h"
+#include "pns_shove.h"
+#include "pns_topology.h"
+#include "pns_utils.h"
+#include "pns_walkaround.h"
 
 #include <class_board_item.h>
 
@@ -344,13 +345,8 @@ bool LINE_PLACER::mergeHead()
             return false;
     }
 
-    if( !n_tail )
-        tail.Append( head.CSegment( 0 ).A );
-
-    for( int i = 0; i < n_head - 2; i++ )
-    {
-        tail.Append( head.CSegment( i ).B );
-    }
+    tail.Append( head );
+    tail.Remove( -1 );
 
     tail.Simplify();
 
@@ -359,7 +355,7 @@ bool LINE_PLACER::mergeHead()
     m_p_start = last.B;
     m_direction = DIRECTION_45( last ).Right();
 
-    head.Remove( 0, n_head - 2 );
+    head.Remove( 0, -1 );
 
     wxLogTrace( "PNS", "Placer: merge %d, new direction: %s", n_head, m_direction.Format().c_str() );
 
@@ -1064,17 +1060,32 @@ bool LINE_PLACER::FixRoute( const VECTOR2I& aP, ITEM* aEndItem, bool aForceFinis
         lastV = std::max( 1, l.SegmentCount() - 1 );
 
     SEGMENT* lastSeg = nullptr;
+    int      lastArc = -1;
 
     for( int i = 0; i < lastV; i++ )
     {
-        const SEG& s = pl.CSegment( i );
-        lastSeg = new SEGMENT( s, m_currentNet );
-        std::unique_ptr< SEGMENT > seg( lastSeg );
-        seg->SetWidth( pl.Width() );
-        seg->SetLayer( m_currentLayer );
-        if( ! m_lastNode->Add( std::move( seg ) ) )
+        ssize_t arcIndex = l.ArcIndex( i );
+
+        if( arcIndex < 0 )
         {
+            const SEG& s = pl.CSegment( i );
+            auto       seg = std::make_unique<SEGMENT>( s, m_currentNet );
+            seg->SetWidth( pl.Width() );
+            seg->SetLayer( m_currentLayer );
+            if( !m_lastNode->Add( std::move( seg ) ) )
+                lastSeg = nullptr;
+        }
+        else
+        {
+            if( arcIndex == lastArc )
+                continue;
+
+            auto arc = std::make_unique<ARC>( l.Arc( arcIndex ), m_currentNet );
+            arc->SetWidth( pl.Width() );
+            arc->SetLayer( m_currentLayer );
+            m_lastNode->Add( std::move( arc ) );
             lastSeg = nullptr;
+            lastArc = arcIndex;
         }
     }
 
@@ -1115,12 +1126,12 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
     if( aLatest.CLine().CPoint( 0 ) == aLatest.CLine().CPoint( -1 ) )
         return;
 
-    std::set<SEGMENT *> toErase;
+    std::set<LINKED_ITEM *> toErase;
     aNode->Add( aLatest, true );
 
     for( int s = 0; s < aLatest.LinkCount(); s++ )
     {
-        SEGMENT* seg = aLatest.GetLink(s);
+        auto seg = aLatest.GetLink(s);
         LINE ourLine = aNode->AssembleLine( seg );
         JOINT a, b;
         std::vector<LINE> lines;
@@ -1143,7 +1154,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
 
             if( !( line.ContainsSegment( seg ) ) && line.SegmentCount() )
             {
-                for( SEGMENT *ss : line.LinkedSegments() )
+                for( auto ss : line.LinkedSegments() )
                     toErase.insert( ss );
 
                 removedCount++;
@@ -1153,7 +1164,7 @@ void LINE_PLACER::removeLoops( NODE* aNode, LINE& aLatest )
         wxLogTrace( "PNS", "total segs removed: %d/%d", removedCount, total );
     }
 
-    for( SEGMENT *s : toErase )
+    for( auto s : toErase )
         aNode->Remove( s );
 
     aNode->Remove( aLatest );
@@ -1207,6 +1218,7 @@ void LINE_PLACER::SetOrthoMode( bool aOrthoMode )
 bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInvertPosture )
 {
     SHAPE_LINE_CHAIN l;
+    int initial_radius = 0;
 
     if( m_p_start == aP )
     {
@@ -1220,10 +1232,14 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
         }
         else
         {
+            // Rounded corners don't make sense when routing orthogonally (single track at a time)
+            if( Settings().GetRounded()  && !m_orthoMode )
+                initial_radius = Settings().GetMaxRadius();
+
             if ( aInvertPosture )
-                l = m_direction.Right().BuildInitialTrace( m_p_start, aP );
+                l = m_direction.Right().BuildInitialTrace( m_p_start, aP, false, initial_radius );
             else
-                l = m_direction.BuildInitialTrace( m_p_start, aP );
+                l = m_direction.BuildInitialTrace( m_p_start, aP, false, initial_radius );
         }
 
         if( l.SegmentCount() > 1 && m_orthoMode )
@@ -1256,7 +1272,7 @@ bool LINE_PLACER::buildInitialLine( const VECTOR2I& aP, LINE& aHead, bool aInver
 
     if( v.PushoutForce( m_currentNode, lead, force, solidsOnly, 40 ) )
     {
-        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP + force );
+        SHAPE_LINE_CHAIN line = m_direction.BuildInitialTrace( m_p_start, aP + force, initial_radius );
         aHead = LINE( aHead, line );
 
         v.SetPos( v.Pos() + force );

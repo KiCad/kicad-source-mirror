@@ -587,7 +587,7 @@ BOARD* PCB_PARSER::parseBOARD_unchecked()
             break;
 
         case T_arc:
-            m_board->Add( parseARC(), ADD_INSERT );
+            m_board->Add( parseARC(), ADD_MODE::INSERT );
             break;
 
         case T_via:
@@ -3406,7 +3406,7 @@ ARC* PCB_PARSER::parseARC()
             break;
 
         case T_tstamp:
-            arc->SetTimeStamp( parseHex() );
+            const_cast<KIID&>( arc->m_Uuid ) = KIID( CurStr() );
             break;
 
         case T_status:

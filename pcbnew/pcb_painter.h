@@ -37,6 +37,7 @@ class COLORS_DESIGN_SETTINGS;
 class PCB_DISPLAY_OPTIONS;
 
 class BOARD_ITEM;
+class ARC;
 class BOARD;
 class VIA;
 class TRACK;
@@ -247,6 +248,7 @@ protected:
 
     // Drawing functions for various types of PCB-specific items
     void draw( const TRACK* aTrack, int aLayer );
+    void draw( const ARC* aArc, int aLayer );
     void draw( const VIA* aVia, int aLayer );
     void draw( const D_PAD* aPad, int aLayer );
     void draw( const DRAWSEGMENT* aSegment, int aLayer );

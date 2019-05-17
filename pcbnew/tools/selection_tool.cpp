@@ -822,7 +822,7 @@ int SELECTION_TOOL::expandConnection( const TOOL_EVENT& aEvent )
 void SELECTION_TOOL::selectConnectedTracks( BOARD_CONNECTED_ITEM& aStartItem,
                                             KICAD_T aStopCondition )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
 
     auto connectivity = board()->GetConnectivity();
     auto connectedItems = connectivity->GetConnectedItems( &aStartItem, types );
@@ -1210,6 +1210,7 @@ static bool itemIsIncludedByFilter( const BOARD_ITEM& aItem, const BOARD& aBoard
             break;
         }
         case PCB_TRACE_T:
+        case PCB_ARC_T:
         {
             include = aFilterOptions.includeTracks;
             break;
@@ -1525,6 +1526,7 @@ bool SELECTION_TOOL::Selectable( const BOARD_ITEM* aItem, bool checkVisibilityOn
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
         {
             if( !board()->IsElementVisible( LAYER_TRACKS ) )
                 return false;
@@ -2038,6 +2040,7 @@ void SELECTION_TOOL::GuessSelectionCandidates( GENERAL_COLLECTOR& aCollector,
                     switch( item->Type() )
                     {
                         case PCB_TRACE_T:
+                        case PCB_ARC_T:
                         case PCB_PAD_T:
                         case PCB_LINE_T:
                         case PCB_VIA_T:

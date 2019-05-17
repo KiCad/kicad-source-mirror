@@ -203,6 +203,7 @@ void BOARD::Move( const wxPoint& aMoveVector )        // overload
         PCB_TARGET_T,
         PCB_VIA_T,
         PCB_TRACE_T,
+        PCB_ARC_T,
         //        PCB_PAD_T,            Can't be at board level
         //        PCB_MODULE_TEXT_T,    Can't be at board level
         PCB_MODULE_T,
@@ -549,6 +550,7 @@ void BOARD::Add( BOARD_ITEM* aBoardItem, ADD_MODE aMode )
 
     case PCB_TRACE_T:
     case PCB_VIA_T:
+    case PCB_ARC_T:
 
         // N.B. This inserts a small memory leak as we lose the
         if( !IsCopperLayer( aBoardItem->GetLayer() ) )
@@ -647,6 +649,7 @@ void BOARD::Remove( BOARD_ITEM* aBoardItem )
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
     case PCB_VIA_T:
         m_tracks.erase( std::remove_if( m_tracks.begin(), m_tracks.end(),
                 [aBoardItem]( BOARD_ITEM* aItem ) { return aItem == aBoardItem; } ) );
@@ -954,6 +957,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
         // consuming) search is made, but this case is statistically rare.
         case PCB_VIA_T:
         case PCB_TRACE_T:
+        case PCB_ARC_T:
             result = IterateForward( m_Track, inspector, testData, p );
 
             // skip over any types handled in the above call.
@@ -963,6 +967,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
                 {
                 case PCB_VIA_T:
                 case PCB_TRACE_T:
+                case PCB_ARC_T:
                     continue;
 
                 default:
@@ -981,6 +986,7 @@ SEARCH_RESULT BOARD::Visit( INSPECTOR inspector, void* testData, const KICAD_T s
             break;
 
         case PCB_TRACE_T:
+        case PCB_ARC_T:
             result = IterateForward<TRACK*>( m_tracks, inspector, testData, p );
             ++p;
             break;
@@ -1415,7 +1421,7 @@ std::tuple<int, double, double> BOARD::GetTrackLength( const TRACK& aTrack ) con
     double length = 0.0;
     double package_length = 0.0;
 
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_VIA_T, PCB_PAD_T, EOT };
+    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_ARC_T, PCB_VIA_T, PCB_PAD_T, EOT };
     auto              connectivity = GetBoard()->GetConnectivity();
 
     for( auto item : connectivity->GetConnectedItems(

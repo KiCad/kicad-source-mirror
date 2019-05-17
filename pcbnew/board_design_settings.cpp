@@ -29,6 +29,7 @@
 #include <fctsys.h>
 #include <common.h>
 #include <class_board.h>
+#include <class_track.h>
 #include <layers_id_colors_and_visibility.h>
 #include <kiface_i.h>
 #include <pcbnew.h>

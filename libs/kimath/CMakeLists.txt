@@ -5,6 +5,7 @@ set( KIMATH_SRCS
     src/trigo.cpp
 
     src/geometry/convex_hull.cpp
+    src/geometry/direction_45.cpp
     src/geometry/geometry_utils.cpp
     src/geometry/polygon_test_point_inside.cpp
     src/geometry/seg.cpp

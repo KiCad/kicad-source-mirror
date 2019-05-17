@@ -60,6 +60,7 @@ INDEX::ITEM_SHAPE_INDEX* INDEX::getSubindex( const ITEM* aItem )
         }
         break;
 
+    case ITEM::ARC_T:
     case ITEM::SEGMENT_T:
     case ITEM::LINE_T:
         idx_n = SI_Traces + 2 * l.Start() + SI_SegStraight;

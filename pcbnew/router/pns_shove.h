@@ -111,6 +111,7 @@ private:
     SHOVE_STATUS walkaroundLoneVia( LINE& aCurrent, LINE& aObstacle, LINE& aShoved );
     bool checkBumpDirection( const LINE& aCurrent, const LINE& aShoved ) const;
 
+    SHOVE_STATUS onCollidingArc( LINE& aCurrent, ARC* aObstacleArc );
     SHOVE_STATUS onCollidingLine( LINE& aCurrent, LINE& aObstacle );
     SHOVE_STATUS onCollidingSegment( LINE& aCurrent, SEGMENT* aObstacleSeg );
     SHOVE_STATUS onCollidingSolid( LINE& aCurrent, ITEM* aObstacle );
@@ -120,7 +121,7 @@ private:
 
     OPT_BOX2I totalAffectedArea() const;
 
-    void unwindLineStack( SEGMENT* aSeg );
+    void unwindLineStack( LINKED_ITEM* aSeg );
     void unwindLineStack( ITEM* aItem );
 
     void runOptimizer( NODE* aNode );
@@ -128,7 +129,7 @@ private:
     bool pushLineStack( const LINE& aL, bool aKeepCurrentOnTop = false );
     void popLineStack();
 
-    LINE assembleLine( const SEGMENT* aSeg, int* aIndex = NULL );
+    LINE assembleLine( const LINKED_ITEM* aSeg, int* aIndex = NULL );
 
     void replaceItems( ITEM* aOld, std::unique_ptr< ITEM > aNew );
     void replaceLine( LINE& aOld, LINE& aNew );

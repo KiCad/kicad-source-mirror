@@ -38,6 +38,7 @@
 #include <build_version.h>
 
 #include <class_board.h>
+#include <class_track.h>
 
 #include <pcbplot.h>
 #include <pcbnew.h>

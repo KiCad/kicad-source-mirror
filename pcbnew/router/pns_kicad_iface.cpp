@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2016 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2020 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -52,6 +52,8 @@
 #include "tools/pcb_tool_base.h"
 
 #include "pns_kicad_iface.h"
+
+#include "pns_arc.h"
 #include "pns_routing_settings.h"
 #include "pns_item.h"
 #include "pns_solid.h"
@@ -815,6 +817,24 @@ std::unique_ptr<PNS::SEGMENT> PNS_KICAD_IFACE::syncTrack( TRACK* aTrack )
 }
 
 
+std::unique_ptr<PNS::ARC> PNS_KICAD_IFACE::syncArc( ARC* aArc )
+{
+    std::unique_ptr< PNS::ARC > arc(
+        new PNS::ARC( SHAPE_ARC( aArc->GetCenter(), aArc->GetStart(),
+                                 aArc->GetAngle(), aArc->GetWidth() ),
+                aArc->GetNetCode() )
+    );
+
+    arc->SetLayers( LAYER_RANGE( aArc->GetLayer() ) );
+    arc->SetParent( aArc );
+
+    if( aArc->IsLocked() )
+        arc->Mark( PNS::MK_LOCKED );
+
+    return arc;
+}
+
+
 std::unique_ptr<PNS::VIA> PNS_KICAD_IFACE::syncVia( VIA* aVia )
 {
     PCB_LAYER_ID top, bottom;
@@ -1180,6 +1200,11 @@ void PNS_KICAD_IFACE::SyncWorld( PNS::NODE *aWorld )
             if( auto segment = syncTrack( t ) )
                 aWorld->Add( std::move( segment ) );
         }
+        else if( type == PCB_ARC_T )
+        {
+            if( auto arc = syncArc( static_cast<ARC*>( t ) ) )
+                aWorld->Add( std::move( arc ) );
+        }
         else if( type == PCB_VIA_T )
         {
             if( auto via = syncVia( static_cast<VIA*>( t ) ) )
@@ -1290,6 +1315,17 @@ void PNS_KICAD_IFACE::AddItem( PNS::ITEM* aItem )
 
     switch( aItem->Kind() )
     {
+    case PNS::ITEM::ARC_T:
+    {
+        auto arc = static_cast<PNS::ARC*>( aItem );
+        ARC* new_arc = new ARC( m_board, static_cast<const SHAPE_ARC*>( arc->Shape() ) );
+        new_arc->SetWidth( arc->Width() );
+        new_arc->SetLayer( ToLAYER_ID( arc->Layers().Start() ) );
+        new_arc->SetNetCode( std::max<int>( 0, arc->Net() ) );
+        newBI = new_arc;
+        break;
+    }
+
     case PNS::ITEM::SEGMENT_T:
     {
         PNS::SEGMENT* seg = static_cast<PNS::SEGMENT*>( aItem );

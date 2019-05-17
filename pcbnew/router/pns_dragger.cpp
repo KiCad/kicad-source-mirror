@@ -2,7 +2,7 @@
  * KiRouter - a push-and-(sometimes-)shove PCB router
  *
  * Copyright (C) 2013-2014 CERN
- * Copyright (C) 2016 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2016-2019 KiCad Developers, see AUTHORS.txt for contributors.
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
  *
  * This program is free software: you can redistribute it and/or modify it
@@ -18,6 +18,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+#include "pns_arc.h"
 
 #include "pns_dragger.h"
 #include "pns_shove.h"
@@ -69,6 +71,7 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     }
     else if( distB <= w2 )
     {
+        //todo (snh) Adjust segment for arcs
         m_draggedSegmentIndex++;
         m_mode = DM_CORNER;
     }
@@ -84,6 +87,17 @@ bool DRAGGER::startDragSegment( const VECTOR2D& aP, SEGMENT* aSeg )
     {
         m_mode = DM_SEGMENT;
     }
+
+    return true;
+}
+
+
+
+bool DRAGGER::startDragArc( const VECTOR2D& aP, ARC* aArc )
+{
+    m_draggedLine = m_world->AssembleLine( aArc, &m_draggedSegmentIndex );
+    m_shove->SetInitialLine( m_draggedLine );
+    m_mode = DM_ARC;
 
     return true;
 }
@@ -110,10 +124,10 @@ const ITEM_SET DRAGGER::findViaFanoutByHandle ( NODE *aNode, const VIA_HANDLE& h
 
     for( ITEM* item : jt->LinkList() )
     {
-        if( item->OfKind( ITEM::SEGMENT_T ) )
+        if( item->OfKind( ITEM::SEGMENT_T | ITEM::ARC_T ) )
         {
             int segIndex;
-            SEGMENT* seg = ( SEGMENT*) item;
+            LINKED_ITEM* seg = ( LINKED_ITEM*) item;
             LINE l = aNode->AssembleLine( seg, &segIndex );
 
             if( segIndex != 0 )
@@ -151,6 +165,9 @@ bool DRAGGER::Start( const VECTOR2I& aP, ITEM* aStartItem )
     case ITEM::VIA_T:
         return startDragVia( static_cast<VIA*>( aStartItem ) );
 
+    case ITEM::ARC_T:
+        return startDragArc( aP, static_cast<ARC*>( aStartItem ) );
+
     default:
         return false;
     }
@@ -179,15 +196,16 @@ bool DRAGGER::dragMarkObstacles( const VECTOR2I& aP )
     case DM_SEGMENT:
     case DM_CORNER:
     {
-        int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
+        //TODO: Make threshhold configurable
+        int  thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
         LINE origLine( m_draggedLine );
         LINE dragged( m_draggedLine );
-        dragged.ClearSegmentLinks();
+        dragged.SetSnapThreshhold( thresh );
 
         if( m_mode == DM_SEGMENT )
-            dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
+            dragged.DragSegment( aP, m_draggedSegmentIndex );
         else
-            dragged.DragCorner( aP, m_draggedSegmentIndex, thresh, m_freeAngleMode );
+            dragged.DragCorner( aP, m_draggedSegmentIndex, m_freeAngleMode );
 
         m_lastNode->Remove( origLine );
         m_lastNode->Add( dragged );
@@ -233,7 +251,7 @@ void DRAGGER::dumbDragVia( const VIA_HANDLE& aHandle, NODE* aNode, const VECTOR2
             LINE origLine( *l );
             LINE draggedLine( *l );
 
-            draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), 0, m_freeAngleMode );
+            draggedLine.DragCorner( aP, origLine.CLine().Find( aHandle.pos ), m_freeAngleMode );
             draggedLine.ClearSegmentLinks();
 
             m_draggedItems.Add( draggedLine );
@@ -270,13 +288,15 @@ bool DRAGGER::dragShove( const VECTOR2I& aP )
     case DM_SEGMENT:
     case DM_CORNER:
     {
-        int thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 4 : 0;
+        //TODO: Make threshhold configurable
+        int  thresh = Settings().SmoothDraggedSegments() ? m_draggedLine.Width() / 2 : 0;
         LINE dragged( m_draggedLine );
+        dragged.SetSnapThreshhold( thresh );
 
         if( m_mode == DM_SEGMENT )
-            dragged.DragSegment( aP, m_draggedSegmentIndex, thresh );
+            dragged.DragSegment( aP, m_draggedSegmentIndex );
         else
-            dragged.DragCorner( aP, m_draggedSegmentIndex, thresh );
+            dragged.DragCorner( aP, m_draggedSegmentIndex );
 
         SHOVE::SHOVE_STATUS st = m_shove->ShoveLines( dragged );
 

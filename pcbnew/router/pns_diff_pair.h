@@ -170,7 +170,7 @@ public:
     }
 
 private:
-    DIRECTION_45 anchorDirection( ITEM* aItem, const VECTOR2I& aP ) const;
+    DIRECTION_45 anchorDirection( const ITEM* aItem, const VECTOR2I& aP ) const;
 
     ITEM* m_primP;
     ITEM* m_primN;

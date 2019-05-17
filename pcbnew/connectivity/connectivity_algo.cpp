@@ -60,6 +60,7 @@ bool CN_CONNECTIVITY_ALGO::Remove( BOARD_ITEM* aItem )
         break;
 
     case PCB_TRACE_T:
+    case PCB_ARC_T:
         m_itemMap[ static_cast<BOARD_CONNECTED_ITEM*>( aItem ) ].MarkItemsAsInvalid();
         m_itemMap.erase( static_cast<BOARD_CONNECTED_ITEM*>( aItem ) );
         m_itemList.SetDirty( true );
@@ -149,6 +150,16 @@ bool CN_CONNECTIVITY_ALGO::Add( BOARD_ITEM* aItem )
             return false;
 
         add( m_itemList, static_cast<TRACK*>( aItem ) );
+
+        break;
+    }
+
+    case PCB_ARC_T:
+    {
+        if( m_itemMap.find( static_cast<ARC*>( aItem ) ) != m_itemMap.end() )
+            return false;
+
+        add( m_itemList, static_cast<ARC*>( aItem ) );
 
         break;
     }
@@ -280,8 +291,10 @@ void CN_CONNECTIVITY_ALGO::searchConnections()
 
 const CN_CONNECTIVITY_ALGO::CLUSTERS CN_CONNECTIVITY_ALGO::SearchClusters( CLUSTER_SEARCH_MODE aMode )
 {
-    constexpr KICAD_T types[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_MODULE_T, EOT };
-    constexpr KICAD_T no_zones[] = { PCB_TRACE_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
+    constexpr KICAD_T types[] =
+    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_ZONE_AREA_T, PCB_MODULE_T, EOT };
+    constexpr KICAD_T no_zones[] =
+    { PCB_TRACE_T, PCB_ARC_T, PCB_PAD_T, PCB_VIA_T, PCB_MODULE_T, EOT };
 
     if( aMode == CSM_PROPAGATE )
         return SearchClusters( aMode, no_zones, -1 );
@@ -423,6 +436,7 @@ void CN_CONNECTIVITY_ALGO::Build( const std::vector<BOARD_ITEM*>& aItems )
         switch( item->Type() )
         {
             case PCB_TRACE_T:
+            case PCB_ARC_T:
             case PCB_VIA_T:
             case PCB_PAD_T:
                 Add( item );

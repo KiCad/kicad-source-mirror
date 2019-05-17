@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2013-2015 CERN
  * Author: Tomasz Wlostowski <tomasz.wlostowski@cern.ch>
- * Copyright (C) 2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2017-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -43,7 +43,7 @@ public:
      * Represents available directions - there are 8 of them, as on a rectilinear map (north = up) +
      * an extra undefined direction, reserved for traces that don't respect 45-degree routing regime.
      */
-    enum Directions
+    enum Directions : int
     {
         N           = 0,
         NE          = 1,
@@ -53,6 +53,7 @@ public:
         SW          = 5,
         W           = 6,
         NW          = 7,
+        LAST        = 8,
         UNDEFINED   = -1
     };
 
@@ -70,13 +71,14 @@ public:
         ANG_UNDEFINED   = 0x20
     };
 
-    DIRECTION_45( Directions aDir = UNDEFINED ) : m_dir( aDir ) {}
+    DIRECTION_45( Directions aDir = UNDEFINED ) : m_dir( aDir ), m_90deg( false ) {}
 
     /**
      * Constructor
      * @param aVec vector, whose direction will be translated into a DIRECTION_45.
      */
-    DIRECTION_45( const VECTOR2I& aVec )
+    DIRECTION_45( const VECTOR2I &aVec, bool a90 = false ) :
+            m_90deg( a90 )
     {
         construct_( aVec );
     }
@@ -85,7 +87,8 @@ public:
      * Constructor
      * @param aSeg segment, whose direction will be translated into a DIRECTION_45.
      */
-    DIRECTION_45( const SEG& aSeg )
+    DIRECTION_45( const SEG& aSeg, bool a90 = false ) :
+            m_90deg( a90 )
     {
         construct_( aSeg.B - aSeg.A );
     }
@@ -198,51 +201,13 @@ public:
      * @param aP0 starting point
      * @param aP1 ending point
      * @param aStartDiagonal whether the first segment has to be diagonal
+     * @param aRadius is the radius of curvature for rounding.  If =0, do not insert arcs
      * @return the trace
      */
     const SHAPE_LINE_CHAIN BuildInitialTrace( const VECTOR2I& aP0,
             const VECTOR2I& aP1,
-            bool aStartDiagonal = false ) const
-    {
-        int w = abs( aP1.x - aP0.x );
-        int h = abs( aP1.y - aP0.y );
-        int sw  = sign( aP1.x - aP0.x );
-        int sh  = sign( aP1.y - aP0.y );
-
-        VECTOR2I mp0, mp1;
-
-        // we are more horizontal than vertical?
-        if( w > h )
-        {
-            mp0 = VECTOR2I( ( w - h ) * sw, 0 );    // direction: E
-            mp1 = VECTOR2I( h * sw, h * sh );       // direction: NE
-        }
-        else
-        {
-            mp0 = VECTOR2I( 0, sh * ( h - w ) );    // direction: N
-            mp1 = VECTOR2I( sw * w, sh * w );       // direction: NE
-        }
-
-        bool start_diagonal;
-
-        if( m_dir == UNDEFINED )
-            start_diagonal = aStartDiagonal;
-        else
-            start_diagonal = IsDiagonal();
-
-        SHAPE_LINE_CHAIN pl;
-
-        pl.Append( aP0 );
-
-        if( start_diagonal )
-            pl.Append( aP0 + mp1 );
-        else
-            pl.Append( aP0 + mp0 );
-
-        pl.Append( aP1 );
-        pl.Simplify();
-        return pl;
-    }
+            bool aStartDiagonal = false,
+            int aMaxRadius = 0 ) const;
 
     bool operator==( const DIRECTION_45& aOther ) const
     {
@@ -258,14 +223,19 @@ public:
      * Function Right()
      *
      * Returns the direction on the right side of this (i.e. turns right
-     * by 45 deg)
+     * by 45 or 90 deg)
      */
     const DIRECTION_45 Right() const
     {
         DIRECTION_45 r;
 
         if ( m_dir != UNDEFINED )
-            r.m_dir = static_cast<Directions>( ( m_dir + 1 ) % 8 );
+        {
+            if( m_90deg )
+                r.m_dir = static_cast<Directions>( ( m_dir + 2 ) % LAST );
+            else
+                r.m_dir = static_cast<Directions>( ( m_dir + 1 ) % LAST );
+        }
 
         return r;
     }
@@ -274,19 +244,19 @@ public:
      * Function Left()
      *
      * Returns the direction on the left side of this (i.e. turns left
-     * by 45 deg)
+     * by 45 or 90 deg)
      */
     const DIRECTION_45 Left() const
     {
         DIRECTION_45 l;
 
-        if ( m_dir == UNDEFINED )
-            return l;
-
-        if( m_dir == N )
-            l.m_dir = NW;
-        else
-            l.m_dir = static_cast<Directions>( m_dir - 1 );
+        if ( m_dir != UNDEFINED )
+        {
+            if( m_90deg )
+                l.m_dir = static_cast<Directions>( ( m_dir + LAST - 2 ) % LAST );
+            else
+                l.m_dir = static_cast<Directions>( ( m_dir + LAST - 1 ) % LAST );
+        }
 
         return l;
     }
@@ -344,11 +314,11 @@ private:
 
         int dir = ( mag + 22.5 ) / 45.0;
 
-        if( dir >= 8 )
-            dir = dir - 8;
+        if( dir >= LAST )
+            dir -= LAST;
 
         if( dir < 0 )
-            dir = dir + 8;
+            dir += LAST;
 
         m_dir = (Directions) dir;
 
@@ -357,6 +327,9 @@ private:
 
     ///> our actual direction
     Directions m_dir;
+
+    ///> Are we routing on 45 or 90 degree increments
+    bool m_90deg;
 };
 
 #endif    // DIRECTION45_H

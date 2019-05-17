@@ -93,6 +93,7 @@ DIALOG_TRACK_VIA_PROPERTIES::DIALOG_TRACK_VIA_PROPERTIES( PCB_BASE_FRAME* aParen
         switch( item->Type() )
         {
             case PCB_TRACE_T:
+            case PCB_ARC_T:
             {
                 const TRACK* t = static_cast<const TRACK*>( item );
 
@@ -410,6 +411,7 @@ bool DIALOG_TRACK_VIA_PROPERTIES::TransferDataFromWindow()
         switch( item->Type() )
         {
             case PCB_TRACE_T:
+            case PCB_ARC_T:
             {
                 wxASSERT( m_tracks );
                 TRACK* t = static_cast<TRACK*>( item );

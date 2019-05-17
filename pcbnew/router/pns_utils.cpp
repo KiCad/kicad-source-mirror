@@ -24,6 +24,7 @@
 #include "pns_via.h"
 #include "pns_router.h"
 
+#include <geometry/shape_arc.h>
 #include <geometry/shape_segment.h>
 #include <math/box2.h>
 
@@ -48,6 +49,63 @@ const SHAPE_LINE_CHAIN OctagonalHull( const VECTOR2I& aP0, const VECTOR2I& aSize
     s.Append( aP0.x - aClearance, aP0.y + aSize.y + aClearance - aChamfer );
 
     return s;
+}
+
+
+const SHAPE_LINE_CHAIN ArcHull( const SHAPE_ARC& aSeg, int aClearance,
+            int aWalkaroundThickness )
+{
+    int d = aSeg.GetWidth() / 2 + aClearance + aWalkaroundThickness / 2 + HULL_MARGIN;
+    int x = (int)( 2.0 / ( 1.0 + M_SQRT2 ) * d ) / 2;
+
+    auto line = aSeg.ConvertToPolyline();
+
+    SHAPE_LINE_CHAIN s;
+    s.SetClosed( true );
+    std::vector<VECTOR2I> reverse_line;
+
+    auto seg = line.Segment( 0 );
+    VECTOR2I dir = seg.B - seg.A;
+    VECTOR2I p0 = dir.Perpendicular().Resize( d );
+    VECTOR2I ds = dir.Perpendicular().Resize( x );
+    VECTOR2I pd = dir.Resize( x );
+    VECTOR2I dp = dir.Resize( d );
+
+    // Append the first curve
+    s.Append( seg.A + p0 - pd );
+    s.Append( seg.A - dp + ds );
+    s.Append( seg.A - dp - ds );
+    s.Append( seg.A - p0 - pd );
+
+    for( int i = 1; i < line.SegmentCount(); i++ )
+    {
+        auto old_seg = seg;
+        auto endpt = ( old_seg.A - old_seg.B ).Resize( seg.Length() );
+        old_seg.A = old_seg.B + endpt;
+
+        seg = line.Segment( i );
+        auto dir2 = old_seg.A - seg.B;
+
+        p0 = dir2.Perpendicular().Resize( d );
+        s.Append( seg.A - p0 );
+        reverse_line.push_back( seg.A + p0 );
+    }
+
+    pd = dir.Resize( x );
+    dp = dir.Resize( d );
+    s.Append( seg.B - p0 + pd );
+    s.Append( seg.B + dp - ds );
+    s.Append( seg.B + dp + ds );
+    s.Append( seg.B + p0 + pd );
+
+    for( int i = reverse_line.size() - 1; i >= 0; i-- )
+        s.Append( reverse_line[i] );
+
+    // make sure the hull outline is always clockwise
+    if( s.CSegment( 0 ).Side( line.Segment( 0 ).A ) < 0 )
+        return s.Reverse();
+    else
+        return s;
 }
 
 
