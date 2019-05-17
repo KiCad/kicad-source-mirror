@@ -1291,7 +1291,7 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
         double   nameAngle = 0.0;
 
         if( aSheet->IsVerticalOrientation() )
-            nameAngle = -M_PI/2;
+            nameAngle = M_PI/2;
 
         m_gal->SetStrokeColor( getRenderColor( aSheet, LAYER_SHEETNAME, false ) );
 
@@ -1328,8 +1328,8 @@ void SCH_PAINTER::draw( SCH_SHEET *aSheet, int aLayer )
 
             switch( sheetPin.GetEdge() )
             {
-            case SCH_SHEET_PIN::SHEET_TOP_SIDE:    offset_pos.y -= width / 2; break;
-            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: offset_pos.y += width / 2; break;
+            case SCH_SHEET_PIN::SHEET_TOP_SIDE:    offset_pos.y += width / 2; break;
+            case SCH_SHEET_PIN::SHEET_BOTTOM_SIDE: offset_pos.y -= width / 2; break;
             case SCH_SHEET_PIN::SHEET_RIGHT_SIDE:  offset_pos.x -= width / 2; break;
             case SCH_SHEET_PIN::SHEET_LEFT_SIDE:   offset_pos.x += width / 2; break;
             default: break;
