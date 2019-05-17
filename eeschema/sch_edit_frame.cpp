@@ -276,7 +276,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnSwitchCanvas )
 
     /* Handle user interface update events. */
-    EVT_UPDATE_UI( wxID_PASTE, SCH_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_SAVE_PROJECT, SCH_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_UPDATE_ONE_SHEET, SCH_EDIT_FRAME::OnUpdateSaveSheet )
     EVT_UPDATE_UI( ID_REMAP_SYMBOLS, SCH_EDIT_FRAME::OnUpdateRemapSymbols )
@@ -731,12 +730,6 @@ void SCH_EDIT_FRAME::OnModify()
         RecalculateConnections( false );
 
     m_canvas->Refresh();
-}
-
-
-void SCH_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
-{
-    event.Enable( m_blockItems.GetCount() > 0 );
 }
 
 

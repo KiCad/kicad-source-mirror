@@ -119,7 +119,6 @@ private:
     DIALOG_SCH_FIND*        m_dlgFindReplace;
     wxArrayString           m_findStringHistoryList;
     wxArrayString           m_replaceStringHistoryList;
-    BLOCK_SELECTOR          m_blockItems;         ///< List of selected items.
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
     SCH_FIND_COLLECTOR      m_foundItems;         ///< List of find/replace items.
@@ -797,7 +796,6 @@ private:
     void OnPreferencesOptions( wxCommandEvent& event );
 
     /* User interface update event handlers. */
-    void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
     void OnUpdateSaveSheet( wxUpdateUIEvent& aEvent );
     void OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent );

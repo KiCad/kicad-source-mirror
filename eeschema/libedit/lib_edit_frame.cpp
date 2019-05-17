@@ -136,7 +136,6 @@ BEGIN_EVENT_TABLE( LIB_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, LIB_EDIT_FRAME::Process_Config )
 
     // Update user interface elements.
-    EVT_UPDATE_UI( wxID_PASTE, LIB_EDIT_FRAME::OnUpdatePaste )
     EVT_UPDATE_UI( ID_LIBEDIT_EXPORT_PART, LIB_EDIT_FRAME::OnUpdateHavePart )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE, LIB_EDIT_FRAME::OnUpdateSave )
     EVT_UPDATE_UI( ID_LIBEDIT_SAVE_ALL, LIB_EDIT_FRAME::OnUpdateSave )
@@ -442,12 +441,6 @@ void LIB_EDIT_FRAME::OnUpdateEditingPart( wxUpdateUIEvent& aEvent )
 
     if( part && aEvent.GetEventObject() == m_drawToolBar )
         aEvent.Check( GetToolId() == aEvent.GetId() );
-}
-
-
-void LIB_EDIT_FRAME::OnUpdatePaste( wxUpdateUIEvent& event )
-{
-    event.Enable( m_clipboard.GetCount() > 0 );
 }
 
 

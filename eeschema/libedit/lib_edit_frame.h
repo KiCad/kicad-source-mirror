@@ -290,7 +290,6 @@ public:
     void OnCheckComponent( wxCommandEvent& event );
     void OnSelectBodyStyle( wxCommandEvent& event );
 
-    void OnUpdatePaste( wxUpdateUIEvent& event );
     void OnUpdateEditingPart( wxUpdateUIEvent& event );
     void OnUpdateHavePart( wxUpdateUIEvent& aEvent );
     void OnUpdateSave( wxUpdateUIEvent& aEvent );
@@ -596,9 +595,6 @@ private:
 
     ///> Renames LIB_PART aliases to avoid conflicts before adding a component to a library
     void fixDuplicateAliases( LIB_PART* aPart, const wxString& aLibrary );
-
-    ///> Clipboard buffer storing LIB_ITEMs
-    BLOCK_SELECTOR m_clipboard;
 
     DECLARE_EVENT_TABLE()
 };

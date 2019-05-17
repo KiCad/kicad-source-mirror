@@ -353,9 +353,6 @@ protected:
      */
     bool saveSymbolLibTables( bool aGlobal, bool aProject );
 
-    virtual bool HandleBlockBegin( wxDC* aDC, EDA_KEY aKey, const wxPoint& aPosition,
-                                   int aExplicitCommand = 0 ) override;
-
 };
 
 #endif // SCH_BASE_FRAME_H_
