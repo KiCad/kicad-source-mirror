@@ -235,43 +235,6 @@ void PCB_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         InstallPcbGlobalDeleteFrame( wxDefaultPosition );
         break;
 
-    case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
-        m_canvas->SetAutoPanRequest( false );
-        HandleBlockPlace( &dc );
-        break;
-
-    case ID_POPUP_DUPLICATE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        m_canvas->SetAutoPanRequest( false );
-        HandleBlockPlace( &dc );
-        break;
-
-    case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_FLIP_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_FLIP );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
     case ID_DRC_CONTROL:
         // Shows the DRC dialog in non modal mode, to allows board editing
         // with the DRC dialog opened and showing errors.

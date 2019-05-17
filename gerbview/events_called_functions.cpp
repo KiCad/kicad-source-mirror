@@ -154,10 +154,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     switch( id )
     {
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_ZOOM_BLOCK:
-        break;
-
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
         m_canvas->EndMouseCapture();
 
@@ -202,26 +198,6 @@ void GERBVIEW_FRAME::Process_Special_Functions( wxCommandEvent& event )
 
     case ID_GERBVIEW_SHOW_LIST_DCODES:
         Liste_D_Codes();
-        break;
-
-    case ID_POPUP_PLACE_BLOCK:
-        if( !IsGalCanvasActive() )
-        {
-            INSTALL_UNBUFFERED_DC( dc, m_canvas );
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
-            m_canvas->SetAutoPanRequest( false );
-            HandleBlockPlace( &dc );
-        }
-        break;
-
-    case ID_POPUP_ZOOM_BLOCK:
-        if( !IsGalCanvasActive() )
-        {
-            INSTALL_UNBUFFERED_DC( dc, m_canvas );
-            GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-            GetScreen()->m_BlockLocate.SetMessageBlock( this );
-            HandleBlockEnd( &dc );
-        }
         break;
 
     case ID_HIGHLIGHT_CMP_ITEMS:

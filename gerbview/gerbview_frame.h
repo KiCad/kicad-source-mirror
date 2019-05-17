@@ -232,7 +232,7 @@ public:
     void ReCreateMenuBar() override;
     void OnLeftClick( wxDC* aDC, const wxPoint& aMousePos ) override;
     void OnLeftDClick( wxDC* aDC, const wxPoint& aMousePos ) override;
-    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override;
+    bool OnRightClick( const wxPoint& aMousePos, wxMenu* aPopMenu ) override { return true; }
     void OnUpdateSelectZoom( wxUpdateUIEvent& aEvent );
     double BestZoom() override;
     void UpdateStatusBar() override;

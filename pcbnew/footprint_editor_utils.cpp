@@ -262,12 +262,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
     case ID_POPUP_MODEDIT_EDIT_WIDTH_ALL_EDGE:
     case ID_POPUP_MODEDIT_EDIT_LAYER_ALL_EDGE:
     case ID_POPUP_PCB_DELETE_EDGE:
-    case ID_POPUP_DELETE_BLOCK:
-    case ID_POPUP_PLACE_BLOCK:
-    case ID_POPUP_ZOOM_BLOCK:
-    case ID_POPUP_MIRROR_X_BLOCK:
-    case ID_POPUP_ROTATE_BLOCK:
-    case ID_POPUP_DUPLICATE_BLOCK:
         break;
 
     case ID_POPUP_CANCEL_CURRENT_COMMAND:
@@ -704,49 +698,6 @@ void FOOTPRINT_EDIT_FRAME::Process_Special_Functions( wxCommandEvent& event )
         SaveCopyInUndoList( GetBoard()->m_Modules, UR_CHANGED );
         Transform( (MODULE*) GetScreen()->GetCurItem(), id );
         m_canvas->Refresh();
-        break;
-
-    case ID_POPUP_PLACE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE );
-        m_canvas->SetAutoPanRequest( false );
-        HandleBlockPlace( &dc );
-        break;
-
-    case ID_POPUP_DUPLICATE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DUPLICATE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        m_canvas->SetAutoPanRequest( false );
-        HandleBlockPlace( &dc );
-        break;
-
-    case ID_POPUP_ZOOM_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ZOOM );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_DELETE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_DELETE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_ROTATE_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_ROTATE );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_MIRROR_X_BLOCK:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MIRROR_X );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
-        break;
-
-    case ID_POPUP_MOVE_BLOCK_EXACT:
-        GetScreen()->m_BlockLocate.SetCommand( BLOCK_MOVE_EXACT );
-        GetScreen()->m_BlockLocate.SetMessageBlock( this );
-        HandleBlockEnd( &dc );
         break;
 
     case ID_GEN_IMPORT_GRAPHICS_FILE:

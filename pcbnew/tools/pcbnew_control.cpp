@@ -1006,7 +1006,6 @@ void PCBNEW_CONTROL::setTransitions()
     Go( &PCBNEW_CONTROL::TrackDisplayMode,    PCB_ACTIONS::trackDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::showRatsnest.MakeEvent() );
     Go( &PCBNEW_CONTROL::ToggleRatsnest,      PCB_ACTIONS::ratsnestLineMode.MakeEvent() );
-    Go( &PCBNEW_CONTROL::TogglePolarCoords,   PCB_ACTIONS::togglePolarCoords.MakeEvent() );
     Go( &PCBNEW_CONTROL::PadDisplayMode,      PCB_ACTIONS::padDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::ViaDisplayMode,      PCB_ACTIONS::viaDisplayMode.MakeEvent() );
     Go( &PCBNEW_CONTROL::GraphicDisplayMode,  PCB_ACTIONS::graphicDisplayMode.MakeEvent() );

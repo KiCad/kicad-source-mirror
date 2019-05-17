@@ -57,7 +57,6 @@ set( GERBVIEW_SRCS
     locate.cpp
     menubar.cpp
     onleftclick.cpp
-    onrightclick.cpp
     readgerb.cpp
     rs274_read_XY_and_IJ_coordinates.cpp
     rs274d.cpp

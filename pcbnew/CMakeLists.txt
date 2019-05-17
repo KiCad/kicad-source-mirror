@@ -234,7 +234,6 @@ set( PCBNEW_CLASS_SRCS
     array_creator.cpp
     array_pad_name_provider.cpp
     attribut.cpp
-    block.cpp
     block_footprint_editor.cpp
     board_netlist_updater.cpp
     build_BOM_from_board.cpp

@@ -160,17 +160,6 @@ enum main_id
     ID_POPUP_GENERAL_START_RANGE,   // first number
     ID_POPUP_CANCEL_CURRENT_COMMAND,
     ID_POPUP_CLOSE_CURRENT_TOOL,
-
-    // JEY TODO: all the block-specific commands are obsolete after PCBNew's legacy canvas goes...
-    ID_POPUP_MOVE_BLOCK_EXACT,
-    ID_POPUP_DUPLICATE_BLOCK,
-    ID_POPUP_ROTATE_BLOCK,
-    ID_POPUP_DELETE_BLOCK,
-    ID_POPUP_FLIP_BLOCK,
-    ID_POPUP_PLACE_BLOCK,
-    ID_POPUP_ZOOM_BLOCK,
-    ID_POPUP_MIRROR_X_BLOCK,
-    ID_POPUP_MIRROR_Y_BLOCK,
     ID_POPUP_GENERAL_END_RANGE, // last number
 
     ID_POPUP_ENTER_MENU,

@@ -44,16 +44,6 @@ void PCB_EDIT_FRAME::ProcessMuWaveFunctions( wxCommandEvent& event )
 
     pos.y += 20;
 
-    switch( id )    // End any command in progress.
-    {
-    case ID_POPUP_DUPLICATE_BLOCK:
-        break;
-
-    default:        // End block command in progress.
-        m_canvas->EndMouseCapture( );
-        break;
-    }
-
     switch( id )
     {
     case ID_PCB_MUWAVE_TOOL_SELF_CMD:
