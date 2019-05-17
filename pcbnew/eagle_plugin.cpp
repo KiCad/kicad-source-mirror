@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2012 SoftPLC Corporation, Dick Hollenbeck <dick@softplc.com>
- * Copyright (C) 2012-2017 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2012-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -448,7 +448,7 @@ void EAGLE_PLUGIN::loadLayerDefs( wxXmlNode* aLayers )
     }
 #endif
 
-    // Set the layer names and cu count iff we're loading a board.
+    // Set the layer names and cu count if we're loading a board.
     if( m_board )
     {
         m_board->SetCopperLayerCount( cu.size() );
@@ -559,7 +559,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                         pcbtxt->SetTextAngle( sign * 90 * 10 );
                         align = ETEXT::TOP_RIGHT;
                     }
-                    else // Ok so text is not at 90,180 or 270 so do some funny stuf to get placement right
+                    else // Ok so text is not at 90,180 or 270 so do some funny stuff to get placement right
                     {
                         if( ( degrees > 0 ) &&  ( degrees < 90 ) )
                             pcbtxt->SetTextAngle( sign * t.rot->degrees * 10 );
@@ -724,7 +724,7 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
                 if( d.dimensionType )
                 {
                     // Eagle dimension graphic arms may have different lengths, but they look
-                    // incorrect in KiCad (the graphic is tilted). Make them even lenght in such case.
+                    // incorrect in KiCad (the graphic is tilted). Make them even length in such case.
                     if( *d.dimensionType == "horizontal" )
                     {
                         int newY = ( d.y1.ToPcbUnits() + d.y2.ToPcbUnits() ) / 2;
@@ -943,11 +943,11 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                 m->Reference().SetVisible( true );   // Only if place holder in package layout
         }
         else if( *e.smashed == true )
-        { // Smasted so set default to no show for NAME and VALUE
+        { // Smashed so set default to no show for NAME and VALUE
             m->Value().SetVisible( false );
             m->Reference().SetVisible( false );
 
-            // initalize these to default values incase the <attribute> elements are not present.
+            // initialize these to default values in case the <attribute> elements are not present.
             m_xpath->push( "attribute", "name" );
 
             // VALUE and NAME can have something like our text "effects" overrides
@@ -1015,7 +1015,7 @@ void EAGLE_PLUGIN::loadElements( wxXmlNode* aElements )
                         }
                     }
                     else
-                        // No display, so default is visable, and show value of NAME
+                        // No display, so default is visible, and show value of NAME
                         m->Reference().SetVisible( true );
                 }
                 else if( a.name == "VALUE" )
@@ -1174,7 +1174,7 @@ ZONE_CONTAINER* EAGLE_PLUGIN::loadPolygon( wxXmlNode* aPolyNode )
     }
 
     // if spacing is set the zone should be hatched
-    // However, use the default hatch step, p.spacing value has no meaning for Kicad
+    // However, use the default hatch step, p.spacing value has no meaning for KiCad
     // TODO: see if this parameter is related to a grid fill option.
     if( p.spacing )
         zone->SetHatch( ZONE_CONTAINER::DIAGONAL_EDGE, zone->GetDefaultHatchPitch(), true );
@@ -1400,12 +1400,39 @@ void EAGLE_PLUGIN::packageWire( MODULE* aModule, wxXmlNode* aTree ) const
     wxPoint      end(   kicad_x( w.x2 ), kicad_y( w.y2 ) );
     int          width = w.width.ToPcbUnits();
 
+    // KiCad cannot handle zero or negative line widths which apparently have meaning in Eagle.
     if( width <= 0 )
     {
-        width = aModule->GetBoard()->GetDesignSettings().GetLineThickness( layer );
+        BOARD* board = aModule->GetBoard();
+
+        if( board )
+        {
+            width = board->GetDesignSettings().GetLineThickness( layer );
+        }
+        else
+        {
+            // When loading footprint libraries, there is no board so use the default KiCad
+            // line widths.
+            switch( layer )
+            {
+            case Edge_Cuts:
+                width = Millimeter2iu( DEFAULT_EDGE_WIDTH );
+                break;
+            case F_SilkS:
+            case B_SilkS:
+                width = Millimeter2iu( DEFAULT_SILK_LINE_WIDTH );
+                break;
+            case F_CrtYd:
+            case B_CrtYd:
+                width = Millimeter2iu( DEFAULT_COURTYARD_WIDTH );
+                break;
+            default:
+                width = Millimeter2iu( DEFAULT_LINE_WIDTH );
+            }
+        }
     }
 
-    // FIXME: the cap attribute is ignored because kicad can't create lines
+    // FIXME: the cap attribute is ignored because KiCad can't create lines
     //        with flat ends.
     EDGE_MODULE* dwg;
 
@@ -2086,7 +2113,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     else
                     {
                         double annulus = drillz * m_rules->rvViaOuter;  // eagle "restring"
-                        annulus = eagleClamp( m_rules->rlMinViaOuter, annulus, m_rules->rlMaxViaOuter );
+                        annulus = eagleClamp( m_rules->rlMinViaOuter, annulus,
+                                              m_rules->rlMaxViaOuter );
                         kidiam = KiROUND( drillz + 2 * annulus );
                         via->SetWidth( kidiam );
                     }
@@ -2098,7 +2126,8 @@ void EAGLE_PLUGIN::loadSignals( wxXmlNode* aSignals )
                     if( !v.diam || via->GetWidth() <= via->GetDrill() )
                     {
                         double annulus = eagleClamp( m_rules->rlMinViaOuter,
-                                (double)( via->GetWidth() / 2 - via->GetDrill() ), m_rules->rlMaxViaOuter );
+                                (double)( via->GetWidth() / 2 - via->GetDrill() ),
+                                m_rules->rlMaxViaOuter );
                         via->SetWidth( drillz + 2 * annulus );
                     }
 
@@ -2230,7 +2259,7 @@ PCB_LAYER_ID EAGLE_PLUGIN::kicad_layer( int aEagleLayer ) const
         case EAGLE_LAYER::TDOCU:         kiLayer = F_Fab;        break;
         case EAGLE_LAYER::BDOCU:         kiLayer = B_Fab;        break;
 
-        // thes layers are defined as user layers. put them on ECO layers
+        // these layers are defined as user layers. put them on ECO layers
         case EAGLE_LAYER::USERLAYER1:    kiLayer = Eco1_User;    break;
         case EAGLE_LAYER::USERLAYER2:    kiLayer = Eco2_User;    break;
 
