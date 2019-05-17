@@ -388,24 +388,25 @@ bool SCH_EDIT_TOOL::Init()
     //
     CONDITIONAL_MENU& drawMenu = drawingTools->GetToolMenu().GetMenu();
 
-    drawMenu.AddItem( EE_ACTIONS::rotateCCW,       orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::rotateCW,        orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorX,         orientCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::mirrorY,         orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCCW,        orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::rotateCW,         orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorX,          orientCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::mirrorY,          orientCondition, 200 );
 
-    drawMenu.AddItem( EE_ACTIONS::properties,      propertiesCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editReference,   singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editValue,       singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::editFootprint,   singleComponentCondition, 200 );
-    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan, EE_CONDITIONS::SingleDeMorganSymbol, 200 );
+    drawMenu.AddItem( EE_ACTIONS::properties,       propertiesCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editReference,    singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editValue,        singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editFootprint,    singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::autoplaceFields,  singleComponentCondition, 200 );
+    drawMenu.AddItem( EE_ACTIONS::convertDeMorgan,  EE_CONDITIONS::SingleDeMorganSymbol, 200 );
 
     std::shared_ptr<SYMBOL_UNIT_MENU> symUnitMenu2 = std::make_shared<SYMBOL_UNIT_MENU>();
     symUnitMenu2->SetTool( drawingTools );
     drawingTools->GetToolMenu().AddSubMenu( symUnitMenu2 );
     drawMenu.AddMenu( symUnitMenu2.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    drawMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
-                                         singleComponentCondition && EE_CONDITIONS::Idle, 200 );
+    drawMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleComponentCondition
+                                                        && EE_CONDITIONS::Idle, 200 );
 
     drawMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
     drawMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );
@@ -439,8 +440,8 @@ bool SCH_EDIT_TOOL::Init()
     m_selectionTool->GetToolMenu().AddSubMenu( symUnitMenu3 );
     selToolMenu.AddMenu( symUnitMenu3.get(), EE_CONDITIONS::SingleMultiUnitSymbol, 1 );
 
-    selToolMenu.AddItem( EE_ACTIONS::editWithSymbolEditor,
-                                          singleComponentCondition && EE_CONDITIONS::Idle, 200 );
+    selToolMenu.AddItem( EE_ACTIONS::editWithLibEdit,  singleComponentCondition
+                                                           && EE_CONDITIONS::Idle, 200 );
 
     selToolMenu.AddItem( EE_ACTIONS::toShapeSlash,     entryCondition, 200 );
     selToolMenu.AddItem( EE_ACTIONS::toShapeBackslash, entryCondition, 200 );

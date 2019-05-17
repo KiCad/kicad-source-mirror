@@ -150,7 +150,7 @@ public:
     static TOOL_ACTION showDatasheet;
     static TOOL_ACTION showMarkerInfo;
     static TOOL_ACTION showSymbolEditor;
-    static TOOL_ACTION editWithSymbolEditor;
+    static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showLibraryBrowser;
 
     /// Clipboard

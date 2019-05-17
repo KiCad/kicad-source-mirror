@@ -83,7 +83,7 @@ public:
 
     int FindReplace( const TOOL_EVENT& aEvent );
 
-    int EditWithSymbolEditor( const TOOL_EVENT& aEvent );
+    int EditWithLibEdit( const TOOL_EVENT& aEvent );
     int ShowSymbolEditor( const TOOL_EVENT& aEvent );
     int ShowLibraryBrowser( const TOOL_EVENT& aEvent );
 

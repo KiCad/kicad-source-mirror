@@ -81,7 +81,7 @@ TOOL_ACTION EE_ACTIONS::showSymbolEditor( "eeschema.EditorControl.showSymbolEdit
         _( "Show Symbol Editor" ), _( "Create, delete and edit symbols" ),
         libedit_xpm );
 
-TOOL_ACTION EE_ACTIONS::editWithSymbolEditor( "eeschema.EditorControl.editWithSymbolEditor",
+TOOL_ACTION EE_ACTIONS::editWithLibEdit( "eeschema.EditorControl.editWithSymbolEditor",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_EDIT_COMPONENT_WITH_LIBEDIT ),
         _( "Edit with Symbol Editor" ), _( "Open the symbol editor to edit the symbol" ),
         libedit_xpm );
@@ -705,7 +705,7 @@ int SCH_EDITOR_CONTROL::FindReplace( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::EditWithSymbolEditor( const TOOL_EVENT& aEvent )
+int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
     SELECTION&         selection = selTool->RequestSelection( EE_COLLECTOR::ComponentsOnly );
@@ -830,7 +830,7 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::find.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::replace.MakeEvent() );
 
-    Go( &SCH_EDITOR_CONTROL::EditWithSymbolEditor,  EE_ACTIONS::editWithSymbolEditor.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowLibraryBrowser,    EE_ACTIONS::showLibraryBrowser.MakeEvent() );
 
