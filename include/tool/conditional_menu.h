@@ -42,12 +42,7 @@ public:
     ///> Constant to indicate that we do not care about an ENTRY location in the menu.
     static const int ANY_ORDER = -1;
 
-
-    CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool ) :
-        m_isContextMenu( isContextMenu )
-    {
-        m_tool = aTool;
-    }
+    CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool );
 
     ACTION_MENU* create() const override;
 
