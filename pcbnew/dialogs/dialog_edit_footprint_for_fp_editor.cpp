@@ -390,7 +390,7 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnRemove3DModel( wxCommandEvent&  )
 
     int idx = m_modelsGrid->GetGridCursorRow();
 
-    if( idx >= 0 )
+    if( idx >= 0 && m_modelsGrid->GetNumberRows() && !m_shapes3D_list.empty() )
     {
         m_shapes3D_list.erase( m_shapes3D_list.begin() + idx );
         m_modelsGrid->DeleteRows( idx );
@@ -853,6 +853,8 @@ void DIALOG_FOOTPRINT_FP_EDITOR::OnUpdateUI( wxUpdateUIEvent& event )
         m_delayedFocusRow = -1;
         m_delayedFocusColumn = -1;
     }
+
+    m_button3DShapeRemove->Enable( m_modelsGrid->GetNumberRows() > 0 );
 }
 
 
