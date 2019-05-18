@@ -71,6 +71,9 @@ private:
     ///> Flag determining if anything is being dragged right now
     bool                  m_moveInProgress;
 
+    ///> Items (such as wires) which were added to the selection for a drag
+    EDA_ITEMS             m_dragAdditions;
+
     ///> Used for chaining commands
     VECTOR2I              m_moveOffset;
 

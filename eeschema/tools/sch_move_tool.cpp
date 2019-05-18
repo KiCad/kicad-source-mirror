@@ -120,7 +120,6 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
-    EDA_ITEMS  dragAdditions;
     bool       unselect = selection.IsHover();
 
     if( selection.Empty() )
@@ -137,26 +136,23 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     bool restore_state = false;
     bool chain_commands = false;
-    bool appendUndo = false;
     OPT_TOOL_EVENT evt = aEvent;
     VECTOR2I prevPos;
 
     if( m_moveInProgress )
     {
-        // User must have switched from move to drag or vice-versa.  Reset the moved items
-        // so we can start again with the current m_isDragOperation and m_moveOffset.
-        m_frame->RollbackSchematicFromUndo();
-        m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
-        m_moveInProgress = false;
-        // And give it a kick so it doesn't have to wait for the first mouse movement to
-        // refresh.
-        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        if( !selection.Front()->IsNew() )
+        {
+            // User must have switched from move to drag or vice-versa.  Reset the selected
+            // items so we can start again with the current m_isDragOperation and m_moveOffset.
+            m_frame->RollbackSchematicFromUndo();
+            m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
+            m_moveInProgress = false;
+            // And give it a kick so it doesn't have to wait for the first mouse movement to
+            // refresh.
+            m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        }
         return 0;
-    }
-    else if( selection.Front()->IsNew() )
-    {
-        // New items will already be on the undo list
-        appendUndo = true;
     }
 
     // Main loop: keep receiving events
@@ -170,6 +166,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         {
             if( !m_moveInProgress )    // Prepare to start moving/dragging
             {
+                bool appendUndo = selection.Front()->IsNew();
+
                 //------------------------------------------------------------------------
                 // Setup a drag or a move
                 //
@@ -193,11 +191,11 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                             static_cast<SCH_ITEM*>( item )->GetConnectionPoints( connections );
 
                             for( wxPoint point : connections )
-                                getConnectedDragItems( (SCH_ITEM*) item, point, dragAdditions );
+                                getConnectedDragItems( (SCH_ITEM*) item, point, m_dragAdditions );
                         }
                     }
 
-                    m_selectionTool->AddItemsToSel( &dragAdditions, QUIET_MODE );
+                    m_selectionTool->AddItemsToSel( &m_dragAdditions, QUIET_MODE );
                 }
 
                 // Mark the edges of the block with dangling flags for a move.
@@ -248,7 +246,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                     // Apply any initial offset in case we're coming from a previous command.
                     //
-                    moveItem( item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
+                    if( !item->GetParent() || !item->GetParent()->IsSelected() )
+                        moveItem( item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
                 }
 
                 // Set up the starting position and move/drag offset
@@ -419,10 +418,12 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         if( unselect )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
         else
-            m_selectionTool->RemoveItemsFromSel( &dragAdditions, QUIET_MODE );
+            m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
 
         m_frame->OnModify();
     }
+
+    m_dragAdditions.clear();
 
     return 0;
 }
