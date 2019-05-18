@@ -116,6 +116,9 @@ public:
     int RemoveItemsFromSel( const TOOL_EVENT& aEvent );
     void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
+    void BrightenItem( EDA_ITEM* aItem );
+    void ClearBrightening();
+
     ///> Find (but don't select) node under cursor
     EDA_ITEM* GetNode( VECTOR2I aPosition );
 

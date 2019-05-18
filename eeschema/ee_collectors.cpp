@@ -389,6 +389,8 @@ SEARCH_RESULT SCH_FIND_COLLECTOR::Inspect( EDA_ITEM* aItem, void* aTestData )
         }
 
         Append( aItem );
+        aItem->SetBrightened();
+
         m_data.push_back( SCH_FIND_COLLECTOR_DATA( position,
                                                    m_currentSheetPath->PathHumanReadable(),
                                                    (SCH_ITEM*) aTestData ) );

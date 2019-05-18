@@ -829,6 +829,31 @@ void EE_SELECTION_TOOL::RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode )
 }
 
 
+void EE_SELECTION_TOOL::BrightenItem( EDA_ITEM* aItem )
+{
+    highlight( aItem, BRIGHTENED );
+}
+
+
+void EE_SELECTION_TOOL::ClearBrightening()
+{
+    EDA_ITEM* start = nullptr;
+
+    if( m_isLibEdit )
+        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
+    else
+        start = m_frame->GetScreen()->GetDrawItems();
+
+    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
+    {
+        unhighlight( item, BRIGHTENED );
+        return SEARCH_CONTINUE;
+    };
+
+    EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+}
+
+
 int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
     clearSelection();

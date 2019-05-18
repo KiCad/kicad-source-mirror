@@ -55,7 +55,8 @@
 #include <kicad_device_context.h>
 
 #include <dialogs/dialog_schematic_find.h>
-
+#include <tool/tool_manager.h>
+#include <tools/ee_selection_tool.h>
 
 void SCH_EDIT_FRAME::OnFindDrcMarker( wxFindDialogEvent& event )
 {
@@ -263,6 +264,7 @@ bool SCH_EDIT_FRAME::IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearch
 
 void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 {
+    EE_SELECTION_TOOL*      selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
     SCH_FIND_REPLACE_DATA   searchCriteria;
     SCH_FIND_COLLECTOR_DATA data;
 
@@ -274,17 +276,18 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
     {
         if( m_foundItems.GetCount() == 0 )
             return;
+
+        selectionTool->ClearBrightening();
     }
     else if( IsSearchCacheObsolete( searchCriteria ) )
     {
         if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-        {
             m_foundItems.Collect( searchCriteria, g_CurrentSheet );
-        }
         else
-        {
             m_foundItems.Collect( searchCriteria );
-        }
+
+        for( EDA_ITEM* item : m_foundItems )
+            selectionTool->BrightenItem( item );
     }
     else
     {
@@ -302,7 +305,8 @@ void SCH_EDIT_FRAME::OnFindSchematicItem( wxFindDialogEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
 {
-    SCH_ITEM*               item;
+    EE_SELECTION_TOOL*      selectionTool = m_toolManager->GetTool<EE_SELECTION_TOOL>();
+    EDA_ITEM*               item;
     SCH_SHEET_PATH*         sheet;
     SCH_SHEET_LIST          schematic( g_RootSheet );
     SCH_FIND_COLLECTOR_DATA data;
@@ -316,24 +320,23 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     if( IsSearchCacheObsolete( searchCriteria ) )
     {
         if( aEvent.GetFlags() & FR_CURRENT_SHEET_ONLY && g_RootSheet->CountSheets() > 1 )
-        {
             m_foundItems.Collect( searchCriteria, g_CurrentSheet );
-        }
         else
-        {
             m_foundItems.Collect( searchCriteria );
-        }
+
+        for( EDA_ITEM* foundItem : m_foundItems )
+            selectionTool->BrightenItem( foundItem );
     }
 
     if( aEvent.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL )
     {
-        while( ( item = (SCH_ITEM*) m_foundItems.GetItem( data ) ) != NULL )
+        while( ( item = m_foundItems.GetItem( data ) ) != NULL )
         {
             SCH_ITEM* undoItem = data.GetParent();
 
             // Don't save child items in undo list.
             if( undoItem == NULL )
-                undoItem = item;
+                undoItem = (SCH_ITEM*) item;
 
             sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
@@ -355,14 +358,14 @@ void SCH_EDIT_FRAME::OnFindReplace( wxFindDialogEvent& aEvent )
     }
     else
     {
-        item = (SCH_ITEM*) m_foundItems.GetItem( data );
+        item = m_foundItems.GetItem( data );
 
         wxCHECK_RET( item != NULL, wxT( "Invalid replace item in find collector list." ) );
 
         SCH_ITEM* undoItem = data.GetParent();
 
         if( undoItem == NULL )
-            undoItem = item;
+            undoItem = (SCH_ITEM*) item;
 
         sheet = schematic.GetSheetByPath( data.GetSheetPath() );
 
