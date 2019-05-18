@@ -84,27 +84,10 @@ void CVPCB_MAINFRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Menu Help:
-    wxMenu* helpMenu = new wxMenu;
-
-    // Manual Contents
-    AddMenuItem( helpMenu, wxID_HELP, _( "CvPcb &Manual" ),
-                 _( "Open CvPcb Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    // About CvPcb
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-
     // Create the menubar and append all submenus
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

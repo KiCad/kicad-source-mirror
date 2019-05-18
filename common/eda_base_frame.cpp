@@ -42,6 +42,9 @@
 #include <panel_hotkeys_editor.h>
 #include <dialogs/panel_common_settings.h>
 #include <widgets/paged_dialog.h>
+#include <bitmaps.h>
+#include <tool/action_menu.h>
+#include <menus_helpers.h>
 
 
 /// The default auto save interval is 10 minutes.
@@ -67,6 +70,14 @@ static const wxString entrySizeY = "Size_y"; ///< Height of frame, in pixels (su
 static const wxString entrySizeX = "Size_x"; ///< Width of frame, in pixels (suffix)
 static const wxString entryMaximized = "Maximized";  ///< Nonzero iff frame is maximized (suffix)
 ///@}
+
+
+BEGIN_EVENT_TABLE( EDA_BASE_FRAME, wxFrame )
+    EVT_MENU( wxID_HELP, EDA_BASE_FRAME::GetKicadHelp )
+    EVT_MENU( wxID_INDEX, EDA_BASE_FRAME::GetKicadHelp )
+    EVT_MENU( ID_HELP_GET_INVOLVED, EDA_BASE_FRAME::GetKicadContribute )
+    EVT_MENU( wxID_ABOUT, EDA_BASE_FRAME::GetKicadAbout )
+END_EVENT_TABLE()
 
 EDA_BASE_FRAME::EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -227,6 +238,36 @@ bool EDA_BASE_FRAME::doAutoSave()
 
 void EDA_BASE_FRAME::ReCreateMenuBar()
 {
+}
+
+
+void EDA_BASE_FRAME::AddStandardHelpMenu( wxMenuBar* aMenuBar )
+{
+    wxMenu* helpMenu = new wxMenu;
+
+    AddMenuItem( helpMenu, wxID_HELP,
+                 _( "&Help" ),
+                 _( "Open product documentation in a web browser" ),
+                 KiBitmap( online_help_xpm ) );
+
+    AddMenuItem( helpMenu, wxID_INDEX,
+                 _( "&Getting Started with KiCad" ),
+                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
+                 KiBitmap( help_xpm ) );
+
+    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, _( "&List Hotkeys..." ),
+                 _( "Displays current hotkeys table and corresponding commands" ),
+                 KiBitmap( hotkeys_xpm ) );
+
+    helpMenu->AppendSeparator();
+    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
+                 _( "Open \"Contribute to KiCad\" in a web browser" ),
+                 KiBitmap( info_xpm ) );
+
+    helpMenu->AppendSeparator();
+    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
+
+    aMenuBar->Append( helpMenu, _( "&Help" ) );
 }
 
 

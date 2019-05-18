@@ -76,12 +76,6 @@ BEGIN_EVENT_TABLE( PL_EDITOR_FRAME, EDA_DRAW_FRAME )
     EVT_MENU( ID_MENU_SWITCH_BGCOLOR, PL_EDITOR_FRAME::Process_Config )
     EVT_MENU( ID_MENU_GRID_ONOFF, PL_EDITOR_FRAME::Process_Config )
 
-    // Menu Help
-    EVT_MENU( wxID_HELP, EDA_DRAW_FRAME::GetKicadHelp )
-    EVT_MENU( wxID_INDEX, EDA_DRAW_FRAME::GetKicadHelp )
-    EVT_MENU( ID_HELP_GET_INVOLVED, EDA_DRAW_FRAME::GetKicadContribute )
-    EVT_MENU( wxID_ABOUT, EDA_DRAW_FRAME::GetKicadAbout )
-
     EVT_TOOL( wxID_DELETE, PL_EDITOR_FRAME::Process_Special_Functions )
     EVT_TOOL( wxID_UNDO, PL_EDITOR_FRAME::GetLayoutFromUndoList )
     EVT_TOOL( wxID_REDO, PL_EDITOR_FRAME::GetLayoutFromRedoList )

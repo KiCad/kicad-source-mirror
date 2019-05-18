@@ -357,37 +357,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( prefs_menu );
 
-    //----- Help menu --------------------
-    wxMenu* helpMenu = new wxMenu;
-
-    // Contents
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "Pcbnew &Manual" ),
-                 _( "Open the Pcbnew Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu, wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    text = AddHotkeyName( _( "&List Hotkeys..." ), m_hotkeysDescrList, HK_HELP );
-    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 text,
-                 _( "Displays current hotkeys table and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    helpMenu->AppendSeparator();
-
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    // About Pcbnew
-    helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-
+    //------------------------------------
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
@@ -396,7 +366,7 @@ void FOOTPRINT_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( prefs_menu, _( "P&references" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

@@ -24,6 +24,9 @@
 #include <macros.h>
 #include <menus_helpers.h>
 #include <tool/actions.h>
+#include <tool/conditional_menu.h>
+#include <tool/tool_manager.h>
+#include <tools/selection_tool.h>
 #include "help_common_strings.h"
 #include "hotkeys.h"
 #include "footprint_viewer_frame.h"
@@ -115,6 +118,7 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateVToolbar()
 // Virtual function
 void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
 {
+    SELECTION_TOOL* selTool = m_toolManager->GetTool<SELECTION_TOOL>();
     // wxWidgets handles the Mac Application menu behind the scenes, but that means
     // we always have to start from scratch with a new wxMenuBar.
     wxMenuBar* oldMenuBar = GetMenuBar();
@@ -133,23 +137,13 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
                  KiBitmap( exit_xpm ) );
 
     // View menu
-    wxMenu* viewMenu = new wxMenu;
+    CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
 
-    text = AddHotkeyName( _( "Zoom &In" ), g_Module_Viewer_Hotkeys_Descr,
-                          HK_ZOOM_IN, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_IN, text, HELP_ZOOM_IN, KiBitmap( zoom_in_xpm ) );
-
-    text = AddHotkeyName( _( "Zoom &Out" ), g_Module_Viewer_Hotkeys_Descr,
-                          HK_ZOOM_OUT, IS_ACCELERATOR );
-    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_OUT, text, HELP_ZOOM_OUT, KiBitmap( zoom_out_xpm ) );
-
-    text = AddHotkeyName( _( "&Fit on Screen" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_AUTO  );
-    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_PAGE, text, _( "Zoom to fit footprint" ),
-                 KiBitmap( zoom_fit_in_page_xpm ) );
-
-    text = AddHotkeyName( _( "&Redraw" ), g_Module_Viewer_Hotkeys_Descr, HK_ZOOM_REDRAW );
-    AddMenuItem( viewMenu, ID_VIEWER_ZOOM_REDRAW, text,
-                 HELP_ZOOM_REDRAW, KiBitmap( zoom_redraw_xpm ) );
+    viewMenu->AddSeparator();
+    viewMenu->AddItem( ACTIONS::zoomInCenter,    SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomOutCenter,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomFitScreen,   SELECTION_CONDITIONS::ShowAlways );
+    viewMenu->AddItem( ACTIONS::zoomRedraw,      SELECTION_CONDITIONS::ShowAlways );
 
     viewMenu->AppendSeparator();
 
@@ -158,32 +152,10 @@ void FOOTPRINT_VIEWER_FRAME::ReCreateMenuBar()
     AddMenuItem( viewMenu, ID_MODVIEW_SHOW_3D_VIEW, text, _( "Show footprint in 3D viewer" ),
                  KiBitmap( three_d_xpm ) );
 
-    // Menu Help:
-    wxMenu* helpMenu = new wxMenu;
-
-    // Contents
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "Pcbnew &Manual" ),
-                 _( "Open the Pcbnew manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu, wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    // About Pcbnew
-    helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About Pcbnew" ),
-                 _( "About Pcbnew PCB designer" ),
-                 KiBitmap( info_xpm ) );
-
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
-
     menuBar->Append( viewMenu, _( "&View" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

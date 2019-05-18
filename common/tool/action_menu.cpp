@@ -143,13 +143,21 @@ void ACTION_MENU::DisplayTitle( bool aDisplay )
 
 wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon )
 {
-#ifdef DEBUG
-    if( FindItem( aId ) != NULL )
-        wxLogWarning( wxT( "Adding more than one menu entry with the same ID may result in"
-                "undefined behaviour" ) );
-#endif
+    wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
 
     wxMenuItem* item = new wxMenuItem( this, aId, aLabel, wxEmptyString, wxITEM_NORMAL );
+    set_wxMenuIcon( item, aIcon );
+
+    return Append( item );
+}
+
+
+wxMenuItem* ACTION_MENU::Add( const wxString& aLabel, const wxString& aTooltip, int aId,
+                              const BITMAP_OPAQUE* aIcon )
+{
+    wxASSERT_MSG( FindItem( aId ) == nullptr, "Duplicate menu IDs!" );
+
+    wxMenuItem* item = new wxMenuItem( this, aId, aLabel, aTooltip, wxITEM_NORMAL );
     set_wxMenuIcon( item, aIcon );
 
     return Append( item );

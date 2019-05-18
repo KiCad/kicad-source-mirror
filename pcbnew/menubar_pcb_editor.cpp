@@ -323,11 +323,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     preparePreferencesMenu( this, configmenu );
 
-    //------ Help menu ----------------------------------------------------------
-    wxMenu* helpMenu = new wxMenu;
-    prepareHelpMenu( helpMenu );
-
-    // Append all menus to the menuBar
+    //------ Append all menus to the menuBar ------------------------------------
     menuBar->Append( filesMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
@@ -336,7 +332,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( configmenu, _( "P&references" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;
@@ -536,39 +532,6 @@ void prepareToolsMenu( wxMenu* aParentMenu )
 
     submenuActionPluginsMenu->AppendSeparator();
 #endif
-}
-
-
-// Build the help menu
-void prepareHelpMenu( wxMenu* aParentMenu )
-{
-
-    AddMenuItem( aParentMenu, wxID_HELP,
-                 _( "Pcbnew &Manual" ),
-                 _( "Open Pcbnew Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( aParentMenu, wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), g_Board_Editor_Hotkeys_Descr, HK_HELP );
-    AddMenuItem( aParentMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 text,
-                 _( "Display current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    aParentMenu->AppendSeparator();
-
-    AddMenuItem( aParentMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
 }
 
 

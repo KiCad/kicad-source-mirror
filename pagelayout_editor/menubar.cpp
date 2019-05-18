@@ -181,41 +181,13 @@ void PL_EDITOR_FRAME::ReCreateMenuBar()
     // Language submenu
     Pgm().AddMenuLanguageList( preferencesMenu );
 
-    // Menu Help
-    wxMenu* helpMenu = new wxMenu;
-
-    // Contents
-    AddMenuItem( helpMenu, wxID_HELP, _( "Page Layout Editor &Manual" ),
-                 _( "Open the Page Layout Editor Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu, wxID_INDEX, _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    msg = AddHotkeyName( _( "&List Hotkeys" ), PlEditorHotkeysDescr, HK_HELP );
-    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, msg,
-                 _( "Displays the current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    // Separator
-    helpMenu->AppendSeparator();
-
-    // About Kicad
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), wxEmptyString, KiBitmap( about_xpm ) );
-
     // Append menus to the menubar
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

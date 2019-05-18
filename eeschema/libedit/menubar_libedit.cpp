@@ -281,50 +281,16 @@ void LIB_EDIT_FRAME::ReCreateMenuBar()
                  _( "Use Modern Toolset with software graphics (fall-back)" ),
                  KiBitmap( tools_xpm ), wxITEM_RADIO );
 
-
-
-    // Menu Help:
-    wxMenu* helpMenu = new wxMenu;
-
-    // Contents
-    AddMenuItem( helpMenu,
-                 wxID_HELP,
-                 _( "Eeschema &Manual" ),
-                 _( "Open the Eeschema Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu,
-                 wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open the \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    text = AddHotkeyName( _( "&List Hotkeys..." ), g_Libedit_Hotkeys_Descr, HK_HELP );
-    AddMenuItem( helpMenu,
-                 ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 text,
-                 _( "Displays the current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    helpMenu->AppendSeparator();
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    // About Eeschema
-    helpMenu->AppendSeparator();
-
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-
+    //
     // Create the menubar and append all submenus
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( editMenu, _( "&Edit" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( placeMenu, _( "&Place" ) );
     menuBar->Append( inspectMenu, _( "&Inspect" ) );
     menuBar->Append( preferencesMenu, _( "P&references" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

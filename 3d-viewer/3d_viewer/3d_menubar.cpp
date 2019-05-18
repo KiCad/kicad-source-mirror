@@ -45,7 +45,6 @@ void EDA_3D_VIEWER::CreateMenuBar()
     wxMenu*    editMenu  = new wxMenu;
     wxMenu*    viewMenu  = new wxMenu;
     wxMenu*    prefsMenu = new wxMenu;
-    wxMenu*    helpMenu  = new wxMenu;
 
     menuBar->Append( fileMenu, _( "&File" ) );
 
@@ -292,39 +291,7 @@ void EDA_3D_VIEWER::CreateMenuBar()
                  _( "Reset to Default Settings" ),
                  KiBitmap( tools_xpm ) );
 
-    // Help menu
-    // /////////////////////////////////////////////////////////////////////////
-    menuBar->Append( helpMenu, _( "&Help" ) );
-
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "Pcbnew &Manual" ),
-                 _( "Open Pcbnew Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu, wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    wxString text = AddHotkeyName( _( "&List Hotkeys..." ), GetHotkeyConfig(), HK_HELP );
-    AddMenuItem( helpMenu, ID_MENU3D_HELP_HOTKEY_SHOW_CURRENT_LIST,
-                 text,
-                 _( "Displays the current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    helpMenu->AppendSeparator();
-
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    helpMenu->AppendSeparator();
-
-    AddMenuItem( helpMenu, wxID_ABOUT,
-                 _( "&About KiCad" ),
-                 _( "Display KiCad About dialog" ),
-                 KiBitmap( about_xpm ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
 }

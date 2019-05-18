@@ -362,8 +362,6 @@ public:
     void UpdateTrackWidthSelectBox( wxChoice* aTrackWidthSelectBox, const bool aEdit = true );
     void UpdateViaSizeSelectBox( wxChoice* aViaSizeSelectBox, const bool aEdit = true );
 
-    void GetKicadAbout( wxCommandEvent& event );
-
     /**
      * Function IsGridVisible() , virtual
      * @return true if the grid must be shown

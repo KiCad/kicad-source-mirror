@@ -61,10 +61,6 @@ BEGIN_EVENT_TABLE( KICAD_MANAGER_FRAME, EDA_BASE_FRAME )
     EVT_MENU( ID_SAVE_AND_ZIP_FILES, KICAD_MANAGER_FRAME::OnArchiveFiles )
     EVT_MENU( ID_READ_ZIP_ARCHIVE, KICAD_MANAGER_FRAME::OnUnarchiveFiles )
     EVT_MENU( ID_PROJECT_TREE_REFRESH, KICAD_MANAGER_FRAME::OnRefresh )
-    EVT_MENU( wxID_HELP, KICAD_MANAGER_FRAME::GetKicadHelp )
-    EVT_MENU( wxID_INDEX, KICAD_MANAGER_FRAME::GetKicadHelp )
-    EVT_MENU( ID_HELP_GET_INVOLVED, KICAD_MANAGER_FRAME::GetKicadContribute )
-    EVT_MENU( wxID_ABOUT, KICAD_MANAGER_FRAME::GetKicadAbout )
     EVT_MENU( ID_IMPORT_EAGLE_PROJECT, KICAD_MANAGER_FRAME::OnImportEagleFiles )
 
     // Range menu events
@@ -400,47 +396,13 @@ void KICAD_MANAGER_FRAME::ReCreateMenuBar()
                  _( "Edit worksheet graphics and text" ),
                  KiBitmap( pagelayout_load_xpm ) );
 
-    // Menu Help:
-    wxMenu* helpMenu = new wxMenu;
-
-    // Contents
-    AddMenuItem( helpMenu, wxID_HELP,
-                 _( "KiCad &Manual" ),
-                 _( "Open KiCad user manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    AddMenuItem( helpMenu, wxID_INDEX,
-                 _( "&Getting Started in KiCad" ),
-                 _( "Open \"Getting Started in KiCad\" guide for beginners" ),
-                 KiBitmap( help_xpm ) );
-
-    AddMenuItem( helpMenu,
-                 ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST,
-                 _( "&List Hotkeys" ),
-                 _( "Displays the current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    // Separator
-    helpMenu->AppendSeparator();
-
-    // Get involved with KiCad
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED,
-                 _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    helpMenu->AppendSeparator();
-
-    // About
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-
     // Create the menubar and append all submenus
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( toolsMenu, _( "&Tools" ) );
     menuBar->Append( browseMenu, _( "&Browse" ) );
     menuBar->Append( preferencesMenu, _( "&Preferences" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     SetMenuBar( menuBar );
     delete oldMenuBar;

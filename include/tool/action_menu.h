@@ -74,13 +74,12 @@ public:
 
     /**
      * Function Add()
-     * Adds an entry to the menu. After highlighting/selecting the entry, a TOOL_EVENT command is
-     * sent that contains ID of the entry.
-     * @param aLabel is the text label show in the menu.
-     * @param aId is the ID that is sent in the TOOL_EVENT. It should be unique for every entry.
-     * @param aIcon is an optional icon.
+     * Adds a wxWidgets-style entry to the menu. After highlighting/selecting the entry,
+     * a wxWidgets event is generated.
      */
-    wxMenuItem* Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon = NULL );
+    wxMenuItem* Add( const wxString& aLabel, int aId, const BITMAP_OPAQUE* aIcon );
+    wxMenuItem* Add( const wxString& aLabel, const wxString& aToolTip, int aId,
+                     const BITMAP_OPAQUE* aIcon );
 
     /**
      * Function Add()

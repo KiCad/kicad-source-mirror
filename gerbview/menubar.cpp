@@ -321,37 +321,14 @@ void GERBVIEW_FRAME::ReCreateMenuBar()
                  _( "Clear the graphic layer currently selected" ),
                  KiBitmap( delete_sheet_xpm ) );
 
-    // Help menu
-    wxMenu* helpMenu = new wxMenu;
-
-    AddMenuItem( helpMenu, wxID_HELP, _( "Gerbview &Manual" ),
-                 _( "Open the GerbView Manual" ),
-                 KiBitmap( online_help_xpm ) );
-
-    text = AddHotkeyName( _( "&List Hotkeys..." ), GerbviewHotkeysDescr, HK_HELP );
-    AddMenuItem( helpMenu, ID_PREFERENCES_HOTKEY_SHOW_CURRENT_LIST, text,
-                 _( "Displays the current hotkeys list and corresponding commands" ),
-                 KiBitmap( hotkeys_xpm ) );
-
-    // Separator
-    helpMenu->AppendSeparator();
-
-    // Get involved with KiCad
-    AddMenuItem( helpMenu, ID_HELP_GET_INVOLVED, _( "Get &Involved" ),
-                 _( "Contribute to KiCad (opens a web browser)" ),
-                 KiBitmap( info_xpm ) );
-
-    helpMenu->AppendSeparator();
-
-    // About Kicad
-    AddMenuItem( helpMenu, wxID_ABOUT, _( "&About KiCad" ), KiBitmap( about_xpm ) );
-
+    //
     // Append menus to the menubar
+    //
     menuBar->Append( fileMenu, _( "&File" ) );
     menuBar->Append( viewMenu, _( "&View" ) );
     menuBar->Append( miscellaneousMenu, _( "&Tools" ) );
     menuBar->Append( configMenu, _( "&Preferences" ) );
-    menuBar->Append( helpMenu, _( "&Help" ) );
+    AddStandardHelpMenu( menuBar );
 
     // Associate the menu bar with the frame, if no previous menubar
     SetMenuBar( menuBar );

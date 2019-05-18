@@ -190,6 +190,8 @@ protected:
 
     virtual wxString help_name();
 
+    DECLARE_EVENT_TABLE()
+
 public:
     EDA_BASE_FRAME( wxWindow* aParent, FRAME_T aFrameType,
         const wxString& aTitle, const wxPoint& aPos, const wxSize& aSize,
@@ -349,6 +351,11 @@ public:
      * Needed when the language is changed
      */
     virtual void ReCreateMenuBar();
+
+    /**
+     * Adds the standard KiCad help menu to the menubar.
+     */
+    void AddStandardHelpMenu( wxMenuBar* aMenuBar );
 
     /**
      * Checks if \a aFileName can be written.
