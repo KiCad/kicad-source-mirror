@@ -507,6 +507,13 @@ public:
     void SetRef( const SCH_SHEET_PATH* aSheet, const wxString& aReference );
 
     /**
+     * Checks if the component has a valid annotation (reference) for the given sheet path
+     * @param aSheet is the sheet path to test
+     * @return true if the component exists on that sheet and has a valid reference
+     */
+    bool IsAnnotated( const SCH_SHEET_PATH* aSheet );
+
+    /**
      * Add a full hierarchical reference to this symbol.
      *
      * @param aPath is the hierarchical path (/&ltsheet timestamp&gt/&ltcomponent

@@ -89,13 +89,19 @@ wxString SCH_PIN::GetDefaultNetName( const SCH_SHEET_PATH aPath )
 
     name << GetParentComponent()->GetRef( &aPath );
 
-    // TODO(JE) do we need adoptTimestamp?
-    if( /* adoptTimestamp && */ name.Last() == '?' )
+    bool annotated = true;
+
+    // Add timestamp for uninitialized components
+    if( name.Last() == '?' )
+    {
         name << GetParentComponent()->GetTimeStamp();
+        annotated = false;
+    }
 
     name << "-Pad" << m_libPin->GetNumber() << ")";
 
-    m_net_name_map[ aPath ] = name;
+    if( annotated )
+        m_net_name_map[ aPath ] = name;
 
     return name;
 }

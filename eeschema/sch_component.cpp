@@ -724,6 +724,29 @@ void SCH_COMPONENT::SetRef( const SCH_SHEET_PATH* sheet, const wxString& ref )
 }
 
 
+bool SCH_COMPONENT::IsAnnotated( const SCH_SHEET_PATH* aSheet )
+{
+    wxString          path = GetPath( aSheet );
+    wxString          h_path;
+    wxStringTokenizer tokenizer;
+    wxString          separators( wxT( " " ) );
+
+    for( unsigned ii = 0; ii < m_PathsAndReferences.GetCount(); ii++ )
+    {
+        tokenizer.SetString( m_PathsAndReferences[ii], separators );
+        h_path = tokenizer.GetNextToken();
+
+        if( h_path.Cmp( path ) == 0 )
+        {
+            wxString ref = tokenizer.GetNextToken();
+            return ref.Last() != '?';
+        }
+    }
+
+    return false;
+}
+
+
 void SCH_COMPONENT::SetTimeStamp( timestamp_t aNewTimeStamp )
 {
     wxString string_timestamp, string_oldtimestamp;

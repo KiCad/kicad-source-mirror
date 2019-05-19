@@ -23,6 +23,8 @@
 
 #include <advanced_config.h>
 #include <connection_graph.h>
+#include <sch_component.h>
+#include <sch_pin.h>
 #include <sch_screen.h>
 
 #include <sch_connection.h>
@@ -234,11 +236,18 @@ bool SCH_CONNECTION::IsDriver() const
     case SCH_LABEL_T:
     case SCH_GLOBAL_LABEL_T:
     case SCH_HIER_LABEL_T:
-    case SCH_PIN_T:
     case SCH_SHEET_PIN_T:
     case SCH_SHEET_T:
     case LIB_PIN_T:
         return true;
+
+    case SCH_PIN_T:
+    {
+        auto pin = static_cast<SCH_PIN*>( Parent() );
+
+        // Only annotated components should drive nets
+        return pin->GetParentComponent()->IsAnnotated( &m_sheet );
+    }
 
     default:
         return false;
