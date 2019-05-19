@@ -144,6 +144,9 @@ public:
     ///> Menu requires updating before display.
     bool m_Dirty;
 
+    ///> The default menu event handler.
+    void OnMenuEvent( wxMenuEvent& aEvent );
+
 protected:
     ///> Returns an instance of this class. It has to be overridden in inheriting classes.
     virtual ACTION_MENU* create() const;
@@ -189,9 +192,6 @@ protected:
 
     ///> Initializes handlers for events.
     void setupEvents();
-
-    ///> The default menu event handler.
-    void onMenuEvent( wxMenuEvent& aEvent );
 
     ///> Updates hot key settings for TOOL_ACTIONs in this menu.
     void updateHotKeys();

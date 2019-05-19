@@ -87,9 +87,11 @@ void ACTION_MENU::SetIcon( const BITMAP_OPAQUE* aIcon )
 
 void ACTION_MENU::setupEvents()
 {
-    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::onMenuEvent ), NULL, this );
-    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::onMenuEvent ), NULL, this );
-    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::onMenuEvent ), NULL, this );
+// See wxWidgets hack in EDA_DRAW_FRAME::OnMenuOpen().
+//    Connect( wxEVT_MENU_OPEN, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
+//    Connect( wxEVT_MENU_HIGHLIGHT, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
+
+    Connect( wxEVT_COMMAND_MENU_SELECTED, wxMenuEventHandler( ACTION_MENU::OnMenuEvent ), NULL, this );
 }
 
 
@@ -322,7 +324,7 @@ void ACTION_MENU::updateHotKeys()
 }
 
 
-void ACTION_MENU::onMenuEvent( wxMenuEvent& aEvent )
+void ACTION_MENU::OnMenuEvent( wxMenuEvent& aEvent )
 {
     OPT_TOOL_EVENT evt;
     wxString menuText;

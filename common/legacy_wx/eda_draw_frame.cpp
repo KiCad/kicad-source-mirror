@@ -46,7 +46,6 @@
 #include <math/box2.h>
 #include <lockfile.h>
 #include <trace_helpers.h>
-
 #include <wx/clipbrd.h>
 #include <fctsys.h>
 #include <gr_basic.h>
@@ -55,8 +54,6 @@
 #include <base_screen.h>
 #include <confirm.h>
 #include <draw_frame.h>
-
-
 #include <wx/fontdlg.h>
 #include <wx/snglinst.h>
 #include <view/view.h>
@@ -65,7 +62,7 @@
 #include <tool/tool_manager.h>
 #include <tool/tool_dispatcher.h>
 #include <tool/actions.h>
-
+#include <tool/action_menu.h>
 #include <advanced_config.h>
 #include <menus_helpers.h>
 #include <page_info.h>
@@ -105,6 +102,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
 
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
+    EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
     EVT_MENU_RANGE( ID_ZOOM_BEGIN, ID_ZOOM_END, EDA_DRAW_FRAME::OnZoom )
 
@@ -306,8 +304,37 @@ void EDA_DRAW_FRAME::OnActivate( wxActivateEvent& event )
 
 void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
 {
-    if( m_canvas )
-        m_canvas->SetCanStartBlock( -1 );
+    // On wxWidgets 3.0.x Windows, EVT_MENU_OPEN ( and other EVT_MENU_xx) events are not
+    // captured by the ACTON_MENU menus.  While it is fixed in wxWidgets 3.1.x, we still
+    // need a solution for the earlier verions.
+    //
+    // This could be made conditional, but for now I'm going to use the same strategy
+    // everywhere so it gets wider testing.
+    // Note that if the conditional compilation is reactivated, the Connect() lines in
+    // ACTION_MENU::setupEvents() will need to be re-enabled.
+//#if defined( __WINDOWS__ ) && wxCHECK_VERSION( 3, 0, 0 ) && !wxCHECK_VERSION( 3, 1, 0 )
+
+    // As if things weren't bad enough, wxWidgets doesn't pass the menu pointer when the
+    // event is a wxEVT_MENU_HIGHLIGHT, so we store the menu from the EVT_MENU_OPEN call.
+    static ACTION_MENU* currentMenu;
+
+    if( event.GetEventType() == wxEVT_MENU_OPEN )
+    {
+        currentMenu = dynamic_cast<ACTION_MENU*>( event.GetMenu() );
+
+        if( currentMenu )
+            currentMenu->OnMenuEvent( event );
+    }
+    else if( event.GetEventType() == wxEVT_MENU_HIGHLIGHT )
+    {
+        if( currentMenu )
+            currentMenu->OnMenuEvent( event );
+    }
+    else if( event.GetEventType() == wxEVT_MENU_CLOSE )
+    {
+        currentMenu = nullptr;
+    }
+//#endif
 
     event.Skip();
 }
