@@ -435,19 +435,15 @@ void GERBVIEW_FRAME::OnUpdateSwitchCanvas( wxUpdateUIEvent& aEvent )
 {
     wxMenuBar* menuBar = GetMenuBar();
     EDA_DRAW_PANEL_GAL* gal_canvas = GetGalCanvas();
-    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE;
-
-    if( IsGalCanvasActive() && gal_canvas )
-        canvasType = gal_canvas->GetBackend();
+    EDA_DRAW_PANEL_GAL::GAL_TYPE canvasType = gal_canvas->GetBackend();
 
     struct { int menuId; int galType; } menuList[] =
     {
-        { ID_MENU_CANVAS_LEGACY,    EDA_DRAW_PANEL_GAL::GAL_TYPE_NONE },
         { ID_MENU_CANVAS_OPENGL,    EDA_DRAW_PANEL_GAL::GAL_TYPE_OPENGL },
         { ID_MENU_CANVAS_CAIRO,     EDA_DRAW_PANEL_GAL::GAL_TYPE_CAIRO },
     };
 
-    for( auto ii: menuList )
+    for( auto ii : menuList )
     {
         wxMenuItem* item = menuBar->FindItem( ii.menuId );
 
