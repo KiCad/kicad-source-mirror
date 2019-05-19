@@ -521,6 +521,13 @@ public:
     SCH_SHEET* FindSheetByName( const wxString& aSheetName );
 
     /**
+     * Function FindSheetForScreen
+     *
+     * returns the first sheetPath (not necessarily the only one) using a particular screen
+     */
+    SCH_SHEET_PATH* FindSheetForScreen( SCH_SCREEN* aScreen );
+
+    /**
      * Function BuildSheetList
      * builds the list of sheets and their sheet path from \a aSheet.
      * If \a aSheet is the root sheet, the full sheet path and sheet list are built.

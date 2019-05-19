@@ -232,11 +232,9 @@ int SCH_DRAWING_TOOLS::AddSheetPin( const TOOL_EVENT& aEvent )
         if( !label )
         {
             m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
-            m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
             m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-            m_statusPopup->Popup();
-            m_statusPopup->Expire( 2000 );
+            m_statusPopup->PopupFor( 2000 );
             return 0;
         }
     }
@@ -367,7 +365,7 @@ int SCH_DRAWING_TOOLS::doPlaceComponent( SCH_COMPONENT* aComponent, SCHLIB_FILTE
             if( !aComponent )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {
@@ -501,7 +499,7 @@ int SCH_DRAWING_TOOLS::PlaceImage( const TOOL_EVENT& aEvent )
             if( !image )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( image && ( evt->IsAction( &EE_ACTIONS::refreshPreview )
                          || evt->IsMotion() ) )
@@ -609,7 +607,7 @@ int SCH_DRAWING_TOOLS::doSingleClickPlace( KICAD_T aType )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
     }
 
@@ -721,11 +719,9 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                     if( !sheet )
                     {
                         m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
-                        m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
                         m_statusPopup->SetText( _( "Click over a sheet." ) );
                         m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                        m_statusPopup->Popup();
-                        m_statusPopup->Expire( 2000 );
+                        m_statusPopup->PopupFor( 2000 );
                         break;
                     }
 
@@ -736,11 +732,9 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
                         if( !label )
                         {
                             m_statusPopup.reset( new STATUS_TEXT_POPUP( m_frame ) );
-                            m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
                             m_statusPopup->SetText( _( "No new hierarchical labels found." ) );
                             m_statusPopup->Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
-                            m_statusPopup->Popup();
-                            m_statusPopup->Expire( 2000 );
+                            m_statusPopup->PopupFor( 2000 );
                             break;
                         }
                     }
@@ -783,7 +777,7 @@ int SCH_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             if( !item )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( item && TOOL_EVT_UTILS::IsSelectionEvent( evt.get() ) )
         {
@@ -893,7 +887,7 @@ int SCH_DRAWING_TOOLS::DrawSheet( const TOOL_EVENT& aEvent )
             if( !sheet )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
         // Enable autopanning and cursor capture only when there is a sheet to be placed

@@ -320,15 +320,16 @@ void SCH_FIELD::Place( SCH_EDIT_FRAME* frame, wxDC* DC )
 }
 
 
-bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
-    bool match;
     wxString text = GetFullyQualifiedText();
 
     // User defined fields have an ID of -1.
     if( ((m_id > VALUE || m_id < REFERENCE) && !(aSearchData.GetFlags() & FR_SEARCH_ALL_FIELDS))
         || ((m_id == REFERENCE) && !(aSearchData.GetFlags() & FR_REPLACE_REFERENCES)) )
+    {
         return false;
+    }
 
     wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
@@ -346,17 +347,7 @@ bool SCH_FIELD::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
             text << LIB_PART::SubReference( component->GetUnit() );
     }
 
-    match = SCH_ITEM::Matches( text, aSearchData );
-
-    if( match )
-    {
-        if( aFindLocation )
-            *aFindLocation = GetBoundingBox().Centre();
-
-        return true;
-    }
-
-    return false;
+    return SCH_ITEM::Matches( text, aSearchData );
 }
 
 

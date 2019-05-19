@@ -1024,8 +1024,7 @@ static bool deleteItem( SCH_BASE_FRAME* aFrame, const VECTOR2D& aPosition )
     {
         STATUS_TEXT_POPUP statusPopup( aFrame );
         statusPopup.SetText( _( "Item locked." ) );
-        statusPopup.Expire( 2000 );
-        statusPopup.Popup();
+        statusPopup.PopupFor( 2000 );
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
         return true;
     }

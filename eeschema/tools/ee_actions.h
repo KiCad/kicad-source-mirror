@@ -154,11 +154,6 @@ public:
     static TOOL_ACTION editWithLibEdit;
     static TOOL_ACTION showLibraryBrowser;
 
-    /// Clipboard
-    static TOOL_ACTION cut;
-    static TOOL_ACTION copy;
-    static TOOL_ACTION paste;
-
     // Miscellaneous
     static TOOL_ACTION enterSheet;
     static TOOL_ACTION leaveSheet;

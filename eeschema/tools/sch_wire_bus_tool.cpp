@@ -765,7 +765,7 @@ int SCH_WIRE_BUS_TOOL::doDrawSegments( int aType, SCH_LINE* aSegment )
             if( !aSegment )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         else if( evt->Category() == TC_COMMAND && evt->Action() == TA_CONTEXT_MENU_CHOICE )
         {

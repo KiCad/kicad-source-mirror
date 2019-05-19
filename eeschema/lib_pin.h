@@ -123,7 +123,7 @@ public:
     void GetMsgPanelInfo( EDA_UNITS_T aUnits, std::vector< MSG_PANEL_ITEM >& aList,
                           SCH_COMPONENT* aComponent );
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
 
     /* Cannot use a default parameter here as it will not be compatible with the virtual. */
     const EDA_RECT GetBoundingBox() const override { return GetBoundingBox( false ); }

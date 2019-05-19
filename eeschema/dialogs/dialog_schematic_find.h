@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,9 @@
 
 #include <wx/fdrepdlg.h>          // Use the wxFindReplaceDialog events, data, and enums.
 
+class SCH_EDIT_FRAME;
+class SCH_EDITOR_CONTROL;
+
 
 /**
  * Define schematic specific find and replace dialog flags based on the enum entries
@@ -65,9 +68,6 @@ enum SchematicFindReplaceFlags
     /// Wrap around the beginning or end of search list.
     FR_SEARCH_WRAP           = wxFR_MATCHCASE << 5,
 
-    /// Don't warp cursor to found item until the dialog is closed.
-    FR_NO_WARP_CURSOR        = wxFR_MATCHCASE << 6,
-
     /// Perform a search for a item that has replaceable text.
     FR_SEARCH_REPLACE        = wxFR_MATCHCASE << 7,
 
@@ -84,8 +84,7 @@ enum SchematicFindReplaceFlags
  * Definition FR_MASK_NON_COMPARE_FLAGS
  * is used to mask find/replace flag bits that do not effect the search results.
  */
-#define FR_MASK_NON_COMPARE_FLAGS  ~( wxFR_DOWN | FR_SEARCH_WRAP | FR_NO_WARP_CURSOR | \
-                                      FR_REPLACE_ITEM_FOUND )
+#define FR_MASK_NON_COMPARE_FLAGS  ~( wxFR_DOWN | FR_SEARCH_WRAP | FR_REPLACE_ITEM_FOUND )
 
 
 /**
@@ -96,7 +95,7 @@ class SCH_FIND_REPLACE_DATA : public wxFindReplaceData
 {
 public:
 
-    SCH_FIND_REPLACE_DATA& operator =( SCH_FIND_REPLACE_DATA& aFindReplaceData )
+    SCH_FIND_REPLACE_DATA& operator =( const SCH_FIND_REPLACE_DATA& aFindReplaceData )
     {
         if( this == &aFindReplaceData )
             return *this;
@@ -120,26 +119,6 @@ public:
         return !( *this == aFindReplaceData );
     }
 
-
-    /**
-     * Function ChangesCompare
-     * tests \a aFindReplaceData to see if it would result in a change in the search string
-     * comparison results.
-     *
-     * @param aFindReplaceData A reference to a #SCH_FIND_REPLACE_DATA object to compare
-     *                         against.
-     * @return True if \a aFindReplaceData would result in a search and/or replace change,
-     *         otherwise false.
-     */
-    bool ChangesCompare( const SCH_FIND_REPLACE_DATA& aFindReplaceData )
-    {
-        return ( (GetFindString() != aFindReplaceData.GetFindString())
-              || (GetCompareFlags() != aFindReplaceData.GetCompareFlags()) );
-    }
-
-    bool IsReplacing() const { return (GetFlags() & FR_SEARCH_REPLACE) != 0; }
-    bool IsWrapping() const { return (GetFlags() & FR_SEARCH_WRAP) != 0; }
-
 private:
     /**
      * Function GetSearchFlags
@@ -155,26 +134,24 @@ class DIALOG_SCH_FIND : public DIALOG_SCH_FIND_BASE
 protected:
     // Handlers for DIALOG_SCH_FIND_BASE events.
     void OnClose( wxCloseEvent& aEvent ) override;
+    void OnSearchForText( wxCommandEvent& aEvent ) override;
     void OnTextEnter( wxCommandEvent& event ) override;
-    void OnUpdateFindUI( wxUpdateUIEvent& aEvent ) override;
+    void OnOptions( wxCommandEvent& event ) override;
     void OnUpdateReplaceUI( wxUpdateUIEvent& aEvent ) override;
     void OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent ) override;
-    void OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent ) override;
-    void OnUpdateWildcardUI( wxUpdateUIEvent& aEvent ) override;
 
+    void OnChar( wxKeyEvent& aEvent );
     void OnFind( wxCommandEvent& aEvent ) override;
     void OnReplace( wxCommandEvent& aEvent ) override;
-    void OnCancel( wxCommandEvent& aEvent ) override;
 
-    void SendEvent( const wxEventType& aEventType );
-
-    wxFindReplaceData* m_findReplaceData;
-    wxString*          m_status;
+    SCH_EDIT_FRAME*     m_frame;
+    SCH_EDITOR_CONTROL* m_editorControl;
+    wxFindReplaceData*  m_findReplaceData;
 
     DECLARE_NO_COPY_CLASS( DIALOG_SCH_FIND )
 
 public:
-    DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, wxString* aStatus,
+    DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
                      const wxPoint& aPosition = wxDefaultPosition,
                      const wxSize& aSize = wxDefaultSize, int aStyle = 0 );
 
@@ -185,17 +162,5 @@ public:
     wxArrayString GetReplaceEntries() const { return m_comboReplace->GetStrings(); }
 };
 
-
-BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_LOCAL_EVENT_TYPE( EVT_COMMAND_FIND_DRC_MARKER, wxID_ANY )
-    DECLARE_LOCAL_EVENT_TYPE( EVT_COMMAND_FIND_COMPONENT_IN_LIB, wxID_ANY )
-END_DECLARE_EVENT_TYPES()
-
-
-#define EVT_FIND_DRC_MARKER( id, fn ) \
-    wx__DECLARE_EVT1( EVT_COMMAND_FIND_DRC_MARKER, id, wxFindDialogEventHandler( fn ) )
-
-#define EVT_FIND_COMPONENT_IN_LIB( id, fn ) \
-    wx__DECLARE_EVT1( EVT_COMMAND_FIND_COMPONENT_IN_LIB, id, wxFindDialogEventHandler( fn ) )
 
 #endif // __dialog_schematic_find__

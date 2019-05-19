@@ -168,10 +168,8 @@ static EDA_HOTKEY HkDelete( _HKI( "Delete Item" ), HK_DELETE, WXK_DELETE );
 static EDA_HOTKEY HkFind( _HKI( "Find" ), HK_FIND, 'F' + GR_KB_CTRL  );
 static EDA_HOTKEY HkReplace( _HKI( "Find and Replace" ), HK_REPLACE, 'F' + GR_KB_CTRL + GR_KB_ALT );
 
-static EDA_HOTKEY HkFindNextItem( _HKI( "Find Next Item" ), HK_FIND_NEXT_ITEM, WXK_F5,
-                                  wxEVT_COMMAND_FIND );
-static EDA_HOTKEY HkFindNextMarker( _HKI( "Find Next Marker" ), HK_FIND_NEXT_DRC_MARKER, WXK_F5 + GR_KB_SHIFT,
-                                    EVT_COMMAND_FIND_DRC_MARKER );
+static EDA_HOTKEY HkFindNextItem( _HKI( "Find Next" ), HK_FIND_NEXT, WXK_F5 );
+static EDA_HOTKEY HkFindNextMarker( _HKI( "Find Next Marker" ), HK_FIND_NEXT_MARKER, WXK_F5 + GR_KB_SHIFT );
 static EDA_HOTKEY HkZoomSelection( _HKI( "Zoom to Selection" ), HK_ZOOM_SELECTION, GR_KB_CTRL + WXK_F5,
                                    ID_ZOOM_SELECTION );
 
@@ -439,27 +437,6 @@ bool SCH_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
         GetScreen()->m_O_Curseur = GetCrossHairPosition();
         break;
 
-    case HK_FIND:
-    case HK_REPLACE:
-        if( EE_CONDITIONS::Idle( selection ) )
-        {
-            cmd.SetId( hotKey->m_IdMenuEvent );
-            GetEventHandler()->ProcessEvent( cmd );
-        }
-        break;
-
-    case HK_FIND_NEXT_ITEM:
-    case HK_FIND_NEXT_DRC_MARKER:
-        if( EE_CONDITIONS::Idle( selection ) )
-        {
-            wxFindDialogEvent event( hotKey->m_IdMenuEvent, GetId() );
-            event.SetEventObject( this );
-            event.SetFlags( m_findReplaceData->GetFlags() );
-            event.SetFindString( m_findReplaceData->GetFindString() );
-            GetEventHandler()->ProcessEvent( event );
-        }
-        break;
-
     case HK_CANVAS_CAIRO:
     case HK_CANVAS_OPENGL:
         {
@@ -493,9 +470,7 @@ bool LIB_EDIT_FRAME::OnHotKey( wxDC* aDC, int aHotKey, const wxPoint& aPosition,
     if( aHotKey == 0 )
         return false;
 
-    wxCommandEvent     cmd( wxEVT_COMMAND_MENU_SELECTED );
-    EE_SELECTION_TOOL* selTool = GetToolManager()->GetTool<EE_SELECTION_TOOL>();
-
+    wxCommandEvent cmd( wxEVT_COMMAND_MENU_SELECTED );
     cmd.SetEventObject( this );
 
     /* Convert lower to upper case (the usual toupper function has problem

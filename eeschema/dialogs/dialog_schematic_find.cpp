@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2010 Wayne Stambaugh <stambaughw@verizon.net>
- * Copyright (C) 2010-2011 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2010-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -22,24 +22,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
  */
 
-/**
- * @file dialog_schematic_find.cpp
- * @brief Schematic find and replace dialog implementation.
- */
-
 #include <dialog_schematic_find.h>
+#include <tool/actions.h>
+#include <tool/tool_manager.h>
+#include <sch_edit_frame.h>
+#include <tools/sch_editor_control.h>
 
 
-DEFINE_EVENT_TYPE( EVT_COMMAND_FIND_DRC_MARKER )
-DEFINE_EVENT_TYPE( EVT_COMMAND_FIND_COMPONENT_IN_LIB )
-
-
-DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, wxString* aStatus,
+DIALOG_SCH_FIND::DIALOG_SCH_FIND( SCH_EDIT_FRAME* aParent, wxFindReplaceData* aData,
                                   const wxPoint& aPosition, const wxSize& aSize, int aStyle ) :
     DIALOG_SCH_FIND_BASE( aParent, wxID_ANY, _( "Find" ), aPosition, aSize,
                           wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | aStyle ),
-    m_findReplaceData( aData ),
-    m_status( aStatus )
+    m_frame( aParent ),
+    m_editorControl( m_frame->GetToolManager()->GetTool<SCH_EDITOR_CONTROL>() ),
+    m_findReplaceData( aData )
 {
     wxASSERT_MSG( m_findReplaceData, wxT( "can't create find dialog without data" ) );
 
@@ -59,7 +55,6 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, w
     m_radioBackward->SetValue( ( flags & wxFR_DOWN ) == 0 );
     m_checkMatchCase->SetValue( flags & wxFR_MATCHCASE );
     m_checkWholeWord->SetValue( flags & wxFR_WHOLEWORD );
-    m_checkNoWarpCursor->SetValue( flags & FR_NO_WARP_CURSOR );
 
     /* Whole word and wild card searches are mutually exclusive. */
     if( !( flags & wxFR_WHOLEWORD ) )
@@ -68,10 +63,8 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, w
     m_checkAllFields->SetValue( flags & FR_SEARCH_ALL_FIELDS );
     m_checkReplaceReferences->SetValue( flags & FR_REPLACE_REFERENCES );
     m_checkAllPins->SetValue( flags & FR_SEARCH_ALL_PINS );
-    m_checkWrap->SetValue( flags & FR_SEARCH_WRAP );
     m_checkCurrentSheetOnly->SetValue( flags & FR_CURRENT_SHEET_ONLY );
 
-    m_statusLine->SetLabel( wxEmptyString );
     m_buttonFind->SetDefault();
     SetInitialFocus( m_comboFind );
 
@@ -94,25 +87,24 @@ DIALOG_SCH_FIND::DIALOG_SCH_FIND( wxWindow* aParent, wxFindReplaceData* aData, w
     SetSize( size );
 
     GetSizer()->Fit( this ); // Needed on Ubuntu/Unity to display the dialog
+
+    Connect( wxEVT_CHAR, wxKeyEventHandler( DIALOG_SCH_FIND::OnChar ), nullptr, this );
 }
 
 
 void DIALOG_SCH_FIND::OnClose( wxCloseEvent& aEvent )
 {
-    SendEvent( wxEVT_COMMAND_FIND_CLOSE );
-}
-
-
-void DIALOG_SCH_FIND::OnUpdateFindUI( wxUpdateUIEvent& aEvent )
-{
-    aEvent.Enable( !m_comboFind->GetValue().empty() );
+    // Notify the SCH_EDIT_FRAME
+    m_frame->OnFindDialogClose();
+    // Notify the controller
+    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }
 
 
 void DIALOG_SCH_FIND::OnUpdateReplaceUI( wxUpdateUIEvent& aEvent )
 {
     aEvent.Enable( HasFlag( wxFR_REPLACEDIALOG ) && !m_comboFind->GetValue().empty() &&
-                   (m_findReplaceData->GetFlags() & FR_REPLACE_ITEM_FOUND) );
+                    m_editorControl->HasMatch() );
 }
 
 
@@ -122,21 +114,56 @@ void DIALOG_SCH_FIND::OnUpdateReplaceAllUI( wxUpdateUIEvent& aEvent )
 }
 
 
-void DIALOG_SCH_FIND::OnUpdateWholeWordUI( wxUpdateUIEvent& aEvent )
+void DIALOG_SCH_FIND::OnChar( wxKeyEvent& aEvent )
 {
-    aEvent.Enable( !m_checkWildcardMatch->GetValue() );
+    if( aEvent.GetKeyCode() == WXK_RETURN )
+    {
+        wxCommandEvent dummyCommand;
+        OnFind( dummyCommand );
+    }
 }
 
 
-void DIALOG_SCH_FIND::OnUpdateWildcardUI( wxUpdateUIEvent& aEvent )
+void DIALOG_SCH_FIND::OnSearchForText( wxCommandEvent& aEvent )
 {
-    aEvent.Enable( !m_checkWholeWord->GetValue() );
+    m_findReplaceData->SetFindString( m_comboFind->GetValue() );
+    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }
 
 
 void DIALOG_SCH_FIND::OnTextEnter( wxCommandEvent& aEvent )
 {
     OnFind( aEvent );
+}
+
+
+void DIALOG_SCH_FIND::OnOptions( wxCommandEvent& aEvent )
+{
+    int flags = 0;
+
+    if( m_radioForward->GetValue() )
+        flags |= wxFR_DOWN;
+
+    if( m_checkMatchCase->GetValue() )
+        flags |= wxFR_MATCHCASE;
+
+    if( m_checkWholeWord->GetValue() )
+        flags |= wxFR_WHOLEWORD;
+
+    if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
+        flags |= FR_MATCH_WILDCARD;
+
+    if( m_checkAllFields->GetValue() )
+        flags |= FR_SEARCH_ALL_FIELDS;
+
+    if( m_checkAllPins->GetValue() )
+        flags |= FR_SEARCH_ALL_PINS;
+
+    if( m_checkCurrentSheetOnly->GetValue() )
+        flags |= FR_CURRENT_SHEET_ONLY;
+
+    m_findReplaceData->SetFlags( flags );
+    m_editorControl->UpdateFind( ACTIONS::updateFind.MakeEvent() );
 }
 
 
@@ -157,7 +184,7 @@ void DIALOG_SCH_FIND::OnFind( wxCommandEvent& aEvent )
         m_comboFind->SetSelection( 0 );
     }
 
-    SendEvent( wxEVT_COMMAND_FIND );
+    m_editorControl->FindNext( ACTIONS::findNext.MakeEvent());
 }
 
 
@@ -179,94 +206,9 @@ void DIALOG_SCH_FIND::OnReplace( wxCommandEvent& aEvent )
     }
 
     if( aEvent.GetId() == wxID_REPLACE )
-        SendEvent( wxEVT_COMMAND_FIND_REPLACE );
+        m_editorControl->FindNext( ACTIONS::replaceAndFindNext.MakeEvent());
     else if( aEvent.GetId() == wxID_REPLACE_ALL )
-        SendEvent( wxEVT_COMMAND_FIND_REPLACE_ALL );
-}
-
-
-void DIALOG_SCH_FIND::OnCancel( wxCommandEvent& aEvent )
-{
-    SendEvent( wxEVT_COMMAND_FIND_CLOSE );
-    Show( false );
-}
-
-
-void DIALOG_SCH_FIND::SendEvent( const wxEventType& aEventType )
-{
-    wxFindDialogEvent event( aEventType, GetId() );
-    event.SetEventObject( this );
-    event.SetFindString( m_comboFind->GetValue() );
-
-    int flags = 0;
-
-    if ( HasFlag( wxFR_REPLACEDIALOG ) )
-    {
-        event.SetReplaceString( m_comboReplace->GetValue() );
-        flags |= FR_SEARCH_REPLACE;
-    }
-
-    if( m_checkReplaceReferences->GetValue() )
-        flags |= FR_REPLACE_REFERENCES;
-
-    if( m_radioForward->GetValue() )
-        flags |= wxFR_DOWN;
-
-    if( m_checkMatchCase->GetValue() )
-        flags |= wxFR_MATCHCASE;
-
-    if( m_checkWholeWord->GetValue() )
-        flags |= wxFR_WHOLEWORD;
-
-    if( m_checkWildcardMatch->IsShown() && m_checkWildcardMatch->GetValue() )
-        flags |= FR_MATCH_WILDCARD;
-
-    if( m_checkAllFields->GetValue() )
-        flags |= FR_SEARCH_ALL_FIELDS;
-
-    if( m_checkAllPins->GetValue() )
-        flags |= FR_SEARCH_ALL_PINS;
-
-    if( m_checkWrap->GetValue() )
-        flags |= FR_SEARCH_WRAP;
-
-    if( m_checkCurrentSheetOnly->GetValue() )
-        flags |= FR_CURRENT_SHEET_ONLY;
-
-    if( m_checkNoWarpCursor->GetValue() )
-        flags |= FR_NO_WARP_CURSOR;
-
-    m_findReplaceData->SetFindString( event.GetFindString() );
-
-    if( HasFlag( wxFR_REPLACEDIALOG )
-        && ( event.GetEventType() == wxEVT_COMMAND_FIND_REPLACE
-             || event.GetEventType() == wxEVT_COMMAND_FIND_REPLACE_ALL ) )
-    {
-        m_findReplaceData->SetReplaceString( event.GetReplaceString() );
-    }
-
-    event.SetFlags( flags );
-
-    m_findReplaceData->SetFlags( event.GetFlags() );
-
-    // when we are no using the find/replace (just find)
-    // FR_REPLACE_REFERENCES flag bit is always set to 1 in event flags
-    // but not set in m_findReplaceData
-    if ( ! HasFlag( wxFR_REPLACEDIALOG ) )
-    {
-        flags |= FR_REPLACE_REFERENCES;
-        event.SetFlags( flags );
-    }
-
-    if( !GetEventHandler()->ProcessEvent( event ) )
-    {
-        GetParent()->GetEventHandler()->ProcessEvent( event );
-    }
-
-    if( event.GetFlags() != flags )
-        m_findReplaceData->SetFlags( event.GetFlags() );
-
-    m_statusLine->SetLabel( *m_status );
+        m_editorControl->FindNext( ACTIONS::replaceAll.MakeEvent());
 }
 
 

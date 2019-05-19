@@ -34,10 +34,7 @@
 // see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_command {
-    HK_FIND_NEXT_ITEM = HK_COMMON_END,
-    HK_FIND_NEXT_DRC_MARKER,
-    HK_DELETE,
-    HK_REPEAT_LAST,
+    HK_REPEAT_LAST = HK_COMMON_END,
     HK_LIBEDIT_CREATE_PIN,
     HK_LIBEDIT_VIEW_DOC,
     HK_ROTATE,

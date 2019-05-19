@@ -341,8 +341,6 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
 
     BOARD_ITEM* text = NULL;
     const BOARD_DESIGN_SETTINGS& dsnSettings = m_frame->GetDesignSettings();
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    SELECTION& selection = selTool->GetSelection();
     BOARD_COMMIT commit( m_frame );
 
     m_toolMgr->RunAction( PCB_ACTIONS::selectionClear, true );
@@ -388,7 +386,7 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -491,8 +489,8 @@ int DRAWING_TOOL::PlaceText( const TOOL_EVENT& aEvent )
         else if( text && evt->IsMotion() )
         {
             text->SetPosition( (wxPoint) cursorPos );
-            selection.SetReferencePoint( cursorPos );
-            m_view->Update( &selection );
+            selection().SetReferencePoint( cursorPos );
+            m_view->Update( &selection() );
             frame()->SetMsgPanel( text );
         }
 
@@ -596,7 +594,7 @@ int DRAWING_TOOL::DrawDimension( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -882,7 +880,7 @@ int DRAWING_TOOL::PlaceImportedGraphics( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) )
         {
@@ -940,7 +938,7 @@ int DRAWING_TOOL::SetAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( TOOL_EVT_UTILS::IsCancelInteractive( *evt ) )
             break;
@@ -1051,7 +1049,7 @@ bool DRAWING_TOOL::drawSegment( int aShape, DRAWSEGMENT*& aGraphic, OPT<VECTOR2D
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsClick( BUT_LEFT ) || evt->IsDblClick( BUT_LEFT ) )
         {
@@ -1269,7 +1267,7 @@ bool DRAWING_TOOL::drawArc( DRAWSEGMENT*& aGraphic )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( evt->IsAction( &PCB_ACTIONS::incWidth ) )
         {
@@ -1430,7 +1428,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         // events that lock in nodes
         else if( evt->IsClick( BUT_LEFT )
@@ -1490,8 +1488,7 @@ int DRAWING_TOOL::drawZone( bool aKeepout, ZONE_MODE aMode )
             {
                 wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
                 status.Move( p );
-                status.Popup( m_frame );
-                status.Expire( 1500 );
+                status.PopupFor( 1500 );
             }
             else
             {

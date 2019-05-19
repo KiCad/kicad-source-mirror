@@ -31,7 +31,9 @@ void PNS_TUNE_STATUS_POPUP::UpdateStatus( PNS::ROUTER* aRouter )
     if( !placer )
         return;
 
-    SetText( placer->TuningInfo( m_frame->GetUserUnits() ) );
+    EDA_DRAW_FRAME* frame = static_cast<EDA_DRAW_FRAME*>( GetParent() );
+
+    SetText( placer->TuningInfo( frame->GetUserUnits() ) );
 
     // Determine the background color first and choose a contrasting value
     COLOR4D bg( m_panel->GetBackgroundColour() );

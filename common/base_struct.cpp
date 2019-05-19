@@ -132,9 +132,7 @@ SEARCH_RESULT EDA_ITEM::IterateForward( EDA_ITEM*       listStart,
                                         void*           testData,
                                         const KICAD_T   scanTypes[] )
 {
-    EDA_ITEM* p = listStart;
-
-    for( ; p; p = p->Pnext )
+    for( EDA_ITEM* p = listStart; p; p = p->Pnext )
     {
         if( SEARCH_QUIT == p->Visit( inspector, testData, scanTypes ) )
             return SEARCH_QUIT;

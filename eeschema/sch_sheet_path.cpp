@@ -797,3 +797,15 @@ SCH_SHEET* SCH_SHEET_LIST::FindSheetByName( const wxString& aSheetName )
 
     return NULL;
 }
+
+
+SCH_SHEET_PATH* SCH_SHEET_LIST::FindSheetForScreen( SCH_SCREEN* aScreen )
+{
+    for( SCH_SHEET_PATH& sheetpath : *this )
+    {
+        if( sheetpath.LastScreen() == aScreen )
+            return &sheetpath;
+    }
+
+    return nullptr;
+}

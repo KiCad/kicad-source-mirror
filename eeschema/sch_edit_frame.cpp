@@ -278,13 +278,6 @@ BEGIN_EVENT_TABLE( SCH_EDIT_FRAME, EDA_DRAW_FRAME )
     EVT_UPDATE_UI( ID_MENU_CANVAS_CAIRO, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
     EVT_UPDATE_UI( ID_MENU_CANVAS_OPENGL, SCH_EDIT_FRAME::OnUpdateSwitchCanvas )
 
-    /* Search dialog events. */
-    EVT_FIND_CLOSE( wxID_ANY, SCH_EDIT_FRAME::OnFindDialogClose )
-    EVT_FIND_DRC_MARKER( wxID_ANY, SCH_EDIT_FRAME::OnFindDrcMarker )
-    EVT_FIND( wxID_ANY, SCH_EDIT_FRAME::OnFindSchematicItem )
-    EVT_FIND_REPLACE( wxID_ANY, SCH_EDIT_FRAME::OnFindReplace )
-    EVT_FIND_REPLACE_ALL( wxID_ANY, SCH_EDIT_FRAME::OnFindReplace )
-
 END_EVENT_TABLE()
 
 
@@ -305,13 +298,14 @@ SCH_EDIT_FRAME::SCH_EDIT_FRAME( KIWAY* aKiway, wxWindow* aParent ):
     m_printSheetReference = true;
     SetShowPageLimits( true );
     m_hotkeysDescrList = g_Schematic_Hotkeys_Descr;
-    m_dlgFindReplace = NULL;
-    m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
-    m_findReplaceStatus = new wxString( wxEmptyString );
     m_undoItem = NULL;
     m_hasAutoSave = true;
     m_FrameSize = ConvertDialogToPixels( wxSize( 500, 350 ) );    // default in case of no prefs
     m_AboutTitle = "Eeschema";
+
+    m_findReplaceData = new wxFindReplaceData( wxFR_DOWN );
+    m_findReplaceDialog = nullptr;
+    m_findReplaceStatusPopup = nullptr;
 
     SetForceHVLines( true );
     SetSpiceAjustPassiveValues( false );
@@ -385,7 +379,6 @@ SCH_EDIT_FRAME::~SCH_EDIT_FRAME()
     delete g_ConnectionGraph;
     delete m_undoItem;
     delete m_findReplaceData;
-    delete m_findReplaceStatus;
     delete g_RootSheet;
 
     g_CurrentSheet = nullptr;
@@ -635,12 +628,15 @@ void SCH_EDIT_FRAME::OnCloseWindow( wxCloseEvent& aEvent )
     }
 
     // Close the find dialog and preserve it's setting if it is displayed.
-    if( m_dlgFindReplace )
+    if( m_findReplaceDialog )
     {
-        m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
-        m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
-        m_dlgFindReplace->Destroy();
-        m_dlgFindReplace = NULL;
+        m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
+        m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
+        m_findReplaceDialog->Destroy();
+        m_findReplaceDialog = nullptr;
+
+        m_findReplaceStatusPopup->Destroy();
+        m_findReplaceStatusPopup = nullptr;
     }
 
     SCH_SCREENS screens;
@@ -725,8 +721,6 @@ void SCH_EDIT_FRAME::OnModify()
 {
     GetScreen()->SetModify();
     GetScreen()->SetSave();
-
-    m_foundItems.SetForceSearch();
 
     if( ADVANCED_CFG::GetCfg().m_realTimeConnectivity && CONNECTION_GRAPH::m_allowRealTime )
         RecalculateConnections( false );
@@ -826,15 +820,24 @@ void SCH_EDIT_FRAME::OnLaunchBusManager( wxCommandEvent& )
 }
 
 
-void SCH_EDIT_FRAME::DoFindReplace( bool aReplace )
+wxFindReplaceData* SCH_EDIT_FRAME::GetFindReplaceData()
 {
-    wxCHECK_RET( m_findReplaceData != NULL,
-                 wxT( "Forgot to create find/replace data.  Bad Programmer!" ) );
-
-    if( m_dlgFindReplace )
+    if( m_findReplaceDialog && m_findReplaceDialog->IsVisible()
+            && !m_findReplaceData->GetFindString().IsEmpty() )
     {
-        delete m_dlgFindReplace;
-        m_dlgFindReplace = NULL;
+        return m_findReplaceData;
+    }
+
+    return nullptr;
+}
+
+
+void SCH_EDIT_FRAME::ShowFindReplaceDialog( bool aReplace )
+{
+    if( m_findReplaceDialog )
+    {
+        delete m_findReplaceDialog;
+        delete m_findReplaceStatusPopup;
     }
 
     int style = 0;
@@ -842,28 +845,40 @@ void SCH_EDIT_FRAME::DoFindReplace( bool aReplace )
     if( aReplace )
         style = wxFR_REPLACEDIALOG;
 
-    m_dlgFindReplace = new DIALOG_SCH_FIND( this, m_findReplaceData, m_findReplaceStatus,
-                                            wxDefaultPosition, wxDefaultSize, style );
+    m_findReplaceDialog = new DIALOG_SCH_FIND( this, m_findReplaceData, wxDefaultPosition,
+                                            wxDefaultSize, style );
 
-    m_dlgFindReplace->SetFindEntries( m_findStringHistoryList );
-    m_dlgFindReplace->SetReplaceEntries( m_replaceStringHistoryList );
-    m_dlgFindReplace->Show( true );
+    m_findReplaceDialog->SetFindEntries( m_findStringHistoryList );
+    m_findReplaceDialog->SetReplaceEntries( m_replaceStringHistoryList );
+    m_findReplaceDialog->Show( true );
+
+    m_findReplaceStatusPopup = new STATUS_TEXT_POPUP( m_findReplaceDialog );
+    m_findReplaceStatusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
 }
 
 
-void SCH_EDIT_FRAME::OnFindDialogClose( wxFindDialogEvent& event )
+void SCH_EDIT_FRAME::ShowFindReplaceStatus( const wxString& aMsg )
 {
-    // If the user dismissed the dialog with the mouse, this will send the cursor back
-    // to the last item found.
-    OnFindSchematicItem( event );
+    wxPoint pos = wxGetMousePosition() - m_findReplaceStatusPopup->GetSize() - wxPoint( 10, 10 );
 
-    if( m_dlgFindReplace )
-    {
-        m_findStringHistoryList = m_dlgFindReplace->GetFindEntries();
-        m_replaceStringHistoryList = m_dlgFindReplace->GetReplaceEntries();
-        m_dlgFindReplace->Destroy();
-        m_dlgFindReplace = NULL;
-    }
+    m_findReplaceStatusPopup->SetText( aMsg );
+    m_findReplaceStatusPopup->Move( pos );
+    m_findReplaceStatusPopup->PopupFor( 3000 );
+}
+
+
+void SCH_EDIT_FRAME::ClearFindReplaceStatus()
+{
+    m_findReplaceStatusPopup->Hide();
+}
+
+
+void SCH_EDIT_FRAME::OnFindDialogClose()
+{
+    m_findStringHistoryList = m_findReplaceDialog->GetFindEntries();
+    m_replaceStringHistoryList = m_findReplaceDialog->GetReplaceEntries();
+    m_findReplaceDialog->Destroy();
+    m_findReplaceDialog = NULL;
 }
 
 

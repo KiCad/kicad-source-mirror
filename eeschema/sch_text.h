@@ -161,7 +161,7 @@ public:
     void MirrorX( int aXaxis_position ) override;
     void Rotate( wxPoint aPosition ) override;
 
-    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation ) override;
+    bool Matches( wxFindReplaceData& aSearchData, void* aAuxData ) override;
 
     bool Replace( wxFindReplaceData& aSearchData, void* aAuxData ) override
     {

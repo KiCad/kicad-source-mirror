@@ -1673,7 +1673,7 @@ wxString LIB_PIN::GetSelectMenuText( EDA_UNITS_T aUnits ) const
 }
 
 
-bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxDat )
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 
@@ -1685,15 +1685,8 @@ bool LIB_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* 
 
     wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
-    if( EDA_ITEM::Matches( GetName(), aSearchData ) || EDA_ITEM::Matches( m_number, aSearchData ) )
-    {
-        if( aFindLocation )
-            *aFindLocation = GetBoundingBox().Centre();
-
-        return true;
-    }
-
-    return false;
+    return EDA_ITEM::Matches( GetName(), aSearchData )
+                || EDA_ITEM::Matches( m_number, aSearchData );
 }
 
 

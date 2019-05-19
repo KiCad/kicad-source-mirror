@@ -32,11 +32,6 @@ CONDITIONAL_MENU::CONDITIONAL_MENU( bool isContextMenu, TOOL_INTERACTIVE* aTool 
         m_isContextMenu( isContextMenu )
 {
     m_tool = aTool;
-
-    // wxWidgets 3.0.4 on MSW checks for an empty menu before running the MENU_OPEN
-    // event.  Add a dummy item to ensure that the event is dispatched.  Evaluate()
-    // will clear the menu before evaluating all the items anyway.
-    Append( wxID_ANY, wxT( "dummy menu for MSW" ) );
 }
 
 

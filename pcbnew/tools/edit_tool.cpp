@@ -962,8 +962,7 @@ int EDIT_TOOL::Remove( const TOOL_EVENT& aEvent )
         m_lockedSelected = true;
         m_toolMgr->RunAction( PCB_ACTIONS::selectItems, true, &lockedItems );
         statusPopup.SetText( _( "Delete again to remove locked items" ) );
-        statusPopup.Expire( 2000 );
-        statusPopup.Popup();
+        statusPopup.PopupFor( 2000 );
         statusPopup.Move( wxGetMousePosition() + wxPoint( 20, 20 ) );
 
         Activate();
@@ -1354,7 +1353,7 @@ int EDIT_TOOL::MeasureTool( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
     }
 

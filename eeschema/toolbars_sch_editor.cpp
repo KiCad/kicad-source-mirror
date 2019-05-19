@@ -84,7 +84,7 @@ void SCH_EDIT_FRAME::ReCreateHToolbar()
 
     KiScaledSeparator( m_mainToolBar, this );
     m_mainToolBar->Add( ACTIONS::find );
-    m_mainToolBar->Add( ACTIONS::replace );
+    m_mainToolBar->Add( ACTIONS::findAndReplace );
 
     m_mainToolBar->AddSeparator();
     m_mainToolBar->Add( ACTIONS::zoomRedraw );

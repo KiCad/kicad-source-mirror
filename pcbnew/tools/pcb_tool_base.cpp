@@ -175,7 +175,7 @@ void PCB_TOOL_BASE::doInteractiveItemPlacement( INTERACTIVE_PLACER_BASE* aPlacer
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
         else if( newItem && evt->Category() == TC_COMMAND )
         {

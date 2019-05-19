@@ -196,23 +196,14 @@ void SCH_SHEET_PIN::ConstrainOnEdge( wxPoint Pos )
 }
 
 
-bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData,
-                             void* aAuxData, wxPoint* aFindLocation )
+bool SCH_SHEET_PIN::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxCHECK_MSG( GetParent() != NULL, false,
                  wxT( "Sheet pin " ) + m_Text + wxT( " does not have a parent sheet!" ) );
 
     wxLogTrace( traceFindItem, wxT( "    child item " ) + GetSelectMenuText( MILLIMETRES ) );
 
-    if( SCH_ITEM::Matches( m_Text, aSearchData ) )
-    {
-        if( aFindLocation )
-            *aFindLocation = GetBoundingBox().Centre();
-
-        return true;
-    }
-
-    return false;
+    return SCH_ITEM::Matches( m_Text, aSearchData );
 }
 
 

@@ -33,7 +33,6 @@
 
 class SCH_BASE_FRAME;
 class SCH_ITEM;
-class EE_COLLECTOR;
 
 namespace KIGFX
 {
@@ -117,7 +116,7 @@ public:
     void RemoveItemsFromSel( EDA_ITEMS* aList, bool aQuietMode = false );
 
     void BrightenItem( EDA_ITEM* aItem );
-    void ClearBrightening();
+    void UnbrightenItem( EDA_ITEM* aItem );
 
     ///> Find (but don't select) node under cursor
     EDA_ITEM* GetNode( VECTOR2I aPosition );
@@ -130,6 +129,8 @@ public:
 
     ///> Clear current selection event handler.
     int ClearSelection( const TOOL_EVENT& aEvent );
+
+    void ClearSelection();
 
     /**
      * Function SelectionMenu()
@@ -169,12 +170,6 @@ private:
      * @return true if an item was picked
      */
     bool doSelectionMenu( EE_COLLECTOR* aItems );
-
-    /**
-     * Function clearSelection()
-     * Clears the current selection.
-     */
-    void clearSelection();
 
     /**
      * Function toggleSelection()

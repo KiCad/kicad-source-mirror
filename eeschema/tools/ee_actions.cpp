@@ -46,10 +46,10 @@ OPT<TOOL_EVENT> EE_ACTIONS::TranslateLegacyId( int aId )
         return EE_ACTIONS::unfoldBus.MakeEvent();
 
     case ID_MOUSE_CLICK:
-        return EE_ACTIONS::cursorClick.MakeEvent();
+        return ACTIONS::cursorClick.MakeEvent();
 
     case ID_MOUSE_DOUBLECLICK:
-        return EE_ACTIONS::cursorDblClick.MakeEvent();
+        return ACTIONS::cursorDblClick.MakeEvent();
     }
 
     return OPT<TOOL_EVENT>();

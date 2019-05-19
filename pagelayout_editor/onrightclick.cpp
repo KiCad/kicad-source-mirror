@@ -113,26 +113,20 @@ bool PL_EDITOR_FRAME::OnRightClick( const wxPoint& aPosition, wxMenu* aPopMenu )
                              KiBitmap( move_xpm ) );
             }
 
-            msg = AddHotkeyName( _( "Move Item" ), PlEditorHotkeysDescr,
-                                 HK_MOVE_ITEM );
-            AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE, msg,
-                         KiBitmap( move_xpm ) );
+            msg = AddHotkeyName( _( "Move Item" ), PlEditorHotkeysDescr, HK_MOVE_ITEM );
+            AddMenuItem( aPopMenu, ID_POPUP_ITEM_MOVE, msg, KiBitmap( move_xpm ) );
             aPopMenu->AppendSeparator();
 
-            msg = AddHotkeyName( _( "Delete" ), PlEditorHotkeysDescr,
-                                 HK_DELETE_ITEM );
+            msg = AddHotkeyName( _( "Delete" ), PlEditorHotkeysDescr, HK_DELETE_ITEM );
             AddMenuItem( aPopMenu, ID_POPUP_ITEM_DELETE, msg, KiBitmap( delete_xpm ) );
             aPopMenu->AppendSeparator();
         }
     }
     else     // An item is currently in edit
     {
-        msg = AddHotkeyName( _( "Place Item" ), PlEditorHotkeysDescr,
-                                 HK_PLACE_ITEM );
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE, msg,
-                     KiBitmap( move_xpm ) );
-        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE_CANCEL, _( "Cancel" ),
-                     KiBitmap( cancel_xpm ) );
+        msg = AddHotkeyName( _( "Place Item" ), PlEditorHotkeysDescr, HK_PLACE_ITEM );
+        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE, msg, KiBitmap( move_xpm ) );
+        AddMenuItem( aPopMenu, ID_POPUP_ITEM_PLACE_CANCEL, _( "Cancel" ), KiBitmap( cancel_xpm ) );
         aPopMenu->AppendSeparator();
     }
 

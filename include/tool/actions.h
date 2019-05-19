@@ -52,8 +52,15 @@ public:
     static TOOL_ACTION cut;
     static TOOL_ACTION copy;
     static TOOL_ACTION paste;
+
+    // Find and Replace
     static TOOL_ACTION find;
-    static TOOL_ACTION replace;
+    static TOOL_ACTION findAndReplace;
+    static TOOL_ACTION findNext;
+    static TOOL_ACTION findNextMarker;
+    static TOOL_ACTION replaceAndFindNext;
+    static TOOL_ACTION replaceAll;
+    static TOOL_ACTION updateFind;
 
     // View controls
     static TOOL_ACTION zoomRedraw;

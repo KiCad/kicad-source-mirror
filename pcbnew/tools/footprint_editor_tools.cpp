@@ -309,7 +309,7 @@ int MODULE_EDITOR_TOOLS::EnumeratePads( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
 
         // Prepare the next loop by updating the old cursor mouse position

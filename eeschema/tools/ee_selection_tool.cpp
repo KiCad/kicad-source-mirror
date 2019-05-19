@@ -39,7 +39,6 @@
 #include <tool/tool_event.h>
 #include <tool/tool_manager.h>
 #include <tools/sch_wire_bus_tool.h>
-#include <ee_actions.h>
 #include <ee_collectors.h>
 #include <painter.h>
 #include <eeschema_id.h>
@@ -265,7 +264,7 @@ void EE_SELECTION_TOOL::Reset( RESET_REASON aReason )
     }
     else
         // Restore previous properties of selected items and remove them from containers
-        clearSelection();
+        ClearSelection();
 
     // Reinsert the VIEW_GROUP, in case it was removed from the VIEW
     getView()->Remove( &m_selection );
@@ -341,7 +340,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             {
                 // If no modifier keys are pressed, clear the selection
                 if( !m_additive )
-                    clearSelection();
+                    ClearSelection();
 
                 SelectPoint( evt->Position());
             }
@@ -359,7 +358,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             if( !selectionCancelled )
-                m_menu.ShowContextMenu();
+                m_menu.ShowContextMenu( m_selection );
         }
 
         // double click? Display the properties window
@@ -404,7 +403,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 else
                 {
                     // No -> clear the selection list
-                    clearSelection();
+                    ClearSelection();
                 }
             }
         }
@@ -432,13 +431,13 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 
         else if( evt->IsAction( &ACTIONS::cancelInteractive ) || evt->IsCancel() )
         {
-            clearSelection();
+            ClearSelection();
             m_toolMgr->RunAction( EE_ACTIONS::clearHighlight, true );
         }
 
         else if( evt->Action() == TA_UNDO_REDO_PRE )
         {
-            clearSelection();
+            ClearSelection();
         }
 
         else if( evt->Action() == TA_CONTEXT_MENU_CLOSED )
@@ -523,7 +522,7 @@ EDA_ITEM* EE_SELECTION_TOOL::SelectPoint( const VECTOR2I& aWhere, const KICAD_T*
     }
 
     if( !m_additive && anyCollected )
-        clearSelection();
+        ClearSelection();
 
     return nullptr;
 }
@@ -596,7 +595,7 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
     {
         VECTOR2D cursorPos = getViewControls()->GetCursorPosition( true );
 
-        clearSelection();
+        ClearSelection();
         SelectPoint( cursorPos, aFilterList );
         m_selection.SetIsHover( true );
         m_selection.ClearReferencePoint();
@@ -878,28 +877,15 @@ void EE_SELECTION_TOOL::BrightenItem( EDA_ITEM* aItem )
 }
 
 
-void EE_SELECTION_TOOL::ClearBrightening()
+void EE_SELECTION_TOOL::UnbrightenItem( EDA_ITEM* aItem )
 {
-    EDA_ITEM* start = nullptr;
-
-    if( m_isLibEdit )
-        start = static_cast<LIB_EDIT_FRAME*>( m_frame )->GetCurPart();
-    else
-        start = m_frame->GetScreen()->GetDrawItems();
-
-    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
-    {
-        unhighlight( item, BRIGHTENED );
-        return SEARCH_CONTINUE;
-    };
-
-    EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+    unhighlight( aItem, BRIGHTENED );
 }
 
 
 int EE_SELECTION_TOOL::ClearSelection( const TOOL_EVENT& aEvent )
 {
-    clearSelection();
+    ClearSelection();
 
     return 0;
 }
@@ -1065,7 +1051,7 @@ bool EE_SELECTION_TOOL::selectable( const EDA_ITEM* aItem, bool checkVisibilityO
 }
 
 
-void EE_SELECTION_TOOL::clearSelection()
+void EE_SELECTION_TOOL::ClearSelection()
 {
     if( m_selection.Empty() )
         return;
@@ -1095,7 +1081,7 @@ void EE_SELECTION_TOOL::toggleSelection( EDA_ITEM* aItem, bool aForce )
     else
     {
         if( !m_additive )
-            clearSelection();
+            ClearSelection();
 
         // Prevent selection of invisible or inactive items
         if( aForce || selectable( aItem ) )

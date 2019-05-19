@@ -451,11 +451,9 @@ public:
      *                    search criteria.
      * @param aAuxData A pointer to optional data required for the search or NULL
      *                 if not used.
-     * @param aFindLocation A pointer to a wxPoint object to store the location of
-     *                      matched item.  The pointer can be NULL if it is not used.
      * @return True if the item's text matches the search criteria in \a aSearchData.
      */
-    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+    virtual bool Matches( wxFindReplaceData& aSearchData, void* aAuxData )
     {
         return false;
     }

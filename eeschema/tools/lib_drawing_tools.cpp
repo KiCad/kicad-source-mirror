@@ -250,7 +250,7 @@ int LIB_DRAWING_TOOLS::doTwoClickPlace( KICAD_T aType )
             if( !item )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
         else if( item && ( evt->IsAction( &EE_ACTIONS::refreshPreview ) || evt->IsMotion() ) )
@@ -384,7 +384,7 @@ int LIB_DRAWING_TOOLS::DrawShape( const TOOL_EVENT& aEvent )
             if( !item )
                 m_toolMgr->VetoContextMenuMouseWarp();
 
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
 
         // Enable autopanning and cursor capture only when there is a shape being drawn
@@ -436,7 +436,7 @@ int LIB_DRAWING_TOOLS::PlaceAnchor( const TOOL_EVENT& aEvent )
         }
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
     }
 

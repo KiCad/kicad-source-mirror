@@ -43,10 +43,33 @@ TOOL_ACTION ACTIONS::find( "common.Interactive.find",
         _( "Find" ), _( "Find text" ),
         find_xpm );
 
-TOOL_ACTION ACTIONS::replace( "common.Interactive.findAndReplace",
+TOOL_ACTION ACTIONS::findAndReplace( "common.Interactive.findAndReplace",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_REPLACE ),
         _( "Find and Replace" ), _( "Find and replace text" ),
         find_replace_xpm );
+
+TOOL_ACTION ACTIONS::findNext( "common.Interactive.findNext",
+        AS_GLOBAL, 0,
+        _( "Find Next" ), _( "Find next match" ),
+        find_xpm );
+
+TOOL_ACTION ACTIONS::findNextMarker( "common.Interactive.findNextMarker",
+        AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_FIND_NEXT_MARKER ),
+        _( "Find Next Marker" ), "",
+        find_xpm );
+
+TOOL_ACTION ACTIONS::replaceAndFindNext( "common.Interactive.replaceAndFindNext",
+        AS_GLOBAL, 0,
+        _( "Replace and Find Next" ), _( "Replace current match and find next" ),
+        find_replace_xpm );
+
+TOOL_ACTION ACTIONS::replaceAll( "common.Interactive.replaceAll",
+        AS_GLOBAL, 0,
+        _( "Replace All" ), _( "Replace all matches" ),
+        find_replace_xpm );
+
+TOOL_ACTION ACTIONS::updateFind( "common.Control.updateFind",
+        AS_GLOBAL, 0, "", "" );   // This is an internal event
 
 // View Controls
 TOOL_ACTION ACTIONS::zoomRedraw( "common.Control.zoomRedraw",

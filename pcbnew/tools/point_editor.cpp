@@ -258,7 +258,7 @@ void POINT_EDITOR::Reset( RESET_REASON aReason )
 
     m_statusPopup.reset( new STATUS_TEXT_POPUP( getEditFrame<PCB_BASE_EDIT_FRAME>() ) );
     m_statusPopup->SetTextColor( wxColour( 255, 0, 0 ) );
-    m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed" ) );
+    m_statusPopup->SetText( _( "Self-intersecting polygons are not allowed." ) );
 }
 
 
@@ -685,8 +685,7 @@ bool POINT_EDITOR::validatePolygon( SHAPE_POLY_SET& aModified, const SHAPE_POLY_
     {
         wxPoint p = wxGetMousePosition() + wxPoint( 20, 20 );
         m_statusPopup->Move( p );
-        m_statusPopup->Popup( getEditFrame<PCB_BASE_FRAME>() );
-        m_statusPopup->Expire( 1500 );
+        m_statusPopup->PopupFor( 1500 );
     }
 
     if( aOriginal )

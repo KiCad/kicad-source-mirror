@@ -714,7 +714,7 @@ void SCH_SHEET::Resize( const wxSize& aSize )
 }
 
 
-bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint* aFindLocation )
+bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 
@@ -722,17 +722,11 @@ bool SCH_SHEET::Matches( wxFindReplaceData& aSearchData, void* aAuxData, wxPoint
     if( !(aSearchData.GetFlags() & FR_SEARCH_REPLACE)
         && SCH_ITEM::Matches( m_fileName, aSearchData ) )
     {
-        if( aFindLocation )
-            *aFindLocation = GetFileNamePosition();
-
         return true;
     }
 
     if( SCH_ITEM::Matches( m_name, aSearchData ) )
     {
-        if( aFindLocation )
-            *aFindLocation = GetSheetNamePosition();
-
         return true;
     }
 

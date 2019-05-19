@@ -225,11 +225,12 @@ bool SCH_PAINTER::isUnitAndConversionShown( const LIB_ITEM* aItem )
 
 COLOR4D SCH_PAINTER::getRenderColor( const EDA_ITEM* aItem, int aLayer, bool aOnBackgroundLayer )
 {
-    if( aItem->IsBrightened() )
-        return m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+    COLOR4D color = m_schSettings.GetLayerColor( aLayer );
 
-    const SCH_LINE* line = dynamic_cast<const SCH_LINE*>( aItem );
-    COLOR4D         color = line ? line->GetLineColor() : m_schSettings.GetLayerColor( aLayer );
+    if( aItem->IsBrightened() )
+        color = m_schSettings.GetLayerColor( LAYER_BRIGHTENED );
+    else if( aItem->Type() == SCH_LINE_T )
+        color = static_cast<const SCH_LINE*>( aItem )->GetLineColor();
 
     if( aItem->IsSelected() )
     {

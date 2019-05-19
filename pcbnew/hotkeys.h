@@ -35,8 +35,7 @@
 // see also enum common_hotkey_id_command in hotkeys_basic.h
 // for shared hotkeys id
 enum hotkey_id_command {
-    HK_DELETE = HK_COMMON_END,
-    HK_BACK_SPACE,
+    HK_BACK_SPACE = HK_COMMON_END,
     HK_ROTATE_ITEM,
     HK_ROTATE_ITEM_CLOCKWISE,
     HK_FLIP_ITEM,

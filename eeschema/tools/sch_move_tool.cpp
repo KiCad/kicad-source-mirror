@@ -414,7 +414,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         //
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( m_selectionTool->GetSelection() );
         }
         //------------------------------------------------------------------------
         // Handle drop

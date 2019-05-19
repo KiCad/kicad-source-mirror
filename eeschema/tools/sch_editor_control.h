@@ -27,6 +27,7 @@
 
 #include <sch_base_frame.h>
 #include <tools/ee_tool_base.h>
+#include <status_popup.h>
 
 class SCH_EDIT_FRAME;
 
@@ -44,6 +45,15 @@ public:
     { }
 
     ~SCH_EDITOR_CONTROL() { }
+
+    int FindAndReplace( const TOOL_EVENT& aEvent );
+
+    int FindNext( const TOOL_EVENT& aEvent );
+    bool HasMatch();
+    int ReplaceAndFindNext( const TOOL_EVENT& aEvent );
+    int ReplaceAll( const TOOL_EVENT& aEvent );
+
+    int UpdateFind( const TOOL_EVENT& aEvent );
 
     int ToggleLockSelected( const TOOL_EVENT& aEvent );
     int LockSelected( const TOOL_EVENT& aEvent );
@@ -80,8 +90,6 @@ public:
     int Cut( const TOOL_EVENT& aEvent );
     int Copy( const TOOL_EVENT& aEvent );
     int Paste( const TOOL_EVENT& aEvent );
-
-    int FindReplace( const TOOL_EVENT& aEvent );
 
     int EditWithLibEdit( const TOOL_EVENT& aEvent );
     int ShowSymbolEditor( const TOOL_EVENT& aEvent );

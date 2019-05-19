@@ -24,11 +24,8 @@
 #include <fctsys.h>
 #include <kiway.h>
 #include <sch_view.h>
-#include <sch_draw_panel.h>
 #include <sch_edit_frame.h>
-#include <sch_component.h>
 #include <sch_sheet.h>
-#include <sch_bitmap.h>
 #include <connection_graph.h>
 #include <erc.h>
 #include <eeschema_id.h>
@@ -39,7 +36,7 @@
 #include <tools/sch_editor_control.h>
 #include <tools/ee_selection_tool.h>
 #include <tools/sch_drawing_tools.h>
-#include <project.h>
+#include <tools/sch_wire_bus_tool.h>
 #include <ee_hotkeys.h>
 #include <advanced_config.h>
 #include <simulation_cursors.h>
@@ -47,9 +44,8 @@
 #include <sch_legacy_plugin.h>
 #include <class_library.h>
 #include <confirm.h>
-#include <lib_edit_frame.h>
 #include <sch_painter.h>
-#include "sch_wire_bus_tool.h"
+#include <status_popup.h>
 
 TOOL_ACTION EE_ACTIONS::refreshPreview( "eeschema.EditorControl.refreshPreview",
          AS_GLOBAL, 0, "", "" );
@@ -120,6 +116,243 @@ TOOL_ACTION EE_ACTIONS::toggleForceHV( "eeschema.EditorControl.forceHVLines",
         AS_GLOBAL, 0,
         _( "Force H/V Wires and Busses" ), "",
         lines90_xpm );
+
+
+// A timer during which a subsequent FindNext will result in a wrap-around
+static wxTimer           g_wrapAroundTimer;
+
+// A dummy wxFindReplaceData signalling any marker should be found
+static wxFindReplaceData g_markersOnly;
+
+
+int SCH_EDITOR_CONTROL::FindAndReplace( const TOOL_EVENT& aEvent )
+{
+    m_frame->ShowFindReplaceDialog( aEvent.IsAction( &ACTIONS::findAndReplace ));
+    return UpdateFind( aEvent );
+}
+
+
+int SCH_EDITOR_CONTROL::UpdateFind( const TOOL_EVENT& aEvent )
+{
+    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+
+    if( aEvent.IsAction( &ACTIONS::find )
+     || aEvent.IsAction( &ACTIONS::findAndReplace )
+     || aEvent.IsAction( &ACTIONS::updateFind ) )
+    {
+        m_selectionTool->ClearSelection();
+
+        INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* )
+        {
+            if( data && item->Matches( *data, nullptr ) )
+            {
+                m_selectionTool->BrightenItem( item );
+
+                if( m_selectionTool->GetSelection().GetSize() == 0 )
+                    m_selectionTool->AddItemToSel( item );
+            }
+            else if( item->IsBrightened() )
+            {
+                m_selectionTool->UnbrightenItem( item );
+            }
+
+            return SEARCH_CONTINUE;
+        };
+
+        EDA_ITEM* start = m_frame->GetScreen()->GetDrawItems();
+        EDA_ITEM::IterateForward( start, inspector, nullptr, EE_COLLECTOR::AllItems );
+    }
+    else if( aEvent.Matches( EVENTS::SelectedItemsModified ) )
+    {
+        for( EDA_ITEM* item : m_selectionTool->GetSelection() )
+        {
+            if( data && item->Matches( *data, nullptr ) )
+                m_selectionTool->BrightenItem( item );
+            else if( item->IsBrightened() )
+                m_selectionTool->UnbrightenItem( item );
+        }
+    }
+
+    getView()->UpdateItems();
+    m_frame->GetCanvas()->Refresh();
+
+    return 0;
+}
+
+
+EDA_ITEM* nextMatch( SCH_SCREEN* aScreen, EDA_ITEM* after, wxFindReplaceData* data )
+{
+    EDA_ITEM* found = nullptr;
+
+    INSPECTOR_FUNC inspector = [&] ( EDA_ITEM* item, void* testData )
+    {
+        if( after )
+        {
+            if( after == item )
+                after = nullptr;
+
+            return SEARCH_CONTINUE;
+        }
+
+        if( ( data == &g_markersOnly && item->Type() == SCH_MARKER_T )
+                || item->Matches( *data, nullptr ) )
+        {
+            found = item;
+            return SEARCH_QUIT;
+        }
+
+        return SEARCH_CONTINUE;
+    };
+
+    EDA_ITEM::IterateForward( aScreen->GetDrawItems(), inspector, nullptr, EE_COLLECTOR::AllItems );
+
+    return found;
+}
+
+
+int SCH_EDITOR_CONTROL::FindNext( const TOOL_EVENT& aEvent )
+{
+    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+
+    if( aEvent.IsAction( &ACTIONS::findNextMarker ) )
+    {
+        if( data )
+            g_markersOnly.SetFlags( data->GetFlags() );
+
+        data = &g_markersOnly;
+    }
+    else if( !data )
+    {
+        return FindAndReplace( ACTIONS::find.MakeEvent() );
+    }
+
+    bool        searchAllSheets = !( data->GetFlags() & FR_CURRENT_SHEET_ONLY );
+    SELECTION&  selection = m_selectionTool->GetSelection();
+    SCH_SCREEN* afterScreen = m_frame->GetScreen();
+    EDA_ITEM*   afterItem = selection.Front();
+    EDA_ITEM*   item = nullptr;
+
+    if( g_wrapAroundTimer.IsRunning() )
+    {
+        afterScreen = nullptr;
+        afterItem = nullptr;
+        g_wrapAroundTimer.Stop();
+        m_frame->ClearFindReplaceStatus();
+    }
+
+    m_selectionTool->ClearSelection();
+
+    if( afterScreen || !searchAllSheets )
+        item = nextMatch( m_frame->GetScreen(), afterItem, data );
+
+    if( !item && searchAllSheets )
+    {
+        SCH_SHEET_LIST schematic( g_RootSheet );
+        SCH_SCREENS    screens;
+
+        for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+        {
+            if( afterScreen )
+            {
+                if( afterScreen == screen )
+                    afterScreen = nullptr;
+
+                continue;
+            }
+
+            item = nextMatch( screen, nullptr, data );
+
+            if( item )
+            {
+                SCH_SHEET_PATH* sheet = schematic.FindSheetForScreen( screen );
+                wxCHECK_MSG( sheet, 0, "Sheet not found for " + screen->GetFileName() );
+
+                *g_CurrentSheet = *sheet;
+                g_CurrentSheet->UpdateAllScreenReferences();
+
+                screen->SetZoom( m_frame->GetScreen()->GetZoom() );
+                screen->TestDanglingEnds();
+
+                m_frame->SetScreen( screen );
+                UpdateFind( ACTIONS::updateFind.MakeEvent() );
+
+                break;
+            }
+        }
+    }
+
+    if( item )
+    {
+        m_selectionTool->AddItemToSel( item );
+        getView()->SetCenter( item->GetBoundingBox().GetCenter() );
+        m_frame->GetCanvas()->Refresh();
+    }
+    else
+    {
+        wxString msg;
+
+        if( searchAllSheets )
+            msg = _( "Reached end of schematic." );
+        else
+            msg = _( "Reached end of sheet." );
+
+        m_frame->ShowFindReplaceStatus( msg + _( "\nFind again to wrap around to the start." ) );
+        g_wrapAroundTimer.StartOnce( 4000 );
+    }
+
+    return 0;
+}
+
+
+bool SCH_EDITOR_CONTROL::HasMatch()
+{
+    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
+
+    return data && item && item->Matches( *data, nullptr );
+}
+
+
+int SCH_EDITOR_CONTROL::ReplaceAndFindNext( const TOOL_EVENT& aEvent )
+{
+    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+    EDA_ITEM*          item = m_selectionTool->GetSelection().Front();
+
+    if( !data )
+        return FindAndReplace( ACTIONS::find.MakeEvent() );
+
+    if( item && item->Matches( *data, nullptr ) )
+    {
+        item->Replace( *data, g_CurrentSheet );
+        FindNext( ACTIONS::findNext.MakeEvent() );
+    }
+
+    return 0;
+}
+
+
+int SCH_EDITOR_CONTROL::ReplaceAll( const TOOL_EVENT& aEvent )
+{
+    wxFindReplaceData* data = m_frame->GetFindReplaceData();
+
+    if( !data )
+        return FindAndReplace( ACTIONS::find.MakeEvent() );
+
+    SCH_SHEET_LIST schematic( g_RootSheet );
+    SCH_SCREENS    screens;
+
+    for( SCH_SCREEN* screen = screens.GetFirst(); screen; screen = screens.GetNext() )
+    {
+        for( EDA_ITEM* item = nextMatch( screen, nullptr, data );
+             item;
+             item = nextMatch( screen, item, data ) )
+        {
+            item->Replace( *data, schematic.FindSheetForScreen( screen ) );
+        }
+    }
+
+    return 0;
+}
 
 
 int SCH_EDITOR_CONTROL::CrossProbeToPcb( const TOOL_EVENT& aEvent )
@@ -698,13 +931,6 @@ int SCH_EDITOR_CONTROL::Paste( const TOOL_EVENT& aEvent )
 }
 
 
-int SCH_EDITOR_CONTROL::FindReplace( const TOOL_EVENT& aEvent )
-{
-    m_frame->DoFindReplace( aEvent.IsAction( &ACTIONS::replace ) );
-    return 0;
-}
-
-
 int SCH_EDITOR_CONTROL::EditWithLibEdit( const TOOL_EVENT& aEvent )
 {
     EE_SELECTION_TOOL* selTool = m_toolMgr->GetTool<EE_SELECTION_TOOL>();
@@ -800,6 +1026,15 @@ int SCH_EDITOR_CONTROL::ToggleForceHV( const TOOL_EVENT& aEvent )
 
 void SCH_EDITOR_CONTROL::setTransitions()
 {
+    Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::find.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindAndReplace,        ACTIONS::findAndReplace.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindNext,              ACTIONS::findNext.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::FindNext,              ACTIONS::findNextMarker.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ReplaceAndFindNext,    ACTIONS::replaceAndFindNext.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::ReplaceAll,            ACTIONS::replaceAll.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdateFind,            ACTIONS::updateFind.MakeEvent() );
+    Go( &SCH_EDITOR_CONTROL::UpdateFind,            EVENTS::SelectedItemsModified );
+
     /*
     Go( &SCH_EDITOR_CONTROL::ToggleLockSelected,    EE_ACTIONS::toggleLock.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::LockSelected,          EE_ACTIONS::lock.MakeEvent() );
@@ -827,8 +1062,6 @@ void SCH_EDITOR_CONTROL::setTransitions()
     Go( &SCH_EDITOR_CONTROL::Cut,                   ACTIONS::cut.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Copy,                  ACTIONS::copy.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::Paste,                 ACTIONS::paste.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::find.MakeEvent() );
-    Go( &SCH_EDITOR_CONTROL::FindReplace,           ACTIONS::replace.MakeEvent() );
 
     Go( &SCH_EDITOR_CONTROL::EditWithLibEdit,       EE_ACTIONS::editWithLibEdit.MakeEvent() );
     Go( &SCH_EDITOR_CONTROL::ShowSymbolEditor,      EE_ACTIONS::showSymbolEditor.MakeEvent() );

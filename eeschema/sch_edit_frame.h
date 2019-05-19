@@ -39,6 +39,7 @@
 // enum PINSHEETLABEL_SHAPE
 #include <sch_text.h>
 #include <tool/selection.h>
+#include <status_popup.h>
 
 class SCH_ITEM;
 class EDA_ITEM;
@@ -112,16 +113,10 @@ private:
     PARAM_CFG_ARRAY         m_configSettings;
     ERC_SETTINGS            m_ercSettings;
     wxPageSetupDialogData   m_pageSetupData;
-    wxFindReplaceData*      m_findReplaceData;
-    wxString*               m_findReplaceStatus;
     bool                    m_printMonochrome;     ///< Print monochrome instead of grey scale.
     bool                    m_printSheetReference;
-    DIALOG_SCH_FIND*        m_dlgFindReplace;
-    wxArrayString           m_findStringHistoryList;
-    wxArrayString           m_replaceStringHistoryList;
     SCH_ITEM*               m_item_to_repeat;     ///< Last item to insert by the repeat command.
     int                     m_repeatLabelDelta;   ///< Repeat label number increment step.
-    SCH_FIND_COLLECTOR      m_foundItems;         ///< List of find/replace items.
     SCH_ITEM*               m_undoItem;           ///< Copy of the current item being edited.
     wxString                m_simulatorCommand;   ///< Command line used to call the circuit
                                                   ///< simulator (gnucap, spice, ...)
@@ -137,8 +132,11 @@ private:
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
 
-    /// An index to the last find item in the found items list #m_foundItems.
-    int         m_foundItemIndex;
+    wxFindReplaceData*      m_findReplaceData;
+    DIALOG_SCH_FIND*        m_findReplaceDialog;
+    STATUS_TEXT_POPUP*      m_findReplaceStatusPopup;
+    wxArrayString           m_findStringHistoryList;
+    wxArrayString           m_replaceStringHistoryList;
 
     /// Flag to indicate show hidden pins.
     bool        m_showAllPins;
@@ -180,8 +178,6 @@ protected:
      * Returns true if the schematic has been modified.
      */
     virtual bool isAutoSaveRequired() const override;
-
-    void updateFindReplaceView( wxFindDialogEvent& aEvent );
 
     void backAnnotateFootprints( const std::string& aChangedSetOfReferences );
 
@@ -361,7 +357,20 @@ public:
     /**
      * Run the Find or Find & Replace dialog.
      */
-    void DoFindReplace( bool aReplace );
+    void ShowFindReplaceDialog( bool aReplace );
+
+    void ShowFindReplaceStatus( const wxString& aMsg );
+    void ClearFindReplaceStatus();
+
+    /**
+     * Get the find criteria (as set by the dialog).
+     */
+    wxFindReplaceData* GetFindReplaceData();
+
+    /**
+     * Notification that the Find dialog has closed.
+     */
+    void OnFindDialogClose();
 
     /**
      * Breaks a single segment into two at the specified point.
@@ -697,9 +706,6 @@ public:
                      bool        aSaveUnderNewName = false,
                      bool        aCreateBackupFile = CREATE_BACKUP_FILE );
 
-    // General search:
-
-    bool IsSearchCacheObsolete( const SCH_FIND_REPLACE_DATA& aSearchCriteria );
 
     /**
      * Checks if any of the screens has unsaved changes and asks the user whether to save or
@@ -758,23 +764,6 @@ private:
     void OnCreateBillOfMaterials( wxCommandEvent& event );
     void OnLaunchBomManager( wxCommandEvent& event );
     void OnLaunchBusManager( wxCommandEvent& event );
-    void OnFindDialogClose( wxFindDialogEvent& event );
-    void OnFindDrcMarker( wxFindDialogEvent& event );
-
-    /**
-     * Find an item in the schematic matching the search criteria in \a aEvent.
-     *
-     * @param aEvent - Find dialog event containing the find parameters.
-     */
-    void OnFindSchematicItem( wxFindDialogEvent& aEvent );
-
-    /**
-     * Perform a search and replace of text in an item in the schematic matching the
-     * search and replace criteria in \a aEvent.
-     *
-     * @param aEvent - Find dialog event containing the search and replace parameters.
-     */
-    void OnFindReplace( wxFindDialogEvent& aEvent );
 
     void OnLoadFile( wxCommandEvent& event );
     void OnLoadCmpToFootprintLinkFile( wxCommandEvent& event );

@@ -304,7 +304,7 @@ int SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
             }
 
             if( !selectionCancelled )
-                m_menu.ShowContextMenu();
+                m_menu.ShowContextMenu( m_selection );
         }
 
         // double click? Display the properties window

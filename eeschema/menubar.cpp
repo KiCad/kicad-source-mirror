@@ -101,7 +101,7 @@ void SCH_EDIT_FRAME::ReCreateMenuBar()
     // Find
     editMenu->AddSeparator();
     editMenu->AddItem( ACTIONS::find,                SELECTION_CONDITIONS::ShowAlways );
-    editMenu->AddItem( ACTIONS::replace,             SELECTION_CONDITIONS::ShowAlways );
+    editMenu->AddItem( ACTIONS::findAndReplace,      SELECTION_CONDITIONS::ShowAlways );
 
     editMenu->AddSeparator();
     // Update field values

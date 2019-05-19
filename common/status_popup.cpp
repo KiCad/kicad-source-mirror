@@ -29,14 +29,11 @@
 #include <status_popup.h>
 #include <draw_frame.h>
 
-STATUS_POPUP::STATUS_POPUP( EDA_DRAW_FRAME* aParent ) :
+STATUS_POPUP::STATUS_POPUP( wxWindow* aParent ) :
         wxPopupWindow( aParent ),
-        m_frame( aParent ),
         m_expireTimer( this )
 {
     m_panel = new wxPanel( this, wxID_ANY );
-    m_panel->SetBackgroundColour( *wxLIGHT_GREY );
-
     m_topSizer = new wxBoxSizer( wxVERTICAL );
     m_panel->SetSizer( m_topSizer );
     m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW ) );
@@ -59,10 +56,12 @@ void STATUS_POPUP::onCharHook( wxKeyEvent& aEvent )
     // the canvas / frame.
     aEvent.SetEventType( wxEVT_CHAR );
 
-    if( m_frame->IsGalCanvasActive() )
-        m_frame->GetGalCanvas()->OnEvent( aEvent );
+    EDA_DRAW_FRAME* frame = dynamic_cast<EDA_DRAW_FRAME*>( GetParent() );
+
+    if( frame )
+        frame->GetGalCanvas()->OnEvent( aEvent );
     else
-        m_frame->ProcessEvent( aEvent );
+        GetParent()->GetEventHandler()->ProcessEvent( aEvent );
 }
 
 
@@ -70,6 +69,13 @@ void STATUS_POPUP::Popup( wxWindow* )
 {
     Show( true );
     Raise();
+}
+
+
+void STATUS_POPUP::PopupFor( int aMsecs )
+{
+    Popup();
+    Expire( aMsecs );
 }
 
 
@@ -104,7 +110,7 @@ void STATUS_POPUP::onExpire( wxTimerEvent& aEvent )
 }
 
 
-STATUS_TEXT_POPUP::STATUS_TEXT_POPUP( EDA_DRAW_FRAME* aParent ) :
+STATUS_TEXT_POPUP::STATUS_TEXT_POPUP( wxWindow* aParent ) :
     STATUS_POPUP( aParent )
 {
     m_panel->SetBackgroundColour( wxSystemSettings::GetColour( wxSYS_COLOUR_BTNSHADOW ) );

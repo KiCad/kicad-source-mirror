@@ -42,10 +42,11 @@ class EDA_DRAW_FRAME;
 class STATUS_POPUP: public wxPopupWindow
 {
 public:
-    STATUS_POPUP( EDA_DRAW_FRAME* aParent );
+    STATUS_POPUP( wxWindow* aParent );
     virtual ~STATUS_POPUP() {}
 
     virtual void Popup( wxWindow* aFocus = nullptr );
+    virtual void PopupFor( int aMsecs );
     virtual void Move( const wxPoint &aWhere );
     virtual void Move( const VECTOR2I& aWhere );
 
@@ -64,7 +65,6 @@ protected:
     ///> Expire timer even handler
     void onExpire( wxTimerEvent& aEvent );
 
-    EDA_DRAW_FRAME* m_frame;
     wxPanel* m_panel;
     wxBoxSizer* m_topSizer;
     wxTimer m_expireTimer;
@@ -79,7 +79,7 @@ protected:
 class STATUS_TEXT_POPUP : public STATUS_POPUP
 {
 public:
-    STATUS_TEXT_POPUP( EDA_DRAW_FRAME* aParent );
+    STATUS_TEXT_POPUP( wxWindow* aParent );
     virtual ~STATUS_TEXT_POPUP() {}
 
     /**

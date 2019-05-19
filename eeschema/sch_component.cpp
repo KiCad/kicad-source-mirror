@@ -1505,8 +1505,7 @@ void SCH_COMPONENT::Rotate( wxPoint aPosition )
 }
 
 
-bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData,
-                             wxPoint* aFindLocation )
+bool SCH_COMPONENT::Matches( wxFindReplaceData& aSearchData, void* aAuxData )
 {
     wxLogTrace( traceFindItem, wxT( "  item " ) + GetSelectMenuText( MILLIMETRES ) );
 

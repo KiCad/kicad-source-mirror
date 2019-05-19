@@ -439,8 +439,6 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 {
     MODULE* module = aEvent.Parameter<MODULE*>();
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-    SELECTION_TOOL* selTool = m_toolMgr->GetTool<SELECTION_TOOL>();
-    SELECTION& selection = selTool->GetSelection();
     BOARD_COMMIT commit( m_frame );
     BOARD* board = getModel<BOARD>();
 
@@ -525,14 +523,14 @@ int PCB_EDITOR_CONTROL::PlaceModule( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu(  selection()  );
         }
 
         else if( module && evt->IsMotion() )
         {
             module->SetPosition( wxPoint( cursorPos.x, cursorPos.y ) );
-            selection.SetReferencePoint( cursorPos );
-            getView()->Update( &selection );
+            selection().SetReferencePoint( cursorPos );
+            getView()->Update( & selection()  );
         }
 
         else if( module && evt->IsAction( &PCB_ACTIONS::properties ) )
@@ -680,7 +678,7 @@ int PCB_EDITOR_CONTROL::PlaceTarget( const TOOL_EVENT& aEvent )
 
         else if( evt->IsClick( BUT_RIGHT ) )
         {
-            m_menu.ShowContextMenu();
+            m_menu.ShowContextMenu( selection() );
         }
 
         else if( evt->IsMotion() )
