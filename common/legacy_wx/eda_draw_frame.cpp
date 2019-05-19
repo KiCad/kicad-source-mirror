@@ -1342,14 +1342,14 @@ bool EDA_DRAW_FRAME::saveCanvasTypeSetting( EDA_DRAW_PANEL_GAL::GAL_TYPE aCanvas
     // a parent frame)
     FRAME_T allowed_frames[] =
     {
-        FRAME_SCH, FRAME_PCB, FRAME_PCB_MODULE_EDITOR
+        FRAME_SCH, FRAME_PCB, FRAME_PCB_MODULE_EDITOR, FRAME_GERBER
     };
 
     bool allow_save = false;
 
-    for( int ii = 0; ii < 3; ii++ )
+    for( FRAME_T frame : allowed_frames )
     {
-        if( m_Ident == allowed_frames[ii] )
+        if( m_Ident == frame )
         {
             allow_save = true;
             break;
