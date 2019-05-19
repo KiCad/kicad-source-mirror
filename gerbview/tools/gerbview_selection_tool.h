@@ -58,6 +58,9 @@ public:
     /// @copydoc TOOL_BASE::Reset()
     void Reset( RESET_REASON aReason ) override;
 
+    // called to rebuild a CONDITIONAL_MENU before opening it:
+    int UpdateMenu( const TOOL_EVENT& aEvent );
+
     /**
      * Function Main()
      *

@@ -149,6 +149,22 @@ GERBVIEW_SELECTION_TOOL::GERBVIEW_SELECTION_TOOL() :
 }
 
 
+int GERBVIEW_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
+{
+    ACTION_MENU*      actionMenu = aEvent.Parameter<ACTION_MENU*>();
+    CONDITIONAL_MENU* conditionalMenu = dynamic_cast<CONDITIONAL_MENU*>( actionMenu );
+
+    if( conditionalMenu )
+        conditionalMenu->Evaluate( m_selection );
+
+    if( actionMenu )
+        actionMenu->UpdateAll();
+
+    return 0;
+}
+
+
+
 GERBVIEW_SELECTION_TOOL::~GERBVIEW_SELECTION_TOOL()
 {
     getView()->Remove( &m_selection );
@@ -457,6 +473,7 @@ bool GERBVIEW_SELECTION_TOOL::selectMultiple()
 
 void GERBVIEW_SELECTION_TOOL::setTransitions()
 {
+    Go( &GERBVIEW_SELECTION_TOOL::UpdateMenu,       ACTIONS::updateMenu.MakeEvent() );
     Go( &GERBVIEW_SELECTION_TOOL::Main,             GERBVIEW_ACTIONS::selectionActivate.MakeEvent() );
     Go( &GERBVIEW_SELECTION_TOOL::CursorSelection,  GERBVIEW_ACTIONS::selectionCursor.MakeEvent() );
     Go( &GERBVIEW_SELECTION_TOOL::ClearSelection,   GERBVIEW_ACTIONS::selectionClear.MakeEvent() );
