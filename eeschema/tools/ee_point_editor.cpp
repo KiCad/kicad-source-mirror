@@ -307,8 +307,6 @@ int EE_POINT_EDITOR::Main( const TOOL_EVENT& aEvent )
 
             updateItem();
             updatePoints();
-
-            view->Redraw();
         }
 
         else if( evt->IsMouseUp( BUT_LEFT ) )
