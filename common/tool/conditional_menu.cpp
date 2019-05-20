@@ -50,7 +50,7 @@ ACTION_MENU* CONDITIONAL_MENU::create() const
 void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_CONDITION& aCondition,
                                 int aOrder )
 {
-    assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
+    wxASSERT( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
     addEntry( ENTRY( &aAction, aCondition, aOrder, false ) );
 }
 
@@ -58,7 +58,7 @@ void CONDITIONAL_MENU::AddItem( const TOOL_ACTION& aAction, const SELECTION_COND
 void CONDITIONAL_MENU::AddCheckItem( const TOOL_ACTION& aAction,
                                      const SELECTION_CONDITION& aCondition, int aOrder )
 {
-    assert( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
+    wxASSERT( aAction.GetId() > 0 ); // Check if action was previously registered in ACTION_MANAGER
     addEntry( ENTRY( &aAction, aCondition, aOrder, true ) );
 }
 
@@ -133,29 +133,37 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
                 menuItem = Add( *entry.Action(), entry.IsCheckmarkEntry() );
                 menu_count++;
                 break;
+
             case ENTRY::MENU:
                 menuItem = Add( entry.Menu() );
                 menu_count++;
                 break;
+
             case ENTRY::WXITEM:
                 menuItem = Append( entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
                                    entry.wxItem()->GetHelp(), entry.wxItem()->GetKind() );
                 menu_count++;
                 break;
+
             case ENTRY::SEPARATOR:
                 if( menu_count )
                     menuItem = AppendSeparator();
+
                 menu_count = 0;
                 break;
+
             default:
-                assert( false );
+                wxASSERT( false );
                 break;
         }
 
-        if( entry.IsCheckmarkEntry() )
-            menuItem->Check( result );
-        else
-            menuItem->Enable( result );
+        if( menuItem )
+        {
+            if( entry.IsCheckmarkEntry() )
+                menuItem->Check( result );
+            else
+                menuItem->Enable( result );
+        }
     }
 }
 
