@@ -547,7 +547,7 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        rotPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+        rotPoint = (wxPoint)selection.GetReferencePoint();
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {
@@ -732,7 +732,7 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
     }
     else if( selection.GetSize() > 1 )
     {
-        mirrorPoint = m_frame->GetNearestGridPosition( (wxPoint)selection.GetCenter() );
+        mirrorPoint = (wxPoint)selection.GetReferencePoint();
 
         for( unsigned ii = 0; ii < selection.GetSize(); ii++ )
         {

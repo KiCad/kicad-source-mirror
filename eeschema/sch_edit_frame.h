@@ -136,6 +136,10 @@ private:
     bool                    m_autoplaceJustify;   ///< allow autoplace to change justification
     bool                    m_autoplaceAlign;     ///< align autoplaced fields to the grid
     bool                    m_footprintPreview;   ///< whether to show footprint previews
+    bool                    m_moveTakesCursorAsOrigin; ///< eemodern: always take the cursor (instead of item origin) as move anchor
+    bool                    m_dragActionIsMove;     ///< eemodern: if true, drag action defaults to move, otherwise it's drag
+    bool                    m_dragAlwaysSelects;    ///< eemodern: if true, drag action only selects items (and never drags/moves)
+    bool                    m_moveWarpsCursor; ///< eemodern: if true, cursor is warped to move/drag origin
 
     /// An index to the last find item in the found items list #m_foundItems.
     int         m_foundItemIndex;
@@ -205,6 +209,18 @@ public:
     SCH_SCREEN* GetScreen() const override;
 
     void OnCloseWindow( wxCloseEvent& Event );
+
+    void SetMoveTakesCursorAsOrigin( bool aValue ) { m_moveTakesCursorAsOrigin = aValue; }
+    bool GetMoveTakesCursorAsOrigin() const { return m_moveTakesCursorAsOrigin; }
+
+    void SetDragActionIsMove( bool aValue ) { m_dragActionIsMove = aValue; }
+    bool GetDragActionIsMove() const { return m_dragActionIsMove; }
+
+    void SetDragAlwaysSelects( bool aValue ) { m_dragAlwaysSelects = aValue; }
+    bool GetDragAlwaysSelects() const { return m_dragAlwaysSelects; }
+
+    void SetMoveWarpsCursor( bool aValue ) { m_moveWarpsCursor = aValue; }
+    bool GetMoveWarpsCursor() const { return m_moveWarpsCursor; }
 
     bool GetForceHVLines() const { return m_forceHVLines; }
     void SetForceHVLines( bool aForceHVdirection ) { m_forceHVLines = aForceHVdirection; }

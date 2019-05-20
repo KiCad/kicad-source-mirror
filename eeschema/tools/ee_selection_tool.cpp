@@ -290,6 +290,26 @@ int EE_SELECTION_TOOL::UpdateMenu( const TOOL_EVENT& aEvent )
 
 int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
 {
+    const KICAD_T movableItems[] =
+    {
+        SCH_MARKER_T,
+        SCH_JUNCTION_T,
+        SCH_NO_CONNECT_T,
+        SCH_BUS_BUS_ENTRY_T,
+        SCH_BUS_WIRE_ENTRY_T,
+        SCH_LINE_T,
+        SCH_BITMAP_T,
+        SCH_TEXT_T,
+        SCH_LABEL_T,
+        SCH_GLOBAL_LABEL_T,
+        SCH_HIER_LABEL_T,
+        SCH_FIELD_T,
+        SCH_COMPONENT_T,
+        SCH_SHEET_PIN_T,
+        SCH_SHEET_T,
+        EOT
+    };
+
     // Main loop: keep receiving events
     while( OPT_TOOL_EVENT evt = Wait() )
     {
@@ -359,7 +379,14 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         // drag with LMB? Select multiple objects (or at least draw a selection box) or drag them
         else if( evt->IsDrag( BUT_LEFT ) )
         {
-            if( m_additive || m_subtractive || m_selection.Empty() )
+            bool stillEmpty = true;
+            if( m_selection.Empty() )
+            {
+                m_selection = RequestSelection( movableItems );
+                stillEmpty = m_selection.Empty();
+            }
+
+            if( m_additive || m_subtractive || stillEmpty )
             {
                 selectMultiple();
             }
@@ -369,7 +396,7 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
                 if( selectionContains( evt->Position() ) )
                 {
                     // Yes -> run the move tool and wait till it finishes
-                    m_toolMgr->InvokeTool( "eeschema.InteractiveEdit" );
+                    m_toolMgr->InvokeTool( "eeschema.InteractiveMove" );
                 }
                 else
                 {

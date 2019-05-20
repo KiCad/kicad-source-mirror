@@ -113,6 +113,7 @@ public:
     static TOOL_ACTION finishDrawing;
 
     // Editing
+    static TOOL_ACTION moveActivate;
     static TOOL_ACTION move;
     static TOOL_ACTION drag;
     static TOOL_ACTION duplicate;

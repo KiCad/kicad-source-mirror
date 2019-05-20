@@ -335,6 +335,10 @@ const wxChar RescueNeverShowEntry[] =               wxT( "RescueNeverShow" );
 const wxChar AutoplaceFieldsEntry[] =               wxT( "AutoplaceFields" );
 const wxChar AutoplaceJustifyEntry[] =              wxT( "AutoplaceJustify" );
 const wxChar AutoplaceAlignEntry[] =                wxT( "AutoplaceAlign" );
+static const wxChar MoveWarpsCursorEntry[] =       wxT( "MoveWarpsCursor" );
+static const wxChar MoveTakesCursorAsOriginEntry[] =       wxT( "MoveTakesCursorAsOrigin" );
+static const wxChar DragActionIsMoveEntry[] =       wxT( "DragActionIsMove" );
+static const wxChar DragAlwaysSelectsEntry[] =      wxT( "DragAlwaysSelects" );
 static const wxChar FootprintPreviewEntry[] =       wxT( "FootprintPreview" );
 static const wxChar DefaultBusWidthEntry[] =        wxT( "DefaultBusWidth" );
 static const wxChar DefaultDrawLineWidthEntry[] =   wxT( "DefaultDrawLineWidth" );
@@ -413,6 +417,10 @@ void SCH_EDIT_FRAME::LoadSettings( wxConfigBase* aCfg )
     SetDefaultBusThickness( (int) aCfg->Read( DefaultBusWidthEntry, DEFAULTBUSTHICKNESS ) );
     SetDefaultLineThickness( (int) aCfg->Read( DefaultDrawLineWidthEntry, DEFAULTDRAWLINETHICKNESS ) );
     SCH_JUNCTION::SetSymbolSize( (int) aCfg->Read( DefaultJctSizeEntry, SCH_JUNCTION::GetSymbolSize() ) );
+    aCfg->Read( MoveWarpsCursorEntry, &m_moveWarpsCursor, true );
+    aCfg->Read( MoveTakesCursorAsOriginEntry, &m_moveTakesCursorAsOrigin, false );
+    aCfg->Read( DragActionIsMoveEntry, &m_dragActionIsMove, true );
+    aCfg->Read( DragAlwaysSelectsEntry, &m_dragAlwaysSelects, false );
     aCfg->Read( ShowHiddenPinsEntry, &m_showAllPins, false );
     aCfg->Read( HorzVertLinesOnlyEntry, &m_forceHVLines, true );
     aCfg->Read( AutoplaceFieldsEntry, &m_autoplaceFields, true );
@@ -482,6 +490,10 @@ void SCH_EDIT_FRAME::SaveSettings( wxConfigBase* aCfg )
 
     wxConfigSaveSetups( aCfg, GetConfigurationSettings() );
 
+    aCfg->Write( MoveWarpsCursorEntry, m_moveWarpsCursor );
+    aCfg->Write( MoveTakesCursorAsOriginEntry, m_moveTakesCursorAsOrigin );
+    aCfg->Write( DragActionIsMoveEntry, m_dragActionIsMove );
+    aCfg->Write( DragAlwaysSelectsEntry, m_dragAlwaysSelects );
     aCfg->Write( DefaultBusWidthEntry, (long) GetDefaultBusThickness() );
     aCfg->Write( DefaultDrawLineWidthEntry, (long) GetDefaultLineThickness() );
     aCfg->Write( DefaultJctSizeEntry, (long) SCH_JUNCTION::GetSymbolSize() );

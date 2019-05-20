@@ -46,6 +46,10 @@ TOOL_ACTION EE_ACTIONS::drag( "eeschema.InteractiveEdit.drag",
         AS_GLOBAL, TOOL_ACTION::LegacyHotKey( HK_DRAG ),
         _( "Drag" ), _( "Drags the selected item(s)" ), move_xpm, AF_ACTIVATE );
 
+TOOL_ACTION EE_ACTIONS::moveActivate( "eeschema.InteractiveMove",
+        AS_GLOBAL, 0,
+        _( "Move Activate" ), "", move_xpm, AF_ACTIVATE );
+
 
 // For adding to or removing from selections
 #define QUIET_MODE true
@@ -90,6 +94,26 @@ bool SCH_MOVE_TOOL::Init()
 }
 
 
+void SCH_MOVE_TOOL::Reset( RESET_REASON aReason )
+{
+    if( aReason == MODEL_RELOAD )
+    {
+        m_moveInProgress = false;
+        m_moveOffset = { 0, 0 };
+
+        // Init variables used by every drawing tool
+        m_controls = getViewControls();
+        m_frame = getEditFrame<SCH_EDIT_FRAME>();
+    }
+}
+
+/* TODO - Tom/Jeff
+  - add preferences option "Move origin: always cursor / item origin"
+  - add preferences option "Default drag action: drag items / move"
+  - add preferences option "Drag always selects"
+  */
+
+
 int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 {
     const KICAD_T movableItems[] =
@@ -125,10 +149,16 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     if( selection.Empty() )
         return 0;
 
-    if( aEvent.IsAction( &EE_ACTIONS::move ) )
+    if( aEvent.IsAction( &EE_ACTIONS::move ) || aEvent.IsAction( &EE_ACTIONS::moveActivate ) )
+    {
         m_frame->SetToolID( ID_SCH_MOVE, wxCURSOR_DEFAULT, _( "Move Items" ) );
+        moveMode = true;
+    }
     else
+    {
         m_frame->SetToolID( ID_SCH_DRAG, wxCURSOR_DEFAULT, _( "Drag Items" ) );
+        moveMode = false;
+    }
 
     Activate();
     controls->ShowCursor( true );
@@ -143,14 +173,14 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         if( !selection.Front()->IsNew() )
         {
-            // User must have switched from move to drag or vice-versa.  Reset the selected
-            // items so we can start again with the current m_isDragOperation and m_moveOffset.
-            m_frame->RollbackSchematicFromUndo();
+        // User must have switched from move to drag or vice-versa.  Reset the moved items
+        // so we can start again with the current m_isDragOperation and m_moveOffset.
+        m_frame->RollbackSchematicFromUndo();
             m_selectionTool->RemoveItemsFromSel( &m_dragAdditions, QUIET_MODE );
-            m_moveInProgress = false;
-            // And give it a kick so it doesn't have to wait for the first mouse movement to
-            // refresh.
-            m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+        m_moveInProgress = false;
+        // And give it a kick so it doesn't have to wait for the first mouse movement to
+        // refresh.
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
         }
         return 0;
     }
@@ -160,7 +190,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     {
         controls->SetSnapping( !evt->Modifier( MD_ALT ) );
 
-        if( evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
+        if( evt->IsAction( &EE_ACTIONS::moveActivate ) 
+                || evt->IsAction( &EE_ACTIONS::move ) || evt->IsAction( &EE_ACTIONS::drag )
                 || evt->IsMotion() || evt->IsDrag( BUT_LEFT )
                 || evt->IsAction( &EE_ACTIONS::refreshPreview ) )
         {
@@ -181,7 +212,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Add connections to the selection for a drag.
                 //
-                if( m_frame->GetToolId() == ID_SCH_DRAG )
+                if( !moveMode )
                 {
                     for( EDA_ITEM* item : selection )
                     {
@@ -200,7 +231,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 // Mark the edges of the block with dangling flags for a move.
                 //
-                if( m_frame->GetToolId() == ID_SCH_MOVE )
+                if( moveMode )
                 {
                     std::vector<DANGLING_END_ITEM> internalPoints;
 
@@ -247,7 +278,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                     // Apply any initial offset in case we're coming from a previous command.
                     //
                     if( !item->GetParent() || !item->GetParent()->IsSelected() )
-                        moveItem( item, m_moveOffset, m_frame->GetToolId() == ID_SCH_DRAG );
+                    	moveItem( item, m_moveOffset, !moveMode );
                 }
 
                 // Set up the starting position and move/drag offset
@@ -265,7 +296,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         if( item->GetParent() && item->GetParent()->IsSelected() )
                             continue;
 
-                        moveItem( item, delta, m_frame->GetToolId() == ID_SCH_DRAG );
+                        moveItem( item, delta, !moveMode );
                         updateView( item );
                     }
 
@@ -439,6 +470,7 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
         switch( test->Type() )
         {
+        default:
         case SCH_LINE_T:
         {
             // Select the connected end of wires/bus connections.
