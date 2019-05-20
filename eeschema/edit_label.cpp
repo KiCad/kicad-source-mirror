@@ -2,7 +2,7 @@
  * This program source code file is part of KiCad, a free EDA CAD application.
  *
  * Copyright (C) 2018 Jean-Pierre Charras, jp.charras at wanadoo.fr
- * Copyright (C) 2004-2018 KiCad Developers, see AUTHORS.txt for contributors.
+ * Copyright (C) 2004-2019 KiCad Developers, see AUTHORS.txt for contributors.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,10 +98,6 @@ SCH_TEXT* SCH_EDIT_FRAME::CreateNewText( int aType )
 }
 
 
-/*
- * ConvertTextType changes a text from one type to another.  It creates a new text of the
- * appropriate type and deletes the old one.
- */
 void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
 {
     bool selected = aText->IsSelected();
@@ -113,7 +109,18 @@ void SCH_EDIT_FRAME::ConvertTextType( SCH_TEXT* aText, KICAD_T aType )
 
     SCH_TEXT* newtext = nullptr;
     const wxPoint& position = aText->GetPosition();
-    const wxString txt = aText->GetText();
+    wxString txt = aText->GetText();
+
+    // There can be characters in a SCH_TEXT object that can break labels so we have to
+    // fix them here.
+    if( aText->Type() == SCH_TEXT_T )
+    {
+        txt.Replace( "\n", "_" );
+        txt.Replace( "\r", "_" );
+        txt.Replace( "\t", "_" );
+        txt.Replace( " ", "_" );
+        txt.Replace( "/", "_" );
+    }
 
     switch( aType )
     {
