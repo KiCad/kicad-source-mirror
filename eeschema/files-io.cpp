@@ -239,7 +239,9 @@ bool SCH_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     {
         SetScreen( nullptr );
         delete g_RootSheet;
-        g_RootSheet = NULL;
+        if( g_CurrentSheet )
+            g_CurrentSheet->clear();
+        g_RootSheet = nullptr;
 
         CreateScreens();
     }

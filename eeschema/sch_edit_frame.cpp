@@ -489,12 +489,18 @@ void SCH_EDIT_FRAME::SetSheetNumberAndCount()
 
 SCH_SCREEN* SCH_EDIT_FRAME::GetScreen() const
 {
+    if( !g_CurrentSheet )
+        return nullptr;
+
     return g_CurrentSheet->LastScreen();
 }
 
 
 wxString SCH_EDIT_FRAME::GetScreenDesc() const
 {
+    if(! g_CurrentSheet )
+        return wxT("<unknown>");
+
     wxString s = g_CurrentSheet->PathHumanReadable();
 
     return s;
@@ -748,8 +754,12 @@ void SCH_EDIT_FRAME::OnUpdateRemapSymbols( wxUpdateUIEvent& aEvent )
 
 void SCH_EDIT_FRAME::OnUpdateSaveSheet( wxUpdateUIEvent& aEvent )
 {
-    aEvent.Enable( GetScreen()->IsModify() );
+    auto screen = GetScreen();
 
+    if( !screen )
+        return;
+
+    aEvent.Enable( screen->IsModify() );
 }
 
 

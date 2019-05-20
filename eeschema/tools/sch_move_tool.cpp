@@ -125,9 +125,9 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     };
 
     KIGFX::VIEW_CONTROLS* controls = getViewControls();
-
     controls->SetSnapping( true );
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
+    bool moveMode;
 
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
@@ -463,7 +463,6 @@ void SCH_MOVE_TOOL::getConnectedDragItems( SCH_ITEM* aOriginalItem, wxPoint aPoi
 
         switch( test->Type() )
         {
-        default:
         case SCH_LINE_T:
         {
             // Select the connected end of wires/bus connections.
