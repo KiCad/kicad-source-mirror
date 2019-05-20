@@ -51,7 +51,10 @@ static void prepareFilesMenu( wxMenu* aParentMenu, bool aIsOutsideProject );
 static void prepareExportMenu( wxMenu* aParentMenu );
 
 // Build the place submenu
-static void preparePlaceMenu( wxMenu* aParentMenu );
+static void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool );
+
+// Build the edit submenu
+static void prepareEditMenu( CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool );
 
 // Build the route menu
 static void prepareRouteMenu( wxMenu* aParentMenu );
@@ -67,9 +70,6 @@ static void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu 
 
 // Build the tools menu
 static void prepareToolsMenu( wxMenu* aParentMenu );
-
-// Build the help menu
-static void prepareHelpMenu( wxMenu* aParentMenu );
 
 
 void PCB_EDIT_FRAME::ReCreateMenuBar()
@@ -89,6 +89,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     //----- Edit menu -----------------------------------------------------------
     CONDITIONAL_MENU* editMenu = new CONDITIONAL_MENU( false, selTool );
+    prepareEditMenu( editMenu, selTool );
 
     auto enableUndoCondition = [ this ] ( const SELECTION& sel ) {
         return GetScreen() && GetScreen()->GetUndoCommandCount() > 0;
@@ -135,11 +136,11 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
     editMenu->AddItem( ID_PCB_GLOBAL_DELETE,
                        _( "Glo&bal Deletions..." ),
                        _( "Delete tracks, footprints and graphic items from board" ),
-                       general_deletions_xpm,           SELECTION_CONDITIONS::ShowAlways );
+                       general_deletions_xpm, SELECTION_CONDITIONS::ShowAlways );
     editMenu->AddItem( ID_MENU_PCB_CLEAN,
                        _( "C&leanup Tracks and Vias..." ),
                        _( "Clean stubs, vias, delete break points or unconnected tracks" ),
-                       delete_xpm,                      SELECTION_CONDITIONS::ShowAlways );
+                       delete_xpm, SELECTION_CONDITIONS::ShowAlways );
 
     //----- View menu -----------------------------------------------------------
     CONDITIONAL_MENU* viewMenu = new CONDITIONAL_MENU( false, selTool );
@@ -272,37 +273,7 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
     //----- Place Menu ----------------------------------------------------------
     CONDITIONAL_MENU* placeMenu = new CONDITIONAL_MENU( false, selTool );
-
-    placeMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
-
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
-
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
-
-    placeMenu->AddSeparator();
-    placeMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
-    placeMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
-
-    placeMenu->AddSeparator();
-
-    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
-    autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
-    autoplaceSubmenu->SetTool( selTool );
-
-    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
-    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
-
-    placeMenu->AddMenu( autoplaceSubmenu );
+    preparePlaceMenu( placeMenu, selTool );
 
     //----- Route Menu ----------------------------------------------------------
     wxMenu* routeMenu = new wxMenu;
@@ -344,10 +315,15 @@ void PCB_EDIT_FRAME::ReCreateMenuBar()
 
 }
 
+
+void prepareEditMenu( CONDITIONAL_MENU* aEditMenu, SELECTION_TOOL* aSelectionTool )
+{
+}
+
+
 // Build the preferences menu
 void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 {
-
     wxString text;
 
     text = AddHotkeyName( _( "&Preferences..." ), g_Board_Editor_Hotkeys_Descr, HK_PREFERENCES );
@@ -380,6 +356,44 @@ void preparePreferencesMenu( PCB_EDIT_FRAME* aFrame, wxMenu* aParentMenu )
 
     // Language submenu
     Pgm().AddMenuLanguageList( aParentMenu );
+}
+
+
+// Build the place submenu
+void preparePlaceMenu( CONDITIONAL_MENU* aPlaceMenu, SELECTION_TOOL* aSelectionTool )
+{
+
+    aPlaceMenu->AddItem( PCB_ACTIONS::placeModule,     SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawVia,         SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawZone,        SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawZoneKeepout, SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::placeText,       SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawArc,         SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawCircle,      SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawLine,        SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawPolygon,     SELECTION_CONDITIONS::ShowAlways );
+
+    aPlaceMenu->AddSeparator();
+    aPlaceMenu->AddItem( PCB_ACTIONS::drawDimension,   SELECTION_CONDITIONS::ShowAlways );
+
+    aPlaceMenu->AddSeparator();
+    aPlaceMenu->AddItem( PCB_ACTIONS::placeTarget,     SELECTION_CONDITIONS::ShowAlways );
+
+    aPlaceMenu->AddSeparator();
+    aPlaceMenu->AddItem( PCB_ACTIONS::drillOrigin,     SELECTION_CONDITIONS::ShowAlways );
+    aPlaceMenu->AddItem( ACTIONS::gridSetOrigin,       SELECTION_CONDITIONS::ShowAlways );
+
+    aPlaceMenu->AddSeparator();
+
+    ACTION_MENU* autoplaceSubmenu = new ACTION_MENU;
+    autoplaceSubmenu->SetTitle( _( "Auto-Place Footprints" ) );
+    autoplaceSubmenu->SetTool( aSelectionTool );
+    autoplaceSubmenu->SetIcon( mode_module_xpm );
+
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceOffboardComponents );
+    autoplaceSubmenu->Add( PCB_ACTIONS::autoplaceSelectedComponents );
+
+    aPlaceMenu->AddMenu( autoplaceSubmenu );
 }
 
 
