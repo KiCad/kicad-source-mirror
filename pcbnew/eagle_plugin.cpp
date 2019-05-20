@@ -495,6 +495,12 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
             if( layer != UNDEFINED_LAYER )
             {
                 DRAWSEGMENT* dseg = new DRAWSEGMENT( m_board );
+                int          width = w.width.ToPcbUnits();
+
+                // KiCad cannot handle zero or negative line widths
+                if( width <= 0 )
+                    width = m_board->GetDesignSettings().GetLineThickness( layer );
+
                 m_board->Add( dseg, ADD_APPEND );
 
                 if( !w.curve )
@@ -514,8 +520,9 @@ void EAGLE_PLUGIN::loadPlain( wxXmlNode* aGraphics )
 
                 dseg->SetTimeStamp( EagleTimeStamp( gr ) );
                 dseg->SetLayer( layer );
-                dseg->SetWidth( Millimeter2iu( DEFAULT_PCB_EDGE_THICKNESS ) );
+                dseg->SetWidth( width );
             }
+
             m_xpath->pop();
         }
         else if( grName == "text" )
