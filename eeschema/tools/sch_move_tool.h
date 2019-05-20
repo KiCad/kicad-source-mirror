@@ -80,6 +80,8 @@ private:
     ///> Last cursor position (needed for getModificationPoint() to avoid changes
     ///> of edit reference point).
     VECTOR2I              m_cursor;
+
+    boost::optional<VECTOR2I> m_anchorPoint;
 };
 
 #endif //KICAD_SCH_MOVE_TOOL_H

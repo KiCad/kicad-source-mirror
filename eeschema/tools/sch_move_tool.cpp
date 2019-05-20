@@ -129,6 +129,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
     VECTOR2I originalCursorPos = controls->GetCursorPosition();
     bool moveMode;
 
+    m_anchorPoint.reset();
+
     // Be sure that there is at least one item that we can move. If there's no selection try
     // looking for the stuff under mouse cursor (i.e. Kicad old-style hover selection).
     SELECTION& selection = m_selectionTool->RequestSelection( movableItems );
@@ -177,6 +179,8 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
         }
         return 0;
     }
+
+    m_cursor = controls->GetCursorPosition();
 
     // Main loop: keep receiving events
     do
@@ -280,7 +284,17 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
                 if( selection.HasReferencePoint() )
                 {
-                    VECTOR2I delta = m_cursor - selection.GetReferencePoint();
+                    m_anchorPoint = selection.GetReferencePoint();
+                    if( m_frame->GetMoveWarpsCursor() )
+                    {
+                        getViewControls()->WarpCursor( *m_anchorPoint );
+                        m_cursor = *m_anchorPoint;
+                    }
+                }
+
+                if( m_anchorPoint )
+                {
+                    VECTOR2I delta = m_cursor - (*m_anchorPoint);
 
                     // Drag items to the current cursor position
                     for( EDA_ITEM* item : selection )
@@ -293,7 +307,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
                         updateView( item );
                     }
 
-                    selection.SetReferencePoint( m_cursor );
+                    m_anchorPoint = m_cursor;
                 }
                 else if( selection.Size() == 1 )
                 {
@@ -320,7 +334,7 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
             //
             m_cursor = controls->GetCursorPosition();
             VECTOR2I delta( m_cursor - prevPos );
-            selection.SetReferencePoint( m_cursor );
+            m_anchorPoint = m_cursor;
 
             m_moveOffset += delta;
             prevPos = m_cursor;
@@ -422,16 +436,23 @@ int SCH_MOVE_TOOL::Main( const TOOL_EVENT& aEvent )
 
     m_moveInProgress = false;
     m_frame->SetNoToolSelected();
-
-    selection.ClearReferencePoint();
+    m_anchorPoint.reset();
 
     for( EDA_ITEM* item : selection )
         item->ClearEditFlags();
 
     if( restore_state )
     {
-        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
         m_frame->RollbackSchematicFromUndo();
+            
+        if( unselect )
+        {
+            m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+        }
+        else
+        {
+            m_toolMgr->ProcessEvent( EVENTS::SelectedEvent );
+        }
     }
     else
     {
@@ -654,16 +675,14 @@ bool SCH_MOVE_TOOL::updateModificationPoint( SELECTION& aSelection )
         // hierarchical sheets or components can have the anchor outside the view)
         if( item->IsMovableFromAnchorPoint() )
         {
-            wxPoint pos = item->GetPosition();
-            aSelection.SetReferencePoint( pos );
-
+            m_anchorPoint = item->GetPosition();
             return true;
         }
     }
 
     // ...otherwise modify items with regard to the grid-snapped cursor position
     m_cursor = getViewControls()->GetCursorPosition( true );
-    aSelection.SetReferencePoint( m_cursor );
+    m_anchorPoint = m_cursor;
 
     return true;
 }

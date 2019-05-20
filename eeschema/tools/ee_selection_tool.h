@@ -237,7 +237,7 @@ private:
 
     ///> Sets up handlers for various events.
     void setTransitions() override;
-
+    
 private:
     SCH_BASE_FRAME* m_frame;    // Pointer to the parent frame
     SELECTION m_selection;      // Current state of selection

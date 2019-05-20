@@ -380,12 +380,15 @@ int EE_SELECTION_TOOL::Main( const TOOL_EVENT& aEvent )
         else if( evt->IsDrag( BUT_LEFT ) )
         {
             bool empty = m_selection.Empty();
+
+            // selection is empty? try to start dragging the item under the point where drag started
             if( empty )
             {
                 m_selection = RequestSelection( movableItems );
                 empty = m_selection.Empty();
             }
 
+            // selection STILL empty? attempt a rectangle multi-selection
             if( m_additive || m_subtractive || empty || m_frame->GetDragAlwaysSelects() )
             {
                 selectMultiple();
@@ -596,6 +599,13 @@ SELECTION& EE_SELECTION_TOOL::RequestSelection( const KICAD_T aFilterList[] )
         clearSelection();
         SelectPoint( cursorPos, aFilterList );
         m_selection.SetIsHover( true );
+        m_selection.ClearReferencePoint();
+    }
+
+    if( m_selection.Size() == 1 )
+    {
+        VECTOR2I refP = ((SCH_ITEM*) m_selection.GetItem( 0 ))->GetPosition();
+        m_selection.SetReferencePoint( refP );
     }
 
     return m_selection;
