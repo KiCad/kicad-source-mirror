@@ -102,6 +102,7 @@ BEGIN_EVENT_TABLE( EDA_DRAW_FRAME, KIWAY_PLAYER )
 
     EVT_MOUSEWHEEL( EDA_DRAW_FRAME::OnMouseEvent )
     EVT_MENU_OPEN( EDA_DRAW_FRAME::OnMenuOpen )
+    EVT_MENU_CLOSE( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_MENU_HIGHLIGHT_ALL( EDA_DRAW_FRAME::OnMenuOpen )
     EVT_ACTIVATE( EDA_DRAW_FRAME::OnActivate )
     EVT_MENU_RANGE( ID_ZOOM_BEGIN, ID_ZOOM_END, EDA_DRAW_FRAME::OnZoom )
@@ -330,7 +331,7 @@ void EDA_DRAW_FRAME::OnMenuOpen( wxMenuEvent& event )
         if( currentMenu )
             currentMenu->OnMenuEvent( event );
     }
-    else if( event.GetEventType() == wxEVT_MENU_CLOSE )
+    else    // if( event.GetEventType() == wxEVT_MENU_CLOSE )
     {
         currentMenu = nullptr;
     }
