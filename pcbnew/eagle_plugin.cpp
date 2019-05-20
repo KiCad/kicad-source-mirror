@@ -1471,7 +1471,7 @@ void EAGLE_PLUGIN::packagePad( MODULE* aModule, wxXmlNode* aTree ) const
     aModule->PadsList().PushBack( pad );
     transferPad( e, pad );
 
-    if( pad->GetName() == wxT( "1" ) && m_rules->psFirst != EPAD::UNDEF )
+    if( e.first && *e.first && m_rules->psFirst != EPAD::UNDEF )
         shape = m_rules->psFirst;
     else if( aModule->GetLayer() == F_Cu &&  m_rules->psTop != EPAD::UNDEF )
         shape = m_rules->psTop;
