@@ -161,7 +161,7 @@ TOOL_ACTION EE_ACTIONS::doDelete( "eeschema.InteractiveEdit.doDelete",
 
 TOOL_ACTION EE_ACTIONS::deleteItemCursor( "eeschema.InteractiveEdit.deleteTool",
         AS_GLOBAL, 0,
-        _( "DoDelete Items" ), _( "DoDelete clicked items" ),
+        _( "Delete Items" ), _( "Delete clicked items" ),
         delete_xpm, AF_ACTIVATE );
 
 TOOL_ACTION EE_ACTIONS::breakWire( "eeschema.InteractiveEdit.breakWire",
@@ -596,7 +596,11 @@ int SCH_EDIT_TOOL::Rotate( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
-    if( !item->IsMoving() )
+    if( item->IsMoving() )
+    {
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+    }
+    else
     {
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
@@ -774,7 +778,11 @@ int SCH_EDIT_TOOL::Mirror( const TOOL_EVENT& aEvent )
 
     m_toolMgr->PostEvent( EVENTS::SelectedItemsModified );
 
-    if( !item->IsMoving() )
+    if( item->IsMoving() )
+    {
+        m_toolMgr->RunAction( EE_ACTIONS::refreshPreview );
+    }
+    else
     {
         if( selection.IsHover() )
             m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
