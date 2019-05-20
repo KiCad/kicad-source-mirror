@@ -48,6 +48,9 @@ bool PCB_EDIT_FRAME::Clear_Pcb( bool aQuery )
             return false;
     }
 
+    // Release the lock file, if exists
+    ReleaseFile();
+
     // Clear undo and redo lists because we want a full deletion
     GetScreen()->ClearUndoRedoList();
     GetScreen()->ClrModify();

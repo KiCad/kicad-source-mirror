@@ -418,7 +418,7 @@ bool PCB_EDIT_FRAME::OpenProjectFiles( const std::vector<wxString>& aFileSet, in
     }
 
     // Release the lock file, until the new file is actually loaded
-    m_file_checker.reset( nullptr );
+    ReleaseFile();
 
     wxFileName pro = fullFileName;
     pro.SetExt( ProjectFileExtension );
