@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: KiCad\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-08 21:33+0100\n"
-"PO-Revision-Date: 2018-08-06 15:10+0200\n"
+"PO-Revision-Date: 2019-05-20 17:39+0200\n"
 "Last-Translator: \n"
 "Language-Team: Wolftronics <farkasg.zoltan@wolftronics.hu>\n"
 "Language: hu_HU\n"
@@ -23,12 +23,12 @@ msgstr "3D modell kiválasztása"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:136
 msgid "Paths:"
-msgstr "Útvonalak:"
+msgstr "Elérési utak:"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:137
 #: common/dialogs/dialog_configure_paths_base.h:73
 msgid "Configure Paths"
-msgstr "Útvonalak konfigurálása"
+msgstr "Elérési utak konfigurálása"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:142
 #: common/dialog_about/dialog_about_base.cpp:75
@@ -37,7 +37,7 @@ msgstr "Útvonalak konfigurálása"
 #: gerbview/dialogs/dialog_select_one_pcb_layer.cpp:181
 #: pcbnew/microwave.cpp:454
 msgid "OK"
-msgstr "Rendben"
+msgstr "OK"
 
 #: 3d-viewer/3d_cache/dialogs/dlg_select_3dmodel.cpp:143 common/confirm.cpp:184
 #: common/confirm.cpp:202 common/selcolor.cpp:181 common/tool/actions.cpp:10
@@ -92,7 +92,7 @@ msgstr "Z tengely:"
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:65
 #: gerbview/gerber_draw_item.cpp:714 pcbnew/class_module.cpp:593
 msgid "Rotation"
-msgstr "Elforgatás:"
+msgstr "Forgatás:"
 
 #: 3d-viewer/3d_cache/dialogs/panel_prev_3d_base.cpp:109
 msgid "Offset"
@@ -134,11 +134,11 @@ msgstr "Rétegek létrehozása"
 #: 3d-viewer/3d_canvas/cinfo3d_visu.cpp:462
 #: pcbnew/dialogs/dialog_export_step.cpp:235
 msgid "Cannot determine the board outline."
-msgstr "Nem tudom meghatározni a panel körvonalát."
+msgstr "Nem lehet meghatározni a panel körvonalát."
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:251
 msgid "Create tracks and vias"
-msgstr "Vezetősávokat és átvezetőfuratok létrehozzása"
+msgstr "Vezetősávok és átvezetőfuratok (viák) létrehozzása"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:790
 msgid "Create zones"
@@ -146,11 +146,11 @@ msgstr "Zónák létrehozása"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:862
 msgid "Simplifying copper layers polygons"
-msgstr ""
+msgstr "Vezetőréteg poligonok egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:906
 msgid "Simplify holes contours"
-msgstr ""
+msgstr "Furat kontúrok egyszerűsítése"
 
 #: 3d-viewer/3d_canvas/create_layer_items.cpp:952
 msgid "Build Tech layers"
@@ -191,19 +191,19 @@ msgstr "Bal oldali nézet"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:698
 msgid "Front View"
-msgstr "Előlnézet"
+msgstr "Elölnézet"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:703
 msgid "Back View"
-msgstr "Hátúlnézet"
+msgstr "Hátulnézet"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:710
 msgid "Move Left <-"
-msgstr "Mozgatás balra <--"
+msgstr "Mozgatás balra <-"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:715
 msgid "Move Right ->"
-msgstr "Mozgatás jobbra -->"
+msgstr "Mozgatás jobbra ->"
 
 #: 3d-viewer/3d_canvas/eda_3d_canvas.cpp:720
 msgid "Move Up ^"
@@ -329,7 +329,7 @@ msgstr "Nagyítás képernyőméretre"
 #: pcbnew/menubar_footprint_editor.cpp:233 pcbnew/menubar_pcb_editor.cpp:588
 #: pcbnew/tool_footprint_viewer.cpp:176
 msgid "&Redraw"
-msgstr "Újra rajzol"
+msgstr "Újrarajzol"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:92 3d-viewer/3d_viewer/3d_toolbar.cpp:91
 msgid "Rotate X Clockwise"
@@ -403,7 +403,7 @@ msgstr "Képernyő tulajdonságok"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:143
 msgid "Raytracing"
-msgstr ""
+msgstr "Sugárkövetés"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:149
 msgid "Render Options"
@@ -455,11 +455,11 @@ msgstr "A 3D modellek határoló dobozainak megjelenítése"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:188
 msgid "Raytracing Options"
-msgstr ""
+msgstr "Sugárkövetés beállítások"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:191
 msgid "Render Shadows"
-msgstr ""
+msgstr "Árnyékok megjelenítése"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:195
 msgid "Procedural Textures"
@@ -471,7 +471,7 @@ msgstr ""
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:200
 msgid "Add Floor"
-msgstr "Mezöt hozzáad"
+msgstr "Mezőt hozzáad"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:201
 msgid "Adds a floor plane below the board (slow)"
@@ -569,7 +569,7 @@ msgstr "3D rács 5mm"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:273
 msgid "3D Grid 2.5 mm"
-msgstr "3D rács 2.5mm"
+msgstr "3D rács 2,5mm"
 
 #: 3d-viewer/3d_viewer/3d_menubar.cpp:274
 msgid "3D Grid 1 mm"
@@ -666,7 +666,7 @@ msgstr "Megjelenítési beállítások"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:71
 msgid "Render current view using Raytracing"
-msgstr ""
+msgstr "Sugárkövetés alkalmazása az aktuális nézetre"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:76 eeschema/help_common_strings.h:43
 #: eeschema/tool_viewlib.cpp:65 gerbview/menubar.cpp:205
@@ -694,7 +694,7 @@ msgstr "Nézet újrarajzolás"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:86
 msgid "Zoom to fit 3D model"
-msgstr "Nagyítása a 3d modellhez"
+msgstr "3D modell nagyítása képernyőméretre"
 
 #: 3d-viewer/3d_viewer/3d_toolbar.cpp:130
 msgid "Enable/Disable orthographic projection"
@@ -731,7 +731,7 @@ msgstr "Látható 3D modellek:"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:112
 msgid "Show 3D through hole models"
-msgstr "3D átmenőfuratos modellek megjelenítése"
+msgstr "3D furatszerelt modellek megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:121
 msgid "Show 3D SMD models"
@@ -751,7 +751,7 @@ msgstr "Szitanyomat réteg megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:174
 msgid "Show solder mask layers"
-msgstr "Forrasztómaszk réteg megjelenítése"
+msgstr "Forrasztásgátló réteg megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:183
 msgid "Show solder paste layers"
@@ -763,7 +763,7 @@ msgstr "SMD ragasztó réteg megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:201
 msgid "User layers (not shown in realistic mode):"
-msgstr "Felhasználói rétegek (nem láthatók a reális üzemmódban):"
+msgstr "Felhasználói rétegek (nem láthatók a valósághű üzemmódban):"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:218
 msgid "Show comments and drawings layers"
@@ -771,7 +771,7 @@ msgstr "Szöveg és rajz rétegek megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.cpp:227
 msgid "Show ECO layers"
-msgstr ""
+msgstr "ECO rétegek megjelenítése"
 
 #: 3d-viewer/3d_viewer/dialogs/dialog_3D_view_option_base.h:86
 msgid "3D Display Options"
@@ -801,11 +801,11 @@ msgstr "A fájlt nem lehet menteni"
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1023
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1055
 msgid "Solder Mask Color"
-msgstr "Forrasztómaszk színe"
+msgstr "Forrasztásgátló réteg színe"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1074
 msgid "Copper Color"
-msgstr "Réz réteg színe"
+msgstr "Vezető réteg színe"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1098
 msgid "Board Body Color"
@@ -813,7 +813,7 @@ msgstr "Paneltest színe"
 
 #: 3d-viewer/3d_viewer/eda_3d_viewer.cpp:1116
 msgid "Solder Paste Color"
-msgstr "Forrasztópaszta színe"
+msgstr "Forrasztópaszta réteg színe"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:34 eeschema/hotkeys.cpp:118
 #: gerbview/hotkeys.cpp:68 kicad/menubar.cpp:153
@@ -856,23 +856,23 @@ msgstr "Elölnézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:44
 msgid "View Back"
-msgstr ""
+msgstr "Hátulnézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:45
 msgid "View Left"
-msgstr ""
+msgstr "Bal oldali nézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:46
 msgid "View Right"
-msgstr ""
+msgstr "Jobb oldali nézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:47
 msgid "View Top"
-msgstr ""
+msgstr "Felülnézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:48
 msgid "View Bot"
-msgstr ""
+msgstr "Alulnézet"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:50
 msgid "Rotate 45 degrees over Z axis"
@@ -880,19 +880,19 @@ msgstr "Fordítsa 45 fokkal a Z tengely fölé"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:51
 msgid "Zoom in "
-msgstr ""
+msgstr "Nagyítás"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:53
 msgid "Toggle 3D models with type Through Hole"
-msgstr ""
+msgstr "Furatszerelt 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:54
 msgid "Toggle 3D models with type Surface Mount"
-msgstr ""
+msgstr "Felületszerelt 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:55
 msgid "Toggle 3D models with type Virtual"
-msgstr ""
+msgstr "Virtuális 3D modellek megjelenítése/elrejtése"
 
 #: 3d-viewer/3d_viewer/hotkeys.cpp:57
 msgid "Viewer 3D"
@@ -926,11 +926,11 @@ msgstr "Postscript fájl létrehozása"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:614
 msgid "Create Symbol Library"
-msgstr "Alkatrész létrehozása"
+msgstr "Alkatrész szimbólum létrehozása"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:651
 msgid "Create Footprint Library"
-msgstr "Alkatrésztok létrehozása"
+msgstr "Alkatrész rajzolat létrehozása"
 
 #: bitmap2component/bitmap2cmp_gui.cpp:691
 msgid "Error allocating memory for potrace bitmap"
@@ -1087,11 +1087,11 @@ msgstr "Nyáktervező *.kicad_mod fájl"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Postscript (.ps file)"
-msgstr "Posztszkript *.ps fájl"
+msgstr "Postscript *.ps fájl"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:129
 msgid "Logo for title block (.kicad_wks file)"
-msgstr "Logó címblokkhoz *.kicad_wks fájl"
+msgstr "Rajz-fejléc logo *.kicad_wks fájl"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:131
 msgid "Format:"
@@ -1103,15 +1103,15 @@ msgstr "Képbeállítások:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:138
 msgid "Black / White Threshold:"
-msgstr ""
+msgstr "Fekete / Fehér küszöbszint:"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:143
 msgid ""
 "Adjust the level to convert the greyscale picture to a black and white "
 "picture."
 msgstr ""
-"Állítsa be a határértéket,\n"
-"ha a szürkeárnyalatos képet fekete-fehérre szeretné konvertálni."
+"Adja meg a szürkeárnyalatos kép fekete-fehérré történő konverzió "
+"küszöbszintjét."
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:147
 #: gerbview/gerber_file_image.cpp:358
@@ -1121,20 +1121,20 @@ msgstr "Negatív"
 #: bitmap2component/bitmap2cmp_gui_base.cpp:153
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:338
 msgid "Front silk screen"
-msgstr "Felső szita"
+msgstr "Felső szitanyomat"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:153
 #: pcbnew/dialogs/dialog_pad_properties_base.cpp:344
 msgid "Front solder mask"
-msgstr "Felső forrasztómaszk"
+msgstr "Felső forrasztásgátló réteg"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:153
 msgid "User layer Eco1"
-msgstr ""
+msgstr "Felhasználói Eco1 réteg"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:153
 msgid "User layer Eco2"
-msgstr ""
+msgstr "Felhasználói Eco2 réteg"
 
 #: bitmap2component/bitmap2cmp_gui_base.cpp:155
 msgid "Board Layer for Outline:"
@@ -1146,7 +1146,7 @@ msgid ""
 "The 2 invisible fields reference and value are always placed on the silk "
 "screen layer."
 msgstr ""
-"Válassza ki melyík rétegre kéri a körvonal elhelyezését.\n"
+"Válassza ki melyik rétegre kéri a körvonal elhelyezését.\n"
 "A 2 láthatatlan mezők referenciája és értéke mindig a szita rétegre kerül."
 
 #: bitmap2component/bitmap2cmp_gui_base.h:92
@@ -1154,24 +1154,24 @@ msgid "Bitmap to Component Converter"
 msgstr "Képkonvertáló"
 
 #: common/base_screen.cpp:194
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %.4f mm (%.2f mils)"
-msgstr "Rács: %.4f mm -- %.2f mill"
+msgstr "Rács: %.4f mm -- %.2f mil"
 
 #: common/base_screen.cpp:197
-#, fuzzy, c-format
+#, c-format
 msgid "User grid: %.2f mils (%.4f mm)"
-msgstr "Rács: %.2f mill -- %.4f mm"
+msgstr "Rács: %.2f mil -- %.4f mm"
 
 #: common/base_screen.cpp:204
 #, c-format
 msgid "Grid: %.4f mm (%.2f mils)"
-msgstr "Rács: %.4f mm -- %.2f mill"
+msgstr "Rács: %.4f mm -- %.2f mil"
 
 #: common/base_screen.cpp:207
 #, c-format
 msgid "Grid: %.2f mils (%.4f mm)"
-msgstr "Rács: %.2f mill -- %.4f mm"
+msgstr "Rács: %.2f mil -- %.4f mm"
 
 #: common/base_units.cpp:438 eeschema/dialogs/dialog_set_grid_base.cpp:34
 #: eeschema/dialogs/panel_eeschema_display_options_base.cpp:41
@@ -1189,11 +1189,11 @@ msgstr "Rács: %.2f mill -- %.4f mm"
 #: eeschema/dialogs/panel_libedit_settings_base.cpp:131
 #: pcbnew/import_gfx/dialog_import_gfx_base.cpp:156
 msgid "mils"
-msgstr "mill"
+msgstr "mil"
 
 #: common/base_units.cpp:440
 msgid "in"
-msgstr "col"
+msgstr "hüvelyk"
 
 #: common/base_units.cpp:449 pcbnew/dialogs/dialog_create_array_base.cpp:233
 #: pcbnew/dialogs/dialog_graphic_item_properties_base.cpp:136
@@ -1245,7 +1245,7 @@ msgstr "Piros 1"
 
 #: common/colors.cpp:49
 msgid "Magenta 1"
-msgstr "Bíborvörös 1"
+msgstr "Magenta 1"
 
 #: common/colors.cpp:50
 msgid "Brown 1"
@@ -1269,7 +1269,7 @@ msgstr "Piros 2"
 
 #: common/colors.cpp:55
 msgid "Magenta 2"
-msgstr "Bíborvörös 2"
+msgstr "Magenta 2"
 
 #: common/colors.cpp:56
 msgid "Brown 2"
@@ -1293,7 +1293,7 @@ msgstr "Piros 3"
 
 #: common/colors.cpp:61
 msgid "Magenta 3"
-msgstr "Bíborvörös 3"
+msgstr "Magenta 3"
 
 #: common/colors.cpp:62
 msgid "Yellow 3"
@@ -1317,7 +1317,7 @@ msgstr "Piros 4"
 
 #: common/colors.cpp:67
 msgid "Magenta 4"
-msgstr "Bíborvörös 4"
+msgstr "Magenta 4"
 
 #: common/colors.cpp:68
 msgid "Yellow 4"
@@ -1328,11 +1328,13 @@ msgstr "Sárga 4"
 msgid ""
 "Environment variables expansion failed: missing '%c' at position %u in '%s'."
 msgstr ""
+"Nem sikerült a környezeti változók kiterjesztése: missing '%c' at position "
+"%u in '%s'."
 
 #: common/common.cpp:498
 #, c-format
 msgid "Cannot make path \"%s\" absolute with respect to \"%s\"."
-msgstr ""
+msgstr "Az \"%s\" elérési út nem tehető abszolúttá az \"%s\" tekintetében. "
 
 #: common/common.cpp:516
 #, c-format
@@ -1351,7 +1353,7 @@ msgstr "Ne mutassa többször"
 #: common/confirm.cpp:129
 #: pcb_calculator/dialogs/pcb_calculator_frame_base.cpp:234
 msgid "Message"
-msgstr "Üzenet :"
+msgstr "Üzenet"
 
 #: common/confirm.cpp:130
 msgid "Question"
@@ -1371,7 +1373,7 @@ msgstr "Hiba"
 
 #: common/confirm.cpp:183 common/dialogs/dialog_exit_base.cpp:34
 msgid "If you don't save, all your changes will be permanently lost."
-msgstr "Ha nem mented, az összes módosítás véglegesen elvész."
+msgstr "Ha nem menti, az összes módosítás véglegesen elvész."
 
 #: common/confirm.cpp:184 eeschema/hotkeys.cpp:226
 #: eeschema/libedit/libedit.cpp:430 eeschema/widgets/tuner_slider_base.cpp:66
@@ -1381,15 +1383,13 @@ msgid "Save"
 msgstr "Mentés"
 
 #: common/confirm.cpp:201
-#, fuzzy
 msgid "Your current changes will be permanently lost."
-msgstr "Ha nem mented, az összes módosítás véglegesen elvész."
+msgstr "Az összes módosítás véglegesen elvész."
 
 #: common/confirm.cpp:202 eeschema/widgets/symbol_tree_pane.cpp:60
 #: eeschema/widgets/symbol_tree_pane.cpp:84 pcbnew/footprint_tree_pane.cpp:85
-#, fuzzy
 msgid "Revert"
-msgstr "Soha"
+msgstr "Visszatérés az utolsó állapotra"
 
 #: common/confirm.cpp:279
 msgid "Info"
@@ -1434,35 +1434,35 @@ msgstr "KiCAD az interneten:"
 
 #: common/dialog_about/AboutDialog_main.cpp:132
 msgid "The official KiCad website - "
-msgstr "Hivatalos KiCAD weboldal..."
+msgstr "Hivatalos KiCAD weboldal - "
 
 #: common/dialog_about/AboutDialog_main.cpp:136
 msgid "Developer website on Launchpad - "
-msgstr ""
+msgstr "Fejlesztői weboldal a Launchpad-en - "
 
 #: common/dialog_about/AboutDialog_main.cpp:141
 msgid "Official KiCad library repositories - "
-msgstr "Hivatalos KiCAD alkatrész tárolók -"
+msgstr "Hivatalos KiCad könyvtár tárolók -"
 
 #: common/dialog_about/AboutDialog_main.cpp:148
 msgid "Bug tracker"
-msgstr "Hibák bejelentése:"
+msgstr "Hibabejelentő"
 
 #: common/dialog_about/AboutDialog_main.cpp:154
 msgid "Report or examine bugs - "
-msgstr "Feltárt hibajelentések..."
+msgstr "Hibák bejelentése vagy megtekintése"
 
 #: common/dialog_about/AboutDialog_main.cpp:161
 msgid "KiCad user's groups and community"
-msgstr "KiCAD felhasználói csoportok és közösség:"
+msgstr "KiCad felhasználói csoportok és közösség"
 
 #: common/dialog_about/AboutDialog_main.cpp:166
 msgid "KiCad forum - "
-msgstr "KiCAD fórum - "
+msgstr "KiCad fórum - "
 
 #: common/dialog_about/AboutDialog_main.cpp:171
 msgid "KiCad user's group - "
-msgstr "KiCAD felhasználói csoportok - "
+msgstr "KiCad felhasználói csoportok - "
 
 #: common/dialog_about/AboutDialog_main.cpp:185
 msgid "The complete KiCad EDA Suite is released under the"
@@ -1489,11 +1489,11 @@ msgstr "3D modellek:"
 
 #: common/dialog_about/AboutDialog_main.cpp:433
 msgid "Symbols by"
-msgstr "Rajzjelek:"
+msgstr "Alkatrész szimbólumok:"
 
 #: common/dialog_about/AboutDialog_main.cpp:440
 msgid "Footprints by"
-msgstr "Alkatrészektokok:"
+msgstr "Alkatrész rajzolatok:"
 
 #: common/dialog_about/dialog_about.cpp:124
 msgid "Information"
@@ -1554,7 +1554,7 @@ msgstr "Program verzió információ:"
 
 #: common/dialog_about/dialog_about_base.cpp:45
 msgid "Lib Version Info"
-msgstr ""
+msgstr "Könyvtár verzió információ:"
 
 #: common/dialog_about/dialog_about_base.cpp:67
 msgid "Show Version Info"
@@ -1574,61 +1574,55 @@ msgstr "Névjegy"
 
 #: common/dialogs/dialog_color_picker_base.cpp:31
 msgid "RGB"
-msgstr ""
+msgstr "RGB"
 
 #: common/dialogs/dialog_color_picker_base.cpp:46
 msgid "Red:"
-msgstr ""
+msgstr "Vörös:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:50
-#, fuzzy
 msgid "Green:"
-msgstr "Zöld 1"
+msgstr "Zöld:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:54
-#, fuzzy
 msgid "Blue:"
-msgstr "Kék 1"
+msgstr "Kék:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:80
-#, fuzzy
 msgid "HSV"
-msgstr "*.SVG"
+msgstr "HSV"
 
 #: common/dialogs/dialog_color_picker_base.cpp:97
 msgid "Hue:"
-msgstr ""
+msgstr "Árnyalat (hue):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:101
-#, fuzzy
 msgid "Saturation:"
-msgstr "Elfordulási szöge:"
+msgstr "Színtelítettség (saturation):"
 
 #: common/dialogs/dialog_color_picker_base.cpp:124
 #: eeschema/dialogs/dialog_spice_model_base.cpp:45
 #: eeschema/dialogs/dialog_spice_model_base.cpp:596
 #: pcbnew/dialogs/dialog_text_properties.cpp:91
 msgid "Value:"
-msgstr "Érték:"
+msgstr "Világosság:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:144
 #: common/dialogs/dialog_color_picker_base.h:92
-#, fuzzy
 msgid "Color Picker"
-msgstr "Ellenállás színkódok"
+msgstr "Színválasztó"
 
 #: common/dialogs/dialog_color_picker_base.cpp:164
-#, fuzzy
 msgid "Defined Colors"
-msgstr "Színek"
+msgstr "Definiált színek"
 
 #: common/dialogs/dialog_color_picker_base.cpp:173
 msgid "Opacity:"
-msgstr ""
+msgstr "Átlátszóság:"
 
 #: common/dialogs/dialog_color_picker_base.cpp:195
 msgid "Preview (old / new):"
-msgstr ""
+msgstr "Előnézet (régi / új):"
 
 #: common/dialogs/dialog_configure_paths.cpp:236
 #: common/dialogs/dialog_configure_paths.cpp:306
@@ -1637,9 +1631,8 @@ msgstr "Környezeti változó neve nem lehet üres."
 
 #: common/dialogs/dialog_configure_paths.cpp:244
 #: common/dialogs/dialog_configure_paths.cpp:308
-#, fuzzy
 msgid "Environment variable path cannot be empty."
-msgstr "Környezeti változó neve nem lehet üres."
+msgstr "Környezeti változó elérési útvonala nem lehet üres."
 
 #: common/dialogs/dialog_configure_paths.cpp:271
 #: common/dialogs/dialog_configure_paths.cpp:313
@@ -1658,6 +1651,8 @@ msgid ""
 "This path was defined  externally to the running process and\n"
 "will only be temporarily overwritten."
 msgstr ""
+"Ez az elérési útvonal külsőleg lett meghatározva,\n"
+"ezért csak ideiglenesen lett felülírva."
 
 #: common/dialogs/dialog_configure_paths.cpp:330
 msgid ""
@@ -1675,9 +1670,8 @@ msgstr "Tallózás..."
 
 #: common/dialogs/dialog_configure_paths.cpp:473
 #: common/widgets/grid_text_button_helpers.cpp:346
-#, fuzzy
 msgid "Select Path"
-msgstr "Összes kijelölése"
+msgstr "Elérési útvonal kiválasztása"
 
 #: common/dialogs/dialog_configure_paths.cpp:553
 msgid ""
@@ -1700,16 +1694,15 @@ msgid ""
 "To ensure environment variable names are valid on all platforms, the name "
 "field will only accept upper case letters, digits, and the underscore "
 "characters."
-msgstr ""
+msgstr "A név mező csak nagybetűket, számokat és aláhúzást tartalmazhat."
 
 #: common/dialogs/dialog_configure_paths.cpp:574
 msgid "Environment Variable Help"
 msgstr "Környezeti változók segítség"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:22
-#, fuzzy
 msgid "Environment Variables"
-msgstr "Környezeti változó"
+msgstr "Környezeti változós"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:39
 #: cvpcb/dialogs/dialog_config_equfiles_base.cpp:80
@@ -1734,12 +1727,11 @@ msgstr "Név"
 #: common/dialogs/dialog_configure_paths_base.cpp:97
 #: pcbnew/dialogs/panel_pcbnew_action_plugins_base.cpp:41
 msgid "Path"
-msgstr "Útvonal"
+msgstr "Elérési útvonal"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:78
-#, fuzzy
 msgid "3D Search Paths"
-msgstr "Keresési útvonalak:"
+msgstr "3D Keresési útvonalak:"
 
 #: common/dialogs/dialog_configure_paths_base.cpp:96
 msgid "Alias"
@@ -1752,12 +1744,11 @@ msgstr "Az összes könyvtár változások mentése"
 
 #: common/dialogs/dialog_exit_base.cpp:49
 msgid "Apply to all"
-msgstr ""
+msgstr "Mindenre alkalmaz"
 
 #: common/dialogs/dialog_exit_base.cpp:55
-#, fuzzy
 msgid "Discard Changes"
-msgstr "Módosítás visszavonása"
+msgstr "Módosítások eldobása"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:39
 #, fuzzy, c-format
@@ -1777,7 +1768,7 @@ msgstr ""
 #: common/dialogs/dialog_global_lib_table_config.cpp:49
 #, c-format
 msgid "Copy default global %s library table (recommended)"
-msgstr ""
+msgstr "Az alapértelmezett globális '%s' könyvtár táblázat másolása (ajánlott)"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:51
 #, c-format
@@ -1785,17 +1776,19 @@ msgid ""
 "Select this option if you not sure about configuring the global %s library "
 "table"
 msgstr ""
+"Válassza ezt az opciót, ha nem biztos az alapértelmezett globális '%s' "
+"könyvtár táblázat konfigurálásában."
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:55
-#, fuzzy, c-format
+#, c-format
 msgid "Copy custom global %s library table"
-msgstr "A \"%s\" globális könyvtártáblázat útvonal nem hozható létre."
+msgstr "Egyedi globális '%s' könyvtár táblázat másolása"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:57
 #, c-format
 msgid ""
 "Select this option to copy a %s library table file other than the default"
-msgstr ""
+msgstr "Válassza ezt az opciót a '%s' könyvtár táblázat fájl másolásához"
 
 #: common/dialogs/dialog_global_lib_table_config.cpp:61
 #, fuzzy, c-format
@@ -1857,13 +1850,13 @@ msgstr "Helytelen méretezési érték"
 #: common/dialogs/dialog_image_editor.cpp:148
 #, c-format
 msgid "This scale gives a too small image size (%.2f mm or %.1f mil)"
-msgstr ""
+msgstr "Ez a méretezés túl kicsi képet eredményez (%.2f mm vagy %.1f mil)"
 
 #: common/dialogs/dialog_image_editor.cpp:159
 #, c-format
 msgid ""
 "This scale gives a very large image size (%.1f mm or %.2f in). Are you sure?"
-msgstr ""
+msgstr "Ez a méretezés túl nagy képet eredményez (%.2f mm vagy %.1f mil)"
 
 #: common/dialogs/dialog_image_editor_base.cpp:33 eeschema/hotkeys.cpp:157
 msgid "Mirror X"
@@ -1876,7 +1869,7 @@ msgstr "Tükrözés Y tengelyen"
 #: common/dialogs/dialog_image_editor_base.cpp:39 pcbnew/onrightclick.cpp:940
 #: pcbnew/tools/edit_tool.cpp:705
 msgid "Rotate"
-msgstr "Elforgatás"
+msgstr "Forgatás"
 
 #: common/dialogs/dialog_image_editor_base.cpp:42
 msgid "Grey"
@@ -2019,9 +2012,8 @@ msgid "Orientation:"
 msgstr "Irány:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:52
-#, fuzzy
 msgid "Custom paper size:"
-msgstr "Egyedi papírszélesség."
+msgstr "Egyedi papírméret:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:61
 #: pcbnew/dialogs/dialog_text_properties_base.cpp:114
@@ -2096,7 +2088,7 @@ msgstr "Elrendezés előnézete"
 
 #: common/dialogs/dialog_page_settings_base.cpp:122
 msgid "Title Block Parameters"
-msgstr "Címblokk paraméterek:"
+msgstr "Rajz-fejléc paraméterek:"
 
 #: common/dialogs/dialog_page_settings_base.cpp:132
 #, c-format
@@ -2215,9 +2207,8 @@ msgstr "Figyelmeztetés: A skála értéke nagyon kicsi."
 
 #: common/dialogs/dialog_print_generic.cpp:169
 #: common/dialogs/dialog_print_generic.cpp:210
-#, fuzzy
 msgid "Nothing to print"
-msgstr "Alkatrészek betöltése"
+msgstr "Nincs mit nyomtatni"
 
 #: common/dialogs/dialog_print_generic.cpp:227
 msgid "There was a problem printing."
@@ -2255,9 +2246,8 @@ msgid "Black and white"
 msgstr "Fekete-fehér"
 
 #: common/dialogs/dialog_print_generic_base.cpp:40
-#, fuzzy
 msgid "Print border and title block"
-msgstr "Keret és címblokk megjelenítése"
+msgstr "Keret és rajz-fejléc nyomtatása"
 
 #: common/dialogs/dialog_print_generic_base.cpp:42
 msgid "Print Frame references."
@@ -2281,7 +2271,7 @@ msgstr "Egyéni"
 msgid "Set X scale adjust for exact scale plotting"
 msgstr ""
 "Beállíthatja az X tengely igazítását.\n"
-"Növellheti vagy csökkentheti az értékét,\n"
+"Növelheti vagy csökkentheti az értékét,\n"
 "a méretpontos nyomat létrehozásához."
 
 #: common/dialogs/dialog_print_generic_base.cpp:92
@@ -2324,7 +2314,7 @@ msgstr "perc"
 
 #: common/dialogs/panel_common_settings_base.cpp:46
 msgid "File history size:"
-msgstr ""
+msgstr "Fájltörténet mérete:"
 
 #: common/dialogs/panel_common_settings_base.cpp:54
 #, fuzzy
@@ -2358,24 +2348,20 @@ msgid "Graphics (Fallback):"
 msgstr "réteg:"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "Fast Antialiasing"
-msgstr "Nincs  élsimítás"
+msgstr "Gyors  élsimítás"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "Balanced Antialiasing"
-msgstr "Nincs  élsimítás"
+msgstr "Kiegyensúlyozott  élsimítás"
 
 #: common/dialogs/panel_common_settings_base.cpp:69
-#, fuzzy
 msgid "High Quality Antialiasing"
-msgstr "Nincs  élsimítás"
+msgstr "Magas minőségű  élsimítás"
 
 #: common/dialogs/panel_common_settings_base.cpp:81
-#, fuzzy
 msgid "Helper Applications"
-msgstr "Kiválasztás törlése"
+msgstr "Segítő alkalmazások"
 
 #: common/dialogs/panel_common_settings_base.cpp:90
 #, fuzzy
@@ -2465,7 +2451,7 @@ msgstr "Gyorsbillentyű beállítása"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:107
 msgid "Undo all changes made so far in this dialog"
-msgstr ""
+msgstr "Az ebben az ablakban elvégzett módosítások visszavonása"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:114
 #, fuzzy
@@ -2474,17 +2460,16 @@ msgstr "Visszaállítás alapértelmezésre"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:115
 msgid "Set all hotkeys to the built-in KiCad defaults"
-msgstr ""
+msgstr "Gyorsbillentyűk visszaállítása alapértelmezettre"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:125
-#, fuzzy
 msgid "Import..."
-msgstr "Import"
+msgstr "Importálás"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:126
 msgid ""
 "Import hotkey definitions from an external file, replacing the current values"
-msgstr ""
+msgstr "Gyorsbillentyűk konfigurációjának importálása fájlból"
 
 #: common/dialogs/panel_hotkeys_editor.cpp:133
 #, fuzzy
@@ -2567,7 +2552,7 @@ msgstr "Szűrés:"
 
 #: common/draw_panel_gal.cpp:228 common/draw_panel_gal.cpp:389
 msgid "Could not use OpenGL, falling back to software rendering"
-msgstr ""
+msgstr "Nem használható az OpenGL mód, visszatérés szoftveres megjelenítésre"
 
 #: common/dsnlexer.cpp:39
 msgid "clipboard"
@@ -2586,7 +2571,7 @@ msgstr "Váratlan \"%s\""
 #: common/dsnlexer.cpp:380
 #, c-format
 msgid "%s is a duplicate"
-msgstr "%s ez már léltezik"
+msgstr "Az '%s' már léltezik"
 
 #: common/dsnlexer.cpp:433
 #, c-format
@@ -2595,11 +2580,11 @@ msgstr "szükség van egy számra a \"%s\" számára"
 
 #: common/dsnlexer.cpp:705 common/dsnlexer.cpp:765
 msgid "Un-terminated delimited string"
-msgstr ""
+msgstr "A tagolt string nincs lezárva"
 
 #: common/dsnlexer.cpp:727
 msgid "String delimiter must be a single character of ', \", or $"
-msgstr ""
+msgstr "A string tagoló csak egy karakternyi ', \", vagy $ lehet"
 
 #: common/eda_base_frame.cpp:421
 #, c-format
@@ -2751,7 +2736,7 @@ msgstr "Normál"
 #: pcbnew/dialogs/panel_setup_text_and_graphics_base.cpp:48
 #: pcbnew/text_mod_grid_table.cpp:90
 msgid "Italic"
-msgstr "Dőlt betű"
+msgstr "Dőlt"
 
 #: common/eda_text.cpp:394
 #: eeschema/dialogs/dialog_edit_component_in_lib_base.cpp:62
@@ -2846,7 +2831,7 @@ msgstr ""
 
 #: common/filename_resolver.cpp:470
 msgid "The given path does not exist"
-msgstr "Az adott útvonal nem létezik"
+msgstr "Az adott elérési útvonal nem létezik"
 
 #: common/filename_resolver.cpp:473
 msgid "3D model search path"
@@ -3024,7 +3009,7 @@ msgstr "Elem vonszolása"
 
 #: common/legacy_gal/block.cpp:83 common/legacy_wx/block.cpp:82
 msgid "Block Duplicate"
-msgstr "Blokk egyszeri másolás"
+msgstr "Blokk duplikálása"
 
 #: common/legacy_gal/block.cpp:87 common/legacy_wx/block.cpp:86
 msgid "Block Delete"
@@ -3282,7 +3267,7 @@ msgstr "Egyszerűsített kínai"
 
 #: common/pgm_base.cpp:144
 msgid "Chinese traditional"
-msgstr ""
+msgstr "Hagyományos kínai"
 
 #: common/pgm_base.cpp:145
 msgid "Catalan"
@@ -3415,16 +3400,16 @@ msgstr "Tükrözést Y tengelyre, még nem támogatott!"
 
 #: common/widgets/footprint_preview_widget.cpp:96
 msgid "Footprint not found"
-msgstr "Alkatrésztok nem található!"
+msgstr "Alkatrész rajzolat nem található!"
 
 #: common/widgets/footprint_select_widget.cpp:78 cvpcb/cvpcb_mainframe.cpp:711
 #: pcbnew/footprint_edit_frame.cpp:863 pcbnew/load_select_footprint.cpp:214
 msgid "Loading Footprint Libraries"
-msgstr "Alkatrésztok könyvtárak betöltése"
+msgstr "Alkatrész rajzolat könyvtárak betöltése"
 
 #: common/widgets/footprint_select_widget.cpp:230
 msgid "No default footprint"
-msgstr "Nincs alapértelmezett alkatrésztok"
+msgstr "Nincs alapértelmezett alkatrész rajzolat"
 
 #: common/widgets/footprint_select_widget.cpp:235
 #: common/widgets/footprint_select_widget.cpp:236
@@ -3441,7 +3426,7 @@ msgstr "Rács beállítások"
 
 #: common/widgets/gal_options_panel.cpp:76
 msgid "Dots"
-msgstr "Pöttyök"
+msgstr "Pontok"
 
 #: common/widgets/gal_options_panel.cpp:77
 msgid "Lines"
@@ -3483,11 +3468,11 @@ msgstr "Teljes képernyős célkereszt"
 
 #: common/widgets/gal_options_panel.cpp:171
 msgid "Cursor shape:"
-msgstr "Egérkúzor:"
+msgstr "Egérkurzor:"
 
 #: common/widgets/gal_options_panel.cpp:176
 msgid "Cursor shape for drawing, placement and movement tools"
-msgstr ""
+msgstr "Kurzor rajzoláshoz, lehelyezéshez és mozgatáshoz"
 
 #: common/widgets/gal_options_panel.cpp:182
 #, fuzzy
@@ -26974,11 +26959,11 @@ msgstr "Polinomiális alakzat létrehozása, mikrohullámú alkalmazásokhoz"
 
 #: pcbnew/tools/microwave_tool.cpp:89
 msgid "Add Microwave Line"
-msgstr "Mikrohullámú vonal hozzáadása"
+msgstr "Mikrohullámú tápvonal hozzáadása"
 
 #: pcbnew/tools/microwave_tool.cpp:141
 msgid "Add Stub (Arc)"
-msgstr "Csonkolt körcikk hozzáadása"
+msgstr "Csonk (körcikk) hozzáadása"
 
 #: pcbnew/tools/microwave_tool.cpp:210
 msgid "Place microwave feature"
@@ -27003,7 +26988,7 @@ msgstr ""
 
 #: pcbnew/tools/pad_tool.cpp:60
 msgid "Copy the current pad's properties to other pads"
-msgstr ""
+msgstr "Az aktuális forrpont tulajdonságainak kiterjesztése a többire"
 
 #: pcbnew/tools/pad_tool.cpp:336
 #, fuzzy
@@ -27033,7 +27018,7 @@ msgstr "Réteg igazító célkereszt hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:105
 msgid "Add a footprint"
-msgstr "Alkatrésztok hozzáadása"
+msgstr "Alkatrész rajzolat hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:121
 msgid "Lock"
@@ -27049,7 +27034,7 @@ msgstr "Lezárás"
 
 #: pcbnew/tools/pcb_editor_control.cpp:505
 msgid "Place a module"
-msgstr ""
+msgstr "Modul hozzáadása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:657
 msgid "Place a layer alignment target"
@@ -27061,7 +27046,7 @@ msgstr "Zóna másolása"
 
 #: pcbnew/tools/pcb_editor_control.cpp:1164
 msgid "Pick Components for Local Ratsnest"
-msgstr ""
+msgstr "Alkatrészek kiválasztása lokális légvezetékekhez"
 
 #: pcbnew/tools/pcbnew_control.cpp:208
 msgid "Paste content from clipboard"
@@ -27082,11 +27067,11 @@ msgstr ""
 
 #: pcbnew/tools/pcbnew_control.cpp:989
 msgid "Not available in OpenGL/Cairo canvases."
-msgstr ""
+msgstr "Nem lehetséges OpenGL/Cairo megjelenítés mellett"
 
 #: pcbnew/tools/placement_tool.cpp:43
 msgid "Align to Top"
-msgstr ""
+msgstr "Igazítás felülre"
 
 #: pcbnew/tools/placement_tool.cpp:44
 msgid "Aligns selected items to the top edge"
@@ -27094,7 +27079,7 @@ msgstr "A kijelölt elem igazítása felső élhez"
 
 #: pcbnew/tools/placement_tool.cpp:48
 msgid "Align to Bottom"
-msgstr ""
+msgstr "Igazítás alulra"
 
 #: pcbnew/tools/placement_tool.cpp:49
 msgid "Aligns selected items to the bottom edge"
@@ -27154,11 +27139,11 @@ msgstr "Igazítás/Elosztás"
 
 #: pcbnew/tools/placement_tool.cpp:239
 msgid "Align to top"
-msgstr ""
+msgstr "Igazítás felülre"
 
 #: pcbnew/tools/placement_tool.cpp:272
 msgid "Align to bottom"
-msgstr ""
+msgstr "Igazítás alulra"
 
 #: pcbnew/tools/placement_tool.cpp:320
 msgid "Align to left"
@@ -27395,7 +27380,7 @@ msgstr ""
 
 #: pcbnew/zone_filler.cpp:245
 msgid "Performing polygon fills..."
-msgstr "kitöltése"
+msgstr "Sokszög kitöltés végrehajtása..."
 
 #: pcbnew/zone_filler.cpp:292
 msgid "Committing changes..."
@@ -27407,15 +27392,15 @@ msgstr "Zóna kitöltése"
 
 #: pcbnew/zones_by_polygon.cpp:136
 msgid "The duplicated zone cannot be on the same layers as the original zone."
-msgstr ""
+msgstr "A duplikált kitöltés nem lehet az eredetivel egy rétegeken."
 
 #: pcbnew/zones_by_polygon.cpp:141
 msgid "The duplicated zone cannot be on the same layer as the original zone."
-msgstr ""
+msgstr "A duplikált kitöltés nem lehet az eredetivel egy rétegen."
 
 #: pcbnew/zones_by_polygon.cpp:170
 msgid "Warning: The new zone fails DRC"
-msgstr ""
+msgstr "Figyelem: az új kitöltés DRC hibát okoz"
 
 #: pcbnew/zones_by_polygon.cpp:368 pcbnew/zones_by_polygon.cpp:427
 #: pcbnew/zones_by_polygon.cpp:818
@@ -27430,8 +27415,8 @@ msgstr "Hiba: a kizárt terület csak réz rétegeken engedélyezett."
 msgid "DRC error: this start point is inside or too close another area"
 msgstr ""
 "DRC hiba:\n"
-"Ez a kezdőpont túl közel van egy zónához,\n"
-"vagy egy másik zónán belül van."
+"Ez a kezdőpont túl közel van egy kitöltéshez,\n"
+"vagy egy másik kitöltésen belül van."
 
 #: pcbnew/zones_by_polygon.cpp:756
 msgid "DRC error: closing this area creates a DRC error with another area"
@@ -27439,7 +27424,7 @@ msgstr "DRC hiba: a terület bezárása DRC hibát okoz egy másik területen."
 
 #: pcbnew/zones_by_polygon.cpp:914 pcbnew/zones_by_polygon.cpp:978
 msgid "Modify zone properties"
-msgstr "Modul jellemzők"
+msgstr "Zónajellemzők módosítása"
 
 #: pcbnew/zones_by_polygon.cpp:969
 #, c-format
@@ -27448,7 +27433,7 @@ msgstr "%d zónák kitöltése"
 
 #: pcbnew/zones_by_polygon_fill_functions.cpp:119
 msgid "Checking Zones"
-msgstr "Modulok ellenőrzése"
+msgstr "Zónák ellenőrzése"
 
 #~ msgid "path exists but is not a regular file"
 #~ msgstr "Útvonal létezik, de nem szabályos fájl"
