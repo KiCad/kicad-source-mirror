@@ -1220,6 +1220,11 @@ int SCH_EDIT_TOOL::Properties( const TOOL_EVENT& aEvent )
 
     updateView( item );
 
+    if( selection.IsHover() )
+    {
+        m_toolMgr->RunAction( EE_ACTIONS::clearSelection, true );
+    }
+
     return 0;
 }
 
