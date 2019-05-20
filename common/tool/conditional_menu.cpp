@@ -106,6 +106,9 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
 {
     Clear();
 
+    // We try to avoid adding useless separators (when no menuitems between separators)
+    int menu_count = 0;     // number of menus since the latest separator
+
     for( const ENTRY& entry : m_entries )
     {
         const SELECTION_CONDITION& cond = entry.Condition();
@@ -128,16 +131,21 @@ void CONDITIONAL_MENU::Evaluate( SELECTION& aSelection )
         {
             case ENTRY::ACTION:
                 menuItem = Add( *entry.Action(), entry.IsCheckmarkEntry() );
+                menu_count++;
                 break;
             case ENTRY::MENU:
                 menuItem = Add( entry.Menu() );
+                menu_count++;
                 break;
             case ENTRY::WXITEM:
                 menuItem = Append( entry.wxItem()->GetId(), entry.wxItem()->GetItemLabel(),
                                    entry.wxItem()->GetHelp(), entry.wxItem()->GetKind() );
+                menu_count++;
                 break;
             case ENTRY::SEPARATOR:
-                menuItem = AppendSeparator();
+                if( menu_count )
+                    menuItem = AppendSeparator();
+                menu_count = 0;
                 break;
             default:
                 assert( false );
